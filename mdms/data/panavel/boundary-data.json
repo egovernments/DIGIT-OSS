@@ -1,0 +1,31 @@
+{
+  "id": 300,
+  "boundarynum": 1,
+  "name": "Panavel  Municipality",
+  "localname": "Panavel  Municipality",
+  "longitude": null,
+  "latitude": null,
+  "code": "300",
+  "children": [
+    {
+      "id": 301,
+      "boundarynum": 1,
+      "name": "Election Ward No 1",
+      "localname": "Election Ward No 1",
+      "longitude": null,
+      "latitude": null,
+      "code": "301",
+      "children": null
+    },
+    {
+      "id": 302,
+      "boundarynum": 2,
+      "name": "Election Ward No 2",
+      "localname": "Election Ward No 2",
+      "longitude": null,
+      "latitude": null,
+      "code": "302",
+      "children": null
+    }
+  ]
+}

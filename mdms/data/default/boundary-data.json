@@ -1,0 +1,2790 @@
+{
+"tenantId": "default",
+"moduleName": "egov-location",
+"TenantBoundary" : [
+  {
+  "hierarchyType" : {
+    "code" : "REVENUE",
+    "name" : "REVENUE"
+  },
+  "boundary" : {
+  "id": 1,
+  "boundaryNum": 1,
+  "name": "Roha Municipality",
+  "localname": "Srikakulam  Municipality",
+  "longitude": null,
+  "latitude": null,
+  "label" : "City",
+  "code": "1",
+  "children": [
+    {
+      "id": 1385,
+      "boundaryNum": 41,
+      "name": "test",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "",
+      "code": "BOUNDARY1",
+      "children": null
+    },
+    {
+      "id": 1391,
+      "boundaryNum": 231,
+      "name": "TestBoundary1",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "",
+      "code": "TESTBNDRY",
+      "children": null
+    },
+    {
+      "id": 2,
+      "boundaryNum": 1,
+      "name": "Zone-1",
+      "localname": "Zone-1",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Zone",
+      "code": "2",
+      "children": [
+        {
+          "id": 12,
+          "boundaryNum": 8,
+          "name": "Gandhi Road",
+          "localname": "Gandhi Road",
+          "longitude": null,
+          "latitude": null,
+          "label" : "Ward",
+          "code": "12",
+          "children": null
+        },
+        {
+          "id": 6,
+          "boundaryNum": 1,
+          "name": "Revenue Ward No 1",
+          "localname": "Revenue Ward No 1",
+          "longitude": null,
+          "latitude": null,
+          "label" : "Ward",
+          "code": "6",
+          "children": [
+            {
+              "id": 1364,
+              "boundaryNum": 4091,
+              "name": "jeswanth",
+              "localname": null,
+              "longitude": null,
+              "latitude": null,
+              "label" : "Block",
+              "code": "1364"
+            },
+            {
+              "id": 13,
+              "boundaryNum": 1,
+              "name": "Block No 1",
+              "localname": "Block No 1",
+              "longitude": null,
+              "latitude": null,
+              "label" : "Block",
+              "code": "13",
+              "children" : [
+              {
+                "id": 200,
+              "boundaryNum": 1,
+              "name": "Colony 1",
+              "localname": "Colony 1",
+              "longitude": null,
+              "latitude": null,
+              "label" : "Colony",
+              "code": "200"
+              }
+                ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "boundaryNum": 2,
+      "name": "Zone-2",
+      "localname": "Zone-2",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Zone",
+      "code": "3",
+      "children": [
+        {
+          "id": 7,
+          "boundaryNum": 2,
+          "name": "Revenue Ward No 2",
+          "localname": "Revenue Ward No 2",
+          "longitude": null,
+          "latitude": null,
+          "label" : "Ward",
+          "code": "7",
+          "children": [
+            {
+              "id": 14,
+              "boundaryNum": 3,
+              "name": "Block No 2",
+              "localname": "Block No 2",
+              "longitude": null,
+              "latitude": null,
+              "label" : "Block",
+              "code": "14",
+              "children" : [
+                {
+                "id": 201,
+              "boundaryNum": 1,
+              "name": "Colony 2",
+              "localname": "Colony 2",
+              "longitude": null,
+              "latitude": null,
+              "label" : "Colony",
+              "code": "201"
+              }
+                
+                ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "boundaryNum": 3,
+      "name": "Zone-3",
+      "localname": "Zone-3",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Zone",
+      "code": "4",
+      "children": [
+        {
+          "id": 11,
+          "boundaryNum": 7,
+          "name": "Revenue Ward: 6",
+          "localname": "Revenue Ward: 6",
+          "longitude": null,
+          "latitude": null,
+          "label" : "Ward",
+          "code": "11",
+          "children": null
+        },
+        {
+          "id": 8,
+          "boundaryNum": 3,
+          "name": "Revenue Ward No 3",
+          "localname": "Revenue Ward No 3",
+          "longitude": null,
+          "latitude": null,
+          "label" : "Ward",
+          "code": "8",
+          "children": [
+            {
+              "id": 15,
+              "boundaryNum": 7,
+              "name": "Block No 3",
+              "localname": "Block No 3",
+              "longitude": null,
+              "latitude": null,
+              "label" : "Block",
+              "code": "15",
+              "children" : [
+                {
+              "id": 202,
+              "boundaryNum": 1,
+              "name": "Colony 3",
+              "localname": "Colony 3",
+              "longitude": null,
+              "latitude": null,
+              "label" : "Colony",
+              "code": "202"
+              }
+                ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "boundaryNum": 4,
+      "name": "Zone-4",
+      "localname": "Zone-4",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Zone",
+      "code": "5",
+      "children": [
+        {
+          "id": 10,
+          "boundaryNum": 6,
+          "name": "Revenue",
+          "localname": "Revenue",
+          "longitude": null,
+          "latitude": null,
+          "label" : "Ward",
+          "code": "10",
+          "children": null
+        },
+        {
+          "id": 9,
+          "boundaryNum": 4,
+          "name": "Revenue Ward No 4",
+          "localname": "Revenue Ward No 4",
+          "longitude": null,
+          "latitude": null,
+          "label" : "Ward",
+          "code": "9",
+          "children": [
+            {
+              "id": 16,
+              "boundaryNum": 6,
+              "name": "Block No 4",
+              "localname": "Block No 4",
+              "longitude": null,
+              "latitude": null,
+              "label" : "Block",
+              "code": "16",
+              "children" : [
+                {
+                "id": 203,
+              "boundaryNum": 1,
+              "name": "Colony 4",
+              "localname": "Colony 4",
+              "longitude": null,
+              "latitude": null,
+              "label" : "Colony",
+              "code": "203"
+              }
+                ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+
+  }
+  },
+    {
+  "hierarchyType" : {
+    "code" : "LOCATION",
+    "name" : "LOCATION"
+  },
+  "boundary" : {
+    
+  "id": 18,
+  "boundaryNum": 1,
+  "name": "Srikakulam  Municipality",
+  "localname": "Srikakulam  Municipality",
+  "longitude": null,
+  "latitude": null,
+  "label" : "City",
+  "code": "18",
+  "children": [
+    {
+      "id": 100,
+      "boundaryNum": 89,
+      "name": "Yeda Dasaripeta",
+      "localname": "Yeda Dasaripeta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "100",
+      "children": null
+    },
+    {
+      "id": 101,
+      "boundaryNum": 90,
+      "name": "Bank Colony",
+      "localname": "Bank Colony",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "101",
+      "children": null
+    },
+    {
+      "id": 102,
+      "boundaryNum": 91,
+      "name": "Valandapeta",
+      "localname": "Valandapeta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "102",
+      "children": null
+    },
+    {
+      "id": 103,
+      "boundaryNum": 92,
+      "name": "Krishna Colony",
+      "localname": "Krishna Colony",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "103",
+      "children": null
+    },
+    {
+      "id": 104,
+      "boundaryNum": 93,
+      "name": "Mamidipalem Colony",
+      "localname": "Mamidipalem Colony",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "104",
+      "children": null
+    },
+    {
+      "id": 105,
+      "boundaryNum": 94,
+      "name": "Mamidipalem & Valanda Bhoomulu",
+      "localname": "Mamidipalem & Valanda Bhoomulu",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "105",
+      "children": null
+    },
+    {
+      "id": 106,
+      "boundaryNum": 95,
+      "name": "Mamidipalem",
+      "localname": "Mamidipalem",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "106",
+      "children": null
+    },
+    {
+      "id": 107,
+      "boundaryNum": 96,
+      "name": "Koradapeta Kallalu",
+      "localname": "Koradapeta Kallalu",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "107",
+      "children": null
+    },
+    {
+      "id": 108,
+      "boundaryNum": 97,
+      "name": "Koradapeta",
+      "localname": "Koradapeta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "108",
+      "children": null
+    },
+    {
+      "id": 109,
+      "boundaryNum": 98,
+      "name": "Rayapalem",
+      "localname": "Rayapalem",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "109",
+      "children": null
+    },
+    {
+      "id": 110,
+      "boundaryNum": 99,
+      "name": "Karrinammivani Peta",
+      "localname": "Karrinammivani Peta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "110",
+      "children": null
+    },
+    {
+      "id": 111,
+      "boundaryNum": 100,
+      "name": "Sangivalasa",
+      "localname": "Sangivalasa",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "111",
+      "children": null
+    },
+    {
+      "id": 112,
+      "boundaryNum": 101,
+      "name": "Nammivanipeta Colony",
+      "localname": "Nammivanipeta Colony",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "112",
+      "children": null
+    },
+    {
+      "id": 113,
+      "boundaryNum": 102,
+      "name": "Sivananda Asharamam(near)",
+      "localname": "Sivananda Asharamam(near)",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "113",
+      "children": null
+    },
+    {
+      "id": 114,
+      "boundaryNum": 103,
+      "name": "Nammivanipeta",
+      "localname": "Nammivanipeta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "114",
+      "children": null
+    },
+    {
+      "id": 115,
+      "boundaryNum": 105,
+      "name": "Sangivalasa Colony",
+      "localname": "Sangivalasa Colony",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "115",
+      "children": null
+    },
+    {
+      "id": 116,
+      "boundaryNum": 106,
+      "name": "Dekkathipalem,rajalingampeta",
+      "localname": "Dekkathipalem,rajalingampeta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "116",
+      "children": null
+    },
+    {
+      "id": 117,
+      "boundaryNum": 107,
+      "name": "Dekkathipalem",
+      "localname": "Dekkathipalem",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "117",
+      "children": null
+    },
+    {
+      "id": 118,
+      "boundaryNum": 108,
+      "name": "Chillapeta Moolakuddu Road",
+      "localname": "Chillapeta Moolakuddu Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "118",
+      "children": null
+    },
+    {
+      "id": 119,
+      "boundaryNum": 109,
+      "name": "Chillapeta",
+      "localname": "Chillapeta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "119",
+      "children": null
+    },
+    {
+      "id": 120,
+      "boundaryNum": 110,
+      "name": "Jeeru Peta",
+      "localname": "Jeeru Peta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "120",
+      "children": null
+    },
+    {
+      "id": 121,
+      "boundaryNum": 111,
+      "name": "Bheemunipatnam",
+      "localname": "Bheemunipatnam",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "121",
+      "children": null
+    },
+    {
+      "id": 122,
+      "boundaryNum": 112,
+      "name": "Information not Available",
+      "localname": "Information not Available",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "122",
+      "children": null
+    },
+    {
+      "id": 123,
+      "boundaryNum": 113,
+      "name": "Gollalapalem",
+      "localname": "",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "123",
+      "children": null
+    },
+    {
+      "id": 124,
+      "boundaryNum": 114,
+      "name": "Guptha Veedhi",
+      "localname": "",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "124",
+      "children": null
+    },
+    {
+      "id": 125,
+      "boundaryNum": 115,
+      "name": "Nookalamma Temple Street",
+      "localname": "Bheemunipatnam",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "125",
+      "children": null
+    },
+    {
+      "id": 126,
+      "boundaryNum": 116,
+      "name": "Ganesh Theater",
+      "localname": "Thagarapuvalasa",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "126",
+      "children": null
+    },
+    {
+      "id": 127,
+      "boundaryNum": 117,
+      "name": "Nookalamma Temple",
+      "localname": "Bptnmcmnr",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "127",
+      "children": null
+    },
+    {
+      "id": 128,
+      "boundaryNum": 118,
+      "name": "Gollala Palem",
+      "localname": "Gollala Palem",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "128",
+      "children": null
+    },
+    {
+      "id": 129,
+      "boundaryNum": 119,
+      "name": "Rajalingam Peta",
+      "localname": "Rajalingam Peta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "129",
+      "children": null
+    },
+    {
+      "id": 130,
+      "boundaryNum": 120,
+      "name": "Feriki Veehi",
+      "localname": "",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "130",
+      "children": null
+    },
+    {
+      "id": 131,
+      "boundaryNum": 121,
+      "name": "Adharasa Nagar",
+      "localname": "",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "131",
+      "children": null
+    },
+    {
+      "id": 132,
+      "boundaryNum": 122,
+      "name": "Kummari Veedhi",
+      "localname": "",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "132",
+      "children": null
+    },
+    {
+      "id": 133,
+      "boundaryNum": 123,
+      "name": "K.v.bhoomulu",
+      "localname": "",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "133",
+      "children": null
+    },
+    {
+      "id": 134,
+      "boundaryNum": 124,
+      "name": "Kalla Street",
+      "localname": "",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "134",
+      "children": null
+    },
+    {
+      "id": 135,
+      "boundaryNum": 125,
+      "name": "Velampeta",
+      "localname": "",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "135",
+      "children": null
+    },
+    {
+      "id": 136,
+      "boundaryNum": 126,
+      "name": "Boya Veedhi",
+      "localname": "",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "136",
+      "children": null
+    },
+    {
+      "id": 137,
+      "boundaryNum": 127,
+      "name": "Bramana Veedhi",
+      "localname": "Bheemunipatnam",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "137",
+      "children": null
+    },
+    {
+      "id": 138,
+      "boundaryNum": 128,
+      "name": "Ananda Vanam",
+      "localname": "Bank Colony",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "138",
+      "children": null
+    },
+    {
+      "id": 139,
+      "boundaryNum": 129,
+      "name": "Mangala Veedhi",
+      "localname": "Bheemunipatnam",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "139",
+      "children": null
+    },
+    {
+      "id": 140,
+      "boundaryNum": 130,
+      "name": "Mangalaveedhi",
+      "localname": "Bheemunipatnam",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "140",
+      "children": null
+    },
+    {
+      "id": 141,
+      "boundaryNum": 131,
+      "name": "Tagarapuvalasa",
+      "localname": "Tagarapuvalasa",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "141",
+      "children": null
+    },
+    {
+      "id": 142,
+      "boundaryNum": 132,
+      "name": "Venkateswar Metta",
+      "localname": "",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "142",
+      "children": null
+    },
+    {
+      "id": 143,
+      "boundaryNum": 133,
+      "name": "Bhimili Road",
+      "localname": "Tagarapuvalasa",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "143",
+      "children": null
+    },
+    {
+      "id": 144,
+      "boundaryNum": 134,
+      "name": "S.v.p. Temple Veedhi",
+      "localname": "Bheemunipatnam",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "144",
+      "children": null
+    },
+    {
+      "id": 145,
+      "boundaryNum": 135,
+      "name": "Nerellavalasa Colony",
+      "localname": "Bheemunipatnam",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "145",
+      "children": null
+    },
+    {
+      "id": 146,
+      "boundaryNum": 136,
+      "name": "Kanyaka Prameswari Street",
+      "localname": "Kanyaka Prameswari Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "146",
+      "children": null
+    },
+    {
+      "id": 147,
+      "boundaryNum": 137,
+      "name": "Peruku Veedhi",
+      "localname": "Peruku Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "147",
+      "children": null
+    },
+    {
+      "id": 148,
+      "boundaryNum": 138,
+      "name": "Kanyaka Parameswari Street",
+      "localname": "",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "148",
+      "children": null
+    },
+    {
+      "id": 149,
+      "boundaryNum": 139,
+      "name": "Kothapeta",
+      "localname": "Kothapet",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "149",
+      "children": null
+    },
+    {
+      "id": 150,
+      "boundaryNum": 140,
+      "name": "Ramadasu Veedhi",
+      "localname": "Ramadasu Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "150",
+      "children": null
+    },
+    {
+      "id": 151,
+      "boundaryNum": 141,
+      "name": "Gandhi Road",
+      "localname": "Gandhi Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "151",
+      "children": null
+    },
+    {
+      "id": 152,
+      "boundaryNum": 142,
+      "name": "Bus Stand Area",
+      "localname": "Bus Stand Area",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "152",
+      "children": null
+    },
+    {
+      "id": 153,
+      "boundaryNum": 143,
+      "name": "Bank Colony-bheemili",
+      "localname": "",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "153",
+      "children": null
+    },
+    {
+      "id": 154,
+      "boundaryNum": 144,
+      "name": "Maedera Veedhi",
+      "localname": "Maedera Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "154",
+      "children": null
+    },
+    {
+      "id": 155,
+      "boundaryNum": 145,
+      "name": "Zeeru Peta",
+      "localname": "Zeeru Peta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "155",
+      "children": null
+    },
+    {
+      "id": 156,
+      "boundaryNum": 146,
+      "name": "Ulla Peta",
+      "localname": "Ulla Peta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "156",
+      "children": null
+    },
+    {
+      "id": 157,
+      "boundaryNum": 147,
+      "name": "Palle Kumaripaleem",
+      "localname": "Palle Kumaripaleem",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "157",
+      "children": null
+    },
+    {
+      "id": 158,
+      "boundaryNum": 148,
+      "name": "Harijana Santapeta",
+      "localname": "Santapeta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "158",
+      "children": null
+    },
+    {
+      "id": 159,
+      "boundaryNum": 149,
+      "name": "Idadasaripeta",
+      "localname": "Idadasaripeta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "159",
+      "children": null
+    },
+    {
+      "id": 160,
+      "boundaryNum": 150,
+      "name": "Venkateswara Metta",
+      "localname": "Vinkateswara Metta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "160",
+      "children": null
+    },
+    {
+      "id": 161,
+      "boundaryNum": 151,
+      "name": "Bheemili Road",
+      "localname": "Tagarapuvalasa",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "161",
+      "children": null
+    },
+    {
+      "id": 162,
+      "boundaryNum": 152,
+      "name": "Ullapeta",
+      "localname": "Ullapeta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "162",
+      "children": null
+    },
+    {
+      "id": 163,
+      "boundaryNum": 153,
+      "name": "Sadanandarao Veedhi",
+      "localname": "Boyiveedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "163",
+      "children": null
+    },
+    {
+      "id": 164,
+      "boundaryNum": 154,
+      "name": "Kothapeta -bheemili",
+      "localname": "Yeguvapeta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "164",
+      "children": null
+    },
+    {
+      "id": 165,
+      "boundaryNum": 155,
+      "name": "Keetinpeta",
+      "localname": "Keetinpeta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "165",
+      "children": null
+    },
+    {
+      "id": 166,
+      "boundaryNum": 156,
+      "name": "Vuda Colony",
+      "localname": "Vuda Colony",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "166",
+      "children": null
+    },
+    {
+      "id": 167,
+      "boundaryNum": 157,
+      "name": "Bhimili Main Road",
+      "localname": "Gantastambham Area",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "167",
+      "children": null
+    },
+    {
+      "id": 168,
+      "boundaryNum": 158,
+      "name": "Lankadavari Veedhi",
+      "localname": "",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "168",
+      "children": null
+    },
+    {
+      "id": 169,
+      "boundaryNum": 159,
+      "name": "Adarashanagar",
+      "localname": "Adarashanagar",
+      "longitude": null,
+      "latitude": null,
+      "label" : "LocalityLocality",
+      "code": "169",
+      "children": null
+    },
+    {
+      "id": 170,
+      "boundaryNum": 160,
+      "name": "Lankadavariveedhi",
+      "localname": "Lankadavariveedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "170",
+      "children": null
+    },
+    {
+      "id": 171,
+      "boundaryNum": 161,
+      "name": "Kondapeta",
+      "localname": "Kondapeta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "171",
+      "children": null
+    },
+    {
+      "id": 19,
+      "boundaryNum": 1,
+      "name": "Kotta Peta Super Structure",
+      "localname": "Kotta Peta Super Structure",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "19",
+      "children": null
+    },
+    {
+      "id": 20,
+      "boundaryNum": 2,
+      "name": "Panda Veedhi",
+      "localname": "Panda Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "20",
+      "children": null
+    },
+    {
+      "id": 21,
+      "boundaryNum": 3,
+      "name": "Ganagalla Veedhi",
+      "localname": "Ganagalla Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "21",
+      "children": null
+    },
+    {
+      "id": 22,
+      "boundaryNum": 4,
+      "name": "Gedda Veedi",
+      "localname": "Gedda Veedi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "22",
+      "children": null
+    },
+    {
+      "id": 23,
+      "boundaryNum": 5,
+      "name": "Golla Veedhi",
+      "localname": "Golla Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "23",
+      "children": null
+    },
+    {
+      "id": 24,
+      "boundaryNum": 6,
+      "name": "Gowda Veedi",
+      "localname": "Gowda Veedi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "24",
+      "children": null
+    },
+    {
+      "id": 25,
+      "boundaryNum": 7,
+      "name": "Kaligotla Veedhi",
+      "localname": "Kaligotla Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "25",
+      "children": null
+    },
+    {
+      "id": 26,
+      "boundaryNum": 8,
+      "name": "Durga Asramam",
+      "localname": "Durga Asramam",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "26",
+      "children": null
+    },
+    {
+      "id": 27,
+      "boundaryNum": 9,
+      "name": "Konki Veedhi",
+      "localname": "Konki Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "27",
+      "children": null
+    },
+    {
+      "id": 28,
+      "boundaryNum": 10,
+      "name": "College Road",
+      "localname": "College Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "28",
+      "children": null
+    },
+    {
+      "id": 29,
+      "boundaryNum": 11,
+      "name": "Krishnayya Veedi",
+      "localname": "Krishnayya Veedi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "29",
+      "children": null
+    },
+    {
+      "id": 30,
+      "boundaryNum": 12,
+      "name": "Yeguvapeta Veedhi",
+      "localname": "Yeguvapeta Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "30",
+      "children": null
+    },
+    {
+      "id": 32,
+      "boundaryNum": 14,
+      "name": "Narasimhaswamy Temple Street",
+      "localname": "Narasimhaswamy Temple Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "32",
+      "children": null
+    },
+    {
+      "id": 33,
+      "boundaryNum": 15,
+      "name": "Nehru Street",
+      "localname": "Nehru Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "33",
+      "children": null
+    },
+    {
+      "id": 34,
+      "boundaryNum": 16,
+      "name": "Old I.t.i",
+      "localname": "Old I.t.i",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "34",
+      "children": null
+    },
+    {
+      "id": 35,
+      "boundaryNum": 17,
+      "name": "Old I.t.i Road",
+      "localname": "Old I.t.i Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "35",
+      "children": null
+    },
+    {
+      "id": 36,
+      "boundaryNum": 18,
+      "name": "Konda Peta",
+      "localname": "Konda Peta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "36",
+      "children": null
+    },
+    {
+      "id": 37,
+      "boundaryNum": 19,
+      "name": "Bheemilipatnam",
+      "localname": "Bheemilipatnam",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "37",
+      "children": null
+    },
+    {
+      "id": 38,
+      "boundaryNum": 20,
+      "name": "Anjaneya Temple Street",
+      "localname": "Anjaneya Temple Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "38",
+      "children": null
+    },
+    {
+      "id": 39,
+      "boundaryNum": 21,
+      "name": "Appikonda Veedhi",
+      "localname": "Appikonda Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "39",
+      "children": null
+    },
+    {
+      "id": 40,
+      "boundaryNum": 22,
+      "name": "Bank Road",
+      "localname": "Bank Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "40",
+      "children": null
+    },
+    {
+      "id": 41,
+      "boundaryNum": 23,
+      "name": "Bheemili Boya Veedhi",
+      "localname": "Bheemili Boya Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "41",
+      "children": null
+    },
+    {
+      "id": 42,
+      "boundaryNum": 24,
+      "name": "Bheemili Main Road",
+      "localname": "Bheemili Main Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "42",
+      "children": null
+    },
+    {
+      "id": 43,
+      "boundaryNum": 25,
+      "name": "Bheemili Mangala Veedhi",
+      "localname": "Bheemili Mangala Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "43",
+      "children": null
+    },
+    {
+      "id": 44,
+      "boundaryNum": 26,
+      "name": "Gadu Veedhi",
+      "localname": "Gadu Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "44",
+      "children": null
+    },
+    {
+      "id": 45,
+      "boundaryNum": 27,
+      "name": "Bheemili Yegu Peta",
+      "localname": "Bheemili Yegu Peta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "45",
+      "children": null
+    },
+    {
+      "id": 46,
+      "boundaryNum": 28,
+      "name": "Kummari Palem Street",
+      "localname": "Kummari Palem Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "46",
+      "children": null
+    },
+    {
+      "id": 47,
+      "boundaryNum": 29,
+      "name": "Bheemilipatnam Beach Road",
+      "localname": "Bheemilipatnam Beach Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "47",
+      "children": null
+    },
+    {
+      "id": 48,
+      "boundaryNum": 30,
+      "name": "Burma Colony",
+      "localname": "Burma Colony",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "48",
+      "children": null
+    },
+    {
+      "id": 49,
+      "boundaryNum": 31,
+      "name": "C.b.m Road",
+      "localname": "C.b.m Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "49",
+      "children": null
+    },
+    {
+      "id": 50,
+      "boundaryNum": 32,
+      "name": "Cbm Area",
+      "localname": "Cbm Area",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "50",
+      "children": null
+    },
+    {
+      "id": 51,
+      "boundaryNum": 33,
+      "name": "Chilaka Veedhi",
+      "localname": "Chilaka Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "51",
+      "children": null
+    },
+    {
+      "id": 52,
+      "boundaryNum": 34,
+      "name": "Chinna Bazar",
+      "localname": "Chinna Bazar",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "52",
+      "children": null
+    },
+    {
+      "id": 53,
+      "boundaryNum": 35,
+      "name": "Chinna Bazar Area",
+      "localname": "Chinna Bazar Area",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "53",
+      "children": null
+    },
+    {
+      "id": 54,
+      "boundaryNum": 36,
+      "name": "Bheemili Reddy Veedhi",
+      "localname": "Bheemili Reddy Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "54",
+      "children": null
+    },
+    {
+      "id": 55,
+      "boundaryNum": 37,
+      "name": "Relli Street",
+      "localname": "Relli Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "55",
+      "children": null
+    },
+    {
+      "id": 56,
+      "boundaryNum": 38,
+      "name": "Thota Street",
+      "localname": "Thota Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "56",
+      "children": null
+    },
+    {
+      "id": 57,
+      "boundaryNum": 39,
+      "name": "Subash Road",
+      "localname": "Subash Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "57",
+      "children": null
+    },
+    {
+      "id": 58,
+      "boundaryNum": 40,
+      "name": "St Anns School Road",
+      "localname": "St Anns School Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "58",
+      "children": null
+    },
+    {
+      "id": 59,
+      "boundaryNum": 41,
+      "name": "Smith Street",
+      "localname": "Smith Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "59",
+      "children": null
+    },
+    {
+      "id": 60,
+      "boundaryNum": 42,
+      "name": "Rottela Veedi",
+      "localname": "Rottela Veedi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "60",
+      "children": null
+    },
+    {
+      "id": 61,
+      "boundaryNum": 43,
+      "name": "Pandda Veedi",
+      "localname": "Pandda Veedi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "61",
+      "children": null
+    },
+    {
+      "id": 62,
+      "boundaryNum": 44,
+      "name": "Peerlupanja",
+      "localname": "Peerlupanja",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "62",
+      "children": null
+    },
+    {
+      "id": 63,
+      "boundaryNum": 45,
+      "name": "Old Local Office Road",
+      "localname": "Old Local Office Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "63",
+      "children": null
+    },
+    {
+      "id": 64,
+      "boundaryNum": 46,
+      "name": "Kondapeta Colony",
+      "localname": "Kondapeta Colony",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "64",
+      "children": null
+    },
+    {
+      "id": 65,
+      "boundaryNum": 47,
+      "name": "Vzm Road",
+      "localname": "Vzm Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "65",
+      "children": null
+    },
+    {
+      "id": 66,
+      "boundaryNum": 48,
+      "name": "Jogavari Veedhi",
+      "localname": "Jogavari Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "66",
+      "children": null
+    },
+    {
+      "id": 67,
+      "boundaryNum": 49,
+      "name": "Vsp Road",
+      "localname": "Vsp Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "67",
+      "children": null
+    },
+    {
+      "id": 68,
+      "boundaryNum": 50,
+      "name": "Harijana Peta",
+      "localname": "Harijana Peta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "68",
+      "children": null
+    },
+    {
+      "id": 69,
+      "boundaryNum": 51,
+      "name": "Raja Rama Street",
+      "localname": "Raja Rama Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "69",
+      "children": null
+    },
+    {
+      "id": 70,
+      "boundaryNum": 52,
+      "name": "Ramanna Peta",
+      "localname": "Ramanna Peta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "70",
+      "children": null
+    },
+    {
+      "id": 71,
+      "boundaryNum": 53,
+      "name": "Vempada Vari Veeedhi",
+      "localname": "Vempada Vari Veeedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "71",
+      "children": null
+    },
+    {
+      "id": 72,
+      "boundaryNum": 54,
+      "name": "Karnam Badi Street",
+      "localname": "Karnam Badi Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "72",
+      "children": null
+    },
+    {
+      "id": 73,
+      "boundaryNum": 55,
+      "name": "Power Office Road",
+      "localname": "Power Office Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "73",
+      "children": null
+    },
+    {
+      "id": 74,
+      "boundaryNum": 56,
+      "name": "Santhapeta",
+      "localname": "Santhapeta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "74",
+      "children": null
+    },
+    {
+      "id": 75,
+      "boundaryNum": 57,
+      "name": "Pump House Road",
+      "localname": "Pump House Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "75",
+      "children": null
+    },
+    {
+      "id": 76,
+      "boundaryNum": 58,
+      "name": "Bypass Road",
+      "localname": "Bypass Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "76",
+      "children": null
+    },
+    {
+      "id": 77,
+      "boundaryNum": 59,
+      "name": "Satyanarayana Peta",
+      "localname": "Satyanarayana Peta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "77",
+      "children": null
+    },
+    {
+      "id": 78,
+      "boundaryNum": 60,
+      "name": "Sivalayam Road",
+      "localname": "Sivalayam Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "78",
+      "children": null
+    },
+    {
+      "id": 79,
+      "boundaryNum": 64,
+      "name": "Bangala Metta",
+      "localname": "Bangala Metta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "79",
+      "children": null
+    },
+    {
+      "id": 80,
+      "boundaryNum": 65,
+      "name": "Local Office Road",
+      "localname": "Local Office Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "80",
+      "children": null
+    },
+    {
+      "id": 81,
+      "boundaryNum": 66,
+      "name": "Rama Kovela Street",
+      "localname": "Rama Kovela Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "81",
+      "children": null
+    },
+    {
+      "id": 82,
+      "boundaryNum": 67,
+      "name": "Main Road Near Thatha Theatre",
+      "localname": "Main Road Near Thatha Theatre",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "82",
+      "children": null
+    },
+    {
+      "id": 83,
+      "boundaryNum": 68,
+      "name": "Rama Street",
+      "localname": "Rama Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "83",
+      "children": null
+    },
+    {
+      "id": 84,
+      "boundaryNum": 69,
+      "name": "Raja Veedhi",
+      "localname": "Raja Veedhi",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "84",
+      "children": null
+    },
+    {
+      "id": 85,
+      "boundaryNum": 70,
+      "name": "Msn Road",
+      "localname": "Msn Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "85",
+      "children": null
+    },
+    {
+      "id": 86,
+      "boundaryNum": 71,
+      "name": "Ramana Peta",
+      "localname": "Ramana Peta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "86",
+      "children": null
+    },
+    {
+      "id": 87,
+      "boundaryNum": 72,
+      "name": "Kosuri Vari Street",
+      "localname": "Kosuri Vari Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "87",
+      "children": null
+    },
+    {
+      "id": 88,
+      "boundaryNum": 73,
+      "name": "Nagarapu Street",
+      "localname": "Nagarapu Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "88",
+      "children": null
+    },
+    {
+      "id": 89,
+      "boundaryNum": 74,
+      "name": "Kosuri Simhachalam Street",
+      "localname": "Kosuri Simhachalam Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "89",
+      "children": null
+    },
+    {
+      "id": 90,
+      "boundaryNum": 75,
+      "name": "Balaji Nagar",
+      "localname": "Balaji Nagar",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "90",
+      "children": null
+    },
+    {
+      "id": 91,
+      "boundaryNum": 76,
+      "name": "Chakali Santhapeta",
+      "localname": "Chakali Santhapeta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "91",
+      "children": null
+    },
+    {
+      "id": 92,
+      "boundaryNum": 77,
+      "name": "Santhapeta(reddy Street)",
+      "localname": "Santhapeta(reddy Street)",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "92",
+      "children": null
+    },
+    {
+      "id": 93,
+      "boundaryNum": 79,
+      "name": "Chittivalasa",
+      "localname": "Chittivalasa",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "93",
+      "children": null
+    },
+    {
+      "id": 94,
+      "boundaryNum": 82,
+      "name": "Reddy Street",
+      "localname": "Reddy Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "94",
+      "children": null
+    },
+    {
+      "id": 95,
+      "boundaryNum": 84,
+      "name": "Grandalayamu Street",
+      "localname": "Grandalayamu Street",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "95",
+      "children": null
+    },
+    {
+      "id": 96,
+      "boundaryNum": 85,
+      "name": "C.j.mills",
+      "localname": "C.j.mills",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "96",
+      "children": null
+    },
+    {
+      "id": 97,
+      "boundaryNum": 86,
+      "name": "Sabbivani Peta",
+      "localname": "Sabbivani Peta",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "97",
+      "children": null
+    },
+    {
+      "id": 98,
+      "boundaryNum": 87,
+      "name": "Yathakummari Palem",
+      "localname": "Yathakummari Palem",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "98",
+      "children": null
+    },
+    {
+      "id": 99,
+      "boundaryNum": 88,
+      "name": "Vizag Road",
+      "localname": "Vizag Road",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "99",
+      "children": null
+    }
+  ]
+
+  }
+  },
+    {
+  "hierarchyType" : {
+    "code" : "ADMIN",
+    "name" : "ADMINISTRATION"
+  },
+  "boundary" : {
+
+  "id": 172,
+  "boundaryNum": 1,
+  "name": "Srikakulam  Municipality",
+  "localname": "Srikakulam  Municipality",
+  "longitude": null,
+  "latitude": null,
+  "label" : "City",
+  "code": "172",
+  "children": [
+    {
+      "id": 173,
+      "boundaryNum": 1,
+      "name": "Election Ward No 1",
+      "localname": "Election Ward No 1",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "173",
+      "children": null
+    },
+    {
+      "id": 174,
+      "boundaryNum": 2,
+      "name": "Election Ward No 2",
+      "localname": "Election Ward No 2",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "174",
+      "children": null
+    },
+    {
+      "id": 175,
+      "boundaryNum": 3,
+      "name": "Election Ward No 3",
+      "localname": "Election Ward No 3",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "175",
+      "children": null
+    },
+    {
+      "id": 176,
+      "boundaryNum": 4,
+      "name": "Election Ward No 4",
+      "localname": "Election Ward No 4",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "176",
+      "children": null
+    },
+    {
+      "id": 177,
+      "boundaryNum": 5,
+      "name": "Election Ward No 5",
+      "localname": "Election Ward No 5",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "177",
+      "children": null
+    },
+    {
+      "id": 178,
+      "boundaryNum": 6,
+      "name": "Election Ward No 6",
+      "localname": "Election Ward No 6",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "178",
+      "children": null
+    },
+    {
+      "id": 305,
+      "boundaryNum": 7,
+      "name": "Election Ward No 7",
+      "localname": "Election Ward No No 7",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "305",
+      "children": null
+    },
+    {
+      "id": 306,
+      "boundaryNum": 8,
+      "name": "Election Ward No 8",
+      "localname": "Election Ward No No 8",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "306",
+      "children": null
+    },
+    {
+      "id": 307,
+      "boundaryNum": 9,
+      "name": "Election Ward No 9",
+      "localname": "Election Ward No No 9",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "307",
+      "children": null
+    },
+    {
+      "id": 308,
+      "boundaryNum": 10,
+      "name": "Election Ward No 10",
+      "localname": "Election Ward No No 10",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "308",
+      "children": null
+    },
+    {
+      "id": 309,
+      "boundaryNum": 11,
+      "name": "Election Ward No 11",
+      "localname": "Election Ward No No 11",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "309",
+      "children": null
+    },
+    {
+      "id": 310,
+      "boundaryNum": 12,
+      "name": "Election Ward No 12",
+      "localname": "Election Ward No No 12",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "310",
+      "children": null
+    },
+    {
+      "id": 311,
+      "boundaryNum": 13,
+      "name": "Election Ward No 13",
+      "localname": "Election Ward No No 13",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "311",
+      "children": null
+    },
+    {
+      "id": 312,
+      "boundaryNum": 14,
+      "name": "Election Ward No 14",
+      "localname": "Election Ward No No 14",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "312",
+      "children": null
+    },
+    {
+      "id": 313,
+      "boundaryNum": 15,
+      "name": "Election Ward No 15",
+      "localname": "Election Ward No No 15",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "313",
+      "children": null
+    },
+    {
+      "id": 314,
+      "boundaryNum": 16,
+      "name": "Election Ward No 16",
+      "localname": "Election Ward No No 16",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "314",
+      "children": null
+    },
+    {
+      "id": 315,
+      "boundaryNum": 17,
+      "name": "Election Ward No 17",
+      "localname": "Election Ward No No 17",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "315",
+      "children": null
+    },
+    {
+      "id": 316,
+      "boundaryNum": 18,
+      "name": "Election Ward No 18",
+      "localname": "Election Ward No No 18",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "316",
+      "children": null
+    },
+    {
+      "id": 317,
+      "boundaryNum": 19,
+      "name": "Election Ward No 19",
+      "localname": "Election Ward No No 19",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "317",
+      "children": null
+    },
+    {
+      "id": 318,
+      "boundaryNum": 20,
+      "name": "Election Ward No 20",
+      "localname": "Election Ward No No 20",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "318",
+      "children": null
+    },
+    {
+      "id": 319,
+      "boundaryNum": 21,
+      "name": "Election Ward No 21",
+      "localname": "Election Ward No No 21",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "319",
+      "children": null
+    },
+    {
+      "id": 320,
+      "boundaryNum": 22,
+      "name": "Election Ward No 22",
+      "localname": "Election Ward No No 22",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "320",
+      "children": null
+    },
+    {
+      "id": 321,
+      "boundaryNum": 23,
+      "name": "Election Ward No 23",
+      "localname": "Election Ward No No 23",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "321",
+      "children": null
+    },
+    {
+      "id": 322,
+      "boundaryNum": 24,
+      "name": "Election Ward No 24",
+      "localname": "Election Ward No No 24",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "322",
+      "children": null
+    },
+    {
+      "id": 323,
+      "boundaryNum": 25,
+      "name": "Election Ward No 25",
+      "localname": "Election Ward No No 25",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "323",
+      "children": null
+    },
+    {
+      "id": 324,
+      "boundaryNum": 26,
+      "name": "Election Ward No 26",
+      "localname": "Election Ward No No 26",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "324",
+      "children": null
+    },
+    {
+      "id": 325,
+      "boundaryNum": 27,
+      "name": "Election Ward No 27",
+      "localname": "Election Ward No No 27",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "325",
+      "children": null
+    },
+    {
+      "id": 326,
+      "boundaryNum": 28,
+      "name": "Election Ward No 28",
+      "localname": "Election Ward No No 28",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "326",
+      "children": null
+    },
+    {
+      "id": 327,
+      "boundaryNum": 29,
+      "name": "Election Ward No 29",
+      "localname": "Election Ward No No 29",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "327",
+      "children": null
+    },
+    {
+      "id": 328,
+      "boundaryNum": 30,
+      "name": "Election Ward No 30",
+      "localname": "Election Ward No No 30",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "328",
+      "children": null
+    },
+    {
+      "id": 329,
+      "boundaryNum": 31,
+      "name": "Election Ward No 31",
+      "localname": "Election Ward No No 31",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "329",
+      "children": null
+    },
+    {
+      "id": 330,
+      "boundaryNum": 32,
+      "name": "Election Ward No 32",
+      "localname": "Election Ward No No 32",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "330",
+      "children": null
+    },
+    {
+      "id": 331,
+      "boundaryNum": 33,
+      "name": "Election Ward No 33",
+      "localname": "Election Ward No No 33",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "331",
+      "children": null
+    },
+    {
+      "id": 332,
+      "boundaryNum": 34,
+      "name": "Election Ward No 34",
+      "localname": "Election Ward No No 34",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "332",
+      "children": null
+    },
+    {
+      "id": 333,
+      "boundaryNum": 35,
+      "name": "Election Ward No 35",
+      "localname": "Election Ward No No 35",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "333",
+      "children": null
+    },
+    {
+      "id": 334,
+      "boundaryNum": 36,
+      "name": "Election Ward No 36",
+      "localname": "Election Ward No No 36",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "334",
+      "children": null
+    },
+    {
+      "id": 335,
+      "boundaryNum": 37,
+      "name": "Election Ward No 37",
+      "localname": "Election Ward No No 37",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "335",
+      "children": null
+    },
+    {
+      "id": 336,
+      "boundaryNum": 38,
+      "name": "Election Ward No 38",
+      "localname": "Election Ward No No 38",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "336",
+      "children": null
+    },
+    {
+      "id": 337,
+      "boundaryNum": 39,
+      "name": "Election Ward No 39",
+      "localname": "Election Ward No No 39",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "337",
+      "children": null
+    },
+    {
+      "id": 338,
+      "boundaryNum": 40,
+      "name": "Election Ward No 40",
+      "localname": "Election Ward No No 40",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "338",
+      "children": null
+    },
+    {
+      "id": 339,
+      "boundaryNum": 41,
+      "name": "Election Ward No 41",
+      "localname": "Election Ward No No 41",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "339",
+      "children": null
+    },
+    {
+      "id": 340,
+      "boundaryNum": 42,
+      "name": "Election Ward No 42",
+      "localname": "Election Ward No No 42",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "340",
+      "children": null
+    },
+    {
+      "id": 341,
+      "boundaryNum": 43,
+      "name": "Election Ward No 43",
+      "localname": "Election Ward No No 43",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "341",
+      "children": null
+    },
+    {
+      "id": 342,
+      "boundaryNum": 44,
+      "name": "Election Ward No 44",
+      "localname": "Election Ward No No 44",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "342",
+      "children": null
+    },
+    {
+      "id": 343,
+      "boundaryNum": 45,
+      "name": "Election Ward No 45",
+      "localname": "Election Ward No No 45",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "343",
+      "children": null
+    },
+    {
+      "id": 344,
+      "boundaryNum": 46,
+      "name": "Election Ward No 46",
+      "localname": "Election Ward No No 46",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "344",
+      "children": null
+    },
+    {
+      "id": 345,
+      "boundaryNum": 47,
+      "name": "Election Ward No 47",
+      "localname": "Election Ward No No 47",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "345",
+      "children": null
+    },
+    {
+      "id": 346,
+      "boundaryNum": 48,
+      "name": "Election Ward No 48",
+      "localname": "Election Ward No No 48",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "346",
+      "children": null
+    },
+    {
+      "id": 347,
+      "boundaryNum": 49,
+      "name": "Election Ward No 49",
+      "localname": "Election Ward No No 49",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "347",
+      "children": null
+    },
+    {
+      "id": 348,
+      "boundaryNum": 50,
+      "name": "Election Ward No 50",
+      "localname": "Election Ward No No 50",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "348",
+      "children": null
+    },
+    {
+      "id": 349,
+      "boundaryNum": 51,
+      "name": "Election Ward No 51",
+      "localname": "Election Ward No No 51",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "349",
+      "children": null
+    }
+  ]
+
+  }
+  },
+    {
+  "hierarchyType" : {
+    "code" : "REVENUE_PTIS",
+    "name" : "REVENUE_PTIS"
+  },
+  "boundary" : {
+    
+  "id": 1365,
+  "boundaryNum": 1,
+  "name": "Default  Municipality",
+  "localname": "Default  Municipality",
+  "longitude": null,
+  "latitude": null,
+  "label" : "City",
+  "code": "DM",
+  "children": [
+    {
+      "id": 1366,
+      "boundaryNum": 1,
+      "name": "Zone-1",
+      "localname": "Zone-1",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Zone",
+      "code": "Z1",
+      "children": null
+    },
+    {
+      "id": 1367,
+      "boundaryNum": 2,
+      "name": "Zone-2",
+      "localname": "Zone-2",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Zone",
+      "code": "Z2",
+      "children": null
+    }
+  ]
+
+  }
+  },
+  {
+    "hierarchyType" : {
+    "code" : "ADMINISTRATION_TL",
+    "name" : "ADMINISTRATION_TL"
+  },
+  "boundary" : {
+    
+  "id": 1370,
+  "boundaryNum": 1,
+  "name": "Default  Municipality",
+  "localname": "Default  Municipality",
+  "longitude": null,
+  "latitude": null,
+  "label" : "City",
+  "code": "TLADMINDM",
+  "children": [
+    {
+      "id": 1371,
+      "boundaryNum": 1,
+      "name": "Zone-1",
+      "localname": "Zone-1",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Zone",
+      "code": "TLADMINZ1",
+      "children": [
+        {
+          "id": 1373,
+          "boundaryNum": 1,
+          "name": "Admin Ward No 1",
+          "localname": "Admin Ward No 1",
+          "longitude": null,
+          "latitude": null,
+          "label" : "Ward",
+          "code": "TLADMINRW1",
+          "children": null
+        }
+      ]
+    },
+    {
+      "id": 1372,
+      "boundaryNum": 2,
+      "name": "Zone-2",
+      "localname": "Zone-2",
+      "longitude": null,
+      "latitude": null,
+      "label" : "",
+      "code": "TLADMINZ2",
+      "children": [
+        {
+          "id": 1374,
+          "boundaryNum": 2,
+          "name": "Admin Ward No 2",
+          "localname": "Admin Ward No 2",
+          "longitude": null,
+          "latitude": null,
+          "label" : "Zone",
+          "code": "TLADMINRW2",
+          "children": null
+        }
+      ]
+    }
+  ]
+
+  }
+  
+  },
+    {
+  "hierarchyType" : {
+    "code" : "LOCATION_TL",
+    "name" : "LOCATION_TL"
+  },
+  "boundary" : {
+    
+  "id": 1375,
+  "boundaryNum": 1,
+  "name": "Default  Municipality",
+  "localname": "Default  Municipality",
+  "longitude": null,
+  "latitude": null,
+  "label" : "City",
+  "code": "TLLOCDM",
+  "children": [
+    {
+      "id": 1376,
+      "boundaryNum": 1,
+      "name": "Zone-1",
+      "localname": "Zone-1",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Zone",
+      "code": "TLLOCZ1",
+      "children": [
+        {
+          "id": 1378,
+          "boundaryNum": 1,
+          "name": "Location Ward No 1",
+          "localname": "Location Ward No 1",
+          "longitude": null,
+          "latitude": null,
+          "label" : "ward",
+          "code": "TLLOCW1",
+          "children": null
+        }
+      ]
+    },
+    {
+      "id": 1377,
+      "boundaryNum": 2,
+      "name": "Zone-2",
+      "localname": "Zone-2",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Zone",
+      "code": "TLLOCZ2",
+      "children": [
+        {
+          "id": 1379,
+          "boundaryNum": 2,
+          "name": "Location Ward No 2",
+          "localname": "Location Ward No 2",
+          "longitude": null,
+          "latitude": null,
+          "label" : "Ward",
+          "code": "TLLOCW2",
+          "children": null
+        }
+      ]
+    }
+  ]
+
+    
+  }
+  },
+  {
+  "hierarchyType" : {
+    "code" : "REVENUE_TL",
+    "name" : "REVENUE_TL"
+  },
+  "boundary" : {
+    
+  "id": 1380,
+  "boundaryNum": 1,
+  "name": "Default  Municipality",
+  "localname": "Default  Municipality",
+  "longitude": null,
+  "latitude": null,
+  "label" : "City",
+  "code": "TLREVDM",
+  "children": [
+    {
+      "id": 1381,
+      "boundaryNum": 1,
+      "name": "Zone-1",
+      "localname": "Zone-1",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Zone",
+      "code": "Z1TLREV",
+      "children": [
+        {
+          "id": 1383,
+          "boundaryNum": 1,
+          "name": "Revenue Ward No 1",
+          "localname": "Revenue Ward No 1",
+          "longitude": null,
+          "latitude": null,
+          "label" : "Ward",
+          "code": "RW1TLREV",
+          "children": null
+        }
+      ]
+    },
+    {
+      "id": 1382,
+      "boundaryNum": 2,
+      "name": "Zone-2",
+      "localname": "Zone-2",
+      "longitude": null,
+      "latitude": null,
+      "label" : "Zone",
+      "code": "Z2TLREV",
+      "children": [
+        {
+          "id": 1384,
+          "boundaryNum": 2,
+          "name": "Revenue Ward No 2",
+          "localname": "Revenue Ward No 2",
+          "longitude": null,
+          "latitude": null,
+          "label" : "Ward",
+          "code": "RW2TLREV",
+          "children": null
+        }
+      ]
+    }
+  ]
+
+  }
+  }
+]
+}

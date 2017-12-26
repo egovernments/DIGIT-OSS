@@ -1,0 +1,387 @@
+{
+"tenantId": "mh.khop",
+"moduleName": "egov-location",
+"TenantBoundary" : [
+  {
+  "hierarchyType" : {
+    "code" : "REVENUE",
+    "name" : "REVENUE"
+  },
+  "boundary" : {
+    
+  "id": 1046,
+  "boundarynum": 1,
+  "name": "Khopoli Municipal Council",
+  "localname": null,
+  "longitude": null,
+  "latitude": null,
+  "label": "City",
+  "code": "1046",
+  "children": [
+    {
+      "id": 1057,
+      "boundarynum": 1,
+      "name": "Ward-1",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label": "Ward",
+      "code": "1057",
+      "children": null
+    },
+    {
+      "id": 1058,
+      "boundarynum": 2,
+      "name": "Ward-2",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label": "Ward",
+      "code": "1058",
+      "children": null
+    },
+    {
+      "id": 1059,
+      "boundarynum": 3,
+      "name": "Ward-3",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1059",
+      "children": null
+    },
+    {
+      "id": 1060,
+      "boundarynum": 4,
+      "name": "Ward-4",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1060",
+      "children": null
+    },
+    {
+      "id": 1061,
+      "boundarynum": 5,
+      "name": "Ward-5",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1061",
+      "children": null
+    },
+    {
+      "id": 1062,
+      "boundarynum": 6,
+      "name": "Ward-6",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label": "Ward",
+      "code": "1062",
+      "children": null
+    },
+    {
+      "id": 1063,
+      "boundarynum": 7,
+      "name": "Ward-7",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1063",
+      "children": null
+    },
+    {
+      "id": 1064,
+      "boundarynum": 8,
+      "name": "Ward-8",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1064",
+      "children": null
+    },
+    {
+      "id": 1065,
+      "boundarynum": 9,
+      "name": "Ward-9",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1065",
+      "children": null
+    },
+    {
+      "id": 1066,
+      "boundarynum": 10,
+      "name": "Ward-10",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1066",
+      "children": null
+    },
+    {
+      "id": 1067,
+      "boundarynum": 11,
+      "name": "Ward-11",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1067",
+      "children": null
+    },
+    {
+      "id": 1068,
+      "boundarynum": 12,
+      "name": "Ward-12",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label": "Ward",
+      "code": "1068",
+      "children": null
+    },
+    {
+      "id": 1069,
+      "boundarynum": 13,
+      "name": "Ward-13",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1069",
+      "children": null
+    },
+    {
+      "id": 1070,
+      "boundarynum": 14,
+      "name": "Ward-14",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1070",
+      "children": null
+    },
+    {
+      "id": 1071,
+      "boundarynum": 15,
+      "name": "Ward-15",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label": "Ward",
+      "code": "1071",
+      "children": null
+    },
+    {
+      "id": 1072,
+      "boundarynum": 16,
+      "name": "Ward-16",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1072",
+      "children": null
+    },
+    {
+      "id": 1073,
+      "boundarynum": 17,
+      "name": "Ward-17",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1073",
+      "children": null
+    },
+    {
+      "id": 1074,
+      "boundarynum": 18,
+      "name": "Ward-18",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1074",
+      "children": null
+    },
+    {
+      "id": 1075,
+      "boundarynum": 19,
+      "name": "Ward-19",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label": "Ward",
+      "code": "1075",
+      "children": null
+    },
+    {
+      "id": 1076,
+      "boundarynum": 20,
+      "name": "Ward-20",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1076",
+      "children": null
+    },
+    {
+      "id": 1077,
+      "boundarynum": 21,
+      "name": "Ward-21",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label": "Ward",
+      "code": "1077",
+      "children": null
+    },
+    {
+      "id": 1078,
+      "boundarynum": 22,
+      "name": "Ward-22",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label": "Ward",
+      "code": "1078",
+      "children": null
+    },
+    {
+      "id": 1079,
+      "boundarynum": 23,
+      "name": "Ward-23",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label": "Ward",
+      "code": "1079",
+      "children": null
+    },
+    {
+      "id": 1080,
+      "boundarynum": 24,
+      "name": "Ward-24",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label": "Ward",
+      "code": "1080",
+      "children": null
+    },
+    {
+      "id": 1081,
+      "boundarynum": 25,
+      "name": "Ward-25",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label": "Ward",
+      "code": "1081",
+      "children": null
+    },
+    {
+      "id": 1082,
+      "boundarynum": 26,
+      "name": "Ward-26",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label": "Ward",
+      "code": "1082",
+      "children": null
+    },
+    {
+      "id": 1083,
+      "boundarynum": 27,
+      "name": "Ward-27",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1083",
+      "children": null
+    },
+    {
+      "id": 1084,
+      "boundarynum": 28,
+      "name": "Ward-28",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label": "Ward",
+      "code": "1084",
+      "children": null
+    },
+    {
+      "id": 1085,
+      "boundarynum": 29,
+      "name": "Ward-29",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label": "Ward",
+      "code": "1085",
+      "children": null
+    },
+    {
+      "id": 1086,
+      "boundarynum": 30,
+      "name": "Ward-30",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+       "label": "Ward",
+      "code": "1086",
+      "children": null
+    }
+  ]
+
+  }
+  },
+  {
+    "hierarchyType" : {
+    "code" : "ADMIN",
+    "name" : "ADMINISTRATION"
+  },
+  "boundary" : {
+    
+  "id": 1136,
+  "boundarynum": 1,
+  "name": "Khopoli Municipal Council",
+  "localname": null,
+  "longitude": null,
+  "latitude": null,
+  "label" : "City",
+  "code": "1136",
+  "children": [
+    {
+      "id": 1137,
+      "boundarynum": 1,
+      "name": "HO",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",                
+      "code": "1137",
+      "children": null
+    }
+  ]
+  }
+  
+  }
+]
+}

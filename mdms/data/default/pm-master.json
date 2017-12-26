@@ -1,0 +1,31 @@
+{
+  "tenantId": "default",
+  "moduleName": "PM",
+  "KpiCategory": [
+    {
+      "id": 1,
+      "code" : "WS", 
+      "name": "Water Supply",
+      "tenantId" : "default"
+    },
+    {
+      "id": 2,
+      "code" : "WW", 
+      "name": "Waste Water",
+      "tenantId" : "default"
+    },
+    {
+      "id": 3,
+      "code" : "SWM", 
+      "name": "Solid Waste Management",
+      "tenantId" : "default"
+    },
+    {
+      "id": 4,
+      "code" : "SWD", 
+      "name": "Storm Water Drainage",
+      "tenantId" : "default"
+    }
+  ]
+}
+  

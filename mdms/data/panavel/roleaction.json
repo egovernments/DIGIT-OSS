@@ -1,0 +1,3853 @@
+{
+  "tenantId": "panavel",
+  "moduleName": "ACCESSCONTROL",
+  "roleactions": 
+  [
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 6,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 7,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 9,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 10,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 11,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 12,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 14,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 18,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 19,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 20,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 21,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 6,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 7,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 9,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 10,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 11,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 12,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 14,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 18,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 19,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 20,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 21,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 6,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 7,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 9,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 10,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 11,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 12,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 14,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 18,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 19,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 20,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 21,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 6,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 7,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 9,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 10,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 11,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 12,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 14,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 18,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 19,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 20,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 21,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 6,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 7,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 9,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 10,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 11,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 12,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 14,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 18,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 19,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 20,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 21,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 267,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 268,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 227,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 229,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 231,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 275,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 279,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 287,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 287,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 287,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 287,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 287,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 288,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 288,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 288,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 288,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 288,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 289,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 289,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 289,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 289,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 289,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 237,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 269,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 291,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 292,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 291,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 292,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 291,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 292,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 291,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 292,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 291,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 292,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 168,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 308,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 308,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 308,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 308,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 308,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 309,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 309,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 309,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 309,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 309,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 311,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 311,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 311,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 311,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 311,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 310,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 310,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 310,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 310,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 324,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 324,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 324,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 324,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 324,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 673,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 674,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 675,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 676,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 677,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 678,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 679,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 421,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 422,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 423,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 426,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 403,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 407,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 409,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 413,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 415,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 419,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 490,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 491,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 680,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 681,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 682,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 683,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 684,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 685,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 686,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 687,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 383,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 384,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 385,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 386,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 387,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 388,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 389,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 492,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 493,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 494,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 495,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 505,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 506,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 507,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 508,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 509,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 510,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 463,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 464,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 457,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 458,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 459,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 460,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 461,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 462,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 465,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 688,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 689,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 690,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 405,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 411,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 417,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 182,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 209,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 210,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 597,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 598,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 599,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 628,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 629,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 630,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 631,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 632,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 633,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 634,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 635,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 636,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 637,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 638,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 639,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 640,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 641,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 349,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 350,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 331,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 329,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 335,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 334,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 333,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 336,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 332,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 330,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 328,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 345,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 346,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 327,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 344,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 642,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 643,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 644,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 645,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 646,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 647,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 648,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 649,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 650,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 651,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 358,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 652,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 653,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 654,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 655,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 656,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 657,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 369,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 373,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 378,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 352,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 351,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 337,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 340,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 339,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 338,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 357,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 359,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 366,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 360,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 361,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 362,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 363,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 364,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 365,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 370,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 353,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 355,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 372,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 374,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 379,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 380,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 381,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 382,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 658,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 659,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 660,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 661,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 662,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 663,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 664,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 665,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 666,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 667,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 668,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 669,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 670,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 671,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 347,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 348,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 691,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 692,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 693,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 694,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 695,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 696,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 697,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 698,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 699,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 700,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 701,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 702,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 703,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 704,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 705,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 706,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 707,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 397,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 399,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 401,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 184,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 214,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 216,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 180,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 208,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 211,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 212,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 213,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 215,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 217,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 192,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 708,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 709,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 710,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 711,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 341,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 343,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 342,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 238,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 241,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 712,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 713,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 228,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 226,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 230,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 232,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 234,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 242,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 244,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 714,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 715,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 716,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 717,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 718,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 719,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 720,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 151,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 152,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 153,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 154,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 155,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 156,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 233,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 235,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 225,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 221,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 157,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 158,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 159,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 160,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 161,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 162,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 173,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 174,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 255,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 256,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 257,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 425,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 259,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 260,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 261,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 262,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 263,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 264,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 265,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 266,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 427,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 721,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 722,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 424,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 430,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 428,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 429,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 258,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 253,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 254,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 723,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 276,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 277,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 278,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 431,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 290,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 523,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 524,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 525,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 526,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 527,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 528,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 293,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 294,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 529,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 530,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 531,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 532,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 533,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 534,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 535,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 536,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 537,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 538,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 539,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 540,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 541,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 542,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 543,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 432,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 220,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 224,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 295,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 222,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 325,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 296,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 297,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 298,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 299,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 300,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 301,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 466,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 467,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 468,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 469,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 470,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 471,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 472,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 473,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 474,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 475,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 476,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 477,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 478,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 479,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 480,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 481,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 482,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 483,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 484,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 485,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 486,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 487,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 488,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 489,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 433,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 434,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 435,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 436,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 437,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 438,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 439,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 440,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 441,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 442,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 443,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 444,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 445,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 446,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 447,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 448,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 449,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 450,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 451,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 452,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 453,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 454,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 455,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 456,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 515,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 516,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 518,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 252,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 512,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 513,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 240,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 239,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 519,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 520,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 521,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 522,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 243,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 420,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 514,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 517,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 246,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 247,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 368,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 376,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 245,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 570,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 571,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 572,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 573,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 574,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 575,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 576,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 577,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 578,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 579,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 580,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 581,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 248,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 511,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 371,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 367,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 169,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 170,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 171,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 175,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 177,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 178,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 179,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 181,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 165,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 167,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 163,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 544,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 545,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 546,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 547,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 548,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 549,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 550,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 551,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 218,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 236,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 164,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 280,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 552,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 553,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 554,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 555,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 556,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 557,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 558,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 559,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 560,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 561,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 562,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 563,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 564,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 565,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 566,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 567,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 568,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 166,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 285,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 198,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 194,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 196,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 202,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 203,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 207,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 188,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 204,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 205,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 206,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 199,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 172,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 201,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 200,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 270,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 281,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 284,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 282,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 286,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 283,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 219,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 223,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 582,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 583,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 584,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 585,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 586,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 587,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 588,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 589,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 590,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 591,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 592,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 593,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 594,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 595,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 596,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 600,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 601,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 602,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 603,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 604,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 605,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 606,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 607,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 608,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 609,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 610,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 611,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 612,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 613,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 614,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 615,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 616,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 617,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 618,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 620,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 621,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 619,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 623,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 624,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 625,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 626,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 627,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 183,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 185,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 186,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 187,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 193,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 195,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 197,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 189,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 190,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 191,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 569,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 10,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 11,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 149,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 150,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 168,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 227,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 229,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 231,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 237,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 267,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 268,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 269,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 275,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 279,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 287,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 288,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 289,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 309,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 310,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 311,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 324,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 724,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 725,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 726,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 727,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 728,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 729,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 730,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 731,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 732,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 733,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 734,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 735,
+      "actioncode": "",
+      "tenantid": "panavel"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 736,
+      "actioncode": "",
+      "tenantid": "panavel"
+    }
+  ]
+}

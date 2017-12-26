@@ -1,0 +1,778 @@
+{
+"tenantId": "mh.roha",
+"moduleName": "egov-location",
+"TenantBoundary" : [
+  {
+  "hierarchyType" : {
+    "code" : "LOCATION",
+    "name" : "LOCATION"
+  },
+  "boundary" : {
+  "id": 722,
+  "boundarynum": 1,
+  "name": "Roha Municipality",
+  "localname": null,
+  "longitude": null,
+  "latitude": null,
+  "label" : "City",
+  "code": "722",
+  "children": [
+    {
+      "id": 802,
+      "boundarynum": 18,
+      "name": "Excel Society",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "802",
+      "children": null
+    },
+    {
+      "id": 803,
+      "boundarynum": 19,
+      "name": "Ganesh Nagar",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "803",
+      "children": null
+    },
+    {
+      "id": 804,
+      "boundarynum": 20,
+      "name": "Goroba Nagar",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "804",
+      "children": null
+    },
+    {
+      "id": 805,
+      "boundarynum": 21,
+      "name": "Hanuman Na",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "805",
+      "children": null
+    },
+    {
+      "id": 806,
+      "boundarynum": 22,
+      "name": "Kalpak Society",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "806",
+      "children": null
+    },
+    {
+      "id": 807,
+      "boundarynum": 23,
+      "name": "Kasar Ali",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "807",
+      "children": null
+    },
+    {
+      "id": 808,
+      "boundarynum": 24,
+      "name": "Kasar Ali",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "808",
+      "children": null
+    },
+    {
+      "id": 809,
+      "boundarynum": 25,
+      "name": "Khalcha Miohlla Asthami",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "809",
+      "children": null
+    },
+    {
+      "id": 810,
+      "boundarynum": 26,
+      "name": "Khalcha Mohlla Asthami",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "810",
+      "children": null
+    },
+    {
+      "id": 811,
+      "boundarynum": 27,
+      "name": "Main Road",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "811",
+      "children": null
+    },
+    {
+      "id": 812,
+      "boundarynum": 28,
+      "name": "Mangal Wadi",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "812",
+      "children": null
+    },
+    {
+      "id": 813,
+      "boundarynum": 29,
+      "name": "Maratha Ali",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "813",
+      "children": null
+    },
+    {
+      "id": 814,
+      "boundarynum": 30,
+      "name": "Mhada Colony",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "814",
+      "children": null
+    },
+    {
+      "id": 815,
+      "boundarynum": 31,
+      "name": "More Ali",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",  
+      "code": "815",
+      "children": null
+    },
+    {
+      "id": 816,
+      "boundarynum": 32,
+      "name": "M.Phule Nagar",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "816",
+      "children": null
+    },
+    {
+      "id": 817,
+      "boundarynum": 33,
+      "name": "Mukund Nagar",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "817",
+      "children": null
+    },
+    {
+      "id": 818,
+      "boundarynum": 34,
+      "name": "Mukund Nagar",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "818",
+      "children": null
+    },
+    {
+      "id": 819,
+      "boundarynum": 35,
+      "name": "Nana Shankarsheth Road",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "819",
+      "children": null
+    },
+    {
+      "id": 820,
+      "boundarynum": 36,
+      "name": "Nehru Nagar",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "820",
+      "children": null
+    },
+    {
+      "id": 821,
+      "boundarynum": 37,
+      "name": "Pingalsai Road",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "821",
+      "children": null
+    },
+    {
+      "id": 822,
+      "boundarynum": 38,
+      "name": "Raikar Park",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "822",
+      "children": null
+    },
+    {
+      "id": 823,
+      "boundarynum": 39,
+      "name": "Roha Bajarpeth",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "823",
+      "children": null
+    },
+    {
+      "id": 824,
+      "boundarynum": 40,
+      "name": "Roha Bajar Peth",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "824",
+      "children": null
+    },
+    {
+      "id": 825,
+      "boundarynum": 41,
+      "name": "Roha Dongari Mohlla",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "825",
+      "children": null
+    },
+    {
+      "id": 826,
+      "boundarynum": 42,
+      "name": "Roha Khalcha Mohlla",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "826",
+      "children": null
+    },
+    {
+      "id": 827,
+      "boundarynum": 43,
+      "name": "Roha Kolad Road",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "827",
+      "children": null
+    },
+    {
+      "id": 828,
+      "boundarynum": 44,
+      "name": "Roha Kolad Road",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "828",
+      "children": null
+    },
+    {
+      "id": 829,
+      "boundarynum": 45,
+      "name": "Roha Murud Road",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "829",
+      "children": null
+    },
+    {
+      "id": 830,
+      "boundarynum": 46,
+      "name": "Roha Nagothane Road",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "830",
+      "children": null
+    },
+    {
+      "id": 831,
+      "boundarynum": 47,
+      "name": "Roha Nagothane Road",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "831",
+      "children": null
+    },
+    {
+      "id": 832,
+      "boundarynum": 48,
+      "name": "Roha Nagothane Road",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "832",
+      "children": null
+    },
+    {
+      "id": 833,
+      "boundarynum": 49,
+      "name": "Roha Varcha Mohlla",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "833",
+      "children": null
+    },
+    {
+      "id": 834,
+      "boundarynum": 50,
+      "name": "Rohidas Nagar",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "834",
+      "children": null
+    },
+    {
+      "id": 835,
+      "boundarynum": 51,
+      "name": "Sawarkar Road",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "835",
+      "children": null
+    },
+    {
+      "id": 836,
+      "boundarynum": 52,
+      "name": "Sevadal Ali",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "836",
+      "children": null
+    },
+    {
+      "id": 837,
+      "boundarynum": 53,
+      "name": "Shivaji Nagar",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "837",
+      "children": null
+    },
+    {
+      "id": 838,
+      "boundarynum": 54,
+      "name": "Sidharth Nagar",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "838",
+      "children": null
+    },
+    {
+      "id": 839,
+      "boundarynum": 55,
+      "name": "Sonar Ali",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "839",
+      "children": null
+    },
+    {
+      "id": 840,
+      "boundarynum": 56,
+      "name": "S.T Depo",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "840",
+      "children": null
+    },
+    {
+      "id": 841,
+      "boundarynum": 57,
+      "name": "Sundar Nagar",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "841",
+      "children": null
+    },
+    {
+      "id": 842,
+      "boundarynum": 58,
+      "name": "Trimurtee Nagar",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "842",
+      "children": null
+    },
+    {
+      "id": 843,
+      "boundarynum": 59,
+      "name": "Vaikuntdham",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "843",
+      "children": null
+    },
+    {
+      "id": 844,
+      "boundarynum": 60,
+      "name": "Varcha Mohlla Asthami",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "844",
+      "children": null
+    },
+    {
+      "id": 845,
+      "boundarynum": 61,
+      "name": "Varcha Mohlla Asthami",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "845",
+      "children": null
+    },
+    {
+      "id": 786,
+      "boundarynum": 2,
+      "name": "Aambedkar Nagar",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "786",
+      "children": null
+    },
+    {
+      "id": 787,
+      "boundarynum": 3,
+      "name": "AndharAli",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "787",
+      "children": null
+    },
+    {
+      "id": 785,
+      "boundarynum": 1,
+      "name": "Aaadavi Bajarpeth",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "785",
+      "children": null
+    },
+    {
+      "id": 788,
+      "boundarynum": 4,
+      "name": "Andhar Ali",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "788",
+      "children": null
+    },
+    {
+      "id": 789,
+      "boundarynum": 5,
+      "name": "AndharAli Main Road",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "789",
+      "children": null
+    },
+    {
+      "id": 790,
+      "boundarynum": 6,
+      "name": "AndharAli Main Road",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "790",
+      "children": null
+    },
+    {
+      "id": 791,
+      "boundarynum": 7,
+      "name": "Ashtami Bajarpeth",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "791",
+      "children": null
+    },
+    {
+      "id": 792,
+      "boundarynum": 8,
+      "name": "Ashtami Bajarpeth",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "792",
+      "children": null
+    },
+    {
+      "id": 793,
+      "boundarynum": 9,
+      "name": "Ashtami Koliwada",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "793",
+      "children": null
+    },
+    {
+      "id": 794,
+      "boundarynum": 10,
+      "name": "Ashtami Koliwada",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "794",
+      "children": null
+    },
+    {
+      "id": 795,
+      "boundarynum": 11,
+      "name": "Ashtami Paril Ali",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "795",
+      "children": null
+    },
+    {
+      "id": 796,
+      "boundarynum": 12,
+      "name": "Bangale Ali",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "796",
+      "children": null
+    },
+    {
+      "id": 797,
+      "boundarynum": 13,
+      "name": "Bangle Ali",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "797",
+      "children": null
+    },
+    {
+      "id": 798,
+      "boundarynum": 14,
+      "name": "Bramhan Ali",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "798",
+      "children": null
+    },
+    {
+      "id": 799,
+      "boundarynum": 15,
+      "name": "Court Road",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Locality",
+      "code": "799",
+      "children": null
+    },
+    {
+      "id": 800,
+      "boundarynum": 16,
+      "name": "Dhangar ali",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "800",
+      "children": null
+    },
+    {
+      "id": 801,
+      "boundarynum": 17,
+      "name": "Excel Colony",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Locality",
+      "code": "801",
+      "children": null
+    }
+  ]
+
+    
+    
+    
+  }
+  },
+  
+  {
+    "hierarchyType" : {
+    "code" : "ADMIN",
+    "name" : "ADMINISTRATION"
+  },
+  
+  "boundary" : {
+    
+  "id": 715,
+  "boundarynum": 1,
+  "name": "Roha Municipality",
+  "localname": null,
+  "longitude": null,
+  "latitude": null,
+  "label" : "City",
+  "code": "715",
+  "children": [
+    {
+      "id": 716,
+      "boundarynum": 1,
+      "name": "Prabhag 1",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "716",
+      "children": null
+    },
+    {
+      "id": 717,
+      "boundarynum": 2,
+      "name": "Prabhag 2",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "717",
+      "children": null
+    },
+    {
+      "id": 718,
+      "boundarynum": 3,
+      "name": "Prabhag 3",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+     "label" : "Ward",
+      "code": "718",
+      "children": null
+    },
+    {
+      "id": 719,
+      "boundarynum": 4,
+      "name": "Prabhag 4",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "719",
+      "children": null
+    },
+    {
+      "id": 720,
+      "boundarynum": 5,
+      "name": "Prabhag 5",
+      "localname": null,
+      "longitude": null,
+      "latitude": null,
+      "label" : "Ward",
+      "code": "720",
+      "children": null
+    }
+  ]
+
+  }
+  
+  }
+  
+]
+}

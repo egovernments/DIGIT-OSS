@@ -1,0 +1,439 @@
+{
+  "tenantId": "ap.public",
+  "moduleName": "ACCESSCONTROL",
+  "roleactions": 
+  [
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 6,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 7,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 9,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 12,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 14,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 18,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 19,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 20,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 21,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 6,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 7,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 12,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 18,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 19,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 20,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 6,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 7,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 9,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 12,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 14,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 18,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 19,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 20,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 21,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 6,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 7,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 9,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 12,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 14,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 18,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 19,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 20,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 21,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 6,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 7,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 9,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 12,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 14,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 18,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 19,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 20,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 21,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 6,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 7,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 9,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 12,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 14,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 18,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 19,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 20,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 21,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 6,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 7,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 9,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 12,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 14,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 18,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 19,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 20,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 21,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 291,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 292,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 291,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 292,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 291,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GO",
+      "actionid": 292,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 291,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "RO",
+      "actionid": 292,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 291,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GA",
+      "actionid": 292,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 291,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 292,
+      "actioncode": "",
+      "tenantid": "ap.public"
+    }
+  ]
+}
