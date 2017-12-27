@@ -1470,6 +1470,41 @@
       "moduleType": "Contractor",
       "tenantId": "default",
       "orderNumber": 4
+    },
+    {
+      "code": "APPROVED",
+      "description": "Approved",
+      "moduleType": "Milestone",
+      "tenantId": "default",
+      "orderNumber": 1
+    },
+    {
+      "code": "CANCELLED",
+      "description": "Cancelled",
+      "moduleType": "Milestone",
+      "tenantId": "default",
+      "orderNumber": 2
+    },
+    {
+      "code": "NOT_YET_STARTED",
+      "description": "Not yet started",
+      "moduleType": "TrackMilestone",
+      "tenantId": "default",
+      "orderNumber": 1
+    },
+    {
+      "code": "IN_PROGRESS",
+      "description": "In Progress",
+      "moduleType": "TrackMilestone",
+      "tenantId": "default",
+      "orderNumber": 1
+    },
+    {
+      "code": "COMPLETED",
+      "description": "Completed",
+      "moduleType": "TrackMilestone",
+      "tenantId": "default",
+      "orderNumber": 1
     }
   ]
 }
