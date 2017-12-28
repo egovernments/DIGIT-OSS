@@ -11076,6 +11076,32 @@
       "serviceCode": "CheckList",
       "code": "null",
       "path": "Financials.Transactions.Search CheckList"
+    },
+    {
+      "id": 1470,
+      "name": "Shift",
+      "url": "/swm-services/vendors/_search",
+      "displayName": "Shift",
+      "orderNumber": 0,
+      "queryParams": null,
+      "parentModule": "530",
+      "enabled": true,
+      "serviceCode": "swm.shift",
+      "code": "null",
+      "path": "Solid Waste Management.SWM Masters.Shift.Shift"
+    },
+    {
+      "id": 1471,
+      "name": "Dumping Ground",
+      "url": "/swm-services/dumpingground/_search",
+      "displayName": "Dumping Ground",
+      "orderNumber": 0,
+      "queryParams": null,
+      "parentModule": "530",
+      "enabled": true,
+      "serviceCode": "DumpingGround",
+      "code": "null",
+      "path": "Solid Waste Management.SWM Masters.Dumping Ground.Dumping Ground"
     }
   ]
 }
