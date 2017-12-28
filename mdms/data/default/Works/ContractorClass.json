@@ -1,0 +1,30 @@
+{
+  "tenantId": "default",
+  "moduleName": "Works",
+  "ContractorClass": [
+    {
+      "id": 1,
+      "tenantId": "default",
+      "class": "001 - Fake",
+      "description": "Class - 1 - Fake",
+      "minimumAmount": 10,
+      "maximumAmount": 1000
+    },
+    {
+      "id": 2,
+      "tenantId": "default",
+      "class": "002 - Fake",
+      "description": "Class - 2 - Fake",
+      "minimumAmount": 1000,
+      "maximumAmount": 100000
+    },
+    {
+      "id": 3,
+      "tenantId": "default",
+      "class": "003 - Fake",
+      "description": "Class - 3 - Fake",
+      "minimumAmount": 100000,
+      "maximumAmount": 10000000
+    }
+  ]
+}

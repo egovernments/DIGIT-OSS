@@ -1,0 +1,36 @@
+{
+  "tenantId": "default",
+  "moduleName": "swm",
+  "WasteType": [
+    {
+      "tenantId": "default",
+      "name": "Dry Waste",
+      "code": "Waste Type Code 1"
+    },
+    {
+      "tenantId": "default",
+      "name": "Wet Waste",
+      "code": "Waste Type Code 2"
+    },
+    {
+      "tenantId": "default",
+      "name": "Medical Waste",
+      "code": "Medical Wate"
+    },
+    {
+      "tenantId": "default",
+      "name": "hjghjgjH",
+      "code": "jgjhg"
+    },
+    {
+      "tenantId": "default",
+      "name": "Dry Waste",
+      "code": "Waste Type Code 3"
+    },
+    {
+      "tenantId": "default",
+      "name": "Bio Medical Waste",
+      "code": "Bio Medical Waste"
+    }
+  ]
+}

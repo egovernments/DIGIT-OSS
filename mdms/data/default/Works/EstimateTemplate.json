@@ -1,0 +1,39 @@
+{
+  "tenantId": "default",
+  "moduleName": "Works",
+  "EstimateTemplate": [
+    {
+      "id": 1,
+      "tenantId": "default",
+      "code": "NPNWS1 - Fake",
+      "status": "Water Supply Works for Nippani - Fake",
+      "templateName": "Water Supply Works for Nippani - Fake",
+      "templateDescription": "Laying of pipe - fake",
+      "typeOfWork": "RDBF",
+      "subTypeOfWork": null,
+      "estimateTemplateActivities": [
+        {
+          "id": 3,
+          "tenantId": "default",
+          "scheduleOfRate": [
+            {
+              "id": 1
+            }
+          ],
+          "categoryType": "EXV - FAKE",
+          "SORCode": "EARTH WORK - FAKE",
+          "SORDescription": "Earth work in surface excavation - FAKE",
+          "uom": "CM - FAKE",
+          "sorRates": [
+            {
+              "id": 1
+            }
+          ],
+          "rate": 10,
+          "fromDate": 1546541452157,
+          "toDate": 1546541452157
+        }
+      ]
+    }
+  ]
+}

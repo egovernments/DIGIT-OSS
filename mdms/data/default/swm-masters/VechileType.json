@@ -1,0 +1,31 @@
+{
+  "tenantId": "default",
+  "moduleName": "swm",
+  "VehicleType": [
+    {
+      "tenantId": "default",
+      "name": "Ghantagadi (TATA-ACE)- 3",
+      "code": "Vehicle Type Code 1"
+    },
+    {
+      "tenantId": "default",
+      "name": "Tractors - 2",
+      "code": "Vehicle Type Code 2"
+    },
+    {
+      "tenantId": "default",
+      "name": "Dumper",
+      "code": "Vehicle Type Code 3"
+    },
+    {
+      "tenantId": "default",
+      "name": "Tractor 19",
+      "code": "T1"
+    },
+    {
+      "tenantId": "default",
+      "name": "Bharat Benz",
+      "code": "BB"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "tenantId": "default",
+  "moduleName": "lcms",
+  "caseCategory": [
+    {
+      "name": "Minor case",
+      "code": "MINOR_CASE",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "testcategory",
+      "code": "MAJOR_CASE",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "MajorT",
+      "code": "MT",
+      "active": false,
+      "tenantId": "default"
+    },
+    {
+      "name": "semimajor2",
+      "code": "mt",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "CaseCategoryName",
+      "code": "category1",
+      "active": true,
+      "tenantId": "default"
+    }
+  ]
+}

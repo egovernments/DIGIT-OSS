@@ -1,0 +1,14 @@
+{
+  "tenantId": "default",
+  "moduleName": "swm",
+  "Population": [
+    {
+      "code": "Trimbak MC Code",
+      "tenantId": "default",
+      "censusYear": 2011,
+      "population": 13383,
+      "garbageToBeCollected": 5,
+      "ulbName": "Trimbak Muncipal Council"
+    }
+  ]
+}

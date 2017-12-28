@@ -1,0 +1,42 @@
+{
+  "tenantId": "default",
+  "moduleName": "Works",
+  "MilestoneTemplate": [
+    {
+      "id": 1,
+      "tenantId": "default",
+      "templateCode": "CRROAD7W - Fake",
+      "templateStaus": "MANRAYROAD - Fake",
+      "templateName": "TWO LANE ROAD WITHOUT DIVIDER - Fake",
+      "templateDescription": "Laying of road - fake",
+      "typeOfWork": "RDBF",
+      "subTypeOfWork": "ROADS"
+    },
+    {
+      "id": 2,
+      "tenantId": "default",
+      "templateCode": "NPNWS1 - Fake",
+      "templateStaus": "Active",
+      "templateName": "Water Supply Works for Nippani - Fake",
+      "templateDescription": "Laying of pipe - fake",
+      "typeOfWork": "ROADS",
+      "subTypeOfWork": null,
+      "milestoneTemplateActivities": [
+        {
+          "id": 3,
+          "tenantId": "default",
+          "stageOrderNumber": 1,
+          "percentage": 50,
+          "description": "Laying of road - fake"
+        },
+        {
+          "id": 4,
+          "tenantId": "default",
+          "stageOrderNumber": 1,
+          "percentage": 50,
+          "description": "Laying of road - fake"
+        }
+      ]
+    }
+  ]
+}

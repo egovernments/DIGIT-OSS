@@ -1,0 +1,30 @@
+{
+  "tenantId": "default",
+  "moduleName": "inventory",
+  "MaterialType": [
+    {
+      "id": 1,
+      "tenantId": "default",
+      "code": "MT1",
+      "name": "Fake Material Type Name 1",
+      "parent": null,
+      "isparent": false
+    },
+    {
+      "id": 2,
+      "tenantId": "default",
+      "code": "MT2",
+      "name": "Fake Material Type Name 2",
+      "parent": null,
+      "isparent": false
+    },
+    {
+      "id": 3,
+      "tenantId": "default",
+      "code": "MT3",
+      "name": "Fake Material Type Name 3",
+      "parent": null,
+      "isparent": false
+    }
+  ]
+}

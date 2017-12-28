@@ -1,0 +1,60 @@
+{
+  "tenantId": "default",
+  "moduleName": "swm",
+  "WasteSubType": [
+    {
+      "tenantId": "default",
+      "name": "Household Waste",
+      "code": "Waste  Sub Type Name 1",
+      "wasteType": "Waste Type Code 1"
+    },
+    {
+      "tenantId": "default",
+      "name": "Household Waste",
+      "code": "Waste  Sub Type Name 2",
+      "wasteType": "Waste Type Code 1"
+    },
+    {
+      "tenantId": "default",
+      "name": "Slaughterhouse Waste",
+      "code": "Waste  Sub Type Name 3",
+      "wasteType": "Waste Type Code 2"
+    },
+    {
+      "tenantId": "default",
+      "name": "Market Waste",
+      "code": "Waste  Sub Type Name 4",
+      "wasteType": "Waste Type Code 2"
+    },
+    {
+      "tenantId": "default",
+      "name": "Hospital waste",
+      "code": "Waste Sub Type Code 1",
+      "wasteType": "Medical Wate"
+    },
+    {
+      "tenantId": "default",
+      "name": "tyhgfh@12%^&*()\"|?><",
+      "code": "Q@#45",
+      "wasteType": "Medical Wate"
+    },
+    {
+      "tenantId": "default",
+      "name": "yuyui",
+      "code": "nbvbbf756",
+      "wasteType": "Medical Wate"
+    },
+    {
+      "tenantId": "default",
+      "name": "bnvbcghf",
+      "code": "vhgh5343",
+      "wasteType": "Waste Type Code 2"
+    },
+    {
+      "tenantId": "default",
+      "name": "Bio Medical Waste",
+      "code": "Bio Medical Waste",
+      "wasteType": "Bio Medical Waste"
+    }
+  ]
+}

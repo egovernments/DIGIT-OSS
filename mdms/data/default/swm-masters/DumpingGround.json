@@ -1,0 +1,174 @@
+{
+  "tenantId": "default",
+  "moduleName": "swm",
+  "DumpingGround": [
+    {
+      "code": "DG Code 1",
+      "tenantId": "default",
+      "name": "Trimbak Muncipal Council",
+      "ulbs": [
+        {
+          "code": "default"
+        },
+        {
+          "code": "mh.roha"
+        }
+      ],
+      "siteDetails": {
+        "area": 0.025,
+        "capacity": "6.007",
+        "address": "Trimbak",
+        "location": {
+          "code": "101",
+          "name": "Fake location name 1"
+        },
+        "latitude": 0,
+        "longitude": 0,
+        "mpcbAuthorisation": true,
+        "bankGuarantee": false,
+        "bankValidityFrom": "1509190483",
+        "bankValidityTo": "1509190483",
+        "wasteTypes": [
+          {
+            "code": "Waste Type Code 1"
+          },
+          {
+            "code": "Waste Type Code 2"
+          }
+        ]
+      },
+      "isProcessingSite": true
+    },
+    {
+      "code": "DG Code 2",
+      "tenantId": "default",
+      "name": "Fake dumping ground 2",
+      "ulbs": [
+        {
+          "code": "mh.roha",
+          "name": "Fake ULB 2",
+          "imageId": "Fake image ID 2",
+          "logoId": "Fake logo ID 2",
+          "type": "Fake type 2"
+        }
+      ],
+      "siteDetails": {
+        "area": "2.007",
+        "capacity": 16.4,
+        "address": "Fake address",
+        "location": {
+          "code": "Fake location code 1",
+          "name": "Fake location name 1"
+        },
+        "latitude": 0,
+        "longitude": 0,
+        "mpcbAuthorisation": true,
+        "bankGuarantee": false,
+        "bankValidityFrom": "1509190483",
+        "bankValidityTo": "1509190483",
+        "wasteTypes": [
+          {
+            "tenantId": "default",
+            "name": "Dry Waste",
+            "code": "Waste Type Code 1"
+          },
+          {
+            "tenantId": "default",
+            "name": "Wet Waste",
+            "code": "Waste Type Code 2"
+          }
+        ]
+      },
+      "isProcessingSite": false,
+      "distanceFromProcessingSite": 20.75,
+      "processingSite": {
+        "code": "Fake Pro. Plant 1"
+      }
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "2",
+        "capacity": "10",
+        "address": "Bangalore,India",
+        "latitude": "",
+        "longitude": "",
+        "location": {
+          "code": "101"
+        },
+        "wasteTypes": [
+          {
+            "code": "Waste Type Code 3"
+          },
+          {
+            "code": "Waste Type Code 1"
+          }
+        ]
+      },
+      "name": "Trimbak Muncipal Council 2",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1513848687844",
+      "ulbs": [
+        {
+          "code": "mh.amba"
+        },
+        {
+          "code": "159"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "23",
+        "capacity": "23",
+        "address": "HBR",
+        "latitude": "1.2",
+        "longitude": "2.8",
+        "location": {
+          "code": "101"
+        },
+        "wasteTypes": [
+          {
+            "code": "Waste Type Code 3"
+          },
+          {
+            "code": "Medical Wate"
+          },
+          {
+            "code": "Waste Type Code 1"
+          }
+        ]
+      },
+      "name": "Dg 4000",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": "PP 999"
+      },
+      "distanceFromProcessingSite": "23",
+      "tenantId": "default",
+      "code": "DumpingGround-1513861139509",
+      "ulbs": [
+        {
+          "code": "159"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "tenantId": "default",
+  "moduleName": "lcms",
+  "bench": [
+    {
+      "name": "Bombay",
+      "code": "BOMBAY",
+      "active": false,
+      "tenantId": "default"
+    },
+    {
+      "name": "Aurangabad",
+      "code": "AURANGABAD",
+      "active": false,
+      "tenantId": "default"
+    },
+    {
+      "name": "Nagpur",
+      "code": "NAGPUR",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "TestBench",
+      "code": "Nass",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "testing on 14 Bench_updated_2",
+      "code": "Tob",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "BenchName1",
+      "code": "bench1",
+      "active": true,
+      "tenantId": "default"
+    }
+  ]
+}

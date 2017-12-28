@@ -1,0 +1,142 @@
+{
+  "tenantId": "default",
+  "moduleName": "swm",
+  "ProcessingSite": [{
+      "code": "Pro. Plant Code 1",
+      "tenantId": "default",
+      "name": "Fake Pro. Plant 1",
+      "siteDetails": {
+        "area": 0.025,
+        "capacity": 6.4,
+        "address": "Fake Address",
+        "location": {
+          "code": "Fake location code 1",
+          "name": "Fake location name 1"
+        },
+        "latitude": 0,
+        "longitude": 0,
+        "mpcbAuthorisation": true,
+        "bankGuarantee": false,
+        "bankValidityFrom": "1509190483",
+        "bankValidityTo": "1509190483",
+        "wasteTypes": [{
+          "tenantId": "default",
+          "name": "Wet Waste",
+          "code": "Waste Type Code 2"
+        }]
+      }
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "sd",
+        "bankValidityFrom": 1511893800000,
+        "bankValidityTo": 1513189800000,
+        "area": "23",
+        "capacity": "232",
+        "address": "sdf",
+        "latitude": "234234",
+        "longitude": "23423",
+        "location": {
+          "ward": "6",
+          "zone": "37",
+          "block": "40",
+          "code": "101"
+        },
+        "wasteTypes": [{
+            "code": "Waste Type Code 2"
+          },
+          {
+            "code": "jgjhg"
+          },
+          {
+            "code": "Medical Wate"
+          },
+          {
+            "code": "Waste Type Code 3"
+          }
+        ]
+      },
+      "name": "site 1",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "ProcessingSite-1513777025747",
+      "ulbs": [{
+        "code": "mh.amba"
+      }]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": true,
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "3",
+        "capacity": "30",
+        "address": "Bangalore,India",
+        "latitude": "4",
+        "longitude": "6",
+        "location": {
+          "ward": "6",
+          "zone": "37",
+          "block": "40",
+          "code": "101"
+        },
+        "wasteTypes": [{
+            "code": "Medical Wate"
+          },
+          {
+            "code": "Waste Type Code 3"
+          }
+        ]
+      },
+      "name": "Bangalore",
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "ProcessingSite-1513864087389"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "1",
+        "capacity": "12",
+        "address": "Bangalore,India",
+        "latitude": "2",
+        "longitude": "5",
+        "location": {
+          "ward": "6",
+          "zone": "37",
+          "block": "40",
+          "code": "101"
+        },
+        "wasteTypes": [{
+            "code": "Waste Type Code 2"
+          },
+          {
+            "code": "Waste Type Code 3"
+          }
+        ]
+      },
+      "name": "SriNagar",
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "ProcessingSite-1513865191921"
+    }
+  ]
+}

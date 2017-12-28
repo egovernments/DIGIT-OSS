@@ -1,0 +1,138 @@
+{
+  "tenantId": "default",
+  "moduleName": "lcms",
+  "side": [
+    {
+      "name": "Civil",
+      "code": "CVL",
+      "active": false,
+      "tenantId": "default"
+    },
+    {
+      "name": "Criminal",
+      "code": "CRMNL",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "Original",
+      "code": "ORGNL",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "SideNameFields1",
+      "code": "C22",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "test01",
+      "code": "001",
+      "active": false,
+      "tenantId": "default"
+    },
+    {
+      "name": "Side_side",
+      "code": "002",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "SideNameFields2",
+      "code": "1002",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "SideNameField3",
+      "code": "003",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "SideNameFields4",
+      "code": "101",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "Appeal from Order1hyd",
+      "code": "123",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "Side/Murari",
+      "code": "side1",
+      "active": false,
+      "tenantId": "default"
+    },
+    {
+      "name": "Sidename/M1",
+      "code": "1001",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "SideP12",
+      "code": "10011",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "ewrwer",
+      "code": "werwer",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "dfsgdsf",
+      "code": "dsfgdsf",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "ewtet345345",
+      "code": "m1",
+      "active": false,
+      "tenantId": "default"
+    },
+    {
+      "name": "ewtet345345",
+      "code": "ewtewrt",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "TestData3",
+      "code": "Test/11",
+      "active": true,
+      "tenantId": "default"
+    },
+    {
+      "name": "TestData2",
+      "code": "546",
+      "active": false,
+      "tenantId": "default"
+    },
+    {
+      "name": "TestData2",
+      "code": "547",
+      "active": false,
+      "tenantId": "default"
+    },
+    {
+      "name": "TestData3",
+      "code": "548",
+      "active": false,
+      "tenantId": "default"
+    },
+    {
+      "name": "test on 26th",
+      "code": "26",
+      "active": true,
+      "tenantId": "default"
+    }
+  ]
+}

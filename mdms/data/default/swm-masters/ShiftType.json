@@ -1,0 +1,36 @@
+{
+  "tenantId": "default",
+  "moduleName": "swm",
+  "ShiftType": [
+    {
+      "tenantId": "default",
+      "name": "Morning Shift",
+      "code": "Shift Type Code 1"
+    },
+    {
+      "tenantId": "default",
+      "name": "Afternoon Shift",
+      "code": "Shift Type Code 2"
+    },
+    {
+      "tenantId": "default",
+      "name": "Night Shift",
+      "code": "Shift Type Code 3"
+    },
+    {
+      "tenantId": "default",
+      "name": "jhjhdj",
+      "code": "shift code 4"
+    },
+    {
+      "tenantId": "default",
+      "name": "saffafa",
+      "code": "fdfsdfsdfd"
+    },
+    {
+      "tenantId": "default",
+      "name": "Evening Shift",
+      "code": "ES"
+    }
+  ]
+}

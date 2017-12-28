@@ -1,0 +1,30 @@
+{
+  "tenantId": "default",
+  "moduleName": "swm",
+  "CollectionType": [{
+      "tenantId": "default",
+      "name": "Door to Door Collection (Wet & Dry)",
+      "code": "Collection Type Code 1"
+    },
+    {
+      "tenantId": "default",
+      "name": "(Day to Day Basis)",
+      "code": "Collection Type Code 2"
+    },
+    {
+      "tenantId": "default",
+      "name": "Collection from collection point",
+      "code": "Collection Type Code 3"
+    },
+    {
+      "tenantId": "default",
+      "name": "sdsad",
+      "code": "asdsad"
+    },
+    {
+      "tenantId": "default",
+      "name": "Weekly Collection (Door to Door)",
+      "code": "Weekly Collection"
+    }
+  ]
+}

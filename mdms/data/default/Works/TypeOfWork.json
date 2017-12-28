@@ -1,0 +1,446 @@
+{
+  "tenantId": "default",
+  "moduleName": "Works",
+  "TypeOfWork": [
+    {
+      "code": "Buildings",
+      "description": "Buildings",
+      "name": "Buildings",
+      "tenantid": "default",
+      "active": "true",
+      "parent": null
+    },
+    {
+      "code": "WaterWorks",
+      "description": "Water Works",
+      "name": "Water Works",
+      "tenantid": "default",
+      "active": "true",
+      "parent": null
+    },
+    {
+      "code": "RDBF",
+      "description": "Roads, Drains, Bridges and Flyovers",
+      "name": "Roads, Drains, Bridges and Flyovers",
+      "tenantid": "default",
+      "active": "true",
+      "parent": null
+    },
+    {
+      "code": "LDCW",
+      "description": "Land Development (civil works)",
+      "name": "Land Development (civil works)",
+      "tenantid": "default",
+      "active": "true",
+      "parent": null
+    },
+    {
+      "code": "SWDANDUGD",
+      "description": "Strom Water Drains and UGD",
+      "name": "Strom Water Drains and UGD",
+      "tenantid": "default",
+      "active": "true",
+      "parent": null
+    },
+    {
+      "code": "STREETLIGHTING",
+      "description": "Street Lighting",
+      "name": "Street Lighting",
+      "tenantid": "default",
+      "active": "true",
+      "parent": null
+    },
+    {
+      "code": "SWM",
+      "description": "Solid Waste Management",
+      "name": "Solid Waste Management",
+      "tenantid": "default",
+      "active": "true",
+      "parent": null
+    },
+    {
+      "code": "VEHICLES",
+      "description": "Vehicles",
+      "name": "Vehicles",
+      "tenantid": "default",
+      "active": "true",
+      "parent": null
+    },
+    {
+      "code": "FURNITURES",
+      "description": "Furniture and Fixtures",
+      "name": "Furniture and Fixtures",
+      "tenantid": "default",
+      "active": "true",
+      "parent": null
+    },
+    {
+      "code": "EQUIPMENT",
+      "description": "Equipment",
+      "name": "Equipment",
+      "tenantid": "default",
+      "active": "true",
+      "parent": null
+    },
+    {
+      "code": "Supplies",
+      "description": "Supplies",
+      "name": "Supplies",
+      "tenantid": "default",
+      "active": "true",
+      "parent": null
+    },
+    {
+      "code": "ROADS",
+      "description": "Roads",
+      "name": "Roads",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "RDBF"
+    },
+    {
+      "code": "ROADSDRAINS",
+      "description": "Road-Drains",
+      "name": "Road-Drains",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "RDBF"
+    },
+    {
+      "code": "OFFICEBUILDINGS",
+      "description": "Office Buildings",
+      "name": "Office Buildings",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "Buildings"
+    },
+    {
+      "code": "COMMUNITYBUILDINGS",
+      "description": "Community Buildings",
+      "name": "Community Buildings",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "Buildings"
+    },
+    {
+      "code": "RWC",
+      "description": "Road Widening Compensation",
+      "name": "Road Widening Compensation",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "LDCW"
+    },
+    {
+      "code": "WATERSTORAGE",
+      "description": "Water Storage",
+      "name": "Water Storage",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "WaterWorks"
+    },
+    {
+      "code": "PARKS",
+      "description": "Parks",
+      "name": "Parks",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "LDCW"
+    },
+    {
+      "code": "PLAYGROUNDS",
+      "description": "Playgrounds",
+      "name": "Playgrounds",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "LDCW"
+    },
+    {
+      "code": "DYANDTS",
+      "description": "Dumping Yards and Transfer Stations",
+      "name": "Dumping Yards and Transfer Stations",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "LDCW"
+    },
+    {
+      "code": "BURIALGROUNDS",
+      "description": "Burial Grounds",
+      "name": "Burial Grounds",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "LDCW"
+    },
+    {
+      "code": "COMMERCIALCOMPLEX",
+      "description": "Commercial Complex",
+      "name": "Commercial Complex",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "Buildings"
+    },
+    {
+      "code": "SCHOOLBUILDINGS",
+      "description": "School Buildings",
+      "name": "School Buildings",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "Buildings"
+    },
+    {
+      "code": "HOSPITALS",
+      "description": "Hospitals and Dispensaries",
+      "name": "Hospitals and Dispensaries",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "Buildings"
+    },
+    {
+      "code": "CREMATORIUM",
+      "description": "Crematorium",
+      "name": "Crematorium",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "Buildings"
+    },
+    {
+      "code": "SPORTSCOMPLEX",
+      "description": "Sports Complex and Swimming Pools",
+      "name": "Sports Complex and Swimming Pools",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "Buildings"
+    },
+    {
+      "code": "OTHERBUILDINGS",
+      "description": "Other Buildings",
+      "name": "Other Buildings",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "Buildings"
+    },
+    {
+      "code": "OTHERBUILDINGS",
+      "description": "Bridges, Culverts",
+      "name": "Bridges, Culverts",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "RDBF"
+    },
+    {
+      "code": "RUB",
+      "description": "RUB",
+      "name": "RUB",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "RDBF"
+    },
+    {
+      "code": "ROB",
+      "description": "ROB",
+      "name": "ROB",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "RDBF"
+    },
+    {
+      "code": "FLYOVERS",
+      "description": "Flyovers",
+      "name": "FLYOVERS",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "RDBF"
+    },
+    {
+      "code": "SWD",
+      "description": "SWD",
+      "name": "SWD",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "SWDANDUGD"
+    },
+    {
+      "code": "UGD",
+      "description": "UGD",
+      "name": "UGD",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "SWDANDUGD"
+    },
+    {
+      "code": "PURIFICATION",
+      "description": "Purification",
+      "name": "Purification",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "WaterWorks"
+    },
+    {
+      "code": "PUMPING",
+      "description": "Pumping",
+      "name": "Pumping",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "WaterWorks"
+    },
+    {
+      "code": "DISTRIBUTION",
+      "description": "Distribution",
+      "name": "Distribution",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "WaterWorks"
+    },
+    {
+      "code": "MAJORSTREETS",
+      "description": "Major Streets",
+      "name": "Major Streets",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "STREETLIGHTING"
+    },
+    {
+      "code": "MINORSTREETS",
+      "description": "Minor Streets",
+      "name": "Minor Streets",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "STREETLIGHTING"
+    },
+    {
+      "code": "STP",
+      "description": "Sewerage Treatment Plant",
+      "name": "Sewerage Treatment Plant",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "SWM"
+    },
+    {
+      "code": "DESILTING",
+      "description": "Desilting",
+      "name": "Desilting",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "SWM"
+    },
+    {
+      "code": "HMV",
+      "description": "Heavy Vehicles",
+      "name": "Heavy Vehicles",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "VEHICLES"
+    },
+    {
+      "code": "LMV",
+      "description": "Light Vehicles",
+      "name": "Light Vehicles",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "VEHICLES"
+    },
+    {
+      "code": "TWOANDFOURWHEELERS",
+      "description": "Two and Four wheelers",
+      "name": "Two and Four wheelers",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "VEHICLES"
+    },
+    {
+      "code": "TABLESANDCHAIRS",
+      "description": "Tables and Chairs",
+      "name": "Tables and Chairs",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "FURNITURES"
+    },
+    {
+      "code": "OFFICEFURNITURE",
+      "description": "Office Furniture",
+      "name": "Office Furniture",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "FURNITURES"
+    },
+    {
+      "code": "COMPUTERS",
+      "description": "Computers, Laptops, Tabs,  Mobiles",
+      "name": "Computers, Laptops, Tabs,  Mobiles",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "EQUIPMENT"
+    },
+    {
+      "code": "PRINTERS",
+      "description": "Printers",
+      "name": "Printers",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "EQUIPMENT"
+    },
+    {
+      "code": "PHOTOCOPIERS",
+      "description": "Photo Copiers",
+      "name": "Photo Copiers",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "EQUIPMENT"
+    },
+    {
+      "code": "OTHEREQUIPMENT",
+      "description": "Other Office Equipment",
+      "name": "Other Office Equipment",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "EQUIPMENT"
+    },
+    {
+      "code": "ManPower",
+      "description": "Man power",
+      "name": "Man power",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "Supplies"
+    },
+    {
+      "code": "Consumables",
+      "description": "Consumables",
+      "name": "Consumables",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "Supplies"
+    },
+    {
+      "code": "FootPath",
+      "description": "Foot Path",
+      "name": "Foot Path",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "RDBF"
+    },
+    {
+      "code": "RoadFurniture",
+      "description": "Road Furniture",
+      "name": "Road Furniture",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "RDBF"
+    },
+    {
+      "code": "WaterBodies",
+      "description": "Water Bodies",
+      "name": "Water Bodies",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "LDCW"
+    },
+    {
+      "code": "CENTRALMEDIA",
+      "description": "Central Median/Dividers",
+      "name": "Central Median/Dividers",
+      "tenantid": "default",
+      "active": "true",
+      "parent": "LDCW"
+    }
+  ]
+}

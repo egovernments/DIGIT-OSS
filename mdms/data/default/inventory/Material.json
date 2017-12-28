@@ -1,0 +1,685 @@
+{
+  "tenantId": "default",
+  "moduleName": "inventory",
+  "Material": [
+    {
+      "code": "MAT1",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT1"
+      },
+      "name": "SEAL",
+      "description": "Seal",
+      "baseUom": {
+        "code": "NOS",
+        "uomCategory": "QUANTITY"
+      },
+      "expenseAccount": {
+        "glCode": "44001"
+      },
+      "minQuantity": "2",
+      "maxQuantity": "20",
+      "reorderLevel": "10",
+      "reorderQuantity": "12",
+      "purchaseUom": {
+        "code": "NOS",
+        "uomCategory": "QUANTITY"
+      },
+      "stockingUom": {
+        "code": "NOS",
+        "uomCategory": "QUANTITY"
+      },
+      "lotControl": false,
+      "shelfLifeControl": false,
+      "serialNumber": false
+    },
+    {
+      "code": "MAT2",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT2"
+      },
+      "name": "FRONT AXLE BOLT",
+      "description": "Front Axle Bolt",
+      "baseUom": {
+        "code": "NOS",
+        "uomCategory": "QUANTITY"
+      },
+      "expenseAccount": {
+        "glCode": "44002"
+      },
+      "minQuantity": "2",
+      "maxQuantity": "20",
+      "reorderLevel": "10",
+      "reorderQuantity": "12",
+      "purchaseUom": {
+        "code": "NOS",
+        "uomCategory": "QUANTITY"
+      },
+      "stockingUom": {
+        "code": "NOS",
+        "uomCategory": "QUANTITY"
+      },
+      "lotControl": false,
+      "shelfLifeControl": false,
+      "serialNumber": false
+    },
+    {
+      "code": "MAT3",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT3"
+      },
+      "name": "ENGINE OIL",
+      "description": "EngineOil",
+      "baseUom": {
+        "code": "LTR",
+        "uomCategory": "VOLUME"
+      },
+      "expenseAccount": {
+        "glCode": "44003"
+      },
+      "minQuantity": "5",
+      "maxQuantity": "25",
+      "reorderLevel": "18",
+      "reorderQuantity": "12",
+      "purchaseUom": {
+        "code": ":LTR"
+      },
+      "stockingUom": {
+        "code": "LTR",
+        "uomCategory": "VOLUME"
+      },
+      "lotControl": false,
+      "shelfLifeControl": false,
+      "serialNumber": false
+    },
+    {
+      "code": "MAT4",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT1"
+      },
+      "name": "LAPTOPS",
+      "description": "Laptops",
+      "baseUom": {
+        "code": "NOS",
+        "uomCategory": "QUANTITY"
+      },
+      "expenseAccount": {
+        "glCode": "44004"
+      },
+      "minQuantity": "2",
+      "maxQuantity": "15",
+      "reorderLevel": "8",
+      "reorderQuantity": "8",
+      "purchaseUom": {
+        "code": "NOS",
+        "uomCategory": "QUANTITY"
+      },
+      "stockingUom": {
+        "code": "NOS",
+        "uomCategory": "QUANTITY"
+      },
+      "lotControl": false,
+      "shelfLifeControl": false,
+      "serialNumber": false
+    },
+    {
+      "code": "MAT5",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT2"
+      },
+      "name": "IRON NAILS",
+      "description": "Iron Nails",
+      "baseUom": {
+        "code": "KGS",
+        "uomCategory": "WEIGHT"
+      },
+      "expenseAccount": {
+        "glCode": "44005"
+      },
+      "minQuantity": "1000",
+      "maxQuantity": "2000",
+      "reorderLevel": "1500",
+      "reorderQuantity": "1000",
+      "purchaseUom": {
+        "code": "KGS",
+        "uomCategory": "WEIGHT"
+      },
+      "stockingUom": {
+        "code": "KGS",
+        "uomCategory": "WEIGHT"
+      },
+      "lotControl": false,
+      "shelfLifeControl": false,
+      "serialNumber": false
+    },
+    {
+      "code": "MAT6",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT3"
+      },
+      "name": "SIlk THREAD",
+      "description": "Silk Thread",
+      "baseUom": {
+        "code": "MTR",
+        "uomCategory": "LENGTH"
+      },
+      "expenseAccount": {
+        "glCode": "44006"
+      },
+      "minQuantity": "50",
+      "maxQuantity": "100",
+      "reorderLevel": "40",
+      "reorderQuantity": "30",
+      "purchaseUom": {
+        "code": "MTR",
+        "uomCategory": "LENGTH"
+      },
+      "stockingUom": {
+        "code": "MTR",
+        "uomCategory": "LENGTH"
+      },
+      "lotControl": false,
+      "shelfLifeControl": false,
+      "serialNumber": false
+    },
+    {
+      "code": "MAT7",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT1"
+      },
+      "name": "OIL GREASE",
+      "description": "Oil Grease",
+      "baseUom": {
+        "code": "GMS",
+        "uomCategory": "WEIGHT"
+      },
+      "expenseAccount": {
+        "glCode": "44007"
+      },
+      "minQuantity": "100",
+      "maxQuantity": "1000",
+      "reorderLevel": "800",
+      "reorderQuantity": "500",
+      "purchaseUom": {
+        "code": "GMS",
+        "uomCategory": "WEIGHT"
+      },
+      "stockingUom": {
+        "code": "GMS",
+        "uomCategory": "WEIGHT"
+      },
+      "lotControl": false,
+      "shelfLifeControl": false,
+      "serialNumber": false
+    },
+    {
+      "code": "MAT8",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT2"
+      },
+      "name": "PAINT",
+      "description": "paint",
+      "baseUom": {
+        "code": "LTR",
+        "uomCategory": "VOLUME"
+      },
+      "expenseAccount": {
+        "glCode": "44008"
+      },
+      "minQuantity": "50",
+      "maxQuantity": "100",
+      "reorderLevel": "70",
+      "reorderQuantity": "30",
+      "purchaseUom": {
+        "code": "LTR",
+        "uomCategory": "VOLUME"
+      },
+      "stockingUom": {
+        "code": "LTR",
+        "uomCategory": "VOLUME"
+      },
+      "lotControl": false,
+      "shelfLifeControl": false,
+      "serialNumber": false
+    },
+    {
+      "code": "MAT9",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT3"
+      },
+      "name": "SCREWS",
+      "description": "Screws",
+      "baseUom": {
+        "code": "KGS",
+        "uomCategory": "WEIGHT"
+      },
+      "expenseAccount": {
+        "glCode": "44009"
+      },
+      "minQuantity": "500",
+      "maxQuantity": "2000",
+      "reorderLevel": "1500",
+      "reorderQuantity": "1000",
+      "purchaseUom": {
+        "code": "KGS",
+        "uomCategory": "WEIGHT"
+      },
+      "stockingUom": {
+        "code": "KGS",
+        "uomCategory": "WEIGHT"
+      },
+      "lotControl": true,
+      "shelfLifeControl": true,
+      "serialNumber": true
+    },
+    {
+      "code": "MAT10",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT1"
+      },
+      "name": "WATER PUMP",
+      "description": "Water Pump",
+      "baseUom": {
+        "code": "HP",
+        "uomCategory": "POWER"
+      },
+      "expenseAccount": {
+        "glCode": "44010"
+      },
+      "minQuantity": "2",
+      "maxQuantity": "20",
+      "reorderLevel": "10",
+      "reorderQuantity": "12",
+      "purchaseUom": {
+        "code": "HP",
+        "uomCategory": "POWER"
+      },
+      "stockingUom": {
+        "code": "HP",
+        "uomCategory": "POWER"
+      },
+      "lotControl": true,
+      "shelfLifeControl": true,
+      "serialNumber": true
+    },
+    {
+      "code": "MAT11",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT2"
+      },
+      "name": "PROTECTOR OIL SEAL",
+      "description": "Protector Oil Seal",
+      "baseUom": {
+        "code": "NOS",
+        "uomCategory": "QUANTITY"
+      },
+      "expenseAccount": {
+        "glCode": "44011"
+      },
+      "minQuantity": "2",
+      "maxQuantity": "20",
+      "reorderLevel": "10",
+      "reorderQuantity": "12",
+      "purchaseUom": {
+        "code": "NOS",
+        "uomCategory": "QUANTITY"
+      },
+      "stockingUom": {
+        "code": "NOS",
+        "uomCategory": "QUANTITY"
+      },
+      "lotControl": true,
+      "shelfLifeControl": true,
+      "serialNumber": false
+    },
+    {
+      "code": "MA12",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT3"
+      },
+      "name": "OFC CABLE",
+      "description": "OFC Cable",
+      "baseUom": {
+        "code": "MTR",
+        "uomCategory": "LENGTH"
+      },
+      "expenseAccount": {
+        "glCode": "44012"
+      },
+      "minQuantity": "50",
+      "maxQuantity": "500",
+      "reorderLevel": "300",
+      "reorderQuantity": "500",
+      "purchaseUom": {
+        "code": "MTR",
+        "uomCategory": "LENGTH"
+      },
+      "stockingUom": {
+        "code": "MTR",
+        "uomCategory": "LENGTH"
+      },
+      "lotControl": true,
+      "shelfLifeControl": true,
+      "serialNumber": true
+    },
+    {
+      "code": "MAT13",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT1"
+      },
+      "name": "AIR COOLER",
+      "description": "Air Cooler",
+      "baseUom": {
+        "code": "KW",
+        "uomCategory": "POWER"
+      },
+      "expenseAccount": {
+        "glCode": "44013"
+      },
+      "minQuantity": "2",
+      "maxQuantity": "20",
+      "reorderLevel": "10",
+      "reorderQuantity": "12",
+      "purchaseUom": {
+        "code": "KW",
+        "uomCategory": "POWER"
+      },
+      "stockingUom": {
+        "code": "KW",
+        "uomCategory": "POWER"
+      },
+      "lotControl": true,
+      "shelfLifeControl": true,
+      "serialNumber": true
+    },
+    {
+      "code": "MAT14",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT2"
+      },
+      "name": "BULB",
+      "description": "Bulb",
+      "baseUom": {
+        "code": "KVA",
+        "uomCategory": "POWER"
+      },
+      "expenseAccount": {
+        "glCode": "44014"
+      },
+      "minQuantity": "10",
+      "maxQuantity": "20",
+      "reorderLevel": "10",
+      "reorderQuantity": "12",
+      "purchaseUom": {
+        "code": "KVA",
+        "uomCategory": "POWER"
+      },
+      "stockingUom": {
+        "code": "KVA",
+        "uomCategory": "POWER"
+      },
+      "lotControl": true,
+      "shelfLifeControl": true,
+      "serialNumber": true
+    },
+    {
+      "code": "MAT15",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT3"
+      },
+      "name": "PAPER",
+      "description": "Paper",
+      "baseUom": {
+        "code": "KGS",
+        "uomCategory": "WEIGHT"
+      },
+      "expenseAccount": {
+        "glCode": "44015"
+      },
+      "minQuantity": "25",
+      "maxQuantity": "100",
+      "reorderLevel": "50",
+      "reorderQuantity": "50",
+      "purchaseUom": {
+        "code": "KGS",
+        "uomCategory": "WEIGHT"
+      },
+      "stockingUom": {
+        "code": "KGS",
+        "uomCategory": "WEIGHT"
+      },
+      "lotControl": true,
+      "shelfLifeControl": true,
+      "serialNumber": true
+    },
+    {
+      "code": "MAT16",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT1"
+      },
+      "name": "TILES",
+      "description": "Tiles",
+      "baseUom": {
+        "code": "SFT",
+        "uomCategory": "AREA"
+      },
+      "expenseAccount": {
+        "glCode": "44016"
+      },
+      "minQuantity": "20",
+      "maxQuantity": "100",
+      "reorderLevel": "50",
+      "reorderQuantity": "50",
+      "purchaseUom": {
+        "code": "SFT",
+        "uomCategory": "AREA"
+      },
+      "stockingUom": {
+        "code": "SFT",
+        "uomCategory": "AREA"
+      },
+      "lotControl": true,
+      "shelfLifeControl": false,
+      "serialNumber": false
+    },
+    {
+      "code": "MAT17",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT2"
+      },
+      "name": "METAL SHEAT",
+      "description": "Metal Sheat",
+      "baseUom": {
+        "code": "SFT",
+        "uomCategory": "AREA"
+      },
+      "expenseAccount": {
+        "glCode": "44017"
+      },
+      "minQuantity": "50",
+      "maxQuantity": "100",
+      "reorderLevel": "50",
+      "reorderQuantity": "50",
+      "purchaseUom": {
+        "code": "SFT",
+        "uomCategory": "AREA"
+      },
+      "stockingUom": {
+        "code": "SFT",
+        "uomCategory": "AREA"
+      },
+      "lotControl": false,
+      "shelfLifeControl": true,
+      "serialNumber": true
+    },
+    {
+      "code": "MAT18",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT3"
+      },
+      "name": "COTTON",
+      "description": "Cotton",
+      "baseUom": {
+        "code": "TON",
+        "uomCategory": "WEIGHT"
+      },
+      "expenseAccount": {
+        "glCode": "44018"
+      },
+      "minQuantity": "5",
+      "maxQuantity": "20",
+      "reorderLevel": "10",
+      "reorderQuantity": "12",
+      "purchaseUom": {
+        "code": "TON",
+        "uomCategory": "WEIGHT"
+      },
+      "stockingUom": {
+        "code": "TON",
+        "uomCategory": "WEIGHT"
+      },
+      "lotControl": true,
+      "shelfLifeControl": false,
+      "serialNumber": false
+    },
+    {
+      "code": "MAT19",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT1"
+      },
+      "name": "CEMENT",
+      "description": "Cement",
+      "baseUom": {
+        "code": "TON",
+        "uomCategory": "WEIGHT"
+      },
+      "expenseAccount": {
+        "glCode": "44019"
+      },
+      "minQuantity": "2",
+      "maxQuantity": "20",
+      "reorderLevel": "10",
+      "reorderQuantity": "12",
+      "purchaseUom": {
+        "code": "TON",
+        "uomCategory": "WEIGHT"
+      },
+      "stockingUom": {
+        "code": "TON",
+        "uomCategory": "WEIGHT"
+      },
+      "lotControl": false,
+      "shelfLifeControl": true,
+      "serialNumber": false
+    },
+    {
+      "code": "MAT20",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT2"
+      },
+      "name": "IRON",
+      "description": "Iron",
+      "baseUom": {
+        "code": "TON",
+        "uomCategory": "WEIGHT"
+      },
+      "expenseAccount": {
+        "glCode": "44020"
+      },
+      "minQuantity": "2",
+      "maxQuantity": "20",
+      "reorderLevel": "10",
+      "reorderQuantity": "12",
+      "purchaseUom": {
+        "code": "TON",
+        "uomCategory": "WEIGHT"
+      },
+      "stockingUom": {
+        "code": "TON",
+        "uomCategory": "WEIGHT"
+      },
+      "lotControl": true,
+      "shelfLifeControl": false,
+      "serialNumber": false
+    },
+    {
+      "code": "MAT3",
+      "tenantId": "mh",
+      "materialType": {
+        "code": "MT3"
+      },
+      "name": "ENGINE OIL",
+      "description": "EngineOil",
+      "baseUom": {
+        "code": "LTR",
+        "uomCategory": "VOLUME"
+      },
+      "expenseAccount": {
+        "glCode": "44003"
+      },
+      "minQuantity": "5",
+      "maxQuantity": "25",
+      "reorderLevel": "18",
+      "reorderQuantity": "12",
+      "purchaseUom": {
+        "code": "LTR"
+      },
+      "stockingUom": {
+        "code": "LTR",
+        "uomCategory": "VOLUME"
+      },
+      "lotControl": false,
+      "shelfLifeControl": false,
+      "serialNumber": false
+    },
+    {
+      "code": "MAT3",
+      "tenantId": "default",
+      "materialType": {
+        "code": "MT3"
+      },
+      "name": "ENGINE OIL",
+      "description": "EngineOil",
+      "baseUom": {
+        "code": "LTR",
+        "uomCategory": "VOLUME"
+      },
+      "expenseAccount": {
+        "glCode": "44003"
+      },
+      "minQuantity": "5",
+      "maxQuantity": "25",
+      "reorderLevel": "18",
+      "reorderQuantity": "12",
+      "purchaseUom": {
+        "code": "LTR"
+      },
+      "stockingUom": {
+        "code": "LTR",
+        "uomCategory": "VOLUME"
+      },
+      "lotControl": false,
+      "shelfLifeControl": false,
+      "serialNumber": false
+    }
+  ]
+}
