@@ -19,7 +19,7 @@
     {
       "code": "TECHNICAL_SANCTIONED",
       "description": "Technical Sanctioned",
-      "moduleType": "AbstractEstimate",
+      "moduleType": "DetailedEstimate",
       "tenantId": "default",
       "orderNumber": 3
     },
@@ -279,18 +279,6 @@
       "tenantId": "default"
     },
     {
-      "code": "APPROVED",
-      "description": "Approved",
-      "moduleType": "TrackMilestone",
-      "tenantId": "default"
-    },
-    {
-      "code": "CANCELLED",
-      "description": "Cancelled",
-      "moduleType": "TrackMilestone",
-      "tenantId": "default"
-    },
-    {
       "code": "CREATED",
       "description": "Created",
       "moduleType": "WorkOrder",
@@ -391,18 +379,67 @@
       "orderNumber": 4
     },
     {
-      "code": "APPROVED",
-      "description": "Approved",
-      "moduleType": "Milestone",
+      "code": "CREATED",
+      "description": "Created",
+      "moduleType": "ProjectCode",
       "tenantId": "default",
       "orderNumber": 1
     },
     {
-      "code": "CANCELLED",
-      "description": "Cancelled",
-      "moduleType": "Milestone",
+      "code": "APPROVED",
+      "description": "Approved",
+      "moduleType": "LetterOfAcceptance",
+      "tenantId": "default",
+      "orderNumber": 1
+    },
+    {
+      "code": "SAVED",
+      "description": "Saved",
+      "moduleType": "MeasurementBook",
+      "tenantId": "default",
+      "orderNumber": 1
+    },
+    {
+      "code": "CREATED",
+      "description": "Created",
+      "moduleType": "MeasurementBook",
+      "tenantId": "default",
+      "orderNumber": 1
+    },
+    {
+      "code": "CHECKED",
+      "description": "Checked",
+      "moduleType": "MeasurementBook",
       "tenantId": "default",
       "orderNumber": 2
+    },
+    {
+      "code": "APPROVED",
+      "description": "Approved",
+      "moduleType": "MeasurementBook",
+      "tenantId": "default",
+      "orderNumber": 3
+    },
+    {
+      "code": "REJECTED",
+      "description": "Rejected",
+      "moduleType": "MeasurementBook",
+      "tenantId": "default",
+      "orderNumber": 4
+    },
+    {
+      "code": "RESUBMITTED",
+      "description": "Resubmitted",
+      "moduleType": "MeasurementBook",
+      "tenantId": "default",
+      "orderNumber": 5
+    },
+    {
+      "code": "CANCELLED",
+      "description": "Cancelled",
+      "moduleType": "MeasurementBook",
+      "tenantId": "default",
+      "orderNumber": 6
     },
     {
       "code": "NOT_YET_STARTED",
