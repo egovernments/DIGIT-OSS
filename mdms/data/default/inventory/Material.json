@@ -15,7 +15,7 @@
         "uomCategory": "QUANTITY"
       },
       "expenseAccount": {
-        "glCode": "44001"
+          "glcode": "44001"
       },
       "minQuantity": "2",
       "maxQuantity": "20",
@@ -46,7 +46,7 @@
         "uomCategory": "QUANTITY"
       },
       "expenseAccount": {
-        "glCode": "44002"
+          "glcode": "44002"
       },
       "minQuantity": "2",
       "maxQuantity": "20",
@@ -77,7 +77,7 @@
         "uomCategory": "VOLUME"
       },
       "expenseAccount": {
-        "glCode": "44003"
+          "glcode": "44003"
       },
       "minQuantity": "5",
       "maxQuantity": "25",
@@ -107,7 +107,7 @@
         "uomCategory": "QUANTITY"
       },
       "expenseAccount": {
-        "glCode": "44004"
+          "glcode": "44004"
       },
       "minQuantity": "2",
       "maxQuantity": "15",
@@ -138,7 +138,7 @@
         "uomCategory": "WEIGHT"
       },
       "expenseAccount": {
-        "glCode": "44005"
+          "glcode": "44005"
       },
       "minQuantity": "1000",
       "maxQuantity": "2000",
@@ -169,7 +169,7 @@
         "uomCategory": "LENGTH"
       },
       "expenseAccount": {
-        "glCode": "44006"
+          "glcode": "44006"
       },
       "minQuantity": "50",
       "maxQuantity": "100",
@@ -200,7 +200,7 @@
         "uomCategory": "WEIGHT"
       },
       "expenseAccount": {
-        "glCode": "44007"
+          "glcode": "44007"
       },
       "minQuantity": "100",
       "maxQuantity": "1000",
@@ -231,7 +231,7 @@
         "uomCategory": "VOLUME"
       },
       "expenseAccount": {
-        "glCode": "44008"
+          "glcode": "44008"
       },
       "minQuantity": "50",
       "maxQuantity": "100",
@@ -262,7 +262,7 @@
         "uomCategory": "WEIGHT"
       },
       "expenseAccount": {
-        "glCode": "44009"
+          "glcode": "44009"
       },
       "minQuantity": "500",
       "maxQuantity": "2000",
@@ -293,7 +293,7 @@
         "uomCategory": "POWER"
       },
       "expenseAccount": {
-        "glCode": "44010"
+          "glcode": "44010"
       },
       "minQuantity": "2",
       "maxQuantity": "20",
@@ -324,7 +324,7 @@
         "uomCategory": "QUANTITY"
       },
       "expenseAccount": {
-        "glCode": "44011"
+          "glcode": "44011"
       },
       "minQuantity": "2",
       "maxQuantity": "20",
@@ -355,7 +355,7 @@
         "uomCategory": "LENGTH"
       },
       "expenseAccount": {
-        "glCode": "44012"
+          "glcode": "44012"
       },
       "minQuantity": "50",
       "maxQuantity": "500",
@@ -386,7 +386,7 @@
         "uomCategory": "POWER"
       },
       "expenseAccount": {
-        "glCode": "44013"
+          "glcode": "44013"
       },
       "minQuantity": "2",
       "maxQuantity": "20",
@@ -417,7 +417,7 @@
         "uomCategory": "POWER"
       },
       "expenseAccount": {
-        "glCode": "44014"
+          "glcode": "44014"
       },
       "minQuantity": "10",
       "maxQuantity": "20",
@@ -448,7 +448,7 @@
         "uomCategory": "WEIGHT"
       },
       "expenseAccount": {
-        "glCode": "44015"
+          "glcode": "44015"
       },
       "minQuantity": "25",
       "maxQuantity": "100",
@@ -479,7 +479,7 @@
         "uomCategory": "AREA"
       },
       "expenseAccount": {
-        "glCode": "44016"
+          "glcode": "44016"
       },
       "minQuantity": "20",
       "maxQuantity": "100",
@@ -510,7 +510,7 @@
         "uomCategory": "AREA"
       },
       "expenseAccount": {
-        "glCode": "44017"
+          "glcode": "44017"
       },
       "minQuantity": "50",
       "maxQuantity": "100",
@@ -541,7 +541,7 @@
         "uomCategory": "WEIGHT"
       },
       "expenseAccount": {
-        "glCode": "44018"
+          "glcode": "44018"
       },
       "minQuantity": "5",
       "maxQuantity": "20",
@@ -572,7 +572,7 @@
         "uomCategory": "WEIGHT"
       },
       "expenseAccount": {
-        "glCode": "44019"
+          "glcode": "44019"
       },
       "minQuantity": "2",
       "maxQuantity": "20",
@@ -603,7 +603,7 @@
         "uomCategory": "WEIGHT"
       },
       "expenseAccount": {
-        "glCode": "44020"
+          "glcode": "44020"
       },
       "minQuantity": "2",
       "maxQuantity": "20",
@@ -634,7 +634,7 @@
         "uomCategory": "VOLUME"
       },
       "expenseAccount": {
-        "glCode": "44003"
+          "glcode": "44003"
       },
       "minQuantity": "5",
       "maxQuantity": "25",
@@ -664,7 +664,7 @@
         "uomCategory": "VOLUME"
       },
       "expenseAccount": {
-        "glCode": "44003"
+          "glcode": "44003"
       },
       "minQuantity": "5",
       "maxQuantity": "25",
