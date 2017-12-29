@@ -1,7 +1,7 @@
   {
     "tenantId": "default",
     "moduleName": "ACCESSCONTROL-ROLEACTIONS",
-    "roleactions": [
+    "roleaction": [
       {
         "rolecode": "SUPERUSER",
         "actionid": 628,
