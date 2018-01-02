@@ -1,5 +1,5 @@
 {
-  "tenantId": "default",
+  "tenantId": "mh.aliba",
   "moduleName": "lcms",
   "charge": [
     {
@@ -16,7 +16,7 @@
       "courtType": "courtType1",
       "caseType": "caseType1",
       "active": true,
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "name": "Retainer Fee",
@@ -32,7 +32,7 @@
       "courtType": "courtType2",
       "caseType": "caseType2",
       "active": true,
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "name": "Advocate Fee",
@@ -48,7 +48,7 @@
       "courtType": "courtType3",
       "caseType": "caseType4",
       "active": true,
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     }
   ]
 }

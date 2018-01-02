@@ -1,31 +1,31 @@
 {
-  "tenantId": "default",
+  "tenantId": "mh.aliba",
   "moduleName": "lcms",
   "bank": [
     {
       "name": "AXIS BANK",
       "code": "AXIS",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "name": "ICICI BANK LTD",
       "code": "ICICI",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "name": "HDFC BANK",
       "code": "HDFC",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "name": "STATE BANK OF INDIA",
       "code": "SBI",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "name": "BANK OF MAHARASHTRA",
       "code": "BOM",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     }
   ]
 }

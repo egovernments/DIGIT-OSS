@@ -1,0 +1,18 @@
+{
+  "tenantId": "mh.aliba",
+  "moduleName": "lcms",
+  "caseCategory": [
+    {
+      "name": "Minor case",
+      "code": "MINOR_CASE",
+      "active": true,
+      "tenantId": "mh.aliba"
+    },
+    {
+      "name": "Major case",
+      "code": "MAJOR_CASE",
+      "active": true,
+      "tenantId": "mh.aliba"
+    }
+  ]
+}

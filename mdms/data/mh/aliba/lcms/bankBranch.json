@@ -1,5 +1,5 @@
 {
-  "tenantId": "default",
+  "tenantId": "mh.aliba",
   "moduleName": "lcms",
   "bankBranch": [
     {
@@ -10,7 +10,7 @@
       "ifscCode": "UTIB0001531",
       "MICRCode": "400211095",
       "bankName": "AXIS BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -20,7 +20,7 @@
       "ifscCode": "UTIB0003387",
       "MICRCode": "400211174",
       "bankName": "AXIS BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -30,7 +30,7 @@
       "ifscCode": "UTIB0002622",
       "MICRCode": "400211144",
       "bankName": "AXIS BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -40,7 +40,7 @@
       "ifscCode": "UTIB0SBMCB1",
       "MICRCode": "NA",
       "bankName": "AXIS BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -50,7 +50,7 @@
       "ifscCode": "UTIB0003388",
       "MICRCode": "400211173",
       "bankName": "AXIS BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -60,7 +60,7 @@
       "ifscCode": "UTIB0002709",
       "MICRCode": "NA",
       "bankName": "AXIS BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -70,7 +70,7 @@
       "ifscCode": "UTIB0001004",
       "MICRCode": "400211070",
       "bankName": "AXIS BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -80,7 +80,7 @@
       "ifscCode": "UTIB0002274",
       "MICRCode": "400211135",
       "bankName": "AXIS BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -90,7 +90,7 @@
       "ifscCode": "UTIB0NPSKRV",
       "MICRCode": "NA",
       "bankName": "AXIS BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -100,7 +100,7 @@
       "ifscCode": "UTIB0002517",
       "MICRCode": "400211140",
       "bankName": "AXIS BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -110,7 +110,7 @@
       "ifscCode": "ICIC0003449",
       "MICRCode": "400299271",
       "bankName": "ICICI BANK LTD",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -120,7 +120,7 @@
       "ifscCode": "ICIC0003450",
       "MICRCode": "400229232",
       "bankName": "ICICI BANK LTD",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -130,7 +130,7 @@
       "ifscCode": "ICIC0001956",
       "MICRCode": "400229220",
       "bankName": "ICICI BANK LTD",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -140,7 +140,7 @@
       "ifscCode": "ICIC00FINPY",
       "MICRCode": "NA",
       "bankName": "ICICI BANK LTD",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -150,7 +150,7 @@
       "ifscCode": "ICIC0003611",
       "MICRCode": "400229237",
       "bankName": "ICICI BANK LTD",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -160,7 +160,7 @@
       "ifscCode": "HDFC0CBMC01",
       "MICRCode": "400069001",
       "bankName": "HDFC BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -170,7 +170,7 @@
       "ifscCode": "HDFC0CECBL2",
       "MICRCode": "400108002",
       "bankName": "HDFC BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -180,7 +180,7 @@
       "ifscCode": "HDFC0003953",
       "MICRCode": "400240187",
       "bankName": "HDFC BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -190,7 +190,7 @@
       "ifscCode": "HDFC0004417",
       "MICRCode": "400240194",
       "bankName": "HDFC BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -200,7 +200,7 @@
       "ifscCode": "HDFC0004272",
       "MICRCode": "400240196",
       "bankName": "HDFC BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -210,7 +210,7 @@
       "ifscCode": "HDFC0003650",
       "MICRCode": "400240188",
       "bankName": "HDFC BANK",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -220,7 +220,7 @@
       "ifscCode": "SBIN0016654",
       "MICRCode": "NA",
       "bankName": "STATE BANK OF INDIA",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -230,7 +230,7 @@
       "ifscCode": "SBIN0030001",
       "MICRCode": "400005003",
       "bankName": "STATE BANK OF INDIA",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -240,7 +240,7 @@
       "ifscCode": "SBIN0012002",
       "MICRCode": "400002232",
       "bankName": "STATE BANK OF INDIA",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -250,7 +250,7 @@
       "ifscCode": "SBIN0010296",
       "MICRCode": "NA",
       "bankName": "STATE BANK OF INDIA",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -260,7 +260,7 @@
       "ifscCode": "SBIN0016376",
       "MICRCode": "NA",
       "bankName": "STATE BANK OF INDIA",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -270,7 +270,7 @@
       "ifscCode": "SBIN0017594",
       "MICRCode": "NA",
       "bankName": "STATE BANK OF INDIA",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -280,7 +280,7 @@
       "ifscCode": "MAHB0001756",
       "MICRCode": "400014165",
       "bankName": "BANK OF MAHARASHTRA",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -290,7 +290,7 @@
       "ifscCode": "MAHB0001421",
       "MICRCode": "400014138",
       "bankName": "BANK OF MAHARASHTRA",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -300,7 +300,7 @@
       "ifscCode": "MAHB0001450",
       "MICRCode": "400014997",
       "bankName": "BANK OF MAHARASHTRA",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -310,7 +310,7 @@
       "ifscCode": "MAHB0001504",
       "MICRCode": "400014145",
       "bankName": "BANK OF MAHARASHTRA",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -320,7 +320,7 @@
       "ifscCode": "MAHB0001588",
       "MICRCode": "400014158",
       "bankName": "BANK OF MAHARASHTRA",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -330,7 +330,7 @@
       "ifscCode": "MAHB0001767",
       "MICRCode": "400014170",
       "bankName": "BANK OF MAHARASHTRA",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -340,7 +340,7 @@
       "ifscCode": "MAHB0001757",
       "MICRCode": "400014166",
       "bankName": "BANK OF MAHARASHTRA",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     },
     {
       "state": "Maharashtra",
@@ -350,7 +350,7 @@
       "ifscCode": "MAHB0001447",
       "MICRCode": "411014996",
       "bankName": "BANK OF MAHARASHTRA",
-      "tenantId": "default"
+      "tenantId": "mh.aliba"
     }
   ]
 }

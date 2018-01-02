@@ -1,0 +1,24 @@
+{
+  "tenantId": "mh.aliba",
+  "moduleName": "lcms",
+  "bench": [
+    {
+      "name": "Bombayaa",
+      "code": "BOMBAY",
+      "active": true,
+      "tenantId": "mh.aliba"
+    },
+    {
+      "name": "Aurangabad",
+      "code": "AURANGABAD",
+      "active": false,
+      "tenantId": "mh.aliba"
+    },
+    {
+      "name": "Nagpur",
+      "code": "NAGPUR",
+      "active": true,
+      "tenantId": "mh.aliba"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "tenantId": "mh.roha",
+  "moduleName": "lcms",
+  "caseCategory": [
+    {
+      "name": "Minor case",
+      "code": "MINOR_CASE",
+      "active": true,
+      "tenantId": "mh.roha"
+    },
+    {
+      "name": "Major case",
+      "code": "MAJOR_CASE",
+      "active": true,
+      "tenantId": "mh.roha"
+    }
+  ]
+}
