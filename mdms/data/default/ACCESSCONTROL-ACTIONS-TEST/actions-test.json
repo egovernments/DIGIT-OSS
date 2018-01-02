@@ -10968,9 +10968,9 @@
       "queryParams": null,
       "parentModule": "527",
       "enabled": true,
-      "serviceCode": "WORKS_MASTERS",
+      "serviceCode": "WorkOrder",
       "code": "null",
-      "path": "Works Management.Masters"
+      "path": "Works Management.Work Order.Work Order"
     },
     {
       "id": 1442,
@@ -10981,9 +10981,9 @@
       "queryParams": null,
       "parentModule": "527",
       "enabled": false,
-      "serviceCode": "WORKS_MASTERS",
+      "serviceCode": "WorkOrder",
       "code": "null",
-      "path": "Works Management.Masters"
+      "path": "Works Management.Work Order.Work Order"
     },
     {
       "id": 1443,
@@ -10994,9 +10994,9 @@
       "queryParams": null,
       "parentModule": "527",
       "enabled": false,
-      "serviceCode": "WORKS_MASTERS",
+      "serviceCode": "WorkOrder",
       "code": "null",
-      "path": "Works Management.Masters"
+      "path": "Works Management.Work Order.Work Order"
     },
     {
       "id": 1444,
@@ -11098,9 +11098,9 @@
       "queryParams": null,
       "parentModule": "527",
       "enabled": true,
-      "serviceCode": "WORKS_MASTERS",
+      "serviceCode": "WorkOrder",
       "code": "null",
-      "path": "Works Management.Masters"
+      "path": "Works Management.Work Order.Work Order"
     },
     {
       "id": 1473,
@@ -11111,9 +11111,9 @@
       "queryParams": null,
       "parentModule": "527",
       "enabled": false,
-      "serviceCode": "WORKS_MASTERS",
+      "serviceCode": "WorkOrder",
       "code": "null",
-      "path": "Works Management.Masters"
+      "path": "Works Management.Work Order.Work Order"
     },
     {
       "id": 1474,
@@ -11124,9 +11124,9 @@
       "queryParams": null,
       "parentModule": "527",
       "enabled": false,
-      "serviceCode": "WORKS_MASTERS",
+      "serviceCode": "WorkOrder",
       "code": "null",
-      "path": "Works Management.Masters"
+      "path": "Works Management.Work Order.Work Order"
     }
   ]
 }
