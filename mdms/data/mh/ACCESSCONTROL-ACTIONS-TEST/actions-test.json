@@ -83,7 +83,7 @@
       "id": 366,
       "name": "AssetRevaluationSearchToCreate",
       "url": "/app/asset/search-asset-revaluation.html",
-      "displayName": "Reevaluate Asset",
+      "displayName": "Revaluate Asset",
       "orderNumber": 1,
       "queryParams": null,
       "parentModule": "152",
