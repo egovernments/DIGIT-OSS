@@ -1,0 +1,20 @@
+{"tenantId":"mh.roha","moduleName":"lcms","side": 
+  [{
+    "name": "Civil",
+    "code": "CVL",
+    "active": true,
+    "tenantId": "mh.roha"
+  },
+  {
+    "name": "Criminal",
+    "code": "CRMNL",
+    "active": true,
+    "tenantId": "mh.roha"
+  },
+  {
+    "name": "Original",
+    "code": "ORGNL",
+    "active": true,
+    "tenantId": "mh.roha"
+  }
+]}
