@@ -1062,7 +1062,7 @@
       "orderNumber": 0,
       "queryParams": null,
       "parentModule": "517",
-      "enabled": false,
+      "enabled": true,
       "serviceCode": "COURTTYPE",
       "code": "null",
       "path": "Legal Case Management.Legal Case Masters.Court.Court"
