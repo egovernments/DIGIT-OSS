@@ -151,6 +151,66 @@
       "code": "directortestcode112234324",
       "name": "director123456",
       "description": "test123description"
+    },
+    {
+      "code": "COMMISSIONER",
+      "name": "Commissioner",
+      "description": "Commissioner"
+    },
+    {
+      "code": "AE_CREATOR",
+      "name": "Abstract Estimate Creator",
+      "description": "Who has a access to create Abstract Estimate"
+    },
+    {
+      "code": "WORKS_FINANCIAL_APPROVER",
+      "name": "Financials Approver",
+      "description": "Who has a access to capture Financial details and budgetary/financial sanction"
+    },
+    {
+      "code": "DE_CREATOR",
+      "name": "Detailed Estimate Creator",
+      "description": "Who has a access to create Detailed Estimate"
+    },
+    {
+      "code": "LOA_CREATOR",
+      "name": "LOA Creator",
+      "description": "Who has a access to create Letter Of Acceptance"
+    },
+    {
+      "code": "WO_CREATOR",
+      "name": "WO Creator",
+      "description": "Who has a access to create Work Order"
+    },
+    {
+      "code": "WORKS_BILL_CREATOR",
+      "name": "Works Bill Creator",
+      "description": "Who has a access to create Contractor Bill"
+    },
+    {
+      "code": "CONTRACTOR_ADVANCE_CREATOR",
+      "name": "Contractor Advance creator",
+      "description": "Who has a access to create Contractor Advance"
+    },
+    {
+      "code": "MB_CREATOR",
+      "name": "MB creator",
+      "description": "Who has a access to create MB"
+    },
+    {
+      "code": "WORKS_APPROVER",
+      "name": "Works Approver",
+      "description": "Who has a access to approve/verify Works objects"
+    },
+    {
+      "code": "WORKS_ADMINISTRATOR",
+      "name": "Works Administrator",
+      "description": "Who has a access to all the transactions, masters and reports"
+    },
+    {
+      "code": "WORKS_MASTER_CREATOR",
+      "name": "Works Master creator",
+      "description": "Who has a access to all the works masters."
     }
   ]
 }
