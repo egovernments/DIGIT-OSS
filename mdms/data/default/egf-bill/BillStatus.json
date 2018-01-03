@@ -3,7 +3,6 @@
   "moduleName": "egf-bill",
   "BillStatus": [
     {
-      "id": "1",
       "tenantId": "default",
       "name": "Created",
       "code": "Created",
@@ -12,7 +11,6 @@
       "orderNumber": 1
     },
     {
-      "id": "2",
       "tenantId": "default",
       "name": "Approved",
       "code": "Approved",
@@ -21,7 +19,6 @@
       "orderNumber": 2
     },
     {
-      "id": "3",
       "tenantId": "default",
       "name": "Cancelled",
       "code": "Cancelled",

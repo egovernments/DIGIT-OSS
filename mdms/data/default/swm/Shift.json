@@ -3,6 +3,7 @@
   "moduleName": "swm",
   "Shift": [{
       "code": "Morning Collection Shift Code",
+      "name": "Morning Collection Shift Name",
       "tenantId": "default",
       "shiftType": {
         "tenantId": "default",
@@ -30,6 +31,7 @@
     },
     {
       "code": "Afternoon Collection Shift Code",
+      "name": "Afternoon Collection Shift Name",
       "tenantId": "default",
       "shiftType": {
         "tenantId": "default",
@@ -57,6 +59,7 @@
     },
     {
       "code": "Morning Segregation Shift Code",
+      "name": "Morning Segregation Shift Name",
       "tenantId": "default",
       "shiftType": {
         "tenantId": "default",
@@ -84,6 +87,7 @@
     },
     {
       "code": "Afternoon Segregation Shift Code",
+      "name": "Afternoon Segregation Shift Name",
       "tenantId": "default",
       "shiftType": {
         "tenantId": "default",
@@ -111,6 +115,7 @@
     },
     {
       "code": "Morning Disposal Shift Code",
+      "name": "Morning Disposal Shift Name",
       "tenantId": "default",
       "shiftType": {
         "tenantId": "default",
@@ -138,6 +143,7 @@
     },
     {
       "code": "Afternoon Disposal Shift Code",
+      "name": "Afternoon Disposal Shift Name",
       "tenantId": "default",
       "shiftType": {
         "tenantId": "default",
@@ -164,6 +170,9 @@
       "graceTimeTo": 1512019800000
     },
     {
+      "code": "Shift-1513690523382",
+      "name": "Shift-1513690523382 Name",
+      "tenantId": "default",
       "shiftType": {
         "code": "Shift Type Code 3"
       },
@@ -173,8 +182,6 @@
       "designation": {
         "code": "Manager"
       },
-      "code": "Shift-1513690523382",
-      "tenantId": "default",
       "shiftStartTime": "1513662540000",
       "shiftEndTime": "1513622100000",
       "lunchStartTime": "1513625400000",
