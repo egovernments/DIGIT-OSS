@@ -11127,6 +11127,19 @@
       "serviceCode": "WorkOrder",
       "code": "null",
       "path": "Works Management.Work Order.Work Order"
-    }
+    },
+     {
+      "id": 1475,
+      "name": "Upload",
+      "url": "/upload",
+      "displayName": "Upload",
+      "orderNumber": 0,
+      "queryParams": null,
+      "parentModule": "530",
+      "enabled": true,
+      "serviceCode": "upload.upload",
+      "code": "null",
+      "path": "Upload.Upload"
+    }                   
   ]
 }
