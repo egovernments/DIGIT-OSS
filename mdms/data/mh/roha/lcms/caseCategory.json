@@ -1,1 +1,1 @@
-{"tenantId":"mh.roha","moduleName":"lcms","caseCategory":[{"name":"Minor case","code":"MINOR_CASE","active":true,"tenantId":"mh.roha"},{"name":"Major case","code":"MAJOR_CASE","active":true,"tenantId":"mh.roha"},{"name":"Test","code":"T01","active":true,"tenantId":"mh.roha"}]}
+{"tenantId":"mh.roha","moduleName":"lcms","caseCategory":[{"name":"Minor case","code":"MINOR_CASE","active":true,"tenantId":"mh.roha"},{"name":"Major case","code":"MAJOR_CASE","active":true,"tenantId":"mh.roha"},{"name":"Test1","code":"T01","active":true,"tenantId":"mh.roha"}]}
