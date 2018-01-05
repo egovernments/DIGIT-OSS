@@ -738,7 +738,7 @@
          "orderNumber":3,
          "queryParams":null,
          "parentModule":null,
-         "enabled":true,
+         "enabled":false,
          "serviceCode":"MATERIAL MASTER",
          "code":"null",
          "path":"Inventory.Inventory Masters.Material Master.Material Search"
@@ -11244,7 +11244,7 @@
          "enabled":true,
          "serviceCode":"MATERIALTYPE MASTER",
          "code":"null",
-         "path":"Inventory.Inventory Masters.MaterialType Master.MaterialType Create"
+         "path":"Inventory.Inventory Masters.MaterialType Master.MaterialType"
       }
    ]
 }
