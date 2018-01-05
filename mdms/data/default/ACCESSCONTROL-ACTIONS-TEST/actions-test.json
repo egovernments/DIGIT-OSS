@@ -708,7 +708,7 @@
          "id":1107,
          "name":"Material Create",
          "url":"/inventory-services/materials/_create",
-         "displayName":"Create Material",
+         "displayName":"Material",
          "orderNumber":1,
          "queryParams":null,
          "parentModule":null,
@@ -11232,6 +11232,19 @@
    "serviceCode": "upload.upload",
    "code": "null",
    "path": "Upload.User Jobs"
- }
+ },
+ {  
+         "id":1485,
+         "name":"MaterialType Create",
+         "url":"",
+         "displayName":"MaterialType",
+         "orderNumber":2,
+         "queryParams":null,
+         "parentModule":null,
+         "enabled":true,
+         "serviceCode":"MATERIALTYPE MASTER",
+         "code":"null",
+         "path":"Inventory.Inventory Masters.MaterialType Master.MaterialType Create"
+      }
    ]
 }
