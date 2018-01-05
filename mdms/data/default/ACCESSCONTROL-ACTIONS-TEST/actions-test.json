@@ -8982,7 +8982,7 @@
          "orderNumber":3,
          "queryParams":null,
          "parentModule":null,
-         "enabled":false,
+         "enabled":true,
          "serviceCode":"PURCHASE ORDER",
          "code":"null",
          "path":"Inventory.Inventory Transactions.Purchase Order.Purchase Order Search"
@@ -10742,16 +10742,16 @@
       },
       {  
          "id":1460,
-         "name":"Purchase Order Create from Indents",
+         "name":"Create Indent Purchase Order",
          "url":"/inventory-services/purchaseorders/_preparepofromindents",
-         "displayName":"Create Purchase Order From Indents",
+         "displayName":"Create Indent Purchase Order",
          "orderNumber":4,
          "queryParams":null,
          "parentModule":null,
-         "enabled":false,
+         "enabled":true,
          "serviceCode":"PURCHASE ORDER",
          "code":"null",
-         "path":"Inventory.Inventory Transactions.Purchase Order.Purchase Order Create"
+         "path":"Inventory.Inventory Transactions.Purchase Order.Create Indent Purchase Order"
       },
       {  
          "id":1465,
@@ -11245,6 +11245,58 @@
          "serviceCode":"MATERIALTYPE MASTER",
          "code":"null",
          "path":"Inventory.Inventory Masters.MaterialType Master.MaterialType.MaterialType"
+      },
+      {  
+         "id":1486,
+         "name":"Create Non Indent Purchase Order",
+         "url":"/inventory-services/purchaseorders/_create",
+         "displayName":"Create Non Indent Purchase Order",
+         "orderNumber":5,
+         "queryParams":null,
+         "parentModule":null,
+         "enabled":true,
+         "serviceCode":"PURCHASE ORDER",
+         "code":"null",
+         "path":"Inventory.Inventory Transactions.Purchase Order.Create Non Indent Purchase Order"
+      },
+      {  
+         "id":1487,
+         "name":"Create Advance Requisition",
+         "url":"/inventory-services/supplieradvancerequisitions/_create",
+         "displayName":"Create Advance Requisition",
+         "orderNumber":1,
+         "queryParams":null,
+         "parentModule":null,
+         "enabled":false,
+         "serviceCode":"SUPPLIER ADVANCE REQUISITION",
+         "code":"null",
+         "path":"Inventory.Inventory Transactions.Advance Requisition.Create Advance Requisition"
+      },
+      {  
+         "id":1488,
+         "name":"Modify Advance Requisition",
+         "url":"/inventory-services/supplieradvancerequisitions/_update",
+         "displayName":"Modify Advance Requisition",
+         "orderNumber":2,
+         "queryParams":null,
+         "parentModule":null,
+         "enabled":false,
+         "serviceCode":"SUPPLIER ADVANCE REQUISITION",
+         "code":"null",
+         "path":"Inventory.Inventory Transactions.Advance Requisition.Modify Advance Requisition"
+      },
+      {  
+         "id":1489,
+         "name":"Search Advance Requisition",
+         "url":"/inventory-services/supplieradvancerequisitions/_search",
+         "displayName":"Search Advance Requisition",
+         "orderNumber":3,
+         "queryParams":null,
+         "parentModule":null,
+         "enabled":false,
+         "serviceCode":"SUPPLIER ADVANCE REQUISITION",
+         "code":"null",
+         "path":"Inventory.Inventory Transactions.Advance Requisition.Search Advance Requisition"
       }
    ]
 }
