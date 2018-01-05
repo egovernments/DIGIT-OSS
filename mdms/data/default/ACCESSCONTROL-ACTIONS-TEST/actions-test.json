@@ -11235,7 +11235,7 @@
  },
  {  
          "id":1485,
-         "name":"MaterialType Create",
+         "name":"MaterialType",
          "url":"",
          "displayName":"MaterialType",
          "orderNumber":2,
@@ -11244,7 +11244,7 @@
          "enabled":true,
          "serviceCode":"MATERIALTYPE MASTER",
          "code":"null",
-         "path":"Inventory.Inventory Masters.MaterialType Master.MaterialType"
+         "path":"Inventory.Inventory Masters.MaterialType Master.MaterialType.MaterialType"
       }
    ]
 }
