@@ -1,1 +1,1 @@
-{"tenantId":"mh.aliba","moduleName":"lcms","side":[{"name":"Civil1","code":"CVL","active":true,"tenantId":"mh.aliba"},{"name":"Criminal1","code":"CRMNL","active":true,"tenantId":"mh.aliba"},{"name":"Original","code":"ORGNL","active":true,"tenantId":"mh.aliba"}]}
+{"tenantId":"mh.aliba","moduleName":"lcms","side":[{"name":"Civil1","code":"CVL","active":true,"tenantId":"mh.aliba"},{"name":"Criminal1","code":"CRMNL","active":false,"tenantId":"mh.aliba"},{"name":"Original","code":"ORGNL","active":true,"tenantId":"mh.aliba"}]}
