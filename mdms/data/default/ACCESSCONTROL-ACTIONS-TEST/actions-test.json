@@ -11236,7 +11236,7 @@
  {  
          "id":1485,
          "name":"MaterialType",
-         "url":"",
+         "url":"/inventory-services/materialstoremapping/_create",
          "displayName":"MaterialType",
          "orderNumber":2,
          "queryParams":null,
