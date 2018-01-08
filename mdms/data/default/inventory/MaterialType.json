@@ -1,1 +1,1 @@
-{"tenantId":"default","moduleName":"inventory","MaterialType":[]}
+{"tenantId":"default","moduleName":"inventory","MaterialType":[{"isParent":false,"isActive":true,"tenantId":"default","code":"98753","name":"keypad","description":"qwerty"}]}
