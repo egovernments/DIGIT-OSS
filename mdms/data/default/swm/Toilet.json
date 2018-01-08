@@ -1,35 +1,30 @@
 {
   "tenantId": "default",
   "moduleName": "swm",
-  "Toilet": [{
-      "code": 1,
+  "Toilet": [
+    {
+      "code": "1",
       "tenantId": "default",
       "publicToilet": true,
       "name": "Toilet Name 1",
       "location": {
-        "name": "Fake location name 1"
+        "code": "169"
       },
-      "ward": "Fake Ward 1",
-      "zone": "Fake Zone 1",
-      "street": "Fake Street 1",
-      "colony": "Fake colony 1",
-      "seatCount": 10,
-      "address": "Fake Address 1"
+      "latitude": 12.88838,
+      "longitude": 14.33233,
+      "seatCount": 10
     },
     {
-      "code": 2,
+      "code": "2",
       "tenantId": "default",
-      "publicToilet": false,
+      "publicToilet": true,
       "name": "Toilet Name 2",
       "location": {
-        "name": "Fake location name 2"
+        "code": "169"
       },
-      "ward": "Fake Ward 1",
-      "zone": "Fake Zone 2",
-      "street": "Fake Street 2",
-      "colony": "Fake colony 2",
-      "seatCount": 7,
-      "address": "Fake Address 2"
+      "latitude": 12.88989,
+      "longitude": 14.78789,
+      "seatCount": 10
     }
   ]
 }

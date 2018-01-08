@@ -1,1 +1,14 @@
-{"WasteSubType":[{"code":"test ","wasteType":{"code":""},"name":"Test","tenantId":"default"}],"tenantId":"default","moduleName":"swm"}
+{
+  "tenantId": "default",
+  "moduleName": "swm",
+  "WasteSubType": [
+    {
+      "tenantId": "default",
+      "code": "test ",
+      "name": "Test",
+      "wasteType": {
+        "code": ""
+      }
+    }
+  ]
+}
