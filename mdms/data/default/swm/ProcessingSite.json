@@ -236,6 +236,31 @@
       "name": "processing ",
       "tenantId": "default",
       "code": "ProcessingSite-1515119291633"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "1",
+        "capacity": "1",
+        "address": "Process Test 1 Process Test 1",
+        "latitude": "",
+        "longitude": "",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Waste Type Code 1"
+          }
+        ]
+      },
+      "name": "Process Test 1",
+      "tenantId": "default",
+      "code": "ProcessingSite-1515503331395"
     }
   ]
 }
