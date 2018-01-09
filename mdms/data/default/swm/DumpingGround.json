@@ -1116,6 +1116,44 @@
           "code": "mh.aliba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": true,
+        "bankName": "SBI",
+        "bankValidityFrom": 1514745000000,
+        "bankValidityTo": 1609353000000,
+        "area": "1",
+        "capacity": "1",
+        "address": "Dump Dump dump dump",
+        "latitude": "",
+        "longitude": "",
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "Waste Type Code 1"
+          },
+          {
+            "code": "Waste Type Code 2"
+          }
+        ]
+      },
+      "name": "Dump 6",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": "ProcessingSite-1513865191921"
+      },
+      "distanceFromProcessingSite": "1",
+      "tenantId": "default",
+      "code": "DumpingGround-1515496983960",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        }
+      ]
     }
   ]
 }
