@@ -1479,6 +1479,47 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "20",
+        "capacity": "258",
+        "address": "test test test r",
+        "latitude": "111",
+        "longitude": "222",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Bio Medical Waste"
+          }
+        ]
+      },
+      "name": "test 12345678",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1515509439651",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
