@@ -8,7 +8,7 @@
       "name": "Building",
       "code": "1",
       "assetCategoryType": "IMMOVABLE",
-      "parent": "1",
+      "parent": "",
       "depreciationMethod": "Straight Line method",
       "isAssetAllow": true,
       "isAssetAllowFromUi": true,
