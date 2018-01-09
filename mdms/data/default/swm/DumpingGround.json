@@ -1611,6 +1611,53 @@
           "code": "mh.amba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "ICICI ukatpallu",
+        "bankValidityFrom": 1514917800000,
+        "bankValidityTo": 1514917800000,
+        "area": "50",
+        "capacity": "258",
+        "address": "test eestsfdsf dsfdsf ds",
+        "latitude": "102",
+        "longitude": "205",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Bio Medical Waste"
+          }
+        ]
+      },
+      "name": "qwerty",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "256",
+      "tenantId": "default",
+      "code": "DumpingGround-1515511182385",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        },
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
