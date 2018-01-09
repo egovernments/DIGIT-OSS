@@ -1195,6 +1195,41 @@
           "code": "mh.aliba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "1",
+        "capacity": "1",
+        "address": "Dump 8Dump 8Dump 8Dump 8",
+        "latitude": "",
+        "longitude": "",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Waste Type Code 1"
+          }
+        ]
+      },
+      "name": "Dump 8",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "1",
+      "tenantId": "default",
+      "code": "DumpingGround-1515497975650",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        }
+      ]
     }
   ]
 }
