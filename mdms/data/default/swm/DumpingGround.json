@@ -1347,6 +1347,47 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "ICICI",
+        "bankValidityFrom": 1515436200000,
+        "bankValidityTo": 1531333800000,
+        "area": "50",
+        "capacity": "10000",
+        "address": "test domoing kgourne data ",
+        "latitude": "100",
+        "longitude": "150",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "DD1"
+          }
+        ]
+      },
+      "name": "Nalasopara",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1515503898060",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        }
+      ]
     }
   ]
 }
