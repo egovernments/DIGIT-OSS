@@ -1828,6 +1828,18 @@
       "code": "2004",
       "isAssetAllow": true,
       "tenantId": "default"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "assetCategoryType": "IMMOVABLE",
+      "name": "KR Road",
+      "unitOfMeasurement": "KM",
+      "isDepreciationApplicable": false,
+      "id": "2005",
+      "code": "2005",
+      "isAssetAllow": true,
+      "tenantId": "default"
     }
   ]
 }
