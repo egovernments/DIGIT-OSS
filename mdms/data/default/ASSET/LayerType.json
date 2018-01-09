@@ -34,8 +34,8 @@
       "tenantId": "default",
       "name": "FAKE LAYER 5 ",
       "description": "./temp/images/mortarlessPavement.jpg",
-      "numberOfLayers": 4,
-      "layeSize": 3,
+      "numberOfLayers": 3,
+      "layeSize": 2,
       "isActive": true
     }
   ]
