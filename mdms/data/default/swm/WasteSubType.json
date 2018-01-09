@@ -86,6 +86,14 @@
       "wasteType": {
         "code": "HHPW"
       }
+    },
+    {
+      "name": "Test Waste2",
+      "code": "TW2",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "BCW"
+      }
     }
   ]
 }
