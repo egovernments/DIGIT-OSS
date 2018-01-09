@@ -1,7 +1,1 @@
-{
-  "tenantId": "default",
-  "moduleName": "inventory",
-  "Material": [
-    
-  ]
-}
+{"tenantId":"default","moduleName":"inventory","Material":[{"lotControl":true,"serialNumber":true,"shelfLifeControl":true,"scrapable":true,"tenantId":"default","code":"Test123","oldCode":"Test","materialType":{"code":"132365"},"name":"Test","description":"Test","baseUom":{"code":"NOS"},"materialstatus":"Active","assetCategory":{"code":"6"},"inventoryType":"Asset","purchaseUom":{"code":"NOS"},"expenseAccount":{"glCode":"42190"},"materialClass":"MediumUsage","stockingUom":{"code":"CUL"},"model":"123","manufacturePartNo":"123","techincalSpecs":"test","termsOfDelivery":"test"}]}
