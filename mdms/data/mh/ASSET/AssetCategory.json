@@ -1766,7 +1766,7 @@
       "isAssetAllowFromUi": true,
       "name": "Garbage Trucks",
       "assetCategoryType": "MOVABLE",
-      "parent": "25",
+      "parent": "",
       "unitOfMeasurement": "TON",
       "isDepreciationApplicable": true,
       "depreciationRate": "10",
