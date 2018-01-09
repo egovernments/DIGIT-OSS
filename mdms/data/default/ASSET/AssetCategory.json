@@ -1864,6 +1864,19 @@
       "code": "2007",
       "isAssetAllow": true,
       "tenantId": "default"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "name": "KK Road",
+      "assetCategoryType": "IMMOVABLE",
+      "parent": "12",
+      "unitOfMeasurement": "KM",
+      "isDepreciationApplicable": false,
+      "id": "2008",
+      "code": "2008",
+      "isAssetAllow": true,
+      "tenantId": "default"
     }
   ]
 }
