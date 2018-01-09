@@ -1230,6 +1230,47 @@
           "code": "mh.aliba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "Bank 1",
+        "bankValidityFrom": 1514745000000,
+        "bankValidityTo": 1518201000000,
+        "area": "10",
+        "capacity": "1000",
+        "address": "DG1 TAddress 100 Feet Road",
+        "latitude": "",
+        "longitude": "",
+        "location": {
+          "code": "203"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "Waste Type Code 1"
+          }
+        ]
+      },
+      "name": "DG1",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": "Pro. Plant Code 1"
+      },
+      "distanceFromProcessingSite": "10",
+      "tenantId": "default",
+      "code": "DumpingGround-1515498270470",
+      "ulbs": [
+        {
+          "code": "mh.roha"
+        },
+        {
+          "code": "mh.pen0"
+        }
+      ]
     }
   ]
 }
