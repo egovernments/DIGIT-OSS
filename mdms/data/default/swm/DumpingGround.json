@@ -1309,7 +1309,7 @@
     },
     {
       "siteDetails": {
-        "mpcbAuthorisation": false,
+        "mpcbAuthorisation": true,
         "bankGuarantee": true,
         "bankName": "ICICI",
         "bankValidityFrom": 1514831400000,
