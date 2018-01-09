@@ -1,0 +1,16 @@
+{
+  "tenantId": "default",
+  "moduleName": "Works",
+  "TypeOfDocument": [
+    {
+      "code": "WORK_ORDER",
+      "name": "Work Order",
+      "tenantId": "default"
+    },
+    {
+      "code": "NOTICE",
+      "name": "Notice",
+      "tenantId": "default"
+    }
+  ]
+}
