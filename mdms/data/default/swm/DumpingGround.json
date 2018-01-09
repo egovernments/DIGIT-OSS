@@ -1309,11 +1309,11 @@
     },
     {
       "siteDetails": {
-        "mpcbAuthorisation": true,
-        "bankGuarantee": "",
-        "bankName": "",
-        "bankValidityFrom": "",
-        "bankValidityTo": "",
+        "mpcbAuthorisation": false,
+        "bankGuarantee": true,
+        "bankName": "ICICI",
+        "bankValidityFrom": 1514831400000,
+        "bankValidityTo": 1514745000000,
         "area": "12",
         "capacity": "12",
         "address": "test create address",
