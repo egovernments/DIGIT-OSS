@@ -94,6 +94,14 @@
       "wasteType": {
         "code": "BCW"
       }
+    },
+    {
+      "name": "waste test3",
+      "code": "WT3",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "BCW"
+      }
     }
   ]
 }
