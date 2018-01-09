@@ -13327,6 +13327,42 @@
       "actionid": 1496,
       "actioncode": "",
       "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1493,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1494,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1495,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "CONTRACTOR_ADVANCE_CREATOR",
+      "actionid": 1493,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "CONTRACTOR_ADVANCE_CREATOR",
+      "actionid": 1494,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "CONTRACTOR_ADVANCE_CREATOR",
+      "actionid": 1495,
+      "actioncode": "",
+      "tenantid": "default"
     }
   ]
 }
