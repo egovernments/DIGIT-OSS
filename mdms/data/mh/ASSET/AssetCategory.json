@@ -712,13 +712,14 @@
       "tenantId": "mh",
       "id": "19",
       "name": "Other Vehicles",
-      "code": "019",
+      "code": "19",
       "assetCategoryType": "MOVABLE",
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
-      "isAssetAllow": false,
+      "isAssetAllow": true,
       "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
+      "depreciationRate": "10",
       "isDepreciationApplicable": true
     },
     {
