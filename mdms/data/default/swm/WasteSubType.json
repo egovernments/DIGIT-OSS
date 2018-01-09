@@ -62,6 +62,14 @@
       "wasteType": {
         "code": "Waste Type Code 2"
       }
+    },
+    {
+      "name": "hgfds",
+      "code": "ngbfvdsx",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Bio Medical Waste"
+      }
     }
   ]
 }
