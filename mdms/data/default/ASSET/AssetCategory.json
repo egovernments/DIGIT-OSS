@@ -50,6 +50,10 @@
         {
           "name": "Measurement",
           "type": "Number"
+        },
+        {
+          "name": "Floor",
+          "type": "Number"
         }
       ]
     },
