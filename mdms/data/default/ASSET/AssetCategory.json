@@ -1896,7 +1896,21 @@
       "id": "2008",
       "code": "2008",
       "isAssetAllow": true,
-      "tenantId": "default"
+      "tenantId": "default",
+      "assetFieldsDefination": [
+        {
+          "name": "Length",
+          "type": "Number"
+        },
+        {
+          "name": "Breadth",
+          "type": "Number"
+        },
+        {
+          "name": "Start Point",
+          "type": "Text"
+        }
+      ]
     }
   ]
 }
