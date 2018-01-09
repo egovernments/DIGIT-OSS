@@ -6,13 +6,14 @@
       "tenantId": "default",
       "id": "1",
       "name": "Building",
-      "code": "001",
+      "code": "1",
       "assetCategoryType": "IMMOVABLE",
-      "depreciationMethod": "STRAIGHT_LINE_METHOD",
-      "isAssetAllow": false,
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllow": true,
       "isAssetAllowFromUi": false,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
+      "isDepreciationApplicable": false,
       "assetFieldsDefination": [
         {
           "name": "Construction Class",
@@ -40,6 +41,15 @@
           "isActive": true,
           "isMandatory": false,
           "columns": []
+        },
+        null,
+        {
+          "name": "Location",
+          "type": "Text"
+        },
+        {
+          "name": "Measurement",
+          "type": "Number"
         }
       ]
     },
