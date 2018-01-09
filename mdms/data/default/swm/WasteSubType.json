@@ -70,6 +70,14 @@
       "wasteType": {
         "code": "Bio Medical Waste"
       }
+    },
+    {
+      "name": "Waste 1",
+      "code": "W1",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Cons"
+      }
     }
   ]
 }
