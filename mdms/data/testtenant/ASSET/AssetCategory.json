@@ -1796,6 +1796,19 @@
       "unitOfMeasurement": "NOS",
       "version": "1.0",
       "isDepreciationApplicable": true
+    },
+    {
+      "tenantId": "testtenant",
+      "id": "903",
+      "name": "Infrastructure assets",
+      "code": "002",
+      "assetCategoryType": "IMMOVABLE",
+      "depreciationMethod": "STRAIGHT_LINE_METHOD",
+      "isAssetAllow": false,
+      "isAssetAllowFromUi": true,
+      "unitOfMeasurement": "NOS",
+      "version": "1.0",
+      "isDepreciationApplicable": true
     }
   ]
 }
