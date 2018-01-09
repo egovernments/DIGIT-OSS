@@ -1852,6 +1852,18 @@
       "code": "2006",
       "isAssetAllow": true,
       "tenantId": "default"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "name": "RV Road",
+      "assetCategoryType": "IMMOVABLE",
+      "unitOfMeasurement": "KM",
+      "isDepreciationApplicable": false,
+      "id": "2007",
+      "code": "2007",
+      "isAssetAllow": true,
+      "tenantId": "default"
     }
   ]
 }
