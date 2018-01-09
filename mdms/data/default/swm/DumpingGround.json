@@ -1567,6 +1567,50 @@
           "code": "mh.amba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "HDFC Kukatpally",
+        "bankValidityFrom": 1509474600000,
+        "bankValidityTo": 1515436200000,
+        "area": "20",
+        "capacity": "258",
+        "address": "test test test ",
+        "latitude": "10",
+        "longitude": "20",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "JNTU",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515119291633"
+      },
+      "distanceFromProcessingSite": "26",
+      "tenantId": "default",
+      "code": "DumpingGround-1515510456037",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
