@@ -1909,6 +1909,10 @@
         {
           "name": "Start Point",
           "type": "Text"
+        },
+        {
+          "name": "End Point",
+          "type": "Text"
         }
       ]
     }
