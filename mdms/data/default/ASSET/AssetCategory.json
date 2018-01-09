@@ -1824,10 +1824,10 @@
           "order": "3"
         },
         {
-          "name": "Heater",
-          "type": "Number",
+          "name": "Refrigerator",
+          "type": "Text",
           "isActive": true,
-          "order": "0"
+          "order": "4"
         }
       ],
       "id": "2004",
