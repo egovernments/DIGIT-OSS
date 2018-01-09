@@ -1822,6 +1822,12 @@
           "type": "Text",
           "isActive": true,
           "order": "3"
+        },
+        {
+          "name": "Heater",
+          "type": "Number",
+          "isActive": true,
+          "order": "0"
         }
       ],
       "id": "2004",
