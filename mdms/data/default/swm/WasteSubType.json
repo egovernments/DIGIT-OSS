@@ -118,6 +118,14 @@
       "wasteType": {
         "code": "Cons"
       }
+    },
+    {
+      "name": "Test Waste 6",
+      "code": "TW6",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "DD1"
+      }
     }
   ]
 }
