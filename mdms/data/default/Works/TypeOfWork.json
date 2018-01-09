@@ -7,88 +7,77 @@
       "description": "Buildings",
       "name": "Buildings",
       "tenantId": "default",
-      "active": "true",
-      "parent": null
+      "active": "true"
     },
     {
       "code": "WaterWorks",
       "description": "Water Works",
       "name": "Water Works",
       "tenantId": "default",
-      "active": "true",
-      "parent": null
+      "active": "true"
     },
     {
       "code": "RDBF",
       "description": "Roads, Drains, Bridges and Flyovers",
       "name": "Roads, Drains, Bridges and Flyovers",
       "tenantId": "default",
-      "active": "true",
-      "parent": null
+      "active": "true"
     },
     {
       "code": "LDCW",
       "description": "Land Development (civil works)",
       "name": "Land Development (civil works)",
       "tenantId": "default",
-      "active": "true",
-      "parent": null
+      "active": "true"
     },
     {
       "code": "SWDANDUGD",
       "description": "Strom Water Drains and UGD",
       "name": "Strom Water Drains and UGD",
       "tenantId": "default",
-      "active": "true",
-      "parent": null
+      "active": "true"
     },
     {
       "code": "STREETLIGHTING",
       "description": "Street Lighting",
       "name": "Street Lighting",
       "tenantId": "default",
-      "active": "true",
-      "parent": null
+      "active": "true"
     },
     {
       "code": "SWM",
       "description": "Solid Waste Management",
       "name": "Solid Waste Management",
       "tenantId": "default",
-      "active": "true",
-      "parent": null
+      "active": "true"
     },
     {
       "code": "VEHICLES",
       "description": "Vehicles",
       "name": "Vehicles",
       "tenantId": "default",
-      "active": "true",
-      "parent": null
+      "active": "true"
     },
     {
       "code": "FURNITURES",
       "description": "Furniture and Fixtures",
       "name": "Furniture and Fixtures",
       "tenantId": "default",
-      "active": "true",
-      "parent": null
+      "active": "true"
     },
     {
       "code": "EQUIPMENT",
       "description": "Equipment",
       "name": "Equipment",
       "tenantId": "default",
-      "active": "true",
-      "parent": null
+      "active": "true"
     },
     {
       "code": "Supplies",
       "description": "Supplies",
       "name": "Supplies",
       "tenantId": "default",
-      "active": "true",
-      "parent": null
+      "active": "true"
     },
     {
       "code": "ROADS",
@@ -441,6 +430,12 @@
       "tenantId": "default",
       "active": "true",
       "parent": "LDCW"
+    },
+    {
+      "code": "NewTOW",
+      "description": "New Type Of Work Description",
+      "name": "New Type Of Work",
+      "active": true
     }
   ]
 }
