@@ -1800,7 +1800,7 @@
     {
       "tenantId": "testtenant",
       "id": "903",
-      "name": "Infrastructure assets",
+      "name": "Infrastructure assets UPDATED",
       "code": "002",
       "assetCategoryType": "IMMOVABLE",
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
