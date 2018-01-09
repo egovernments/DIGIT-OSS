@@ -19,6 +19,24 @@
       "numberOfLayers": 4,
       "layeSize": 2,
       "isActive": true
+    },
+    {
+      "id": 4,
+      "tenantId": "default",
+      "name": "FAKE LAYER 4",
+      "description": "./temp/images/mortarlessPavement.jpg",
+      "numberOfLayers": 4,
+      "layeSize": 3,
+      "isActive": true
+    },
+    {
+      "id": 5,
+      "tenantId": "default",
+      "name": "FAKE LAYER 5 ",
+      "description": "./temp/images/mortarlessPavement.jpg",
+      "numberOfLayers": 4,
+      "layeSize": 3,
+      "isActive": true
     }
   ]
 }
