@@ -78,6 +78,14 @@
       "wasteType": {
         "code": "Cons"
       }
+    },
+    {
+      "name": "Test Waste1",
+      "code": "TW1",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "HHPW"
+      }
     }
   ]
 }
