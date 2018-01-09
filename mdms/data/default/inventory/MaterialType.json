@@ -1,1 +1,30 @@
-{"tenantId":"default","moduleName":"inventory","MaterialType":[{"isParent":false,"isActive":true,"tenantId":"default","code":"98753","name":"keypad","description":"qwerty"},{"isParent":false,"isActive":true,"tenantId":"default","code":"2552","name":"searching.....","description":"on the way"},{"isParent":false,"isActive":true,"tenantId":"default","code":"132365","name":"forbidden box","description":"the ancient box","parent":""},{"isParent":false,"isActive":false,"tenantId":"default","code":"789654","name":"mango cart","description":"mango is tadsty"},{"isParent":true,"isActive":true,"tenantId":"default","code":"123234","name":"dsbfgnmghm","description":"tiger","parent":"132365"},{"isParent":true,"isActive":true,"tenantId":"default","code":"987456","name":"something","description":"something.... is loading","parent":"searching....."},{"isParent":true,"isActive":true,"tenantId":"default","code":"56464","name":"apple cart ","description":"apple is good for health","parent":"789654"},{"isParent":true,"isActive":true,"tenantId":"default","code":"7887","name":"loading data.......","description":"data loaded .. found nothing","parent":"132365"},{"isParent":false,"isActive":true,"tenantId":"default","code":"889","name":"orange cart","description":"orange, cart , sour , taste"},{"isParent":false,"isActive":true,"tenantId":"default","code":"12312","name":"dfgdfg","description":"dfgfhh"},{"isParent":false,"isActive":true,"tenantId":"default","code":"8956","name":"kites","description":"colored kites"},{"isParent":false,"isActive":true,"tenantId":"default","code":"5454","name":"hhjh","description":"uiui"},{"isParent":false,"isActive":true,"tenantId":"default","code":"8899","name":"mlop","description":"oplk"},{"isParent":true,"isActive":true,"tenantId":"default","code":"12345","name":"ghnghnh","description":"ghnghghh","parent":"56464"}]}
+{
+  "tenantId": "default",
+  "moduleName": "inventory",
+  "MaterialType": [
+    {
+      "id": 1,
+      "tenantId": "default",
+      "code": "MT1",
+      "name": "Fake Material Type Name 1",
+      "parent": null,
+      "isparent": false
+    },
+    {
+      "id": 2,
+      "tenantId": "default",
+      "code": "MT2",
+      "name": "Fake Material Type Name 2",
+      "parent": null,
+      "isparent": false
+    },
+    {
+      "id": 3,
+      "tenantId": "default",
+      "code": "MT3",
+      "name": "Fake Material Type Name 3",
+      "parent": null,
+      "isparent": false
+    }
+  ]
+}
