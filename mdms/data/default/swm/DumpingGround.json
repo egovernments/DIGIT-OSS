@@ -1177,7 +1177,10 @@
           {
             "code": "Medical Wate"
           }
-        ]
+        ],
+        "location": {
+          "code": "200"
+        }
       },
       "name": "test ground",
       "isProcessingSite": "",
