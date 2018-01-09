@@ -1520,6 +1520,53 @@
           "code": "mh.amba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "20",
+        "capacity": "258",
+        "address": "test test test wrew",
+        "latitude": "10",
+        "longitude": "258",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "Gadar",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1515510261512",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "default"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
