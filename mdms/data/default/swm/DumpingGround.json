@@ -1154,6 +1154,47 @@
           "code": "mh.khop"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "ICICI",
+        "bankValidityFrom": 1516213800000,
+        "bankValidityTo": 1515349800000,
+        "area": "12.3",
+        "capacity": "7000",
+        "address": "Address Address Address",
+        "latitude": "",
+        "longitude": "",
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "Medical Wate"
+          }
+        ]
+      },
+      "name": "test ground",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "12",
+      "tenantId": "default",
+      "code": "DumpingGround-1515497597964",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        },
+        {
+          "code": "mh.aliba"
+        }
+      ]
     }
   ]
 }
