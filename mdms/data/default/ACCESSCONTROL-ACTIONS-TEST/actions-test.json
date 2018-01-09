@@ -10311,6 +10311,18 @@
       "serviceCode": "ProcessingSite",
       "code": "null",
       "path": "Solid Waste Management.SWM Masters.Processing Site.Processing Site"
+    },
+    {
+      "id": 1497,
+      "name": "Work Order Register",
+      "url": "/report/works/metadata/_get",
+      "displayName": "Work Order Register",
+      "orderNumber": 1,
+      "parentModule": "644",
+      "enabled": true,
+      "serviceCode": "WORKS_REPORTS",
+      "code": "null",
+      "path": "Works Management.Reports.Work Order Register"
     }
   ]
 }
