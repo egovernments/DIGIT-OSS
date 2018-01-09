@@ -110,6 +110,14 @@
       "wasteType": {
         "code": "Cons"
       }
+    },
+    {
+      "name": "TestWaste 5",
+      "code": "TW5",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Cons"
+      }
     }
   ]
 }
