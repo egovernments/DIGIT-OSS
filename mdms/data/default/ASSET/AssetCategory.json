@@ -1840,6 +1840,18 @@
       "code": "2005",
       "isAssetAllow": true,
       "tenantId": "default"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "name": "Brigade Road",
+      "assetCategoryType": "IMMOVABLE",
+      "unitOfMeasurement": "KM",
+      "isDepreciationApplicable": false,
+      "id": "2006",
+      "code": "2006",
+      "isAssetAllow": true,
+      "tenantId": "default"
     }
   ]
 }
