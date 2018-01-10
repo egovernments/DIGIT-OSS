@@ -367,6 +367,31 @@
       "name": "Process Test 51",
       "tenantId": "default",
       "code": "ProcessingSite-1515570915015"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "ICIC",
+        "bankValidityFrom": 1515522600000,
+        "bankValidityTo": 1515609000000,
+        "area": "20",
+        "capacity": "500",
+        "address": "tet test es",
+        "latitude": "100",
+        "longitude": "200",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          }
+        ]
+      },
+      "name": "PS_1",
+      "tenantId": "default",
+      "code": "ProcessingSite-1515582812696"
     }
   ]
 }
