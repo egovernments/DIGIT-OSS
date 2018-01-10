@@ -261,6 +261,34 @@
       "name": "Process Test 1",
       "tenantId": "default",
       "code": "ProcessingSite-1515503331395"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": true,
+        "bankName": "ICICI",
+        "bankValidityFrom": 1514658600000,
+        "bankValidityTo": 1518201000000,
+        "area": "12",
+        "capacity": "50000",
+        "address": "Address Address Address Address",
+        "latitude": "0",
+        "longitude": "0",
+        "location": {
+          "code": "201"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Bio Medical Waste"
+          }
+        ]
+      },
+      "name": "Test site",
+      "tenantId": "default",
+      "code": "ProcessingSite-1515563860187"
     }
   ]
 }
