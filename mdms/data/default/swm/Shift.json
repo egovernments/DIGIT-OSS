@@ -154,6 +154,7 @@
         "code": "DR"
       },
       "code": "Shift-1515052480206",
+      "name": "Shift-1515052480206-name",
       "tenantId": "default",
       "shiftStartTime": "1515073338896",
       "shiftEndTime": "1515040920000",
@@ -174,6 +175,7 @@
         "code": "DR"
       },
       "code": "Shift-1515067765271",
+      "name": "Shift-1515067765271-name",
       "tenantId": "default",
       "shiftStartTime": "1515445080000",
       "shiftEndTime": "1515445080000",
@@ -194,6 +196,7 @@
         "code": "DR"
       },
       "code": "Shift-1515069341461",
+      "name": "Shift-1515069341461-name",
       "tenantId": "default",
       "shiftStartTime": "1515070800000",
       "shiftEndTime": "1515085200000",
@@ -214,6 +217,7 @@
         "code": "ADCOM"
       },
       "code": "Shift-1515144855108",
+      "name": "Shift-1515144855108-name",
       "tenantId": "default",
       "shiftStartTime": "1515101640000",
       "shiftEndTime": "1515101640000",
@@ -234,6 +238,7 @@
         "code": "DR"
       },
       "code": "Shift-1515145244540",
+      "name": "Shift-1515145244540-name",
       "tenantId": "default",
       "shiftStartTime": "1515102000000",
       "shiftEndTime": "1515102000000",
@@ -245,6 +250,7 @@
     },
     {
       "code": "Shift-1515254905673",
+      "name": "Shift-1515254905673-name",
       "tenantId": "default",
       "shiftType": {
         "code": "ABCDE"
@@ -258,6 +264,7 @@
     },
     {
       "code": "Shift-1515262145049",
+      "name": "Shift-1515262145049-name",
       "tenantId": "default",
       "shiftType": {
         "code": "2To4Shift"
@@ -278,6 +285,7 @@
     },
     {
       "code": "Shift-1515262748675",
+      "name": "Shift-1515262748675-name",
       "tenantId": "default",
       "shiftType": {
         "code": "MDS"
@@ -298,6 +306,7 @@
     },
     {
       "code": "Shift-1515494504965",
+      "name": "Shift-1515494504965-name",
       "tenantId": "default",
       "shiftType": {
         "code": "2To4Shift"
@@ -317,6 +326,7 @@
     },
     {
       "code": "Shift-1515498218544",
+      "name": "Shift-1515498218544-name",
       "tenantId": "default",
       "shiftType": {
         "code": "2To4Shift"
@@ -336,6 +346,7 @@
     },
     {
       "code": "Shift-1515514849211",
+      "name": "Shift-1515514849211-name",
       "tenantId": "default",
       "shiftType": {
         "code": "2To4Shift"
@@ -356,6 +367,7 @@
     },
     {
       "code": "Shift-1515565039381",
+      "name": "Shift-1515565039381-name",
       "tenantId": "default",
       "shiftStartTime": "1515573000000",
       "shiftEndTime": "1515580200000",
@@ -376,6 +388,7 @@
     },
     {
       "code": "Shift-1515565533804",
+      "name": "Shift-1515565533804-name",
       "tenantId": "default",
       "shiftType": {
         "code": "2To4Shift"
@@ -396,6 +409,7 @@
     },
     {
       "code": "Shift-1515577561795",
+      "name": "Shift-1515577561795-name",
       "tenantId": "default",
       "shiftType": {
         "code": "Shift Type Code 2"
