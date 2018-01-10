@@ -56,6 +56,11 @@
       "tenantId": "default",
       "name": "Industrial Waste",
       "code": "IWS001"
+    },
+    {
+      "tenantId": "default",
+      "name": "Kali Seesa Paper",
+      "code": "KSP"
     }
   ]
 }
