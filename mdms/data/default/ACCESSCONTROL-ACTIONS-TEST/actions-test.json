@@ -10336,6 +10336,39 @@
       "serviceCode": "WORKS_REPORTS",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1499,
+      "name": "Material Create",
+      "url": "/inventory-services/materialtypes/_create",
+      "displayName": "Material Type",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "MATERIAL TYPE MASTER",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1500,
+      "name": "Material Update",
+      "url": "/inventory-services/materialtypes/_update",
+      "displayName": "Update Material Type",
+      "orderNumber": 2,
+      "enabled": false,
+      "serviceCode": "MATERIAL TYPE MASTER",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1501,
+      "name": "Material Search",
+      "url": "/inventory-services/materialtypes/_search",
+      "displayName": "Material Type",
+      "orderNumber": 3,
+      "enabled": false,
+      "serviceCode": "MATERIAL TYPE MASTER",
+      "code": "null",
+      "path": ""
     }
   ]
 }
