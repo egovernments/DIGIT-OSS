@@ -1968,15 +1968,15 @@
     {
       "depreciationMethod": "Straight Line method",
       "isAssetAllowFromUi": true,
-      "name": "QATEst",
+      "name": "QATEstA",
       "assetCategoryType": "IMMOVABLE",
       "parent": "17",
       "unitOfMeasurement": "KVA",
-      "isDepreciationApplicable": false,
+      "isDepreciationApplicable": true,
       "depreciationRate": "6.66",
       "assetFieldsDefination": [
         {
-          "name": "first",
+          "name": "first1",
           "type": "Text",
           "isActive": true,
           "isMandatory": true,
@@ -1986,7 +1986,8 @@
           "name": "second",
           "type": "Number",
           "isActive": true,
-          "isMandatory": true
+          "isMandatory": true,
+          "order": "2"
         }
       ],
       "id": "2011",
