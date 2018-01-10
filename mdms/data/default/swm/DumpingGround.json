@@ -1693,6 +1693,47 @@
           "code": "mh.aliba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "33",
+        "capacity": "43",
+        "address": "back to back test",
+        "latitude": "432",
+        "longitude": "543",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "test abc",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1515571906341",
+      "ulbs": [
+        {
+          "code": "mh.amba"
+        },
+        {
+          "code": "mh.aliba"
+        }
+      ]
     }
   ]
 }
