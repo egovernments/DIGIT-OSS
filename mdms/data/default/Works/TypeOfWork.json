@@ -499,6 +499,14 @@
       "description": "Testing Desc",
       "tenantId": "default",
       "active": false
+    },
+    {
+      "code": "Testing",
+      "description": "Testing Description",
+      "name": "Name of the Testing Updated Type",
+      "tenantId": "default",
+      "parent": "",
+      "active": true
     }
   ]
 }
