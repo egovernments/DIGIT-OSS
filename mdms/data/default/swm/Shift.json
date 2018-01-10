@@ -446,6 +446,26 @@
       "graceTimeFrom": "1515529980000",
       "graceTimeTo": "1515522780000",
       "remarks": "Remarks test."
+    },
+    {
+      "code": "Shift-1515599528201",
+      "tenantId": "default",
+      "shiftType": {
+        "code": "ABCDE"
+      },
+      "department": {
+        "code": "EDU"
+      },
+      "designation": {
+        "code": 228
+      },
+      "shiftStartTime": "1515556320000",
+      "shiftEndTime": "1515556320000",
+      "lunchStartTime": "1515556320000",
+      "lunchEndTime": "1515556320000",
+      "graceTimeFrom": "1515556320000",
+      "graceTimeTo": "1515567120000",
+      "remarks": "testettttt"
     }
   ]
 }
