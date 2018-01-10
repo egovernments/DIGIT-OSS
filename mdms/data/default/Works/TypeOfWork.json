@@ -467,6 +467,14 @@
       "tenantId": "default",
       "parent": "",
       "active": false
+    },
+    {
+      "parent": "LDCW",
+      "code": "SubLD",
+      "name": "Sub Type For Land Development",
+      "description": "SubLD Description",
+      "tenantId": "default",
+      "active": true
     }
   ]
 }
