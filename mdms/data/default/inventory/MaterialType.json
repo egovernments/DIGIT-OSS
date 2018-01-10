@@ -25,6 +25,15 @@
       "name": "Fake Material Type Name 3",
       "parent": null,
       "isparent": false
+    },
+    {
+      "isParent": false,
+      "active": true,
+      "tenantId": "default",
+      "code": "2211",
+      "name": "mango carrt",
+      "description": "mango is apple , and apple is tasty but apple is not mango",
+      "parent": ""
     }
   ]
 }
