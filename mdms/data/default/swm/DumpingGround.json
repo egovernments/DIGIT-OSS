@@ -31,7 +31,8 @@
         "capacity": "6.007",
         "address": "Trimbak",
         "location": {
-          "code": "200"
+          "code": "101",
+          "name": "Fake location name 1"
         },
         "latitude": 0,
         "longitude": 0,
@@ -84,7 +85,8 @@
         "capacity": 16.4,
         "address": "Fake address",
         "location": {
-          "code": "200"
+          "code": "Fake location code 1",
+          "name": "Fake location name 1"
         },
         "latitude": 0,
         "longitude": 0,
@@ -124,7 +126,7 @@
         "latitude": "",
         "longitude": "",
         "location": {
-          "code": "200"
+          "code": "101"
         },
         "wasteTypes": [
           {
@@ -165,7 +167,7 @@
         "latitude": "1.2",
         "longitude": "2.8",
         "location": {
-          "code": "200"
+          "code": "101"
         },
         "wasteTypes": [
           {
@@ -208,9 +210,7 @@
         "address": "Bangalore",
         "latitude": "",
         "longitude": "",
-        "location": {
-	    "code":"200"
-	},
+        "location": {},
         "wasteTypes": [
           {
             "code": "Waste Type Code 1"
@@ -246,9 +246,7 @@
         "address": "Maharastra",
         "latitude": "",
         "longitude": "",
-        "location": {
-	    "code":"200"
-	},
+        "location": {},
         "wasteTypes": [
           {
             "code": "BCW"
@@ -284,9 +282,7 @@
         "address": "Maharastra",
         "latitude": "",
         "longitude": "",
-        "location": {
-	    "code":"200"
-	},
+        "location": {},
         "wasteTypes": [
           {
             "code": "BCW"
@@ -325,9 +321,7 @@
         "address": "Pune Corporation",
         "latitude": "",
         "longitude": "",
-        "location": {
-	    "code":"200"
-	},
+        "location": {},
         "wasteTypes": [
           {
             "code": "Bio Medical Waste"
@@ -366,9 +360,7 @@
         "address": "Pune",
         "latitude": "",
         "longitude": "",
-        "location": {
-	    "code":"200"
-	},
+        "location": {},
         "wasteTypes": [
           {
             "code": "BCW"
@@ -408,7 +400,7 @@
         "latitude": "",
         "longitude": "",
         "location": {
-          "code": "200"
+          "code": "101"
         },
         "wasteTypes": [
           {
@@ -448,9 +440,7 @@
         "address": "",
         "latitude": "",
         "longitude": "",
-        "location": {
-	    "code":"200"
-	},
+        "location": {},
         "wasteTypes": [
           {
             "code": "Waste Type Code 1"
@@ -489,9 +479,7 @@
         "address": "xyzzz",
         "latitude": "8",
         "longitude": "7",
-        "location": {
-	    "code":"200"
-	},
+        "location": {},
         "wasteTypes": [
           {
             "code": "Medical Wate"
@@ -524,9 +512,7 @@
         "address": "Pune",
         "latitude": "",
         "longitude": "",
-        "location": {
-	    "code":"200"
-	},
+        "location": {},
         "wasteTypes": [
           {
             "code": "DD1"
@@ -562,9 +548,7 @@
         "address": "Pune",
         "latitude": "",
         "longitude": "",
-        "location": {
-	    "code":"200"
-	},
+        "location": {},
         "wasteTypes": [
           {
             "code": "Medical Wate"
@@ -592,9 +576,7 @@
         "address": "Pune",
         "latitude": "",
         "longitude": "",
-        "location": {
-	    "code":"200"
-	},
+        "location": {},
         "wasteTypes": [
           {
             "code": "Waste Type Code 1"
@@ -625,9 +607,7 @@
         "address": "Pune",
         "latitude": "",
         "longitude": "",
-        "location": {
-	    "code":"200"
-	},
+        "location": {},
         "wasteTypes": [
           {
             "code": "Waste Type Code 3"
@@ -666,9 +646,7 @@
             "code": "Bio Medical Waste"
           }
         ],
-        "location": {
-	    "code":"200"
-	}
+        "location": {}
       },
       "name": "Test 5 ",
       "isProcessingSite": true,
@@ -2000,6 +1978,47 @@
       "ulbs": [
         {
           "code": "mh.khop"
+        },
+        {
+          "code": "default"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "35",
+        "capacity": "453",
+        "address": "345434 bdfgdhdfrg rttr",
+        "latitude": "43",
+        "longitude": "34",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "erewr",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "43",
+      "tenantId": "default",
+      "code": "DumpingGround-1515594099399",
+      "ulbs": [
+        {
+          "code": "mh.amba"
         },
         {
           "code": "default"
