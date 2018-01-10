@@ -1942,6 +1942,47 @@
           "code": "mh.amba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "6",
+        "capacity": "564",
+        "address": "ertesr trdtyrt drthyrt",
+        "latitude": "546",
+        "longitude": "6456",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Waste Type Code 3"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "dr fgchfg",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": "Pro. Plant Code 1"
+      },
+      "distanceFromProcessingSite": "464",
+      "tenantId": "default",
+      "code": "DumpingGround-1515577261023",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        },
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
