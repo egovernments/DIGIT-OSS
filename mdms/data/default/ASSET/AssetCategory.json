@@ -1970,7 +1970,7 @@
       "isAssetAllowFromUi": true,
       "name": "QATEstA",
       "assetCategoryType": "IMMOVABLE",
-      "parent": "17",
+      "parent": "1",
       "unitOfMeasurement": "KVA",
       "isDepreciationApplicable": true,
       "depreciationRate": "6.66",
