@@ -314,6 +314,31 @@
       "name": "Process Test 2",
       "tenantId": "default",
       "code": "ProcessingSite-1515568749813"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": true,
+        "bankName": "Canara",
+        "bankValidityFrom": 1514745000000,
+        "bankValidityTo": 1517337000000,
+        "area": "1",
+        "capacity": "1",
+        "address": "Process Test 4",
+        "latitude": "0",
+        "longitude": "0",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Medical Wate"
+          }
+        ]
+      },
+      "name": "Process Test 4",
+      "tenantId": "default",
+      "code": "ProcessingSite-1515569430289"
     }
   ]
 }
