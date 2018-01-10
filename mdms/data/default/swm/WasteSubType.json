@@ -134,6 +134,14 @@
       "wasteType": {
         "code": "Cons"
       }
+    },
+    {
+      "name": "Dummy Waste Sub Type ",
+      "code": "DWST",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "BCW"
+      }
     }
   ]
 }
