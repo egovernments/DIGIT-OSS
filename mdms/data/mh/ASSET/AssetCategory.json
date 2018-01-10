@@ -2067,6 +2067,33 @@
       "code": "59",
       "isAssetAllow": true,
       "tenantId": "mh"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "assetCategoryType": "MOVABLE",
+      "parent": "28",
+      "name": "KK Cabs",
+      "unitOfMeasurement": "NOS",
+      "isDepreciationApplicable": false,
+      "assetFieldsDefination": [
+        {
+          "name": "Model Number",
+          "type": "Text"
+        },
+        {
+          "name": "Mileage",
+          "type": "Number"
+        },
+        {
+          "name": "Color",
+          "type": "Text"
+        }
+      ],
+      "id": "60",
+      "code": "60",
+      "isAssetAllow": true,
+      "tenantId": "mh"
     }
   ]
 }
