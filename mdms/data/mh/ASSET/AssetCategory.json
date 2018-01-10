@@ -2125,6 +2125,13 @@
           "order": "3",
           "isActive": true,
           "values": "Yes, No"
+        },
+        {
+          "name": "Fuel Type",
+          "type": "Select",
+          "isActive": true,
+          "order": "4",
+          "values": "Petrol, Diesel, Gas"
         }
       ],
       "id": "61",
