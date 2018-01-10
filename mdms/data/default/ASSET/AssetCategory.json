@@ -1915,6 +1915,19 @@
           "type": "Text"
         }
       ]
+    },
+    {
+      "tenantId": "default",
+      "id": "2009",
+      "name": "Cultivation Land",
+      "code": "2009",
+      "assetCategoryType": "LAND",
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllow": true,
+      "isAssetAllowFromUi": true,
+      "version": "1.0",
+      "depreciationRate": "6.66",
+      "isDepreciationApplicable": true
     }
   ]
 }
