@@ -1964,6 +1964,34 @@
       "depreciationRate": "",
       "isDepreciationApplicable": false,
       "assetFieldsDefination": null
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "assetCategoryType": "MOVABLE",
+      "parent": "36",
+      "name": "Damro",
+      "unitOfMeasurement": "NOS",
+      "isDepreciationApplicable": true,
+      "depreciationRate": "8",
+      "assetFieldsDefination": [
+        {
+          "name": "Chairs",
+          "type": "Number"
+        },
+        {
+          "name": "Sofa Set",
+          "type": "Number"
+        },
+        {
+          "name": "Dining Table",
+          "type": "Number"
+        }
+      ],
+      "id": "2011",
+      "code": "2011",
+      "isAssetAllow": true,
+      "tenantId": "default"
     }
   ]
 }
