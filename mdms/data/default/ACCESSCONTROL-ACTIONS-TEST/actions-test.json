@@ -10323,6 +10323,19 @@
       "serviceCode": "WORKS_REPORTS",
       "code": "null",
       "path": "Works Management.Reports.Work Order Register"
+    },
+    {
+      "id": 1498,
+      "name": "Work Order Register",
+      "url": "/report/works/_get",
+      "displayName": "Work Order Register",
+      "orderNumber": 1,
+      "queryParams": null,
+      "parentModule": "644",
+      "enabled": false,
+      "serviceCode": "WORKS_REPORTS",
+      "code": "null",
+      "path": ""
     }
   ]
 }
