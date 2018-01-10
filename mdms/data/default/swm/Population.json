@@ -8,7 +8,12 @@
       "censusYear": 2011,
       "population": 13383,
       "garbageToBeCollected": 5,
-      "ulbName": "Trimbak Muncipal Council"
+      "location":{
+	"code": "169"
+       },
+      "ulb":{
+	"code": "default"
+       }
     }
   ]
 }
