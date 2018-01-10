@@ -81,6 +81,11 @@
       "tenantId": "default",
       "name": "LorriesName",
       "code": "Lorry"
+    },
+    {
+      "tenantId": "default",
+      "name": "Tata MCB",
+      "code": "MCB"
     }
   ]
 }
