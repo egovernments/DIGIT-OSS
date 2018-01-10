@@ -426,6 +426,40 @@
       "name": "Dhopet",
       "tenantId": "default",
       "code": "ProcessingSite-1515612368621"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": false,
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "11",
+        "capacity": "11",
+        "address": "wdsadsad",
+        "latitude": "11",
+        "longitude": "222",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "DD1"
+          }
+        ]
+      },
+      "name": "wwww",
+      "tenantId": "default",
+      "code": "ProcessingSite-1515612517417"
     }
   ]
 }
