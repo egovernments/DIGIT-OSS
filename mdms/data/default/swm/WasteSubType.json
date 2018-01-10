@@ -128,11 +128,11 @@
       }
     },
     {
-      "name": "wast1",
-      "code": "WNew",
+      "name": "Wste1",
+      "code": "Waste1",
       "tenantId": "default",
       "wasteType": {
-        "code": "Bio Medical Waste"
+        "code": "Cons"
       }
     }
   ]
