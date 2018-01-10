@@ -1721,6 +1721,10 @@
           "name": "Weight",
           "type": "Number",
           "isActive": true
+        },
+        {
+          "name": "size",
+          "type": "Number"
         }
       ],
       "id": "2001",
