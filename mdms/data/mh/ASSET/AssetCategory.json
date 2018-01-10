@@ -1842,12 +1842,19 @@
           "isActive": true,
           "isMandatory": true,
           "order": "10"
+        },
+        {
+          "name": "Type",
+          "type": "Select",
+          "isActive": true,
+          "order": "11"
         }
       ],
       "id": "53",
       "code": "53",
       "isAssetAllow": true,
-      "tenantId": "mh"
+      "tenantId": "mh",
+      "parent": null
     },
     {
       "depreciationMethod": "Straight Line method",
