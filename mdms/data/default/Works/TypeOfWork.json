@@ -515,6 +515,14 @@
       "tenantId": "default",
       "parent": "",
       "active": true
+    },
+    {
+      "code": "Miro",
+      "description": "Miro Description",
+      "name": "Mirror Miro",
+      "tenantId": "default",
+      "parent": "",
+      "active": true
     }
   ]
 }
