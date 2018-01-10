@@ -1901,6 +1901,47 @@
           "code": "mh.khop"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "5",
+        "capacity": "567",
+        "address": "gfhjgfj dfhdfhfg t uytutut",
+        "latitude": "5675",
+        "longitude": "575",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "54657",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": "Pro. Plant Code 1"
+      },
+      "distanceFromProcessingSite": "57",
+      "tenantId": "default",
+      "code": "DumpingGround-1515576917041",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
