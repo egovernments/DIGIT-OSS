@@ -1961,8 +1961,8 @@
       "depreciationExpenseAccount": null,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
-      "depreciationRate": "6.66",
-      "isDepreciationApplicable": true,
+      "depreciationRate": "",
+      "isDepreciationApplicable": false,
       "assetFieldsDefination": null
     }
   ]
