@@ -1988,6 +1988,14 @@
           "isActive": true,
           "isMandatory": true,
           "order": "2"
+        },
+        {
+          "name": "third",
+          "type": "Select",
+          "isActive": true,
+          "isMandatory": true,
+          "order": "3",
+          "values": "yes,no"
         }
       ],
       "id": "2011",
