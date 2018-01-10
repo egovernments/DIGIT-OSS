@@ -355,8 +355,15 @@
       "remarks": "no remarks this is onl for tesitng "
     },
     {
-      "code": "Shift-1515564714671",
+      "code": "Shift-1515565039381",
       "tenantId": "default",
+      "shiftStartTime": "1515573000000",
+      "shiftEndTime": "1515580200000",
+      "lunchStartTime": "1515576600000",
+      "lunchEndTime": "1515577200000",
+      "graceTimeFrom": "1515578400000",
+      "graceTimeTo": "1515578700000",
+      "remarks": "test",
       "shiftType": {
         "code": "2To4Shift"
       },
@@ -365,14 +372,7 @@
       },
       "designation": {
         "code": 228
-      },
-      "shiftStartTime": "1515573000000",
-      "shiftEndTime": "1515580200000",
-      "lunchStartTime": "1515576600000",
-      "lunchEndTime": "1515577200000",
-      "graceTimeFrom": "1515578400000",
-      "graceTimeTo": "1515578700000",
-      "remarks": "Test "
+      }
     }
   ]
 }
