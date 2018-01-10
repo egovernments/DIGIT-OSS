@@ -2132,6 +2132,11 @@
           "isActive": true,
           "order": "4",
           "values": "Petrol, Diesel, Gas"
+        },
+        {
+          "name": "Color",
+          "type": "Text",
+          "isActive": true
         }
       ],
       "id": "61",
