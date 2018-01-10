@@ -13393,6 +13393,18 @@
       "actionid": 1497,
       "actioncode": "",
       "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1498,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "WORKS_ADMINISTRATOR",
+      "actionid": 1498,
+      "actioncode": "",
+      "tenantid": "default"
     }
   ]
 }
