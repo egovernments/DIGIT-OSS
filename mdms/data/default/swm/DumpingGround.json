@@ -1734,6 +1734,50 @@
           "code": "mh.aliba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "22",
+        "capacity": "33",
+        "address": "back to back create test issue",
+        "latitude": "43",
+        "longitude": "345",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Bio Medical Waste"
+          }
+        ]
+      },
+      "name": "test abc",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "34",
+      "tenantId": "default",
+      "code": "DumpingGround-1515572126018",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        },
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
