@@ -51,6 +51,11 @@
       "tenantId": "default",
       "name": "Construction",
       "code": "Cons"
+    },
+    {
+      "tenantId": "default",
+      "name": "Industrial Waste",
+      "code": "IWS001"
     }
   ]
 }
