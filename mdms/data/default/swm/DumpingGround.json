@@ -1778,6 +1778,47 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "43",
+        "capacity": "45",
+        "address": "dgdsg grre rtyre ",
+        "latitude": "54",
+        "longitude": "45",
+        "location": {
+          "code": "202"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "234234",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "423",
+      "tenantId": "default",
+      "code": "DumpingGround-1515572852960",
+      "ulbs": [
+        {
+          "code": "mh.khopoli"
+        },
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
