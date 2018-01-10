@@ -126,6 +126,14 @@
       "wasteType": {
         "code": "DD1"
       }
+    },
+    {
+      "name": "wast1",
+      "code": "WNew",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Bio Medical Waste"
+      }
     }
   ]
 }
