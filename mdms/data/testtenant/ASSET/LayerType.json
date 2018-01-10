@@ -127,6 +127,15 @@
       "numberOfLayers": 2,
       "layerSize": 2,
       "isActive": true
+    },
+    {
+      "id": 17,
+      "tenantId": "testtenant",
+      "name": "FAKE LAYER new",
+      "description": null,
+      "numberOfLayers": 2,
+      "layerSize": 2,
+      "isActive": true
     }
   ]
 }
