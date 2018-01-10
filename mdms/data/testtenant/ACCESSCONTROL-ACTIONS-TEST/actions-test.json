@@ -6,7 +6,7 @@
       "id": 238,
       "name": "CreateImmovableAsset",
       "url": "/app/asset/create-asset.html",
-      "displayName": "Create Immovable Asset",
+      "displayName": "CreateImmovableAsset",
       "orderNumber": 1,
       "queryParams": null,
       "parentModule": "593",
