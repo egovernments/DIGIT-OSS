@@ -1658,6 +1658,41 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "1",
+        "capacity": "11",
+        "address": "test test \ntest ",
+        "latitude": "11",
+        "longitude": "11",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          }
+        ]
+      },
+      "name": "TestDG",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": "ProcessingSite-1515075903699"
+      },
+      "distanceFromProcessingSite": "11",
+      "tenantId": "default",
+      "code": "DumpingGround-1515566698236",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        }
+      ]
     }
   ]
 }
