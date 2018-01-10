@@ -562,6 +562,40 @@
       "name": "1111",
       "tenantId": "default",
       "code": "ProcessingSite-1515615040373"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "11",
+        "capacity": "23",
+        "address": "tes test test ",
+        "latitude": "11",
+        "longitude": "11",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Medical Wate"
+          },
+          {
+            "code": "KSP"
+          },
+          {
+            "code": "IWS001"
+          },
+          {
+            "code": "HHPW"
+          }
+        ]
+      },
+      "name": "testttttt",
+      "tenantId": "default",
+      "code": "ProcessingSite-1515615144413"
     }
   ]
 }
