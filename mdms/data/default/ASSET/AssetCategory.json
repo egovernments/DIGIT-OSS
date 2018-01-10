@@ -1725,6 +1725,18 @@
         {
           "name": "size",
           "type": "Number"
+        },
+        {
+          "name": "length",
+          "type": "Number"
+        },
+        {
+          "name": "engine Type",
+          "type": "Select"
+        },
+        {
+          "name": "engine Number",
+          "type": "Number"
         }
       ],
       "id": "2001",
