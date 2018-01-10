@@ -8,7 +8,7 @@
       "publicToilet": true,
       "name": "Toilet Name 1",
       "location": {
-        "code": "169"
+        "code": "200"
       },
       "latitude": 12.88838,
       "longitude": 14.33233,
@@ -20,7 +20,7 @@
       "publicToilet": true,
       "name": "Toilet Name 2",
       "location": {
-        "code": "169"
+        "code": "200"
       },
       "latitude": 12.88989,
       "longitude": 14.78789,
