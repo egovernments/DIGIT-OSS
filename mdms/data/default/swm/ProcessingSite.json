@@ -347,8 +347,8 @@
         "bankName": "",
         "bankValidityFrom": "",
         "bankValidityTo": "",
-        "area": "1",
-        "capacity": "1",
+        "area": "10",
+        "capacity": "10",
         "address": "Process Test 5 Process Test 5",
         "latitude": "0",
         "longitude": "0",
@@ -357,11 +357,14 @@
         },
         "wasteTypes": [
           {
-            "code": "BCW"
+            "code": "Cons"
+          },
+          {
+            "code": "Bio Medical Waste"
           }
         ]
       },
-      "name": "Process Test 5",
+      "name": "Process Test 51",
       "tenantId": "default",
       "code": "ProcessingSite-1515570915015"
     }
