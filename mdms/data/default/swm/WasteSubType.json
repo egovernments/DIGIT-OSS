@@ -158,6 +158,14 @@
       "wasteType": {
         "code": "BCW"
       }
+    },
+    {
+      "name": "213",
+      "code": "123",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Bio Medical Waste"
+      }
     }
   ]
 }
