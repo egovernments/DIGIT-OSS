@@ -2024,6 +2024,44 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "ICIC",
+        "bankValidityFrom": 1515609000000,
+        "bankValidityTo": 1515781800000,
+        "area": "49",
+        "capacity": "2000",
+        "address": "test test test ",
+        "latitude": "110",
+        "longitude": "220",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "Banjara hills",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "120",
+      "tenantId": "default",
+      "code": "DumpingGround-1515598559289",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        }
+      ]
     }
   ]
 }
