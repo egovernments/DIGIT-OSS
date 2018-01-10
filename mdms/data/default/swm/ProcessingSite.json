@@ -460,6 +460,40 @@
       "name": "wwww",
       "tenantId": "default",
       "code": "ProcessingSite-1515612517417"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "11",
+        "capacity": "11",
+        "address": "test tes tetew",
+        "latitude": "11",
+        "longitude": "123",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "DD1"
+          }
+        ]
+      },
+      "name": "1111",
+      "tenantId": "default",
+      "code": "ProcessingSite-1515613498522"
     }
   ]
 }
