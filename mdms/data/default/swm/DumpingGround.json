@@ -1860,6 +1860,47 @@
           "code": "mh.aliba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "44",
+        "capacity": "53",
+        "address": "3535345 b ryretreyeey",
+        "latitude": "35345",
+        "longitude": "32453",
+        "location": {
+          "code": "201"
+        },
+        "wasteTypes": [
+          {
+            "code": "Waste Type Code 3"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "456",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1515576696918",
+      "ulbs": [
+        {
+          "code": "default"
+        },
+        {
+          "code": "mh.khop"
+        }
+      ]
     }
   ]
 }
