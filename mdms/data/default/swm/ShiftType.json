@@ -61,6 +61,11 @@
       "tenantId": "default",
       "name": "Mid Day shift",
       "code": "MDS"
+    },
+    {
+      "tenantId": "default",
+      "name": "New shift",
+      "code": "NS"
     }
   ]
 }
