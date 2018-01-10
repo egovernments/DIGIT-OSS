@@ -2110,14 +2110,14 @@
           "type": "Number",
           "isMandatory": true,
           "isActive": true,
-          "order": "1"
+          "order": "5"
         },
         {
           "name": "Engine capacity",
           "type": "Text",
           "isActive": true,
           "isMandatory": true,
-          "order": "2"
+          "order": "4"
         },
         {
           "name": "Commerical license present",
@@ -2130,14 +2130,14 @@
           "name": "Fuel Type",
           "type": "Select",
           "isActive": true,
-          "order": "4",
+          "order": "1",
           "values": "Petrol, Diesel, Gas"
         },
         {
           "name": "Color",
           "type": "Text",
           "isActive": true,
-          "order": "5"
+          "order": "2"
         }
       ],
       "id": "61",
