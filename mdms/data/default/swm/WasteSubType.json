@@ -150,6 +150,14 @@
       "wasteType": {
         "code": "Bio Medical Waste"
       }
+    },
+    {
+      "name": "4645",
+      "code": "456",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "BCW"
+      }
     }
   ]
 }
