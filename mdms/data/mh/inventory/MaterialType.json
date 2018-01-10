@@ -10,6 +10,14 @@
       "name": "Bricks ",
       "description": "this is cement materiel description ",
       "parent": ""
+    },
+    {
+      "isParent": false,
+      "active": true,
+      "tenantId": "mh",
+      "code": "101",
+      "name": "Cement",
+      "description": "cement is good materiel need to check cement is good materiel need to check cement is good materiel need to check cement is good materiel need to check cement is good materiel need to check cement is good materiel need to check cement is good materiel need to check cement is good materiel need to check cement is good materiel need to check cement is good materiel need to check cement is good materiel need to check "
     }
   ]
 }
