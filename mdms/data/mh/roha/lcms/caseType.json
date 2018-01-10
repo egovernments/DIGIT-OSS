@@ -12,8 +12,8 @@
     {
       "name": "Arbitration Appeal",
       "code": "AA",
-      "sideCode": "SNM1",
-      "active": true,
+      "sideCode": "CVL",
+      "active": false,
       "tenantId": "mh.roha"
     },
     {
@@ -2232,6 +2232,13 @@
       "name": "CaseTypeName Murari 2",
       "code": "CM2",
       "sideCode": "SNM2",
+      "active": true,
+      "tenantId": "mh.roha"
+    },
+    {
+      "name": "1111",
+      "code": "123wer",
+      "sideCode": "CVL",
       "active": true,
       "tenantId": "mh.roha"
     }
