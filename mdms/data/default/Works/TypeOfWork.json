@@ -483,6 +483,14 @@
       "tenantId": "default",
       "parent": "",
       "active": true
+    },
+    {
+      "parent": "FURNITURES",
+      "code": "SubTesting",
+      "name": "Sub Testing Type Of Work",
+      "description": "Testing Desc",
+      "tenantId": "default",
+      "active": false
     }
   ]
 }
