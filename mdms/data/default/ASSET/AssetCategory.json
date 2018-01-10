@@ -1944,6 +1944,26 @@
       "version": "1.0",
       "depreciationRate": "6.66",
       "isDepreciationApplicable": true
+    },
+    {
+      "tenantId": "default",
+      "id": "2010",
+      "name": "RI-Office",
+      "code": "2010",
+      "assetCategoryType": "IMMOVABLE",
+      "parent": null,
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllow": true,
+      "isAssetAllowFromUi": true,
+      "assetAccount": null,
+      "accumulatedDepreciationAccount": null,
+      "revaluationReserveAccount": null,
+      "depreciationExpenseAccount": null,
+      "unitOfMeasurement": "NOS",
+      "version": "1.0",
+      "depreciationRate": "6.66",
+      "isDepreciationApplicable": true,
+      "assetFieldsDefination": null
     }
   ]
 }
