@@ -289,6 +289,31 @@
       "name": "Test site",
       "tenantId": "default",
       "code": "ProcessingSite-1515563860187"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "1",
+        "capacity": "1",
+        "address": "Process Test 2Process Test 2",
+        "latitude": "90",
+        "longitude": "90",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "Process Test 2",
+      "tenantId": "default",
+      "code": "ProcessingSite-1515568749813"
     }
   ]
 }
