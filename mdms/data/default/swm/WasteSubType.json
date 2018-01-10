@@ -166,6 +166,14 @@
       "wasteType": {
         "code": "Bio Medical Waste"
       }
+    },
+    {
+      "name": "sdfghj",
+      "code": "sdfgh",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Cons"
+      }
     }
   ]
 }
