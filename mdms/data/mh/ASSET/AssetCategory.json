@@ -2136,7 +2136,8 @@
         {
           "name": "Color",
           "type": "Text",
-          "isActive": true
+          "isActive": true,
+          "order": "5"
         }
       ],
       "id": "61",
