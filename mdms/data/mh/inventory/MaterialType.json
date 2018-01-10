@@ -18,6 +18,14 @@
       "code": "101",
       "name": "Concrete",
       "description": "Concrete is a ceramic composite made up of water, sand, gravel, crushed stone, and cement. The ingredients are mixed together thoroughly, and are poured into a form. After the concrete is completely dry, it has excellent compression strength."
+    },
+    {
+      "isParent": false,
+      "active": true,
+      "tenantId": "mh",
+      "code": "103",
+      "description": "Plastics/polymers are made up of millions of repeated links to make long molecules or networks that are tangled or crosslinked together. Almost all polymers use carbon atoms in very long chains. The carbon atoms may be attached to other carbon, oxygen, nitrogen, and hydrogen atoms. Polymers may or may not have an orderly arrangement of atoms.",
+      "name": "Polymers/ Plastics"
     }
   ]
 }
