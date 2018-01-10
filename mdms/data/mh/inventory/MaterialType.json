@@ -2,7 +2,14 @@
   "tenantId": "mh",
   "moduleName": "inventory",
   "MaterialType": [
-   
-    
+    {
+      "isParent": false,
+      "active": true,
+      "tenantId": "mh",
+      "code": "100",
+      "name": "Cement",
+      "description": "this is cement materiel description ",
+      "parent": ""
+    }
   ]
 }
