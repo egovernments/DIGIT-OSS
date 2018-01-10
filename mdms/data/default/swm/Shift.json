@@ -373,6 +373,26 @@
       "designation": {
         "code": 228
       }
+    },
+    {
+      "code": "Shift-1515565533804",
+      "tenantId": "default",
+      "shiftType": {
+        "code": "2To4Shift"
+      },
+      "department": {
+        "code": "ACC"
+      },
+      "designation": {
+        "code": 228
+      },
+      "shiftStartTime": "1515573000000",
+      "shiftEndTime": "1515580200000",
+      "lunchStartTime": "1515576600000",
+      "lunchEndTime": "1515577200000",
+      "graceTimeFrom": "1515578400000",
+      "graceTimeTo": "1515578700000",
+      "remarks": "test"
     }
   ]
 }
