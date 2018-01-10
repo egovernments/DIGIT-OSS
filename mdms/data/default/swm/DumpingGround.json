@@ -1819,6 +1819,47 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "5",
+        "capacity": "45",
+        "address": "ret ge dg gre rtg",
+        "latitude": "45",
+        "longitude": "65",
+        "location": {
+          "code": "203"
+        },
+        "wasteTypes": [
+          {
+            "code": "Waste Type Code 1"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "654",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "543",
+      "tenantId": "default",
+      "code": "DumpingGround-1515573002907",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        },
+        {
+          "code": "mh.aliba"
+        }
+      ]
     }
   ]
 }
