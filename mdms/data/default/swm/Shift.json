@@ -13,7 +13,7 @@
         "code": "ENG"
       },
       "designation": {
-        "code": 67
+        "code": "CHNM"
       },
       "shiftStartTime": "1515501000000",
       "shiftEndTime": "1515443400000",
@@ -151,7 +151,7 @@
         "code": "Administration"
       },
       "designation": {
-        "code": "Driver"
+        "code": "DR"
       },
       "code": "Shift-1515052480206",
       "tenantId": "default",
@@ -171,7 +171,7 @@
         "code": "Admin"
       },
       "designation": {
-        "code": "Driver"
+        "code": "DR"
       },
       "code": "Shift-1515067765271",
       "tenantId": "default",
@@ -211,7 +211,7 @@
         "code": "ENG"
       },
       "designation": {
-        "code": 83
+        "code": "ADCOM"
       },
       "code": "Shift-1515144855108",
       "tenantId": "default",
@@ -231,7 +231,7 @@
         "code": "ADM"
       },
       "designation": {
-        "code": 228
+        "code": "DR"
       },
       "code": "Shift-1515145244540",
       "tenantId": "default",
@@ -253,7 +253,7 @@
         "code": "ADM"
       },
       "designation": {
-        "code": 14
+        "code": "ACIV"
       }
     },
     {
@@ -266,7 +266,7 @@
         "code": "ADM"
       },
       "designation": {
-        "code": 9
+        "code": "COMM"
       },
       "shiftStartTime": "1515184200000",
       "shiftEndTime": "1515191400000",
@@ -286,7 +286,7 @@
         "code": "ADM"
       },
       "designation": {
-        "code": 9
+        "code": "COMM"
       },
       "shiftStartTime": "1515227400000",
       "shiftEndTime": "1515234600000",
@@ -306,7 +306,7 @@
         "code": "ADM"
       },
       "designation": {
-        "code": 228
+        "code": "DR"
       },
       "shiftStartTime": "1515451260000",
       "shiftEndTime": "1515451260000",
@@ -325,7 +325,7 @@
         "code": "ADM"
       },
       "designation": {
-        "code": 226
+        "code": "DR"
       },
       "shiftStartTime": "1515454775473",
       "shiftEndTime": "1515501575473",
@@ -344,7 +344,7 @@
         "code": "ACC"
       },
       "designation": {
-        "code": 228
+        "code": "DR"
       },
       "shiftStartTime": "1515470400000",
       "shiftEndTime": "1515502800000",
@@ -371,7 +371,7 @@
         "code": "ACC"
       },
       "designation": {
-        "code": 228
+        "code": "DR"
       }
     },
     {
@@ -384,7 +384,7 @@
         "code": "ACC"
       },
       "designation": {
-        "code": 228
+        "code": "DR"
       },
       "shiftStartTime": "1515573000000",
       "shiftEndTime": "1515580200000",
@@ -404,7 +404,7 @@
         "code": "ACC"
       },
       "designation": {
-        "code": 2
+        "code": "AO"
       },
       "shiftStartTime": "1515534060000",
       "shiftEndTime": "1515534060000",
