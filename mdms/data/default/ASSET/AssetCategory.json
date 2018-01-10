@@ -1961,31 +1961,32 @@
       "depreciationExpenseAccount": null,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
-      "depreciationRate": "",
-      "isDepreciationApplicable": false,
+      "depreciationRate": "6.66",
+      "isDepreciationApplicable": true,
       "assetFieldsDefination": null
     },
     {
       "depreciationMethod": "Straight Line method",
       "isAssetAllowFromUi": true,
-      "assetCategoryType": "MOVABLE",
-      "parent": "36",
-      "name": "Damro",
-      "unitOfMeasurement": "NOS",
-      "isDepreciationApplicable": true,
-      "depreciationRate": "8",
+      "name": "QATEst",
+      "assetCategoryType": "IMMOVABLE",
+      "parent": "17",
+      "unitOfMeasurement": "KVA",
+      "isDepreciationApplicable": false,
+      "depreciationRate": "6.66",
       "assetFieldsDefination": [
         {
-          "name": "Chairs",
-          "type": "Number"
+          "name": "first",
+          "type": "Text",
+          "isActive": true,
+          "isMandatory": true,
+          "order": "1"
         },
         {
-          "name": "Sofa Set",
-          "type": "Number"
-        },
-        {
-          "name": "Dining Table",
-          "type": "Number"
+          "name": "second",
+          "type": "Number",
+          "isActive": true,
+          "isMandatory": true
         }
       ],
       "id": "2011",
