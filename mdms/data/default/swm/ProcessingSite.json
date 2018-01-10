@@ -392,6 +392,40 @@
       "name": "PS_1",
       "tenantId": "default",
       "code": "ProcessingSite-1515582812696"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "CIC",
+        "bankValidityFrom": 1515695400000,
+        "bankValidityTo": 1516300200000,
+        "area": "49",
+        "capacity": "20",
+        "address": "test site address",
+        "latitude": "100",
+        "longitude": "200",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "DD1"
+          }
+        ]
+      },
+      "name": "Dhopet",
+      "tenantId": "default",
+      "code": "ProcessingSite-1515612368621"
     }
   ]
 }
