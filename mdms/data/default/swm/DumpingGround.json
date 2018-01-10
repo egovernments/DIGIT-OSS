@@ -2097,6 +2097,41 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "1",
+        "capacity": "1",
+        "address": "MPCP  Approved ",
+        "latitude": "1",
+        "longitude": "1",
+        "location": {
+          "code": "203"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          }
+        ]
+      },
+      "name": "MPCP Approved",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": "ProcessingSite-1513865191921"
+      },
+      "distanceFromProcessingSite": "1",
+      "tenantId": "default",
+      "code": "DumpingGround-1515609148119",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        }
+      ]
     }
   ]
 }
