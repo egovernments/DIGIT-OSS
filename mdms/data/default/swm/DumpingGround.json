@@ -2062,6 +2062,50 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "20",
+        "capacity": "200",
+        "address": "HSR Layout Bangalore",
+        "latitude": "12",
+        "longitude": "13",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "DP 101",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1515666926022",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        },
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
