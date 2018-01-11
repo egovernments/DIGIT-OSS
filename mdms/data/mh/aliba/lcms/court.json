@@ -413,6 +413,18 @@
       },
       "active": true,
       "tenantId": "mh.aliba"
+    },
+    {
+      "name": "N Court",
+      "code": "Ms23",
+      "address": {
+        "addressLine1": "Village - sukhbasi",
+        "addressLine2": "Patna",
+        "city": "Patna",
+        "pincode": "258963"
+      },
+      "active": true,
+      "tenantId": "mh.aliba"
     }
   ]
 }
