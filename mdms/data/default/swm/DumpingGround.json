@@ -2348,6 +2348,41 @@
           }
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "2",
+        "capacity": "2",
+        "address": "wertytrewqwerttrewwe",
+        "latitude": "21",
+        "longitude": "21",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "123432123",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": "ProcessingSite-1515613498522"
+      },
+      "distanceFromProcessingSite": "21",
+      "tenantId": "default",
+      "code": "DumpingGround-1515658380060",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        }
+      ]
     }
   ]
 }
