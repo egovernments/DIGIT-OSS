@@ -23,7 +23,7 @@
     {
       "name": "Nasik ",
       "code": "NC",
-      "active": false,
+      "active": true,
       "tenantId": "mh.aliba"
     }
   ]
