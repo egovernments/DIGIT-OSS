@@ -2258,6 +2258,47 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "Bank 1",
+        "bankValidityFrom": 1515609000000,
+        "bankValidityTo": 1529605800000,
+        "area": "1",
+        "capacity": "2",
+        "address": "Testing dumping ground 1 Address",
+        "latitude": "233232.23",
+        "longitude": "2112.211",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "Testing dumping ground 1",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": "Pro. Plant Code 1"
+      },
+      "distanceFromProcessingSite": "221",
+      "tenantId": "default",
+      "code": "DumpingGround-1515654657653",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
