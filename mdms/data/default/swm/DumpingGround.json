@@ -2217,6 +2217,47 @@
           "code": "mh.aliba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "12",
+        "capacity": "21",
+        "address": "Dump 60 90 180 ",
+        "latitude": "12",
+        "longitude": "23",
+        "location": {
+          "code": "202"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "Waste Type Code 3"
+          }
+        ]
+      },
+      "name": "test_dump",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": "ProcessingSite-1515075903699"
+      },
+      "distanceFromProcessingSite": "12",
+      "tenantId": "default",
+      "code": "DumpingGround-1515645933253",
+      "ulbs": [
+        {
+          "code": "mh.amba"
+        },
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
