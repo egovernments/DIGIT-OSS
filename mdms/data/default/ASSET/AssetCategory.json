@@ -1963,7 +1963,13 @@
       "version": "1.0",
       "depreciationRate": "",
       "isDepreciationApplicable": false,
-      "assetFieldsDefination": null
+      "assetFieldsDefination": [
+        {
+          "name": "floor",
+          "type": "Number",
+          "isActive": true
+        }
+      ]
     },
     {
       "depreciationMethod": "Straight Line method",
