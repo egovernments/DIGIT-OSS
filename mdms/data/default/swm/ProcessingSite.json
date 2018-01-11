@@ -621,6 +621,34 @@
       "name": "Alibag",
       "tenantId": "default",
       "code": "ProcessingSite-1515640889212"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "23",
+        "capacity": "2000",
+        "address": "Bangalore",
+        "latitude": "2323",
+        "longitude": "12323",
+        "location": {
+          "code": "203"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "Test 1001",
+      "tenantId": "default",
+      "code": "ProcessingSite-1515682552351"
     }
   ]
 }
