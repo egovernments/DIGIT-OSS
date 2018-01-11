@@ -27,9 +27,9 @@
       "tenantId": "mh.aliba"
     },
     {
-      "name": "Murari Case Side 2",
+      "name": "Murari Case Side 2 Update",
       "code": "MCS2",
-      "active": true,
+      "active": false,
       "tenantId": "mh.aliba"
     }
   ]
