@@ -9,7 +9,7 @@
       "code": "1",
       "assetCategoryType": "IMMOVABLE",
       "depreciationMethod": "Straight Line method",
-      "isAssetAllow": true,
+      "isAssetAllow": false,
       "isAssetAllowFromUi": false,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
@@ -55,7 +55,8 @@
           "name": "Floor",
           "type": "Number"
         }
-      ]
+      ],
+      "parent": null
     },
     {
       "tenantId": "default",
