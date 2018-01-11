@@ -187,6 +187,14 @@
       "wasteType": {
         "code": "Bio Medical Waste"
       }
+    },
+    {
+      "name": "WST_name1",
+      "code": "WST_code1",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Waste Type Code 3"
+      }
     }
   ]
 }
