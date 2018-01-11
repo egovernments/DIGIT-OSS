@@ -2185,6 +2185,47 @@
           "code": "mh.amba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "20",
+        "capacity": "2000",
+        "address": "BTM Layout , Bangalore - 560002",
+        "latitude": "1",
+        "longitude": "2",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "Test 101",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1515670318729",
+      "ulbs": [
+        {
+          "code": "default"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
