@@ -2144,6 +2144,47 @@
           "code": "mh.amba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "20",
+        "capacity": "2000",
+        "address": "Marathahalli, Bangalore - 560102",
+        "latitude": "12",
+        "longitude": "14",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "DP 301",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1515669363633",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
