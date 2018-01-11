@@ -2038,7 +2038,7 @@
       "assetCategoryType": "IMMOVABLE",
       "parent": "56",
       "unitOfMeasurement": "KVA",
-      "isDepreciationApplicable": false,
+      "isDepreciationApplicable": true,
       "depreciationRate": "6.66",
       "assetFieldsDefination": [
         {
