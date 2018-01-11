@@ -1706,7 +1706,7 @@
       "isAssetAllowFromUi": true,
       "name": "Road Roller",
       "assetCategoryType": "MOVABLE",
-      "parent": "19",
+      "parent": null,
       "unitOfMeasurement": "TON",
       "isDepreciationApplicable": true,
       "depreciationRate": "12",
