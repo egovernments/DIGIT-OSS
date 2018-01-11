@@ -660,6 +660,26 @@
       "graceTimeFrom": "1515637800000",
       "graceTimeTo": "1515639600000",
       "remarks": "Yes"
+    },
+    {
+      "code": "Shift-1515663432288",
+      "tenantId": "default",
+      "shiftType": {
+        "code": "BFS"
+      },
+      "department": {
+        "code": "UPA"
+      },
+      "designation": {
+        "code": "APO"
+      },
+      "shiftStartTime": "1515630600000",
+      "shiftEndTime": "1515632400000",
+      "lunchStartTime": "1515634200000",
+      "lunchEndTime": "1515636000000",
+      "graceTimeFrom": "1515637800000",
+      "graceTimeTo": "1515639600000",
+      "remarks": "lhl"
     }
   ]
 }
