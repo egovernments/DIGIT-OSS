@@ -17,7 +17,7 @@
     {
       "name": "Pending",
       "code": "Pen",
-      "active": false,
+      "active": true,
       "tenantId": "mh.aliba"
     }
   ]
