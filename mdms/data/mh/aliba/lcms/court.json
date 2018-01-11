@@ -389,6 +389,18 @@
       },
       "active": true,
       "tenantId": "mh.aliba"
+    },
+    {
+      "name": "M Court",
+      "code": "MC2222",
+      "address": {
+        "addressLine1": "36/a vangal rao nagar",
+        "addressLine2": "Madhubani",
+        "city": "Madhubani",
+        "pincode": "339999"
+      },
+      "active": true,
+      "tenantId": "mh.aliba"
     }
   ]
 }
