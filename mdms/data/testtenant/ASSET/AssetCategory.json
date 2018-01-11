@@ -5,7 +5,7 @@
     {
       "tenantId": "testtenant",
       "id": "1",
-      "name": "Building6",
+      "name": "Building",
       "code": "001",
       "assetCategoryType": "IMMOVABLE",
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
