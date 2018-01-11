@@ -2317,14 +2317,10 @@
         },
         "wasteTypes": [
           {
-            "code": {
               "code": "DD1"
-            }
           },
           {
-            "code": {
               "code": "Cons"
-            }
           }
         ]
       },
@@ -2338,14 +2334,10 @@
       "code": "DumpingGround-1515656452017",
       "ulbs": [
         {
-          "code": {
             "code": "mh.khop"
-          }
         },
         {
-          "code": {
             "code": "default"
-          }
         }
       ]
     },
