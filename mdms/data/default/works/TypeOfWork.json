@@ -546,6 +546,14 @@
       "tenantId": "default",
       "parent": "",
       "active": true
+    },
+    {
+      "parent": "BBB",
+      "code": "BBBSUB",
+      "name": "BBB Sub Name",
+      "description": "BBB Sub Description",
+      "tenantId": "default",
+      "active": true
     }
   ]
 }
