@@ -19,6 +19,12 @@
       "code": "NAGPUR",
       "active": true,
       "tenantId": "mh.aliba"
+    },
+    {
+      "name": "Nasik",
+      "code": "NC",
+      "active": true,
+      "tenantId": "mh.aliba"
     }
   ]
 }
