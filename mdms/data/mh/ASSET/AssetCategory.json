@@ -1721,7 +1721,7 @@
       "assetCategoryType": "IMMOVABLE",
       "parent": "1",
       "unitOfMeasurement": "SFT",
-      "isDepreciationApplicable": true,
+      "isDepreciationApplicable": false,
       "depreciationRate": "51",
       "assetFieldsDefination": [
         {
