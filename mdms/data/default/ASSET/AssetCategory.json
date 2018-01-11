@@ -1709,7 +1709,7 @@
       "parent": "19",
       "unitOfMeasurement": "TON",
       "isDepreciationApplicable": true,
-      "depreciationRate": "12",
+      "depreciationRate": "11",
       "assetFieldsDefination": [
         {
           "name": "Max Speed",
@@ -1961,40 +1961,9 @@
       "depreciationExpenseAccount": null,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
-      "depreciationRate": "",
-      "isDepreciationApplicable": false,
-      "assetFieldsDefination": null
-    },
-    {
-      "depreciationMethod": "Straight Line method",
-      "isAssetAllowFromUi": true,
-      "assetCategoryType": "MOVABLE",
-      "parent": "36",
-      "name": "Damro",
-      "unitOfMeasurement": "NOS",
+      "depreciationRate": "6.66",
       "isDepreciationApplicable": true,
-      "depreciationRate": "8",
-      "assetFieldsDefination": [
-        {
-          "name": "Chairs",
-          "type": "Number",
-          "order": "1"
-        },
-        {
-          "name": "Sofa Set",
-          "type": "Number",
-          "order": "3"
-        },
-        {
-          "name": "Dining Table",
-          "type": "Number",
-          "order": "2"
-        }
-      ],
-      "id": "2011",
-      "code": "2011",
-      "isAssetAllow": true,
-      "tenantId": "default"
+      "assetFieldsDefination": null
     }
   ]
 }
