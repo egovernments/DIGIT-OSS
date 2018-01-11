@@ -35,6 +35,15 @@
       "name": "Composites",
       "description": "Composites are mixtures of two or more bonded materials. Composites are the mixture of multiple materials, which in combination offer superior properties to the materials alone. Structural composites usually refer to the use of fibers which are embedded in a plastic. These composites offer high strength with very little weight.",
       "parent": ""
+    },
+    {
+      "isParent": true,
+      "active": true,
+      "tenantId": "mh",
+      "code": "105",
+      "description": "Electronic/optical materials are tailored to conduct electricity or light. These materials may be metals, ceramics or polymers. These materials are carefully formulated to control the intensity, scattering, and bending of electrons or photons which pass through them.",
+      "name": "Electronic / Optical",
+      "parent": "100"
     }
   ]
 }
