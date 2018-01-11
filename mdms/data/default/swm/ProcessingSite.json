@@ -596,6 +596,31 @@
       "name": "testttttt",
       "tenantId": "default",
       "code": "ProcessingSite-1515615144413"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "1",
+        "capacity": "1",
+        "address": "Alibag Municipal office",
+        "latitude": "0",
+        "longitude": "0",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "Alibag",
+      "tenantId": "default",
+      "code": "ProcessingSite-1515640889212"
     }
   ]
 }
