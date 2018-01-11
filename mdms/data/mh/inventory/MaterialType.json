@@ -44,6 +44,15 @@
       "description": "Electronic/optical materials are tailored to conduct electricity or light. These materials may be metals, ceramics or polymers. These materials are carefully formulated to control the intensity, scattering, and bending of electrons or photons which pass through them.",
       "name": "Electronic / Optical",
       "parent": "100"
+    },
+    {
+      "isParent": true,
+      "active": true,
+      "tenantId": "mh",
+      "code": "106",
+      "name": "Metals",
+      "description": "Metals are comparatively malleable, optically reflective, and electrically conductive. Most metals and alloys are easily shaped by forming. Their disassociate electron bonding makes them excellent conductors of electricity and heat. Almost all metals have an orderly arrangement of atoms, resulting in a crystalline structure that may have multiple crystal phases bordering eachother.",
+      "parent": ""
     }
   ]
 }
