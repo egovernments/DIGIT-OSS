@@ -649,6 +649,34 @@
       "name": "Test 1001",
       "tenantId": "default",
       "code": "ProcessingSite-1515682552351"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "20",
+        "capacity": "3000",
+        "address": "HSR",
+        "latitude": "4444",
+        "longitude": "5555",
+        "location": {
+          "code": "203"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "Test 2002",
+      "tenantId": "default",
+      "code": "ProcessingSite-1515682657791"
     }
   ]
 }
