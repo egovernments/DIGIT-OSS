@@ -66,6 +66,11 @@
       "tenantId": "default",
       "name": "New shifts",
       "code": "NS"
+    },
+    {
+      "tenantId": "default",
+      "name": "Shift Shift",
+      "code": "SS"
     }
   ]
 }
