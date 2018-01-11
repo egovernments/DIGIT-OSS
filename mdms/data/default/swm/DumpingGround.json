@@ -2027,44 +2027,6 @@
     },
     {
       "siteDetails": {
-        "mpcbAuthorisation": true,
-        "bankGuarantee": true,
-        "bankName": "ICIC",
-        "bankValidityFrom": 1515609000000,
-        "bankValidityTo": 1515781800000,
-        "area": "49",
-        "capacity": "2000",
-        "address": "test test test ",
-        "latitude": "110",
-        "longitude": "220",
-        "location": {
-          "code": "200"
-        },
-        "wasteTypes": [
-          {
-            "code": "Cons"
-          },
-          {
-            "code": "BCW"
-          }
-        ]
-      },
-      "name": "Banjara hills",
-      "isProcessingSite": true,
-      "processingSite": {
-        "code": "ProcessingSite-1513864087389"
-      },
-      "distanceFromProcessingSite": "120",
-      "tenantId": "default",
-      "code": "DumpingGround-1515598559289",
-      "ulbs": [
-        {
-          "code": "mh.khop"
-        }
-      ]
-    },
-    {
-      "siteDetails": {
         "mpcbAuthorisation": false,
         "bankGuarantee": "",
         "bankName": "",
@@ -2072,7 +2034,7 @@
         "bankValidityTo": "",
         "area": "1",
         "capacity": "1",
-        "address": "Dumping Address",
+        "address": "Bangalore India",
         "latitude": "0",
         "longitude": "0",
         "location": {
@@ -2080,299 +2042,24 @@
         },
         "wasteTypes": [
           {
+            "code": "BCW"
+          },
+          {
             "code": "Cons"
           }
         ]
       },
-      "name": "Do Do Dump",
-      "isProcessingSite": true,
-      "processingSite": {
-        "code": ""
-      },
-      "distanceFromProcessingSite": "",
-      "tenantId": "default",
-      "code": "DumpingGround-1515602930619",
-      "ulbs": [
-        {
-          "code": "default"
-        }
-      ]
-    },
-    {
-      "siteDetails": {
-        "mpcbAuthorisation": true,
-        "bankGuarantee": "",
-        "bankName": "",
-        "bankValidityFrom": "",
-        "bankValidityTo": "",
-        "area": "1",
-        "capacity": "1",
-        "address": "MPCP  Approved ",
-        "latitude": "1",
-        "longitude": "1",
-        "location": {
-          "code": "203"
-        },
-        "wasteTypes": [
-          {
-            "code": "DD1"
-          }
-        ]
-      },
-      "name": "MPCP Approved",
+      "name": "Dump 1",
       "isProcessingSite": "",
       "processingSite": {
         "code": "ProcessingSite-1513865191921"
       },
-      "distanceFromProcessingSite": "1",
+      "distanceFromProcessingSite": "09",
       "tenantId": "default",
-      "code": "DumpingGround-1515609148119",
+      "code": "DumpingGround-1515664858372",
       "ulbs": [
-        {
-          "code": "mh.aliba"
-        }
-      ]
-    },
-    {
-      "siteDetails": {
-        "mpcbAuthorisation": true,
-        "bankGuarantee": "",
-        "bankName": "",
-        "bankValidityFrom": "",
-        "bankValidityTo": "",
-        "area": "11",
-        "capacity": "123",
-        "address": "test testst st s",
-        "latitude": "11",
-        "longitude": "111",
-        "location": {
-          "code": "200"
-        },
-        "wasteTypes": [
-          {
-            "code": "Bio Medical Waste"
-          },
-          {
-            "code": "BCW"
-          },
-          {
-            "code": "Cons"
-          }
-        ]
-      },
-      "name": "qqq",
-      "isProcessingSite": true,
-      "processingSite": {
-        "code": "ProcessingSite-1513864087389"
-      },
-      "distanceFromProcessingSite": "11",
-      "tenantId": "default",
-      "code": "DumpingGround-1515613069235",
-      "ulbs": [
-        {
-          "code": "mh.aliba"
-        },
-        {
-          "code": "mh.amba"
-        },
         {
           "code": "default"
-        },
-        {
-          "code": "mh.khop"
-        }
-      ]
-    },
-    {
-      "siteDetails": {
-        "mpcbAuthorisation": false,
-        "bankGuarantee": true,
-        "bankName": "Sbi",
-        "bankValidityFrom": 1514745000000,
-        "bankValidityTo": 1517337000000,
-        "area": "1",
-        "capacity": "1",
-        "address": "Dump 60 90 180 ",
-        "latitude": "0",
-        "longitude": "0",
-        "location": {
-          "code": "200"
-        },
-        "wasteTypes": [
-          {
-            "code": "BCW"
-          }
-        ]
-      },
-      "name": "Dump 60",
-      "isProcessingSite": true,
-      "processingSite": {
-        "code": "ProcessingSite-1515119291633"
-      },
-      "distanceFromProcessingSite": "1",
-      "tenantId": "default",
-      "code": "DumpingGround-1515640393146",
-      "ulbs": [
-        {
-          "code": "mh.aliba"
-        }
-      ]
-    },
-    {
-      "siteDetails": {
-        "mpcbAuthorisation": true,
-        "bankGuarantee": "",
-        "bankName": "",
-        "bankValidityFrom": "",
-        "bankValidityTo": "",
-        "area": "12",
-        "capacity": "21",
-        "address": "Dump 60 90 180 ",
-        "latitude": "12",
-        "longitude": "23",
-        "location": {
-          "code": "202"
-        },
-        "wasteTypes": [
-          {
-            "code": "DD1"
-          },
-          {
-            "code": "Waste Type Code 3"
-          }
-        ]
-      },
-      "name": "test_dump",
-      "isProcessingSite": true,
-      "processingSite": {
-        "code": "ProcessingSite-1515075903699"
-      },
-      "distanceFromProcessingSite": "12",
-      "tenantId": "default",
-      "code": "DumpingGround-1515645933253",
-      "ulbs": [
-        {
-          "code": "mh.amba"
-        },
-        {
-          "code": "default"
-        }
-      ]
-    },
-    {
-      "siteDetails": {
-        "mpcbAuthorisation": true,
-        "bankGuarantee": true,
-        "bankName": "Bank 1",
-        "bankValidityFrom": 1515609000000,
-        "bankValidityTo": 1529605800000,
-        "area": "1",
-        "capacity": "2",
-        "address": "Testing dumping ground 1 Address",
-        "latitude": "233232.23",
-        "longitude": "2112.211",
-        "location": {
-          "code": "200"
-        },
-        "wasteTypes": [
-          {
-            "code": "Cons"
-          },
-          {
-            "code": "BCW"
-          }
-        ]
-      },
-      "name": "Testing dumping ground 1",
-      "isProcessingSite": true,
-      "processingSite": {
-        "code": "Pro. Plant Code 1"
-      },
-      "distanceFromProcessingSite": "221",
-      "tenantId": "default",
-      "code": "DumpingGround-1515654657653",
-      "ulbs": [
-        {
-          "code": "mh.aliba"
-        },
-        {
-          "code": "default"
-        }
-      ]
-    },
-    {
-      "siteDetails": {
-        "mpcbAuthorisation": false,
-        "bankGuarantee": "",
-        "bankName": "",
-        "bankValidityFrom": "",
-        "bankValidityTo": "",
-        "area": "4",
-        "capacity": "345",
-        "address": "hjdkjdjkdkjdjdlkdklc",
-        "latitude": "4",
-        "longitude": "6",
-        "location": {
-          "code": "202"
-        },
-        "wasteTypes": [
-          {
-              "code": "DD1"
-          },
-          {
-              "code": "Cons"
-          }
-        ]
-      },
-      "name": "testOne",
-      "isProcessingSite": "",
-      "processingSite": {
-        "code": "ProcessingSite-1515082999610"
-      },
-      "distanceFromProcessingSite": "4",
-      "tenantId": "default",
-      "code": "DumpingGround-1515656452017",
-      "ulbs": [
-        {
-            "code": "mh.khop"
-        },
-        {
-            "code": "default"
-        }
-      ]
-    },
-    {
-      "siteDetails": {
-        "mpcbAuthorisation": true,
-        "bankGuarantee": "",
-        "bankName": "",
-        "bankValidityFrom": "",
-        "bankValidityTo": "",
-        "area": "2",
-        "capacity": "2",
-        "address": "wertytrewqwerttrewwe",
-        "latitude": "21",
-        "longitude": "21",
-        "location": {
-          "code": "200"
-        },
-        "wasteTypes": [
-          {
-            "code": "Cons"
-          }
-        ]
-      },
-      "name": "123432123",
-      "isProcessingSite": "",
-      "processingSite": {
-        "code": "ProcessingSite-1515613498522"
-      },
-      "distanceFromProcessingSite": "21",
-      "tenantId": "default",
-      "code": "DumpingGround-1515658380060",
-      "ulbs": [
-        {
-          "code": "mh.aliba"
         }
       ]
     }
