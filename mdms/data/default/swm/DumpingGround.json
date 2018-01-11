@@ -2305,6 +2305,50 @@
           "code": "mh.amba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "23",
+        "capacity": "2424",
+        "address": "adsadasdadadadada",
+        "latitude": "121",
+        "longitude": "1313",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "Test 404",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": "ProcessingSite-1515075903699"
+      },
+      "distanceFromProcessingSite": "12313",
+      "tenantId": "default",
+      "code": "DumpingGround-1515682032423",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
