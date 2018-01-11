@@ -2349,6 +2349,47 @@
           "code": "mh.amba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "24",
+        "capacity": "2323",
+        "address": "werwqwefewfwefwefewf",
+        "latitude": "1232",
+        "longitude": "23434",
+        "location": {
+          "code": "203"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "DD1"
+          }
+        ]
+      },
+      "name": "Test 505",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": "ProcessingSite-1515082999610"
+      },
+      "distanceFromProcessingSite": "34",
+      "tenantId": "default",
+      "code": "DumpingGround-1515682259052",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        },
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
