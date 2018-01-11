@@ -97,6 +97,12 @@
       "code": "Pending",
       "active": true,
       "tenantId": "mh.aliba"
+    },
+    {
+      "name": "Pending",
+      "code": "Pending",
+      "active": true,
+      "tenantId": "mh.aliba"
     }
   ]
 }
