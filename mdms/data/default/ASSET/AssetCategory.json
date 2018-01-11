@@ -2001,6 +2001,20 @@
       "code": "2011",
       "isAssetAllow": true,
       "tenantId": "default"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "assetCategoryType": "IMMOVABLE",
+      "name": "Theaters",
+      "unitOfMeasurement": "SFT",
+      "isDepreciationApplicable": true,
+      "depreciationRate": "5",
+      "parent": null,
+      "isAssetAllow": false,
+      "id": "2012",
+      "code": "2012",
+      "tenantId": "default"
     }
   ]
 }
