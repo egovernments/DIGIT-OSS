@@ -740,6 +740,26 @@
       "graceTimeFrom": "1515637800000",
       "graceTimeTo": "1515639600000",
       "remarks": "hfkdjskjlfh"
+    },
+    {
+      "code": "Shift-1515683331759",
+      "tenantId": "default",
+      "shiftType": {
+        "code": "2To4Shift"
+      },
+      "department": {
+        "code": "ACC"
+      },
+      "designation": {
+        "code": 228
+      },
+      "shiftStartTime": "1515633180000",
+      "shiftEndTime": "1515679998888",
+      "lunchStartTime": "1515683598888",
+      "lunchEndTime": "1515687198888",
+      "graceTimeFrom": "1515690798888",
+      "graceTimeTo": "1515694398888",
+      "remarks": "test remarks if any."
     }
   ]
 }
