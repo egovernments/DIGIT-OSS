@@ -2264,6 +2264,47 @@
           "code": "mh.khopoli"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": false,
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "20",
+        "capacity": "2000",
+        "address": "BTM Layout, Bangalore - 560102",
+        "latitude": "12",
+        "longitude": "14",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "Test 202",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": "ProcessingSite-1515615040373"
+      },
+      "distanceFromProcessingSite": "24",
+      "tenantId": "default",
+      "code": "DumpingGround-1515680530754",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
