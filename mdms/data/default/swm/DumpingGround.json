@@ -2182,6 +2182,41 @@
           "code": "mh.khop"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": true,
+        "bankName": "Sbi",
+        "bankValidityFrom": 1514745000000,
+        "bankValidityTo": 1517337000000,
+        "area": "1",
+        "capacity": "1",
+        "address": "Dump 60 90 180 ",
+        "latitude": "0",
+        "longitude": "0",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "Dump 60",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": "ProcessingSite-1515119291633"
+      },
+      "distanceFromProcessingSite": "1",
+      "tenantId": "default",
+      "code": "DumpingGround-1515640393146",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        }
+      ]
     }
   ]
 }
