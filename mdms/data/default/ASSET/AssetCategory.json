@@ -1741,7 +1741,7 @@
       ],
       "id": "2001",
       "code": "2001",
-      "isAssetAllow": true,
+      "isAssetAllow": false,
       "tenantId": "default"
     },
     {
