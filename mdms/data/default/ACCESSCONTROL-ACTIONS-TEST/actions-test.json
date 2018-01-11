@@ -611,9 +611,9 @@
       "id": 1084,
       "name": "Material Store Mapping Search",
       "url": "/inventory-services/materialstoremapping/_search",
-      "displayName": "Search Material Store Mapping",
+      "displayName": "Material Store Mapping",
       "orderNumber": 3,
-      "enabled": false,
+      "enabled": true,
       "serviceCode": "Material Store Mapping",
       "code": "null",
       "path": "Inventory.Inventory Masters.Material Store Mapping.Material Store Mapping Search"
@@ -9678,11 +9678,11 @@
       "id": 1435,
       "name": "Material Type Store Mapping Search",
       "url": "/inventory-services/materialtypestoremapping/_search",
-      "displayName": "Search Material Type Store Mapping",
+      "displayName": "Material Type Store Mapping",
       "orderNumber": 3,
-      "enabled": false,
+      "enabled": true,
       "serviceCode": "Material Type Store Mapping",
-      "path": ""
+      "path": "Inventory.Inventory Masters.Material Type Store Mapping.Material Store Mapping Search"
     },
     {
       "id": 1436,
