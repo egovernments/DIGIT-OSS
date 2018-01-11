@@ -166,6 +166,11 @@
       "wasteType": {
         "code": "Bio Medical Waste"
       }
+    },
+    {
+      "name": "SIndhu",
+      "code": "SGK",
+      "tenantId": "default"
     }
   ]
 }
