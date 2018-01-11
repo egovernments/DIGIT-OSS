@@ -171,6 +171,14 @@
       "name": "SIndhu",
       "code": "SGK",
       "tenantId": "default"
+    },
+    {
+      "name": "1234",
+      "code": "1234",
+      "tenantId": "default",
+      "wasteType": {
+        "code": ""
+      }
     }
   ]
 }
