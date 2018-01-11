@@ -4,7 +4,7 @@
   "CollectionType": [
     {
       "tenantId": "default",
-      "name": "Door to Door Collections (Wet \u0026 Dry)",
+      "name": "Door to Door Collection (Wet \u0026 Dry)",
       "code": "Collection Type Code 1"
     },
     {
@@ -19,7 +19,7 @@
     },
     {
       "tenantId": "default",
-      "name": "From demolished appartments",
+      "name": "From demolished apartments",
       "code": "asdsad"
     },
     {
@@ -41,11 +41,6 @@
       "tenantId": "default",
       "name": "CT Name",
       "code": "CTN"
-    },
-    {
-      "tenantId": "default",
-      "name": "Collect",
-      "code": "C"
     }
   ]
 }
