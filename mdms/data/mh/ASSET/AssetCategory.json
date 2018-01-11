@@ -2024,6 +2024,14 @@
           "isActive": true,
           "isMandatory": true,
           "order": "4"
+        },
+        {
+          "name": "Units",
+          "type": "Select",
+          "isActive": true,
+          "isMandatory": true,
+          "order": "5",
+          "values": "Centimeter, Meter, Feet"
         }
       ],
       "id": "58",
