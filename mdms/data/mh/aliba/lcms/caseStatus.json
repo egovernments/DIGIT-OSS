@@ -75,7 +75,7 @@
       "tenantId": "mh.aliba"
     },
     {
-      "name": "Withdrawn & settled by mediation",
+      "name": "Withdrawn \u0026 settled by mediation",
       "code": "WSM",
       "active": true,
       "tenantId": "mh.aliba"
@@ -91,7 +91,12 @@
       "code": "DND",
       "active": true,
       "tenantId": "mh.aliba"
+    },
+    {
+      "name": "Pending",
+      "code": "Pending",
+      "active": true,
+      "tenantId": "mh.aliba"
     }
-   
   ]
 }
