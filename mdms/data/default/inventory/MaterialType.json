@@ -8,7 +8,7 @@
       "code": "MT1",
       "name": "Fake Material Type Name 1",
       "parent": null,
-      "isparent": false
+      "isParent": false
     },
     {
       "id": 2,
@@ -16,7 +16,7 @@
       "code": "MT2",
       "name": "Fake Material Type Name 2",
       "parent": null,
-      "isparent": false
+      "isParent": false
     },
     {
       "id": 3,
@@ -24,7 +24,7 @@
       "code": "MT3",
       "name": "Fake Material Type Name 3",
       "parent": null,
-      "isparent": false
+      "isParent": false
     },
     {
       "isParent": false,
