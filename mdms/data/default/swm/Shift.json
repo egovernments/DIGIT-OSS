@@ -720,6 +720,26 @@
       "graceTimeFrom": "1515645000000",
       "graceTimeTo": "1515648600000",
       "remarks": "dshjsadaskkjj"
+    },
+    {
+      "code": "Shift-1515678551012",
+      "tenantId": "default",
+      "shiftType": {
+        "code": "Shift Type Code 2"
+      },
+      "department": {
+        "code": "ADM"
+      },
+      "designation": {
+        "code": 83
+      },
+      "shiftStartTime": "1515630600000",
+      "shiftEndTime": "1515632400000",
+      "lunchStartTime": "1515634200000",
+      "lunchEndTime": "1515636000000",
+      "graceTimeFrom": "1515637800000",
+      "graceTimeTo": "1515639600000",
+      "remarks": "hfkdjskjlfh"
     }
   ]
 }
