@@ -11102,6 +11102,18 @@
       "serviceCode": "DumpingGround",
       "code": "null",
       "path": "Solid Waste Management.SWM Masters.Dumping Ground.Dumping Ground"
+    },
+    {
+      "id": 1497,
+      "name": "WorkOrderRegister",
+      "url": "/report/works/metadata/_get",
+      "displayName": "Work Order Register",
+      "orderNumber": 1,
+      "parentModule": "644",
+      "enabled": true,
+      "serviceCode": "WORKS_REPORTS",
+      "code": "null",
+      "path": "Works Management.Reports.WorkOrderRegister"
     }
   ]
 }
