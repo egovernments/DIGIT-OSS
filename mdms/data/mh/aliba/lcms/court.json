@@ -437,6 +437,18 @@
       },
       "active": true,
       "tenantId": "mh.aliba"
+    },
+    {
+      "name": "High Court Creating ",
+      "code": "HCC",
+      "address": {
+        "addressLine1": "36/A vangal Rao Nagar",
+        "addressLine2": "village-sukhbasi",
+        "city": "Madhubani",
+        "pincode": "90303"
+      },
+      "active": true,
+      "tenantId": "mh.aliba"
     }
   ]
 }
