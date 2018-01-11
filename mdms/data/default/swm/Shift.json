@@ -524,6 +524,25 @@
       "lunchEndTime": "1515650074692",
       "graceTimeFrom": "1515650434692",
       "graceTimeTo": "1515650734692"
+    },
+    {
+      "code": "Shift-1515639877650",
+      "tenantId": "default",
+      "shiftType": {
+        "code": "BFS"
+      },
+      "department": {
+        "code": "ADM"
+      },
+      "designation": {
+        "code": 32
+      },
+      "shiftStartTime": "1515639771520",
+      "shiftEndTime": "1515650571520",
+      "lunchStartTime": "1515643371520",
+      "lunchEndTime": "1515643971520",
+      "graceTimeFrom": "1515644211520",
+      "graceTimeTo": "1515644451520"
     }
   ]
 }
