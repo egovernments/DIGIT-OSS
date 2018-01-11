@@ -1,6 +1,6 @@
 {
   "tenantId": "default",
-  "moduleName": "Works",
+  "moduleName": "works",
   "SubScheme": [{
       "id": 1,
       "code": "BSUP",

@@ -1,6 +1,6 @@
 {
   "tenantId": "default",
-  "moduleName": "Works",
+  "moduleName": "works",
   "TypeOfDocument": [
     {
       "name": "Work Order",

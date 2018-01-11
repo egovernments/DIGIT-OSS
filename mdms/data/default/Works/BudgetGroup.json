@@ -1,6 +1,6 @@
 {
   "tenantId": "default",
-  "moduleName": "Works",
+  "moduleName": "works",
   "BudgetGroup": [{
       "id": 363,
       "majorcode": null,

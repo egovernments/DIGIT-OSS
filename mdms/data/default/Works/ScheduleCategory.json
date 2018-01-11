@@ -1,6 +1,6 @@
 {
   "tenantId": "default",
-  "moduleName": "Works",
+  "moduleName": "works",
   "ScheduleCategory": [
     {
       "id": 1,
