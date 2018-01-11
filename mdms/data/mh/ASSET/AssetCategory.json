@@ -8,9 +8,8 @@
       "name": "Building",
       "code": "1",
       "assetCategoryType": "IMMOVABLE",
-      "parent": null,
       "depreciationMethod": "Straight Line method",
-      "isAssetAllow": false,
+      "isAssetAllow": true,
       "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
@@ -67,7 +66,6 @@
       "name": "Infrastructure assets",
       "code": "2",
       "assetCategoryType": "IMMOVABLE",
-      "parent": null,
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
       "isAssetAllow": false,
       "isAssetAllowFromUi": true,
@@ -81,7 +79,6 @@
       "name": "Plant and Machinery",
       "code": "3",
       "assetCategoryType": "IMMOVABLE",
-      "parent": null,
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
       "isAssetAllow": false,
       "isAssetAllowFromUi": true,
@@ -95,7 +92,6 @@
       "name": "Electrical Installations",
       "code": "4",
       "assetCategoryType": "IMMOVABLE",
-      "parent": null,
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
       "isAssetAllow": false,
       "isAssetAllowFromUi": true,
@@ -703,9 +699,8 @@
       "name": "Commercial Vehicles",
       "code": "18",
       "assetCategoryType": "MOVABLE",
-      "parent": null,
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
-      "isAssetAllow": false,
+      "isAssetAllow": true,
       "isAssetAllowFromUi": false,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
@@ -718,9 +713,8 @@
       "name": "Other Vehicles",
       "code": "19",
       "assetCategoryType": "MOVABLE",
-      "parent": null,
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
-      "isAssetAllow": false,
+      "isAssetAllow": true,
       "isAssetAllowFromUi": false,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
@@ -733,7 +727,6 @@
       "name": "Office Equipments, computers and peripherals",
       "code": "20",
       "assetCategoryType": "MOVABLE",
-      "parent": null,
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
       "isAssetAllow": false,
       "isAssetAllowFromUi": true,
@@ -747,7 +740,6 @@
       "name": "Furniture and Fixtures",
       "code": "21",
       "assetCategoryType": "MOVABLE",
-      "parent": null,
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
       "isAssetAllow": false,
       "isAssetAllowFromUi": true,
@@ -761,7 +753,6 @@
       "name": "Intangible Assets",
       "code": "22",
       "assetCategoryType": "MOVABLE",
-      "parent": null,
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
       "isAssetAllow": false,
       "isAssetAllowFromUi": true,
@@ -1060,7 +1051,6 @@
       "name": "Land",
       "code": "42",
       "assetCategoryType": "LAND",
-      "parent": null,
       "isAssetAllow": false,
       "isAssetAllowFromUi": false,
       "unitOfMeasurement": "NOS",
@@ -1776,7 +1766,6 @@
       "isAssetAllowFromUi": true,
       "name": "Garbage Trucks",
       "assetCategoryType": "MOVABLE",
-      "parent": null,
       "unitOfMeasurement": "TON",
       "isDepreciationApplicable": true,
       "depreciationRate": "10",
@@ -2045,11 +2034,11 @@
     {
       "depreciationMethod": "Straight Line method",
       "isAssetAllowFromUi": true,
-      "name": "FTCat",
+      "name": "FTCatt",
       "assetCategoryType": "IMMOVABLE",
       "parent": "56",
-      "unitOfMeasurement": "KW",
-      "isDepreciationApplicable": true,
+      "unitOfMeasurement": "KVA",
+      "isDepreciationApplicable": false,
       "depreciationRate": "6.66",
       "assetFieldsDefination": [
         {
@@ -2061,10 +2050,11 @@
         },
         {
           "name": "2nd Field",
-          "type": "Text",
+          "type": "Select",
           "isActive": true,
           "isMandatory": true,
-          "order": "2"
+          "order": "2",
+          "values": "Yes,No"
         },
         {
           "name": "3rd Field",
@@ -2103,56 +2093,6 @@
       ],
       "id": "60",
       "code": "60",
-      "isAssetAllow": true,
-      "tenantId": "mh"
-    },
-    {
-      "depreciationMethod": "Straight Line method",
-      "isAssetAllowFromUi": true,
-      "name": "Speed boat",
-      "assetCategoryType": "MOVABLE",
-      "parent": "29",
-      "unitOfMeasurement": "KW",
-      "isDepreciationApplicable": true,
-      "depreciationRate": "4",
-      "assetFieldsDefination": [
-        {
-          "name": "Number of seats",
-          "type": "Number",
-          "isMandatory": true,
-          "isActive": true,
-          "order": "5"
-        },
-        {
-          "name": "Engine capacity",
-          "type": "Text",
-          "isActive": true,
-          "isMandatory": true,
-          "order": "4"
-        },
-        {
-          "name": "Commerical license present",
-          "type": "Select",
-          "order": "3",
-          "isActive": true,
-          "values": "Yes, No"
-        },
-        {
-          "name": "Fuel Type",
-          "type": "Select",
-          "isActive": true,
-          "order": "1",
-          "values": "Petrol, Diesel, Gas"
-        },
-        {
-          "name": "Color",
-          "type": "Text",
-          "isActive": true,
-          "order": "2"
-        }
-      ],
-      "id": "61",
-      "code": "61",
       "isAssetAllow": true,
       "tenantId": "mh"
     }
