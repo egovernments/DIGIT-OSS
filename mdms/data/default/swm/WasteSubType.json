@@ -173,11 +173,11 @@
       "tenantId": "default"
     },
     {
-      "name": "1234",
-      "code": "1234",
+      "name": "test ",
+      "code": "0026",
       "tenantId": "default",
       "wasteType": {
-        "code": ""
+        "code": "Bio Medical Waste"
       }
     }
   ]
