@@ -84,7 +84,7 @@
       "code": "TW1",
       "tenantId": "default",
       "wasteType": {
-        "code": "IWS001"
+        "code": "HHPW"
       }
     },
     {
@@ -165,14 +165,6 @@
       "tenantId": "default",
       "wasteType": {
         "code": "Bio Medical Waste"
-      }
-    },
-    {
-      "name": "sdfghj",
-      "code": "sdfgh",
-      "tenantId": "default",
-      "wasteType": {
-        "code": "Cons"
       }
     }
   ]
