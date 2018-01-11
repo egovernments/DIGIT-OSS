@@ -2062,6 +2062,208 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "20",
+        "capacity": "200",
+        "address": "HSR Layout Bangalore",
+        "latitude": "12",
+        "longitude": "13",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "DP 101",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1515666926022",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        },
+        {
+          "code": "default"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "29",
+        "capacity": "2323",
+        "address": "JP Nagar, Bangalore - 560102",
+        "latitude": "12",
+        "longitude": "14",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "DP 201",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1515667847132",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "20",
+        "capacity": "2000",
+        "address": "Marathahalli, Bangalore - 560102",
+        "latitude": "12",
+        "longitude": "14",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "DP 301",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1515669363633",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "20",
+        "capacity": "2000",
+        "address": "BTM Layout , Bangalore - 560002",
+        "latitude": "1",
+        "longitude": "2",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "Test 101",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1515670318729",
+      "ulbs": [
+        {
+          "code": "default"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "10",
+        "capacity": "20",
+        "address": "Dumping Ground ",
+        "latitude": "12-45",
+        "longitude": "34-60",
+        "location": {
+          "code": "202"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "Dumbing",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": "ProcessingSite-1515615040373"
+      },
+      "distanceFromProcessingSite": "40",
+      "tenantId": "default",
+      "code": "DumpingGround-1515676693816",
+      "ulbs": [
+        {
+          "code": "default"
+        },
+        {
+          "code": "mh.khopoli"
+        }
+      ]
     }
   ]
 }
