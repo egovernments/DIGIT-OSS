@@ -1709,7 +1709,7 @@
       "parent": "19",
       "unitOfMeasurement": "TON",
       "isDepreciationApplicable": true,
-      "depreciationRate": "10",
+      "depreciationRate": "12",
       "assetFieldsDefination": [
         {
           "name": "Max Speed",
