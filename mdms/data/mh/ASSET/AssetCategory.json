@@ -1722,7 +1722,7 @@
       "parent": "1",
       "unitOfMeasurement": "SFT",
       "isDepreciationApplicable": true,
-      "depreciationRate": "5",
+      "depreciationRate": "51",
       "assetFieldsDefination": [
         {
           "isActive": true,
