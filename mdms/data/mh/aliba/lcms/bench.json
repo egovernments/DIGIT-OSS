@@ -21,9 +21,9 @@
       "tenantId": "mh.aliba"
     },
     {
-      "name": "Nasik Update",
+      "name": "Nasik ",
       "code": "NC",
-      "active": true,
+      "active": false,
       "tenantId": "mh.aliba"
     }
   ]
