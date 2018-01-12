@@ -730,11 +730,11 @@
     },
     {
       "siteDetails": {
-        "mpcbAuthorisation": true,
-        "bankGuarantee": "",
-        "bankName": "",
-        "bankValidityFrom": "",
-        "bankValidityTo": "",
+        "mpcbAuthorisation": false,
+        "bankGuarantee": true,
+        "bankName": "SBI",
+        "bankValidityFrom": 1514745000000,
+        "bankValidityTo": 1517337000000,
         "area": "1",
         "capacity": "1",
         "address": "Address Address",
