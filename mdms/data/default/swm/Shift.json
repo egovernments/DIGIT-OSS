@@ -148,7 +148,7 @@
         "code": "Shift Type Code 2"
       },
       "department": {
-        "code": "ADM"
+        "code": "Administration"
       },
       "designation": {
         "code": "DR"
@@ -942,44 +942,24 @@
       "remarks": "dgdgfdg"
     },
     {
-      "code": "Shift-1515762837583",
+      "code": "Shift-1515764525655",
       "tenantId": "default",
-      "name": "rantest2",
+      "name": "Coffee Shift Name",
       "shiftType": {
-        "code": "BFS"
+        "code": "CS"
       },
       "department": {
         "code": "ADM"
       },
       "designation": {
-        "code": 26
+        "code": 9
       },
-      "shiftStartTime": "1515719580000",
-      "shiftEndTime": "1515719580000",
-      "lunchStartTime": "1515719580000",
-      "lunchEndTime": "1515719580000",
-      "graceTimeFrom": "1515719580000",
-      "graceTimeTo": "1515719580000"
-    },
-    {
-      "code": "Shift-1515763018249",
-      "tenantId": "default",
-      "name": "Test 222",
-      "shiftType": {
-        "code": "ES"
-      },
-      "department": {
-        "code": "ACC"
-      },
-      "designation": {
-        "code": "ACC"
-      },
-      "shiftStartTime": "1515717000000",
-      "shiftEndTime": "1515718800000",
-      "lunchStartTime": "1515720600000",
-      "lunchEndTime": "1515722400000",
-      "graceTimeFrom": "1515724200000",
-      "graceTimeTo": "1515726000000"
+      "shiftStartTime": "1515719402440",
+      "shiftEndTime": "1515726600000",
+      "lunchStartTime": "1515763802440",
+      "lunchEndTime": "1515764702440",
+      "graceTimeFrom": "1515765602440",
+      "graceTimeTo": "1515766200000"
     }
   ]
 }
