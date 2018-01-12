@@ -609,7 +609,8 @@
       "lunchEndTime": "1515616200000",
       "graceTimeFrom": "1515618000000",
       "graceTimeTo": "1515619800000",
-      "remarks": "Yes"
+      "remarks": "Yes",
+      "name": "Data Shift 8"
     },
     {
       "code": "Shift-1515654999927",
