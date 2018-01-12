@@ -34,7 +34,7 @@
     },
     {
       "isParent": false,
-      "active": true,
+      "active": false,
       "tenantId": "default",
       "code": "2211",
       "name": "Polymers/ Plastics",
