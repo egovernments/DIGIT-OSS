@@ -1136,10 +1136,11 @@
       },
       "shiftStartTime": "1515728400000",
       "shiftEndTime": "1515771600000",
-      "lunchStartTime": "1515750000000",
+      "lunchStartTime": "1515750360000",
       "lunchEndTime": "1515750000000",
       "graceTimeFrom": "1515768039587",
-      "graceTimeTo": "1515728400000"
+      "graceTimeTo": "1515728400000",
+      "remarks": "QWERTYHJK"
     },
     {
       "tenantId": "default",
