@@ -16,9 +16,11 @@
       "id": 2,
       "tenantId": "default",
       "code": "MT2",
-      "name": "Fake Material Type Name 2",
+      "name": "Composites",
       "parent": null,
-      "isparent": false
+      "isparent": false,
+      "description": "Composites are mixtures of two or more bonded materials. Composites are the mixture of multiple materials, which in combination offer superior properties to the materials alone. Structural composites usually refer to the use of fibers which are embedded in a plastic. These composites offer high strength with very little weight.",
+      "active": true
     },
     {
       "id": 3,
