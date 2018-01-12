@@ -189,11 +189,11 @@
       }
     },
     {
-      "name": "Test Sub",
-      "code": "SUB-TEST",
+      "name": "n QA",
+      "code": "QA code",
       "tenantId": "default",
       "wasteType": {
-        "code": "DD1"
+        "code": "Cons"
       }
     }
   ]
