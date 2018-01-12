@@ -91,6 +91,11 @@
       "tenantId": "default",
       "name": "Tea",
       "code": "Tea"
+    },
+    {
+      "tenantId": "default",
+      "name": "Empty Shift",
+      "code": "ES11"
     }
   ]
 }
