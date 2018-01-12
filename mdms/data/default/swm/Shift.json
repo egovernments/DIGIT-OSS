@@ -445,7 +445,8 @@
       "lunchEndTime": "1515598800000",
       "graceTimeFrom": "1515529980000",
       "graceTimeTo": "1515522780000",
-      "remarks": "Remarks test."
+      "remarks": "Remarks test.",
+      "name": "ada"
     },
     {
       "code": "Shift-1515599528201",
