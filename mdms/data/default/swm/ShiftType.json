@@ -76,6 +76,11 @@
       "tenantId": "default",
       "name": "Breakfast Shift",
       "code": "BFS"
+    },
+    {
+      "tenantId": "default",
+      "name": "Snacks Shift",
+      "code": "SNS"
     }
   ]
 }
