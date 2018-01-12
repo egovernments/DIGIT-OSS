@@ -730,7 +730,7 @@
     },
     {
       "siteDetails": {
-        "mpcbAuthorisation": false,
+        "mpcbAuthorisation": true,
         "bankGuarantee": "",
         "bankName": "",
         "bankValidityFrom": "",
