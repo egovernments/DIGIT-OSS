@@ -280,9 +280,11 @@
         "area": "45",
         "capacity": "45",
         "address": "Maharastra",
-        "latitude": "",
-        "longitude": "",
-        "location": {},
+        "latitude": "23",
+        "longitude": "33",
+        "location": {
+          "code": "203"
+        },
         "wasteTypes": [
           {
             "code": "BCW"
@@ -295,9 +297,9 @@
       "name": "Waste Test1",
       "isProcessingSite": "",
       "processingSite": {
-        "code": ""
+        "code": "ProcessingSite-1515082999610"
       },
-      "distanceFromProcessingSite": "",
+      "distanceFromProcessingSite": "200",
       "tenantId": "default",
       "code": "DumpingGround-1514988115500",
       "ulbs": [
