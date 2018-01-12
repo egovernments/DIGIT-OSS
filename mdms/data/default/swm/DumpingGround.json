@@ -2655,6 +2655,50 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "HDFC",
+        "bankValidityFrom": 1514745000000,
+        "bankValidityTo": 1515695400000,
+        "area": "49",
+        "capacity": "200",
+        "address": "wwwwwwwwwwwwwwwwwww",
+        "latitude": "50",
+        "longitude": "50",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "DD1"
+          }
+        ]
+      },
+      "name": "Police gorund",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": "ProcessingSite-1515082999610"
+      },
+      "distanceFromProcessingSite": "12",
+      "tenantId": "default",
+      "code": "DumpingGround-1515774283403",
+      "ulbs": [
+        {
+          "code": "mh.khopoli"
+        }
+      ]
     }
   ]
 }
