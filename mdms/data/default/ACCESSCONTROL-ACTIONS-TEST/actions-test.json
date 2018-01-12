@@ -1368,7 +1368,7 @@
       "displayName": "Route",
       "orderNumber": 0,
       "parentModule": "509",
-      "enabled": true,
+      "enabled": false,
       "serviceCode": "Route",
       "code": "null",
       "path": "Solid Waste Management.SWM Masters.Route.Route Search"
