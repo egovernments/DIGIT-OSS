@@ -878,6 +878,27 @@
       "lunchEndTime": "1515724028258",
       "graceTimeFrom": "1515760028258",
       "graceTimeTo": "1515760028258"
+    },
+    {
+      "code": "Shift-1515762104199",
+      "tenantId": "default",
+      "name": "Special Shift",
+      "shiftType": {
+        "code": "MNS"
+      },
+      "department": {
+        "code": "ADM"
+      },
+      "designation": {
+        "code": 228
+      },
+      "shiftStartTime": "1515736140000",
+      "shiftEndTime": "1515695700000",
+      "lunchStartTime": "1515699000000",
+      "lunchEndTime": "1515702600000",
+      "graceTimeFrom": "1515704400000",
+      "graceTimeTo": "1515706200000",
+      "remarks": "hftyr"
     }
   ]
 }
