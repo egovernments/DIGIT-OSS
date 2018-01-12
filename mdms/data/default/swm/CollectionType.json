@@ -46,6 +46,11 @@
       "tenantId": "default",
       "name": "12",
       "code": "11"
+    },
+    {
+      "tenantId": "default",
+      "name": "Coll Type",
+      "code": "1201"
     }
   ]
 }
