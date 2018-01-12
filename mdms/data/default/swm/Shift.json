@@ -691,7 +691,8 @@
       "lunchEndTime": "1515636000000",
       "graceTimeFrom": "1515637800000",
       "graceTimeTo": "1515639600000",
-      "remarks": "lhl"
+      "remarks": "lhl",
+      "name": "Shift 2"
     },
     {
       "code": "Shift-1515669176108",
