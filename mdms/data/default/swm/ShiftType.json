@@ -86,6 +86,11 @@
       "tenantId": "default",
       "name": "Coffee Shift",
       "code": "CS"
+    },
+    {
+      "tenantId": "default",
+      "name": "Tea",
+      "code": "Tea"
     }
   ]
 }
