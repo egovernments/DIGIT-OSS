@@ -800,6 +800,26 @@
       "graceTimeFrom": "1515724200000",
       "graceTimeTo": "1515726000000",
       "remarks": "fgfdg"
+    },
+    {
+      "code": "Shift-1515753291737",
+      "tenantId": "default",
+      "shiftType": {
+        "code": "SNS"
+      },
+      "name": "Snacks shift",
+      "department": {
+        "code": "ADM"
+      },
+      "designation": {
+        "code": 9
+      },
+      "shiftStartTime": "1515753240000",
+      "shiftEndTime": "1515760491314",
+      "lunchStartTime": "1515753951314",
+      "lunchEndTime": "1515759351314",
+      "graceTimeFrom": "1515759651314",
+      "graceTimeTo": "1515759951314"
     }
   ]
 }
