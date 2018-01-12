@@ -81,6 +81,11 @@
       "tenantId": "default",
       "name": "Snacks Shift",
       "code": "SNS"
+    },
+    {
+      "tenantId": "default",
+      "name": "Coffee Shift",
+      "code": "CS"
     }
   ]
 }
