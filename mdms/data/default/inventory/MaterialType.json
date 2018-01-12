@@ -35,6 +35,15 @@
       "name": "mango carrt",
       "description": "mango is apple , and apple is tasty but apple is not mango",
       "parent": ""
+    },
+    {
+      "isParent": false,
+      "active": true,
+      "tenantId": "default",
+      "code": "matnew01",
+      "name": "matname",
+      "description": "hhh jshshjd",
+      "parent": ""
     }
   ]
 }
