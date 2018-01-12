@@ -1332,7 +1332,7 @@
       "displayName": "Collection Point Details",
       "orderNumber": 0,
       "parentModule": "508",
-      "enabled": true,
+      "enabled": false,
       "serviceCode": "Collection Point Details",
       "code": "null",
       "path": "Solid Waste Management.SWM Masters.Collection Point Details.CollectionPointDetails Search"
