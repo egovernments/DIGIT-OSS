@@ -2616,15 +2616,15 @@
     {
       "siteDetails": {
         "mpcbAuthorisation": false,
-        "bankGuarantee": "",
-        "bankName": "",
-        "bankValidityFrom": "",
-        "bankValidityTo": "",
+        "bankGuarantee": true,
+        "bankName": "SBI",
+        "bankValidityFrom": 1514745000000,
+        "bankValidityTo": 1517337000000,
         "area": "10",
         "capacity": "1",
         "address": "dUMP 10 dUMP 10",
-        "latitude": "0",
-        "longitude": "0",
+        "latitude": "90",
+        "longitude": "90",
         "location": {
           "code": "200"
         },
