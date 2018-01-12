@@ -1976,7 +1976,7 @@
       "depreciationMethod": "Straight Line method",
       "isAssetAllowFromUi": true,
       "assetCategoryType": "MOVABLE",
-      "parent": null,
+      "parent": "21",
       "name": "Damro",
       "unitOfMeasurement": "NOS",
       "isDepreciationApplicable": true,
@@ -2000,7 +2000,7 @@
       ],
       "id": "2011",
       "code": "2011",
-      "isAssetAllow": false,
+      "isAssetAllow": true,
       "tenantId": "default"
     },
     {
