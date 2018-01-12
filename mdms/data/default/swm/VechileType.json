@@ -86,6 +86,11 @@
       "tenantId": "default",
       "name": "Ghanta Trin Trin gadis",
       "code": "123"
+    },
+    {
+      "tenantId": "default",
+      "name": "Vehicle Type 1",
+      "code": "VT1"
     }
   ]
 }
