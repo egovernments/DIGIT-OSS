@@ -61,6 +61,11 @@
       "tenantId": "default",
       "name": "Vegetable Waste",
       "code": "VW"
+    },
+    {
+      "tenantId": "default",
+      "name": "Fruits waste",
+      "code": "FW"
     }
   ]
 }
