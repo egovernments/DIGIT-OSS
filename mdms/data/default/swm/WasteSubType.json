@@ -189,11 +189,19 @@
       }
     },
     {
-      "name": "n QA",
-      "code": "QA code",
+      "name": "Test Sub",
+      "code": "SUB-TEST",
       "tenantId": "default",
       "wasteType": {
-        "code": "Cons"
+        "code": "DD1"
+      }
+    },
+    {
+      "name": "Apple peel",
+      "code": "Ap",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "FW"
       }
     }
   ]
