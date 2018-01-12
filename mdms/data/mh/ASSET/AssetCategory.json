@@ -348,9 +348,9 @@
       "code": "10",
       "assetCategoryType": "IMMOVABLE",
       "parent": "1",
-      "depreciationMethod": "STRAIGHT_LINE_METHOD",
+      "depreciationMethod": "Straight Line method",
       "isAssetAllow": true,
-      "isAssetAllowFromUi": false,
+      "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
       "depreciationRate": 6.66,
@@ -360,28 +360,45 @@
           "name": "Construction Class",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "columns": [],
+          "order": "3",
+          "type": "Number"
         },
         {
           "name": "Usage",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "columns": [],
+          "order": "4"
         },
         {
           "name": "Occupancy By",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "columns": [],
+          "order": "5"
         },
         {
           "name": "Name Of Occupant",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "columns": [],
+          "order": "6"
+        },
+        {
+          "name": "Floor",
+          "type": "Number",
+          "isActive": true,
+          "order": "1"
+        },
+        {
+          "name": "Floor Wise Area",
+          "type": "Number",
+          "isActive": true,
+          "order": "2"
         }
       ]
     },
