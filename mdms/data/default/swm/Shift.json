@@ -662,7 +662,7 @@
         "code": "EDU"
       },
       "designation": {
-        "code": 2
+        "code": "COMM"
       },
       "shiftStartTime": "1515630600000",
       "shiftEndTime": "1515632400000",
@@ -670,7 +670,8 @@
       "lunchEndTime": "1515636000000",
       "graceTimeFrom": "1515637800000",
       "graceTimeTo": "1515639600000",
-      "remarks": "Yes"
+      "remarks": "Yes",
+      "name": "Shift 10"
     },
     {
       "code": "Shift-1515663432288",
