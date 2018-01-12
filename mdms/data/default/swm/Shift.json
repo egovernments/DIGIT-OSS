@@ -899,6 +899,26 @@
       "graceTimeFrom": "1515704400000",
       "graceTimeTo": "1515706200000",
       "remarks": "hftyr"
+    },
+    {
+      "code": "Shift-1515761702721",
+      "tenantId": "default",
+      "name": "test2ran",
+      "shiftType": {
+        "code": "Shift Type Code 2"
+      },
+      "department": {
+        "code": "REV"
+      },
+      "designation": {
+        "code": "APO"
+      },
+      "shiftStartTime": "1515762002596",
+      "shiftEndTime": "1515760202596",
+      "lunchStartTime": "1515718980000",
+      "lunchEndTime": "1515714902596",
+      "graceTimeFrom": "1515760502596",
+      "graceTimeTo": "1515725702596"
     }
   ]
 }
