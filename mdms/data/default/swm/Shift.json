@@ -725,7 +725,7 @@
         "code": "ENG"
       },
       "designation": {
-        "code": 26
+        "code": "ATO"
       },
       "shiftStartTime": "1515630600000",
       "shiftEndTime": "1515632400000",
@@ -733,7 +733,8 @@
       "lunchEndTime": "1515648600000",
       "graceTimeFrom": "1515645000000",
       "graceTimeTo": "1515648600000",
-      "remarks": "dshjsadaskkjj"
+      "remarks": "dshjsadaskkjj",
+      "name": "Shift 5"
     },
     {
       "code": "Shift-1515678551012",
