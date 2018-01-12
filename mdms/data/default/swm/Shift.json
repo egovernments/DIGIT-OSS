@@ -767,7 +767,7 @@
         "code": "ACC"
       },
       "designation": {
-        "code": 228
+        "code": "CO"
       },
       "shiftStartTime": "1515633180000",
       "shiftEndTime": "1515679998888",
@@ -775,7 +775,8 @@
       "lunchEndTime": "1515687198888",
       "graceTimeFrom": "1515690798888",
       "graceTimeTo": "1515694398888",
-      "remarks": "test remarks if any."
+      "remarks": "test remarks if any.",
+      "name": "Shift 7"
     },
     {
       "code": "Shift-1515735867583",
