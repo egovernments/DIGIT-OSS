@@ -980,6 +980,26 @@
       "lunchEndTime": "1515721740000",
       "graceTimeFrom": "1515721740000",
       "graceTimeTo": "1515721740000"
+    },
+    {
+      "code": "Shift-1515765207480",
+      "tenantId": "default",
+      "name": "ran-3",
+      "shiftType": {
+        "code": "Shift Type Code 2"
+      },
+      "department": {
+        "code": "ADM"
+      },
+      "designation": {
+        "code": "COMM"
+      },
+      "shiftStartTime": "1515764427336",
+      "shiftEndTime": "1515765627336",
+      "lunchStartTime": "1515765627336",
+      "lunchEndTime": "1515765627336",
+      "graceTimeFrom": "1515765627336",
+      "graceTimeTo": "1515765627336"
     }
   ]
 }
