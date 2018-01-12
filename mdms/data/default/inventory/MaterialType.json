@@ -6,9 +6,11 @@
       "id": 1,
       "tenantId": "default",
       "code": "MT1",
-      "name": "Fake Material Type Name 1",
+      "name": "Biomaterials",
       "parent": null,
-      "isParent": false
+      "isparent": false,
+      "description": "A biomaterial is any substance that has been engineered to interact with biological systems for a medical purpose - either a therapeutic (treat, augment, repair or replace a tissue function of the body) or a diagnostic one. The study of biomaterials is called biomaterials science or biomaterials engineering. Biomaterials science encompasses elements of medicine, biology, chemistry, tissue engineering and materials science",
+      "active": true
     },
     {
       "id": 2,
@@ -16,7 +18,7 @@
       "code": "MT2",
       "name": "Fake Material Type Name 2",
       "parent": null,
-      "isParent": false
+      "isparent": false
     },
     {
       "id": 3,
@@ -24,7 +26,7 @@
       "code": "MT3",
       "name": "Fake Material Type Name 3",
       "parent": null,
-      "isParent": false
+      "isparent": false
     },
     {
       "isParent": false,
