@@ -298,9 +298,9 @@
       "code": "9",
       "assetCategoryType": "IMMOVABLE",
       "parent": "1",
-      "depreciationMethod": "Straight Line method",
+      "depreciationMethod": "STRAIGHT_LINE_METHOD",
       "isAssetAllow": true,
-      "isAssetAllowFromUi": true,
+      "isAssetAllowFromUi": false,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
       "depreciationRate": 6.66,
@@ -332,12 +332,6 @@
           "isActive": true,
           "isMandatory": false,
           "columns": []
-        },
-        {
-          "name": "Floor",
-          "type": "Number",
-          "isActive": true,
-          "order": "1"
         }
       ]
     },
@@ -348,9 +342,9 @@
       "code": "10",
       "assetCategoryType": "IMMOVABLE",
       "parent": "1",
-      "depreciationMethod": "Straight Line method",
+      "depreciationMethod": "STRAIGHT_LINE_METHOD",
       "isAssetAllow": true,
-      "isAssetAllowFromUi": true,
+      "isAssetAllowFromUi": false,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
       "depreciationRate": 6.66,
@@ -360,45 +354,28 @@
           "name": "Construction Class",
           "isActive": true,
           "isMandatory": false,
-          "columns": [],
-          "order": "3",
-          "type": "Number"
+          "columns": []
         },
         {
           "name": "Usage",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": [],
-          "order": "4"
+          "columns": []
         },
         {
           "name": "Occupancy By",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": [],
-          "order": "5"
+          "columns": []
         },
         {
           "name": "Name Of Occupant",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": [],
-          "order": "6"
-        },
-        {
-          "name": "Floor",
-          "type": "Number",
-          "isActive": true,
-          "order": "1"
-        },
-        {
-          "name": "Floor Wise Area",
-          "type": "Number",
-          "isActive": true,
-          "order": "2"
+          "columns": []
         }
       ]
     },
@@ -723,12 +700,13 @@
       "code": "18",
       "assetCategoryType": "MOVABLE",
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
-      "isAssetAllow": true,
+      "isAssetAllow": false,
       "isAssetAllowFromUi": false,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
       "depreciationRate": "10",
-      "isDepreciationApplicable": true
+      "isDepreciationApplicable": true,
+      "parent": null
     },
     {
       "tenantId": "mh",
@@ -1744,8 +1722,8 @@
       "assetCategoryType": "IMMOVABLE",
       "parent": "1",
       "unitOfMeasurement": "SFT",
-      "isDepreciationApplicable": false,
-      "depreciationRate": "51",
+      "isDepreciationApplicable": true,
+      "depreciationRate": "5",
       "assetFieldsDefination": [
         {
           "isActive": true,
@@ -2047,14 +2025,6 @@
           "isActive": true,
           "isMandatory": true,
           "order": "4"
-        },
-        {
-          "name": "Units",
-          "type": "Select",
-          "isActive": true,
-          "isMandatory": true,
-          "order": "5",
-          "values": "Centimeter, Meter, Feet"
         }
       ],
       "id": "58",
@@ -2065,10 +2035,10 @@
     {
       "depreciationMethod": "Straight Line method",
       "isAssetAllowFromUi": true,
-      "name": "FTCatt",
+      "name": "FTCat",
       "assetCategoryType": "IMMOVABLE",
       "parent": "56",
-      "unitOfMeasurement": "KVA",
+      "unitOfMeasurement": "KW",
       "isDepreciationApplicable": true,
       "depreciationRate": "6.66",
       "assetFieldsDefination": [
@@ -2081,11 +2051,10 @@
         },
         {
           "name": "2nd Field",
-          "type": "Select",
+          "type": "Text",
           "isActive": true,
           "isMandatory": true,
-          "order": "2",
-          "values": "Yes,No"
+          "order": "2"
         },
         {
           "name": "3rd Field",
@@ -2124,6 +2093,56 @@
       ],
       "id": "60",
       "code": "60",
+      "isAssetAllow": true,
+      "tenantId": "mh"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "name": "Speed boat",
+      "assetCategoryType": "MOVABLE",
+      "parent": "29",
+      "unitOfMeasurement": "KW",
+      "isDepreciationApplicable": true,
+      "depreciationRate": "4",
+      "assetFieldsDefination": [
+        {
+          "name": "Number of seats",
+          "type": "Number",
+          "isMandatory": true,
+          "isActive": true,
+          "order": "5"
+        },
+        {
+          "name": "Engine capacity",
+          "type": "Text",
+          "isActive": true,
+          "isMandatory": true,
+          "order": "4"
+        },
+        {
+          "name": "Commerical license present",
+          "type": "Select",
+          "order": "3",
+          "isActive": true,
+          "values": "Yes, No"
+        },
+        {
+          "name": "Fuel Type",
+          "type": "Select",
+          "isActive": true,
+          "order": "1",
+          "values": "Petrol, Diesel, Gas"
+        },
+        {
+          "name": "Color",
+          "type": "Text",
+          "isActive": true,
+          "order": "2"
+        }
+      ],
+      "id": "61",
+      "code": "61",
       "isAssetAllow": true,
       "tenantId": "mh"
     }
