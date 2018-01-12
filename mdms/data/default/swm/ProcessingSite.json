@@ -727,6 +727,40 @@
       "name": "Process 2",
       "tenantId": "default",
       "code": "ProcessingSite-1515759231706"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "10",
+        "capacity": "1000",
+        "address": "Processing Site",
+        "latitude": "80",
+        "longitude": "60",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "Waste Type Code 1"
+          }
+        ]
+      },
+      "name": "PS1",
+      "tenantId": "default",
+      "code": "ProcessingSite-1515772508800"
     }
   ]
 }
