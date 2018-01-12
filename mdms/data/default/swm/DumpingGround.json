@@ -2577,6 +2577,41 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "1",
+        "capacity": "1",
+        "address": "Address Address ",
+        "latitude": "0",
+        "longitude": "0",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "Dump 3",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": "ProcessingSite-1513865191921"
+      },
+      "distanceFromProcessingSite": "1",
+      "tenantId": "default",
+      "code": "DumpingGround-1515759011146",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        }
+      ]
     }
   ]
 }
