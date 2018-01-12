@@ -960,6 +960,26 @@
       "lunchEndTime": "1515719580000",
       "graceTimeFrom": "1515719580000",
       "graceTimeTo": "1515719580000"
+    },
+    {
+      "code": "Shift-1515763018249",
+      "tenantId": "default",
+      "name": "Test 222",
+      "shiftType": {
+        "code": "ES"
+      },
+      "department": {
+        "code": "ACC"
+      },
+      "designation": {
+        "code": "ACC"
+      },
+      "shiftStartTime": "1515717000000",
+      "shiftEndTime": "1515718800000",
+      "lunchStartTime": "1515720600000",
+      "lunchEndTime": "1515722400000",
+      "graceTimeFrom": "1515724200000",
+      "graceTimeTo": "1515726000000"
     }
   ]
 }
