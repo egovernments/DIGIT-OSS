@@ -2542,6 +2542,41 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "1",
+        "capacity": "1",
+        "address": "sdasdasdasdas sdasd",
+        "latitude": "0",
+        "longitude": "0",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "Dump 1",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515612368621"
+      },
+      "distanceFromProcessingSite": "9",
+      "tenantId": "default",
+      "code": "DumpingGround-1515754027503",
+      "ulbs": [
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
