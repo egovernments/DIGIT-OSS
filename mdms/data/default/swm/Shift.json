@@ -1140,6 +1140,26 @@
       "lunchEndTime": "1515750000000",
       "graceTimeFrom": "1515768039587",
       "graceTimeTo": "1515728400000"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1515772098879",
+      "name": "ran-10",
+      "shiftType": {
+        "code": "BFS"
+      },
+      "department": {
+        "code": "ENG"
+      },
+      "designation": {
+        "code": "ACC"
+      },
+      "shiftStartTime": "1515728880000",
+      "shiftEndTime": "1515728880000",
+      "lunchStartTime": "1515728880000",
+      "lunchEndTime": "1515728880000",
+      "graceTimeFrom": "1515728880000",
+      "graceTimeTo": "1515728880000"
     }
   ]
 }
