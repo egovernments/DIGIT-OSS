@@ -10369,6 +10369,39 @@
       "serviceCode": "MATERIAL TYPE MASTER",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1502,
+      "name": "Transfer Outward Material Issue Create",
+      "url": "/inventory-services/materialissues-to/_create",
+      "displayName": "Create Transfer Outward Material Issue",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "TRANSFER OUTWARD ISSUE",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1503,
+      "name": "Transfer Outward Material Issue Update",
+      "url": "/inventory-services/materialissues-to/_update",
+      "displayName": "Update Transfer Outward Material Issue",
+      "orderNumber": 2,
+      "enabled": false,
+      "serviceCode": "TRANSFER OUTWARD ISSUE",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1504,
+      "name": "Transfer Outward Material Issue Search",
+      "url": "/inventory-services/materialissues-to/_search",
+      "displayName": "Search Transfer Outward Material Issue",
+      "orderNumber": 3,
+      "enabled": false,
+      "serviceCode": "TRANSFER OUTWARD ISSUE",
+      "code": "null",
+      "path": ""
     }
   ]
 }
