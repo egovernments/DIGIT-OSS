@@ -711,8 +711,9 @@
         "code": "TP"
       },
       "designation": {
-        "code": 8
-      }
+        "code": "CADOP"
+      },
+      "name": "Shift 3"
     },
     {
       "code": "Shift-1515677037569",
