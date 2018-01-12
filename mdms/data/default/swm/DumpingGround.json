@@ -2469,6 +2469,41 @@
           "code": "mh.aliba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "12",
+        "capacity": "100",
+        "address": "Chandanagar Hyderabad",
+        "latitude": "",
+        "longitude": "",
+        "location": {
+          "code": "201"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          }
+        ]
+      },
+      "name": "Pnb",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1515752407324",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        }
+      ]
     }
   ]
 }
