@@ -2504,6 +2504,44 @@
           "code": "mh.aliba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "1",
+        "capacity": "1",
+        "address": "Dumping Ground ",
+        "latitude": "1",
+        "longitude": "1",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "Dump",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "1",
+      "tenantId": "default",
+      "code": "DumpingGround-1515753933306",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
