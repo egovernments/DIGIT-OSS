@@ -2612,6 +2612,50 @@
           "code": "mh.aliba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "50",
+        "capacity": "100",
+        "address": "DG Address Kolapur",
+        "latitude": "89",
+        "longitude": "90",
+        "location": {
+          "code": "202"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "DG1",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515682657791"
+      },
+      "distanceFromProcessingSite": "100",
+      "tenantId": "default",
+      "code": "DumpingGround-1515772085115",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
