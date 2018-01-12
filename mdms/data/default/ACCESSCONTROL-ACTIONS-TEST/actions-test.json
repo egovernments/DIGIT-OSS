@@ -9380,7 +9380,7 @@
       "displayName": "Payment Details",
       "orderNumber": 0,
       "parentModule": "310",
-      "enabled": true,
+      "enabled": false,
       "serviceCode": "Payment Details",
       "code": "null",
       "path": "Solid Waste Management.SWM Transactions.Payment Details.PaymentDetails Search"
