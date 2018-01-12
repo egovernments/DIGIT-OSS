@@ -527,7 +527,8 @@
       "lunchStartTime": "1515646474692",
       "lunchEndTime": "1515650074692",
       "graceTimeFrom": "1515650434692",
-      "graceTimeTo": "1515650734692"
+      "graceTimeTo": "1515650734692",
+      "name": "Data Shift 4"
     },
     {
       "code": "Shift-1515639877650",
