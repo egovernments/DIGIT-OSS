@@ -6,39 +6,34 @@
       "id": 1,
       "tenantId": "default",
       "code": "MT1",
-      "name": "Biomaterials",
+      "name": "check update ",
       "parent": null,
-      "isparent": false,
-      "description": "A biomaterial is any substance that has been engineered to interact with biological systems for a medical purpose - either a therapeutic (treat, augment, repair or replace a tissue function of the body) or a diagnostic one. The study of biomaterials is called biomaterials science or biomaterials engineering. Biomaterials science encompasses elements of medicine, biology, chemistry, tissue engineering and materials science",
-      "active": true
+      "isParent": false,
+      "description": "check update"
     },
     {
       "id": 2,
       "tenantId": "default",
       "code": "MT2",
-      "name": "Composites",
+      "name": "Fake Material Type Name 2",
       "parent": null,
-      "isparent": false,
-      "description": "Composites are mixtures of two or more bonded materials. Composites are the mixture of multiple materials, which in combination offer superior properties to the materials alone. Structural composites usually refer to the use of fibers which are embedded in a plastic. These composites offer high strength with very little weight.",
-      "active": true
+      "isParent": false
     },
     {
       "id": 3,
       "tenantId": "default",
       "code": "MT3",
-      "name": "Electronic / Optical",
+      "name": "Fake Material Type Name 3",
       "parent": null,
-      "isparent": false,
-      "description": "Electronic/optical materials are tailored to conduct electricity or light. These materials may be metals, ceramics or polymers. These materials are carefully formulated to control the intensity, scattering, and bending of electrons or photons which pass through them.",
-      "active": true
+      "isParent": false
     },
     {
       "isParent": false,
-      "active": false,
+      "active": true,
       "tenantId": "default",
       "code": "2211",
-      "name": "Polymers/ Plastics",
-      "description": "Plastics/polymers are made up of millions of repeated links to make long molecules or networks that are tangled or crosslinked together. Almost all polymers use carbon atoms in very long chains. The carbon atoms may be attached to other carbon, oxygen, nitrogen, and hydrogen atoms. Polymers may or may not have an orderly arrangement of atoms.",
+      "name": "mango carrt",
+      "description": "mango is apple , and apple is tasty but apple is not mango",
       "parent": ""
     }
   ]
