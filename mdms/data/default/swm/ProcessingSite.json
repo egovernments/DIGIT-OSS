@@ -735,32 +735,26 @@
         "bankName": "",
         "bankValidityFrom": "",
         "bankValidityTo": "",
-        "area": "10",
-        "capacity": "1000",
-        "address": "Processing Site",
-        "latitude": "80",
-        "longitude": "60",
+        "area": "1",
+        "capacity": "1",
+        "address": "Address Address",
+        "latitude": "0",
+        "longitude": "0",
         "location": {
           "code": "200"
         },
         "wasteTypes": [
           {
+            "code": "Bio Medical Waste"
+          },
+          {
             "code": "BCW"
-          },
-          {
-            "code": "Cons"
-          },
-          {
-            "code": "DD1"
-          },
-          {
-            "code": "Waste Type Code 1"
           }
         ]
       },
-      "name": "PS1",
+      "name": "Process 10",
       "tenantId": "default",
-      "code": "ProcessingSite-1515772508800"
+      "code": "ProcessingSite-1515772855866"
     }
   ]
 }
