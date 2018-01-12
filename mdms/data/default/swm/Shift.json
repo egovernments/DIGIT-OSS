@@ -746,7 +746,7 @@
         "code": "ADM"
       },
       "designation": {
-        "code": 83
+        "code": "DYCOMM"
       },
       "shiftStartTime": "1515630600000",
       "shiftEndTime": "1515632400000",
@@ -754,7 +754,8 @@
       "lunchEndTime": "1515636000000",
       "graceTimeFrom": "1515637800000",
       "graceTimeTo": "1515639600000",
-      "remarks": "hfkdjskjlfh"
+      "remarks": "hfkdjskjlfh",
+      "name": "Shift 6"
     },
     {
       "code": "Shift-1515683331759",
