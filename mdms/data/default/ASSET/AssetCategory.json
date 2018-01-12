@@ -9,7 +9,7 @@
       "code": "1",
       "assetCategoryType": "IMMOVABLE",
       "depreciationMethod": "Straight Line method",
-      "isAssetAllow": false,
+      "isAssetAllow": true,
       "isAssetAllowFromUi": false,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
@@ -55,8 +55,7 @@
           "name": "Floor",
           "type": "Number"
         }
-      ],
-      "parent": null
+      ]
     },
     {
       "tenantId": "default",
@@ -676,11 +675,12 @@
       "code": "18",
       "assetCategoryType": "MOVABLE",
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
-      "isAssetAllow": true,
+      "isAssetAllow": false,
       "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
-      "isDepreciationApplicable": true
+      "isDepreciationApplicable": true,
+      "parent": null
     },
     {
       "tenantId": "default",
@@ -1710,7 +1710,7 @@
       "parent": "19",
       "unitOfMeasurement": "TON",
       "isDepreciationApplicable": true,
-      "depreciationRate": "12",
+      "depreciationRate": "10",
       "assetFieldsDefination": [
         {
           "name": "Max Speed",
@@ -1834,7 +1834,7 @@
       "parent": "1",
       "unitOfMeasurement": "CM",
       "isDepreciationApplicable": true,
-      "depreciationRate": "10",
+      "depreciationRate": "1",
       "assetFieldsDefination": [
         {
           "name": "car",
@@ -1964,19 +1964,13 @@
       "version": "1.0",
       "depreciationRate": "",
       "isDepreciationApplicable": false,
-      "assetFieldsDefination": [
-        {
-          "name": "floor",
-          "type": "Number",
-          "isActive": true
-        }
-      ]
+      "assetFieldsDefination": null
     },
     {
       "depreciationMethod": "Straight Line method",
       "isAssetAllowFromUi": true,
       "assetCategoryType": "MOVABLE",
-      "parent": "21",
+      "parent": "36",
       "name": "Damro",
       "unitOfMeasurement": "NOS",
       "isDepreciationApplicable": true,
@@ -2001,20 +1995,6 @@
       "id": "2011",
       "code": "2011",
       "isAssetAllow": true,
-      "tenantId": "default"
-    },
-    {
-      "depreciationMethod": "Straight Line method",
-      "isAssetAllowFromUi": true,
-      "assetCategoryType": "IMMOVABLE",
-      "name": "Theaters",
-      "unitOfMeasurement": "SFT",
-      "isDepreciationApplicable": true,
-      "depreciationRate": "5",
-      "parent": null,
-      "isAssetAllow": false,
-      "id": "2012",
-      "code": "2012",
       "tenantId": "default"
     }
   ]
