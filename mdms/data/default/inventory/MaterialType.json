@@ -26,9 +26,11 @@
       "id": 3,
       "tenantId": "default",
       "code": "MT3",
-      "name": "Fake Material Type Name 3",
+      "name": "Electronic / Optical",
       "parent": null,
-      "isparent": false
+      "isparent": false,
+      "description": "Electronic/optical materials are tailored to conduct electricity or light. These materials may be metals, ceramics or polymers. These materials are carefully formulated to control the intensity, scattering, and bending of electrons or photons which pass through them.",
+      "active": true
     },
     {
       "isParent": false,
