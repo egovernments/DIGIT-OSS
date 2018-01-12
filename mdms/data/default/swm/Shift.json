@@ -795,7 +795,8 @@
       "lunchStartTime": "1515736120707",
       "lunchEndTime": "1515739720707",
       "graceTimeFrom": "1515740440707",
-      "graceTimeTo": "1515743280000"
+      "graceTimeTo": "1515743280000",
+      "name": "Shift 8"
     },
     {
       "code": "Shift-1515742203224",
