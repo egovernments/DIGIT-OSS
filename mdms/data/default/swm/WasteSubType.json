@@ -173,33 +173,20 @@
       "tenantId": "default"
     },
     {
-      "name": "test ",
-      "code": "0026",
+      "name": "1234",
+      "code": "1234",
       "tenantId": "default",
       "wasteType": {
-        "code": "Bio Medical Waste"
+        "code": ""
       }
     },
     {
-      "name": "WST_Name",
-      "code": "WST_Code",
+      "name": "Onion Peel",
+      "code": "OP",
       "tenantId": "default",
       "wasteType": {
-        "code": "Bio Medical Waste"
+        "code": "VW"
       }
-    },
-    {
-      "name": "WST_name1",
-      "code": "WST_code1",
-      "tenantId": "default",
-      "wasteType": {
-        "code": "Waste Type Code 3"
-      }
-    },
-    {
-      "name": "test sybtype",
-      "code": "test sybtype code",
-      "tenantId": "default"
     }
   ]
 }
