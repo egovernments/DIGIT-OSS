@@ -1614,7 +1614,7 @@
       "displayName": "Population",
       "orderNumber": 0,
       "parentModule": "507",
-      "enabled": true,
+      "enabled": false,
       "serviceCode": "Collection Point",
       "code": "null",
       "path": "Solid Waste Management.SWM Masters.Population.Population"
