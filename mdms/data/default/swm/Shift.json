@@ -1000,6 +1000,26 @@
       "lunchEndTime": "1515765627336",
       "graceTimeFrom": "1515765627336",
       "graceTimeTo": "1515765627336"
+    },
+    {
+      "code": "Shift-1515765424175",
+      "tenantId": "default",
+      "shiftType": {
+        "code": "Tea"
+      },
+      "name": "Tea Shift",
+      "department": {
+        "code": "ADM"
+      },
+      "designation": {
+        "code": "COMM"
+      },
+      "shiftStartTime": "1515722223740",
+      "shiftEndTime": "1515729420000",
+      "lunchStartTime": "1515722760000",
+      "lunchEndTime": "1515723060000",
+      "graceTimeFrom": "1515723840000",
+      "graceTimeTo": "1515724140000"
     }
   ]
 }
