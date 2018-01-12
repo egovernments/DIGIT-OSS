@@ -2620,18 +2620,15 @@
         "bankName": "",
         "bankValidityFrom": "",
         "bankValidityTo": "",
-        "area": "50",
-        "capacity": "100",
-        "address": "DG Address Kolapur",
-        "latitude": "89",
-        "longitude": "90",
+        "area": "10",
+        "capacity": "1",
+        "address": "dUMP 10 dUMP 10",
+        "latitude": "0",
+        "longitude": "0",
         "location": {
-          "code": "202"
+          "code": "200"
         },
         "wasteTypes": [
-          {
-            "code": "Bio Medical Waste"
-          },
           {
             "code": "BCW"
           },
@@ -2640,20 +2637,20 @@
           }
         ]
       },
-      "name": "DG1",
+      "name": "dUMP 10",
       "isProcessingSite": false,
       "processingSite": {
-        "code": "ProcessingSite-1515682657791"
+        "code": "ProcessingSite-1513864087389"
       },
-      "distanceFromProcessingSite": "100",
+      "distanceFromProcessingSite": "10",
       "tenantId": "default",
-      "code": "DumpingGround-1515772085115",
+      "code": "DumpingGround-1515772494106",
       "ulbs": [
         {
-          "code": "mh.aliba"
+          "code": "mh.amba"
         },
         {
-          "code": "mh.amba"
+          "code": "default"
         }
       ]
     }
