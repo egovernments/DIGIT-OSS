@@ -642,14 +642,15 @@
         "code": "ACC"
       },
       "designation": {
-        "code": 14
+        "code": "DYCOMM"
       },
       "shiftStartTime": "1515649740000",
       "shiftEndTime": "1515609300000",
       "lunchStartTime": "1515645000000",
       "lunchEndTime": "1515648600000",
       "graceTimeFrom": "1515645000000",
-      "graceTimeTo": "1515648600000"
+      "graceTimeTo": "1515648600000",
+      "name": "Data Shift 9"
     },
     {
       "code": "Shift-1515656880520",
