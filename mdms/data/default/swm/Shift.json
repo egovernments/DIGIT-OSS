@@ -1014,8 +1014,8 @@
       "designation": {
         "code": "COMM"
       },
-      "shiftStartTime": "1515722223740",
-      "shiftEndTime": "1515729420000",
+      "shiftStartTime": "1515720600000",
+      "shiftEndTime": "1515729600000",
       "lunchStartTime": "1515722760000",
       "lunchEndTime": "1515723060000",
       "graceTimeFrom": "1515723840000",
