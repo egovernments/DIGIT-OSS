@@ -1542,7 +1542,7 @@
       "displayName": "Sanitation Staff Target",
       "orderNumber": 0,
       "parentModule": "591",
-      "enabled": true,
+      "enabled": false,
       "serviceCode": "SanitationStaffTarget",
       "code": "null",
       "path": "Solid Waste Management.SWM Masters.Sanitation Staff Target.SanitationStaffTarget Search"
