@@ -195,7 +195,7 @@
       "code": "7",
       "assetCategoryType": "IMMOVABLE",
       "parent": "1",
-      "depreciationMethod": "STRAIGHT_LINE_METHOD",
+      "depreciationMethod": "Straight Line method",
       "isAssetAllow": true,
       "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
@@ -233,6 +233,18 @@
           "isMandatory": false,
           "columns": [],
           "order": "4"
+        },
+        {
+          "name": "Floor",
+          "type": "Number",
+          "isActive": true,
+          "order": "5"
+        },
+        {
+          "name": "Floorwise Area",
+          "type": "Number",
+          "isActive": true,
+          "order": "6"
         }
       ]
     },
