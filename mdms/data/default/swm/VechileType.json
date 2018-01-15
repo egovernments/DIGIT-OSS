@@ -101,6 +101,11 @@
       "tenantId": "default",
       "name": "???? ???? ",
       "code": "? ????/???"
+    },
+    {
+      "tenantId": "default",
+      "name": "SDfsag!@#$$%%^^\u0026*(){}L:\u003e\u003c?",
+      "code": "Jds!@#$%%^^\u0026*()_+|}{:\"\u003c\u003e?"
     }
   ]
 }
