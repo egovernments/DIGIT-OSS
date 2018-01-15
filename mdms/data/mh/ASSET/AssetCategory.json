@@ -2162,6 +2162,20 @@
       "code": "61",
       "isAssetAllow": true,
       "tenantId": "mh"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "name": "Precedent Library",
+      "assetCategoryType": "IMMOVABLE",
+      "parent": "10",
+      "unitOfMeasurement": "SFT",
+      "isDepreciationApplicable": true,
+      "depreciationRate": "6.66",
+      "isAssetAllow": true,
+      "id": "62",
+      "code": "62",
+      "tenantId": "mh"
     }
   ]
 }
