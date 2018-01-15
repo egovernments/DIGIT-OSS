@@ -44,6 +44,15 @@
       "name": "matname",
       "description": "hhh jshshjd",
       "parent": ""
+    },
+    {
+      "isParent": false,
+      "active": true,
+      "tenantId": "default",
+      "code": "MT_Dry",
+      "name": "Sand\u0027s Brick",
+      "description": "this is avval brick and good for foundation and walls construction.",
+      "parent": ""
     }
   ]
 }
