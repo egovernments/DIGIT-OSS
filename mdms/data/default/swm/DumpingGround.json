@@ -167,7 +167,7 @@
         "latitude": "1.2",
         "longitude": "2.8",
         "location": {
-          "code": "200"
+          "code": "101"
         },
         "wasteTypes": [
           {
@@ -280,11 +280,9 @@
         "area": "45",
         "capacity": "45",
         "address": "Maharastra",
-        "latitude": "23",
-        "longitude": "33",
-        "location": {
-          "code": "203"
-        },
+        "latitude": "",
+        "longitude": "",
+        "location": {},
         "wasteTypes": [
           {
             "code": "BCW"
@@ -297,9 +295,9 @@
       "name": "Waste Test1",
       "isProcessingSite": "",
       "processingSite": {
-        "code": "ProcessingSite-1515082999610"
+        "code": ""
       },
-      "distanceFromProcessingSite": "200",
+      "distanceFromProcessingSite": "",
       "tenantId": "default",
       "code": "DumpingGround-1514988115500",
       "ulbs": [
@@ -2618,19 +2616,22 @@
     {
       "siteDetails": {
         "mpcbAuthorisation": false,
-        "bankGuarantee": true,
-        "bankName": "SBI",
-        "bankValidityFrom": 1514745000000,
-        "bankValidityTo": 1517337000000,
-        "area": "10",
-        "capacity": "1",
-        "address": "dUMP 10 dUMP 10",
-        "latitude": "90",
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "50",
+        "capacity": "100",
+        "address": "DG Address Kolapur",
+        "latitude": "89",
         "longitude": "90",
         "location": {
-          "code": "200"
+          "code": "202"
         },
         "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          },
           {
             "code": "BCW"
           },
@@ -2639,20 +2640,20 @@
           }
         ]
       },
-      "name": "dUMP 10",
+      "name": "DG1",
       "isProcessingSite": false,
       "processingSite": {
-        "code": "ProcessingSite-1513864087389"
+        "code": "ProcessingSite-1515682657791"
       },
-      "distanceFromProcessingSite": "10",
+      "distanceFromProcessingSite": "100",
       "tenantId": "default",
-      "code": "DumpingGround-1515772494106",
+      "code": "DumpingGround-1515772085115",
       "ulbs": [
         {
-          "code": "mh.amba"
+          "code": "mh.aliba"
         },
         {
-          "code": "default"
+          "code": "mh.amba"
         }
       ]
     },
@@ -2660,43 +2661,34 @@
       "siteDetails": {
         "mpcbAuthorisation": true,
         "bankGuarantee": true,
-        "bankName": "HDFC",
-        "bankValidityFrom": 1514745000000,
-        "bankValidityTo": 1515695400000,
-        "area": "49",
-        "capacity": "200",
-        "address": "wwwwwwwwwwwwwwwwwww",
-        "latitude": "50",
-        "longitude": "50",
+        "bankName": "HGS Bank",
+        "bankValidityFrom": 1490985000000,
+        "bankValidityTo": 1554057000000,
+        "area": "23",
+        "capacity": "50",
+        "address": "Agarkar Dumping Ground Roha",
+        "latitude": "12",
+        "longitude": "32",
         "location": {
           "code": "200"
         },
         "wasteTypes": [
           {
             "code": "Cons"
-          },
-          {
-            "code": "BCW"
-          },
-          {
-            "code": "Bio Medical Waste"
-          },
-          {
-            "code": "DD1"
           }
         ]
       },
-      "name": "Police gorund",
-      "isProcessingSite": "",
+      "name": "Agarkar Dumping Ground",
+      "isProcessingSite": false,
       "processingSite": {
-        "code": "ProcessingSite-1515082999610"
+        "code": "ProcessingSite-1515075903699"
       },
-      "distanceFromProcessingSite": "12",
+      "distanceFromProcessingSite": "450",
       "tenantId": "default",
-      "code": "DumpingGround-1515774283403",
+      "code": "DumpingGround-1516014671011",
       "ulbs": [
         {
-          "code": "mh.khopoli"
+          "code": "mh.aliba"
         }
       ]
     }
