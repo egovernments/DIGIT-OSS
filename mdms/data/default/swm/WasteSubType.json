@@ -171,9 +171,12 @@
       }
     },
     {
-      "name": "SIndhu",
+      "name": "WST Update",
       "code": "SGK",
-      "tenantId": "default"
+      "tenantId": "default",
+      "wasteType": {
+        "code": "IWS001"
+      }
     },
     {
       "name": "1234",
