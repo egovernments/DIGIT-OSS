@@ -39,6 +39,10 @@
     {
       "name": "One More",
       "code": "OneMore"
+    },
+    {
+      "name": "Stationery",
+      "code": "Stationery"
     }
   ]
 }
