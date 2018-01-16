@@ -53,6 +53,14 @@
       "name": "Sand\u0027s Brick",
       "description": "this is avval brick and good for foundation and walls construction.",
       "parent": ""
+    },
+    {
+      "isParent": false,
+      "active": true,
+      "tenantId": "default",
+      "code": "MTC001",
+      "name": "MTN001",
+      "description": "MTD001"
     }
   ]
 }
