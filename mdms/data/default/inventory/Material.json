@@ -812,7 +812,11 @@
         "glcode": "411"
       },
       "materialClass": "MediumUsage",
-      "oldCode": "Old"
+      "oldCode": "Old",
+      "model": "Abcd",
+      "manufacturePartNo": "Abcd",
+      "techincalSpecs": "Abcd",
+      "termsOfDelivery": "Abcd"
     }
   ]
 }
