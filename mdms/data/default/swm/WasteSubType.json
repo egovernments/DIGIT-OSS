@@ -45,7 +45,10 @@
     {
       "name": "qwerfg",
       "code": "werfg",
-      "tenantId": "default"
+      "tenantId": "default",
+      "wasteType": {
+        "code": "DD1"
+      }
     },
     {
       "name": "Waste Test111",
