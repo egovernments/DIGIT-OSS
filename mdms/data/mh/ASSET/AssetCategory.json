@@ -208,7 +208,8 @@
           "isActive": true,
           "isMandatory": false,
           "columns": [],
-          "order": "1"
+          "order": "1",
+          "type": "Text"
         },
         {
           "name": "Usage",
