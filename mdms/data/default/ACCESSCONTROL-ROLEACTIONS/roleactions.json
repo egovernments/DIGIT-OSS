@@ -13441,6 +13441,24 @@
       "actionid": 1504,
       "actioncode": "",
       "tenantid": "default"
+    },
+    {
+      "rolecode": "AE_CREATOR",
+      "actionid": 1020,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "AE_CREATOR",
+      "actionid": 1021,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "AE_CREATOR",
+      "actionid": 1022,
+      "actioncode": "",
+      "tenantid": "default"
     }
   ]
 }
