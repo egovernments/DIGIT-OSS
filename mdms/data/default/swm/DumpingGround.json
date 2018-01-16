@@ -2691,6 +2691,65 @@
           "code": "mh.aliba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "25.0000025",
+        "capacity": "1",
+        "address": "Maharastra Central",
+        "latitude": "0",
+        "longitude": "0",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          }
+        ]
+      },
+      "name": "Dump 60",
+      "isProcessingSite": "",
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "1000",
+      "tenantId": "default",
+      "code": "DumpingGround-1516084113525",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        },
+        {
+          "code": "default"
+        },
+        {
+          "code": "mh.khop"
+        },
+        {
+          "code": "mh.khopoli"
+        },
+        {
+          "code": "panavel"
+        },
+        {
+          "code": "mh.pen0"
+        },
+        {
+          "code": "mh.roha"
+        },
+        {
+          "code": "mh.rohatest"
+        }
+      ]
     }
   ]
 }
