@@ -789,6 +789,37 @@
       "name": "miyapur Pro site",
       "tenantId": "default",
       "code": "ProcessingSite-1515774846581"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": false,
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "50",
+        "capacity": "20",
+        "address": "test dfdewrew ff ",
+        "latitude": "85",
+        "longitude": "85",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "test1",
+      "tenantId": "default",
+      "code": "ProcessingSite-1516122118982"
     }
   ]
 }
