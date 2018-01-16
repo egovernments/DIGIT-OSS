@@ -94,7 +94,7 @@
       "id": 370,
       "name": "AssetSaleAndDisposalSearchToCreate",
       "url": "/app/asset/search-asset-sale.html",
-      "displayName": "Disposal/Transfer of Asset",
+      "displayName": "Transfer/ Disposal of Asset",
       "orderNumber": 1,
       "parentModule": "155",
       "enabled": true,
