@@ -790,10 +790,10 @@
       "tenantId": "default",
       "code": "MAT",
       "materialType": {
-        "code": "MTC001"
+        "code": "MT1"
       },
-      "name": "test MaterialV",
-      "description": "abcd",
+      "name": "test MaterialVe",
+      "description": "abcde",
       "baseUom": {
         "code": "CM"
       },
@@ -812,11 +812,11 @@
         "glcode": "411"
       },
       "materialClass": "MediumUsage",
-      "oldCode": "Old",
-      "model": "Abcd",
-      "manufacturePartNo": "Abcd",
-      "techincalSpecs": "Abcd",
-      "termsOfDelivery": "Abcd"
+      "oldCode": "Olde",
+      "model": "Abcde",
+      "manufacturePartNo": "Abcde",
+      "techincalSpecs": "Abcde",
+      "termsOfDelivery": "Abcde"
     }
   ]
 }
