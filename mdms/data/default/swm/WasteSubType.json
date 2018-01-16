@@ -189,19 +189,19 @@
       }
     },
     {
-      "name": "Test Sub",
-      "code": "SUB-TEST",
+      "name": "n QA",
+      "code": "QA code",
       "tenantId": "default",
       "wasteType": {
-        "code": "DD1"
+        "code": "Cons"
       }
     },
     {
-      "name": "Apple peel off",
-      "code": "Ap",
+      "name": "Test type",
+      "code": "TT",
       "tenantId": "default",
       "wasteType": {
-        "code": "FW"
+        "code": "Bio Medical Waste"
       }
     }
   ]
