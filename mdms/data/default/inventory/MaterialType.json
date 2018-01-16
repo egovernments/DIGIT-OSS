@@ -61,6 +61,15 @@
       "code": "MTC001",
       "name": "MTN001",
       "description": "MTD001"
+    },
+    {
+      "isParent": true,
+      "active": true,
+      "tenantId": "default",
+      "code": "MATCODE",
+      "name": "MatName",
+      "description": "Mat Desc",
+      "parent": "MTC001"
     }
   ]
 }
