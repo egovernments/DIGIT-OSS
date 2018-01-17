@@ -88,6 +88,14 @@
       "name": "MatTypeName2",
       "description": "Material Type Desc",
       "parent": "MT3"
+    },
+    {
+      "isParent": false,
+      "active": true,
+      "tenantId": "default",
+      "code": "123",
+      "name": "kjhg",
+      "description": "dfvdfvdfvfdv"
     }
   ]
 }
