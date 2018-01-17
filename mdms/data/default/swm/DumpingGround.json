@@ -2783,35 +2783,29 @@
         "bankName": "",
         "bankValidityFrom": "",
         "bankValidityTo": "",
-        "area": "4",
-        "capacity": "50",
-        "address": "Gaziabad Pune Maharastra",
-        "latitude": "4",
-        "longitude": "5",
+        "area": "20",
+        "capacity": "13",
+        "address": "test test test ",
+        "latitude": "89",
+        "longitude": "15",
         "location": {
-          "code": "202"
+          "code": "200"
         },
         "wasteTypes": [
           {
-            "code": "Waste Type Code 3"
-          },
-          {
-            "code": "Cons"
+            "code": "DD1"
           }
         ]
       },
-      "name": "DNG2",
+      "name": "Test",
       "isProcessingSite": false,
       "processingSite": {
         "code": "ProcessingSite-1515075903699"
       },
-      "distanceFromProcessingSite": "6",
+      "distanceFromProcessingSite": "12",
       "tenantId": "default",
-      "code": "DumpingGround-1516197739674",
+      "code": "DumpingGround-1516198287914",
       "ulbs": [
-        {
-          "code": "mh.khop"
-        },
         {
           "code": "default"
         }
