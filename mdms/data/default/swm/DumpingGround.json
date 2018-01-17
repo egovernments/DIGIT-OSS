@@ -2631,6 +2631,12 @@
         "wasteTypes": [
           {
             "code": "Cons"
+          },
+          {
+            "code": "Waste Type Code 3"
+          },
+          {
+            "code": "Waste Type Code 1"
           }
         ]
       },
