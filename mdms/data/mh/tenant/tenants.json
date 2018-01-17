@@ -88,8 +88,8 @@
     },
     {
       "code": "mh.rohatest",
-      "name": "Roha Municipal Council",
-      "description": "Roha Municipal Council",
+      "name": "Roha-Test Municipal Council",
+      "description": "Roha-Test Municipal Council",
       "logoId": "",
       "imageId": "123",
       "domainUrl": null,
@@ -98,7 +98,7 @@
       "facebookUrl": null,
       "emailId": null,
       "city": {
-        "name": "Roha Municipal Council",
+        "name": "Roha-Test Municipal Council",
         "localName": null,
         "districtCode": "RA",
         "districtName": "Raigad",
