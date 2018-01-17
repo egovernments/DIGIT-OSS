@@ -43,6 +43,10 @@
     {
       "name": "Sewage Water Category",
       "code": "SWC"
+    },
+    {
+      "name": "E Waste ",
+      "code": "EW"
     }
   ]
 }
