@@ -167,7 +167,7 @@
         "latitude": "1.2",
         "longitude": "2.8",
         "location": {
-          "code": "101"
+          "code": "200"
         },
         "wasteTypes": [
           {
@@ -280,9 +280,11 @@
         "area": "45",
         "capacity": "45",
         "address": "Maharastra",
-        "latitude": "",
-        "longitude": "",
-        "location": {},
+        "latitude": "23",
+        "longitude": "33",
+        "location": {
+          "code": "203"
+        },
         "wasteTypes": [
           {
             "code": "BCW"
@@ -295,9 +297,9 @@
       "name": "Waste Test1",
       "isProcessingSite": "",
       "processingSite": {
-        "code": ""
+        "code": "ProcessingSite-1515082999610"
       },
-      "distanceFromProcessingSite": "",
+      "distanceFromProcessingSite": "200",
       "tenantId": "default",
       "code": "DumpingGround-1514988115500",
       "ulbs": [
@@ -2615,16 +2617,57 @@
     },
     {
       "siteDetails": {
-        "mpcbAuthorisation": true,
+        "mpcbAuthorisation": false,
         "bankGuarantee": true,
-        "bankName": "hdfc",
+        "bankName": "SBI",
         "bankValidityFrom": 1514745000000,
         "bankValidityTo": 1517337000000,
-        "area": "40",
-        "capacity": "10000",
-        "address": "mmmmmmmmmmmmmmmmmmm",
-        "latitude": "10.2",
-        "longitude": "11.8",
+        "area": "10",
+        "capacity": "1",
+        "address": "dUMP 10 dUMP 10",
+        "latitude": "90",
+        "longitude": "90",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "dUMP 10",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "10",
+      "tenantId": "default",
+      "code": "DumpingGround-1515772494106",
+      "ulbs": [
+        {
+          "code": "mh.amba"
+        },
+        {
+          "code": "default"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "HDFC",
+        "bankValidityFrom": 1514745000000,
+        "bankValidityTo": 1515695400000,
+        "area": "49",
+        "capacity": "200",
+        "address": "wwwwwwwwwwwwwwwwwww",
+        "latitude": "50",
+        "longitude": "50",
         "location": {
           "code": "200"
         },
@@ -2633,24 +2676,103 @@
             "code": "Cons"
           },
           {
-            "code": "Waste Type Code 3"
+            "code": "BCW"
           },
           {
-            "code": "Waste Type Code 1"
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "DD1"
           }
         ]
       },
-      "name": "sgk01",
-      "isProcessingSite": false,
+      "name": "Police gorund",
+      "isProcessingSite": "",
       "processingSite": {
-        "code": "ProcessingSite-1515075903699"
+        "code": "ProcessingSite-1515082999610"
       },
-      "distanceFromProcessingSite": "10000",
+      "distanceFromProcessingSite": "12",
       "tenantId": "default",
-      "code": "DumpingGround-1516165244158",
+      "code": "DumpingGround-1515774283403",
       "ulbs": [
         {
-          "code": "mh.aliba"
+          "code": "mh.khopoli"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "babd",
+        "bankValidityFrom": 1514831400000,
+        "bankValidityTo": 1518028200000,
+        "area": "3",
+        "capacity": "5",
+        "address": "245fcs dfgdv sdfv",
+        "latitude": "65",
+        "longitude": "23",
+        "location": {
+          "code": "202"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          }
+        ]
+      },
+      "name": "Dump23",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515082999610"
+      },
+      "distanceFromProcessingSite": "45",
+      "tenantId": "default",
+      "code": "DumpingGround-1516098014869",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "4",
+        "capacity": "500",
+        "address": "Gaziabad Pune Maharastra",
+        "latitude": "5",
+        "longitude": "6",
+        "location": {
+          "code": "202"
+        },
+        "wasteTypes": [
+          {
+            "code": "Waste Type Code 3"
+          },
+          {
+            "code": "DD1"
+          }
+        ]
+      },
+      "name": "DGN1",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515503331395"
+      },
+      "distanceFromProcessingSite": "4",
+      "tenantId": "default",
+      "code": "DumpingGround-1516180027948",
+      "ulbs": [
+        {
+          "code": "mh.khopoli"
+        },
+        {
+          "code": "mh.khop"
         }
       ]
     }
