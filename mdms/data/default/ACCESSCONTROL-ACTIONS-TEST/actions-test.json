@@ -48,9 +48,9 @@
       "orderNumber": 1,
       "parentModule": "64",
       "enabled": false,
-      "serviceCode": "Asset Category",
+      "serviceCode": "Asset Sub Category",
       "code": "null",
-      "path": "Asset Management.Asset Masters.Asset Category.CreateAssetCategory"
+      "path": "Asset Management.Asset Masters.Asset Sub Category.CreateAssetCategory"
     },
     {
       "id": 242,
@@ -61,9 +61,9 @@
       "queryParams": "type\u003dview",
       "parentModule": "64",
       "enabled": true,
-      "serviceCode": "Asset Category",
+      "serviceCode": "Asset Sub Category",
       "code": "null",
-      "path": "Asset Management.Asset Masters.Asset Category.ViewAssetCategory"
+      "path": "Asset Management.Asset Masters.Asset Sub Category.ViewAssetCategory"
     },
     {
       "id": 243,
@@ -74,9 +74,9 @@
       "queryParams": "type\u003dupdate",
       "parentModule": "64",
       "enabled": false,
-      "serviceCode": "Asset Category",
+      "serviceCode": "Asset Sub Category",
       "code": "null",
-      "path": "Asset Management.Asset Masters.Asset Category.ModifyAssetCategory"
+      "path": "Asset Management.Asset Masters.Asset Sub Category.ModifyAssetCategory"
     },
     {
       "id": 366,
