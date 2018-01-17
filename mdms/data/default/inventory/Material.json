@@ -1195,6 +1195,42 @@
       "manufacturePartNo": "23",
       "techincalSpecs": "45",
       "termsOfDelivery": "searching . ... "
+    },
+    {
+      "lotControl": true,
+      "serialNumber": true,
+      "shelfLifeControl": true,
+      "scrapable": true,
+      "tenantId": "default",
+      "code": "454634",
+      "oldCode": "4tgrt4",
+      "materialType": {
+        "code": "MTC001"
+      },
+      "name": "rgvrevgdfjblfdnblkdfnblkdfnbklnfdbknrepignrepnvglk",
+      "description": "fbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbvdfvbdfbhfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbdfbdfbfdfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf jbn dfjn blfkdnblkdfnblkfndfbdfbfbfdbfbuikjfd;ondf ",
+      "baseUom": {
+        "code": "CUL"
+      },
+      "status": "Active",
+      "assetCategory": {
+        "code": "1"
+      },
+      "inventoryType": "Asset",
+      "purchaseUom": {
+        "code": "GMS"
+      },
+      "expenseAccount": {
+        "glcode": "42090"
+      },
+      "materialClass": "MediumUsage",
+      "stockingUom": {
+        "code": "CM"
+      },
+      "model": "143654",
+      "manufacturePartNo": "12321",
+      "techincalSpecs": "56gh nghn",
+      "termsOfDelivery": "ghnghnhgn"
     }
   ]
 }
