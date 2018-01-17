@@ -843,7 +843,16 @@
       "materialClass": "MediumUsage",
       "stockingUom": {
         "code": "CM"
-      }
+      },
+      "model": "Model",
+      "manufacturePartNo": "MPN",
+      "techincalSpecs": "tS",
+      "termsOfDelivery": "TOD",
+      "status": "Active",
+      "expenseAccount": {
+        "glcode": "411"
+      },
+      "oldCode": "moc"
     }
   ]
 }
