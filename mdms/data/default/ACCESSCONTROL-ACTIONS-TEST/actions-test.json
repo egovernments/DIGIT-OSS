@@ -3486,7 +3486,7 @@
       "enabled": false,
       "serviceCode": "AssetSaleAndDisposal",
       "code": "null",
-      "path": "Asset Management.Asset Transactions.Asset Sale And Disposal.AssetSaleAndDisposalCreateService"
+      "path": "Asset Management.Asset Transactions.Transfer/Disposal of Asset.AssetSaleAndDisposalCreateService"
     },
     {
       "id": 372,
@@ -3498,7 +3498,7 @@
       "enabled": false,
       "serviceCode": "AssetSaleAndDisposal",
       "code": "null",
-      "path": "Asset Management.Asset Transactions.Asset Sale And Disposal.AssetSaleAndDisposalView"
+      "path": "Asset Management.Asset Transactions.Transfer/Disposal of Asset.AssetSaleAndDisposalView"
     },
     {
       "id": 373,
@@ -3510,7 +3510,7 @@
       "enabled": false,
       "serviceCode": "AssetSaleAndDisposal",
       "code": "null",
-      "path": "Asset Management.Asset Transactions.Asset Sale And Disposal.AssetSaleAndDisposalViewService"
+      "path": "Asset Management.Asset Transactions.Transfer/Disposal of Asset.AssetSaleAndDisposalViewService"
     },
     {
       "id": 374,
@@ -3523,7 +3523,7 @@
       "enabled": false,
       "serviceCode": "AssetSaleAndDisposal",
       "code": "null",
-      "path": "Asset Management.Asset Transactions.Asset Sale And Disposal.AssetSaleAndDisposalSearchToView"
+      "path": "Asset Management.Asset Transactions.Transfer/Disposal of Asset.AssetSaleAndDisposalSearchToView"
     },
     {
       "id": 376,
