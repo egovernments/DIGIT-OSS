@@ -86,7 +86,7 @@
       "code": "MatTypeCodeTest2",
       "name": "MatTypeName2",
       "description": "Material Type Desc",
-      "parent": ""
+      "parent": "MT3"
     }
   ]
 }
