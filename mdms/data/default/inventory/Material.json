@@ -1095,6 +1095,34 @@
       "stockingUom": {
         "code": "GMS"
       }
+    },
+    {
+      "lotControl": true,
+      "serialNumber": true,
+      "shelfLifeControl": true,
+      "scrapable": true,
+      "tenantId": "default",
+      "code": "MatTypeCodeTest4",
+      "oldCode": "Oldeer@33",
+      "materialType": {
+        "code": "MATCODE"
+      },
+      "name": "MatTypeName1bebe",
+      "description": "ancdjdjjdjdj",
+      "baseUom": {
+        "code": "GMS"
+      },
+      "assetCategory": {
+        "code": "2009"
+      },
+      "inventoryType": "Asset",
+      "purchaseUom": {
+        "code": "GMS"
+      },
+      "materialClass": "MediumUsage",
+      "stockingUom": {
+        "code": "GMS"
+      }
     }
   ]
 }
