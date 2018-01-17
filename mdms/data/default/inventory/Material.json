@@ -1018,7 +1018,7 @@
       "name": "BlueSage",
       "description": "this is materialDescription",
       "baseUom": {
-        "code": "CM"
+        "code": "CUL"
       },
       "status": "Inactive",
       "assetCategory": {
