@@ -56,7 +56,7 @@
       "id": 242,
       "name": "ViewAssetCategory",
       "url": "/app/asset/search-asset-category.html",
-      "displayName": "Asset Category",
+      "displayName": "Asset Sub Category",
       "orderNumber": 2,
       "queryParams": "type\u003dview",
       "parentModule": "64",
