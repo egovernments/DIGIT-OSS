@@ -45,10 +45,7 @@
     {
       "name": "qwerfg",
       "code": "werfg",
-      "tenantId": "default",
-      "wasteType": {
-        "code": "DD1"
-      }
+      "tenantId": "default"
     },
     {
       "name": "Waste Test111",
@@ -171,19 +168,16 @@
       }
     },
     {
-      "name": "WST Update",
+      "name": "SIndhu",
       "code": "SGK",
-      "tenantId": "default",
-      "wasteType": {
-        "code": "IWS001"
-      }
+      "tenantId": "default"
     },
     {
       "name": "1234",
       "code": "1234",
       "tenantId": "default",
       "wasteType": {
-        "code": "VW"
+        "code": ""
       }
     },
     {
@@ -195,19 +189,11 @@
       }
     },
     {
-      "name": "n QA",
-      "code": "QA code",
+      "name": "Plastic Bottals",
+      "code": "PLASTIC/001/005",
       "tenantId": "default",
       "wasteType": {
-        "code": "Cons"
-      }
-    },
-    {
-      "name": "Test type",
-      "code": "TT",
-      "tenantId": "default",
-      "wasteType": {
-        "code": "Bio Medical Waste"
+        "code": "PLASTIC/001"
       }
     }
   ]
