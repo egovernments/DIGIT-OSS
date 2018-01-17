@@ -94,13 +94,13 @@
       "id": 370,
       "name": "AssetSaleAndDisposalSearchToCreate",
       "url": "/app/asset/search-asset-sale.html",
-      "displayName": "Transfer/ Disposal of Asset",
+      "displayName": "Transfer/Disposal of Asset",
       "orderNumber": 1,
       "parentModule": "155",
       "enabled": true,
       "serviceCode": "AssetSaleAndDisposal",
       "code": "null",
-      "path": "Asset Management.Asset Transactions.Asset Sale And Disposal.AssetSaleAndDisposalSearchToCreate"
+      "path": "Asset Management.Asset Transactions.Transfer/Disposal of Asset.AssetSaleAndDisposalSearchToCreate"
     },
     {
       "id": 989,
