@@ -70,6 +70,14 @@
       "name": "MatName",
       "description": "Mat Desc",
       "parent": "MTC001"
+    },
+    {
+      "isParent": false,
+      "active": true,
+      "tenantId": "default",
+      "code": "MatTypeCode1",
+      "name": "MatTypeName1",
+      "description": "MaterialTypeDesc1"
     }
   ]
 }
