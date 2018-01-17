@@ -81,7 +81,7 @@
     },
     {
       "isParent": true,
-      "active": true,
+      "active": false,
       "tenantId": "default",
       "code": "MatTypeCodeTest2",
       "name": "MatTypeName2",
