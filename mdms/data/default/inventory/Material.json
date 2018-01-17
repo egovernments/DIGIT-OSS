@@ -1132,12 +1132,12 @@
       "tenantId": "default",
       "code": "MatTypeCodeTest5",
       "materialType": {
-        "code": "MT2"
+        "code": "MT3"
       },
-      "name": "MatTypeName5",
-      "description": "Material Desc",
+      "name": "MatTypeName5d",
+      "description": "Material Descd",
       "baseUom": {
-        "code": "GMS"
+        "code": "KGS"
       },
       "status": "Active",
       "assetCategory": {
@@ -1157,7 +1157,8 @@
       "model": "fdfef123",
       "manufacturePartNo": "dvfew2332",
       "techincalSpecs": "dcddcs333",
-      "termsOfDelivery": "decfwwe2333"
+      "termsOfDelivery": "decfwwe2333",
+      "oldCode": "dsddds"
     }
   ]
 }
