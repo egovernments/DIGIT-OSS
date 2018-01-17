@@ -1039,6 +1039,33 @@
       "manufacturePartNo": "9875S",
       "techincalSpecs": "45.c targbo power 2.57 ts",
       "termsOfDelivery": "deleivery terms"
+    },
+    {
+      "lotControl": false,
+      "serialNumber": true,
+      "shelfLifeControl": true,
+      "scrapable": false,
+      "tenantId": "default",
+      "code": "mat55",
+      "materialType": {
+        "code": "MATCODE"
+      },
+      "name": "abcdef",
+      "description": "weddewdwdwe",
+      "baseUom": {
+        "code": "GMS"
+      },
+      "assetCategory": {
+        "code": "1"
+      },
+      "inventoryType": "Asset",
+      "purchaseUom": {
+        "code": "GMS"
+      },
+      "materialClass": "MediumUsage",
+      "stockingUom": {
+        "code": "GMS"
+      }
     }
   ]
 }
