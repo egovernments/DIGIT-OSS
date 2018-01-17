@@ -51,6 +51,11 @@
       "tenantId": "default",
       "name": "Dry Collection",
       "code": "Gandhi Nagar/098"
+    },
+    {
+      "tenantId": "default",
+      "name": "Wet Collection",
+      "code": "Gandhi Nagar/025"
     }
   ]
 }
