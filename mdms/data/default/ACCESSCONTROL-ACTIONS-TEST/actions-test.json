@@ -98,7 +98,7 @@
       "orderNumber": 1,
       "parentModule": "155",
       "enabled": true,
-      "serviceCode": "AssetSaleAndDisposal",
+      "serviceCode": "Transfer/Disposal of Asset",
       "code": "null",
       "path": "Asset Management.Asset Transactions.Transfer/Disposal of Asset.AssetSaleAndDisposalSearchToCreate"
     },
