@@ -64,8 +64,8 @@
     },
     {
       "tenantId": "default",
-      "name": "Fruits waste 1",
-      "code": "FW"
+      "name": "Plastic Waste",
+      "code": "PLASTIC/001"
     }
   ]
 }
