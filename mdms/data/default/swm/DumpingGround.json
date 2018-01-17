@@ -2801,11 +2801,11 @@
         ]
       },
       "name": "DNG2",
-      "isProcessingSite": true,
+      "isProcessingSite": false,
       "processingSite": {
-        "code": ""
+        "code": "ProcessingSite-1515075903699"
       },
-      "distanceFromProcessingSite": "",
+      "distanceFromProcessingSite": "6",
       "tenantId": "default",
       "code": "DumpingGround-1516197739674",
       "ulbs": [
