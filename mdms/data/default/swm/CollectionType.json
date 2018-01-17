@@ -51,6 +51,11 @@
       "tenantId": "default",
       "name": "Coll Type updated",
       "code": "CTS"
+    },
+    {
+      "tenantId": "default",
+      "name": "From Dust Bin",
+      "code": "FDB"
     }
   ]
 }
