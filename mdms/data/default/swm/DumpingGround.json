@@ -167,7 +167,7 @@
         "latitude": "1.2",
         "longitude": "2.8",
         "location": {
-          "code": "200"
+          "code": "101"
         },
         "wasteTypes": [
           {
@@ -280,11 +280,9 @@
         "area": "45",
         "capacity": "45",
         "address": "Maharastra",
-        "latitude": "23",
-        "longitude": "33",
-        "location": {
-          "code": "203"
-        },
+        "latitude": "",
+        "longitude": "",
+        "location": {},
         "wasteTypes": [
           {
             "code": "BCW"
@@ -297,9 +295,9 @@
       "name": "Waste Test1",
       "isProcessingSite": "",
       "processingSite": {
-        "code": "ProcessingSite-1515082999610"
+        "code": ""
       },
-      "distanceFromProcessingSite": "200",
+      "distanceFromProcessingSite": "",
       "tenantId": "default",
       "code": "DumpingGround-1514988115500",
       "ulbs": [
@@ -2617,121 +2615,36 @@
     },
     {
       "siteDetails": {
-        "mpcbAuthorisation": false,
+        "mpcbAuthorisation": true,
         "bankGuarantee": true,
-        "bankName": "SBI",
+        "bankName": "hdfc",
         "bankValidityFrom": 1514745000000,
         "bankValidityTo": 1517337000000,
-        "area": "10",
-        "capacity": "1",
-        "address": "dUMP 10 dUMP 10",
-        "latitude": "90",
-        "longitude": "90",
-        "location": {
-          "code": "200"
-        },
-        "wasteTypes": [
-          {
-            "code": "BCW"
-          },
-          {
-            "code": "Cons"
-          }
-        ]
-      },
-      "name": "dUMP 10",
-      "isProcessingSite": false,
-      "processingSite": {
-        "code": "ProcessingSite-1513864087389"
-      },
-      "distanceFromProcessingSite": "10",
-      "tenantId": "default",
-      "code": "DumpingGround-1515772494106",
-      "ulbs": [
-        {
-          "code": "mh.amba"
-        },
-        {
-          "code": "default"
-        }
-      ]
-    },
-    {
-      "siteDetails": {
-        "mpcbAuthorisation": true,
-        "bankGuarantee": true,
-        "bankName": "HDFC",
-        "bankValidityFrom": 1514745000000,
-        "bankValidityTo": 1515695400000,
-        "area": "49",
-        "capacity": "200",
-        "address": "wwwwwwwwwwwwwwwwwww",
-        "latitude": "50",
-        "longitude": "50",
+        "area": "40",
+        "capacity": "10000",
+        "address": "mmmmmmmmmmmmmmmmmmm",
+        "latitude": "10.2",
+        "longitude": "11.8",
         "location": {
           "code": "200"
         },
         "wasteTypes": [
           {
             "code": "Cons"
-          },
-          {
-            "code": "BCW"
-          },
-          {
-            "code": "Bio Medical Waste"
-          },
-          {
-            "code": "DD1"
           }
         ]
       },
-      "name": "Police gorund",
-      "isProcessingSite": "",
-      "processingSite": {
-        "code": "ProcessingSite-1515082999610"
-      },
-      "distanceFromProcessingSite": "12",
-      "tenantId": "default",
-      "code": "DumpingGround-1515774283403",
-      "ulbs": [
-        {
-          "code": "mh.khopoli"
-        }
-      ]
-    },
-    {
-      "siteDetails": {
-        "mpcbAuthorisation": true,
-        "bankGuarantee": true,
-        "bankName": "babd",
-        "bankValidityFrom": 1514831400000,
-        "bankValidityTo": 1518028200000,
-        "area": "3",
-        "capacity": "5",
-        "address": "245fcs dfgdv sdfv",
-        "latitude": "65",
-        "longitude": "23",
-        "location": {
-          "code": "202"
-        },
-        "wasteTypes": [
-          {
-            "code": "DD1"
-          }
-        ]
-      },
-      "name": "Dump23",
+      "name": "sgk01",
       "isProcessingSite": false,
       "processingSite": {
-        "code": "ProcessingSite-1515082999610"
+        "code": "ProcessingSite-1515075903699"
       },
-      "distanceFromProcessingSite": "45",
+      "distanceFromProcessingSite": "10000",
       "tenantId": "default",
-      "code": "DumpingGround-1516098014869",
+      "code": "DumpingGround-1516165244158",
       "ulbs": [
         {
-          "code": "mh.khop"
+          "code": "mh.aliba"
         }
       ]
     }
