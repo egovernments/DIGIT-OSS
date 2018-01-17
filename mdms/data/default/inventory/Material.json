@@ -1003,6 +1003,42 @@
       "baseUom": {
         "code": "CM"
       }
+    },
+    {
+      "lotControl": true,
+      "serialNumber": true,
+      "shelfLifeControl": true,
+      "scrapable": true,
+      "tenantId": "mh.roha",
+      "code": "M100",
+      "oldCode": "M101",
+      "materialType": {
+        "code": "MT3"
+      },
+      "name": "BlueSage",
+      "description": "this is materialDescription",
+      "baseUom": {
+        "code": "CM"
+      },
+      "status": "Active",
+      "assetCategory": {
+        "code": "2009"
+      },
+      "inventoryType": "Asset",
+      "purchaseUom": {
+        "code": "CM"
+      },
+      "expenseAccount": {
+        "glcode": "42090"
+      },
+      "materialClass": "HighUsage",
+      "stockingUom": {
+        "code": "CM"
+      },
+      "model": "TESE12",
+      "manufacturePartNo": "9875S",
+      "techincalSpecs": "45.c targbo power 2.57 ts",
+      "termsOfDelivery": "deleivery terms"
     }
   ]
 }
