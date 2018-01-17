@@ -98,9 +98,9 @@
       "orderNumber": 1,
       "parentModule": "155",
       "enabled": true,
-      "serviceCode": "AssetSaleAndDisposal",
+      "serviceCode": "Transfer/Disposal of Asset",
       "code": "null",
-      "path": "Asset Management.Asset Transactions.Asset Sale And Disposal.AssetSaleAndDisposalSearchToCreate"
+      "path": "Asset Management.Asset Transactions.Transfer/Disposal of Asset.AssetSaleAndDisposalSearchToCreate"
     },
     {
       "id": 989,
@@ -3484,9 +3484,9 @@
       "orderNumber": 1,
       "parentModule": "155",
       "enabled": false,
-      "serviceCode": "AssetSaleAndDisposal",
+      "serviceCode": "Transfer/Disposal of Asset",
       "code": "null",
-      "path": "Asset Management.Asset Transactions.Asset Sale And Disposal.AssetSaleAndDisposalCreateService"
+      "path": "Asset Management.Asset Transactions.Transfer/Disposal of Asset.AssetSaleAndDisposalCreateService"
     },
     {
       "id": 372,
@@ -3496,9 +3496,9 @@
       "orderNumber": 2,
       "parentModule": "157",
       "enabled": false,
-      "serviceCode": "AssetSaleAndDisposal",
+      "serviceCode": "Transfer/Disposal of Asset",
       "code": "null",
-      "path": "Asset Management.Asset Transactions.Asset Sale And Disposal.AssetSaleAndDisposalView"
+      "path": "Asset Management.Asset Transactions.Transfer/Disposal of Asset.AssetSaleAndDisposalView"
     },
     {
       "id": 373,
@@ -3508,9 +3508,9 @@
       "orderNumber": 2,
       "parentModule": "157",
       "enabled": false,
-      "serviceCode": "AssetSaleAndDisposal",
+      "serviceCode": "Transfer/Disposal of Asset",
       "code": "null",
-      "path": "Asset Management.Asset Transactions.Asset Sale And Disposal.AssetSaleAndDisposalViewService"
+      "path": "Asset Management.Asset Transactions.Transfer/Disposal of Asset.AssetSaleAndDisposalViewService"
     },
     {
       "id": 374,
@@ -3521,9 +3521,9 @@
       "queryParams": "type\u003dview",
       "parentModule": "155",
       "enabled": false,
-      "serviceCode": "AssetSaleAndDisposal",
+      "serviceCode": "Transfer/Disposal of Asset",
       "code": "null",
-      "path": "Asset Management.Asset Transactions.Asset Sale And Disposal.AssetSaleAndDisposalSearchToView"
+      "path": "Asset Management.Asset Transactions.Transfer/Disposal of Asset.AssetSaleAndDisposalSearchToView"
     },
     {
       "id": 376,
