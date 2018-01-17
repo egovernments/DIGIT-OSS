@@ -939,6 +939,38 @@
       "stockingUom": {
         "code": "CM"
       }
+    },
+    {
+      "lotControl": false,
+      "serialNumber": false,
+      "shelfLifeControl": false,
+      "scrapable": false,
+      "tenantId": "default",
+      "code": "MC001@",
+      "oldCode": "Old",
+      "materialType": {
+        "code": "MT2"
+      },
+      "name": "MatTypeName001@3",
+      "description": "MatTypeName0013",
+      "baseUom": {
+        "code": "GMS"
+      },
+      "status": "Active",
+      "assetCategory": {
+        "code": "2009"
+      },
+      "inventoryType": "Asset",
+      "purchaseUom": {
+        "code": "GMS"
+      },
+      "expenseAccount": {
+        "glcode": "411"
+      },
+      "materialClass": "HighUsage",
+      "stockingUom": {
+        "code": "GMS"
+      }
     }
   ]
 }
