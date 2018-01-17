@@ -961,6 +961,26 @@
       "graceTimeFrom": "1516160412526",
       "graceTimeTo": "1516160712526",
       "remarks": "123"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516209274240",
+      "name": "Test",
+      "shiftType": {
+        "code": "ABCD"
+      },
+      "department": {
+        "code": "EDU"
+      },
+      "designation": {
+        "code": "ADCOM"
+      },
+      "shiftStartTime": "1516203609758",
+      "shiftEndTime": "1516131729758",
+      "lunchStartTime": "1516135329758",
+      "lunchEndTime": "1516160529758",
+      "graceTimeFrom": "1516160520000",
+      "graceTimeTo": "1516203720000"
     }
   ]
 }
