@@ -9,7 +9,7 @@
       "code": "1",
       "assetCategoryType": "IMMOVABLE",
       "depreciationMethod": "Straight Line method",
-      "isAssetAllow": true,
+      "isAssetAllow": false,
       "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
@@ -17,48 +17,79 @@
       "isDepreciationApplicable": true,
       "assetFieldsDefination": [
         {
-          "name": "Floor",
+          "name": "Number of Floors",
           "type": "Number",
           "isActive": true,
-          "isMandatory": true,
+          "isMandatory": false,
           "order": "1"
         },
         {
           "name": "Floor Wise Area",
           "type": "Number",
           "isActive": true,
-          "isMandatory": true,
+          "isMandatory": false,
           "order": "2"
         },
         {
           "name": "Construction Class",
           "type": "Number",
           "isActive": true,
-          "isMandatory": true,
+          "isMandatory": false,
           "order": "3"
         },
         {
           "name": "Usage",
           "type": "Text",
           "isActive": true,
-          "isMandatory": true,
+          "isMandatory": false,
           "order": "4"
         },
         {
           "name": "Occupancy By",
           "type": "Text",
           "isActive": true,
-          "isMandatory": true,
+          "isMandatory": false,
           "order": "5"
         },
         {
           "name": "Name Of Occupant",
           "type": "Text",
           "isActive": true,
-          "isMandatory": true,
+          "isMandatory": false,
           "order": "6"
+        },
+        {
+          "name": "Plinth Area",
+          "type": "Text",
+          "isActive": true,
+          "order": "7"
+        },
+        {
+          "name": "Cubic Content",
+          "type": "Text",
+          "isActive": true,
+          "order": "8"
+        },
+        {
+          "name": "Length",
+          "type": "Number",
+          "isActive": true,
+          "order": "9"
+        },
+        {
+          "name": "Breadth",
+          "type": "Number",
+          "isActive": true,
+          "order": "10"
+        },
+        {
+          "name": "Height",
+          "type": "Number",
+          "isActive": true,
+          "order": "11"
         }
-      ]
+      ],
+      "parent": null
     },
     {
       "tenantId": "mh",
@@ -195,9 +226,9 @@
       "code": "7",
       "assetCategoryType": "IMMOVABLE",
       "parent": "1",
-      "depreciationMethod": "Straight Line method",
+      "depreciationMethod": "STRAIGHT_LINE_METHOD",
       "isAssetAllow": true,
-      "isAssetAllowFromUi": true,
+      "isAssetAllowFromUi": false,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
       "depreciationRate": 6.66,
@@ -207,45 +238,28 @@
           "name": "Construction Class",
           "isActive": true,
           "isMandatory": false,
-          "columns": [],
-          "order": "1",
-          "type": "Text"
+          "columns": []
         },
         {
           "name": "Usage",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": [],
-          "order": "2"
+          "columns": []
         },
         {
           "name": "Occupancy By",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": [],
-          "order": "3"
+          "columns": []
         },
         {
           "name": "Name Of Occupant",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": [],
-          "order": "4"
-        },
-        {
-          "name": "Floor",
-          "type": "Number",
-          "isActive": true,
-          "order": "5"
-        },
-        {
-          "name": "Floorwise Area",
-          "type": "Number",
-          "isActive": true,
-          "order": "6"
+          "columns": []
         }
       ]
     },
@@ -2162,20 +2176,6 @@
       "id": "61",
       "code": "61",
       "isAssetAllow": true,
-      "tenantId": "mh"
-    },
-    {
-      "depreciationMethod": "Straight Line method",
-      "isAssetAllowFromUi": true,
-      "name": "Precedent Library",
-      "assetCategoryType": "IMMOVABLE",
-      "parent": "10",
-      "unitOfMeasurement": "SFT",
-      "isDepreciationApplicable": true,
-      "depreciationRate": "6.66",
-      "isAssetAllow": true,
-      "id": "62",
-      "code": "62",
       "tenantId": "mh"
     }
   ]
