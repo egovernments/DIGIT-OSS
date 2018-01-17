@@ -25,7 +25,8 @@
       "code": "MT3",
       "name": "Fake Material Type Name 3",
       "parent": null,
-      "isParent": false
+      "isParent": false,
+      "description": "cdssds"
     },
     {
       "isParent": false,
