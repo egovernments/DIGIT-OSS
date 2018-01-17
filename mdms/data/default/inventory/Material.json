@@ -971,6 +971,38 @@
       "stockingUom": {
         "code": "GMS"
       }
+    },
+    {
+      "lotControl": true,
+      "serialNumber": true,
+      "shelfLifeControl": true,
+      "scrapable": true,
+      "tenantId": "default",
+      "code": "Old",
+      "oldCode": "Old",
+      "materialType": {
+        "code": "MT3"
+      },
+      "name": "csdsdsde3",
+      "description": "dscsdssdss3",
+      "model": "ewffew44223@#",
+      "manufacturePartNo": "@24vvv",
+      "techincalSpecs": "@424",
+      "termsOfDelivery": "@34f",
+      "materialClass": "HighUsage",
+      "stockingUom": {
+        "code": "CM"
+      },
+      "assetCategory": {
+        "code": "049"
+      },
+      "inventoryType": "Asset",
+      "purchaseUom": {
+        "code": "GMS"
+      },
+      "baseUom": {
+        "code": "CM"
+      }
     }
   ]
 }
