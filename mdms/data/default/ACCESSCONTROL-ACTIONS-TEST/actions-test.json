@@ -10402,6 +10402,50 @@
       "serviceCode": "TRANSFER OUTWARD ISSUE",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1505,
+      "name": "PO Used Tender Quantity",
+      "url": "/inventory-services/pricelists/_gettenderusedquantity",
+      "displayName": "Price List Tnder Used Quantity",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1506,
+      "name": "PO Advance Requisition",
+      "url": "/inventory-services/purchaseorders/_searchpoforadvancerequisition",
+      "displayName": "Po Advance Rquisition",
+      "orderNumber": 2,
+      "enabled": false,
+      "serviceCode": "",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1507,
+      "name": "Fifo stock",
+      "url": "/inventory-services/fifologic/_stock",
+      "displayName": "Fifo Logic Stock",
+      "orderNumber": 3,
+      "enabled": false,
+      "serviceCode": "",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1508,
+      "name": "Fifo Unit Rate",
+      "url": "/inventory-services/fifologic/_unitrate",
+      "displayName": "Fifo Logic Unit Rate",
+      "orderNumber": 3,
+      "enabled": false,
+      "serviceCode": "",
+      "code": "null",
+      "path": ""
     }
   ]
 }
