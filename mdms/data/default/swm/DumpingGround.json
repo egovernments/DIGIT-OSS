@@ -208,9 +208,11 @@
         "area": "3",
         "capacity": "10",
         "address": "Bangalore",
-        "latitude": "",
-        "longitude": "",
-        "location": {},
+        "latitude": "34",
+        "longitude": "35",
+        "location": {
+          "code": "202"
+        },
         "wasteTypes": [
           {
             "code": "Waste Type Code 1"
@@ -221,16 +223,22 @@
         ]
       },
       "name": "Test 1",
-      "isProcessingSite": "",
+      "isProcessingSite": false,
       "processingSite": {
-        "code": ""
+        "code": "ProcessingSite-1515613498522"
       },
-      "distanceFromProcessingSite": "",
+      "distanceFromProcessingSite": "56",
       "tenantId": "default",
       "code": "DumpingGround-1514973406014",
       "ulbs": [
         {
           "code": "160"
+        },
+        {
+          "code": "mh.khop"
+        },
+        {
+          "code": "default"
         }
       ]
     },
