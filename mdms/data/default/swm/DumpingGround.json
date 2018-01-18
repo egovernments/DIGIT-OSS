@@ -295,11 +295,11 @@
         ]
       },
       "name": "Waste Test1",
-      "isProcessingSite": "",
+      "isProcessingSite": true,
       "processingSite": {
-        "code": "ProcessingSite-1515082999610"
+        "code": ""
       },
-      "distanceFromProcessingSite": "200",
+      "distanceFromProcessingSite": "",
       "tenantId": "default",
       "code": "DumpingGround-1514988115500",
       "ulbs": [
