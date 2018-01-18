@@ -2916,6 +2916,47 @@
           "code": "mh.amba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "7",
+        "capacity": "89",
+        "address": "Pune Maharastra",
+        "latitude": "8",
+        "longitude": "9",
+        "location": {
+          "code": "202"
+        },
+        "wasteTypes": [
+          {
+            "code": "IWS001"
+          },
+          {
+            "code": "Medical Wate"
+          }
+        ]
+      },
+      "name": "DNG 5",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "Pro. Plant Code 1"
+      },
+      "distanceFromProcessingSite": "78",
+      "tenantId": "default",
+      "code": "DumpingGround-1516254467285",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
