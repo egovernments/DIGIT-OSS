@@ -362,9 +362,11 @@
         "area": "5",
         "capacity": "7",
         "address": "Pune",
-        "latitude": "",
-        "longitude": "",
-        "location": {},
+        "latitude": "4",
+        "longitude": "5",
+        "location": {
+          "code": "202"
+        },
         "wasteTypes": [
           {
             "code": "BCW"
@@ -375,7 +377,7 @@
         ]
       },
       "name": "Test5",
-      "isProcessingSite": "",
+      "isProcessingSite": true,
       "processingSite": {
         "code": ""
       },
@@ -388,6 +390,12 @@
         },
         {
           "code": "159"
+        },
+        {
+          "code": "mh.khop"
+        },
+        {
+          "code": "default"
         }
       ]
     },
