@@ -146,31 +146,76 @@
       "isDepreciationApplicable": true,
       "assetFieldsDefination": [
         {
-          "name": "Construction Class",
+          "name": "Number of Floors",
+          "type": "Number",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "1"
+        },
+        {
+          "name": "Floor Wise Area",
+          "type": "Number",
+          "isActive": true,
+          "isMandatory": false,
+          "order": "2"
+        },
+        {
+          "name": "Construction Class",
+          "type": "Number",
+          "isActive": true,
+          "isMandatory": false,
+          "order": "3"
         },
         {
           "name": "Usage",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "4"
         },
         {
           "name": "Occupancy By",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "5"
         },
         {
           "name": "Name Of Occupant",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "6"
+        },
+        {
+          "name": "Plinth Area",
+          "type": "Text",
+          "isActive": true,
+          "order": "7"
+        },
+        {
+          "name": "Cubic Content",
+          "type": "Text",
+          "isActive": true,
+          "order": "8"
+        },
+        {
+          "name": "Length",
+          "type": "Number",
+          "isActive": true,
+          "order": "9"
+        },
+        {
+          "name": "Breadth",
+          "type": "Number",
+          "isActive": true,
+          "order": "10"
+        },
+        {
+          "name": "Height",
+          "type": "Number",
+          "isActive": true,
+          "order": "11"
         }
       ]
     },
@@ -277,31 +322,76 @@
       "isDepreciationApplicable": true,
       "assetFieldsDefination": [
         {
-          "name": "Construction Class",
+          "name": "Number of Floors",
+          "type": "Number",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "1"
+        },
+        {
+          "name": "Floor Wise Area",
+          "type": "Number",
+          "isActive": true,
+          "isMandatory": false,
+          "order": "2"
+        },
+        {
+          "name": "Construction Class",
+          "type": "Number",
+          "isActive": true,
+          "isMandatory": false,
+          "order": "3"
         },
         {
           "name": "Usage",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "4"
         },
         {
           "name": "Occupancy By",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "5"
         },
         {
           "name": "Name Of Occupant",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "6"
+        },
+        {
+          "name": "Plinth Area",
+          "type": "Text",
+          "isActive": true,
+          "order": "7"
+        },
+        {
+          "name": "Cubic Content",
+          "type": "Text",
+          "isActive": true,
+          "order": "8"
+        },
+        {
+          "name": "Length",
+          "type": "Number",
+          "isActive": true,
+          "order": "9"
+        },
+        {
+          "name": "Breadth",
+          "type": "Number",
+          "isActive": true,
+          "order": "10"
+        },
+        {
+          "name": "Height",
+          "type": "Number",
+          "isActive": true,
+          "order": "11"
         }
       ]
     },
@@ -321,46 +411,76 @@
       "isDepreciationApplicable": true,
       "assetFieldsDefination": [
         {
-          "name": "Floor",
+          "name": "Number of Floors",
           "type": "Number",
           "isActive": true,
-          "isMandatory": true,
+          "isMandatory": false,
           "order": "1"
         },
         {
           "name": "Floor Wise Area",
           "type": "Number",
           "isActive": true,
-          "isMandatory": true,
+          "isMandatory": false,
           "order": "2"
         },
         {
           "name": "Construction Class",
           "type": "Number",
           "isActive": true,
-          "isMandatory": true,
+          "isMandatory": false,
           "order": "3"
         },
         {
           "name": "Usage",
           "type": "Text",
           "isActive": true,
-          "isMandatory": true,
+          "isMandatory": false,
           "order": "4"
         },
         {
           "name": "Occupancy By",
           "type": "Text",
           "isActive": true,
-          "isMandatory": true,
+          "isMandatory": false,
           "order": "5"
         },
         {
-          "name": "Name Of Occupant ",
+          "name": "Name Of Occupant",
           "type": "Text",
           "isActive": true,
-          "isMandatory": true,
+          "isMandatory": false,
           "order": "6"
+        },
+        {
+          "name": "Plinth Area",
+          "type": "Text",
+          "isActive": true,
+          "order": "7"
+        },
+        {
+          "name": "Cubic Content",
+          "type": "Text",
+          "isActive": true,
+          "order": "8"
+        },
+        {
+          "name": "Length",
+          "type": "Number",
+          "isActive": true,
+          "order": "9"
+        },
+        {
+          "name": "Breadth",
+          "type": "Number",
+          "isActive": true,
+          "order": "10"
+        },
+        {
+          "name": "Height",
+          "type": "Number",
+          "isActive": true,
+          "order": "11"
         }
       ]
     },
@@ -380,31 +500,76 @@
       "isDepreciationApplicable": true,
       "assetFieldsDefination": [
         {
-          "name": "Construction Class",
+          "name": "Number of Floors",
+          "type": "Number",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "1"
+        },
+        {
+          "name": "Floor Wise Area",
+          "type": "Number",
+          "isActive": true,
+          "isMandatory": false,
+          "order": "2"
+        },
+        {
+          "name": "Construction Class",
+          "type": "Number",
+          "isActive": true,
+          "isMandatory": false,
+          "order": "3"
         },
         {
           "name": "Usage",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "4"
         },
         {
           "name": "Occupancy By",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "5"
         },
         {
           "name": "Name Of Occupant",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "6"
+        },
+        {
+          "name": "Plinth Area",
+          "type": "Text",
+          "isActive": true,
+          "order": "7"
+        },
+        {
+          "name": "Cubic Content",
+          "type": "Text",
+          "isActive": true,
+          "order": "8"
+        },
+        {
+          "name": "Length",
+          "type": "Number",
+          "isActive": true,
+          "order": "9"
+        },
+        {
+          "name": "Breadth",
+          "type": "Number",
+          "isActive": true,
+          "order": "10"
+        },
+        {
+          "name": "Height",
+          "type": "Number",
+          "isActive": true,
+          "order": "11"
         }
       ]
     },
@@ -424,31 +589,76 @@
       "isDepreciationApplicable": true,
       "assetFieldsDefination": [
         {
-          "name": "Construction Class",
+          "name": "Number of Floors",
+          "type": "Number",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "1"
+        },
+        {
+          "name": "Floor Wise Area",
+          "type": "Number",
+          "isActive": true,
+          "isMandatory": false,
+          "order": "2"
+        },
+        {
+          "name": "Construction Class",
+          "type": "Number",
+          "isActive": true,
+          "isMandatory": false,
+          "order": "3"
         },
         {
           "name": "Usage",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "4"
         },
         {
           "name": "Occupancy By",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "5"
         },
         {
           "name": "Name Of Occupant",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "columns": []
+          "order": "6"
+        },
+        {
+          "name": "Plinth Area",
+          "type": "Text",
+          "isActive": true,
+          "order": "7"
+        },
+        {
+          "name": "Cubic Content",
+          "type": "Text",
+          "isActive": true,
+          "order": "8"
+        },
+        {
+          "name": "Length",
+          "type": "Number",
+          "isActive": true,
+          "order": "9"
+        },
+        {
+          "name": "Breadth",
+          "type": "Number",
+          "isActive": true,
+          "order": "10"
+        },
+        {
+          "name": "Height",
+          "type": "Number",
+          "isActive": true,
+          "order": "11"
         }
       ]
     },
@@ -468,28 +678,76 @@
       "isDepreciationApplicable": true,
       "assetFieldsDefination": [
         {
+          "name": "Number of Floors",
+          "type": "Number",
+          "isActive": true,
+          "isMandatory": false,
+          "order": "1"
+        },
+        {
+          "name": "Floor Wise Area",
+          "type": "Number",
+          "isActive": true,
+          "isMandatory": false,
+          "order": "2"
+        },
+        {
           "name": "Construction Class",
           "type": "Number",
           "isActive": true,
+          "isMandatory": false,
           "order": "3"
         },
         {
           "name": "Usage",
           "type": "Text",
-          "order": "4",
-          "isActive": true
+          "isActive": true,
+          "isMandatory": false,
+          "order": "4"
         },
         {
           "name": "Occupancy By",
           "type": "Text",
           "isActive": true,
+          "isMandatory": false,
           "order": "5"
         },
         {
-          "name": "Name Of Occupant ",
+          "name": "Name Of Occupant",
           "type": "Text",
-          "order": "6",
-          "isActive": true
+          "isActive": true,
+          "isMandatory": false,
+          "order": "6"
+        },
+        {
+          "name": "Plinth Area",
+          "type": "Text",
+          "isActive": true,
+          "order": "7"
+        },
+        {
+          "name": "Cubic Content",
+          "type": "Text",
+          "isActive": true,
+          "order": "8"
+        },
+        {
+          "name": "Length",
+          "type": "Number",
+          "isActive": true,
+          "order": "9"
+        },
+        {
+          "name": "Breadth",
+          "type": "Number",
+          "isActive": true,
+          "order": "10"
+        },
+        {
+          "name": "Height",
+          "type": "Number",
+          "isActive": true,
+          "order": "11"
         }
       ]
     },
