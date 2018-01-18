@@ -208,6 +208,15 @@
       "code": "100",
       "name": "Biomaterials",
       "description": "A biomaterial is any substance that has been engineered to interact with biological systems for a medical purpose - either a therapeutic (treat, augment, repair or replace a tissue function of the body) or a diagnostic one. The study of biomaterials is called biomaterials science or biomaterials engineering. Biomaterials science encompasses elements of medicine, biology, chemistry, tissue engineering and materials science."
+    },
+    {
+      "isParent": true,
+      "active": true,
+      "tenantId": "default",
+      "parent": "",
+      "code": "101",
+      "name": "Ceramics",
+      "description": "A ceramic is a non-metallic material composed of inorganic molecules, normally prepared by heating a powder or slurry. Many common ceramics are made up of oxides or nitride compounds and are highly crystalline with long-range molecular order. Some ceramics are partially or fully amorphous, with no long-range molecular order; these are typically classified as glassy materials."
     }
   ]
 }
