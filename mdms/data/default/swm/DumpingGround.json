@@ -336,11 +336,11 @@
         ]
       },
       "name": "Test 4",
-      "isProcessingSite": "",
+      "isProcessingSite": true,
       "processingSite": {
-        "code": "Pro. Plant Code 1"
+        "code": ""
       },
-      "distanceFromProcessingSite": "4",
+      "distanceFromProcessingSite": "",
       "tenantId": "default",
       "code": "DumpingGround-1515044610349",
       "ulbs": [
