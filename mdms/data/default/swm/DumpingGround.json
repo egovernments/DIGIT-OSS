@@ -2844,11 +2844,11 @@
         ]
       },
       "name": "DNG 3",
-      "isProcessingSite": true,
+      "isProcessingSite": false,
       "processingSite": {
-        "code": ""
+        "code": "ProcessingSite-1515759184380"
       },
-      "distanceFromProcessingSite": "",
+      "distanceFromProcessingSite": "45",
       "tenantId": "default",
       "code": "DumpingGround-1516253414973",
       "ulbs": [
