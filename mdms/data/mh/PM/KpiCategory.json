@@ -47,6 +47,10 @@
     {
       "name": "E Waste ",
       "code": "EW"
+    },
+    {
+      "name": "New Category",
+      "code": "Category"
     }
   ]
 }
