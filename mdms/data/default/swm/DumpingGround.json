@@ -602,9 +602,11 @@
         "area": "11",
         "capacity": "444",
         "address": "Pune",
-        "latitude": "",
-        "longitude": "",
-        "location": {},
+        "latitude": "45",
+        "longitude": "78",
+        "location": {
+          "code": "202"
+        },
         "wasteTypes": [
           {
             "code": "Waste Type Code 1"
@@ -615,13 +617,21 @@
         ]
       },
       "name": "Test 4",
-      "isProcessingSite": "",
+      "isProcessingSite": true,
       "processingSite": {
         "code": ""
       },
       "distanceFromProcessingSite": "",
       "tenantId": "default",
-      "code": "DumpingGround-1515058965273"
+      "code": "DumpingGround-1515058965273",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.khopoli"
+        }
+      ]
     },
     {
       "siteDetails": {
