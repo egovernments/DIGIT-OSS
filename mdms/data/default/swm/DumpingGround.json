@@ -3229,6 +3229,41 @@
           "code": "mh.aliba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "1",
+        "capacity": "1",
+        "address": "Test test test ",
+        "latitude": "11.11",
+        "longitude": "12.12",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          }
+        ]
+      },
+      "name": "HyDumping",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515615040373"
+      },
+      "distanceFromProcessingSite": "1",
+      "tenantId": "default",
+      "code": "DumpingGround-1516276209941",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        }
+      ]
     }
   ]
 }
