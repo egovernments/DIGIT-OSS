@@ -13,7 +13,7 @@
         "code": "ENG"
       },
       "designation": {
-        "code": "CHNM"
+        "code": "CE"
       },
       "shiftStartTime": "1515501000000",
       "shiftEndTime": "1515443220000",
@@ -196,7 +196,7 @@
         "code": "DR"
       },
       "code": "Shift-1515069341461",
-      "name": "Shift-1515069341461-name",
+      "name": "Shift-1515069341462-name",
       "tenantId": "default",
       "shiftStartTime": "1515070800000",
       "shiftEndTime": "1515085200000",
@@ -942,32 +942,252 @@
       "remarks": "dgdgfdg"
     },
     {
+      "code": "Shift-1515764525655",
       "tenantId": "default",
-      "code": "-1516162434950",
+      "name": "Coffee Shift Name",
       "shiftType": {
-        "code": "BFS"
+        "code": "CS"
       },
-      "name": "123",
+      "department": {
+        "code": "ADM"
+      },
+      "designation": {
+        "code": "COMM"
+      },
+      "shiftStartTime": "1515719402440",
+      "shiftEndTime": "1515726600000",
+      "lunchStartTime": "1515763802440",
+      "lunchEndTime": "1515764702440",
+      "graceTimeFrom": "1515765602440",
+      "graceTimeTo": "1515766200000"
+    },
+    {
+      "code": "Shift-1515764954632",
+      "tenantId": "default",
+      "name": "ran-2",
+      "shiftType": {
+        "code": "Shift Type Code 2"
+      },
+      "department": {
+        "code": "ENG"
+      },
+      "designation": {
+        "code": "AO"
+      },
+      "shiftStartTime": "1515721740000",
+      "shiftEndTime": "1515721740000",
+      "lunchStartTime": "1515721740000",
+      "lunchEndTime": "1515721740000",
+      "graceTimeFrom": "1515721740000",
+      "graceTimeTo": "1515721740000"
+    },
+    {
+      "code": "Shift-1515765207480",
+      "tenantId": "default",
+      "name": "ran-3",
+      "shiftType": {
+        "code": "Shift Type Code 2"
+      },
+      "department": {
+        "code": "ADM"
+      },
+      "designation": {
+        "code": "COMM"
+      },
+      "shiftStartTime": "1515764427336",
+      "shiftEndTime": "1515765627336",
+      "lunchStartTime": "1515765627336",
+      "lunchEndTime": "1515765627336",
+      "graceTimeFrom": "1515765627336",
+      "graceTimeTo": "1515765627336"
+    },
+    {
+      "code": "Shift-1515765424175",
+      "tenantId": "default",
+      "shiftType": {
+        "code": "Tea"
+      },
+      "name": "Tea Shifts",
+      "department": {
+        "code": "ADM"
+      },
+      "designation": {
+        "code": "COMM"
+      },
+      "shiftStartTime": "1515720600000",
+      "shiftEndTime": "1515729600000",
+      "lunchStartTime": "1515722760000",
+      "lunchEndTime": "1515723060000",
+      "graceTimeFrom": "1515723840000",
+      "graceTimeTo": "1515724140000"
+    },
+    {
+      "code": "Shift-1515765784332",
+      "tenantId": "default",
+      "name": "ran-3",
+      "shiftType": {
+        "code": "Shift Type Code 2"
+      },
+      "department": {
+        "code": "ENG"
+      },
+      "designation": {
+        "code": "AO"
+      },
+      "shiftStartTime": "1515765604199",
+      "shiftEndTime": "1515722580000",
+      "lunchStartTime": "1515722580000",
+      "lunchEndTime": "1515722580000",
+      "graceTimeFrom": "1515765904199",
+      "graceTimeTo": "1515722580000"
+    },
+    {
+      "code": "Shift-1515767137348",
+      "tenantId": "default",
+      "name": "ran-6",
+      "shiftType": {
+        "code": "Shift Type Code 2"
+      },
       "department": {
         "code": "EDU"
       },
       "designation": {
-        "code": "ADCOM"
+        "code": "AO"
       },
-      "shiftStartTime": "1516160412526",
-      "shiftEndTime": "1516204920000",
-      "lunchStartTime": "1516204920000",
-      "lunchEndTime": "1516158132526",
-      "graceTimeFrom": "1516160412526",
-      "graceTimeTo": "1516160712526",
-      "remarks": "123"
+      "shiftStartTime": "1515723900000",
+      "shiftEndTime": "1515723900000",
+      "lunchStartTime": "1515723900000",
+      "lunchEndTime": "1515723900000",
+      "graceTimeFrom": "1515723900000",
+      "graceTimeTo": "1515723900000"
+    },
+    {
+      "code": "Shift-1515767221200",
+      "tenantId": "default",
+      "name": "ran-7",
+      "shiftType": {
+        "code": "Shift Type Code 2"
+      },
+      "department": {
+        "code": "ENG"
+      },
+      "designation": {
+        "code": "AE"
+      },
+      "shiftStartTime": "1515724020000",
+      "shiftEndTime": "1515724020000",
+      "lunchStartTime": "1515724020000",
+      "lunchEndTime": "1515724020000",
+      "graceTimeFrom": "1515724020000",
+      "graceTimeTo": "1515724020000"
+    },
+    {
+      "code": "Shift-1515768530405",
+      "tenantId": "default",
+      "name": "ran-9",
+      "shiftType": {
+        "code": "SS"
+      },
+      "department": {
+        "code": "ENG"
+      },
+      "designation": {
+        "code": "ACC"
+      },
+      "shiftStartTime": "1515725280000",
+      "shiftEndTime": "1515725280000",
+      "lunchStartTime": "1515725280000",
+      "lunchEndTime": "1515725280000",
+      "graceTimeFrom": "1515725280000",
+      "graceTimeTo": "1515725280000"
     },
     {
       "tenantId": "default",
-      "code": "-1516209274240",
-      "name": "Test",
+      "code": "-1515771121778",
+      "name": "test9",
       "shiftType": {
-        "code": "ABCD"
+        "code": "Shift Type Code 2"
+      },
+      "department": {
+        "code": "ENG"
+      },
+      "designation": {
+        "code": "ACC"
+      },
+      "shiftStartTime": "1515727920000",
+      "shiftEndTime": "1515727920000",
+      "lunchStartTime": "1515727920000",
+      "lunchEndTime": "1515727920000",
+      "graceTimeFrom": "1515727920000",
+      "graceTimeTo": "1515727920000"
+    },
+    {
+      "code": "Shift-1515772081512",
+      "tenantId": "default",
+      "name": "Empty ",
+      "shiftType": {
+        "code": "ES11"
+      },
+      "department": {
+        "code": "ADM"
+      },
+      "designation": {
+        "code": "AO"
+      },
+      "shiftStartTime": "1515728400000",
+      "shiftEndTime": "1515771600000",
+      "lunchStartTime": "1515750360000",
+      "lunchEndTime": "1515750000000",
+      "graceTimeFrom": "1515768039587",
+      "graceTimeTo": "1515728400000",
+      "remarks": "QWERTYHJK"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1515772098879",
+      "name": "ran-10",
+      "shiftType": {
+        "code": "BFS"
+      },
+      "department": {
+        "code": "ENG"
+      },
+      "designation": {
+        "code": "ACC"
+      },
+      "shiftStartTime": "1515728880000",
+      "shiftEndTime": "1515728880000",
+      "lunchStartTime": "1515728880000",
+      "lunchEndTime": "1515728880000",
+      "graceTimeFrom": "1515728880000",
+      "graceTimeTo": "1515728880000"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1515772179221",
+      "name": "ran-11",
+      "shiftType": {
+        "code": "Shift Type Code 2"
+      },
+      "department": {
+        "code": "ENG"
+      },
+      "designation": {
+        "code": "AO"
+      },
+      "shiftStartTime": "1515728880000",
+      "shiftEndTime": "1515728880000",
+      "lunchStartTime": "1515728880000",
+      "lunchEndTime": "1515728880000",
+      "graceTimeFrom": "1515728880000",
+      "graceTimeTo": "1515728880000"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1515772299294",
+      "name": "shift32",
+      "shiftType": {
+        "code": "Shift Type Code 2"
       },
       "department": {
         "code": "EDU"
@@ -975,12 +1195,32 @@
       "designation": {
         "code": "ADCOM"
       },
-      "shiftStartTime": "1516203609758",
-      "shiftEndTime": "1516131729758",
-      "lunchStartTime": "1516135329758",
-      "lunchEndTime": "1516160529758",
-      "graceTimeFrom": "1516160520000",
-      "graceTimeTo": "1516203720000"
+      "shiftStartTime": "1515729060000",
+      "shiftEndTime": "1515772380000",
+      "lunchStartTime": "1515779487172",
+      "lunchEndTime": "1515739860000",
+      "graceTimeFrom": "1515772347172",
+      "graceTimeTo": "1515725487172"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516256030866",
+      "name": "test",
+      "shiftType": {
+        "code": "ABCDE"
+      },
+      "department": {
+        "code": "ACC"
+      },
+      "designation": {
+        "code": "ACIV"
+      },
+      "shiftStartTime": "1516299180000",
+      "shiftEndTime": "1516291980000",
+      "lunchStartTime": "1516299180000",
+      "lunchEndTime": "1516299180000",
+      "graceTimeFrom": "1516299180000",
+      "graceTimeTo": "1516255980000"
     }
   ]
 }
