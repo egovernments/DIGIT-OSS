@@ -221,7 +221,7 @@
     },
     {
       "isParent": false,
-      "active": false,
+      "active": true,
       "tenantId": "default",
       "code": "STN001",
       "name": "Stationary..",
