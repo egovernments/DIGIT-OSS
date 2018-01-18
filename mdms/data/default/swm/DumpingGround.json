@@ -267,11 +267,11 @@
         ]
       },
       "name": "Test23",
-      "isProcessingSite": "",
+      "isProcessingSite": true,
       "processingSite": {
-        "code": "ProcessingSite-1515570915015"
+        "code": ""
       },
-      "distanceFromProcessingSite": "78",
+      "distanceFromProcessingSite": "",
       "tenantId": "default",
       "code": "DumpingGround-1514987736095",
       "ulbs": [
