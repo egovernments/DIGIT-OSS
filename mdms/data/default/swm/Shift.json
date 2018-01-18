@@ -1221,6 +1221,27 @@
       "lunchEndTime": "1516299180000",
       "graceTimeFrom": "1516299180000",
       "graceTimeTo": "1516255980000"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516256142210",
+      "name": "TTTT",
+      "shiftType": {
+        "code": "Shift Type Code 2"
+      },
+      "department": {
+        "code": "EDU"
+      },
+      "designation": {
+        "code": "AO"
+      },
+      "shiftStartTime": "1516266840000",
+      "shiftEndTime": "1516299180000",
+      "lunchStartTime": "1516295580000",
+      "lunchEndTime": "1516254050559",
+      "graceTimeFrom": "1516299180000",
+      "graceTimeTo": "1516255980000",
+      "remarks": "test"
     }
   ]
 }
