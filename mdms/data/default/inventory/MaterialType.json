@@ -224,8 +224,8 @@
       "active": true,
       "tenantId": "default",
       "code": "STN001",
-      "name": "Stationary",
-      "description": "Stationary Material"
+      "name": "Stationary..",
+      "description": "Stationary Material.."
     }
   ]
 }
