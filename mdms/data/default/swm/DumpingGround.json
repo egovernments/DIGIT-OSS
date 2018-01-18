@@ -2992,6 +2992,47 @@
           "code": "mh.amba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "6",
+        "capacity": "67",
+        "address": "Pune Maharastra",
+        "latitude": "23",
+        "longitude": "33",
+        "location": {
+          "code": "202"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "DNG 6",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515570915015"
+      },
+      "distanceFromProcessingSite": "45",
+      "tenantId": "default",
+      "code": "DumpingGround-1516256253382",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.khop"
+        }
+      ]
     }
   ]
 }
