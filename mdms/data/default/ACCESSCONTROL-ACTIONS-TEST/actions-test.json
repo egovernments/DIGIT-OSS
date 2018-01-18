@@ -1818,7 +1818,7 @@
       "displayName": "Create Vendor Payment Details",
       "orderNumber": 0,
       "parentModule": "636",
-      "enabled": false,
+      "enabled": true,
       "serviceCode": "VendorPaymentDetails",
       "code": "null",
       "path": "Solid Waste Management.SWM Transactions.Vendor Payment Details.VendorPaymentDetails Create"
