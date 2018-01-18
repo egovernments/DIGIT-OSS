@@ -200,6 +200,14 @@
       "code": "nhgnmgh",
       "name": "mghm",
       "description": "ghmhjmfghmghm"
+    },
+    {
+      "isParent": false,
+      "active": true,
+      "tenantId": "default",
+      "code": "100",
+      "name": "Biomaterials",
+      "description": "A biomaterial is any substance that has been engineered to interact with biological systems for a medical purpose - either a therapeutic (treat, augment, repair or replace a tissue function of the body) or a diagnostic one. The study of biomaterials is called biomaterials science or biomaterials engineering. Biomaterials science encompasses elements of medicine, biology, chemistry, tissue engineering and materials science."
     }
   ]
 }
