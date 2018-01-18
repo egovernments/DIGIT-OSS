@@ -321,9 +321,11 @@
         "area": "3",
         "capacity": "5",
         "address": "Pune Corporation",
-        "latitude": "",
-        "longitude": "",
-        "location": {},
+        "latitude": "4",
+        "longitude": "5",
+        "location": {
+          "code": "202"
+        },
         "wasteTypes": [
           {
             "code": "Bio Medical Waste"
@@ -336,9 +338,9 @@
       "name": "Test 4",
       "isProcessingSite": "",
       "processingSite": {
-        "code": ""
+        "code": "Pro. Plant Code 1"
       },
-      "distanceFromProcessingSite": "",
+      "distanceFromProcessingSite": "4",
       "tenantId": "default",
       "code": "DumpingGround-1515044610349",
       "ulbs": [
@@ -2783,29 +2785,35 @@
         "bankName": "",
         "bankValidityFrom": "",
         "bankValidityTo": "",
-        "area": "20",
-        "capacity": "13",
-        "address": "test test test ",
-        "latitude": "89",
-        "longitude": "15",
+        "area": "4",
+        "capacity": "50",
+        "address": "Gaziabad Pune Maharastra",
+        "latitude": "4",
+        "longitude": "5",
         "location": {
-          "code": "200"
+          "code": "202"
         },
         "wasteTypes": [
           {
-            "code": "DD1"
+            "code": "Waste Type Code 3"
+          },
+          {
+            "code": "Cons"
           }
         ]
       },
-      "name": "Test",
+      "name": "DNG2",
       "isProcessingSite": false,
       "processingSite": {
         "code": "ProcessingSite-1515075903699"
       },
-      "distanceFromProcessingSite": "12",
+      "distanceFromProcessingSite": "6",
       "tenantId": "default",
-      "code": "DumpingGround-1516198287914",
+      "code": "DumpingGround-1516197739674",
       "ulbs": [
+        {
+          "code": "mh.khop"
+        },
         {
           "code": "default"
         }
