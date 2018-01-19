@@ -90,17 +90,18 @@
         "code": "Shift Type Code 1"
       },
       "department": {
-        "code": "Code SWM"
+        "code": "ACC"
       },
       "designation": {
-        "code": "DR"
+        "code": "ACIV"
       },
       "shiftStartTime": 1512001800000,
       "shiftEndTime": 1512030600000,
-      "lunchStartTime": 1512016200000,
-      "lunchEndTime": 1512019800000,
-      "graceTimeFrom": 1512016200000,
-      "graceTimeTo": 1512019800000
+      "lunchStartTime": "1516318200000",
+      "lunchEndTime": "1516320000000",
+      "graceTimeFrom": "1516318200000",
+      "graceTimeTo": "1512085500000",
+      "remarks": "ASDSA"
     },
     {
       "code": "Afternoon Disposal Shift Code",
