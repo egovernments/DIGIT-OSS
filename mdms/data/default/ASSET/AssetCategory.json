@@ -31,62 +31,70 @@
           "order": "2"
         },
         {
+          "name": "Unit of Measurement",
+          "type": "Select",
+          "isActive": true,
+          "isMandatory": false,
+          "order": "3",
+          "url": "/egov-mdms-service/v1/_get?\u0026masterName   \u003dUom\u0026moduleName\u003dcommon-masters|$..code|$..description"
+        },
+        {
           "name": "Construction Class",
           "type": "Number",
           "isActive": true,
           "isMandatory": false,
-          "order": "3"
+          "order": "4"
         },
         {
           "name": "Usage",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "order": "4"
+          "order": "5"
         },
         {
           "name": "Occupancy By",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "order": "5"
+          "order": "6"
         },
         {
           "name": "Name Of Occupant",
           "type": "Text",
           "isActive": true,
           "isMandatory": false,
-          "order": "6"
+          "order": "7"
         },
         {
           "name": "Plinth Area",
           "type": "Text",
           "isActive": true,
-          "order": "7"
+          "order": "8"
         },
         {
           "name": "Cubic Content",
           "type": "Text",
           "isActive": true,
-          "order": "8"
+          "order": "9"
         },
         {
           "name": "Length",
           "type": "Number",
           "isActive": true,
-          "order": "9"
+          "order": "10"
         },
         {
           "name": "Breadth",
           "type": "Number",
           "isActive": true,
-          "order": "10"
+          "order": "11"
         },
         {
           "name": "Height",
           "type": "Number",
           "isActive": true,
-          "order": "11"
+          "order": "12"
         }
       ]
     },
