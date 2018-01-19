@@ -141,9 +141,9 @@
       "tenantId": "default"
     },
     {
-      "name": "CaseStatus1",
+      "name": "CaseStatus2",
       "code": "5665656565",
-      "active": true,
+      "active": false,
       "tenantId": "default"
     }
   ]
