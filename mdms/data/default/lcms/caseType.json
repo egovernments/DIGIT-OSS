@@ -2614,7 +2614,7 @@
       "tenantId": "default"
     },
     {
-      "name": "CaseTypeName1 Update",
+      "name": "CaseTypeName1 ",
       "code": "CNN1",
       "sideCode": "SN1",
       "active": true,
