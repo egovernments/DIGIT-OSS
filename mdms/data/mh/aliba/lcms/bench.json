@@ -29,7 +29,7 @@
     {
       "name": "Hyderabad",
       "code": "BC1",
-      "active": true,
+      "active": false,
       "tenantId": "mh.aliba"
     }
   ]
