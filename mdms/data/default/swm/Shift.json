@@ -1442,8 +1442,8 @@
       "shiftEndTime": "1516366800000",
       "graceTimeFrom": "1516336200000",
       "graceTimeTo": "1516350600000",
-      "lunchStartTime": "1516335000000",
-      "lunchEndTime": "1516365000000"
+      "lunchStartTime": "1516350600000",
+      "lunchEndTime": "1516354500000"
     }
   ]
 }
