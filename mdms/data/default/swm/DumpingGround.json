@@ -3390,6 +3390,44 @@
           "code": "mh.amba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "20",
+        "capacity": "2000",
+        "address": "Hyderabad kukatpally",
+        "latitude": "50",
+        "longitude": "40",
+        "location": {
+          "code": "203"
+        },
+        "wasteTypes": [
+          {
+            "code": "Waste Type Code 3"
+          }
+        ]
+      },
+      "name": "Kukatpally",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515772855866"
+      },
+      "distanceFromProcessingSite": "5",
+      "tenantId": "default",
+      "code": "DumpingGround-1516355082748",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
