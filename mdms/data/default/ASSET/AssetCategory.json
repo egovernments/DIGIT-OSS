@@ -967,6 +967,14 @@
           "columns": []
         },
         {
+          "name": "Unit of Measurement",
+          "type": "Select",
+          "isActive": true,
+          "isMandatory": false,
+          "order": "3",
+          "url": "/egov-mdms-service/v1/_get?\u0026masterName\u003dUom\u0026moduleName\u003dcommon-masters\u0026tenantId\u003ddefault"
+        },
+        {
           "name": "Collection Mains",
           "type": "Number",
           "isActive": true,
