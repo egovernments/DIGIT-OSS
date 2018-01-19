@@ -1257,11 +1257,11 @@
         "code": "AO"
       },
       "shiftStartTime": "1516354200000",
-      "shiftEndTime": "1516357800000",
+      "shiftEndTime": "1516350600000",
       "lunchStartTime": "1516350600000",
-      "lunchEndTime": "1516354200000",
+      "lunchEndTime": "1516347000000",
       "graceTimeFrom": "1516354200000",
-      "graceTimeTo": "1516357800000"
+      "graceTimeTo": "1516347000000"
     }
   ]
 }
