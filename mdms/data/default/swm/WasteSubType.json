@@ -203,6 +203,14 @@
       "wasteType": {
         "code": "Waste Type Code 1"
       }
+    },
+    {
+      "name": "Test View WasteSubType",
+      "code": "WST009",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Bio Medical Waste"
+      }
     }
   ]
 }
