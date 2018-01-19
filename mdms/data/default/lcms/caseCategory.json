@@ -57,7 +57,7 @@
       "tenantId": "default"
     },
     {
-      "name": "CaseCategoryName1",
+      "name": "CaseCategoryName1Update",
       "code": "CCN1",
       "active": true,
       "tenantId": "default"
