@@ -1344,6 +1344,26 @@
       "graceTimeFrom": "1516337520000",
       "graceTimeTo": "1516338720000",
       "remarks": "123"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516369036979",
+      "name": "asd",
+      "shiftType": {
+        "code": "Shift002"
+      },
+      "department": {
+        "code": "ENG"
+      },
+      "designation": {
+        "code": "ADCOM"
+      },
+      "shiftStartTime": "1516370416578",
+      "shiftEndTime": "1516381200000",
+      "lunchStartTime": "1516365420000",
+      "lunchEndTime": "1516370416578",
+      "graceTimeFrom": "1516369216578",
+      "graceTimeTo": "1516370400000"
     }
   ]
 }
