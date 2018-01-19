@@ -19,6 +19,12 @@
       "code": "Pen",
       "active": true,
       "tenantId": "mh.aliba"
+    },
+    {
+      "name": "Semi Minor",
+      "code": "SM",
+      "active": true,
+      "tenantId": "mh.aliba"
     }
   ]
 }
