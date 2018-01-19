@@ -103,6 +103,12 @@
       "code": "Pending",
       "active": true,
       "tenantId": "mh.aliba"
+    },
+    {
+      "name": "Not yet Completed",
+      "code": "NYC",
+      "active": false,
+      "tenantId": "mh.aliba"
     }
   ]
 }
