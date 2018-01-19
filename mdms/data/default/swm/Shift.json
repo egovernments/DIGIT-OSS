@@ -1302,6 +1302,27 @@
       "lunchEndTime": "1516361400000",
       "graceTimeFrom": "1516357800000",
       "graceTimeTo": "1516361400000"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516368593772",
+      "name": "KK",
+      "shiftType": {
+        "code": "ABCDE"
+      },
+      "department": {
+        "code": "ADM"
+      },
+      "designation": {
+        "code": "ACIV"
+      },
+      "shiftStartTime": "1516366253397",
+      "shiftEndTime": "1516366253397",
+      "lunchStartTime": "1516365353397",
+      "lunchEndTime": "1516372140000",
+      "graceTimeFrom": "1516365053397",
+      "graceTimeTo": "1516365053397",
+      "remarks": "asdfasdfasdfasfd asdfasdf asdfasfasfasdf"
     }
   ]
 }
