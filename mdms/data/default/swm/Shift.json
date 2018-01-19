@@ -1002,6 +1002,27 @@
       "graceTimeFrom": "1516365015036",
       "graceTimeTo": "1516365915036",
       "remarks": "sdafsdf"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516347137192",
+      "name": "sdsadas",
+      "shiftType": {
+        "code": "Shift Type Code 2"
+      },
+      "department": {
+        "code": "ACC"
+      },
+      "designation": {
+        "code": "ACIV"
+      },
+      "shiftStartTime": "1516351515036",
+      "shiftEndTime": "1516380315036",
+      "lunchStartTime": "1516362315036",
+      "lunchEndTime": "1516364100000",
+      "graceTimeFrom": "1516365000000",
+      "graceTimeTo": "1516366800000",
+      "remarks": "dgdsfds"
     }
   ]
 }
