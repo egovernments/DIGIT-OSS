@@ -3264,6 +3264,47 @@
           "code": "mh.aliba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "HDFV",
+        "bankValidityFrom": 1514745000000,
+        "bankValidityTo": 1518201000000,
+        "area": "49",
+        "capacity": "20",
+        "address": "ttseetewewtew ewewtew ew",
+        "latitude": "20",
+        "longitude": "20",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "Waste Type Code 3"
+          },
+          {
+            "code": "Waste Type Code 1"
+          }
+        ]
+      },
+      "name": "Hafeezpet",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1516352364188",
+      "ulbs": [
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
