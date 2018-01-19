@@ -20,11 +20,11 @@
           {
             "id": 2,
             "boundaryNum": 1,
-            "name": "Zone-1",
-            "localname": "Zone-1",
+            "name": "Ward-1",
+            "localname": "Ward-1",
             "longitude": null,
             "latitude": null,
-            "label": "Zone",
+            "label": "Ward",
             "code": "2",
             "children": [
               {
@@ -34,17 +34,17 @@
                 "localname": "Gandhi Road",
                 "longitude": null,
                 "latitude": null,
-                "label": "Ward",
+                "label": "Zone",
                 "code": "12",
                 "children": [
                   {
                     "id": 300,
                     "boundaryNum": 4091,
-                    "name": "Test Block",
+                    "name": "Rottela Veedi",
                     "localname": null,
                     "longitude": null,
                     "latitude": null,
-                    "label": "Block",
+                    "label": "Road/Street",
                     "code": "300",
                     "children": [
                       {
@@ -54,7 +54,7 @@
                         "localname": "Colony 3",
                         "longitude": null,
                         "latitude": null,
-                        "label": "Colony",
+                        "label": "Colony/Society/Complex",
                         "code": "303"
                       }
                     ]
@@ -62,11 +62,11 @@
                   {
                     "id": 301,
                     "boundaryNum": 1,
-                    "name": "Block No 1",
-                    "localname": "Block No 1",
+                    "name": "Road No 1",
+                    "localname": "Road No 1",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Block",
+                    "label": "Road/Street",
                     "code": "301",
                     "children": [
                       {
@@ -76,7 +76,7 @@
                         "localname": "Colony 2",
                         "longitude": null,
                         "latitude": null,
-                        "label": "Colony",
+                        "label": "Colony/Society/Complex",
                         "code": "302"
                       }
                     ]
@@ -86,21 +86,21 @@
               {
                 "id": 6,
                 "boundaryNum": 1,
-                "name": "Revenue Ward No 1",
-                "localname": "Revenue Ward No 1",
+                "name": "Revenue Zone No 1",
+                "localname": "Revenue Zone No 1",
                 "longitude": null,
                 "latitude": null,
-                "label": "Ward",
+                "label": "Zone",
                 "code": "6",
                 "children": [
                   {
                     "id": 1364,
                     "boundaryNum": 4091,
-                    "name": "jeswanth",
+                    "name": "Gandhi Road",
                     "localname": null,
                     "longitude": null,
                     "latitude": null,
-                    "label": "Block",
+                    "label": "Road/Street",
                     "code": "1364",
                     "children" : [
                       {
@@ -110,7 +110,7 @@
                         "localname": "Colony 1",
                         "longitude": null,
                         "latitude": null,
-                        "label": "Colony",
+                        "label": "Colony/Society/Complex",
                         "code": "355"
                       }
                     ]
@@ -118,11 +118,11 @@
                   {
                     "id": 13,
                     "boundaryNum": 1,
-                    "name": "Block No 1",
-                    "localname": "Block No 1",
+                    "name": "Gedda Veedi",
+                    "localname": "Gedda Veedi",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Block",
+                    "label": "Road/Street",
                     "code": "13",
                     "children": [
                       {
@@ -132,7 +132,7 @@
                         "localname": "Colony 1",
                         "longitude": null,
                         "latitude": null,
-                        "label": "Colony",
+                        "label": "Colony/Society/Complex",
                         "code": "200"
                       }
                     ]
@@ -144,31 +144,31 @@
           {
             "id": 3,
             "boundaryNum": 2,
-            "name": "Zone-2",
-            "localname": "Zone-2",
+            "name": "Ward-2",
+            "localname": "Ward-2",
             "longitude": null,
             "latitude": null,
-            "label": "Zone",
+            "label": "Ward",
             "code": "3",
             "children": [
               {
                 "id": 7,
                 "boundaryNum": 2,
-                "name": "Revenue Ward No 2",
-                "localname": "Revenue Ward No 2",
+                "name": "Revenue Zone No 2",
+                "localname": "Revenue Zone No 2",
                 "longitude": null,
                 "latitude": null,
-                "label": "Ward",
+                "label": "Zone",
                 "code": "7",
                 "children": [
                   {
                     "id": 14,
                     "boundaryNum": 3,
-                    "name": "Block No 2",
-                    "localname": "Block No 2",
+                    "name": "Ganagalla Veedhi",
+                    "localname":"Ganagalla Veedhi",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Block",
+                    "label": "Road/Street",
                     "code": "14",
                     "children": [
                       {
@@ -178,7 +178,7 @@
                         "localname": "Colony 2",
                         "longitude": null,
                         "latitude": null,
-                        "label": "Colony",
+                        "label": "Colony/Society/Complex",
                         "code": "201"
                       }
                     ]
@@ -190,31 +190,31 @@
           {
             "id": 4,
             "boundaryNum": 3,
-            "name": "Zone-3",
-            "localname": "Zone-3",
+            "name": "Ward-3",
+            "localname": "Ward-3",
             "longitude": null,
             "latitude": null,
-            "label": "Zone",
+            "label": "Ward",
             "code": "4",
             "children": [
               {
                 "id": 11,
                 "boundaryNum": 7,
-                "name": "Revenue Ward: 6",
-                "localname": "Revenue Ward: 6",
+                "name": "Revenue Zone: 6",
+                "localname": "Revenue Zone: 6",
                 "longitude": null,
                 "latitude": null,
-                "label": "Ward",
+                "label": "Zone",
                 "code": "11",
                 "children": [
                  {
                     "id": 304,
                     "boundaryNum": 7,
-                    "name": "Block No 6",
-                    "localname": "Block No 6",
+                    "name": "Gowda Veedi",
+                    "localname": "Gowda Veedi",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Block",
+                    "label": "Road/Street",
                     "code": "304",
                     "children": [
                       {
@@ -224,7 +224,7 @@
                         "localname": "Colony 6",
                         "longitude": null,
                         "latitude": null,
-                        "label": "Colony",
+                        "label": "Colony/Society/Complex",
                         "code": "350"
                       }
                     ]
@@ -236,21 +236,21 @@
               {
                 "id": 8,
                 "boundaryNum": 3,
-                "name": "Revenue Ward No 3",
-                "localname": "Revenue Ward No 3",
+                "name": "Revenue Zone No 3",
+                "localname": "Revenue Zone No 3",
                 "longitude": null,
                 "latitude": null,
-                "label": "Ward",
+                "label": "Zone",
                 "code": "8",
                 "children": [
                   {
                     "id": 15,
                     "boundaryNum": 7,
-                    "name": "Block No 3",
-                    "localname": "Block No 3",
+                    "name": "Kaligotla Veedhi",
+                    "localname": "Kaligotla Veedhi",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Block",
+                    "label": "Road/Street",
                     "code": "15",
                     "children": [
                       {
@@ -260,7 +260,7 @@
                         "localname": "Colony 3",
                         "longitude": null,
                         "latitude": null,
-                        "label": "Colony",
+                        "label": "Colony/Society/Complex",
                         "code": "202"
                       }
                     ]
@@ -272,31 +272,31 @@
           {
             "id": 5,
             "boundaryNum": 4,
-            "name": "Zone-4",
-            "localname": "Zone-4",
+            "name": "Ward-4",
+            "localname": "Ward-4",
             "longitude": null,
             "latitude": null,
-            "label": "Zone",
+            "label": "Ward",
             "code": "5",
             "children": [
               {
                 "id": 10,
                 "boundaryNum": 6,
-                "name": "Revenue",
-                "localname": "Revenue",
+                "name": "Zone-4",
+                "localname": "Zone-4",
                 "longitude": null,
                 "latitude": null,
-                "label": "Ward",
+                "label": "Zone",
                 "code": "10",
                 "children": [
                   {
                     "id": 351,
                     "boundaryNum": 6,
-                    "name": "Revenue Block",
-                    "localname": "Revenue Block",
+                    "name": "Konda Peta",
+                    "localname": "Konda Peta",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Block",
+                    "label": "Road/Street",
                     "code": "351",
                     "children": [
                       {
@@ -306,7 +306,7 @@
                         "localname": "Revenue Colony",
                         "longitude": null,
                         "latitude": null,
-                        "label": "Colony",
+                        "label": "Colony/Society/Complex",
                         "code": "352"
                       }
                     ]
@@ -316,31 +316,31 @@
               {
                 "id": 9,
                 "boundaryNum": 4,
-                "name": "Revenue Ward No 4",
-                "localname": "Revenue Ward No 4",
+                "name": "Revenue Zone No 5",
+                "localname": "Revenue Zone No 5",
                 "longitude": null,
                 "latitude": null,
-                "label": "Ward",
+                "label": "Zone",
                 "code": "9",
                 "children": [
                   {
                     "id": 16,
                     "boundaryNum": 6,
-                    "name": "Block No 4",
-                    "localname": "Block No 4",
+                    "name": "Bheemili Boya Veedhi",
+                    "localname": "Bheemili Boya Veedhi",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Block",
+                    "label": "Road/Street",
                     "code": "16",
                     "children": [
                       {
                         "id": 203,
                         "boundaryNum": 1,
-                        "name": "Colony 4",
-                        "localname": "Colony 4",
+                        "name": "Colony 5",
+                        "localname": "Colony 5",
                         "longitude": null,
                         "latitude": null,
-                        "label": "Colony",
+                        "label": "Colony/Society/Complex",
                         "code": "203"
                       }
                     ]
