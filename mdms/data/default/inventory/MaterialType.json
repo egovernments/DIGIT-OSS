@@ -227,6 +227,15 @@
       "name": "Stationary..",
       "description": "Stationary Material..",
       "parent": "MTC001"
+    },
+    {
+      "isParent": true,
+      "active": true,
+      "tenantId": "default",
+      "parent": "MTC001",
+      "code": "MTN001",
+      "name": "MTN001",
+      "description": "MTN001"
     }
   ]
 }
