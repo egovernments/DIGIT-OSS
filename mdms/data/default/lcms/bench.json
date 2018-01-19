@@ -63,7 +63,7 @@
       "tenantId": "default"
     },
     {
-      "name": "BenchName",
+      "name": "BenchNameUpdate",
       "code": "BN",
       "active": true,
       "tenantId": "default"
