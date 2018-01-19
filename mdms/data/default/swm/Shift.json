@@ -1323,6 +1323,27 @@
       "graceTimeFrom": "1516365053397",
       "graceTimeTo": "1516365053397",
       "remarks": "asdfasdfasdfasfd asdfasdf asdfasfasfasdf"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516368686520",
+      "name": "GGGG",
+      "shiftType": {
+        "code": "ABCDE"
+      },
+      "department": {
+        "code": "EDU"
+      },
+      "designation": {
+        "code": "AO"
+      },
+      "shiftStartTime": "1516337520000",
+      "shiftEndTime": "1516341120000",
+      "lunchStartTime": "1516341120000",
+      "lunchEndTime": "1516342920000",
+      "graceTimeFrom": "1516337520000",
+      "graceTimeTo": "1516338720000",
+      "remarks": "s"
     }
   ]
 }
