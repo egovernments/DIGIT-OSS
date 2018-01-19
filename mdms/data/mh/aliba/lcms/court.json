@@ -459,7 +459,7 @@
         "city": "Mahubani",
         "pincode": "874500"
       },
-      "active": false,
+      "active": true,
       "tenantId": "mh.aliba"
     }
   ]
