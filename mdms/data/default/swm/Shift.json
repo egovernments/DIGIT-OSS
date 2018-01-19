@@ -1424,6 +1424,26 @@
       "lunchEndTime": "1516354200000",
       "graceTimeFrom": "1516336200000",
       "graceTimeTo": "1516365000000"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516373267049",
+      "name": "GG",
+      "shiftType": {
+        "code": "2To4Shift"
+      },
+      "department": {
+        "code": "ACC"
+      },
+      "designation": {
+        "code": "ACIV"
+      },
+      "shiftStartTime": "1516334400000",
+      "shiftEndTime": "1516366800000",
+      "graceTimeFrom": "1516336200000",
+      "graceTimeTo": "1516350600000",
+      "lunchStartTime": "1516335000000",
+      "lunchEndTime": "1516365000000"
     }
   ]
 }
