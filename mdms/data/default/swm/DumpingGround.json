@@ -3305,6 +3305,50 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "HDFC",
+        "bankValidityFrom": 1516300200000,
+        "bankValidityTo": 1518114600000,
+        "area": "29",
+        "capacity": "26",
+        "address": "est ets tstet tet wt ew",
+        "latitude": "20",
+        "longitude": "20",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Waste Type Code 3"
+          },
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "Miypaur -III",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "56",
+      "tenantId": "default",
+      "code": "DumpingGround-1516352654154",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        }
+      ]
     }
   ]
 }
