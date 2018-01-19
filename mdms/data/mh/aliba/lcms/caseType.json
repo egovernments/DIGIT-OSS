@@ -2178,6 +2178,13 @@
       "sideCode": "MCS1",
       "active": true,
       "tenantId": "mh.aliba"
+    },
+    {
+      "name": "Murari case type name 1",
+      "code": "MCTN1",
+      "sideCode": "MCS3",
+      "active": true,
+      "tenantId": "mh.aliba"
     }
   ]
 }
