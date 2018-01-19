@@ -1444,6 +1444,26 @@
       "graceTimeTo": "1516350600000",
       "lunchStartTime": "1516350600000",
       "lunchEndTime": "1516354500000"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516387942644",
+      "shiftStartTime": "1516320944838",
+      "shiftEndTime": "1516403744838",
+      "lunchStartTime": "1516396544838",
+      "lunchEndTime": "1516400100000",
+      "graceTimeFrom": "1516335344838",
+      "graceTimeTo": "1516418640000",
+      "name": "ZXCVBN",
+      "shiftType": {
+        "code": "Shift002"
+      },
+      "department": {
+        "code": "ENG"
+      },
+      "designation": {
+        "code": "AO"
+      }
     }
   ]
 }
