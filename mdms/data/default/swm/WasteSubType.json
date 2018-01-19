@@ -195,6 +195,14 @@
       "wasteType": {
         "code": "PLASTIC/001"
       }
+    },
+    {
+      "name": "Plastic Dry Waste",
+      "code": "PLASTIC/001/006",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Waste Type Code 1"
+      }
     }
   ]
 }
