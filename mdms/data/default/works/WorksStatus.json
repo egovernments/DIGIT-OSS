@@ -461,6 +461,12 @@
       "moduleType": "TrackMilestone",
       "tenantId": "default",
       "orderNumber": 1
+    },
+    {
+      "code": "FINANCIAL_SANCTIONED",
+      "description": "Financial Sanctioned",
+      "moduleType": "AbstractEstimate",
+      "tenantId": "default"
     }
   ]
 }
