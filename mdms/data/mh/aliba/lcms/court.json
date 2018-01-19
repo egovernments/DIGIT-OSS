@@ -449,6 +449,18 @@
       },
       "active": true,
       "tenantId": "mh.aliba"
+    },
+    {
+      "name": "Harsubar",
+      "code": "140",
+      "address": {
+        "addressLine1": "village-sukhbasi",
+        "addressLine2": "District-madhubani",
+        "city": "Mahubani",
+        "pincode": "874500"
+      },
+      "active": true,
+      "tenantId": "mh.aliba"
     }
   ]
 }
