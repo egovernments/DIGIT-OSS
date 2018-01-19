@@ -36,11 +36,11 @@
         "code": "DR"
       },
       "shiftStartTime": 1512030600000,
-      "shiftEndTime": 1512059400000,
+      "shiftEndTime": "1516347000000",
       "lunchStartTime": 1512046800000,
-      "lunchEndTime": 1512050400000,
+      "lunchEndTime": "1516363200000",
       "graceTimeFrom": 1512016200000,
-      "graceTimeTo": 1512019800000
+      "graceTimeTo": "1516318200000"
     },
     {
       "code": "Morning Segregation Shift Code",
