@@ -3349,6 +3349,47 @@
           "code": "mh.khop"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": true,
+        "bankName": "ICICI",
+        "bankValidityFrom": 1514831400000,
+        "bankValidityTo": 1515781800000,
+        "area": "34",
+        "capacity": "4",
+        "address": "Bangalore Karnataka",
+        "latitude": "43",
+        "longitude": "34",
+        "location": {
+          "code": "202"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "DD1"
+          }
+        ]
+      },
+      "name": "DG Test 909",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1516352911462",
+      "ulbs": [
+        {
+          "code": "default"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
