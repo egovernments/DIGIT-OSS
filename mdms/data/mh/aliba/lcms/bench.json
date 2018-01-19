@@ -25,6 +25,12 @@
       "code": "NC",
       "active": true,
       "tenantId": "mh.aliba"
+    },
+    {
+      "name": "Hyderabad",
+      "code": "BC1",
+      "active": true,
+      "tenantId": "mh.aliba"
     }
   ]
 }
