@@ -211,6 +211,14 @@
       "wasteType": {
         "code": "Bio Medical Waste"
       }
+    },
+    {
+      "name": "Bricks",
+      "code": "BR",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Cons"
+      }
     }
   ]
 }
