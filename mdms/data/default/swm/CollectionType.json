@@ -71,6 +71,11 @@
       "tenantId": "default",
       "name": "338CT-3",
       "code": "338-3"
+    },
+    {
+      "tenantId": "default",
+      "name": "Test on 20 Sat",
+      "code": "S20"
     }
   ]
 }
