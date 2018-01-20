@@ -61,6 +61,11 @@
       "tenantId": "default",
       "name": "338CollectionType - 1",
       "code": "338-1"
+    },
+    {
+      "tenantId": "default",
+      "name": "338CollectionType2",
+      "code": "338-2"
     }
   ]
 }
