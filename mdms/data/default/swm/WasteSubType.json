@@ -219,6 +219,14 @@
       "wasteType": {
         "code": "Cons"
       }
+    },
+    {
+      "name": "test",
+      "code": "t01",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "IWS001"
+      }
     }
   ]
 }
