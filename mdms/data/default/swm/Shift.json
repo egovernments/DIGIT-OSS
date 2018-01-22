@@ -1552,6 +1552,26 @@
       "graceTimeFrom": "1516588200000",
       "graceTimeTo": "1516590000000",
       "remarks": ""
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516624795758",
+      "name": "New Shift One",
+      "shiftType": {
+        "code": "Shift002"
+      },
+      "department": {
+        "code": "ENG"
+      },
+      "designation": {
+        "code": "ADCOM"
+      },
+      "shiftStartTime": "1516581000000",
+      "shiftEndTime": "1516601760000",
+      "lunchStartTime": "1516584600000",
+      "lunchEndTime": "1516586400000",
+      "graceTimeFrom": "1516588200000",
+      "graceTimeTo": "1516590000000"
     }
   ]
 }
