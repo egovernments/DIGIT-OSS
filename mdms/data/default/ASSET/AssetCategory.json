@@ -1035,6 +1035,14 @@
           "columns": []
         },
         {
+          "name": "Unit of Measurement",
+          "type": "Select",
+          "isActive": true,
+          "isMandatory": false,
+          "order": "3",
+          "url": "/egov-mdms-service/v1/_get?moduleName\u003dcommon-masters\u0026masterName\u003dUom\u0026tenantId\u003ddefault"
+        },
+        {
           "name": "Material Type",
           "type": "Select",
           "isActive": true,
@@ -1056,6 +1064,14 @@
           "isActive": true,
           "isMandatory": false,
           "columns": []
+        },
+        {
+          "name": "Unit of Measurement",
+          "type": "Select",
+          "isActive": true,
+          "isMandatory": false,
+          "order": "3",
+          "url": "/egov-mdms-service/v1/_get?moduleName\u003dcommon-masters\u0026masterName\u003dUom\u0026tenantId\u003ddefault"
         }
       ]
     },
