@@ -55,6 +55,10 @@
     {
       "name": "ChallengeTest",
       "code": "CT"
+    },
+    {
+      "name": "Assessment Internal",
+      "code": "AI"
     }
   ]
 }
