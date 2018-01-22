@@ -51,6 +51,19 @@
       },
       "latitude": "22",
       "longitude": "14"
+    },
+    {
+      "publicToilet": true,
+      "name": "toilet name 007",
+      "code": "Toilet-1516619493464",
+      "tenantId": "default",
+      "address": "007 street ",
+      "location": {
+        "code": "203"
+      },
+      "latitude": "22",
+      "longitude": "33",
+      "seatCount": "5"
     }
   ]
 }
