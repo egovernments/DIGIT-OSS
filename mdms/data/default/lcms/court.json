@@ -617,6 +617,18 @@
       },
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "test/Murari/Court",
+      "code": "9875",
+      "address": {
+        "addressLine1": "36/a vangal rao nagar",
+        "addressLine2": "36/a vangal rao naga8",
+        "city": "Hyderabad",
+        "pincode": "9874562"
+      },
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
