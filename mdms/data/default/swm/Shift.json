@@ -1464,6 +1464,27 @@
       "designation": {
         "code": "AO"
       }
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516591621491",
+      "name": "Supervision first shift",
+      "shiftType": {
+        "code": "Shift Type Code 1"
+      },
+      "department": {
+        "code": "PHS"
+      },
+      "designation": {
+        "code": "HMO"
+      },
+      "shiftStartTime": "1516584617892",
+      "shiftEndTime": "1516600800000",
+      "lunchStartTime": "1516593600000",
+      "lunchEndTime": "1516595400000",
+      "graceTimeFrom": "1516595400000",
+      "graceTimeTo": "1516596000000",
+      "remarks": "Grade time is not applicable to all"
     }
   ]
 }
