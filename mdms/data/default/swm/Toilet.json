@@ -28,16 +28,16 @@
     },
     {
       "publicToilet": true,
-      "name": "tdfd",
+      "name": "toilet name 4",
       "code": "Toilet-1516613013746",
       "tenantId": "default",
-      "address": "fdbdfb",
+      "address": "assdf colony",
       "location": {
         "code": "352"
       },
       "latitude": "44",
       "longitude": "55",
-      "seatCount": "6"
+      "seatCount": "8"
     },
     {
       "publicToilet": true,
