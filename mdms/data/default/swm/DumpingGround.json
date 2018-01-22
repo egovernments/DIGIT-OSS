@@ -99,10 +99,10 @@
           }
         ]
       },
-      "isProcessingSite": true,
-      "distanceFromProcessingSite": "",
+      "isProcessingSite": false,
+      "distanceFromProcessingSite": "12",
       "processingSite": {
-        "code": ""
+        "code": "ProcessingSite-1515075903699"
       }
     },
     {
