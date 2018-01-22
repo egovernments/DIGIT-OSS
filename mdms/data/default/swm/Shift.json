@@ -1511,6 +1511,26 @@
       "latitude": "55",
       "longitude": "21",
       "seatCount": "6"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516619415184",
+      "name": "New Shift Name",
+      "shiftType": {
+        "code": "Shift002"
+      },
+      "department": {
+        "code": "EDU"
+      },
+      "designation": {
+        "code": "AO"
+      },
+      "shiftStartTime": "1516581000000",
+      "shiftEndTime": "1516601700000",
+      "lunchStartTime": "1516588200000",
+      "lunchEndTime": "1516591800000",
+      "graceTimeFrom": "1516595400000",
+      "graceTimeTo": "1516599000000"
     }
   ]
 }
