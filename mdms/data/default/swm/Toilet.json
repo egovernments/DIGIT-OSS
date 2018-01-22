@@ -64,6 +64,19 @@
       "latitude": "22",
       "longitude": "33",
       "seatCount": "5"
+    },
+    {
+      "publicToilet": true,
+      "name": "bbnnh",
+      "code": "Toilet-1516624460923",
+      "tenantId": "default",
+      "address": "dfbdfgbfgd",
+      "location": {
+        "code": "350"
+      },
+      "latitude": "22",
+      "longitude": "88",
+      "seatCount": "88"
     }
   ]
 }
