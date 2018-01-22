@@ -839,14 +839,14 @@
           "columns": []
         },
         {
-          "name": "Area(Sq. mtr)",
+          "name": "Area",
           "type": "Number",
           "isActive": true,
           "isMandatory": false,
           "columns": []
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Area UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
@@ -861,14 +861,14 @@
           "columns": []
         },
         {
-          "name": "MinimumWidth",
+          "name": "Minimum Width",
           "type": "Number",
           "isActive": true,
           "isMandatory": false,
           "columns": []
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Minimum Width UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
@@ -876,14 +876,14 @@
           "url": "/egov-mdms-service/v1/_get?moduleName\u003dcommon-masters\u0026masterName\u003dUom\u0026tenantId\u003ddefault"
         },
         {
-          "name": "MaximumWidth",
+          "name": "Maximum Width",
           "type": "Number",
           "isActive": true,
           "isMandatory": false,
           "columns": []
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Maximum Width UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
@@ -921,7 +921,7 @@
           "columns": []
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Layer Size UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
