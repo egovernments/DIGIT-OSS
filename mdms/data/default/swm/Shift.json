@@ -1485,6 +1485,19 @@
       "graceTimeFrom": "1516595400000",
       "graceTimeTo": "1516596000000",
       "remarks": "Grade time is not applicable to all"
+    },
+    {
+      "publicToilet": true,
+      "name": "toilet 3",
+      "code": "Shift-1516611371271",
+      "tenantId": "default",
+      "address": "xuz ",
+      "location": {
+        "code": "200"
+      },
+      "latitude": "23",
+      "longitude": "45",
+      "seatCount": "5"
     }
   ]
 }
