@@ -1498,6 +1498,19 @@
       "latitude": "23",
       "longitude": "45",
       "seatCount": "5"
+    },
+    {
+      "publicToilet": true,
+      "name": "toilet 4",
+      "code": "Shift-1516612757012",
+      "tenantId": "default",
+      "address": "akhibara",
+      "location": {
+        "code": "352"
+      },
+      "latitude": "55",
+      "longitude": "21",
+      "seatCount": "6"
     }
   ]
 }
