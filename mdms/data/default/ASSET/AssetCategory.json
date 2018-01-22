@@ -31,7 +31,7 @@
           "order": "2"
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Floor Wise Area UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
@@ -167,7 +167,7 @@
           "order": "2"
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Floor Wise Area UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
@@ -264,7 +264,7 @@
           "order": "2"
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Floor Wise Area UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
@@ -361,7 +361,7 @@
           "order": "2"
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Floor Wise Area UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
@@ -458,7 +458,7 @@
           "order": "2"
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Floor Wise Area UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
@@ -555,7 +555,7 @@
           "order": "2"
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Floor Wise Area UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
@@ -652,7 +652,7 @@
           "order": "2"
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Floor Wise Area UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
@@ -749,7 +749,7 @@
           "order": "2"
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Floor Wise Area UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
@@ -967,7 +967,7 @@
           "columns": []
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Diameter UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
@@ -1035,7 +1035,7 @@
           "columns": []
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Diameter UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
@@ -1066,7 +1066,7 @@
           "columns": []
         },
         {
-          "name": "Unit of Measurement",
+          "name": "Length UOM",
           "type": "Select",
           "isActive": true,
           "isMandatory": false,
