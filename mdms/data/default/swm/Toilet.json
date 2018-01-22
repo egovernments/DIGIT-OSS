@@ -38,6 +38,19 @@
       "latitude": "44",
       "longitude": "55",
       "seatCount": "6"
+    },
+    {
+      "publicToilet": true,
+      "name": "liknhjlkn",
+      "code": "Toilet-1516613613275",
+      "tenantId": "default",
+      "address": "dsfgfdg",
+      "seatCount": "10",
+      "location": {
+        "code": "201"
+      },
+      "latitude": "22",
+      "longitude": "14"
     }
   ]
 }
