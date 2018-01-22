@@ -3490,11 +3490,11 @@
         ]
       },
       "name": "aaaa",
-      "isProcessingSite": false,
+      "isProcessingSite": true,
       "processingSite": {
-        "code": "ProcessingSite-1515503331395"
+        "code": ""
       },
-      "distanceFromProcessingSite": "1",
+      "distanceFromProcessingSite": "",
       "tenantId": "default",
       "code": "DumpingGround-1516628483636",
       "ulbs": [
