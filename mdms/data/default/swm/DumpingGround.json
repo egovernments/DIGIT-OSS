@@ -267,7 +267,7 @@
         ]
       },
       "name": "Test23",
-      "isProcessingSite": true,
+      "isProcessingSite": false,
       "processingSite": {
         "code": ""
       },
@@ -311,11 +311,11 @@
         ]
       },
       "name": "Waste Test1",
-      "isProcessingSite": false,
+      "isProcessingSite": true,
       "processingSite": {
-        "code": "ProcessingSite-1515772855866"
+        "code": ""
       },
-      "distanceFromProcessingSite": "56",
+      "distanceFromProcessingSite": "",
       "tenantId": "default",
       "code": "DumpingGround-1514988115500",
       "ulbs": [
@@ -3269,14 +3269,55 @@
       "siteDetails": {
         "mpcbAuthorisation": true,
         "bankGuarantee": true,
-        "bankName": "State Bank Of India",
+        "bankName": "HDFV",
         "bankValidityFrom": 1514745000000,
-        "bankValidityTo": 1546281000000,
-        "area": "50",
-        "capacity": "60",
-        "address": "kharghar dumping ground",
-        "latitude": "45",
-        "longitude": "56",
+        "bankValidityTo": 1518201000000,
+        "area": "49",
+        "capacity": "20",
+        "address": "ttseetewewtew ewewtew ew",
+        "latitude": "20",
+        "longitude": "20",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "Waste Type Code 3"
+          },
+          {
+            "code": "Waste Type Code 1"
+          }
+        ]
+      },
+      "name": "Hafeezpet",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1516352364188",
+      "ulbs": [
+        {
+          "code": "default"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "HDFC",
+        "bankValidityFrom": 1516300200000,
+        "bankValidityTo": 1518114600000,
+        "area": "29",
+        "capacity": "26",
+        "address": "est ets tstet tet wt ew",
+        "latitude": "20",
+        "longitude": "20",
         "location": {
           "code": "200"
         },
@@ -3285,24 +3326,153 @@
             "code": "Waste Type Code 3"
           },
           {
-            "code": "Waste Type Code 2"
+            "code": "DD1"
+          },
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
           }
         ]
       },
-      "name": "????? ???? ???? ??????",
+      "name": "Miypaur -III",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "56",
+      "tenantId": "default",
+      "code": "DumpingGround-1516352654154",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": true,
+        "bankName": "ICICI",
+        "bankValidityFrom": 1514831400000,
+        "bankValidityTo": 1515781800000,
+        "area": "34",
+        "capacity": "4",
+        "address": "Bangalore Karnataka",
+        "latitude": "43",
+        "longitude": "34",
+        "location": {
+          "code": "202"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "DD1"
+          }
+        ]
+      },
+      "name": "DG Test 909",
       "isProcessingSite": true,
       "processingSite": {
         "code": ""
       },
       "distanceFromProcessingSite": "",
       "tenantId": "default",
-      "code": "DumpingGround-1516433154662",
+      "code": "DumpingGround-1516352911462",
+      "ulbs": [
+        {
+          "code": "default"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "20",
+        "capacity": "2000",
+        "address": "Hyderabad kukatpally",
+        "latitude": "50",
+        "longitude": "40",
+        "location": {
+          "code": "203"
+        },
+        "wasteTypes": [
+          {
+            "code": "Waste Type Code 3"
+          }
+        ]
+      },
+      "name": "Kukatpally",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515772855866"
+      },
+      "distanceFromProcessingSite": "5",
+      "tenantId": "default",
+      "code": "DumpingGround-1516355082748",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "1",
+        "capacity": "1",
+        "address": "dsdasdasdsaddasdas",
+        "latitude": "0",
+        "longitude": "0",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "Dump 102",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515569430289"
+      },
+      "distanceFromProcessingSite": "1",
+      "tenantId": "default",
+      "code": "DumpingGround-1516356469112",
       "ulbs": [
         {
           "code": "mh.amba"
         },
         {
-          "code": "mh.aliba"
+          "code": "mh.khop"
+        },
+        {
+          "code": "default"
+        },
+        {
+          "code": "panavel"
         }
       ]
     }
