@@ -1572,6 +1572,26 @@
       "lunchEndTime": "1516586400000",
       "graceTimeFrom": "1516588200000",
       "graceTimeTo": "1516590000000"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516628175813",
+      "name": "asdasd",
+      "shiftType": {
+        "code": "ABCD"
+      },
+      "department": {
+        "code": "ENG"
+      },
+      "designation": {
+        "code": "AO"
+      },
+      "shiftStartTime": "1516580503398",
+      "shiftEndTime": "1516605703398",
+      "lunchStartTime": "1516580700000",
+      "lunchEndTime": "1516584103398",
+      "graceTimeFrom": "1516580700000",
+      "graceTimeTo": "1516584060000"
     }
   ]
 }
