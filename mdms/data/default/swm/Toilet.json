@@ -25,6 +25,19 @@
       "latitude": 12.88989,
       "longitude": 14.78789,
       "seatCount": 10
+    },
+    {
+      "publicToilet": true,
+      "name": "tdfd",
+      "code": "Toilet-1516613013746",
+      "tenantId": "default",
+      "address": "fdbdfb",
+      "location": {
+        "code": "352"
+      },
+      "latitude": "44",
+      "longitude": "55",
+      "seatCount": "6"
     }
   ]
 }
