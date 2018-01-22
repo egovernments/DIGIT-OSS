@@ -8,12 +8,25 @@
       "censusYear": 2011,
       "population": 13383,
       "garbageToBeCollected": 5,
-      "location":{
-	"code": "200"
-       },
-      "ulb":{
-	"code": "default"
-       }
+      "location": {
+        "code": "200"
+      },
+      "ulb": {
+        "code": "default"
+      }
+    },
+    {
+      "ulb": {
+        "code": "mh.aliba"
+      },
+      "code": "Population-1516630930024",
+      "tenantId": "default",
+      "censusYear": "2018",
+      "population": "12",
+      "garbageToBeCollected": "4",
+      "location": {
+        "code": "202"
+      }
     }
   ]
 }
