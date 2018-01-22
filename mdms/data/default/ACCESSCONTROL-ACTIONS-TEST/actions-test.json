@@ -1821,7 +1821,7 @@
       "enabled": true,
       "serviceCode": "VendorPaymentDetails",
       "code": "null",
-      "path": "Solid Waste Management.SWM Transactions.Vendor Payment Details.VendorPaymentDetails Create"
+      "path": "Solid Waste Management.SWM Transactions.Vendor Invoice.Vendor Invoice Create"
     },
     {
       "id": 1207,
@@ -1833,7 +1833,7 @@
       "enabled": false,
       "serviceCode": "VendorPaymentDetails",
       "code": "null",
-      "path": "Solid Waste Management.SWM Transactions.Vendor Payment Details.VendorPaymentDetails Update"
+      "path": "Solid Waste Management.SWM Transactions.Vendor Invoice.Vendor Invoice Update"
     },
     {
       "id": 1208,
@@ -1845,7 +1845,7 @@
       "enabled": false,
       "serviceCode": "VendorPaymentDetails",
       "code": "null",
-      "path": "Solid Waste Management.SWM Transactions.Vendor Payment Details.VendorPaymentDetails Search"
+      "path": "Solid Waste Management.SWM Transactions.Vendor Invoice.Vendor Invoice Search"
     },
     {
       "id": 6,
