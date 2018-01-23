@@ -91,6 +91,11 @@
       "tenantId": "default",
       "name": "test on 23_3",
       "code": "T23_3"
+    },
+    {
+      "tenantId": "default",
+      "name": "CT_23",
+      "code": "CT23"
     }
   ]
 }
