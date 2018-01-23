@@ -23,7 +23,7 @@
       "tenantId": "default",
       "censusYear": "2018",
       "population": "12",
-      "garbageToBeCollected": "10",
+      "garbageToBeCollected": "3",
       "location": {
         "code": "202"
       }
