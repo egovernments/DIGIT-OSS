@@ -3,7 +3,7 @@
   "moduleName": "lcms",
   "caseStatus": [
     {
-      "name": "aaaa",
+      "name": "UpdateCaseStatus",
       "code": "RUNNING",
       "active": true,
       "tenantId": "default"
