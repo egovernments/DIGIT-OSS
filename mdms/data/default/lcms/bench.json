@@ -67,6 +67,12 @@
       "code": "BN",
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "BenchName2",
+      "code": "BN2",
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
