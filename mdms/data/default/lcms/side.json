@@ -259,6 +259,12 @@
       "code": "SN1",
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "Side Name 2",
+      "code": "SN2",
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
