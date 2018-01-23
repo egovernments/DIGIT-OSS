@@ -145,6 +145,12 @@
       "code": "5665656565",
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "CaseStatus3",
+      "code": "CS3",
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
