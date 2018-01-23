@@ -69,8 +69,8 @@
     },
     {
       "tenantId": "default",
-      "name": "construction waste",
-      "code": "waste001"
+      "name": "Bio Waste",
+      "code": "BW001"
     }
   ]
 }
