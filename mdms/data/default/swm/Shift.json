@@ -1484,7 +1484,7 @@
       "lunchEndTime": "1516596300000",
       "graceTimeFrom": "1516595400000",
       "graceTimeTo": "1516596000000",
-      "remarks": "Grade time is not applicable to all"
+      "remarks": "Grade time is applicable to all"
     },
     {
       "publicToilet": true,
