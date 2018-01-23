@@ -27,6 +27,19 @@
       "location": {
         "code": "202"
       }
+    },
+    {
+      "code": "Population-1516685115133",
+      "tenantId": "default",
+      "ulb": {
+        "code": "panavel"
+      },
+      "censusYear": "2018",
+      "population": "152",
+      "garbageToBeCollected": "10",
+      "location": {
+        "code": "303"
+      }
     }
   ]
 }
