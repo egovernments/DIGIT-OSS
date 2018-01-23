@@ -2626,6 +2626,13 @@
       "sideCode": "SN2",
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "Case Type Name 3",
+      "code": "CTN3",
+      "sideCode": "SN1",
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
