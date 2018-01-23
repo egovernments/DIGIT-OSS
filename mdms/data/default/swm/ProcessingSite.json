@@ -857,6 +857,46 @@
       "name": "Sahyog Processing Site",
       "tenantId": "default",
       "code": "ProcessingSite-1516353210352"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "BOM",
+        "bankValidityFrom": 1514745000000,
+        "bankValidityTo": 1522521000000,
+        "area": "10",
+        "capacity": "6",
+        "address": "Processing Unit01",
+        "latitude": "34",
+        "longitude": "56",
+        "location": {
+          "code": "302"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "Waste Type Code 3"
+          },
+          {
+            "code": "Waste Type Code 1"
+          },
+          {
+            "code": "HHPW"
+          }
+        ]
+      },
+      "name": "Processing Unit01",
+      "tenantId": "default",
+      "code": "ProcessingSite-1516692533752"
     }
   ]
 }
