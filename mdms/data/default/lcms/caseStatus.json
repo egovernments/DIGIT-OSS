@@ -149,7 +149,7 @@
     {
       "name": "CaseStatus3",
       "code": "CS3",
-      "active": true,
+      "active": false,
       "tenantId": "default"
     }
   ]
