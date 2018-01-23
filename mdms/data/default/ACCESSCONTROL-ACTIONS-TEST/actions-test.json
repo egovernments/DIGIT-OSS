@@ -10446,6 +10446,39 @@
       "serviceCode": "",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1509,
+      "name": "Create Supplier Bill",
+      "url": "/inventory-services/supplierbills/_create",
+      "displayName": "Supplier Bill",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1510,
+      "name": "Update Supplier Bill",
+      "url": "/inventory-services/supplierbills/_update",
+      "displayName": "Update Supplier Bill",
+      "orderNumber": 2,
+      "enabled": false,
+      "serviceCode": "",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1511,
+      "name": "Search Supplier Bill",
+      "url": "/inventory-services/supplierbills/_update",
+      "displayName": "Search Supplier Bill",
+      "orderNumber": 3,
+      "enabled": false,
+      "serviceCode": "",
+      "code": "null",
+      "path": ""
     }
   ]
 }
