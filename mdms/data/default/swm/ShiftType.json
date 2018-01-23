@@ -101,6 +101,11 @@
       "tenantId": "default",
       "name": "Afternoon Shift",
       "code": "Shift002"
+    },
+    {
+      "tenantId": "default",
+      "name": "10 to 6",
+      "code": "shift106"
     }
   ]
 }
