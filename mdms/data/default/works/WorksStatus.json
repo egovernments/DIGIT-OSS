@@ -47,37 +47,37 @@
     {
       "code": "NOTICEINVITINGTENDERRELEASED",
       "description": "Notice inviting tender released",
-      "moduleType": "AbstractEstimateOffline",
+      "moduleType": "DetailedEstimateOffline",
       "tenantId": "default"
     },
     {
       "code": "TENDER_DOCUMENT_RELEASED",
       "description": "Tender document released",
-      "moduleType": "AbstractEstimateOffline",
+      "moduleType": "DetailedEstimateOffline",
       "tenantId": "default"
     },
     {
       "code": "TENDER_OPENED",
       "description": "Tender opened",
-      "moduleType": "AbstractEstimateOffline",
+      "moduleType": "DetailedEstimateOffline",
       "tenantId": "default"
     },
     {
       "code": "TECHNICAL_EVALUATION_DONE",
       "description": "Technical evaluation done",
-      "moduleType": "AbstractEstimateOffline",
+      "moduleType": "DetailedEstimateOffline",
       "tenantId": "default"
     },
     {
       "code": "COMMERCIAL_EVALUATION_DONE",
       "description": "Commercial evaluation done",
-      "moduleType": "AbstractEstimateOffline",
+      "moduleType": "DetailedEstimateOffline",
       "tenantId": "default"
     },
     {
       "code": "L1_TENDER_FINALIZED",
       "description": "L1 tender finalized",
-      "moduleType": "AbstractEstimateOffline",
+      "moduleType": "DetailedEstimateOffline",
       "tenantId": "default"
     },
     {
