@@ -61,6 +61,12 @@
       "code": "CCN1",
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "CaseCategoryName2",
+      "code": "CNN2",
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
