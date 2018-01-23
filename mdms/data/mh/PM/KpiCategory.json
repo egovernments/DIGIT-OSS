@@ -57,8 +57,8 @@
       "code": "CT"
     },
     {
-      "name": "Assessment Internal",
-      "code": "AI"
+      "name": "AssessmentCategory",
+      "code": "ASC"
     }
   ]
 }
