@@ -227,6 +227,14 @@
       "wasteType": {
         "code": "IWS001"
       }
+    },
+    {
+      "name": "TestBio",
+      "code": "TB01",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Bio Medical Waste"
+      }
     }
   ]
 }
