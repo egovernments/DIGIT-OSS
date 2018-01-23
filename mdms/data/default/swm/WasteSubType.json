@@ -205,35 +205,11 @@
       }
     },
     {
-      "name": "Test View WasteSubType",
-      "code": "WST009",
+      "name": "Bio Medical Waste",
+      "code": "BMW001",
       "tenantId": "default",
       "wasteType": {
-        "code": "Bio Medical Waste"
-      }
-    },
-    {
-      "name": "Bricks",
-      "code": "BR",
-      "tenantId": "default",
-      "wasteType": {
-        "code": "Cons"
-      }
-    },
-    {
-      "name": "test",
-      "code": "t01",
-      "tenantId": "default",
-      "wasteType": {
-        "code": "IWS001"
-      }
-    },
-    {
-      "name": "TestBio",
-      "code": "TB01",
-      "tenantId": "default",
-      "wasteType": {
-        "code": "Bio Medical Waste"
+        "code": "BW001"
       }
     }
   ]
