@@ -73,11 +73,7 @@
       "name": "Fake dumping ground 2",
       "ulbs": [
         {
-          "code": "mh.roha",
-          "name": "Fake ULB 2",
-          "imageId": "Fake image ID 2",
-          "logoId": "Fake logo ID 2",
-          "type": "Fake type 2"
+          "code": "mh.roha"
         }
       ],
       "siteDetails": {
@@ -85,24 +81,20 @@
         "capacity": 16.4,
         "address": "Fake address",
         "location": {
-          "code": "Fake location code 1",
+          "code": "352",
           "name": "Fake location name 1"
         },
-        "latitude": 0,
-        "longitude": 0,
+        "latitude": "19.085084896649633",
+        "longitude": "72.87564006347658",
         "mpcbAuthorisation": true,
         "bankGuarantee": false,
         "bankValidityFrom": "1509190483",
         "bankValidityTo": "1509190483",
         "wasteTypes": [
           {
-            "tenantId": "default",
-            "name": "Dry Waste",
             "code": "Waste Type Code 1"
           },
           {
-            "tenantId": "default",
-            "name": "Wet Waste",
             "code": "Waste Type Code 2"
           }
         ]
