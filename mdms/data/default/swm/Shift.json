@@ -1612,6 +1612,26 @@
       "lunchEndTime": "1516716000000",
       "graceTimeFrom": "1516717800000",
       "graceTimeTo": "1516719600000"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516699297909",
+      "name": "New SHift 722",
+      "shiftType": {
+        "code": "ABCD"
+      },
+      "department": {
+        "code": "ACC"
+      },
+      "designation": {
+        "code": "ACIV"
+      },
+      "shiftStartTime": "1516710600000",
+      "shiftEndTime": "1516730400000",
+      "lunchStartTime": "1516714200000",
+      "lunchEndTime": "1516716000000",
+      "graceTimeFrom": "1516717800000",
+      "graceTimeTo": "1516719600000"
     }
   ]
 }
