@@ -71,6 +71,11 @@
       "tenantId": "default",
       "name": "T-24-2",
       "code": "T24-2"
+    },
+    {
+      "tenantId": "default",
+      "name": "24CollectionName",
+      "code": "24CollectionTypeCode"
     }
   ]
 }
