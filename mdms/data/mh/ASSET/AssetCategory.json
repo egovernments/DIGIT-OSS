@@ -2372,7 +2372,7 @@
       "parent": "56",
       "unitOfMeasurement": "KW",
       "isDepreciationApplicable": true,
-      "depreciationRate": "6.66",
+      "depreciationRate": "7",
       "assetFieldsDefination": [
         {
           "name": "1stField",
