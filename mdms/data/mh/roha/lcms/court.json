@@ -109,6 +109,18 @@
       },
       "active": false,
       "tenantId": "mh.roha"
+    },
+    {
+      "name": "Test55",
+      "code": "t55",
+      "address": {
+        "addressLine1": "test",
+        "addressLine2": "test",
+        "city": "test",
+        "pincode": "78945465"
+      },
+      "active": true,
+      "tenantId": "mh.roha"
     }
   ]
 }
