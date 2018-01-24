@@ -10479,6 +10479,45 @@
       "serviceCode": "",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1512,
+      "name": "Create Contractor Bil",
+      "url": "/works-measurementbook/v1/contractorbills/_create",
+      "displayName": "Create Contractor Bil",
+      "orderNumber": 1,
+      "queryParams": null,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "ContractorBill",
+      "code": "null",
+      "path": "Works Management.Contractor Bil.Contractor Bil"
+    },
+    {
+      "id": 1513,
+      "name": "Update Contractor Bil",
+      "url": "/works-measurementbook/v1/contractorbills/_update",
+      "displayName": "Update Contractor Bil",
+      "orderNumber": 2,
+      "queryParams": null,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "ContractorBill",
+      "code": "null",
+      "path": "Works Management.Contractor Bil.Contractor Bil"
+    },
+    {
+      "id": 1514,
+      "name": "Search Contractor Bil",
+      "url": "/works-measurementbook/v1/contractorbills/_search",
+      "displayName": "Search Contractor Bil",
+      "orderNumber": 0,
+      "queryParams": null,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "ContractorBill",
+      "code": "null",
+      "path": "Works Management.Contractor Bil.Contractor Bil"
     }
   ]
 }
