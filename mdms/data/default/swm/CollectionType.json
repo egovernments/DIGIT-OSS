@@ -86,6 +86,11 @@
       "tenantId": "default",
       "name": "242CollectionTypeName",
       "code": "242CollectionTypeCode"
+    },
+    {
+      "tenantId": "default",
+      "name": "PCollName",
+      "code": "PCollCode"
     }
   ]
 }
