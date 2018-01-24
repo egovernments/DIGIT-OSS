@@ -13537,6 +13537,42 @@
       "actionid": 1514,
       "actioncode": "",
       "tenantid": "default"
+    },
+    {
+      "rolecode": "WORKS_ADMINISTRATOR",
+      "actionid": 1512,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "WORKS_ADMINISTRATOR",
+      "actionid": 1513,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "WORKS_ADMINISTRATOR",
+      "actionid": 1514,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "WORKS_APPROVER",
+      "actionid": 1512,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "WORKS_APPROVER",
+      "actionid": 1513,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "WORKS_APPROVER",
+      "actionid": 1514,
+      "actioncode": "",
+      "tenantid": "default"
     }
   ]
 }
