@@ -277,6 +277,12 @@
       "code": "SFT",
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "BBB",
+      "code": "BBB",
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
