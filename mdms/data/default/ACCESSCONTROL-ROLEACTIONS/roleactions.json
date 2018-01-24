@@ -13501,6 +13501,42 @@
       "actionid": 1511,
       "actioncode": "",
       "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1512,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1513,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1514,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "WORKS_BILL_CREATOR",
+      "actionid": 1512,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "WORKS_BILL_CREATOR",
+      "actionid": 1513,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "WORKS_BILL_CREATOR",
+      "actionid": 1514,
+      "actioncode": "",
+      "tenantid": "default"
     }
   ]
 }
