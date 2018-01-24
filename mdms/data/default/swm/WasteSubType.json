@@ -211,6 +211,14 @@
       "wasteType": {
         "code": "BW001"
       }
+    },
+    {
+      "name": "BIOTEst",
+      "code": "BT09",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Bio Medical Waste"
+      }
     }
   ]
 }
