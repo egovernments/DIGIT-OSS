@@ -414,13 +414,13 @@
         "bankName": "",
         "bankValidityFrom": "",
         "bankValidityTo": "",
-        "area": "",
-        "capacity": "",
-        "address": "",
-        "latitude": "",
-        "longitude": "",
+        "area": "1",
+        "capacity": "1",
+        "address": "sasaaaaaaaaasaaSs",
+        "latitude": "1",
+        "longitude": "1",
         "location": {
-          "code": "101"
+          "code": "200"
         },
         "wasteTypes": [
           {
@@ -431,12 +431,12 @@
           }
         ]
       },
-      "name": "",
+      "name": "qaas",
       "isProcessingSite": false,
       "processingSite": {
-        "code": ""
+        "code": "ProcessingSite-1515772855866"
       },
-      "distanceFromProcessingSite": "",
+      "distanceFromProcessingSite": "1",
       "tenantId": "default",
       "code": "DumpingGround-1515050513105",
       "ulbs": [
