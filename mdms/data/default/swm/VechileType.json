@@ -121,6 +121,11 @@
       "tenantId": "default",
       "name": "भाषा ऑनलाईन भाषा ऑनलाईन",
       "code": "Marathi Text Test"
+    },
+    {
+      "tenantId": "default",
+      "name": "भाषा ऑनलाईन भाषा",
+      "code": "Marathi Text"
     }
   ]
 }
