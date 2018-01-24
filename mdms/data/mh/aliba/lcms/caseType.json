@@ -2187,7 +2187,7 @@
       "tenantId": "mh.aliba"
     },
     {
-      "name": "Application Acceptance",
+      "name": "Application Acceptance Allocation",
       "code": "APPA",
       "sideCode": "ORGNL",
       "active": true,
