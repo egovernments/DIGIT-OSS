@@ -2236,7 +2236,7 @@
       "name": "Test CategoryA",
       "assetCategoryType": "IMMOVABLE",
       "parent": "1",
-      "unitOfMeasurement": "SFT",
+      "unitOfMeasurement": "SQM",
       "isDepreciationApplicable": true,
       "depreciationRate": "6.66",
       "assetFieldsDefination": [
