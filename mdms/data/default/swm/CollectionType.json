@@ -66,6 +66,11 @@
       "tenantId": "default",
       "name": "test on 24_1",
       "code": "T24_1"
+    },
+    {
+      "tenantId": "default",
+      "name": "T-24-2",
+      "code": "T24-2"
     }
   ]
 }
