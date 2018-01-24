@@ -2185,6 +2185,13 @@
       "sideCode": "MCS3",
       "active": true,
       "tenantId": "mh.aliba"
+    },
+    {
+      "name": "Application Acceptance",
+      "code": "APPA",
+      "sideCode": "ORGNL",
+      "active": true,
+      "tenantId": "mh.aliba"
     }
   ]
 }
