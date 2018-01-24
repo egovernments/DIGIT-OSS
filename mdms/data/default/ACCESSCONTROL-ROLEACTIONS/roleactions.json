@@ -13573,6 +13573,30 @@
       "actionid": 1514,
       "actioncode": "",
       "tenantid": "default"
+    },
+    {
+      "rolecode": "LOA_CREATOR",
+      "actionid": 1174,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "LOA_CREATOR",
+      "actionid": 1175,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "WO_CREATOR",
+      "actionid": 1174,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "WO_CREATOR",
+      "actionid": 1175,
+      "actioncode": "",
+      "tenantid": "default"
     }
   ]
 }
