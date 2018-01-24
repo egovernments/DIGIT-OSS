@@ -5,7 +5,7 @@
     {
       "code": "1",
       "tenantId": "default",
-      "publicToilet": true,
+      "publicToilet": false,
       "name": "Toilet Name 1",
       "location": {
         "code": "200"
