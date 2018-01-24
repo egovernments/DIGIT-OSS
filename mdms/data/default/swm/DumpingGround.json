@@ -31,7 +31,8 @@
         "capacity": "6.007",
         "address": "Trimbak",
         "location": {
-          "code": "200"
+          "code": "101",
+          "name": "Fake location name 1"
         },
         "latitude": 0,
         "longitude": 0,
@@ -80,7 +81,8 @@
         "capacity": 16.4,
         "address": "Fake address",
         "location": {
-          "code": "200"
+          "code": "352",
+          "name": "Fake location name 1"
         },
         "latitude": "19.085084896649633",
         "longitude": "72.87564006347658",
@@ -116,7 +118,7 @@
         "latitude": "",
         "longitude": "",
         "location": {
-          "code": "200"
+          "code": "101"
         },
         "wasteTypes": [
           {
@@ -201,7 +203,7 @@
         "latitude": "34",
         "longitude": "35",
         "location": {
-          "code": "200"
+          "code": "202"
         },
         "wasteTypes": [
           {
@@ -245,7 +247,7 @@
         "latitude": "7",
         "longitude": "9",
         "location": {
-          "code": "200"
+          "code": "202"
         },
         "wasteTypes": [
           {
@@ -289,7 +291,7 @@
         "latitude": "23",
         "longitude": "33",
         "location": {
-          "code": "200"
+          "code": "203"
         },
         "wasteTypes": [
           {
@@ -330,7 +332,7 @@
         "latitude": "4",
         "longitude": "5",
         "location": {
-          "code": "200"
+          "code": "202"
         },
         "wasteTypes": [
           {
@@ -371,7 +373,7 @@
         "latitude": "4",
         "longitude": "5",
         "location": {
-          "code": "200"
+          "code": "202"
         },
         "wasteTypes": [
           {
@@ -418,7 +420,7 @@
         "latitude": "",
         "longitude": "",
         "location": {
-          "code": "200"
+          "code": "101"
         },
         "wasteTypes": [
           {
@@ -458,9 +460,7 @@
         "address": "",
         "latitude": "",
         "longitude": "",
-        "location": {
-          "code":"200"
-        },
+        "location": {},
         "wasteTypes": [
           {
             "code": "Waste Type Code 1"
@@ -499,9 +499,7 @@
         "address": "xyzzz",
         "latitude": "8",
         "longitude": "7",
-        "location": {
-          "code":"200"
-        },
+        "location": {},
         "wasteTypes": [
           {
             "code": "Medical Wate"
@@ -534,9 +532,7 @@
         "address": "Pune",
         "latitude": "",
         "longitude": "",
-        "location": {
-          "code":"200"
-        },
+        "location": {},
         "wasteTypes": [
           {
             "code": "DD1"
@@ -572,9 +568,7 @@
         "address": "Pune",
         "latitude": "",
         "longitude": "",
-        "location": {
-          "code":"200"
-        },
+        "location": {},
         "wasteTypes": [
           {
             "code": "Medical Wate"
@@ -643,9 +637,7 @@
         "address": "Pune",
         "latitude": "",
         "longitude": "",
-        "location": {
-          "code":"200"
-        },
+        "location": {},
         "wasteTypes": [
           {
             "code": "Waste Type Code 3"
@@ -684,9 +676,7 @@
             "code": "Bio Medical Waste"
           }
         ],
-        "location": {
-          "code":"200"
-        }
+        "location": {}
       },
       "name": "Test 5 ",
       "isProcessingSite": true,
