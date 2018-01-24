@@ -271,6 +271,12 @@
       "code": "SN3",
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "SideFoTest",
+      "code": "SFT",
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
