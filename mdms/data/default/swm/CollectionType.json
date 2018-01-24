@@ -61,6 +61,11 @@
       "tenantId": "default",
       "name": "Door To Door",
       "code": "CollectionTypeCode001"
+    },
+    {
+      "tenantId": "default",
+      "name": "test on 24_1",
+      "code": "T24_1"
     }
   ]
 }
