@@ -12,7 +12,7 @@
       "name": "Pune District Court",
       "type": "District Court",
       "code": "PDC",
-      "active": false,
+      "active": true,
       "tenantId": "default"
     },
     {
