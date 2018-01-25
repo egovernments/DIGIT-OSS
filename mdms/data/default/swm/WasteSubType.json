@@ -219,6 +219,14 @@
       "wasteType": {
         "code": "Bio Medical Waste"
       }
+    },
+    {
+      "name": "Hale Radio",
+      "code": "HR",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "EGW"
+      }
     }
   ]
 }
