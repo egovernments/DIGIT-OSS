@@ -221,11 +221,11 @@
       }
     },
     {
-      "name": "Hale Radios",
-      "code": "HR",
+      "name": "Medical Dry Waste",
+      "code": "MDW001",
       "tenantId": "default",
       "wasteType": {
-        "code": "EGW"
+        "code": "Medical Wate"
       }
     }
   ]
