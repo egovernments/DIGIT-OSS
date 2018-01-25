@@ -126,6 +126,11 @@
       "tenantId": "default",
       "name": "नाव",
       "code": "नाव  नवीन"
+    },
+    {
+      "tenantId": "default",
+      "name": "नवीन",
+      "code": "1234 नवीन"
     }
   ]
 }
