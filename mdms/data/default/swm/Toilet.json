@@ -90,6 +90,19 @@
       "latitude": "11.11",
       "longitude": "12.12",
       "seatCount": "2"
+    },
+    {
+      "publicToilet": true,
+      "name": "gfn",
+      "code": "Toilet-1516884775882",
+      "tenantId": "default",
+      "address": "fgngfn",
+      "location": {
+        "code": "202"
+      },
+      "latitude": "34",
+      "longitude": "43",
+      "seatCount": "43"
     }
   ]
 }
