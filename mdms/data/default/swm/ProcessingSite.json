@@ -897,6 +897,37 @@
       "name": "Processing Unit01",
       "tenantId": "default",
       "code": "ProcessingSite-1516692533752"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "11",
+        "capacity": "11",
+        "address": "Site 1Site 1Site 1Site 1Site 1",
+        "latitude": "0",
+        "longitude": "0",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "BW001"
+          },
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "Site 1",
+      "tenantId": "default",
+      "code": "ProcessingSite-1516880833188"
     }
   ]
 }
