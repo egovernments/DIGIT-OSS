@@ -629,6 +629,18 @@
       },
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "Court Name 3",
+      "code": "CN3",
+      "address": {
+        "addressLine1": "village-sukhbasi",
+        "addressLine2": "Village-Basopatti",
+        "city": "Madhubani",
+        "pincode": "847252"
+      },
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
