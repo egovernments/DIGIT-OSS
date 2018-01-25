@@ -10,7 +10,7 @@
         "addressLine1": "Address 1",
         "addressLine2": "address 2"
       },
-      "name": "Court_132",
+      "name": "Court_131",
       "tenantId": "default",
       "active": true
     },
@@ -111,13 +111,13 @@
       "tenantId": "mh.roha"
     },
     {
-      "name": "Test55",
-      "code": "t55",
+      "name": "court name 2",
+      "code": "CC2",
       "address": {
-        "addressLine1": "test",
-        "addressLine2": "test",
-        "city": "test",
-        "pincode": "78945465"
+        "addressLine1": "36/a vangal rao nagar",
+        "addressLine2": "village-sukhbasi",
+        "city": "Madhubani",
+        "pincode": "839933"
       },
       "active": true,
       "tenantId": "mh.roha"
