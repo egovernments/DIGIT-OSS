@@ -2640,6 +2640,13 @@
       "sideCode": "MST",
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "Murari Case Type Testing 2",
+      "code": "MCTT3",
+      "sideCode": "MST2",
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
