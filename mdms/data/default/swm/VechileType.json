@@ -131,6 +131,11 @@
       "tenantId": "default",
       "name": "नवीन",
       "code": "1234 नवीन"
+    },
+    {
+      "tenantId": "default",
+      "name": "Bharath Benz SMT",
+      "code": "BBSMT"
     }
   ]
 }
