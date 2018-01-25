@@ -3669,6 +3669,50 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "11",
+        "capacity": "11",
+        "address": "Dump_502 Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dum",
+        "latitude": "0",
+        "longitude": "0",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "Dump_502",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1516880521908",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        },
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
