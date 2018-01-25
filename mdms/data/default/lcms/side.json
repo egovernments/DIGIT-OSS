@@ -289,6 +289,12 @@
       "code": "MST",
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "Murari Side Testing 2",
+      "code": "MST2",
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
