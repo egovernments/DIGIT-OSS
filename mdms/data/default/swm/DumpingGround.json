@@ -3677,8 +3677,8 @@
         "bankName": "",
         "bankValidityFrom": "",
         "bankValidityTo": "",
-        "area": "11",
-        "capacity": "11",
+        "area": "12",
+        "capacity": "12",
         "address": "Dump_502 Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dum",
         "latitude": "0",
         "longitude": "0",
@@ -3711,6 +3711,21 @@
         },
         {
           "code": "default"
+        },
+        {
+          "code": "mh.khop"
+        },
+        {
+          "code": "mh.khopoli"
+        },
+        {
+          "code": "panavel"
+        },
+        {
+          "code": "mh.pen0"
+        },
+        {
+          "code": "mh.roha"
         }
       ]
     }
