@@ -2192,6 +2192,13 @@
       "sideCode": "ORGNL",
       "active": true,
       "tenantId": "mh.aliba"
+    },
+    {
+      "name": "Murari Case Type Name Testing ",
+      "code": "MCTNT",
+      "sideCode": "MCS3",
+      "active": true,
+      "tenantId": "mh.aliba"
     }
   ]
 }
