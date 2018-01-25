@@ -1632,6 +1632,27 @@
       "lunchEndTime": "1516716000000",
       "graceTimeFrom": "1516717800000",
       "graceTimeTo": "1516719600000"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1516864672893",
+      "name": "8To9 Shift",
+      "shiftType": {
+        "code": "8To9 Shift"
+      },
+      "department": {
+        "code": "ADM"
+      },
+      "designation": {
+        "code": "DR"
+      },
+      "shiftStartTime": "1516847400000",
+      "shiftEndTime": "1516851000000",
+      "lunchStartTime": "1516849200000",
+      "lunchEndTime": "1516849500000",
+      "graceTimeFrom": "1516849500000",
+      "graceTimeTo": "1516849560000",
+      "remarks": "8To9 Shift 8To9 Shift"
     }
   ]
 }
