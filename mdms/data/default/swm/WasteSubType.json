@@ -227,6 +227,14 @@
       "wasteType": {
         "code": "Medical Wate"
       }
+    },
+    {
+      "name": "Bio Wet Waste",
+      "code": "BWW001",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "BW001"
+      }
     }
   ]
 }
