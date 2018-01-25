@@ -91,6 +91,11 @@
       "tenantId": "default",
       "name": "PCollName",
       "code": "PCollCode"
+    },
+    {
+      "tenantId": "default",
+      "name": "Dust Bin",
+      "code": "DB"
     }
   ]
 }
