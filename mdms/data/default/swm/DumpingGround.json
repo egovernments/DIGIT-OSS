@@ -3587,6 +3587,56 @@
           "code": "mh.aliba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "10",
+        "capacity": "100",
+        "address": "Dump_504 Dump_504 Dump_504",
+        "latitude": "0.251054300",
+        "longitude": "65.20315633588",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "EW"
+          }
+        ]
+      },
+      "name": "Dump_504",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1516987058006",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        },
+        {
+          "code": "default"
+        },
+        {
+          "code": "mh.khop"
+        }
+      ]
     }
   ]
 }
