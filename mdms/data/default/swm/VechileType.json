@@ -24,7 +24,7 @@
     },
     {
       "tenantId": "default",
-      "name": "Bharata Benz",
+      "name": "Bharat Benz",
       "code": "BB"
     },
     {
@@ -84,7 +84,7 @@
     },
     {
       "tenantId": "default",
-      "name": "Ghant Trin Trin gadis",
+      "name": "Ghanta Trin Trin gadis",
       "code": "123"
     },
     {
@@ -99,7 +99,7 @@
     },
     {
       "tenantId": "default",
-      "name": "????? ???? ??????",
+      "name": "???? ???? ",
       "code": "? ????/???"
     },
     {
@@ -119,22 +119,7 @@
     },
     {
       "tenantId": "default",
-      "name": "मराठी भाषा ऑनलाईन",
-      "code": "Marathi Text Test"
-    },
-    {
-      "tenantId": "default",
-      "name": "नाव",
-      "code": "नाव  नवीन"
-    },
-    {
-      "tenantId": "default",
-      "name": "नवीन",
-      "code": "1234 नवीन"
-    },
-    {
-      "tenantId": "default",
-      "name": "Bharath Benz SMTs",
+      "name": "Bharath Benz SMT",
       "code": "BBSMT"
     }
   ]
