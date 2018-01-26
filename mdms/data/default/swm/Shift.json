@@ -1635,24 +1635,23 @@
     },
     {
       "tenantId": "default",
-      "code": "-1516864672893",
-      "name": "8To9 Shifts",
+      "code": "-1516986772236",
+      "name": "5 To 10 Shift",
       "shiftType": {
-        "code": "8To9 Shift"
+        "code": "5TO8"
       },
       "department": {
         "code": "ADM"
       },
       "designation": {
-        "code": "DR"
+        "code": "Driver"
       },
-      "shiftStartTime": "1516847400000",
-      "shiftEndTime": "1516851000000",
-      "lunchStartTime": "1516849200000",
-      "lunchEndTime": "1516849500000",
-      "graceTimeFrom": "1516849500000",
-      "graceTimeTo": "1516849560000",
-      "remarks": "8To9 Shift 8To9 Shift"
+      "shiftStartTime": "1516923000000",
+      "shiftEndTime": "1516941000000",
+      "lunchStartTime": "1516933800000",
+      "lunchEndTime": "1516935600000",
+      "graceTimeFrom": "1516935600000",
+      "graceTimeTo": "1516935900000"
     }
   ]
 }
