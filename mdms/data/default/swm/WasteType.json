@@ -19,7 +19,7 @@
     },
     {
       "tenantId": "default",
-      "name": "hjghjgjH",
+      "name": "hjghjgj",
       "code": "jgjhg"
     },
     {
@@ -71,11 +71,6 @@
       "tenantId": "default",
       "name": "Bio Waste",
       "code": "BW001"
-    },
-    {
-      "tenantId": "default",
-      "name": "Electronic goods wastes",
-      "code": "EGW"
     }
   ]
 }
