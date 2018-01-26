@@ -71,6 +71,11 @@
       "tenantId": "default",
       "name": "Bio Waste",
       "code": "BW001"
+    },
+    {
+      "tenantId": "default",
+      "name": "Electronic Waste",
+      "code": "EW"
     }
   ]
 }
