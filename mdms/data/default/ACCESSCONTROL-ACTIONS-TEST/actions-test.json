@@ -1518,7 +1518,7 @@
       "displayName": "Create Sanitation Staff Target",
       "orderNumber": 0,
       "parentModule": "591",
-      "enabled": false,
+      "enabled": true,
       "serviceCode": "SanitationStaffTarget",
       "code": "null",
       "path": "Solid Waste Management.SWM Masters.Sanitation Staff Target.SanitationStaffTarget Create"
@@ -1530,7 +1530,7 @@
       "displayName": "Update Sanitation Staff Target",
       "orderNumber": 0,
       "parentModule": "591",
-      "enabled": false,
+      "enabled": true,
       "serviceCode": "SanitationStaffTarget",
       "code": "null",
       "path": "Solid Waste Management.SWM Masters.Sanitation Staff Target.SanitationStaffTarget Update"
@@ -1542,7 +1542,7 @@
       "displayName": "Sanitation Staff Target",
       "orderNumber": 0,
       "parentModule": "591",
-      "enabled": false,
+      "enabled": true,
       "serviceCode": "SanitationStaffTarget",
       "code": "null",
       "path": "Solid Waste Management.SWM Masters.Sanitation Staff Target.SanitationStaffTarget Search"
@@ -1710,7 +1710,7 @@
       "displayName": "Create Vehicle Trip Sheet Details",
       "orderNumber": 0,
       "parentModule": "623",
-      "enabled": false,
+      "enabled": true,
       "serviceCode": "VehicleTripSheetDetails",
       "code": "null",
       "path": "Solid Waste Management.SWM Transactions.Vehicle Trip Sheet Details.VehicleTripSheetDetails Create"
@@ -1722,7 +1722,7 @@
       "displayName": "Update Vehicle Trip Sheet Details",
       "orderNumber": 0,
       "parentModule": "623",
-      "enabled": false,
+      "enabled": true,
       "serviceCode": "VehicleTripSheetDetails",
       "code": "null",
       "path": "Solid Waste Management.SWM Transactions.Vehicle Trip Sheet Details.VehicleTripSheetDetails Update"
@@ -1734,7 +1734,7 @@
       "displayName": "Vehicle Trip Sheet Details",
       "orderNumber": 0,
       "parentModule": "623",
-      "enabled": false,
+      "enabled": true,
       "serviceCode": "VehicleTripSheetDetails",
       "code": "null",
       "path": "Solid Waste Management.SWM Transactions.Vehicle Trip Sheet Details.VehicleTripSheetDetails Search"
