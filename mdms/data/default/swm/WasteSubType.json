@@ -235,6 +235,14 @@
       "wasteType": {
         "code": "BW001"
       }
+    },
+    {
+      "name": "Old radio",
+      "code": "OR",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "EW"
+      }
     }
   ]
 }
