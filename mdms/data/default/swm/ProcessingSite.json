@@ -901,13 +901,13 @@
     {
       "siteDetails": {
         "mpcbAuthorisation": false,
-        "bankGuarantee": "",
-        "bankName": "",
-        "bankValidityFrom": "",
-        "bankValidityTo": "",
-        "area": "12",
-        "capacity": "12",
-        "address": "Site 1Site 1Site 1Site 1Site 1",
+        "bankGuarantee": true,
+        "bankName": "SBI",
+        "bankValidityFrom": 1516905000000,
+        "bankValidityTo": 1519756200000,
+        "area": "25",
+        "capacity": "100",
+        "address": "Processing Site at Panvel",
         "latitude": "0",
         "longitude": "0",
         "location": {
@@ -915,19 +915,13 @@
         },
         "wasteTypes": [
           {
-            "code": "BW001"
-          },
-          {
-            "code": "BCW"
-          },
-          {
-            "code": "Cons"
+            "code": "EW"
           }
         ]
       },
-      "name": "Site 1",
+      "name": "Processing Site at Panvel",
       "tenantId": "default",
-      "code": "ProcessingSite-1516880833188"
+      "code": "ProcessingSite-1516987301798"
     }
   ]
 }
