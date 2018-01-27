@@ -99,7 +99,7 @@
     },
     {
       "tenantId": "default",
-      "name": "???? ???? ",
+      "name": "????? ???? ??????",
       "code": "? ????/???"
     },
     {
@@ -119,8 +119,13 @@
     },
     {
       "tenantId": "default",
-      "name": "Bharath Benz SMTs",
-      "code": "BBSMT"
+      "name": "मराठी भाषा ऑनलाईन",
+      "code": "Marathi Text Test"
+    },
+    {
+      "tenantId": "default",
+      "name": "मराठी भाषा ऑनलाईन",
+      "code": "मराठी भाषा ऑनलाईन1"
     }
   ]
 }
