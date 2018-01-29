@@ -34,8 +34,8 @@
           "code": "101",
           "name": "Fake location name 1"
         },
-        "latitude": 0,
-        "longitude": 0,
+        "latitude": "0",
+        "longitude": "0",
         "mpcbAuthorisation": true,
         "bankGuarantee": true,
         "bankValidityFrom": "1509190483",
