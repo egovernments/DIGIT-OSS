@@ -10531,6 +10531,19 @@
       "serviceCode": "WORKS_REPORTS",
       "code": "null",
       "path": "Works Management.ReportsWork In Progress Register"
+    },
+    {
+      "id": 1516,
+      "name": "Work In Progress Register",
+      "url": "/report/works/_get",
+      "displayName": "Work In Progress Register",
+      "orderNumber": 1,
+      "queryParams": null,
+      "parentModule": "644",
+      "enabled": false,
+      "serviceCode": "WORKS_REPORTS",
+      "code": "null",
+      "path": ""
     }
   ]
 }
