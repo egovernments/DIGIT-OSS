@@ -3588,10 +3588,10 @@
     {
       "siteDetails": {
         "mpcbAuthorisation": false,
-        "bankGuarantee": "",
-        "bankName": "",
-        "bankValidityFrom": "",
-        "bankValidityTo": "",
+        "bankGuarantee": true,
+        "bankName": "SBI",
+        "bankValidityFrom": 1517164200000,
+        "bankValidityTo": 1519756200000,
         "area": "1",
         "capacity": "1",
         "address": "Dump_500 Dump_500",
