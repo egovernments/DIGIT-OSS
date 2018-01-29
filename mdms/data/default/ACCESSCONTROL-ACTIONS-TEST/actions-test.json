@@ -10518,6 +10518,19 @@
       "serviceCode": "ContractorBill",
       "code": "null",
       "path": "Works Management.Contractor Bil.Contractor Bil"
+    },
+    {
+      "id": 1515,
+      "name": "Work In Progress Register",
+      "url": "/report/works/metadata/_get",
+      "displayName": "Work In Progress Register",
+      "orderNumber": 1,
+      "queryParams": null,
+      "parentModule": "644",
+      "enabled": true,
+      "serviceCode": "WORKS_REPORTS",
+      "code": "null",
+      "path": "Works Management.ReportsWork In Progress Register"
     }
   ]
 }
