@@ -106,7 +106,7 @@
       "seatCount": "43"
     },
     {
-      "publicToilet": true,
+      "publicToilet": false,
       "name": "new toilet and new",
       "code": "Toilet-1517219692024",
       "tenantId": "default",
