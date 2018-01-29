@@ -2480,6 +2480,40 @@
       "code": "2011",
       "isAssetAllow": true,
       "tenantId": "default"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "name": "Bin",
+      "assetCategoryType": "IMMOVABLE",
+      "parent": "2",
+      "unitOfMeasurement": "KGS",
+      "isDepreciationApplicable": true,
+      "depreciationRate": "3",
+      "assetFieldsDefination": [
+        {
+          "name": "Type",
+          "type": "Text",
+          "isActive": true,
+          "order": "1"
+        },
+        {
+          "name": "Size",
+          "type": "Number",
+          "isActive": true,
+          "order": "2"
+        },
+        {
+          "name": "Track Id",
+          "type": "Text",
+          "isActive": true,
+          "isMandatory": false
+        }
+      ],
+      "isAssetAllow": true,
+      "id": "2012",
+      "code": "2012",
+      "tenantId": "default"
     }
   ]
 }
