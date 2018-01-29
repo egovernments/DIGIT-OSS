@@ -2315,8 +2315,9 @@
       ],
       "id": "53",
       "code": "53",
-      "isAssetAllow": true,
-      "tenantId": "mh"
+      "isAssetAllow": false,
+      "tenantId": "mh",
+      "parent": null
     },
     {
       "depreciationMethod": "Straight Line method",
