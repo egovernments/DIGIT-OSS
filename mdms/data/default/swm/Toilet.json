@@ -104,6 +104,19 @@
       "latitude": "34",
       "longitude": "43",
       "seatCount": "43"
+    },
+    {
+      "publicToilet": true,
+      "name": "new toilet and new",
+      "code": "Toilet-1517219692024",
+      "tenantId": "default",
+      "address": "new colony",
+      "location": {
+        "code": "203"
+      },
+      "latitude": "23",
+      "longitude": "22",
+      "seatCount": "12"
     }
   ]
 }
