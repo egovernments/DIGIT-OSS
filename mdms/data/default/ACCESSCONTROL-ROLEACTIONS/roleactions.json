@@ -13597,6 +13597,12 @@
       "actionid": 1175,
       "actioncode": "",
       "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1515,
+      "actioncode": "",
+      "tenantid": "default"
     }
   ]
 }
