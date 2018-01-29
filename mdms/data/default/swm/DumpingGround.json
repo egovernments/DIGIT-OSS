@@ -3553,36 +3553,74 @@
     {
       "siteDetails": {
         "mpcbAuthorisation": false,
-        "bankGuarantee": false,
+        "bankGuarantee": "",
         "bankName": "",
         "bankValidityFrom": "",
         "bankValidityTo": "",
-        "area": "1.5",
-        "capacity": "20",
-        "address": "test testtesttesttest",
-        "latitude": "45",
-        "longitude": "15",
-        "location": {
-          "code": "302"
-        },
+        "area": "1",
+        "capacity": "1",
+        "address": "?????? vdvsadv adsfas asdfas ",
+        "latitude": "11.11",
+        "longitude": "11.11",
         "wasteTypes": [
           {
             "code": "DD1"
-          },
+          }
+        ],
+        "location": {
+          "code": "200"
+        }
+      },
+      "name": "??????",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515082999610"
+      },
+      "distanceFromProcessingSite": "1",
+      "tenantId": "default",
+      "code": "DumpingGround-1516774180587",
+      "ulbs": [
+        {
+          "code": "mh.khopoli"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "1",
+        "capacity": "1",
+        "address": "Dump_500 Dump_500",
+        "latitude": "0",
+        "longitude": "0",
+        "location": {
+          "code": "203"
+        },
+        "wasteTypes": [
           {
-            "code": "BCW"
+            "code": "Cons"
           }
         ]
       },
-      "name": "?????",
+      "name": "Dump_500",
       "isProcessingSite": true,
       "processingSite": {
         "code": ""
       },
       "distanceFromProcessingSite": "",
       "tenantId": "default",
-      "code": "DumpingGround-1516984689284",
+      "code": "DumpingGround-1516776412928",
       "ulbs": [
+        {
+          "code": "default"
+        },
+        {
+          "code": "mh.amba"
+        },
         {
           "code": "mh.aliba"
         }
@@ -3596,10 +3634,54 @@
         "bankValidityFrom": "",
         "bankValidityTo": "",
         "area": "10",
-        "capacity": "100",
-        "address": "Dump_504 Dump_504 Dump_504",
-        "latitude": "0.251054300",
-        "longitude": "65.20315633588",
+        "capacity": "10",
+        "address": "Dump_501 Dump_501",
+        "latitude": "0.2000000",
+        "longitude": "0.123523441",
+        "location": {
+          "code": "202"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "Dump_501",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "1",
+      "tenantId": "default",
+      "code": "DumpingGround-1516876649972",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.amba"
+        },
+        {
+          "code": "mh.khop"
+        },
+        {
+          "code": "default"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "12",
+        "capacity": "12",
+        "address": "Dump_502 Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dum",
+        "latitude": "0",
+        "longitude": "0",
         "location": {
           "code": "200"
         },
@@ -3609,20 +3691,17 @@
           },
           {
             "code": "BCW"
-          },
-          {
-            "code": "EW"
           }
         ]
       },
-      "name": "Dump_504",
+      "name": "Dump_502",
       "isProcessingSite": true,
       "processingSite": {
         "code": ""
       },
       "distanceFromProcessingSite": "",
       "tenantId": "default",
-      "code": "DumpingGround-1516987058006",
+      "code": "DumpingGround-1516880521908",
       "ulbs": [
         {
           "code": "mh.aliba"
@@ -3637,7 +3716,57 @@
           "code": "mh.khop"
         },
         {
+          "code": "mh.khopoli"
+        },
+        {
           "code": "panavel"
+        },
+        {
+          "code": "mh.pen0"
+        },
+        {
+          "code": "mh.roha"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "34",
+        "capacity": "44",
+        "address": "Hosur Road Bangalore",
+        "latitude": "0",
+        "longitude": "0",
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "DG Test 0001",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1517210911850",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        },
+        {
+          "code": "mh.khopoli"
         }
       ]
     }
