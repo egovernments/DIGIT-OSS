@@ -1,0 +1,16 @@
+{
+  "tenantId": "default",
+  "moduleName": "swm",
+  "ToiletType": [
+    {
+      "tenantId": "default",
+      "name": "Private Toilet",
+      "code": "Private Toilet"
+    },
+    {
+      "tenantId": "default",
+      "name": "Public Toilet",
+      "code": "Public Toilet"
+    }
+  ]
+}
