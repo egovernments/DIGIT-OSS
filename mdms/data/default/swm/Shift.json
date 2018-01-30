@@ -1652,6 +1652,27 @@
       "lunchEndTime": "1516935600000",
       "graceTimeFrom": "1516935600000",
       "graceTimeTo": "1516935900000"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1517305599917",
+      "name": "ABC Shift",
+      "shiftType": {
+        "code": "Shift Type Code 1"
+      },
+      "department": {
+        "code": "ACC"
+      },
+      "designation": {
+        "code": "AO"
+      },
+      "shiftStartTime": "1517275849701",
+      "shiftEndTime": "1517304600000",
+      "lunchStartTime": "1517292049701",
+      "lunchEndTime": "1517295649701",
+      "graceTimeFrom": "1517279389701",
+      "graceTimeTo": "1517301060000",
+      "remarks": "khjkhjkjkhjkhjkh"
     }
   ]
 }
