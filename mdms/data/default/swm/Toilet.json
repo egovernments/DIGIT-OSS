@@ -5,7 +5,9 @@
     {
       "code": "1",
       "tenantId": "default",
-      "publicToilet": false,
+      "toiletType": {
+	"code":"Public"
+	},
       "name": "Toilet Name 1",
       "location": {
         "code": "200"
@@ -14,109 +16,6 @@
       "longitude": 14.33233,
       "seatCount": 10,
       "address": "xyz gali.."
-    },
-    {
-      "code": "2",
-      "tenantId": "default",
-      "publicToilet": true,
-      "name": "Toilet Name 2",
-      "location": {
-        "code": "200"
-      },
-      "latitude": 12.88989,
-      "longitude": 14.78789,
-      "seatCount": 10
-    },
-    {
-      "publicToilet": true,
-      "name": "toilet name 4",
-      "code": "Toilet-1516613013746",
-      "tenantId": "default",
-      "address": "assdf colony",
-      "location": {
-        "code": "352"
-      },
-      "latitude": "44",
-      "longitude": "55",
-      "seatCount": "8"
-    },
-    {
-      "publicToilet": true,
-      "name": "toilet 55",
-      "code": "Toilet-1516613613275",
-      "tenantId": "default",
-      "address": "dsfgfdg",
-      "seatCount": "10",
-      "location": {
-        "code": "201"
-      },
-      "latitude": "22",
-      "longitude": "14"
-    },
-    {
-      "publicToilet": true,
-      "name": "toilet name 007",
-      "code": "Toilet-1516619493464",
-      "tenantId": "default",
-      "address": "007 street ",
-      "location": {
-        "code": "203"
-      },
-      "latitude": "22",
-      "longitude": "33",
-      "seatCount": "5"
-    },
-    {
-      "publicToilet": true,
-      "name": "toilet new ",
-      "code": "Toilet-1516624460923",
-      "tenantId": "default",
-      "address": "dfbdfgbfgd",
-      "location": {
-        "code": "350"
-      },
-      "latitude": "22",
-      "longitude": "88",
-      "seatCount": "88"
-    },
-    {
-      "publicToilet": false,
-      "name": "test1",
-      "code": "Toilet-1516794364390",
-      "tenantId": "default",
-      "location": {
-        "code": "302"
-      },
-      "address": "test1addresss",
-      "latitude": "11.11",
-      "longitude": "12.12",
-      "seatCount": "2"
-    },
-    {
-      "publicToilet": true,
-      "name": "gfn",
-      "code": "Toilet-1516884775882",
-      "tenantId": "default",
-      "address": "fgngfn",
-      "location": {
-        "code": "202"
-      },
-      "latitude": "34",
-      "longitude": "43",
-      "seatCount": "43"
-    },
-    {
-      "publicToilet": false,
-      "name": "new toilet and new",
-      "code": "Toilet-1517219692024",
-      "tenantId": "default",
-      "address": "new colony",
-      "location": {
-        "code": "203"
-      },
-      "latitude": "23",
-      "longitude": "22",
-      "seatCount": "15"
     }
   ]
 }
