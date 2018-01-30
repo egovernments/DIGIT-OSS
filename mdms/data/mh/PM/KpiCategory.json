@@ -59,6 +59,10 @@
     {
       "name": "AssessmentCategory",
       "code": "ASC"
+    },
+    {
+      "name": "Old Files",
+      "code": "OF"
     }
   ]
 }
