@@ -131,6 +131,11 @@
       "tenantId": "default",
       "name": "घंटागाडी",
       "code": "घंटागाडी००१"
+    },
+    {
+      "tenantId": "default",
+      "name": "डंपर",
+      "code": "डंपर००१"
     }
   ]
 }
