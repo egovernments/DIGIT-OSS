@@ -61,8 +61,9 @@
       "code": "ASC"
     },
     {
-      "name": "Old Files",
-      "code": "OF"
+      "code": "COM",
+      "name": "सामान्य श्रेणी",
+      "tenantId": "mh"
     }
   ]
 }
