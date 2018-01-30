@@ -10530,7 +10530,7 @@
       "enabled": true,
       "serviceCode": "WORKS_REPORTS",
       "code": "null",
-      "path": "Works Management.ReportsWork In Progress Register"
+      "path": "Works Management.Reports.Work In Progress Register"
     },
     {
       "id": 1516,
