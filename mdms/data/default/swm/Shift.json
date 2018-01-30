@@ -1673,6 +1673,26 @@
       "graceTimeFrom": "1517279389701",
       "graceTimeTo": "1517301060000",
       "remarks": "khjkhjkjkhjkhjkh"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1517306395804",
+      "name": "Morning1 shift",
+      "shiftType": {
+        "code": "Shift Type Code 1"
+      },
+      "department": {
+        "code": "EDU"
+      },
+      "designation": {
+        "code": "ADCOM"
+      },
+      "shiftStartTime": "1517275849701",
+      "shiftEndTime": "1517304600000",
+      "lunchStartTime": "1517292000000",
+      "lunchEndTime": "1517295600000",
+      "graceTimeFrom": "1517275860000",
+      "graceTimeTo": "1517277649701"
     }
   ]
 }
