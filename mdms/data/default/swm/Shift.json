@@ -1682,10 +1682,10 @@
         "code": "Shift Type Code 1"
       },
       "department": {
-        "code": "EDU"
+        "code": "ACC"
       },
       "designation": {
-        "code": "ADCOM"
+        "code": "AO"
       },
       "shiftStartTime": "1517275849701",
       "shiftEndTime": "1517304600000",
