@@ -40,6 +40,18 @@
       "location": {
         "code": "303"
       }
+    },
+    {
+      "code": "Population-1517313781695",
+      "tenantId": "default",
+      "ulb": {
+        "code": "129"
+      },
+      "censusYear": "2018",
+      "population": "1285799",
+      "garbageToBeCollected": "10",
+      "ward": 6,
+      "zone": 2
     }
   ]
 }
