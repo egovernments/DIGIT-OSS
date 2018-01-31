@@ -291,6 +291,19 @@
       "longitude": 78.39205560000005,
       "latitude": 17.494568,
       "seatCount": "3"
+    },
+    {
+      "name": "new toilet dtaa",
+      "code": "Toilet-1517403555696",
+      "tenantId": "default",
+      "toiletType": "Public Toilet",
+      "address": "new toilet dtaa address",
+      "location": {
+        "code": "350"
+      },
+      "longitude": 72.8777,
+      "latitude": 19.076,
+      "seatCount": "12"
     }
   ]
 }
