@@ -197,7 +197,7 @@
       "seatCount": "11"
     },
     {
-      "publicToilet": false,
+      "publicToilet": true,
       "name": "hyd/madhapur/Neerja col/004",
       "code": "Toilet-1517385959710",
       "tenantId": "default",
