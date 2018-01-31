@@ -278,6 +278,19 @@
         "code": "201"
       },
       "seatCount": "2500003"
+    },
+    {
+      "publicToilet": false,
+      "name": "hyd_001",
+      "code": "Toilet-1517402882951",
+      "tenantId": "default",
+      "address": "toilet address_001",
+      "location": {
+        "code": "302"
+      },
+      "longitude": 78.39205560000005,
+      "latitude": 17.494568,
+      "seatCount": "3"
     }
   ]
 }
