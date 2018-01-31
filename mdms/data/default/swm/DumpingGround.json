@@ -3778,6 +3778,47 @@
           "code": "mh.khopoli"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "6",
+        "capacity": "78",
+        "address": "Dumping Ground Address  - 30012018",
+        "latitude": 17.48944149999999,
+        "longitude": 78.39275780000003,
+        "location": {
+          "code": "355"
+        },
+        "wasteTypes": [
+          {
+            "code": "BW001"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "New Dumping Ground - 30012018",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1513864087389"
+      },
+      "distanceFromProcessingSite": "6",
+      "tenantId": "default",
+      "code": "DumpingGround-1517390887762",
+      "ulbs": [
+        {
+          "code": "mh.amba"
+        },
+        {
+          "code": "mh.khop"
+        }
+      ]
     }
   ]
 }
