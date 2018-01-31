@@ -435,6 +435,21 @@
       "longitude": 72.85710063476564,
       "latitude": 19.11330978747856,
       "seatCount": "6"
+    },
+    {
+      "name": "gbdfgbdfb",
+      "code": "Toilet-1517407999508",
+      "tenantId": "default",
+      "toiletType": {
+        "code": "Public Toilet"
+      },
+      "address": "ghmghjmghmghmgh",
+      "location": {
+        "code": "202"
+      },
+      "longitude": 72.85298076171877,
+      "latitude": 19.112336595542814,
+      "seatCount": "4"
     }
   ]
 }
