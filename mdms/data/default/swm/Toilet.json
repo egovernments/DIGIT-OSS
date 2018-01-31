@@ -540,6 +540,21 @@
       "longitude": 72.8777,
       "latitude": 19.076,
       "seatCount": "6"
+    },
+    {
+      "name": "Madhapur/003",
+      "tenantId": "default",
+      "code": "Toilet-1517413301436",
+      "longitude": 78.39205560000005,
+      "latitude": 17.494568,
+      "seatCount": "7",
+      "toiletType": {
+        "code": "Community Toilet"
+      },
+      "address": "12-22/003",
+      "location": {
+        "code": "201"
+      }
     }
   ]
 }
