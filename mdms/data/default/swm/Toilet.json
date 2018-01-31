@@ -405,6 +405,21 @@
       "longitude": 72.86843028564455,
       "latitude": 19.133901487098004,
       "seatCount": "20"
+    },
+    {
+      "name": "code geass",
+      "code": "Toilet-1517406682053",
+      "tenantId": "default",
+      "toiletType": {
+        "code": "Public Toilet"
+      },
+      "address": "addres of code geass",
+      "location": {
+        "code": "201"
+      },
+      "longitude": 72.86156383056642,
+      "latitude": 19.10876817610675,
+      "seatCount": "4"
     }
   ]
 }
