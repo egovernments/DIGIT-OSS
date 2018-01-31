@@ -3819,6 +3819,47 @@
           "code": "mh.khop"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "4",
+        "capacity": "11",
+        "address": "fgbfgnbfgnfgnfgngn",
+        "latitude": 19.099360155814466,
+        "longitude": 72.85263743896486,
+        "location": {
+          "code": "201"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "nfgn",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515075903699"
+      },
+      "distanceFromProcessingSite": "8",
+      "tenantId": "default",
+      "code": "DumpingGround-1517407385000",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        },
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
