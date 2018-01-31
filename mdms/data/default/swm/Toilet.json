@@ -345,6 +345,21 @@
       "longitude": 72.8777,
       "latitude": 19.076,
       "seatCount": "5"
+    },
+    {
+      "name": "name - 007",
+      "code": "Toilet-1517404609201",
+      "tenantId": "default",
+      "address": "log horizon",
+      "toiletType": {
+        "code": "Community Toilet"
+      },
+      "location": {
+        "code": "350"
+      },
+      "longitude": 72.86259379882814,
+      "latitude": 19.124014520649027,
+      "seatCount": "17"
     }
   ]
 }
