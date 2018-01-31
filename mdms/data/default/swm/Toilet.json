@@ -123,13 +123,13 @@
       "name": "hyd/madhapur/Neerja col/001",
       "code": "Toilet-1517372953285",
       "tenantId": "default",
-      "address": "12-22 Neerja col",
+      "address": "12-22 Neerja colony",
       "location": {
         "code": "200"
       },
-      "latitude": "20",
-      "longitude": "20",
-      "seatCount": "5"
+      "latitude": "22",
+      "longitude": "22",
+      "seatCount": "6"
     }
   ]
 }
