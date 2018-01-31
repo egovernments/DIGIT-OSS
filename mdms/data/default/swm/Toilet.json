@@ -221,6 +221,19 @@
       "longitude": 78.39964409999993,
       "latitude": 17.4947934,
       "seatCount": "5"
+    },
+    {
+      "publicToilet": true,
+      "name": "hyd/madhapur/Neerja col/0067",
+      "code": "Toilet-1517396068371",
+      "tenantId": "default",
+      "address": "12-22 krishna cottage",
+      "location": {
+        "code": "355"
+      },
+      "longitude": 78.33541300000002,
+      "latitude": 17.5102469,
+      "seatCount": "2"
     }
   ]
 }
