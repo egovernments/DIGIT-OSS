@@ -3682,10 +3682,10 @@
     {
       "siteDetails": {
         "mpcbAuthorisation": false,
-        "bankGuarantee": "",
-        "bankName": "",
-        "bankValidityFrom": "",
-        "bankValidityTo": "",
+        "bankGuarantee": true,
+        "bankName": "Indus Bank",
+        "bankValidityFrom": 1514658600000,
+        "bankValidityTo": 1515090600000,
         "area": "12",
         "capacity": "12",
         "address": "Dump_502 Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dump_502Dum",
