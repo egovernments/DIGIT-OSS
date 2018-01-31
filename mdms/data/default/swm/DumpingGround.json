@@ -3860,6 +3860,47 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "4",
+        "capacity": "4",
+        "address": "fghnfgnghnmfgnfgnfg",
+        "latitude": 19.117851274100467,
+        "longitude": 72.87735667724611,
+        "location": {
+          "code": "202"
+        },
+        "wasteTypes": [
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "EW"
+          }
+        ]
+      },
+      "name": "fdbvdfb",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515082767504"
+      },
+      "distanceFromProcessingSite": "22",
+      "tenantId": "default",
+      "code": "DumpingGround-1517407442957",
+      "ulbs": [
+        {
+          "code": "default"
+        },
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
