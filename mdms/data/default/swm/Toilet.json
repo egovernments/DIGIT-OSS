@@ -208,6 +208,19 @@
       "latitude": "40",
       "longitude": "40",
       "seatCount": "9"
+    },
+    {
+      "publicToilet": false,
+      "name": "New Toilet - 30012018",
+      "code": "Toilet-1517391127763",
+      "tenantId": "default",
+      "address": "New Toilet Address - 30012018",
+      "location": {
+        "code": "201"
+      },
+      "longitude": 78.39964409999993,
+      "latitude": 17.4947934,
+      "seatCount": "5"
     }
   ]
 }
