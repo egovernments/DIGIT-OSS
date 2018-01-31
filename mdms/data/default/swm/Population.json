@@ -5,20 +5,55 @@
     {
       "code": "Trimbak MC Code",
       "tenantId": "default",
-      "censusYear":{
-	"code": "2011"
-	},
-      "populationEstimated": 13383,
+      "censusYear": 2011,
+      "population": 13383,
       "garbageToBeCollected": 5,
-      "ward": {
-        "code": "200"
-      },
-      "zone": {
+      "location": {
         "code": "200"
       },
       "ulb": {
         "code": "default"
+      },
+      "ward": 2,
+      "zone": 3
+    },
+    {
+      "ulb": {
+        "code": "mh.aliba"
+      },
+      "code": "Population-1516630930024",
+      "tenantId": "default",
+      "censusYear": "2018",
+      "population": "12",
+      "garbageToBeCollected": "3",
+      "location": {
+        "code": "202"
       }
+    },
+    {
+      "code": "Population-1516685115133",
+      "tenantId": "default",
+      "ulb": {
+        "code": "panavel"
+      },
+      "censusYear": "2018",
+      "population": "152",
+      "garbageToBeCollected": "10",
+      "location": {
+        "code": "303"
+      }
+    },
+    {
+      "code": "Population-1517313781695",
+      "tenantId": "default",
+      "ulb": {
+        "code": "129"
+      },
+      "censusYear": "2018",
+      "population": "1285799",
+      "garbageToBeCollected": "10",
+      "ward": 6,
+      "zone": 2
     }
   ]
 }
