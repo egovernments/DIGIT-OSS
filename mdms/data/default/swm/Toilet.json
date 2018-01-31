@@ -92,7 +92,10 @@
       },
       "latitude": "22",
       "longitude": "88",
-      "seatCount": "88"
+      "seatCount": "88",
+      "toiletType": {
+        "code": "Community Toilet"
+      }
     },
     {
       "publicToilet": false,
