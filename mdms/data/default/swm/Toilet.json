@@ -182,6 +182,19 @@
       "latitude": "25",
       "longitude": "55",
       "seatCount": "14"
+    },
+    {
+      "publicToilet": false,
+      "name": "hyd/madhapur/Neerja col/003",
+      "code": "Toilet-1517384809315",
+      "tenantId": "default",
+      "address": "12-22 Krishna nagar, 4th cross",
+      "location": {
+        "code": "203"
+      },
+      "latitude": "50",
+      "longitude": "50",
+      "seatCount": "11"
     }
   ]
 }
