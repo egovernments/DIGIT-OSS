@@ -420,6 +420,21 @@
       "longitude": 72.86156383056642,
       "latitude": 19.10876817610675,
       "seatCount": "4"
+    },
+    {
+      "name": "toilte -- hyd",
+      "code": "Toilet-1517407581644",
+      "tenantId": "default",
+      "toiletType": {
+        "code": "Community Toilet"
+      },
+      "address": "address at hyd",
+      "location": {
+        "code": "352"
+      },
+      "longitude": 72.85710063476564,
+      "latitude": 19.11330978747856,
+      "seatCount": "6"
     }
   ]
 }
