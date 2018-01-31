@@ -60,7 +60,10 @@
         "code": "201"
       },
       "latitude": "22",
-      "longitude": "14"
+      "longitude": "14",
+      "toiletType": {
+        "code": "Public Toilet"
+      }
     },
     {
       "publicToilet": true,
