@@ -245,6 +245,19 @@
         "code": "200"
       },
       "seatCount": "5"
+    },
+    {
+      "publicToilet": false,
+      "name": "ABC 123",
+      "code": "Toilet-1517398526394",
+      "tenantId": "default",
+      "address": "",
+      "longitude": 72.8982993652344,
+      "latitude": 19.00914581557084,
+      "seatCount": "6",
+      "location": {
+        "code": "355"
+      }
     }
   ]
 }
