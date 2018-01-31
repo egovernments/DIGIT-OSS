@@ -82,6 +82,18 @@
       "garbageToBeCollected": "600",
       "ward": 8,
       "zone": 1
+    },
+    {
+      "code": "Population-1517409751013",
+      "tenantId": "default",
+      "ulb": {
+        "code": "mh.khopoli"
+      },
+      "censusYear": "2000",
+      "population": "1200",
+      "garbageToBeCollected": "25",
+      "ward": 8,
+      "zone": 1
     }
   ]
 }
