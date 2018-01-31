@@ -118,6 +118,18 @@
       "garbageToBeCollected": "25",
       "ward": 6,
       "zone": 1
+    },
+    {
+      "tenantId": "default",
+      "code": "Population-1517412855987",
+      "ulb": {
+        "code": "mh.pen0"
+      },
+      "censusYear": "2018",
+      "population": "150",
+      "garbageToBeCollected": "25",
+      "ward": 6,
+      "zone": 2
     }
   ]
 }
