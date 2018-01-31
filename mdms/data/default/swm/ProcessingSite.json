@@ -922,6 +922,61 @@
       "name": "Processing Site at Panvel",
       "tenantId": "default",
       "code": "ProcessingSite-1516987301798"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "11",
+        "capacity": "11",
+        "address": "ewtwe tewtwet433243242sss",
+        "latitude": 17.450415,
+        "longitude": 78.38109469999995,
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "BW001"
+          },
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "Waste Type Code 1"
+          },
+          {
+            "code": "Waste Type Code 3"
+          },
+          {
+            "code": "Waste Type Code 2"
+          },
+          {
+            "code": "VW"
+          },
+          {
+            "code": "PLASTIC/001"
+          },
+          {
+            "code": "Medical Wate"
+          }
+        ],
+        "location": {
+          "code": "302"
+        }
+      },
+      "name": "etewtweew",
+      "tenantId": "default",
+      "code": "ProcessingSite-1517397322654"
     }
   ]
 }
