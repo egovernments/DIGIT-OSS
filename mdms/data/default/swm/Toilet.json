@@ -450,6 +450,21 @@
       "longitude": 72.85298076171877,
       "latitude": 19.112336595542814,
       "seatCount": "4"
+    },
+    {
+      "name": "vbn fgn",
+      "code": "Toilet-1517408239731",
+      "tenantId": "default",
+      "toiletType": {
+        "code": "Public Toilet"
+      },
+      "address": "fgnfgn",
+      "location": {
+        "code": "201"
+      },
+      "longitude": 72.85950389404299,
+      "latitude": 19.123365768678624,
+      "seatCount": "4"
     }
   ]
 }
