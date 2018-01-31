@@ -317,6 +317,19 @@
       "longitude": 72.8492042114258,
       "latitude": 19.159987137543766,
       "seatCount": "11"
+    },
+    {
+      "name": "cars acce 0012",
+      "code": "Toilet-1517404006667",
+      "tenantId": "default",
+      "toiletType": "Public Toilet",
+      "address": "dscdsvdfv",
+      "location": {
+        "code": "201"
+      },
+      "longitude": 72.90653911132814,
+      "latitude": 19.105042901462575,
+      "seatCount": "11"
     }
   ]
 }
