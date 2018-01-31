@@ -234,6 +234,17 @@
       "longitude": 77.20812709999996,
       "latitude": 28.6172144,
       "seatCount": "2"
+    },
+    {
+      "publicToilet": false,
+      "name": "ABC Community Toilet",
+      "code": "Toilet-1517397362845",
+      "tenantId": "default",
+      "address": "Maha municipality",
+      "location": {
+        "code": "200"
+      },
+      "seatCount": "5"
     }
   ]
 }
