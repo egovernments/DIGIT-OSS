@@ -70,6 +70,18 @@
       "garbageToBeCollected": "15",
       "ward": 8,
       "zone": 1
+    },
+    {
+      "code": "Population-1517407987686",
+      "tenantId": "default",
+      "ulb": {
+        "code": "mh.aliba"
+      },
+      "censusYear": "2018",
+      "population": "1000",
+      "garbageToBeCollected": "600",
+      "ward": 8,
+      "zone": 1
     }
   ]
 }
