@@ -247,7 +247,7 @@
       "seatCount": "5"
     },
     {
-      "publicToilet": false,
+      "publicToilet": true,
       "name": "ABC 123",
       "code": "Toilet-1517398526394",
       "tenantId": "default",
