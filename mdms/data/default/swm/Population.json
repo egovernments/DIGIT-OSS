@@ -43,7 +43,9 @@
       "garbageToBeCollected": "10",
       "location": {
         "code": "303"
-      }
+      },
+      "ward": 7,
+      "zone": 3
     },
     {
       "code": "Population-1517313781695",
