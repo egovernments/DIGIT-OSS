@@ -258,6 +258,16 @@
       "location": {
         "code": "355"
       }
+    },
+    {
+      "publicToilet": false,
+      "name": "ABC 123",
+      "code": "Toilet-1517398907497",
+      "tenantId": "default",
+      "location": {
+        "code": "201"
+      },
+      "seatCount": "2500"
     }
   ]
 }
