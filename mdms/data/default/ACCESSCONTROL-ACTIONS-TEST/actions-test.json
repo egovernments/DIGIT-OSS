@@ -10544,6 +10544,32 @@
       "serviceCode": "WORKS_REPORTS",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1517,
+      "name": "Project Status Report",
+      "url": "/report/works/metadata/_get",
+      "displayName": "Project Status Report",
+      "orderNumber": 1,
+      "queryParams": null,
+      "parentModule": "644",
+      "enabled": true,
+      "serviceCode": "WORKS_REPORTS",
+      "code": "null",
+      "path": "Works Management.Reports.Project Status Report"
+    },
+    {
+      "id": 1518,
+      "name": "Project Status Report",
+      "url": "/report/works/_get",
+      "displayName": "Project Status Report",
+      "orderNumber": 1,
+      "queryParams": null,
+      "parentModule": "644",
+      "enabled": false,
+      "serviceCode": "WORKS_REPORTS",
+      "code": "null",
+      "path": ""
     }
   ]
 }
