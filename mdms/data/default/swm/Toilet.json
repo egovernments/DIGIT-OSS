@@ -195,6 +195,19 @@
       "latitude": "50",
       "longitude": "50",
       "seatCount": "11"
+    },
+    {
+      "publicToilet": false,
+      "name": "hyd/madhapur/Neerja col/004",
+      "code": "Toilet-1517385959710",
+      "tenantId": "default",
+      "address": "Toilet address 101",
+      "location": {
+        "code": "200"
+      },
+      "latitude": "40",
+      "longitude": "40",
+      "seatCount": "9"
     }
   ]
 }
