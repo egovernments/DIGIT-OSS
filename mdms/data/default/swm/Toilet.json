@@ -169,6 +169,19 @@
       "latitude": "20",
       "longitude": "20",
       "seatCount": "5"
+    },
+    {
+      "publicToilet": false,
+      "name": "hyd/madhapur/col/006",
+      "code": "Toilet-1517378090141",
+      "tenantId": "default",
+      "address": "col 6",
+      "location": {
+        "code": "203"
+      },
+      "latitude": "25",
+      "longitude": "55",
+      "seatCount": "14"
     }
   ]
 }
