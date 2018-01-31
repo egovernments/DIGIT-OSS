@@ -1152,13 +1152,37 @@
       "code": "17",
       "assetCategoryType": "IMMOVABLE",
       "parent": "4",
-      "depreciationMethod": "STRAIGHT_LINE_METHOD",
+      "depreciationMethod": "Straight Line method",
       "isAssetAllow": true,
       "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
       "depreciationRate": 15,
-      "isDepreciationApplicable": true
+      "isDepreciationApplicable": true,
+      "assetFieldsDefination": [
+        {
+          "name": "Color",
+          "isActive": true,
+          "isMandatory": true,
+          "order": "1",
+          "values": "Blue"
+        },
+        {
+          "name": "Material",
+          "type": "Text",
+          "isActive": true,
+          "isMandatory": true,
+          "order": "2",
+          "values": "Fiber"
+        },
+        {
+          "name": "Length",
+          "isActive": true,
+          "isMandatory": true,
+          "order": "3",
+          "values": "100"
+        }
+      ]
     },
     {
       "tenantId": "mh",
@@ -2315,9 +2339,8 @@
       ],
       "id": "53",
       "code": "53",
-      "isAssetAllow": false,
-      "tenantId": "mh",
-      "parent": null
+      "isAssetAllow": true,
+      "tenantId": "mh"
     },
     {
       "depreciationMethod": "Straight Line method",
@@ -2392,7 +2415,7 @@
           "order": "2"
         },
         {
-          "name": "???????????",
+          "name": "TestField3",
           "type": "Number",
           "order": "3",
           "isActive": true,
