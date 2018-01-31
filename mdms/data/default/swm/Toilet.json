@@ -495,6 +495,21 @@
       "longitude": 72.85916057128908,
       "latitude": 19.094169294923972,
       "seatCount": "5"
+    },
+    {
+      "name": "cfvbhfchfc",
+      "tenantId": "default",
+      "code": "Toilet-1517410532327",
+      "toiletType": {
+        "code": "Community Toilet"
+      },
+      "address": "hfchfch",
+      "location": {
+        "code": "350"
+      },
+      "longitude": 72.86877360839846,
+      "latitude": 19.101631106251386,
+      "seatCount": "12"
     }
   ]
 }
