@@ -4,8 +4,8 @@
   "ToiletType": [
     {
       "tenantId": "default",
-      "name": "Private Toilet",
-      "code": "Private Toilet"
+      "name": "Community Toilet",
+      "code": "Community Toilet"
     },
     {
       "tenantId": "default",
