@@ -130,6 +130,19 @@
       "latitude": "22",
       "longitude": "22",
       "seatCount": "6"
+    },
+    {
+      "publicToilet": false,
+      "name": "hyd/madhapur/Neerja col/002",
+      "code": "Toilet-1517373464194",
+      "tenantId": "default",
+      "address": "12-23 Krishna colony",
+      "location": {
+        "code": "201"
+      },
+      "latitude": "150",
+      "longitude": "30",
+      "seatCount": "7"
     }
   ]
 }
