@@ -465,6 +465,21 @@
       "longitude": 72.85950389404299,
       "latitude": 19.123365768678624,
       "seatCount": "4"
+    },
+    {
+      "name": "nbm ghmgh",
+      "code": "Toilet-1517409353307",
+      "tenantId": "default",
+      "toiletType": {
+        "code": "Community Toilet"
+      },
+      "address": "mghm",
+      "location": {
+        "code": "350"
+      },
+      "longitude": 72.8777,
+      "latitude": 19.076,
+      "seatCount": "6"
     }
   ]
 }
