@@ -330,6 +330,21 @@
       "longitude": 72.90653911132814,
       "latitude": 19.105042901462575,
       "seatCount": "11"
+    },
+    {
+      "name": "ghoul area",
+      "code": "Toilet-1517404423890",
+      "tenantId": "default",
+      "toiletType": {
+        "code": "Public Toilet"
+      },
+      "address": "ghoul area address",
+      "location": {
+        "code": "200"
+      },
+      "longitude": 72.8777,
+      "latitude": 19.076,
+      "seatCount": "5"
     }
   ]
 }
