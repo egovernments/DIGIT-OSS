@@ -94,6 +94,18 @@
       "garbageToBeCollected": "25",
       "ward": 8,
       "zone": 1
+    },
+    {
+      "code": "Population-1517410456253",
+      "tenantId": "default",
+      "ulb": {
+        "code": "panavel"
+      },
+      "censusYear": "2018",
+      "population": "1200",
+      "garbageToBeCollected": "23",
+      "ward": 7,
+      "zone": 4
     }
   ]
 }
