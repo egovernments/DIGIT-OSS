@@ -143,6 +143,19 @@
       "latitude": "150",
       "longitude": "30",
       "seatCount": "7"
+    },
+    {
+      "publicToilet": false,
+      "name": "abcd",
+      "code": "Toilet-1517376653765",
+      "tenantId": "default",
+      "address": "abcd colony",
+      "location": {
+        "code": "350"
+      },
+      "latitude": "23",
+      "longitude": "25",
+      "seatCount": "10"
     }
   ]
 }
