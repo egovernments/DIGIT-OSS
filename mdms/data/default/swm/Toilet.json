@@ -304,6 +304,19 @@
       "longitude": 72.8777,
       "latitude": 19.076,
       "seatCount": "12"
+    },
+    {
+      "name": "community toilet -005",
+      "code": "Toilet-1517403800145",
+      "tenantId": "default",
+      "toiletType": "Community Toilet",
+      "address": "hjgkjb",
+      "location": {
+        "code": "202"
+      },
+      "longitude": 72.8492042114258,
+      "latitude": 19.159987137543766,
+      "seatCount": "11"
     }
   ]
 }
