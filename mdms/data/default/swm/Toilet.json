@@ -76,7 +76,10 @@
       },
       "latitude": "22",
       "longitude": "33",
-      "seatCount": "5"
+      "seatCount": "5",
+      "toiletType": {
+        "code": "Public Toilet"
+      }
     },
     {
       "publicToilet": true,
