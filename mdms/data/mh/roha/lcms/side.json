@@ -3,9 +3,9 @@
   "moduleName": "lcms",
   "side": [
     {
-      "name": "Civil2",
+      "name": "Civill",
       "code": "CVL",
-      "active": true,
+      "active": false,
       "tenantId": "mh.roha"
     },
     {
@@ -135,8 +135,8 @@
       "tenantId": "mh.roha"
     },
     {
-      "name": "Test55",
-      "code": "t55",
+      "name": "SRLegal",
+      "code": "SRL",
       "active": true,
       "tenantId": "mh.roha"
     }
