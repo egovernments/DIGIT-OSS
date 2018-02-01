@@ -496,6 +496,21 @@
       "location": {
         "code": "350"
       }
+    },
+    {
+      "name": "dfsvdfgv",
+      "tenantId": "default",
+      "code": "Toilet-1517487528850",
+      "toiletType": {
+        "code": "COM"
+      },
+      "address": "fdvfdv",
+      "location": {
+        "code": "350"
+      },
+      "longitude": 72.86431041259767,
+      "latitude": 19.11850004771845,
+      "seatCount": "34"
     }
   ]
 }
