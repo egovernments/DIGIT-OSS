@@ -59,7 +59,7 @@
     {
       "name": "SR CASE CATEGORY NAME",
       "code": "SCCN",
-      "active": true,
+      "active": false,
       "tenantId": "mh.roha"
     }
   ]
