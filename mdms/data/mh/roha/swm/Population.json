@@ -52,6 +52,15 @@
       "censusYear": "2011",
       "population": 50,
       "garbageToBeCollected": 50
+    },
+    {
+      "tenantId": "mh.roha",
+      "code": "Population-1517494693749",
+      "population": 1200,
+      "garbageToBeCollected": 75,
+      "ward": 1,
+      "zone": 1,
+      "censusYear": "2001"
     }
   ]
 }
