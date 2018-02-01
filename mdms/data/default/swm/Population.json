@@ -186,7 +186,7 @@
         "code": "default"
       },
       "censusYear": "2000",
-      "population": "500000000",
+      "population": "500000",
       "garbageToBeCollected": "500",
       "ward": 1,
       "zone": 1
