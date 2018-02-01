@@ -119,7 +119,7 @@
     {
       "name": "CASE STATUS Master",
       "code": "CSSESTA",
-      "active": false,
+      "active": true,
       "tenantId": "mh.roha"
     }
   ]
