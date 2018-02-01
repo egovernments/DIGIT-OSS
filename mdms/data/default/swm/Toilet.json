@@ -586,6 +586,21 @@
       "longitude": 72.8777,
       "latitude": 19.076,
       "seatCount": "4"
+    },
+    {
+      "name": "wert",
+      "tenantId": "default",
+      "code": "Toilet-1517489157431",
+      "toiletType": {
+        "code": "PUB"
+      },
+      "address": "rty",
+      "location": {
+        "code": "350"
+      },
+      "longitude": 72.8777,
+      "latitude": 19.076,
+      "seatCount": "67"
     }
   ]
 }
