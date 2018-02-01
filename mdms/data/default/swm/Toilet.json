@@ -451,6 +451,21 @@
       "longitude": 72.8777,
       "latitude": 19.076,
       "seatCount": "2"
+    },
+    {
+      "name": "t2",
+      "tenantId": "default",
+      "code": "Toilet-1517486998825",
+      "toiletType": {
+        "code": "PUB"
+      },
+      "address": "add2",
+      "location": {
+        "code": "201"
+      },
+      "longitude": 72.8777,
+      "latitude": 19.076,
+      "seatCount": "3"
     }
   ]
 }
