@@ -833,7 +833,7 @@
       "assetFieldsDefination": [
         {
           "name": "Location(Point to Point)",
-          "type": "Text",
+          "type": "GIS",
           "isActive": true,
           "isMandatory": false,
           "columns": []
