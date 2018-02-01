@@ -1,0 +1,38 @@
+{
+  "tenantId": "default",
+  "moduleName": "swm",
+  "WasteSubType": [
+    {
+      "name": "HouseHold Wet",
+      "code": "HouseHold Wet",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Wet"
+      }
+    }, 
+    {
+      "name": "HouseHold Dry",
+      "code": "HouseHold Dry",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Dry"
+      }
+    },
+    {
+      "name": "Market Wet",
+      "code": "Market Wet",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Wet"
+      }
+    }, 
+    {
+      "name": "Market Dry",
+      "code": "Market Dry",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Dry"
+      }
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "tenantId": "mh",
+  "moduleName": "swm",
+  "DumpingGround": [
+    {
+      "code": "Kanjurmarg",
+      "tenantId": "mh",
+      "name": "Kanjurmarg",
+      "ulbs": [
+        {
+          "code": "mh.roha"
+        },
+        {
+          "code": "mh.aliba"
+        }
+      ],
+      "siteDetails": {
+        "area": 0.025,
+        "capacity": "6.007",
+        "address": "Kanjurmarg",
+        "location": {
+          "code": "200"
+        },
+        "latitude": "0",
+        "longitude": "0",
+        "wasteTypes": [
+          {
+            "code": "Wet"
+          },
+          {
+            "code": "Dry"
+          }
+        ]
+      },
+      "isProcessingSite": false
+    },
+    {
+      "code": "Deonar",
+      "tenantId": "mh",
+      "name": "Deonar",
+      "ulbs": [
+        {
+          "code": "mh.roha"
+        },
+        {
+          "code": "mh.aliba"
+        }
+      ],
+      "siteDetails": {
+        "area": 0.025,
+        "capacity": "3.6",
+        "address": "Deonar",
+        "location": {
+          "code": "200"
+        },
+        "latitude": "0",
+        "longitude": "0",
+        "wasteTypes": [
+          {
+            "code": "Wet"
+          },
+          {
+            "code": "Dry"
+          }
+        ]
+      },
+      "isProcessingSite": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "tenantId": "mh",
+  "moduleName": "swm",
+  "ShiftType": [
+    {
+      "tenantId": "mh",
+      "name": "Morning Shift",
+      "code": "Morning Shift"
+    },
+    {
+      "tenantId": "mh",
+      "name": "Afternoon Shift",
+      "code": "Afternoon Shift"
+    },
+    {
+      "tenantId": "mh",
+      "name": "Night Shift",
+      "code": "Night Shift"
+    }
+  ]
+}

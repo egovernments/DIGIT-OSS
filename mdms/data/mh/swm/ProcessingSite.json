@@ -1,0 +1,29 @@
+{
+  "tenantId": "mh",
+  "moduleName": "swm",
+  "ProcessingSite": [
+    {
+      "code": "Thermax Limited",
+      "tenantId": "mh",
+      "name": "Thermax Limited",
+      "siteDetails": {
+        "area": 0.025,
+        "capacity": "6.007",
+        "address": "SHivagi Nagar, Pune",
+        "location": {
+          "code": "200"
+        },
+        "latitude": "0",
+        "longitude": "0",
+        "wasteTypes": [
+          {
+            "code": "Wet"
+          },
+          {
+            "code": "Dry"
+          }
+        ]
+      }
+    }
+  ]
+}

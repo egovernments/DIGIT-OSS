@@ -1,0 +1,16 @@
+{
+  "tenantId": "mh",
+  "moduleName": "swm",
+  "CollectionType": [
+    {
+      "tenantId": "mh",
+      "name": "Door to door",
+      "code": "DTD"
+    },
+    {
+      "tenantId": "mh",
+      "name": "Community",
+      "code": "COMM"
+    }
+  ]
+}
