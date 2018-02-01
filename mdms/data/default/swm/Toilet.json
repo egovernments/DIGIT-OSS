@@ -556,6 +556,21 @@
       "longitude": 72.8598472167969,
       "latitude": 19.11330978747856,
       "seatCount": "66"
+    },
+    {
+      "name": "qqq",
+      "tenantId": "default",
+      "code": "Toilet-1517489089553",
+      "toiletType": {
+        "code": "COM"
+      },
+      "address": "qqq",
+      "location": {
+        "code": "303"
+      },
+      "longitude": 72.8777,
+      "latitude": 19.076,
+      "seatCount": "2"
     }
   ]
 }
