@@ -1,0 +1,27 @@
+{
+  "tenantId": "mh.roha",
+  "moduleName": "swm",
+  "Shift": [
+    {
+      "tenantId": "mh.roha",
+      "code": "-1517480060243",
+      "name": "First shift",
+      "shiftType": {
+        "code": "Morning Shift"
+      },
+      "department": {
+        "code": "CD"
+      },
+      "designation": {
+        "code": "CLRK"
+      },
+      "shiftStartTime": "1517448620485",
+      "shiftEndTime": "1517470220485",
+      "lunchStartTime": "1517463020485",
+      "lunchEndTime": "1517464820485",
+      "graceTimeFrom": "1517449200000",
+      "graceTimeTo": "1517449500000",
+      "remarks": "This is the very first shift"
+    }
+  ]
+}
