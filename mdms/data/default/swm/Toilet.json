@@ -421,6 +421,21 @@
       "longitude": 72.8488608886719,
       "latitude": 19.108119364299995,
       "seatCount": "23"
+    },
+    {
+      "name": "saitama",
+      "tenantId": "default",
+      "code": "Toilet-1517485184206",
+      "toiletType": {
+        "code": "PUB"
+      },
+      "address": "Maou colony",
+      "location": {
+        "code": "350"
+      },
+      "longitude": 72.85641398925783,
+      "latitude": 19.100333424104157,
+      "seatCount": "4"
     }
   ]
 }
