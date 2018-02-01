@@ -571,6 +571,21 @@
       "longitude": 72.8777,
       "latitude": 19.076,
       "seatCount": "2"
+    },
+    {
+      "name": "sss",
+      "tenantId": "default",
+      "code": "Toilet-1517489119750",
+      "toiletType": {
+        "code": "PUB"
+      },
+      "address": "sss",
+      "location": {
+        "code": "201"
+      },
+      "longitude": 72.8777,
+      "latitude": 19.076,
+      "seatCount": "4"
     }
   ]
 }
