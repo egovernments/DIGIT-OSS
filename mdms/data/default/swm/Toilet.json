@@ -481,6 +481,21 @@
       "longitude": 72.8777,
       "latitude": 19.076,
       "seatCount": "34"
+    },
+    {
+      "name": "ohjoijop",
+      "tenantId": "default",
+      "code": "Toilet-1517487333749",
+      "toiletType": {
+        "code": "PUB"
+      },
+      "seatCount": "8",
+      "address": "bgfgbfgn",
+      "longitude": 72.85229411621096,
+      "latitude": 19.12174387760945,
+      "location": {
+        "code": "350"
+      }
     }
   ]
 }
