@@ -16,6 +16,11 @@
       "tenantId": "mh",
       "name": "Night Shift",
       "code": "Night Shift"
+    },
+    {
+      "tenantId": "mh",
+      "name": "First Shift",
+      "code": "First Shift"
     }
   ]
 }
