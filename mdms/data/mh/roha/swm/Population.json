@@ -4,27 +4,15 @@
   "Population": [
     {
       "tenantId": "mh.roha",
-      "code": "Population-1517490885326",
-      "ulb": {
-        "code": "default"
-      },
-      "ward": 1,
-      "zone": 1,
-      "censusYear": "2011",
-      "population": 200,
-      "garbageToBeCollected": 200
-    },
-    {
-      "tenantId": "mh.roha",
-      "code": "Population-1517491179566",
+      "code": "Population-1517491955424",
       "ulb": {
         "code": "mh.roha"
       },
-      "ward": 1,
-      "zone": 1,
-      "censusYear": "2011",
-      "population": 1,
-      "garbageToBeCollected": 1
+      "ward": 5,
+      "zone": 2,
+      "censusYear": "2001",
+      "population": 120,
+      "garbageToBeCollected": 1.9
     }
   ]
 }
