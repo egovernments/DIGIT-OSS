@@ -151,6 +151,11 @@
       "tenantId": "default",
       "name": "fdsvdfbfg",
       "code": "fgbfgnbfgn"
+    },
+    {
+      "tenantId": "default",
+      "name": "VehicleTypeName",
+      "code": "VTC"
     }
   ]
 }
