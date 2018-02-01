@@ -131,7 +131,7 @@
         "city": "Madhubani",
         "pincode": "838484"
       },
-      "active": false,
+      "active": true,
       "tenantId": "mh.roha"
     }
   ]
