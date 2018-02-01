@@ -406,6 +406,21 @@
         "code": "200"
       },
       "seatCount": "202005"
+    },
+    {
+      "name": "xyz new toilet",
+      "tenantId": "default",
+      "code": "Toilet-1517479495229",
+      "toiletType": {
+        "code": "PUB"
+      },
+      "address": "astriek",
+      "location": {
+        "code": "201"
+      },
+      "longitude": 72.8488608886719,
+      "latitude": 19.108119364299995,
+      "seatCount": "23"
     }
   ]
 }
