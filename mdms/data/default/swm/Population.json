@@ -298,6 +298,18 @@
       "garbageToBeCollected": "44",
       "ward": 1,
       "zone": 3
+    },
+    {
+      "tenantId": "default",
+      "code": "Population-1517489296331",
+      "ulb": {
+        "code": "mh.rohatest"
+      },
+      "ward": 2,
+      "zone": 3,
+      "censusYear": "2011",
+      "population": 200000,
+      "garbageToBeCollected": 100
     }
   ]
 }
