@@ -2241,6 +2241,13 @@
       "sideCode": "CVL",
       "active": true,
       "tenantId": "mh.roha"
+    },
+    {
+      "name": "SRCaseType",
+      "code": "SRCT",
+      "sideCode": "SRL",
+      "active": true,
+      "tenantId": "mh.roha"
     }
   ]
 }
