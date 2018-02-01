@@ -2246,7 +2246,7 @@
       "name": "SRCaseType",
       "code": "SRCT",
       "sideCode": "SRL",
-      "active": true,
+      "active": false,
       "tenantId": "mh.roha"
     }
   ]
