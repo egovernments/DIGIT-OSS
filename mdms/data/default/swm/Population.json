@@ -190,6 +190,18 @@
       "garbageToBeCollected": "500",
       "ward": 1,
       "zone": 1
+    },
+    {
+      "tenantId": "default",
+      "code": "Population-1517468407969",
+      "ulb": {
+        "code": "panavel"
+      },
+      "censusYear": "2000",
+      "population": "25000",
+      "garbageToBeCollected": "20",
+      "ward": 1,
+      "zone": 1
     }
   ]
 }
