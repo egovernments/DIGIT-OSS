@@ -13,6 +13,18 @@
       "censusYear": "2011",
       "population": 200,
       "garbageToBeCollected": 200
+    },
+    {
+      "tenantId": "mh.roha",
+      "code": "Population-1517491179566",
+      "ulb": {
+        "code": "mh.roha"
+      },
+      "ward": 1,
+      "zone": 1,
+      "censusYear": "2011",
+      "population": 1,
+      "garbageToBeCollected": 1
     }
   ]
 }
