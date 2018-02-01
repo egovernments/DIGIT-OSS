@@ -1,14 +1,14 @@
 {
-  "tenantId": "default",
+  "tenantId": "mh",
   "moduleName": "swm",
   "WasteType": [
     {
-      "tenantId": "default",
+      "tenantId": "mh",
       "name": "Dry Waste",
       "code": "Dry"
     },
     {
-      "tenantId": "default",
+      "tenantId": "mh",
       "name": "Wet Waste",
       "code": "Wet"
     }
