@@ -38,94 +38,106 @@
                 "label": "Zone",
                 "children": [
                   {
-                    "id": 668,
-                    "boundarynum": 15,
-                    "name": "Court Road",
+                    "id": 1364,
+                    "boundaryNum": 4091,
+                    "name": "Gandhi Road",
                     "localname": null,
                     "longitude": null,
                     "latitude": null,
-                    "label": "Area",
-                    "code": "668"
-                  },
-                  {
-                    "id": 670,
-                    "boundarynum": 17,
-                    "name": "Excel Colony",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "670"
-                  },
-                  {
-                    "id": 672,
-                    "boundarynum": 19,
-                    "name": "Ganesh Nagar",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "672"
-                  },
-                  {
-                    "id": 688,
-                    "boundarynum": 35,
-                    "name": "Nana Shankarsheth Road",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "688"
-                  },
-                  {
-                    "id": 691,
-                    "boundarynum": 38,
-                    "name": "Raikar Park",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "691"
-                  },
-                  {
-                    "id": 696,
-                    "boundarynum": 43,
-                    "name": "Roha Kolad Road",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "696"
-                  },
-                  {
-                    "id": 697,
-                    "boundarynum": 44,
-                    "name": "Roha Kolad Road",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "697"
-                  },
-                  {
-                    "id": 711,
-                    "boundarynum": 58,
-                    "name": "Trimurtee Nagar",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "711"
-                  },
-                  {
-                    "id": 712,
-                    "boundarynum": 59,
-                    "name": "Vaikuntdham",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "712"
+                    "label": "Road/Street",
+                    "code": "1364",
+                    "children": [
+                      {
+                        "id": 668,
+                        "boundarynum": 15,
+                        "name": "Court Road",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "668"
+                      },
+                      {
+                        "id": 670,
+                        "boundarynum": 17,
+                        "name": "Excel Colony",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "670"
+                      },
+                      {
+                        "id": 672,
+                        "boundarynum": 19,
+                        "name": "Ganesh Nagar",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "672"
+                      },
+                      {
+                        "id": 688,
+                        "boundarynum": 35,
+                        "name": "Nana Shankarsheth Road",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "688"
+                      },
+                      {
+                        "id": 691,
+                        "boundarynum": 38,
+                        "name": "Raikar Park",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "691"
+                      },
+                      {
+                        "id": 696,
+                        "boundarynum": 43,
+                        "name": "Roha Kolad Road",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "696"
+                      },
+                      {
+                        "id": 697,
+                        "boundarynum": 44,
+                        "name": "Roha Kolad Road",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "697"
+                      },
+                      {
+                        "id": 711,
+                        "boundarynum": 58,
+                        "name": "Trimurtee Nagar",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "711"
+                      },
+                      {
+                        "id": 712,
+                        "boundarynum": 59,
+                        "name": "Vaikuntdham",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "712"
+                      }
+                    ]
                   }
                 ]
               },
@@ -140,14 +152,26 @@
                 "label": "Zone",
                 "children": [
                   {
-                    "id": 673,
-                    "boundarynum": 20,
-                    "name": "Goroba Nagar",
-                    "localname": null,
+                    "id": 13,
+                    "boundaryNum": 1,
+                    "name": "Gedda Veedi",
+                    "localname": "Gedda Veedi",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Area",
-                    "code": "673"
+                    "label": "Road/Street",
+                    "code": "13",
+                    "children": [
+                      {
+                        "id": 673,
+                        "boundarynum": 20,
+                        "name": "Goroba Nagar",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "673"
+                      }
+                    ]
                   }
                 ]
               }
@@ -174,87 +198,88 @@
                 "label": "Zone",
                 "children": [
                   {
-                    "id": 666,
-                    "boundarynum": 13,
-                    "name": "Bangle Ali",
-                    "localname": null,
+                    "id": 14,
+                    "boundaryNum": 3,
+                    "name": "Ganagalla Veedhi",
+                    "localname": "Ganagalla Veedhi",
                     "longitude": null,
                     "latitude": null,
-                    "code": "666",
-                    "label": "Area"
-                  },
-                  {
-                    "id": 667,
-                    "boundarynum": 14,
-                    "name": "Bramhan Ali",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "667"
-                  },
-                  {
-                    "id": 680,
-                    "boundarynum": 27,
-                    "name": "Main Road",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "680"
-                  },
-                  {
-                    "id": 681,
-                    "boundarynum": 28,
-                    "name": "Mangal Wadi",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "681"
-                  },
-                  {
-                    "id": 706,
-                    "boundarynum": 53,
-                    "name": "Shivaji Nagar",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "706"
-                  },
-                  {
-                    "id": 693,
-                    "boundarynum": 40,
-                    "name": "Roha Bajar Peth",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "693"
-                  },
-                  {
-                    "id": 705,
-                    "boundarynum": 52,
-                    "name": "Sevadal Ali",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "705"
+                    "label": "Road/Street",
+                    "code": "14",
+                    "children": [
+                      {
+                        "id": 666,
+                        "boundarynum": 13,
+                        "name": "Bangle Ali",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "code": "666",
+                        "label": "Colony/Society/Complex"
+                      },
+                      {
+                        "id": 667,
+                        "boundarynum": 14,
+                        "name": "Bramhan Ali",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "667"
+                      },
+                      {
+                        "id": 680,
+                        "boundarynum": 27,
+                        "name": "Main Road",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "680"
+                      },
+                      {
+                        "id": 681,
+                        "boundarynum": 28,
+                        "name": "Mangal Wadi",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "681"
+                      },
+                      {
+                        "id": 706,
+                        "boundarynum": 53,
+                        "name": "Shivaji Nagar",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "706"
+                      },
+                      {
+                        "id": 693,
+                        "boundarynum": 40,
+                        "name": "Roha Bajar Peth",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "693"
+                      },
+                      {
+                        "id": 705,
+                        "boundarynum": 52,
+                        "name": "Sevadal Ali",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "705"
+                      }
+                    ]
                   }
                 ]
-              },
-              {
-                "id": 645,
-                "boundarynum": 6,
-                "name": "Zone B",
-                "localname": null,
-                "longitude": null,
-                "latitude": null,
-                "code": "645",
-                "label": "Zone",
-                "children": null
               },
               {
                 "id": 653,
@@ -267,34 +292,46 @@
                 "label": "Zone",
                 "children": [
                   {
-                    "id": 656,
-                    "boundarynum": 3,
-                    "name": "AndharAli",
-                    "localname": null,
+                    "id": 304,
+                    "boundaryNum": 7,
+                    "name": "Gowda Veedi",
+                    "localname": "Gowda Veedi",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Area",
-                    "code": "656"
-                  },
-                  {
-                    "id": 674,
-                    "boundarynum": 21,
-                    "name": "Hanuman Na",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "674"
-                  },
-                  {
-                    "id": 684,
-                    "boundarynum": 31,
-                    "name": "More Ali",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "684"
+                    "label": "Road/Street",
+                    "code": "304",
+                    "children": [
+                      {
+                        "id": 656,
+                        "boundarynum": 3,
+                        "name": "AndharAli",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "656"
+                      },
+                      {
+                        "id": 674,
+                        "boundarynum": 21,
+                        "name": "Hanuman Na",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "674"
+                      },
+                      {
+                        "id": 684,
+                        "boundarynum": 31,
+                        "name": "More Ali",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "684"
+                      }
+                    ]
                   }
                 ]
               }
@@ -321,94 +358,106 @@
                 "label": "Zone",
                 "children": [
                   {
-                    "id": 654,
-                    "boundarynum": 1,
-                    "name": "Aaadavi Bajarpeth",
-                    "localname": null,
+                    "id": 15,
+                    "boundaryNum": 7,
+                    "name": "Kaligotla Veedhi",
+                    "localname": "Kaligotla Veedhi",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Area",
-                    "code": "654"
-                  },
-                  {
-                    "id": 683,
-                    "boundarynum": 30,
-                    "name": "Mhada Colony",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "683"
-                  },
-                  {
-                    "id": 695,
-                    "boundarynum": 42,
-                    "name": "Roha Khalcha Mohlla",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "695"
-                  },
-                  {
-                    "id": 698,
-                    "boundarynum": 45,
-                    "name": "Roha Murud Road",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "698"
-                  },
-                  {
-                    "id": 709,
-                    "boundarynum": 56,
-                    "name": "S.T Depo",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "709"
-                  },
-                  {
-                    "id": 710,
-                    "boundarynum": 57,
-                    "name": "Sundar Nagar",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "710"
-                  },
-                  {
-                    "id": 699,
-                    "boundarynum": 46,
-                    "name": "Roha Nagothane Road",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "699"
-                  },
-                  {
-                    "id": 700,
-                    "boundarynum": 47,
-                    "name": "Roha Nagothane Road",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "700"
-                  },
-                  {
-                    "id": 701,
-                    "boundarynum": 48,
-                    "name": "Roha Nagothane Road",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "701"
+                    "label": "Road/Street",
+                    "code": "15",
+                    "children": [
+                      {
+                        "id": 654,
+                        "boundarynum": 1,
+                        "name": "Aaadavi Bajarpeth",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "654"
+                      },
+                      {
+                        "id": 683,
+                        "boundarynum": 30,
+                        "name": "Mhada Colony",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "683"
+                      },
+                      {
+                        "id": 695,
+                        "boundarynum": 42,
+                        "name": "Roha Khalcha Mohlla",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "695"
+                      },
+                      {
+                        "id": 698,
+                        "boundarynum": 45,
+                        "name": "Roha Murud Road",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "698"
+                      },
+                      {
+                        "id": 709,
+                        "boundarynum": 56,
+                        "name": "S.T Depo",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "709"
+                      },
+                      {
+                        "id": 710,
+                        "boundarynum": 57,
+                        "name": "Sundar Nagar",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "710"
+                      },
+                      {
+                        "id": 699,
+                        "boundarynum": 46,
+                        "name": "Roha Nagothane Road",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "699"
+                      },
+                      {
+                        "id": 700,
+                        "boundarynum": 47,
+                        "name": "Roha Nagothane Road",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "700"
+                      },
+                      {
+                        "id": 701,
+                        "boundarynum": 48,
+                        "name": "Roha Nagothane Road",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "701"
+                      }
+                    ]
                   }
                 ]
               },
@@ -423,14 +472,26 @@
                 "label": "Zone",
                 "children": [
                   {
-                    "id": 708,
-                    "boundarynum": 55,
-                    "name": "Sonar Ali",
-                    "label": "Area",
-                    "localname": null,
+                    "id": 352,
+                    "boundaryNum": 6,
+                    "name": "Konda Peta1",
+                    "localname": "Konda Peta1",
                     "longitude": null,
                     "latitude": null,
-                    "code": "708"
+                    "label": "Road/Street",
+                    "code": "352",
+                    "children": [
+                      {
+                        "id": 708,
+                        "boundarynum": 55,
+                        "name": "Sonar Ali",
+                        "label": "Colony/Society/Complex",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "code": "708"
+                      }
+                    ]
                   }
                 ]
               },
@@ -445,44 +506,56 @@
                 "label": "Zone",
                 "children": [
                   {
-                    "id": 685,
-                    "boundarynum": 32,
-                    "name": "M.Phule Nagar",
-                    "localname": null,
+                    "id": 16,
+                    "boundaryNum": 6,
+                    "name": "Bheemili Boya Veedhi",
+                    "localname": "Bheemili Boya Veedhi",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Area",
-                    "code": "685"
-                  },
-                  {
-                    "id": 694,
-                    "boundarynum": 41,
-                    "name": "Roha Dongari Mohlla",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "694"
-                  },
-                  {
-                    "id": 707,
-                    "boundarynum": 54,
-                    "name": "Sidharth Nagar",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "707"
-                  },
-                  {
-                    "id": 702,
-                    "boundarynum": 49,
-                    "name": "Roha Varcha Mohlla",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "702"
+                    "label": "Road/Street",
+                    "code": "16",
+                    "children": [
+                      {
+                        "id": 685,
+                        "boundarynum": 32,
+                        "name": "M.Phule Nagar",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "685"
+                      },
+                      {
+                        "id": 694,
+                        "boundarynum": 41,
+                        "name": "Roha Dongari Mohlla",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "694"
+                      },
+                      {
+                        "id": 707,
+                        "boundarynum": 54,
+                        "name": "Sidharth Nagar",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "707"
+                      },
+                      {
+                        "id": 702,
+                        "boundarynum": 49,
+                        "name": "Roha Varcha Mohlla",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "702"
+                      }
+                    ]
                   }
                 ]
               }
@@ -509,94 +582,106 @@
                 "label": "Zone",
                 "children": [
                   {
-                    "id": 660,
-                    "boundarynum": 7,
-                    "name": "Ashtami Bajarpeth",
-                    "localname": null,
+                    "id": 305,
+                    "boundaryNum": 7,
+                    "name": "Gowda Veedi1",
+                    "localname": "Gowda Veedi1",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Area",
-                    "code": "660"
-                  },
-                  {
-                    "id": 661,
-                    "boundarynum": 8,
-                    "name": "Ashtami Bajarpeth",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "661"
-                  },
-                  {
-                    "id": 662,
-                    "boundarynum": 9,
-                    "name": "Ashtami Koliwada",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "662"
-                  },
-                  {
-                    "id": 663,
-                    "boundarynum": 10,
-                    "name": "Ashtami Koliwada",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "663"
-                  },
-                  {
-                    "id": 679,
-                    "boundarynum": 26,
-                    "name": "Khalcha Mohlla Asthami",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "679"
-                  },
-                  {
-                    "id": 686,
-                    "boundarynum": 33,
-                    "name": "Mukund Nagar",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "686"
-                  },
-                  {
-                    "id": 687,
-                    "boundarynum": 34,
-                    "name": "Mukund Nagar",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "687"
-                  },
-                  {
-                    "id": 690,
-                    "boundarynum": 37,
-                    "name": "Pingalsai Road",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "690"
-                  },
-                  {
-                    "id": 703,
-                    "boundarynum": 50,
-                    "name": "Rohidas Nagar",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "703"
+                    "label": "Road/Street",
+                    "code": "305",
+                    "children": [
+                      {
+                        "id": 660,
+                        "boundarynum": 7,
+                        "name": "Ashtami Bajarpeth",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "660"
+                      },
+                      {
+                        "id": 661,
+                        "boundarynum": 8,
+                        "name": "Ashtami Bajarpeth",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "661"
+                      },
+                      {
+                        "id": 662,
+                        "boundarynum": 9,
+                        "name": "Ashtami Koliwada",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "662"
+                      },
+                      {
+                        "id": 663,
+                        "boundarynum": 10,
+                        "name": "Ashtami Koliwada",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "663"
+                      },
+                      {
+                        "id": 679,
+                        "boundarynum": 26,
+                        "name": "Khalcha Mohlla Asthami",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "679"
+                      },
+                      {
+                        "id": 686,
+                        "boundarynum": 33,
+                        "name": "Mukund Nagar",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "686"
+                      },
+                      {
+                        "id": 687,
+                        "boundarynum": 34,
+                        "name": "Mukund Nagar",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "687"
+                      },
+                      {
+                        "id": 690,
+                        "boundarynum": 37,
+                        "name": "Pingalsai Road",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "690"
+                      },
+                      {
+                        "id": 703,
+                        "boundarynum": 50,
+                        "name": "Rohidas Nagar",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "703"
+                      }
+                    ]
                   }
                 ]
               },
@@ -611,13 +696,23 @@
                 "label": "Zone",
                 "children": [
                   {
+                    "id": 354,
+                    "boundaryNum": 6,
+                    "name": "Konda Peta3",
+                    "localname": "Konda Peta3",
+                    "longitude": null,
+                    "latitude": null,
+                    "label": "Road/Street",
+                    "code": "354",
+                    "children": [
+                  {
                     "id": 677,
                     "boundarynum": 24,
                     "name": "Kasar Ali",
                     "localname": null,
                     "longitude": null,
                     "latitude": null,
-                    "label": "Area",
+                    "label": "Colony/Society/Complex",
                     "code": "677"
                   },
                   {
@@ -627,7 +722,7 @@
                     "localname": null,
                     "longitude": null,
                     "latitude": null,
-                    "label": "Area",
+                    "label": "Colony/Society/Complex",
                     "code": "678"
                   },
                   {
@@ -637,7 +732,7 @@
                     "localname": null,
                     "longitude": null,
                     "latitude": null,
-                    "label": "Area",
+                    "label": "Colony/Society/Complex",
                     "code": "676"
                   },
                   {
@@ -647,7 +742,7 @@
                     "localname": null,
                     "longitude": null,
                     "latitude": null,
-                    "label": "Area",
+                    "label": "Colony/Society/Complex",
                     "code": "713"
                   },
                   {
@@ -657,52 +752,13 @@
                     "localname": null,
                     "longitude": null,
                     "latitude": null,
-                    "label": "Area",
+                    "label": "Colony/Society/Complex",
                     "code": "714"
                   }
                 ]
-              },
-              {
-                "id": 651,
-                "boundarynum": 12,
-                "name": "Zone C",
-                "localname": null,
-                "longitude": null,
-                "latitude": null,
-                "code": "651",
-                "label": "Zone",
-                "children": [
-                  {
-                    "id": 655,
-                    "boundarynum": 2,
-                    "name": "Aambedkar Nagar",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "655"
-                  },
-                  {
-                    "id": 664,
-                    "boundarynum": 11,
-                    "name": "Ashtami Paril Ali",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "664"
-                  },
-                  {
-                    "id": 682,
-                    "boundarynum": 29,
-                    "name": "Maratha Ali",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "682"
                   }
                 ]
+                
               }
             ]
           },
@@ -727,64 +783,76 @@
                 "label": "Zone",
                 "children": [
                   {
-                    "id": 665,
-                    "boundarynum": 12,
-                    "name": "Bangale Ali",
-                    "localname": null,
+                    "id": 310,
+                    "boundaryNum": 7,
+                    "name": "Kaligotla Veedhi1",
+                    "localname": "Kaligotla Veedhi1",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Area",
-                    "code": "665"
-                  },
-                  {
-                    "id": 671,
-                    "boundarynum": 18,
-                    "name": "Excel Society",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "671"
-                  },
-                  {
-                    "id": 675,
-                    "boundarynum": 22,
-                    "name": "Kalpak Society",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "675"
-                  },
-                  {
-                    "id": 689,
-                    "boundarynum": 36,
-                    "name": "Nehru Nagar",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "689"
-                  },
-                  {
-                    "id": 692,
-                    "boundarynum": 39,
-                    "name": "Roha Bajarpeth",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "692"
-                  },
-                  {
-                    "id": 704,
-                    "boundarynum": 51,
-                    "name": "Sawarkar Road",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "704"
+                    "label": "Road/Street",
+                    "code": "310",
+                    "children": [
+                      {
+                        "id": 665,
+                        "boundarynum": 12,
+                        "name": "Bangale Ali",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "665"
+                      },
+                      {
+                        "id": 671,
+                        "boundarynum": 18,
+                        "name": "Excel Society",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "671"
+                      },
+                      {
+                        "id": 675,
+                        "boundarynum": 22,
+                        "name": "Kalpak Society",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "675"
+                      },
+                      {
+                        "id": 689,
+                        "boundarynum": 36,
+                        "name": "Nehru Nagar",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "689"
+                      },
+                      {
+                        "id": 692,
+                        "boundarynum": 39,
+                        "name": "Roha Bajarpeth",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "692"
+                      },
+                      {
+                        "id": 704,
+                        "boundarynum": 51,
+                        "name": "Sawarkar Road",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "704"
+                      }
+                    ]
                   }
                 ]
               },
@@ -799,24 +867,36 @@
                 "label": "Zone",
                 "children": [
                   {
-                    "id": 659,
-                    "boundarynum": 6,
-                    "name": "AndharAli Main Road",
-                    "localname": null,
+                    "id": 353,
+                    "boundaryNum": 6,
+                    "name": "Konda Peta2",
+                    "localname": "Konda Peta2",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Area",
-                    "code": "659"
-                  },
-                  {
-                    "id": 658,
-                    "boundarynum": 5,
-                    "name": "AndharAli Main Road",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "658"
+                    "label": "Road/Street",
+                    "code": "353",
+                    "children": [
+                      {
+                        "id": 659,
+                        "boundarynum": 6,
+                        "name": "AndharAli Main Road",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "659"
+                      },
+                      {
+                        "id": 658,
+                        "boundarynum": 5,
+                        "name": "AndharAli Main Road",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "658"
+                      }
+                    ]
                   }
                 ]
               },
@@ -831,24 +911,36 @@
                 "label": "Zone",
                 "children": [
                   {
-                    "id": 657,
-                    "boundarynum": 4,
-                    "name": "Andhar Ali",
-                    "localname": null,
+                    "id": 351,
+                    "boundaryNum": 6,
+                    "name": "Konda Peta",
+                    "localname": "Konda Peta",
                     "longitude": null,
                     "latitude": null,
-                    "label": "Area",
-                    "code": "657"
-                  },
-                  {
-                    "id": 669,
-                    "boundarynum": 16,
-                    "name": "Dhangar ali",
-                    "localname": null,
-                    "longitude": null,
-                    "latitude": null,
-                    "label": "Area",
-                    "code": "669"
+                    "label": "Road/Street",
+                    "code": "351",
+                    "children": [
+                      {
+                        "id": 657,
+                        "boundarynum": 4,
+                        "name": "Andhar Ali",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "657"
+                      },
+                      {
+                        "id": 669,
+                        "boundarynum": 16,
+                        "name": "Dhangar ali",
+                        "localname": null,
+                        "longitude": null,
+                        "latitude": null,
+                        "label": "Colony/Society/Complex",
+                        "code": "669"
+                      }
+                    ]
                   }
                 ]
               }
