@@ -1157,8 +1157,8 @@
         "area": "1",
         "capacity": "1",
         "address": "Dump Dump dump dump",
-        "latitude": "",
-        "longitude": "",
+        "latitude": 19.076,
+        "longitude": 72.8777,
         "wasteTypes": [
           {
             "code": "Bio Medical Waste"
@@ -1169,7 +1169,10 @@
           {
             "code": "Waste Type Code 2"
           }
-        ]
+        ],
+        "location": {
+          "code": "200"
+        }
       },
       "name": "Dump 6",
       "isProcessingSite": "",
