@@ -1734,6 +1734,27 @@
       "graceTimeFrom": "1517484600000",
       "graceTimeTo": "1517485200000",
       "remarks": "eeedwsderf23213213@@@@@@"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1517473438868",
+      "name": "test ",
+      "shiftType": {
+        "code": "shift106"
+      },
+      "department": {
+        "code": "ACC"
+      },
+      "designation": {
+        "code": "ACIV"
+      },
+      "shiftStartTime": "1517457600000",
+      "shiftEndTime": "1517500800000",
+      "lunchStartTime": "1517472000000",
+      "lunchEndTime": "1517473800000",
+      "graceTimeFrom": "1517484600000",
+      "graceTimeTo": "1517485200000",
+      "remarks": "dsdsadsadsadsfdsgdfgdag"
     }
   ]
 }
