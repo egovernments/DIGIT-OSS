@@ -286,6 +286,18 @@
       "garbageToBeCollected": "44",
       "ward": 6,
       "zone": 3
+    },
+    {
+      "tenantId": "default",
+      "code": "Population-1517488897085",
+      "ulb": {
+        "code": "mh.roha"
+      },
+      "censusYear": "2001",
+      "population": "34",
+      "garbageToBeCollected": "44",
+      "ward": 1,
+      "zone": 3
     }
   ]
 }
