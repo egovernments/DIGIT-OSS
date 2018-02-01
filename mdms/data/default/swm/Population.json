@@ -346,6 +346,15 @@
       "garbageToBeCollected": "33",
       "ward": 1,
       "zone": 3
+    },
+    {
+      "tenantId": "default",
+      "code": "Population-1517491870287",
+      "ward": 8,
+      "zone": 1,
+      "censusYear": "2001",
+      "population": 1000,
+      "garbageToBeCollected": 12
     }
   ]
 }
