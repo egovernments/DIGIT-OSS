@@ -13,8 +13,8 @@
         "location": {
           "code": "Fake location code 1"
         },
-        "latitude": 0,
-        "longitude": 0,
+        "latitude": 19.076,
+        "longitude": 72.8777,
         "mpcbAuthorisation": true,
         "bankGuarantee": false,
         "bankValidityFrom": "1509190483",
