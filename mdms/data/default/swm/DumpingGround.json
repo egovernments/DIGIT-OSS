@@ -3904,6 +3904,41 @@
           "code": "mh.amba"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "HDFC",
+        "bankValidityFrom": 1517423400000,
+        "bankValidityTo": 1519756200000,
+        "area": "50",
+        "capacity": "100",
+        "address": "H-607, Rajaji Nagar, KP Road",
+        "latitude": 19.076,
+        "longitude": 72.8777,
+        "location": {
+          "code": "303"
+        },
+        "wasteTypes": [
+          {
+            "code": "BW001"
+          }
+        ]
+      },
+      "name": "SGK999",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515075903699"
+      },
+      "distanceFromProcessingSite": "5",
+      "tenantId": "default",
+      "code": "DumpingGround-1517469426891",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        }
+      ]
     }
   ]
 }
