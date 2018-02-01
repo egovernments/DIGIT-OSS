@@ -5,12 +5,12 @@
     {
       "tenantId": "default",
       "name": "Community Toilet",
-      "code": "Community Toilet"
+      "code": "COM"
     },
     {
       "tenantId": "default",
       "name": "Public Toilet",
-      "code": "Public Toilet"
+      "code": "PUB"
     }
   ]
 }

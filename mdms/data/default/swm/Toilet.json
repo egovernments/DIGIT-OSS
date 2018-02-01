@@ -15,7 +15,7 @@
       "seatCount": 10,
       "address": "xyz gali..",
       "toiletType": {
-        "code": ""
+        "code": "PUB"
       }
     },
     {
@@ -30,7 +30,7 @@
       "longitude": 14.78789,
       "seatCount": 10,
       "toiletType": {
-        "code": "Public Toilet"
+        "code": "PUB"
       }
     },
     {
@@ -46,7 +46,7 @@
       "longitude": "55",
       "seatCount": "8",
       "toiletType": {
-        "code": "Public Toilet"
+        "code": "PUB"
       }
     },
     {
@@ -62,7 +62,7 @@
       "latitude": "22",
       "longitude": "14",
       "toiletType": {
-        "code": "Public Toilet"
+        "code": "PUB"
       }
     },
     {
@@ -78,7 +78,7 @@
       "longitude": "33",
       "seatCount": "5",
       "toiletType": {
-        "code": "Public Toilet"
+        "code": "PUB"
       }
     },
     {
@@ -94,7 +94,7 @@
       "longitude": "88",
       "seatCount": "88",
       "toiletType": {
-        "code": "Community Toilet"
+        "code": "COM"
       }
     },
     {
@@ -110,7 +110,7 @@
       "longitude": "12.12",
       "seatCount": "2",
       "toiletType": {
-        "code": "Community Toilet"
+        "code": "COM"
       }
     },
     {
@@ -126,7 +126,7 @@
       "longitude": "43",
       "seatCount": "43",
       "toiletType": {
-        "code": "Community Toilet"
+        "code": "COM"
       }
     },
     {
@@ -142,7 +142,7 @@
       "longitude": "22",
       "seatCount": "15",
       "toiletType": {
-        "code": "Community Toilet"
+        "code": "COM"
       }
     },
     {
@@ -158,175 +158,14 @@
       "longitude": "",
       "seatCount": "6",
       "toiletType": {
-        "code": "Public Toilet"
+        "code": "PUB"
       }
-    },
-    {
-      "publicToilet": false,
-      "name": "hyd/madhapur/Neerja col/002",
-      "code": "Toilet-1517373464194",
-      "tenantId": "default",
-      "address": "12-23 Krishna colony",
-      "location": {
-        "code": "201"
-      },
-      "latitude": "150",
-      "longitude": "30",
-      "seatCount": "7"
-    },
-    {
-      "publicToilet": false,
-      "name": "abcd",
-      "code": "Toilet-1517376653765",
-      "tenantId": "default",
-      "address": "abcd colony",
-      "location": {
-        "code": "350"
-      },
-      "latitude": "23",
-      "longitude": "25",
-      "seatCount": "10"
-    },
-    {
-      "publicToilet": false,
-      "name": "hyd/madhapur/Neerja col/001",
-      "code": "Toilet-1517376483422",
-      "tenantId": "default",
-      "address": "12-2202",
-      "location": {
-        "code": "200"
-      },
-      "latitude": "20",
-      "longitude": "20",
-      "seatCount": "5"
-    },
-    {
-      "publicToilet": false,
-      "name": "hyd/madhapur/col/006",
-      "code": "Toilet-1517378090141",
-      "tenantId": "default",
-      "address": "col 6",
-      "location": {
-        "code": "203"
-      },
-      "latitude": "25",
-      "longitude": "55",
-      "seatCount": "14"
-    },
-    {
-      "publicToilet": false,
-      "name": "hyd/madhapur/Neerja col/003",
-      "code": "Toilet-1517384809315",
-      "tenantId": "default",
-      "address": "12-22 Krishna nagar, 4th cross",
-      "location": {
-        "code": "203"
-      },
-      "latitude": "50",
-      "longitude": "50",
-      "seatCount": "11"
-    },
-    {
-      "publicToilet": true,
-      "name": "hyd/madhapur/Neerja col/004",
-      "code": "Toilet-1517385959710",
-      "tenantId": "default",
-      "address": "Toilet address 101",
-      "location": {
-        "code": "200"
-      },
-      "latitude": "40",
-      "longitude": "40",
-      "seatCount": "9"
-    },
-    {
-      "publicToilet": false,
-      "name": "New Toilet - 30012018",
-      "code": "Toilet-1517391127763",
-      "tenantId": "default",
-      "address": "New Toilet Address - 30012018",
-      "location": {
-        "code": "201"
-      },
-      "longitude": 78.39964409999993,
-      "latitude": 17.4947934,
-      "seatCount": "5"
-    },
-    {
-      "publicToilet": true,
-      "name": "hyd/madhapur/Neerja col/0067",
-      "code": "Toilet-1517396068371",
-      "tenantId": "default",
-      "address": "12-22 krishna cottage",
-      "location": {
-        "code": "355"
-      },
-      "longitude": 77.20812709999996,
-      "latitude": 28.6172144,
-      "seatCount": "2"
-    },
-    {
-      "publicToilet": false,
-      "name": "ABC Community Toilet",
-      "code": "Toilet-1517397362845",
-      "tenantId": "default",
-      "address": "Maha municipality",
-      "location": {
-        "code": "200"
-      },
-      "seatCount": "5"
-    },
-    {
-      "publicToilet": true,
-      "name": "ABC 123",
-      "code": "Toilet-1517398526394",
-      "tenantId": "default",
-      "address": "",
-      "longitude": 72.8982993652344,
-      "latitude": 19.00914581557084,
-      "seatCount": "6",
-      "location": {
-        "code": "355"
-      }
-    },
-    {
-      "publicToilet": false,
-      "name": "ABC 123",
-      "code": "Toilet-1517398907497",
-      "tenantId": "default",
-      "location": {
-        "code": "201"
-      },
-      "seatCount": "2500"
-    },
-    {
-      "publicToilet": false,
-      "name": "ABC 123",
-      "code": "Toilet-1517399099738",
-      "tenantId": "default",
-      "location": {
-        "code": "201"
-      },
-      "seatCount": "2500003"
-    },
-    {
-      "publicToilet": false,
-      "name": "hyd_001",
-      "code": "Toilet-1517402882951",
-      "tenantId": "default",
-      "address": "toilet address_001",
-      "location": {
-        "code": "302"
-      },
-      "longitude": 78.39205560000005,
-      "latitude": 17.494568,
-      "seatCount": "3"
     },
     {
       "name": "new toilet dtaa",
       "code": "Toilet-1517403555696",
       "tenantId": "default",
-      "toiletType": "Public Toilet",
+      "toiletType": "PUB",
       "address": "new toilet dtaa address",
       "location": {
         "code": "350"
@@ -336,10 +175,10 @@
       "seatCount": "12"
     },
     {
-      "name": "community toilet -005",
+      "name": "COM -005",
       "code": "Toilet-1517403800145",
       "tenantId": "default",
-      "toiletType": "Community Toilet",
+      "toiletType": "COM",
       "address": "hjgkjb",
       "location": {
         "code": "202"
@@ -352,7 +191,7 @@
       "name": "cars acce 0012",
       "code": "Toilet-1517404006667",
       "tenantId": "default",
-      "toiletType": "Public Toilet",
+      "toiletType": "PUB",
       "address": "dscdsvdfv",
       "location": {
         "code": "201"
@@ -366,7 +205,7 @@
       "code": "Toilet-1517404423890",
       "tenantId": "default",
       "toiletType": {
-        "code": "Public Toilet"
+        "code": "PUB"
       },
       "address": "ghoul area address",
       "location": {
@@ -382,7 +221,7 @@
       "tenantId": "default",
       "address": "log horizon",
       "toiletType": {
-        "code": "Community Toilet"
+        "code": "COM"
       },
       "location": {
         "code": "350"
@@ -396,7 +235,7 @@
       "code": "Toilet-1517405611547",
       "tenantId": "default",
       "toiletType": {
-        "code": "Public Toilet"
+        "code": "PUB"
       },
       "address": "fgnfgdn",
       "location": {
@@ -411,7 +250,7 @@
       "code": "Toilet-1517406682053",
       "tenantId": "default",
       "toiletType": {
-        "code": "Public Toilet"
+        "code": "PUB"
       },
       "address": "addres of code geass",
       "location": {
@@ -426,7 +265,7 @@
       "code": "Toilet-1517407581644",
       "tenantId": "default",
       "toiletType": {
-        "code": "Community Toilet"
+        "code": "COM"
       },
       "address": "address at hyd",
       "location": {
@@ -441,7 +280,7 @@
       "code": "Toilet-1517407999508",
       "tenantId": "default",
       "toiletType": {
-        "code": "Public Toilet"
+        "code": "PUB"
       },
       "address": "ghmghjmghmghmgh",
       "location": {
@@ -456,7 +295,7 @@
       "code": "Toilet-1517408239731",
       "tenantId": "default",
       "toiletType": {
-        "code": "Public Toilet"
+        "code": "PUB"
       },
       "address": "fgnfgn",
       "location": {
@@ -471,7 +310,7 @@
       "code": "Toilet-1517409353307",
       "tenantId": "default",
       "toiletType": {
-        "code": "Community Toilet"
+        "code": "COM"
       },
       "address": "mghm",
       "location": {
@@ -486,7 +325,7 @@
       "code": "Toilet-1517410316078",
       "tenantId": "default",
       "toiletType": {
-        "code": "Community Toilet"
+        "code": "COM"
       },
       "address": "hfchfch",
       "location": {
@@ -501,7 +340,7 @@
       "tenantId": "default",
       "code": "Toilet-1517410532327",
       "toiletType": {
-        "code": "Community Toilet"
+        "code": "COM"
       },
       "address": "hfchfch",
       "location": {
@@ -516,7 +355,7 @@
       "tenantId": "default",
       "code": "Toilet-1517410560407",
       "toiletType": {
-        "code": "Community Toilet"
+        "code": "COM"
       },
       "address": "ghkhgkhk",
       "location": {
@@ -531,7 +370,7 @@
       "tenantId": "default",
       "code": "Toilet-1517413179316",
       "toiletType": {
-        "code": "Community Toilet"
+        "code": "COM"
       },
       "address": "12-22/001",
       "location": {
@@ -549,7 +388,7 @@
       "latitude": 17.494568,
       "seatCount": "9",
       "toiletType": {
-        "code": "Community Toilet"
+        "code": "COM"
       },
       "address": "12-22/003",
       "location": {
@@ -561,7 +400,7 @@
       "tenantId": "default",
       "code": "Toilet-1517467244669",
       "toiletType": {
-        "code": "Public Toilet"
+        "code": "PUB"
       },
       "location": {
         "code": "200"
