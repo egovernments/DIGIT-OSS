@@ -135,9 +135,9 @@
       "tenantId": "mh.roha"
     },
     {
-      "name": "SRLegal",
+      "name": "SR Legal",
       "code": "SRL",
-      "active": true,
+      "active": false,
       "tenantId": "mh.roha"
     }
   ]
