@@ -123,7 +123,7 @@
       "tenantId": "mh.roha"
     },
     {
-      "name": "SRCourt",
+      "name": "SR Court",
       "code": "SRC",
       "address": {
         "addressLine1": "village-sukhbasi",
@@ -131,7 +131,7 @@
         "city": "Madhubani",
         "pincode": "838484"
       },
-      "active": true,
+      "active": false,
       "tenantId": "mh.roha"
     }
   ]
