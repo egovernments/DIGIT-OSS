@@ -16,6 +16,11 @@
       "tenantId": "mh",
       "name": "Compactor",
       "code": "Compactor"
+    },
+    {
+      "tenantId": "mh",
+      "name": "Tractor",
+      "code": "Tractor"
     }
   ]
 }
