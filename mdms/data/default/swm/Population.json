@@ -5,7 +5,7 @@
     {
       "code": "Trimbak MC Code",
       "tenantId": "default",
-      "censusYear": 2011,
+      "censusYear": "2001",
       "population": 13383,
       "garbageToBeCollected": 5,
       "location": {
