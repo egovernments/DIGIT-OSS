@@ -121,6 +121,18 @@
       },
       "active": true,
       "tenantId": "mh.roha"
+    },
+    {
+      "name": "SRCourt",
+      "code": "SRC",
+      "address": {
+        "addressLine1": "village-sukhbasi",
+        "addressLine2": "36/a vangal rao nagar ",
+        "city": "Madhubani",
+        "pincode": "838484"
+      },
+      "active": true,
+      "tenantId": "mh.roha"
     }
   ]
 }
