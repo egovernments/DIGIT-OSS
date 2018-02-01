@@ -541,6 +541,21 @@
       "longitude": 72.87598338623049,
       "latitude": 19.125312016948353,
       "seatCount": "23"
+    },
+    {
+      "name": "ghnghn",
+      "tenantId": "default",
+      "code": "Toilet-1517488953304",
+      "toiletType": {
+        "code": "COM"
+      },
+      "address": "ghnghn",
+      "location": {
+        "code": "202"
+      },
+      "longitude": 72.8598472167969,
+      "latitude": 19.11330978747856,
+      "seatCount": "66"
     }
   ]
 }
