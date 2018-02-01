@@ -511,6 +511,21 @@
       "longitude": 72.86431041259767,
       "latitude": 19.11850004771845,
       "seatCount": "34"
+    },
+    {
+      "name": "gmm",
+      "tenantId": "default",
+      "code": "Toilet-1517488592623",
+      "toiletType": {
+        "code": "COM"
+      },
+      "address": "gmghmghm",
+      "location": {
+        "code": "350"
+      },
+      "longitude": 72.85366740722658,
+      "latitude": 19.114931761308473,
+      "seatCount": "3"
     }
   ]
 }
