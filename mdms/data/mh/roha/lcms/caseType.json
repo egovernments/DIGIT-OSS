@@ -2243,7 +2243,7 @@
       "tenantId": "mh.roha"
     },
     {
-      "name": "SRCaseType",
+      "name": "SR CaseType",
       "code": "SRCT",
       "sideCode": "SRL",
       "active": true,
