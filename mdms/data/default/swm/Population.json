@@ -166,6 +166,18 @@
       "garbageToBeCollected": "12",
       "ward": 8,
       "zone": 1
+    },
+    {
+      "tenantId": "default",
+      "code": "Population-1517466578523",
+      "ulb": {
+        "code": "default"
+      },
+      "censusYear": "2002",
+      "population": "20",
+      "garbageToBeCollected": "30",
+      "ward": 6,
+      "zone": 4
     }
   ]
 }
