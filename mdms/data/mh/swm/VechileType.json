@@ -21,6 +21,11 @@
       "tenantId": "mh",
       "name": "Tractor",
       "code": "Tractor"
+    },
+    {
+      "tenantId": "mh",
+      "name": "Bharath Benz",
+      "code": "BB"
     }
   ]
 }
