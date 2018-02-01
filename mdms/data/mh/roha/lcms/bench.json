@@ -47,7 +47,7 @@
     {
       "name": "SR BENCH",
       "code": "SB",
-      "active": false,
+      "active": true,
       "tenantId": "mh.roha"
     }
   ]
