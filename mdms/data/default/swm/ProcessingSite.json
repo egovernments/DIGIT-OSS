@@ -977,6 +977,31 @@
       "name": "etewtweew",
       "tenantId": "default",
       "code": "ProcessingSite-1517397322654"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "10",
+        "capacity": "6",
+        "address": "jlkhh h hlklkjl jlj",
+        "latitude": 13.1156777,
+        "longitude": 80.18106169999999,
+        "location": {
+          "code": "303"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "ooooo",
+      "tenantId": "default",
+      "code": "ProcessingSite-1517562238876"
     }
   ]
 }
