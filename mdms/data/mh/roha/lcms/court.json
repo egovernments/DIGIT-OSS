@@ -133,6 +133,18 @@
       },
       "active": true,
       "tenantId": "mh.roha"
+    },
+    {
+      "name": "Bangalore Court",
+      "code": "BBCOURT",
+      "address": {
+        "addressLine1": "Bangalore",
+        "addressLine2": "Bangalore",
+        "city": "Bangalore",
+        "pincode": "560023"
+      },
+      "active": true,
+      "tenantId": "mh.roha"
     }
   ]
 }
