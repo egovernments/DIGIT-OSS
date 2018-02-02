@@ -31,6 +31,18 @@
       "longitude": 78.04215520000002,
       "latitude": 27.1750151,
       "seatCount": "4"
+    },
+    {
+      "name": "Toilet 1",
+      "tenantId": "mh.roha",
+      "code": "MH-mh.roha-PUB-1517582693576",
+      "toiletType": {
+        "code": "PUB"
+      },
+      "location": {
+        "code": "654"
+      },
+      "seatCount": "20"
     }
   ]
 }
