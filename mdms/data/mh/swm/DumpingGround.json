@@ -109,6 +109,47 @@
           "code": "mh.roha"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "49.99",
+        "capacity": "49.99",
+        "address": "Roha Dumping Ground",
+        "latitude": 18.4389511,
+        "longitude": 73.1167514,
+        "location": {
+          "code": "660"
+        },
+        "wasteTypes": [
+          {
+            "code": "Dry"
+          },
+          {
+            "code": "Wet"
+          }
+        ]
+      },
+      "name": "Roha Dumping Ground",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "mh",
+      "code": "DumpingGround-1517575950006",
+      "ulbs": [
+        {
+          "code": "mh.aliba"
+        },
+        {
+          "code": "mh.roha"
+        }
+      ]
     }
   ]
 }
