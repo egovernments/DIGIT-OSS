@@ -72,6 +72,10 @@
     {
       "name": "Public Health Administration",
       "code": "PHA"
+    },
+    {
+      "name": "Electricity",
+      "code": "EL"
     }
   ]
 }
