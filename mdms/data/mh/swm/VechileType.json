@@ -26,6 +26,11 @@
       "tenantId": "mh",
       "name": "Bharath Benz",
       "code": "BB"
+    },
+    {
+      "tenantId": "mh",
+      "name": "Bharath Benz SMT",
+      "code": "BBSMT"
     }
   ]
 }
