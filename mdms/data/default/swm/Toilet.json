@@ -717,6 +717,21 @@
       "longitude": 72.8777,
       "latitude": 19.076,
       "seatCount": "10"
+    },
+    {
+      "name": "fgfgn",
+      "tenantId": "default",
+      "code": "MH-default-PUB-1517567863454",
+      "toiletType": {
+        "code": "PUB"
+      },
+      "address": "fgnfgnfgn",
+      "location": {
+        "code": "350"
+      },
+      "longitude": 72.84611430664064,
+      "latitude": 19.105199679672214,
+      "seatCount": "4"
     }
   ]
 }
