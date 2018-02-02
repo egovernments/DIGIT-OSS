@@ -4001,6 +4001,41 @@
           "code": "mh.pen0"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "HDFC",
+        "bankValidityFrom": 1517509800000,
+        "bankValidityTo": 1519756200000,
+        "area": "1",
+        "capacity": "10",
+        "address": "uuuuuuuuuuuuuuuuuuuuuuuuu",
+        "latitude": 19.076,
+        "longitude": 72.8777,
+        "location": {
+          "code": "303"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          }
+        ]
+      },
+      "name": "SGK07",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1513865191921"
+      },
+      "distanceFromProcessingSite": "4",
+      "tenantId": "default",
+      "code": "DumpingGround-1517559849336",
+      "ulbs": [
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
