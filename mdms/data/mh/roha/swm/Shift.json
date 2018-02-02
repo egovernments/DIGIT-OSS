@@ -25,7 +25,7 @@
     },
     {
       "tenantId": "mh.roha",
-      "code": "-1517581756524",
+      "code": "-1517587848748",
       "name": "6 AM to 10 AM Shift",
       "shiftType": {
         "code": "6to10shift"
@@ -36,13 +36,12 @@
       "designation": {
         "code": "ACC"
       },
-      "shiftStartTime": "1517531400000",
-      "shiftEndTime": "1517545800000",
-      "lunchStartTime": "1517536800000",
-      "lunchEndTime": "1517538000000",
-      "graceTimeFrom": "1517538000000",
-      "graceTimeTo": "1517538300000",
-      "remarks": "6 AM to 10 AM Shift"
+      "shiftStartTime": "1517531452765",
+      "shiftEndTime": "1517545852765",
+      "lunchStartTime": "1517540340000",
+      "lunchEndTime": "1517541000000",
+      "graceTimeFrom": "1517541120000",
+      "graceTimeTo": "1517541360000"
     }
   ]
 }
