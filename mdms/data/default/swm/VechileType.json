@@ -161,6 +161,11 @@
       "tenantId": "default",
       "name": "VechicleTypeName",
       "code": "V T"
+    },
+    {
+      "tenantId": "default",
+      "name": "MK",
+      "code": "MK01"
     }
   ]
 }
