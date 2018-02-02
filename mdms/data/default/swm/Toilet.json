@@ -762,6 +762,21 @@
       "longitude": 72.84783092041017,
       "latitude": 19.106497323647492,
       "seatCount": "12"
+    },
+    {
+      "name": "tatsuya",
+      "tenantId": "default",
+      "code": "MH-default-PUB-1517569528617",
+      "toiletType": {
+        "code": "PUB"
+      },
+      "address": "address - cil",
+      "location": {
+        "code": "352"
+      },
+      "longitude": 72.85778728027346,
+      "latitude": 19.10747054994792,
+      "seatCount": "6"
     }
   ]
 }
