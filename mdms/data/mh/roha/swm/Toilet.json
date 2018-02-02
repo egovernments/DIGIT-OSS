@@ -1,0 +1,21 @@
+{
+  "tenantId": "mh.roha",
+  "moduleName": "swm",
+  "Toilet": [
+    {
+      "name": "Community Toilet",
+      "tenantId": "mh.roha",
+      "code": "MH-mh.roha-COM-1517582023055",
+      "toiletType": {
+        "code": "COM"
+      },
+      "address": "12-22 express colony",
+      "location": {
+        "code": "668"
+      },
+      "longitude": 153.07983860000002,
+      "latitude": -27.4436795,
+      "seatCount": "3"
+    }
+  ]
+}
