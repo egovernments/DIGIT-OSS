@@ -4036,6 +4036,47 @@
           "code": "mh.rohatest"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "1.2585564",
+        "capacity": "1.20358799",
+        "address": "Bheemili Boya Veedhi, #123, 2nd Main",
+        "latitude": 12.9715987,
+        "longitude": 77.59456269999998,
+        "location": {
+          "code": "203"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          },
+          {
+            "code": "BW001"
+          },
+          {
+            "code": "Bio Medical Waste"
+          }
+        ]
+      },
+      "name": "Bheemili Boya Dumping Ground",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1517572368750",
+      "ulbs": [
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
