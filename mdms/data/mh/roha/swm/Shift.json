@@ -41,7 +41,8 @@
       "lunchStartTime": "1517536800000",
       "lunchEndTime": "1517538000000",
       "graceTimeFrom": "1517538000000",
-      "graceTimeTo": "1517538300000"
+      "graceTimeTo": "1517538300000",
+      "remarks": "6 AM to 10 AM Shift"
     }
   ]
 }
