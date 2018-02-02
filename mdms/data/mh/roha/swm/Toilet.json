@@ -25,6 +25,18 @@
       "toiletType": {
         "code": "COM"
       }
+    },
+    {
+      "name": "Toilet 1",
+      "tenantId": "mh.roha",
+      "code": "MH-mh.roha-COM-1517596614525",
+      "toiletType": {
+        "code": "COM"
+      },
+      "location": {
+        "code": "660"
+      },
+      "seatCount": "1"
     }
   ]
 }
