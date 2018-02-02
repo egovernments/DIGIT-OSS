@@ -639,7 +639,9 @@
       "location": {
         "code": "201"
       },
-      "seatCount": "2"
+      "seatCount": "2",
+      "longitude": 73.11751619999995,
+      "latitude": 18.9894007
     }
   ]
 }
