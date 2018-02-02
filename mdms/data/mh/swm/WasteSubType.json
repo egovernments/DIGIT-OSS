@@ -9,7 +9,7 @@
       "wasteType": {
         "code": "Wet"
       }
-    }, 
+    },
     {
       "name": "HouseHold Dry",
       "code": "HouseHold Dry",
@@ -25,13 +25,21 @@
       "wasteType": {
         "code": "Wet"
       }
-    }, 
+    },
     {
       "name": "Market Dry",
       "code": "Market Dry",
       "tenantId": "mh",
       "wasteType": {
         "code": "Dry"
+      }
+    },
+    {
+      "name": "Bio Medical waste",
+      "code": "BMW",
+      "tenantId": "mh",
+      "wasteType": {
+        "code": "MW"
       }
     }
   ]
