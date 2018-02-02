@@ -11,6 +11,11 @@
       "tenantId": "mh",
       "name": "Wet Waste",
       "code": "Wet"
+    },
+    {
+      "tenantId": "mh",
+      "name": "Medical waste",
+      "code": "MW"
     }
   ]
 }
