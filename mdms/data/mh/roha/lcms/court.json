@@ -145,6 +145,18 @@
       },
       "active": true,
       "tenantId": "mh.roha"
+    },
+    {
+      "name": "Ahmedabad High Court",
+      "code": "AHC",
+      "address": {
+        "addressLine1": "Ahmedabad",
+        "addressLine2": "Ahmedabad",
+        "city": "Ahmedabad",
+        "pincode": "560039"
+      },
+      "active": true,
+      "tenantId": "mh.roha"
     }
   ]
 }
