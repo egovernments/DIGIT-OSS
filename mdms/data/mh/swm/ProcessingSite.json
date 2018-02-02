@@ -24,6 +24,37 @@
           }
         ]
       }
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "25",
+        "capacity": "25",
+        "address": "Astami bajarpeth",
+        "latitude": 18.4389511,
+        "longitude": 73.1167514,
+        "location": {
+          "code": "660"
+        },
+        "wasteTypes": [
+          {
+            "code": "Dry"
+          },
+          {
+            "code": "MW"
+          },
+          {
+            "code": "Wet"
+          }
+        ]
+      },
+      "name": "Processing Site at Astami bajarpeth",
+      "tenantId": "mh",
+      "code": "ProcessingSite-1517599151521"
     }
   ]
 }
