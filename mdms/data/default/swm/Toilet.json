@@ -628,6 +628,18 @@
         "code": "200"
       },
       "seatCount": "4"
+    },
+    {
+      "name": "Toilet At Colony 2",
+      "tenantId": "default",
+      "code": "MH-default-PUB-1517552219086",
+      "toiletType": {
+        "code": "COM"
+      },
+      "location": {
+        "code": "201"
+      },
+      "seatCount": "2"
     }
   ]
 }
