@@ -807,6 +807,21 @@
       "longitude": 100.12333960000001,
       "latitude": -0.6256516999999999,
       "seatCount": "28"
+    },
+    {
+      "name": "community toilet for Madhapur 1",
+      "tenantId": "default",
+      "code": "MH-default-COM-1517573260761",
+      "toiletType": {
+        "code": "COM"
+      },
+      "address": "test address ",
+      "location": {
+        "code": "303"
+      },
+      "longitude": -75.70092899999997,
+      "latitude": 45.4235937,
+      "seatCount": "45"
     }
   ]
 }
