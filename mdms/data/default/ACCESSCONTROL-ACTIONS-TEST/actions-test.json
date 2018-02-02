@@ -10570,6 +10570,19 @@
       "serviceCode": "WORKS_REPORTS",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1519,
+      "name": "Uploaded File MetaData",
+      "url": "/filestore/v1/files/metadata",
+      "displayName": "Uploaded File MetaData",
+      "orderNumber": 1,
+      "queryParams": null,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "FILE_METADATA",
+      "code": "null",
+      "path": ""
     }
   ]
 }
