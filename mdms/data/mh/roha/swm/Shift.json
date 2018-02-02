@@ -22,6 +22,26 @@
       "graceTimeFrom": "1517449200000",
       "graceTimeTo": "1517449500000",
       "remarks": "This is the very first shift"
+    },
+    {
+      "tenantId": "mh.roha",
+      "code": "-1517581756524",
+      "name": "6 AM to 10 AM Shift",
+      "shiftType": {
+        "code": "6to10shift"
+      },
+      "department": {
+        "code": "FM"
+      },
+      "designation": {
+        "code": "ACC"
+      },
+      "shiftStartTime": "1517531400000",
+      "shiftEndTime": "1517545800000",
+      "lunchStartTime": "1517536800000",
+      "lunchEndTime": "1517538000000",
+      "graceTimeFrom": "1517538000000",
+      "graceTimeTo": "1517538300000"
     }
   ]
 }
