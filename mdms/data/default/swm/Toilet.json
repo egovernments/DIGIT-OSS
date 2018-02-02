@@ -837,6 +837,21 @@
       "longitude": 77.20993249999992,
       "latitude": 28.6195187,
       "seatCount": "6"
+    },
+    {
+      "name": "sdsad",
+      "tenantId": "default",
+      "code": "MH-default-PUB-1517573553419",
+      "toiletType": {
+        "code": "PUB"
+      },
+      "address": "sdsadsa",
+      "location": {
+        "code": "303"
+      },
+      "longitude": 78.39268679999998,
+      "latitude": 17.4891777,
+      "seatCount": "4"
     }
   ]
 }
