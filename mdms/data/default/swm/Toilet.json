@@ -693,7 +693,7 @@
       "tenantId": "default",
       "code": "MH-default-PUB-1517564616818",
       "toiletType": {
-        "code": "PUB"
+        "code": "COM"
       },
       "address": "fgnfgnfg",
       "location": {
