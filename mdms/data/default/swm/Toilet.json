@@ -732,6 +732,21 @@
       "longitude": 72.84611430664064,
       "latitude": 19.105199679672214,
       "seatCount": "4"
+    },
+    {
+      "name": "jk,kj,kj",
+      "tenantId": "default",
+      "code": "MH-default-COM-1517567929591",
+      "toiletType": {
+        "code": "COM"
+      },
+      "address": ".,kj.kj.",
+      "location": {
+        "code": "202"
+      },
+      "longitude": 72.85572734375002,
+      "latitude": 19.109741389044217,
+      "seatCount": "8"
     }
   ]
 }
