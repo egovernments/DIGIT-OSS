@@ -616,6 +616,18 @@
       "longitude": 72.84439769287111,
       "latitude": 19.11817566122777,
       "seatCount": "3"
+    },
+    {
+      "name": "Public Toilet at Colony 1",
+      "tenantId": "default",
+      "code": "MH-default-null-1517552026820",
+      "toiletType": {
+        "code": "PUB"
+      },
+      "location": {
+        "code": "200"
+      },
+      "seatCount": "4"
     }
   ]
 }
