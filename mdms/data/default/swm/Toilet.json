@@ -777,6 +777,21 @@
       "longitude": 72.85778728027346,
       "latitude": 19.10747054994792,
       "seatCount": "6"
+    },
+    {
+      "name": "community Miyapur",
+      "tenantId": "default",
+      "code": "MH-default-COM-1517571146725",
+      "toiletType": {
+        "code": "COM"
+      },
+      "address": "12-22 miy",
+      "location": {
+        "code": "303"
+      },
+      "longitude": 77.16923599999996,
+      "latitude": 28.551663,
+      "seatCount": "3"
     }
   ]
 }
