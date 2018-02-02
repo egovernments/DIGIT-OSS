@@ -13068,12 +13068,6 @@
       "rolecode": "SUPERUSER",
       "actionid": 1483,
       "actioncode": "",
-      "tenantid": "default"
-    },
-    {
-      "rolecode": "SUPERUSER",
-      "actionid": 1483,
-      "actioncode": "",
       "tenantid": "mh.roha"
     }
   ]
