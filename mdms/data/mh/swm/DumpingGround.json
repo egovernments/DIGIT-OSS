@@ -91,11 +91,11 @@
         ]
       },
       "name": "Bidar ground",
-      "isProcessingSite": false,
+      "isProcessingSite": true,
       "processingSite": {
-        "code": "Thermax Limited"
+        "code": ""
       },
-      "distanceFromProcessingSite": "12",
+      "distanceFromProcessingSite": "",
       "tenantId": "mh",
       "code": "DumpingGround-1517491509179",
       "ulbs": [
