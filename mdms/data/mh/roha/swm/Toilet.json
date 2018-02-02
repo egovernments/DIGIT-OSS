@@ -21,7 +21,10 @@
       "location": {
         "code": "660"
       },
-      "seatCount": "25"
+      "seatCount": "25",
+      "toiletType": {
+        "code": "COM"
+      }
     }
   ]
 }
