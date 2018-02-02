@@ -657,6 +657,21 @@
       "longitude": 72.8777,
       "latitude": 19.076,
       "seatCount": "12"
+    },
+    {
+      "name": "uuuuuuuuu",
+      "tenantId": "mh.roha",
+      "code": "MH-mh.roha-null-1517558687998",
+      "longitude": 77.23050579999995,
+      "latitude": 28.6560722,
+      "toiletType": {
+        "code": "COM"
+      },
+      "address": "oooooo",
+      "location": {
+        "code": "203"
+      },
+      "seatCount": "9"
     }
   ]
 }
