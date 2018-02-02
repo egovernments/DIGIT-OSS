@@ -12,7 +12,7 @@
       "zone": 1,
       "censusYear": "2011",
       "population": 200,
-      "garbageToBeCollected": 200
+      "garbageToBeCollected": 250
     },
     {
       "tenantId": "mh.roha",
