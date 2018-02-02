@@ -672,6 +672,21 @@
         "code": "203"
       },
       "seatCount": "9"
+    },
+    {
+      "name": "va - new ",
+      "tenantId": "default",
+      "code": "MH-default-COM-1517564517031",
+      "toiletType": {
+        "code": "COM"
+      },
+      "address": "fgnfgnfg",
+      "location": {
+        "code": "201"
+      },
+      "longitude": 72.87358012695314,
+      "latitude": 19.108443770521568,
+      "seatCount": "6"
     }
   ]
 }
