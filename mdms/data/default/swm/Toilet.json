@@ -642,6 +642,21 @@
       "seatCount": "2",
       "longitude": 73.11751619999995,
       "latitude": 18.9894007
+    },
+    {
+      "name": "abcxyz",
+      "tenantId": "default",
+      "code": "MH-default-null-1517553025739",
+      "toiletType": {
+        "code": "PUB"
+      },
+      "address": "abc adderess , xyz conoly",
+      "location": {
+        "code": "202"
+      },
+      "longitude": 72.8777,
+      "latitude": 19.076,
+      "seatCount": "12"
     }
   ]
 }
