@@ -35,7 +35,7 @@
       }
     },
     {
-      "name": "Bio Medical waste",
+      "name": "Bio Medical Wastes",
       "code": "BMW",
       "tenantId": "mh",
       "wasteType": {
