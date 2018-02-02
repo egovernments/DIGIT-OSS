@@ -13063,6 +13063,12 @@
       "actionid": 1482,
       "actioncode": "",
       "tenantid": "mh.roha"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1483,
+      "actioncode": "",
+      "tenantid": "default"
     }
   ]
 }
