@@ -822,6 +822,21 @@
       "longitude": -75.70092899999997,
       "latitude": 45.4235937,
       "seatCount": "45"
+    },
+    {
+      "name": "public toilet Delhi Parliament road",
+      "tenantId": "default",
+      "code": "MH-default-PUB-1517573461992",
+      "toiletType": {
+        "code": "PUB"
+      },
+      "address": "public toilet Delhi Parliament road",
+      "location": {
+        "code": "203"
+      },
+      "longitude": 77.20993249999992,
+      "latitude": 28.6195187,
+      "seatCount": "6"
     }
   ]
 }
