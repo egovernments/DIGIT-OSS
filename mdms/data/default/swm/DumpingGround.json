@@ -3961,6 +3961,12 @@
           },
           {
             "code": "Wet"
+          },
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "BW001"
           }
         ]
       },
