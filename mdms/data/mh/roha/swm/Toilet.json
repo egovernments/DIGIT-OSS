@@ -13,6 +13,15 @@
         "code": "660"
       },
       "seatCount": "20"
+    },
+    {
+      "name": "Toilet at Prabhag 2",
+      "tenantId": "mh.roha",
+      "code": "MH-mh.roha-",
+      "location": {
+        "code": "660"
+      },
+      "seatCount": "25"
     }
   ]
 }
