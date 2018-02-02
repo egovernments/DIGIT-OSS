@@ -11,6 +11,11 @@
       "tenantId": "mh",
       "name": "Community",
       "code": "COMM"
+    },
+    {
+      "tenantId": "mh",
+      "name": "Weekly Collection",
+      "code": "WC"
     }
   ]
 }
