@@ -42,6 +42,26 @@
       "lunchEndTime": "1517541000000",
       "graceTimeFrom": "1517541120000",
       "graceTimeTo": "1517541360000"
+    },
+    {
+      "tenantId": "mh.roha",
+      "code": "-1517769353310",
+      "name": "New shift",
+      "shiftType": {
+        "code": "Morning Shift"
+      },
+      "department": {
+        "code": "CD"
+      },
+      "designation": {
+        "code": "CLRK"
+      },
+      "shiftStartTime": "1517798700000",
+      "shiftEndTime": "1517827500000",
+      "lunchStartTime": "1517814900000",
+      "lunchEndTime": "1517817120000",
+      "graceTimeFrom": "1517802120000",
+      "graceTimeTo": "1517802900000"
     }
   ]
 }
