@@ -2605,6 +2605,9 @@
         {
           "name": "Color",
           "type": "Text"
+        },
+        {
+          "name": "Registration Number"
         }
       ],
       "id": "60",
