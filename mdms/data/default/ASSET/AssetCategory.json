@@ -2530,6 +2530,19 @@
       "id": "2012",
       "code": "2012",
       "tenantId": "default"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "assetCategoryType": "MOVABLE",
+      "unitOfMeasurement": "CM",
+      "isDepreciationApplicable": false,
+      "name": "Cab",
+      "parent": null,
+      "isAssetAllow": false,
+      "id": "2013",
+      "code": "2013",
+      "tenantId": "default"
     }
   ]
 }
