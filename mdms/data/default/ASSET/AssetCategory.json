@@ -2461,7 +2461,8 @@
       "isDepreciationApplicable": false,
       "assetFieldsDefination": [
         {
-          "name": "Location"
+          "name": "Location",
+          "isActive": true
         }
       ]
     },
