@@ -106,6 +106,11 @@
       "tenantId": "default",
       "name": "New CT Test 101",
       "code": "CT 101"
+    },
+    {
+      "tenantId": "default",
+      "name": "M_Collection_Point Update",
+      "code": "MCollect"
     }
   ]
 }
