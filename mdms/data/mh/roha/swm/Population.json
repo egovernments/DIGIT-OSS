@@ -73,12 +73,12 @@
     },
     {
       "tenantId": "mh.roha",
-      "code": "Population-1517815218378",
+      "code": "Population-1517929156097",
       "ward": "635",
-      "zone": "Zone B",
+      "zone": "Zone A",
       "censusYear": "2001",
-      "population": 13,
-      "garbageToBeCollected": 25
+      "population": 20,
+      "garbageToBeCollected": 20
     }
   ]
 }
