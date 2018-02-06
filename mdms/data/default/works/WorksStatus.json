@@ -282,31 +282,43 @@
       "code": "CREATED",
       "description": "Created",
       "moduleType": "WorkOrder",
-      "tenantId": "default"
+      "tenantId": "default",
+      "orderNumber": 1
     },
     {
       "code": "CHECKED",
       "description": "Checked",
       "moduleType": "WorkOrder",
-      "tenantId": "default"
-    },
-    {
-      "code": "REJECTED",
-      "description": "Rejected",
-      "moduleType": "WorkOrder",
-      "tenantId": "default"
+      "tenantId": "default",
+      "orderNumber": 2
     },
     {
       "code": "APPROVED",
       "description": "Approved",
       "moduleType": "WorkOrder",
-      "tenantId": "default"
+      "tenantId": "default",
+      "orderNumber": 3
+    },
+    {
+      "code": "REJECTED",
+      "description": "Rejected",
+      "moduleType": "WorkOrder",
+      "tenantId": "default",
+      "orderNumber": 4
     },
     {
       "code": "CANCELLED",
       "description": "Cancelled",
       "moduleType": "WorkOrder",
-      "tenantId": "default"
+      "tenantId": "default",
+      "orderNumber": 5
+    },
+    {
+      "code": "RESUBMITTED",
+      "description": "Re-Submitted",
+      "moduleType": "WorkOrder",
+      "tenantId": "default",
+      "orderNumber": 6
     },
     {
       "code": "ACCEPTANCE_LETTER_ISSUED",
@@ -345,12 +357,6 @@
       "tenantId": "default"
     },
     {
-      "code": "RESUBMITTED",
-      "description": "Re-Submitted",
-      "moduleType": "WorkOrder",
-      "tenantId": "default"
-    },
-    {
       "code": "ACTIVE",
       "description": "Active",
       "moduleType": "Contractor",
@@ -386,11 +392,46 @@
       "orderNumber": 1
     },
     {
+      "code": "CREATED",
+      "description": "Created",
+      "moduleType": "LetterOfAcceptance",
+      "tenantId": "default",
+      "orderNumber": 1
+    },
+    {
+      "code": "CHECKED",
+      "description": "Checked",
+      "moduleType": "LetterOfAcceptance",
+      "tenantId": "default",
+      "orderNumber": 2
+    },
+    {
       "code": "APPROVED",
       "description": "Approved",
       "moduleType": "LetterOfAcceptance",
       "tenantId": "default",
-      "orderNumber": 1
+      "orderNumber": 3
+    },
+    {
+      "code": "REJECT",
+      "description": "Reject",
+      "moduleType": "LetterOfAcceptance",
+      "tenantId": "default",
+      "orderNumber": 4
+    },
+    {
+      "code": "CANCELLED",
+      "description": "Cancelled",
+      "moduleType": "LetterOfAcceptance",
+      "tenantId": "default",
+      "orderNumber": 5
+    },
+    {
+      "code": "RESUBMITTED",
+      "description": "Resubmitted",
+      "moduleType": "LetterOfAcceptance",
+      "tenantId": "default",
+      "orderNumber": 5
     },
     {
       "code": "SAVED",
