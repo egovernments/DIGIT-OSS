@@ -2537,9 +2537,9 @@
       "assetCategoryType": "MOVABLE",
       "unitOfMeasurement": "CM",
       "isDepreciationApplicable": false,
-      "name": "Cab",
-      "parent": null,
-      "isAssetAllow": false,
+      "name": "BB Cab",
+      "parent": "2013",
+      "isAssetAllow": true,
       "id": "2013",
       "code": "2013",
       "tenantId": "default"
