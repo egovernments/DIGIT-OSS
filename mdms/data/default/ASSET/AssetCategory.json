@@ -1312,16 +1312,27 @@
       "tenantId": "default",
       "id": "29",
       "name": "Boat",
-      "code": "029",
+      "code": "29",
       "assetCategoryType": "MOVABLE",
       "parent": "19",
-      "depreciationMethod": "STRAIGHT_LINE_METHOD",
+      "depreciationMethod": "Straight Line method",
       "isAssetAllow": true,
       "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
       "depreciationRate": 15,
-      "isDepreciationApplicable": true
+      "isDepreciationApplicable": true,
+      "assetFieldsDefination": [
+        {
+          "name": "size",
+          "type": "Number",
+          "isActive": true
+        },
+        {
+          "name": "Load Capacity",
+          "isActive": true
+        }
+      ]
     },
     {
       "tenantId": "default",
