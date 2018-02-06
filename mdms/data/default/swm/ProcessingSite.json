@@ -1002,6 +1002,31 @@
       "name": "ooooo",
       "tenantId": "default",
       "code": "ProcessingSite-1517562238876"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": false,
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "20",
+        "capacity": "100",
+        "address": "village-sukhbasi",
+        "latitude": 19.098366615097913,
+        "longitude": 72.89315309671203,
+        "location": {
+          "code": "303"
+        },
+        "wasteTypes": [
+          {
+            "code": "Waste Type Code 2"
+          }
+        ]
+      },
+      "name": "siteName",
+      "tenantId": "default",
+      "code": "ProcessingSite-1517923185161"
     }
   ]
 }
