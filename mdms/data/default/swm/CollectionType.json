@@ -66,6 +66,11 @@
       "tenantId": "default",
       "name": "Road Bin",
       "code": "RB"
+    },
+    {
+      "tenantId": "default",
+      "name": "Wastage",
+      "code": "WASTAGE"
     }
   ]
 }
