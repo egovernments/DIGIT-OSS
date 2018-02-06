@@ -109,7 +109,7 @@
     },
     {
       "tenantId": "default",
-      "name": "M_Collection_Point Update",
+      "name": "M_Collection_Point",
       "code": "MCollect"
     }
   ]
