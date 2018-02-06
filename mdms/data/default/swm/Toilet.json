@@ -852,6 +852,21 @@
       "longitude": 78.39268679999998,
       "latitude": 17.4891777,
       "seatCount": "4"
+    },
+    {
+      "name": "test",
+      "tenantId": "default",
+      "code": "MH-default-COM-1517929984072",
+      "toiletType": {
+        "code": "COM"
+      },
+      "address": "fdfdsf",
+      "location": {
+        "code": "303"
+      },
+      "longitude": 105.84089700000004,
+      "latitude": 20.993595,
+      "seatCount": "4"
     }
   ]
 }
