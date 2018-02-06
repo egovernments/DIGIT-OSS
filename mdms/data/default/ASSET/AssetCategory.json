@@ -2449,7 +2449,7 @@
       "assetCategoryType": "IMMOVABLE",
       "parent": null,
       "depreciationMethod": "Straight Line method",
-      "isAssetAllow": true,
+      "isAssetAllow": false,
       "isAssetAllowFromUi": true,
       "assetAccount": null,
       "accumulatedDepreciationAccount": null,
@@ -2459,7 +2459,11 @@
       "version": "1.0",
       "depreciationRate": "",
       "isDepreciationApplicable": false,
-      "assetFieldsDefination": null
+      "assetFieldsDefination": [
+        {
+          "name": "Location"
+        }
+      ]
     },
     {
       "depreciationMethod": "Straight Line method",
