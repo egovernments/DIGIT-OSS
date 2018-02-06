@@ -2065,11 +2065,11 @@
         "bankName": "",
         "bankValidityFrom": "",
         "bankValidityTo": "",
-        "area": "1",
-        "capacity": "1",
+        "area": "25",
+        "capacity": "200",
         "address": "Bangalore India",
-        "latitude": "0",
-        "longitude": "0",
+        "latitude": 12.9673053,
+        "longitude": 77.64330889999997,
         "location": {
           "code": "200"
         },
@@ -2079,6 +2079,15 @@
           },
           {
             "code": "Cons"
+          },
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "Waste Type Code 1"
+          },
+          {
+            "code": "Waste Type Code 3"
           }
         ]
       },
