@@ -4077,6 +4077,47 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "50",
+        "capacity": "200",
+        "address": "test test test test ",
+        "latitude": 17.494568,
+        "longitude": 78.39205560000005,
+        "location": {
+          "code": "303"
+        },
+        "wasteTypes": [
+          {
+            "code": "Bio Medical Waste"
+          },
+          {
+            "code": "BW001"
+          },
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "text dumping ground",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1515613498522"
+      },
+      "distanceFromProcessingSite": "20",
+      "tenantId": "default",
+      "code": "DumpingGround-1517896840357",
+      "ulbs": [
+        {
+          "code": "default"
+        }
+      ]
     }
   ]
 }
