@@ -653,6 +653,18 @@
       },
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "New Court 101",
+      "code": "Court101",
+      "address": {
+        "addressLine1": "BTM",
+        "addressLine2": "Karnataka",
+        "city": "Bangalore",
+        "pincode": "445566"
+      },
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
