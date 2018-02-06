@@ -101,6 +101,11 @@
       "tenantId": "default",
       "name": "KKK",
       "code": "KKK"
+    },
+    {
+      "tenantId": "default",
+      "name": "New CT Test 101",
+      "code": "CT 101"
     }
   ]
 }
