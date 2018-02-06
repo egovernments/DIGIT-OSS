@@ -16,6 +16,11 @@
       "tenantId": "mh",
       "name": "Weekly Collection(From Bins)",
       "code": "WC"
+    },
+    {
+      "tenantId": "mh",
+      "name": "New Test CT 333",
+      "code": "CT 333"
     }
   ]
 }
