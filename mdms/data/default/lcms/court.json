@@ -641,6 +641,18 @@
       },
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "CourtName 23",
+      "code": "CN23",
+      "address": {
+        "addressLine1": "Maharastra",
+        "addressLine2": "India",
+        "city": "Pune",
+        "pincode": "456788"
+      },
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
