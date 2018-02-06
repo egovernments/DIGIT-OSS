@@ -71,6 +71,11 @@
       "tenantId": "default",
       "name": "Wastage",
       "code": "WASTAGE"
+    },
+    {
+      "tenantId": "default",
+      "name": "TTT",
+      "code": "Test"
     }
   ]
 }
