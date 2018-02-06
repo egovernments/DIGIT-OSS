@@ -2457,8 +2457,8 @@
       "depreciationExpenseAccount": null,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
-      "depreciationRate": "",
-      "isDepreciationApplicable": false,
+      "depreciationRate": "5",
+      "isDepreciationApplicable": true,
       "assetFieldsDefination": [
         {
           "name": "Location",
