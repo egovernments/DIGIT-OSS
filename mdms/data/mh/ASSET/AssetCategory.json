@@ -2688,7 +2688,7 @@
           "order": "2"
         },
         {
-          "name": "Track Id",
+          "name": "RFID",
           "type": "Text",
           "isActive": true,
           "isMandatory": false
