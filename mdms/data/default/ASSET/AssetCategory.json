@@ -2542,7 +2542,14 @@
       "isAssetAllow": true,
       "id": "2013",
       "code": "2013",
-      "tenantId": "default"
+      "tenantId": "default",
+      "assetFieldsDefination": [
+        {
+          "isActive": true,
+          "order": "1",
+          "values": "1"
+        }
+      ]
     }
   ]
 }
