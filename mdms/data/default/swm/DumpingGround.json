@@ -4127,6 +4127,41 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "ICIC",
+        "bankValidityFrom": 1517769000000,
+        "bankValidityTo": 1518373800000,
+        "area": "30",
+        "capacity": "1000",
+        "address": "village- sukhbasi , post-Damu",
+        "latitude": 19.113634183517547,
+        "longitude": 72.92301860351564,
+        "location": {
+          "code": "303"
+        },
+        "wasteTypes": [
+          {
+            "code": "BW001"
+          }
+        ]
+      },
+      "name": "M_ground",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1517994568123",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        }
+      ]
     }
   ]
 }
