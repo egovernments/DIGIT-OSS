@@ -677,6 +677,18 @@
       },
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "5678",
+      "code": "CN5678",
+      "address": {
+        "addressLine1": "PMT Building, Swargate",
+        "addressLine2": "3rd cross Road",
+        "city": "Pune",
+        "pincode": "411005"
+      },
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
