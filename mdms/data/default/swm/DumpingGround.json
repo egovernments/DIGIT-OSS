@@ -4162,6 +4162,41 @@
           "code": "mh.khop"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "SBI",
+        "bankValidityFrom": 1518460200000,
+        "bankValidityTo": 1518460200000,
+        "area": "10",
+        "capacity": "120",
+        "address": "village-sukhbasi ,post-Damu",
+        "latitude": 19.076,
+        "longitude": 72.8777,
+        "location": {
+          "code": "303"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "M_ground_2",
+      "isProcessingSite": false,
+      "processingSite": {
+        "code": "ProcessingSite-1517995112558"
+      },
+      "distanceFromProcessingSite": "10",
+      "tenantId": "default",
+      "code": "DumpingGround-1517995955923",
+      "ulbs": [
+        {
+          "code": "mh.amba"
+        }
+      ]
     }
   ]
 }
