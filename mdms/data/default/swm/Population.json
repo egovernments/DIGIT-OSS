@@ -422,9 +422,9 @@
     {
       "tenantId": "default",
       "code": "Population-1517989361369",
-      "ward": "2",
-      "zone": "Gandhi Road",
-      "censusYear": "2011",
+      "ward": "5",
+      "zone": "Revenue Zone No 5",
+      "censusYear": "2001",
       "population": 155,
       "garbageToBeCollected": 155
     }
