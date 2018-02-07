@@ -171,6 +171,11 @@
       "tenantId": "default",
       "name": "PullingBike2",
       "code": "TP"
+    },
+    {
+      "tenantId": "default",
+      "name": "M_Type_Name_1",
+      "code": "MTN"
     }
   ]
 }
