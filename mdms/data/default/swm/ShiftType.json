@@ -124,7 +124,7 @@
     },
     {
       "tenantId": "default",
-      "name": "M_ShiftTypeName",
+      "name": "M_ShiftTypeName_update",
       "code": "MSTCs"
     }
   ]
