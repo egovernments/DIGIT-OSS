@@ -508,6 +508,15 @@
       "censusYear": "2001",
       "population": 0.3,
       "garbageToBeCollected": 0.4
+    },
+    {
+      "tenantId": "default",
+      "code": "Population-1518010449480",
+      "ward": "2",
+      "zone": "Revenue Zone No 1",
+      "censusYear": "2001",
+      "population": 1,
+      "garbageToBeCollected": 1
     }
   ]
 }
