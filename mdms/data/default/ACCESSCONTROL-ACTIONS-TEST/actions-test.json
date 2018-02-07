@@ -10022,7 +10022,7 @@
     {
       "id": 1470,
       "name": "Shift",
-      "url": "/swm-services/vendors/_search",
+      "url": "/swm-services/shifts/_search",
       "displayName": "Shift",
       "orderNumber": 0,
       "parentModule": "530",
