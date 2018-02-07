@@ -481,6 +481,15 @@
       "censusYear": "2001",
       "population": 100,
       "garbageToBeCollected": 100
+    },
+    {
+      "tenantId": "default",
+      "code": "Population-1517989921548",
+      "ward": "4",
+      "zone": "Revenue Zone: 6",
+      "censusYear": "2011",
+      "population": 121,
+      "garbageToBeCollected": 123
     }
   ]
 }
