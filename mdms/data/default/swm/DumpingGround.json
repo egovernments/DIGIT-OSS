@@ -4150,11 +4150,11 @@
         ]
       },
       "name": "M_ground",
-      "isProcessingSite": false,
+      "isProcessingSite": true,
       "processingSite": {
-        "code": "ProcessingSite-1515613498522"
+        "code": ""
       },
-      "distanceFromProcessingSite": "1200",
+      "distanceFromProcessingSite": "",
       "tenantId": "default",
       "code": "DumpingGround-1517994568123",
       "ulbs": [
