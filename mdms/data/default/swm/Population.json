@@ -463,6 +463,15 @@
       "censusYear": "2001",
       "population": 1,
       "garbageToBeCollected": 121
+    },
+    {
+      "tenantId": "default",
+      "code": "Population-1517989734986",
+      "ward": "2",
+      "zone": "Gandhi Road",
+      "censusYear": "2001",
+      "population": 1,
+      "garbageToBeCollected": 121
     }
   ]
 }
