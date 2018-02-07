@@ -713,6 +713,18 @@
       },
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "New Court",
+      "code": "NC",
+      "address": {
+        "addressLine1": "street#1",
+        "addressLine2": "Bangalore",
+        "city": "Pune",
+        "pincode": "411005"
+      },
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
