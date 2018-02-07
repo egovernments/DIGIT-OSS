@@ -1052,6 +1052,31 @@
       "name": "M_Processing_Site",
       "tenantId": "default",
       "code": "ProcessingSite-1517995112558"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "SBI",
+        "bankValidityFrom": 1518373800000,
+        "bankValidityTo": 1518460200000,
+        "area": "26",
+        "capacity": "100",
+        "address": "village-sukhabsi",
+        "latitude": 19.079224384197808,
+        "longitude": 72.88113680032531,
+        "location": {
+          "code": "201"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "M_Processing_Site_2",
+      "tenantId": "default",
+      "code": "ProcessingSite-1517995861501"
     }
   ]
 }
