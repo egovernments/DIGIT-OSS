@@ -14,8 +14,8 @@
       "ulb": {
         "code": "default"
       },
-      "ward": 2,
-      "zone": 3
+      "ward": "3",
+      "zone": "Revenue Zone No 2"
     },
     {
       "ulb": {
