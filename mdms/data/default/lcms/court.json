@@ -665,6 +665,18 @@
       },
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "1234",
+      "code": "CN1234",
+      "address": {
+        "addressLine1": "street#1",
+        "addressLine2": "3rd cross Road",
+        "city": "Pune",
+        "pincode": "411042"
+      },
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
