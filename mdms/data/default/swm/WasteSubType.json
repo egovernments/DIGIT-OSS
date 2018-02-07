@@ -224,7 +224,7 @@
       }
     },
     {
-      "name": "M_waste_Sub_Type",
+      "name": "M_waste_Sub_Type_Update",
       "code": "MWST",
       "tenantId": "default",
       "wasteType": {
