@@ -76,6 +76,11 @@
       "tenantId": "default",
       "name": "Electronic Wastes",
       "code": "EW"
+    },
+    {
+      "tenantId": "default",
+      "name": "M_Waste_Name_Update",
+      "code": "MWN"
     }
   ]
 }
