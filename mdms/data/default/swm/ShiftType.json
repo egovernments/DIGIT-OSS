@@ -116,6 +116,11 @@
       "tenantId": "default",
       "name": "SGK-Morning",
       "code": "SGK555"
+    },
+    {
+      "tenantId": "default",
+      "name": "M_ShiftTypeName",
+      "code": "MSTC"
     }
   ]
 }
