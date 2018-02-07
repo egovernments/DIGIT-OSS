@@ -701,6 +701,18 @@
       },
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "Court Name 1234",
+      "code": "CN 1234",
+      "address": {
+        "addressLine1": "street#2",
+        "addressLine2": "Pune",
+        "city": "Bangalore",
+        "pincode": "411005"
+      },
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
