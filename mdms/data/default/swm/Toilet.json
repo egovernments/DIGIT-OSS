@@ -854,19 +854,19 @@
       "seatCount": "4"
     },
     {
-      "name": "test",
+      "name": "TOI199",
       "tenantId": "default",
-      "code": "MH-default-COM-1517929984072",
+      "code": "MH-default-PUB-1517993376519",
       "toiletType": {
-        "code": "COM"
+        "code": "PUB"
       },
-      "address": "fdfdsf",
+      "address": "Jaya Nagar. Block II",
       "location": {
         "code": "303"
       },
-      "longitude": 105.84089700000004,
-      "latitude": 20.993595,
-      "seatCount": "4"
+      "longitude": 79.94136760000004,
+      "latitude": 18.1932372,
+      "seatCount": "9"
     }
   ]
 }
