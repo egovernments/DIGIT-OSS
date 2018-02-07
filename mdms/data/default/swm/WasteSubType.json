@@ -222,6 +222,14 @@
       "wasteType": {
         "code": "Bio Medical Waste"
       }
+    },
+    {
+      "name": "M_waste_Sub_Type",
+      "code": "MWST",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "MWN"
+      }
     }
   ]
 }
