@@ -111,6 +111,11 @@
       "tenantId": "default",
       "name": "M_Collection_Point",
       "code": "MCollect"
+    },
+    {
+      "tenantId": "default",
+      "name": "M_Colleaction_Point",
+      "code": "MCollection"
     }
   ]
 }
