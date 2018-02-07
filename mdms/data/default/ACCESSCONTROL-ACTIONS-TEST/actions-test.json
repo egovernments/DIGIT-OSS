@@ -10583,6 +10583,30 @@
       "serviceCode": "FILE_METADATA",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1520,
+      "name": "Shift",
+      "url": "/swm-services/shifts/_create",
+      "displayName": "Shift",
+      "orderNumber": 0,
+      "parentModule": "530",
+      "enabled": false,
+      "serviceCode": "swm.shift",
+      "code": "null",
+      "path": "Solid Waste Management.SWM Masters.Shift.Shift"
+    },
+    {
+      "id": 1521,
+      "name": "Shift",
+      "url": "/swm-services/shifts/_update",
+      "displayName": "Shift",
+      "orderNumber": 0,
+      "parentModule": "530",
+      "enabled": false,
+      "serviceCode": "swm.shift",
+      "code": "null",
+      "path": "Solid Waste Management.SWM Masters.Shift.Shift"
     }
   ]
 }
