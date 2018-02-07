@@ -1027,6 +1027,31 @@
       "name": "siteName",
       "tenantId": "default",
       "code": "ProcessingSite-1517923185161"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": true,
+        "bankName": "HDFC",
+        "bankValidityFrom": 1517855400000,
+        "bankValidityTo": 1517855400000,
+        "area": "16",
+        "capacity": "100",
+        "address": "village-sukhbasi",
+        "latitude": 19.076,
+        "longitude": 72.8777,
+        "location": {
+          "code": "303"
+        },
+        "wasteTypes": [
+          {
+            "code": "BCW"
+          }
+        ]
+      },
+      "name": "M_Processing_Site",
+      "tenantId": "default",
+      "code": "ProcessingSite-1517995112558"
     }
   ]
 }
