@@ -79,7 +79,7 @@
     },
     {
       "tenantId": "default",
-      "name": "M_Waste_Name_Update",
+      "name": "M_Waste_Name",
       "code": "MWN"
     }
   ]
