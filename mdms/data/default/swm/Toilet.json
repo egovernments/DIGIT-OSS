@@ -858,7 +858,7 @@
       "tenantId": "default",
       "code": "MH-default-PUB-1517993376519",
       "toiletType": {
-        "code": "PUB"
+        "code": "COM"
       },
       "address": "Jaya Nagar. Block II",
       "location": {
