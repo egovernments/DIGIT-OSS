@@ -156,6 +156,11 @@
       "tenantId": "default",
       "name": "CT Name 999",
       "code": "CTN 999"
+    },
+    {
+      "tenantId": "default",
+      "name": "Collection Test 101",
+      "code": "CT Test 101"
     }
   ]
 }
