@@ -59,6 +59,10 @@
     {
       "name": "???",
       "code": "???"
+    },
+    {
+      "name": "Test Education",
+      "code": "TST_EDU_12"
     }
   ]
 }
