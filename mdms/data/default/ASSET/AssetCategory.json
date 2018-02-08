@@ -2574,6 +2574,20 @@
       "id": "2014",
       "code": "2014",
       "tenantId": "default"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "assetCategoryType": "IMMOVABLE",
+      "name": "Railway Station",
+      "parent": "1",
+      "unitOfMeasurement": "SQM",
+      "isDepreciationApplicable": true,
+      "depreciationRate": "2",
+      "isAssetAllow": true,
+      "id": "2015",
+      "code": "2015",
+      "tenantId": "default"
     }
   ]
 }
