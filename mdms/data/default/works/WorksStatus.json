@@ -413,8 +413,8 @@
       "orderNumber": 3
     },
     {
-      "code": "REJECT",
-      "description": "Reject",
+      "code": "REJECTED",
+      "description": "Rejected",
       "moduleType": "LetterOfAcceptance",
       "tenantId": "default",
       "orderNumber": 4
