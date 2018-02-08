@@ -2577,7 +2577,7 @@
     },
     {
       "depreciationMethod": "Straight Line method",
-      "isAssetAllowFromUi": true,
+      "isAssetAllowFromUi": false,
       "assetCategoryType": "IMMOVABLE",
       "name": "Railway Station",
       "parent": "1",
