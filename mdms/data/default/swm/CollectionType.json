@@ -116,6 +116,11 @@
       "tenantId": "default",
       "name": "M_Colleaction_Point_2",
       "code": "MCollection"
+    },
+    {
+      "tenantId": "default",
+      "name": "New Collection Type 23",
+      "code": "NCT 23"
     }
   ]
 }
