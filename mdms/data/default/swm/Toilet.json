@@ -882,6 +882,21 @@
       "longitude": 78.39405349999993,
       "latitude": 17.4963714,
       "seatCount": "2"
+    },
+    {
+      "name": "3105 testing",
+      "tenantId": "default",
+      "code": "MH-default-COM-1518107842184",
+      "toiletType": {
+        "code": "COM"
+      },
+      "address": "testing testing testing ",
+      "location": {
+        "code": "303"
+      },
+      "longitude": -72.58842220000002,
+      "latitude": 42.3417565,
+      "seatCount": "6"
     }
   ]
 }
