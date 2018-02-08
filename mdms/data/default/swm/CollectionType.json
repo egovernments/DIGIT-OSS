@@ -121,6 +121,11 @@
       "tenantId": "default",
       "name": "New Collection Type 23",
       "code": "NCT 23"
+    },
+    {
+      "tenantId": "default",
+      "name": "Collection Type 24",
+      "code": "CT 24"
     }
   ]
 }
