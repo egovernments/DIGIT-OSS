@@ -867,6 +867,21 @@
       "longitude": 73.11751619999995,
       "latitude": 18.9894007,
       "seatCount": "9"
+    },
+    {
+      "name": "test public 0012",
+      "tenantId": "default",
+      "code": "MH-default-PUB-1518073458509",
+      "toiletType": {
+        "code": "PUB"
+      },
+      "address": "tet tewt wtwetwetewtertrtre ",
+      "location": {
+        "code": "303"
+      },
+      "longitude": 78.39405349999993,
+      "latitude": 17.4963714,
+      "seatCount": "2"
     }
   ]
 }
