@@ -318,7 +318,7 @@
       "description": "Re-Submitted",
       "moduleType": "WorkOrder",
       "tenantId": "default",
-      "orderNumber": 6
+      "orderNumber": 1
     },
     {
       "code": "ACCEPTANCE_LETTER_ISSUED",
@@ -431,7 +431,7 @@
       "description": "Resubmitted",
       "moduleType": "LetterOfAcceptance",
       "tenantId": "default",
-      "orderNumber": 5
+      "orderNumber": 1
     },
     {
       "code": "SAVED",
@@ -473,7 +473,7 @@
       "description": "Resubmitted",
       "moduleType": "MeasurementBook",
       "tenantId": "default",
-      "orderNumber": 5
+      "orderNumber": 1
     },
     {
       "code": "CANCELLED",
