@@ -2587,7 +2587,18 @@
       "isAssetAllow": true,
       "id": "2015",
       "code": "2015",
-      "tenantId": "default"
+      "tenantId": "default",
+      "assetFieldsDefination": [
+        {
+          "name": "Number Of Platforms",
+          "type": "Number",
+          "isActive": true,
+          "isMandatory": true,
+          "order": "1",
+          "values": "3",
+          "url": "none"
+        }
+      ]
     }
   ]
 }
