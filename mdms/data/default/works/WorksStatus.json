@@ -42,7 +42,7 @@
       "description": "Cancelled",
       "moduleType": "DetailedEstimate",
       "tenantId": "default",
-      "orderNumber": 6
+      "orderNumber": 5
     },
     {
       "code": "NOTICEINVITINGTENDERRELEASED",
@@ -480,7 +480,7 @@
       "description": "Cancelled",
       "moduleType": "MeasurementBook",
       "tenantId": "default",
-      "orderNumber": 6
+      "orderNumber": 5
     },
     {
       "code": "NOT_YET_STARTED",
