@@ -2550,6 +2550,30 @@
           "values": "1"
         }
       ]
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": false,
+      "name": "Apartment",
+      "assetCategoryType": "IMMOVABLE",
+      "parent": "1",
+      "unitOfMeasurement": "SFT",
+      "isDepreciationApplicable": false,
+      "assetFieldsDefination": [
+        {
+          "name": "Maintenance Cost",
+          "type": "Number",
+          "isMandatory": true,
+          "isActive": true,
+          "order": "1",
+          "values": "2000",
+          "url": "nourl"
+        }
+      ],
+      "isAssetAllow": true,
+      "id": "2014",
+      "code": "2014",
+      "tenantId": "default"
     }
   ]
 }
