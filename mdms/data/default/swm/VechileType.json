@@ -176,6 +176,11 @@
       "tenantId": "default",
       "name": "M_Type_Name_1",
       "code": "MTN"
+    },
+    {
+      "tenantId": "default",
+      "name": "Light goods vehicles",
+      "code": "LGV"
     }
   ]
 }
