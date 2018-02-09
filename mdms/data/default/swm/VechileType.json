@@ -179,8 +179,8 @@
     },
     {
       "tenantId": "default",
-      "name": "Light goods vehicles",
-      "code": "LGV"
+      "name": "Garbage truck",
+      "code": "GT"
     }
   ]
 }
