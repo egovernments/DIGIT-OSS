@@ -69,9 +69,9 @@
       "tenantId": "default"
     },
     {
-      "name": "Case_Category_Name_4",
+      "name": "Case_Category_Name_4_Update",
       "code": "CCN4",
-      "active": true,
+      "active": false,
       "tenantId": "default"
     }
   ]
