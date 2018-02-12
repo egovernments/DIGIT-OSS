@@ -725,6 +725,18 @@
       },
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "Court_Name_Murari_4",
+      "code": "CNM4",
+      "address": {
+        "addressLine1": "Madhubani",
+        "addressLine2": "Near By R.k Collage ",
+        "city": "Madhubani",
+        "pincode": "884848"
+      },
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
