@@ -153,9 +153,9 @@
       "tenantId": "default"
     },
     {
-      "name": "Case_Status_Name_4",
+      "name": "Case_Status_Name_4_Udpate",
       "code": "CSN4",
-      "active": true,
+      "active": false,
       "tenantId": "default"
     }
   ]
