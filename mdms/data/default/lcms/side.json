@@ -315,9 +315,9 @@
       "tenantId": "default"
     },
     {
-      "name": "Name_Side",
+      "name": "Checker_Side",
       "code": "SNM4",
-      "active": false,
+      "active": true,
       "tenantId": "default"
     }
   ]
