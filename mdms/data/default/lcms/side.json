@@ -317,7 +317,7 @@
     {
       "name": "Name_Side",
       "code": "SNM4",
-      "active": true,
+      "active": false,
       "tenantId": "default"
     }
   ]
