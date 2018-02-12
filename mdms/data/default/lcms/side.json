@@ -317,7 +317,7 @@
     {
       "name": "Checker_Side 2",
       "code": "SNM4",
-      "active": true,
+      "active": false,
       "tenantId": "default"
     }
   ]
