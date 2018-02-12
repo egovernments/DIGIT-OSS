@@ -1077,6 +1077,40 @@
       "name": "M_Processing_Site_2",
       "tenantId": "default",
       "code": "ProcessingSite-1517995861501"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": false,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "10",
+        "capacity": "10",
+        "address": "aaa aaaaaaaaa aaaaaaaaa aaaaaaaaa a मराठी शाब्दबंध aaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaa!@#$%^\u0026*+{}|\"?\u003e: /*-+~` aaa aaaaaaaaa aaaaaaaaa aaaaaaaaa a मराठी शाब्दबंध aaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaa",
+        "latitude": 18.9894007,
+        "longitude": 73.11751619999995,
+        "location": {
+          "code": "200"
+        },
+        "wasteTypes": [
+          {
+            "code": "BW001"
+          },
+          {
+            "code": "DD1"
+          },
+          {
+            "code": "BCW"
+          },
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "Process Test 1",
+      "tenantId": "default",
+      "code": "ProcessingSite-1518421261572"
     }
   ]
 }
