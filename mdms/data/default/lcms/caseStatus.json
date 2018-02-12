@@ -151,6 +151,12 @@
       "code": "CS3",
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "Case_Status_Name_4",
+      "code": "CSN4",
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
