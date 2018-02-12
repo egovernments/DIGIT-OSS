@@ -2651,7 +2651,7 @@
     {
       "name": "Case_Type_Murari_4",
       "code": "CTM4",
-      "sideCode": "123",
+      "sideCode": "SNM4",
       "active": true,
       "tenantId": "default"
     }
