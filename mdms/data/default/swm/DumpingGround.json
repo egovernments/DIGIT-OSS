@@ -4267,6 +4267,41 @@
           "code": "default"
         }
       ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "23",
+        "capacity": "12",
+        "address": "errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
+        "latitude": 19.07535105974557,
+        "longitude": 72.87746396560671,
+        "location": {
+          "code": "201"
+        },
+        "wasteTypes": [
+          {
+            "code": "Cons"
+          }
+        ]
+      },
+      "name": "कोरडा कागद, पुठ्ठा, प्लास्टिक",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1518427085338",
+      "ulbs": [
+        {
+          "code": "mh.khop"
+        }
+      ]
     }
   ]
 }
