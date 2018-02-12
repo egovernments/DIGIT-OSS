@@ -75,9 +75,9 @@
       "tenantId": "default"
     },
     {
-      "name": "Bench_Name_4_Udpate",
+      "name": "Bench_Name_4",
       "code": "BN4",
-      "active": false,
+      "active": true,
       "tenantId": "default"
     }
   ]
