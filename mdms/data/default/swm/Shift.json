@@ -1776,6 +1776,27 @@
       "graceTimeFrom": "1517980380000",
       "graceTimeTo": "1517987580000",
       "remarks": "this is remark make sure every thing is working here need to check more effective way "
+    },
+    {
+      "tenantId": "default",
+      "code": "-1518434315198",
+      "name": "Shift_name_1",
+      "shiftType": {
+        "code": "MNS"
+      },
+      "department": {
+        "code": "ACC"
+      },
+      "designation": {
+        "code": "ACC"
+      },
+      "shiftStartTime": "1518406200000",
+      "shiftEndTime": "1518442200000",
+      "lunchStartTime": "1518419640000",
+      "lunchEndTime": "1518423240000",
+      "graceTimeFrom": "1518435000000",
+      "graceTimeTo": "1518438600000",
+      "remarks": "this is remark field "
     }
   ]
 }
