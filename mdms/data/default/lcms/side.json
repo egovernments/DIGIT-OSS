@@ -309,9 +309,9 @@
       "tenantId": "default"
     },
     {
-      "name": "Side Name ",
+      "name": "Side_name_2",
       "code": "TTTTT",
-      "active": true,
+      "active": false,
       "tenantId": "default"
     },
     {
