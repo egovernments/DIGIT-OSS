@@ -2647,6 +2647,13 @@
       "sideCode": "MST2",
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "Case_Type_Murari_4",
+      "code": "CTM4",
+      "sideCode": "123",
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
