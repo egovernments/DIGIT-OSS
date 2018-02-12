@@ -4200,39 +4200,71 @@
     },
     {
       "siteDetails": {
-        "mpcbAuthorisation": false,
+        "mpcbAuthorisation": true,
         "bankGuarantee": "",
         "bankName": "",
         "bankValidityFrom": "",
         "bankValidityTo": "",
-        "area": "10",
-        "capacity": "10",
-        "address": "aaa aaaaaaaaa aaaaaaaaa aaaaaaaaa a मराठी शाब्दबंध aaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaa!@#$%^\u0026*+{}|\"?\u003e: /*-+~` मराठी शाब्दबंध",
-        "latitude": 20.0504987,
-        "longitude": 77.63786189999996,
+        "area": "25",
+        "capacity": "1.0",
+        "address": "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",
+        "latitude": 19.1998211,
+        "longitude": 72.84259399999996,
         "location": {
-          "code": "355"
+          "code": "352"
+        },
+        "wasteTypes": [
+          {
+            "code": "EW"
+          }
+        ]
+      },
+      "name": "SGK12345",
+      "isProcessingSite": true,
+      "processingSite": {
+        "code": ""
+      },
+      "distanceFromProcessingSite": "",
+      "tenantId": "default",
+      "code": "DumpingGround-1518416757117",
+      "ulbs": [
+        {
+          "code": "panavel"
+        }
+      ]
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "34",
+        "capacity": "35",
+        "address": "werrrrtttttttttttttttttttttttttttttttttttttt",
+        "latitude": 19.076,
+        "longitude": 72.8777,
+        "location": {
+          "code": "302"
         },
         "wasteTypes": [
           {
             "code": "Bio Medical Waste"
-          },
-          {
-            "code": "BW001"
           }
         ]
       },
-      "name": "Dump 1",
-      "isProcessingSite": false,
+      "name": "डाऊनलोड मराठी फॉन्ट",
+      "isProcessingSite": true,
       "processingSite": {
-        "code": "ProcessingSite-1515503331395"
+        "code": ""
       },
-      "distanceFromProcessingSite": "10",
+      "distanceFromProcessingSite": "",
       "tenantId": "default",
-      "code": "DumpingGround-1518420185764",
+      "code": "DumpingGround-1518426827969",
       "ulbs": [
         {
-          "code": "mh.aliba"
+          "code": "default"
         }
       ]
     }
