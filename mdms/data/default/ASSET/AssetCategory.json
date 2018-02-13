@@ -96,7 +96,8 @@
           "isActive": true,
           "order": "12"
         }
-      ]
+      ],
+      "parent": null
     },
     {
       "tenantId": "default",
@@ -1158,12 +1159,12 @@
       "code": "18",
       "assetCategoryType": "MOVABLE",
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
-      "isAssetAllow": true,
+      "isAssetAllow": false,
       "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
       "isDepreciationApplicable": true,
-      "parent": "2001"
+      "parent": null
     },
     {
       "tenantId": "default",
