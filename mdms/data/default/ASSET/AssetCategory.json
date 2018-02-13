@@ -106,12 +106,12 @@
       "code": "2",
       "assetCategoryType": "IMMOVABLE",
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
-      "isAssetAllow": false,
+      "isAssetAllow": true,
       "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
       "isDepreciationApplicable": true,
-      "parent": null,
+      "parent": "2014",
       "depreciationRate": "2"
     },
     {
