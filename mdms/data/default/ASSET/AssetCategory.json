@@ -110,7 +110,7 @@
       "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
-      "isDepreciationApplicable": true,
+      "isDepreciationApplicable": false,
       "parent": null
     },
     {
