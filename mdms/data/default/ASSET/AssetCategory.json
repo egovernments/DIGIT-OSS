@@ -110,8 +110,9 @@
       "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
-      "isDepreciationApplicable": false,
-      "parent": null
+      "isDepreciationApplicable": true,
+      "parent": null,
+      "depreciationRate": "2"
     },
     {
       "tenantId": "default",
