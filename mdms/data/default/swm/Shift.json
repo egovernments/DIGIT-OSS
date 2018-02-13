@@ -1796,6 +1796,27 @@
       "lunchEndTime": "1518472279171",
       "graceTimeFrom": "1518465600000",
       "graceTimeTo": "1518466500000"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1518524409303",
+      "name": "Morning",
+      "shiftType": {
+        "code": "shift106"
+      },
+      "department": {
+        "code": "ACC"
+      },
+      "designation": {
+        "code": "ACC"
+      },
+      "shiftStartTime": "1518481800000",
+      "shiftEndTime": "1518507000000",
+      "lunchStartTime": "1518492600000",
+      "lunchEndTime": "1518496200000",
+      "graceTimeFrom": "1518489000000",
+      "graceTimeTo": "1518501600000",
+      "remarks": "hghghgghggghjgjjggj"
     }
   ]
 }
