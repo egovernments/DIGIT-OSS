@@ -1779,29 +1779,8 @@
     },
     {
       "tenantId": "default",
-      "code": "-1518434315198",
-      "name": "Shift_name_1",
-      "shiftType": {
-        "code": "MNS"
-      },
-      "department": {
-        "code": "ACC"
-      },
-      "designation": {
-        "code": "ACC"
-      },
-      "shiftStartTime": "1518406200000",
-      "shiftEndTime": "1518442200000",
-      "lunchStartTime": "1518419640000",
-      "lunchEndTime": "1518423240000",
-      "graceTimeFrom": "1518435000000",
-      "graceTimeTo": "1518438600000",
-      "remarks": "this is remark field "
-    },
-    {
-      "tenantId": "default",
-      "code": "-1518434782508",
-      "name": "Test Shift Master",
+      "code": "-1518505143683",
+      "name": "Shift Name 3",
       "shiftType": {
         "code": "shift106"
       },
@@ -1811,95 +1790,12 @@
       "designation": {
         "code": "ACC"
       },
-      "shiftStartTime": "1518409800000",
-      "shiftEndTime": "1518438637639",
-      "lunchStartTime": "1518420637639",
-      "lunchEndTime": "1518422400000",
-      "graceTimeFrom": "1518431437639",
-      "graceTimeTo": "1518435037639"
-    },
-    {
-      "tenantId": "default",
-      "code": "-1518435904310",
-      "name": "Shift_testing_120",
-      "shiftType": {
-        "code": "SS"
-      },
-      "department": {
-        "code": "ACC"
-      },
-      "designation": {
-        "code": "ACC"
-      },
-      "shiftStartTime": "1518377400000",
-      "shiftEndTime": "1518380700000",
-      "lunchStartTime": "1518377520000",
-      "lunchEndTime": "1518377700000",
-      "graceTimeFrom": "1518377880000",
-      "graceTimeTo": "1518378000000",
-      "remarks": "remakrk is the good"
-    },
-    {
-      "tenantId": "default",
-      "code": "-1518436108062",
-      "name": "shift_testing_121",
-      "shiftType": {
-        "code": "ABCDE"
-      },
-      "department": {
-        "code": "ACC"
-      },
-      "designation": {
-        "code": "ACIV"
-      },
-      "shiftStartTime": "1518377400000",
-      "shiftEndTime": "1518380400000",
-      "lunchStartTime": "1518377700000",
-      "lunchEndTime": "1518378000000",
-      "graceTimeFrom": "1518377700000",
-      "graceTimeTo": "1518378000000"
-    },
-    {
-      "tenantId": "default",
-      "code": "-1518443462554",
-      "name": "9:30 am - 6:30 pm",
-      "shiftType": {
-        "code": "ABCDE"
-      },
-      "department": {
-        "code": "ACC"
-      },
-      "designation": {
-        "code": "ACC"
-      },
-      "shiftStartTime": "1518408000000",
-      "shiftEndTime": "1518440400000",
-      "lunchStartTime": "1518422400000",
-      "lunchEndTime": "1518424200000",
-      "graceTimeFrom": "1518435900000",
-      "graceTimeTo": "1518436800000",
-      "remarks": "test test test test"
-    },
-    {
-      "tenantId": "default",
-      "code": "-1518443558017",
-      "name": "9:30 AM -6:30 PM",
-      "shiftType": {
-        "code": "ABCDE"
-      },
-      "department": {
-        "code": "ACC"
-      },
-      "designation": {
-        "code": "ACC"
-      },
-      "shiftStartTime": "1518408000000",
-      "shiftEndTime": "1518440400000",
-      "lunchStartTime": "1518424200000",
-      "lunchEndTime": "1518426000000",
-      "graceTimeFrom": "1518438600000",
-      "graceTimeTo": "1518439500000",
-      "remarks": "test test stestsst ets"
+      "shiftStartTime": "1518465079171",
+      "shiftEndTime": "1518475219171",
+      "lunchStartTime": "1518465300000",
+      "lunchEndTime": "1518472279171",
+      "graceTimeFrom": "1518465600000",
+      "graceTimeTo": "1518466500000"
     }
   ]
 }
