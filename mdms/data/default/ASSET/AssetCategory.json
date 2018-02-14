@@ -2680,12 +2680,13 @@
       "assetCategoryType": "IMMOVABLE",
       "name": "highway",
       "unitOfMeasurement": "KM",
-      "isDepreciationApplicable": false,
+      "isDepreciationApplicable": true,
       "parent": null,
       "isAssetAllow": false,
       "id": "2022",
       "code": "2022",
-      "tenantId": "default"
+      "tenantId": "default",
+      "depreciationRate": "3"
     }
   ]
 }
