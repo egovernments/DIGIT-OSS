@@ -2660,6 +2660,19 @@
       "id": "2020",
       "code": "2020",
       "tenantId": "default"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": false,
+      "name": "truck",
+      "assetCategoryType": "MOVABLE",
+      "unitOfMeasurement": "MTR",
+      "isDepreciationApplicable": false,
+      "parent": null,
+      "isAssetAllow": false,
+      "id": "2021",
+      "code": "2021",
+      "tenantId": "default"
     }
   ]
 }
