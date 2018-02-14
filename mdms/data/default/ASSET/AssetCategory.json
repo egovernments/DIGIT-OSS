@@ -2621,6 +2621,19 @@
       "id": "2017",
       "code": "2017",
       "tenantId": "default"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": false,
+      "assetCategoryType": "MOVABLE",
+      "name": "Cycle",
+      "unitOfMeasurement": "KM",
+      "isDepreciationApplicable": false,
+      "parent": null,
+      "isAssetAllow": false,
+      "id": "2018",
+      "code": "2018",
+      "tenantId": "default"
     }
   ]
 }
