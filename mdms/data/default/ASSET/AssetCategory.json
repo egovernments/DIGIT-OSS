@@ -2634,6 +2634,19 @@
       "id": "2018",
       "code": "2018",
       "tenantId": "default"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "name": "Bicycle",
+      "assetCategoryType": "MOVABLE",
+      "unitOfMeasurement": "KM",
+      "isDepreciationApplicable": false,
+      "parent": null,
+      "isAssetAllow": false,
+      "id": "2019",
+      "code": "2019",
+      "tenantId": "default"
     }
   ]
 }
