@@ -2607,6 +2607,20 @@
       "id": "2016",
       "code": "2016",
       "tenantId": "default"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": false,
+      "assetCategoryType": "MOVABLE",
+      "name": "UnicornBike",
+      "unitOfMeasurement": "KM",
+      "isDepreciationApplicable": true,
+      "depreciationRate": "2",
+      "parent": null,
+      "isAssetAllow": false,
+      "id": "2017",
+      "code": "2017",
+      "tenantId": "default"
     }
   ]
 }
