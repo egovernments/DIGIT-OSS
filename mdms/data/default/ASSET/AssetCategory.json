@@ -2593,6 +2593,20 @@
       "id": "2015",
       "code": "2015",
       "tenantId": "default"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "assetCategoryType": "MOVABLE",
+      "name": "Bike",
+      "isDepreciationApplicable": true,
+      "depreciationRate": "2",
+      "unitOfMeasurement": "NOS",
+      "parent": null,
+      "isAssetAllow": false,
+      "id": "2016",
+      "code": "2016",
+      "tenantId": "default"
     }
   ]
 }
