@@ -2580,6 +2580,19 @@
       "code": "2014",
       "tenantId": "default",
       "depreciationRate": "2"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "assetCategoryType": "MOVABLE",
+      "name": "Boat House",
+      "unitOfMeasurement": "MTR",
+      "isDepreciationApplicable": false,
+      "parent": null,
+      "isAssetAllow": false,
+      "id": "2015",
+      "code": "2015",
+      "tenantId": "default"
     }
   ]
 }
