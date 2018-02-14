@@ -1575,7 +1575,7 @@
       "id": 1216,
       "name": "Waste Sub-Type",
       "url": "/swm-services/wastesubtype/_create",
-      "displayName": "Waste Subtype",
+      "displayName": "Waste Sub-Type",
       "orderNumber": 0,
       "parentModule": "507",
       "enabled": true,
