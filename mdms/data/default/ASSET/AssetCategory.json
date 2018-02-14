@@ -9,7 +9,7 @@
       "code": "1",
       "assetCategoryType": "IMMOVABLE",
       "depreciationMethod": "Straight Line method",
-      "isAssetAllow": false,
+      "isAssetAllow": true,
       "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
@@ -97,7 +97,7 @@
           "order": "12"
         }
       ],
-      "parent": null
+      "parent": "2006"
     },
     {
       "tenantId": "default",
