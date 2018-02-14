@@ -2647,6 +2647,19 @@
       "id": "2019",
       "code": "2019",
       "tenantId": "default"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": false,
+      "name": "tricycle",
+      "assetCategoryType": "MOVABLE",
+      "unitOfMeasurement": "KM",
+      "isDepreciationApplicable": false,
+      "parent": null,
+      "isAssetAllow": false,
+      "id": "2020",
+      "code": "2020",
+      "tenantId": "default"
     }
   ]
 }
