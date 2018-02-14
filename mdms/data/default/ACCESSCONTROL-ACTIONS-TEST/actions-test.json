@@ -1573,7 +1573,7 @@
     },
     {
       "id": 1216,
-      "name": "Waste Subtype",
+      "name": "Waste Sub-Type",
       "url": "/swm-services/wastesubtype/_create",
       "displayName": "Waste Subtype",
       "orderNumber": 0,
