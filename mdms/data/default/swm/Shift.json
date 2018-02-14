@@ -1837,6 +1837,26 @@
       "lunchEndTime": "1518600600000",
       "graceTimeFrom": "1518607800000",
       "graceTimeTo": "1518611400000"
+    },
+    {
+      "tenantId": "default",
+      "code": "-1518582757673",
+      "name": "Accounts  Acc first shift ",
+      "shiftType": {
+        "code": "Shift Type Code 1"
+      },
+      "department": {
+        "code": "ACC"
+      },
+      "designation": {
+        "code": "ACC"
+      },
+      "shiftStartTime": "1518582600000",
+      "shiftEndTime": "1518597000000",
+      "lunchStartTime": "1518588012089",
+      "lunchEndTime": "1518589212089",
+      "graceTimeFrom": "1518582732089",
+      "graceTimeTo": "1518583212089"
     }
   ]
 }
