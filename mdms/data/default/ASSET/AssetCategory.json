@@ -118,14 +118,15 @@
       "tenantId": "default",
       "id": "3",
       "name": "Plant and Machinery",
-      "code": "003",
+      "code": "3",
       "assetCategoryType": "IMMOVABLE",
       "depreciationMethod": "STRAIGHT_LINE_METHOD",
       "isAssetAllow": false,
       "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
-      "isDepreciationApplicable": true
+      "isDepreciationApplicable": true,
+      "parent": null
     },
     {
       "tenantId": "default",
