@@ -2637,7 +2637,7 @@
     },
     {
       "depreciationMethod": "Straight Line method",
-      "isAssetAllowFromUi": true,
+      "isAssetAllowFromUi": false,
       "name": "Bicycle",
       "assetCategoryType": "MOVABLE",
       "unitOfMeasurement": "KM",
