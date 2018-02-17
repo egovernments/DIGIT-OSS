@@ -55,6 +55,37 @@
       "name": "Processing Site at Astami bajarpeth",
       "tenantId": "mh",
       "code": "ProcessingSite-1517599151521"
+    },
+    {
+      "siteDetails": {
+        "mpcbAuthorisation": true,
+        "bankGuarantee": "",
+        "bankName": "",
+        "bankValidityFrom": "",
+        "bankValidityTo": "",
+        "area": "45",
+        "capacity": "15",
+        "address": "fsafsdfdsfdsfsdfdsf",
+        "latitude": 19.07307974884021,
+        "longitude": 72.86561503487155,
+        "location": {
+          "code": "660"
+        },
+        "wasteTypes": [
+          {
+            "code": "Wet"
+          },
+          {
+            "code": "Dry"
+          },
+          {
+            "code": "MW"
+          }
+        ]
+      },
+      "name": "Ranade Processing Site",
+      "tenantId": "mh",
+      "code": "ProcessingSite-1518847690737"
     }
   ]
 }
