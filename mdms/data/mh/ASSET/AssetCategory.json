@@ -2695,6 +2695,30 @@
       "id": "2012",
       "code": "2012",
       "tenantId": "mh"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "name": "Mall",
+      "assetCategoryType": "IMMOVABLE",
+      "parent": "1",
+      "unitOfMeasurement": "NOS",
+      "isDepreciationApplicable": true,
+      "depreciationRate": "6.66",
+      "assetFieldsDefination": [
+        {
+          "name": "Construction Class",
+          "type": "Text",
+          "isMandatory": true,
+          "isActive": true,
+          "order": "123",
+          "values": "121"
+        }
+      ],
+      "isAssetAllow": true,
+      "id": "2013",
+      "code": "2013",
+      "tenantId": "mh"
     }
   ]
 }
