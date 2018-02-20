@@ -26,6 +26,11 @@
       "tenantId": "mh",
       "name": "CT Test 444",
       "code": "CT 444"
+    },
+    {
+      "tenantId": "mh",
+      "name": "Community Wet Bin",
+      "code": "CWB"
     }
   ]
 }
