@@ -2694,6 +2694,50 @@
       "id": "2013",
       "code": "2013",
       "tenantId": "mh"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "name": "Icebreaker",
+      "assetCategoryType": "MOVABLE",
+      "parent": "19",
+      "unitOfMeasurement": "NOS",
+      "isDepreciationApplicable": true,
+      "depreciationRate": "15",
+      "assetFieldsDefination": [
+        {
+          "name": "Lengh",
+          "type": "Number",
+          "isActive": true,
+          "isMandatory": true,
+          "order": "1"
+        },
+        {
+          "name": "Breath",
+          "type": "Number",
+          "isActive": true,
+          "isMandatory": true,
+          "order": "2"
+        },
+        {
+          "name": "Height",
+          "type": "Text",
+          "isActive": true,
+          "isMandatory": true,
+          "order": "3"
+        },
+        {
+          "name": "Type of Engine",
+          "type": "Text",
+          "isActive": true,
+          "isMandatory": true,
+          "order": "4"
+        }
+      ],
+      "isAssetAllow": true,
+      "id": "2014",
+      "code": "2014",
+      "tenantId": "mh"
     }
   ]
 }
