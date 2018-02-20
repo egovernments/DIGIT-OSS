@@ -2548,12 +2548,7 @@
       "id": "2013",
       "code": "2013",
       "tenantId": "default",
-      "assetFieldsDefination": [
-        {
-          "name": "no. of persons",
-          "type": "Text"
-        }
-      ]
+      "assetFieldsDefination": []
     },
     {
       "depreciationMethod": "Straight Line method",
