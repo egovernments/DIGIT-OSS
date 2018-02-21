@@ -2549,15 +2549,7 @@
       "code": "2013",
       "tenantId": "default",
       "assetFieldsDefination": [
-        {
-          "name": "No. of persons",
-          "type": "Number"
-        },
-        null,
-        {
-          "name": "price per person",
-          "type": "Select"
-        }
+        null
       ]
     },
     {
