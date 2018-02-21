@@ -2549,7 +2549,11 @@
       "code": "2013",
       "tenantId": "default",
       "assetFieldsDefination": [
-        null
+        {
+          "name": "number of persons",
+          "type": "Number",
+          "isActive": true
+        }
       ]
     },
     {
