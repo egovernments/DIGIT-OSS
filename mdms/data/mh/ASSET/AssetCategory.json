@@ -437,7 +437,7 @@
       "parent": "1",
       "depreciationMethod": "Straight Line method",
       "isAssetAllow": true,
-      "isAssetAllowFromUi": false,
+      "isAssetAllowFromUi": true,
       "unitOfMeasurement": "NOS",
       "version": "1.0",
       "depreciationRate": 6.66,
@@ -445,10 +445,11 @@
       "assetFieldsDefination": [
         {
           "name": "Number of Floors",
-          "type": "Number",
+          "type": "Select",
           "isActive": true,
-          "isMandatory": false,
-          "order": "1"
+          "isMandatory": true,
+          "order": "1",
+          "values": "1, 2, 3, 4, 5"
         },
         {
           "name": "Floor Wise Area",
@@ -459,7 +460,7 @@
         },
         {
           "name": "Floor Wise Area UOM",
-          "type": "Select",
+          "type": "Text",
           "isActive": true,
           "isMandatory": false,
           "order": "3",
