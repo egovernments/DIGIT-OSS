@@ -13651,6 +13651,18 @@
       "actionid": 1521,
       "actioncode": "",
       "tenantid": "default"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 698,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 698,
+      "actioncode": "",
+      "tenantid": "default"
     }
   ]
 }
