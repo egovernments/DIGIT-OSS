@@ -13663,6 +13663,246 @@
       "actionid": 698,
       "actioncode": "",
       "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1524,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1525,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1526,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1527,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1528,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1529,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1530,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1531,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1524,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1525,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1526,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1527,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1528,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1529,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1530,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1531,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1524,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1525,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1526,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1527,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1528,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1529,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1530,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1531,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1524,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1525,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1526,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1527,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1528,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1529,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1530,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1531,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1524,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1525,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1526,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1527,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1528,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1529,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1530,
+      "actioncode": "",
+      "tenantid": "default"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1531,
+      "actioncode": "",
+      "tenantid": "default"
     }
   ]
 }
