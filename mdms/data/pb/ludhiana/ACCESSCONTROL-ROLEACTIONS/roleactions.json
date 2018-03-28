@@ -13687,6 +13687,246 @@
       "actionid": 1523,
       "actioncode": "",
       "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1524,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1525,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1526,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1527,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1528,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1529,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1530,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1531,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1524,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1525,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1526,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1527,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1528,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1529,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1530,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1531,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1524,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1525,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1526,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1527,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1528,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1529,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1530,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1531,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1524,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1525,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1526,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1527,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1528,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1529,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1530,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "GRO",
+      "actionid": 1531,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1524,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1525,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1526,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1527,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1528,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1529,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1530,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1531,
+      "actioncode": "",
+      "tenantId": "pb.ludhiana"
     }
   ]
 }

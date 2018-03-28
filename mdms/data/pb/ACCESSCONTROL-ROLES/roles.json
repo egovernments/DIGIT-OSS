@@ -211,6 +211,11 @@
       "code": "WORKS_MASTER_CREATOR",
       "name": "Works Master creator",
       "description": "Who has a access to all the works masters."
+    },
+    {
+      "code": "DGRO",
+      "name": "Department Grievance Routing Officer",
+      "description": "EMPLOYEE who addresses grievances"
     }
   ]
 }
