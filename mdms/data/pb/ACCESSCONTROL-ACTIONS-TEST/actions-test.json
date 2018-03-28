@@ -10596,6 +10596,30 @@
       "serviceCode": "swm.shift",
       "code": "null",
       "path": "Solid Waste Management.SWM Masters.Shift.Shift"
+    },
+    {
+      "id": 1522,
+      "name": "Get GeoJSON and other geographical data of requested tenant",
+      "url": "/egov-location/location/v11/geography/_search",
+      "displayName": "Geographical Search",
+      "orderNumber": 0,
+      "parentModule": "67",
+      "enabled": false,
+      "serviceCode": "LOCATION_MS",
+      "code": "null",
+      "path": "Location.Search Geography GeoJSON"
+    },
+    {
+      "id": 1523,
+      "name": "Resolve Tenant from Lat/Lng",
+      "url": "/egov-location/location/v11/tenant/_search",
+      "displayName": "Tenant Search",
+      "orderNumber": 0,
+      "parentModule": "67",
+      "enabled": false,
+      "serviceCode": "LOCATION_MS",
+      "code": "null",
+      "path": "Location.Search Tenant Resolve"
     }
   ]
 }
