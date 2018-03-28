@@ -13663,6 +13663,30 @@
       "actionid": 698,
       "actioncode": "",
       "tenantid": "pb.amritsar"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1522,
+      "actioncode": "",
+      "tenantid": "pb.amritsar"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1523,
+      "actioncode": "",
+      "tenantid": "pb.amritsar"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1522,
+      "actioncode": "",
+      "tenantid": "pb.amritsar"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1523,
+      "actioncode": "",
+      "tenantid": "pb.amritsar"
     }
   ]
 }
