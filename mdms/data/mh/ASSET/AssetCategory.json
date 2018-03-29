@@ -2696,6 +2696,20 @@
       "id": "2012",
       "code": "2012",
       "tenantId": "mh"
+    },
+    {
+      "depreciationMethod": "Straight Line method",
+      "isAssetAllowFromUi": true,
+      "name": "MRI Machine",
+      "assetCategoryType": "MOVABLE",
+      "unitOfMeasurement": "NOS",
+      "isDepreciationApplicable": true,
+      "parent": "22",
+      "depreciationRate": "20",
+      "isAssetAllow": true,
+      "id": "2013",
+      "code": "2013",
+      "tenantId": "mh"
     }
   ]
 }
