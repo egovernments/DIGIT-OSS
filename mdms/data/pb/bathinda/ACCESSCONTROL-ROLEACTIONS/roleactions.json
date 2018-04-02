@@ -13687,6 +13687,12 @@
       "actionid": 1523,
       "actioncode": "",
       "tenantId": "pb.bathinda"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 697,
+      "actioncode": "",
+      "tenantid": "pb.bathinda"
     }
   ]
 }
