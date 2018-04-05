@@ -1,996 +1,377 @@
 {
-  "tenantId": "pb",
+  "tenantId": "egov",
   "moduleName": "RAINMAKER-PGR",
   "ServiceDefs": [
     {
-      "tenantId": "pb",
-      "serviceCode": "DM",
-      "serviceName": "ANIMALS",
-      "description": "Dog Menace",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "ANIMALS",
-      "group": "DNA",
-      "slaHours": 9
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "SP",
-      "serviceName": "Stray Pigs",
-      "description": "There are no sweepers to sweep the roads and leftovers after garbage collection",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "ANIMALS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "DOSA",
-      "serviceName": "Death of Stray Animals",
-      "description": "Needed personale for assessment certificate",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "ANIMALS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "SC",
-      "serviceName": "Stray Cattle",
-      "description": "New drainage connection needed to the newly built house",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "ANIMALS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "DSOD",
-      "serviceName": "De-silting of Drain",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "DRAINS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "UGDO",
-      "serviceName": "UGD Overflow",
-      "description": "Illegal disposal and buring of garbage in wrong places",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "DRAINS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "SOW",
-      "serviceName": "Stagnation of Water",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "DRAINS",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "WPL",
-      "serviceName": "Water Pipe Leakage",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "DRAINS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "OOWF",
-      "serviceName": "Obstruction of Water Flow",
-      "description": "Bio Medical waste/Health hazard waste removal",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "DRAINS",
-      "group": "DNA",
-      "slaHours": 24
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "DM",
-      "serviceName": "RTSWD",
-      "description": "Repairs to SWD",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "DRAINS",
-      "group": "DNA",
-      "slaHours": 9
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "RTEF",
-      "serviceName": "Repairs to existing Footpath",
-      "description": "There are no sweepers to sweep the roads and leftovers after garbage collection",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "FOOTPATHS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "ROMC",
-      "serviceName": "Replacement of Manhole Cover",
-      "description": "Needed personale for assessment certificate",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "FOOTPATHS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "ROD",
-      "serviceName": "Removal of Debris",
-      "description": "New drainage connection needed to the newly built house",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "ROG",
-      "serviceName": "Removal of Garbage",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "AGC",
-      "serviceName": "Absent Garbage Collector",
-      "description": "Illegal disposal and buring of garbage in wrong places",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "AS",
-      "serviceName": "Absent Sweeper",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "BG",
-      "serviceName": "Burning of Garbage",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "IS",
-      "serviceName": "Improper Sweeping",
-      "description": "Bio Medical waste/Health hazard waste removal",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 24
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "BB",
-      "serviceName": "Broken Bin",
-      "description": "New drainage connection needed to the newly built house",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "BMW",
-      "serviceName": "Bio-medical waste/ Health Hazard Removal",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "IDOSSWD",
-      "serviceName": "Illegal Draining of Sewage to SWD/ Open Site",
-      "description": "Illegal disposal and buring of garbage in wrong places",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "POGB",
-      "serviceName": "Provision of Garbage Bin",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "OOGB",
-      "serviceName": "Overflowing of Garbage Bin",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "SOGB",
-      "serviceName": "Shifting of Garbage Bin",
-      "description": "Bio Medical waste/Health hazard waste removal",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 24
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "SC",
-      "serviceName": "GLWN",
-      "description": "Garbage Lorry Without Net",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "SOG",
-      "serviceName": "Spilling of Garbage",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "TSS",
-      "serviceName": "Transfer Station Smell",
-      "description": "Illegal disposal and buring of garbage in wrong places",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Garbage",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "CROPT",
-      "serviceName": "Complaints related to PT",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Land & Property",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "EOPP",
-      "serviceName": "Encroachment on Public Property",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Land & Property",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "UIC",
-      "serviceName": "Unauthorised/ Illegal Construction",
-      "description": "Bio Medical waste/Health hazard waste removal",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Land & Property",
-      "group": "DNA",
-      "slaHours": 24
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "IRVL",
-      "serviceName": "Issues related to Vacant Land",
-      "description": "New drainage connection needed to the newly built house",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Land & Property",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "ROSOF",
-      "serviceName": "Removal of Shops on Footpath",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Land & Property",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "NPTF",
-      "serviceName": "New Property Tax Fixation",
-      "description": "Illegal disposal and buring of garbage in wrong places",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Land & Property",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "TOTOP",
-      "serviceName": "Transfer of Title of Property",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Land & Property",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "EIDN",
-      "serviceName": "Errors in Demand Notice",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Land & Property",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "VODBL",
-      "serviceName": "Violation of DCR/Building Laws",
-      "description": "Bio Medical waste/Health hazard waste removal",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Land & Property",
-      "group": "DNA",
-      "slaHours": 24
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "NVLTF",
-      "serviceName": "New Vacant Land Tax Fixation",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Land & Property",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "RPOPT",
-      "serviceName": "Revision Petition on PT",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Land & Property",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "DA",
-      "serviceName": "Double Assessments",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Land & Property",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "PTB",
-      "serviceName": "PT Bifurcation",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Land & Property",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "PI",
-      "serviceName": "Parking Issues",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC AREAS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "MOP",
-      "serviceName": "Maintenance of Parks",
-      "description": "Bio Medical waste/Health hazard waste removal",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC AREAS",
-      "group": "DNA",
-      "slaHours": 24
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "CRBG",
-      "serviceName": "Complaints Regarding Burial Grounds",
-      "description": "New drainage connection needed to the newly built house",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC AREAS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "CRD",
-      "serviceName": "Complaints regarding Dispensary",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC AREAS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "MOP",
-      "serviceName": "Maintenance of Playgrounds",
-      "description": "Illegal disposal and buring of garbage in wrong places",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC AREAS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "RFH",
-      "serviceName": "Regarding Function Halls",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC AREAS",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "MOCH",
-      "serviceName": "Misuse of Community Halls",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC AREAS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "MM",
-      "serviceName": "Mosquito Menace",
-      "description": "Bio Medical waste/Health hazard waste removal",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC HEALTH & HYGIENE",
-      "group": "DNA",
-      "slaHours": 24
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "FDM",
-      "serviceName": "Fevers - Dengue, Malaria",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC HEALTH & HYGIENE",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "RPT",
-      "serviceName": "Regarding Public Toilets",
-      "description": "Bio Medical waste/Health hazard waste removal",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC HEALTH & HYGIENE",
-      "group": "DNA",
-      "slaHours": 24
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "CT",
-      "serviceName": "Community Toilets",
-      "description": "New drainage connection needed to the newly built house",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC HEALTH & HYGIENE",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "OD",
-      "serviceName": "Open Defecation",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC HEALTH & HYGIENE",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "CRR",
-      "serviceName": "Complaints Regarding Restaurants",
-      "description": "Illegal disposal and buring of garbage in wrong places",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC HEALTH & HYGIENE",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "FARE",
-      "serviceName": "Food Adulteration : Road side Eateries",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC HEALTH & HYGIENE",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "RFAO",
-      "serviceName": "Request for Anti-Larval Operations",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC HEALTH & HYGIENE",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "UCSH",
-      "serviceName": "Unhygienic Conditions - Slaughter House",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC HEALTH & HYGIENE",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "PMOPTAFS",
-      "serviceName": "Poor Maintenance of Public Toilets at Fuel Stations",
-      "description": "Bio Medical waste/Health hazard waste removal",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC HEALTH & HYGIENE",
-      "group": "DNA",
-      "slaHours": 24
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "USMP",
-      "serviceName": "Unauthorised Sale of Meat/ Meat Products",
-      "description": "New drainage connection needed to the newly built house",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC HEALTH & HYGIENE",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "IS",
-      "serviceName": "Illegal Slaughtering",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC HEALTH & HYGIENE",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "UITOML",
-      "serviceName": "Unhygienic, Improper Transfer of Meat & Livestock",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC HEALTH & HYGIENE",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "PI",
-      "serviceName": "NROPDE",
-      "description": "Non-Receipt of Pensions - Disabled, Elderly etc.",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC SERVICES",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "CRIOAL",
-      "serviceName": "Complaints regarding Issue of all Licenses",
-      "description": "Bio Medical waste/Health hazard waste removal",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC SERVICES",
-      "group": "DNA",
-      "slaHours": 24
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "IDOCOVL",
-      "serviceName": "Inclusion/ Deletion of Correction on Voter List",
-      "description": "New drainage connection needed to the newly built house",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC SERVICES",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "CRVL",
-      "serviceName": "Complaints Regarding Voter List",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC SERVICES",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "CRSL",
-      "serviceName": "Complaints regarding Sanctioned Loans",
-      "description": "Illegal disposal and buring of garbage in wrong places",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC SERVICES",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "SOGC",
-      "serviceName": "Sanction of Gas Connection",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC SERVICES",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "NSOBLTTG",
-      "serviceName": "Non Sanction of Bank Linkage to the Group",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC SERVICES",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "PQOW",
-      "serviceName": "Poor Quality of Work",
-      "description": "New drainage connection needed to the newly built house",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC WORKS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "SOCW",
-      "serviceName": "Stoppage of Civil Works",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC WORKS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "IRTAB",
-      "serviceName": "Issues relating to Ad Boards",
-      "description": "Illegal disposal and buring of garbage in wrong places",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC WORKS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "UTC",
-      "serviceName": "Unauthorised Tree Cutting",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC WORKS",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "UAB",
-      "serviceName": "Unauthorised Ad Boards",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "PUBLIC WORKS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "DORSOTR",
-      "serviceName": "Disposal of removed silt on the Road",
-      "description": "New drainage connection needed to the newly built house",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "ROADS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "PHRDS",
-      "serviceName": "Pot Hole Fill-ups / Damaged Surface",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "ROADS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "SBTSOD",
-      "serviceName": "Silt by the side of the dividers",
-      "description": "Illegal disposal and buring of garbage in wrong places",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "ROADS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "UCOTR",
-      "serviceName": "Unsanitary conditions on the Road",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "ROADS",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "RTFBC",
-      "serviceName": "Repairs to Flyovers, Bridges & Culverts",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "ROADS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "OORBB",
-      "serviceName": "Obstruction of Road by Branches",
-      "description": "New drainage connection needed to the newly built house",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "ROADS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "URC",
-      "serviceName": "Unauthorised Road Cutting",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "ROADS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "ROCM",
-      "serviceName": "Repairs of Centre Median",
-      "description": "Illegal disposal and buring of garbage in wrong places",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "ROADS",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "ROTI",
-      "serviceName": "Repairs to Traffic Island",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "ROADS",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "NBOS",
-      "serviceName": "Non-Burning of Streetlight",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Streetlights",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "HSW",
-      "serviceName": "Hanging Streetlight Wires",
-      "description": "New drainage connection needed to the newly built house",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Streetlights",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "ESDTS",
-      "serviceName": "Electric Shock due to Streetlight",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Streetlights",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "NS",
-      "serviceName": "New Streetlight",
-      "description": "Illegal disposal and buring of garbage in wrong places",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Streetlights",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "OCH",
-      "serviceName": "Overhead Cables Hazard",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "Streetlights",
-      "group": "DNA",
-      "slaHours": 48
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "IRTDW",
-      "serviceName": "Issues related to Drinking Water",
-      "description": "The trash can of the area is broken",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "WATER",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "ROBW",
-      "serviceName": "Repair of Bore Well",
-      "description": "Need personale/body for marriage registration and certification",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "WATER",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "CODW",
-      "serviceName": "Contamination of Drinking Water",
-      "description": "Illegal disposal and buring of garbage in wrong places",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "WATER",
-      "group": "DNA",
-      "slaHours": 12
-    },
-    {
-      "tenantId": "pb",
-      "serviceCode": "TR",
-      "serviceName": "Tap Repair",
-      "description": "Need assistance in sanctioning the building plan",
-      "metadata": "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/pgr/contract/v1-0-0.yml",
-      "type": "realtime",
-      "keywords": "WATER",
-      "group": "DNA",
-      "slaHours": 48
+      "serviceCode": "StrayDogs",
+      "keywords": "dog,animal",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "StrayPigs",
+      "keywords": "pig,animal",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "StrayCattle",
+      "keywords": "cattle,animal",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "DeadBody",
+      "keywords": "dead,body,animal",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "RequestSprayOp",
+      "keywords": "spray,Mosquitoes",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "RequestSmokeOp",
+      "keywords": "smoke,Mosquitoes",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "RemoveGarbageOrWater",
+      "keywords": "garbage,water,Mosquitoes",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "IllegalFootpathShop",
+      "keywords": "foot,path,shop,footpath",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "IllegalConstruction",
+      "keywords": "construction",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "Encroachment",
+      "keywords": "encroachment",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "IllegalParking",
+      "keywords": "parking",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "VacantLand",
+      "keywords": "land,Garbage",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "Roadscodee",
+      "keywords": "road,Garbage",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "BinNotEmpty",
+      "keywords": "bin,Garbage",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "PoorSweeping",
+      "keywords": "sweeping",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "EmployeeAbsent",
+      "keywords": "employee",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "RequestNew",
+      "keywords": "bin",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "BrokenBin",
+      "keywords": "bin",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "Burning",
+      "keywords": "Burning",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "TruckSpillage",
+      "keywords": "truck,spillage",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "Blocked",
+      "keywords": "blocked,drain",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "Overflowing",
+      "keywords": "drain",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "Broken",
+      "keywords": "drain",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "ShortSupply",
+      "keywords": "water",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "RequestTanker",
+      "keywords": "water",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "BadSupply",
+      "keywords": "water",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "BrokenHandpump",
+      "keywords": "water",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "Misuse",
+      "keywords": "water",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "BrokenPipeOrTap",
+      "keywords": "water",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "Potholes",
+      "keywords": "road",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "DebrisOrSilt",
+      "keywords": "road",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "Damaged",
+      "keywords": "road",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "WaterLogged",
+      "keywords": "road",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "ManholeIssue",
+      "keywords": "Road",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "Damaged",
+      "keywords": "Footpath",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "IllegalShops",
+      "keywords": "footpath",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "BadStreetlight",
+      "keywords": "light",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "PoleOrLightDamage",
+      "keywords": "light",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "BadTrafficLight",
+      "keywords": "light",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "IllegalHoarding",
+      "keywords": "hoarding",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "SlowProgress",
+      "keywords": "",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "OpenLand",
+      "keywords": "land",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "WaterBody",
+      "keywords": "water",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "StormWaterDrain",
+      "keywords": "water",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "BrokenOrDamagedPipe",
+      "keywords": "water",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "DirtyOrSmelly",
+      "keywords": "toilet",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "NotFunctional",
+      "keywords": "toilet",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "NoWaterOrElectricity",
+      "keywords": "toilet",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "IllegalCutting",
+      "keywords": "tree",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "RequestTrimming",
+      "keywords": "tree",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "BrokenGuard",
+      "keywords": "tree",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "OpenDefacation",
+      "keywords": "defacation",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
+    },
+    {
+      "serviceCode": "Others",
+      "keywords": "other",
+      "department": "NA",
+      "slaHours": 12,
+      "menuPath": ""
     }
   ]
 }
