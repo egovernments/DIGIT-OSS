@@ -1,5 +1,5 @@
 {
-  "tenantId": "egov",
+  "tenantId": "pb",
   "moduleName": "RAINMAKER-PGR",
   "ServiceDefs": [
     {
