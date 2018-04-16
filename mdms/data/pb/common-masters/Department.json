@@ -1,0 +1,46 @@
+{
+  "tenantId": "pb",
+  "moduleName": "common-masters",
+  "Department": [
+    {
+      "name": "ADMINISTRATION",
+      "code": "ADM",
+      "active": "true"
+    },
+    {
+      "name": "ACCOUNTS",
+      "code": "ACC",
+      "active": "true"
+    },
+    {
+      "name": "ENGINEERING",
+      "code": "ENG",
+      "active": "true"
+    },
+    {
+      "name": "TOWN PLANNING",
+      "code": "TP",
+      "active": "true"
+    },
+    {
+      "name": "REVENUE",
+      "code": "REV",
+      "active": "true"
+    },
+    {
+      "name": "PUBLIC HEALTH AND SANITATION",
+      "code": "PHS",
+      "active": "true"
+    },
+    {
+      "name": "URBAN POVERTY ALLEVIATION",
+      "code": "UPA",
+      "active": "true"
+    },
+    {
+      "name": "EDUCATION",
+      "code": "EDU",
+      "active": "true"
+    }
+  ]
+}
