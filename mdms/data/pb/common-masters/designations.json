@@ -1,0 +1,138 @@
+{
+  "tenantId": "pb",
+  "moduleName": "common-masters",
+  "designations": [
+    {
+      "code": "DR",
+      "name": "Driver",
+      "description": "Driver",
+      "active": true
+    },
+    {
+      "code": "OVR",
+      "name": "Oversear",
+      "description": "Oversear",
+      "active": true
+    },
+    {
+      "code": "SI",
+      "name": "Sanitary Inspector",
+      "description": "Sanitary Inspector",
+      "active": true
+    },
+    {
+      "code": "TXI",
+      "name": "Tax Inspector",
+      "description": "Tax Inspector",
+      "active": true
+    },
+    {
+      "code": "ATXI",
+      "name": "Assistant Tax Inspector",
+      "description": "Assistant Tax Inspector",
+      "active": true
+    },
+    {
+      "code": "FTD",
+      "name": "Filteration Driver",
+      "description": "Filteration Driver",
+      "active": true
+    },
+    {
+      "code": "JRP",
+      "name": "Jr. Programmer",
+      "description": "Jr. Programmer",
+      "active": true
+    },
+    {
+      "code": "DCO",
+      "name": "Driver Cum Operator",
+      "description": "Driver Cum Operator",
+      "active": true
+    },
+    {
+      "code": "WIR",
+      "name": "Electrician",
+      "description": "City Engineer",
+      "active": true
+    },
+    {
+      "code": "CENG",
+      "name": "City Engineer",
+      "description": "City Engineer",
+      "active": true
+    },
+    {
+      "code": "WENG",
+      "name": "Water Supply And Sanitation Engineer",
+      "description": "Water Supply And Sanitation Engineer",
+      "active": true
+    },
+    {
+      "code": "AWEN",
+      "name": "Assistant Water Supply And Sanitation Engineer",
+      "description": "Assistant Water Supply And Sanitation Engineer",
+      "active": true
+    },
+    {
+      "code": "CO",
+      "name": "Chief Officer",
+      "description": "Chief Officer",
+      "active": true
+    },
+    {
+      "code": "DPCO",
+      "name": "Deputy Chief Officer",
+      "description": "Deputy Chief Officer",
+      "active": true
+    },
+    {
+      "code": "MOV",
+      "name": "Mechanical Oversear",
+      "description": "Mechanical Oversear",
+      "active": true
+    },
+    {
+      "code": "CLRK",
+      "name": "Clerk",
+      "description": "Clerk",
+      "active": true
+    },
+    {
+      "code": "ACC",
+      "name": "Accountant",
+      "description": "Accountant",
+      "active": true
+    },
+    {
+      "code": "AACC",
+      "name": "Assistant Accountant",
+      "description": "Assistant Accountant",
+      "active": true
+    },
+    {
+      "code": "SC",
+      "name": "Senior Clerk",
+      "description": "Senior Clerk",
+      "active": true
+    },
+    {
+      "code": "AOS",
+      "name": "Assistant Office Supritendent",
+      "description": "Assistant Store Keeper",
+      "active": true
+    },
+    {
+      "code": "ASK",
+      "name": "Assistant Store Keeper",
+      "description": "Assistant Store Keeper",
+      "active": true
+    },
+    {
+      "code": "AAUD",
+      "name": "Assistant Auditor",
+      "description": "Assistant Auditor",
+      "active": true
+    }
+  ]
+}
