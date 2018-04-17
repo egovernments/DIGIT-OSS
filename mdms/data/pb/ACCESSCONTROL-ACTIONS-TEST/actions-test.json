@@ -10716,6 +10716,41 @@
       "serviceCode": "filestore url",
       "code": "null",
       "path": ""
+    },{
+      "id": 1532,
+      "name": "CreateEmployees",
+      "url": "/hr-employee-v2/employees/_create",
+      "displayName": "CreateEmployees",
+      "orderNumber": 2,
+      "parentModule": "48",
+      "enabled": false,
+      "serviceCode": "Employee",
+      "code": "null",
+      "path": "Employee Management.Employee Masters.Employee.CreateEmployees"
+    },
+    {
+      "id": 1533,
+      "name": "EmployeeUpdate",
+      "url": "/hr-employee-v2/employees/_update",
+      "displayName": "EmployeeUpdate",
+      "orderNumber": 4,
+      "parentModule": "48",
+      "enabled": false,
+      "serviceCode": "Employee",
+      "code": "null",
+      "path": "Employee Management.Employee Masters.Employee.EmployeeUpdate"
+    },
+    {
+      "id": 1534,
+      "name": "SearchEmployee",
+      "url": "/hr-employee-v2/employees/_search",
+      "displayName": "SearchEmployee",
+      "orderNumber": 6,
+      "parentModule": "48",
+      "enabled": false,
+      "serviceCode": "Employee",
+      "code": "null",
+      "path": "Employee Management.Employee Masters.Employee.SearchEmployee"
     }
   ]
 }
