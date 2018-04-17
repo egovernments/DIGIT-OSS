@@ -1,7 +1,7 @@
 {
   "tenantId": "pb",
   "moduleName": "common-masters",
-  "designations": [
+  "Designation": [
     {
       "code": "DR",
       "name": "Driver",
