@@ -4,15 +4,19 @@
   "tenants": [
     {
       "code": "pb.chandigarh",
-      "name": "Chandigarh",											
+      "name": "Chandigarh",
       "description": "Chandigarh",
       "logoId": null,
       "imageId": null,
-      "domainUrl": null,
+      "domainUrl": "http://mcchandigarh.gov.in",
       "type": "CITY",
-      "twitterUrl": null,
-      "facebookUrl": null,
-      "emailId": null,
+      "twitterUrl": "https://twitter.com/search?q=%23chandigarh",
+      "facebookUrl": "https://www.facebook.com/city/chandigarh-Punjab",
+      "emailId": "chandigar@gmail.com",
+      "OfficeTimings": {
+        "Mon - Fri": "9.00 AM - 6.00 PM",
+        "Sat": "9.00 AM - 12.00 PM"
+      },
       "city": {
         "name": "Chandigarh",
         "localName": null,
@@ -20,27 +24,31 @@
         "districtName": null,
         "regionName": null,
         "ulbGrade": null,
-        "longitude": 76.7742766,
-        "latitude": 30.7334765,
+        "longitude": 75.9550328,
+        "latitude": 30.5389944,
         "shapeFileLocation": null,
         "captcha": null,
         "code": null
       },
-      "address": null,
-      "contactNumber":null ,
-      "helpLineNumber": null
+      "address": "Shri.V.P. Singh Badnore,Raj Bhawan, Chandigarh,Punjab",
+      "contactNumber": "91 172 2740740",
+      "helpLineNumber": "2749194"
     },
     {
       "code": "pb.amritsar",
-      "name": "Amritsar",											
+      "name": "Amritsar",
       "description": null,
       "logoId": null,
       "imageId": null,
-      "domainUrl": null,
+      "domainUrl": "www.amritsarcorp.com",
       "type": "CITY",
-      "twitterUrl": null,
-      "facebookUrl": null,
-      "emailId": null,
+      "twitterUrl": "https://twitter.com/search?q=%23AMRITSAR",
+      "facebookUrl": "https://www.facebook.com/city/Amritsar-Punjab",
+      "emailId": "cmcasr@gmail.com",
+      "OfficeTimings": {
+        "Mon - Fri": "9.00 AM - 6.00 PM",
+        "Sat": "9.00 AM - 12.00 PM"
+      },
       "city": {
         "name": "Amritsar",
         "localName": null,
@@ -48,27 +56,31 @@
         "districtName": null,
         "regionName": null,
         "ulbGrade": null,
-        "longitude": 74.8000799,
-        "latitude": 31.633525,
+        "longitude": 74.8722642,
+        "latitude": 31.6339793,
         "shapeFileLocation": null,
         "captcha": null,
         "code": null
       },
-      "address": null,
-      "contactNumber":null ,
-      "helpLineNumber": null
+      "address": "Municipal Corporation Amritsar, Town Hall, Amritsar,Punjab",
+      "contactNumber": "0183-2545155",
+      "helpLineNumber": "0183-2210300"
     },
     {
       "code": "pb.ludhiana",
-      "name": "Ludhiana",											
+      "name": "Ludhiana",
       "description": "Ludhiana",
       "logoId": null,
       "imageId": null,
-      "domainUrl": null,
+      "domainUrl": "www.mcludhiana.gov.in",
       "type": "CITY",
-      "twitterUrl": null,
-      "facebookUrl": null,
-      "emailId": null,
+      "twitterUrl": "https://twitter.com/search?q=%23Ludhiana",
+      "facebookUrl": "https://www.facebook.com/city/Ludhiana-Punjab",
+      "emailId": "dc.ldh@punjab.gov.in",
+      "OfficeTimings": {
+        "Mon - Fri": "9.00 AM - 6.00 PM",
+        "Sat": "9.00 AM - 12.00 PM"
+      },
       "city": {
         "name": "Ludhiana",
         "localName": null,
@@ -82,21 +94,25 @@
         "captcha": null,
         "code": null
       },
-      "address": null,
-      "contactNumber":null ,
-      "helpLineNumber": null
+      "address": "Municipal Corporation, Clock Tower Road, Mata Rani Chowk, Ludhiana,Punjab",
+      "contactNumber": "0161-2748412",
+      "helpLineNumber": "0161-2444573"
     },
     {
       "code": "pb.bathinda",
-      "name": "Bathinda",											
+      "name": "Bathinda",
       "description": "Bathinda",
       "logoId": null,
       "imageId": null,
-      "domainUrl": null,
+      "domainUrl": "www.mcbathinda.com",
       "type": "CITY",
-      "twitterUrl": null,
-      "facebookUrl": null,
-      "emailId": null,
+      "twitterUrl": "https://twitter.com/search?q=%23bathinda",
+      "facebookUrl": "https://www.facebook.com/city/bathinda-Punjab",
+      "emailId": "cmcbathinda@gmail.com",
+      "OfficeTimings": {
+        "Mon - Fri": "9.00 AM - 6.00 PM",
+        "Sat": "9.00 AM - 12.00 PM"
+      },
       "city": {
         "name": "Bathinda",
         "localName": null,
@@ -110,21 +126,25 @@
         "captcha": null,
         "code": null
       },
-      "address": null,
-      "contactNumber":null ,
-      "helpLineNumber": null
+      "address": "Near Railway Station, Bathinda,Punjab",
+      "contactNumber": "098145-86896",
+      "helpLineNumber": "2213025"
     },
     {
       "code": "pb.patiala",
-      "name": "Patiala",											
+      "name": "Patiala",
       "description": "Patiala",
       "logoId": null,
       "imageId": null,
-      "domainUrl": null,
+      "domainUrl": "www.mcpatiala.in",
       "type": "CITY",
-      "twitterUrl": null,
-      "facebookUrl": null,
-      "emailId": null,
+      "twitterUrl": "https://twitter.com/search?q=%23patiala",
+      "facebookUrl": "https://www.facebook.com/city/patiala-Punjab",
+      "emailId": "cmc_patiala@yahoo.com",
+      "OfficeTimings": {
+        "Mon - Fri": "9.00 AM - 6.00 PM",
+        "Sat": "9.00 AM - 12.00 PM"
+      },
       "city": {
         "name": "Patiala",
         "localName": null,
@@ -132,27 +152,31 @@
         "districtName": null,
         "regionName": null,
         "ulbGrade": null,
-        "longitude": 76.3390134,
-        "latitude": 30.3466365,
+        "longitude": 76.3868797,
+        "latitude": 30.3397809,
         "shapeFileLocation": null,
         "captcha": null,
         "code": null
       },
-      "address": null,
-      "contactNumber":null ,
-      "helpLineNumber": null
+      "address": "Municipal Corporation, Moti Bagh, Patiala. Pincode - 147001,Punjab",
+      "contactNumber": "1800-180-2808",
+      "helpLineNumber": "2358488"
     },
     {
       "code": "pb.jalandhar",
-      "name": "Jalandhar",											
+      "name": "Jalandhar",
       "description": "Jalandhar",
       "logoId": null,
       "imageId": null,
-      "domainUrl": null,
+      "domainUrl": "www.mcjalandhar.in",
       "type": "CITY",
-      "twitterUrl": null,
-      "facebookUrl": null,
-      "emailId": null,
+      "twitterUrl": "https://twitter.com/search?q=%23jalandhar",
+      "facebookUrl": "https://www.facebook.com/city/jalandhar-Punjab",
+      "emailId": "commissioner.mcj@gmail.com",
+      "OfficeTimings": {
+        "Mon - Fri": "9.00 AM - 6.00 PM",
+        "Sat": "9.00 AM - 12.00 PM"
+      },
       "city": {
         "name": "Jalandhar",
         "localName": null,
@@ -160,16 +184,15 @@
         "districtName": null,
         "regionName": null,
         "ulbGrade": null,
-        "longitude": 75.5033788,
-        "latitude": 31.3223787,
+        "longitude": 75.5761829,
+        "latitude": 31.3260152,
         "shapeFileLocation": null,
         "captcha": null,
         "code": null
       },
-      "address": null,
-      "contactNumber":null ,
-      "helpLineNumber": null
+      "address": "1st Floor, Dr. B.R.Ambedkar Admin Complex, Jalandhar,Punjab",
+      "contactNumber": "0181-2227015",
+      "helpLineNumber": "0181-2226497"
     }
-
   ]
 }
