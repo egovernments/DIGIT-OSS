@@ -10716,6 +10716,43 @@
       "serviceCode": "CreateProperty",
       "code": "null",
       "path": "Property Tax.Existing Property.Create Property"
+    },
+    {
+      "id": 1533,
+      "name": "PositionSearchV2",
+      "url": "/hr-masters-v2/positions/_search",
+      "displayName": "PositionSearchV2",
+      "orderNumber": 1,
+      "parentModule": "70",
+      "enabled": false,
+      "serviceCode": "Position",
+      "code": "null",
+      "path": "Employee Management.Employee Masters.Position.PositionSearch"
+    },
+    {
+      "id": 1534,
+      "name": "DesignationSearchV2",
+      "url": "/hr-masters-v2/designations/_search",
+      "displayName": "DesignationSearchV2",
+      "orderNumber": 1,
+      "queryParams": "tenantId\u003d",
+      "parentModule": "50",
+      "enabled": false,
+      "serviceCode": "Category",
+      "code": "null",
+      "path": "Employee Management.Employee Masters.Category.DesignationSearch"
+    },
+    {
+      "id": 1535,
+      "name": "SearchEmployeeV2",
+      "url": "/hr-employee-v2/employees/_search",
+      "displayName": "SearchEmployeeV2",
+      "orderNumber": 6,
+      "parentModule": "48",
+      "enabled": false,
+      "serviceCode": "Employee",
+      "code": "null",
+      "path": "Employee Management.Employee Masters.Employee.SearchEmployee"
     }
   ]
 }
