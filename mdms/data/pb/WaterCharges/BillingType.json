@@ -3,8 +3,8 @@
   "moduleName": "WaterCharges",
   "BillingType": [
     {
-      "name": "MeterBased",
-      "code": "METERBASED",
+      "name": "Meter Based",
+      "code": "METER",
       "description": "charges will be calculated based on meter readings",
       "active": true
     },
@@ -16,13 +16,13 @@
     },
     {
       "name": "Plot Based",
-      "code": "PLOTBASED",
+      "code": "PLOT",
       "description": "charges will be calculated based on plot size of the property",
       "active": true
     },
     {
       "name": "Tab Based",
-      "code": "TABBASED",
+      "code": "TAP",
       "description": "charges will be calculated based on tabs",
       "active": true
     },
