@@ -1,1 +1,1 @@
-This folder contains master data for WaterCharges module
+This folder contains master data for Water Charges module
