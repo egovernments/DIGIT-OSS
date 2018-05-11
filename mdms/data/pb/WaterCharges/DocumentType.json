@@ -5,24 +5,22 @@
     {
       "code": "PAN",
       "description": "PAN card",
-      "isActive": true,
-
+      "isActive": true
     },
     {
       "code": "DRIVINGLICENSE",
       "description": "driving licence",
-      "isActive": true,
-
+      "isActive": true
     },
     {
       "code": "VOTERID",
       "description": "voter id",
-      "isActive": true,
+      "isActive": true
     },
     {
       "code": "AADHAR",
       "description": "Aadhar id",
-      "isActive": true,
+      "isActive": true
     }
   ]
 }
