@@ -4,373 +4,282 @@
   "ServiceDefs": [
     {
       "serviceCode": "StrayDogs",
-      "keywords": "dog,animal",
-      "department": "NA",
-      "slaHours": 12,
+      "keywords": "stray, dog, dogs, menace, animal, animals, attack, attacking, bite, biting, bark, barking",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
       "menuPath": "Animals"
     },
     {
       "serviceCode": "StrayPigs",
-      "keywords": "pig,animal",
-      "department": "NA",
-      "slaHours": 12,
+      "keywords": "stray, pig, pigs, menace, animal, animals, piglet, piglets",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
       "menuPath": "Animals"
     },
     {
       "serviceCode": "StrayCattle",
-      "keywords": "cattle,animal",
-      "department": "NA",
-      "slaHours": 12,
+      "keywords": "stray, cow, cows, cattle, bull, bulls, graze, grazing, dung, menace",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
       "menuPath": "Animals"
     },
     {
-      "serviceCode": "DeadBody",
-      "keywords": "dead,body,animal",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "DeadAnimals",
+      "keywords": "dead, animal, body, corpse, carcass, dead, death, died, rot",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
       "menuPath": "Animals"
     },
     {
-      "serviceCode": "RequestSprayOp",
-      "keywords": "spray,Mosquitoes",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "RequestSprayingOrFoggingOperation",
+      "keywords": "mosquito, menace, fog, spray, kill, health, dengue, malaria, disease, clean",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
       "menuPath": "Mosquitoes"
     },
     {
-      "serviceCode": "RequestSmokeOp",
-      "keywords": "smoke,Mosquitoes",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "StagnantWater",
+      "keywords": "mosquito, menace, dengue, malaria, health, disease, water, stagnant, puddle, drainage, flow, breed, rain",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
       "menuPath": "Mosquitoes"
     },
     {
-      "serviceCode": "RemoveGarbageOrWater",
-      "keywords": "garbage,water,Mosquitoes",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "Mosquitoes"
+      "serviceCode": "IllegalShopsOnFootPath",
+      "keywords": "illegal, shop, footpath, violation, property, public, space, land, unathourised, site, construction, wrong",
+      "department": "Town Planning",
+      "slaHours": 336,
+      "menuPath": "LandViolations"
     },
     {
-      "serviceCode": "IllegalFootpathShop",
-      "keywords": "foot,path,shop,footpath",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "LandViolation"
+      "serviceCode": "IllegalConstructions",
+      "keywords": "illegal, violation, property, public, space, land, unathourised, site, construction, wrong, build",
+      "department": "Town Planning",
+      "slaHours": 336,
+      "menuPath": "LandViolations"
     },
     {
-      "serviceCode": "IllegalConstruction",
-      "keywords": "construction",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "LandViolation"
-    },
-    {
-      "serviceCode": "Encroachment",
-      "keywords": "encroachment",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "LandViolation"
+      "serviceCode": "EncroachmentOnPublicProperty",
+      "keywords": "illegal, violation, property, public, space, land, unathourised, site, construction, wrong, build, encroachment, build",
+      "department": "Town Planning",
+      "slaHours": 336,
+      "menuPath": "LandViolations"
     },
     {
       "serviceCode": "IllegalParking",
-      "keywords": "parking",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "LandViolation"
+      "keywords": "illegal, parking, car, vehicle, space, removal, road, street, vehicle",
+      "department": "Town Planning",
+      "slaHours": 336,
+      "menuPath": "LandViolations"
     },
     {
-      "serviceCode": "VacantLand",
-      "keywords": "land,Garbage",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "Garbage.Dumping"
-    },
-    {
-      "serviceCode": "Roadscodee",
-      "keywords": "road,Garbage",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "Garbage.Dumping"
-    },
-    {
-      "serviceCode": "BinNotEmpty",
-      "keywords": "bin,Garbage",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "Garbage.Service"
-    },
-    {
-      "serviceCode": "PoorSweeping",
-      "keywords": "sweeping",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "Garbage.Service"
-    },
-    {
-      "serviceCode": "EmployeeAbsent",
-      "keywords": "employee",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "Garbage.Service"
-    },
-    {
-      "serviceCode": "RequestNew",
-      "keywords": "bin",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "Garbage.Bins"
-    },
-    {
-      "serviceCode": "BrokenBin",
-      "keywords": "bin",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "Garbage.Bins"
-    },
-    {
-      "serviceCode": "Burning",
-      "keywords": "Burning",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "GarbageNeedsTobeCleaned",
+      "keywords": "garbage, collect, litter, clean, door, waste, remove, sweeper, sanitation, dump, health, debris, throw",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
       "menuPath": "Garbage"
     },
     {
-      "serviceCode": "TruckSpillage",
-      "keywords": "truck,spillage",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "GarbageBinNotEmpty",
+      "keywords": "garbage, waste, bin, dustbin, clean, remove, sanitation, overflow, smell, health, throw, dispose",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
       "menuPath": "Garbage"
     },
     {
-      "serviceCode": "Blocked",
-      "keywords": "blocked,drain",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "GarbageBinNotThere",
+      "keywords": "garbage, waste, bin, dustbin, clean, remove, sanitation, overflow, smell, health, throw, dispose, absent, provision",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
+      "menuPath": "Garbage"
+    },
+    {
+      "serviceCode": "BrokenGarbageBin",
+      "keywords": "garbage, waste, bin, dustbin, clean, remove, sanitation, overflow, smell, health, throw, dispose, absent, provision, damage, broken, replace, repair",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
+      "menuPath": "Garbage"
+    },
+    {
+      "serviceCode": "BurningOfGarbage",
+      "keywords": "garbage, remove, burn, fire, health, waste, smoke, plastic, illegal",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
+      "menuPath": "Garbage"
+    },
+    {
+      "serviceCode": "BlockedDrain",
+      "keywords": "drain, block, clean, debris, silt, drainage, water, clean, roadside, flow, remove, waste, garbage, clear, overflow, canal, fill, stagnate, rain, sanitation, sand, pipe, clog, stuck",
+      "department": "Engineering",
+      "slaHours": 336,
       "menuPath": "Drains"
     },
     {
-      "serviceCode": "Overflowing",
-      "keywords": "drain",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "OverflowingDrain",
+      "keywords": "drain, block, clean, debris, silt, drainage, water, clean, roadside, flow, remove, waste, garbage, clear, overflow, canal, fill, stagnate, rain, sanitation, sand, pipe, clog, stuck",
+      "department": "Engineering",
+      "slaHours": 336,
       "menuPath": "Drains"
     },
     {
-      "serviceCode": "Broken",
-      "keywords": "drain",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "DamagedDrain",
+      "keywords": "drain, block, clean, debris, silt, drainage, water, clean, roadside, flow, remove, waste, garbage, clear, overflow, canal, fill, stagnate, rain, sanitation, sand, pipe, clog, stuck, break, broke, damage, repair, fix",
+      "department": "Engineering",
+      "slaHours": 336,
       "menuPath": "Drains"
     },
     {
-      "serviceCode": "ShortSupply",
-      "keywords": "water",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "ShortageOfWater",
+      "keywords": "water, supply, shortage, drink, tap, connection,leakage,less",
+      "department": "Water Supply",
+      "slaHours": 336,
       "menuPath": "Water"
     },
     {
-      "serviceCode": "RequestTanker",
-      "keywords": "water",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "NotWaterSupply",
+      "keywords": "water, supply, connection, drink, tap",
+      "department": "Water Supply",
+      "slaHours": 336,
       "menuPath": "Water"
     },
     {
-      "serviceCode": "BadSupply",
-      "keywords": "water",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "DirtyWaterSupply",
+      "keywords": "water, supply, connection, drink, dirty, contaminated, impure, health, clean",
+      "department": "Water Supply",
+      "slaHours": 336,
       "menuPath": "Water"
     },
     {
-      "serviceCode": "BrokenHandpump",
-      "keywords": "water",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "BrokenWaterPipeOrTap",
+      "keywords": "water, supply, connection, damage, repair, broken, pipe, piping, tap",
+      "department": "Water Supply",
+      "slaHours": 336,
       "menuPath": "Water"
     },
     {
-      "serviceCode": "Misuse",
-      "keywords": "water",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "Water"
+      "serviceCode": "PotholesOnTheRoad",
+      "keywords": "pothole, damage, hole, street, surface, repair, patch, maintenance, street,",
+      "department": "Engineering",
+      "slaHours": 336,
+      "menuPath": "Roads"
     },
     {
-      "serviceCode": "BrokenPipeOrTap",
-      "keywords": "water",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "Water"
+      "serviceCode": "DamagedRoad",
+      "keywords": "road, damage, hole, surface, repair, patch, broken, maintenance, street, construction, fix",
+      "department": "Engineering",
+      "slaHours": 336,
+      "menuPath": "Roads"
     },
     {
-      "serviceCode": "Potholes",
-      "keywords": "road",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "RoadOrFootpath.Roads"
+      "serviceCode": "WaterLoggedRoad",
+      "keywords": "road, drainage, water, block, puddle, street, flood, overflow, rain",
+      "department": "Engineering",
+      "slaHours": 336,
+      "menuPath": "Roads"
     },
     {
-      "serviceCode": "DebrisOrSilt",
-      "keywords": "road",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "RoadOrFootpath.Roads"
+      "serviceCode": "ManholeCoverMissingOrDamaged",
+      "keywords": "road, street, manhole, hole, cover, lid, footpath, open, man, drainage, damage, repair, fix",
+      "department": "Engineering",
+      "slaHours": 336,
+      "menuPath": "Roads"
     },
     {
-      "serviceCode": "Damaged",
-      "keywords": "road",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "RoadOrFootpath.Roads"
+      "serviceCode": "DamagedFootpath",
+      "keywords": "footpath, repair, broken, surface, damage, patch, hole, maintenance, walk, path",
+      "department": "Engineering",
+      "slaHours": 336,
+      "menuPath": "Footpaths"
     },
     {
-      "serviceCode": "WaterLogged",
-      "keywords": "road",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "RoadOrFootpath.Roads"
+      "serviceCode": "IllegalShopsOnTheFootpath",
+      "keywords": "illegal, shop, footpath, walk, remove, occupy, path",
+      "department": "Town Planning",
+      "slaHours": 336,
+      "menuPath": "Footpaths"
     },
     {
-      "serviceCode": "ManholeIssue",
-      "keywords": "Road",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "RoadOrFootpath.Roads"
+      "serviceCode": "DamagedStreetLight",
+      "keywords": "streetlight, light, repair, work, pole, electric, power, repair, damage, fix",
+      "department": "Engineering",
+      "slaHours": 336,
+      "menuPath": "StreetLights"
     },
     {
-      "serviceCode": "Damaged",
-      "keywords": "Footpath",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "RoadOrFootpath.Footpaths"
+      "serviceCode": "StreetLightNotWorking",
+      "keywords": "streetlight, light, repair, work, pole, electric, power, repair, fix",
+      "department": "Engineering",
+      "slaHours": 336,
+      "menuPath": "StreetLights"
     },
     {
-      "serviceCode": "IllegalShops",
-      "keywords": "footpath",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "RoadOrFootpath.Footpaths"
+      "serviceCode": "IllegalDischargeOfSewage",
+      "keywords": "illegal, discharge, sewage, drain, smell, drainage, sewage, waste, flow, dirty",
+      "department": "Engineering",
+      "slaHours": 336,
+      "menuPath": "Sewage"
     },
     {
-      "serviceCode": "BadStreetlight",
-      "keywords": "light",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "RoadOrFootpath.Lights"
+      "serviceCode": "OverflowingSewage",
+      "keywords": "discharge, sewage, drain, smell, drainage, sewage, waste, flow, dirty, overflow, spill, leak",
+      "department": "Engineering",
+      "slaHours": 336,
+      "menuPath": "Sewage"
     },
     {
-      "serviceCode": "PoleOrLightDamage",
-      "keywords": "light",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "RoadOrFootpath.Lights"
+      "serviceCode": "BrokenOrLeakingSewagePipe",
+      "keywords": "sewage, pipe, leak, broken, break, repair, damage, spill",
+      "department": "Engineering",
+      "slaHours": 336,
+      "menuPath": "Sewage"
     },
     {
-      "serviceCode": "BadTrafficLight",
-      "keywords": "light",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "RoadOrFootpath.Lights"
+      "serviceCode": "DirtyOrSmellyPublicToilets",
+      "keywords": "toilet, public, restroom, bathroom, urinal, smell, dirty",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
+      "menuPath": "PublicToilets"
     },
     {
-      "serviceCode": "IllegalHoarding",
-      "keywords": "hoarding",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "RoadOrFootpath"
+      "serviceCode": "PublicToiletIsNotWorkingProperly",
+      "keywords": "toilet, public, restroom, bathroom, urinal, block, working",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
+      "menuPath": "PublicToilets"
     },
     {
-      "serviceCode": "SlowProgress",
-      "keywords": "",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "RoadOrFootpath"
+      "serviceCode": "NoWaterOrElectricityinPublicToilet",
+      "keywords": "toilet, public, restroom, bathroom, urinal, electricity, water, working",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
+      "menuPath": "PublicToilets"
     },
     {
-      "serviceCode": "OpenLand",
-      "keywords": "land",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "SewageEffluents.IllegalDischarge"
-    },
-    {
-      "serviceCode": "WaterBody",
-      "keywords": "water",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "SewageEffluents.IllegalDischarge"
-    },
-    {
-      "serviceCode": "StormWaterDrain",
-      "keywords": "water",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "SewageEffluents.IllegalDischarge"
-    },
-    {
-      "serviceCode": "BrokenOrDamagedPipe",
-      "keywords": "water",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "SewageEffluents"
-    },
-    {
-      "serviceCode": "DirtyOrSmelly",
-      "keywords": "toilet",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "Toilets"
-    },
-    {
-      "serviceCode": "NotFunctional",
-      "keywords": "toilet",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "Toilets"
-    },
-    {
-      "serviceCode": "NoWaterOrElectricity",
-      "keywords": "toilet",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "Toilets"
-    },
-    {
-      "serviceCode": "IllegalCutting",
-      "keywords": "tree",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "IllegalCuttingOfTrees",
+      "keywords": "tree, cut, illegal, unathourized, remove, plant",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
       "menuPath": "Trees"
     },
     {
-      "serviceCode": "RequestTrimming",
-      "keywords": "tree",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "CuttingOrTrimmingOfTreeRequired",
+      "keywords": "tree, remove, trim, fallen, cut, plant, branch",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
       "menuPath": "Trees"
     },
     {
-      "serviceCode": "BrokenGuard",
-      "keywords": "tree",
-      "department": "NA",
-      "slaHours": 12,
-      "menuPath": "Trees"
-    },
-    {
-      "serviceCode": "OpenDefacation",
-      "keywords": "defacation",
-      "department": "NA",
-      "slaHours": 12,
+      "serviceCode": "OpenDefecation",
+      "keywords": "open, defecation, waste, human, privy, toilet",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
       "menuPath": ""
     },
     {
       "serviceCode": "Others",
-      "keywords": "other",
+      "keywords": "other, miscellaneous,ad,playgrounds,burial,slaughterhouse, misc, tax, revenue",
       "department": "NA",
-      "slaHours": 12,
+      "slaHours": 336,
       "menuPath": ""
     }
   ]
