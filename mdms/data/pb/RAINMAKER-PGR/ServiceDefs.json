@@ -3,74 +3,18 @@
   "moduleName": "RAINMAKER-PGR",
   "ServiceDefs": [
     {
-      "serviceCode": "StrayDogs",
-      "keywords": "stray, dog, dogs, menace, animal, animals, attack, attacking, bite, biting, bark, barking",
-      "department": "Health & Sanitation",
+      "serviceCode": "DamagedStreetLight",
+      "keywords": "streetlight, light, repair, work, pole, electric, power, repair, damage, fix",
+      "department": "Engineering",
       "slaHours": 336,
-      "menuPath": "Animals"
+      "menuPath": "StreetLights"
     },
     {
-      "serviceCode": "StrayPigs",
-      "keywords": "stray, pig, pigs, menace, animal, animals, piglet, piglets",
-      "department": "Health & Sanitation",
+      "serviceCode": "StreetLightNotWorking",
+      "keywords": "streetlight, light, repair, work, pole, electric, power, repair, fix",
+      "department": "Engineering",
       "slaHours": 336,
-      "menuPath": "Animals"
-    },
-    {
-      "serviceCode": "StrayCattle",
-      "keywords": "stray, cow, cows, cattle, bull, bulls, graze, grazing, dung, menace",
-      "department": "Health & Sanitation",
-      "slaHours": 336,
-      "menuPath": "Animals"
-    },
-    {
-      "serviceCode": "DeadAnimals",
-      "keywords": "dead, animal, body, corpse, carcass, dead, death, died, rot",
-      "department": "Health & Sanitation",
-      "slaHours": 336,
-      "menuPath": "Animals"
-    },
-    {
-      "serviceCode": "RequestSprayingOrFoggingOperation",
-      "keywords": "mosquito, menace, fog, spray, kill, health, dengue, malaria, disease, clean",
-      "department": "Health & Sanitation",
-      "slaHours": 336,
-      "menuPath": "Mosquitoes"
-    },
-    {
-      "serviceCode": "StagnantWater",
-      "keywords": "mosquito, menace, dengue, malaria, health, disease, water, stagnant, puddle, drainage, flow, breed, rain",
-      "department": "Health & Sanitation",
-      "slaHours": 336,
-      "menuPath": "Mosquitoes"
-    },
-    {
-      "serviceCode": "IllegalShopsOnFootPath",
-      "keywords": "illegal, shop, footpath, violation, property, public, space, land, unathourised, site, construction, wrong",
-      "department": "Town Planning",
-      "slaHours": 336,
-      "menuPath": "LandViolations"
-    },
-    {
-      "serviceCode": "IllegalConstructions",
-      "keywords": "illegal, violation, property, public, space, land, unathourised, site, construction, wrong, build",
-      "department": "Town Planning",
-      "slaHours": 336,
-      "menuPath": "LandViolations"
-    },
-    {
-      "serviceCode": "EncroachmentOnPublicProperty",
-      "keywords": "illegal, violation, property, public, space, land, unathourised, site, construction, wrong, build, encroachment, build",
-      "department": "Town Planning",
-      "slaHours": 336,
-      "menuPath": "LandViolations"
-    },
-    {
-      "serviceCode": "IllegalParking",
-      "keywords": "illegal, parking, car, vehicle, space, removal, road, street, vehicle",
-      "department": "Town Planning",
-      "slaHours": 336,
-      "menuPath": "LandViolations"
+      "menuPath": "StreetLights"
     },
     {
       "serviceCode": "GarbageNeedsTobeCleaned",
@@ -185,6 +129,48 @@
       "menuPath": "Roads"
     },
     {
+      "serviceCode": "RequestSprayingOrFoggingOperation",
+      "keywords": "mosquito, menace, fog, spray, kill, health, dengue, malaria, disease, clean",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
+      "menuPath": "Mosquitoes"
+    },
+    {
+      "serviceCode": "StagnantWater",
+      "keywords": "mosquito, menace, dengue, malaria, health, disease, water, stagnant, puddle, drainage, flow, breed, rain",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
+      "menuPath": "Mosquitoes"
+    },
+    {
+      "serviceCode": "StrayDogs",
+      "keywords": "stray, dog, dogs, menace, animal, animals, attack, attacking, bite, biting, bark, barking",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
+      "menuPath": "Animals"
+    },
+    {
+      "serviceCode": "StrayPigs",
+      "keywords": "stray, pig, pigs, menace, animal, animals, piglet, piglets",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
+      "menuPath": "Animals"
+    },
+    {
+      "serviceCode": "StrayCattle",
+      "keywords": "stray, cow, cows, cattle, bull, bulls, graze, grazing, dung, menace",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
+      "menuPath": "Animals"
+    },
+    {
+      "serviceCode": "DeadAnimals",
+      "keywords": "dead, animal, body, corpse, carcass, dead, death, died, rot",
+      "department": "Health & Sanitation",
+      "slaHours": 336,
+      "menuPath": "Animals"
+    },
+    {
       "serviceCode": "DamagedFootpath",
       "keywords": "footpath, repair, broken, surface, damage, patch, hole, maintenance, walk, path",
       "department": "Engineering",
@@ -197,20 +183,6 @@
       "department": "Town Planning",
       "slaHours": 336,
       "menuPath": "Footpaths"
-    },
-    {
-      "serviceCode": "DamagedStreetLight",
-      "keywords": "streetlight, light, repair, work, pole, electric, power, repair, damage, fix",
-      "department": "Engineering",
-      "slaHours": 336,
-      "menuPath": "StreetLights"
-    },
-    {
-      "serviceCode": "StreetLightNotWorking",
-      "keywords": "streetlight, light, repair, work, pole, electric, power, repair, fix",
-      "department": "Engineering",
-      "slaHours": 336,
-      "menuPath": "StreetLights"
     },
     {
       "serviceCode": "IllegalDischargeOfSewage",
@@ -253,6 +225,34 @@
       "department": "Health & Sanitation",
       "slaHours": 336,
       "menuPath": "PublicToilets"
+    },
+    {
+      "serviceCode": "IllegalShopsOnFootPath",
+      "keywords": "illegal, shop, footpath, violation, property, public, space, land, unathourised, site, construction, wrong",
+      "department": "Town Planning",
+      "slaHours": 336,
+      "menuPath": "LandViolations"
+    },
+    {
+      "serviceCode": "IllegalConstructions",
+      "keywords": "illegal, violation, property, public, space, land, unathourised, site, construction, wrong, build",
+      "department": "Town Planning",
+      "slaHours": 336,
+      "menuPath": "LandViolations"
+    },
+    {
+      "serviceCode": "EncroachmentOnPublicProperty",
+      "keywords": "illegal, violation, property, public, space, land, unathourised, site, construction, wrong, build, encroachment, build",
+      "department": "Town Planning",
+      "slaHours": 336,
+      "menuPath": "LandViolations"
+    },
+    {
+      "serviceCode": "IllegalParking",
+      "keywords": "illegal, parking, car, vehicle, space, removal, road, street, vehicle",
+      "department": "Town Planning",
+      "slaHours": 336,
+      "menuPath": "LandViolations"
     },
     {
       "serviceCode": "IllegalCuttingOfTrees",
