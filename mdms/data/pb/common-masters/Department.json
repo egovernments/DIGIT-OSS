@@ -41,6 +41,11 @@
       "name": "EDUCATION",
       "code": "EDU",
       "active": "true"
+    },
+    {
+      "name": "WATER SUPPLY",
+      "code": "WS",
+      "active": "true" 
     }
   ]
 }
