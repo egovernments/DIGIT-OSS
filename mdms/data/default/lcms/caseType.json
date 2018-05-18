@@ -6,7 +6,7 @@
       "name": "Appeal from Order1",
       "code": "AFO",
       "sideCode": "CVL",
-      "active": true,
+      "active": false,
       "tenantId": "default"
     },
     {
