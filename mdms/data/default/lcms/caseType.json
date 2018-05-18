@@ -2654,6 +2654,13 @@
       "sideCode": "SNM4",
       "active": true,
       "tenantId": "default"
+    },
+    {
+      "name": "asdfg",
+      "code": "asdfgh",
+      "sideCode": "CV",
+      "active": true,
+      "tenantId": "default"
     }
   ]
 }
