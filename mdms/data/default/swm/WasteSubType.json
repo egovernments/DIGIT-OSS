@@ -230,6 +230,14 @@
       "wasteType": {
         "code": "MWN"
       }
+    },
+    {
+      "name": "Test Waste Type",
+      "code": "Test",
+      "tenantId": "default",
+      "wasteType": {
+        "code": "Waste Type Code 3"
+      }
     }
   ]
 }
