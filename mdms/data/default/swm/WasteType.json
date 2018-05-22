@@ -81,6 +81,11 @@
       "tenantId": "default",
       "name": "M_Waste_Name",
       "code": "MWN"
+    },
+    {
+      "tenantId": "default",
+      "name": "sdD",
+      "code": "DDSD"
     }
   ]
 }
