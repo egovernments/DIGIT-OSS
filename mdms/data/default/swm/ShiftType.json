@@ -126,6 +126,11 @@
       "tenantId": "default",
       "name": "M_ShiftTypeName",
       "code": "MSTCs"
+    },
+    {
+      "tenantId": "default",
+      "name": "morning",
+      "code": "12345"
     }
   ]
 }
