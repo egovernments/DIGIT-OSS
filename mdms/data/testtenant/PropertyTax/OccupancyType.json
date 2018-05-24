@@ -1,22 +1,19 @@
 {
-  "tenantId": "pb",
+  "tenantId": "testtenant",
   "moduleName": "PropertyTax",
   "OccupancyType":
   [
     {
-
       "code": "RENTED",
       "description": "rented house",
       "active": true
     },
     {
-
       "code": "SELFOCCUPIED",
       "description": "own house",
       "active": true
     },
     {
-
       "code": "UNOCCUPIED",
       "description": "property unoccupied",
       "active": true
