@@ -20,6 +20,13 @@
       "code": "Vehicle Type Code 1 Test updated_update",
       "tenatid": "mh.roha",
       "id": "112313"
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "movable",
+      "code": "12345",
+      "description": "test property type",
+      "active": true
     }
   ]
 }
