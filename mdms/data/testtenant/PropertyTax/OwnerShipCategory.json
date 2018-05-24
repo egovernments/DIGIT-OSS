@@ -1,0 +1,19 @@
+{
+  "tenantId": "pb",
+  "moduleName": "PropertyTax",
+  "OwnerShipCategory":
+  [
+    {
+      "name": "Private",
+      "code": "PRIVATE",
+      "description": "Property owned by a private entity",
+      "active": true
+    },
+    {
+      "name": "Government",
+      "code": "GOVERNMENT",
+      "description": "Property owned by Government",
+      "active": true
+    }
+  ]
+}
