@@ -1,8 +1,7 @@
 {
   "tenantId": "testtenant",
   "moduleName": "PropertyTax",
-  "PropertyType":
-  [
+  "PropertyType": [
     {
       "name": "Vacant",
       "code": "VACANT",
@@ -14,6 +13,13 @@
       "code": "BUILTUP",
       "description": "Properties with built up structures",
       "active": true
+    },
+    {
+      "tenantId": "jbqejkdoe",
+      "name": "Ghantagadi (TATA-ACE)- 3",
+      "code": "Vehicle Type Code 1 Test updated_update",
+      "tenatid": "mh.roha",
+      "id": "112313"
     }
   ]
 }
