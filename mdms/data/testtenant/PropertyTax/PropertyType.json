@@ -1,0 +1,19 @@
+{
+  "tenantId": "pb",
+  "moduleName": "PropertyTax",
+  "PropertyType":
+  [
+    {
+      "name": "Vacant",
+      "code": "VACANT",
+      "description": "Vacant land or properties with no building",
+      "active": true
+    },
+    {
+      "name": "Built Up",
+      "code": "BUILTUP",
+      "description": "Properties with built up structures",
+      "active": true
+    }
+  ]
+}

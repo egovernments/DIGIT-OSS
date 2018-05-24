@@ -1,0 +1,47 @@
+{
+  "tenantId": "pb",
+  "moduleName": "PropertyTax",
+  "UsageCategorySubMinor": [{
+      "name": "Offices",
+      "code": "Offices",
+      "usageCategoryMinor": "Commercial",
+      "description": "Indicates that the property is being used as an office",
+      "active": true
+    },
+    {
+      "name": "Retail",
+      "code": "Retail",
+      "usageCategoryMinor": "Commercial",
+      "description": "The property is being utilized for Retail purposes",
+      "active": true
+    },
+    {
+      "name": "Event space",
+      "code": "EventSpace",
+      "usageCategoryMinor": "Commercial",
+      "description": "the property is used for conductiong events",
+      "active": true
+    },
+    {
+      "name": "Food joints",
+      "code": "FoodJoints",
+      "usageCategoryMinor": "Commercial",
+      "description": "the property is used for Religious purposes",
+      "active": true
+    },
+    {
+      "name": "Hotels",
+      "code": "Hotels",
+      "usageCategoryMinor": "Commercial",
+      "description": "the property is used as Hotels",
+      "active": true
+    },
+    {
+      "name": "Industrial",
+      "code": "Industrial",
+      "usageCategoryMinor": "Commercial",
+      "description": "the property is used for Industrial purposes",
+      "active": true
+    }
+  ]
+}
