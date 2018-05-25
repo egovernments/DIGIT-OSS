@@ -10716,7 +10716,8 @@
       "serviceCode": "filestore url",
       "code": "null",
       "path": ""
-    },{
+    },
+    {
       "id": 1532,
       "name": "CreateEmployees",
       "url": "/hr-employee-v2/employees/_create",
@@ -10751,6 +10752,39 @@
       "serviceCode": "Employee",
       "code": "null",
       "path": "Employee Management.Employee Masters.Employee.SearchEmployee"
+    },
+    {
+      "id": 1535,
+      "name": "Create Property v2",
+      "url": "/pt-services-v2/property/_create",
+      "displayName": "Create property",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "pt-services-v2",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1536,
+      "name": "Update Property v2",
+      "url": "/pt-services-v2/property/_update",
+      "displayName": "Update property",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "pt-services-v2",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1537,
+      "name": "Search Property v2",
+      "url": "/pt-services-v2/property/_search",
+      "displayName": "Search property",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "pt-services-v2",
+      "code": "null",
+      "path": ""
     }
   ]
 }
