@@ -48,6 +48,13 @@
       "code": "44444",
       "description": "test property type 333",
       "active": "true"
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "S101",
+      "code": "sss",
+      "description": "hello",
+      "active": "true"
     }
   ]
 }
