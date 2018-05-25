@@ -34,6 +34,13 @@
       "code": "444",
       "description": "test property type 333",
       "active": true
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "Test23",
+      "code": "t23",
+      "description": "hello",
+      "active": "true"
     }
   ]
 }
