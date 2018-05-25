@@ -27,6 +27,13 @@
       "code": "12345",
       "description": "test property type",
       "active": true
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "new 1001",
+      "code": "444",
+      "description": "test property type 333",
+      "active": true
     }
   ]
 }
