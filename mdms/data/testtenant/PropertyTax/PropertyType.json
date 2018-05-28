@@ -36,11 +36,11 @@
       "active": "true"
     },
     {
-      "tenantId": "testtenant",
-      "name": "Test23",
+      "active": "true",
       "code": "t23",
       "description": "hello",
-      "active": "true"
+      "name": "Test23",
+      "tenantId": "testtenant"
     },
     {
       "tenantId": "testtenant",
