@@ -83,6 +83,13 @@
       "code": "HT 4444",
       "description": "hospital property",
       "active": true
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "New Property 101",
+      "code": "NP 101",
+      "description": "Testing mdms create 1.0",
+      "active": true
     }
   ]
 }
