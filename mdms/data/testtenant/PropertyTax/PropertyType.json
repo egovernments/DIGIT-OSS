@@ -3,6 +3,7 @@
   "moduleName": "PropertyTax",
   "PropertyType": [
     {
+      "tenantId": "testtenant",
       "name": "Vacant",
       "code": "VACANT",
       "description": "Vacant land or properties with no building",
