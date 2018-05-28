@@ -111,6 +111,13 @@
       "code": "p1001",
       "description": "testing 1001",
       "active": true
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "property999",
+      "code": "p999",
+      "description": "test 999",
+      "active": true
     }
   ]
 }
