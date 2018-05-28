@@ -140,6 +140,13 @@
       "code": "PWD",
       "description": "govt building",
       "active": true
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "Prop 10002",
+      "code": "p10002",
+      "description": "Testing 1002",
+      "active": true
     }
   ]
 }
