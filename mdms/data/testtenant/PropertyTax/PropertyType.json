@@ -55,6 +55,13 @@
       "code": "sss",
       "description": "hello",
       "active": "true"
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "Commercial101",
+      "code": "Com101",
+      "description": "Commercial Property",
+      "active": "true"
     }
   ]
 }
