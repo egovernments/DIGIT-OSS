@@ -30,10 +30,10 @@
     },
     {
       "tenantId": "testtenant",
-      "name": "new 1001",
+      "name": "newname101",
       "code": "444",
-      "description": "test property type 333",
-      "active": true
+      "description": "Commercial Property Update Test",
+      "active": "true"
     },
     {
       "tenantId": "testtenant",
