@@ -21,7 +21,7 @@
       "name": "Ghantagadi (TATA-ACE)- 3",
       "code": "Vehicle Type Code 1 Test updated_update",
       "description": "Does everything work fine?",
-      "active": ""
+      "active": true
     },
     {
       "tenantId": "testtenant",
