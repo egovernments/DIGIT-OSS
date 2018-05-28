@@ -62,6 +62,13 @@
       "code": "Com101",
       "description": "Commercial Property",
       "active": "true"
+    },
+    {
+      "tenantId": "pb",
+      "name": "school",
+      "code": "sch",
+      "description": "govt school",
+      "active": true
     }
   ]
 }
