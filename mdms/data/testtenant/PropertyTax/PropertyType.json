@@ -20,8 +20,8 @@
       "tenantId": "jbqejkdoe",
       "name": "Ghantagadi (TATA-ACE)- 3",
       "code": "Vehicle Type Code 1 Test updated_update",
-      "tenatid": "testenant",
-      "id": "112313"
+      "description": "Does everything work fine?",
+      "active": ""
     },
     {
       "tenantId": "testtenant",
