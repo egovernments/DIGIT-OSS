@@ -147,6 +147,13 @@
       "code": "p10002",
       "description": "Testing 1002",
       "active": true
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "Government office",
+      "code": "GO",
+      "description": "Government property",
+      "active": true
     }
   ]
 }
