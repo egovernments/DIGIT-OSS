@@ -69,6 +69,13 @@
       "code": "sch",
       "description": "govt school",
       "active": true
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "hospital",
+      "code": "ht4444",
+      "description": "hospital property",
+      "active": true
     }
   ]
 }
