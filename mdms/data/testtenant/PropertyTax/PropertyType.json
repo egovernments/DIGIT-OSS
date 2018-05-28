@@ -9,10 +9,11 @@
       "active": true
     },
     {
+      "tenantId": "testtenant",
       "name": "Built Up",
       "code": "BUILTUP",
       "description": "Properties with built up structures",
-      "active": true
+      "active": "Yes"
     },
     {
       "tenantId": "jbqejkdoe",
