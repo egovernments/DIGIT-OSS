@@ -133,6 +133,13 @@
       "code": "f123",
       "description": "ffffff",
       "active": true
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "PWD office",
+      "code": "PWD",
+      "description": "govt building",
+      "active": true
     }
   ]
 }
