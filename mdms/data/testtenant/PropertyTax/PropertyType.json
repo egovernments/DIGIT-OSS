@@ -97,6 +97,13 @@
       "code": "P101",
       "description": "Testing mdms 101",
       "active": true
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "Property 102",
+      "code": "P102",
+      "description": "Testing 102",
+      "active": true
     }
   ]
 }
