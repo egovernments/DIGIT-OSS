@@ -76,6 +76,13 @@
       "code": "ht4444",
       "description": "hospital property",
       "active": true
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "Hospital",
+      "code": "HT 4444",
+      "description": "hospital property",
+      "active": true
     }
   ]
 }
