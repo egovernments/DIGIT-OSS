@@ -190,6 +190,13 @@
       "code": "P300",
       "description": "Testing 300",
       "active": true
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "Property 301",
+      "code": "P301",
+      "description": "Test 301",
+      "active": true
     }
   ]
 }
