@@ -1,8 +1,14 @@
 {
   "tenantId": "pb",
   "moduleName": "PropertyTax",
-  "PropertyType":
-  [
+  "PropertyType": [
+    {
+      "name": "property 678",
+      "code": "p678",
+      "description": "testing p678",
+      "active": true,
+      "tenantId": "pb"
+    },
     {
       "name": "Vacant",
       "code": "VACANT",
