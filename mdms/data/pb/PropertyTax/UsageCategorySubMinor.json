@@ -3,36 +3,36 @@
   "moduleName": "PropertyTax",
   "UsageCategorySubMinor": [{
       "name": "Offices",
-      "code": "Offices",
-      "usageCategoryMinor": "Commercial",
+      "code": "OFFICES",
+      "usageCategoryMinor": "COMMERCIAL",
       "description": "Indicates that the property is being used as an office",
       "active": true
     },
     {
       "name": "Retail",
-      "code": "Retail",
-      "usageCategoryMinor": "Commercial",
+      "code": "RETAIL",
+      "usageCategoryMinor": "COMMERCIAL",
       "description": "The property is being utilized for Retail purposes",
       "active": true
     },
     {
       "name": "Event space",
-      "code": "EventSpace",
-      "usageCategoryMinor": "Commercial",
+      "code": "EVENTSPACE",
+      "usageCategoryMinor": "COMMERCIAL",
       "description": "the property is used for conductiong events",
       "active": true
     },
     {
       "name": "Food joints",
-      "code": "FoodJoints",
-      "usageCategoryMinor": "Commercial",
+      "code": "FOODJOINTS",
+      "usageCategoryMinor": "COMMERCIAL",
       "description": "the property is used for Religious purposes",
       "active": true
     },
     {
       "name": "Hotels",
-      "code": "Hotels",
-      "usageCategoryMinor": "Commercial",
+      "code": "HOTELS",
+      "usageCategoryMinor": "COMMERCIAL",
       "description": "the property is used as Hotels",
       "active": true
     },
