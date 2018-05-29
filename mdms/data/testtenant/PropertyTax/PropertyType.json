@@ -28,7 +28,7 @@
       "name": "movable",
       "code": "12345",
       "description": "test property type",
-      "active": true
+      "active": false
     },
     {
       "tenantId": "testtenant",
