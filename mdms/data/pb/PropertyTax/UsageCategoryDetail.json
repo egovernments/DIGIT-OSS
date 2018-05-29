@@ -6,42 +6,42 @@
     {
       "name": "Grocery store",
       "code": "GROCERYSTORE",
-      "usageCategorySubMinor": "Retail",
+      "usageCategorySubMinor": "RETAIL",
       "description": "Indicates that the property is being used as GroceryStore",
       "active": true
     },
     {
       "name": "Supermarkets",
       "code": "SUPERMARKETS",
-      "usageCategorySubMinor": "Retail",
+      "usageCategorySubMinor": "RETAIL",
       "description": "The property is being utilized as Supermarkets",
       "active": true
     },
     {
       "name": "Clothes",
       "code": "CLOTHES",
-      "usageCategorySubMinor": "Retail",
+      "usageCategorySubMinor": "RETAIL",
       "description": "the property is used for Clothes Retail",
       "active": true
     },
     {
       "name": "Electronics",
       "code": "ELECTRONICS",
-      "usageCategorySubMinor": "Retail",
+      "usageCategorySubMinor": "RETAIL",
       "description": "the property is used for electronics retail",
       "active": true
     },
     {
       "name": "Pharmacy",
       "code": "PHARMACY",
-      "usageCategorySubMinor": "Retail",
+      "usageCategorySubMinor": "RETAIL",
       "description": "the property is used as pharmacy",
       "active": true
     },
     {
       "name": "Industrial",
       "code": "INDUSTRIAL",
-      "usageCategorySubMinor": "Retail",
+      "usageCategorySubMinor": "RETAIL",
       "description": "the property is used for Industrial purposes",
       "active": true
     }
