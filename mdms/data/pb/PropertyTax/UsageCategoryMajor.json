@@ -5,19 +5,19 @@
 [
   {
     "name":"Residential",
-    "code":"Residential",
+    "code":"RESIDENTIAL",
     "description":"Indicates that the property is being used for residential purposes",
     "active": true
   },
   {
     "name":"Non-Residential",
-    "code":"NonResidential",
+    "code":"NONRESIDENTIAL",
     "description":"The property is being utilized for Non residential purposes eg: commercial, educational etc...",
     "active": true
   },
   {
     "name":"Mixed",
-    "code":"Mixed",
+    "code":"MIXED",
     "description":"the property is used for both residential and other purposes",
     "active": true
   }
