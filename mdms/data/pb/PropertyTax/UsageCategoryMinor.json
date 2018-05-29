@@ -5,36 +5,36 @@
   [
     {
       "name": "Commercial",
-      "code": "Commercial",
-      "usageCategoryMajor": "NonResidential",
+      "code": "COMMERCIAL",
+      "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "Indicates that the property is being used for Commercial purposes",
       "active": true
     },
     {
       "name": "Industrial",
-      "code": "Industrial",
-      "usageCategoryMajor": "NonResidential",
+      "code": "INDUSTRIAL",
+      "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "The property is being utilized for Non Industrial purposes",
       "active": true
     },
     {
       "name": "Institutional",
-      "code": "Institutional",
-      "usageCategoryMajor": "NonResidential",
+      "code": "INSTITUTIONAL",
+      "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "the property is used for Institutional purposes",
       "active": true
     },
     {
       "name": "Religious",
-      "code": "Religious",
-      "usageCategoryMajor": "NonResidential",
+      "code": "RELIGIOUS",
+      "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "the property is used for Religious purposes",
       "active": true
     },
     {
       "name": "Public spaces",
-      "code": "PublicSpaces",
-      "usageCategoryMajor": "NonResidential",
+      "code": "PUBLICSPACES",
+      "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "the property is used as public spaces",
       "active": true
     }
