@@ -211,6 +211,13 @@
       "code": "P333",
       "description": "Test333",
       "active": true
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "prop444",
+      "code": "p444",
+      "description": "test444",
+      "active": true
     }
   ]
 }
