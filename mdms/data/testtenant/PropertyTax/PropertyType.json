@@ -183,6 +183,13 @@
       "code": "abcd",
       "description": "abcd",
       "active": true
+    },
+    {
+      "tenantId": "testtenant",
+      "name": "Property 300",
+      "code": "P300",
+      "description": "Testing 300",
+      "active": true
     }
   ]
 }
