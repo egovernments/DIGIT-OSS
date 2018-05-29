@@ -3,6 +3,13 @@
   "moduleName": "PropertyTax",
   "PropertyType": [
     {
+      "tenantId": "asdas",
+      "name": "asd",
+      "code": "ad",
+      "description": "ad",
+      "active": ""
+    },
+    {
       "tenantId": "fff",
       "name": "fff",
       "code": "fff",
