@@ -4,6 +4,13 @@
   "PropertyType": [
     {
       "tenantId": "testtenant",
+      "name": "prop666",
+      "code": "p666",
+      "description": "test666",
+      "active": true
+    },
+    {
+      "tenantId": "testtenant",
       "name": "prop555",
       "code": "p555",
       "description": "test555",
