@@ -3,23 +3,31 @@
   "moduleName": "PropertyTax",
   "PropertySubType": [
     {
+      "name": "Property1",
+      "code": "Prop1",
+      "propertyType": "vishaltest1",
+      "description": "yes",
+      "active": true,
+      "tenantId": "pb"
+    },
+    {
       "name": "Independent Building",
       "code": "INDEPENDENTBUILDING",
-      "propertyType":"BUILTUP",
+      "propertyType": "BUILTUP",
       "description": "A seperate bungalow type house",
       "active": true
     },
     {
       "name": "Apartment",
       "code": "APARTMENT",
-      "propertyType":"BUILTUP",
+      "propertyType": "BUILTUP",
       "description": "A flat owned within an aparment",
       "active": true
     },
     {
       "name": "Row Houses",
       "code": "ROWHOUSES",
-      "propertyType":"BUILTUP",
+      "propertyType": "BUILTUP",
       "description": "A colony of independent houses",
       "active": true
     }
