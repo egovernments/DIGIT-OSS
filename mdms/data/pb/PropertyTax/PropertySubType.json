@@ -3,6 +3,14 @@
   "moduleName": "PropertyTax",
   "PropertySubType": [
     {
+      "name": "property 2",
+      "code": "prop2",
+      "propertyType": "t23",
+      "description": "govt",
+      "active": true,
+      "tenantId": "pb"
+    },
+    {
       "name": "Property1",
       "code": "Prop1",
       "propertyType": "vishaltest1",
