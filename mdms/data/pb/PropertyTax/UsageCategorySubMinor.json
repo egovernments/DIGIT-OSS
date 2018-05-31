@@ -5,9 +5,10 @@
     {
       "name": "Offices",
       "code": "OFFICES",
-      "usageCategoryMinor": "COMMERCIAL",
+      "usageCategoryMinor": "Commercial",
       "description": "Indicates that the property is being used as an office",
-      "active": true
+      "active": true,
+      "tenantId": "pb"
     },
     {
       "name": "Retail",
