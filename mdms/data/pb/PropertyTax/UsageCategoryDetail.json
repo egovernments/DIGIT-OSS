@@ -1,8 +1,15 @@
 {
   "tenantId": "pb",
   "moduleName": "PropertyTax",
-  "UsageCategoryDetail":
-  [
+  "UsageCategoryDetail": [
+    {
+      "name": "Jagannath cola",
+      "code": "JC",
+      "usageCategorySubMinor": "FoodJoints",
+      "description": "cola and jalebi shop",
+      "active": true,
+      "tenantId": "pb"
+    },
     {
       "name": "Grocery store",
       "code": "GROCERYSTORE",
