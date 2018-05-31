@@ -3,6 +3,14 @@
   "moduleName": "PropertyTax",
   "UsageCategoryDetail": [
     {
+      "name": "Retail outlet",
+      "code": "RO",
+      "usageCategorySubMinor": "Retail",
+      "description": "buy anything",
+      "active": true,
+      "tenantId": "pb"
+    },
+    {
       "name": "Jagannath cola",
       "code": "JC",
       "usageCategorySubMinor": "FoodJoints",
