@@ -5,9 +5,10 @@
     {
       "name": "Commercial",
       "code": "COMMERCIAL",
-      "usageCategoryMajor": "NONRESIDENTIAL",
+      "usageCategoryMajor": "NonResidential",
       "description": "Indicates that the property is being used for Commercial purposes",
-      "active": true
+      "active": true,
+      "tenantId": "pb"
     },
     {
       "name": "Industrial",
