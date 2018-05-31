@@ -13,7 +13,7 @@
     {
       "name": "Retail",
       "code": "RETAIL",
-      "usageCategoryMinor": "Commercial",
+      "usageCategoryMinor": "Industrial",
       "description": "The property is being utilized for Retail purposes",
       "active": true,
       "tenantId": "pb"
