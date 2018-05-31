@@ -1,8 +1,7 @@
 {
   "tenantId": "pb",
   "moduleName": "PropertyTax",
-  "UsageCategoryMinor":
-  [
+  "UsageCategoryMinor": [
     {
       "name": "Commercial",
       "code": "COMMERCIAL",
@@ -15,7 +14,8 @@
       "code": "INDUSTRIAL",
       "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "The property is being utilized for Non Industrial purposes",
-      "active": true
+      "active": true,
+      "tenantId": "pb"
     },
     {
       "name": "Institutional",
