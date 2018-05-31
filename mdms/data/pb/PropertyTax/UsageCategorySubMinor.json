@@ -13,9 +13,10 @@
     {
       "name": "Retail",
       "code": "RETAIL",
-      "usageCategoryMinor": "COMMERCIAL",
+      "usageCategoryMinor": "Commercial",
       "description": "The property is being utilized for Retail purposes",
-      "active": true
+      "active": true,
+      "tenantId": "pb"
     },
     {
       "name": "Event space",
