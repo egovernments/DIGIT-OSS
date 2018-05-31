@@ -29,9 +29,10 @@
     {
       "name": "Food joints",
       "code": "FOODJOINTS",
-      "usageCategoryMinor": "COMMERCIAL",
+      "usageCategoryMinor": "PublicSpaces",
       "description": "the property is used for Religious purposes",
-      "active": true
+      "active": true,
+      "tenantId": "pb"
     },
     {
       "name": "Hotels",
