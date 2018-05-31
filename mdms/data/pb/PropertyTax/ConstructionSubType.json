@@ -1,8 +1,14 @@
 {
   "tenantId": "pb",
   "moduleName": "PropertyTax",
-  "ConstructionSubType":
-  [
+  "ConstructionSubType": [
+    {
+      "name": "bada naala",
+      "code": "BN",
+      "description": "biggest naala in the town",
+      "active": true,
+      "tenantId": "pb"
+    },
     {
       "name": "Country Tiled",
       "code": "COUNTRYTILED",
