@@ -28,9 +28,10 @@
     {
       "name": "Apartment",
       "code": "APARTMENT",
-      "propertyType": "BUILTUP",
+      "propertyType": "12345",
       "description": "A flat owned within an aparment",
-      "active": true
+      "active": true,
+      "tenantId": "pb"
     },
     {
       "name": "Row Houses",
