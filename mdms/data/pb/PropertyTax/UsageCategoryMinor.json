@@ -27,9 +27,10 @@
     {
       "name": "Religious",
       "code": "RELIGIOUS",
-      "usageCategoryMajor": "NONRESIDENTIAL",
+      "usageCategoryMajor": "NonResidential",
       "description": "the property is used for Religious purposes",
-      "active": true
+      "active": true,
+      "tenantId": "pb"
     },
     {
       "name": "Public spaces",
