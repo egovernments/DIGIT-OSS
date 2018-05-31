@@ -1,7 +1,8 @@
 {
   "tenantId": "pb",
   "moduleName": "PropertyTax",
-  "UsageCategorySubMinor": [{
+  "UsageCategorySubMinor": [
+    {
       "name": "Offices",
       "code": "OFFICES",
       "usageCategoryMinor": "COMMERCIAL",
@@ -18,9 +19,10 @@
     {
       "name": "Event space",
       "code": "EVENTSPACE",
-      "usageCategoryMinor": "COMMERCIAL",
+      "usageCategoryMinor": "PublicSpaces",
       "description": "the property is used for conductiong events",
-      "active": true
+      "active": true,
+      "tenantId": "pb"
     },
     {
       "name": "Food joints",
