@@ -3,6 +3,14 @@
   "moduleName": "PropertyTax",
   "PropertySubType": [
     {
+      "name": "Sunny Hospital",
+      "code": "SH",
+      "propertyType": "HT 4444",
+      "description": "sunny\u0027s hospital",
+      "active": true,
+      "tenantId": "pb"
+    },
+    {
       "name": "property 2",
       "code": "prop2",
       "propertyType": "t23",
