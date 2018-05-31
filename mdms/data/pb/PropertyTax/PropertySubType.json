@@ -5,7 +5,7 @@
     {
       "name": "Sunny Hospital",
       "code": "SH",
-      "propertyType": "ht4444",
+      "propertyType": "HT 4444",
       "description": "sunny\u0027s hospital",
       "active": true,
       "tenantId": "pb"
