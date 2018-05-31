@@ -21,7 +21,7 @@
     {
       "name": "Property1",
       "code": "Prop1",
-      "propertyType": "BUILTUP",
+      "propertyType": "zzz444",
       "description": "yes",
       "active": true,
       "tenantId": "pb"
