@@ -21,9 +21,10 @@
     {
       "name": "Independent Building",
       "code": "INDEPENDENTBUILDING",
-      "propertyType": "BUILTUP",
+      "propertyType": "sch",
       "description": "A seperate bungalow type house",
-      "active": true
+      "active": true,
+      "tenantId": "pb"
     },
     {
       "name": "Apartment",
