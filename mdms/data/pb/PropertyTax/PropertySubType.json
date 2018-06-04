@@ -3,6 +3,14 @@
   "moduleName": "PropertyTax",
   "PropertySubType": [
     {
+      "name": "govt hostel",
+      "code": "hostel",
+      "propertyType": "p678",
+      "description": " hostel",
+      "active": true,
+      "tenantId": "pb"
+    },
+    {
       "name": "Sunny Hospital",
       "code": "SH",
       "propertyType": "p3334",
