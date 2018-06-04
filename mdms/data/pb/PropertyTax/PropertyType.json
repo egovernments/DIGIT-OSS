@@ -3,6 +3,13 @@
   "moduleName": "PropertyTax",
   "PropertyType": [
     {
+      "name": "Hosptital ",
+      "code": "H",
+      "description": "hospital govt",
+      "active": "",
+      "tenantId": "pb"
+    },
+    {
       "name": "Prop 567",
       "code": "P567",
       "description": "Test 567",
