@@ -6,7 +6,7 @@
       "name": "Hosptital ",
       "code": "H",
       "description": "hospital govt",
-      "active": "",
+      "active": true,
       "tenantId": "pb"
     },
     {
