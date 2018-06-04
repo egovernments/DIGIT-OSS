@@ -22,7 +22,7 @@
       "name": "Property1",
       "code": "Prop1",
       "propertyType": "BUILTUP",
-      "description": "built already",
+      "description": "yes built already",
       "active": true,
       "tenantId": "pb"
     },
