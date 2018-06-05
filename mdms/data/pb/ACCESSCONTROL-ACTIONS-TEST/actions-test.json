@@ -10930,6 +10930,30 @@
       "code": "null",
       "path": "Property Tax.PT Masters.ConstructionType",
       "navigationURL": "mdms/PropertyTax/ConstructionType "
-    }
+    },
+    {
+      "id": 1549,
+      "name": "DraftCreate",
+      "url": "/pt-services-v2/drafts/_create",
+      "displayName": "Draft Create",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "pt-services",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1550,
+      "name": "DraftCreate",
+      "url": "/pt-services-v2/drafts/_search",
+      "displayName": "Draft Search",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "pt-services",
+      "code": "null",
+      "path": ""
+    },
   ]
 }
