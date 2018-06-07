@@ -5,7 +5,7 @@
     {
       "name": "Commercial",
       "code": "COMMERCIAL",
-      "usageCategoryMajor": "NonResidential",
+      "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "Indicates that the property is being used for Commercial purposes",
       "active": true,
       "tenantId": "pb"
@@ -28,7 +28,7 @@
     {
       "name": "Religious",
       "code": "RELIGIOUS",
-      "usageCategoryMajor": "NonResidential",
+      "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "the property is used for Religious purposes",
       "active": true,
       "tenantId": "pb"

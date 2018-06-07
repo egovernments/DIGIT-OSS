@@ -5,7 +5,7 @@
     {
       "name": "Offices",
       "code": "OFFICES",
-      "usageCategoryMinor": "Commercial",
+      "usageCategoryMinor": "COMMERCIAL",
       "description": "Indicates that the property is being used as an office",
       "active": true,
       "tenantId": "pb"
@@ -13,7 +13,7 @@
     {
       "name": "Retail",
       "code": "RETAIL",
-      "usageCategoryMinor": "Industrial",
+      "usageCategoryMinor": "INDUSTRIAL",
       "description": "The property is being utilized for Retail purposes",
       "active": true,
       "tenantId": "pb"
@@ -21,7 +21,7 @@
     {
       "name": "Event space",
       "code": "EVENTSPACE",
-      "usageCategoryMinor": "PublicSpaces",
+      "usageCategoryMinor": "PUBLICPSACES",
       "description": "the property is used for conductiong events",
       "active": true,
       "tenantId": "pb"
@@ -29,7 +29,7 @@
     {
       "name": "Food joints",
       "code": "FOODJOINTS",
-      "usageCategoryMinor": "PublicSpaces",
+      "usageCategoryMinor": "PUBLICPSACES",
       "description": "the property is used for Religious purposes",
       "active": true,
       "tenantId": "pb"
@@ -44,7 +44,7 @@
     {
       "name": "Industrial",
       "code": "Industrial",
-      "usageCategoryMinor": "Commercial",
+      "usageCategoryMinor": "COMMERCIAL",
       "description": "the property is used for Industrial purposes",
       "active": true
     }

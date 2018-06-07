@@ -2,60 +2,26 @@
   "tenantId": "pb",
   "moduleName": "PropertyTax",
   "PropertySubType": [
-    {
-      "name": "govt hostel",
-      "code": "hostel",
-      "propertyType": "p678",
-      "description": " hostel",
-      "active": true,
-      "tenantId": "pb"
-    },
-    {
-      "name": "Sunny Hospital",
-      "code": "SH",
-      "propertyType": "p3334",
-      "description": "sunny\u0027s hospital",
-      "active": true,
-      "tenantId": "pb"
-    },
-    {
-      "name": "property 2",
-      "code": "prop2",
-      "propertyType": "zzz444",
-      "description": "govt",
-      "active": true,
-      "tenantId": "pb"
-    },
-    {
-      "name": "Property1",
-      "code": "Prop1",
-      "propertyType": "BUILTUP",
-      "description": "built already",
-      "active": true,
-      "tenantId": "pb"
-    },
-    {
-      "name": "Independent Building",
-      "code": "INDEPENDENTBUILDING",
-      "propertyType": "sch",
-      "description": "A seperate bungalow type house",
-      "active": true,
-      "tenantId": "pb"
-    },
-    {
-      "name": "Apartment",
-      "code": "APARTMENT",
-      "propertyType": "12345",
-      "description": "A flat owned within an aparment",
-      "active": true,
-      "tenantId": "pb"
-    },
-    {
-      "name": "Row Houses",
-      "code": "ROWHOUSES",
-      "propertyType": "BUILTUP",
-      "description": "A colony of independent houses",
-      "active": true
-    }
-  ]
+  {
+    "tenantId": "pb",
+    "code": "INDEPENDENTBUILDING",
+    "description": "A seperate bungalow type house",
+    "propertyType":"BUILTUP",
+    "active": true
+  },
+  {
+    "tenantId": "pb",
+    "code": "APARTMENT",
+    "description": "A flat owned within an aparment",
+    "propertyType":"BUILTUP",
+    "active": true
+  },
+  {
+    "tenantId": "pb",
+    "code": "ROWHOUSES",
+    "description": "A colony of independent houses",
+    "propertyType":"BUILTUP",
+    "active": true
+  }
+]
 }

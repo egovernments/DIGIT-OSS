@@ -3,6 +3,7 @@
   "moduleName": "PropertyTax",
   "PropertyType": [
     {
+<<<<<<< Updated upstream
       "name": "Shared",
       "code": "SharedProperty",
       "description": "none",
@@ -73,6 +74,8 @@
       "tenantId": "pb"
     },
     {
+=======
+>>>>>>> Stashed changes
       "name": "Vacant",
       "code": "VACANT",
       "description": "Vacant land or properties with no building",
