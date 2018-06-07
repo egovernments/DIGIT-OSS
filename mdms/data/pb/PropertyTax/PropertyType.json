@@ -3,6 +3,13 @@
   "moduleName": "PropertyTax",
   "PropertyType": [
     {
+      "name": "IndependantProperty",
+      "code": "IndependantProperty",
+      "description": "Sample",
+      "active": true,
+      "tenantId": "pb"
+    },
+    {
       "name": "Vacant",
       "code": "VACANT",
       "description": "Vacant land or properties with no building",
