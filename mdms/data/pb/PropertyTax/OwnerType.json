@@ -1,0 +1,46 @@
+{
+  "tenantId": "pb",
+  "moduleName": "PropertyTax",
+  "OwnerType": [
+    {
+      "name": "Freedom Fighter",
+      "code": "FREEDOMFIGHTER",
+      "description": "Freedom Fighters, who are receiving pension from the Central or State Government",
+      "exemptionRate": 	100,
+      "tenantId": "pb",
+      "active":true
+    },
+    {
+      "name": "Below Poverty Line",
+      "code": "BPL",
+      "description": "Persons living below poverty line",
+      "exemptionRate": 	100,
+      "tenantId": "pb",
+      "active":true
+    },
+    {
+      "name": "Ex-Service Man/Woman",
+      "code": "EXSERVICEMAN",
+      "description": "Persons, who had served, or are serving, in any rank, whether as a combatant or a non-combatant, in the Naval, Military or Air Force",
+      "exemptionRate": 	100,
+      "tenantId": "pb",
+      "active":true
+    },
+    {
+      "name": "Widow",
+      "code": "WIDOWS",
+      "description": "Widows",
+      "exemptionRate": 	50,
+      "tenantId": "pb",
+      "active":true
+    },
+    {
+      "name": "Handicap",
+      "code": "HANDICAP",
+      "description": "Handicapped persons(who are as if being assesses entitled for the time being to the benefits of deduction under section 80 U of the Income Tax Act, 1961;)",
+      "exemptionRate": 	100,
+      "tenantId": "pb",
+      "active": true
+    }
+  ]
+}

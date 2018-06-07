@@ -10939,21 +10939,45 @@
       "orderNumber": 1,
       "parentModule": "",
       "enabled": false,
-      "serviceCode": "pt-services",
+      "serviceCode": "pt-services-v2",
       "code": "null",
       "path": ""
     },
     {
       "id": 1550,
-      "name": "DraftCreate",
+      "name": "DraftSearch",
       "url": "/pt-services-v2/drafts/_search",
       "displayName": "Draft Search",
       "orderNumber": 1,
       "parentModule": "",
       "enabled": false,
-      "serviceCode": "pt-services",
+      "serviceCode": "pt-services-v2",
       "code": "null",
       "path": ""
     },
+    {
+      "id": 1551,
+      "name": "BillingSlabCreate",
+      "url": "/pt-calculator-v2/billing-slab/_create",
+      "displayName": "Draft Search",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "pt-calculator-v2",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1552,
+      "name": "BillingSlabSearch",
+      "url": "/pt-calculator-v2/billing-slab/_search",
+      "displayName": "Draft Search",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "pt-calculator-v2",
+      "code": "null",
+      "path": ""
+    }
   ]
 }
