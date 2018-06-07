@@ -3,6 +3,13 @@
   "moduleName": "PropertyTax",
   "PropertyType": [
     {
+      "name": "Independant Property",
+      "code": "IndependantProperty",
+      "description": "none",
+      "active": true,
+      "tenantId": "pb"
+    },
+    {
       "name": "Hosptital ",
       "code": "H",
       "description": "hospital govt",
