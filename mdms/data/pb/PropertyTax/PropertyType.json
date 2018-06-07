@@ -3,6 +3,13 @@
   "moduleName": "PropertyTax",
   "PropertyType": [
     {
+      "name": "Occupied",
+      "code": "OccupiedProperty",
+      "description": "",
+      "active": true,
+      "tenantId": "pb"
+    },
+    {
       "name": "SharedProperty",
       "code": "SharedProperty",
       "description": "SharedProperty Sample",
