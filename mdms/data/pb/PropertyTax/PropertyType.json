@@ -6,7 +6,7 @@
       "name": "Shared Property",
       "code": "SharedProperty",
       "description": "none",
-      "active": "",
+      "active": true,
       "tenantId": "pb"
     },
     {
