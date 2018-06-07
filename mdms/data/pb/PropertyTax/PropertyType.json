@@ -3,7 +3,7 @@
   "moduleName": "PropertyTax",
   "PropertyType": [
     {
-      "name": "Shared Property",
+      "name": "Shared",
       "code": "SharedProperty",
       "description": "none",
       "active": true,
