@@ -21,7 +21,7 @@
     {
       "name": "Event space",
       "code": "EVENTSPACE",
-      "usageCategoryMinor": "PUBLICPSACES",
+      "usageCategoryMinor": "PUBLICSPACES",
       "description": "the property is used for conductiong events",
       "active": true,
       "tenantId": "pb"
@@ -29,7 +29,7 @@
     {
       "name": "Food joints",
       "code": "FOODJOINTS",
-      "usageCategoryMinor": "PUBLICPSACES",
+      "usageCategoryMinor": "PUBLICSPACES",
       "description": "the property is used for Religious purposes",
       "active": true,
       "tenantId": "pb"
