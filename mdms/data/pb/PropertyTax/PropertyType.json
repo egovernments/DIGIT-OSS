@@ -31,10 +31,11 @@
       "tenantId": "pb"
     },
     {
-      "name": "Vacant",
+      "name": "Vacant Land",
       "code": "VACANT",
       "description": "Vacant land or properties with no building",
-      "active": true
+      "active": true,
+      "tenantId": "pb"
     },
     {
       "name": "Built Up",
