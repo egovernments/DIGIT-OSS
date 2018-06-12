@@ -17,7 +17,7 @@
       "tenantId": "pb"
     },
     {
-      "name": "SharedProperty",
+      "name": "Flat/Part of Building",
       "code": "SharedProperty",
       "description": "SharedProperty Sample",
       "active": true,
