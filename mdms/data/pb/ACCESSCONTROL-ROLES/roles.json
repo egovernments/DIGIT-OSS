@@ -215,7 +215,12 @@
     {
       "code": "DGRO",
       "name": "Department Grievance Routing Officer",
-      "description": "EMPLOYEE who addresses grievances"
+      "description": "GRO for a sepcific dept who assings the grievances to last mile employees"
+    },
+    {
+      "code": "CSR",
+      "name": "Customer Support Representative",
+      "description": "Employee who files and follows up complaints on behalf of the citizen"
     }
   ]
 }
