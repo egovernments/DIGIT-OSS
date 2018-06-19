@@ -13933,6 +13933,42 @@
       "actionid": 697,
       "actioncode": "",
       "tenantid": "pb.jalandhar"
+    },
+    {
+      "rolecode": "CSR",
+      "actionid": 1524,
+      "actioncode": "",
+      "tenantId": "pb.jalandhar"
+    },
+    {
+      "rolecode": "CSR",
+      "actionid": 1525,
+      "actioncode": "",
+      "tenantId": "pb.jalandhar"
+    },
+    {
+      "rolecode": "CSR",
+      "actionid": 1526,
+      "actioncode": "",
+      "tenantId": "pb.jalandhar"
+    },
+    {
+      "rolecode": "CSR",
+      "actionid": 1527,
+      "actioncode": "",
+      "tenantId": "pb.jalandhar"
+    },
+    {
+      "rolecode": "CSR",
+      "actionid": 605,
+      "actioncode": "",
+      "tenantId": "pb.jalandhar"
+    },
+    {
+      "rolecode": "CSR",
+      "actionid": 1523,
+      "actioncode": "",
+      "tenantId": "pb.jalandhar"
     }
   ]
 }

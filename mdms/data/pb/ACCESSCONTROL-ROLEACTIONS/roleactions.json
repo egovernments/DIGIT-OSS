@@ -14389,6 +14389,12 @@
       "actionid": 1523,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "CSR",
+      "actionid": 695,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
