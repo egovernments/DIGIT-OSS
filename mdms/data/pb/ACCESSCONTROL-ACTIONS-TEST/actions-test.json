@@ -10978,6 +10978,31 @@
       "serviceCode": "pt-calculator-v2",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1553,
+      "name": "RainmakerPGRReportMetadata",
+      "url": "/report/rainmaker-pgr/metadata/_get",
+      "displayName": "Rainmaker PGR report metadata",
+      "orderNumber": 1,
+      "parentModule": "147",
+      "enabled": true,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "Asset Management.Asset Reports.AssetImmovableRegister"
+    },
+    {
+      "id": 1554,
+      "name": "RainmakerPGRReport",
+      "url": "/report/rainmaker-pgr/_get",
+      "displayName": "Rainmaker PGR Report",
+      "orderNumber": 1,
+      "parentModule": "147",
+      "enabled": true,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "Asset Management.Asset Reports.AssetImmovableRegister"
     }
+    
   ]
 }
