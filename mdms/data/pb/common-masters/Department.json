@@ -3,47 +3,47 @@
   "moduleName": "common-masters",
   "Department": [
     {
-      "name": "ADMINISTRATION",
+      "name": "Administration",
       "code": "ADM",
       "active": "true"
     },
     {
-      "name": "ACCOUNTS",
+      "name": "Accounts",
       "code": "ACC",
       "active": "true"
     },
     {
-      "name": "ENGINEERING",
+      "name": "Engineering",
       "code": "ENG",
       "active": "true"
     },
     {
-      "name": "TOWN PLANNING",
+      "name": "Town Planning",
       "code": "TP",
       "active": "true"
     },
     {
-      "name": "REVENUE",
+      "name": "Revenue",
       "code": "REV",
       "active": "true"
     },
     {
-      "name": "PUBLIC HEALTH AND SANITATION",
+      "name": "Public Health and Sanitation",
       "code": "PHS",
       "active": "true"
     },
     {
-      "name": "URBAN POVERTY ALLEVIATION",
+      "name": "Urban poverty alleviation",
       "code": "UPA",
       "active": "true"
     },
     {
-      "name": "EDUCATION",
+      "name": "Education",
       "code": "EDU",
       "active": "true"
     },
     {
-      "name": "WATER SUPPLY",
+      "name": "Water Supply",
       "code": "WS",
       "active": "true" 
     }
