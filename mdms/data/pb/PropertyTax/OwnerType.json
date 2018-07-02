@@ -28,8 +28,8 @@
     },
     {
       "name": "Widow",
-      "code": "WIDOWS",
-      "description": "Widows",
+      "code": "WIDOW",
+      "description": "Widow",
       "exemptionRate": 	50,
       "tenantId": "pb",
       "active":true
