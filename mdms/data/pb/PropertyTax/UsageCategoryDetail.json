@@ -1,14 +1,16 @@
 {
   "tenantId": "pb",
   "moduleName": "PropertyTax",
-  "UsageCategoryDetail": [
-    {
+  "UsageCategoryDetail": [{
       "name": "Retail outlet",
       "code": "RO",
       "usageCategorySubMinor": "Retail",
-      "description": "buy anything",
+      "description": "Outlet where you can buy things for retail price",
       "active": true,
-      "tenantId": "pb"
+      "isExemptionEnabled": "true",
+      "exemptionRate": 3.5,
+      "exemptionMaxAmount": "400",
+      "exemptionFlatAmount": "200"
     },
     {
       "name": "Jagannath cola",
@@ -16,49 +18,76 @@
       "usageCategorySubMinor": "FoodJoints",
       "description": "cola and jalebi shop",
       "active": true,
-      "tenantId": "pb"
+      "isExemptionEnabled": "true",
+      "exemptionRate": 6.5,
+      "exemptionMaxAmount": "500",
+      "exemptionFlatAmount": "200"
     },
     {
       "name": "Grocery store",
       "code": "GROCERYSTORE",
       "usageCategorySubMinor": "RETAIL",
       "description": "Indicates that the property is being used as GroceryStore",
-      "active": true
+      "active": true,
+      "isExemptionEnabled": "true",
+      "exemptionRate": 5.5,
+      "exemptionMaxAmount": "600",
+      "exemptionFlatAmount": "200"
     },
     {
       "name": "Supermarkets",
       "code": "SUPERMARKETS",
       "usageCategorySubMinor": "RETAIL",
       "description": "The property is being utilized as Supermarkets",
-      "active": true
+      "active": true,
+      "isExemptionEnabled": "true",
+      "exemptionRate": 4.5,
+      "exemptionMaxAmount": "700",
+      "exemptionFlatAmount": "150"
     },
     {
       "name": "Clothes",
       "code": "CLOTHES",
       "usageCategorySubMinor": "RETAIL",
       "description": "the property is used for Clothes Retail",
-      "active": true
+      "active": true,
+      "isExemptionEnabled": "true",
+      "exemptionRate": 6.5,
+      "exemptionMaxAmount": "800",
+      "exemptionFlatAmount": "150"
     },
     {
       "name": "Electronics",
       "code": "ELECTRONICS",
       "usageCategorySubMinor": "RETAIL",
       "description": "the property is used for electronics retail",
-      "active": true
+      "active": true,
+      "isExemptionEnabled": "true",
+      "exemptionRate": 4.5,
+      "exemptionMaxAmount": "440",
+      "exemptionFlatAmount": "180"
     },
     {
       "name": "Pharmacy",
       "code": "PHARMACY",
       "usageCategorySubMinor": "RETAIL",
       "description": "the property is used as pharmacy",
-      "active": true
+      "active": true,
+      "isExemptionEnabled": "true",
+      "exemptionRate": 2.5,
+      "exemptionMaxAmount": "350",
+      "exemptionFlatAmount": "100"
     },
     {
       "name": "Industrial",
       "code": "INDUSTRIAL",
       "usageCategorySubMinor": "RETAIL",
       "description": "the property is used for Industrial purposes",
-      "active": true
+      "active": true,
+      "isExemptionEnabled": "true",
+      "exemptionRate": 9.5,
+      "exemptionMaxAmount": "2000",
+      "exemptionFlatAmount": "800"
     }
   ]
 }
