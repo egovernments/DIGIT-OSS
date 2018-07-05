@@ -1,5 +1,4 @@
 {
-  "tenantId": "pb",
   "moduleName": "PropertyTax",
   "UsageCategorySubMinor": [
     {
@@ -8,7 +7,7 @@
       "usageCategoryMinor": "COMMERCIAL",
       "description": "Indicates that the property is being used as an office",
       "active": true,
-      "tenantId": "pb"
+      "fromFY": "2018-19"
     },
     {
       "name": "Retail",
@@ -16,7 +15,12 @@
       "usageCategoryMinor": "INDUSTRIAL",
       "description": "The property is being utilized for Retail purposes",
       "active": true,
-      "tenantId": "pb"
+      "fromFY": "2018-19",
+      "exemption": {
+        "rate": 3.5,
+        "maxAmount": 400.0,
+        "flatAmount": 200.0
+      }
     },
     {
       "name": "Event space",
@@ -24,7 +28,7 @@
       "usageCategoryMinor": "PUBLICSPACES",
       "description": "the property is used for conductiong events",
       "active": true,
-      "tenantId": "pb"
+      "fromFY": "2018-19"
     },
     {
       "name": "Food joints",
@@ -32,21 +36,24 @@
       "usageCategoryMinor": "PUBLICSPACES",
       "description": "the property is used for Religious purposes",
       "active": true,
-      "tenantId": "pb"
+      "fromFY": "2018-19"
+
     },
     {
       "name": "Hotels",
       "code": "HOTELS",
       "usageCategoryMinor": "COMMERCIAL",
       "description": "the property is used as Hotels",
-      "active": true
+      "active": true,
+      "fromFY": "2018-19"
     },
     {
       "name": "Industrial",
       "code": "Industrial",
       "usageCategoryMinor": "COMMERCIAL",
       "description": "the property is used for Industrial purposes",
-      "active": true
+      "active": true,
+      "fromFY": "2018-19"
     }
   ]
 }
