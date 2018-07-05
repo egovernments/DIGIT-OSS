@@ -10994,7 +10994,7 @@
     {
       "id": 1554,
       "name": "RainmakerPGRReport",
-      "url": "/report/rainmaker-pgr/_get",
+      "url": "/rainmaker-pgr/v1/reports/_get",
       "displayName": "Rainmaker PGR Report",
       "orderNumber": 1,
       "parentModule": "147",
