@@ -7,7 +7,8 @@
       "code": "RO",
       "usageCategorySubMinor": "RETAIL",
       "description": "Outlet where you can buy things for retail price",
-      "active": true
+      "active": true,
+      "fromFY": "2018-19"
     },
     {
       "name": "Grocery store",
@@ -15,11 +16,11 @@
       "usageCategorySubMinor": "RETAIL",
       "description": "Indicates that the property is being used as GroceryStore",
       "active": true,
+      "fromFY": "2018-19",
       "exemption": {
         "rate": 5.5,
         "maxAmount": 600.0,
-        "flatAmount": 200.0,
-        "fromFY": "2018-19"
+        "flatAmount": 200.0
       }
     },
     {
@@ -28,11 +29,11 @@
       "usageCategorySubMinor": "RETAIL",
       "description": "The property is being utilized as Supermarkets",
       "active": true,
+      "fromFY": "2018-19",
       "exemption": {
         "rate": 4.5,
         "maxAmount": 700.0,
-        "flatAmount": 150.0,
-        "fromFY": "2018-19"
+        "flatAmount": 150.0
       }
     },
     {
@@ -41,11 +42,11 @@
       "usageCategorySubMinor": "RETAIL",
       "description": "the property is used for Clothes Retail",
       "active": true,
+      "fromFY": "2018-19",
       "exemption": {
         "rate": 6.5,
         "maxAmount": 800,
-        "flatAmount": 150.0,
-        "fromFY": "2018-19"
+        "flatAmount": 150.0
       }
     },
     {
@@ -54,11 +55,11 @@
       "usageCategorySubMinor": "RETAIL",
       "description": "the property is used for electronics retail",
       "active": true,
+      "fromFY": "2018-19",
       "exemption": {
         "rate": null,
         "maxAmount": null,
-        "flatAmount": 180.0,
-        "fromFY": "2018-19"
+        "flatAmount": 180.0
       }
     },
     {
@@ -67,11 +68,11 @@
       "usageCategorySubMinor": "RETAIL",
       "description": "the property is used as pharmacy",
       "active": true,
+      "fromFY": "2018-19",
       "exemption": {
         "rate": 2.5,
         "maxAmount": 350.0,
-        "flatAmount": 100.0,
-        "fromFY": "2018-19"
+        "flatAmount": 100.0
       }
     },
     {
@@ -80,11 +81,11 @@
       "usageCategorySubMinor": "RETAIL",
       "description": "the property is used for Industrial purposes",
       "active": true,
+      "fromFY": "2018-19",
       "exemption": {
         "rate": 9.5,
         "maxAmount": 2000.0,
-        "flatAmount": 800.0,
-        "fromFY": "2018-19"
+        "flatAmount": 800.0
       }
     }
   ]
