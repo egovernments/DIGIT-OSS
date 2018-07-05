@@ -1,5 +1,4 @@
 {
-  "tenantId": "pb",
   "moduleName": "PropertyTax",
   "UsageCategoryMinor": [
     {
@@ -8,7 +7,7 @@
       "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "Indicates that the property is being used for Commercial purposes",
       "active": true,
-      "tenantId": "pb"
+      "fromFY": "2018-19"
     },
     {
       "name": "Industrial",
@@ -16,14 +15,15 @@
       "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "The property is being utilized for Non Industrial purposes",
       "active": true,
-      "tenantId": "pb"
+      "fromFY": "2018-19"
     },
     {
       "name": "Institutional",
       "code": "INSTITUTIONAL",
       "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "the property is used for Institutional purposes",
-      "active": true
+      "active": true,
+      "fromFY": "2018-19"
     },
     {
       "name": "Religious",
@@ -31,14 +31,23 @@
       "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "the property is used for Religious purposes",
       "active": true,
-      "tenantId": "pb"
+      "exemption": {
+        "rate": 100,
+        "maxAmount": null,
+        "flatAmount": null
+      }
     },
     {
       "name": "Public spaces",
       "code": "PUBLICSPACES",
       "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "the property is used as public spaces",
-      "active": true
+      "active": true,
+      "exemption": {
+        "rate": 100,
+        "maxAmount": null,
+        "flatAmount": null
+      }
     }
   ]
 }
