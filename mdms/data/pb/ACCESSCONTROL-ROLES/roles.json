@@ -221,6 +221,11 @@
       "code": "CSR",
       "name": "Customer Support Representative",
       "description": "Employee who files and follows up complaints on behalf of the citizen"
+    },
+    {
+      "rolecode": "PGR-ADMIN",
+      "name": "PGR Administrator",
+      "description": "Admin role that has super access over the system"
     }
   ]
 }
