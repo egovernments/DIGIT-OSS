@@ -12,10 +12,9 @@
       "type": "CITY",
       "twitterUrl": "https://twitter.com/search?q=%23jalandhar",
       "facebookUrl": "https://www.facebook.com/city/jalandhar-Punjab",
-      "emailId": "commissioner.mcj@gmail.com",
+      "emailId": "complaints.mcj@gmail.com",
       "OfficeTimings": {
-        "Mon - Fri": "9.00 AM - 6.00 PM",
-        "Sat": "9.00 AM - 12.00 PM"
+        "Mon - Fri": "9.00 AM - 6.00 PM"
       },
       "city": {
         "name": "Jalandhar",
@@ -30,9 +29,8 @@
         "captcha": null,
         "code": null
       },
-      "address": "1st Floor, Dr. B.R.Ambedkar Admin Complex, Jalandhar,Punjab",
-      "contactNumber": "0181-2227015",
-      "helpLineNumber": "0181-2226497"
+      "address": "Municipal Corporation Office, Dr. B.R.Ambedkar Admin Complex, Nehru Garden, Jalandhar City-144001",
+      "contactNumber": "0181-2227015"
     }
   ]
 }
