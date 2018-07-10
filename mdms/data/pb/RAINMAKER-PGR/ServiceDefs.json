@@ -49,7 +49,7 @@
       "keywords": "water, supply, connection, damage, repair, broken, pipe, piping, tap",
       "department": "Operation & Maintenance",
       "slaHours": 336,
-      "menuPath": "OperationAndMaintenance "
+      "menuPath": "Sewage"
     },
     {
       "serviceCode": "Block/OverflowingSewage",
