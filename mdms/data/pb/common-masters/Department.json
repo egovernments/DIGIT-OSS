@@ -3,49 +3,39 @@
   "moduleName": "common-masters",
   "Department": [
     {
-      "name": "Administration",
-      "code": "ADM",
+      "name": "Street Lights",
+      "code": "DEPT_1",
       "active": "true"
     },
     {
-      "name": "Accounts",
-      "code": "ACC",
+      "name": "Building & Roads",
+      "code": "DEPT_2",
       "active": "true"
     },
     {
-      "name": "Engineering",
-      "code": "ENG",
+      "name": "Health & Sanitation",
+      "code": "DEPT_3",
       "active": "true"
     },
     {
-      "name": "Town Planning",
-      "code": "TP",
+      "name": "Operation & Maintenance",
+      "code": "DEPT_4",
       "active": "true"
     },
     {
-      "name": "Revenue",
-      "code": "REV",
+      "name": "Horticulture",
+      "code": "DEPT_5",
       "active": "true"
     },
     {
-      "name": "Public Health and Sanitation",
-      "code": "PHS",
+      "name": "Building Branch",
+      "code": "DEPT_6",
       "active": "true"
     },
     {
-      "name": "Urban poverty alleviation",
-      "code": "UPA",
+      "name": "Citizen service desk",
+      "code": "DEPT_7",
       "active": "true"
-    },
-    {
-      "name": "Education",
-      "code": "EDU",
-      "active": "true"
-    },
-    {
-      "name": "Water Supply",
-      "code": "WS",
-      "active": "true" 
     }
   ]
 }
