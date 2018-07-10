@@ -36,6 +36,11 @@
       "name": "Citizen service desk",
       "code": "DEPT_7",
       "active": "true"
+    },
+    {
+      "name": "Complaint Cell",
+      "code": "DEPT_8",
+      "active": "true"
     }
   ]
 }

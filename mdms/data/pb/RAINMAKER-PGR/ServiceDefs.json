@@ -5,7 +5,7 @@
     {
       "serviceCode": "NoStreetlight",
       "keywords": "streetlight, light, repair, work, pole, electric, power, repair, damage, fix",
-      "department": "Streetlights",
+      "department": "Streetights",
       "slaHours": 336,
       "menuPath": "StreetLights"
     },
@@ -24,7 +24,7 @@
       "menuPath": "Garbage"
     },
     {
-      "serviceCode": "Replace/ProvideGarbageBin",
+      "serviceCode": "ReplaceOrProvideGarbageBin",
       "keywords": "garbage, waste, bin, dustbin, clean, remove, sanitation, overflow, smell, health, throw, dispose",
       "department": "Health & Sanitation",
       "slaHours": 336,
@@ -38,7 +38,7 @@
       "menuPath": "Garbage"
     },
     {
-      "serviceCode": "Overflowing/BlockedDrain",
+      "serviceCode": "OverflowingOrBlockedDrain",
       "keywords": "drain, block, clean, debris, silt, drainage, water, clean, roadside, flow, remove, waste, garbage, clear, overflow, canal, fill, stagnate, rain, sanitation, sand, pipe, clog, stuck",
       "department": "Operation & Maintenance",
       "slaHours": 336,
@@ -52,7 +52,7 @@
       "menuPath": "WaterandSewage"
     },
     {
-      "serviceCode": "Block/OverflowingSewage",
+      "serviceCode": "BlockOrOverflowingSewage",
       "keywords": "water, supply, connection, damage, repair, broken, pipe, piping, tap",
       "department": "Operation & Maintenance",
       "slaHours": 336,
@@ -115,7 +115,7 @@
       "menuPath": "RoadsAndFootpaths"
     },
     {
-      "serviceCode": "Damaged/BlockedFootpath",
+      "serviceCode": "DamagedOrBlockedFootpath",
       "keywords": "footpath, repair, broken, surface, damage, patch, hole, maintenance, walk, path",
       "department": "Building & Roads",
       "slaHours": 336,
