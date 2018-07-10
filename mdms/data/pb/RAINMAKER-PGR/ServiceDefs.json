@@ -213,7 +213,7 @@
       "menuPath": "OpenDefecation"
     },
     {
-      "serviceCode": "Parks",
+      "serviceCode": "ParkRequiresMaintenance",
       "keywords": "open, defecation, waste, human, privy, toilet",
       "department": "Horticulture",
       "slaHours": 336,
