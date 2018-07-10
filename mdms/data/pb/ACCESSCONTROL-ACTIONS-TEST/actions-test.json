@@ -10787,7 +10787,6 @@
       "path": ""
     },
     {
-
       "id": 1538,
       "name": "ConstructionSubType",
       "url": "url",
@@ -10903,7 +10902,6 @@
       "code": "null",
       "path": "Property Tax.PT Masters.PropertyType",
       "navigationURL": "mdms/PropertyTax/PropertyType"
-
     },
     {
       "id": 1547,
@@ -11015,8 +11013,7 @@
       "code": "null",
       "path": "PGR.AllComplaints",
       "navigationURL": "all-complaints",
-      "leftIcon": "custom:open-complaints" ,
-	  
+      "leftIcon": "custom:open-complaints"
     },
     {
       "id": 1556,
@@ -11030,8 +11027,7 @@
       "code": "null",
       "path": "PGR.MyComplaints",
       "navigationURL": "my-complaints",
-      "leftIcon": "alert:warning" ,
-	  
+      "leftIcon": "alert:warning"
     },
     {
       "id": 1557,
@@ -11045,7 +11041,7 @@
       "code": "null",
       "path": "PGR.MyComplaints",
       "navigationURL": "all-complaints",
-      "leftIcon": "custom:open-complaints" ,
+      "leftIcon": "custom:open-complaints"
     },
     {
       "id": 1558,
@@ -11059,7 +11055,7 @@
       "code": "null",
       "path": "PGR.MyComplaints",
       "navigationURL": "closed-complaints",
-      "leftIcon": "custom:closed-complaints" ,
+      "leftIcon": "custom:closed-complaints"
     },
     {
       "id": 1559,
@@ -11073,7 +11069,7 @@
       "code": "null",
       "path": "PGR.CreateComplaint",
       "navigationURL": "create-complaint",
-      "leftIcon": "content:add" ,
+      "leftIcon": "content:add"
     },
     {
       "id": 1560,
@@ -11086,8 +11082,8 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "PGR.PGR Reports.ComplaintTypeWiseReport",
-      "navigationURL": "report/rainmaker-pgr/ComplaintTypeWiseReport", 
-      "leftIcon": "action:assignment" ,
+      "navigationURL": "report/rainmaker-pgr/ComplaintTypeWiseReport",
+      "leftIcon": "action:assignment"
     },
     {
       "id": 1561,
@@ -11101,7 +11097,7 @@
       "code": "null",
       "path": "PGR.PGR Reports.DepartmentWiseReport",
       "navigationURL": "report/rainmaker-pgr/DepartmentWiseReport",
-      "leftIcon": "action:assignment" ,
+      "leftIcon": "action:assignment"
     },
     {
       "id": 1562,
@@ -11114,8 +11110,8 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "PGR.PGR Reports.AOWiseReport",
-      "navigationURL": "report/rainmaker-pgr/AOWiseReport", 
-      "leftIcon": "action:assignment" ,
+      "navigationURL": "report/rainmaker-pgr/AOWiseReport",
+      "leftIcon": "action:assignment"
     },
     {
       "id": 1563,
@@ -11129,7 +11125,7 @@
       "code": "null",
       "path": "PGR.PGR Reports.FunctionaryWiseReport",
       "navigationURL": "report/rainmaker-pgr/FunctionaryWiseReport",
-      "leftIcon": "action:assignment" ,
+      "leftIcon": "action:assignment"
     },
     {
       "id": 1564,
@@ -11143,7 +11139,7 @@
       "code": "null",
       "path": "PGR.PGR Reports.SourceWiseReport",
       "navigationURL": "report/rainmaker-pgr/SourceWiseReport",
-      "leftIcon": "action:assignment" ,
+      "leftIcon": "action:assignment"
     },
     {
       "id": 1565,
