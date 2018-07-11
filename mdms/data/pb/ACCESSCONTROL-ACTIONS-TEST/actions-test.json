@@ -11027,7 +11027,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "MyComplaints",
-      "navigationURL": "my-complaints",
+      "navigationURL": "/",
       "leftIcon": "alert:warning",
       "rightIcon": ""
     },
