@@ -1,56 +1,60 @@
 {
   "tenantId": "pb",
   "moduleName": "PropertyTax",
-  "UsageCategoryMinor": [
+  "UsageCategorySubMinor": [
     {
-      "name": "Commercial",
-      "code": "COMMERCIAL",
-      "usageCategoryMajor": "NONRESIDENTIAL",
-      "description": "Indicates that the property is being used for Commercial purposes",
+      "name": "Offices",
+      "code": "OFFICES",
+      "usageCategoryMinor": "COMMERCIAL",
+      "description": "Indicates that the property is being used as an office",
+      "active": true,
+      "fromFY": "2018-19"
+    },
+    {
+      "name": "Retail",
+      "code": "RETAIL",
+      "usageCategoryMinor": "INDUSTRIAL",
+      "description": "The property is being utilized for Retail purposes",
+      "active": true,
+      "fromFY": "2018-19",
+      "exemption": {
+        "rate": 3.5,
+        "maxAmount": 400.0,
+        "flatAmount": 200.0
+      }
+    },
+    {
+      "name": "Event space",
+      "code": "EVENTSPACE",
+      "usageCategoryMinor": "PUBLICSPACES",
+      "description": "the property is used for conductiong events",
+      "active": true,
+      "fromFY": "2018-19"
+    },
+    {
+      "name": "Food joints",
+      "code": "FOODJOINTS",
+      "usageCategoryMinor": "PUBLICSPACES",
+      "description": "the property is used for Religious purposes",
+      "active": true,
+      "fromFY": "2018-19"
+
+    },
+    {
+      "name": "Hotels",
+      "code": "HOTELS",
+      "usageCategoryMinor": "COMMERCIAL",
+      "description": "the property is used as Hotels",
       "active": true,
       "fromFY": "2018-19"
     },
     {
       "name": "Industrial",
-      "code": "INDUSTRIAL",
-      "usageCategoryMajor": "NONRESIDENTIAL",
-      "description": "The property is being utilized for Non Industrial purposes",
+      "code": "Industrial",
+      "usageCategoryMinor": "COMMERCIAL",
+      "description": "the property is used for Industrial purposes",
       "active": true,
       "fromFY": "2018-19"
-    },
-    {
-      "name": "Institutional",
-      "code": "INSTITUTIONAL",
-      "usageCategoryMajor": "NONRESIDENTIAL",
-      "description": "the property is used for Institutional purposes",
-      "active": true,
-      "fromFY": "2018-19"
-    },
-    {
-      "name": "Religious",
-      "code": "RELIGIOUS",
-      "usageCategoryMajor": "NONRESIDENTIAL",
-      "description": "the property is used for Religious purposes",
-      "active": true,
-      "fromFY": "2018-19",
-      "exemption": {
-        "rate": 100,
-        "maxAmount": null,
-        "flatAmount": null
-      }
-    },
-    {
-      "name": "Public spaces",
-      "code": "PUBLICSPACES",
-      "usageCategoryMajor": "NONRESIDENTIAL",
-      "description": "the property is used as public spaces",
-      "active": true,
-      "fromFY": "2018-19",
-      "exemption": {
-        "rate": 100,
-        "maxAmount": null,
-        "flatAmount": null
-      }
     }
   ]
 }
