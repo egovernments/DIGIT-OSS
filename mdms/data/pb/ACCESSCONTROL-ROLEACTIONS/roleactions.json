@@ -14595,19 +14595,13 @@
       "tenantId": "pb"
     },
     {
-      "rolecode": "CITIZEN",
+      "rolecode": "CSR",
       "actionid": 1555,
       "actioncode": "",
       "tenantId": "pb"
     },
     {
       "rolecode": "CITIZEN",
-      "actionid": 1559,
-      "actioncode": "",
-      "tenantId": "pb"
-    },
-    {
-      "rolecode": "CSR",
       "actionid": 1556,
       "actioncode": "",
       "tenantId": "pb"
