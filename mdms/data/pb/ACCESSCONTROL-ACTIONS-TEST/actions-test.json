@@ -11011,23 +11011,25 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.AllComplaints",
+      "path": "AllComplaints",
       "navigationURL": "all-complaints",
-      "leftIcon": "custom:open-complaints"
+      "leftIcon": "custom:open-complaints",
+      "rightIcon": ""
     },
     {
       "id": 1556,
       "name": "MyComplaints",
       "url": "url",
-      "displayName": "My Complaints",
+      "displayName": "Complaints",
       "orderNumber": 1,
       "parentModule": "rainmaker-pgr",
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.MyComplaints",
+      "path": "MyComplaints",
       "navigationURL": "my-complaints",
-      "leftIcon": "alert:warning"
+      "leftIcon": "alert:warning",
+      "rightIcon": ""
     },
     {
       "id": 1557,
@@ -11039,9 +11041,10 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.MyComplaints",
+      "path": "MyComplaints",
       "navigationURL": "all-complaints",
-      "leftIcon": "custom:open-complaints"
+      "leftIcon": "custom:open-complaints",
+      "rightIcon": ""
     },
     {
       "id": 1558,
@@ -11053,9 +11056,10 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.MyComplaints",
+      "path": "MyComplaints",
       "navigationURL": "closed-complaints",
-      "leftIcon": "custom:closed-complaints"
+      "leftIcon": "custom:closed-complaints",
+      "rightIcon": ""
     },
     {
       "id": 1559,
@@ -11067,9 +11071,10 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.CreateComplaint",
+      "path": "CreateComplaint",
       "navigationURL": "create-complaint",
-      "leftIcon": "content:add"
+      "leftIcon": "content:add",
+      "rightIcon": ""
     },
     {
       "id": 1560,
@@ -11081,9 +11086,10 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.PGR Reports.ComplaintTypeWiseReport",
+      "path": "PGR Reports.ComplaintTypeWiseReport",
       "navigationURL": "report/rainmaker-pgr/ComplaintTypeWiseReport",
-      "leftIcon": "action:assignment"
+      "leftIcon": "action:assignment",
+      "rightIcon": ""
     },
     {
       "id": 1561,
@@ -11095,9 +11101,10 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.PGR Reports.DepartmentWiseReport",
+      "path": "PGR Reports.DepartmentWiseReport",
       "navigationURL": "report/rainmaker-pgr/DepartmentWiseReport",
-      "leftIcon": "action:assignment"
+      "leftIcon": "action:assignment",
+      "rightIcon": ""
     },
     {
       "id": 1562,
@@ -11109,9 +11116,10 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.PGR Reports.AOWiseReport",
+      "path": "PGR Reports.AOWiseReport",
       "navigationURL": "report/rainmaker-pgr/AOWiseReport",
-      "leftIcon": "action:assignment"
+      "leftIcon": "action:assignment",
+      "rightIcon": ""
     },
     {
       "id": 1563,
@@ -11123,9 +11131,10 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.PGR Reports.FunctionaryWiseReport",
-      "navigationURL": "report/rainmaker-pgr/FunctionaryWiseReport",
-      "leftIcon": "action:assignment"
+      "path": "PGR Reports.ULBEmployeeWiseReport",
+      "navigationURL": "report/rainmaker-pgr/ULBEmployeeWiseReport",
+      "leftIcon": "action:assignment",
+      "rightIcon": ""
     },
     {
       "id": 1564,
@@ -11137,9 +11146,10 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.PGR Reports.SourceWiseReport",
+      "path": "PGR Reports.SourceWiseReport",
       "navigationURL": "report/rainmaker-pgr/SourceWiseReport",
-      "leftIcon": "action:assignment"
+      "leftIcon": "action:assignment",
+      "rightIcon": ""
     },
     {
       "id": 1565,
