@@ -1,4 +1,5 @@
 {
+  "tenantId": "pb",
   "moduleName": "PropertyTax",
   "UsageCategoryMinor": [
     {
@@ -31,6 +32,7 @@
       "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "the property is used for Religious purposes",
       "active": true,
+      "fromFY": "2018-19",
       "exemption": {
         "rate": 100,
         "maxAmount": null,
@@ -43,6 +45,7 @@
       "usageCategoryMajor": "NONRESIDENTIAL",
       "description": "the property is used as public spaces",
       "active": true,
+      "fromFY": "2018-19",
       "exemption": {
         "rate": 100,
         "maxAmount": null,
