@@ -7,7 +7,7 @@
         "code": "ADMIN",
         "name": "ADMIN"
       },
-      "boundary": [
+      "boundary":
         {
           "id": 1,
           "boundaryNum": 1,
@@ -14360,7 +14360,6 @@
             }
           ]
         }
-      ]
     }
   ]
 }
