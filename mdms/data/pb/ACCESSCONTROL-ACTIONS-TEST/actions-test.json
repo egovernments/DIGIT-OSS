@@ -11162,6 +11162,42 @@
       "serviceCode": "Employee",
       "code": "null",
       "path": "Employee Management.Employee Masters.Employee.CreateEmployees"
+    },
+    {
+      "id": 1566,
+      "name": "propertytax Estimate",
+      "url": "/pt-calculator-v2/propertytax/_estimate",
+      "displayName": "PropertyTaxEstimates",
+      "orderNumber": 0,
+      "parentModule": null,
+      "enabled": false,
+      "serviceCode": "PropertytaxCalculatorV2",
+      "code": "null",
+      "path": null
+    },
+    {
+      "id": 1567,
+      "name": "propertytax Calculation",
+      "url": "/pt-calculator-v2/propertytax/_calculation",
+      "displayName": "PropertyTaxCalculation",
+      "orderNumber": 0,
+      "parentModule": null,
+      "enabled": false,
+      "serviceCode": "PropertytaxCalculatorV2",
+      "code": "null",
+      "path": "Employee Management.Employee Masters.Employee.CreateEmployees"
+    },
+    {
+      "id": 1568,
+      "name": "propertytax Get Bill",
+      "url": "/pt-calculator-v2/propertytax/_getbill",
+      "displayName": "PropertyTaxGetBill",
+      "orderNumber": 2,
+      "parentModule": null,
+      "enabled": false,
+      "serviceCode": "PropertytaxCalculatorV2",
+      "code": "null",
+      "path": null
     }
   ]
 }
