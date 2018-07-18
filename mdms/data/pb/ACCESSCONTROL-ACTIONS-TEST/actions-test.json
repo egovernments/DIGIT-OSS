@@ -10956,7 +10956,7 @@
     {
       "id": 1551,
       "name": "BillingSlabCreate",
-      "url": "/pt-calculator-v2/billing-slab/_create",
+      "url": "/pt-calculator-v2/billingslab/_create",
       "displayName": "Draft Search",
       "orderNumber": 1,
       "parentModule": "",
@@ -10968,7 +10968,7 @@
     {
       "id": 1552,
       "name": "BillingSlabSearch",
-      "url": "/pt-calculator-v2/billing-slab/_search",
+      "url": "/pt-calculator-v2/billingslab/_search",
       "displayName": "Draft Search",
       "orderNumber": 1,
       "parentModule": "",
