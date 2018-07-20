@@ -112,7 +112,7 @@
       "active": true,
       "fromFY": "2016-17",
       "exemption": {
-        "rate": 0,
+        "rate": 0.0,
         "maxAmount": null,
         "flatAmount": null
       }
