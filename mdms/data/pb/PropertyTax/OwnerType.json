@@ -103,6 +103,19 @@
         "maxAmount": null,
         "flatAmount": null
       }
+    },
+    {
+      "name": "General",
+      "code": "GENERAL",
+      "description": " The average citizen for whom no exemptions apply by defaut",
+      "tenantId": "pb",
+      "active": true,
+      "fromFY": "2016-17",
+      "exemption": {
+        "rate": 0,
+        "maxAmount": null,
+        "flatAmount": null
+      }
     }
   ]
 }
