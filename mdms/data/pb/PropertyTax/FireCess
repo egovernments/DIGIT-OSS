@@ -1,0 +1,18 @@
+{
+  "tenantId": "pb",
+  "moduleName": "PropertyTax",
+  "FireCess": [
+    {
+      "rate": 13,
+      "minAmount": 500,
+      "flatAmount": 300,
+      "fromFY": "2018-19"
+    },
+    {
+      "rate": 10,
+      "minAmount": 400,
+      "flatAmount": 250,
+      "fromFY": "2014-15"
+    }
+  ]
+}
