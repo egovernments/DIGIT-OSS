@@ -11210,6 +11210,42 @@
       "serviceCode": "pt-services-v2",
       "code": "null",
       "path": ""
-    }
+    },
+    {
+    "id": 1570,
+    "name": "PGService Transaction Search",
+    "url": "/pg-service/transaction/v1/_search",
+    "displayName": "Transaction Search",
+    "orderNumber": 0,
+    "parentModule": "",
+    "enabled": false,
+    "serviceCode": "pg-service",
+    "code": "null",
+    "path": ""
+  },
+  {
+    "id": 1571,
+    "name": "PGService Transaction Create",
+    "url": "/pg-service/transaction/v1/_create",
+    "displayName": "Transaction Create",
+    "orderNumber": 1,
+    "parentModule": "",
+    "enabled": false,
+    "serviceCode": "pg-service",
+    "code": "null",
+    "path": ""
+  },
+  {
+    "id": 1572,
+    "name": "PGService Transaction Update",
+    "url": "/pg-service/transaction/v1/_update",
+    "displayName": "Transaction Update",
+    "orderNumber": 2,
+    "parentModule": "",
+    "enabled": false,
+    "serviceCode": "pg-service",
+    "code": "null",
+    "path": ""
+  }
   ]
 }
