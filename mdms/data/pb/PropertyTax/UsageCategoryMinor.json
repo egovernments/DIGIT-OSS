@@ -1,6 +1,6 @@
 {
   "tenantId": "pb",
-  "modulename": "PropertyTax",
+  "moduleName": "PropertyTax",
   "UsageCategoryMinor":  [
     {
       "name": "Commercial",
