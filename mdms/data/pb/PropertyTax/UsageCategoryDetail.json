@@ -1,100 +1,186 @@
 {
   "tenantId": "pb",
   "moduleName": "PropertyTax",
-  "UsageCategorySubMinor": [
+  "UsageCategoryDetail": [
     {
-      "name": "Residential",
+      "name": "Industrial",
+      "code": "Industrial",
+      "active": true,
+      "fromFY": "2017-18",
+      "usageCategorySubMinor": "COMMERCIAL",
+      "exemption": {
+        "rate": "10.1",
+        "maxAmount": "100",
+        "flatAmount": "1000"
+      }
+    },
+    {
+      "name": "RESIDENTIAL",
       "code": "RESIDENTIAL",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinor": "RESIDENTIAL"
+      "usageCategorySubMinor": "RESIDENTIAL"
+
     },
     {
-      "name": "Retail",
-      "code": "RETAIL",
+      "name": "Malls",
+      "code": "MALLS",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinor": "COMMERCIAL"
+      "usageCategorySubMinor": "RETAIL"
+
+    },
+    {
+      "name": "Grocery Store",
+      "code": "GROCERY",
+      "active": true,
+      "fromFY": "2013-14",
+      "usageCategorySubMinor": "RETAIL"
+
+    },
+    {
+      "name": "Pharmacy",
+      "code": "PHARMACY",
+      "active": true,
+      "fromFY": "2013-14",
+      "usageCategorySubMinor": "RETAIL"
+
     },
     {
       "name": "Hotels",
       "code": "HOTELS",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinor": "COMMERCIAL"
+      "usageCategorySubMinor": "HOTELS"
+
     },
     {
       "name": "Office Space",
       "code": "OFFICESPACE",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinor": "COMMERCIAL"
+      "usageCategorySubMinor": "OFFICESPACE"
+
     },
     {
-      "name": "Event Space ",
-      "code": "EVENTSPACE",
+      "name": "Community Hall",
+      "code": "COMMUNITYHALL",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinor": "COMMERCIAL"
+      "usageCategorySubMinor": "EVENTSPACE"
+
     },
     {
-      "name": "Food Joint",
-      "code": "FOODJOINT",
+      "name": "Marriage Place",
+      "code": "MARRIAGEPALACE",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinor": "COMMERCIAL"
+      "usageCategorySubMinor": "EVENTSPACE"
+
     },
     {
-      "name": "Entertainment",
-      "code": "ENTERTAINMENT",
+      "name": "Restaurant",
+      "code": "RESTAURANT",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinor": "COMMERCIAL"
+      "usageCategorySubMinor": "FOODJOINT"
+
     },
     {
-      "name": "Medical Facility",
-      "code": "MEDICALFACILITY",
+      "name": "Movie Theatre",
+      "code": "MOVIETHEATRE",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinor": "COMMERCIAL"
+      "usageCategorySubMinor": "ENTERTAINMENT"
+
+    },
+    {
+      "name": "Gaming center",
+      "code": "GAMINGCENTER",
+      "active": true,
+      "fromFY": "2013-14",
+      "usageCategorySubMinor": "ENTERTAINMENT"
+
+    },
+    {
+      "name": "Hospital",
+      "code": "HOSPITAL",
+      "active": true,
+      "fromFY": "2013-14",
+      "usageCategorySubMinor": "MEDICALFACILITY"
+
+    },
+    {
+      "name": "Dispensary",
+      "code": "DISPENSARY",
+      "active": true,
+      "fromFY": "2013-14",
+      "usageCategorySubMinor": "MEDICALFACILITY"
+
     },
     {
       "name": "Warehouse",
       "code": "WAREHOUSE",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinor": "INDUSTRIAL"
+      "usageCategorySubMinor": "WAREHOUSE"
+
     },
     {
       "name": "Manufacturing Facility",
       "code": "MANUFACTURINGFACILITY",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinor": "INDUSTRIAL"
+      "usageCategorySubMinor": "MANUFACTURINGFACILITY"
     },
     {
-      "name": "Educational",
-      "code": "EDUCATIONAL",
+      "name": "School",
+      "code": "SCHOOL",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinor": "INSTITUTIONAL"
+      "usageCategorySubMinor": "EDUCATIONAL"
     },
     {
-      "name": "Educational(govt. aided)",
-      "code": "EDUCATIONAL",
+      "name": "Colleges",
+      "code": "COLLEGES",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinor": "INSTITUTIONAL"
+      "usageCategorySubMinor": "EDUCATIONAL"
     },
     {
-      "name": "Others(care giving facilities)",
-      "code": "OTHERS",
+      "name": "Training Institutes",
+      "code": "TRAININGINSTITUTES",
       "active": true,
       "fromFY": "2013-14",
-      "exemption": {
-        "rate": "100"
-      },
-      "usageCategoryMinor": "INSTITUTIONAL"
+      "usageCategorySubMinor": "EDUCATIONAL"
+    },
+    {
+      "name": "Polytechnics",
+      "code": "POLYTECHNICS",
+      "active": true,
+      "fromFY": "2013-14",
+      "usageCategorySubMinor": "EDUCATIONAL"
+    },
+    {
+      "name": "Orphanage",
+      "code": "ORPHANAGE",
+      "active": true,
+      "fromFY": "2013-14",
+      "usageCategorySubMinor": "OTHERS"
+    },
+    {
+      "name": "Old age homes",
+      "code": "OLDAGEHOMES",
+      "active": true,
+      "fromFY": "2013-14",
+      "usageCategorySubMinor": "OTHERS"
+    },
+    {
+      "name": "Home for the disabled",
+      "code": "DISABLEDHOME",
+      "active": true,
+      "fromFY": "2013-14",
+      "usageCategorySubMinor": "OTHERS"
     },
     {
       "name": "Religious",
@@ -102,33 +188,33 @@
       "active": true,
       "fromFY": "2013-14",
       "exemption": {
-        "rate": "100"
+        "rate": "100.0"
       },
-      "usageCategoryMinor": "RELIGIOUS"
+      "usageCategorySubMinor": "RELIGIOUS"
     },
     {
       "name": "Parks",
       "code": "PARKS",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinor": "PUBLICSPACES"
+      "usageCategorySubMinor": "PARK"
     },
     {
       "name": "Libraries",
       "code": "LIBRARIES",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinor": "PUBLICSPACES"
+      "usageCategorySubMinor": "LIBRARIES"
     },
     {
-      "name": "Cremation/Burial Ground",
+      "name": "Cremation/ Burial Ground",
       "code": "CREMATION/BURIAL",
       "active": true,
       "fromFY": "2013-14",
       "exemption": {
-        "rate": "100"
+        "rate": "100.0"
       },
-      "usageCategoryMinor": "OTHERS"
+      "usageCategorySubMinor": "CREMATION/BURIAL"
     },
     {
       "name": "Stray Animal Care Center",
@@ -136,9 +222,9 @@
       "active": true,
       "fromFY": "2013-14",
       "exemption": {
-        "rate": "100"
+        "rate": "100.0"
       },
-      "usageCategoryMinor": "OTHERS"
+      "usageCategorySubMinor": "ANIMALCARE"
     },
     {
       "name": "Historical Building",
@@ -146,9 +232,9 @@
       "active": true,
       "fromFY": "2013-14",
       "exemption": {
-        "rate": "100"
+        "rate": "100.0"
       },
-      "usageCategoryMinor": "OTHERS"
+      "usageCategorySubMinor": "HISTORICAL"
     }
   ]
 }
