@@ -31,6 +31,36 @@
       },
       "address": "Municipal Corporation Office, Dr. B.R.Ambedkar Admin Complex, Nehru Garden, Jalandhar City-144001",
       "contactNumber": "0181-2227015"
-    }
+    },
+    {
+	"code": "pb.phagwara",
+	"name": "phagwara",
+	"description": "phagwara",
+	"logoId": null,
+	"imageId": null,
+	"domainUrl": "http://www.mcphagwara.com/index.php",
+	"type": "CITY",
+	"twitterUrl": null,
+	"facebookUrl": null,
+	"emailId": "comm.mcpgr@punjab.gov.in",
+	"OfficeTimings": {
+		"Mon - Fri": "9.00 AM - 6.00 PM"
+	},
+	"city": {
+		"name": "Phagwara",
+		"localName": null,
+		"districtCode": null,
+		"districtName": null,
+		"regionName": null,
+		"ulbGrade": null,
+		"longitude": 75.7708,
+		"latitude": 31.2240,
+		"shapeFileLocation": null,
+		"captcha": null,
+		"code": null
+	},
+	"address": "Town Hall, Phagwara, Punjab - 144401",
+	"contactNumber": "01824-260426"
+	}
   ]
 }
