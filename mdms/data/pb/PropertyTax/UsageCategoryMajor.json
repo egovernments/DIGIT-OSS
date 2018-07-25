@@ -2,27 +2,30 @@
   "tenantId": "pb",
   "moduleName": "PropertyTax",
   "UsageCategoryMajor":
-[
-  {
-    "name":"Residential",
-    "code":"RESIDENTIAL",
-    "description":"Indicates that the property is being used for residential purposes",
-    "active": true,
-    "fromFY": "2018-19"
-  },
-  {
-    "name":"Non-Residential",
-    "code":"NONRESIDENTIAL",
-    "description":"The property is being utilized for Non residential purposes eg: commercial, educational etc...",
-    "active": true,
-    "fromFY": "2018-19"
-  },
-  {
-    "name":"Mixed",
-    "code":"MIXED",
-    "description":"the property is used for both residential and other purposes",
-    "active": true,
-    "fromFY": "2018-19"
-  }
-]
+  [
+    {
+      "name": "RESIDENTIAL",
+      "code": "RESIDENTIAL",
+      "active": true,
+      "fromFY": "2017-18"
+    },
+    {
+      "name": "NONRESIDENTIAL",
+      "code": "NONRESIDENTIAL",
+      "active": true,
+      "fromFY": "2017-18"
+    },
+    {
+      "name": "Mixed",
+      "code": "MIXED",
+      "active": true,
+      "fromFY": "2017-18"
+    },
+    {
+      "name": "All",
+      "code": "ALL",
+      "active": true,
+      "fromFY": "2017-18"
+    }
+  ]
 }
