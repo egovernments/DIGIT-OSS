@@ -1,56 +1,68 @@
 {
   "tenantId": "pb",
-  "moduleName": "PropertyTax",
-  "UsageCategoryMinor": [
+  "modulename": "PropertyTax",
+  "UsageCategoryMinor":  [
     {
       "name": "Commercial",
       "code": "COMMERCIAL",
-      "usageCategoryMajor": "NONRESIDENTIAL",
-      "description": "Indicates that the property is being used for Commercial purposes",
       "active": true,
-      "fromFY": "2018-19"
+      "fromFY": "2013-14",
+      "usageCategoryMajor": "NONRESIDENTIAL"
     },
     {
       "name": "Industrial",
       "code": "INDUSTRIAL",
-      "usageCategoryMajor": "NONRESIDENTIAL",
-      "description": "The property is being utilized for Non Industrial purposes",
       "active": true,
-      "fromFY": "2018-19"
+      "fromFY": "2013-14",
+      "usageCategoryMajor": "NONRESIDENTIAL"
     },
     {
       "name": "Institutional",
       "code": "INSTITUTIONAL",
-      "usageCategoryMajor": "NONRESIDENTIAL",
-      "description": "the property is used for Institutional purposes",
       "active": true,
-      "fromFY": "2018-19"
+      "fromFY": "2013-14",
+      "usageCategoryMajor": "NONRESIDENTIAL"
     },
     {
       "name": "Religious",
       "code": "RELIGIOUS",
-      "usageCategoryMajor": "NONRESIDENTIAL",
-      "description": "the property is used for Religious purposes",
       "active": true,
-      "fromFY": "2018-19",
+      "fromFY": "2013-14",
       "exemption": {
-        "rate": 100,
-        "maxAmount": null,
-        "flatAmount": null
-      }
+        "rate": 100.0
+      },
+      "usageCategoryMajor": "NONRESIDENTIAL"
     },
     {
-      "name": "Public spaces",
+      "name": "Public Spaces",
       "code": "PUBLICSPACES",
-      "usageCategoryMajor": "NONRESIDENTIAL",
-      "description": "the property is used as public spaces",
       "active": true,
-      "fromFY": "2018-19",
+      "fromFY": "2013-14",
+      "usageCategoryMajor": "NONRESIDENTIAL"
+    },
+    {
+      "name": "Others",
+      "code": "OTHERS",
+      "active": true,
+      "fromFY": "2013-14",
       "exemption": {
-        "rate": 100,
-        "maxAmount": null,
-        "flatAmount": null
-      }
+        "rate": 100.0
+      },
+      "usageCategoryMajor": "NONRESIDENTIAL"
+    },
+    {
+      "name": "Residential",
+      "code": "RESIDENTIAL",
+      "active": true,
+      "fromFY": "2013-14",
+      "usageCategoryMajor": "RESIDENTIAL"
+    },
+    {
+      "name": "All",
+      "code": "ALL",
+      "active": true,
+      "fromFY": "2013-14",
+      "usageCategoryMajor": "ALL"
     }
   ]
 }
