@@ -7,84 +7,84 @@
       "code": "RESIDENTIAL",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinorCode": "RESIDENTIAL"
+      "usageCategoryMinor": "RESIDENTIAL"
     },
     {
       "name": "Retail",
       "code": "RETAIL",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinorCode": "COMMERCIAL"
+      "usageCategoryMinor": "COMMERCIAL"
     },
     {
       "name": "Hotels",
       "code": "HOTELS",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinorCode": "COMMERCIAL"
+      "usageCategoryMinor": "COMMERCIAL"
     },
     {
       "name": "Office Space",
       "code": "OFFICESPACE",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinorCode": "COMMERCIAL"
+      "usageCategoryMinor": "COMMERCIAL"
     },
     {
       "name": "Event Space ",
       "code": "EVENTSPACE",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinorCode": "COMMERCIAL"
+      "usageCategoryMinor": "COMMERCIAL"
     },
     {
       "name": "Food Joint",
       "code": "FOODJOINT",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinorCode": "COMMERCIAL"
+      "usageCategoryMinor": "COMMERCIAL"
     },
     {
       "name": "Entertainment",
       "code": "ENTERTAINMENT",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinorCode": "COMMERCIAL"
+      "usageCategoryMinor": "COMMERCIAL"
     },
     {
       "name": "Medical Facility",
       "code": "MEDICALFACILITY",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinorCode": "COMMERCIAL"
+      "usageCategoryMinor": "COMMERCIAL"
     },
     {
       "name": "Warehouse",
       "code": "WAREHOUSE",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinorCode": "INDUSTRIAL"
+      "usageCategoryMinor": "INDUSTRIAL"
     },
     {
       "name": "Manufacturing Facility",
       "code": "MANUFACTURINGFACILITY",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinorCode": "INDUSTRIAL"
+      "usageCategoryMinor": "INDUSTRIAL"
     },
     {
       "name": "Educational",
       "code": "EDUCATIONAL",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinorCode": "INSTITUTIONAL"
+      "usageCategoryMinor": "INSTITUTIONAL"
     },
     {
       "name": "Educational(govt. aided)",
       "code": "EDUCATIONAL",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinorCode": "INSTITUTIONAL"
+      "usageCategoryMinor": "INSTITUTIONAL"
     },
     {
       "name": "Others(care giving facilities)",
@@ -94,7 +94,7 @@
       "exemption": {
         "rate": "100"
       },
-      "usageCategoryMinorCode": "INSTITUTIONAL"
+      "usageCategoryMinor": "INSTITUTIONAL"
     },
     {
       "name": "Religious",
@@ -104,21 +104,21 @@
       "exemption": {
         "rate": "100"
       },
-      "usageCategoryMinorCode": "RELIGIOUS"
+      "usageCategoryMinor": "RELIGIOUS"
     },
     {
       "name": "Parks",
       "code": "PARKS",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinorCode": "PUBLICSPACES"
+      "usageCategoryMinor": "PUBLICSPACES"
     },
     {
       "name": "Libraries",
       "code": "LIBRARIES",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMinorCode": "PUBLICSPACES"
+      "usageCategoryMinor": "PUBLICSPACES"
     },
     {
       "name": "Cremation/Burial Ground",
@@ -128,7 +128,7 @@
       "exemption": {
         "rate": "100"
       },
-      "usageCategoryMinorCode": "OTHERS"
+      "usageCategoryMinor": "OTHERS"
     },
     {
       "name": "Stray Animal Care Center",
@@ -138,7 +138,7 @@
       "exemption": {
         "rate": "100"
       },
-      "usageCategoryMinorCode": "OTHERS"
+      "usageCategoryMinor": "OTHERS"
     },
     {
       "name": "Historical Building",
@@ -148,7 +148,7 @@
       "exemption": {
         "rate": "100"
       },
-      "usageCategoryMinorCode": "OTHERS"
+      "usageCategoryMinor": "OTHERS"
     }
   ]
 }
