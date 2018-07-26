@@ -4,32 +4,76 @@
   "SubOwnerShipCategory":
   [
     {
-      "name": "Individual",
-      "code": "INDIVIDUAL",
-      "ownerShipCategoryCode": "PRIVATE",
-      "description": "Property owned by an individual",
-      "active": true
+      "name": "Single Owner",
+      "code": "SINGLEOWNER",
+      "active": true,
+      "ownerShipCategory": "INDIVIDUALS"
     },
     {
-      "name": "Institutional",
-      "code": "INSTITUTIONAL",
-      "ownerShipCategoryCode": "PRIVATE",
-      "description": "Property owned by an insrtitution",
-      "active": true
+      "name": "Multiple Owners",
+      "code": "MULTIPLEOWNERS",
+      "active": true,
+      "ownerShipCategory": "INDIVIDUALS"
     },
     {
-      "name": "National",
-      "code": "NATIONAL",
-      "ownerShipCategoryCode": "GOVERNMENT",
-      "description": "Property owned by a central govt",
-      "active": true
+      "name": "Private Company",
+      "code": "PRIVATECOMPANY",
+      "active": true,
+      "ownerShipCategory": "INSTITUITIONALPRIVATE"
     },
     {
-      "name": "State Ulb",
-      "code": "STATEULB",
-      "ownerShipCategoryCode": "GOVERNMENT",
-      "description": "Property owned by a state govt",
-      "active": true
+      "name": "NGO",
+      "code": "NGO",
+      "active": true,
+      "ownerShipCategory": "INSTITUITIONALPRIVATE"
+    },
+    {
+      "name": "Private Trust",
+      "code": "PRIVATETRUST",
+      "active": true,
+      "ownerShipCategory": "INSTITUITIONALPRIVATE"
+    },
+    {
+      "name": "Private Board",
+      "code": "PRIVATEBOARD",
+      "active": true,
+      "ownerShipCategory": "INSTITUITIONALPRIVATE"
+    },
+    {
+      "name": "ULB Government",
+      "code": "ULBGOVERNMENT",
+      "active": true,
+      "ownerShipCategory": "INSTITUITIONALGOVERNMENT"
+    },
+    {
+      "name": "State Government",
+      "code": "STATEGOVERNMENT",
+      "active": true,
+      "ownerShipCategory": "INSTITUITIONALGOVERNMENT"
+    },
+    {
+      "name": "Central Government",
+      "code": "CENTRALGOVERNMENT",
+      "active": true,
+      "ownerShipCategory": "INSTITUITIONALGOVERNMENT"
+    },
+    {
+      "name": "Others - Private Instituition",
+      "code": "OTHERSPRIVATEINSTITUITION",
+      "active": true,
+      "ownerShipCategory": "INSTITUITIONALPRIVATE"
+    },
+    {
+      "name": "Others - Government Instituition",
+      "code": "OTHERGOVERNMENTINSTITUITION",
+      "active": true,
+      "ownerShipCategory": "INSTITUITIONALGOVERNMENT"
+    },
+    {
+      "name": "All",
+      "code": "ALL",
+      "active": true,
+      "ownerShipCategory": "ALL"
     }
   ]
 }
