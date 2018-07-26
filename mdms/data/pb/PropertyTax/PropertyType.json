@@ -3,44 +3,13 @@
   "moduleName": "PropertyTax",
   "PropertyType": [
     {
-      "name": "Shared",
-      "code": "SHARED",
-      "description": "SampleShared",
-      "active": true,
-      "tenantId": "pb"
-    },
-    {
-      "name": "Occupied",
-      "code": "OCCUPIEDPROPERTY",
-      "description": "",
-      "active": true,
-      "tenantId": "pb"
-    },
-    {
-      "name": "Flat/Part of Building",
-      "code": "SHAREDPROPERTY",
-      "description": "SharedProperty Sample",
-      "active": true,
-      "tenantId": "pb"
-    },
-    {
-      "name": "Independent Building",
-      "code": "INDEPENDENTPROPERTY",
-      "description": "Sample",
-      "active": true,
-      "tenantId": "pb"
-    },
-    {
       "name": "Vacant Land",
       "code": "VACANT",
-      "description": "Vacant land or properties with no building",
-      "active": true,
-      "tenantId": "pb"
+      "active": true
     },
     {
       "name": "Built Up",
       "code": "BUILTUP",
-      "description": "Properties with built up structures",
       "active": true
     }
   ]
