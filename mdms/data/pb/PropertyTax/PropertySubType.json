@@ -2,26 +2,24 @@
   "tenantId": "pb",
   "moduleName": "PropertyTax",
   "PropertySubType": [
-  {
-    "tenantId": "pb",
-    "code": "INDEPENDENTBUILDING",
-    "description": "A seperate bungalow type house",
-    "propertyType":"BUILTUP",
-    "active": true
-  },
-  {
-    "tenantId": "pb",
-    "code": "APARTMENT",
-    "description": "A flat owned within an aparment",
-    "propertyType":"BUILTUP",
-    "active": true
-  },
-  {
-    "tenantId": "pb",
-    "code": "ROWHOUSES",
-    "description": "A colony of independent houses",
-    "propertyType":"BUILTUP",
-    "active": true
-  }
-]
+    {
+      "description": "Flat/Part of the building",
+      "code": "SHAREDPROPERTY",
+      "active": true,
+      "propertyType": "BUILTUP"
+    },
+    {
+      "description": "Independent Building",
+      "code": "INDEPENDENTPROPERTY",
+      "active": true,
+      "propertyType": "BUILTUP"
+    },
+    {
+      "description": "All",
+      "code": "ALL",
+      "active": true,
+      "propertyType": "ALL"
+    }
+  ]
 }
+
