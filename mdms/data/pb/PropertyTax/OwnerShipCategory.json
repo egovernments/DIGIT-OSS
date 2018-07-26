@@ -4,15 +4,23 @@
   "OwnerShipCategory":
   [
     {
-      "name": "Private",
-      "code": "PRIVATE",
-      "description": "Property owned by a private entity",
+      "name": "Individual(s)",
+      "code": "INDIVIDUAL",
       "active": true
     },
     {
-      "name": "Government",
-      "code": "GOVERNMENT",
-      "description": "Property owned by Government",
+      "name": "Institutional - Private ",
+      "code": "INSTITUITIONALPRIVATE",
+      "active": true
+    },
+    {
+      "name": "Institutional - Government",
+      "code": "INSTITUITIONALGOVERNMENT",
+      "active": true
+    },
+    {
+      "name": "All",
+      "code": "ALL",
       "active": true
     }
   ]
