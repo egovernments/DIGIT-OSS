@@ -3,46 +3,21 @@
   "moduleName": "PropertyTax",
   "ConstructionSubType": [
     {
-      "name": "bada naala",
-      "code": "BN",
-      "description": "biggest naala in the town.",
-      "active": true,
-      "tenantId": "pb"
-    },
-    {
-      "name": "Country Tiled",
-      "code": "COUNTRYTILED",
-      "description": "House built with country tiles",
+      "id": "1",
+      "name": "Pucca",
+      "code": "PUCCA",
       "active": true
     },
     {
-      "name": "Huts",
-      "code": "HUTS",
-      "description": "Huts built out in villages",
+      "id": "2",
+      "name": "Semi-Pucca",
+      "code": "SEMIPUCCA",
       "active": true
     },
     {
-      "name": "Mangalore Tiled",
-      "code": "MANGALORETILED",
-      "description": "House built with mangalore tiles",
-      "active": true
-    },
-    {
-      "name": "Madras Terrace",
-      "code": "MADRASTERRACE",
-      "description": "House built with madras terrace",
-      "active": true
-    },
-    {
-      "name": "RCC Ordinary",
-      "code": "RCCORDINARY",
-      "description": "Houses built with ordinary RCC",
-      "active": true
-    },
-    {
-      "name": "RCC Posh",
-      "code": "RCCPOSH",
-      "description": "Houses built with posh RCC",
+      "id": "3",
+      "name": "Kuccha",
+      "code": "KUCCHA",
       "active": true
     }
   ]
