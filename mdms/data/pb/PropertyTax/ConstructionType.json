@@ -4,21 +4,21 @@
   "ConstructionType":
   [
     {
+      "id": "1",
       "name": "Pucca",
       "code": "PUCCA",
-      "description": "House built with cement-concrete-steel",
       "active": true
     },
     {
+      "id": "2",
       "name": "Semi-Pucca",
       "code": "SEMIPUCCA",
-      "description": "House built with mixture of mud and cement - concrete",
       "active": true
     },
     {
+      "id": "3",
       "name": "Kuccha",
       "code": "KUCCHA",
-      "description": "House built with mud",
       "active": true
     }
   ]
