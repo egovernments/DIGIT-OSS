@@ -5,75 +5,10 @@
     {
       "name": "Freedom Fighter",
       "code": "FREEDOMFIGHTER",
-      "description": "Freedom Fighters, who are receiving pension from the Central or State Government",
-
-      "tenantId": "pb",
-      "active":true,
-      "fromFY": "2011-12"
-    },
-    {
-      "name": "Freedom Fighter",
-      "code": "FREEDOMFIGHTER",
-      "description": "Freedom Fighters, who are receiving pension from the Central or State Government",
-
-      "tenantId": "pb",
-      "active":true,
-      "fromFY": "2012-13"
-    },
-    {
-      "name": "Freedom Fighter",
-      "code": "FREEDOMFIGHTER",
-      "description": "Freedom Fighters, who are receiving pension from the Central or State Government",
-
-      "tenantId": "pb",
-      "active":true,
-      "fromFY": "2013-14"
-    },
-    {
-      "name": "Freedom Fighter",
-      "code": "FREEDOMFIGHTER",
-      "description": "Freedom Fighters, who are receiving pension from the Central or State Government",
-
-      "tenantId": "pb",
-      "active":true,
-      "fromFY": "2019-20"
-    },
-    {
-      "name": "Freedom Fighter",
-      "code": "FREEDOMFIGHTER",
-      "description": "Freedom Fighters, who are receiving pension from the Central or State Government",
-      "exemptionRate": 	10.0,
-      "tenantId": "pb",
-      "active":true,
-      "fromFY": "2014-15",
+      "active": true,
+      "fromFY": "2013-14",
       "exemption": {
-        "rate": 70.0,
-        "maxAmount": null,
-        "flatAmount": null
-      }
-    },
-    {
-      "name": "Below Poverty Line",
-      "code": "BPL",
-      "description": "Persons living below poverty line",
-      "tenantId": "pb",
-      "active":true,
-      "fromFY": "2018-19",
-      "exemption": {
-        "rate": 100.0,
-        "maxAmount": null,
-        "flatAmount": null
-      }
-    },
-    {
-      "name": "Ex-Service Man/Woman",
-      "code": "EXSERVICEMAN",
-      "description": "Persons, who had served, or are serving, in any rank, whether as a combatant or a non-combatant, in the Naval, Military or Air Force",
-      "tenantId": "pb",
-      "active":true,
-      "fromFY": "2018-19",
-      "exemption": {
-        "rate": 100.0,
+        "rate": 100,
         "maxAmount": null,
         "flatAmount": null
       }
@@ -81,23 +16,30 @@
     {
       "name": "Widow",
       "code": "WIDOW",
-      "description": "Widow",
-      "tenantId": "pb",
-      "active":true,
-       "fromFY": "2018-19",
-       "exemption": {
-         "rate": 100.0,
-         "maxAmount": null,
-         "flatAmount": null
-       }
+      "active": true,
+      "fromFY": "2013-14",
+      "exemption": {
+        "rate": null,
+        "maxAmount": null,
+        "flatAmount": 5000.0
+      }
     },
     {
-      "name": "Handicap",
-      "code": "HANDICAP",
-      "description": "Handicapped persons(who are as if being assesses entitled for the time being to the benefits of deduction under section 80 U of the Income Tax Act, 1961;)",
-      "tenantId": "pb",
+      "name": "Handicapped Person",
+      "code": "HANDICAPPED",
       "active": true,
-      "fromFY": "2018-19",
+      "fromFY": "2013-14",
+      "exemption": {
+        "rate": null,
+        "maxAmount": null,
+        "flatAmount": 5000.0
+      }
+    },
+    {
+      "name": "Below Poverty Line",
+      "code": "BPL",
+      "active": true,
+      "fromFY": "2013-14",
       "exemption": {
         "rate": 100.0,
         "maxAmount": null,
@@ -105,17 +47,27 @@
       }
     },
     {
-      "name": "General",
-      "code": "GENERAL",
-      "description": " The average citizen for whom no exemptions apply by defaut",
-      "tenantId": "pb",
+      "name": "Defense Personnell",
+      "code": "DEFENSE",
       "active": true,
-      "fromFY": "2016-17",
+      "fromFY": "2013-14",
       "exemption": {
-        "rate": 0.0,
+        "rate": 100.0,
         "maxAmount": null,
         "flatAmount": null
       }
+    },
+    {
+      "name": "Government",
+      "code": "GOVERNMENT",
+      "active": true,
+      "fromFY": "2013-14"
+    },
+    {
+      "name": "None of the above",
+      "code": "NONE",
+      "active": true,
+      "fromFY": "2013-14"
     }
   ]
 }
