@@ -3,23 +3,22 @@
   "moduleName": "PropertyTax",
   "PropertySubType": [
     {
-      "description": "Flat/Part of the building",
+      "name": "Flat/Part of the building",
       "code": "SHAREDPROPERTY",
       "active": true,
       "propertyType": "BUILTUP"
     },
     {
-      "description": "Independent Building",
+      "name": "Independent Building",
       "code": "INDEPENDENTPROPERTY",
       "active": true,
       "propertyType": "BUILTUP"
     },
     {
-      "description": "All",
+      "name": "All",
       "code": "ALL",
       "active": true,
       "propertyType": "ALL"
     }
   ]
 }
-
