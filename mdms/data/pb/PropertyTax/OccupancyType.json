@@ -6,19 +6,21 @@
     {
       "name": "Rented",
       "code": "RENTED",
-      "description": "rented house",
       "active": true
     },
     {
       "name": "Self-Occupied",
       "code": "SELFOCCUPIED",
-      "description": "own house",
       "active": true
     },
     {
       "name": "Unoccupied",
       "code": "UNOCCUPIED",
-      "description": "property unoccupied",
+      "active": true
+    },
+    {
+      "name": "All",
+      "code": "ALL",
       "active": true
     }
   ]
