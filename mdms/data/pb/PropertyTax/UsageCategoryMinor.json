@@ -58,6 +58,13 @@
       "usageCategoryMajor": "RESIDENTIAL"
     },
     {
+      "name": "Mixed",
+      "code": "MIXED",
+      "active": true,
+      "fromFY": "2013-14",
+      "usageCategoryMajor": "MIXED"
+    },
+    {
       "name": "All",
       "code": "ALL",
       "active": true,
