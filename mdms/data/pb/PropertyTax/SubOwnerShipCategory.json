@@ -7,13 +7,13 @@
       "name": "Single Owner",
       "code": "SINGLEOWNER",
       "active": true,
-      "ownerShipCategory": "INDIVIDUALS"
+      "ownerShipCategory": "INDIVIDUAL"
     },
     {
       "name": "Multiple Owners",
       "code": "MULTIPLEOWNERS",
       "active": true,
-      "ownerShipCategory": "INDIVIDUALS"
+      "ownerShipCategory": "INDIVIDUAL"
     },
     {
       "name": "Private Company",
