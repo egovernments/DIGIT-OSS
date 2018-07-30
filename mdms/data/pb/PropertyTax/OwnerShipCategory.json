@@ -10,12 +10,12 @@
     },
     {
       "name": "Institutional - Private ",
-      "code": "INSTITUITIONALPRIVATE",
+      "code": "INSTITUTIONALPRIVATE",
       "active": true
     },
     {
       "name": "Institutional - Government",
-      "code": "INSTITUITIONALGOVERNMENT",
+      "code": "INSTITUTIONALGOVERNMENT",
       "active": true
     },
     {
