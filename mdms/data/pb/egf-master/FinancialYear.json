@@ -1,6 +1,6 @@
 {
   "tenantId": "pb",
-  "moduleName": "PropertyTax",
+  "moduleName": "egf-master",
   "FinancialYear": [
     {
       "id": "1",
