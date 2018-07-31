@@ -1,0 +1,20 @@
+{
+  "tenantId": "pb.amritsar",
+  "moduleName": "PropertyTax",
+  "FireCess": [
+    {
+      "rate": 14,
+      "minAmount": 600,
+      "flatAmount": 400,
+      "maxAmount" : 1000,
+      "fromFY": "2018-19"
+    },
+    {
+      "rate": 11,
+      "minAmount": 500,
+      "flatAmount": 350,
+      "maxAmount": 800,
+      "fromFY": "2014-15"
+    }
+  ]
+}

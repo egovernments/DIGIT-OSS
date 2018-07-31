@@ -1,0 +1,9 @@
+{
+  "tenantId": "pb.amritsar",
+  "moduleName": "PropertyTax",
+  "Penalty": [
+    {
+      "rate": "31"
+    }
+  ]
+}
