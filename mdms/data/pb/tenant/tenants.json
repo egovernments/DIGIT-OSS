@@ -61,6 +61,38 @@
 	},
 	"address": "Town Hall, Phagwara, Punjab - 144401",
 	"contactNumber": "01824-260426"
-	}
+	},
+    {
+      "code": "pb.amritsar",
+      "name": "Amritsar",
+      "description": null,
+      "logoId": null,
+      "imageId": null,
+      "domainUrl": "www.amritsarcorp.com",
+      "type": "CITY",
+      "twitterUrl": "https://twitter.com/search?q=%23AMRITSAR",
+      "facebookUrl": "https://www.facebook.com/city/Amritsar-Punjab",
+      "emailId": "cmcasr@gmail.com",
+      "OfficeTimings": {
+        "Mon - Fri": "9.00 AM - 6.00 PM",
+        "Sat": "9.00 AM - 12.00 PM"
+      },
+      "city": {
+        "name": "Amritsar",
+        "localName": null,
+        "districtCode": null,
+        "districtName": null,
+        "regionName": null,
+        "ulbGrade": null,
+        "longitude": 74.8722642,
+        "latitude": 31.6339793,
+        "shapeFileLocation": null,
+        "captcha": null,
+        "code": null
+      },
+      "address": "Municipal Corporation Amritsar, Town Hall, Amritsar,Punjab",
+      "contactNumber": "0183-2545155",
+      "helpLineNumber": "0183-2210300"
+    }
   ]
 }
