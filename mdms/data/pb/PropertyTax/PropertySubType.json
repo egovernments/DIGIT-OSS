@@ -13,12 +13,6 @@
       "code": "INDEPENDENTPROPERTY",
       "active": true,
       "propertyType": "BUILTUP"
-    },
-    {
-      "name": "All",
-      "code": "ALL",
-      "active": true,
-      "propertyType": "ALL"
     }
   ]
 }

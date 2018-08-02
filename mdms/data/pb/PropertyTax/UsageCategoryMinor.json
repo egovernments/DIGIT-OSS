@@ -14,7 +14,12 @@
       "code": "INDUSTRIAL",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategoryMajor": "NONRESIDENTIAL"
+      "usageCategoryMajor": "NONRESIDENTIAL",
+        "exemption": {
+        "rate": "10.1",
+        "maxAmount": "100",
+        "flatAmount": "1000"
+      }
     },
     {
       "name": "Institutional",
@@ -49,20 +54,6 @@
         "rate": 100.0
       },
       "usageCategoryMajor": "NONRESIDENTIAL"
-    },
-    {
-      "name": "Residential",
-      "code": "RESIDENTIAL",
-      "active": true,
-      "fromFY": "2013-14",
-      "usageCategoryMajor": "RESIDENTIAL"
-    },
-    {
-      "name": "All",
-      "code": "ALL",
-      "active": true,
-      "fromFY": "2013-14",
-      "usageCategoryMajor": "ALL"
     }
   ]
 }

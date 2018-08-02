@@ -68,12 +68,6 @@
       "code": "OTHERGOVERNMENTINSTITUITION",
       "active": true,
       "ownerShipCategory": "INSTITUTIONALGOVERNMENT"
-    },
-    {
-      "name": "All",
-      "code": "ALL",
-      "active": true,
-      "ownerShipCategory": "ALL"
     }
   ]
 }

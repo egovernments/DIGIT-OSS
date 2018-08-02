@@ -3,26 +3,6 @@
   "moduleName": "PropertyTax",
   "UsageCategoryDetail": [
     {
-      "name": "Industrial",
-      "code": "Industrial",
-      "active": true,
-      "fromFY": "2017-18",
-      "usageCategorySubMinor": "COMMERCIAL",
-      "exemption": {
-        "rate": "10.1",
-        "maxAmount": "100",
-        "flatAmount": "1000"
-      }
-    },
-    {
-      "name": "RESIDENTIAL",
-      "code": "RESIDENTIAL",
-      "active": true,
-      "fromFY": "2013-14",
-      "usageCategorySubMinor": "RESIDENTIAL"
-
-    },
-    {
       "name": "Malls",
       "code": "MALLS",
       "active": true,
@@ -44,22 +24,6 @@
       "active": true,
       "fromFY": "2013-14",
       "usageCategorySubMinor": "RETAIL"
-
-    },
-    {
-      "name": "Hotels",
-      "code": "HOTELS",
-      "active": true,
-      "fromFY": "2013-14",
-      "usageCategorySubMinor": "HOTELS"
-
-    },
-    {
-      "name": "Office Space",
-      "code": "OFFICESPACE",
-      "active": true,
-      "fromFY": "2013-14",
-      "usageCategorySubMinor": "OFFICESPACE"
 
     },
     {
@@ -119,21 +83,6 @@
 
     },
     {
-      "name": "Warehouse",
-      "code": "WAREHOUSE",
-      "active": true,
-      "fromFY": "2013-14",
-      "usageCategorySubMinor": "WAREHOUSE"
-
-    },
-    {
-      "name": "Manufacturing Facility",
-      "code": "MANUFACTURINGFACILITY",
-      "active": true,
-      "fromFY": "2013-14",
-      "usageCategorySubMinor": "MANUFACTURINGFACILITY"
-    },
-    {
       "name": "School",
       "code": "SCHOOL",
       "active": true,
@@ -166,75 +115,21 @@
       "code": "ORPHANAGE",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategorySubMinor": "OTHERS"
+      "usageCategorySubMinor": "OTHERSINSTITUTIONAL"
     },
     {
       "name": "Old age homes",
       "code": "OLDAGEHOMES",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategorySubMinor": "OTHERS"
+      "usageCategorySubMinor": "OTHERSINSTITUTIONAL"
     },
     {
       "name": "Home for the disabled",
       "code": "DISABLEDHOME",
       "active": true,
       "fromFY": "2013-14",
-      "usageCategorySubMinor": "OTHERS"
-    },
-    {
-      "name": "Religious",
-      "code": "RELIGIOUS",
-      "active": true,
-      "fromFY": "2013-14",
-      "exemption": {
-        "rate": "100.0"
-      },
-      "usageCategorySubMinor": "RELIGIOUS"
-    },
-    {
-      "name": "Parks",
-      "code": "PARKS",
-      "active": true,
-      "fromFY": "2013-14",
-      "usageCategorySubMinor": "PARK"
-    },
-    {
-      "name": "Libraries",
-      "code": "LIBRARIES",
-      "active": true,
-      "fromFY": "2013-14",
-      "usageCategorySubMinor": "LIBRARIES"
-    },
-    {
-      "name": "Cremation/ Burial Ground",
-      "code": "CREMATION/BURIAL",
-      "active": true,
-      "fromFY": "2013-14",
-      "exemption": {
-        "rate": "100.0"
-      },
-      "usageCategorySubMinor": "CREMATION/BURIAL"
-    },
-    {
-      "name": "Stray Animal Care Center",
-      "code": "ANIMALCARE",
-      "active": true,
-      "fromFY": "2013-14",
-      "exemption": {
-        "rate": "100.0"
-      },
-      "usageCategorySubMinor": "ANIMALCARE"
-    },
-    {
-      "name": "Historical Building",
-      "code": "HISTORICAL",
-      "active": true,
-      "fromFY": "2013-14",
-      "exemption": {
-        "rate": "100.0"
-      },
-      "usageCategorySubMinor": "HISTORICAL"
+      "usageCategorySubMinor": "OTHERSINSTITUTIONAL"
     }
   ]
 }

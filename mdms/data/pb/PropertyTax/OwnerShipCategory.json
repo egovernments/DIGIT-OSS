@@ -17,11 +17,6 @@
       "name": "Institutional - Government",
       "code": "INSTITUTIONALGOVERNMENT",
       "active": true
-    },
-    {
-      "name": "All",
-      "code": "ALL",
-      "active": true
     }
   ]
 }

@@ -17,11 +17,6 @@
       "name": "Unoccupied",
       "code": "UNOCCUPIED",
       "active": true
-    },
-    {
-      "name": "All",
-      "code": "ALL",
-      "active": true
     }
   ]
 }
