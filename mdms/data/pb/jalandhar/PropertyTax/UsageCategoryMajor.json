@@ -20,12 +20,6 @@
       "code": "MIXED",
       "active": true,
       "fromFY": "2017-18"
-    },
-    {
-      "name": "All",
-      "code": "ALL",
-      "active": true,
-      "fromFY": "2017-18"
     }
   ]
 }
