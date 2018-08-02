@@ -3,13 +3,6 @@
   "moduleName": "PropertyTax",
   "UsageCategorySubMinor": [
     {
-      "name": "Residential",
-      "code": "RESIDENTIAL",
-      "active": true,
-      "fromFY": "2013-14",
-      "usageCategoryMinor": "RESIDENTIAL"
-    },
-    {
       "name": "Retail",
       "code": "RETAIL",
       "active": true,
@@ -81,30 +74,20 @@
     },
     {
       "name": "Educational(govt. aided)",
-      "code": "EDUCATIONAL",
+      "code": "EDUCATIONALGOV",
       "active": true,
       "fromFY": "2013-14",
       "usageCategoryMinor": "INSTITUTIONAL"
     },
     {
       "name": "Others(care giving facilities)",
-      "code": "OTHERS",
+      "code": "OTHERSINSTITUTIONAL",
       "active": true,
       "fromFY": "2013-14",
       "exemption": {
         "rate": "100.0"
       },
       "usageCategoryMinor": "INSTITUTIONAL"
-    },
-    {
-      "name": "Religious",
-      "code": "RELIGIOUS",
-      "active": true,
-      "fromFY": "2013-14",
-      "exemption": {
-        "rate": "100.0"
-      },
-      "usageCategoryMinor": "RELIGIOUS"
     },
     {
       "name": "Parks",
