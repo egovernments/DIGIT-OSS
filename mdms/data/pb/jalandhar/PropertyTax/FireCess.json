@@ -4,14 +4,14 @@
   "FireCess": [
     {
       "rate": 13,
-      "minAmount": 500,
+      "minAmount": 10,
       "flatAmount": 300,
       "maxAmount" : 900,
       "fromFY": "2018-19"
     },
     {
       "rate": 10,
-      "minAmount": 400,
+      "minAmount": 10,
       "flatAmount": 250,
       "maxAmount": 700,
       "fromFY": "2014-15"
