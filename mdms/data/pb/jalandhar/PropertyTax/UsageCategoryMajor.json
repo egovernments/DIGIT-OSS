@@ -1,25 +1,23 @@
 {
-  "tenantId": "pb.jalandhar",
-  "moduleName": "PropertyTax",
-  "UsageCategoryMajor":
-  [
-    {
-      "name": "RESIDENTIAL",
-      "code": "RESIDENTIAL",
-      "active": true,
-      "fromFY": "2017-18"
-    },
-    {
-      "name": "NONRESIDENTIAL",
-      "code": "NONRESIDENTIAL",
-      "active": true,
-      "fromFY": "2017-18"
-    },
-    {
-      "name": "Mixed",
-      "code": "MIXED",
-      "active": true,
-      "fromFY": "2017-18"
-    }
-  ]
+	"tenantId": "pb.jalandhar",
+	"moduleName": "PropertyTax",
+	"UsageCategoryMajor": [{
+			"name": "Residential",
+			"code": "RESIDENTIAL",
+			"active": true,
+			"fromFY": "2017-18"
+		},
+		{
+			"name": "NonResidential",
+			"code": "NONRESIDENTIAL",
+			"active": true,
+			"fromFY": "2017-18"
+		},
+		{
+			"name": "Mixed",
+			"code": "MIXED",
+			"active": true,
+			"fromFY": "2017-18"
+		}
+	]
 }
