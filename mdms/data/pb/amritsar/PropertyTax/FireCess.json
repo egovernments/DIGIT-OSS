@@ -5,14 +5,14 @@
     {
       "rate": 14,
       "minAmount": 11,
-      "flatAmount": 400,
+      "flatAmount": 200,
       "maxAmount" : 1000,
       "fromFY": "2018-19"
     },
     {
       "rate": 11,
       "minAmount": 12,
-      "flatAmount": 350,
+      "flatAmount": 200,
       "maxAmount": 800,
       "fromFY": "2014-15"
     }

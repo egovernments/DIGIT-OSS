@@ -3,7 +3,7 @@
   "moduleName": "PropertyTax",
   "Interest": [{
       "rate": 10.0,
-      "minAmount": 500.0,
+      "minAmount": 100.0,
       "flatAmount": 300.0,
        "maxAmount": 500.0,
       "fromFY": "2018-19",
@@ -11,7 +11,7 @@
     },
     {
       "rate": 20.0,
-      "minAmount": 500.0,
+      "minAmount": 100.0,
       "flatAmount": 300.0,
        "maxAmount": 500.0,
       "fromFY": "2019-20",
@@ -19,7 +19,7 @@
     },
     {
       "rate": 10.0,
-      "minAmount": 500.0,
+      "minAmount": 100.0,
       "flatAmount": 300.0,
        "maxAmount": 500.0,
       "fromFY": "2017-18",

@@ -4,8 +4,8 @@
   "Rebate": [
     {
       "rate": 21,
-      "maxAmount": 550,
-      "flatAmount": 250,
+      "maxAmount": 300,
+      "flatAmount": 100,
       "fromFY": "2015-16",
       "endingDay": "10/07"
     },
