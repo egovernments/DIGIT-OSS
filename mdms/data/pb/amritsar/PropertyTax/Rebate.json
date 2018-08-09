@@ -3,14 +3,14 @@
   "moduleName": "PropertyTax",
   "Rebate": [
     {
-      "rate": "21",
-      "maxAmount": "550",
-      "flatAmount": "250",
+      "rate": 21,
+      "maxAmount": 550,
+      "flatAmount": 250,
       "fromFY": "2015-16",
       "endingDay": "10/07"
     },
     {
-      "rate": "21",
+      "rate": 21,
       "fromFY": "2015-16",
       "endingDay": "10/07"
     }
