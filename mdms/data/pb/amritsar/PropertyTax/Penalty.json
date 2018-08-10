@@ -14,6 +14,13 @@
       "flatAmount": null,
       "fromFY": "2015-16",
       "startingDay": "1/04"
+    },
+     {
+      "rate": 15,
+      "minAmount": null,
+      "flatAmount": null,
+      "fromFY": "2016-17",
+      "startingDay": "1/04"
     }
   ]
 }
