@@ -11270,6 +11270,83 @@
       "serviceCode": "pt-calculator-v2",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1575,
+      "name": "Daily Collections Report",
+      "url": "/rainmaker-pt/report/DailyCollectionsReport/_get",
+      "displayName": "Daily Collections Report",
+      "orderNumber": 0,
+      "enabled": true,
+      "serviceCode": "PROPERTYREPORTS",
+      "code": "null",
+      "path": "Legal Case Management.Legal Case Reports.Due Date Report"
+    },
+    {
+      "id": 1576,
+      "name": "Monthly Collections Report",
+      "url": "/rainmaker-pt/report/MonthlyCollectionsReport/_get",
+      "displayName": "Monthly Collections Report",
+      "orderNumber": 0,
+      "enabled": true,
+      "serviceCode": "PROPERTYREPORTS",
+      "code": "null",
+      "path": "Legal Case Management.Legal Case Reports.Due Date Report"
+    },
+    {
+      "id": 1577,
+      "name": "Owner Based Exemption Report",
+      "url": "/rainmaker-pt/report/OwnerBasedExemptionReport/_get",
+      "displayName": "Owner Based Exemption Report",
+      "orderNumber": 0,
+      "enabled": true,
+      "serviceCode": "PROPERTYREPORTS",
+      "code": "null",
+      "path": "Legal Case Management.Legal Case Reports.Due Date Report"
+    },
+    {
+      "id": 1578,
+      "name": "Usage Based Exemption Report",
+      "url": "/rainmaker-pt/report/UsageBasedExemptionReport/_get",
+      "displayName": "Usage Based Exemption Report",
+      "orderNumber": 0,
+      "enabled": true,
+      "serviceCode": "PROPERTYREPORTS",
+      "code": "null",
+      "path": "Legal Case Management.Legal Case Reports.Due Date Report"
+    },
+    {
+      "id": 1579,
+      "name": "Adhoc Charges Report",
+      "url": "/rainmaker-pt/report/AdhocChargesReport/_get",
+      "displayName": "Adhoc Charges Report",
+      "orderNumber": 0,
+      "enabled": true,
+      "serviceCode": "PROPERTYREPORTS",
+      "code": "null",
+      "path": "Legal Case Management.Legal Case Reports.Due Date Report"
+    },
+    {
+      "id": 1580,
+      "name": "Adhoc Rebates Report",
+      "url": "/rainmaker-pt/report/AdhocRebatesReport/_get",
+      "displayName": "Adhoc Rebates Report",
+      "orderNumber": 0,
+      "enabled": true,
+      "serviceCode": "PROPERTYREPORTS",
+      "code": "null",
+      "path": "Legal Case Management.Legal Case Reports.Due Date Report"
+    },
+    {
+      "id": 1581,
+      "name": "Ulb Wise Collection Report",
+      "url": "/rainmaker-pt/report/UlbWiseCollectionReport/_get",
+      "displayName": "Ulb Wise Collection Report",
+      "orderNumber": 0,
+      "enabled": true,
+      "serviceCode": "PROPERTYREPORTS",
+      "code": "null",
+      "path": "Legal Case Management.Legal Case Reports.Due Date Report"
     }
   ]
 }
