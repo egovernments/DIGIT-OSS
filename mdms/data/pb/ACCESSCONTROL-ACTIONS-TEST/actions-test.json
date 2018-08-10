@@ -11258,6 +11258,18 @@
     "serviceCode": "proeprtytax",
     "code": "null",
     "path": ""
-  }
+  },
+   {
+      "id": 1574,
+      "name": "BillingSlabUpdate",
+      "url": "/pt-calculator-v2/billingslab/_update",
+      "displayName": "Billing Slab Update",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "pt-calculator-v2",
+      "code": "null",
+      "path": ""
+    }
   ]
 }
