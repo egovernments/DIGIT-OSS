@@ -3,18 +3,11 @@
   "moduleName": "PropertyTax",
   "FireCess": [
     {
-      "rate": 14,
-      "minAmount": 11,
-      "flatAmount": 200,
-      "maxAmount" : 1000,
-      "fromFY": "2018-19"
-    },
-    {
-      "rate": 11,
-      "minAmount": 12,
-      "flatAmount": 200,
-      "maxAmount": 800,
-      "fromFY": "2014-15"
+      "rate": 5,
+      "minAmount": null,
+      "flatAmount": null,
+      "maxAmount" : null,
+      "fromFY": "2015-16"
     }
   ]
 }
