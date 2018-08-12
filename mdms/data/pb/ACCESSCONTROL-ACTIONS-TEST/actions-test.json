@@ -11292,6 +11292,17 @@
       "serviceCode": "PROPERTYREPORTS",
       "code": "null",
       "path": "Property Report"
+    },
+    {
+      "id": 9999,
+      "name": "PGR LME Report",
+      "url": "/customization/open/reports/lmereport",
+      "displayName": "PGR LME Report",
+      "orderNumber": 0,
+      "enabled": true,
+      "serviceCode": "PGRCUSTOMREPORT",
+      "code": "null",
+      "path": "PGR Report"
     }
   ]
 }
