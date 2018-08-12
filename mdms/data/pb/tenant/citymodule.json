@@ -1,0 +1,28 @@
+{
+  "tenantId": "pb",
+  "moduleName": "citymodule",
+  "tenants": [
+    {
+      "module": "PGR",
+      "tenants": [
+        {
+          "code": "pb.jalandhar"
+        },
+        {
+          "code": "pb.phagwara"
+        },
+        {
+          "code": "pb.amritsar"
+        }
+      ]
+    },
+    {
+      "module": "PT",
+      "tenants": [
+        {
+          "code": "pb.jalandhar"
+        }
+      ]
+    }
+  ]
+}
