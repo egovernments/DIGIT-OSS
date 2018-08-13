@@ -110,7 +110,6 @@ public class Feature extends AbstractPersistable<Long> {
     @AuditJoinTable
     private Set<Role> roles;
 
-    @NotAudited
     private boolean enabled;
 
     @Override

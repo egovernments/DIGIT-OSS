@@ -114,12 +114,12 @@
 		<property name="createdDate" type="date">
 			<column name="CREATEDDATE"></column>
 		</property>
-		<many-to-one name="createdBy" class="org.egov.infra.admin.master.entity.User">
+		<property name="createdBy" type="long">
 			<column name="CREATEDBY"></column>
-		</many-to-one>
-		<many-to-one name="lastModifiedBy" class="org.egov.infra.admin.master.entity.User">
+		</property>
+		<property name="lastModifiedBy" type="long">
 			<column name="LASTMODIFIEDBY"></column>
-		</many-to-one>
+		</property>
 
 	</class>
 </hibernate-mapping>

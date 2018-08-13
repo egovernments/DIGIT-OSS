@@ -48,21 +48,12 @@
 package org.egov.eis.repository;
 
 import org.egov.pims.commons.DeptDesig;
-import org.egov.pims.commons.Designation;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface DeptDesigRepository extends JpaRepository<DeptDesig, Long> {
 
-    DeptDesig findByDepartment_IdAndDesignation_Id(Long id, Long desId);
-
-    @Query("select d.designation from DeptDesig d where d.department.id=:deptId ")
-    List<Designation> getDesignationsByDepartment(@Param("deptId") Long deptId);
-
+    public DeptDesig findByDepartment_IdAndDesignation_Id(Long id, Long desId);
 
 }

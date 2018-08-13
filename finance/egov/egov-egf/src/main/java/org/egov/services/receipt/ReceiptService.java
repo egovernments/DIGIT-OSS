@@ -116,19 +116,20 @@ public class ReceiptService extends PersistenceService<ReceiptVoucher, Long> {
     public Department getDepartmentForWfItem(final ReceiptVoucher rv)
     {
         // TODO: Now employee is extending user so passing userid to get assingment -- changes done by Vaibhav
-        final Assignment assignment = eisCommonService.getLatestAssignmentForEmployeeByToDate(rv.getCreatedBy().getId(),
+        final Assignment assignment = eisCommonService.getLatestAssignmentForEmployeeByToDate(rv.getCreatedBy(),
                 new Date());
         return assignment.getDepartment();
     }
 
     public Position getPositionForWfItem(final ReceiptVoucher rv)
     {
-        return eisCommonService.getPositionByUserId(rv.getCreatedBy().getId());
+        return eisCommonService.getPositionByUserId(rv.getCreatedBy());
     }
 
     public Boundary getBoundaryForUser(final ReceiptVoucher rv)
     {
-        return egovCommon.getBoundaryForUser(rv.getCreatedBy());
+//        return egovCommon.getBoundaryForUser(rv.getCreatedBy());
+    	return null;
     }
 
     public Department getDepartmentForUser(final User user)

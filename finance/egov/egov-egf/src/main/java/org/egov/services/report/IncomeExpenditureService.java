@@ -69,13 +69,16 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 public class IncomeExpenditureService extends ReportService {
+ @Autowired
+ @Qualifier("persistenceService")
+ private PersistenceService persistenceService;
+
     private static final String I = "I";
     private static final String E = "E";
     private static final String IE = "IE";
-    @Autowired
-    @Qualifier("persistenceService")
-    private PersistenceService persistenceService;
-
+   // Date fromDate;
+    //Date toDate;
+    private static final BigDecimal NEGATIVE = new BigDecimal(-1);
     private FunctionwiseIEService functionwiseIEService;
 
     public FunctionwiseIEService getFunctionwiseIEService() {
@@ -90,6 +93,8 @@ public class IncomeExpenditureService extends ReportService {
     protected void addRowsToStatement(final Statement balanceSheet, final Statement assets, final Statement liabilities) {
         IEStatementEntry incomeEntry = new IEStatementEntry();
         IEStatementEntry expenseEntry = new IEStatementEntry();
+        List<IEStatementEntry> totalIncomeOverExpense = new ArrayList<IEStatementEntry>();
+
         if (liabilities.sizeIE() > 0) {
             balanceSheet.addIE(new IEStatementEntry(null, Constants.INCOME, "", true));
             incomeEntry = getTotalIncomeFundwise(liabilities);
@@ -102,7 +107,7 @@ public class IncomeExpenditureService extends ReportService {
             balanceSheet.addAllIE(assets);
             balanceSheet.addIE(expenseEntry);
         }
-        List<IEStatementEntry> totalIncomeOverExpense = computeTotalsIncomeExpense(incomeEntry, expenseEntry);
+        totalIncomeOverExpense = computeTotalsIncomeExpense(incomeEntry, expenseEntry);
         for (final IEStatementEntry exp : totalIncomeOverExpense)
             balanceSheet.addIE(exp);
 
@@ -112,32 +117,39 @@ public class IncomeExpenditureService extends ReportService {
         minorCodeLength = Integer.valueOf(getAppConfigValueFor(Constants.EGF, "coa_minorcode_length"));
         coaType.add('I');
         coaType.add('E');
-        Date fromDate = getFromDate(ie);
-        Date toDate = getToDate(ie);
+        Date  fromDate = getFromDate(ie);
+        Date  toDate = getToDate(ie);
         final String filterQuery = getFilterQuery(ie);
         populateCurrentYearAmountPerFund(ie, filterQuery, toDate, fromDate, IE);
+        // populateSchedule(ie,IE);
         ie = addBudgetDetails(ie);
         removeFundsWithNoDataIE(ie);
     }
 
     private Statement addBudgetDetails(final Statement ie) {
         final List<StatementResultObject> budgetForMajorCodes = getBudgetForMajorCodes(ie);
+        // if(LOGGER.isDebugEnabled())
+        LOGGER.error("Budget Amounts.................................");
         print(budgetForMajorCodes);
         final List<StatementResultObject> budgetReappForMajorCodes = getBudgetReappMinorCodes(ie);
+        // if(LOGGER.isDebugEnabled())
+        LOGGER.error("Budget Reapp Amounts...........................");
         print(budgetReappForMajorCodes);
         BigDecimal totalBudget = BigDecimal.ZERO;
         for (final StatementResultObject ent : budgetForMajorCodes)
             for (final StatementResultObject stm : budgetReappForMajorCodes)
                 if (ent.getGlCode() != null && ent.getGlCode().equalsIgnoreCase(stm.getGlCode()))
-                    if (ent.getAmount() != null) {
+                    if (ent.getAmount() != null)
+                    {
                         if (stm.getAmount() != null)
                             ent.setAmount(ent.getAmount().add(stm.getAmount()));
                     } else if (stm.getAmount() != null)
                         ent.setAmount(stm.getAmount());
 
         for (final IEStatementEntry ent : ie.getIeEntries())
-            for (final StatementResultObject stm : budgetForMajorCodes)
-                if (ent.getGlCode() != null && ent.getGlCode().equalsIgnoreCase(stm.getGlCode())) {
+            inner: for (final StatementResultObject stm : budgetForMajorCodes)
+                if (ent.getGlCode() != null && ent.getGlCode().equalsIgnoreCase(stm.getGlCode()))
+                {
                     ent.setBudgetAmount(stm.getAmount().setScale(2));
                     totalBudget = totalBudget.add(ent.getBudgetAmount());
                 }
@@ -156,8 +168,8 @@ public class IncomeExpenditureService extends ReportService {
 
     // add previous year amount and current year amount. Opening balance is not added for IE codes
     public void populateCurrentYearAmountPerFund(final Statement statement, final String filterQuery, final Date toDate,
-                                                 final Date fromDate,
-                                                 final String scheduleReportType) {
+            final Date fromDate,
+            final String scheduleReportType) {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug(" inside populateCurrentYearAmountPerFund ");
         final BigDecimal divisor = statement.getDivisor();
@@ -169,7 +181,7 @@ public class IncomeExpenditureService extends ReportService {
 
         final List<StatementResultObject> results = getTransactionAmount(filterQuery, toDate, fromDate, "'I','E'", IE);
 
-        final List<StatementResultObject> preYearResults = getTransactionAmount(filterQuery, getPreviousYearFor(toDate),
+        final List<StatementResultObject> PreYearResults = getTransactionAmount(filterQuery, getPreviousYearFor(toDate),
                 getPreviousYearFor(fromDate), "'I','E'", scheduleReportType);
 
         for (final StatementResultObject queryObject : allGlCodes) {
@@ -178,21 +190,21 @@ public class IncomeExpenditureService extends ReportService {
                 queryObject.setGlCode("");
             final List<StatementResultObject> rows = getRowWithGlCode(results, queryObject.getGlCode());
             if (rows.isEmpty() && queryObject.getGlCode() != null) {
-                if (contains(preYearResults, queryObject.getGlCode())) {
-                    final List<StatementResultObject> preRow = getRowWithGlCode(preYearResults, queryObject.getGlCode());
+                if (contains(PreYearResults, queryObject.getGlCode())) {
+                    final List<StatementResultObject> preRow = getRowWithGlCode(PreYearResults, queryObject.getGlCode());
                     final IEStatementEntry preentry = new IEStatementEntry();
                     for (final StatementResultObject pre : preRow)
                         if (I.equalsIgnoreCase(queryObject.getType().toString())) {
                             if (pre.isIncome())
                                 pre.negateAmount();
                             preentry.getPreviousYearAmount().put(
-                                    getFundNameForId(statement.getFunds(), pre.getFundId()),
+                                    getFundNameForId(statement.getFunds(), Integer.valueOf(pre.getFundId())),
                                     divideAndRound(pre.getAmount(), divisor));
                         } else if (E.equalsIgnoreCase(queryObject.getType().toString())) {
                             if (pre.isIncome())
                                 pre.negateAmount();
                             preentry.getPreviousYearAmount().put(
-                                    getFundNameForId(statement.getFunds(), pre.getFundId()),
+                                    getFundNameForId(statement.getFunds(), Integer.valueOf(pre.getFundId())),
                                     divideAndRound(pre.getAmount(), divisor));
                         }
                     if (queryObject.getGlCode() != null) {
@@ -217,17 +229,17 @@ public class IncomeExpenditureService extends ReportService {
                     } else {
                         final IEStatementEntry entry = new IEStatementEntry();
                         if (row.getAmount() != null && row.getFundId() != null) {
-                            entry.getNetAmount().put(getFundNameForId(statement.getFunds(), row.getFundId()),
+                            entry.getNetAmount().put(getFundNameForId(statement.getFunds(), Integer.valueOf(row.getFundId())),
                                     divideAndRound(row.getAmount(), divisor));
-                            if (queryObject.getGlCode() != null && contains(preYearResults, row.getGlCode())) {
-                                final List<StatementResultObject> preRow = getRowWithGlCode(preYearResults,
+                            if (queryObject.getGlCode() != null && contains(PreYearResults, row.getGlCode())) {
+                                final List<StatementResultObject> preRow = getRowWithGlCode(PreYearResults,
                                         queryObject.getGlCode());
                                 for (final StatementResultObject pre : preRow) {
                                     if (pre.isIncome())
                                         pre.negateAmount();
                                     if (pre.getGlCode() != null && pre.getGlCode().equals(row.getGlCode()))
                                         entry.getPreviousYearAmount().put(
-                                                getFundNameForId(statement.getFunds(), pre.getFundId()),
+                                                getFundNameForId(statement.getFunds(), Integer.valueOf(pre.getFundId())),
                                                 divideAndRound(pre.getAmount(), divisor));
                                 }
                             }
@@ -253,25 +265,26 @@ public class IncomeExpenditureService extends ReportService {
      * Computes income over expenditure and vise versa for current year amount and previous year amount
      */
     private List<IEStatementEntry> computeTotalsIncomeExpense(final IEStatementEntry incomeFundTotals,
-                                                              final IEStatementEntry expenditureFundTotals) {
-        final Map<String, BigDecimal> netTotal = new HashMap<>();
-        final Map<String, BigDecimal> preTotal = new HashMap<>();
-        final Map<String, BigDecimal> netTotalIncomeExpense = new HashMap<>();
-        final Map<String, BigDecimal> preTotalIncomeExpense = new HashMap<>();
-        final Map<String, BigDecimal> netTotalExpenseIncome = new HashMap<>();
-        final Map<String, BigDecimal> preTotalExpenseIncome = new HashMap<>();
-        Set<String> netFundSet;
-        Set<String> preFundSet;
-        BigDecimal curAmount;
+            final IEStatementEntry expenditureFundTotals) {
+        final Map<String, BigDecimal> netTotal = new HashMap<String, BigDecimal>();
+        final Map<String, BigDecimal> preTotal = new HashMap<String, BigDecimal>();
+        final Map<String, BigDecimal> netTotalin_ex = new HashMap<String, BigDecimal>();
+        final Map<String, BigDecimal> preTotalin_ex = new HashMap<String, BigDecimal>();
+        final Map<String, BigDecimal> netTotalex_in = new HashMap<String, BigDecimal>();
+        final Map<String, BigDecimal> preTotalex_in = new HashMap<String, BigDecimal>();
+        Set<String> netFundSet = new HashSet<String>();
+        Set<String> preFundSet = new HashSet<String>();
+        BigDecimal curAmount = BigDecimal.ZERO;
         final String prevoius = "PREVIOUS";
         final String current = "CURRENT";
         netFundSet = getAllKey(incomeFundTotals, expenditureFundTotals, current);
         preFundSet = getAllKey(incomeFundTotals, expenditureFundTotals, prevoius);
+        // Entry<String, BigDecimal> prerow;
         final IEStatementEntry income = new IEStatementEntry();
         final IEStatementEntry expense = new IEStatementEntry();
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Calculating income over expenses");
-        final List<IEStatementEntry> incomeOverExpenditure = new ArrayList<>();
+        final List<IEStatementEntry> incomeOverExpenditure = new ArrayList<IEStatementEntry>();
         for (final String str : netFundSet)
             if (incomeFundTotals.getNetAmount().containsKey(str)) {
                 final BigDecimal amount = zeroOrValue(incomeFundTotals.getNetAmount().get(str));
@@ -294,17 +307,17 @@ public class IncomeExpenditureService extends ReportService {
         for (final String str : netFundSet) {
             final int isIncome = netTotal.get(str).signum();
             if (isIncome > 0) {
-                netTotalIncomeExpense.put(str, netTotal.get(str));
+                netTotalin_ex.put(str, netTotal.get(str));
                 income.setGlCode("A-B");
                 income.setAccountName("Income Over Expenditure");
                 income.setDisplayBold(true);
-                income.setNetAmount(netTotalIncomeExpense);
+                income.setNetAmount(netTotalin_ex);
             } else {
                 curAmount = zeroOrValue(netTotal.get(str)).negate();
-                netTotalExpenseIncome.put(str, curAmount);
+                netTotalex_in.put(str, curAmount);
                 expense.setGlCode("B-A");
                 expense.setAccountName("Expenditure Over Income");
-                expense.setNetAmount(netTotalExpenseIncome);
+                expense.setNetAmount(netTotalex_in);
                 expense.setDisplayBold(true);
             }
 
@@ -314,28 +327,28 @@ public class IncomeExpenditureService extends ReportService {
             final int isIncome = preTotal.get(str).signum();
             if (isIncome > 0) {
                 if (income.getGlCode() != null) {
-                    preTotalIncomeExpense.put(str, preTotal.get(str));
-                    income.setPreviousYearAmount(preTotalIncomeExpense);
+                    preTotalin_ex.put(str, preTotal.get(str));
+                    income.setPreviousYearAmount(preTotalin_ex);
                 } else {
-                    preTotalIncomeExpense.put(str, preTotal.get(str));
-                    income.setPreviousYearAmount(preTotalIncomeExpense);
+                    preTotalin_ex.put(str, preTotal.get(str));
+                    income.setPreviousYearAmount(preTotalin_ex);
                     income.setGlCode("A-B");
                     income.setAccountName("Income Over Expenditure");
                     income.setDisplayBold(true);
-                    preTotalIncomeExpense.put(str, preTotal.get(str));
-                    income.setPreviousYearAmount(preTotalIncomeExpense);
+                    preTotalin_ex.put(str, preTotal.get(str));
+                    income.setPreviousYearAmount(preTotalin_ex);
                 }
             } else if (expense.getGlCode() != null) {
-                preTotalExpenseIncome.put(str, preTotal.get(str).negate());
-                expense.setPreviousYearAmount(preTotalExpenseIncome);
+                preTotalex_in.put(str, preTotal.get(str).negate());
+                expense.setPreviousYearAmount(preTotalex_in);
             } else {
                 curAmount = zeroOrValue(preTotal.get(str)).negate();
-                preTotalExpenseIncome.put(str, curAmount);
+                preTotalex_in.put(str, curAmount);
                 expense.setGlCode("B-A");
                 expense.setAccountName("Expenditure Over Income");
                 expense.setDisplayBold(true);
-                preTotalExpenseIncome.put(str, curAmount);
-                expense.setPreviousYearAmount(preTotalExpenseIncome);
+                preTotalex_in.put(str, curAmount);
+                expense.setPreviousYearAmount(preTotalex_in);
 
             }
         }
@@ -352,24 +365,26 @@ public class IncomeExpenditureService extends ReportService {
     }
 
     void addFundPreviousAmountIE(final List<Fund> fundList, final Statement type, final BigDecimal divisor,
-                                 final StatementResultObject row) {
+            final StatementResultObject row) {
         for (int index = 0; index < type.size(); index++) {
             final BigDecimal amount = divideAndRound(row.getAmount(), divisor);
             if (type.get(index).getGlCode() != null
                     && row.getGlCode().equals(type.get(index).getGlCode()))
-                type.getIE(index).getPreviousYearAmount().put(getFundNameForId(fundList, row.getFundId()), amount);
+                type.getIE(index).getPreviousYearAmount().put(
+                        getFundNameForId(fundList, Integer.valueOf(row
+                                .getFundId())), amount);
         }
     }
 
     /*
      * Calculate total Income of current year and previous year
      */
-    private IEStatementEntry getTotalIncomeFundwise(final Statement incomeExpense) {
-        final Map<String, BigDecimal> fundNetTotals = new HashMap<>();
-        final Map<String, BigDecimal> fundPreTotals = new HashMap<>();
-        BigDecimal netAmount;
-        BigDecimal preAmount;
-        for (final IEStatementEntry entry : incomeExpense.getIeEntries()) {
+    private IEStatementEntry getTotalIncomeFundwise(final Statement income_expense) {
+        final Map<String, BigDecimal> fundNetTotals = new HashMap<String, BigDecimal>();
+        final Map<String, BigDecimal> fundPreTotals = new HashMap<String, BigDecimal>();
+        BigDecimal netAmount = BigDecimal.ZERO;
+        BigDecimal preAmount = BigDecimal.ZERO;
+        for (final IEStatementEntry entry : income_expense.getIeEntries()) {
 
             for (final Entry<String, BigDecimal> row : entry.getNetAmount().entrySet()) {
                 if (fundNetTotals.get(row.getKey()) == null)
@@ -390,13 +405,13 @@ public class IncomeExpenditureService extends ReportService {
     /*
      * Calculate total Expenditure of current year and previous year
      */
-    private IEStatementEntry getTotalExpenseFundwise(final Statement incomeExpense) {
+    private IEStatementEntry getTotalExpenseFundwise(final Statement income_expense) {
 
-        final Map<String, BigDecimal> fundNetTotals = new HashMap<>();
-        final Map<String, BigDecimal> fundPreTotals = new HashMap<>();
-        BigDecimal netAmount;
-        BigDecimal preAmount;
-        for (final IEStatementEntry entry : incomeExpense.getIeEntries()) {
+        final Map<String, BigDecimal> fundNetTotals = new HashMap<String, BigDecimal>();
+        final Map<String, BigDecimal> fundPreTotals = new HashMap<String, BigDecimal>();
+        BigDecimal netAmount = BigDecimal.ZERO;
+        BigDecimal preAmount = BigDecimal.ZERO;
+        for (final IEStatementEntry entry : income_expense.getIeEntries()) {
 
             for (final Entry<String, BigDecimal> row : entry.getNetAmount().entrySet()) {
                 if (fundNetTotals.get(row.getKey()) == null)
@@ -418,9 +433,9 @@ public class IncomeExpenditureService extends ReportService {
      * Returns All Fund id for which transaction is made previous year or this year
      */
     private HashSet<String> getAllKey(final IEStatementEntry incomeFundTotals, final IEStatementEntry expenditureFundTotals,
-                                      final String amtType) {
+            final String amtType) {
 
-        final Set<String> allFundSet = new HashSet<>();
+        final Set<String> allFundSet = new HashSet<String>();
         if (amtType.equals("CURRENT")) {
             for (final Entry<String, BigDecimal> row : incomeFundTotals.getNetAmount().entrySet())
                 allFundSet.add(row.getKey());
@@ -439,13 +454,15 @@ public class IncomeExpenditureService extends ReportService {
 
     private List<StatementResultObject> getBudgetForMajorCodes(final Statement incomeExpenditureStatement) {
 
-        final StringBuilder queryStr = new StringBuilder(1000);
+        final StringBuffer queryStr = new StringBuffer(1024);
 
-        queryStr.append(" select coa.majorCode as glcode, sum(bd.approvedamount) as amount ")
-                .append(" from egf_budgetdetail bd , egf_budgetgroup bg,egf_budget b, chartofaccounts coa, eg_wf_states wfs ")
-                .append("where ((bg.maxcode<=coa.id and bg.mincode>=coa.id) or bg.majorcode=coa.id ) ")
-                .append("and bd.budgetgroup= bg.id and bd.budget=b.id and  bd.state_id=wfs.id  and wfs.value='END'")
-                .append("and b.isbere=:isBeRe and b.financialyearid=:finYearId  ");
+        queryStr.append(" select coa.majorCode as glcode, sum(bd.approvedamount) as amount ");
+
+        queryStr.append(" from egf_budgetdetail bd , egf_budgetgroup bg,egf_budget b, chartofaccounts coa, eg_wf_states wfs ");
+
+        queryStr.append("where ((bg.maxcode<=coa.id and bg.mincode>=coa.id) or bg.majorcode=coa.id ) and bd.budgetgroup= bg.id "
+                +
+                " and bd.budget=b.id and  bd.state_id=wfs.id  and wfs.value='END'  and b.isbere=:isBeRe and b.financialyearid=:finYearId   ");
         if (incomeExpenditureStatement.getFund() != null && incomeExpenditureStatement.getFund().getId() != null
                 && incomeExpenditureStatement.getFund().getId() != 0)
             queryStr.append(" and bd.fund=" + incomeExpenditureStatement.getFund().getId());
@@ -458,23 +475,26 @@ public class IncomeExpenditureService extends ReportService {
         queryStr.append(" and coa.majorcode is not null  group by coa.majorCode ");
 
         queryStr.append(" order by 1");
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("query is " + queryStr.toString());
         final SQLQuery budgteQuery = persistenceService.getSession().createSQLQuery(queryStr.toString());
         budgteQuery.addScalar("glCode").addScalar("amount")
-                .setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
+        .setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
         budgteQuery.setLong("finYearId", incomeExpenditureStatement.getFinancialYear().getId())
-                .setString("isBeRe", "RE");
-        return budgteQuery.list();
+        .setString("isBeRe", "RE");
+        final List<StatementResultObject> list = budgteQuery.list();
+        return list;
 
     }
 
     private List<StatementResultObject> getBudgetReappMinorCodes(final Statement incomeExpenditureStatement) {
-        final StringBuilder queryStr = new StringBuilder(1000);
+        final StringBuffer queryStr = new StringBuffer(1024);
 
-        queryStr.append(" select coa.majorcode as glCode, sum(bdr.addition_amount- bdr.deduction_amount) as amount ")
-                .append(" from egf_budgetdetail bd , egf_budgetgroup bg,egf_budget b, chartofaccounts coa,eg_wf_states wfs,")
-                .append("egf_budget_reappropriation bdr where ((bg.maxcode<=coa.id and bg.mincode>=coa.id) or bg.majorcode=coa.id ) ")
-                .append("and bd.budgetgroup= bg.id and bdr.budgetdetail=bd.id and bd.budget=b.id and bdr.state_id=wfs.id ")
-                .append("and wfs.value='END' and b.isbere=:isBeRe and b.financialyearid=:finYearId  ");
+        queryStr.append(" select coa.majorcode as glCode, sum(bdr.addition_amount- bdr.deduction_amount) as amount ");
+
+        queryStr.append(" from egf_budgetdetail bd , egf_budgetgroup bg,egf_budget b, chartofaccounts coa,eg_wf_states wfs,egf_budget_reappropriation bdr where ((bg.maxcode<=coa.id and bg.mincode>=coa.id) or bg.majorcode=coa.id ) and bd.budgetgroup= bg.id "
+                +
+                "  and bdr.budgetdetail=bd.id and bd.budget=b.id and bdr.state_id=wfs.id  and wfs.value='END' and b.isbere=:isBeRe and b.financialyearid=:finYearId  ");
 
         if (incomeExpenditureStatement.getFund() != null && incomeExpenditureStatement.getFund().getId() != null
                 && incomeExpenditureStatement.getFund().getId() != 0)
@@ -487,13 +507,16 @@ public class IncomeExpenditureService extends ReportService {
         queryStr.append("  group by coa.majorCode ");
 
         queryStr.append(" order by 1 asc");
+        if (LOGGER.isDebugEnabled())
+            LOGGER.debug("query is " + queryStr.toString());
         final SQLQuery budgteReappQuery = persistenceService.getSession().createSQLQuery(queryStr.toString());
         budgteReappQuery.addScalar("glCode").addScalar("amount")
-                .setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
+        .setResultTransformer(Transformers.aliasToBean(StatementResultObject.class));
         budgteReappQuery.setLong("finYearId", incomeExpenditureStatement.getFinancialYear().getId())
-                .setString("isBeRe", "RE");
-        return budgteReappQuery.list();
+        .setString("isBeRe", "RE");
+        final List<StatementResultObject> list = budgteReappQuery.list();
+        return list;
     }
 
-
+    
 }

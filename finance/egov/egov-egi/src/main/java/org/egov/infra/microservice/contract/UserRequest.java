@@ -121,9 +121,9 @@ public class UserRequest {
         locale = user.getLocale();
         type = user.getType();
         accountLocked = user.isAccountLocked();
-        createdBy = user.getCreatedBy() == null ? 0l : user.getCreatedBy().getId();
+        createdBy = user.getCreatedBy() ;
         createdDate = user.getCreatedDate();
-        lastModifiedBy = user.getLastModifiedBy() == null ? 0l : user.getLastModifiedBy().getId();
+        lastModifiedBy = user.getLastModifiedBy() ;
         lastModifiedDate = user.getLastModifiedDate();
         this.tenantId = tenantId;
         roles = convertRoleEntitiesToContract(user.getRoles());

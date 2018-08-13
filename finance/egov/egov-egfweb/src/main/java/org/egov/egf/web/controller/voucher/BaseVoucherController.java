@@ -119,8 +119,11 @@ public abstract class BaseVoucherController extends GenericWorkFlowController {
                 mandatoryFields.add(header);
         }
         mandatoryFields.add("voucherdate");
-        if (headerFields.contains("department"))
-            model.addAttribute("departments", masterDataCache.get("egi-department"));
+        if (headerFields.contains("department")) {
+        	
+        	model.addAttribute("departments", this.getDepartmentsFromMs());
+        
+        }
         if (headerFields.contains("functionary"))
             model.addAttribute("functionarys", masterDataCache.get("egi-functionary"));
         if (headerFields.contains("function"))

@@ -245,7 +245,7 @@ public class EgBillRegisterService extends PersistenceService<EgBillregister, Lo
     }
 
     private Assignment getWorkflowInitiator(final EgBillregister billregister) {
-        Assignment wfInitiator = assignmentService.findByEmployeeAndGivenDate(billregister.getCreatedBy().getId(), new Date())
+        Assignment wfInitiator = assignmentService.findByEmployeeAndGivenDate(billregister.getCreatedBy(), new Date())
                 .get(0);
         return wfInitiator;
     }

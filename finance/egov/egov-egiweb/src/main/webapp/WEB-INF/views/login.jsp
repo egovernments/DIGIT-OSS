@@ -51,7 +51,6 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="/WEB-INF/taglib/cdn.tld" prefix="cdn" %>
-<%@ taglib prefix="egov" tagdir="/WEB-INF/tags" %>
 <html lang="en">
 <head>
     <spring:eval expression="@environment.getProperty('analytics.enabled')" scope="application" var="analyticsEnabled"/>
@@ -215,7 +214,8 @@
                                     </c:when>
                                     <c:when test="${fn:contains(security_message, 'User account is locked')}">
                                         <spring:message code="msg.acc.locked"/>
-                                        <egov:captcha/>
+                                        <spring:eval expression="@environment.getProperty('captcha.strength')" var="strength"/>
+                                        <c:import url="/WEB-INF/views/common/captcha-${strength}.jsp" context="/egi"/>
                                         <c:if test="${fn:contains(security_message, 'Recaptcha Invalid')}">
                                             <spring:message code="err.recaptcha.invalid"/>
                                         </c:if>

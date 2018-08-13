@@ -48,7 +48,24 @@
 
 package org.egov.infra.microservice.utils;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.egov.infra.utils.ApplicationConstant.CITIZEN_ROLE_NAME;
+import static org.egov.infra.utils.DateUtils.toDefaultDateTimeFormat;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
+import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.RoleService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
@@ -58,6 +75,12 @@ import org.egov.infra.microservice.contract.Task;
 import org.egov.infra.microservice.contract.TaskResponse;
 import org.egov.infra.microservice.contract.UserDetailResponse;
 import org.egov.infra.microservice.contract.UserRequest;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.models.DepartmentResponse;
+import org.egov.infra.microservice.models.Designation;
+import org.egov.infra.microservice.models.DesignationResponse;
+import org.egov.infra.microservice.models.EmployeeInfo;
+import org.egov.infra.microservice.models.EmployeeInfoResponse;
 import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.microservice.models.UserInfo;
 import org.egov.infra.persistence.entity.enums.UserType;
@@ -66,133 +89,291 @@ import org.egov.infra.web.support.ui.Inbox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.egov.infra.utils.ApplicationConstant.CITIZEN_ROLE_NAME;
-import static org.egov.infra.utils.DateUtils.toDefaultDateTimeFormat;
+import redis.clients.jedis.JedisShardInfo;
 
 @Service
 public class MicroserviceUtils {
 
-    private static final Logger LOGGER = Logger.getLogger(MicroserviceUtils.class);
-    private static final String CLIENT_ID = "client.id";
+	private static final Logger LOGGER = Logger.getLogger(MicroserviceUtils.class);
+	private static final String CLIENT_ID = "client.id";
 
-    @Autowired
-    private SecurityUtils securityUtils;
+	@Autowired
+	private SecurityUtils securityUtils;
 
-    @Autowired
-    private Environment environment;
+	@Autowired
+	private Environment environment;
+	
+	@Autowired
+	public RedisTemplate<Object, Object> redisTemplate;
+	
+	@Autowired
+	private RoleService roleService;
 
-    @Autowired
-    private RoleService roleService;
+	@Value("${egov.services.workflow.url}")
+	private String workflowServiceUrl;
 
-    @Value("${egov.services.workflow.url}")
-    private String workflowServiceUrl;
+	@Value("${egov.services.user.create.url}")
+	private String userServiceUrl;
 
-    @Value("${egov.services.user.create.url}")
-    private String userServiceUrl;
+	@Value("${egov.services.user.deparment.url}")
+	private String deptServiceUrl;
 
-    public RequestInfo createRequestInfo() {
-        final RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setApiId("apiId");
-        requestInfo.setVer("ver");
-        requestInfo.setTs(new Date());
-        requestInfo.setUserInfo(getUserInfo());
-        return requestInfo;
-    }
+	@Value("${egov.services.user.designation.url}")
+	private String designServiceUrl;
 
-    public UserInfo getUserInfo() {
-        final User user = securityUtils.getCurrentUser();
-        final List<org.egov.infra.microservice.models.RoleInfo> roles = new ArrayList<org.egov.infra.microservice.models.RoleInfo>();
-        user.getRoles().forEach(authority -> roles.add(new org.egov.infra.microservice.models.RoleInfo(authority.getName())));
+	@Value("${egov.services.user.approvers.url}")
+	private String approverSrvcUrl;
+	
+	@Value("${egov.services.user.authsrvc.url}")
+	private String authSrvcUrl;
+	
+	public RequestInfo createRequestInfo() {
+		final RequestInfo requestInfo = new RequestInfo();
+		requestInfo.setApiId("apiId");
+		requestInfo.setVer("ver");
+		requestInfo.setTs(new Date());
+		requestInfo.setUserInfo(getUserInfo());
+		return requestInfo;
+	}
 
-        return new UserInfo(roles, user.getId(), user.getUsername(), user.getName(),
-                user.getEmailId(), user.getMobileNumber(), user.getType().toString(),
-                getTanentId());
-    }
+	public UserInfo getUserInfo() {
+		final User user = securityUtils.getCurrentUser();
+		final List<org.egov.infra.microservice.models.RoleInfo> roles = new ArrayList<org.egov.infra.microservice.models.RoleInfo>();
+		user.getRoles()
+				.forEach(authority -> roles.add(new org.egov.infra.microservice.models.RoleInfo(authority.getName())));
 
-    public String getTanentId() {
-        final String clientId = environment.getProperty(CLIENT_ID);
-        String tenantId = ApplicationThreadLocals.getTenantID();
-        if (isNotBlank(clientId)) {
-            final StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(clientId).append('.').append(tenantId);
-            tenantId = stringBuilder.toString();
-        }
-        return tenantId;
-    }
+		return new UserInfo(roles, user.getId(), user.getUsername(), user.getName(), user.getEmailId(),
+				user.getMobileNumber(), user.getType().toString(), getTanentId());
+	}
 
-    public void createUserMicroservice(final User user) {
-        if (isNotBlank(userServiceUrl)) {
+	public String getTanentId() {
+		final String clientId = environment.getProperty(CLIENT_ID);
+		String tenantId = ApplicationThreadLocals.getTenantID();
+		if (isNotBlank(clientId)) {
+			final StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.append(clientId).append('.').append(tenantId);
+			tenantId = stringBuilder.toString();
+		}
+		return tenantId;
+	}
 
-            if (user.getRoles().isEmpty() && user.getType().equals(UserType.CITIZEN))
-                user.addRole(roleService.getRoleByName(CITIZEN_ROLE_NAME));
+	public void createUserMicroservice(final User user) {
+		if (isNotBlank(userServiceUrl)) {
 
-            final CreateUserRequest createUserRequest = new CreateUserRequest();
-            final UserRequest userRequest = new UserRequest(user, getTanentId());
-            createUserRequest.setUserRequest(userRequest);
-            createUserRequest.setRequestInfo(createRequestInfo());
+			if (user.getRoles().isEmpty() && user.getType().equals(UserType.CITIZEN))
+				user.addRole(roleService.getRoleByName(CITIZEN_ROLE_NAME));
 
-            final RestTemplate restTemplate = new RestTemplate();
-            try {
-                restTemplate.postForObject(userServiceUrl, createUserRequest, UserDetailResponse.class);
-            } catch (final Exception e) {
-                final String errMsg = "Exception while creating User in microservice ";                
-                //throw new ApplicationRuntimeException(errMsg, e);
-                LOGGER.fatal(errMsg, e);
-            }
-        }
-    }
+			final CreateUserRequest createUserRequest = new CreateUserRequest();
+			final UserRequest userRequest = new UserRequest(user, getTanentId());
+			createUserRequest.setUserRequest(userRequest);
+			createUserRequest.setRequestInfo(createRequestInfo());
 
-    public List<Task> getTasks() {
+			final RestTemplate restTemplate = new RestTemplate();
+			try {
+				restTemplate.postForObject(userServiceUrl, createUserRequest, UserDetailResponse.class);
+			} catch (final Exception e) {
+				final String errMsg = "Exception while creating User in microservice ";
+				// throw new ApplicationRuntimeException(errMsg, e);
+				LOGGER.fatal(errMsg, e);
+			}
+		}
+	}
 
-        List<Task> tasks = new ArrayList<>();
-        if (isNotBlank(workflowServiceUrl)) {
-            final RestTemplate restTemplate = new RestTemplate();
-            TaskResponse tresp;
-            try {
-                RequestInfo createRequestInfo = createRequestInfo();
-                RequestInfoWrapper requestInfo = new RequestInfoWrapper();
-                requestInfo.setRequestInfo(createRequestInfo);
-                tresp = restTemplate.postForObject(workflowServiceUrl, requestInfo, TaskResponse.class);
-                tasks = tresp.getTasks();
-            } catch (final Exception e) {
-                final String errMsg = "Exception while getting inbox items from microservice ";
-               // throw new ApplicationRuntimeException(errMsg, e);
-                LOGGER.fatal(errMsg,e);
-            }
-        }
-        return tasks;
-    }
+	public List<Department> getDepartments(String access_token, String tenantId) {
 
-    public List<Inbox> getInboxItems() {
-        List<Inbox> inboxItems = new LinkedList<>();
-        if (hasWorkflowService()) {
-            for (Task t : getTasks()) {
-                Inbox inboxItem = new Inbox();
-                inboxItem.setId(t.getId());
-                inboxItem.setCreatedDate(t.getCreatedDate());
-                inboxItem.setDate(toDefaultDateTimeFormat(t.getCreatedDate()));
-                inboxItem.setSender(t.getSenderName());
-                inboxItem.setTask(t.getNatureOfTask());
-                inboxItem.setStatus(t.getStatus());
-                inboxItem.setDetails(t.getDetails());
-                inboxItem.setLink(t.getUrl());
-                inboxItem.setSender(t.getSenderName());
-                inboxItems.add(inboxItem);
-            }
-        }
-        return inboxItems;
-    }
+		final RestTemplate restTemplate = new RestTemplate();
+		final String dept_url = deptServiceUrl+"?tenantId="+tenantId;
 
-    public boolean hasWorkflowService() {
-        return isNotBlank(workflowServiceUrl);
-    }
+		RequestInfo requestInfo = new RequestInfo();
+		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+		
+		requestInfo.setAuthToken(access_token);
+		requestInfo.setTs(new Date());
+		reqWrapper.setRequestInfo(requestInfo);
+
+		DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper,
+				DepartmentResponse.class);
+		return depResponse.getDepartment();
+	}
+
+	public List<Designation> getDesignation(String access_token, String tenantId) {
+
+		final RestTemplate restTemplate = new RestTemplate();
+		final String design_url = designServiceUrl+"?tenantId="+tenantId;
+
+		RequestInfo requestInfo = new RequestInfo();
+		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+		requestInfo.setAuthToken(access_token);
+		requestInfo.setTs(new Date());
+		reqWrapper.setRequestInfo(requestInfo);
+
+		DesignationResponse designResponse = restTemplate.postForObject(design_url, reqWrapper,
+				DesignationResponse.class);
+		return designResponse.getDesignation();
+	}
+
+	public List<EmployeeInfo> getApprovers(String access_token, String tenantId,String departmentId,String designationId) {
+
+		final RestTemplate restTemplate = new RestTemplate();
+		
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		
+		final String approver_url = approverSrvcUrl 
+					+"?tenantId="+tenantId
+					+"&assignment.departmentId"+departmentId
+					+"&assignment.designationId"+designationId
+					+"&asOnDate"+dateFormat.format(new Date());
+
+		RequestInfo requestInfo = new RequestInfo();
+		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+		//tenantId=default&assignment.departmentId=1&assignment.designationId=1&asOnDate=28/07/2018
+
+		requestInfo.setAuthToken(access_token);
+		requestInfo.setTs(new Date());
+		reqWrapper.setRequestInfo(requestInfo);
+
+		EmployeeInfoResponse empResponse = restTemplate.postForObject(approver_url, reqWrapper,
+				EmployeeInfoResponse.class);
+
+		return empResponse.getEmployees();
+	}
+
+	public CustomUserDetails getUserDetails(String access_token){
+		final RestTemplate restT = new RestTemplate();
+    	final String authurl = authSrvcUrl+"?access_token="+access_token;
+    	
+    	RequestInfo reqInfo = new RequestInfo();
+    	RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+    	
+    	reqInfo.setAuthToken(access_token);
+    	reqWrapper.setRequestInfo(reqInfo);
+    	
+    	
+    	CustomUserDetails user = restT.postForObject(authurl, reqWrapper,CustomUserDetails.class);
+    	return user;
+	}
+	public List<Task> getTasks() {
+
+		List<Task> tasks = new ArrayList<>();
+		if (isNotBlank(workflowServiceUrl)) {
+			final RestTemplate restTemplate = new RestTemplate();
+			TaskResponse tresp;
+			try {
+				RequestInfo createRequestInfo = createRequestInfo();
+				RequestInfoWrapper requestInfo = new RequestInfoWrapper();
+				requestInfo.setRequestInfo(createRequestInfo);
+				tresp = restTemplate.postForObject(workflowServiceUrl, requestInfo, TaskResponse.class);
+				tasks = tresp.getTasks();
+			} catch (final Exception e) {
+				final String errMsg = "Exception while getting inbox items from microservice ";
+				// throw new ApplicationRuntimeException(errMsg, e);
+				LOGGER.fatal(errMsg, e);
+			}
+		}
+		return tasks;
+	}
+
+	public List<Inbox> getInboxItems() {
+		List<Inbox> inboxItems = new LinkedList<>();
+		if (hasWorkflowService()) {
+			for (Task t : getTasks()) {
+				Inbox inboxItem = new Inbox();
+				inboxItem.setId(t.getId());
+				inboxItem.setCreatedDate(t.getCreatedDate());
+				inboxItem.setDate(toDefaultDateTimeFormat(t.getCreatedDate()));
+				inboxItem.setSender(t.getSenderName());
+				inboxItem.setTask(t.getNatureOfTask());
+				inboxItem.setStatus(t.getStatus());
+				inboxItem.setDetails(t.getDetails());
+				inboxItem.setLink(t.getUrl());
+				inboxItem.setSender(t.getSenderName());
+				inboxItems.add(inboxItem);
+			}
+		}
+		return inboxItems;
+	}
+	
+
+	public boolean hasWorkflowService() {
+		return isNotBlank(workflowServiceUrl);
+	}
+
+	public String getAccessTokenFromRedis(HttpServletRequest request) {
+
+		String access_token = null;
+
+		String sessionId = request.getSession().getId();
+
+		if (redisTemplate.hasKey(sessionId)) {
+			if (redisTemplate.opsForHash().hasKey(sessionId, "ACCESS_TOKEN")) {
+				access_token = String.valueOf(redisTemplate.opsForHash().get(sessionId, "ACCESS_TOKEN"));
+			}
+		}
+		return access_token;
+	}
+	
+	public void SaveSessionToRedis(String access_token,String sessionId,Map<String,String> values){
+		
+		if(null!=access_token && null!=values && values.size()>0){
+			values.keySet().forEach(key->{
+				this.redisTemplate.opsForHash().putIfAbsent(sessionId, key, values.get(key));
+				});
+			this.redisTemplate.opsForList().leftPush(access_token, sessionId);
+		}
+		
+	}
+	
+	public Map<String,String> readSessionValuesFromRedis(String sessionId){
+		Map<String,String> sValues = new HashMap<>();
+		
+		if(this.redisTemplate.hasKey(sessionId)){
+			
+			this.redisTemplate.opsForHash().keys(sessionId).forEach(key->{
+				sValues.put(String.valueOf(key), String.valueOf(this.redisTemplate.opsForHash().get(sessionId, key)));
+				});;
+		}
+		
+		return sValues;
+	}
+	
+	
+	public void removeSessionFromRedis(String access_token){
+		LOGGER.info("Logout for access/auth token called :: "+access_token);
+		if(this.redisTemplate.hasKey(access_token)){
+			while(this.redisTemplate.opsForList().size(access_token)>0){
+				this.redisTemplate.delete(this.redisTemplate.opsForList().leftPop(access_token));
+			}
+			this.redisTemplate.delete(access_token);
+			}
+		
+	}
+	
+	public void refreshToken(String oldToken,String newToken){
+		LOGGER.info("Refresh Token is called OLD::NEW"+oldToken+" :: "+newToken);
+		if(this.redisTemplate.hasKey(oldToken)){
+			
+			while(this.redisTemplate.opsForList().size(oldToken)>0){
+			
+				Object sessionId =  this.redisTemplate.opsForList().leftPop(oldToken);
+				if(this.redisTemplate.hasKey(sessionId)){
+					if(oldToken.equals(this.redisTemplate.opsForHash().get(sessionId, "ACCESS_TOKEN"))){
+						this.redisTemplate.opsForHash().delete(sessionId, "ACCESS_TOKEN");
+						this.redisTemplate.opsForHash().put(sessionId, "ACCESS_TOKEN", newToken);
+						this.redisTemplate.delete(oldToken);
+						this.redisTemplate.opsForValue().set(newToken, sessionId);
+					}
+				}
+				this.redisTemplate.opsForList().leftPush(newToken, sessionId);
+			}
+			this.redisTemplate.delete(oldToken);
+			
+		}
+	}
 }

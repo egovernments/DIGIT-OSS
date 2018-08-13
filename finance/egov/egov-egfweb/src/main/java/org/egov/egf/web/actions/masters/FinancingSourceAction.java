@@ -209,7 +209,8 @@ public class FinancingSourceAction extends BaseFormAction {
             LOGGER.debug("FinancingSourceAction | save | start");
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("financial source list size " + fundSourceList.size());
-        final User user = (User) persistenceService.find("from User where id=" + ApplicationThreadLocals.getUserId());
+//        final User user = (User) persistenceService.find("from User where id=" + ApplicationThreadLocals.getUserId());
+          final long user = ApplicationThreadLocals.getUserId();
         SharedFundSource sharedFundSource;
         try {
             for (Fundsource fundsource : fundSourceList)

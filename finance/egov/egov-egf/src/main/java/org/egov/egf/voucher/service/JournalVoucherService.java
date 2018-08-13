@@ -365,7 +365,7 @@ public class JournalVoucherService {
         Assignment wfInitiator = null;
         final String currState = "";
         if (null != voucherHeader.getId())
-            wfInitiator = assignmentService.getPrimaryAssignmentForUser(voucherHeader.getCreatedBy().getId());
+            wfInitiator = assignmentService.getPrimaryAssignmentForUser(voucherHeader.getCreatedBy());
         if (FinancialConstants.BUTTONREJECT.toString().equalsIgnoreCase(workFlowAction)) {
             final String stateValue = FinancialConstants.WORKFLOW_STATE_REJECTED;
             voucherHeader.transition().progressWithStateCopy().withSenderName(user.getUsername() + "::" + user.getName())
@@ -430,7 +430,7 @@ public class JournalVoucherService {
             approvalPosition = voucherHeader.getState().getOwnerPosition().getId();
         else if (wfmatrix != null)
             approvalPosition = financialUtils.getApproverPosition(wfmatrix.getNextDesignation(),
-                    voucherHeader.getState(), voucherHeader.getCreatedBy().getId());
+                    voucherHeader.getState(), voucherHeader.getCreatedBy());
         if (workFlowAction.equals(FinancialConstants.BUTTONCANCEL))
             approvalPosition = null;
 

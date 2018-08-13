@@ -48,13 +48,29 @@
 
 package org.egov.infra.config.security.authentication.userdetail.service;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.egov.infra.admin.master.entity.CustomUserDetails;
+import org.egov.infra.admin.master.entity.Role;
+import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.UserService;
 import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.egov.infra.persistence.entity.enums.Gender;
+import org.egov.infra.persistence.entity.enums.UserType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.client.RestTemplate;
 
 public class UserDetailService implements UserDetailsService {
-    private UserService userService;
+    
+	@Autowired
+	public MicroserviceUtils msUtil;
+	
+	private UserService userService;
 
     public UserDetailService(UserService userService) {
         this.userService = userService;
@@ -62,6 +78,86 @@ public class UserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        return new CurrentUser(this.userService.getUserByUsername(username));
+    	 System.out.println("************** retrieving user information - started*******************");
+         User user= this.loadUserFromMS(username);
+//         User user= this.getDummyUser();
+         System.out.println("************** retrieving user information - end*******************");
+         return new CurrentUser(user);
+    }
+    
+    private User loadUserFromMS(String accessToken)
+    {
+    	System.out.println("*************** User Info microservice - started ****************");
+    	System.out.println("Recieved token:"+accessToken);
+    	//MicroserviceUtils msutil = new MicroserviceUtils();
+    	CustomUserDetails user = msUtil.getUserDetails(accessToken);
+    	System.out.println("*************** User Info microservice - end ****************");
+    	return this.parepareCurrentUser(user);
+    }
+    
+    private User parepareCurrentUser(CustomUserDetails userdetails) {
+    
+    		
+    	
+    	User user =new User(UserType.EMPLOYEE);
+    //	user.setId(userdetails.getId());
+    	user.setId(userdetails.getId());
+    	user.setUsername(userdetails.getUserName());
+    	user.setActive(true);
+    	user.setAccountLocked(false);
+    	user.setGender(Gender.FEMALE);
+    	user.setPassword("demo");
+    	user.setName(userdetails.getName());
+    	user.setPwdExpiryDate(new Date(2090,01,01));
+    	user.setLocale(userdetails.getLocale());
+    	System.out.println("***************** is password expired :  "+user.getPwdExpiryDate().isAfterNow());
+    	
+//    	for(Role _role:userdetails.getRoles()){
+//    		
+//    	}
+//    	Role role = new Role();
+//    	role.setId(4L);
+//    	role.setName("SYSTEM");
+    	Set<Role> roles = new HashSet<>(userdetails.getRoles());
+    	//roles.add(role);
+    	
+    	user.setRoles(roles);
+    	
+//    	user.setRoles(new HashSet<>(userdetails.getRoles()));
+    	
+    	
+    	
+    	return user;
+//    	currentUser.setRoles(new Set(userdetails.getRoles()));
+    	
+    }
+    
+    private User getDummyUser(){
+    	User user =new User(UserType.EMPLOYEE);
+        //	user.setId(userdetails.getId());
+        	user.setId(1L);
+        	user.setUsername("egovernments");
+        	user.setActive(true);
+        	user.setAccountLocked(false);
+        	user.setGender(Gender.MALE);
+        	user.setPassword("demo");
+        	user.setName("egovernments");
+        	user.setPwdExpiryDate(new Date(2090,01,01));
+        	user.setLocale("en_lan");
+        	System.out.println("***************** is password expired :  "+user.getPwdExpiryDate().isAfterNow());
+        	
+        	Role role = new Role();
+        	role.setId(4L);
+        	role.setName("SYSTEM");
+        	Set<Role> roles = new HashSet<>();
+        	roles.add(role);
+        	
+        	user.setRoles(roles);
+        	
+//        	user.setRoles(new HashSet<>(userdetails.getRoles()));
+        	
+        	
+        	
+        	return user;
     }
 }

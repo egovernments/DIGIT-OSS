@@ -72,6 +72,7 @@ public class CacheControlFilter implements Filter {
 
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
+    	System.out.println("********************** CacheControlFilter: init");
         if (filterConfig.getInitParameter("expireInSeconds") == null)
             expireInSeconds = DEFAULT_EXPIRES_SECONDS;
         else
@@ -80,7 +81,10 @@ public class CacheControlFilter implements Filter {
     
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
-        final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+       
+    	System.out.println("********************** CacheControlFilter: doFilter");
+    	
+    	final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         httpServletResponse.setHeader(CACHE_CONTROL_HEADER, "public,max-age=" + expireInSeconds);
         httpServletResponse.setDateHeader(EXPIRE_HEADER, System.currentTimeMillis() + expireInSeconds * 1000L);
         httpServletResponse.setHeader(PRAGMA_HEADER, null);

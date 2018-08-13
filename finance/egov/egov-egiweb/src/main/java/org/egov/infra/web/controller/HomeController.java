@@ -54,12 +54,14 @@ import org.egov.infra.admin.common.service.FavouritesService;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.admin.master.service.UserService;
+import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
 import org.egov.infra.validation.ValidatorUtils;
 import org.egov.infra.web.support.ui.menu.ApplicationMenuRenderingService;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -142,7 +144,13 @@ public class HomeController {
 
     @GetMapping
     public ModelAndView showHome(HttpServletRequest request, HttpServletResponse response, ModelMap modelData) {
-        User user = userService.getCurrentUser();
+    	
+    	//  code change for parallel 
+    	CurrentUser curuser = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	System.out.println("************current user: "+curuser.getUsername());
+    	
+    	//    	User user = userService.getCurrentUser();
+    	User user =curuser.getUser();
         setUserLocale(user, request, response);
         if (user.getType().equals(EMPLOYEE) || user.getType().equals(SYSTEM) || user.hasRole(portalAccessibleRole)) {
             String menuJson = new StringBuilder(100)

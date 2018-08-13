@@ -410,7 +410,7 @@ public class ExpenseBillService {
         final String currState = "";
         String stateValue = "";
         if (null != egBillregister.getId())
-            wfInitiator = assignmentService.getPrimaryAssignmentForUser(egBillregister.getCreatedBy().getId());
+            wfInitiator = assignmentService.getPrimaryAssignmentForUser(egBillregister.getCreatedBy());
         if (FinancialConstants.BUTTONREJECT.equalsIgnoreCase(workFlowAction)) {
             stateValue = FinancialConstants.WORKFLOW_STATE_REJECTED;
             egBillregister.transition().progressWithStateCopy().withSenderName(user.getUsername() + "::" + user.getName())
@@ -450,7 +450,9 @@ public class ExpenseBillService {
                         .withComments(approvalComent)
                         .withStateValue(stateValue).withDateInfo(new Date()).withOwner(wfInitiator.getPosition())
                         .withNextAction(wfmatrix.getNextAction())
-                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME);
+                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME)
+                        .withCreatedBy(user.getId())
+                        .withtLastModifiedBy(user.getId());
             } else if (FinancialConstants.BUTTONCANCEL.equalsIgnoreCase(workFlowAction)) {
                 stateValue = FinancialConstants.WORKFLOW_STATE_CANCELLED;
                 egBillregister.transition().end().withSenderName(user.getUsername() + "::" + user.getName())
@@ -502,7 +504,7 @@ public class ExpenseBillService {
             approvalPosition = egBillregister.getState().getOwnerPosition().getId();
         else if (wfmatrix != null)
             approvalPosition = financialUtils.getApproverPosition(wfmatrix.getNextDesignation(),
-                    egBillregister.getState(), egBillregister.getCreatedBy().getId());
+                    egBillregister.getState(), egBillregister.getCreatedBy());
         if (workFlowAction.equals(FinancialConstants.BUTTONCANCEL))
             approvalPosition = null;
 

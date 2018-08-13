@@ -60,8 +60,8 @@
         </id>
 		<property column="LASTMODIFIEDDATE" name="modifiedDate" type="timestamp"/>
 		<property column="createdDate" name="createdDate"/>
-		<many-to-one name="createdBy" class="org.egov.infra.admin.master.entity.User" column="CREATEDBY"/>
-		<many-to-one name="modifiedBy" class="org.egov.infra.admin.master.entity.User" column="LASTMODIFIEDBY"/>
+		 <property name="createdBy" type="long"><column name="CREATEDBY"></column></property>
+		<property name="modifiedBy" type="long"><column name="LASTMODIFIEDBY"></column></property>
         
         <many-to-one name="chartOfAccount" class="org.egov.commons.CChartOfAccounts" column="GLCODEID"  />
         <property name="head" type="string" column="HEAD"/>

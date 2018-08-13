@@ -71,29 +71,31 @@ public abstract class AbstractAuditable extends AbstractPersistable<Long> {
 
     private static final long serialVersionUID = 7138056997693406739L;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "createdBy")
-    @CreatedBy
-    private User createdBy;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "createdBy")
+//    @CreatedBy
+   // private User createdBy;
+    private Long createdBy;
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     private Date createdDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lastModifiedBy")
-    @LastModifiedBy
-    private User lastModifiedBy;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "lastModifiedBy")
+//    @LastModifiedBy
+//    private User lastModifiedBy;
+    private Long lastModifiedBy;
 
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date lastModifiedDate;
 
-    public User getCreatedBy() {
+    public long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(final User createdBy) {
+    public void setCreatedBy(final long createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -106,11 +108,11 @@ public abstract class AbstractAuditable extends AbstractPersistable<Long> {
     }
 
     @Audited
-    public User getLastModifiedBy() {
+    public long getLastModifiedBy() {
         return lastModifiedBy;
     }
 
-    public void setLastModifiedBy(final User lastModifiedBy) {
+    public void setLastModifiedBy(final long lastModifiedBy) {
         this.lastModifiedBy = lastModifiedBy;
     }
 

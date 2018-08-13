@@ -49,11 +49,18 @@
 package org.egov.infra.admin.master.repository;
 
 import org.egov.infra.admin.master.entity.Role;
+import org.hibernate.FlushMode;
 
 import javax.persistence.EntityManager;
+import javax.persistence.FlushModeType;
 import javax.persistence.PersistenceContext;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class ModuleRepositoryImpl implements ModuleRepositoryCustom {
 
@@ -66,8 +73,17 @@ public class ModuleRepositoryImpl implements ModuleRepositoryCustom {
                 append("SELECT DISTINCT mod.name,mod.contextRoot,mod.displayName, mod.id, mod.ordernumber FROM eg_module mod,eg_action act ").
                 append("WHERE act.id IN (SELECT DISTINCT actionid FROM eg_roleaction WHERE roleid IN (:roles)) ").
                 append("AND mod.enabled=true AND act.enabled = true AND act.application=mod.id AND mod.parentmodule is null ORDER BY mod.ordernumber ASC");
+        //entityManager.setFlushMode(FlushModeType.COMMIT);
+       
+//        return entityManager.createNativeQuery(sql.toString()).
+//                setParameter("roles", roles).
+//                setFlushMode(FlushModeType.COMMIT).
+//                getResultList();
+  
+        	
         return entityManager.createNativeQuery(sql.toString()).
-                setParameter("roles", roles).
+                setParameter("roles", Arrays.asList(4L,2L)).
+                setFlushMode(FlushModeType.COMMIT).
                 getResultList();
     }
 

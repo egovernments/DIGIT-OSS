@@ -73,8 +73,8 @@
 	    <property name="commTaxOfficer" type="string" column="COMMTAXOFFICER" />
 	    <property name="createdDate" type="date" column="CREATEDDATE" />
 	    <property name="modifiedDate" type="date" column="LASTMODIFIEDDATE" />
-	    <many-to-one name="createdBy" class="org.egov.infra.admin.master.entity.User" column="CREATEDBY" not-null="true"/>
-	    <many-to-one name="modifiedBy" class="org.egov.infra.admin.master.entity.User" column="LASTMODIFIEDBY"/>
+	    <property name="createdBy" type="long" column="CREATEDBY" not-null="true"/>
+	    <property name="modifiedBy" type="long"><column name="LASTMODIFIEDBY"></column></property>
 	    
 	 </class>
 </hibernate-mapping>

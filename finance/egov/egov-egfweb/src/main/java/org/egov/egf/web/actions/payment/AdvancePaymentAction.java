@@ -244,13 +244,13 @@ public class AdvancePaymentAction extends BasePaymentAction {
         paymentheader = getPayment();
         action = parameters.get(ACTIONNAME)[0];
 
-        Integer userId = null;
+        Long userId = null;
         if (parameters.get(ACTIONNAME)[0] != null && parameters.get(ACTIONNAME)[0].contains(REJECT_ACTION))
-            userId = paymentheader.getCreatedBy().getId().intValue();
+            userId = paymentheader.getCreatedBy();
         else if (null != parameters.get("approverUserId") && Integer.valueOf(parameters.get("approverUserId")[0]) != -1)
-            userId = Integer.valueOf(parameters.get("approverUserId")[0]);
+            userId = Long.valueOf(parameters.get("approverUserId")[0]);
         else
-            userId = ApplicationThreadLocals.getUserId().intValue();
+            userId = ApplicationThreadLocals.getUserId();
 
         paymentWorkflowService.transition(parameters.get(ACTIONNAME)[0] + "|" + userId, paymentheader,
                 parameters.get("comments")[0]);

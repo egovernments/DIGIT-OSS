@@ -106,7 +106,7 @@ public class CreateJournalVoucherController extends BaseVoucherController {
     }
 
     @RequestMapping(value = "/newform", method = RequestMethod.GET)
-    public String showNewForm(@ModelAttribute("voucherHeader") final CVoucherHeader voucherHeader, final Model model) {
+    public String showNewForm(@ModelAttribute("voucherHeader") final CVoucherHeader voucherHeader, final Model model,final HttpServletRequest request) {
         voucherHeader.setType(FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL);
         setDropDownValues(model);
         model.addAttribute(STATE_TYPE, voucherHeader.getClass().getSimpleName());

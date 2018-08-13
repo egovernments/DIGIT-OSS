@@ -84,7 +84,8 @@ public class ApplicationAuthenticationSuccessHandler extends SimpleUrlAuthentica
                                         Authentication authentication) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         session.setAttribute(LOGIN_TIME, new Date());
-        redirectToSuccessPage(request, response, authentication);
+        System.out.println("******************Authentication processed successfully********");
+     //   redirectToSuccessPage(request, response, authentication);
     }
 
     private void redirectToSuccessPage(HttpServletRequest request, HttpServletResponse response,

@@ -333,6 +333,17 @@ public abstract class StateAware<T extends OwnerGroup> extends AbstractAuditable
             state.setSenderName(senderName);
             return this;
         }
+        
+        public final Transition withCreatedBy(long id){
+        	checkTransitionStatus();
+        	state.setCreatedBy(id);
+        	return this;
+        }
+        public final Transition withtLastModifiedBy(long id){
+        	checkTransitionStatus();
+        	state.setLastModifiedBy(id);
+        	return this;
+        }
 
         private void resetState() {
             state.setComments(EMPTY);

@@ -83,7 +83,7 @@
     }
 </style>
     <form:form name="expenseBillForm" role="form" method="post" action="create" modelAttribute="egBillregister" id="egBillregister" class="form-horizontal form-groups-bordered" enctype="multipart/form-data">
-
+	
     <div class="position_alert">
         <spring:message code="lbl.netpayable.amount"/>
         : &#8377 <span id="expenseNetPayableAmount"><c:out

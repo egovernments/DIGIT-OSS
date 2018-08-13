@@ -328,7 +328,7 @@ public class PaymentActionHelper {
     }
 
     protected Assignment getWorkflowInitiator(final Paymentheader paymentheader) {
-        Assignment wfInitiator = assignmentService.getPrimaryAssignmentForUser(paymentheader.getCreatedBy().getId());
+        Assignment wfInitiator = assignmentService.getPrimaryAssignmentForUser(paymentheader.getCreatedBy());
         return wfInitiator;
     }
 

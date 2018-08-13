@@ -48,6 +48,7 @@
 
 package org.egov.infra.web.controller;
 
+import org.apache.http.HttpStatus;
 import org.egov.infra.admin.common.service.IdentityRecoveryService;
 import org.egov.infra.admin.master.entity.Location;
 import org.egov.infra.admin.master.service.LocationService;
@@ -118,5 +119,11 @@ public class LoginController {
     @ResponseBody
     public List<Location> requiredLocations(@RequestParam final String username) {
         return locationService.getLocationRequiredByUserName(username);
+    }
+    @PostMapping
+    public String login() {
+    
+    	System.out.println("***********EGI WEB LOGIN PROCESSING**************");
+    	return "home";
     }
 }

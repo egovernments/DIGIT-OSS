@@ -48,13 +48,13 @@
 
 package org.egov.infra.workflow.repository;
 
-import org.egov.infra.workflow.entity.WorkflowType;
+import org.egov.infra.workflow.entity.WorkflowTypes;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface WorkflowTypeRepository extends JpaRepository<WorkflowType, Long> {
+public interface WorkflowTypeRepository extends JpaRepository<WorkflowTypes, Long> {
 
-    WorkflowType findByTypeAndEnabledIsTrue(String type);
+    WorkflowTypes findByTypeAndEnabledIsTrue(String type);
 
-    WorkflowType findByType(String type);
+    WorkflowTypes findByType(String type);
 
 }

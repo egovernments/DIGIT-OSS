@@ -60,16 +60,16 @@ PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 		<property name="name" column="NAME" type="string" />
 		<property name="code" column="CODE" type="string" />
 		<property name="isActive" column="ISACTIVE" type="java.lang.Boolean" />
-		<many-to-one name="createdBy"
-			class="org.egov.infra.admin.master.entity.User" fetch="select">
+		<property name="createdBy"
+			type="long">
 			<column name="CREATEDBY" precision="22" scale="0" />
-		</many-to-one>
+		</property>
 		<property name="createdDate" column="CREATEDDATE" type="timestamp" />
 		<property name="modifiedDate" column="LASTMODIFIEDDATE" type="timestamp" />
-		<many-to-one name="modifiedBy"
-			class="org.egov.infra.admin.master.entity.User" fetch="select">
+		<property name="modifiedBy"
+			type="long">
 			<column name="LASTMODIFIEDBY" precision="22" scale="0" />
-		</many-to-one>
+		</property>
 		<set name="services" inverse="true" cascade="all,delete-orphan">
 			<cache usage="transactional" />
 			<key>

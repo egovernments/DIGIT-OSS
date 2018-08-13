@@ -77,13 +77,13 @@
          </many-to-one>
         <property name="createdDate" column="CREATEDDATE" type="timestamp"/>
 		<property name="lastModifiedDate" column="LASTMODIFIEDDATE" type="timestamp" />
-		<many-to-one name="createdBy" class="org.egov.infra.admin.master.entity.User"
-			fetch="select">
+		<property name="createdBy" type="long"
+			>
 			<column name="CREATEDBY" precision="22" scale="0" />
-		</many-to-one>
-		<many-to-one name="lastModifiedBy" class="org.egov.infra.admin.master.entity.User"
-			fetch="select">
+		</property>
+		<property name="lastModifiedBy" type="long"
+			>
 			<column name="LASTMODIFIEDBY" precision="22" scale="0" />
-		</many-to-one>
+		</property>
 	</class>
 </hibernate-mapping>

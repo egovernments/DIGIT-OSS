@@ -115,9 +115,10 @@ public class HibernateEventListener implements SaveOrUpdateEventListener, PreUpd
             }
 
         } else if (object instanceof Auditable && !session.getPersistenceContext().reassociateIfUninitializedProxy(object)) {
-            final User usr = session.load(User.class, ApplicationThreadLocals.getUserId());
+//            final User usr = session.load(User.class, ApplicationThreadLocals.getUserId());
+        	  final long usr = ApplicationThreadLocals.getUserId();
             final AbstractAuditable entity = (AbstractAuditable) session.getPersistenceContext().unproxyAndReassociate(object);
-            if (entity.getCreatedBy() == null) {
+            if (entity.getCreatedBy() == 0) {
                 final Date currentDate = new Date();
                 entity.setCreatedDate(currentDate);
                 entity.setCreatedBy(usr);

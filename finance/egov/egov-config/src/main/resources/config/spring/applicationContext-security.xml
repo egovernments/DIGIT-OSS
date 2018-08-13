@@ -56,11 +56,20 @@
 
     <security:global-method-security secured-annotations="enabled"
                                      access-decision-manager-ref="accessDecisionManager"/>
+   <!--  <security:http auto-config="false" 
+    	security-context-repository-ref="applicationSecurityContextRepository" 
+    	entry-point-ref="authenticationEntryPoint"
+    	authentication-manager-ref="authenticationManager" >
+    	<security:custom-filter ref="authenticationProcessingFilter" after="FIRST"/>
+    	<security:access-denied-handler  error-page="/error/403"/>
+		
+    </security:http>         -->                         
 
     <bean id="concurrentSessionFilter" class="org.springframework.security.web.session.ConcurrentSessionFilter">
         <constructor-arg name="sessionRegistry" ref="springSessionBackedSessionRegistry"/>
     </bean>
-
+	<bean id ="applicationSecurityContextRepository" class="org.egov.infra.config.security.repository.ApplicationSecurityRepository">
+	</bean>
     <bean id="concurrentSessionControlStrategy"
           class="org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy">
         <constructor-arg index="0" ref="springSessionBackedSessionRegistry"/>
@@ -74,7 +83,9 @@
     </bean>
 
     <bean id="securityContextPersistenceFilter"
-          class="org.springframework.security.web.context.SecurityContextPersistenceFilter"/>
+          class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
+          	<constructor-arg ref="applicationSecurityContextRepository"/>
+          </bean>
 
     <bean id="logoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
         <constructor-arg value="/index.jsp"/>
@@ -148,7 +159,7 @@
         <constructor-arg name="authorities">
             <list value-type="org.springframework.security.core.GrantedAuthority">
                 <bean class="org.springframework.security.core.authority.SimpleGrantedAuthority">
-                    <constructor-arg name="role" value="PUBLIC"/>
+                    <constructor-arg name="role" value="SYSTEM"/>
                 </bean>
             </list>
         </constructor-arg>
@@ -164,9 +175,9 @@
     </bean>
 
     <bean id="authenticationEntryPoint"
-          class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-        <constructor-arg index="0" value="/index.jsp"/>
-        <property name="forceHttps" value="false"/>
+          class="org.egov.infra.web.filter.ApplicationAuthenticationEntryPoint">
+       <!--  <constructor-arg index="0" value="/index.jsp"/>
+        <property name="forceHttps" value="false"/> -->
     </bean>
 
     <bean id="filterSecurityInterceptor"
@@ -226,7 +237,7 @@
           class="org.egov.infra.config.security.authentication.userdetail.service.UserDetailService">
         <constructor-arg ref="userService"/>
     </bean>
-
+	<bean id="msUtil" class="org.egov.infra.microservice.utils.MicroserviceUtils"></bean>
     <bean id="applicationAuthorizationMetadataSource"
           class="org.egov.infra.config.security.authorization.ApplicationAuthorizationMetadataSource">
         <property name="excludePatterns">

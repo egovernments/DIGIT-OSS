@@ -174,6 +174,7 @@ public class ContingentBillAction extends BaseBillAction {
     @Override
     public void prepare() {
         super.prepare();
+        System.out.println("*********** New ExpenseBill recieved - Prepare *********************");
         accountDetailTypeList = persistenceService.findAllBy("from Accountdetailtype where isactive=true order by name");
         addDropdownData(ACCOUNT_DETAIL_TYPE_LIST, accountDetailTypeList);
         addDropdownData(BILL_SUB_TYPE_LIST, getBillSubTypes());
@@ -253,6 +254,7 @@ public class ContingentBillAction extends BaseBillAction {
     @SkipValidation
     @Action(value = "/bill/contingentBill-newform")
     public String newform() {
+    	System.out.println("*********** New ExpenseBill recieved- newForm*********************");
         List<AppConfigValues> cutOffDateconfigValue = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
                 "DataEntryCutOffDate");
         Date date;
@@ -348,6 +350,7 @@ public class ContingentBillAction extends BaseBillAction {
     public String create() {
         if (LOGGER.isInfoEnabled())
             LOGGER.info(billDetailsTableCreditFinal);
+        System.out.println("*********** ExpenseBill creation started*********************");
         try {
             voucherHeader.setVoucherDate(commonBean.getBillDate());
             voucherHeader.setVoucherNumber(commonBean.getBillNumber());
@@ -523,7 +526,7 @@ public class ContingentBillAction extends BaseBillAction {
             if (!validateOwner(cbill.getState()))
                 throw new ApplicationRuntimeException("Invalid Aceess");
         if (parameters.get(ACTION_NAME)[0].contains("reject"))
-            cbill.getCreatedBy().getId().intValue();
+            cbill.getCreatedBy();
         // billRegisterWorkflowService.transition(parameters.get(ACTION_NAME)[0]+"|"+userId, cbill,parameters.get("comments")[0]);
         cbill.transition().end().withOwner(getPosition()).withComments(parameters.get("comments")[0]);
         final String statusQury = "from EgwStatus where upper(moduletype)=upper('" + FinancialConstants.CONTINGENCYBILL_FIN

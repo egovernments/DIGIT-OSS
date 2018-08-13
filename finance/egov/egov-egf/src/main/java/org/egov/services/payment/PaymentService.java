@@ -177,7 +177,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
     @Autowired
     @Qualifier("chequeService")
     private ChequeService chequeService;
-    private User user = null;
+    private long user = 0;
     private int conBillIdlength = 0;
     public Integer selectedRows = 0;
     private final Date currentDate = new Date();
@@ -299,8 +299,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 
             final HashMap<String, Object> headerdetails = new HashMap<String, Object>();
 
-            user = (User) persistenceService.find(" from User where id = ?",
-                    ApplicationThreadLocals.getUserId());
+            user = ApplicationThreadLocals.getUserId();
             if (billList != null && billList.size() > 0
                     && "salary".equalsIgnoreCase(billList.get(0).getExpType()))
                 headerdetails.put(VoucherConstant.VOUCHERNAME,
@@ -456,7 +455,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 
     protected Assignment getWorkflowInitiator(final Paymentheader paymentheader) {
         Assignment wfInitiator = assignmentService.findByEmployeeAndGivenDate(
-                paymentheader.getCreatedBy().getId(), new Date()).get(0);
+                paymentheader.getCreatedBy(), new Date()).get(0);
         return wfInitiator;
     }
 
@@ -819,7 +818,9 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
         miscbilldetail.setBillamount(egBillregister.getBillamount());
         miscbilldetail.setPassedamount(passedAmt);
         miscbilldetail.setPaidamount(paidAmt);
-        miscbilldetail.setPaidby(user);
+//        miscbilldetail.setPaidby(user);
+//        need to change the signature
+        miscbilldetail.setPaidby(null);
         miscbilldetail.setPaidto(egBillregister.getEgBillregistermis()
                 .getPayto().trim());
         miscbilldetail.setBillVoucherHeader(egBillregister
@@ -840,7 +841,9 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
         miscbilldetail.setBillamount(egBillregister.getBillamount());
         miscbilldetail.setPassedamount(passedAmt);
         miscbilldetail.setPaidamount(paidAmt);
-        miscbilldetail.setPaidby(user);
+        //miscbilldetail.setPaidby(user);
+        // need to change the signature of this method
+        miscbilldetail.setPaidby(null);
         miscbilldetail.setPaidto(newPartyName.trim());
         miscbilldetail.setBillVoucherHeader(egBillregister
                 .getEgBillregistermis().getVoucherHeader());
@@ -857,8 +860,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
         Paymentheader paymentheader = null;
         try {
             miscBillList = new ArrayList<Miscbilldetail>();
-            user = (User) persistenceService.find(" from User where id = ?",
-                    ApplicationThreadLocals.getUserId());
+            user = ApplicationThreadLocals.getUserId();
             final Bankaccount ba = (Bankaccount) persistenceService.find(
                     "from Bankaccount where id=?", payheader.getBankaccount()
                             .getId());
@@ -1087,7 +1089,9 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
         miscbilldetail.setBillamount(bean.getNetAmt());
         miscbilldetail.setPassedamount(bean.getPassedAmt());
         miscbilldetail.setPaidamount(bean.getPaymentAmt());
-        miscbilldetail.setPaidby(user);
+       // miscbilldetail.setPaidby(user);
+        // need to change signature of this method
+        miscbilldetail.setPaidby(null);
         miscbilldetail.setPaidto(bean.getPayTo());
         miscbilldetail.setBillVoucherHeader(br.getEgBillregistermis()
                 .getVoucherHeader());
@@ -1107,7 +1111,9 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
         miscbilldetail.setBillamount(bean.getNetAmt());
         miscbilldetail.setPassedamount(bean.getPassedAmt());
         miscbilldetail.setPaidamount(bean.getPaymentAmt());
-        miscbilldetail.setPaidby(user);
+       // miscbilldetail.setPaidby(user);
+        //need to change the signature;
+        miscbilldetail.setPaidby(null);
         miscbilldetail.setPaidto(newPartyName);
         miscbilldetail.setBillVoucherHeader(br.getEgBillregistermis()
                 .getVoucherHeader());

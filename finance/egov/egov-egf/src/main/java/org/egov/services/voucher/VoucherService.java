@@ -202,7 +202,8 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
     }
 
     public Boundary getBoundaryForUser(final CVoucherHeader rv) {
-        return egovCommon.getBoundaryForUser(rv.getCreatedBy());
+//        return egovCommon.getBoundaryForUser(rv.getCreatedBy());
+    	return null;
     }
 
     public String getEmployeeNameForPositionId(final Position pos) {
@@ -222,14 +223,14 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
     public Department getDepartmentForWfItem(final CVoucherHeader cv) {
         final Assignment assignment = eisCommonService
                 .getLatestAssignmentForEmployeeByDate(
-                        cv.getCreatedBy().getId(), new Date());
+                        cv.getCreatedBy(), new Date());
         return assignment.getDepartment();
     }
 
     public Department getTempDepartmentForWfItem(final CVoucherHeader cv,
             final Position position) {
         Department d = null;
-        eisCommonService.getEmployeeByUserId(cv.getCreatedBy().getId());
+        eisCommonService.getEmployeeByUserId(cv.getCreatedBy());
         d = (Department) persistenceService
                 .find("select v.deptId from EmployeeView v left join v.userMaster  as user where v.isPrimary=true and user.id=?",
                         ApplicationThreadLocals.getUserId());
@@ -247,7 +248,7 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
     }
 
     public Position getPositionForWfItem(final CVoucherHeader rv) {
-        return eisCommonService.getPositionByUserId(rv.getCreatedBy().getId());
+        return eisCommonService.getPositionByUserId(rv.getCreatedBy());
     }
 
     public boolean budgetaryCheck(final EgBillregister billregister) {

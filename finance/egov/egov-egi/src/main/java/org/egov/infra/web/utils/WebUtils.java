@@ -60,6 +60,8 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.egov.infra.utils.ApplicationConstant.COLON;
 import static org.egov.infra.utils.ApplicationConstant.SLASH;
 
+import java.util.Locale;
+
 public final class WebUtils {
 
     private static final char QUESTION_MARK = '?';
@@ -119,6 +121,7 @@ public final class WebUtils {
 
     public static void setUserLocale(User user, HttpServletRequest request, HttpServletResponse response) {
         LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
-        localeResolver.setLocale(request, response, user.locale());
+//        localeResolver.setLocale(request, response, user.locale());
+        localeResolver.setLocale(request, response, new Locale("en_IN"));
     }
 }

@@ -92,10 +92,9 @@
    fetch="select" name="recruitmentTypeMstr">
    <column name="RECRUITMENT_TYPE_ID" precision="32" scale="0"/>
   </many-to-one>
-  <many-to-one cascade="all" class="org.egov.infra.admin.master.entity.User"
-   fetch="select" name="userMaster">
+  <property name="userMaster">
    <column name="ID_USER" precision="32" scale="0"/>
-  </many-to-one>
+  </property>
   <property generated="never" lazy="false" name="employeeCode">
    <column name="CODE"/>
   </property>
@@ -185,9 +184,9 @@
    <key column="ID_EMPLOYEE" not-null="true"/>
    <one-to-many class="org.egov.eis.entity.Assignment"/>
   </set>
-  <many-to-one class="org.egov.infra.admin.master.entity.User" fetch="select" name="createdBy">
+  <property type="long" name="createdBy">
    <column name="CREATED_BY"/>
-  </many-to-one>
+  </property>
   
   <property generated="never" lazy="false" name="permanentAddress" type="string">
    <column length="2048" name="PERMANENT_ADDRESS"/>

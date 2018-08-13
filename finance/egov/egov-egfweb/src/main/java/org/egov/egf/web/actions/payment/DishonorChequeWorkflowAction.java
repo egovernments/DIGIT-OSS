@@ -408,7 +408,7 @@ public class DishonorChequeWorkflowAction extends BaseFormAction {
                     .find("from InstrumentOtherDetails where instrumentHeaderId.id=?", dishonorChequeView.getInstrumentHeader()
                             .getId());
             final User approverUser = (User) persistenceService.find("from User where id=?", iob.getPayinslipId().getCreatedBy()
-                    .getId());
+                    );
             eisService.getPrimaryPositionForUser(approverUser.getId(), new Date());
             // phoenix migration dishonorChequeView.setApproverPositionId(approvePos.getId());
             startChequeWorkflow(dishonorChequeView, actionNm,

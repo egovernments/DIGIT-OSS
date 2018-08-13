@@ -247,8 +247,8 @@ public class FinancialUtils {
                 final HashMap<String, Object> workflowHistory = new HashMap<>(0);
                 workflowHistory.put("date", stateHistory.getDateInfo());
                 workflowHistory.put("comments", stateHistory.getComments());
-                workflowHistory.put("updatedBy", stateHistory.getLastModifiedBy().getUsername() + "::"
-                        + stateHistory.getLastModifiedBy().getName());
+                workflowHistory.put("updatedBy", stateHistory.getLastModifiedBy() + "::"
+                        + stateHistory.getLastModifiedBy());
                 workflowHistory.put("status", stateHistory.getValue());
                 final Position owner = stateHistory.getOwnerPosition();
                 user = stateHistory.getOwnerUser();
@@ -268,7 +268,7 @@ public class FinancialUtils {
             }
             map.put("date", state.getDateInfo());
             map.put("comments", state.getComments() != null ? state.getComments() : "");
-            map.put("updatedBy", state.getLastModifiedBy().getUsername() + "::" + state.getLastModifiedBy().getName());
+            map.put("updatedBy", state.getLastModifiedBy() + "::" + state.getLastModifiedBy());
             map.put("status", state.getValue());
             final Position ownerPosition = state.getOwnerPosition();
             user = state.getOwnerUser();

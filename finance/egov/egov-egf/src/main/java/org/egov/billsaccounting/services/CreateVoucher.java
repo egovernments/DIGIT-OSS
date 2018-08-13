@@ -1466,8 +1466,10 @@ public class CreateVoucher {
 			LOGGER.error(ERR, e);
 			throw new ApplicationRuntimeException(e.getMessage());
 		}
-		vh.setCreatedBy(userMngr.getUserById(Long.valueOf(ApplicationThreadLocals
-				.getUserId())));
+//		vh.setCreatedBy(userMngr.getUserById(Long.valueOf(ApplicationThreadLocals
+//				.getUserId())));
+		vh.setCreatedBy(Long.valueOf(ApplicationThreadLocals
+				.getUserId()));
 		if (LOGGER.isInfoEnabled())
 			LOGGER.info("++++++++++++++++++" + vh.toString());
 		voucherService.persist(vh);

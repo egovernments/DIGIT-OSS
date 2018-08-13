@@ -47,7 +47,7 @@
  */
 $(document).ready(function()
 {	
-	$('#approvalDepartment').change(function(){
+/*	$('#approvalDepartment').change(function(){
 		$.ajax({
 			url: "/eis/ajaxWorkFlow-getDesignationsByObjectType",     
 			type: "GET",
@@ -66,6 +66,46 @@ $(document).ready(function()
 				$('#approvalDesignation').empty();
 				$('#approvalDesignation').append($("<option value=''>Select from below</option>"));
 				$.each(response, function(index, value) {
+					$('#approvalDesignation').append($('<option>').text(value.name).attr('value', value.id));
+				});
+				$('#approvalDesignation').val($('#approvalDesignationValue').val());
+				$('#approvalDesignation').trigger('change');
+			}, 
+			error: function (response) {
+				bootbox.alert('json fail');
+				console.log("failed");
+			}
+		});
+	});*/
+	
+	
+	$('#approvalDepartment').change(function(){
+		
+		var jsonData = {
+					 "requestInfo":{
+								"apiId": "string",
+								  "ver": "string",
+								  "ts": "28-07-2018 00:00:00",
+								  "action": "string",
+								  "did": "string",
+								  "key": "string",
+								  "msgId": "string",
+								  "requesterId": "string",
+								  "authToken": "string"
+								}
+				};
+		var tenantId = 'default';
+		
+		$.ajax({
+			url: "/egov-common-masters/departments/_search?tenantId="+tenantId,     
+			type:'post',
+			contentType:'application/json',
+			data:JSON.stringify(jsonData),
+			success: function (response) {
+				console.log("success"+response);
+				$('#approvalDesignation').empty();
+				$('#approvalDesignation').append($("<option value=''>Select from below</option>"));
+				$.each(response.Department, function(index, value) {
 					$('#approvalDesignation').append($('<option>').text(value.name).attr('value', value.id));
 				});
 				$('#approvalDesignation').val($('#approvalDesignationValue').val());

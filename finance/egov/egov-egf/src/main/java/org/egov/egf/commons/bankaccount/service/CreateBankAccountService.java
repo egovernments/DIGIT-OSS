@@ -141,7 +141,7 @@ public class CreateBankAccountService {
             bankaccount
                     .setChartofaccounts(chartOfAccountsService.getByGlCode(bankaccount.getChartofaccounts().getGlcode()));
         bankaccount.setCreatedDate(new Date());
-        bankaccount.setCreatedBy(getCurrentSession().load(User.class, ApplicationThreadLocals.getUserId()));
+        bankaccount.setCreatedBy( ApplicationThreadLocals.getUserId());
 
         return bankAccountRepository.save(bankaccount);
     }
@@ -150,7 +150,7 @@ public class CreateBankAccountService {
     public Bankaccount update(final Bankaccount bankaccount) {
 
         bankaccount.setLastModifiedDate(new Date());
-        bankaccount.setLastModifiedBy(getCurrentSession().load(User.class, ApplicationThreadLocals.getUserId()));
+        bankaccount.setLastModifiedBy(ApplicationThreadLocals.getUserId());
         return bankAccountRepository.save(bankaccount);
     }
 

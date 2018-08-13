@@ -47,9 +47,14 @@
  */
 package org.egov.eis.web.controller.workflow;
 
+
+import org.egov.eis.contract.DepartmentResponse;
+import org.egov.eis.contract.RequestInfo;
 import org.egov.eis.web.contract.WorkflowContainer;
-import org.egov.infra.admin.master.entity.Department;
+
 import org.egov.infra.admin.master.service.DepartmentService;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.workflow.entity.State;
 import org.egov.infra.workflow.entity.StateAware;
 import org.egov.infra.workflow.matrix.entity.WorkFlowMatrix;
@@ -58,9 +63,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Arrays;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public abstract class GenericWorkFlowController {
@@ -70,10 +86,20 @@ public abstract class GenericWorkFlowController {
 
     @Autowired
     protected DepartmentService departmentService;
+    
+    @Autowired
+    HttpServletRequest serRequest;
+    
+    @Autowired
+    MicroserviceUtils msUtil;
+    
 
     @ModelAttribute(value = "approvalDepartmentList")
     public List<Department> addAllDepartments() {
-        return departmentService.getAllDepartments();
+		System.out.println("************************Retriveing all departments information****************");
+       List<Department>deptlist = getDepartmentsFromMs();
+		
+		return deptlist;
     }
 
     @ModelAttribute("workflowcontainer")
@@ -134,6 +160,58 @@ public abstract class GenericWorkFlowController {
                     container.getWorkFlowDepartment(), container.getAmountRule(), container.getAdditionalRule(),
                     State.DEFAULT_STATE_VALUE_CREATED, container.getPendingActions(), model.getCreatedDate(), container.getCurrentDesignation());
         return validActions;
+    }
+    
+    private String getAccessToken(){
+
+		String access_token = String.valueOf(serRequest.getSession().getAttribute("access_token"));
+		if(access_token==null)
+				access_token = msUtil.getAccessTokenFromRedis(serRequest);
+		return access_token;
+	}
+    public List<Department> getDepartmentsFromMs() {
+    	
+//    	MicroserviceUtils msUtil = new MicroserviceUtils();
+    	
+    	String access_token = getAccessToken();
+    	
+    	List<Department>departments = msUtil.getDepartments(access_token, "default");
+    	
+    	return departments;
+    	
+//    	String  url = "http://localhost:8080/egov-common-masters/departments/_search?tenantId=default";
+//    	
+//    	
+//    	
+//    	RestTemplate restTemplate = new RestTemplate();
+//    	MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+//		converter.setObjectMapper(new ObjectMapper());
+//		restTemplate.getMessageConverters().add(converter);
+//		
+//		
+//		RequestInfo requestObj = new RequestInfo();
+//		HttpHeaders header = new HttpHeaders();
+//		header.setContentType(MediaType.APPLICATION_JSON);
+//		HttpEntity<RequestInfo> entity = new HttpEntity<RequestInfo>(requestObj, header);
+//		
+//		ResponseEntity<DepartmentResponse> departmentResponse = null;
+//		ResponseEntity<String> depres = null;
+//		
+//		try {
+//			departmentResponse = restTemplate.exchange(url, HttpMethod.POST,entity,DepartmentResponse.class);
+//			depres = restTemplate.exchange(url, HttpMethod.POST,entity,String.class);
+//			System.out.println("******************************response :"+depres.getBody());
+//		} catch (RestClientException e) {
+//			// TODO Auto-generated catch block
+//			//e.printStackTrace();
+//			System.out.println("Department retrieval failed from service...");
+//		}
+//		
+//		if( departmentResponse!=null)
+//		System.out.println("******************** Retieved department list size :"+ departmentResponse.getBody().getDepartlist().size()+"*************");
+//		
+//		return null!=departmentResponse? departmentResponse.getBody().getDepartlist():null;
+    
     }
 
 }

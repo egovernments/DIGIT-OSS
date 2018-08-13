@@ -81,7 +81,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private MicroserviceUtils microserviceUtils;
+    private MicroserviceUtils msUtil;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -101,7 +101,7 @@ public class UserService {
     @Transactional
     public User createUser(User user) {
         User savedUser = userRepository.save(user);
-        microserviceUtils.createUserMicroservice(user);
+        msUtil.createUserMicroservice(user);
         return savedUser;
     }
 
@@ -170,9 +170,5 @@ public class UserService {
 
     public List<User> getUsersByUsernameAndRolename(String userName, String roleName) {
         return userRepository.findUsersByUserAndRoleName(userName, roleName);
-    }
-    
-    public List<User> findByMobileNumberAndType(String mobileNumber,UserType type) {
-        return userRepository.findByMobileNumberAndType(mobileNumber,type);
     }
 }

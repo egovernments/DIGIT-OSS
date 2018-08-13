@@ -54,7 +54,9 @@ import org.egov.egf.budget.service.BudgetControlTypeService;
 import org.egov.egf.expensebill.service.ExpenseBillService;
 import org.egov.egf.utils.FinancialUtils;
 import org.egov.eis.web.contract.WorkflowContainer;
+import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.AppConfigValueService;
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.bills.DocumentUpload;
@@ -72,6 +74,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -131,14 +134,27 @@ public class CreateExpenseBillController extends BaseBillController {
         super.setDropDownValues(model);
     }
 
-    @RequestMapping(value = "/newform", method = RequestMethod.GET)
-    public String showNewForm(@ModelAttribute("egBillregister") final EgBillregister egBillregister, final Model model) {
-
+    @RequestMapping(value = "/newform", method = RequestMethod.POST)
+    public String showNewForm(@ModelAttribute("egBillregister") final EgBillregister egBillregister, final Model model,HttpServletRequest request) {
+    	System.out.println("*********** New ExpenseBill recieved*********************");
+    	Cookie[] cookies = request.getCookies();
+    	
+    	System.out.println("************** Session User Id :"+ApplicationThreadLocals.getUserId());
+    	
+    	if(null!=cookies && cookies.length>0)
+    	{
+    	   for(Cookie ck:cookies) {
+    		   System.out.println("Name:"+ck.getName()+" value"+ck.getValue());
+    	   }
+    	}
         setDropDownValues(model);
         model.addAttribute(STATE_TYPE, egBillregister.getClass().getSimpleName());
         prepareWorkflow(model, egBillregister, new WorkflowContainer());
         prepareValidActionListByCutOffDate(model);
         egBillregister.setBilldate(new Date());
+//        User createdBy = new User();
+//        createdBy.setId(ApplicationThreadLocals.getUserId());
+//        egBillregister.setCreatedBy(createdBy);
         return EXPENSEBILL_FORM;
     }
 
@@ -147,7 +163,11 @@ public class CreateExpenseBillController extends BaseBillController {
     public String create(@ModelAttribute("egBillregister") final EgBillregister egBillregister, final Model model,
                          final BindingResult resultBinder, final HttpServletRequest request, @RequestParam final String workFlowAction)
             throws IOException {
-
+    	System.out.println("************** Session User Id :"+ApplicationThreadLocals.getUserId());
+      //User createdBy = new User();
+     // createdBy.setId(ApplicationThreadLocals.getUserId());
+      egBillregister.setCreatedBy(ApplicationThreadLocals.getUserId());
+    	
 
         String[] contentType = ((MultiPartRequestWrapper) request).getContentTypes("file");
         List<DocumentUpload> list = new ArrayList<>();

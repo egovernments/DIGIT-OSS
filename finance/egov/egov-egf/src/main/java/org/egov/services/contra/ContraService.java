@@ -141,7 +141,7 @@ public class ContraService extends PersistenceService<ContraJournalVoucher, Long
     }
 
     public Position getPositionForWfItem(final ContraJournalVoucher rv) {
-        return eisCommonService.getPositionByUserId(rv.getCreatedBy().getId());
+        return eisCommonService.getPositionByUserId(rv.getCreatedBy());
     }
 
     public Department getDepartmentForUser(final User user) {
@@ -469,13 +469,14 @@ public class ContraService extends PersistenceService<ContraJournalVoucher, Long
 
     public Department getDepartmentForWfItem(final ContraJournalVoucher cjv) {
         // TODO: Now employee is extending user so passing userid to get assingment -- changes done by Vaibhav
-        final Assignment assignment = eisCommonService.getLatestAssignmentForEmployeeByToDate(cjv.getCreatedBy().getId(),
+        final Assignment assignment = eisCommonService.getLatestAssignmentForEmployeeByToDate(cjv.getCreatedBy(),
                 new Date());
         return assignment.getDepartment();
     }
 
     public Boundary getBoundaryForUser(final ContraJournalVoucher rv) {
-        return egovCommon.getBoundaryForUser(rv.getCreatedBy());
+       // return egovCommon.getBoundaryForUser(rv.getCreatedBy());
+    	return null;
     }
 
     public Position getPositionForEmployee(final Employee emp) throws ApplicationRuntimeException {

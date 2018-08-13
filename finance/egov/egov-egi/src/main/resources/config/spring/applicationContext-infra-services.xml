@@ -95,4 +95,6 @@
 		<constructor-arg index="0" ref="stateAwarePersistenceService" />
 	</bean>
 	
+	<bean class="org.egov.infra.microservice.utils.MicroserviceUtils" />
+	
 </beans>

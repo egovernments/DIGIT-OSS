@@ -63,9 +63,9 @@
 			<column name="MODULETYPE" length="30" not-null="true" />
 		</property>
 		<property name="moduleid" column="MODULEID" />
-		<many-to-one name="actionDoneBy" class="org.egov.infra.admin.master.entity.User">
-			<column name="ACTIONDONEBY" precision="22" scale="0" />
-		</many-to-one>
+		<property name="actionDoneBy" type="long">
+			<column name="ACTIONDONEBY" />
+		</property>
 		<property name="actionDoneOn" type="date">
 			<column name="ACTIONDONEON" length="7" />
 		</property>

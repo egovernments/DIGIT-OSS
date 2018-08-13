@@ -48,24 +48,15 @@
 
 package org.egov.infra.config.security;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.egov.infra.security.utils.captcha.DefaultCaptchaService;
 import org.egov.infra.security.utils.captcha.DefaultCaptchaStore;
-import org.jasypt.encryption.pbe.PBEStringEncryptor;
-import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
-import org.jasypt.hibernate4.encryptor.HibernatePBEStringEncryptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityConfiguration {
-
-    @Autowired
-    private Environment environment;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -80,23 +71,5 @@ public class SecurityConfiguration {
     @Bean
     protected DefaultCaptchaStore defaultCaptchaStore() {
         return new DefaultCaptchaStore();
-    }
-
-    @Bean
-    public HibernatePBEStringEncryptor stringDataEncryptor() {
-        HibernatePBEStringEncryptor stringDataEncryptor = new HibernatePBEStringEncryptor();
-        stringDataEncryptor.setRegisteredName("stringDataEncryptor");
-        stringDataEncryptor.setEncryptor(dataEncryptor());
-        return stringDataEncryptor;
-    }
-
-    @Bean
-    public PBEStringEncryptor dataEncryptor() {
-        PooledPBEStringEncryptor dataEncryptor = new PooledPBEStringEncryptor();
-        dataEncryptor.setProvider(new BouncyCastleProvider());
-        dataEncryptor.setAlgorithm(environment.getProperty("data.enc.algo"));
-        dataEncryptor.setPassword(environment.getRequiredProperty("data.enc.key"));
-        dataEncryptor.setPoolSize(Runtime.getRuntime().availableProcessors());
-        return dataEncryptor;
     }
 }

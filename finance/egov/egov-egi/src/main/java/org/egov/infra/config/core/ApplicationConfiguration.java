@@ -129,8 +129,7 @@ public class ApplicationConfiguration {
     }
 
     @PostConstruct
-    public void enhanceSystemProperties() throws InvocationTargetException, IllegalAccessException,
-            NoSuchMethodException, ClassNotFoundException {
+    public void enhanceSystemProperties() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, ClassNotFoundException {
         MethodInvokingFactoryBean methodInvokingFactoryBean = new MethodInvokingFactoryBean();
         methodInvokingFactoryBean.setTargetObject(System.getProperties());
         methodInvokingFactoryBean.setTargetMethod("putAll");

@@ -95,6 +95,7 @@ public class ApplicationAuthenticationProvider extends DaoAuthenticationProvider
     @Override
     public Authentication authenticate(Authentication authentication) {
         try {
+        	System.out.println(" *************Authentictaion provider********");
             return super.authenticate(authentication);
         } catch (BadCredentialsException ex) {
             lockAccount(authentication);
@@ -132,10 +133,11 @@ public class ApplicationAuthenticationProvider extends DaoAuthenticationProvider
 
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) {
-        HashMap<String, String> authenticationCredentials = (HashMap<String, String>) authentication.getCredentials();
-        if (authenticationCredentials == null ||
-                !passwordEncoder.matches(authenticationCredentials.get(LOGIN_PASS_FIELD), userDetails.getPassword())) {
-            throw new BadCredentialsException(messages.getMessage(BAD_CRED_MSG_KEY, BAD_CRED_DEFAULT_MSG));
-        }
+        System.out.println("*************** additional authentication check recieved - logic commented*************************");
+//    	HashMap<String, String> authenticationCredentials = (HashMap<String, String>) authentication.getCredentials();
+//        if (authenticationCredentials == null ||
+//                !passwordEncoder.matches(authenticationCredentials.get(LOGIN_PASS_FIELD), userDetails.getPassword())) {
+//            throw new BadCredentialsException(messages.getMessage(BAD_CRED_MSG_KEY, BAD_CRED_DEFAULT_MSG));
+//        }
     }
 }

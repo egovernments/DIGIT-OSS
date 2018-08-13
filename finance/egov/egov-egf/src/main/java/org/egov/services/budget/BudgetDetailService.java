@@ -2207,7 +2207,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
 
     public Assignment getWorkflowInitiator(final BudgetDetail budgetDetail) {
         return assignmentService
-                .findByEmployeeAndGivenDate(budgetDetail.getCreatedBy().getId(), new Date()).get(0);
+                .findByEmployeeAndGivenDate(budgetDetail.getCreatedBy(), new Date()).get(0);
     }
 
     @Transactional

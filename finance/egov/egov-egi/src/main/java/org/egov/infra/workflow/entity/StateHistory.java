@@ -78,16 +78,16 @@ public class StateHistory<T extends OwnerGroup> implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_STATEHISTORY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "createdBy")
-    private User createdBy;
+    private long createdBy;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lastModifiedBy")
-    private User lastModifiedBy;
+    private long lastModifiedBy;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastModifiedDate;
@@ -237,11 +237,11 @@ public class StateHistory<T extends OwnerGroup> implements Serializable {
         this.id = id;
     }
 
-    public User getCreatedBy() {
+    public long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(User createdBy) {
+    public void setCreatedBy(long createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -253,11 +253,11 @@ public class StateHistory<T extends OwnerGroup> implements Serializable {
         this.createdDate = createdDate;
     }
 
-    public User getLastModifiedBy() {
+    public long getLastModifiedBy() {
         return lastModifiedBy;
     }
 
-    public void setLastModifiedBy(User lastModifiedBy) {
+    public void setLastModifiedBy(long lastModifiedBy) {
         this.lastModifiedBy = lastModifiedBy;
     }
 

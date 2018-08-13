@@ -85,7 +85,7 @@ public class ApplicationAuthorizationMetadataSource implements FilterInvocationS
 
     @Override
     public Collection<ConfigAttribute> getAllConfigAttributes() {
-        return Collections.unmodifiableCollection(new ArrayList<>());
+        return Collections.unmodifiableCollection(new ArrayList<ConfigAttribute>());
     }
 
     @Override
@@ -98,7 +98,9 @@ public class ApplicationAuthorizationMetadataSource implements FilterInvocationS
         if (!urlExcluded(url)) {
             Action action = actionService.getActionByUrlAndContextRoot(url, contextRoot);
             if (action != null) {
-                action.getRoles().forEach(role -> configAttributes.add(new SecurityConfig(role.getName())));
+                action.getRoles().forEach((role) ->{ configAttributes.add(new SecurityConfig(role.getName()));
+                	System.out.println("****************"+url+" : role "+role.getName());
+                });
             }
         }
         if (configAttributes.isEmpty())

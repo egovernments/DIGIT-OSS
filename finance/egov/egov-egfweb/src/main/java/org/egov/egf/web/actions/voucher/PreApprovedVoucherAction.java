@@ -782,12 +782,12 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
             }
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Voucherheader==" + voucherHeader.getId() + ", actionname=" + parameters.get(ACTIONNAME)[0]);
-        Integer userId = null;
+        Long userId = null;
         if (parameters.get("actionName")[0].contains("approve"))
-            userId = parameters.get("approverUserId") != null ? Integer.valueOf(parameters.get("approverUserId")[0])
-                    : ApplicationThreadLocals.getUserId().intValue();
+            userId = Long.valueOf(parameters.get("approverUserId") != null ? Integer.valueOf(parameters.get("approverUserId")[0])
+                    : ApplicationThreadLocals.getUserId().intValue());
         else
-            userId = voucherHeader.getCreatedBy().getId().intValue();
+            userId = voucherHeader.getCreatedBy();
 
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("User selected id is : " + userId);

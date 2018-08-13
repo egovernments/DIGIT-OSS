@@ -47,7 +47,8 @@
  */
 $(document).ready(function()
 {	
-	$('#approvalDepartment').change(function(){
+	console.log("workflow file got updated................");
+/*	$('#approvalDepartment').change(function(){
 		$.ajax({
 			url: "/eis/ajaxWorkFlow-getDesignationsForActiveAssignmentsByObjectType",     
 			type: "GET",
@@ -76,23 +77,54 @@ $(document).ready(function()
 				console.log("failed");
 			}
 		});
+	});*/
+	
+	$('#approvalDepartment').change(function(){
+		
+		$.ajax({
+			url: "/EGF/designations",     
+			type:'GET',
+			contentType:'application/json',
+			//data:JSON.stringify(jsonData),
+			success: function (response) {
+				console.log("success"+response);
+				$('#approvalDesignation').empty();
+				$('#approvalDesignation').append($("<option value=''>Select from below</option>"));
+				$.each(response, function(index, value) {
+					$('#approvalDesignation').append($('<option>').text(value.name).attr('value', value.id));
+				});
+				$('#approvalDesignation').val($('#approvalDesignationValue').val());
+				$('#approvalDesignation').trigger('change');
+			}, 
+			error: function (response) {
+				bootbox.alert('json fail');
+				console.log("failed");
+			}
+		});
 	});
 	
+
+	
 	$('#approvalDesignation').change(function(){
+		
+		
+				todayDate = new Date(Date.now()).toLocaleString(),
+				departmentId = $('#approvalDesignation').val(),
+				designationId= $('#approvalDepartment').val();
+		
+		
 		$.ajax({
-			url: "/eis/ajaxWorkFlow-positionsByDepartmentAndDesignation",     
+			url: "/EGF/approvers/"+departmentId+"/"+designationId,     
 			type: "GET",
-			data: {
-				approvalDesignation : $('#approvalDesignation').val(),
-				approvalDepartment : $('#approvalDepartment').val()    
-			},
-			dataType: "json",
+			contentType:'application/json',
+//			data: JSON.stringify(jsonData),
 			success: function (response) {
 				console.log("success"+response);
 				$('#approvalPosition').empty();
 				$('#approvalPosition').append($("<option value=''>Select from below</option>"));
 				$.each(response, function(index, value) {
-					$('#approvalPosition').append($('<option>').text(value.userName+'/'+value.positionName).attr('value', value.positionId));  
+					//$('#approvalPosition').append($('<option>').text(value.userName+'/'+value.positionName).attr('value', value.positionId));  
+					$('#approvalPosition').append($('<option>').text(value.userName).attr('value', value.assignments[0].position));  
 				});
 				$('#approvalPosition').val($('#approvalPositionValue').val());
 			}, 

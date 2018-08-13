@@ -96,6 +96,4 @@ public interface UserRepository extends JpaRepository<User, Long>, RevisionRepos
     Integer getUserSerialNumberByName(@Param("name") final String name);
 
     User findByNameAndMobileNumberAndGender(String name, String mobileNumber, Gender gender);
-    
-    List<User> findByMobileNumberAndType(String mobileNumber,UserType type);
 }
