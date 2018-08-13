@@ -11296,7 +11296,7 @@
     {
       "id": 9999,
       "name": "PGR LME Report",
-      "url": "/customization/open/reports/lmereport",
+      "url": "/customization/protected/reports/lmereport",
       "displayName": "PGR LME Report",
       "orderNumber": 0,
       "enabled": true,
