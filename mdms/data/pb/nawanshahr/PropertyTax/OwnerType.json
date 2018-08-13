@@ -1,5 +1,5 @@
 {
-  "tenantId": "pb",
+  "tenantId": "pb.nawanshahr",
   "moduleName": "PropertyTax",
   "OwnerType": [
     {
@@ -47,7 +47,7 @@
       }
     },
     {
-      "name": "Defense Personnel",
+      "name": "Defense Personnell",
       "code": "DEFENSE",
       "active": true,
       "fromFY": "2015-16",

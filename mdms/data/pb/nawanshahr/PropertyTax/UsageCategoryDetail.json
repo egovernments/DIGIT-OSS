@@ -1,0 +1,265 @@
+{
+  "tenantId": "pb.nawanshahr",
+  "modulename": "PropertyTax",
+  "UsageCategoryDetail": [
+    {
+      "name": "Residential",
+      "code": "RESIDENTIAL",
+      "UsageCategorySubMinor": "RESIDENTIAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Malls",
+      "code": "MALLS",
+      "UsageCategorySubMinor": "RETAIL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Grocery Store",
+      "code": "GROCERY",
+      "UsageCategorySubMinor": "RETAIL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Pharmacy",
+      "code": "PHARMACY",
+      "UsageCategorySubMinor": "RETAIL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Hotels",
+      "code": "HOTELS",
+      "UsageCategorySubMinor": "HOTELS",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Office Space",
+      "code": "OFFICESPACE",
+      "UsageCategorySubMinor": "OFFICESPACE",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Marriage Palace",
+      "code": "MARRIAGEPALACE",
+      "UsageCategorySubMinor": "EVENTSPACE",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Restaurant",
+      "code": "RESTAURANT",
+      "UsageCategorySubMinor": "FOODJOINT",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Multiplex ",
+      "code": "MULTIPLEX",
+      "UsageCategorySubMinor": "ENTERTAINMENT",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Movie Theatre",
+      "code": "MOVIETHEATRE",
+      "UsageCategorySubMinor": "ENTERTAINMENT",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Statutory Organisation",
+      "code": "STATUTORY",
+      "UsageCategorySubMinor": "STATUTORY",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Private Hospital",
+      "code": "PVTHOSPITAL",
+      "UsageCategorySubMinor": "MEDICALFACILITY",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Private Dispensary",
+      "code": "PVTDISPENSARY",
+      "UsageCategorySubMinor": "MEDICALFACILITY",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Other Commercial Usage ",
+      "code": "OTHERCOMMERCIAL",
+      "UsageCategorySubMinor": "OTHERCOMMERCIALSUBMINOR",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Godown or Warehouse",
+      "code": "WAREHOUSE",
+      "UsageCategorySubMinor": "WAREHOUSE",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Manufacturing Facility",
+      "code": "MANUFACTURINGFACILITY",
+      "UsageCategorySubMinor": "MANUFACTURINGFACILITY",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Other Industrial Usage ",
+      "code": "OTHERINDUSTRIAL",
+      "UsageCategorySubMinor": "OTHERINDUSTRIALSUBMINOR",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "School",
+      "code": "SCHOOL",
+      "UsageCategorySubMinor": "EDUCATIONAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Colleges",
+      "code": "COLLEGES",
+      "UsageCategorySubMinor": "EDUCATIONAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Training Institute",
+      "code": "TRAININGINSTITUTES",
+      "UsageCategorySubMinor": "EDUCATIONAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Polytechnics",
+      "code": "POLYTECHNICS",
+      "UsageCategorySubMinor": "EDUCATIONAL",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Other Private Educational Institute",
+      "code": "OTHEREDUCATIONAL",
+      "UsageCategorySubMinor": "EDUCATIONAL",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Govt. Aided Educational Institute",
+      "code": "GOVAIDEDEDUCATIONAL",
+      "UsageCategorySubMinor": "EDUCATIONAL",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Others ",
+      "code": "OTHERINSTITUITIONAL",
+      "UsageCategorySubMinor": "OTHERINSTITUITIONALSUBMINOR",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Sports Stadium",
+      "code": "SPORTSSTADIUM",
+      "UsageCategorySubMinor": "RECREATIONAL",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Social Club",
+      "code": "SOCIALCLUB",
+      "UsageCategorySubMinor": "RECREATIONAL",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Golf Club ",
+      "code": "GOLFCLUB",
+      "UsageCategorySubMinor": "RECREATIONAL",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Orphanage",
+      "code": "ORPHANAGE",
+      "UsageCategorySubMinor": "HOMESFORSPECIALCARE",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Old Age Homes",
+      "code": "OLDAGEHOMES",
+      "UsageCategorySubMinor": "HOMESFORSPECIALCARE",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Home for the disabled / destitute",
+      "code": "DISABLEDHOME",
+      "UsageCategorySubMinor": "HOMESFORSPECIALCARE",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Stray Animal Care Center",
+      "code": "ANIMALCARE",
+      "UsageCategorySubMinor": "HOMESFORSPECIALCARE",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Community Hall",
+      "code": "COMMUNITYHALL",
+      "UsageCategorySubMinor": "PUBLICFACILITY",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Govt. Hospital & Dispensary",
+      "code": "GOVTHOSPITAL",
+      "UsageCategorySubMinor": "PUBLICFACILITY",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Religious",
+      "code": "RELIGIOUS",
+      "UsageCategorySubMinor": "RELIGIOUSINSTITUITION",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Historical Building",
+      "code": "HISTORICAL",
+      "UsageCategorySubMinor": "HISTORICAL",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Public Libraries",
+      "code": "LIBRARIES",
+      "UsageCategorySubMinor": "PUBLICFACILITY",
+      "active": true,
+      "fromFY": "2015-16",
+    },
+    {
+      "name": "Cremation/ Burial Ground",
+      "code": "CREMATION/BURIAL",
+      "UsageCategorySubMinor": "PUBLICSPACES",
+      "active": true,
+      "fromFY": "2015-16",
+    }
+  ]
+}
