@@ -61,7 +61,12 @@
       "name": "Government",
       "code": "GOVERNMENT",
       "active": true,
-      "fromFY": "2015-16"
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 50.0,
+        "maxAmount": null,
+        "flatAmount": null
+      }
     },
     {
       "name": "None of the above",
