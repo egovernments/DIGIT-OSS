@@ -1,6 +1,6 @@
 {
   "tenantId": "pb.nawanshahr",
-  "modulename": "PropertyTax",
+  "moduleName": "PropertyTax",
   "UsageCategoryDetail": [
     {
       "name": "Residential",
