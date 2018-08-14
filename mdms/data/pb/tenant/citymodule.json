@@ -21,6 +21,9 @@
       "tenants": [
         {
           "code": "pb.jalandhar"
+        },
+        {
+          "code": "pb.nawanshahr"
         }
       ]
     }

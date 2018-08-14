@@ -93,6 +93,37 @@
       "address": "Municipal Corporation Amritsar, Town Hall, Amritsar,Punjab",
       "contactNumber": "0183-2545155",
       "helpLineNumber": "0183-2210300"
+    },
+    {
+      "code": "pb.nawanshahr",
+      "name": "Nawanshahr",
+      "description": null,
+      "logoId": null,
+      "imageId": null,
+      "domainUrl": "www.nawanshahr.com",
+      "type": "CITY",
+      "twitterUrl": null,
+      "facebookUrl": null,
+      "emailId": "",
+      "OfficeTimings": {
+        "Mon - Fri": "9.00 AM - 6.00 PM"
+      },
+      "city": {
+        "name": "Nawanshahr",
+        "localName": null,
+        "districtCode": null,
+        "districtName": null,
+        "regionName": null,
+        "ulbGrade": null,
+        "longitude": 74.8722642,
+        "latitude": 31.6339793,
+        "shapeFileLocation": null,
+        "captcha": null,
+        "code": null
+      },
+      "address": "nawanshahr",
+      "contactNumber": "",
+      "helpLineNumber": ""
     }
   ]
 }
