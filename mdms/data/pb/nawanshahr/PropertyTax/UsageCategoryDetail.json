@@ -147,119 +147,119 @@
       "code": "POLYTECHNICS",
       "UsageCategorySubMinor": "EDUCATIONAL",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Other Private Educational Institute",
       "code": "OTHEREDUCATIONAL",
       "UsageCategorySubMinor": "EDUCATIONAL",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Govt. Aided Educational Institute",
       "code": "GOVAIDEDEDUCATIONAL",
       "UsageCategorySubMinor": "EDUCATIONAL",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Others ",
       "code": "OTHERINSTITUITIONAL",
       "UsageCategorySubMinor": "OTHERINSTITUITIONALSUBMINOR",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Sports Stadium",
       "code": "SPORTSSTADIUM",
       "UsageCategorySubMinor": "RECREATIONAL",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Social Club",
       "code": "SOCIALCLUB",
       "UsageCategorySubMinor": "RECREATIONAL",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Golf Club ",
       "code": "GOLFCLUB",
       "UsageCategorySubMinor": "RECREATIONAL",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Orphanage",
       "code": "ORPHANAGE",
       "UsageCategorySubMinor": "HOMESFORSPECIALCARE",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Old Age Homes",
       "code": "OLDAGEHOMES",
       "UsageCategorySubMinor": "HOMESFORSPECIALCARE",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Home for the disabled / destitute",
       "code": "DISABLEDHOME",
       "UsageCategorySubMinor": "HOMESFORSPECIALCARE",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Stray Animal Care Center",
       "code": "ANIMALCARE",
       "UsageCategorySubMinor": "HOMESFORSPECIALCARE",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Community Hall",
       "code": "COMMUNITYHALL",
       "UsageCategorySubMinor": "PUBLICFACILITY",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Govt. Hospital & Dispensary",
       "code": "GOVTHOSPITAL",
       "UsageCategorySubMinor": "PUBLICFACILITY",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Religious",
       "code": "RELIGIOUS",
       "UsageCategorySubMinor": "RELIGIOUSINSTITUITION",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Historical Building",
       "code": "HISTORICAL",
       "UsageCategorySubMinor": "HISTORICAL",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Public Libraries",
       "code": "LIBRARIES",
       "UsageCategorySubMinor": "PUBLICFACILITY",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     },
     {
       "name": "Cremation/ Burial Ground",
       "code": "CREMATION/BURIAL",
       "UsageCategorySubMinor": "PUBLICSPACES",
       "active": true,
-      "fromFY": "2015-16",
+      "fromFY": "2015-16"
     }
   ]
 }
