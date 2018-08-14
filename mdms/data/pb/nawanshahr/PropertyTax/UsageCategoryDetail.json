@@ -165,8 +165,8 @@
     },
     {
       "name": "Others ",
-      "code": "OTHERINSTITUITIONAL",
-      "UsageCategorySubMinor": "OTHERINSTITUITIONALSUBMINOR",
+      "code": "OTHERINSTITUTIONAL",
+      "UsageCategorySubMinor": "OTHERINSTITUTIONALSUBMINOR",
       "active": true,
       "fromFY": "2015-16"
     },
