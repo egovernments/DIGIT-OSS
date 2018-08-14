@@ -267,8 +267,8 @@
       }
     },
     {
-      "name": "Other Instituitional Usage ",
-      "code": "OTHERINSTITUITIONALSUBMINOR",
+      "name": "Other Institutional Usage ",
+      "code": "OTHERINSTITUTIONALSUBMINOR",
       "usageCategoryMinor": "INSTITUTIONAL",
       "active": true,
       "fromFY": "2015-16",
