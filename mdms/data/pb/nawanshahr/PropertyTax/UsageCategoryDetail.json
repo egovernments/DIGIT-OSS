@@ -10,6 +10,13 @@
       "fromFY": "2015-16"
     },
     {
+      "name": "Showroom",
+      "code": "SHOWROOM",
+      "usageCategorySubMinor": "RETAIL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
       "name": "Malls",
       "code": "MALLS",
       "usageCategorySubMinor": "RETAIL",
