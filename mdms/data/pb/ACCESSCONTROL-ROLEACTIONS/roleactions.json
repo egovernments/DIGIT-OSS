@@ -14847,13 +14847,13 @@
       "tenantId": "pb"
     },
     {
-      "rolecode": "PGR-ADMIN",
+      "rolecode": "EMPLOYEE",
       "actionid": 1575,
       "actioncode": "",
       "tenantId": "pb"
     },
     {
-      "rolecode": "PGR-ADMIN",
+      "rolecode": "EMPLOYEE",
       "actionid": 1576,
       "actioncode": "",
       "tenantId": "pb"
@@ -14863,6 +14863,60 @@
       "actionid": 9999,
       "actioncode": "",
       "tenantId": "pb"
-    }
+    },
+    {
+     "rolecode": "EMPLOYEE",
+     "actionid": 1577,
+     "actioncode": "",
+     "tenantId": "pb"
+   },
+   {
+     "rolecode": "EMPLOYEE",
+     "actionid": 1578,
+     "actioncode": "",
+     "tenantId": "pb"
+   },
+   {
+     "rolecode": "EMPLOYEE",
+     "actionid": 1579,
+     "actioncode": "",
+     "tenantId": "pb"
+   },
+   {
+     "rolecode": "EMPLOYEE",
+     "actionid": 1580,
+     "actioncode": "",
+     "tenantId": "pb"
+   },
+   {
+     "rolecode": "EMPLOYEE",
+     "actionid": 1581,
+     "actioncode": "",
+     "tenantId": "pb"
+   },
+   {
+     "rolecode": "EMPLOYEE",
+     "actionid": 1582,
+     "actioncode": "",
+     "tenantId": "pb"
+   },
+   {
+     "rolecode": "EMPLOYEE",
+     "actionid": 1583,
+     "actioncode": "",
+     "tenantId": "pb"
+   },
+   {
+     "rolecode": "EMPLOYEE",
+     "actionid": 1584,
+     "actioncode": "",
+     "tenantId": "pb"
+   },
+   {
+     "rolecode": "EMPLOYEE",
+     "actionid": 1585,
+     "actioncode": "",
+     "tenantId": "pb"
+   }
   ]
 }
