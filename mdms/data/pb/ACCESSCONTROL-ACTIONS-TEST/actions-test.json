@@ -11018,17 +11018,17 @@
     },
     {
       "id": 1556,
-      "name": "MyComplaints",
+      "name": "Home",
       "url": "url",
-      "displayName": "Complaints",
+      "displayName": "Home",
       "orderNumber": 1,
       "parentModule": "rainmaker-pgr",
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "MyComplaints",
+      "path": "Home",
       "navigationURL": "/",
-      "leftIcon": "alert:warning",
+      "leftIcon": "action:home",
       "rightIcon": ""
     },
     {
