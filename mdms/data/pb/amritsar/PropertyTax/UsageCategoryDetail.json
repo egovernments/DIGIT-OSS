@@ -3,13 +3,6 @@
   "moduleName": "PropertyTax",
   "UsageCategoryDetail": [
     {
-      "name": "Residential",
-      "code": "RESIDENTIAL",
-      "usageCategorySubMinor": "RESIDENTIAL",
-      "active": true,
-      "fromFY": "2015-16"
-    },
-    {
       "name": "Showroom",
       "code": "SHOWROOM",
       "usageCategorySubMinor": "RETAIL",
@@ -38,16 +31,16 @@
       "fromFY": "2015-16"
     },
     {
-      "name": "Hotels",
-      "code": "HOTELS",
-      "usageCategorySubMinor": "HOTELS",
+      "name": "AC Restaurant",
+      "code": "ACRESTAURANT",
+      "usageCategorySubMinor": "FOODJOINTS",
       "active": true,
       "fromFY": "2015-16"
     },
     {
-      "name": "Office Space",
-      "code": "OFFICESPACE",
-      "usageCategorySubMinor": "OFFICESPACE",
+      "name": "Non AC Restaurant",
+      "code": "NONACRESTAURANT",
+      "usageCategorySubMinor": "FOODJOINTS",
       "active": true,
       "fromFY": "2015-16"
     },
@@ -55,13 +48,6 @@
       "name": "Marriage Palace",
       "code": "MARRIAGEPALACE",
       "usageCategorySubMinor": "EVENTSPACE",
-      "active": true,
-      "fromFY": "2015-16"
-    },
-    {
-      "name": "Restaurant",
-      "code": "RESTAURANT",
-      "usageCategorySubMinor": "FOODJOINT",
       "active": true,
       "fromFY": "2015-16"
     },
@@ -81,7 +67,7 @@
     },
     {
       "name": "Statutory Organisation",
-      "code": "STATUTORY",
+      "code": "STATUTORYORGANISATION",
       "usageCategorySubMinor": "STATUTORY",
       "active": true,
       "fromFY": "2015-16"
@@ -108,7 +94,7 @@
       "fromFY": "2015-16"
     },
     {
-      "name": "Godown or Warehouse",
+      "name": "Godown/Warehouse",
       "code": "WAREHOUSE",
       "usageCategorySubMinor": "WAREHOUSE",
       "active": true,
@@ -136,7 +122,7 @@
       "fromFY": "2015-16"
     },
     {
-      "name": "Colleges",
+      "name": "College",
       "code": "COLLEGES",
       "usageCategorySubMinor": "EDUCATIONAL",
       "active": true,
@@ -150,7 +136,7 @@
       "fromFY": "2015-16"
     },
     {
-      "name": "Polytechnics",
+      "name": "Polytechnic",
       "code": "POLYTECHNICS",
       "usageCategorySubMinor": "EDUCATIONAL",
       "active": true,
@@ -166,7 +152,7 @@
     {
       "name": "Govt. Aided Educational Institute",
       "code": "GOVAIDEDEDUCATIONAL",
-      "usageCategorySubMinor": "EDUCATIONAL",
+      "usageCategorySubMinor": "EDUCATIONALGOVAIDED",
       "active": true,
       "fromFY": "2015-16"
     },
@@ -238,7 +224,12 @@
       "code": "GOVTHOSPITAL",
       "usageCategorySubMinor": "PUBLICFACILITY",
       "active": true,
-      "fromFY": "2015-16"
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 100,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
     },
     {
       "name": "Religious",
