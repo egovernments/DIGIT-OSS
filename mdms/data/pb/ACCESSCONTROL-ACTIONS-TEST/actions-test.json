@@ -11306,9 +11306,9 @@
     },
     {
     "id": 1577,
-    "name": "Dashboard",
+    "name": "Assess New Property",
     "url": "url",
-    "displayName": "Dashboard",
+    "displayName": "Assess New Property",
     "orderNumber": 1,
     "queryParams": "",
     "parentModule": "",
@@ -11319,8 +11319,8 @@
     "createdBy": null,
     "lastModifiedDate": null,
     "lastModifiedBy": null,
-    "path": "Property Tax.Dashboard",
-    "navigationURL": "/property-tax",
+    "path": "Property Tax.Assess New Property",
+    "navigationURL": "property-tax",
     "leftIcon": "communication:business",
     "rightIcon": ""
   },
@@ -11340,7 +11340,7 @@
     "lastModifiedDate": null,
     "lastModifiedBy": null,
     "path": "Property Tax.Search Properties",
-    "navigationURL": "/property-tax/search-property",
+    "navigationURL": "property-tax/search-property",
     "leftIcon": "communication:business",
     "rightIcon": ""
   },
@@ -11360,7 +11360,7 @@
     "lastModifiedDate": null,
     "lastModifiedBy": null,
     "path": "Property Tax.Reports.Daily Collections Report",
-    "navigationURL": "/report/rainmaker-pt/DailyCollectionsReport",
+    "navigationURL": "report/rainmaker-pt/DailyCollectionsReport",
     "leftIcon": "action:assignment",
     "rightIcon": ""
   },
@@ -11380,7 +11380,7 @@
     "lastModifiedDate": null,
     "lastModifiedBy": null,
     "path": "Property Tax.Reports.Monthly Collections Report",
-    "navigationURL": "/report/rainmaker-pt/MonthlyCollectionsReport",
+    "navigationURL": "report/rainmaker-pt/MonthlyCollectionsReport",
     "leftIcon": "action:assignment",
     "rightIcon": ""
   },
@@ -11400,7 +11400,7 @@
     "lastModifiedDate": null,
     "lastModifiedBy": null,
     "path": "Property Tax.Reports.Owner based Exemption Report",
-    "navigationURL": "/report/rainmaker-pt/OwnerBasedExemptionReport",
+    "navigationURL": "report/rainmaker-pt/OwnerBasedExemptionReport",
     "leftIcon": "action:assignment",
     "rightIcon": ""
   },
@@ -11420,7 +11420,7 @@
     "lastModifiedDate": null,
     "lastModifiedBy": null,
     "path": "Property Tax.Reports.Usage based Exemption Report",
-    "navigationURL": "/report/rainmaker-pt/UsageBasedExemptionReport",
+    "navigationURL": "report/rainmaker-pt/UsageBasedExemptionReport",
     "leftIcon": "action:assignment",
     "rightIcon": ""
   },
@@ -11440,7 +11440,7 @@
     "lastModifiedDate": null,
     "lastModifiedBy": null,
     "path": "Property Tax.Reports.Additional Charges Report",
-    "navigationURL": "/report/rainmaker-pt/AdditionalChargesReport",
+    "navigationURL": "report/rainmaker-pt/AdditionalChargesReport",
     "leftIcon": "action:assignment",
     "rightIcon": ""
   },
@@ -11460,7 +11460,7 @@
     "lastModifiedDate": null,
     "lastModifiedBy": null,
     "path": "Property Tax.Reports.Additional Rebates Report",
-    "navigationURL": "/report/rainmaker-pt/AdditionalRebatesReport",
+    "navigationURL": "report/rainmaker-pt/AdditionalRebatesReport",
     "leftIcon": "action:assignment",
     "rightIcon": ""
   },
@@ -11480,7 +11480,7 @@
     "lastModifiedDate": null,
     "lastModifiedBy": null,
     "path": "Property Tax.Reports.ULB wise Collection Report",
-    "navigationURL": "/report/rainmaker-pt/UlbWiseCollectionReport",
+    "navigationURL": "report/rainmaker-pt/UlbWiseCollectionReport",
     "leftIcon": "action:assignment",
     "rightIcon": ""
   }
