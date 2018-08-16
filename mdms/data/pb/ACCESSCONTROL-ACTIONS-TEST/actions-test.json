@@ -11307,7 +11307,7 @@
     {
     "id": 1577,
     "name": "Dashboard",
-    "url": "",
+    "url": "url",
     "displayName": "Dashboard",
     "orderNumber": 1,
     "queryParams": "",
@@ -11327,7 +11327,7 @@
   {
     "id": 1578,
     "name": "Search Properties",
-    "url": "",
+    "url": "url",
     "displayName": "Search Properties",
     "orderNumber": 1,
     "queryParams": "",
@@ -11347,7 +11347,7 @@
   {
     "id": 1579,
     "name": "Daily Collections Report",
-    "url": "",
+    "url": "url",
     "displayName": "Daily Collections Report",
     "orderNumber": 1,
     "queryParams": "",
@@ -11367,7 +11367,7 @@
   {
     "id": 1580,
     "name": "Monthly Collections Report",
-    "url": "",
+    "url": "url",
     "displayName": "Monthly Collections Report",
     "orderNumber": 2,
     "queryParams": "",
@@ -11387,7 +11387,7 @@
   {
     "id": 1581,
     "name": "Owner - based Exemption Report",
-    "url": "",
+    "url": "url",
     "displayName": "Owner - based Exemption Report",
     "orderNumber": 3,
     "queryParams": "",
@@ -11407,7 +11407,7 @@
   {
     "id": 1582,
     "name": "Usage - based Exemption Report",
-    "url": "",
+    "url": "url",
     "displayName": "Usage - based Exemption Report",
     "orderNumber": 4,
     "queryParams": "",
@@ -11427,7 +11427,7 @@
   {
     "id": 1583,
     "name": "Additional Charges Report",
-    "url": "",
+    "url": "url",
     "displayName": "Additional Charges Report",
     "orderNumber": 5,
     "queryParams": "",
@@ -11447,7 +11447,7 @@
   {
     "id": 1584,
     "name": "Additional Rebates Report",
-    "url": "",
+    "url": "url",
     "displayName": "Additional Rebates Report",
     "orderNumber": 6,
     "queryParams": "",
@@ -11467,7 +11467,7 @@
   {
     "id": 1585,
     "name": "ULB - wise Collection Report",
-    "url": "",
+    "url": "url",
     "displayName": "ULB - wise Collection Report",
     "orderNumber": 7,
     "queryParams": "",
