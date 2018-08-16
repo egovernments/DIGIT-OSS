@@ -15,30 +15,6 @@
       }
     },
     {
-      "name": "Residential",
-      "code": "RESIDENTIAL",
-      "usageCategoryMinor": "RESIDENTIAL",
-      "active": true,
-      "fromFY": "2015-16",
-      "exemption": {
-        "rate": 0,
-        "maxAmount": 0,
-        "flatAmount": 0
-      }
-    },
-    {
-      "name": "Retail",
-      "code": "RETAIL",
-      "usageCategoryMinor": "COMMERCIAL",
-      "active": true,
-      "fromFY": "2015-16",
-      "exemption": {
-        "rate": 0,
-        "maxAmount": 0,
-        "flatAmount": 0
-      }
-    },
-    {
       "name": "Hotels",
       "code": "HOTELS",
       "usageCategoryMinor": "COMMERCIAL",
@@ -189,7 +165,7 @@
       "active": true,
       "fromFY": "2015-16",
       "exemption": {
-        "rate": 0,
+        "rate": 100,
         "maxAmount": 0,
         "flatAmount": 0
       }
@@ -282,18 +258,6 @@
       "name": "Public Spaces",
       "code": "PUBLICSPACES",
       "usageCategoryMinor": "OTHERS",
-      "active": true,
-      "fromFY": "2015-16",
-      "exemption": {
-        "rate": 0,
-        "maxAmount": 0,
-        "flatAmount": 0
-      }
-    },
-    {
-      "name": "All",
-      "code": "ALL",
-      "usageCategoryMinor": "ALL",
       "active": true,
       "fromFY": "2015-16",
       "exemption": {
