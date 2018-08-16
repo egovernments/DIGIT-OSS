@@ -53,19 +53,6 @@
       "isActiveForPosting": true,
       "isClosed": false,
       "transferClosingBalance": false
-    },
-    {
-      "id": "5",
-      "tenantId": "pb",
-      "finYearRange": "2014-15",
-      "name":"2014-15",
-      "code":"2014-15",
-      "startingDate": 1396310400000,
-      "endingDate": 1427846399000,
-      "active": true,
-      "isActiveForPosting": true,
-      "isClosed": false,
-      "transferClosingBalance": false
     }
   ]
 }
