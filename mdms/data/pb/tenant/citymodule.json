@@ -1,7 +1,7 @@
 {
   "tenantId": "pb",
-  "moduleName": "citymodule",
-  "tenants": [
+  "moduleName": "tenant",
+  "citymodule": [
     {
       "module": "PGR",
       "tenants": [
