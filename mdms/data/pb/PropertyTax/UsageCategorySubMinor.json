@@ -196,7 +196,7 @@
     },
     {
       "name": "Religious Instituition",
-      "code": "RELIGIOUSINSTITUITION",
+      "code": "RELIGIOUSINSTITUTION",
       "usageCategoryMinor": "INSTITUTIONAL",
       "active": true,
       "fromFY": "2015-16",
