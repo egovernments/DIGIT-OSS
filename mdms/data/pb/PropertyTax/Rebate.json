@@ -1,26 +1,13 @@
 {
   "tenantId": "pb",
   "moduleName": "PropertyTax",
-  "Rebate": [{
-      "rate": 13.0,
-      "maxAmount": 100.0,
-      "flatAmount": 300.0,
+  "Rebate": [
+    {
+      "rate": 10,
+      "maxAmount": null,
+      "flatAmount": null,
       "fromFY": "2018-19",
-      "endingDay": "9/07"
-    },
-    {
-      "rate": 11.0,
-      "maxAmount": 100.0,
-      "flatAmount": 300.0,
-      "fromFY": "2019-20",
-      "endingDay": "9/07"
-    },
-    {
-      "rate": 15.0,
-      "maxAmount": 100.0,
-      "flatAmount": 300.0,
-      "fromFY": "2017-18",
-      "endingDay": "9/07"
+      "endingDay": "01/10"
     }
   ]
 }

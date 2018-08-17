@@ -2,25 +2,18 @@
   "tenantId": "pb",
   "moduleName": "PropertyTax",
   "Penalty": [{
-      "rate": 13.0,
-      "minAmount": 100.0,
-      "flatAmount": 300.0,
+      "rate": 10.0,
+      "minAmount": null,
+      "flatAmount": null,
       "fromFY": "2018-19",
-      "startingDay": "9/07"
+      "startingDay": "1/01"
     },
     {
-      "rate": 11.0,
-      "minAmount": 100.0,
-      "flatAmount": 300.0,
-      "fromFY": "2019-20",
-      "startingDay": "9/09"
-    },
-    {
-      "rate": 15.0,
-      "minAmount": 100.0,
-      "flatAmount": 300.0,
-      "fromFY": "2017-18",
-      "startingDay": "9/09"
+      "rate": 20,
+      "minAmount": null,
+      "flatAmount": null,
+      "fromFY": "2015-16",
+      "startingDay": "1/04"
     }
   ]
 }

@@ -6,54 +6,49 @@
       "name": "Commercial",
       "code": "COMMERCIAL",
       "active": true,
-      "fromFY": "2013-14",
-      "usageCategoryMajor": "NONRESIDENTIAL"
+      "fromFY": "2015-16",
+      "usageCategoryMajor": "NONRESIDENTIAL",
+      "exemption": {
+        "rate": 0,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
     },
     {
       "name": "Industrial",
       "code": "INDUSTRIAL",
       "active": true,
-      "fromFY": "2013-14",
+      "fromFY": "2015-16",
       "usageCategoryMajor": "NONRESIDENTIAL",
-        "exemption": {
-        "rate": "10.1",
-        "maxAmount": "100",
-        "flatAmount": "1000"
+      "exemption": {
+        "rate": 0,
+        "maxAmount": 0,
+        "flatAmount": 0
       }
     },
     {
       "name": "Institutional",
       "code": "INSTITUTIONAL",
       "active": true,
-      "fromFY": "2013-14",
-      "usageCategoryMajor": "NONRESIDENTIAL"
-    },
-    {
-      "name": "Religious",
-      "code": "RELIGIOUS",
-      "active": true,
-      "fromFY": "2013-14",
+      "fromFY": "2015-16",
+      "usageCategoryMajor": "NONRESIDENTIAL",
       "exemption": {
-        "rate": 100.0
-      },
-      "usageCategoryMajor": "NONRESIDENTIAL"
-    },
-    {
-      "name": "Public Spaces",
-      "code": "PUBLICSPACES",
-      "active": true,
-      "fromFY": "2013-14",
-      "usageCategoryMajor": "NONRESIDENTIAL"
+        "rate": 0,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
     },
     {
       "name": "Others",
       "code": "OTHERS",
       "active": true,
-      "fromFY": "2013-14",
+      "fromFY": "2015-16",
+      "usageCategoryMajor": "NONRESIDENTIAL",
       "exemption": {
-        "rate": 100.0
-      },
-      "usageCategoryMajor": "NONRESIDENTIAL"
+        "rate": 100,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
     }
   ]
 }
