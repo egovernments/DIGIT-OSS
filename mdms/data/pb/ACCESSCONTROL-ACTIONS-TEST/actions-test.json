@@ -11518,6 +11518,28 @@
       "serviceCode": "PGRREPORTS",
       "code": "null",
       "path": "PGR Report"
+    },
+    {
+      "id": 1589,
+      "name": "Collection Create Reciept",
+      "url": "/collection-services/receipts/_create",
+      "displayName": "Create Reciept",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "COLLECTION",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1590,
+      "name": "Collection Search Reciept",
+      "url": "/collection-services/receipts/_search",
+      "displayName": "Search Reciept",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "COLLECTION",
+      "code": "null",
+      "path": ""
     }
   ]
 }
