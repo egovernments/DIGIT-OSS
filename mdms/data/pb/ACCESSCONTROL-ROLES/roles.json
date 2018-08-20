@@ -226,6 +226,26 @@
       "rolecode": "PGR-ADMIN",
       "name": "PGR Administrator",
       "description": "Admin role that has super access over the system"
+    },
+    {
+      "rolecode": "CEMP",
+      "name": "Counter Employee",
+      "description": "Employee at the counter who performs assessment on behalf of citizen"
+    },
+    {
+      "rolecode": "FEMP",
+      "name": "Field Employee",
+      "description": "Employee on the field"
+    },
+    {
+      "rolecode": "PTADMIN",
+      "name": "ULB Administrator",
+      "description": "Admin role that as access over an ulb"
+    },
+    {
+      "rolecode": "STADMIN",
+      "name": "State Administrator",
+      "description": "Admin role that as access over a state"
     }
   ]
 }
