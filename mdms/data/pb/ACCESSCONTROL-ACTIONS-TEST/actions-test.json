@@ -11087,7 +11087,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "PGR Reports.ComplaintTypeWiseReport",
-      "navigationURL": "report/rainmaker-pgr/ComplaintTypeWiseReport",
+      "navigationURL": "report/rainmaker-pgr-nonframework/ComplaintTypeWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
     },
@@ -11102,7 +11102,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "PGR Reports.DepartmentWiseReport",
-      "navigationURL": "report/rainmaker-pgr/DepartmentWiseReport",
+      "navigationURL": "report/rainmaker-pgr-nonframework/DepartmentWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
     },
@@ -11117,7 +11117,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "PGR Reports.AOWiseReport",
-      "navigationURL": "report/rainmaker-pgr/AOWiseReport",
+      "navigationURL": "report/rainmaker-pgr-nonframework/AOWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
     },
@@ -11132,7 +11132,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "PGR Reports.ULBEmployeeWiseReport",
-      "navigationURL": "report/rainmaker-pgr/ULBEmployeeWiseReport",
+      "navigationURL": "report/rainmaker-pgr-nonframework/ULBEmployeeWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
     },
@@ -11147,7 +11147,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "PGR Reports.SourceWiseReport",
-      "navigationURL": "report/rainmaker-pgr/SourceWiseReport",
+      "navigationURL": "report/rainmaker-pgr-nonframework/SourceWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
     },
@@ -11540,6 +11540,36 @@
       "serviceCode": "COLLECTION",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1591,
+      "name": "DescriptionReport",
+      "url": "url",
+      "displayName": "Description",
+      "orderNumber": 6,
+      "parentModule": "rainmaker-pgr",
+      "enabled": true,
+      "serviceCode": "PGR",
+      "code": "null",
+      "path": "PGR Reports.DescriptionReport",
+      "navigationURL": "report/rainmaker-pgr/DescriptionReport",
+      "leftIcon": "action:assignment",
+      "rightIcon": ""
+    },
+    {
+      "id": 1592,
+      "name": "EmployeeReport",
+      "url": "url",
+      "displayName": "Employee",
+      "orderNumber": 7,
+      "parentModule": "rainmaker-pgr",
+      "enabled": true,
+      "serviceCode": "PGR",
+      "code": "null",
+      "path": "PGR Reports.EmployeeReport",
+      "navigationURL": "report/rainmaker-pgr/EmployeeReport",
+      "leftIcon": "action:assignment",
+      "rightIcon": ""
     }
   ]
 }
