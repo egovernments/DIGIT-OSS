@@ -11041,7 +11041,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "MyComplaints",
+      "path": "PGR.MyComplaints",
       "navigationURL": "PGR.all-complaints",
       "leftIcon": "custom:open-complaints",
       "rightIcon": ""
@@ -11056,7 +11056,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "MyComplaints",
+      "path": "PGR.MyComplaints",
       "navigationURL": "PGR.closed-complaints",
       "leftIcon": "custom:closed-complaints",
       "rightIcon": ""
@@ -11071,7 +11071,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "CreateComplaint",
+      "path": "PGR.CreateComplaint",
       "navigationURL": "create-complaint",
       "leftIcon": "content:add",
       "rightIcon": ""
@@ -11086,7 +11086,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR Reports.ComplaintTypeWiseReport",
+      "path": "PGR.PGR Reports.ComplaintTypeWiseReport",
       "navigationURL": "report/rainmaker-pgr-nonframework/ComplaintTypeWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11101,7 +11101,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR Reports.DepartmentWiseReport",
+      "path": "PGR.PGR Reports.DepartmentWiseReport",
       "navigationURL": "report/rainmaker-pgr-nonframework/DepartmentWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11116,7 +11116,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR Reports.AOWiseReport",
+      "path": "PGR.PGR Reports.AOWiseReport",
       "navigationURL": "report/rainmaker-pgr-nonframework/AOWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11131,7 +11131,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR Reports.ULBEmployeeWiseReport",
+      "path": "PGR.PGR Reports.ULBEmployeeWiseReport",
       "navigationURL": "report/rainmaker-pgr-nonframework/ULBEmployeeWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11146,7 +11146,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR Reports.SourceWiseReport",
+      "path": "PGR.PGR Reports.SourceWiseReport",
       "navigationURL": "report/rainmaker-pgr-nonframework/SourceWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11359,7 +11359,7 @@
       "createdBy": null,
       "lastModifiedDate": null,
       "lastModifiedBy": null,
-      "path": "Property Tax.Reports.Daily Collections Report",
+      "path": "Property Tax.PT Reports.Daily Collections Report",
       "navigationURL": "report/rainmaker-pt/DailyCollectionsReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11379,7 +11379,7 @@
       "createdBy": null,
       "lastModifiedDate": null,
       "lastModifiedBy": null,
-      "path": "Property Tax.Reports.Monthly Collections Report",
+      "path": "Property Tax.PT Reports.Monthly Collections Report",
       "navigationURL": "report/rainmaker-pt/MonthlyCollectionsReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11399,7 +11399,7 @@
       "createdBy": null,
       "lastModifiedDate": null,
       "lastModifiedBy": null,
-      "path": "Property Tax.Reports.Owner based Exemption Report",
+      "path": "Property Tax.PT Reports.Owner based Exemption Report",
       "navigationURL": "report/rainmaker-pt/OwnerBasedExemptionReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11419,7 +11419,7 @@
       "createdBy": null,
       "lastModifiedDate": null,
       "lastModifiedBy": null,
-      "path": "Property Tax.Reports.Usage based Exemption Report",
+      "path": "Property Tax.PT Reports.Usage based Exemption Report",
       "navigationURL": "report/rainmaker-pt/UsageBasedExemptionReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11439,7 +11439,7 @@
       "createdBy": null,
       "lastModifiedDate": null,
       "lastModifiedBy": null,
-      "path": "Property Tax.Reports.Additional Charges Report",
+      "path": "Property Tax.PT Reports.Additional Charges Report",
       "navigationURL": "report/rainmaker-pt/AdditionalChargesReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11459,7 +11459,7 @@
       "createdBy": null,
       "lastModifiedDate": null,
       "lastModifiedBy": null,
-      "path": "Property Tax.Reports.Additional Rebates Report",
+      "path": "Property Tax.PT Reports.Additional Rebates Report",
       "navigationURL": "report/rainmaker-pt/AdditionalRebatesReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11479,7 +11479,7 @@
       "createdBy": null,
       "lastModifiedDate": null,
       "lastModifiedBy": null,
-      "path": "Property Tax.Reports.ULB wise Collection Report",
+      "path": "Property Tax.PT Reports.ULB wise Collection Report",
       "navigationURL": "report/rainmaker-pt/UlbWiseCollectionReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11551,7 +11551,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR Reports.DescriptionReport",
+      "path": "PGR.PGR Reports.DescriptionReport",
       "navigationURL": "report/rainmaker-pgr/DescriptionReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11566,10 +11566,10 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR Reports.EmployeeReport",
+      "path": "PGR.PGR Reports.EmployeeReport",
       "navigationURL": "report/rainmaker-pgr/EmployeeReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
-    }
+    }  
   ]
 }
