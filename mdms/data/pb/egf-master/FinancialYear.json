@@ -3,7 +3,7 @@
   "moduleName": "egf-master",
   "FinancialYear": [
     {
-      "id": "1",
+      "id": "4",
       "tenantId": "pb",
       "finYearRange": "2018-19",
       "name":"2018-19",
@@ -13,10 +13,11 @@
       "active": true,
       "isActiveForPosting": false,
       "isClosed": false,
-      "transferClosingBalance": false
+      "transferClosingBalance": false,
+      "module":"PT"
     },
     {
-      "id": "2",
+      "id": "3",
       "tenantId": "pb",
       "finYearRange": "2017-18",
       "name": "2017-18",
@@ -26,10 +27,11 @@
       "active": true,
       "isActiveForPosting": true,
       "isClosed": false,
-      "transferClosingBalance": false
+      "transferClosingBalance": false,
+      "module":"PT"
     },
     {
-      "id": "3",
+      "id": "2",
       "tenantId": "pb",
       "finYearRange": "2016-17",
       "name":"2016-17",
@@ -39,10 +41,11 @@
       "active": true,
       "isActiveForPosting": true,
       "isClosed": false,
-      "transferClosingBalance": false
+      "transferClosingBalance": false,
+      "module":"PT"
     },
     {
-      "id": "4",
+      "id": "1",
       "tenantId": "pb",
       "finYearRange": "2015-16",
       "name":"2015-16",
@@ -52,7 +55,8 @@
       "active": true,
       "isActiveForPosting": true,
       "isClosed": false,
-      "transferClosingBalance": false
+      "transferClosingBalance": false,
+      "module":"PT"
     }
   ]
 }
