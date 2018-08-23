@@ -164,9 +164,8 @@ public abstract class GenericWorkFlowController {
     
     private String getAccessToken(){
 
-		String access_token = String.valueOf(serRequest.getSession().getAttribute("access_token"));
-		if(access_token==null)
-				access_token = msUtil.getAccessTokenFromRedis(serRequest);
+		String access_token = (String) msUtil.readFromRedis(serRequest.getSession().getId(), "auth_token");
+		
 		return access_token;
 	}
     public List<Department> getDepartmentsFromMs() {
@@ -179,38 +178,7 @@ public abstract class GenericWorkFlowController {
     	
     	return departments;
     	
-//    	String  url = "http://localhost:8080/egov-common-masters/departments/_search?tenantId=default";
-//    	
-//    	
-//    	
-//    	RestTemplate restTemplate = new RestTemplate();
-//    	MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-//		converter.setObjectMapper(new ObjectMapper());
-//		restTemplate.getMessageConverters().add(converter);
-//		
-//		
-//		RequestInfo requestObj = new RequestInfo();
-//		HttpHeaders header = new HttpHeaders();
-//		header.setContentType(MediaType.APPLICATION_JSON);
-//		HttpEntity<RequestInfo> entity = new HttpEntity<RequestInfo>(requestObj, header);
-//		
-//		ResponseEntity<DepartmentResponse> departmentResponse = null;
-//		ResponseEntity<String> depres = null;
-//		
-//		try {
-//			departmentResponse = restTemplate.exchange(url, HttpMethod.POST,entity,DepartmentResponse.class);
-//			depres = restTemplate.exchange(url, HttpMethod.POST,entity,String.class);
-//			System.out.println("******************************response :"+depres.getBody());
-//		} catch (RestClientException e) {
-//			// TODO Auto-generated catch block
-//			//e.printStackTrace();
-//			System.out.println("Department retrieval failed from service...");
-//		}
-//		
-//		if( departmentResponse!=null)
-//		System.out.println("******************** Retieved department list size :"+ departmentResponse.getBody().getDepartlist().size()+"*************");
-//		
-//		return null!=departmentResponse? departmentResponse.getBody().getDepartlist():null;
+
     
     }
 

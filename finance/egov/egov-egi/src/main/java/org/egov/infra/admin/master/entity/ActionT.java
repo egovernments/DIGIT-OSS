@@ -1,6 +1,8 @@
 package org.egov.infra.admin.master.entity;
 
-public class ActionT {
+import java.io.Serializable;
+
+public class ActionT implements Serializable{
 	
 	private String name;
 	private String url;

@@ -1,8 +1,9 @@
 package org.egov.infra.admin.master.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CustomUserDetails {
+public class CustomUserDetails implements Serializable{
 
 	private Long id;
 	private String userName;

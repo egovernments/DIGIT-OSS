@@ -78,86 +78,87 @@ public class UserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-    	 System.out.println("************** retrieving user information - started*******************");
-         User user= this.loadUserFromMS(username);
-//         User user= this.getDummyUser();
-         System.out.println("************** retrieving user information - end*******************");
-         return new CurrentUser(user);
+//    	 System.out.println("************** retrieving user information - started*******************");
+//         User user= this.loadUserFromMS(username);
+////         User user= this.getDummyUser();
+//         System.out.println("************** retrieving user information - end*******************");
+//         return new CurrentUser(user);
+    	return null;
     }
     
-    private User loadUserFromMS(String accessToken)
-    {
-    	System.out.println("*************** User Info microservice - started ****************");
-    	System.out.println("Recieved token:"+accessToken);
-    	//MicroserviceUtils msutil = new MicroserviceUtils();
-    	CustomUserDetails user = msUtil.getUserDetails(accessToken);
-    	System.out.println("*************** User Info microservice - end ****************");
-    	return this.parepareCurrentUser(user);
-    }
-    
-    private User parepareCurrentUser(CustomUserDetails userdetails) {
-    
-    		
-    	
-    	User user =new User(UserType.EMPLOYEE);
-    //	user.setId(userdetails.getId());
-    	user.setId(userdetails.getId());
-    	user.setUsername(userdetails.getUserName());
-    	user.setActive(true);
-    	user.setAccountLocked(false);
-    	user.setGender(Gender.FEMALE);
-    	user.setPassword("demo");
-    	user.setName(userdetails.getName());
-    	user.setPwdExpiryDate(new Date(2090,01,01));
-    	user.setLocale(userdetails.getLocale());
-    	System.out.println("***************** is password expired :  "+user.getPwdExpiryDate().isAfterNow());
-    	
-//    	for(Role _role:userdetails.getRoles()){
+//    private User loadUserFromMS(String accessToken)
+//    {
+//    	System.out.println("*************** User Info microservice - started ****************");
+//    	System.out.println("Recieved token:"+accessToken);
+//    	//MicroserviceUtils msutil = new MicroserviceUtils();
+//    	CustomUserDetails user = msUtil.getUserDetails(accessToken);
+//    	System.out.println("*************** User Info microservice - end ****************");
+//    	return this.parepareCurrentUser(user);
+//    }
+//    
+//    private User parepareCurrentUser(CustomUserDetails userdetails) {
+//    
 //    		
-//    	}
-//    	Role role = new Role();
-//    	role.setId(4L);
-//    	role.setName("SYSTEM");
-    	Set<Role> roles = new HashSet<>(userdetails.getRoles());
-    	//roles.add(role);
-    	
-    	user.setRoles(roles);
-    	
-//    	user.setRoles(new HashSet<>(userdetails.getRoles()));
-    	
-    	
-    	
-    	return user;
-//    	currentUser.setRoles(new Set(userdetails.getRoles()));
-    	
-    }
-    
-    private User getDummyUser(){
-    	User user =new User(UserType.EMPLOYEE);
-        //	user.setId(userdetails.getId());
-        	user.setId(1L);
-        	user.setUsername("egovernments");
-        	user.setActive(true);
-        	user.setAccountLocked(false);
-        	user.setGender(Gender.MALE);
-        	user.setPassword("demo");
-        	user.setName("egovernments");
-        	user.setPwdExpiryDate(new Date(2090,01,01));
-        	user.setLocale("en_lan");
-        	System.out.println("***************** is password expired :  "+user.getPwdExpiryDate().isAfterNow());
-        	
-        	Role role = new Role();
-        	role.setId(4L);
-        	role.setName("SYSTEM");
-        	Set<Role> roles = new HashSet<>();
-        	roles.add(role);
-        	
-        	user.setRoles(roles);
-        	
-//        	user.setRoles(new HashSet<>(userdetails.getRoles()));
-        	
-        	
-        	
-        	return user;
-    }
+//    	
+//    	User user =new User(UserType.EMPLOYEE);
+//    //	user.setId(userdetails.getId());
+//    	user.setId(userdetails.getId());
+//    	user.setUsername(userdetails.getUserName());
+//    	user.setActive(true);
+//    	user.setAccountLocked(false);
+//    	user.setGender(Gender.FEMALE);
+//    	user.setPassword("demo");
+//    	user.setName(userdetails.getName());
+//    	user.setPwdExpiryDate(new Date(2090,01,01));
+//    	user.setLocale(userdetails.getLocale());
+//    	System.out.println("***************** is password expired :  "+user.getPwdExpiryDate().isAfterNow());
+//    	
+////    	for(Role _role:userdetails.getRoles()){
+////    		
+////    	}
+////    	Role role = new Role();
+////    	role.setId(4L);
+////    	role.setName("SYSTEM");
+//    	Set<Role> roles = new HashSet<>(userdetails.getRoles());
+//    	//roles.add(role);
+//    	
+//    	user.setRoles(roles);
+//    	
+////    	user.setRoles(new HashSet<>(userdetails.getRoles()));
+//    	
+//    	
+//    	
+//    	return user;
+////    	currentUser.setRoles(new Set(userdetails.getRoles()));
+//    	
+//    }
+//    
+//    private User getDummyUser(){
+//    	User user =new User(UserType.EMPLOYEE);
+//        //	user.setId(userdetails.getId());
+//        	user.setId(1L);
+//        	user.setUsername("egovernments");
+//        	user.setActive(true);
+//        	user.setAccountLocked(false);
+//        	user.setGender(Gender.MALE);
+//        	user.setPassword("demo");
+//        	user.setName("egovernments");
+//        	user.setPwdExpiryDate(new Date(2090,01,01));
+//        	user.setLocale("en_lan");
+//        	System.out.println("***************** is password expired :  "+user.getPwdExpiryDate().isAfterNow());
+//        	
+//        	Role role = new Role();
+//        	role.setId(4L);
+//        	role.setName("SYSTEM");
+//        	Set<Role> roles = new HashSet<>();
+//        	roles.add(role);
+//        	
+//        	user.setRoles(roles);
+//        	
+////        	user.setRoles(new HashSet<>(userdetails.getRoles()));
+//        	
+//        	
+//        	
+//        	return user;
+//    }
 }

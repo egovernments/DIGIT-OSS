@@ -47,10 +47,11 @@
  */
 package org.egov.infra.microservice.models;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CustomUserDetails {
+public class CustomUserDetails implements Serializable{
 	private Long id;
 	private String userName;
 	private String name;

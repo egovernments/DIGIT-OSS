@@ -63,14 +63,12 @@ public class MSCommController {
 	
 	private String getAccessToken(){
 
-		String access_token = String.valueOf(servletrequest.getSession().getAttribute("access_token"));
-		if(access_token==null)
-				access_token = msUtil.getAccessTokenFromRedis(servletrequest);
+		String access_token =(String) msUtil.readFromRedis(servletrequest.getSession().getId(), "auth_token");
 		return access_token;
 	}
 	
 	@RequestMapping(value="/ClearToken",method=RequestMethod.POST)
-	private void logout(@RequestParam(value="access_token")String access_token){
+	private void logout(@RequestParam(value="auth_token")String access_token){
 		if(null != access_token){
 			msUtil.removeSessionFromRedis(access_token);
 		}

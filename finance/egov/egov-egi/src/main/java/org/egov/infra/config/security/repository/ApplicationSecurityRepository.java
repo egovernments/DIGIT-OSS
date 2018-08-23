@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,13 +18,18 @@ import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.Role;
 import org.egov.infra.admin.master.entity.User;
+import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
+import org.egov.infra.microservice.contract.UserSearchResponse;
+import org.egov.infra.microservice.contract.UserSearchResponseContent;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.persistence.entity.enums.Gender;
 import org.egov.infra.persistence.entity.enums.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.CustomEditorConfigurer;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.messaging.simp.user.UserSessionRegistryAdapter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,10 +46,10 @@ import redis.clients.jedis.JedisShardInfo;
 public class ApplicationSecurityRepository implements SecurityContextRepository {
 
 	private static final Logger LOGGER = Logger.getLogger(ApplicationSecurityRepository.class);
-	
+
 	@Autowired
 	public RedisTemplate<Object, Object> redisTemplate;
-	
+
 	@Autowired
 	public MicroserviceUtils msUtil;
 
@@ -50,160 +57,140 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 	public SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder) {
 		// TODO Auto-generated method stub
 
-		LOGGER.debug("Loading security context:  "+requestResponseHolder);
-		
+		LOGGER.debug("Loading security context:  " + requestResponseHolder);
+		SecurityContext context = new SecurityContextImpl();
+		CurrentUser cur_user= null;
 		try {
 
 			HttpServletRequest request = requestResponseHolder.getRequest();
+			cur_user = (CurrentUser)this.msUtil.readFromRedis(request.getSession().getId(), "current_user");
+			if (cur_user==null) {
+				LOGGER.info("Session is not available in redis and trying to login");
+				cur_user = new CurrentUser(this.getUserDetails(request));
+				this.msUtil.savetoRedis(request.getSession().getId(), "current_user", cur_user);
 
-			Map<String,String> sessionVals = msUtil.readSessionValuesFromRedis(request.getSession().getId());
-			if(sessionVals.size()>0){
-				SecurityContext context = new SecurityContextImpl();
-				context.setAuthentication(
-						this.prepareAuthenticationObj(request, sessionVals.get("NAME"), sessionVals.get("Authorities")));
-				return context;
 			}
-			
-			 else {
-				 LOGGER.info("Session is not found in Redis. Creating empty security context");
-				return SecurityContextHolder.createEmptyContext();
-			}
+			context.setAuthentication(this.prepareAuthenticationObj(request, cur_user));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			LOGGER.error("Session is not found in Redis. Creating empty security context");
 			return SecurityContextHolder.createEmptyContext();
 		}
+		return context;
 	}
 
 	@Override
 	public void saveContext(SecurityContext context, HttpServletRequest request, HttpServletResponse response) {
 
-		LOGGER.debug("Got the request to cusome app security repository - saveContext");
-		if (context == null || context.getAuthentication() == null){
-			LOGGER.error("Securirty context/authentication is null");
-			return;
-			}
-		try {
-			HttpSession session = request.getSession();
-			String sessionId = session.getId(), tenantId = String.valueOf(session.getAttribute("tenantId")),
-					access_token = request.getParameter("acces_token"), user = context.getAuthentication().getName(),
-					remoteIp = request.getRemoteAddr();
-			
-			if(access_token ==null) access_token = String.valueOf(session.getAttribute("access_token"));
-			
-			if(null!=access_token)
-			{
-				Map<String,String> sesValues = new HashMap<>();
-				
-				sesValues.put("ACCESS_TOKEN", access_token);
-				sesValues.put("NAME", user);
-				sesValues.put("RemoteIP", remoteIp);
-				
-				Authentication auth = context.getAuthentication();
-				StringBuilder authStr = new StringBuilder();
-				for (GrantedAuthority authority : auth.getAuthorities()) {
-					authStr.append(authority.getAuthority() + ",");
-				}
-				sesValues.put("Authorities", authStr.toString());
-				msUtil.SaveSessionToRedis(access_token, session.getId(), sesValues);
-			}else
-			{
-				LOGGER.error("Null access token, Security context redis save failed");
-			}
-			
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
-		}
-
-		// SaveToSessionResponseWrapper wrappedResponse = new
-		// SaveToSessionResponseWrapper(
-		// response, request, httpSession != null, context);
-		// requestResponseHolder.setResponse(wrappedResponse);
-		//
-		// if (isServlet3) {
-		// requestResponseHolder.setRequest(new
-		// Servlet3SaveToSessionRequestWrapper(
-		// request, wrappedResponse));
-		// }
+//		LOGGER.debug("Got the request to cusome app security repository - saveContext");
+//		if (context == null || context.getAuthentication() == null) {
+//			LOGGER.error("Securirty context/authentication is null");
+//			return;
+//		}
+//		try {
+//			HttpSession session = request.getSession();
+//			String sessionId = session.getId(), tenantId = String.valueOf(session.getAttribute("tenantId")),
+//					access_token = request.getParameter("acces_token"), user = context.getAuthentication().getName(),
+//					remoteIp = request.getRemoteAddr();
+//
+//			if (access_token == null)
+//				access_token = String.valueOf(session.getAttribute("access_token"));
+//
+//			if (null != access_token) {
+//				Map<String, String> sesValues = new HashMap<>();
+//
+//				sesValues.put("ACCESS_TOKEN", access_token);
+//				sesValues.put("NAME", user);
+//				sesValues.put("RemoteIP", remoteIp);
+//
+//				Authentication auth = context.getAuthentication();
+//				StringBuilder authStr = new StringBuilder();
+//				for (GrantedAuthority authority : auth.getAuthorities()) {
+//					authStr.append(authority.getAuthority() + ",");
+//				}
+//				sesValues.put("Authorities", authStr.toString());
+//				msUtil.SaveSessionToRedis(access_token, session.getId(), sesValues);
+//			} else {
+//				LOGGER.error("Null access token, Security context redis save failed");
+//			}
+//
+//		} catch (Exception e) {
+//			LOGGER.error(e.getMessage());
+//		}
 
 	}
 
 	@Override
 	public boolean containsContext(HttpServletRequest request) {
-		LOGGER.debug("containsContext: checking context avialability in redis -"
-				+request.getSession().getId()+" : "
-		+redisTemplate.hasKey(request.getSession().getId()));
+		LOGGER.debug("containsContext: checking context avialability in redis -" + request.getSession().getId() + " : "
+				+ redisTemplate.hasKey(request.getSession().getId()));
 
 		return redisTemplate.hasKey(request.getSession().getId());
 
 	}
 
-	private Authentication prepareAuthenticationObj(HttpServletRequest request, String user, String authroities) {
-		List<SimpleGrantedAuthority> authlist = new ArrayList<>();
-		if (authroities != null) {
-			String[] auths = authroities.split(",");
-			for (int count = 0; count < auths.length; ++count) {
-				authlist.add(new SimpleGrantedAuthority(auths[count]));
-			}
+//	private Authentication prepareAuthenticationObj(HttpServletRequest request, String user, String authroities) {
+//		List<SimpleGrantedAuthority> authlist = new ArrayList<>();
+//		if (authroities != null) {
+//			String[] auths = authroities.split(",");
+//			for (int count = 0; count < auths.length; ++count) {
+//				authlist.add(new SimpleGrantedAuthority(auths[count]));
+//			}
+//
+//		}
+//		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, "dummy", authlist);
+//		WebAuthenticationDetails details = new WebAuthenticationDetails(request);
+//		auth.setDetails(details);
+//		return auth;
+//
+//	}
 
-		}
-		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, "dummy", authlist);
+	private Authentication prepareAuthenticationObj(HttpServletRequest request, CurrentUser user) {
+
+		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, "dummy",
+				user.getAuthorities());
 		WebAuthenticationDetails details = new WebAuthenticationDetails(request);
 		auth.setDetails(details);
 		return auth;
+	}
+
+	private User getUserDetails(HttpServletRequest request) throws Exception{
+		String user_token = request.getParameter("auth_token");
+		if(user_token==null)
+			throw new Exception("AuthToken not found");
+		String sessionId = request.getSession().getId();
+		this.msUtil.savetoRedis(sessionId, "auth_token", user_token);
+		String admin_token = this.msUtil.generateAdminToken();
+		CustomUserDetails user = this.msUtil.getUserDetails(user_token, admin_token);
+		this.msUtil.savetoRedis(sessionId, "_details", user);
+		UserSearchResponse response = this.msUtil.getUserInfo(user_token, user.getTenantId(), user.getUserName());
+		return this.parepareCurrentUser(response.getUserSearchResponseContent().get(0));
+	}
+
+	private User parepareCurrentUser(UserSearchResponseContent userinfo) {
+
+		User user = new User(UserType.EMPLOYEE);
+		user.setId(userinfo.getId());
+		user.setUsername(userinfo.getUserName());
+		user.setActive(userinfo.getActive());
+		user.setAccountLocked(userinfo.getAccountLocked());
+		user.setGender(Gender.FEMALE);
+		user.setPassword("demo");
+		user.setName(userinfo.getName());
+		user.setPwdExpiryDate(userinfo.getPwdExpiryDate());
+		user.setLocale(userinfo.getLocale());
+
+		Set<Role> roles = new HashSet<>();
+
+		userinfo.getRoles().forEach(roleReq -> {
+			Role role = new Role();
+			role.setId(roleReq.getId());
+			role.setName(roleReq.getName());
+			roles.add(role);
+		});
+
+		return user;
 
 	}
-	
-	private void getUserDetails(){
-		
-	}
-	
-	 private User loadUserFromMS(String accessToken)
-	    {
-	    	System.out.println("*************** User Info microservice - started ****************");
-	    	System.out.println("Recieved token:"+accessToken);
-	    	//MicroserviceUtils msutil = new MicroserviceUtils();
-	    	CustomUserDetails user = msUtil.getUserDetails(accessToken);
-	    	System.out.println("*************** User Info microservice - end ****************");
-	    	return this.parepareCurrentUser(user);
-	    }
-	    
-	    private User parepareCurrentUser(CustomUserDetails userdetails) {
-	    
-	    		
-	    	
-	    	User user =new User(UserType.EMPLOYEE);
-	    //	user.setId(userdetails.getId());
-	    	user.setId(userdetails.getId());
-	    	user.setUsername(userdetails.getUserName());
-	    	user.setActive(true);
-	    	user.setAccountLocked(false);
-	    	user.setGender(Gender.FEMALE);
-	    	user.setPassword("demo");
-	    	user.setName(userdetails.getName());
-	    	user.setPwdExpiryDate(new Date(2090,01,01));
-	    	user.setLocale(userdetails.getLocale());
-	    	System.out.println("***************** is password expired :  "+user.getPwdExpiryDate().isAfterNow());
-	    	
-//	    	for(Role _role:userdetails.getRoles()){
-//	    		
-//	    	}
-//	    	Role role = new Role();
-//	    	role.setId(4L);
-//	    	role.setName("SYSTEM");
-	    	Set<Role> roles = new HashSet<>(userdetails.getRoles());
-	    	//roles.add(role);
-	    	
-	    	user.setRoles(roles);
-	    	
-//	    	user.setRoles(new HashSet<>(userdetails.getRoles()));
-	    	
-	    	
-	    	
-	    	return user;
-//	    	currentUser.setRoles(new Set(userdetails.getRoles()));
-	    	
-	    }
-	    
 
 }

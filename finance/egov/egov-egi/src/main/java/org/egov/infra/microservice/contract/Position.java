@@ -50,11 +50,11 @@ package org.egov.infra.microservice.contract;
 
 public class Position {
 
-    private Long id;
+   private Long id;
 
     private String name;
 
-    // private DepartmentDesignation deptdesig;
+    private DepartmentDesignation deptDesig;
 
     private Boolean isPostOutsourced;
 
@@ -91,5 +91,13 @@ public class Position {
     public void setActive(Boolean active) {
         this.active = active;
     }
+    
+    public DepartmentDesignation getDeptdesig() {
+		return deptDesig;
+	}
+
+	public void setDeptdesig(DepartmentDesignation deptdesig) {
+		this.deptDesig = deptdesig;
+	}
 
 }

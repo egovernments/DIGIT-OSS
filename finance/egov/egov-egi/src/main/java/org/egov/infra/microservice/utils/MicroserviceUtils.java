@@ -69,12 +69,20 @@ import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.RoleService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
+import org.egov.infra.microservice.contract.ActionRequest;
+import org.egov.infra.microservice.contract.ActionResponse;
 import org.egov.infra.microservice.contract.CreateUserRequest;
+import org.egov.infra.microservice.contract.Position;
+import org.egov.infra.microservice.contract.PositionRequest;
+import org.egov.infra.microservice.contract.PositionResponse;
 import org.egov.infra.microservice.contract.RequestInfoWrapper;
 import org.egov.infra.microservice.contract.Task;
 import org.egov.infra.microservice.contract.TaskResponse;
 import org.egov.infra.microservice.contract.UserDetailResponse;
 import org.egov.infra.microservice.contract.UserRequest;
+import org.egov.infra.microservice.contract.UserSearchRequest;
+import org.egov.infra.microservice.contract.UserSearchResponse;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.DepartmentResponse;
 import org.egov.infra.microservice.models.Designation;
@@ -92,7 +100,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import redis.clients.jedis.JedisShardInfo;
@@ -132,6 +146,18 @@ public class MicroserviceUtils {
 	
 	@Value("${egov.services.user.authsrvc.url}")
 	private String authSrvcUrl;
+	
+	@Value("${egov.services.master.poistion.url}")
+	private String positionSrvcUrl;
+	
+	@Value("${egov.services.master.actions.url}")
+	private String actionSrvcUrl;
+	
+	@Value("${egov.services.user.search.url}")
+	private String userSrcUrl;
+	
+	@Value("${egov.services.user.token.url}")
+	private String tokenGenUrl;
 	
 	public RequestInfo createRequestInfo() {
 		final RequestInfo requestInfo = new RequestInfo();
@@ -245,20 +271,98 @@ public class MicroserviceUtils {
 		return empResponse.getEmployees();
 	}
 
-	public CustomUserDetails getUserDetails(String access_token){
+	public CustomUserDetails getUserDetails(String user_token,String admin_token){
 		final RestTemplate restT = new RestTemplate();
-    	final String authurl = authSrvcUrl+"?access_token="+access_token;
+    	final String authurl = authSrvcUrl+"?access_token="+user_token;
     	
     	RequestInfo reqInfo = new RequestInfo();
     	RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
     	
-    	reqInfo.setAuthToken(access_token);
+    	reqInfo.setAuthToken(admin_token);
     	reqWrapper.setRequestInfo(reqInfo);
     	
     	
     	CustomUserDetails user = restT.postForObject(authurl, reqWrapper,CustomUserDetails.class);
     	return user;
 	}
+	
+	public String generateAdminToken(){
+		final RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders header = new HttpHeaders();
+		header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		header.add("Authorization", "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0");
+		
+		MultiValueMap<String,String> map = new LinkedMultiValueMap<>();
+		map.add("username", "elzan");
+		map.add("scope", "read");
+		map.add("password", "demo");
+		map.add("grant_type", "password");
+		map.add("tenantId", "default");
+		map.add("userType", "EMPLOYEE");
+		
+		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map,header);
+		
+		try {
+			Object response = restTemplate.postForObject(this.tokenGenUrl, request, Object.class);
+			if(response!=null)
+				return String.valueOf(((HashMap)response).get("access_token"));
+		} catch (RestClientException e) {
+			// TODO Auto-generated catch block
+			return null;
+		}
+		return null;
+	}
+	
+	public UserSearchResponse getUserInfo(String auth_token,String tenantId,String userName){
+		final RestTemplate restT = new RestTemplate();
+		
+		RequestInfo req_header = new RequestInfo();
+		UserSearchRequest request = new UserSearchRequest();
+		
+		req_header.setAuthToken(auth_token);
+		request.setRequestInfo(req_header);
+		request.setUserName(userName);
+		request.setTenantId(tenantId);
+		
+		UserSearchResponse response = restT.postForObject(this.userSrcUrl, request, UserSearchResponse.class);
+		return response;
+	}
+	
+	public PositionResponse createPosition(String access_token,String tenantId,List<Position> positions){
+		
+		final RestTemplate restT = new RestTemplate();
+		PositionRequest posrequest = new PositionRequest();
+		RequestInfo req_header = new RequestInfo();
+		
+		req_header.setAuthToken(access_token);
+		posrequest.setRequestInfo(req_header);
+		posrequest.setPosition(positions);
+		
+		PositionResponse response = restT.postForObject(this.positionSrvcUrl, posrequest, PositionResponse.class);
+		
+		return response;
+		
+	}
+	
+	public ActionResponse getActions(String authtoken,String tenantId,List<String> roles){
+		
+		final RestTemplate restT = new RestTemplate();
+		ActionRequest request  = new ActionRequest();
+		RequestInfo req_header = new RequestInfo();
+		
+		req_header.setAuthToken(authtoken);
+		request.setRequestInfo(req_header);
+		request.setTenantId(tenantId);
+		request.setRoleCodes(roles);
+		request.setActionMaster("actions-test");
+		request.setEnabled(true);
+		
+		ActionResponse response = restT.postForObject(this.actionSrvcUrl, request, ActionResponse.class);
+		
+//		response.getActions()
+		return response;
+	}
+	
 	public List<Task> getTasks() {
 
 		List<Task> tasks = new ArrayList<>();
@@ -305,18 +409,22 @@ public class MicroserviceUtils {
 		return isNotBlank(workflowServiceUrl);
 	}
 
-	public String getAccessTokenFromRedis(HttpServletRequest request) {
-
-		String access_token = null;
-
-		String sessionId = request.getSession().getId();
-
-		if (redisTemplate.hasKey(sessionId)) {
-			if (redisTemplate.opsForHash().hasKey(sessionId, "ACCESS_TOKEN")) {
-				access_token = String.valueOf(redisTemplate.opsForHash().get(sessionId, "ACCESS_TOKEN"));
-			}
-		}
-		return access_token;
+//	public String getAccessTokenFromRedis(HttpServletRequest request) {
+//
+//		String access_token = null;
+//
+//		String sessionId = request.getSession().getId();
+//
+//		if (redisTemplate.hasKey(sessionId)) {
+//			if (redisTemplate.opsForHash().hasKey(sessionId, "ACCESS_TOKEN")) {
+//				access_token = String.valueOf(redisTemplate.opsForHash().get(sessionId, "ACCESS_TOKEN"));
+//			}
+//		}
+//		return access_token;
+//	}
+	
+	public void saveAuthToken(String auth_token,String sessionId){
+		this.redisTemplate.opsForValue().set(auth_token, sessionId);
 	}
 	
 	public void SaveSessionToRedis(String access_token,String sessionId,Map<String,String> values){
@@ -330,18 +438,26 @@ public class MicroserviceUtils {
 		
 	}
 	
-	public Map<String,String> readSessionValuesFromRedis(String sessionId){
-		Map<String,String> sValues = new HashMap<>();
-		
-		if(this.redisTemplate.hasKey(sessionId)){
-			
-			this.redisTemplate.opsForHash().keys(sessionId).forEach(key->{
-				sValues.put(String.valueOf(key), String.valueOf(this.redisTemplate.opsForHash().get(sessionId, key)));
-				});;
-		}
-		
-		return sValues;
+	public void savetoRedis(String sessionId,String key, Object obj){
+		 this.redisTemplate.opsForHash().putIfAbsent(sessionId,key,obj);
 	}
+	
+	public Object readFromRedis(String sessionId,String key){
+		return this.redisTemplate.opsForHash().get(sessionId, key);
+	}
+	
+//	public Map<String,String> readSessionValuesFromRedis(String sessionId){
+//		Map<String,String> sValues = new HashMap<>();
+//		
+//		if(this.redisTemplate.hasKey(sessionId)){
+//			
+//			this.redisTemplate.opsForHash().keys(sessionId).forEach(key->{
+//				sValues.put(String.valueOf(key), String.valueOf(this.redisTemplate.opsForHash().get(sessionId, key)));
+//				});;
+//		}
+//		
+//		return sValues;
+//	}
 	
 	
 	public void removeSessionFromRedis(String access_token){
@@ -376,4 +492,6 @@ public class MicroserviceUtils {
 			
 		}
 	}
+	
+
 }

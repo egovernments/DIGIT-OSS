@@ -72,7 +72,7 @@
                 	</div>
 				</div>
            		</c:if>
-		<form:form id="addPosition" method="post" class="form-horizontal form-groups-bordered"	modelAttribute="position">
+		<form:form id="addPosition" method="post" class="form-horizontal form-groups-bordered"	modelAttribute="position">d
 		<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title">

@@ -191,9 +191,10 @@
     <bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
         <constructor-arg index="0">
             <list>
-                <bean class="org.springframework.security.access.vote.RoleVoter">
+                <!-- <bean class="org.springframework.security.access.vote.RoleVoter">
                     <property name="rolePrefix" value=""/>
-                </bean>
+                </bean> -->
+                <bean class="org.egov.infra.config.security.voter.ApplicationDecisionVoter"></bean>
             </list>
         </constructor-arg>
         <property name="allowIfAllAbstainDecisions" value="false"/>

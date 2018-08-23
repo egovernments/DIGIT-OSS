@@ -95,15 +95,15 @@ public class ApplicationAuthorizationMetadataSource implements FilterInvocationS
 
     private Collection<ConfigAttribute> lookupAttributes(String contextRoot, String url) {
         List<ConfigAttribute> configAttributes = new ArrayList<>();
-        if (!urlExcluded(url)) {
-            Action action = actionService.getActionByUrlAndContextRoot(url, contextRoot);
-            if (action != null) {
-                action.getRoles().forEach((role) ->{ configAttributes.add(new SecurityConfig(role.getName()));
-                	System.out.println("****************"+url+" : role "+role.getName());
-                });
-            }
-        }
-        if (configAttributes.isEmpty())
+//        if (!urlExcluded(url)) {
+//            Action action = actionService.getActionByUrlAndContextRoot(url, contextRoot);
+//            if (action != null) {
+//                action.getRoles().forEach((role) ->{ configAttributes.add(new SecurityConfig(role.getName()));
+//                	System.out.println("****************"+url+" : role "+role.getName());
+//                });
+//            }
+//        }
+//        if (configAttributes.isEmpty())
             configAttributes.add(new SecurityConfig(NO_ROLE_NAME));
         return configAttributes;
     }
