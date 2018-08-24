@@ -59,13 +59,13 @@ public class CityIndexService {
 	@Autowired
 	private CityIndexRepository cityIndexRepository;
 	
-	public CityIndex findOne(String id){
-		return cityIndexRepository.findOne(id);
-	}
-	
-	public Iterable<CityIndex> findAll(){		
-		return cityIndexRepository.findAll();
-	}
+//	public CityIndex findOne(String id){
+//		return cityIndexRepository.findOne(id);
+//	}
+//	
+//	public Iterable<CityIndex> findAll(){		
+//		return cityIndexRepository.findAll();
+//	}
 	
 	public CityIndex findByCitycode(String cityCode){
 		return cityIndexRepository.findOneByCityCode(cityCode);

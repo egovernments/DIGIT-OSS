@@ -98,7 +98,7 @@ public class RatioAnalysisDashboardService {
     private static final String LYGRANTRECEIPT = "lyGrantReceipt";
 
 
-    @Autowired
+//    @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
 
 

@@ -55,7 +55,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CityIndexRepository extends ElasticsearchRepository<CityIndex, String>,CityIndexCustomRepository {
+public interface CityIndexRepository extends /*ElasticsearchRepository<CityIndex, String>,*/CityIndexCustomRepository {
 
 	CityIndex findByCitycode(String code);
 	

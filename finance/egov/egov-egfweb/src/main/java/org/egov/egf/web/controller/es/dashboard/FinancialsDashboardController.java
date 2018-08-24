@@ -71,8 +71,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.List;
 
-@RestController
-@RequestMapping(value = {"/public/findashboard", "/findashboard"})
+//@RestController
+//@RequestMapping(value = {"/public/findashboard", "/findashboard"})
 public class FinancialsDashboardController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FinancialsDashboardController.class);

@@ -196,7 +196,7 @@ public class ApplicationDocumentService {
     @Autowired
     private BeanMapperConfiguration beanMapperConfiguration;
 
-    @Autowired
+//    @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
 
     private static final String DATE_FORMAT_YYYYMMDD = "yyyy-MM-dd";

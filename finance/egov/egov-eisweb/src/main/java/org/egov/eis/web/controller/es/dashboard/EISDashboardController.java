@@ -64,14 +64,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.util.List;
 
-@RestController
-@RequestMapping(value = "/eisdashboard")
+/*@RestController
+@RequestMapping(value = "/eisdashboard")*/
 public class EISDashboardController {
 
-    @Autowired
+//    @Autowired
     private EmployeeStatisticsDashboardService employeeStatisticsDashboardService;
 
-    @Autowired
+//    @Autowired
     private EmployeeDetailsDashboardService employeeDetailsDashboardService;
 
     @RequestMapping(value = "/employeestatistics", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

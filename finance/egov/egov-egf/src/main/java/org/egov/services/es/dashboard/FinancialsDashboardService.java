@@ -104,7 +104,7 @@ public class FinancialsDashboardService {
     private static final String MONTH = "month";
 
 
-    @Autowired
+//    @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
 
 

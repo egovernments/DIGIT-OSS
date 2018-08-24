@@ -62,7 +62,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 import java.net.InetSocketAddress;
 import java.util.List;
 
-@Configuration
+//@Configuration
 @EnableElasticsearchRepositories(basePackages = {"org.egov.**.repository.es", "org.egov.**.elasticsearch.repository"})
 public class ElasticSearchConfiguration {
 
