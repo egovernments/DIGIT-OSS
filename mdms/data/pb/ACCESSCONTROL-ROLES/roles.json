@@ -246,6 +246,16 @@
       "rolecode": "STADMIN",
       "name": "State Administrator",
       "description": "Admin role that as access over a state"
+    },
+ 		{
+      "rolecode": "EGF-BILL_CREATOR",
+      "name": "EGF Bill Creator",
+      "description": "Employee who creates Bills mainly expense bill "
+    },
+		{
+      "rolecode": "EGF-BILL_APPROVER",
+      "name": "EGF Bill Approver",
+      "description": "Employee who takes part in  Bills  approval mainly expense bill "
     }
   ]
 }
