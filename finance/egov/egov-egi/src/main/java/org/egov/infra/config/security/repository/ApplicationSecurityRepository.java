@@ -161,6 +161,7 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 		String sessionId = request.getSession().getId();
 		this.msUtil.savetoRedis(sessionId, "auth_token", user_token);
 		String admin_token = this.msUtil.generateAdminToken();
+		this.msUtil.savetoRedis(sessionId, "admin_token", admin_token);
 		CustomUserDetails user = this.msUtil.getUserDetails(user_token, admin_token);
 		this.msUtil.savetoRedis(sessionId, "_details", user);
 		UserSearchResponse response = this.msUtil.getUserInfo(user_token, user.getTenantId(), user.getUserName());

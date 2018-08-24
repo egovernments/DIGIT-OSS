@@ -63,7 +63,7 @@ public class MSCommController {
 	
 	private String getAccessToken(){
 
-		String access_token =(String) msUtil.readFromRedis(servletrequest.getSession().getId(), "auth_token");
+		String access_token =(String) msUtil.readFromRedis(servletrequest.getSession().getId(), "admin_token");
 		return access_token;
 	}
 	

@@ -164,7 +164,7 @@ public abstract class GenericWorkFlowController {
     
     private String getAccessToken(){
 
-		String access_token = (String) msUtil.readFromRedis(serRequest.getSession().getId(), "auth_token");
+		String access_token = (String) msUtil.readFromRedis(serRequest.getSession().getId(), "admin_token");
 		
 		return access_token;
 	}
