@@ -11533,7 +11533,7 @@
     {
       "id": 1590,
       "name": "Collection Search Reciept",
-      "url": "/collection-services/receipts/_search",
+      "url": "/tR-services/receipts/_search",
       "displayName": "Search Reciept",
       "orderNumber": 1,
       "enabled": false,
@@ -11574,7 +11574,7 @@
     {     		
 			"id": 1593,
 			"name": "Financial Expense bill create",
-			"navigationURL": "/EGF/expensebill/newform",
+			"navigationURL": "EGF/expensebill/newform",
 			"url": "url",
 			"parentModule": "EGF",	   
 			"displayName": "Create Expense Bill",
