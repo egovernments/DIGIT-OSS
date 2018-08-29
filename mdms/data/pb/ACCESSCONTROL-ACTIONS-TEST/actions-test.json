@@ -11582,7 +11582,7 @@
 			"enabled": true,
 			"serviceCode": "Bills Accounting",
 			"code": "null",
-			"path": ""
+			"path": "EGF.Bills Accounting.Create Expense Bill"
 		},
 		{     		
 			"id": 1594,
