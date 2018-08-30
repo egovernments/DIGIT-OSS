@@ -1,0 +1,13 @@
+{
+ "tenantId": "pb",
+ "moduleName": "PropertyTax",
+ "CancerCess": [
+   {
+     "rate": 5,
+     "minAmount": null,
+     "flatAmount": null,
+     "maxAmount" : null,
+     "fromFY": "2015-16"
+   }
+ ]
+}
