@@ -260,11 +260,7 @@
       "usageCategoryMinor": "OTHERS",
       "active": true,
       "fromFY": "2015-16",
-      "exemption": {
-        "rate": 0,
-        "maxAmount": 0,
-        "flatAmount": 0
-      }
+      "exemption": null
     }
   ]
 }
