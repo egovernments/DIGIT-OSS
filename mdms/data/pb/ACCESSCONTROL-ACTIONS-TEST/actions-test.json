@@ -11712,6 +11712,30 @@
       "serviceCode": "hr-masters",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1607,
+      "name": "PositionCreate",
+      "url": "/hr-masters-v2/positions/_create",
+      "displayName": "PositionCreate",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "hr-masters",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1608,
+      "name": "DepartmentSearch",
+      "url": "/hr-masters-v2/departments/_search",
+      "displayName": "DepartmentSearch",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "hr-masters",
+      "code": "null",
+      "path": ""
     }
   ]
 }
