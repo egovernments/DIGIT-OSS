@@ -1,1 +1,0 @@
-﻿alter table egtl_license_aud rename startdate to commencementDate;

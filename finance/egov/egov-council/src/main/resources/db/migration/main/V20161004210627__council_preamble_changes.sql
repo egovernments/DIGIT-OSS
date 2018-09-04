@@ -1,1 +1,0 @@
-alter table egcncl_preamble add column implStatus bigint; 

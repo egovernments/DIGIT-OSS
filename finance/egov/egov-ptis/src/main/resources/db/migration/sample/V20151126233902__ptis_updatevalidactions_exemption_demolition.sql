@@ -1,2 +1,0 @@
-update eg_wf_matrix set validactions ='Forward' where additionalrule ='EXEMPTION' and currentstate='Exemption:NEW';
-update eg_wf_matrix set validactions ='Forward' where additionalrule ='DEMOLITION' and currentstate='Demolition:NEW';

@@ -1,1 +1,0 @@
-UPDATE eg_action set enabled = false WHERE name = 'Search unit rate edit' and contextroot = 'ptis';

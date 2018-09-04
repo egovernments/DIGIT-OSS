@@ -1,1 +1,0 @@
-update eg_module  set enabled=false  where name = 'Sewerage Tax Management';

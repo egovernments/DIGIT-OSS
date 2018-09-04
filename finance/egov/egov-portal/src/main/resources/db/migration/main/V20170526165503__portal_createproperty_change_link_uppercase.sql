@@ -1,1 +1,0 @@
-update egp_portalservice set name='Create Property' where name='create property';

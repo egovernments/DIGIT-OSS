@@ -1,1 +1,0 @@
-update eg_wf_matrix set validactions  ='Forward,Cancel,Generate Provisional Certificate,Reassign' where currentstate='First Level Fee Collected' and additionalrule='RENEWLICENSE' and objecttype='TradeLicense';

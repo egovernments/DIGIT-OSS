@@ -1,1 +1,0 @@
-update eg_demand_reason_master set code='CHQ_BUNC_PENALTY' where reasonmaster='Cheque Bounce Penalty' and code = 'CHEQUE_PENALTY';

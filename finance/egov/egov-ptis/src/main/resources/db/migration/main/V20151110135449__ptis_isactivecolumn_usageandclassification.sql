@@ -1,2 +1,0 @@
-ALTER TABLE egpt_property_usage_master ADD COLUMN isActive BOOLEAN DEFAULT TRUE;
-ALTER TABLE egpt_struc_cl ADD COLUMN isActive BOOLEAN DEFAULT TRUE;

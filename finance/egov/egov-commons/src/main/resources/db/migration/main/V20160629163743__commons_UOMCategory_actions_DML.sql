@@ -1,4 +1,9 @@
+INSERT into eg_module values (nextval('SEQ_EG_ACTION'),'Common',true,'common',null,'Common',1);
+
 INSERT into eg_module values (nextval('SEQ_EG_ACTION'),'CommonUOMCategory',true,'common',(select id from eg_module where name='Common-Masters' and contextroot='common'),'UOM Category',1);
+
+
+
 
 INSERT into eg_module values (nextval('SEQ_EG_ACTION'),'Common-Masters',true,'common',(select id from eg_module where name='Common' and parentmodule is null),'Masters',1);
 

@@ -1,1 +1,0 @@
-update eg_wf_matrix set nextaction =null where objecttype= 'AdvertisementPermitDetail' and currentstate='Third Party operator created';

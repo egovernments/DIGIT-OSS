@@ -1,3 +1,5 @@
+
+select setval('seq_eg_script', (Select max(id)+1 from EG_SCRIPT) );
 INSERT INTO EG_SCRIPT (ID,NAME,type,SCRIPT,version) VALUES(nextval('seq_eg_script'),'egf.budget.reappropriation.sequence.generator','python',
 'from org.egov.infra.validation.exception import ValidationError  
 from org.egov.infstr.utils.seqgen import DatabaseSequenceFirstTimeException   

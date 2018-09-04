@@ -1,2 +1,0 @@
-INSERT INTO eg_feature_action (ACTION, FEATURE) VALUES ((select id FROM eg_action  WHERE name = 'AjaxCheckIfBillsCreatedToCancelLOA') ,(select id FROM eg_feature WHERE name = 'Cancel LOA'));
-INSERT INTO eg_feature_action (ACTION, FEATURE) VALUES ((select id FROM eg_action  WHERE name = 'WorksSaveLOASuccess') ,(select id FROM eg_feature WHERE name = 'Modify LOA'));

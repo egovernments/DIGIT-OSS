@@ -1,3 +1,4 @@
+select setval('seq_eg_role', (Select max(id) from eg_role) );
 insert into eg_role values(nextval('seq_eg_role'),'Bill Creator','One who can create bills',current_date,1,1,current_date,0);
 insert into eg_role values(nextval('seq_eg_role'),'Bill Approver','One who can approve bills',current_date,1,1,current_date,0);
 

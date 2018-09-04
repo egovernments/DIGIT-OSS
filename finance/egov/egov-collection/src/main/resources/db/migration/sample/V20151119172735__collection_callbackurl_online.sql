@@ -1,1 +1,0 @@
-update egcl_servicedetails set callbackurl='https://phoenix-qa.egovernments.org/collection/citizen/onlineReceipt-acceptMessageFromPaymentGateway.action' where callbackurl='https://dev4.governation.com/collection/citizen/onlineReceipt-acceptMessageFromPaymentGateway.action';

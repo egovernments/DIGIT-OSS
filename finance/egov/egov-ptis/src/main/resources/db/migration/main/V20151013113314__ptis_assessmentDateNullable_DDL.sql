@@ -1,1 +1,0 @@
-ALTER TABLE egpt_basic_property ALTER COLUMN assessmentdate DROP NOT NULL;

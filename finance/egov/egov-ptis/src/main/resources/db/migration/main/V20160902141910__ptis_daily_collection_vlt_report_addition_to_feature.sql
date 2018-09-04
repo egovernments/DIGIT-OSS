@@ -1,2 +1,0 @@
-INSERT INTO eg_feature_action (ACTION, FEATURE) VALUES ((select id FROM eg_action  WHERE name = 'Daily collection report VLT') ,(select id FROM eg_feature WHERE name = 'Property Tax Reports'));
-INSERT INTO eg_feature_action (ACTION, FEATURE) VALUES ((select id FROM eg_action  WHERE name = 'Daily collection report VLT result') ,(select id FROM eg_feature WHERE name = 'Property Tax Reports'));

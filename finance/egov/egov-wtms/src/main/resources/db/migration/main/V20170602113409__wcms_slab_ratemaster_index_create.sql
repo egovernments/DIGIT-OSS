@@ -1,1 +1,0 @@
-CREATE INDEX idx_meteredratedetail_meteredrate ON egwtr_metered_rates_detail(meteredrate);

@@ -1,1 +1,0 @@
-UPDATE eg_action set enabled = true WHERE name = 'Property Deactivation Form' and contextroot = 'ptis';

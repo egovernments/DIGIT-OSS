@@ -1,1 +1,0 @@
-update eg_action set displayname ='Base Register (PT)' where name = 'Base Register Report' and contextroot='ptis';

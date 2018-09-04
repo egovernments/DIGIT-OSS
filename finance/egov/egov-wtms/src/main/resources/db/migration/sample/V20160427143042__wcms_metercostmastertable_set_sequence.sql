@@ -1,1 +1,0 @@
-SELECT setval('SEQ_EGWTR_METERCOST', COALESCE((SELECT MAX(id)+1 FROM egwtr_metercost), 1), false);

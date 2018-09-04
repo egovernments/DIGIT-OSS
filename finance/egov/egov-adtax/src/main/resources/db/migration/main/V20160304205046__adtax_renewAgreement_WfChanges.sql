@@ -1,1 +1,0 @@
-update eg_wf_matrix set validactions='GENERATE DEMAND NOTICE' where additionalrule='RENEWADVERTISEMENT' and objecttype='AdvertisementPermitDetail' and currentstate='Commissioner Approved';

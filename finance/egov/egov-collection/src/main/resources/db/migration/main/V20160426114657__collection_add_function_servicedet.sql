@@ -1,1 +1,0 @@
-ALTER TABLE egcl_servicedetails ADD  function INTEGER CONSTRAINT fk_function_servicedet REFERENCES FUNCTION(id);

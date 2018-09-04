@@ -1,1 +1,0 @@
-DROP VIEW egpgr_mv_drilldown_report_view;

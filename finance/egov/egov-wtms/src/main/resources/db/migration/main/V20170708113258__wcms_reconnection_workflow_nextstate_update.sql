@@ -1,1 +1,0 @@
-update eg_wf_matrix  set nextstate='ReConn forwared By Approver' where objecttype ='WaterConnectionDetails' and additionalrule ='RECONNECTION' and currentstate='ReConnection By AE';

@@ -1,2 +1,0 @@
-update EG_WF_STATES set value ='Estimate Notice Generated' where value ='Estmate Notice Generated';
-update eg_wf_matrix set  nextstate='Estimate Notice Generated' where objecttype='WaterConnectionDetails' and nextstate='Estmate Notice Generated';

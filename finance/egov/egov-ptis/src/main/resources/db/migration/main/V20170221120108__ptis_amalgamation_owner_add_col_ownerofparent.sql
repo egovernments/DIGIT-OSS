@@ -1,1 +1,0 @@
-ALTER TABLE egpt_amalgamation_owner ADD COLUMN OWNEROFPARENT boolean DEFAULT false;

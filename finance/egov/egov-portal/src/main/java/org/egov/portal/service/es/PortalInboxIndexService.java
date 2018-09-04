@@ -80,8 +80,8 @@ public class PortalInboxIndexService {
         final City cityWebsite = cityService.getCityByURL(ApplicationThreadLocals.getDomainName());
         final PortalInboxIndex portalInboxIndex = new PortalInboxIndex();
         portalInboxIndex.setUlbName(cityWebsite.getName());
-        portalInboxIndex.setApplicationCreatedBy(portalInbox.getCreatedBy() != null ? portalInbox.getCreatedBy()
-                .getName() : "");
+      //  portalInboxIndex.setApplicationCreatedBy(portalInbox.getCreatedBy() != null ? portalInbox.getCreatedBy()
+      //          .getName() : "");
         portalInboxIndex.setApplicationDate(portalInbox.getApplicationDate());
         portalInboxIndex.setApplicationNumber(portalInbox.getApplicationNumber());
         portalInboxIndex.setApplicationStatus(portalInbox.getStatus() != null ? portalInbox.getStatus() : "");

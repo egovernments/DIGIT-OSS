@@ -1,1 +1,0 @@
-update eg_wf_types set typefqn='org.egov.tl.entity.TradeLicense' where typefqn='org.egov.tl.domain.entity.TradeLicense';

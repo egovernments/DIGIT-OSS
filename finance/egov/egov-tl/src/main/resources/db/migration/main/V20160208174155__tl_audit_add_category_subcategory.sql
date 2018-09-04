@@ -1,1 +1,0 @@
-﻿alter table egtl_license_aud add column id_category bigint, add column id_sub_category bigint;

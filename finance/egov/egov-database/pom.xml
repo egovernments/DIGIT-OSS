@@ -110,54 +110,11 @@
                                 <resource>
                                     <directory>../egov-egf/src/main/resources/db/migration</directory>
                                 </resource>
-                                <resource>
-                                    <directory>../egov-collection/src/main/resources/db/migration</directory>
-                                </resource>
-                                <resource>
-                                    <directory>../egov-pgr/src/main/resources/db/migration</directory>
-                                </resource>
-                                <resource>
-                                    <directory>../egov-wtms/src/main/resources/db/migration</directory>
-                                </resource>
-                                <resource>
-                                    <directory>../egov-demand/src/main/resources/db/migration</directory>
-                                </resource>
+                                
                                 <resource>
                                     <directory>../egov-portal/src/main/resources/db/migration</directory>
                                 </resource>
-                                <resource>
-                                    <directory>../egov-eventnotification/src/main/resources/db/migration</directory>
-                                </resource>
-                                <resource>
-                                    <directory>../egov-pushbox/src/main/resources/db/migration</directory>
-                                </resource>
-                                <resource>
-                                    <directory>../egov-ptis/src/main/resources/db/migration</directory>
-                                </resource>
-                                <resource>
-                                    <directory>../egov-adtax/src/main/resources/db/migration</directory>
-                                </resource>
-                                <resource>
-                                    <directory>../egov-tl/src/main/resources/db/migration</directory>
-                                </resource>
-                                <resource>
-                                    <directory>../egov-assets/src/main/resources/db/migration</directory>
-                                </resource>
-                                <resource>
-                                    <directory>../egov-works/src/main/resources/db/migration</directory>
-                                </resource>
-                                <resource>
-                                    <directory>../egov-council/src/main/resources/db/migration</directory>
-                                </resource>
-                                <resource>
-                                    <directory>../egov-lcms/src/main/resources/db/migration</directory>
-                                </resource>
-                                <resource>
-                                    <directory>../egov-stms/src/main/resources/db/migration</directory>
-                                </resource>
-                                 <resource>
-                                    <directory>../egov-mrs/src/main/resources/db/migration</directory>
-                                </resource>
+                                
                             </resources>
                         </configuration>
                     </execution>

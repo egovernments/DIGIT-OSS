@@ -1,1 +1,0 @@
-INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) VALUES ((SELECT id FROM eg_role WHERE upper(name) = 'PUBLIC'), (SELECT id FROM eg_action WHERE name ='ViewReceipt' and contextroot='collection'));

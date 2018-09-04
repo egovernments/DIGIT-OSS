@@ -1,1 +1,0 @@
-update eg_wf_matrix set nextaction='Digital Signature Pending' where objecttype  = 'WaterConnectionDetails' and nextstate='Commissioner Approved';

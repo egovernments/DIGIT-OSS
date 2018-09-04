@@ -1,1 +1,0 @@
-UPDATE eg_wf_matrix SET validactions='Reject' WHERE objecttype='PropertyMutation' AND currentstate='UD Revenue Inspector Approved';

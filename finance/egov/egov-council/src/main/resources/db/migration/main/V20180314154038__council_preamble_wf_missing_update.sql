@@ -1,1 +1,0 @@
-update eg_wf_matrix set additionalrule ='CouncilCommonWorkflow' where id =(select id from eg_wf_matrix where objecttype ='CouncilPreamble' and currentstate='NEW' and pendingactions is null);

@@ -1,1 +1,0 @@
-insert into egpgr_receivingmode (id, name, code, visible) values (nextval('seq_egpgr_receivingmode'), 'Citizen Portal', 'CPORTAL', false),(nextval('seq_egpgr_receivingmode'), 'Employee App', 'EMPAPP', false);

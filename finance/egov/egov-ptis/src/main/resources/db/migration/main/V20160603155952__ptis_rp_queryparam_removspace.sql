@@ -1,1 +1,0 @@
-update eg_action set queryparams='applicationType=Revision_Petition' where queryparams='applicationType=Revision Petition' and displayname='Create Revision Petition' and contextroot='ptis';

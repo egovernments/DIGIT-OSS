@@ -36,7 +36,7 @@ INSERT INTO  eg_roleaction (actionid, roleid) select (select id from eg_action w
 
 INSERT INTO  eg_roleaction (actionid, roleid) select (select id from eg_action where name = 'OfficialChangePassword'), id from eg_role where name in ('Employee Admin');
 
-INSERT INTO  eg_roleaction (actionid, roleid) select (select id from eg_action where name = 'Open inbox'), id from eg_role where name in ('Employee Admin');
+--INSERT INTO  eg_roleaction (actionid, roleid) select (select id from eg_action where name = 'Open inbox'), id from eg_role where name in ('Employee Admin');
 
 INSERT INTO  eg_roleaction (actionid, roleid) select (select id from eg_action where name = 'EmpDesigAutoComplete'), id from eg_role where name in ('Employee Admin');
 

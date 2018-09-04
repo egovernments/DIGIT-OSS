@@ -1,1 +1,0 @@
-alter table egpt_floor_detail add column floor_uid bigint;

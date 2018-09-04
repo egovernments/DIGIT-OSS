@@ -10,11 +10,11 @@ delete from eg_action where name in('New-CouncilQualification','Create-CouncilQu
 
 -------------alter table--------------------------------
 
-ALTER TABLE egcncl_qualification RENAME TO eg_qualification;
+--ALTER TABLE egcncl_qualification RENAME TO eg_qualification;
 
-ALTER TABLE eg_qualification RENAME CONSTRAINT pk_egcncl_qualification TO pk_eg_qualification;
+--ALTER TABLE eg_qualification RENAME CONSTRAINT pk_egcncl_qualification TO pk_eg_qualification;
 
-ALTER SEQUENCE seq_egcncl_qualification RENAME TO seq_eg_qualification;
+--ALTER SEQUENCE seq_egcncl_qualification RENAME TO seq_eg_qualification;
 
 
 ----------------------educational qualification role action mapping------------------------------------

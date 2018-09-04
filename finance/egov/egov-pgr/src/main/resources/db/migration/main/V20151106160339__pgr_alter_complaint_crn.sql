@@ -1,3 +1,0 @@
-ALTER TABLE egpgr_complaint ALTER COLUMN crn TYPE VARCHAR(32);
-ALTER TABLE egpgr_complaint ALTER COLUMN crn SET NOT NULL;
-ALTER TABLE egpgr_complaint ADD CONSTRAINT unq_crn UNIQUE (crn);

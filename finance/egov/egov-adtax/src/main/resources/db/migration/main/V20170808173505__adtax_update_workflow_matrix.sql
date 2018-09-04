@@ -1,1 +1,0 @@
-update eg_wf_matrix set pendingactions ='Commissioner approval pending' where objecttype='AdvertisementPermitDetail' and currentstate='Rejected'  and currentstatus='REJECTED';

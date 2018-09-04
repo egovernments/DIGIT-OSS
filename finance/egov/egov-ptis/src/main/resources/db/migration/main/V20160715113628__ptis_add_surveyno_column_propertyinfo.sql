@@ -1,1 +1,0 @@
-alter table egpt_mv_propertyinfo add column surveyNo character varying(64);
