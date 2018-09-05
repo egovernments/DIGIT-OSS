@@ -114,7 +114,7 @@ public class BillRegisterSearchAction extends BaseFormAction {
     public BillRegisterSearchAction() {
         billregister = new EgBillregister();
         billregister.setEgBillregistermis(new EgBillregistermis());
-        addRelatedEntity("egBillregistermis.egDepartment", Department.class);
+       // addRelatedEntity("egBillregistermis.egDepartment", Department.class);
         addRelatedEntity("egBillregistermis.fund", Fund.class);
         addRelatedEntity("egBillregistermis.scheme", Scheme.class);
         addRelatedEntity("egBillregistermis.subScheme", SubScheme.class);

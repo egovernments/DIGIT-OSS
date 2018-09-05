@@ -81,6 +81,7 @@ import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -151,6 +152,9 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
     private FinancialYearDAO financialYearDAO;
     @Autowired
     private VoucherTypeForULB voucherTypeForULB;
+    
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
     @Autowired
     private CreateVoucher createVoucher;
     public List<CChartOfAccounts> purchaseBillGlcodeList = new ArrayList<CChartOfAccounts>();
@@ -329,10 +333,11 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                 headerdetails.put(VoucherConstant.VOUCHERNUMBER,
                         parameters.get(VoucherConstant.VOUCHERNUMBER)[0]);
 
-            if (billregister.getEgBillregistermis().getEgDepartment() != null)
-                headerdetails.put(VoucherConstant.DEPARTMENTCODE, billregister
-                        .getEgBillregistermis().getEgDepartment().getCode());
-
+            if (billregister.getEgBillregistermis().getDepartmentid() != null){
+               List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(billregister.getEgBillregistermis().getDepartmentid(),"default");
+               String departmentCode = list!=null && !list.isEmpty() ? list.get(0).getCode() : "";
+                headerdetails.put(VoucherConstant.DEPARTMENTCODE, departmentCode);
+            }
             if (billregister.getEgBillregistermis().getFundsource() != null)
                 headerdetails.put(VoucherConstant.FUNDSOURCECODE, billregister
                         .getEgBillregistermis().getFundsource().getCode());
@@ -3411,9 +3416,11 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                 if (billregister.getEgBillregistermis().getFund() != null)
                     paymentBean.setFundName(billregister.getEgBillregistermis()
                             .getFund().getName());
-                if (billregister.getEgBillregistermis().getEgDepartment() != null)
-                    paymentBean.setDeptName(billregister.getEgBillregistermis()
-                            .getEgDepartment().getName());
+                if (billregister.getEgBillregistermis().getDepartmentid() != null){
+                    List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(billregister.getEgBillregistermis().getDepartmentid(),"default");
+                    String departmentName = list!=null && !list.isEmpty() ? list.get(0).getName() : "";
+                    paymentBean.setDeptName(departmentName);
+                }
                 if (billregister.getEgBillregistermis().getScheme() != null)
                     paymentBean.setSchemeName(billregister
                             .getEgBillregistermis().getScheme().getName());

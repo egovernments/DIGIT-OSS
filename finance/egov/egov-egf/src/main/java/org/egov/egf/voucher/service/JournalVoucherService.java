@@ -286,7 +286,7 @@ public class JournalVoucherService {
 
         final EgBillregistermis egBillregistermis = new EgBillregistermis();
         egBillregistermis.setFund(voucherHeader.getFundId());
-        egBillregistermis.setEgDepartment(voucherHeader.getVouchermis().getDepartmentid());
+        egBillregistermis.setDepartmentid(voucherHeader.getVouchermis().getDepartmentid().getId());
         egBillregistermis.setFunctionaryid(voucherHeader.getVouchermis().getFunctionary());
         egBillregistermis.setFunction(voucherHeader.getVouchermis().getFunction());
         egBillregistermis.setFundsource(voucherHeader.getVouchermis().getFundsource());

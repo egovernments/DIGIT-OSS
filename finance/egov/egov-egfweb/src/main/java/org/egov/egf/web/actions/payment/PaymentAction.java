@@ -425,7 +425,7 @@ public class PaymentAction extends BasePaymentAction {
             sql.append(" and bill.egBillregistermis.fundsource.id="
                     + voucherHeader.getVouchermis().getFundsource().getId());
         if (voucherHeader.getVouchermis().getDepartmentid() != null)
-            sql.append(" and bill.egBillregistermis.egDepartment.id="
+            sql.append(" and bill.egBillregistermis.departmentid="
                     + voucherHeader.getVouchermis().getDepartmentid().getId());
         if (voucherHeader.getVouchermis().getSchemeid() != null)
             sql.append(" and bill.egBillregistermis.scheme.id=" + voucherHeader.getVouchermis().getSchemeid().getId());
@@ -709,7 +709,7 @@ public class PaymentAction extends BasePaymentAction {
         if (voucherHeader.getFundId() != null)
             sql.append(" and bill.egBillregistermis.fund.id=" + voucherHeader.getFundId().getId());
         if (voucherHeader.getVouchermis().getDepartmentid() != null)
-            sql.append(" and bill.egBillregistermis.egDepartment.id="
+            sql.append(" and bill.egBillregistermis.departmentid="
                     + voucherHeader.getVouchermis().getDepartmentid().getId());
         if (voucherHeader.getVouchermis().getFunction() != null)
             sql.append(" and bill.egBillregistermis.function=" + voucherHeader.getVouchermis().getFunction().getId());
@@ -947,8 +947,7 @@ public class PaymentAction extends BasePaymentAction {
                 LOGGER.debug("Starting createPayment...");
             populateWorkflowBean();
             if (parameters.get("department") != null)
-                billregister.getEgBillregistermis().setEgDepartment(
-                        departmentService.getDepartmentById(Long.valueOf(parameters.get("department")[0].toString())));
+                billregister.getEgBillregistermis().setDepartmentid(Long.valueOf(parameters.get("department")[0]));
             if (parameters.get("function") != null)
                 billregister.getEgBillregistermis()
                         .setFunction(functionService.findOne(Long.valueOf(parameters.get("function")[0].toString())));

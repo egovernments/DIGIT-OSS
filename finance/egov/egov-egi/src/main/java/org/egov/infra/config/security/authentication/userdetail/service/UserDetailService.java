@@ -48,27 +48,16 @@
 
 package org.egov.infra.config.security.authentication.userdetail.service;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.egov.infra.admin.master.entity.CustomUserDetails;
-import org.egov.infra.admin.master.entity.Role;
-import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.UserService;
-import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
-import org.egov.infra.persistence.entity.enums.Gender;
-import org.egov.infra.persistence.entity.enums.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.client.RestTemplate;
 
 public class UserDetailService implements UserDetailsService {
     
 	@Autowired
-	public MicroserviceUtils msUtil;
+	public MicroserviceUtils microserviceUtils;
 	
 	private UserService userService;
 

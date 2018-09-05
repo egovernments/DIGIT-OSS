@@ -132,9 +132,7 @@ public class EgBillregistermis extends AbstractPersistable<Integer> implements j
 
     private BigDecimal month;
 
-    @ManyToOne
-    @JoinColumn(name = "departmentid")
-    private Department egDepartment;
+    private Long departmentid;
 
     @ManyToOne
     @JoinColumn(name = "financialyearid")
@@ -244,7 +242,7 @@ public class EgBillregistermis extends AbstractPersistable<Integer> implements j
             final String sanctiondetail, final String narration, final Date lastupdatedtime,
             final String disbursementtype, final BigDecimal escalation,
             final BigDecimal advancepayments, final BigDecimal securedadvances,
-            final BigDecimal deductamountwitheld, final Department departmentid,
+            final BigDecimal deductamountwitheld, final Long departmentid,
             final BigDecimal month, final CFinancialYear financialyear,
             final Fundsource fundsource, final Date paybydate, final EgBillSubType egBillSubtype,
             final String ptyBillNumber, final Date ptyBillDate, final String inwrdSlNumber) {
@@ -267,7 +265,7 @@ public class EgBillregistermis extends AbstractPersistable<Integer> implements j
         this.advancepayments = advancepayments;
         this.securedadvances = securedadvances;
         this.deductamountwitheld = deductamountwitheld;
-        egDepartment = departmentid;
+        this.departmentid = departmentid;
         this.month = month;
         this.financialyear = financialyear;
         this.fundsource = fundsource;
@@ -424,14 +422,6 @@ public class EgBillregistermis extends AbstractPersistable<Integer> implements j
         this.month = month;
     }
 
-    public Department getEgDepartment() {
-        return egDepartment;
-    }
-
-    public void setEgDepartment(final Department egDepartment) {
-        this.egDepartment = egDepartment;
-    }
-
     public CFinancialYear getFinancialyear() {
         return financialyear;
     }
@@ -556,7 +546,15 @@ public class EgBillregistermis extends AbstractPersistable<Integer> implements j
         return subSchemeId;
     }
 
-    public void setSubSchemeId(final Long subSchemeId) {
+    public Long getDepartmentid() {
+		return departmentid;
+	}
+
+	public void setDepartmentid(Long departmentid) {
+		this.departmentid = departmentid;
+	}
+
+	public void setSubSchemeId(final Long subSchemeId) {
         this.subSchemeId = subSchemeId;
     }
 

@@ -627,7 +627,7 @@ public class ExpenseBillService {
     private void getRequiredDataForBudget(EgBillregister egBillregister, Map<String, Object> budgetDataMap) {
 
         budgetDataMap.put("financialyearid", egBillregister.getEgBillregistermis().getFinancialyear().getId());
-        budgetDataMap.put(Constants.DEPTID, egBillregister.getEgBillregistermis().getEgDepartment().getId());
+        budgetDataMap.put(Constants.DEPTID, egBillregister.getEgBillregistermis().getDepartmentid());
         if (egBillregister.getEgBillregistermis().getFunctionaryid() != null)
             budgetDataMap.put(Constants.FUNCTIONARYID, egBillregister.getEgBillregistermis().getFunctionaryid().getId());
         if (egBillregister.getEgBillregistermis().getScheme() != null)

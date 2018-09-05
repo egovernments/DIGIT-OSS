@@ -3,13 +3,11 @@ package org.egov.egf.web.controller.microservice;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.Designation;
 import org.egov.infra.microservice.models.EmployeeInfo;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
-import org.egov.infra.web.spring.annotation.DuplicateRequestToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MSCommController {
 
 	@Autowired
-	MicroserviceUtils msUtil;
+	MicroserviceUtils microserviceUtils;
 	@Autowired
 	
 	private HttpServletRequest servletrequest;
@@ -35,7 +33,7 @@ public class MSCommController {
 	
 		String access_token=getAccessToken();
 		String tenantId ="default";
-		List<Department> departments = msUtil.getDepartments(access_token, tenantId);
+		List<Department> departments = microserviceUtils.getDepartments(access_token, tenantId);
 		return departments;
 	}
 	
@@ -45,7 +43,7 @@ public class MSCommController {
 		
 		String access_token=getAccessToken();
 		String tenantId = "default";
-		List<Designation> designations = msUtil.getDesignation(access_token, tenantId);
+		List<Designation> designations = microserviceUtils.getDesignation(access_token, tenantId);
 		
 		return designations;
 	}
@@ -56,21 +54,21 @@ public class MSCommController {
 		
 		String access_token=getAccessToken();
 		String tenantId = "default";
-		List<EmployeeInfo> approvers = msUtil.getApprovers(access_token, tenantId,deptId,desgnId);
+		List<EmployeeInfo> approvers = microserviceUtils.getApprovers(access_token, tenantId,deptId,desgnId);
 		
 		return approvers;
 	}
 	
 	private String getAccessToken(){
 
-		String access_token =(String) msUtil.readFromRedis(servletrequest.getSession().getId(), "admin_token");
+		String access_token =(String) microserviceUtils.readFromRedis(servletrequest.getSession().getId(), "admin_token");
 		return access_token;
 	}
 	
 	@RequestMapping(value="/ClearToken",method=RequestMethod.POST)
 	private void logout(@RequestParam(value="auth_token")String access_token){
 		if(null != access_token){
-			msUtil.removeSessionFromRedis(access_token);
+			microserviceUtils.removeSessionFromRedis(access_token);
 		}
 	}
 	
@@ -78,7 +76,7 @@ public class MSCommController {
 	private void refreshToken(@RequestParam(value="oldToken")String oldToken,@RequestParam(value="newToken")String newToken){
 		
 		if(null!=oldToken && null!=newToken){
-			msUtil.refreshToken(oldToken, newToken);
+			microserviceUtils.refreshToken(oldToken, newToken);
 		}
 	}
 }

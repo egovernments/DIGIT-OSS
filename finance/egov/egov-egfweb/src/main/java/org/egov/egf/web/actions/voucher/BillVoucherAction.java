@@ -153,7 +153,7 @@ public class BillVoucherAction extends BaseVoucherAction {
             if (null != billNumber && StringUtils.isNotEmpty(billNumber))
                 query.append(" and br.billnumber='").append(billNumber).append("'");
             if (null != voucherHeader.getVouchermis().getDepartmentid())
-                query.append(" and br.egBillregistermis.egDepartment.id=").append(
+                query.append(" and br.egBillregistermis.departmentid=").append(
                         voucherHeader.getVouchermis().getDepartmentid().getId());
             if (null != voucherTypeBean.getVoucherDateFrom() && StringUtils.isNotEmpty(voucherTypeBean.getVoucherDateFrom()))
                 query.append(" and br.billdate>='").append(Constants.DDMMYYYYFORMAT1.format(Constants.DDMMYYYYFORMAT2.

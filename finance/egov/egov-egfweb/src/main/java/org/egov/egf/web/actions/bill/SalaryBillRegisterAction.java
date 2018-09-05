@@ -257,9 +257,6 @@ public class SalaryBillRegisterAction extends BaseFormAction {
     }
 
     private void setValuesOnBillRegisterMis() {
-        if (billregistermis.getEgDepartment() != null && billregistermis.getEgDepartment().getId() != null)
-            billregistermis.setEgDepartment((Department) persistenceService.find("from Department where id=?", billregistermis
-                    .getEgDepartment().getId()));
         if (billregistermis.getFinancialyear() != null && billregistermis.getFinancialyear().getId() != null)
             billregistermis.setFinancialyear((CFinancialYear) persistenceService.find("from CFinancialYear where id=?",
                     billregistermis.getFinancialyear().getId()));

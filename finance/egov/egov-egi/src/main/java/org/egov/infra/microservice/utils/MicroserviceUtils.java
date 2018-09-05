@@ -65,6 +65,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.RoleService;
@@ -227,6 +228,26 @@ public class MicroserviceUtils {
 				DepartmentResponse.class);
 		return depResponse.getDepartment();
 	}
+	
+	public List<Department> getDepartmentsById(Long departmentId , String tenantId) {
+		 HttpServletRequest request =  ServletActionContext.getRequest();
+	        String access_token = (String) readFromRedis(request.getSession().getId(), "admin_token");
+		final RestTemplate restTemplate = new RestTemplate();
+		final String dept_url = deptServiceUrl+"?tenantId="+tenantId+"&id="+departmentId;
+
+		RequestInfo requestInfo = new RequestInfo();
+		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+		
+		requestInfo.setAuthToken(access_token);
+		requestInfo.setTs(new Date());
+		reqWrapper.setRequestInfo(requestInfo);
+
+		DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper,
+				DepartmentResponse.class);
+		return depResponse.getDepartment();
+	}
+	
+	
 
 	public List<Designation> getDesignation(String access_token, String tenantId) {
 

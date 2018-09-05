@@ -87,7 +87,7 @@
 										&nbsp;
 									</div></td>
 								<td class="blueborderfortd"><div align="center">
-										<s:property value="egBillregistermis.egDepartment.deptName" />
+										<s:property value="egBillregistermis.departmentid" />
 										&nbsp;
 									</div></td>
 								<td class="blueborderfortd"><div align="center">

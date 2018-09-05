@@ -626,8 +626,8 @@ public class ContingentBillAction extends BaseBillAction {
         final HashMap<String, Object> headerDetails = createHeaderAndMisDetails();
         headerDetails.put(VoucherConstant.SOURCEPATH, "/EGF/bill/contingentBill!beforeView.action?billRegisterId=");
         Boolean recreateBillnumber = false;
-        if (bill.getEgBillregistermis().getEgDepartment() != null && voucherHeader.getVouchermis().getDepartmentid() != null)
-            if (bill.getEgBillregistermis().getEgDepartment().getId() != voucherHeader.getVouchermis().getDepartmentid().getId())
+        if (bill.getEgBillregistermis().getDepartmentid() != null && voucherHeader.getVouchermis().getDepartmentid() != null)
+            if (bill.getEgBillregistermis().getDepartmentid() != voucherHeader.getVouchermis().getDepartmentid().getId())
                 recreateBillnumber = true;
         bill = setBillDetailsFromHeaderDetails(bill, bill.getEgBillregistermis(), recreateBillnumber);
         final Set<EgBilldetails> EgBillSet = bill.getEgBilldetailes();
@@ -834,7 +834,7 @@ public class ContingentBillAction extends BaseBillAction {
      */
     private void getHeadersFromBill(final EgBillregister cbill) {
         voucherHeader.setFundId(cbill.getEgBillregistermis().getFund());
-        voucherHeader.getVouchermis().setDepartmentid(cbill.getEgBillregistermis().getEgDepartment());
+     //   voucherHeader.getVouchermis().setDepartmentid(cbill.getEgBillregistermis().getDepartmentid());
         voucherHeader.getVouchermis().setDivisionid(cbill.getEgBillregistermis().getFieldid());
         voucherHeader.getVouchermis().setSchemeid(cbill.getEgBillregistermis().getScheme());
         voucherHeader.getVouchermis().setSubschemeid(cbill.getEgBillregistermis().getSubScheme());
@@ -1163,7 +1163,7 @@ public class ContingentBillAction extends BaseBillAction {
     private EgBillregister setBillDetailsFromHeaderDetails(final EgBillregister bill, final EgBillregistermis mis,
             final boolean generateBill) {
 
-        mis.setEgDepartment(voucherHeader.getVouchermis().getDepartmentid());
+        mis.setDepartmentid(voucherHeader.getVouchermis().getDepartmentid().getId());
         mis.setFund(voucherHeader.getFundId());
         mis.setScheme(voucherHeader.getVouchermis().getSchemeid());
         mis.setSubScheme(voucherHeader.getVouchermis().getSubschemeid());

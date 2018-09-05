@@ -126,7 +126,7 @@
 				<spring:message code="lbl.department" />
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
-				<c:out default="N/A" value="${egBillregister.egBillregistermis.egDepartment.name }" />
+				<c:out default="N/A" value="${egBillregister.egBillregistermis.departmentid }" />
 			</div>
 		</c:when>
 		<c:otherwise>

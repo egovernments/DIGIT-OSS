@@ -81,7 +81,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private MicroserviceUtils msUtil;
+    private MicroserviceUtils microserviceUtils;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -101,7 +101,7 @@ public class UserService {
     @Transactional
     public User createUser(User user) {
         User savedUser = userRepository.save(user);
-        msUtil.createUserMicroservice(user);
+        microserviceUtils.createUserMicroservice(user);
         return savedUser;
     }
 

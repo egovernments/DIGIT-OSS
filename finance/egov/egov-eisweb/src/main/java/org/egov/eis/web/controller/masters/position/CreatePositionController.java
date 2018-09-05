@@ -87,7 +87,7 @@ public class CreatePositionController {
 	private static final String POSITION_ALREADY_PRESENT = "Position name already exist. Please change position name.";
 
 	@Autowired
-	public MicroserviceUtils msUtil;
+	public MicroserviceUtils microserviceUtils;
 
 	@Autowired
 	HttpServletRequest serRequest;
@@ -192,26 +192,18 @@ public class CreatePositionController {
 
 	private String getAccessToken() {
 
-		String access_token = (String) msUtil.readFromRedis(serRequest.getSession().getId(), "admin_token");
+		String access_token = (String) microserviceUtils.readFromRedis(serRequest.getSession().getId(), "admin_token");
 		return access_token;
 	}
 
 	public List<Department> getDepartmentsFromMs() {
-
-		// MicroserviceUtils msUtil = new MicroserviceUtils();
-
 		String access_token = getAccessToken();
-
-		List<Department> departments = msUtil.getDepartments(access_token, "default");
-
+		List<Department> departments = microserviceUtils.getDepartments(access_token, "default");
 		return departments;
-
 	}
 	
 	public List<Designation> getDesignationsFromMs(){
-		
 		String access_token = getAccessToken();
-		return msUtil.getDesignation(access_token,"default");
-		
+		return microserviceUtils.getDesignation(access_token,"default");
 	}
 }

@@ -82,9 +82,10 @@ public class SecurityUtils {
 
     public User getCurrentUser() {
         Optional<Authentication> authentication = getCurrentAuthentication();
-        return !authentication.isPresent() || userAnonymouslyAuthenticated(authentication)
+/*        return !authentication.isPresent() || userAnonymouslyAuthenticated(authentication)
                 ? userService.getUserByUsername(ANONYMOUS_USERNAME) :
-                userService.getUserById(((CurrentUser) authentication.get().getPrincipal()).getUserId());
+                userService.getUserById(((CurrentUser) authentication.get().getPrincipal()).getUserId());*/
+        return ((CurrentUser) authentication.get().getPrincipal()).getUser();
     }
 
     public UserType currentUserType() {

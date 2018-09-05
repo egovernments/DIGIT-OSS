@@ -58,6 +58,8 @@ import org.apache.struts2.interceptor.ParameterAware;
 import org.apache.struts2.interceptor.RequestAware;
 import org.apache.struts2.interceptor.SessionAware;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infstr.services.PersistenceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +73,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.servlet.http.HttpServletRequest;
+
 import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -87,6 +92,11 @@ public abstract class BaseFormAction extends ActionSupport
     @Autowired
     @Qualifier("persistenceService")
     protected transient PersistenceService persistenceService;
+    @Autowired
+    public HttpServletRequest serRequest;
+    
+    @Autowired
+    MicroserviceUtils microserviceUtils;
     protected transient Map<String, Object> request;
     protected transient Map<String, List> dropdownData = new HashMap<>();
     protected transient Map<String, Class> relations = new HashMap<>();
@@ -206,4 +216,18 @@ public abstract class BaseFormAction extends ActionSupport
     public String tokenName() {
         return this.getClass().getSimpleName() + UUID.randomUUID();
     }
+    
+    private String getAccessToken(){
+
+		String access_token = (String) microserviceUtils.readFromRedis(serRequest.getSession().getId(), "admin_token");
+		
+		return access_token;
+	}
+    public List<Department> getDepartmentsFromMs() {
+    	
+    	String access_token = getAccessToken();
+    	List<Department>departments = microserviceUtils.getDepartments(access_token, "default");
+    	return departments;
+    }
+
 }

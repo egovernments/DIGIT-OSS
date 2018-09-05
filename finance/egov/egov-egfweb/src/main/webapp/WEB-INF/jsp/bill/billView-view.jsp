@@ -111,7 +111,7 @@
 							value="egBillregistermis.fund.name" /></td>
 					<td class="greybox"><s:text name="bill.search.dept" /></td>
 					<td class="greybox"><s:property
-							value="egBillregistermis.egDepartment.name" /></td>
+							value="egBillregistermis.departmentid" /></td>
 				</tr>
 				<tr>
 					<td class="bluebox"><s:text name="bill.search.functionary" /></td>

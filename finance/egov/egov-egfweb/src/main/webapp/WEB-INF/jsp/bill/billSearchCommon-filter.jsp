@@ -121,10 +121,10 @@
 				<span class="mandatory1">*</span>
 			</s:if></td>
 		<td class="bluebox"><s:select
-				name="egBillregistermis.egDepartment" id="departmentid"
+				name="egBillregistermis.departmentid" id="departmentid"
 				list="dropdownData.departmentList" listKey="id" listValue="name"
 				headerKey="-1" headerValue="----Choose----"
-				value="%{egBillregistermis.egDepartment.id}" /></td>
+				value="%{egBillregistermis.departmentid}" /></td>
 	</s:if>
 </tr>
 <tr>

@@ -51,7 +51,7 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 	public RedisTemplate<Object, Object> redisTemplate;
 
 	@Autowired
-	public MicroserviceUtils msUtil;
+	public MicroserviceUtils microserviceUtils;
 
 	@Override
 	public SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder) {
@@ -63,11 +63,11 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 		try {
 
 			HttpServletRequest request = requestResponseHolder.getRequest();
-			cur_user = (CurrentUser)this.msUtil.readFromRedis(request.getSession().getId(), "current_user");
+			cur_user = (CurrentUser)this.microserviceUtils.readFromRedis(request.getSession().getId(), "current_user");
 			if (cur_user==null) {
 				LOGGER.info("Session is not available in redis and trying to login");
 				cur_user = new CurrentUser(this.getUserDetails(request));
-				this.msUtil.savetoRedis(request.getSession().getId(), "current_user", cur_user);
+				this.microserviceUtils.savetoRedis(request.getSession().getId(), "current_user", cur_user);
 
 			}
 			context.setAuthentication(this.prepareAuthenticationObj(request, cur_user));
@@ -159,12 +159,12 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 		if(user_token==null)
 			throw new Exception("AuthToken not found");
 		String sessionId = request.getSession().getId();
-		this.msUtil.savetoRedis(sessionId, "auth_token", user_token);
-		String admin_token = this.msUtil.generateAdminToken();
-		this.msUtil.savetoRedis(sessionId, "admin_token", admin_token);
-		CustomUserDetails user = this.msUtil.getUserDetails(user_token, admin_token);
-		this.msUtil.savetoRedis(sessionId, "_details", user);
-		UserSearchResponse response = this.msUtil.getUserInfo(user_token, user.getTenantId(), user.getUserName());
+		this.microserviceUtils.savetoRedis(sessionId, "auth_token", user_token);
+		String admin_token = this.microserviceUtils.generateAdminToken();
+		this.microserviceUtils.savetoRedis(sessionId, "admin_token", admin_token);
+		CustomUserDetails user = this.microserviceUtils.getUserDetails(user_token, admin_token);
+		this.microserviceUtils.savetoRedis(sessionId, "_details", user);
+		UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token, user.getTenantId(), user.getUserName());
 		return this.parepareCurrentUser(response.getUserSearchResponseContent().get(0));
 	}
 

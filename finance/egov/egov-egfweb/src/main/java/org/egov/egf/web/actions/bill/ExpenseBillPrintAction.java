@@ -82,6 +82,8 @@ import org.egov.egf.commons.EgovCommon;
 import org.egov.eis.service.EisCommonService;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.exception.ApplicationException;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.reporting.util.ReportUtil;
 import org.egov.infra.utils.NumberToWordConverter;
 import org.egov.infra.validation.exception.ValidationError;
@@ -137,6 +139,8 @@ public class ExpenseBillPrintAction extends BaseFormAction {
     private transient FinancialYearDAO financialYearDAO;
     @Autowired
     private transient EgovCommon egovCommon;
+    @Autowired
+    private transient MicroserviceUtils microserviceUtils;
     private transient CVoucherHeader voucher = new CVoucherHeader();
     @Autowired
     private transient BudgetControlTypeService budgetControlTypeService;
@@ -268,7 +272,12 @@ public class ExpenseBillPrintAction extends BaseFormAction {
             paramMap.put("netAmountInWords", amountInWords);
             paramMap.put("billNumber", billRegistermis.getEgBillregister().getBillnumber());
             paramMap.put("functionName", getFunctionName());
-            paramMap.put("departmentName", billRegistermis.getEgDepartment().getName());
+            String depName ="";
+            if(cbill.getEgBillregistermis().getDepartmentid()!=null){
+            List<Department> list = microserviceUtils.getDepartmentsById(cbill.getEgBillregistermis().getDepartmentid(),"default");
+            depName = list!=null && !list.isEmpty() ? list.get(0).getName() : "";
+            }
+            paramMap.put("departmentName", depName);
             paramMap.put("fundName", billRegistermis.getFund().getName());
             billRegistermis.getEgBillregister().getBillamount();
             paramMap.put("budgetApprNumber", billRegistermis.getBudgetaryAppnumber());
@@ -358,8 +367,12 @@ public class ExpenseBillPrintAction extends BaseFormAction {
         budgetApprDetailsMap.put("currentBalanceAvailable", currentBalanceAvailable);
         budgetApprDetailsMap.put("currentBillAmount", currentBillAmount);
         budgetApprDetailsMap.put("AccountCode", coa.getGlcode());
-
-        budgetApprDetailsMap.put("departmentName", cbill.getEgBillregistermis().getEgDepartment().getName());
+        String depName ="";
+        if(cbill.getEgBillregistermis().getDepartmentid()!=null){
+        List<Department> list = microserviceUtils.getDepartmentsById(cbill.getEgBillregistermis().getDepartmentid(),"default");
+        depName = list!=null && !list.isEmpty() ? list.get(0).getName() : "";
+        }
+        budgetApprDetailsMap.put("departmentName",depName);
         budgetApprDetailsMap.put("functionName", functionName);
         budgetApprDetailsMap.put("fundName", cbill.getEgBillregistermis().getFund().getName());
 
@@ -376,7 +389,7 @@ public class ExpenseBillPrintAction extends BaseFormAction {
 
         budgetDataMap.put("financialyearid", financialYearById.getId());
 
-        budgetDataMap.put(Constants.DEPTID, cbill.getEgBillregistermis().getEgDepartment().getId());
+        budgetDataMap.put(Constants.DEPTID, cbill.getEgBillregistermis().getDepartmentid());
         if (cbill.getEgBillregistermis().getFunctionaryid() != null)
             budgetDataMap.put(Constants.FUNCTIONARYID, cbill.getEgBillregistermis().getFunctionaryid().getId());
         if (cbill.getEgBillregistermis().getScheme() != null)

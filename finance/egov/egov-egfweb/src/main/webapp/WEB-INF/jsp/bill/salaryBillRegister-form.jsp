@@ -437,10 +437,10 @@ function createDropdownFormatterForAccountCode(prefix){
 		<td class="bluebox"><s:text name="department" />:<span
 			class="mandatory">*</span></td>
 		<td class="bluebox"><s:select
-				name="billregistermis.egDepartment.id" id="department"
+				name="billregistermis.departmentid" id="department"
 				list="dropdownData.departmentList" listKey="id" listValue="deptName"
 				headerKey="-1" headerValue="----Choose----"
-				value="billregistermis.egDepartment.id" /></td>
+				value="billregistermis.departmentid" /></td>
 		<td class="bluebox"><s:text name="field" />:</td>
 		<td class="bluebox"><s:select name="billregistermis.fieldid.id"
 				id="fieldid" list="dropdownData.fieldList" listKey="id"

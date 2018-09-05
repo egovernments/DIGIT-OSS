@@ -265,9 +265,8 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
         if (billregister.getEgBillregistermis().getFieldid() != null)
             paramMap.put("boundaryid", billregister.getEgBillregistermis()
                     .getFieldid().getId());
-        if (billregister.getEgBillregistermis().getEgDepartment() != null)
-            paramMap.put("deptid", billregister.getEgBillregistermis()
-                    .getEgDepartment().getId());
+        if (billregister.getEgBillregistermis().getDepartmentid() != null)
+            paramMap.put("deptid", billregister.getEgBillregistermis().getDepartmentid());
         if (billregister.getEgBillregistermis().getFunctionaryid() != null)
             paramMap.put("functionaryid", billregister.getEgBillregistermis()
                     .getFunctionaryid().getId());
@@ -1291,8 +1290,8 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 
             final EgBillregistermis egBillregistermis = new EgBillregistermis();
             egBillregistermis.setFund(voucherHeader.getFundId());
-            egBillregistermis.setEgDepartment(voucherHeader.getVouchermis()
-                    .getDepartmentid());
+            egBillregistermis.setDepartmentid(voucherHeader.getVouchermis()
+                    .getDepartmentid().getId());
             egBillregistermis.setFunctionaryid(voucherHeader.getVouchermis()
                     .getFunctionary());
             egBillregistermis.setFunction(voucherHeader.getVouchermis()
@@ -1422,8 +1421,8 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
             egBillregister.setBillamount(totalBillAmount);
 
             egBillregistermis.setFund(voucherHeader.getFundId());
-            egBillregistermis.setEgDepartment(voucherHeader.getVouchermis()
-                    .getDepartmentid());
+            egBillregistermis.setDepartmentid(voucherHeader.getVouchermis()
+                    .getDepartmentid().getId());
             egBillregistermis.setFunction(voucherHeader.getVouchermis()
                     .getFunction());
             egBillregistermis.setFunctionaryid(voucherHeader.getVouchermis()

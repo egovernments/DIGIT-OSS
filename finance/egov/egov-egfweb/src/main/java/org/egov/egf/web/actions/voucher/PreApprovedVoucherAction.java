@@ -80,6 +80,7 @@ import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.script.service.ScriptService;
 import org.egov.infra.utils.StringUtils;
 import org.egov.infra.validation.exception.ValidationError;
@@ -181,6 +182,9 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
     @Autowired
     private AppConfigService appConfigService;
     
+    @Autowired
+    private MicroserviceUtils microserviceUtils;;
+    
     private static final Logger LOGGER = Logger.getLogger(PreApprovedVoucherAction.class);
     protected FinancialYearHibernateDAO financialYearDAO;
     private final PreApprovedVoucher preApprovedVoucher = new PreApprovedVoucher();
@@ -246,7 +250,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
         if (isFieldMandatory("department"))
             preApprovedVoucherList = getPersistenceService()
                     .findAllBy(
-                            " from EgBillregister br where br.status=? and br.egBillregistermis.egDepartment.id=? and ( br.egBillregistermis.voucherHeader is null or br.egBillregistermis.voucherHeader in (from CVoucherHeader vh where vh.status =4 )) ",
+                            " from EgBillregister br where br.status=? and br.egBillregistermis.departmentid=? and ( br.egBillregistermis.voucherHeader is null or br.egBillregistermis.voucherHeader in (from CVoucherHeader vh where vh.status =4 )) ",
                             egwStatus, getCurrentDepartment().getId());
         else
             preApprovedVoucherList = getPersistenceService()
@@ -864,9 +868,10 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
             val = egBillregister.getEgBillregistermis().getFund().getName();
         else if (name.equals("fundsource") && egBillregister.getEgBillregistermis().getFundsource() != null)
             val = egBillregister.getEgBillregistermis().getFundsource().getName();
-        else if (name.equals("department") && egBillregister.getEgBillregistermis().getEgDepartment() != null)
-            val = egBillregister.getEgBillregistermis().getEgDepartment().getName();
-        else if (name.equals("scheme") && egBillregister.getEgBillregistermis().getScheme() != null)
+        else if (name.equals("department") && egBillregister.getEgBillregistermis().getDepartmentid() != null){
+        	List<org.egov.infra.microservice.models.Department> depList = microserviceUtils.getDepartmentsById(egBillregister.getEgBillregistermis().getDepartmentid(),"default");
+        	val = depList!=null && !depList.isEmpty() ? depList.get(0).getName():"";
+        } else if (name.equals("scheme") && egBillregister.getEgBillregistermis().getScheme() != null)
             val = egBillregister.getEgBillregistermis().getScheme().getName();
         else if (name.equals("subscheme") && egBillregister.getEgBillregistermis().getSubScheme() != null)
             val = egBillregister.getEgBillregistermis().getSubScheme().getName();

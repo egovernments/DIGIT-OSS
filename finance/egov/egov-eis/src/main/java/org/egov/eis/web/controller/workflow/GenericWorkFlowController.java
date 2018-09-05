@@ -91,7 +91,7 @@ public abstract class GenericWorkFlowController {
     HttpServletRequest serRequest;
     
     @Autowired
-    MicroserviceUtils msUtil;
+    MicroserviceUtils microserviceUtils;
     
 
     @ModelAttribute(value = "approvalDepartmentList")
@@ -164,17 +164,14 @@ public abstract class GenericWorkFlowController {
     
     private String getAccessToken(){
 
-		String access_token = (String) msUtil.readFromRedis(serRequest.getSession().getId(), "admin_token");
+		String access_token = (String) microserviceUtils.readFromRedis(serRequest.getSession().getId(), "admin_token");
 		
 		return access_token;
 	}
     public List<Department> getDepartmentsFromMs() {
-    	
-//    	MicroserviceUtils msUtil = new MicroserviceUtils();
-    	
     	String access_token = getAccessToken();
     	
-    	List<Department>departments = msUtil.getDepartments(access_token, "default");
+    	List<Department>departments = microserviceUtils.getDepartments(access_token, "default");
     	
     	return departments;
     	

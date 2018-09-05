@@ -60,6 +60,7 @@ import org.egov.egf.budget.model.BudgetControlType;
 import org.egov.egf.budget.service.BudgetControlTypeService;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.AppConfigValueService;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.model.bills.EgBilldetails;
@@ -85,6 +86,9 @@ public class BudgetAppropriationService extends PersistenceService {
     
     @Autowired
     private BudgetControlTypeService budgetControlTypeService;
+    
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
 
     public BudgetAppropriationService() {
         super(null);
@@ -230,8 +234,10 @@ public class BudgetAppropriationService extends PersistenceService {
     }
 
     private void populateDepartmentForBill(final EgBillregister bill, final BudgetReportEntry budgetReportEntry) {
-        if (bill.getEgBillregistermis().getEgDepartment() != null)
-            budgetReportEntry.setDepartmentName(bill.getEgBillregistermis().getEgDepartment().getName());
+        if (bill.getEgBillregistermis().getDepartmentid() != null){
+        	List<org.egov.infra.microservice.models.Department> list = microserviceUtils.getDepartmentsById(bill.getEgBillregistermis().getDepartmentid(), "default");
+            budgetReportEntry.setDepartmentName(list.get(0).getName());
+        }  
     }
 
     private Department getDepartmentForVoucher(final CVoucherHeader voucher) {
@@ -268,7 +274,7 @@ public class BudgetAppropriationService extends PersistenceService {
             final CFunction function, final CChartOfAccounts coa) {
         final Map<String, Object> budgetDataMap = new HashMap<String, Object>();
         budgetDataMap.put("financialyearid", financialYear.getId());
-        budgetDataMap.put(Constants.DEPTID, cbill.getEgBillregistermis().getEgDepartment().getId());
+        budgetDataMap.put(Constants.DEPTID, cbill.getEgBillregistermis().getDepartmentid());
         if (cbill.getEgBillregistermis().getFunctionaryid() != null)
             budgetDataMap.put(Constants.FUNCTIONARYID, cbill.getEgBillregistermis().getFunctionaryid().getId());
         if (cbill.getEgBillregistermis().getScheme() != null)

@@ -176,7 +176,7 @@ public class ExpenseJournalVoucherPrintAction extends BaseFormAction {
                     final VoucherReport voucherReport = new VoucherReport(persistenceService, Integer.valueOf(voucher.getId()
                             .toString()), vd, egovCommon);
                     if (billRegistermis != null)
-                        voucherReport.setDepartment(billRegistermis.getEgDepartment());
+                    //    voucherReport.setDepartment(billRegistermis.getDepartmentid());
                     voucherReportList.add(voucherReport);
                 }
             for (final CGeneralLedger vd : voucher.getGeneralledger())
@@ -184,7 +184,7 @@ public class ExpenseJournalVoucherPrintAction extends BaseFormAction {
                     final VoucherReport voucherReport = new VoucherReport(persistenceService, Integer.valueOf(voucher.getId()
                             .toString()), vd, egovCommon);
                     if (billRegistermis != null)
-                        voucherReport.setDepartment(billRegistermis.getEgDepartment());
+                    //    voucherReport.setDepartment(billRegistermis.getDepartmentid());
                     voucherReportList.add(voucherReport);
                 }
         }

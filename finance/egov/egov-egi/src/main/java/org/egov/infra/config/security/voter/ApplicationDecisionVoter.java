@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 public class ApplicationDecisionVoter implements AccessDecisionVoter<Object>{
 
 	@Autowired
-	public MicroserviceUtils msUtil;
+	public MicroserviceUtils microserviceUtils;
 	
 //	@Autowired
 //	HttpServletRequest httprequest;

@@ -2317,7 +2317,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
                         if (deptid == null || deptid == 0)
                             throw new ValidationException(EMPTY_STRING, "Department is required");
                         else
-                            query = query + getQuery(Department.class, deptid, " and bmis.egDepartment.id=");
+                            query = query + getQuery(Department.class, deptid, " and bmis.departmentid=");
                     } else if (value.equals("function")) {
                         if (functionid == null || functionid == 0)
                             throw new ValidationException(EMPTY_STRING, "Function is required");

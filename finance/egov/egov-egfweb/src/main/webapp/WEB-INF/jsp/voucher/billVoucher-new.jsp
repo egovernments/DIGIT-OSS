@@ -173,7 +173,7 @@
 							<td class="bluebox setborder" style="text-align: center"><s:property
 									value="%{expendituretype}" /></td>
 							<td class="bluebox setborder" style="text-align: center"><s:property
-									value="%{egBillregistermis.egDepartment.name}" /></td>
+									value="%{egBillregistermis.departmentid}" /></td>
 						</tr>
 					</s:iterator>
 				</table>

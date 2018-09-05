@@ -87,6 +87,7 @@ import org.egov.infra.admin.master.service.HierarchyTypeService;
 import org.egov.infra.admin.master.service.UserService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.persistence.utils.GenericSequenceNumberGenerator;
 import org.egov.infra.utils.autonumber.AutonumberServiceBeanResolver;
 import org.egov.infra.validation.exception.ValidationError;
@@ -160,6 +161,8 @@ public class CreateVoucher {
 	private final String SELECT = "  Please Select  ";
 	@Autowired
 	private AppConfigService appConfigService;
+	@Autowired
+	private MicroserviceUtils microserviceUtils;
 	@Autowired
 	private VoucherTypeForULB voucherTypeForULB;
 	@Autowired
@@ -335,7 +338,7 @@ public class CreateVoucher {
 			final String deptMandatory = EGovConfig.getProperty(
 					"egf_config.xml", "deptRequired", "", "general");
 			if (deptMandatory.equalsIgnoreCase("Y"))
-				if (billMis.getEgDepartment() == null)
+				if (billMis.getDepartmentid() == null)
 					throw new ApplicationRuntimeException(DEPTMISSINGMSG);
 
 			final Fundsource fundSrc = billMis.getFundsource();
@@ -460,9 +463,11 @@ public class CreateVoucher {
 			if (billMis.getSourcePath() != null)
 				headerDetails.put(VoucherConstant.SOURCEPATH,
 						billMis.getSourcePath());
-			if (billMis.getEgDepartment() != null)
-				headerDetails.put(VoucherConstant.DEPARTMENTCODE, billMis
-						.getEgDepartment().getCode());
+			if (billMis.getDepartmentid() != null){
+				 List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(billMis.getDepartmentid(),"default");
+			        String departmentCode = list!=null && !list.isEmpty() ? list.get(0).getCode() : "";
+				headerDetails.put(VoucherConstant.DEPARTMENTCODE, departmentCode);
+			}
 			if (billMis.getFund() != null)
 				headerDetails.put(VoucherConstant.FUNDCODE, billMis.getFund()
 						.getCode());
@@ -598,7 +603,7 @@ public class CreateVoucher {
 			final String deptMandatory = EGovConfig.getProperty(
 					"egf_config.xml", "deptRequired", "", "general");
 			if (deptMandatory.equalsIgnoreCase("Y"))
-				if (billMis.getEgDepartment() == null)
+				if (billMis.getDepartmentid() == null)
 					throw new ApplicationRuntimeException(DEPTMISSINGMSG);
 
 			final Fundsource fundSrc = billMis.getFundsource();

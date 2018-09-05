@@ -47,8 +47,20 @@
  */
 package org.egov.egf.web.actions.voucher;
 
-import com.exilant.eGov.src.domain.BillRegisterBean;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
@@ -57,6 +69,7 @@ import org.egov.commons.EgwStatus;
 import org.egov.commons.Fund;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.services.PersistenceService;
@@ -69,13 +82,7 @@ import org.hibernate.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import com.exilant.eGov.src.domain.BillRegisterBean;
 
 @Results({ @Result(name = "search", location = "cancelBill-search.jsp") })
 public class CancelBillAction extends BaseFormAction {
@@ -103,6 +110,9 @@ public class CancelBillAction extends BaseFormAction {
     private EgovMasterDataCaching masterDataCache;
     @Autowired
     private CancelBillAndVoucher cancelBillAndVoucher;
+    
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
 
     @Override
     public Object getModel() {
@@ -150,14 +160,16 @@ public class CancelBillAction extends BaseFormAction {
         return expType;
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     public void prepare() {
         super.prepare();
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Inside Prepare method");
-        dropdownData.put("DepartmentList",
-                masterDataCache.get("egi-department"));
-        // get this from master data cache
+        HttpServletRequest request =  ServletActionContext.getRequest();
+        String access_token = (String) microserviceUtils.readFromRedis(request.getSession().getId(), "admin_token");
+        List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments(access_token, "default");
+        dropdownData.put("DepartmentList",departments);
         addDropdownData(
                 "fundList",
                 persistenceService
@@ -168,9 +180,10 @@ public class CancelBillAction extends BaseFormAction {
                 "expenditureList",
                 persistenceService
                         .findAllBy(
-                                "select distinct bill.expendituretype from EgBillregister bill where bill.expendituretype like '"
-                                        + FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT
-                                        + "'   order by bill.expendituretype"));
+                                "select distinct bill.expendituretype from EgBillregister bill where bill.expendituretype='"
+                                        + FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT+"' or bill.expendituretype='"
+                                        + FinancialConstants.STANDARD_EXPENDITURETYPE_WORKS+"' or bill.expendituretype='"
+                                        + FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE+"' order by bill.expendituretype"));
     }
 
     public void prepareBeforeSearch() {
@@ -191,7 +204,7 @@ public class CancelBillAction extends BaseFormAction {
     public StringBuilder filterQuery() {
         final String userCond = " where ";
         final StringBuilder query = new StringBuilder(
-                " select billmis.egBillregister.id, billmis.egBillregister.billnumber, billmis.egBillregister.billdate, billmis.egBillregister.billamount, billmis.egDepartment.name  from EgBillregistermis billmis ");
+                " select billmis.egBillregister.id, billmis.egBillregister.billnumber, billmis.egBillregister.billdate, billmis.egBillregister.billamount, billmis.departmentid  from EgBillregistermis billmis ");
         // if the logged in user is same as creator or is superruser
         query.append(userCond);
 
@@ -204,7 +217,7 @@ public class CancelBillAction extends BaseFormAction {
                     + billNumber + "'");
         if (deptImpl != null && deptImpl.getId() != null
                 && deptImpl.getId() != -1 && deptImpl.getId() != 0)
-            query.append(" and billmis.egDepartment.id ='" + deptImpl.getId()
+            query.append(" and billmis.departmentid ='" + deptImpl.getId()
                     + "'");
         if (fromDate != null && fromDate.length() != 0) {
             Date fDate;
@@ -313,6 +326,13 @@ public class CancelBillAction extends BaseFormAction {
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("Size of tempBillList - " + tempBillList.size());
             final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            HttpServletRequest request =  ServletActionContext.getRequest();
+            String access_token = (String) microserviceUtils.readFromRedis(request.getSession().getId(), "admin_token");
+            List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments(access_token, "default");
+            Map<Long,String> depMap = new HashMap<>();
+            for(org.egov.infra.microservice.models.Department department : departments){
+            	depMap.put(department.getId(), department.getName());
+            }
             for (final Object[] bill : tempBillList) {
                 billRegstrBean = new BillRegisterBean();
                 billRegstrBean.setId(bill[0].toString());
@@ -321,7 +341,7 @@ public class CancelBillAction extends BaseFormAction {
                     billRegstrBean.setBillDate(sdf.format(bill[2]));
                 billRegstrBean.setBillAmount(Double.parseDouble(bill[3]
                         .toString()));
-                billRegstrBean.setBillDeptName(bill[4].toString());
+                billRegstrBean.setBillDeptName(depMap.get(bill[4]));
                 billListDisplay.add(billRegstrBean);
             }
             afterSearch = true;

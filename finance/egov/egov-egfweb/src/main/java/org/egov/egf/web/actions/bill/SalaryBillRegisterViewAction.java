@@ -91,7 +91,7 @@ public class SalaryBillRegisterViewAction extends BaseFormAction {
             billRegisterList
             .addAll(persistenceService
                     .findAllBy(
-                            "from EgBillregister where billdate<=? and billdate>=? and egBillregistermis.egDepartment.id=? and egBillregistermis.month=? order by billdate",
+                            "from EgBillregister where billdate<=? and billdate>=? and egBillregistermis.departmentid=? and egBillregistermis.month=? order by billdate",
                             toDate, fromDate, department.getId(), month));
         else if (department.getId() == -1 && !new BigDecimal("-1").equals(month))
             billRegisterList.addAll(persistenceService.findAllBy(
@@ -101,7 +101,7 @@ public class SalaryBillRegisterViewAction extends BaseFormAction {
             billRegisterList
             .addAll(persistenceService
                     .findAllBy(
-                            "from EgBillregister where billdate<=? and billdate>=? and egBillregistermis.egDepartment.id=? order by billdate",
+                            "from EgBillregister where billdate<=? and billdate>=? and egBillregistermis.departmentid=? order by billdate",
                             toDate, fromDate, department.getId()));
         else
             billRegisterList.addAll(persistenceService.findAllBy(
