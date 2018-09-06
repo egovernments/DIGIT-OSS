@@ -15157,6 +15157,18 @@
     "actionid": 1608,
     "actioncode": "",
     "tenantId": "pb"
+  },
+  {
+    "rolecode": "SUPERUSER",
+    "actionid": 1609,
+    "actioncode": "",
+    "tenantId": "pb"
+  },
+  {
+    "rolecode": "EMPLOYEE",
+    "actionid": 1609,
+    "actioncode": "",
+    "tenantId": "pb"
   }
   ]
 }
