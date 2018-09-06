@@ -659,4 +659,29 @@
 		<put-attribute name="page-title" value="title.receiptpayment.search" cascade="true"/>
 		<put-attribute name="body" value="/WEB-INF/views/inbox/inbox.jsp"></put-attribute>
 	</definition>
+	
+		 <definition name="contractor-new" extends="base_layout">
+        <put-attribute name="page-title" value="title.contractor.create" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/contractor/contractor-new.jsp"/>
+    </definition>
+    
+    <definition name="contractor-result" extends="base_layout">
+        <put-attribute name="page-title" value="title.contractor.result" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/contractor/contractor-result.jsp"/>
+    </definition>
+    
+    <definition name="contractor-edit" extends="base_layout">
+        <put-attribute name="page-title" value="title.contractor.edit" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/contractor/contractor-edit.jsp"/>
+    </definition>
+    
+    <definition name="contractor-view" extends="base_layout">
+        <put-attribute name="page-title" value="title.contractor.view" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/contractor/contractor-view.jsp"/>
+    </definition>
+    
+    <definition name="contractor-search" extends="base_layout">
+        <put-attribute name="page-title" value="title.contractor.search" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/contractor/contractor-search.jsp"/>
+    </definition>
 </tiles-definitions>
