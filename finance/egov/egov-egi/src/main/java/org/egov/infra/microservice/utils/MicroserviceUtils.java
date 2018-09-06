@@ -78,6 +78,7 @@ import org.egov.infra.microservice.contract.Position;
 import org.egov.infra.microservice.contract.PositionRequest;
 import org.egov.infra.microservice.contract.PositionResponse;
 import org.egov.infra.microservice.contract.RequestInfoWrapper;
+import org.egov.infra.microservice.contract.ResponseInfo;
 import org.egov.infra.microservice.contract.Task;
 import org.egov.infra.microservice.contract.TaskResponse;
 import org.egov.infra.microservice.contract.UserDetailResponse;
@@ -94,6 +95,7 @@ import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.microservice.models.UserInfo;
 import org.egov.infra.persistence.entity.enums.UserType;
 import org.egov.infra.security.utils.SecurityUtils;
+import org.egov.infra.web.rest.handler.RestErrorHandler;
 import org.egov.infra.web.support.ui.Inbox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -104,6 +106,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -126,6 +129,9 @@ public class MicroserviceUtils {
 	
 	@Autowired
 	public RedisTemplate<Object, Object> redisTemplate;
+	
+//	@Autowired
+//	private RestTemplateBuilder restBuilder;
 	
 	@Autowired
 	private RoleService roleService;
@@ -160,12 +166,15 @@ public class MicroserviceUtils {
 	@Value("${egov.services.user.token.url}")
 	private String tokenGenUrl;
 	
+//	@Value("${egov.services.employee.search.url}")
+//	private String empSerchUrl;
+	
 	public RequestInfo createRequestInfo() {
 		final RequestInfo requestInfo = new RequestInfo();
 		requestInfo.setApiId("apiId");
 		requestInfo.setVer("ver");
 		requestInfo.setTs(new Date());
-		requestInfo.setUserInfo(getUserInfo());
+//		requestInfo.setUserInfo(getUserInfo());
 		return requestInfo;
 	}
 
@@ -309,6 +318,8 @@ public class MicroserviceUtils {
 	
 	public String generateAdminToken(){
 		final RestTemplate restTemplate = new RestTemplate();
+		RestErrorHandler errorHandler = new RestErrorHandler();
+		restTemplate.setErrorHandler(errorHandler);
 		HttpHeaders header = new HttpHeaders();
 		header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		header.add("Authorization", "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0");
@@ -382,6 +393,34 @@ public class MicroserviceUtils {
 		
 //		response.getActions()
 		return response;
+	}
+	
+	public EmployeeInfoResponse getEmployee(String authtoken,String tenantId,Long empId,Date toDay,String departmentId,String designationId){
+		
+		
+		final RestTemplate restTemplate = new RestTemplate();
+		RestErrorHandler errorHandler = new RestErrorHandler();
+		restTemplate.setErrorHandler(errorHandler);
+		
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		StringBuilder empUrl = new StringBuilder(this.approverSrvcUrl);
+		empUrl.append("?tenantId="+tenantId);
+		
+		if(empId!=0) empUrl.append("&id="+empId);
+		if(toDay!=null) empUrl.append("&asOnDate"+dateFormat.format(toDay));
+		if(departmentId!=null) empUrl.append("&assignment.departmentId"+departmentId);
+		if(designationId!=null) empUrl.append("&assignment.designationId"+designationId);
+		
+
+		RequestInfo requestInfo = new RequestInfo();
+		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+		requestInfo.setAuthToken(authtoken);
+		requestInfo.setTs(new Date());
+		reqWrapper.setRequestInfo(requestInfo);
+
+		EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper,EmployeeInfoResponse.class);
+		return empResponse;
 	}
 	
 	public List<Task> getTasks() {

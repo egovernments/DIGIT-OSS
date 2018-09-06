@@ -42,7 +42,7 @@
 		class="org.springframework.security.web.FilterChainProxy">
 		<constructor-arg>
 			<list>
-				<security:filter-chain pattern="/resources/**"
+			<!-- 	<security:filter-chain pattern="/resources/**"
 					filters="none" />
 				<security:filter-chain pattern="/help*"
 					filters="none" />
@@ -65,42 +65,13 @@
 				<security:filter-chain pattern="/error/**"
 					filters="none" />
 				<security:filter-chain pattern="/city/details"
-					filters="none" />
-				<security:filter-chain pattern="/public/**" filters="anonymousAuthenticationFilter"/> 
+					filters="none" /> -->
+				<security:filter-chain pattern="/**"  filters="concurrentSessionFilter,securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,rememberMeAuthenticationFilter,anonymousAuthenticationFilter,exceptionTranslationFilter,filterSecurityInterceptor" />
+				<!-- <security:filter-chain pattern="/public/**" filters="anonymousAuthenticationFilter"/> 
 					<security:filter-chain pattern="/**" filters="concurrentSessionFilter,securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,rememberMeAuthenticationFilter,anonymousAuthenticationFilter,exceptionTranslationFilter,filterSecurityInterceptor" 
-					/>
+					/> -->
 			</list>
 		</constructor-arg>
 	</bean>
-	<!-- <bean id="authenticationEntryPoint"
-		class="org.egov.infra.config.security.ApplicationAuthenctionEntryPoint">
-
-	</bean>
-	<security:http auto-config="true"  entry-point-ref="authenticationEntryPoint"
-		use-expressions="true">
-		<security:custom-filter
-			ref="authenticationFilter" before="PRE_AUTH_FILTER" />
-		<security:csrf disabled="true" />
-		<security:logout delete-cookies="JSESSIONID" />
-	</security:http>
 	
-
-	<bean id="authenticationProvider"
-		class="org.egov.infra.web.security.filter.AppAuthenticationProvider" />
-
-	<security:authentication-manager
-		alias="authenticationManager">
-		<security:authentication-provider
-			ref="authenticationProvider" />
-	</security:authentication-manager>
-
-
-	<bean id="authenticationFilter"
-		class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
-		<property name="authenticationManager"
-			ref="authenticationManager" />
-		<property name="postOnly" value="false" />
-		<property name="authenticationSuccessHandler" ref="authenticationSuccessHandler" 
-			/>
-	</bean> -->
 </beans>

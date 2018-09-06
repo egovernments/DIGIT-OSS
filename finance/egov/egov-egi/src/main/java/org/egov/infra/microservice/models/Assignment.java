@@ -68,10 +68,10 @@ public class Assignment {
 	private Long function;
 
 	@NotNull
-	private Long department;
+	private String department;
 
 	@NotNull
-	private Long designation;
+	private String designation;
 
 	@Valid
 	private List<HODDepartment> hod = new ArrayList<HODDepartment>();
@@ -110,8 +110,8 @@ public class Assignment {
 	private String tenantId;
 	public Assignment(){}
 
-	public Assignment(Long id, Long position, Long fund, Long functionary, Long function, Long department,
-			Long designation, List<HODDepartment> hod, Boolean isPrimary, Date fromDate, Date toDate, Long grade,
+	public Assignment(Long id, Long position, Long fund, Long functionary, Long function, String department,
+			String designation, List<HODDepartment> hod, Boolean isPrimary, Date fromDate, Date toDate, Long grade,
 			String govtOrderNumber, List<String> documents, Long createdBy, Date createdDate, Long lastModifiedBy,
 			Date lastModifiedDate, String tenantId) {
 		this.id = id;
@@ -175,19 +175,19 @@ public class Assignment {
 		this.function = function;
 	}
 
-	public Long getDepartment() {
+	public String getDepartment() {
 		return department;
 	}
 
-	public void setDepartment(Long department) {
+	public void setDepartment(String department) {
 		this.department = department;
 	}
 
-	public Long getDesignation() {
+	public String getDesignation() {
 		return designation;
 	}
 
-	public void setDesignation(Long designation) {
+	public void setDesignation(String designation) {
 		this.designation = designation;
 	}
 

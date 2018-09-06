@@ -151,5 +151,49 @@ public class FunctionService {
 
         return query.getResultList();
     }
+    
+    
+    public List<CFunction> search(final CFunction function,List<Integer> ids,String sortBy,Integer offset,Integer pageSize){
+    	
+    	
+    	 final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+         final CriteriaQuery<CFunction> createQuery = cb.createQuery(CFunction.class);
+         final Root<CFunction> functions = createQuery.from(CFunction.class);
+         createQuery.select(functions);
+         final Metamodel m = entityManager.getMetamodel();
+         final javax.persistence.metamodel.EntityType<CFunction> tempFunction = m.entity(CFunction.class);
+
+         final List<Predicate> predicates = new ArrayList<>();
+         if (function.getName() != null) {
+             final String name = "%" + function.getName().toLowerCase() + "%";
+             predicates.add(cb.isNotNull(functions.get("name")));
+             predicates.add(cb.like(
+                     cb.lower(functions.get(tempFunction.getDeclaredSingularAttribute("name", String.class))), name));
+         }
+         if (function.getCode() != null) {
+             final String code = "%" + function.getCode().toLowerCase() + "%";
+             predicates.add(cb.isNotNull(functions.get("code")));
+             predicates.add(cb.like(
+                     cb.lower(functions.get(tempFunction.getDeclaredSingularAttribute("code", String.class))), code));
+         }
+         if (function.getIsActive())
+             predicates.add(
+                     cb.equal(functions.get(tempFunction.getDeclaredSingularAttribute("isActive", Boolean.class)), true));
+         if (function.getParentId() != null)
+             predicates.add(cb.equal(functions.get("parentId"), function.getParentId()));
+         
+         if(null!=ids && ids.size()>0)
+        	 predicates.add(functions.in(ids));
+
+         createQuery.where(predicates.toArray(new Predicate[] {}));
+         createQuery.orderBy(cb.asc(functions.get(sortBy)));
+         
+         final TypedQuery<CFunction> query = entityManager.createQuery(createQuery);
+         
+         query.setFirstResult(offset);
+         query.setMaxResults(pageSize);
+    	
+    	return query.getResultList();
+    }
 
 }

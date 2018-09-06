@@ -60,6 +60,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
@@ -140,6 +141,43 @@ public class FundService {
         final TypedQuery<Fund> query = entityManager.createQuery(createQuery);
         return query.getResultList();
 
+    }
+    
+    public List<Fund>search(final Fund fund,List<Integer> ids,String sortBy,Integer offset,Integer pageSize){
+    	
+    	final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        final CriteriaQuery<Fund> createQuery = cb.createQuery(Fund.class);
+        final Root<Fund> funds = createQuery.from(Fund.class);
+        createQuery.select(funds);
+        final Metamodel m = entityManager.getMetamodel();
+        final EntityType<Fund> Fund_ = m.entity(Fund.class);
+
+        final List<Predicate> predicates = new ArrayList<Predicate>();
+        if (fund.getName() != null) {
+            final String name = "%" + fund.getName().toLowerCase() + "%";
+            predicates.add(cb.isNotNull(funds.get("name")));
+            predicates.add(cb.like(cb.lower(funds.get(Fund_.getDeclaredSingularAttribute("name", String.class))), name));
+        }
+        if (fund.getCode() != null) {
+            final String code = "%" + fund.getCode().toLowerCase() + "%";
+            predicates.add(cb.isNotNull(funds.get("code")));
+            predicates.add(cb.like(cb.lower(funds.get(Fund_.getDeclaredSingularAttribute("code", String.class))), code));
+        }
+        if (fund.getIsactive())
+            predicates.add(cb.equal(funds.get("isactive"), true));
+        if (fund.getParentId() != null)
+            predicates.add(cb.equal(funds.get("parentId"), fund.getParentId()));
+       
+        if(null!=ids && ids.size()>0)
+        predicates.add(funds.get("id").in(ids));
+             
+        createQuery.where(predicates.toArray(new Predicate[] {}));
+        createQuery.orderBy(cb.asc(funds.get(sortBy)));
+        
+        final TypedQuery<Fund> query = entityManager.createQuery(createQuery).setFirstResult(offset).setMaxResults(pageSize);
+           
+        return query.getResultList();
+    	
     }
 
     public List<Fund> findByIsnotleaf() {

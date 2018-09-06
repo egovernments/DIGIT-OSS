@@ -50,7 +50,11 @@ package org.egov.commons.service;
 import org.egov.commons.CFinancialYear;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infstr.services.PersistenceService;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.python.bouncycastle.asn1.isismtt.x509.Restriction;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -91,4 +95,21 @@ public class FinancialYearService extends PersistenceService<CFinancialYear, Lon
             throw new ApplicationRuntimeException("Financial Year is not active For Posting.");
         return cFinancialYear;
     }
+    
+   public List<CFinancialYear> Search(CFinancialYear finYear,List<Integer> ids,String sortBy,int pageSize,int offset){
+	   
+	   Criteria criteria = getSession().createCriteria(CFinancialYear.class);
+	   criteria.add(Restrictions.eq("financialyear", finYear.getFinYearRange()));
+	   criteria.add(Restrictions.eq("startingDate", finYear.getStartingDate()));
+	   criteria.add(Restrictions.eq("endingDate",finYear.getEndingDate()));
+	   criteria.add(Restrictions.eq("isActive",finYear.getIsActive()));
+	   criteria.add(Restrictions.eq("isACtiveForPosting",finYear.getIsActiveForPosting()));
+	   if(ids.size()>0)
+	   criteria.add(Restrictions.in("id", ids));
+	   
+	   criteria.setFirstResult(offset);
+	   criteria.setMaxResults(pageSize);
+	   criteria.addOrder(Order.asc(sortBy));
+	   return criteria.list();
+   }
 }

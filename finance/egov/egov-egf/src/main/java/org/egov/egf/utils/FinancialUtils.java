@@ -59,6 +59,8 @@ import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.AppConfigService;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.filestore.service.FileStoreService;
+import org.egov.infra.microservice.models.EmployeeInfoResponse;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.workflow.entity.State;
 import org.egov.infra.workflow.entity.StateHistory;
@@ -121,6 +123,9 @@ public class FinancialUtils {
     @Autowired
     private FileStoreService fileStoreService;
 
+    @Autowired
+    MicroserviceUtils msUtil;
+    
     public Session getCurrentSession() {
         return entityManager.unwrap(Session.class);
     }
@@ -141,9 +146,15 @@ public class FinancialUtils {
     }
 
     public String getApproverDetails(final String workFlowAction, final State<Position> state, final Long id, final Long approvalPosition) {
-        final Assignment currentUserAssignment = assignmentService.getPrimaryAssignmentForGivenRange(securityUtils
+       
+    	
+    	final Assignment currentUserAssignment = assignmentService.getPrimaryAssignmentForGivenRange(securityUtils
                 .getCurrentUser().getId(), new Date(), new Date());
 
+    	EmployeeInfoResponse empInfo = msUtil.getEmployee("", "", securityUtils.getCurrentUser().getId(), new Date(),null,null);
+    	
+    	final Assignment curr_assignment ;
+    	
         Assignment assignObj = null;
         List<Assignment> asignList = null;
         if (approvalPosition != null)

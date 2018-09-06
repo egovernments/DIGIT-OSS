@@ -47,10 +47,14 @@
  */
 package org.egov.commons.service;
 
+import org.egov.commons.Bank;
 import org.egov.commons.Bankbranch;
 import org.egov.infstr.services.PersistenceService;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -92,6 +96,27 @@ public class BankBranchService extends PersistenceService<Bankbranch, Integer> {
             }
         }
         return bankBranchList;
+    }
+    
+    public List<Bankbranch> search(Bankbranch bb,List<Long> ids,Long bankId,String sortBy,Integer offset,Integer pageSize){
+    	
+    	
+    	Criteria bankCriteria = getSession().createCriteria(Bank.class);
+    	
+    	Criteria bbCriteria = bankCriteria.createCriteria("bankbranch");
+    	
+    	bbCriteria.add(Restrictions.eq("bankid", bankId));
+    	
+    	bbCriteria.add(Restrictions.eq("code", bb.getBranchcode()));
+    	bbCriteria.add(Restrictions.eq("name", bb.getBranchname()));
+    	bbCriteria.add(Restrictions.eq("isactive", bb.getIsactive()));
+    	
+    	bbCriteria.add(Restrictions.in("id", ids));
+    	
+    	bbCriteria.setFirstResult(offset);
+    	bbCriteria.setMaxResults(pageSize);
+    	bbCriteria.addOrder(Order.asc(sortBy));
+    	return bbCriteria.list();
     }
 
 }

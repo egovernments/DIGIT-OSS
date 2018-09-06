@@ -84,4 +84,29 @@ public class ResponseInfo {
     public String getStatus() {
         return status;
     }
+
+	public void setApiId(String apiId) {
+		this.apiId = apiId;
+	}
+
+	public void setVer(String ver) {
+		this.ver = ver;
+	}
+
+	public void setTs(String ts) {
+		this.ts = ts;
+	}
+
+	public void setResMsgId(String resMsgId) {
+		this.resMsgId = resMsgId;
+	}
+
+	public void setMsgId(String msgId) {
+		this.msgId = msgId;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+    
 }

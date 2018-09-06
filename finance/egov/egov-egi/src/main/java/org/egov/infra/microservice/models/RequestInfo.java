@@ -72,7 +72,7 @@ public class RequestInfo {
 
     private String correlationId;
 
-    private UserInfo userInfo;
+//    private UserInfo userInfo;
 
     public String getApiId() {
         return apiId;
@@ -146,12 +146,12 @@ public class RequestInfo {
         this.correlationId = correlationId;
     }
 
-    public UserInfo getUserInfo() {
-        return userInfo;
-    }
+//    public UserInfo getUserInfo() {
+//        return userInfo;
+//    }
 
-    public void setUserInfo(final UserInfo userInfo) {
-        this.userInfo = userInfo;
-    }
+//    public void setUserInfo(final UserInfo userInfo) {
+//        this.userInfo = userInfo;
+//    }
 
 }

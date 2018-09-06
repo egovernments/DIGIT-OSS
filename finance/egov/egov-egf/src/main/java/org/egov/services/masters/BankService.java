@@ -51,6 +51,9 @@ package org.egov.services.masters;
 import org.egov.commons.Bank;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.utils.FinancialConstants;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -245,5 +248,23 @@ public class BankService extends PersistenceService<Bank, Integer> {
                 .setInteger(FUND_ID, fundId)
                 .setDate("asOnDate", asOnDate)
                 .list();
+    }
+    
+    public List<Bank> search(Bank bank,List<Long>ids, String sortBy,int offset,int pageSize){
+    	
+    	Criteria criteria = getSession().createCriteria(Bank.class);
+    	
+    	criteria.add(Restrictions.eq("code", bank.getCode()));
+    	criteria.add(Restrictions.eq("name", bank.getName()));
+    	criteria.add(Restrictions.eq("isactive", bank.getIsactive()));
+    	
+    	if(ids.size()>0)
+    	criteria.add(Restrictions.in("id",ids));
+    	
+    	criteria.addOrder(Order.asc(sortBy));
+    	criteria.setFirstResult(offset);
+    	criteria.setMaxResults(pageSize);
+    	
+    	return criteria.list();
     }
 }
