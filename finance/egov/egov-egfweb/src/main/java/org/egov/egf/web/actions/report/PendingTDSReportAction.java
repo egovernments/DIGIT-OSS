@@ -476,7 +476,7 @@ public class PendingTDSReportAction extends BaseFormAction {
         voucherHeader.setFundId(fund);
         final Vouchermis vouchermis = new Vouchermis();
         voucherHeader.setVouchermis(vouchermis);
-        voucherHeader.getVouchermis().setDepartmentid(department);
+        voucherHeader.getVouchermis().setDepartmentid(department.getId());
         voucherHeader.setVoucherDate(asOnDate);
         return voucherHeader;
     }

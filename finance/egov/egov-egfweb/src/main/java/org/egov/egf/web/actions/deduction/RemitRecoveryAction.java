@@ -85,6 +85,7 @@ import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Boundary;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.DepartmentService;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.script.entity.Script;
 import org.egov.infra.script.service.ScriptService;
 import org.egov.infra.validation.exception.ValidationError;
@@ -166,6 +167,9 @@ public class RemitRecoveryAction extends BasePaymentAction {
     private DepartmentService departmentService;
     @Autowired
     private FunctionService functionService;
+    
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
 
     @Autowired
     @Qualifier("persistenceService")
@@ -310,8 +314,8 @@ public class RemitRecoveryAction extends BasePaymentAction {
             }
         voucherHeader.setType(FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
         if (voucherHeader.getVouchermis().getDepartmentid() == null) {
-            final Department department = departmentService.getDepartmentById(departmentId.longValue());
-            voucherHeader.getVouchermis().setDepartmentid(department);
+            final List<org.egov.infra.microservice.models.Department> department = microserviceUtils.getDepartmentsById(departmentId.longValue(),"default");
+            voucherHeader.getVouchermis().setDepartmentid(department.get(0).getId());
         }
         if (voucherHeader.getVouchermis().getFunction() == null) {
             final CFunction function = functionService.findOne(functionId);

@@ -1944,10 +1944,8 @@ public class CreateVoucher {
 		final Vouchermis vouchermis = new Vouchermis();
 		if (headerdetails.containsKey(VoucherConstant.DEPARTMENTCODE)
 				&& null != headerdetails.get(VoucherConstant.DEPARTMENTCODE)) {
-			final String departmentCode = headerdetails.get(
-					VoucherConstant.DEPARTMENTCODE).toString();
-			vouchermis.setDepartmentid(deptM
-					.getDepartmentByCode(departmentCode));
+			final String departmentCode = headerdetails.get(VoucherConstant.DEPARTMENTCODE).toString();
+			vouchermis.setDepartmentid(microserviceUtils.getDepartmentByCode(departmentCode,"default").get(0).getId());
 		}
 		if (headerdetails.containsKey(VoucherConstant.SCHEMECODE)
 				&& null != headerdetails.get(VoucherConstant.SCHEMECODE)) {
@@ -2974,9 +2972,10 @@ public class CreateVoucher {
 		headerdetails.put(VoucherConstant.DESCRIPTION,
 				voucherHeader.getDescription());
 
-		if (voucherHeader.getVouchermis().getDepartmentid() != null)
-			headerdetails.put(VoucherConstant.DEPARTMENTCODE, voucherHeader
-					.getVouchermis().getDepartmentid().getCode());
+		if (voucherHeader.getVouchermis().getDepartmentid() != null){
+			List<org.egov.infra.microservice.models.Department> list=microserviceUtils.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid() , "default");
+			headerdetails.put(VoucherConstant.DEPARTMENTCODE,list.get(0).getCode());
+		}
 		if (voucherHeader.getFundId() != null)
 			headerdetails.put(VoucherConstant.FUNDCODE, voucherHeader
 					.getFundId().getCode());

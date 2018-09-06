@@ -62,6 +62,7 @@ import org.egov.infra.admin.master.entity.Boundary;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
@@ -111,6 +112,10 @@ public class AdvanceRequisitionPaymentAction extends BaseVoucherAction {
 
     @Autowired
     private EgovMasterDataCaching masterDataCache;
+    
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
+    
     
     @Override
     public void prepare() {
@@ -297,9 +302,7 @@ public class AdvanceRequisitionPaymentAction extends BaseVoucherAction {
                 headerdetails.put(VoucherConstant.FUNDCODE, egAdvanceReqMises.getFund().getCode());
             }
             if (egAdvanceReqMises.getEgDepartment() != null && egAdvanceReqMises.getEgDepartment().getId() != null) {
-                voucherHeader.getVouchermis().setDepartmentid(
-                        (Department) persistenceService.find("from Department where id=?", egAdvanceReqMises.getEgDepartment()
-                                .getId()));
+                voucherHeader.getVouchermis().setDepartmentid(egAdvanceReqMises.getEgDepartment().getId());
                 headerdetails.put(VoucherConstant.DEPARTMENTCODE, egAdvanceReqMises.getEgDepartment().getCode());
             }
             if (egAdvanceReqMises.getFundsource() != null && egAdvanceReqMises.getFundsource().getId() != null) {

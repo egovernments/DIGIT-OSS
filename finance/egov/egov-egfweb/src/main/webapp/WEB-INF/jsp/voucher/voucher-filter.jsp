@@ -155,10 +155,9 @@
 				test="%{isFieldMandatory('department')}">
 				<span class="mandatory1">*</span>
 			</s:if></td>
-		<td class="bluebox"><s:select name="vouchermis.departmentid"
-				id="vouchermis.departmentid" list="dropdownData.departmentList"
-				listKey="id" listValue="name" headerKey="-1"
-				headerValue="----Choose----" value="%{vouchermis.departmentid.id}" /></td>
+		<td class="greybox"><s:select name="deptImpl.id" id="deptImpl.id"
+				list="dropdownData.departmentList" listKey="id" listValue="name"
+				headerKey="-1" headerValue="----Choose----" value="%{deptImpl.id}" /></td>
 	</s:if>
 
 	<%if(count % 2 == 1) {%>

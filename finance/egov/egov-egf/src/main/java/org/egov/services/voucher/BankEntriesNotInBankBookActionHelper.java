@@ -47,6 +47,11 @@
  */
 package org.egov.services.voucher;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.egov.billsaccounting.services.CreateVoucher;
 import org.egov.billsaccounting.services.VoucherConstant;
 import org.egov.commons.Bankaccount;
@@ -61,6 +66,8 @@ import org.egov.commons.dao.SchemeHibernateDAO;
 import org.egov.commons.dao.SubSchemeHibernateDAO;
 import org.egov.commons.service.BankAccountService;
 import org.egov.infra.admin.master.service.DepartmentService;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.brs.BrsEntrieMis;
@@ -72,11 +79,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 @Transactional(readOnly = true)
 @Service
@@ -115,6 +117,9 @@ public class BankEntriesNotInBankBookActionHelper {
 
     @Autowired
     private DepartmentService departmentService;
+    
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
 
     @Autowired
     @Qualifier("bankEntriesService")
@@ -158,8 +163,7 @@ public class BankEntriesNotInBankBookActionHelper {
                                 .setFunction(functionDAO.getFunctionById(voucherHeader.getVouchermis().getFunction().getId()));
                     if (voucherHeader.getVouchermis().getDepartmentid() != null)
                         bankEntryMis.setDepartment(departmentService.getDepartmentById(voucherHeader.getVouchermis()
-                                .getDepartmentid()
-                                .getId()));
+                                .getDepartmentid()));
                     if (voucherHeader.getFundId() != null)
                         bankEntryMis.setFund(fundDAO.fundById(voucherHeader.getFundId().getId(), false));
                     if (voucherHeader.getVouchermis().getSchemeid() != null)
@@ -262,8 +266,10 @@ public class BankEntriesNotInBankBookActionHelper {
         headerdetails.put(VoucherConstant.VOUCHERDATE, voucherHeader.getVoucherDate());
         headerdetails.put(VoucherConstant.DESCRIPTION, voucherHeader.getDescription());
 
-        if (voucherHeader.getVouchermis().getDepartmentid() != null)
-            headerdetails.put(VoucherConstant.DEPARTMENTCODE, voucherHeader.getVouchermis().getDepartmentid().getCode());
+        if (voucherHeader.getVouchermis().getDepartmentid() != null){
+        	List<Department> depList =microserviceUtils.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid(), "default");
+            headerdetails.put(VoucherConstant.DEPARTMENTCODE, depList.get(0).getCode());
+        }
         if (voucherHeader.getFundId() != null)
             headerdetails.put(VoucherConstant.FUNDCODE, voucherHeader.getFundId().getCode());
         if (voucherHeader.getVouchermis().getSchemeid() != null)

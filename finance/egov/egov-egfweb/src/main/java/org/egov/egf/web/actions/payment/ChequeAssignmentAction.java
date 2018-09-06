@@ -47,7 +47,28 @@
  */
 package org.egov.egf.web.actions.payment;
 
-import net.sf.jasperreports.engine.JRException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
@@ -107,27 +128,7 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
+import net.sf.jasperreports.engine.JRException;
 
 @ParentPackage("egov")
 @Results({
@@ -430,10 +431,10 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
                         .setFunction(
                                 (CFunction) persistenceService.find("from CFunction where code = ?",
                                         propartyAppConfigResultList.get(key)));
-            if (key.equals("EB Voucher Property-Department"))
-                voucherHeader.getVouchermis().setDepartmentid(
-                        (Department) persistenceService.find("from Department where deptCode = ?",
-                                propartyAppConfigResultList.get(key)));
+            if (key.equals("EB Voucher Property-Department")){
+            	Department dep =(Department) persistenceService.find("from Department where deptCode = ?",propartyAppConfigResultList.get(key));
+                voucherHeader.getVouchermis().setDepartmentid(dep.getId());
+            }
             if (key.equals("EB Voucher Property-BankBranch"))
                 bank_branch = propartyAppConfigResultList.get(key);
             if (key.equals("EB Voucher Property-BankAccount")) {
@@ -1931,12 +1932,12 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
                         break;
                     } else if (reassignSurrenderChq) {
                         if (!instrumentService.isReassigningChequeNumberValid(assignment.getChequeNumber(),
-                                bankaccount.longValue(), voucherHeader.getVouchermis().getDepartmentid().getId().intValue(),
+                                bankaccount.longValue(), voucherHeader.getVouchermis().getDepartmentid().intValue(),
                                 assignment.getSerialNo()))
                             addFieldError("chequeAssignmentList[" + i + "].chequeNumber",
                                     getMessage("payment.chequenumber.invalid"));
                     } else if (!instrumentService.isChequeNumberValid(assignment.getChequeNumber(), bankaccount.longValue(),
-                            voucherHeader.getVouchermis().getDepartmentid().getId().intValue(), assignment.getSerialNo()))
+                            voucherHeader.getVouchermis().getDepartmentid().intValue(), assignment.getSerialNo()))
                         addFieldError("chequeAssignmentList[" + i + "].chequeNumber",
                                 getMessage("payment.chequenumber.invalid"));
                     if (null == assignment.getChequeDate()) {
@@ -1983,10 +1984,10 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
                     }
                 if (reassignSurrenderChq) {
                     if (!instrumentService.isReassigningChequeNumberValid(parameters.get("chequeNo")[0], bankaccount.longValue(),
-                            voucherHeader.getVouchermis().getDepartmentid().getId().intValue(), parameters.get("serialNo")[0]))
+                            voucherHeader.getVouchermis().getDepartmentid().intValue(), parameters.get("serialNo")[0]))
                         addFieldError("chequeAssignmentList[" + i + "].chequeNumber", getMessage("payment.chequenumber.invalid"));
                 } else if (!instrumentService.isChequeNumberValid(parameters.get("chequeNo")[0], bankaccount.longValue(),
-                        voucherHeader.getVouchermis().getDepartmentid().getId().intValue(), parameters.get("serialNo")[0]))
+                        voucherHeader.getVouchermis().getDepartmentid().intValue(), parameters.get("serialNo")[0]))
                     addFieldError("chequeN0", getMessage("payment.chequenumber.invalid"));
             }
             if (null == getChequeDt())

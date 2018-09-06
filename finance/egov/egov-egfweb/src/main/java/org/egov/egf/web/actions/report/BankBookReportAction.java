@@ -367,8 +367,8 @@ public class BankBookReportAction extends BaseFormAction {
         getInstrumentVouchersByInstrumentHeaderIds();
         Integer deptId = null;
         if (getVouchermis() != null && getVouchermis().getDepartmentid() != null
-                && getVouchermis().getDepartmentid().getId() != null && getVouchermis().getDepartmentid().getId() != -1)
-            deptId = getVouchermis().getDepartmentid().getId().intValue();
+                && getVouchermis().getDepartmentid() != null && getVouchermis().getDepartmentid() != -1)
+            deptId = getVouchermis().getDepartmentid().intValue();
         final BankBookEntry initialOpeningBalance = getInitialAccountBalance(glCode, fundCode, deptId);
         entries.add(initialOpeningBalance);
         Date date = bankBookEntries.get(0).getVoucherDate();
@@ -691,10 +691,10 @@ public class BankBookReportAction extends BaseFormAction {
         }
 
         if (getVouchermis() != null && getVouchermis().getDepartmentid() != null
-                && getVouchermis().getDepartmentid().getId() != null && getVouchermis().getDepartmentid().getId() != -1) {
-            query.append(" and vmis.DEPARTMENTID=").append(getVouchermis().getDepartmentid().getId().toString());
+                && getVouchermis().getDepartmentid() != null && getVouchermis().getDepartmentid() != -1) {
+            query.append(" and vmis.DEPARTMENTID=").append(getVouchermis().getDepartmentid().toString());
             final Department dept = (Department) persistenceService.find("from Department where id=?", getVouchermis()
-                    .getDepartmentid().getId());
+                    .getDepartmentid());
             header.append(" in " + dept.getName() + " ");
         }
         if (getVouchermis() != null && getVouchermis().getFunctionary() != null

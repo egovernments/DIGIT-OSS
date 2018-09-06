@@ -58,6 +58,8 @@ import org.egov.eis.entity.Assignment;
 import org.egov.eis.service.AssignmentService;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -104,6 +106,10 @@ public class JournalVoucherActionHelper {
     @Autowired
     @Qualifier("voucherService")
     private VoucherService voucherService;
+    
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
+    
     @Autowired
     @Qualifier("createVoucher")
     private CreateVoucher createVoucher;
@@ -273,9 +279,10 @@ public class JournalVoucherActionHelper {
         headerdetails.put(VoucherConstant.VOUCHERNUMBER, voucherHeader.getVoucherNumber());
         headerdetails.put(VoucherConstant.VOUCHERDATE, voucherHeader.getVoucherDate());
         headerdetails.put(VoucherConstant.DESCRIPTION, voucherHeader.getDescription());
-
-        if (voucherHeader.getVouchermis().getDepartmentid() != null)
-            headerdetails.put(VoucherConstant.DEPARTMENTCODE, voucherHeader.getVouchermis().getDepartmentid().getCode());
+        if (voucherHeader.getVouchermis().getDepartmentid() != null){
+        	List<Department> depList =microserviceUtils.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid(), "default");
+            headerdetails.put(VoucherConstant.DEPARTMENTCODE, depList.get(0).getCode());
+        }
         if (voucherHeader.getFundId() != null)
             headerdetails.put(VoucherConstant.FUNDCODE, voucherHeader.getFundId().getCode());
         if (voucherHeader.getVouchermis().getSchemeid() != null)

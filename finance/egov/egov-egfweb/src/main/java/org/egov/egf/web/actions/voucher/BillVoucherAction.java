@@ -50,6 +50,14 @@
  */
 package org.egov.egf.web.actions.voucher;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
@@ -78,197 +86,194 @@ import org.egov.utils.FinancialConstants;
 import org.egov.utils.VoucherHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 @ParentPackage("egov")
 @Results({ @Result(name = JournalVoucherAction.NEW, location = "billVoucher-new.jsp") })
 public class BillVoucherAction extends BaseVoucherAction {
 
-    private static final long serialVersionUID = 1L;
-    private static final Logger LOGGER = Logger.getLogger(BillVoucherAction.class);
-    @Autowired
-    private EgwStatusHibernateDAO egwStatusDAO;
-    private EisCommonService eisCommonService;
-    private VoucherService voucherService;
-    private String expType;
-    private String billNumber;
-    private List<EgBillregister> preApprovedVoucherList;
-    private VoucherTypeBean voucherTypeBean;
-    private EisUtilService eisUtilService;
-    @Autowired
-    private ScriptService scriptService;
-    @Autowired
-    private EgovMasterDataCaching masterDataCache;
-    @Autowired
-    private AppConfigValueService appConfigValueService;
-    
-    public VoucherTypeBean getVoucherTypeBean() {
-        return voucherTypeBean;
-    }
+	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger(BillVoucherAction.class);
+	@Autowired
+	private EgwStatusHibernateDAO egwStatusDAO;
+	private EisCommonService eisCommonService;
+	private VoucherService voucherService;
+	private String expType;
+	private String billNumber;
+	private List<EgBillregister> preApprovedVoucherList;
+	private VoucherTypeBean voucherTypeBean;
+	private EisUtilService eisUtilService;
+	@Autowired
+	private ScriptService scriptService;
+	@Autowired
+	private EgovMasterDataCaching masterDataCache;
+	@Autowired
+	private AppConfigValueService appConfigValueService;
 
-    public void setVoucherTypeBean(final VoucherTypeBean voucherTypeBean) {
-        this.voucherTypeBean = voucherTypeBean;
-    }
+	public VoucherTypeBean getVoucherTypeBean() {
+		return voucherTypeBean;
+	}
 
-    @Override
-    public void prepare() {
-        super.prepare();
-        // If the department is mandatory show the logged in users assigned department only.
-        if (mandatoryFields.contains("department")) {
-            addDropdownData("departmentList", masterDataCache.get("egi-department"));
-        }
-    }
+	public void setVoucherTypeBean(final VoucherTypeBean voucherTypeBean) {
+		this.voucherTypeBean = voucherTypeBean;
+	}
 
-    @Action(value = "/voucher/billVoucher-newForm")
-    public String newForm() {
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("BillVoucherAction | newform | START");
-        final List<String> listBillReg = VoucherHelper.EXPENDITURE_TYPES;
-        final Map<String, String> expTypeList = new LinkedHashMap<String, String>();
-        for (final String expType : listBillReg)
-            expTypeList.put(expType, expType);
+	@Override
+	public void prepare() {
+		super.prepare();
+		// If the department is mandatory show the logged in users assigned
+		// department only.
+		if (mandatoryFields.contains("department")) {
+			addDropdownData("departmentList", masterDataCache.get("egi-department"));
+		}
+	}
 
-        addDropdownData("expTypeList", listBillReg);
-        return NEW;
-    }
-    @ValidationErrorPage(NEW)
-    @SuppressWarnings("unchecked")
-    @Action(value = "/voucher/billVoucher-lists")
-    public String lists() throws ValidationException {
-        final StringBuffer query = new StringBuffer(300);
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Expenditure Type selected :=" + expType);
+	@Action(value = "/voucher/billVoucher-newForm")
+	public String newForm() {
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("BillVoucherAction | newform | START");
+		final List<String> listBillReg = VoucherHelper.EXPENDITURE_TYPES;
+		final Map<String, String> expTypeList = new LinkedHashMap<String, String>();
+		for (final String expType : listBillReg)
+			expTypeList.put(expType, expType);
 
-        try {
-            final String statusid = getApprovalStatusForBills();
-            query.append("from EgBillregister br where br.status.id in(")
-                    .append(statusid)
-                    .append(")and ( br.egBillregistermis.voucherHeader is null or br.egBillregistermis.voucherHeader in (from CVoucherHeader vh where vh.status =? ))");
-            if (null != billNumber && StringUtils.isNotEmpty(billNumber))
-                query.append(" and br.billnumber='").append(billNumber).append("'");
-            if (null != voucherHeader.getVouchermis().getDepartmentid())
-                query.append(" and br.egBillregistermis.departmentid=").append(
-                        voucherHeader.getVouchermis().getDepartmentid().getId());
-            if (null != voucherTypeBean.getVoucherDateFrom() && StringUtils.isNotEmpty(voucherTypeBean.getVoucherDateFrom()))
-                query.append(" and br.billdate>='").append(Constants.DDMMYYYYFORMAT1.format(Constants.DDMMYYYYFORMAT2.
-                        parse(voucherTypeBean.getVoucherDateFrom()))).append("'");
-            if (null != voucherTypeBean.getVoucherDateTo() && StringUtils.isNotEmpty(voucherTypeBean.getVoucherDateTo()))
-                query.append(" and br.billdate<='").append(Constants.DDMMYYYYFORMAT1.format(Constants.DDMMYYYYFORMAT2.
-                        parse(voucherTypeBean.getVoucherDateTo()))).append("'");
-            preApprovedVoucherList = persistenceService.findAllBy(query.toString(), 4);
-            if(preApprovedVoucherList.size()==0)
-            {
-            	addActionError("No records found.");
-            }
-        } catch (final ValidationException e) {
+		addDropdownData("expTypeList", listBillReg);
+		return NEW;
+	}
 
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
-            throw new ValidationException(errors);
-        } catch (final ParseException e) {
-            throw new ValidationException(Arrays.asList(new ValidationError("not a valid date", "not a valid date")));
-        }
-        return newForm();
-    }
+	@ValidationErrorPage(NEW)
+	@SuppressWarnings("unchecked")
+	@Action(value = "/voucher/billVoucher-lists")
+	public String lists() throws ValidationException {
+		final StringBuffer query = new StringBuffer(300);
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Expenditure Type selected :=" + expType);
 
-    public List<WorkflowAction> getValidActions(final String purpose) {
-        final List<WorkflowAction> validButtons = new ArrayList<WorkflowAction>();
-        final Script validScript = (Script) getPersistenceService().findAllByNamedQuery(Script.BY_NAME, "pjv.validbuttons")
-                .get(0);
-        final List<String> list = (List<String>) scriptService.executeScript(validScript, ScriptService.createContext(
-                "eisCommonServiceBean", eisCommonService, "userId", ApplicationThreadLocals.getUserId().intValue(), "date", new Date(),
-                "purpose", purpose));
-        for (final Object s : list)
-        {
-            if ("invalid".equals(s))
-                break;
-            final WorkflowAction action = (WorkflowAction) getPersistenceService().find(
-                    " from WorkflowAction where type='CVoucherHeader' and name=?", s.toString());
-            validButtons.add(action);
-        }
-        return validButtons;
-    }
+		try {
+			final String statusid = getApprovalStatusForBills();
+			query.append("from EgBillregister br where br.status.id in(").append(statusid).append(
+					")and ( br.egBillregistermis.voucherHeader is null or br.egBillregistermis.voucherHeader in (from CVoucherHeader vh where vh.status =? ))");
+			if (null != billNumber && StringUtils.isNotEmpty(billNumber))
+				query.append(" and br.billnumber='").append(billNumber).append("'");
+			if (null != voucherHeader.getVouchermis().getDepartmentid())
+				query.append(" and br.egBillregistermis.departmentid=")
+						.append(voucherHeader.getVouchermis().getDepartmentid());
+			if (null != voucherTypeBean.getVoucherDateFrom()
+					&& StringUtils.isNotEmpty(voucherTypeBean.getVoucherDateFrom()))
+				query.append(" and br.billdate>='")
+						.append(Constants.DDMMYYYYFORMAT1
+								.format(Constants.DDMMYYYYFORMAT2.parse(voucherTypeBean.getVoucherDateFrom())))
+						.append("'");
+			if (null != voucherTypeBean.getVoucherDateTo()
+					&& StringUtils.isNotEmpty(voucherTypeBean.getVoucherDateTo()))
+				query.append(" and br.billdate<='")
+						.append(Constants.DDMMYYYYFORMAT1
+								.format(Constants.DDMMYYYYFORMAT2.parse(voucherTypeBean.getVoucherDateTo())))
+						.append("'");
+			preApprovedVoucherList = persistenceService.findAllBy(query.toString(), 4);
+			if (preApprovedVoucherList.size() == 0) {
+				addActionError("No records found.");
+			}
+		} catch (final ValidationException e) {
 
-    private String getApprovalStatusForBills() {
-        String statusid = "";
-        final List<AppConfigValues> appConfigList = appConfigValueService.getConfigValuesByModuleAndKey(FinancialConstants.MODULE_NAME_APPCONFIG, expType + "BillApprovalStatus");
+			final List<ValidationError> errors = new ArrayList<ValidationError>();
+			errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
+			throw new ValidationException(errors);
+		} catch (final ParseException e) {
+			throw new ValidationException(Arrays.asList(new ValidationError("not a valid date", "not a valid date")));
+		}
+		return newForm();
+	}
 
-        if (appConfigList.size() == 0)
-            throw new ValidationException(Arrays.asList(new ValidationError("Status for bill approval",
-                    "App Config value is missing for exp type :" + expType)));
-        for (final AppConfigValues appConfigVal : appConfigList) {
+	public List<WorkflowAction> getValidActions(final String purpose) {
+		final List<WorkflowAction> validButtons = new ArrayList<WorkflowAction>();
+		final Script validScript = (Script) getPersistenceService()
+				.findAllByNamedQuery(Script.BY_NAME, "pjv.validbuttons").get(0);
+		final List<String> list = (List<String>) scriptService.executeScript(validScript,
+				ScriptService.createContext("eisCommonServiceBean", eisCommonService, "userId",
+						ApplicationThreadLocals.getUserId().intValue(), "date", new Date(), "purpose", purpose));
+		for (final Object s : list) {
+			if ("invalid".equals(s))
+				break;
+			final WorkflowAction action = (WorkflowAction) getPersistenceService()
+					.find(" from WorkflowAction where type='CVoucherHeader' and name=?", s.toString());
+			validButtons.add(action);
+		}
+		return validButtons;
+	}
 
-            final String configvalue = appConfigVal.getValue();
-            final EgwStatus egwstatus = egwStatusDAO.getStatusByModuleAndCode(configvalue.substring(0, configvalue.indexOf("|"))
-                    , configvalue.substring(configvalue.indexOf("|") + 1));
-            if (null == egwstatus || null == egwstatus.getId())
-                throw new ValidationException(
-                        Arrays.asList(new ValidationError("Status for bill approval",
-                                " status for " + expType + " approval is not present in Egwstatus for app config value : "
-                                        + configvalue)));
-            else
-                statusid = statusid.isEmpty() ? egwstatus.getId().toString() : statusid + "," + egwstatus.getId();
-        }
+	private String getApprovalStatusForBills() {
+		String statusid = "";
+		final List<AppConfigValues> appConfigList = appConfigValueService.getConfigValuesByModuleAndKey(
+				FinancialConstants.MODULE_NAME_APPCONFIG, expType + "BillApprovalStatus");
 
-        return statusid;
+		if (appConfigList.size() == 0)
+			throw new ValidationException(Arrays.asList(new ValidationError("Status for bill approval",
+					"App Config value is missing for exp type :" + expType)));
+		for (final AppConfigValues appConfigVal : appConfigList) {
 
-    }
+			final String configvalue = appConfigVal.getValue();
+			final EgwStatus egwstatus = egwStatusDAO.getStatusByModuleAndCode(
+					configvalue.substring(0, configvalue.indexOf("|")),
+					configvalue.substring(configvalue.indexOf("|") + 1));
+			if (null == egwstatus || null == egwstatus.getId())
+				throw new ValidationException(
+						Arrays.asList(new ValidationError("Status for bill approval", " status for " + expType
+								+ " approval is not present in Egwstatus for app config value : " + configvalue)));
+			else
+				statusid = statusid.isEmpty() ? egwstatus.getId().toString() : statusid + "," + egwstatus.getId();
+		}
 
-    public EisCommonService getEisCommonService() {
-        return eisCommonService;
-    }
+		return statusid;
 
-    public void setEisCommonService(final EisCommonService eisCommonService) {
-        this.eisCommonService = eisCommonService;
-    }
+	}
 
-    public VoucherService getVoucherService() {
-        return voucherService;
-    }
+	public EisCommonService getEisCommonService() {
+		return eisCommonService;
+	}
 
-    public void setVoucherService(final VoucherService voucherService) {
-        this.voucherService = voucherService;
-    }
+	public void setEisCommonService(final EisCommonService eisCommonService) {
+		this.eisCommonService = eisCommonService;
+	}
 
-    public String getExpType() {
-        return expType;
-    }
+	public VoucherService getVoucherService() {
+		return voucherService;
+	}
 
-    public void setExpType(final String expType) {
-        this.expType = expType;
-    }
+	public void setVoucherService(final VoucherService voucherService) {
+		this.voucherService = voucherService;
+	}
 
-    public List<EgBillregister> getPreApprovedVoucherList() {
-        return preApprovedVoucherList;
-    }
+	public String getExpType() {
+		return expType;
+	}
 
-    public void setPreApprovedVoucherList(
-            final List<EgBillregister> preApprovedVoucherList) {
-        this.preApprovedVoucherList = preApprovedVoucherList;
-    }
+	public void setExpType(final String expType) {
+		this.expType = expType;
+	}
 
-    public String getBillNumber() {
-        return billNumber;
-    }
+	public List<EgBillregister> getPreApprovedVoucherList() {
+		return preApprovedVoucherList;
+	}
 
-    public void setBillNumber(final String billNumber) {
-        this.billNumber = billNumber;
-    }
+	public void setPreApprovedVoucherList(final List<EgBillregister> preApprovedVoucherList) {
+		this.preApprovedVoucherList = preApprovedVoucherList;
+	}
 
-    public EisUtilService getEisUtilService() {
-        return eisUtilService;
-    }
+	public String getBillNumber() {
+		return billNumber;
+	}
 
-    public void setEisUtilService(final EisUtilService eisUtilService) {
-        this.eisUtilService = eisUtilService;
-    }
+	public void setBillNumber(final String billNumber) {
+		this.billNumber = billNumber;
+	}
 
-    public void setVoucherHelper(final VoucherHelper voucherHelper) {
-    }
+	public EisUtilService getEisUtilService() {
+		return eisUtilService;
+	}
+
+	public void setEisUtilService(final EisUtilService eisUtilService) {
+		this.eisUtilService = eisUtilService;
+	}
+
+	public void setVoucherHelper(final VoucherHelper voucherHelper) {
+	}
 }

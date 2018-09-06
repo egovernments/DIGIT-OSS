@@ -682,7 +682,7 @@ public class BillRegisterReportAction extends SearchFormAction {
         if (null != voucherHeader.getFundId())
             whereQuery.append(" and mis.fundid=" + voucherHeader.getFundId().getId());
         if (null != voucherHeader.getVouchermis().getDepartmentid())
-            whereQuery.append(" and mis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid().getId());
+            whereQuery.append(" and mis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid());
         if (null != voucherHeader.getVouchermis().getSchemeid())
             whereQuery.append(" and mis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId());
         if (null != voucherHeader.getVouchermis().getSubschemeid())

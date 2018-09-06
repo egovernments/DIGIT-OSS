@@ -807,7 +807,7 @@ public class DishonorChequeWorkflowAction extends BaseFormAction {
             headerdetails.put(
                     VoucherConstant.DEPARTMENTCODE,
                     ((Department) persistenceService.find("from Department where id=?", dishonorChequeView
-                            .getOriginalVoucherHeader().getVouchermis().getDepartmentid().getId())).getCode());
+                            .getOriginalVoucherHeader().getVouchermis().getDepartmentid())).getCode());
         if (null != dishonorChequeView.getOriginalVoucherHeader().getFundId())
             headerdetails.put(
                     VoucherConstant.FUNDCODE,

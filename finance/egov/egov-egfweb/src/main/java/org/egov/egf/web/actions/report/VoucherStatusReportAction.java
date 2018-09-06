@@ -289,7 +289,7 @@ public class VoucherStatusReportAction extends BaseFormAction
             voucherMap.put("type", voucherheader.getType());
             voucherMap.put("name", voucherheader.getName());
             voucherMap.put("voucherdate", voucherheader.getVoucherDate());
-            voucherMap.put("deptName", voucherheader.getVouchermis().getDepartmentid().getName());
+            voucherMap.put("deptName", voucherheader.getVouchermis().getDepartmentid());
             for (final CGeneralLedger detail : voucherheader.getGeneralledger())
                 amt = amt+detail.getDebitAmount();
             voucherMap.put("amount", amt);
@@ -361,8 +361,8 @@ public class VoucherStatusReportAction extends BaseFormAction
             sql = sql + " and vh.status=" + voucherHeader.getStatus();
 
         if (voucherHeader.getVouchermis().getDepartmentid() != null
-                && voucherHeader.getVouchermis().getDepartmentid().getId() != -1)
-            sql = sql + " and vh.vouchermis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid().getId();
+                && voucherHeader.getVouchermis().getDepartmentid() != -1)
+            sql = sql + " and vh.vouchermis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid();
 
         if (voucherHeader.getVouchermis().getSchemeid() != null)
             sql = sql + " and vh.vouchermis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId();
@@ -424,7 +424,7 @@ public class VoucherStatusReportAction extends BaseFormAction
         for (final CVoucherHeader cVchrHdr : list)
         {
             final VoucherReportView vhcrRptView = new VoucherReportView();
-            vhcrRptView.setDeptName(cVchrHdr.getVouchermis().getDepartmentid().getName());
+            vhcrRptView.setDeptName(cVchrHdr.getVouchermis().getDepartmentid()!=null ? cVchrHdr.getVouchermis().getDepartmentid().toString():"");
             vhcrRptView.setVoucherNumber(cVchrHdr.getVoucherNumber());
             vhcrRptView.setVoucherType(cVchrHdr.getType());
             vhcrRptView.setVoucherName(cVchrHdr.getName());
@@ -551,7 +551,7 @@ public class VoucherStatusReportAction extends BaseFormAction
     {
         paramMap.put("fund", voucherHeader.getFundId().getName());
         if (voucherHeader.getVouchermis() != null && voucherHeader.getVouchermis().getDepartmentid() != null)
-            paramMap.put("deptName", voucherHeader.getVouchermis().getDepartmentid().getName());
+            paramMap.put("deptName", voucherHeader.getVouchermis().getDepartmentid());
         paramMap.put("status", getVoucherStatus(voucherHeader.getStatus()));
         paramMap.put("toDate", toDate);
         paramMap.put("fromDate", fromDate);

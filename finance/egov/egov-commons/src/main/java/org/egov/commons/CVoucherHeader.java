@@ -126,6 +126,9 @@ public class CVoucherHeader extends StateAware<Position> {
 
     @Transient
     private String billNumber;
+    
+    @Transient
+    private String departmentName;
 
     @Transient
     private Date billDate;
@@ -138,6 +141,15 @@ public class CVoucherHeader extends StateAware<Position> {
 
     @Transient
     private String voucherNumType;
+    
+
+    public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
 
     @Override
     public Long getId() {

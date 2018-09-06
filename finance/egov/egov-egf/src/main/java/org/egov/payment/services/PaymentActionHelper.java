@@ -65,6 +65,8 @@ import org.egov.eis.service.PositionMasterService;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -138,7 +140,8 @@ public class PaymentActionHelper {
     @Autowired
     @Qualifier("paymentService")
     private PaymentService paymentService;
-
+    @Autowired
+    MicroserviceUtils microserviceUtils;
     @Autowired
     PositionMasterService positionMasterService;
 
@@ -544,8 +547,10 @@ public class PaymentActionHelper {
         headerdetails.put(VoucherConstant.VOUCHERDATE, voucherHeader.getVoucherDate());
         headerdetails.put(VoucherConstant.DESCRIPTION, voucherHeader.getDescription());
 
-        if (voucherHeader.getVouchermis().getDepartmentid() != null)
-            headerdetails.put(VoucherConstant.DEPARTMENTCODE, voucherHeader.getVouchermis().getDepartmentid().getCode());
+        if (voucherHeader.getVouchermis().getDepartmentid() != null){
+        	List<Department> depList=microserviceUtils.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid(), "default");
+            headerdetails.put(VoucherConstant.DEPARTMENTCODE, depList.get(0).getCode());
+        }
         if (voucherHeader.getFundId() != null)
             headerdetails.put(VoucherConstant.FUNDCODE, voucherHeader.getFundId().getCode());
         if (voucherHeader.getVouchermis().getSchemeid() != null)

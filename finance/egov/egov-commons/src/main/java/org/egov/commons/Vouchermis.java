@@ -47,8 +47,7 @@
  */
 package org.egov.commons;
 
-import org.egov.infra.admin.master.entity.Boundary;
-import org.egov.infra.admin.master.entity.Department;
+import static org.egov.commons.Vouchermis.SEQ_VOUCHERMIS;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -61,7 +60,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import static org.egov.commons.Vouchermis.SEQ_VOUCHERMIS;
+import org.egov.infra.admin.master.entity.Boundary;
 
 @Entity
 @Table(name = "VOUCHERMIS")
@@ -82,9 +81,7 @@ public class Vouchermis implements java.io.Serializable {
     @JoinColumn(name = "divisionid")
     private Boundary divisionid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "departmentid")
-    private Department departmentid;
+    private Long departmentid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schemeid")
@@ -183,11 +180,11 @@ public class Vouchermis implements java.io.Serializable {
         this.divisionid = divisionid;
     }
 
-    public Department getDepartmentid() {
+    public Long getDepartmentid() {
         return this.departmentid;
     }
 
-    public void setDepartmentid(Department departmentid) {
+    public void setDepartmentid(Long departmentid) {
         this.departmentid = departmentid;
     }
 

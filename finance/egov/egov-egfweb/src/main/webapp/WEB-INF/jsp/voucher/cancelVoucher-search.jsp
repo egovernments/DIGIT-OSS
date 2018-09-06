@@ -199,7 +199,7 @@ function loadNamesForSelectedType()
 							<s:property value="%{fundId.name}" />
 						</td>
 						<td style="text-align: center" class="<c:out value="${trclass}"/>">
-							<s:property value="%{vouchermis.departmentid.name}" />
+							<s:property value="%{departmentName}" />
 						</td>
 						<td style="text-align: center" class="<c:out value="${trclass}"/>">
 							<s:property value="%{type}" />-<s:property value="%{name}" />

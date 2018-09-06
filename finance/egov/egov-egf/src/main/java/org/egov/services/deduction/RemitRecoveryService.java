@@ -288,10 +288,9 @@ public class RemitRecoveryService {
         final StringBuilder misQuery = new StringBuilder();
         if (null != voucherHeader && null != voucherHeader.getVouchermis()) {
             if (null != voucherHeader.getVouchermis().getDepartmentid()
-                    && null != voucherHeader.getVouchermis().getDepartmentid().getId()
-                    && -1 != voucherHeader.getVouchermis().getDepartmentid().getId()) {
+                    && -1 != voucherHeader.getVouchermis().getDepartmentid()) {
                 misQuery.append("and  mis.departmentid=");
-                misQuery.append(voucherHeader.getVouchermis().getDepartmentid().getId());
+                misQuery.append(voucherHeader.getVouchermis().getDepartmentid());
             }
             if (null != voucherHeader.getVouchermis().getFunctionary()
                     && null != voucherHeader.getVouchermis().getFunctionary().getId()
