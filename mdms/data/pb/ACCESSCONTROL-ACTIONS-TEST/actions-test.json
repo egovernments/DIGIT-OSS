@@ -11736,6 +11736,18 @@
       "serviceCode": "hr-masters",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1609,
+      "name": "VacantPositions",
+      "url": "/hr-masters-v2/vacantpositions/_search",
+      "displayName": "VacantPositions",
+      "orderNumber": 3,
+      "parentModule": "70",
+      "enabled": false,
+      "serviceCode": "Position",
+      "code": "null",
+      "path": "Employee Management.Employee Masters.Position.VacantPositions"
     }
   ]
 }
