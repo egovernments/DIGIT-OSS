@@ -444,4 +444,5 @@ public interface FinancialConstants {
 	public static final String BUDGETTYPE_DEBIT = "debit";
 	public static final String BUDGETTYPE_ALL = "all";
 	public static final String STATUS_MODULE_NAME_CONTRACTOR = "Contractor";
+	public static final String STATUS_MODULE_NAME_SUPPLIER = "Supplier";
 }

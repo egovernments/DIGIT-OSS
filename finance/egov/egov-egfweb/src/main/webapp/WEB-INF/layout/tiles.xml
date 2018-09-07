@@ -659,8 +659,8 @@
 		<put-attribute name="page-title" value="title.receiptpayment.search" cascade="true"/>
 		<put-attribute name="body" value="/WEB-INF/views/inbox/inbox.jsp"></put-attribute>
 	</definition>
-	
-		 <definition name="contractor-new" extends="base_layout">
+   
+    <definition name="contractor-new" extends="base_layout">
         <put-attribute name="page-title" value="title.contractor.create" cascade="true"/>
         <put-attribute name="body" value="/WEB-INF/views/contractor/contractor-new.jsp"/>
     </definition>
@@ -683,5 +683,30 @@
     <definition name="contractor-search" extends="base_layout">
         <put-attribute name="page-title" value="title.contractor.search" cascade="true"/>
         <put-attribute name="body" value="/WEB-INF/views/contractor/contractor-search.jsp"/>
+    </definition>
+    
+        <definition name="supplier-new" extends="base_layout">
+        <put-attribute name="page-title" value="title.supplier.create" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/supplier/supplier-new.jsp"/>
+    </definition>
+    
+    <definition name="supplier-result" extends="base_layout">
+        <put-attribute name="page-title" value="title.supplier.result" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/supplier/supplier-result.jsp"/>
+    </definition>
+    
+    <definition name="supplier-edit" extends="base_layout">
+        <put-attribute name="page-title" value="title.supplier.edit" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/supplier/supplier-edit.jsp"/>
+    </definition>
+    
+    <definition name="supplier-view" extends="base_layout">
+        <put-attribute name="page-title" value="title.supplier.view" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/supplier/supplier-view.jsp"/>
+    </definition>
+    
+    <definition name="supplier-search" extends="base_layout">
+        <put-attribute name="page-title" value="title.supplier.search" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/supplier/supplier-search.jsp"/>
     </definition>
 </tiles-definitions>
