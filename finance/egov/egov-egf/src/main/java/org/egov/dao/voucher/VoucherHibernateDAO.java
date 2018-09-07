@@ -50,6 +50,11 @@
  */
 package org.egov.dao.voucher;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.commons.Accountdetailtype;
@@ -71,11 +76,6 @@ import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author Manoranjan
@@ -120,8 +120,8 @@ public class VoucherHibernateDAO extends PersistenceService<CVoucherHeader, Long
         if (null != voucherHeader.getVouchermis().getFundsource())
             sql.append(" and vh.fundsourceId=").append(voucherHeader.getVouchermis().getFundsource().getId());
 
-        if (null != voucherHeader.getVouchermis().getDepartmentid())
-            sql.append(" and vh.vouchermis.departmentid=").append(voucherHeader.getVouchermis().getDepartmentid());
+        if (null != voucherHeader.getVouchermis().getDepartmentcode())
+            sql.append(" and vh.vouchermis.departmentcode='").append(voucherHeader.getVouchermis().getDepartmentcode()+"'");
 
         if (voucherHeader.getVouchermis().getSchemeid() != null)
             sql.append(" and vh.vouchermis.schemeid=").append(voucherHeader.getVouchermis().getSchemeid().getId());

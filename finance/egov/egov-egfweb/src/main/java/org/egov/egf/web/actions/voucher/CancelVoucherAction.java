@@ -173,19 +173,17 @@ public class CancelVoucherAction extends BaseFormAction {
 	public String search() {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("...Searching for voucher of type " + voucherHeader.getType());
-		voucherHeader.getVouchermis().setDepartmentid(deptImpl.getId());
+		voucherHeader.getVouchermis().setDepartmentcode(deptImpl.getCode());
 		voucherSearchList = getVouchersForCancellation();
-		HttpServletRequest request = ServletActionContext.getRequest();
-		String access_token = (String) microserviceUtils.readFromRedis(request.getSession().getId(), "admin_token");
 		List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
-		Map<Long, String> depMap = new HashMap<>();
+		Map<String, String> depMap = new HashMap<>();
 		for (org.egov.infra.microservice.models.Department department : departments) {
-			depMap.put(department.getId(), department.getName());
+			depMap.put(department.getCode(), department.getName());
 		}
 		if (voucherSearchList != null && !voucherSearchList.isEmpty())
 			for (CVoucherHeader voucher : voucherSearchList) {
-				if (voucher.getVouchermis().getDepartmentid() != null)
-					voucher.setDepartmentName(depMap.get(voucher.getVouchermis().getDepartmentid()));
+				if (voucher.getVouchermis().getDepartmentcode() != null)
+					voucher.setDepartmentName(depMap.get(voucher.getVouchermis().getDepartmentcode()));
 			}
 		return SEARCH;
 	}
@@ -351,7 +349,7 @@ public class CancelVoucherAction extends BaseFormAction {
 			final boolean value = cancelBillAndVoucher.canCancelVoucher(voucherObj);
 
 			if (!value) {
-				addActionMessage(getText("cancel.voucher.failure", new String[] { voucherObj.getVoucherNumber() }));
+				addActionMessage(getText("Vouchers Cancelled Failure"));
 				continue;
 			}
 			voucherId = voucherObj.getId().toString();
@@ -532,7 +530,7 @@ public class CancelVoucherAction extends BaseFormAction {
 		if (checKDate > 0)
 			addFieldError("To Date", getText("Please Enter To Date Greater than From Date"));
 		checkMandatoryField("fundId", "fund", voucherHeader.getFundId(), "voucher.fund.mandatory");
-		checkMandatoryField("vouchermis.departmentid", "department", voucherHeader.getVouchermis().getDepartmentid(),
+		checkMandatoryField("vouchermis.departmentcode", "department", voucherHeader.getVouchermis().getDepartmentcode(),
 				"voucher.department.mandatory");
 		checkMandatoryField("vouchermis.schemeid", "scheme", voucherHeader.getVouchermis().getSchemeid(),
 				"voucher.scheme.mandatory");

@@ -433,7 +433,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
                                         propartyAppConfigResultList.get(key)));
             if (key.equals("EB Voucher Property-Department")){
             	Department dep =(Department) persistenceService.find("from Department where deptCode = ?",propartyAppConfigResultList.get(key));
-                voucherHeader.getVouchermis().setDepartmentid(dep.getId());
+                voucherHeader.getVouchermis().setDepartmentcode(dep.getCode());
             }
             if (key.equals("EB Voucher Property-BankBranch"))
                 bank_branch = propartyAppConfigResultList.get(key);
@@ -1082,11 +1082,11 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
             if (getFieldErrors().isEmpty()) {
                 if (reassignSurrenderChq && !paymentMode.equalsIgnoreCase(FinancialConstants.MODEOFPAYMENT_RTGS))
                     instHeaderList = chequeAssignmentHelper.reassignInstrument(chequeAssignmentList, paymentMode, bankaccount,
-                            parameters, voucherHeader.getVouchermis().getDepartmentid());
+                            parameters,Long.valueOf(voucherHeader.getVouchermis().getDepartmentcode()));
                 else
                     instHeaderList = chequeAssignmentHelper.createInstrument(chequeAssignmentList, paymentMode, bankaccount,
                             parameters,
-                            voucherHeader.getVouchermis().getDepartmentid());
+                            Long.valueOf(voucherHeader.getVouchermis().getDepartmentcode()));
                 selectedRows = paymentService.selectedRows;
                 if (paymentMode.equalsIgnoreCase(FinancialConstants.MODEOFPAYMENT_RTGS))
                     addActionMessage(getMessage("rtgs.transaction.success"));
@@ -1188,8 +1188,8 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
                     chequeAssignmentList = resultMap.get(row.getKey());
                     bankaccount = Integer.parseInt(row.getKey());
 
-                    paymentService.createInstrument(chequeAssignmentList, paymentMode, bankaccount, parameters, voucherHeader
-                            .getVouchermis().getDepartmentid());
+                    paymentService.createInstrument(chequeAssignmentList, paymentMode, bankaccount, parameters,voucherHeader
+                            .getVouchermis().getDepartmentcode());
                     instVoucherList.addAll(paymentService.getInstVoucherList());
                     List<InstrumentVoucher> tempInstVoucherList = new ArrayList<InstrumentVoucher>();
                     for (InstrumentVoucher iv : instVoucherList) {
@@ -1289,10 +1289,10 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
             if (getFieldErrors().isEmpty()) {
                 if (reassignSurrenderChq && !paymentMode.equalsIgnoreCase(FinancialConstants.MODEOFPAYMENT_RTGS))
                     instHeaderList = paymentService.reassignInstrument(chequeAssignmentList, paymentMode, bankaccount,
-                            parameters, voucherHeader.getVouchermis().getDepartmentid());
+                            parameters, Long.valueOf(voucherHeader.getVouchermis().getDepartmentcode()));
                 else
                     instHeaderList = paymentService.createInstrument(chequeAssignmentList, paymentMode, bankaccount, parameters,
-                            voucherHeader.getVouchermis().getDepartmentid());
+                            voucherHeader.getVouchermis().getDepartmentcode());
                 selectedRows = paymentService.selectedRows;
                 if (paymentMode.equalsIgnoreCase(FinancialConstants.MODEOFPAYMENT_RTGS))
                     addActionMessage(getMessage("rtgs.transaction.success"));
@@ -1340,10 +1340,9 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
             if (getFieldErrors().isEmpty()) {
                 if (reassignSurrenderChq && !paymentMode.equalsIgnoreCase(FinancialConstants.MODEOFPAYMENT_RTGS))
                     instHeaderList = paymentService.reassignInstrument(chequeAssignmentList, paymentMode, bankaccount,
-                            parameters, voucherHeader.getVouchermis().getDepartmentid());
+                            parameters, Long.valueOf(voucherHeader.getVouchermis().getDepartmentcode()));
                 else
-                    instHeaderList = paymentService.createInstrument(chequeAssignmentList, paymentMode, bankaccount, parameters,
-                            voucherHeader.getVouchermis().getDepartmentid());
+                    instHeaderList = paymentService.createInstrument(chequeAssignmentList, paymentMode, bankaccount, parameters,voucherHeader.getVouchermis().getDepartmentcode());
                 selectedRows = paymentService.selectedRows;
                 if (paymentMode.equalsIgnoreCase(FinancialConstants.MODEOFPAYMENT_RTGS))
                     addActionMessage(getMessage("rtgs.transaction.success"));
@@ -1430,7 +1429,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
         }
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed validateData.");
-        checkMandatory("vouchermis.departmentid", Constants.DEPARTMENT, voucherHeader.getVouchermis().getDepartmentid(),
+        checkMandatory("vouchermis.departmentid", Constants.DEPARTMENT, voucherHeader.getVouchermis().getDepartmentcode(),
                 "voucher.department.mandatory");
     }
 
@@ -1848,7 +1847,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
     private String getNewChequenumbers(final InstrumentHeader instrumentHeader, final Integer department) {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Starting getNewChequenumbers...");
-        return chequeService.nextChequeNumber(instrumentHeader.getBankAccountId().getId().toString(), 1, department);
+        return chequeService.nextChequeNumber(instrumentHeader.getBankAccountId().getId().toString(), 1, department.toString());
 
     }
 
@@ -1932,12 +1931,12 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
                         break;
                     } else if (reassignSurrenderChq) {
                         if (!instrumentService.isReassigningChequeNumberValid(assignment.getChequeNumber(),
-                                bankaccount.longValue(), voucherHeader.getVouchermis().getDepartmentid().intValue(),
+                                bankaccount.longValue(), Integer.valueOf(voucherHeader.getVouchermis().getDepartmentcode()),
                                 assignment.getSerialNo()))
                             addFieldError("chequeAssignmentList[" + i + "].chequeNumber",
                                     getMessage("payment.chequenumber.invalid"));
                     } else if (!instrumentService.isChequeNumberValid(assignment.getChequeNumber(), bankaccount.longValue(),
-                            voucherHeader.getVouchermis().getDepartmentid().intValue(), assignment.getSerialNo()))
+                            Integer.valueOf(voucherHeader.getVouchermis().getDepartmentcode()), assignment.getSerialNo()))
                         addFieldError("chequeAssignmentList[" + i + "].chequeNumber",
                                 getMessage("payment.chequenumber.invalid"));
                     if (null == assignment.getChequeDate()) {
@@ -1984,10 +1983,10 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
                     }
                 if (reassignSurrenderChq) {
                     if (!instrumentService.isReassigningChequeNumberValid(parameters.get("chequeNo")[0], bankaccount.longValue(),
-                            voucherHeader.getVouchermis().getDepartmentid().intValue(), parameters.get("serialNo")[0]))
+                            Integer.valueOf(voucherHeader.getVouchermis().getDepartmentcode()), parameters.get("serialNo")[0]))
                         addFieldError("chequeAssignmentList[" + i + "].chequeNumber", getMessage("payment.chequenumber.invalid"));
                 } else if (!instrumentService.isChequeNumberValid(parameters.get("chequeNo")[0], bankaccount.longValue(),
-                        voucherHeader.getVouchermis().getDepartmentid().intValue(), parameters.get("serialNo")[0]))
+                        Integer.valueOf(voucherHeader.getVouchermis().getDepartmentcode()), parameters.get("serialNo")[0]))
                     addFieldError("chequeN0", getMessage("payment.chequenumber.invalid"));
             }
             if (null == getChequeDt())
@@ -2020,7 +2019,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
             LOGGER.debug("Starting validate...");
         if (!rtgsContractorAssignment && !containsRTGS ) {
             checkMandatory("fundId", Constants.FUND, voucherHeader.getFundId(), "voucher.fund.mandatory");
-            checkMandatory("vouchermis.departmentid", Constants.DEPARTMENT, voucherHeader.getVouchermis().getDepartmentid(),
+            checkMandatory("vouchermis.departmentcode", Constants.DEPARTMENT, voucherHeader.getVouchermis().getDepartmentcode(),
                     "voucher.department.mandatory");
             checkMandatory("voucher.function", Constants.FUNCTION, voucherHeader.getVouchermis().getFunction(),
                     "voucher.function.mandatory");

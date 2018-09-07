@@ -183,8 +183,9 @@ public class AccountChequeAction extends BaseFormAction {
             chequeDetail = new ChequeDetail();
             chequeDetail.setFromChqNo(chequeDeptMapping.getAccountCheque().getFromChequeNumber());
             chequeDetail.setToChqNo(chequeDeptMapping.getAccountCheque().getToChequeNumber());
-            chequeDetail.setDeptName(chequeDeptMapping.getAllotedTo().getName());
-            chequeDetail.setDeptId(chequeDeptMapping.getAllotedTo().getId().intValue());
+            //Need to set department name
+            chequeDetail.setDeptName(chequeDeptMapping.getAllotedTo());
+           // chequeDetail.setDeptId(chequeDeptMapping.getAllotedTo().getId().intValue());
             CFinancialYear fy = (CFinancialYear) financialYearDAO.findById(
                     Long.valueOf(chequeDeptMapping.getAccountCheque().getSerialNo()), false);
             chequeDetail.setSerialNoH(fy.getFinYearRange());

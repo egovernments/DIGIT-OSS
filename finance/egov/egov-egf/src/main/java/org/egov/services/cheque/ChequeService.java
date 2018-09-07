@@ -66,127 +66,132 @@ import java.util.List;
  *
  */
 public class ChequeService extends PersistenceService<AccountCheques, Long> {
-    /**
-     *
-     */
-    private static final String REQUIRED_NUMBER_OF_CHEQUES_ARE_NOT_AVAILABLE = "Required number of cheques are not available";
-    @SuppressWarnings("unchecked")
-    private PersistenceService persistenceService;
+	/**
+	 *
+	 */
+	private static final String REQUIRED_NUMBER_OF_CHEQUES_ARE_NOT_AVAILABLE = "Required number of cheques are not available";
+	@SuppressWarnings("unchecked")
+	private PersistenceService persistenceService;
 
-    /**
-     * @param persistenceService the persistenceService to set
-     */
-    public void setPersistenceService(final PersistenceService persistenceService) {
-        this.persistenceService = persistenceService;
-    }
+	/**
+	 * @param persistenceService
+	 *            the persistenceService to set
+	 */
+	public void setPersistenceService(final PersistenceService persistenceService) {
+		this.persistenceService = persistenceService;
+	}
 
-    public ChequeService() {
-        super(AccountCheques.class);
-    }
+	public ChequeService() {
+		super(AccountCheques.class);
+	}
 
-    public ChequeService(final Class<AccountCheques> type) {
-       super(type);
-    }
-    /**
-     *
-     * @param accId
-     * @param noChqs
-     * @param allotId
-     * @return String containing cheque numbers of requested count seperated by comma
-     *
-     */
-    public String nextChequeNumber(final String accId, final int noChqs, final int allotId)
-    {
-        String nextChequeNumber = "";
-        int count = 1;
-        int i = 0;
-        final Bankaccount bankaccount = getBankaccount(accId);
-        final Department department = getDepartment(allotId);
+	public ChequeService(final Class<AccountCheques> type) {
+		super(type);
+	}
 
-        final String chqQuery = "select ac from AccountCheques ac, ChequeDeptMapping cd where ac.id=cd.accountCheque.id and ac.bankAccountId=? and cd.allotedTo=?  and (ac.isExhausted is null or ac.isExhausted=0)  order by ac.id";
-        final List<AccountCheques> chqList = findAllBy(chqQuery, bankaccount, department);
-        if (chqList == null || chqList.size() == 0)
-            throw new ValidationException(Arrays.asList(new ValidationError("No cheques available", "No cheques available")));
-        AccountCheques chq = chqList.get(i);
-        while (count <= noChqs)
-            if (i < chqList.size())
-            {
+	/**
+	 *
+	 * @param accId
+	 * @param noChqs
+	 * @param allotId
+	 * @return String containing cheque numbers of requested count seperated by
+	 *         comma
+	 *
+	 */
+	public String nextChequeNumber(final String accId, final int noChqs, final String allotId) {
+		String nextChequeNumber = "";
+		int count = 1;
+		int i = 0;
+		final Bankaccount bankaccount = getBankaccount(accId);
+		// final Department department = getDepartment(allotId);
 
-                if (chq.getNextChqNo() == null)                       // this book not yet used
-                {
-                    // chq.setNextChqNo(chq.getFromChequeNumber());
-                    nextChequeNumber += addComma(nextChequeNumber) + chq.getFromChequeNumber();
-                    chq.setNextChqNo(increment(chq.getFromChequeNumber()));
-                }
-                else if (chq.getNextChqNo().equals(chq.getToChequeNumber())) // this is last leaf in the cheque
-                {
-                    nextChequeNumber += addComma(nextChequeNumber) + chq.getToChequeNumber();
-                    chq.setIsExhausted(true);
-                    i++;
-                    if (count == noChqs)
-                    {
-                        count++;
-                        continue; // means with last leaf we got enough cheques so no need fetch next
+		final String chqQuery = "select ac from AccountCheques ac, ChequeDeptMapping cd where ac.id=cd.accountCheque.id and ac.bankAccountId=? and cd.allotedTo=?  and (ac.isExhausted is null or ac.isExhausted=0)  order by ac.id";
+		final List<AccountCheques> chqList = findAllBy(chqQuery, bankaccount, allotId);
+		if (chqList == null || chqList.size() == 0)
+			throw new ValidationException(
+					Arrays.asList(new ValidationError("No cheques available", "No cheques available")));
+		AccountCheques chq = chqList.get(i);
+		while (count <= noChqs)
+			if (i < chqList.size()) {
 
-                    }
-                    if (i < chqList.size())
-                        chq = chqList.get(i);
-                    else
-                        throw new ApplicationRuntimeException(REQUIRED_NUMBER_OF_CHEQUES_ARE_NOT_AVAILABLE);
+				if (chq.getNextChqNo() == null) // this book not yet used
+				{
+					// chq.setNextChqNo(chq.getFromChequeNumber());
+					nextChequeNumber += addComma(nextChequeNumber) + chq.getFromChequeNumber();
+					chq.setNextChqNo(increment(chq.getFromChequeNumber()));
+				} else if (chq.getNextChqNo().equals(chq.getToChequeNumber())) // this
+																				// is
+																				// last
+																				// leaf
+																				// in
+																				// the
+																				// cheque
+				{
+					nextChequeNumber += addComma(nextChequeNumber) + chq.getToChequeNumber();
+					chq.setIsExhausted(true);
+					i++;
+					if (count == noChqs) {
+						count++;
+						continue; // means with last leaf we got enough cheques
+									// so no need fetch next
 
-                }
-                else
-                {
-                    nextChequeNumber += addComma(nextChequeNumber) + chq.getNextChqNo();
-                    chq.setNextChqNo(increment(chq.getNextChqNo()));
-                }
-                count++;
-            }
-            else if (i < noChqs)
-                throw new ApplicationRuntimeException(REQUIRED_NUMBER_OF_CHEQUES_ARE_NOT_AVAILABLE);
+					}
+					if (i < chqList.size())
+						chq = chqList.get(i);
+					else
+						throw new ApplicationRuntimeException(REQUIRED_NUMBER_OF_CHEQUES_ARE_NOT_AVAILABLE);
 
-        return nextChequeNumber;
+				} else {
+					nextChequeNumber += addComma(nextChequeNumber) + chq.getNextChqNo();
+					chq.setNextChqNo(increment(chq.getNextChqNo()));
+				}
+				count++;
+			} else if (i < noChqs)
+				throw new ApplicationRuntimeException(REQUIRED_NUMBER_OF_CHEQUES_ARE_NOT_AVAILABLE);
 
-    }
+		return nextChequeNumber;
 
-    /**
-     *
-     * @param nextChequeNumber
-     * @return "," OR "" String
-     */
-    private String addComma(final String nextChequeNumber) {
-        if (nextChequeNumber.equals(""))
-            return "";
-        else
-            return ",";
-    }
+	}
 
-    private String increment(final String fromChequeNumber) {
+	/**
+	 *
+	 * @param nextChequeNumber
+	 * @return "," OR "" String
+	 */
+	private String addComma(final String nextChequeNumber) {
+		if (nextChequeNumber.equals(""))
+			return "";
+		else
+			return ",";
+	}
 
-        final StringBuffer temp = new StringBuffer(fromChequeNumber);
-        StringBuffer numBuff = new StringBuffer();
-        Long num = Long.valueOf(fromChequeNumber);
-        num += 1;
-        numBuff = new StringBuffer(num.toString());
-        while (numBuff.length() < temp.length())
-            numBuff.insert(0, "0");
-        return numBuff.toString();
-    }
+	private String increment(final String fromChequeNumber) {
 
-    private Bankaccount getBankaccount(final String accId) {
-        final Bankaccount account = (Bankaccount) persistenceService.find("from Bankaccount where id=? ", Integer.valueOf(accId));
-        if (account == null)
-            throw new IllegalArgumentException("Bankaccount doesnot exist in the system for id:" + accId);
-        else
-            return account;
-    }
+		final StringBuffer temp = new StringBuffer(fromChequeNumber);
+		StringBuffer numBuff = new StringBuffer();
+		Long num = Long.valueOf(fromChequeNumber);
+		num += 1;
+		numBuff = new StringBuffer(num.toString());
+		while (numBuff.length() < temp.length())
+			numBuff.insert(0, "0");
+		return numBuff.toString();
+	}
 
-    private Department getDepartment(final int allotId) {
-        final Department dept = (Department) persistenceService.find("from Department where id=? ", allotId);
-        if (dept == null)
-            throw new IllegalArgumentException("Department doesnot exist in the system for id:" + allotId);
-        else
-            return dept;
-    }
+	private Bankaccount getBankaccount(final String accId) {
+		final Bankaccount account = (Bankaccount) persistenceService.find("from Bankaccount where id=? ",
+				Integer.valueOf(accId));
+		if (account == null)
+			throw new IllegalArgumentException("Bankaccount doesnot exist in the system for id:" + accId);
+		else
+			return account;
+	}
+
+	private Department getDepartment(final int allotId) {
+		final Department dept = (Department) persistenceService.find("from Department where id=? ", allotId);
+		if (dept == null)
+			throw new IllegalArgumentException("Department doesnot exist in the system for id:" + allotId);
+		else
+			return dept;
+	}
 
 }

@@ -276,11 +276,8 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 		headerdetails.put(VoucherConstant.VOUCHERDATE, voucherHeader.getVoucherDate());
 		headerdetails.put(VoucherConstant.DESCRIPTION, voucherHeader.getDescription());
 
-		if (voucherHeader.getVouchermis().getDepartmentid() != null) {
-			List<org.egov.infra.microservice.models.Department> depList = microserviceUtils
-					.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid());
-			headerdetails.put(VoucherConstant.DEPARTMENTCODE, depList.get(0).getCode());
-		}
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null) 
+			headerdetails.put(VoucherConstant.DEPARTMENTCODE, voucherHeader.getVouchermis().getDepartmentcode());
 		if (voucherHeader.getFundId() != null)
 			headerdetails.put(VoucherConstant.FUNDCODE, voucherHeader.getFundId().getCode());
 		if (voucherHeader.getVouchermis().getSchemeid() != null)
@@ -308,7 +305,7 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 		checkMandatoryField("voucherdate", voucherHeader.getVoucherDate(), "voucher.field.voucherdate");
 		checkMandatoryField("fund", voucherHeader.getFundId(), "voucher.fund.mandatory");
 		checkMandatoryField("function", voucherHeader.getVouchermis().getFunction(), "voucher.function.mandatory");
-		checkMandatoryField("department", voucherHeader.getVouchermis().getDepartmentid(),
+		checkMandatoryField("department", voucherHeader.getVouchermis().getDepartmentcode(),
 				"voucher.department.mandatory");
 		checkMandatoryField("scheme", voucherHeader.getVouchermis().getSchemeid(), "voucher.scheme.mandatory");
 		checkMandatoryField("subscheme", voucherHeader.getVouchermis().getSubschemeid(), "voucher.subscheme.mandatory");

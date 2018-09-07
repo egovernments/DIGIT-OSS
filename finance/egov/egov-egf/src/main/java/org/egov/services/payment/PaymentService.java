@@ -312,11 +312,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 			if (parameters.get(VoucherConstant.VOUCHERNUMBER) != null)
 				headerdetails.put(VoucherConstant.VOUCHERNUMBER, parameters.get(VoucherConstant.VOUCHERNUMBER)[0]);
 
-			if (billregister.getEgBillregistermis().getDepartmentid() != null) {
-				List<org.egov.infra.microservice.models.Department> list = microserviceUtils
-						.getDepartmentsById(billregister.getEgBillregistermis().getDepartmentid());
-				String departmentCode = list != null && !list.isEmpty() ? list.get(0).getCode() : "";
-				headerdetails.put(VoucherConstant.DEPARTMENTCODE, departmentCode);
+			if (billregister.getEgBillregistermis().getDepartmentcode() != null) {
+				headerdetails.put(VoucherConstant.DEPARTMENTCODE, billregister.getEgBillregistermis().getDepartmentcode());
 			}
 			if (billregister.getEgBillregistermis().getFundsource() != null)
 				headerdetails.put(VoucherConstant.FUNDSOURCECODE,
@@ -1576,8 +1573,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 			sql.append(" and vh.fundId=" + voucherHeader.getFundId().getId());
 		if (voucherHeader.getVouchermis().getFundsource() != null)
 			sql.append(" and vmis.fundsourceId=" + voucherHeader.getVouchermis().getFundsource().getId());
-		if (voucherHeader.getVouchermis().getDepartmentid() != null)
-			sql.append(" and vmis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid());
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+			sql.append(" and vmis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode()+"'");
 		if (voucherHeader.getVouchermis().getSchemeid() != null)
 			sql.append(" and vmis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId());
 		if (voucherHeader.getVouchermis().getSubschemeid() != null)
@@ -1719,8 +1716,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 			sql.append(" and vh.fundId=" + voucherHeader.getFundId().getId());
 		if (voucherHeader.getVouchermis().getFundsource() != null)
 			sql.append(" and vmis.fundsourceId=" + voucherHeader.getVouchermis().getFundsource().getId());
-		if (voucherHeader.getVouchermis().getDepartmentid() != null)
-			sql.append(" and vmis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid());
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+			sql.append(" and vmis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode()+"'");
 		if (voucherHeader.getVouchermis().getSchemeid() != null)
 			sql.append(" and vmis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId());
 		if (voucherHeader.getVouchermis().getSubschemeid() != null)
@@ -1862,8 +1859,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 			sql.append(" and vh.fundId=" + voucherHeader.getFundId().getId());
 		if (voucherHeader.getVouchermis().getFundsource() != null)
 			sql.append(" and vmis.fundsourceId=" + voucherHeader.getVouchermis().getFundsource().getId());
-		if (voucherHeader.getVouchermis().getDepartmentid() != null)
-			sql.append(" and vmis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid());
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+			sql.append(" and vmis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode()+"'");
 		if (voucherHeader.getVouchermis().getSchemeid() != null)
 			sql.append(" and vmis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId());
 		if (voucherHeader.getVouchermis().getSubschemeid() != null)
@@ -1990,8 +1987,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 				sql.append(" and vh.fundId=" + voucherHeader.getFundId().getId());
 			if (voucherHeader.getVouchermis().getFundsource() != null)
 				sql.append(" and vmis.fundsourceId=" + voucherHeader.getVouchermis().getFundsource().getId());
-			if (voucherHeader.getVouchermis().getDepartmentid() != null)
-				sql.append(" and vmis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid());
+			if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+				sql.append(" and vmis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode()+"'");
 			if (voucherHeader.getVouchermis().getSchemeid() != null)
 				sql.append(" and vmis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId());
 			if (voucherHeader.getVouchermis().getSubschemeid() != null)
@@ -2293,7 +2290,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 	@Transactional
 	public List<InstrumentHeader> createInstrument(final List<ChequeAssignment> chequeAssignmentList,
 			final String paymentMode, final Integer bankaccount, final Map<String, String[]> parameters,
-			final Long dept) throws ApplicationRuntimeException, Exception {
+			final String dept) throws ApplicationRuntimeException, Exception {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Starting createInstrument...");
 		List<InstrumentHeader> instHeaderList = new ArrayList<InstrumentHeader>();
@@ -2338,8 +2335,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 											// auto
 			{
 				// get chequeNumber
-				final String chequeNo = chequeService.nextChequeNumber(account.getId().toString(), payeeMap.size(),
-						dept.intValue());
+				final String chequeNo = chequeService.nextChequeNumber(account.getId().toString(), payeeMap.size(),dept);
 				final String[] chequeNoArray = StringUtils.split(chequeNo, ",");
 
 				// create instrument header
@@ -2410,7 +2406,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 			else if (isChequeNoGenerationAuto()) // if cheque number generation
 													// is auto
 			{
-				chequeNo = chequeService.nextChequeNumber(account.getId().toString(), 1, dept.intValue());
+				chequeNo = chequeService.nextChequeNumber(account.getId().toString(), 1, dept);
 				instrumentHeaderList.add(prepareInstrumentHeader(account, chequeNo,
 						FinancialConstants.MODEOFPAYMENT_CHEQUE.toLowerCase(), parameters.get("inFavourOf")[0],
 						totalPaidAmt, currentDate, "", null));
@@ -2726,9 +2722,9 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 					continue;
 				if (billregister.getEgBillregistermis().getFund() != null)
 					paymentBean.setFundName(billregister.getEgBillregistermis().getFund().getName());
-				if (billregister.getEgBillregistermis().getDepartmentid() != null) {
+				if (billregister.getEgBillregistermis().getDepartmentcode() != null) {
 					List<org.egov.infra.microservice.models.Department> list = microserviceUtils
-							.getDepartmentsById(billregister.getEgBillregistermis().getDepartmentid());
+							.getDepartmentByCode(billregister.getEgBillregistermis().getDepartmentcode());
 					String departmentName = list != null && !list.isEmpty() ? list.get(0).getName() : "";
 					paymentBean.setDeptName(departmentName);
 				}
@@ -2853,8 +2849,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 			sql.append(" and vh.fundId=" + voucherHeader.getFundId().getId());
 		if (voucherHeader.getVouchermis().getFundsource() != null)
 			sql.append(" and vmis.fundsourceId=" + voucherHeader.getVouchermis().getFundsource().getId());
-		if (voucherHeader.getVouchermis().getDepartmentid() != null)
-			sql.append(" and vmis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid());
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+			sql.append(" and vmis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode()+"'");
 		if (voucherHeader.getVouchermis().getSchemeid() != null)
 			sql.append(" and vmis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId());
 		if (voucherHeader.getVouchermis().getSubschemeid() != null)

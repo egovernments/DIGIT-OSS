@@ -65,56 +65,55 @@ import java.util.Map;
 @Transactional(readOnly = true)
 @Service
 public class ChequeAssignmentHelper {
-    final private static Logger LOGGER = Logger.getLogger(ChequeAssignmentHelper.class);
-    @Autowired
-    @Qualifier("paymentService")
-    private PaymentService paymentService;
+	final private static Logger LOGGER = Logger.getLogger(ChequeAssignmentHelper.class);
+	@Autowired
+	@Qualifier("paymentService")
+	private PaymentService paymentService;
 
-    @Transactional
-    public List<InstrumentHeader> reassignInstrument(final List<ChequeAssignment> chequeAssignmentList, final String paymentMode,
-            final Integer bankaccount, final Map<String, String[]> parameters, final Long dept) throws Exception {
-        List<InstrumentHeader> instHeaderList = new ArrayList<InstrumentHeader>();
-        try {
-            instHeaderList =  paymentService.reassignInstrument(chequeAssignmentList, paymentMode, bankaccount,
-                    parameters, dept);
-           
-        }
-        catch (final ValidationException e) {
+	@Transactional
+	public List<InstrumentHeader> reassignInstrument(final List<ChequeAssignment> chequeAssignmentList,
+			final String paymentMode, final Integer bankaccount, final Map<String, String[]> parameters,
+			final Long dept) throws Exception {
+		List<InstrumentHeader> instHeaderList = new ArrayList<InstrumentHeader>();
+		try {
+			instHeaderList = paymentService.reassignInstrument(chequeAssignmentList, paymentMode, bankaccount,
+					parameters, dept);
 
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
-            throw new ValidationException(errors);
-        }catch (final Exception e) {
+		} catch (final ValidationException e) {
 
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
-        }
-        return instHeaderList;
-    }
-    
-    
-    @Transactional
-    public List<InstrumentHeader> createInstrument(final List<ChequeAssignment> chequeAssignmentList, final String paymentMode,
-            final Integer bankaccount, final Map<String, String[]> parameters, final Long dept) throws Exception {
-        List<InstrumentHeader> instHeaderList = new ArrayList<InstrumentHeader>();
-        try {
-            instHeaderList =  paymentService.createInstrument(chequeAssignmentList, paymentMode, bankaccount,
-                    parameters, dept);
-           
-        }
-        catch (final ValidationException e) {
+			final List<ValidationError> errors = new ArrayList<ValidationError>();
+			errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
+			throw new ValidationException(errors);
+		} catch (final Exception e) {
 
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
-            throw new ValidationException(errors);
-        }catch (final Exception e) {
+			final List<ValidationError> errors = new ArrayList<ValidationError>();
+			errors.add(new ValidationError("exp", e.getMessage()));
+			throw new ValidationException(errors);
+		}
+		return instHeaderList;
+	}
 
-            final List<ValidationError> errors = new ArrayList<ValidationError>();
-            errors.add(new ValidationError("exp", e.getMessage()));
-            throw new ValidationException(errors);
-        }
-        return instHeaderList;
-    }
-   
+	@Transactional
+	public List<InstrumentHeader> createInstrument(final List<ChequeAssignment> chequeAssignmentList,
+			final String paymentMode, final Integer bankaccount, final Map<String, String[]> parameters,
+			final Long dept) throws Exception {
+		List<InstrumentHeader> instHeaderList = new ArrayList<InstrumentHeader>();
+		try {
+			instHeaderList = paymentService.createInstrument(chequeAssignmentList, paymentMode, bankaccount, parameters,
+					dept.toString());
+
+		} catch (final ValidationException e) {
+
+			final List<ValidationError> errors = new ArrayList<ValidationError>();
+			errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
+			throw new ValidationException(errors);
+		} catch (final Exception e) {
+
+			final List<ValidationError> errors = new ArrayList<ValidationError>();
+			errors.add(new ValidationError("exp", e.getMessage()));
+			throw new ValidationException(errors);
+		}
+		return instHeaderList;
+	}
+
 }

@@ -168,8 +168,7 @@ public class ContraBTBActionHelper {
 
 					try {
 						iMap.put("Instrument number",
-								chequeService.nextChequeNumber(cVoucher.getToBankAccountId().getId().toString(), 1,
-										voucherHeader.getVouchermis().getDepartmentid().intValue()));
+								chequeService.nextChequeNumber(cVoucher.getToBankAccountId().getId().toString(), 1,voucherHeader.getVouchermis().getDepartmentcode()));
 					} catch (final ApplicationRuntimeException e) {
 						throw new ValidationException(Arrays.asList(
 								new ValidationError("Exception while getting Cheque Number  ", e.getMessage())));
@@ -235,8 +234,7 @@ public class ContraBTBActionHelper {
 
 				try {
 					iMap.put("Instrument number",
-							chequeService.nextChequeNumber(cVoucher.getFromBankAccountId().getId().toString(), 1,
-									voucherHeader.getVouchermis().getDepartmentid().intValue()));
+							chequeService.nextChequeNumber(cVoucher.getFromBankAccountId().getId().toString(), 1,voucherHeader.getVouchermis().getDepartmentcode()));
 				} catch (final ApplicationRuntimeException e) {
 					LOGGER.error(e.getMessage(), e);
 					throw new ValidationException(Arrays
@@ -384,8 +382,8 @@ public class ContraBTBActionHelper {
 		headerdetails.put(VoucherConstant.VOUCHERDATE, voucherHeader.getVoucherDate());
 		headerdetails.put(VoucherConstant.DESCRIPTION, voucherHeader.getDescription());
 
-		if (voucherHeader.getVouchermis().getDepartmentid() != null)
-			headerdetails.put(VoucherConstant.DEPARTMENTCODE, voucherHeader.getVouchermis().getDepartmentid());
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+			headerdetails.put(VoucherConstant.DEPARTMENTCODE, voucherHeader.getVouchermis().getDepartmentcode());
 		if (voucherHeader.getFundId() != null)
 			headerdetails.put(VoucherConstant.FUNDCODE, voucherHeader.getFundId().getCode());
 		if (voucherHeader.getVouchermis().getSchemeid() != null)

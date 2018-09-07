@@ -47,6 +47,11 @@
  */
 package org.egov.egf.commons;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.commons.CVoucherHeader;
@@ -61,11 +66,6 @@ import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Transactional(readOnly = true)
 public class VoucherSearchUtil {
@@ -211,8 +211,8 @@ public class VoucherSearchUtil {
 			sql = sql + " and vh.fundId=" + voucherHeader.getFundId().getId();
 		if (voucherHeader.getVouchermis().getFundsource() != null)
 			sql = sql + " and vh.fundsourceId=" + voucherHeader.getVouchermis().getFundsource().getId();
-		if (voucherHeader.getVouchermis().getDepartmentid() != null)
-			sql = sql + " and vh.vouchermis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid();
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+			sql = sql + " and vh.vouchermis.departmentid=" + voucherHeader.getVouchermis().getDepartmentcode();
 		if (voucherHeader.getVouchermis().getSchemeid() != null)
 			sql = sql + " and vh.vouchermis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId();
 		if (voucherHeader.getVouchermis().getSubschemeid() != null)
@@ -259,8 +259,8 @@ public class VoucherSearchUtil {
 			sql = sql + " and vh.fundId=" + voucherHeader.getFundId().getId();
 		if (voucherHeader.getVouchermis().getFundsource() != null)
 			sql = sql + " and vh.fundsourceId=" + voucherHeader.getVouchermis().getFundsource().getId();
-		if (voucherHeader.getVouchermis().getDepartmentid() != null && voucherHeader.getVouchermis().getDepartmentid()!=-1)
-			sql = sql + " and vh.vouchermis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid();
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null && !voucherHeader.getVouchermis().getDepartmentcode().equals("-1"))
+			sql = sql + " and vh.vouchermis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode()+"'";
 		if (voucherHeader.getVouchermis().getSchemeid() != null)
 			sql = sql + " and vh.vouchermis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId();
 		if (voucherHeader.getVouchermis().getSubschemeid() != null)

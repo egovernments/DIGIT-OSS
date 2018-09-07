@@ -365,8 +365,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 			if (contraBean.getModeOfCollection().equals(MDC_CHEQUE))
 				if (!egovCommon.isShowChequeNumber())
 					try {
-						contraBean.setChequeNumber(chequeService.nextChequeNumber(contraBean.getFromBankAccountId(), 1,
-								voucherHeader.getVouchermis().getDepartmentid().intValue()));
+						contraBean.setChequeNumber(chequeService.nextChequeNumber(contraBean.getFromBankAccountId(), 1,voucherHeader.getVouchermis().getDepartmentcode()));
 					} catch (final ApplicationRuntimeException e) {
 						throw new ValidationException(Arrays.asList(
 								new ValidationError("Exception while getting Cheque Number  ", e.getMessage())));
@@ -728,8 +727,8 @@ public class ContraBTBAction extends BaseVoucherAction {
 			 * addFieldError("contraBean.contraBean.toDepartment()",
 			 * getText("toDepartment.required")); }
 			 */
-			if (voucherHeader.getVouchermis().getDepartmentid() == null) {
-				addFieldError("voucherHeader.vouchermis.departmentid", getText("fromDepartment.required"));
+			if (voucherHeader.getVouchermis().getDepartmentcode() == null) {
+				addFieldError("voucherHeader.vouchermis.departmentcode", getText("fromDepartment.required"));
 			}
 			if (voucherHeader.getVouchermis().getFunction() == null
 					|| voucherHeader.getVouchermis().getFunction().getId() == null) {
@@ -1001,7 +1000,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 					if (!egovCommon.isShowChequeNumber())
 						try {
 							contraBean.setChequeNumber(chequeService.nextChequeNumber(contraBean.getFromBankAccountId(),
-									1, voucherHeader.getVouchermis().getDepartmentid().intValue()));
+									1, voucherHeader.getVouchermis().getDepartmentcode()));
 						} catch (final ApplicationRuntimeException e) {
 							LOGGER.error(e.getMessage(), e);
 							throw new ValidationException(Arrays.asList(
@@ -1107,8 +1106,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 
 				try {
 					iMap.put("Instrument number",
-							chequeService.nextChequeNumber(cVoucher.getFromBankAccountId().getId().toString(), 1,
-									voucherHeader.getVouchermis().getDepartmentid().intValue()));
+							chequeService.nextChequeNumber(cVoucher.getFromBankAccountId().getId().toString(), 1,voucherHeader.getVouchermis().getDepartmentcode()));
 				} catch (final ApplicationRuntimeException e) {
 					LOGGER.error(e.getMessage(), e);
 					throw new ValidationException(Arrays
@@ -1167,8 +1165,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 
 				try {
 					iMap.put("Instrument number",
-							chequeService.nextChequeNumber(cVoucher.getToBankAccountId().getId().toString(), 1,
-									voucherHeader.getVouchermis().getDepartmentid().intValue()));
+							chequeService.nextChequeNumber(cVoucher.getToBankAccountId().getId().toString(), 1,voucherHeader.getVouchermis().getDepartmentcode()));
 				} catch (final ApplicationRuntimeException e) {
 					throw new ValidationException(Arrays
 							.asList(new ValidationError("Exception while getting Cheque Number  ", e.getMessage())));
@@ -1521,7 +1518,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 
 	private void validateChqNumber(final String chqNo, final Long bankaccId, final CVoucherHeader voucherHeader) {
 		if (!instrumentService.isChequeNumberValid(chqNo, bankaccId,
-				voucherHeader.getVouchermis().getDepartmentid().intValue(), null))
+				Integer.valueOf(voucherHeader.getVouchermis().getDepartmentcode()), null))
 			throw new ValidationException(
 					Arrays.asList(new ValidationError("Invalid cheque number", "Invalid cheque number")));
 

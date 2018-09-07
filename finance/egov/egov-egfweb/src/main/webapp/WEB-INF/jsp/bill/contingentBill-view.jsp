@@ -696,7 +696,7 @@ if(null != document.getElementById("topTableHeader")){
 }
 //disableAll();
 <s:if test='%{! nextLevel.equalsIgnoreCase("END")}'>
-	document.getElementById("departmentid").value= <s:property value="%{voucherHeader.vouchermis.departmentid.id}" /> 
+	document.getElementById("departmentid").value= <s:property value="%{voucherHeader.vouchermis.departmentcode}" /> 
 	<s:if test="%{isFieldMandatory('department')}"> 
 		//This has been changed from true pls check mingle story 2104, 2103 etc.
 		document.getElementById("departmentid").disabled=false;

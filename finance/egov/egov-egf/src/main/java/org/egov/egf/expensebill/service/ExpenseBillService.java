@@ -47,6 +47,19 @@
  */
 package org.egov.egf.expensebill.service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.script.ScriptContext;
+
 import org.apache.commons.lang.StringUtils;
 import org.egov.commons.CChartOfAccountDetail;
 import org.egov.commons.CChartOfAccounts;
@@ -94,18 +107,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.script.ScriptContext;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author venki
@@ -627,7 +628,7 @@ public class ExpenseBillService {
     private void getRequiredDataForBudget(EgBillregister egBillregister, Map<String, Object> budgetDataMap) {
 
         budgetDataMap.put("financialyearid", egBillregister.getEgBillregistermis().getFinancialyear().getId());
-        budgetDataMap.put(Constants.DEPTID, egBillregister.getEgBillregistermis().getDepartmentid());
+        budgetDataMap.put(Constants.DEPTID, egBillregister.getEgBillregistermis().getDepartmentcode());
         if (egBillregister.getEgBillregistermis().getFunctionaryid() != null)
             budgetDataMap.put(Constants.FUNCTIONARYID, egBillregister.getEgBillregistermis().getFunctionaryid().getId());
         if (egBillregister.getEgBillregistermis().getScheme() != null)

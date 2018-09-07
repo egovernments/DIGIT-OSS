@@ -60,18 +60,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.apache.struts2.ServletActionContext;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.RoleService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
-import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
 import org.egov.infra.microservice.contract.ActionRequest;
 import org.egov.infra.microservice.contract.ActionResponse;
 import org.egov.infra.microservice.contract.CreateUserRequest;
@@ -79,7 +73,6 @@ import org.egov.infra.microservice.contract.Position;
 import org.egov.infra.microservice.contract.PositionRequest;
 import org.egov.infra.microservice.contract.PositionResponse;
 import org.egov.infra.microservice.contract.RequestInfoWrapper;
-import org.egov.infra.microservice.contract.ResponseInfo;
 import org.egov.infra.microservice.contract.Task;
 import org.egov.infra.microservice.contract.TaskResponse;
 import org.egov.infra.microservice.contract.UserDetailResponse;
@@ -101,20 +94,15 @@ import org.egov.infra.web.support.ui.Inbox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
-import redis.clients.jedis.JedisShardInfo;
 
 @Service
 public class MicroserviceUtils {
@@ -250,8 +238,7 @@ public class MicroserviceUtils {
 	}
 	
 	public List<Department> getDepartmentsById(Long departmentId) {
-//		 HttpServletRequest request =  ServletActionContext.getRequest();
-//	        String access_token = (String) readFromRedis(request.getSession().getId(), "admin_token");
+
 		final RestTemplate restTemplate = createRestTemplate();
 		final String dept_url = deptServiceUrl+"?tenantId="+getTenentId()+"&id="+departmentId;
 
@@ -267,16 +254,14 @@ public class MicroserviceUtils {
 		return depResponse.getDepartment();
 	}
 	
-	public List<Department> getDepartmentByCode(String departmentCode , String tenantId) {
-		 HttpServletRequest request =  ServletActionContext.getRequest();
-	        String access_token = (String) readFromRedis(request.getSession().getId(), "admin_token");
+	public List<Department> getDepartmentByCode(String departmentCode) {
 		final RestTemplate restTemplate = new RestTemplate();
-		final String dept_url = deptServiceUrl+"?tenantId="+tenantId+"&code="+departmentCode;
+		final String dept_url = deptServiceUrl+"?tenantId="+getTenentId()+"&code="+departmentCode;
 
 		RequestInfo requestInfo = new RequestInfo();
 		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 		
-		requestInfo.setAuthToken(access_token);
+		requestInfo.setAuthToken(getAdminToken());
 		requestInfo.setTs(new Date());
 		reqWrapper.setRequestInfo(requestInfo);
 

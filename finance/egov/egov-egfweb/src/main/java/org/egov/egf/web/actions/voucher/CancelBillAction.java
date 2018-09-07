@@ -166,7 +166,6 @@ public class CancelBillAction extends BaseFormAction {
         super.prepare();
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Inside Prepare method");
-        HttpServletRequest request =  ServletActionContext.getRequest();
         List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
         dropdownData.put("DepartmentList",departments);
         addDropdownData(
@@ -203,7 +202,7 @@ public class CancelBillAction extends BaseFormAction {
     public StringBuilder filterQuery() {
         final String userCond = " where ";
         final StringBuilder query = new StringBuilder(
-                " select billmis.egBillregister.id, billmis.egBillregister.billnumber, billmis.egBillregister.billdate, billmis.egBillregister.billamount, billmis.departmentid  from EgBillregistermis billmis ");
+                " select billmis.egBillregister.id, billmis.egBillregister.billnumber, billmis.egBillregister.billdate, billmis.egBillregister.billamount, billmis.departmentcode from EgBillregistermis billmis ");
         // if the logged in user is same as creator or is superruser
         query.append(userCond);
 
@@ -214,9 +213,8 @@ public class CancelBillAction extends BaseFormAction {
         if (billNumber != null && billNumber.length() != 0)
             query.append(" and billmis.egBillregister.billnumber ='"
                     + billNumber + "'");
-        if (deptImpl != null && deptImpl.getId() != null
-                && deptImpl.getId() != -1 && deptImpl.getId() != 0)
-            query.append(" and billmis.departmentid ='" + deptImpl.getId()
+        if (deptImpl != null && deptImpl.getCode() != null  && !deptImpl.getCode().equals("-1"))
+            query.append(" and billmis.departmentcode ='" + deptImpl.getCode()
                     + "'");
         if (fromDate != null && fromDate.length() != 0) {
             Date fDate;
@@ -325,11 +323,10 @@ public class CancelBillAction extends BaseFormAction {
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("Size of tempBillList - " + tempBillList.size());
             final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            HttpServletRequest request =  ServletActionContext.getRequest();
             List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
-            Map<Long,String> depMap = new HashMap<>();
+            Map<String,String> depMap = new HashMap<>();
             for(org.egov.infra.microservice.models.Department department : departments){
-            	depMap.put(department.getId(), department.getName());
+            	depMap.put(department.getCode(), department.getName());
             }
             for (final Object[] bill : tempBillList) {
                 billRegstrBean = new BillRegisterBean();
@@ -421,7 +418,7 @@ public class CancelBillAction extends BaseFormAction {
                 billRegister = billsService.getBillRegisterById(idList[i].intValue());
                 final boolean value = cancelBillAndVoucher.canCancelBill(billRegister);
                 if (!value) {
-                    addActionMessage(getText("cancel.bill.failure", new String[] { billRegister.getBillnumber() }));
+                    addActionMessage(getText("Bills Cancelled Failure"));
                     continue;
                 }
                 idString += idList[i] + (i == idListLength - 1 ? "" : ",");
@@ -442,7 +439,7 @@ public class CancelBillAction extends BaseFormAction {
         }
 
         if (isNotBlank(idString))
-            addActionMessage(getText("cancel.bill.success"));
+            addActionMessage(getText("Bills Cancelled Succesfully"));
 
         prepareBeforeSearch();
         return "search";

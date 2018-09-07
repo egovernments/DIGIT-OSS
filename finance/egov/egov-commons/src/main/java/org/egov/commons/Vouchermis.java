@@ -81,7 +81,7 @@ public class Vouchermis implements java.io.Serializable {
     @JoinColumn(name = "divisionid")
     private Boundary divisionid;
 
-    private Long departmentid;
+    private String departmentcode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schemeid")
@@ -180,14 +180,6 @@ public class Vouchermis implements java.io.Serializable {
         this.divisionid = divisionid;
     }
 
-    public Long getDepartmentid() {
-        return this.departmentid;
-    }
-
-    public void setDepartmentid(Long departmentid) {
-        this.departmentid = departmentid;
-    }
-
     public Scheme getSchemeid() {
         return this.schemeid;
     }
@@ -196,7 +188,15 @@ public class Vouchermis implements java.io.Serializable {
         this.schemeid = schemeid;
     }
 
-    public SubScheme getSubschemeid() {
+    public String getDepartmentcode() {
+		return departmentcode;
+	}
+
+	public void setDepartmentcode(String departmentcode) {
+		this.departmentcode = departmentcode;
+	}
+
+	public SubScheme getSubschemeid() {
         return this.subschemeid;
     }
 

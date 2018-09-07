@@ -48,9 +48,25 @@
 //Source file: D:\\SUSHMA\\PROJECTS\\E-GOV\\ENGINEDESIGN\\com\\exilant\\GLEngine\\ChartOfAccounts.java
 package com.exilant.GLEngine;
 
-import com.exilant.eGov.src.transactions.ExilPrecision;
-import com.exilant.exility.common.DataCollection;
-import com.exilant.exility.common.TaskFailedException;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.apache.log4j.Logger;
 import org.egov.commons.Accountdetailtype;
 import org.egov.commons.CChartOfAccountDetail;
@@ -79,23 +95,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.exilant.eGov.src.transactions.ExilPrecision;
+import com.exilant.exility.common.DataCollection;
+import com.exilant.exility.common.TaskFailedException;
 
 /**
  * This Singleton class contains all the account codes for the organization
@@ -474,8 +476,8 @@ public class ChartOfAccounts {
 				paramMap.put("creditAmt", new BigDecimal(txnObj.getCrAmount() + ""));
 			if (voucherHeader.getFundId() != null)
 				paramMap.put("fundid", voucherHeader.getFundId().getId());
-			if (voucherHeader.getVouchermis().getDepartmentid() != null)
-				paramMap.put("deptid", voucherHeader.getVouchermis().getDepartmentid());
+			if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+				paramMap.put("deptid", voucherHeader.getVouchermis().getDepartmentcode());
 			if (txnObj.functionId != null && !txnObj.functionId.equals(""))
 				paramMap.put("functionid", Long.valueOf(txnObj.functionId));
 			if (voucherHeader.getVouchermis().getFunctionary() != null)

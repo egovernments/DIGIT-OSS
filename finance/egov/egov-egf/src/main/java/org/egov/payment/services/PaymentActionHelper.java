@@ -48,6 +48,17 @@
 
 package org.egov.payment.services;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.egov.billsaccounting.services.CreateVoucher;
 import org.egov.billsaccounting.services.VoucherConstant;
@@ -65,8 +76,6 @@ import org.egov.eis.service.PositionMasterService;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
-import org.egov.infra.microservice.models.Department;
-import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -93,17 +102,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 @Transactional(readOnly = true)
 @Service
@@ -140,8 +138,7 @@ public class PaymentActionHelper {
     @Autowired
     @Qualifier("paymentService")
     private PaymentService paymentService;
-    @Autowired
-    MicroserviceUtils microserviceUtils;
+
     @Autowired
     PositionMasterService positionMasterService;
 
@@ -547,10 +544,8 @@ public class PaymentActionHelper {
         headerdetails.put(VoucherConstant.VOUCHERDATE, voucherHeader.getVoucherDate());
         headerdetails.put(VoucherConstant.DESCRIPTION, voucherHeader.getDescription());
 
-        if (voucherHeader.getVouchermis().getDepartmentid() != null){
-        	List<Department> depList=microserviceUtils.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid());
-            headerdetails.put(VoucherConstant.DEPARTMENTCODE, depList.get(0).getCode());
-        }
+        if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+            headerdetails.put(VoucherConstant.DEPARTMENTCODE,voucherHeader.getVouchermis().getDepartmentcode());
         if (voucherHeader.getFundId() != null)
             headerdetails.put(VoucherConstant.FUNDCODE, voucherHeader.getFundId().getCode());
         if (voucherHeader.getVouchermis().getSchemeid() != null)

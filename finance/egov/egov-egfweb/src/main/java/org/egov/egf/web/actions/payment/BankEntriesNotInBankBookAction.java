@@ -47,6 +47,11 @@
  */
 package org.egov.egf.web.actions.payment;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -75,11 +80,6 @@ import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @ParentPackage("egov")
 @Results({
@@ -189,8 +189,8 @@ public class BankEntriesNotInBankBookAction extends BasePaymentAction {
         String query = "", subQuery = "";
         if (bankaccount != null)
             subQuery = subQuery + "and be.bankaccountid = " + bankaccount;
-        if (voucherHeader.getVouchermis().getDepartmentid() != null)
-            subQuery = subQuery + "and bemis.departmentid = " + voucherHeader.getVouchermis().getDepartmentid();
+        if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+            subQuery = subQuery + "and bemis.departmentid = '" + voucherHeader.getVouchermis().getDepartmentcode()+"'";
         if (voucherHeader.getFundId() != null)
             subQuery = subQuery + "and bemis.fundid = " + voucherHeader.getFundId().getId();
         if (voucherHeader.getVouchermis().getSchemeid() != null)

@@ -209,9 +209,9 @@ public class JournalVoucherPrintAction extends BaseFormAction {
 	}
 
 	public String getDepartmentName() {
-		if (voucher != null && voucher.getVouchermis() != null && voucher.getVouchermis().getDepartmentid() != null) {
-			final Department dept = (Department) persistenceService.find("from Department where id=? ",
-					voucher.getVouchermis().getDepartmentid());
+		if (voucher != null && voucher.getVouchermis() != null && voucher.getVouchermis().getDepartmentcode() != null) {
+			final Department dept = (Department) persistenceService.find("from Department where code=? ",
+					voucher.getVouchermis().getDepartmentcode());
 			return dept == null ? "" : dept.getName();
 		}
 		return "";

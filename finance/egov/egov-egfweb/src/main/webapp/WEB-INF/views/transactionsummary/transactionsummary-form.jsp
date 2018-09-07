@@ -96,16 +96,16 @@
 						<label class="col-sm-2 control-label text-right"><spring:message
 								code="lbl.departmentid" /><span class="mandatory1">*</span></label>
 						<div class="col-sm-3 add-margin">
-							<form:select path="departmentid.id" id="departmentid.id"
+							<form:select path="departmentcode" id="departmentcode"
 								cssClass="form-control mandatory"
 								cssErrorClass="form-control error">
 								<form:option value="">
 									<spring:message code="lbl.select" />
 								</form:option>
-								<form:options items="${departments}" itemValue="id"
+								<form:options items="${departments}" itemValue="code"
 									itemLabel="name" />
 							</form:select>
-							<form:errors path="departmentid" cssClass="error-msg" />
+							<form:errors path="departmentcode" cssClass="error-msg" />
 						</div>
 					</div>
 					<div class="form-group">

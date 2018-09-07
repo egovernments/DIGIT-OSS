@@ -919,8 +919,8 @@ public class ChequeAssignmentService extends PersistenceService<Paymentheader, L
 			sql.append(" and vh.fundId=" + voucherHeader.getFundId().getId());
 		if (voucherHeader.getVouchermis().getFundsource() != null)
 			sql.append(" and vmis.fundsourceId=" + voucherHeader.getVouchermis().getFundsource().getId());
-		if (voucherHeader.getVouchermis().getDepartmentid() != null)
-			sql.append(" and vmis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid());
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+			sql.append(" and vmis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode()+"'");
 		if (voucherHeader.getVouchermis().getSchemeid() != null)
 			sql.append(" and vmis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId());
 		if (voucherHeader.getVouchermis().getSubschemeid() != null)

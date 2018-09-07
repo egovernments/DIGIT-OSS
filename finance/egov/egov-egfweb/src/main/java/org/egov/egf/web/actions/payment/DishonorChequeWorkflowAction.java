@@ -47,8 +47,20 @@
  */
 package org.egov.egf.web.actions.payment;
 
-//import com.exilant.eGov.src.domain.BankEntries;
-import com.exilant.exility.common.TaskFailedException;
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
@@ -97,19 +109,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import java.math.BigDecimal;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+//import com.exilant.eGov.src.domain.BankEntries;
+import com.exilant.exility.common.TaskFailedException;
 
 
 @Results({
@@ -803,11 +804,11 @@ public class DishonorChequeWorkflowAction extends BaseFormAction {
             headerdetails.put(VoucherConstant.STATUS, 0);
         else
             headerdetails.put(VoucherConstant.STATUS, 0);
-        if (null != dishonorChequeView.getOriginalVoucherHeader().getVouchermis().getDepartmentid())
+        if (null != dishonorChequeView.getOriginalVoucherHeader().getVouchermis().getDepartmentcode())
             headerdetails.put(
                     VoucherConstant.DEPARTMENTCODE,
-                    ((Department) persistenceService.find("from Department where id=?", dishonorChequeView
-                            .getOriginalVoucherHeader().getVouchermis().getDepartmentid())).getCode());
+                    ((Department) persistenceService.find("from Department where code=?", dishonorChequeView
+                            .getOriginalVoucherHeader().getVouchermis().getDepartmentcode())));
         if (null != dishonorChequeView.getOriginalVoucherHeader().getFundId())
             headerdetails.put(
                     VoucherConstant.FUNDCODE,

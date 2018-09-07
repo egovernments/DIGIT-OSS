@@ -273,8 +273,8 @@ public class ExpenseBillPrintAction extends BaseFormAction {
             paramMap.put("billNumber", billRegistermis.getEgBillregister().getBillnumber());
             paramMap.put("functionName", getFunctionName());
             String depName ="";
-            if(cbill.getEgBillregistermis().getDepartmentid()!=null){
-            List<Department> list = microserviceUtils.getDepartmentsById(cbill.getEgBillregistermis().getDepartmentid());
+            if(cbill.getEgBillregistermis().getDepartmentcode()!=null){
+            List<Department> list = microserviceUtils.getDepartmentByCode(cbill.getEgBillregistermis().getDepartmentcode());
             depName = list!=null && !list.isEmpty() ? list.get(0).getName() : "";
             }
             paramMap.put("departmentName", depName);
@@ -368,8 +368,8 @@ public class ExpenseBillPrintAction extends BaseFormAction {
         budgetApprDetailsMap.put("currentBillAmount", currentBillAmount);
         budgetApprDetailsMap.put("AccountCode", coa.getGlcode());
         String depName ="";
-        if(cbill.getEgBillregistermis().getDepartmentid()!=null){
-        List<Department> list = microserviceUtils.getDepartmentsById(cbill.getEgBillregistermis().getDepartmentid());
+        if(cbill.getEgBillregistermis().getDepartmentcode()!=null){
+        List<Department> list = microserviceUtils.getDepartmentByCode(cbill.getEgBillregistermis().getDepartmentcode());
         depName = list!=null && !list.isEmpty() ? list.get(0).getName() : "";
         }
         budgetApprDetailsMap.put("departmentName",depName);
@@ -388,8 +388,7 @@ public class ExpenseBillPrintAction extends BaseFormAction {
         final CFinancialYear financialYearById = financialYearDAO.getFinYearByDate(billDate);
 
         budgetDataMap.put("financialyearid", financialYearById.getId());
-
-        budgetDataMap.put(Constants.DEPTID, cbill.getEgBillregistermis().getDepartmentid());
+        budgetDataMap.put(Constants.DEPTID, cbill.getEgBillregistermis().getDepartmentcode());
         if (cbill.getEgBillregistermis().getFunctionaryid() != null)
             budgetDataMap.put(Constants.FUNCTIONARYID, cbill.getEgBillregistermis().getFunctionaryid().getId());
         if (cbill.getEgBillregistermis().getScheme() != null)

@@ -48,26 +48,23 @@
 
 package org.egov.egf.autonumber.impl;
 
+import java.io.Serializable;
+
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.egf.autonumber.WorksBillNumberGenerator;
 import org.egov.infra.exception.ApplicationRuntimeException;
-import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.persistence.utils.GenericSequenceNumberGenerator;
 import org.egov.model.bills.EgBillregister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.Serializable;
-import java.util.List;
 
 @Service
 public class WorksBillNumberGeneratorImpl implements WorksBillNumberGenerator {
 
     @Autowired
     private FinancialYearDAO financialYearDAO;
-    @Autowired
-    private MicroserviceUtils microserviceUtils;;
+
     @Autowired
     private GenericSequenceNumberGenerator genericSequenceNumberGenerator;
 
@@ -87,10 +84,7 @@ public class WorksBillNumberGeneratorImpl implements WorksBillNumberGenerator {
             throw new ApplicationRuntimeException("Financial Year is not defined for the voucher date");
         sequenceName = "seq_works_billnumber_" + financialYear.getFinYearRange();
         final Serializable nextSequence = genericSequenceNumberGenerator.getNextSequence(sequenceName);
-        List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(br.getEgBillregistermis().getDepartmentid());
-        String departmentCode = list!=null && !list.isEmpty() ? list.get(0).getCode() : "";
-        worksBillNumber = String.format("%s/%s/%04d/%s",departmentCode, "WBILL", nextSequence, financialYear.getFinYearRange());
-
+        worksBillNumber = String.format("%s/%s/%04d/%s",br.getEgBillregistermis().getDepartmentcode(), "WBILL", nextSequence, financialYear.getFinYearRange());
         return worksBillNumber;
     }
 }

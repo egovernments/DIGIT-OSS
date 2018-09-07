@@ -90,11 +90,11 @@
 									headerValue="----Choose----" /></td>
 							<td class="bluebox" id="deptLabel"><s:text
 									name="voucher.department" /></td>
-							<td class="bluebox"><s:select name="vouchermis.departmentid"
+							<td class="bluebox"><s:select name="vouchermis.departmentcode"
 									id="departmentid" list="dropdownData.departmentList"
-									listKey="id" listValue="name" headerKey="-1"
+									listKey="code" listValue="name" headerKey="-1"
 									headerValue="----Choose----"
-									value="voucherHeader.vouchermis.departmentid.id" /></td>
+									value="voucherHeader.vouchermis.departmentcode /></td>
 
 						</tr>
 
@@ -173,7 +173,7 @@
 							<td class="bluebox setborder" style="text-align: center"><s:property
 									value="%{expendituretype}" /></td>
 							<td class="bluebox setborder" style="text-align: center"><s:property
-									value="%{egBillregistermis.departmentid}" /></td>
+									value="%{egBillregistermis.departmentcode}" /></td>
 						</tr>
 					</s:iterator>
 				</table>

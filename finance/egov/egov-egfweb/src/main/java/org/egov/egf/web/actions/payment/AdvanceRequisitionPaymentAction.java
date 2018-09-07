@@ -47,6 +47,15 @@
  */
 package org.egov.egf.web.actions.payment;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.egov.billsaccounting.services.VoucherConstant;
 import org.egov.commons.Bankaccount;
@@ -59,7 +68,6 @@ import org.egov.commons.SubScheme;
 import org.egov.egf.commons.EgovCommon;
 import org.egov.egf.web.actions.voucher.BaseVoucherAction;
 import org.egov.infra.admin.master.entity.Boundary;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
@@ -79,15 +87,6 @@ import org.egov.services.payment.PaymentService;
 import org.egov.services.voucher.VoucherService;
 import org.egov.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 
@@ -302,7 +301,7 @@ public class AdvanceRequisitionPaymentAction extends BaseVoucherAction {
                 headerdetails.put(VoucherConstant.FUNDCODE, egAdvanceReqMises.getFund().getCode());
             }
             if (egAdvanceReqMises.getEgDepartment() != null && egAdvanceReqMises.getEgDepartment().getId() != null) {
-                voucherHeader.getVouchermis().setDepartmentid(egAdvanceReqMises.getEgDepartment().getId());
+                voucherHeader.getVouchermis().setDepartmentcode(egAdvanceReqMises.getEgDepartment().getCode());
                 headerdetails.put(VoucherConstant.DEPARTMENTCODE, egAdvanceReqMises.getEgDepartment().getCode());
             }
             if (egAdvanceReqMises.getFundsource() != null && egAdvanceReqMises.getFundsource().getId() != null) {

@@ -47,8 +47,15 @@
  */
 package org.egov.services.voucher;
 
-import com.exilant.GLEngine.ChartOfAccounts;
-import com.exilant.GLEngine.Transaxtion;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.egov.billsaccounting.services.CreateVoucher;
 import org.egov.billsaccounting.services.VoucherConstant;
@@ -58,7 +65,6 @@ import org.egov.eis.entity.Assignment;
 import org.egov.eis.service.AssignmentService;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.exception.ApplicationRuntimeException;
-import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.validation.exception.ValidationError;
@@ -78,14 +84,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.exilant.GLEngine.ChartOfAccounts;
+import com.exilant.GLEngine.Transaxtion;
 
 @Transactional(readOnly = true)
 @Service
@@ -279,10 +279,8 @@ public class JournalVoucherActionHelper {
         headerdetails.put(VoucherConstant.VOUCHERNUMBER, voucherHeader.getVoucherNumber());
         headerdetails.put(VoucherConstant.VOUCHERDATE, voucherHeader.getVoucherDate());
         headerdetails.put(VoucherConstant.DESCRIPTION, voucherHeader.getDescription());
-        if (voucherHeader.getVouchermis().getDepartmentid() != null){
-        	List<Department> depList =microserviceUtils.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid());
-            headerdetails.put(VoucherConstant.DEPARTMENTCODE, depList.get(0).getCode());
-        }
+        if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+            headerdetails.put(VoucherConstant.DEPARTMENTCODE, voucherHeader.getVouchermis().getDepartmentcode());
         if (voucherHeader.getFundId() != null)
             headerdetails.put(VoucherConstant.FUNDCODE, voucherHeader.getFundId().getCode());
         if (voucherHeader.getVouchermis().getSchemeid() != null)

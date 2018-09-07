@@ -290,7 +290,7 @@ public class VoucherSearchAction extends BaseFormAction {
 				voucherMap.put("type", voucherheader.getType());
 				voucherMap.put("name", voucherheader.getName());
 				List<org.egov.infra.microservice.models.Department> depList = microserviceUtils
-						.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid());
+						.getDepartmentByCode(voucherHeader.getVouchermis().getDepartmentcode());
 				voucherMap.put("deptName", depList.get(0).getName());
 				voucherMap.put("voucherdate", voucherheader.getVoucherDate());
 				voucherMap.put("fundname", voucherheader.getFundId().getName());
@@ -331,7 +331,7 @@ public class VoucherSearchAction extends BaseFormAction {
 					voucherMap.put("type", voucherheader.getType());
 					voucherMap.put("name", voucherheader.getName());
 					List<org.egov.infra.microservice.models.Department> depList = microserviceUtils
-							.getDepartmentsById(voucherheader.getVouchermis().getDepartmentid());
+							.getDepartmentByCode(voucherheader.getVouchermis().getDepartmentcode());
 					voucherMap.put("deptName", depList.get(0).getName());
 					voucherMap.put("voucherdate", voucherheader.getVoucherDate());
 					voucherMap.put("fundname", voucherheader.getFundId().getName());
@@ -405,8 +405,8 @@ public class VoucherSearchAction extends BaseFormAction {
 			if (toDate == null)
 				addFieldError("To Date", getText("Please Enter To Date"));
 			checkMandatoryField("fundId", "fund", voucherHeader.getFundId(), "voucher.fund.mandatory");
-			checkMandatoryField("vouchermis.departmentid", "department",
-					voucherHeader.getVouchermis().getDepartmentid(), "voucher.department.mandatory");
+			checkMandatoryField("vouchermis.departmentcode", "department",
+					voucherHeader.getVouchermis().getDepartmentcode(), "voucher.department.mandatory");
 			checkMandatoryField("vouchermis.schemeid", "scheme", voucherHeader.getVouchermis().getSchemeid(),
 					"voucher.scheme.mandatory");
 			checkMandatoryField("vouchermis.subschemeid", "subscheme", voucherHeader.getVouchermis().getSubschemeid(),

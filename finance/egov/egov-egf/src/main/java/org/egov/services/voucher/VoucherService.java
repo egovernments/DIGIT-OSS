@@ -47,10 +47,17 @@
  */
 package org.egov.services.voucher;
 
-import com.exilant.GLEngine.Transaxtion;
-import com.exilant.GLEngine.TransaxtionParameter;
-import com.exilant.eGov.src.common.EGovernCommon;
-import com.exilant.eGov.src.transactions.VoucherTypeForULB;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.commons.Accountdetailtype;
@@ -118,16 +125,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.exilant.GLEngine.Transaxtion;
+import com.exilant.GLEngine.TransaxtionParameter;
+import com.exilant.eGov.src.common.EGovernCommon;
+import com.exilant.eGov.src.transactions.VoucherTypeForULB;
 
 @Service
 public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
@@ -255,8 +256,8 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 			paramMap.put("subschemeid", billregister.getEgBillregistermis().getSubScheme().getId());
 		if (billregister.getEgBillregistermis().getFieldid() != null)
 			paramMap.put("boundaryid", billregister.getEgBillregistermis().getFieldid().getId());
-		if (billregister.getEgBillregistermis().getDepartmentid() != null)
-			paramMap.put("deptid", billregister.getEgBillregistermis().getDepartmentid());
+		if (billregister.getEgBillregistermis().getDepartmentcode() != null)
+			paramMap.put("deptid", billregister.getEgBillregistermis().getDepartmentcode());
 		if (billregister.getEgBillregistermis().getFunctionaryid() != null)
 			paramMap.put("functionaryid", billregister.getEgBillregistermis().getFunctionaryid().getId());
 		if (billregister.getEgBillregistermis().getFund() != null)
@@ -506,7 +507,7 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 				existingVH = find("from CVoucherHeader where id=?", voucherHeader.getId());
 			existingVH = getUpdatedVNumCGVN(existingVH, voucherHeader, voucherNumType);
 			existingVH.setFundId(voucherHeader.getFundId());
-			existingVH.getVouchermis().setDepartmentid(voucherHeader.getVouchermis().getDepartmentid());
+			existingVH.getVouchermis().setDepartmentcode(voucherHeader.getVouchermis().getDepartmentcode());
 			existingVH.getVouchermis().setFunction(voucherHeader.getVouchermis().getFunction());
 			existingVH.getVouchermis().setSchemeid(voucherHeader.getVouchermis().getSchemeid());
 			existingVH.getVouchermis().setSubschemeid(voucherHeader.getVouchermis().getSubschemeid());
@@ -1136,7 +1137,7 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 
 			final EgBillregistermis egBillregistermis = new EgBillregistermis();
 			egBillregistermis.setFund(voucherHeader.getFundId());
-			egBillregistermis.setDepartmentid(voucherHeader.getVouchermis().getDepartmentid());
+			egBillregistermis.setDepartmentcode(voucherHeader.getVouchermis().getDepartmentcode());
 			egBillregistermis.setFunctionaryid(voucherHeader.getVouchermis().getFunctionary());
 			egBillregistermis.setFunction(voucherHeader.getVouchermis().getFunction());
 			egBillregistermis.setFundsource(voucherHeader.getVouchermis().getFundsource());
@@ -1245,7 +1246,7 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 			egBillregister.setBillamount(totalBillAmount);
 
 			egBillregistermis.setFund(voucherHeader.getFundId());
-			egBillregistermis.setDepartmentid(voucherHeader.getVouchermis().getDepartmentid());
+			egBillregistermis.setDepartmentcode(voucherHeader.getVouchermis().getDepartmentcode());
 			egBillregistermis.setFunction(voucherHeader.getVouchermis().getFunction());
 			egBillregistermis.setFunctionaryid(voucherHeader.getVouchermis().getFunctionary());
 			egBillregistermis.setFundsource(voucherHeader.getVouchermis().getFundsource());

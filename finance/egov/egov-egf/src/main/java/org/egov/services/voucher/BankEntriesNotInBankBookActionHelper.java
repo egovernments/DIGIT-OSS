@@ -66,7 +66,6 @@ import org.egov.commons.dao.SchemeHibernateDAO;
 import org.egov.commons.dao.SubSchemeHibernateDAO;
 import org.egov.commons.service.BankAccountService;
 import org.egov.infra.admin.master.service.DepartmentService;
-import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -161,9 +160,9 @@ public class BankEntriesNotInBankBookActionHelper {
                             && voucherHeader.getVouchermis().getFunction().getId() != null)
                         bankEntryMis
                                 .setFunction(functionDAO.getFunctionById(voucherHeader.getVouchermis().getFunction().getId()));
-                    if (voucherHeader.getVouchermis().getDepartmentid() != null)
-                        bankEntryMis.setDepartment(departmentService.getDepartmentById(voucherHeader.getVouchermis()
-                                .getDepartmentid()));
+                    if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+                        bankEntryMis.setDepartment(departmentService.getDepartmentByCode(voucherHeader.getVouchermis()
+                                .getDepartmentcode()));
                     if (voucherHeader.getFundId() != null)
                         bankEntryMis.setFund(fundDAO.fundById(voucherHeader.getFundId().getId(), false));
                     if (voucherHeader.getVouchermis().getSchemeid() != null)
@@ -266,10 +265,8 @@ public class BankEntriesNotInBankBookActionHelper {
         headerdetails.put(VoucherConstant.VOUCHERDATE, voucherHeader.getVoucherDate());
         headerdetails.put(VoucherConstant.DESCRIPTION, voucherHeader.getDescription());
 
-        if (voucherHeader.getVouchermis().getDepartmentid() != null){
-        	List<Department> depList =microserviceUtils.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid());
-            headerdetails.put(VoucherConstant.DEPARTMENTCODE, depList.get(0).getCode());
-        }
+        if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+            headerdetails.put(VoucherConstant.DEPARTMENTCODE, voucherHeader.getVouchermis().getDepartmentcode());
         if (voucherHeader.getFundId() != null)
             headerdetails.put(VoucherConstant.FUNDCODE, voucherHeader.getFundId().getCode());
         if (voucherHeader.getVouchermis().getSchemeid() != null)

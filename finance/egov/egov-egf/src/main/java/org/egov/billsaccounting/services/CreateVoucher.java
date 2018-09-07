@@ -47,14 +47,37 @@
  */
 package org.egov.billsaccounting.services;
 
-import com.exilant.GLEngine.ChartOfAccounts;
-import com.exilant.GLEngine.Transaxtion;
-import com.exilant.GLEngine.TransaxtionParameter;
-import com.exilant.eGov.src.transactions.VoucherTypeForULB;
-import com.exilant.exility.common.TaskFailedException;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.egov.commons.*;
+import org.egov.commons.Accountdetailtype;
+import org.egov.commons.Bankaccount;
+import org.egov.commons.Bankreconciliation;
+import org.egov.commons.CChartOfAccounts;
+import org.egov.commons.CFiscalPeriod;
+import org.egov.commons.CFunction;
+import org.egov.commons.CGeneralLedger;
+import org.egov.commons.CGeneralLedgerDetail;
+import org.egov.commons.CVoucherHeader;
+import org.egov.commons.Functionary;
+import org.egov.commons.Fund;
+import org.egov.commons.Fundsource;
+import org.egov.commons.Scheme;
+import org.egov.commons.SubScheme;
+import org.egov.commons.Vouchermis;
 import org.egov.commons.dao.AccountdetailtypeHibernateDAO;
 import org.egov.commons.dao.BankHibernateDAO;
 import org.egov.commons.dao.BankaccountHibernateDAO;
@@ -118,19 +141,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.exilant.GLEngine.ChartOfAccounts;
+import com.exilant.GLEngine.Transaxtion;
+import com.exilant.GLEngine.TransaxtionParameter;
+import com.exilant.eGov.src.transactions.VoucherTypeForULB;
+import com.exilant.exility.common.TaskFailedException;
 
 /**
  * This Class will create voucher from bill <br>
@@ -338,7 +353,7 @@ public class CreateVoucher {
 			final String deptMandatory = EGovConfig.getProperty(
 					"egf_config.xml", "deptRequired", "", "general");
 			if (deptMandatory.equalsIgnoreCase("Y"))
-				if (billMis.getDepartmentid() == null)
+				if (billMis.getDepartmentcode() == null)
 					throw new ApplicationRuntimeException(DEPTMISSINGMSG);
 
 			final Fundsource fundSrc = billMis.getFundsource();
@@ -463,10 +478,8 @@ public class CreateVoucher {
 			if (billMis.getSourcePath() != null)
 				headerDetails.put(VoucherConstant.SOURCEPATH,
 						billMis.getSourcePath());
-			if (billMis.getDepartmentid() != null){
-				 List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(billMis.getDepartmentid());
-			        String departmentCode = list!=null && !list.isEmpty() ? list.get(0).getCode() : "";
-				headerDetails.put(VoucherConstant.DEPARTMENTCODE, departmentCode);
+			if (billMis.getDepartmentcode() != null){
+				headerDetails.put(VoucherConstant.DEPARTMENTCODE,billMis.getDepartmentcode());
 			}
 			if (billMis.getFund() != null)
 				headerDetails.put(VoucherConstant.FUNDCODE, billMis.getFund()
@@ -603,7 +616,7 @@ public class CreateVoucher {
 			final String deptMandatory = EGovConfig.getProperty(
 					"egf_config.xml", "deptRequired", "", "general");
 			if (deptMandatory.equalsIgnoreCase("Y"))
-				if (billMis.getDepartmentid() == null)
+				if (billMis.getDepartmentcode() == null)
 					throw new ApplicationRuntimeException(DEPTMISSINGMSG);
 
 			final Fundsource fundSrc = billMis.getFundsource();
@@ -1945,7 +1958,7 @@ public class CreateVoucher {
 		if (headerdetails.containsKey(VoucherConstant.DEPARTMENTCODE)
 				&& null != headerdetails.get(VoucherConstant.DEPARTMENTCODE)) {
 			final String departmentCode = headerdetails.get(VoucherConstant.DEPARTMENTCODE).toString();
-			vouchermis.setDepartmentid(microserviceUtils.getDepartmentByCode(departmentCode,"default").get(0).getId());
+			vouchermis.setDepartmentcode(departmentCode);
 		}
 		if (headerdetails.containsKey(VoucherConstant.SCHEMECODE)
 				&& null != headerdetails.get(VoucherConstant.SCHEMECODE)) {
@@ -2972,10 +2985,8 @@ public class CreateVoucher {
 		headerdetails.put(VoucherConstant.DESCRIPTION,
 				voucherHeader.getDescription());
 
-		if (voucherHeader.getVouchermis().getDepartmentid() != null){
-			List<org.egov.infra.microservice.models.Department> list=microserviceUtils.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid());
-			headerdetails.put(VoucherConstant.DEPARTMENTCODE,list.get(0).getCode());
-		}
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+			headerdetails.put(VoucherConstant.DEPARTMENTCODE,voucherHeader.getVouchermis().getDepartmentcode());
 		if (voucherHeader.getFundId() != null)
 			headerdetails.put(VoucherConstant.FUNDCODE, voucherHeader
 					.getFundId().getCode());

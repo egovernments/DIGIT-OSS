@@ -157,8 +157,7 @@ public class ContraBTCAction extends BaseVoucherAction {
 			try {
 				if (!showChequeNumber()) {
 					final Bankaccount bankAccount = getBank(Integer.valueOf(contraBean.getAccountNumberId()));
-					contraBean.setChequeNumber(chequeService.nextChequeNumber(bankAccount.getId().toString(), 1,
-							getVouchermis().getDepartmentid().intValue()));
+					contraBean.setChequeNumber(chequeService.nextChequeNumber(bankAccount.getId().toString(), 1,getVouchermis().getDepartmentcode()));
 				}
 				instrumentList = instrumentService.addToInstrument(createInstruments(contraBean));
 				voucherHeader = createVoucher(voucherHeader);
@@ -296,13 +295,13 @@ public class ContraBTCAction extends BaseVoucherAction {
 	private boolean validateChequeNumber() {
 		if (instrumentHeader == null && !instrumentService.isChequeNumberValid(contraBean.getChequeNumber(),
 				Long.parseLong(contraBean.getAccountNumberId()),
-				voucherHeader.getVouchermis().getDepartmentid().intValue(), null))
+				Integer.valueOf(voucherHeader.getVouchermis().getDepartmentcode()), null))
 			return false;
 		else if (instrumentHeader != null
 				&& !contraBean.getChequeNumber().equalsIgnoreCase(instrumentHeader.getInstrumentNumber())
 				&& !instrumentService.isChequeNumberValid(contraBean.getChequeNumber(),
 						Long.parseLong(contraBean.getAccountNumberId()),
-						voucherHeader.getVouchermis().getDepartmentid().intValue(), null))
+						Integer.valueOf(voucherHeader.getVouchermis().getDepartmentcode()), null))
 			return false;
 		return true;
 	}
@@ -342,8 +341,7 @@ public class ContraBTCAction extends BaseVoucherAction {
 		final List<Map<String, Object>> iList = new ArrayList<Map<String, Object>>();
 		if (!showChequeNumber()) {
 			final Bankaccount bankAccount = getBank(Integer.valueOf(contraBean.getAccountNumberId()));
-			cBean.setChequeNumber(chequeService.nextChequeNumber(bankAccount.getId().toString(), 1,
-					getVouchermis().getDepartmentid().intValue()));
+			cBean.setChequeNumber(chequeService.nextChequeNumber(bankAccount.getId().toString(), 1,getVouchermis().getDepartmentcode()));
 		}
 		iMap.put("Instrument number", cBean.getChequeNumber());
 		Date dt = null;

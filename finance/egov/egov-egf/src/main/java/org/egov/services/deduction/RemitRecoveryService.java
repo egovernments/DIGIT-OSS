@@ -287,10 +287,10 @@ public class RemitRecoveryService {
     private Object getMisSQlQuery(final CVoucherHeader voucherHeader) {
         final StringBuilder misQuery = new StringBuilder();
         if (null != voucherHeader && null != voucherHeader.getVouchermis()) {
-            if (null != voucherHeader.getVouchermis().getDepartmentid()
-                    && -1 != voucherHeader.getVouchermis().getDepartmentid()) {
-                misQuery.append("and  mis.departmentid=");
-                misQuery.append(voucherHeader.getVouchermis().getDepartmentid());
+            if (null != voucherHeader.getVouchermis().getDepartmentcode()
+                    && "-1" != voucherHeader.getVouchermis().getDepartmentcode()) {
+                misQuery.append("and  mis.departmentcode='");
+                misQuery.append(voucherHeader.getVouchermis().getDepartmentcode()+"'");
             }
             if (null != voucherHeader.getVouchermis().getFunctionary()
                     && null != voucherHeader.getVouchermis().getFunctionary().getId()

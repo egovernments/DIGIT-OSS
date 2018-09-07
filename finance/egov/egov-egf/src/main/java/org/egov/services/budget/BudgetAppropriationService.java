@@ -237,15 +237,16 @@ public class BudgetAppropriationService extends PersistenceService {
 	}
 
 	private void populateDepartmentForBill(final EgBillregister bill, final BudgetReportEntry budgetReportEntry) {
-		if (bill.getEgBillregistermis().getDepartmentid() != null) {
+		if (bill.getEgBillregistermis().getDepartmentcode() != null) {
 			List<org.egov.infra.microservice.models.Department> list = microserviceUtils
-					.getDepartmentsById(bill.getEgBillregistermis().getDepartmentid());
+					.getDepartmentByCode(bill.getEgBillregistermis().getDepartmentcode());
 			budgetReportEntry.setDepartmentName(list.get(0).getName());
 		}
 	}
+
 	private Department getDepartmentForVoucher(final CVoucherHeader voucher) {
-		if (voucher != null && voucher.getVouchermis().getDepartmentid() != null)
-			return (Department) find("from Department where id=?", voucher.getVouchermis().getDepartmentid());
+		if (voucher != null && voucher.getVouchermis().getDepartmentcode() != null)
+			return (Department) find("from Department where id=?", voucher.getVouchermis().getDepartmentcode());
 		return null;
 	}
 
@@ -278,7 +279,7 @@ public class BudgetAppropriationService extends PersistenceService {
 			final CFinancialYear financialYear, final CFunction function, final CChartOfAccounts coa) {
 		final Map<String, Object> budgetDataMap = new HashMap<String, Object>();
 		budgetDataMap.put("financialyearid", financialYear.getId());
-		budgetDataMap.put(Constants.DEPTID, cbill.getEgBillregistermis().getDepartmentid());
+		budgetDataMap.put(Constants.DEPTID, cbill.getEgBillregistermis().getDepartmentcode());
 		if (cbill.getEgBillregistermis().getFunctionaryid() != null)
 			budgetDataMap.put(Constants.FUNCTIONARYID, cbill.getEgBillregistermis().getFunctionaryid().getId());
 		if (cbill.getEgBillregistermis().getScheme() != null)
@@ -300,8 +301,8 @@ public class BudgetAppropriationService extends PersistenceService {
 			final CFinancialYear financialYear, final CFunction function, final CChartOfAccounts coa) {
 		final Map<String, Object> budgetDataMap = new HashMap<String, Object>();
 		budgetDataMap.put("financialyearid", financialYear.getId());
-		if (voucher.getVouchermis().getDepartmentid() != null)
-			budgetDataMap.put(Constants.DEPTID, voucher.getVouchermis().getDepartmentid());
+		if (voucher.getVouchermis().getDepartmentcode() != null)
+			budgetDataMap.put(Constants.DEPTID, voucher.getVouchermis().getDepartmentcode());
 		if (voucher.getVouchermis().getFunctionary() != null)
 			budgetDataMap.put(Constants.FUNCTIONARYID, voucher.getVouchermis().getFunctionary().getId());
 		if (voucher.getVouchermis().getSchemeid() != null)

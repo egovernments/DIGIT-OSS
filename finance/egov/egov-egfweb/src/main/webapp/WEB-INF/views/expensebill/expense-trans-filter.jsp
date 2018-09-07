@@ -207,22 +207,22 @@
 						<span class="mandatory"></span>
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:select path="egBillregistermis.departmentid" data-first-option="false" id="department" class="form-control" required="required">
+						<form:select path="egBillregistermis.departmentcode" data-first-option="false" id="department" class="form-control" required="required">
 							<form:option value=""><spring:message code="lbl.select" /></form:option>
-							<form:options items="${departments}" itemValue="id" itemLabel="name" />
+							<form:options items="${departments}" itemValue="code" itemLabel="name" />
 						</form:select>
-						<form:errors path="egBillregistermis.departmentid" cssClass="add-margin error-msg" />
+						<form:errors path="egBillregistermis.departmentcode" cssClass="add-margin error-msg" />
 					</div>
 				</c:when>
 				<c:otherwise>
 					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.department" />
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:select path="egBillregistermis.departmentid" data-first-option="false" id="department" class="form-control">
+						<form:select path="egBillregistermis.departmentcode" data-first-option="false" id="department" class="form-control">
 							<form:option value=""><spring:message code="lbl.select" /></form:option>
 							<form:options items="${departments}" itemValue="id" itemLabel="name" />
 						</form:select>
-						<form:errors path="egBillregistermis.departmentid" cssClass="add-margin error-msg" />
+						<form:errors path="egBillregistermis.departmentcode" cssClass="add-margin error-msg" />
 					</div>
 				</c:otherwise>
 			</c:choose>

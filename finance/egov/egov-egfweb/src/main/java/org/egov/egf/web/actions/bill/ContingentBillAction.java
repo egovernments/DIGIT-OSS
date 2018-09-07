@@ -626,8 +626,8 @@ public class ContingentBillAction extends BaseBillAction {
         final HashMap<String, Object> headerDetails = createHeaderAndMisDetails();
         headerDetails.put(VoucherConstant.SOURCEPATH, "/EGF/bill/contingentBill!beforeView.action?billRegisterId=");
         Boolean recreateBillnumber = false;
-        if (bill.getEgBillregistermis().getDepartmentid() != null && voucherHeader.getVouchermis().getDepartmentid() != null)
-            if (bill.getEgBillregistermis().getDepartmentid() != voucherHeader.getVouchermis().getDepartmentid())
+        if (bill.getEgBillregistermis().getDepartmentcode() != null && voucherHeader.getVouchermis().getDepartmentcode() != null)
+            if (bill.getEgBillregistermis().getDepartmentcode() != voucherHeader.getVouchermis().getDepartmentcode())
                 recreateBillnumber = true;
         bill = setBillDetailsFromHeaderDetails(bill, bill.getEgBillregistermis(), recreateBillnumber);
         final Set<EgBilldetails> EgBillSet = bill.getEgBilldetailes();
@@ -712,7 +712,7 @@ public class ContingentBillAction extends BaseBillAction {
         if (primaryDepartment != null && primaryDepartment.getId() != null)
             map = voucherService.getDesgBYPassingWfItem("cbill.nextUser", cbill, primaryDepartment.getId().intValue());
         else
-            map = voucherService.getDesgBYPassingWfItem("cbill.nextUser", cbill, voucherHeader.getVouchermis().getDepartmentid().intValue());
+            map = voucherService.getDesgBYPassingWfItem("cbill.nextUser", cbill, Integer.valueOf(voucherHeader.getVouchermis().getDepartmentcode()));
         addDropdownData(DESIGNATION_LIST, (List<Map<String, Object>>) map.get(DESIGNATION_LIST));
         addDropdownData(USER_LIST, Collections.EMPTY_LIST);
         nextLevel = map.get(WFITEMSTATE) != null ? map.get(WFITEMSTATE).toString() : null;
@@ -1162,7 +1162,7 @@ public class ContingentBillAction extends BaseBillAction {
     private EgBillregister setBillDetailsFromHeaderDetails(final EgBillregister bill, final EgBillregistermis mis,
             final boolean generateBill) {
 
-        mis.setDepartmentid(voucherHeader.getVouchermis().getDepartmentid());
+        mis.setDepartmentcode(voucherHeader.getVouchermis().getDepartmentcode());
         mis.setFund(voucherHeader.getFundId());
         mis.setScheme(voucherHeader.getVouchermis().getSchemeid());
         mis.setSubScheme(voucherHeader.getVouchermis().getSubschemeid());

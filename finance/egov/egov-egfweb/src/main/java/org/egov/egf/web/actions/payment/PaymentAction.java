@@ -349,7 +349,7 @@ public class PaymentAction extends BasePaymentAction {
 			LOGGER.debug("Starting beforeTNEBSearch...");
 		setTNEBMandatoryFields();
 		// if(validateUser("deptcheck"))
-		voucherHeader.getVouchermis().setDepartmentid(paymentService.getAssignment().getDepartment().getId());
+		voucherHeader.getVouchermis().setDepartmentcode(paymentService.getAssignment().getDepartment().getCode());
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Completed beforeSearch.");
 		return "tnebSearch";
@@ -391,7 +391,7 @@ public class PaymentAction extends BasePaymentAction {
 			if (key.equals("EB Voucher Property-Department")) {
 				Department dep = (Department) persistenceService.find("from Department where deptCode = ?",
 						propartyAppConfigResultList.get(key));
-				voucherHeader.getVouchermis().setDepartmentid(dep != null ? dep.getId() : 0l);
+				voucherHeader.getVouchermis().setDepartmentcode(dep != null ? dep.getCode() : "");
 			}
 			if (key.equals("EB Voucher Property-BankBranch"))
 				bank_branch = propartyAppConfigResultList.get(key);
@@ -426,8 +426,8 @@ public class PaymentAction extends BasePaymentAction {
 		if (voucherHeader.getVouchermis().getFundsource() != null)
 			sql.append(" and bill.egBillregistermis.fundsource.id="
 					+ voucherHeader.getVouchermis().getFundsource().getId());
-		if (voucherHeader.getVouchermis().getDepartmentid() != null)
-			sql.append(" and bill.egBillregistermis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid());
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+			sql.append(" and bill.egBillregistermis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode()+"'");
 		if (voucherHeader.getVouchermis().getSchemeid() != null)
 			sql.append(" and bill.egBillregistermis.scheme.id=" + voucherHeader.getVouchermis().getSchemeid().getId());
 		if (voucherHeader.getVouchermis().getSubschemeid() != null)
@@ -714,8 +714,8 @@ public class PaymentAction extends BasePaymentAction {
 			sql.append(" and bill.billnumber = '" + billNumber + "' ");
 		if (voucherHeader.getFundId() != null)
 			sql.append(" and bill.egBillregistermis.fund.id=" + voucherHeader.getFundId().getId());
-		if (voucherHeader.getVouchermis().getDepartmentid() != null)
-			sql.append(" and bill.egBillregistermis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid());
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+			sql.append(" and bill.egBillregistermis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode()+"'");
 		if (voucherHeader.getVouchermis().getFunction() != null)
 			sql.append(" and bill.egBillregistermis.function=" + voucherHeader.getVouchermis().getFunction().getId());
 
@@ -961,7 +961,7 @@ public class PaymentAction extends BasePaymentAction {
 				LOGGER.debug("Starting createPayment...");
 			populateWorkflowBean();
 			if (parameters.get("department") != null)
-				billregister.getEgBillregistermis().setDepartmentid(Long.valueOf(parameters.get("department")[0]));
+				billregister.getEgBillregistermis().setDepartmentcode(parameters.get("department")[0]);
 			if (parameters.get("function") != null)
 				billregister.getEgBillregistermis()
 						.setFunction(functionService.findOne(Long.valueOf(parameters.get("function")[0].toString())));
@@ -1193,7 +1193,7 @@ public class PaymentAction extends BasePaymentAction {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Starting beforeModify.");
 		// if(validateUser("deptcheck"))
-		voucherHeader.getVouchermis().setDepartmentid(paymentService.getAssignment().getDepartment().getId());
+		voucherHeader.getVouchermis().setDepartmentcode(paymentService.getAssignment().getDepartment().getCode());
 		action = "search";
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Completed beforeModify.");
@@ -1224,9 +1224,9 @@ public class PaymentAction extends BasePaymentAction {
 			sql.append(" and ph.voucherheader.voucherNumber like '%" + voucherHeader.getVoucherNumber() + "%'");
 		if (voucherHeader.getFundId() != null)
 			sql.append(" and ph.voucherheader.fundId.id=" + voucherHeader.getFundId().getId());
-		if (voucherHeader.getVouchermis().getDepartmentid() != null)
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null)
 			sql.append(
-					" and ph.voucherheader.vouchermis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid());
+					" and ph.voucherheader.vouchermis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode()+"'");
 		if (voucherHeader.getVouchermis().getSchemeid() != null)
 			sql.append(" and ph.voucherheader.vouchermis.schemeid.id="
 					+ voucherHeader.getVouchermis().getSchemeid().getId());
@@ -1570,7 +1570,7 @@ public class PaymentAction extends BasePaymentAction {
 	@Override
 	public void validate() {
 		checkMandatory("fundId", Constants.FUND, voucherHeader.getFundId(), "voucher.fund.mandatory");
-		checkMandatory("vouchermis.departmentid", Constants.DEPARTMENT, voucherHeader.getVouchermis().getDepartmentid(),
+		checkMandatory("vouchermis.departmentcode", Constants.DEPARTMENT, voucherHeader.getVouchermis().getDepartmentcode(),
 				"voucher.department.mandatory");
 		checkMandatory("vouchermis.function", Constants.FUNCTION, voucherHeader.getVouchermis().getFunction(),
 				"voucher.function.mandatory");

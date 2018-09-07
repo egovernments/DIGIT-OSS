@@ -50,8 +50,18 @@
  */
 package org.egov.utils;
 
-import com.exilant.eGov.src.common.EGovernCommon;
-import com.exilant.exility.common.TaskFailedException;
+import static org.egov.infra.utils.ApplicationConstant.UNDERSCORE;
+
+import java.io.Serializable;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.script.ScriptContext;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.commons.CFiscalPeriod;
@@ -64,8 +74,8 @@ import org.egov.eis.entity.EmployeeView;
 import org.egov.eis.service.EisCommonService;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.exception.ApplicationRuntimeException;
-import org.egov.infra.persistence.utils.GenericSequenceNumberGenerator;
 import org.egov.infra.persistence.utils.DatabaseSequenceCreator;
+import org.egov.infra.persistence.utils.GenericSequenceNumberGenerator;
 import org.egov.infra.script.service.ScriptService;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.model.bills.EgBillregister;
@@ -74,16 +84,8 @@ import org.egov.pims.service.EisUtilService;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.script.ScriptContext;
-import java.io.Serializable;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.egov.infra.utils.ApplicationConstant.UNDERSCORE;
+import com.exilant.eGov.src.common.EGovernCommon;
+import com.exilant.exility.common.TaskFailedException;
 
 /**
  * @author msahoo
@@ -127,9 +129,9 @@ public class VoucherHelper {
 	public static String getMisQuery(final CVoucherHeader voucherHeader) {
 		final StringBuffer misQuery = new StringBuffer();
 		if (null != voucherHeader && null != voucherHeader.getVouchermis()) {
-			if (null != voucherHeader.getVouchermis().getDepartmentid()) {
-				misQuery.append(" and mis.departmentid.id=");
-				misQuery.append(voucherHeader.getVouchermis().getDepartmentid());
+			if (null != voucherHeader.getVouchermis().getDepartmentcode()) {
+				misQuery.append(" and mis.departmentcode='");
+				misQuery.append(voucherHeader.getVouchermis().getDepartmentcode()+"'");
 			}
 			if (null != voucherHeader.getVouchermis().getFunctionary()) {
 				misQuery.append(" and mis.functionary.id=");
@@ -196,9 +198,9 @@ public class VoucherHelper {
 				misQuery.append(" and billmis.fund.id=")
 						.append(egBillRegister.getEgBillregistermis().getFund().getId());
 
-			if (null != egBillRegister.getEgBillregistermis().getDepartmentid()) {
-				misQuery.append(" and billmis.departmentid=");
-				misQuery.append(egBillRegister.getEgBillregistermis().getDepartmentid());
+			if (null != egBillRegister.getEgBillregistermis().getDepartmentcode()) {
+				misQuery.append(" and billmis.departmentcode='");
+				misQuery.append(egBillRegister.getEgBillregistermis().getDepartmentcode()+"'");
 			}
 			if (null != egBillRegister.getEgBillregistermis().getFunctionaryid()) {
 				misQuery.append(" and billmis.functionaryid.id=");

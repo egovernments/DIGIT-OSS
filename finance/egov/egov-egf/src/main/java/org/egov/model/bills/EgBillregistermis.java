@@ -132,7 +132,7 @@ public class EgBillregistermis extends AbstractPersistable<Integer> implements j
 
     private BigDecimal month;
 
-    private Long departmentid;
+    private String departmentcode;
 
     @ManyToOne
     @JoinColumn(name = "financialyearid")
@@ -242,7 +242,7 @@ public class EgBillregistermis extends AbstractPersistable<Integer> implements j
             final String sanctiondetail, final String narration, final Date lastupdatedtime,
             final String disbursementtype, final BigDecimal escalation,
             final BigDecimal advancepayments, final BigDecimal securedadvances,
-            final BigDecimal deductamountwitheld, final Long departmentid,
+            final BigDecimal deductamountwitheld, final String departmentcode,
             final BigDecimal month, final CFinancialYear financialyear,
             final Fundsource fundsource, final Date paybydate, final EgBillSubType egBillSubtype,
             final String ptyBillNumber, final Date ptyBillDate, final String inwrdSlNumber) {
@@ -265,7 +265,7 @@ public class EgBillregistermis extends AbstractPersistable<Integer> implements j
         this.advancepayments = advancepayments;
         this.securedadvances = securedadvances;
         this.deductamountwitheld = deductamountwitheld;
-        this.departmentid = departmentid;
+        this.departmentcode = departmentcode;
         this.month = month;
         this.financialyear = financialyear;
         this.fundsource = fundsource;
@@ -546,16 +546,16 @@ public class EgBillregistermis extends AbstractPersistable<Integer> implements j
         return subSchemeId;
     }
 
-    public Long getDepartmentid() {
-		return departmentid;
-	}
-
-	public void setDepartmentid(Long departmentid) {
-		this.departmentid = departmentid;
-	}
-
-	public void setSubSchemeId(final Long subSchemeId) {
+    public void setSubSchemeId(final Long subSchemeId) {
         this.subSchemeId = subSchemeId;
     }
+
+	public String getDepartmentcode() {
+		return departmentcode;
+	}
+
+	public void setDepartmentcode(String departmentcode) {
+		this.departmentcode = departmentcode;
+	}
 
 }

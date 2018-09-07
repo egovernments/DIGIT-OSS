@@ -47,7 +47,14 @@
  */
 package org.egov.egf.voucher.service;
 
-import com.exilant.eGov.src.transactions.VoucherTypeForULB;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Date;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.apache.commons.lang.StringUtils;
 import org.egov.commons.CFiscalPeriod;
 import org.egov.commons.CGeneralLedger;
@@ -94,12 +101,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Date;
+import com.exilant.eGov.src.transactions.VoucherTypeForULB;
 
 /**
  * @author venki
@@ -286,7 +288,7 @@ public class JournalVoucherService {
 
         final EgBillregistermis egBillregistermis = new EgBillregistermis();
         egBillregistermis.setFund(voucherHeader.getFundId());
-        egBillregistermis.setDepartmentid(voucherHeader.getVouchermis().getDepartmentid());
+        egBillregistermis.setDepartmentcode(voucherHeader.getVouchermis().getDepartmentcode());
         egBillregistermis.setFunctionaryid(voucherHeader.getVouchermis().getFunctionary());
         egBillregistermis.setFunction(voucherHeader.getVouchermis().getFunction());
         egBillregistermis.setFundsource(voucherHeader.getVouchermis().getFundsource());

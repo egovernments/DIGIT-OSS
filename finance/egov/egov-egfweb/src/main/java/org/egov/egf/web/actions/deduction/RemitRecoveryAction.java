@@ -50,9 +50,20 @@
  */
 package org.egov.egf.web.actions.deduction;
 
-import com.exilant.GLEngine.ChartOfAccounts;
-import com.exilant.GLEngine.Transaxtion;
-import com.opensymphony.xwork2.validator.annotations.Validation;
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -115,19 +126,9 @@ import org.egov.utils.FinancialConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
+import com.exilant.GLEngine.ChartOfAccounts;
+import com.exilant.GLEngine.Transaxtion;
+import com.opensymphony.xwork2.validator.annotations.Validation;
 
 @ParentPackage("egov")
 @Validation
@@ -163,13 +164,9 @@ public class RemitRecoveryAction extends BasePaymentAction {
     public boolean showApprove = false;
     private CommonBean commonBean;
     private String modeOfPayment;
-    @Autowired
-    private DepartmentService departmentService;
+
     @Autowired
     private FunctionService functionService;
-    
-    @Autowired
-    private MicroserviceUtils microserviceUtils;
 
     @Autowired
     @Qualifier("persistenceService")
@@ -233,7 +230,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
 
     public RemitRecoveryAction() {
         voucherHeader.setVouchermis(new Vouchermis());
-        addRelatedEntity("vouchermis.departmentid", Department.class);
+        addRelatedEntity("vouchermis.departmentcode", Department.class);
         addRelatedEntity("fundId", Fund.class);
         addRelatedEntity("vouchermis.schemeid", Scheme.class);
         addRelatedEntity("vouchermis.subschemeid", SubScheme.class);
@@ -313,9 +310,8 @@ public class RemitRecoveryAction extends BasePaymentAction {
 
             }
         voucherHeader.setType(FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
-        if (voucherHeader.getVouchermis().getDepartmentid() == null) {
-            final List<org.egov.infra.microservice.models.Department> department = microserviceUtils.getDepartmentsById(departmentId.longValue());
-            voucherHeader.getVouchermis().setDepartmentid(department.get(0).getId());
+        if (voucherHeader.getVouchermis().getDepartmentcode() == null) {
+            voucherHeader.getVouchermis().setDepartmentcode(departmentId.toString());
         }
         if (voucherHeader.getVouchermis().getFunction() == null) {
             final CFunction function = functionService.findOne(functionId);

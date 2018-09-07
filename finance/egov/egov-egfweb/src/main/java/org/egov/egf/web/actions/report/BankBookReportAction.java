@@ -47,7 +47,19 @@
  */
 package org.egov.egf.web.actions.report;
 
-import net.sf.jasperreports.engine.JRException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -87,18 +99,7 @@ import org.hibernate.type.BigDecimalType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import net.sf.jasperreports.engine.JRException;
 
 @ParentPackage("egov")
 @Results({
@@ -366,9 +367,11 @@ public class BankBookReportAction extends BaseFormAction {
         getInstrumentsByVoucherIds();
         getInstrumentVouchersByInstrumentHeaderIds();
         Integer deptId = null;
-        if (getVouchermis() != null && getVouchermis().getDepartmentid() != null
-                && getVouchermis().getDepartmentid() != null && getVouchermis().getDepartmentid() != -1)
-            deptId = getVouchermis().getDepartmentid().intValue();
+        if (getVouchermis() != null && getVouchermis().getDepartmentcode() != null
+                && getVouchermis().getDepartmentcode() != null && getVouchermis().getDepartmentcode() != "-1"){
+                   //We need to get department code 
+        	deptId = getVouchermis().getId().intValue();
+        }
         final BankBookEntry initialOpeningBalance = getInitialAccountBalance(glCode, fundCode, deptId);
         entries.add(initialOpeningBalance);
         Date date = bankBookEntries.get(0).getVoucherDate();
@@ -690,11 +693,11 @@ public class BankBookReportAction extends BaseFormAction {
             header.append(" for " + fnd.getName());
         }
 
-        if (getVouchermis() != null && getVouchermis().getDepartmentid() != null
-                && getVouchermis().getDepartmentid() != null && getVouchermis().getDepartmentid() != -1) {
-            query.append(" and vmis.DEPARTMENTID=").append(getVouchermis().getDepartmentid().toString());
-            final Department dept = (Department) persistenceService.find("from Department where id=?", getVouchermis()
-                    .getDepartmentid());
+        if (getVouchermis() != null && getVouchermis().getDepartmentcode() != null
+                && getVouchermis().getDepartmentcode() != null && getVouchermis().getDepartmentcode() !="-1") {
+            query.append(" and vmis.DEPARTMENTCODE='").append(getVouchermis().getDepartmentcode()+"'");
+            final Department dept = (Department) persistenceService.find("from Department where code=?", getVouchermis()
+                    .getDepartmentcode());
             header.append(" in " + dept.getName() + " ");
         }
         if (getVouchermis() != null && getVouchermis().getFunctionary() != null

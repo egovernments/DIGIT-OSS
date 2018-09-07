@@ -48,7 +48,18 @@
 package org.egov.egf.web.actions.report;
 
 
-import com.opensymphony.xwork2.validator.annotations.Validation;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -89,17 +100,7 @@ import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import com.opensymphony.xwork2.validator.annotations.Validation;
 
 @Results(value = {
         @Result(name = "PDF", type = "stream", location = "inputStream", params = { "inputName", "inputStream", "contentType",
@@ -289,7 +290,7 @@ public class VoucherStatusReportAction extends BaseFormAction
             voucherMap.put("type", voucherheader.getType());
             voucherMap.put("name", voucherheader.getName());
             voucherMap.put("voucherdate", voucherheader.getVoucherDate());
-            voucherMap.put("deptName", voucherheader.getVouchermis().getDepartmentid());
+            voucherMap.put("deptName", voucherheader.getVouchermis().getDepartmentcode());
             for (final CGeneralLedger detail : voucherheader.getGeneralledger())
                 amt = amt+detail.getDebitAmount();
             voucherMap.put("amount", amt);
@@ -360,9 +361,9 @@ public class VoucherStatusReportAction extends BaseFormAction
         if (voucherHeader.getStatus() != -1)
             sql = sql + " and vh.status=" + voucherHeader.getStatus();
 
-        if (voucherHeader.getVouchermis().getDepartmentid() != null
-                && voucherHeader.getVouchermis().getDepartmentid() != -1)
-            sql = sql + " and vh.vouchermis.departmentid=" + voucherHeader.getVouchermis().getDepartmentid();
+        if (voucherHeader.getVouchermis().getDepartmentcode() != null
+                && voucherHeader.getVouchermis().getDepartmentcode() != "-1")
+            sql = sql + " and vh.vouchermis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode()+"'";
 
         if (voucherHeader.getVouchermis().getSchemeid() != null)
             sql = sql + " and vh.vouchermis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId();
@@ -402,7 +403,7 @@ public class VoucherStatusReportAction extends BaseFormAction
         if (toDate == null)
             addFieldError("To Date", getText("Please enter To Date"));
         checkMandatoryField("fundId", "fund", voucherHeader.getFundId(), "voucher.fund.mandatory");
-        checkMandatoryField("vouchermis.departmentid", "department", voucherHeader.getVouchermis().getDepartmentid(),
+        checkMandatoryField("vouchermis.departmentcode", "department", voucherHeader.getVouchermis().getDepartmentcode(),
                 "voucher.department.mandatory");
         checkMandatoryField("vouchermis.schemeid", "scheme", voucherHeader.getVouchermis().getSchemeid(),
                 "voucher.scheme.mandatory");
@@ -424,7 +425,7 @@ public class VoucherStatusReportAction extends BaseFormAction
         for (final CVoucherHeader cVchrHdr : list)
         {
             final VoucherReportView vhcrRptView = new VoucherReportView();
-            vhcrRptView.setDeptName(cVchrHdr.getVouchermis().getDepartmentid()!=null ? cVchrHdr.getVouchermis().getDepartmentid().toString():"");
+            vhcrRptView.setDeptName(cVchrHdr.getVouchermis().getDepartmentcode()!=null ? cVchrHdr.getVouchermis().getDepartmentcode().toString():"");
             vhcrRptView.setVoucherNumber(cVchrHdr.getVoucherNumber());
             vhcrRptView.setVoucherType(cVchrHdr.getType());
             vhcrRptView.setVoucherName(cVchrHdr.getName());
@@ -550,8 +551,8 @@ public class VoucherStatusReportAction extends BaseFormAction
     public void setParamMap()
     {
         paramMap.put("fund", voucherHeader.getFundId().getName());
-        if (voucherHeader.getVouchermis() != null && voucherHeader.getVouchermis().getDepartmentid() != null)
-            paramMap.put("deptName", voucherHeader.getVouchermis().getDepartmentid());
+        if (voucherHeader.getVouchermis() != null && voucherHeader.getVouchermis().getDepartmentcode() != null)
+            paramMap.put("deptName", voucherHeader.getVouchermis().getDepartmentcode());
         paramMap.put("status", getVoucherStatus(voucherHeader.getStatus()));
         paramMap.put("toDate", toDate);
         paramMap.put("fromDate", fromDate);

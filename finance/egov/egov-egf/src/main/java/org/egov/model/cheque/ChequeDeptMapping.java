@@ -50,8 +50,6 @@
  */
 package org.egov.model.cheque;
 
-import org.egov.infra.admin.master.entity.Department;
-
 import java.io.Serializable;
 
 /**
@@ -66,7 +64,7 @@ public class ChequeDeptMapping implements Serializable {
 
     private AccountCheques accountCheque;
 
-    private Department allotedTo;
+    private String allotedTo;
 
     public Long getId() {
         return id;
@@ -84,11 +82,11 @@ public class ChequeDeptMapping implements Serializable {
         this.accountCheque = accountCheque;
     }
 
-    public Department getAllotedTo() {
+    public String getAllotedTo() {
         return allotedTo;
     }
 
-    public void setAllotedTo(final Department allotedTo) {
+    public void setAllotedTo(final String allotedTo) {
         this.allotedTo = allotedTo;
     }
 

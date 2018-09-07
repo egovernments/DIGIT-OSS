@@ -48,7 +48,16 @@
 package org.egov.egf.web.actions.report;
 
 
-import net.sf.jasperreports.engine.JRException;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -84,15 +93,7 @@ import org.hibernate.FlushMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import net.sf.jasperreports.engine.JRException;
 
 
 @Results(value = {
@@ -476,7 +477,7 @@ public class PendingTDSReportAction extends BaseFormAction {
         voucherHeader.setFundId(fund);
         final Vouchermis vouchermis = new Vouchermis();
         voucherHeader.setVouchermis(vouchermis);
-        voucherHeader.getVouchermis().setDepartmentid(department.getId());
+        voucherHeader.getVouchermis().setDepartmentcode(department.getCode());
         voucherHeader.setVoucherDate(asOnDate);
         return voucherHeader;
     }

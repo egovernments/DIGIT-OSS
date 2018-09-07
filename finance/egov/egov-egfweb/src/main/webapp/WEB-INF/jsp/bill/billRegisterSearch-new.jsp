@@ -238,7 +238,7 @@
 				 }
 			 </s:if>
 			<s:if test="%{isFieldMandatory('department')}"> 
-				 if(null!= document.getElementById('vouchermis.departmentid') && document.getElementById('vouchermis.departmentid').value == -1){
+				 if(null!= document.getElementById('vouchermis.departmentcode') && document.getElementById('vouchermis.departmentcode').value == -1){
 
 					document.getElementById('lblError').innerHTML = "Please select a department";
 					return false;
