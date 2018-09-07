@@ -56,28 +56,28 @@
 					<label class="col-sm-2 control-label text-right" for="code"> <spring:message code="contractor.code" /><span class="mandatory"></span> 
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:input path="code" maxlength="50" cssClass="form-control" required="required"/>
+						<form:input path="code" maxlength="50" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" required="required"/>
 						<form:errors path="code" cssClass="add-margin error-msg" />
 					</div>
 					<label class="col-sm-2 control-label text-right" for="name"> <spring:message code="contractor.name" /><span class="mandatory"></span>
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:input path="name" id="name" size="40" maxlength="100" cssClass="form-control" required="required"/>
+						<form:input path="name" id="name" size="40" maxlength="100" cssClass="form-control patternvalidation" data-pattern="alphabetwithspace" required="required"/>
 						<form:errors path="name" cssClass="add-margin error-msg" />
 					</div>
 				</div>
 		
 				<div class="form-group">
-					<label class="col-sm-2 control-label text-right" for="correspondenceAddress" > <spring:message code="contractor.correspondenceAddress" /><span class="mandatory"></span>
+					<label class="col-sm-2 control-label text-right" for="correspondenceAddress" > <spring:message code="contractor.correspondenceAddress"   /><span class="mandatory"></span>
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:textarea path="correspondenceAddress" cols="35" cssClass="form-control textfieldsvalidate" id="correspondenceAddress" maxlength = "250" required="required"/>
+						<form:textarea path="correspondenceAddress" cols="35" cssClass="form-control textfieldsvalidate patternvalidation" id="correspondenceAddress" data-pattern="address" maxlength = "250" required="required"/>
 						<form:errors path="correspondenceAddress" cssClass="add-margin error-msg" />
 					</div>
 					<label class="col-sm-2 control-label text-right" for="paymentAddress"> <spring:message code="contractor.paymentAddress" />
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:textarea path="paymentAddress" cols="35" cssClass="form-control textfieldsvalidate" id="paymentAddress" maxlength = "250" />
+						<form:textarea path="paymentAddress" cols="35" cssClass="form-control textfieldsvalidate patternvalidation" data-pattern="address"  id="paymentAddress" maxlength = "250" />
 						<form:errors path="paymentAddress" cssClass="add-margin error-msg" />
 					</div>
 				</div>
@@ -86,7 +86,7 @@
 					<label class="col-sm-2 control-label text-right" for="contactPerson"> <spring:message code="contractor.contactPerson" /><span class="mandatory"></span> 
 					</label>
 					<div class="col-sm-3 add-margin contactPerson"> 
-						<form:input path="contactPerson" id="contactPerson" size="40" maxlength="100" cssClass="form-control" required="required" />
+						<form:input path="contactPerson" id="contactPerson" size="40" maxlength="100" cssClass="form-control patternvalidation" data-pattern="alphabetwithspace" required="required" />
 						<form:errors path="contactPerson" cssClass="add-margin error-msg" />
 					</div>
 					<label class="col-sm-2 control-label text-right" for="email"> <spring:message code="contractor.email" />
@@ -107,7 +107,7 @@
 					<label class="col-sm-2 control-label text-right" for="mobileNumber"> <spring:message code="lbl.mobile" /><span class="mandatory"></span> 
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:input path="mobileNumber" id="mobileNumber" maxlength="10" cssClass="form-control" required="required" />
+						<form:input path="mobileNumber" id="mobileNumber" maxlength="10" cssClass="form-control patternvalidation" data-pattern="number" required="required" />
 						<form:errors path="mobileNumber" cssClass="add-margin error-msg" />
 					</div>
 				</div>
@@ -116,13 +116,13 @@
 					<label class="col-sm-2 control-label text-right" for="panNumber"> <spring:message code="contractor.panNo" />
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:input path="panNumber" id="panNumber" maxlength="10" cssClass="form-control"/>
+						<form:input path="panNumber" id="panNumber" maxlength="10" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace"/>
 						<form:errors path="panNumber" cssClass="add-margin error-msg" />
 					</div>
 					<label class="col-sm-2 control-label text-right" for="tinNumber"> <spring:message code="contractor.tinNo" /><span class="mandatory"></span> 
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:input path="tinNumber" id="tinNumber" maxlength="14" cssClass="form-control" required="required"/>
+						<form:input path="tinNumber" id="tinNumber" maxlength="14" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" required="required"/>
 						<form:errors path="tinNumber" cssClass="add-margin error-msg" />
 					</div>
 				</div>
@@ -140,7 +140,7 @@
 					<label class="col-sm-2 control-label text-right" for="ifscCode"> <spring:message code="contractor.ifscCode" />
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:input path="ifscCode" id="ifscCode" maxlength="15" cssClass="form-control" />
+						<form:input path="ifscCode" id="ifscCode" maxlength="15" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" />
 						<form:errors path="ifscCode" cssClass="add-margin error-msg" />
 					</div>
 				</div>
@@ -155,7 +155,7 @@
 					<label class="col-sm-2 control-label text-right" for="registrationNumber"> <spring:message code="contractor.registrationNo" />
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:input path="registrationNumber" id="registrationNumber" maxlength="50" cssClass="form-control"/>
+						<form:input path="registrationNumber" id="registrationNumber" maxlength="50" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace"/>
 						<form:errors path="registrationNumber" cssClass="add-margin error-msg" />
 					</div>
 				</div>

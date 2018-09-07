@@ -67,3 +67,4 @@
 		}
 	});
 </script>
+<script src="<cdn:url value='/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}' context='/egi'/>"></script>

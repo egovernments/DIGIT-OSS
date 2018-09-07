@@ -46,8 +46,7 @@
   ~
   --%>
 
- <%@ page language="java" errorPage="/error/error.jsp" pageEncoding="UTF-8"  %>
-
+<%@ page language="java" errorPage="/error/error.jsp" pageEncoding="UTF-8"  %>
 <%@ taglib uri="http://displaytag.sf.net" prefix="display" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>  
@@ -60,4 +59,4 @@
 <%@ taglib prefix="egov" tagdir="/WEB-INF/tags"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-
+<%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn" %>
