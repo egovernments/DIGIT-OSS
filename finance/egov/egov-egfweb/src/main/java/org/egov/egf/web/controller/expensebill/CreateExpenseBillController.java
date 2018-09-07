@@ -248,20 +248,20 @@ public class CreateExpenseBillController extends BaseBillController {
         String approverName = "";
         String currentUserDesgn = "";
         String nextDesign = "";
-        if (keyNameArray.length != 0 && keyNameArray.length > 0)
-            if (keyNameArray.length == 1)
-                id = Long.parseLong(keyNameArray[0].trim());
-            else if (keyNameArray.length == 3) {
-                id = Long.parseLong(keyNameArray[0].trim());
-                approverName = keyNameArray[1];
-                currentUserDesgn = keyNameArray[2];
-            } else {
-                id = Long.parseLong(keyNameArray[0].trim());
-                approverName = keyNameArray[1];
-                currentUserDesgn = keyNameArray[2];
-                nextDesign = keyNameArray[3];
-            }
-
+//        if (keyNameArray.length != 0 && keyNameArray.length > 0)
+//            if (keyNameArray.length == 1)
+//                id = Long.parseLong(keyNameArray[0].trim());
+//            else if (keyNameArray.length == 3) {
+//                id = Long.parseLong(keyNameArray[0].trim());
+//                approverName = keyNameArray[1];
+//                currentUserDesgn = keyNameArray[2];
+//            } else {
+//                id = Long.parseLong(keyNameArray[0].trim());
+//                approverName = keyNameArray[1];
+//                currentUserDesgn = keyNameArray[2];
+//                nextDesign = keyNameArray[3];
+//            }
+        approverName= keyNameArray[0];
         if (id != null)
             model.addAttribute("approverName", approverName);
         model.addAttribute("currentUserDesgn", currentUserDesgn);
