@@ -853,7 +853,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 				val = voucherHeader.getVouchermis().getFundsource().getName();
 			else if (name.equals("department") && voucherHeader.getVouchermis().getDepartmentid() != null) {
 				List<org.egov.infra.microservice.models.Department> list = microserviceUtils
-						.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid(), "default");
+						.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid());
 				val = list.get(0).getName();
 			} else if (name.equals("scheme") && voucherHeader.getVouchermis().getSchemeid() != null)
 				val = voucherHeader.getVouchermis().getSchemeid().getName();
@@ -875,7 +875,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 			val = egBillregister.getEgBillregistermis().getFundsource().getName();
 		else if (name.equals("department") && egBillregister.getEgBillregistermis().getDepartmentid() != null) {
 			List<org.egov.infra.microservice.models.Department> depList = microserviceUtils
-					.getDepartmentsById(egBillregister.getEgBillregistermis().getDepartmentid(), "default");
+					.getDepartmentsById(egBillregister.getEgBillregistermis().getDepartmentid());
 			val = depList != null && !depList.isEmpty() ? depList.get(0).getName() : "";
 		} else if (name.equals("scheme") && egBillregister.getEgBillregistermis().getScheme() != null)
 			val = egBillregister.getEgBillregistermis().getScheme().getName();
@@ -1288,66 +1288,6 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 		this.billDetailslist = billDetailslist;
 	}
 
-	public String getValues() {
-		return values;
-	}
-
-	public void setValues(final String values) {
-		this.values = values;
-	}
-
-	public String getMethodName() {
-		return methodName;
-	}
-
-	public void setMethodName(final String methodName) {
-		this.methodName = methodName;
-	}
-
-	public List<String> getHeaderFields() {
-		return headerFields;
-	}
-
-	public void setHeaderFields(final List<String> headerFields) {
-		this.headerFields = headerFields;
-	}
-
-	public List<String> getMandatoryFields() {
-		return mandatoryFields;
-	}
-
-	public void setMandatoryFields(final List<String> mandatoryFields) {
-		this.mandatoryFields = mandatoryFields;
-	}
-
-	public Integer getDepartmentId() {
-		return departmentId;
-	}
-
-	public void setDepartmentId(final Integer departmentId) {
-		this.departmentId = departmentId;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(final String type) {
-		this.type = type;
-	}
-
-	public String getWfitemstate() {
-		return wfitemstate;
-	}
-
-	public void setWfitemstate(final String wfitemstate) {
-		this.wfitemstate = wfitemstate;
-	}
-
-	public ContraJournalVoucher getContraVoucher() {
-		return contraVoucher;
-	}
-
 	public void setContraVoucher(final ContraJournalVoucher contraVoucher) {
 		this.contraVoucher = contraVoucher;
 	}
@@ -1367,6 +1307,67 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 	public void setBillDetails(final Map<String, Object> billDetails) {
 		this.billDetails = billDetails;
 	}
+
+
+    public String getValues() {
+        return values;
+    }
+
+    public void setValues(final String values) {
+        this.values = values;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(final String methodName) {
+        this.methodName = methodName;
+    }
+
+    public List<String> getHeaderFields() {
+        return headerFields;
+    }
+
+    public void setHeaderFields(final List<String> headerFields) {
+        this.headerFields = headerFields;
+    }
+
+    public List<String> getMandatoryFields() {
+        return mandatoryFields;
+    }
+
+    public void setMandatoryFields(final List<String> mandatoryFields) {
+        this.mandatoryFields = mandatoryFields;
+    }
+
+    public Integer getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(final Integer departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(final String type) {
+        this.type = type;
+    }
+
+    public String getWfitemstate() {
+        return wfitemstate;
+    }
+
+    public void setWfitemstate(final String wfitemstate) {
+        this.wfitemstate = wfitemstate;
+    }
+
+    public ContraJournalVoucher getContraVoucher() {
+        return contraVoucher;
+    }
 
 	public String getFinConstExpendTypeContingency() {
 		return FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT;

@@ -48,7 +48,9 @@
 
 package org.egov.infra.workflow.inbox;
 
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
+import org.egov.infra.microservice.models.EmployeeInfo;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.web.support.ui.Inbox;
 import org.egov.infra.workflow.entity.OwnerGroup;
@@ -71,6 +73,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -116,7 +119,13 @@ public class InboxRenderServiceDelegate<T extends StateAware> {
                 .filter(item -> !item.isDraft())
                 .collect(Collectors.toList());
     }
-
+    @ReadOnly
+    public List<Inbox> getCurrentUserInboxItems(String token) {
+        return buildInbox(getAssignedWorkflowItems())
+                .parallelStream()
+                .filter(item -> !item.isDraft())
+                .collect(Collectors.toList());
+    }
     @ReadOnly
     public List<Inbox> getCurrentUserDraftItems() {
         return buildInbox(getAssignedWorkflowDrafts());
@@ -149,10 +158,10 @@ public class InboxRenderServiceDelegate<T extends StateAware> {
 
     private List<T> getAssignedWorkflowItems(boolean draft) {
         List<T> workflowItems = new ArrayList<>();
-       // List<Long> owners = currentUserPositionIds();
-        List<Long> owners = new ArrayList<>();
-        owners.add(4L);
-        owners.add(1L);
+        List<Long> owners = currentUserPositionIds();
+//        List<Long> owners = new ArrayList<>();
+//        owners.add(4L);
+//        owners.add(1L);
         if (!owners.isEmpty()) {
             List<String> types = stateService.getAssignedWorkflowTypeNames(owners);
             for (String type : types) {
@@ -216,9 +225,21 @@ public class InboxRenderServiceDelegate<T extends StateAware> {
     }
 
     private List<Long> currentUserPositionIds() {
-        return this.ownerGroupService.getOwnerGroupsByUserId(getUserId())
-                .parallelStream()
-                .map(OwnerGroup::getId)
-                .collect(Collectors.toList());
+       
+    	List<Long> positions = new ArrayList();
+    	Long empId = ApplicationThreadLocals.getUserId();
+    	List<EmployeeInfo> employs = microserviceUtils.getEmployee(empId, new Date(),null, null);
+    	
+    	if(null !=employs && employs.size()>0 )
+    		
+    	employs.get(0).getAssignments().forEach(assignment->{
+    		positions.add(assignment.getPosition());
+    	});
+    	
+    	return positions;
+//    	return this.ownerGroupService.getOwnerGroupsByUserId(getUserId())
+//                .parallelStream()
+//                .map(OwnerGroup::getId)
+//                .collect(Collectors.toList());
     }
 }

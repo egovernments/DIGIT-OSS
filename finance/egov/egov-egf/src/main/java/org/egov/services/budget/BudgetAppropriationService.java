@@ -239,11 +239,10 @@ public class BudgetAppropriationService extends PersistenceService {
 	private void populateDepartmentForBill(final EgBillregister bill, final BudgetReportEntry budgetReportEntry) {
 		if (bill.getEgBillregistermis().getDepartmentid() != null) {
 			List<org.egov.infra.microservice.models.Department> list = microserviceUtils
-					.getDepartmentsById(bill.getEgBillregistermis().getDepartmentid(), "default");
+					.getDepartmentsById(bill.getEgBillregistermis().getDepartmentid());
 			budgetReportEntry.setDepartmentName(list.get(0).getName());
 		}
 	}
-
 	private Department getDepartmentForVoucher(final CVoucherHeader voucher) {
 		if (voucher != null && voucher.getVouchermis().getDepartmentid() != null)
 			return (Department) find("from Department where id=?", voucher.getVouchermis().getDepartmentid());

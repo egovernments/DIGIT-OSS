@@ -110,6 +110,7 @@
 						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.approver"/><span class="mandatory"></span></label>
 						<div class="col-sm-3 add-margin">
 						<input type="hidden" id="approvalPositionValue" value="${approvalPosition }" />
+						<input type="hidden" id="approverName" name="approverName" />
 						<form:select path="" data-first-option="false" 
 							id="approvalPosition" name="approvalPosition" cssClass="form-control" onfocus="callAlertForDesignation();" 
 							cssErrorClass="form-control error" required="required">  

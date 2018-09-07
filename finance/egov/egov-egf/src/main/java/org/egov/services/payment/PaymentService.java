@@ -314,7 +314,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 
 			if (billregister.getEgBillregistermis().getDepartmentid() != null) {
 				List<org.egov.infra.microservice.models.Department> list = microserviceUtils
-						.getDepartmentsById(billregister.getEgBillregistermis().getDepartmentid(), "default");
+						.getDepartmentsById(billregister.getEgBillregistermis().getDepartmentid());
 				String departmentCode = list != null && !list.isEmpty() ? list.get(0).getCode() : "";
 				headerdetails.put(VoucherConstant.DEPARTMENTCODE, departmentCode);
 			}
@@ -2728,7 +2728,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 					paymentBean.setFundName(billregister.getEgBillregistermis().getFund().getName());
 				if (billregister.getEgBillregistermis().getDepartmentid() != null) {
 					List<org.egov.infra.microservice.models.Department> list = microserviceUtils
-							.getDepartmentsById(billregister.getEgBillregistermis().getDepartmentid(), "default");
+							.getDepartmentsById(billregister.getEgBillregistermis().getDepartmentid());
 					String departmentName = list != null && !list.isEmpty() ? list.get(0).getName() : "";
 					paymentBean.setDeptName(departmentName);
 				}
@@ -3084,5 +3084,4 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 	public void setCreateVoucher(final CreateVoucher createVoucher) {
 		this.createVoucher = createVoucher;
 	}
-
 }

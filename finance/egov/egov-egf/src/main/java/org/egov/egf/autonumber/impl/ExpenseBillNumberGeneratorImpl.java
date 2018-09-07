@@ -87,7 +87,7 @@ public class ExpenseBillNumberGeneratorImpl implements ExpenseBillNumberGenerato
             throw new ApplicationRuntimeException("Financial Year is not defined for the voucher date");
         sequenceName = "seq_expense_billnumber_" + financialYear.getFinYearRange();
         Serializable nextSequence = genericSequenceNumberGenerator.getNextSequence(sequenceName);
-        List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(br.getEgBillregistermis().getDepartmentid(),"default");
+        List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(br.getEgBillregistermis().getDepartmentid());
         String departmentCode = list!=null && !list.isEmpty() ? list.get(0).getCode() : "";
         expenseBillNumber = String.format("%s/%s/%04d/%s", departmentCode, "EJV",nextSequence, financialYear.getFinYearRange());
 

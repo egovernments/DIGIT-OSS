@@ -151,7 +151,7 @@ public class FinancialUtils {
     	final Assignment currentUserAssignment = assignmentService.getPrimaryAssignmentForGivenRange(securityUtils
                 .getCurrentUser().getId(), new Date(), new Date());
 
-    	EmployeeInfoResponse empInfo = msUtil.getEmployee("", "", securityUtils.getCurrentUser().getId(), new Date(),null,null);
+//    	EmployeeInfoResponse empInfo = msUtil.getEmployee("", "", securityUtils.getCurrentUser().getId(), new Date(),null,null);
     	
     	final Assignment curr_assignment ;
     	

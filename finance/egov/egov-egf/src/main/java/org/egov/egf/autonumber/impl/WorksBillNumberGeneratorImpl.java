@@ -87,7 +87,7 @@ public class WorksBillNumberGeneratorImpl implements WorksBillNumberGenerator {
             throw new ApplicationRuntimeException("Financial Year is not defined for the voucher date");
         sequenceName = "seq_works_billnumber_" + financialYear.getFinYearRange();
         final Serializable nextSequence = genericSequenceNumberGenerator.getNextSequence(sequenceName);
-        List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(br.getEgBillregistermis().getDepartmentid(),"default");
+        List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(br.getEgBillregistermis().getDepartmentid());
         String departmentCode = list!=null && !list.isEmpty() ? list.get(0).getCode() : "";
         worksBillNumber = String.format("%s/%s/%04d/%s",departmentCode, "WBILL", nextSequence, financialYear.getFinYearRange());
 

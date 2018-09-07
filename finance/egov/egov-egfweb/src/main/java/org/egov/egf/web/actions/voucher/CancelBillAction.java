@@ -167,8 +167,7 @@ public class CancelBillAction extends BaseFormAction {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Inside Prepare method");
         HttpServletRequest request =  ServletActionContext.getRequest();
-        String access_token = (String) microserviceUtils.readFromRedis(request.getSession().getId(), "admin_token");
-        List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments(access_token, "default");
+        List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
         dropdownData.put("DepartmentList",departments);
         addDropdownData(
                 "fundList",
@@ -327,8 +326,7 @@ public class CancelBillAction extends BaseFormAction {
                 LOGGER.debug("Size of tempBillList - " + tempBillList.size());
             final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             HttpServletRequest request =  ServletActionContext.getRequest();
-            String access_token = (String) microserviceUtils.readFromRedis(request.getSession().getId(), "admin_token");
-            List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments(access_token, "default");
+            List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
             Map<Long,String> depMap = new HashMap<>();
             for(org.egov.infra.microservice.models.Department department : departments){
             	depMap.put(department.getId(), department.getName());

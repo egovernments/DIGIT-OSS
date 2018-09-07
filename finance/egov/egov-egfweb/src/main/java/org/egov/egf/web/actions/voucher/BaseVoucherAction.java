@@ -278,7 +278,7 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 
 		if (voucherHeader.getVouchermis().getDepartmentid() != null) {
 			List<org.egov.infra.microservice.models.Department> depList = microserviceUtils
-					.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid(), "default");
+					.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid());
 			headerdetails.put(VoucherConstant.DEPARTMENTCODE, depList.get(0).getCode());
 		}
 		if (voucherHeader.getFundId() != null)

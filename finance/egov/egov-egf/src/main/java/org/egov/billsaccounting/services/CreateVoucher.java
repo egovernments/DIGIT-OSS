@@ -464,7 +464,7 @@ public class CreateVoucher {
 				headerDetails.put(VoucherConstant.SOURCEPATH,
 						billMis.getSourcePath());
 			if (billMis.getDepartmentid() != null){
-				 List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(billMis.getDepartmentid(),"default");
+				 List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(billMis.getDepartmentid());
 			        String departmentCode = list!=null && !list.isEmpty() ? list.get(0).getCode() : "";
 				headerDetails.put(VoucherConstant.DEPARTMENTCODE, departmentCode);
 			}
@@ -2973,7 +2973,7 @@ public class CreateVoucher {
 				voucherHeader.getDescription());
 
 		if (voucherHeader.getVouchermis().getDepartmentid() != null){
-			List<org.egov.infra.microservice.models.Department> list=microserviceUtils.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid() , "default");
+			List<org.egov.infra.microservice.models.Department> list=microserviceUtils.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid());
 			headerdetails.put(VoucherConstant.DEPARTMENTCODE,list.get(0).getCode());
 		}
 		if (voucherHeader.getFundId() != null)

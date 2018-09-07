@@ -8,3 +8,7 @@ target
 .tern-project
 rebel.xml
 .travis.yml
+
+egov/\.metadata/
+
+egov/\.recommenders/

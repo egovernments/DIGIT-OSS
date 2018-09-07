@@ -280,7 +280,7 @@ public class JournalVoucherActionHelper {
         headerdetails.put(VoucherConstant.VOUCHERDATE, voucherHeader.getVoucherDate());
         headerdetails.put(VoucherConstant.DESCRIPTION, voucherHeader.getDescription());
         if (voucherHeader.getVouchermis().getDepartmentid() != null){
-        	List<Department> depList =microserviceUtils.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid(), "default");
+        	List<Department> depList =microserviceUtils.getDepartmentsById(voucherHeader.getVouchermis().getDepartmentid());
             headerdetails.put(VoucherConstant.DEPARTMENTCODE, depList.get(0).getCode());
         }
         if (voucherHeader.getFundId() != null)

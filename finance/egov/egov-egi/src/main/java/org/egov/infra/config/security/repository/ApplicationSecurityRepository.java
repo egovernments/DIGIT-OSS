@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.Role;
 import org.egov.infra.admin.master.entity.User;
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
 import org.egov.infra.microservice.contract.UserSearchResponse;
 import org.egov.infra.microservice.contract.UserSearchResponseContent;
@@ -42,6 +43,9 @@ import org.springframework.security.web.context.HttpRequestResponseHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
 
 import redis.clients.jedis.JedisShardInfo;
+
+import static org.egov.infra.utils.ApplicationConstant.MS_TENANTID_KEY;
+import static org.egov.infra.utils.ApplicationConstant.MS_ADMIN_TOKEN;
 
 public class ApplicationSecurityRepository implements SecurityContextRepository {
 
@@ -82,41 +86,6 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 	@Override
 	public void saveContext(SecurityContext context, HttpServletRequest request, HttpServletResponse response) {
 
-//		LOGGER.debug("Got the request to cusome app security repository - saveContext");
-//		if (context == null || context.getAuthentication() == null) {
-//			LOGGER.error("Securirty context/authentication is null");
-//			return;
-//		}
-//		try {
-//			HttpSession session = request.getSession();
-//			String sessionId = session.getId(), tenantId = String.valueOf(session.getAttribute("tenantId")),
-//					access_token = request.getParameter("acces_token"), user = context.getAuthentication().getName(),
-//					remoteIp = request.getRemoteAddr();
-//
-//			if (access_token == null)
-//				access_token = String.valueOf(session.getAttribute("access_token"));
-//
-//			if (null != access_token) {
-//				Map<String, String> sesValues = new HashMap<>();
-//
-//				sesValues.put("ACCESS_TOKEN", access_token);
-//				sesValues.put("NAME", user);
-//				sesValues.put("RemoteIP", remoteIp);
-//
-//				Authentication auth = context.getAuthentication();
-//				StringBuilder authStr = new StringBuilder();
-//				for (GrantedAuthority authority : auth.getAuthorities()) {
-//					authStr.append(authority.getAuthority() + ",");
-//				}
-//				sesValues.put("Authorities", authStr.toString());
-//				msUtil.SaveSessionToRedis(access_token, session.getId(), sesValues);
-//			} else {
-//				LOGGER.error("Null access token, Security context redis save failed");
-//			}
-//
-//		} catch (Exception e) {
-//			LOGGER.error(e.getMessage());
-//		}
 
 	}
 
@@ -129,21 +98,6 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 
 	}
 
-//	private Authentication prepareAuthenticationObj(HttpServletRequest request, String user, String authroities) {
-//		List<SimpleGrantedAuthority> authlist = new ArrayList<>();
-//		if (authroities != null) {
-//			String[] auths = authroities.split(",");
-//			for (int count = 0; count < auths.length; ++count) {
-//				authlist.add(new SimpleGrantedAuthority(auths[count]));
-//			}
-//
-//		}
-//		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, "dummy", authlist);
-//		WebAuthenticationDetails details = new WebAuthenticationDetails(request);
-//		auth.setDetails(details);
-//		return auth;
-//
-//	}
 
 	private Authentication prepareAuthenticationObj(HttpServletRequest request, CurrentUser user) {
 
@@ -158,13 +112,16 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 		String user_token = request.getParameter("auth_token");
 		if(user_token==null)
 			throw new Exception("AuthToken not found");
-		String sessionId = request.getSession().getId();
-		this.microserviceUtils.savetoRedis(sessionId, "auth_token", user_token);
+		HttpSession session = request.getSession();
+		this.microserviceUtils.savetoRedis(session.getId(), "auth_token", user_token);
 		String admin_token = this.microserviceUtils.generateAdminToken();
-		this.microserviceUtils.savetoRedis(sessionId, "admin_token", admin_token);
+		session.setAttribute(MS_ADMIN_TOKEN, admin_token);
+		//this.microserviceUtils.savetoRedis(session.getId(), "admin_token", admin_token);
 		CustomUserDetails user = this.microserviceUtils.getUserDetails(user_token, admin_token);
-		this.microserviceUtils.savetoRedis(sessionId, "_details", user);
-		UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token, user.getTenantId(), user.getUserName());
+		session.setAttribute(MS_TENANTID_KEY, user.getTenantId());
+		
+		this.microserviceUtils.savetoRedis(session.getId(), "_details", user);
+		UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token,user.getTenantId(),user.getUserName());
 		return this.parepareCurrentUser(response.getUserSearchResponseContent().get(0));
 	}
 

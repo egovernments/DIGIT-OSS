@@ -161,17 +161,9 @@ public abstract class GenericWorkFlowController {
                     State.DEFAULT_STATE_VALUE_CREATED, container.getPendingActions(), model.getCreatedDate(), container.getCurrentDesignation());
         return validActions;
     }
-    
-    private String getAccessToken(){
-
-		String access_token = (String) microserviceUtils.readFromRedis(serRequest.getSession().getId(), "admin_token");
-		
-		return access_token;
-	}
     public List<Department> getDepartmentsFromMs() {
-    	String access_token = getAccessToken();
     	
-    	List<Department>departments = microserviceUtils.getDepartments(access_token, "default");
+    	List<Department>departments = microserviceUtils.getDepartments();
     	
     	return departments;
     	

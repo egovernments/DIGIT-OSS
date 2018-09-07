@@ -314,7 +314,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
             }
         voucherHeader.setType(FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
         if (voucherHeader.getVouchermis().getDepartmentid() == null) {
-            final List<org.egov.infra.microservice.models.Department> department = microserviceUtils.getDepartmentsById(departmentId.longValue(),"default");
+            final List<org.egov.infra.microservice.models.Department> department = microserviceUtils.getDepartmentsById(departmentId.longValue());
             voucherHeader.getVouchermis().setDepartmentid(department.get(0).getId());
         }
         if (voucherHeader.getVouchermis().getFunction() == null) {

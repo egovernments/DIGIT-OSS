@@ -8,13 +8,20 @@ import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.Designation;
 import org.egov.infra.microservice.models.EmployeeInfo;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.egov.infra.web.support.ui.Inbox;
+import org.egov.infra.workflow.entity.StateAware;
+import org.egov.infra.workflow.inbox.InboxRenderServiceDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 @Controller
 public class MSCommController {
@@ -25,15 +32,15 @@ public class MSCommController {
 	
 	private HttpServletRequest servletrequest;
 
-	
+	 @Autowired
+	 private InboxRenderServiceDelegate<StateAware> inboxRenderServiceDelegate;
+	 
 	
 	@RequestMapping(value = "/depratments",method=RequestMethod.GET)
 	@ResponseBody
 	public List<Department> getDetapartments(){
 	
-		String access_token=getAccessToken();
-		String tenantId ="default";
-		List<Department> departments = microserviceUtils.getDepartments(access_token, tenantId);
+		List<Department> departments = microserviceUtils.getDepartments();
 		return departments;
 	}
 	
@@ -41,9 +48,7 @@ public class MSCommController {
 	@ResponseBody
 	public List<Designation> getDesignations(){
 		
-		String access_token=getAccessToken();
-		String tenantId = "default";
-		List<Designation> designations = microserviceUtils.getDesignation(access_token, tenantId);
+		List<Designation> designations = microserviceUtils.getDesignation();
 		
 		return designations;
 	}
@@ -52,17 +57,9 @@ public class MSCommController {
 	@ResponseBody
 	public List<EmployeeInfo> getApprovers(@PathVariable(name="deptId")String deptId,@PathVariable(name="desgId")String desgnId){
 		
-		String access_token=getAccessToken();
-		String tenantId = "default";
-		List<EmployeeInfo> approvers = microserviceUtils.getApprovers(access_token, tenantId,deptId,desgnId);
+		List<EmployeeInfo> approvers = microserviceUtils.getApprovers(deptId,desgnId);
 		
 		return approvers;
-	}
-	
-	private String getAccessToken(){
-
-		String access_token =(String) microserviceUtils.readFromRedis(servletrequest.getSession().getId(), "admin_token");
-		return access_token;
 	}
 	
 	@RequestMapping(value="/ClearToken",method=RequestMethod.POST)
@@ -79,4 +76,11 @@ public class MSCommController {
 			microserviceUtils.refreshToken(oldToken, newToken);
 		}
 	}
+	
+	@GetMapping(value="inbox/items",produces = APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public List<Inbox>showInbox() {
+        
+        return inboxRenderServiceDelegate.getCurrentUserInboxItems();
+    }
 }

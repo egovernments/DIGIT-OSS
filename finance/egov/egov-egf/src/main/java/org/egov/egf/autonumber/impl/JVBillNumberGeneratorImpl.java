@@ -87,7 +87,7 @@ public class JVBillNumberGeneratorImpl implements JVBillNumberGenerator {
             throw new ApplicationRuntimeException("Financial Year is not defined for the voucher date");
         sequenceName = "seq_jv_billnumber_" + financialYear.getFinYearRange();
         Serializable nextSequence = genericSequenceNumberGenerator.getNextSequence(sequenceName);
-        List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(br.getEgBillregistermis().getDepartmentid(),"default");
+        List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(br.getEgBillregistermis().getDepartmentid());
         String departmentCode = list!=null && !list.isEmpty() ? list.get(0).getCode() : "";
         jvBillNumber = String.format("%s/%s/%04d/%s", departmentCode, "MN",
                 nextSequence, financialYear.getFinYearRange());

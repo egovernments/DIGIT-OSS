@@ -274,7 +274,7 @@ public class ExpenseBillPrintAction extends BaseFormAction {
             paramMap.put("functionName", getFunctionName());
             String depName ="";
             if(cbill.getEgBillregistermis().getDepartmentid()!=null){
-            List<Department> list = microserviceUtils.getDepartmentsById(cbill.getEgBillregistermis().getDepartmentid(),"default");
+            List<Department> list = microserviceUtils.getDepartmentsById(cbill.getEgBillregistermis().getDepartmentid());
             depName = list!=null && !list.isEmpty() ? list.get(0).getName() : "";
             }
             paramMap.put("departmentName", depName);
@@ -369,7 +369,7 @@ public class ExpenseBillPrintAction extends BaseFormAction {
         budgetApprDetailsMap.put("AccountCode", coa.getGlcode());
         String depName ="";
         if(cbill.getEgBillregistermis().getDepartmentid()!=null){
-        List<Department> list = microserviceUtils.getDepartmentsById(cbill.getEgBillregistermis().getDepartmentid(),"default");
+        List<Department> list = microserviceUtils.getDepartmentsById(cbill.getEgBillregistermis().getDepartmentid());
         depName = list!=null && !list.isEmpty() ? list.get(0).getName() : "";
         }
         budgetApprDetailsMap.put("departmentName",depName);

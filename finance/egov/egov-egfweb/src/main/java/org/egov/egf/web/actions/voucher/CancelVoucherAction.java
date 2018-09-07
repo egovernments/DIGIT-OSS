@@ -177,8 +177,7 @@ public class CancelVoucherAction extends BaseFormAction {
 		voucherSearchList = getVouchersForCancellation();
 		HttpServletRequest request = ServletActionContext.getRequest();
 		String access_token = (String) microserviceUtils.readFromRedis(request.getSession().getId(), "admin_token");
-		List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments(access_token,
-				"default");
+		List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
 		Map<Long, String> depMap = new HashMap<>();
 		for (org.egov.infra.microservice.models.Department department : departments) {
 			depMap.put(department.getId(), department.getName());
@@ -489,8 +488,7 @@ public class CancelVoucherAction extends BaseFormAction {
 		if (headerFields.contains("department")) {
 			HttpServletRequest request = ServletActionContext.getRequest();
 			String access_token = (String) microserviceUtils.readFromRedis(request.getSession().getId(), "admin_token");
-			List<org.egov.infra.microservice.models.Department> departments = microserviceUtils
-					.getDepartments(access_token, "default");
+			List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
 			addDropdownData("departmentList", departments);
 		}
 		if (headerFields.contains("functionary"))

@@ -217,16 +217,10 @@ public abstract class BaseFormAction extends ActionSupport
         return this.getClass().getSimpleName() + UUID.randomUUID();
     }
     
-    private String getAccessToken(){
-
-		String access_token = (String) microserviceUtils.readFromRedis(serRequest.getSession().getId(), "admin_token");
-		
-		return access_token;
-	}
+  
     public List<Department> getDepartmentsFromMs() {
     	
-    	String access_token = getAccessToken();
-    	List<Department>departments = microserviceUtils.getDepartments(access_token, "default");
+    	List<Department>departments = microserviceUtils.getDepartments();
     	return departments;
     }
 

@@ -135,6 +135,13 @@ $(document).ready(function()
 	});
 	
 	$('#approvalDepartment').trigger('change');
+	
+	$('#approvalPosition').change(function(){
+		
+		$("#approverName").val($('#approvalPosition option:selected').text());
+	});
+	
+	
 });
 
 function callAlertForDepartment() {

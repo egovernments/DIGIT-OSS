@@ -112,6 +112,8 @@ import static org.egov.infra.utils.ApplicationConstant.TENANTID_KEY;
 import static org.egov.infra.utils.ApplicationConstant.UNKNOWN;
 import static org.egov.infra.utils.ApplicationConstant.USERID_KEY;
 import static org.egov.infra.utils.ApplicationConstant.USERNAME_KEY;
+import static org.egov.infra.utils.ApplicationConstant.MS_TENANTID_KEY;
+import static org.egov.infra.utils.ApplicationConstant.MS_ADMIN_TOKEN;
 import static org.egov.infra.utils.StringUtils.emptyIfNull;
 
 public class ApplicationCoreFilter implements Filter {
@@ -225,6 +227,8 @@ public class ApplicationCoreFilter implements Filter {
         ApplicationThreadLocals.setMunicipalityName((String) session.getAttribute(CITY_CORP_NAME_KEY));
         ApplicationThreadLocals.setUserId((Long) session.getAttribute(USERID_KEY));
         ApplicationThreadLocals.setIPAddress((String) session.getAttribute(IP_ADDRESS));
+        ApplicationThreadLocals.setUserTenantId((String) session.getAttribute(MS_TENANTID_KEY));
+        ApplicationThreadLocals.setAdminToken((String)session.getAttribute(MS_ADMIN_TOKEN));
     }
 
     private void prepareRequestOriginDetails(HttpSession session, HttpServletRequest request) {

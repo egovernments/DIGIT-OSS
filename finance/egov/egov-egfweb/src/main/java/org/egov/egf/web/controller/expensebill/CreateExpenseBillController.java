@@ -167,7 +167,7 @@ public class CreateExpenseBillController extends BaseBillController {
       //User createdBy = new User();
      // createdBy.setId(ApplicationThreadLocals.getUserId());
       egBillregister.setCreatedBy(ApplicationThreadLocals.getUserId());
-    	
+ 
 
         String[] contentType = ((MultiPartRequestWrapper) request).getContentTypes("file");
         List<DocumentUpload> list = new ArrayList<>();
@@ -230,8 +230,9 @@ public class CreateExpenseBillController extends BaseBillController {
                 return EXPENSEBILL_FORM;
             }
 
-            final String approverDetails = financialUtils.getApproverDetails(workFlowAction,
-                    savedEgBillregister.getState(), savedEgBillregister.getId(), approvalPosition);
+//            final String approverDetails = financialUtils.getApproverDetails(workFlowAction,
+//                    savedEgBillregister.getState(), savedEgBillregister.getId(), approvalPosition);
+              final String approverDetails = String.valueOf(request.getParameter("approverName"));
 
             return "redirect:/expensebill/success?approverDetails=" + approverDetails + "&billNumber="
                     + savedEgBillregister.getBillnumber();
