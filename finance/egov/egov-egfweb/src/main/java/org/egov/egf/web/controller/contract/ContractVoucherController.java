@@ -48,46 +48,21 @@
 
 package org.egov.egf.web.controller.contract;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.billsaccounting.services.CreateVoucher;
-import org.egov.billsaccounting.services.VoucherConstant;
-import org.egov.commons.CFiscalPeriod;
-import org.egov.commons.CFunction;
-import org.egov.commons.CGeneralLedger;
-import org.egov.commons.CGeneralLedgerDetail;
-import org.egov.commons.CVoucherHeader;
 import org.egov.commons.dao.FiscalPeriodHibernateDAO;
 import org.egov.commons.service.FunctionService;
 import org.egov.commons.service.FunctionaryService;
 import org.egov.commons.service.FundService;
 import org.egov.commons.service.FundsourceService;
-import org.egov.egf.contract.model.*;
 import org.egov.egf.voucher.service.ContractVoucherService;
 import org.egov.infra.admin.master.service.DepartmentService;
-import org.egov.infra.config.core.ApplicationThreadLocals;
-import org.egov.infra.exception.ApplicationRuntimeException;
-import org.egov.infra.validation.exception.ValidationException;
 import org.egov.services.masters.SchemeService;
 import org.egov.services.masters.SubSchemeService;
 import org.egov.services.voucher.GeneralLedgerDetailService;
 import org.egov.services.voucher.GeneralLedgerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Controller
 @RequestMapping("/vouchers")
@@ -129,8 +104,8 @@ public class ContractVoucherController {
     @Autowired
     private FunctionaryService functionaryService;
 
-    @RequestMapping(value = "/_create", method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public @ResponseBody String createVoucher(@RequestBody final VoucherContract voucherRequest,
+   /* @RequestMapping(value = "/_create", method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    public @ResponseBody String createVoucher(@RequestBody final Voucher voucherRequest,
             @RequestParam final String tenantId, final HttpServletResponse response) throws Exception {
 
         List<ErrorDetail> errorList = new ArrayList<>(0);
@@ -286,7 +261,7 @@ public class ContractVoucherController {
         return subledgerDetailContract1;
     }
 
-    private void prepairHeaderDetail(final HashMap<String, Object> headerDetails, final VoucherRequest request) {
+    private void prepairHeaderDetail(final HashMap<String, Object> headerDetails, final Voucher request) {
         headerDetails.put(VoucherConstant.VOUCHERNAME, request.getName());
         headerDetails.put(VoucherConstant.VOUCHERTYPE, request.getType());
         headerDetails.put(VoucherConstant.DESCRIPTION, request.getDescription());
@@ -435,5 +410,5 @@ public class ContractVoucherController {
         else if (request.getFunctionary() != null && !request.getFunctionary().getCode().isEmpty())
             headerDetails.put(VoucherConstant.FUNCTIONARYCODE, request.getFunctionary().getCode());
     }
-
+*/
 }

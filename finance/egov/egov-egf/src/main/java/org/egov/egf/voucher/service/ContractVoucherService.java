@@ -47,21 +47,21 @@
  */
 package org.egov.egf.voucher.service;
 
-import org.egov.egf.contract.model.ErrorDetail;
-import org.egov.egf.contract.model.VoucherContract;
-import org.egov.egf.contract.model.VoucherRequest;
-import org.springframework.stereotype.Service;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.egov.egf.contract.model.ErrorDetail;
+import org.egov.egf.contract.model.Voucher;
+import org.egov.egf.contract.model.VoucherRequest;
+import org.springframework.stereotype.Service;
+
 @Service
 public class ContractVoucherService {
     
-    public List<ErrorDetail> validateVoucherReuest(final VoucherContract request) {
+    public List<ErrorDetail> validateVoucherReuest(final VoucherRequest request) {
         final List<ErrorDetail> errors = new ArrayList<>();
         ErrorDetail errorDetails = new ErrorDetail();
         
@@ -71,38 +71,38 @@ public class ContractVoucherService {
             errors.add(errorDetails);
         }
         
-        VoucherRequest VoucherRequest = request.getVouchers().get(0);
+        Voucher  voucher = request.getVouchers().get(0);
         
-        if (VoucherRequest.getLedgers().size() > 100) {
+        if (voucher.getLedgers().size() > 100) {
             errorDetails.setErrorCode("EGF-VOUCHER-2");
             errorDetails.setErrorMessage("Account Details size cannot be greater then 30");
             errors.add(errorDetails);
         }
 
-        if (request != null && VoucherRequest.getLedgers().isEmpty()) {
+        if (request != null && voucher.getLedgers().isEmpty()) {
             errorDetails.setErrorCode("EGF-VOUCHER-5");
             errorDetails.setErrorMessage("Account Details List cannot be empty");
             errors.add(errorDetails);
         }
         
-        validateVoucherDate(request, errors, errorDetails, VoucherRequest);
+        validateVoucherDate(voucher, errors, errorDetails, request);
      
         return errors;
     }
 
-    private void validateVoucherDate(final VoucherContract request, final List<ErrorDetail> errors, ErrorDetail errorDetails,
+    private void validateVoucherDate(final Voucher request, final List<ErrorDetail> errors, ErrorDetail errorDetails,
             VoucherRequest VoucherRequest) {
-        if(VoucherRequest.getVoucherDate().isEmpty()) {
+        if(request.getVoucherDate().isEmpty()) {
             errorDetails.setErrorCode("EGF-VOUCHER-3");
             errorDetails.setErrorMessage("Voucher Date cannot be empty");
             errors.add(errorDetails);
         }
         
-        if (request != null && !VoucherRequest.getVoucherDate().isEmpty()) {
+        if (request != null && !request.getVoucherDate().isEmpty()) {
             final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             Date voucherDate = null;
             try {
-                voucherDate = (Date) formatter.parse(VoucherRequest.getVoucherDate());
+                voucherDate = (Date) formatter.parse(request.getVoucherDate());
             } catch (ParseException e) {
                 errorDetails.setErrorCode("EGF-VOUCHER-3");
                 errorDetails.setErrorMessage("Please send the Voucher Date in DD-MM-YYYY format");
