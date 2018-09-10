@@ -102,42 +102,6 @@ function callAjaxSearch() {
 					"data" : "code",
 					"sClass" : "text-left"
 				}, {
-					"data" : "correspondenceAddress",
-					"sClass" : "text-right"
-				}, {
-					"data" : "paymentAddress",
-					"sClass" : "text-right"
-				}, {
-					"data" : "contactPerson",
-					"sClass" : "text-left"
-				}, {
-					"data" : "email",
-					"sClass" : "text-left"
-				}, {
-					"data" : "narration",
-					"sClass" : "text-left"
-				} , {
-					"data" : "mobileNumber",
-					"sClass" : "text-left"
-				} , {
-					"data" : "panNumber",
-					"sClass" : "text-left"
-				} , {
-					"data" : "tinNumber",
-					"sClass" : "text-left"
-				} , {
-					"data" : "bank",
-					"sClass" : "text-left"
-				} , {
-					"data" : "ifscCode",
-					"sClass" : "text-left"
-				} , {
-					"data" : "bankAccount",
-					"sClass" : "text-left"
-				} , {
-					"data" : "registrationNumber",
-					"sClass" : "text-left"
-				} , {
 					"data" : "status",
 					"sClass" : "text-left"
 				} ]

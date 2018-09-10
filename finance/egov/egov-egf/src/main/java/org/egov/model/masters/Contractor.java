@@ -114,15 +114,15 @@ public class Contractor extends AbstractAuditable implements EntityType {
 	@OptionalPattern(regex = Constants.PANNUMBER, message = "Enter the PAN No in correct format - XXXXX1234X")
 	private String panNumber;
 
-	@Length(max = 14, message = "Maximum of 50 Characters allowed for TIN No")
-	@OptionalPattern(regex = Constants.ALPHANUMERIC, message = "Special Characters are not allowed in TIN No")
+	@Length(min = 15, max = 15, message = "Maximum of 15 Characters allowed for TIN/GST No")
+	@OptionalPattern(regex = Constants.ALPHANUMERIC, message = "Special Characters are not allowed in TIN/GST No")
 	private String tinNumber;
 
 	@ManyToOne
 	@JoinColumn(name = "bank")
 	private Bank bank;
 
-	@Length(max = 15, message = "Maximum of 50 Characters allowed for IFSC Code")
+	@Length(min = 11, max = 11, message = "Maximum of 11 Characters allowed for IFSC Code")
 	@OptionalPattern(regex = Constants.ALPHANUMERIC, message = "Special Characters are not allowed in IFSC Code")
 	private String ifscCode;
 
@@ -134,7 +134,7 @@ public class Contractor extends AbstractAuditable implements EntityType {
 	@OptionalPattern(regex = Constants.MOBILE_NUM, message = "Please enter valid mobile number")
 	private String mobileNumber;
 
-	@Length(max = 50, message = "Maximum of 50 Characters allowed for Registration No")
+	@Length(max = 21, message = "Maximum of 21 Characters allowed for Registration No")
 	@OptionalPattern(regex = FinancialConstants.alphaNumericwithspecialchar, message = "Special Characters are not allowed in Registration No")
 	private String registrationNumber;
 
