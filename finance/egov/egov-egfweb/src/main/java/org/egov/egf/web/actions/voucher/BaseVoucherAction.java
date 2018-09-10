@@ -82,7 +82,6 @@ import org.egov.eis.service.AssignmentService;
 import org.egov.eis.web.actions.workflow.GenericWorkFlowAction;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Boundary;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
@@ -143,7 +142,6 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 
 	public BaseVoucherAction() {
 		voucherHeader.setVouchermis(new Vouchermis());
-		addRelatedEntity("vouchermis.departmentid", Department.class);
 		addRelatedEntity("fundId", Fund.class);
 		addRelatedEntity("vouchermis.schemeid", Scheme.class);
 		addRelatedEntity("vouchermis.subschemeid", SubScheme.class);
@@ -171,8 +169,10 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Inside Prepare method");
 		getHeaderMandateFields();
-		if (headerFields.contains("department"))
-			addDropdownData("departmentList", masterDataCache.get("egi-department"));
+		if (headerFields.contains("department")){
+			List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
+			addDropdownData("departmentList", departments);
+		}
 		if (headerFields.contains("functionary"))
 			addDropdownData("functionaryList", masterDataCache.get("egi-functionary"));
 		if (headerFields.contains("function"))
@@ -276,7 +276,7 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 		headerdetails.put(VoucherConstant.VOUCHERDATE, voucherHeader.getVoucherDate());
 		headerdetails.put(VoucherConstant.DESCRIPTION, voucherHeader.getDescription());
 
-		if (voucherHeader.getVouchermis().getDepartmentcode() != null) 
+		if (voucherHeader.getVouchermis().getDepartmentcode() != null)
 			headerdetails.put(VoucherConstant.DEPARTMENTCODE, voucherHeader.getVouchermis().getDepartmentcode());
 		if (voucherHeader.getFundId() != null)
 			headerdetails.put(VoucherConstant.FUNDCODE, voucherHeader.getFundId().getCode());

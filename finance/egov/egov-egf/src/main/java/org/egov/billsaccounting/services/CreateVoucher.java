@@ -154,7 +154,7 @@ import com.exilant.exility.common.TaskFailedException;
  *
  */
 @Service
-//@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+// @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class CreateVoucher {
 	private static final String DD_MMM_YYYY = "dd-MMM-yyyy";
 	private static final String DD_MM_YYYY = "dd/MM/yyyy";
@@ -185,7 +185,7 @@ public class CreateVoucher {
 	@Autowired
 	@Qualifier("persistenceService")
 	private PersistenceService persistenceService;
-	 
+
 	@Autowired
 	private AutonumberServiceBeanResolver beanResolver;
 
@@ -223,17 +223,16 @@ public class CreateVoucher {
 	@Autowired
 	private BankHibernateDAO bankDAO;
 
-
 	@Autowired
 	private EgBillRegisterHibernateDAO egBillRegisterHibernateDAO;
 
 	@Autowired
 	@Qualifier("voucherService")
-	private VoucherService voucherService; 
- 
+	private VoucherService voucherService;
+
 	@Autowired
 	private BoundaryService boundaryService;
-	
+
 	@Autowired
 	private GenericSequenceNumberGenerator genericSequenceNumberGenerator;
 
@@ -274,14 +273,14 @@ public class CreateVoucher {
 	private AccountdetailtypeHibernateDAO accountdetailtypeHibernateDAO;
 	@Autowired
 	private FiscalPeriodHibernateDAO fiscalPeriodHibernateDAO;
-	
+
 	@Autowired
 	private ChartOfAccountDetailService chartOfAccountDetailService;
 
 	public CreateVoucher() {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Initializing CreateVoucher Service");
-		 
+
 	}
 
 	/**
@@ -296,50 +295,42 @@ public class CreateVoucher {
 	 * @throws Exception
 	 */
 
-    public long createVoucherFromBill(final int billId, String voucherStatus,
-            final String voucherNumber, final Date voucherDate)
-            throws ApplicationRuntimeException, SQLException,
-            TaskFailedException {
-        CVoucherHeader vh = null;
-        try {
-            if (voucherStatus == null) {
-                final List vStatusList = appConfigValuesService
-                        .getConfigValuesByModuleAndKey(FinancialConstants.MODULE_NAME_APPCONFIG, "PREAPPROVEDVOUCHERSTATUS");
+	public long createVoucherFromBill(final int billId, String voucherStatus, final String voucherNumber,
+			final Date voucherDate) throws ApplicationRuntimeException, SQLException, TaskFailedException {
+		CVoucherHeader vh = null;
+		try {
+			if (voucherStatus == null) {
+				final List vStatusList = appConfigValuesService.getConfigValuesByModuleAndKey(
+						FinancialConstants.MODULE_NAME_APPCONFIG, "PREAPPROVEDVOUCHERSTATUS");
 
-                if (!vStatusList.isEmpty() && vStatusList.size() == 1) {
-                    final AppConfigValues appVal = (AppConfigValues) vStatusList
-                            .get(0);
-                    voucherStatus = appVal.getValue();
-                } else
-                    throw new ApplicationRuntimeException(
-                            "PREAPPROVEDVOUCHERSTATUS"
-                                    + "is not defined in AppConfig values cannot proceed creating voucher");
-            }
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug(" ---------------Generating Voucher for Bill-------");
-            EgBillregister egBillregister = null;
-            egBillregister = billsService.getBillRegisterById(Integer
-                    .valueOf(billId));
+				if (!vStatusList.isEmpty() && vStatusList.size() == 1) {
+					final AppConfigValues appVal = (AppConfigValues) vStatusList.get(0);
+					voucherStatus = appVal.getValue();
+				} else
+					throw new ApplicationRuntimeException("PREAPPROVEDVOUCHERSTATUS"
+							+ "is not defined in AppConfig values cannot proceed creating voucher");
+			}
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug(" ---------------Generating Voucher for Bill-------");
+			EgBillregister egBillregister = null;
+			egBillregister = billsService.getBillRegisterById(Integer.valueOf(billId));
 			/*
 			 * identify the bill type and delegate get the fund and fundsource
 			 * check for mandatory fields for implementation if missing throw
 			 * exception department is mandatory for implementation type fund is
 			 * mandatory for all implementations
 			 */
-			final EgBillregistermis billMis = egBillregister
-					.getEgBillregistermis();
+			final EgBillregistermis billMis = egBillregister.getEgBillregistermis();
 			// checking voucher already exists or not for this bill
 			try {
 				CVoucherHeader result;
 				if (billMis.getVoucherHeader() != null) {
-					result = (CVoucherHeader) voucherService
-							.find("select vh from CVoucherHeader vh where vh.id = ? and vh.status!=?",
-									billMis.getVoucherHeader().getId(),
-									FinancialConstants.CANCELLEDVOUCHERSTATUS);
+					result = (CVoucherHeader) voucherService.find(
+							"select vh from CVoucherHeader vh where vh.id = ? and vh.status!=?",
+							billMis.getVoucherHeader().getId(), FinancialConstants.CANCELLEDVOUCHERSTATUS);
 					if (result != null)
-						throw new ApplicationRuntimeException("Voucher "
-								+ result.getVoucherNumber()
-								+ " already exists for this bill ");
+						throw new ApplicationRuntimeException(
+								"Voucher " + result.getVoucherNumber() + " already exists for this bill ");
 				}
 			} catch (final Exception e) {
 				throw new ApplicationRuntimeException(e.getMessage());
@@ -350,8 +341,7 @@ public class CreateVoucher {
 				throw new ApplicationRuntimeException(FUNDMISSINGMSG);
 			} else
 				fund.getId();
-			final String deptMandatory = EGovConfig.getProperty(
-					"egf_config.xml", "deptRequired", "", "general");
+			final String deptMandatory = EGovConfig.getProperty("egf_config.xml", "deptRequired", "", "general");
 			if (deptMandatory.equalsIgnoreCase("Y"))
 				if (billMis.getDepartmentcode() == null)
 					throw new ApplicationRuntimeException(DEPTMISSINGMSG);
@@ -367,15 +357,14 @@ public class CreateVoucher {
 			final String expType = egBillregister.getExpendituretype();
 			String voucherType = null;
 			String voucherSubType = null;
-			String name="";
+			String name = "";
 			if (expType.equalsIgnoreCase(CONBILL)) {
 				name = "Contractor Journal";
 				voucherSubType = FinancialConstants.JOURNALVOUCHER_NAME_CONTRACTORJOURNAL;
 			} else if (expType.equalsIgnoreCase(SUPBILL)) {
 				name = "Supplier Journal";
 				if (null != billMis.getEgBillSubType()
-						&& billMis.getEgBillSubType().getName()
-								.equalsIgnoreCase("Fixed Asset"))
+						&& billMis.getEgBillSubType().getName().equalsIgnoreCase("Fixed Asset"))
 					voucherSubType = FinancialConstants.JOURNALVOUCHER_NAME_FIXEDASSETJOURNAL;
 				else
 					voucherSubType = FinancialConstants.JOURNALVOUCHER_NAME_PURCHASEJOURNAL;
@@ -384,8 +373,7 @@ public class CreateVoucher {
 				voucherSubType = FinancialConstants.JOURNALVOUCHER_NAME_SALARYJOURNAL;
 			}
 			// Pension,Gratuity are saved as Expense Bill
-			else if (expType
-					.equalsIgnoreCase(FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT)) {
+			else if (expType.equalsIgnoreCase(FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT)) {
 				name = FinancialConstants.JOURNALVOUCHER_NAME_EXPENSEJOURNAL;
 				voucherSubType = FinancialConstants.JOURNALVOUCHER_NAME_EXPENSEJOURNAL;
 			} else if (expType.equalsIgnoreCase(PENSBILL)) {
@@ -405,8 +393,7 @@ public class CreateVoucher {
 			Set<EgBillPayeedetails> subLedgerlist;
 			final List<HashMap<String, Object>> accountdetails = new ArrayList<HashMap<String, Object>>();
 			final List<HashMap<String, Object>> subledgerDetails = new ArrayList<HashMap<String, Object>>();
-			final Set<EgBilldetails> billDetailslist = egBillregister
-					.getEgBilldetailes();
+			final Set<EgBilldetails> billDetailslist = egBillregister.getEgBilldetailes();
 			detailMap = new HashMap<String, Object>();
 			new HashMap<String, Object>();
 
@@ -414,8 +401,7 @@ public class CreateVoucher {
 			headerDetails.put(VoucherConstant.VOUCHERTYPE, voucherType);
 			headerDetails.put("vouchersubtype", voucherSubType);
 			new SimpleDateFormat(DD_MMM_YYYY);
-			headerDetails.put(VoucherConstant.VOUCHERNUMBER,
-					voucherNumber == null ? "" : voucherNumber);
+			headerDetails.put(VoucherConstant.VOUCHERNUMBER, voucherNumber == null ? "" : voucherNumber);
 			Date dt = new Date();
 			Date vdt;
 			String purposeValueVN = "";
@@ -431,9 +417,7 @@ public class CreateVoucher {
 			 **/
 			try {
 				final List<AppConfigValues> configValues = appConfigValuesService
-						.getConfigValuesByModuleAndKey(
-								FinancialConstants.MODULE_NAME_APPCONFIG,
-								"VOUCHERDATE_FROM_UI");
+						.getConfigValuesByModuleAndKey(FinancialConstants.MODULE_NAME_APPCONFIG, "VOUCHERDATE_FROM_UI");
 
 				for (final AppConfigValues appConfigVal : configValues)
 					purposeValueVN = appConfigVal.getValue();
@@ -443,10 +427,8 @@ public class CreateVoucher {
 			}
 			if (purposeValueVN.equals("Y")) {
 				if (voucherDate == null)
-					throw new ValidationException(
-							Arrays.asList(new ValidationError(
-									"Voucherdate Should be entered by user",
-									"voucherfrombill.voucherdate.mandatory")));
+					throw new ValidationException(Arrays.asList(new ValidationError(
+							"Voucherdate Should be entered by user", "voucherfrombill.voucherdate.mandatory")));
 				else {
 					dt = voucherDate;
 					vdt = dt;
@@ -455,10 +437,8 @@ public class CreateVoucher {
 			} else {
 
 				try {
-					final List<AppConfigValues> configValues = appConfigValuesService
-							.getConfigValuesByModuleAndKey(
-									FinancialConstants.MODULE_NAME_APPCONFIG,
-									"USE BILLDATE IN CREATE VOUCHER FROM BILL");
+					final List<AppConfigValues> configValues = appConfigValuesService.getConfigValuesByModuleAndKey(
+							FinancialConstants.MODULE_NAME_APPCONFIG, "USE BILLDATE IN CREATE VOUCHER FROM BILL");
 
 					for (final AppConfigValues appConfigVal : configValues)
 						purposeValueVN = appConfigVal.getValue();
@@ -476,34 +456,26 @@ public class CreateVoucher {
 			if (egBillregister.getId() != null)
 				headerDetails.put("billid", egBillregister.getId());
 			if (billMis.getSourcePath() != null)
-				headerDetails.put(VoucherConstant.SOURCEPATH,
-						billMis.getSourcePath());
-			if (billMis.getDepartmentcode() != null){
-				headerDetails.put(VoucherConstant.DEPARTMENTCODE,billMis.getDepartmentcode());
+				headerDetails.put(VoucherConstant.SOURCEPATH, billMis.getSourcePath());
+			if (billMis.getDepartmentcode() != null) {
+				headerDetails.put(VoucherConstant.DEPARTMENTCODE, billMis.getDepartmentcode());
 			}
 			if (billMis.getFund() != null)
-				headerDetails.put(VoucherConstant.FUNDCODE, billMis.getFund()
-						.getCode());
+				headerDetails.put(VoucherConstant.FUNDCODE, billMis.getFund().getCode());
 			if (billMis.getScheme() != null)
-				headerDetails.put(VoucherConstant.SCHEMECODE, billMis
-						.getScheme().getCode());
+				headerDetails.put(VoucherConstant.SCHEMECODE, billMis.getScheme().getCode());
 			if (billMis.getSubScheme() != null)
-				headerDetails.put(VoucherConstant.SUBSCHEMECODE, billMis
-						.getSubScheme().getCode());
+				headerDetails.put(VoucherConstant.SUBSCHEMECODE, billMis.getSubScheme().getCode());
 			if (billMis.getFundsource() != null)
-				headerDetails.put(VoucherConstant.FUNDSOURCECODE, billMis
-						.getFundsource().getCode());
+				headerDetails.put(VoucherConstant.FUNDSOURCECODE, billMis.getFundsource().getCode());
 			if (billMis.getFieldid() != null)
 				if (billMis.getFieldid().getId() != null)
-					headerDetails.put(VoucherConstant.DIVISIONID, billMis
-							.getFieldid().getId().toString());
+					headerDetails.put(VoucherConstant.DIVISIONID, billMis.getFieldid().getId().toString());
 			if (billMis.getFunctionaryid() != null)
-				headerDetails.put(VoucherConstant.FUNCTIONARYCODE, billMis
-						.getFunctionaryid().getCode());
+				headerDetails.put(VoucherConstant.FUNCTIONARYCODE, billMis.getFunctionaryid().getCode());
 			// TODO- read the fnction from billdetails. We can remove this
 			if (billMis.getFunction() != null)
-				headerDetails.put(VoucherConstant.FUNCTIONCODE, billMis
-						.getFunction().getCode());
+				headerDetails.put(VoucherConstant.FUNCTIONCODE, billMis.getFunction().getCode());
 
 			for (final EgBilldetails egBilldetails : billDetailslist) {
 
@@ -518,55 +490,42 @@ public class CreateVoucher {
 					 * function.getCode());
 					 */
 				}
-				detailMap.put(VoucherConstant.DEBITAMOUNT, egBilldetails
-						.getDebitamount() == null ? BigDecimal.ZERO
-						: egBilldetails.getDebitamount());
-				detailMap.put(VoucherConstant.CREDITAMOUNT, egBilldetails
-						.getCreditamount() == null ? BigDecimal.ZERO
-						: egBilldetails.getCreditamount());
-				final String glcode = persistenceService
-						.getSession()
-						.createQuery(
-								"select glcode from CChartOfAccounts where id = "
-										+ egBilldetails.getGlcodeid()
-												.longValue()).list().get(0)
-						.toString();
+				detailMap.put(VoucherConstant.DEBITAMOUNT,
+						egBilldetails.getDebitamount() == null ? BigDecimal.ZERO : egBilldetails.getDebitamount());
+				detailMap.put(VoucherConstant.CREDITAMOUNT,
+						egBilldetails.getCreditamount() == null ? BigDecimal.ZERO : egBilldetails.getCreditamount());
+				final String glcode = persistenceService.getSession().createQuery(
+						"select glcode from CChartOfAccounts where id = " + egBilldetails.getGlcodeid().longValue())
+						.list().get(0).toString();
 				detailMap.put(VoucherConstant.GLCODE, glcode);
 				accountdetails.add(detailMap);
 				subLedgerlist = egBilldetails.getEgBillPaydetailes();
-                                for (final EgBillPayeedetails egBillPayeedetails : subLedgerlist) {
-                                    subledgertDetailMap = new HashMap<>();
-                                    if (chartOfAccountDetailService.getByGlcodeIdAndDetailTypeId(
-                                            egBillPayeedetails.getEgBilldetailsId().getGlcodeid().longValue(),
-                                            egBillPayeedetails.getAccountDetailTypeId().intValue()) != null) {
-                                        subledgertDetailMap
-                                                .put(VoucherConstant.DEBITAMOUNT,
-                                                        egBillPayeedetails.getDebitAmount() == null ? BigDecimal.ZERO
-                                                                : egBillPayeedetails
-                                                                        .getDebitAmount());
-                                        subledgertDetailMap
-                                                .put(VoucherConstant.CREDITAMOUNT,
-                                                        egBillPayeedetails.getCreditAmount() == null ? BigDecimal.ZERO
-                                                                : egBillPayeedetails
-                                                                        .getCreditAmount());
-                                        subledgertDetailMap.put(VoucherConstant.DETAILTYPEID,
-                                                egBillPayeedetails.getAccountDetailTypeId());
-                                        subledgertDetailMap.put(VoucherConstant.DETAILKEYID,
-                                                egBillPayeedetails.getAccountDetailKeyId());
-                                        subledgertDetailMap.put(VoucherConstant.GLCODE, glcode);
-                                        subledgerDetails.add(subledgertDetailMap);
-                                    }
-                                }
+				for (final EgBillPayeedetails egBillPayeedetails : subLedgerlist) {
+					subledgertDetailMap = new HashMap<>();
+					if (chartOfAccountDetailService.getByGlcodeIdAndDetailTypeId(
+							egBillPayeedetails.getEgBilldetailsId().getGlcodeid().longValue(),
+							egBillPayeedetails.getAccountDetailTypeId().intValue()) != null) {
+						subledgertDetailMap.put(VoucherConstant.DEBITAMOUNT, egBillPayeedetails.getDebitAmount() == null
+								? BigDecimal.ZERO : egBillPayeedetails.getDebitAmount());
+						subledgertDetailMap.put(VoucherConstant.CREDITAMOUNT,
+								egBillPayeedetails.getCreditAmount() == null ? BigDecimal.ZERO
+										: egBillPayeedetails.getCreditAmount());
+						subledgertDetailMap.put(VoucherConstant.DETAILTYPEID,
+								egBillPayeedetails.getAccountDetailTypeId());
+						subledgertDetailMap.put(VoucherConstant.DETAILKEYID,
+								egBillPayeedetails.getAccountDetailKeyId());
+						subledgertDetailMap.put(VoucherConstant.GLCODE, glcode);
+						subledgerDetails.add(subledgertDetailMap);
+					}
+				}
 			}
-			vh = createPreApprovedVoucher(headerDetails, accountdetails,
-					subledgerDetails);
+			vh = createPreApprovedVoucher(headerDetails, accountdetails, subledgerDetails);
 			egBillregister.getEgBillregistermis().setVoucherHeader(vh);
 
 		} catch (final ValidationException e) {
 			LOGGER.error(e.getErrors());
 			final List<ValidationError> errors = new ArrayList<ValidationError>();
-			errors.add(new ValidationError("exp", e.getErrors().get(0)
-					.getMessage()));
+			errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
 			throw new ValidationException(errors);
 		} catch (final Exception e) {
 			LOGGER.error("Error in create voucher from bill" + e.getMessage());
@@ -585,36 +544,30 @@ public class CreateVoucher {
 	 * @throws Exception
 	 */
 
-	public long createVoucherFromBillForPJV(final int billId,
-			final String voucherStatus,
-			final List<PreApprovedVoucher> voucherdetailList,
-			final List<PreApprovedVoucher> subLedgerList)
-			throws ApplicationRuntimeException, SQLException,
-			TaskFailedException {
+	public long createVoucherFromBillForPJV(final int billId, final String voucherStatus,
+			final List<PreApprovedVoucher> voucherdetailList, final List<PreApprovedVoucher> subLedgerList)
+			throws ApplicationRuntimeException, SQLException, TaskFailedException {
 		final CVoucherHeader vh = null;
 		try {
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug(" ---------------Generating Voucher-------");
 			EgBillregister egBillregister = null;
-			egBillregister = billsService.getBillRegisterById(Integer
-					.valueOf(billId));
+			egBillregister = billsService.getBillRegisterById(Integer.valueOf(billId));
 			/*
 			 * identify the bill type and delegate get the fund and fundsource
 			 * check for mandatory fields for implementation if missing throw
 			 * exception department is mandatory for implementation type fund is
 			 * mandatory for all implementations
 			 */
-			String name="";
-			final EgBillregistermis billMis = egBillregister
-					.getEgBillregistermis();
+			String name = "";
+			final EgBillregistermis billMis = egBillregister.getEgBillregistermis();
 			final Fund fund = billMis.getFund();
 			if (fund == null) {
 				LOGGER.error(FUNDMISSINGMSG);
 				throw new ApplicationRuntimeException(FUNDMISSINGMSG);
 			} else
 				fund.getId();
-			final String deptMandatory = EGovConfig.getProperty(
-					"egf_config.xml", "deptRequired", "", "general");
+			final String deptMandatory = EGovConfig.getProperty("egf_config.xml", "deptRequired", "", "general");
 			if (deptMandatory.equalsIgnoreCase("Y"))
 				if (billMis.getDepartmentcode() == null)
 					throw new ApplicationRuntimeException(DEPTMISSINGMSG);
@@ -632,17 +585,15 @@ public class CreateVoucher {
 				name = "Contractor Journal";
 			} else if (expType.equalsIgnoreCase(SUPBILL)) {
 				name = "Supplier Journal";
-/*				if (null != billMis.getEgBillSubType()
-						&& billMis.getEgBillSubType().getName()
-								.equalsIgnoreCase("Fixed Asset")) {
-				} else {
-				}
-*/			} else if (expType.equalsIgnoreCase(SALBILL)) {
+				/*
+				 * if (null != billMis.getEgBillSubType() &&
+				 * billMis.getEgBillSubType().getName() .equalsIgnoreCase(
+				 * "Fixed Asset")) { } else { }
+				 */ } else if (expType.equalsIgnoreCase(SALBILL)) {
 				name = "Salary Journal";
 			}
 			// Pension,Gratuity are saved as contingency Bill
-			else if (expType
-					.equalsIgnoreCase(FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT)) {
+			else if (expType.equalsIgnoreCase(FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT)) {
 				name = FinancialConstants.JOURNALVOUCHER_NAME_EXPENSEJOURNAL;
 			} else if (expType.equalsIgnoreCase(PENSBILL)) {
 				name = "Pension Journal";
@@ -654,8 +605,7 @@ public class CreateVoucher {
 
 			// vh=createVoucherheaderAndPostGLForPJV(fundId,egBillregister,fundSrcId,schemeId,subSchemeId,name,cgnCode,voucherType,voucherdetailList,subLedgerList);
 		} catch (final Exception e) {
-			LOGGER.error("Error in createVoucherFromBillForPJV "
-					+ e.getMessage());
+			LOGGER.error("Error in createVoucherFromBillForPJV " + e.getMessage());
 			throw new ApplicationRuntimeException(e.getMessage());
 		}
 		return vh.getId().longValue();
@@ -672,11 +622,10 @@ public class CreateVoucher {
 	 *         the vouchers for the preapproved vouchers.s
 	 */
 
-	public void createVoucherFromPreApprovedVoucher(final long vouhcerheaderid,
-			final String status) throws ApplicationRuntimeException {
+	public void createVoucherFromPreApprovedVoucher(final long vouhcerheaderid, final String status)
+			throws ApplicationRuntimeException {
 		try {
-			final CVoucherHeader vh = (CVoucherHeader) voucherHeaderDAO
-					.findById(vouhcerheaderid, false);
+			final CVoucherHeader vh = (CVoucherHeader) voucherHeaderDAO.findById(vouhcerheaderid, false);
 			vh.setStatus(Integer.valueOf(status));
 			voucherHeaderDAO.update(vh);
 
@@ -790,33 +739,28 @@ public class CreateVoucher {
 	 * @throws ApplicationRuntimeException
 	 */
 	@Transactional
-	public CVoucherHeader createPreApprovedVoucher(
-			final HashMap<String, Object> headerdetails,
+	public CVoucherHeader createPreApprovedVoucher(final HashMap<String, Object> headerdetails,
 			final List<HashMap<String, Object>> accountcodedetails,
 			final List<HashMap<String, Object>> subledgerdetails)
 			throws ApplicationRuntimeException, ValidationException {
-		final AppConfig appConfig = appConfigService
-				.getAppConfigByKeyName("PREAPPROVEDVOUCHERSTATUS");
+		final AppConfig appConfig = appConfigService.getAppConfigByKeyName("PREAPPROVEDVOUCHERSTATUS");
 		if (null != appConfig && null != appConfig.getConfValues())
-			for (final AppConfigValues appConfigVal : appConfig
-					.getConfValues())
-				headerdetails.put(VoucherConstant.STATUS,
-						Integer.valueOf(appConfigVal.getValue()));
+			for (final AppConfigValues appConfigVal : appConfig.getConfValues())
+				headerdetails.put(VoucherConstant.STATUS, Integer.valueOf(appConfigVal.getValue()));
 		else
 			throw new ApplicationRuntimeException(
 					"Appconfig value for PREAPPROVEDVOUCHERSTATUS is not defined in the system");
 		CVoucherHeader vh;
 		try {
-			vh = createVoucher(headerdetails, accountcodedetails,
-					subledgerdetails);
-			/*if (vh.getModuleId() != null)
-				startWorkflow(vh);*/ 
-			//if u need workflow enable above lines and fix workflow
+			vh = createVoucher(headerdetails, accountcodedetails, subledgerdetails);
+			/*
+			 * if (vh.getModuleId() != null) startWorkflow(vh);
+			 */
+			// if u need workflow enable above lines and fix workflow
 		} catch (final ValidationException ve) {
 			LOGGER.error(ERR, ve);
 			final List<ValidationError> errors = new ArrayList<ValidationError>();
-			errors.add(new ValidationError("exp", ve.getErrors().get(0)
-					.getMessage()));
+			errors.add(new ValidationError("exp", ve.getErrors().get(0).getMessage()));
 			throw new ValidationException(errors);
 		} catch (final Exception e) {
 			LOGGER.error(ERR, e);
@@ -833,25 +777,18 @@ public class CreateVoucher {
 	 * @throws ValidationException
 	 */
 
-	public void startWorkflow(final CVoucherHeader voucherheader)
-			throws ValidationException {
+	public void startWorkflow(final CVoucherHeader voucherheader) throws ValidationException {
 		try {
 			final ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-					new String[] {
-							"classpath:org/serviceconfig-Bean.xml",
+					new String[] { "classpath:org/serviceconfig-Bean.xml",
 							"classpath:org/egov/infstr/beanfactory/globalApplicationContext.xml",
 							"classpath:org/egov/infstr/beanfactory/applicationContext-egf.xml",
 							"classpath:org/egov/infstr/beanfactory/applicationContext-pims.xml" });
-			if (voucherheader.getType().equals(
-					FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL)
-					|| voucherheader.getType().equals(
-							FinancialConstants.STANDARD_VOUCHER_TYPE_RECEIPT)) {
+			if (voucherheader.getType().equals(FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL)
+					|| voucherheader.getType().equals(FinancialConstants.STANDARD_VOUCHER_TYPE_RECEIPT)) {
 				LOGGER.error("Calling StartWorkflow...in create voucher.....for ......ContraJournalVoucher......"
-						+ voucherheader.getType()
-						+ " ----"
-						+ voucherheader.getName());
-				final String billtype = egBillRegisterHibernateDAO
-						.getBillTypeforVoucher(voucherheader);
+						+ voucherheader.getType() + " ----" + voucherheader.getName());
+				final String billtype = egBillRegisterHibernateDAO.getBillTypeforVoucher(voucherheader);
 				if (billtype == null) {
 					applicationContext.getBean("voucherWorkflowService");
 					voucherheader.transition().start().withOwner(getPosition());
@@ -860,26 +797,21 @@ public class CreateVoucher {
 					// Position position =
 					// eisCommonService.getPositionByUserId(ApplicationThreadLocals.getUserId());
 
-					final VoucherService vs = (VoucherService) applicationContext
-							.getBean("voucherService");
+					final VoucherService vs = (VoucherService) applicationContext.getBean("voucherService");
 					final PersistenceService persistenceService = (PersistenceService) applicationContext
 							.getBean("persistenceService");
-					final Position nextPosition = getNextPosition(
-							voucherheader, vs, persistenceService, null);
-					voucherheader.transition().progressWithStateCopy()
-							.withStateValue("WORKFLOW INITIATED")
-							.withOwner(nextPosition)
-							.withComments("WORKFLOW STARTED");
+					final Position nextPosition = getNextPosition(voucherheader, vs, persistenceService, null);
+					voucherheader.transition().progressWithStateCopy().withStateValue("WORKFLOW INITIATED")
+							.withOwner(nextPosition).withComments("WORKFLOW STARTED");
 				}
 			}
 			/*
 			 * this logic is moved to top since both have same workflow else
-			 * if(voucherheader
-			 * .getType().equals(FinancialConstants.STANDARD_VOUCHER_TYPE_RECEIPT
-			 * )) { // ReceiptVoucher rv=new ReceiptVoucher();
-			 * PersistenceService<ReceiptVoucher, Long> persistenceService = new
-			 * PersistenceService<ReceiptVoucher, Long>();
-			 * //persistenceService.setType(ReceiptVoucher.class);
+			 * if(voucherheader .getType().equals(FinancialConstants.
+			 * STANDARD_VOUCHER_TYPE_RECEIPT )) { // ReceiptVoucher rv=new
+			 * ReceiptVoucher(); PersistenceService<ReceiptVoucher, Long>
+			 * persistenceService = new PersistenceService<ReceiptVoucher,
+			 * Long>(); //persistenceService.setType(ReceiptVoucher.class);
 			 * rv.setId(voucherheader.getId());
 			 * rv.setVoucherHeader(voucherheader);
 			 * persistenceService.create(rv);
@@ -894,28 +826,23 @@ public class CreateVoucher {
 		} catch (final Exception e) {
 			final List<ValidationError> errors = new ArrayList<ValidationError>();
 			LOGGER.error(ERR, e);
-			errors.add(new ValidationError(
-					"Exp in startWorkflow for JV/Receipt voucher=", e
-							.getMessage()));
+			errors.add(new ValidationError("Exp in startWorkflow for JV/Receipt voucher=", e.getMessage()));
 			throw new ValidationException(errors);
 		}
 	}
 
-	private Position getNextPosition(final CVoucherHeader voucherheader,
-			final VoucherService vs,
+	private Position getNextPosition(final CVoucherHeader voucherheader, final VoucherService vs,
 			final PersistenceService persistenceService, final Position position) {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Getting next Position for WorkFlow");
 		final Position nextPosition = null;
-		Department department = vs.getTempDepartmentForWfItem(voucherheader,
-				position);
+		Department department = vs.getTempDepartmentForWfItem(voucherheader, position);
 		if (department == null) {
 			LOGGER.warn("Not able to get tempoaray Assignment defaulting to primary asssigment");
 			department = vs.getDepartmentForWfItem(voucherheader);
 			if (department == null) {
 				final List<ValidationError> errors = new ArrayList<ValidationError>();
-				errors.add(new ValidationError("Unable to get Temp Department",
-						"Unable to get Temp Department"));
+				errors.add(new ValidationError("Unable to get Temp Department", "Unable to get Temp Department"));
 				throw new ValidationException(errors);
 			}
 		}
@@ -924,10 +851,8 @@ public class CreateVoucher {
 		designationName = "SECTION MANAGER";
 		Boundary boundaryForUser = null;
 		if (department.getCode().equalsIgnoreCase("A")) {
-			final HierarchyType hierarchyTypeByName = hierarchyTypeService
-					.getHierarchyTypeByName("ADMINISTRATION");
-			final List topBoundaries = boundaryService
-					.getTopLevelBoundaryByHierarchyType(hierarchyTypeByName);
+			final HierarchyType hierarchyTypeByName = hierarchyTypeService.getHierarchyTypeByName("ADMINISTRATION");
+			final List topBoundaries = boundaryService.getTopLevelBoundaryByHierarchyType(hierarchyTypeByName);
 			if (topBoundaries != null && topBoundaries.size() > 0)
 				boundaryForUser = (Boundary) topBoundaries.get(0);
 			functionaryName = "Compilation";
@@ -936,58 +861,53 @@ public class CreateVoucher {
 			functionaryName = "ZONE";
 		}
 		final Designation next_desig = (Designation) persistenceService
-				.find("from Designation  where upper(name)=upper(?)",
-						designationName);
-		final Functionary functionary = (Functionary) persistenceService.find(
-				"from Functionary where upper(name)=upper(?)", functionaryName);
+				.find("from Designation  where upper(name)=upper(?)", designationName);
+		final Functionary functionary = (Functionary) persistenceService
+				.find("from Functionary where upper(name)=upper(?)", functionaryName);
 
 		try {
-			personalInformationDAO.getEmployeeByFunctionary(department.getId(),
-					next_desig.getId(), boundaryForUser.getId(),
-					functionary.getId());
+			personalInformationDAO.getEmployeeByFunctionary(department.getId(), next_desig.getId(),
+					boundaryForUser.getId(), functionary.getId());
 		} catch (final TooManyValuesException e) {
 			LOGGER.error(e.getMessage(), e);
 			final List<ValidationError> errors = new ArrayList<ValidationError>();
-			errors.add(new ValidationError("Too Many  Employee Exists",
-					"Too Many  Employee Exists"));
+			errors.add(new ValidationError("Too Many  Employee Exists", "Too Many  Employee Exists"));
 			throw new ValidationException(errors);
 
 		} catch (final NoSuchObjectException e) {
 			LOGGER.error(e.getMessage(), e);
 			final List<ValidationError> errors = new ArrayList<ValidationError>();
-			errors.add(new ValidationError("No  Employee Exists",
-					"No  Employee Exists"));
+			errors.add(new ValidationError("No  Employee Exists", "No  Employee Exists"));
 			throw new ValidationException(errors);
 		}
 		// TODO: Get employee instead of personalinformation and fix the issue
 		// nextPosition=vs.getPositionForEmployee(employeeByFunctionary) ;
 		if (nextPosition != null) {
 			if (LOGGER.isDebugEnabled())
-				LOGGER.debug("Returning next Position for WorkFlow"
-						+ nextPosition.getName());
+				LOGGER.debug("Returning next Position for WorkFlow" + nextPosition.getName());
 		} else
 			LOGGER.error("Could not get next Position for WorkFlow");
 		return nextPosition;
 
 	}
-/**
- * 
- */
+
+	/**
+	 * 
+	 */
 	@Deprecated
-	public void startWorkflow(final ContraJournalVoucher cjv)
-			throws ValidationException {
+	public void startWorkflow(final ContraJournalVoucher cjv) throws ValidationException {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Starting Contra Journal Voucher Workflow....startWorkflow(ContraJournalVoucher cjv)...");
 
 		try {
 			if (cjv.getVoucherHeaderId().getState() == null) {
 				if (LOGGER.isDebugEnabled())
-					LOGGER.debug("Calling StartWorkflow...in create voucher.....for ......ContraJournalVoucher.....................................................................................");
+					LOGGER.debug(
+							"Calling StartWorkflow...in create voucher.....for ......ContraJournalVoucher.....................................................................................");
 				if (LOGGER.isDebugEnabled())
 					LOGGER.debug("fetching voucherWorkflowService from application context.......");
 				final ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-						new String[] {
-								"classpath:org/serviceconfig-Bean.xml",
+						new String[] { "classpath:org/serviceconfig-Bean.xml",
 								"classpath:org/egov/infstr/beanfactory/globalApplicationContext.xml",
 								"classpath:org/egov/infstr/beanfactory/applicationContext-egf.xml",
 								"classpath:org/egov/infstr/beanfactory/applicationContext-pims.xml" });
@@ -998,25 +918,20 @@ public class CreateVoucher {
 				// voucherWorkflowService.transition("am_approve",
 				// cjv.getVoucherHeaderId(), "Created"); // action name need to
 				// pass
-				final Position position = eisCommonService
-						.getPositionByUserId(ApplicationThreadLocals.getUserId());
-				cjv.transition().progressWithStateCopy().withStateValue("WORKFLOW INITIATED")
-						.withOwner(position).withComments("WORKFLOW STARTED");
-				final VoucherService vs = (VoucherService) applicationContext
-						.getBean("voucherService");
+				final Position position = eisCommonService.getPositionByUserId(ApplicationThreadLocals.getUserId());
+				cjv.transition().progressWithStateCopy().withStateValue("WORKFLOW INITIATED").withOwner(position)
+						.withComments("WORKFLOW STARTED");
+				final VoucherService vs = (VoucherService) applicationContext.getBean("voucherService");
 				final PersistenceService persistenceService = (PersistenceService) applicationContext
 						.getBean("persistenceService");
-				final Position nextPosition = getNextPosition(
-						cjv.getVoucherHeaderId(), vs, persistenceService, null);
-				cjv.transition().progressWithStateCopy().withStateValue("WORKFLOW INITIATED")
-						.withOwner(nextPosition)
+				final Position nextPosition = getNextPosition(cjv.getVoucherHeaderId(), vs, persistenceService, null);
+				cjv.transition().progressWithStateCopy().withStateValue("WORKFLOW INITIATED").withOwner(nextPosition)
 						.withComments("WORKFLOW STARTED");
 			}
 		} catch (final Exception e) {
 			final List<ValidationError> errors = new ArrayList<ValidationError>();
 			LOGGER.error(ERR, e);
-			errors.add(new ValidationError("Exp in startWorkflow for Contra=",
-					e.getMessage()));
+			errors.add(new ValidationError("Exp in startWorkflow for Contra=", e.getMessage()));
 			throw new ValidationException(errors);
 		}
 		if (LOGGER.isDebugEnabled())
@@ -1031,8 +946,7 @@ public class CreateVoucher {
 	 *             Uses VoucherWorkflow since contra and brv workflows are same
 	 */
 
-	public void startWorkflowForCashUpdate(final CVoucherHeader voucherHeader)
-			throws ValidationException {
+	public void startWorkflowForCashUpdate(final CVoucherHeader voucherHeader) throws ValidationException {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Starting  Journal Voucher Workflow.  for contra......");
 
@@ -1040,8 +954,7 @@ public class CreateVoucher {
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Calling StartWorkflow...For Cash");
 			final ApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-					new String[] {
-							"classpath:org/serviceconfig-Bean.xml",
+					new String[] { "classpath:org/serviceconfig-Bean.xml",
 							"classpath:org/egov/infstr/beanfactory/globalApplicationContext.xml",
 							"classpath:org/egov/infstr/beanfactory/applicationContext-egf.xml",
 							"classpath:org/egov/infstr/beanfactory/applicationContext-pims.xml" });
@@ -1049,20 +962,17 @@ public class CreateVoucher {
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("completed voucherWorkflowService from application context.......");
 			voucherHeader.transition().start().withOwner(getPosition());
-			final VoucherService vs = (VoucherService) applicationContext
-					.getBean("voucherService");
+			final VoucherService vs = (VoucherService) applicationContext.getBean("voucherService");
 			final PersistenceService persistenceService = (PersistenceService) applicationContext
 					.getBean("persistenceService");
-			final Position nextPosition = getNextPosition(voucherHeader, vs,
-					persistenceService, null);
-			voucherHeader.transition().progressWithStateCopy().withStateValue("Forwarded")
-					.withOwner(nextPosition).withComments("Forwarded");
+			final Position nextPosition = getNextPosition(voucherHeader, vs, persistenceService, null);
+			voucherHeader.transition().progressWithStateCopy().withStateValue("Forwarded").withOwner(nextPosition)
+					.withComments("Forwarded");
 
 		} catch (final Exception e) {
 			final List<ValidationError> errors = new ArrayList<ValidationError>();
 			LOGGER.error(ERR, e);
-			errors.add(new ValidationError("Exp in startWorkflow for Contra=",
-					e.getMessage()));
+			errors.add(new ValidationError("Exp in startWorkflow for Contra=", e.getMessage()));
 			throw new ValidationException(errors);
 		}
 		if (LOGGER.isDebugEnabled())
@@ -1073,8 +983,7 @@ public class CreateVoucher {
 		Position pos;
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("getPosition====" + ApplicationThreadLocals.getUserId());
-		pos = eisCommonService
-				.getPositionByUserId(ApplicationThreadLocals.getUserId());
+		pos = eisCommonService.getPositionByUserId(ApplicationThreadLocals.getUserId());
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("position===" + pos.getId());
 		return null;// pos;
@@ -1191,11 +1100,9 @@ public class CreateVoucher {
 	 * @throws ApplicationRuntimeException
 	 */
 	@Transactional
-	public CVoucherHeader createVoucher(
-			final HashMap<String, Object> headerdetails,
+	public CVoucherHeader createVoucher(final HashMap<String, Object> headerdetails,
 			final List<HashMap<String, Object>> accountcodedetails,
-			final List<HashMap<String, Object>> subledgerdetails)
-			throws ApplicationRuntimeException {
+			final List<HashMap<String, Object>> subledgerdetails) throws ApplicationRuntimeException {
 		CVoucherHeader vh;
 		Vouchermis mis;
 
@@ -1220,23 +1127,20 @@ public class CreateVoucher {
 			try {
 				fiscalPeriod = getFiscalPeriod(vdt);
 			} catch (final TaskFailedException e) {
-				throw new ApplicationRuntimeException(
-						"error while getting fiscal period");
+				throw new ApplicationRuntimeException("error while getting fiscal period");
 			}
 			if (null == fiscalPeriod)
 				throw new ApplicationRuntimeException(
 						"Voucher Date not within an open period or Financial year not open for posting, fiscalPeriod := "
 								+ fiscalPeriod);
 			vh.setFiscalPeriodId(Integer.valueOf(fiscalPeriod));
-			
+
 			vh.setCgvn(getCGVNNumber(vh));
 
 			try {
 				if (!isUniqueVN(vh.getVoucherNumber(), vdt))
 					throw new ValidationException(
-							Arrays.asList(new ValidationError(
-									"Duplicate Voucher Number",
-									"Duplicate Voucher Number")));
+							Arrays.asList(new ValidationError("Duplicate Voucher Number", "Duplicate Voucher Number")));
 			} catch (final Exception e) {
 				LOGGER.error(ERR, e);
 				throw new ApplicationRuntimeException(e.getMessage());
@@ -1245,18 +1149,14 @@ public class CreateVoucher {
 			if (LOGGER.isInfoEnabled())
 				LOGGER.info("++++++++++++++++++" + vh.toString());
 			voucherService.persist(vh);
-			if (null != vh.getVouchermis().getSourcePath()
-					&& null == vh.getModuleId()
-					&& vh.getVouchermis().getSourcePath().length() == vh
-							.getVouchermis().getSourcePath().indexOf("=") + 1) {
+			if (null != vh.getVouchermis().getSourcePath() && null == vh.getModuleId() && vh.getVouchermis()
+					.getSourcePath().length() == vh.getVouchermis().getSourcePath().indexOf("=") + 1) {
 				final StringBuffer sourcePath = new StringBuffer();
 				if (LOGGER.isDebugEnabled())
-					LOGGER.debug("Source Path received : "
-							+ vh.getVouchermis().getSourcePath());
+					LOGGER.debug("Source Path received : " + vh.getVouchermis().getSourcePath());
 				if (LOGGER.isDebugEnabled())
 					LOGGER.debug("Voucher Header Id  : " + vh.getId());
-				sourcePath.append(vh.getVouchermis().getSourcePath()).append(
-						vh.getId().toString());
+				sourcePath.append(vh.getVouchermis().getSourcePath()).append(vh.getId().toString());
 				vh.getVouchermis().setSourcePath(sourcePath.toString());
 				voucherService.applyAuditing(vh);
 				voucherService.update(vh);
@@ -1266,23 +1166,21 @@ public class CreateVoucher {
 				LOGGER.debug("End | insertIntoVoucherHeader");
 
 			// insertIntoRecordStatus(vh);
-			final List<Transaxtion> transactions = createTransaction(
-					headerdetails, accountcodedetails, subledgerdetails, vh);
-			//persistenceService.getSession().flush();
+			final List<Transaxtion> transactions = createTransaction(headerdetails, accountcodedetails,
+					subledgerdetails, vh);
+			// persistenceService.getSession().flush();
 			// engine = ChartOfAccounts.getInstance();
 			// setChartOfAccounts();
 			Transaxtion txnList[] = new Transaxtion[transactions.size()];
 			txnList = transactions.toArray(txnList);
 			final SimpleDateFormat formatter = new SimpleDateFormat(DD_MMM_YYYY);
-			if (!chartOfAccounts.postTransaxtions(txnList,
-					formatter.format(vh.getVoucherDate())))
+			if (!chartOfAccounts.postTransaxtions(txnList, formatter.format(vh.getVoucherDate())))
 				throw new ApplicationRuntimeException("Voucher creation Failed");
 		}
 
 		catch (final ValidationException ve) {
 			final List<ValidationError> errors = new ArrayList<ValidationError>();
-			errors.add(new ValidationError("exp", ve.getErrors().get(0)
-					.getMessage()));
+			errors.add(new ValidationError("exp", ve.getErrors().get(0).getMessage()));
 			throw new ValidationException(errors);
 		} catch (final Exception e) {
 			LOGGER.error(ERR, e);
@@ -1304,12 +1202,12 @@ public class CreateVoucher {
 	private void validateFunction(final HashMap<String, Object> headerdetails,
 			final List<HashMap<String, Object>> accountcodedetails) {
 
-		final List<AppConfigValues> appConfigValues = appConfigValuesService.getConfigValuesByModuleAndKey(FinancialConstants.MODULE_NAME_APPCONFIG, "ifRestrictedToOneFunctionCenter");
+		final List<AppConfigValues> appConfigValues = appConfigValuesService.getConfigValuesByModuleAndKey(
+				FinancialConstants.MODULE_NAME_APPCONFIG, "ifRestrictedToOneFunctionCenter");
 		if (appConfigValues == null) {
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("app config ifRestrictedToOneFunctionCenter is not defined");
-			throw new ValidationException("Error",
-					"Use Single Function For a transaction is not defined");
+			throw new ValidationException("Error", "Use Single Function For a transaction is not defined");
 		} else if (appConfigValues.get(0).getValue().equalsIgnoreCase("No")) {
 
 			// Keep last two lines when making single function mandatory.
@@ -1331,15 +1229,13 @@ public class CreateVoucher {
 			// 1. check if function is passed in header
 			if (null != headerdetails.get(VoucherConstant.FUNCTIONCODE)) {
 
-				functionCodeInHeader = (String) headerdetails
-						.get(VoucherConstant.FUNCTIONCODE);
+				functionCodeInHeader = (String) headerdetails.get(VoucherConstant.FUNCTIONCODE);
 				functionMap.put(functionCodeInHeader, functionCodeInHeader);
 				foundInHeader = true;
 			}
 			if (foundInHeader)
 				for (final HashMap<String, Object> accDetailMap : accountcodedetails)
-					accDetailMap.put(VoucherConstant.FUNCTIONCODE,
-							headerdetails.get(VoucherConstant.FUNCTIONCODE));
+					accDetailMap.put(VoucherConstant.FUNCTIONCODE, headerdetails.get(VoucherConstant.FUNCTIONCODE));
 
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Not a single Function Transaction  No need of Further check on function");
@@ -1362,8 +1258,7 @@ public class CreateVoucher {
 			// 1. check if function is passed in header
 			if (null != headerdetails.get(VoucherConstant.FUNCTIONCODE)) {
 
-				functionCodeInHeader = (String) headerdetails
-						.get(VoucherConstant.FUNCTIONCODE);
+				functionCodeInHeader = (String) headerdetails.get(VoucherConstant.FUNCTIONCODE);
 				functionMap.put(functionCodeInHeader, functionCodeInHeader);
 				foundInHeader = true;
 			}
@@ -1372,8 +1267,7 @@ public class CreateVoucher {
 			for (final HashMap<String, Object> accDetailMap : accountcodedetails)
 				if (null != accDetailMap.get(VoucherConstant.FUNCTIONCODE)
 						&& "" != accDetailMap.get(VoucherConstant.FUNCTIONCODE)) {
-					functionCodeInDetail = accDetailMap.get(
-							VoucherConstant.FUNCTIONCODE).toString();
+					functionCodeInDetail = accDetailMap.get(VoucherConstant.FUNCTIONCODE).toString();
 					functionMap.put(functionCodeInDetail, functionCodeInDetail);
 				} else
 					// Mark if Function is missing in detail level
@@ -1382,8 +1276,7 @@ public class CreateVoucher {
 			if (functionMap.size() > 1) {
 				LOGGER.error("multiple functions found in Header and details Cannot Continue Transaction....");
 				throw new ValidationException(
-						Arrays.asList(new ValidationError(
-								"multiple functions found in Header and details",
+						Arrays.asList(new ValidationError("multiple functions found in Header and details",
 								"multiple.functions.found.in.Header.and.details")));
 			}
 			// commented by Shamili - functionMap.isEmpty() needs to be
@@ -1391,26 +1284,19 @@ public class CreateVoucher {
 			// Uncommenting since one function center is mandatory
 			if (functionMap.isEmpty()) {
 				LOGGER.error("Function not found in Header or details Cannot Continue Transaction....");
-				throw new ValidationException(
-						Arrays.asList(new ValidationError(
-								"function not found in Header or details",
-								"function.not.found.in.Header.or.details")));
+				throw new ValidationException(Arrays.asList(new ValidationError(
+						"function not found in Header or details", "function.not.found.in.Header.or.details")));
 			}
 			// since we passed the above check, there is one function.If it is
 			// not in header then it must be from detail
 			if (!foundInHeader)
-				headerdetails.put(VoucherConstant.FUNCTIONCODE,
-						functionCodeInDetail);
+				headerdetails.put(VoucherConstant.FUNCTIONCODE, functionCodeInDetail);
 			// Now fetch it from the header which we have populated
 			if (atLeastOneMissing)
 				for (final HashMap<String, Object> accDetailMap : accountcodedetails)
 					if (null == accDetailMap.get(VoucherConstant.FUNCTIONCODE)
-							|| "" == accDetailMap
-									.get(VoucherConstant.FUNCTIONCODE))
-						accDetailMap
-								.put(VoucherConstant.FUNCTIONCODE,
-										headerdetails
-												.get(VoucherConstant.FUNCTIONCODE));
+							|| "" == accDetailMap.get(VoucherConstant.FUNCTIONCODE))
+						accDetailMap.put(VoucherConstant.FUNCTIONCODE, headerdetails.get(VoucherConstant.FUNCTIONCODE));
 		}
 
 	}
@@ -1420,29 +1306,21 @@ public class CreateVoucher {
 	 */
 	private void validateLength(final HashMap<String, Object> headerdetails) {
 		if (headerdetails.get(VoucherConstant.DESCRIPTION) != null
-				&& headerdetails.get(VoucherConstant.DESCRIPTION).toString()
-						.length() > 250)
-			throw new ValidationException(Arrays.asList(new ValidationError(
-					"voucher.description.exceeds.max.length",
-					"Narration exceeds maximum length")));
+				&& headerdetails.get(VoucherConstant.DESCRIPTION).toString().length() > 250)
+			throw new ValidationException(Arrays.asList(
+					new ValidationError("voucher.description.exceeds.max.length", "Narration exceeds maximum length")));
 		final String vNumGenMode = voucherTypeForULB
-				.readVoucherTypes(headerdetails
-						.get(VoucherConstant.VOUCHERTYPE).toString());
-		if (!vNumGenMode.equals("Auto")
-				&& headerdetails.get(VoucherConstant.VOUCHERNUMBER) != null) {
-			final int typeLength = Integer
-					.valueOf(FinancialConstants.VOUCHERNO_TYPE_LENGTH);
+				.readVoucherTypes(headerdetails.get(VoucherConstant.VOUCHERTYPE).toString());
+		if (!vNumGenMode.equals("Auto") && headerdetails.get(VoucherConstant.VOUCHERNUMBER) != null) {
+			final int typeLength = Integer.valueOf(FinancialConstants.VOUCHERNO_TYPE_LENGTH);
 			final int voucherNumberColumnLength = 30;// length in the db
 			final int fundIdentfierLength = 1;
-			if (headerdetails.get(VoucherConstant.VOUCHERNUMBER).toString()
-					.length() > voucherNumberColumnLength
+			if (headerdetails.get(VoucherConstant.VOUCHERNUMBER).toString().length() > voucherNumberColumnLength
 					- (typeLength + fundIdentfierLength)) {
 				final String voucheNumberErrMsg = " VoucherNumber length should be lessthan "
 						+ (voucherNumberColumnLength - (typeLength + fundIdentfierLength));
 				throw new ValidationException(
-						Arrays.asList(new ValidationError(
-								"voucher.number.exceeds.max.length",
-								voucheNumberErrMsg)));
+						Arrays.asList(new ValidationError("voucher.number.exceeds.max.length", voucheNumberErrMsg)));
 			}
 		}
 
@@ -1450,59 +1328,49 @@ public class CreateVoucher {
 
 	// used for reversal
 
-	protected void insertIntoVoucherHeader(final CVoucherHeader vh)
-			throws ApplicationRuntimeException {
+	protected void insertIntoVoucherHeader(final CVoucherHeader vh) throws ApplicationRuntimeException {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("start | insertIntoVoucherHeader");
 		final String vdt = formatter.format(vh.getVoucherDate());
 		String fiscalPeriod = null;
 		try {
-			CFiscalPeriod fis = fiscalPeriodHibernateDAO
-					.getFiscalPeriodByDate(vh.getVoucherDate());
+			CFiscalPeriod fis = fiscalPeriodHibernateDAO.getFiscalPeriodByDate(vh.getVoucherDate());
 			if (fis != null)
 				fiscalPeriod = fis.getId().toString();
 
 		} catch (final Exception e) {
-			throw new ApplicationRuntimeException(
-					"error while getting fiscal period");
+			throw new ApplicationRuntimeException("error while getting fiscal period");
 		}
 		if (null == fiscalPeriod)
 			throw new ApplicationRuntimeException(
 					"Voucher Date not within an open period or Financial year not open for posting, fiscalPeriod := "
 							+ fiscalPeriod);
 		vh.setFiscalPeriodId(Integer.valueOf(fiscalPeriod));
-		
+
 		vh.setCgvn(getCGVNNumber(vh));
 
 		try {
 			if (!isUniqueVN(vh.getVoucherNumber(), vdt))
 				throw new ValidationException(
-						Arrays.asList(new ValidationError(
-								"Duplicate Voucher Number",
-								"Duplicate Voucher Number")));
+						Arrays.asList(new ValidationError("Duplicate Voucher Number", "Duplicate Voucher Number")));
 		} catch (final Exception e) {
 			LOGGER.error(ERR, e);
 			throw new ApplicationRuntimeException(e.getMessage());
 		}
-//		vh.setCreatedBy(userMngr.getUserById(Long.valueOf(ApplicationThreadLocals
-//				.getUserId())));
-		vh.setCreatedBy(Long.valueOf(ApplicationThreadLocals
-				.getUserId()));
+		// vh.setCreatedBy(userMngr.getUserById(Long.valueOf(ApplicationThreadLocals
+		// .getUserId())));
+		vh.setCreatedBy(Long.valueOf(ApplicationThreadLocals.getUserId()));
 		if (LOGGER.isInfoEnabled())
 			LOGGER.info("++++++++++++++++++" + vh.toString());
 		voucherService.persist(vh);
-		if (null != vh.getVouchermis().getSourcePath()
-				&& null == vh.getModuleId()
-				&& vh.getVouchermis().getSourcePath().length() == vh
-						.getVouchermis().getSourcePath().indexOf("=") + 1) {
+		if (null != vh.getVouchermis().getSourcePath() && null == vh.getModuleId()
+				&& vh.getVouchermis().getSourcePath().length() == vh.getVouchermis().getSourcePath().indexOf("=") + 1) {
 			final StringBuffer sourcePath = new StringBuffer();
 			if (LOGGER.isDebugEnabled())
-				LOGGER.debug("Source Path received : "
-						+ vh.getVouchermis().getSourcePath());
+				LOGGER.debug("Source Path received : " + vh.getVouchermis().getSourcePath());
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Voucher Header Id  : " + vh.getId());
-			sourcePath.append(vh.getVouchermis().getSourcePath()).append(
-					vh.getId().toString());
+			sourcePath.append(vh.getVouchermis().getSourcePath()).append(vh.getId().toString());
 			vh.getVouchermis().setSourcePath(sourcePath.toString());
 			voucherService.update(vh);
 		}
@@ -1531,8 +1399,8 @@ public class CreateVoucher {
 		case PAYMENT:
 			cgnType = "DBP";
 			break;
-		default://do nothing
-		        break;
+		default:// do nothing
+			break;
 		}
 		return cgnType;
 	}
@@ -1545,25 +1413,21 @@ public class CreateVoucher {
 	 * @param headerdetails
 	 * @throws ApplicationRuntimeException
 	 */
-	public void validateVoucherMIS(final HashMap<String, Object> headerdetails)
-			throws ApplicationRuntimeException {
+	public void validateVoucherMIS(final HashMap<String, Object> headerdetails) throws ApplicationRuntimeException {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("START | validateVoucherMIS");
 		// Validate Department.
-		Department dept = null;
 		if (headerdetails.containsKey(VoucherConstant.DEPARTMENTCODE)
 				&& null != headerdetails.get(VoucherConstant.DEPARTMENTCODE)) {
-			dept = deptM.getDepartmentByCode(headerdetails.get(
-					VoucherConstant.DEPARTMENTCODE).toString());
-			if (dept == null)
+			List<org.egov.infra.microservice.models.Department> depList = microserviceUtils
+					.getDepartmentByCode(headerdetails.get(VoucherConstant.DEPARTMENTCODE).toString());
+			if (depList == null || depList.isEmpty())
 				throw new ApplicationRuntimeException("not a valid Department");
 		}
 
 		if (null != headerdetails.get(VoucherConstant.FUNCTIONARYCODE)) {
-			final Functionary functionary = functionaryDAO
-					.getFunctionaryByCode(BigDecimal.valueOf(Long
-							.valueOf(headerdetails.get(
-									VoucherConstant.FUNCTIONARYCODE).toString())));
+			final Functionary functionary = functionaryDAO.getFunctionaryByCode(
+					BigDecimal.valueOf(Long.valueOf(headerdetails.get(VoucherConstant.FUNCTIONARYCODE).toString())));
 			if (null == functionary)
 				throw new ApplicationRuntimeException("not a valid functionary");
 		}
@@ -1582,75 +1446,64 @@ public class CreateVoucher {
 		Scheme scheme = null;
 		if (headerdetails.containsKey(VoucherConstant.SCHEMECODE)
 				&& null != headerdetails.get(VoucherConstant.SCHEMECODE)) {
-			final String schemecode = headerdetails.get(
-					VoucherConstant.SCHEMECODE).toString();
+			final String schemecode = headerdetails.get(VoucherConstant.SCHEMECODE).toString();
 			scheme = schemeDAO.getSchemeByCode(schemecode);
 			if (null == scheme)
 				throw new ApplicationRuntimeException("not a valid scheme");
 			if (!fund.getId().equals(scheme.getFund().getId()))
-				throw new ApplicationRuntimeException(
-						"This scheme does not belong to this fund");
+				throw new ApplicationRuntimeException("This scheme does not belong to this fund");
 		}
 		// validate subscheme
 		SubScheme subScheme = null;
 		if (headerdetails.containsKey(VoucherConstant.SUBSCHEMECODE)
 				&& null != headerdetails.get(VoucherConstant.SUBSCHEMECODE)) {
-			final String subSchemeCode = headerdetails.get(
-					VoucherConstant.SUBSCHEMECODE).toString();
+			final String subSchemeCode = headerdetails.get(VoucherConstant.SUBSCHEMECODE).toString();
 			subScheme = subSchemeDAO.getSubSchemeByCode(subSchemeCode);
 			if (null == subScheme)
 				throw new ApplicationRuntimeException("not a valid subscheme");
 			if (!subScheme.getScheme().getId().equals(scheme.getId()))
-				throw new ApplicationRuntimeException(
-						"This subscheme does not belong to this scheme");
+				throw new ApplicationRuntimeException("This subscheme does not belong to this scheme");
 		}
 		// validate fundsource
 		if (headerdetails.containsKey(VoucherConstant.FUNDSOURCECODE)
 				&& null != headerdetails.get(VoucherConstant.FUNDSOURCECODE)) {
 			final Fundsource fundsource = fundSourceDAO
-					.getFundSourceByCode(headerdetails.get(
-							VoucherConstant.FUNDSOURCECODE).toString());
+					.getFundSourceByCode(headerdetails.get(VoucherConstant.FUNDSOURCECODE).toString());
 			if (null == fundsource)
 				throw new ApplicationRuntimeException("not a valid fund source");
 		}
 
 		if (headerdetails.containsKey(VoucherConstant.DIVISIONID)
 				&& null != headerdetails.get(VoucherConstant.DIVISIONID))
-			if (null == boundary.getBoundaryById(Long.parseLong(headerdetails
-					.get(VoucherConstant.DIVISIONID).toString())))
+			if (null == boundary
+					.getBoundaryById(Long.parseLong(headerdetails.get(VoucherConstant.DIVISIONID).toString())))
 				throw new ApplicationRuntimeException("not a valid divisionid");
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("END | validateVoucherMIS");
 	}
 
-	public void validateMandateFields(
-			final HashMap<String, Object> headerdetails) {
+	public void validateMandateFields(final HashMap<String, Object> headerdetails) {
 
 		List<String> headerMandateFields = getHeaderMandateFields();
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Inside Validate Method");
-		checkMandatoryField("vouchernumber",
-				headerdetails.get(VoucherConstant.VOUCHERNUMBER), headerdetails,headerMandateFields);
-		checkMandatoryField("voucherdate",
-				headerdetails.get(VoucherConstant.VOUCHERDATE), headerdetails,headerMandateFields);
-		checkMandatoryField("fund",
-				headerdetails.get(VoucherConstant.FUNDCODE), headerdetails,headerMandateFields);
-		checkMandatoryField("department",
-				headerdetails.get(VoucherConstant.DEPARTMENTCODE),
-				headerdetails,headerMandateFields);
-		checkMandatoryField("scheme",
-				headerdetails.get(VoucherConstant.SCHEMECODE), headerdetails,headerMandateFields);
-		checkMandatoryField("subscheme",
-				headerdetails.get(VoucherConstant.SUBSCHEMECODE), headerdetails,headerMandateFields);
-		checkMandatoryField("functionary",
-				headerdetails.get(VoucherConstant.FUNCTIONARYCODE),
-				headerdetails,headerMandateFields);
+		checkMandatoryField("vouchernumber", headerdetails.get(VoucherConstant.VOUCHERNUMBER), headerdetails,
+				headerMandateFields);
+		checkMandatoryField("voucherdate", headerdetails.get(VoucherConstant.VOUCHERDATE), headerdetails,
+				headerMandateFields);
+		checkMandatoryField("fund", headerdetails.get(VoucherConstant.FUNDCODE), headerdetails, headerMandateFields);
+		checkMandatoryField("department", headerdetails.get(VoucherConstant.DEPARTMENTCODE), headerdetails,
+				headerMandateFields);
+		checkMandatoryField("scheme", headerdetails.get(VoucherConstant.SCHEMECODE), headerdetails,
+				headerMandateFields);
+		checkMandatoryField("subscheme", headerdetails.get(VoucherConstant.SUBSCHEMECODE), headerdetails,
+				headerMandateFields);
+		checkMandatoryField("functionary", headerdetails.get(VoucherConstant.FUNCTIONARYCODE), headerdetails,
+				headerMandateFields);
 		// checkMandatoryField("function",headerdetails.get(VoucherConstant.FUNCTIONCODE),headerdetails);
-		checkMandatoryField("fundsource",
-				headerdetails.get(VoucherConstant.FUNDSOURCECODE),
-				headerdetails,headerMandateFields);
-		checkMandatoryField("field",
-				headerdetails.get(VoucherConstant.DIVISIONID), headerdetails,headerMandateFields);
+		checkMandatoryField("fundsource", headerdetails.get(VoucherConstant.FUNDSOURCECODE), headerdetails,
+				headerMandateFields);
+		checkMandatoryField("field", headerdetails.get(VoucherConstant.DIVISIONID), headerdetails, headerMandateFields);
 
 	}
 
@@ -1669,8 +1522,7 @@ public class CreateVoucher {
 
 	@Transactional
 	@SuppressWarnings("deprecation")
-	public CVoucherHeader createVoucherHeader(
-			final HashMap<String, Object> headerdetails)
+	public CVoucherHeader createVoucherHeader(final HashMap<String, Object> headerdetails)
 			throws ApplicationRuntimeException, Exception {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("START | createVoucherHeader");
@@ -1679,17 +1531,13 @@ public class CreateVoucher {
 		final CVoucherHeader cVoucherHeader = new CVoucherHeader();
 		try {
 			// String voucherSubType="";
-			cVoucherHeader.setName(headerdetails.get(
-					VoucherConstant.VOUCHERNAME).toString());
-			String voucherType = headerdetails.get(VoucherConstant.VOUCHERTYPE)
-					.toString();
-			cVoucherHeader.setType(headerdetails.get(
-					VoucherConstant.VOUCHERTYPE).toString());
+			cVoucherHeader.setName(headerdetails.get(VoucherConstant.VOUCHERNAME).toString());
+			String voucherType = headerdetails.get(VoucherConstant.VOUCHERTYPE).toString();
+			cVoucherHeader.setType(headerdetails.get(VoucherConstant.VOUCHERTYPE).toString());
 			String vNumGenMode = null;
 
 			// -- Voucher Type checking. --START
-			if (FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL
-					.equalsIgnoreCase(voucherType))
+			if (FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL.equalsIgnoreCase(voucherType))
 				vNumGenMode = voucherTypeForULB.readVoucherTypes("Journal");
 			else
 				vNumGenMode = voucherTypeForULB.readVoucherTypes(voucherType);
@@ -1698,25 +1546,19 @@ public class CreateVoucher {
 
 			String voucherSubType = null;
 			if (headerdetails.get(VoucherConstant.VOUCHERSUBTYPE) != null) {
-				voucherSubType = (String) headerdetails
-						.get(VoucherConstant.VOUCHERSUBTYPE);
-				voucherSubType = voucherSubType.toUpperCase().replaceAll(" ",
-						"");
+				voucherSubType = (String) headerdetails.get(VoucherConstant.VOUCHERSUBTYPE);
+				voucherSubType = voucherSubType.toUpperCase().replaceAll(" ", "");
 			}
 
 			// why it is type,subtype where api expects subtype,type ?
 			// if()
-			final String voucherNumberPrefix = getVoucherNumberPrefix(
-					voucherType, voucherSubType);
+			final String voucherNumberPrefix = getVoucherNumberPrefix(voucherType, voucherSubType);
 			String voucherNumber = null;
 			if (headerdetails.get(VoucherConstant.DESCRIPTION) != null)
-				cVoucherHeader.setDescription(headerdetails.get(
-						VoucherConstant.DESCRIPTION).toString());
-			final Date voucherDate = (Date) headerdetails
-					.get(VoucherConstant.VOUCHERDATE);
+				cVoucherHeader.setDescription(headerdetails.get(VoucherConstant.DESCRIPTION).toString());
+			final Date voucherDate = (Date) headerdetails.get(VoucherConstant.VOUCHERDATE);
 			cVoucherHeader.setVoucherDate(voucherDate);
-		Fund	fundByCode = fundDAO.fundByCode(headerdetails.get(
-					VoucherConstant.FUNDCODE).toString());
+			Fund fundByCode = fundDAO.fundByCode(headerdetails.get(VoucherConstant.FUNDCODE).toString());
 
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Voucher Type is :" + voucherType);
@@ -1724,12 +1566,11 @@ public class CreateVoucher {
 				LOGGER.debug("vNumGenMode is  :" + vNumGenMode);
 
 			if (headerdetails.get(VoucherConstant.VOUCHERNUMBER) != null)
-				voucherNumber = headerdetails
-						.get(VoucherConstant.VOUCHERNUMBER).toString();
+				voucherNumber = headerdetails.get(VoucherConstant.VOUCHERNUMBER).toString();
 			if (null != headerdetails.get(VoucherConstant.MODULEID))
 				vNumGenMode = "Auto";
-			
-			cVoucherHeader.setFundId(fundByCode); 
+
+			cVoucherHeader.setFundId(fundByCode);
 			if (vNumGenMode.equals("Auto")) {
 				cVoucherHeader.setVoucherNumberPrefix(voucherNumberPrefix);
 				VouchernumberGenerator v = beanResolver.getAutoNumberServiceFor(VouchernumberGenerator.class);
@@ -1741,9 +1582,9 @@ public class CreateVoucher {
 			/*
 			 * if("Auto".equalsIgnoreCase(vNumGenMode) || null !=
 			 * headerdetails.get(VoucherConstant.MODULEID)){
-			 * if(LOGGER.isDebugEnabled())
-			 * LOGGER.debug("Generating auto voucher number"); SimpleDateFormat
-			 * df = new SimpleDateFormat(DD_MM_YYYY); String vDate =
+			 * if(LOGGER.isDebugEnabled()) LOGGER.debug(
+			 * "Generating auto voucher number"); SimpleDateFormat df = new
+			 * SimpleDateFormat(DD_MM_YYYY); String vDate =
 			 * df.format(voucherDate);
 			 * cVoucherHeader.setVoucherNumber(cmImpl.getTxnNumber
 			 * (fundId.toString(),voucherNumberPrefix,vDate,con)); }else {
@@ -1759,11 +1600,9 @@ public class CreateVoucher {
 			 * }
 			 */
 
-		 
 			if (headerdetails.containsKey(VoucherConstant.MODULEID)
 					&& null != headerdetails.get(VoucherConstant.MODULEID)) {
-				cVoucherHeader.setModuleId(Integer.valueOf(headerdetails.get(
-						VoucherConstant.MODULEID).toString()));
+				cVoucherHeader.setModuleId(Integer.valueOf(headerdetails.get(VoucherConstant.MODULEID).toString()));
 				cVoucherHeader.setIsConfirmed(Integer.valueOf(1));
 			} else {
 				// Fix Me
@@ -1772,51 +1611,45 @@ public class CreateVoucher {
 				 * appConfigSer = new PersistenceService<AppConfig, Integer>();
 				 * appConfigSer.setSessionFactory(new SessionFactory());
 				 * appConfigSer.setType(AppConfig.class); AppConfig appConfig=
-				 * (AppConfig)
-				 * appConfigSer.find("from AppConfig where key_name =?",
+				 * (AppConfig) appConfigSer.find(
+				 * "from AppConfig where key_name =?",
 				 * "JournalVoucher_ConfirmonCreate"); if(null != appConfig &&
 				 * null!= appConfig.getValues() ){ for (AppConfigValues
-				 * appConfigVal : appConfig.getValues()) {
-				 * cVoucherHeader.
+				 * appConfigVal : appConfig.getValues()) { cVoucherHeader.
 				 * setIsConfirmed(Integer.valueOf(appConfigVal.getValue())); } }
 				 */
 			}
 
-			if (headerdetails.containsKey(VoucherConstant.STATUS)
-					&& null != headerdetails.get(VoucherConstant.STATUS))
-				cVoucherHeader.setStatus(Integer.valueOf(headerdetails.get(
-						VoucherConstant.STATUS).toString()));
+			if (headerdetails.containsKey(VoucherConstant.STATUS) && null != headerdetails.get(VoucherConstant.STATUS))
+				cVoucherHeader.setStatus(Integer.valueOf(headerdetails.get(VoucherConstant.STATUS).toString()));
 			else {
-				final List list = appConfigValuesService
-						.getConfigValuesByModuleAndKey("EGF",
-								"DEFAULTVOUCHERCREATIONSTATUS");
-				cVoucherHeader.setStatus(Integer
-						.parseInt(((AppConfigValues) list.get(0)).getValue()));
+				final List list = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
+						"DEFAULTVOUCHERCREATIONSTATUS");
+				cVoucherHeader.setStatus(Integer.parseInt(((AppConfigValues) list.get(0)).getValue()));
 			}
 
 			if (null != headerdetails.get(VoucherConstant.ORIGIONALVOUCHER)) {
 
-				final Long origionalVId = Long.parseLong(headerdetails.get(
-						VoucherConstant.ORIGIONALVOUCHER).toString());
-				query = persistenceService.getSession().createQuery(
-						"from CVoucherHeader where id=:id");
+				final Long origionalVId = Long
+						.parseLong(headerdetails.get(VoucherConstant.ORIGIONALVOUCHER).toString());
+				query = persistenceService.getSession().createQuery("from CVoucherHeader where id=:id");
 				query.setLong("id", origionalVId);
 				if (query.list().size() == 0)
-					throw new ApplicationRuntimeException(
-							"Not a valid origional voucherheader id");
+					throw new ApplicationRuntimeException("Not a valid origional voucherheader id");
 				else
 					cVoucherHeader.setOriginalvcId(origionalVId);
 			}
 
-			cVoucherHeader.setRefvhId((Long) headerdetails
-					.get(VoucherConstant.REFVOUCHER));
+			cVoucherHeader.setRefvhId((Long) headerdetails.get(VoucherConstant.REFVOUCHER));
 			cVoucherHeader.setEffectiveDate(new Date());
 			if (LOGGER.isDebugEnabled())
-				LOGGER.debug("Printing Voucher Details------------------------------------------------------------------------------");
+				LOGGER.debug(
+						"Printing Voucher Details------------------------------------------------------------------------------");
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug(cVoucherHeader.toString());
 			if (LOGGER.isDebugEnabled())
-				LOGGER.debug("Printing Voucher Details------------------------------------------------------------------------------");
+				LOGGER.debug(
+						"Printing Voucher Details------------------------------------------------------------------------------");
 		} catch (final ValidationException e) {
 			LOGGER.error(e.getMessage());
 			throw e;
@@ -1941,17 +1774,15 @@ public class CreateVoucher {
 		case PAYMENT:
 			voucherNumberPrefix = FinancialConstants.PAYMENT_VOUCHERNO_TYPE;
 			break;
-		default://do nothing
-		        break;
+		default:// do nothing
+			break;
 		}
 		return voucherNumberPrefix;
 
 	}
 
 	@Transactional
-	public Vouchermis createVouchermis(
-			final HashMap<String, Object> headerdetails)
-			throws ApplicationRuntimeException {
+	public Vouchermis createVouchermis(final HashMap<String, Object> headerdetails) throws ApplicationRuntimeException {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("START | createVouchermis");
 		final Vouchermis vouchermis = new Vouchermis();
@@ -1962,51 +1793,38 @@ public class CreateVoucher {
 		}
 		if (headerdetails.containsKey(VoucherConstant.SCHEMECODE)
 				&& null != headerdetails.get(VoucherConstant.SCHEMECODE)) {
-			final String schemecode = headerdetails.get(
-					VoucherConstant.SCHEMECODE).toString();
+			final String schemecode = headerdetails.get(VoucherConstant.SCHEMECODE).toString();
 			vouchermis.setSchemeid(schemeDAO.getSchemeByCode(schemecode));
 		}
 		if (headerdetails.containsKey(VoucherConstant.SUBSCHEMECODE)
 				&& null != headerdetails.get(VoucherConstant.SUBSCHEMECODE)) {
-			final String subschemecode = headerdetails.get(
-					VoucherConstant.SUBSCHEMECODE).toString();
-			vouchermis.setSubschemeid(subSchemeDAO
-					.getSubSchemeByCode(subschemecode));
+			final String subschemecode = headerdetails.get(VoucherConstant.SUBSCHEMECODE).toString();
+			vouchermis.setSubschemeid(subSchemeDAO.getSubSchemeByCode(subschemecode));
 		}
 
 		if (headerdetails.containsKey(VoucherConstant.FUNDSOURCECODE)
 				&& null != headerdetails.get(VoucherConstant.FUNDSOURCECODE)) {
-			final String fundsourcecode = headerdetails.get(
-					VoucherConstant.FUNDSOURCECODE).toString();
-			vouchermis.setFundsource(fundSourceDAO
-					.getFundSourceByCode(fundsourcecode));
+			final String fundsourcecode = headerdetails.get(VoucherConstant.FUNDSOURCECODE).toString();
+			vouchermis.setFundsource(fundSourceDAO.getFundSourceByCode(fundsourcecode));
 		}
 		if (null != headerdetails.get(VoucherConstant.FUNCTIONARYCODE))
-			vouchermis
-					.setFunctionary(functionaryDAO
-							.getFunctionaryByCode(BigDecimal.valueOf(Long
-									.valueOf(headerdetails.get(
-											VoucherConstant.FUNCTIONARYCODE)
-											.toString()))));
+			vouchermis.setFunctionary(functionaryDAO.getFunctionaryByCode(
+					BigDecimal.valueOf(Long.valueOf(headerdetails.get(VoucherConstant.FUNCTIONARYCODE).toString()))));
 		if (headerdetails.containsKey(VoucherConstant.FUNCTIONCODE)
 				&& null != headerdetails.get(VoucherConstant.FUNCTIONCODE)) {
-			final String functionCode = headerdetails.get(
-					VoucherConstant.FUNCTIONCODE).toString();
+			final String functionCode = headerdetails.get(VoucherConstant.FUNCTIONCODE).toString();
 			vouchermis.setFunction(functionDAO.getFunctionByCode(functionCode));
 		}
 
 		if (null != headerdetails.get(VoucherConstant.SOURCEPATH))
-			vouchermis.setSourcePath(headerdetails.get(
-					VoucherConstant.SOURCEPATH).toString());
+			vouchermis.setSourcePath(headerdetails.get(VoucherConstant.SOURCEPATH).toString());
 		if (headerdetails.containsKey(VoucherConstant.DIVISIONID)
 				&& null != headerdetails.get(VoucherConstant.DIVISIONID))
-			vouchermis.setDivisionid(boundary.getBoundaryById(Long
-					.parseLong(headerdetails.get(VoucherConstant.DIVISIONID)
-							.toString())));
+			vouchermis.setDivisionid(
+					boundary.getBoundaryById(Long.parseLong(headerdetails.get(VoucherConstant.DIVISIONID).toString())));
 		if (headerdetails.containsKey(VoucherConstant.BUDGETCHECKREQ)
 				&& null != headerdetails.get(VoucherConstant.BUDGETCHECKREQ))
-			vouchermis.setBudgetCheckReq((Boolean) headerdetails
-					.get(VoucherConstant.BUDGETCHECKREQ));
+			vouchermis.setBudgetCheckReq((Boolean) headerdetails.get(VoucherConstant.BUDGETCHECKREQ));
 		else
 			vouchermis.setBudgetCheckReq(true);
 		if (LOGGER.isDebugEnabled())
@@ -2014,10 +1832,8 @@ public class CreateVoucher {
 		return vouchermis;
 	}
 
-	public void validateTransaction(
-			final List<HashMap<String, Object>> accountcodedetails,
-			final List<HashMap<String, Object>> subledgerdetails)
-			throws ApplicationRuntimeException, Exception {
+	public void validateTransaction(final List<HashMap<String, Object>> accountcodedetails,
+			final List<HashMap<String, Object>> subledgerdetails) throws ApplicationRuntimeException, Exception {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("START | validateTransaction");
 		// List<Transaxtion> transaxtionList = new ArrayList<Transaxtion>();
@@ -2028,101 +1844,75 @@ public class CreateVoucher {
 
 			String glcode = null;
 
-			final BigDecimal debitAmount = new BigDecimal(accDetailMap.get(
-					VoucherConstant.DEBITAMOUNT).toString());
-			final BigDecimal creditAmount = new BigDecimal(accDetailMap.get(
-					VoucherConstant.CREDITAMOUNT).toString());
+			final BigDecimal debitAmount = new BigDecimal(accDetailMap.get(VoucherConstant.DEBITAMOUNT).toString());
+			final BigDecimal creditAmount = new BigDecimal(accDetailMap.get(VoucherConstant.CREDITAMOUNT).toString());
 
 			totaldebitAmount = totaldebitAmount.add(debitAmount);
 			totalcreditAmount = totalcreditAmount.add(creditAmount);
-			if (accDetailMap.containsKey(VoucherConstant.GLCODE)
-					&& null != accDetailMap.get(VoucherConstant.GLCODE)) {
+			if (accDetailMap.containsKey(VoucherConstant.GLCODE) && null != accDetailMap.get(VoucherConstant.GLCODE)) {
 				glcode = accDetailMap.get(VoucherConstant.GLCODE).toString();
-				if (null == chartOfAccountsDAO
-						.getCChartOfAccountsByGlCode(glcode))
-					throw new ApplicationRuntimeException(
-							"Not a valid account code" + glcode);
+				if (null == chartOfAccountsDAO.getCChartOfAccountsByGlCode(glcode))
+					throw new ApplicationRuntimeException("Not a valid account code" + glcode);
 			} else
-				throw new ApplicationRuntimeException(
-						"glcode is missing or null");
-			if (debitAmount.compareTo(BigDecimal.ZERO) != 0
-					&& creditAmount.compareTo(BigDecimal.ZERO) != 0)
+				throw new ApplicationRuntimeException("glcode is missing or null");
+			if (debitAmount.compareTo(BigDecimal.ZERO) != 0 && creditAmount.compareTo(BigDecimal.ZERO) != 0)
 				throw new ApplicationRuntimeException(
 						"Both debit amount and credit amount cannot be greater than zero");
-			if (debitAmount.compareTo(BigDecimal.ZERO) == 0
-					&& creditAmount.compareTo(BigDecimal.ZERO) == 0)
-				throw new ApplicationRuntimeException(
-						"debit and credit both amount is Zero");
+			if (debitAmount.compareTo(BigDecimal.ZERO) == 0 && creditAmount.compareTo(BigDecimal.ZERO) == 0)
+				throw new ApplicationRuntimeException("debit and credit both amount is Zero");
 			if (null != accDetailMap.get(VoucherConstant.FUNCTIONCODE)
 					&& "" != accDetailMap.get(VoucherConstant.FUNCTIONCODE)) {
-				final String functionCode = accDetailMap.get(
-						VoucherConstant.FUNCTIONCODE).toString();
+				final String functionCode = accDetailMap.get(VoucherConstant.FUNCTIONCODE).toString();
 				if (null == functionDAO.getFunctionByCode(functionCode))
-					throw new ApplicationRuntimeException(
-							"not a valid function code");
+					throw new ApplicationRuntimeException("not a valid function code");
 			}
 			if (debitAmount.compareTo(BigDecimal.ZERO) != 0) {
 				if (null != accDetAmtMap.get(VoucherConstant.DEBIT + glcode)) {
-					final BigDecimal accountCodeTotDbAmt = accDetAmtMap.get(
-							VoucherConstant.DEBIT + glcode).add(debitAmount);
-					accDetAmtMap.put(VoucherConstant.DEBIT + glcode,
-							accountCodeTotDbAmt);
+					final BigDecimal accountCodeTotDbAmt = accDetAmtMap.get(VoucherConstant.DEBIT + glcode)
+							.add(debitAmount);
+					accDetAmtMap.put(VoucherConstant.DEBIT + glcode, accountCodeTotDbAmt);
 				} else
-					accDetAmtMap.put(VoucherConstant.DEBIT + glcode,
-							debitAmount);
+					accDetAmtMap.put(VoucherConstant.DEBIT + glcode, debitAmount);
 
 			} else if (creditAmount.compareTo(BigDecimal.ZERO) != 0)
 				if (null != accDetAmtMap.get(VoucherConstant.CREDIT + glcode)) {
-					final BigDecimal accountCodeTotCrAmt = accDetAmtMap.get(
-							VoucherConstant.CREDIT + glcode).add(creditAmount);
-					accDetAmtMap.put(VoucherConstant.CREDIT + glcode,
-							accountCodeTotCrAmt);
+					final BigDecimal accountCodeTotCrAmt = accDetAmtMap.get(VoucherConstant.CREDIT + glcode)
+							.add(creditAmount);
+					accDetAmtMap.put(VoucherConstant.CREDIT + glcode, accountCodeTotCrAmt);
 				} else
-					accDetAmtMap.put(VoucherConstant.CREDIT + glcode,
-							creditAmount);
+					accDetAmtMap.put(VoucherConstant.CREDIT + glcode, creditAmount);
 		}
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Total Debit  amount   :" + totaldebitAmount);
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Total Credit amount   :" + totalcreditAmount);
-		totaldebitAmount = totaldebitAmount.setScale(2,
-				BigDecimal.ROUND_HALF_UP);
-		totalcreditAmount = totalcreditAmount.setScale(2,
-				BigDecimal.ROUND_HALF_UP);
+		totaldebitAmount = totaldebitAmount.setScale(2, BigDecimal.ROUND_HALF_UP);
+		totalcreditAmount = totalcreditAmount.setScale(2, BigDecimal.ROUND_HALF_UP);
 		if (LOGGER.isDebugEnabled())
-			LOGGER.debug("Total Debit  amount after round off :"
-					+ totaldebitAmount);
+			LOGGER.debug("Total Debit  amount after round off :" + totaldebitAmount);
 		if (LOGGER.isDebugEnabled())
-			LOGGER.debug("Total Credit amount after round off :"
-					+ totalcreditAmount);
+			LOGGER.debug("Total Credit amount after round off :" + totalcreditAmount);
 		if (totaldebitAmount.compareTo(totalcreditAmount) != 0)
-			throw new ApplicationRuntimeException(
-					"total debit and total credit amount is not matching");
+			throw new ApplicationRuntimeException("total debit and total credit amount is not matching");
 		final Map<String, BigDecimal> subledAmtmap = new HashMap<String, BigDecimal>();
 		for (final HashMap<String, Object> subdetailDetailMap : subledgerdetails) {
 			String glcode = null;
 			String detailtypeid = null;
 			String detailKeyId = null;
 			if (null != subdetailDetailMap.get(VoucherConstant.GLCODE)) {
-				glcode = subdetailDetailMap.get(VoucherConstant.GLCODE)
-						.toString();
-				if (null == chartOfAccountsDAO
-						.getCChartOfAccountsByGlCode(glcode))
+				glcode = subdetailDetailMap.get(VoucherConstant.GLCODE).toString();
+				if (null == chartOfAccountsDAO.getCChartOfAccountsByGlCode(glcode))
 					throw new ApplicationRuntimeException("not a valid glcode");
 			} else
 				throw new ApplicationRuntimeException("glcode is missing");
-			final Query querytds = persistenceService.getSession().createQuery(
-					"select t.id from Recovery t where "
-							+ "t.chartofaccounts.glcode=:glcode");
+			final Query querytds = persistenceService.getSession()
+					.createQuery("select t.id from Recovery t where " + "t.chartofaccounts.glcode=:glcode");
 			querytds.setString("glcode", glcode);
 			querytds.setCacheable(true);
-			if (null != querytds.list()
-					&& querytds.list().size() > 0
+			if (null != querytds.list() && querytds.list().size() > 0
 					&& null == subdetailDetailMap.get(VoucherConstant.TDSID)
-					&& null != subdetailDetailMap
-							.get(VoucherConstant.CREDITAMOUNT)
-					&& new BigDecimal(subdetailDetailMap.get(
-							VoucherConstant.CREDITAMOUNT).toString())
+					&& null != subdetailDetailMap.get(VoucherConstant.CREDITAMOUNT)
+					&& new BigDecimal(subdetailDetailMap.get(VoucherConstant.CREDITAMOUNT).toString())
 							.compareTo(BigDecimal.ZERO) != 0) {
 				/*
 				 * Commenting out throw ApplicationRuntimeException since we are
@@ -2130,116 +1920,92 @@ public class CreateVoucher {
 				 * not setting the TDS id..
 				 */
 				// throw new
-				// ApplicationRuntimeException("Recovery detail is missing for glcode :"+glcode);
+				// ApplicationRuntimeException("Recovery detail is missing for
+				// glcode :"+glcode);
 			}
 			// validate the glcode is a subledger code or not.
 
-			final Query query = persistenceService.getSession().createQuery(
-					"from CChartOfAccountDetail cd,CChartOfAccounts c where "
+			final Query query = persistenceService.getSession()
+					.createQuery("from CChartOfAccountDetail cd,CChartOfAccounts c where "
 							+ "cd.glCodeId = c.id and c.glcode=:glcode");
 
 			query.setString(VoucherConstant.GLCODE, glcode);
 			query.setCacheable(true);
 			if (null == query.list() || query.list().size() == 0)
-				throw new ApplicationRuntimeException(
-						"This code is not a control code" + glcode);
+				throw new ApplicationRuntimeException("This code is not a control code" + glcode);
 
 			// validate subledger Detailtypeid
 
 			if (null != subdetailDetailMap.get(VoucherConstant.DETAILTYPEID)) {
-				detailtypeid = subdetailDetailMap.get(
-						VoucherConstant.DETAILTYPEID).toString();
+				detailtypeid = subdetailDetailMap.get(VoucherConstant.DETAILTYPEID).toString();
 				final Session session = persistenceService.getSession();
-				final Query qry = session
-						.createQuery("from CChartOfAccountDetail cd,CChartOfAccounts c where "
-								+ "cd.glCodeId = c.id and c.glcode=:glcode and cd.detailTypeId.id=:detailTypeId");
+				final Query qry = session.createQuery("from CChartOfAccountDetail cd,CChartOfAccounts c where "
+						+ "cd.glCodeId = c.id and c.glcode=:glcode and cd.detailTypeId.id=:detailTypeId");
 				qry.setString(VoucherConstant.GLCODE, glcode);
 				qry.setInteger("detailTypeId", Integer.valueOf(detailtypeid));
 				qry.setCacheable(true);
 				if (null == qry.list() || qry.list().size() == 0)
 					throw new ApplicationRuntimeException(
-							"The subledger type mapped to this account code is not correct "
-									+ glcode);
+							"The subledger type mapped to this account code is not correct " + glcode);
 			} else
-				throw new ApplicationRuntimeException(
-						"Subledger type value is missing for account code "
-								+ glcode);
+				throw new ApplicationRuntimeException("Subledger type value is missing for account code " + glcode);
 
 			if (null != subdetailDetailMap.get(VoucherConstant.DETAILKEYID)) {
-				detailKeyId = subdetailDetailMap.get(
-						VoucherConstant.DETAILKEYID).toString();
+				detailKeyId = subdetailDetailMap.get(VoucherConstant.DETAILKEYID).toString();
 				final Session session = persistenceService.getSession();
-				final Query qry = session
-						.createQuery("from Accountdetailkey adk where adk.accountdetailtype.id=:detailtypeid and adk.detailkey=:detailkey");
-				qry.setInteger(VoucherConstant.DETAILTYPEID,
-						Integer.valueOf(detailtypeid));
+				final Query qry = session.createQuery(
+						"from Accountdetailkey adk where adk.accountdetailtype.id=:detailtypeid and adk.detailkey=:detailkey");
+				qry.setInteger(VoucherConstant.DETAILTYPEID, Integer.valueOf(detailtypeid));
 				qry.setInteger("detailkey", Integer.valueOf(detailKeyId));
 				qry.setCacheable(true);
 				if (null == qry.list() || qry.list().size() == 0)
-					throw new ApplicationRuntimeException(
-							"Subledger data is not valid for account code "
-									+ glcode);
+					throw new ApplicationRuntimeException("Subledger data is not valid for account code " + glcode);
 			} else
 				throw new ApplicationRuntimeException("detailkeyid is missing");
 
 			if (null != subdetailDetailMap.get(VoucherConstant.DEBITAMOUNT)
-					&& new BigDecimal(subdetailDetailMap.get(
-							VoucherConstant.DEBITAMOUNT).toString())
+					&& new BigDecimal(subdetailDetailMap.get(VoucherConstant.DEBITAMOUNT).toString())
 							.compareTo(BigDecimal.ZERO) != 0) {
-				final BigDecimal dbtAmount = new BigDecimal(subdetailDetailMap
-						.get(VoucherConstant.DEBITAMOUNT).toString());
+				final BigDecimal dbtAmount = new BigDecimal(
+						subdetailDetailMap.get(VoucherConstant.DEBITAMOUNT).toString());
 				if (null != subledAmtmap.get(VoucherConstant.DEBIT + glcode))
 					subledAmtmap.put(VoucherConstant.DEBIT + glcode,
-							subledAmtmap.get(VoucherConstant.DEBIT + glcode)
-									.add(dbtAmount));
+							subledAmtmap.get(VoucherConstant.DEBIT + glcode).add(dbtAmount));
 				else
 					subledAmtmap.put(VoucherConstant.DEBIT + glcode, dbtAmount);
 
-			} else if (null != subdetailDetailMap
-					.get(VoucherConstant.CREDITAMOUNT)
-					&& new BigDecimal(subdetailDetailMap.get(
-							VoucherConstant.CREDITAMOUNT).toString())
+			} else if (null != subdetailDetailMap.get(VoucherConstant.CREDITAMOUNT)
+					&& new BigDecimal(subdetailDetailMap.get(VoucherConstant.CREDITAMOUNT).toString())
 							.compareTo(BigDecimal.ZERO) != 0) {
-				final BigDecimal creditAmt = new BigDecimal(subdetailDetailMap
-						.get(VoucherConstant.CREDITAMOUNT).toString());
+				final BigDecimal creditAmt = new BigDecimal(
+						subdetailDetailMap.get(VoucherConstant.CREDITAMOUNT).toString());
 				if (null != subledAmtmap.get(VoucherConstant.CREDIT + glcode))
 					subledAmtmap.put(VoucherConstant.CREDIT + glcode,
-							subledAmtmap.get(VoucherConstant.CREDIT + glcode)
-									.add(creditAmt));
+							subledAmtmap.get(VoucherConstant.CREDIT + glcode).add(creditAmt));
 				else
-					subledAmtmap
-							.put(VoucherConstant.CREDIT + glcode, creditAmt);
+					subledAmtmap.put(VoucherConstant.CREDIT + glcode, creditAmt);
 
 			} else
-				throw new ApplicationRuntimeException(
-						"Incorrect Sub ledger amount supplied for glcode : "
-								+ glcode);
+				throw new ApplicationRuntimeException("Incorrect Sub ledger amount supplied for glcode : " + glcode);
 
 		}
 
 		for (final HashMap<String, Object> accDetailMap : accountcodedetails) {
 
-			final String glcode = accDetailMap.get(VoucherConstant.GLCODE)
-					.toString();
+			final String glcode = accDetailMap.get(VoucherConstant.GLCODE).toString();
 
 			if (null != subledAmtmap.get(VoucherConstant.DEBIT + glcode))
 				// changed since equals does considers decimal values eg 20.0 is
 				// not equal to 2
-				if (subledAmtmap.get(VoucherConstant.DEBIT + glcode).compareTo(
-						accDetAmtMap.get(VoucherConstant.DEBIT + glcode)) != 0)
-					throw new ApplicationRuntimeException(
-							"Total of subleger debit amount is not matching with the account code amount "
-									+ glcode);
+				if (subledAmtmap.get(VoucherConstant.DEBIT + glcode)
+						.compareTo(accDetAmtMap.get(VoucherConstant.DEBIT + glcode)) != 0)
+				throw new ApplicationRuntimeException("Total of subleger debit amount is not matching with the account code amount " + glcode);
 			if (null != subledAmtmap.get(VoucherConstant.CREDIT + glcode))
 				// changed since equals does considers decimal values eg 20.0 is
 				// not equal to 2
 				if (subledAmtmap.get(VoucherConstant.CREDIT + glcode)
-						.compareTo(
-								accDetAmtMap.get(VoucherConstant.CREDIT
-										+ glcode)) != 0)
-					throw new ApplicationRuntimeException(
-							"Total of subleger credit amount is not matching with the account code amount "
-									+ glcode);
+						.compareTo(accDetAmtMap.get(VoucherConstant.CREDIT + glcode)) != 0)
+				throw new ApplicationRuntimeException("Total of subleger credit amount is not matching with the account code amount " + glcode);
 
 		}
 		if (LOGGER.isDebugEnabled())
@@ -2247,42 +2013,34 @@ public class CreateVoucher {
 
 	}
 
-	public List<Transaxtion> createTransaction(
-			final HashMap<String, Object> headerdetails,
+	public List<Transaxtion> createTransaction(final HashMap<String, Object> headerdetails,
 			final List<HashMap<String, Object>> accountcodedetails,
-			final List<HashMap<String, Object>> subledgerdetails,
-			final CVoucherHeader vh) throws ApplicationRuntimeException {
+			final List<HashMap<String, Object>> subledgerdetails, final CVoucherHeader vh)
+			throws ApplicationRuntimeException {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Start | createTransaction ");
 		final List<Transaxtion> transaxtionList = new ArrayList<Transaxtion>();
 		try {
 			Integer voucherLineId = 1;
 			for (final HashMap<String, Object> accDetailMap : accountcodedetails) {
-				final String glcode = accDetailMap.get(VoucherConstant.GLCODE)
-						.toString();
+				final String glcode = accDetailMap.get(VoucherConstant.GLCODE).toString();
 
-				final String debitAmount = accDetailMap.get(
-						VoucherConstant.DEBITAMOUNT).toString();
-				final String creditAmount = accDetailMap.get(
-						VoucherConstant.CREDITAMOUNT).toString();
+				final String debitAmount = accDetailMap.get(VoucherConstant.DEBITAMOUNT).toString();
+				final String creditAmount = accDetailMap.get(VoucherConstant.CREDITAMOUNT).toString();
 				String functionId = null;
 				String functioncode = null;
 				if (null != accDetailMap.get(VoucherConstant.NARRATION))
 					accDetailMap.get(VoucherConstant.NARRATION).toString();
 				if (null != accDetailMap.get(VoucherConstant.FUNCTIONCODE)
 						&& "" != accDetailMap.get(VoucherConstant.FUNCTIONCODE)) {
-					functioncode = accDetailMap.get(
-							VoucherConstant.FUNCTIONCODE).toString();
+					functioncode = accDetailMap.get(VoucherConstant.FUNCTIONCODE).toString();
 					functionId = functionDAO
-							.getFunctionByCode(
-									accDetailMap.get(
-											VoucherConstant.FUNCTIONCODE)
-											.toString()).getId().toString();
+							.getFunctionByCode(accDetailMap.get(VoucherConstant.FUNCTIONCODE).toString()).getId()
+							.toString();
 					if (LOGGER.isDebugEnabled())
 						LOGGER.debug("functionId>>>>>>>> " + functionId);
 				}
-				final CChartOfAccounts chartOfAcc = chartOfAccountsDAO
-						.getCChartOfAccountsByGlCode(glcode);
+				final CChartOfAccounts chartOfAcc = chartOfAccountsDAO.getCChartOfAccountsByGlCode(glcode);
 				/*
 				 * VoucherDetail voucherDetail = new VoucherDetail();
 				 * voucherDetail.setLineId(lineId++);
@@ -2297,58 +2055,42 @@ public class CreateVoucher {
 				 */
 				final Transaxtion transaction = new Transaxtion();
 				transaction.setGlCode(chartOfAcc.getGlcode());
-				transaction.setGlName(chartOfAcc.getName()); 
+				transaction.setGlName(chartOfAcc.getName());
 				transaction.setVoucherLineId(String.valueOf(voucherLineId++));
 				transaction.setVoucherHeaderId(vh.getId().toString());
 				transaction.setCrAmount(creditAmount);
 				transaction.setDrAmount(debitAmount);
 				transaction.setFunctionId(functionId);
-				if (headerdetails != null
-						&& headerdetails.get("billid") != null)
+				if (headerdetails != null && headerdetails.get("billid") != null)
 					transaction.setBillId((Long) headerdetails.get("billid"));
-				
-			 
+
 				final ArrayList reqParams = new ArrayList();
 				for (final HashMap<String, Object> sublegDetailMap : subledgerdetails) {
 
-					final String detailGlCode = sublegDetailMap.get(
-							VoucherConstant.GLCODE).toString();
-					final String detailtypeid = sublegDetailMap.get(
-							VoucherConstant.DETAILTYPEID).toString();
-					if (sublegDetailMap
-							.containsKey(VoucherConstant.FUNCTIONCODE)
-							&& null != sublegDetailMap
-									.get(VoucherConstant.FUNCTIONCODE)
-							&& "" != sublegDetailMap
-									.get(VoucherConstant.FUNCTIONCODE)) {
-						final String detailFunctionCode = sublegDetailMap.get(
-								VoucherConstant.FUNCTIONCODE).toString();
+					final String detailGlCode = sublegDetailMap.get(VoucherConstant.GLCODE).toString();
+					final String detailtypeid = sublegDetailMap.get(VoucherConstant.DETAILTYPEID).toString();
+					if (sublegDetailMap.containsKey(VoucherConstant.FUNCTIONCODE)
+							&& null != sublegDetailMap.get(VoucherConstant.FUNCTIONCODE)
+							&& "" != sublegDetailMap.get(VoucherConstant.FUNCTIONCODE)) {
+						final String detailFunctionCode = sublegDetailMap.get(VoucherConstant.FUNCTIONCODE).toString();
 						if (glcode.equals(detailGlCode) && functioncode != null
 								&& functioncode.equals(detailFunctionCode)) {
 							final TransaxtionParameter reqData = new TransaxtionParameter();
 							final Accountdetailtype adt = (Accountdetailtype) accountdetailtypeHibernateDAO
-									.findById(Integer.valueOf(detailtypeid),
-											false);
+									.findById(Integer.valueOf(detailtypeid), false);
 							reqData.setDetailName(adt.getAttributename());
 							reqData.setGlcodeId(chartOfAcc.getId().toString());
-							if (null != sublegDetailMap
-									.get(VoucherConstant.DEBITAMOUNT)
-									&& new BigDecimal(sublegDetailMap.get(
-											VoucherConstant.DEBITAMOUNT)
-											.toString())
+							if (null != sublegDetailMap.get(VoucherConstant.DEBITAMOUNT)
+									&& new BigDecimal(sublegDetailMap.get(VoucherConstant.DEBITAMOUNT).toString())
 											.compareTo(BigDecimal.ZERO) != 0)
-								reqData.setDetailAmt(sublegDetailMap.get(
-										VoucherConstant.DEBITAMOUNT).toString());
+								reqData.setDetailAmt(sublegDetailMap.get(VoucherConstant.DEBITAMOUNT).toString());
 							else
-								reqData.setDetailAmt(sublegDetailMap.get(
-										VoucherConstant.CREDITAMOUNT)
-										.toString());
+								reqData.setDetailAmt(sublegDetailMap.get(VoucherConstant.CREDITAMOUNT).toString());
 
-							reqData.setDetailKey(sublegDetailMap.get(
-									VoucherConstant.DETAILKEYID).toString());
+							reqData.setDetailKey(sublegDetailMap.get(VoucherConstant.DETAILKEYID).toString());
 							reqData.setDetailTypeId(detailtypeid);
-							reqData.setTdsId(sublegDetailMap.get("tdsId") != null ? sublegDetailMap
-									.get("tdsId").toString() : null);
+							reqData.setTdsId(sublegDetailMap.get("tdsId") != null
+									? sublegDetailMap.get("tdsId").toString() : null);
 							reqParams.add(reqData);
 						}
 					} else if (glcode.equals(detailGlCode)) {
@@ -2357,22 +2099,17 @@ public class CreateVoucher {
 								.findById(Integer.valueOf(detailtypeid), false);
 						reqData.setDetailName(adt.getAttributename());
 						reqData.setGlcodeId(chartOfAcc.getId().toString());
-						if (null != sublegDetailMap
-								.get(VoucherConstant.DEBITAMOUNT)
-								&& new BigDecimal(sublegDetailMap.get(
-										VoucherConstant.DEBITAMOUNT).toString())
+						if (null != sublegDetailMap.get(VoucherConstant.DEBITAMOUNT)
+								&& new BigDecimal(sublegDetailMap.get(VoucherConstant.DEBITAMOUNT).toString())
 										.compareTo(BigDecimal.ZERO) != 0)
-							reqData.setDetailAmt(sublegDetailMap.get(
-									VoucherConstant.DEBITAMOUNT).toString());
+							reqData.setDetailAmt(sublegDetailMap.get(VoucherConstant.DEBITAMOUNT).toString());
 						else
-							reqData.setDetailAmt(sublegDetailMap.get(
-									VoucherConstant.CREDITAMOUNT).toString());
+							reqData.setDetailAmt(sublegDetailMap.get(VoucherConstant.CREDITAMOUNT).toString());
 
-						reqData.setDetailKey(sublegDetailMap.get(
-								VoucherConstant.DETAILKEYID).toString());
+						reqData.setDetailKey(sublegDetailMap.get(VoucherConstant.DETAILKEYID).toString());
 						reqData.setDetailTypeId(detailtypeid);
-						reqData.setTdsId(sublegDetailMap.get("tdsId") != null ? sublegDetailMap
-								.get("tdsId").toString() : null);
+						reqData.setTdsId(
+								sublegDetailMap.get("tdsId") != null ? sublegDetailMap.get("tdsId").toString() : null);
 						reqParams.add(reqData);
 					}
 
@@ -2384,8 +2121,7 @@ public class CreateVoucher {
 		} catch (final Exception e) {
 			LOGGER.error("Exception occured while posting data into voucher detail and transaction");
 			throw new ApplicationRuntimeException(
-					"Exception occured while posting data into voucher detail and transaction"
-							+ e.getMessage());
+					"Exception occured while posting data into voucher detail and transaction" + e.getMessage());
 		}
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("END | createTransaction ");
@@ -2394,35 +2130,29 @@ public class CreateVoucher {
 
 	public Functionary getFunctionaryByCode(final BigDecimal code) {
 		// functionarySer.setType(Functionary.class);
-		final Functionary functionary = (Functionary) persistenceService.find(
-				"from Functionary where code=?", code);
+		final Functionary functionary = (Functionary) persistenceService.find("from Functionary where code=?", code);
 		return functionary;
 
 	}
 
 	public void validateVoucherHeader(final CVoucherHeader voucherHeader) {
 		if (null == voucherHeader)
-			throw new ApplicationRuntimeException(
-					"voucherHeader object passed is null");
+			throw new ApplicationRuntimeException("voucherHeader object passed is null");
 		if (null == voucherHeader.getType()
-				|| !voucherHeader.getType().equalsIgnoreCase(
-						voucherTypeEnum.RECEIPT.toString()))
+				|| !voucherHeader.getType().equalsIgnoreCase(voucherTypeEnum.RECEIPT.toString()))
 			throw new ApplicationRuntimeException("Voucher type is not Receipt");
 	}
 
-	public void validateReceiptDetails(
-			final HashMap<String, Object> receiptdetails) {
+	public void validateReceiptDetails(final HashMap<String, Object> receiptdetails) {
 		String modeofcollection = null;
 		if (null == receiptdetails)
 			throw new ApplicationRuntimeException("receiptdetails is null");
 		if (null == receiptdetails.get(VoucherConstant.MODEOFCOLLECTION))
 			throw new ApplicationRuntimeException("modeofcollection is null");
 		else {
-			modeofcollection = chkModeOfCollection(receiptdetails.get(
-					VoucherConstant.MODEOFCOLLECTION).toString());
+			modeofcollection = chkModeOfCollection(receiptdetails.get(VoucherConstant.MODEOFCOLLECTION).toString());
 			if (null == modeofcollection)
-				throw new ApplicationRuntimeException(
-						"Not a valid modeofcollection");
+				throw new ApplicationRuntimeException("Not a valid modeofcollection");
 		}
 		if (VoucherConstant.BANK.equalsIgnoreCase(modeofcollection))
 			validateBankDetails(receiptdetails);
@@ -2442,16 +2172,12 @@ public class CreateVoucher {
 		if (null == receiptdetails.get(VoucherConstant.BANKACCOUNTNUMBER))
 			throw new ApplicationRuntimeException("Bank Account number is null");
 		bankCode = receiptdetails.get(VoucherConstant.BANKCODE).toString();
-		bankBranchCode = receiptdetails.get(VoucherConstant.BANKBRANCHCODE)
-				.toString();
-		bankAccNumber = receiptdetails.get(VoucherConstant.BANKACCOUNTNUMBER)
-				.toString();
-		final Bankaccount bankAccount = bankAccountDAO
-				.getBankAccountByAccBranchBank(bankAccNumber, bankBranchCode,
-						bankCode);
+		bankBranchCode = receiptdetails.get(VoucherConstant.BANKBRANCHCODE).toString();
+		bankAccNumber = receiptdetails.get(VoucherConstant.BANKACCOUNTNUMBER).toString();
+		final Bankaccount bankAccount = bankAccountDAO.getBankAccountByAccBranchBank(bankAccNumber, bankBranchCode,
+				bankCode);
 		if (null == bankAccount)
-			throw new ApplicationRuntimeException(
-					"not a valid bank account number");
+			throw new ApplicationRuntimeException("not a valid bank account number");
 		else
 			receiptdetails.put(VoucherConstant.BANKACCID, bankAccount.getId());
 	}
@@ -2460,8 +2186,7 @@ public class CreateVoucher {
 	 *
 	 * @param instrumentdetails
 	 */
-	public void validateInstrumentdetails(
-			final List<HashMap<String, Object>> instrumentdetailsList,
+	public void validateInstrumentdetails(final List<HashMap<String, Object>> instrumentdetailsList,
 			final HashMap<String, Object> receiptdetails) {
 		String bankCode = null;
 		BigDecimal chequeAmounts = BigDecimal.valueOf(0);
@@ -2473,21 +2198,16 @@ public class CreateVoucher {
 			if (null == instrumentdetails.get(VoucherConstant.INSTRUMENTAMOUNT))
 				throw new ApplicationRuntimeException("Cheque amount is null");
 			else
-				chequeAmounts = chequeAmounts.add(new BigDecimal(
-						instrumentdetails.get(VoucherConstant.INSTRUMENTAMOUNT)
-								.toString()));
+				chequeAmounts = chequeAmounts
+						.add(new BigDecimal(instrumentdetails.get(VoucherConstant.INSTRUMENTAMOUNT).toString()));
 			if (null != instrumentdetails.get(VoucherConstant.BANKCODE)) {
-				bankCode = instrumentdetails.get(VoucherConstant.BANKCODE)
-						.toString();
+				bankCode = instrumentdetails.get(VoucherConstant.BANKCODE).toString();
 				if (null == bankDAO.getBankByCode(bankCode))
-					throw new ApplicationRuntimeException(
-							"not a valid bank code");
+					throw new ApplicationRuntimeException("not a valid bank code");
 			}
 		}
-		if (!chequeAmounts
-				.equals(receiptdetails.get(VoucherConstant.NETAMOUNT)))
-			throw new ApplicationRuntimeException(
-					"total cheque amount is not matching with net amount");
+		if (!chequeAmounts.equals(receiptdetails.get(VoucherConstant.NETAMOUNT)))
+			throw new ApplicationRuntimeException("total cheque amount is not matching with net amount");
 
 	}
 
@@ -2553,19 +2273,14 @@ public class CreateVoucher {
 			}
 		} catch (final Exception e) {
 			LOGGER.error(ERR, e);
-			throw new ApplicationRuntimeException(
-					"Not a valid modeofcollection");
+			throw new ApplicationRuntimeException("Not a valid modeofcollection");
 		}
 
 		return collectionMode;
 	}
 
-	
-
-	public void updatePJV(final CVoucherHeader vh,
-			final List<PreApprovedVoucher> detailList,
-			final List<PreApprovedVoucher> subledgerlist)
-			throws ApplicationRuntimeException {
+	public void updatePJV(final CVoucherHeader vh, final List<PreApprovedVoucher> detailList,
+			final List<PreApprovedVoucher> subledgerlist) throws ApplicationRuntimeException {
 		try {
 			// delete the existing voucherdetail, gl entries.
 			deleteVoucherdetailAndGL(vh);
@@ -2580,46 +2295,34 @@ public class CreateVoucher {
 			for (final PreApprovedVoucher detail : detailList) {
 				detailMap = new HashMap<String, Object>();
 				detailMap.put(VoucherConstant.GLCODE, detail.getGlcodeDetail());
-				detailMap.put(VoucherConstant.DEBITAMOUNT,
-						detail.getDebitAmountDetail());
-				detailMap.put(VoucherConstant.CREDITAMOUNT,
-						detail.getCreditAmountDetail());
+				detailMap.put(VoucherConstant.DEBITAMOUNT, detail.getDebitAmountDetail());
+				detailMap.put(VoucherConstant.CREDITAMOUNT, detail.getCreditAmountDetail());
 				if (detail.getFunctionIdDetail() != null) {
-					function = functionDAO.getFunctionById(detail
-							.getFunctionIdDetail());
-					detailMap.put(VoucherConstant.FUNCTIONCODE,
-							function.getCode());
+					function = functionDAO.getFunctionById(detail.getFunctionIdDetail());
+					detailMap.put(VoucherConstant.FUNCTIONCODE, function.getCode());
 				}
 				accountdetails.add(detailMap);
 			}
 			if (subledgerlist != null)
 				for (final PreApprovedVoucher subledger : subledgerlist) {
 					subledgerMap = new HashMap<String, Object>();
-					coa = (CChartOfAccounts) chartOfAccountsDAO.findById(
-							subledger.getGlcode().getId(), false);
+					coa = (CChartOfAccounts) chartOfAccountsDAO.findById(subledger.getGlcode().getId(), false);
 					subledgerMap.put(VoucherConstant.GLCODE, coa.getGlcode());
-					subledgerMap.put(VoucherConstant.DETAILTYPEID, subledger
-							.getDetailType().getId());
-					subledgerMap.put(VoucherConstant.DETAILKEYID,
-							subledger.getDetailKeyId());
+					subledgerMap.put(VoucherConstant.DETAILTYPEID, subledger.getDetailType().getId());
+					subledgerMap.put(VoucherConstant.DETAILKEYID, subledger.getDetailKeyId());
 					if (subledger.getDebitAmountDetail() == null
-							|| subledger.getDebitAmountDetail().compareTo(
-									BigDecimal.ZERO) == 0)
-						subledgerMap.put(VoucherConstant.CREDITAMOUNT,
-								subledger.getCreditAmount());
+							|| subledger.getDebitAmountDetail().compareTo(BigDecimal.ZERO) == 0)
+						subledgerMap.put(VoucherConstant.CREDITAMOUNT, subledger.getCreditAmount());
 					else
-						subledgerMap.put(VoucherConstant.DEBITAMOUNT,
-								subledger.getDebitAmount());
+						subledgerMap.put(VoucherConstant.DEBITAMOUNT, subledger.getDebitAmount());
 					subledgerdetails.add(subledgerMap);
 				}
-			final List<Transaxtion> transactions = createTransaction(null,
-					accountdetails, subledgerdetails, vh);
+			final List<Transaxtion> transactions = createTransaction(null, accountdetails, subledgerdetails, vh);
 			persistenceService.getSession().flush();
 			Transaxtion txnList[] = new Transaxtion[transactions.size()];
 			txnList = transactions.toArray(txnList);
 			final SimpleDateFormat formatter = new SimpleDateFormat(DD_MMM_YYYY);
-			if (!chartOfAccounts.postTransaxtions(txnList,
-					formatter.format(vh.getVoucherDate())))
+			if (!chartOfAccounts.postTransaxtions(txnList, formatter.format(vh.getVoucherDate())))
 				throw new ApplicationRuntimeException("Voucher creation Failed");
 		} catch (final Exception e) {
 			LOGGER.error("Inside exception updatePJV" + e.getMessage());
@@ -2627,8 +2330,7 @@ public class CreateVoucher {
 		}
 	}
 
-	public void deleteVoucherdetailAndGL(final CVoucherHeader vh)
-			throws SQLException, ApplicationRuntimeException {
+	public void deleteVoucherdetailAndGL(final CVoucherHeader vh) throws SQLException, ApplicationRuntimeException {
 		try {
 			Query pstmt1 = null;
 			Query pstmt2 = null;
@@ -2648,20 +2350,17 @@ public class CreateVoucher {
 			List<Object[]> rs1 = null;
 			boolean delete = false;
 			while (rs != null && rs.size() > 0) {
-				pstmt2 = persistenceService.getSession()
-						.createSQLQuery(glidQry);
+				pstmt2 = persistenceService.getSession().createSQLQuery(glidQry);
 				pstmt2.setLong(0, Long.parseLong(rs.get(1).toString()));
 				rs1 = pstmt2.list();
 				while (rs1 != null && rs1.size() > 0) {
 					delete = true;
-					pstmt3 = persistenceService.getSession().createSQLQuery(
-							delQry);
+					pstmt3 = persistenceService.getSession().createSQLQuery(delQry);
 					pstmt3.setLong(0, Long.parseLong(rs1.get(1).toString()));
 					pstmt3.executeUpdate();
 				}
 				if (delete) {
-					pstmt4 = persistenceService.getSession().createSQLQuery(
-							delQrr);
+					pstmt4 = persistenceService.getSession().createSQLQuery(delQrr);
 					pstmt4.setLong(0, Long.parseLong(rs1.get(1).toString()));
 					pstmt4.executeUpdate();
 				}
@@ -2675,8 +2374,7 @@ public class CreateVoucher {
 			pstmt1.executeUpdate();
 
 		} catch (final Exception e) {
-			LOGGER.error("Inside exception deleteVoucherdetailAndGL"
-					+ e.getMessage());
+			LOGGER.error("Inside exception deleteVoucherdetailAndGL" + e.getMessage());
 			throw new ApplicationRuntimeException(e.getMessage());
 		}
 	}
@@ -2700,71 +2398,55 @@ public class CreateVoucher {
 	 * @return
 	 */
 	@Transactional
-	public CVoucherHeader reverseVoucher(
-			final List<HashMap<String, Object>> paramList)
-					throws ApplicationRuntimeException, ParseException {
+	public CVoucherHeader reverseVoucher(final List<HashMap<String, Object>> paramList)
+			throws ApplicationRuntimeException, ParseException {
 		// -- Reversal Voucher date check ----
 		CVoucherHeader reversalVoucherObj = new CVoucherHeader();
-		CVoucherHeader originalVocher=null;
+		CVoucherHeader originalVocher = null;
 		for (final HashMap<String, Object> paramMap : paramList) {
 
 			if (paramMap.get(VOUCHER_HEADER_ID) == null)
-				throw new IllegalArgumentException(VOUCHER_HEADER_ID
-						+ IS_MISSING);
+				throw new IllegalArgumentException(VOUCHER_HEADER_ID + IS_MISSING);
 			else {
-				try {  
-					originalVocher = voucherService.find("from CVoucherHeader where id=?",(Long) paramMap.get(VOUCHER_HEADER_ID));
-								 
+				try {
+					originalVocher = voucherService.find("from CVoucherHeader where id=?",
+							(Long) paramMap.get(VOUCHER_HEADER_ID));
+
 				} catch (final Exception e) {
-					throw new ApplicationRuntimeException("cannot find "
-							+ VOUCHER_HEADER_ID + "in the system");
+					throw new ApplicationRuntimeException("cannot find " + VOUCHER_HEADER_ID + "in the system");
 				}
 				reversalVoucherObj.setOriginalvcId(originalVocher.getId());
 			}
 
 			if (paramMap.get(REVERSAL_VOUCHER_DATE) == null) {
 				final SimpleDateFormat sdf = new SimpleDateFormat(DD_MM_YYYY);
-				final Date reversalVoucherDate = sdf.parse(sdf
-						.format(originalVocher.getVoucherDate()));
+				final Date reversalVoucherDate = sdf.parse(sdf.format(originalVocher.getVoucherDate()));
 				reversalVoucherObj.setVoucherDate(reversalVoucherDate);
 			} else {
 				if (LOGGER.isDebugEnabled())
-					LOGGER.debug("Voucher  end REVERSAL_VOUCHER_DAT :"
-							+ paramMap.get(REVERSAL_VOUCHER_DATE));
-				final Date reversalVoucherDate = sdf.parse(sdf
-						.format(paramMap
-								.get(REVERSAL_VOUCHER_DATE)));
-				reversalVoucherObj.setVoucherDate( reversalVoucherDate);
+					LOGGER.debug("Voucher  end REVERSAL_VOUCHER_DAT :" + paramMap.get(REVERSAL_VOUCHER_DATE));
+				final Date reversalVoucherDate = sdf.parse(sdf.format(paramMap.get(REVERSAL_VOUCHER_DATE)));
+				reversalVoucherObj.setVoucherDate(reversalVoucherDate);
 			}
 		}
-		originalVocher = (CVoucherHeader) persistenceService.find(
-				"from CVoucherHeader where id=?",
+		originalVocher = (CVoucherHeader) persistenceService.find("from CVoucherHeader where id=?",
 				reversalVoucherObj.getOriginalvcId());
 		if (LOGGER.isDebugEnabled())
-			LOGGER.debug("original voucher is "
-					+ reversalVoucherObj.getOriginalvcId());
+			LOGGER.debug("original voucher is " + reversalVoucherObj.getOriginalvcId());
 		if (LOGGER.isDebugEnabled())
-			LOGGER.debug("reversalVoucherObj getVoucherDate is "
-					+ reversalVoucherObj.getVoucherDate());
+			LOGGER.debug("reversalVoucherObj getVoucherDate is " + reversalVoucherObj.getVoucherDate());
 		if (LOGGER.isDebugEnabled())
-			LOGGER.debug("originalVocher getVoucherDate is "
-					+ originalVocher.getVoucherDate());
-		if (reversalVoucherObj.getVoucherDate().before(
-				originalVocher.getVoucherDate())) {
+			LOGGER.debug("originalVocher getVoucherDate is " + originalVocher.getVoucherDate());
+		if (reversalVoucherObj.getVoucherDate().before(originalVocher.getVoucherDate())) {
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Reversal Voucher Date should be greater than the Origianal Voucher Date");
-			throw new ValidationException(
-					Arrays.asList(new ValidationError(
-							"reversal.voucher.date.validate",
-							"Reversal Voucher Date should be greater than the Original Voucher Date")));
+			throw new ValidationException(Arrays.asList(new ValidationError("reversal.voucher.date.validate",
+					"Reversal Voucher Date should be greater than the Original Voucher Date")));
 		}
-
-
 
 		reversalVoucherObj.setName(originalVocher.getName());
 		reversalVoucherObj.setType(originalVocher.getType());
-		reversalVoucherObj.setVoucherSubType(originalVocher
-				.getVoucherSubType());
+		reversalVoucherObj.setVoucherSubType(originalVocher.getVoucherSubType());
 
 		reversalVoucherObj.setVoucherNumber("");
 
@@ -2775,260 +2457,207 @@ public class CreateVoucher {
 		final HashMap<String, Object> headerDetails = createHeaderAndMisDetails(reversalVoucherObj);
 
 		List<CGeneralLedger> orginalLedgerEntries = generalLedgerService
-				.findAllBy("from CGeneralLedger where voucherHeaderId=?",
-						originalVocher);
+				.findAllBy("from CGeneralLedger where voucherHeaderId=?", originalVocher);
 		HashMap<String, Object> detailMap = null;
 		HashMap<String, Object> subledgerMap = null;
 		final List<HashMap<String, Object>> accountdetails = new ArrayList<HashMap<String, Object>>();
 		final List<HashMap<String, Object>> subledgerdetails = new ArrayList<HashMap<String, Object>>();
 
-
-
 		CFunction function = null;
 		for (final CGeneralLedger ledger : orginalLedgerEntries) {
 			detailMap = new HashMap<String, Object>();
 			detailMap.put(VoucherConstant.GLCODE, ledger.getGlcode());
-			//debit becomes credit ,credit becomes debit
-			detailMap.put(VoucherConstant.DEBITAMOUNT,ledger.getCreditAmount());
-			detailMap.put(VoucherConstant.CREDITAMOUNT,ledger.getDebitAmount());
+			// debit becomes credit ,credit becomes debit
+			detailMap.put(VoucherConstant.DEBITAMOUNT, ledger.getCreditAmount());
+			detailMap.put(VoucherConstant.CREDITAMOUNT, ledger.getDebitAmount());
 
 			if (ledger.getFunctionId() != null) {
-				function = functionDAO.getFunctionById(ledger
-						.getFunctionId().longValue());
-				detailMap.put(VoucherConstant.FUNCTIONCODE,function.getCode());
+				function = functionDAO.getFunctionById(ledger.getFunctionId().longValue());
+				detailMap.put(VoucherConstant.FUNCTIONCODE, function.getCode());
 			}
 			List<CGeneralLedgerDetail> ledgerDetailSet = generalLedgerDetailService
-					.findAllBy(
-							"from CGeneralLedgerDetail where generalLedgerId.id=?",
-							ledger.getId());
+					.findAllBy("from CGeneralLedgerDetail where generalLedgerId.id=?", ledger.getId());
 			for (final CGeneralLedgerDetail ledgerDetail : ledgerDetailSet) {
 				subledgerMap = new HashMap<String, Object>();
 				subledgerMap.put(VoucherConstant.GLCODE, ledger.getGlcode());
 				subledgerMap.put(VoucherConstant.DETAILTYPEID, ledgerDetail.getDetailTypeId().getId());
-				subledgerMap.put(VoucherConstant.DETAILKEYID,ledgerDetail.getDetailKeyId());
-				//even for subledger debit becomes credit ,credit becomes debit
-				if (BigDecimal.valueOf(ledger.getDebitAmount()).compareTo(BigDecimal.ZERO)!=0)
-					subledgerMap.put(VoucherConstant.CREDITAMOUNT,ledgerDetail.getAmount());
+				subledgerMap.put(VoucherConstant.DETAILKEYID, ledgerDetail.getDetailKeyId());
+				// even for subledger debit becomes credit ,credit becomes debit
+				if (BigDecimal.valueOf(ledger.getDebitAmount()).compareTo(BigDecimal.ZERO) != 0)
+					subledgerMap.put(VoucherConstant.CREDITAMOUNT, ledgerDetail.getAmount());
 				else
-					subledgerMap.put(VoucherConstant.DEBITAMOUNT,ledgerDetail.getAmount().setScale(2,BigDecimal.ROUND_HALF_EVEN));
+					subledgerMap.put(VoucherConstant.DEBITAMOUNT,
+							ledgerDetail.getAmount().setScale(2, BigDecimal.ROUND_HALF_EVEN));
 
 				subledgerdetails.add(subledgerMap);
 			}
 			accountdetails.add(detailMap);
 		}
-		try{
+		try {
 			reversalVoucherObj = createVoucher(headerDetails, accountdetails, subledgerdetails);
 		} catch (final HibernateException e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new ValidationException(Arrays.asList(new ValidationError(
-					EXCEPTION_WHILE_SAVING_DATA, FAILED)));
+			throw new ValidationException(Arrays.asList(new ValidationError(EXCEPTION_WHILE_SAVING_DATA, FAILED)));
 		} catch (final ApplicationRuntimeException e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new ValidationException(Arrays.asList(new ValidationError(e
-					.getMessage(), e.getMessage())));
+			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
 		} catch (final ValidationException e) {
 			LOGGER.error(e.getMessage(), e);
 			throw e;
 		} catch (final Exception e) {
 			LOGGER.error(e.getMessage(), e);
-			throw new ValidationException(Arrays.asList(new ValidationError(e
-					.getMessage(), e.getMessage())));
-		}
-		   
-			originalVocher.setStatus(1);
-			originalVocher.setEffectiveDate(new Date());
-			voucherService.applyAuditing(originalVocher);
-			voucherService.update(originalVocher);
-		
-			reversalVoucherObj.setOriginalvcId(originalVocher.getId());
-			reversalVoucherObj.setStatus(2);
-			voucherService.applyAuditing(reversalVoucherObj);
-			voucherService.persist(reversalVoucherObj);
-			
-			
-
-			return reversalVoucherObj;
+			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
 		}
 
-	
+		originalVocher.setStatus(1);
+		originalVocher.setEffectiveDate(new Date());
+		voucherService.applyAuditing(originalVocher);
+		voucherService.update(originalVocher);
 
+		reversalVoucherObj.setOriginalvcId(originalVocher.getId());
+		reversalVoucherObj.setStatus(2);
+		voucherService.applyAuditing(reversalVoucherObj);
+		voucherService.persist(reversalVoucherObj);
 
-	private CVoucherHeader validateAndAssignReversalVoucherParams(
-			final List<HashMap<String, Object>> paramList)
+		return reversalVoucherObj;
+	}
+
+	private CVoucherHeader validateAndAssignReversalVoucherParams(final List<HashMap<String, Object>> paramList)
 			throws ParseException {
 		final CVoucherHeader reversalVoucher = new CVoucherHeader();
 		for (final HashMap<String, Object> paramMap : paramList) {
 			CVoucherHeader originalVoucher = null;
 			if (paramMap.get(VOUCHER_HEADER_ID) == null)
-				throw new IllegalArgumentException(VOUCHER_HEADER_ID
-						+ IS_MISSING);
+				throw new IllegalArgumentException(VOUCHER_HEADER_ID + IS_MISSING);
 			else {
 				try {
-					originalVoucher = (CVoucherHeader) voucherHeaderDAO
-							.findById((Long) paramMap.get(VOUCHER_HEADER_ID),
-									false);
+					originalVoucher = (CVoucherHeader) voucherHeaderDAO.findById((Long) paramMap.get(VOUCHER_HEADER_ID),
+							false);
 				} catch (final Exception e) {
-					throw new ApplicationRuntimeException("cannot find "
-							+ VOUCHER_HEADER_ID + "in the system");
+					throw new ApplicationRuntimeException("cannot find " + VOUCHER_HEADER_ID + "in the system");
 				}
 				reversalVoucher.setOriginalvcId(originalVoucher.getId());
 
 			}
-			if (paramMap.get(NAME) == null
-					|| ((String) paramMap.get(NAME)).isEmpty())
-				throw new IllegalArgumentException(NAME + IS_MISSING + "or"
-						+ IS_EMPTY);
+			if (paramMap.get(NAME) == null || ((String) paramMap.get(NAME)).isEmpty())
+				throw new IllegalArgumentException(NAME + IS_MISSING + "or" + IS_EMPTY);
 			else
 				reversalVoucher.setName((String) paramMap.get(NAME));
-			if (paramMap.get(TYPE) == null
-					|| ((String) paramMap.get(TYPE)).isEmpty())
-				throw new IllegalArgumentException(TYPE + IS_MISSING + "or"
-						+ IS_EMPTY);
+			if (paramMap.get(TYPE) == null || ((String) paramMap.get(TYPE)).isEmpty())
+				throw new IllegalArgumentException(TYPE + IS_MISSING + "or" + IS_EMPTY);
 			else {
 				validateVoucherType((String) paramMap.get(TYPE));
-				reversalVoucher
-						.setType(FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL);
+				reversalVoucher.setType(FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL);
 			}
 			if (paramMap.get(REVERSAL_VOUCHER_DATE) == null) {
 				final SimpleDateFormat sdf = new SimpleDateFormat(DD_MM_YYYY);
-				final Date reversalVoucherDate = sdf.parse(sdf
-						.format(originalVoucher.getVoucherDate()));
+				final Date reversalVoucherDate = sdf.parse(sdf.format(originalVoucher.getVoucherDate()));
 				reversalVoucher.setVoucherDate(reversalVoucherDate);
 			} else {
 				if (LOGGER.isDebugEnabled())
-					LOGGER.debug("vo end REVERSAL_VOUCHER_DAT :"
-							+ paramMap.get(REVERSAL_VOUCHER_DATE));
-				reversalVoucher.setVoucherDate((Date) paramMap
-						.get(REVERSAL_VOUCHER_DATE));
+					LOGGER.debug("vo end REVERSAL_VOUCHER_DAT :" + paramMap.get(REVERSAL_VOUCHER_DATE));
+				reversalVoucher.setVoucherDate((Date) paramMap.get(REVERSAL_VOUCHER_DATE));
 			}
 			// it may be null and taken care in calling api
-			reversalVoucher.setVoucherNumber((String) paramMap
-					.get(REVERSAL_VOUCHER_NUMBER));
+			reversalVoucher.setVoucherNumber((String) paramMap.get(REVERSAL_VOUCHER_NUMBER));
 
 		}
 		return reversalVoucher;
 	}
 
-	protected void validateMandotyFields(
-			final HashMap<String, Object> headerdetails) {
+	protected void validateMandotyFields(final HashMap<String, Object> headerdetails) {
 
 	}
 
-	protected void checkMandatoryField(final String fieldName,
-			final Object value, final HashMap<String, Object> headerdetails,List<String> mandatoryFields) {
+	protected void checkMandatoryField(final String fieldName, final Object value,
+			final HashMap<String, Object> headerdetails, List<String> mandatoryFields) {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Filed name :=" + fieldName + " Value = :" + value);
 		String vNumGenMode = null;
 		if (fieldName.equals("vouchernumber")) {
 			if (headerdetails.get(VoucherConstant.VOUCHERTYPE) == null)
-				throw new ValidationException(
-						Arrays.asList(new ValidationError(
-								VoucherConstant.VOUCHERTYPE + ISREQUIRED,
-								VoucherConstant.VOUCHERTYPE + ISREQUIRED)));
+				throw new ValidationException(Arrays.asList(new ValidationError(
+						VoucherConstant.VOUCHERTYPE + ISREQUIRED, VoucherConstant.VOUCHERTYPE + ISREQUIRED)));
 			else {
-				validateVoucherType(headerdetails.get(
-						VoucherConstant.VOUCHERTYPE).toString());
+				validateVoucherType(headerdetails.get(VoucherConstant.VOUCHERTYPE).toString());
 				if (FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL
-						.equalsIgnoreCase(headerdetails.get(
-								VoucherConstant.VOUCHERTYPE).toString()))
+						.equalsIgnoreCase(headerdetails.get(VoucherConstant.VOUCHERTYPE).toString()))
 					vNumGenMode = voucherTypeForULB.readVoucherTypes("Journal");
 				else
 					vNumGenMode = voucherTypeForULB
-							.readVoucherTypes(headerdetails.get(
-									VoucherConstant.VOUCHERTYPE).toString());
-				if (!"Auto".equalsIgnoreCase(vNumGenMode)
-						&& (value == null || ((String) value).isEmpty())
+							.readVoucherTypes(headerdetails.get(VoucherConstant.VOUCHERTYPE).toString());
+				if (!"Auto".equalsIgnoreCase(vNumGenMode) && (value == null || ((String) value).isEmpty())
 						&& headerdetails.get(VoucherConstant.MODULEID) == null)
 					throw new ValidationException(
-							Arrays.asList(new ValidationError(SELECT
-									+ fieldName, SELECT + fieldName)));
+							Arrays.asList(new ValidationError(SELECT + fieldName, SELECT + fieldName)));
 			}
-		} else if (mandatoryFields.contains(fieldName)
-				&& (value == null || StringUtils.isEmpty(value.toString())))
-			throw new ValidationException(Arrays.asList(new ValidationError(
-					SELECT + fieldName, SELECT + fieldName)));
+		} else if (mandatoryFields.contains(fieldName) && (value == null || StringUtils.isEmpty(value.toString())))
+			throw new ValidationException(Arrays.asList(new ValidationError(SELECT + fieldName, SELECT + fieldName)));
 	}
 
 	@SuppressWarnings("unchecked")
-    protected List<String> getHeaderMandateFields() {
-		List<String> mandatoryFields=new ArrayList<String>();
-        final List<AppConfigValues> appConfigList = appConfigValuesService.getConfigValuesByModuleAndKey(
-                FinancialConstants.MODULE_NAME_APPCONFIG, "DEFAULTTXNMISATTRRIBUTES");
+	protected List<String> getHeaderMandateFields() {
+		List<String> mandatoryFields = new ArrayList<String>();
+		final List<AppConfigValues> appConfigList = appConfigValuesService
+				.getConfigValuesByModuleAndKey(FinancialConstants.MODULE_NAME_APPCONFIG, "DEFAULTTXNMISATTRRIBUTES");
 
-        for (final AppConfigValues appConfigVal : appConfigList)
-        {
-            final String value = appConfigVal.getValue();
-            final String header = value.substring(0, value.indexOf("|"));
-            final String mandate = value.substring(value.indexOf("|") + 1);
-            if (mandate.equalsIgnoreCase("M"))
-                mandatoryFields.add(header);
-        }
-        return mandatoryFields;
-    }
+		for (final AppConfigValues appConfigVal : appConfigList) {
+			final String value = appConfigVal.getValue();
+			final String header = value.substring(0, value.indexOf("|"));
+			final String mandate = value.substring(value.indexOf("|") + 1);
+			if (mandate.equalsIgnoreCase("M"))
+				mandatoryFields.add(header);
+		}
+		return mandatoryFields;
+	}
 
-
-
-	private HashMap<String, Object> createHeaderAndMisDetails(
-			CVoucherHeader voucherHeader) throws ValidationException {
+	private HashMap<String, Object> createHeaderAndMisDetails(CVoucherHeader voucherHeader) throws ValidationException {
 		final HashMap<String, Object> headerdetails = new HashMap<String, Object>();
 		// All reversal will be GJV
-		headerdetails.put(VoucherConstant.VOUCHERNAME,
-				FinancialConstants.JOURNALVOUCHER_NAME_GENERAL);
-		headerdetails.put(VoucherConstant.VOUCHERTYPE,
-				FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL);
-		headerdetails.put((String) VoucherConstant.VOUCHERSUBTYPE,
-				voucherHeader.getVoucherSubType());
-		headerdetails.put(VoucherConstant.VOUCHERNUMBER,
-				voucherHeader.getVoucherNumber());
-		headerdetails.put(VoucherConstant.VOUCHERDATE,
-				voucherHeader.getVoucherDate());
-		headerdetails.put(VoucherConstant.DESCRIPTION,
-				voucherHeader.getDescription());
+		headerdetails.put(VoucherConstant.VOUCHERNAME, FinancialConstants.JOURNALVOUCHER_NAME_GENERAL);
+		headerdetails.put(VoucherConstant.VOUCHERTYPE, FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL);
+		headerdetails.put((String) VoucherConstant.VOUCHERSUBTYPE, voucherHeader.getVoucherSubType());
+		headerdetails.put(VoucherConstant.VOUCHERNUMBER, voucherHeader.getVoucherNumber());
+		headerdetails.put(VoucherConstant.VOUCHERDATE, voucherHeader.getVoucherDate());
+		headerdetails.put(VoucherConstant.DESCRIPTION, voucherHeader.getDescription());
 
 		if (voucherHeader.getVouchermis().getDepartmentcode() != null)
-			headerdetails.put(VoucherConstant.DEPARTMENTCODE,voucherHeader.getVouchermis().getDepartmentcode());
+			headerdetails.put(VoucherConstant.DEPARTMENTCODE, voucherHeader.getVouchermis().getDepartmentcode());
 		if (voucherHeader.getFundId() != null)
-			headerdetails.put(VoucherConstant.FUNDCODE, voucherHeader
-					.getFundId().getCode());
+			headerdetails.put(VoucherConstant.FUNDCODE, voucherHeader.getFundId().getCode());
 		if (voucherHeader.getVouchermis().getSchemeid() != null)
-			headerdetails.put(VoucherConstant.SCHEMECODE, voucherHeader
-					.getVouchermis().getSchemeid().getCode());
+			headerdetails.put(VoucherConstant.SCHEMECODE, voucherHeader.getVouchermis().getSchemeid().getCode());
 		if (voucherHeader.getVouchermis().getSubschemeid() != null)
-			headerdetails.put(VoucherConstant.SUBSCHEMECODE, voucherHeader
-					.getVouchermis().getSubschemeid().getCode());
+			headerdetails.put(VoucherConstant.SUBSCHEMECODE, voucherHeader.getVouchermis().getSubschemeid().getCode());
 		if (voucherHeader.getVouchermis().getFundsource() != null)
-			headerdetails.put(VoucherConstant.FUNDSOURCECODE, voucherHeader
-					.getVouchermis().getFundsource().getCode());
+			headerdetails.put(VoucherConstant.FUNDSOURCECODE, voucherHeader.getVouchermis().getFundsource().getCode());
 		if (voucherHeader.getVouchermis().getDivisionid() != null)
-			headerdetails.put(VoucherConstant.DIVISIONID, voucherHeader
-					.getVouchermis().getDivisionid().getId());
+			headerdetails.put(VoucherConstant.DIVISIONID, voucherHeader.getVouchermis().getDivisionid().getId());
 		if (voucherHeader.getVouchermis().getFunctionary() != null)
-			headerdetails.put(VoucherConstant.FUNCTIONARYCODE, voucherHeader
-					.getVouchermis().getFunctionary().getCode());
+			headerdetails.put(VoucherConstant.FUNCTIONARYCODE,
+					voucherHeader.getVouchermis().getFunctionary().getCode());
 		if (voucherHeader.getVouchermis().getFunction() != null)
-			headerdetails.put(VoucherConstant.FUNCTIONCODE, voucherHeader
-					.getVouchermis().getFunction().getCode());
+			headerdetails.put(VoucherConstant.FUNCTIONCODE, voucherHeader.getVouchermis().getFunction().getCode());
 		return headerdetails;
 	}
-	
-	 public String getCGVNNumber(CVoucherHeader vh)
-	    {
-	        String cgvnNumber = "";
 
-	        String sequenceName = "";
+	public String getCGVNNumber(CVoucherHeader vh) {
+		String cgvnNumber = "";
 
-	        final CFiscalPeriod fiscalPeriod = fiscalPeriodHibernateDAO.getFiscalPeriodByDate(vh.getVoucherDate());
-	        if (fiscalPeriod == null)
-	            throw new ApplicationRuntimeException("Fiscal period is not defined for the voucher date");
-	        sequenceName = "sq_" + vh.getFundId().getIdentifier() + "_" + getCgnType(vh.getType()).toLowerCase() + "_cgvn_"
-	                + fiscalPeriod.getName();
-	        Serializable nextSequence = genericSequenceNumberGenerator.getNextSequence(sequenceName);
+		String sequenceName = "";
 
-	        cgvnNumber = String.format("%s/%s/%s%010d", vh.getFundId().getIdentifier(), getCgnType(vh.getType()), "CGVN",
-	                nextSequence);
+		final CFiscalPeriod fiscalPeriod = fiscalPeriodHibernateDAO.getFiscalPeriodByDate(vh.getVoucherDate());
+		if (fiscalPeriod == null)
+			throw new ApplicationRuntimeException("Fiscal period is not defined for the voucher date");
+		sequenceName = "sq_" + vh.getFundId().getIdentifier() + "_" + getCgnType(vh.getType()).toLowerCase() + "_cgvn_"
+				+ fiscalPeriod.getName();
+		Serializable nextSequence = genericSequenceNumberGenerator.getNextSequence(sequenceName);
 
-	        return cgvnNumber;
-	    }
+		cgvnNumber = String.format("%s/%s/%s%010d", vh.getFundId().getIdentifier(), getCgnType(vh.getType()), "CGVN",
+				nextSequence);
+
+		return cgvnNumber;
+	}
 
 	public AppConfigService getAppConfigService() {
 		return appConfigService;
@@ -3042,8 +2671,7 @@ public class CreateVoucher {
 		return persistenceService;
 	}
 
-	public void setPersistenceService(
-			final PersistenceService persistenceService) {
+	public void setPersistenceService(final PersistenceService persistenceService) {
 		this.persistenceService = persistenceService;
 	}
 
@@ -3059,47 +2687,44 @@ public class CreateVoucher {
 		return appConfigValuesService;
 	}
 
-	public void setAppConfigValuesService(
-			final AppConfigValueService appConfigValuesService) {
+	public void setAppConfigValuesService(final AppConfigValueService appConfigValuesService) {
 		this.appConfigValuesService = appConfigValuesService;
 	}
 
-	
 	public boolean isUniqueVN(String vcNum, final String vcDate) throws Exception, TaskFailedException {
-	       boolean isUnique = false;
-	       String fyStartDate = "", fyEndDate = "";
-	       vcNum = vcNum.toUpperCase();
-	       Query pst = null;                           
-	       List<Object[]> rs = null;
-	       try {
-	           final String query1 = "SELECT to_char(startingDate, 'DD-Mon-YYYY') AS \"startingDate\", to_char(endingDate, 'DD-Mon-YYYY') AS \"endingDate\" FROM financialYear WHERE startingDate <= '"
-	                   + vcDate + "' AND endingDate >= '" + vcDate + "'";
-	           pst = persistenceService.getSession().createSQLQuery(query1);
-	           rs = pst.list();
-	           if (rs != null && rs.size() > 0)
-	               for (final Object[] element : rs) {
-	                   fyStartDate = element[0].toString();
-	                   fyEndDate = element[1].toString();
-	               }
-	           final String query2 = "SELECT id FROM voucherHeader WHERE voucherNumber = '" + vcNum + "' AND voucherDate>='"
-	                   + fyStartDate
-	                   + "' AND voucherDate<='" + fyEndDate + "' and status!=4";
-	           pst = persistenceService.getSession().createSQLQuery(query2);
-	           rs = pst.list();
-	           if (rs != null && rs.size() > 0) {
-	               if (LOGGER.isDebugEnabled())
-	                   LOGGER.debug("Duplicate Voucher Number");
-	           } else
-	               isUnique = true;
-	       } catch (final Exception ex) {
-	           LOGGER.error("error in finding unique VoucherNumber");
-	            throw new ApplicationRuntimeException("error in finding unique VoucherNumber"); 
-	       } finally {
-	           
-	       }
-	       return isUnique;
-	   }
-	
+		boolean isUnique = false;
+		String fyStartDate = "", fyEndDate = "";
+		vcNum = vcNum.toUpperCase();
+		Query pst = null;
+		List<Object[]> rs = null;
+		try {
+			final String query1 = "SELECT to_char(startingDate, 'DD-Mon-YYYY') AS \"startingDate\", to_char(endingDate, 'DD-Mon-YYYY') AS \"endingDate\" FROM financialYear WHERE startingDate <= '"
+					+ vcDate + "' AND endingDate >= '" + vcDate + "'";
+			pst = persistenceService.getSession().createSQLQuery(query1);
+			rs = pst.list();
+			if (rs != null && rs.size() > 0)
+				for (final Object[] element : rs) {
+					fyStartDate = element[0].toString();
+					fyEndDate = element[1].toString();
+				}
+			final String query2 = "SELECT id FROM voucherHeader WHERE voucherNumber = '" + vcNum
+					+ "' AND voucherDate>='" + fyStartDate + "' AND voucherDate<='" + fyEndDate + "' and status!=4";
+			pst = persistenceService.getSession().createSQLQuery(query2);
+			rs = pst.list();
+			if (rs != null && rs.size() > 0) {
+				if (LOGGER.isDebugEnabled())
+					LOGGER.debug("Duplicate Voucher Number");
+			} else
+				isUnique = true;
+		} catch (final Exception ex) {
+			LOGGER.error("error in finding unique VoucherNumber");
+			throw new ApplicationRuntimeException("error in finding unique VoucherNumber");
+		} finally {
+
+		}
+		return isUnique;
+	}
+
 	public String getFiscalPeriod(final String vDate) throws TaskFailedException {
 		BigInteger fiscalPeriod = null;
 		final String sql = "select id from fiscalperiod  where '" + vDate + "' between startingdate and endingdate";
@@ -3113,5 +2738,5 @@ public class CreateVoucher {
 		}
 		return fiscalPeriod.toString();
 	}
-	
+
 }

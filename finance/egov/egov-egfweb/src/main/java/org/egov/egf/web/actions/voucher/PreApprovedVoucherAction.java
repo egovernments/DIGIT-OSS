@@ -66,7 +66,6 @@ import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.egov.billsaccounting.services.BillsAccountingService;
-import org.egov.billsaccounting.services.CreateVoucher;
 import org.egov.billsaccounting.services.VoucherConstant;
 import org.egov.commons.Accountdetailtype;
 import org.egov.commons.CChartOfAccounts;
@@ -92,7 +91,6 @@ import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
-import org.egov.infra.script.service.ScriptService;
 import org.egov.infra.utils.StringUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -141,8 +139,6 @@ import com.exilant.eGov.src.transactions.VoucherTypeForULB;
 @ParentPackage("egov")
 public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 	private final static String FORWARD = "Forward";
-	private static final String EGF = "EGF";
-	private static final String EMPTY_STRING = "";
 	private static final long serialVersionUID = 1L;
 	private VoucherService voucherService;
 	private CVoucherHeader voucherHeader = new CVoucherHeader();
@@ -172,8 +168,6 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 	private AppConfigValueService appConfigValuesService;
 	@Autowired
 	private BillsAccountingService billsAccountingService;
-	@Autowired
-	private BillsService billsManager;
 
 	@Autowired
 	private ChartOfAccountDetailService chartOfAccountDetailService;
@@ -189,8 +183,6 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 	private final PreApprovedVoucher preApprovedVoucher = new PreApprovedVoucher();
 	private List<PreApprovedVoucher> billDetailslist;
 	private List<PreApprovedVoucher> subLedgerlist;
-	@Autowired
-	private CreateVoucher createVoucher;
 	private ContraJournalVoucher contraVoucher;
 	private static final String ERROR = "error";
 
@@ -215,7 +207,6 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 	private VoucherHelper voucherHelper;
 	private JournalVoucherModifyAction journalvouchermodify;
 	private boolean showVoucherDate;
-	private ScriptService scriptService;
 	private String mode = "";
 	protected Long voucherId;
 	private EgBillregister billRegister;

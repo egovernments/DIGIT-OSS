@@ -51,18 +51,52 @@
 
 <%@ page language="java"%>
 <html>
-
 <head>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
-<meta http-equiv="Content-Type"
-	content="text/html; charset=windows-1252" />
-<title>Create Voucher From Bill</title>
-
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252" />
+	<title>Create Voucher From Bill</title>
+	<script type="text/javascript">
+		function onloadtask() 
+		{
+			<s:iterator value="getActionErrors()" >
+			  document.getElementById("search").style.display="none";
+			  document.getElementById("Reset").style.display="none";
+			</s:iterator>
+			<s:if test="%{isFieldMandatory('department')}"> 
+				// document.getElementById("departmentid").disabled=true;
+			</s:if>
+		}
+	
+	
+		function validate()
+		{
+			var expType=document.getElementById('expType').value;
+			if(expType == "-1")
+			{
+				bootbox.alert("Please select Bill Type");
+				return false;
+			}
+			
+			 document.billVoucher.action='${pageContext.request.contextPath}/voucher/billVoucher-lists.action';
+			 document.billVoucher.submit();
+		
+		   
+			document.getElementById('expType').disabled=false;
+			return true;
+		}
+	
+		function resetForm()
+		{
+			document.getElementById("expType").value=-1;
+			document.getElementById("departmentid").value=-1;
+			document.getElementById("voucherDateFrom").value="";
+			document.getElementById("voucherDateTo").value="";
+			document.getElementById("billNumber").value="";
+		}
+	</script>
 </head>
 
 <body onload="onloadtask();">
-
 	<s:form action="billVoucher" theme="simple" name="billVoucher">
 		<jsp:include page="../budget/budgetHeader.jsp">
 			<jsp:param name="heading" value="Journal voucher search" />
@@ -76,46 +110,28 @@
 				<div align="left">
 					<font style='color: red; font-weight: bold'>
 						<p class="error-block" id="lblError"></p>
-					</font> <span class="mandatory1"> <font
-						style='color: red; font-weight: bold'> <s:actionerror /> <s:fielderror />
+					</font> <span class="mandatory1"> <font style='color: red; font-weight: bold'> <s:actionerror /> <s:fielderror />
 							<s:actionmessage />
 					</font>
 					</span>
 					<table border="0" width="100%">
 						<tr>
-							<td class="bluebox">Bill Type<span class="bluebox"><span
-									class="mandatory1">*</span></span></td>
-							<td class="bluebox"><s:select name="expType" id="expType"
-									list="dropdownData.expTypeList" headerKey="-1"
-									headerValue="----Choose----" /></td>
-							<td class="bluebox" id="deptLabel"><s:text
-									name="voucher.department" /></td>
-							<td class="bluebox"><s:select name="vouchermis.departmentcode"
-									id="departmentid" list="dropdownData.departmentList"
-									listKey="code" listValue="name" headerKey="-1"
-									headerValue="----Choose----"
-									value="voucherHeader.vouchermis.departmentcode /></td>
+							<td class="bluebox">Bill Type<span class="bluebox"><span class="mandatory1">*</span></span></td>
+							<td class="bluebox"><s:select name="expType" id="expType" list="dropdownData.expTypeList" headerKey="-1" headerValue="----Choose----" /></td>
+							<td class="bluebox" id="deptLabel"><s:text name="voucher.department" /></td>
+							<td class="bluebox"><s:select name="vouchermis.departmentcode" id="departmentid" list="dropdownData.departmentList" listKey="code" listValue="name" headerKey="-1" headerValue="----Choose----" value="voucherHeader.vouchermis.departmentcode" /></td>
 
 						</tr>
 
 						<tr>
 							<td class="greybox">From Date</td>
-							<td class="greybox"><s:textfield id="voucherDateFrom"
-									name="voucherTypeBean.voucherDateFrom" data-date-end-date="0d"
-									onkeyup="DateFormat(this,this.value,event,false,'3')"
-									placeholder="DD/MM/YYYY" class="form-control datepicker"
-									data-inputmask="'mask': 'd/m/y'" /></td>
+							<td class="greybox"><s:textfield id="voucherDateFrom" name="voucherTypeBean.voucherDateFrom" data-date-end-date="0d" onkeyup="DateFormat(this,this.value,event,false,'3')" placeholder="DD/MM/YYYY" class="form-control datepicker" data-inputmask="'mask': 'd/m/y'" /></td>
 							<td class="greybox">To Date</td>
-							<td class="greybox"><s:textfield id="voucherDateTo"
-									name="voucherTypeBean.voucherDateTo" data-date-end-date="0d"
-									onkeyup="DateFormat(this,this.value,event,false,'3')"
-									placeholder="DD/MM/YYYY" class="form-control datepicker"
-									data-inputmask="'mask': 'd/m/y'" />
+							<td class="greybox"><s:textfield id="voucherDateTo" name="voucherTypeBean.voucherDateTo" data-date-end-date="0d" onkeyup="DateFormat(this,this.value,event,false,'3')" placeholder="DD/MM/YYYY" class="form-control datepicker" data-inputmask="'mask': 'd/m/y'" />
 						</tr>
 						<tr>
 							<td class="bluebox"><s:text name="bill.Number" /></td>
-							<td class="bluebox"><s:textfield name="billNumber"
-									id="billNumber" maxlength="50" value="%{billNumber}" /></td>
+							<td class="bluebox"><s:textfield name="billNumber" id="billNumber" maxlength="50" value="%{billNumber}" /></td>
 							<td class="bluebox"></td>
 							<td class="bluebox"></td>
 						</tr>
@@ -130,12 +146,9 @@
 				<table align="center">
 					<tr>
 
-						<td><s:submit value="Search" onclick="return validate()"
-								cssClass="buttonsubmit" />&nbsp;</td>
-						<td><input type="button" value="Reset" class="button"
-							onclick="return resetForm();" />&nbsp;</td>
-						<td><input type="button" value="Close"
-							onclick="javascript:window.close()" class="button" />&nbsp;</td>
+						<td><s:submit value="Search" onclick="return validate()" cssClass="buttonsubmit" />&nbsp;</td>
+						<td><input type="button" value="Reset" class="button" onclick="return resetForm();" />&nbsp;</td>
+						<td><input type="button" value="Close" onclick="javascript:window.close()" class="button" />&nbsp;</td>
 					</tr>
 				</table>
 			</div>
@@ -157,23 +170,12 @@
 						<tr class="setborder">
 							<td class="bluebox setborder"><s:property value="#s.index+1" />
 							</td>
-							<td class="bluebox setborder" style="text-align: center"><a
-								href="preApprovedVoucher-voucher.action?billid=<s:property value='%{id}'/>"><s:property
-										value="%{billnumber}" /> </a></td>
-							<td class="bluebox setborder" style="text-align: center"><s:date
-									name="%{billdate}" format="dd/MM/yyyy" /></td>
-							<td class="bluebox setborder" style="text-align: right"><s:text
-									name="format.number">
-									<s:param value="%{billamount}" />
-								</s:text></td>
-							<td class="bluebox setborder" style="text-align: right"><s:text
-									name="format.number">
-									<s:param value="%{passedamount}" />
-								</s:text></td>
-							<td class="bluebox setborder" style="text-align: center"><s:property
-									value="%{expendituretype}" /></td>
-							<td class="bluebox setborder" style="text-align: center"><s:property
-									value="%{egBillregistermis.departmentcode}" /></td>
+							<td class="bluebox setborder" style="text-align: center"><a href="preApprovedVoucher-voucher.action?billid=<s:property value='%{id}'/>"><s:property value="%{billnumber}" /> </a></td>
+							<td class="bluebox setborder" style="text-align: center"><s:date name="%{billdate}" format="dd/MM/yyyy" /></td>
+							<td class="bluebox setborder" style="text-align: right"><s:text name="format.number"> <s:param value="%{billamount}" /> </s:text></td>
+							<td class="bluebox setborder" style="text-align: right"><s:text name="format.number"> <s:param value="%{passedamount}" /> </s:text></td>
+							<td class="bluebox setborder" style="text-align: center"><s:property value="%{expendituretype}" /></td>
+							<td class="bluebox setborder" style="text-align: center"><s:property value="%{egBillregistermis.departmentcode}" /></td>
 						</tr>
 					</s:iterator>
 				</table>
@@ -181,56 +183,6 @@
 		</s:if>
 
 	</s:form>
-	<script type="text/javascript">
-function onloadtask(){
-<s:iterator value="getActionErrors()" >
-  document.getElementById("search").style.display="none";
-   document.getElementById("Reset").style.display="none";
- </s:iterator>
-<s:if test="%{isFieldMandatory('department')}"> 
-	// document.getElementById("departmentid").disabled=true;
-	
-</s:if>
-
-}
-
-
-function validate()
-{
-	
-	var expType=document.getElementById('expType').value;
-	
-	
-
-	if(expType == "-1"){
-		bootbox.alert("Please select Bill Type");
-		return false;
-		}
-	
-	
-	 document.billVoucher.action='${pageContext.request.contextPath}/voucher/billVoucher-lists.action';
-	 document.billVoucher.submit();
-
-   
-document.getElementById('expType').disabled=false;
-return true;
-}
-
-
-	
-
-	function resetForm()
-	{
-
-		document.getElementById("expType").value=-1;
-		document.getElementById("departmentid").value=-1;
-		document.getElementById("voucherDateFrom").value="";
-		document.getElementById("voucherDateTo").value="";
-		document.getElementById("billNumber").value="";
-		
-	
-	}
-</script>
 </body>
 
 </html>

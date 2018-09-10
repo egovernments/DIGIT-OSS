@@ -59,10 +59,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
-import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
@@ -484,8 +481,6 @@ public class CancelVoucherAction extends BaseFormAction {
 	private void loadDropDowns() {
 
 		if (headerFields.contains("department")) {
-			HttpServletRequest request = ServletActionContext.getRequest();
-			String access_token = (String) microserviceUtils.readFromRedis(request.getSession().getId(), "admin_token");
 			List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
 			addDropdownData("departmentList", departments);
 		}
@@ -530,8 +525,8 @@ public class CancelVoucherAction extends BaseFormAction {
 		if (checKDate > 0)
 			addFieldError("To Date", getText("Please Enter To Date Greater than From Date"));
 		checkMandatoryField("fundId", "fund", voucherHeader.getFundId(), "voucher.fund.mandatory");
-		checkMandatoryField("vouchermis.departmentcode", "department", voucherHeader.getVouchermis().getDepartmentcode(),
-				"voucher.department.mandatory");
+		checkMandatoryField("vouchermis.departmentcode", "department",
+				voucherHeader.getVouchermis().getDepartmentcode(), "voucher.department.mandatory");
 		checkMandatoryField("vouchermis.schemeid", "scheme", voucherHeader.getVouchermis().getSchemeid(),
 				"voucher.scheme.mandatory");
 		checkMandatoryField("vouchermis.subschemeid", "subscheme", voucherHeader.getVouchermis().getSubschemeid(),

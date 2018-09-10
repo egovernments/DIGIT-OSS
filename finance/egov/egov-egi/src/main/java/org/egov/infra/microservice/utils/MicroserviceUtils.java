@@ -223,8 +223,7 @@ public class MicroserviceUtils {
 
 		final RestTemplate restTemplate = createRestTemplate();
 				
-//		final String dept_url = deptServiceUrl+"?tenantId="+getTenentId();
-		final String dept_url = deptServiceUrl+"?tenantId="+"default";
+		final String dept_url = deptServiceUrl+"?tenantId="+getTenentId();
 		RequestInfo requestInfo = new RequestInfo();
 		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 		
