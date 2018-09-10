@@ -98,18 +98,6 @@
         <tr>
           <th><spring:message code="lbl.name" /></th>
           <th><spring:message code="lbl.code" /></th>
-          <th><spring:message code="supplier.correspondenceAddress" /></th>
-          <th><spring:message code="supplier.paymentAddress" /></th>
-          <th><spring:message code="supplier.contactPerson" /></th>
-          <th><spring:message code="supplier.email" /></th>
-          <th><spring:message code="supplier.narration" /></th>
-          <th><spring:message code="lbl.mobile" /></th>
-          <th><spring:message code="supplier.panNo" /></th>
-          <th><spring:message code="supplier.tinNo" /></th>
-          <th><spring:message code="supplier.bank" /></th>
-          <th><spring:message code="supplier.ifscCode" /></th>
-          <th><spring:message code="supplier.bankAccount" /></th>
-          <th><spring:message code="supplier.registrationNo" /></th>
           <th><spring:message code="supplier.status" /></th>
         </tr>
       </thead>

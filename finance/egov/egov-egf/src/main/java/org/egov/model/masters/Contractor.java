@@ -98,15 +98,15 @@ public class Contractor extends AbstractAuditable implements EntityType {
 	@OptionalPattern(regex = FinancialConstants.ALPHANUMERICWITHALLSPECIALCHAR, message = "Special characters are not allowed in payment address")
 	private String paymentAddress;
 
-	@Length(max = 100, message = "Maximum of 250 Characters allowed for Contact Person")
+	@Length(max = 100, message = "Maximum of 100 Characters allowed for Contact Person")
 	@OptionalPattern(regex = Constants.ALPHANUMERIC_WITHSPACE, message = "Special Characters are not allowed in Contact Person")
 	private String contactPerson;
 
 	@OptionalPattern(regex = Constants.EMAIL, message = "Invalid Email")
-	@Length(max = 100, message = "Maximum of 25 Characters allowed for Email")
+	@Length(max = 100, message = "Maximum of 100 Characters allowed for Email")
 	private String email;
 
-	@Length(max = 1024, message = "Maximum of 250 Characters allowed for Narration")
+	@Length(max = 1024, message = "Maximum of 1024 Characters allowed for Narration")
 	@OptionalPattern(regex = FinancialConstants.ALPHANUMERICWITHALLSPECIALCHAR, message = "Special Characters are not allowed in narration")
 	private String narration;
 
@@ -126,7 +126,7 @@ public class Contractor extends AbstractAuditable implements EntityType {
 	@OptionalPattern(regex = Constants.ALPHANUMERIC, message = "Special Characters are not allowed in IFSC Code")
 	private String ifscCode;
 
-	@Length(max = 22, message = "Maximum of 50 Characters allowed for Bank Account")
+	@Length(max = 22, message = "Maximum of 22 Characters allowed for Bank Account")
 	@OptionalPattern(regex = Constants.ALPHANUMERIC, message = "Special Characters are not allowed in Bank Account")
 	private String bankAccount;
 
