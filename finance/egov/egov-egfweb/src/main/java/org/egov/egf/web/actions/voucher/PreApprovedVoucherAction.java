@@ -842,7 +842,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 				val = voucherHeader.getFundId().getName();
 			else if (name.equals("fundsource") && voucherHeader.getVouchermis().getFundsource() != null)
 				val = voucherHeader.getVouchermis().getFundsource().getName();
-			else if (name.equals("department") && voucherHeader.getVouchermis().getDepartmentcode() != null) {
+			else if (name.equals("department") && voucherHeader.getVouchermis().getDepartmentcode() != null && !voucherHeader.getVouchermis().getDepartmentcode().equals("-1")) {
 				List<org.egov.infra.microservice.models.Department> list = microserviceUtils
 						.getDepartmentByCode(voucherHeader.getVouchermis().getDepartmentcode());
 				val = list.get(0).getName();
