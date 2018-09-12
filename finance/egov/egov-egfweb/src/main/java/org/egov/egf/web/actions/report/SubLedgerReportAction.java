@@ -48,11 +48,11 @@
 
 package org.egov.egf.web.actions.report;
 
-import com.exilant.eGov.src.reports.GeneralLedgerReport;
-import com.exilant.eGov.src.reports.GeneralLedgerReportBean;
-import com.exilant.exility.common.TaskFailedException;
-import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.Validations;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.LinkedList;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -70,10 +70,11 @@ import org.egov.utils.FinancialConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.LinkedList;
+import com.exilant.eGov.src.reports.GeneralLedgerReport;
+import com.exilant.eGov.src.reports.GeneralLedgerReportBean;
+import com.exilant.exility.common.TaskFailedException;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.Validations;
 
 @ParentPackage("egov")
 @Results({ @Result(name = "search", location = "subLedgerReport-search.jsp") })
@@ -170,9 +171,9 @@ public class SubLedgerReportAction extends BaseFormAction {
         }
         heading = "Sub Ledger Report for " + subLedgerReport.getEntityName() + " in " + glCode.getName() + " under "
                 + fund.getName() + " from " + subLedgerReport.getStartDate() + " to " + subLedgerReport.getEndDate();
-        if (checkNullandEmpty(subLedgerReport.getDepartmentId())) {
+        if (checkNullandEmpty(subLedgerReport.getDepartmentCode())) {
             final Department dept = (Department) persistenceService.find("from Department where id = ?",
-                    Long.parseLong(subLedgerReport.getDepartmentId()));
+                    Long.parseLong(subLedgerReport.getDepartmentCode()));
             heading = heading + " under " + dept.getName() + " ";
         }
 

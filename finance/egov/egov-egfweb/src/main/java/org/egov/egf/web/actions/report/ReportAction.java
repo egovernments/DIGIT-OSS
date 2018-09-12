@@ -58,6 +58,7 @@ import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Boundary;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.AppConfigValueService;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.utils.Constants;
@@ -90,6 +91,8 @@ public class ReportAction extends BaseFormAction
     protected SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
     @Autowired
     private AppConfigValueService appConfigValueService;
+    @Autowired
+    private MicroserviceUtils microserviceUtils; 
 
     @Override
     public Object getModel() {
@@ -116,7 +119,7 @@ public class ReportAction extends BaseFormAction
         super.prepare();
         getHeaderFields();
         if (headerFields.contains(Constants.DEPARTMENT))
-            addDropdownData("departmentList", persistenceService.findAllBy("from Department order by name"));
+            addDropdownData("departmentList",microserviceUtils.getDepartments());
         if (headerFields.contains(Constants.FUNCTION))
             addDropdownData("functionList",
                     persistenceService.findAllBy("from CFunction where isactive=true and isnotleaf=false  order by name"));

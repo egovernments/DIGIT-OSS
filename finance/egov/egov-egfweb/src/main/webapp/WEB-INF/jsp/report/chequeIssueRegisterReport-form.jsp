@@ -80,7 +80,6 @@ function generateReport(){
 		return false;
 	doLoadingMask();
 	var url = '../report/chequeIssueRegisterReport-ajaxPrint.action?fromDate='+fromDate+'&toDate='+toDate+'&accountNumber.id='+bankAccount+'&deptImpl.code='+department+'&bank='+bank+'&showDropDown=false';
-	alert("url "+url);
 	YAHOO.util.Connect.asyncRequest('POST', url, callback, null);
 }
 

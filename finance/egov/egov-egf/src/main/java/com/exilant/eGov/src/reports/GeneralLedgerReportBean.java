@@ -103,7 +103,7 @@ public class GeneralLedgerReportBean
     private String netRcptAmount;
     private String netPymntAmount;
 
-    private String departmentId;
+    private String departmentCode;
     private String functionaryId;
     private String fieldId;
     public String functionCodeId;
@@ -686,12 +686,12 @@ public class GeneralLedgerReportBean
         this.netRcptAmount = netRcptAmount;
     }
 
-    public String getDepartmentId() {
-        return departmentId;
+    public String getDepartmentCode() {
+        return departmentCode;
     }
 
-    public void setDepartmentId(final String departmentId) {
-        this.departmentId = departmentId;
+    public void setDepartmentCode(final String departmentCode) {
+        this.departmentCode = departmentCode;
     }
 
     public String getFunctionaryId() {

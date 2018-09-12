@@ -1215,8 +1215,8 @@ public class CollectionObjectFactory {
 
 		instrVoucher.setInstrumentHeaderId(instrHeader);
 		instrVoucher.setVoucherHeaderId(voucher);
-		instrVoucher.setCreatedBy(user);
-		instrVoucher.setModifiedBy(user);
+		instrVoucher.setCreatedBy(user.getId());
+		instrVoucher.setModifiedBy(user.getId());
 		instrVoucher.setCreatedDate(date);
 		instrVoucher.setModifiedDate(date);
 
@@ -1582,8 +1582,8 @@ public class CollectionObjectFactory {
 
 		onlinePayment.setCreatedDate(new Date());
 		onlinePayment.setModifiedDate(new Date());
-		onlinePayment.setCreatedBy(user);
-		onlinePayment.setModifiedBy(user);
+		onlinePayment.setCreatedBy(user.getId());
+		onlinePayment.setModifiedBy(user.getId());
 		onlinePayment.setService(this.createServiceDetails());
 		onlinePayment.setTransactionAmount(BigDecimal.valueOf(1000));
 		onlinePayment.setTransactionDate(new Date());
@@ -1609,8 +1609,8 @@ public class CollectionObjectFactory {
 
 		onlinePayment.setCreatedDate(new Date());
 		onlinePayment.setModifiedDate(new Date());
-		onlinePayment.setCreatedBy(user);
-		onlinePayment.setModifiedBy(user);
+		onlinePayment.setCreatedBy(user.getId());
+		onlinePayment.setModifiedBy(user.getId());
 
 		onlinePayment.setService(this.createServiceDetails());
 

@@ -51,12 +51,15 @@
  */
 package com.exilant.eGov.src.reports;
 
-import com.exilant.GLEngine.GeneralLedgerBean;
-import com.exilant.eGov.src.chartOfAccounts.CodeValidator;
-import com.exilant.eGov.src.common.EGovernCommon;
-import com.exilant.eGov.src.transactions.ExilPrecision;
-import com.exilant.eGov.src.transactions.OpBal;
-import com.exilant.exility.common.TaskFailedException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.commons.CFinancialYear;
@@ -70,14 +73,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import com.exilant.GLEngine.GeneralLedgerBean;
+import com.exilant.eGov.src.chartOfAccounts.CodeValidator;
+import com.exilant.eGov.src.common.EGovernCommon;
+import com.exilant.eGov.src.transactions.ExilPrecision;
+import com.exilant.eGov.src.transactions.OpBal;
+import com.exilant.exility.common.TaskFailedException;
 
 @Service
 public class GeneralLedgerReport {
@@ -139,7 +140,7 @@ public class GeneralLedgerReport {
             throw taskExc;
         }
         final String fundId = reportBean.getFund_id();
-        final String deptId = reportBean.getDepartmentId();
+        final String deptCode = reportBean.getDepartmentCode();
         final String fundSourceId = reportBean.getFundSource_id();
         reportBean.setFundName(getFundName(fundId));
         reportBean.setAccountCode(getAccountName(glCode1));
@@ -269,7 +270,7 @@ public class GeneralLedgerReport {
                 // opb<startdate
                 startDate = sdf.format(formatter1.parse(startDate));
                 final OpBal opbal = getOpeningBalance(glCode1, fundId, fundSourceId, fyId, accEntityId, accEntityKey,
-                        startDate, functionId, deptId);
+                        startDate, functionId, deptCode);
                 final String arr[] = new String[15];
                 openingBalance = opbal.dr - opbal.cr;
                 if (LOGGER.isInfoEnabled())
@@ -358,7 +359,7 @@ public class GeneralLedgerReport {
                         final String arr[] = new String[15];
                         startDate = sdf.format(formatter1.parse(startDate));
                         final OpBal opbal = getOpeningBalance(code, fundId, fundSourceId, fyId, accEntityId,
-                                accEntityKey, startDate, functionId, deptId);
+                                accEntityKey, startDate, functionId, deptCode);
                         openingBalance = opbal.dr - opbal.cr;
                         String fundName = "";
                         if (element[13].toString() != null)
@@ -924,7 +925,7 @@ public class GeneralLedgerReport {
 
     private OpBal getOpeningBalance(final String glCode, final String fundId, final String fundSourceId,
             final String fyId, final String accEntityId, final String accEntityKey, final String tillDate,
-            final String functionId, final String deptId) throws TaskFailedException {
+            final String functionId, final String deptCode) throws TaskFailedException {
         String fundCondition = "";
         String fundSourceCondition = "";
         String accEntityCondition = "";
@@ -938,10 +939,10 @@ public class GeneralLedgerReport {
         /** opening balance of the Year **/
         if (!fundId.equalsIgnoreCase(""))
             fundCondition = "fundId = ? AND ";
-        if (deptId != null && !deptId.equalsIgnoreCase("")) {
-            deptCondition = "DEPARTMENTID = ? AND ";
+        if (deptCode != null && !deptCode.equalsIgnoreCase("")) {
+            deptCondition = "DEPARTMENTCODE = ? AND ";
             deptFromCondition = ", vouchermis mis";
-            deptWhereCondition = " mis.voucherheaderid =vh.id   and mis.DepartmentId = ? and ";
+            deptWhereCondition = " mis.voucherheaderid =vh.id   and mis.DepartmentCode = ? and ";
         }
         if (!fundSourceId.equalsIgnoreCase(""))
             fundSourceCondition = "fundSourceId = ? AND ";
@@ -974,8 +975,8 @@ public class GeneralLedgerReport {
                 pstmt.setLong(i++, Long.valueOf(accEntityId));
                 pstmt.setLong(i++, Long.valueOf(accEntityKey));
             }
-            if (deptId != null && !deptId.equalsIgnoreCase(""))
-                pstmt.setLong(i++, Long.valueOf(deptId));
+            if (deptCode != null && !deptCode.equalsIgnoreCase(""))
+                pstmt.setString(i++, deptCode);
             pstmt.setLong(i++, Long.valueOf(fyId));
             pstmt.setString(i++, glCode);
             resultset = null;
@@ -1071,12 +1072,12 @@ public class GeneralLedgerReport {
                     pstmt.setLong(i++, Long.parseLong(accEntityId));
                     pstmt.setLong(i++, Long.parseLong(accEntityKey));
                 }
-                if (deptId != null && !deptId.equalsIgnoreCase(""))
-                    pstmt.setLong(i++, Long.parseLong(deptId));
+                if (deptCode != null && !deptCode.equalsIgnoreCase(""))
+                    pstmt.setString(i++,deptCode);
                 pstmt.setString(i++, startDate);
                 pstmt.setString(i++, tillDate);
-                if (deptId != null && !deptId.equalsIgnoreCase(""))
-                    pstmt.setLong(i++, Long.parseLong(deptId));
+                if (deptCode != null && !deptCode.equalsIgnoreCase(""))
+                    pstmt.setString(i++, deptCode);
                 if (!fundId.equalsIgnoreCase(""))
                     pstmt.setLong(i++, Long.parseLong(fundId));
                 if (!fundSourceId.equalsIgnoreCase(""))
@@ -1092,8 +1093,8 @@ public class GeneralLedgerReport {
                 pstmt.setString(i++, glCode);
             } else {
 
-                if (deptId != null && !deptId.equalsIgnoreCase(""))
-                    pstmt.setLong(i++, Long.parseLong(deptId));
+                if (deptCode != null && !deptCode.equalsIgnoreCase(""))
+                    pstmt.setString(i++, deptCode);
                 pstmt.setString(i++, glCode);
                 if (!fundId.equalsIgnoreCase(""))
                     pstmt.setLong(i++, Long.parseLong(fundId));

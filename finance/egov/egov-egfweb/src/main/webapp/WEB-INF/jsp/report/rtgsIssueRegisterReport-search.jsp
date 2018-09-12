@@ -181,11 +181,11 @@
 							headerKey="-1" headerValue="----Choose----"
 							onChange="loadBank(this);" value="%{fundId.id}" /></td>
 					<td class="bluebox"><s:text name="voucher.department" />
-					<td class="bluebox"><s:select name="departmentid"
-							id="departmentid" list="dropdownData.departmentList" listKey="id"
+					<td class="bluebox"><s:select name="departmentcode"
+							id="departmentcode" list="dropdownData.departmentList" listKey="code"
 							listValue="name" headerKey="-1" headerValue="----Choose----"
 							onChange="alertWhileSelectingDepartment(this);"
-							value="%{departmentId.id}" /></td>
+							value="%{departmentcode}" /></td>
 				</tr>
 				<tr>
 					<td class="bluebox"></td>
@@ -295,7 +295,7 @@
 			return true;
 		}
 		function alertWhileSelectingDepartment() {
-			var department = document.getElementById('departmentid').value;
+			var department = document.getElementById('departmentcode').value;
 			if (department == -1) {
 				return true;
 			} else {

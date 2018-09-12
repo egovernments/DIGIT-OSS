@@ -219,7 +219,7 @@ public class ReportEngine {
 
     public ReportEngineBean populateReportEngineBean(final GeneralLedgerReportBean reportBean) {
         final ReportEngineBean reBean = new ReportEngineBean();
-        reBean.setDepartmentId(reportBean.getDepartmentId());
+        reBean.setDepartmentId(reportBean.getDepartmentCode());
         reBean.setDivisionId(reportBean.getFieldId());
         reBean.setFundId(reportBean.getFund_id());
         reBean.setFundsourceId(reportBean.getFundSource_id());
