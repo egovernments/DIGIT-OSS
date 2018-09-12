@@ -588,9 +588,9 @@ public class CollectionObjectFactory {
 		User user = createUser("system");
 		Date date = new Date();
 		instrType.setType(type + getRandomNumber());
-		instrType.setCreatedBy(user);
+		instrType.setCreatedBy(user.getId());
 		instrType.setCreatedDate(date);
-		instrType.setModifiedBy(user);
+		instrType.setModifiedBy(user.getId());
 		instrType.setModifiedDate(date);
 
 		return instrType;
@@ -608,9 +608,9 @@ public class CollectionObjectFactory {
 		User user = createUser("system");
 		Date date = new Date();
 		instrType.setType(type);
-		instrType.setCreatedBy(user);
+		instrType.setCreatedBy(user.getId());
 		instrType.setCreatedDate(date);
-		instrType.setModifiedBy(user);
+		instrType.setModifiedBy(user.getId());
 		instrType.setModifiedDate(date);
 		// session.saveOrUpdate(instrType);
 
@@ -631,10 +631,10 @@ public class CollectionObjectFactory {
 		instrHdr.setInstrumentType(instrumentType);
 
 		User user = createUser("testUser");
-		instrHdr.setCreatedBy(user);
+		instrHdr.setCreatedBy(user.getId());
 		instrHdr.setCreatedDate(new Date());
 		instrHdr.setCreatedDate(new Date());
-		instrHdr.setModifiedBy(user);
+		instrHdr.setModifiedBy(user.getId());
 		instrHdr.setModifiedDate(new Date());
 		return instrHdr;
 	}
@@ -648,10 +648,10 @@ public class CollectionObjectFactory {
 		instrHdr.setInstrumentType(createUnsavedInstrumentType(instrumentType));
 
 		User user = createUser("testUser");
-		instrHdr.setCreatedBy(user);
+		instrHdr.setCreatedBy(user.getId());
 		instrHdr.setCreatedDate(new Date());
 		instrHdr.setCreatedDate(new Date());
-		instrHdr.setModifiedBy(user);
+		instrHdr.setModifiedBy(user.getId());
 		instrHdr.setModifiedDate(new Date());
 		return instrHdr;
 	}
@@ -671,10 +671,10 @@ public class CollectionObjectFactory {
 		instrHdr.setInstrumentType(instrumentType);
 		
 		User user = createUser("testUser");
-		instrHdr.setCreatedBy(user);
+		instrHdr.setCreatedBy(user.getId());
 		instrHdr.setCreatedDate(new Date());
 		instrHdr.setCreatedDate(new Date());
-		instrHdr.setModifiedBy(user);
+		instrHdr.setModifiedBy(user.getId()	);
 		instrHdr.setModifiedDate(new Date());
 		session.saveOrUpdate(instrHdr);
 		return instrHdr;
@@ -705,10 +705,10 @@ public class CollectionObjectFactory {
 		instrHdr.setTransactionDate(new Date());
 		
 		User user = createUser("testUser");
-		instrHdr.setCreatedBy(user);
+		instrHdr.setCreatedBy(user.getId());
 		instrHdr.setCreatedDate(new Date());
 		instrHdr.setCreatedDate(new Date());
-		instrHdr.setModifiedBy(user);
+		instrHdr.setModifiedBy(user.getId());
 		instrHdr.setModifiedDate(new Date());
 		session.saveOrUpdate(instrHdr);
 		return instrHdr;
@@ -761,8 +761,8 @@ public class CollectionObjectFactory {
 				CollectionConstants.MODULE_NAME_RECEIPTHEADER));
 		instrHdr.setCreatedDate(new Date());
 		instrHdr.setModifiedDate(new Date());
-		instrHdr.setCreatedBy(user);
-		instrHdr.setModifiedBy(user);
+		instrHdr.setCreatedBy(user.getId());
+		instrHdr.setModifiedBy(user.getId());
 		return instrHdr;
 	}
 
@@ -793,8 +793,8 @@ public class CollectionObjectFactory {
 		instrHdr.setInstrumentDate(instrumentDate);
 
 		User user = createUser("testUserInstrumentHdr");
-		instrHdr.setCreatedBy(user);
-		instrHdr.setModifiedBy(user);
+		instrHdr.setCreatedBy(user.getId());
+		instrHdr.setModifiedBy(user.getId());
 		instrHdr.setCreatedDate(new Date());
 		instrHdr.setModifiedDate(new Date());
 
@@ -1123,9 +1123,9 @@ public class CollectionObjectFactory {
 		Date date = new Date();
 
 		InstrumentAccountCodes instrAccountCode = new InstrumentAccountCodes();
-		instrAccountCode.setCreatedBy(user);
+		instrAccountCode.setCreatedBy(user.getId());
 		instrAccountCode.setCreatedDate(date);
-		instrAccountCode.setModifiedBy(user);
+		instrAccountCode.setModifiedBy(user.getId());
 		instrAccountCode.setModifiedDate(date);
 		instrAccountCode.setInstrumentType(instrType);
 		// session.saveOrUpdate(instrAccountCode);
@@ -1143,9 +1143,9 @@ public class CollectionObjectFactory {
 		User user = createUser("system");
 		Date date = new Date();
 
-		instrAccountCode.setCreatedBy(user);
+		instrAccountCode.setCreatedBy(user.getId());
 		instrAccountCode.setCreatedDate(date);
-		instrAccountCode.setModifiedBy(user);
+		instrAccountCode.setModifiedBy(user.getId());
 		instrAccountCode.setModifiedDate(date);
 
 		InstrumentType type = createInstrumentType(instrType);
@@ -1165,8 +1165,8 @@ public class CollectionObjectFactory {
 		instrOtherDet.setPayinslipId(instrVoucher.getVoucherHeaderId());
 		instrOtherDet.setInstrumentStatusDate(statusDate);
 		User user = createUser("testUser");
-		instrOtherDet.setCreatedBy(user);
-		instrOtherDet.setModifiedBy(user);
+		instrOtherDet.setCreatedBy(user.getId());
+		instrOtherDet.setModifiedBy(user.getId());
 		instrOtherDet.setCreatedDate(statusDate);
 		instrOtherDet.setModifiedDate(statusDate);
 		session.saveOrUpdate(instrOtherDet);
