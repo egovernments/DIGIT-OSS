@@ -297,8 +297,12 @@ public class ApplicationCoreFilter implements Filter {
     }
     
     private boolean checkUrl(String url){
-    	  boolean isCSS = url.contains(".css") || url.contains(".js")
-  				|| url.contains(".ttf")|| url.contains(".woff");
-    	return isCSS;
+    		String [] allowedExtensions = {".css",".js",".ttf",".woff",".png",".gif"};
+    		boolean isAllowed = false;
+    		for(int count=0;count<allowedExtensions.length;++count){
+    			if(url.contains(allowedExtensions[count]))
+    				isAllowed = true;
+    		}
+    	return isAllowed;
     }
 }

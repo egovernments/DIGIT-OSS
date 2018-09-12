@@ -192,6 +192,9 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 		// persistenceService.findAllBy(" select distinct vh.type from
 		// CVoucherHeader vh where vh.status!=4 order by vh.type"));
 		addDropdownData("typeList", VoucherHelper.VOUCHER_TYPES);
+		 addDropdownData("approverDepartmentList",
+				 masterDataCache.get("egi-department"));
+		
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Number of  MIS attributes are :" + headerFields.size());
 		if (LOGGER.isDebugEnabled())

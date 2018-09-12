@@ -223,8 +223,8 @@ public class MicroserviceUtils {
 
 		final RestTemplate restTemplate = createRestTemplate();
 				
-//		final String dept_url = deptServiceUrl+"?tenantId="+getTenentId();
-		final String dept_url = deptServiceUrl+"?tenantId="+"default";
+		final String dept_url = deptServiceUrl+"?tenantId="+getTenentId();
+//		final String dept_url = deptServiceUrl+"?tenantId="+"default";
 		RequestInfo requestInfo = new RequestInfo();
 		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 		
@@ -270,12 +270,14 @@ public class MicroserviceUtils {
 		return depResponse.getDepartment();
 	}
 
-	public List<Designation> getDesignation() {
-
+	public List<Designation> getDesignation(String code){
+		
 		final RestTemplate restTemplate = createRestTemplate();
-//		final String design_url = designServiceUrl+"?tenantId="+getTenentId();
-		final String design_url = designServiceUrl+"?tenantId="+"default";
+		String design_url = designServiceUrl+"?tenantId="+getTenentId();
+//		String design_url = designServiceUrl+"?tenantId="+"default";
 
+		if(code!=null)design_url = design_url +"&code="+code;
+		
 		RequestInfo requestInfo = new RequestInfo();
 		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
@@ -287,6 +289,9 @@ public class MicroserviceUtils {
 				DesignationResponse.class);
 		return designResponse.getDesignation();
 	}
+	public List<Designation> getDesignation() {
+		return this.getDesignation(null);
+		}
 
 	public List<EmployeeInfo> getApprovers(String departmentId,String designationId) {
 
@@ -419,8 +424,8 @@ public class MicroserviceUtils {
 		
 		if(empId!=0) empUrl.append("&id="+empId);
 		if(toDay!=null) empUrl.append("&asOnDate"+dateFormat.format(toDay));
-		if(departmentId!=null) empUrl.append("&assignment.departmentId"+departmentId);
-		if(designationId!=null) empUrl.append("&assignment.designationId"+designationId);
+		if(departmentId!=null) empUrl.append("&departmentId"+departmentId);
+		if(designationId!=null) empUrl.append("&designationId"+designationId);
 		
 
 		RequestInfo requestInfo = new RequestInfo();

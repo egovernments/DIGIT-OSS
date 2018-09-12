@@ -111,7 +111,7 @@ window.document.onkeydown = function(event) {
 	
 		<div class="page-container">
 		    <!-- header -->
-		    <egovtags:breadcrumb/> 
+		    <%-- <egovtags:breadcrumb/> --%> 
 		    
 		    <!-- pagecontent -->
 		    <div class="main-content">

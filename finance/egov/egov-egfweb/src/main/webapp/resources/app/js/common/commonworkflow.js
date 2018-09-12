@@ -79,34 +79,19 @@ $(document).ready(function()
 	});*/
 	
 	
-	$('#approvalDepartment').change(function(){
-		
-		var jsonData = {
-					 "requestInfo":{
-								"apiId": "string",
-								  "ver": "string",
-								  "ts": "28-07-2018 00:00:00",
-								  "action": "string",
-								  "did": "string",
-								  "key": "string",
-								  "msgId": "string",
-								  "requesterId": "string",
-								  "authToken": "string"
-								}
-				};
-		var tenantId = 'default';
+$('#approvalDepartment').change(function(){
 		
 		$.ajax({
-			url: "/egov-common-masters/departments/_search?tenantId="+tenantId,     
-			type:'post',
+			url: "/EGF/designations",     
+			type:'GET',
 			contentType:'application/json',
-			data:JSON.stringify(jsonData),
+			//data:JSON.stringify(jsonData),
 			success: function (response) {
 				console.log("success"+response);
 				$('#approvalDesignation').empty();
 				$('#approvalDesignation').append($("<option value=''>Select from below</option>"));
-				$.each(response.Department, function(index, value) {
-					$('#approvalDesignation').append($('<option>').text(value.name).attr('value', value.id));
+				$.each(response, function(index, value) {
+					$('#approvalDesignation').append($('<option>').text(value.name).attr('value', value.code));
 				});
 				$('#approvalDesignation').val($('#approvalDesignationValue').val());
 				$('#approvalDesignation').trigger('change');
@@ -118,31 +103,43 @@ $(document).ready(function()
 		});
 	});
 	
-	$('#approvalDesignation').change(function(){
-		$.ajax({
-			url: "/eis/ajaxWorkFlow-positionsByDepartmentAndDesignation",     
-			type: "GET",
-			data: {
-				approvalDesignation : $('#approvalDesignation').val(),
-				approvalDepartment : $('#approvalDepartment').val()    
-			},
-			dataType: "json",
-			success: function (response) {
-				console.log("success"+response);
-				$('#approvalPosition').empty();
-				$('#approvalPosition').append($("<option value=''>Select from below</option>"));
-				$.each(response, function(index, value) {
-					$('#approvalPosition').append($('<option>').text(value.userName+'/'+value.positionName).attr('value', value.positionId));  
-				});
-				$('#approvalPosition').val($('#approvalPositionValue').val());
-			}, 
-			error: function (response) {
-				console.log("failed");
-			}
-		});
-	});
+$('#approvalDesignation').change(function(){
 	
-	$('#approvalDepartment').trigger('change');
+	
+	todayDate = new Date(Date.now()).toLocaleString(),
+	departmentId = $('#approvalDesignation').val(),
+	designationId= $('#approvalDepartment').val();
+
+
+$.ajax({
+url: "/EGF/approvers/"+departmentId+"/"+designationId,     
+type: "GET",
+contentType:'application/json',
+//data: JSON.stringify(jsonData),
+success: function (response) {
+	console.log("success"+response);
+	$('#approvalPosition').empty();
+	$('#approvalPosition').append($("<option value=''>Select from below</option>"));
+	$.each(response, function(index, value) {
+		//$('#approvalPosition').append($('<option>').text(value.userName+'/'+value.positionName).attr('value', value.positionId));  
+		$('#approvalPosition').append($('<option>').text(value.userName).attr('value', value.assignments[0].position));  
+	});
+	$('#approvalPosition').val($('#approvalPositionValue').val());
+}, 
+error: function (response) {
+	console.log("failed");
+		}
+	});
+});
+
+$('#approvalDepartment').trigger('change');
+
+$('#approvalPosition').change(function(){
+
+		$("#approverName").val($('#approvalPosition option:selected').text());
+	});
+
+
 });
 
 function callAlertForDepartment() {

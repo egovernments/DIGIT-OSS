@@ -124,7 +124,7 @@ public class EgBillregister extends StateAware<Position> implements java.io.Seri
     @Transient
     private List<DocumentUpload> documentDetail = new ArrayList<>();
     @Transient
-    private Long approvalDepartment;
+    private String approvalDepartment;
     @Transient
     private String approvalComent;
 
@@ -433,11 +433,11 @@ public class EgBillregister extends StateAware<Position> implements java.io.Seri
         this.checkLists = checkLists;
     }
 
-    public Long getApprovalDepartment() {
+    public String getApprovalDepartment() {
         return approvalDepartment;
     }
 
-    public void setApprovalDepartment(final Long approvalDepartment) {
+    public void setApprovalDepartment(final String approvalDepartment) {
         this.approvalDepartment = approvalDepartment;
     }
 

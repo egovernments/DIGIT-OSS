@@ -91,7 +91,7 @@ $(document).ready(function()
 				$('#approvalDesignation').empty();
 				$('#approvalDesignation').append($("<option value=''>Select from below</option>"));
 				$.each(response, function(index, value) {
-					$('#approvalDesignation').append($('<option>').text(value.name).attr('value', value.id));
+					$('#approvalDesignation').append($('<option>').text(value.name).attr('value', value.code));
 				});
 				$('#approvalDesignation').val($('#approvalDesignationValue').val());
 				$('#approvalDesignation').trigger('change');

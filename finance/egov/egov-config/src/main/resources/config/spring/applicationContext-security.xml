@@ -238,7 +238,7 @@
           class="org.egov.infra.config.security.authentication.userdetail.service.UserDetailService">
         <constructor-arg ref="userService"/>
     </bean>
-	<bean id="msUtil" class="org.egov.infra.microservice.utils.MicroserviceUtils"></bean>
+	<bean id="microServiceUtil" class="org.egov.infra.microservice.utils.MicroserviceUtils"></bean>
     <bean id="applicationAuthorizationMetadataSource"
           class="org.egov.infra.config.security.authorization.ApplicationAuthorizationMetadataSource">
         <property name="excludePatterns">

@@ -48,20 +48,9 @@
 
 package org.egov.infstr.utils;
 
-import org.egov.infra.config.core.ApplicationThreadLocals;
-import org.egov.infra.exception.ApplicationRuntimeException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.infinispan.manager.EmbeddedCacheManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static org.apache.commons.lang.StringUtils.EMPTY;
+import static org.apache.commons.lang.StringUtils.isNotBlank;
 
-import javax.annotation.PreDestroy;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -70,8 +59,23 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.commons.lang.StringUtils.EMPTY;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import javax.annotation.PreDestroy;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.infinispan.manager.EmbeddedCacheManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @deprecated no longer supported
@@ -89,6 +93,9 @@ public class EgovMasterDataCaching {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
+    
     static {
         try {
             final Context context = new InitialContext();
@@ -119,7 +126,10 @@ public class EgovMasterDataCaching {
                 dataList = (List<Object>) cacheValuesHashMap.get(sqlTagName);
 
             if (dataList == null || dataList.isEmpty()) {
-                final String type = EGovConfig
+            	if(sqlTagName.equalsIgnoreCase("egi-department")){
+            		dataList = this.loadFromMicroService();
+            	}else{
+            	final String type = EGovConfig
                         .getProperty(applName + CONFIG_FILE_SUFFIX, "type", EMPTY, SQL_TAG_PREFIX + sqlTagName).trim();
                 if (type.equalsIgnoreCase("java")) {
                     final String className = EGovConfig.getProperty(applName + CONFIG_FILE_SUFFIX, "class", EMPTY,
@@ -146,11 +156,13 @@ public class EgovMasterDataCaching {
                                 "Query should be mentioned for " + type + " in " + applName + CONFIG_FILE_SUFFIX);
                 } else
                     throw new ApplicationRuntimeException("This type (" + type + ") is not supported for " + sqlTagName);
+            	}
                 final HashMap<String, Object> hm = new HashMap<String, Object>();
                 hm.put(sqlTagName, dataList);
                 CACHE_MANAGER.getCache().put(applName + PATH_DELIM + domainName + PATH_DELIM + sqlTagName, hm);
             } else
                 LOGGER.info("EgovMasterDataCaching: Got directly from cache, not from db");
+            
 
         } catch (final Exception e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching", e);
@@ -438,6 +450,12 @@ public class EgovMasterDataCaching {
         return list;
     }
 
+    private List loadFromMicroService(){
+    	
+    	List<Department> deptList = this.microserviceUtils.getDepartments();
+    	return deptList;
+    }
+    
     @PreDestroy
     public void destroy() {
         if (CACHE_MANAGER != null && CACHE_MANAGER.isDefaultRunning())
