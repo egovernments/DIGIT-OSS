@@ -62,6 +62,7 @@ import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.reporting.util.ReportUtil;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -114,7 +115,6 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
     private Date toDate;
     private String chequeFromNumber;
     private String chequeToNumber;
-    private Department department;
     private Bankaccount accountNumber;
     ReportHelper reportHelper;
     private InputStream inputStream;
@@ -131,6 +131,9 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
     private String chequeFormat = "";
     private Long instrumentHeaderId;
     private InstrumentHeaderService instrumentHeaderService;
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
+    private Department deptImpl = new Department();
 
     public ChequeIssueRegisterReportAction() {
         addRelatedEntity(Constants.EXECUTING_DEPARTMENT, Department.class);
@@ -144,7 +147,8 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
         if (!parameters.containsKey("showDropDown")) {
             addDropdownData("bankList", egovCommon.getBankBranchForActiveBanks());
             addDropdownData("bankAccountList", Collections.EMPTY_LIST);
-            dropdownData.put("executingDepartmentList", masterDataCache.get("egi-department"));
+          //  dropdownData.put("executingDepartmentList", masterDataCache.get("egi-department"));
+            dropdownData.put("executingDepartmentList",microserviceUtils.getDepartments());
         }
         populateUlbName();
     }
@@ -245,8 +249,8 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
 
     String createQuery() {
         String query = "";
-        if (department != null && department.getId() != 0)
-            query = query.concat(" and vmis.departmentid=" + department.getId());
+        if (deptImpl != null && deptImpl.getCode()!=null && !deptImpl.getCode().equals("0"))
+            query = query.concat(" and vmis.departmentcode='" + deptImpl.getCode()+"'");
         return query;
     }
 
@@ -383,10 +387,8 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
         paramMap.put("fromDate", Constants.DDMMYYYYFORMAT1.format(fromDate));
         paramMap.put("toDate", Constants.DDMMYYYYFORMAT1.format(toDate));
         paramMap.put("ulbName", ulbName);
-        if (department != null && department.getId() != null && department.getId() != 0) {
-            final Department dept = (Department) persistenceService.find("from Department where id=?",
-                    department.getId());
-            paramMap.put("departmentName", dept.getName());
+        if (deptImpl != null && deptImpl.getCode() != null && !deptImpl.getCode().equals("0")) {
+            paramMap.put("departmentName",deptImpl.getCode());
         }
         return paramMap;
     }
@@ -455,14 +457,6 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
         return bank;
     }
 
-    public void setDepartment(final Department department) {
-        this.department = department;
-    }
-
-    public Department getDepartment() {
-        return department;
-    }
-
     public void setChequeToNumber(final String chequeToNumber) {
         this.chequeToNumber = chequeToNumber;
     }
@@ -526,5 +520,13 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
     public void setInstrumentHeaderId(Long instrumentHeaderId) {
         this.instrumentHeaderId = instrumentHeaderId;
     }
+
+	public Department getDeptImpl() {
+		return deptImpl;
+	}
+
+	public void setDeptImpl(Department deptImpl) {
+		this.deptImpl = deptImpl;
+	}
 
 }

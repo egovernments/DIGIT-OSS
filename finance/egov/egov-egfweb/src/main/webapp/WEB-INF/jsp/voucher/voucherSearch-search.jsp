@@ -312,8 +312,15 @@
 
 			var url =  url+'='+ vid+'&showMode='+showMode;
 		}
-		
-			window.open(url,'','width=900, height=700');
+			//window.open(url,'','width=900, height=700');
+			 var form = document.createElement("voucherform");
+			 form.setAttribute("method", "post");
+			 form.setAttribute("action", url, '');
+			 form.setAttribute("target", "NewFile");
+			 document.body.appendChild(form);
+			 window.open("post.htm", "NewFile", 'width=800, height=600');
+			 form.submit();
+			 document.body.removeChild(form);
 		}
 		function validateAndSubmit(){
 			if(document.getElementById('voucherNumber')!=null && document.getElementById('voucherNumber').value!="")

@@ -79,7 +79,8 @@ function generateReport(){
 	if(isValid == false)
 		return false;
 	doLoadingMask();
-	var url = '../report/chequeIssueRegisterReport-ajaxPrint.action?fromDate='+fromDate+'&toDate='+toDate+'&accountNumber.id='+bankAccount+'&department.id='+department+'&bank='+bank+'&showDropDown=false';
+	var url = '../report/chequeIssueRegisterReport-ajaxPrint.action?fromDate='+fromDate+'&toDate='+toDate+'&accountNumber.id='+bankAccount+'&deptImpl.code='+department+'&bank='+bank+'&showDropDown=false';
+	alert("url "+url);
 	YAHOO.util.Connect.asyncRequest('POST', url, callback, null);
 }
 
@@ -190,9 +191,9 @@ function printCheque(id)
 					<td width="10%" class="bluebox">&nbsp;</td>
 					<td class="bluebox"><s:text name="report.department" /></td>
 					<td width="22%" class="bluebox"><s:select
-							list="dropdownData.executingDepartmentList" listKey="id"
-							listValue="name" name="department.id" headerKey="0"
-							headerValue="--- Select ---" value="department.id"
+							list="dropdownData.executingDepartmentList" listKey="code"
+							listValue="name" name="deptImpl.code" headerKey="0"
+							headerValue="--- Select ---" value="%{deptImpl.code}"
 							id="department"></s:select></td>
 				</tr>
 			</table>

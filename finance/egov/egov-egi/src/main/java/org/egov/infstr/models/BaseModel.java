@@ -70,16 +70,16 @@ public class BaseModel implements Serializable {
      * http://opensource.atlassian.com/projects/hibernate/browse/HSEARCH-333
      */
     protected Long id;
-    protected User createdBy;
+    protected Long createdBy;
     protected Date createdDate;
-    protected User modifiedBy;
+    protected Long modifiedBy;
     protected Date modifiedDate;
 
-    public User getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(final User createdBy) {
+    public void setCreatedBy(final Long createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -91,11 +91,11 @@ public class BaseModel implements Serializable {
         this.createdDate = createdDate;
     }
 
-    public User getModifiedBy() {
+    public Long getModifiedBy() {
         return modifiedBy;
     }
 
-    public void setModifiedBy(final User modifiedBy) {
+    public void setModifiedBy(final Long modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
 
