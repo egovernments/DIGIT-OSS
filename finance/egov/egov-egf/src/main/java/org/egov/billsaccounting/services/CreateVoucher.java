@@ -1566,7 +1566,7 @@ public class CreateVoucher {
 				LOGGER.debug("vNumGenMode is  :" + vNumGenMode);
 
 			if (headerdetails.get(VoucherConstant.VOUCHERNUMBER) != null)
-				voucherNumber = headerdetails.get(VoucherConstant.VOUCHERNUMBER).toString();
+				cVoucherHeader.setVoucherNumber(headerdetails.get(VoucherConstant.VOUCHERNUMBER).toString());
 			if (null != headerdetails.get(VoucherConstant.MODULEID))
 				vNumGenMode = "Auto";
 

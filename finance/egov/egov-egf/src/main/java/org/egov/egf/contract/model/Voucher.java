@@ -65,7 +65,7 @@ public class Voucher{
     private Long refVhId;
     private String cgvn;
     private Long moduleId;
-    private Long department;
+    private String department;
     private String source;
     private SchemeContract scheme;
     private SchemeContract subScheme;
@@ -177,11 +177,11 @@ public class Voucher{
         this.ledgers = ledgers;
     }
 
-    public Long getDepartment() {
+    public String getDepartment() {
         return department;
     }
 
-    public void setDepartment(final Long department) {
+    public void setDepartment(final String department) {
         this.department = department;
     }
 

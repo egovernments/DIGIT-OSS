@@ -1,6 +1,9 @@
 package org.egov.egf.web.controller.microservice;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -13,7 +16,9 @@ import org.egov.egf.contract.model.SubledgerDetailContract;
 import org.egov.egf.contract.model.Voucher;
 import org.egov.egf.contract.model.VoucherRequest;
 import org.egov.egf.contract.model.VoucherResponse;
+import org.egov.egf.web.controller.microservice.exception.InvalidDataException;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.ErrorRes;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.model.bills.EgBillPayeedetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +26,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import org.egov.infra.validation.exception.ValidationException;
+
+import org.egov.infra.microservice.models.Error;
 
 @RestController 
 public class VoucherController {
@@ -45,14 +54,17 @@ public class VoucherController {
 		for(Voucher voucher:voucherRequest.getVouchers())
 		{
 		
-		 List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(voucher.getDepartment());
+		/* List<org.egov.infra.microservice.models.Department> list =microserviceUtils.getDepartmentsById(voucher.getDepartment());
 		 String departmentCode = list!=null && !list.isEmpty() ? list.get(0).getCode() : "";
-		 headerDetails.put(VoucherConstant.DEPARTMENTCODE, departmentCode);
-	      
+		*/ 
+			try {	
+			SimpleDateFormat fm=new SimpleDateFormat("dd/MM/yyyy");
+			Date vDate = fm.parse(voucher.getVoucherDate());
+		headerDetails.put(VoucherConstant.DEPARTMENTCODE, voucher.getDepartment());
 		headerDetails.put(VoucherConstant.VOUCHERNAME, voucher.getName());
 		headerDetails.put(VoucherConstant.VOUCHERTYPE, voucher.getType());
 		headerDetails.put(VoucherConstant.VOUCHERNUMBER, voucher.getVoucherNumber());
-		headerDetails.put(VoucherConstant.VOUCHERDATE, voucher.getVoucherDate());
+		headerDetails.put(VoucherConstant.VOUCHERDATE, vDate);
 		if(voucher.getFund()!=null)
 		headerDetails.put(VoucherConstant.FUNDCODE, voucher.getFund().getCode()); 
 		
@@ -71,7 +83,7 @@ public class VoucherController {
 			detailMap.put(VoucherConstant.GLCODE, ac.getGlcode());
 			detailMap.put(VoucherConstant.DEBITAMOUNT, ac.getDebitAmount());
 			detailMap.put(VoucherConstant.CREDITAMOUNT, ac.getCreditAmount());
-			if(ac.getFunction().getCode()!=null)
+			if(ac.getFunction()!=null)
 				detailMap.put(VoucherConstant.FUNCTIONCODE, ac.getFunction().getCode());
 			
 			accountdetails.add(detailMap);
@@ -89,14 +101,34 @@ public class VoucherController {
 			}
 		}
 		
-		try {
+		
 			CVoucherHeader voucherHeader = createVoucher.createVoucher(headerDetails, accountdetails, subledgerDetails);
 			voucher.setId(voucherHeader.getId());
 			voucher.setVoucherNumber(voucherHeader.getVoucherNumber());
 			response.getVouchers().add(voucher);
-		} catch (ApplicationRuntimeException e) {
-		 
 		}
+			catch (ValidationException e) {
+				 
+				throw new InvalidDataException(e.getMessage(),e.getMessage(),e.getMessage());
+			 
+			}
+		 catch (ApplicationRuntimeException e) {
+		 
+			ErrorRes errorRes=new ErrorRes();
+			Error errorsItem=new Error();
+			errorsItem.setMessage(e.getMessage());
+			errorsItem.setCode(e.getMessage());
+			errorRes.addErrorsItem(errorsItem);
+		} catch (ParseException e) {
+
+			ErrorRes errorRes=new ErrorRes();
+			Error errorsItem=new Error();
+			errorsItem.setMessage(e.getMessage());
+			errorsItem.setCode(e.getMessage());
+			errorRes.addErrorsItem(errorsItem);
+		}
+		
+		
 		
 		
 		}
