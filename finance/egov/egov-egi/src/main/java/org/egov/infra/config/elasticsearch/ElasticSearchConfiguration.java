@@ -48,6 +48,9 @@
 
 package org.egov.infra.config.elasticsearch;
 
+import java.net.InetSocketAddress;
+import java.util.List;
+
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
@@ -59,10 +62,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
-import java.net.InetSocketAddress;
-import java.util.List;
-
-//@Configuration
+@Configuration
 @EnableElasticsearchRepositories(basePackages = {"org.egov.**.repository.es", "org.egov.**.elasticsearch.repository"})
 public class ElasticSearchConfiguration {
 

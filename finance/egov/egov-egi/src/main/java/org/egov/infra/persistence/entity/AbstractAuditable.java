@@ -48,80 +48,75 @@
 
 package org.egov.infra.persistence.entity;
 
-import org.egov.infra.admin.master.entity.User;
-import org.hibernate.envers.Audited;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import java.util.Date;
 
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.util.Date;
+
+import org.hibernate.envers.Audited;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractAuditable extends AbstractPersistable<Long> {
 
-    private static final long serialVersionUID = 7138056997693406739L;
+	private static final long serialVersionUID = 7138056997693406739L;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "createdBy")
-//    @CreatedBy
-   // private User createdBy;
-    private Long createdBy;
+	// @ManyToOne(fetch = FetchType.LAZY)
+	// @JoinColumn(name = "createdBy")
+	// @CreatedBy
+	// private User createdBy;
+	private Long createdBy;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    private Date createdDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@CreatedDate
+	private Date createdDate;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "lastModifiedBy")
-//    @LastModifiedBy
-//    private User lastModifiedBy;
-    private Long lastModifiedBy;
+	// @ManyToOne(fetch = FetchType.LAZY)
+	// @JoinColumn(name = "lastModifiedBy")
+	// @LastModifiedBy
+	// private User lastModifiedBy;
+	private Long lastModifiedBy;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @LastModifiedDate
-    private Date lastModifiedDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@LastModifiedDate
+	private Date lastModifiedDate;
 
-    public long getCreatedBy() {
-        return createdBy;
-    }
+	public Long getCreatedBy() {
+		return createdBy;
+	}
 
-    public void setCreatedBy(final long createdBy) {
-        this.createdBy = createdBy;
-    }
+	public void setCreatedBy(final Long createdBy) {
+		this.createdBy = createdBy;
+	}
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
+	public Date getCreatedDate() {
+		return createdDate;
+	}
 
-    public void setCreatedDate(final Date createdDate) {
-        this.createdDate = createdDate;
-    }
+	public void setCreatedDate(final Date createdDate) {
+		this.createdDate = createdDate;
+	}
 
-    @Audited
-    public long getLastModifiedBy() {
-        return lastModifiedBy;
-    }
+	@Audited
+	public Long getLastModifiedBy() {
+		return lastModifiedBy;
+	}
 
-    public void setLastModifiedBy(final long lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
+	public void setLastModifiedBy(final Long lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
+	}
 
-    @Audited
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
+	@Audited
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
+	}
 
-    public void setLastModifiedDate(final Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
+	public void setLastModifiedDate(final Date lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
 }
