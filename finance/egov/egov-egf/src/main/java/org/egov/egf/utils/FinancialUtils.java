@@ -124,7 +124,7 @@ public class FinancialUtils {
     private FileStoreService fileStoreService;
 
     @Autowired
-    MicroserviceUtils msUtil;
+    MicroserviceUtils microServiceUtil;
     
     public Session getCurrentSession() {
         return entityManager.unwrap(Session.class);
