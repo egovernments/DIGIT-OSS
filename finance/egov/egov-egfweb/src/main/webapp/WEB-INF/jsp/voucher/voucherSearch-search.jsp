@@ -156,18 +156,13 @@
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
 			<s:if test="%{pagedResults!=null}">
 				<tr>
-					<td width="100%"><display:table name="pagedResults"
-							uid="currentRowObject" cellpadding="0" cellspacing="0"
-							requestURI="" class="its"
-							style=" border-left: 1px solid #C5C5C5; border-top: 1px solid #C5C5C5;border-right: 1px solid #C5C5C5;border-bottom: 1px solid #C5C5C5;">
+					<td width="100%"><display:table name="pagedResults"	uid="currentRowObject" cellpadding="0" cellspacing="0"
+							requestURI="" class="its" style=" border-left: 1px solid #C5C5C5; border-top: 1px solid #C5C5C5;border-right: 1px solid #C5C5C5;border-bottom: 1px solid #C5C5C5;">
 							<display:column title=" Sl No" style="text-align:center;">
-								<s:property
-									value="%{#attr.currentRowObject_rowNum+ (page-1)*pageSize}" />
+								<s:property	value="%{#attr.currentRowObject_rowNum+ (page-1)*pageSize}" />
 							</display:column>
 							<display:column title="Voucher Number" style="text-align:center;">
-
-								<a href="#"
-									onclick="openVoucher('<s:property value='%{#attr.currentRowObject.id}'/>','<s:property value="%{#attr.currentRowObject.vouchernumber}" />','<s:date name="%{#attr.currentRowObject.voucherdate}" format="dd/MM/yyyy"/>');"><s:property
+								<a href="#"	onclick="openVoucher('<s:property value='%{#attr.currentRowObject.id}'/>','<s:property value="%{#attr.currentRowObject.vouchernumber}" />','<s:date name="%{#attr.currentRowObject.voucherdate}" format="dd/MM/yyyy"/>');"><s:property
 										value="%{#attr.currentRowObject.vouchernumber}" />
 							</display:column>
 
@@ -317,8 +312,15 @@
 
 			var url =  url+'='+ vid+'&showMode='+showMode;
 		}
-		
-			window.open(url,'','width=900, height=700');
+			//window.open(url,'','width=900, height=700');
+			 var form = document.createElement("voucherform");
+			 form.setAttribute("method", "post");
+			 form.setAttribute("action", url, '');
+			 form.setAttribute("target", "NewFile");
+			 document.body.appendChild(form);
+			 window.open("post.htm", "NewFile", 'width=800, height=600');
+			 form.submit();
+			 document.body.removeChild(form);
 		}
 		function validateAndSubmit(){
 			if(document.getElementById('voucherNumber')!=null && document.getElementById('voucherNumber').value!="")

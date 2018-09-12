@@ -122,44 +122,29 @@ function loadNamesForSelectedType()
 				</tr>
 				<tr>
 					<td class="greybox">&nbsp;</td>
-					<td class="greybox"><s:text name="voucher.type" /><span
-						class="mandatory1">*</span></td>
-					<td class="greybox"><s:select name="type" id="type"
-							list="dropdownData.typeList" headerKey="-1"
-							headerValue="----Choose----"
+					<td class="greybox"><s:text name="voucher.type" /><span	class="mandatory1">*</span></td>
+					<td class="greybox"><s:select name="type" id="type"	list="dropdownData.typeList" headerKey="-1" headerValue="----Choose----"
 							onchange="loadVoucherNames(this.value)" /></td>
-					<td class="greybox"><s:text name="voucher.name" /><span
-						class="mandatory1">*</span></td>
-					<td class="greybox"><s:select name="name" id="name"
-							list="%{nameMap}"  headerKey="-1" headerValue="----Choose----" /></td>
+					<td class="greybox"><s:text name="voucher.name" /><span	class="mandatory1">*</span></td>
+					<td class="greybox"><s:select name="name" id="name"	list="%{nameMap}"  headerKey="-1" headerValue="----Choose----" /></td>
 				</tr>
 				<tr>
 					<td class="greybox">&nbsp;</td>
-					<td class="bluebox"><s:text name="voucher.fromdate" /><span
-						class="mandatory1">*</span></td>
+					<td class="bluebox"><s:text name="voucher.fromdate" /><span	class="mandatory1">*</span></td>
 					<s:date name="fromDate" format="dd/MM/yyyy" var="tempFromDate" />
-					<td class="bluebox"><s:textfield id="fromDate" name="fromDate"
-							value="%{tempFromDate}"
-							onkeyup="DateFormat(this,this.value,event,false,'3')"
-							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
-							data-inputmask="'mask': 'd/m/y'" /></td>
-					<td class="bluebox"><s:text name="voucher.todate" /><span
-						class="mandatory1">*</span></td>
+					<td class="bluebox"><s:textfield id="fromDate" name="fromDate" value="%{tempFromDate}" onkeyup="DateFormat(this,this.value,event,false,'3')"
+							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"	data-inputmask="'mask': 'd/m/y'" /></td>
+					<td class="bluebox"><s:text name="voucher.todate" /><span class="mandatory1">*</span></td>
 					<s:date name="toDate" format="dd/MM/yyyy" var="tempToDate" />
-					<td class="bluebox"><s:textfield id="toDate" name="toDate"
-							value="%{tempToDate}"
-							onkeyup="DateFormat(this,this.value,event,false,'3')"
-							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
-							data-inputmask="'mask': 'd/m/y'" /></td>
+					<td class="bluebox"><s:textfield id="toDate" name="toDate" value="%{tempToDate}" onkeyup="DateFormat(this,this.value,event,false,'3')"
+							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"	data-inputmask="'mask': 'd/m/y'" /></td>
 				</tr>
 			</table>
 	</div>
 	<div class="buttonbottom">
-		<input type="submit" class="buttonsubmit" value="Search" id="Search"
-			name="button" onclick="return loadSearch();" /> <input type="reset"
-			value="Reset" class="buttonsubmit" onclick="return fieldReset();" />
-		<input type="button" value="Close" onclick="javascript:window.close()"
-			class="button" />
+		<input type="submit" class="buttonsubmit" value="Search" id="Search" name="button" onclick="return loadSearch();" />
+		 <input type="reset" value="Reset" class="buttonsubmit" onclick="return fieldReset();" />
+		<input type="button" value="Close" onclick="javascript:window.close()" class="button" />
 	</div>
 	<s:if test="%{voucherSearchList.size!=0}">
 		<div id="listid">
@@ -177,7 +162,7 @@ function loadNamesForSelectedType()
 					<th class="bluebgheadtd">Narration</th>
 					<th class="bluebgheadtd">Select</th>
 				</tr>
-				<c:set var="trclass" value="greybox" />
+				<c:set var="trclass" value="greybox" />	
 
 				<s:iterator var="p" value="voucherSearchList" status="s">
 					<tr>
@@ -227,16 +212,13 @@ function loadNamesForSelectedType()
 				</s:iterator>
 			</table>
 			<div class="buttonbottom" align="center">
-				<s:submit Class="buttonsubmit" value="Cancel Voucher"
-					onclick="return validateVouchers();" />
+				<s:submit Class="buttonsubmit" value="Cancel Voucher" onclick="return validateVouchers();" />
 			</div>
 
 		</div>
 	</s:if>
 	<s:else>
-		<s:if test="%{voucherList.size==0 && voucherList!=null}">
-					No data found
-				</s:if>
+		<s:if test="%{voucherList.size==0 && voucherList!=null}">No Data Found.</s:if>
 	</s:else>
 
 	<s:token />

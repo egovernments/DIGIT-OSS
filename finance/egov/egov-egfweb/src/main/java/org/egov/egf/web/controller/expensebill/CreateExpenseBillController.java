@@ -121,8 +121,6 @@ public class CreateExpenseBillController extends BaseBillController {
     @Autowired
     private BudgetControlTypeService budgetControlTypeService;
     @Autowired
-    private FinancialUtils financialUtils;
-    @Autowired
     private FileStoreService fileStoreService;
 
     public CreateExpenseBillController(final AppConfigValueService appConfigValuesService) {

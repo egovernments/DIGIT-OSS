@@ -175,8 +175,7 @@ function validateCancel()
 			<div class="buttonbottom">
 				<s:submit method="search" value="Search" id="searchBtn"
 					onclick="return validate()" cssClass="buttonsubmit" />
-				<input type="submit" value="Close"
-					onclick="javascript:window.close()" class="button" />
+				<input type="button" value="Close" onclick="javascript:window.close()" class="button" />
 			</div>
 		</div>
 		<s:if test="%{billListDisplay.size()!=0}">
@@ -245,8 +244,7 @@ function validateCancel()
 		</s:if>
 		<s:elseif test="%{billListDisplay.size() == 0 && afterSearch}">
 			<tr>
-				<td colspan="7" align="center"><font color="red">No
-						record Found.</font></td>
+				<td colspan="7" align="center"><font color="red">No Data Found.</font></td>
 			</tr>
 		</s:elseif>
 		<input type="hidden" id="selectedRows" name="selectedRows" />

@@ -76,7 +76,6 @@ import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infra.workflow.entity.WorkflowAction;
-import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.bills.EgBillregister;
 import org.egov.model.voucher.VoucherTypeBean;
 import org.egov.pims.service.EisUtilService;
@@ -104,8 +103,6 @@ public class BillVoucherAction extends BaseVoucherAction {
 	@Autowired
 	private ScriptService scriptService;
 	@Autowired
-	private EgovMasterDataCaching masterDataCache;
-	@Autowired
 	private AppConfigValueService appConfigValueService;
 
 	public VoucherTypeBean getVoucherTypeBean() {
@@ -119,11 +116,6 @@ public class BillVoucherAction extends BaseVoucherAction {
 	@Override
 	public void prepare() {
 		super.prepare();
-		// If the department is mandatory show the logged in users assigned
-		// department only.
-		if (mandatoryFields.contains("department")) {
-			addDropdownData("departmentList", masterDataCache.get("egi-department"));
-		}
 	}
 
 	@Action(value = "/voucher/billVoucher-newForm")
@@ -153,9 +145,10 @@ public class BillVoucherAction extends BaseVoucherAction {
 					")and ( br.egBillregistermis.voucherHeader is null or br.egBillregistermis.voucherHeader in (from CVoucherHeader vh where vh.status =? ))");
 			if (null != billNumber && StringUtils.isNotEmpty(billNumber))
 				query.append(" and br.billnumber='").append(billNumber).append("'");
-			if (null != voucherHeader.getVouchermis().getDepartmentcode())
+			if (null != voucherHeader.getVouchermis().getDepartmentcode()
+					&& !voucherHeader.getVouchermis().getDepartmentcode().equals("-1"))
 				query.append(" and br.egBillregistermis.departmentcode='")
-						.append(voucherHeader.getVouchermis().getDepartmentcode()+"'");
+						.append(voucherHeader.getVouchermis().getDepartmentcode() + "'");
 			if (null != voucherTypeBean.getVoucherDateFrom()
 					&& StringUtils.isNotEmpty(voucherTypeBean.getVoucherDateFrom()))
 				query.append(" and br.billdate>='")

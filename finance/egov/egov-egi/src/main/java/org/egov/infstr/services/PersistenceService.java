@@ -323,10 +323,10 @@ public class PersistenceService<T, ID extends Serializable> {
     public void applyAuditing(BaseModel baseModel) {
         Date currentDate = new Date();
         if (baseModel.getId() == null) {
-            baseModel.setCreatedBy(getSession().load(User.class, ApplicationThreadLocals.getUserId()));
+            baseModel.setCreatedBy(ApplicationThreadLocals.getUserId());
             baseModel.setCreatedDate(currentDate);
         }
-        baseModel.setModifiedBy(getSession().load(User.class, ApplicationThreadLocals.getUserId()));
+        baseModel.setModifiedBy(ApplicationThreadLocals.getUserId());
         baseModel.setModifiedDate(currentDate);
     }
 

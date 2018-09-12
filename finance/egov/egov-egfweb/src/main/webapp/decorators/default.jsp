@@ -110,8 +110,11 @@ window.document.onkeydown = function(event) {
 <body <decorator:getProperty property="body.id" writeEntireProperty="yes"/><decorator:getProperty property="body.class" writeEntireProperty="true"/> <decorator:getProperty property="body.onload" writeEntireProperty="true"/>  >
 	
 		<div class="page-container">
+<<<<<<< HEAD
 		    <!-- header -->
 		    <%-- <egovtags:breadcrumb/> --%> 
+=======
+>>>>>>> branch 'coexistence' of https://github.com/egovernments/eGov-Punjab-Implementation.git
 		    
 		    <!-- pagecontent -->
 		    <div class="main-content">

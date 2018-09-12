@@ -380,8 +380,8 @@ public class LoanGrantAction extends LoanGrantBaseAction {
             loanGrantHeader.setSubScheme(subScheme);
             final User user = (User) persistenceService.find("from User where id=?", ApplicationThreadLocals.getUserId());
             final Date currDate = new Date();
-            loanGrantHeader.setCreatedBy(user);
-            loanGrantHeader.setModifiedBy(user);
+            loanGrantHeader.setCreatedBy(user.getId());
+            loanGrantHeader.setModifiedBy(user.getId());
             loanGrantHeader.setCreatedDate(currDate);
             loanGrantHeader.setModifiedDate(currDate);
             if (loanGrantHeader.getRevisedCost() == null)
@@ -390,16 +390,16 @@ public class LoanGrantAction extends LoanGrantBaseAction {
             for (final LoanGrantDetail lgDetail : loanGrantHeader.getDetailList())
                 if (lgDetail.getId() != null)
                 {
-                    lgDetail.setCreatedBy(user);
-                    lgDetail.setModifiedBy(user);
+                    lgDetail.setCreatedBy(user.getId());
+                    lgDetail.setModifiedBy(user.getId());
                     lgDetail.setCreatedDate(currDate);
                     lgDetail.setModifiedDate(currDate);
                 }
             for (final LoanGrantReceiptDetail lgRecptDetail : loanGrantHeader.getReceiptList())
                 if (lgRecptDetail.getId() != null)
                 {
-                    lgRecptDetail.setCreatedBy(user);
-                    lgRecptDetail.setModifiedBy(user);
+                    lgRecptDetail.setCreatedBy(user.getId());
+                    lgRecptDetail.setModifiedBy(user.getId());
                     lgRecptDetail.setCreatedDate(currDate);
                     lgRecptDetail.setModifiedDate(currDate);
                 }

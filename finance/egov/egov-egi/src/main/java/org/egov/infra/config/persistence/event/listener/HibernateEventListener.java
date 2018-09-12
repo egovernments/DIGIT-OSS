@@ -109,8 +109,8 @@ public class HibernateEventListener implements SaveOrUpdateEventListener, PreUpd
             final BaseModel entity = (BaseModel) session.getPersistenceContext().unproxyAndReassociate(object);
             if (entity.getCreatedBy() == null) {
                 entity.setCreatedDate(currentDate);
-                entity.setCreatedBy(usr);
-                entity.setModifiedBy(usr);
+                entity.setCreatedBy(usr.getId());
+                entity.setModifiedBy(usr.getId());
                 entity.setModifiedDate(currentDate);
             }
 

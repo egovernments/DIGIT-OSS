@@ -224,7 +224,10 @@ public class MicroserviceUtils {
 		final RestTemplate restTemplate = createRestTemplate();
 				
 		final String dept_url = deptServiceUrl+"?tenantId="+getTenentId();
+<<<<<<< HEAD
 //		final String dept_url = deptServiceUrl+"?tenantId="+"default";
+=======
+>>>>>>> branch 'coexistence' of https://github.com/egovernments/eGov-Punjab-Implementation.git
 		RequestInfo requestInfo = new RequestInfo();
 		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 		

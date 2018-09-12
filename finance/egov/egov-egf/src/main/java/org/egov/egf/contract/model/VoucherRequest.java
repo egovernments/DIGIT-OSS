@@ -50,187 +50,35 @@ package org.egov.egf.contract.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.egov.infra.microservice.models.RequestInfo;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class VoucherRequest {
 
-    private Long id;
-    private String name;
-    private String type;
-    private String voucherNumber;
-    private String description;
-    private String voucherDate;
-    private FundContract fund;
-    private FiscalPeriodContract fiscalPeriod;
-    private EgwStatusContract status;
-    private Long originalVhId;
-    private Long refVhId;
-    private String cgvn;
-    private Long moduleId;
-    private Long department;
-    private String source;
-    private SchemeContract scheme;
-    private SchemeContract subScheme;
-    private FunctionaryContract functionary;
-    private FundsourceContract fundsource;
-    private List<AccountDetailContract> ledgers = new ArrayList<>(0);
+  
 
-    public String getName() {
-        return name;
+	@JsonProperty("vouchers")
+    private List<Voucher> vouchers = new ArrayList<>(0);
+    @JsonProperty("RequestInfo")
+    private RequestInfo requestInfo;
+
+    
+    
+    public List<Voucher> getVouchers() {
+  		return vouchers;
+  	}
+
+  	public void setVouchers(List<Voucher> vouchers) {
+  		this.vouchers = vouchers;
+  	}
+
+    public RequestInfo getRequestInfo() {
+        return requestInfo;
     }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(final String type) {
-        this.type = type;
-    }
-
-    public String getVoucherNumber() {
-        return voucherNumber;
-    }
-
-    public void setVoucherNumber(final String voucherNumber) {
-        this.voucherNumber = voucherNumber;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    public String getVoucherDate() {
-        return voucherDate;
-    }
-
-    public void setVoucherDate(final String voucherDate) {
-        this.voucherDate = voucherDate;
-    }
-
-    public FundContract getFund() {
-        return fund;
-    }
-
-    public void setFund(final FundContract fund) {
-        this.fund = fund;
-    }
-
-    public FiscalPeriodContract getFiscalPeriod() {
-        return fiscalPeriod;
-    }
-
-    public void setFiscalPeriod(final FiscalPeriodContract fiscalPeriod) {
-        this.fiscalPeriod = fiscalPeriod;
-    }
-
-    public EgwStatusContract getStatus() {
-        return status;
-    }
-
-    public void setStatus(final EgwStatusContract status) {
-        this.status = status;
-    }
-
-    public Long getOriginalVhId() {
-        return originalVhId;
-    }
-
-    public void setOriginalVhId(final Long originalVhId) {
-        this.originalVhId = originalVhId;
-    }
-
-    public Long getRefVhId() {
-        return refVhId;
-    }
-
-    public void setRefVhId(final Long refVhId) {
-        this.refVhId = refVhId;
-    }
-
-    public String getCgvn() {
-        return cgvn;
-    }
-
-    public void setCgvn(final String cgvn) {
-        this.cgvn = cgvn;
-    }
-
-    public Long getModuleId() {
-        return moduleId;
-    }
-
-    public void setModuleId(final Long moduleId) {
-        this.moduleId = moduleId;
-    }
-
-    public List<AccountDetailContract> getLedgers() {
-        return ledgers;
-    }
-
-    public void setLedgers(final List<AccountDetailContract> ledgers) {
-        this.ledgers = ledgers;
-    }
-
-    public Long getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(final Long department) {
-        this.department = department;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(final Long id) {
-        this.id = id;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(final String source) {
-        this.source = source;
-    }
-
-    public SchemeContract getScheme() {
-        return scheme;
-    }
-
-    public void setScheme(final SchemeContract scheme) {
-        this.scheme = scheme;
-    }
-
-    public FunctionaryContract getFunctionary() {
-        return functionary;
-    }
-
-    public void setFunctionary(final FunctionaryContract functionary) {
-        this.functionary = functionary;
-    }
-
-    public FundsourceContract getFundsource() {
-        return fundsource;
-    }
-
-    public void setFundsource(final FundsourceContract fundsource) {
-        this.fundsource = fundsource;
-    }
-
-    public SchemeContract getSubScheme() {
-        return subScheme;
-    }
-
-    public void setSubScheme(final SchemeContract subScheme) {
-        this.subScheme = subScheme;
+    public void setRequestInfo(final RequestInfo requestInfo) {
+        this.requestInfo = requestInfo;
     }
 
 }

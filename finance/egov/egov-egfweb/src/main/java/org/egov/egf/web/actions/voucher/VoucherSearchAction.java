@@ -124,6 +124,7 @@ public class VoucherSearchAction extends BaseFormAction {
 	List<String> voucherTypes = VoucherHelper.VOUCHER_TYPES;
 	Map<String, List<String>> voucherNames = VoucherHelper.VOUCHER_TYPE_NAMES;
 	private FinancialYearDAO financialYearDAO;
+	private Department deptImpl = new Department();
 
 	@Override
 	public Object getModel() {
@@ -133,7 +134,7 @@ public class VoucherSearchAction extends BaseFormAction {
 	public VoucherSearchAction() {
 		LOGGER.error("creating instance of VoucherSearchAction ");
 		voucherHeader.setVouchermis(new Vouchermis());
-		addRelatedEntity("vouchermis.departmentid", Department.class);
+		addRelatedEntity("vouchermis.departmentcode", String.class);
 		addRelatedEntity("fundId", Fund.class);
 		addRelatedEntity("vouchermis.schemeid", Scheme.class);
 		addRelatedEntity("vouchermis.subschemeid", SubScheme.class);
@@ -148,7 +149,7 @@ public class VoucherSearchAction extends BaseFormAction {
 		getHeaderFields();
 		populateSourceMap();
 		if (headerFields.contains("department"))
-			addDropdownData("departmentList", persistenceService.findAllBy("from Department order by name"));
+			addDropdownData("departmentList",microserviceUtils.getDepartments());
 		if (headerFields.contains("functionary"))
 			addDropdownData("functionaryList",
 					persistenceService.findAllBy(" from Functionary where isactive=true order by name"));
@@ -253,6 +254,7 @@ public class VoucherSearchAction extends BaseFormAction {
 		boolean ismodifyJv = false;
 		voucherList = new ArrayList<Map<String, Object>>();
 		Map<String, Object> voucherMap = null;
+		voucherHeader.getVouchermis().setDepartmentcode(deptImpl.getCode());
 		if (null != parameters.get("showMode"))
 			showMode = parameters.get("showMode")[0];
 		if (voucherHeader.getModuleId() != null && voucherHeader.getModuleId() == -1)
@@ -289,9 +291,11 @@ public class VoucherSearchAction extends BaseFormAction {
 				voucherMap.put("vouchernumber", voucherheader.getVoucherNumber());
 				voucherMap.put("type", voucherheader.getType());
 				voucherMap.put("name", voucherheader.getName());
+				if(voucherheader.getVouchermis().getDepartmentcode()!=null && !voucherheader.getVouchermis().getDepartmentcode().equals("-1")){
 				List<org.egov.infra.microservice.models.Department> depList = microserviceUtils
-						.getDepartmentByCode(voucherHeader.getVouchermis().getDepartmentcode());
+						.getDepartmentByCode(voucherheader.getVouchermis().getDepartmentcode());
 				voucherMap.put("deptName", depList.get(0).getName());
+				}
 				voucherMap.put("voucherdate", voucherheader.getVoucherDate());
 				voucherMap.put("fundname", voucherheader.getFundId().getName());
 				if (voucherheader.getModuleId() == null)
@@ -330,9 +334,11 @@ public class VoucherSearchAction extends BaseFormAction {
 					voucherMap.put("vouchernumber", voucherheader.getVoucherNumber());
 					voucherMap.put("type", voucherheader.getType());
 					voucherMap.put("name", voucherheader.getName());
+					if(voucherheader.getVouchermis().getDepartmentcode()!=null && !voucherheader.getVouchermis().getDepartmentcode().equals("-1")){
 					List<org.egov.infra.microservice.models.Department> depList = microserviceUtils
 							.getDepartmentByCode(voucherheader.getVouchermis().getDepartmentcode());
 					voucherMap.put("deptName", depList.get(0).getName());
+					}
 					voucherMap.put("voucherdate", voucherheader.getVoucherDate());
 					voucherMap.put("fundname", voucherheader.getFundId().getName());
 					if (voucherheader.getModuleId() == null)
@@ -541,5 +547,13 @@ public class VoucherSearchAction extends BaseFormAction {
 	public void setVoucherNames(final Map<String, List<String>> voucherNames) {
 		this.voucherNames = voucherNames;
 	}
+	
+    public Department getDeptImpl() {
+        return deptImpl;
+    }
+
+    public void setDeptImpl(final Department deptImpl) {
+        this.deptImpl = deptImpl;
+    }
 
 }

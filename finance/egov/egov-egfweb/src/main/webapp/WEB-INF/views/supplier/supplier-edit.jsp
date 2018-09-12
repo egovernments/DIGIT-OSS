@@ -50,18 +50,24 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
 <form:form role="form" action="/EGF/supplier/update" modelAttribute="supplier" id="supplierForm" cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
-	<%@ include file="supplier-form.jsp"%>
-	<input type="hidden" name="supplier" value="${supplier.id}" />
-	</div>
-	</div>
-	</div>
-	</div>
-	<div class="form-group">
-		<div class="text-center">
-			<button type='submit' class='btn btn-primary' id="buttonSubmit"> <spring:message code='lbl.update' /> </button>
-			<a href='javascript:void(0)' class='btn btn-default' onclick='self.close()'><spring:message code='lbl.close' /></a>
+<div class="main-content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-primary" data-collapsed="0">
+				<div class="panel-heading">
+					<div class="panel-title"><spring:message code="title.supplier.edit" /></div>
+				</div>	
+				<%@ include file="supplier-form.jsp"%>
+				<div class="form-group">
+					<div class="text-center">
+						<button type='submit' class='btn btn-primary' id="buttonSubmit"> <spring:message code='lbl.update' /> </button>
+						<a href='javascript:void(0)' class='btn btn-default' onclick='self.close()'><spring:message code='lbl.close' /></a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
+</div>
 </form:form>
 <script>
 	$('#buttonSubmit').click(function(e) {
