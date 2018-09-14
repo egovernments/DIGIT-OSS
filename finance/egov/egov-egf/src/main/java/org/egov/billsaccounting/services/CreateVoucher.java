@@ -1141,10 +1141,14 @@ public class CreateVoucher {
 				if (!isUniqueVN(vh.getVoucherNumber(), vdt))
 					throw new ValidationException(
 							Arrays.asList(new ValidationError("Duplicate Voucher Number", "Duplicate Voucher Number")));
-			} catch (final Exception e) {
+			} catch (final ValidationException e) {
 				LOGGER.error(ERR, e);
-				throw new ApplicationRuntimeException(e.getMessage());
+				throw e;
 			}
+			 catch (final Exception e) {
+					LOGGER.error(ERR, e);
+					throw new ApplicationRuntimeException(e.getMessage());
+				}
 			voucherService.applyAuditing(vh);
 			if (LOGGER.isInfoEnabled())
 				LOGGER.info("++++++++++++++++++" + vh.toString());
@@ -1839,6 +1843,11 @@ public class CreateVoucher {
 		// List<Transaxtion> transaxtionList = new ArrayList<Transaxtion>();
 		BigDecimal totaldebitAmount = BigDecimal.valueOf(0);
 		BigDecimal totalcreditAmount = BigDecimal.valueOf(0);
+		if(accountcodedetails.isEmpty())
+		{
+			ValidationError error=new ValidationError("Account details Missing","Account details Missing");
+			throw new ValidationException(Arrays.asList(error));
+		}
 		final Map<String, BigDecimal> accDetAmtMap = new HashMap<String, BigDecimal>();
 		for (final HashMap<String, Object> accDetailMap : accountcodedetails) {
 

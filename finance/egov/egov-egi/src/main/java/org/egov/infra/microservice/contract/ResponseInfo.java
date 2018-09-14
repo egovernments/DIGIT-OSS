@@ -47,6 +47,9 @@
  */
 package org.egov.infra.microservice.contract;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public class ResponseInfo {
 
     private String apiId;
@@ -108,5 +111,38 @@ public class ResponseInfo {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	@Override
+	public String toString() {
+		return "ResponseInfo [apiId=" + apiId + ", ver=" + ver + ", ts=" + ts + ", resMsgId=" + resMsgId + ", msgId="
+				+ msgId + ", status=" + status + "]";
+	}
+	 public enum StatusEnum {
+	        SUCCESSFUL("SUCCESSFUL"),
+	        
+	        FAILED("FAILED");
+
+	        private String value;
+
+	        StatusEnum(String value) {
+	          this.value = value;
+	        }
+
+	        @Override
+	        @JsonValue
+	        public String toString() {
+	          return String.valueOf(value);
+	        }
+
+	        @JsonCreator
+	        public static StatusEnum fromValue(String text) {
+	          for (StatusEnum b : StatusEnum.values()) {
+	            if (String.valueOf(b.value).equals(text)) {
+	              return b;
+	            }
+	          }
+	          return null;
+	        }
+	      }
     
 }

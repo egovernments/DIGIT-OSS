@@ -506,7 +506,7 @@ public class ChartOfAccounts {
 			throws Exception, ValidationException {
 
 		if (!checkBudget(txnList))
-			throw new Exception(FinancialConstants.BUDGET_CHECK_ERROR_MESSAGE);
+			throw new TaskFailedException(FinancialConstants.BUDGET_CHECK_ERROR_MESSAGE);
 		// if objects are lost load them
 		loadAccountData();
 		try {

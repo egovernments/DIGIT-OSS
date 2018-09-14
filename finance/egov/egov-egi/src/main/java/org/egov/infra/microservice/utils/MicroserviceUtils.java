@@ -73,6 +73,7 @@ import org.egov.infra.microservice.contract.Position;
 import org.egov.infra.microservice.contract.PositionRequest;
 import org.egov.infra.microservice.contract.PositionResponse;
 import org.egov.infra.microservice.contract.RequestInfoWrapper;
+import org.egov.infra.microservice.models.ResponseInfo;
 import org.egov.infra.microservice.contract.Task;
 import org.egov.infra.microservice.contract.TaskResponse;
 import org.egov.infra.microservice.contract.UserDetailResponse;
@@ -91,6 +92,7 @@ import org.egov.infra.persistence.entity.enums.UserType;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.web.rest.handler.RestErrorHandler;
 import org.egov.infra.web.support.ui.Inbox;
+import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -115,10 +117,10 @@ public class MicroserviceUtils {
 
 	@Autowired
 	private Environment environment;
-	
+
 	@Autowired
 	public RedisTemplate<Object, Object> redisTemplate;
-	
+
 	@Autowired
 	private RoleService roleService;
 
@@ -136,40 +138,38 @@ public class MicroserviceUtils {
 
 	@Value("${egov.services.user.approvers.url}")
 	private String approverSrvcUrl;
-	
+
 	@Value("${egov.services.user.authsrvc.url}")
 	private String authSrvcUrl;
-	
+
 	@Value("${egov.services.master.poistion.url}")
 	private String positionSrvcUrl;
-	
+
 	@Value("${egov.services.master.actions.url}")
 	private String actionSrvcUrl;
-	
+
 	@Value("${egov.services.user.search.url}")
 	private String userSrcUrl;
-	
+
 	@Value("${egov.services.user.token.url}")
 	private String tokenGenUrl;
-	
 
-	
 	public RequestInfo createRequestInfo() {
 		final RequestInfo requestInfo = new RequestInfo();
 		requestInfo.setApiId("apiId");
 		requestInfo.setVer("ver");
 		requestInfo.setTs(new Date());
-//		requestInfo.setUserInfo(getUserInfo());
+		// requestInfo.setUserInfo(getUserInfo());
 		return requestInfo;
 	}
 
-	public RestTemplate createRestTemplate(){
+	public RestTemplate createRestTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.setErrorHandler(new RestErrorHandler());
-		
+
 		return restTemplate;
 	}
-	
+
 	public UserInfo getUserInfo() {
 		final User user = securityUtils.getCurrentUser();
 		final List<org.egov.infra.microservice.models.RoleInfo> roles = new ArrayList<org.egov.infra.microservice.models.RoleInfo>();
@@ -179,21 +179,19 @@ public class MicroserviceUtils {
 		return new UserInfo(roles, user.getId(), user.getUsername(), user.getName(), user.getEmailId(),
 				user.getMobileNumber(), user.getType().toString(), getTenentId());
 	}
-	
-	
 
 	public String getTenentId() {
 		final String clientId = environment.getProperty(CLIENT_ID);
 		String tenantId = ApplicationThreadLocals.getUserTenantId();
-//		if (isNotBlank(clientId)) {
-//			final StringBuilder stringBuilder = new StringBuilder();
-//			stringBuilder.append(clientId).append('.').append(tenantId);
-//			tenantId = stringBuilder.toString();
-//		}
+		// if (isNotBlank(clientId)) {
+		// final StringBuilder stringBuilder = new StringBuilder();
+		// stringBuilder.append(clientId).append('.').append(tenantId);
+		// tenantId = stringBuilder.toString();
+		// }
 		return tenantId;
 	}
-	
-	public String getAdminToken(){
+
+	public String getAdminToken() {
 		return ApplicationThreadLocals.getAdminToken();
 	}
 
@@ -222,64 +220,62 @@ public class MicroserviceUtils {
 	public List<Department> getDepartments() {
 
 		final RestTemplate restTemplate = createRestTemplate();
-				
-		final String dept_url = deptServiceUrl+"?tenantId="+getTenentId();
 
-//		final String dept_url = deptServiceUrl+"?tenantId="+"default";
+		final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId();
+
+		// final String dept_url = deptServiceUrl+"?tenantId="+"default";
 
 		RequestInfo requestInfo = new RequestInfo();
 		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-		
+
 		requestInfo.setAuthToken(getAdminToken());
 		requestInfo.setTs(new Date());
 		reqWrapper.setRequestInfo(requestInfo);
 
-		DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper,
-				DepartmentResponse.class);
+		DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
 		return depResponse.getDepartment();
 	}
-	
+
 	public List<Department> getDepartmentsById(Long departmentId) {
 
 		final RestTemplate restTemplate = createRestTemplate();
-		final String dept_url = deptServiceUrl+"?tenantId="+getTenentId()+"&id="+departmentId;
+		final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId() + "&id=" + departmentId;
 
 		RequestInfo requestInfo = new RequestInfo();
 		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-		
+
 		requestInfo.setAuthToken(getAdminToken());
 		requestInfo.setTs(new Date());
 		reqWrapper.setRequestInfo(requestInfo);
 
-		DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper,
-				DepartmentResponse.class);
+		DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
 		return depResponse.getDepartment();
 	}
-	
+
 	public List<Department> getDepartmentByCode(String departmentCode) {
 		final RestTemplate restTemplate = new RestTemplate();
-		final String dept_url = deptServiceUrl+"?tenantId="+getTenentId()+"&code="+departmentCode;
+		final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId() + "&code=" + departmentCode;
 
 		RequestInfo requestInfo = new RequestInfo();
 		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-		
+
 		requestInfo.setAuthToken(getAdminToken());
 		requestInfo.setTs(new Date());
 		reqWrapper.setRequestInfo(requestInfo);
 
-		DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper,
-				DepartmentResponse.class);
+		DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
 		return depResponse.getDepartment();
 	}
 
-	public List<Designation> getDesignation(String code){
-		
-		final RestTemplate restTemplate = createRestTemplate();
-		String design_url = designServiceUrl+"?tenantId="+getTenentId();
-//		String design_url = designServiceUrl+"?tenantId="+"default";
+	public List<Designation> getDesignation(String code) {
 
-		if(code!=null)design_url = design_url +"&code="+code;
-		
+		final RestTemplate restTemplate = createRestTemplate();
+		String design_url = designServiceUrl + "?tenantId=" + getTenentId();
+		// String design_url = designServiceUrl+"?tenantId="+"default";
+
+		if (code != null)
+			design_url = design_url + "&code=" + code;
+
 		RequestInfo requestInfo = new RequestInfo();
 		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
@@ -291,25 +287,24 @@ public class MicroserviceUtils {
 				DesignationResponse.class);
 		return designResponse.getDesignation();
 	}
+
 	public List<Designation> getDesignation() {
 		return this.getDesignation(null);
-		}
+	}
 
-	public List<EmployeeInfo> getApprovers(String departmentId,String designationId) {
+	public List<EmployeeInfo> getApprovers(String departmentId, String designationId) {
 
 		final RestTemplate restTemplate = createRestTemplate();
-		
+
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		
-		final String approver_url = approverSrvcUrl 
-					+"?tenantId="+getTenentId()
-					+"&assignment.departmentId"+departmentId
-					+"&assignment.designationId"+designationId
-					+"&asOnDate"+dateFormat.format(new Date());
+
+		final String approver_url = approverSrvcUrl + "?tenantId=" + getTenentId() + "&assignment.departmentId"
+				+ departmentId + "&assignment.designationId" + designationId + "&asOnDate"
+				+ dateFormat.format(new Date());
 
 		RequestInfo requestInfo = new RequestInfo();
 		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-		//tenantId=default&assignment.departmentId=1&assignment.designationId=1&asOnDate=28/07/2018
+		// tenantId=default&assignment.departmentId=1&assignment.designationId=1&asOnDate=28/07/2018
 
 		requestInfo.setAuthToken(getAdminToken());
 		requestInfo.setTs(new Date());
@@ -321,114 +316,115 @@ public class MicroserviceUtils {
 		return empResponse.getEmployees();
 	}
 
-	public CustomUserDetails getUserDetails(String user_token,String admin_token){
+	public CustomUserDetails getUserDetails(String user_token, String admin_token) {
 		final RestTemplate restT = createRestTemplate();
-    	final String authurl = authSrvcUrl+"?access_token="+user_token;
-    	
-    	RequestInfo reqInfo = new RequestInfo();
-    	RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-    	
-    	reqInfo.setAuthToken(admin_token);
-    	reqWrapper.setRequestInfo(reqInfo);
-    	
-    	
-    	CustomUserDetails user = restT.postForObject(authurl, reqWrapper,CustomUserDetails.class);
-    	return user;
+		final String authurl = authSrvcUrl + "?access_token=" + user_token;
+
+		RequestInfo reqInfo = new RequestInfo();
+		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+		reqInfo.setAuthToken(admin_token);
+		reqWrapper.setRequestInfo(reqInfo);
+
+		CustomUserDetails user = restT.postForObject(authurl, reqWrapper, CustomUserDetails.class);
+		return user;
 	}
-	
-	public String generateAdminToken(){
+
+	public String generateAdminToken() {
 		final RestTemplate restTemplate = createRestTemplate();
-		
+
 		HttpHeaders header = new HttpHeaders();
 		header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		header.add("Authorization", "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0");
-		
-		MultiValueMap<String,String> map = new LinkedMultiValueMap<>();
+
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 		map.add("username", "rama");
 		map.add("scope", "read");
 		map.add("password", "12345678");
 		map.add("grant_type", "password");
 		map.add("tenantId", "pb.jalandhar");
 		map.add("userType", "EMPLOYEE");
-		
-		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map,header);
-		
+
+		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, header);
+
 		try {
 			Object response = restTemplate.postForObject(this.tokenGenUrl, request, Object.class);
-			if(response!=null)
-				return String.valueOf(((HashMap)response).get("access_token"));
+			if (response != null)
+				return String.valueOf(((HashMap) response).get("access_token"));
 		} catch (RestClientException e) {
 			// TODO Auto-generated catch block
 			return null;
 		}
 		return null;
 	}
-	
-	public UserSearchResponse getUserInfo(String auth_token,String tenantId,String userName){
+
+	public UserSearchResponse getUserInfo(String auth_token, String tenantId, String userName) {
 		final RestTemplate restT = createRestTemplate();
-		
+
 		RequestInfo req_header = new RequestInfo();
 		UserSearchRequest request = new UserSearchRequest();
-		
+
 		req_header.setAuthToken(auth_token);
 		request.setRequestInfo(req_header);
 		request.setUserName(userName);
 		request.setTenantId(tenantId);
-		
+
 		UserSearchResponse response = restT.postForObject(this.userSrcUrl, request, UserSearchResponse.class);
 		return response;
 	}
-	
-	public PositionResponse createPosition(String access_token,List<Position> positions){
-		
+
+	public PositionResponse createPosition(String access_token, List<Position> positions) {
+
 		final RestTemplate restT = createRestTemplate();
-		
+
 		PositionRequest posrequest = new PositionRequest();
 		RequestInfo req_header = new RequestInfo();
-		
+
 		req_header.setAuthToken(access_token);
 		posrequest.setRequestInfo(req_header);
 		posrequest.setPosition(positions);
-		
+
 		PositionResponse response = restT.postForObject(this.positionSrvcUrl, posrequest, PositionResponse.class);
-		
+
 		return response;
-		
+
 	}
-	
-	public ActionResponse getActions(String authtoken,List<String> roles){
-		
+
+	public ActionResponse getActions(String authtoken, List<String> roles) {
+
 		final RestTemplate restT = createRestTemplate();
-		ActionRequest request  = new ActionRequest();
+		ActionRequest request = new ActionRequest();
 		RequestInfo req_header = new RequestInfo();
-		
+
 		req_header.setAuthToken(authtoken);
 		request.setRequestInfo(req_header);
 		request.setTenantId(getTenentId());
 		request.setRoleCodes(roles);
 		request.setActionMaster("actions-test");
 		request.setEnabled(true);
-		
+
 		ActionResponse response = restT.postForObject(this.actionSrvcUrl, request, ActionResponse.class);
-		
-//		response.getActions()
+
+		// response.getActions()
 		return response;
 	}
-	
-	public List<EmployeeInfo> getEmployee(Long empId,Date toDay,String departmentId,String designationId){
-		
-		
+
+	public List<EmployeeInfo> getEmployee(Long empId, Date toDay, String departmentId, String designationId) {
+
 		final RestTemplate restTemplate = createRestTemplate();
-		
+
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		StringBuilder empUrl = new StringBuilder(this.approverSrvcUrl);
-		empUrl.append("?tenantId="+getTenentId());
-		
-		if(empId!=0) empUrl.append("&id="+empId);
-		if(toDay!=null) empUrl.append("&asOnDate"+dateFormat.format(toDay));
-		if(departmentId!=null) empUrl.append("&departmentId"+departmentId);
-		if(designationId!=null) empUrl.append("&designationId"+designationId);
-		
+		empUrl.append("?tenantId=" + getTenentId());
+
+		if (empId != 0)
+			empUrl.append("&id=" + empId);
+		if (toDay != null)
+			empUrl.append("&asOnDate" + dateFormat.format(toDay));
+		if (departmentId != null)
+			empUrl.append("&departmentId" + departmentId);
+		if (designationId != null)
+			empUrl.append("&designationId" + designationId);
 
 		RequestInfo requestInfo = new RequestInfo();
 		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -437,10 +433,11 @@ public class MicroserviceUtils {
 		requestInfo.setTs(new Date());
 		reqWrapper.setRequestInfo(requestInfo);
 
-		EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper,EmployeeInfoResponse.class);
+		EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper,
+				EmployeeInfoResponse.class);
 		return empResponse.getEmployees();
 	}
-	
+
 	public List<Task> getTasks() {
 
 		List<Task> tasks = new ArrayList<>();
@@ -481,56 +478,54 @@ public class MicroserviceUtils {
 		}
 		return inboxItems;
 	}
-	
 
 	public boolean hasWorkflowService() {
 		return isNotBlank(workflowServiceUrl);
 	}
 
-
-	public void saveAuthToken(String auth_token,String sessionId){
+	public void saveAuthToken(String auth_token, String sessionId) {
 		this.redisTemplate.opsForValue().set(auth_token, sessionId);
 	}
-	
-	public void SaveSessionToRedis(String access_token,String sessionId,Map<String,String> values){
-		
-		if(null!=access_token && null!=values && values.size()>0){
-			values.keySet().forEach(key->{
+
+	public void SaveSessionToRedis(String access_token, String sessionId, Map<String, String> values) {
+
+		if (null != access_token && null != values && values.size() > 0) {
+			values.keySet().forEach(key -> {
 				this.redisTemplate.opsForHash().putIfAbsent(sessionId, key, values.get(key));
-				});
+			});
 			this.redisTemplate.opsForList().leftPush(access_token, sessionId);
 		}
-		
+
 	}
-	
-	public void savetoRedis(String sessionId,String key, Object obj){
-		 this.redisTemplate.opsForHash().putIfAbsent(sessionId,key,obj);
+
+	public void savetoRedis(String sessionId, String key, Object obj) {
+		this.redisTemplate.opsForHash().putIfAbsent(sessionId, key, obj);
 	}
-	
-	public Object readFromRedis(String sessionId,String key){
+
+	public Object readFromRedis(String sessionId, String key) {
 		return this.redisTemplate.opsForHash().get(sessionId, key);
 	}
-	
-	public void removeSessionFromRedis(String access_token){
-		LOGGER.info("Logout for access/auth token called :: "+access_token);
-		if(this.redisTemplate.hasKey(access_token)){
-			while(this.redisTemplate.opsForList().size(access_token)>0){
+
+	public void removeSessionFromRedis(String access_token) {
+		LOGGER.info("Logout for access/auth token called :: " + access_token);
+		if (this.redisTemplate.hasKey(access_token)) {
+			while (this.redisTemplate.opsForList().size(access_token) > 0) {
 				this.redisTemplate.delete(this.redisTemplate.opsForList().leftPop(access_token));
 			}
 			this.redisTemplate.delete(access_token);
-			}
-		
+		}
+
 	}
-	
-	public void refreshToken(String oldToken,String newToken){
-		LOGGER.info("Refresh Token is called OLD::NEW"+oldToken+" :: "+newToken);
-		if(this.redisTemplate.hasKey(oldToken)){
-			
-			while(this.redisTemplate.opsForList().size(oldToken)>0){
-			
-				Object sessionId =  this.redisTemplate.opsForList().leftPop(oldToken);
-				if(this.redisTemplate.hasKey(sessionId)){
-					if(oldToken.equals(this.redisTemplate.opsForHash().get(sessionId, "ACCESS_TOKEN"))){
+
+	public void refreshToken(String oldToken, String newToken) {
+		LOGGER.info("Refresh Token is called OLD::NEW" + oldToken + " :: " + newToken);
+		if (this.redisTemplate.hasKey(oldToken)) {
+
+			while (this.redisTemplate.opsForList().size(oldToken) > 0) {
+
+				Object sessionId = this.redisTemplate.opsForList().leftPop(oldToken);
+				if (this.redisTemplate.hasKey(sessionId)) {
+					if (oldToken.equals(this.redisTemplate.opsForHash().get(sessionId, "ACCESS_TOKEN"))) {
 						this.redisTemplate.opsForHash().delete(sessionId, "ACCESS_TOKEN");
 						this.redisTemplate.opsForHash().put(sessionId, "ACCESS_TOKEN", newToken);
 						this.redisTemplate.delete(oldToken);
@@ -540,9 +535,26 @@ public class MicroserviceUtils {
 				this.redisTemplate.opsForList().leftPush(newToken, sessionId);
 			}
 			this.redisTemplate.delete(oldToken);
-			
+
 		}
 	}
-	
+
+	public static ResponseInfo getResponseInfo(RequestInfo requestInfo, Integer status, String apiId) {
+		ResponseInfo info = new ResponseInfo();
+
+		if (requestInfo != null) {
+			info.setVer(requestInfo.getVer());
+			info.setResMsgId(requestInfo.getMsgId());
+			info.setApiId(requestInfo.getApiId());
+		} else if (apiId == null)
+			info.setApiId(apiId);
+
+		if (status != null)
+			info.setStatus(status.toString());
+		else
+			Log.error("Code is sending null value for status");
+		info.setTs(new Date().toString());
+		return info;
+	}
 
 }
