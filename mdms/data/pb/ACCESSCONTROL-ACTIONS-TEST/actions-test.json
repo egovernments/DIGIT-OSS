@@ -11567,7 +11567,7 @@
     {
       "id": 1594,
       "name": "Financial getnetpayable code ",
-      "url": "/EGF/common/getnetpayablecodesbyaccountdetailtype",
+      "url": "/services/EGF/common/getnetpayablecodesbyaccountdetailtype",
       "displayName": "getNetPayableCode",
       "orderNumber": 1,
       "enabled": false,
@@ -11578,7 +11578,7 @@
     {
       "id": 1595,
       "name": "Financial getnetpayable code ",
-      "url": "/EGF/common/ajaxfunctionnames",
+      "url": "/services/EGF/common/ajaxfunctionnames",
       "displayName": "getFunctionNames",
       "orderNumber": 1,
       "enabled": false,
@@ -11589,7 +11589,7 @@
     {
       "id": 1596,
       "name": "Financial getnetpayable code ",
-      "url": "/EGF/common/ajaxfunctionnames",
+      "url": "/services/EGF/common/ajaxfunctionnames",
       "displayName": "getFunctionNames",
       "orderNumber": 1,
       "enabled": false,
@@ -11600,7 +11600,7 @@
     {
       "id": 1597,
       "name": "Financial accountcode by detail type",
-      "url": "/EGF/common/getaccountcodesforaccountdetailtype",
+      "url": "/services/EGF/common/getaccountcodesforaccountdetailtype",
       "displayName": "getAccountCode",
       "orderNumber": 1,
       "enabled": false,
@@ -11611,7 +11611,7 @@
     {
       "id": 1598,
       "name": "Financial checklist",
-      "url": "/EGF/common/getchecklistbybillsubtype",
+      "url": "/services/EGF/common/getchecklistbybillsubtype",
       "displayName": "getCheckList",
       "orderNumber": 1,
       "enabled": false,
@@ -11622,7 +11622,7 @@
     {
       "id": 1599,
       "name": "Financial expense bill success",
-      "url": "/EGF/expensebill/success",
+      "url": "/services/EGF/expensebill/success",
       "displayName": "expensebill_success",
       "orderNumber": 1,
       "enabled": false,
@@ -11633,7 +11633,7 @@
     {
       "id": 1600,
       "name": "Financial expense bill success",
-      "url": "/EGF/expensebill/create",
+      "url": "/services/EGF/expensebill/create",
       "displayName": "expensebill_success",
       "orderNumber": 1,
       "enabled": false,
@@ -11752,7 +11752,7 @@
     {
 	   "id": 1610,
 	   "name": "billRegisterSearch",
-	   "url": "/EGF/bill/billRegisterSearch.action",
+	   "url": "/services/EGF/bill/billRegisterSearch.action",
 	   "parentModule": null,
 	   "displayName": "billRegisterSearch",
 	   "orderNumber": null,
@@ -11765,7 +11765,7 @@
  {
    "id": 1611,
    "name": "budgetGroup",
-   "url": "/EGF/budget/budgetGroup.action",
+   "url": "/services/EGF/budget/budgetGroup.action",
    "parentModule": null,
    "displayName": "budgetGroup",
    "orderNumber": null,
@@ -11778,7 +11778,7 @@
  {
    "id": 1612,
    "name": "PaymentModify",
-   "url": "/EGF/payment/payment-modify.action",
+   "url": "/services/EGF/payment/payment-modify.action",
    "parentModule": null,
    "displayName": "PaymentModify",
    "orderNumber": null,
@@ -11791,7 +11791,7 @@
  {
    "id": 1613,
    "name": "CBillEdit",
-   "url": "/EGF/bill/contingentBill-beforeEdit.action",
+   "url": "/services/EGF/bill/contingentBill-beforeEdit.action",
    "parentModule": null,
    "displayName": "CBillEdit",
    "orderNumber": null,
@@ -11804,7 +11804,7 @@
  {
    "id": 1614,
    "name": "ContraModify",
-   "url": "/EGF/contra/contraBTB-beforeEdit.action",
+   "url": "/services/EGF/contra/contraBTB-beforeEdit.action",
    "parentModule": null,
    "displayName": "ContraModify",
    "orderNumber": null,
@@ -11817,7 +11817,7 @@
  {
    "id": 1615,
    "name": "ajax-common-loadbankBranch",
-   "url": "/EGF/voucher/common-ajaxLoadBankBranch.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBankBranch.action",
    "parentModule": null,
    "displayName": "ajax-common-loadbankBranch",
    "orderNumber": null,
@@ -11830,7 +11830,7 @@
  {
    "id": 1616,
    "name": "ajax-common-schemeby20",
-   "url": "/EGF/voucher/common-ajaxLoadSchemeBy20.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadSchemeBy20.action",
    "parentModule": null,
    "displayName": "ajax-common-schemeby20",
    "orderNumber": null,
@@ -11843,7 +11843,7 @@
  {
    "id": 1617,
    "name": "ajax-common-subschemeby20",
-   "url": "/EGF/voucher/common-ajaxLoadSubSchemeBy20.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadSubSchemeBy20.action",
    "parentModule": null,
    "displayName": "ajax-common-subschemeby20",
    "orderNumber": null,
@@ -11856,7 +11856,7 @@
  {
    "id": 1618,
    "name": "exil-subledrep",
-   "url": "/EGF/Reports/SubLedgerReport.jsp",
+   "url": "/services/EGF/Reports/SubLedgerReport.jsp",
    "parentModule": null,
    "displayName": "exil-subledrep",
    "orderNumber": null,
@@ -11869,7 +11869,7 @@
  {
    "id": 1619,
    "name": "ajax-common-detailcode",
-   "url": "/EGF/voucher/common-getDetailCode.action",
+   "url": "/services/EGF/voucher/common-getDetailCode.action",
    "parentModule": null,
    "displayName": "ajax-common-detailcode",
    "orderNumber": null,
@@ -11882,7 +11882,7 @@
  {
    "id": 1620,
    "name": "ajax-common-detailtype",
-   "url": "/EGF/voucher/common-getDetailType.action",
+   "url": "/services/EGF/voucher/common-getDetailType.action",
    "parentModule": null,
    "displayName": "ajax-common-detailtype",
    "orderNumber": null,
@@ -11895,7 +11895,7 @@
  {
    "id": 1621,
    "name": "ajax-common-entityby20",
-   "url": "/EGF/voucher/common-ajaxLoadEntitesBy20.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadEntitesBy20.action",
    "parentModule": null,
    "displayName": "ajax-common-entityby20",
    "orderNumber": null,
@@ -11908,7 +11908,7 @@
  {
    "id": 1622,
    "name": "payment-viewInboxItems",
-   "url": "/EGF/payment/basePayment-viewInboxItems.action",
+   "url": "/services/EGF/payment/basePayment-viewInboxItems.action",
    "parentModule": null,
    "displayName": "payment-viewInboxItems",
    "orderNumber": null,
@@ -11921,7 +11921,7 @@
  {
    "id": 1623,
    "name": "payment-dbp-viewInboxItem",
-   "url": "/EGF/payment/directBankPayment-viewInboxItem.action",
+   "url": "/services/EGF/payment/directBankPayment-viewInboxItem.action",
    "parentModule": null,
    "displayName": "payment-dbp-viewInboxItem",
    "orderNumber": null,
@@ -11934,7 +11934,7 @@
  {
    "id": 1624,
    "name": "payment-print",
-   "url": "/EGF/report/billPaymentVoucherPrint.action",
+   "url": "/services/EGF/report/billPaymentVoucherPrint.action",
    "parentModule": null,
    "displayName": "payment-print",
    "orderNumber": null,
@@ -11947,7 +11947,7 @@
  {
    "id": 1625,
    "name": "ajax-common-bankcheqassigned",
-   "url": "/EGF/voucher/common-ajaxLoadBanksAccountsWithAssignedCheques.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBanksAccountsWithAssignedCheques.action",
    "parentModule": null,
    "displayName": "ajax-common-bankcheqassigned",
    "orderNumber": null,
@@ -11960,7 +11960,7 @@
  {
    "id": 1626,
    "name": "ajax-common-validatecheque",
-   "url": "/EGF/voucher/common-ajaxValidateChequeNumber.action",
+   "url": "/services/EGF/voucher/common-ajaxValidateChequeNumber.action",
    "parentModule": null,
    "displayName": "ajax-common-validatecheque",
    "orderNumber": null,
@@ -11973,7 +11973,7 @@
  {
    "id": 1627,
    "name": "ajax-common-accnum",
-   "url": "/EGF/voucher/common-ajaxLoadAccNum.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadAccNum.action",
    "parentModule": null,
    "displayName": "ajax-common-accnum",
    "orderNumber": null,
@@ -11986,7 +11986,7 @@
  {
    "id": 1628,
    "name": "jv-crud",
-   "url": "/EGF/voucher/journalVoucher.action",
+   "url": "/services/EGF/voucher/journalVoucher.action",
    "parentModule": null,
    "displayName": "jv-crud",
    "orderNumber": null,
@@ -11999,7 +11999,7 @@
  {
    "id": 1629,
    "name": "jv-print-crud",
-   "url": "/EGF/voucher/journalVoucherPrint.action",
+   "url": "/services/EGF/voucher/journalVoucherPrint.action",
    "parentModule": null,
    "displayName": "jv-print-crud",
    "orderNumber": null,
@@ -12012,7 +12012,7 @@
  {
    "id": 1630,
    "name": "jv-beforemodify",
-   "url": "/EGF/voucher/journalVoucherModify-beforeModify.action",
+   "url": "/services/EGF/voucher/journalVoucherModify-beforeModify.action",
    "parentModule": null,
    "displayName": "jv-beforemodify",
    "orderNumber": null,
@@ -12025,7 +12025,7 @@
  {
    "id": 1631,
    "name": "jv-modify-crud",
-   "url": "/EGF/voucher/journalVoucherModify.action",
+   "url": "/services/EGF/voucher/journalVoucherModify.action",
    "parentModule": null,
    "displayName": "jv-modify-crud",
    "orderNumber": null,
@@ -12038,7 +12038,7 @@
  {
    "id": 1632,
    "name": "recovery-crud",
-   "url": "/EGF/deduction/remitRecovery.action",
+   "url": "/services/EGF/deduction/remitRecovery.action",
    "parentModule": null,
    "displayName": "recovery-crud",
    "orderNumber": null,
@@ -12051,7 +12051,7 @@
  {
    "id": 1633,
    "name": "ajax-common-codesofdetailtype",
-   "url": "/EGF/voucher/common-ajaxLoadCodesOfDetailType.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadCodesOfDetailType.action",
    "parentModule": null,
    "displayName": "ajax-common-codesofdetailtype",
    "orderNumber": null,
@@ -12064,7 +12064,7 @@
  {
    "id": 1634,
    "name": "ajax-common-checklist",
-   "url": "/EGF/voucher/common-ajaxLoadCheckList.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadCheckList.action",
    "parentModule": null,
    "displayName": "ajax-common-checklist",
    "orderNumber": null,
@@ -12077,7 +12077,7 @@
  {
    "id": 1635,
    "name": "cbill-crud",
-   "url": "/EGF/bill/contingentBill.action",
+   "url": "/services/EGF/bill/contingentBill.action",
    "parentModule": null,
    "displayName": "cbill-crud",
    "orderNumber": null,
@@ -12090,7 +12090,7 @@
  {
    "id": 1636,
    "name": "cbill-print",
-   "url": "/EGF/bill/expenseBillPrint-print.action",
+   "url": "/services/EGF/bill/expenseBillPrint-print.action",
    "parentModule": null,
    "displayName": "cbill-print",
    "orderNumber": null,
@@ -12103,7 +12103,7 @@
  {
    "id": 1637,
    "name": "cbill-ajaxprint",
-   "url": "/EGF/bill/expenseBillPrint-ajaxPrint.action",
+   "url": "/services/EGF/bill/expenseBillPrint-ajaxPrint.action",
    "parentModule": null,
    "displayName": "cbill-ajaxprint",
    "orderNumber": null,
@@ -12116,7 +12116,7 @@
  {
    "id": 1638,
    "name": "payment-view",
-   "url": "/EGF/payment/payment-view.action",
+   "url": "/services/EGF/payment/payment-view.action",
    "parentModule": null,
    "displayName": "payment-view",
    "orderNumber": null,
@@ -12129,7 +12129,7 @@
  {
    "id": 1639,
    "name": "cbill-print-crud",
-   "url": "/EGF/bill/expenseBillPrint.action",
+   "url": "/services/EGF/bill/expenseBillPrint.action",
    "parentModule": null,
    "displayName": "cbill-print-crud",
    "orderNumber": null,
@@ -12142,7 +12142,7 @@
  {
    "id": 1640,
    "name": "Contra-BTC-ajaxAvailableBalance",
-   "url": "/EGF/contra/contraBTC-ajaxAvailableBalance.action",
+   "url": "/services/EGF/contra/contraBTC-ajaxAvailableBalance.action",
    "parentModule": null,
    "displayName": "Contra-BTC-ajaxAvailableBalance",
    "orderNumber": null,
@@ -12155,7 +12155,7 @@
  {
    "id": 1641,
    "name": "Ajax-loadAccNumNarrationAndFund",
-   "url": "/EGF/voucher/common-loadAccNumNarrationAndFund.action",
+   "url": "/services/EGF/voucher/common-loadAccNumNarrationAndFund.action",
    "parentModule": null,
    "displayName": "Ajax-loadAccNumNarrationAndFund",
    "orderNumber": null,
@@ -12168,7 +12168,7 @@
  {
    "id": 1642,
    "name": "Ajax-load Banks",
-   "url": "/EGF/voucher/common-ajaxLoadBanks.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBanks.action",
    "parentModule": null,
    "displayName": "Ajax-load Banks",
    "orderNumber": null,
@@ -12181,7 +12181,7 @@
  {
    "id": 1643,
    "name": "Ajax-LoadBanksWithPaymentInWorkFlow",
-   "url": "/EGF/voucher/common-ajaxLoadBanksWithPaymentInWorkFlow.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBanksWithPaymentInWorkFlow.action",
    "parentModule": null,
    "displayName": "Ajax-LoadBanksWithPaymentInWorkFlow",
    "orderNumber": null,
@@ -12194,7 +12194,7 @@
  {
    "id": 1644,
    "name": "Ajax-Bank Account Based on Type",
-   "url": "/EGF/voucher/common-ajaxLoadAccNumAndType.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadAccNumAndType.action",
    "parentModule": null,
    "displayName": "Ajax-Bank Account Based on Type",
    "orderNumber": null,
@@ -12207,7 +12207,7 @@
  {
    "id": 1645,
    "name": "report-Fundflow",
-   "url": "/EGF/report/fundFlow.action",
+   "url": "/services/EGF/report/fundFlow.action",
    "parentModule": null,
    "displayName": "report-Fundflow",
    "orderNumber": null,
@@ -12220,7 +12220,7 @@
  {
    "id": 1646,
    "name": "Contra-BTC",
-   "url": "/EGF/contra/contraBTC.action",
+   "url": "/services/EGF/contra/contraBTC.action",
    "parentModule": null,
    "displayName": "Contra-BTC",
    "orderNumber": null,
@@ -12233,7 +12233,7 @@
  {
    "id": 1647,
    "name": "Contra-BTCView",
-   "url": "/EGF/contra/contraBTC-view.action",
+   "url": "/services/EGF/contra/contraBTC-view.action",
    "parentModule": null,
    "displayName": "Contra-BTCView",
    "orderNumber": null,
@@ -12246,7 +12246,7 @@
  {
    "id": 1648,
    "name": "ajax Load Variance Report",
-   "url": "/EGF/report/budgetVarianceReport-ajaxLoadData.action",
+   "url": "/services/EGF/report/budgetVarianceReport-ajaxLoadData.action",
    "parentModule": null,
    "displayName": "ajax Load Variance Report",
    "orderNumber": null,
@@ -12259,7 +12259,7 @@
  {
    "id": 1649,
    "name": "ajax pendingTDSReport",
-   "url": "/EGF/report/pendingTDSReport-ajaxLoadSummaryData.action",
+   "url": "/services/EGF/report/pendingTDSReport-ajaxLoadSummaryData.action",
    "parentModule": null,
    "displayName": "ajax pendingTDSReport",
    "orderNumber": null,
@@ -12272,7 +12272,7 @@
  {
    "id": 1650,
    "name": "Cancel Selected Vouchers",
-   "url": "/EGF/voucher/cancelVoucher-update.action",
+   "url": "/services/EGF/voucher/cancelVoucher-update.action",
    "parentModule": null,
    "displayName": "Cancel Selected Vouchers",
    "orderNumber": null,
@@ -12285,7 +12285,7 @@
  {
    "id": 1651,
    "name": "Report-View Schedule Income expenditure",
-   "url": "/EGF/report/incomeExpenditureReport-generateScheduleReport.action",
+   "url": "/services/EGF/report/incomeExpenditureReport-generateScheduleReport.action",
    "parentModule": null,
    "displayName": "Report-View Schedule Income expenditure",
    "orderNumber": null,
@@ -12298,7 +12298,7 @@
  {
    "id": 1652,
    "name": "Report-ajaxPrintIncomeExpenditureReport",
-   "url": "/EGF/report/incomeExpenditureReport-ajaxPrintIncomeExpenditureReport.action",
+   "url": "/services/EGF/report/incomeExpenditureReport-ajaxPrintIncomeExpenditureReport.action",
    "parentModule": null,
    "displayName": "Report-ajaxPrintIncomeExpenditureReport",
    "orderNumber": null,
@@ -12311,7 +12311,7 @@
  {
    "id": 1653,
    "name": "Report-generateIncomeExpenditureSubReportPdf",
-   "url": "/EGF/report/incomeExpenditureReport-generateSchedulePdf.action",
+   "url": "/services/EGF/report/incomeExpenditureReport-generateSchedulePdf.action",
    "parentModule": null,
    "displayName": "Report-generateIncomeExpenditureSubReportPdf",
    "orderNumber": null,
@@ -12324,7 +12324,7 @@
  {
    "id": 1654,
    "name": "Report-generateIncomeExpenditureSubReportXls",
-   "url": "/EGF/report/incomeExpenditureReport-generateScheduleXls.action",
+   "url": "/services/EGF/report/incomeExpenditureReport-generateScheduleXls.action",
    "parentModule": null,
    "displayName": "Report-generateIncomeExpenditureSubReportXls",
    "orderNumber": null,
@@ -12337,7 +12337,7 @@
  {
    "id": 1655,
    "name": "Report-generateIncomeExpenditureSchedulePDF",
-   "url": "/EGF/report/incomeExpenditureReport-generateIncomeExpenditureSchedulePdf.action",
+   "url": "/services/EGF/report/incomeExpenditureReport-generateIncomeExpenditureSchedulePdf.action",
    "parentModule": null,
    "displayName": "Report-generateIncomeExpenditureSchedulePDF",
    "orderNumber": null,
@@ -12350,7 +12350,7 @@
  {
    "id": 1656,
    "name": "Report-generateIncomeExpenditureScheduleXls",
-   "url": "/EGF/report/incomeExpenditureReport-generateIncomeExpenditureScheduleXls.action",
+   "url": "/services/EGF/report/incomeExpenditureReport-generateIncomeExpenditureScheduleXls.action",
    "parentModule": null,
    "displayName": "Report-generateIncomeExpenditureScheduleXls",
    "orderNumber": null,
@@ -12363,7 +12363,7 @@
  {
    "id": 1657,
    "name": "Report-generateIncomeExpenditurePdf",
-   "url": "/EGF/report/incomeExpenditureReport-generateIncomeExpenditurePdf.action",
+   "url": "/services/EGF/report/incomeExpenditureReport-generateIncomeExpenditurePdf.action",
    "parentModule": null,
    "displayName": "Report-generateIncomeExpenditurePdf",
    "orderNumber": null,
@@ -12376,7 +12376,7 @@
  {
    "id": 1658,
    "name": "Report-generateIncomeExpenditureXls",
-   "url": "/EGF/report/incomeExpenditureReport-generateIncomeExpenditureXls.action",
+   "url": "/services/EGF/report/incomeExpenditureReport-generateIncomeExpenditureXls.action",
    "parentModule": null,
    "displayName": "Report-generateIncomeExpenditureXls",
    "orderNumber": null,
@@ -12389,7 +12389,7 @@
  {
    "id": 1659,
    "name": "Report-ajax search BankBook",
-   "url": "/EGF/report/bankBookReport-ajaxLoadBankBook.action",
+   "url": "/services/EGF/report/bankBookReport-ajaxLoadBankBook.action",
    "parentModule": null,
    "displayName": "Report-ajax search BankBook",
    "orderNumber": null,
@@ -12402,7 +12402,7 @@
  {
    "id": 1660,
    "name": "view Voucher",
-   "url": "/EGF/voucher/preApprovedVoucher-voucher.action",
+   "url": "/services/EGF/voucher/preApprovedVoucher-voucher.action",
    "parentModule": null,
    "displayName": "view Voucher",
    "orderNumber": null,
@@ -12415,7 +12415,7 @@
  {
    "id": 1661,
    "name": "Report-bankBookReportPdf",
-   "url": "/EGF/report/bankBookReport-exportPdf.action",
+   "url": "/services/EGF/report/bankBookReport-exportPdf.action",
    "parentModule": null,
    "displayName": "Report-bankBookReportPdf",
    "orderNumber": null,
@@ -12428,7 +12428,7 @@
  {
    "id": 1662,
    "name": "Report-bankBookReportXls",
-   "url": "/EGF/report/bankBookReport-exportXls.action",
+   "url": "/services/EGF/report/bankBookReport-exportXls.action",
    "parentModule": null,
    "displayName": "Report-bankBookReportXls",
    "orderNumber": null,
@@ -12441,7 +12441,7 @@
  {
    "id": 1663,
    "name": "Load chequeIssueRegisterReport",
-   "url": "/EGF/report/chequeIssueRegisterReport-ajaxPrint.action",
+   "url": "/services/EGF/report/chequeIssueRegisterReport-ajaxPrint.action",
    "parentModule": null,
    "displayName": "Load chequeIssueRegisterReport",
    "orderNumber": null,
@@ -12454,7 +12454,7 @@
  {
    "id": 1664,
    "name": "Report-chequeIssueRegisterPDF",
-   "url": "/EGF/report/chequeIssueRegisterReport-generatePdf.action",
+   "url": "/services/EGF/report/chequeIssueRegisterReport-generatePdf.action",
    "parentModule": null,
    "displayName": "Report-chequeIssueRegisterPDF",
    "orderNumber": null,
@@ -12467,7 +12467,7 @@
  {
    "id": 1665,
    "name": "Report-chequeIssueRegisterXLS",
-   "url": "/EGF/report/chequeIssueRegisterReport-generateXls.action",
+   "url": "/services/EGF/report/chequeIssueRegisterReport-generateXls.action",
    "parentModule": null,
    "displayName": "Report-chequeIssueRegisterXLS",
    "orderNumber": null,
@@ -12480,7 +12480,7 @@
  {
    "id": 1666,
    "name": "Report-BillregisterReprotSearch",
-   "url": "/EGF/report/billRegisterReport.action",
+   "url": "/services/EGF/report/billRegisterReport.action",
    "parentModule": null,
    "displayName": "Report-BillregisterReprotSearch",
    "orderNumber": null,
@@ -12493,7 +12493,7 @@
  {
    "id": 1667,
    "name": "Report-functionwiseIEresult",
-   "url": "/EGF/report/functionwiseIE.action",
+   "url": "/services/EGF/report/functionwiseIE.action",
    "parentModule": null,
    "displayName": "Report-functionwiseIEresult",
    "orderNumber": null,
@@ -12506,7 +12506,7 @@
  {
    "id": 1668,
    "name": "Report-functionwiseIEresultPDF",
-   "url": "/EGF/report/functionwiseIE-generateFunctionwiseIEPdf.action",
+   "url": "/services/EGF/report/functionwiseIE-generateFunctionwiseIEPdf.action",
    "parentModule": null,
    "displayName": "Report-functionwiseIEresultPDF",
    "orderNumber": null,
@@ -12519,7 +12519,7 @@
  {
    "id": 1669,
    "name": "Report-functionwiseIEresultXLS",
-   "url": "/EGF/report/functionwiseIE-generateFunctionwiseIEXls.action",
+   "url": "/services/EGF/report/functionwiseIE-generateFunctionwiseIEXls.action",
    "parentModule": null,
    "displayName": "Report-functionwiseIEresultXLS",
    "orderNumber": null,
@@ -12532,7 +12532,7 @@
  {
    "id": 1670,
    "name": "Report-voucherStatusResult",
-   "url": "/EGF/report/voucherStatusReport.action",
+   "url": "/services/EGF/report/voucherStatusReport.action",
    "parentModule": null,
    "displayName": "Report-voucherStatusResult",
    "orderNumber": null,
@@ -12545,7 +12545,7 @@
  {
    "id": 1671,
    "name": "Report-pendingTDSReport",
-   "url": "/EGF/report/pendingTDSReport-ajaxLoadData.action",
+   "url": "/services/EGF/report/pendingTDSReport-ajaxLoadData.action",
    "parentModule": null,
    "displayName": "Report-pendingTDSReport",
    "orderNumber": null,
@@ -12558,7 +12558,7 @@
  {
    "id": 1672,
    "name": "Report-pendingTDS_Pdf",
-   "url": "/EGF/report/pendingTDSReport-exportPdf.action",
+   "url": "/services/EGF/report/pendingTDSReport-exportPdf.action",
    "parentModule": null,
    "displayName": "Report-pendingTDS_Pdf",
    "orderNumber": null,
@@ -12571,7 +12571,7 @@
  {
    "id": 1673,
    "name": "Report-pendingTDS_Xls",
-   "url": "/EGF/report/pendingTDSReport-exportXls.action",
+   "url": "/services/EGF/report/pendingTDSReport-exportXls.action",
    "parentModule": null,
    "displayName": "Report-pendingTDS_Xls",
    "orderNumber": null,
@@ -12584,7 +12584,7 @@
  {
    "id": 1674,
    "name": "exil-RPSchedules",
-   "url": "/EGF/Reports/RPSchedules.jsp",
+   "url": "/services/EGF/Reports/RPSchedules.jsp",
    "parentModule": null,
    "displayName": "exil-RPSchedules",
    "orderNumber": null,
@@ -12597,7 +12597,7 @@
  {
    "id": 1675,
    "name": "exil-preapproverdVoucher",
-   "url": "/EGF/voucher/preApprovedVoucher-loadvoucherviewByCGN.action",
+   "url": "/services/EGF/voucher/preApprovedVoucher-loadvoucherviewByCGN.action",
    "parentModule": null,
    "displayName": "exil-preapproverdVoucher",
    "orderNumber": null,
@@ -12610,7 +12610,7 @@
  {
    "id": 1676,
    "name": "exil-Calender",
-   "url": "/EGF/Reports/calendar.htm",
+   "url": "/services/EGF/Reports/calendar.htm",
    "parentModule": null,
    "displayName": "exil-Calender",
    "orderNumber": null,
@@ -12623,7 +12623,7 @@
  {
    "id": 1677,
    "name": "Ajax-LoadBanksWithApprovedPayments",
-   "url": "/EGF/voucher/common-ajaxLoadBanksWithApprovedPayments.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBanksWithApprovedPayments.action",
    "parentModule": null,
    "displayName": "Ajax-LoadBanksWithApprovedPayments",
    "orderNumber": null,
@@ -12636,7 +12636,7 @@
  {
    "id": 1678,
    "name": "Ajax-LoadBankAccountsWithApprovedPayments",
-   "url": "/EGF/voucher/common-ajaxLoadBankAccountsWithApprovedPayments.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBankAccountsWithApprovedPayments.action",
    "parentModule": null,
    "displayName": "Ajax-LoadBankAccountsWithApprovedPayments",
    "orderNumber": null,
@@ -12649,7 +12649,7 @@
  {
    "id": 1679,
    "name": "Ajax-LoadDocumentNoAndDate",
-   "url": "/EGF/voucher/common-ajaxLoadDocumentNoAndDate.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadDocumentNoAndDate.action",
    "parentModule": null,
    "displayName": "Ajax-LoadDocumentNoAndDate",
    "orderNumber": null,
@@ -12662,7 +12662,7 @@
  {
    "id": 1680,
    "name": "ajax-common-loadaccnumber",
-   "url": "/EGF/voucher/common-ajaxLoadAccountNumbers.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadAccountNumbers.action",
    "parentModule": null,
    "displayName": "ajax-common-loadaccnumber",
    "orderNumber": null,
@@ -12675,7 +12675,7 @@
  {
    "id": 1681,
    "name": "payment-reversepayment",
-   "url": "/EGF/payment/paymentReversal.action",
+   "url": "/services/EGF/payment/paymentReversal.action",
    "parentModule": null,
    "displayName": "payment-reversepayment",
    "orderNumber": null,
@@ -12688,7 +12688,7 @@
  {
    "id": 1682,
    "name": "Report-TDSexportSummaryPdf",
-   "url": "/EGF/report/pendingTDSReport-exportSummaryPdf.action",
+   "url": "/services/EGF/report/pendingTDSReport-exportSummaryPdf.action",
    "parentModule": null,
    "displayName": "Report-TDSexportSummaryPdf",
    "orderNumber": null,
@@ -12701,7 +12701,7 @@
  {
    "id": 1683,
    "name": "Report-TDSexportSummaryXls",
-   "url": "/EGF/report/pendingTDSReport-exportSummaryXls.action",
+   "url": "/services/EGF/report/pendingTDSReport-exportSummaryXls.action",
    "parentModule": null,
    "displayName": "Report-TDSexportSummaryXls",
    "orderNumber": null,
@@ -12714,7 +12714,7 @@
  {
    "id": 1684,
    "name": "exil-submit data",
-   "url": "/EGF/SubmitData.jsp",
+   "url": "/services/EGF/SubmitData.jsp",
    "parentModule": null,
    "displayName": "exil-submit data",
    "orderNumber": null,
@@ -12727,7 +12727,7 @@
  {
    "id": 1685,
    "name": "exil-chartofaccount add new",
-   "url": "/EGF/masters/chartOfAccounts-addNew.action",
+   "url": "/services/EGF/masters/chartOfAccounts-addNew.action",
    "parentModule": null,
    "displayName": "exil-chartofaccount add new",
    "orderNumber": null,
@@ -12740,7 +12740,7 @@
  {
    "id": 1686,
    "name": "exil-chartofaccount view/modify",
-   "url": "/EGF/masters/chartOfAccounts.action",
+   "url": "/services/EGF/masters/chartOfAccounts.action",
    "parentModule": null,
    "displayName": "exil-chartofaccount view/modify",
    "orderNumber": null,
@@ -12753,7 +12753,7 @@
  {
    "id": 1687,
    "name": "Cancel Voucher Search",
-   "url": "/EGF/voucher/cancelVoucher.action",
+   "url": "/services/EGF/voucher/cancelVoucher.action",
    "parentModule": null,
    "displayName": "Cancel Voucher Search",
    "orderNumber": null,
@@ -12766,7 +12766,7 @@
  {
    "id": 1688,
    "name": "exil-SubScheme View",
-   "url": "/EGF/masters/subScheme-viewSubScheme.action",
+   "url": "/services/EGF/masters/subScheme-viewSubScheme.action",
    "parentModule": null,
    "displayName": "exil-SubScheme View",
    "orderNumber": null,
@@ -12779,7 +12779,7 @@
  {
    "id": 1689,
    "name": "master-FinSource codecheck",
-   "url": "/EGF/masters/financingSource-codeUniqueCheck.action",
+   "url": "/services/EGF/masters/financingSource-codeUniqueCheck.action",
    "parentModule": null,
    "displayName": "master-FinSource codecheck",
    "orderNumber": null,
@@ -12792,7 +12792,7 @@
  {
    "id": 1690,
    "name": "exil-ChartOfaccountsMenuTree",
-   "url": "/EGF/commonyui/egov/ChartOfaccountsMenuTree.jsp",
+   "url": "/services/EGF/commonyui/egov/ChartOfaccountsMenuTree.jsp",
    "parentModule": null,
    "displayName": "exil-ChartOfaccountsMenuTree",
    "orderNumber": null,
@@ -12805,7 +12805,7 @@
  {
    "id": 1691,
    "name": "exil-ChartOfaccountsIndex",
-   "url": "/EGF/index.jsp",
+   "url": "/services/EGF/index.jsp",
    "parentModule": null,
    "displayName": "exil-ChartOfaccountsIndex",
    "orderNumber": null,
@@ -12818,7 +12818,7 @@
  {
    "id": 1692,
    "name": "exil-loadChartOfaccountsAjax",
-   "url": "/EGF/commonyui/egov/loadChartofaccountsAjax.jsp",
+   "url": "/services/EGF/commonyui/egov/loadChartofaccountsAjax.jsp",
    "parentModule": null,
    "displayName": "exil-loadChartOfaccountsAjax",
    "orderNumber": null,
@@ -12831,7 +12831,7 @@
  {
    "id": 1693,
    "name": "exil-ChartOfaccountsView",
-   "url": "/EGF/masters/chartOfAccounts-view.action",
+   "url": "/services/EGF/masters/chartOfAccounts-view.action",
    "parentModule": null,
    "displayName": "exil-ChartOfaccountsView",
    "orderNumber": null,
@@ -12844,7 +12844,7 @@
  {
    "id": 1694,
    "name": "exil-uniqueCheckAjax",
-   "url": "/EGF/commonyui/egov/uniqueCheckAjax.jsp",
+   "url": "/services/EGF/commonyui/egov/uniqueCheckAjax.jsp",
    "parentModule": null,
    "displayName": "exil-uniqueCheckAjax",
    "orderNumber": null,
@@ -12857,7 +12857,7 @@
  {
    "id": 1695,
    "name": "accountCheque-manipulateCheques",
-   "url": "/EGF/masters/accountCheque-manipulateCheques.action",
+   "url": "/services/EGF/masters/accountCheque-manipulateCheques.action",
    "parentModule": null,
    "displayName": "accountCheque-manipulateCheques",
    "orderNumber": null,
@@ -12870,7 +12870,7 @@
  {
    "id": 1696,
    "name": "accountChequeAction",
-   "url": "/EGF/masters/accountCheque.action",
+   "url": "/services/EGF/masters/accountCheque.action",
    "parentModule": null,
    "displayName": "accountChequeAction",
    "orderNumber": null,
@@ -12883,7 +12883,7 @@
  {
    "id": 1697,
    "name": "GetList-showMode-serviceID",
-   "url": "/EGF/GetList.jsp",
+   "url": "/services/EGF/GetList.jsp",
    "parentModule": null,
    "displayName": "GetList-showMode-serviceID",
    "orderNumber": null,
@@ -12896,7 +12896,7 @@
  {
    "id": 1698,
    "name": "GetList-showMode-serviceID-fundNameList",
-   "url": "/EGF/GetList.jsp",
+   "url": "/services/EGF/GetList.jsp",
    "parentModule": null,
    "displayName": "GetList-showMode-serviceID-fundNameList",
    "orderNumber": null,
@@ -12909,7 +12909,7 @@
  {
    "id": 1699,
    "name": "GetList-showMode-modify-serviceID-fundNameList",
-   "url": "/EGF/GetList.jsp",
+   "url": "/services/EGF/GetList.jsp",
    "parentModule": null,
    "displayName": "GetList-showMode-modify-serviceID-fundNameList",
    "orderNumber": null,
@@ -12922,7 +12922,7 @@
  {
    "id": 1700,
    "name": "cbill-pjv-print",
-   "url": "/EGF/report/expenseJournalVoucherPrint-print.action",
+   "url": "/services/EGF/report/expenseJournalVoucherPrint-print.action",
    "parentModule": null,
    "displayName": "cbill-pjv-print",
    "orderNumber": null,
@@ -12935,7 +12935,7 @@
  {
    "id": 1701,
    "name": "pjv-view",
-   "url": "/EGF/voucher/preApprovedVoucher-loadvoucher.action",
+   "url": "/services/EGF/voucher/preApprovedVoucher-loadvoucher.action",
    "parentModule": null,
    "displayName": "pjv-view",
    "orderNumber": null,
@@ -12948,7 +12948,7 @@
  {
    "id": 1702,
    "name": "pjv-printajax",
-   "url": "/EGF/voucher/journalVoucherPrint-ajaxPrint.action",
+   "url": "/services/EGF/voucher/journalVoucherPrint-ajaxPrint.action",
    "parentModule": null,
    "displayName": "pjv-printajax",
    "orderNumber": null,
@@ -12961,7 +12961,7 @@
  {
    "id": 1703,
    "name": "exil-getData-fromBean",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-getData-fromBean",
    "orderNumber": null,
@@ -12974,7 +12974,7 @@
  {
    "id": 1704,
    "name": "cbill-pjv-ajaxprint",
-   "url": "/EGF/report/expenseJournalVoucherPrint-ajaxPrint.action",
+   "url": "/services/EGF/report/expenseJournalVoucherPrint-ajaxPrint.action",
    "parentModule": null,
    "displayName": "cbill-pjv-ajaxprint",
    "orderNumber": null,
@@ -12987,7 +12987,7 @@
  {
    "id": 1705,
    "name": "pjv-printpdf",
-   "url": "/EGF/voucher/journalVoucherPrint-exportPdf.action",
+   "url": "/services/EGF/voucher/journalVoucherPrint-exportPdf.action",
    "parentModule": null,
    "displayName": "pjv-printpdf",
    "orderNumber": null,
@@ -13000,7 +13000,7 @@
  {
    "id": 1706,
    "name": "pjv-printxls",
-   "url": "/EGF/voucher/journalVoucherPrint-exportXls.action",
+   "url": "/services/EGF/voucher/journalVoucherPrint-exportXls.action",
    "parentModule": null,
    "displayName": "pjv-printxls",
    "orderNumber": null,
@@ -13013,7 +13013,7 @@
  {
    "id": 1707,
    "name": "exil-GetData-type",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-GetData-type",
    "orderNumber": null,
@@ -13026,7 +13026,7 @@
  {
    "id": 1708,
    "name": "exil-GetData-schedtype",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-GetData-schedtype",
    "orderNumber": null,
@@ -13039,7 +13039,7 @@
  {
    "id": 1709,
    "name": "Master-ajaxLoadBankAccountsBySubscheme",
-   "url": "/EGF/voucher/common-ajaxLoadBankAccountsBySubscheme.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBankAccountsBySubscheme.action",
    "parentModule": null,
    "displayName": "Master-ajaxLoadBankAccountsBySubscheme",
    "orderNumber": null,
@@ -13052,7 +13052,7 @@
  {
    "id": 1710,
    "name": "Master-financingSource_getIntEstAmt",
-   "url": "/EGF/masters/financingSource-getIntEstAmt.action",
+   "url": "/services/EGF/masters/financingSource-getIntEstAmt.action",
    "parentModule": null,
    "displayName": "Master-financingSource_getIntEstAmt",
    "orderNumber": null,
@@ -13065,7 +13065,7 @@
  {
    "id": 1711,
    "name": "searchEntries-accountdetail",
-   "url": "/EGF/voucher/common-searchEntites.action",
+   "url": "/services/EGF/voucher/common-searchEntites.action",
    "parentModule": null,
    "displayName": "searchEntries-accountdetail",
    "orderNumber": null,
@@ -13078,7 +13078,7 @@
  {
    "id": 1712,
    "name": "report-balancesheet",
-   "url": "/EGF/report/balanceSheetReport.action",
+   "url": "/services/EGF/report/balanceSheetReport.action",
    "parentModule": null,
    "displayName": "report-balancesheet",
    "orderNumber": null,
@@ -13091,7 +13091,7 @@
  {
    "id": 1713,
    "name": "report-balancesheet-showdropdown",
-   "url": "/EGF/report/balanceSheetReport-generateScheduleReport.action",
+   "url": "/services/EGF/report/balanceSheetReport-generateScheduleReport.action",
    "parentModule": null,
    "displayName": "report-balancesheet-showdropdown",
    "orderNumber": null,
@@ -13104,7 +13104,7 @@
  {
    "id": 1714,
    "name": "report-balancesheetsubreport-showdropdown",
-   "url": "/EGF/report/balanceSheetReport-generateBalanceSheetSubReport.action",
+   "url": "/services/EGF/report/balanceSheetReport-generateBalanceSheetSubReport.action",
    "parentModule": null,
    "displayName": "report-balancesheetsubreport-showdropdown",
    "orderNumber": null,
@@ -13117,7 +13117,7 @@
  {
    "id": 1715,
    "name": "ajax-common-loaduser",
-   "url": "/EGF/voucher/common-ajaxLoadUser.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadUser.action",
    "parentModule": null,
    "displayName": "ajax-common-loaduser",
    "orderNumber": null,
@@ -13130,7 +13130,7 @@
  {
    "id": 1716,
    "name": "createVoucher",
-   "url": "/EGF/voucher/preApprovedVoucher.action",
+   "url": "/services/EGF/voucher/preApprovedVoucher.action",
    "parentModule": null,
    "displayName": "createVoucher",
    "orderNumber": null,
@@ -13143,7 +13143,7 @@
  {
    "id": 1717,
    "name": "ajax-common-loadbaccount",
-   "url": "/EGF/voucher/common-ajaxLoadBankAccounts.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBankAccounts.action",
    "parentModule": null,
    "displayName": "ajax-common-loadbaccount",
    "orderNumber": null,
@@ -13156,7 +13156,7 @@
  {
    "id": 1718,
    "name": "ajax-common-nextdesig",
-   "url": "/EGF/voucher/common-ajaxLoadDesg.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadDesg.action",
    "parentModule": null,
    "displayName": "ajax-common-nextdesig",
    "orderNumber": null,
@@ -13169,7 +13169,7 @@
  {
    "id": 1719,
    "name": "payment-voucherprint",
-   "url": "/EGF/report/billPaymentVoucherPrint-print.action",
+   "url": "/services/EGF/report/billPaymentVoucherPrint-print.action",
    "parentModule": null,
    "displayName": "payment-voucherprint",
    "orderNumber": null,
@@ -13182,7 +13182,7 @@
  {
    "id": 1720,
    "name": "payment-voucherAjaxprint",
-   "url": "/EGF/report/billPaymentVoucherPrint-ajaxPrint.action",
+   "url": "/services/EGF/report/billPaymentVoucherPrint-ajaxPrint.action",
    "parentModule": null,
    "displayName": "payment-voucherAjaxprint",
    "orderNumber": null,
@@ -13195,7 +13195,7 @@
  {
    "id": 1721,
    "name": "ajax-common-bankaccwithapprsalary",
-   "url": "/EGF/voucher/common-ajaxLoadBankAccountsWithApprovedSalaryPayments.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBankAccountsWithApprovedSalaryPayments.action",
    "parentModule": null,
    "displayName": "ajax-common-bankaccwithapprsalary",
    "orderNumber": null,
@@ -13208,7 +13208,7 @@
  {
    "id": 1722,
    "name": "chequeassignment-crud",
-   "url": "/EGF/payment/chequeAssignment.action",
+   "url": "/services/EGF/payment/chequeAssignment.action",
    "parentModule": null,
    "displayName": "chequeassignment-crud",
    "orderNumber": null,
@@ -13221,7 +13221,7 @@
  {
    "id": 1723,
    "name": "ajax-common-bankbyfandt",
-   "url": "/EGF/voucher/common-ajaxLoadBanksByFundAndType.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBanksByFundAndType.action",
    "parentModule": null,
    "displayName": "ajax-common-bankbyfandt",
    "orderNumber": null,
@@ -13234,7 +13234,7 @@
  {
    "id": 1724,
    "name": "ajax-common-loadaccnum",
-   "url": "/EGF/voucher/common-loadAccNumNarration.action",
+   "url": "/services/EGF/voucher/common-loadAccNumNarration.action",
    "parentModule": null,
    "displayName": "ajax-common-loadaccnum",
    "orderNumber": null,
@@ -13247,7 +13247,7 @@
  {
    "id": 1725,
    "name": "ajax-common-accountbalance",
-   "url": "/EGF/payment/payment-ajaxGetAccountBalance.action",
+   "url": "/services/EGF/payment/payment-ajaxGetAccountBalance.action",
    "parentModule": null,
    "displayName": "ajax-common-accountbalance",
    "orderNumber": null,
@@ -13260,7 +13260,7 @@
  {
    "id": 1726,
    "name": "ajax-process-coacodes",
-   "url": "/EGF/commons/Process.jsp",
+   "url": "/services/EGF/commons/Process.jsp",
    "parentModule": null,
    "displayName": "ajax-process-coacodes",
    "orderNumber": null,
@@ -13273,7 +13273,7 @@
  {
    "id": 1727,
    "name": "ajax-process-function",
-   "url": "/EGF/commons/Process.jsp",
+   "url": "/services/EGF/commons/Process.jsp",
    "parentModule": null,
    "displayName": "ajax-process-function",
    "orderNumber": null,
@@ -13286,7 +13286,7 @@
  {
    "id": 1728,
    "name": "ajax-common-loadName",
-   "url": "/EGF/voucher/common-ajaxLoadVoucherNames.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadVoucherNames.action",
    "parentModule": null,
    "displayName": "ajax-common-loadName",
    "orderNumber": null,
@@ -13299,7 +13299,7 @@
  {
    "id": 1729,
    "name": "Load bank Account",
-   "url": "/EGF/voucher/common-ajaxLoadBranchAccountNumbers.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBranchAccountNumbers.action",
    "parentModule": null,
    "displayName": "Load bank Account",
    "orderNumber": null,
@@ -13312,7 +13312,7 @@
  {
    "id": 1730,
    "name": "Fixed deposit",
-   "url": "/EGF/revenue/fixedDeposit.action",
+   "url": "/services/EGF/revenue/fixedDeposit.action",
    "parentModule": null,
    "displayName": "Fixed deposit",
    "orderNumber": null,
@@ -13325,7 +13325,7 @@
  {
    "id": 1731,
    "name": "loadAllLiablityCodes",
-   "url": "/EGF/commons/Process.jsp",
+   "url": "/services/EGF/commons/Process.jsp",
    "parentModule": null,
    "displayName": "loadAllLiablityCodes",
    "orderNumber": null,
@@ -13338,7 +13338,7 @@
  {
    "id": 1732,
    "name": "loadAllAssetCodes",
-   "url": "/EGF/commons/Process.jsp",
+   "url": "/services/EGF/commons/Process.jsp",
    "parentModule": null,
    "displayName": "loadAllAssetCodes",
    "orderNumber": null,
@@ -13351,7 +13351,7 @@
  {
    "id": 1733,
    "name": "Payment In Workflow",
-   "url": "/EGF/voucher/common-ajaxLoadBankAccountsWithPaymentInWorkFlow.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBankAccountsWithPaymentInWorkFlow.action",
    "parentModule": null,
    "displayName": "Payment In Workflow",
    "orderNumber": null,
@@ -13364,7 +13364,7 @@
  {
    "id": 1734,
    "name": "Get Next GLcode",
-   "url": "/EGF/masters/chartOfAccounts-ajaxNextGlCode.action",
+   "url": "/services/EGF/masters/chartOfAccounts-ajaxNextGlCode.action",
    "parentModule": null,
    "displayName": "Get Next GLcode",
    "orderNumber": null,
@@ -13377,7 +13377,7 @@
  {
    "id": 1735,
    "name": "Cancel Bill Action",
-   "url": "/EGF/voucher/cancelBill.action",
+   "url": "/services/EGF/voucher/cancelBill.action",
    "parentModule": null,
    "displayName": "Cancel Bill Action",
    "orderNumber": null,
@@ -13390,7 +13390,7 @@
  {
    "id": 1736,
    "name": "ShowFinancialWorkflowHistory",
-   "url": "/EGF/voucher/common-showHistory.action",
+   "url": "/services/EGF/voucher/common-showHistory.action",
    "parentModule": null,
    "displayName": "ShowFinancialWorkflowHistory",
    "orderNumber": null,
@@ -13403,7 +13403,7 @@
  {
    "id": 1737,
    "name": "rev-voucher-link",
-   "url": "/EGF/voucher/voucherSearch-beforesearch.action",
+   "url": "/services/EGF/voucher/voucherSearch-beforesearch.action",
    "parentModule": null,
    "displayName": "rev-voucher-link",
    "orderNumber": null,
@@ -13416,7 +13416,7 @@
  {
    "id": 1738,
    "name": "rev-ajax-vouamt",
-   "url": "/EGF/voucher/common-ajaxLoadVoucherAmount.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadVoucherAmount.action",
    "parentModule": null,
    "displayName": "rev-ajax-vouamt",
    "orderNumber": null,
@@ -13429,7 +13429,7 @@
  {
    "id": 1739,
    "name": "rev-ajax-cheque",
-   "url": "/EGF/voucher/common-ajaxLoadChequeNoAndDate.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadChequeNoAndDate.action",
    "parentModule": null,
    "displayName": "rev-ajax-cheque",
    "orderNumber": null,
@@ -13442,7 +13442,7 @@
  {
    "id": 1740,
    "name": "Remittancerecovry-inbox",
-   "url": "/EGF/deduction/remitRecovery-viewInboxItem.action",
+   "url": "/services/EGF/deduction/remitRecovery-viewInboxItem.action",
    "parentModule": null,
    "displayName": "Remittancerecovry-inbox",
    "orderNumber": null,
@@ -13455,7 +13455,7 @@
  {
    "id": 1741,
    "name": "ajax-common-bankbyapprovedpayments",
-   "url": "/EGF/voucher/common-ajaxLoadBanksWithApprovedRemittances.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBanksWithApprovedRemittances.action",
    "parentModule": null,
    "displayName": "ajax-common-bankbyapprovedpayments",
    "orderNumber": null,
@@ -13468,7 +13468,7 @@
  {
    "id": 1742,
    "name": "ajax-common-bankaccbyapprovedpayments",
-   "url": "/EGF/voucher/common-ajaxLoadBankAccountsWithApprovedRemittances.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBankAccountsWithApprovedRemittances.action",
    "parentModule": null,
    "displayName": "ajax-common-bankaccbyapprovedpayments",
    "orderNumber": null,
@@ -13481,7 +13481,7 @@
  {
    "id": 1743,
    "name": "LOGIN",
-   "url": "/EGF/eGov.jsp",
+   "url": "/services/EGF/eGov.jsp",
    "parentModule": null,
    "displayName": "LOGIN",
    "orderNumber": null,
@@ -13494,7 +13494,7 @@
  {
    "id": 1744,
    "name": "ajax-report-tds-loadEntity",
-   "url": "/EGF/report/pendingTDSReport-ajaxLoadEntites.action",
+   "url": "/services/EGF/report/pendingTDSReport-ajaxLoadEntites.action",
    "parentModule": null,
    "displayName": "ajax-report-tds-loadEntity",
    "orderNumber": null,
@@ -13507,7 +13507,7 @@
  {
    "id": 1745,
    "name": "budget-crud",
-   "url": "/EGF/budget/budget.action",
+   "url": "/services/EGF/budget/budget.action",
    "parentModule": null,
    "displayName": "budget-crud",
    "orderNumber": null,
@@ -13520,7 +13520,7 @@
  {
    "id": 1746,
    "name": "ajax_LoadBanksSalaryPayments",
-   "url": "/EGF/voucher/common-ajaxLoadBanksWithApprovedSalaryPayments.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBanksWithApprovedSalaryPayments.action",
    "parentModule": null,
    "displayName": "ajax_LoadBanksSalaryPayments",
    "orderNumber": null,
@@ -13533,7 +13533,7 @@
  {
    "id": 1747,
    "name": "exp-JVprint",
-   "url": "/EGF/report/expenseJournalVoucherPrint.action",
+   "url": "/services/EGF/report/expenseJournalVoucherPrint.action",
    "parentModule": null,
    "displayName": "exp-JVprint",
    "orderNumber": null,
@@ -13546,7 +13546,7 @@
  {
    "id": 1748,
    "name": "ajax-common-validSurrCheq",
-   "url": "/EGF/voucher/common-ajaxValidateReassignSurrenderChequeNumber.action",
+   "url": "/services/EGF/voucher/common-ajaxValidateReassignSurrenderChequeNumber.action",
    "parentModule": null,
    "displayName": "ajax-common-validSurrCheq",
    "orderNumber": null,
@@ -13559,7 +13559,7 @@
  {
    "id": 1749,
    "name": "loangrant-searchforedit",
-   "url": "/EGF/masters/loanGrant-beforeEdit.action",
+   "url": "/services/EGF/masters/loanGrant-beforeEdit.action",
    "parentModule": null,
    "displayName": "loangrant-searchforedit",
    "orderNumber": null,
@@ -13572,7 +13572,7 @@
  {
    "id": 1750,
    "name": "Remittance recovery view",
-   "url": "/EGF/deduction/remitRecovery-beforeView.action",
+   "url": "/services/EGF/deduction/remitRecovery-beforeView.action",
    "parentModule": null,
    "displayName": "Remittance recovery view",
    "orderNumber": null,
@@ -13585,7 +13585,7 @@
  {
    "id": 1751,
    "name": "dish-process-getbankgl",
-   "url": "/EGF/commons/Process.jsp",
+   "url": "/services/EGF/commons/Process.jsp",
    "parentModule": null,
    "displayName": "dish-process-getbankgl",
    "orderNumber": null,
@@ -13598,7 +13598,7 @@
  {
    "id": 1752,
    "name": "dish-process-accid",
-   "url": "/EGF/commons/Process.jsp",
+   "url": "/services/EGF/commons/Process.jsp",
    "parentModule": null,
    "displayName": "dish-process-accid",
    "orderNumber": null,
@@ -13611,7 +13611,7 @@
  {
    "id": 1753,
    "name": "budget-budgetReport-action",
-   "url": "/EGF/budget/budgetReport.action",
+   "url": "/services/EGF/budget/budgetReport.action",
    "parentModule": null,
    "displayName": "budget-budgetReport-action",
    "orderNumber": null,
@@ -13624,7 +13624,7 @@
  {
    "id": 1754,
    "name": "Scheme Code unique check",
-   "url": "/EGF/masters/scheme-codeUniqueCheck.action",
+   "url": "/services/EGF/masters/scheme-codeUniqueCheck.action",
    "parentModule": null,
    "displayName": "Scheme Code unique check",
    "orderNumber": null,
@@ -13637,7 +13637,7 @@
  {
    "id": 1755,
    "name": "View Scheme Code",
-   "url": "/EGF/masters/scheme-beforeView.action",
+   "url": "/services/EGF/masters/scheme-beforeView.action",
    "parentModule": null,
    "displayName": "View Scheme Code",
    "orderNumber": null,
@@ -13650,7 +13650,7 @@
  {
    "id": 1756,
    "name": "Edit Scheme Code",
-   "url": "/EGF/masters/scheme-beforeEdit.action",
+   "url": "/services/EGF/masters/scheme-beforeEdit.action",
    "parentModule": null,
    "displayName": "Edit Scheme Code",
    "orderNumber": null,
@@ -13663,7 +13663,7 @@
  {
    "id": 1757,
    "name": "transaction-billVoucher",
-   "url": "/EGF/voucher/billVoucher.action",
+   "url": "/services/EGF/voucher/billVoucher.action",
    "parentModule": null,
    "displayName": "transaction-billVoucher",
    "orderNumber": null,
@@ -13676,7 +13676,7 @@
  {
    "id": 1758,
    "name": "exil-getList-banklist",
-   "url": "/EGF/GetList.jsp",
+   "url": "/services/EGF/GetList.jsp",
    "parentModule": null,
    "displayName": "exil-getList-banklist",
    "orderNumber": null,
@@ -13689,7 +13689,7 @@
  {
    "id": 1759,
    "name": "exil-getData-accountcode",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-getData-accountcode",
    "orderNumber": null,
@@ -13702,7 +13702,7 @@
  {
    "id": 1760,
    "name": "exil-getData-isactive",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-getData-isactive",
    "orderNumber": null,
@@ -13715,7 +13715,7 @@
  {
    "id": 1761,
    "name": "exil-getData-newBank",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-getData-newBank",
    "orderNumber": null,
@@ -13728,7 +13728,7 @@
  {
    "id": 1762,
    "name": "exil-getList-newBank",
-   "url": "/EGF/GetList.jsp",
+   "url": "/services/EGF/GetList.jsp",
    "parentModule": null,
    "displayName": "exil-getList-newBank",
    "orderNumber": null,
@@ -13741,7 +13741,7 @@
  {
    "id": 1763,
    "name": "exil-getData-bankBranch_branchId",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-getData-bankBranch_branchId",
    "orderNumber": null,
@@ -13754,7 +13754,7 @@
  {
    "id": 1764,
    "name": "exil-getData_tds_ID",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-getData_tds_ID",
    "orderNumber": null,
@@ -13767,7 +13767,7 @@
  {
    "id": 1765,
    "name": "exil-getData_serviceID",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-getData_serviceID",
    "orderNumber": null,
@@ -13780,7 +13780,7 @@
  {
    "id": 1766,
    "name": "exil-getData_screenName",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-getData_screenName",
    "orderNumber": null,
@@ -13793,7 +13793,7 @@
  {
    "id": 1767,
    "name": "exil-GetList_ShowMode",
-   "url": "/EGF/GetList.jsp",
+   "url": "/services/EGF/GetList.jsp",
    "parentModule": null,
    "displayName": "exil-GetList_ShowMode",
    "orderNumber": null,
@@ -13806,7 +13806,7 @@
  {
    "id": 1768,
    "name": "exil-GetList_serviceID",
-   "url": "/EGF/GetList.jsp",
+   "url": "/services/EGF/GetList.jsp",
    "parentModule": null,
    "displayName": "exil-GetList_serviceID",
    "orderNumber": null,
@@ -13819,7 +13819,7 @@
  {
    "id": 1769,
    "name": "exil-getData_financialYear_ID",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-getData_financialYear_ID",
    "orderNumber": null,
@@ -13832,7 +13832,7 @@
  {
    "id": 1770,
    "name": "exil-getData-tableNameForCode",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-getData-tableNameForCode",
    "orderNumber": null,
@@ -13845,7 +13845,7 @@
  {
    "id": 1771,
    "name": "exil-getData-billCollector_codeToSearch",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-getData-billCollector_codeToSearch",
    "orderNumber": null,
@@ -13858,7 +13858,7 @@
  {
    "id": 1772,
    "name": "exil-getData-schId",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-getData-schId",
    "orderNumber": null,
@@ -13871,7 +13871,7 @@
  {
    "id": 1773,
    "name": "exil-getData-companyDetail_name",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-getData-companyDetail_name",
    "orderNumber": null,
@@ -13884,7 +13884,7 @@
  {
    "id": 1774,
    "name": "cmmn_uniqueCheckAjax",
-   "url": "/EGF/commonyui/egov/uniqueCheckAjax.jsp",
+   "url": "/services/EGF/commonyui/egov/uniqueCheckAjax.jsp",
    "parentModule": null,
    "displayName": "cmmn_uniqueCheckAjax",
    "orderNumber": null,
@@ -13897,7 +13897,7 @@
  {
    "id": 1775,
    "name": "cmmn_loadComboAjax",
-   "url": "/EGF/commonyui/egov/loadComboAjax.jsp",
+   "url": "/services/EGF/commonyui/egov/loadComboAjax.jsp",
    "parentModule": null,
    "displayName": "cmmn_loadComboAjax",
    "orderNumber": null,
@@ -13910,7 +13910,7 @@
  {
    "id": 1776,
    "name": "exil-getList-fromBean",
-   "url": "/EGF/GetList.jsp",
+   "url": "/services/EGF/GetList.jsp",
    "parentModule": null,
    "displayName": "exil-getList-fromBean",
    "orderNumber": null,
@@ -13923,7 +13923,7 @@
  {
    "id": 1777,
    "name": "exil-getList-reportType",
-   "url": "/EGF/GetList.jsp",
+   "url": "/services/EGF/GetList.jsp",
    "parentModule": null,
    "displayName": "exil-getList-reportType",
    "orderNumber": null,
@@ -13936,7 +13936,7 @@
  {
    "id": 1778,
    "name": "exil-getData-reportType",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-getData-reportType",
    "orderNumber": null,
@@ -13949,7 +13949,7 @@
  {
    "id": 1779,
    "name": "ajax-LoadEntites_AccountDetailType",
-   "url": "/EGF/voucher/common-ajaxLoadEntites.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadEntites.action",
    "parentModule": null,
    "displayName": "ajax-LoadEntites_AccountDetailType",
    "orderNumber": null,
@@ -13962,7 +13962,7 @@
  {
    "id": 1780,
    "name": "Report-SubLedger_frombean",
-   "url": "/EGF/Reports/SubLedgerReport.jsp",
+   "url": "/services/EGF/Reports/SubLedgerReport.jsp",
    "parentModule": null,
    "displayName": "Report-SubLedger_frombean",
    "orderNumber": null,
@@ -13975,7 +13975,7 @@
  {
    "id": 1781,
    "name": "exil-getList-selectedDate",
-   "url": "/EGF/GetList.jsp",
+   "url": "/services/EGF/GetList.jsp",
    "parentModule": null,
    "displayName": "exil-getList-selectedDate",
    "orderNumber": null,
@@ -13988,7 +13988,7 @@
  {
    "id": 1782,
    "name": "exil-report-genIESubR",
-   "url": "/EGF/report/incomeExpenditureReport-generateIncomeExpenditureSubReport.action",
+   "url": "/services/EGF/report/incomeExpenditureReport-generateIncomeExpenditureSubReport.action",
    "parentModule": null,
    "displayName": "exil-report-genIESubR",
    "orderNumber": null,
@@ -14001,7 +14001,7 @@
  {
    "id": 1783,
    "name": "exil-report-genIEDet",
-   "url": "/EGF/report/incomeExpenditureReport-generateIncomeExpenditureDetail.action",
+   "url": "/services/EGF/report/incomeExpenditureReport-generateIncomeExpenditureDetail.action",
    "parentModule": null,
    "displayName": "exil-report-genIEDet",
    "orderNumber": null,
@@ -14014,7 +14014,7 @@
  {
    "id": 1784,
    "name": "exil-BSreport-BSSpdf",
-   "url": "/EGF/report/balanceSheetReport-generateBalanceSheetSchedulePdf.action",
+   "url": "/services/EGF/report/balanceSheetReport-generateBalanceSheetSchedulePdf.action",
    "parentModule": null,
    "displayName": "exil-BSreport-BSSpdf",
    "orderNumber": null,
@@ -14027,7 +14027,7 @@
  {
    "id": 1785,
    "name": "exil-BSreport-BSSXls",
-   "url": "/EGF/report/balanceSheetReport-generateBalanceSheetScheduleXls.action",
+   "url": "/services/EGF/report/balanceSheetReport-generateBalanceSheetScheduleXls.action",
    "parentModule": null,
    "displayName": "exil-BSreport-BSSXls",
    "orderNumber": null,
@@ -14040,7 +14040,7 @@
  {
    "id": 1786,
    "name": "exil-BSreport-BSpdf",
-   "url": "/EGF/report/balanceSheetReport-generateBalanceSheetPdf.action",
+   "url": "/services/EGF/report/balanceSheetReport-generateBalanceSheetPdf.action",
    "parentModule": null,
    "displayName": "exil-BSreport-BSpdf",
    "orderNumber": null,
@@ -14053,7 +14053,7 @@
  {
    "id": 1787,
    "name": "exil-BSreport-BSXls",
-   "url": "/EGF/report/balanceSheetReport-generateBalanceSheetXls.action",
+   "url": "/services/EGF/report/balanceSheetReport-generateBalanceSheetXls.action",
    "parentModule": null,
    "displayName": "exil-BSreport-BSXls",
    "orderNumber": null,
@@ -14066,7 +14066,7 @@
  {
    "id": 1788,
    "name": "exil-BSreport-genSchepdf",
-   "url": "/EGF/report/balanceSheetReport-generateSchedulePdf.action",
+   "url": "/services/EGF/report/balanceSheetReport-generateSchedulePdf.action",
    "parentModule": null,
    "displayName": "exil-BSreport-genSchepdf",
    "orderNumber": null,
@@ -14079,7 +14079,7 @@
  {
    "id": 1789,
    "name": "exil-BSreport-genScheXls",
-   "url": "/EGF/report/balanceSheetReport-generateScheduleXls.action",
+   "url": "/services/EGF/report/balanceSheetReport-generateScheduleXls.action",
    "parentModule": null,
    "displayName": "exil-BSreport-genScheXls",
    "orderNumber": null,
@@ -14092,7 +14092,7 @@
  {
    "id": 1790,
    "name": "Contra-ReverseVoucher",
-   "url": "/EGF/contra/contraBTB-beforeReverse.action",
+   "url": "/services/EGF/contra/contraBTB-beforeReverse.action",
    "parentModule": null,
    "displayName": "Contra-ReverseVoucher",
    "orderNumber": null,
@@ -14105,7 +14105,7 @@
  {
    "id": 1791,
    "name": "ajax_BanksApprovedRemit",
-   "url": "/EGF/voucher/common-ajaxLoadBanksWithApprovedRemittances.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBanksWithApprovedRemittances.action",
    "parentModule": null,
    "displayName": "ajax_BanksApprovedRemit",
    "orderNumber": null,
@@ -14118,7 +14118,7 @@
  {
    "id": 1792,
    "name": "ConsolidateBudgetReportAction",
-   "url": "/EGF/report/consolidatedBudgetReport.action",
+   "url": "/services/EGF/report/consolidatedBudgetReport.action",
    "parentModule": null,
    "displayName": "ConsolidateBudgetReportAction",
    "orderNumber": null,
@@ -14131,7 +14131,7 @@
  {
    "id": 1793,
    "name": "ConsolidateBudgetReportPdf",
-   "url": "/EGF/report/consolidatedBudgetReport-exportPDF.action",
+   "url": "/services/EGF/report/consolidatedBudgetReport-exportPDF.action",
    "parentModule": null,
    "displayName": "ConsolidateBudgetReportPdf",
    "orderNumber": null,
@@ -14144,7 +14144,7 @@
  {
    "id": 1794,
    "name": "ConsolidateBudgetReportXls",
-   "url": "/EGF/report/consolidatedBudgetReport-exportExcel.action",
+   "url": "/services/EGF/report/consolidatedBudgetReport-exportExcel.action",
    "parentModule": null,
    "displayName": "ConsolidateBudgetReportXls",
    "orderNumber": null,
@@ -14157,7 +14157,7 @@
  {
    "id": 1795,
    "name": "ajax-process-getAllCoaCodesExceptCashBank",
-   "url": "/EGF/commons/Process.jsp",
+   "url": "/services/EGF/commons/Process.jsp",
    "parentModule": null,
    "displayName": "ajax-process-getAllCoaCodesExceptCashBank",
    "orderNumber": null,
@@ -14170,7 +14170,7 @@
  {
    "id": 1796,
    "name": "ReceiptPaymentReportAction",
-   "url": "/EGF/report/receiptPaymentReport.action",
+   "url": "/services/EGF/report/receiptPaymentReport.action",
    "parentModule": null,
    "displayName": "ReceiptPaymentReportAction",
    "orderNumber": null,
@@ -14183,7 +14183,7 @@
  {
    "id": 1797,
    "name": "ReceiptPaymentReportDetail",
-   "url": "/EGF/report/receiptPaymentReport-searchDetail.action",
+   "url": "/services/EGF/report/receiptPaymentReport-searchDetail.action",
    "parentModule": null,
    "displayName": "ReceiptPaymentReportDetail",
    "orderNumber": null,
@@ -14196,7 +14196,7 @@
  {
    "id": 1798,
    "name": "Get Actuals for new budget detail",
-   "url": "/EGF/budget/budgetProposalDetail-loadActualsForBudgetDetailRe.action",
+   "url": "/services/EGF/budget/budgetProposalDetail-loadActualsForBudgetDetailRe.action",
    "parentModule": null,
    "displayName": "Get Actuals for new budget detail",
    "orderNumber": null,
@@ -14209,7 +14209,7 @@
  {
    "id": 1799,
    "name": "Add new budget detail",
-   "url": "/EGF/budget/budgetProposalDetail-createBudgetDetail.action",
+   "url": "/services/EGF/budget/budgetProposalDetail-createBudgetDetail.action",
    "parentModule": null,
    "displayName": "Add new budget detail",
    "orderNumber": null,
@@ -14222,7 +14222,7 @@
  {
    "id": 1800,
    "name": "BudgetProposal-exportxls",
-   "url": "/EGF/budget/budgetProposal-generateXls.action",
+   "url": "/services/EGF/budget/budgetProposal-generateXls.action",
    "parentModule": null,
    "displayName": "BudgetProposal-exportxls",
    "orderNumber": null,
@@ -14235,7 +14235,7 @@
  {
    "id": 1801,
    "name": "BudgetProposal-exportPdf",
-   "url": "/EGF/budget/budgetProposal-generatePdf.action",
+   "url": "/services/EGF/budget/budgetProposal-generatePdf.action",
    "parentModule": null,
    "displayName": "BudgetProposal-exportPdf",
    "orderNumber": null,
@@ -14248,7 +14248,7 @@
  {
    "id": 1802,
    "name": "BudgetProposalStatusRepAction",
-   "url": "/EGF/report/budgetProposalStatusReport.action",
+   "url": "/services/EGF/report/budgetProposalStatusReport.action",
    "parentModule": null,
    "displayName": "BudgetProposalStatusRepAction",
    "orderNumber": null,
@@ -14261,7 +14261,7 @@
  {
    "id": 1803,
    "name": "report-ie-detailedschedule",
-   "url": "/EGF/report/incomeExpenditureReport-generateDetailCodeReport.action",
+   "url": "/services/EGF/report/incomeExpenditureReport-generateDetailCodeReport.action",
    "parentModule": null,
    "displayName": "report-ie-detailedschedule",
    "orderNumber": null,
@@ -14274,7 +14274,7 @@
  {
    "id": 1804,
    "name": "report-ie-detailedschedulepdf",
-   "url": "/EGF/report/incomeExpenditureReport-generateDetailCodePdf.action",
+   "url": "/services/EGF/report/incomeExpenditureReport-generateDetailCodePdf.action",
    "parentModule": null,
    "displayName": "report-ie-detailedschedulepdf",
    "orderNumber": null,
@@ -14287,7 +14287,7 @@
  {
    "id": 1805,
    "name": "report-ie-detailedschedulexls",
-   "url": "/EGF/report/incomeExpenditureReport-generateDetailCodeXls.action",
+   "url": "/services/EGF/report/incomeExpenditureReport-generateDetailCodeXls.action",
    "parentModule": null,
    "displayName": "report-ie-detailedschedulexls",
    "orderNumber": null,
@@ -14300,7 +14300,7 @@
  {
    "id": 1806,
    "name": "report-bs-detailedschedule",
-   "url": "/EGF/report/balanceSheetReport-generateScheduleReportDetailed.action",
+   "url": "/services/EGF/report/balanceSheetReport-generateScheduleReportDetailed.action",
    "parentModule": null,
    "displayName": "report-bs-detailedschedule",
    "orderNumber": null,
@@ -14313,7 +14313,7 @@
  {
    "id": 1807,
    "name": "report-bs-detailedschedulepdf",
-   "url": "/EGF/report/balanceSheetReport-generateDetailedSchedulePdf.action",
+   "url": "/services/EGF/report/balanceSheetReport-generateDetailedSchedulePdf.action",
    "parentModule": null,
    "displayName": "report-bs-detailedschedulepdf",
    "orderNumber": null,
@@ -14326,7 +14326,7 @@
  {
    "id": 1808,
    "name": "report-bs-detailedschedulexls",
-   "url": "/EGF/report/balanceSheetReport-generateDetailedScheduleXls.action",
+   "url": "/services/EGF/report/balanceSheetReport-generateDetailedScheduleXls.action",
    "parentModule": null,
    "displayName": "report-bs-detailedschedulexls",
    "orderNumber": null,
@@ -14339,7 +14339,7 @@
  {
    "id": 1809,
    "name": "ajax LoadBanksWith Pension Payments",
-   "url": "/EGF/voucher/common-ajaxLoadBanksWithApprovedPensionPayments.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBanksWithApprovedPensionPayments.action",
    "parentModule": null,
    "displayName": "ajax LoadBanksWith Pension Payments",
    "orderNumber": null,
@@ -14352,7 +14352,7 @@
  {
    "id": 1810,
    "name": "ajax LoadBanksAccountsWith Pension Payments",
-   "url": "/EGF/voucher/common-ajaxLoadBankAccountsWithApprovedPensionPayments.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBankAccountsWithApprovedPensionPayments.action",
    "parentModule": null,
    "displayName": "ajax LoadBanksAccountsWith Pension Payments",
    "orderNumber": null,
@@ -14365,7 +14365,7 @@
  {
    "id": 1811,
    "name": "bankAdviceReportAcc",
-   "url": "/EGF/report/bankAdviceReport.action",
+   "url": "/services/EGF/report/bankAdviceReport.action",
    "parentModule": null,
    "displayName": "bankAdviceReportAcc",
    "orderNumber": null,
@@ -14378,7 +14378,7 @@
  {
    "id": 1812,
    "name": "ajaxLoadBankBranchFromBank",
-   "url": "/EGF/voucher/common-ajaxLoadBankBranchFromBank.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBankBranchFromBank.action",
    "parentModule": null,
    "displayName": "ajaxLoadBankBranchFromBank",
    "orderNumber": null,
@@ -14391,7 +14391,7 @@
  {
    "id": 1813,
    "name": "ajaxLoadBankAccFromBranch",
-   "url": "/EGF/voucher/common-ajaxLoadBankAccFromBranch.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBankAccFromBranch.action",
    "parentModule": null,
    "displayName": "ajaxLoadBankAccFromBranch",
    "orderNumber": null,
@@ -14404,7 +14404,7 @@
  {
    "id": 1814,
    "name": "ajaxLoadRTGSChequeFromBankAcc",
-   "url": "/EGF/voucher/common-ajaxLoadRTGSChequeFromBankAcc.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadRTGSChequeFromBankAcc.action",
    "parentModule": null,
    "displayName": "ajaxLoadRTGSChequeFromBankAcc",
    "orderNumber": null,
@@ -14417,7 +14417,7 @@
  {
    "id": 1815,
    "name": "Load all bank across fund",
-   "url": "/EGF/voucher/common-ajaxLoadAllBanks.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadAllBanks.action",
    "parentModule": null,
    "displayName": "Load all bank across fund",
    "orderNumber": null,
@@ -14430,7 +14430,7 @@
  {
    "id": 1816,
    "name": "AutoRemittanceXLS",
-   "url": "/EGF/report/autoRemittanceReport-exportXls.action",
+   "url": "/services/EGF/report/autoRemittanceReport-exportXls.action",
    "parentModule": null,
    "displayName": "AutoRemittanceXLS",
    "orderNumber": null,
@@ -14443,7 +14443,7 @@
  {
    "id": 1817,
    "name": "fundFlowManualEntryReport",
-   "url": "/EGF/report/fundFlowManualEntryReport.action",
+   "url": "/services/EGF/report/fundFlowManualEntryReport.action",
    "parentModule": null,
    "displayName": "fundFlowManualEntryReport",
    "orderNumber": null,
@@ -14456,7 +14456,7 @@
  {
    "id": 1818,
    "name": "DepartmentwiseExpenditureReportAction",
-   "url": "/EGF/report/departmentwiseExpenditureReport.action",
+   "url": "/services/EGF/report/departmentwiseExpenditureReport.action",
    "parentModule": null,
    "displayName": "DepartmentwiseExpenditureReportAction",
    "orderNumber": null,
@@ -14469,7 +14469,7 @@
  {
    "id": 1819,
    "name": "Load bank rtgs not assigned",
-   "url": "/EGF/voucher/common-ajaxLoadBanksWithPayGenAndRTGSNotAssigned.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBanksWithPayGenAndRTGSNotAssigned.action",
    "parentModule": null,
    "displayName": "Load bank rtgs not assigned",
    "orderNumber": null,
@@ -14482,7 +14482,7 @@
  {
    "id": 1820,
    "name": "Ajax-LoadBankAccountsWithRTGSnotAssigned",
-   "url": "/EGF/voucher/common-ajaxLoadBankAccountsWithPayGenAndRTGSNotAssigned.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBankAccountsWithPayGenAndRTGSNotAssigned.action",
    "parentModule": null,
    "displayName": "Ajax-LoadBankAccountsWithRTGSnotAssigned",
    "orderNumber": null,
@@ -14495,7 +14495,7 @@
  {
    "id": 1821,
    "name": "DishonorChequeWorkflow",
-   "url": "/EGF/payment/dishonorChequeWorkflow.action",
+   "url": "/services/EGF/payment/dishonorChequeWorkflow.action",
    "parentModule": null,
    "displayName": "DishonorChequeWorkflow",
    "orderNumber": null,
@@ -14508,7 +14508,7 @@
  {
    "id": 1822,
    "name": "rtgsRegisterReportSearch",
-   "url": "/EGF/report/rtgsIssueRegisterReport.action",
+   "url": "/services/EGF/report/rtgsIssueRegisterReport.action",
    "parentModule": null,
    "displayName": "rtgsRegisterReportSearch",
    "orderNumber": null,
@@ -14521,7 +14521,7 @@
  {
    "id": 1823,
    "name": "searchAccountCodes",
-   "url": "/EGF/voucher/common-searchAccountCodes.action",
+   "url": "/services/EGF/voucher/common-searchAccountCodes.action",
    "parentModule": null,
    "displayName": "searchAccountCodes",
    "orderNumber": null,
@@ -14534,7 +14534,7 @@
  {
    "id": 1824,
    "name": "bankAdviceReportExportText",
-   "url": "/EGF/report/bankAdviceReport-exportText.action",
+   "url": "/services/EGF/report/bankAdviceReport-exportText.action",
    "parentModule": null,
    "displayName": "bankAdviceReportExportText",
    "orderNumber": null,
@@ -14547,7 +14547,7 @@
  {
    "id": 1825,
    "name": "AutoRemittancePDF",
-   "url": "/EGF/report/autoRemittanceReport-exportPdf.action",
+   "url": "/services/EGF/report/autoRemittanceReport-exportPdf.action",
    "parentModule": null,
    "displayName": "AutoRemittancePDF",
    "orderNumber": null,
@@ -14560,7 +14560,7 @@
  {
    "id": 1826,
    "name": "Searchresults",
-   "url": "/EGF/report/autoRemittanceReport.action",
+   "url": "/services/EGF/report/autoRemittanceReport.action",
    "parentModule": null,
    "displayName": "Searchresults",
    "orderNumber": null,
@@ -14573,7 +14573,7 @@
  {
    "id": 1827,
    "name": "AutoRemittanceSearch",
-   "url": "/EGF/report/autoRemittanceReport-ajaxLoadData.action",
+   "url": "/services/EGF/report/autoRemittanceReport-ajaxLoadData.action",
    "parentModule": null,
    "displayName": "AutoRemittanceSearch",
    "orderNumber": null,
@@ -14586,7 +14586,7 @@
  {
    "id": 1828,
    "name": "Generate PJV",
-   "url": "/EGF/voucher/billVoucher-newform.action",
+   "url": "/services/EGF/voucher/billVoucher-newform.action",
    "parentModule": null,
    "displayName": "Create Voucher",
    "orderNumber": "1",
@@ -14594,12 +14594,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Transaction.Create Voucher",
-   "navigationURL": "/EGF/voucher/billVoucher-newform.action"
+   "navigationURL": "/services/EGF/voucher/billVoucher-newform.action"
  },
  {
    "id": 1829,
    "name": "Cancellation of  Vouchers-Search",
-   "url": "/EGF/voucher/cancelVoucher-beforeSearch.action",
+   "url": "/services/EGF/voucher/cancelVoucher-beforeSearch.action",
    "parentModule": null,
    "displayName": "Cancel Vouchers",
    "orderNumber": "1",
@@ -14607,12 +14607,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Administration.Cancel Voucher",
-   "navigationURL": "/EGF/voucher/cancelVoucher-beforeSearch.action"
+   "navigationURL": "/services/EGF/voucher/cancelVoucher-beforeSearch.action"
  },
  {
    "id": 1830,
    "name": "Financial Year-SetUp",
-   "url": "/EGF/HTML/FinancialYearEnq.htm",
+   "url": "/services/EGF/HTML/FinancialYearEnq.htm",
    "parentModule": null,
    "displayName": "Financial Year",
    "orderNumber": "1",
@@ -14620,12 +14620,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Period End Activities.Financial Year",
-   "navigationURL": "/EGF/HTML/FinancialYearEnq.htm"
+   "navigationURL": "/services/EGF/HTML/FinancialYearEnq.htm"
  },
  {
    "id": 1831,
    "name": "Fiscal periods-SetUp",
-   "url": "/EGF/HTML/SetUp.htm",
+   "url": "/services/EGF/HTML/SetUp.htm",
    "parentModule": null,
    "displayName": "Close Period",
    "orderNumber": "1",
@@ -14638,7 +14638,7 @@
  {
    "id": 1832,
    "name": "Report Schedule Mapping-Create",
-   "url": "/EGF/Reports/ScheduleMaster.jsp",
+   "url": "/services/EGF/Reports/ScheduleMaster.jsp",
    "parentModule": null,
    "displayName": "Create Report Schedule",
    "orderNumber": "1",
@@ -14651,7 +14651,7 @@
  {
    "id": 1833,
    "name": "Schedules-Search ",
-   "url": "/EGF/Reports/ScheduleSearch.htm",
+   "url": "/services/EGF/Reports/ScheduleSearch.htm",
    "parentModule": null,
    "displayName": "View/Modify Report Schedule ",
    "orderNumber": "1",
@@ -14664,7 +14664,7 @@
  {
    "id": 1834,
    "name": "Direct Bank Payments",
-   "url": "/EGF/payment/directBankPayment-newform.action",
+   "url": "/services/EGF/payment/directBankPayment-newform.action",
    "parentModule": null,
    "displayName": "Direct Bank Payments",
    "orderNumber": "2",
@@ -14672,12 +14672,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Transactions.Payments.Direct Bank Payments",
-   "navigationURL": "/EGF/payment/directBankPayment-newform.action"
+   "navigationURL": "/services/EGF/payment/directBankPayment-newform.action"
  },
  {
    "id": 1835,
    "name": "Journal Voucher-Create",
-   "url": "/EGF/voucher/journalVoucher-newForm.action",
+   "url": "/services/EGF/voucher/journalVoucher-newForm.action",
    "parentModule": null,
    "displayName": "Create Journal Voucher",
    "orderNumber": "3",
@@ -14685,12 +14685,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Transactions.Journal Voucher",
-   "navigationURL": "/EGF/voucher/journalVoucher-newForm.action"
+   "navigationURL": "/services/EGF/voucher/journalVoucher-newForm.action"
  },
  {
    "id": 1836,
    "name": "Chart Of Accounts",
-   "url": "/EGF/eGov_COA.jsp",
+   "url": "/services/EGF/eGov_COA.jsp",
    "parentModule": null,
    "displayName": "Chart Of Accounts",
    "orderNumber": "1",
@@ -14698,12 +14698,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Chartofaccounts",
-   "navigationURL": "/EGF/eGov_COA.jsp"
+   "navigationURL": "/services/EGF/eGov_COA.jsp"
  },
  {
    "id": 1837,
    "name": "payment-crud",
-   "url": "/EGF/payment/payment.action",
+   "url": "/services/EGF/payment/payment.action",
    "parentModule": null,
    "displayName": "payment-crud",
    "orderNumber": null,
@@ -14716,7 +14716,7 @@
  {
    "id": 1838,
    "name": "Modify Journal Vouchers-Search",
-   "url": "/EGF/voucher/voucherSearch-beforesearch.action",
+   "url": "/services/EGF/voucher/voucherSearch-beforesearch.action",
    "parentModule": null,
    "displayName": "Modify Journal Vouchers",
    "orderNumber": "1",
@@ -14729,7 +14729,7 @@
  {
    "id": 1839,
    "name": "Bank to Bank Transfer",
-   "url": "/EGF/contra/contraBTB-newform.action",
+   "url": "/services/EGF/contra/contraBTB-newform.action",
    "parentModule": null,
    "displayName": "Bank to Bank Transfer",
    "orderNumber": "1",
@@ -14742,7 +14742,7 @@
  {
    "id": 1840,
    "name": "Modify Contra Entries-Search",
-   "url": "/EGF/voucher/voucherSearch-beforesearch.action",
+   "url": "/services/EGF/voucher/voucherSearch-beforesearch.action",
    "parentModule": null,
    "displayName": "Modify Contra Entries",
    "orderNumber": "1",
@@ -14755,7 +14755,7 @@
  {
    "id": 1841,
    "name": "Income - Expenditures Statement",
-   "url": "/EGF/report/incomeExpenditureReport-generateIncomeExpenditureReport.action",
+   "url": "/services/EGF/report/incomeExpenditureReport-generateIncomeExpenditureReport.action",
    "parentModule": null,
    "displayName": "Income - Expenditures Statement",
    "orderNumber": "1",
@@ -14768,7 +14768,7 @@
  {
    "id": 1842,
    "name": "Balance Sheet",
-   "url": "/EGF/report/balanceSheetReport-generateBalanceSheetReport.action",
+   "url": "/services/EGF/report/balanceSheetReport-generateBalanceSheetReport.action",
    "parentModule": null,
    "displayName": "Balance Sheet",
    "orderNumber": "1",
@@ -14781,7 +14781,7 @@
  {
    "id": 1843,
    "name": "Detailed Code-Create/Modify/View",
-   "url": "/EGF/masters/chartOfAccounts-detailed.action",
+   "url": "/services/EGF/masters/chartOfAccounts-detailed.action",
    "parentModule": null,
    "displayName": "Create/Modify/View Detailed Code",
    "orderNumber": "1",
@@ -14789,12 +14789,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Detailed Codes.View Detailed Code",
-   "navigationURL": "/EGF/masters/chartOfAccounts-detailed.action"
+   "navigationURL": "/services/EGF/masters/chartOfAccounts-detailed.action"
  },
  {
    "id": 1844,
    "name": "Bank Book",
-   "url": "/EGF/report/bankBookReport.action",
+   "url": "/services/EGF/report/bankBookReport.action",
    "parentModule": null,
    "displayName": "Bank Book",
    "orderNumber": "3",
@@ -14802,12 +14802,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Reports.Accounting Records.Bank book",
-   "navigationURL": "/EGF/report/bankBookReport.action"
+   "navigationURL": "/services/EGF/report/bankBookReport.action"
  },
  {
    "id": 1845,
    "name": "Reconcile with Bank",
-   "url": "/EGF/brs/BankReconciliation.do",
+   "url": "/services/EGF/brs/BankReconciliation.do",
    "parentModule": null,
    "displayName": "Reconcile with Bank",
    "orderNumber": "1",
@@ -14820,7 +14820,7 @@
  {
    "id": 1846,
    "name": "Bank Statement Entries-Not in Bank Book",
-   "url": "/EGF/brs/BankStatementEntries.do",
+   "url": "/services/EGF/brs/BankStatementEntries.do",
    "parentModule": null,
    "displayName": "Bank Statement Entries-Not in Bank Book",
    "orderNumber": "1",
@@ -14833,7 +14833,7 @@
  {
    "id": 1847,
    "name": "Reconciliation Summary",
-   "url": "/EGF/brs/ReconciliationSummary.do",
+   "url": "/services/EGF/brs/ReconciliationSummary.do",
    "parentModule": null,
    "displayName": "Reconciliation Summary",
    "orderNumber": "1",
@@ -14846,7 +14846,7 @@
  {
    "id": 1848,
    "name": "Dishonored Cheques",
-   "url": "/EGF/brs/DishonoredChequeEntries.do",
+   "url": "/services/EGF/brs/DishonoredChequeEntries.do",
    "parentModule": null,
    "displayName": "Dishonored Cheques",
    "orderNumber": "1",
@@ -14859,7 +14859,7 @@
  {
    "id": 1849,
    "name": "Cheque Issue Register",
-   "url": "/EGF/report/chequeIssueRegisterReport.action",
+   "url": "/services/EGF/report/chequeIssueRegisterReport.action",
    "parentModule": null,
    "displayName": "Cheque Issue Register",
    "orderNumber": "5",
@@ -14867,12 +14867,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Reports.MIS Reports.Cheque Issue Register",
-   "navigationURL": "/EGF/report/chequeIssueRegisterReport.action"
+   "navigationURL": "/services/EGF/report/chequeIssueRegisterReport.action"
  },
  {
    "id": 1850,
    "name": "Dishonored Cheques Report",
-   "url": "/EGF/Reports/DishonoredChequeReport.jsp",
+   "url": "/services/EGF/Reports/DishonoredChequeReport.jsp",
    "parentModule": null,
    "displayName": "Dishonored Cheques Report",
    "orderNumber": "1",
@@ -14885,7 +14885,7 @@
  {
    "id": 1851,
    "name": "View Bill Registers-Search",
-   "url": "/EGF/bill/billRegisterSearch-newform.action",
+   "url": "/services/EGF/bill/billRegisterSearch-newform.action",
    "parentModule": null,
    "displayName": "View Bill Registers",
    "orderNumber": "1",
@@ -14893,12 +14893,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Transactions.Bills Accounting.View Bills",
-   "navigationURL": "/EGF/bill/billRegisterSearch-newform.action"
+   "navigationURL": "/services/EGF/bill/billRegisterSearch-newform.action"
  },
  {
    "id": 1852,
    "name": "Scheme-Create",
-   "url": "/EGF/masters/scheme-newForm.action",
+   "url": "/services/EGF/masters/scheme-newForm.action",
    "parentModule": null,
    "displayName": "Create Scheme",
    "orderNumber": "1",
@@ -14906,12 +14906,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Scheme.Create Scheme",
-   "navigationURL": "/EGF/masters/scheme-newForm.action"
+   "navigationURL": "/services/EGF/masters/scheme-newForm.action"
  },
  {
    "id": 1853,
    "name": "View Schemes-Search",
-   "url": "/EGF/masters/scheme-beforeSearch.action",
+   "url": "/services/EGF/masters/scheme-beforeSearch.action",
    "parentModule": null,
    "displayName": "View Schemes",
    "orderNumber": "2",
@@ -14919,12 +14919,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Scheme.View Scheme",
-   "navigationURL": "/EGF/masters/scheme-beforeSearch.action"
+   "navigationURL": "/services/EGF/masters/scheme-beforeSearch.action"
  },
  {
    "id": 1854,
    "name": "Modify Schemes-Search",
-   "url": "/EGF/masters/scheme-beforeSearch.action",
+   "url": "/services/EGF/masters/scheme-beforeSearch.action",
    "parentModule": null,
    "displayName": "Modify Schemes",
    "orderNumber": "3",
@@ -14932,12 +14932,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Scheme.Modify Scheme",
-   "navigationURL": "/EGF/masters/scheme-beforeSearch.action"
+   "navigationURL": "/services/EGF/masters/scheme-beforeSearch.action"
  },
  {
    "id": 1855,
    "name": "Remittance Recovery-Create",
-   "url": "/EGF/deduction/remitRecovery-newform.action",
+   "url": "/services/EGF/deduction/remitRecovery-newform.action",
    "parentModule": null,
    "displayName": "Create Remittance Recovery",
    "orderNumber": "1",
@@ -14950,7 +14950,7 @@
  {
    "id": 1856,
    "name": "View Remittance Recovery-Search",
-   "url": "/EGF/deduction/remitRecovery.do",
+   "url": "/services/EGF/deduction/remitRecovery.do",
    "parentModule": null,
    "displayName": "View Remittance Recovery",
    "orderNumber": "1",
@@ -14963,7 +14963,7 @@
  {
    "id": 1857,
    "name": "Modify Remittance Recovery-Search",
-   "url": "/EGF/deduction/remitRecovery.do",
+   "url": "/services/EGF/deduction/remitRecovery.do",
    "parentModule": null,
    "displayName": "Modify Remittance Recovery",
    "orderNumber": "1",
@@ -14976,7 +14976,7 @@
  {
    "id": 1858,
    "name": "Party Type-Create",
-   "url": "/EGF/masters/partyType-newform.action",
+   "url": "/services/EGF/masters/partyType-newform.action",
    "parentModule": null,
    "displayName": "Create Party Types",
    "orderNumber": "1",
@@ -14989,7 +14989,7 @@
  {
    "id": 1859,
    "name": "View Contract Types-Search",
-   "url": "/EGF/masters/contractType-beforeSearch.action",
+   "url": "/services/EGF/masters/contractType-beforeSearch.action",
    "parentModule": null,
    "displayName": "View Contract Types",
    "orderNumber": "1",
@@ -15002,7 +15002,7 @@
  {
    "id": 1860,
    "name": "Modify Contract Types-Search",
-   "url": "/EGF/masters/contractType-beforeSearch.action",
+   "url": "/services/EGF/masters/contractType-beforeSearch.action",
    "parentModule": null,
    "displayName": "Modify Contract Types",
    "orderNumber": "1",
@@ -15015,7 +15015,7 @@
  {
    "id": 1861,
    "name": "Recovery-Create",
-   "url": "/EGF/deduction/recoverySetupMaster.do",
+   "url": "/services/EGF/deduction/recoverySetupMaster.do",
    "parentModule": null,
    "displayName": "Create Recovery",
    "orderNumber": "1",
@@ -15023,12 +15023,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Recovery.Create Recovery",
-   "navigationURL": "/EGF/deduction/recoverySetupMaster.do"
+   "navigationURL": "/services/EGF/deduction/recoverySetupMaster.do"
  },
  {
    "id": 1862,
    "name": "View Recoveries-Search",
-   "url": "/EGF/deduction/recoverySetupMaster.do",
+   "url": "/services/EGF/deduction/recoverySetupMaster.do",
    "parentModule": null,
    "displayName": "View Recoveries",
    "orderNumber": "2",
@@ -15036,12 +15036,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Recovery.View Recovery",
-   "navigationURL": "/EGF/deduction/recoverySetupMaster.do"
+   "navigationURL": "/services/EGF/deduction/recoverySetupMaster.do"
  },
  {
    "id": 1863,
    "name": "Modify Recoveries-Search",
-   "url": "/EGF/deduction/recoverySetupMaster.do",
+   "url": "/services/EGF/deduction/recoverySetupMaster.do",
    "parentModule": null,
    "displayName": "Modify Recoveries",
    "orderNumber": "3",
@@ -15049,12 +15049,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Recovery.Modify Recovery",
-   "navigationURL": "/EGF/deduction/recoverySetupMaster.do"
+   "navigationURL": "/services/EGF/deduction/recoverySetupMaster.do"
  },
  {
    "id": 1864,
    "name": "BudgetAppropriationRegister",
-   "url": "/EGF/report/budgetAppropriationRegisterReport.action",
+   "url": "/services/EGF/report/budgetAppropriationRegisterReport.action",
    "parentModule": null,
    "displayName": "Budget Appropriation Register",
    "orderNumber": "1",
@@ -15067,7 +15067,7 @@
  {
    "id": 1865,
    "name": "View Sub-schemes - Search",
-   "url": "/EGF/masters/subScheme-beforeSearch.action",
+   "url": "/services/EGF/masters/subScheme-beforeSearch.action",
    "parentModule": null,
    "displayName": "View Sub Schemes",
    "orderNumber": "5",
@@ -15075,12 +15075,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Sub-scheme.View Sub-scheme",
-   "navigationURL": "/EGF/masters/subScheme-beforeSearch.action"
+   "navigationURL": "/services/EGF/masters/subScheme-beforeSearch.action"
  },
  {
    "id": 1866,
    "name": "TDS Summary",
-   "url": "/EGF/report/pendingTDSReport-summaryReport.action",
+   "url": "/services/EGF/report/pendingTDSReport-summaryReport.action",
    "parentModule": null,
    "displayName": "TDS Summary",
    "orderNumber": "1",
@@ -15093,7 +15093,7 @@
  {
    "id": 1867,
    "name": "Cheque Assignment For Remittances",
-   "url": "/EGF/payment/chequeAssignment-beforeSearchForRemittance.action",
+   "url": "/services/EGF/payment/chequeAssignment-beforeSearchForRemittance.action",
    "parentModule": null,
    "displayName": "Cheque Assignment",
    "orderNumber": "1",
@@ -15106,7 +15106,7 @@
  {
    "id": 1868,
    "name": "Modify Sub-scheme",
-   "url": "/EGF/masters/subScheme-edit.action",
+   "url": "/services/EGF/masters/subScheme-edit.action",
    "parentModule": null,
    "displayName": "Modify Sub Scheme",
    "orderNumber": "6",
@@ -15114,12 +15114,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Sub-scheme.Modify Sub-scheme",
-   "navigationURL": "/EGF/masters/subScheme-edit.action"
+   "navigationURL": "/services/EGF/masters/subScheme-edit.action"
  },
  {
    "id": 1869,
    "name": "Voucher Status Report",
-   "url": "/EGF/report/voucherStatusReport-beforeSearch.action",
+   "url": "/services/EGF/report/voucherStatusReport-beforeSearch.action",
    "parentModule": null,
    "displayName": "Voucher Status Report",
    "orderNumber": "4",
@@ -15127,12 +15127,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Reports.MIS Reports.Voucher Status Report",
-   "navigationURL": "/EGF/report/voucherStatusReport-beforeSearch.action"
+   "navigationURL": "/services/EGF/report/voucherStatusReport-beforeSearch.action"
  },
  {
    "id": 1870,
    "name": "Functionwise Working Budget",
-   "url": "/EGF/budget/budgetReport-functionwise.action",
+   "url": "/services/EGF/budget/budgetReport-functionwise.action",
    "parentModule": null,
    "displayName": "Functionwise Working Budget",
    "orderNumber": "1",
@@ -15145,7 +15145,7 @@
  {
    "id": 1871,
    "name": "Salary Cheque Assignment",
-   "url": "/EGF/payment/chequeAssignment-beforeSalarySearch.action",
+   "url": "/services/EGF/payment/chequeAssignment-beforeSalarySearch.action",
    "parentModule": null,
    "displayName": "Salary Cheque Assignment",
    "orderNumber": "1",
@@ -15158,7 +15158,7 @@
  {
    "id": 1872,
    "name": "Salary Payments",
-   "url": "/EGF/payment/payment-beforeSearch.action?salaryType",
+   "url": "/services/EGF/payment/payment-beforeSearch.action?salaryType",
    "parentModule": null,
    "displayName": "Salary Payments",
    "orderNumber": "1",
@@ -15171,7 +15171,7 @@
  {
    "id": 1873,
    "name": "Pending TDS",
-   "url": "/EGF/report/pendingTDSReport.action",
+   "url": "/services/EGF/report/pendingTDSReport.action",
    "parentModule": null,
    "displayName": "Pending TDS",
    "orderNumber": "1",
@@ -15184,7 +15184,7 @@
  {
    "id": 1874,
    "name": "Working Budget Report",
-   "url": "/EGF/report/budgetReport.action",
+   "url": "/services/EGF/report/budgetReport.action",
    "parentModule": null,
    "displayName": "Working Budget Report",
    "orderNumber": "1",
@@ -15197,7 +15197,7 @@
  {
    "id": 1875,
    "name": "Cancel Bills",
-   "url": "/EGF/voucher/cancelBill-beforeSearch.action",
+   "url": "/services/EGF/voucher/cancelBill-beforeSearch.action",
    "parentModule": null,
    "displayName": "Cancel Bills",
    "orderNumber": "1",
@@ -15205,12 +15205,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Administration.Cancel Bills",
-   "navigationURL": "/EGF/voucher/cancelBill-beforeSearch.action"
+   "navigationURL": "/services/EGF/voucher/cancelBill-beforeSearch.action"
  },
  {
    "id": 1876,
    "name": "chequeAssignmentForRTGS",
-   "url": "/EGF/payment/chequeAssignment-beforeRtgsSearch.action",
+   "url": "/services/EGF/payment/chequeAssignment-beforeRtgsSearch.action",
    "parentModule": null,
    "displayName": "RTGS Assignment",
    "orderNumber": "1",
@@ -15218,12 +15218,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Transactions.Payments.RTGS Assignment",
-   "navigationURL": "/EGF/payment/chequeAssignment-beforeRtgsSearch.action"
+   "navigationURL": "/services/EGF/payment/chequeAssignment-beforeRtgsSearch.action"
  },
  {
    "id": 1877,
    "name": "Remittance Recovery-View",
-   "url": "/EGF/deduction/remitRecovery.do",
+   "url": "/services/EGF/deduction/remitRecovery.do",
    "parentModule": null,
    "displayName": "Remittance Recovery-View",
    "orderNumber": null,
@@ -15236,7 +15236,7 @@
  {
    "id": 1878,
    "name": "Remittance Recovery-Modify",
-   "url": "/EGF/deduction/remitRecovery.do",
+   "url": "/services/EGF/deduction/remitRecovery.do",
    "parentModule": null,
    "displayName": "Remittance Recovery-Modify",
    "orderNumber": null,
@@ -15249,7 +15249,7 @@
  {
    "id": 1879,
    "name": "AutoRemittanceSchedulerReportResult",
-   "url": "/EGF/report/autoRemittanceSchedulerReport.action",
+   "url": "/services/EGF/report/autoRemittanceSchedulerReport.action",
    "parentModule": null,
    "displayName": "Auto Remittance Scheduler Report Result",
    "orderNumber": null,
@@ -15262,7 +15262,7 @@
  {
    "id": 1880,
    "name": "AutoRemittanceSchedulerReport",
-   "url": "/EGF/report/autoRemittanceSchedulerReport-newform.action",
+   "url": "/services/EGF/report/autoRemittanceSchedulerReport-newform.action",
    "parentModule": null,
    "displayName": "Auto Remittance Scheduler Report",
    "orderNumber": null,
@@ -15275,7 +15275,7 @@
  {
    "id": 1881,
    "name": "Print Journal Voucher",
-   "url": "/EGF/voucher/journalVoucherPrint-print.action",
+   "url": "/services/EGF/voucher/journalVoucherPrint-print.action",
    "parentModule": null,
    "displayName": "Print Journal Voucher",
    "orderNumber": null,
@@ -15288,7 +15288,7 @@
  {
    "id": 1882,
    "name": "Load Sub Scheme",
-   "url": "/EGF/budget/budgetDetail-ajaxLoadSubSchemes.action",
+   "url": "/services/EGF/budget/budgetDetail-ajaxLoadSubSchemes.action",
    "parentModule": null,
    "displayName": "Load Sub Scheme",
    "orderNumber": null,
@@ -15301,7 +15301,7 @@
  {
    "id": 1883,
    "name": "Direct Bank Payments-View",
-   "url": "/EGF/payment/directBankPayment-beforeView.action",
+   "url": "/services/EGF/payment/directBankPayment-beforeView.action",
    "parentModule": null,
    "displayName": "Direct Bank Payments-View",
    "orderNumber": null,
@@ -15314,7 +15314,7 @@
  {
    "id": 1884,
    "name": "Direct Bank Payments-Modify",
-   "url": "/EGF/payment/directBankPayment-beforeEdit.action",
+   "url": "/services/EGF/payment/directBankPayment-beforeEdit.action",
    "parentModule": null,
    "displayName": "Direct Bank Payments-Modify",
    "orderNumber": null,
@@ -15327,7 +15327,7 @@
  {
    "id": 1885,
    "name": "Direct Bank Payments-Reverse",
-   "url": "/EGF/payment/directBankPayment-beforeReverse.action",
+   "url": "/services/EGF/payment/directBankPayment-beforeReverse.action",
    "parentModule": null,
    "displayName": "Direct Bank Payments-Reverse",
    "orderNumber": null,
@@ -15340,7 +15340,7 @@
  {
    "id": 1886,
    "name": "View  Bills-Search",
-   "url": "/EGF/voucher/voucherSearch-beforesearch.action",
+   "url": "/services/EGF/voucher/voucherSearch-beforesearch.action",
    "parentModule": null,
    "displayName": "View  Bills",
    "orderNumber": null,
@@ -15353,7 +15353,7 @@
  {
    "id": 1887,
    "name": "View Payments-Search",
-   "url": "/EGF/voucher/voucherSearch-beforesearch.action",
+   "url": "/services/EGF/voucher/voucherSearch-beforesearch.action",
    "parentModule": null,
    "displayName": "View Payments",
    "orderNumber": null,
@@ -15366,7 +15366,7 @@
  {
    "id": 1888,
    "name": "View Payments- Search",
-   "url": "/EGF/payment/PaymentVhSearch.jsp",
+   "url": "/services/EGF/payment/PaymentVhSearch.jsp",
    "parentModule": null,
    "displayName": "View Payments",
    "orderNumber": null,
@@ -15379,7 +15379,7 @@
  {
    "id": 1889,
    "name": "Modify Payments-Search",
-   "url": "/EGF/payment/PaymentVhSearch.jsp",
+   "url": "/services/EGF/payment/PaymentVhSearch.jsp",
    "parentModule": null,
    "displayName": "Modify Payments",
    "orderNumber": null,
@@ -15392,7 +15392,7 @@
  {
    "id": 1890,
    "name": "Modify Payments- Search",
-   "url": "/EGF/payment/paymentAdvice.do",
+   "url": "/services/EGF/payment/paymentAdvice.do",
    "parentModule": null,
    "displayName": "Modify Payments",
    "orderNumber": null,
@@ -15405,7 +15405,7 @@
  {
    "id": 1891,
    "name": "Reverse Payments-Search",
-   "url": "/EGF/payment/paymentReversal-vouchersForReversal.action",
+   "url": "/services/EGF/payment/paymentReversal-vouchersForReversal.action",
    "parentModule": null,
    "displayName": "Reverse Payments",
    "orderNumber": null,
@@ -15418,7 +15418,7 @@
  {
    "id": 1892,
    "name": "Reverse Payments- Search",
-   "url": "/EGF/payment/paymentAdvice.do",
+   "url": "/services/EGF/payment/paymentAdvice.do",
    "parentModule": null,
    "displayName": "Reverse Payments",
    "orderNumber": null,
@@ -15431,7 +15431,7 @@
  {
    "id": 1893,
    "name": "Generate Payment Advice-Search",
-   "url": "/EGF/payment/PaymentVhSearch.jsp",
+   "url": "/services/EGF/payment/PaymentVhSearch.jsp",
    "parentModule": null,
    "displayName": "Generate Payment Advice",
    "orderNumber": null,
@@ -15444,7 +15444,7 @@
  {
    "id": 1894,
    "name": "Generate Payment Advice- Search",
-   "url": "/EGF/payment/paymentAdvice.do",
+   "url": "/services/EGF/payment/paymentAdvice.do",
    "parentModule": null,
    "displayName": "Generate Payment Advice",
    "orderNumber": null,
@@ -15457,7 +15457,7 @@
  {
    "id": 1895,
    "name": "View Journal Vouchers-Search",
-   "url": "/EGF/voucher/voucherSearch-beforesearch.action",
+   "url": "/services/EGF/voucher/voucherSearch-beforesearch.action",
    "parentModule": null,
    "displayName": "View Journal Vouchers",
    "orderNumber": null,
@@ -15470,7 +15470,7 @@
  {
    "id": 1896,
    "name": "Recovery Master-Modify",
-   "url": "/EGF/deduction/recoverySetupMaster.do",
+   "url": "/services/EGF/deduction/recoverySetupMaster.do",
    "parentModule": null,
    "displayName": "Recovery Master-View",
    "orderNumber": null,
@@ -15483,7 +15483,7 @@
  {
    "id": 1897,
    "name": "Recovery Master-View",
-   "url": "/EGF/deduction/recoverySetupMaster.do",
+   "url": "/services/EGF/deduction/recoverySetupMaster.do",
    "parentModule": null,
    "displayName": "Recovery Master-Modify",
    "orderNumber": null,
@@ -15496,7 +15496,7 @@
  {
    "id": 1898,
    "name": "Contingent Bill-View",
-   "url": "/EGF/bill/contingentBill-beforeView.action",
+   "url": "/services/EGF/bill/contingentBill-beforeView.action",
    "parentModule": null,
    "displayName": "Contingent Bill-View",
    "orderNumber": null,
@@ -15509,7 +15509,7 @@
  {
    "id": 1899,
    "name": "Financial Year Create/Modify",
-   "url": "/EGF/HTML/FinancialYearAdd.htm",
+   "url": "/services/EGF/HTML/FinancialYearAdd.htm",
    "parentModule": null,
    "displayName": "Financial Year Create/Modify",
    "orderNumber": null,
@@ -15522,7 +15522,7 @@
  {
    "id": 1900,
    "name": "Administration",
-   "url": "/EGF/egi/eGov.jsp",
+   "url": "/services/EGF/egi/eGov.jsp",
    "parentModule": null,
    "displayName": "Administration",
    "orderNumber": null,
@@ -15535,7 +15535,7 @@
  {
    "id": 1901,
    "name": "Reverse Journal Vouchers-Search",
-   "url": "/EGF/voucher/voucherSearch-beforesearch.action",
+   "url": "/services/EGF/voucher/voucherSearch-beforesearch.action",
    "parentModule": null,
    "displayName": "Reverse Journal Vouchers",
    "orderNumber": null,
@@ -15548,7 +15548,7 @@
  {
    "id": 1902,
    "name": "Cash Deposit",
-   "url": "/EGF/contra/contraCTB-newform.action",
+   "url": "/services/EGF/contra/contraCTB-newform.action",
    "parentModule": null,
    "displayName": "Cash Deposit",
    "orderNumber": null,
@@ -15561,7 +15561,7 @@
  {
    "id": 1903,
    "name": "Cash Withdrawal",
-   "url": "/EGF/contra/contraBTC-newForm.action",
+   "url": "/services/EGF/contra/contraBTC-newForm.action",
    "parentModule": null,
    "displayName": "Cash Withdrawal",
    "orderNumber": null,
@@ -15574,7 +15574,7 @@
  {
    "id": 1904,
    "name": "Pay in",
-   "url": "/EGF/contra/payInSlip-newform.action",
+   "url": "/services/EGF/contra/payInSlip-newform.action",
    "parentModule": null,
    "displayName": "Pay in",
    "orderNumber": null,
@@ -15587,7 +15587,7 @@
  {
    "id": 1905,
    "name": "View Contra Entries-Search",
-   "url": "/EGF/voucher/voucherSearch-beforesearch.action",
+   "url": "/services/EGF/voucher/voucherSearch-beforesearch.action",
    "parentModule": null,
    "displayName": "View Contra Entries",
    "orderNumber": null,
@@ -15600,7 +15600,7 @@
  {
    "id": 1906,
    "name": "Reverse Contra Entries-Search",
-   "url": "/EGF/voucher/voucherSearch-beforesearch.action",
+   "url": "/services/EGF/voucher/voucherSearch-beforesearch.action",
    "parentModule": null,
    "displayName": "Reverse Contra Entries",
    "orderNumber": null,
@@ -15613,7 +15613,7 @@
  {
    "id": 1907,
    "name": "Receipt/Payment Report",
-   "url": "/EGF/Reports/RPReport.jsp",
+   "url": "/services/EGF/Reports/RPReport.jsp",
    "parentModule": null,
    "displayName": "Receipt/Payment Report",
    "orderNumber": null,
@@ -15626,7 +15626,7 @@
  {
    "id": 1908,
    "name": "Chart Of Accounts ",
-   "url": "/EGF/commonyui/egov/ChartOfaccountsMenuTree.jsp?eGovAppName=ChartOfAccounts",
+   "url": "/services/EGF/commonyui/egov/ChartOfaccountsMenuTree.jsp?eGovAppName=ChartOfAccounts",
    "parentModule": null,
    "displayName": "Chart Of Accounts",
    "orderNumber": null,
@@ -15639,7 +15639,7 @@
  {
    "id": 1909,
    "name": "Trial Balance",
-   "url": "/EGF/Reports/TrialBalance.jsp",
+   "url": "/services/EGF/Reports/TrialBalance.jsp",
    "parentModule": null,
    "displayName": "Trial Balance",
    "orderNumber": null,
@@ -15652,7 +15652,7 @@
  {
    "id": 1910,
    "name": "Sub-Ledger",
-   "url": "/EGF/Reports/SubLedgerReport.jsp",
+   "url": "/services/EGF/Reports/SubLedgerReport.jsp",
    "parentModule": null,
    "displayName": "Sub-Ledger",
    "orderNumber": null,
@@ -15665,7 +15665,7 @@
  {
    "id": 1911,
    "name": "Opening Balance Report",
-   "url": "/EGF/Reports/OpeningBalance.jsp",
+   "url": "/services/EGF/Reports/OpeningBalance.jsp",
    "parentModule": null,
    "displayName": "Opening Balance Report",
    "orderNumber": null,
@@ -15678,7 +15678,7 @@
  {
    "id": 1912,
    "name": "Cheque-in-hand Report",
-   "url": "/EGF/Reports/chequeInHand.jsp",
+   "url": "/services/EGF/Reports/chequeInHand.jsp",
    "parentModule": null,
    "displayName": "Cheque-in-hand Report",
    "orderNumber": null,
@@ -15691,7 +15691,7 @@
  {
    "id": 1913,
    "name": "Cheques Received",
-   "url": "/EGF/Reports/ChequesReceived.jsp",
+   "url": "/services/EGF/Reports/ChequesReceived.jsp",
    "parentModule": null,
    "displayName": "Cheques Received",
    "orderNumber": null,
@@ -15704,7 +15704,7 @@
  {
    "id": 1914,
    "name": "Register of Bills",
-   "url": "/EGF/Reports/RptBillRegister.jsp",
+   "url": "/services/EGF/Reports/RptBillRegister.jsp",
    "parentModule": null,
    "displayName": "Register of Bills",
    "orderNumber": null,
@@ -15717,7 +15717,7 @@
  {
    "id": 1915,
    "name": "Receipt Register",
-   "url": "/EGF/Reports/receiptRegister.jsp",
+   "url": "/services/EGF/Reports/receiptRegister.jsp",
    "parentModule": null,
    "displayName": "Receipt Register",
    "orderNumber": null,
@@ -15730,7 +15730,7 @@
  {
    "id": 1916,
    "name": "Bank Transaction",
-   "url": "/EGF/Reports/BankTransaction.jsp",
+   "url": "/services/EGF/Reports/BankTransaction.jsp",
    "parentModule": null,
    "displayName": "Bank Transaction",
    "orderNumber": null,
@@ -15743,7 +15743,7 @@
  {
    "id": 1917,
    "name": "Contract Type",
-   "url": "/EGF/masters/contractType.action",
+   "url": "/services/EGF/masters/contractType.action",
    "parentModule": null,
    "displayName": "Contract Type",
    "orderNumber": null,
@@ -15756,7 +15756,7 @@
  {
    "id": 1918,
    "name": "Modify Bill Registers-Search",
-   "url": "/EGF/billsaccounting/BillRegisterSearch.jsp",
+   "url": "/services/EGF/billsaccounting/BillRegisterSearch.jsp",
    "parentModule": null,
    "displayName": "Modify Bill Registers",
    "orderNumber": null,
@@ -15769,7 +15769,7 @@
  {
    "id": 1919,
    "name": "Approve Bill Registers-Search",
-   "url": "/EGF/inbox/Inbox.jsp",
+   "url": "/services/EGF/inbox/Inbox.jsp",
    "parentModule": null,
    "displayName": "Approve Bill Register",
    "orderNumber": null,
@@ -15782,7 +15782,7 @@
  {
    "id": 1920,
    "name": "View Remittance Recovery",
-   "url": "/EGF/deduction/remitRecovery.do",
+   "url": "/services/EGF/deduction/remitRecovery.do",
    "parentModule": null,
    "displayName": "View Remittance Recovery",
    "orderNumber": null,
@@ -15795,7 +15795,7 @@
  {
    "id": 1921,
    "name": "Modify Remittance Recovery",
-   "url": "/EGF/deduction/remitRecovery.do",
+   "url": "/services/EGF/deduction/remitRecovery.do",
    "parentModule": null,
    "displayName": "Modify Remittance Recovery",
    "orderNumber": null,
@@ -15808,7 +15808,7 @@
  {
    "id": 1922,
    "name": "Modify Remittance Recovery ",
-   "url": "/EGF/deduction/remitRecovery.do",
+   "url": "/services/EGF/deduction/remitRecovery.do",
    "parentModule": null,
    "displayName": "Modify Remittance Recovery",
    "orderNumber": null,
@@ -15821,7 +15821,7 @@
  {
    "id": 1923,
    "name": "Contract Type-BeforeModify",
-   "url": "/EGF/masters/contractType-beforeModify.action",
+   "url": "/services/EGF/masters/contractType-beforeModify.action",
    "parentModule": null,
    "displayName": "Contract Type-BeforeModify",
    "orderNumber": null,
@@ -15834,7 +15834,7 @@
  {
    "id": 1924,
    "name": "Recovery- Create",
-   "url": "/EGF/deduction/recoverySetupMaster.do",
+   "url": "/services/EGF/deduction/recoverySetupMaster.do",
    "parentModule": null,
    "displayName": "Create Recovery",
    "orderNumber": null,
@@ -15847,7 +15847,7 @@
  {
    "id": 1925,
    "name": "Modify Recoveries- Search",
-   "url": "/EGF/deduction/recoverySetupMaster.do",
+   "url": "/services/EGF/deduction/recoverySetupMaster.do",
    "parentModule": null,
    "displayName": "Modify Recoveries",
    "orderNumber": null,
@@ -15860,7 +15860,7 @@
  {
    "id": 1926,
    "name": "Bank to Bank Transfer-View",
-   "url": "/EGF/contra/contraBTB-beforeView.action",
+   "url": "/services/EGF/contra/contraBTB-beforeView.action",
    "parentModule": null,
    "displayName": "Bank to Bank Transfer-View",
    "orderNumber": null,
@@ -15873,7 +15873,7 @@
  {
    "id": 1927,
    "name": "Bank Transaction-View",
-   "url": "/EGF/Reports/BankTransaction.jsp",
+   "url": "/services/EGF/Reports/BankTransaction.jsp",
    "parentModule": null,
    "displayName": "Bank Transaction-View",
    "orderNumber": null,
@@ -15886,7 +15886,7 @@
  {
    "id": 1928,
    "name": "Scheme-View",
-   "url": "/EGF/masters/scheme.action",
+   "url": "/services/EGF/masters/scheme.action",
    "parentModule": null,
    "displayName": "Scheme-View",
    "orderNumber": null,
@@ -15899,7 +15899,7 @@
  {
    "id": 1929,
    "name": "Bank to Bank Transfer-Modify",
-   "url": "/EGF/contra/contraBTB-edit.action",
+   "url": "/services/EGF/contra/contraBTB-edit.action",
    "parentModule": null,
    "displayName": "Bank to Bank Transfer-Modify",
    "orderNumber": null,
@@ -15912,7 +15912,7 @@
  {
    "id": 1930,
    "name": "Bank Transaction-Modify",
-   "url": "/EGF/Reports/BankTransaction.jsp",
+   "url": "/services/EGF/Reports/BankTransaction.jsp",
    "parentModule": null,
    "displayName": "Bank Transaction-Modify",
    "orderNumber": null,
@@ -15925,7 +15925,7 @@
  {
    "id": 1931,
    "name": "Scheme-Modify",
-   "url": "/EGF/masters/scheme-nameUniqueCheck.action",
+   "url": "/services/EGF/masters/scheme-nameUniqueCheck.action",
    "parentModule": null,
    "displayName": "Scheme-Modify",
    "orderNumber": null,
@@ -15938,7 +15938,7 @@
  {
    "id": 1932,
    "name": "Bank to Bank Transfer-Reverse",
-   "url": "/EGF/contra/contraBTB-reverse.action",
+   "url": "/services/EGF/contra/contraBTB-reverse.action",
    "parentModule": null,
    "displayName": "Bank to Bank Transfer-Reverse",
    "orderNumber": null,
@@ -15951,7 +15951,7 @@
  {
    "id": 1933,
    "name": "Bank Transaction-Reverse",
-   "url": "/EGF/Reports/BankTransaction.jsp",
+   "url": "/services/EGF/Reports/BankTransaction.jsp",
    "parentModule": null,
    "displayName": "Bank Transaction-Reverse",
    "orderNumber": null,
@@ -15964,7 +15964,7 @@
  {
    "id": 1934,
    "name": "View Party Types-Search",
-   "url": "/EGF/masters/partyType-beforeSearch.action",
+   "url": "/services/EGF/masters/partyType-beforeSearch.action",
    "parentModule": null,
    "displayName": "View Party Types",
    "orderNumber": "1",
@@ -15977,7 +15977,7 @@
  {
    "id": 1935,
    "name": "Modify Party Type-Search",
-   "url": "/EGF/masters/partyType-beforeSearch.action",
+   "url": "/services/EGF/masters/partyType-beforeSearch.action",
    "parentModule": null,
    "displayName": "Modify Party Types",
    "orderNumber": "1",
@@ -15990,7 +15990,7 @@
  {
    "id": 1936,
    "name": "voucherSearch",
-   "url": "/EGF/voucher/voucherSearch.action",
+   "url": "/services/EGF/voucher/voucherSearch.action",
    "parentModule": null,
    "displayName": "voucherSearch",
    "orderNumber": null,
@@ -16003,7 +16003,7 @@
  {
    "id": 1937,
    "name": "directBankPayment!approve.action",
-   "url": "/EGF/payment/directBankPayment-approve.action",
+   "url": "/services/EGF/payment/directBankPayment-approve.action",
    "parentModule": null,
    "displayName": "directBankPayment!approve.action",
    "orderNumber": null,
@@ -16016,7 +16016,7 @@
  {
    "id": 1938,
    "name": "Contract Type-Create",
-   "url": "/EGF/masters/contractType-newform.action",
+   "url": "/services/EGF/masters/contractType-newform.action",
    "parentModule": null,
    "displayName": "Create Contract Type",
    "orderNumber": "1",
@@ -16029,7 +16029,7 @@
  {
    "id": 1939,
    "name": "AjaxMiscReceiptFundSource",
-   "url": "/EGF/voucher/common-ajaxLoadFundSource.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadFundSource.action",
    "parentModule": null,
    "displayName": "AjaxMiscReceiptFundSource",
    "orderNumber": null,
@@ -16042,7 +16042,7 @@
  {
    "id": 1940,
    "name": "AjaxMiscReceiptSubScheme",
-   "url": "/EGF/voucher/common-ajaxLoadSubSchemes.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadSubSchemes.action",
    "parentModule": null,
    "displayName": "AjaxMiscReceiptSubScheme",
    "orderNumber": null,
@@ -16055,7 +16055,7 @@
  {
    "id": 1941,
    "name": "AjaxMiscReceiptScheme",
-   "url": "/EGF/voucher/common-ajaxLoadSchemes.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadSchemes.action",
    "parentModule": null,
    "displayName": "AjaxMiscReceiptScheme",
    "orderNumber": null,
@@ -16068,7 +16068,7 @@
  {
    "id": 1942,
    "name": "ContraBTB",
-   "url": "/EGF/contra/contraBTB.action",
+   "url": "/services/EGF/contra/contraBTB.action",
    "parentModule": null,
    "displayName": "ContraBTB",
    "orderNumber": null,
@@ -16081,7 +16081,7 @@
  {
    "id": 1943,
    "name": "Voucher View",
-   "url": "/EGF/voucher/preApprovedVoucher-loadvoucherview.action",
+   "url": "/services/EGF/voucher/preApprovedVoucher-loadvoucherview.action",
    "parentModule": null,
    "displayName": "Voucher View",
    "orderNumber": null,
@@ -16094,7 +16094,7 @@
  {
    "id": 1944,
    "name": "DirectBankPayment",
-   "url": "/EGF/payment/directBankPayment.action",
+   "url": "/services/EGF/payment/directBankPayment.action",
    "parentModule": null,
    "displayName": "DirectBankPayment",
    "orderNumber": null,
@@ -16107,7 +16107,7 @@
  {
    "id": 1945,
    "name": "Generate Advance Bpv",
-   "url": "/EGF/payment/advanceRequisitionPayment.action",
+   "url": "/services/EGF/payment/advanceRequisitionPayment.action",
    "parentModule": null,
    "displayName": "Generate Advance Bpv",
    "orderNumber": null,
@@ -16120,7 +16120,7 @@
  {
    "id": 1946,
    "name": "FuncPayheadSummaryReport",
-   "url": "/EGF/reports/functionaryPayheadSummary.jsp",
+   "url": "/services/EGF/reports/functionaryPayheadSummary.jsp",
    "parentModule": null,
    "displayName": "Functionary Payhead Summary",
    "orderNumber": null,
@@ -16133,7 +16133,7 @@
  {
    "id": 1947,
    "name": "View Vouchers",
-   "url": "/EGF/voucher/voucherSearch-beforesearch.action",
+   "url": "/services/EGF/voucher/voucherSearch-beforesearch.action",
    "parentModule": null,
    "displayName": "View Vouchers",
    "orderNumber": "1",
@@ -16141,12 +16141,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Transactions.View Vouchers",
-   "navigationURL": "/EGF/voucher/voucherSearch-beforesearch.action"
+   "navigationURL": "/services/EGF/voucher/voucherSearch-beforesearch.action"
  },
  {
    "id": 1948,
    "name": "Contractor/Supplier Payments",
-   "url": "/EGF/payment/payment-beforeSearch.action",
+   "url": "/services/EGF/payment/payment-beforeSearch.action",
    "parentModule": null,
    "displayName": "Bill Payment",
    "orderNumber": "1",
@@ -16154,12 +16154,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Transactions.Payments.Bill Payment",
-   "navigationURL": "/EGF/payment/payment-beforeSearch.action"
+   "navigationURL": "/services/EGF/payment/payment-beforeSearch.action"
  },
  {
    "id": 1949,
    "name": "Cheque Assignment",
-   "url": "/EGF/payment/chequeAssignment-beforeSearch.action",
+   "url": "/services/EGF/payment/chequeAssignment-beforeSearch.action",
    "parentModule": null,
    "displayName": "Cheque Assignment",
    "orderNumber": "1",
@@ -16167,12 +16167,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Transactions.Payments.Cheque Assignment",
-   "navigationURL": "/EGF/payment/chequeAssignment-beforeSearch.action"
+   "navigationURL": "/services/EGF/payment/chequeAssignment-beforeSearch.action"
  },
  {
    "id": 1950,
    "name": "Surrender/Reassign Cheque",
-   "url": "/EGF/payment/chequeAssignment-beforeSearchForSurrender.action",
+   "url": "/services/EGF/payment/chequeAssignment-beforeSearchForSurrender.action",
    "parentModule": null,
    "displayName": "Surrender/Reassign Cheque",
    "orderNumber": "1",
@@ -16180,12 +16180,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Transactions.Payments.Surrender/Reassign Cheque",
-   "navigationURL": "/EGF/payment/chequeAssignment-beforeSearchForSurrender.action"
+   "navigationURL": "/services/EGF/payment/chequeAssignment-beforeSearchForSurrender.action"
  },
  {
    "id": 1951,
    "name": "Modify Payments-Search ",
-   "url": "/EGF/payment/payment-beforeModify.action",
+   "url": "/services/EGF/payment/payment-beforeModify.action",
    "parentModule": null,
    "displayName": "Modify Payments-Search",
    "orderNumber": "1",
@@ -16198,7 +16198,7 @@
  {
    "id": 1952,
    "name": "Add/Modify Bank Account Cheque",
-   "url": "/EGF/masters/accountCheque-newform.action",
+   "url": "/services/EGF/masters/accountCheque-newform.action",
    "parentModule": null,
    "displayName": "Add/Modify Bank Account Cheque",
    "orderNumber": "1",
@@ -16206,12 +16206,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Cheque.Add/Modify Bank Account Cheque",
-   "navigationURL": "/EGF/masters/accountCheque-newform.action"
+   "navigationURL": "/services/EGF/masters/accountCheque-newform.action"
  },
  {
    "id": 1953,
    "name": "Modify Funding Agency",
-   "url": "/EGF/masters/fundingAgency-beforeSearch.action",
+   "url": "/services/EGF/masters/fundingAgency-beforeSearch.action",
    "parentModule": null,
    "displayName": "Modify Funding Agency",
    "orderNumber": "1",
@@ -16224,7 +16224,7 @@
  {
    "id": 1954,
    "name": "exil-Ajax-SubLedgerScheduleCodes",
-   "url": "/EGF/commons/Process.jsp",
+   "url": "/services/EGF/commons/Process.jsp",
    "parentModule": null,
    "displayName": "AjaxSubLedgerScheduleCodes",
    "orderNumber": null,
@@ -16237,7 +16237,7 @@
  {
    "id": 1955,
    "name": "exil-rptTitle",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "rptTitle..",
    "orderNumber": null,
@@ -16250,7 +16250,7 @@
  {
    "id": 1956,
    "name": "exil-showmodeeditFund",
-   "url": "/EGF/GetList.jsp",
+   "url": "/services/EGF/GetList.jsp",
    "parentModule": null,
    "displayName": "Showmode..",
    "orderNumber": null,
@@ -16263,7 +16263,7 @@
  {
    "id": 1957,
    "name": "exil-showmode_editFunction",
-   "url": "/EGF/GetList.jsp",
+   "url": "/services/EGF/GetList.jsp",
    "parentModule": null,
    "displayName": "Showmode..",
    "orderNumber": null,
@@ -16276,7 +16276,7 @@
  {
    "id": 1958,
    "name": "Fund-Create",
-   "url": "/EGF/masters/fund-newform.action",
+   "url": "/services/EGF/masters/fund-newform.action",
    "parentModule": null,
    "displayName": "Create Fund",
    "orderNumber": "1",
@@ -16284,12 +16284,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Fund.Create Fund",
-   "navigationURL": "/EGF/masters/fund-newform.action"
+   "navigationURL": "/services/EGF/masters/fund-newform.action"
  },
  {
    "id": 1959,
    "name": "Fund-View",
-   "url": "/EGF/masters/fund-beforeSearch.action",
+   "url": "/services/EGF/masters/fund-beforeSearch.action",
    "parentModule": null,
    "displayName": "View Fund",
    "orderNumber": "2",
@@ -16297,12 +16297,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Fund.View Fund",
-   "navigationURL": "/EGF/masters/fund-beforeSearch.action"
+   "navigationURL": "/services/EGF/masters/fund-beforeSearch.action"
  },
  {
    "id": 1960,
    "name": "Fund-Modify",
-   "url": "/EGF/masters/fund-beforeSearch.action",
+   "url": "/services/EGF/masters/fund-beforeSearch.action",
    "parentModule": null,
    "displayName": "Modify Fund",
    "orderNumber": "3",
@@ -16310,12 +16310,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Fund.Modify Fund",
-   "navigationURL": "/EGF/masters/fund-beforeSearch.action"
+   "navigationURL": "/services/EGF/masters/fund-beforeSearch.action"
  },
  {
    "id": 1961,
    "name": "User Defined Codes-Create",
-   "url": "/EGF/masters/userDefinedCodes-newform.action",
+   "url": "/services/EGF/masters/userDefinedCodes-newform.action",
    "parentModule": null,
    "displayName": "Create User Defined Codes",
    "orderNumber": "1",
@@ -16323,12 +16323,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Other masters.Create other masters",
-   "navigationURL": "/EGF/masters/userDefinedCodes-newform.action"
+   "navigationURL": "/services/EGF/masters/userDefinedCodes-newform.action"
  },
  {
    "id": 1962,
    "name": "User Defined Codes-View",
-   "url": "/EGF/masters/userDefinedCodes-beforeSearch.action",
+   "url": "/services/EGF/masters/userDefinedCodes-beforeSearch.action",
    "parentModule": null,
    "displayName": "View User Defined Codes",
    "orderNumber": "2",
@@ -16336,12 +16336,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Other Masters.View Other Masters",
-   "navigationURL": "/EGF/masters/userDefinedCodes-beforeSearch.action"
+   "navigationURL": "/services/EGF/masters/userDefinedCodes-beforeSearch.action"
  },
  {
    "id": 1963,
    "name": "User Defined Codes-Modify",
-   "url": "/EGF/masters/userDefinedCodes-beforeSearch.action",
+   "url": "/services/EGF/masters/userDefinedCodes-beforeSearch.action",
    "parentModule": null,
    "displayName": "Modify User Defined Codes",
    "orderNumber": "3",
@@ -16349,12 +16349,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Other Masters.Create Other Masters",
-   "navigationURL": "/EGF/masters/userDefinedCodes-beforeSearch.action"
+   "navigationURL": "/services/EGF/masters/userDefinedCodes-beforeSearch.action"
  },
  {
    "id": 1964,
    "name": "exil-Ajax-getGLreportCodes",
-   "url": "/EGF/commons/Process.jsp",
+   "url": "/services/EGF/commons/Process.jsp",
    "parentModule": null,
    "displayName": "AjaxgetGLreportCodes",
    "orderNumber": null,
@@ -16367,7 +16367,7 @@
  {
    "id": 1965,
    "name": "exil-Neweacc",
-   "url": "/EGF/GetData.jsp",
+   "url": "/services/EGF/GetData.jsp",
    "parentModule": null,
    "displayName": "exil-Neweacc",
    "orderNumber": null,
@@ -16380,7 +16380,7 @@
  {
    "id": 1966,
    "name": "exil-NeweaccList",
-   "url": "/EGF/GetList.jsp",
+   "url": "/services/EGF/GetList.jsp",
    "parentModule": null,
    "displayName": "exil-NeweaccList",
    "orderNumber": null,
@@ -16393,7 +16393,7 @@
  {
    "id": 1967,
    "name": "Fund",
-   "url": "/EGF/masters/fund.action",
+   "url": "/services/EGF/masters/fund.action",
    "parentModule": null,
    "displayName": "Fund",
    "orderNumber": null,
@@ -16406,7 +16406,7 @@
  {
    "id": 1968,
    "name": "Fund-BeforeModify",
-   "url": "/EGF/masters/fund-beforeModify.action",
+   "url": "/services/EGF/masters/fund-beforeModify.action",
    "parentModule": null,
    "displayName": "Fund-BeforeModify",
    "orderNumber": null,
@@ -16419,7 +16419,7 @@
  {
    "id": 1969,
    "name": "User Defined Codes",
-   "url": "/EGF/masters/userDefinedCodes.action",
+   "url": "/services/EGF/masters/userDefinedCodes.action",
    "parentModule": null,
    "displayName": "User Defined Codes",
    "orderNumber": null,
@@ -16432,7 +16432,7 @@
  {
    "id": 1970,
    "name": "Function-Create",
-   "url": "/EGF/masters/function-newform.action",
+   "url": "/services/EGF/masters/function-newform.action",
    "parentModule": null,
    "displayName": "Create Function",
    "orderNumber": "1",
@@ -16440,12 +16440,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Function.Create Function",
-   "navigationURL": "/EGF/masters/function-newform.action"
+   "navigationURL": "/services/EGF/masters/function-newform.action"
  },
  {
    "id": 1971,
    "name": "Function-View",
-   "url": "/EGF/masters/function-beforeSearch.action",
+   "url": "/services/EGF/masters/function-beforeSearch.action",
    "parentModule": null,
    "displayName": "View Function",
    "orderNumber": "2",
@@ -16453,12 +16453,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Function.View Function",
-   "navigationURL": "/EGF/masters/function-beforeSearch.action"
+   "navigationURL": "/services/EGF/masters/function-beforeSearch.action"
  },
  {
    "id": 1972,
    "name": "Function-Modify",
-   "url": "/EGF/masters/function-beforeSearch.action",
+   "url": "/services/EGF/masters/function-beforeSearch.action",
    "parentModule": null,
    "displayName": "Modify Function",
    "orderNumber": "3",
@@ -16466,12 +16466,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Function.Modify Function",
-   "navigationURL": "/EGF/masters/function-beforeSearch.action"
+   "navigationURL": "/services/EGF/masters/function-beforeSearch.action"
  },
  {
    "id": 1973,
    "name": "TrialBalance",
-   "url": "/EGF/report/trialBalance-newForm.action",
+   "url": "/services/EGF/report/trialBalance-newForm.action",
    "parentModule": null,
    "displayName": "TrialBalance",
    "orderNumber": "2",
@@ -16479,12 +16479,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Reports.Accounting Records.Trial Balance",
-   "navigationURL": "/EGF/report/trialBalance-newForm.action"
+   "navigationURL": "/services/EGF/report/trialBalance-newForm.action"
  },
  {
    "id": 1974,
    "name": "Create Sub Scheme",
-   "url": "/EGF/masters/subScheme-newForm.action",
+   "url": "/services/EGF/masters/subScheme-newForm.action",
    "parentModule": null,
    "displayName": "Create Sub Scheme",
    "orderNumber": "4",
@@ -16492,12 +16492,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Scheme.Create Sub-scheme",
-   "navigationURL": "/EGF/masters/subScheme-newForm.action"
+   "navigationURL": "/services/EGF/masters/subScheme-newForm.action"
  },
  {
    "id": 1975,
    "name": "User Defined Codes-BeforeModify",
-   "url": "/EGF/masters/userDefinedCodes-beforeModify.action",
+   "url": "/services/EGF/masters/userDefinedCodes-beforeModify.action",
    "parentModule": null,
    "displayName": "User Defined Codes-BeforeModify",
    "orderNumber": null,
@@ -16510,7 +16510,7 @@
  {
    "id": 1976,
    "name": "Function",
-   "url": "/EGF/masters/function.action",
+   "url": "/services/EGF/masters/function.action",
    "parentModule": null,
    "displayName": "Function",
    "orderNumber": null,
@@ -16523,7 +16523,7 @@
  {
    "id": 1977,
    "name": "Function-BeforeModify",
-   "url": "/EGF/masters/function-beforeModify.action",
+   "url": "/services/EGF/masters/function-beforeModify.action",
    "parentModule": null,
    "displayName": "Function-BeforeModify",
    "orderNumber": null,
@@ -16536,7 +16536,7 @@
  {
    "id": 1978,
    "name": "AutoReconcile",
-   "url": "/EGF/brs/autoReconciliation-newForm.action",
+   "url": "/services/EGF/brs/autoReconciliation-newForm.action",
    "parentModule": null,
    "displayName": "Auto Reconcile",
    "orderNumber": null,
@@ -16549,7 +16549,7 @@
  {
    "id": 1979,
    "name": "common-bankbranches",
-   "url": "/EGF/voucher/common-ajaxLoadBankBranchesByBank.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBankBranchesByBank.action",
    "parentModule": null,
    "displayName": "common-bankbranches",
    "orderNumber": null,
@@ -16562,7 +16562,7 @@
  {
    "id": 1980,
    "name": "common-bankaccounts",
-   "url": "/EGF/voucher/common-ajaxLoadBankAccountsByBranch.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadBankAccountsByBranch.action",
    "parentModule": null,
    "displayName": "common-bankaccounts",
    "orderNumber": null,
@@ -16575,7 +16575,7 @@
  {
    "id": 1981,
    "name": "autoReconciliation-crud",
-   "url": "/EGF/brs/autoReconciliation.action",
+   "url": "/services/EGF/brs/autoReconciliation.action",
    "parentModule": null,
    "displayName": "autoReconciliation-crud",
    "orderNumber": null,
@@ -16588,7 +16588,7 @@
  {
    "id": 1982,
    "name": "AutoReconcile-Upload",
-   "url": "/EGF/brs/autoReconciliation-beforeUpload.action",
+   "url": "/services/EGF/brs/autoReconciliation-beforeUpload.action",
    "parentModule": null,
    "displayName": "Auto Reconcile-Upload",
    "orderNumber": null,
@@ -16601,7 +16601,7 @@
  {
    "id": 1983,
    "name": "Party Type",
-   "url": "/EGF/masters/partyType.action",
+   "url": "/services/EGF/masters/partyType.action",
    "parentModule": null,
    "displayName": "Party Type",
    "orderNumber": null,
@@ -16614,7 +16614,7 @@
  {
    "id": 1984,
    "name": "Party Type-BeforeModify",
-   "url": "/EGF/masters/partyType-beforeModify.action",
+   "url": "/services/EGF/masters/partyType-beforeModify.action",
    "parentModule": null,
    "displayName": "Party Type-BeforeModify",
    "orderNumber": null,
@@ -16627,7 +16627,7 @@
  {
    "id": 1985,
    "name": "TrialBalance-crud",
-   "url": "/EGF/report/trialBalance.action",
+   "url": "/services/EGF/report/trialBalance.action",
    "parentModule": null,
    "displayName": "TrialBalance-crud",
    "orderNumber": null,
@@ -16640,7 +16640,7 @@
  {
    "id": 1986,
    "name": "Bill View Action",
-   "url": "/EGF/bill/billView.action",
+   "url": "/services/EGF/bill/billView.action",
    "parentModule": null,
    "displayName": "BillViewAction",
    "orderNumber": null,
@@ -16653,7 +16653,7 @@
  {
    "id": 1987,
    "name": "Bill View-View",
-   "url": "/EGF/bill/billView-view.action",
+   "url": "/services/EGF/bill/billView-view.action",
    "parentModule": null,
    "displayName": "BillView",
    "orderNumber": null,
@@ -16666,7 +16666,7 @@
  {
    "id": 1988,
    "name": "ConsolidateBudgetReport",
-   "url": "/EGF/report/consolidatedBudgetReport-consolidatedReport.action",
+   "url": "/services/EGF/report/consolidatedBudgetReport-consolidatedReport.action",
    "parentModule": null,
    "displayName": "Consolidated Budget Report",
    "orderNumber": "1",
@@ -16679,7 +16679,7 @@
  {
    "id": 1989,
    "name": "complete Bill Register Report",
-   "url": "/EGF/report/billRegisterReport-searchform.action",
+   "url": "/services/EGF/report/billRegisterReport-searchform.action",
    "parentModule": null,
    "displayName": "Complete Bill Register Report",
    "orderNumber": "1",
@@ -16687,12 +16687,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Reports.MIS Reports.Bill Register Detailed Report",
-   "navigationURL": "/EGF/report/billRegisterReport-searchform.action"
+   "navigationURL": "/services/EGF/report/billRegisterReport-searchform.action"
  },
  {
    "id": 1990,
    "name": "ReceiptPaymentReport",
-   "url": "/EGF/report/receiptPaymentReport-newForm.action",
+   "url": "/services/EGF/report/receiptPaymentReport-newForm.action",
    "parentModule": null,
    "displayName": "Receipt Payment Report",
    "orderNumber": "1",
@@ -16705,7 +16705,7 @@
  {
    "id": 1991,
    "name": "PensionPayments",
-   "url": "/EGF/payment/payment-beforeSearch.action?pensionType",
+   "url": "/services/EGF/payment/payment-beforeSearch.action?pensionType",
    "parentModule": null,
    "displayName": "Pension Payments",
    "orderNumber": "1",
@@ -16718,7 +16718,7 @@
  {
    "id": 1992,
    "name": "Pension Cheque Assignemnt Search",
-   "url": "/EGF/payment/chequeAssignment-beforePensionSearch.action",
+   "url": "/services/EGF/payment/chequeAssignment-beforePensionSearch.action",
    "parentModule": null,
    "displayName": "Pension Cheque Assignemnt",
    "orderNumber": "1",
@@ -16731,7 +16731,7 @@
  {
    "id": 1993,
    "name": "BankAdviceReportforRTGSBankPayment",
-   "url": "/EGF/report/bankAdviceReport-newForm.action",
+   "url": "/services/EGF/report/bankAdviceReport-newForm.action",
    "parentModule": null,
    "displayName": "Bank Advice Report for RTGS Bank Payment",
    "orderNumber": "2",
@@ -16739,12 +16739,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Reports.MIS Reports.Bank Advice Report(RTGS)",
-   "navigationURL": "/EGF/report/bankAdviceReport-newForm.action"
+   "navigationURL": "/services/EGF/report/bankAdviceReport-newForm.action"
  },
  {
    "id": 1994,
    "name": "BankMasterModify",
-   "url": "/EGF/masters/bank.action",
+   "url": "/services/EGF/masters/bank.action",
    "parentModule": null,
    "displayName": "Modify Bank",
    "orderNumber": "1",
@@ -16752,12 +16752,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Bank.Modify Bank",
-   "navigationURL": "/EGF/masters/bank.action"
+   "navigationURL": "/services/EGF/masters/bank.action"
  },
  {
    "id": 1995,
    "name": "BankAccountMaster",
-   "url": "/EGF/masters/bankAccount.action",
+   "url": "/services/EGF/masters/bankAccount.action",
    "parentModule": null,
    "displayName": "BankAccountMaster",
    "orderNumber": null,
@@ -16770,7 +16770,7 @@
  {
    "id": 1996,
    "name": "BankBranchMaster",
-   "url": "/EGF/masters/bankBranch.action",
+   "url": "/services/EGF/masters/bankBranch.action",
    "parentModule": null,
    "displayName": "BankBranchMaster",
    "orderNumber": null,
@@ -16783,7 +16783,7 @@
  {
    "id": 1997,
    "name": "RTGSAssignmentforPayment",
-   "url": "/EGF/payment/chequeAssignment-beforeRemittanceRtgsSearch.action",
+   "url": "/services/EGF/payment/chequeAssignment-beforeRemittanceRtgsSearch.action",
    "parentModule": null,
    "displayName": "Auto Remittance RTGS Assignment",
    "orderNumber": null,
@@ -16796,7 +16796,7 @@
  {
    "id": 1998,
    "name": "BankMaster",
-   "url": "/EGF/masters/bank.action",
+   "url": "/services/EGF/masters/bank.action",
    "parentModule": null,
    "displayName": "Create Bank",
    "orderNumber": "1",
@@ -16804,12 +16804,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Masters.Bank.Create Bank",
-   "navigationURL": "/EGF/masters/bank.action"
+   "navigationURL": "/services/EGF/masters/bank.action"
  },
  {
    "id": 1999,
    "name": "RTGSIssueRegisterReport",
-   "url": "/EGF/report/rtgsIssueRegisterReport-newForm.action",
+   "url": "/services/EGF/report/rtgsIssueRegisterReport-newForm.action",
    "parentModule": null,
    "displayName": "RTGS register report",
    "orderNumber": "3",
@@ -16817,12 +16817,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Reports.MIS Reports.RTGS Register",
-   "navigationURL": "/EGF/report/rtgsIssueRegisterReport-newForm.action"
+   "navigationURL": "/services/EGF/report/rtgsIssueRegisterReport-newForm.action"
  },
  {
    "id": 2000,
    "name": "DishonoredCheques-inbox",
-   "url": "/EGF/payment/dishonorChequeWorkflow-view.action",
+   "url": "/services/EGF/payment/dishonorChequeWorkflow-view.action",
    "parentModule": null,
    "displayName": "Dishonored Cheques",
    "orderNumber": null,
@@ -16835,7 +16835,7 @@
  {
    "id": 2001,
    "name": "CreateAdvancePayment",
-   "url": "/EGF/payment/searchAdvanceRequisitionForPayment-beforeSearch.action",
+   "url": "/services/EGF/payment/searchAdvanceRequisitionForPayment-beforeSearch.action",
    "parentModule": null,
    "displayName": "Contractor Advance Payment",
    "orderNumber": "1",
@@ -16848,7 +16848,7 @@
  {
    "id": 2002,
    "name": "GeneralLedger-Search",
-   "url": "/EGF/report/generalLedgerReport-newForm.action",
+   "url": "/services/EGF/report/generalLedgerReport-newForm.action",
    "parentModule": null,
    "displayName": "General Ledger Report",
    "orderNumber": "1",
@@ -16856,12 +16856,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Reports.Accounting Records.General Ledger",
-   "navigationURL": "/EGF/report/generalLedgerReport-newForm.action"
+   "navigationURL": "/services/EGF/report/generalLedgerReport-newForm.action"
  },
  {
    "id": 2003,
    "name": "SubLedgerSchedule-Search",
-   "url": "/EGF/report/subLedgerScheduleReport-newForm.action",
+   "url": "/services/EGF/report/subLedgerScheduleReport-newForm.action",
    "parentModule": null,
    "displayName": "Sub Ledger Schedule Report",
    "orderNumber": "4",
@@ -16869,12 +16869,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Reports.Accounting Records.Subledger Schedule",
-   "navigationURL": "/EGF/report/subLedgerScheduleReport-newForm.action"
+   "navigationURL": "/services/EGF/report/subLedgerScheduleReport-newForm.action"
  },
  {
    "id": 2004,
    "name": "SearchAdvanceRequisitionForPayment",
-   "url": "/EGF/payment/searchAdvanceRequisitionForPayment.action",
+   "url": "/services/EGF/payment/searchAdvanceRequisitionForPayment.action",
    "parentModule": null,
    "displayName": "SearchAdvanceRequisitionForPayment",
    "orderNumber": null,
@@ -16887,7 +16887,7 @@
  {
    "id": 2005,
    "name": "AjaxARFNoForAdvancePayment",
-   "url": "/EGF/voucher/common-searchARFNumbers.action",
+   "url": "/services/EGF/voucher/common-searchARFNumbers.action",
    "parentModule": null,
    "displayName": "AjaxARFNoForAdvancePayment",
    "orderNumber": null,
@@ -16900,7 +16900,7 @@
  {
    "id": 2006,
    "name": "AdvancePaymentNewform",
-   "url": "/EGF/payment/advancePayment-newform.action",
+   "url": "/services/EGF/payment/advancePayment-newform.action",
    "parentModule": null,
    "displayName": "AdvancePaymentNewform",
    "orderNumber": null,
@@ -16913,7 +16913,7 @@
  {
    "id": 2007,
    "name": "AdvancePaymentSubmit",
-   "url": "/EGF/payment/advancePayment.action",
+   "url": "/services/EGF/payment/advancePayment.action",
    "parentModule": null,
    "displayName": "AdvancePaymentSubmit",
    "orderNumber": null,
@@ -16926,7 +16926,7 @@
  {
    "id": 2008,
    "name": "AdvancePaymentViewInbox",
-   "url": "/EGF/payment/advancePayment-viewInboxItem.action",
+   "url": "/services/EGF/payment/advancePayment-viewInboxItem.action",
    "parentModule": null,
    "displayName": "AdvancePaymentViewInbox",
    "orderNumber": null,
@@ -16939,7 +16939,7 @@
  {
    "id": 2009,
    "name": "AdvancePaymentView",
-   "url": "/EGF/payment/advancePayment-view.action",
+   "url": "/services/EGF/payment/advancePayment-view.action",
    "parentModule": null,
    "displayName": "AdvancePaymentView",
    "orderNumber": null,
@@ -16952,7 +16952,7 @@
  {
    "id": 2010,
    "name": "ajaxLoadAllBanksByFund",
-   "url": "/EGF/voucher/common-ajaxLoadAllBanksByFund.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadAllBanksByFund.action",
    "parentModule": null,
    "displayName": "ajaxLoadAllBanksByFund",
    "orderNumber": null,
@@ -16965,7 +16965,7 @@
  {
    "id": 2011,
    "name": "AutoRemittanceReport",
-   "url": "/EGF/report/autoRemittanceReport-newform.action",
+   "url": "/services/EGF/report/autoRemittanceReport-newform.action",
    "parentModule": null,
    "displayName": "Auto Remittance Report",
    "orderNumber": null,
@@ -16978,7 +16978,7 @@
  {
    "id": 2012,
    "name": "ajaxLoadDrawingOfficersByDept",
-   "url": "/EGF/voucher/common-ajaxLoadDrawingOfficers.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadDrawingOfficers.action",
    "parentModule": null,
    "displayName": "ajaxLoadDrawingOfficersByDept",
    "orderNumber": null,
@@ -16991,7 +16991,7 @@
  {
    "id": 2013,
    "name": "ScheduleRemittanceManual",
-   "url": "/EGF/deduction/autoRemittance-manualSchedule.action",
+   "url": "/services/EGF/deduction/autoRemittance-manualSchedule.action",
    "parentModule": null,
    "displayName": "Schedule Remittance Manually",
    "orderNumber": null,
@@ -17004,7 +17004,7 @@
  {
    "id": 2014,
    "name": "ajaxLoadRTGSNumber",
-   "url": "/EGF/voucher/common-ajaxLoadRTGSNumberBy20.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadRTGSNumberBy20.action",
    "parentModule": null,
    "displayName": "ajaxLoadRTGSNumber",
    "orderNumber": null,
@@ -17017,7 +17017,7 @@
  {
    "id": 2015,
    "name": "ScheduleRemittanceManual-CRUD",
-   "url": "/EGF/deduction/autoRemittance.action",
+   "url": "/services/EGF/deduction/autoRemittance.action",
    "parentModule": null,
    "displayName": "ScheduleRemittanceManual-CRUD",
    "orderNumber": null,
@@ -17030,7 +17030,7 @@
  {
    "id": 2016,
    "name": "SubLedger-Search",
-   "url": "/EGF/report/subLedgerReport-newForm.action",
+   "url": "/services/EGF/report/subLedgerReport-newForm.action",
    "parentModule": null,
    "displayName": "Sub Ledger Report",
    "orderNumber": "5",
@@ -17038,12 +17038,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Reports.Accounting Records.Sub Ledger",
-   "navigationURL": "/EGF/report/subLedgerReport-newForm.action"
+   "navigationURL": "/services/EGF/report/subLedgerReport-newForm.action"
  },
  {
    "id": 2017,
    "name": "GeneralLedger-View",
-   "url": "/EGF/report/generalLedgerReport.action",
+   "url": "/services/EGF/report/generalLedgerReport.action",
    "parentModule": null,
    "displayName": "GeneralLedger-View",
    "orderNumber": null,
@@ -17056,7 +17056,7 @@
  {
    "id": 2018,
    "name": "ajaxLoadGLreportCodes",
-   "url": "/EGF/voucher/common-ajaxLoadGLreportCodes.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadGLreportCodes.action",
    "parentModule": null,
    "displayName": "ajaxLoadGLreportCodes",
    "orderNumber": null,
@@ -17069,7 +17069,7 @@
  {
    "id": 2019,
    "name": "ajaxLoadFunctionCodes",
-   "url": "/EGF/voucher/common-ajaxLoadFunctionCodes.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadFunctionCodes.action",
    "parentModule": null,
    "displayName": "ajaxLoadFunctionCodes",
    "orderNumber": null,
@@ -17082,7 +17082,7 @@
  {
    "id": 2020,
    "name": "SubLedgerSchedule-View",
-   "url": "/EGF/report/subLedgerScheduleReport.action",
+   "url": "/services/EGF/report/subLedgerScheduleReport.action",
    "parentModule": null,
    "displayName": "SubLedgerSchedule-View",
    "orderNumber": null,
@@ -17095,7 +17095,7 @@
  {
    "id": 2021,
    "name": "SubLedgerName-View",
-   "url": "/EGF/report/subLedgerReport-search.action",
+   "url": "/services/EGF/report/subLedgerReport-search.action",
    "parentModule": null,
    "displayName": "SubLedgerName-View",
    "orderNumber": null,
@@ -17108,7 +17108,7 @@
  {
    "id": 2022,
    "name": "DayBook-Search",
-   "url": "/EGF/report/dayBookReport-newForm.action",
+   "url": "/services/EGF/report/dayBookReport-newForm.action",
    "parentModule": null,
    "displayName": "Day Book Report",
    "orderNumber": "6",
@@ -17116,12 +17116,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Reports.Accounting Records.Day Book",
-   "navigationURL": "/EGF/report/dayBookReport-newForm.action"
+   "navigationURL": "/services/EGF/report/dayBookReport-newForm.action"
  },
  {
    "id": 2023,
    "name": "JournalBook-Search",
-   "url": "/EGF/report/journalBookReport-newForm.action",
+   "url": "/services/EGF/report/journalBookReport-newForm.action",
    "parentModule": null,
    "displayName": "Journal Book Report",
    "orderNumber": "7",
@@ -17129,12 +17129,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Reports.Accounting Records.Journal Book",
-   "navigationURL": "/EGF/report/journalBookReport-newForm.action"
+   "navigationURL": "/services/EGF/report/journalBookReport-newForm.action"
  },
  {
    "id": 2024,
    "name": "DishonoredCheque-Search",
-   "url": "/EGF/report/dishonoredChequeReport-newForm.action",
+   "url": "/services/EGF/report/dishonoredChequeReport-newForm.action",
    "parentModule": null,
    "displayName": "Dishonored Cheques Report - New",
    "orderNumber": "1",
@@ -17147,7 +17147,7 @@
  {
    "id": 2025,
    "name": "SubLedger-View",
-   "url": "/EGF/report/subLedgerReport.action",
+   "url": "/services/EGF/report/subLedgerReport.action",
    "parentModule": null,
    "displayName": "SubLedger-View",
    "orderNumber": null,
@@ -17160,7 +17160,7 @@
  {
    "id": 2026,
    "name": "ajaxLoadSLreportCodes",
-   "url": "/EGF/voucher/common-ajaxLoadSLreportCodes.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadSLreportCodes.action",
    "parentModule": null,
    "displayName": "ajaxLoadSLreportCodes",
    "orderNumber": null,
@@ -17173,7 +17173,7 @@
  {
    "id": 2027,
    "name": "ajaxLoadSubLedgerTypesByGlCode",
-   "url": "/EGF/voucher/common-ajaxLoadSubLedgerTypesByGlCode.action",
+   "url": "/services/EGF/voucher/common-ajaxLoadSubLedgerTypesByGlCode.action",
    "parentModule": null,
    "displayName": "ajaxLoadSubLedgerTypesByGlCode",
    "orderNumber": null,
@@ -17186,7 +17186,7 @@
  {
    "id": 2028,
    "name": "JournalBook-View",
-   "url": "/EGF/report/journalBookReport.action",
+   "url": "/services/EGF/report/journalBookReport.action",
    "parentModule": null,
    "displayName": "JournalBook-View",
    "orderNumber": null,
@@ -17199,7 +17199,7 @@
  {
    "id": 2029,
    "name": "DayBook-View",
-   "url": "/EGF/report/dayBookReport.action",
+   "url": "/services/EGF/report/dayBookReport.action",
    "parentModule": null,
    "displayName": "DayBook-View",
    "orderNumber": null,
@@ -17212,7 +17212,7 @@
  {
    "id": 2030,
    "name": "BankBookReport-showChequeDetails",
-   "url": "/EGF/report/bankBookReport-showChequeDetails.action",
+   "url": "/services/EGF/report/bankBookReport-showChequeDetails.action",
    "parentModule": null,
    "displayName": "BankBookReport-showChequeDetails",
    "orderNumber": null,
@@ -17225,7 +17225,7 @@
  {
    "id": 2031,
    "name": "DishonoredCheque-View",
-   "url": "/EGF/report/dishonoredChequeReport.action",
+   "url": "/services/EGF/report/dishonoredChequeReport.action",
    "parentModule": null,
    "displayName": "DishonoredCheque-View",
    "orderNumber": null,
@@ -17238,7 +17238,7 @@
  {
    "id": 2032,
    "name": "DishonoredCheque-ajaxSearch",
-   "url": "/EGF/report/dishonoredChequeReport-ajaxSearch.action",
+   "url": "/services/EGF/report/dishonoredChequeReport-ajaxSearch.action",
    "parentModule": null,
    "displayName": "DishonoredCheque-ajaxSearch",
    "orderNumber": null,
@@ -17251,7 +17251,7 @@
  {
    "id": 2033,
    "name": "GeneralLedger-ajaxSearch",
-   "url": "/EGF/report/generalLedgerReport-ajaxSearch.action",
+   "url": "/services/EGF/report/generalLedgerReport-ajaxSearch.action",
    "parentModule": null,
    "displayName": "GeneralLedger-ajaxSearch",
    "orderNumber": null,
@@ -17264,7 +17264,7 @@
  {
    "id": 2034,
    "name": "DayBookReport-ajaxSearch",
-   "url": "/EGF/report/dayBookReport-ajaxSearch.action",
+   "url": "/services/EGF/report/dayBookReport-ajaxSearch.action",
    "parentModule": null,
    "displayName": "DayBookReport-ajaxSearch",
    "orderNumber": null,
@@ -17277,7 +17277,7 @@
  {
    "id": 2035,
    "name": "JournalBookReport-ajaxSearch",
-   "url": "/EGF/report/journalBookReport-ajaxSearch.action",
+   "url": "/services/EGF/report/journalBookReport-ajaxSearch.action",
    "parentModule": null,
    "displayName": "JournalBookReport-ajaxSearch",
    "orderNumber": null,
@@ -17290,7 +17290,7 @@
  {
    "id": 2036,
    "name": "SubLedgerScheduleReport-ajaxSearch",
-   "url": "/EGF/report/subLedgerScheduleReport-ajaxSearch.action",
+   "url": "/services/EGF/report/subLedgerScheduleReport-ajaxSearch.action",
    "parentModule": null,
    "displayName": "SubLedgerScheduleReport-ajaxSearch",
    "orderNumber": null,
@@ -17303,7 +17303,7 @@
  {
    "id": 2037,
    "name": "OpeningBalanceReport-ajaxSearch",
-   "url": "/EGF/report/openingBalanceReport-ajaxSearch.action",
+   "url": "/services/EGF/report/openingBalanceReport-ajaxSearch.action",
    "parentModule": null,
    "displayName": "OpeningBalanceReport-ajaxSearch",
    "orderNumber": null,
@@ -17316,7 +17316,7 @@
  {
    "id": 2038,
    "name": "OpeningBalance-View",
-   "url": "/EGF/report/openingBalanceReport.action",
+   "url": "/services/EGF/report/openingBalanceReport.action",
    "parentModule": null,
    "displayName": "OpeningBalance-View",
    "orderNumber": null,
@@ -17329,7 +17329,7 @@
  {
    "id": 2039,
    "name": "Update Budget Detail",
-   "url": "/EGF/budget/budgetProposalDetail-ajaxUpdateBudgetDetail.action",
+   "url": "/services/EGF/budget/budgetProposalDetail-ajaxUpdateBudgetDetail.action",
    "parentModule": null,
    "displayName": "Update Budget Detail",
    "orderNumber": null,
@@ -17342,7 +17342,7 @@
  {
    "id": 2040,
    "name": "createScheme",
-   "url": "/EGF/masters/scheme-create.action",
+   "url": "/services/EGF/masters/scheme-create.action",
    "parentModule": null,
    "displayName": "Create Scheme",
    "orderNumber": null,
@@ -17355,7 +17355,7 @@
  {
    "id": 2041,
    "name": "searchScheme",
-   "url": "/EGF/masters/scheme-search.action",
+   "url": "/services/EGF/masters/scheme-search.action",
    "parentModule": null,
    "displayName": "Search Scheme",
    "orderNumber": null,
@@ -17368,7 +17368,7 @@
  {
    "id": 2042,
    "name": "editScheme",
-   "url": "/EGF/masters/scheme-edit.action",
+   "url": "/services/EGF/masters/scheme-edit.action",
    "parentModule": null,
    "displayName": "Search Scheme",
    "orderNumber": null,
@@ -17381,7 +17381,7 @@
  {
    "id": 2043,
    "name": "createSubScheme",
-   "url": "/EGF/masters/subScheme-create.action",
+   "url": "/services/EGF/masters/subScheme-create.action",
    "parentModule": null,
    "displayName": "Search Scheme",
    "orderNumber": null,
@@ -17394,7 +17394,7 @@
  {
    "id": 2044,
    "name": "searchSubScheme",
-   "url": "/EGF/masters/subScheme-search.action",
+   "url": "/services/EGF/masters/subScheme-search.action",
    "parentModule": null,
    "displayName": "Search SubScheme",
    "orderNumber": null,
@@ -17407,7 +17407,7 @@
  {
    "id": 2045,
    "name": "ajaLoadAllCoaCodes",
-   "url": "/EGF/voucher/common-ajaLoadAllCoaCodes.action",
+   "url": "/services/EGF/voucher/common-ajaLoadAllCoaCodes.action",
    "parentModule": null,
    "displayName": "ajaLoadAllCoaCodes",
    "orderNumber": null,
@@ -17420,7 +17420,7 @@
  {
    "id": 2046,
    "name": "JournalVoucherCreate",
-   "url": "/EGF/voucher/journalVoucher-create.action",
+   "url": "/services/EGF/voucher/journalVoucher-create.action",
    "parentModule": null,
    "displayName": "Journal Voucher Create",
    "orderNumber": null,
@@ -17433,7 +17433,7 @@
  {
    "id": 2047,
    "name": "ModifyJVoucher",
-   "url": "/EGF/voucher/journalVoucherModify-update.action",
+   "url": "/services/EGF/voucher/journalVoucherModify-update.action",
    "parentModule": null,
    "displayName": "ModifyJVoucher",
    "orderNumber": null,
@@ -17446,7 +17446,7 @@
  {
    "id": 2048,
    "name": "JournalVoucherSearch",
-   "url": "/EGF/voucher/voucherSearch-search.action",
+   "url": "/services/EGF/voucher/voucherSearch-search.action",
    "parentModule": null,
    "displayName": "JournalVoucherSearch",
    "orderNumber": null,
@@ -17459,7 +17459,7 @@
  {
    "id": 2049,
    "name": "cancelVoucherSearch",
-   "url": "/EGF/voucher/cancelVoucher-search.action",
+   "url": "/services/EGF/voucher/cancelVoucher-search.action",
    "parentModule": null,
    "displayName": "cancelVoucherSearch",
    "orderNumber": null,
@@ -17472,7 +17472,7 @@
  {
    "id": 2050,
    "name": "BillRegisterSearch",
-   "url": "/EGF/bill/billRegisterSearch-search",
+   "url": "/services/EGF/bill/billRegisterSearch-search",
    "parentModule": null,
    "displayName": "BillRegisterSearch",
    "orderNumber": null,
@@ -17485,7 +17485,7 @@
  {
    "id": 2051,
    "name": "ExpenseBillCreate",
-   "url": "/EGF/bill/contingentBill-create",
+   "url": "/services/EGF/bill/contingentBill-create",
    "parentModule": null,
    "displayName": "ExpenseBillCreate",
    "orderNumber": null,
@@ -17498,7 +17498,7 @@
  {
    "id": 2052,
    "name": "ChartOfAccountsSearchView",
-   "url": "/EGF/masters/chartOfAccounts-viewSearch.action",
+   "url": "/services/EGF/masters/chartOfAccounts-viewSearch.action",
    "parentModule": null,
    "displayName": "BillVouchersList",
    "orderNumber": null,
@@ -17511,7 +17511,7 @@
  {
    "id": 2053,
    "name": "ChartOfAccountsSearchModify",
-   "url": "/EGF/masters/chartOfAccounts-modifySearch.action",
+   "url": "/services/EGF/masters/chartOfAccounts-modifySearch.action",
    "parentModule": null,
    "displayName": "BillVouchersList",
    "orderNumber": null,
@@ -17524,7 +17524,7 @@
  {
    "id": 2054,
    "name": "ChartOfAccountsUpdate",
-   "url": "/EGF/masters/chartOfAccounts-update.action",
+   "url": "/services/EGF/masters/chartOfAccounts-update.action",
    "parentModule": null,
    "displayName": "BillVouchersList",
    "orderNumber": null,
@@ -17537,7 +17537,7 @@
  {
    "id": 2055,
    "name": "ChartOfAccountsModify",
-   "url": "/EGF/masters/chartOfAccounts-modify.action",
+   "url": "/services/EGF/masters/chartOfAccounts-modify.action",
    "parentModule": null,
    "displayName": "BillVouchersList",
    "orderNumber": null,
@@ -17550,7 +17550,7 @@
  {
    "id": 2056,
    "name": "ChartOfAccountsCreate",
-   "url": "/EGF/masters/chartOfAccounts-create.action",
+   "url": "/services/EGF/masters/chartOfAccounts-create.action",
    "parentModule": null,
    "displayName": "BillVouchersList",
    "orderNumber": null,
@@ -17563,7 +17563,7 @@
  {
    "id": 2057,
    "name": "viewReceiptDetailsResult",
-   "url": "/EGF/payment/chequeAssignment-getReceiptDetails.action",
+   "url": "/services/EGF/payment/chequeAssignment-getReceiptDetails.action",
    "parentModule": null,
    "displayName": "viewReceiptDetailsResult",
    "orderNumber": null,
@@ -17576,7 +17576,7 @@
  {
    "id": 2058,
    "name": "bankAdviceReportExportPDF",
-   "url": "/EGF/report/bankAdviceReport-exportPDF.action",
+   "url": "/services/EGF/report/bankAdviceReport-exportPDF.action",
    "parentModule": null,
    "displayName": "bankAdviceReportExportPDF",
    "orderNumber": null,
@@ -17589,7 +17589,7 @@
  {
    "id": 2059,
    "name": "bankAdviceReportExportHtml",
-   "url": "/EGF/report/bankAdviceReport-exportHtml.action",
+   "url": "/services/EGF/report/bankAdviceReport-exportHtml.action",
    "parentModule": null,
    "displayName": "bankAdviceReportExportHtml",
    "orderNumber": null,
@@ -17602,7 +17602,7 @@
  {
    "id": 2060,
    "name": "bankAdviceReportExportExcel",
-   "url": "/EGF/report/bankAdviceReport-exportExcel.action",
+   "url": "/services/EGF/report/bankAdviceReport-exportExcel.action",
    "parentModule": null,
    "displayName": "bankAdviceReportExportExcel",
    "orderNumber": null,
@@ -17615,7 +17615,7 @@
  {
    "id": 2061,
    "name": "SurrenderRTGSSearch",
-   "url": "/EGF/payment/chequeAssignment-searchForRTGSSurrender.action",
+   "url": "/services/EGF/payment/chequeAssignment-searchForRTGSSurrender.action",
    "parentModule": null,
    "displayName": "SurrenderRTGSSearch",
    "orderNumber": null,
@@ -17628,7 +17628,7 @@
  {
    "id": 2062,
    "name": "saveBank",
-   "url": "/EGF/masters/bank-save.action",
+   "url": "/services/EGF/masters/bank-save.action",
    "parentModule": null,
    "displayName": "saveBank",
    "orderNumber": null,
@@ -17641,7 +17641,7 @@
  {
    "id": 2063,
    "name": "modifyBank",
-   "url": "/EGF/masters/bank-execute.action",
+   "url": "/services/EGF/masters/bank-execute.action",
    "parentModule": null,
    "displayName": "modifyBank",
    "orderNumber": null,
@@ -17654,7 +17654,7 @@
  {
    "id": 2064,
    "name": "OpeningBalance-Search",
-   "url": "/EGF/report/openingBalanceReport-newForm.action",
+   "url": "/services/EGF/report/openingBalanceReport-newForm.action",
    "parentModule": null,
    "displayName": "Opening Balance Report",
    "orderNumber": "8",
@@ -17662,12 +17662,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Reports.Accounting Records.Opening Balance\t \t",
-   "navigationURL": "/EGF/report/openingBalanceReport-newForm.action"
+   "navigationURL": "/services/EGF/report/openingBalanceReport-newForm.action"
  },
  {
    "id": 2065,
    "name": "SurrenderRTGS",
-   "url": "/EGF/payment/chequeAssignment-beforeSearchForRTGSSurrender.action",
+   "url": "/services/EGF/payment/chequeAssignment-beforeSearchForRTGSSurrender.action",
    "parentModule": null,
    "displayName": "Surrender RTGS",
    "orderNumber": "1",
@@ -17675,12 +17675,12 @@
    "serviceCode": null,
    "code": null,
    "path": "Finance.Transactions.Payments.Surrender RTGS",
-   "navigationURL": "/EGF/payment/chequeAssignment-beforeSearchForRTGSSurrender.action"
+   "navigationURL": "/services/EGF/payment/chequeAssignment-beforeSearchForRTGSSurrender.action"
  },
  {
    "id": 2066,
    "name": "Dishonored Cheque Search",
-   "url": "/EGF/brs/dishonoredCheque-search.action",
+   "url": "/services/EGF/brs/dishonoredCheque-search.action",
    "parentModule": null,
    "displayName": "Dishonored Cheque",
    "orderNumber": null,
