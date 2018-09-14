@@ -72,8 +72,18 @@ public class Voucher{
     private FunctionaryContract functionary;
     private FundsourceContract fundsource;
     private List<AccountDetailContract> ledgers = new ArrayList<>(0);
+    // this is only to keep standard .As of now this field is not used
+    private String tenantId;
 
-    public String getName() {
+    public String getTenantId() {
+		return tenantId;
+	}
+
+	public void setTenantId(String tenantId) {
+		this.tenantId = tenantId;
+	}
+
+	public String getName() {
         return name;
     }
 
