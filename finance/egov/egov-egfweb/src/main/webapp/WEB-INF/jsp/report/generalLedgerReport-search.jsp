@@ -155,7 +155,7 @@
 						<td class="greybox"><s:select name="fund_id" id="fund_id"
 								list="dropdownData.fundList" listKey="id" listValue="name"
 								headerKey="" headerValue="----Choose----" /></td>
-								<td class="greybox"><s:text name="generalLedger.departmentCode" /></td>
+								<td class="greybox"><s:text name="generalLedger.department" /></td>
 						<td class="greybox"><s:select name="departmentCode"
 								id="departmentCode" list="dropdownData.departmentList"
 								listKey="code" listValue="name" headerKey=""   

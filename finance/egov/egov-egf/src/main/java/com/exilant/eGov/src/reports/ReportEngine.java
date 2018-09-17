@@ -157,7 +157,7 @@ public class ReportEngine {
                 firstParam = andParam;
             }
             if (checkNullandEmpty(reBean.getDepartmentId())) {
-                reportEngineQry.append(firstParam + " mis.departmentId=" + reBean.getDepartmentId());
+                reportEngineQry.append(firstParam + " mis.departmentcode='" + reBean.getDepartmentId()+"'");
                 firstParam = andParam;
             }
             if (checkNullandEmpty(reBean.getFunctionaryId())) {
