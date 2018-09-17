@@ -11554,15 +11554,15 @@
     {
       "id": 1593,
       "name": "Financial Expense bill create",
-      "navigationURL": "/services/EGF/expensebill/newform",
+      "navigationURL": "services/EGF/expensebill/newform",
       "url": "url",
       "parentModule": "EGF",
-      "displayName": "Create Expense Bill",
+      "displayName": "Expense Bill",
       "orderNumber": 1,
       "enabled": true,
       "serviceCode": "Bills Accounting",
       "code": "null",
-      "path": "Finance.Transactions.Bills Accounting.Create Expense Bill"
+      "path": "Finance.Transactions.Bills Accounting.Expense Bill"
     },
     {
       "id": 1594,
@@ -14593,8 +14593,8 @@
    "enabled": true,
    "serviceCode": "",
    "code": "null",
-   "path": "Finance.Transactions.Create Voucher",
-   "navigationURL": "/services/EGF/voucher/billVoucher-newform.action"
+   "path": "Finance.Transactions.Bills Accounting.Create Voucher",
+   "navigationURL": "services/EGF/voucher/billVoucher-newform.action"
  },
  {
    "id": 1829,
@@ -14607,7 +14607,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Administration.Cancel Voucher",
-   "navigationURL": "/services/EGF/voucher/cancelVoucher-beforeSearch.action"
+   "navigationURL": "services/EGF/voucher/cancelVoucher-beforeSearch.action"
  },
  {
    "id": 1830,
@@ -14620,7 +14620,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Period End Activities.Financial Year",
-   "navigationURL": "/services/EGF/HTML/FinancialYearEnq.htm"
+   "navigationURL": "services/EGF/HTML/FinancialYearEnq.htm"
  },
  {
    "id": 1831,
@@ -14672,7 +14672,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Transactions.Payments.Direct Bank Payments",
-   "navigationURL": "/services/EGF/payment/directBankPayment-newform.action"
+   "navigationURL": "services/EGF/payment/directBankPayment-newform.action"
  },
  {
    "id": 1835,
@@ -14685,7 +14685,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Transactions.Journal Voucher",
-   "navigationURL": "/services/EGF/voucher/journalVoucher-newForm.action"
+   "navigationURL": "services/EGF/voucher/journalVoucher-newForm.action"
  },
  {
    "id": 1836,
@@ -14698,7 +14698,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Chartofaccounts",
-   "navigationURL": "/services/EGF/eGov_COA.jsp"
+   "navigationURL": "services/EGF/eGov_COA.jsp"
  },
  {
    "id": 1837,
@@ -14789,7 +14789,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Detailed Codes.View Detailed Code",
-   "navigationURL": "/services/EGF/masters/chartOfAccounts-detailed.action"
+   "navigationURL": "services/EGF/masters/chartOfAccounts-detailed.action"
  },
  {
    "id": 1844,
@@ -14802,7 +14802,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Reports.Accounting Records.Bank book",
-   "navigationURL": "/services/EGF/report/bankBookReport.action"
+   "navigationURL": "services/EGF/report/bankBookReport.action"
  },
  {
    "id": 1845,
@@ -14867,7 +14867,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Reports.MIS Reports.Cheque Issue Register",
-   "navigationURL": "/services/EGF/report/chequeIssueRegisterReport.action"
+   "navigationURL": "services/EGF/report/chequeIssueRegisterReport.action"
  },
  {
    "id": 1850,
@@ -14893,7 +14893,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Transactions.Bills Accounting.View Bills",
-   "navigationURL": "/services/EGF/bill/billRegisterSearch-newform.action"
+   "navigationURL": "services/EGF/bill/billRegisterSearch-newform.action"
  },
  {
    "id": 1852,
@@ -14906,7 +14906,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Scheme.Create Scheme",
-   "navigationURL": "/services/EGF/masters/scheme-newForm.action"
+   "navigationURL": "services/EGF/masters/scheme-newForm.action"
  },
  {
    "id": 1853,
@@ -14919,7 +14919,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Scheme.View Scheme",
-   "navigationURL": "/services/EGF/masters/scheme-beforeSearch.action"
+   "navigationURL": "services/EGF/masters/scheme-beforeSearch.action"
  },
  {
    "id": 1854,
@@ -14932,7 +14932,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Scheme.Modify Scheme",
-   "navigationURL": "/services/EGF/masters/scheme-beforeSearch.action"
+   "navigationURL": "services/EGF/masters/scheme-beforeSearch.action"
  },
  {
    "id": 1855,
@@ -15023,7 +15023,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Recovery.Create Recovery",
-   "navigationURL": "/services/EGF/deduction/recoverySetupMaster.do"
+   "navigationURL": "services/EGF/deduction/recoverySetupMaster.do"
  },
  {
    "id": 1862,
@@ -15036,7 +15036,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Recovery.View Recovery",
-   "navigationURL": "/services/EGF/deduction/recoverySetupMaster.do"
+   "navigationURL": "services/EGF/deduction/recoverySetupMaster.do"
  },
  {
    "id": 1863,
@@ -15049,7 +15049,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Recovery.Modify Recovery",
-   "navigationURL": "/services/EGF/deduction/recoverySetupMaster.do"
+   "navigationURL": "services/EGF/deduction/recoverySetupMaster.do"
  },
  {
    "id": 1864,
@@ -15075,7 +15075,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Sub-scheme.View Sub-scheme",
-   "navigationURL": "/services/EGF/masters/subScheme-beforeSearch.action"
+   "navigationURL": "services/EGF/masters/subScheme-beforeSearch.action"
  },
  {
    "id": 1866,
@@ -15114,7 +15114,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Sub-scheme.Modify Sub-scheme",
-   "navigationURL": "/services/EGF/masters/subScheme-edit.action"
+   "navigationURL": "services/EGF/masters/subScheme-edit.action"
  },
  {
    "id": 1869,
@@ -15127,7 +15127,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Reports.MIS Reports.Voucher Status Report",
-   "navigationURL": "/services/EGF/report/voucherStatusReport-beforeSearch.action"
+   "navigationURL": "services/EGF/report/voucherStatusReport-beforeSearch.action"
  },
  {
    "id": 1870,
@@ -15205,7 +15205,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Administration.Cancel Bills",
-   "navigationURL": "/services/EGF/voucher/cancelBill-beforeSearch.action"
+   "navigationURL": "services/EGF/voucher/cancelBill-beforeSearch.action"
  },
  {
    "id": 1876,
@@ -15218,7 +15218,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Transactions.Payments.RTGS Assignment",
-   "navigationURL": "/services/EGF/payment/chequeAssignment-beforeRtgsSearch.action"
+   "navigationURL": "services/EGF/payment/chequeAssignment-beforeRtgsSearch.action"
  },
  {
    "id": 1877,
@@ -16141,7 +16141,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Transactions.View Vouchers",
-   "navigationURL": "/services/EGF/voucher/voucherSearch-beforesearch.action"
+   "navigationURL": "services/EGF/voucher/voucherSearch-beforesearch.action"
  },
  {
    "id": 1948,
@@ -16154,7 +16154,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Transactions.Payments.Bill Payment",
-   "navigationURL": "/services/EGF/payment/payment-beforeSearch.action"
+   "navigationURL": "services/EGF/payment/payment-beforeSearch.action"
  },
  {
    "id": 1949,
@@ -16167,7 +16167,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Transactions.Payments.Cheque Assignment",
-   "navigationURL": "/services/EGF/payment/chequeAssignment-beforeSearch.action"
+   "navigationURL": "services/EGF/payment/chequeAssignment-beforeSearch.action"
  },
  {
    "id": 1950,
@@ -16180,7 +16180,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Transactions.Payments.Surrender/Reassign Cheque",
-   "navigationURL": "/services/EGF/payment/chequeAssignment-beforeSearchForSurrender.action"
+   "navigationURL": "services/EGF/payment/chequeAssignment-beforeSearchForSurrender.action"
  },
  {
    "id": 1951,
@@ -16206,7 +16206,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Cheque.Add/Modify Bank Account Cheque",
-   "navigationURL": "/services/EGF/masters/accountCheque-newform.action"
+   "navigationURL": "services/EGF/masters/accountCheque-newform.action"
  },
  {
    "id": 1953,
@@ -16284,7 +16284,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Fund.Create Fund",
-   "navigationURL": "/services/EGF/masters/fund-newform.action"
+   "navigationURL": "services/EGF/masters/fund-newform.action"
  },
  {
    "id": 1959,
@@ -16297,7 +16297,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Fund.View Fund",
-   "navigationURL": "/services/EGF/masters/fund-beforeSearch.action"
+   "navigationURL": "services/EGF/masters/fund-beforeSearch.action"
  },
  {
    "id": 1960,
@@ -16310,7 +16310,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Fund.Modify Fund",
-   "navigationURL": "/services/EGF/masters/fund-beforeSearch.action"
+   "navigationURL": "services/EGF/masters/fund-beforeSearch.action"
  },
  {
    "id": 1961,
@@ -16323,7 +16323,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Other Masters.Create other masters",
-   "navigationURL": "/services/EGF/masters/userDefinedCodes-newform.action"
+   "navigationURL": "services/EGF/masters/userDefinedCodes-newform.action"
  },
  {
    "id": 1962,
@@ -16336,7 +16336,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Other Masters.View Other Masters",
-   "navigationURL": "/services/EGF/masters/userDefinedCodes-beforeSearch.action"
+   "navigationURL": "services/EGF/masters/userDefinedCodes-beforeSearch.action"
  },
  {
    "id": 1963,
@@ -16349,7 +16349,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Other Masters.Create Other Masters",
-   "navigationURL": "/services/EGF/masters/userDefinedCodes-beforeSearch.action"
+   "navigationURL": "services/EGF/masters/userDefinedCodes-beforeSearch.action"
  },
  {
    "id": 1964,
@@ -16440,7 +16440,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Function.Create Function",
-   "navigationURL": "/services/EGF/masters/function-newform.action"
+   "navigationURL": "services/EGF/masters/function-newform.action"
  },
  {
    "id": 1971,
@@ -16453,7 +16453,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Function.View Function",
-   "navigationURL": "/services/EGF/masters/function-beforeSearch.action"
+   "navigationURL": "services/EGF/masters/function-beforeSearch.action"
  },
  {
    "id": 1972,
@@ -16466,7 +16466,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Function.Modify Function",
-   "navigationURL": "/services/EGF/masters/function-beforeSearch.action"
+   "navigationURL": "services/EGF/masters/function-beforeSearch.action"
  },
  {
    "id": 1973,
@@ -16479,7 +16479,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Reports.Accounting Records.Trial Balance",
-   "navigationURL": "/services/EGF/report/trialBalance-newForm.action"
+   "navigationURL": "services/EGF/report/trialBalance-newForm.action"
  },
  {
    "id": 1974,
@@ -16492,7 +16492,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Scheme.Create Sub-scheme",
-   "navigationURL": "/services/EGF/masters/subScheme-newForm.action"
+   "navigationURL": "services/EGF/masters/subScheme-newForm.action"
  },
  {
    "id": 1975,
@@ -16687,7 +16687,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Reports.MIS Reports.Bill Register Detailed Report",
-   "navigationURL": "/services/EGF/report/billRegisterReport-searchform.action"
+   "navigationURL": "services/EGF/report/billRegisterReport-searchform.action"
  },
  {
    "id": 1990,
@@ -16739,7 +16739,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Reports.MIS Reports.Bank Advice Report(RTGS)",
-   "navigationURL": "/services/EGF/report/bankAdviceReport-newForm.action"
+   "navigationURL": "services/EGF/report/bankAdviceReport-newForm.action"
  },
  {
    "id": 1994,
@@ -16752,7 +16752,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Bank.Modify Bank",
-   "navigationURL": "/services/EGF/masters/bank.action"
+   "navigationURL": "services/EGF/masters/bank.action"
  },
  {
    "id": 1995,
@@ -16804,7 +16804,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Bank.Create Bank",
-   "navigationURL": "/services/EGF/masters/bank.action"
+   "navigationURL": "services/EGF/masters/bank.action"
  },
  {
    "id": 1999,
@@ -16817,7 +16817,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Reports.MIS Reports.RTGS Register",
-   "navigationURL": "/services/EGF/report/rtgsIssueRegisterReport-newForm.action"
+   "navigationURL": "services/EGF/report/rtgsIssueRegisterReport-newForm.action"
  },
  {
    "id": 2000,
@@ -16856,7 +16856,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Reports.Accounting Records.General Ledger",
-   "navigationURL": "/services/EGF/report/generalLedgerReport-newForm.action"
+   "navigationURL": "services/EGF/report/generalLedgerReport-newForm.action"
  },
  {
    "id": 2003,
@@ -16869,7 +16869,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Reports.Accounting Records.Subledger Schedule",
-   "navigationURL": "/services/EGF/report/subLedgerScheduleReport-newForm.action"
+   "navigationURL": "services/EGF/report/subLedgerScheduleReport-newForm.action"
  },
  {
    "id": 2004,
@@ -17038,7 +17038,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Reports.Accounting Records.Sub Ledger",
-   "navigationURL": "/services/EGF/report/subLedgerReport-newForm.action"
+   "navigationURL": "services/EGF/report/subLedgerReport-newForm.action"
  },
  {
    "id": 2017,
@@ -17116,7 +17116,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Reports.Accounting Records.Day Book",
-   "navigationURL": "/services/EGF/report/dayBookReport-newForm.action"
+   "navigationURL": "services/EGF/report/dayBookReport-newForm.action"
  },
  {
    "id": 2023,
@@ -17129,7 +17129,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Reports.Accounting Records.Journal Book",
-   "navigationURL": "/services/EGF/report/journalBookReport-newForm.action"
+   "navigationURL": "services/EGF/report/journalBookReport-newForm.action"
  },
  {
    "id": 2024,
@@ -17662,7 +17662,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Reports.Accounting Records.Opening Balance\t \t",
-   "navigationURL": "/services/EGF/report/openingBalanceReport-newForm.action"
+   "navigationURL": "services/EGF/report/openingBalanceReport-newForm.action"
  },
  {
    "id": 2065,
@@ -17675,7 +17675,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Transactions.Payments.Surrender RTGS",
-   "navigationURL": "/services/EGF/payment/chequeAssignment-beforeSearchForRTGSSurrender.action"
+   "navigationURL": "services/EGF/payment/chequeAssignment-beforeSearchForRTGSSurrender.action"
  },
  {
    "id": 2066,
@@ -17696,12 +17696,12 @@
    "url": "",
    "parentModule": "",
    "displayName": "Create Contractor",
-   "orderNumber": 8,
+   "orderNumber": 1,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
-   "path": "Finance.Masters.Contractor",
-   "navigationURL": "/services/EGF/contractor/newform"
+   "path": "Finance.Masters.Contractor.Create Contractor",
+   "navigationURL": "services/EGF/contractor/newform"
  },
 {
    "id": 2068,
@@ -17709,12 +17709,12 @@
    "url": "",
    "parentModule": "",
    "displayName": "View Contractor",
-   "orderNumber": 9,
+   "orderNumber": 2,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
-   "path": "Finance.Masters.Contractor",
-   "navigationURL": "/services/EGF/contractor/search/view"
+   "path": "Finance.Masters.Contractor. View Contractor",
+   "navigationURL": "services/EGF/contractor/search/view"
  },
 {
    "id": 2069,
@@ -17722,12 +17722,12 @@
    "url": "",
    "parentModule": "",
    "displayName": "Modify Contractor",
-   "orderNumber": 10,
+   "orderNumber": 3,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
-   "path": "Finance.Masters.Contractor",
-   "navigationURL": "/services/EGF/contractor/search/edit"
+   "path": "Finance.Masters.Contractor.Modify Contractor",
+   "navigationURL": "services/EGF/contractor/search/edit"
  },
 {
    "id": 2070,
@@ -17735,12 +17735,12 @@
    "url": "",
    "parentModule": "",
    "displayName": "Create Supplier",
-   "orderNumber": 8,
+   "orderNumber": 1,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
-   "path": "Finance.Masters.Supplier",
-   "navigationURL": "/services/EGF/supplier/newform"
+   "path": "Finance.Masters.Supplier.Create Supplier",
+   "navigationURL": "services/EGF/supplier/newform"
  },
 {
    "id": 2071,
@@ -17748,12 +17748,12 @@
    "url": "",
    "parentModule": "",
    "displayName": "View Supplier",
-   "orderNumber": 9,
+   "orderNumber": 2,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
-   "path": "Finance.Masters.Supplier",
-   "navigationURL": "/services/EGF/supplier/search/view"
+   "path": "Finance.Masters.Supplier.View Supplier",
+   "navigationURL": "services/EGF/supplier/search/view"
  },
 {
    "id": 2072,
@@ -17761,12 +17761,12 @@
    "url": "",
    "parentModule": "",
    "displayName": "Modify Supplier",
-   "orderNumber": 10,
+   "orderNumber": 3,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
-   "path": "Finance.Masters.Supplier",
-   "navigationURL": "/services/EGF/supplier/search/edit"
+   "path": "Finance.Masters.Supplier.Modify Supplier",
+   "navigationURL": "services/EGF/supplier/search/edit"
  },
 {
    "id": 2073,
@@ -17779,7 +17779,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Collections.Receipts.Miscellaneous Receipts",
-   "navigationURL": "/services/collection/receipts/receipt-newform.action?Receipt=Misc#no-back-button"
+   "navigationURL": "services/collection/receipts/receipt-newform.action?Receipt=Misc#no-back-button"
  },
 {
    "id": 2074,

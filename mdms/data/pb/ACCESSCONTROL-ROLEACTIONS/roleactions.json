@@ -18025,7 +18025,13 @@
    "actionid": 2085,
    "actioncode": "",
    "tenantId": "pb"
- }
+ },
+{
+      "rolecode": "SUPERUSER",
+      "actionid": 1593,
+      "actioncode": "",
+      "tenantId": "pb"
+    }
 
   ]
 }
