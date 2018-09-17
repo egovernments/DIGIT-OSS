@@ -17936,6 +17936,32 @@
    "code": "null",
    "path": "",
    "navigationURL": ""
+ },
+{
+   "id": 2086,
+   "name": "business category search",
+   "url": "/egov-common-masters/businessCategory/_search",
+   "parentModule": "",
+   "displayName": "business category search",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": "",
+   "navigationURL": ""
+ },
+{
+   "id": 2087,
+   "name": "businessDetails search",
+   "url": "/egov-common-masters/businessDetails/_search",
+   "parentModule": "",
+   "displayName": "",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": "",
+   "navigationURL": ""
  }
   ]
 }
