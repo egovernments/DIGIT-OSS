@@ -17706,7 +17706,7 @@
 {
    "id": 2068,
    "name": "View Contractor",
-   "url": "",
+   "url": "url",
    "parentModule": "",
    "displayName": "View Contractor",
    "orderNumber": 2,
@@ -17719,7 +17719,7 @@
 {
    "id": 2069,
    "name": "Modify Contractor",
-   "url": "",
+   "url": "url",
    "parentModule": "",
    "displayName": "Modify Contractor",
    "orderNumber": 3,
@@ -17732,7 +17732,7 @@
 {
    "id": 2070,
    "name": "Create Supplier",
-   "url": "",
+   "url": "url",
    "parentModule": "",
    "displayName": "Create Supplier",
    "orderNumber": 1,
@@ -17745,7 +17745,7 @@
 {
    "id": 2071,
    "name": "View Supplier",
-   "url": "",
+   "url": "url",
    "parentModule": "",
    "displayName": "View Supplier",
    "orderNumber": 2,
@@ -17758,7 +17758,7 @@
 {
    "id": 2072,
    "name": "Modify Supplier",
-   "url": "",
+   "url": "url",
    "parentModule": "",
    "displayName": "Modify Supplier",
    "orderNumber": 3,
@@ -17771,7 +17771,7 @@
 {
    "id": 2073,
    "name": "Create Mis Receipts",
-   "url": "",
+   "url": "url",
    "parentModule": "",
    "displayName": "Miscellaneous Receipts",
    "orderNumber": 1,
