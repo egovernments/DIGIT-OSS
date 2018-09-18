@@ -1180,7 +1180,7 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 			egBillRegisterService.persist(egBillregister);
 
 			voucherHeader.getVouchermis().setSourcePath(
-					"/EGF/voucher/journalVoucherModify-beforeModify.action?voucherHeader.id=" + voucherHeader.getId());
+					"/services/EGF/voucher/journalVoucherModify-beforeModify.action?voucherHeader.id=" + voucherHeader.getId());
 			update(voucherHeader);
 			persistenceService.getSession().flush();
 		} catch (final ValidationException e) {

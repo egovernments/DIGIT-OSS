@@ -68,15 +68,15 @@ function loadDropDownCodes() {
 	}
 	var url = "";
 	if (document.getElementById("minor").value != "") {
-		var url = "/EGF/voucher/common-ajaxCoaDetailCode.action?glCode="
+		var url = "/services/EGF/voucher/common-ajaxCoaDetailCode.action?glCode="
 				+ document.getElementById("minor").value;
 	} else if (document.getElementById("major").value != "") {
-		url = "/EGF/voucher/common-ajaxCoaDetailCode.action?glCode="
+		url = "/services/EGF/voucher/common-ajaxCoaDetailCode.action?glCode="
 				+ document.getElementById("major").value;
 	} else if (document.getElementById("type").value == "A") {
-		url = "/EGF/voucher/common-ajaxGetAllAssetCodes.action";
+		url = "/services/EGF/voucher/common-ajaxGetAllAssetCodes.action";
 	} else {
-		url = "/EGF/voucher/common-ajaxGetAllLiabCodes.action";
+		url = "/services/EGF/voucher/common-ajaxGetAllLiabCodes.action";
 	}
 
 	var req2 = initiateRequest();
@@ -105,7 +105,7 @@ function loadDropDownCodes() {
 var funcObj;
 var funcArray;
 function loadDropDownCodesFunction() {
-	var url = "/EGF/voucher/common-ajaxGetAllFunctionName.action";
+	var url = "/services/EGF/voucher/common-ajaxGetAllFunctionName.action";
 	var req2 = initiateRequest();
 	req2.onreadystatechange = function() {
 		if (req2.readyState == 4) {
@@ -616,7 +616,7 @@ function changeaccountdetailkey(obj) {
 var oAutoCompEntityForJV;
 function autocompleteEntities(obj) {
 	oACDS = new YAHOO.widget.DS_XHR(
-			"/EGF/voucher/common-ajaxLoadEntitesBy20.action", [ "~^" ]);
+			"/services/EGF/voucher/common-ajaxLoadEntitesBy20.action", [ "~^" ]);
 	oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 	oACDS.scriptQueryParam = "startsWith";
 	// alert(obj.name);
@@ -673,7 +673,7 @@ function loadDropDownCodesForEntities(obj) {
 	if (entities) {
 		entities = null;
 	}
-	var url = "/EGF/voucher/common-ajaxLoadEntites.action?accountDetailType="
+	var url = "/services/EGF/voucher/common-ajaxLoadEntites.action?accountDetailType="
 			+ obj.value;
 	var req2 = initiateRequest();
 	req2.onreadystatechange = function() {

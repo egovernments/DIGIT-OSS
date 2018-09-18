@@ -48,7 +48,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
-<form:form role="form" action="/EGF/closedperiod/update"
+<form:form role="form" action="/services/EGF/closedperiod/update"
 	modelAttribute="closedPeriod" id="closedPeriodform"
 	cssClass="form-horizontal form-groups-bordered"
 	enctype="multipart/form-data">

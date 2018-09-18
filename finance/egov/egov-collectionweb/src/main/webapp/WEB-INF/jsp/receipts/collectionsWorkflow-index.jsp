@@ -490,6 +490,6 @@ function onChangePaymentMode(obj)
 			</s:if>
 			</s:form>
 			</div>
-			<script src="<cdn:url value='/resources/global/js/egov/inbox.js?rnd=${app_release_no}' context='/egi'/>"></script>
+			<script src="<cdn:url value='/resources/global/js/egov/inbox.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
 			</body>
 </html>

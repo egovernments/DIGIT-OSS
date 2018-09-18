@@ -52,8 +52,8 @@
 <html>
 <head>
  <link rel="stylesheet" type="text/css"
-	href="/EGF/resources/commonyui/yui2.7/paginator/assets/skins/sam/paginator.css">
-<script src="/EGF/resources/commonyui/yui2.7/paginator/paginator-min.js"></script>
+	href="/services/EGF/resources/commonyui/yui2.7/paginator/assets/skins/sam/paginator.css">
+<script src="/services/EGF/resources/commonyui/yui2.7/paginator/paginator-min.js"></script>
 
 <title><s:text name="budget.search" /></title>
 <style>

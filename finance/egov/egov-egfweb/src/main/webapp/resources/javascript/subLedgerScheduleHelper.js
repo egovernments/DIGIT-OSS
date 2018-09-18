@@ -120,7 +120,7 @@
 	var oAutoCompEntityForJV;
 	function autocompleteAccountCodes(obj)
 	{
-	  	   oACDS = new YAHOO.widget.DS_XHR(path+"/EGF/voucher/common-ajaxLoadSLreportCodes.action", [ "~^"]);
+	  	   oACDS = new YAHOO.widget.DS_XHR(path+"/services/EGF/voucher/common-ajaxLoadSLreportCodes.action", [ "~^"]);
 		   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 		   oACDS.scriptQueryParam = "startsWith";
 		   oAutoCompEntityForJV = new YAHOO.widget.AutoComplete(obj.name,'codescontainer',oACDS);

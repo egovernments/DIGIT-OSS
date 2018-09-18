@@ -99,7 +99,7 @@ public class ContraBTCAction extends BaseVoucherAction {
 	 *
 	 */
 	private static final long serialVersionUID = 8307131392372518372L;
-	private static final String SOURCEPATH = "/EGF/contra/contraBTC!view.action?voucherHeader.id=";
+	private static final String SOURCEPATH = "/services/EGF/contra/contraBTC!view.action?voucherHeader.id=";
 	private ContraBean contraBean = new ContraBean();
 	private EgovCommon egovCommon;
 	private InstrumentService instrumentService;

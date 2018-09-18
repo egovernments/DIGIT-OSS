@@ -1285,55 +1285,55 @@ val1=val.substring(0,3);
  switch(val1)
  {
   case 'JVG':
-  window.open("/EGF/HTML/VMC/JV_General_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+  window.open("/services/EGF/HTML/VMC/JV_General_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
   break;
   case 'SJV' :
-  window.open("/EGF/HTML/VMC/SupplierJournal_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+  window.open("/services/EGF/HTML/VMC/SupplierJournal_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
   break;
   case 'CJV' :
-  window.open("/EGF/HTML/VMC/ContractorJournal_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+  window.open("/services/EGF/HTML/VMC/ContractorJournal_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
   break;
   case 'SAL' :
-  window.open("/EGF/HTML/VMC/JV_Salary_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+  window.open("/services/EGF/HTML/VMC/JV_Salary_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
   break;
   case 'PYS':
-  window.open("/EGF/HTML/VMC/PayInSlip_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+  window.open("/services/EGF/HTML/VMC/PayInSlip_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
   break;
   case 'BTB':
-  window.open("/EGF/HTML/VMC/JV_Contra_BToB_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+  window.open("/services/EGF/HTML/VMC/JV_Contra_BToB_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
   break;
   case 'BTC':
-  window.open("/EGF/HTML/VMC/JV_Contra_BToC_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+  window.open("/services/EGF/HTML/VMC/JV_Contra_BToC_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
   break;
   case 'CTB':
-  window.open("/EGF/HTML/VMC/JV_Contra_CToB_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+  window.open("/services/EGF/HTML/VMC/JV_Contra_CToB_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
   break;
   case 'FTF':
-  window.open("/EGF/HTML/VMC/JV_Contra_FToF_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+  window.open("/services/EGF/HTML/VMC/JV_Contra_FToF_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
   break;
   case 'DBP':
-  window.open("/EGF/HTML/VMC/DirectBankPayment_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+  window.open("/services/EGF/HTML/VMC/DirectBankPayment_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
   break;
    case 'BBP':
-	window.open("/EGF/payment/payment.do?submitType=beforeViewAndModifyPayment&cgNumber="+val+"&mode="+mode,"","height=650,width=900,scrollbars=yes,left=20,top=20,status=yes");
+	window.open("/services/EGF/payment/payment.do?submitType=beforeViewAndModifyPayment&cgNumber="+val+"&mode="+mode,"","height=650,width=900,scrollbars=yes,left=20,top=20,status=yes");
   break;
   case 'DCP' :
-  window.open("/EGF/HTML/VMC/DirectCashPayment_VMC.jsp?cgNumber="+val+"&showMode=viewCash","","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+  window.open("/services/EGF/HTML/VMC/DirectCashPayment_VMC.jsp?cgNumber="+val+"&showMode=viewCash","","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
   break;
   case 'SPH':
-  window.open("/EGF/payment/payment.do?submitType=beforeViewAndModifyPayment&cgNumber="+val+"&mode="+mode,"","height=650,width=900,scrollbars=yes,left=20,top=20,status=yes");
+  window.open("/services/EGF/payment/payment.do?submitType=beforeViewAndModifyPayment&cgNumber="+val+"&mode="+mode,"","height=650,width=900,scrollbars=yes,left=20,top=20,status=yes");
   break;
   case 'SSP' :
-  window.open("/EGF/payment/payment.do?submitType=beforeViewAndModifyPayment&cgNumber="+val+"&mode="+mode,"","height=650,width=900,scrollbars=yes,left=20,top=20,status=yes");
+  window.open("/services/EGF/payment/payment.do?submitType=beforeViewAndModifyPayment&cgNumber="+val+"&mode="+mode,"","height=650,width=900,scrollbars=yes,left=20,top=20,status=yes");
   break;
   case 'ASP' :
-  window.open("/EGF/HTML/VMC/AdvanceJournal_VMC.jsp?drillDownCgn="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+  window.open("/services/EGF/HTML/VMC/AdvanceJournal_VMC.jsp?drillDownCgn="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
   break;
   case 'MSR':
-  window.open("/EGF/HTML/VMC/miscReceipt_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+  window.open("/services/EGF/HTML/VMC/miscReceipt_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
   break;
   case 'OJV' :
-  window.open("/EGF/HTML/VMC/ContingencyJournal_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=0,top=0,status=yes");
+  window.open("/services/EGF/HTML/VMC/ContingencyJournal_VMC.jsp?cgNumber="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=0,top=0,status=yes");
  }
 }
 // This is for NN. but some files incorporated to AP.
@@ -1414,7 +1414,7 @@ function callme(val,val1)
 function callmeAP(val,val1)
 {
  var mode="view";
- window.open("/EGF/voucher/preApprovedVoucher!loadvoucherviewByCGN.action?cgn="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+ window.open("/services/EGF/voucher/preApprovedVoucher!loadvoucherviewByCGN.action?cgn="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
  
  /*
  switch(val1)
@@ -1750,7 +1750,7 @@ function getRow(obj)
  function checkUnique(tablename,fieldname,fieldvalue)
  {
 	var type = "checkUniqueness";
-	var link = "/EGF/inventory/commons/uniqueChecking.jsp?type=" + type+"&tablename=" + tablename+"&fieldname=" + fieldname+ "&fieldvalue=" + fieldvalue+ " ";
+	var link = "/services/EGF/inventory/commons/uniqueChecking.jsp?type=" + type+"&tablename=" + tablename+"&fieldname=" + fieldname+ "&fieldvalue=" + fieldvalue+ " ";
 		
 	var request = initiateRequest();
 	var isUnique;

@@ -55,19 +55,19 @@
 <head>
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252">
-<link href="/EGF/resources/css/budget.css?rnd=${app_release_no}" rel="stylesheet"
+<link href="/services/EGF/resources/css/budget.css?rnd=${app_release_no}" rel="stylesheet"
 	type="text/css" />
-<link href="/EGF/resources/css/commonegovnew.css?rnd=${app_release_no}" rel="stylesheet"
+<link href="/services/EGF/resources/css/commonegovnew.css?rnd=${app_release_no}" rel="stylesheet"
 	type="text/css" />
-<link rel="stylesheet" href="/EGF/resources/css/tabber.css?rnd=${app_release_no}"
+<link rel="stylesheet" href="/services/EGF/resources/css/tabber.css?rnd=${app_release_no}"
 	TYPE="text/css">
-<script type="text/javascript" src="/EGF/resources/javascript/tabber.js?rnd=${app_release_no}"></script>
+<script type="text/javascript" src="/services/EGF/resources/javascript/tabber.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/remitrecovery-helper.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/remitrecovery-helper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/tabber2.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/tabber2.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="<cdn:url value='/resources/global/js/egov/inbox.js?rnd=${app_release_no}' context='/egi'/>"> </script>
+	src="<cdn:url value='/resources/global/js/egov/inbox.js?rnd=${app_release_no}' context='/services/egi'/>"> </script>
 <title><s:text name="remit.recovery.create.title" /></title>
 <script>
 

@@ -57,15 +57,15 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/javascript/contingentBillHelper.js?rnd=${app_release_no}"></script>
 <link rel="stylesheet"
-	href="/EGF/resources/css/tabber.css?rnd=${app_release_no}"
+	href="/services/EGF/resources/css/tabber.css?rnd=${app_release_no}"
 	TYPE="text/css">
 <script type="text/javascript"
-	src="/EGF/resources/javascript/tabber.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/tabber.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/tabber2.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/tabber2.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/autocomplete-debug.js"></script>
-<link rel="stylesheet" href="/EGF/struts/xhtml/styles.css"
+	src="/services/EGF/resources/javascript/autocomplete-debug.js"></script>
+<link rel="stylesheet" href="/services/EGF/struts/xhtml/styles.css"
 	type="text/css" />
 
 <meta http-equiv="Content-Type"

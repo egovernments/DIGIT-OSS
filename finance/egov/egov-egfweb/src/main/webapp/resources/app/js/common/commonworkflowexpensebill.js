@@ -82,7 +82,7 @@ $(document).ready(function()
 	$('#approvalDepartment').change(function(){
 		
 		$.ajax({
-			url: "/EGF/designations",     
+			url: "/services/EGF/designations",     
 			type:'GET',
 			contentType:'application/json',
 			//data:JSON.stringify(jsonData),
@@ -114,7 +114,7 @@ $(document).ready(function()
 		
 		
 		$.ajax({
-			url: "/EGF/approvers/"+departmentId+"/"+designationId,     
+			url: "/services/EGF/approvers/"+departmentId+"/"+designationId,     
 			type: "GET",
 			contentType:'application/json',
 //			data: JSON.stringify(jsonData),

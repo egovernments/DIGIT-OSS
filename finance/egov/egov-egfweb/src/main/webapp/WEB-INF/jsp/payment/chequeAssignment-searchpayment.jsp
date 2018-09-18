@@ -52,7 +52,7 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css"
-	href="/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
+	href="/services/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
 <title>Cheque Assignment Search</title>
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252">
@@ -656,7 +656,7 @@
 				console.log('departmentid'+departmentid.value);
 				console.log('bankaccount'+document.getElementById('bankaccount').value);
 				jQuery.ajax({
-					url: "/EGF/voucher/common-ajaxYearCode.action?departmentId="+departmentid.value+"&bankaccount="+document.getElementById('bankaccount').value,
+					url: "/services/EGF/voucher/common-ajaxYearCode.action?departmentId="+departmentid.value+"&bankaccount="+document.getElementById('bankaccount').value,
 					method: 'GET',
 				    async : false,
 				    

@@ -56,16 +56,16 @@
 <head>
 
  <!-- Required CSS -->
-<link rel="stylesheet" type="text/css" href="/EGF/resources/commonyui/build/treeview/assets/css/folders/tree.css">
+<link rel="stylesheet" type="text/css" href="/services/EGF/resources/commonyui/build/treeview/assets/css/folders/tree.css">
 <!--<link rel="stylesheet" type="text/css" href="../build/assets/skins/sam/treeview.css">-->
 <!-- Dependency source files --> 
-<script src = "/EGF/resources/commonyui/build/yahoo/yahoo-min.js" ></script>  
-<script src = "/EGF/resources/commonyui/build/event/event-min.js" ></script> 
+<script src = "/services/EGF/resources/commonyui/build/yahoo/yahoo-min.js" ></script>  
+<script src = "/services/EGF/resources/commonyui/build/event/event-min.js" ></script> 
 <!-- Source file -->
-<script src="/EGF/resources/commonyui/build/connection/connection-min.js"></script>
-<%-- <script type="text/javascript" src="/EGF/resources/javascript/jsCommonMethods.js?rnd=${app_release_no}"></script> --%>
+<script src="/services/EGF/resources/commonyui/build/connection/connection-min.js"></script>
+<%-- <script type="text/javascript" src="/services/EGF/resources/javascript/jsCommonMethods.js?rnd=${app_release_no}"></script> --%>
 <!-- TreeView source file -->   
-<script src = "/EGF/resources/commonyui/build/treeview/treeview-min.js" ></script>
+<script src = "/services/EGF/resources/commonyui/build/treeview/treeview-min.js" ></script>
 </head>
 <body onload="treeInit()" >
 <h2>
@@ -214,10 +214,10 @@ function loadSelectDataForChartOfacounts(url,sourceobj,destobj)
 			
 			url = url +'?'+actionidstr;
 				//var actionId=449;
-				url="/EGF/masters/chartOfAccounts-view.action?model.id="+id;
+				url="/services/EGF/masters/chartOfAccounts-view.action?model.id="+id;
 				}
 				//var actionid=449;
-				//window.open("/EGF/masters/chartOfAccounts.action?chartOfAccounts_glCode="+noded+"&actionId="+actionId,"mainFrame");
+				//window.open("/services/EGF/masters/chartOfAccounts.action?chartOfAccounts_glCode="+noded+"&actionId="+actionId,"mainFrame");
 				openPopupWindow(url, windowname , 900, 650)
 		}			
     }    
@@ -230,8 +230,8 @@ function loadNodeData(node, fnLoadComplete){
 	var moduleQuery = url+'?glCode='+nodeId;
 	//bootbox.alert(moduleQuery);
 	//var actionId=449;
-	url="/EGF/masters/chartOfAccounts-view.action?model.id="+nodeId;
-				//window.open("/EGF/masters/chartOfAccounts.action?chartOfAccounts_glCode="+nodeUrl+"&actionId="+actionId,"mainFrame");
+	url="/services/EGF/masters/chartOfAccounts-view.action?model.id="+nodeId;
+				//window.open("/services/EGF/masters/chartOfAccounts.action?chartOfAccounts_glCode="+nodeUrl+"&actionId="+actionId,"mainFrame");
 				//openPopupWindow(url, "" , 900, 650)
 				//by mani not to open a new window on every click
 	//first call for modules

@@ -107,7 +107,7 @@
 	{
 		
 		console.log("autocompleteAccountCodes");
-	  	   oACDS = new YAHOO.widget.DS_XHR("/EGF/voucher/common-ajaxLoadGLreportCodes.action", [ "~^"]);
+	  	   oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common-ajaxLoadGLreportCodes.action", [ "~^"]);
 	  	 console.log("outside");
 		   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 		   oAutoCompEntityForJV = new YAHOO.widget.AutoComplete(obj.name,'codescontainer',oACDS);
@@ -149,7 +149,7 @@
 	}
 	function autocompleteFunction(obj)
 	{
-	  	   oACDS = new YAHOO.widget.DS_XHR(path+"/EGF/voucher/common-ajaxLoadFunctionCodes.action", [ "~^"]);
+	  	   oACDS = new YAHOO.widget.DS_XHR(path+"/services/EGF/voucher/common-ajaxLoadFunctionCodes.action", [ "~^"]);
 		   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 		   oACDS.scriptQueryParam = "startsWith";
 		   oAutoCompEntityForJV = new YAHOO.widget.AutoComplete(obj.name,'codescontainer',oACDS);

@@ -591,7 +591,7 @@ function onChangeDeparment(approverDeptId)
 }
 
 function openVoucherSearch(){
-	window.open ("/EGF/voucher/voucherSearch-beforesearch.action","VoucherSearch","resizable=yes,scrollbars=yes,top=40, width=900, height=650");
+	window.open ("/services/EGF/voucher/voucherSearch-beforesearch.action","VoucherSearch","resizable=yes,scrollbars=yes,top=40, width=900, height=650");
 }
 function populatepositionuseronload()
 {
@@ -875,6 +875,6 @@ onChange="onChangeDeparment(this.value)" />
 </s:push>
 </s:form>
 </div>
-<script src="<cdn:url value='/resources/global/js/egov/inbox.js?rnd=${app_release_no}' context='/egi'/>"></script>
+<script src="<cdn:url value='/resources/global/js/egov/inbox.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
 </body>
 

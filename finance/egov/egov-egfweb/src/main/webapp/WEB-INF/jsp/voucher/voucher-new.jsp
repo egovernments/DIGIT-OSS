@@ -55,13 +55,13 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
 <SCRIPT type="text/javascript"
-	src="/EGF/resources/javascript/jsCommonMethods.js?rnd=${app_release_no}"></SCRIPT>
-<script type="text/javascript" src="/EGF/exility/PageManager.js?rnd=${app_release_no}"></script>
-<script type="text/javascript" src="/EGF/exility/PageValidator.js?rnd=${app_release_no}"></script>
-<script type="text/javascript" src="/EGF/exility/data.js?rnd=${app_release_no}"></script>
-<script type="text/javascript" src="/EGF/exility/ExilityParameters.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/jsCommonMethods.js?rnd=${app_release_no}"></SCRIPT>
+<script type="text/javascript" src="/services/EGF/exility/PageManager.js?rnd=${app_release_no}"></script>
+<script type="text/javascript" src="/services/EGF/exility/PageValidator.js?rnd=${app_release_no}"></script>
+<script type="text/javascript" src="/services/EGF/exility/data.js?rnd=${app_release_no}"></script>
+<script type="text/javascript" src="/services/EGF/exility/ExilityParameters.js?rnd=${app_release_no}"></script>
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252">
 <title>PJV-Create</title>

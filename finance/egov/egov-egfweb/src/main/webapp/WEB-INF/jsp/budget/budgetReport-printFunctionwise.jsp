@@ -112,7 +112,7 @@
 	</s:form>
 	<script>
 		function submitForm(method) {
-			document.budgetDetailReportForm.action = "/EGF/budget/budgetReport-"
+			document.budgetDetailReportForm.action = "/services/EGF/budget/budgetReport-"
 					+ method + ".action";
 			document.budgetDetailReportForm.submit();
 		}

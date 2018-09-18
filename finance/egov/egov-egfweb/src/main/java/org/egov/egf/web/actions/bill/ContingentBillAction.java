@@ -286,7 +286,7 @@ public class ContingentBillAction extends BaseBillAction {
                     Long.valueOf(parameters.get("billRegisterId")[0]));
             if (null == bill.getEgBillregistermis().getSourcePath()) {
                 bill.getEgBillregistermis().setSourcePath(
-                        "/EGF/bill/contingentBill!beforeView.action?billRegisterId=" + bill.getId());
+                        "/services/EGF/bill/contingentBill!beforeView.action?billRegisterId=" + bill.getId());
             }
             populateWorkflowBean();
             bill = egBillRegisterService.sendForApproval(bill, workflowBean);
@@ -364,7 +364,7 @@ public class ContingentBillAction extends BaseBillAction {
             }
             final HashMap<String, Object> headerDetails = createHeaderAndMisDetails();
             // update DirectBankPayment source path
-            headerDetails.put(VoucherConstant.SOURCEPATH, "/EGF/bill/contingentBill-beforeView.action?billRegisterId=");
+            headerDetails.put(VoucherConstant.SOURCEPATH, "/services/EGF/bill/contingentBill-beforeView.action?billRegisterId=");
             final EgBillregistermis mis = new EgBillregistermis();
             bill = setBillDetailsFromHeaderDetails(bill, mis, true);
             bill = createBillDetails(bill);
@@ -624,7 +624,7 @@ public class ContingentBillAction extends BaseBillAction {
 
     private EgBillregister updateBill(EgBillregister bill) {
         final HashMap<String, Object> headerDetails = createHeaderAndMisDetails();
-        headerDetails.put(VoucherConstant.SOURCEPATH, "/EGF/bill/contingentBill!beforeView.action?billRegisterId=");
+        headerDetails.put(VoucherConstant.SOURCEPATH, "/services/EGF/bill/contingentBill!beforeView.action?billRegisterId=");
         Boolean recreateBillnumber = false;
         if (bill.getEgBillregistermis().getDepartmentcode() != null && voucherHeader.getVouchermis().getDepartmentcode() != null)
             if (bill.getEgBillregistermis().getDepartmentcode() != voucherHeader.getVouchermis().getDepartmentcode())
@@ -1171,7 +1171,7 @@ public class ContingentBillAction extends BaseBillAction {
         mis.setFunction(voucherHeader.getVouchermis().getFunction());
         bill.setNarration(voucherHeader.getDescription());
         mis.setNarration(voucherHeader.getDescription());
-        // mis.setSourcePath("/EGF/bill/contingentBill!beforeView.action?billRegisterId=");
+        // mis.setSourcePath("/services/EGF/bill/contingentBill!beforeView.action?billRegisterId=");
         final EgBillSubType egBillSubType = (EgBillSubType) persistenceService.find("from EgBillSubType where id=?",
                 commonBean.getBillSubType().longValue());
         mis.setEgBillSubType(egBillSubType);

@@ -54,7 +54,7 @@
 <head>
 <title><s:text name="masters.loangrant.search.title" /></title>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
 <style type="text/css">
 #codescontainer {
 	position: absolute;
@@ -246,7 +246,7 @@
 }
 function autocompleteSchemeBy20LG()
 {
-	     oACDS = new YAHOO.widget.DS_XHR("/EGF/voucher/common!ajaxLoadSchemeBy20.action", [ "~^"]);
+	     oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common!ajaxLoadSchemeBy20.action", [ "~^"]);
 	   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 	   oACDS.scriptQueryParam = "startsWith";
 	  
@@ -276,7 +276,7 @@ function autocompleteSchemeBy20LG()
 }
 function autocompleteSubSchemeBy20LG()
 {
-	   oACDS = new YAHOO.widget.DS_XHR("/EGF/voucher/common!ajaxLoadSubSchemeBy20.action", [ "~^"]);
+	   oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common!ajaxLoadSubSchemeBy20.action", [ "~^"]);
 	   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 	   oACDS.scriptQueryParam = "startsWith";
 	   var oAutoComp1 = new YAHOO.widget.AutoComplete('subScheme.name','codescontainer',oACDS);

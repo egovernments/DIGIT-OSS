@@ -89,7 +89,7 @@ function getFormData($form) {
 function loadBankBranches(bankId) {
     $.ajax({
         method: "GET",
-        url: "/EGF/common/getbankbranchesbybankid",
+        url: "/services/EGF/common/getbankbranchesbybankid",
         data: {
             bankId: bankId
         },
@@ -110,7 +110,7 @@ function loadBankBranches(bankId) {
 function loadBankAccounts(branchId) {
     $.ajax({
         method: "GET",
-        url: "/EGF/common/getbankaccountbybranchid",
+        url: "/services/EGF/common/getbankaccountbybranchid",
         data: {
             branchId: branchId
         },
@@ -135,7 +135,7 @@ function callAjaxSearch() {
     jQuery('.report-section').removeClass('display-hide');
     reportdatatable = drillDowntableContainer.dataTable({
         ajax: {
-            url: "/EGF/bankstatement/ajaxsearch",
+            url: "/services/EGF/bankstatement/ajaxsearch",
             type: "POST",
             "data": getFormData(jQuery('form'))
         },
@@ -180,6 +180,6 @@ function callAjaxSearch() {
     });
 }
 function downloadFile(fileStoreId) {
-    window.open("/EGF/bankstatement/downloadDoc?fileStoreId=" + fileStoreId, '',
+    window.open("/services/EGF/bankstatement/downloadDoc?fileStoreId=" + fileStoreId, '',
         'height=650,width=980,scrollbars=yes,left=0,top=0,status=yes');
 }

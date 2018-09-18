@@ -48,7 +48,7 @@
 
 
 <%@ taglib prefix="s" uri="/WEB-INF/tags/struts-tags.tld"%>
-<link href="/EGF/resources/css/budget.css?rnd=${app_release_no}" rel="stylesheet"
+<link href="/services/EGF/resources/css/budget.css?rnd=${app_release_no}" rel="stylesheet"
 	type="text/css" />
 <style type="text/css">
 @media print {
@@ -126,7 +126,7 @@ function showAllSchedulesDetailed(){
 
 
 
-	document.balanceSheetReport.action="/EGF/report/balanceSheetReport-generateScheduleReportDetailed.action?showDropDown=false&model.period="+period+"&model.currency="+currency+"&model.financialYear.id="+financialYear+"&model.department.id="+department+"&model.fund.id="+fund+"&model.function.id="+functionId+"&model.asOndate="+asOndate;
+	document.balanceSheetReport.action="/services/EGF/report/balanceSheetReport-generateScheduleReportDetailed.action?showDropDown=false&model.period="+period+"&model.currency="+currency+"&model.financialYear.id="+financialYear+"&model.department.id="+department+"&model.fund.id="+fund+"&model.function.id="+functionId+"&model.asOndate="+asOndate;
 
 	document.balanceSheetReport.submit();
 	return true;

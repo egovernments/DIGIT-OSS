@@ -80,7 +80,7 @@ $('#bank').change(function () {
 function loadBankBranches(bankId){
 		$.ajax({
 			method : "GET",
-			url : "/EGF/common/getbankbranchesbybankid",
+			url : "/services/EGF/common/getbankbranchesbybankid",
 			data : {
 				bankId : bankId
 			},
@@ -105,7 +105,7 @@ function callAjaxSearch() {
 	reportdatatable = drillDowntableContainer
 			.dataTable({
 				ajax : {
-					url : "/EGF/bankbranch/ajaxsearch/" + $('#mode').val(),
+					url : "/services/EGF/bankbranch/ajaxsearch/" + $('#mode').val(),
 					type : "POST",
 					"data" : getFormData(jQuery('form'))
 				},

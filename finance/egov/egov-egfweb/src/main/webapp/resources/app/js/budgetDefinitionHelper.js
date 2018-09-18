@@ -68,7 +68,7 @@ function callAjaxSearch() {
 	reportdatatable = drillDowntableContainer
 			.dataTable({
 				ajax : {
-					url : "/EGF/budgetdefinition/ajaxsearch/"
+					url : "/services/EGF/budgetdefinition/ajaxsearch/"
 							+ $('#mode').val(),
 					type : "POST",
 					"data" : getFormData(jQuery('form'))
@@ -132,7 +132,7 @@ function getParentByFinancialYear(financialYearId) {
 	} else {
 		$.ajax(
 				{
-					url : "/EGF/budgetdefinition/parents" + "?financialYearId="
+					url : "/services/EGF/budgetdefinition/parents" + "?financialYearId="
 							+ financialYearId + "&isBeRe=" + isBereChecked,
 					type : "GET",
 					dataType : "json"
@@ -164,7 +164,7 @@ function getReferenceBudgets(financialYearId) {
 		$
 				.ajax(
 						{
-							url : "/EGF/budgetdefinition/referencebudget?financialYearId="
+							url : "/services/EGF/budgetdefinition/referencebudget?financialYearId="
 									+ financialYearId,
 							type : "GET",
 							dataType : "json"
@@ -208,7 +208,7 @@ function getDropDownsForModify(budgetId) {
 		$
 				.ajax(
 						{
-							url : "/EGF/budgetdefinition/ajaxgetdropdownsformodify?budgetId="
+							url : "/services/EGF/budgetdefinition/ajaxgetdropdownsformodify?budgetId="
 									+ budgetId,
 							type : "GET",
 							dataType : "json"

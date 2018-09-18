@@ -53,7 +53,7 @@
 <script>
 function openDeptWiseIEWithBudget(scheduleId,scheduleName)
 {
-var url="/EGF/report/functionwiseIE!deptWiseIEWithBudget.action?";
+var url="/services/EGF/report/functionwiseIE!deptWiseIEWithBudget.action?";
 url=url+"&"+'model.incExp=<s:property value="model.incExp"/>';
 url=url+"&"+'model.fund.id=<s:property value="model.fund.id"/>';
 url=url+"&"+'model.function.id=<s:property value="model.function.id"/>';
@@ -65,7 +65,7 @@ window.open(url,"DeptWiseIEReprt","height=650,width=900,scrollbars=yes,left=20,t
 
 function generateReport(type)
 {
-var url="/EGF/report/functionwiseIE!exportMajorAndMinorCodewise.action?";
+var url="/services/EGF/report/functionwiseIE!exportMajorAndMinorCodewise.action?";
 url=url+"&"+'model.incExp=<s:property value="model.incExp"/>';
 url=url+"&"+'model.fund.id=<s:property value="model.fund.id"/>';
 url=url+"&"+'model.function.id=<s:property value="model.function.id"/>';

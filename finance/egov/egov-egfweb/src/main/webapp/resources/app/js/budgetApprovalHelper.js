@@ -78,11 +78,11 @@ jQuery('#approve,#reject').click(
 				var comments = $('#comments').val();
 				$.ajax({
 					type : "POST",
-					url : "/EGF/budgetapproval/"+button+ "?checkedArray="
+					url : "/services/EGF/budgetapproval/"+button+ "?checkedArray="
 							+ selected.toString() + "&comments=" + comments,
 					success : function(response) {
 						console.log("success" + response);
-						window.location.href = "/EGF/budgetapproval/success"
+						window.location.href = "/services/EGF/budgetapproval/success"
 								+ "?message=" + response
 					},
 					error : function(response) {
@@ -98,7 +98,7 @@ function search() {
 	reportdatatable = drillDowntableContainer
 			.dataTable({
 				ajax : {
-					url : "/EGF/budgetapproval/search",
+					url : "/services/EGF/budgetapproval/search",
 					type : "POST",
 					"data" : getFormData(jQuery('form'))
 				},

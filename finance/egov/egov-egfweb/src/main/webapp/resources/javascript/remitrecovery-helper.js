@@ -172,7 +172,7 @@ jQuery(document).ready(function(){
 function loadBankBranches(bankId){
 	jQuery.ajax({
 			method : "GET",
-			url : "/EGF/common/getbankbranchesbybankid",
+			url : "/services/EGF/common/getbankbranchesbybankid",
 			data : {
 				bankId : bankId
 			},
@@ -195,7 +195,7 @@ function loadBankBranches(bankId){
 function loadBankAccounts(branchId){
 	jQuery.ajax({
 			method : "GET",
-			url : "/EGF/common/getbankaccountbybranchid",
+			url : "/services/EGF/common/getbankaccountbybranchid",
 			data : {
 				branchId : branchId
 			},

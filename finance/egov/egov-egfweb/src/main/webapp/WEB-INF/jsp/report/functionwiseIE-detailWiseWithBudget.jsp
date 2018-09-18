@@ -52,7 +52,7 @@
 <script>
 function openDeptWiseIEWithBudget(glcode,deptName)
 {
-var url="/EGF/report/functionwiseIE!detailWiseIEWithBudget.action?";
+var url="/services/EGF/report/functionwiseIE!detailWiseIEWithBudget.action?";
 url=url+"&"+'model.incExp=<s:property value="model.incExp"/>';
 url=url+"&"+'model.fund.id=<s:property value="model.fund.id"/>';
 url=url+"&"+'model.function.id=<s:property value="model.function.id"/>';
@@ -64,7 +64,7 @@ window.open(url,"detailIEReport","height=650,width=900,scrollbars=yes,left=20,to
 }
 function generateReport(type)
 {
-var url="/EGF/report/functionwiseIE!exportDetailwise.action?";
+var url="/services/EGF/report/functionwiseIE!exportDetailwise.action?";
 url=url+"&"+'model.incExp=<s:property value="model.incExp"/>';
 url=url+"&"+'model.fund.id=<s:property value="model.fund.id"/>';
 url=url+"&"+'model.function.id=<s:property value="model.function.id"/>';

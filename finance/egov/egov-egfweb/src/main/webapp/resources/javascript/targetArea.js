@@ -124,7 +124,7 @@ var path="../..";
 var oAutoCompEntityForJV;
 function autocompleteCode(obj)
 {
-  	   oACDS = new YAHOO.widget.DS_XHR(path+"/EGF/common/eBCommon!ajaxLoadTargetAreaCodes.action", [ "~^"]);
+  	   oACDS = new YAHOO.widget.DS_XHR(path+"/services/EGF/common/eBCommon!ajaxLoadTargetAreaCodes.action", [ "~^"]);
 	   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 	   oACDS.scriptQueryParam = "startsWith";
 	   oAutoCompEntityForJV = new YAHOO.widget.AutoComplete(obj.name,'codescontainer',oACDS);

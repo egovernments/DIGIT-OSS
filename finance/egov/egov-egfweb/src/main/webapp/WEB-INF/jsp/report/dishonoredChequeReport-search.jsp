@@ -98,16 +98,16 @@
 }
 </style>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/calender.js"></script>
+	src="/services/EGF/resources/javascript/calender.js"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/calendar.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/calendar.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/dateValidation.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/dateValidation.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/dishonoredChequeHelper.js"></script>
-<link rel="stylesheet" href="/EGF/struts/xhtml/styles.css"
+	src="/services/EGF/resources/javascript/dishonoredChequeHelper.js"></script>
+<link rel="stylesheet" href="/services/EGF/struts/xhtml/styles.css"
 	type="text/css" />
 <div id="loading"
 	style="position: absolute; left: 25%; top: 70%; padding: 2px; z-index: 20001; height: auto; width: 500px; display: none;">

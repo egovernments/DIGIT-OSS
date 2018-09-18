@@ -54,7 +54,7 @@
 <html>
 <head>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/fundFlow.js?rnd=${app_release_no}">
+	src="/services/EGF/resources/javascript/fundFlow.js?rnd=${app_release_no}">
 </script>
 <title><s:text name="trialbalancereport" /></title>
 <script type="text/javascript">

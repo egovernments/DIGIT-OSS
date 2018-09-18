@@ -805,7 +805,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 		try {
 			final HashMap<String, Object> headerDetails = createHeaderAndMisDetails();
 			// update ContraBTB source path
-			headerDetails.put(VoucherConstant.SOURCEPATH, "/EGF/contra/contraBTB!beforeView.action?voucherHeader.id=");
+			headerDetails.put(VoucherConstant.SOURCEPATH, "/services/EGF/contra/contraBTB!beforeView.action?voucherHeader.id=");
 			if (voucherHeader.getFundId().getCode().equalsIgnoreCase("03")) {
 				final Department department = (Department) persistenceService.find("from Department where code=?", "Z");
 				headerDetails.remove(VoucherConstant.DEPARTMENTCODE);
@@ -876,7 +876,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 				headerDetails.put(VoucherConstant.DEPARTMENTCODE, department.getCode());
 			}
 			// update ContraBTB source path
-			headerDetails.put(VoucherConstant.SOURCEPATH, "/EGF/contra/contraBTB!beforeView.action?voucherHeader.id=");
+			headerDetails.put(VoucherConstant.SOURCEPATH, "/services/EGF/contra/contraBTB!beforeView.action?voucherHeader.id=");
 
 			HashMap<String, Object> detailMap = null;
 			List<HashMap<String, Object>> accountdetails = new ArrayList<HashMap<String, Object>>();
@@ -902,7 +902,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 
 			// update ContraBTB source path
 			// headerDetails.put(VoucherConstant.SOURCEPATH,
-			// "/EGF/contra/contraBTB!beforeView.action?voucherHeader.id=");
+			// "/services/EGF/contra/contraBTB!beforeView.action?voucherHeader.id=");
 
 			accountdetails = new ArrayList<HashMap<String, Object>>();
 			// overriding voucherName

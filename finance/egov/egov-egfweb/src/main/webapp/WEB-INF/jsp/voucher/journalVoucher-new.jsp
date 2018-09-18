@@ -55,15 +55,15 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/calendar.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/calendar.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/dateValidation.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/dateValidation.js?rnd=${app_release_no}"></script>
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252">
 <script type="text/javascript"
-	src="/EGF/resources/javascript/autocomplete-debug.js"></script>
+	src="/services/EGF/resources/javascript/autocomplete-debug.js"></script>
 <title>Journal voucher Create</title>
 </head>
 
@@ -453,7 +453,7 @@ function showMessage(message){
 	//bootbox.alert(message);
 	bootbox.alert(message, function() {
 		var voucherHeaderId = '<s:property value="voucherHeader.id"/>';
-		document.forms[0].action = "/EGF/voucher/preApprovedVoucher-loadvoucherview.action?vhid="+voucherHeaderId;
+		document.forms[0].action = "/services/EGF/voucher/preApprovedVoucher-loadvoucherview.action?vhid="+voucherHeaderId;
 		document.forms[0].submit(); 
 	});
 	     

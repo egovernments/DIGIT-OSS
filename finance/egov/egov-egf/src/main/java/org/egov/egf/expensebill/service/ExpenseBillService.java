@@ -261,7 +261,7 @@ public class ExpenseBillService {
         if (savedEgBillregister.getEgBillregistermis().getSourcePath() == null
                 || StringUtils.isBlank(savedEgBillregister.getEgBillregistermis().getSourcePath()))
             savedEgBillregister.getEgBillregistermis().setSourcePath(
-                    "/EGF/expensebill/view/" + savedEgBillregister.getId().toString());
+                    "/services/EGF/expensebill/view/" + savedEgBillregister.getId().toString());
 
         return expenseBillRepository.save(savedEgBillregister);
     }

@@ -68,7 +68,7 @@ function callAjaxSearch() {
 	reportdatatable = drillDowntableContainer
 	.dataTable({
 		ajax : {
-			url : "/EGF/accountdetailtype/ajaxsearch/"
+			url : "/services/EGF/accountdetailtype/ajaxsearch/"
 				+ $('#mode').val(),
 				type : "POST",
 				"data" : getFormData(jQuery('form'))

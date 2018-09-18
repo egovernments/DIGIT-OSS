@@ -52,7 +52,7 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css"
-	href="/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
+	href="/services/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
 <title>Cheque Assignment Search</title>
 </head>
 <body onload="onload()">

@@ -50,7 +50,7 @@
 <%@ include file="/includes/taglibs.jsp"%>
 <%@ page language="java"%>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/generalLedgerHelper.js"></script>
+	src="/services/EGF/resources/javascript/generalLedgerHelper.js"></script>
 
 <span class="mandatory1"> <font
 	style='color: red; font-weight: bold'> <s:actionerror /> <s:fielderror />

@@ -55,13 +55,13 @@
 <head>
 
 <link rel="stylesheet" type="text/css"
-	href="/EGF/resources/commonyui/build/treeview/assets/css/folders/tree.css">
-<script src="/EGF/resources/commonyui/build/yahoo/yahoo-min.js"></script>
-<script src="/EGF/resources/commonyui/build/event/event-min.js"></script>
+	href="/services/EGF/resources/commonyui/build/treeview/assets/css/folders/tree.css">
+<script src="/services/EGF/resources/commonyui/build/yahoo/yahoo-min.js"></script>
+<script src="/services/EGF/resources/commonyui/build/event/event-min.js"></script>
 <script
-	src="/EGF/resources/commonyui/build/connection/connection-min.js"></script>
+	src="/services/EGF/resources/commonyui/build/connection/connection-min.js"></script>
 <!-- TreeView source file -->
-<script src="/EGF/resources/commonyui/build/treeview/treeview-min.js"></script>
+<script src="/services/EGF/resources/commonyui/build/treeview/treeview-min.js"></script>
 </head>
 <body onload="treeInit()">
 	<h2>Chart Of Accounts</h2>
@@ -184,7 +184,7 @@ function loadSelectDataForChartOfacounts(url,sourceobj,destobj)
 				{
 			
 			url = url +'?'+actionidstr;
-				url="/EGF/masters/chartOfAccounts-viewChartOfAccounts.action?model.id="+id;
+				url="/services/EGF/masters/chartOfAccounts-viewChartOfAccounts.action?model.id="+id;
 				}
 				openPopupWindow(url, windowname , 900, 650)
 		}			
@@ -195,7 +195,7 @@ function loadNodeData(node, fnLoadComplete){
 	var nodeUrl =  node.data.url;
 	var url = '/EGF/voucher/common-ajaxloadcoa.action';
 	var moduleQuery = url+'?glCode='+nodeId;
-	url="/EGF/masters/chartOfAccounts-viewChartOfAccounts.action?model.id="+nodeId;
+	url="/services/EGF/masters/chartOfAccounts-viewChartOfAccounts.action?model.id="+nodeId;
 	//prepare our callback object
 	var callback = {
 	

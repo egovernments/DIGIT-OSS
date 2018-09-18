@@ -53,7 +53,7 @@
 <head>
 <title><s:text name="chartOfAccount.modify" /></title>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/chartofaccountsHelper.js"></script>
+	src="/services/EGF/resources/javascript/chartofaccountsHelper.js"></script>
 <script type="text/javascript">
 	function validateAndSubmit() {
 

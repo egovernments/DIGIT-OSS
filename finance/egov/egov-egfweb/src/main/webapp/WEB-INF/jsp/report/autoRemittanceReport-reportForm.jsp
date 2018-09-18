@@ -51,10 +51,10 @@
 <%@ taglib prefix="egov" tagdir="/WEB-INF/tags"%>
 <head>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/tdsReportHelper.js"></script>
-<script type="text/javascript" src="/EGF/resources/javascript/helper.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/tdsReportHelper.js"></script>
+<script type="text/javascript" src="/services/EGF/resources/javascript/helper.js?rnd=${app_release_no}"></script>
 <style type="text/css">
 #codescontainer {
 	position: absolute;

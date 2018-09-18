@@ -57,14 +57,14 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/javascript/directBankPaymentHelper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/calendar.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/calendar.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/dateValidation.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/dateValidation.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/autocomplete-debug.js"></script>
-<link rel="stylesheet" href="/EGF/struts/xhtml/styles.css"
+	src="/services/EGF/resources/javascript/autocomplete-debug.js"></script>
+<link rel="stylesheet" href="/services/EGF/struts/xhtml/styles.css"
 	type="text/css" />
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252">

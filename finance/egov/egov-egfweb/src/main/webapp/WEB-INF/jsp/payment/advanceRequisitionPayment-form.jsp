@@ -50,16 +50,16 @@
 <%@ page language="java"%>
 
 <script type="text/javascript"
-	src="/EGF/resources/javascript/calendar.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/calendar.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/dateValidation.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/dateValidation.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
-<link rel="stylesheet" href="/EGF/resources/css/tabber.css?rnd=${app_release_no}"
+	src="/services/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
+<link rel="stylesheet" href="/services/EGF/resources/css/tabber.css?rnd=${app_release_no}"
 	TYPE="text/css">
-<script type="text/javascript" src="/EGF/resources/javascript/tabber.js?rnd=${app_release_no}"></script>
+<script type="text/javascript" src="/services/EGF/resources/javascript/tabber.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
 <link href="common/css/budget.css?rnd=${app_release_no}" rel="stylesheet" type="text/css" />
 <link href="common/css/commonegov.css?rnd=${app_release_no}" rel="stylesheet" type="text/css" />
 

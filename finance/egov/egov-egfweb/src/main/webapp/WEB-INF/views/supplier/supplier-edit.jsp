@@ -49,7 +49,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
-<form:form role="form" action="/EGF/supplier/update" modelAttribute="supplier" id="supplierForm" cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
+<form:form role="form" action="/services/EGF/supplier/update" modelAttribute="supplier" id="supplierForm" cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
 <div class="main-content">
 	<div class="row">
 		<div class="col-md-12">
@@ -77,4 +77,4 @@
 		}
 	});
 </script>
-<script src="<cdn:url value='/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}' context='/egi'/>"></script>
+<script src="<cdn:url value='/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}' context='/services/egi'/>"></script>

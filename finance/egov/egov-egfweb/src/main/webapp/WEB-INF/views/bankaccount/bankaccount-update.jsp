@@ -49,7 +49,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
-<form:form role="form" action="/EGF/bankaccount/update" modelAttribute="bankaccount" id="bankaccountform" cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
+<form:form role="form" action="/services/EGF/bankaccount/update" modelAttribute="bankaccount" id="bankaccountform" cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
 	<spring:hasBindErrors name="bankaccount">
 		<div class="alert alert-danger"
 			style="margin-top: 20px; margin-bottom: 10px;">

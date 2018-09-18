@@ -56,7 +56,7 @@
         <div class="container-fluid">
             <div class="navbar-header col-md-10 col-xs-10">
                 <a class="navbar-brand" href="javascript:void(0);">
-                    <img src="<c:url value='/downloadfile/logo' context='/egi'/>" height="60">
+                    <img src="<c:url value='/downloadfile/logo' context='/services/egi'/>" height="60">
                     <div>
 						<span class="title2">
 						<c:set var="titleKey">
@@ -72,7 +72,7 @@
                 <ul class="hr-menu text-right">
                     <li class="ico-menu">
                         <a href="http://www.egovernments.org" target="_blank">
-                            <img src="<cdn:url value='/resources/global/images/logo@2x.png' context='/egi'/>" title="Powered by eGovernments" height="20px">
+                            <img src="<cdn:url value='/resources/global/images/logo@2x.png' context='/services/egi'/>" title="Powered by eGovernments" height="20px">
                         </a>
                     </li>
 

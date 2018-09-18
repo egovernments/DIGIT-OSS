@@ -52,7 +52,7 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css"
-	href="/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
+	href="/services/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
 <title>Cheque Assignment Search</title>
 </head>
 <body>
@@ -151,7 +151,7 @@
 	<script>
 		function submitForm() {
 
-			document.chequeAssignment.action = "/EGF/payment/chequeAssignment-searchChequesOfRemittance.action";
+			document.chequeAssignment.action = "/services/EGF/payment/chequeAssignment-searchChequesOfRemittance.action";
 			document.chequeAssignment.submit();
 		}
 		var date = '<s:date name="currentDate" format="dd/MM/yyyy"/>';

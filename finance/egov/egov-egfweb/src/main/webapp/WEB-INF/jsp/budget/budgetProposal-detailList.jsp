@@ -53,22 +53,22 @@
 <head>
 <title><s:text name="budgetdetail" /></title>
 <link rel="stylesheet"
-	href="/EGF/resources/css/tabber.css?rnd=${app_release_no}"
+	href="/services/EGF/resources/css/tabber.css?rnd=${app_release_no}"
 	TYPE="text/css">
 <script type="text/javascript"
-	src="/EGF/resources/javascript/tabber.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/tabber.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/tabber2.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/tabber2.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/helper.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/helper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/jquery-1.7.2.min.js"></script>
+	src="/services/EGF/resources/javascript/jquery-1.7.2.min.js"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/jquery/jquery.fixheadertable.js"></script>
+	src="/services/EGF/resources/javascript/jquery/jquery.fixheadertable.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="/EGF/resources/css/jquery/base.css?rnd=${app_release_no}" />
+	href="/services/EGF/resources/css/jquery/base.css?rnd=${app_release_no}" />
 <link rel="stylesheet" type="text/css"
-	href="/EGF/resources/css/jquery-ui/css/redmond/jquery-ui-1.8.4.custom.css" />
+	href="/services/EGF/resources/css/jquery-ui/css/redmond/jquery-ui-1.8.4.custom.css" />
 
 <jsp:include page="budgetHeader.jsp" />
 <SCRIPT type="text/javascript">
@@ -297,7 +297,7 @@
 	function updateNew(){
 		var asOndate = document.getElementById("asOndate").value;
 		var budid = document.getElementById("budgetDetail.budget.id").value;
-		window.location = "/EGF/budget/budgetProposal-modifyBudgetDetailList.action?budgetDetail.budget.id="+budid+"&asOndate="+asOndate;
+		window.location = "/services/EGF/budget/budgetProposal-modifyBudgetDetailList.action?budgetDetail.budget.id="+budid+"&asOndate="+asOndate;
 		return true;
 	}
 

@@ -48,7 +48,7 @@
 
 
 <%@ taglib prefix="s" uri="/WEB-INF/tags/struts-tags.tld"%>
-<link href="/EGF/resources/css/budget.css?rnd=${app_release_no}"
+<link href="/services/EGF/resources/css/budget.css?rnd=${app_release_no}"
 	rel="stylesheet" type="text/css" />
 <script>
 	var budName = "";

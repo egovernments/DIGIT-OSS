@@ -52,7 +52,7 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css"
-	href="/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
+	href="/services/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
 <title><s:text name="surrender.and.reassign.cheques" /></title>
 </head>
 <body>
@@ -267,7 +267,7 @@
 	function openDetails(val)
 	{
 	var mode="view";
- 	window.open("/EGF/voucher/preApprovedVoucher-loadvoucherview.action?vhid="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
+ 	window.open("/services/EGF/voucher/preApprovedVoucher-loadvoucherview.action?vhid="+val+"&showMode="+mode,"","height=650,width=900,scrollbars=yes,left=30,top=30,status=yes");
  	}
  	function surrenderChq(){
  		resetSelectedRowsId();
@@ -338,7 +338,7 @@
 		console.log('departmentid'+departmentid.value);
 		console.log('bankaccount'+document.getElementById('bankaccount').value);
 		jQuery.ajax({
-			url: "/EGF/voucher/common-ajaxYearCode.action?departmentId="+departmentid.value+"&bankaccount="+document.getElementById('bankaccount').value,
+			url: "/services/EGF/voucher/common-ajaxYearCode.action?departmentId="+departmentid.value+"&bankaccount="+document.getElementById('bankaccount').value,
 			method: 'GET',
 		    async : false,
 		    

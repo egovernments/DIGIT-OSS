@@ -52,7 +52,7 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css"
-	href="/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
+	href="/services/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
 <title>Cheque Assignment Search</title>
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252">
@@ -306,7 +306,7 @@
 				<s:if test="%{paymentMode!='cheque'}">
 				if(validateChequeDateForNonChequeMode()){
 					resetSelectedRowsId();
-					document.chequeAssignment.action= "/EGF/payment/chequeAssignment-create.action";
+					document.chequeAssignment.action= "/services/EGF/payment/chequeAssignment-create.action";
 					document.chequeAssignment.submit();
 					return true;
 					}
@@ -315,7 +315,7 @@
 				</s:if> 
 				<s:else>
 				resetSelectedRowsId();
-				document.chequeAssignment.action= "/EGF/payment/chequeAssignment-create.action";
+				document.chequeAssignment.action= "/services/EGF/payment/chequeAssignment-create.action";
 				document.chequeAssignment.submit();
 				return true;
 				</s:else>

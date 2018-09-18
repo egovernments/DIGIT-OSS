@@ -47,7 +47,7 @@
   --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
-<form:form role="form" action="/EGF/fundsource/update" modelAttribute="fundsource"
+<form:form role="form" action="/services/EGF/fundsource/update" modelAttribute="fundsource"
 	id="fundsourceform" cssClass="form-horizontal form-groups-bordered"
 	enctype="multipart/form-data">
 	<%@ include file="fundsource-form.jsp"%>

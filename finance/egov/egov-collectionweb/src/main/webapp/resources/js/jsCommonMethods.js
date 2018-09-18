@@ -1644,7 +1644,7 @@ function getRow(obj)
  function checkUnique(tablename,fieldname,fieldvalue)
  {
 	var type = "checkUniqueness";
-	var link = "/EGF/inventory/commons/uniqueChecking.jsp?type=" + type+"&tablename=" + tablename+"&fieldname=" + fieldname+ "&fieldvalue=" + fieldvalue+ " ";
+	var link = "/services/EGF/inventory/commons/uniqueChecking.jsp?type=" + type+"&tablename=" + tablename+"&fieldname=" + fieldname+ "&fieldvalue=" + fieldvalue+ " ";
 		
 	var request = initiateRequest();
 	var isUnique;

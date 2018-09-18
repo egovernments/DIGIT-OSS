@@ -53,7 +53,7 @@
 			bootbox.alert('Please select a financial year');
 			return false;
 		}
-		document.budgetDetailReportForm.action = "/EGF/budget/budgetReport-"
+		document.budgetDetailReportForm.action = "/services/EGF/budget/budgetReport-"
 				+ method + ".action";
 		document.budgetDetailReportForm.submit();
 	}

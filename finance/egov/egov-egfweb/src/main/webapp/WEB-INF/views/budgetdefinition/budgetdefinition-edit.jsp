@@ -48,7 +48,7 @@
   ~
   --%>
 
-<form:form role="form" action="/EGF/budgetdefinition/update" modelAttribute="budget"
+<form:form role="form" action="/services/EGF/budgetdefinition/update" modelAttribute="budget"
 	id="budgetform" cssClass="form-horizontal form-groups-bordered"
 	enctype="multipart/form-data">
 	<%@ include file="budgetdefinition-form.jsp"%>

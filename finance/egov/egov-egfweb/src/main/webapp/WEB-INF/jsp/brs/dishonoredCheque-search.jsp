@@ -56,7 +56,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><s:text name="dishonoredCheq.title" /></title>
 <sj:head jqueryui="true" jquerytheme="redmond" loadAtOnce="true" />
-<script type="text/javascript" src="/EGF/resources/javascript/helper.js?rnd=${app_release_no}"></script>
+<script type="text/javascript" src="/services/EGF/resources/javascript/helper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript">
 
 

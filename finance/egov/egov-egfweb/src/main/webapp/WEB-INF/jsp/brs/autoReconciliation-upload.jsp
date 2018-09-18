@@ -165,7 +165,7 @@
 							id="bankStatmentInXls" /></td>
                   
 					<td class="greybox" colspan="2">
-                    <a href="/EGF/resources/app/formats/brs_format.xls">Download Template</a>
+                    <a href="/services/EGF/resources/app/formats/brs_format.xls">Download Template</a>
 					</td>
 				</tr>
 

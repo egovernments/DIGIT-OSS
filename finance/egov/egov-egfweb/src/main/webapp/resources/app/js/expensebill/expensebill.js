@@ -344,7 +344,7 @@ $('#subLedgerType').change(function () {
 		
 		$.ajax({
 			method : "GET",
-			url : "/EGF/common/getnetpayablecodesbyaccountdetailtype",
+			url : "/services/EGF/common/getnetpayablecodesbyaccountdetailtype",
 			dataType: "json",
 			data : {
 				accountDetailType : accountDetailType
@@ -372,7 +372,7 @@ function loadCheckListTable(){
 	if($('#billSubType').val()!=""){
 		$.ajax({
 			method : "GET",
-			url : "/EGF/common/getchecklistbybillsubtype",
+			url : "/services/EGF/common/getchecklistbybillsubtype",
 			data : {
 				billSubType : $('#billSubType').val()
 			},

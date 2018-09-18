@@ -124,7 +124,7 @@
 	var oAutoCompEntityForJV;
 	function autocompleteRTGSNumbers(obj) {
 		oACDS = new YAHOO.widget.DS_XHR(path
-				+ "/EGF/voucher/common-ajaxLoadRTGSNumberByAccountId.action",
+				+ "/services/EGF/voucher/common-ajaxLoadRTGSNumberByAccountId.action",
 				[ "~^" ]);
 		oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 		oACDS.scriptQueryParam = "startsWith";
@@ -156,7 +156,7 @@
 	}
 </script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/autocomplete-debug.js"></script>
+	src="/services/EGF/resources/javascript/autocomplete-debug.js"></script>
 <body>
 	<s:form action="rtgsIssueRegisterReport" name="rtgsIssueRegisterReport"
 		theme="simple" method="post">

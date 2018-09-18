@@ -52,7 +52,7 @@
 <html>
 <head>
 <title>Detailed Chart Of Accounts</title>
-<link rel="stylesheet" href="/EGF/struts/xhtml/styles.css"
+<link rel="stylesheet" href="/services/EGF/struts/xhtml/styles.css"
 	type="text/css" />
 <script type="text/javascript">
 		function validateAndSubmit(obj){

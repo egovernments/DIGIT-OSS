@@ -49,7 +49,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
-<form:form role="form" action="/EGF/bankbranch/update" modelAttribute="bankbranch" id="bankbranchform" cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
+<form:form role="form" action="/services/EGF/bankbranch/update" modelAttribute="bankbranch" id="bankbranchform" cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
 	<%@ include file="bankbranch-form.jsp"%>
 	<input type="hidden" name="bankbranch" value="${bankbranch.id}" />
 	<div class="form-group">

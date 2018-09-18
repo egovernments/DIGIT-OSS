@@ -173,7 +173,7 @@
 					<tr>
 
 						<td class="greybox" colspan="2"><a
-							href="/EGF/resources/app/formats/Budget_Data_Template.xls">Download
+							href="/services/EGF/resources/app/formats/Budget_Data_Template.xls">Download
 								Template</a></td>
 					</tr>
 				</table>

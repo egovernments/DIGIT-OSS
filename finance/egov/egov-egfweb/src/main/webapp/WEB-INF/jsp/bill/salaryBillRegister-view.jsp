@@ -52,7 +52,7 @@
 <html>
 <head>
 <title><s:text name="bill.salarybill.register" /></title>
-<link href="/EGF/css/commonegov.css?rnd=${app_release_no}" rel="stylesheet" type="text/css" />
+<link href="/services/EGF/css/commonegov.css?rnd=${app_release_no}" rel="stylesheet" type="text/css" />
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript">
@@ -68,7 +68,7 @@
 	function populateFunctionName(){
 		var funcArray;
 		var map = {};
-		var url = "/EGF/voucher/common-ajaxGetAllFunctionName.action";
+		var url = "/services/EGF/voucher/common-ajaxGetAllFunctionName.action";
 		var req2 = initiateRequest();
 		req2.onreadystatechange = function(){
 		  if (req2.readyState == 4){

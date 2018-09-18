@@ -78,7 +78,7 @@
     </div>
     <c:if test="${egBillregister.documentDetail != null &&  !egBillregister.documentDetail.isEmpty()}">
         <c:forEach items="${egBillregister.documentDetail }" var="documentDetials">
-            <a href="/EGF/expensebill/downloadBillDoc?egBillRegisterId=${egBillregister.id }&fileStoreId=${documentDetials.fileStore.fileStoreId }">${documentDetials.fileStore.fileName }</a><br />
+            <a href="/services/EGF/expensebill/downloadBillDoc?egBillRegisterId=${egBillregister.id }&fileStoreId=${documentDetials.fileStore.fileStoreId }">${documentDetials.fileStore.fileName }</a><br />
         </c:forEach>
     </c:if>
     <c:if test="${mode == 'view' && egBillregister.documentDetail.isEmpty()}">

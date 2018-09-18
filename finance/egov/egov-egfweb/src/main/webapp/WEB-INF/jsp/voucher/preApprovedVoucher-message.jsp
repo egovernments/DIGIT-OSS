@@ -52,7 +52,7 @@
 <html>
 <head>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
 	
 <title>PJV Approval</title>
 </head>

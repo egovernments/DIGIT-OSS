@@ -664,7 +664,7 @@ ORDER BY
 					<font fontName="Times New Roman" isBold="true" isItalic="true" isUnderline="true" pdfFontName="Times-Roman" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{VOUCHER_NUMBER}]]></textFieldExpression>
-				<hyperlinkReferenceExpression><![CDATA["/EGF/voucher/preApprovedVoucher-loadvoucherview.action?vhid="+$F{VOUCHER_ID}]]></hyperlinkReferenceExpression>
+				<hyperlinkReferenceExpression><![CDATA["/services/EGF/voucher/preApprovedVoucher-loadvoucherview.action?vhid="+$F{VOUCHER_ID}]]></hyperlinkReferenceExpression>
 				<hyperlinkTooltipExpression><![CDATA[$F{VOUCHER_NUMBER}]]></hyperlinkTooltipExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">

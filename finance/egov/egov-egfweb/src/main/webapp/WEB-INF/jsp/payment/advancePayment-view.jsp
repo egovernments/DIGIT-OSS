@@ -53,9 +53,9 @@
 <head>
 <title><s:text name="advance.payment.view.title" /></title>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/advancePaymentHelper.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/advancePaymentHelper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
 <style>
 @media print {
 	input#printbutton {

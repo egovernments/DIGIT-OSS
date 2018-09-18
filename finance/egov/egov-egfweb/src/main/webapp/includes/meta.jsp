@@ -54,4 +54,4 @@
 <!-- Prevents caching at the Proxy Server -->
 <meta http-equiv="Expires" content="0"/>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<link rel="icon" href="<cdn:url value='/resources/global/images/favicon.png' context='/egi'/>" sizes="32x32">
+<link rel="icon" href="<cdn:url value='/resources/global/images/favicon.png' context='/services/egi'/>" sizes="32x32">

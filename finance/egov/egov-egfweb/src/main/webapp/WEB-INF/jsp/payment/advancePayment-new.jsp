@@ -53,9 +53,9 @@
 <head>
 <title><s:text name="advance.payment.title" /></title>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/advancePaymentHelper.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/advancePaymentHelper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
 <script>
 window.history.forward(1);
 function noBack() {

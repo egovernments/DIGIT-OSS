@@ -894,7 +894,7 @@ var funcObj;
 var funcArray;
 function loadDropDownCodesFunction()
 {
-	var url = "/EGF/voucher/common-ajaxGetAllFunctionName.action";
+	var url = "/services/EGF/voucher/common-ajaxGetAllFunctionName.action";
 	var req4 = initiateRequest();
 	req4.onreadystatechange = function()
 	{
@@ -1226,7 +1226,7 @@ var codeObj;
 var acccodeArray;
 function loadDropDownCodes()
 {
-	var	url = "/EGF/voucher/common-ajaxGetAllCoaNames.action";
+	var	url = "/services/EGF/voucher/common-ajaxGetAllCoaNames.action";
 	var req2 = initiateRequest();
 	req2.onreadystatechange = function()
 	{
@@ -1520,20 +1520,20 @@ if(null != result && result.length !=0){
 				 dom.get('receiptMisc.fund.id').value = parseInt(miscArray[0]);		
 		}
 		if(null != dom.get('schemeId') ){
-				var url= "/EGF/voucher/common-ajaxLoadSchemes.action";
+				var url= "/services/EGF/voucher/common-ajaxLoadSchemes.action";
 				var fundId = dom.get('receiptMisc.fund.id').value;
 				makeJSONCall(["Text","Value"],url,{fundId:miscArray[0]},schemeDropDownSuccessHandler,schemeDropDownFailureHandler);
 		}
 		if(null != dom.get('subschemeId')  ){
 
-				var url= "/EGF/voucher/common-ajaxLoadSubSchemes.action";
+				var url= "/services/EGF/voucher/common-ajaxLoadSubSchemes.action";
 				var schemeId = dom.get('schemeId').value;
 				makeJSONCall(["Text","Value"],url,{schemeId:miscArray[1]},subschemeDropDownSuccessHandler,subschemeDropDownFailureHandler);
 				
 		}
 		
 		if(null != dom.get('fundSourceId') ){
-				var url= "/EGF/voucher/common-ajaxLoadFundSource.action";
+				var url= "/services/EGF/voucher/common-ajaxLoadFundSource.action";
 				var subschemeId = dom.get('subschemeId').value;
 				makeJSONCall(["Text","Value"],url,{subSchemeId:miscArray[2]},fundsourceDropDownSuccessHandler,fundsourceDropDownFailureHandler);
 

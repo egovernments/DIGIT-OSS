@@ -71,7 +71,7 @@ function setTotalAmount()
 }
 </script>
 <head>
-<link rel="stylesheet" type="text/css" href="/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
+<link rel="stylesheet" type="text/css" href="/services/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
 <title>Cheque Assignment Search for Salary Payments</title>
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252">

@@ -61,7 +61,7 @@ function callAjaxSearch() {
 	doLoadingMask();
 	var fd = jQuery('#mrform').serialize();
 	jQuery.ajax({
-		url : "/EGF/brs/manualReconciliation-ajaxSearch.action",
+		url : "/services/EGF/brs/manualReconciliation-ajaxSearch.action",
 		type : "POST",
 		data : fd,
 		// dataType: "text",
@@ -120,7 +120,7 @@ function validateReconcile() {
 	doLoadingMask();
 	var fd = jQuery('#mrform').serialize();
 	jQuery.ajax({
-		url : "/EGF/brs/manualReconciliation-update.action",
+		url : "/services/EGF/brs/manualReconciliation-update.action",
 		type : "POST",
 		data : fd,
 		// dataType: "text",
@@ -150,7 +150,7 @@ function showBalance() {
 	doLoadingMask();
 	var fd = jQuery('#mrform').serialize();
 	jQuery.ajax({
-		url : "/EGF/brs/manualReconciliation-ajaxBalance.action",
+		url : "/services/EGF/brs/manualReconciliation-ajaxBalance.action",
 		type : "POST",
 		data : fd,
 		// dataType: "text",

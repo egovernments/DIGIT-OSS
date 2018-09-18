@@ -372,7 +372,7 @@ public class AdvancePaymentAction extends BasePaymentAction {
     private CVoucherHeader createVoucherAndledger() {
         try {
             final HashMap<String, Object> headerDetails = createHeaderAndMisDetails();
-            headerDetails.put(VoucherConstant.SOURCEPATH, "/EGF/payment/advancePayment!view.action?voucherHeader.id=");
+            headerDetails.put(VoucherConstant.SOURCEPATH, "/services/EGF/payment/advancePayment!view.action?voucherHeader.id=");
             HashMap<String, Object> detailMap = null;
             HashMap<String, Object> subledgertDetailMap = null;
             final List<HashMap<String, Object>> accountdetails = new ArrayList<HashMap<String, Object>>();

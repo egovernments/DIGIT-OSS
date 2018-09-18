@@ -68,7 +68,7 @@ function setOnlineInstrumentDetails(elem) {
 var bankfuncObj;
 var bankArray;
 function loadDropDownCodesBank() {
-	var url = "/EGF/voucher/common-ajaxGetAllBankName.action";
+	var url = "/services/EGF/voucher/common-ajaxGetAllBankName.action";
 	var req2 = initiateRequest();
 	req2.onreadystatechange = function() {
 		if (req2.readyState == 4) {

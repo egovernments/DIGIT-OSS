@@ -52,9 +52,9 @@
 <html>
 <head>
 <title><s:text name="bill.salarybill.register" /></title>
-<link href="/EGF/resources/css/budget.css?rnd=${app_release_no}" rel="stylesheet"
+<link href="/services/EGF/resources/css/budget.css?rnd=${app_release_no}" rel="stylesheet"
 	type="text/css" />
-<link href="/EGF/css/commonegov.css" rel="stylesheet" type="text/css" />
+<link href="/services/EGF/css/commonegov.css" rel="stylesheet" type="text/css" />
 <script>
 var callback = {
 		success: function(o){

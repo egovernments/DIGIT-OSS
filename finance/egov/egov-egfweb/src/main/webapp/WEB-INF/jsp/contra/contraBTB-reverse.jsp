@@ -56,7 +56,7 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/javascript/contraBTBHelper.js"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
 </head>
 <body onload="onLoadTask_reverse">
 	<s:form action="contraBTB" theme="simple" name="cbtbform">

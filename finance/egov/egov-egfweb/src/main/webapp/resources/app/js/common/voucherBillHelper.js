@@ -114,7 +114,7 @@ function loadScheme(fundId){
 		
 		$.ajax({
 			method : "GET",
-			url : "/EGF/common/getschemesbyfundid",
+			url : "/services/EGF/common/getschemesbyfundid",
 			data : {
 				fundId : fundId
 			},
@@ -145,7 +145,7 @@ function loadSubScheme(schemeId){
 		
 		$.ajax({
 			method : "GET",
-			url : "/EGF/common/getsubschemesbyschemeid",
+			url : "/services/EGF/common/getsubschemesbyschemeid",
 			data : {
 				schemeId : schemeId
 			},

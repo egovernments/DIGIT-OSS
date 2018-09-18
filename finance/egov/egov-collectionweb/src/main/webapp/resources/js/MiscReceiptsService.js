@@ -98,7 +98,7 @@ success: function(o) {
 				}
 				
 				if(null != dom.get('fundSourceId') ){
-						var url= "/EGF/voucher/common-ajaxLoadFundSource.action";
+						var url= "/services/EGF/voucher/common-ajaxLoadFundSource.action";
 						var subschemeId = dom.get('subschemeId').value;
         				makeJSONCall(["Text","Value"],url,{subSchemeId:miscArray[2]},fundsourceDropDownSuccessHandler,fundsourceDropDownFailureHandler);
 		

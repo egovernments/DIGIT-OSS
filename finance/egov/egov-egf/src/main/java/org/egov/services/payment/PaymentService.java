@@ -268,7 +268,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 				subledgerdetails);
 		final Paymentheader paymentheader = createPaymentHeader(voucherHeader, bankaccount, parameters);
 		paymentheader.getVoucherheader().getVouchermis()
-				.setSourcePath("/EGF/payment/payment-view.action?paymentid=" + paymentheader.getId());
+				.setSourcePath("/services/EGF/payment/payment-view.action?paymentid=" + paymentheader.getId());
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Completed createPayment.");
 		return paymentheader;
@@ -387,7 +387,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 			}
 
 			paymentheader.getVoucherheader().getVouchermis()
-					.setSourcePath("/EGF/payment/payment-view.action?" + PAYMENTID + "=" + paymentheader.getId());
+					.setSourcePath("/services/EGF/payment/payment-view.action?" + PAYMENTID + "=" + paymentheader.getId());
 			if (FinancialConstants.CREATEANDAPPROVE.equalsIgnoreCase(workflowBean.getWorkFlowAction())
 					&& voucherHeader.getState() == null) {
 				paymentheader.getVoucherheader().setStatus(FinancialConstants.CREATEDVOUCHERSTATUS);

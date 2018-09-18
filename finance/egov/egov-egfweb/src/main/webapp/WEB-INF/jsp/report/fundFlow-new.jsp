@@ -53,7 +53,7 @@
 <html>
 <head>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/fundFlow.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/fundFlow.js?rnd=${app_release_no}"></script>
 <title><s:text name="fundflowreport" /></title>
 
 

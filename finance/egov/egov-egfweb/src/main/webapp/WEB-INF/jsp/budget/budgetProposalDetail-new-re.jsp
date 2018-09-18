@@ -53,15 +53,15 @@
 <head>
 <title>Create budget proposal (RE)</title>
 <link rel="stylesheet"
-	href="/EGF/resources/css/tabber.css?rnd=${app_release_no}"
+	href="/services/EGF/resources/css/tabber.css?rnd=${app_release_no}"
 	TYPE="text/css">
-<script type="text/javascript" src="/EGF/resources/javascript/tabber.js?rnd=${app_release_no}"></script>
+<script type="text/javascript" src="/services/EGF/resources/javascript/tabber.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/tabber2.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/tabber2.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/helper.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/helper.js?rnd=${app_release_no}"></script>
 	<script type="text/javascript"
-	src="/EGF/resources/javascript/calendar.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/calendar.js?rnd=${app_release_no}"></script>
 <STYLE type="text/css">
 .yui-dt-liner {
 	text-align: right;

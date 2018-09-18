@@ -69,7 +69,7 @@
 }
 </style>
 <link rel="stylesheet" type="text/css"
-	href="/EGF/resources/css/jquery-ui/css/smoothness/jquery-ui-1.8.4.custom.css" />
+	href="/services/EGF/resources/css/jquery-ui/css/smoothness/jquery-ui-1.8.4.custom.css" />
 <SCRIPT type="text/javascript"
 	src="../resources/javascript/calendar.js?rnd=${app_release_no}"
 	type="text/javascript"></SCRIPT>

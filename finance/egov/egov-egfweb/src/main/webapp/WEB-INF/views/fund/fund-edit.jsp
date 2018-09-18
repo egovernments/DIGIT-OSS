@@ -49,7 +49,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
-<form:form role="form" action="/EGF/fund/update" modelAttribute="fund"
+<form:form role="form" action="/services/EGF/fund/update" modelAttribute="fund"
 	id="fundform" cssClass="form-horizontal form-groups-bordered"
 	enctype="multipart/form-data">
 	<%@ include file="fund-form.jsp"%>

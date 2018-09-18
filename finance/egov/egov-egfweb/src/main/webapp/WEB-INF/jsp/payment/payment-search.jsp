@@ -53,7 +53,7 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css"
-	href="/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
+	href="/services/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
 <s:if
 	test="%{disableExpenditureType == true && enablePensionType == false}">
 	<title>Salary Bill Payment Search</title>

@@ -56,7 +56,7 @@
 <title><s:text name="dishonorcheque.title" /></title>
 <sj:head jqueryui="true" jquerytheme="redmond" loadAtOnce="true" />
 <script type="text/javascript"
-	src="/EGF/resources/javascript/helper.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/helper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript">
 	function getAccountNumbers(branchId) {
 		populateaccountNumber({
@@ -196,7 +196,7 @@
 	}
 
 	function openVoucher(vid){
-		var url = "/EGF/voucher/preApprovedVoucher-loadvoucherview.action?vhid="+ vid;
+		var url = "/services/EGF/voucher/preApprovedVoucher-loadvoucherview.action?vhid="+ vid;
 		window.open(url,'','width=900, height=700');
 	}
 

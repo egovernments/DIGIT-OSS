@@ -98,18 +98,18 @@
 }
 </style>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/calendar.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/calendar.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/dateValidation.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/dateValidation.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/generalLedgerHelper.js"></script>
-<link rel="stylesheet" href="/EGF/struts/xhtml/styles.css"
+	src="/services/EGF/resources/javascript/generalLedgerHelper.js"></script>
+<link rel="stylesheet" href="/services/EGF/struts/xhtml/styles.css"
 	type="text/css" />
-	<link rel="stylesheet" type="text/css" href="/EGF/resources/css/jquery-ui/css/ui-lightness/jquery-ui-1.8.4.custom.css" type="text/css"/>
+	<link rel="stylesheet" type="text/css" href="/services/EGF/resources/css/jquery-ui/css/ui-lightness/jquery-ui-1.8.4.custom.css" type="text/css"/>
 	
-	 <script type="text/javascript" src="/EGF/resources/javascript/autocomplete-debug.js"></script> 
+	 <script type="text/javascript" src="/services/EGF/resources/javascript/autocomplete-debug.js"></script> 
 <div id="loading"
 	style="position: absolute; left: 25%; top: 70%; padding: 2px; z-index: 20001; height: auto; width: 500px; display: none;">
 	<div class="loading-indicator"

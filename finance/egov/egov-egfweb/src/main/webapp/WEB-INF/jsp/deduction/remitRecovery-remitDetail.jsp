@@ -55,19 +55,19 @@
 
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252">
-<link href="/EGF/resources/css/budget.css?rnd=${app_release_no}"
+<link href="/services/EGF/resources/css/budget.css?rnd=${app_release_no}"
 	rel="stylesheet" type="text/css" />
-<link href="/EGF/resources/css/commonegovnew.css?rnd=${app_release_no}"
+<link href="/services/EGF/resources/css/commonegovnew.css?rnd=${app_release_no}"
 	rel="stylesheet" type="text/css" />
 <link rel="stylesheet"
-	href="/EGF/resources/css/tabber.css?rnd=${app_release_no}"
+	href="/services/EGF/resources/css/tabber.css?rnd=${app_release_no}"
 	TYPE="text/css">
 <script type="text/javascript"
-	src="/EGF/resources/javascript/tabber.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/tabber.js?rnd=${app_release_no}"></script>
 	<script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/tabber2.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/tabber2.js?rnd=${app_release_no}"></script>
 <title><s:text name="remit.recovery.create.title" /></title>
 <script>
 var vTypeOfAccount="RECEIPTS_PAYMENTS,PAYMENTS"      ;                                 

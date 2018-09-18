@@ -52,4 +52,4 @@
 
 <%@ include file="employeegrievance-view.jsp"%>
 <script
-	src="<cdn:url value='/resources/global/js/egov/inbox.js?rnd=${app_release_no}' context='/egi'/>"></script>
+	src="<cdn:url value='/resources/global/js/egov/inbox.js?rnd=${app_release_no}' context='/services/egi'/>"></script>

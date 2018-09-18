@@ -55,7 +55,7 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/javascript/contra.js?rnd=${app_release_no}"></script>
 	<script type="text/javascript"
-		src="/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
+		src="/services/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
 	<meta http-equiv="Content-Type"
 		content="text/html; charset=windows-1252">
 	<style type="text/css">
@@ -141,7 +141,7 @@ function validateBank(){
 	function autocompleteEntities12By20(obj,type)
 	{
 		//bootbox.alert("in side fun");
-	  	   oACDS = new YAHOO.widget.DS_XHR(path+"/EGF/voucher/common!ajaxLoadEntitesBy20.action", [ "~^"]);
+	  	   oACDS = new YAHOO.widget.DS_XHR(path+"/services/EGF/voucher/common!ajaxLoadEntitesBy20.action", [ "~^"]);
 		   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 		   oACDS.scriptQueryParam = "startsWith";
 		 //  bootbox.alert("in side fun2"); 
@@ -223,7 +223,7 @@ function validateBank(){
 	function autocompleteRTGSNumbers(obj)
 	{
 		//bootbox.alert(obj.name);
-	  	   oACDS = new YAHOO.widget.DS_XHR(path+"/EGF/voucher/common!ajaxLoadRTGSNumberBy20.action", [ "~^"]);
+	  	   oACDS = new YAHOO.widget.DS_XHR(path+"/services/EGF/voucher/common!ajaxLoadRTGSNumberBy20.action", [ "~^"]);
 		   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 		   oACDS.scriptQueryParam = "startsWith";
 		 //bootbox.alert("in side fun2"); 

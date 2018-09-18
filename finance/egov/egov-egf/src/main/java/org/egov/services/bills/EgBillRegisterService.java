@@ -124,7 +124,7 @@ public class EgBillRegisterService extends PersistenceService<EgBillregister, Lo
             }
             persist(bill);
             bill.getEgBillregistermis().setSourcePath(
-                    "/EGF/bill/contingentBill-beforeView.action?billRegisterId=" + bill.getId().toString());
+                    "/services/EGF/bill/contingentBill-beforeView.action?billRegisterId=" + bill.getId().toString());
             createCheckList(bill, checkListsTable);
         } catch (final Exception e) {
 

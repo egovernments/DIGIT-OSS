@@ -70,64 +70,64 @@
 
 <title></title>
 <link rel="icon"
-	href="<cdn:url value='/resources/global/images/favicon.png' context='/egi'/>" sizes="32x32">
+	href="<cdn:url value='/resources/global/images/favicon.png' context='/services/egi'/>" sizes="32x32">
 <link rel="stylesheet"
-	href="<cdn:url value='/resources/global/css/bootstrap/bootstrap.css' context='/egi'/>">
+	href="<cdn:url value='/resources/global/css/bootstrap/bootstrap.css' context='/services/egi'/>">
 <link rel="stylesheet"
-	href="<cdn:url value='/resources/global/css/font-icons/font-awesome/css/font-awesome.min.css' context='/egi'/>">
+	href="<cdn:url value='/resources/global/css/font-icons/font-awesome/css/font-awesome.min.css' context='/services/egi'/>">
 <link rel="stylesheet"
-	href="<cdn:url value='/resources/global/css/bootstrap/typeahead.css'  context='/egi'/>">
+	href="<cdn:url value='/resources/global/css/bootstrap/typeahead.css'  context='/services/egi'/>">
 <link rel="stylesheet"
-      href="<cdn:url value='/resources/global/css/egov/custom.css?rnd=${app_release_no}' context='/egi'/>">
+      href="<cdn:url value='/resources/global/css/egov/custom.css?rnd=${app_release_no}' context='/services/egi'/>">
 <link rel="stylesheet"
-	href="<cdn:url value='/resources/global/css/bootstrap/bootstrap-datepicker.css'  context='/egi'/>" />
+	href="<cdn:url value='/resources/global/css/bootstrap/bootstrap-datepicker.css'  context='/services/egi'/>" />
 <script
-        src="<cdn:url value='/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}' context='/egi'/>"></script>
+        src="<cdn:url value='/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
 
 <script
-	src="<cdn:url value='/resources/global/js/jquery/jquery.js' context='/egi'/>"></script>
-<%-- <script type="text/javascript" src="/EGF/resources/javascript/jquery-1.7.2.min.js"></script> --%>
+	src="<cdn:url value='/resources/global/js/jquery/jquery.js' context='/services/egi'/>"></script>
+<%-- <script type="text/javascript" src="/services/EGF/resources/javascript/jquery-1.7.2.min.js"></script> --%>
 <script
-	src="<cdn:url value='/resources/global/js/bootstrap/bootstrap.js' context='/egi'/>"></script>
+	src="<cdn:url value='/resources/global/js/bootstrap/bootstrap.js' context='/services/egi'/>"></script>
 <script
-	src="<cdn:url value='/resources/global/js/jquery/plugins/jquery.validate.min.js' context='/egi'/>"></script>
+	src="<cdn:url value='/resources/global/js/jquery/plugins/jquery.validate.min.js' context='/services/egi'/>"></script>
 <script
-        src="<cdn:url value='/resources/global/js/egov/custom.js?rnd=${app_release_no}' context='/egi'/>"></script>
+        src="<cdn:url value='/resources/global/js/egov/custom.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
 <script
-        src="<cdn:url value='/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}' context='/egi'/>"></script>
+        src="<cdn:url value='/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
 <script
-	src="<cdn:url value='/resources/global/js/jquery-ui/jquery-ui.js' context='/egi'/>"></script>
+	src="<cdn:url value='/resources/global/js/jquery-ui/jquery-ui.js' context='/services/egi'/>"></script>
 <link
-	src="<cdn:url value='/resources/global/js/jquery-ui/jquery-ui.css' context='/egi'/>"></link>
+	src="<cdn:url value='/resources/global/js/jquery-ui/jquery-ui.css' context='/services/egi'/>"></link>
 
 
 <link rel="stylesheet" type="text/css"
-	href="/EGF/resources/commonyui/yui2.8/fonts/fonts-min.css" />
+	href="/services/EGF/resources/commonyui/yui2.8/fonts/fonts-min.css" />
 <link rel="stylesheet" type="text/css"
-	href="/EGF/resources/commonyui/yui2.8/datatable/assets/skins/sam/datatable.css" />
+	href="/services/EGF/resources/commonyui/yui2.8/datatable/assets/skins/sam/datatable.css" />
 <link rel="stylesheet" type="text/css"
-	href="/EGF/resources/commonyui/yui2.8/assets/skins/sam/autocomplete.css" />
-<!-- <script type="text/javascript" src="/EGF/resources/commonyui/yui2.8/animation/animation-min.js"></script> -->
+	href="/services/EGF/resources/commonyui/yui2.8/assets/skins/sam/autocomplete.css" />
+<!-- <script type="text/javascript" src="/services/EGF/resources/commonyui/yui2.8/animation/animation-min.js"></script> -->
 <script type="text/javascript"
-	src="/EGF/resources/commonyui/yui2.8/yuiloader/yuiloader-min.js"></script>
+	src="/services/EGF/resources/commonyui/yui2.8/yuiloader/yuiloader-min.js"></script>
 <script type="text/javascript"
-	src="/EGF/resources/commonyui/yui2.8/yahoo-dom-event/yahoo-dom-event.js"></script>
+	src="/services/EGF/resources/commonyui/yui2.8/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript"
-	src="/EGF/resources/commonyui/yui2.8/element/element-min.js"></script>
+	src="/services/EGF/resources/commonyui/yui2.8/element/element-min.js"></script>
 <script type="text/javascript"
-	src="/EGF/resources/commonyui/yui2.8/connection/connection-min.js"></script>
+	src="/services/EGF/resources/commonyui/yui2.8/connection/connection-min.js"></script>
 <script type="text/javascript"
-	src="/EGF/resources/commonyui/yui2.8/datasource/datasource-min.js"></script>
+	src="/services/EGF/resources/commonyui/yui2.8/datasource/datasource-min.js"></script>
 <script type="text/javascript"
-	src="/EGF/resources/commonyui/yui2.8/datatable/datatable-min.js"></script>
+	src="/services/EGF/resources/commonyui/yui2.8/datatable/datatable-min.js"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/autocomplete.js"></script>
+	src="/services/EGF/resources/javascript/autocomplete.js"></script>
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/javascript/helper.js?rnd=${app_release_no}"></script>
 
 <script type="text/javascript"
-	src="/EGF/resources/javascript/autocomplete-debug.js"></script>
+	src="/services/EGF/resources/javascript/autocomplete-debug.js"></script>
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -269,4 +269,4 @@
 	</form:form>
 </body>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/transactionSummaryHelper.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/transactionSummaryHelper.js?rnd=${app_release_no}"></script>

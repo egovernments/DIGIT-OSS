@@ -392,7 +392,7 @@ function loadAccountDetailTypesByGlcodeId(glcodeId,rowindex){
 		
 		$.ajax({
 			method : "GET",
-			url : "/EGF/common/getaccountdetailtypesbyglcodeid",
+			url : "/services/EGF/common/getaccountdetailtypesbyglcodeid",
 			data : {
 				glcodeId : glcodeId
 			},

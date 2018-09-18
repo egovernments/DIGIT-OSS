@@ -55,13 +55,13 @@
 
 <head>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/calender.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/calender.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/dateValidation.js?rnd=${app_release_no}"></script>
+	src="/services/EGF/resources/javascript/dateValidation.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/EGF/resources/javascript/jquery.min.js"></script>
+	src="/services/EGF/resources/javascript/jquery.min.js"></script>
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252">
 

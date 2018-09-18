@@ -49,7 +49,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
-<form:form role="form" action="/EGF/accountentity/update"
+<form:form role="form" action="/services/EGF/accountentity/update"
 	modelAttribute="accountEntity" id="accountEntityform"
 	cssClass="form-horizontal form-groups-bordered"
 	enctype="multipart/form-data">

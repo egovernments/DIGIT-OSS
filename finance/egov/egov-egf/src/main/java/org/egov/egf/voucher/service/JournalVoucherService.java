@@ -226,7 +226,7 @@ public class JournalVoucherService {
         final CVoucherHeader savedVoucherHeader = journalVoucherRepository.save(voucherHeader);
 
         voucherHeader.getVouchermis().setSourcePath(
-                "/EGF/voucher/journalVoucherModify-beforeModify.action?voucherHeader.id="
+                "/services/EGF/voucher/journalVoucherModify-beforeModify.action?voucherHeader.id="
                         + voucherHeader.getId());
         update(voucherHeader);
 

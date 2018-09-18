@@ -200,7 +200,7 @@ public class PaymentActionHelper {
     @Transactional
     private CVoucherHeader createVoucherAndLedger(CVoucherHeader voucherHeader, RemittanceBean remittanceBean, Recovery recovery,
             CommonBean commonBean, HashMap<String, Object> headerDetails, List<RemittanceBean> listRemitBean) {
-        headerDetails.put(VoucherConstant.SOURCEPATH, "/EGF/deduction/remitRecovery-beforeView.action?voucherHeader.id=");
+        headerDetails.put(VoucherConstant.SOURCEPATH, "/services/EGF/deduction/remitRecovery-beforeView.action?voucherHeader.id=");
         HashMap<String, Object> detailMap = null;
         final List<HashMap<String, Object>> accountdetails = new ArrayList<HashMap<String, Object>>();
         List<HashMap<String, Object>> subledgerDetails = new ArrayList<HashMap<String, Object>>();
@@ -455,7 +455,7 @@ public class PaymentActionHelper {
         try {
             final HashMap<String, Object> headerDetails = createHeaderAndMisDetails(voucherHeader);
             // update DirectBankPayment source path
-            headerDetails.put(VoucherConstant.SOURCEPATH, "/EGF/payment/directBankPayment-beforeView.action?voucherHeader.id=");
+            headerDetails.put(VoucherConstant.SOURCEPATH, "/services/EGF/payment/directBankPayment-beforeView.action?voucherHeader.id=");
             HashMap<String, Object> detailMap = null;
             HashMap<String, Object> subledgertDetailMap = null;
             final List<HashMap<String, Object>> accountdetails = new ArrayList<HashMap<String, Object>>();
