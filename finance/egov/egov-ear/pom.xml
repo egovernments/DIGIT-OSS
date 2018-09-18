@@ -174,27 +174,27 @@
                         <webModule>
                             <groupId>org.egov</groupId>
                             <artifactId>egov-egiweb</artifactId>
-                            <contextRoot>/services/egi</contextRoot>
+                            <contextRoot>/egi</contextRoot>
                         </webModule>
                         <webModule>
                             <groupId>org.egov</groupId>
                             <artifactId>egov-commonsweb</artifactId>
-                            <contextRoot>/services/common</contextRoot>
+                            <contextRoot>/common</contextRoot>
                         </webModule>
                         <webModule>
                             <groupId>org.egov</groupId>
                             <artifactId>egov-eisweb</artifactId>
-                            <contextRoot>/services/eis</contextRoot>
+                            <contextRoot>/eis</contextRoot>
                         </webModule>
                         <webModule>
                             <groupId>org.egov</groupId>
                             <artifactId>egov-egfweb</artifactId>
-                            <contextRoot>/services/EGF</contextRoot>
+                            <contextRoot>/EGF</contextRoot>
                  	    </webModule>
                  	    <webModule>
                             <groupId>org.egov</groupId>
                             <artifactId>egov-collectionweb</artifactId>
-                            <contextRoot>/services/collection</contextRoot>
+                            <contextRoot>/collection</contextRoot>
                      	</webModule>
                     </modules>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
