@@ -156,9 +156,7 @@ public class TransactionSummaryController {
                     transactionSummaryService.delete(transactionSummary);
                 }
                 else {
-                    transactionSummary.setDepartmentid(departmentService.getDepartmentById(transactionSummaryDto
-                            .getDepartmentid()
-                            .getId()));
+                    transactionSummary.setDepartmentCode(transactionSummaryDto.getDepartmentcode());
                     transactionSummary.setDivisionid(transactionSummaryDto.getDivisionid());
                     transactionSummary.setFinancialyear(financialYearDAO.getFinancialYearById(transactionSummaryDto
                             .getFinancialyear().getId()));

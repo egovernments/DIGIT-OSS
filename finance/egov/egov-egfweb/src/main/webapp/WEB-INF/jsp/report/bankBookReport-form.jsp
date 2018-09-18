@@ -102,7 +102,7 @@ function getMiscData(){
 		data = data+"&fundId.id="+fund;
 	
 	if(department != undefined)
-		data = data+"&vouchermis.departmentid.id="+department;
+		data = data+"&vouchermis.departmentcode="+department;
 	if(functionary != undefined)
 		data = data+"&vouchermis.functionary.id="+functionary;
 	if(field != undefined)

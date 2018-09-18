@@ -80,9 +80,10 @@ import org.egov.egf.model.BankBookEntry;
 import org.egov.egf.model.BankBookViewEntry;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Boundary;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.reporting.util.ReportUtil;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
@@ -159,6 +160,9 @@ public class BankBookReportAction extends BaseFormAction {
 
     @Autowired
     private FinancialYearDAO financialYearDAO;
+    
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
 
     public void setReportHelper(final ReportHelper reportHelper) {
         this.reportHelper = reportHelper;
@@ -183,7 +187,7 @@ public class BankBookReportAction extends BaseFormAction {
     }
 
     public BankBookReportAction() {
-        addRelatedEntity("vouchermis.departmentid", Department.class);
+      //  addRelatedEntity("vouchermis.departmentcode", String.class);
         addRelatedEntity("vouchermis.fundId", Fund.class);
         addRelatedEntity("vouchermis.schemeid", Scheme.class);
         addRelatedEntity("vouchermis.subschemeid", SubScheme.class);
@@ -203,7 +207,7 @@ public class BankBookReportAction extends BaseFormAction {
 
             getHeaderFields();
             if (headerFields.contains(Constants.DEPARTMENT))
-                addDropdownData("departmentList", persistenceService.findAllBy("from Department order by name"));
+                addDropdownData("departmentList",microserviceUtils.getDepartments());
             if (headerFields.contains(Constants.FUNCTION))
                 addDropdownData("functionList",
                         persistenceService.findAllBy("from CFunction where isactive=true and isnotleaf=false  order by name"));
@@ -366,13 +370,8 @@ public class BankBookReportAction extends BaseFormAction {
         final List<BankBookEntry> entries = new ArrayList<BankBookEntry>();
         getInstrumentsByVoucherIds();
         getInstrumentVouchersByInstrumentHeaderIds();
-        Integer deptId = null;
-        if (getVouchermis() != null && getVouchermis().getDepartmentcode() != null
-                && getVouchermis().getDepartmentcode() != null && getVouchermis().getDepartmentcode() != "-1"){
-                   //We need to get department code 
-        	deptId = getVouchermis().getId().intValue();
-        }
-        final BankBookEntry initialOpeningBalance = getInitialAccountBalance(glCode, fundCode, deptId);
+       
+        final BankBookEntry initialOpeningBalance = getInitialAccountBalance(glCode, fundCode, getVouchermis().getDepartmentcode());
         entries.add(initialOpeningBalance);
         Date date = bankBookEntries.get(0).getVoucherDate();
         String voucherNumber = EMPTY_STRING;
@@ -595,12 +594,12 @@ public class BankBookReportAction extends BaseFormAction {
         return rep;
     }
 
-    private BankBookEntry getInitialAccountBalance(final String glCode, final String fundCode, final Integer deptId) {
+    private BankBookEntry getInitialAccountBalance(final String glCode, final String fundCode, final String deptCode) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
         final BankBookEntry initialOpeningBalance = new BankBookEntry("To Opening Balance", egovCommon.getAccountBalanceforDate(
-                calendar.getTime(), glCode, fundCode, null, null, deptId), RECEIPT, BigDecimal.ZERO, BigDecimal.ZERO);
+                calendar.getTime(), glCode, fundCode, null, null, deptCode), RECEIPT, BigDecimal.ZERO, BigDecimal.ZERO);
         return initialOpeningBalance;
     }
 
@@ -696,9 +695,8 @@ public class BankBookReportAction extends BaseFormAction {
         if (getVouchermis() != null && getVouchermis().getDepartmentcode() != null
                 && getVouchermis().getDepartmentcode() != null && getVouchermis().getDepartmentcode() !="-1") {
             query.append(" and vmis.DEPARTMENTCODE='").append(getVouchermis().getDepartmentcode()+"'");
-            final Department dept = (Department) persistenceService.find("from Department where code=?", getVouchermis()
-                    .getDepartmentcode());
-            header.append(" in " + dept.getName() + " ");
+           List<Department> depList = microserviceUtils.getDepartmentByCode(getVouchermis().getDepartmentcode());
+            header.append(" in " + depList.get(0).getName() + " ");
         }
         if (getVouchermis() != null && getVouchermis().getFunctionary() != null
                 && getVouchermis().getFunctionary().getId() != null && getVouchermis().getFunctionary().getId() != -1)

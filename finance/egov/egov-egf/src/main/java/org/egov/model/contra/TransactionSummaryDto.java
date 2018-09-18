@@ -71,7 +71,7 @@ public class TransactionSummaryDto {
     
     private Fund fund;
     
-    private Department departmentid;
+    private String departmentcode;
     
     private Functionary functionaryid;
     
@@ -116,14 +116,6 @@ public class TransactionSummaryDto {
 		this.fund = fund;
 	}
 
-	public Department getDepartmentid() {
-		return departmentid;
-	}
-
-	public void setDepartmentid(Department departmentid) {
-		this.departmentid = departmentid;
-	}
-
 	public Functionary getFunctionaryid() {
 		return functionaryid;
 	}
@@ -146,6 +138,14 @@ public class TransactionSummaryDto {
 
 	public void setDivisionid(Integer divisionid) {
 		this.divisionid = divisionid;
+	}
+
+	public String getDepartmentcode() {
+		return departmentcode;
+	}
+
+	public void setDepartmentcode(String departmentcode) {
+		this.departmentcode = departmentcode;
 	}
 
 	public List<TransactionSummary> getTransactionSummaryList() {

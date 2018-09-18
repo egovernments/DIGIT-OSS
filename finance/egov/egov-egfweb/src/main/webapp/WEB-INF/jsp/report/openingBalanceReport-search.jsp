@@ -153,7 +153,7 @@
 					<tr>
 						<td class="greybox"><s:text name="openingBalance.department" /></td>
 						<td class="greybox"><s:select name="deptId" id="deptId"
-								list="dropdownData.departmentList" listKey="id"
+								list="dropdownData.departmentList" listKey="code"
 								listValue="name" headerKey="" headerValue="----Choose----" /></td>
 						<td class="greybox"></td>
 						<td class="greybox"></td>

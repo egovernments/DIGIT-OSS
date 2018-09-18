@@ -925,7 +925,7 @@ public class EgovCommon {
      */
     public BigDecimal getAccountBalanceforDate(final Date asondate, final String glcode, final String fundcode,
             final Integer accountdetailType,
-            final Integer accountdetailkey, final Integer deptId)
+            final Integer accountdetailkey, final String deptCode)
                     throws ValidationException {
 
         if (LOGGER.isDebugEnabled())
@@ -934,9 +934,9 @@ public class EgovCommon {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("validation of data is sucessfull");
         final BigDecimal opBalAsonDate = getOpeningBalAsonDate(asondate, glcode, fundcode, accountdetailType, accountdetailkey,
-                deptId);
+        		deptCode);
         final BigDecimal glBalAsonDate = getGlcodeBalBeforeDate(asondate, glcode, fundcode, accountdetailType, accountdetailkey,
-                deptId);
+        		deptCode);
 
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("EgovCommon | getAccountBalanceforDate | Start");
@@ -960,7 +960,7 @@ public class EgovCommon {
      */
     public BigDecimal getAccountBalanceTillDate(final Date asondate, final String glcode, final String fundcode,
             final Integer accountdetailType,
-            final Integer accountdetailkey, final Integer deptId)
+            final Integer accountdetailkey, final String deptCode)
                     throws ValidationException {
 
         if (LOGGER.isDebugEnabled())
@@ -969,9 +969,9 @@ public class EgovCommon {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("validation of data is sucessfull");
         final BigDecimal opBalAsonDate = getOpeningBalAsonDate(asondate, glcode, fundcode, accountdetailType, accountdetailkey,
-                deptId);
+        		deptCode);
         final BigDecimal glBalAsonDate = getGlcodeBalTillDate(asondate, glcode, fundcode, accountdetailType, accountdetailkey,
-                deptId);
+        		deptCode);
 
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("EgovCommon | getAccountBalanceTillDate | Opening Balance :" + opBalAsonDate + " Txn Balance  :"
@@ -1043,7 +1043,7 @@ public class EgovCommon {
 
     @SuppressWarnings("unchecked")
     public BigDecimal getOpeningBalAsonDate(final Date asondate, final String glcode,
-            final String fundCode, final Integer accountdetailType, final Integer accountdetailkey, final Integer deptId)
+            final String fundCode, final Integer accountdetailType, final Integer accountdetailkey, final String deptCode)
                     throws ValidationException {
         BigDecimal opBalAsonDate = BigDecimal.ZERO;
         final StringBuffer opBalncQuery = new StringBuffer(300);
@@ -1051,8 +1051,8 @@ public class EgovCommon {
         String fundConidtion = "";
         if (fundCode != null)
             fundConidtion = " and fund.code='" + fundCode + "'";
-        if (deptId != null)
-            deptCondition = " and departmentid.id=" + deptId;
+        if (deptCode != null && !deptCode.isEmpty())
+            deptCondition = " and departmentcode='" + deptCode+"'";
 
         opBalncQuery
         .append(
@@ -1151,7 +1151,7 @@ public class EgovCommon {
     }
 
     protected BigDecimal getGlcodeBalBeforeDate(final Date asondate, final String glcode,
-            final String fundcode, final Integer accountdetailType, final Integer accountdetailkey, final Integer deptId)
+            final String fundcode, final Integer accountdetailType, final Integer accountdetailkey, final String deptCode)
                     throws ValidationException {
         final StringBuffer glCodeBalQry = new StringBuffer(400);
         final StringBuffer glCodeDbtBalQry = new StringBuffer(400);
@@ -1164,9 +1164,9 @@ public class EgovCommon {
         String fundCond = "";
         if (fundcode != null)
             fundCond = " and vh.fundId.code='" + fundcode + "'";
-        if (deptId != null) {
+        if (deptCode != null && !deptCode.isEmpty()) {
             misTab = ",Vouchermis mis";
-            deptCond = " and mis.voucherheaderid.id=vh.id and mis.departmentid.id=" + deptId;
+            deptCond = " and mis.voucherheaderid.id=vh.id and mis.departmentcode='" + deptCode + "'";
         }
 
         final List<AppConfigValues> appList = appConfigValuesService.getConfigValuesByModuleAndKey(FinancialConstants.MODULE_NAME_APPCONFIG,
@@ -1243,7 +1243,7 @@ public class EgovCommon {
     }
 
     protected BigDecimal getGlcodeBalTillDate(final Date asondate, final String glcode,
-            final String fundcode, final Integer accountdetailType, final Integer accountdetailkey, final Integer deptId)
+            final String fundcode, final Integer accountdetailType, final Integer accountdetailkey, final String deptCode)
                     throws ValidationException {
         final StringBuffer glCodeBalQry = new StringBuffer(400);
         final StringBuffer glCodeDbtBalQry = new StringBuffer(400);
@@ -1256,9 +1256,9 @@ public class EgovCommon {
         String fundCond = "";
         if (fundcode != null)
             fundCond = " and vh.fundId.code='" + fundcode + "'";
-        if (deptId != null) {
+        if (deptCode != null && !deptCode.isEmpty()) {
             misTab = ",Vouchermis mis";
-            deptCond = " and mis.voucherheaderid.id=vh.id and mis.departmentid.id=" + deptId;
+            deptCond = " and mis.voucherheaderid.id=vh.id and mis.departmentcode='" + deptCode+"'";
         }
 
         final List<AppConfigValues> appList = appConfigValuesService.getConfigValuesByModuleAndKey(FinancialConstants.MODULE_NAME_APPCONFIG,

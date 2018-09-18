@@ -79,7 +79,7 @@ public class OpeningBalance
 
     List<Object[]> resultset;
     Query pstmt = null;
-    private String fundId = "", finYear = "", deptId = "";
+    private String fundId = "", finYear = "", deptCode = "";
     private double grandTotalDr = 0.0, grandTotalCr = 0.0;
     private String fund = "", checkFund = "";
     private String glcode = "", name = "", narration = "" , deptcode= "",functioncode = "";
@@ -97,9 +97,9 @@ public class OpeningBalance
             final String fuId = OPBean.getObFund_id();
             if (fuId != null)
                 fundId = OPBean.getObFund_id();
-            final String deptid = OPBean.getDeptId();
-            if (deptid != null)
-                deptId = OPBean.getDeptId();
+            final String deptcode = OPBean.getDeptId();
+            if (deptcode != null)
+                deptCode = OPBean.getDeptId();
             finYear = OPBean.getFinYear();
             if (LOGGER.isInfoEnabled())
                 LOGGER.info("finYear --> " + finYear + " fundid  " + fundId);
@@ -122,20 +122,20 @@ public class OpeningBalance
         new DecimalFormat("###############.00");
         if (!fundId.equalsIgnoreCase(""))
             fundCondition = " and b.id=? ";
-        if (!deptId.equalsIgnoreCase(""))
-            deptCondition = " and a.DEPARTMENTID=? ";
+        if (!deptCode.equalsIgnoreCase(""))
+            deptCondition = " and a.departmentcode=? ";
         query = "SELECT b.name AS \"fund\",c.glcode AS \"accountcode\",c.name AS \"accountname\",'' as \"narration\",SUM(a.openingdebitbalance) AS \"debit\","
-                + " SUM(a.openingcreditbalance)AS \"credit\",dept.code AS \"deptcode\",fn.code AS \"functioncode\"  FROM TRANSACTIONSUMMARY a,FUND  b,CHARTOFACCOUNTS c, eg_department dept,function fn "
-                + " WHERE c.id in (select glcodeid from chartofaccountdetail  ) and a.departmentid= dept.id and fn.id = a.functionid and  a.financialyearid=? "
+                + " SUM(a.openingcreditbalance)AS \"credit\",a.departmentcode AS \"deptcode\",fn.code AS \"functioncode\"  FROM TRANSACTIONSUMMARY a,FUND  b,CHARTOFACCOUNTS c,function fn "
+                + " WHERE c.id in (select glcodeid from chartofaccountdetail ) and fn.id = a.functionid and  a.financialyearid=? "
                 + fundCondition
                 + deptCondition
-                + " AND a.fundid=b.id AND a.glcodeid=c.id AND (a.openingdebitbalance>0 OR a.openingcreditbalance>0) GROUP BY b.name, c.glcode,c.name,dept.code,fn.code union";
+                + " AND a.fundid=b.id AND a.glcodeid=c.id AND (a.openingdebitbalance>0 OR a.openingcreditbalance>0) GROUP BY b.name, c.glcode,c.name,a.departmentcode,fn.code union";
         query = query + " SELECT b.name AS \"fund\",c.glcode AS \"accountcode\",c.name AS \"accountname\",a.narration as \"narration\",SUM(a.openingdebitbalance) AS \"debit\","
-                + " SUM(a.openingcreditbalance)AS \"credit\",dept.code AS \"deptcode\",fn.code AS \"functioncode\"  FROM TRANSACTIONSUMMARY a,FUND  b,CHARTOFACCOUNTS c, eg_department dept,function fn "
-                + " WHERE c.id not in (select glcodeid from chartofaccountdetail  ) and a.departmentid= dept.id and fn.id = a.functionid and  a.financialyearid=? "
+                + " SUM(a.openingcreditbalance)AS \"credit\",a.departmentcode AS \"deptcode\",fn.code AS \"functioncode\"  FROM TRANSACTIONSUMMARY a,FUND  b,CHARTOFACCOUNTS c,function fn "
+                + " WHERE c.id not in (select glcodeid from chartofaccountdetail  ) and fn.id = a.functionid and  a.financialyearid=? "
                 + fundCondition
                 + deptCondition
-                + " AND a.fundid=b.id AND a.glcodeid=c.id AND (a.openingdebitbalance>0 OR a.openingcreditbalance>0) GROUP BY b.name, c.glcode,c.name,dept.code,fn.code, a.narration ";
+                + " AND a.fundid=b.id AND a.glcodeid=c.id AND (a.openingdebitbalance>0 OR a.openingcreditbalance>0) GROUP BY b.name, c.glcode,c.name,a.departmentcode,fn.code, a.narration ";
        if (LOGGER.isDebugEnabled())
             LOGGER.debug("Opening balance Query ...." + query);
 
@@ -146,13 +146,13 @@ public class OpeningBalance
             pstmt.setLong(i++, Long.valueOf(finYear));
             if (!fundId.equalsIgnoreCase(""))
                 pstmt.setLong(i++, Long.valueOf(fundId));
-            if (!deptId.equalsIgnoreCase(""))
-                pstmt.setLong(i++,Long.valueOf( deptId));
+            if (!deptCode.equalsIgnoreCase(""))
+                pstmt.setString(i++,deptCode);
             pstmt.setLong(i++, Long.valueOf(finYear));
             if (!fundId.equalsIgnoreCase(""))
                 pstmt.setLong(i++, Long.valueOf(fundId));
-            if (!deptId.equalsIgnoreCase(""))
-                pstmt.setLong(i++,Long.valueOf( deptId));
+            if (!deptCode.equalsIgnoreCase(""))
+                pstmt.setString(i++,deptCode);
             List<Object[]> list= pstmt.list();
             resultset =list;
             

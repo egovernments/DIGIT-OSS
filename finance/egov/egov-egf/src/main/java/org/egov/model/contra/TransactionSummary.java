@@ -50,16 +50,7 @@
  */
 package org.egov.model.contra;
 
-import org.egov.commons.Accountdetailtype;
-import org.egov.commons.CChartOfAccounts;
-import org.egov.commons.CFinancialYear;
-import org.egov.commons.CFunction;
-import org.egov.commons.Functionary;
-import org.egov.commons.Fund;
-import org.egov.commons.Fundsource;
-import org.egov.infra.admin.master.entity.Department;
-import org.egov.infra.persistence.entity.AbstractAuditable;
-import org.hibernate.validator.constraints.Length;
+import java.math.BigDecimal;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -70,7 +61,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.math.BigDecimal;
+
+import org.egov.commons.Accountdetailtype;
+import org.egov.commons.CChartOfAccounts;
+import org.egov.commons.CFinancialYear;
+import org.egov.commons.CFunction;
+import org.egov.commons.Functionary;
+import org.egov.commons.Fund;
+import org.egov.commons.Fundsource;
+import org.egov.infra.persistence.entity.AbstractAuditable;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * @author msahoo
@@ -120,9 +120,7 @@ public class TransactionSummary extends AbstractAuditable{
     @Length(max = 300)
     private String narration;
     
-    @ManyToOne
-    @JoinColumn(name="DEPARTMENTID")
-    private Department departmentid;
+    private String departmentCode;
     
     @ManyToOne
     @JoinColumn(name="FUNCTIONARYID")
@@ -198,7 +196,15 @@ public class TransactionSummary extends AbstractAuditable{
         this.openingcreditbalance = openingcreditbalance;
     }
 
-    public Integer getAccountdetailkey() {
+    public String getDepartmentCode() {
+		return departmentCode;
+	}
+
+	public void setDepartmentCode(String departmentCode) {
+		this.departmentCode = departmentCode;
+	}
+
+	public Integer getAccountdetailkey() {
         return accountdetailkey;
     }
 
@@ -236,14 +242,6 @@ public class TransactionSummary extends AbstractAuditable{
 
     public void setDivisionid(final Integer divisionid) {
         this.divisionid = divisionid;
-    }
-
-    public Department getDepartmentid() {
-        return departmentid;
-    }
-
-    public void setDepartmentid(final Department departmentid) {
-        this.departmentid = departmentid;
     }
 
 	public String getGlcodeDetail() {

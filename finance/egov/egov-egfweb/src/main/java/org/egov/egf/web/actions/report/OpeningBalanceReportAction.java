@@ -47,11 +47,13 @@
  */
 package org.egov.egf.web.actions.report;
 
-import com.exilant.eGov.src.reports.OpeningBalance;
-import com.exilant.eGov.src.reports.OpeningBalanceInputBean;
-import com.exilant.exility.common.TaskFailedException;
-import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.Validations;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -60,9 +62,10 @@ import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.Fund;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
@@ -72,146 +75,160 @@ import org.hibernate.FlushMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-
+import com.exilant.eGov.src.reports.OpeningBalance;
+import com.exilant.eGov.src.reports.OpeningBalanceBean;
+import com.exilant.eGov.src.reports.OpeningBalanceInputBean;
+import com.exilant.exility.common.TaskFailedException;
+import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
+import com.opensymphony.xwork2.validator.annotations.Validations;
 
 @ParentPackage("egov")
-@Results({
-    @Result(name = "result", location = "openingBalanceReport-result.jsp"),
-    @Result(name = FinancialConstants.STRUTS_RESULT_PAGE_SEARCH, location = "openingBalanceReport-"
-            + FinancialConstants.STRUTS_RESULT_PAGE_SEARCH + ".jsp")
-})
+@Results({ @Result(name = "result", location = "openingBalanceReport-result.jsp"),
+		@Result(name = FinancialConstants.STRUTS_RESULT_PAGE_SEARCH, location = "openingBalanceReport-"
+				+ FinancialConstants.STRUTS_RESULT_PAGE_SEARCH + ".jsp") })
 public class OpeningBalanceReportAction extends BaseFormAction {
- @Autowired
- @Qualifier("persistenceService")
- private PersistenceService persistenceService;
-    private static final long serialVersionUID = -2567999475434622263L;
-    private static final Logger LOGGER = Logger.getLogger(OpeningBalanceReportAction.class);
-    private OpeningBalanceInputBean openingBalanceReport = new OpeningBalanceInputBean();
-    private OpeningBalance openingBalance;
-    protected DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-    protected ArrayList openingBalanceDisplayList = new ArrayList();
-    String heading = "";
+	@Autowired
+	@Qualifier("persistenceService")
+	private PersistenceService persistenceService;
+	private static final long serialVersionUID = -2567999475434622263L;
+	private static final Logger LOGGER = Logger.getLogger(OpeningBalanceReportAction.class);
+	private OpeningBalanceInputBean openingBalanceReport = new OpeningBalanceInputBean();
+	private OpeningBalance openingBalance;
+	@Autowired
+	private MicroserviceUtils microserviceUtils;
+	protected DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+	protected ArrayList openingBalanceDisplayList = new ArrayList();
+	String heading = "";
 
-    public OpeningBalanceReportAction() {
-        super();
-    }
+	public OpeningBalanceReportAction() {
+		super();
+	}
 
-    @Override
-    public Object getModel() {
-        return openingBalanceReport;
-    }
+	@Override
+	public Object getModel() {
+		return openingBalanceReport;
+	}
 
-    public void prepareNewForm() {
-        super.prepare();
-        persistenceService.getSession().setDefaultReadOnly(true);
-        persistenceService.getSession().setFlushMode(FlushMode.MANUAL);
-        addDropdownData("fundList", persistenceService.findAllBy(" from Fund where isactive=true and isnotleaf=false order by name"));
-        addDropdownData("departmentList", persistenceService.findAllBy("from Department order by name"));
-        addDropdownData("financialYearList", persistenceService.findAllBy("from CFinancialYear order by finYearRange desc "));
+	public void prepareNewForm() {
+		super.prepare();
+		persistenceService.getSession().setDefaultReadOnly(true);
+		persistenceService.getSession().setFlushMode(FlushMode.MANUAL);
+		addDropdownData("fundList",
+				persistenceService.findAllBy(" from Fund where isactive=true and isnotleaf=false order by name"));
+		addDropdownData("departmentList", microserviceUtils.getDepartments());
+		addDropdownData("financialYearList",
+				persistenceService.findAllBy("from CFinancialYear order by finYearRange desc "));
 
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Inside  Prepare ........");
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Inside  Prepare ........");
 
-    }
+	}
 
-    @SkipValidation
-    @Action(value = "/report/openingBalanceReport-newForm")
-    public String newForm() {
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("..Inside NewForm method..");
-        return FinancialConstants.STRUTS_RESULT_PAGE_SEARCH;
-    }
+	@SkipValidation
+	@Action(value = "/report/openingBalanceReport-newForm")
+	public String newForm() {
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("..Inside NewForm method..");
+		return FinancialConstants.STRUTS_RESULT_PAGE_SEARCH;
+	}
 
-    @ReadOnly
-    @Validations(requiredFields = { @RequiredFieldValidator(fieldName = "finYear", message = "", key = FinancialConstants.REQUIRED) })
-    @ValidationErrorPage(value = FinancialConstants.STRUTS_RESULT_PAGE_SEARCH)
-    @Action(value = "/report/openingBalanceReport-ajaxSearch")
-    public String ajaxSearch() throws TaskFailedException {
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("OpeningBalanceReportAction | Search | start");
-        try {
-            openingBalanceDisplayList = openingBalance.getOBReport(openingBalanceReport);
-        } catch (final ValidationException e) {
-            throw new ValidationException(e.getErrors());
-        } catch (final Exception e)
-        {
-            throw new ApplicationRuntimeException(e.getMessage());
-        }
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("OpeningBalanceReportAction | list | End");
-        heading = getGLHeading();
-        prepareNewForm();
-        persistenceService.getSession().setFlushMode(FlushMode.AUTO);
-        return "result";
-    }
+	@ReadOnly
+	@Validations(requiredFields = {
+			@RequiredFieldValidator(fieldName = "finYear", message = "", key = FinancialConstants.REQUIRED) })
+	@ValidationErrorPage(value = FinancialConstants.STRUTS_RESULT_PAGE_SEARCH)
+	@Action(value = "/report/openingBalanceReport-ajaxSearch")
+	public String ajaxSearch() throws TaskFailedException {
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("OpeningBalanceReportAction | Search | start");
+		Map<String, String> depMap = new HashMap<>();
+		List<Department> list;
+		try {
+			openingBalanceDisplayList = openingBalance.getOBReport(openingBalanceReport);
+		} catch (final ValidationException e) {
+			throw new ValidationException(e.getErrors());
+		} catch (final Exception e) {
+			throw new ApplicationRuntimeException(e.getMessage());
+		}
 
-    private String getGLHeading() {
+		if (!openingBalanceDisplayList.isEmpty()) {
+			list = microserviceUtils.getDepartments();
+			for (Department dep : list) {
+				depMap.put(dep.getCode(), dep.getName());
+			}
+			for (Object openBalance : openingBalanceDisplayList) {
+				OpeningBalanceBean balance = (OpeningBalanceBean) openBalance;
+				balance.setDeptcode(depMap.get(balance.getDeptcode()));
+			}
+		}
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("OpeningBalanceReportAction | list | End");
+		heading = getGLHeading();
+		prepareNewForm();
+		persistenceService.getSession().setFlushMode(FlushMode.AUTO);
+		return "result";
+	}
 
-        String heading = "Opening Balance for the Year ";
-        CFinancialYear finYear = new CFinancialYear();
-        Fund fund = new Fund();
-        Department dept = new Department();
-        if (checkNullandEmpty(openingBalanceReport.getFinYear())) {
-            finYear = (CFinancialYear) persistenceService.find("from CFinancialYear where id = ?",
-                    Long.parseLong(openingBalanceReport.getFinYear()));
-            heading = heading + finYear.getFinYearRange();
-        }
-        if (checkNullandEmpty(openingBalanceReport.getObFund_id())) {
-            fund = (Fund) persistenceService
-                    .find("from Fund where id = ?", Integer.parseInt(openingBalanceReport.getObFund_id()));
-            heading = heading + " under " + fund.getName();
-        }
+	private String getGLHeading() {
 
-        if (checkNullandEmpty(openingBalanceReport.getDeptId())) {
-            dept = (Department) persistenceService.find("from Department where id = ?",
-                    Long.parseLong(openingBalanceReport.getDeptId()));
-            heading = heading + " and " + dept.getName() + " Department ";
-        }
-        return heading;
-    }
+		String heading = "Opening Balance for the Year ";
+		CFinancialYear finYear = new CFinancialYear();
+		Fund fund = new Fund();
+		if (checkNullandEmpty(openingBalanceReport.getFinYear())) {
+			finYear = (CFinancialYear) persistenceService.find("from CFinancialYear where id = ?",
+					Long.parseLong(openingBalanceReport.getFinYear()));
+			heading = heading + finYear.getFinYearRange();
+		}
+		if (checkNullandEmpty(openingBalanceReport.getObFund_id())) {
+			fund = (Fund) persistenceService.find("from Fund where id = ?",
+					Integer.parseInt(openingBalanceReport.getObFund_id()));
+			heading = heading + " under " + fund.getName();
+		}
 
-    private boolean checkNullandEmpty(final String column)
-    {
-        if (column != null && !column.isEmpty())
-            return true;
-        else
-            return false;
+		if (checkNullandEmpty(openingBalanceReport.getDeptId())) {
+			List<Department> list = microserviceUtils.getDepartmentByCode(openingBalanceReport.getDeptId());
+			heading = heading + " and " + list.get(0).getName() + " Department ";
+		}
+		return heading;
+	}
 
-    }
+	private boolean checkNullandEmpty(final String column) {
+		if (column != null && !column.isEmpty())
+			return true;
+		else
+			return false;
 
-    public String getHeading() {
-        return heading;
-    }
+	}
 
-    public void setHeading(final String heading) {
-        this.heading = heading;
-    }
+	public String getHeading() {
+		return heading;
+	}
 
-    public OpeningBalanceInputBean getOpeningBalanceReport() {
-        return openingBalanceReport;
-    }
+	public void setHeading(final String heading) {
+		this.heading = heading;
+	}
 
-    public void setOpeningBalanceReport(final OpeningBalanceInputBean openingBalanceReport) {
-        this.openingBalanceReport = openingBalanceReport;
-    }
+	public OpeningBalanceInputBean getOpeningBalanceReport() {
+		return openingBalanceReport;
+	}
 
-    public OpeningBalance getOpeningBalance() {
-        return openingBalance;
-    }
+	public void setOpeningBalanceReport(final OpeningBalanceInputBean openingBalanceReport) {
+		this.openingBalanceReport = openingBalanceReport;
+	}
 
-    public void setOpeningBalance(final OpeningBalance openingBalance) {
-        this.openingBalance = openingBalance;
-    }
+	public OpeningBalance getOpeningBalance() {
+		return openingBalance;
+	}
 
-    public ArrayList getOpeningBalanceDisplayList() {
-        return openingBalanceDisplayList;
-    }
+	public void setOpeningBalance(final OpeningBalance openingBalance) {
+		this.openingBalance = openingBalance;
+	}
 
-    public void setOpeningBalanceDisplayList(final ArrayList openingBalanceDisplayList) {
-        this.openingBalanceDisplayList = openingBalanceDisplayList;
-    }
+	public ArrayList getOpeningBalanceDisplayList() {
+		return openingBalanceDisplayList;
+	}
+
+	public void setOpeningBalanceDisplayList(final ArrayList openingBalanceDisplayList) {
+		this.openingBalanceDisplayList = openingBalanceDisplayList;
+	}
 
 }
