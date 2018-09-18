@@ -47,9 +47,33 @@
  */
 package org.egov.collection.entity;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import org.egov.collection.constants.CollectionConstants;
 import org.egov.collection.integration.pgi.DefaultPaymentResponse;
-import org.egov.commons.*;
+import org.egov.commons.Accountdetailkey;
+import org.egov.commons.Accountdetailtype;
+import org.egov.commons.Bank;
+import org.egov.commons.Bankaccount;
+import org.egov.commons.Bankbranch;
+import org.egov.commons.CChartOfAccountDetail;
+import org.egov.commons.CChartOfAccounts;
+import org.egov.commons.CFinancialYear;
+import org.egov.commons.CFunction;
+import org.egov.commons.CVoucherHeader;
+import org.egov.commons.EgwStatus;
+import org.egov.commons.Functionary;
+import org.egov.commons.Fund;
+import org.egov.commons.Fundsource;
+import org.egov.commons.Scheme;
+import org.egov.commons.SubScheme;
 import org.egov.commons.entity.BankAccountServiceMap;
 import org.egov.infra.admin.master.entity.Boundary;
 import org.egov.infra.admin.master.entity.BoundaryType;
@@ -71,15 +95,6 @@ import org.egov.pims.model.PersonalInformation;
 import org.elasticsearch.repositories.RepositoryException;
 import org.hibernate.Session;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 /**
  * 
  */
@@ -90,20 +105,20 @@ public class CollectionObjectFactory {
 	public static final String MODULE_NAME_TESTRECEIPTHEADER = "TestReceiptHeader";
 	public static final String MODULE_NAME_TESTINSTRUMENTSTATUS = "TestInstrumentStatus";
 	public static final String MODULE_NAME_TESTCHALLANHEADER = "TestChallanHeader";
-	
-	public CollectionObjectFactory(){
+
+	public CollectionObjectFactory() {
 		this.session = null;
 	}
 
 	public CollectionObjectFactory(Session session) {
 		this.session = session;
 	}
-	
-	public CollectionObjectFactory(Session session,PersistenceService service) {
+
+	public CollectionObjectFactory(Session session, PersistenceService service) {
 		this.session = session;
 		this.service = service;
 	}
-	
+
 	public int getRandomNumber() {
 		Random ran = new Random();
 		return ran.nextInt();
@@ -127,9 +142,8 @@ public class CollectionObjectFactory {
 		return service;
 	}
 
-	public BankAccountServiceMap createBankAccountServiceMap(ServiceDetails serviceDetails)
-	{
-		BankAccountServiceMap bankServ=new BankAccountServiceMap();
+	public BankAccountServiceMap createBankAccountServiceMap(ServiceDetails serviceDetails) {
+		BankAccountServiceMap bankServ = new BankAccountServiceMap();
 		bankServ.setServiceDetails(serviceDetails);
 		bankServ.setBankAccountId(createBankAccount("$" + serviceDetails.getCode() + "%"));
 		bankServ.setDeptId(createDept("testDeptName", "testDeptCode"));
@@ -137,16 +151,16 @@ public class CollectionObjectFactory {
 		bankServ.setLastModifiedDate(new Date());
 		bankServ.setCreatedBy(ApplicationThreadLocals.getUserId());
 		bankServ.setCreatedDate(new Date());
-		return  (bankServ);
+		return (bankServ);
 	}
-	
+
 	public Bankaccount createBankAccount(String glCode) {
 		Bankaccount bankaccount = new Bankaccount();
 		bankaccount.setAccountnumber("123456789");
 		bankaccount.setAccounttype("NATIONALISED BANKS");
 		bankaccount.setIsactive(true);
 		bankaccount.setFund(createFund("testFund"));
-		bankaccount.setChartofaccounts(createCOA(this.getRandomNumber(99999999)+""));
+		bankaccount.setChartofaccounts(createCOA(this.getRandomNumber(99999999) + ""));
 		bankaccount.setBankbranch(createBankBranch());
 		session.saveOrUpdate(bankaccount);
 		return bankaccount;
@@ -161,9 +175,9 @@ public class CollectionObjectFactory {
 		bankbranch.setIsactive(true);
 		bankbranch.setBank(createBank());
 		bankbranch.setCreatedDate(new Date());
-		bankbranch.setCreatedBy(createUser("system"));
+		bankbranch.setCreatedBy(ApplicationThreadLocals.getUserId());
 		bankbranch.setLastModifiedDate(new Date());
-		bankbranch.setLastModifiedBy(createUser("system"));
+		bankbranch.setLastModifiedBy(ApplicationThreadLocals.getUserId());
 		session.saveOrUpdate(bankbranch);
 		return bankbranch;
 	}
@@ -174,9 +188,9 @@ public class CollectionObjectFactory {
 		bank.setName("Test Bank" + getRandomNumber());
 		bank.setIsactive(true);
 		bank.setCreatedDate(new Date());
-		bank.setCreatedBy(createUser("system"));
+		bank.setCreatedBy(ApplicationThreadLocals.getUserId());
 		bank.setLastModifiedDate(new Date());
-		bank.setLastModifiedBy(createUser("system"));
+		bank.setLastModifiedBy(ApplicationThreadLocals.getUserId());
 		session.saveOrUpdate(bank);
 		return bank;
 	}
@@ -199,9 +213,8 @@ public class CollectionObjectFactory {
 	}
 
 	public ReceiptHeader createReceiptHeader(String receiptnumber) throws NumberFormatException {
-		return createReceiptHeader(receiptnumber,
-				CollectionConstants.RECEIPT_TYPE_BILL, "123456", "testCode",
-				createUser("system"),null);
+		return createReceiptHeader(receiptnumber, CollectionConstants.RECEIPT_TYPE_BILL, "123456", "testCode",
+				createUser("system"), null);
 	}
 
 	/**
@@ -216,16 +229,16 @@ public class CollectionObjectFactory {
 	 * @param statusCode
 	 *            Receipt status code
 	 * @return Receipt header created with given details
-	 * @throws RepositoryException 
-	 * @throws NumberFormatException 
+	 * @throws RepositoryException
+	 * @throws NumberFormatException
 	 */
-	public ReceiptHeader createUnsavedReceiptHeader(String receiptnumber,
-			char receiptType, String refNum, String statusCode, User user,EgwStatus status) throws NumberFormatException {
+	public ReceiptHeader createUnsavedReceiptHeader(String receiptnumber, char receiptType, String refNum,
+			String statusCode, User user, EgwStatus status) throws NumberFormatException {
 		ReceiptHeader receiptHeader = new ReceiptHeader();
 		receiptHeader.setReceipttype(receiptType);
-		if(receiptnumber != null){
-			receiptHeader.setReceiptnumber(receiptnumber+getRandomNumber());
-		}	
+		if (receiptnumber != null) {
+			receiptHeader.setReceiptnumber(receiptnumber + getRandomNumber());
+		}
 		receiptHeader.setReferencenumber(refNum);
 		receiptHeader.setConsumerCode("10-10-111-20");
 		receiptHeader.setService(createServiceDetails());
@@ -235,18 +248,15 @@ public class CollectionObjectFactory {
 		receiptHeader.setLastModifiedBy(user.getId());
 		receiptHeader.setIsReconciled(false);
 		receiptHeader.setManualreceiptnumber("292929");
-		if(status==null){
-			receiptHeader.setStatus(createEgwStatus(statusCode,
-				CollectionConstants.MODULE_NAME_RECEIPTHEADER));
-		}
-		else{
+		if (status == null) {
+			receiptHeader.setStatus(createEgwStatus(statusCode, CollectionConstants.MODULE_NAME_RECEIPTHEADER));
+		} else {
 			receiptHeader.setStatus(status);
 		}
 		receiptHeader.setPaidBy("Test Payee");
 		receiptHeader.setReceiptMisc(createUnSavedReceiptMisc(receiptHeader));
-		receiptHeader.addReceiptDetail(createUnsavedReceiptDetail(createCOA("1100201"),
-				BigDecimal.valueOf(100.00), BigDecimal.ZERO, createFunction("Test Function"), 1L,
-				"testGLCodeDescription", receiptHeader,true));
+		receiptHeader.addReceiptDetail(createUnsavedReceiptDetail(createCOA("1100201"), BigDecimal.valueOf(100.00),
+				BigDecimal.ZERO, createFunction("Test Function"), 1L, "testGLCodeDescription", receiptHeader, true));
 
 		return receiptHeader;
 	}
@@ -263,13 +273,13 @@ public class CollectionObjectFactory {
 	 * @param statusCode
 	 *            Receipt status code
 	 * @return Receipt header created with given details
-	 * @throws RepositoryException 
-	 * @throws NumberFormatException 
+	 * @throws RepositoryException
+	 * @throws NumberFormatException
 	 */
-	public ReceiptHeader createReceiptHeader(String receiptnumber,
-			char receiptType, String refNum, String statusCode, User user, EgwStatus status) throws NumberFormatException {
-		ReceiptHeader receiptHeader = createUnsavedReceiptHeader(receiptnumber,
-				receiptType, refNum, statusCode, user,status);
+	public ReceiptHeader createReceiptHeader(String receiptnumber, char receiptType, String refNum, String statusCode,
+			User user, EgwStatus status) throws NumberFormatException {
+		ReceiptHeader receiptHeader = createUnsavedReceiptHeader(receiptnumber, receiptType, refNum, statusCode, user,
+				status);
 		session.saveOrUpdate(receiptHeader);
 		return receiptHeader;
 	}
@@ -286,31 +296,22 @@ public class CollectionObjectFactory {
 		return pos;
 	}
 
-	/*public State createState(User user) {
-		State state = new State("ReceiptHeader",
-				CollectionConstants.WF_STATE_RECEIPT_CREATED, createPosition(),
-				"Test");
-		state.setCreatedBy(user);
-		state.setModifiedBy(user);
-		state.setCreatedDate(new Date());
-		state.setModifiedDate(new Date());
-		state.setValue(CollectionConstants.WF_STATE_RECEIPT_CREATED);
-		session.saveOrUpdate(state);
-		return state;
-	}
-	
-	public State createState(String type,String value) {
-		State state = new State(type,
-				value, createPosition(),
-				"Test");
-		User user = createUser("testUser");
-		state.setCreatedBy(user);
-		state.setModifiedBy(user);
-		state.setCreatedDate(new Date());
-		state.setModifiedDate(new Date());
-		session.saveOrUpdate(state);
-		return state;
-	}*/
+	/*
+	 * public State createState(User user) { State state = new
+	 * State("ReceiptHeader", CollectionConstants.WF_STATE_RECEIPT_CREATED,
+	 * createPosition(), "Test"); state.setCreatedBy(user);
+	 * state.setModifiedBy(user); state.setCreatedDate(new Date());
+	 * state.setModifiedDate(new Date());
+	 * state.setValue(CollectionConstants.WF_STATE_RECEIPT_CREATED);
+	 * session.saveOrUpdate(state); return state; }
+	 * 
+	 * public State createState(String type,String value) { State state = new
+	 * State(type, value, createPosition(), "Test"); User user =
+	 * createUser("testUser"); state.setCreatedBy(user);
+	 * state.setModifiedBy(user); state.setCreatedDate(new Date());
+	 * state.setModifiedDate(new Date()); session.saveOrUpdate(state); return
+	 * state; }
+	 */
 
 	/**
 	 * Creates a receipt header along with associated instrument header attached
@@ -329,19 +330,16 @@ public class CollectionObjectFactory {
 	 * @param functionName
 	 * @param userName
 	 * @return Receipt header created using given details
-	 * @throws RepositoryException 
-	 * @throws NumberFormatException 
+	 * @throws RepositoryException
+	 * @throws NumberFormatException
 	 */
-	public ReceiptHeader createReceiptHeaderWithInstrument(String receiptNum,
-			char receiptType, String statusCode, String refNum,
-			InstrumentType instrumentType, String instrumentNum,
-			Double instrumentAmount, Date instrumentDate,
-			String instrumentStatusCode, String glCode, String functionName,
-			String userName) throws NumberFormatException {
-		return createReceiptHeaderWithInstrument(receiptNum, receiptType,
-				statusCode, refNum, instrumentType, instrumentNum,
-				instrumentAmount, instrumentDate, instrumentStatusCode, glCode,
-				functionName, userName, "testCounter");
+	public ReceiptHeader createReceiptHeaderWithInstrument(String receiptNum, char receiptType, String statusCode,
+			String refNum, InstrumentType instrumentType, String instrumentNum, Double instrumentAmount,
+			Date instrumentDate, String instrumentStatusCode, String glCode, String functionName, String userName)
+			throws NumberFormatException {
+		return createReceiptHeaderWithInstrument(receiptNum, receiptType, statusCode, refNum, instrumentType,
+				instrumentNum, instrumentAmount, instrumentDate, instrumentStatusCode, glCode, functionName, userName,
+				"testCounter");
 	}
 
 	/**
@@ -362,22 +360,19 @@ public class CollectionObjectFactory {
 	 * @param userName
 	 * @param counterName
 	 * @return Receipt header created using given details
-	 * @throws RepositoryException 
-	 * @throws NumberFormatException 
+	 * @throws RepositoryException
+	 * @throws NumberFormatException
 	 */
-	public ReceiptHeader createReceiptHeaderWithInstrument(String receiptNum,
-			char receiptType, String statusCode, String refNum,
-			InstrumentType instrumentType, String instrumentNum,
-			Double instrumentAmount, Date instrumentDate,
-			String instrumentStatusCode, String glCode, String functionName,
-			String userName, String counterName) throws NumberFormatException {
+	public ReceiptHeader createReceiptHeaderWithInstrument(String receiptNum, char receiptType, String statusCode,
+			String refNum, InstrumentType instrumentType, String instrumentNum, Double instrumentAmount,
+			Date instrumentDate, String instrumentStatusCode, String glCode, String functionName, String userName,
+			String counterName) throws NumberFormatException {
 
 		User user = createUser(userName);
 		Location counter = createCounter(counterName);
-		return createReceiptHeaderWithInstrument(receiptNum, receiptType,
-				statusCode, refNum, instrumentType, instrumentNum,
-				instrumentAmount, instrumentDate, instrumentStatusCode, glCode,
-				functionName, user, counter);
+		return createReceiptHeaderWithInstrument(receiptNum, receiptType, statusCode, refNum, instrumentType,
+				instrumentNum, instrumentAmount, instrumentDate, instrumentStatusCode, glCode, functionName, user,
+				counter);
 	}
 
 	/**
@@ -398,44 +393,44 @@ public class CollectionObjectFactory {
 	 * @param user
 	 * @param counter
 	 * @return Receipt header created using given details
-	 * @throws RepositoryException 
-	 * @throws NumberFormatException 
+	 * @throws RepositoryException
+	 * @throws NumberFormatException
 	 */
-	public ReceiptHeader createReceiptHeaderWithInstrument(String receiptNum,
-			char receiptType, String statusCode, String refNum,
-			InstrumentType instrumentType, String instrumentNum,
-			Double instrumentAmount, Date instrumentDate,
-			String instrumentStatusCode, String glCode, String functionName,
-			User user, Location counter) throws NumberFormatException {
+	public ReceiptHeader createReceiptHeaderWithInstrument(String receiptNum, char receiptType, String statusCode,
+			String refNum, InstrumentType instrumentType, String instrumentNum, Double instrumentAmount,
+			Date instrumentDate, String instrumentStatusCode, String glCode, String functionName, User user,
+			Location counter) throws NumberFormatException {
 		// Create employee for user
-		PersonalInformation emp = createPersonalInformation(user,
-				createDept("testDepartment"));
-		/*createEmployeePositionDetails("testDesignation", emp,
-				createDept("testDept"));*/
+		PersonalInformation emp = createPersonalInformation(user, createDept("testDepartment"));
+		/*
+		 * createEmployeePositionDetails("testDesignation", emp,
+		 * createDept("testDept"));
+		 */
 
 		// Create chart of accounts
 		CChartOfAccounts coaObj = createCOA(glCode);
 		CFunction functionObj = createFunction(functionName);
 
 		// Create basic receipt header
-		ReceiptHeader receiptHeader = createUnsavedReceiptHeader(receiptNum,
-				receiptType, refNum, statusCode, user,null);
+		ReceiptHeader receiptHeader = createUnsavedReceiptHeader(receiptNum, receiptType, refNum, statusCode, user,
+				null);
 		receiptHeader.setReceiptMisc(createUnSavedReceiptMisc(receiptHeader));
 
 		// Add given instrument
-		receiptHeader.addInstrument(createInstrumentHeader(instrumentType,
-				instrumentNum, instrumentAmount, instrumentDate,
-				instrumentStatusCode, user));
+		receiptHeader.addInstrument(createInstrumentHeader(instrumentType, instrumentNum, instrumentAmount,
+				instrumentDate, instrumentStatusCode, user));
 
 		// Add payee details
-		//receiptHeader.setReceiptPayeeDetails(createReceiptPayeeDetails());
+		// receiptHeader.setReceiptPayeeDetails(createReceiptPayeeDetails());
 
 		// Add receipt detail
-		/*ReceiptDetail receiptDetail = createUnsavedReceiptDetail(coaObj,
-				BigDecimal.valueOf(instrumentAmount), BigDecimal.ZERO, functionObj, 1L,
-				"testGLCodeDescription", receiptHeader,1L);
-		receiptDetail.setCramountToBePaid(receiptDetail.getCramount());
-		receiptHeader.addReceiptDetail(receiptDetail);*/
+		/*
+		 * ReceiptDetail receiptDetail = createUnsavedReceiptDetail(coaObj,
+		 * BigDecimal.valueOf(instrumentAmount), BigDecimal.ZERO, functionObj,
+		 * 1L, "testGLCodeDescription", receiptHeader,1L);
+		 * receiptDetail.setCramountToBePaid(receiptDetail.getCramount());
+		 * receiptHeader.addReceiptDetail(receiptDetail);
+		 */
 
 		// Set the location (counter)
 		receiptHeader.setLocation(counter);
@@ -444,7 +439,7 @@ public class CollectionObjectFactory {
 		ReceiptVoucher receiptVoucher = new ReceiptVoucher();
 		receiptVoucher.setReceiptHeader(receiptHeader);
 		receiptHeader.addReceiptVoucher(receiptVoucher);
-		//receiptHeader.setState(this.createState("test","test"));
+		// receiptHeader.setState(this.createState("test","test"));
 		// Save the receipt header
 		session.saveOrUpdate(receiptHeader);
 
@@ -457,40 +452,36 @@ public class CollectionObjectFactory {
 		receiptHeader.setService(createServiceDetails());
 		receiptHeader.setCreatedDate(new Date());
 		receiptHeader.setIsReconciled(false);
-		receiptHeader.setStatus(createEgwStatus(
-				("testCodeRH" + getRandomNumber()).substring(0, 10),
-				MODULE_NAME_TESTRECEIPTHEADER));
-		receiptHeader.setReceiptnumber("testReceiptNumber"+getRandomNumber());
+		receiptHeader.setStatus(
+				createEgwStatus(("testCodeRH" + getRandomNumber()).substring(0, 10), MODULE_NAME_TESTRECEIPTHEADER));
+		receiptHeader.setReceiptnumber("testReceiptNumber" + getRandomNumber());
 		receiptHeader.setPaidBy("Test Payee");
 		receiptHeader.setOverrideAccountHeads(true);
 		receiptHeader.setPartPaymentAllowed(true);
 		receiptHeader.setCallbackForApportioning(false);
 		receiptHeader.setConsumerCode("testConsumerCode");
 		receiptHeader.setReceiptMisc(createUnSavedReceiptMisc(receiptHeader));
-		receiptHeader.addReceiptDetail(createUnsavedReceiptDetail(createCOA("1100201"),
-				BigDecimal.valueOf(100.00), BigDecimal.ZERO, createFunction("Test Function"), 1L,
-				"testGLCodeDescription", receiptHeader,true));
+		receiptHeader.addReceiptDetail(createUnsavedReceiptDetail(createCOA("1100201"), BigDecimal.valueOf(100.00),
+				BigDecimal.ZERO, createFunction("Test Function"), 1L, "testGLCodeDescription", receiptHeader, true));
 		return receiptHeader;
 	}
-	
+
 	public ReceiptHeader createUnsavedPendingReceiptHeader() throws NumberFormatException {
 		ReceiptHeader receiptHeader = new ReceiptHeader();
 		receiptHeader.setReceipttype('A');
 		receiptHeader.setService(createServiceDetails());
 		receiptHeader.setCreatedDate(new Date());
 		receiptHeader.setIsReconciled(false);
-		receiptHeader.setStatus(createEgwStatus(
-				("testCodeRH" + getRandomNumber()).substring(0, 10),
-				MODULE_NAME_TESTRECEIPTHEADER));
-		//receiptHeader.setReceiptnumber(null);
+		receiptHeader.setStatus(
+				createEgwStatus(("testCodeRH" + getRandomNumber()).substring(0, 10), MODULE_NAME_TESTRECEIPTHEADER));
+		// receiptHeader.setReceiptnumber(null);
 		receiptHeader.setPaidBy("Test Payee");
 		receiptHeader.setOverrideAccountHeads(true);
 		receiptHeader.setPartPaymentAllowed(true);
 		receiptHeader.setConsumerCode("testConsumerCode");
 		receiptHeader.setReceiptMisc(createUnSavedReceiptMisc(receiptHeader));
-		receiptHeader.addReceiptDetail(createUnsavedReceiptDetail(createCOA("1100201"),
-				BigDecimal.valueOf(100.00), BigDecimal.ZERO, createFunction("Test Function"), 1L,
-				"testGLCodeDescription", receiptHeader,true));
+		receiptHeader.addReceiptDetail(createUnsavedReceiptDetail(createCOA("1100201"), BigDecimal.valueOf(100.00),
+				BigDecimal.ZERO, createFunction("Test Function"), 1L, "testGLCodeDescription", receiptHeader, true));
 		return receiptHeader;
 	}
 
@@ -500,7 +491,7 @@ public class CollectionObjectFactory {
 		function.setCode(name + getRandomNumber());
 		function.setIsActive(true);
 		function.setIsNotLeaf(false);
-		///function.setLevel(1);
+		/// function.setLevel(1);
 		function.setType(name);
 		session.saveOrUpdate(function);
 		return function;
@@ -512,7 +503,7 @@ public class CollectionObjectFactory {
 		function.setCode(code);
 		function.setIsActive(true);
 		function.setIsNotLeaf(false);
-		//function.setLevel(1);
+		// function.setLevel(1);
 		function.setType(name);
 		session.saveOrUpdate(function);
 		return function;
@@ -558,29 +549,24 @@ public class CollectionObjectFactory {
 		return counter;
 	}
 
-
 	public User createUser(String userName) {
 		User user = new User();
 		user.setName(userName + getRandomNumber());
-		//user.setFirstName(userName);
+		// user.setFirstName(userName);
 		user.setPassword("testpassword");
-		//user.setPwdModifiedDate(new Date());
+		// user.setPwdModifiedDate(new Date());
 		user.setActive(true);
 		session.saveOrUpdate(user);
 		return user;
 	}
-	
-	/*public User createUser(String userName, Department dept) {
-		User user = new User();
-		user.setName(userName + getRandomNumber());
-		user.setFirstName(userName);
-		user.setPassword("testpassword");
-        user.setPwdModifiedDate(new Date());
-		user.setIsActive(1);
-		user.setDepartment(dept);
-		session.saveOrUpdate(user);
-		return user;
-	}*/
+
+	/*
+	 * public User createUser(String userName, Department dept) { User user =
+	 * new User(); user.setName(userName + getRandomNumber());
+	 * user.setFirstName(userName); user.setPassword("testpassword");
+	 * user.setPwdModifiedDate(new Date()); user.setIsActive(1);
+	 * user.setDepartment(dept); session.saveOrUpdate(user); return user; }
+	 */
 
 	public InstrumentType createUnsavedInstrumentType(String type) {
 		InstrumentType instrType = new InstrumentType();
@@ -623,8 +609,7 @@ public class CollectionObjectFactory {
 		return instrType;
 	}
 
-	public InstrumentHeader createUnsavedInstrumentHeader(
-			InstrumentType instrumentType, EgwStatus status) {
+	public InstrumentHeader createUnsavedInstrumentHeader(InstrumentType instrumentType, EgwStatus status) {
 		InstrumentHeader instrHdr = new InstrumentHeader();
 		instrHdr.setInstrumentAmount(BigDecimal.valueOf(1000));
 		instrHdr.setStatusId(status);
@@ -639,12 +624,10 @@ public class CollectionObjectFactory {
 		return instrHdr;
 	}
 
-	public InstrumentHeader createUnsavedInstrumentHeader(
-			String instrumentType, String status) {
+	public InstrumentHeader createUnsavedInstrumentHeader(String instrumentType, String status) {
 		InstrumentHeader instrHdr = new InstrumentHeader();
 		instrHdr.setInstrumentAmount(BigDecimal.valueOf(1000));
-		instrHdr.setStatusId(createEgwStatus(status,
-				CollectionConstants.MODULE_NAME_RECEIPTHEADER));
+		instrHdr.setStatusId(createEgwStatus(status, CollectionConstants.MODULE_NAME_RECEIPTHEADER));
 		instrHdr.setInstrumentType(createUnsavedInstrumentType(instrumentType));
 
 		User user = createUser("testUser");
@@ -663,47 +646,46 @@ public class CollectionObjectFactory {
 	 * @param instrumentType
 	 * @return
 	 */
-	public InstrumentHeader createInstrumentHeader(
-			InstrumentType instrumentType, EgwStatus status) {
+	public InstrumentHeader createInstrumentHeader(InstrumentType instrumentType, EgwStatus status) {
 		InstrumentHeader instrHdr = new InstrumentHeader();
 		instrHdr.setInstrumentAmount(BigDecimal.valueOf(1000));
 		instrHdr.setStatusId(status);
 		instrHdr.setInstrumentType(instrumentType);
-		
+
 		User user = createUser("testUser");
 		instrHdr.setCreatedBy(user.getId());
 		instrHdr.setCreatedDate(new Date());
 		instrHdr.setCreatedDate(new Date());
-		instrHdr.setModifiedBy(user.getId()	);
+		instrHdr.setModifiedBy(user.getId());
 		instrHdr.setModifiedDate(new Date());
 		session.saveOrUpdate(instrHdr);
 		return instrHdr;
 	}
-	
+
 	/**
 	 * TODO: Check if this can be removed and the subsequent
 	 * createInstrumentHeader method can be used in its place
 	 * 
 	 * @param instrumentType
 	 * @return
-	 * @throws RepositoryException 
-	 * @throws NumberFormatException 
+	 * @throws RepositoryException
+	 * @throws NumberFormatException
 	 */
 	public InstrumentHeader createBankInstrumentHeader() throws NumberFormatException {
 		InstrumentHeader instrHdr = new InstrumentHeader();
 		instrHdr.setInstrumentAmount(BigDecimal.valueOf(1000));
 		instrHdr.setStatusId(createEgwStatus("testStatus", MODULE_NAME_TESTRECEIPTHEADER));
-		
+
 		instrHdr.setInstrumentType((InstrumentType) service.find("from InstrumentType where type=?",
 				CollectionConstants.INSTRUMENTTYPE_BANK));
-		
+
 		instrHdr.setBankAccountId(createBankAccount("testGLCode"));
 		instrHdr.setBankId(instrHdr.getBankAccountId().getBankbranch().getBank());
 		instrHdr.setBankBranchName(instrHdr.getBankAccountId().getBankbranch().getBranchname());
-		instrHdr.setTransactionNumber("123456");//(BigDecimal.valueOf(1000));
+		instrHdr.setTransactionNumber("123456");// (BigDecimal.valueOf(1000));
 		instrHdr.setIsPayCheque(CollectionConstants.ZERO_INT);
 		instrHdr.setTransactionDate(new Date());
-		
+
 		User user = createUser("testUser");
 		instrHdr.setCreatedBy(user.getId());
 		instrHdr.setCreatedDate(new Date());
@@ -748,17 +730,14 @@ public class CollectionObjectFactory {
 	 *            User creating/modifying the object
 	 * @return Instrument header object created using given details
 	 */
-	public InstrumentHeader createUnsavedInstrumentHeader(
-			InstrumentType instrumentType, String instrumentNum,
-			Double instrumentAmount, Date instrumentDate, String statusCode,
-			User user) {
+	public InstrumentHeader createUnsavedInstrumentHeader(InstrumentType instrumentType, String instrumentNum,
+			Double instrumentAmount, Date instrumentDate, String statusCode, User user) {
 		InstrumentHeader instrHdr = new InstrumentHeader();
 		instrHdr.setInstrumentNumber(instrumentNum);
 		instrHdr.setInstrumentType(instrumentType);
 		instrHdr.setInstrumentAmount(BigDecimal.valueOf(instrumentAmount));
 		instrHdr.setInstrumentDate(instrumentDate);
-		instrHdr.setStatusId(createEgwStatus(statusCode,
-				CollectionConstants.MODULE_NAME_RECEIPTHEADER));
+		instrHdr.setStatusId(createEgwStatus(statusCode, CollectionConstants.MODULE_NAME_RECEIPTHEADER));
 		instrHdr.setCreatedDate(new Date());
 		instrHdr.setModifiedDate(new Date());
 		instrHdr.setCreatedBy(user.getId());
@@ -766,22 +745,19 @@ public class CollectionObjectFactory {
 		return instrHdr;
 	}
 
-	public InstrumentHeader createInstrumentHeaderWithBankDetails(
-			InstrumentType instrumentType, String instrumentNum,
-			Double instrumentAmount, Date instrumentDate, EgwStatus status,
-			Bank bank, String branchName, String isPayCheck) {
-		InstrumentHeader instrHdr = createUnsavedInstrumentHeaderWithBankDetails(
-				instrumentType, instrumentNum, instrumentAmount,
-				instrumentDate, status, bank, branchName, isPayCheck);
+	public InstrumentHeader createInstrumentHeaderWithBankDetails(InstrumentType instrumentType, String instrumentNum,
+			Double instrumentAmount, Date instrumentDate, EgwStatus status, Bank bank, String branchName,
+			String isPayCheck) {
+		InstrumentHeader instrHdr = createUnsavedInstrumentHeaderWithBankDetails(instrumentType, instrumentNum,
+				instrumentAmount, instrumentDate, status, bank, branchName, isPayCheck);
 
 		session.saveOrUpdate(instrHdr);
 		return instrHdr;
 	}
 
-	public InstrumentHeader createUnsavedInstrumentHeaderWithBankDetails(
-			InstrumentType instrumentType, String instrumentNum,
-			Double instrumentAmount, Date instrumentDate, EgwStatus status,
-			Bank bank, String branchName, String isPayCheck) {
+	public InstrumentHeader createUnsavedInstrumentHeaderWithBankDetails(InstrumentType instrumentType,
+			String instrumentNum, Double instrumentAmount, Date instrumentDate, EgwStatus status, Bank bank,
+			String branchName, String isPayCheck) {
 		InstrumentHeader instrHdr = new InstrumentHeader();
 		instrHdr.setInstrumentNumber(instrumentNum);
 		instrHdr.setInstrumentType(instrumentType);
@@ -816,13 +792,10 @@ public class CollectionObjectFactory {
 	 *            User creating/modifying the object
 	 * @return Instrument header object created using given details
 	 */
-	public InstrumentHeader createInstrumentHeader(
-			InstrumentType instrumentType, String instrumentNum,
-			Double instrumentAmount, Date instrumentDate, String statusCode,
-			User user) {
-		InstrumentHeader instrumentHeader = createUnsavedInstrumentHeader(
-				instrumentType, instrumentNum, instrumentAmount,
-				instrumentDate, statusCode, user);
+	public InstrumentHeader createInstrumentHeader(InstrumentType instrumentType, String instrumentNum,
+			Double instrumentAmount, Date instrumentDate, String statusCode, User user) {
+		InstrumentHeader instrumentHeader = createUnsavedInstrumentHeader(instrumentType, instrumentNum,
+				instrumentAmount, instrumentDate, statusCode, user);
 		session.saveOrUpdate(instrumentHeader);
 		return instrumentHeader;
 	}
@@ -851,8 +824,7 @@ public class CollectionObjectFactory {
 			end.set(now.get(Calendar.YEAR), Calendar.MARCH, 31);
 			endingDate = end.getTime();
 		}
-		String finYrRange = start.get(Calendar.YEAR) + "_"
-				+ String.valueOf(end.get(Calendar.YEAR)).substring(2);
+		String finYrRange = start.get(Calendar.YEAR) + "_" + String.valueOf(end.get(Calendar.YEAR)).substring(2);
 
 		financialYear.setStartingDate(startingDate);
 		financialYear.setEndingDate(endingDate);
@@ -869,7 +841,7 @@ public class CollectionObjectFactory {
 		voucher.setVoucherDate(new Date());
 		voucher.setFiscalPeriodId(1);
 		voucher.setVoucherNumber("testVoucherNumber");
-		voucher.setCgvn("testCGVN" + name );
+		voucher.setCgvn("testCGVN" + name);
 		session.saveOrUpdate(voucher);
 		return voucher;
 	}
@@ -880,7 +852,7 @@ public class CollectionObjectFactory {
 		CVoucherHeader voucherHeader = createVoucher("testVoucher");
 		receiptVoucher.setReceiptHeader(receiptHeader);
 		receiptVoucher.setVoucherheader(voucherHeader);
-		//receiptVoucher.setInternalrefno("123456/2009-10");
+		// receiptVoucher.setInternalrefno("123456/2009-10");
 		session.saveOrUpdate(receiptVoucher);
 		return receiptVoucher;
 	}
@@ -888,28 +860,28 @@ public class CollectionObjectFactory {
 	public ReceiptVoucher createReceiptVoucher(CVoucherHeader voucherHeader) throws NumberFormatException {
 		ReceiptVoucher receiptVoucher = new ReceiptVoucher();
 
-		//ReceiptPayeeDetails payee = new ReceiptPayeeDetails();
+		// ReceiptPayeeDetails payee = new ReceiptPayeeDetails();
 		ReceiptHeader receiptHeader1 = createUnsavedReceiptHeader();
-		receiptHeader1.setReceiptnumber("testReceiptnumber1"+getRandomNumber());
-		/*receiptHeader1.setReceiptPayeeDetails(payee);
-		payee.addReceiptHeader(receiptHeader1);
-
-		session.saveOrUpdate(payee);
-
-		ReceiptHeader savedReceiptHeader1 = payee.getReceiptHeaders()
-				.iterator().next();*/
+		receiptHeader1.setReceiptnumber("testReceiptnumber1" + getRandomNumber());
+		/*
+		 * receiptHeader1.setReceiptPayeeDetails(payee);
+		 * payee.addReceiptHeader(receiptHeader1);
+		 * 
+		 * session.saveOrUpdate(payee);
+		 * 
+		 * ReceiptHeader savedReceiptHeader1 = payee.getReceiptHeaders()
+		 * .iterator().next();
+		 */
 		receiptVoucher.setReceiptHeader(receiptHeader1);
 		receiptVoucher.setVoucherheader(voucherHeader);
-		//receiptVoucher.setInternalrefno("123456/2009-10");
+		// receiptVoucher.setInternalrefno("123456/2009-10");
 		session.saveOrUpdate(receiptVoucher);
 		return receiptVoucher;
 	}
 
 	public ReceiptDetail createReceiptDetail() throws NumberFormatException {
-		return createReceiptDetail(createCOA("1100201"), BigDecimal
-				.valueOf(100.00), BigDecimal.valueOf(100.00),
-				createFunction("Test Function"), 1L, "testGLDescription",
-				createReceiptHeader("11111"));
+		return createReceiptDetail(createCOA("1100201"), BigDecimal.valueOf(100.00), BigDecimal.valueOf(100.00),
+				createFunction("Test Function"), 1L, "testGLDescription", createReceiptHeader("11111"));
 	}
 
 	/**
@@ -929,9 +901,9 @@ public class CollectionObjectFactory {
 	 *            Receipt header
 	 * @return The receipt detail object created using given details
 	 */
-	public ReceiptDetail createUnsavedReceiptDetail(CChartOfAccounts coa,
-			BigDecimal crAmt, BigDecimal drAmt, CFunction function,
-			long orderNum, String description, ReceiptHeader receiptHeader,Boolean isActualDemand) {
+	public ReceiptDetail createUnsavedReceiptDetail(CChartOfAccounts coa, BigDecimal crAmt, BigDecimal drAmt,
+			CFunction function, long orderNum, String description, ReceiptHeader receiptHeader,
+			Boolean isActualDemand) {
 		ReceiptDetail receiptDetail = new ReceiptDetail();
 		receiptDetail.setAccounthead(coa);
 		receiptDetail.setCramount(crAmt);
@@ -962,11 +934,10 @@ public class CollectionObjectFactory {
 	 *            Receipt header
 	 * @return The receipt detail object created using given details
 	 */
-	public ReceiptDetail createReceiptDetail(CChartOfAccounts coa,
-			BigDecimal crAmt, BigDecimal drAmt, CFunction function,
-			long orderNum, String description, ReceiptHeader receiptHeader) {
-		ReceiptDetail receiptDetail = createUnsavedReceiptDetail(coa, crAmt,
-				drAmt, function, orderNum, description, receiptHeader,true);
+	public ReceiptDetail createReceiptDetail(CChartOfAccounts coa, BigDecimal crAmt, BigDecimal drAmt,
+			CFunction function, long orderNum, String description, ReceiptHeader receiptHeader) {
+		ReceiptDetail receiptDetail = createUnsavedReceiptDetail(coa, crAmt, drAmt, function, orderNum, description,
+				receiptHeader, true);
 		session.saveOrUpdate(receiptDetail);
 		return receiptDetail;
 	}
@@ -1041,8 +1012,10 @@ public class CollectionObjectFactory {
 		boundaryTypeImpl.setHierarchy(Long.valueOf(1));
 		boundaryTypeImpl.setName("karnataka");
 		boundaryTypeImpl.setLastModifiedDate(new Date());
-		/*boundaryTypeImpl.setHeirarchyType(createHierarchy("testHierarchyName",
-				"testHierarchyCode"));*/
+		/*
+		 * boundaryTypeImpl.setHeirarchyType(createHierarchy(
+		 * "testHierarchyName", "testHierarchyCode"));
+		 */
 		session.saveOrUpdate(boundaryTypeImpl);
 		return boundaryTypeImpl;
 	}
@@ -1060,7 +1033,7 @@ public class CollectionObjectFactory {
 		Department empDept = new Department();
 		empDept.setName(deptName + getRandomNumber());
 		empDept.setLastModifiedDate(new Date());
-		//empDept.setBillingLocation("0");
+		// empDept.setBillingLocation("0");
 		empDept.setCode(deptCode + getRandomNumber());
 		session.saveOrUpdate(empDept);
 		return empDept;
@@ -1071,7 +1044,7 @@ public class CollectionObjectFactory {
 		empDept.setName(deptCode);
 		empDept.setCode(deptCode);
 		empDept.setLastModifiedDate(new Date());
-		//empDept.setBillingLocation("0");
+		// empDept.setBillingLocation("0");
 		session.saveOrUpdate(empDept);
 		return empDept;
 	}
@@ -1088,37 +1061,33 @@ public class CollectionObjectFactory {
 		return fund;
 	}
 
-	/*public ReceiptPayeeDetails createUnsavedReceiptPayeeDetails() {
-		ReceiptPayeeDetails newReceiptPayeeDetails = new ReceiptPayeeDetails();
-		newReceiptPayeeDetails.setPayeeAddress("Test Address");
-		newReceiptPayeeDetails.setPayeename("Test Payee");
-		ReceiptHeader receipt=createReceiptHeader("110001");
-		receipt.setReceiptPayeeDetails(newReceiptPayeeDetails);
-		newReceiptPayeeDetails.addReceiptHeader(receipt);
-		return newReceiptPayeeDetails;
-	}
-
-	public ReceiptPayeeDetails createReceiptPayeeDetails() {
-		ReceiptPayeeDetails payeeDetails = createUnsavedReceiptPayeeDetails();
-		session.saveOrUpdate(payeeDetails);
-		return payeeDetails;
-	}
-	
-	public ReceiptPayeeDetails createPayeeForChallan(){
-		ReceiptPayeeDetails payeeDetails = new ReceiptPayeeDetails();
-		payeeDetails.setPayeeAddress("Test Address");
-		payeeDetails.setPayeename("Test Payee");
-		ReceiptHeader header = createReceiptHeaderForChallan();
-		header.setReceiptPayeeDetails(payeeDetails);
-		payeeDetails.addReceiptHeader(header);
-		session.saveOrUpdate(payeeDetails);
-		return payeeDetails;
-		
-	}*/
+	/*
+	 * public ReceiptPayeeDetails createUnsavedReceiptPayeeDetails() {
+	 * ReceiptPayeeDetails newReceiptPayeeDetails = new ReceiptPayeeDetails();
+	 * newReceiptPayeeDetails.setPayeeAddress("Test Address");
+	 * newReceiptPayeeDetails.setPayeename("Test Payee"); ReceiptHeader
+	 * receipt=createReceiptHeader("110001");
+	 * receipt.setReceiptPayeeDetails(newReceiptPayeeDetails);
+	 * newReceiptPayeeDetails.addReceiptHeader(receipt); return
+	 * newReceiptPayeeDetails; }
+	 * 
+	 * public ReceiptPayeeDetails createReceiptPayeeDetails() {
+	 * ReceiptPayeeDetails payeeDetails = createUnsavedReceiptPayeeDetails();
+	 * session.saveOrUpdate(payeeDetails); return payeeDetails; }
+	 * 
+	 * public ReceiptPayeeDetails createPayeeForChallan(){ ReceiptPayeeDetails
+	 * payeeDetails = new ReceiptPayeeDetails(); payeeDetails.setPayeeAddress(
+	 * "Test Address"); payeeDetails.setPayeename("Test Payee"); ReceiptHeader
+	 * header = createReceiptHeaderForChallan();
+	 * header.setReceiptPayeeDetails(payeeDetails);
+	 * payeeDetails.addReceiptHeader(header);
+	 * session.saveOrUpdate(payeeDetails); return payeeDetails;
+	 * 
+	 * }
+	 */
 
 	public InstrumentType createInstrumentTypeWithAccountCode() {
-		InstrumentType instrType = createUnsavedInstrumentType("testInstrumentType"
-				+ getRandomNumber());
+		InstrumentType instrType = createUnsavedInstrumentType("testInstrumentType" + getRandomNumber());
 		User user = createUser("system");
 		Date date = new Date();
 
@@ -1136,8 +1105,7 @@ public class CollectionObjectFactory {
 		return instrType;
 	}
 
-	public InstrumentAccountCodes createInstrumentAccountCodesForInstrType(
-			String instrType) {
+	public InstrumentAccountCodes createInstrumentAccountCodesForInstrType(String instrType) {
 		InstrumentAccountCodes instrAccountCode = new InstrumentAccountCodes();
 
 		User user = createUser("system");
@@ -1157,11 +1125,9 @@ public class CollectionObjectFactory {
 		return instrAccountCode;// here
 	}
 
-	public InstrumentOtherDetails createInstrumentOtherDetails(
-			InstrumentVoucher instrVoucher, Date statusDate) {
+	public InstrumentOtherDetails createInstrumentOtherDetails(InstrumentVoucher instrVoucher, Date statusDate) {
 		InstrumentOtherDetails instrOtherDet = new InstrumentOtherDetails();
-		instrOtherDet.setInstrumentHeaderId(instrVoucher
-				.getInstrumentHeaderId());
+		instrOtherDet.setInstrumentHeaderId(instrVoucher.getInstrumentHeaderId());
 		instrOtherDet.setPayinslipId(instrVoucher.getVoucherHeaderId());
 		instrOtherDet.setInstrumentStatusDate(statusDate);
 		User user = createUser("testUser");
@@ -1203,12 +1169,10 @@ public class CollectionObjectFactory {
 	 * return instrVoucher; }
 	 */
 
-	public InstrumentVoucher createInstrumentVoucher(
-			EgwStatus instrumentStatus, InstrumentType instrumentType) {
+	public InstrumentVoucher createInstrumentVoucher(EgwStatus instrumentStatus, InstrumentType instrumentType) {
 		InstrumentVoucher instrVoucher = new InstrumentVoucher();
 
-		InstrumentHeader instrHeader = createInstrumentHeader(instrumentType,
-				instrumentStatus);
+		InstrumentHeader instrHeader = createInstrumentHeader(instrumentType, instrumentStatus);
 		CVoucherHeader voucher = createVoucher("testVoucher");
 		User user = createUser("testUser");
 		Date date = new Date();
@@ -1225,7 +1189,6 @@ public class CollectionObjectFactory {
 		return instrVoucher;
 	}
 
-	
 	public ReceiptDetail createReceiptDetailWithoutHeader() {
 		ReceiptDetail receiptDetail = new ReceiptDetail();
 		receiptDetail.setAccounthead(createCOA("testGLCode"));
@@ -1237,45 +1200,42 @@ public class CollectionObjectFactory {
 		return receiptDetail;
 	}
 
-	/*public ReceiptPayeeDetails createReceiptPayeeWithoutHeader() {
-		ReceiptPayeeDetails receiptPayee = new ReceiptPayeeDetails();
-		receiptPayee.setPayeeAddress("Test Address");
-		receiptPayee.setPayeename("Test Payee");
-		return receiptPayee;
-	}
+	/*
+	 * public ReceiptPayeeDetails createReceiptPayeeWithoutHeader() {
+	 * ReceiptPayeeDetails receiptPayee = new ReceiptPayeeDetails();
+	 * receiptPayee.setPayeeAddress("Test Address"); receiptPayee.setPayeename(
+	 * "Test Payee"); return receiptPayee; }
+	 * 
+	 * public ReceiptPayeeDetails createReceiptPayeeForBillingSystem() {
+	 * ReceiptPayeeDetails receiptPayee = createReceiptPayeeWithoutHeader();
+	 * ReceiptHeader receiptHeader = createReceiptHeader("testReceiptNo");
+	 * EgwStatus status = createEgwStatus("testStatusCode",
+	 * "TestInstrumentHeader"); InstrumentType testInstrType =
+	 * createInstrumentType("testInstrType");
+	 * receiptHeader.addInstrument(createInstrumentHeader(testInstrType,
+	 * status));
+	 * //receiptHeader.addReceiptDetail(createReceiptDetailWithoutHeader());
+	 * receiptPayee.addReceiptHeader(receiptHeader);
+	 * receiptHeader.setReceiptPayeeDetails(receiptPayee);
+	 * session.saveOrUpdate(receiptPayee); return receiptPayee; }
+	 */
 
-	public ReceiptPayeeDetails createReceiptPayeeForBillingSystem() {
-		ReceiptPayeeDetails receiptPayee = createReceiptPayeeWithoutHeader();
-		ReceiptHeader receiptHeader = createReceiptHeader("testReceiptNo");
-		EgwStatus status = createEgwStatus("testStatusCode",
-				"TestInstrumentHeader");
-		InstrumentType testInstrType = createInstrumentType("testInstrType");
-		receiptHeader.addInstrument(createInstrumentHeader(testInstrType,
-				status));
-		//receiptHeader.addReceiptDetail(createReceiptDetailWithoutHeader());
-		receiptPayee.addReceiptHeader(receiptHeader);
-		receiptHeader.setReceiptPayeeDetails(receiptPayee);
-		session.saveOrUpdate(receiptPayee);
-		return receiptPayee;
-	}*/
-
-	/*public Assignment createAssignment(AssignmentPrd assignmentPrd,
-			DesignationMaster empDsgn, Position position,Department department) {
-	    Department dimpl = (Department) department;
-		Assignment assignment = new Assignment();
-		assignment.setAssignmentPrd(assignmentPrd);
-		assignment.setDesigId(empDsgn);
-		assignment.setPosition(position);
-		assignment.setDeptId(dimpl);
-		session.saveOrUpdate(assignment);
-		return assignment;
-
-	}*/
+	/*
+	 * public Assignment createAssignment(AssignmentPrd assignmentPrd,
+	 * DesignationMaster empDsgn, Position position,Department department) {
+	 * Department dimpl = (Department) department; Assignment assignment = new
+	 * Assignment(); assignment.setAssignmentPrd(assignmentPrd);
+	 * assignment.setDesigId(empDsgn); assignment.setPosition(position);
+	 * assignment.setDeptId(dimpl); session.saveOrUpdate(assignment); return
+	 * assignment;
+	 * 
+	 * }
+	 */
 
 	public Position createPosition(Designation desig) {
 		Position position = new Position();
 		position.setName(desig.getName() + "pos");
-		//position.setDeptDesigId(desig);
+		// position.setDeptDesigId(desig);
 		session.saveOrUpdate(position);
 		return position;
 	}
@@ -1288,44 +1248,41 @@ public class CollectionObjectFactory {
 		return d;
 	}
 
-	/*public AssignmentPrd createEmpAsgnmtPrd(PersonalInformation employee) {
-		AssignmentPrd assignPeriod = new AssignmentPrd();
-		assignPeriod.setEmployeeId(employee);
-		assignPeriod.setFromDate(new Date("4/1/2005"));
-		assignPeriod.setToDate(new Date("4/1/2099"));
-		session.saveOrUpdate(assignPeriod);
-		return assignPeriod;
-	}*/
+	/*
+	 * public AssignmentPrd createEmpAsgnmtPrd(PersonalInformation employee) {
+	 * AssignmentPrd assignPeriod = new AssignmentPrd();
+	 * assignPeriod.setEmployeeId(employee); assignPeriod.setFromDate(new
+	 * Date("4/1/2005")); assignPeriod.setToDate(new Date("4/1/2099"));
+	 * session.saveOrUpdate(assignPeriod); return assignPeriod; }
+	 */
 
-	public Designation createDesignation(int deptId,
-			String designationName) {
+	public Designation createDesignation(int deptId, String designationName) {
 		Designation designation = new Designation();
-		//designation.setDeptId(deptId);
+		// designation.setDeptId(deptId);
 		designation.setName(designationName);
 		designation.setDescription(designationName);
 		session.saveOrUpdate(designation);
 		return designation;
 	}
 
-	/*public Position createEmployeePositionDetails(String designation,
-			PersonalInformation emp, Department dept) {
-		AssignmentPrd ap = createEmpAsgnmtPrd(emp);
-		DesignationMaster desig = createDesignation(dept.getId(), designation
-				+ getRandomNumber());
-		Position position = createPosition(desig);
-		createAssignment(ap, desig, position,dept);
+	/*
+	 * public Position createEmployeePositionDetails(String designation,
+	 * PersonalInformation emp, Department dept) { AssignmentPrd ap =
+	 * createEmpAsgnmtPrd(emp); DesignationMaster desig =
+	 * createDesignation(dept.getId(), designation + getRandomNumber());
+	 * Position position = createPosition(desig); createAssignment(ap, desig,
+	 * position,dept);
+	 * 
+	 * return position; }
+	 */
 
-		return position;
-	}*/
-
-	public PersonalInformation createPersonalInformation(User user,
-			Department dept) {
+	public PersonalInformation createPersonalInformation(User user, Department dept) {
 		PersonalInformation personalInformation = new PersonalInformation();
 		personalInformation.setEmployeeFirstName(user.getName());
 		Random ran = new Random();
 		personalInformation.setEmployeeCode(ran.nextInt());
 		personalInformation.setUserMaster(user);
-		//personalInformation.setEgdeptMstr(dept);
+		// personalInformation.setEgdeptMstr(dept);
 		session.saveOrUpdate(personalInformation);
 		return personalInformation;
 	}
@@ -1342,23 +1299,21 @@ public class CollectionObjectFactory {
 
 	public Accountdetailtype createAccountdetailtype(String name) {
 		Accountdetailtype accountdetailtype = new Accountdetailtype();
-		accountdetailtype.setName(name+getRandomNumber());
+		accountdetailtype.setName(name + getRandomNumber());
 		accountdetailtype.setDescription(name);
-		accountdetailtype.setAttributename(name+getRandomNumber());
+		accountdetailtype.setAttributename(name + getRandomNumber());
 		accountdetailtype.setNbroflevels(new BigDecimal(1));
 		session.saveOrUpdate(accountdetailtype);
 		return accountdetailtype;
 	}
 
 	public AccountPayeeDetail createAccountPayeeDetail() {
-		return createAccountPayeeDetail(createAccountdetailtype("test"),
-				createAccountdetailkey("test"), BigDecimal.valueOf(100.00),
-				createReceiptDetailWithoutHeader());
+		return createAccountPayeeDetail(createAccountdetailtype("test"), createAccountdetailkey("test"),
+				BigDecimal.valueOf(100.00), createReceiptDetailWithoutHeader());
 	}
 
-	public AccountPayeeDetail createUnsavedAccountPayeeDetail(
-			Accountdetailtype accdetailtype, Accountdetailkey accdetailkey,
-			BigDecimal amt, ReceiptDetail receiptDetail) {
+	public AccountPayeeDetail createUnsavedAccountPayeeDetail(Accountdetailtype accdetailtype,
+			Accountdetailkey accdetailkey, BigDecimal amt, ReceiptDetail receiptDetail) {
 		AccountPayeeDetail accpayeeDetail = new AccountPayeeDetail();
 		accpayeeDetail.setAmount(amt);
 		accpayeeDetail.setAccountDetailKey(accdetailkey);
@@ -1368,11 +1323,10 @@ public class CollectionObjectFactory {
 		return accpayeeDetail;
 	}
 
-	public AccountPayeeDetail createAccountPayeeDetail(
-			Accountdetailtype accdetailtype, Accountdetailkey accdetailkey,
+	public AccountPayeeDetail createAccountPayeeDetail(Accountdetailtype accdetailtype, Accountdetailkey accdetailkey,
 			BigDecimal amt, ReceiptDetail receiptDetail) {
-		AccountPayeeDetail accpayeeDetail = createUnsavedAccountPayeeDetail(
-				accdetailtype, accdetailkey, amt, receiptDetail);
+		AccountPayeeDetail accpayeeDetail = createUnsavedAccountPayeeDetail(accdetailtype, accdetailkey, amt,
+				receiptDetail);
 		session.saveOrUpdate(accpayeeDetail);
 		return accpayeeDetail;
 	}
@@ -1466,8 +1420,7 @@ public class CollectionObjectFactory {
 		return functionary;
 	}
 
-	public CChartOfAccountDetail createCOADetail(CChartOfAccounts c,
-			Accountdetailtype a) {
+	public CChartOfAccountDetail createCOADetail(CChartOfAccounts c, Accountdetailtype a) {
 		CChartOfAccountDetail cChartOfAccountDetail = new CChartOfAccountDetail();
 		cChartOfAccountDetail.setGlCodeId(c);
 		cChartOfAccountDetail.setDetailTypeId(a);
@@ -1506,15 +1459,14 @@ public class CollectionObjectFactory {
 		session.saveOrUpdate(coa);
 		return coa;
 	}
-	
-	
+
 	public List<ReceiptDetailInfo> createSubLedgerlist() {
 		List<ReceiptDetailInfo> subLedgerlist = new ArrayList<ReceiptDetailInfo>();
-		//Accountdetailtype accDetailType = createAccountdetailtype("testEmployee");
+		// Accountdetailtype accDetailType =
+		// createAccountdetailtype("testEmployee");
 		CChartOfAccounts ccoa = createCOA("subLedGLCode");
 		Accountdetailkey accDetKey1 = createAccountdetailkey("testDetailKeyName1");
-		
-		
+
 		Accountdetailkey accDetKey2 = createAccountdetailkey("testDetailKeyName2");
 		ReceiptDetailInfo vd = new ReceiptDetailInfo();
 		vd.setCreditAmountDetail(new BigDecimal(0));
@@ -1528,7 +1480,7 @@ public class CollectionObjectFactory {
 		vd.setGlcode(ccoa);
 		vd.setSubledgerCode("3117004");
 		subLedgerlist.add(vd);
-		
+
 		ReceiptDetailInfo vd2 = new ReceiptDetailInfo();
 		vd2.setCreditAmountDetail(new BigDecimal(0));
 		vd2.setDebitAmountDetail(new BigDecimal(0));
@@ -1541,14 +1493,15 @@ public class CollectionObjectFactory {
 		vd2.setGlcode(ccoa);
 		vd2.setSubledgerCode("3117004");
 		subLedgerlist.add(vd2);
-		
+
 		return subLedgerlist;
 	}
-	
-	public List<ReceiptDetailInfo> createSubLedgerlist(CChartOfAccounts ccoa,Accountdetailtype accDetailType) {
+
+	public List<ReceiptDetailInfo> createSubLedgerlist(CChartOfAccounts ccoa, Accountdetailtype accDetailType) {
 		List<ReceiptDetailInfo> subLedgerlist = new ArrayList<ReceiptDetailInfo>();
-		//Accountdetailtype accDetailType = createAccountdetailtype("testEmployee");
-		//CChartOfAccounts ccoa = createCOAForGLCode("3117004");
+		// Accountdetailtype accDetailType =
+		// createAccountdetailtype("testEmployee");
+		// CChartOfAccounts ccoa = createCOAForGLCode("3117004");
 		ReceiptDetailInfo vd = new ReceiptDetailInfo();
 		vd.setCreditAmountDetail(new BigDecimal(0));
 		vd.setDebitAmountDetail(new BigDecimal(0));
@@ -1575,7 +1528,7 @@ public class CollectionObjectFactory {
 		subLedgerlist.add(vd2);
 		return subLedgerlist;
 	}
-	
+
 	public OnlinePayment createOnlinePayment() throws NumberFormatException {
 		OnlinePayment onlinePayment = new OnlinePayment();
 		User user = createUser("testUser");
@@ -1588,22 +1541,20 @@ public class CollectionObjectFactory {
 		onlinePayment.setTransactionAmount(BigDecimal.valueOf(1000));
 		onlinePayment.setTransactionDate(new Date());
 		onlinePayment.setTransactionNumber("2309319937");
-		onlinePayment.setReceiptHeader(this.createReceiptHeader("101010"
-				+ getRandomNumber()));
-		
-		onlinePayment.setStatus(this.createEgwStatus(
-				("testCodeRH" + getRandomNumber()).substring(0, 10),
+		onlinePayment.setReceiptHeader(this.createReceiptHeader("101010" + getRandomNumber()));
+
+		onlinePayment.setStatus(this.createEgwStatus(("testCodeRH" + getRandomNumber()).substring(0, 10),
 				MODULE_NAME_TESTRECEIPTHEADER));
-		
+
 		onlinePayment.getReceiptHeader().setOnlinePayment(onlinePayment);
 
 		session.saveOrUpdate(onlinePayment);
 		return onlinePayment;
 
 	}
-	
-	public OnlinePayment createOnlinePayment(ReceiptHeader receiptHeader,
-			String transNo, BigDecimal transAmt,EgwStatus status) throws NumberFormatException {
+
+	public OnlinePayment createOnlinePayment(ReceiptHeader receiptHeader, String transNo, BigDecimal transAmt,
+			EgwStatus status) throws NumberFormatException {
 		OnlinePayment onlinePayment = new OnlinePayment();
 		User user = createUser("testUser");
 
@@ -1625,8 +1576,8 @@ public class CollectionObjectFactory {
 
 		return onlinePayment;
 	}
-	
-	public DefaultPaymentResponse createPaytResponse(){
+
+	public DefaultPaymentResponse createPaytResponse() {
 		DefaultPaymentResponse paytResponse = new DefaultPaymentResponse();
 
 		paytResponse.setMerchantId("MerchantID");
@@ -1655,35 +1606,25 @@ public class CollectionObjectFactory {
 		paytResponse.setErrorStatus("errorStatus");
 		paytResponse.setErrorDescription("errorDescription");
 		paytResponse.setChecksum("checksum");
-		
+
 		return paytResponse;
 	}
 
-	public List<Map<String, Object>> createMapForInstrumentHeader(
-			List<InstrumentHeader> instrumentHeaderList) {
+	public List<Map<String, Object>> createMapForInstrumentHeader(List<InstrumentHeader> instrumentHeaderList) {
 		List<Map<String, Object>> instrumentHeaderMapList = new ArrayList();
 		if (instrumentHeaderList != null) {
 			for (InstrumentHeader instrumentHeader : instrumentHeaderList) {
 				Map<String, Object> instrumentHeaderMap = new HashMap();
-				instrumentHeaderMap.put("Instrument number", instrumentHeader
-						.getInstrumentNumber());
-				instrumentHeaderMap.put("Instrument date", instrumentHeader
-						.getInstrumentDate());
-				instrumentHeaderMap.put("Instrument amount", instrumentHeader
-						.getInstrumentAmount());
-				instrumentHeaderMap.put("Instrument type", instrumentHeader
-						.getInstrumentType().getType());
-				instrumentHeaderMap.put("Is pay cheque", instrumentHeader
-						.getIsPayCheque());
+				instrumentHeaderMap.put("Instrument number", instrumentHeader.getInstrumentNumber());
+				instrumentHeaderMap.put("Instrument date", instrumentHeader.getInstrumentDate());
+				instrumentHeaderMap.put("Instrument amount", instrumentHeader.getInstrumentAmount());
+				instrumentHeaderMap.put("Instrument type", instrumentHeader.getInstrumentType().getType());
+				instrumentHeaderMap.put("Is pay cheque", instrumentHeader.getIsPayCheque());
 				if (instrumentHeader.getBankId() != null)
-					instrumentHeaderMap.put("Bank code", instrumentHeader
-							.getBankId().getCode());
-				instrumentHeaderMap.put("Bank branch name", instrumentHeader
-						.getBankBranchName());
-				instrumentHeaderMap.put("Transaction number", instrumentHeader
-						.getTransactionNumber());
-				instrumentHeaderMap.put("Transaction date", instrumentHeader
-						.getTransactionDate());
+					instrumentHeaderMap.put("Bank code", instrumentHeader.getBankId().getCode());
+				instrumentHeaderMap.put("Bank branch name", instrumentHeader.getBankBranchName());
+				instrumentHeaderMap.put("Transaction number", instrumentHeader.getTransactionNumber());
+				instrumentHeaderMap.put("Transaction date", instrumentHeader.getTransactionDate());
 				instrumentHeaderMapList.add(instrumentHeaderMap);
 			}
 		}
@@ -1691,111 +1632,102 @@ public class CollectionObjectFactory {
 		return instrumentHeaderMapList;
 	}
 
-	public List<Map<String, Object>> createMapForInstrumentVoucher(
-			List<CVoucherHeader> voucherHeaderList,
+	public List<Map<String, Object>> createMapForInstrumentVoucher(List<CVoucherHeader> voucherHeaderList,
 			List<InstrumentHeader> instrumentHeaderList) {
-		List<Map<String, Object>> instrumentVoucherList = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> instrumentVoucherList = new ArrayList<Map<String, Object>>();
 
 		if (voucherHeaderList != null && instrumentHeaderList != null) {
 			for (CVoucherHeader voucherHeader : voucherHeaderList) {
 				for (InstrumentHeader instrumentHeader : instrumentHeaderList) {
 					Map<String, Object> iVoucherMap = new HashMap();
-					iVoucherMap
-							.put(
-									CollectionConstants.FINANCIAL_INSTRUMENTSERVICE_INSTRUMENTHEADEROBJECT,
-									instrumentHeader);
-					iVoucherMap
-							.put(
-									CollectionConstants.FINANCIAL_INSTRUMENTSERVICE_VOUCHERHEADEROBJECT,
-									voucherHeader);
+					iVoucherMap.put(CollectionConstants.FINANCIAL_INSTRUMENTSERVICE_INSTRUMENTHEADEROBJECT,
+							instrumentHeader);
+					iVoucherMap.put(CollectionConstants.FINANCIAL_INSTRUMENTSERVICE_VOUCHERHEADEROBJECT, voucherHeader);
 					instrumentVoucherList.add(iVoucherMap);
 				}
 			}
 		}
 		return instrumentVoucherList;
 	}
-	
+
 	public Challan createChallan() throws NumberFormatException {
 		Challan challan = createUnsavedChallan();
 		session.saveOrUpdate(challan);
 		return challan;
 	}
-	
+
 	public ReceiptHeader createReceiptHeaderWithChallan() throws NumberFormatException {
 		ReceiptHeader receiptHeader = createReceiptHeader("testReceiptNo");
-		
+
 		receiptHeader.setReceipttype(CollectionConstants.RECEIPT_TYPE_CHALLAN);
-		
+
 		Challan challan = new Challan();
 		User user = createUser("testUser");
-		
+
 		Date date = new Date();
-		
+
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE,2);
-		//cal.set(Calendar.HOUR, 23);
-		//cal.set(Calendar.MINUTE, 59);
-		//cal.set(Calendar.SECOND, 59);
+		cal.add(Calendar.DATE, 2);
+		// cal.set(Calendar.HOUR, 23);
+		// cal.set(Calendar.MINUTE, 59);
+		// cal.set(Calendar.SECOND, 59);
 		Date valid = cal.getTime();
 		challan.setValidUpto(valid);
-		
+
 		challan.setCreatedDate(date);
 		challan.setLastModifiedDate(date);
-		
+
 		challan.setCreatedBy(user.getId());
 		challan.setLastModifiedBy(user.getId());
 		challan.setChallanNumber("testChallanNo");
 		challan.setChallanDate(date);
 		challan.setService(createServiceDetails("testService"));
-		challan.setStatus(this.createEgwStatus(
-				("testCodeRH" + getRandomNumber()).substring(0, 10),
+		challan.setStatus(this.createEgwStatus(("testCodeRH" + getRandomNumber()).substring(0, 10),
 				MODULE_NAME_TESTCHALLANHEADER));
 		challan.setVoucherHeader(createVoucher("testChallanVoucher"));
-		
+
 		challan.setReceiptHeader(receiptHeader);
 		receiptHeader.setChallan(challan);
 		session.saveOrUpdate(challan);
 		session.saveOrUpdate(receiptHeader);
-		
+
 		return receiptHeader;
 	}
-	
-	
+
 	public Challan createUnsavedChallan() throws NumberFormatException {
 		Challan challan = new Challan();
 		User user = createUser("testUser");
 		Date date = new Date();
-		
+
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE,3);
+		cal.add(Calendar.DATE, 3);
 		Date valid = cal.getTime();
 		challan.setValidUpto(valid);
-		
-		
+
 		challan.setCreatedDate(date);
 		challan.setLastModifiedDate(date);
-		//challan.setValidUpto(date);
+		// challan.setValidUpto(date);
 		challan.setCreatedBy(user.getId());
 		challan.setLastModifiedBy(user.getId());
 		challan.setChallanNumber("testChallanNo");
 		challan.setChallanDate(date);
 		challan.setService(createServiceDetails("testService"));
-		/*ReceiptPayeeDetails payee = createReceiptPayeeDetails();
-		ReceiptHeader header = payee.getReceiptHeaders().iterator().next();
-		header.setReceiptPayeeDetails(payee);
-		challan.setReceiptHeader(header);*/ //TODO: Set the header appropriately
-		
-		challan.setStatus(this.createEgwStatus(
-				("testCodeRH" + getRandomNumber()).substring(0, 10),
+		/*
+		 * ReceiptPayeeDetails payee = createReceiptPayeeDetails();
+		 * ReceiptHeader header = payee.getReceiptHeaders().iterator().next();
+		 * header.setReceiptPayeeDetails(payee);
+		 * challan.setReceiptHeader(header);
+		 */ // TODO: Set the header appropriately
+
+		challan.setStatus(this.createEgwStatus(("testCodeRH" + getRandomNumber()).substring(0, 10),
 				MODULE_NAME_TESTCHALLANHEADER));
-		
 
 		return challan;
 	}
-	
+
 	public ServiceDetails createUnsavedChallanServiceDetails() {
 		ServiceDetails service = new ServiceDetails();
-		BankAccountServiceMap tempB=new BankAccountServiceMap();
+		BankAccountServiceMap tempB = new BankAccountServiceMap();
 		String serviceName = "@testChallanSrvc$" + getRandomNumber(9999);
 		service.setName(serviceName);
 		service.setServiceUrl("testServiceURL");
@@ -1804,7 +1736,7 @@ public class CollectionObjectFactory {
 		service.addBankAccountServiceMap(createBankAccountServiceMap(service));
 		return service;
 	}
-	
+
 	public ReceiptMisc createReceiptMisForChallan() throws NumberFormatException {
 		ReceiptMisc receiptMisc = new ReceiptMisc();
 		Fund fund = createFund("001");
@@ -1815,8 +1747,8 @@ public class CollectionObjectFactory {
 		session.saveOrUpdate(receiptMisc);
 		return receiptMisc;
 	}
-	
-	public ReceiptDetailInfo createReceiptDetailInfo(BigDecimal creditAmt, BigDecimal debitAmt,String glCode){
+
+	public ReceiptDetailInfo createReceiptDetailInfo(BigDecimal creditAmt, BigDecimal debitAmt, String glCode) {
 		ReceiptDetailInfo receiptDetailInfo = new ReceiptDetailInfo();
 		receiptDetailInfo.setCreditAmountDetail(creditAmt);
 		receiptDetailInfo.setDebitAmountDetail(debitAmt);
@@ -1827,17 +1759,18 @@ public class CollectionObjectFactory {
 		receiptDetailInfo.setFunctionIdDetail(Long.valueOf(2));
 		return receiptDetailInfo;
 	}
+
 	public List<ReceiptDetailInfo> createCreditDetailslist() {
 		List<ReceiptDetailInfo> billCreditDetailslist = new ArrayList<ReceiptDetailInfo>();
-		
+
 		ReceiptDetailInfo vd = new ReceiptDetailInfo();
 		vd.setAccounthead("Surcharge on Stamp Duty for Transfer of Immovable Properties");
 		vd.setCreditAmountDetail(new BigDecimal(100));
 		vd.setDebitAmountDetail(new BigDecimal(0));
 		vd.setAmount(new BigDecimal(0));
-		
+
 		vd.setGlcodeDetail("testGLCODE");
-		
+
 		vd.setGlcodeIdDetail(Long.valueOf(355));
 		vd.setFinancialYearId(Long.valueOf("4"));
 		vd.setFunctionDetail("testFunction");
@@ -1845,19 +1778,19 @@ public class CollectionObjectFactory {
 		billCreditDetailslist.add(vd);
 		return billCreditDetailslist;
 	}
-	
+
 	public List<ReceiptDetailInfo> createCreditDetailslist(CChartOfAccounts account) {
 		List<ReceiptDetailInfo> billCreditDetailslist = new ArrayList<ReceiptDetailInfo>();
-		
+
 		ReceiptDetailInfo vd = new ReceiptDetailInfo();
 		vd.setAccounthead(account.getName());
 		vd.setCreditAmountDetail(new BigDecimal(100));
 		vd.setDebitAmountDetail(new BigDecimal(0));
 		vd.setAmount(new BigDecimal(0));
-		
+
 		vd.setGlcodeDetail(account.getGlcode());
 		vd.setGlcodeIdDetail(account.getId());
-		
+
 		vd.setFinancialYearId(Long.valueOf("4"));
 		vd.setFunctionDetail("testFunction");
 		vd.setFunctionIdDetail(Long.valueOf(2));
@@ -1865,44 +1798,45 @@ public class CollectionObjectFactory {
 		return billCreditDetailslist;
 	}
 
-	public ReceiptHeader createReceiptHeaderForChallan() throws NumberFormatException{
-		//ReceiptPayeeDetails payee = createReceiptPayeeDetails();
-		ReceiptHeader receiptHeader = null ; //TODO: Fix the issue by getting ReceiptHeader //payee.getReceiptHeaders().iterator().next();
-		//receiptHeader.setReceiptPayeeDetails(payee);
+	public ReceiptHeader createReceiptHeaderForChallan() throws NumberFormatException {
+		// ReceiptPayeeDetails payee = createReceiptPayeeDetails();
+		ReceiptHeader receiptHeader = null; // TODO: Fix the issue by getting
+											// ReceiptHeader
+											// //payee.getReceiptHeaders().iterator().next();
+		// receiptHeader.setReceiptPayeeDetails(payee);
 		// ReceiptHeader receiptHeader=new ReceiptHeader();
 		receiptHeader.setReceipttype(CollectionConstants.RECEIPT_TYPE_CHALLAN);
-		receiptHeader.setReceiptnumber("1234"+getRandomNumber());
+		receiptHeader.setReceiptnumber("1234" + getRandomNumber());
 		receiptHeader.setReferencenumber("12");
 		receiptHeader.setConsumerCode("10-10-111-20");
 		receiptHeader.setService(createServiceDetails());
 		receiptHeader.setCreatedDate(new Date());
 		receiptHeader.setLastModifiedDate(new Date());
-		User user=createUser("system");
+		User user = createUser("system");
 		receiptHeader.setCreatedBy(user.getId());
 		receiptHeader.setLastModifiedBy(user.getId());
 		receiptHeader.setIsReconciled(false);
-		receiptHeader.setStatus(createEgwStatus("testcode",
-				CollectionConstants.MODULE_NAME_CHALLAN));
+		receiptHeader.setStatus(createEgwStatus("testcode", CollectionConstants.MODULE_NAME_CHALLAN));
 		receiptHeader.setPaidBy("Test Payee");
 		receiptHeader.setReceiptMisc(createUnSavedReceiptMisc(receiptHeader));
 		receiptHeader.addReceiptDetail(createReceiptDetailForChallan());
 		session.saveOrUpdate(receiptHeader);
 		return receiptHeader;
-		
+
 	}
-	
-	public ReceiptDetail createReceiptDetailForChallan() throws NumberFormatException{
-		ReceiptDetail receiptDetail = createUnsavedReceiptDetail(createCOA("1100201"), BigDecimal
-				.valueOf(100.00), BigDecimal.valueOf(100.00),
-				createFunction("Test Function"), 1L, "testGLDescription",
-				createReceiptHeader("11111"),true);
+
+	public ReceiptDetail createReceiptDetailForChallan() throws NumberFormatException {
+		ReceiptDetail receiptDetail = createUnsavedReceiptDetail(createCOA("1100201"), BigDecimal.valueOf(100.00),
+				BigDecimal.valueOf(100.00), createFunction("Test Function"), 1L, "testGLDescription",
+				createReceiptHeader("11111"), true);
 		receiptDetail.setFinancialYear(getFinancialYearForDate(new Date()));
 		session.saveOrUpdate(receiptDetail);
 		receiptDetail.addAccountPayeeDetail(createAccountPayeeDetail(createAccountdetailtype("test"),
-				createAccountdetailkey("test"), BigDecimal.valueOf(100.00),receiptDetail));
+				createAccountdetailkey("test"), BigDecimal.valueOf(100.00), receiptDetail));
 		session.saveOrUpdate(receiptDetail);
 		return receiptDetail;
 	}
+
 	public ServiceDetails createChallanServiceDetails() throws NumberFormatException {
 		ServiceDetails service = new ServiceDetails();
 		String serviceName = "@testChallanSrvc$" + getRandomNumber(9999);

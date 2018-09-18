@@ -263,7 +263,7 @@ public class FinancialUtils {
                 workflowHistory.put("status", stateHistory.getValue());
                 final Long owner = stateHistory.getOwnerPosition();
                 final State _sowner = stateHistory.getState();
-                user = stateHistory.getOwnerUser();
+               // user = stateHistory.getOwnerUser();
                 if (null != user) {
                     workflowHistory.put("user", user.getUsername() + "::" + user.getName());
                     workflowHistory.put("department",
@@ -282,7 +282,7 @@ public class FinancialUtils {
             map.put("updatedBy", state.getLastModifiedBy() + "::" + state.getLastModifiedBy());
             map.put("status", state.getValue());
             final Long ownerPosition = state.getOwnerPosition();
-            user = state.getOwnerUser();
+           // user = state.getOwnerUser();
             if (null != user) {
                 map.put("user", user.getUsername() + "::" + user.getName());
                 map.put("department", null != eisCommonService.getDepartmentForUser(user.getId()) ? eisCommonService

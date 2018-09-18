@@ -47,12 +47,9 @@
  */
 package org.egov.commons;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.egov.infra.admin.master.entity.User;
-import org.egov.infra.persistence.entity.AbstractPersistable;
-import org.egov.infra.persistence.validator.annotation.Required;
-import org.egov.infra.persistence.validator.annotation.Unique;
-import org.hibernate.validator.constraints.Length;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -60,14 +57,15 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.egov.infra.persistence.entity.AbstractPersistable;
+import org.egov.infra.persistence.validator.annotation.Required;
+import org.egov.infra.persistence.validator.annotation.Unique;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "BANK")
@@ -75,143 +73,139 @@ import java.util.Set;
 @Unique(fields = { "code", "name" }, enableDfltMsg = true)
 public class Bank extends AbstractPersistable<Integer> {
 
-    private static final long serialVersionUID = -2839424467289504649L;
+	private static final long serialVersionUID = -2839424467289504649L;
 
-    public static final String SEQ_BANK = "SEQ_BANK";
+	public static final String SEQ_BANK = "SEQ_BANK";
 
-    @Id
-    @GeneratedValue(generator = SEQ_BANK, strategy = GenerationType.SEQUENCE)
-    @JsonIgnore
-    private Integer id;
+	@Id
+	@GeneratedValue(generator = SEQ_BANK, strategy = GenerationType.SEQUENCE)
+	@JsonIgnore
+	private Integer id;
 
-    @Required
-    @Length(max = 50)
-    private String code;
+	@Required
+	@Length(max = 50)
+	private String code;
 
-    @Required
-    @Length(max = 100)
-    private String name;
+	@Required
+	@Length(max = 100)
+	private String name;
 
-    @JsonIgnore
-    @Length(max = 250)
-    private String narration;
+	@JsonIgnore
+	@Length(max = 250)
+	private String narration;
 
-    @JsonIgnore
-    @Required
-    private Boolean isactive;
+	@JsonIgnore
+	@Required
+	private Boolean isactive;
 
-    @JsonIgnore
-    @Length(max = 50)
-    private String type;
+	@JsonIgnore
+	@Length(max = 50)
+	private String type;
 
-    @JsonIgnore
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bank", targetEntity = Bankbranch.class)
-    private Set<Bankbranch> bankbranchs = new HashSet<>(0);
+	@JsonIgnore
+	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "bank", targetEntity = Bankbranch.class)
+	private Set<Bankbranch> bankbranchs = new HashSet<>(0);
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "createdby")
-    private User createdBy;
+	@JsonIgnore
+	private Long createdBy;
 
-    @JsonIgnore
-    private Date createdDate;
+	@JsonIgnore
+	private Date createdDate;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lastModifiedBy")
-    private User lastModifiedBy;
+	@JsonIgnore
+	private Long lastModifiedBy;
 
-    @JsonIgnore
-    private Date lastModifiedDate;
+	@JsonIgnore
+	private Date lastModifiedDate;
 
-    @Override
-    public Integer getId() {
-        return id;
-    }
+	@Override
+	public Integer getId() {
+		return id;
+	}
 
-    @Override
-    public void setId(final Integer id) {
-        this.id = id;
-    }
+	@Override
+	public void setId(final Integer id) {
+		this.id = id;
+	}
 
-    public String getCode() {
-        return code;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public void setCode(final String code) {
-        this.code = code;
-    }
+	public void setCode(final String code) {
+		this.code = code;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(final String name) {
-        this.name = name;
-    }
+	public void setName(final String name) {
+		this.name = name;
+	}
 
-    public String getNarration() {
-        return narration;
-    }
+	public String getNarration() {
+		return narration;
+	}
 
-    public void setNarration(final String narration) {
-        this.narration = narration;
-    }
+	public void setNarration(final String narration) {
+		this.narration = narration;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setType(final String type) {
-        this.type = type;
-    }
+	public void setType(final String type) {
+		this.type = type;
+	}
 
-    public Set<Bankbranch> getBankbranchs() {
-        return bankbranchs;
-    }
+	public Set<Bankbranch> getBankbranchs() {
+		return bankbranchs;
+	}
 
-    public void setBankbranchs(final Set<Bankbranch> bankbranchs) {
-        this.bankbranchs = bankbranchs;
-    }
+	public void setBankbranchs(final Set<Bankbranch> bankbranchs) {
+		this.bankbranchs = bankbranchs;
+	}
 
-    public Boolean getIsactive() {
-        return isactive;
-    }
+	public Boolean getIsactive() {
+		return isactive;
+	}
 
-    public void setIsactive(final Boolean isactive) {
-        this.isactive = isactive;
-    }
+	public void setIsactive(final Boolean isactive) {
+		this.isactive = isactive;
+	}
 
-    public User getCreatedBy() {
-        return createdBy;
-    }
+	public Long getCreatedBy() {
+		return createdBy;
+	}
 
-    public void setCreatedBy(final User createdBy) {
-        this.createdBy = createdBy;
-    }
+	public void setCreatedBy(final Long createdBy) {
+		this.createdBy = createdBy;
+	}
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
+	public Date getCreatedDate() {
+		return createdDate;
+	}
 
-    public void setCreatedDate(final Date createdDate) {
-        this.createdDate = createdDate;
-    }
+	public void setCreatedDate(final Date createdDate) {
+		this.createdDate = createdDate;
+	}
 
-    public User getLastModifiedBy() {
-        return lastModifiedBy;
-    }
+	public Long getLastModifiedBy() {
+		return lastModifiedBy;
+	}
 
-    public void setLastModifiedBy(final User lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
+	public void setLastModifiedBy(final Long lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
+	}
 
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
+	}
 
-    public void setLastModifiedDate(final Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
+	public void setLastModifiedDate(final Date lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
 
 }

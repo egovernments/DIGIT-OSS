@@ -107,7 +107,7 @@ public class CreateBankService {
     public Bank create(final Bank bank) {
 
         bank.setCreatedDate(new Date());
-        bank.setCreatedBy(getCurrentSession().load(User.class, ApplicationThreadLocals.getUserId()));
+        bank.setCreatedBy(ApplicationThreadLocals.getUserId());
 
         return bankRepository.save(bank);
     }
@@ -116,7 +116,7 @@ public class CreateBankService {
     public Bank update(final Bank bank) {
 
         bank.setLastModifiedDate(new Date());
-        bank.setLastModifiedBy(getCurrentSession().load(User.class, ApplicationThreadLocals.getUserId()));
+        bank.setLastModifiedBy(ApplicationThreadLocals.getUserId());
         return bankRepository.save(bank);
     }
 

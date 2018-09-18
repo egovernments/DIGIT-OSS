@@ -145,7 +145,7 @@
 <body <decorator:getProperty property="body.id" writeEntireProperty="yes"/><decorator:getProperty property="body.class" writeEntireProperty="true"/> <decorator:getProperty property="body.onload" writeEntireProperty="true"/>  >
     <div class="page-container">
 		    <!-- header -->
-		    <egov:breadcrumb/>
+		    <%-- <egov:breadcrumb/> --%>
 		    
 		    <!-- pagecontent -->
 		    <div class="main-content">

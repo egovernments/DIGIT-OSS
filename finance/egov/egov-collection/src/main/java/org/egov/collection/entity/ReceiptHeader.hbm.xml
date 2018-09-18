@@ -110,14 +110,12 @@
 			cascade="all">
 			<column name="STATE_ID" />
 		</many-to-one>
-		<many-to-one name="createdBy" class="org.egov.infra.admin.master.entity.User"
-			fetch="select">
-			<column name="CREATEDBY" precision="22" scale="0" />
-		</many-to-one>
-		<many-to-one name="lastModifiedBy" class="org.egov.infra.admin.master.entity.User"
-			fetch="select">
-			<column name="LASTMODIFIEDBY" precision="22" scale="0" />
-		</many-to-one>
+		<property name="createdBy" type="long">
+			<column name="createdBy" />
+		</property>
+		<property name="lastModifiedBy" type="long">
+			<column name="lastModifiedBy" />
+		</property>
 
 		<set name="receiptDetails" inverse="true" cascade="all,delete-orphan" order-by="ordernumber">
 			<key>
@@ -220,8 +218,8 @@
    	<query name="RECEIPTS_BY_RECONSTATUS">
     <![CDATA[select receipt from org.egov.collection.entity.ReceiptHeader receipt where receipt.isReconciled = ?]]></query>
         
-    <query name="CREATEDBYUSERS_OF_RECEIPTS">
-    <![CDATA[select distinct createdBy from org.egov.collection.entity.ReceiptHeader rh where rh.createdBy.type not in ('CITIZEN','SYSTEM')]]></query>
+   <!--  <query name="CREATEDBYUSERS_OF_RECEIPTS">
+    <![CDATA[select distinct createdBy from org.egov.collection.entity.ReceiptHeader rh where rh.createdBy.type not in ('CITIZEN','SYSTEM')]]></query> -->
     
     <query name="RECEIPT_BY_CHALLANID">
     <![CDATA[select receipt from org.egov.collection.entity.ReceiptHeader receipt, org.egov.collection.entity.Challan cl WHERE cl.receiptHeader.id = receipt.id and cl.id = ?]]></query>

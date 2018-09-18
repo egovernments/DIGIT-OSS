@@ -1121,7 +1121,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
             final List<InstrumentHeader> receiptInstrList) {
         try {
             LOGGER.info("Workflow started for newly created receipts");
-            if (isReceiptCreateApprovedStatus(receiptHeader))
+            if (true)//isReceiptCreateApprovedStatus(receiptHeader))
                 setReceiptApprovedStatus(receiptHeader);
             else
                 startWorkflow(receiptHeader);
@@ -1133,8 +1133,8 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
             if (receiptHeader.getService().getServiceType().equalsIgnoreCase(CollectionConstants.SERVICE_TYPE_BILLING)) {
                 updateBillingSystemWithReceiptInfo(receiptHeader, null, null);
                 LOGGER.info("Updated billing system ");
-            } else
-                updateCollectionIndexAndPushMail(receiptHeader);
+            }/* else
+                updateCollectionIndexAndPushMail(receiptHeader);*/
         } catch (final HibernateException e) {
             LOGGER.error("Receipt Service HException while persisting ReceiptHeader", e);
             throw new ApplicationRuntimeException("Receipt Service Exception while persisting ReceiptHeader : ", e);

@@ -155,16 +155,16 @@ public class BankAction extends BaseFormAction {
                 // TODO Dirty Code can be avoided by extending BaseModel for Bank
                 final Date currentDate = new Date();
                 bank.setCreatedDate(currentDate);
-                bank.setCreatedBy(bankService.getSession().load(User.class, ApplicationThreadLocals.getUserId()));
+                bank.setCreatedBy(ApplicationThreadLocals.getUserId());
                 bank.setLastModifiedDate(currentDate);
-                bank.setLastModifiedBy(bankService.getSession().load(User.class, ApplicationThreadLocals.getUserId()));
+                bank.setLastModifiedBy(ApplicationThreadLocals.getUserId());
                 bankService.persist(bank);
             } else {
                 final Date currentDate = new Date();
                 bank.setCreatedDate(currentDate);
-                bank.setCreatedBy(bankService.getSession().load(User.class, ApplicationThreadLocals.getUserId()));
+                bank.setCreatedBy(ApplicationThreadLocals.getUserId());
                 bank.setLastModifiedDate(currentDate);
-                bank.setLastModifiedBy(bankService.getSession().load(User.class, ApplicationThreadLocals.getUserId()));
+                bank.setLastModifiedBy(ApplicationThreadLocals.getUserId());
                 bankService.update(bank);
             }
             addActionMessage(getText("Bank Saved Successfully"));

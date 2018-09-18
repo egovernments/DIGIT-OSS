@@ -49,8 +49,7 @@ public class FinanceController {
 	private BankService bankService;
 	@Autowired
 	private BankBranchService branchService;
-	
-	
+
 	@PostMapping(value = "/funds/_search")
 	@ResponseBody
 	public FundResponse fundSearch(@RequestBody FundRequest fundRequest) {
@@ -122,15 +121,15 @@ public class FinanceController {
 	@PostMapping(value = "/bankbranch")
 	@ResponseBody
 	public BankBranchResponse BankBranchSearch(@RequestBody BankBranchRequest bbRequest) {
-	
+
 		Bankbranch branch = new Bankbranch();
 		branch.setBranchcode(bbRequest.getCode());
 		branch.setBranchname(bbRequest.getName());
 		branch.setIsactive(bbRequest.getActive());
-		List<Bankbranch> branchList = branchService.search(branch, bbRequest.getIds(), bbRequest.getBank(), 
+		List<Bankbranch> branchList = branchService.search(branch, bbRequest.getIds(), bbRequest.getBank(),
 				bbRequest.getSortBy(), bbRequest.getOffset(), bbRequest.getPageSize());
-		
-		return getSuccessBankBranchResponse(branchList,bbRequest);
+
+		return getSuccessBankBranchResponse(branchList, bbRequest);
 	}
 
 	@PostMapping(value = "/bankaccount")
@@ -247,8 +246,8 @@ public class FinanceController {
 
 		List<org.egov.egf.contract.model.Bank> bankList = new ArrayList<>();
 		banks.forEach(bank -> {
-			AuditDetails auditDetails = new AuditDetails(bankRequest.getTenantId(), bank.getCreatedBy().getId(),
-					bank.getLastModifiedBy().getId(), bank.getCreatedDate(), bank.getLastModifiedDate());
+			AuditDetails auditDetails = new AuditDetails(bankRequest.getTenantId(), bank.getCreatedBy(),
+					bank.getLastModifiedBy(), bank.getCreatedDate(), bank.getLastModifiedDate());
 
 			org.egov.egf.contract.model.Bank _bank = new org.egov.egf.contract.model.Bank(bank.getId(), bank.getCode(),
 					bank.getName(), bank.getNarration(), bank.getIsactive(), bank.getType(), auditDetails);
@@ -262,41 +261,42 @@ public class FinanceController {
 
 		return new BankResponse(responseInfo, bankList, page);
 	}
-	
-	private BankBranchResponse getSuccessBankBranchResponse(List<Bankbranch> branches,BankBranchRequest branchRequest){
-		
+
+	private BankBranchResponse getSuccessBankBranchResponse(List<Bankbranch> branches,
+			BankBranchRequest branchRequest) {
+
 		ResponseInfo responseInfo = createResponseObj(branchRequest.getRequestInfo(), true);
-		
-		List<BankBranch> branchList =new ArrayList<>();
-		
-		branches.forEach(branch->{
+
+		List<BankBranch> branchList = new ArrayList<>();
+
+		branches.forEach(branch -> {
 			AuditDetails branchAudit = new AuditDetails(branchRequest.getTenantId(),
-					branch.getCreatedBy()!=null?branch.getCreatedBy().getId():null,
-					branch.getLastModifiedBy()!=null?branch.getLastModifiedBy().getId():null,
-					branch.getCreatedDate(),branch.getLastModifiedDate());
+					branch.getCreatedBy() != null ? branch.getCreatedBy() : null,
+					branch.getLastModifiedBy() != null ? branch.getLastModifiedBy() : null, branch.getCreatedDate(),
+					branch.getLastModifiedDate());
 			BankBranch _branch = new BankBranch();
-			
+
 			_branch.setActive(branch.getIsactive());
 			_branch.setAddress(branch.getBranchaddress1());
 			_branch.setAddress2(branch.getBranchaddress2());
 			_branch.setAuditDetails(branchAudit);
-						
-			if(branch.getBank()!=null){
-			AuditDetails bankAudit =new AuditDetails(branchRequest.getTenantId(),
-					branch.getBank().getCreatedBy()!=null?branch.getBank().getCreatedBy().getId():null,
-					branch.getBank().getLastModifiedBy()!=null?branch.getBank().getLastModifiedBy().getId():null,
-					branch.getBank().getCreatedDate(),branch.getBank().getLastModifiedDate());
-			org.egov.egf.contract.model.Bank _bank = new org.egov.egf.contract.model.Bank();
-			_bank.setCode(branch.getBank().getCode());
-			_bank.setId(branch.getBank().getId());
-			_bank.setName(branch.getBank().getName());
-			_bank.setActive(branch.getBank().getIsactive());
-			_bank.setType(branch.getBank().getType());
-			_bank.setDescription(branch.getBank().getNarration());
-			_bank.setAuditDetails(bankAudit);
-			_branch.setBank(_bank);
+
+			if (branch.getBank() != null) {
+				AuditDetails bankAudit = new AuditDetails(branchRequest.getTenantId(),
+						branch.getBank().getCreatedBy() != null ? branch.getBank().getCreatedBy() : null,
+						branch.getBank().getLastModifiedBy() != null ? branch.getBank().getLastModifiedBy() : null,
+						branch.getBank().getCreatedDate(), branch.getBank().getLastModifiedDate());
+				org.egov.egf.contract.model.Bank _bank = new org.egov.egf.contract.model.Bank();
+				_bank.setCode(branch.getBank().getCode());
+				_bank.setId(branch.getBank().getId());
+				_bank.setName(branch.getBank().getName());
+				_bank.setActive(branch.getBank().getIsactive());
+				_bank.setType(branch.getBank().getType());
+				_bank.setDescription(branch.getBank().getNarration());
+				_bank.setAuditDetails(bankAudit);
+				_branch.setBank(_bank);
 			}
-			
+
 			_branch.setCity(branch.getBranchcity());
 			_branch.setCode(branch.getBranchcode());
 			_branch.setContactPerson(branch.getContactperson());
@@ -308,15 +308,15 @@ public class FinanceController {
 			_branch.setPhone(branch.getBranchphone());
 			_branch.setPincode(branch.getBranchpin());
 			_branch.setState(branch.getBranchstate());
-			
+
 			branchList.add(_branch);
 		});
-		
+
 		Pagination page = new Pagination();
 		page.setOffSet(branchRequest.getOffset());
 		page.setPageSize(branchRequest.getPageSize());
 		page.setTotalResults(branchList.size());
-		
+
 		return new BankBranchResponse(responseInfo, branchList, page);
 	}
 }

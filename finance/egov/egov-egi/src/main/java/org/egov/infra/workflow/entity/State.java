@@ -48,14 +48,11 @@
 
 package org.egov.infra.workflow.entity;
 
-import org.egov.infra.admin.master.entity.User;
-import org.egov.infra.persistence.entity.AbstractAuditable;
-import org.egov.infra.utils.JsonUtils;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.SafeHtml;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import static org.egov.infra.workflow.entity.State.SEQ_STATE;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -72,252 +69,247 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.egov.infra.workflow.entity.State.SEQ_STATE;
+import org.egov.infra.persistence.entity.AbstractAuditable;
+import org.egov.infra.utils.JsonUtils;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.SafeHtml;
 
 @Entity
 @Table(name = "EG_WF_STATES")
 @SequenceGenerator(name = SEQ_STATE, sequenceName = SEQ_STATE, allocationSize = 1)
-public class State/*<T extends OwnerGroup>*/ extends AbstractAuditable {
+public class State/* <T extends OwnerGroup> */ extends AbstractAuditable {
 
-    public static final String DEFAULT_STATE_VALUE_CREATED = "Created";
-    public static final String DEFAULT_STATE_VALUE_CLOSED = "Closed";
-    public static final String STATE_REOPENED = "Reopened";
-    protected static final String SEQ_STATE = "SEQ_EG_WF_STATES";
-    private static final long serialVersionUID = -9159043292636575746L;
+	public static final String DEFAULT_STATE_VALUE_CREATED = "Created";
+	public static final String DEFAULT_STATE_VALUE_CLOSED = "Closed";
+	public static final String STATE_REOPENED = "Reopened";
+	protected static final String SEQ_STATE = "SEQ_EG_WF_STATES";
+	private static final long serialVersionUID = -9159043292636575746L;
 
-    @Id
-    @GeneratedValue(generator = SEQ_STATE, strategy = GenerationType.SEQUENCE)
-    private Long id;
+	@Id
+	@GeneratedValue(generator = SEQ_STATE, strategy = GenerationType.SEQUENCE)
+	private Long id;
 
-    @NotBlank
-    @Length(max = 255)
-    @SafeHtml
-    private String type;
+	@NotBlank
+	@Length(max = 255)
+	@SafeHtml
+	private String type;
 
-    @NotBlank
-    @Length(max = 255)
-    @SafeHtml
-    private String value;
+	@NotBlank
+	@Length(max = 255)
+	@SafeHtml
+	private String value;
 
-//    @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
-    @Column(name = "OWNER_POS")
-    private Long ownerPosition;
+	// @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
+	@Column(name = "OWNER_POS")
+	private Long ownerPosition;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "OWNER_USER")
-    private User ownerUser;
+	@Column(name = "OWNER_USER")
+	private Long ownerUser;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-            fetch = FetchType.LAZY, mappedBy = "state", targetEntity = StateHistory.class)
-    @OrderBy("id")
-    private Set<StateHistory> history = new HashSet<>();
+	@OneToMany(cascade = { CascadeType.PERSIST,
+			CascadeType.MERGE }, fetch = FetchType.LAZY, mappedBy = "state", targetEntity = StateHistory.class)
+	@OrderBy("id")
+	private Set<StateHistory> history = new HashSet<>();
 
-    @Length(max = 100)
-    @SafeHtml
-    private String senderName;
+	@Length(max = 100)
+	@SafeHtml
+	private String senderName;
 
-    @Length(max = 255)
-    @SafeHtml
-    private String nextAction;
+	@Length(max = 255)
+	@SafeHtml
+	private String nextAction;
 
-    @Length(max = 1024)
-    @SafeHtml
-    private String comments;
+	@Length(max = 1024)
+	@SafeHtml
+	private String comments;
 
-    @Length(max = 100)
-    @SafeHtml
-    private String natureOfTask;
+	@Length(max = 100)
+	@SafeHtml
+	private String natureOfTask;
 
-    @Length(max = 1024)
-    @SafeHtml
-    private String extraInfo;
+	@Length(max = 1024)
+	@SafeHtml
+	private String extraInfo;
 
-    private Date dateInfo;
+	private Date dateInfo;
 
-    private Date extraDateInfo;
+	private Date extraDateInfo;
 
-    @Enumerated(EnumType.ORDINAL)
-    @NotNull
-    private StateStatus status;
+	@Enumerated(EnumType.ORDINAL)
+	@NotNull
+	private StateStatus status;
 
-//    @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
-    @Column(name = "INITIATOR_POS")
-    private Long initiatorPosition;
+	// @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
+	@Column(name = "INITIATOR_POS")
+	private Long initiatorPosition;
 
-//    @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
-    @Column(name = "previousOwner")
-    private Long previousOwner;
+	// @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
+	@Column(name = "previousOwner")
+	private Long previousOwner;
 
-    @ManyToOne(targetEntity = State.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "previousStateRef")
-    private State previousStateRef;
-    
-    
-    @Transient
-    private String deptCode;
-    @Transient
-    private String deptName;
-    @Transient
-    private String desgCode;
-    @Transient
-    private String desgName;
-    
-//    @Column(name="createdby")
-//	private Long createdBy;
-//
-//	@Temporal(TemporalType.TIMESTAMP)
-//	@CreatedDate
-//	private Date createdDate;
-//	
-//	@Column(name="lastmodifiedby")
-//	private Long lastModifiedBy;
-//
-//	@Temporal(TemporalType.TIMESTAMP)
-//	@LastModifiedDate
-//	private Date lastModifiedDate;
+	@ManyToOne(targetEntity = State.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "previousStateRef")
+	private State previousStateRef;
 
+	@Transient
+	private String deptCode;
+	@Transient
+	private String deptName;
+	@Transient
+	private String desgCode;
+	@Transient
+	private String desgName;
 
-    protected State() {
-        //Explicit state initialization not allowed
-    }
+	// @Column(name="createdby")
+	// private Long createdBy;
+	//
+	// @Temporal(TemporalType.TIMESTAMP)
+	// @CreatedDate
+	// private Date createdDate;
+	//
+	// @Column(name="lastmodifiedby")
+	// private Long lastModifiedBy;
+	//
+	// @Temporal(TemporalType.TIMESTAMP)
+	// @LastModifiedDate
+	// private Date lastModifiedDate;
 
-//    @Override
-    public Long getId() {
-        return id;
-    }
+	protected State() {
+		// Explicit state initialization not allowed
+	}
 
-//    @Override
-    protected void setId(final Long id) {
-        this.id = id;
-    }
+	// @Override
+	public Long getId() {
+		return id;
+	}
 
-    public String getType() {
-        return type;
-    }
+	// @Override
+	protected void setId(final Long id) {
+		this.id = id;
+	}
 
-    protected void setType(final String type) {
-        this.type = type;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public String getValue() {
-        return value;
-    }
+	protected void setType(final String type) {
+		this.type = type;
+	}
 
-    protected void setValue(final String value) {
-        this.value = value;
-    }
+	public String getValue() {
+		return value;
+	}
 
-    public Long getOwnerPosition() {
-        return ownerPosition;
-    }
+	protected void setValue(final String value) {
+		this.value = value;
+	}
 
-    protected void setOwnerPosition(final Long ownerPosition) {
-        this.ownerPosition = ownerPosition;
-    }
+	public Long getOwnerPosition() {
+		return ownerPosition;
+	}
 
-    public User getOwnerUser() {
-        return ownerUser;
-    }
+	protected void setOwnerPosition(final Long ownerPosition) {
+		this.ownerPosition = ownerPosition;
+	}
 
-    protected void setOwnerUser(final User ownerUser) {
-        this.ownerUser = ownerUser;
-    }
+	public Long getOwnerUser() {
+		return ownerUser;
+	}
 
-    public Set<StateHistory> getHistory() {
-        return history;
-    }
+	protected void setOwnerUser(final Long ownerUser) {
+		this.ownerUser = ownerUser;
+	}
 
-    protected void setHistory(final Set<StateHistory> history) {
-        this.history = history;
-    }
+	public Set<StateHistory> getHistory() {
+		return history;
+	}
 
-    protected void addStateHistory(final StateHistory history) {
-        getHistory().add(history);
-    }
+	protected void setHistory(final Set<StateHistory> history) {
+		this.history = history;
+	}
 
-    public String getSenderName() {
-        return senderName;
-    }
+	protected void addStateHistory(final StateHistory history) {
+		getHistory().add(history);
+	}
 
-    protected void setSenderName(final String senderName) {
-        this.senderName = senderName;
-    }
+	public String getSenderName() {
+		return senderName;
+	}
 
-    public String getNextAction() {
-        return nextAction;
-    }
+	protected void setSenderName(final String senderName) {
+		this.senderName = senderName;
+	}
 
-    protected void setNextAction(final String nextAction) {
-        this.nextAction = nextAction;
-    }
+	public String getNextAction() {
+		return nextAction;
+	}
 
-    public String getComments() {
-        return comments;
-    }
+	protected void setNextAction(final String nextAction) {
+		this.nextAction = nextAction;
+	}
 
-    protected void setComments(final String comments) {
-        this.comments = comments;
-    }
+	public String getComments() {
+		return comments;
+	}
 
-    public String getNatureOfTask() {
-        return natureOfTask;
-    }
+	protected void setComments(final String comments) {
+		this.comments = comments;
+	}
 
-    protected void setNatureOfTask(final String natureOfTask) {
-        this.natureOfTask = natureOfTask;
-    }
+	public String getNatureOfTask() {
+		return natureOfTask;
+	}
 
-    public String getExtraInfo() {
-        return extraInfo;
-    }
+	protected void setNatureOfTask(final String natureOfTask) {
+		this.natureOfTask = natureOfTask;
+	}
 
-    protected void setExtraInfo(final String extraInfo) {
-        this.extraInfo = extraInfo;
-    }
+	public String getExtraInfo() {
+		return extraInfo;
+	}
 
-    public Date getDateInfo() {
-        return dateInfo;
-    }
+	protected void setExtraInfo(final String extraInfo) {
+		this.extraInfo = extraInfo;
+	}
 
-    protected void setDateInfo(final Date dateInfo) {
-        this.dateInfo = dateInfo;
-    }
+	public Date getDateInfo() {
+		return dateInfo;
+	}
 
-    public Date getExtraDateInfo() {
-        return extraDateInfo;
-    }
+	protected void setDateInfo(final Date dateInfo) {
+		this.dateInfo = dateInfo;
+	}
 
-    protected void setExtraDateInfo(final Date extraDateInfo) {
-        this.extraDateInfo = extraDateInfo;
-    }
+	public Date getExtraDateInfo() {
+		return extraDateInfo;
+	}
 
-    public StateStatus getStatus() {
-        return status;
-    }
+	protected void setExtraDateInfo(final Date extraDateInfo) {
+		this.extraDateInfo = extraDateInfo;
+	}
 
-    protected void setStatus(final StateStatus status) {
-        this.status = status;
-    }
+	public StateStatus getStatus() {
+		return status;
+	}
 
-//    @Override
-//    public boolean isNew() {
-//        return status.equals(StateStatus.STARTED);
-//    }
+	protected void setStatus(final StateStatus status) {
+		this.status = status;
+	}
 
-    public boolean isEnded() {
-        return status.equals(StateStatus.ENDED);
-    }
+	// @Override
+	// public boolean isNew() {
+	// return status.equals(StateStatus.STARTED);
+	// }
 
-    public String getDeptCode() {
+	public boolean isEnded() {
+		return status.equals(StateStatus.ENDED);
+	}
+
+	public String getDeptCode() {
 		return deptCode;
 	}
 
@@ -350,39 +342,39 @@ public class State/*<T extends OwnerGroup>*/ extends AbstractAuditable {
 	}
 
 	public boolean isInprogress() {
-        return status.equals(StateStatus.INPROGRESS);
-    }
+		return status.equals(StateStatus.INPROGRESS);
+	}
 
-    public Long getInitiatorPosition() {
-        return initiatorPosition;
-    }
+	public Long getInitiatorPosition() {
+		return initiatorPosition;
+	}
 
-    protected void setInitiatorPosition(Long initiatorPosition) {
-        this.initiatorPosition = initiatorPosition;
-    }
+	protected void setInitiatorPosition(Long initiatorPosition) {
+		this.initiatorPosition = initiatorPosition;
+	}
 
-    public Long getPreviousOwner() {
-        return previousOwner;
-    }
+	public Long getPreviousOwner() {
+		return previousOwner;
+	}
 
-    protected void setPreviousOwner(final Long previousOwner) {
-        this.previousOwner = previousOwner;
-    }
+	protected void setPreviousOwner(final Long previousOwner) {
+		this.previousOwner = previousOwner;
+	}
 
-    public State getPreviousStateRef() {
-        return previousStateRef;
-    }
+	public State getPreviousStateRef() {
+		return previousStateRef;
+	}
 
-    protected void setPreviousStateRef(State previousStateRef) {
-        this.previousStateRef = previousStateRef;
-    }
+	protected void setPreviousStateRef(State previousStateRef) {
+		this.previousStateRef = previousStateRef;
+	}
 
-    public <S> S extraInfoAs(Class<S> type) {
-        return JsonUtils.fromJSON(getExtraInfo(), type);
-    }
+	public <S> S extraInfoAs(Class<S> type) {
+		return JsonUtils.fromJSON(getExtraInfo(), type);
+	}
 
-    public enum StateStatus {
-        STARTED, INPROGRESS, ENDED
-    }
+	public enum StateStatus {
+		STARTED, INPROGRESS, ENDED
+	}
 
 }
