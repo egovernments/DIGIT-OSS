@@ -372,13 +372,13 @@ public class BudgetSearchAndModify extends BudgetSearchAction {
             LOGGER.info("Processed Budget line items");
         // if budget is not forwarded yet send the budget else ignore
         if (getTopBudget().getState().getOwnerPosition() != null
-                && getTopBudget().getState().getOwnerPosition().getId() != positionByUserId.getId())
+                && getTopBudget().getState().getOwnerPosition() != positionByUserId.getId())
             getTopBudget().transition().progressWithStateCopy().withStateValue("Forwarded by " + name).withOwner(positionByUserId)
                     .withComments(comments);
         // add logic for BE approval also
         final Budget beBudget = budgetService.find("from Budget where referenceBudget=?", getTopBudget());
         if (beBudget.getState().getOwnerPosition() != null
-                && beBudget.getState().getOwnerPosition().getId() != positionByUserId.getId())
+                && beBudget.getState().getOwnerPosition() != positionByUserId.getId())
             beBudget.transition().progressWithStateCopy().withStateValue("Forwarded by " + name).withOwner(positionByUserId).withComments(comments);
 
         // budgetWorkflowService.transition(parameters.get(ACTIONNAME)[0]+"|"+userId, getTopBudget(),comments);
@@ -388,10 +388,10 @@ public class BudgetSearchAndModify extends BudgetSearchAction {
                 addActionMessage(getMessage("budgetdetail.approved.end"));
             else
                 addActionMessage(getMessage("budgetdetail.approved")
-                        + budgetService.getEmployeeNameAndDesignationForPosition(positionByUserId));
+                        + budgetService.getEmployeeNameAndDesignationForPosition(positionByUserId.getId()));
         } else
             addActionMessage(getMessage("budgetdetail.approved")
-                    + budgetService.getEmployeeNameAndDesignationForPosition(positionByUserId));
+                    + budgetService.getEmployeeNameAndDesignationForPosition(positionByUserId.getId()));
         showButton = false;
     }
 

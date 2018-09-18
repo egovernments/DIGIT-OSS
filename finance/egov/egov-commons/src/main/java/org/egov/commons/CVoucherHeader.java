@@ -74,7 +74,7 @@ import static org.egov.commons.CVoucherHeader.SEQ_VOUCHERHEADER;
 @Entity
 @Table(name = "VOUCHERHEADER")
 @SequenceGenerator(name = SEQ_VOUCHERHEADER, sequenceName = SEQ_VOUCHERHEADER, allocationSize = 1)
-public class CVoucherHeader extends StateAware<Position> {
+public class CVoucherHeader extends StateAware{
 
     public static final String SEQ_VOUCHERHEADER = "SEQ_VOUCHERHEADER";
     private static final long serialVersionUID = -1950866465902911747L;

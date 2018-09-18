@@ -60,11 +60,11 @@ import java.util.List;
 @Repository
 public interface StateRepository extends JpaRepository<State, Long> {
 
-    Long countByOwnerPosition_IdAndCreatedDateGreaterThanEqual(Long id, Date givenDate);
+    Long countByOwnerPositionAndCreatedDateGreaterThanEqual(Long id, Date givenDate);
 
-    @Query("select distinct s.type from State s where s.ownerPosition.id in (:ownerIds)  and s.status <> 2")
+    @Query("select distinct s.type from State s where s.ownerPosition in (:ownerIds)  and s.status <> 2")
     List<String> findAllTypeByOwnerAndStatus(@Param("ownerIds") List<Long> ownerIds);
 
-    @Query("select max(s.createdDate) from State s  where s.ownerPosition.id = :posId and s.status <> 2")
+    @Query("select max(s.createdDate) from State s  where s.ownerPosition = :posId and s.status <> 2")
     Date findMaxCreatedDateByOwnerPosId(@Param("posId") Long posId);
 }

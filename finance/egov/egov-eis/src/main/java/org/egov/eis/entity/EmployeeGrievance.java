@@ -84,7 +84,7 @@ import org.hibernate.validator.constraints.SafeHtml;
 @Unique(fields = { "grievanceNumber" }, enableDfltMsg = true)
 @Table(name = "egeis_grievance")
 @SequenceGenerator(name = SEQ_EMPLOYEEGRIEVANCE, sequenceName = SEQ_EMPLOYEEGRIEVANCE, allocationSize = 1)
-public class EmployeeGrievance extends StateAware<Position> {
+public class EmployeeGrievance extends StateAware {
 
     private static final long serialVersionUID = 9177150353790687499L;
 

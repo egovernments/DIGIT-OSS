@@ -58,7 +58,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class BudgetReAppropriationMisc extends StateAware<Position> {
+public class BudgetReAppropriationMisc extends StateAware {
     private static final long serialVersionUID = 3462810824735494382L;
     private Long id;
     private String sequenceNumber;

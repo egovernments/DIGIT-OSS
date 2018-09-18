@@ -207,8 +207,8 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 		return null;
 	}
 
-	public String getEmployeeNameForPositionId(final Position pos) {
-		final Assignment assignment = assignmentService.getAssignmentsForPosition(+pos.getId(), new Date()).get(0);
+	public String getEmployeeNameForPositionId(final Long pos) {
+		final Assignment assignment = assignmentService.getAssignmentsForPosition(+pos, new Date()).get(0);
 		return assignment.getEmployee().getName() + " (" + assignment.getDesignation().getName() + ")";
 	}
 

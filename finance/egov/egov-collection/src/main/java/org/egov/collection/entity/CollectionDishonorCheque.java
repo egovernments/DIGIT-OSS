@@ -77,7 +77,7 @@ import static org.egov.collection.entity.CollectionDishonorCheque.SEQ_EGCL_DISHO
 @Entity
 @Table(name = "EGCL_DISHONORCHEQUE")
 @SequenceGenerator(name = SEQ_EGCL_DISHONORCHEQUE, sequenceName = SEQ_EGCL_DISHONORCHEQUE, allocationSize = 1)
-public class CollectionDishonorCheque extends StateAware<Position> {
+public class CollectionDishonorCheque extends StateAware {
 
     public static final String SEQ_EGCL_DISHONORCHEQUE = "SEQ_EGCL_DISHONORCHEQUE";
     private static final long serialVersionUID = -6134188498111765210L;

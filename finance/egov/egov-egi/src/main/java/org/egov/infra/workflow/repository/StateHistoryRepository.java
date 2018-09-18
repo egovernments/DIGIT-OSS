@@ -57,5 +57,5 @@ import java.util.Date;
 @Repository
 public interface StateHistoryRepository extends JpaRepository<StateHistory, Long> {
 
-    Long countByOwnerPosition_IdAndCreatedDateGreaterThanEqual(Long id, Date givenDate);
+    Long countByOwnerPositionAndCreatedDateGreaterThanEqual(Long id, Date givenDate);
 }

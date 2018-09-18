@@ -51,6 +51,7 @@ package org.egov.infra.workflow.entity;
 import org.egov.infra.admin.master.entity.User;
 import org.hibernate.annotations.Immutable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -70,7 +71,7 @@ import java.util.Date;
 @Immutable
 @Table(name = "eg_wf_state_history")
 @SequenceGenerator(name = StateHistory.SEQ_STATEHISTORY, sequenceName = StateHistory.SEQ_STATEHISTORY, allocationSize = 1)
-public class StateHistory<T extends OwnerGroup> implements Serializable {
+public class StateHistory implements Serializable {
     static final String SEQ_STATEHISTORY = "SEQ_EG_WF_STATE_HISTORY";
     private static final long serialVersionUID = -2286621991905578107L;
 
@@ -94,14 +95,14 @@ public class StateHistory<T extends OwnerGroup> implements Serializable {
 
     @ManyToOne(targetEntity = State.class, fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "state_id")
-    private State<T> state;
+    private State state;
 
     @NotNull
     private String value;
 
-    @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "OWNER_POS")
-    private T ownerPosition;
+//    @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
+    @Column(name = "OWNER_POS")
+    private Long ownerPosition;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "OWNER_USER")
@@ -115,14 +116,14 @@ public class StateHistory<T extends OwnerGroup> implements Serializable {
     private Date dateInfo;
     private Date extraDateInfo;
 
-    @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "INITIATOR_POS")
-    private T initiatorPosition;
+//    @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
+    @Column(name = "INITIATOR_POS")
+    private Long initiatorPosition;
 
     StateHistory() {
     }
 
-    public StateHistory(State<T> state) {
+    public StateHistory(State state) {
         this.state = state;
         createdBy = state.getCreatedBy();
         createdDate = state.getCreatedDate();
@@ -157,11 +158,11 @@ public class StateHistory<T extends OwnerGroup> implements Serializable {
         this.value = value;
     }
 
-    public T getOwnerPosition() {
+    public Long getOwnerPosition() {
         return ownerPosition;
     }
 
-    public void setOwnerPosition(T ownerPosition) {
+    public void setOwnerPosition(Long ownerPosition) {
         this.ownerPosition = ownerPosition;
     }
 
@@ -237,7 +238,7 @@ public class StateHistory<T extends OwnerGroup> implements Serializable {
         this.id = id;
     }
 
-    public long getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
@@ -253,7 +254,7 @@ public class StateHistory<T extends OwnerGroup> implements Serializable {
         this.createdDate = createdDate;
     }
 
-    public long getLastModifiedBy() {
+    public Long getLastModifiedBy() {
         return lastModifiedBy;
     }
 
@@ -269,11 +270,11 @@ public class StateHistory<T extends OwnerGroup> implements Serializable {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public T getInitiatorPosition() {
+    public Long getInitiatorPosition() {
         return initiatorPosition;
     }
 
-    public void setInitiatorPosition(T initiatorPosition) {
+    public void setInitiatorPosition(Long initiatorPosition) {
         this.initiatorPosition = initiatorPosition;
     }
 

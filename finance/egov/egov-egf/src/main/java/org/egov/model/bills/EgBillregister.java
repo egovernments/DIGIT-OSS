@@ -67,7 +67,7 @@ import java.util.Set;
 @Table(name = "EG_BILLREGISTER")
 @Inheritance(strategy = InheritanceType.JOINED)
 @SequenceGenerator(name = EgBillregister.SEQ_EG_BILLREGISTER, sequenceName = EgBillregister.SEQ_EG_BILLREGISTER, allocationSize = 1)
-public class EgBillregister extends StateAware<Position> implements java.io.Serializable {
+public class EgBillregister extends StateAware implements java.io.Serializable {
 
     public static final String SEQ_EG_BILLREGISTER = "SEQ_EG_BILLREGISTER";
     private static final long serialVersionUID = -4312140421386028968L;

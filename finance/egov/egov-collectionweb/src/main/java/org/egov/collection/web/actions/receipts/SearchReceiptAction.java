@@ -197,7 +197,7 @@ public class SearchReceiptAction extends SearchFormAction {
         for (ReceiptHeader receiptHeader : receiptList) {
             if (receiptHeader.getState() != null && receiptHeader.getState().getOwnerPosition() != null) {
                 List<Assignment> assignments = assignmentService.getAssignmentsForPosition(
-                        receiptHeader.getState().getOwnerPosition().getId(), receiptHeader.getCreatedDate());
+                        receiptHeader.getState().getOwnerPosition(), receiptHeader.getCreatedDate());
                 if (!assignments.isEmpty())
                     receiptHeader.setWorkflowUserName(assignments.get(0).getEmployee().getUsername());
             }

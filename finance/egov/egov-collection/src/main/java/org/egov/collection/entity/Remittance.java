@@ -61,7 +61,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class Remittance extends StateAware<Position> implements Auditable {
+public class Remittance extends StateAware implements Auditable {
     private static final long serialVersionUID = 1L;
     private Long id;
     private String referenceNumber;

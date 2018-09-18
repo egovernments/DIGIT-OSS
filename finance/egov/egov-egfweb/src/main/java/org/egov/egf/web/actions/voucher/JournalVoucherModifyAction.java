@@ -252,13 +252,13 @@ public class JournalVoucherModifyAction extends BaseVoucherAction {
             else {
                 addActionMessage(getText("pjv.voucher.modified", new String[] { voucherHeader.getVoucherNumber() }));
                 addActionMessage(getText("pjv.voucher.approved",
-                        new String[] { voucherService.getEmployeeNameForPositionId(pos) }));
+                        new String[] { voucherService.getEmployeeNameForPositionId(pos.getId()) }));
             }
         else if (parameters.get(ACTIONNAME)[0].contains("ao_reject") || parameters.get(ACTIONNAME)[0].contains("aa_reject")
                 || "END".equals(stateValue))
             addActionMessage(getText("voucher.cancelled"));
         else
-            addActionMessage(getText("pjv.voucher.rejected", new String[] { voucherService.getEmployeeNameForPositionId(pos) }));
+            addActionMessage(getText("pjv.voucher.rejected", new String[] { voucherService.getEmployeeNameForPositionId(pos.getId()) }));
 
     }
 

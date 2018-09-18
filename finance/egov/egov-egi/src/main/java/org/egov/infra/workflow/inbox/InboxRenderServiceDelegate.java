@@ -99,9 +99,9 @@ public class InboxRenderServiceDelegate<T extends StateAware> {
     @Autowired
     private StateService stateService;
 
-    @Autowired
-    @Qualifier("eisService")
-    private OwnerGroupService<? extends OwnerGroup> ownerGroupService;
+//    @Autowired
+//    @Qualifier("eisService")
+//    private OwnerGroupService<? extends OwnerGroup> ownerGroupService;
 
     @Autowired
     private WorkflowTypeService workflowTypeService;

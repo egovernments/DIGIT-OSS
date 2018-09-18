@@ -56,7 +56,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class EgAdvanceRequisition extends StateAware<Position> implements java.io.Serializable {
+public class EgAdvanceRequisition extends StateAware implements java.io.Serializable {
 
     private static final long serialVersionUID = 5350085164408760402L;
     private Long id;

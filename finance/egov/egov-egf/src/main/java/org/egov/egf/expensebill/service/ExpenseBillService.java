@@ -82,6 +82,11 @@ import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.AppConfigService;
 import org.egov.infra.admin.master.service.AppConfigValueService;
+import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.models.Designation;
+import org.egov.infra.microservice.models.EmployeeInfo;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.script.service.ScriptService;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.utils.autonumber.AutonumberServiceBeanResolver;
@@ -94,6 +99,7 @@ import org.egov.model.bills.EgBillPayeedetails;
 import org.egov.model.bills.EgBilldetails;
 import org.egov.model.bills.EgBillregister;
 import org.egov.model.budget.BudgetGroup;
+import org.egov.pims.commons.Position;
 import org.egov.services.masters.SchemeService;
 import org.egov.services.masters.SubSchemeService;
 import org.egov.services.voucher.VoucherService;
@@ -158,6 +164,9 @@ public class ExpenseBillService {
     private BudgetDetailsHibernateDAO budgetDetailsHibernateDAO;
     @Autowired
     private CFinancialYearService cFinancialYearService;
+    
+    @Autowired
+    private MicroserviceUtils microServiceUtil;
 
     @Autowired
     public ExpenseBillService(final ExpenseBillRepository expenseBillRepository, final ScriptService scriptExecutionService) {
@@ -215,11 +224,12 @@ public class ExpenseBillService {
         if (isBillNumberGenerationAuto())
             egBillregister.setBillnumber(getNextBillNumber(egBillregister));
 
-        try {
-            checkBudgetAndGenerateBANumber(egBillregister);
-        } catch (final ValidationException e) {
-            throw new ValidationException(e.getErrors());
-        }
+//       	commented as budget check was disabled
+//        try {
+//            checkBudgetAndGenerateBANumber(egBillregister);
+//        } catch (final ValidationException e) {
+//            throw new ValidationException(e.getErrors());
+//        }
 
         final List<EgChecklists> checkLists = egBillregister.getCheckLists();
 
@@ -411,7 +421,8 @@ public class ExpenseBillService {
         final String currState = "";
         String stateValue = "";
         if (null != egBillregister.getId())
-            wfInitiator = assignmentService.getPrimaryAssignmentForUser(egBillregister.getCreatedBy());
+//            wfInitiator = assignmentService.getPrimaryAssignmentForUser(egBillregister.getCreatedBy());
+        	wfInitiator = this.getCurrentUserAssignmet(egBillregister.getCreatedBy());
         if (FinancialConstants.BUTTONREJECT.equalsIgnoreCase(workFlowAction)) {
             stateValue = FinancialConstants.WORKFLOW_STATE_REJECTED;
             egBillregister.transition().progressWithStateCopy().withSenderName(user.getUsername() + "::" + user.getName())
@@ -421,8 +432,8 @@ public class ExpenseBillService {
                     .withNextAction("")
                     .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME);
         } else {
-            if (null != approvalPosition && approvalPosition != -1 && !approvalPosition.equals(Long.valueOf(0)))
-                wfInitiator = assignmentService.getAssignmentsForPosition(approvalPosition).get(0);
+//            if (null != approvalPosition && approvalPosition != -1 && !approvalPosition.equals(Long.valueOf(0)))
+//                wfInitiator = assignmentService.getAssignmentsForPosition(approvalPosition).get(0);
             WorkFlowMatrix wfmatrix;
 
             wfmatrix = egBillregisterRegisterWorkflowService.getWfMatrix(egBillregister.getStateType(), null,
@@ -502,7 +513,7 @@ public class ExpenseBillService {
                 .getStateType(), null, null, additionalRule, egBillregister.getCurrentState().getValue(), null);
         if (egBillregister.getState() != null && !egBillregister.getState().getHistory().isEmpty()
                 && egBillregister.getState().getOwnerPosition() != null)
-            approvalPosition = egBillregister.getState().getOwnerPosition().getId();
+            approvalPosition = egBillregister.getState().getOwnerPosition();
         else if (wfmatrix != null)
             approvalPosition = financialUtils.getApproverPosition(wfmatrix.getNextDesignation(),
                     egBillregister.getState(), egBillregister.getCreatedBy());
@@ -648,5 +659,46 @@ public class ExpenseBillService {
 
     public List<DocumentUpload> findByObjectIdAndObjectType(final Long objectId, final String objectType) {
         return documentUploadRepository.findByObjectIdAndObjectType(objectId, objectType);
+    }
+    
+    private Assignment getCurrentUserAssignmet(Long userId){
+//    	Long userId = ApplicationThreadLocals.getUserId();
+    	List<EmployeeInfo> emplist = microServiceUtil.getEmployee(userId, new Date(), null, null);
+    	Assignment assignment =new Assignment();
+    	if(null!=emplist && emplist.size()>0 && emplist.get(0).getAssignments().size()>0){
+    		Position position = new Position();
+    		position.setId(emplist.get(0).getAssignments().get(0).getPosition());
+    		assignment.setPosition(position);
+            
+    		org.egov.pims.commons.Designation designation = new org.egov.pims.commons.Designation();
+            Designation _desg = this.getDesignationDetails(emplist.get(0).getAssignments().get(0).getDesignation());
+            designation.setCode(_desg.getCode());
+            designation.setName(_desg.getName());
+            assignment.setDesignation(designation);
+            
+            org.egov.infra.admin.master.entity.Department department = new org.egov.infra.admin.master.entity.Department();
+            Department _dept = this.getDepartmentDetails(emplist.get(0).getAssignments().get(0).getDepartment());
+            department.setCode(_dept.getCode());
+            department.setName(_dept.getName());
+            
+            return assignment;
+    	}
+    	return null;
+    }
+    private Assignment getPrimaryUserAssignment(){
+    	
+    	return null;
+    }
+    
+    private Department getDepartmentDetails(String deptCode){
+    	
+    	List<Department> deptlist = microServiceUtil.getDepartmentByCode(deptCode);
+    	return deptlist.get(0);
+    	
+    }
+    
+    private Designation getDesignationDetails(String desgnCode){
+    	List<Designation> desgnList = microServiceUtil.getDesignation(desgnCode);
+    	return desgnList.get(0);
     }
 }

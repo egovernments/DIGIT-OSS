@@ -490,7 +490,7 @@ public class VoucherStatusReportAction extends BaseFormAction
             else if (voucherState.getValue().equals("END"))
                 return dash;
             else
-                return getUserNameForPosition(voucherState.getOwnerPosition().getId().intValue());
+                return getUserNameForPosition(voucherState.getOwnerPosition().intValue());
         }
         else if (voucherType.equalsIgnoreCase(FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL))
         {
@@ -500,7 +500,7 @@ public class VoucherStatusReportAction extends BaseFormAction
             else if (voucherState.getValue().equals("END"))
                 return dash;
             else
-                return getUserNameForPosition(voucherState.getOwnerPosition().getId().intValue());
+                return getUserNameForPosition(voucherState.getOwnerPosition().intValue());
         }
         else if (voucherType.equalsIgnoreCase(FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT))
         {
@@ -515,7 +515,7 @@ public class VoucherStatusReportAction extends BaseFormAction
             else if (voucherState.getValue().equals("END"))
                 return dash;
             else
-                return getUserNameForPosition(voucherState.getOwnerPosition().getId().intValue());
+                return getUserNameForPosition(voucherState.getOwnerPosition().intValue());
         }
         
         //no need to find owner of receipt

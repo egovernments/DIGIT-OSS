@@ -535,7 +535,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 		return "view";
 	}
 
-	private void addActionMsg(final String stateValue, final Position pos) {
+	private void addActionMsg(final String stateValue, final Long pos) {
 		if (parameters.get(ACTIONNAME)[0].contains("approve"))
 			if ("END".equals(stateValue))
 				addActionMessage(getText("pjv.voucher.final.approval", new String[] { "The File has been approved" }));
@@ -1234,7 +1234,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 		List<Position> positionsForUser = null;
 		positionsForUser = eisService.getPositionsForUser(ApplicationThreadLocals.getUserId(), new Date());
 		for (final Position pos : positionsForUser)
-			if (pos.getId().equals(state.getOwnerPosition().getId())) {
+			if (pos.getId().equals(state.getOwnerPosition())) {
 				if (LOGGER.isDebugEnabled())
 					LOGGER.debug("Valid Owner :return true");
 				check = true;

@@ -56,7 +56,7 @@ import org.egov.pims.commons.Position;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Paymentheader extends StateAware<Position> {
+public class Paymentheader extends StateAware {
 
     private static final long serialVersionUID = 1300661952219397466L;
     private Long id;

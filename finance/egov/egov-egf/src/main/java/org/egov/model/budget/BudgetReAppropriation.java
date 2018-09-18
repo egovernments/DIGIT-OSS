@@ -54,7 +54,7 @@ import org.egov.pims.commons.Position;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class BudgetReAppropriation extends StateAware<Position> {
+public class BudgetReAppropriation extends StateAware {
     private static final long serialVersionUID = 2343135780753283100L;
     private Long id = null;
     private BudgetDetail budgetDetail;

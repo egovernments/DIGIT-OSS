@@ -3014,8 +3014,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 		return eisCommonService.getEmployeeByUserId(ApplicationThreadLocals.getUserId());
 	}
 
-	public String getEmployeeNameForPositionId(final Position pos) throws ApplicationRuntimeException {
-		Assignment assignment = assignmentService.getAssignmentsForPosition(+pos.getId(), new Date()).get(0);
+	public String getEmployeeNameForPositionId(final Long pos) throws ApplicationRuntimeException {
+		Assignment assignment = assignmentService.getAssignmentsForPosition(+pos, new Date()).get(0);
 		return assignment.getEmployee().getName() + " (" + assignment.getDesignation().getName() + ")";
 	}
 

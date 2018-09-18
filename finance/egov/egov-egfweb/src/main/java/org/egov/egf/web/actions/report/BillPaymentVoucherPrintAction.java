@@ -433,7 +433,7 @@ public class BillPaymentVoucherPrintAction extends BaseFormAction {
                 .getVoucherDate());
     }
 
-    private void loadInboxHistoryData(final List<StateHistory<Position>> stateHistory,
+    private void loadInboxHistoryData(final List<StateHistory> stateHistory,
                               final Map<String, Object> paramMap) {
         final List<String> history = new ArrayList<>();
         final List<String> workFlowDate = new ArrayList<>();

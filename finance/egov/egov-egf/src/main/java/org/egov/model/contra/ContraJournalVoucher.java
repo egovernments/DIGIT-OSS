@@ -54,7 +54,7 @@ import org.egov.infra.workflow.entity.StateAware;
 import org.egov.model.instrument.InstrumentHeader;
 import org.egov.pims.commons.Position;
 
-public class ContraJournalVoucher extends StateAware<Position> implements Auditable {
+public class ContraJournalVoucher extends StateAware implements Auditable {
 
     private static final long serialVersionUID = 8375001509911609969L;
 

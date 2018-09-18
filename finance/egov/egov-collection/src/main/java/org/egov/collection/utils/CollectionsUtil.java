@@ -885,9 +885,9 @@ public class CollectionsUtil {
                 CollectionConstants.COLLECTION_DESIGNATIONFORAPPROVER));
     }
 
-    public String getApproverName(final Position position) {
+    public String getApproverName(final Long position) {
         String approver = null;
-        final List<Assignment> assignments = assignmentService.getAssignmentsForPosition(position.getId());
+        final List<Assignment> assignments = assignmentService.getAssignmentsForPosition(position);
         for (final Assignment assignment : assignments)
             if (assignment.getPrimary())
                 approver = assignment.getEmployee().getName().concat("~").concat(assignment.getEmployee().getCode())

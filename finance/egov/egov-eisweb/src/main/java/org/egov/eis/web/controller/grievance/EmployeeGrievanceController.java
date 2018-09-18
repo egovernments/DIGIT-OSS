@@ -240,7 +240,7 @@ public class EmployeeGrievanceController {
 
     private String getMessageByStatus(final EmployeeGrievance employeeGrievance) {
         String message = "";
-        String ownerName = employeeGrievanceService.getApproverName(employeeGrievance.getState().getOwnerPosition().getId());
+        String ownerName = employeeGrievanceService.getApproverName(employeeGrievance.getState().getOwnerPosition());
         if (employeeGrievance.getStatus().equals(EmployeeGrievanceStatus.REGISTERED)) {
 
             message = messageSource.getMessage("msg.employeegrievance.success",

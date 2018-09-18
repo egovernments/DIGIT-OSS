@@ -86,7 +86,7 @@ import static org.egov.model.budget.BudgetDetail.SEQ_BUDGETDETAIL;
 @Entity
 @Table(name = "EGF_BUDGETDETAIL")
 @SequenceGenerator(name = SEQ_BUDGETDETAIL, sequenceName = SEQ_BUDGETDETAIL, allocationSize = 1)
-public class BudgetDetail extends StateAware<Position> {
+public class BudgetDetail extends StateAware {
     public static final String SEQ_BUDGETDETAIL = "SEQ_EGF_BUDGETDETAIL";
     private static final long serialVersionUID = 5908792258911500512L;
     @Id

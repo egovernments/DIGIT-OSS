@@ -70,7 +70,7 @@ public class StateService {
     }
 
     public boolean isPositionUnderWorkflow(final Long posId, final Date givenDate) {
-        return stateRepository.countByOwnerPosition_IdAndCreatedDateGreaterThanEqual(posId, givenDate) > 0;
+        return stateRepository.countByOwnerPositionAndCreatedDateGreaterThanEqual(posId, givenDate) > 0;
     }
 
     public List<String> getAssignedWorkflowTypeNames(final List<Long> ownerIds) {

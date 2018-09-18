@@ -76,7 +76,7 @@ import java.util.Set;
 @Entity
 @Table(name = "EGF_DISHONORCHEQUE")
 @SequenceGenerator(name = DishonorCheque.SEQ_EGF_DISHONORCHEQUE, sequenceName = DishonorCheque.SEQ_EGF_DISHONORCHEQUE, allocationSize = 1)
-public class DishonorCheque extends StateAware<Position> {
+public class DishonorCheque extends StateAware{
 
     public static final String SEQ_EGF_DISHONORCHEQUE = "SEQ_EGF_DISHONORCHQ";
     private static final long serialVersionUID = -6134188498111765210L;

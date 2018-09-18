@@ -548,7 +548,7 @@ public class BudgetReAppropriationModifyAction extends BaseFormAction {
 
     private BudgetReAppropriationMisc transformAndSetActionMessage(BudgetReAppropriationMisc misc, final Integer userId) {
         misc = budgetReAppropriationService.performActionOnMisc(actionName + "|" + userId, misc, comment);
-        final Position owner = misc.getState().getOwnerPosition();
+        final Long owner = misc.getState().getOwnerPosition();
         if (actionName.contains("approv")) {
             if ("END".equalsIgnoreCase(misc.getCurrentState().getValue()))
                 addActionMessage(getText("budget.reapp.approved.end"));

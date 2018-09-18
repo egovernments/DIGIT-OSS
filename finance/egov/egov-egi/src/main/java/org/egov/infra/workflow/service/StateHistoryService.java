@@ -67,7 +67,7 @@ public class StateHistoryService {
     }
 
     public boolean isPositionUnderWorkflowHistory(final Long posId, final Date givenDate) {
-        return stateHistoryRepository.countByOwnerPosition_IdAndCreatedDateGreaterThanEqual(posId, givenDate) > 0;
+        return stateHistoryRepository.countByOwnerPositionAndCreatedDateGreaterThanEqual(posId, givenDate) > 0;
     }
 
 }

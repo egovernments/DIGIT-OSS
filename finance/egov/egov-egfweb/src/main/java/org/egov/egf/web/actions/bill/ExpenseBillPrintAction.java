@@ -417,7 +417,7 @@ public class ExpenseBillPrintAction extends BaseFormAction {
         return voucher == null || voucher.getDescription() == null ? "" : voucher.getDescription();
     }
 
-    void loadInboxHistoryData(List<StateHistory<Position>> stateHistory,
+    void loadInboxHistoryData(List<StateHistory> stateHistory,
                               final Map<String, Object> paramMap) {
         final List<String> history = new ArrayList<>();
         final List<String> workFlowDate = new ArrayList<>();

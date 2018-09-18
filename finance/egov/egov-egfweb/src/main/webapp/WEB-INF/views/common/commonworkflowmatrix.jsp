@@ -89,7 +89,7 @@
 								<form:option value="">
 									<spring:message code="lbl.select" />
 								</form:option>
-								<form:options items="${approvalDepartmentList}" itemValue="id"
+								<form:options items="${approvalDepartmentList}" itemValue="code"
 									itemLabel="name" />     
 							</form:select>
 						</div>

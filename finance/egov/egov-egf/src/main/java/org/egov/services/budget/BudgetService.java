@@ -341,8 +341,8 @@ public class BudgetService extends PersistenceService<Budget, Long> {
         this.budgetDetailWorkflowService = budgetDetailWorkflowService;
     }
 
-    public String getEmployeeNameAndDesignationForPosition(final Position pos) throws ApplicationRuntimeException {
-        final Employee pi = eisCommonService.getPrimaryAssignmentEmployeeForPos(pos.getId());
+    public String getEmployeeNameAndDesignationForPosition(final Long pos) throws ApplicationRuntimeException {
+        final Employee pi = eisCommonService.getPrimaryAssignmentEmployeeForPos(pos);
         final Assignment assignment = eisCommonService.getLatestAssignmentForEmployee(pi.getId());
         return pi.getName() + " (" + assignment.getDesignation().getName() + ")";
     }

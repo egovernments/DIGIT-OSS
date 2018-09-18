@@ -67,7 +67,7 @@ import org.egov.infstr.models.ServiceDetails;
 import org.egov.model.instrument.InstrumentHeader;
 import org.egov.pims.commons.Position;
 
-public class ReceiptHeader extends StateAware<Position> implements Auditable {
+public class ReceiptHeader extends StateAware implements Auditable {
     private static final long serialVersionUID = 1L;
     private Long id;
 

@@ -406,7 +406,7 @@ public class CollectionsWorkflowAction extends BaseFormAction {
             i++;
         }
         receiptHeaderService.performWorkflowForAllReceipts(wfAction, receiptHeaders, remarks);
-        approverName = collectionsUtil.getApproverName(approverPosition);
+        approverName = collectionsUtil.getApproverName(approverPosition.getId());
         // Add the selected receipt ids to sereceiptHeader
         // Need to find a better mechanism to achieve this.
         getSession().put(CollectionConstants.SESSION_VAR_RECEIPT_IDS, receiptIds);

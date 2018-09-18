@@ -518,10 +518,10 @@ public class BudgetProposalDetailAction extends BaseBudgetDetailAction {
                 addActionMessage(getMessage("budgetdetail.approved.end"));
             else
                 addActionMessage(getMessage("budgetdetail.approved")
-                        + budgetService.getEmployeeNameAndDesignationForPosition(getPositionByUserId(userId)));
+                        + budgetService.getEmployeeNameAndDesignationForPosition(getPositionByUserId(userId).getId()));
         } else
             addActionMessage(getMessage("budgetdetail.approved")
-                    + budgetService.getEmployeeNameAndDesignationForPosition(getPositionByUserId(userId)));
+                    + budgetService.getEmployeeNameAndDesignationForPosition(getPositionByUserId(userId).getId()));
     }
 
     @Action(value = "/budget/budgetProposalDetail-newRe")

@@ -54,8 +54,11 @@ import org.egov.infra.utils.JsonUtils;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.SafeHtml;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -69,7 +72,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -79,7 +86,7 @@ import static org.egov.infra.workflow.entity.State.SEQ_STATE;
 @Entity
 @Table(name = "EG_WF_STATES")
 @SequenceGenerator(name = SEQ_STATE, sequenceName = SEQ_STATE, allocationSize = 1)
-public class State<T extends OwnerGroup> extends AbstractAuditable {
+public class State/*<T extends OwnerGroup>*/ extends AbstractAuditable {
 
     public static final String DEFAULT_STATE_VALUE_CREATED = "Created";
     public static final String DEFAULT_STATE_VALUE_CLOSED = "Closed";
@@ -101,9 +108,9 @@ public class State<T extends OwnerGroup> extends AbstractAuditable {
     @SafeHtml
     private String value;
 
-    @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "OWNER_POS")
-    private T ownerPosition;
+//    @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
+    @Column(name = "OWNER_POS")
+    private Long ownerPosition;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "OWNER_USER")
@@ -112,7 +119,7 @@ public class State<T extends OwnerGroup> extends AbstractAuditable {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             fetch = FetchType.LAZY, mappedBy = "state", targetEntity = StateHistory.class)
     @OrderBy("id")
-    private Set<StateHistory<T>> history = new HashSet<>();
+    private Set<StateHistory> history = new HashSet<>();
 
     @Length(max = 100)
     @SafeHtml
@@ -142,28 +149,53 @@ public class State<T extends OwnerGroup> extends AbstractAuditable {
     @NotNull
     private StateStatus status;
 
-    @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "INITIATOR_POS")
-    private T initiatorPosition;
+//    @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
+    @Column(name = "INITIATOR_POS")
+    private Long initiatorPosition;
 
-    @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "previousOwner")
-    private T previousOwner;
+//    @ManyToOne(targetEntity = OwnerGroup.class, fetch = FetchType.LAZY)
+    @Column(name = "previousOwner")
+    private Long previousOwner;
 
     @ManyToOne(targetEntity = State.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "previousStateRef")
-    private State<T> previousStateRef;
+    private State previousStateRef;
+    
+    
+    @Transient
+    private String deptCode;
+    @Transient
+    private String deptName;
+    @Transient
+    private String desgCode;
+    @Transient
+    private String desgName;
+    
+//    @Column(name="createdby")
+//	private Long createdBy;
+//
+//	@Temporal(TemporalType.TIMESTAMP)
+//	@CreatedDate
+//	private Date createdDate;
+//	
+//	@Column(name="lastmodifiedby")
+//	private Long lastModifiedBy;
+//
+//	@Temporal(TemporalType.TIMESTAMP)
+//	@LastModifiedDate
+//	private Date lastModifiedDate;
+
 
     protected State() {
         //Explicit state initialization not allowed
     }
 
-    @Override
+//    @Override
     public Long getId() {
         return id;
     }
 
-    @Override
+//    @Override
     protected void setId(final Long id) {
         this.id = id;
     }
@@ -184,11 +216,11 @@ public class State<T extends OwnerGroup> extends AbstractAuditable {
         this.value = value;
     }
 
-    public T getOwnerPosition() {
+    public Long getOwnerPosition() {
         return ownerPosition;
     }
 
-    protected void setOwnerPosition(final T ownerPosition) {
+    protected void setOwnerPosition(final Long ownerPosition) {
         this.ownerPosition = ownerPosition;
     }
 
@@ -200,11 +232,11 @@ public class State<T extends OwnerGroup> extends AbstractAuditable {
         this.ownerUser = ownerUser;
     }
 
-    public Set<StateHistory<T>> getHistory() {
+    public Set<StateHistory> getHistory() {
         return history;
     }
 
-    protected void setHistory(final Set<StateHistory<T>> history) {
+    protected void setHistory(final Set<StateHistory> history) {
         this.history = history;
     }
 
@@ -276,32 +308,64 @@ public class State<T extends OwnerGroup> extends AbstractAuditable {
         this.status = status;
     }
 
-    @Override
-    public boolean isNew() {
-        return status.equals(StateStatus.STARTED);
-    }
+//    @Override
+//    public boolean isNew() {
+//        return status.equals(StateStatus.STARTED);
+//    }
 
     public boolean isEnded() {
         return status.equals(StateStatus.ENDED);
     }
 
-    public boolean isInprogress() {
+    public String getDeptCode() {
+		return deptCode;
+	}
+
+	public void setDeptCode(String deptCode) {
+		this.deptCode = deptCode;
+	}
+
+	public String getDeptName() {
+		return deptName;
+	}
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+
+	public String getDesgCode() {
+		return desgCode;
+	}
+
+	public void setDesgCode(String desgCode) {
+		this.desgCode = desgCode;
+	}
+
+	public String getDesgName() {
+		return desgName;
+	}
+
+	public void setDesgName(String desgName) {
+		this.desgName = desgName;
+	}
+
+	public boolean isInprogress() {
         return status.equals(StateStatus.INPROGRESS);
     }
 
-    public T getInitiatorPosition() {
+    public Long getInitiatorPosition() {
         return initiatorPosition;
     }
 
-    protected void setInitiatorPosition(T initiatorPosition) {
+    protected void setInitiatorPosition(Long initiatorPosition) {
         this.initiatorPosition = initiatorPosition;
     }
 
-    public T getPreviousOwner() {
+    public Long getPreviousOwner() {
         return previousOwner;
     }
 
-    protected void setPreviousOwner(final T previousOwner) {
+    protected void setPreviousOwner(final Long previousOwner) {
         this.previousOwner = previousOwner;
     }
 

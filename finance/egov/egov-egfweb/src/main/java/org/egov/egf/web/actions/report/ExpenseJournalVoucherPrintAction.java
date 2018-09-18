@@ -257,7 +257,7 @@ public class ExpenseJournalVoucherPrintAction extends BaseFormAction {
                 .getVoucherDate());
     }
 
-    void loadInboxHistoryData(final List<StateHistory<Position>> stateHistory, final Map<String, Object> paramMap) {
+    void loadInboxHistoryData(final List<StateHistory> stateHistory, final Map<String, Object> paramMap) {
         final List<String> history = new ArrayList<>();
         final List<String> workFlowDate = new ArrayList<>();
         for (final StateHistory historyState : stateHistory)

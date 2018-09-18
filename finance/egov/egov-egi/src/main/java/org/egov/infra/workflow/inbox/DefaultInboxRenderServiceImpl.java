@@ -50,6 +50,7 @@ package org.egov.infra.workflow.inbox;
 
 import org.egov.infra.workflow.entity.StateAware;
 import org.egov.infstr.services.PersistenceService;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
@@ -98,14 +99,27 @@ public class DefaultInboxRenderServiceImpl<T extends StateAware> implements Inbo
 
     @Override
     public List<T> getAssignedWorkflowItems(List<Long> owners) {
-        return this.stateAwarePersistenceService.getSession().createCriteria(this.stateAwareType)
-                .setFetchMode("state", JOIN).createAlias("state", "state")
-                .setFlushMode(MANUAL).setReadOnly(true).setCacheable(true)
-                .add(Restrictions.eq("state.type", this.stateAwareType.getSimpleName()))
-                .add(Restrictions.in("state.ownerPosition.id", owners))
-                .add(Restrictions.in("state.status", Arrays.asList(INPROGRESS, STARTED)))
-                .addOrder(Order.desc("state.createdDate"))
-                .list();
+      
+//    	List<T> list = this.stateAwarePersistenceService.getSession().createCriteria(this.stateAwareType)
+//                .setFetchMode("state", JOIN).createAlias("state", "state")
+//                .setFlushMode(MANUAL).setReadOnly(true).setCacheable(true)
+//                .add(Restrictions.eq("state.type", this.stateAwareType.getSimpleName()))
+//                .add(Restrictions.in("state.ownerPosition", owners))
+//                .add(Restrictions.in("state.status", Arrays.asList(INPROGRESS, STARTED)))
+//                .addOrder(Order.desc("state.createdDate"))
+//                .list();
+    	
+    	Criteria criteria =  this.stateAwarePersistenceService.getSession().createCriteria(this.stateAwareType)
+              .setFetchMode("state", JOIN).createAlias("state", "state")
+              .setFlushMode(MANUAL).setReadOnly(true).setCacheable(true)
+              .add(Restrictions.eq("state.type", this.stateAwareType.getSimpleName()))
+              .add(Restrictions.in("state.ownerPosition", owners))
+              .add(Restrictions.in("state.status", Arrays.asList(INPROGRESS, STARTED)))
+              .addOrder(Order.desc("state.createdDate"));
+    	
+    	List list = criteria.list();
+    	System.out.println("#################### inbox list size"+list.size());
+    	return list;
     }
 
     @Override

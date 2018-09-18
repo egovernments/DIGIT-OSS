@@ -429,7 +429,7 @@ public class JournalVoucherService {
                 .getStateType(), null, null, additionalRule, voucherHeader.getCurrentState().getValue(), null);
         if (voucherHeader.getState() != null && !voucherHeader.getState().getHistory().isEmpty()
                 && voucherHeader.getState().getOwnerPosition() != null)
-            approvalPosition = voucherHeader.getState().getOwnerPosition().getId();
+            approvalPosition = voucherHeader.getState().getOwnerPosition();
         else if (wfmatrix != null)
             approvalPosition = financialUtils.getApproverPosition(wfmatrix.getNextDesignation(),
                     voucherHeader.getState(), voucherHeader.getCreatedBy());

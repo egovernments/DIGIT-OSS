@@ -56,7 +56,7 @@ import org.egov.pims.commons.Position;
 
 import java.util.Date;
 
-public class Challan extends StateAware<Position> implements Auditable {
+public class Challan extends StateAware implements Auditable {
 
     private static final long serialVersionUID = 1L;
     private Long id;
