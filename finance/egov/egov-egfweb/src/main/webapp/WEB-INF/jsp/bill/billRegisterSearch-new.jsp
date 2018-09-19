@@ -204,7 +204,7 @@
 				 if(!validate())
 					 return false;
 		 	  }
-	       	document.billRegisterForm.action='/services/${pageContext.request.contextPath}/bill/billRegisterSearch-search.action';
+	       	document.billRegisterForm.action='${pageContext.request.contextPath}/bill/billRegisterSearch-search.action';
 		 	document.billRegisterForm.submit();
 		 	return true;
 		 }
