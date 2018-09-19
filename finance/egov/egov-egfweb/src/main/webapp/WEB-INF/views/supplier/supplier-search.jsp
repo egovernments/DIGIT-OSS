@@ -131,4 +131,4 @@
   src="<cdn:url value='/resources/global/js/jquery/plugins/jquery.validate.min.js' context='/services/egi'/>"></script>
 <script src="<cdn:url value='/resources/global/js/bootstrap/bootstrap-datepicker.js' context='/services/egi'/>"
   type="text/javascript"></script>
-<script type="text/javascript" src="<cdn:url value='/resources/app/js/supplierHelper.js?rnd=${app_release_no}'/>"></script>
+<script type="text/javascript" src="<cdn:url value='/resources/app/js/supplierHelper.js?rnd=${app_release_no}'context='/services/EGF'/>"></script>
