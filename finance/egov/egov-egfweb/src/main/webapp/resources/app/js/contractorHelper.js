@@ -79,7 +79,7 @@ function callAjaxSearch() {
 								console.log(data.id);
 								 var form = document.createElement("form");
 								 form.setAttribute("method", "post");
-								 form.setAttribute("action", '/EGF/contractor/' + $('#mode').val()+ '/' + data.id, '');
+								 form.setAttribute("action", '/services/EGF/contractor/' + $('#mode').val()+ '/' + data.id, '');
 								 form.setAttribute("target", "NewFile");
 								 document.body.appendChild(form);
 								 window.open("post.htm", "NewFile", 'width=800, height=600');
