@@ -181,9 +181,14 @@ public class ApplicationCoreFilter implements Filter {
        }
        
         try {
-            prepareRequestOriginDetails(session, request);
+        	if(!this.checkUrl(current_url))
+        	{
+           
             prepareUserSession(request,response,session);
-            prepareApplicationThreadLocal(session);
+           
+        	}
+        	 prepareRequestOriginDetails(session, request);
+        	 prepareApplicationThreadLocal(session);
             chain.doFilter(request, resp);
         } finally {
             ApplicationThreadLocals.clearValues();
@@ -210,7 +215,7 @@ public class ApplicationCoreFilter implements Filter {
             if (authentication.isPresent() && authentication.get().getPrincipal() instanceof CurrentUser) {
                 session.setAttribute(USERID_KEY, ((CurrentUser) authentication.get().getPrincipal()).getUserId());
             } else if (!authentication.isPresent() || !(authentication.get().getPrincipal() instanceof User)) {
-                session.setAttribute(USERID_KEY, securityUtils.getCurrentUser().getId());
+            		session.setAttribute(USERID_KEY, securityUtils.getCurrentUser().getId());
             }
         }else
         {
