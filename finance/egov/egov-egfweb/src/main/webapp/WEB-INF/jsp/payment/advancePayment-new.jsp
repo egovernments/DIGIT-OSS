@@ -185,7 +185,7 @@ function validateAppoveUser(name,value){
 									onmouseover="window.status='Date Picker';return true;"
 									onmouseout="window.status='';return true;"> <img
 										id="voucherDateImage"
-										src="/egi/resources/erp2/images/calendaricon.gif"
+										src="/services/egi/resources/erp2/images/calendaricon.gif"
 										alt="Calendar" width="16" height="16" border="0"
 										align="absmiddle" /></a></td>
 								<td class="bluebox"><s:text name="arf.department" /></td>

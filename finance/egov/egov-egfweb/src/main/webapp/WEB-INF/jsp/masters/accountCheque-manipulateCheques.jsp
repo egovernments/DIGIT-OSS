@@ -159,7 +159,7 @@
 							onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 						href="javascript:show_calendar('chequeMaster.receivedDate',null,null,'DD/MM/YYYY');"
 						style="text-decoration: none">&nbsp;<img
-							src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 					</td>
 					<td class="bluebox">Department<span class="mandatory1">*</span></td>
 					<td class="bluebox"><s:select name="departmentList"

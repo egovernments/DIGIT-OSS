@@ -167,7 +167,7 @@ function createDateFieldFormatter(tableType,prefix,suffix)
 	var fieldName = prefix+"[" + index + "]" +  suffix;
 	var idt=oColumn.getKey()+oRecord.getId();
 	var id=idt.replace("-","");
-	var CALENDERURL="/egi/resources/erp2/images/calendaricon.gif";
+	var CALENDERURL="/services/egi/resources/erp2/images/calendaricon.gif";
 	var HREF='javascript:show_calendar("forms[0].'+id+'")';
 	markup="<input type='text' id='"+id+"' name='"+fieldName+"' value='"+value+"'    maxlength='10' style=\"width:70px\" onkeyup='DateFormat(this,this.value,event,false,3);' onblur='checkDateLG(this);' /><a href='#' style='text-decoration:none' onclick='"+HREF+"'><img src='"+CALENDERURL+"' border='0'  /></a>";
 	 el.innerHTML = markup;
@@ -686,7 +686,7 @@ var makeReceiptTable = function() {
 										tabindex="-1"
 										href="javascript:show_calendar('forms[0].councilResDate');"
 										style="text-decoration: none">&nbsp;<img
-											src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>
+											src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>
 									</td>
 								</tr>
 								<tr>
@@ -706,7 +706,7 @@ var makeReceiptTable = function() {
 										tabindex="-1"
 										href="javascript:show_calendar('forms[0].govtOrderDate');"
 										style="text-decoration: none">&nbsp;<img
-											src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>
+											src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>
 									</td>
 								</tr>
 								<tr>
@@ -726,7 +726,7 @@ var makeReceiptTable = function() {
 										tabindex="-1"
 										href="javascript:show_calendar('forms[0].amendmentDate');"
 										style="text-decoration: none">&nbsp;<img
-											src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>
+											src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>
 									</td>
 								</tr>
 							</table>

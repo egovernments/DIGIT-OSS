@@ -125,7 +125,7 @@
 							onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 							href="javascript:show_calendar('cbtbform.voucherDate');"
 							style="text-decoration: none">&nbsp;<img tabIndex="-1"
-								src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>(dd/mm/yyyy)</td>
+								src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>(dd/mm/yyyy)</td>
 					</tr>
 					<%@include file="contraBTB-form.jsp"%>
 				</table>

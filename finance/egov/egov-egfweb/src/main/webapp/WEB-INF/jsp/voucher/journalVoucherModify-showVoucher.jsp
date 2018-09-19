@@ -133,7 +133,7 @@
 										onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 									href="javascript:show_calendar('jvmodifyform.voucherDate');"
 									style="text-decoration: none">&nbsp;<img tabIndex=-1
-										src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+										src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 								</td>
 
 

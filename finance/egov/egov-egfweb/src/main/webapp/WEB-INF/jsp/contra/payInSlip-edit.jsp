@@ -119,7 +119,7 @@
 									value='<s:date name="voucherDate" format="dd/MM/yyyy"/>' /> <a
 									href="javascript:show_calendar('payinform.voucherDate');"
 									style="text-decoration: none">&nbsp;<img tabIndex="-1"
-										src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>(dd/mm/yyyy)</td>
+										src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>(dd/mm/yyyy)</td>
 							</tr>
 							<%@include file="payInSlip-form.jsp"%>
 						</table>

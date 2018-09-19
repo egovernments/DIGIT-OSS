@@ -275,7 +275,7 @@ function validateBank(){
 						onkeyup="DateFormat(this,this.value,event,false,'3')" /><a
 					href="javascript:show_calendar('autoRemittanceReport.paymentVoucherFromDate');"
 					style="text-decoration: none">&nbsp;<img
-						src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
+						src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
 				</td>
 				<td class="greybox"><s:text name="report.paymentvouchertodate" />:</td>
 				<td class="greybox"><s:textfield name="paymentVoucherToDate"
@@ -284,7 +284,7 @@ function validateBank(){
 						onkeyup="DateFormat(this,this.value,event,false,'3')" /><a
 					href="javascript:show_calendar('autoRemittanceReport.paymentVoucherToDate');"
 					style="text-decoration: none">&nbsp;<img
-						src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
+						src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
 				</td>
 			</tr>
 			<tr>
@@ -335,7 +335,7 @@ function validateBank(){
 						onkeyup="DateFormat(this,this.value,event,false,'3')" /><a
 					href="javascript:show_calendar('autoRemittanceReport.rtgsAssignedFromDate');"
 					style="text-decoration: none">&nbsp;<img
-						src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
+						src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
 				</td>
 				<td class="greybox"><s:text name="report.rtgsassignedtodate" />:</td>
 				<td class="greybox"><s:textfield name="rtgsAssignedToDate"
@@ -344,7 +344,7 @@ function validateBank(){
 						onkeyup="DateFormat(this,this.value,event,false,'3')" /><a
 					href="javascript:show_calendar('autoRemittanceReport.rtgsAssignedToDate');"
 					style="text-decoration: none">&nbsp;<img
-						src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
+						src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
 				</td>
 			</tr>
 			<tr>

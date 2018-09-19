@@ -104,7 +104,7 @@
 							maxlength="20" /><a
 						href="javascript:show_calendar('forms[0].asOnDate');"
 						style="text-decoration: none">&nbsp;<img
-							src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a><br />(dd/mm/yyyy)</td>
+							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a><br />(dd/mm/yyyy)</td>
 				</tr>
 				<tr>
 					<td class="bluebox"><s:text name="voucher.fund" /><span

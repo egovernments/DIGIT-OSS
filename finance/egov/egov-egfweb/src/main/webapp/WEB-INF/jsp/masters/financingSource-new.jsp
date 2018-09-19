@@ -347,7 +347,7 @@
 						onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 					href="javascript:show_calendar('finsrcheaderform.govtDate',null,null,'DD/MM/YYYY');"
 					style="text-decoration: none">&nbsp;<img tabIndex=-1
-						src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+						src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 				</td>
 
 
@@ -390,7 +390,7 @@
 						onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 					href="javascript:show_calendar('finsrcheaderform.finInstLetterDate',null,null,'DD/MM/YYYY');"
 					style="text-decoration: none">&nbsp;<img tabIndex=-1
-						src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+						src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 				</td>
 
 			</tr>
@@ -415,7 +415,7 @@
 						onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 					href="javascript:show_calendar('finsrcheaderform.finInstSchmDate',null,null,'DD/MM/YYYY');"
 					style="text-decoration: none">&nbsp;<img tabIndex=-1
-						src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+						src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 				</td>
 			</tr>
 			<tr>

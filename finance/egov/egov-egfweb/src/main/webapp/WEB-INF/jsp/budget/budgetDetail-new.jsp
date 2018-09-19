@@ -115,7 +115,7 @@
 					value='<s:date name="asOnDate" format="dd/MM/yyyy"/>' /><a
 					href="javascript:show_calendar('budgetDetailForm.asOnDate');"
 					style="text-decoration: none">&nbsp;<img
-						src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
+						src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
 				<td class="bluebox"><s:submit method="loadActuals"
 						value="Get Actuals" cssClass="buttonsubmit" /></td>
 			</tr>

@@ -341,7 +341,7 @@ function printVoucher(){
 																		href="javascript:show_calendar('dbpform.voucherDate');"
 																		style="text-decoration: none">&nbsp;<img
 																			tabIndex="-1"
-																			src="/egi/resources/erp2/images/calendaricon.gif"
+																			src="/services/egi/resources/erp2/images/calendaricon.gif"
 																			border="0" />
 																	</A></td>
 																</tr>

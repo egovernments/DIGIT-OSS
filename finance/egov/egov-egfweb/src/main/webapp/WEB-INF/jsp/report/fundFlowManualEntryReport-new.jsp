@@ -185,7 +185,7 @@ function loadSearch(){
 						value="%{tempFromDate}" /><a
 					href="javascript:show_calendar('fundFlowManualEntryReport.startDate');"
 					style="text-decoration: none">&nbsp;<img
-						src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
+						src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
 				<td class="greybox"><s:text name="voucher.todate" /><span
 					class="mandatory">*</span></td>
 				<s:date name="endDate" format="dd/MM/yyyy" var="tempToDate" />
@@ -195,7 +195,7 @@ function loadSearch(){
 						value="%{tempToDate}" /><a
 					href="javascript:show_calendar('fundFlowManualEntryReport.endDate');"
 					style="text-decoration: none">&nbsp;<img
-						src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
+						src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
 			</tr>
 			<s:hidden name="selectedAccountNumber" id="selectedAccountNumber" />
 		</table>

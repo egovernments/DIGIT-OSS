@@ -76,7 +76,7 @@
 			onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 			href="javascript:show_calendar('subSchemeForm.validfrom');"
 			id="calendar0" style="text-decoration: none">&nbsp;<img
-				src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
+				src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
 	</tr>
 	<tr>
 		<td class="bluebox">&nbsp;</td>
@@ -88,7 +88,7 @@
 			onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 			href="javascript:show_calendar('subSchemeForm.validto');"
 			id="calendar1" style="text-decoration: none">&nbsp;<img
-				src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
+				src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
 		<td class="bluebox"><strong><s:text
 					name="subscheme.form.isactive" /></strong></td>
 		<td class="bluebox"><s:checkbox name="isActive" id="isActive" /></td>
@@ -123,7 +123,7 @@
 			onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 			href="javascript:show_calendar('subSchemeForm.councilLoanProposalDate');"
 			id="calendar2" style="text-decoration: none">&nbsp;<img
-				src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
+				src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
 	</tr>
 	<tr>
 		<td class="greybox">&nbsp;</td>
@@ -141,7 +141,7 @@
 			onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 			href="javascript:show_calendar('subSchemeForm.councilAdminSanctionDate');"
 			id="calendar3" style="text-decoration: none">&nbsp;<img
-				src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
+				src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
 	</tr>
 	<tr>
 		<td class="bluebox">&nbsp;</td>
@@ -157,7 +157,7 @@
 			onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 			href="javascript:show_calendar('subSchemeForm.govtLoanProposalDate');"
 			id="calendar4" style="text-decoration: none">&nbsp;<img
-				src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
+				src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
 	</tr>
 	<tr>
 		<td class="greybox">&nbsp;</td>
@@ -173,6 +173,6 @@
 			onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 			href="javascript:show_calendar('subSchemeForm.govtAdminSanctionDate');"
 			id="calendar5" style="text-decoration: none">&nbsp;<img
-				src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
+				src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
 	</tr>
 </table>

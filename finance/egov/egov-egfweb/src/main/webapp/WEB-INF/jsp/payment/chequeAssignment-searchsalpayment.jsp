@@ -185,7 +185,7 @@ function setTotalAmount()
 									value="%{tempChequeDate}" size="10" /><a
 								href="javascript:show_calendar('forms[0].chequeDate<s:property value="#s.index"/>');"
 								style="text-decoration: none">&nbsp;<img
-									src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
+									src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
 						</s:if>
 						<s:elseif
 							test="%{!isChequeNoGenerationAuto() && paymentMode=='cheque'}">
@@ -206,7 +206,7 @@ function setTotalAmount()
 									value="%{tempChequeDate}" size="10" /><a
 								href="javascript:show_calendar('forms[0].chequeDate<s:property value="#s.index"/>');"
 								style="text-decoration: none">&nbsp;<img
-									src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
+									src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
 						</s:elseif>
 					</tr>
 				</s:iterator>
@@ -242,7 +242,7 @@ function setTotalAmount()
 									onkeyup="DateFormat(this,this.value,event,false,'3')" /><a
 								href="javascript:show_calendar('forms[0].rtgsDate');"
 								style="text-decoration: none">&nbsp;<img
-									src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+									src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 							</td>
 
 						</s:if>
@@ -273,7 +273,7 @@ function setTotalAmount()
 										onkeyup="DateFormat(this,this.value,event,false,'3')" /><a
 									href="javascript:show_calendar('forms[0].chequeDt');"
 									style="text-decoration: none">&nbsp;<img
-										src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a><br />(dd/mm/yyyy)
+										src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a><br />(dd/mm/yyyy)
 								</td>
 							</s:if>
 
@@ -293,7 +293,7 @@ function setTotalAmount()
 										onkeyup="DateFormat(this,this.value,event,false,'3')" /><a
 									href="javascript:show_calendar('forms[0].chequeDt');"
 									style="text-decoration: none">&nbsp;<img
-										src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a><br />(dd/mm/yyyy)
+										src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a><br />(dd/mm/yyyy)
 								</td>
 							</s:elseif>
 							<s:if test="%{paymentMode=='cash'}">

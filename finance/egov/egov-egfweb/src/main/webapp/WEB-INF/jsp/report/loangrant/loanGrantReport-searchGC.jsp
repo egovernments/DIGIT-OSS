@@ -174,7 +174,7 @@ return true;
 						maxlength="20" value="%{fromDate}" /> <a
 					href="javascript:show_calendar('forms[0].fromDate');"
 					style="text-decoration: none">&nbsp;<img
-						src="/egi/resources/erp2/images/calendaricon.gif" border="0"
+						src="/services/egi/resources/erp2/images/calendaricon.gif" border="0"
 						alt="" />
 				</a> <br /> (dd/mm/yyyy)</td>
 				<td class="bluebox"><s:text name="voucher.todate" /></td>
@@ -182,7 +182,7 @@ return true;
 						maxlength="20" value="%{toDate}" /> <a
 					href="javascript:show_calendar('forms[0].toDate');"
 					style="text-decoration: none">&nbsp; <img
-						src="/egi/resources/erp2/images/calendaricon.gif" border="0"
+						src="/services/egi/resources/erp2/images/calendaricon.gif" border="0"
 						alt="" />
 				</a>(dd/mm/yyyy)</td>
 			</tr>

@@ -182,7 +182,7 @@ th.bluebgheadtd {
 							cssStyle="width:100px" /><a
 						href="javascript:show_calendar('balanceSheetReport.asOndate');"
 						style="text-decoration: none">&nbsp;<img
-							src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 					</td>
 					<td class="greybox"><s:text name="report.rupees" />:<span
 						class="mandatory1">*</span></td>

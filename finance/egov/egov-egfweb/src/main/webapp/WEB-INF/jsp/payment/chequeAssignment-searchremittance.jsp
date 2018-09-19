@@ -166,7 +166,7 @@
 									value="%{tempChequeDate}" size="10" /><a
 								href="javascript:show_calendar('forms[0].chequeDate<s:property value="#s.index"/>');"
 								style="text-decoration: none">&nbsp;<img
-									src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
+									src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
 						</s:if>
 						<s:elseif
 							test="%{!isChequeNoGenerationAuto() && paymentMode=='cheque'}">
@@ -187,7 +187,7 @@
 									value="%{tempChequeDate}" size="10" /><a
 								href="javascript:show_calendar('forms[0].chequeDate<s:property value="#s.index"/>');"
 								style="text-decoration: none">&nbsp;<img
-									src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
+									src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
 						</s:elseif>
 					</tr>
 				</s:iterator>

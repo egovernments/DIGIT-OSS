@@ -91,7 +91,7 @@
 			onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 		href="javascript:show_calendar('jvcreateform.partyBillDate',null,null,'DD/MM/YYYY');"
 		style="text-decoration: none">&nbsp;<img tabIndex=-1
-			src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
+			src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
 	<td class="bluebox"><s:text name="jv.billDate" /></td>
 	<td class="bluebox"><s:date name="voucherTypeBean.billDate"
 			var="billDateId" format="dd/MM/yyyy" /> <s:textfield
@@ -100,7 +100,7 @@
 			onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 		href="javascript:show_calendar('jvcreateform.billDate',null,null,'DD/MM/YYYY');"
 		style="text-decoration: none">&nbsp;<img tabIndex=-1
-			src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
+			src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
 </tr>
 <input type="hidden" id="voucherTypeBean.voucherSubType"
 	name="voucherTypeBean.voucherSubType"

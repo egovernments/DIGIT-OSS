@@ -319,7 +319,7 @@ function doAfterSubmit(){
 							onkeyup="DateFormat(this,this.value,event,false,'3')" /><a
 						href="javascript:show_calendar('concurrenceReport.asOnDate');"
 						style="text-decoration: none">&nbsp;<img
-							src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
+							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
 					</td>
 				</tr>
 				<tr id="dateran">
@@ -330,7 +330,7 @@ function doAfterSubmit(){
 							onkeyup="DateFormat(this,this.value,event,false,'3')" /><a
 						href="javascript:show_calendar('concurrenceReport.fromDate');"
 						style="text-decoration: none">&nbsp;<img
-							src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
+							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
 					</td>
 					<td class="bluebox">To Date:<span class="mandatory">*</span></td>
 					<td class="bluebox"><s:textfield name="toDate" id="toDate"
@@ -338,7 +338,7 @@ function doAfterSubmit(){
 							onkeyup="DateFormat(this,this.value,event,false,'3')" /><a
 						href="javascript:show_calendar('concurrenceReport.toDate');"
 						style="text-decoration: none">&nbsp;<img
-							src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
+							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
 					</td>
 				</tr>
 				<tr>

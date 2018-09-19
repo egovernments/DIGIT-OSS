@@ -532,7 +532,7 @@ document.getElementById(tab+"["+idx+"]."+field).options[<s:property value="#stat
 									value="%{commonBean.billDateId}" /> <a tabindex="-1"
 								href="javascript:show_calendar('cbill.billDate');"
 								style="text-decoration: none">&nbsp;<img
-									src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></A></td>
+									src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A></td>
 						</tr>
 						<%@include file="contingentBill-form.jsp"%>
 					</table>

@@ -311,7 +311,7 @@
 						value='<s:date name="voucherDate" format="dd/MM/yyyy"/>' /> <a
 						href="javascript:show_calendar('cbtbform.voucherDate');"
 						style="text-decoration: none">&nbsp;<img tabIndex="-1"
-							src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></A></td>
+							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A></td>
 				</tr>
 				<%@include file="directBankPayment-form.jsp"%>
 				<table border="0" width="100%" cellspacing="0" cellpadding="0">
@@ -332,7 +332,7 @@
 								onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 							href="javascript:show_calendar('dbpform.reversalVoucherDate');"
 							style="text-decoration: none">&nbsp;<img tabIndex="-1"
-								src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>(dd/mm/yyyy)</td>
+								src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>(dd/mm/yyyy)</td>
 					</tr>
 				</table>
 				</div>

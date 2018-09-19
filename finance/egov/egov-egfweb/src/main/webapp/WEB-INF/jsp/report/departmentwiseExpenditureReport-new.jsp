@@ -237,7 +237,7 @@ function populateAssetCode(obj){
 							onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 						href="javascript:show_calendar('departmentwiseExpenditureReport.fromDate',null,null,'DD/MM/YYYY');"
 						style="text-decoration: none">&nbsp;<img
-							src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 					</td>
 					<td class="bluebox" width="6%">
 					<td class="bluebox" width="6%"></td>
@@ -249,7 +249,7 @@ function populateAssetCode(obj){
 							onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 						href="javascript:show_calendar('departmentwiseExpenditureReport.toDate',null,null,'DD/MM/YYYY');"
 						style="text-decoration: none">&nbsp;<img
-							src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 					</td>
 					<td class="bluebox" width="4%">
 					<td class="bluebox" width="4%">

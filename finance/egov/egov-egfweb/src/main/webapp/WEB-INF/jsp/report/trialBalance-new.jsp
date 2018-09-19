@@ -204,7 +204,7 @@ today = dd+'/'+mm+'/'+yyyy;
 								value="%{tempFromDate}" /> <a
 							href="javascript:show_calendar('forms[0].fromDate');"
 							style="text-decoration: none">&nbsp;<img tabIndex="-1"
-								src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>
+								src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>
 						</td>
 						<td class="greybox"><div id="toDatelbl">
 								<s:text name="todate" />
@@ -215,7 +215,7 @@ today = dd+'/'+mm+'/'+yyyy;
 								value="%{tempToDate}" /> <a
 							href="javascript:show_calendar('forms[0].toDate');"
 							style="text-decoration: none">&nbsp;<img tabIndex="-1"
-								src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>
+								src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>
 						</td>
 					</tr>
 					<tr>

@@ -123,7 +123,7 @@
 										onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 									href="javascript:show_calendar('cashDepositForm.voucherDate',null,null,'DD/MM/YYYY');"
 									style="text-decoration: none">&nbsp;<img tabIndex=-1
-										src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+										src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 								</td>
 							</tr>
 							<tr>
@@ -172,7 +172,7 @@
 										onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 									href="javascript:show_calendar('cashDepositForm.documentDate');"
 									style="text-decoration: none">&nbsp;<img tabIndex="-1"
-										src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
+										src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
 
 							</tr>
 							<tr>

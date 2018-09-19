@@ -333,7 +333,7 @@ function checkpensionForSameMisAttribs(obj,len)
 																		id="fromDate" maxlength="20" value="%{fromDate}" /><a
 																	href="javascript:show_calendar('forms[0].fromDate');"
 																	style="text-decoration: none">&nbsp;<img
-																		src="/egi/resources/erp2/images/calendaricon.gif"
+																		src="/services/egi/resources/erp2/images/calendaricon.gif"
 																		border="0" /></a><br />(dd/mm/yyyy)</td>
 																<td class="greybox" width="30%"><s:text
 																		name="payment.billdateto" /></td>
@@ -341,7 +341,7 @@ function checkpensionForSameMisAttribs(obj,len)
 																		id="toDate" maxlength="20" value="%{toDate}" /><a
 																	href="javascript:show_calendar('forms[0].toDate');"
 																	style="text-decoration: none">&nbsp;<img
-																		src="/egi/resources/erp2/images/calendaricon.gif"
+																		src="/services/egi/resources/erp2/images/calendaricon.gif"
 																		border="0" /></a>(dd/mm/yyyy)</td>
 															</tr>
 															<tr>

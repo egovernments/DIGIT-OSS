@@ -112,7 +112,7 @@
 						value='<s:date name="voucherDate" format="dd/MM/yyyy"/>' /> <a
 						href="javascript:show_calendar('cashWithDrawalForm.voucherDate',null,null,'DD/MM/YYYY');"
 						style="text-decoration: none">&nbsp;<img tabIndex=-1
-							src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 					</td>
 				</tr>
 				<tr>
@@ -155,7 +155,7 @@
 						value='<s:property value="contraBean.chequeDate"/>' /> <a
 						href="javascript:show_calendar('cashWithDrawalForm.chequeDate',null,null,'DD/MM/YYYY');"
 						style="text-decoration: none">&nbsp;<img tabIndex=-1
-							src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 					</td>
 					<s:if test="%{showChequeNumber()}">
 						<td class="bluebox"><s:text name="cheque.number" /><span

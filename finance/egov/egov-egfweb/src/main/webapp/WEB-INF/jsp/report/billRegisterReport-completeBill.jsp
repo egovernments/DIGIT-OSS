@@ -91,7 +91,7 @@
 						onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 					href="javascript:show_calendar('billRegisterReport.fromDate',null,null,'DD/MM/YYYY');"
 					style="text-decoration: none">&nbsp;<img
-						src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+						src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 				</td>
 				<td class="greybox"><s:text name="voucher.todate" /></td>
 				<td class="greybox"><s:date name="toDate" var="toDateId"
@@ -100,7 +100,7 @@
 						onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 					href="javascript:show_calendar('billRegisterReport.toDate',null,null,'DD/MM/YYYY');"
 					style="text-decoration: none">&nbsp;<img
-						src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
+						src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
 			</tr>
 			<tr>
 			<td style="width: 5%"></td>

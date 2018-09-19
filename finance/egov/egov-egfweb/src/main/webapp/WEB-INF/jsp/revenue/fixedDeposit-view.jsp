@@ -84,7 +84,7 @@
 								onkeyup="DateFormat(this,this.value,event,false,'3')" /><a
 							href="javascript:show_calendar('concurrenceReport.fromDate');"
 							style="text-decoration: none">&nbsp;<img
-								src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
+								src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
 						</td>
 
 						<td class="greybox" width="10%">To Date</td>
@@ -93,7 +93,7 @@
 								onkeyup="DateFormat(this,this.value,event,false,'3')" /><a
 							href="javascript:show_calendar('concurrenceReport.toDate');"
 							style="text-decoration: none">&nbsp;<img
-								src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
+								src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)<br />
 						</td>
 					</tr>
 				</table>

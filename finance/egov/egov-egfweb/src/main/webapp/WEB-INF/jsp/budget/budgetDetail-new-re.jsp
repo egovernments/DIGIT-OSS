@@ -213,7 +213,7 @@
 											value='<s:date name="asOnDate" format="dd/MM/yyyy"/>' /><a
 											href="javascript:show_calendar('budgetDetailForm.asOnDate');"
 											style="text-decoration: none">&nbsp;<img
-												src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+												src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 										</td>
 										<td width="15%" class="greybox"><s:text name="function" /></td>
 										<egov:ajaxdropdown id="function_filtered"

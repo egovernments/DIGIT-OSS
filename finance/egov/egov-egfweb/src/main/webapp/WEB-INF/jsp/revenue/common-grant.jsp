@@ -462,7 +462,7 @@
 			var fieldName = prefix+"[" + index + "]" +  suffix;
 			var idt=oColumn.getKey()+oRecord.getId();
 			var id=idt.replace("-","");
-			var CALENDERURL="/egi/resources/erp2/images/calendaricon.gif";
+			var CALENDERURL="/services/egi/resources/erp2/images/calendaricon.gif";
 			var HREF='javascript:show_calendar("forms[0].'+id+'")';
 			markup="<input type='text' id='"+id+"' name='"+fieldName+"' value='"+value+"'    maxlength='10' style=\"width:70px\" onkeyup='DateFormat(this,this.value,event,false,3);' onblur='checkDate(this);' /><a href='#' style='text-decoration:none' onclick='"+HREF+"'><img src='"+CALENDERURL+"' border='0'  /></a>";
 	 		el.innerHTML = markup;

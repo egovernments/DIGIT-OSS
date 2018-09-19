@@ -377,7 +377,7 @@
 									value='<s:date name="appropriationMisc.reAppropriationDate" format="dd/MM/yyyy"/>' /><a
 									href="javascript:show_calendar('budgetDetailForm.date');"
 									style="text-decoration: none">&nbsp;<img
-										src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
+										src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
 								<td class="greybox"><s:text
 										name="budgetReAppropriation.comments" /></td>
 								<td class="greybox"><s:textarea

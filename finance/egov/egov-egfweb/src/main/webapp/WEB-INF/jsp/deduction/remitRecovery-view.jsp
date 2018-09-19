@@ -237,7 +237,7 @@ function printVoucher(){
 																				style="text-decoration: none" align="left"><img
 																				img width="18" height="18" border="0"
 																				align="absmiddle" alt="Date"
-																				src="/egi/resources/erp2/images/calendaricon.gif" /></A>
+																				src="/services/egi/resources/erp2/images/calendaricon.gif" /></A>
 																		</div>
 																	</td>
 																<tr>

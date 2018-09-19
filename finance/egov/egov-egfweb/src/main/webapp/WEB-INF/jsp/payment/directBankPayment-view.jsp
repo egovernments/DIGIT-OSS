@@ -387,7 +387,7 @@ function printVoucher(){
 										value='<s:date name="voucherDate" format="dd/MM/yyyy"/>' /> <a
 										href="javascript:show_calendar('cbtbform.voucherDate');"
 										style="text-decoration: none">&nbsp;<img tabIndex="-1"
-											src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></A></td>
+											src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A></td>
 								</tr>
 								<div class="buttonbottom"></div>
 

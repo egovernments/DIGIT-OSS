@@ -63,11 +63,11 @@
     <meta name="description" content="eGov Urban Portal"/>
     <meta name="author" content="eGovernments Foundation"/>
     <title>eGov Urban Portal Login</title>
-    <link rel="icon" href="<cdn:url value='/resources/global/images/favicon.png'/>" sizes="32x32">
-    <link rel="stylesheet" href="<cdn:url value='/resources/global/css/bootstrap/bootstrap.css'/>">
-    <link rel="stylesheet" href="<cdn:url value='/resources/global/css/font-icons/font-awesome/css/font-awesome.min.css'/>">
-    <link rel="stylesheet" href="<cdn:url value='/resources/global/css/egov/custom.css?rnd=${app_release_no}'/>">
-    <script src="<cdn:url value='/resources/global/js/jquery/jquery.js'/>" type="text/javascript"></script>
+    <link rel="icon" href="<cdn:url value='/resources/global/images/favicon.png' context='/services/egi'/>" sizes="32x32">
+    <link rel="stylesheet" href="<cdn:url value='/resources/global/css/bootstrap/bootstrap.css' context='/services/egi'/>">
+    <link rel="stylesheet" href="<cdn:url value='/resources/global/css/font-icons/font-awesome/css/font-awesome.min.css' context='/services/egi'/>">
+    <link rel="stylesheet" href="<cdn:url value='/resources/global/css/egov/custom.css?rnd=${app_release_no}' context='/services/egi'/>">
+    <script src="<cdn:url value='/resources/global/js/jquery/jquery.js' context='/services/egi'/>" type="text/javascript"></script>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>

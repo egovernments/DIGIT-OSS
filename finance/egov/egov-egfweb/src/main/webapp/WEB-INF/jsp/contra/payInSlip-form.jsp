@@ -139,14 +139,14 @@ path="${pageContext.request.contextPath}";
 			onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 		href="javascript:show_calendar('payinform.voucherDateFrom');"
 		style="text-decoration: none">&nbsp;<img tabIndex=-1
-			src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
+			src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
 	<td class="greybox"><s:text name="payin.voucherDateTo" /></td>
 	<td class="greybox"><s:textfield
 			name="voucherTypeBean.voucherDateTo" id="voucherDateTo"
 			onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 		href="javascript:show_calendar('payinform.voucherDateTo');"
 		style="text-decoration: none">&nbsp;<img tabIndex=-1
-			src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
+			src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
 </tr>
 <tr>
 	<td class="bluebox"><s:text name="payin.chequeInHand" /></td>
@@ -170,7 +170,7 @@ path="${pageContext.request.contextPath}";
 			onkeyup="DateFormat(this,this.value,event,false,'3')" /> <a
 		href="javascript:show_calendar('payinform.reversalVoucherDate');"
 		style="text-decoration: none">&nbsp;<img tabIndex="-1"
-			src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>(dd/mm/yyyy)</td>
+			src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></A>(dd/mm/yyyy)</td>
 </tr>
 
 </div>

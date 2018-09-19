@@ -110,7 +110,7 @@
 							value="%{tempFromDate}" /><a
 						href="javascript:show_calendar('forms[0].fromDate');"
 						style="text-decoration: none">&nbsp;<img
-							src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
+							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
 					<td class="greybox"><s:text name="voucher.todate" /><span
 						class="mandatory1">*</span></td>
 					 <s:date name="toDate" format="dd/MM/yyyy" var="tempToDate" />  
@@ -120,7 +120,7 @@
 							value="%{tempToDate}" /><a
 						href="javascript:show_calendar('forms[0].toDate');"
 						style="text-decoration: none">&nbsp;<img
-							src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
+							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
 				</tr>
 				<tr>
 					<td style="width: 5%"></td>

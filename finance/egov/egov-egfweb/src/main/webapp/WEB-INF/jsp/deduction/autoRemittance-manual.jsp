@@ -105,7 +105,7 @@
 							onkeyup="DateFormat(this,this.value,event,false,'3')" />**? <a
 						href="javascript:show_calendar('autoRemittanceForm.lastRunDate',null,null,'DD/MM/YYYY');"
 						style="text-decoration: none">&nbsp;<img
-							src="/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
+							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)
 					</td>
 				</tr>
 

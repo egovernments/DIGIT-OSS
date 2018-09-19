@@ -212,7 +212,7 @@
 													name="asOndate" id="asOndate" cssStyle="width:100px" /><a
 												href="javascript:show_calendar('budgetProposal.asOndate');"
 												style="text-decoration: none">&nbsp;<img
-													src="/egi/resources/erp2/images/calendaricon.gif"
+													src="/services/egi/resources/erp2/images/calendaricon.gif"
 													border="0" /></a>(dd/mm/yyyy)</td>
 											<td width="5%"></td>
 											<td><input type="button" class="buttonsubmit"
