@@ -67,7 +67,7 @@ $(document).ready(function(){
 		},
 		queryTokenizer : Bloodhound.tokenizers.whitespace,
 		remote : {
-			url : '/EGF/common/ajaxfunctionnames?name=%QUERY',
+			url : '/services/EGF/common/ajaxfunctionnames?name=%QUERY',
 			filter : function(data) {
 				return $.map(data, function(ct) {
 					return {

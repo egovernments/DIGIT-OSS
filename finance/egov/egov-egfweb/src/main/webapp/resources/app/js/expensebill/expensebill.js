@@ -170,7 +170,7 @@ function debitGlcode_initialize() {
 	    datumTokenizer: function(d) { return d.tokens; },
 	    queryTokenizer: Bloodhound.tokenizers.whitespace,
 		   remote: {
-	            url: '/EGF/common/getaccountcodesforaccountdetailtype?glcode=',
+	            url: '/services/EGF/common/getaccountcodesforaccountdetailtype?glcode=',
 	            dataType: "json",
 	            replace: function (url, query) {
 					var subLedgerType = $('#subLedgerType').val();
@@ -248,7 +248,7 @@ function creditGlcode_initialize() {
 	    datumTokenizer: function(d) { return d.tokens; },
 	    queryTokenizer: Bloodhound.tokenizers.whitespace,
 		   remote: {
-	            url: '/EGF/common/getaccountcodesforaccountdetailtype?glcode=',
+	            url: '/services/EGF/common/getaccountcodesforaccountdetailtype?glcode=',
 	            dataType: "json",
 	            replace: function (url, query) {
 					var subLedgerType = $('#subLedgerType').val();

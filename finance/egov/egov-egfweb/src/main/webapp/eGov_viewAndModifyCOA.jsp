@@ -160,7 +160,7 @@ function loadSelectDataForChartOfacounts(url,sourceobj,destobj)
 	    
 	     var root = tree.getRoot();   
 	     
-        loadSelectDataForChartOfacounts('/EGF/voucher/common-ajaxloadcoa.action','roleId',root);
+        loadSelectDataForChartOfacounts('/services/EGF/voucher/common-ajaxloadcoa.action','roleId',root);
 	     tree.draw(); 
 	      }        
      }             
@@ -194,7 +194,7 @@ function loadNodeData(node, fnLoadComplete){
 	var nodeLabel = encodeURI(node.label);
 	var nodeId = encodeURI(node.data.id);
 	var nodeUrl =  node.data.url;
-	var url = '/EGF/voucher/common-ajaxloadcoa.action';
+	var url = '/services/EGF/voucher/common-ajaxloadcoa.action';
 	var moduleQuery = url+'?glCode='+nodeId;
 	url="/services/EGF/masters/chartOfAccounts-modifyChartOfAccounts.action?model.id="+nodeId;
 	//prepare our callback object

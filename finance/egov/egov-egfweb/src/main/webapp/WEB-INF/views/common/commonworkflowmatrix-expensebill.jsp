@@ -132,4 +132,4 @@
 
 </div>
 
-<script src="<cdn:url value='/resources/app/js/common/commonworkflowexpensebill.js?rnd=${app_release_no}'/>"></script>
+<script src="<cdn:url value='/resources/app/js/common/commonworkflowexpensebill.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
