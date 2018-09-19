@@ -14586,7 +14586,7 @@
  {
    "id": 1828,
    "name": "Generate PJV",
-   "url": "/services/EGF/voucher/billVoucher-newform.action",
+   "url": "/services/EGF/voucher/billVoucher-newForm.action",
    "parentModule": "",
    "displayName": "Voucher from bill",
    "orderNumber": 1,
@@ -17962,6 +17962,60 @@
    "code": "null",
    "path": "",
    "navigationURL": ""
+ },
+ {
+   "id": 2088,
+   "name": "cancelbillsearch",
+   "url": "/services/EGF/voucher/cancelBill-search.action",
+   "parentModule": "",
+   "displayName": "cancel billsearch",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": "",
+   "navigationURL": ""
+ },
+{
+   "id": 2089,
+   "name": "rtgsIssueRegisterReport",
+   "url": "/services/EGF/report/rtgsIssueRegisterReport-exportHtml.action",
+   "parentModule": "",
+   "displayName": "rtgsIssueRegisterReport",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": "",
+   "navigationURL": ""
+ },
+{
+   "id": 2090,
+   "name": "preApprovedVoucher",
+   "url": "/services/EGF/voucher/preApprovedVoucher-save.action",
+   "parentModule": "",
+   "displayName": "preApprovedVoucher",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": "",
+   "navigationURL": ""
+ },
+{
+   "id": 2091,
+   "name": "billVoucher-lists",
+   "url": "/services/EGF/voucher/billVoucher-lists.action",
+   "parentModule": "",
+   "displayName": "billVoucher-lists",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": "",
+   "navigationURL": ""
  }
+
+
   ]
 }
