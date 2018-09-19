@@ -47,8 +47,6 @@
  */
 package org.egov.commons;
 
-import org.egov.infra.admin.master.entity.User;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
@@ -82,9 +80,9 @@ public class Scheme implements java.io.Serializable {
 
     private Set<SubScheme> subSchemes = new HashSet<SubScheme>(0);
 
-    private User createdBy;
+    private Long createdBy;
 
-    private User lastModifiedBy;
+    private Long lastModifiedBy;
 
     private Date createdDate;
 
@@ -222,19 +220,19 @@ public class Scheme implements java.io.Serializable {
         this.subSchemes = subSchemes;
     }
 
-    public User getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(final User createdBy) {
+    public void setCreatedBy(final Long createdBy) {
         this.createdBy = createdBy;
     }
 
-    public User getLastModifiedBy() {
+    public Long getLastModifiedBy() {
         return lastModifiedBy;
     }
 
-    public void setLastModifiedBy(final User lastModifiedBy) {
+    public void setLastModifiedBy(final Long lastModifiedBy) {
         this.lastModifiedBy = lastModifiedBy;
     }
 

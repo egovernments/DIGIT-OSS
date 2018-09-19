@@ -252,7 +252,7 @@ public class MicroserviceUtils {
 		return depResponse.getDepartment();
 	}
 
-	public List<Department> getDepartmentByCode(String departmentCode) {
+	public Department getDepartmentByCode(String departmentCode) {
 		final RestTemplate restTemplate = new RestTemplate();
 		final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId() + "&code=" + departmentCode;
 
@@ -264,7 +264,11 @@ public class MicroserviceUtils {
 		reqWrapper.setRequestInfo(requestInfo);
 
 		DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
-		return depResponse.getDepartment();
+		
+		if (depResponse.getDepartment() != null && !depResponse.getDepartment().isEmpty())
+			return depResponse.getDepartment().get(0);
+		else
+			return null;
 	}
 
 	public List<Designation> getDesignation(String code) {

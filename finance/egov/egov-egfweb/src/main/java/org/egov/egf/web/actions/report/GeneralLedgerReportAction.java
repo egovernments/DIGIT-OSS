@@ -227,9 +227,9 @@ public class GeneralLedgerReportAction extends BaseFormAction {
 					+ fund.getName() + " from " + generalLedgerReportBean.getStartDate() + " to "
 					+ generalLedgerReportBean.getEndDate();
 		if (checkNullandEmpty(generalLedgerReportBean.getDepartmentCode())) {
-			List<org.egov.infra.microservice.models.Department> list = microserviceUtils
+			org.egov.infra.microservice.models.Department list = microserviceUtils
 					.getDepartmentByCode(generalLedgerReportBean.getDepartmentCode());
-			heading = heading + " under " + list.get(0).getName() + " Department ";
+			heading = heading + " under " + list.getName() + " Department ";
 		}
 		if (checkNullandEmpty(generalLedgerReportBean.getFunctionCode())) {
 			final CFunction function = (CFunction) persistenceService.find("from CFunction where id = ?",

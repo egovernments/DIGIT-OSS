@@ -463,7 +463,7 @@ function onChangeServiceClass(obj)
 		              <s:text name="report.bankbranch.note"/>
 		</div>
 </div>
-<div id="loadingMask" style="display: none; overflow: hidden; text-align: center"><img src="/collection/resources/images/bar_loader.gif"/> <span style="color: red">Please wait....</span></div>
+<div id="loadingMask" style="display: none; overflow: hidden; text-align: center"><img src="/services/collection/resources/images/bar_loader.gif"/> <span style="color: red">Please wait....</span></div>
     <div class="buttonbottom">
       <label><s:submit type="submit" cssClass="buttonsubmit" id="button" value="Search" onclick="return validate();"/></label>
       <label><s:submit type="submit" cssClass="button" value="Reset" onclick="document.searchReceiptForm.action='searchReceipt-reset.action'"/></label>

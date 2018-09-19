@@ -271,7 +271,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         if (receiptMisc.getFundsource() != null)
             fundsourceCode = receiptMisc.getFundsource().getCode();
         if (receiptMisc.getDepartment() != null)
-            departmentCode = receiptMisc.getDepartment().getCode();
+            departmentCode = receiptMisc.getDepartment();
 
         for (final InstrumentHeader instrumentHeader : receiptHeader.getReceiptInstrument())
             if (instrumentHeader.getInstrumentType().getType().equals(CollectionConstants.INSTRUMENTTYPE_CASH)

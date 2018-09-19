@@ -48,11 +48,8 @@
 
 package org.egov.commons;
 
-import org.egov.infra.admin.master.entity.User;
-import org.egov.infra.persistence.entity.AbstractPersistable;
-import org.egov.infra.persistence.validator.annotation.Required;
-import org.egov.infra.persistence.validator.annotation.Unique;
-import org.hibernate.validator.constraints.Length;
+import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -63,8 +60,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import java.math.BigDecimal;
-import java.util.Date;
+
+import org.egov.infra.persistence.entity.AbstractPersistable;
+import org.egov.infra.persistence.validator.annotation.Required;
+import org.egov.infra.persistence.validator.annotation.Unique;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "fund")
@@ -98,14 +98,10 @@ public class Fund extends AbstractPersistable<Integer> {
 
     private Boolean isactive;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "createdby")
-    private User createdby;
+    private Long createdby;
     private Date createdDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lastModifiedBy")
-    private User lastModifiedBy;
+    private Long lastModifiedBy;
 
     private Date lastModifiedDate;
 
@@ -173,11 +169,11 @@ public class Fund extends AbstractPersistable<Integer> {
         this.isactive = isactive;
     }
 
-    public User getCreatedby() {
+    public Long getCreatedby() {
         return createdby;
     }
 
-    public void setCreatedby(User createdby) {
+    public void setCreatedby(Long createdby) {
         this.createdby = createdby;
     }
 
@@ -189,11 +185,11 @@ public class Fund extends AbstractPersistable<Integer> {
         this.createdDate = createdDate;
     }
 
-    public User getLastModifiedBy() {
+    public Long getLastModifiedBy() {
         return lastModifiedBy;
     }
 
-    public void setLastModifiedBy(User lastModifiedBy) {
+    public void setLastModifiedBy(Long lastModifiedBy) {
         this.lastModifiedBy = lastModifiedBy;
     }
 

@@ -734,7 +734,7 @@ public class ChallanAction extends BaseFormAction {
 
         final Department depart = (Department) getPersistenceService().findByNamedQuery(
                 CollectionConstants.QUERY_DEPARTMENT_BY_ID, Long.valueOf(deptId));
-        receiptHeader.getReceiptMisc().setDepartment(depart);
+        receiptHeader.getReceiptMisc().setDepartment(depart.getCode());
         if (boundaryId != null)
             receiptHeader.getReceiptMisc().setBoundary(boundaryService.getBoundaryById(boundaryId));
         receiptHeader.getReceiptMisc().setReceiptHeader(receiptHeader);
@@ -953,8 +953,8 @@ public class ChallanAction extends BaseFormAction {
      * Load receipt details.
      */
     private void loadReceiptDetails() {
-        setDeptId(receiptHeader.getReceiptMisc().getDepartment().getId().toString());
-        setDept(receiptHeader.getReceiptMisc().getDepartment());
+        setDeptId(receiptHeader.getReceiptMisc().getDepartment());
+        //setDept(receiptHeader.getReceiptMisc().getDepartment()); Need to fix
         if (!receiptHeader.getReceiptDetails().isEmpty()) {
             final CFunction functn = receiptHeader.getReceiptDetails().iterator().next().getFunction();
             if (functn != null) {

@@ -69,10 +69,9 @@
         <many-to-one name="boundary" class="org.egov.infra.admin.master.entity.Boundary" fetch="select">
             <column name="boundary" precision="22" scale="0" />
         </many-to-one>
-        <many-to-one name="department" class="org.egov.infra.admin.master.entity.Department" fetch="select">
-            <column name="department" precision="22" scale="0" not-null="true"/>
-        </many-to-one>
-        
+        <property name="department" type="string">
+            <column name="department" length="80" />
+        </property>
         <many-to-one name="scheme" class="org.egov.commons.Scheme" fetch="select">
             <column name="scheme" precision="22" scale="0" />
         </many-to-one>

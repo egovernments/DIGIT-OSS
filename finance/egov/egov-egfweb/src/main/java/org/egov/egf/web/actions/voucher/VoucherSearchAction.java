@@ -292,9 +292,9 @@ public class VoucherSearchAction extends BaseFormAction {
 				voucherMap.put("type", voucherheader.getType());
 				voucherMap.put("name", voucherheader.getName());
 				if(voucherheader.getVouchermis().getDepartmentcode()!=null && !voucherheader.getVouchermis().getDepartmentcode().equals("-1")){
-				List<org.egov.infra.microservice.models.Department> depList = microserviceUtils
+				org.egov.infra.microservice.models.Department depList = microserviceUtils
 						.getDepartmentByCode(voucherheader.getVouchermis().getDepartmentcode());
-				voucherMap.put("deptName", depList.get(0).getName());
+				voucherMap.put("deptName", depList.getName());
 				}
 				voucherMap.put("voucherdate", voucherheader.getVoucherDate());
 				voucherMap.put("fundname", voucherheader.getFundId().getName());
@@ -335,9 +335,9 @@ public class VoucherSearchAction extends BaseFormAction {
 					voucherMap.put("type", voucherheader.getType());
 					voucherMap.put("name", voucherheader.getName());
 					if(voucherheader.getVouchermis().getDepartmentcode()!=null && !voucherheader.getVouchermis().getDepartmentcode().equals("-1")){
-					List<org.egov.infra.microservice.models.Department> depList = microserviceUtils
+					org.egov.infra.microservice.models.Department depList = microserviceUtils
 							.getDepartmentByCode(voucherheader.getVouchermis().getDepartmentcode());
-					voucherMap.put("deptName", depList.get(0).getName());
+					voucherMap.put("deptName", depList.getName());
 					}
 					voucherMap.put("voucherdate", voucherheader.getVoucherDate());
 					voucherMap.put("fundname", voucherheader.getFundId().getName());

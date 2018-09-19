@@ -692,8 +692,8 @@ public class ExpenseBillService {
     
     private Department getDepartmentDetails(String deptCode){
     	
-    	List<Department> deptlist = microServiceUtil.getDepartmentByCode(deptCode);
-    	return deptlist.get(0);
+    	Department dept = microServiceUtil.getDepartmentByCode(deptCode);
+    	return dept;
     	
     }
     

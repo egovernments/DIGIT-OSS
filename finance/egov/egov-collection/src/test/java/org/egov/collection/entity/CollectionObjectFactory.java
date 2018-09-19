@@ -947,7 +947,7 @@ public class CollectionObjectFactory {
 		Fund fund = createFund("testFund");
 		Scheme scheme = createScheme("123", "testscheme", fund);
 		receiptMisc.setBoundary(createBoundary());
-		receiptMisc.setDepartment(createDept("testDeptName", "testDeptCode"));
+		receiptMisc.setDepartment("testDeptCode");
 		receiptMisc.setFund(fund);
 		receiptMisc.setFundsource(createFundsource("testFSName", "testFSCode"));
 		receiptMisc.setScheme(scheme);
@@ -961,7 +961,7 @@ public class CollectionObjectFactory {
 		Fund fund = createFund("001");
 		Scheme scheme = createScheme("234", "testscheme1", fund);
 		receiptMisc.setBoundary(createBoundary());
-		receiptMisc.setDepartment(createDept("testDeptName", "testDeptCode"));
+		receiptMisc.setDepartment("testDeptCode");
 		receiptMisc.setFund(fund);
 		receiptMisc.setFundsource(createFundsource("testFSName", "testFSCode"));
 		receiptMisc.setScheme(scheme);
@@ -1359,7 +1359,7 @@ public class CollectionObjectFactory {
 		Fund fund = createFund("001");
 		Scheme scheme = createScheme("234", "testscheme1", fund);
 		receiptMisc.setBoundary(createBoundary());
-		receiptMisc.setDepartment(createDept("testDeptName", "testDeptCode"));
+		receiptMisc.setDepartment("testDeptCode");
 		receiptMisc.setFund(fund);
 		receiptMisc.setFundsource(createFundsource("testFSName", "testFSCode"));
 		receiptMisc.setScheme(scheme);
@@ -1741,7 +1741,7 @@ public class CollectionObjectFactory {
 		ReceiptMisc receiptMisc = new ReceiptMisc();
 		Fund fund = createFund("001");
 		receiptMisc.setBoundary(createBoundary());
-		receiptMisc.setDepartment(createDept("testDeptName", "testDeptCode"));
+		receiptMisc.setDepartment("testDeptCode");
 		receiptMisc.setFund(fund);
 		receiptMisc.setReceiptHeader(createReceiptHeader("11111"));
 		session.saveOrUpdate(receiptMisc);

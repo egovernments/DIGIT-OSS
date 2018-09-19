@@ -695,8 +695,8 @@ public class BankBookReportAction extends BaseFormAction {
         if (getVouchermis() != null && getVouchermis().getDepartmentcode() != null
                 && getVouchermis().getDepartmentcode() != null && getVouchermis().getDepartmentcode() !="-1") {
             query.append(" and vmis.DEPARTMENTCODE='").append(getVouchermis().getDepartmentcode()+"'");
-           List<Department> depList = microserviceUtils.getDepartmentByCode(getVouchermis().getDepartmentcode());
-            header.append(" in " + depList.get(0).getName() + " ");
+           Department depList = microserviceUtils.getDepartmentByCode(getVouchermis().getDepartmentcode());
+            header.append(" in " + depList.getName() + " ");
         }
         if (getVouchermis() != null && getVouchermis().getFunctionary() != null
                 && getVouchermis().getFunctionary().getId() != null && getVouchermis().getFunctionary().getId() != -1)

@@ -47,15 +47,12 @@
  */
 package org.egov.commons;
 
-import org.egov.infra.admin.master.entity.Department;
-import org.egov.infra.admin.master.entity.User;
-
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.egov.infra.admin.master.entity.Department;
 
-public class SubScheme implements java.io.Serializable
-{
+public class SubScheme implements java.io.Serializable {
 
 	private Integer id;
 
@@ -82,85 +79,67 @@ public class SubScheme implements java.io.Serializable
 	private Date councilAdminSanctionDate;
 	private Date govtLoanProposalDate;
 	private Date govtAdminSanctionDate;
-	
-	private User createdBy;
-	private User lastModifiedBy;
+
+	private Long createdBy;
+	private Long lastModifiedBy;
 	private Date createdDate;
 
-	public SubScheme(){
+	public SubScheme() {
 	}
 
-	
-
-	public Integer getId()
-	{
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id)
-	{
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public Scheme getScheme()
-	{
+	public Scheme getScheme() {
 		return this.scheme;
 	}
 
-	public void setScheme(Scheme scheme)
-	{
+	public void setScheme(Scheme scheme) {
 		this.scheme = scheme;
 	}
 
-	public String getCode()
-	{
+	public String getCode() {
 		return this.code;
 	}
 
-	public void setCode(String code)
-	{
+	public void setCode(String code) {
 		this.code = code;
 	}
 
-	public String getName()
-	{
+	public String getName() {
 		return this.name;
 	}
 
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public Date getValidfrom()
-	{
+	public Date getValidfrom() {
 		return this.validfrom;
 	}
 
-	public void setValidfrom(Date validfrom)
-	{
+	public void setValidfrom(Date validfrom) {
 		this.validfrom = validfrom;
 	}
 
-	public Date getValidto()
-	{
+	public Date getValidto() {
 		return this.validto;
 	}
 
-	public void setValidto(Date validto)
-	{
+	public void setValidto(Date validto) {
 		this.validto = (Date) validto;
 	}
 
-	
-
-	public Date getLastmodifieddate()
-	{
+	public Date getLastmodifieddate() {
 		return this.lastmodifieddate;
 	}
 
-	public void setLastmodifieddate(Date lastmodifieddate)
-	{
+	public void setLastmodifieddate(Date lastmodifieddate) {
 		this.lastmodifieddate = lastmodifieddate;
 	}
 
@@ -180,8 +159,7 @@ public class SubScheme implements java.io.Serializable
 		return initialEstimateAmount;
 	}
 
-	public void setCouncilLoanProposalNumber(
-			String councilLoanProposalEstimateNumber) {
+	public void setCouncilLoanProposalNumber(String councilLoanProposalEstimateNumber) {
 		this.councilLoanProposalNumber = councilLoanProposalEstimateNumber;
 	}
 
@@ -189,8 +167,7 @@ public class SubScheme implements java.io.Serializable
 		return councilLoanProposalNumber;
 	}
 
-	public void setCouncilAdminSanctionNumber(
-			String councilAdminSanctionEstimateNumber) {
+	public void setCouncilAdminSanctionNumber(String councilAdminSanctionEstimateNumber) {
 		this.councilAdminSanctionNumber = councilAdminSanctionEstimateNumber;
 	}
 
@@ -198,8 +175,7 @@ public class SubScheme implements java.io.Serializable
 		return councilAdminSanctionNumber;
 	}
 
-	public void setGovtLoanProposalNumber(
-			String govtLoanProposalEstimateNumber) {
+	public void setGovtLoanProposalNumber(String govtLoanProposalEstimateNumber) {
 		this.govtLoanProposalNumber = govtLoanProposalEstimateNumber;
 	}
 
@@ -207,8 +183,7 @@ public class SubScheme implements java.io.Serializable
 		return govtLoanProposalNumber;
 	}
 
-	public void setGovtAdminSanctionNumber(
-			String govtAdminSanctionEstimateNumber) {
+	public void setGovtAdminSanctionNumber(String govtAdminSanctionEstimateNumber) {
 		this.govtAdminSanctionNumber = govtAdminSanctionEstimateNumber;
 	}
 
@@ -216,8 +191,7 @@ public class SubScheme implements java.io.Serializable
 		return govtAdminSanctionNumber;
 	}
 
-	public void setCouncilLoanProposalDate(
-			Date councilLoanProposalEstimateDate) {
+	public void setCouncilLoanProposalDate(Date councilLoanProposalEstimateDate) {
 		this.councilLoanProposalDate = councilLoanProposalEstimateDate;
 	}
 
@@ -225,8 +199,7 @@ public class SubScheme implements java.io.Serializable
 		return councilLoanProposalDate;
 	}
 
-	public void setCouncilAdminSanctionDate(
-			Date councilAdminSanctionEstimateDate) {
+	public void setCouncilAdminSanctionDate(Date councilAdminSanctionEstimateDate) {
 		this.councilAdminSanctionDate = councilAdminSanctionEstimateDate;
 	}
 
@@ -234,8 +207,7 @@ public class SubScheme implements java.io.Serializable
 		return councilAdminSanctionDate;
 	}
 
-	public void setGovtLoanProposalDate(
-			Date govtLoanProposalEstimateDate) {
+	public void setGovtLoanProposalDate(Date govtLoanProposalEstimateDate) {
 		this.govtLoanProposalDate = govtLoanProposalEstimateDate;
 	}
 
@@ -243,8 +215,7 @@ public class SubScheme implements java.io.Serializable
 		return govtLoanProposalDate;
 	}
 
-	public void setGovtAdminSanctionDate(
-			Date govtAdminSanctionEstimateDate) {
+	public void setGovtAdminSanctionDate(Date govtAdminSanctionEstimateDate) {
 		this.govtAdminSanctionDate = govtAdminSanctionEstimateDate;
 	}
 
@@ -252,19 +223,19 @@ public class SubScheme implements java.io.Serializable
 		return govtAdminSanctionDate;
 	}
 
-	public User getCreatedBy() {
+	public Long getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(User createdBy) {
+	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public User getLastModifiedBy() {
+	public Long getLastModifiedBy() {
 		return lastModifiedBy;
 	}
 
-	public void setLastModifiedBy(User lastModifiedBy) {
+	public void setLastModifiedBy(Long lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
 	}
 
@@ -276,13 +247,9 @@ public class SubScheme implements java.io.Serializable
 		this.createdDate = createdDate;
 	}
 
-
-
 	public Boolean getIsactive() {
 		return isactive;
 	}
-
-
 
 	public void setIsactive(Boolean isactive) {
 		this.isactive = isactive;

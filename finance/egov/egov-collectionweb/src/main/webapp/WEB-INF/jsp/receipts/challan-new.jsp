@@ -842,7 +842,7 @@ onChange="onChangeDeparment(this.value)" />
 	</table>
 	</td></tr>
 	</table>
-<div id="loadingMask" style="display:none;overflow:hidden;text-align: center"><img src="/collection/resources/images/bar_loader.gif"/> <span style="color: red">Please wait....</span></div>
+<div id="loadingMask" style="display:none;overflow:hidden;text-align: center"><img src="/services/collection/resources/images/bar_loader.gif"/> <span style="color: red">Please wait....</span></div>
 
 <div align="left" class="mandatorycoll"><s:text name="common.mandatoryfields"/> </div>
 <!-- </div> -->

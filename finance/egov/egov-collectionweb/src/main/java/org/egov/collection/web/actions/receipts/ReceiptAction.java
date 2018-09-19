@@ -504,10 +504,8 @@ public class ReceiptAction extends BaseFormAction {
 		Fundsource fundSource = null;
 		if (receiptMisc.getFundsource() != null && receiptMisc.getFundsource().getId() != null)
 			fundSource = fundSourceDAO.fundsourceById(receiptMisc.getFundsource().getId().intValue());
-		final Department dept = (Department) getPersistenceService()
-				.findByNamedQuery(CollectionConstants.QUERY_DEPARTMENT_BY_ID, Long.valueOf(deptId));
 		receiptHeader.setReceiptMisc(
-				new ReceiptMisc(null, fund, functionary, fundSource, dept, receiptHeader, scheme, subscheme, null));
+				new ReceiptMisc(null, fund, functionary, fundSource, deptId, receiptHeader, scheme, subscheme, null));
 		totalAmntToBeCollected = BigDecimal.ZERO;
 		int m = 0;
 		BigDecimal debitamount = BigDecimal.ZERO;
@@ -843,7 +841,7 @@ public class ReceiptAction extends BaseFormAction {
 		headerFields.remove(CollectionConstants.SUBSCHEME);
 		if (headerFields.contains(CollectionConstants.DEPARTMENT))
 			addDropdownData("departmentList",
-					persistenceService.findAllByNamedQuery(CollectionConstants.QUERY_ALL_DEPARTMENTS));
+					getDepartmentsFromMs());
 		if (headerFields.contains(CollectionConstants.FUNCTIONARY))
 			addDropdownData("functionaryList",
 					persistenceService.findAllByNamedQuery(CollectionConstants.QUERY_ALL_FUNCTIONARY));

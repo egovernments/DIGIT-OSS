@@ -633,7 +633,7 @@
 				<br />
 				<div id="loadingMask"
 					style="display: none; overflow: hidden; text-align: center">
-					<img src="/collection/resources/images/bar_loader.gif" alt="" /> <span
+					<img src="/services/collection/resources/images/bar_loader.gif" alt="" /> <span
 						style="color: red">Please wait....</span>
 				</div>
 

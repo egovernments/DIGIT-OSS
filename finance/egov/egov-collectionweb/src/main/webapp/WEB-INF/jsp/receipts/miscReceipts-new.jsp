@@ -783,7 +783,7 @@ var totaldbamt=0,totalcramt=0;
             </s:else>
               <s:if test="%{shouldShowHeaderField('department')}">
            <td width="21%" class="bluebox"><s:text name="miscreceipt.department"/><s:if test="%{isFieldMandatory('department')}"><span class="bluebox"><span class="mandatory"/></s:if></td>
-          <td width="24%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="deptId" id="deptId" cssClass="selectwk" list="dropdownData.departmentList" listKey="id" listValue="name"  /> </td>
+          <td width="24%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="deptId" id="deptId" cssClass="selectwk" list="dropdownData.departmentList" listKey="code" listValue="name"  /> </td>
             </s:if>
            <s:else>
             <td colspan=2 class="bluebox"></td>
@@ -838,7 +838,7 @@ var totaldbamt=0,totalcramt=0;
          <td width="30%" class="bluebox">
           <s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="subschemeId" id="subschemeId" onchange="setSubSchemeId();getFundSourcelist(this)" onclick="checkscheme()" cssClass="selectwk" list="dropdownData.subschemeList" listKey="id" listValue="name"  /></td>
           <egov:ajaxdropdown id="fundSourceId" fields="['Text','Value']" dropdownId='fundSourceId'
-           url='../../EGF/voucher/common-ajaxLoadFundSource.action'  />
+           url='../../services/EGF/voucher/common-ajaxLoadFundSource.action'  />
            <s:hidden label="receiptMisc.subscheme.id" id="receiptMisc.subscheme.id"  name="receiptMisc.subscheme.id"/>
          
         </tr>

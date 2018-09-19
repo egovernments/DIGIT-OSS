@@ -1493,7 +1493,7 @@ function loadFinDetails(service){
 	var dept = dom.get('deptId').value;
 	var service = dom.get('serviceId').value;
 	
-	var path = '/collection';
+	var path = '/services/collection';
 	
 	var url1 = path+"/receipts/ajaxReceiptCreate-ajaxFinMiscDtlsByService.action?serviceId="+service+"&deptId="+dept;
 	var transaction = YAHOO.util.Connect.asyncRequest('POST', url1,loadMiscDetails, null);

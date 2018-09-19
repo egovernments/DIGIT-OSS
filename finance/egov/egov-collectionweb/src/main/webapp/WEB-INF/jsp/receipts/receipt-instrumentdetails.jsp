@@ -634,7 +634,7 @@ function validateTransactionNumber()
 								href="javascript:show_calendar('forms[0].bankChallanDate');"
 								onmouseover="window.status='Date Picker';return true;"
 								onmouseout="window.status='';return true;"> <img
-									src="/../../egi/resources/erp2/images/calendaricon.gif"
+									src="/../../services/egi/resources/erp2/images/calendaricon.gif"
 									alt="Date" width="18" height="18" border="0" align="middle" />
 							</a></td>
 						</tr>

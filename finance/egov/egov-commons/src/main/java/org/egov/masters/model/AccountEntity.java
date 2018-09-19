@@ -47,13 +47,7 @@
  */
 package org.egov.masters.model;
 
-import org.egov.commons.Accountdetailtype;
-import org.egov.commons.EgwStatus;
-import org.egov.commons.utils.EntityType;
-import org.egov.infra.admin.master.entity.User;
-import org.egov.infra.persistence.entity.AbstractPersistable;
-import org.egov.infra.persistence.validator.annotation.Unique;
-import org.hibernate.validator.constraints.Length;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -65,64 +59,64 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
+import org.egov.commons.Accountdetailtype;
+import org.egov.commons.EgwStatus;
+import org.egov.commons.utils.EntityType;
+import org.egov.infra.persistence.entity.AbstractPersistable;
+import org.egov.infra.persistence.validator.annotation.Unique;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
-@Table(name="AccountEntityMaster")
+@Table(name = "AccountEntityMaster")
 @SequenceGenerator(name = AccountEntity.SEQ, sequenceName = AccountEntity.SEQ, allocationSize = 1)
-@Unique(id = "id", tableName = "AccountEntityMaster", fields = { "code"}, columnName = { "code" }, enableDfltMsg = true)
+@Unique(id = "id", tableName = "AccountEntityMaster", fields = { "code" }, columnName = {
+		"code" }, enableDfltMsg = true)
 public class AccountEntity extends AbstractPersistable<Integer> implements java.io.Serializable, EntityType {
 
 	private static final long serialVersionUID = 1L;
 	public static final String SEQ = "SEQ_AccountEntityMaster";
-	
+
 	@Id
 	@GeneratedValue(generator = SEQ, strategy = GenerationType.SEQUENCE)
 	private Integer id;
 
-	//@SearchField
-	//@SearchResult
+	// @SearchField
+	// @SearchResult
 	@NotNull
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="detailtypeid")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "detailtypeid")
 	private Accountdetailtype accountdetailtype;
-	
-	//@SearchField
-	//@SearchResult
+
+	// @SearchField
+	// @SearchResult
 	@NotNull
-	@Length(max=350)
+	@Length(max = 350)
 	private String name;
-	
-	//@SearchField
-	//@SearchResult
+
+	// @SearchField
+	// @SearchResult
 	@NotNull
-	@Length(max=25)
+	@Length(max = 25)
 	private String code;
 
-	@Length(max=250)
+	@Length(max = 250)
 	private String narration;
-	//@SearchResult
+	// @SearchResult
 	private Boolean isactive;
 
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="createdBy")
-	private User createdBy;
+	private Long createdBy;
 
 	private Date createdDate;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="lastModifiedBy")
-	private User lastModifiedBy;
+
+	private Long lastModifiedBy;
 
 	private Date lastmodifiedDate;
-	
 
 	public AccountEntity() {
-		//For hibernate to work
+		// For hibernate to work
 	}
 
-	
 	public Integer getId() {
 		return this.id;
 	}
@@ -171,7 +165,6 @@ public class AccountEntity extends AbstractPersistable<Integer> implements java.
 		this.isactive = isactive;
 	}
 
-	
 	@Override
 	public String getBankaccount() {
 		return null;
@@ -183,22 +176,22 @@ public class AccountEntity extends AbstractPersistable<Integer> implements java.
 	}
 
 	@Override
-	public String getIfsccode() {		
+	public String getIfsccode() {
 		return null;
 	}
 
 	@Override
-	public String getModeofpay() {		
+	public String getModeofpay() {
 		return null;
 	}
 
 	@Override
-	public String getPanno() {		
+	public String getPanno() {
 		return null;
 	}
 
 	@Override
-	public String getTinno() {		
+	public String getTinno() {
 		return null;
 	}
 
@@ -218,41 +211,33 @@ public class AccountEntity extends AbstractPersistable<Integer> implements java.
 		return null;
 	}
 
-
 	public Date getLastmodifiedDate() {
 		return lastmodifiedDate;
 	}
-
 
 	public void setLastmodifiedDate(Date lastmodifiedDate) {
 		this.lastmodifiedDate = lastmodifiedDate;
 	}
 
-
-	public User getCreatedBy() {
+	public Long getCreatedBy() {
 		return createdBy;
 	}
 
-
-	public void setCreatedBy(User createdBy) {
+	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
 	}
 
-
-	public User getLastModifiedBy() {
+	public Long getLastModifiedBy() {
 		return lastModifiedBy;
 	}
 
-
-	public void setLastModifiedBy(User lastModifiedBy) {
+	public void setLastModifiedBy(Long lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
 	}
-
 
 	public Date getCreatedDate() {
 		return createdDate;
 	}
-
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;

@@ -68,7 +68,7 @@ public class ReceiptMisc implements java.io.Serializable {
     private Fundsource fundsource;
 
     private Boundary boundary;
-    private Department department;
+    private String department;
     private Scheme scheme;
     private SubScheme subscheme;
     private Functionary idFunctionary;
@@ -78,7 +78,7 @@ public class ReceiptMisc implements java.io.Serializable {
     }
 
     public ReceiptMisc(final Boundary boundary, final Fund fund, final Functionary functionary,
-            final Fundsource fundSource, final Department department, final ReceiptHeader receiptHeader,
+            final Fundsource fundSource, final String department, final ReceiptHeader receiptHeader,
             final Scheme scheme, final SubScheme subscheme, final Bankbranch depositedBranch) {
         this.boundary = boundary;
         this.fund = fund;
@@ -132,11 +132,11 @@ public class ReceiptMisc implements java.io.Serializable {
         this.boundary = boundary;
     }
 
-    public Department getDepartment() {
+    public String getDepartment() {
         return department;
     }
 
-    public void setDepartment(final Department department) {
+    public void setDepartment(final String department) {
         this.department = department;
     }
 

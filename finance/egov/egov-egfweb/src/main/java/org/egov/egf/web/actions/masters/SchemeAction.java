@@ -190,7 +190,7 @@ public class SchemeAction extends BaseFormAction {
     public String edit() {
         try {
         	scheme.setLastModifiedDate(new Date());
-        	scheme.setLastModifiedBy((User)schemeService.getSession().load(User.class, ApplicationThreadLocals.getUserId()));
+        	scheme.setLastModifiedBy(ApplicationThreadLocals.getUserId());
             schemeService.persist(scheme);
         } catch (final ValidationException e) {
             LOGGER.error("ValidationException in creating Scheme" + e.getMessage());
@@ -215,7 +215,7 @@ public class SchemeAction extends BaseFormAction {
 
         try {
         	scheme.setCreatedDate(new Date());
-        	scheme.setCreatedBy((User)schemeService.getSession().load(User.class, ApplicationThreadLocals.getUserId()));
+        	scheme.setCreatedBy(ApplicationThreadLocals.getUserId());
             schemeService.persist(scheme);
         } catch (final ValidationException e) {
             LOGGER.error("ValidationException in create Scheme" + e.getMessage());

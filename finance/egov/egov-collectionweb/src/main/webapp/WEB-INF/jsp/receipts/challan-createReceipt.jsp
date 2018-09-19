@@ -719,7 +719,7 @@ function validate()
 
 					<div id="loadingMask"
 						style="display: none; overflow: hidden; text-align: center">
-						<img src="/collection/resources/images/bar_loader.gif" /> <span
+						<img src="/services/collection/resources/images/bar_loader.gif" /> <span
 							style="color: red">Please wait....</span>
 					</div>
 

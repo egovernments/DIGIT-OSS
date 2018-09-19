@@ -166,8 +166,8 @@ public class FinanceController {
 		funds.forEach(fund -> {
 
 			AuditDetails auditDetails = new AuditDetails(fundRequest.getTenantId(),
-					fund.getCreatedby() != null ? fund.getCreatedby().getId() : null,
-					fund.getLastModifiedBy() != null ? fund.getLastModifiedBy().getId() : null, fund.getCreatedDate(),
+					fund.getCreatedby() != null ? fund.getCreatedby() : null,
+					fund.getLastModifiedBy() != null ? fund.getLastModifiedBy() : null, fund.getCreatedDate(),
 					fund.getLastModifiedDate());
 			org.egov.egf.contract.model.Fund _fund = new org.egov.egf.contract.model.Fund();
 			_fund.setAuditDetils(auditDetails);

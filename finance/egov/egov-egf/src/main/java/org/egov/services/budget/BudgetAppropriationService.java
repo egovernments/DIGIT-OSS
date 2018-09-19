@@ -238,9 +238,9 @@ public class BudgetAppropriationService extends PersistenceService {
 
 	private void populateDepartmentForBill(final EgBillregister bill, final BudgetReportEntry budgetReportEntry) {
 		if (bill.getEgBillregistermis().getDepartmentcode() != null) {
-			List<org.egov.infra.microservice.models.Department> list = microserviceUtils
+			org.egov.infra.microservice.models.Department list = microserviceUtils
 					.getDepartmentByCode(bill.getEgBillregistermis().getDepartmentcode());
-			budgetReportEntry.setDepartmentName(list.get(0).getName());
+			budgetReportEntry.setDepartmentName(list.getName());
 		}
 	}
 

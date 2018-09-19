@@ -2110,10 +2110,10 @@ function validateBankAccount(obj)
 						</div></td>
 					<td class="blueborderfortd">
 						<div align="center">
-							<a href="#"><img src="/egi/resources/erp2/images/addrow.gif"
+							<a href="#"><img src="/services/egi/resources/erp2/images/addrow.gif"
 								alt="Add" width="18" height="18" border="0"
 								onclick="javascript:addRow();" /></a> <a href="#"><img
-								src="/egi/resources/erp2/images/removerow.gif" alt="Del"
+								src="/services/egi/resources/erp2/images/removerow.gif" alt="Del"
 								width="18" height="18" border="0"
 								onclick="javascript:return deleteRow(this);" /></a>
 						</div>
@@ -2211,10 +2211,10 @@ function validateBankAccount(obj)
 				if( ((String)session.getAttribute("mode")).equalsIgnoreCase("modify")) { %>
 					<td class="blueborderfortd">
 						<div align="center">
-							<a href="#"><img src="/egi/resources/erp2/images/addrow.gif"
+							<a href="#"><img src="/services/egi/resources/erp2/images/addrow.gif"
 								alt="Add" width="18" height="18" border="0"
 								onclick="javascript:addRow();" /></a> <a href="#"><img
-								src="/egi/resources/erp2/images/removerow.gif" alt="Del"
+								src="/services/egi/resources/erp2/images/removerow.gif" alt="Del"
 								width="18" height="18" border="0"
 								onclick="javascript:return deleteRow(this);" /></a>
 						</div>

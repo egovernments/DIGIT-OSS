@@ -105,8 +105,8 @@
    
     <link rel="icon" href="<cdn:url value='/resources/global/images/favicon.png' context='/services/egi'/>" sizes="32x32">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/collections.css?rnd=${app_release_no}"/>
-	<link rel="stylesheet" type="text/css" href="/collection/resources/commonyui/yui2.8/fonts/fonts-min.css"/>
-	<link rel="stylesheet" type="text/css" href="/collection/resources/commonyui/yui2.8/datatable/assets/skins/sam/datatable.css"/>
+	<link rel="stylesheet" type="text/css" href="/services/collection/resources/commonyui/yui2.8/fonts/fonts-min.css" />
+	<link rel="stylesheet" type="text/css" href="/services/collection/resources/commonyui/yui2.8/datatable/assets/skins/sam/datatable.css"/>
 	
 	<link href="<cdn:url value='/resources/global/css/bootstrap/bootstrap.css' context='/services/egi'/>" rel="stylesheet" type="text/css" />
 	<link href="<cdn:url value='/resources/global/css/egov/custom.css?rnd=${app_release_no}' context='/services/egi'/>" rel="stylesheet" type="text/css" />
@@ -122,22 +122,22 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/ajax-script.js?${app_release_no}"></script>
 	
 	<script src="<cdn:url value='/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
-	<SCRIPT type="text/javascript" src="/collection/resources/js/jsCommonMethods.js"></SCRIPT>
-	<script type="text/javascript" src="/collection/resources/commonyui/yui2.8/yuiloader/yuiloader-min.js"></script>
-	<script type="text/javascript" src="/collection/resources/commonyui/yui2.8/yahoo-dom-event/yahoo-dom-event.js"></script>
-	<script type="text/javascript" src="/collection/resources/commonyui/yui2.8/element/element-min.js"></script>
-	<script type="text/javascript" src="/collection/resources/commonyui/yui2.8/connection/connection-min.js"></script>
-	<script type="text/javascript" src="/collection/resources/commonyui/yui2.8/datasource/datasource-min.js"></script>
-	<script type="text/javascript" src="/collection/resources/commonyui/yui2.8/datatable/datatable-min.js"></script>
-	<script type="text/javascript" src="<cdn:url value='/resources/commonyui/yui2.8/yahoo/yahoo-min.js' context='/collection'/>"></script>
-	<script type="text/javascript" src="<cdn:url value='/resources/commonyui/yui2.8/dom/dom-min.js' context='/collection'/>"></script>
-	<script type="text/javascript" src="<cdn:url value='/resources/js/autocomplete.js' context='/collection'/>"></script>
-	<script type="text/javascript" src="<cdn:url value='/resources/commonyui/yui2.8/event/event-min.js' context='/collection'/>"></script>
-	<script type="text/javascript" src="<cdn:url value='/resources/commonyui/yui2.8/animation/animation-min.js' context='/collection'/>"></script>
-	<script type="text/javascript" src="<cdn:url value='/resources/commonjs/ajaxCommonFunctions.js' context='/collection'/>"></script>
-	<script type="text/javascript" src="<cdn:url value='/resources/js/helper.js' context='/collection'/>"></script>
-	<script type="text/javascript" src="<cdn:url value='/resources/js/collections.js' context='/collection'/>"></script>
-	<script type="text/javascript" src="<cdn:url value='/resources/js/calender.js' context='/collection'/>"></script>
+	<SCRIPT type="text/javascript" src="/services/collection/resources/js/jsCommonMethods.js"></SCRIPT>
+	<script type="text/javascript" src="/services/collection/resources/commonyui/yui2.8/yuiloader/yuiloader-min.js"></script>
+	<script type="text/javascript" src="/services/collection/resources/commonyui/yui2.8/yahoo-dom-event/yahoo-dom-event.js"></script>
+	<script type="text/javascript" src="/services/collection/resources/commonyui/yui2.8/element/element-min.js"></script>
+	<script type="text/javascript" src="/services/collection/resources/commonyui/yui2.8/connection/connection-min.js"></script>
+	<script type="text/javascript" src="/services/collection/resources/commonyui/yui2.8/datasource/datasource-min.js"></script>
+	<script type="text/javascript" src="/services/collection/resources/commonyui/yui2.8/datatable/datatable-min.js"></script>
+	<script type="text/javascript" src="<cdn:url value='/resources/commonyui/yui2.8/yahoo/yahoo-min.js' context='/services/collection'/>"></script>
+	<script type="text/javascript" src="<cdn:url value='/resources/commonyui/yui2.8/dom/dom-min.js' context='/services/collection'/>"></script>
+	<script type="text/javascript" src="<cdn:url value='/resources/js/autocomplete.js' context='/services/collection'/>"></script>
+	<script type="text/javascript" src="<cdn:url value='/resources/commonyui/yui2.8/event/event-min.js' context='/services/collection'/>"></script>
+	<script type="text/javascript" src="<cdn:url value='/resources/commonyui/yui2.8/animation/animation-min.js' context='/services/collection'/>"></script>
+	<script type="text/javascript" src="<cdn:url value='/resources/commonjs/ajaxCommonFunctions.js' context='/services/collection'/>"></script>
+	<script type="text/javascript" src="<cdn:url value='/resources/js/helper.js' context='/services/collection'/>"></script>
+	<script type="text/javascript" src="<cdn:url value='/resources/js/collections.js' context='/services/collection'/>"></script>
+	<script type="text/javascript" src="<cdn:url value='/resources/js/calender.js' context='/services/collection'/>"></script>
 
     <decorator:head/>
     </head>

@@ -143,7 +143,7 @@ public class SubSchemeAction extends BaseFormAction {
             subScheme.setIsactive(false);
 
         subScheme.setCreatedDate(new Date());
-        subScheme.setCreatedBy(getLoggedInUser());
+        subScheme.setCreatedBy(ApplicationThreadLocals.getUserId());
         subScheme.setLastmodifieddate(new Date());
        
         try {
@@ -174,7 +174,7 @@ public class SubSchemeAction extends BaseFormAction {
         else
             subScheme.setIsactive(false);
 
-        subScheme.setLastModifiedBy(getLoggedInUser());
+        subScheme.setLastModifiedBy(ApplicationThreadLocals.getUserId());
         subScheme.setLastmodifieddate(new Date());
         try {
             subSchemeService.persist(subScheme);

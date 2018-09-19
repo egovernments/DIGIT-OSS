@@ -166,8 +166,8 @@ public class HibernateEventListener implements SaveOrUpdateEventListener, PreUpd
 		for (final String propName : event.getPersister().getPropertyNames()) {
 			if ("modifiedDate".equals(propName))
 				event.getState()[i] = new Date();
-			if ("modifiedBy".equals(propName))
-				event.getState()[i] = getUserObjectFromWithinEventListener(event.getSession());
+			/*if ("modifiedBy".equals(propName))
+				event.getState()[i] = getUserObjectFromWithinEventListener(event.getSession());*/
 			i++;
 		}
 	}
@@ -177,8 +177,8 @@ public class HibernateEventListener implements SaveOrUpdateEventListener, PreUpd
 		for (final String propName : event.getPersister().getPropertyNames()) {
 			if ("lastModifiedDate".equals(propName))
 				event.getState()[i] = new Date();
-			if ("lastModifiedBy".equals(propName))
-				event.getState()[i] = getUserObjectFromWithinEventListener(event.getSession());
+			/*if ("lastModifiedBy".equals(propName))
+				event.getState()[i] = getUserObjectFromWithinEventListener(event.getSession());*/
 			i++;
 		}
 	}

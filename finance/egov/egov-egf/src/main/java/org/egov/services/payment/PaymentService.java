@@ -2723,9 +2723,9 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
 				if (billregister.getEgBillregistermis().getFund() != null)
 					paymentBean.setFundName(billregister.getEgBillregistermis().getFund().getName());
 				if (billregister.getEgBillregistermis().getDepartmentcode() != null) {
-					List<org.egov.infra.microservice.models.Department> list = microserviceUtils
+					org.egov.infra.microservice.models.Department list = microserviceUtils
 							.getDepartmentByCode(billregister.getEgBillregistermis().getDepartmentcode());
-					String departmentName = list != null && !list.isEmpty() ? list.get(0).getName() : "";
+					String departmentName = list != null  ? list.getName() : "";
 					paymentBean.setDeptName(departmentName);
 				}
 				if (billregister.getEgBillregistermis().getScheme() != null)

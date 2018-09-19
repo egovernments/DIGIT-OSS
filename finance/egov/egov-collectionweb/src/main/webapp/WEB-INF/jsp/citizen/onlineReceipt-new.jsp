@@ -717,7 +717,7 @@ function onLoad(){
 							<div id="transactiondiv" style="display: none"></div>
 							<div id="loadingMask"
 								style="display: none; overflow: hidden; text-align: center">
-								<img src="/collection/resources/images/bar_loader.gif" /> <span
+								<img src="/serviecs/collection/resources/images/bar_loader.gif" /> <span
 									style="color: red">Please wait....</span>
 							</div>
 							<div class="bottombuttonholder" align="middle">

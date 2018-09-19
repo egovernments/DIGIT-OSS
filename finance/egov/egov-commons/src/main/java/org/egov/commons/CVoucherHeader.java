@@ -47,8 +47,13 @@
  */
 package org.egov.commons;
 
-import org.egov.infra.workflow.entity.StateAware;
-import org.egov.pims.commons.Position;
+import static org.egov.commons.CVoucherHeader.SEQ_VOUCHERHEADER;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -63,18 +68,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
-import static org.egov.commons.CVoucherHeader.SEQ_VOUCHERHEADER;
+import org.egov.infra.workflow.entity.StateAware;
 
 @Entity
 @Table(name = "VOUCHERHEADER")
 @SequenceGenerator(name = SEQ_VOUCHERHEADER, sequenceName = SEQ_VOUCHERHEADER, allocationSize = 1)
-public class CVoucherHeader extends StateAware{
+public class CVoucherHeader extends StateAware implements java.io.Serializable{
 
     public static final String SEQ_VOUCHERHEADER = "SEQ_VOUCHERHEADER";
     private static final long serialVersionUID = -1950866465902911747L;

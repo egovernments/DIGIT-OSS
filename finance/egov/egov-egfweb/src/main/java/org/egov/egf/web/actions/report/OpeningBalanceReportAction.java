@@ -185,8 +185,8 @@ public class OpeningBalanceReportAction extends BaseFormAction {
 		}
 
 		if (checkNullandEmpty(openingBalanceReport.getDeptId())) {
-			List<Department> list = microserviceUtils.getDepartmentByCode(openingBalanceReport.getDeptId());
-			heading = heading + " and " + list.get(0).getName() + " Department ";
+			Department list = microserviceUtils.getDepartmentByCode(openingBalanceReport.getDeptId());
+			heading = heading + " and " + list.getName() + " Department ";
 		}
 		return heading;
 	}

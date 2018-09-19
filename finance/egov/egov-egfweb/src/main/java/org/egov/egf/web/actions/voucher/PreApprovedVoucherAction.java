@@ -843,9 +843,9 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 			else if (name.equals("fundsource") && voucherHeader.getVouchermis().getFundsource() != null)
 				val = voucherHeader.getVouchermis().getFundsource().getName();
 			else if (name.equals("department") && voucherHeader.getVouchermis().getDepartmentcode() != null && !voucherHeader.getVouchermis().getDepartmentcode().equals("-1")) {
-				List<org.egov.infra.microservice.models.Department> list = microserviceUtils
+				org.egov.infra.microservice.models.Department list = microserviceUtils
 						.getDepartmentByCode(voucherHeader.getVouchermis().getDepartmentcode());
-				val = list.get(0).getName();
+				val = list.getName();
 			} else if (name.equals("scheme") && voucherHeader.getVouchermis().getSchemeid() != null)
 				val = voucherHeader.getVouchermis().getSchemeid().getName();
 			else if (name.equals("subscheme") && voucherHeader.getVouchermis().getSubschemeid() != null)
@@ -865,9 +865,9 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 		else if (name.equals("fundsource") && egBillregister.getEgBillregistermis().getFundsource() != null)
 			val = egBillregister.getEgBillregistermis().getFundsource().getName();
 		else if (name.equals("department") && egBillregister.getEgBillregistermis().getDepartmentcode() != null) {
-			List<org.egov.infra.microservice.models.Department> depList = microserviceUtils
+			org.egov.infra.microservice.models.Department depList = microserviceUtils
 					.getDepartmentByCode(egBillregister.getEgBillregistermis().getDepartmentcode());
-			val = depList != null && !depList.isEmpty() ? depList.get(0).getName() : "";
+			val = depList != null ? depList.getName() : "";
 		} else if (name.equals("scheme") && egBillregister.getEgBillregistermis().getScheme() != null)
 			val = egBillregister.getEgBillregistermis().getScheme().getName();
 		else if (name.equals("subscheme") && egBillregister.getEgBillregistermis().getSubScheme() != null)

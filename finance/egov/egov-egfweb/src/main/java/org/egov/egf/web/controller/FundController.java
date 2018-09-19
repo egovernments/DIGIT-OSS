@@ -53,9 +53,11 @@ import com.google.gson.GsonBuilder;
 import org.egov.commons.Fund;
 import org.egov.commons.service.FundService;
 import org.egov.egf.web.adaptor.FundJsonAdaptor;
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.utils.DateUtils;
 import org.egov.infstr.utils.EgovMasterDataCaching;
+import org.python.netty.handler.ssl.ApplicationProtocolNegotiationHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
@@ -106,7 +108,7 @@ public class FundController {
             return FUND_NEW;
         }
         fund.setCreatedDate(DateUtils.now());
-        fund.setCreatedby(securityUtils.getCurrentUser());
+        fund.setCreatedby(ApplicationThreadLocals.getUserId());
         fundService.create(fund);
         redirectAttrs.addFlashAttribute("message",
                 messageSource.getMessage("msg.fund.success", null, null));
@@ -131,7 +133,7 @@ public class FundController {
             return FUND_EDIT;
         }
         fund.setLastModifiedDate(DateUtils.now());
-        fund.setLastModifiedBy(securityUtils.getCurrentUser());
+        fund.setLastModifiedBy(ApplicationThreadLocals.getUserId());
         fundService.update(fund);
         redirectAttrs.addFlashAttribute("message",
                 messageSource.getMessage("msg.fund.success", null, null));

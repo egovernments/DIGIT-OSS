@@ -284,7 +284,7 @@ public class CollectionCommon {
                     if (branchUserMap != null && branchUserMap.getBankbranch() != null)
                         bankBranch = branchUserMap.getBankbranch();
                 }
-                final ReceiptMisc receiptMisc = new ReceiptMisc(boundary, fund, functionary, fundSource, dept,
+                final ReceiptMisc receiptMisc = new ReceiptMisc(boundary, fund, functionary, fundSource, dept.getCode(),
                         receiptHeader, null, null, bankBranch);
 
                 receiptHeader.setReceiptMisc(receiptMisc);
