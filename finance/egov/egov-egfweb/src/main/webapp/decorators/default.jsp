@@ -75,10 +75,10 @@
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/jsCommonMethods.js?rnd=${app_release_no}"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/calenderNew.js?rnd=${app_release_no}"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/helper.js?rnd=${app_release_no}"></script>
-		<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/jquery.js' context='/egi'/>"> </script>
-		<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery-ui/jquery-ui.js' context='/egi'/>"> </script>
+		<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/jquery.js' context='/services/egi'/>"> </script>
+		<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery-ui/jquery-ui.js' context='/services/egi'/>"> </script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/ajax-script.js?rnd=${app_release_no}"></script>
-		<link rel="stylesheet" type="text/css" href="<cdn:url value='/resources/global/js/jquery-ui/jquery-ui.css' context='/egi'/>" />
+		<link rel="stylesheet" type="text/css" href="<cdn:url value='/resources/global/js/jquery-ui/jquery-ui.css' context='/services/egi'/>" />
 		<link href="<cdn:url value='/resources/global/css/bootstrap/bootstrap.css' context='/services/egi'/>" rel="stylesheet" type="text/css" />
     <link href="<cdn:url value='/resources/global/css/egov/custom.css?rnd=${app_release_no}' context='/services/egi'/>"
           rel="stylesheet" type="text/css"/>
