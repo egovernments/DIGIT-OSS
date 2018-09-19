@@ -82,7 +82,7 @@ function validate()
 		return false;
 	}
 	
-	document.billForm.action='/EGF/voucher/cancelBill-search.action';
+	document.billForm.action='/services/EGF/voucher/cancelBill-search.action';
 	document.billForm.submit();
 	return true;
 }
@@ -105,7 +105,7 @@ function validateCancel()
 		bootbox.alert("Please select atleast one bill");
 		return false;
 	}
-	document.billForm.action='/EGF/voucher/cancelBill-cancelBill.action';
+	document.billForm.action='/services/EGF/voucher/cancelBill-cancelBill.action';
 	document.billForm.submit();
 	return true;
 }
