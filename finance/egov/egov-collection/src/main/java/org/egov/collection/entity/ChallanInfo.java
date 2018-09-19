@@ -201,7 +201,7 @@ public class ChallanInfo {
 	 * @return The service name for this receipt
 	 */
 	public String getServiceName() {
-		return receiptHeader.getService().getName();
+		return receiptHeader.getService();
 	}
 
 	/**

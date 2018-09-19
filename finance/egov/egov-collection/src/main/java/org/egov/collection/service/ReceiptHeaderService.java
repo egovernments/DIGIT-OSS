@@ -92,6 +92,8 @@ import org.egov.infra.admin.master.entity.Boundary;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.DepartmentService;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.BusinessDetails;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.reporting.engine.ReportFormat;
 import org.egov.infra.reporting.engine.ReportRequest;
 import org.egov.infra.security.utils.SecurityUtils;
@@ -141,6 +143,9 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
 
     @Autowired
     protected SecurityUtils securityUtils;
+    
+    @Autowired
+	private MicroserviceUtils microserviceUtils;
 
     public ReceiptHeaderService() {
         super(ReceiptHeader.class);
@@ -261,9 +266,9 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         String fundsourceCode = null;
         String departmentCode = null;
         Boolean isVoucherApproved = Boolean.FALSE;
-
-        if (receiptHeader.getService().getIsVoucherApproved() != null)
-            isVoucherApproved = receiptHeader.getService().getIsVoucherApproved();
+        BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(receiptHeader.getService());
+        if (bd.getIsVoucherApproved() != null)
+            isVoucherApproved = bd.getIsVoucherApproved();
 
         final ReceiptMisc receiptMisc = receiptHeader.getReceiptMisc();
         if (receiptMisc.getFund() != null)
@@ -675,12 +680,12 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
                     && !receiptHeader.getState().getValue().equals(CollectionConstants.WF_STATE_END))
                 endReceiptWorkFlowOnCancellation(receiptHeader);
             if (receiptHeader.getReceipttype() == CollectionConstants.RECEIPT_TYPE_BILL) {
-                if (receiptHeader.getService().getCode().equals(CollectionConstants.SERVICECODE_LAMS)) {
+                if (receiptHeader.getService().equals(CollectionConstants.SERVICECODE_LAMS)) {
                     // TODO Implement separate API for Microservice billing services
                     final BillReceiptInfo billReceipt = new BillReceiptInfoImpl(receiptHeader, chartOfAccountsHibernateDAO,
                             persistenceService, null);
                     collectionsUtil.updateReceiptDetailsAndGetReceiptAmountInfo(new BillReceiptReq(billReceipt),
-                            receiptHeader.getService().getCode());
+                            receiptHeader.getService());
                 } else
                     updateBillingSystemWithReceiptInfo(receiptHeader, null, null);
             }
@@ -1130,7 +1135,8 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
             // create voucher based on configuration.
             if (collectionsUtil.checkVoucherCreation(receiptHeader))
                 createVoucherForReceipt(receiptHeader);
-            if (receiptHeader.getService().getServiceType().equalsIgnoreCase(CollectionConstants.SERVICE_TYPE_BILLING)) {
+            BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(receiptHeader.getService());
+            if (bd.getBusinessType().equalsIgnoreCase(CollectionConstants.SERVICE_TYPE_BILLING)) {
                 updateBillingSystemWithReceiptInfo(receiptHeader, null, null);
                 LOGGER.info("Updated billing system ");
             }/* else
@@ -1171,22 +1177,22 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
          * for each receipt created, send the details back to the billing system
          */
         LOGGER.info("$$$$$$ Update Billing system for Service Code :"
-                + receiptHeader.getService().getCode()
+                + receiptHeader.getService()
                 + (receiptHeader.getConsumerCode() != null ? " and consumer code: " + receiptHeader.getConsumerCode()
                         : ""));
         final Set<BillReceiptInfo> billReceipts = new HashSet<>(0);
         billReceipts.add(new BillReceiptInfoImpl(receiptHeader, chartOfAccountsHibernateDAO, persistenceService,
                 bouncedInstrumentInfo));
 
-        if (receiptHeader.getService().getCode().equals(CollectionConstants.SERVICECODE_LAMS)
-                || updateBillingSystem(receiptHeader.getService(), billReceipts, billingService)) {
+        if (receiptHeader.getService().equals(CollectionConstants.SERVICECODE_LAMS)
+                || true){//updateBillingSystem(receiptHeader.getService(), billReceipts, billingService)) {
             receiptHeader.setIsReconciled(true);
             // the receipts should be persisted again
             super.persist(receiptHeader);
             updateCollectionIndexAndPushMail(receiptHeader);
         }
         LOGGER.info("$$$$$$ Billing system updated for Service Code :"
-                + receiptHeader.getService().getCode()
+                + receiptHeader.getService()
                 + (receiptHeader.getConsumerCode() != null ? " and consumer code: " + receiptHeader.getConsumerCode()
                         : ""));
     }
@@ -1222,13 +1228,13 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         String additionalMessage = null;
         final List<BillReceiptInfo> receiptList = new ArrayList<>(0);
         final Map<String, Object> reportParams = new HashMap<>(0);
-        final String serviceCode = receiptHeader.getService().getCode();
+        final String serviceCode = receiptHeader.getService();
 
         reportParams.put(CollectionConstants.REPORT_PARAM_COLLECTIONS_UTIL, collectionsUtil);
         final String templateName = collectionsUtil.getReceiptTemplateName(receiptHeader.getReceipttype(), serviceCode);
 
         if (receiptHeader.getReceipttype() == CollectionConstants.RECEIPT_TYPE_BILL) {
-            if (!receiptHeader.getService().getCode().equals(CollectionConstants.SERVICECODE_LAMS))
+            if (!receiptHeader.getService().equals(CollectionConstants.SERVICECODE_LAMS))
                 additionalMessage = getAdditionalInfoForReceipt(serviceCode, new BillReceiptInfoImpl(receiptHeader,
                         chartOfAccountsHibernateDAO, persistenceService, null));
             if (additionalMessage != null)
@@ -1332,7 +1338,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
             final Date txnDate, final String txnRefNo, final BigDecimal txnAmount, final String txnAuthStatus,
             final List<ReceiptDetail> reconstructedList, final ReceiptDetail debitAccountDetail) {
         final BillingIntegrationService billingService = (BillingIntegrationService) collectionsUtil
-                .getBean(onlinePaymentReceiptHeader.getService().getCode()
+                .getBean(onlinePaymentReceiptHeader.getService()
                         + CollectionConstants.COLLECTIONS_INTERFACE_SUFFIX);
         if (reconstructedList != null) {
             onlinePaymentReceiptHeader.getReceiptDetails().clear();

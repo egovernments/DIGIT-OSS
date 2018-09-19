@@ -58,17 +58,19 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AccountdetailtypeRepository extends JpaRepository<Accountdetailtype, Integer> {
-    public Accountdetailtype findByName(String name);
+	public Accountdetailtype findByName(String name);
 
-    public List<Accountdetailtype> findByNameContainingIgnoreCaseAndDescriptionContainingIgnoreCase(String name,
-            String description);
+	public List<Accountdetailtype> findByNameContainingIgnoreCaseAndDescriptionContainingIgnoreCase(String name,
+			String description);
 
-    public List<Accountdetailtype> findByNameContainingIgnoreCase(String name);
+	public List<Accountdetailtype> findByNameContainingIgnoreCase(String name);
 
-    public List<Accountdetailtype> findByDescriptionContainingIgnoreCase(String description);
+	public Accountdetailtype findByCode(String code);
 
-    public List<Accountdetailtype> findByFullQualifiedName(String fullQualifiedName);
+	public List<Accountdetailtype> findByDescriptionContainingIgnoreCase(String description);
 
-    @Query("select distinct(adt) from Accountdetailtype adt where adt.id in (select coad.detailTypeId from CChartOfAccountDetail coad where coad.glCodeId in (select coa.id from CChartOfAccounts coa where  coa.id =:glcodeId))")
-    public List<Accountdetailtype> findByGlcodeId(@Param("glcodeId") Long glcodeId);
+	public List<Accountdetailtype> findByFullQualifiedName(String fullQualifiedName);
+
+	@Query("select distinct(adt) from Accountdetailtype adt where adt.id in (select coad.detailTypeId from CChartOfAccountDetail coad where coad.glCodeId in (select coa.id from CChartOfAccounts coa where  coa.id =:glcodeId))")
+	public List<Accountdetailtype> findByGlcodeId(@Param("glcodeId") Long glcodeId);
 }

@@ -180,7 +180,7 @@ public class RemittanceVoucherReportAction extends ReportFormAction {
                     collBankRemitReport.setAmount(instHead.getInstrumentAmount().doubleValue());
                     collBankRemitReport.setReceiptNumber(receiptHead.getReceiptnumber());
                     collBankRemitReport.setReceiptDate(receiptHead.getReceiptDate());
-                    collBankRemitReport.setServiceType(receiptHead.getService().getName());
+                    collBankRemitReport.setServiceType(receiptHead.getService());
                     reportList.add(collBankRemitReport);
                 }
             }

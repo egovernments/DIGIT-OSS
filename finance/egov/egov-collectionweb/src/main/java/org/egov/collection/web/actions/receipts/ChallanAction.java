@@ -726,8 +726,8 @@ public class ChallanAction extends BaseFormAction {
         receiptHeader.setPaidBy(CollectionConstants.CHAIRPERSON);
         receiptHeader.setSource(Source.SYSTEM.toString());
         receiptHeader.setReceiptdate(new Date());
-        receiptHeader.setService(serviceDetailsService.findById(serviceId, false));
-        receiptHeader.getService().setServiceCategory(serviceCategoryService.findById(serviceCategoryId, false));
+       /* receiptHeader.setService(serviceDetailsService.findById(serviceId, false));
+        receiptHeader.getService().setServiceCategory(serviceCategoryService.findById(serviceCategoryId, false));*/
 
         receiptHeader.getReceiptMisc().setFund(
                 fundDAO.fundById(receiptHeader.getReceiptMisc().getFund().getId(), false));
@@ -963,9 +963,9 @@ public class ChallanAction extends BaseFormAction {
             }
         }
         setBoundary(receiptHeader.getReceiptMisc().getBoundary());
-        setServiceCategoryId(receiptHeader.getService().getServiceCategory().getId());
-        setServiceId(receiptHeader.getService().getId());
-        if (null != receiptHeader.getService() && null != receiptHeader.getService().getServiceCategory()
+        //setServiceCategoryId(receiptHeader.getService().getServiceCategory().getId());
+        //setServiceId(receiptHeader.getService());
+     /*   if (null != receiptHeader.getService() && null != receiptHeader.getService().getServiceCategory()
                 && receiptHeader.getService().getServiceCategory().getId() != -1)
             addDropdownData("serviceList", serviceDetailsService.findAllByNamedQuery(
                     CollectionConstants.QUERY_SERVICE_BY_CATEGORY_FOR_TYPE, receiptHeader.getService()
@@ -973,7 +973,7 @@ public class ChallanAction extends BaseFormAction {
                     CollectionConstants.SERVICE_TYPE_CHALLAN_COLLECTION,
                     Boolean.TRUE));
         else
-            addDropdownData("serviceList", Collections.emptyList());
+            addDropdownData("serviceList", Collections.emptyList());*/
         setBillDetailslist(collectionCommon.setReceiptDetailsList(receiptHeader,
                 CollectionConstants.COLLECTIONSAMOUNTTPE_BOTH));
         setSubLedgerlist(collectionCommon.setAccountPayeeList(receiptHeader));

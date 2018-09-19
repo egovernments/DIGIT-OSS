@@ -257,7 +257,7 @@ public class CollectionCommon {
                         billDetail.getConsumerCode(), billDetail.getDescription(), billDetail.getTotalAmount(),
                         billDetail.getMinimumAmount(), collDetails.getPartPaymentAllowed(),
                         collDetails.getOverrideAccountHeadsAllowed(), collDetails.getCallbackForApportioning(),
-                        collDetails.getDisplayMessage(), service, collModesNotAllowed.toString(),
+                        collDetails.getDisplayMessage(), service.getCode(), collModesNotAllowed.toString(),
                         billPayee.getPayeeName(), billPayee.getPayeeAddress(), billPayee.getPayeeEmail(),
                         billDetail.getConsumerType());
 
@@ -336,7 +336,7 @@ public class CollectionCommon {
      * @return an integer representing the report id
      */
     public String generateReport(final ReceiptHeader[] receipts, final boolean flag) {
-        final String serviceCode = receipts[0].getService().getCode();
+        final String serviceCode = receipts[0].getService();
         final char receiptType = receipts[0].getReceipttype();
         final List<BillReceiptInfo> receiptList = new ArrayList<>(0);
 
@@ -356,7 +356,7 @@ public class CollectionCommon {
             for (final ReceiptHeader receiptHeader : receipts) {
                 String additionalMessage = null;
                 if (receiptType == CollectionConstants.RECEIPT_TYPE_BILL) {
-                    if (receiptHeader.getService().getCode().equals(CollectionConstants.SERVICECODE_LAMS)) {
+                    if (receiptHeader.getService().equals(CollectionConstants.SERVICECODE_LAMS)) {
                         BillReceiptInfo billReceiptInfo = new BillReceiptInfoImpl(receiptHeader, chartOfAccountsHibernateDAO,
                                 persistenceService, null);
                         List<ReceiptAccountInfo> receiptAccountInfoList = billReceiptInfo.getAccountDetails().stream()
@@ -792,13 +792,13 @@ public class CollectionCommon {
         BigDecimal totalCreditAmount = BigDecimal.ZERO;
         final ReceiptHeader receiptHeader = receiptDetails.get(0).getReceiptHeader();
         final BillingIntegrationService billingService = (BillingIntegrationService) collectionsUtil
-                .getBean(receiptHeader.getService().getCode() + CollectionConstants.COLLECTIONS_INTERFACE_SUFFIX);
+                .getBean(receiptHeader.getService() + CollectionConstants.COLLECTIONS_INTERFACE_SUFFIX);
         billingService.apportionPaidAmount(receiptHeader.getReferencenumber(), actualAmountPaid, receiptDetails);
         for (final ReceiptDetail receiptDetail : receiptDetails)
             totalCreditAmount = totalCreditAmount.add(receiptDetail.getCramount());
         if (totalCreditAmount.intValue() == 0)
             throw new ApplicationRuntimeException("Apportioning Failed at the Billing System: "
-                    + receiptHeader.getService().getCode() + ", for bill number: " + receiptHeader.getReferencenumber());
+                    + receiptHeader.getService() + ", for bill number: " + receiptHeader.getReferencenumber());
         return receiptDetails;
     }
 

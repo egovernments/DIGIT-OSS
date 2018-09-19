@@ -47,6 +47,11 @@
  */
 package org.egov.collection.web.actions.receipts;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
@@ -60,6 +65,8 @@ import org.egov.commons.dao.BankaccountHibernateDAO;
 import org.egov.commons.exception.NoSuchObjectException;
 import org.egov.eis.entity.EmployeeView;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.BusinessDetails;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
@@ -68,11 +75,6 @@ import org.egov.infstr.services.PersistenceService;
 import org.egov.pims.commons.Designation;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 @ParentPackage("egov")
 @Results({
@@ -101,6 +103,8 @@ public class AjaxBankRemittanceAction extends BaseFormAction {
     private BankBranchHibernateDAO bankBranchHibernateDAO;
     @Autowired
     private BankaccountHibernateDAO bankaccountHibernateDAO;
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
     private PersistenceService<ServiceDetails, Long> serviceDetailsService;
 
     /**
@@ -125,9 +129,8 @@ public class AjaxBankRemittanceAction extends BaseFormAction {
             setFundName(fund.getName());
         }
         if (serviceName == null && serviceId != null && serviceId != -1) {
-            final ServiceDetails serviceDetails = (ServiceDetails) persistenceService.find(
-                    "from ServiceDetails where id=?", serviceId);
-            setServiceName(serviceDetails.getName());
+        	BusinessDetails bd = microserviceUtils.getBusinessDetailsById(serviceId);
+            setServiceName(bd.getName());
         }
         final String bankBranchQueryString = "select distinct(bb.id) as branchid,b.NAME||'-'||bb.BRANCHNAME as branchname from BANK b,BANKBRANCH bb, BANKACCOUNT ba,"
                 + "EGCL_BANKACCOUNTSERVICEMAPPING asm,EGCL_SERVICEDETAILS sd,FUND fd where asm.bankaccount=ba.ID and asm.servicedetails=sd.ID and "

@@ -165,7 +165,7 @@ public class SbimopsAdaptor implements PaymentGatewayAdaptor {
         chStringBuilder.append(CollectionConstants.SEPARATOR_COMMA)
                 .append(collectionApplicationProperties.sbimopsDdocode(ApplicationThreadLocals.getCityCode()).toString())
                 .append(CollectionConstants.SEPARATOR_COMMA)
-                .append(collectionApplicationProperties.sbimopsServiceCode(receiptHeader.getService().getCode()))
+                .append(collectionApplicationProperties.sbimopsServiceCode(receiptHeader.getService()))
                 .append(CollectionConstants.SEPARATOR_COMMA)
                 .append(receiptHeader.getTotalAmount().toString());
         sbiPaymentRequest.setParameter(SBIMOPS_CH, chStringBuilder.toString());

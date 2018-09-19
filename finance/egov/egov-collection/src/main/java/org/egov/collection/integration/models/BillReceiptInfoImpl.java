@@ -307,7 +307,7 @@ public class BillReceiptInfoImpl implements BillReceiptInfo {
      */
     @Override
     public String getServiceName() {
-        return receiptHeader.getService().getName();
+        return receiptHeader.getService();
     }
 
     /*

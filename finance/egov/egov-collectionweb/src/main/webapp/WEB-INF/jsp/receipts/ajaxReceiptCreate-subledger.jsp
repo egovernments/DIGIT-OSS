@@ -52,12 +52,12 @@
 "ResultSet": {
     "Result":[
     <s:iterator var="s" value="subledgerDetails" status="status">
-    {"subledgerCode":"<s:property value="serviceAccountDetail.glCodeId.glcode"/>",
-    "glcodeId":"<s:property value="serviceAccountDetail.glCodeId.id"/>",
-    "detailTypeId":"<s:property value="detailType.id"/>",
-    "detailTypeName":"<s:property value="detailType.name"/>",
+    {"subledgerCode":"<s:property value="businessAccountDetails"/>",
+    "glcodeId":"<s:property value="businessAccountDetails"/>",
+    "detailTypeId":"<s:property value="detailType"/>",
+    "detailTypeName":"<s:property value="detailType"/>",
     "detailCode":"<s:property value="detailCode"/>",
-    "detailKeyId":"<s:property value="detailKeyId"/>",
+    "detailKeyId":"<s:property value="detailKey"/>",
     "detailKey":"<s:property value="detailKey" />",
     "amount":"<s:property value="%{amount}" />"
     }<s:if test="!#status.last">,</s:if>

@@ -51,7 +51,7 @@
 {
 "ResultSet": {
     "Result":[
-    <s:iterator var="s" value="serviceList" status="status">
+    <s:iterator var="s" value="businessDetailsList" status="status">
     {"Text":"<s:property value="%{name+'-'+code}" escapeJavaScript="true"/>",
     "Value":"<s:property value="%{id}" />"
     }<s:if test="!#status.last">,</s:if>

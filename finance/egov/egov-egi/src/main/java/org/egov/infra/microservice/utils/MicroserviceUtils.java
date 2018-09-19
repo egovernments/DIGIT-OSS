@@ -73,13 +73,16 @@ import org.egov.infra.microservice.contract.Position;
 import org.egov.infra.microservice.contract.PositionRequest;
 import org.egov.infra.microservice.contract.PositionResponse;
 import org.egov.infra.microservice.contract.RequestInfoWrapper;
-import org.egov.infra.microservice.models.ResponseInfo;
 import org.egov.infra.microservice.contract.Task;
 import org.egov.infra.microservice.contract.TaskResponse;
 import org.egov.infra.microservice.contract.UserDetailResponse;
 import org.egov.infra.microservice.contract.UserRequest;
 import org.egov.infra.microservice.contract.UserSearchRequest;
 import org.egov.infra.microservice.contract.UserSearchResponse;
+import org.egov.infra.microservice.models.BusinessCategory;
+import org.egov.infra.microservice.models.BusinessCategoryResponse;
+import org.egov.infra.microservice.models.BusinessDetails;
+import org.egov.infra.microservice.models.BusinessDetailsResponse;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.DepartmentResponse;
 import org.egov.infra.microservice.models.Designation;
@@ -87,6 +90,7 @@ import org.egov.infra.microservice.models.DesignationResponse;
 import org.egov.infra.microservice.models.EmployeeInfo;
 import org.egov.infra.microservice.models.EmployeeInfoResponse;
 import org.egov.infra.microservice.models.RequestInfo;
+import org.egov.infra.microservice.models.ResponseInfo;
 import org.egov.infra.microservice.models.UserInfo;
 import org.egov.infra.persistence.entity.enums.UserType;
 import org.egov.infra.security.utils.SecurityUtils;
@@ -153,6 +157,12 @@ public class MicroserviceUtils {
 
 	@Value("${egov.services.user.token.url}")
 	private String tokenGenUrl;
+
+	@Value("${egov.services.user.businesscategory.url}")
+	private String businessCategoryServiceUrl;
+
+	@Value("${egov.services.user.businessdetails.url}")
+	private String businessDetailsServiceUrl;
 
 	public RequestInfo createRequestInfo() {
 		final RequestInfo requestInfo = new RequestInfo();
@@ -264,7 +274,7 @@ public class MicroserviceUtils {
 		reqWrapper.setRequestInfo(requestInfo);
 
 		DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
-		
+
 		if (depResponse.getDepartment() != null && !depResponse.getDepartment().isEmpty())
 			return depResponse.getDepartment().get(0);
 		else
@@ -440,6 +450,85 @@ public class MicroserviceUtils {
 		EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper,
 				EmployeeInfoResponse.class);
 		return empResponse.getEmployees();
+	}
+
+	public List<BusinessCategory> getBusinessCategories() {
+
+		final RestTemplate restTemplate = createRestTemplate();
+
+		final String bc_url = businessCategoryServiceUrl + "?tenantId=" + getTenentId();
+
+		RequestInfo requestInfo = new RequestInfo();
+		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+		requestInfo.setAuthToken(getAdminToken());
+		requestInfo.setTs(new Date());
+		reqWrapper.setRequestInfo(requestInfo);
+
+		BusinessCategoryResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,
+				BusinessCategoryResponse.class);
+		return bcResponse.getBusinessCategoryInfo();
+	}
+
+	public List<BusinessDetails> getBusinessDetailsByCategoryCode(String categoryCode) {
+
+		final RestTemplate restTemplate = createRestTemplate();
+
+		final String bc_url = businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&businessCategoryCode="
+				+ categoryCode;
+
+		RequestInfo requestInfo = new RequestInfo();
+		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+		requestInfo.setAuthToken(getAdminToken());
+		requestInfo.setTs(new Date());
+		reqWrapper.setRequestInfo(requestInfo);
+
+		BusinessDetailsResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,
+				BusinessDetailsResponse.class);
+		return bcResponse.getBusinessDetails();
+	}
+
+	public BusinessDetails getBusinessDetailsByCode(String code) {
+
+		final RestTemplate restTemplate = createRestTemplate();
+
+		final String bc_url = businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&code=" + code;
+
+		RequestInfo requestInfo = new RequestInfo();
+		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+		requestInfo.setAuthToken(getAdminToken());
+		requestInfo.setTs(new Date());
+		reqWrapper.setRequestInfo(requestInfo);
+
+		BusinessDetailsResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,
+				BusinessDetailsResponse.class);
+		if (bcResponse.getBusinessDetails() != null && !bcResponse.getBusinessDetails().isEmpty())
+			return bcResponse.getBusinessDetails().get(0);
+		else
+			return null;
+	}
+	
+	public BusinessDetails getBusinessDetailsById(Long id) {
+
+		final RestTemplate restTemplate = createRestTemplate();
+
+		final String bc_url = businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&id=" + id;
+
+		RequestInfo requestInfo = new RequestInfo();
+		RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+		requestInfo.setAuthToken(getAdminToken());
+		requestInfo.setTs(new Date());
+		reqWrapper.setRequestInfo(requestInfo);
+
+		BusinessDetailsResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,
+				BusinessDetailsResponse.class);
+		if (bcResponse.getBusinessDetails() != null && !bcResponse.getBusinessDetails().isEmpty())
+			return bcResponse.getBusinessDetails().get(0);
+		else
+			return null;
 	}
 
 	public List<Task> getTasks() {

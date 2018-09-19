@@ -112,6 +112,8 @@ import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.entity.Role;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.BusinessDetails;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.utils.NumberUtil;
 import org.egov.infra.utils.StringUtils;
 import org.egov.infra.web.struts.actions.BaseFormAction;
@@ -230,7 +232,7 @@ public class ReceiptAction extends BaseFormAction {
 	 * The <code>User</code> representing the counter operator who has created
 	 * the receipt
 	 */
-	/*private User receiptCreatedByCounterOperator;*/
+	/* private User receiptCreatedByCounterOperator; */
 
 	/**
 	 * A <code>List</code> of <code>ReceiptPayeeDetails</code> representing the
@@ -296,7 +298,11 @@ public class ReceiptAction extends BaseFormAction {
 	@Autowired
 	private EgwStatusHibernateDAO statusDAO;
 
+	@Autowired
+	private MicroserviceUtils microserviceUtils;
+
 	private List<CChartOfAccounts> bankCOAList;
+
 	private Long functionId;
 
 	private String instrumentType;
@@ -312,7 +318,7 @@ public class ReceiptAction extends BaseFormAction {
 	public void prepare() {
 		super.prepare();
 		BillInfoImpl collDetails;
-		//setReceiptCreatedByCounterOperator(collectionsUtil.getLoggedInUser());
+		// setReceiptCreatedByCounterOperator(collectionsUtil.getLoggedInUser());
 		// populates model when request is from the billing system
 		if (getCollectXML() != null && !getCollectXML().isEmpty()) {
 			final String decodedCollectXML = decodeBillXML();
@@ -359,8 +365,7 @@ public class ReceiptAction extends BaseFormAction {
 				addActionError(getText("billreceipt.error.improperbilldata"));
 			}
 		}
-		addDropdownData("serviceCategoryList",
-				serviceCategoryService.findAllByNamedQuery(CollectionConstants.QUERY_ACTIVE_SERVICE_CATEGORY));
+		addDropdownData("serviceCategoryList", microserviceUtils.getBusinessCategories());
 		addDropdownData("serviceList", Collections.emptyList());
 		if (instrumentProxyList == null)
 			instrumentCount = 0;
@@ -443,7 +448,7 @@ public class ReceiptAction extends BaseFormAction {
 	 */
 	private void setCollectionModesNotAllowed() {
 
-		final List<String> modesNotAllowed = new ArrayList<>(); //collectionsUtil.getCollectionModesNotAllowed(getReceiptCreatedByCounterOperator());
+		final List<String> modesNotAllowed = new ArrayList<>(); // collectionsUtil.getCollectionModesNotAllowed(getReceiptCreatedByCounterOperator());
 
 		final List<String> collModesNotAllowed = getCollectionModesNotAllowed();
 
@@ -479,13 +484,11 @@ public class ReceiptAction extends BaseFormAction {
 		if (CollectionConstants.BLANK.equals(payeename))
 			payeename = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
 					CollectionConstants.APPCONFIG_VALUE_PAYEEFORMISCRECEIPTS);
-
-		ServiceDetails service = (ServiceDetails) getPersistenceService().findByNamedQuery(
-				CollectionConstants.QUERY_SERVICE_BY_CODE, CollectionConstants.SERVICE_CODE_COLLECTIONS);
+		BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(CollectionConstants.SERVICE_CODE_COLLECTIONS);
 		if (null != serviceId && serviceId != -1)
-			service = serviceDetailsService.findById(serviceId, false);
+			bd = microserviceUtils.getBusinessDetailsById(serviceId);
 		receiptHeader.setPartPaymentAllowed(false);
-		receiptHeader.setService(service);
+		receiptHeader.setService(bd.getCode());
 		final Fund fund = fundDAO.fundById(receiptMisc.getFund().getId(), false);
 		Functionary functionary = null;
 		Scheme scheme = null;
@@ -605,7 +608,7 @@ public class ReceiptAction extends BaseFormAction {
 			setManualReceiptNumberAndDateReq(Boolean.TRUE);
 
 		createMisc();
-	
+
 		// set collection modes allowed rule through script
 		setCollectionModesNotAllowed();
 		return NEW;
@@ -641,8 +644,8 @@ public class ReceiptAction extends BaseFormAction {
 				final CFinancialYear financialYear = collectionsUtil.getFinancialYearforDate(manualReceiptDate);
 				rhForValidation = receiptHeaderService.findByNamedQuery(
 						CollectionConstants.QUERY_RECEIPT_BY_SERVICE_MANUALRECEIPTNO_AND_DATE, manualReceiptNumber,
-						receiptHeader.getService().getCode(), financialYear.getStartingDate(),
-						financialYear.getEndingDate(), CollectionConstants.RECEIPT_STATUS_CODE_CANCELLED);
+						receiptHeader.getService(), financialYear.getStartingDate(), financialYear.getEndingDate(),
+						CollectionConstants.RECEIPT_STATUS_CODE_CANCELLED);
 			}
 
 			if (rhForValidation == null) {
@@ -684,7 +687,7 @@ public class ReceiptAction extends BaseFormAction {
 							totalCreditAmount = totalCreditAmount.add(receiptDetail.getCramount());
 						if (totalCreditAmount.intValue() == 0)
 							throw new ApplicationRuntimeException(
-									"Apportioning Failed at the Billing System: " + receiptHeader.getService().getCode()
+									"Apportioning Failed at the Billing System: " + receiptHeader.getService()
 											+ ", for bill number: " + receiptHeader.getReferencenumber());
 						else
 							receiptHeader.setReceiptDetails(new HashSet(receiptDetailList));
@@ -734,9 +737,13 @@ public class ReceiptAction extends BaseFormAction {
 					// receiptHeader.getService().getServiceType();
 					receiptHeader.setCollectiontype(CollectionConstants.COLLECTION_TYPE_COUNTER);
 					// Bank Collection Operator location is not captured.
-					/*if (!collectionsUtil.isBankCollectionOperator(receiptCreatedByCounterOperator)
-							&& receiptHeader.getLocation() == null)
-						receiptHeader.setLocation(collectionsUtil.getLocationOfUser(getSession()));*/
+					/*
+					 * if (!collectionsUtil.isBankCollectionOperator(
+					 * receiptCreatedByCounterOperator) &&
+					 * receiptHeader.getLocation() == null)
+					 * receiptHeader.setLocation(collectionsUtil.
+					 * getLocationOfUser(getSession()));
+					 */
 					receiptHeader.setStatus(
 							collectionsUtil.getStatusForModuleAndCode(CollectionConstants.MODULE_NAME_RECEIPTHEADER,
 									CollectionConstants.RECEIPT_STATUS_CODE_TO_BE_SUBMITTED));
@@ -818,7 +825,7 @@ public class ReceiptAction extends BaseFormAction {
 				else
 					returnValue = SUCCESS;
 			} else {
-				if (rhForValidation.getService().getCode().equals(CollectionConstants.SERVICECODE_PROPERTYTAX))
+				if (rhForValidation.getService().equals(CollectionConstants.SERVICECODE_PROPERTYTAX))
 					addActionError("Entered Manual receipt number already exists for the index number"
 							+ rhForValidation.getConsumerCode()
 							+ ".Please enter a valid manual receipt number and create the receipt.");
@@ -840,8 +847,7 @@ public class ReceiptAction extends BaseFormAction {
 		headerFields.remove(CollectionConstants.SCHEME);
 		headerFields.remove(CollectionConstants.SUBSCHEME);
 		if (headerFields.contains(CollectionConstants.DEPARTMENT))
-			addDropdownData("departmentList",
-					getDepartmentsFromMs());
+			addDropdownData("departmentList", getDepartmentsFromMs());
 		if (headerFields.contains(CollectionConstants.FUNCTIONARY))
 			addDropdownData("functionaryList",
 					persistenceService.findAllByNamedQuery(CollectionConstants.QUERY_ALL_FUNCTIONARY));
@@ -880,11 +886,14 @@ public class ReceiptAction extends BaseFormAction {
 		setHeaderFields(headerFields);
 		setMandatoryFields(mandatoryFields);
 		final Department dept = collectionsUtil.getDepartmentOfLoggedInUser();
-		/*if (dept == null)
-			throw new ValidationException(Arrays.asList(
-					new ValidationError("Department does not exists", "viewchallan.validation.error.user.notexists")));*/
-		/*if (getDeptId() == null)
-			setDeptId(dept.getId().toString());*/
+		/*
+		 * if (dept == null) throw new ValidationException(Arrays.asList( new
+		 * ValidationError("Department does not exists",
+		 * "viewchallan.validation.error.user.notexists")));
+		 */
+		/*
+		 * if (getDeptId() == null) setDeptId(dept.getId().toString());
+		 */
 		populateBankBranchList(false);
 	}
 
@@ -1053,7 +1062,8 @@ public class ReceiptAction extends BaseFormAction {
 			setCollectionModesNotAllowed(Arrays.asList(oldReceiptHeader.getCollModesNotAllwd().split(",")));
 		setOverrideAccountHeads(oldReceiptHeader.getOverrideAccountHeads());
 		setPartPaymentAllowed(oldReceiptHeader.getPartPaymentAllowed());
-		setServiceName(oldReceiptHeader.getService().getName());
+		BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(oldReceiptHeader.getService());
+		setServiceName(bd.getName());
 
 		receiptHeader.setReceiptMisc(new ReceiptMisc(oldReceiptHeader.getReceiptMisc().getBoundary(),
 				oldReceiptHeader.getReceiptMisc().getFund(), oldReceiptHeader.getReceiptMisc().getIdFunctionary(),
@@ -1191,7 +1201,7 @@ public class ReceiptAction extends BaseFormAction {
 		final ReceiptHeader receiptHeaderToBeCancelled = receiptHeaderService.findById(oldReceiptId, false);
 		if (receiptHeaderToBeCancelled.getReceipttype() == CollectionConstants.RECEIPT_TYPE_BILL)
 			receiptHeaderService.validateReceiptCancellation(receiptHeaderToBeCancelled.getReceiptnumber(),
-					receiptHeaderToBeCancelled.getService().getCode(), receiptHeaderToBeCancelled.getConsumerCode());
+					receiptHeaderToBeCancelled.getService(), receiptHeaderToBeCancelled.getConsumerCode());
 		LOGGER.info("Receipt Header to be Cancelled : " + receiptHeaderToBeCancelled.getReceiptnumber());
 
 		for (final InstrumentHeader instrumentHeader : receiptHeaderToBeCancelled.getReceiptInstrument())
@@ -1213,12 +1223,13 @@ public class ReceiptAction extends BaseFormAction {
 
 			populateReceiptModelWithExistingReceiptInfo(receiptHeaderToBeCancelled);
 			setFundName(receiptHeaderToBeCancelled.getReceiptMisc().getFund().getName());
-			setServiceName(receiptHeaderToBeCancelled.getService().getName());
-			setServiceId(receiptHeaderToBeCancelled.getService().getId());
-			addDropdownData("serviceList", receiptHeaderToBeCancelled.getService() != null
-					? getPersistenceService().findAllByNamedQuery(CollectionConstants.QUERY_SERVICE_DETAIL_BY_CATEGORY,
-							receiptHeaderToBeCancelled.getService().getServiceCategory().getId(), Boolean.TRUE)
-					: Collections.emptyList());
+			BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(receiptHeaderToBeCancelled.getService());
+			setServiceName(bd.getName());
+			setServiceId(bd.getId());
+			addDropdownData("serviceList",
+					receiptHeaderToBeCancelled.getService() != null ? getPersistenceService().findAllByNamedQuery(
+							CollectionConstants.QUERY_SERVICE_DETAIL_BY_CATEGORY, bd.getBusinessCategory(),
+							Boolean.TRUE) : Collections.emptyList());
 			populateBankBranchList(true);
 			return NEW;
 		} else {
@@ -1369,13 +1380,14 @@ public class ReceiptAction extends BaseFormAction {
 		this.collectionModesNotAllowed = collectionModesNotAllowed;
 	}
 
-	/*public User getReceiptCreatedByCounterOperator() {
-		return receiptCreatedByCounterOperator;
-	}
-
-	public void setReceiptCreatedByCounterOperator(final User receiptCreatedByCounterOperator) {
-		this.receiptCreatedByCounterOperator = receiptCreatedByCounterOperator;
-	}*/
+	/*
+	 * public User getReceiptCreatedByCounterOperator() { return
+	 * receiptCreatedByCounterOperator; }
+	 * 
+	 * public void setReceiptCreatedByCounterOperator(final User
+	 * receiptCreatedByCounterOperator) { this.receiptCreatedByCounterOperator =
+	 * receiptCreatedByCounterOperator; }
+	 */
 
 	public List<ReceiptDetail> getReceiptDetailList() {
 		return receiptDetailList;

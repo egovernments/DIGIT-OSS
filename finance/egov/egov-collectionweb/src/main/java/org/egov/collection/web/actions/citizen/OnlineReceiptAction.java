@@ -484,10 +484,10 @@ public class OnlineReceiptAction extends BaseFormAction {
         constructServiceDetailsList();
         // Fetching pending transaction by consumer code. If transaction is in pending status display message
         if (null != receiptHeader && isNotBlank(receiptHeader.getConsumerCode())
-                && isNotBlank(receiptHeader.getService().getCode())) {
+                && isNotBlank(receiptHeader.getService())) {
             final List<ReceiptHeader> pendingOnlinePayments = getPersistenceService().findAllByNamedQuery(
                     CollectionConstants.QUERY_ONLINE_PENDING_RECEIPTS_BY_CONSUMERCODE_AND_SERVICECODE,
-                    receiptHeader.getService().getCode(),
+                    receiptHeader.getService(),
                     receiptHeader.getConsumerCode(), CollectionConstants.ONLINEPAYMENT_STATUS_CODE_PENDING);
             if (!pendingOnlinePayments.isEmpty()) {
                 isTransactionPending = Boolean.TRUE;

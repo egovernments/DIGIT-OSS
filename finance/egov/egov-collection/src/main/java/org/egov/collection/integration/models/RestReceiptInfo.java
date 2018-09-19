@@ -74,7 +74,7 @@ public class RestReceiptInfo {
         referenceNo = receiptHeader.getConsumerCode();
         amount = receiptHeader.getTotalAmount();
         txnDate = new SimpleDateFormat("dd-MM-yyyy").format(receiptHeader.getReceiptdate());
-        serviceName = receiptHeader.getService().getName();
+        serviceName = receiptHeader.getService();
         payeeName = receiptHeader.getPayeeName();
         receiptStatus = receiptHeader.getStatus().getDescription();
     }

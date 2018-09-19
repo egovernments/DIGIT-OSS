@@ -241,7 +241,7 @@ public class CollectionObjectFactory {
 		}
 		receiptHeader.setReferencenumber(refNum);
 		receiptHeader.setConsumerCode("10-10-111-20");
-		receiptHeader.setService(createServiceDetails());
+		receiptHeader.setService("testCode");
 		receiptHeader.setCreatedDate(new Date());
 		receiptHeader.setLastModifiedDate(new Date());
 		receiptHeader.setCreatedBy(user.getId());
@@ -449,7 +449,7 @@ public class CollectionObjectFactory {
 	public ReceiptHeader createUnsavedReceiptHeader() throws NumberFormatException {
 		ReceiptHeader receiptHeader = new ReceiptHeader();
 		receiptHeader.setReceipttype('A');
-		receiptHeader.setService(createServiceDetails());
+		receiptHeader.setService("testCode");
 		receiptHeader.setCreatedDate(new Date());
 		receiptHeader.setIsReconciled(false);
 		receiptHeader.setStatus(
@@ -469,7 +469,7 @@ public class CollectionObjectFactory {
 	public ReceiptHeader createUnsavedPendingReceiptHeader() throws NumberFormatException {
 		ReceiptHeader receiptHeader = new ReceiptHeader();
 		receiptHeader.setReceipttype('A');
-		receiptHeader.setService(createServiceDetails());
+		receiptHeader.setService("testCode");
 		receiptHeader.setCreatedDate(new Date());
 		receiptHeader.setIsReconciled(false);
 		receiptHeader.setStatus(
@@ -1809,7 +1809,7 @@ public class CollectionObjectFactory {
 		receiptHeader.setReceiptnumber("1234" + getRandomNumber());
 		receiptHeader.setReferencenumber("12");
 		receiptHeader.setConsumerCode("10-10-111-20");
-		receiptHeader.setService(createServiceDetails());
+		receiptHeader.setService("testCode");
 		receiptHeader.setCreatedDate(new Date());
 		receiptHeader.setLastModifiedDate(new Date());
 		User user = createUser("system");

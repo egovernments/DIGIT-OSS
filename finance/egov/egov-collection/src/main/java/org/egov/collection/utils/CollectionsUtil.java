@@ -107,6 +107,7 @@ import org.egov.infra.admin.master.service.UserService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.config.core.EnvironmentSettings;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.BusinessDetails;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.notification.service.NotificationService;
 import org.egov.infra.reporting.engine.ReportOutput;
@@ -808,7 +809,6 @@ public class CollectionsUtil {
 
     public CollectionIndex constructCollectionIndex(final ReceiptHeader receiptHeader) {
         ReceiptAmountInfo receiptAmountInfo = new ReceiptAmountInfo();
-        final ServiceDetails billingService = receiptHeader.getService();
 
         String instrumentType = "";
         if (!receiptHeader.getReceiptInstrument().isEmpty())
@@ -820,12 +820,11 @@ public class CollectionsUtil {
                 final BillReceiptInfo billReceipt = new BillReceiptInfoImpl(receiptHeader, chartOfAccountsHibernateDAO,
                         persistenceService, null);
                 billReceipts.add(billReceipt);
-                if (billingService.getCode().equals(CollectionConstants.SERVICECODE_LAMS))
+                if (receiptHeader.getService().equals(CollectionConstants.SERVICECODE_LAMS))
                     receiptAmountInfo = updateReceiptDetailsAndGetReceiptAmountInfo(new BillReceiptReq(billReceipt),
-                            billingService.getCode());
+                    		receiptHeader.getService());
                 else {
-                    final BillingIntegrationService billingServiceBean = (BillingIntegrationService) getBean(billingService
-                            .getCode() + CollectionConstants.COLLECTIONS_INTERFACE_SUFFIX);
+                    final BillingIntegrationService billingServiceBean = (BillingIntegrationService) getBean(receiptHeader.getService() + CollectionConstants.COLLECTIONS_INTERFACE_SUFFIX);
                     receiptAmountInfo = billingServiceBean.receiptAmountBifurcation(billReceipt);
                 }
             } catch (final Exception e) {
@@ -838,7 +837,7 @@ public class CollectionsUtil {
                 .builder()
                 .withReceiptDate(receiptHeader.getReceiptdate())
                 .withReceiptnumber(receiptHeader.getReceiptnumber())
-                .withBillingservice(billingService.getName())
+                .withBillingservice(receiptHeader.getService())
                 .withPaymentMode(instrumentType)
                 .withTotalamount(receiptHeader.getTotalAmount())
                 .withChannel(receiptHeader.getSource())
@@ -869,13 +868,13 @@ public class CollectionsUtil {
 
     public Boolean checkVoucherCreation(final ReceiptHeader receiptHeader) {
         Boolean createVoucherForBillingService = Boolean.FALSE;
-        if (receiptHeader.getService().getVoucherCutOffDate() != null
+        /*if (receiptHeader.getService().getVoucherCutOffDate() != null
                 && receiptHeader.getReceiptdate().compareTo(receiptHeader.getService().getVoucherCutOffDate()) > 0) {
             if (receiptHeader.getService().getVoucherCreation() != null)
                 createVoucherForBillingService = receiptHeader.getService().getVoucherCreation();
         } else if (receiptHeader.getService().getVoucherCutOffDate() == null
                 && receiptHeader.getService().getVoucherCreation() != null)
-            createVoucherForBillingService = receiptHeader.getService().getVoucherCreation();
+            createVoucherForBillingService = receiptHeader.getService().getVoucherCreation();*/// Need to fix
         return createVoucherForBillingService;
     }
 
@@ -898,7 +897,7 @@ public class CollectionsUtil {
     public List<ReceiptDetail> reconstructReceiptDetail(final ReceiptHeader receiptHeader,
             final List<ReceiptDetail> receiptDetailList) {
         final BillingIntegrationService billingService = (BillingIntegrationService) getBean(receiptHeader.getService()
-                .getCode() + CollectionConstants.COLLECTIONS_INTERFACE_SUFFIX);
+                 + CollectionConstants.COLLECTIONS_INTERFACE_SUFFIX);
         return billingService.reconstructReceiptDetail(receiptHeader.getReferencenumber(),
                 receiptHeader.getTotalAmount(), receiptDetailList);
     }
@@ -982,12 +981,13 @@ public class CollectionsUtil {
 
     public void emailReceiptAsAttachment(final ReceiptHeader receiptHeader, final byte[] attachment) {
         String emailBody = collectionApplicationProperties.getEmailBody();
+        BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(receiptHeader.getService());
         emailBody = String.format(emailBody, ApplicationThreadLocals.getCityName(), receiptHeader.getTotalAmount()
-                .toString(), receiptHeader.getService().getName(), receiptHeader.getConsumerCode(), receiptHeader
+                .toString(), bd.getName(), receiptHeader.getConsumerCode(), receiptHeader
                         .getReceiptdate().toString(),
                 ApplicationThreadLocals.getCityName());
         String emailSubject = collectionApplicationProperties.getEmailSubject();
-        emailSubject = String.format(emailSubject, receiptHeader.getService().getName());
+        emailSubject = String.format(emailSubject, bd.getName());
         notificationService.sendEmailWithAttachment(receiptHeader.getPayeeEmail(), emailSubject, emailBody,
                 "application/pdf", "Receipt" + receiptHeader.getReceiptdate().toString(), attachment);
     }
