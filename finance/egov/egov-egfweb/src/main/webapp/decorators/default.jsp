@@ -60,7 +60,7 @@
 		<link rel="icon" href="<cdn:url value='/resources/global/images/favicon.png' context='/services/egi'/>" sizes="32x32">
 		<link href="<cdn:url value='/resources/css/budget.css?rnd=${app_release_no}'/>" rel="stylesheet" type="text/css" />
 		<link href="<cdn:url value='/resources/css/commonegovnew.css?rnd=${app_release_no}'/>" rel="stylesheet" type="text/css" />
-		<link href="/services/${pageContext.request.contextPath}/resources/css/error.css?rnd=${app_release_no}" rel="stylesheet" type="text/css"></link>
+		<link href="${pageContext.request.contextPath}/resources/css/error.css?rnd=${app_release_no}" rel="stylesheet" type="text/css"></link>
 		<link rel="stylesheet" type="text/css" href="/services/EGF/resources/commonyui/yui2.8/fonts/fonts-min.css"/>
 		<link rel="stylesheet" type="text/css" href="/services/EGF/resources/commonyui/yui2.8/datatable/assets/skins/sam/datatable.css"/>	
 		<link rel="stylesheet" type="text/css" href="/services/EGF/resources/commonyui/yui2.8/assets/skins/sam/autocomplete.css" />	
@@ -72,12 +72,12 @@
 		<script type="text/javascript" src="/services/EGF/resources/commonyui/yui2.8/datasource/datasource-min.js"></script>
 		<script type="text/javascript" src="/services/EGF/resources/commonyui/yui2.8/datatable/datatable-min.js"></script>
 		<script type="text/javascript" src="/services/EGF/resources/javascript/autocomplete.js"></script>
-		<script type="text/javascript" src="/services/${pageContext.request.contextPath}/resources/javascript/jsCommonMethods.js?rnd=${app_release_no}"></script>
-		<script type="text/javascript" src="/services/${pageContext.request.contextPath}/resources/javascript/calenderNew.js?rnd=${app_release_no}"></script>
-		<script type="text/javascript" src="/services/${pageContext.request.contextPath}/resources/javascript/helper.js?rnd=${app_release_no}"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/jsCommonMethods.js?rnd=${app_release_no}"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/calenderNew.js?rnd=${app_release_no}"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/helper.js?rnd=${app_release_no}"></script>
 		<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/jquery.js' context='/egi'/>"> </script>
 		<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery-ui/jquery-ui.js' context='/egi'/>"> </script>
-		<script type="text/javascript" src="/services/${pageContext.request.contextPath}/resources/javascript/ajax-script.js?rnd=${app_release_no}"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/javascript/ajax-script.js?rnd=${app_release_no}"></script>
 		<link rel="stylesheet" type="text/css" href="<cdn:url value='/resources/global/js/jquery-ui/jquery-ui.css' context='/egi'/>" />
 		<link href="<cdn:url value='/resources/global/css/bootstrap/bootstrap.css' context='/services/egi'/>" rel="stylesheet" type="text/css" />
     <link href="<cdn:url value='/resources/global/css/egov/custom.css?rnd=${app_release_no}' context='/services/egi'/>"
