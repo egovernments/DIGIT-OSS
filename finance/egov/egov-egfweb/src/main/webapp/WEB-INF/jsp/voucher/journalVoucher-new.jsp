@@ -233,7 +233,7 @@
 	function onSubmit()
 	{
 		if(validateJV()){
-			document.jvcreateform.action='/EGF/voucher/journalVoucher-create.action';
+			document.jvcreateform.action='/services/EGF/voucher/journalVoucher-create.action';
 	    	return true;
 				
 		}else{

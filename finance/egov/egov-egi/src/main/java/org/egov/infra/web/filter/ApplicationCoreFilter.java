@@ -130,47 +130,13 @@ public class ApplicationCoreFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
        
-    	System.out.println("******************ApplicationCoreFilter:doFilter************");
-    	
     	HttpServletRequest request = (HttpServletRequest) req;
     	HttpServletResponse response = (HttpServletResponse)resp;
         HttpSession session = request.getSession();
-        Authentication auth= SecurityContextHolder.getContext().getAuthentication();
-     
-        String current_url = request.getRequestURI();
-        System.out.println("*** Request url:"+current_url);
-        System.out.println("*** Authentication Obj:"+auth);
-        System.out.println("*** Session ID:  "+session.getId());
-      
-       if(auth!=null  && ! String.valueOf(auth.getPrincipal()).equalsIgnoreCase("anonymous")){
-        System.out.println("Principal :: "+auth.getPrincipal());
-        System.out.println("Credential :: "+ auth.getCredentials());
-        System.out.println("Authentication status :: "+ auth.isAuthenticated());
-       }
-       else{
-    	   if(!this.checkUrl(current_url)){
-    		   String access_token = request.getParameter("access_token");
-    		   System.out.println("ACCESS_TOKEN ::"+ access_token);
-    		   if(access_token!=null){
-    			   request.getSession().putValue("access_token", access_token);
-    			   this.manualLogin(request, response,access_token);
-    			   }
-    		   else
-    		   {
-    			   System.out.println(current_url+" : UNAUTHORIZED");
-    			   response.setStatus(HttpStatus.SC_UNAUTHORIZED);
-    			   return;
-    		   }
-    	   }
-       }
        
         try {
-        	if(!this.checkUrl(current_url))
-        	{
-           
-            prepareUserSession(request,response,session);
-           
-        	}
+        
+        	 prepareUserSession(request,response,session);
         	 prepareRequestOriginDetails(session, request);
         	 prepareApplicationThreadLocal(session);
             chain.doFilter(request, resp);
@@ -180,7 +146,6 @@ public class ApplicationCoreFilter implements Filter {
     }
 
     private void prepareUserSession(HttpServletRequest request,HttpServletResponse response,HttpSession session) {
-    	System.out.println("******************ApplicationCoreFilter:prepareUserSession************");
         if (session.getAttribute(CITY_CODE_KEY) == null)
             cityService.cityDataAsMap().forEach(session::setAttribute);
         if (session.getAttribute(APP_RELEASE_ATTRIB_NAME) == null)
@@ -198,19 +163,18 @@ public class ApplicationCoreFilter implements Filter {
             Optional<Authentication> authentication = getCurrentAuthentication();
             if (authentication.isPresent() && authentication.get().getPrincipal() instanceof CurrentUser) {
                 session.setAttribute(USERID_KEY, ((CurrentUser) authentication.get().getPrincipal()).getUserId());
-            } else if (!authentication.isPresent() || !(authentication.get().getPrincipal() instanceof User)) {
+            } else if ((!authentication.isPresent() || !(authentication.get().getPrincipal() instanceof User))
+            		&& securityUtils.getCurrentUser()!=null) {
             		session.setAttribute(USERID_KEY, securityUtils.getCurrentUser().getId());
             }
         }else
         {
-        	System.out.println("********************USERID_KEY :   "+session.getAttribute(USERID_KEY));
         }
         
     }
 
     private void prepareApplicationThreadLocal(HttpSession session) {
     	
-    	System.out.println("******************ApplicationCoreFilter:prepareApplicationThreadLocal************");
         ApplicationThreadLocals.setCityCode((String) session.getAttribute(CITY_CODE_KEY));
         ApplicationThreadLocals.setCityName((String) session.getAttribute(CITY_NAME_KEY));
         ApplicationThreadLocals.setMunicipalityName((String) session.getAttribute(CITY_CORP_NAME_KEY));
@@ -221,7 +185,6 @@ public class ApplicationCoreFilter implements Filter {
     }
 
     private void prepareRequestOriginDetails(HttpSession session, HttpServletRequest request) {
-    	System.out.println("******************ApplicationCoreFilter:prepareRequestOriginDetails************");
     	
         if (session.getAttribute(IP_ADDRESS) == null) {
             String ipAddress = request.getRemoteAddr();
@@ -246,52 +209,4 @@ public class ApplicationCoreFilter implements Filter {
         //Nothing to be initialized
     }
     
-    private void manualLogin(HttpServletRequest request,HttpServletResponse response,String loggeduser) {
-    	
-    	HttpSession session = request.getSession();
-    	
-    	System.out.println("****************Manual authetication started*********");
-    	
-    	HashMap<String, String> credentials = new HashMap<>();
-
-    	credentials.put("j_password", "demo");
-    	credentials.put("locationId","");
-        String username = loggeduser;
-        System.out.println("User::"+username);
-        
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, credentials);
-       
-        System.out.println("AuthToken ::"+authToken);
-        
-        session.setAttribute(SecurityConstants.USERNAME_FIELD, username);
-        
-        AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource = new WebAuthenticationDetailsSource();
-        
-      
-        authToken.setDetails(authenticationDetailsSource.buildDetails(request));
-       Authentication authResult =  authProvider.authenticate(authToken);
-       csuauthStrategy.onAuthentication(authResult, request, response);
-       
-       System.out.println("********** Auth Result****  "+authResult);
-       
-       if (authResult != null) {
-           CurrentUser principal = (CurrentUser) authResult.getPrincipal();
-           session.setAttribute(USERID_KEY, principal.getUserId());
-           session.setAttribute(USERNAME_KEY, principal.getUsername());
-           SecurityContextHolder.getContext().setAuthentication(authResult);
-       }
-       
-       System.out.println("****************Manual authetication ended*********");
-    	
-    }
-    
-    private boolean checkUrl(String url){
-    		String [] allowedExtensions = {".css",".js",".ttf",".woff",".png",".gif"};
-    		boolean isAllowed = false;
-    		for(int count=0;count<allowedExtensions.length;++count){
-    			if(url.contains(allowedExtensions[count]))
-    				isAllowed = true;
-    		}
-    	return isAllowed;
-    }
 }

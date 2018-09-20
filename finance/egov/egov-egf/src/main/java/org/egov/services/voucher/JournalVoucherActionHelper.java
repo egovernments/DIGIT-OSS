@@ -237,8 +237,13 @@ public class JournalVoucherActionHelper {
                     .withSenderName(user.getName()).withComments(workflowBean.getApproverComments())
                     .withDateInfo(currentDate.toDate());
         } else {
-            if (null != workflowBean.getApproverPositionId() && workflowBean.getApproverPositionId() != -1)
-                pos = (Position) persistenceService.find("from Position where id=?", workflowBean.getApproverPositionId());
+            if (null != workflowBean.getApproverPositionId() && workflowBean.getApproverPositionId() != -1){
+                //create a postion object with id and assign here.
+                 pos = new Position();
+                pos.setId(workflowBean.getApproverPositionId());
+                
+                //pos = (Position) persistenceService.find("from Position where id=?", workflowBean.getApproverPositionId());
+                }
             if (null == voucherHeader.getState()) {
                 final WorkFlowMatrix wfmatrix = voucherHeaderWorkflowService.getWfMatrix(voucherHeader.getStateType(), null,
                         null, null, workflowBean.getCurrentState(), null);

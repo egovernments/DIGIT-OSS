@@ -87,13 +87,11 @@ public class ApplicationAuthenticationFilter extends UsernamePasswordAuthenticat
                                             FilterChain filterChain, Authentication authResult) throws IOException, ServletException {
         String location = request.getParameter(SecurityConstants.LOCATION_FIELD);
         HttpSession session = request.getSession();
-        System.out.println("*** Form login auth result :"+authResult);
         if (isNotBlank(location))
             session.setAttribute(SecurityConstants.LOCATION_FIELD, location);
 
         if (authResult != null) {
             CurrentUser principal = (CurrentUser) authResult.getPrincipal();
-            System.out.println("******** RAMA user:"+ principal.getUserId() +" #username:"+principal.getUsername());
             session.setAttribute(USERID_KEY, principal.getUserId());
             session.setAttribute(USERNAME_KEY, principal.getUsername());
         }
@@ -110,14 +108,11 @@ public class ApplicationAuthenticationFilter extends UsernamePasswordAuthenticat
         for (String credential : credentialFields) {
             String field = emptyIfNull(request.getParameter(credential));
             credentials.put(credential, field);
-            System.out.println("credential::"+credential+"  :: field::"+field);
         }
         String username = request.getParameter(SecurityConstants.USERNAME_FIELD);
-        System.out.println("User::"+username);
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, credentials);
        
-        System.out.println("AuthToken ::"+authToken);
-        
+    
         request.getSession().setAttribute(SecurityConstants.USERNAME_FIELD, username);
         setDetails(request, authToken);
 

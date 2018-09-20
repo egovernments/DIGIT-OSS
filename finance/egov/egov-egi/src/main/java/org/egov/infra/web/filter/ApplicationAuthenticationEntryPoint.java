@@ -16,9 +16,8 @@ public class ApplicationAuthenticationEntryPoint implements AuthenticationEntryP
 	public void commence(HttpServletRequest arg0, HttpServletResponse arg1, AuthenticationException arg2)
 			throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		System.out.println("*********************** request processing failed **********************");
-		//arg1.sendError( HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized" );
-		arg1.setStatus(org.apache.http.HttpStatus.SC_OK);
+		arg1.sendError( HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized" );
+//		arg1.setStatus(org.apache.http.HttpStatus.SC_OK);
 	}
 
 }
