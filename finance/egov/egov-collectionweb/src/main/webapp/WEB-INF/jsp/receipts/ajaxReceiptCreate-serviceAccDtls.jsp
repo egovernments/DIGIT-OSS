@@ -52,9 +52,9 @@
 "ResultSet": {
     "Result":[
     <s:iterator var="s" value="accountDetails" status="status">
-    {"glcodeIdDetail":"<s:property value="%{chartOfAccounts}" />",
-    "glcodeDetail":"<s:property value="%{chartOfAccounts}" />",
-    "accounthead":"<s:property value="%{chartOfAccounts}" />",
+    {"glcodeIdDetail":"<s:property value="%{glCodeId.id}" />",
+    "glcodeDetail":"<s:property value="%{glCodeId.glcode}" />",
+    "accounthead":"<s:property value="%{glCodeId.name}" />",
     "creditAmountDetail":"<s:property value='getText(\'format.amount\',{amount})' />"
     }<s:if test="!#status.last">,</s:if>
     </s:iterator>       

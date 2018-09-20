@@ -94,10 +94,9 @@
 		<property name="isModifiable" type="java.lang.Boolean">
 			<column name="ismodifiable" precision="1" scale="0" />
 		</property>
-		<many-to-one name="service" class="org.egov.infstr.models.ServiceDetails"
-			fetch="select">
-			<column name="servicedetails" precision="22" scale="0" not-null="true" />
-		</many-to-one>
+		<property name="service" type="string">
+			<column name="servicedetails" length="80" />
+		</property>
 		<property name="collectiontype" type="java.lang.Character">
 			<column name="COLLECTIONTYPE" length="1" />
 		</property>
@@ -207,13 +206,13 @@
     <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where rh.receiptnumber=?]]></query>
 
 	<query name="RECEIPTS_BY_RECEIPTNUM_AND_SERVICECODE">
-    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where rh.service.code=? and (rh.receiptnumber=? or rh.manualreceiptnumber=?)]]></query>
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where rh.service=? and (rh.receiptnumber=? or rh.manualreceiptnumber=?)]]></query>
 
 	<query name="RECEIPTS_BY_REFNUM_AND_SERVICECODE">
-    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where rh.referencenumber=? and rh.service.code=?]]></query>
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where rh.referencenumber=? and rh.service=?]]></query>
 
 	<query name="RECEIPTS_BY_INSTRUMENTNO_AND_SERVICECODE">
-    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh left join rh.receiptInstrument as ri where ri.instrumentNumber=?  and rh.service.code=?]]></query>
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh left join rh.receiptInstrument as ri where ri.instrumentNumber=?  and rh.service=?]]></query>
     
    	<query name="RECEIPTS_BY_RECONSTATUS">
     <![CDATA[select receipt from org.egov.collection.entity.ReceiptHeader receipt where receipt.isReconciled = ?]]></query>
@@ -231,7 +230,7 @@
     <![CDATA[select receipt2 from org.egov.collection.entity.ReceiptHeader as receipt1,org.egov.collection.entity.ReceiptHeader as receipt2 left join receipt2.challan as challan where receipt2.receiptHeader.id=receipt1.id and receipt1.id = ?]]></query>
 
     <query name="QUERY_ONLINE_PENDING_RECEIPTS_BY_CONSUMERCODE_AND_SERVICECODE">
-    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh, org.egov.collection.entity.OnlinePayment online where rh.id = online.receiptHeader.id and rh.service.code=? and rh.consumerCode=? and online.status.code = ?]]></query>
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh, org.egov.collection.entity.OnlinePayment online where rh.id = online.receiptHeader.id and rh.service=? and rh.consumerCode=? and online.status.code = ?]]></query>
     
     <query name="RECEIPT_BY_SERVICE_RECEIPTNUMBER_CONSUMERCODE">
     <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where (rh.receiptnumber=? or rh.manualreceiptnumber=?) and rh.consumerCode=?]]></query>
@@ -240,7 +239,7 @@
     <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh, org.egov.collection.entity.OnlinePayment online where rh.id = online.receiptHeader.id and rh.id=? and rh.referencenumber = ? ]]></query>
     
     <query name="RECEIPT_BY_SERVICE_MANUALRECEIPTNO_AND_DATE">
-    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where rh.manualreceiptnumber = ? and rh.service.code = ? and rh.manualreceiptdate between ? and ? and rh.status.code<>? ]]></query>
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where rh.manualreceiptnumber = ? and rh.service = ? and rh.manualreceiptdate between ? and ? and rh.status.code<>? ]]></query>
     
     <query name="QUERY_RECEIPT_BY_ID_AND_CONSUMERCODE">
 	<![CDATA[
@@ -255,11 +254,11 @@
 	</query>
 	
 	<query name="RECEIPTS_BY_DATE_AND_SERVICECODE">
-	<![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where date(rh.receiptdate) between ? and ? and rh.service.code = ? and  rh.source=? and rh.status.code in ('TO_BE_SUBMITTED','SUBMITTED','APPROVED','REMITTED') ]]>
+	<![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh where date(rh.receiptdate) between ? and ? and rh.service = ? and  rh.source=? and rh.status.code in ('TO_BE_SUBMITTED','SUBMITTED','APPROVED','REMITTED') ]]>
 	</query>
 
 	<query name="RECEIPTS_BY_INSTRUMENTHEADER_AND_SERVICECODE">
-    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh left join rh.receiptInstrument as ri where  rh.service.code=? and ri.id in (:param_1)  ]]>
+    <![CDATA[select rh from org.egov.collection.entity.ReceiptHeader rh left join rh.receiptInstrument as ri where  rh.service=? and ri.id in (:param_1)  ]]>
     </query>
 	
 	<query name="STATUS_OF_RECEIPTS">

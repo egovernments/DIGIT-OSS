@@ -53,7 +53,7 @@
     "Result":[
     <s:iterator var="s" value="businessDetailsList" status="status">
     {"Text":"<s:property value="%{name+'-'+code}" escapeJavaScript="true"/>",
-    "Value":"<s:property value="%{id}" />"
+    "Value":"<s:property value="%{code}" />"
     }<s:if test="!#status.last">,</s:if>
     </s:iterator>       
     ]

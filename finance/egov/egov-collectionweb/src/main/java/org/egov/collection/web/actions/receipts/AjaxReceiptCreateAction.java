@@ -66,6 +66,7 @@ import org.egov.commons.CChartOfAccounts;
 import org.egov.commons.Scheme;
 import org.egov.commons.SubScheme;
 import org.egov.commons.service.AccountdetailtypeService;
+import org.egov.commons.service.ChartOfAccountsService;
 import org.egov.commons.service.EntityTypeService;
 import org.egov.commons.utils.EntityType;
 import org.egov.egf.commons.EgovCommon;
@@ -76,6 +77,7 @@ import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.BusinessAccountDetails;
 import org.egov.infra.microservice.models.BusinessAccountSubLedger;
 import org.egov.infra.microservice.models.BusinessDetails;
+import org.egov.infra.microservice.models.ChartOfAccounts;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infstr.models.ServiceDetails;
@@ -119,6 +121,8 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
 	private MicroserviceUtils microserviceUtils;
 	@Autowired
 	private AccountdetailtypeService accountdetailtypeService;
+	@Autowired
+	private ChartOfAccountsService chartOfAccountsService;
 
 	public String getAccountForService() {
 		setValue(CollectionConstants.BLANK);
@@ -436,7 +440,7 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
 	public String ajaxLoadServiceByCategoryForMisc() {
 
 		if (null != parameters.get(SERVICECATID) && null != parameters.get(SERVICECATID)[0]
-				&& Long.valueOf(parameters.get(SERVICECATID)[0]) != -1)
+				&& !parameters.get(SERVICECATID)[0].isEmpty())
 			businessDetailsList = microserviceUtils.getBusinessDetailsByCategoryCode(parameters.get(SERVICECATID)[0]);
 		else
 			businessDetailsList = Collections.emptyList();
@@ -461,8 +465,8 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
 	@Action(value = "/receipts/ajaxReceiptCreate-ajaxFinMiscDtlsByService")
 	public String ajaxFinMiscDtlsByService() {
 
-		final Long serviceId = Long.valueOf(parameters.get(SERVICEID)[0]);
-		BusinessDetails service = microserviceUtils.getBusinessDetailsById(serviceId);
+		final String serviceId = parameters.get(SERVICEID)[0];
+		BusinessDetails service = microserviceUtils.getBusinessDetailsByCode(serviceId);
 
 		final StringBuilder miscDetails = new StringBuilder();
 		if (null != service)
@@ -487,12 +491,22 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
 	@Action(value = "/receipts/ajaxReceiptCreate-ajaxFinAccDtlsByService")
 	public String ajaxFinAccDtlsByService() {
 
-		final Long serviceId = Long.valueOf(parameters.get(SERVICEID)[0]);
-		BusinessDetails service = microserviceUtils.getBusinessDetailsById(serviceId);
+		final String serviceId = parameters.get(SERVICEID)[0];
+		BusinessDetails service = microserviceUtils.getBusinessDetailsByCode(serviceId);
 		accountDetails = new ArrayList<>();
-		if (null != service)
+		if (null != service && service.getAccountDetails() != null) {
 			accountDetails.addAll(service.getAccountDetails());
-		else
+			for (BusinessAccountDetails bad : accountDetails) {
+				if (bad.getChartOfAccounts() != null) {
+					CChartOfAccounts coa = chartOfAccountsService.getByGlCode(bad.getChartOfAccounts().toString());
+					bad.setGlCodeId(new ChartOfAccounts());
+					bad.getGlCodeId().setId(coa.getId());
+					bad.getGlCodeId().setGlcode(coa.getGlcode());
+					bad.getGlCodeId().setName(coa.getName());
+				}
+			}
+
+		} else
 			accountDetails.addAll(Collections.emptyList());
 
 		return "serviceAccDtls";
@@ -501,17 +515,18 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
 
 	@Action(value = "/receipts/ajaxReceiptCreate-ajaxFinSubledgerByService")
 	public String ajaxFinSubledgerByService() {
-		final Long serviceId = Long.valueOf(parameters.get(SERVICEID)[0]);
-		BusinessDetails service = microserviceUtils.getBusinessDetailsById(serviceId);
+		final String serviceId = parameters.get(SERVICEID)[0];
+		BusinessDetails service = microserviceUtils.getBusinessDetailsByCode(serviceId);
 		subledgerDetails = new ArrayList<>();
 		BusinessAccountSubLedger servicInfo;
 		if (null != service)
 			for (final BusinessAccountDetails account : service.getAccountDetails()) {
-				subledgerDetails.addAll(account.getSubledgerDetails());
+				if (account.getSubledgerDetails() != null)
+					subledgerDetails.addAll(account.getSubledgerDetails());
 				if (subledgerDetails.isEmpty()) {
 					final CChartOfAccountDetail chartOfAccountDetail = (CChartOfAccountDetail) getPersistenceService()
 							.find("from CChartOfAccountDetail cd where cd.glCodeId.glcode=?",
-									account.getChartOfAccounts());
+									account.getChartOfAccounts().toString());
 					servicInfo = new BusinessAccountSubLedger();
 					if (chartOfAccountDetail != null) {
 						servicInfo.setDetailType(chartOfAccountDetail.getDetailTypeId().getId().longValue());
@@ -526,7 +541,7 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
 							EntityType entityType = null;
 							try {
 								Accountdetailtype adt = accountdetailtypeService
-										.findByCode(serviceSubledgerInfo.getDetailType().toString());
+										.findByName(serviceSubledgerInfo.getDetailType().toString());
 								entityType = egovCommon.getEntityType(adt, serviceSubledgerInfo.getDetailKey());
 							} catch (final ApplicationException e) {
 								LOGGER.error("Exception while setting subledger details", e);

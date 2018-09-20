@@ -37,7 +37,7 @@ public class BusinessAccountSubLedger {
 	}
 
 	public Double getAmount() {
-		return amount;
+		return amount == null ? Double.valueOf(0) : amount;
 	}
 
 	public void setAmount(Double amount) {

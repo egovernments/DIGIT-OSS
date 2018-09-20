@@ -15,6 +15,8 @@ public class BusinessAccountDetails {
 
 	private List<BusinessAccountSubLedger> subledgerDetails;
 
+	private ChartOfAccounts glCodeId;
+
 	public Long getId() {
 		return id;
 	}
@@ -40,7 +42,7 @@ public class BusinessAccountDetails {
 	}
 
 	public Double getAmount() {
-		return amount;
+		return amount == null ? Double.valueOf(0) : amount;
 	}
 
 	public void setAmount(Double amount) {
@@ -61,6 +63,14 @@ public class BusinessAccountDetails {
 
 	public void setSubledgerDetails(List<BusinessAccountSubLedger> subledgerDetails) {
 		this.subledgerDetails = subledgerDetails;
+	}
+
+	public ChartOfAccounts getGlCodeId() {
+		return glCodeId;
+	}
+
+	public void setGlCodeId(ChartOfAccounts glCodeId) {
+		this.glCodeId = glCodeId;
 	}
 
 }

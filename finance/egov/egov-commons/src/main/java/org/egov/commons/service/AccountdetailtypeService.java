@@ -98,10 +98,6 @@ public class AccountdetailtypeService {
         return accountdetailtypeRepository.findByName(name);
     }
     
-    public Accountdetailtype findByCode(final String code) {
-        return accountdetailtypeRepository.findByCode(code);
-    }
-
     public Accountdetailtype findOne(final Integer id) {
         return accountdetailtypeRepository.findOne(id);
     }

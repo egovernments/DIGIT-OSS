@@ -46,29 +46,38 @@
  *
  */
 
-package org.egov.commons.repository;
+package org.egov.infra.microservice.models;
 
-import java.util.List;
+public class ChartOfAccounts {
 
-import org.egov.commons.Accountdetailtype;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+	private Long id;
 
-@Repository
-public interface AccountdetailtypeRepository extends JpaRepository<Accountdetailtype, Integer> {
-	public Accountdetailtype findByName(String name);
+	private String glcode;
 
-	public List<Accountdetailtype> findByNameContainingIgnoreCaseAndDescriptionContainingIgnoreCase(String name,
-			String description);
+	private String name;
 
-	public List<Accountdetailtype> findByNameContainingIgnoreCase(String name);
+	public Long getId() {
+		return id;
+	}
 
-	public List<Accountdetailtype> findByDescriptionContainingIgnoreCase(String description);
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-	public List<Accountdetailtype> findByFullQualifiedName(String fullQualifiedName);
+	public String getGlcode() {
+		return glcode;
+	}
 
-	@Query("select distinct(adt) from Accountdetailtype adt where adt.id in (select coad.detailTypeId from CChartOfAccountDetail coad where coad.glCodeId in (select coa.id from CChartOfAccounts coa where  coa.id =:glcodeId))")
-	public List<Accountdetailtype> findByGlcodeId(@Param("glcodeId") Long glcodeId);
+	public void setGlcode(String glcode) {
+		this.glcode = glcode;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }

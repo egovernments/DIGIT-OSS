@@ -263,7 +263,7 @@ public class ReceiptAction extends BaseFormAction {
 
 	private PersistenceService<ServiceDetails, Long> serviceDetailsService;
 
-	private Long serviceId;
+	private String serviceId;
 
 	@Autowired
 	private FundHibernateDAO fundDAO;
@@ -485,10 +485,8 @@ public class ReceiptAction extends BaseFormAction {
 			payeename = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
 					CollectionConstants.APPCONFIG_VALUE_PAYEEFORMISCRECEIPTS);
 		BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(CollectionConstants.SERVICE_CODE_COLLECTIONS);
-		if (null != serviceId && serviceId != -1)
-			bd = microserviceUtils.getBusinessDetailsById(serviceId);
 		receiptHeader.setPartPaymentAllowed(false);
-		receiptHeader.setService(bd.getCode());
+		receiptHeader.setService(serviceId);
 		final Fund fund = fundDAO.fundById(receiptMisc.getFund().getId(), false);
 		Functionary functionary = null;
 		Scheme scheme = null;
@@ -1225,7 +1223,7 @@ public class ReceiptAction extends BaseFormAction {
 			setFundName(receiptHeaderToBeCancelled.getReceiptMisc().getFund().getName());
 			BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(receiptHeaderToBeCancelled.getService());
 			setServiceName(bd.getName());
-			setServiceId(bd.getId());
+			setServiceId(bd.getCode());
 			addDropdownData("serviceList",
 					receiptHeaderToBeCancelled.getService() != null ? getPersistenceService().findAllByNamedQuery(
 							CollectionConstants.QUERY_SERVICE_DETAIL_BY_CATEGORY, bd.getBusinessCategory(),
@@ -1939,11 +1937,11 @@ public class ReceiptAction extends BaseFormAction {
 		this.functionId = functionId;
 	}
 
-	public Long getServiceId() {
+	public String getServiceId() {
 		return serviceId;
 	}
 
-	public void setServiceId(final Long serviceId) {
+	public void setServiceId(final String serviceId) {
 		this.serviceId = serviceId;
 	}
 
