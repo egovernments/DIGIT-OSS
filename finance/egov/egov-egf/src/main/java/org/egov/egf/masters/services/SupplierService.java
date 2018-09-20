@@ -61,6 +61,9 @@ import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
+import org.egov.commons.Accountdetailkey;
+import org.egov.commons.service.AccountDetailKeyService;
+import org.egov.commons.service.AccountdetailtypeService;
 import org.egov.egf.masters.repository.SupplierRepository;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.model.masters.Supplier;
@@ -79,8 +82,15 @@ public class SupplierService {
 
 	@Autowired
 	private SupplierRepository supplierRepository;
+
 	@PersistenceContext
 	private EntityManager entityManager;
+
+	@Autowired
+	private AccountDetailKeyService accountDetailKeyService;
+
+	@Autowired
+	private AccountdetailtypeService accountdetailtypeService;
 
 	public Session getCurrentSession() {
 		return entityManager.unwrap(Session.class);
@@ -91,15 +101,28 @@ public class SupplierService {
 	}
 
 	@Transactional
-	public Supplier create(final Supplier supplier) {
+	public Supplier create(Supplier supplier) {
 		setAuditDetails(supplier);
-		return supplierRepository.save(supplier);
+		supplier = supplierRepository.save(supplier);
+		saveAccountDetailKey(supplier);
+		return supplier;
 	}
 
 	@Transactional
 	public Supplier update(final Supplier supplier) {
 		setAuditDetails(supplier);
 		return supplierRepository.save(supplier);
+	}
+
+	@Transactional
+	public void saveAccountDetailKey(Supplier supplier) {
+
+		Accountdetailkey accountdetailkey = new Accountdetailkey();
+		accountdetailkey.setDetailkey(supplier.getId().intValue());
+		accountdetailkey.setDetailname("supplier_id");
+		accountdetailkey.setAccountdetailtype(accountdetailtypeService.findByName(supplier.getClass().getSimpleName()));
+		accountdetailkey.setGroupid(1);
+		accountDetailKeyService.create(accountdetailkey);
 	}
 
 	private void setAuditDetails(Supplier supplier) {

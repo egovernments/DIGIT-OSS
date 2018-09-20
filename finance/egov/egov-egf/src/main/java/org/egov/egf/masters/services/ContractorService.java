@@ -61,6 +61,9 @@ import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
+import org.egov.commons.Accountdetailkey;
+import org.egov.commons.service.AccountDetailKeyService;
+import org.egov.commons.service.AccountdetailtypeService;
 import org.egov.egf.masters.repository.ContractorRepository;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.model.masters.Contractor;
@@ -79,8 +82,15 @@ public class ContractorService {
 
 	@Autowired
 	private ContractorRepository contractorRepository;
+
 	@PersistenceContext
 	private EntityManager entityManager;
+
+	@Autowired
+	private AccountDetailKeyService accountDetailKeyService;
+
+	@Autowired
+	private AccountdetailtypeService accountdetailtypeService;
 
 	public Session getCurrentSession() {
 		return entityManager.unwrap(Session.class);
@@ -91,9 +101,23 @@ public class ContractorService {
 	}
 
 	@Transactional
-	public Contractor create(final Contractor contractor) {
+	public Contractor create(Contractor contractor) {
+
 		setAuditDetails(contractor);
-		return contractorRepository.save(contractor);
+		contractor = contractorRepository.save(contractor);
+		saveAccountDetailKey(contractor);
+		return contractor;
+	}
+
+	@Transactional
+	public void saveAccountDetailKey(Contractor contractor) {
+
+		Accountdetailkey accountdetailkey = new Accountdetailkey();
+		accountdetailkey.setDetailkey(contractor.getId().intValue());
+		accountdetailkey.setDetailname("contractor_id");
+		accountdetailkey.setAccountdetailtype(accountdetailtypeService.findByName(contractor.getClass().getSimpleName()));
+		accountdetailkey.setGroupid(1);
+		accountDetailKeyService.create(accountdetailkey);
 	}
 
 	@Transactional
