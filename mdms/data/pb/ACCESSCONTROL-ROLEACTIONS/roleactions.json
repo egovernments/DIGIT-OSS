@@ -18079,6 +18079,66 @@
    "actionid": 2091,
    "actioncode": "",
    "tenantId": "pb"
+ },
+{
+   "rolecode": "SUPERUSER",
+   "actionid": 2092,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+{
+   "rolecode": "SUPERUSER",
+   "actionid": 2093,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+{
+   "rolecode": "SUPERUSER",
+   "actionid": 2094,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+{
+   "rolecode": "SUPERUSER",
+   "actionid": 2095,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+{
+   "rolecode": "SUPERUSER",
+   "actionid": 2096,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+{
+   "rolecode": "SUPERUSER",
+   "actionid": 2097,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+{
+   "rolecode": "SUPERUSER",
+   "actionid": 2098,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+{
+   "rolecode": "SUPERUSER",
+   "actionid": 2099,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+{
+   "rolecode": "SUPERUSER",
+   "actionid": 2100,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+{
+   "rolecode": "SUPERUSER",
+   "actionid": 2101,
+   "actioncode": "",
+   "tenantId": "pb"
  }
 
   ]
