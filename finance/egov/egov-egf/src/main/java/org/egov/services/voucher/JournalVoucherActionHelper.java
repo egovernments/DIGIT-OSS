@@ -213,8 +213,8 @@ public class JournalVoucherActionHelper {
         final User user = securityUtils.getCurrentUser();
         Position pos = null;
         Assignment wfInitiator = null;
-        if (null != voucherHeader.getId())
-            wfInitiator = getWorkflowInitiator(voucherHeader);
+        /*if (null != voucherHeader.getId())
+            wfInitiator = getWorkflowInitiator(voucherHeader);*/
 
         if (FinancialConstants.BUTTONREJECT.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
                 final String stateValue = FinancialConstants.WORKFLOW_STATE_REJECTED;

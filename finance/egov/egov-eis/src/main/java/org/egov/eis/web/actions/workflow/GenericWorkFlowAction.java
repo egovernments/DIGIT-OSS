@@ -47,6 +47,7 @@
  */
 package org.egov.eis.web.actions.workflow;
 
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.workflow.entity.State;
 import org.egov.infra.workflow.entity.StateAware;
@@ -87,8 +88,7 @@ public abstract class GenericWorkFlowAction extends BaseFormAction {
     @Override
     public void prepare() {
         super.prepare();
-        addDropdownData("approverDepartmentList",
-                this.persistenceService.findAllBy("from Department order by name"));
+        addDropdownData("approverDepartmentList", getDepartmentsFromMs());
         addDropdownData("approverList", Collections.EMPTY_LIST);
         addDropdownData("designationList", Collections.EMPTY_LIST);
     }
@@ -129,11 +129,12 @@ public abstract class GenericWorkFlowAction extends BaseFormAction {
 
     public List<String> getValidActions() {
         List<String> validActions = Collections.emptyList();
-        if (null == getModel() || null == getModel().getId() || getModel().getCurrentState() == null || getModel().getCurrentState().getValue().endsWith("NEW")
-                ||(getModel() != null && getModel().getCurrentState() != null ? getModel().getCurrentState().getValue()
+        if (null == getModel() || null == getModel().getId() || getModel().getCurrentState() == null
+                || getModel().getCurrentState().getValue().endsWith("NEW")
+                || (getModel() != null && getModel().getCurrentState() != null ? getModel().getCurrentState().getValue()
                         .equals("Closed")
-                        || getModel().getCurrentState().getValue().equals("END") : false)){
-           
+                        || getModel().getCurrentState().getValue().equals("END") : false)) {
+
             validActions = Arrays.asList(FORWARD);
         } else {
             if (getModel().getCurrentState() != null) {
@@ -155,7 +156,8 @@ public abstract class GenericWorkFlowAction extends BaseFormAction {
             if (getModel().getCurrentState() != null) {
                 wfMatrix = this.customizedWorkFlowService.getWfMatrix(getModel().getStateType(),
                         getWorkFlowDepartment(), getAmountRule(), getAdditionalRule(), getModel()
-                                .getCurrentState().getValue(), getPendingActions(), getModel()
+                                .getCurrentState().getValue(),
+                        getPendingActions(), getModel()
                                 .getCreatedDate());
             } else {
                 wfMatrix = this.customizedWorkFlowService.getWfMatrix(getModel().getStateType(),

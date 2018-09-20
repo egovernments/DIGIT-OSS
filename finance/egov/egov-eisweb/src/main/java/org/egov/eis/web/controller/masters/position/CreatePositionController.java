@@ -197,6 +197,6 @@ public class CreatePositionController {
 	}
 	
 	public List<Designation> getDesignationsFromMs(){
-		return microserviceUtils.getDesignation();
+		return microserviceUtils.getDesignations();
 	}
 }

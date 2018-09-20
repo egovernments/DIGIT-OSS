@@ -47,30 +47,24 @@
  */
 package org.egov.eis.web.actions;
 
-import org.apache.commons.lang3.StringUtils;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.ResultPath;
 import org.apache.struts2.convention.annotation.Results;
-import org.egov.eis.entity.Assignment;
-import org.egov.eis.service.AssignmentService;
-import org.egov.eis.service.DesignationService;
+import org.egov.infra.microservice.models.Designation;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.workflow.matrix.entity.WorkFlowMatrix;
 import org.egov.infra.workflow.matrix.service.CustomizedWorkFlowService;
-import org.egov.pims.commons.Designation;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  *
@@ -81,7 +75,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @ResultPath("/WEB-INF/jsp/")
 @Results({
         @Result(name = "designations", location = "/WEB-INF/jsp/workflow/ajaxWorkFlow-designations.jsp"),
-        @Result(name = "approvers", location = "/WEB-INF/jsp/workflow/ajaxWorkFlow-approvers.jsp")})
+        @Result(name = "approvers", location = "/WEB-INF/jsp/workflow/ajaxWorkFlow-approvers.jsp") })
 public class AjaxWorkFlowAction extends BaseFormAction {
 
     private static final long serialVersionUID = -4816498948951535977L;
@@ -89,8 +83,8 @@ public class AjaxWorkFlowAction extends BaseFormAction {
     private static final String WF_APPROVERS = "approvers";
     private transient List<Designation> designationList;
     private transient List approverList;
-    private Long designationId;
-    private Long approverDepartmentId;
+    private String designationId;
+    private String approverDepartmentId;
 
     private transient CustomizedWorkFlowService customizedWorkFlowService;
     private String type;
@@ -103,43 +97,28 @@ public class AjaxWorkFlowAction extends BaseFormAction {
     private transient List<String> roleList;
 
     @Autowired
-    private transient AssignmentService assignmentService;
-
-    @Autowired
-    private transient DesignationService designationService;
+    private MicroserviceUtils microserviceUtils;
 
     @Action(value = "/workflow/ajaxWorkFlow-getPositionByPassingDesigId")
     public String getPositionByPassingDesigId() {
-        if (designationId != null && designationId != -1) {
+        if (designationId != null && !designationId.equalsIgnoreCase("-1") && approverDepartmentId != null
+                && !approverDepartmentId.equalsIgnoreCase("-1")) {
 
-            final HashMap<String, String> paramMap = new HashMap<>();
-            if (approverDepartmentId != null && approverDepartmentId != -1)
-                paramMap.put("departmentId", approverDepartmentId.toString());
-            paramMap.put("designationId", designationId.toString());
-            approverList = new ArrayList<>();
-            final List<Assignment> assignmentList = assignmentService
-                    .findAllAssignmentsByDeptDesigAndDates(approverDepartmentId,
-                            designationId, new Date());
-            for (final Assignment assignment : assignmentList)
-                approverList.add(assignment);
+            approverList = microserviceUtils.getAssignments(approverDepartmentId, designationId);
         }
         return WF_APPROVERS;
     }
 
     @Action(value = "/workflow/ajaxWorkFlow-getDesignationsByObjectType")
     public String getDesignationsByObjectType() {
-        if ("END".equals(currentState))
-            currentState = "";
-        if (StringUtils.isNotBlank(designation))
-            designationList = designationService.getDesignationsByNames(customizedWorkFlowService.getNextDesignations(type,
-                    departmentRule, amountRule, additionalRule, currentState,
-                    pendingAction, new Date(), designation));
-        else
-            designationList = designationService.getDesignationsByNames(customizedWorkFlowService.getNextDesignations(type,
-                    departmentRule, amountRule, additionalRule, currentState,
-                    pendingAction, new Date()));
-        if (designationList.isEmpty())
-            designationList = persistenceService.findAllBy("from Designation");
+        /*
+         * if ("END".equals(currentState)) currentState = ""; if (StringUtils.isNotBlank(designation)) designationList =
+         * designationService.getDesignationsByNames(customizedWorkFlowService.getNextDesignations(type, departmentRule,
+         * amountRule, additionalRule, currentState, pendingAction, new Date(), designation)); else designationList =
+         * designationService.getDesignationsByNames(customizedWorkFlowService.getNextDesignations(type, departmentRule,
+         * amountRule, additionalRule, currentState, pendingAction, new Date()));
+         */
+            designationList = microserviceUtils.getDesignations();
         return WF_DESIGNATIONS;
     }
 
@@ -178,7 +157,7 @@ public class AjaxWorkFlowAction extends BaseFormAction {
         return approverList;
     }
 
-    public void setDesignationId(final Long designationId) {
+    public void setDesignationId(final String designationId) {
         this.designationId = designationId;
     }
 
@@ -198,7 +177,7 @@ public class AjaxWorkFlowAction extends BaseFormAction {
         this.currentState = currentState;
     }
 
-    public void setApproverDepartmentId(final Long approverDepartmentId) {
+    public void setApproverDepartmentId(final String approverDepartmentId) {
         this.approverDepartmentId = approverDepartmentId;
     }
 

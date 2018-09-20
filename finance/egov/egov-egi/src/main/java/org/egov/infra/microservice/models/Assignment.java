@@ -40,7 +40,6 @@
 
 package org.egov.infra.microservice.models;
 
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,387 +51,392 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-
-
 public class Assignment {
 
-	private Long id;
+    private Long id;
 
-	@NotNull
-	private Long position;
+    @NotNull
+    private Long position;
 
-	private Long fund;
+    private Long fund;
 
-	private Long functionary;
+    private Long functionary;
 
-	private Long function;
+    private Long function;
 
-	@NotNull
-	private String department;
+    @NotNull
+    private String department;
 
-	@NotNull
-	private String designation;
+    @NotNull
+    private String designation;
 
-	@Valid
-	private List<HODDepartment> hod = new ArrayList<HODDepartment>();
+    @Valid
+    private List<HODDepartment> hod = new ArrayList<HODDepartment>();
 
-	@NotNull
-	private Boolean isPrimary;
+    @NotNull
+    private Boolean isPrimary;
 
-	@NotNull
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	private Date fromDate;
+    @NotNull
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date fromDate;
 
-	@NotNull
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	private Date toDate;
+    @NotNull
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date toDate;
 
-	private Long grade;
+    private Long grade;
 
-	private String govtOrderNumber;
+    private String govtOrderNumber;
 
-	private List<String> documents = new ArrayList<String>();
+    private List<String> documents = new ArrayList<String>();
 
-	private Long createdBy;
+    private Long createdBy;
 
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	private Date createdDate;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date createdDate;
 
-	private Long lastModifiedBy;
+    private Long lastModifiedBy;
 
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@JsonFormat(pattern = "dd/MM/yyyy")
-	private Date lastModifiedDate;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date lastModifiedDate;
 
-	private String tenantId;
-	public Assignment(){}
+    private String employeeName;
 
-	public Assignment(Long id, Long position, Long fund, Long functionary, Long function, String department,
-			String designation, List<HODDepartment> hod, Boolean isPrimary, Date fromDate, Date toDate, Long grade,
-			String govtOrderNumber, List<String> documents, Long createdBy, Date createdDate, Long lastModifiedBy,
-			Date lastModifiedDate, String tenantId) {
-		this.id = id;
-		this.position = position;
-		this.fund = fund;
-		this.functionary = functionary;
-		this.function = function;
-		this.department = department;
-		this.designation = designation;
-		this.hod = hod;
-		this.isPrimary = isPrimary;
-		this.fromDate = fromDate;
-		this.toDate = toDate;
-		this.grade = grade;
-		this.govtOrderNumber = govtOrderNumber;
-		this.documents = documents;
-		this.createdBy = createdBy;
-		this.createdDate = createdDate;
-		this.lastModifiedBy = lastModifiedBy;
-		this.lastModifiedDate = lastModifiedDate;
-		this.tenantId = tenantId;
-	}
+    private String tenantId;
 
-	public Long getId() {
-		return id;
-	}
+    public Assignment() {
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Assignment(Long id, Long position, Long fund, Long functionary, Long function, String department,
+            String designation, List<HODDepartment> hod, Boolean isPrimary, Date fromDate, Date toDate, Long grade,
+            String govtOrderNumber, List<String> documents, Long createdBy, Date createdDate, Long lastModifiedBy,
+            Date lastModifiedDate, String tenantId) {
+        this.id = id;
+        this.position = position;
+        this.fund = fund;
+        this.functionary = functionary;
+        this.function = function;
+        this.department = department;
+        this.designation = designation;
+        this.hod = hod;
+        this.isPrimary = isPrimary;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+        this.grade = grade;
+        this.govtOrderNumber = govtOrderNumber;
+        this.documents = documents;
+        this.createdBy = createdBy;
+        this.createdDate = createdDate;
+        this.lastModifiedBy = lastModifiedBy;
+        this.lastModifiedDate = lastModifiedDate;
+        this.tenantId = tenantId;
+    }
 
-	public Long getPosition() {
-		return position;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setPosition(Long position) {
-		this.position = position;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Long getFund() {
-		return fund;
-	}
+    public Long getPosition() {
+        return position;
+    }
 
-	public void setFund(Long fund) {
-		this.fund = fund;
-	}
+    public void setPosition(Long position) {
+        this.position = position;
+    }
 
-	public Long getFunctionary() {
-		return functionary;
-	}
+    public Long getFund() {
+        return fund;
+    }
 
-	public void setFunctionary(Long functionary) {
-		this.functionary = functionary;
-	}
+    public void setFund(Long fund) {
+        this.fund = fund;
+    }
 
-	public Long getFunction() {
-		return function;
-	}
+    public Long getFunctionary() {
+        return functionary;
+    }
 
-	public void setFunction(Long function) {
-		this.function = function;
-	}
+    public void setFunctionary(Long functionary) {
+        this.functionary = functionary;
+    }
 
-	public String getDepartment() {
-		return department;
-	}
+    public Long getFunction() {
+        return function;
+    }
 
-	public void setDepartment(String department) {
-		this.department = department;
-	}
+    public void setFunction(Long function) {
+        this.function = function;
+    }
 
-	public String getDesignation() {
-		return designation;
-	}
+    public String getDepartment() {
+        return department;
+    }
 
-	public void setDesignation(String designation) {
-		this.designation = designation;
-	}
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 
-	public List<HODDepartment> getHod() {
-		return hod;
-	}
+    public String getDesignation() {
+        return designation;
+    }
 
-	public void setHod(List<HODDepartment> hod) {
-		this.hod = hod;
-	}
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
 
-	public Boolean getIsPrimary() {
-		return isPrimary;
-	}
+    public List<HODDepartment> getHod() {
+        return hod;
+    }
 
-	public void setIsPrimary(Boolean isPrimary) {
-		this.isPrimary = isPrimary;
-	}
+    public void setHod(List<HODDepartment> hod) {
+        this.hod = hod;
+    }
 
-	public Date getFromDate() {
-		return fromDate;
-	}
+    public Boolean getIsPrimary() {
+        return isPrimary;
+    }
 
-	public void setFromDate(Date fromDate) {
-		this.fromDate = fromDate;
-	}
+    public void setIsPrimary(Boolean isPrimary) {
+        this.isPrimary = isPrimary;
+    }
 
-	public Date getToDate() {
-		return toDate;
-	}
+    public Date getFromDate() {
+        return fromDate;
+    }
 
-	public void setToDate(Date toDate) {
-		this.toDate = toDate;
-	}
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
 
-	public Long getGrade() {
-		return grade;
-	}
+    public Date getToDate() {
+        return toDate;
+    }
 
-	public void setGrade(Long grade) {
-		this.grade = grade;
-	}
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
+    }
 
-	public String getGovtOrderNumber() {
-		return govtOrderNumber;
-	}
+    public Long getGrade() {
+        return grade;
+    }
 
-	public void setGovtOrderNumber(String govtOrderNumber) {
-		this.govtOrderNumber = govtOrderNumber;
-	}
+    public void setGrade(Long grade) {
+        this.grade = grade;
+    }
 
-	public List<String> getDocuments() {
-		return documents;
-	}
+    public String getGovtOrderNumber() {
+        return govtOrderNumber;
+    }
 
-	public void setDocuments(List<String> documents) {
-		this.documents = documents;
-	}
+    public void setGovtOrderNumber(String govtOrderNumber) {
+        this.govtOrderNumber = govtOrderNumber;
+    }
 
-	public Long getCreatedBy() {
-		return createdBy;
-	}
+    public List<String> getDocuments() {
+        return documents;
+    }
 
-	public void setCreatedBy(Long createdBy) {
-		this.createdBy = createdBy;
-	}
+    public void setDocuments(List<String> documents) {
+        this.documents = documents;
+    }
 
-	public Date getCreatedDate() {
-		return createdDate;
-	}
+    public Long getCreatedBy() {
+        return createdBy;
+    }
 
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
 
-	public Long getLastModifiedBy() {
-		return lastModifiedBy;
-	}
+    public Date getCreatedDate() {
+        return createdDate;
+    }
 
-	public void setLastModifiedBy(Long lastModifiedBy) {
-		this.lastModifiedBy = lastModifiedBy;
-	}
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
 
-	public Date getLastModifiedDate() {
-		return lastModifiedDate;
-	}
+    public Long getLastModifiedBy() {
+        return lastModifiedBy;
+    }
 
-	public void setLastModifiedDate(Date lastModifiedDate) {
-		this.lastModifiedDate = lastModifiedDate;
-	}
+    public void setLastModifiedBy(Long lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
 
-	public String getTenantId() {
-		return tenantId;
-	}
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
 
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
 
-	
-//	@Override
-//	public int hashCode() {
-//		final int prime = 31;
-//		int result = 1;
-//		result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
-//		result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
-//		result = prime * result + ((department == null) ? 0 : department.hashCode());
-//		result = prime * result + ((designation == null) ? 0 : designation.hashCode());
-//		result = prime * result + ((documents == null) ? 0 : documents.hashCode());
-//		result = prime * result + ((fromDate == null) ? 0 : fromDate.hashCode());
-//		result = prime * result + ((function == null) ? 0 : function.hashCode());
-//		result = prime * result + ((functionary == null) ? 0 : functionary.hashCode());
-//		result = prime * result + ((fund == null) ? 0 : fund.hashCode());
-//		result = prime * result + ((govtOrderNumber == null) ? 0 : govtOrderNumber.hashCode());
-//		result = prime * result + ((grade == null) ? 0 : grade.hashCode());
-//		result = prime * result + ((hod == null) ? 0 : hod.hashCode());
-//		result = prime * result + ((id == null) ? 0 : id.hashCode());
-//		result = prime * result + ((isPrimary == null) ? 0 : isPrimary.hashCode());
-//		result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
-//		result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
-//		result = prime * result + ((position == null) ? 0 : position.hashCode());
-//		result = prime * result + ((tenantId == null) ? 0 : tenantId.hashCode());
-//		result = prime * result + ((toDate == null) ? 0 : toDate.hashCode());
-//		return result;
-//	}
+    public String getTenantId() {
+        return tenantId;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Assignment other = (Assignment) obj;
-		if (createdBy == null) {
-			if (other.createdBy != null)
-				return false;
-		} else if (!createdBy.equals(other.createdBy))
-			return false;
-		if (createdDate == null) {
-			if (other.createdDate != null)
-				return false;
-		} else if (!createdDate.equals(other.createdDate))
-			return false;
-		if (department == null) {
-			if (other.department != null)
-				return false;
-		} else if (!department.equals(other.department))
-			return false;
-		if (designation == null) {
-			if (other.designation != null)
-				return false;
-		} else if (!designation.equals(other.designation))
-			return false;
-		if (documents == null) {
-			if (other.documents != null)
-				return false;
-		} else if (!documents.equals(other.documents))
-			return false;
-		if (fromDate == null) {
-			if (other.fromDate != null)
-				return false;
-		} else if (!fromDate.equals(other.fromDate))
-			return false;
-		if (function == null) {
-			if (other.function != null)
-				return false;
-		} else if (!function.equals(other.function))
-			return false;
-		if (functionary == null) {
-			if (other.functionary != null)
-				return false;
-		} else if (!functionary.equals(other.functionary))
-			return false;
-		if (fund == null) {
-			if (other.fund != null)
-				return false;
-		} else if (!fund.equals(other.fund))
-			return false;
-		if (govtOrderNumber == null) {
-			if (other.govtOrderNumber != null)
-				return false;
-		} else if (!govtOrderNumber.equals(other.govtOrderNumber))
-			return false;
-		if (grade == null) {
-			if (other.grade != null)
-				return false;
-		} else if (!grade.equals(other.grade))
-			return false;
-		if (hod == null) {
-			if (other.hod != null)
-				return false;
-		} else if (!hod.equals(other.hod))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (isPrimary == null) {
-			if (other.isPrimary != null)
-				return false;
-		} else if (!isPrimary.equals(other.isPrimary))
-			return false;
-		if (lastModifiedBy == null) {
-			if (other.lastModifiedBy != null)
-				return false;
-		} else if (!lastModifiedBy.equals(other.lastModifiedBy))
-			return false;
-		if (lastModifiedDate == null) {
-			if (other.lastModifiedDate != null)
-				return false;
-		} else if (!lastModifiedDate.equals(other.lastModifiedDate))
-			return false;
-		if (position == null) {
-			if (other.position != null)
-				return false;
-		} else if (!position.equals(other.position))
-			return false;
-		if (tenantId == null) {
-			if (other.tenantId != null)
-				return false;
-		} else if (!tenantId.equals(other.tenantId))
-			return false;
-		if (toDate == null) {
-			if (other.toDate != null)
-				return false;
-		} else if (!toDate.equals(other.toDate))
-			return false;
-		return true;
-	}
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 
-	@Override
-	public String toString() {
-		return "Assignment [id=" + id + ", position=" + position + ", fund=" + fund + ", functionary=" + functionary
-				+ ", function=" + function + ", department=" + department + ", designation=" + designation + ", hod="
-				+ hod + ", isPrimary=" + isPrimary + ", fromDate=" + fromDate + ", toDate=" + toDate + ", grade="
-				+ grade + ", govtOrderNumber=" + govtOrderNumber + ", documents=" + documents + ", createdBy="
-				+ createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy
-				+ ", lastModifiedDate=" + lastModifiedDate + ", tenantId=" + tenantId + "]";
-	}
+    // @Override
+    // public int hashCode() {
+    // final int prime = 31;
+    // int result = 1;
+    // result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
+    // result = prime * result + ((createdDate == null) ? 0 : createdDate.hashCode());
+    // result = prime * result + ((department == null) ? 0 : department.hashCode());
+    // result = prime * result + ((designation == null) ? 0 : designation.hashCode());
+    // result = prime * result + ((documents == null) ? 0 : documents.hashCode());
+    // result = prime * result + ((fromDate == null) ? 0 : fromDate.hashCode());
+    // result = prime * result + ((function == null) ? 0 : function.hashCode());
+    // result = prime * result + ((functionary == null) ? 0 : functionary.hashCode());
+    // result = prime * result + ((fund == null) ? 0 : fund.hashCode());
+    // result = prime * result + ((govtOrderNumber == null) ? 0 : govtOrderNumber.hashCode());
+    // result = prime * result + ((grade == null) ? 0 : grade.hashCode());
+    // result = prime * result + ((hod == null) ? 0 : hod.hashCode());
+    // result = prime * result + ((id == null) ? 0 : id.hashCode());
+    // result = prime * result + ((isPrimary == null) ? 0 : isPrimary.hashCode());
+    // result = prime * result + ((lastModifiedBy == null) ? 0 : lastModifiedBy.hashCode());
+    // result = prime * result + ((lastModifiedDate == null) ? 0 : lastModifiedDate.hashCode());
+    // result = prime * result + ((position == null) ? 0 : position.hashCode());
+    // result = prime * result + ((tenantId == null) ? 0 : tenantId.hashCode());
+    // result = prime * result + ((toDate == null) ? 0 : toDate.hashCode());
+    // return result;
+    // }
 
-	
-	
+    public String getEmployeeName() {
+        return employeeName;
+    }
 
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Assignment other = (Assignment) obj;
+        if (createdBy == null) {
+            if (other.createdBy != null)
+                return false;
+        } else if (!createdBy.equals(other.createdBy))
+            return false;
+        if (createdDate == null) {
+            if (other.createdDate != null)
+                return false;
+        } else if (!createdDate.equals(other.createdDate))
+            return false;
+        if (department == null) {
+            if (other.department != null)
+                return false;
+        } else if (!department.equals(other.department))
+            return false;
+        if (designation == null) {
+            if (other.designation != null)
+                return false;
+        } else if (!designation.equals(other.designation))
+            return false;
+        if (documents == null) {
+            if (other.documents != null)
+                return false;
+        } else if (!documents.equals(other.documents))
+            return false;
+        if (fromDate == null) {
+            if (other.fromDate != null)
+                return false;
+        } else if (!fromDate.equals(other.fromDate))
+            return false;
+        if (function == null) {
+            if (other.function != null)
+                return false;
+        } else if (!function.equals(other.function))
+            return false;
+        if (functionary == null) {
+            if (other.functionary != null)
+                return false;
+        } else if (!functionary.equals(other.functionary))
+            return false;
+        if (fund == null) {
+            if (other.fund != null)
+                return false;
+        } else if (!fund.equals(other.fund))
+            return false;
+        if (govtOrderNumber == null) {
+            if (other.govtOrderNumber != null)
+                return false;
+        } else if (!govtOrderNumber.equals(other.govtOrderNumber))
+            return false;
+        if (grade == null) {
+            if (other.grade != null)
+                return false;
+        } else if (!grade.equals(other.grade))
+            return false;
+        if (hod == null) {
+            if (other.hod != null)
+                return false;
+        } else if (!hod.equals(other.hod))
+            return false;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (isPrimary == null) {
+            if (other.isPrimary != null)
+                return false;
+        } else if (!isPrimary.equals(other.isPrimary))
+            return false;
+        if (lastModifiedBy == null) {
+            if (other.lastModifiedBy != null)
+                return false;
+        } else if (!lastModifiedBy.equals(other.lastModifiedBy))
+            return false;
+        if (lastModifiedDate == null) {
+            if (other.lastModifiedDate != null)
+                return false;
+        } else if (!lastModifiedDate.equals(other.lastModifiedDate))
+            return false;
+        if (position == null) {
+            if (other.position != null)
+                return false;
+        } else if (!position.equals(other.position))
+            return false;
+        if (tenantId == null) {
+            if (other.tenantId != null)
+                return false;
+        } else if (!tenantId.equals(other.tenantId))
+            return false;
+        if (toDate == null) {
+            if (other.toDate != null)
+                return false;
+        } else if (!toDate.equals(other.toDate))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Assignment [id=" + id + ", position=" + position + ", fund=" + fund + ", functionary=" + functionary
+                + ", function=" + function + ", department=" + department + ", designation=" + designation + ", hod="
+                + hod + ", isPrimary=" + isPrimary + ", fromDate=" + fromDate + ", toDate=" + toDate + ", grade="
+                + grade + ", govtOrderNumber=" + govtOrderNumber + ", documents=" + documents + ", createdBy="
+                + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy
+                + ", lastModifiedDate=" + lastModifiedDate + ", tenantId=" + tenantId + "]";
+    }
 
 }

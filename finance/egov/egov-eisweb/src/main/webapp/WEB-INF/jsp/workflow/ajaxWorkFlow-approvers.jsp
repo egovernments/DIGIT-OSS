@@ -52,8 +52,8 @@
 "ResultSet": {
     "Result":[
     <s:iterator var="s" value="approverList" status="status">
-    {"Text":"<s:property value="%{employee.name}"/> ~ <s:property value="%{position.name}"/>",
-    "Value":"<s:property value="%{position.id}" />"  
+    {"Text":"<s:property value="%{employeeName}"/>",
+    "Value":"<s:property value="%{position}" />"  
     }<s:if test="!#status.last">,</s:if>
     </s:iterator>       
     ]

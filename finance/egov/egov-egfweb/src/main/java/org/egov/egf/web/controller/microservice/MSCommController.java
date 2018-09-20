@@ -48,7 +48,7 @@ public class MSCommController {
 	@ResponseBody
 	public List<Designation> getDesignations(){
 		
-		List<Designation> designations = microserviceUtils.getDesignation();
+		List<Designation> designations = microserviceUtils.getDesignations();
 		
 		return designations;
 	}
