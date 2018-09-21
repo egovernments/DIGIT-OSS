@@ -293,7 +293,7 @@ public class ExpenseBillService {
 
     @Transactional
     public EgBillregister update(final EgBillregister egBillregister, final Long approvalPosition, final String approvalComent,
-                                 final String additionalRule, final String workFlowAction, final String mode) {
+                                 final String additionalRule, final String workFlowAction, final String mode,final String approverDesignation) {
         EgBillregister updatedegBillregister = null;
         if ("edit".equals(mode)) {
             egBillregister.setPassedamount(egBillregister.getBillamount());
@@ -336,7 +336,7 @@ public class ExpenseBillService {
                 expenseBillRegisterStatusChange(updatedegBillregister, workFlowAction);
                 createExpenseBillRegisterWorkflowTransition(updatedegBillregister, approvalPosition, approvalComent,
                         additionalRule,
-                        workFlowAction,"");
+                        workFlowAction,approverDesignation);
             }
             updatedegBillregister = expenseBillRepository.save(updatedegBillregister);
         } else {

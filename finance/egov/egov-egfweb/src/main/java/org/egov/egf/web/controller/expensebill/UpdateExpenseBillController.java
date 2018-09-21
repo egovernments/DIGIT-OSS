@@ -172,6 +172,7 @@ public class UpdateExpenseBillController extends BaseBillController {
 
         Long approvalPosition = 0l;
         String approvalComment = "";
+        String apporverDesignation = "";
 
         if (request.getParameter("approvalComent") != null)
             approvalComment = request.getParameter("approvalComent");
@@ -183,6 +184,8 @@ public class UpdateExpenseBillController extends BaseBillController {
                 && request.getParameter(APPROVAL_POSITION) != null
                 && !request.getParameter(APPROVAL_POSITION).isEmpty())
             approvalPosition = Long.valueOf(request.getParameter(APPROVAL_POSITION));
+        if(request.getParameter(APPROVAL_DESIGNATION) != null && !request.getParameter(APPROVAL_DESIGNATION).isEmpty())
+            apporverDesignation = String.valueOf(request.getParameter(APPROVAL_DESIGNATION));
 
         if (egBillregister.getState() != null
                 && (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue())
@@ -214,7 +217,7 @@ public class UpdateExpenseBillController extends BaseBillController {
             try {
                 if (null != workFlowAction)
                     updatedEgBillregister = expenseBillService.update(egBillregister, approvalPosition, approvalComment, null,
-                            workFlowAction, mode);
+                            workFlowAction, mode,apporverDesignation);
             } catch (final ValidationException e) {
                 setDropDownValues(model);
                 model.addAttribute("stateType", egBillregister.getClass().getSimpleName());

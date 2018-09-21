@@ -159,7 +159,7 @@ public class CreateJournalVoucherController extends BaseVoucherController {
             }
 
             final String approverDetails = financialUtils.getApproverDetails(workFlowAction,
-                    savedVoucherHeader.getState(), savedVoucherHeader.getId(), approvalPosition);
+                    savedVoucherHeader.getState(), savedVoucherHeader.getId(), approvalPosition,"");
 
             return "redirect:/journalvoucher/success?approverDetails= " + approverDetails + "&voucherNumber="
                     + savedVoucherHeader.getVoucherNumber() + "&workFlowAction=" + workFlowAction;
