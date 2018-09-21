@@ -756,7 +756,7 @@ var totaldbamt=0,totalcramt=0;
        		<egov:ajaxdropdown id="service" fields="['Text','Value']" dropdownId="serviceId" url="receipts/ajaxReceiptCreate-ajaxLoadServiceByCategoryForMisc.action" /></td>
         <td width="21%" class="bluebox"><s:text name="miscreceipt.service" /><span class="mandatory"/> </td>
         <td width="30%" class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="serviceId" id="serviceId" cssClass="selectwk" list="dropdownData.serviceList" listKey="id" listValue="name" value="%{serviceId}" onchange="loadFinDetails(this);getBankBranchList();"/>
-	 		<egov:ajaxdropdown id="bankBranchMasterDropdown" fields="['Text','Value']" dropdownId='bankBranchMaster' 	url='receipts/ajaxBankRemittance-bankBranchList.action' selectedValue="%{bankbranch.id}"/> 
+<!-- 	 		<egov:ajaxdropdown id="bankBranchMasterDropdown" fields="['Text','Value']" dropdownId='bankBranchMaster' 	url='receipts/ajaxBankRemittance-bankBranchList.action' selectedValue="%{bankbranch.id}"/> --> 
         </td>
          
        
@@ -770,9 +770,8 @@ var totaldbamt=0,totalcramt=0;
            <s:if test="%{shouldShowHeaderField('fund')}">
           <td width="21%" class="bluebox"><s:text name="miscreceipt.fund"/><s:if test="%{isFieldMandatory('fund')}"><span class="bluebox"><span class="mandatory"/></s:if></td>
           <td width="24%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="fundId" id="fundId" cssClass="selectwk" onChange="setFundId();getSchemelist(this);getBankBranchList();" list="dropdownData.fundList" listKey="id" listValue="name" value="%{fund.id}" />
-          <egov:ajaxdropdown id="bankBranchMasterDropdown" fields="['Text','Value']" dropdownId='bankBranchMaster'
-                url='receipts/ajaxBankRemittance-bankBranchList.action' selectedValue="%{bankbranch.id}"/> 
-          <egov:ajaxdropdown id="schemeIdDropdown" fields="['Text','Value']" dropdownId='schemeId' url='receipts/ajaxReceiptCreate-ajaxLoadSchemes.action' />
+          <!-- <egov:ajaxdropdown id="bankBranchMasterDropdown" fields="['Text','Value']" dropdownId='bankBranchMaster'url='receipts/ajaxBankRemittance-bankBranchList.action' selectedValue="%{bankbranch.id}"/> --> 
+          <!-- <egov:ajaxdropdown id="schemeIdDropdown" fields="['Text','Value']" dropdownId='schemeId' url='receipts/ajaxReceiptCreate-ajaxLoadSchemes.action' /> -->
          <s:hidden label="receiptMisc.fund.id" id="receiptMisc.fund.id"  name="receiptMisc.fund.id"/>
           </td>
           </s:if>

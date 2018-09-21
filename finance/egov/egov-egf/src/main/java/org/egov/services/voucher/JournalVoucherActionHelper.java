@@ -51,7 +51,6 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,11 +60,8 @@ import org.egov.billsaccounting.services.CreateVoucher;
 import org.egov.billsaccounting.services.VoucherConstant;
 import org.egov.commons.CFunction;
 import org.egov.commons.CVoucherHeader;
-import org.egov.eis.entity.Assignment;
-import org.egov.eis.service.AssignmentService;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.exception.ApplicationRuntimeException;
-import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -75,7 +71,6 @@ import org.egov.infstr.services.PersistenceService;
 import org.egov.model.voucher.VoucherDetails;
 import org.egov.model.voucher.VoucherTypeBean;
 import org.egov.model.voucher.WorkflowBean;
-import org.egov.pims.commons.Position;
 import org.egov.utils.FinancialConstants;
 import org.hibernate.HibernateException;
 import org.joda.time.DateTime;
@@ -96,8 +91,6 @@ public class JournalVoucherActionHelper {
     @Autowired
     private SecurityUtils securityUtils;
     @Autowired
-    private AssignmentService assignmentService;
-    @Autowired
     @Qualifier("workflowService")
     private SimpleWorkflowService<CVoucherHeader> voucherHeaderWorkflowService;
     @Autowired
@@ -106,10 +99,7 @@ public class JournalVoucherActionHelper {
     @Autowired
     @Qualifier("voucherService")
     private VoucherService voucherService;
-    
-    @Autowired
-    private MicroserviceUtils microserviceUtils;
-    
+
     @Autowired
     @Qualifier("createVoucher")
     private CreateVoucher createVoucher;
@@ -132,12 +122,9 @@ public class JournalVoucherActionHelper {
                         new BigDecimal(voucherTypeBean.getTotalAmount()));
             }
             if (FinancialConstants.CREATEANDAPPROVE.equalsIgnoreCase(workflowBean.getWorkFlowAction())
-                    && voucherHeader.getState() == null)
-            {
+                    && voucherHeader.getState() == null) {
                 voucherHeader.setStatus(FinancialConstants.CREATEDVOUCHERSTATUS);
-            }
-            else
-            {
+            } else {
                 voucherHeader = transitionWorkFlow(voucherHeader, workflowBean);
                 voucherService.applyAuditing(voucherHeader.getState());
             }
@@ -171,13 +158,11 @@ public class JournalVoucherActionHelper {
             Transaxtion txnList[] = new Transaxtion[transactions.size()];
             txnList = transactions.toArray(txnList);
             final SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
-            if (!chartOfAccounts.postTransaxtions(txnList, formatter.format(voucherHeader.getVoucherDate())))
-            {
+            if (!chartOfAccounts.postTransaxtions(txnList, formatter.format(voucherHeader.getVoucherDate()))) {
                 final List<ValidationError> errors = new ArrayList<ValidationError>();
                 errors.add(new ValidationError("exp", "Engine Validation failed"));
                 throw new ValidationException(errors);
-            }
-            else {
+            } else {
                 if (!"JVGeneral".equalsIgnoreCase(voucherHeader.getName())) {
                     final String totalamount = totaldbamount;
                     if (LOGGER.isDebugEnabled())
@@ -211,23 +196,21 @@ public class JournalVoucherActionHelper {
     public CVoucherHeader transitionWorkFlow(final CVoucherHeader voucherHeader, WorkflowBean workflowBean) {
         final DateTime currentDate = new DateTime();
         final User user = securityUtils.getCurrentUser();
-        Position pos = null;
-        Assignment wfInitiator = null;
-        /*if (null != voucherHeader.getId())
-            wfInitiator = getWorkflowInitiator(voucherHeader);*/
 
         if (FinancialConstants.BUTTONREJECT.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
-                final String stateValue = FinancialConstants.WORKFLOW_STATE_REJECTED;
-                voucherHeader.transition().progressWithStateCopy().withSenderName(user.getName()).withComments(workflowBean.getApproverComments())
-                        .withStateValue(stateValue).withDateInfo(currentDate.toDate())
-                        .withOwner(wfInitiator.getPosition()).withNextAction(FinancialConstants.WF_STATE_EOA_Approval_Pending);
+            final String stateValue = FinancialConstants.WORKFLOW_STATE_REJECTED;
+            voucherHeader.transition().progressWithStateCopy().withSenderName(user.getName())
+                    .withComments(workflowBean.getApproverComments())
+                    .withStateValue(stateValue).withDateInfo(currentDate.toDate())
+                    .withOwner(voucherHeader.getState().getInitiatorPosition())
+                    .withNextAction(FinancialConstants.WF_STATE_EOA_Approval_Pending);
 
         } else if (FinancialConstants.BUTTONAPPROVE.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
             final WorkFlowMatrix wfmatrix = voucherHeaderWorkflowService.getWfMatrix(voucherHeader.getStateType(), null,
                     null, null, voucherHeader.getCurrentState().getValue(), null);
             voucherHeader.transition().end().withSenderName(user.getName()).withComments(workflowBean.getApproverComments())
                     .withStateValue(wfmatrix.getCurrentDesignation() + " Approved").withDateInfo(currentDate.toDate())
-                    .withOwner(pos)
+                    .withOwner(workflowBean.getApproverPositionId())
                     .withNextAction(wfmatrix.getNextAction());
 
             voucherHeader.setStatus(FinancialConstants.CREATEDVOUCHERSTATUS);
@@ -237,20 +220,15 @@ public class JournalVoucherActionHelper {
                     .withSenderName(user.getName()).withComments(workflowBean.getApproverComments())
                     .withDateInfo(currentDate.toDate());
         } else {
-            if (null != workflowBean.getApproverPositionId() && workflowBean.getApproverPositionId() != -1){
-                //create a postion object with id and assign here.
-                 pos = new Position();
-                pos.setId(workflowBean.getApproverPositionId());
-                
-                //pos = (Position) persistenceService.find("from Position where id=?", workflowBean.getApproverPositionId());
-                }
             if (null == voucherHeader.getState()) {
                 final WorkFlowMatrix wfmatrix = voucherHeaderWorkflowService.getWfMatrix(voucherHeader.getStateType(), null,
                         null, null, workflowBean.getCurrentState(), null);
                 voucherHeader.transition().start().withSenderName(user.getName())
                         .withComments(workflowBean.getApproverComments())
-                        .withStateValue(wfmatrix.getNextState()).withDateInfo(currentDate.toDate()).withOwner(pos)
-                        .withNextAction(wfmatrix.getNextAction());
+                        .withStateValue(wfmatrix.getNextState()).withDateInfo(currentDate.toDate())
+                        .withOwner(workflowBean.getApproverPositionId())
+                        .withNextAction(wfmatrix.getNextAction())
+                        .withInitiator(workflowBean.getApproverPositionId());
             } else if (voucherHeader.getCurrentState().getNextAction().equalsIgnoreCase("END"))
                 voucherHeader.transition().end().withSenderName(user.getName())
                         .withComments(workflowBean.getApproverComments())
@@ -261,22 +239,17 @@ public class JournalVoucherActionHelper {
                 }
                 final WorkFlowMatrix wfmatrix = voucherHeaderWorkflowService.getWfMatrix(voucherHeader.getStateType(), null,
                         null, null, voucherHeader.getCurrentState().getValue(), null);
-                voucherHeader.transition().progressWithStateCopy().withSenderName(user.getName()).withComments(workflowBean.getApproverComments())
-                        .withStateValue(wfmatrix.getNextState()).withDateInfo(currentDate.toDate()).withOwner(pos)
+                voucherHeader.transition().progressWithStateCopy().withSenderName(user.getName())
+                        .withComments(workflowBean.getApproverComments())
+                        .withStateValue(wfmatrix.getNextState()).withDateInfo(currentDate.toDate())
+                        .withOwner(workflowBean.getApproverPositionId())
                         .withNextAction(wfmatrix.getNextAction());
             }
         }
         return voucherHeader;
     }
 
-    private Assignment getWorkflowInitiator(final CVoucherHeader voucherHeader) {
-        Assignment wfInitiator = assignmentService.findByEmployeeAndGivenDate(voucherHeader.getCreatedBy(), new Date())
-                .get(0);
-        return wfInitiator;
-    }
-
-    private HashMap<String, Object> createHeaderAndMisDetails(CVoucherHeader voucherHeader) throws ValidationException
-    {
+    private HashMap<String, Object> createHeaderAndMisDetails(CVoucherHeader voucherHeader) throws ValidationException {
         final HashMap<String, Object> headerdetails = new HashMap<String, Object>();
         headerdetails.put(VoucherConstant.VOUCHERNAME, voucherHeader.getName());
         headerdetails.put(VoucherConstant.VOUCHERTYPE, voucherHeader.getType());
@@ -315,8 +288,7 @@ public class JournalVoucherActionHelper {
 
             detailMap = new HashMap<String, Object>();
             final Map<String, Object> glcodeMap = new HashMap<String, Object>();
-            for (final VoucherDetails voucherDetail : billDetailslist)
-            {
+            for (final VoucherDetails voucherDetail : billDetailslist) {
                 detailMap = new HashMap<String, Object>();
                 if (voucherDetail.getFunctionIdDetail() != null)
                     if (voucherHeader.getIsRestrictedtoOneFunctionCenter())
@@ -334,8 +306,7 @@ public class JournalVoucherActionHelper {
                     detailMap.put(VoucherConstant.GLCODE, voucherDetail.getGlcodeDetail());
                     accountdetails.add(detailMap);
                     glcodeMap.put(voucherDetail.getGlcodeDetail(), VoucherConstant.DEBIT);
-                }
-                else {
+                } else {
                     detailMap.put(VoucherConstant.CREDITAMOUNT, voucherDetail.getCreditAmountDetail().toString());
                     detailMap.put(VoucherConstant.DEBITAMOUNT, "0");
                     detailMap.put(VoucherConstant.GLCODE, voucherDetail.getGlcodeDetail());
