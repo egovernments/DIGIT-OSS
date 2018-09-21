@@ -107,16 +107,9 @@
 		if("<s:property value='%{voucherHeader.vouchermis.sourcePath}' escapeHtml='false'/>"=="" || "<s:property value='%{voucherHeader.vouchermis.sourcePath}'/>"=='null')
 			bootbox.alert('Source is not available');
 		else{
-			if("<s:property value='%{voucherHeader.vouchermis.sourcePath}' escapeHtml='false'/>".indexOf('services') > -1
-					&& "<s:property value='%{billRegister.egBillregistermis.sourcePath}' escapeHtml='false'/>".indexOf('services') <= -1)
-				var url = '<s:property value="%{voucherHeader.vouchermis.sourcePath}" escapeHtml="false"/>'+ '&showMode=view';
-			else
-				var url = '<s:property value="%{voucherHeader.vouchermis.sourcePath}" escapeHtml="false"/>';
-				bootbox.alert("url" + url);
+			var url = '<s:property value="%{voucherHeader.vouchermis.sourcePath}" escapeHtml="false"/>';
 			window.open(url,'Source','resizable=yes,scrollbars=yes,left=300,top=40, width=900, height=700')
-				
 		}   
-			
 	}
 	function checkLength(obj)
 	{
