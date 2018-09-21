@@ -193,7 +193,7 @@ public class ExpenseBillService {
 
     @Transactional
     public EgBillregister create(final EgBillregister egBillregister, final Long approvalPosition, final String approvalComent
-            , final String additionalRule, final String workFlowAction) {
+            , final String additionalRule, final String workFlowAction,final String approvalDesignation) {
         if (StringUtils.isBlank(egBillregister.getBilltype()))
             egBillregister.setBilltype(FinancialConstants.BILLTYPE_FINAL_BILL);
         if (StringUtils.isBlank(egBillregister.getExpendituretype()))
@@ -245,7 +245,7 @@ public class ExpenseBillService {
             savedEgBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.CONTINGENCYBILL_FIN,
                     FinancialConstants.CONTINGENCYBILL_CREATED_STATUS));
             createExpenseBillRegisterWorkflowTransition(savedEgBillregister, approvalPosition, approvalComent, additionalRule,
-                    workFlowAction);
+                    workFlowAction,approvalDesignation);
         }
         List<DocumentUpload> files = egBillregister.getDocumentDetail() == null ? null : egBillregister.getDocumentDetail();
         final List<DocumentUpload> documentDetails;
@@ -336,7 +336,7 @@ public class ExpenseBillService {
                 expenseBillRegisterStatusChange(updatedegBillregister, workFlowAction);
                 createExpenseBillRegisterWorkflowTransition(updatedegBillregister, approvalPosition, approvalComent,
                         additionalRule,
-                        workFlowAction);
+                        workFlowAction,"");
             }
             updatedegBillregister = expenseBillRepository.save(updatedegBillregister);
         } else {
@@ -347,7 +347,7 @@ public class ExpenseBillService {
                 expenseBillRegisterStatusChange(egBillregister, workFlowAction);
                 createExpenseBillRegisterWorkflowTransition(egBillregister, approvalPosition, approvalComent,
                         additionalRule,
-                        workFlowAction);
+                        workFlowAction,"");
             }
             updatedegBillregister = expenseBillRepository.save(egBillregister);
         }
@@ -411,7 +411,7 @@ public class ExpenseBillService {
 
     public void createExpenseBillRegisterWorkflowTransition(final EgBillregister egBillregister,
                                                             final Long approvalPosition, final String approvalComent, final String additionalRule,
-                                                            final String workFlowAction) {
+                                                            final String workFlowAction,final String approvalDesignation) {
         if (LOG.isDebugEnabled())
             LOG.debug(" Create WorkFlow Transition Started  ...");
         final User user = securityUtils.getCurrentUser();
@@ -435,6 +435,9 @@ public class ExpenseBillService {
 //            if (null != approvalPosition && approvalPosition != -1 && !approvalPosition.equals(Long.valueOf(0)))
 //                wfInitiator = assignmentService.getAssignmentsForPosition(approvalPosition).get(0);
             WorkFlowMatrix wfmatrix;
+           Designation designation = this.getDesignationDetails(approvalDesignation);
+           Position owenrPos = new Position();
+           owenrPos.setId(approvalPosition);
 
             wfmatrix = egBillregisterRegisterWorkflowService.getWfMatrix(egBillregister.getStateType(), null,
                     null, additionalRule, FinancialConstants.WF_STATE_FINAL_APPROVAL_PENDING, null);
@@ -448,8 +451,8 @@ public class ExpenseBillService {
 
             if (null == egBillregister.getState()) {
 
-                if (wfInitiator.getDesignation() != null
-                        && finalDesignationNames.get(wfInitiator.getDesignation().getName().toUpperCase()) != null)
+                if (designation != null
+                        && finalDesignationNames.get(designation.getName().toUpperCase()) != null)
                     stateValue = FinancialConstants.WF_STATE_FINAL_APPROVAL_PENDING;
 
                 wfmatrix = egBillregisterRegisterWorkflowService.getWfMatrix(egBillregister.getStateType(), null,
@@ -460,7 +463,7 @@ public class ExpenseBillService {
 
                 egBillregister.transition().start().withSenderName(user.getUsername() + "::" + user.getName())
                         .withComments(approvalComent)
-                        .withStateValue(stateValue).withDateInfo(new Date()).withOwner(wfInitiator.getPosition())
+                        .withStateValue(stateValue).withDateInfo(new Date()).withOwner(owenrPos)
                         .withNextAction(wfmatrix.getNextAction())
                         .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME)
                         .withCreatedBy(user.getId())
@@ -485,8 +488,8 @@ public class ExpenseBillService {
                         .withNextAction(wfmatrix.getNextAction())
                         .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME);
             } else {
-                if (wfInitiator.getDesignation() != null
-                        && finalDesignationNames.get(wfInitiator.getDesignation().getName().toUpperCase()) != null)
+                if (designation != null
+                        && finalDesignationNames.get(designation.getName().toUpperCase()) != null)
                     stateValue = FinancialConstants.WF_STATE_FINAL_APPROVAL_PENDING;
 
                 wfmatrix = egBillregisterRegisterWorkflowService.getWfMatrix(egBillregister.getStateType(), null,
@@ -497,7 +500,7 @@ public class ExpenseBillService {
 
                 egBillregister.transition().progressWithStateCopy().withSenderName(user.getUsername() + "::" + user.getName())
                         .withComments(approvalComent)
-                        .withStateValue(stateValue).withDateInfo(new Date()).withOwner(wfInitiator.getPosition())
+                        .withStateValue(stateValue).withDateInfo(new Date()).withOwner(owenrPos)
                         .withNextAction(wfmatrix.getNextAction())
                         .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME);
             }

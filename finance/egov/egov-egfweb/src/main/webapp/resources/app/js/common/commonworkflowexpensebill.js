@@ -109,8 +109,9 @@ $(document).ready(function()
 		
 		
 				todayDate = new Date(Date.now()).toLocaleString(),
-				departmentId = $('#approvalDesignation').val(),
-				designationId= $('#approvalDepartment').val();
+				
+				designationId=  $('#approvalDesignation').val(),
+				departmentId =$('#approvalDepartment').val();
 		
 		
 		$.ajax({

@@ -59,6 +59,7 @@ import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.AppConfigService;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.filestore.service.FileStoreService;
+import org.egov.infra.microservice.models.EmployeeInfo;
 import org.egov.infra.microservice.models.EmployeeInfoResponse;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.security.utils.SecurityUtils;
@@ -125,7 +126,7 @@ public class FinancialUtils {
 
     @Autowired
     MicroserviceUtils microServiceUtil;
-    
+
     public Session getCurrentSession() {
         return entityManager.unwrap(Session.class);
     }
@@ -145,42 +146,45 @@ public class FinancialUtils {
         return egwStatusHibernateDAO.findById(id, true);
     }
 
-    public String getApproverDetails(final String workFlowAction, final State state, final Long id, final Long approvalPosition) {
-       
-    	
-    	final Assignment currentUserAssignment = assignmentService.getPrimaryAssignmentForGivenRange(securityUtils
-                .getCurrentUser().getId(), new Date(), new Date());
+    public String getApproverDetails(final String workFlowAction, final State state, final Long id, final Long approvalPosition,
+            final String approverName) {
 
-//    	EmployeeInfoResponse empInfo = msUtil.getEmployee("", "", securityUtils.getCurrentUser().getId(), new Date(),null,null);
-    	
-    	final Assignment curr_assignment ;
-    	
-        Assignment assignObj = null;
-        List<Assignment> asignList = null;
-        if (approvalPosition != null)
-            assignObj = assignmentService.getPrimaryAssignmentForPositon(approvalPosition);
+//        final Assignment currentUserAssignment = assignmentService.getPrimaryAssignmentForGivenRange(securityUtils
+//                .getCurrentUser().getId(), new Date(), new Date());
 
-        if (assignObj != null) {
-            asignList = new ArrayList<>();
-            asignList.add(assignObj);
-        } else if (approvalPosition != null)
-            asignList = assignmentService.getAssignmentsForPosition(approvalPosition, new Date());
+        // EmployeeInfoResponse empInfo = msUtil.getEmployee("", "", securityUtils.getCurrentUser().getId(), new
+        // Date(),null,null);
 
-        String nextDesign = "";
-        if (asignList != null)
-            nextDesign = !asignList.isEmpty() ? asignList.get(0).getDesignation().getName() : "";
+//        final Assignment curr_assignment;
+//
+//        Assignment assignObj = null;
+//        List<Assignment> asignList = null;
+//        if (approvalPosition != null)
+//            assignObj = assignmentService.getPrimaryAssignmentForPositon(approvalPosition);
+//
+//        if (assignObj != null) {
+//            asignList = new ArrayList<>();
+//            asignList.add(assignObj);
+//        } else if (approvalPosition != null)
+//            asignList = assignmentService.getAssignmentsForPosition(approvalPosition, new Date());
+//
+//        String nextDesign = "";
+//        if (asignList != null)
+//            nextDesign = !asignList.isEmpty() ? asignList.get(0).getDesignation().getName() : "";
 
-        String approverDetails;
+        String approverDetails="";
         if (!FinancialConstants.BUTTONREJECT.toString().equalsIgnoreCase(workFlowAction))
-            approverDetails = id + ","
-                    + getApproverName(approvalPosition) + ","
-                    + (currentUserAssignment != null ? currentUserAssignment.getDesignation().getName() : "") + ","
-                    + (nextDesign != null ? nextDesign : "");
+//            approverDetails = id + ","
+//                    + getApproverName(approvalPosition) + ","
+//                    + (currentUserAssignment != null ? currentUserAssignment.getDesignation().getName() : "") + ","
+//                    + (nextDesign != null ? nextDesign : "");
+            approverDetails = id + "," + approverName;
         else
-            approverDetails = id + ","
-                    + getApproverName(state.getOwnerPosition()) + ","
-                    + (currentUserAssignment != null ? currentUserAssignment.getDesignation().getName() : "") + ","
-                    + (nextDesign != null ? state.getDesgName() : "");
+            approverDetails = id + "," + getInitiatorName(state.getCreatedBy());
+//            approverDetails = id + ","
+//                    + getApproverName(state.getOwnerPosition()) + ","
+//                    + (currentUserAssignment != null ? currentUserAssignment.getDesignation().getName() : "") + ","
+//                    + (nextDesign != null ? state.getDesgName() : "");
         return approverDetails;
     }
 
@@ -195,6 +199,15 @@ public class FinancialUtils {
         } else
             asignList = assignmentService.getAssignmentsForPosition(approvalPosition, new Date());
         return !asignList.isEmpty() ? asignList.get(0).getEmployee().getName() : "";
+    }
+    
+    public String getInitiatorName(Long employeeId){
+        
+      List<EmployeeInfo>empList =  microServiceUtil.getEmployee(employeeId, new Date(),null, null);
+      if(null!=empList && !empList.isEmpty())  
+      return empList.get(0).getName();
+      else
+          return "";
     }
 
     public Long getApproverPosition(final String designationName, final State state, final Long createdById) {
@@ -235,8 +248,7 @@ public class FinancialUtils {
 
     public boolean isBillEditable(final State state) {
         boolean isEditable = false;
-        if (state.getOwnerPosition() != null && state.getDesgName() != null
-               ) {
+        if (state.getOwnerPosition() != null && state.getDesgName() != null) {
             final String designationName = state.getDesgName();
             final AppConfig appConfig = appConfigService.getAppConfigByKeyName(FinancialConstants.BILL_EDIT_DESIGNATIONS);
             for (final AppConfigValues appConfigValues : appConfig.getConfValues())
@@ -263,7 +275,7 @@ public class FinancialUtils {
                 workflowHistory.put("status", stateHistory.getValue());
                 final Long owner = stateHistory.getOwnerPosition();
                 final State _sowner = stateHistory.getState();
-               // user = stateHistory.getOwnerUser();
+                // user = stateHistory.getOwnerUser();
                 if (null != user) {
                     workflowHistory.put("user", user.getUsername() + "::" + user.getName());
                     workflowHistory.put("department",
@@ -273,7 +285,7 @@ public class FinancialUtils {
                     user = eisCommonService.getUserForPosition(owner, new Date());
                     workflowHistory
                             .put("user", null != user.getUsername() ? user.getUsername() + "::" + user.getName() : "");
-                    workflowHistory.put("department", null !=_sowner.getDeptName() ? _sowner.getDeptName() : "");
+                    workflowHistory.put("department", null != _sowner.getDeptName() ? _sowner.getDeptName() : "");
                 }
                 historyTable.add(workflowHistory);
             }
@@ -282,7 +294,7 @@ public class FinancialUtils {
             map.put("updatedBy", state.getLastModifiedBy() + "::" + state.getLastModifiedBy());
             map.put("status", state.getValue());
             final Long ownerPosition = state.getOwnerPosition();
-           // user = state.getOwnerUser();
+            // user = state.getOwnerUser();
             if (null != user) {
                 map.put("user", user.getUsername() + "::" + user.getName());
                 map.put("department", null != eisCommonService.getDepartmentForUser(user.getId()) ? eisCommonService
@@ -290,7 +302,7 @@ public class FinancialUtils {
             } else if (null != ownerPosition && null != state.getDeptName()) {
                 user = eisCommonService.getUserForPosition(ownerPosition, new Date());
                 map.put("user", null != user.getUsername() ? user.getUsername() + "::" + user.getName() : "");
-                map.put("department", null != state.getDeptName() ? state.getDeptName(): "");
+                map.put("department", null != state.getDeptName() ? state.getDeptName() : "");
             }
             historyTable.add(map);
         }
@@ -303,7 +315,8 @@ public class FinancialUtils {
 
     }
 
-    public List<DocumentUpload> getDocumentDetails(final List<DocumentUpload> files, final Object object, final String objectType) {
+    public List<DocumentUpload> getDocumentDetails(final List<DocumentUpload> files, final Object object,
+            final String objectType) {
         final List<DocumentUpload> documentDetailsList = new ArrayList<>();
 
         Long id;

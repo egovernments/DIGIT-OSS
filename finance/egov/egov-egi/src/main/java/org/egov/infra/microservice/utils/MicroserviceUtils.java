@@ -313,8 +313,8 @@ public class MicroserviceUtils {
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        final String approver_url = approverSrvcUrl + "?tenantId=" + getTenentId() + "&assignment.departmentId"
-                + departmentId + "&assignment.designationId" + designationId + "&asOnDate"
+        final String approver_url = approverSrvcUrl + "?tenantId=" + getTenentId() + "&departmentId="
+                + departmentId + "&designationId=" + designationId + "&asOnDate="
                 + dateFormat.format(new Date());
 
         RequestInfo requestInfo = new RequestInfo();

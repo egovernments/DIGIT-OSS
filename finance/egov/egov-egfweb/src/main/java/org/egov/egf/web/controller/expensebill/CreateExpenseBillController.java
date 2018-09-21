@@ -69,6 +69,7 @@ import org.apache.struts2.dispatcher.multipart.UploadedFile;
 import org.egov.egf.budget.model.BudgetControlType;
 import org.egov.egf.budget.service.BudgetControlTypeService;
 import org.egov.egf.expensebill.service.ExpenseBillService;
+import org.egov.egf.utils.FinancialUtils;
 import org.egov.eis.web.contract.WorkflowContainer;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
@@ -121,6 +122,8 @@ public class CreateExpenseBillController extends BaseBillController {
     private BudgetControlTypeService budgetControlTypeService;
     @Autowired
     private FileStoreService fileStoreService;
+    @Autowired
+    private FinancialUtils financialUtils;
 
     public CreateExpenseBillController(final AppConfigValueService appConfigValuesService) {
         super(appConfigValuesService);
@@ -136,7 +139,6 @@ public class CreateExpenseBillController extends BaseBillController {
     	System.out.println("*********** New ExpenseBill recieved*********************");
     	Cookie[] cookies = request.getCookies();
     	
-    	System.out.println("************** Session User Id :"+ApplicationThreadLocals.getUserId());
     	
     	if(null!=cookies && cookies.length>0)
     	{
@@ -203,15 +205,20 @@ public class CreateExpenseBillController extends BaseBillController {
         } else {
             Long approvalPosition = 0l;
             String approvalComment = "";
+            String approvalDesignation = "";
             if (request.getParameter("approvalComment") != null)
                 approvalComment = request.getParameter("approvalComent");
             if (request.getParameter(APPROVAL_POSITION) != null && !request.getParameter(APPROVAL_POSITION).isEmpty())
                 approvalPosition = Long.valueOf(request.getParameter(APPROVAL_POSITION));
+            if (request.getParameter(APPROVAL_DESIGNATION) != null && !request.getParameter(APPROVAL_DESIGNATION).isEmpty())
+                approvalDesignation = String.valueOf(request.getParameter(APPROVAL_DESIGNATION));
+            
             EgBillregister savedEgBillregister;
             egBillregister.setDocumentDetail(list);
             try {
 
-                savedEgBillregister = expenseBillService.create(egBillregister, approvalPosition, approvalComment, null, workFlowAction);
+                savedEgBillregister = expenseBillService.create(egBillregister, approvalPosition, approvalComment, null, 
+                        workFlowAction,approvalDesignation);
             } catch (final ValidationException e) {
                 setDropDownValues(model);
                 model.addAttribute(STATE_TYPE, egBillregister.getClass().getSimpleName());
@@ -226,13 +233,16 @@ public class CreateExpenseBillController extends BaseBillController {
                 resultBinder.reject("", e.getErrors().get(0).getMessage());
                 return EXPENSEBILL_FORM;
             }
-
-//            final String approverDetails = financialUtils.getApproverDetails(workFlowAction,
-//                    savedEgBillregister.getState(), savedEgBillregister.getId(), approvalPosition);
-              final String approverDetails = String.valueOf(request.getParameter("approverName"));
+            final String approverName = String.valueOf(request.getParameter("approverName"));
+            
+            final String approverDetails = financialUtils.getApproverDetails(workFlowAction,
+                    savedEgBillregister.getState(), savedEgBillregister.getId(), approvalPosition,approverName);
+//              
 
             return "redirect:/expensebill/success?approverDetails=" + approverDetails + "&billNumber="
                     + savedEgBillregister.getBillnumber();
+//            return "redirect:/expensebill/success?approverDetails=" + approverDetails + "&billNumber="
+//            + 77777;
 
         }
     }
@@ -245,24 +255,24 @@ public class CreateExpenseBillController extends BaseBillController {
         String approverName = "";
         String currentUserDesgn = "";
         String nextDesign = "";
-//        if (keyNameArray.length != 0 && keyNameArray.length > 0)
-//            if (keyNameArray.length == 1)
-//                id = Long.parseLong(keyNameArray[0].trim());
-//            else if (keyNameArray.length == 3) {
-//                id = Long.parseLong(keyNameArray[0].trim());
-//                approverName = keyNameArray[1];
+        if (keyNameArray.length != 0 && keyNameArray.length > 0)
+            if (keyNameArray.length == 1)
+                id = Long.parseLong(keyNameArray[0].trim());
+            else if (keyNameArray.length == 3) {
+                id = Long.parseLong(keyNameArray[0].trim());
+                approverName = keyNameArray[1];
 //                currentUserDesgn = keyNameArray[2];
-//            } else {
-//                id = Long.parseLong(keyNameArray[0].trim());
-//                approverName = keyNameArray[1];
+            } else {
+                id = Long.parseLong(keyNameArray[0].trim());
+                approverName = keyNameArray[1];
 //                currentUserDesgn = keyNameArray[2];
 //                nextDesign = keyNameArray[3];
-//            }
-        approverName= keyNameArray[0];
+            }
+//        approverName= keyNameArray[0];
         if (id != null)
             model.addAttribute("approverName", approverName);
-        model.addAttribute("currentUserDesgn", currentUserDesgn);
-        model.addAttribute("nextDesign", nextDesign);
+//        model.addAttribute("currentUserDesgn", currentUserDesgn);
+//        model.addAttribute("nextDesign", nextDesign);
 
         final EgBillregister expenseBill = expenseBillService.getByBillnumber(billNumber);
 

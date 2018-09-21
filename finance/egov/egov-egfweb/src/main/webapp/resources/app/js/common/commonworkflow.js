@@ -107,8 +107,8 @@ $('#approvalDesignation').change(function(){
 	
 	
 	todayDate = new Date(Date.now()).toLocaleString(),
-	departmentId = $('#approvalDesignation').val(),
-	designationId= $('#approvalDepartment').val();
+	departmentId = $('#approvalDepartment').val(),
+	designationId= $('#approvalDesignation').val();
 
 
 $.ajax({

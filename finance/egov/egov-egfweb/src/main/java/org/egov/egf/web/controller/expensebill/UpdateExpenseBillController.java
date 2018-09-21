@@ -242,9 +242,10 @@ public class UpdateExpenseBillController extends BaseBillController {
             if (approvalPosition == null || approvalPosition.equals(Long.valueOf(0)))
                 approvalPosition = expenseBillService.getApprovalPositionByMatrixDesignation(
                         egBillregister, null, mode, workFlowAction);
-
+            
+            final String approverName = String.valueOf(request.getParameter("approverName"));
             final String approverDetails = financialUtils.getApproverDetails(workFlowAction,
-                    updatedEgBillregister.getState(), updatedEgBillregister.getId(), approvalPosition);
+                    updatedEgBillregister.getState(), updatedEgBillregister.getId(), approvalPosition,approverName);
 
             return "redirect:/expensebill/success?approverDetails=" + approverDetails + "&billNumber="
                     + updatedEgBillregister.getBillnumber();
