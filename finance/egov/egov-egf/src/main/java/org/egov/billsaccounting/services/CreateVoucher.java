@@ -1149,7 +1149,7 @@ public class CreateVoucher {
 					LOGGER.error(ERR, e);
 					throw new ApplicationRuntimeException(e.getMessage());
 				}
-			//voucherService.applyAuditing(vh);
+			voucherService.applyAuditing(vh);
 			if (LOGGER.isInfoEnabled())
 				LOGGER.info("++++++++++++++++++" + vh.toString());
 			voucherService.persist(vh);
@@ -1162,7 +1162,7 @@ public class CreateVoucher {
 					LOGGER.debug("Voucher Header Id  : " + vh.getId());
 				sourcePath.append(vh.getVouchermis().getSourcePath()).append(vh.getId().toString());
 				vh.getVouchermis().setSourcePath(sourcePath.toString());
-			//	voucherService.applyAuditing(vh);
+				voucherService.applyAuditing(vh);
 				voucherService.update(vh);
 			}
 
