@@ -90,6 +90,7 @@ import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.EmployeeInfo;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.utils.StringUtils;
 import org.egov.infra.validation.exception.ValidationError;
@@ -176,7 +177,7 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
     private AppConfigService appConfigService;
 
     @Autowired
-    private MicroserviceUtils microserviceUtils;;
+    private MicroserviceUtils microserviceUtils;
 
     private static final Logger LOGGER = Logger.getLogger(PreApprovedVoucherAction.class);
     protected FinancialYearHibernateDAO financialYearDAO;
@@ -404,12 +405,11 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
         boolean ismodifyJv = false;
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("voucherHeader==" + voucherHeader);
-        if (voucherHeader != null && voucherHeader.getState() != null)
-            if (!validateOwner(voucherHeader.getState())) {
-                final List<ValidationError> errors = new ArrayList<ValidationError>();
-                errors.add(new ValidationError("exp", "Invalid User"));
-                throw new ValidationException(errors);
-            }
+        /*
+         * if (voucherHeader != null && voucherHeader.getState() != null) if (!validateOwner(voucherHeader.getState())) { final
+         * List<ValidationError> errors = new ArrayList<ValidationError>(); errors.add(new ValidationError("exp", "Invalid User"
+         * )); throw new ValidationException(errors); }
+         */
         final List<AppConfigValues> appList = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
                 "pjv_saveasworkingcopy_enabled");
         final String pjv_wc_enabled = appList.get(0).getValue();
@@ -602,15 +602,14 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                                     new String[] { voucherHeader.getVouchermis().getBudgetaryAppnumber() }));
                 }
             } else {
+                EmployeeInfo employee = microserviceUtils.getEmployeeByPositionId(voucherHeader.getState().getOwnerPosition());
                 if (voucherHeader.getVouchermis().getBudgetaryAppnumber() == null) {
                     addActionMessage(getText(egBillregister.getExpendituretype() + ".voucher.created",
-                            new String[] { voucherHeader.getVoucherNumber(), voucherService
-                                    .getEmployeeNameForPositionId(voucherHeader.getState().getOwnerPosition()) }));
+                            new String[] { voucherHeader.getVoucherNumber(), employee != null ? employee.getName() : "" }));
                 } else {
                     addActionMessage(getText(egBillregister.getExpendituretype() + ".voucher.created",
                             new String[] { voucherHeader.getVoucherNumber(),
-                                    voucherService.getEmployeeNameForPositionId(
-                                            voucherHeader.getState().getOwnerPosition()) })
+                                    employee != null ? employee.getName() : "" })
                             + " And " + getText("budget.recheck.sucessful",
                                     new String[] { voucherHeader.getVouchermis().getBudgetaryAppnumber() }));
 
@@ -698,13 +697,13 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
             type = billsService.getBillTypeforVoucher(voucherHeader);
             if (null == type)
                 type = "default";
-
+            EmployeeInfo employee = microserviceUtils.getEmployeeByPositionId(voucherHeader.getState().getOwnerPosition());
             if (FinancialConstants.BUTTONREJECT.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
                 addActionMessage(getText("pjv.voucher.rejected", new String[] {
-                        voucherService.getEmployeeNameForPositionId(voucherHeader.getState().getOwnerPosition()) }));
+                        employee != null ? employee.getName() : "" }));
             if (FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
                 addActionMessage(getText("pjv.voucher.approved", new String[] {
-                        voucherService.getEmployeeNameForPositionId(voucherHeader.getState().getOwnerPosition()) }));
+                        employee != null ? employee.getName() : "" }));
             if (FinancialConstants.BUTTONCANCEL.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
                 addActionMessage(getText("billVoucher.file.canceled"));
             else if (FinancialConstants.BUTTONAPPROVE.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {

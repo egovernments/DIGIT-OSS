@@ -62,6 +62,8 @@ import org.egov.commons.CFunction;
 import org.egov.commons.CVoucherHeader;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.EmployeeInfo;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -106,6 +108,9 @@ public class JournalVoucherActionHelper {
     @Autowired
     @Qualifier("chartOfAccounts")
     private ChartOfAccounts chartOfAccounts;
+
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
 
     @Transactional
     public CVoucherHeader createVoucher(List<VoucherDetails> billDetailslist, List<VoucherDetails> subLedgerlist,
@@ -196,6 +201,9 @@ public class JournalVoucherActionHelper {
     public CVoucherHeader transitionWorkFlow(final CVoucherHeader voucherHeader, WorkflowBean workflowBean) {
         final DateTime currentDate = new DateTime();
         final User user = securityUtils.getCurrentUser();
+        EmployeeInfo info = null;
+        if (user != null && user.getId() != null)
+            info = microserviceUtils.getEmployeeById(user.getId());
 
         if (FinancialConstants.BUTTONREJECT.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
             final String stateValue = FinancialConstants.WORKFLOW_STATE_REJECTED;
@@ -228,7 +236,8 @@ public class JournalVoucherActionHelper {
                         .withStateValue(wfmatrix.getNextState()).withDateInfo(currentDate.toDate())
                         .withOwner(workflowBean.getApproverPositionId())
                         .withNextAction(wfmatrix.getNextAction())
-                        .withInitiator(workflowBean.getApproverPositionId());
+                        .withInitiator((info != null && info.getAssignments() != null && !info.getAssignments().isEmpty())
+                                ? info.getAssignments().get(0).getPosition() : null);
             } else if (voucherHeader.getCurrentState().getNextAction().equalsIgnoreCase("END"))
                 voucherHeader.transition().end().withSenderName(user.getName())
                         .withComments(workflowBean.getApproverComments())

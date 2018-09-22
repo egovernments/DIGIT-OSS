@@ -331,6 +331,27 @@ public class MicroserviceUtils {
         return empResponse.getEmployees();
     }
 
+    public EmployeeInfo getEmployeeByPositionId(Long positionId) {
+
+        final RestTemplate restTemplate = createRestTemplate();
+
+        final String employee_by_position_url = approverSrvcUrl + "?tenantId=" + getTenentId() + "&positionId="
+                + positionId;
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setTs(new Date());
+        reqWrapper.setRequestInfo(requestInfo);
+
+        EmployeeInfoResponse empResponse = restTemplate.postForObject(employee_by_position_url, reqWrapper,
+                EmployeeInfoResponse.class);
+        if (empResponse.getEmployees() != null && !empResponse.getEmployees().isEmpty())
+            return empResponse.getEmployees().get(0);
+        else
+            return null;
+    }
+
     public CustomUserDetails getUserDetails(String user_token, String admin_token) {
         final RestTemplate restT = createRestTemplate();
         final String authurl = authSrvcUrl + "?access_token=" + user_token;
@@ -451,6 +472,34 @@ public class MicroserviceUtils {
         EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper,
                 EmployeeInfoResponse.class);
         return empResponse.getEmployees();
+    }
+
+    public EmployeeInfo getEmployeeById(Long empId) {
+
+        final RestTemplate restTemplate = createRestTemplate();
+
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        StringBuilder empUrl = new StringBuilder(approverSrvcUrl);
+        empUrl.append("?tenantId=" + getTenentId());
+
+        if (empId != 0)
+            empUrl.append("&id=" + empId);
+        
+        empUrl.append("&asOnDate" + dateFormat.format(new Date()));
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setTs(new Date());
+        reqWrapper.setRequestInfo(requestInfo);
+
+        EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper,
+                EmployeeInfoResponse.class);
+        if (empResponse.getEmployees() != null && !empResponse.getEmployees().isEmpty())
+            return empResponse.getEmployees().get(0);
+        else
+            return null;
     }
 
     public List<Assignment> getAssignments(String department, String designation) {

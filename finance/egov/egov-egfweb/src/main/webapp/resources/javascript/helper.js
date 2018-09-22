@@ -136,7 +136,7 @@ function computeAvailable(prefix,index){
 
 function createDeleteImageFormatter(baseURL,delteRowFunction){
 	var deleteImageFormatter = function(el, oRecord, oColumn, oData) {
-	    var imageURL="/egi/resources/erp2/images/cancel.png";
+	    var imageURL="/services/egi/resources/erp2/images/cancel.png";
 	    markup='<img height="16" border="0" width="16" name="egov_yui_delete_image" id="egov_yui_delete_image" alt="Delete" onclick="'+delteRowFunction+'"  src="'+imageURL+'"/>';
 	    el.innerHTML = markup;
 	}
@@ -145,7 +145,7 @@ function createDeleteImageFormatter(baseURL,delteRowFunction){
 
 function createAddImageFormatter(baseURL,addRowFunction){
 	var addImageFormatter = function(el, oRecord, oColumn, oData) {
-	    var imageURL="/egi/resources/erp2/images/add.png";
+	    var imageURL="/services/egi/resources/erp2/images/add.png";
 	    markup='<img height="16" border="0" width="16" alt="Add" name="egov_yui_add_image" id="egov_yui_add_image" onclick="'+addRowFunction+'" src="'+imageURL+'"/>'
 	    el.innerHTML = markup;
 	}
@@ -154,7 +154,7 @@ function createAddImageFormatter(baseURL,addRowFunction){
 
 function createDeleteImageFormatterEmpty(baseURL,delteRowFunction){
 	var deleteImageFormatter = function(el, oRecord, oColumn, oData) {
-	    var imageURL="/egi/resources/erp2/images/cancel.png";
+	    var imageURL="/services/egi/resources/erp2/images/cancel.png";
 	    markup='<img height="16" border="0" width="16" name="egov_yui_delete_image" id="egov_yui_delete_image" alt="Delete"   src="'+imageURL+'" disabled/>';
 	    el.innerHTML = markup;
 	}
@@ -163,7 +163,7 @@ function createDeleteImageFormatterEmpty(baseURL,delteRowFunction){
 
 function createAddImageFormatterEmpty(baseURL,addRowFunction){
 	var addImageFormatter = function(el, oRecord, oColumn, oData) {
-	    var imageURL="/egi/resources/erp2/images/add.png";
+	    var imageURL="/services/egi/resources/erp2/images/add.png";
 	    markup='<img height="16" border="0" width="16" alt="Add" name="egov_yui_add_image" id="egov_yui_add_image" src="'+imageURL+'" disabled/>'
 	    el.innerHTML = markup;
 	}
@@ -413,9 +413,9 @@ function showDocumentManager(){
 function docManager(docNumber){
     var url;
     if(docNumber==null||docNumber==''||docNumber=='To be assigned'||docNumber==0){
-      url="/egi/docmgmt/basicDocumentManager.action?moduleName=EGF";
+      url="/services/egi/docmgmt/basicDocumentManager.action?moduleName=EGF";
     }else{
-      url = "/egi/docmgmt/basicDocumentManager-editDocument.action?docNumber="+docNumber+"&moduleName=EGF";
+      url = "/services/egi/docmgmt/basicDocumentManager-editDocument.action?docNumber="+docNumber+"&moduleName=EGF";
     }
     var wdth = 1000;
     var hght = 400;
@@ -424,14 +424,14 @@ function docManager(docNumber){
 
 function viewDocumentManager(){
    var v= dom.get("docNumber").value;
-   var url= "/egi/docmgmt/basicDocumentManager-viewDocument.action?docNumber="+v+"&moduleName=EGF";
+   var url= "/services/egi/docmgmt/basicDocumentManager-viewDocument.action?docNumber="+v+"&moduleName=EGF";
    var wdth = 1000;
     var hght = 400;
     window.open(url,'docupload','width='+wdth+',height='+hght);
 }
 
 function viewDocumentManager(docNumber){
-   var url= "/egi/docmgmt/basicDocumentManager-viewDocument.action?docNumber="+docNumber+"&moduleName=EGF";
+   var url= "/services/egi/docmgmt/basicDocumentManager-viewDocument.action?docNumber="+docNumber+"&moduleName=EGF";
    var wdth = 1000;
    var hght = 400;
    window.open(url,'docupload','width='+wdth+',height='+hght);
