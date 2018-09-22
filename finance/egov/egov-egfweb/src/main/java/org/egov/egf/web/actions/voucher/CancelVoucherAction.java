@@ -217,6 +217,13 @@ public class CancelVoucherAction extends BaseFormAction {
 
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("......Searching voucher for cancelllation...");
+		if(voucherHeader.getVoucherNumber()!=null && !voucherHeader.getVoucherNumber().isEmpty()){
+			String voucherNumberQry = "from CVoucherHeader vh where vh.status =" + FinancialConstants.CREATEDVOUCHERSTATUS
+					+ " and ( vh.isConfirmed != 1 or vh.isConfirmed is null) ";
+			persistenceService.findAllBy(voucherNumberQry + filterQry);
+			voucherList.addAll(persistenceService.findAllBy(voucherNumberQry + filterQry));
+			return voucherList;
+		}
 		if (voucherHeader.getType().equalsIgnoreCase(FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL)) {
 			// Voucher for which payment is not generated
 			voucheerWithNoPayment = "from CVoucherHeader vh where vh not in ( select billVoucherHeader from Miscbilldetail) and vh.status in ("
@@ -331,13 +338,13 @@ public class CancelVoucherAction extends BaseFormAction {
 					+ selectedVhs.length);
 		final String cancelVhQuery = "Update CVoucherHeader vh set vh.status="
 				+ FinancialConstants.CANCELLEDVOUCHERSTATUS
-				+ ",vh.lastModifiedBy.id=:modifiedby, vh.lastModifiedDate=:modifiedDate   where vh.id=:vhId";
+				+ ",vh.lastModifiedBy=:modifiedby, vh.lastModifiedDate=:modifiedDate   where vh.id=:vhId";
 		final String cancelVhByCGNQuery = "Update CVoucherHeader vh set vh.status="
 				+ FinancialConstants.CANCELLEDVOUCHERSTATUS
-				+ ",vh.lastModifiedBy.id=:modifiedby , vh.lastModifiedDate=:modifiedDate where vh.refvhId=:vhId";
+				+ ",vh.lastModifiedBy=:modifiedby , vh.lastModifiedDate=:modifiedDate where vh.refvhId=:vhId";
 		final String cancelVhByRefCGNQuery = "Update CVoucherHeader vh set vh.status="
 				+ FinancialConstants.CANCELLEDVOUCHERSTATUS
-				+ ",vh.lastModifiedBy.id=:modifiedby , vh.lastModifiedDate=:modifiedDate where vh.voucherNumber=:vhNum";
+				+ ",vh.lastModifiedBy=:modifiedby , vh.lastModifiedDate=:modifiedDate where vh.voucherNumber=:vhNum";
 		String voucherId = "";
 		final Session session = persistenceService.getSession();
 		for (int i = 0; i < selectedVhs.length; i++) {
@@ -510,6 +517,7 @@ public class CancelVoucherAction extends BaseFormAction {
 
 	@Override
 	public void validate() {
+		if(voucherHeader.getVoucherNumber() == null || voucherHeader.getVoucherNumber().isEmpty()){
 		if (fromDate == null)
 			addFieldError("From Date", getText("Please Enter From Date"));
 		if (toDate == null)
@@ -525,6 +533,7 @@ public class CancelVoucherAction extends BaseFormAction {
 		if (checKDate > 0)
 			addFieldError("To Date", getText("Please Enter To Date Greater than From Date"));
 		checkMandatoryField("fundId", "fund", voucherHeader.getFundId(), "voucher.fund.mandatory");
+		}
 		checkMandatoryField("vouchermis.departmentcode", "department",
 				voucherHeader.getVouchermis().getDepartmentcode(), "voucher.department.mandatory");
 		checkMandatoryField("vouchermis.schemeid", "scheme", voucherHeader.getVouchermis().getSchemeid(),

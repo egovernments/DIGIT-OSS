@@ -71,6 +71,7 @@ public class CancelFinancialEntities implements CancelBillAndVoucher {
 
     @Override
     public boolean canCancelVoucher(final CVoucherHeader voucher) {
+    	//Need to do configuration for any one cancel the voucher
         if (securityUtils.getCurrentUser()!=null && securityUtils.getCurrentUser().getId().longValue() == voucher.getCreatedBy())
             return true;
         else
