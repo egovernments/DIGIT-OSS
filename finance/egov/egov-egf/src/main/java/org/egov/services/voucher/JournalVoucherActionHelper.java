@@ -218,7 +218,8 @@ public class JournalVoucherActionHelper {
                     null, null, voucherHeader.getCurrentState().getValue(), null);
             voucherHeader.transition().end().withSenderName(user.getName()).withComments(workflowBean.getApproverComments())
                     .withStateValue(wfmatrix.getCurrentDesignation() + " Approved").withDateInfo(currentDate.toDate())
-                    .withOwner(workflowBean.getApproverPositionId())
+                    .withOwner((info != null && info.getAssignments() != null && !info.getAssignments().isEmpty())
+                            ? info.getAssignments().get(0).getPosition() : null)
                     .withNextAction(wfmatrix.getNextAction());
 
             voucherHeader.setStatus(FinancialConstants.CREATEDVOUCHERSTATUS);

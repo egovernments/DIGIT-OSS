@@ -146,8 +146,6 @@ public class BasePaymentAction extends BaseVoucherAction {
         String result = null;
         final Paymentheader paymentheader = (Paymentheader) persistenceService.find("from Paymentheader where id=?",
                 Long.valueOf(paymentid));
-        if (!validateOwner(paymentheader.getState()))
-            return INVALIDPAGE;
         getSession().put("paymentid", paymentid);
         if (paymentheader.getVoucherheader().getName()
                 .equalsIgnoreCase(FinancialConstants.PAYMENTVOUCHER_NAME_ADVANCE)) {

@@ -137,7 +137,7 @@
 																		</s:if></td>
 																	<td class="greybox"><s:select name="department"
 																			id="department" list="dropdownData.departmentList"
-																			listKey="id" listValue="name" headerKey="-1"
+																			listKey="code" listValue="name" headerKey="-1"
 																			headerValue="----Choose----"
 																			value="%{billregister.egBillregistermis.departmentid}" /></td>
 																	<%-- <s:property
