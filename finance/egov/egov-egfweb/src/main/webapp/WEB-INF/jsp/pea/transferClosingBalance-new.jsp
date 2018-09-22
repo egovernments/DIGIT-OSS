@@ -62,7 +62,7 @@
 			bootbox.alert("Select Financial Year");
 			return false;
 		}
-		document.transferClosingBalance.action = '/EGF/pea/transferClosingBalance-transfer.action';
+		document.transferClosingBalance.action = '/services/EGF/pea/transferClosingBalance-transfer.action';
 		return true;
 	}
 </script>

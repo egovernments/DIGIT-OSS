@@ -286,7 +286,7 @@ function fillNeibrAfterSplitGlcode(obj) {
 		// document.getElementById('subLedgerlist['+$currRow+'].subledgerCode').value
 		// =accountCode;
 		if (accountCode != 'Select') {
-			var url = '/EGF/voucher/common-getDetailType.action?accountCode='
+			var url = '/services/EGF/voucher/common-getDetailType.action?accountCode='
 					+ accountCode + '&index=0';
 			var transaction = YAHOO.util.Connect.asyncRequest('POST', url,
 					postType, null);
@@ -310,7 +310,7 @@ function fillNeibrAfterSplitGlcode(obj) {
 						finYear : document.getElementById('financialyear.id').value,
 						fund : document.getElementById('fund.id').value,
 						functn : document.getElementById('functionid.id').value,
-						department : document.getElementById('departmentid.id').value,
+						department : document.getElementById('departmentcode').value,
 						glcodeId : glcodeid,
 					},
 					success : function(data, textStatus, jqXHR) {
@@ -362,7 +362,7 @@ function check() {
 					+ i + '].glcodeDetail').value;
 		}
 	}
-	var url = '/EGF/voucher/common-getDetailCode.action?accountCodes='
+	var url = '/services/EGF/voucher/common-getDetailCode.action?accountCodes='
 			+ accountCodes;
 	var transaction = YAHOO.util.Connect.asyncRequest('POST', url, callbackJV,
 			null);
@@ -565,7 +565,7 @@ function splitEntitiesDetailCode(obj) {
 						finYear : document.getElementById('financialyear.id').value,
 						fund : document.getElementById('fund.id').value,
 						functn : document.getElementById('functionid.id').value,
-						department : document.getElementById('departmentid.id').value,
+						department : document.getElementById('departmentcode').value,
 						glcodeId : glcodeid,
 						accountDetailTypeId : accountdetailtypeid.trim(),
 						accountDetailKeyId : accountdetailkey
@@ -826,7 +826,7 @@ $('#buttonProceed')
 						var financialyear = document
 								.getElementById('financialyear.id');
 						var departmentid = document
-								.getElementById('departmentid.id');
+								.getElementById('departmentcode');
 						var fund = document.getElementById('fund.id');
 						var functionid = document
 								.getElementById('functionid.id');
@@ -1018,7 +1018,7 @@ function validSearch() {
 	var finYear = document.getElementById('financialyear.id').value;
 	var fund = document.getElementById('fund.id').value;
 	var functn = document.getElementById('functionid.id').value;
-	var department = document.getElementById('departmentid.id').value;
+	var department = document.getElementById('departmentcode').value;
 	var type = document.getElementById('type').value;
 	var flag = true;
 

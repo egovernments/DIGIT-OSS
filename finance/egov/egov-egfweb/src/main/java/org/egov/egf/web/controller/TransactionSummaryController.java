@@ -48,6 +48,14 @@
 
 package org.egov.egf.web.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.egov.commons.Accountdetailtype;
 import org.egov.commons.CChartOfAccountDetail;
 import org.egov.commons.CChartOfAccounts;
@@ -58,8 +66,7 @@ import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.commons.dao.FunctionDAO;
 import org.egov.commons.dao.FundHibernateDAO;
 import org.egov.commons.service.AccountdetailtypeService;
-import org.egov.eis.service.EmployeeService;
-import org.egov.infra.admin.master.service.DepartmentService;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.model.contra.TransactionSummary;
 import org.egov.model.contra.TransactionSummaryDto;
@@ -78,13 +85,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/transactionsummary")
@@ -105,7 +105,7 @@ public class TransactionSummaryController {
     @Autowired
     private ChartOfAccountsDAO chartOfAccountsDAO;
     @Autowired
-    private DepartmentService departmentService;
+    private MicroserviceUtils microserviceUtils;
 
     @Autowired
     @Qualifier("persistenceService")
@@ -113,8 +113,6 @@ public class TransactionSummaryController {
 
     @Autowired
     private FunctionDAO functionDAO;
-    @Autowired
-    private EmployeeService employeeService;
 
     private void prepareNewForm(Model model) {
         model.addAttribute("accountdetailtypes", accountdetailtypeService.findAll());
@@ -122,11 +120,11 @@ public class TransactionSummaryController {
         model.addAttribute("funds", fundHibernateDAO.findAllActiveFunds());
         model.addAttribute("cChartOfAccountss",
                 chartOfAccountsDAO.findAll());
-        model.addAttribute("departments", departmentService.getAllDepartments());
+        model.addAttribute("departments", microserviceUtils.getDepartments());
         model.addAttribute("cFunctions", functionDAO.getAllActiveFunctions());
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newForm(final Model model) {
         prepareNewForm(model);
         model.addAttribute("transactionSummaryDto", new TransactionSummaryDto());
@@ -150,12 +148,10 @@ public class TransactionSummaryController {
                 }
                 if (ts.getId() == null && ts.getGlcodeid() == null) {
                     // Ignore ts and move to next
-                }
-                else if (ts.getId() != null && ts.getGlcodeid() == null) {
+                } else if (ts.getId() != null && ts.getGlcodeid() == null) {
                     // delete this transaction
                     transactionSummaryService.delete(transactionSummary);
-                }
-                else {
+                } else {
                     transactionSummary.setDepartmentCode(transactionSummaryDto.getDepartmentcode());
                     transactionSummary.setDivisionid(transactionSummaryDto.getDivisionid());
                     transactionSummary.setFinancialyear(financialYearDAO.getFinancialYearById(transactionSummaryDto
@@ -269,8 +265,7 @@ public class TransactionSummaryController {
         if (majorCode != null) {
             accounts = chartOfAccountsDAO
                     .findByGlcodeLikeIgnoreCaseAndClassificationAndMajorCode(glcode + "%", classification, majorCode);
-        }
-        else {
+        } else {
             accounts = chartOfAccountsDAO
                     .findByGlcodeLikeIgnoreCaseAndClassification(glcode + "%", classification);
         }
@@ -291,7 +286,7 @@ public class TransactionSummaryController {
     @RequestMapping(value = "/ajax/searchTransactionSummariesForNonSubledger", method = RequestMethod.GET)
     public @ResponseBody List<Map<String, String>> searchTransactionSummariesForNonSubledger(
             @RequestParam("finYear") Long finYear, @RequestParam("fund") Long fund,
-            @RequestParam("functn") Long functn, @RequestParam("department") Long department,
+            @RequestParam("functn") Long functn, @RequestParam("department") String department,
             @RequestParam("glcodeId") Long glcodeId) {
         List<Map<String, String>> result = new ArrayList<Map<String, String>>();
         Map<String, String> amountsMap = new HashMap<String, String>();
@@ -301,7 +296,8 @@ public class TransactionSummaryController {
         for (TransactionSummary ts : transactionSummaries) {
             amountsMap.put("tsid", ts.getId().toString());
             amountsMap.put("openingdebitbalance", ts.getOpeningdebitbalance().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
-            amountsMap.put("openingcreditbalance", ts.getOpeningcreditbalance().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
+            amountsMap.put("openingcreditbalance",
+                    ts.getOpeningcreditbalance().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
             amountsMap.put("narration", ts.getNarration());
             result.add(amountsMap);
 
@@ -313,7 +309,7 @@ public class TransactionSummaryController {
     @RequestMapping(value = "/ajax/searchTransactionSummariesForSubledger", method = RequestMethod.GET)
     public @ResponseBody List<Map<String, String>> searchTransactionSummariesForSubledger(
             @RequestParam("finYear") Long finYear, @RequestParam("fund") Long fund,
-            @RequestParam("functn") Long functn, @RequestParam("department") Long department,
+            @RequestParam("functn") Long functn, @RequestParam("department") String department,
             @RequestParam("glcodeId") Long glcodeId, @RequestParam("accountDetailTypeId") Integer accountDetailTypeId,
             @RequestParam("accountDetailKeyId") Integer accountDetailKeyId) {
         List<Map<String, String>> result = new ArrayList<Map<String, String>>();
@@ -325,7 +321,8 @@ public class TransactionSummaryController {
         for (TransactionSummary ts : transactionSummaries) {
             amountsMap.put("tsid", ts.getId().toString());
             amountsMap.put("openingdebitbalance", ts.getOpeningdebitbalance().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
-            amountsMap.put("openingcreditbalance", ts.getOpeningcreditbalance().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
+            amountsMap.put("openingcreditbalance",
+                    ts.getOpeningcreditbalance().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
             amountsMap.put("narration", ts.getNarration());
             result.add(amountsMap);
 

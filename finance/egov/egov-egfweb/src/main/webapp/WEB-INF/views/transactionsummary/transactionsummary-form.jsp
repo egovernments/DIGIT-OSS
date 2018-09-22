@@ -79,42 +79,31 @@
 				<div class="panel-body" id="mainTSForm">
 					<div class="form-group">
 						<form:input type="hidden" path="id" />
-						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.financialyear" /><span class="mandatory1">*</span></label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.financialyear" /><span class="mandatory1">*</span></label>
 						<div class="col-sm-3 add-margin">
-							<form:select path="financialyear.id" id="financialyear.id"
-								cssClass="form-control mandatory"
-								cssErrorClass="form-control error">
+							<form:select path="financialyear.id" id="financialyear.id" cssClass="form-control mandatory" cssErrorClass="form-control error">
 								<form:option value="">
 									<spring:message code="lbl.select" />
 								</form:option>
-								<form:options items="${cFinancialYears}" itemValue="id"
-									itemLabel="finYearRange" />
+								<form:options items="${cFinancialYears}" itemValue="id" itemLabel="finYearRange" />
 							</form:select>
 							<form:errors path="financialyear" cssClass="error-msg" />
 						</div>
-						<label class="col-sm-2 control-label text-right"><spring:message
-								code="lbl.departmentid" /><span class="mandatory1">*</span></label>
+						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.departmentid" /><span class="mandatory1">*</span></label>
 						<div class="col-sm-3 add-margin">
-							<form:select path="departmentcode" id="departmentcode"
-								cssClass="form-control mandatory"
-								cssErrorClass="form-control error">
+							<form:select path="departmentcode" id="departmentcode" cssClass="form-control mandatory" cssErrorClass="form-control error">
 								<form:option value="">
 									<spring:message code="lbl.select" />
 								</form:option>
-								<form:options items="${departments}" itemValue="code"
-									itemLabel="name" />
+								<form:options items="${departments}" itemValue="code" itemLabel="name" />
 							</form:select>
 							<form:errors path="departmentcode" cssClass="error-msg" />
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.fund" /><span class="mandatory1">*</span></label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.fund" /><span class="mandatory1">*</span></label>
 						<div class="col-sm-3 add-margin">
-							<form:select path="fund.id" id="fund.id"
-								cssClass="form-control mandatory"
-								cssErrorClass="form-control error">
+							<form:select path="fund.id" id="fund.id" cssClass="form-control mandatory" cssErrorClass="form-control error">
 								<form:option value="">
 									<spring:message code="lbl.select" />
 								</form:option>
@@ -122,12 +111,9 @@
 							</form:select>
 							<form:errors path="fund" cssClass="error-msg" />
 						</div>
-						<label class="col-sm-2 control-label text-right"><spring:message
-								code="lbl.functionid" /><span class="mandatory1">*</span></label>
+						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.functionid" /><span class="mandatory1">*</span></label>
 						<div class="col-sm-3 add-margin">
-							<form:select path="functionid.id" id="functionid.id"
-								cssClass="form-control mandatory"
-								cssErrorClass="form-control error">
+							<form:select path="functionid.id" id="functionid.id" cssClass="form-control mandatory" cssErrorClass="form-control error">
 								<form:option value="">
 									<spring:message code="lbl.select" />
 								</form:option>
@@ -141,28 +127,24 @@
 					</div>
 					<div class="form-group">
 
-						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.type" /><span class="mandatory1">*</span></label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.type" /><span class="mandatory1">*</span></label>
 						<div class="col-sm-3 add-margin">
 							<select name="type" id="type" class="form-control mandatory">
 								<option value="">
 									<spring:message code="lbl.select" />
 								</option>
 								<option value="A"><spring:message code="value.asset" /></option>
-								<option value="L"><spring:message
-										code="value.liability" /></option>
+								<option value="L"><spring:message code="value.liability" /></option>
 							</select>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.major" /></label>
+						<label class="col-sm-3 control-label text-right"><spring:message code="lbl.major" /></label>
 						<div class="col-sm-3 add-margin">
 							<select name="major" id="major" class="form-control">
 							</select>
 						</div>
-						<label class="col-sm-2 control-label text-right"><spring:message
-								code="lbl.minor" /></label>
+						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.minor" /></label>
 						<div class="col-sm-3 add-margin">
 							<select name="minor" id="minor" class="form-control">
 							</select>

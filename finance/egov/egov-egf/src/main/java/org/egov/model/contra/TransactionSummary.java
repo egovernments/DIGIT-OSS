@@ -79,57 +79,57 @@ import org.hibernate.validator.constraints.Length;
 @Entity
 @Table(name = "TRANSACTIONSUMMARY")
 @SequenceGenerator(name = TransactionSummary.SEQ_TRANSACTIONSUMMARY, sequenceName = TransactionSummary.SEQ_TRANSACTIONSUMMARY, allocationSize = 1)
-public class TransactionSummary extends AbstractAuditable{
-	
-	private static final long serialVersionUID = -4555037259173138199L;
+public class TransactionSummary extends AbstractAuditable {
+
+    private static final long serialVersionUID = -4555037259173138199L;
     public static final String SEQ_TRANSACTIONSUMMARY = "SEQ_TRANSACTIONSUMMARY";
-    
+
     @Id
     @GeneratedValue(generator = SEQ_TRANSACTIONSUMMARY, strategy = GenerationType.SEQUENCE)
     private Long id;
-    
+
     @ManyToOne
     @JoinColumn(name = "ACCOUNTDETAILTYPEID")
     private Accountdetailtype accountdetailtype;
-    
+
     @ManyToOne
     @JoinColumn(name = "FINANCIALYEARID")
     private CFinancialYear financialyear;
-    
+
     @ManyToOne
     @JoinColumn(name = "FUNDSOURCEID")
     private Fundsource fundsource;
-    
+
     @ManyToOne
     @JoinColumn(name = "FUNDID")
     private Fund fund;
-    
+
     @ManyToOne
     @JoinColumn(name = "GLCODEID")
     private CChartOfAccounts glcodeid;
-    
+
     @Transient
     private String glcodeDetail;
-    
+
     private BigDecimal openingdebitbalance;
-    
+
     private BigDecimal openingcreditbalance;
-    
+
     private Integer accountdetailkey;
-    
+
     @Length(max = 300)
     private String narration;
-    
+
     private String departmentCode;
-    
+
     @ManyToOne
-    @JoinColumn(name="FUNCTIONARYID")
+    @JoinColumn(name = "FUNCTIONARYID")
     private Functionary functionaryid;
-    
+
     @ManyToOne
-    @JoinColumn(name="FUNCTIONID")
+    @JoinColumn(name = "FUNCTIONID")
     private CFunction functionid;
-    
+
     private Integer divisionid;
 
     public Long getId() {
@@ -197,14 +197,14 @@ public class TransactionSummary extends AbstractAuditable{
     }
 
     public String getDepartmentCode() {
-		return departmentCode;
-	}
+        return departmentCode;
+    }
 
-	public void setDepartmentCode(String departmentCode) {
-		this.departmentCode = departmentCode;
-	}
+    public void setDepartmentCode(String departmentCode) {
+        this.departmentCode = departmentCode;
+    }
 
-	public Integer getAccountdetailkey() {
+    public Integer getAccountdetailkey() {
         return accountdetailkey;
     }
 
@@ -221,10 +221,10 @@ public class TransactionSummary extends AbstractAuditable{
     }
 
     public Functionary getFunctionaryid() {
-		return functionaryid;
-	}
+        return functionaryid;
+    }
 
-	public void setFunctionaryid(final Functionary functionaryid) {
+    public void setFunctionaryid(final Functionary functionaryid) {
         this.functionaryid = functionaryid;
     }
 
@@ -244,11 +244,11 @@ public class TransactionSummary extends AbstractAuditable{
         this.divisionid = divisionid;
     }
 
-	public String getGlcodeDetail() {
-		return glcodeDetail;
-	}
+    public String getGlcodeDetail() {
+        return glcodeDetail;
+    }
 
-	public void setGlcodeDetail(String glcodeDetail) {
-		this.glcodeDetail = glcodeDetail;
-	}
+    public void setGlcodeDetail(String glcodeDetail) {
+        this.glcodeDetail = glcodeDetail;
+    }
 }
