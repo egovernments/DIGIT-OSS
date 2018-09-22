@@ -198,7 +198,7 @@ public class VoucherHelper {
 				misQuery.append(" and billmis.fund.id=")
 						.append(egBillRegister.getEgBillregistermis().getFund().getId());
 
-			if (null != egBillRegister.getEgBillregistermis().getDepartmentcode()) {
+			if (null != egBillRegister.getEgBillregistermis().getDepartmentcode() && !egBillRegister.getEgBillregistermis().getDepartmentcode().equals("-1")) {
 				misQuery.append(" and billmis.departmentcode='");
 				misQuery.append(egBillRegister.getEgBillregistermis().getDepartmentcode()+"'");
 			}
