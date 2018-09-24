@@ -145,7 +145,11 @@
 				</tr>
 				<s:hidden name="mode" value="%{mode}" id="mode" />
 			</table>
+			<br />
+			<div class="subheadsmallnew"></div>
+			<div align="left" class="mandatory1">Either Voucher Number Or Mandatory Fields(*) Are Required</div>
 		</div>
+	
 		<div align="center" class="buttonbottom">
 			<s:submit value="Search" onclick="return validateAndSubmit()"
 				cssClass="buttonsubmit" />
@@ -347,19 +351,20 @@
 			var fromDate=document.getElementById('fromDate').value;
 			var toDate=document.getElementById('toDate').value;
 			var fundId=document.getElementById('fundId').value;
+			var voucherNumber=document.getElementById('voucherNumber').value;
 			if(!DateValidation(fromDate,toDate))
 				return false;
-			if(fromDate == ""){
+			if(fromDate == "" && voucherNumber!=""){
 				bootbox.alert("Please select from date");
 				return false;
 				}
 			
-			if(toDate == ""){
+			if(toDate == "" && voucherNumber!=""){
 				bootbox.alert("Please select to date");
 				return false;
 				}
 
-			if(fundId == "-1"){
+			if(fundId == "-1" && voucherNumber!=""){
 				bootbox.alert("Please select fund");
 				return false;
 				}

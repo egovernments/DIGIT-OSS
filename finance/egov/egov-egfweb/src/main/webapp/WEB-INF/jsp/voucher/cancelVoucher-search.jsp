@@ -140,6 +140,8 @@ function loadNamesForSelectedType()
 							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"	data-inputmask="'mask': 'd/m/y'" /></td>
 				</tr>
 			</table>
+			<div class="subheadsmallnew"></div>
+			<div align="left" class="mandatory1">Either Voucher Number Or Mandatory Fields(*) Are Required</div>
 	</div>
 	<div class="buttonbottom">
 		<input type="submit" class="buttonsubmit" value="Search" id="Search" name="button" onclick="return loadSearch();" />

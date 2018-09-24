@@ -291,7 +291,7 @@ public class VoucherSearchAction extends BaseFormAction {
 				voucherMap.put("vouchernumber", voucherheader.getVoucherNumber());
 				voucherMap.put("type", voucherheader.getType());
 				voucherMap.put("name", voucherheader.getName());
-				if(voucherheader.getVouchermis().getDepartmentcode()!=null && !voucherheader.getVouchermis().getDepartmentcode().equals("-1")){
+				if(voucherheader.getVouchermis()!=null && voucherheader.getVouchermis().getDepartmentcode()!=null && !voucherheader.getVouchermis().getDepartmentcode().equals("-1")){
 				org.egov.infra.microservice.models.Department depList = microserviceUtils
 						.getDepartmentByCode(voucherheader.getVouchermis().getDepartmentcode());
 				voucherMap.put("deptName", depList.getName());
