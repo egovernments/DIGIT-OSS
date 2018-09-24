@@ -76,7 +76,7 @@ function callAjaxSearch() {
 					$(row).on(
 							'click',
 							function() {
-								window.open('/EGF/bank/' + $('#mode').val()+ '/' + data.id, '','width=800, height=600');
+								window.open('/services/EGF/bank/' + $('#mode').val()+ '/' + data.id, '','width=800, height=600');
 							});
 				},
 				"bDestroy" : true,

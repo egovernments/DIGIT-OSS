@@ -50,7 +50,7 @@
 <script>
    var chequeDetailsGridTable;
    var chequeRangeArray = new Array();
-   var deletedChqDeptId="";
+   var deletedChqDeptCode="";
    var CHQDETAILSLIST = "chequeDetailsList";
    var chqDetailsIndex = 0;
 	var makeChequeDetailsGridTable = function() {    
@@ -58,9 +58,9 @@
 	{key:"fromChqNo",label:'From Cheque Number', formatter:createTextField(CHQDETAILSLIST,".fromChqNo")},
 	{key:"isExhaustedH",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".isExhusted","hidden")},
 	{key:"toChqNo",label:'To Cheque Number', formatter:createTextField(CHQDETAILSLIST,".toChqNo")},
-	{key:"chequeDeptId",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".chequeDeptId","hidden")},
+	{key:"chequeDeptCode",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".chequeDeptCode","hidden")},
 	{key:"deptName",label:'Department', formatter:createLabelSamll(CHQDETAILSLIST,".deptName")},
-	{key:"deptId",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".deptId","hidden")},
+	{key:"deptCode",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".deptCode","hidden")},
 	{key:"receivedDateL",label:'Received Date', formatter:createLabelSamll(CHQDETAILSLIST,".receivedDateL")},
 	{key:"receivedDateH",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".receivedDate","hidden")},
 	{key:"serialNoL",label:'Financial Year', formatter:createLabelSamll(CHQDETAILSLIST,".serialNoL")},
@@ -84,10 +84,10 @@
 						bootbox.alert("cannot be deleted");
 					}else{
 						this.deleteRow(record);
-						var index = chequeRangeArray.indexOf(record.getData("fromChqNo")+"-"+record.getData("toChqNo")+"-"+record.getData("deptId")+"-"+record.getData("serialNo"));
+						var index = chequeRangeArray.indexOf(record.getData("fromChqNo")+"-"+record.getData("toChqNo")+"-"+record.getData("deptCode")+"-"+record.getData("serialNo"));
 						chequeRangeArray.splice(index,1);
-						if(record.getData("chequeDeptId")){ // for new cheque leaf records the chequeDeptId value will be blank
-							document.getElementById("deletedChqDeptId").value = document.getElementById("deletedChqDeptId").value==""?record.getData("chequeDeptId"):document.getElementById("deletedChqDeptId").value+","+record.getData("chequeDeptId");
+						if(record.getData("chequeDeptCode")){ // for new cheque leaf records the chequeDeptId value will be blank
+							document.getElementById("deletedChqDeptCode").value = document.getElementById("deletedChqDeptCode").value==""?record.getData("chequeDeptCode"):document.getElementById("deletedChqDeptCode").value+","+record.getData("chequeDeptCode");
 							
 						}
 						
@@ -101,7 +101,7 @@
 			"fromChqNo":'<s:property value="fromChqNo"/>',
 			"toChqNo":'<s:property value="toChqNo"/>',
 			"deptName":'<s:property value="deptName"/>',
-			"deptId":'<s:property value="deptId"/>',
+			"deptCode":'<s:property value="deptCode"/>',
 			"receivedDateL":'<s:property value="receivedDate"/>',
 			"receivedDateH":'<s:property value="receivedDate"/>',
 			"serialNoL":'<s:property value="serialNoH"/>',
@@ -110,12 +110,12 @@
 			"isExhustedH":'<s:property value="isExhusted"/>',
 			"nextChqPresent":'<s:property value="nextChqPresent"/>',
 			"accountChequeId":'<s:property value="accountChequeId"/>',
-			"chequeDeptId":'<s:property value="chequeDeptId"/>'
+			"chequeDeptCode":'<s:property value="chequeDeptCode"/>'
 		});
 		updateFieldChq('fromChqNo',chqDetailsIndex,'<s:property value="fromChqNo"/>','<s:property value="nextChqPresent"/>','<s:property value="isExhusted"/>');
 		updateFieldChq('toChqNo',chqDetailsIndex,'<s:property value="toChqNo"/>','<s:property value="nextChqPresent"/>','<s:property value="isExhusted"/>');
 		updateLabel('deptName',chqDetailsIndex,'<s:property value="deptName"/>');
-		updateField('deptId',chqDetailsIndex,'<s:property value="deptId"/>');
+		updateField('deptCode',chqDetailsIndex,'<s:property value="deptCode"/>');
 		updateLabel('receivedDateL',chqDetailsIndex,'<s:property value="receivedDate"/>');
 		updateField('receivedDate',chqDetailsIndex,'<s:property value="receivedDate"/>');
 		updateLabel('serialNoL',chqDetailsIndex,'<s:property value="serialNoH"/>');
@@ -123,10 +123,10 @@
 		updateLabel('isExhustedL',chqDetailsIndex,'<s:property value="isExhusted"/>');
 		updateField('isExhusted',chqDetailsIndex,'<s:property value="isExhusted"/>');
 		updateField('accountChequeId',chqDetailsIndex,'<s:property value="accountChequeId"/>');
-		updateField('chequeDeptId',chqDetailsIndex,'<s:property value="chequeDeptId"/>');
+		updateField('chequeDeptCode',chqDetailsIndex,'<s:property value="chequeDeptCode"/>');
 		updateField('nextChqPresent',chqDetailsIndex,'<s:property value="nextChqPresent"/>');
 		chqDetailsIndex = chqDetailsIndex + 1;
-		var chequeRange = '<s:property value="fromChqNo"/>'+"-"+'<s:property value="toChqNo"/>'+"-"+'<s:property value="deptId"/>'+"-"+'<s:property value="serialNo"/>';
+		var chequeRange = '<s:property value="fromChqNo"/>'+"-"+'<s:property value="toChqNo"/>'+"-"+'<s:property value="deptCode"/>'+"-"+'<s:property value="serialNo"/>';
 		if(chequeRangeArray.indexOf(chequeRange) == -1){
 			chequeRangeArray.push(chequeRange);
 		}

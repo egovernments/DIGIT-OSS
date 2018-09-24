@@ -59,7 +59,7 @@ public class ChequeDetail {
     private String fromChqNo;
     private String toChqNo;
     private String deptName;
-    private Integer deptId;
+    private String deptCode;
     private String receivedDate;
     private String isExhusted;
     private String nextChqPresent;
@@ -92,14 +92,6 @@ public class ChequeDetail {
         this.toChqNo = toChqNo;
     }
 
-    public Integer getDeptId() {
-        return deptId;
-    }
-
-    public void setDeptId(final Integer deptId) {
-        this.deptId = deptId;
-    }
-
     public String getReceivedDate() {
         return receivedDate;
     }
@@ -116,7 +108,15 @@ public class ChequeDetail {
         this.isExhusted = isExhusted;
     }
 
-    public Long getAccountChequeId() {
+    public String getDeptCode() {
+		return deptCode;
+	}
+
+	public void setDeptCode(String deptCode) {
+		this.deptCode = deptCode;
+	}
+
+	public Long getAccountChequeId() {
         return accountChequeId;
     }
 

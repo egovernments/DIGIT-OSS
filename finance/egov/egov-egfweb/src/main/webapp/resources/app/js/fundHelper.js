@@ -77,7 +77,7 @@ function callAjaxSearch() {
 							'click',
 							function() {
 								console.log(data.id);
-								window.open('/EGF/fund/' + $('#mode').val()
+								window.open('/services/EGF/fund/' + $('#mode').val()
 										+ '/' + data.id, '',
 										'width=800, height=600');
 							});

@@ -48,8 +48,8 @@
 
 package org.egov.egf.web.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.List;
+
 import org.egov.commons.service.CFinancialYearService;
 import org.egov.commons.service.FundService;
 import org.egov.egf.receiptpayment.service.ReceiptPaymentService;
@@ -66,53 +66,52 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/receiptpayment")
 public class ReceiptPaymentController {
-    private final static String RECEIPTPAYMENT_RESULT = "receiptpayment-result";
-    private final static String RECEIPTPAYMENT_VIEW = "receiptpayment-view";
-    private final static String RECEIPTPAYMENT_SEARCH = "receiptpayment-search";
-    @Autowired
-    private ReceiptPaymentService receiptPaymentService;
-    @Autowired
-    private MessageSource messageSource;
-    @Autowired
-    private CFinancialYearService cFinancialYearService;
-    @Autowired
-    private FundService fundService;
+	private final static String RECEIPTPAYMENT_RESULT = "receiptpayment-result";
+	private final static String RECEIPTPAYMENT_VIEW = "receiptpayment-view";
+	private final static String RECEIPTPAYMENT_SEARCH = "receiptpayment-search";
+	@Autowired
+	private ReceiptPaymentService receiptPaymentService;
+	@Autowired
+	private MessageSource messageSource;
+	@Autowired
+	private CFinancialYearService cFinancialYearService;
+	@Autowired
+	private FundService fundService;
 
-    private void prepareNewForm(Model model) {
-        model.addAttribute("cFinancialYears", cFinancialYearService.findAll());
-        model.addAttribute("funds", fundService.findAllActiveAndIsnotleaf());
-        model.addAttribute("financialPeriodEnums", FinancialPeriodEnum.values());
-    }
+	private void prepareNewForm(Model model) {
+		model.addAttribute("cFinancialYears", cFinancialYearService.findAll());
+		model.addAttribute("funds", fundService.findAllActiveAndIsnotleaf());
+		model.addAttribute("financialPeriodEnums", FinancialPeriodEnum.values());
+	}
 
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public String search(Model model) {
+		ReceiptPayment receiptPayment = new ReceiptPayment();
+		prepareNewForm(model);
+		model.addAttribute("receiptPayment", receiptPayment);
+		return RECEIPTPAYMENT_SEARCH;
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String search(Model model) {
-        ReceiptPayment receiptPayment = new ReceiptPayment();
-        prepareNewForm(model);
-        model.addAttribute("receiptPayment", receiptPayment);
-        return RECEIPTPAYMENT_SEARCH;
+	}
 
-    }
+	@RequestMapping(value = "/ajaxsearch", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+	public @ResponseBody String ajaxsearch(Model model, @ModelAttribute final ReceiptPayment receiptPayment) {
+		List<ReceiptPayment> searchResultList = receiptPaymentService.search(receiptPayment);
+		String result = new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
+				.toString();
+		return result;
+	}
 
-    @RequestMapping(value = "/ajaxsearch", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public
-    @ResponseBody
-    String ajaxsearch(Model model,
-                      @ModelAttribute final ReceiptPayment receiptPayment) {
-        List<ReceiptPayment> searchResultList = receiptPaymentService.search(receiptPayment);
-        String result = new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
-        return result;
-    }
-
-    public Object toSearchResultJson(final Object object) {
-        final GsonBuilder gsonBuilder = new GsonBuilder();
-        final Gson gson = gsonBuilder.registerTypeAdapter(ReceiptPayment.class, new ReceiptPaymentJsonAdaptor()).create();
-        final String json = gson.toJson(object);
-        return json;
-    }
+	public Object toSearchResultJson(final Object object) {
+		final GsonBuilder gsonBuilder = new GsonBuilder();
+		final Gson gson = gsonBuilder.registerTypeAdapter(ReceiptPayment.class, new ReceiptPaymentJsonAdaptor())
+				.create();
+		final String json = gson.toJson(object);
+		return json;
+	}
 }

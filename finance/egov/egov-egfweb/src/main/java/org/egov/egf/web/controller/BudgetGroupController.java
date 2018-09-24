@@ -48,8 +48,12 @@
 
 package org.egov.egf.web.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
+import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.egov.egf.web.adaptor.BudgetGroupJsonAdaptor;
 import org.egov.model.budget.BudgetDetail;
@@ -71,132 +75,130 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/budgetgroup")
 public class BudgetGroupController {
-    private final static String BUDGETGROUP_NEW = "budgetgroup-new";
-    private final static String BUDGETGROUP_RESULT = "budgetgroup-result";
-    private final static String BUDGETGROUP_EDIT = "budgetgroup-edit";
-    private final static String BUDGETGROUP_VIEW = "budgetgroup-view";
-    private final static String BUDGETGROUP_SEARCH = "budgetgroup-search";
-    @Autowired
-    private BudgetingGroupService budgetGroupService;
-    @Autowired
-    private MessageSource messageSource;
-    @Autowired
-    private BudgetDetailService budgetDetailService;
+	private final static String BUDGETGROUP_NEW = "budgetgroup-new";
+	private final static String BUDGETGROUP_RESULT = "budgetgroup-result";
+	private final static String BUDGETGROUP_EDIT = "budgetgroup-edit";
+	private final static String BUDGETGROUP_VIEW = "budgetgroup-view";
+	private final static String BUDGETGROUP_SEARCH = "budgetgroup-search";
+	@Autowired
+	private BudgetingGroupService budgetGroupService;
+	@Autowired
+	private MessageSource messageSource;
+	@Autowired
+	private BudgetDetailService budgetDetailService;
 
-    private void prepareNewForm(final Model model) {
-        model.addAttribute("majorCodeList", budgetGroupService.getMajorCodeList());
-        model.addAttribute("minCodeList", budgetGroupService.getMinCodeList());
-        model.addAttribute("budgetAccountTypes", Arrays.asList(BudgetAccountType.values()));
-        model.addAttribute("budgetingTypes", Arrays.asList(BudgetingType.values()));
+	private void prepareNewForm(final Model model) {
+		model.addAttribute("majorCodeList", budgetGroupService.getMajorCodeList());
+		model.addAttribute("minCodeList", budgetGroupService.getMinCodeList());
+		model.addAttribute("budgetAccountTypes", Arrays.asList(BudgetAccountType.values()));
+		model.addAttribute("budgetingTypes", Arrays.asList(BudgetingType.values()));
 
-    }
+	}
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String newForm(final Model model) {
-        prepareNewForm(model);
-        model.addAttribute("budgetGroup", new BudgetGroup());
-        return BUDGETGROUP_NEW;
-    }
+	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	public String newForm(final Model model) {
+		prepareNewForm(model);
+		model.addAttribute("budgetGroup", new BudgetGroup());
+		return BUDGETGROUP_NEW;
+	}
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute final BudgetGroup budgetGroup, final BindingResult errors,
-            final RedirectAttributes redirectAttrs, final Model model) {
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public String create(@Valid @ModelAttribute final BudgetGroup budgetGroup, final BindingResult errors,
+			final RedirectAttributes redirectAttrs, final Model model) {
 
-        if (budgetGroup.getMajorCode() == null && budgetGroup.getMinCode() == null && budgetGroup.getMaxCode() == null)
-            errors.rejectValue("majorCode", "budgetgroup.select.accountcode");
-        if (budgetGroup.getMajorCode() != null
-                && (budgetGroup.getMinCode() != null || budgetGroup.getMaxCode() != null))
-            errors.rejectValue("majorCode", "budgetgroup.invalid.mapping");
-        if (budgetGroup.getMajorCode() == null
-                && (budgetGroup.getMinCode() != null || budgetGroup.getMaxCode() != null)) {
-            if (budgetGroup.getMinCode() == null)
-                errors.rejectValue("minCode", "budgetgroup.invalidminorcode.mapping");
-            else if (budgetGroup.getMaxCode() == null)
-                errors.rejectValue("maxCode", "budgetgroup.invalidmajorcode.mapping");
-        }
-        String validationMessage = budgetGroupService.validate(budgetGroup, errors);
-        if (errors.hasErrors() || !StringUtils.isEmpty(validationMessage)) {
-            prepareNewForm(model);
-            model.addAttribute("majorCode", validationMessage);
-            return BUDGETGROUP_NEW;
-        }
-        budgetGroupService.create(budgetGroup);
-        redirectAttrs.addFlashAttribute("message",
-                messageSource.getMessage("msg.budgetGroup.success", null, Locale.ENGLISH));
-        return "redirect:/budgetgroup/result/" + budgetGroup.getId();
-    }
+		if (budgetGroup.getMajorCode() == null && budgetGroup.getMinCode() == null && budgetGroup.getMaxCode() == null)
+			errors.rejectValue("majorCode", "budgetgroup.select.accountcode");
+		if (budgetGroup.getMajorCode() != null
+				&& (budgetGroup.getMinCode() != null || budgetGroup.getMaxCode() != null))
+			errors.rejectValue("majorCode", "budgetgroup.invalid.mapping");
+		if (budgetGroup.getMajorCode() == null
+				&& (budgetGroup.getMinCode() != null || budgetGroup.getMaxCode() != null)) {
+			if (budgetGroup.getMinCode() == null)
+				errors.rejectValue("minCode", "budgetgroup.invalidminorcode.mapping");
+			else if (budgetGroup.getMaxCode() == null)
+				errors.rejectValue("maxCode", "budgetgroup.invalidmajorcode.mapping");
+		}
+		String validationMessage = budgetGroupService.validate(budgetGroup, errors);
+		if (errors.hasErrors() || !StringUtils.isEmpty(validationMessage)) {
+			prepareNewForm(model);
+			model.addAttribute("majorCode", validationMessage);
+			return BUDGETGROUP_NEW;
+		}
+		budgetGroupService.create(budgetGroup);
+		redirectAttrs.addFlashAttribute("message",
+				messageSource.getMessage("msg.budgetGroup.success", null, Locale.ENGLISH));
+		return "redirect:/budgetgroup/result/" + budgetGroup.getId();
+	}
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String edit(@PathVariable("id") final Long id, final Model model) {
-        final BudgetGroup budgetGroup = budgetGroupService.findOne(id);
-        List<BudgetDetail> bd = budgetDetailService.getBudgetDetailsByBudgetGroupId(budgetGroup.getId());
-        if (!bd.isEmpty()) {
-            model.addAttribute("mode", "edit");
-        }
-        prepareNewForm(model);
-        model.addAttribute("budgetGroup", budgetGroup);
-        return BUDGETGROUP_EDIT;
-    }
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	public String edit(@PathVariable("id") final Long id, final Model model) {
+		final BudgetGroup budgetGroup = budgetGroupService.findOne(id);
+		List<BudgetDetail> bd = budgetDetailService.getBudgetDetailsByBudgetGroupId(budgetGroup.getId());
+		if (!bd.isEmpty()) {
+			model.addAttribute("mode", "edit");
+		}
+		prepareNewForm(model);
+		model.addAttribute("budgetGroup", budgetGroup);
+		return BUDGETGROUP_EDIT;
+	}
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(@Valid @ModelAttribute final BudgetGroup budgetGroup, final BindingResult errors,
-            final Model model, final RedirectAttributes redirectAttrs) {
-        String validationMessage = budgetGroupService.validate(budgetGroup, errors);
-        if (errors.hasErrors() || !StringUtils.isEmpty(validationMessage)) {
-            model.addAttribute("majorCode", validationMessage);
-            prepareNewForm(model);
-            return BUDGETGROUP_EDIT;
-        }
-        budgetGroupService.update(budgetGroup);
-        redirectAttrs.addFlashAttribute("message",
-                messageSource.getMessage("msg.budgetGroup.update", null, Locale.ENGLISH));
-        return "redirect:/budgetgroup/result/" + budgetGroup.getId();
-    }
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String update(@Valid @ModelAttribute final BudgetGroup budgetGroup, final BindingResult errors,
+			final Model model, final RedirectAttributes redirectAttrs) {
+		String validationMessage = budgetGroupService.validate(budgetGroup, errors);
+		if (errors.hasErrors() || !StringUtils.isEmpty(validationMessage)) {
+			model.addAttribute("majorCode", validationMessage);
+			prepareNewForm(model);
+			return BUDGETGROUP_EDIT;
+		}
+		budgetGroupService.update(budgetGroup);
+		redirectAttrs.addFlashAttribute("message",
+				messageSource.getMessage("msg.budgetGroup.update", null, Locale.ENGLISH));
+		return "redirect:/budgetgroup/result/" + budgetGroup.getId();
+	}
 
-    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
-    public String view(@PathVariable("id") final Long id, final Model model) {
-        final BudgetGroup budgetGroup = budgetGroupService.findOne(id);
-        prepareNewForm(model);
-        model.addAttribute("budgetGroup", budgetGroup);
-        return BUDGETGROUP_VIEW;
-    }
+	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+	public String view(@PathVariable("id") final Long id, final Model model) {
+		final BudgetGroup budgetGroup = budgetGroupService.findOne(id);
+		prepareNewForm(model);
+		model.addAttribute("budgetGroup", budgetGroup);
+		return BUDGETGROUP_VIEW;
+	}
 
-    @RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
-    public String result(@PathVariable("id") final Long id, final Model model) {
-        final BudgetGroup budgetGroup = budgetGroupService.findOne(id);
-        model.addAttribute("budgetGroup", budgetGroup);
-        return BUDGETGROUP_RESULT;
-    }
+	@RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
+	public String result(@PathVariable("id") final Long id, final Model model) {
+		final BudgetGroup budgetGroup = budgetGroupService.findOne(id);
+		model.addAttribute("budgetGroup", budgetGroup);
+		return BUDGETGROUP_RESULT;
+	}
 
-    @RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
-    public String search(@PathVariable("mode") final String mode, final Model model) {
-        final BudgetGroup budgetGroup = new BudgetGroup();
-        prepareNewForm(model);
-        model.addAttribute("budgetGroup", budgetGroup);
-        return BUDGETGROUP_SEARCH;
-    }
+	@RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
+	public String search(@PathVariable("mode") final String mode, final Model model) {
+		final BudgetGroup budgetGroup = new BudgetGroup();
+		prepareNewForm(model);
+		model.addAttribute("budgetGroup", budgetGroup);
+		return BUDGETGROUP_SEARCH;
+	}
 
-    @RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public @ResponseBody String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
-            @ModelAttribute final BudgetGroup budgetGroup) {
-        final List<BudgetGroup> searchResultList = budgetGroupService.search(budgetGroup);
-        final String result = new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
-                .toString();
-        return result;
-    }
+	@RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+	public @ResponseBody String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
+			@ModelAttribute final BudgetGroup budgetGroup) {
+		final List<BudgetGroup> searchResultList = budgetGroupService.search(budgetGroup);
+		final String result = new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
+				.toString();
+		return result;
+	}
 
-    public Object toSearchResultJson(final Object object) {
-        final GsonBuilder gsonBuilder = new GsonBuilder();
-        final Gson gson = gsonBuilder.registerTypeAdapter(BudgetGroup.class, new BudgetGroupJsonAdaptor()).create();
-        final String json = gson.toJson(object);
-        return json;
-    }
+	public Object toSearchResultJson(final Object object) {
+		final GsonBuilder gsonBuilder = new GsonBuilder();
+		final Gson gson = gsonBuilder.registerTypeAdapter(BudgetGroup.class, new BudgetGroupJsonAdaptor()).create();
+		final String json = gson.toJson(object);
+		return json;
+	}
 }

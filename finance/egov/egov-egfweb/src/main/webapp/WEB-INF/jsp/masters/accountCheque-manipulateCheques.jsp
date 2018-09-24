@@ -164,7 +164,7 @@
 					<td class="bluebox">Department<span class="mandatory1">*</span></td>
 					<td class="bluebox"><s:select name="departmentList"
 							id="departmentList" list="dropdownData.departmentList"
-							listKey="id" listValue="name" multiple="true" required="true"
+							listKey="code" listValue="name" multiple="true" required="true"
 							style="height:auto;" /></td>
 
 				</tr>
@@ -246,7 +246,7 @@
 					|| department != "" || serialNo != "-1")
 				document.getElementById("lblError").innerHTML = "Please click on add new cheque or unselect required fields";
 			else {
-				document.chequeMaster.action = '/EGF/masters/accountCheque-save.action';
+				document.chequeMaster.action = '/services/EGF/masters/accountCheque-save.action';
 				document.chequeMaster.submit();
 			}
 

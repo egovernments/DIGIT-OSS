@@ -83,394 +83,345 @@ import com.exilant.eGov.src.domain.BillRegisterBean;
 
 @Results({ @Result(name = "search", location = "cancelBill-search.jsp") })
 public class CancelBillAction extends BaseFormAction {
-    private static final long serialVersionUID = 1L;
-    private static final Logger LOGGER = Logger
-            .getLogger(CancelBillAction.class);
-    @Autowired
-    private BillsService billsService;
-    private String billNumber;
-    private String fromDate;
-    private String toDate;
-    private Fund fund = new Fund();
-    private Department deptImpl = new Department();
-    private String expType;
-    private List<BillRegisterBean> billListDisplay = new ArrayList<BillRegisterBean>();
-    private boolean afterSearch = false;
-    Integer loggedInUser = ApplicationThreadLocals.getUserId().intValue();
-    public final SimpleDateFormat formatter = new SimpleDateFormat(
-            "dd/MM/yyyy", Constants.LOCALE);
+	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger(CancelBillAction.class);
+	@Autowired
+	private BillsService billsService;
+	private String billNumber;
+	private String fromDate;
+	private String toDate;
+	private Fund fund = new Fund();
+	private Department deptImpl = new Department();
+	private String expType;
+	private List<BillRegisterBean> billListDisplay = new ArrayList<BillRegisterBean>();
+	private boolean afterSearch = false;
+	Integer loggedInUser = ApplicationThreadLocals.getUserId().intValue();
+	public final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Constants.LOCALE);
 
-    @Autowired
-    @Qualifier("persistenceService")
-    private PersistenceService persistenceService;
-    @Autowired
-    private EgovMasterDataCaching masterDataCache;
-    @Autowired
-    private CancelBillAndVoucher cancelBillAndVoucher;
-    
-    @Autowired
-    private MicroserviceUtils microserviceUtils;
+	@Autowired
+	@Qualifier("persistenceService")
+	private PersistenceService persistenceService;
+	@Autowired
+	private EgovMasterDataCaching masterDataCache;
+	@Autowired
+	private CancelBillAndVoucher cancelBillAndVoucher;
 
-    @Override
-    public Object getModel() {
+	@Autowired
+	private MicroserviceUtils microserviceUtils;
 
-        return null;
-    }
-
-    public void setBillNumber(final String billNumber) {
-        this.billNumber = billNumber;
-    }
-
-    public String getBillNumber() {
-        return billNumber;
-    }
-
-    public void setFromDate(final String fromBillDate) {
-        fromDate = fromBillDate;
-    }
-
-    public String getFromDate() {
-        return fromDate;
-    }
-
-    public void setToDate(final String toBillDate) {
-        toDate = toBillDate;
-    }
-
-    public String getToDate() {
-        return toDate;
-    }
-
-    public void setFund(final Fund fund) {
-        this.fund = fund;
-    }
-
-    public Fund getFund() {
-        return fund;
-    }
-
-    public void setExpType(final String expType) {
-        this.expType = expType;
-    }
-
-    public String getExpType() {
-        return expType;
-    }
-
-    @SuppressWarnings("deprecation")
 	@Override
-    public void prepare() {
-        super.prepare();
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Inside Prepare method");
-        List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
-        dropdownData.put("DepartmentList",departments);
-        addDropdownData(
-                "fundList",
-                persistenceService
-                        .findAllBy("from Fund where isactive=true and isnotleaf=false order by name"));
-        // Important - Remove the like part of the query below to generalize the
-        // bill cancellation screen
-        addDropdownData(
-                "expenditureList",
-                persistenceService
-                        .findAllBy(
-                                "select distinct bill.expendituretype from EgBillregister bill where bill.expendituretype='"
-                                        + FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT+"' or bill.expendituretype='"
-                                        + FinancialConstants.STANDARD_EXPENDITURETYPE_WORKS+"' or bill.expendituretype='"
-                                        + FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE+"' order by bill.expendituretype"));
-    }
+	public Object getModel() {
 
-    public void prepareBeforeSearch() {
-        fund.setId(null);
-        billNumber = "";
-        fromDate = "";
-        toDate = "";
-        expType = "";
-        billListDisplay.clear();
-    }
+		return null;
+	}
 
-    @SkipValidation
-    @Action(value = "/voucher/cancelBill-beforeSearch")
-    public String beforeSearch() {
-        return "search";
-    }
+	public void setBillNumber(final String billNumber) {
+		this.billNumber = billNumber;
+	}
 
-    public StringBuilder filterQuery() {
-        final String userCond = " where ";
-        final StringBuilder query = new StringBuilder(
-                " select billmis.egBillregister.id, billmis.egBillregister.billnumber, billmis.egBillregister.billdate, billmis.egBillregister.billamount, billmis.departmentcode from EgBillregistermis billmis ");
-        // if the logged in user is same as creator or is superruser
-        query.append(userCond);
+	public String getBillNumber() {
+		return billNumber;
+	}
 
-        if (fund != null && fund.getId() != null && fund.getId() != -1
-                && fund.getId() != 0)
-            query.append(" billmis.fund.id=" + fund.getId());
+	public void setFromDate(final String fromBillDate) {
+		fromDate = fromBillDate;
+	}
 
-        if (billNumber != null && billNumber.length() != 0)
-            query.append(" and billmis.egBillregister.billnumber ='"
-                    + billNumber + "'");
-        if (deptImpl != null && deptImpl.getCode() != null  && !deptImpl.getCode().equals("-1"))
-            query.append(" and billmis.departmentcode ='" + deptImpl.getCode()
-                    + "'");
-        if (fromDate != null && fromDate.length() != 0) {
-            Date fDate;
-            try {
-                fDate = formatter.parse(fromDate);
-                query.append(" and billmis.egBillregister.billdate >= '"
-                        + Constants.DDMMYYYYFORMAT1.format(fDate) + "'");
-            } catch (final ParseException e) {
-                LOGGER.error(" From Date parse error");
-                //
-            }
-        }
-        if (toDate != null && toDate.length() != 0) {
-            Date tDate;
-            try {
-                tDate = formatter.parse(toDate);
-                query.append(" and billmis.egBillregister.billdate <= '"
-                        + Constants.DDMMYYYYFORMAT1.format(tDate) + "'");
-            } catch (final ParseException e) {
-                LOGGER.error(" To Date parse error");
-                //
-            }
-        }
-        if (expType == null || expType.equalsIgnoreCase("")) {
-            query.append(" and billmis.egBillregister.expendituretype ='"
-                    + FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT
-                    + "'");
-            query.append(" and billmis.egBillregister.status.moduletype='"
-                    + FinancialConstants.CONTINGENCYBILL_FIN
-                    + "' and billmis.egBillregister.status.description='"
-                    + FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS + "'");
-        } else {
-            query.append(" and billmis.egBillregister.expendituretype ='"
-                    + expType + "'");
-            if (FinancialConstants.STANDARD_EXPENDITURETYPE_SALARY
-                    .equalsIgnoreCase(expType))
-                query.append(" and billmis.egBillregister.status.moduletype='"
-                        + FinancialConstants.SALARYBILL
-                        + "' and billmis.egBillregister.status.description='"
-                        + FinancialConstants.SALARYBILL_APPROVED_STATUS + "'");
-            else if (FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT
-                    .equalsIgnoreCase(expType))
-                query.append(" and billmis.egBillregister.status.moduletype='"
-                        + FinancialConstants.CONTINGENCYBILL_FIN
-                        + "' and billmis.egBillregister.status.description='"
-                        + FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS
-                        + "'");
-            else if (FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE
-                    .equalsIgnoreCase(expType))
-                query.append(" and billmis.egBillregister.status.moduletype='"
-                        + FinancialConstants.SUPPLIERBILL
-                        + "' and billmis.egBillregister.status.description='"
-                        + FinancialConstants.SUPPLIERBILL_PASSED_STATUS + "'");
-            else if (FinancialConstants.STANDARD_EXPENDITURETYPE_WORKS
-                    .equalsIgnoreCase(expType))
-                query.append(" and billmis.egBillregister.status.moduletype='"
-                        + FinancialConstants.CONTRACTORBILL
-                        + "' and billmis.egBillregister.status.description='"
-                        + FinancialConstants.CONTRACTORBILL_PASSED_STATUS + "'");
-        }
+	public String getFromDate() {
+		return fromDate;
+	}
 
-        return query;
+	public void setToDate(final String toBillDate) {
+		toDate = toBillDate;
+	}
 
-    }
+	public String getToDate() {
+		return toDate;
+	}
 
-    public String[] query() {
-        final String[] retQry = new String[2];
-        final StringBuilder filterQry = filterQuery();
+	public void setFund(final Fund fund) {
+		this.fund = fund;
+	}
 
-        retQry[0] = filterQry + " and billmis.voucherHeader is null ";
-        retQry[1] = filterQry + " and billmis.voucherHeader.status in ("
-                + FinancialConstants.REVERSEDVOUCHERSTATUS + ","
-                + FinancialConstants.CANCELLEDVOUCHERSTATUS + ") ";
+	public Fund getFund() {
+		return fund;
+	}
 
-        return retQry;
-    }
+	public void setExpType(final String expType) {
+		this.expType = expType;
+	}
 
-    public void prepareSearch() {
-        billListDisplay.clear();
-    }
+	public String getExpType() {
+		return expType;
+	}
 
-    public void validateFund() {
-        if (fund == null || fund.getId() == -1)
-            addFieldError("fund.id", getText("voucher.fund.mandatory"));
-    }
+	@SuppressWarnings("deprecation")
+	@Override
+	public void prepare() {
+		super.prepare();
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("Inside Prepare method");
+		List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
+		dropdownData.put("DepartmentList", departments);
+		addDropdownData("fundList",
+				persistenceService.findAllBy("from Fund where isactive=true and isnotleaf=false order by name"));
+		// Important - Remove the like part of the query below to generalize the
+		// bill cancellation screen
+		addDropdownData("expenditureList", persistenceService
+				.findAllBy("select distinct bill.expendituretype from EgBillregister bill where bill.expendituretype='"
+						+ FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT + "' or bill.expendituretype='"
+						+ FinancialConstants.STANDARD_EXPENDITURETYPE_WORKS + "' or bill.expendituretype='"
+						+ FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE + "' order by bill.expendituretype"));
+	}
 
-    @ValidationErrorPage(value = "search")
-    @Action(value = "/voucher/cancelBill-search")
-    public String search() {
-        validateFund();
-        if (!hasFieldErrors()) {
-            billListDisplay.clear();
-            final String[] searchQuery = query();
-            final List<Object[]> tempBillList = new ArrayList<Object[]>();
-            List<Object[]> billListWithNoVouchers, billListWithCancelledReversedVouchers;
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("Search Query - " + searchQuery);
-            billListWithNoVouchers = persistenceService
-                    .findAllBy(searchQuery[0]);
-            billListWithCancelledReversedVouchers = persistenceService
-                    .findAllBy(searchQuery[1]);
-            tempBillList.addAll(billListWithNoVouchers);
-            tempBillList.addAll(billListWithCancelledReversedVouchers);
+	public void prepareBeforeSearch() {
+		fund.setId(null);
+		billNumber = "";
+		fromDate = "";
+		toDate = "";
+		expType = "";
+		billListDisplay.clear();
+	}
 
-            BillRegisterBean billRegstrBean;
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug("Size of tempBillList - " + tempBillList.size());
-            final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
-            Map<String,String> depMap = new HashMap<>();
-            for(org.egov.infra.microservice.models.Department department : departments){
-            	depMap.put(department.getCode(), department.getName());
-            }
-            for (final Object[] bill : tempBillList) {
-                billRegstrBean = new BillRegisterBean();
-                billRegstrBean.setId(bill[0].toString());
-                billRegstrBean.setBillNumber(bill[1].toString());
-                if (!bill[2].toString().equalsIgnoreCase(""))
-                    billRegstrBean.setBillDate(sdf.format(bill[2]));
-                billRegstrBean.setBillAmount(Double.parseDouble(bill[3]
-                        .toString()));
-                billRegstrBean.setBillDeptName(depMap.get(bill[4]));
-                billListDisplay.add(billRegstrBean);
-            }
-            afterSearch = true;
-        }
-        return "search";
-    }
+	@SkipValidation
+	@Action(value = "/voucher/cancelBill-beforeSearch")
+	public String beforeSearch() {
+		return "search";
+	}
 
-    @Action(value = "/voucher/cancelBill-cancelBill")
-    public String cancelBill() {
-        new Date();
-        EgBillregister billRegister;
+	public StringBuilder filterQuery() {
+		final String userCond = " where ";
+		final StringBuilder query = new StringBuilder(
+				" select billmis.egBillregister.id, billmis.egBillregister.billnumber, billmis.egBillregister.billdate, billmis.egBillregister.billamount, billmis.departmentcode from EgBillregistermis billmis ");
+		// if the logged in user is same as creator or is superruser
+		query.append(userCond);
 
-        final Long[] idList = new Long[billListDisplay.size()];
-        int i = 0, idListLength = 0;
-        String idString = "";
-        final StringBuilder statusQuery = new StringBuilder(
-                "from EgwStatus where ");
-        final StringBuilder cancelQuery = new StringBuilder(
-                "Update eg_billregister set ");
-        for (final BillRegisterBean billRgistrBean : billListDisplay)
-            if (billRgistrBean.getIsSelected()) {
-                idList[i++] = Long.parseLong(billRgistrBean.getId());
-                idListLength++;
-            }
-        if (expType == null || expType.equalsIgnoreCase("")) {
-            statusQuery
-                    .append("moduletype='"
-                            + FinancialConstants.CONTINGENCYBILL_FIN
-                            + "' and description='"
-                            + FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS
-                            + "'");
-            cancelQuery.append(" billstatus='"
-                    + FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS
-                    + "' , statusid=:statusId ");
-        } else if (FinancialConstants.STANDARD_EXPENDITURETYPE_SALARY
-                .equalsIgnoreCase(expType)) {
-            statusQuery.append("moduletype='" + FinancialConstants.SALARYBILL
-                    + "' and description='"
-                    + FinancialConstants.SALARYBILL_CANCELLED_STATUS + "'");
-            cancelQuery.append(" billstatus='"
-                    + FinancialConstants.SALARYBILL_CANCELLED_STATUS
-                    + "' , statusid=:statusId ");
+		if (fund != null && fund.getId() != null && fund.getId() != -1 && fund.getId() != 0)
+			query.append(" billmis.fund.id=" + fund.getId());
 
-        } else if (FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT
-                .equalsIgnoreCase(expType)) {
-            statusQuery
-                    .append("moduletype='"
-                            + FinancialConstants.CONTINGENCYBILL_FIN
-                            + "' and description='"
-                            + FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS
-                            + "'");
-            cancelQuery.append(" billstatus='"
-                    + FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS
-                    + "' , statusid=:statusId ");
-        } else if (FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE
-                .equalsIgnoreCase(expType)) {
-            statusQuery.append("moduletype='" + FinancialConstants.SUPPLIERBILL
-                    + "' and description='"
-                    + FinancialConstants.SUPPLIERBILL_CANCELLED_STATUS + "'");
-            cancelQuery.append(" billstatus='"
-                    + FinancialConstants.SUPPLIERBILL_CANCELLED_STATUS
-                    + "' , statusid=:statusId ");
-        } else if (FinancialConstants.STANDARD_EXPENDITURETYPE_WORKS
-                .equalsIgnoreCase(expType)) {
-            statusQuery.append("moduletype='"
-                    + FinancialConstants.CONTRACTORBILL + "' and description='"
-                    + FinancialConstants.CONTRACTORBILL_CANCELLED_STATUS + "'");
-            cancelQuery.append(" billstatus='"
-                    + FinancialConstants.CONTRACTORBILL_CANCELLED_STATUS
-                    + "' , statusid=:statusId ");
-        }
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug(" Status Query - " + statusQuery.toString());
-        final EgwStatus status = (EgwStatus) persistenceService
-                .find(statusQuery.toString());
-        persistenceService.getSession();
-        if (idListLength != 0) {
-            for (i = 0; i < idListLength; i++) {
-                billRegister = billsService.getBillRegisterById(idList[i].intValue());
-                final boolean value = cancelBillAndVoucher.canCancelBill(billRegister);
-                if (!value) {
-                    addActionMessage(getText("Bills Cancelled Failure"));
-                    continue;
-                }
-                idString += idList[i] + (i == idListLength - 1 ? "" : ",");
-            }
-            if (isNotBlank(idString))
-            {
-                if (idString.charAt(idString.length() - 1) == ',')
-                    idString = idString.replace(",", "");
-            }
-            cancelQuery.append(" where id in (" + idString + ")");
-            if (LOGGER.isDebugEnabled())
-                LOGGER.debug(" Cancel Query - " + cancelQuery.toString());
-            final SQLQuery totalSQLQuery = persistenceService.getSession()
-                    .createSQLQuery(cancelQuery.toString());
-            totalSQLQuery.setLong("statusId", status.getId());
-            if (isNotBlank(idString))
-                totalSQLQuery.executeUpdate();
-        }
+		if (billNumber != null && billNumber.length() != 0)
+			query.append(" and billmis.egBillregister.billnumber ='" + billNumber + "'");
+		if (deptImpl != null && deptImpl.getCode() != null && !deptImpl.getCode().equals("-1"))
+			query.append(" and billmis.departmentcode ='" + deptImpl.getCode() + "'");
+		if (fromDate != null && fromDate.length() != 0) {
+			Date fDate;
+			try {
+				fDate = formatter.parse(fromDate);
+				query.append(
+						" and billmis.egBillregister.billdate >= '" + Constants.DDMMYYYYFORMAT1.format(fDate) + "'");
+			} catch (final ParseException e) {
+				LOGGER.error(" From Date parse error");
+				//
+			}
+		}
+		if (toDate != null && toDate.length() != 0) {
+			Date tDate;
+			try {
+				tDate = formatter.parse(toDate);
+				query.append(
+						" and billmis.egBillregister.billdate <= '" + Constants.DDMMYYYYFORMAT1.format(tDate) + "'");
+			} catch (final ParseException e) {
+				LOGGER.error(" To Date parse error");
+				//
+			}
+		}
+		if (expType == null || expType.equalsIgnoreCase("")) {
+			query.append(" and billmis.egBillregister.expendituretype ='"
+					+ FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT + "'");
+			query.append(" and billmis.egBillregister.status.moduletype='" + FinancialConstants.CONTINGENCYBILL_FIN
+					+ "' and billmis.egBillregister.status.description='"
+					+ FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS + "'");
+		} else {
+			query.append(" and billmis.egBillregister.expendituretype ='" + expType + "'");
+			if (FinancialConstants.STANDARD_EXPENDITURETYPE_SALARY.equalsIgnoreCase(expType))
+				query.append(" and billmis.egBillregister.status.moduletype='" + FinancialConstants.SALARYBILL
+						+ "' and billmis.egBillregister.status.description='"
+						+ FinancialConstants.SALARYBILL_APPROVED_STATUS + "'");
+			else if (FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT.equalsIgnoreCase(expType))
+				query.append(" and billmis.egBillregister.status.moduletype='" + FinancialConstants.CONTINGENCYBILL_FIN
+						+ "' and billmis.egBillregister.status.description='"
+						+ FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS + "'");
+			else if (FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE.equalsIgnoreCase(expType))
+				query.append(" and billmis.egBillregister.status.moduletype='" + FinancialConstants.SUPPLIERBILL
+						+ "' and billmis.egBillregister.status.description='"
+						+ FinancialConstants.SUPPLIERBILL_PASSED_STATUS + "'");
+			else if (FinancialConstants.STANDARD_EXPENDITURETYPE_WORKS.equalsIgnoreCase(expType))
+				query.append(" and billmis.egBillregister.status.moduletype='" + FinancialConstants.CONTRACTORBILL
+						+ "' and billmis.egBillregister.status.description='"
+						+ FinancialConstants.CONTRACTORBILL_PASSED_STATUS + "'");
+		}
 
-        if (isNotBlank(idString))
-            addActionMessage(getText("Bills Cancelled Succesfully"));
+		return query;
 
-        prepareBeforeSearch();
-        return "search";
-    }
+	}
 
-    public void setBillListDisplay(final List<BillRegisterBean> billListDisplay) {
-        this.billListDisplay = billListDisplay;
-    }
+	public String[] query() {
+		final String[] retQry = new String[2];
+		final StringBuilder filterQry = filterQuery();
 
-    public List<BillRegisterBean> getBillListDisplay() {
-        return billListDisplay;
-    }
+		retQry[0] = filterQry + " and billmis.voucherHeader is null ";
+		retQry[1] = filterQry + " and billmis.voucherHeader.status in (" + FinancialConstants.REVERSEDVOUCHERSTATUS
+				+ "," + FinancialConstants.CANCELLEDVOUCHERSTATUS + ") ";
 
-    public void setAfterSearch(final boolean afterSearch) {
-        this.afterSearch = afterSearch;
-    }
+		return retQry;
+	}
 
-    public boolean getAfterSearch() {
-        return afterSearch;
-    }
+	public void prepareSearch() {
+		billListDisplay.clear();
+	}
 
-    public Department getDeptImpl() {
-        return deptImpl;
-    }
+	public void validateFund() {
+		if (fund == null || fund.getId() == -1)
+			addFieldError("fund.id", getText("voucher.fund.mandatory"));
+	}
 
-    public void setDeptImpl(final Department deptImpl) {
-        this.deptImpl = deptImpl;
-    }
+	@ValidationErrorPage(value = "search")
+	@Action(value = "/voucher/cancelBill-search")
+	public String search() {
+		validateFund();
+		if (!hasFieldErrors()) {
+			billListDisplay.clear();
+			final String[] searchQuery = query();
+			final List<Object[]> tempBillList = new ArrayList<Object[]>();
+			List<Object[]> billListWithNoVouchers, billListWithCancelledReversedVouchers;
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug("Search Query - " + searchQuery);
+			billListWithNoVouchers = persistenceService.findAllBy(searchQuery[0]);
+			billListWithCancelledReversedVouchers = persistenceService.findAllBy(searchQuery[1]);
+			tempBillList.addAll(billListWithNoVouchers);
+			tempBillList.addAll(billListWithCancelledReversedVouchers);
 
-    public Integer getLoggedInUser() {
-        return loggedInUser;
-    }
+			BillRegisterBean billRegstrBean;
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug("Size of tempBillList - " + tempBillList.size());
+			final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
+			Map<String, String> depMap = new HashMap<>();
+			for (org.egov.infra.microservice.models.Department department : departments) {
+				depMap.put(department.getCode(), department.getName());
+			}
+			for (final Object[] bill : tempBillList) {
+				billRegstrBean = new BillRegisterBean();
+				billRegstrBean.setId(bill[0].toString());
+				billRegstrBean.setBillNumber(bill[1].toString());
+				if (!bill[2].toString().equalsIgnoreCase(""))
+					billRegstrBean.setBillDate(sdf.format(bill[2]));
+				billRegstrBean.setBillAmount(Double.parseDouble(bill[3].toString()));
+				billRegstrBean.setBillDeptName(depMap.get(bill[4]));
+				billListDisplay.add(billRegstrBean);
+			}
+			afterSearch = true;
+		}
+		return "search";
+	}
 
-    public void setLoggedInUser(final Integer loggedInUser) {
-        this.loggedInUser = loggedInUser;
-    }
+	@Action(value = "/voucher/cancelBill-cancelBill")
+	public String cancelBill() {
+		new Date();
+		EgBillregister billRegister;
+
+		final Long[] idList = new Long[billListDisplay.size()];
+		int i = 0, idListLength = 0;
+		String idString = "";
+		final StringBuilder statusQuery = new StringBuilder("from EgwStatus where ");
+		final StringBuilder cancelQuery = new StringBuilder("Update eg_billregister set ");
+		for (final BillRegisterBean billRgistrBean : billListDisplay)
+			if (billRgistrBean.getIsSelected()) {
+				idList[i++] = Long.parseLong(billRgistrBean.getId());
+				idListLength++;
+			}
+		if (expType == null || expType.equalsIgnoreCase("")) {
+			statusQuery.append("moduletype='" + FinancialConstants.CONTINGENCYBILL_FIN + "' and description='"
+					+ FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS + "'");
+			cancelQuery.append(
+					" billstatus='" + FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS + "' , statusid=:statusId ");
+		} else if (FinancialConstants.STANDARD_EXPENDITURETYPE_SALARY.equalsIgnoreCase(expType)) {
+			statusQuery.append("moduletype='" + FinancialConstants.SALARYBILL + "' and description='"
+					+ FinancialConstants.SALARYBILL_CANCELLED_STATUS + "'");
+			cancelQuery.append(
+					" billstatus='" + FinancialConstants.SALARYBILL_CANCELLED_STATUS + "' , statusid=:statusId ");
+
+		} else if (FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT.equalsIgnoreCase(expType)) {
+			statusQuery.append("moduletype='" + FinancialConstants.CONTINGENCYBILL_FIN + "' and description='"
+					+ FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS + "'");
+			cancelQuery.append(
+					" billstatus='" + FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS + "' , statusid=:statusId ");
+		} else if (FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE.equalsIgnoreCase(expType)) {
+			statusQuery.append("moduletype='" + FinancialConstants.SUPPLIERBILL + "' and description='"
+					+ FinancialConstants.SUPPLIERBILL_CANCELLED_STATUS + "'");
+			cancelQuery.append(
+					" billstatus='" + FinancialConstants.SUPPLIERBILL_CANCELLED_STATUS + "' , statusid=:statusId ");
+		} else if (FinancialConstants.STANDARD_EXPENDITURETYPE_WORKS.equalsIgnoreCase(expType)) {
+			statusQuery.append("moduletype='" + FinancialConstants.CONTRACTORBILL + "' and description='"
+					+ FinancialConstants.CONTRACTORBILL_CANCELLED_STATUS + "'");
+			cancelQuery.append(
+					" billstatus='" + FinancialConstants.CONTRACTORBILL_CANCELLED_STATUS + "' , statusid=:statusId ");
+		}
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug(" Status Query - " + statusQuery.toString());
+		final EgwStatus status = (EgwStatus) persistenceService.find(statusQuery.toString());
+		persistenceService.getSession();
+		if (idListLength != 0) {
+			for (i = 0; i < idListLength; i++) {
+				billRegister = billsService.getBillRegisterById(idList[i].intValue());
+				// Need to do this change as configurable
+				/*
+				 * final boolean value =
+				 * cancelBillAndVoucher.canCancelBill(billRegister); if (!value)
+				 * { addActionMessage(getText("Bills Cancelled Failure"));
+				 * continue; }
+				 */
+				idString += idList[i] + (i == idListLength - 1 ? "" : ",");
+			}
+			if (isNotBlank(idString)) {
+				if (idString.charAt(idString.length() - 1) == ',')
+					idString = idString.replace(",", "");
+			}
+			cancelQuery.append(" where id in (" + idString + ")");
+			if (LOGGER.isDebugEnabled())
+				LOGGER.debug(" Cancel Query - " + cancelQuery.toString());
+			final SQLQuery totalSQLQuery = persistenceService.getSession().createSQLQuery(cancelQuery.toString());
+			totalSQLQuery.setLong("statusId", status.getId());
+			if (isNotBlank(idString))
+				totalSQLQuery.executeUpdate();
+		}
+
+		if (isNotBlank(idString))
+			addActionMessage(getText("Bills Cancelled Succesfully"));
+
+		prepareBeforeSearch();
+		return "search";
+	}
+
+	public void setBillListDisplay(final List<BillRegisterBean> billListDisplay) {
+		this.billListDisplay = billListDisplay;
+	}
+
+	public List<BillRegisterBean> getBillListDisplay() {
+		return billListDisplay;
+	}
+
+	public void setAfterSearch(final boolean afterSearch) {
+		this.afterSearch = afterSearch;
+	}
+
+	public boolean getAfterSearch() {
+		return afterSearch;
+	}
+
+	public Department getDeptImpl() {
+		return deptImpl;
+	}
+
+	public void setDeptImpl(final Department deptImpl) {
+		this.deptImpl = deptImpl;
+	}
+
+	public Integer getLoggedInUser() {
+		return loggedInUser;
+	}
+
+	public void setLoggedInUser(final Integer loggedInUser) {
+		this.loggedInUser = loggedInUser;
+	}
 }

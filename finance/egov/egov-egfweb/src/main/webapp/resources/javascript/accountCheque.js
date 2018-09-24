@@ -90,7 +90,7 @@ function updateGridData() {
 	var deptSelectedValue = new Array();
 	var deptSelectedText = new Array();
 	var deptObj = document.getElementById("departmentList");
-
+alert("deptObj" + deptObj);
 	var serialNoSelectedValue = new Array();
 	var serialNoSelectedText = new Array();
 	var serialNoObj = document.getElementById("serialNo");
@@ -102,7 +102,7 @@ function updateGridData() {
 			deptSelectedText.push(deptObj.options[i].text);
 		}
 	}
-	
+	alert("deptSelectedValue"+deptSelectedValue);
 	for (var i = 0; i < serialNoObj.length; i++) {
 		if (jQuery("#serialNo option")[i]['selected'] == true) {
 			serialNoSelectedValue.push(serialNoObj.options[i].value);
@@ -189,7 +189,7 @@ function updateGridData() {
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
 				+ '].isExhustedL').innerHTML = "No";
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
-				+ '].deptId').value = deptSelectedValue[i];
+				+ '].deptCode').value = deptSelectedValue[i];
 		chqDetailsIndex = chqDetailsIndex + 1;
 		chequeRangeArray.push(document.getElementById("fromChqNo").value.trim()
 				+ "-" + document.getElementById("toChqNo").value.trim() + "-"

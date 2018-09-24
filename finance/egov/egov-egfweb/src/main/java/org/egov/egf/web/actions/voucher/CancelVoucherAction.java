@@ -217,8 +217,9 @@ public class CancelVoucherAction extends BaseFormAction {
 
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("......Searching voucher for cancelllation...");
-		if(voucherHeader.getVoucherNumber()!=null && !voucherHeader.getVoucherNumber().isEmpty()){
-			String voucherNumberQry = "from CVoucherHeader vh where vh.status =" + FinancialConstants.CREATEDVOUCHERSTATUS
+		if (voucherHeader.getVoucherNumber() != null && !voucherHeader.getVoucherNumber().isEmpty()) {
+			String voucherNumberQry = "from CVoucherHeader vh where vh.status ="
+					+ FinancialConstants.CREATEDVOUCHERSTATUS
 					+ " and ( vh.isConfirmed != 1 or vh.isConfirmed is null) ";
 			persistenceService.findAllBy(voucherNumberQry + filterQry);
 			voucherList.addAll(persistenceService.findAllBy(voucherNumberQry + filterQry));
@@ -350,12 +351,14 @@ public class CancelVoucherAction extends BaseFormAction {
 		for (int i = 0; i < selectedVhs.length; i++) {
 			voucherObj = (CVoucherHeader) persistenceService.find("from CVoucherHeader vh where vh.id=?",
 					selectedVhs[i]);
-			final boolean value = cancelBillAndVoucher.canCancelVoucher(voucherObj);
-
-			if (!value) {
-				addActionMessage(getText("Vouchers Cancelled Failure"));
-				continue;
-			}
+			// Need to do this change as configurable
+			/*
+			 * final boolean value =
+			 * cancelBillAndVoucher.canCancelVoucher(voucherObj);
+			 * 
+			 * if (!value) { addActionMessage(getText(
+			 * "Vouchers Cancelled Failure")); continue; }
+			 */
 			voucherId = voucherObj.getId().toString();
 			switch (voucherObj.getType()) {
 
@@ -517,22 +520,22 @@ public class CancelVoucherAction extends BaseFormAction {
 
 	@Override
 	public void validate() {
-		if(voucherHeader.getVoucherNumber() == null || voucherHeader.getVoucherNumber().isEmpty()){
-		if (fromDate == null)
-			addFieldError("From Date", getText("Please Enter From Date"));
-		if (toDate == null)
-			addFieldError("To Date", getText("Please Enter To Date"));
-		if (voucherHeader.getType() == null || voucherHeader.getType().equals("-1"))
-			addFieldError("Voucher Type", getText("Please Select Voucher Type"));
-		if (voucherHeader.getName() == null || voucherHeader.getName().equals("-1")
-				|| voucherHeader.getName().equals("0"))
-			addFieldError("Voucher Type", getText("Please Select Voucher Name"));
-		int checKDate = 0;
-		if (fromDate != null && toDate != null)
-			checKDate = fromDate.compareTo(toDate);
-		if (checKDate > 0)
-			addFieldError("To Date", getText("Please Enter To Date Greater than From Date"));
-		checkMandatoryField("fundId", "fund", voucherHeader.getFundId(), "voucher.fund.mandatory");
+		if (voucherHeader.getVoucherNumber() == null || voucherHeader.getVoucherNumber().isEmpty()) {
+			if (fromDate == null)
+				addFieldError("From Date", getText("Please Enter From Date"));
+			if (toDate == null)
+				addFieldError("To Date", getText("Please Enter To Date"));
+			if (voucherHeader.getType() == null || voucherHeader.getType().equals("-1"))
+				addFieldError("Voucher Type", getText("Please Select Voucher Type"));
+			if (voucherHeader.getName() == null || voucherHeader.getName().equals("-1")
+					|| voucherHeader.getName().equals("0"))
+				addFieldError("Voucher Type", getText("Please Select Voucher Name"));
+			int checKDate = 0;
+			if (fromDate != null && toDate != null)
+				checKDate = fromDate.compareTo(toDate);
+			if (checKDate > 0)
+				addFieldError("To Date", getText("Please Enter To Date Greater than From Date"));
+			checkMandatoryField("fundId", "fund", voucherHeader.getFundId(), "voucher.fund.mandatory");
 		}
 		checkMandatoryField("vouchermis.departmentcode", "department",
 				voucherHeader.getVouchermis().getDepartmentcode(), "voucher.department.mandatory");

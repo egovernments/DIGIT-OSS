@@ -115,7 +115,7 @@
 				bootbox.alert("Please select Bank Name");
 				return false;
 			}
-			document.bankForm.action = '/EGF/masters/bank-execute.action';
+			document.bankForm.action = '/services/EGF/masters/bank-execute.action';
 			document.bankForm.submit();
 		}
 	</script>

@@ -48,8 +48,8 @@
 
 package org.egov.egf.web.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.List;
+
 import org.egov.commons.dao.FunctionDAO;
 import org.egov.commons.dao.FundHibernateDAO;
 import org.egov.egf.web.adaptor.BudgetUploadReportJsonAdaptor;
@@ -70,7 +70,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/budgetuploadreport")
@@ -108,23 +109,17 @@ public class BudgetUploadReportController {
 	}
 
 	@RequestMapping(value = "/ajaxsearch", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-	public @ResponseBody String ajaxsearch(Model model,
-			@ModelAttribute final BudgetUploadReport budgetUploadReport) {
-		List<BudgetUploadReport> searchResultList = budgetUploadReportService
-				.search(budgetUploadReport);
-		String result = new StringBuilder("{ \"data\":")
-				.append(toSearchResultJson(searchResultList)).append("}")
+	public @ResponseBody String ajaxsearch(Model model, @ModelAttribute final BudgetUploadReport budgetUploadReport) {
+		List<BudgetUploadReport> searchResultList = budgetUploadReportService.search(budgetUploadReport);
+		String result = new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
 				.toString();
 		return result;
 	}
 
 	@RequestMapping(value = "/ajax/getReferenceBudget", method = RequestMethod.GET)
-	public @ResponseBody String getReferenceBudget(
-			@RequestParam("budgetId") Long budgetId) {
+	public @ResponseBody String getReferenceBudget(@RequestParam("budgetId") Long budgetId) {
 		if (budgetId != null) {
-			Budget refBudget = budgetService
-					.getReferenceBudgetFor(budgetService.findById(budgetId,
-							false));
+			Budget refBudget = budgetService.getReferenceBudgetFor(budgetService.findById(budgetId, false));
 
 			return refBudget.getName();
 		} else
@@ -133,8 +128,7 @@ public class BudgetUploadReportController {
 
 	public Object toSearchResultJson(final Object object) {
 		final GsonBuilder gsonBuilder = new GsonBuilder();
-		final Gson gson = gsonBuilder.registerTypeAdapter(
-				BudgetUploadReport.class, new BudgetUploadReportJsonAdaptor())
+		final Gson gson = gsonBuilder.registerTypeAdapter(BudgetUploadReport.class, new BudgetUploadReportJsonAdaptor())
 				.create();
 		final String json = gson.toJson(object);
 		return json;

@@ -48,8 +48,11 @@
 
 package org.egov.egf.web.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.Date;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.egov.commons.Relation;
 import org.egov.commons.service.RelationJpaService;
 import org.egov.egf.web.adaptor.RelationJsonAdaptor;
@@ -69,9 +72,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/relation")
@@ -103,8 +105,7 @@ public class RelationController {
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid @ModelAttribute final Relation relation,
-			final BindingResult errors, final Model model,
+	public String create(@Valid @ModelAttribute final Relation relation, final BindingResult errors, final Model model,
 			final RedirectAttributes redirectAttrs) {
 		if (errors.hasErrors()) {
 			prepareNewForm(model);
@@ -113,8 +114,7 @@ public class RelationController {
 		// this code is to handle non jpa object save since it dont have version
 		// once moved bank to jpa remove this
 		if (relation.getBank() != null && relation.getBank().getId() != null)
-			relation.setBank(bankService.findById(relation.getBank().getId(),
-					false));
+			relation.setBank(bankService.findById(relation.getBank().getId(), false));
 		else
 			relation.setBank(null);
 		relation.setCreatedby(securityUtils.getCurrentUser().getId());
@@ -122,8 +122,7 @@ public class RelationController {
 		relation.setModifiedby(securityUtils.getCurrentUser().getId());
 		relation.setLastmodifieddate(new Date());
 		relationJpaService.create(relation);
-		redirectAttrs.addFlashAttribute("message",
-				messageSource.getMessage("msg.relation.success", null, null));
+		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.relation.success", null, null));
 		return "redirect:/relation/result/" + relation.getId();
 	}
 
@@ -136,8 +135,7 @@ public class RelationController {
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid @ModelAttribute final Relation relation,
-			final BindingResult errors, final Model model,
+	public String update(@Valid @ModelAttribute final Relation relation, final BindingResult errors, final Model model,
 			final RedirectAttributes redirectAttrs) {
 		if (errors.hasErrors()) {
 			prepareNewForm(model);
@@ -147,8 +145,7 @@ public class RelationController {
 		relation.setLastmodifieddate(new Date());
 		relationJpaService.update(relation);
 
-		redirectAttrs.addFlashAttribute("message",
-				messageSource.getMessage("msg.relation.success", null, null));
+		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.relation.success", null, null));
 		return "redirect:/relation/result/" + relation.getId();
 	}
 
@@ -177,20 +174,17 @@ public class RelationController {
 	}
 
 	@RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-	public @ResponseBody String ajaxsearch(
-			@PathVariable("mode") final String mode, Model model,
+	public @ResponseBody String ajaxsearch(@PathVariable("mode") final String mode, Model model,
 			@ModelAttribute final Relation relation) {
 		List<Relation> searchResultList = relationJpaService.search(relation);
-		String result = new StringBuilder("{ \"data\":")
-				.append(toSearchResultJson(searchResultList)).append("}")
+		String result = new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
 				.toString();
 		return result;
 	}
 
 	public Object toSearchResultJson(final Object object) {
 		final GsonBuilder gsonBuilder = new GsonBuilder();
-		final Gson gson = gsonBuilder.registerTypeAdapter(Relation.class,
-				new RelationJsonAdaptor()).create();
+		final Gson gson = gsonBuilder.registerTypeAdapter(Relation.class, new RelationJsonAdaptor()).create();
 		final String json = gson.toJson(object);
 		return json;
 	}

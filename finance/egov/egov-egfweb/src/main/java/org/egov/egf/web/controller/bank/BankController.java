@@ -86,7 +86,7 @@ public class BankController {
     @Autowired
     private MessageSource messageSource;
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newForm(final Model model) {
         model.addAttribute(BANK, new Bank());
         return "bank-new";
@@ -106,7 +106,7 @@ public class BankController {
         return "bank-view";
     }
 
-    @RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
+    @RequestMapping(value = "/search/{mode}", method = RequestMethod.POST)
     public String search(@PathVariable("mode") final String mode, final Model model) {
         final Bank bank = new Bank();
         model.addAttribute(BANK, bank);

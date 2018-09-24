@@ -103,7 +103,7 @@
 		}
 		var bankAccId = document.getElementById('bankAccId').value;
 		var finId = document.getElementById('financialYearId').value;
-		window.location = "../masters/accountCheque-manipulateCheques.action?bankAccId="
+		window.location = "/services/EGF/masters/accountCheque-manipulateCheques.action?bankAccId="
 				+ bankAccId+"&finId="+finId;
 
 	}
@@ -113,7 +113,7 @@
 		}
 		var bankAccId = document.getElementById('bankAccId').value;
 		var finId = document.getElementById('financialYearId').value;
-		window.location = "../masters/accountCheque-viewCheques.action?bankAccId="
+		window.location = "/services/masters/accountCheque-viewCheques.action?bankAccId="
 				+ bankAccId+"&finId="+finId;
 
 	}

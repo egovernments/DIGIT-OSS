@@ -90,266 +90,256 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/transactionsummary")
 public class TransactionSummaryController {
 
-    private final static String TRANSACTIONSUMMARY_NEW = "transactionsummary-new";
-    private final static String TRANSACTIONSUMMARY_RESULT = "transactionsummary-result";
-    private final static String TRANSACTIONSUMMARY_EDIT = "transactionsummary-edit";
-    private final static String TRANSACTIONSUMMARY_VIEW = "transactionsummary-view";
-    @Autowired
-    private TransactionSummaryService transactionSummaryService;
-    @Autowired
-    private AccountdetailtypeService accountdetailtypeService;
-    @Autowired
-    private FinancialYearDAO financialYearDAO;
-    @Autowired
-    private FundHibernateDAO fundHibernateDAO;
-    @Autowired
-    private ChartOfAccountsDAO chartOfAccountsDAO;
-    @Autowired
-    private MicroserviceUtils microserviceUtils;
+	private final static String TRANSACTIONSUMMARY_NEW = "transactionsummary-new";
+	private final static String TRANSACTIONSUMMARY_RESULT = "transactionsummary-result";
+	private final static String TRANSACTIONSUMMARY_EDIT = "transactionsummary-edit";
+	private final static String TRANSACTIONSUMMARY_VIEW = "transactionsummary-view";
+	@Autowired
+	private TransactionSummaryService transactionSummaryService;
+	@Autowired
+	private AccountdetailtypeService accountdetailtypeService;
+	@Autowired
+	private FinancialYearDAO financialYearDAO;
+	@Autowired
+	private FundHibernateDAO fundHibernateDAO;
+	@Autowired
+	private ChartOfAccountsDAO chartOfAccountsDAO;
+	@Autowired
+	private MicroserviceUtils microserviceUtils;
 
-    @Autowired
-    @Qualifier("persistenceService")
-    private PersistenceService persistenceService;
+	@Autowired
+	@Qualifier("persistenceService")
+	private PersistenceService persistenceService;
 
-    @Autowired
-    private FunctionDAO functionDAO;
+	@Autowired
+	private FunctionDAO functionDAO;
 
-    private void prepareNewForm(Model model) {
-        model.addAttribute("accountdetailtypes", accountdetailtypeService.findAll());
-        model.addAttribute("cFinancialYears", financialYearDAO.getAllActivePostingFinancialYear());
-        model.addAttribute("funds", fundHibernateDAO.findAllActiveFunds());
-        model.addAttribute("cChartOfAccountss",
-                chartOfAccountsDAO.findAll());
-        model.addAttribute("departments", microserviceUtils.getDepartments());
-        model.addAttribute("cFunctions", functionDAO.getAllActiveFunctions());
-    }
+	private void prepareNewForm(Model model) {
+		model.addAttribute("accountdetailtypes", accountdetailtypeService.findAll());
+		model.addAttribute("cFinancialYears", financialYearDAO.getAllActivePostingFinancialYear());
+		model.addAttribute("funds", fundHibernateDAO.findAllActiveFunds());
+		model.addAttribute("cChartOfAccountss", chartOfAccountsDAO.findAll());
+		model.addAttribute("departments", microserviceUtils.getDepartments());
+		model.addAttribute("cFunctions", functionDAO.getAllActiveFunctions());
+	}
 
-    @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public String newForm(final Model model) {
-        prepareNewForm(model);
-        model.addAttribute("transactionSummaryDto", new TransactionSummaryDto());
-        return TRANSACTIONSUMMARY_NEW;
-    }
+	@RequestMapping(value = "/new", method = RequestMethod.POST)
+	public String newForm(final Model model) {
+		prepareNewForm(model);
+		model.addAttribute("transactionSummaryDto", new TransactionSummaryDto());
+		return TRANSACTIONSUMMARY_NEW;
+	}
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public @ResponseBody ResponseEntity<?> create(
-            @ModelAttribute final TransactionSummaryDto transactionSummaryDto,
-            final BindingResult errors, final Model model,
-            final RedirectAttributes redirectAttrs, HttpServletResponse response) {
-        List<TransactionSummary> transactionSummaries = new ArrayList<TransactionSummary>();
-        transactionSummaries = removeEmptyRows(transactionSummaryDto.getTransactionSummaryList());
-        try {
-            for (TransactionSummary ts : transactionSummaries) {
-                TransactionSummary transactionSummary = null;
-                if (ts.getId() != null) {
-                    transactionSummary = transactionSummaryService.findOne(ts.getId());
-                } else {
-                    transactionSummary = new TransactionSummary();
-                }
-                if (ts.getId() == null && ts.getGlcodeid() == null) {
-                    // Ignore ts and move to next
-                } else if (ts.getId() != null && ts.getGlcodeid() == null) {
-                    // delete this transaction
-                    transactionSummaryService.delete(transactionSummary);
-                } else {
-                    transactionSummary.setDepartmentCode(transactionSummaryDto.getDepartmentcode());
-                    transactionSummary.setDivisionid(transactionSummaryDto.getDivisionid());
-                    transactionSummary.setFinancialyear(financialYearDAO.getFinancialYearById(transactionSummaryDto
-                            .getFinancialyear().getId()));
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<?> create(@ModelAttribute final TransactionSummaryDto transactionSummaryDto,
+			final BindingResult errors, final Model model, final RedirectAttributes redirectAttrs,
+			HttpServletResponse response) {
+		List<TransactionSummary> transactionSummaries = new ArrayList<TransactionSummary>();
+		transactionSummaries = removeEmptyRows(transactionSummaryDto.getTransactionSummaryList());
+		try {
+			for (TransactionSummary ts : transactionSummaries) {
+				TransactionSummary transactionSummary = null;
+				if (ts.getId() != null) {
+					transactionSummary = transactionSummaryService.findOne(ts.getId());
+				} else {
+					transactionSummary = new TransactionSummary();
+				}
+				if (ts.getId() == null && ts.getGlcodeid() == null) {
+					// Ignore ts and move to next
+				} else if (ts.getId() != null && ts.getGlcodeid() == null) {
+					// delete this transaction
+					transactionSummaryService.delete(transactionSummary);
+				} else {
+					transactionSummary.setDepartmentCode(transactionSummaryDto.getDepartmentcode());
+					transactionSummary.setDivisionid(transactionSummaryDto.getDivisionid());
+					transactionSummary.setFinancialyear(
+							financialYearDAO.getFinancialYearById(transactionSummaryDto.getFinancialyear().getId()));
 
-                    transactionSummary.setFunctionid((CFunction) persistenceService.find("from CFunction where id=?",
-                            transactionSummaryDto.getFunctionid().getId()));
-                    transactionSummary.setFund((Fund) fundHibernateDAO.fundById(transactionSummaryDto.getFund().getId(), false));
+					transactionSummary.setFunctionid((CFunction) persistenceService.find("from CFunction where id=?",
+							transactionSummaryDto.getFunctionid().getId()));
+					transactionSummary
+							.setFund((Fund) fundHibernateDAO.fundById(transactionSummaryDto.getFund().getId(), false));
 
-                    transactionSummary.setAccountdetailkey(ts.getAccountdetailkey());
-                    if (ts.getAccountdetailtype() != null && ts.getAccountdetailtype().getId() != null)
-                        transactionSummary.setAccountdetailtype(accountdetailtypeService.findOne(ts.getAccountdetailtype()
-                                .getId()));
-                    else
-                        transactionSummary.setAccountdetailtype(null);
+					transactionSummary.setAccountdetailkey(ts.getAccountdetailkey());
+					if (ts.getAccountdetailtype() != null && ts.getAccountdetailtype().getId() != null)
+						transactionSummary.setAccountdetailtype(
+								accountdetailtypeService.findOne(ts.getAccountdetailtype().getId()));
+					else
+						transactionSummary.setAccountdetailtype(null);
 
-                    transactionSummary.setGlcodeid((CChartOfAccounts) chartOfAccountsDAO.getCChartOfAccountsByGlCode(ts
-                            .getGlcodeDetail()));
-                    transactionSummary.setNarration(ts.getNarration());
-                    transactionSummary.setOpeningcreditbalance(ts.getOpeningcreditbalance() == null ? BigDecimal.ZERO : ts
-                            .getOpeningcreditbalance());
-                    transactionSummary.setOpeningdebitbalance(ts.getOpeningdebitbalance() == null ? BigDecimal.ZERO : ts
-                            .getOpeningdebitbalance());
-                    transactionSummary = transactionSummaryService.create(transactionSummary);
-                }
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return new ResponseEntity<String>(HttpStatus.OK);
-    }
+					transactionSummary.setGlcodeid(
+							(CChartOfAccounts) chartOfAccountsDAO.getCChartOfAccountsByGlCode(ts.getGlcodeDetail()));
+					transactionSummary.setNarration(ts.getNarration());
+					transactionSummary.setOpeningcreditbalance(
+							ts.getOpeningcreditbalance() == null ? BigDecimal.ZERO : ts.getOpeningcreditbalance());
+					transactionSummary.setOpeningdebitbalance(
+							ts.getOpeningdebitbalance() == null ? BigDecimal.ZERO : ts.getOpeningdebitbalance());
+					transactionSummary = transactionSummaryService.create(transactionSummary);
+				}
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
 
-    private List<TransactionSummary> removeEmptyRows(List<TransactionSummary> transactionSummaries) {
+	private List<TransactionSummary> removeEmptyRows(List<TransactionSummary> transactionSummaries) {
 
-        List<TransactionSummary> tempTransactionSummaries = new ArrayList<TransactionSummary>();
-        for (TransactionSummary transactionSummary : transactionSummaries)
-            if (transactionSummaries.size() != (tempTransactionSummaries.size() + 1))
-                tempTransactionSummaries.add(transactionSummary);
+		List<TransactionSummary> tempTransactionSummaries = new ArrayList<TransactionSummary>();
+		for (TransactionSummary transactionSummary : transactionSummaries)
+			if (transactionSummaries.size() != (tempTransactionSummaries.size() + 1))
+				tempTransactionSummaries.add(transactionSummary);
 
-        /**
-         * Checking last row : if glcode is not there then delete row . else keep the row
-         **/
-        if (transactionSummaries.get(transactionSummaries.size() - 1).getGlcodeDetail() != null
-                && transactionSummaries.get(transactionSummaries.size() - 1).getGlcodeDetail() != "")
-            tempTransactionSummaries.add(transactionSummaries.get(transactionSummaries.size() - 1));
-        return tempTransactionSummaries;
-    }
+		/**
+		 * Checking last row : if glcode is not there then delete row . else
+		 * keep the row
+		 **/
+		if (transactionSummaries.get(transactionSummaries.size() - 1).getGlcodeDetail() != null
+				&& transactionSummaries.get(transactionSummaries.size() - 1).getGlcodeDetail() != "")
+			tempTransactionSummaries.add(transactionSummaries.get(transactionSummaries.size() - 1));
+		return tempTransactionSummaries;
+	}
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String edit(@PathVariable("id") final Long id, Model model) {
-        TransactionSummary transactionSummary = transactionSummaryService
-                .findOne(id);
-        prepareNewForm(model);
-        model.addAttribute("transactionSummary", transactionSummary);
-        return TRANSACTIONSUMMARY_EDIT;
-    }
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	public String edit(@PathVariable("id") final Long id, Model model) {
+		TransactionSummary transactionSummary = transactionSummaryService.findOne(id);
+		prepareNewForm(model);
+		model.addAttribute("transactionSummary", transactionSummary);
+		return TRANSACTIONSUMMARY_EDIT;
+	}
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(
-            @ModelAttribute final TransactionSummary transactionSummary,
-            final BindingResult errors, final Model model,
-            final RedirectAttributes redirectAttrs) {
-        if (errors.hasErrors()) {
-            prepareNewForm(model);
-            return TRANSACTIONSUMMARY_EDIT;
-        }
-        transactionSummaryService.update(transactionSummary);
-        redirectAttrs.addFlashAttribute("message",
-                "msg.transactionSummary.success");
-        return "redirect:/transactionsummary/result/"
-                + transactionSummary.getId();
-    }
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String update(@ModelAttribute final TransactionSummary transactionSummary, final BindingResult errors,
+			final Model model, final RedirectAttributes redirectAttrs) {
+		if (errors.hasErrors()) {
+			prepareNewForm(model);
+			return TRANSACTIONSUMMARY_EDIT;
+		}
+		transactionSummaryService.update(transactionSummary);
+		redirectAttrs.addFlashAttribute("message", "msg.transactionSummary.success");
+		return "redirect:/transactionsummary/result/" + transactionSummary.getId();
+	}
 
-    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
-    public String view(@PathVariable("id") final Long id, Model model) {
-        TransactionSummary transactionSummary = transactionSummaryService
-                .findOne(id);
-        prepareNewForm(model);
-        model.addAttribute("transactionSummary", transactionSummary);
-        return TRANSACTIONSUMMARY_VIEW;
-    }
+	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+	public String view(@PathVariable("id") final Long id, Model model) {
+		TransactionSummary transactionSummary = transactionSummaryService.findOne(id);
+		prepareNewForm(model);
+		model.addAttribute("transactionSummary", transactionSummary);
+		return TRANSACTIONSUMMARY_VIEW;
+	}
 
-    @RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
-    public String result(@PathVariable("id") final Long id, Model model) {
-        TransactionSummary transactionSummary = transactionSummaryService
-                .findOne(id);
-        model.addAttribute("transactionSummary", transactionSummary);
-        return TRANSACTIONSUMMARY_RESULT;
-    }
+	@RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
+	public String result(@PathVariable("id") final Long id, Model model) {
+		TransactionSummary transactionSummary = transactionSummaryService.findOne(id);
+		model.addAttribute("transactionSummary", transactionSummary);
+		return TRANSACTIONSUMMARY_RESULT;
+	}
 
-    @RequestMapping(value = "/ajax/getMajorHeads", method = RequestMethod.GET)
-    public @ResponseBody List<CChartOfAccounts> getMajorHeads(
-            @RequestParam("type") Character type) {
-        List<CChartOfAccounts> accounts = chartOfAccountsDAO.findByType(type);
-        return accounts;
-    }
+	@RequestMapping(value = "/ajax/getMajorHeads", method = RequestMethod.GET)
+	public @ResponseBody List<CChartOfAccounts> getMajorHeads(@RequestParam("type") Character type) {
+		List<CChartOfAccounts> accounts = chartOfAccountsDAO.findByType(type);
+		return accounts;
+	}
 
-    @RequestMapping(value = "/ajax/getMinorHeads", method = RequestMethod.GET)
-    public @ResponseBody List<CChartOfAccounts> getMinorHeads(@RequestParam("majorCode") String majorCode,
-            @RequestParam("classification") Long classification) {
-        List<CChartOfAccounts> accounts = chartOfAccountsDAO
-                .findByMajorCodeAndClassification(majorCode, classification);
-        return accounts;
-    }
+	@RequestMapping(value = "/ajax/getMinorHeads", method = RequestMethod.GET)
+	public @ResponseBody List<CChartOfAccounts> getMinorHeads(@RequestParam("majorCode") String majorCode,
+			@RequestParam("classification") Long classification) {
+		List<CChartOfAccounts> accounts = chartOfAccountsDAO.findByMajorCodeAndClassification(majorCode,
+				classification);
+		return accounts;
+	}
 
-    @RequestMapping(value = "/ajax/getAccounts", method = RequestMethod.GET)
-    public @ResponseBody List<CChartOfAccounts> getAccounts(
-            @RequestParam("term") String glcode, @RequestParam("majorCode") String majorCode,
-            @RequestParam("classification") Long classification) {
-        List<CChartOfAccounts> accounts = null;
-        if (majorCode != null) {
-            accounts = chartOfAccountsDAO
-                    .findByGlcodeLikeIgnoreCaseAndClassificationAndMajorCode(glcode + "%", classification, majorCode);
-        } else {
-            accounts = chartOfAccountsDAO
-                    .findByGlcodeLikeIgnoreCaseAndClassification(glcode + "%", classification);
-        }
+	@RequestMapping(value = "/ajax/getAccounts", method = RequestMethod.GET)
+	public @ResponseBody List<CChartOfAccounts> getAccounts(@RequestParam("term") String glcode,
+			@RequestParam("majorCode") String majorCode, @RequestParam("classification") Long classification) {
+		List<CChartOfAccounts> accounts = null;
+		if (majorCode != null) {
+			accounts = chartOfAccountsDAO.findByGlcodeLikeIgnoreCaseAndClassificationAndMajorCode(glcode + "%",
+					classification, majorCode);
+		} else {
+			accounts = chartOfAccountsDAO.findByGlcodeLikeIgnoreCaseAndClassification(glcode + "%", classification);
+		}
 
-        return accounts;
-    }
+		return accounts;
+	}
 
-    @RequestMapping(value = "/ajax/getAccountDetailTypes", method = RequestMethod.GET)
-    public @ResponseBody List<Accountdetailtype> getAccountDetailTypes(@RequestParam("id") Long id) {
-        CChartOfAccounts account = (CChartOfAccounts) chartOfAccountsDAO.findById(id.intValue(), false);
-        List<Accountdetailtype> detailTypes = new ArrayList<Accountdetailtype>();
-        for (CChartOfAccountDetail detail : account.getChartOfAccountDetails()) {
-            detailTypes.add(detail.getDetailTypeId());
-        }
-        return detailTypes;
-    }
+	@RequestMapping(value = "/ajax/getAccountDetailTypes", method = RequestMethod.GET)
+	public @ResponseBody List<Accountdetailtype> getAccountDetailTypes(@RequestParam("id") Long id) {
+		CChartOfAccounts account = (CChartOfAccounts) chartOfAccountsDAO.findById(id.intValue(), false);
+		List<Accountdetailtype> detailTypes = new ArrayList<Accountdetailtype>();
+		for (CChartOfAccountDetail detail : account.getChartOfAccountDetails()) {
+			detailTypes.add(detail.getDetailTypeId());
+		}
+		return detailTypes;
+	}
 
-    @RequestMapping(value = "/ajax/searchTransactionSummariesForNonSubledger", method = RequestMethod.GET)
-    public @ResponseBody List<Map<String, String>> searchTransactionSummariesForNonSubledger(
-            @RequestParam("finYear") Long finYear, @RequestParam("fund") Long fund,
-            @RequestParam("functn") Long functn, @RequestParam("department") String department,
-            @RequestParam("glcodeId") Long glcodeId) {
-        List<Map<String, String>> result = new ArrayList<Map<String, String>>();
-        Map<String, String> amountsMap = new HashMap<String, String>();
+	@RequestMapping(value = "/ajax/searchTransactionSummariesForNonSubledger", method = RequestMethod.GET)
+	public @ResponseBody List<Map<String, String>> searchTransactionSummariesForNonSubledger(
+			@RequestParam("finYear") Long finYear, @RequestParam("fund") Long fund, @RequestParam("functn") Long functn,
+			@RequestParam("department") String department, @RequestParam("glcodeId") Long glcodeId) {
+		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		Map<String, String> amountsMap = new HashMap<String, String>();
 
-        List<TransactionSummary> transactionSummaries = transactionSummaryService
-                .searchTransactionsForNonSubledger(finYear, fund, functn, department, glcodeId);
-        for (TransactionSummary ts : transactionSummaries) {
-            amountsMap.put("tsid", ts.getId().toString());
-            amountsMap.put("openingdebitbalance", ts.getOpeningdebitbalance().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
-            amountsMap.put("openingcreditbalance",
-                    ts.getOpeningcreditbalance().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
-            amountsMap.put("narration", ts.getNarration());
-            result.add(amountsMap);
+		List<TransactionSummary> transactionSummaries = transactionSummaryService
+				.searchTransactionsForNonSubledger(finYear, fund, functn, department, glcodeId);
+		for (TransactionSummary ts : transactionSummaries) {
+			amountsMap.put("tsid", ts.getId().toString());
+			amountsMap.put("openingdebitbalance",
+					ts.getOpeningdebitbalance().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
+			amountsMap.put("openingcreditbalance",
+					ts.getOpeningcreditbalance().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
+			amountsMap.put("narration", ts.getNarration());
+			result.add(amountsMap);
 
-        }
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    @RequestMapping(value = "/ajax/searchTransactionSummariesForSubledger", method = RequestMethod.GET)
-    public @ResponseBody List<Map<String, String>> searchTransactionSummariesForSubledger(
-            @RequestParam("finYear") Long finYear, @RequestParam("fund") Long fund,
-            @RequestParam("functn") Long functn, @RequestParam("department") String department,
-            @RequestParam("glcodeId") Long glcodeId, @RequestParam("accountDetailTypeId") Integer accountDetailTypeId,
-            @RequestParam("accountDetailKeyId") Integer accountDetailKeyId) {
-        List<Map<String, String>> result = new ArrayList<Map<String, String>>();
-        Map<String, String> amountsMap = new HashMap<String, String>();
+	@RequestMapping(value = "/ajax/searchTransactionSummariesForSubledger", method = RequestMethod.GET)
+	public @ResponseBody List<Map<String, String>> searchTransactionSummariesForSubledger(
+			@RequestParam("finYear") Long finYear, @RequestParam("fund") Long fund, @RequestParam("functn") Long functn,
+			@RequestParam("department") String department, @RequestParam("glcodeId") Long glcodeId,
+			@RequestParam("accountDetailTypeId") Integer accountDetailTypeId,
+			@RequestParam("accountDetailKeyId") Integer accountDetailKeyId) {
+		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		Map<String, String> amountsMap = new HashMap<String, String>();
 
-        List<TransactionSummary> transactionSummaries = transactionSummaryService
-                .searchTransactionsForSubledger(finYear, fund, functn, department, glcodeId, accountDetailTypeId,
-                        accountDetailKeyId);
-        for (TransactionSummary ts : transactionSummaries) {
-            amountsMap.put("tsid", ts.getId().toString());
-            amountsMap.put("openingdebitbalance", ts.getOpeningdebitbalance().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
-            amountsMap.put("openingcreditbalance",
-                    ts.getOpeningcreditbalance().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
-            amountsMap.put("narration", ts.getNarration());
-            result.add(amountsMap);
+		List<TransactionSummary> transactionSummaries = transactionSummaryService.searchTransactionsForSubledger(
+				finYear, fund, functn, department, glcodeId, accountDetailTypeId, accountDetailKeyId);
+		for (TransactionSummary ts : transactionSummaries) {
+			amountsMap.put("tsid", ts.getId().toString());
+			amountsMap.put("openingdebitbalance",
+					ts.getOpeningdebitbalance().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
+			amountsMap.put("openingcreditbalance",
+					ts.getOpeningcreditbalance().setScale(2, BigDecimal.ROUND_HALF_EVEN).toString());
+			amountsMap.put("narration", ts.getNarration());
+			result.add(amountsMap);
 
-        }
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    @RequestMapping(value = "/ajax/deleteTransaction", method = RequestMethod.GET)
-    public @ResponseBody String deleteTransaction(@RequestParam("id") Long id) {
+	@RequestMapping(value = "/ajax/deleteTransaction", method = RequestMethod.GET)
+	public @ResponseBody String deleteTransaction(@RequestParam("id") Long id) {
 
-        if (id != null) {
-            TransactionSummary ts = transactionSummaryService.findOne(id);
-            transactionSummaryService.delete(ts);
-        }
+		if (id != null) {
+			TransactionSummary ts = transactionSummaryService.findOne(id);
+			transactionSummaryService.delete(ts);
+		}
 
-        return "success";
-    }
+		return "success";
+	}
 
-    @RequestMapping(value = "/ajax/getTransactionSummary", method = RequestMethod.GET)
-    public @ResponseBody TransactionSummary getTransactionSummary(@RequestParam("glcodeid") Long glcodeId,
-            @RequestParam("accountdetailtypeid") Long accountDetailTypeId,
-            @RequestParam("accountdetailkey") Integer accountDetailKey) {
-        TransactionSummary ts = null;
-        if (glcodeId != null && accountDetailTypeId != null && accountDetailKey != null) {
-            ts = transactionSummaryService.getTransactionSummary(glcodeId, accountDetailTypeId, accountDetailKey);
-        }
-        return ts;
-    }
+	@RequestMapping(value = "/ajax/getTransactionSummary", method = RequestMethod.GET)
+	public @ResponseBody TransactionSummary getTransactionSummary(@RequestParam("glcodeid") Long glcodeId,
+			@RequestParam("accountdetailtypeid") Long accountDetailTypeId,
+			@RequestParam("accountdetailkey") Integer accountDetailKey) {
+		TransactionSummary ts = null;
+		if (glcodeId != null && accountDetailTypeId != null && accountDetailKey != null) {
+			ts = transactionSummaryService.getTransactionSummary(glcodeId, accountDetailTypeId, accountDetailKey);
+		}
+		return ts;
+	}
 }

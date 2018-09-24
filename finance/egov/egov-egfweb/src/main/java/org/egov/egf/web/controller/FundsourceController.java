@@ -47,8 +47,11 @@
  */
 package org.egov.egf.web.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.List;
+import java.util.Locale;
+
+import javax.validation.Valid;
+
 import org.egov.commons.Fundsource;
 import org.egov.commons.service.FundsourceService;
 import org.egov.egf.web.adaptor.FundsourceJsonAdaptor;
@@ -65,105 +68,104 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.util.List;
-import java.util.Locale;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/fundsource")
 public class FundsourceController {
-    private final static String FUNDSOURCE_NEW = "fundsource-new";
-    private final static String FUNDSOURCE_RESULT = "fundsource-result";
-    private final static String FUNDSOURCE_EDIT = "fundsource-edit";
-    private final static String FUNDSOURCE_VIEW = "fundsource-view";
-    private final static String FUNDSOURCE_SEARCH = "fundsource-search";
-    @Autowired
-    private FundsourceService fundsourceService;
-    @Autowired
-    private MessageSource messageSource;
+	private final static String FUNDSOURCE_NEW = "fundsource-new";
+	private final static String FUNDSOURCE_RESULT = "fundsource-result";
+	private final static String FUNDSOURCE_EDIT = "fundsource-edit";
+	private final static String FUNDSOURCE_VIEW = "fundsource-view";
+	private final static String FUNDSOURCE_SEARCH = "fundsource-search";
+	@Autowired
+	private FundsourceService fundsourceService;
+	@Autowired
+	private MessageSource messageSource;
 
-    private void prepareNewForm(final Model model) {
-        model.addAttribute("fundsources", fundsourceService.findAll());
-    }
+	private void prepareNewForm(final Model model) {
+		model.addAttribute("fundsources", fundsourceService.findAll());
+	}
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String newForm(final Model model) {
-        prepareNewForm(model);
-        model.addAttribute("fundsource", new Fundsource());
-        return FUNDSOURCE_NEW;
-    }
+	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	public String newForm(final Model model) {
+		prepareNewForm(model);
+		model.addAttribute("fundsource", new Fundsource());
+		return FUNDSOURCE_NEW;
+	}
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(@Valid @ModelAttribute final Fundsource fundsource, final BindingResult errors,
-            final Model model, final RedirectAttributes redirectAttrs) {
-        if (errors.hasErrors()) {
-            prepareNewForm(model);
-            return FUNDSOURCE_NEW;
-        }
-        fundsourceService.create(fundsource);
-        redirectAttrs.addFlashAttribute("message",
-                messageSource.getMessage("msg.fundsource.success", null, Locale.ENGLISH));
-        return "redirect:/fundsource/result/" + fundsource.getId();
-    }
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public String create(@Valid @ModelAttribute final Fundsource fundsource, final BindingResult errors,
+			final Model model, final RedirectAttributes redirectAttrs) {
+		if (errors.hasErrors()) {
+			prepareNewForm(model);
+			return FUNDSOURCE_NEW;
+		}
+		fundsourceService.create(fundsource);
+		redirectAttrs.addFlashAttribute("message",
+				messageSource.getMessage("msg.fundsource.success", null, Locale.ENGLISH));
+		return "redirect:/fundsource/result/" + fundsource.getId();
+	}
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String edit(@PathVariable("id") final Long id, final Model model) {
-        final Fundsource fundsource = fundsourceService.findOne(id);
-        prepareNewForm(model);
-        model.addAttribute("fundsource", fundsource);
-        return FUNDSOURCE_EDIT;
-    }
+	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+	public String edit(@PathVariable("id") final Long id, final Model model) {
+		final Fundsource fundsource = fundsourceService.findOne(id);
+		prepareNewForm(model);
+		model.addAttribute("fundsource", fundsource);
+		return FUNDSOURCE_EDIT;
+	}
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(@Valid @ModelAttribute final Fundsource fundsource, final BindingResult errors,
-            final Model model, final RedirectAttributes redirectAttrs) {
-        if (errors.hasErrors()) {
-            prepareNewForm(model);
-            return FUNDSOURCE_EDIT;
-        }
-        fundsourceService.update(fundsource);
-        redirectAttrs.addFlashAttribute("message",
-                messageSource.getMessage("msg.fundsource.success", null, Locale.ENGLISH));
-        return "redirect:/fundsource/result/" + fundsource.getId();
-    }
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String update(@Valid @ModelAttribute final Fundsource fundsource, final BindingResult errors,
+			final Model model, final RedirectAttributes redirectAttrs) {
+		if (errors.hasErrors()) {
+			prepareNewForm(model);
+			return FUNDSOURCE_EDIT;
+		}
+		fundsourceService.update(fundsource);
+		redirectAttrs.addFlashAttribute("message",
+				messageSource.getMessage("msg.fundsource.success", null, Locale.ENGLISH));
+		return "redirect:/fundsource/result/" + fundsource.getId();
+	}
 
-    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
-    public String view(@PathVariable("id") final Long id, final Model model) {
-        final Fundsource fundsource = fundsourceService.findOne(id);
-        prepareNewForm(model);
-        model.addAttribute("fundsource", fundsource);
-        return FUNDSOURCE_VIEW;
-    }
+	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+	public String view(@PathVariable("id") final Long id, final Model model) {
+		final Fundsource fundsource = fundsourceService.findOne(id);
+		prepareNewForm(model);
+		model.addAttribute("fundsource", fundsource);
+		return FUNDSOURCE_VIEW;
+	}
 
-    @RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
-    public String result(@PathVariable("id") final Long id, final Model model) {
-        final Fundsource fundsource = fundsourceService.findOne(id);
-        model.addAttribute("fundsource", fundsource);
-        return FUNDSOURCE_RESULT;
-    }
+	@RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
+	public String result(@PathVariable("id") final Long id, final Model model) {
+		final Fundsource fundsource = fundsourceService.findOne(id);
+		model.addAttribute("fundsource", fundsource);
+		return FUNDSOURCE_RESULT;
+	}
 
-    @RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
-    public String search(@PathVariable("mode") final String mode, final Model model) {
-        final Fundsource fundsource = new Fundsource();
-        prepareNewForm(model);
-        model.addAttribute("fundsource", fundsource);
-        return FUNDSOURCE_SEARCH;
+	@RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
+	public String search(@PathVariable("mode") final String mode, final Model model) {
+		final Fundsource fundsource = new Fundsource();
+		prepareNewForm(model);
+		model.addAttribute("fundsource", fundsource);
+		return FUNDSOURCE_SEARCH;
 
-    }
+	}
 
-    @RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-    public @ResponseBody String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
-            @ModelAttribute final Fundsource fundsource) {
-        final List<Fundsource> searchResultList = fundsourceService.search(fundsource);
-        final String result = new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
-                .toString();
-        return result;
-    }
+	@RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+	public @ResponseBody String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
+			@ModelAttribute final Fundsource fundsource) {
+		final List<Fundsource> searchResultList = fundsourceService.search(fundsource);
+		final String result = new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
+				.toString();
+		return result;
+	}
 
-    public Object toSearchResultJson(final Object object) {
-        final GsonBuilder gsonBuilder = new GsonBuilder();
-        final Gson gson = gsonBuilder.registerTypeAdapter(Fundsource.class, new FundsourceJsonAdaptor()).create();
-        final String json = gson.toJson(object);
-        return json;
-    }
+	public Object toSearchResultJson(final Object object) {
+		final GsonBuilder gsonBuilder = new GsonBuilder();
+		final Gson gson = gsonBuilder.registerTypeAdapter(Fundsource.class, new FundsourceJsonAdaptor()).create();
+		final String json = gson.toJson(object);
+		return json;
+	}
 }

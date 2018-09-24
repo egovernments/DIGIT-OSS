@@ -48,8 +48,10 @@
 
 package org.egov.egf.web.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.List;
+
+import javax.validation.Valid;
+
 import org.egov.commons.CFunction;
 import org.egov.commons.service.FunctionService;
 import org.egov.egf.web.adaptor.FunctionJsonAdaptor;
@@ -67,8 +69,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/function")
@@ -91,7 +93,7 @@ public class FunctionController {
 		model.addAttribute("functions", functionService.findAllIsNotLeafTrue());
 	}
 
-	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	@RequestMapping(value = "/new", method = RequestMethod.POST)
 	public String newForm(final Model model) {
 		prepareNewForm(model);
 		model.addAttribute("CFunction", new CFunction());
@@ -158,7 +160,7 @@ public class FunctionController {
 		return FUNCTION_RESULT;
 	}
 
-	@RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
+	@RequestMapping(value = "/search/{mode}", method = RequestMethod.POST)
 	public String search(@PathVariable("mode") final String mode, Model model) {
 		CFunction function = new CFunction();
 		prepareNewForm(model);

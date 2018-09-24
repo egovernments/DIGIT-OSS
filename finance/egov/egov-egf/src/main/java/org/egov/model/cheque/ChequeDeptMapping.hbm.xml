@@ -63,10 +63,10 @@
 				<param name="sequence_name">SEQ_CHEQUE_DEPT_MAPPING</param>
 			</generator>
 		</id>
-		
-        <many-to-one name="allotedTo" class="org.egov.infra.admin.master.entity.Department">
-            <column name="ALLOTEDTO" precision="22" scale="0" />
-        </many-to-one>
+
+        <property name="allotedTo" type="string">
+            <column name="ALLOTEDTO" length="50" />
+        </property>
         <many-to-one name="accountCheque" class="org.egov.model.cheque.AccountCheques">
             <column name="ACCOUNTCHEQUEID" precision="22" scale="0" />
         </many-to-one>
