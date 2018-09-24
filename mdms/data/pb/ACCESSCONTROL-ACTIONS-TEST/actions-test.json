@@ -6852,50 +6852,50 @@
     {
       "id": 908,
       "name": "VoucherCreate",
-      "url": "/egf-voucher/vouchers/_create",
+      "url": "/services/EGF/vouchers/_create",
       "displayName": "Create Voucher",
       "orderNumber": 0,
       "parentModule": "302",
       "enabled": false,
       "serviceCode": "VOUCHER",
       "code": "null",
-      "path": "VOUCHER SERVICE.VoucherCreate"
+      "path": ""
     },
     {
       "id": 909,
       "name": "VoucherReverse",
-      "url": "/egf-voucher/vouchers/_reverse",
+      "url": "/services/EGF/vouchers/_reverse",
       "displayName": "Create Reverse Voucher",
       "orderNumber": 0,
       "parentModule": "302",
       "enabled": false,
       "serviceCode": "VOUCHER",
       "code": "null",
-      "path": "VOUCHER SERVICE.VoucherReverse"
+      "path": ""
     },
     {
       "id": 910,
       "name": "VoucherUpdate",
-      "url": "/egf-voucher/vouchers/_update",
+      "url": "/services/EGF/vouchers/_update",
       "displayName": "Update Voucher",
       "orderNumber": 0,
       "parentModule": "302",
       "enabled": false,
       "serviceCode": "VOUCHER",
       "code": "null",
-      "path": "VOUCHER SERVICE.VoucherUpdate"
+      "path": ""
     },
     {
       "id": 911,
       "name": "VoucherSearch",
-      "url": "/egf-voucher/vouchers/_search",
+      "url": "/services/EGF/vouchers/_search",
       "displayName": "Search Voucher",
       "orderNumber": 0,
       "parentModule": "302",
       "enabled": false,
       "serviceCode": "VOUCHER",
       "code": "null",
-      "path": "VOUCHER SERVICE.VoucherSearch"
+      "path": ""
     },
     {
       "id": 912,
