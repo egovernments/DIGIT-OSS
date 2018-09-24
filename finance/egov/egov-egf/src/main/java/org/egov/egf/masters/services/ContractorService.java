@@ -64,8 +64,10 @@ import javax.persistence.metamodel.Metamodel;
 import org.egov.commons.Accountdetailkey;
 import org.egov.commons.service.AccountDetailKeyService;
 import org.egov.commons.service.AccountdetailtypeService;
+import org.egov.commons.service.EntityTypeService;
 import org.egov.egf.masters.repository.ContractorRepository;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.masters.Contractor;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,89 +80,120 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-public class ContractorService {
+public class ContractorService implements EntityTypeService {
 
-	@Autowired
-	private ContractorRepository contractorRepository;
+    @Autowired
+    private ContractorRepository contractorRepository;
 
-	@PersistenceContext
-	private EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-	@Autowired
-	private AccountDetailKeyService accountDetailKeyService;
+    @Autowired
+    private AccountDetailKeyService accountDetailKeyService;
 
-	@Autowired
-	private AccountdetailtypeService accountdetailtypeService;
+    @Autowired
+    private AccountdetailtypeService accountdetailtypeService;
 
-	public Session getCurrentSession() {
-		return entityManager.unwrap(Session.class);
-	}
+    public Session getCurrentSession() {
+        return entityManager.unwrap(Session.class);
+    }
 
-	public Contractor getById(final Long id) {
-		return contractorRepository.findOne(id);
-	}
+    public Contractor getById(final Long id) {
+        return contractorRepository.findOne(id);
+    }
 
-	@Transactional
-	public Contractor create(Contractor contractor) {
+    @Transactional
+    public Contractor create(Contractor contractor) {
 
-		setAuditDetails(contractor);
-		contractor = contractorRepository.save(contractor);
-		saveAccountDetailKey(contractor);
-		return contractor;
-	}
+        setAuditDetails(contractor);
+        contractor = contractorRepository.save(contractor);
+        saveAccountDetailKey(contractor);
+        return contractor;
+    }
 
-	@Transactional
-	public void saveAccountDetailKey(Contractor contractor) {
+    @Transactional
+    public void saveAccountDetailKey(Contractor contractor) {
 
-		Accountdetailkey accountdetailkey = new Accountdetailkey();
-		accountdetailkey.setDetailkey(contractor.getId().intValue());
-		accountdetailkey.setDetailname("contractor_id");
-		accountdetailkey.setAccountdetailtype(accountdetailtypeService.findByName(contractor.getClass().getSimpleName()));
-		accountdetailkey.setGroupid(1);
-		accountDetailKeyService.create(accountdetailkey);
-	}
+        Accountdetailkey accountdetailkey = new Accountdetailkey();
+        accountdetailkey.setDetailkey(contractor.getId().intValue());
+        accountdetailkey.setDetailname("contractor_id");
+        accountdetailkey.setAccountdetailtype(accountdetailtypeService.findByName(contractor.getClass().getSimpleName()));
+        accountdetailkey.setGroupid(1);
+        accountDetailKeyService.create(accountdetailkey);
+    }
 
-	@Transactional
-	public Contractor update(final Contractor contractor) {
-		setAuditDetails(contractor);
-		return contractorRepository.save(contractor);
-	}
+    @Transactional
+    public Contractor update(final Contractor contractor) {
+        setAuditDetails(contractor);
+        return contractorRepository.save(contractor);
+    }
 
-	private void setAuditDetails(Contractor contractor) {
-		if (contractor.getId() == null) {
-			contractor.setCreatedDate(new Date());
-			contractor.setCreatedBy(ApplicationThreadLocals.getUserId());
-		}
-		contractor.setLastModifiedDate(new Date());
-		contractor.setLastModifiedBy(ApplicationThreadLocals.getUserId());
-	}
+    private void setAuditDetails(Contractor contractor) {
+        if (contractor.getId() == null) {
+            contractor.setCreatedDate(new Date());
+            contractor.setCreatedBy(ApplicationThreadLocals.getUserId());
+        }
+        contractor.setLastModifiedDate(new Date());
+        contractor.setLastModifiedBy(ApplicationThreadLocals.getUserId());
+    }
 
-	public List<Contractor> search(final Contractor contractor) {
-		final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		final CriteriaQuery<Contractor> createQuery = cb.createQuery(Contractor.class);
-		final Root<Contractor> contractors = createQuery.from(Contractor.class);
-		createQuery.select(contractors);
-		final Metamodel m = entityManager.getMetamodel();
-		final EntityType<Contractor> Contractor_ = m.entity(Contractor.class);
+    public List<Contractor> search(final Contractor contractor) {
+        final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        final CriteriaQuery<Contractor> createQuery = cb.createQuery(Contractor.class);
+        final Root<Contractor> contractors = createQuery.from(Contractor.class);
+        createQuery.select(contractors);
+        final Metamodel m = entityManager.getMetamodel();
+        final EntityType<Contractor> Contractor_ = m.entity(Contractor.class);
 
-		final List<Predicate> predicates = new ArrayList<Predicate>();
-		if (contractor.getName() != null) {
-			final String name = "%" + contractor.getName().toLowerCase() + "%";
-			predicates.add(cb.isNotNull(contractors.get("name")));
-			predicates.add(cb.like(
-					cb.lower(contractors.get(Contractor_.getDeclaredSingularAttribute("name", String.class))), name));
-		}
-		if (contractor.getCode() != null) {
-			final String code = "%" + contractor.getCode().toLowerCase() + "%";
-			predicates.add(cb.isNotNull(contractors.get("code")));
-			predicates.add(cb.like(
-					cb.lower(contractors.get(Contractor_.getDeclaredSingularAttribute("code", String.class))), code));
-		}
+        final List<Predicate> predicates = new ArrayList<Predicate>();
+        if (contractor.getName() != null) {
+            final String name = "%" + contractor.getName().toLowerCase() + "%";
+            predicates.add(cb.isNotNull(contractors.get("name")));
+            predicates.add(cb.like(
+                    cb.lower(contractors.get(Contractor_.getDeclaredSingularAttribute("name", String.class))), name));
+        }
+        if (contractor.getCode() != null) {
+            final String code = "%" + contractor.getCode().toLowerCase() + "%";
+            predicates.add(cb.isNotNull(contractors.get("code")));
+            predicates.add(cb.like(
+                    cb.lower(contractors.get(Contractor_.getDeclaredSingularAttribute("code", String.class))), code));
+        }
 
-		createQuery.where(predicates.toArray(new Predicate[] {}));
-		final TypedQuery<Contractor> query = entityManager.createQuery(createQuery);
-		return query.getResultList();
+        createQuery.where(predicates.toArray(new Predicate[] {}));
+        final TypedQuery<Contractor> query = entityManager.createQuery(createQuery);
+        return query.getResultList();
 
-	}
+    }
+
+    @Override
+    public List<? extends org.egov.commons.utils.EntityType> getAllActiveEntities(Integer accountDetailTypeId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<? extends org.egov.commons.utils.EntityType> filterActiveEntities(String filterKey, int maxRecords,
+            Integer accountDetailTypeId) {
+        return contractorRepository.findByNameLikeOrCodeLike(filterKey + "%", filterKey + "%");
+    }
+
+    @Override
+    public List getAssetCodesForProjectCode(Integer accountdetailkey) throws ValidationException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<? extends org.egov.commons.utils.EntityType> validateEntityForRTGS(List<Long> idsList)
+            throws ValidationException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<? extends org.egov.commons.utils.EntityType> getEntitiesById(List<Long> idsList) throws ValidationException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

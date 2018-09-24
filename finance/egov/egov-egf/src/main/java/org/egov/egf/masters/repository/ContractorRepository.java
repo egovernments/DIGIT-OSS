@@ -47,6 +47,8 @@
  */
 package org.egov.egf.masters.repository;
 
+import java.util.List;
+
 import org.egov.model.masters.Contractor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -58,5 +60,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ContractorRepository extends JpaRepository<Contractor, Long> {
+
+    public List<Contractor> findByNameLikeOrCodeLike(String name, String code);
 
 }

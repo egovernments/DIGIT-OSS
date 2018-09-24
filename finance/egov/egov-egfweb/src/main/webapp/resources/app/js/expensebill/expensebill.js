@@ -85,7 +85,7 @@ $(document).ready(function(){
 		},
 		queryTokenizer : Bloodhound.tokenizers.whitespace,
 		remote : {
-			url : '/EGF/common/getentitesbyaccountdetailtype?name=',
+			url : '/services/EGF/common/getentitesbyaccountdetailtype?name=',
 			replace: function (url, query) {
 				var subLedgerType = $('#subLedgerType').val();
 				if(subLedgerType == null || subLedgerType == "")
