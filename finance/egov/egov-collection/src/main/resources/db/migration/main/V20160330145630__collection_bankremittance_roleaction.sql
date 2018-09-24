@@ -5,7 +5,7 @@ Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role wher
 
 Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='ULB Operator'),(select id from eg_action where name='AjaxAccountListOfService'));
 
-Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='SYSTEM'),(select id from eg_action where name='AjaxAccountListOfService'));
+Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='Super User'),(select id from eg_action where name='AjaxAccountListOfService'));
 
 Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='Remitter'),(select id from eg_action where name='AjaxAccountListOfService'));
 
@@ -16,6 +16,6 @@ Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role wher
 
 Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='ULB Operator'),(select id from eg_action where name='BankRemittanceListData'));
 
-Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='SYSTEM'),(select id from eg_action where name='BankRemittanceListData'));
+Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='Super User'),(select id from eg_action where name='BankRemittanceListData'));
 
 Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='Remitter'),(select id from eg_action where name='BankRemittanceListData'));

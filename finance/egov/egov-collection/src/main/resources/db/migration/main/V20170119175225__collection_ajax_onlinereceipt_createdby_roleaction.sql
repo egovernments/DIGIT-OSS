@@ -3,5 +3,4 @@ Insert into EG_ACTION (id,name,url,queryparams,parentmodule,ordernumber,displayn
 Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='ULB Operator'),(select id from eg_action where name='ajaxOnlineReceiptCreatedByList'));
 Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='Collection Operator'),(select id from eg_action where name='ajaxOnlineReceiptCreatedByList'));
 Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='Remitter'),(select id from eg_action where name='ajaxOnlineReceiptCreatedByList'));
-Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='SYSTEM'),(select id from eg_action where name='ajaxOnlineReceiptCreatedByList'));
-
+Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='Super User'),(select id from eg_action where name='ajaxOnlineReceiptCreatedByList'));

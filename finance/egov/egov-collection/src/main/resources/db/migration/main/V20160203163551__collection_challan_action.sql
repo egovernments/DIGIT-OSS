@@ -2,33 +2,33 @@ Insert into EG_ACTION ("id","name","url","queryparams","parentmodule","ordernumb
 
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'ULB Operator') ,(select id FROM eg_action  WHERE name = 'CreateChallan' and contextroot='collection'));
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'CSC Operator') ,(select id FROM eg_action  WHERE name = 'CreateChallan' and contextroot='collection'));
-INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'SYSTEM') ,(select id FROM eg_action  WHERE name = 'CreateChallan' and contextroot='collection'));
+INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'Super User') ,(select id FROM eg_action  WHERE name = 'CreateChallan' and contextroot='collection'));
 
 Insert into EG_ACTION ("id","name","url","queryparams","parentmodule","ordernumber","displayname","enabled","contextroot","version","createdby","createddate","lastmodifiedby","lastmodifieddate","application") values (nextval('seq_eg_action'),'AjaxChallanApproverDesignation','/receipts/ajaxChallanApproval-approverDesignationList.action',null,(select ID from eg_module where NAME ='Receipt Services'),1,'AjaxChallanApproverDesignation','0','collection',0,1,current_timestamp,1,current_timestamp,(select id from eg_module where name='Collection' and parentmodule is null));
 
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'ULB Operator') ,(select id FROM eg_action  WHERE name = 'AjaxChallanApproverDesignation' and contextroot='collection'));
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'CSC Operator') ,(select id FROM eg_action  WHERE name = 'AjaxChallanApproverDesignation' and contextroot='collection'));
-INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'SYSTEM') ,(select id FROM eg_action  WHERE name = 'AjaxChallanApproverDesignation' and contextroot='collection'));
+INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'Super User') ,(select id FROM eg_action  WHERE name = 'AjaxChallanApproverDesignation' and contextroot='collection'));
 
 Insert into EG_ACTION ("id","name","url","queryparams","parentmodule","ordernumber","displayname","enabled","contextroot","version","createdby","createddate","lastmodifiedby","lastmodifieddate","application") values (nextval('seq_eg_action'),'AjaxChallanApproverPosition','/receipts/ajaxChallanApproval-positionUserList.action',null,(select ID from eg_module where NAME ='Receipt Services'),1,'AjaxChallanApproverPosition','0','collection',0,1,current_timestamp,1,current_timestamp,(select id from eg_module where name='Collection' and parentmodule is null));
 
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'ULB Operator') ,(select id FROM eg_action  WHERE name = 'AjaxChallanApproverPosition' and contextroot='collection'));
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'CSC Operator') ,(select id FROM eg_action  WHERE name = 'AjaxChallanApproverPosition' and contextroot='collection'));
-INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'SYSTEM') ,(select id FROM eg_action  WHERE name = 'AjaxChallanApproverPosition' and contextroot='collection'));
+INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'Super User') ,(select id FROM eg_action  WHERE name = 'AjaxChallanApproverPosition' and contextroot='collection'));
 
 
 Insert into EG_ACTION ("id","name","url","queryparams","parentmodule","ordernumber","displayname","enabled","contextroot","version","createdby","createddate","lastmodifiedby","lastmodifieddate","application") values (nextval('seq_eg_action'),'SaveChallan','/receipts/challan-save.action',null,(select ID from eg_module where NAME ='Receipt Services'),1,'Save Challan','0','collection',0,1,current_timestamp,1,current_timestamp,(select id from eg_module where name='Collection' and parentmodule is null));
 
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'ULB Operator') ,(select id FROM eg_action  WHERE name = 'SaveChallan' and contextroot='collection'));
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'CSC Operator') ,(select id FROM eg_action  WHERE name = 'SaveChallan' and contextroot='collection'));
-INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'SYSTEM') ,(select id FROM eg_action  WHERE name = 'SaveChallan' and contextroot='collection'));
+INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'Super User') ,(select id FROM eg_action  WHERE name = 'SaveChallan' and contextroot='collection'));
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'Remitter') ,(select id FROM eg_action  WHERE name = 'SaveChallan' and contextroot='collection'));
 
 Insert into EG_ACTION ("id","name","url","queryparams","parentmodule","ordernumber","displayname","enabled","contextroot","version","createdby","createddate","lastmodifiedby","lastmodifieddate","application") values (nextval('seq_eg_action'),'PrintChallan','/receipts/challan-printChallan.action',null,(select ID from eg_module where NAME ='Receipt Services'),1,'Print Challan','0','collection',0,1,current_timestamp,1,current_timestamp,(select id from eg_module where name='Collection' and parentmodule is null));
 
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'ULB Operator') ,(select id FROM eg_action  WHERE name = 'PrintChallan' and contextroot='collection'));
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'CSC Operator') ,(select id FROM eg_action  WHERE name = 'PrintChallan' and contextroot='collection'));
-INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'SYSTEM') ,(select id FROM eg_action  WHERE name = 'PrintChallan' and contextroot='collection'));
+INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'Super User') ,(select id FROM eg_action  WHERE name = 'PrintChallan' and contextroot='collection'));
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'Remitter') ,(select id FROM eg_action  WHERE name = 'PrintChallan' and contextroot='collection'));
 
 
@@ -36,12 +36,12 @@ Insert into EG_ACTION ("id","name","url","queryparams","parentmodule","ordernumb
 
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'ULB Operator') ,(select id FROM eg_action  WHERE name = 'ViewChallan' and contextroot='collection'));
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'CSC Operator') ,(select id FROM eg_action  WHERE name = 'ViewChallan' and contextroot='collection'));
-INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'SYSTEM') ,(select id FROM eg_action  WHERE name = 'ViewChallan' and contextroot='collection'));
+INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'Super User') ,(select id FROM eg_action  WHERE name = 'ViewChallan' and contextroot='collection'));
 
 INSERT INTO EG_ROLEACTION (ROLEID, ACTIONID) values ((select id from eg_role where name LIKE 'Remitter') ,(select id FROM eg_action  WHERE name = 'ViewChallan' and contextroot='collection'));
 
 
-Insert into eg_wf_types (id,module,type,link,createdby,createddate,lastmodifiedby,lastmodifieddate,grouped,typefqn,displayname,version) values (nextval('seq_eg_wf_types'),(select id from eg_module where name='Collection'),'Challan','/collection/receipts/challan-viewChallan.action?sourcePage=inbox&challanId=:ID',1,now(),1,now(), false, 'org.egov.collection.entity.Challan', 'Collections Challan', 0 );
+Insert into eg_wf_types (id,module,type,link,createdby,createddate,lastmodifiedby,lastmodifieddate,groupyn,typefqn,displayname,version) values (nextval('seq_eg_wf_types'),(select id from eg_module where name='Collection'),'Challan','/collection/receipts/challan-viewChallan.action?sourcePage=inbox&challanId=:ID',1,now(),1,now(), 'N', 'org.egov.collection.entity.Challan', 'Collections Challan', 0 );
 
 INSERT INTO eg_script (id, name, type, createdby, createddate, lastmodifiedby, lastmodifieddate, script, startdate, enddate, version) 
 VALUES (nextval('seq_eg_script'), 'Challan.workflow.validactions', 'python',1, now(), 1, now(), 'transitions={''DEFAULT'':[''CHALLAN_NEW''],''CREATED'':[''CHALLAN_VALIDATE'',''CHALLAN_REJECT''],''CANCELLED'':[''''],''REJECTED'':[''CHALLAN_MODIFY'',''CHALLAN_CANCEL''],''VALIDATED'':['''']}  

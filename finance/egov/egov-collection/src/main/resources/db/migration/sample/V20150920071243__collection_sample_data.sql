@@ -19,5 +19,5 @@ Insert into egcl_servicedetails (id,name,serviceurl,isenabled,callbackurl,servic
 INSERT into eg_userrole values((select id from eg_role  where name  = 'Remitter'),(select id from eg_user where username ='sumit'));
 -------------------END--------------------
 -------------------START------------------
-INSERT INTO EG_LOCATION (ID,NAME,DESCRIPTION,ACTIVE,VERSION) values (nextval('SEQ_EG_LOCATION'),'Zone-1','Zone 1 Counter 1', true, 0);
+INSERT INTO EG_LOCATION (ID,NAME,DESCRIPTION,ISACTIVE) values (nextval('SEQ_EG_LOCATION'),'Zone-1','Zone 1 Counter 1', 1);
 -------------------END--------------------

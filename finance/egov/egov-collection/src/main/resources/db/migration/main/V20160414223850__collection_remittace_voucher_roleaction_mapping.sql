@@ -3,6 +3,6 @@ values (nextval('SEQ_EG_ACTION'),'ServiceListOfAccount','/receipts/ajaxBankRemit
 
 Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='ULB Operator'),(select id from eg_action where name='ServiceListOfAccount'));
 
-Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='SYSTEM'),(select id from eg_action where name='ServiceListOfAccount'));
+Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='Super User'),(select id from eg_action where name='ServiceListOfAccount'));
 
 Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='Remitter'),(select id from eg_action where name='ServiceListOfAccount'));

@@ -1,3 +1,12 @@
+DROP SEQUENCE seq_eg_script;
+
+CREATE SEQUENCE seq_eg_script
+    START WITH 8
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
 INSERT INTO EG_SCRIPT (ID,NAME,type,SCRIPT,version) VALUES(nextval('seq_eg_script'),'egf.bill.number.generator','python',
 'from org.egov.infra.validation.exception import ValidationError
 from org.egov.infstr.utils.seqgen import DatabaseSequenceFirstTimeException

@@ -7,6 +7,6 @@ Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role wher
 
 Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='Remitter'),(select id from eg_action where name='ReceiptReconcileOnlinePayment'));
 
-Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='SYSTEM'),(select id from eg_action where name='ReceiptReconcileOnlinePayment'));
+Insert into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='Super User'),(select id from eg_action where name='ReceiptReconcileOnlinePayment'));
 
 
