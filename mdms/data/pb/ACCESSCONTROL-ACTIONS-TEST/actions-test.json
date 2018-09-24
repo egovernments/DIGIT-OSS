@@ -4862,38 +4862,38 @@
     {
       "id": 634,
       "name": "createBank_Master",
-      "url": "/egf-master/banks/_create",
+      "url": "/services/EGF/bank/create",
       "displayName": "Create Bank",
-      "orderNumber": 1,
+      "orderNumber": 0,
       "parentModule": "228",
       "enabled": false,
       "serviceCode": "Bank",
       "code": "null",
-      "path": "Financials.Financials_Masters.Bank.createBank_Master"
+      "path": ""
     },
     {
       "id": 635,
       "name": "updateBank_Master",
-      "url": "/egf-master/banks/_update",
+      "url": "/services/EGF/bank/update",
       "displayName": "Modify Bank",
-      "orderNumber": 3,
+      "orderNumber": 0,
       "parentModule": "228",
       "enabled": false,
       "serviceCode": "Bank",
       "code": "null",
-      "path": "Financials.Financials_Masters.Bank.updateBank_Master"
+      "path": ""
     },
     {
       "id": 636,
-      "name": "searchBank_Master",
-      "url": "/egf-master/banks/_search",
-      "displayName": "Search Bank",
-      "orderNumber": 3,
+      "name": "editBank_Master",
+      "url": "/services/EGF/bank/edit/",
+      "displayName": "edit Bank",
+      "orderNumber": 0,
       "parentModule": "228",
       "enabled": false,
       "serviceCode": "Bank",
       "code": "null",
-      "path": "Financials.Financials_Masters.Bank.searchBank_Master"
+      "path": ""
     },
     {
       "id": 637,
@@ -5042,38 +5042,38 @@
     {
       "id": 649,
       "name": "createSubScheme_Master",
-      "url": "/egf-master/subschemes/_create",
+      "url": "/services/EGF/masters/subScheme-beforeEdit.action",
       "displayName": "Create SubScheme",
-      "orderNumber": 1,
+      "orderNumber": 0,
       "parentModule": "233",
       "enabled": false,
       "serviceCode": "SubScheme_Master",
       "code": "null",
-      "path": "Financial_Master.Financials_Master.SubScheme_Master.createSubScheme_Master"
+      "path": ""
     },
     {
       "id": 650,
       "name": "updateSubScheme_Master",
-      "url": "/egf-master/subschemes/_update",
+      "url": "/services/EGF/masters/subScheme-codeUniqueCheck.action",
       "displayName": "Modify SubScheme",
-      "orderNumber": 2,
+      "orderNumber": 0,
       "parentModule": "233",
       "enabled": false,
       "serviceCode": "SubScheme_Master",
       "code": "null",
-      "path": "Financial_Master.Financials_Master.SubScheme_Master.updateSubScheme_Master"
+      "path": ""
     },
     {
       "id": 651,
       "name": "searchSubScheme_Master",
-      "url": "/egf-master/subschemes/_search",
+      "url": "/services/EGF/masters/subScheme-nameUniqueCheck.action",
       "displayName": "Search SubScheme",
-      "orderNumber": 3,
+      "orderNumber": 0,
       "parentModule": "233",
       "enabled": false,
       "serviceCode": "SubScheme_Master",
       "code": "null",
-      "path": "Financial_Master.Financials_Master.SubScheme_Master.searchSubScheme_Master"
+      "path": ""
     },
     {
       "id": 652,
@@ -12038,7 +12038,7 @@
  {
    "id": 1632,
    "name": "recovery-crud",
-   "url": "/services/EGF/deduction/remitRecovery.action",
+   "url": "/services/EGF/recovery/ajaxsearch/edit",
    "parentModule": "",
    "displayName": "recovery-crud",
    "orderNumber": 0,
@@ -13571,10 +13571,10 @@
  },
  {
    "id": 1750,
-   "name": "Remittance recovery view",
-   "url": "/services/EGF/deduction/remitRecovery-beforeView.action",
+   "name": "Remittance recovery edit",
+   "url": "/services/EGF/recovery/edit/",
    "parentModule": "",
-   "displayName": "Remittance recovery view",
+   "displayName": "Remittance recovery edit",
    "orderNumber": 0,
    "enabled": false,
    "serviceCode": "",
@@ -14780,16 +14780,16 @@
  },
  {
    "id": 1843,
-   "name": "Detailed Code-Create/Modify/View",
-   "url": "/services/EGF/masters/chartOfAccounts-detailed.action",
+   "name": "Detailed Code-Create",
+   "url": "url",
    "parentModule": "",
-   "displayName": "Create/Modify/View Detailed Code",
+   "displayName": "Create Detailed Code",
    "orderNumber": 1,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
-   "path": "Finance.Masters.Detailed Codes.View Detailed Code",
-   "navigationURL": "services/EGF/masters/chartOfAccounts-detailed.action"
+   "path": "Finance.Masters.Detailed Codes.Create Detailed Code",
+   "navigationURL": "services/EGF/masters/chartOfAccounts-addNew.action"
  },
  {
    "id": 1844,
@@ -14913,7 +14913,7 @@
    "name": "View Schemes-Search",
    "url": "/services/EGF/masters/scheme-beforeSearch.action",
    "parentModule": "",
-   "displayName": "View Schemes",
+   "displayName": "View Scheme",
    "orderNumber": 2,
    "enabled": true,
    "serviceCode": "",
@@ -14924,15 +14924,15 @@
  {
    "id": 1854,
    "name": "Modify Schemes-Search",
-   "url": "/services/EGF/masters/scheme-beforeSearch.action",
+   "url": "url",
    "parentModule": "",
-   "displayName": "Modify Schemes",
+   "displayName": "Modify Scheme",
    "orderNumber": 3,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Scheme.Modify Scheme",
-   "navigationURL": "services/EGF/masters/scheme-beforeSearch.action"
+   "navigationURL": "services/EGF/masters/scheme-beforeSearch.action?mode=edit"
  },
  {
    "id": 1855,
@@ -15015,7 +15015,7 @@
  {
    "id": 1861,
    "name": "Recovery-Create",
-   "url": "/services/EGF/deduction/recoverySetupMaster.do",
+   "url": "url",
    "parentModule": "",
    "displayName": "Create Recovery",
    "orderNumber": 1,
@@ -15023,33 +15023,33 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Recovery.Create Recovery",
-   "navigationURL": "services/EGF/deduction/recoverySetupMaster.do"
+   "navigationURL": "services/EGF/recovery/new"
  },
  {
    "id": 1862,
    "name": "View Recoveries-Search",
-   "url": "/services/EGF/deduction/recoverySetupMaster.do",
+   "url": "url",
    "parentModule": "",
-   "displayName": "View Recoveries",
+   "displayName": "View Recovery",
    "orderNumber": 2,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Recovery.View Recovery",
-   "navigationURL": "services/EGF/deduction/recoverySetupMaster.do"
+   "navigationURL": "services/EGF/recovery/search/view"
  },
  {
    "id": 1863,
    "name": "Modify Recoveries-Search",
-   "url": "/services/EGF/deduction/recoverySetupMaster.do",
+   "url": "url",
    "parentModule": "",
-   "displayName": "Modify Recoveries",
+   "displayName": "Modify Recovery",
    "orderNumber": 3,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Recovery.Modify Recovery",
-   "navigationURL": "services/EGF/deduction/recoverySetupMaster.do"
+   "navigationURL": "services/EGF/recovery/search/edit"
  },
  {
    "id": 1864,
@@ -15067,15 +15067,15 @@
  {
    "id": 1865,
    "name": "View Sub-schemes - Search",
-   "url": "/services/EGF/masters/subScheme-beforeSearch.action",
+   "url": "url",
    "parentModule": "",
-   "displayName": "View Sub Schemes",
+   "displayName": "View Sub Scheme",
    "orderNumber": 5,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
-   "path": "Finance.Masters.Sub-scheme.View Sub-scheme",
-   "navigationURL": "services/EGF/masters/subScheme-beforeSearch.action"
+   "path": "Finance.Masters.Scheme.View Sub-scheme",
+   "navigationURL": "services/EGF/masters/subScheme-beforeSearch.action?showMode=view"
  },
  {
    "id": 1866,
@@ -15106,15 +15106,15 @@
  {
    "id": 1868,
    "name": "Modify Sub-scheme",
-   "url": "/services/EGF/masters/subScheme-edit.action",
+   "url": "url",
    "parentModule": "",
    "displayName": "Modify Sub Scheme",
    "orderNumber": 6,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
-   "path": "Finance.Masters.Sub-scheme.Modify Sub-scheme",
-   "navigationURL": "services/EGF/masters/subScheme-edit.action"
+   "path": "Finance.Masters.Scheme.Modify Sub-scheme",
+   "navigationURL": "services/EGF/masters/subScheme-beforeSearch.action?showMode=edit"
  },
  {
    "id": 1869,
@@ -15470,7 +15470,7 @@
  {
    "id": 1896,
    "name": "Recovery Master-Modify",
-   "url": "/services/EGF/deduction/recoverySetupMaster.do",
+   "url": "/services/EGF/recovery/update",
    "parentModule": "",
    "displayName": "Recovery Master-View",
    "orderNumber": 0,
@@ -15483,7 +15483,7 @@
  {
    "id": 1897,
    "name": "Recovery Master-View",
-   "url": "/services/EGF/deduction/recoverySetupMaster.do",
+   "url": "/services/EGF/recovery/view/",
    "parentModule": "",
    "displayName": "Recovery Master-Modify",
    "orderNumber": 0,
@@ -15834,7 +15834,7 @@
  {
    "id": 1924,
    "name": "Recovery- Create",
-   "url": "/services/EGF/deduction/recoverySetupMaster.do",
+   "url": "/services/EGF/recovery/create",
    "parentModule": "",
    "displayName": "Create Recovery",
    "orderNumber": 0,
@@ -15847,7 +15847,7 @@
  {
    "id": 1925,
    "name": "Modify Recoveries- Search",
-   "url": "/services/EGF/deduction/recoverySetupMaster.do",
+   "url": "/services/EGF/recovery/result/",
    "parentModule": "",
    "displayName": "Modify Recoveries",
    "orderNumber": 0,
@@ -16276,7 +16276,7 @@
  {
    "id": 1958,
    "name": "Fund-Create",
-   "url": "/services/EGF/masters/fund-newform.action",
+   "url": "url",
    "parentModule": "",
    "displayName": "Create Fund",
    "orderNumber": 1,
@@ -16284,12 +16284,12 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Fund.Create Fund",
-   "navigationURL": "services/EGF/masters/fund-newform.action"
+   "navigationURL": "services/EGF/fund/new"
  },
  {
    "id": 1959,
    "name": "Fund-View",
-   "url": "/services/EGF/masters/fund-beforeSearch.action",
+   "url": "url",
    "parentModule": "",
    "displayName": "View Fund",
    "orderNumber": 2,
@@ -16297,12 +16297,12 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Fund.View Fund",
-   "navigationURL": "services/EGF/masters/fund-beforeSearch.action"
+   "navigationURL": "services/EGF/fund/search/edit"
  },
  {
    "id": 1960,
    "name": "Fund-Modify",
-   "url": "/services/EGF/masters/fund-beforeSearch.action",
+   "url": "url",
    "parentModule": "",
    "displayName": "Modify Fund",
    "orderNumber": 3,
@@ -16310,46 +16310,46 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Fund.Modify Fund",
-   "navigationURL": "services/EGF/masters/fund-beforeSearch.action"
+   "navigationURL": "services/EGF/fund/search/edit"
  },
  {
    "id": 1961,
    "name": "User Defined Codes-Create",
-   "url": "/services/EGF/masters/userDefinedCodes-newform.action",
+   "url": "url",
    "parentModule": "",
-   "displayName": "Create User Defined Codes",
+   "displayName": "Create Other Masters",
    "orderNumber": 1,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Other Masters.Create other masters",
-   "navigationURL": "services/EGF/masters/userDefinedCodes-newform.action"
+   "navigationURL": "services/EGF/accountentity/new"
  },
  {
    "id": 1962,
    "name": "User Defined Codes-View",
-   "url": "/services/EGF/masters/userDefinedCodes-beforeSearch.action",
+   "url": "url",
    "parentModule": "",
-   "displayName": "View User Defined Codes",
+   "displayName": "View Other Masters",
    "orderNumber": 2,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Other Masters.View Other Masters",
-   "navigationURL": "services/EGF/masters/userDefinedCodes-beforeSearch.action"
+   "navigationURL": "services/EGF/accountentity/search/view"
  },
  {
    "id": 1963,
    "name": "User Defined Codes-Modify",
-   "url": "/services/EGF/masters/userDefinedCodes-beforeSearch.action",
+   "url": "url",
    "parentModule": "",
-   "displayName": "Modify User Defined Codes",
+   "displayName": "Modify Other Masters",
    "orderNumber": 3,
    "enabled": true,
    "serviceCode": "",
    "code": "null",
-   "path": "Finance.Masters.Other Masters.Create Other Masters",
-   "navigationURL": "services/EGF/masters/userDefinedCodes-beforeSearch.action"
+   "path": "Finance.Masters.Other Masters.Modify Other Masters",
+   "navigationURL": "services/EGF/accountentity/search/edit"
  },
  {
    "id": 1964,
@@ -16432,7 +16432,7 @@
  {
    "id": 1970,
    "name": "Function-Create",
-   "url": "/services/EGF/masters/function-newform.action",
+   "url": "url",
    "parentModule": "",
    "displayName": "Create Function",
    "orderNumber": 1,
@@ -16440,12 +16440,12 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Function.Create Function",
-   "navigationURL": "services/EGF/masters/function-newform.action"
+   "navigationURL": "services/EGF/function/new"
  },
  {
    "id": 1971,
    "name": "Function-View",
-   "url": "/services/EGF/masters/function-beforeSearch.action",
+   "url": "url",
    "parentModule": "",
    "displayName": "View Function",
    "orderNumber": 2,
@@ -16453,12 +16453,12 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Function.View Function",
-   "navigationURL": "services/EGF/masters/function-beforeSearch.action"
+   "navigationURL": "services/EGF/function/search/view"
  },
  {
    "id": 1972,
    "name": "Function-Modify",
-   "url": "/services/EGF/masters/function-beforeSearch.action",
+   "url": "url",
    "parentModule": "",
    "displayName": "Modify Function",
    "orderNumber": 3,
@@ -16466,7 +16466,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Function.Modify Function",
-   "navigationURL": "services/EGF/masters/function-beforeSearch.action"
+   "navigationURL": "services/EGF/function/search/edit"
  },
  {
    "id": 1973,
@@ -16744,7 +16744,7 @@
  {
    "id": 1994,
    "name": "BankMasterModify",
-   "url": "/services/EGF/masters/bank.action",
+   "url": "url",
    "parentModule": "",
    "displayName": "Modify Bank",
    "orderNumber": 1,
@@ -16752,7 +16752,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Bank.Modify Bank",
-   "navigationURL": "services/EGF/masters/bank.action"
+   "navigationURL": "services/EGF/bank/search/edit"
  },
  {
    "id": 1995,
@@ -16796,7 +16796,7 @@
  {
    "id": 1998,
    "name": "BankMaster",
-   "url": "/services/EGF/masters/bank.action",
+   "url": "url",
    "parentModule": "",
    "displayName": "Create Bank",
    "orderNumber": 1,
@@ -16804,7 +16804,7 @@
    "serviceCode": "",
    "code": "null",
    "path": "Finance.Masters.Bank.Create Bank",
-   "navigationURL": "services/EGF/masters/bank.action"
+   "navigationURL": "services/EGF/bank/new"
  },
  {
    "id": 1999,
@@ -18145,7 +18145,617 @@
    "path": "",
    "navigationURL": ""
  }
+,
+ {
+   "id": 2102,
+   "name": "Detailed Code-View",
+   "url": "url",
+   "parentModule": "",
+   "displayName": "View Detailed Code",
+   "orderNumber": 2,
+   "enabled": true,
+   "serviceCode": "",
+   "code": "null",
+   "path": "Finance.Masters.Detailed Codes.View Detailed Code",
+   "navigationURL": "services/EGF/masters/chartOfAccounts-viewDetailedCode.action"
+ }, 
+{
+   "id": 2103,
+   "name": "Detailed Code-Modify",
+   "url": "url",
+   "parentModule": "",
+   "displayName": "Modify Detailed Code",
+   "orderNumber": 3,
+   "enabled": true,
+   "serviceCode": "",
+   "code": "null",
+   "path": "Finance.Masters.Detailed Codes.Modify Detailed Code",
+   "navigationURL": "services/EGF/masters/chartOfAccounts-editDetailedCode.action"
+ },
+{
+   "id": 2104,
+   "name": "fund-ajax-edit",
+   "url": "/services/EGF/fund/ajaxsearch/edit",
+   "parentModule": "",
+   "displayName": "fund-ajax-edit",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2105,
+   "name": "fund-edit",
+   "url": "/services/EGF/fund/edit/",
+   "parentModule": "",
+   "displayName": "fund-edit",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2106,
+   "name": "fund-create",
+   "url": "/services/EGF/fund/create",
+   "parentModule": "",
+   "displayName": "fund-create",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2107,
+   "name": "fund-result",
+   "url": "/services/EGF/fund/result/",
+   "parentModule": "",
+   "displayName": "fund-result",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2108,
+   "name": "fund-update",
+   "url": "/services/EGF/fund/update",
+   "parentModule": "",
+   "displayName": "fund-update",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2109,
+   "name": "fund-ajax-view",
+   "url": "/services/EGF/fund/ajaxsearch/view",
+   "parentModule": "",
+   "displayName": "fund-ajax-view",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2110,
+   "name": "fund-view",
+   "url": "/services/EGF/fund/view/",
+   "parentModule": "",
+   "displayName": "fund-view",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2111,
+   "name": "accountentity-ajax-edit",
+   "url": "/services/EGF/accountentity/ajaxsearch/edit",
+   "parentModule": "",
+   "displayName": "accountentity-ajax-edit",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2112,
+   "name": "accountentity-edit",
+   "url": "/services/EGF/accountentity/edit/",
+   "parentModule": "",
+   "displayName": "accountentity-edit",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2113,
+   "name": "accountentity-create",
+   "url": "/services/EGF/accountentity/create",
+   "parentModule": "",
+   "displayName": "accountentity-create",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2114,
+   "name": "accountentity-result",
+   "url": "/services/EGF/accountentity/result/",
+   "parentModule": "",
+   "displayName": "accountentity-result",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2115,
+   "name": "accountentity-update",
+   "url": "/services/EGF/accountentity/update",
+   "parentModule": "",
+   "displayName": "accountentity-update",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2116,
+   "name": "accountentity-ajax-view",
+   "url": "/services/EGF/accountentity/ajaxsearch/view",
+   "parentModule": "",
+   "displayName": "accountentity-ajax-view",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2117,
+   "name": "accountentity-view",
+   "url": "/services/EGF/accountentity/view/",
+   "parentModule": "",
+   "displayName": "accountentity-view",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2118,
+   "name": "function-ajax-edit",
+   "url": "/services/EGF/function/ajaxsearch/edit",
+   "parentModule": "",
+   "displayName": "function-ajax-edit",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2119,
+   "name": "function-edit",
+   "url": "/services/EGF/function/edit/",
+   "parentModule": "",
+   "displayName": "function-edit",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2120,
+   "name": "function-create",
+   "url": "/services/EGF/function/create",
+   "parentModule": "",
+   "displayName": "function-create",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2121,
+   "name": "function-result",
+   "url": "/services/EGF/function/result/",
+   "parentModule": "",
+   "displayName": "function-result",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2122,
+   "name": "function-update",
+   "url": "/services/EGF/function/update",
+   "parentModule": "",
+   "displayName": "function-update",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2123,
+   "name": "function-ajax-view",
+   "url": "/services/EGF/function/ajaxsearch/view",
+   "parentModule": "",
+   "displayName": "function-ajax-view",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2124,
+   "name": "function-view",
+   "url": "/services/EGF/function/view/",
+   "parentModule": "",
+   "displayName": "function-view",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2125,
+   "name": "BankMaster-View",
+   "url": "url",
+   "parentModule": "",
+   "displayName": "View Bank",
+   "orderNumber": 2,
+   "enabled": true,
+   "serviceCode": "",
+   "code": "null",
+   "path": "Finance.Masters.Bank.View Bank",
+   "navigationURL": "services/EGF/bank/search/view"
+ },
+{
+   "id": 2126,
+   "name": "bank-view",
+   "url": "/services/EGF/bank/view/",
+   "parentModule": "",
+   "displayName": "bank-view",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2127,
+   "name": "bank-success",
+   "url": "/services/EGF/bank/success/",
+   "parentModule": "",
+   "displayName": "bank-success",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2128,
+   "name": "bank-ajaxview",
+   "url": "/services/EGF/bank/ajaxsearch/view",
+   "parentModule": "",
+   "displayName": "bank-ajaxview",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+},
+{
+   "id": 2129,
+   "name": "bank-ajaxedit",
+   "url": "/services/EGF/bank/ajaxsearch/edit",
+   "parentModule": "",
+   "displayName": "bank-ajaxedit",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2130,
+   "name": "recovery-ajaxview",
+   "url": "/services/EGF/recovery/ajaxsearch/view",
+   "parentModule": "",
+   "displayName": "recovery-ajaxview",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2131,
+   "name": "recovery-getAccountCodes",
+   "url": "/services/EGF/recovery/ajax/getAccountCodes",
+   "parentModule": "",
+   "displayName": "recovery-getAccountCodes",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2132,
+   "name": "openingbalance create",
+   "url": "url",
+   "parentModule": "",
+   "displayName": "Opening Balance Entry",
+   "orderNumber": 0,
+   "enabled": true,
+   "serviceCode": "",
+   "code": "null",
+   "path": "Finance.Period End Activities.Opening Balance Entry",
+   "navigationURL":"services/EGF/transactionsummary/new"
+ },
+{
+   "id": 2133,
+   "name": "opb-create",
+   "url": "/services/EGF/transactionsummary/create",
+   "parentModule": "",
+   "displayName": "opb-create",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2134,
+   "name": "opb-edit",
+   "url": "/services/EGF/transactionsummary/edit/",
+   "parentModule": "",
+   "displayName": "opb-edit",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2135,
+   "name": "opb-update",
+   "url": "/services/EGF/transactionsummary/update",
+   "parentModule": "",
+   "displayName": "opb-update",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2136,
+   "name": "opb-view",
+   "url": "/services/EGF/transactionsummary/view/",
+   "parentModule": "",
+   "displayName": "opb-view",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2137,
+   "name": "opb-results",
+   "url": "/services/EGF/transactionsummary/result/",
+   "parentModule": "",
+   "displayName": "opb-results",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2138,
+   "name": "opb-getMajorHeads",
+   "url": "/services/EGF/transactionsummary/ajax/getMajorHeads",
+   "parentModule": "",
+   "displayName": "opb-getMajorHeads",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2139,
+   "name": "opb-getMinorHead",
+   "url": "/services/EGF/transactionsummary/ajax/getMinorHead",
+   "parentModule": "",
+   "displayName": "opb-getMinorHead",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2140,
+   "name": "opb-getAccounts",
+   "url": "/services/EGF/transactionsummary/ajax/getAccounts",
+   "parentModule": "",
+   "displayName": "opb-getAccounts",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2141,
+   "name": "opb-getAccountDetailTypes",
+   "url": "/services/EGF/transactionsummary/ajax/getAccountDetailTypes",
+   "parentModule": "",
+   "displayName": "opb-getAccountDetailTypes",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2142,
+   "name": "opb-searchTransactionSummariesForNonSubledger",
+   "url": "/services/EGF/transactionsummary/ajax/searchTransactionSummariesForNonSubledger",
+   "parentModule": "",
+   "displayName": "opb-searchTransactionSummariesForNonSubledger",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2143,
+   "name": "opb-searchTransactionSummariesForSubledger",
+   "url": "/services/EGF/transactionsummary/ajax/searchTransactionSummariesForSubledger",
+   "parentModule": "",
+   "displayName": "opb-searchTransactionSummariesForSubledger",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2144,
+   "name": "opb-deleteTransaction",
+   "url": "/services/EGF/transactionsummary/ajax/deleteTransaction",
+   "parentModule": "",
+   "displayName": "opb-deleteTransaction",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2145,
+   "name": "opb-getTransactionSummary",
+   "url": "/services/EGF/transactionsummary/ajax/getTransactionSummary",
+   "parentModule": "",
+   "displayName": "opb-getTransactionSummary",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
 
-
+{
+   "id": 2146,
+   "name": "common-ajaxGetAllLiabCodes",
+   "url": "/services/EGF/voucher/common-ajaxGetAllLiabCodes.action",
+   "parentModule": "",
+   "displayName": "common-ajaxGetAllLiabCodes",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2147,
+   "name": "common-ajaxGetAllAssetCodes",
+   "url": "/services/EGF/voucher/common-ajaxGetAllAssetCodes.action",
+   "parentModule": "",
+   "displayName": "common-ajaxGetAllAssetCodes",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ },
+{
+   "id": 2148,
+   "name": "common-ajaxCoaDetailCode",
+   "url": "/services/EGF/voucher/common-ajaxCoaDetailCode.action",
+   "parentModule": "",
+   "displayName": "common-ajaxCoaDetailCode",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "",
+   "code": "null",
+   "path": ""
+   
+ }
   ]
 }
