@@ -125,7 +125,6 @@ public class CollectionDocumentElasticSearchService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CollectionDocumentElasticSearchService.class);
 
-    @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
 
     public Set<String> getServices() {
