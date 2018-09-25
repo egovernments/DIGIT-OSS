@@ -69,6 +69,7 @@ import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.services.PersistenceService;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.utils.FinancialConstants;
 import org.hibernate.FlushMode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +117,9 @@ public class GeneralLedgerReportAction extends BaseFormAction {
 	@Autowired
 	MicroserviceUtils microserviceUtils;
 
+	@Autowired
+	private EgovMasterDataCaching masterDataCache;
+
 	public GeneralLedgerReportAction() {
 		LOGGER.error("creating instance of GeneralLedgerReportAction ");
 	}
@@ -137,7 +141,7 @@ public class GeneralLedgerReportAction extends BaseFormAction {
 				glCode + "%");
 		addDropdownData("fundList",
 				persistenceService.findAllBy(" from Fund where isactive=true and isnotleaf=false order by name"));
-		addDropdownData("departmentList", microserviceUtils.getDepartments());
+		addDropdownData("departmentList", masterDataCache.get("egi-department"));
 		addDropdownData("functionaryList",
 				persistenceService.findAllBy(" from Functionary where isactive=true order by name"));
 		addDropdownData("fundsourceList",

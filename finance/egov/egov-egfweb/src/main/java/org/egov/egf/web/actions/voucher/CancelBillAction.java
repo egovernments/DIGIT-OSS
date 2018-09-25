@@ -161,7 +161,7 @@ public class CancelBillAction extends BaseFormAction {
 		super.prepare();
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Inside Prepare method");
-		List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
+		List<org.egov.infra.microservice.models.Department> departments = masterDataCache.get("egi-department");
 		dropdownData.put("DepartmentList", departments);
 		addDropdownData("fundList",
 				persistenceService.findAllBy("from Fund where isactive=true and isnotleaf=false order by name"));
@@ -295,7 +295,7 @@ public class CancelBillAction extends BaseFormAction {
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Size of tempBillList - " + tempBillList.size());
 			final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
+			List<org.egov.infra.microservice.models.Department> departments = masterDataCache.get("egi-department");
 			Map<String, String> depMap = new HashMap<>();
 			for (org.egov.infra.microservice.models.Department department : departments) {
 				depMap.put(department.getCode(), department.getName());

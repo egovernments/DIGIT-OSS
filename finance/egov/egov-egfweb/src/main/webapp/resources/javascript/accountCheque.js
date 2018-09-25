@@ -90,7 +90,6 @@ function updateGridData() {
 	var deptSelectedValue = new Array();
 	var deptSelectedText = new Array();
 	var deptObj = document.getElementById("departmentList");
-alert("deptObj" + deptObj);
 	var serialNoSelectedValue = new Array();
 	var serialNoSelectedText = new Array();
 	var serialNoObj = document.getElementById("serialNo");
@@ -102,7 +101,6 @@ alert("deptObj" + deptObj);
 			deptSelectedText.push(deptObj.options[i].text);
 		}
 	}
-	alert("deptSelectedValue"+deptSelectedValue);
 	for (var i = 0; i < serialNoObj.length; i++) {
 		if (jQuery("#serialNo option")[i]['selected'] == true) {
 			serialNoSelectedValue.push(serialNoObj.options[i].value);

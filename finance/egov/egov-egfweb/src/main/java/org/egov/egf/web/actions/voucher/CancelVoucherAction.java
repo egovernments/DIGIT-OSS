@@ -85,6 +85,7 @@ import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.services.PersistenceService;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.bills.EgBillregistermis;
 import org.egov.services.payment.PaymentService;
 import org.egov.utils.FinancialConstants;
@@ -129,6 +130,8 @@ public class CancelVoucherAction extends BaseFormAction {
 	private AppConfigValueService appConfigValueService;
 	@Autowired
 	private MicroserviceUtils microserviceUtils;
+	@Autowired
+	private EgovMasterDataCaching masterDataCache;
 	private Department deptImpl = new Department();
 
 	public CancelVoucherAction() {
@@ -172,14 +175,15 @@ public class CancelVoucherAction extends BaseFormAction {
 			LOGGER.debug("...Searching for voucher of type " + voucherHeader.getType());
 		voucherHeader.getVouchermis().setDepartmentcode(deptImpl.getCode());
 		voucherSearchList = getVouchersForCancellation();
-		List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
+		List<org.egov.infra.microservice.models.Department> departments = masterDataCache.get("egi-department");
+		;
 		Map<String, String> depMap = new HashMap<>();
 		for (org.egov.infra.microservice.models.Department department : departments) {
 			depMap.put(department.getCode(), department.getName());
 		}
 		if (voucherSearchList != null && !voucherSearchList.isEmpty())
 			for (CVoucherHeader voucher : voucherSearchList) {
-				if (voucher.getVouchermis().getDepartmentcode() != null)
+				if (voucher.getVouchermis()!=null && voucher.getVouchermis().getDepartmentcode() != null)
 					voucher.setDepartmentName(depMap.get(voucher.getVouchermis().getDepartmentcode()));
 			}
 		return SEARCH;
@@ -491,7 +495,7 @@ public class CancelVoucherAction extends BaseFormAction {
 	private void loadDropDowns() {
 
 		if (headerFields.contains("department")) {
-			List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
+			List<org.egov.infra.microservice.models.Department> departments = masterDataCache.get("egi-department");
 			addDropdownData("departmentList", departments);
 		}
 		if (headerFields.contains("functionary"))

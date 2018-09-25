@@ -47,7 +47,19 @@
  */
 package org.egov.egf.web.actions.report;
 
-import net.sf.jasperreports.engine.JRException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -81,18 +93,7 @@ import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import net.sf.jasperreports.engine.JRException;
 
 @Results(value = { @Result(name = "result", location = "chequeIssueRegisterReport-result.jsp"),
 		@Result(name = "PDF", type = "stream", location = Constants.INPUT_STREAM, params = { Constants.INPUT_NAME,
@@ -149,7 +150,7 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
 			addDropdownData("bankAccountList", Collections.EMPTY_LIST);
 			// dropdownData.put("executingDepartmentList",
 			// masterDataCache.get("egi-department"));
-			dropdownData.put("executingDepartmentList", microserviceUtils.getDepartments());
+			dropdownData.put("executingDepartmentList", masterDataCache.get("egi-department"));
 		}
 		populateUlbName();
 	}

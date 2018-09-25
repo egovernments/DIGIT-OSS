@@ -62,6 +62,7 @@ import org.egov.commons.CFinancialYear;
 import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.commons.service.BankAccountService;
 import org.egov.egf.commons.EgovCommon;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.services.PersistenceService;
@@ -75,228 +76,228 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-@Results({
-        @Result(name = "new", location = "accountCheque-new.jsp"),
-        @Result(name = "view", location = "accountCheque-view.jsp"),
-        @Result(name = "viewCheques", location = "accountCheque-viewCheques.jsp"),
-        @Result(name = "manipulateCheques", location = "accountCheque-manipulateCheques.jsp")
-})
+@Results({ @Result(name = "new", location = "accountCheque-new.jsp"),
+		@Result(name = "view", location = "accountCheque-view.jsp"),
+		@Result(name = "viewCheques", location = "accountCheque-viewCheques.jsp"),
+		@Result(name = "manipulateCheques", location = "accountCheque-manipulateCheques.jsp") })
 public class AccountChequeAction extends BaseFormAction {
 
-    private static final long serialVersionUID = 1L;
-    private static final Logger LOGGER = Logger.getLogger(AccountChequeAction.class);
-    private AccountCheques accountCheques = new AccountCheques();
-    private List<ChequeDeptMapping> chequeList;
-    private Bankaccount bankaccount;
-    private List<ChequeDetail> chequeDetailsList;
-    private Long financialYearId;
+	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger(AccountChequeAction.class);
+	private AccountCheques accountCheques = new AccountCheques();
+	private List<ChequeDeptMapping> chequeList;
+	private Bankaccount bankaccount;
+	private List<ChequeDetail> chequeDetailsList;
+	private Long financialYearId;
 
+	@Autowired
+	@Qualifier("persistenceService")
+	private PersistenceService persistenceService;
+	@Autowired
+	@Qualifier("accountChequesService")
+	private AccountChequesService accountChequesService;
 
-    @Autowired
-    @Qualifier("persistenceService")
-    private PersistenceService persistenceService;
-    @Autowired
-    @Qualifier("accountChequesService")
-    private AccountChequesService accountChequesService;
+	@Autowired
+	private EgovMasterDataCaching masterDataCache;
 
-    @Autowired
-    private EgovMasterDataCaching masterDataCache;
+	@Autowired
+	private FinancialYearDAO financialYearDAO;
+	@Autowired
+	private BankAccountService bankAccountService;
 
-    @Autowired
-    private FinancialYearDAO financialYearDAO;
-    @Autowired
-    private BankAccountService bankAccountService;
+	private String deletedChqDeptId;
 
-    private String deletedChqDeptId;
+	public AccountChequeAction() {
 
-    public AccountChequeAction() {
+		addRelatedEntity("bankAccountId", Bankaccount.class);
+	}
 
-        addRelatedEntity("bankAccountId", Bankaccount.class);
-    }
+	@Override
+	public Object getModel() {
+		return accountCheques;
+	}
 
-    @Override
-    public Object getModel() {
-        return accountCheques;
-    }
+	@Override
+	public void prepare() {
+		super.prepare();
+		addDropdownData("departmentList", masterDataCache.get("egi-department"));
+		addDropdownData("financialYearList", financialYearDAO.getAllActiveFinancialYearList());
+	}
 
-    @Override
-    public void prepare() {
-        super.prepare();
-        addDropdownData("departmentList", masterDataCache.get("egi-department"));
-        addDropdownData("financialYearList", financialYearDAO.getAllActiveFinancialYearList());
-    }
+	@Action(value = "/masters/accountCheque-newform")
+	public String newform() {
+		addDropdownData("bankList", Collections.EMPTY_LIST);
+		addDropdownData("accNumList", Collections.EMPTY_LIST);
+		addDropdownData("fundList", masterDataCache.get("egi-fund"));
+		return "new";
 
-    @Action(value = "/masters/accountCheque-newform")
-    public String newform() {
-        addDropdownData("bankList", Collections.EMPTY_LIST);
-        addDropdownData("accNumList", Collections.EMPTY_LIST);
-        addDropdownData("fundList", masterDataCache.get("egi-fund"));
-        return "new";
+	}
 
-    }
-    
-    @Action(value = "/masters/accountCheque-view")
-    public String view() {
-        addDropdownData("bankList", Collections.EMPTY_LIST);
-        addDropdownData("accNumList", Collections.EMPTY_LIST);
-        addDropdownData("fundList", masterDataCache.get("egi-fund"));
-        return "view";
+	@Action(value = "/masters/accountCheque-view")
+	public String view() {
+		addDropdownData("bankList", Collections.EMPTY_LIST);
+		addDropdownData("accNumList", Collections.EMPTY_LIST);
+		addDropdownData("fundList", masterDataCache.get("egi-fund"));
+		return "view";
 
-    }
+	}
 
-    @ValidationErrorPage(value = "manipulateCheques")
-    @SuppressWarnings("unchecked")
-    @Action(value = "/masters/accountCheque-manipulateCheques")
-    public String manipulateCheques() {
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("AccountChequeAction | manipulateCheques | Start");
-        final Long bankAccId = Long.valueOf(parameters.get("bankAccId")[0]);
-        final Long finId = Long.valueOf(parameters.get("finId")[0]);
-        setFinancialYearId(finId);
-        // Get cheque leafs presents for this particular account number
-        bankaccount =bankAccountService.findById(bankAccId, false);
-        chequeList = accountChequesService.getChequesByBankAccIdFinId(bankAccId,Long.valueOf(financialYearId));
-        if (chequeList.size() > 0)
-            prepareChequeDetails(chequeList);
-        return "manipulateCheques";
-    }
-    
-    @Action(value = "/masters/accountCheque-viewCheques")
-    public String viewCheques() {
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("AccountChequeAction | manipulateCheques | Start");
-        final Long bankAccId = Long.valueOf(parameters.get("bankAccId")[0]);
-        final Long finId = Long.valueOf(parameters.get("finId")[0]);
-        bankaccount =bankAccountService.findById(bankAccId, false);
-        chequeList = accountChequesService.getChequesByBankAccIdFinId(bankAccId,finId);
-        if (chequeList.size() > 0)
-            prepareChequeDetails(chequeList);
-        return "viewCheques";
-    }
+	@ValidationErrorPage(value = "manipulateCheques")
+	@SuppressWarnings("unchecked")
+	@Action(value = "/masters/accountCheque-manipulateCheques")
+	public String manipulateCheques() {
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("AccountChequeAction | manipulateCheques | Start");
+		final Long bankAccId = Long.valueOf(parameters.get("bankAccId")[0]);
+		final Long finId = Long.valueOf(parameters.get("finId")[0]);
+		setFinancialYearId(finId);
+		// Get cheque leafs presents for this particular account number
+		bankaccount = bankAccountService.findById(bankAccId, false);
+		chequeList = accountChequesService.getChequesByBankAccIdFinId(bankAccId, Long.valueOf(financialYearId));
+		if (chequeList.size() > 0)
+			prepareChequeDetails(chequeList);
+		return "manipulateCheques";
+	}
 
-    private void prepareChequeDetails(final List<ChequeDeptMapping> chequeList) {
+	@Action(value = "/masters/accountCheque-viewCheques")
+	public String viewCheques() {
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("AccountChequeAction | manipulateCheques | Start");
+		final Long bankAccId = Long.valueOf(parameters.get("bankAccId")[0]);
+		final Long finId = Long.valueOf(parameters.get("finId")[0]);
+		bankaccount = bankAccountService.findById(bankAccId, false);
+		chequeList = accountChequesService.getChequesByBankAccIdFinId(bankAccId, finId);
+		if (chequeList.size() > 0)
+			prepareChequeDetails(chequeList);
+		return "viewCheques";
+	}
 
-        chequeDetailsList = new ArrayList<ChequeDetail>();
-        ChequeDetail chequeDetail;
-        for (final ChequeDeptMapping chequeDeptMapping : chequeList) {
+	private void prepareChequeDetails(final List<ChequeDeptMapping> chequeList) {
+		Map<String, String> depMap = new HashMap<>();
+		List<Department> list = masterDataCache.get("egi-department");
+		for (Department dep : list) {
+			depMap.put(dep.getCode(), dep.getName());
+		}
+		chequeDetailsList = new ArrayList<ChequeDetail>();
+		ChequeDetail chequeDetail;
+		for (final ChequeDeptMapping chequeDeptMapping : chequeList) {
 
-            chequeDetail = new ChequeDetail();
-            chequeDetail.setFromChqNo(chequeDeptMapping.getAccountCheque().getFromChequeNumber());
-            chequeDetail.setToChqNo(chequeDeptMapping.getAccountCheque().getToChequeNumber());
-            //Need to set department name
-            chequeDetail.setDeptName(chequeDeptMapping.getAllotedTo());
-           // chequeDetail.setDeptId(chequeDeptMapping.getAllotedTo().getId().intValue());
-            CFinancialYear fy = (CFinancialYear) financialYearDAO.findById(
-                    Long.valueOf(chequeDeptMapping.getAccountCheque().getSerialNo()), false);
-            chequeDetail.setSerialNoH(fy.getFinYearRange());
-            chequeDetail
-                    .setReceivedDate(Constants.DDMMYYYYFORMAT2.format(chequeDeptMapping.getAccountCheque().getReceivedDate()));
-            chequeDetail.setSerialNo(chequeDeptMapping.getAccountCheque().getSerialNo().toString());
-            if (null != chequeDeptMapping.getAccountCheque().getIsExhausted()
-                    && chequeDeptMapping.getAccountCheque().getIsExhausted())
-                chequeDetail.setIsExhusted("Yes");
-            else
-                chequeDetail.setIsExhusted("No");
+			chequeDetail = new ChequeDetail();
+			chequeDetail.setFromChqNo(chequeDeptMapping.getAccountCheque().getFromChequeNumber());
+			chequeDetail.setToChqNo(chequeDeptMapping.getAccountCheque().getToChequeNumber());
+			chequeDetail.setDeptName(depMap.get(chequeDeptMapping.getAllotedTo()));
+			CFinancialYear fy = (CFinancialYear) financialYearDAO
+					.findById(Long.valueOf(chequeDeptMapping.getAccountCheque().getSerialNo()), false);
+			chequeDetail.setSerialNoH(fy.getFinYearRange());
+			chequeDetail.setReceivedDate(
+					Constants.DDMMYYYYFORMAT2.format(chequeDeptMapping.getAccountCheque().getReceivedDate()));
+			chequeDetail.setSerialNo(chequeDeptMapping.getAccountCheque().getSerialNo().toString());
+			if (null != chequeDeptMapping.getAccountCheque().getIsExhausted()
+					&& chequeDeptMapping.getAccountCheque().getIsExhausted())
+				chequeDetail.setIsExhusted("Yes");
+			else
+				chequeDetail.setIsExhusted("No");
 
-            chequeDetail.setNextChqPresent(chequeDeptMapping.getAccountCheque().getNextChqNo() != null ? "Yes" : "No");
-            chequeDetail.setAccountChequeId(chequeDeptMapping.getAccountCheque().getId());
-            chequeDetail.setChequeDeptId(chequeDeptMapping.getId());
-            chequeDetailsList.add(chequeDetail);
-        }
+			chequeDetail.setNextChqPresent(chequeDeptMapping.getAccountCheque().getNextChqNo() != null ? "Yes" : "No");
+			chequeDetail.setAccountChequeId(chequeDeptMapping.getAccountCheque().getId());
+			chequeDetail.setChequeDeptId(chequeDeptMapping.getId());
+			chequeDetailsList.add(chequeDetail);
+		}
 
-    }
+	}
 
-    @ValidationErrorPage(value = "manipulateCheques")
-    @SuppressWarnings("unchecked")
-    @Action(value = "/masters/accountCheque-save")
-    public String save() {
+	@ValidationErrorPage(value = "manipulateCheques")
+	@SuppressWarnings("unchecked")
+	@Action(value = "/masters/accountCheque-save")
+	public String save() {
 
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("AccountChequeAction | save | Start");
-        final Session session = persistenceService.getSession();
-        final Map<String, AccountCheques> chequeMap = new HashMap<String, AccountCheques>();
-        final Map<String, String> chequeIdMap = new HashMap<String, String>();
-        AccountCheques accountCheques;
-        ChequeDeptMapping chqDept;
-        removeEmptyRows();
-        bankaccount = (Bankaccount) persistenceService.find("from Bankaccount where id ="
-                + Long.valueOf(parameters.get("bankAccId")[0]));
-        if (null == chequeDetailsList) {
-            accountChequesService.deleteRecords(deletedChqDeptId, bankaccount);
-            addActionMessage("Cheque Master deleted Successfully : No cheque leafs available");
-            return "manipulateCheques";
-        }
-        accountChequesService.createCheques(chequeDetailsList, chequeIdMap, chequeMap, bankaccount, deletedChqDeptId);
-        accountChequesService.deleteRecords(deletedChqDeptId, bankaccount);
-        // Get cheque leafs presents for this particular account number
-        final StringBuffer query = new StringBuffer(200);
-        chequeList = accountChequesService.getChequesByBankAccIdFinId(bankaccount.getId(),Long.valueOf(financialYearId));
-        if (chequeList.size() > 0)
-            prepareChequeDetails(chequeList);
-        addActionMessage("Cheque Master updated Successfully");
-        return "manipulateCheques";
-    }
+		if (LOGGER.isDebugEnabled())
+			LOGGER.debug("AccountChequeAction | save | Start");
+		final Session session = persistenceService.getSession();
+		final Map<String, AccountCheques> chequeMap = new HashMap<String, AccountCheques>();
+		final Map<String, String> chequeIdMap = new HashMap<String, String>();
+		AccountCheques accountCheques;
+		ChequeDeptMapping chqDept;
+		removeEmptyRows();
+		bankaccount = (Bankaccount) persistenceService
+				.find("from Bankaccount where id =" + Long.valueOf(parameters.get("bankAccId")[0]));
+		if (null == chequeDetailsList) {
+			accountChequesService.deleteRecords(deletedChqDeptId, bankaccount);
+			addActionMessage("Cheque Master deleted Successfully : No cheque leafs available");
+			return "manipulateCheques";
+		}
+		accountChequesService.createCheques(chequeDetailsList, chequeIdMap, chequeMap, bankaccount, deletedChqDeptId);
+		accountChequesService.deleteRecords(deletedChqDeptId, bankaccount);
+		// Get cheque leafs presents for this particular account number
+		final StringBuffer query = new StringBuffer(200);
+		chequeList = accountChequesService.getChequesByBankAccIdFinId(bankaccount.getId(),
+				Long.valueOf(financialYearId));
+		if (chequeList.size() > 0)
+			prepareChequeDetails(chequeList);
+		addActionMessage("Cheque Master updated Successfully");
+		return "manipulateCheques";
+	}
 
-    private void removeEmptyRows() {
-        final List<ChequeDetail> trash = new ArrayList<ChequeDetail>();
-        if (chequeDetailsList != null)
-            for (final ChequeDetail cd : chequeDetailsList)
-                if (cd == null)
-                    trash.add(cd);
+	private void removeEmptyRows() {
+		final List<ChequeDetail> trash = new ArrayList<ChequeDetail>();
+		if (chequeDetailsList != null)
+			for (final ChequeDetail cd : chequeDetailsList)
+				if (cd == null)
+					trash.add(cd);
 
-        for (final ChequeDetail cd : trash)
-            chequeDetailsList.remove(cd);
-        trash.clear();
-    }
+		for (final ChequeDetail cd : trash)
+			chequeDetailsList.remove(cd);
+		trash.clear();
+	}
 
-    public AccountCheques getAccountCheques() {
-        return accountCheques;
-    }
+	public AccountCheques getAccountCheques() {
+		return accountCheques;
+	}
 
-    public void setAccountCheques(final AccountCheques accountCheques) {
-        this.accountCheques = accountCheques;
-    }
+	public void setAccountCheques(final AccountCheques accountCheques) {
+		this.accountCheques = accountCheques;
+	}
 
-    public void setEgovCommon(final EgovCommon egovCommon) {
-    }
+	public void setEgovCommon(final EgovCommon egovCommon) {
+	}
 
-    public List<ChequeDeptMapping> getChequeList() {
-        return chequeList;
-    }
+	public List<ChequeDeptMapping> getChequeList() {
+		return chequeList;
+	}
 
-    public void setChequeList(final List<ChequeDeptMapping> chequeList) {
-        this.chequeList = chequeList;
-    }
+	public void setChequeList(final List<ChequeDeptMapping> chequeList) {
+		this.chequeList = chequeList;
+	}
 
-    public Bankaccount getBankaccount() {
-        return bankaccount;
-    }
+	public Bankaccount getBankaccount() {
+		return bankaccount;
+	}
 
-    public void setBankaccount(final Bankaccount bankaccount) {
-        this.bankaccount = bankaccount;
-    }
+	public void setBankaccount(final Bankaccount bankaccount) {
+		this.bankaccount = bankaccount;
+	}
 
-    public List<ChequeDetail> getChequeDetailsList() {
-        return chequeDetailsList;
-    }
+	public List<ChequeDetail> getChequeDetailsList() {
+		return chequeDetailsList;
+	}
 
-    public void setChequeDetailsList(final List<ChequeDetail> chequeDetailsList) {
-        this.chequeDetailsList = chequeDetailsList;
-    }
+	public void setChequeDetailsList(final List<ChequeDetail> chequeDetailsList) {
+		this.chequeDetailsList = chequeDetailsList;
+	}
 
-    public String getDeletedChqDeptId() {
-        return deletedChqDeptId;
-    }
+	public String getDeletedChqDeptId() {
+		return deletedChqDeptId;
+	}
 
-    public void setDeletedChqDeptId(final String deletedChqDeptId) {
-        this.deletedChqDeptId = deletedChqDeptId;
-    }
+	public void setDeletedChqDeptId(final String deletedChqDeptId) {
+		this.deletedChqDeptId = deletedChqDeptId;
+	}
 
-    public Long getFinancialYearId() {
-        return financialYearId;
-    }
+	public Long getFinancialYearId() {
+		return financialYearId;
+	}
 
-    public void setFinancialYearId(final Long financialYearId) {
-        this.financialYearId = financialYearId;
-    }
+	public void setFinancialYearId(final Long financialYearId) {
+		this.financialYearId = financialYearId;
+	}
 }

@@ -53,8 +53,8 @@ public class ReportBean {
 
     private Integer fundId;
     private Integer functionId;
-    private Integer departmentId;
-    private Integer functionaryId;
+    private String departmentCode;
+	private Integer functionaryId;
     private Integer divisionId;
     private Date fromDate;
     private Date toDate;
@@ -85,10 +85,6 @@ public class ReportBean {
 
     public Integer getFunctionId() {
         return functionId;
-    }
-
-    public Integer getDepartmentId() {
-        return departmentId;
     }
 
     public Integer getFunctionaryId() {
@@ -123,10 +119,6 @@ public class ReportBean {
         this.functionId = functionId;
     }
 
-    public void setDepartmentId(final Integer departmentId) {
-        this.departmentId = departmentId;
-    }
-
     public void setFunctinaryId(final Integer functinaryId) {
         functionaryId = functinaryId;
     }
@@ -150,5 +142,14 @@ public class ReportBean {
     public void setFunctionName(final String functionName) {
         this.functionName = functionName;
     }
+    
+    public String getDepartmentCode() {
+		return departmentCode;
+	}
+
+	public void setDepartmentCode(String departmentCode) {
+		this.departmentCode = departmentCode;
+	}
+
 
 }

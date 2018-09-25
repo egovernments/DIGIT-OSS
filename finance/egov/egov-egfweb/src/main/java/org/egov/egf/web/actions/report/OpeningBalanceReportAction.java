@@ -70,6 +70,7 @@ import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.services.PersistenceService;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.utils.FinancialConstants;
 import org.hibernate.FlushMode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +96,8 @@ public class OpeningBalanceReportAction extends BaseFormAction {
 	private OpeningBalanceInputBean openingBalanceReport = new OpeningBalanceInputBean();
 	private OpeningBalance openingBalance;
 	@Autowired
+	private EgovMasterDataCaching masterDataCache;
+	@Autowired
 	private MicroserviceUtils microserviceUtils;
 	protected DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 	protected ArrayList openingBalanceDisplayList = new ArrayList();
@@ -115,7 +118,7 @@ public class OpeningBalanceReportAction extends BaseFormAction {
 		persistenceService.getSession().setFlushMode(FlushMode.MANUAL);
 		addDropdownData("fundList",
 				persistenceService.findAllBy(" from Fund where isactive=true and isnotleaf=false order by name"));
-		addDropdownData("departmentList", microserviceUtils.getDepartments());
+		addDropdownData("departmentList", masterDataCache.get("egi-department"));
 		addDropdownData("financialYearList",
 				persistenceService.findAllBy("from CFinancialYear order by finYearRange desc "));
 
@@ -151,7 +154,7 @@ public class OpeningBalanceReportAction extends BaseFormAction {
 		}
 
 		if (!openingBalanceDisplayList.isEmpty()) {
-			list = microserviceUtils.getDepartments();
+			list = masterDataCache.get("egi-department");
 			for (Department dep : list) {
 				depMap.put(dep.getCode(), dep.getName());
 			}

@@ -87,6 +87,7 @@ import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infra.web.utils.EgovPaginatedList;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.bills.EgBillregistermis;
 import org.egov.utils.Constants;
 import org.egov.utils.FinancialConstants;
@@ -111,6 +112,9 @@ public class VoucherSearchAction extends BaseFormAction {
 	protected AppConfigValueService appConfigValuesService;
 	@Autowired
 	protected MicroserviceUtils microserviceUtils;
+	@Autowired
+	protected EgovMasterDataCaching masterDataCache;
+
 	private final List<String> headerFields = new ArrayList<String>();
 	private final List<String> mandatoryFields = new ArrayList<String>();
 	public Date fromDate = new Date();
@@ -149,7 +153,7 @@ public class VoucherSearchAction extends BaseFormAction {
 		getHeaderFields();
 		populateSourceMap();
 		if (headerFields.contains("department"))
-			addDropdownData("departmentList",microserviceUtils.getDepartments());
+			addDropdownData("departmentList", masterDataCache.get("egi-department"));
 		if (headerFields.contains("functionary"))
 			addDropdownData("functionaryList",
 					persistenceService.findAllBy(" from Functionary where isactive=true order by name"));
@@ -291,10 +295,11 @@ public class VoucherSearchAction extends BaseFormAction {
 				voucherMap.put("vouchernumber", voucherheader.getVoucherNumber());
 				voucherMap.put("type", voucherheader.getType());
 				voucherMap.put("name", voucherheader.getName());
-				if(voucherheader.getVouchermis()!=null && voucherheader.getVouchermis().getDepartmentcode()!=null && !voucherheader.getVouchermis().getDepartmentcode().equals("-1")){
-				org.egov.infra.microservice.models.Department depList = microserviceUtils
-						.getDepartmentByCode(voucherheader.getVouchermis().getDepartmentcode());
-				voucherMap.put("deptName", depList.getName());
+				if (voucherheader.getVouchermis() != null && voucherheader.getVouchermis().getDepartmentcode() != null
+						&& !voucherheader.getVouchermis().getDepartmentcode().equals("-1")) {
+					org.egov.infra.microservice.models.Department depList = microserviceUtils
+							.getDepartmentByCode(voucherheader.getVouchermis().getDepartmentcode());
+					voucherMap.put("deptName", depList.getName());
 				}
 				voucherMap.put("voucherdate", voucherheader.getVoucherDate());
 				voucherMap.put("fundname", voucherheader.getFundId().getName());
@@ -334,10 +339,11 @@ public class VoucherSearchAction extends BaseFormAction {
 					voucherMap.put("vouchernumber", voucherheader.getVoucherNumber());
 					voucherMap.put("type", voucherheader.getType());
 					voucherMap.put("name", voucherheader.getName());
-					if(voucherheader.getVouchermis().getDepartmentcode()!=null && !voucherheader.getVouchermis().getDepartmentcode().equals("-1")){
-					org.egov.infra.microservice.models.Department depList = microserviceUtils
-							.getDepartmentByCode(voucherheader.getVouchermis().getDepartmentcode());
-					voucherMap.put("deptName", depList.getName());
+					if (voucherheader.getVouchermis().getDepartmentcode() != null
+							&& !voucherheader.getVouchermis().getDepartmentcode().equals("-1")) {
+						org.egov.infra.microservice.models.Department depList = microserviceUtils
+								.getDepartmentByCode(voucherheader.getVouchermis().getDepartmentcode());
+						voucherMap.put("deptName", depList.getName());
 					}
 					voucherMap.put("voucherdate", voucherheader.getVoucherDate());
 					voucherMap.put("fundname", voucherheader.getFundId().getName());
@@ -547,13 +553,13 @@ public class VoucherSearchAction extends BaseFormAction {
 	public void setVoucherNames(final Map<String, List<String>> voucherNames) {
 		this.voucherNames = voucherNames;
 	}
-	
-    public Department getDeptImpl() {
-        return deptImpl;
-    }
 
-    public void setDeptImpl(final Department deptImpl) {
-        this.deptImpl = deptImpl;
-    }
+	public Department getDeptImpl() {
+		return deptImpl;
+	}
+
+	public void setDeptImpl(final Department deptImpl) {
+		this.deptImpl = deptImpl;
+	}
 
 }

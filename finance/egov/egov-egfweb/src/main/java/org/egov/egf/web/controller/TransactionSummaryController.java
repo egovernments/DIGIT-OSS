@@ -66,8 +66,8 @@ import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.commons.dao.FunctionDAO;
 import org.egov.commons.dao.FundHibernateDAO;
 import org.egov.commons.service.AccountdetailtypeService;
-import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infstr.services.PersistenceService;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.contra.TransactionSummary;
 import org.egov.model.contra.TransactionSummaryDto;
 import org.egov.model.service.TransactionSummaryService;
@@ -104,8 +104,9 @@ public class TransactionSummaryController {
 	private FundHibernateDAO fundHibernateDAO;
 	@Autowired
 	private ChartOfAccountsDAO chartOfAccountsDAO;
+
 	@Autowired
-	private MicroserviceUtils microserviceUtils;
+	private EgovMasterDataCaching masterDataCache;
 
 	@Autowired
 	@Qualifier("persistenceService")
@@ -119,7 +120,7 @@ public class TransactionSummaryController {
 		model.addAttribute("cFinancialYears", financialYearDAO.getAllActivePostingFinancialYear());
 		model.addAttribute("funds", fundHibernateDAO.findAllActiveFunds());
 		model.addAttribute("cChartOfAccountss", chartOfAccountsDAO.findAll());
-		model.addAttribute("departments", microserviceUtils.getDepartments());
+		model.addAttribute("departments", masterDataCache.get("egi-department"));
 		model.addAttribute("cFunctions", functionDAO.getAllActiveFunctions());
 	}
 

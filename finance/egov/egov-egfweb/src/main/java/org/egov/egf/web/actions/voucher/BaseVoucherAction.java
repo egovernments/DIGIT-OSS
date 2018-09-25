@@ -170,7 +170,7 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 			LOGGER.debug("Inside Prepare method");
 		getHeaderMandateFields();
 		if (headerFields.contains("department")){
-			List<org.egov.infra.microservice.models.Department> departments = microserviceUtils.getDepartments();
+			List<org.egov.infra.microservice.models.Department> departments = masterDataCache.get("egi-department");
 			addDropdownData("departmentList", departments);
 		}
 		if (headerFields.contains("functionary"))
