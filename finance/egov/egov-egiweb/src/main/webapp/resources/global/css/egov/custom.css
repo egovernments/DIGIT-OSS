@@ -68,7 +68,7 @@ body {
   word-wrap: break-word;
 }
 body {
-  padding-top: 72px;
+ /*  padding-top: 72px; */
 }
 body #loadingMask {
   position: absolute;
@@ -278,11 +278,11 @@ label.error {
 }
 .page-container.horizontal-menu {
   padding-left: 0;
-  padding-top: 62px;
+  /*padding-top: 62px;*/
 }
 .page-container.horizontal-menu .search {
   position: fixed;
-  top: 63px;
+  /*top: 63px;*/
   left: 0;
   z-index: 10;
   width: 250px;
