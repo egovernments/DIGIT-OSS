@@ -113,7 +113,7 @@ function callAjaxSearch() {
 					$(row).on(
 							'click',
 							function() {
-								window.open('/EGF/bankbranch/' + $('#mode').val()+ '/' + data.id, '','width=800, height=600');
+								window.open('/services/EGF/bankbranch/' + $('#mode').val()+ '/' + data.id, '','width=800, height=600');
 							});
 				},
 				"bDestroy" : true,

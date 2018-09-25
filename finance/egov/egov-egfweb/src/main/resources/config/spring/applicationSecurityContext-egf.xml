@@ -68,7 +68,7 @@
 				<security:filter-chain pattern="/commonyui/yui2.7/**" filters="none" />
 				<security:filter-chain pattern="/script/**" filters="none" />
 				<security:filter-chain pattern="/javascript/**" filters="none" /> 
-				<security:filter-chain pattern="/report/dayBookReport*.action" filters="none" />
+				<!-- <security:filter-chain pattern="/report/dayBookReport*.action" filters="none" />
 				<security:filter-chain pattern="/report/trialBalance*.action" filters="none" />
 				<security:filter-chain pattern="/report/bankBookReport*.action" filters="none" />
 				<security:filter-chain pattern="/report/subLedgerScheduleReport*.action" filters="none" />
@@ -77,9 +77,9 @@
 				<security:filter-chain pattern="/report/openingBalanceReport*.action" filters="none" />
 				<security:filter-chain pattern="/report/incomeExpenditureReport*.action" filters="none" />
 				<security:filter-chain pattern="/report/balanceSheetReport*.action" filters="none" />
+				<security:filter-chain pattern="/report/billPaymentVoucherPrint*.action" filters="none" /> -->
 				<security:filter-chain pattern="/voucher/preApprovedVoucher-loadvoucherview.action" filters="none" />
 				<security:filter-chain pattern="/payment/payment-view.action" filters="none" />
-				<security:filter-chain pattern="/report/billPaymentVoucherPrint*.action" filters="none" />
 				<security:filter-chain pattern="/deduction/remitRecovery-beforeView.action" filters="none" />
 				<security:filter-chain pattern="/bill/contingentBill-beforeView.action" filters="none" />
 				<security:filter-chain pattern="/voucher/common-ajaxLoadAccountNumbers.action" filters="none" />

@@ -75,7 +75,7 @@
      	doLoadingMask();
     	document.getElementById("resultDiv").style.display="none";
         var formObj = jQuery(document.getElementById("generalLedgerForm"));
-        var formURL = '/EGF/report/generalLedgerReport-ajaxSearch.action';
+        var formURL = '/services/EGF/report/generalLedgerReport-ajaxSearch.action';
         var formData = new FormData(document.getElementById("generalLedgerForm"));
         jQuery.ajax({
             url: formURL,

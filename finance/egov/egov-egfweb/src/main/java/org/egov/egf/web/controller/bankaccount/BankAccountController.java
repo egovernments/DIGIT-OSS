@@ -126,7 +126,7 @@ public class BankAccountController {
         model.addAttribute("autoglcode", createBankAccountService.autoBankAccountGLCodeEnabled());
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newForm(final Model model) {
         setDropDownValues(model);
         model.addAttribute(BANKACCOUNT, new Bankaccount());
@@ -149,7 +149,7 @@ public class BankAccountController {
         return "bankaccount-view";
     }
 
-    @RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
+    @RequestMapping(value = "/search/{mode}", method = RequestMethod.POST)
     public String search(@PathVariable("mode") final String mode, final Model model) {
         final Bankaccount bankaccount = new Bankaccount();
         setDropDownValues(model);

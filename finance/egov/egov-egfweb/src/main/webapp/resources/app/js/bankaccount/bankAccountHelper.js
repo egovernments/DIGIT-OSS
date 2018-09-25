@@ -116,7 +116,7 @@ function callAjaxSearch() {
 					$(row).on(
 							'click',
 							function() {
-								window.open('/EGF/bankaccount/' + $('#mode').val()+ '/' + data.id, '','width=800, height=600');
+								window.open('/services/EGF/bankaccount/' + $('#mode').val()+ '/' + data.id, '','width=800, height=600');
 							});
 				},
 				"bDestroy" : true,

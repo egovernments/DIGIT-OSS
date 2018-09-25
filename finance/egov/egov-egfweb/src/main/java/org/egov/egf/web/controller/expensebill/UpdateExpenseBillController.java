@@ -111,7 +111,11 @@ public class UpdateExpenseBillController extends BaseBillController {
     }
 
     @ModelAttribute(EG_BILLREGISTER)
-    public EgBillregister getEgBillregister(@PathVariable final String billId) {
+    public EgBillregister getEgBillregister(@PathVariable String billId) {
+    	if(billId.contains("showMode")){
+    		String[] billIds = billId.split("\\&");
+    		billId = billIds[0];
+    	}
         return expenseBillService.getById(Long.parseLong(billId));
     }
 
@@ -256,8 +260,12 @@ public class UpdateExpenseBillController extends BaseBillController {
     }
 
     @RequestMapping(value = "/view/{billId}", method = RequestMethod.GET)
-    public String view(final Model model, @PathVariable final String billId,
+    public String view(final Model model, @PathVariable String billId,
                        final HttpServletRequest request) throws ApplicationException {
+    	if(billId.contains("showMode")){
+    		String[] billIds = billId.split("\\&");
+    		billId = billIds[0];
+    	}
         final EgBillregister egBillregister = expenseBillService.getById(Long.parseLong(billId));
         setDropDownValues(model);
         egBillregister.getBillDetails().addAll(egBillregister.getEgBilldetailes());

@@ -146,7 +146,7 @@ today = dd+'/'+mm+'/'+yyyy;
 		document.getElementById('loading').style.display ='none';                             
 	}
 	function showDetails(glcode,startDate,endDate){           
-		var deptId = '<s:property value="departmentId"/>';
+		var deptCode = '<s:property value="departmentCode"/>';
 		var functionaryId = '<s:property value="functionaryId"/>';
 		var functionName = '<s:property value="functionName"/>';
 		var functionId = '<s:property value="functionId"/>';
@@ -162,7 +162,7 @@ today = dd+'/'+mm+'/'+yyyy;
 			functionId="";
 			}                   
 		
-		window.open('/EGF/report/generalLedgerReport-searchDrilldown.action?fromBean=1&glCode1='+glcode+'&fund_id='+fundId+'&startDate='+startDate+'&endDate='+endDate+'&departmentId='+deptId+'&functionaryId='+functionaryId+'&functionCodeId='+functionId+'&functionCode='+functionCode1+'&fieldId='+fieldId,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+		window.open('/services/EGF/report/generalLedgerReport-searchDrilldown.action?fromBean=1&glCode1='+glcode+'&fund_id='+fundId+'&startDate='+startDate+'&endDate='+endDate+'&departmentCode='+deptCode+'&functionaryId='+functionaryId+'&functionCodeId='+functionId+'&functionCode='+functionCode1+'&fieldId='+fieldId,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
 	}
 </script>
 </head>
@@ -228,10 +228,10 @@ today = dd+'/'+mm+'/'+yyyy;
 								list="dropdownData.fundList" listKey="id" listValue="name"
 								headerKey="" headerValue="----Choose----" value="%{fundId}" /></td>
 						<td class="bluebox"><s:text name="voucher.department" />
-						<td class="bluebox"><s:select name="departmentId"
-								id="departmentid" list="dropdownData.departmentList"
-								listKey="id" listValue="name" headerKey=""
-								headerValue="----Choose----" value="departmentId" /></td>
+						<td class="bluebox"><s:select name="departmentCode"
+								id="departmentcode" list="dropdownData.departmentList"
+								listKey="code" listValue="name" headerKey=""
+								headerValue="----Choose----" value="departmentCode" /></td>
 					</tr>
 					<tr>
 						<td class="greybox"></td>

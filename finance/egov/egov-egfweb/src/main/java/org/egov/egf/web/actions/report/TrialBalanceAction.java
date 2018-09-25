@@ -318,8 +318,8 @@ public class TrialBalanceAction extends BaseFormAction {
         }
 
         if (null != rb.getDepartmentId()) {
-            misDeptCond = " and mis.DEPARTMENTID= :departmentId";
-            tsDeptCond = " and DEPARTMENTID= :departmentId";
+            misDeptCond = " and mis.DEPARTMENTCODE= :departmentCode";
+            tsDeptCond = " and DEPARTMENTCODE= :departmentCode";
         }
         if (null != rb.getFunctionaryId()) {
             functionaryCond = " and mis.FUNCTIONARYID= :functionaryId";

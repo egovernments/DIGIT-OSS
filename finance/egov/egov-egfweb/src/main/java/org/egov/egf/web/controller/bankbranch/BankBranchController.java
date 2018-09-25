@@ -95,7 +95,7 @@ public class BankBranchController {
         model.addAttribute("bankbranches", createBankBranchService.getByIsActiveTrueOrderByBranchname());
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newForm(final Model model) {
         setDropDownValues(model);
         model.addAttribute(BANKBRANCH, new Bankbranch());
@@ -124,7 +124,7 @@ public class BankBranchController {
         return "bankbranch-view";
     }
 
-    @RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
+    @RequestMapping(value = "/search/{mode}", method = RequestMethod.POST)
     public String search(@PathVariable("mode") final String mode, final Model model) {
         final Bankbranch bankbranch = new Bankbranch();
         setDropDownValues(model);
