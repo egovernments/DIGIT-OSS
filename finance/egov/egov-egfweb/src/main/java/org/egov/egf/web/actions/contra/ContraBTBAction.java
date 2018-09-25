@@ -1518,7 +1518,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 
 	private void validateChqNumber(final String chqNo, final Long bankaccId, final CVoucherHeader voucherHeader) {
 		if (!instrumentService.isChequeNumberValid(chqNo, bankaccId,
-				Integer.valueOf(voucherHeader.getVouchermis().getDepartmentcode()), null))
+				voucherHeader.getVouchermis().getDepartmentcode(), null))
 			throw new ValidationException(
 					Arrays.asList(new ValidationError("Invalid cheque number", "Invalid cheque number")));
 

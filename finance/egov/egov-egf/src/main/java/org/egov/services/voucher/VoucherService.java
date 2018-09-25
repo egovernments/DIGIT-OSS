@@ -1001,7 +1001,7 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public Map<String, Object> getDesgBYPassingWfItem(final String scriptName, final Object wfitem,
-			final Integer deptId) {
+			final String deptId) {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Voucher Service | getDesgUserByDeptAndDesgName | Start");
 		final Map<String, Object> map = new HashMap<>();
@@ -1036,7 +1036,7 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> getAllDesgByAndDept(final Integer deptId, final String desgfuncry) {
+	public List<Map<String, Object>> getAllDesgByAndDept(final String deptId, final String desgfuncry) {
 		Map<String, Object> desgMap;
 		final List<Map<String, Object>> desgList = new ArrayList<>();
 		if (LOGGER.isDebugEnabled())

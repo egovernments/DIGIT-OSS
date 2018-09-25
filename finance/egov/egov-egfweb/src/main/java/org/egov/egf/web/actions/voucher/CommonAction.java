@@ -169,7 +169,7 @@ public class CommonAction extends BaseFormAction {
     private Integer bankId;
     private List<Map<String, Object>> bankBranchList;
     private Integer branchId;
-    private Long departmentId;
+    private String departmentId;
     private Long bankaccountId;
     private String rtgsNumber;
     private String chequeNumber;
@@ -788,7 +788,7 @@ public class CommonAction extends BaseFormAction {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("CommonAction | ajaxLoadDrawingOfficers");
         try {
-            if (departmentId != null && departmentId != -1 && departmentId != 0)
+            if (departmentId != null && !departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0"))
                 drawingList = getPersistenceService()
                         .findAllBy(
                                 "select do from DrawingOfficer do,Department dept,DepartmentDOMapping ddm where ddm.department.id = dept.id and ddm.drawingOfficer.id = do.id and dept.id = ?",
@@ -1238,7 +1238,7 @@ public class CommonAction extends BaseFormAction {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Starting ajaxValidateChequeNumber...");
         final String index = parameters.get("index")[0];
-        value = instrumentService.isChequeNumberValid(chequeNumber, bankaccountId, departmentId.intValue(), serialNo) == true ? index
+        value = instrumentService.isChequeNumberValid(chequeNumber, bankaccountId, departmentId, serialNo) == true ? index
                 + "~true" : index + "~false";
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed ajaxValidateChequeNumber.");
@@ -1260,7 +1260,7 @@ public class CommonAction extends BaseFormAction {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Starting ajaxValidateReassignSurrenderChequeNumber...");
         final String index = parameters.get("index")[0];
-        value = instrumentService.isReassigningChequeNumberValid(chequeNumber, bankaccountId, departmentId.intValue(), serialNo) == true
+        value = instrumentService.isReassigningChequeNumberValid(chequeNumber, bankaccountId, departmentId, serialNo) == true
                 ? index
                         + "~true"
                 : index + "~false";
@@ -1285,7 +1285,7 @@ public class CommonAction extends BaseFormAction {
                     + "'");
             functionaryId = functionary != null ? functionary.getId().toString() : null;
         }
-        if (departmentId != -1 && designationId != -1 && null != functionaryName && functionaryName.trim().length() != 0) {
+        if (!departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0") && designationId != -1 && null != functionaryName && functionaryName.trim().length() != 0) {
             final List<EmployeeView> empInfoList = voucherService.getUserByDeptAndDesgName(departmentId.toString(),
                     designationId.toString(), functionaryId);
             for (final EmployeeView employeeView : empInfoList)
@@ -1792,11 +1792,11 @@ public class CommonAction extends BaseFormAction {
     }
 
     
-    public Long getDepartmentId() {
+    public String getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(final Long departmentId) {
+    public void setDepartmentId(final String departmentId) {
         this.departmentId = departmentId;
     }
 
@@ -2059,8 +2059,8 @@ public class CommonAction extends BaseFormAction {
                             " and  vh1.id=vh.id and iv.VOUCHERHEADERID is null ");
             if (fundId != null && fundId != 0 && fundId != -1)
                 queryString = queryString.append(" and bankaccount.fundid=" + fundId.longValue());
-            if (departmentId != null && departmentId != 0 && departmentId != -1)
-                queryString = queryString.append(" and vmis.departmentid=" + departmentId);
+            if (departmentId != null && !departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0"))
+                queryString = queryString.append(" and vmis.departmentcode=" + departmentId);
             queryString = queryString
                     .append(" and gl.debitamount!=0 and gl.debitamount is not null and vh.voucherdate <= :date1 " +
                             " and ph.bankaccountnumberid=bankaccount.id and vh.type='"
@@ -2092,8 +2092,8 @@ public class CommonAction extends BaseFormAction {
                             "ih.id_status=egws.id and egws.description in  ('Surrendered','Surrender_For_Reassign')");
             if (fundId != null && fundId != 0 && fundId != -1)
                 queryString = queryString.append(" and bankaccount.fundid=" + fundId.longValue());
-            if (departmentId != null && departmentId != 0 && departmentId != -1)
-                queryString = queryString.append(" and vmis.departmentid=" + departmentId);
+            if (departmentId != null && !departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0"))
+                queryString = queryString.append(" and vmis.departmentcode=" + departmentId);
             queryString = queryString
                     .append(" and gl.debitamount!=0 and gl.debitamount is not null and vh.voucherdate <= :date2 " +
                             " and ph.bankaccountnumberid=bankaccount.id and vh.type='"
@@ -2159,8 +2159,8 @@ public class CommonAction extends BaseFormAction {
                             " and  vh1.id=vh.id and iv.VOUCHERHEADERID is null ");
             if (fundId != null && fundId != 0 && fundId != -1)
                 queryString = queryString.append(" and bankaccount.fundid=" + fundId.longValue());
-            if (departmentId != null && departmentId != 0 && departmentId != -1)
-                queryString = queryString.append(" and vmis.departmentid=" + departmentId);
+            if (departmentId != null && !departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0"))
+                queryString = queryString.append(" and vmis.departmentcode=" + departmentId);
             queryString = queryString
                     .append(" and gl.debitamount!=0 and gl.debitamount is not null and vh.voucherdate <= :date1 " +
                             " and ph.bankaccountnumberid=bankaccount.id and vh.type='"
@@ -2191,8 +2191,8 @@ public class CommonAction extends BaseFormAction {
                             "ih.id_status=egws.id and egws.description in  ('Surrendered','Surrender_For_Reassign')");
             if (fundId != null && fundId != 0 && fundId != -1)
                 queryString = queryString.append(" and bankaccount.fundid=" + fundId.longValue());
-            if (departmentId != null && departmentId != 0 && departmentId != -1)
-                queryString = queryString.append(" and vmis.departmentid=" + departmentId);
+            if (departmentId != null && !departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0"))
+                queryString = queryString.append(" and vmis.departmentcode=" + departmentId);
             queryString = queryString
                     .append(" and gl.debitamount!=0 and gl.debitamount is not null and vh.voucherdate <= :date2 " +
                             " and ph.bankaccountnumberid=bankaccount.id and vh.type='"
@@ -2257,8 +2257,8 @@ public class CommonAction extends BaseFormAction {
                             " and  vh1.id=vh.id and iv.VOUCHERHEADERID is null ");
             if (fundId != null && fundId != 0 && fundId != -1)
                 queryString = queryString.append(" and bankaccount.fundid=" + fundId.longValue());
-            if (departmentId != null && departmentId != 0 && departmentId != -1)
-                queryString = queryString.append(" and vmis.departmentid=" + departmentId);
+            if (departmentId != null && !departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0"))
+                queryString = queryString.append(" and vmis.departmentcode=" + departmentId);
             queryString = queryString
                     .append(" and gl.debitamount!=0 and gl.debitamount is not null and vh.voucherdate <= :date1 " +
                             " and ph.bankaccountnumberid=bankaccount.id and vh.type='"
@@ -2289,8 +2289,8 @@ public class CommonAction extends BaseFormAction {
                             "ih.id_status=egws.id and egws.description in  ('Surrendered','Surrender_For_Reassign')");
             if (fundId != null && fundId != 0 && fundId != -1)
                 queryString = queryString.append(" and bankaccount.fundid=" + fundId.longValue());
-            if (departmentId != null && departmentId != 0 && departmentId != -1)
-                queryString = queryString.append(" and vmis.departmentid=" + departmentId);
+            if (departmentId != null && !departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0"))
+                queryString = queryString.append(" and vmis.departmentcode=" + departmentId);
             queryString = queryString
                     .append(" and gl.debitamount!=0 and gl.debitamount is not null and vh.voucherdate <= :date2 " +
                             " and ph.bankaccountnumberid=bankaccount.id and vh.type='"
@@ -2777,8 +2777,8 @@ public class CommonAction extends BaseFormAction {
 
             if (fundId != null && fundId != 0 && fundId != -1)
                 queryString = queryString.append(" and bankaccount.fundid=" + fundId.longValue());
-            if (departmentId != null && departmentId != 0 && departmentId != -1)
-                queryString = queryString.append(" and vmis.departmentid=" + departmentId);
+            if (departmentId != null && !departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0"))
+                queryString = queryString.append(" and vmis.departmentcode=" + departmentId);
             queryString = queryString.append(" and ph.bankaccountnumberid=bankaccount.id  and vh.type='"
                     + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT + "' and vh.name='"
                     + FinancialConstants.PAYMENTVOUCHER_NAME_SALARY + "'");
@@ -2807,8 +2807,8 @@ public class CommonAction extends BaseFormAction {
                             " and ih.id_status=egws.id and egws.description in ('Surrendered','Surrender_For_Reassign')");
             if (fundId != null && fundId != 0 && fundId != -1)
                 queryString = queryString.append(" and bankaccount.fundid=" + fundId.longValue());
-            if (departmentId != null && departmentId != 0 && departmentId != -1)
-                queryString = queryString.append(" and vmis.departmentid=" + departmentId);
+            if (departmentId != null && !departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0"))
+                queryString = queryString.append(" and vmis.departmentcode=" + departmentId);
             queryString = queryString.append(" and ph.bankaccountnumberid=bankaccount.id  and vh.type='"
                     + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT + "' and vh.name='"
                     + FinancialConstants.PAYMENTVOUCHER_NAME_SALARY + "' order by 4 ");
@@ -2872,8 +2872,8 @@ public class CommonAction extends BaseFormAction {
 
             if (fundId != null && fundId != 0 && fundId != -1)
                 queryString = queryString.append(" and bankaccount.fundid=" + fundId.longValue());
-            if (departmentId != null && departmentId != 0 && departmentId != -1)
-                queryString = queryString.append(" and vmis.departmentid=" + departmentId);
+            if (departmentId != null && !departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0"))
+                queryString = queryString.append(" and vmis.departmentcode=" + departmentId);
             queryString = queryString.append(" and ph.bankaccountnumberid=bankaccount.id  and vh.type='"
                     + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT + "' and vh.name='"
                     + FinancialConstants.PAYMENTVOUCHER_NAME_PENSION + "'");
@@ -2902,8 +2902,8 @@ public class CommonAction extends BaseFormAction {
                             " and ih.id_status=egws.id and egws.description in ('Surrendered','Surrender_For_Reassign')");
             if (fundId != null && fundId != 0 && fundId != -1)
                 queryString = queryString.append(" and bankaccount.fundid=" + fundId.longValue());
-            if (departmentId != null && departmentId != 0 && departmentId != -1)
-                queryString = queryString.append(" and vmis.departmentid=" + departmentId);
+            if (departmentId != null && !departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0"))
+                queryString = queryString.append(" and vmis.departmentcode=" + departmentId);
             queryString = queryString.append(" and ph.bankaccountnumberid=bankaccount.id  and vh.type='"
                     + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT + "' and vh.name='"
                     + FinancialConstants.PAYMENTVOUCHER_NAME_PENSION + "' order by 4 ");
@@ -3064,9 +3064,9 @@ public class CommonAction extends BaseFormAction {
         if (getBillRegisterId() != null) {
             final EgBillregister cbill = (EgBillregister) persistenceService.find(" from EgBillregister where id=?",
                     getBillRegisterId());
-            map = voucherService.getDesgBYPassingWfItem(scriptName, cbill, departmentId.intValue());
+            map = voucherService.getDesgBYPassingWfItem(scriptName, cbill, departmentId);
         } else
-            map = voucherService.getDesgBYPassingWfItem(scriptName, null, departmentId.intValue());
+            map = voucherService.getDesgBYPassingWfItem(scriptName, null, departmentId);
 
         designationList = (List<Map<String, Object>>) map.get("designationList");
         if (LOGGER.isDebugEnabled())
@@ -3653,7 +3653,7 @@ public class CommonAction extends BaseFormAction {
 
     @Action(value = "/voucher/common-ajaxLoadEstimateBudgetDetailsByDepartmentId")
     public String ajaxLoadEstimateBudgetDetailsByDepartmentId() {
-        if (departmentId != null && departmentId != 0)
+        if (departmentId != null && !departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0"))
             budgetDetailList = budgetDetailService.getFunctionFromBudgetDetailByDepartmentId(departmentId);
         return "estimateBudgetDetails";
     }
@@ -4019,10 +4019,10 @@ public class CommonAction extends BaseFormAction {
             if (bankaccount != null && departmentId != null) {
                 yearCodeList = persistenceService
                         .findAllBy(
-                                "select  DISTINCT fs from  AccountCheques ac,CFinancialYear fs,ChequeDeptMapping cd  where ac.serialNo = fs.id and  bankAccountId=?"
-                                        + " and ac.id=cd.accountCheque and cd.allotedTo.id=?"
+                                "select  DISTINCT fs from  AccountCheques ac,CFinancialYear fs,ChequeDeptMapping cd  where ac.serialNo = fs.id and ac.bankAccountId.id=?"
+                                        + " and ac.id=cd.accountCheque and cd.allotedTo=?"
                                         + " order by fs.id desc ",
-                                bankaccount, departmentId);
+                                bankaccount.longValue(), departmentId.toString());
             }
         } catch (final HibernateException e) {
             LOGGER.error("Exception occured while getting year code " + e.getMessage(),

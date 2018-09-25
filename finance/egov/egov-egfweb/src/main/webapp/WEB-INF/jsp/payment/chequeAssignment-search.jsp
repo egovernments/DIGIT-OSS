@@ -70,80 +70,45 @@
 			<table align="center" width="100%" cellpadding="0" cellspacing="0">
 				<tr>
 					<td class="bluebox"></td>
-					<td class="bluebox"><s:text
-							name="chq.assignment.paymentvoucherdatefrom" /></td>
-					<td class="bluebox"><s:textfield id="fromDate" name="fromDate"
-							value="%{fromDate}" data-date-end-date="0d"
-							onkeyup="DateFormat(this,this.value,event,false,'3')"
-							placeholder="DD/MM/YYYY" class="form-control datepicker"
-							data-inputmask="'mask': 'd/m/y'" /></td>
-					<td class="bluebox"><s:text
-							name="chq.assignment.paymentvoucherdateto" /></td>
-					<td class="bluebox"><s:textfield id="toDate" name="toDate"
-							value="%{toDate}" data-date-end-date="0d"
-							onkeyup="DateFormat(this,this.value,event,false,'3')"
-							placeholder="DD/MM/YYYY" class="form-control datepicker"
-							data-inputmask="'mask': 'd/m/y'" /></td>
+					<td class="bluebox"><s:text name="chq.assignment.paymentvoucherdatefrom" /></td>
+					<td class="bluebox"><s:textfield id="fromDate" name="fromDate" value="%{fromDate}" data-date-end-date="0d" onkeyup="DateFormat(this,this.value,event,false,'3')" placeholder="DD/MM/YYYY" class="form-control datepicker" data-inputmask="'mask': 'd/m/y'" /></td>
+					<td class="bluebox"><s:text name="chq.assignment.paymentvoucherdateto" /></td>
+					<td class="bluebox"><s:textfield id="toDate" name="toDate" value="%{toDate}" data-date-end-date="0d" onkeyup="DateFormat(this,this.value,event,false,'3')" placeholder="DD/MM/YYYY" class="form-control datepicker" data-inputmask="'mask': 'd/m/y'" /></td>
 				</tr>
 				<tr>
 					<td class="greybox"></td>
-					<td class="greybox"><s:text name="payment.mode" /><span
-						class="mandatory"></span></td>
-					<td class="greybox"><s:radio id="paymentMode"
-							name="paymentMode"
-							list="#{'cheque':'Cheque','cash':'Consolidated Cheque'}"
-							onchange="enableOrDisableBillType(this)" value="%{paymentMode}" /></td>
-					<td class="greybox"><s:text
-							name="chq.assignment.paymentvoucherno" /></td>
-					<td class="greybox"><s:textfield name="voucherNumber"
-							id="voucherNumber" value="%{voucherNumber}" /></td>
+					<td class="greybox"><s:text name="payment.mode" /><span class="mandatory"></span></td>
+					<td class="greybox"><s:radio id="paymentMode" name="paymentMode" list="#{'cheque':'Cheque','cash':'Consolidated Cheque'}" onchange="enableOrDisableBillType(this)" value="%{paymentMode}" /></td>
+					<td class="greybox"><s:text name="chq.assignment.paymentvoucherno" /></td>
+					<td class="greybox"><s:textfield name="voucherNumber" id="voucherNumber" value="%{voucherNumber}" /></td>
 				</tr>
 				<tr>
 					<td class="greybox"></td>
 					<td class="bluebox"><s:text name="chq.assignment.billtype" />
 					</td>
-					<td class="bluebox"><s:select name="billType" id="billType"
-							list="billTypeMap" headerKey="-1" headerValue="----Choose----"
-							value="%{billType}" /></td>
+					<td class="bluebox"><s:select name="billType" id="billType" list="billTypeMap" headerKey="-1" headerValue="----Choose----" value="%{billType}" /></td>
 				</tr>
 				<jsp:include page="../voucher/vouchertrans-filter.jsp" />
 				<tr>
 					<td class="greybox"></td>
-					<egov:ajaxdropdown id="bank_branch" fields="['Text','Value']"
-						dropdownId="bank_branch"
-						url="voucher/common-ajaxLoadBanksWithApprovedPayments.action" />
-					<td class="greybox"><s:text name="chq.assignment.bank" /><span
-						class="mandatory"></span></td>
-					<td class="greybox"><s:select name="bank_branch"
-							id="bank_branch" list="bankBranchMap" headerKey="-1"
-							headerValue="----Choose----" onchange="loadBankAccount(this)"
-							value="%{bank_branch}" /></td>
-					<egov:ajaxdropdown id="bankaccount" fields="['Text','Value']"
-						dropdownId="bankaccount"
-						url="voucher/common-ajaxLoadBankAccountsWithApprovedPayments.action" />
-					<td class="greybox"><s:text name="chq.assignment.bankaccount" /><span
-						class="mandatory"></span></td>
-					<td class="greybox" colspan="2"><s:select name="bankaccount"
-							id="bankaccount" list="dropdownData.bankaccountList" listKey="id"
-							listValue="chartofaccounts.glcode+'--'+accountnumber+'---'+accounttype"
-							headerKey="-1" headerValue="----Choose----"
-							value="%{bankaccount}" /></td>
+					<egov:ajaxdropdown id="bank_branch" fields="['Text','Value']" dropdownId="bank_branch" url="voucher/common-ajaxLoadBanksWithApprovedPayments.action" />
+					<td class="greybox"><s:text name="chq.assignment.bank" /><span class="mandatory"></span></td>
+					<td class="greybox"><s:select name="bank_branch" id="bank_branch" list="bankBranchMap" headerKey="-1" headerValue="----Choose----" onchange="loadBankAccount(this)" value="%{bank_branch}" /></td>
+					<egov:ajaxdropdown id="bankaccount" fields="['Text','Value']" dropdownId="bankaccount" url="voucher/common-ajaxLoadBankAccountsWithApprovedPayments.action" />
+					<td class="greybox"><s:text name="chq.assignment.bankaccount" /><span class="mandatory"></span></td>
+					<td class="greybox" colspan="2"><s:select name="bankaccount" id="bankaccount" list="dropdownData.bankaccountList" listKey="id" listValue="chartofaccounts.glcode+'--'+accountnumber+'---'+accounttype" headerKey="-1" headerValue="----Choose----" value="%{bankaccount}" /></td>
 				</tr>
 				<tr>
 					<td class="greybox"></td>
-					<td class="bluebox"><s:text
-							name="chq.assignment.re-assignsurrendercheque" /></td class="bluebox">
-					<td class="bluebox"><s:checkbox id="reassignSurrenderChq"
-							name="reassignSurrenderChq" /></td class="bluebox">
+					<td class="bluebox"><s:text name="chq.assignment.re-assignsurrendercheque" /></td class="bluebox">
+					<td class="bluebox"><s:checkbox id="reassignSurrenderChq" name="reassignSurrenderChq" /></td class="bluebox">
 					<td class="greybox"></td>
 					<td class="greybox"></td>
 				</tr>
 			</table>
 			<div class="buttonbottom">
-				<s:submit method="search" value="Search" id="searchBtn"
-					cssClass="buttonsubmit" onclick="return validateSearch()" />
-				<input type="button" value="Close"
-					onclick="javascript:window.close()" class="button" />
+				<s:submit method="search" value="Search" id="searchBtn" cssClass="buttonsubmit" onclick="return validateSearch()" />
+				<input type="button" value="Close" onclick="javascript:window.close()" class="button" />
 			</div>
 		</div>
 		<s:hidden name="bankbranch" id="bankbranch" />
@@ -193,7 +158,7 @@
 		}
 		function validateSearch() {
 
-			document.forms[0].action = '/EGF/payment/chequeAssignment-search.action';
+			document.forms[0].action = '/services/EGF/payment/chequeAssignment-search.action';
 			document.forms[0].submit();
 
 			return true;

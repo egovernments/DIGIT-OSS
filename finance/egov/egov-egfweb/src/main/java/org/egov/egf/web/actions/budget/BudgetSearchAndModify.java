@@ -685,7 +685,7 @@ public class BudgetSearchAndModify extends BudgetSearchAction {
     private void loadApproverUser(final List<BudgetDetail> budgetDetailList) {
         final Map<String, Object> map = voucherService.getDesgBYPassingWfItem("BudgetDetail.nextDesg", null, budgetDetailList
                 .get(0)
-                .getExecutingDepartment().getId().intValue());
+                .getExecutingDepartment().getCode());
         addDropdownData("departmentList", masterDataCache.get("egi-department"));
 
         final List<Map<String, Object>> desgList = (List<Map<String, Object>>) map.get("designationList");

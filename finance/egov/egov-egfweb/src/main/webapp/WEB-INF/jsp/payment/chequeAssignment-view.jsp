@@ -124,7 +124,7 @@
 									value="%{statusId.description}" /></td>
 							<td class="blueborderfortd"><div align="center">
 									<a
-										href='/EGF/payment/chequeAssignment-bankAdviceExcel.action?instHeaderId=<s:property value="id"/>'>
+										href='/services/EGF/payment/chequeAssignment-bankAdviceExcel.action?instHeaderId=<s:property value="id"/>'>
 										<s:text name="instrument.bankadvice" />
 									</a>
 								</div></td>
@@ -223,7 +223,7 @@ function printCheque(id)
 		bootbox.alert("This bank account is not attached to any cheque formats");
 		return false;
 	} 
-	window.open('/EGF/payment/chequeAssignmentPrint-generateChequeFormat.action?instrumentHeader='+id,'Search','resizable=yes,scrollbars=yes,left=300,top=40,width=900, height=700');
+	window.open('/services/EGF/payment/chequeAssignmentPrint-generateChequeFormat.action?instrumentHeader='+id,'Search','resizable=yes,scrollbars=yes,left=300,top=40,width=900, height=700');
     return false;
 }
 </script>

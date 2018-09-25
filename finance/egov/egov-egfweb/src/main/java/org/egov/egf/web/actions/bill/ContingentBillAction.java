@@ -710,9 +710,9 @@ public class ContingentBillAction extends BaseBillAction {
         // Now, we are loading the primary assignment department as the default in the dropdown(see mingle 2103,2102, 2104)
         // Hence the primary department is passed here
         if (primaryDepartment != null && primaryDepartment.getId() != null)
-            map = voucherService.getDesgBYPassingWfItem("cbill.nextUser", cbill, primaryDepartment.getId().intValue());
+            map = voucherService.getDesgBYPassingWfItem("cbill.nextUser", cbill, primaryDepartment.getCode());
         else
-            map = voucherService.getDesgBYPassingWfItem("cbill.nextUser", cbill, Integer.valueOf(voucherHeader.getVouchermis().getDepartmentcode()));
+            map = voucherService.getDesgBYPassingWfItem("cbill.nextUser", cbill, voucherHeader.getVouchermis().getDepartmentcode());
         addDropdownData(DESIGNATION_LIST, (List<Map<String, Object>>) map.get(DESIGNATION_LIST));
         addDropdownData(USER_LIST, Collections.EMPTY_LIST);
         nextLevel = map.get(WFITEMSTATE) != null ? map.get(WFITEMSTATE).toString() : null;

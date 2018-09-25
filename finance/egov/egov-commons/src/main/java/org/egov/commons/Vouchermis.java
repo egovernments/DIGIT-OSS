@@ -189,14 +189,14 @@ public class Vouchermis implements java.io.Serializable {
     }
 
     public String getDepartmentcode() {
-		return departmentcode;
-	}
+        return departmentcode;
+    }
 
-	public void setDepartmentcode(String departmentcode) {
-		this.departmentcode = departmentcode;
-	}
+    public void setDepartmentcode(String departmentcode) {
+        this.departmentcode = departmentcode;
+    }
 
-	public SubScheme getSubschemeid() {
+    public SubScheme getSubschemeid() {
         return this.subschemeid;
     }
 

@@ -206,9 +206,9 @@
 					<tr>
 						<td class="greybox"><s:text name="chq.assignment.department" /><span
 							class="mandatory1">*</span> <s:select
-								name="vouchermis.departmentid" id="departmentid"
-								list="dropdownData.departmentList" listKey="id" listValue="name"
-								value="%{voucherHeader.vouchermis.departmentid.id}"
+								name="vouchermis.departmentcode" id="departmentid"
+								list="dropdownData.departmentList" listKey="code" listValue="name"
+								value="%{voucherHeader.vouchermis.departmentcode}"
 								onChange="populateYearcode(this);" /></td>
 
 						<s:if test="%{reassignSurrenderChq && paymentMode!='cheque'}">

@@ -295,13 +295,13 @@ public class ContraBTCAction extends BaseVoucherAction {
 	private boolean validateChequeNumber() {
 		if (instrumentHeader == null && !instrumentService.isChequeNumberValid(contraBean.getChequeNumber(),
 				Long.parseLong(contraBean.getAccountNumberId()),
-				Integer.valueOf(voucherHeader.getVouchermis().getDepartmentcode()), null))
+				voucherHeader.getVouchermis().getDepartmentcode(), null))
 			return false;
 		else if (instrumentHeader != null
 				&& !contraBean.getChequeNumber().equalsIgnoreCase(instrumentHeader.getInstrumentNumber())
 				&& !instrumentService.isChequeNumberValid(contraBean.getChequeNumber(),
 						Long.parseLong(contraBean.getAccountNumberId()),
-						Integer.valueOf(voucherHeader.getVouchermis().getDepartmentcode()), null))
+						voucherHeader.getVouchermis().getDepartmentcode(), null))
 			return false;
 		return true;
 	}

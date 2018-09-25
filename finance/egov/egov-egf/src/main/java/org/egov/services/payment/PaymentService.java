@@ -1944,7 +1944,6 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                 }
             // parameters.put("voucherHeader", );
             if (billType == null || billType.equalsIgnoreCase("-1") || billType.equalsIgnoreCase("0"))
-
                 chequeAssignmentList.addAll(chequeAssignmentService.getPaymentVoucherNotInInstrument(parameters));
             else if (billType.equalsIgnoreCase(FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT))
                 chequeAssignmentList.addAll(chequeAssignmentService.getExpenseBillPayments());
@@ -1967,7 +1966,9 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                 sql.append(" and vh.fundId=" + voucherHeader.getFundId().getId());
             if (voucherHeader.getVouchermis().getFundsource() != null)
                 sql.append(" and vmis.fundsourceId=" + voucherHeader.getVouchermis().getFundsource().getId());
-            if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+            if (voucherHeader.getVouchermis().getDepartmentcode() != null
+                    && !voucherHeader.getVouchermis().getDepartmentcode().equalsIgnoreCase("-1")
+                    && !voucherHeader.getVouchermis().getDepartmentcode().equalsIgnoreCase("0"))
                 sql.append(" and vmis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode() + "'");
             if (voucherHeader.getVouchermis().getSchemeid() != null)
                 sql.append(" and vmis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId());

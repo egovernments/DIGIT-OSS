@@ -2173,7 +2173,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                 .addOrder(Order.asc("executingDepartment")).list();
     }
 
-    public List<BudgetDetail> getFunctionFromBudgetDetailByDepartmentId(final Long departmentId) {
+    public List<BudgetDetail> getFunctionFromBudgetDetailByDepartmentId(final String departmentId) {
         final Criteria criteria = getSession().createCriteria(BudgetDetail.class);
         return criteria.add(Restrictions.eq("executingDepartment.id", departmentId))
                 .setProjection(Projections.distinct(Projections.property("function"))).addOrder(Order.asc("function"))

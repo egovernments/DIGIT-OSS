@@ -47,18 +47,8 @@
  */
 package org.egov.model.bills;
 
-import org.egov.commons.CFinancialYear;
-import org.egov.commons.CFunction;
-import org.egov.commons.CVoucherHeader;
-import org.egov.commons.Functionary;
-import org.egov.commons.Fund;
-import org.egov.commons.Fundsource;
-import org.egov.commons.Scheme;
-import org.egov.commons.SubScheme;
-import org.egov.infra.admin.master.entity.Boundary;
-import org.egov.infra.admin.master.entity.Department;
-import org.egov.infra.persistence.entity.AbstractPersistable;
-import org.hibernate.validator.constraints.Length;
+import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -70,8 +60,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.math.BigDecimal;
-import java.util.Date;
+
+import org.egov.commons.CFinancialYear;
+import org.egov.commons.CFunction;
+import org.egov.commons.CVoucherHeader;
+import org.egov.commons.Functionary;
+import org.egov.commons.Fund;
+import org.egov.commons.Fundsource;
+import org.egov.commons.Scheme;
+import org.egov.commons.SubScheme;
+import org.egov.infra.admin.master.entity.Boundary;
+import org.egov.infra.persistence.entity.AbstractPersistable;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "EG_BILLREGISTERMIS")
@@ -133,6 +133,9 @@ public class EgBillregistermis extends AbstractPersistable<Integer> implements j
     private BigDecimal month;
 
     private String departmentcode;
+
+    @Transient
+    private String departmentName;
 
     @ManyToOne
     @JoinColumn(name = "financialyearid")
@@ -550,12 +553,20 @@ public class EgBillregistermis extends AbstractPersistable<Integer> implements j
         this.subSchemeId = subSchemeId;
     }
 
-	public String getDepartmentcode() {
-		return departmentcode;
-	}
+    public String getDepartmentcode() {
+        return departmentcode;
+    }
 
-	public void setDepartmentcode(String departmentcode) {
-		this.departmentcode = departmentcode;
-	}
+    public void setDepartmentcode(String departmentcode) {
+        this.departmentcode = departmentcode;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
 
 }

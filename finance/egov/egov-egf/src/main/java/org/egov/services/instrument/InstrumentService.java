@@ -916,19 +916,19 @@ public class InstrumentService {
     // setters for Spring injection
 
     public boolean isChequeNumberWithinRange(final String chequeNumber,
-            final Long bankAccountId, final Integer departmentId,
+            final Long bankAccountId, final String departmentId,
             final String serialNo) {
         AccountCheques accountCheques = new AccountCheques();
         if (serialNo != null)
             accountCheques = (AccountCheques) persistenceService
                     .find("select ac from AccountCheques ac, ChequeDeptMapping cd where ac.id = cd.accountCheque.id and "
-                            + " ac.bankAccountId.id=? and cd.allotedTo.id=? and ? between ac.fromChequeNumber and ac.toChequeNumber and ac.serialNo=? ",
-                            bankAccountId, departmentId.longValue(), chequeNumber, Long.valueOf(serialNo));
+                            + " ac.bankAccountId.id=? and cd.allotedTo=? and ? between ac.fromChequeNumber and ac.toChequeNumber and ac.serialNo=? ",
+                            bankAccountId, departmentId, chequeNumber, Long.valueOf(serialNo));
         else
             accountCheques = (AccountCheques) persistenceService
                     .find("select ac from AccountCheques ac, ChequeDeptMapping cd where ac.id = cd.accountCheque.id and "
-                            + " ac.bankAccountId.id=? and cd.allotedTo.id=? and ? between ac.fromChequeNumber and ac.toChequeNumber ",
-                            bankAccountId, departmentId.longValue(), chequeNumber);
+                            + " ac.bankAccountId.id=? and cd.allotedTo=? and ? between ac.fromChequeNumber and ac.toChequeNumber ",
+                            bankAccountId, departmentId, chequeNumber);
         if (accountCheques == null)
             return false;
         return true;
@@ -985,7 +985,7 @@ public class InstrumentService {
     }
 
     public boolean isChequeNumberValid(final String chequeNumber,
-            final Long bankAccountId, final Integer departmentId,
+            final Long bankAccountId, final String departmentId,
             final String serialNo) {
         if (!isChequeNumberWithinRange(chequeNumber, bankAccountId,
                 departmentId, serialNo))
@@ -1103,7 +1103,7 @@ public class InstrumentService {
      * @return
      */
     public boolean isReassigningChequeNumberValid(final String chequeNumber,
-            final Long bankAccountId, final Integer departmentId,
+            final Long bankAccountId, final String departmentId,
             final String serialNo) {
         if (!isChequeNumberWithinRange(chequeNumber, bankAccountId,
                 departmentId, serialNo))
