@@ -92,7 +92,12 @@
         <filter-name>springSessionRepositoryFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
-
+	
+	<filter>
+    	<filter-name>restAuthFilter</filter-name>
+    	<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+	
     <filter>
         <filter-name>applicationCoreFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -169,7 +174,12 @@
         <filter-name>securityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
+	
+	 <filter-mapping>
+    	<filter-name>restAuthFilter</filter-name>
+    	<url-pattern>/rest/*</url-pattern>
+    </filter-mapping>
+	
     <filter-mapping>
         <filter-name>applicationCoreFilter</filter-name>
         <url-pattern>/*</url-pattern>

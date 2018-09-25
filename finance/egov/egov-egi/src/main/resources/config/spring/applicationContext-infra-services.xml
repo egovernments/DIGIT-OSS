@@ -67,6 +67,7 @@
     <bean id="abstractPersistenceService" class="org.egov.infstr.services.PersistenceService" abstract="true"/>
 
 	<bean id="applicationCoreFilter" class="org.egov.infra.web.filter.ApplicationCoreFilter"/>
+	<bean id="restAuthFilter" class="org.egov.infra.web.filter.RestServiceAuthFilter" />
 	
 	<bean id="applicationTenantResolverFilter" class="org.egov.infra.web.filter.ApplicationTenantResolverFilter"/>
 	
