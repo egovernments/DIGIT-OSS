@@ -247,15 +247,55 @@
       "name": "State Administrator",
       "description": "Admin role that as access over a state"
     },
- 		{
+    {
       "rolecode": "EGF-BILL_CREATOR",
       "name": "EGF Bill Creator",
-      "description": "Employee who creates Bills mainly expense bill "
+      "description": "Employee who creates Bills in finance "
     },
-		{
+    {
       "rolecode": "EGF-BILL_APPROVER",
       "name": "EGF Bill Approver",
-      "description": "Employee who takes part in  Bills  approval mainly expense bill "
+      "description": "Employee who takes part in  Bills  approval in finance "
+    },
+    {
+      "rolecode": "EGF-VOUCHER_CREATOR",
+      "name": "Finance Voucher Creator",
+      "description": "One who can create a voucher"
+    },
+    {
+      "rolecode": "EGF-VOUCHER_APPROVER",
+      "name": "Finance Voucher Approver",
+      "description": "One who can approve a voucher"
+    },
+    {
+      "rolecode": "EGF-PAYMENT_CREATOR",
+      "name": "Finance Payment Creator",
+      "description": "One who can create a payment"
+    },
+    {
+      "rolecode": "EGF-PAYMENT_APPROVER",
+      "name": "Finance Payment Approver",
+      "description": "One who can approve a payment"
+    },
+    {
+      "rolecode": "EGF-MASTER_ADMIN",
+      "name": "Finance Master Admin",
+      "description": "One who is the administrator for all master data in Finance"
+    },
+    {
+      "rolecode": "EGF-REPORT_VIEW",
+      "name": "Finance Report View",
+      "description": "One who has acess to all financial reports"
+    },
+    {
+      "rolecode": "COLL_RECEIPT_CREATOR",
+      "name": "Collections Receipt Creator",
+      "description": "One who can create and approve a receipt and receipt voucher"
+    },
+    {
+      "rolecode": "COLL_REMIT_TO_BANK",
+      "name": "Collections Remitter",
+      "description": "One who can remit the instruments to bank"
     }
   ]
 }

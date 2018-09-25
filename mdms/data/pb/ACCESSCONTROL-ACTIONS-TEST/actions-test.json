@@ -5047,7 +5047,7 @@
       "orderNumber": 0,
       "parentModule": "233",
       "enabled": false,
-      "serviceCode": "SubScheme_Master",
+      "serviceCode": "FinanceMaster",
       "code": "null",
       "path": ""
     },
@@ -5059,7 +5059,7 @@
       "orderNumber": 0,
       "parentModule": "233",
       "enabled": false,
-      "serviceCode": "SubScheme_Master",
+      "serviceCode": "FinanceMaster",
       "code": "null",
       "path": ""
     },
@@ -5071,7 +5071,7 @@
       "orderNumber": 0,
       "parentModule": "233",
       "enabled": false,
-      "serviceCode": "SubScheme_Master",
+      "serviceCode": "FinanceMaster",
       "code": "null",
       "path": ""
     },
@@ -12732,7 +12732,7 @@
    "displayName": "exil-chartofaccount add new",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -12745,7 +12745,7 @@
    "displayName": "exil-chartofaccount view/modify",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -12771,7 +12771,7 @@
    "displayName": "exil-SubScheme View",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -12784,7 +12784,7 @@
    "displayName": "master-FinSource codecheck",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -12836,7 +12836,7 @@
    "displayName": "exil-ChartOfaccountsView",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -12862,7 +12862,7 @@
    "displayName": "accountCheque-manipulateCheques",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -12875,7 +12875,7 @@
    "displayName": "accountChequeAction",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -13057,7 +13057,7 @@
    "displayName": "Master-financingSource_getIntEstAmt",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -13369,7 +13369,7 @@
    "displayName": "Get Next GLcode",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -13629,7 +13629,7 @@
    "displayName": "Scheme Code unique check",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -13642,7 +13642,7 @@
    "displayName": "View Scheme Code",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -13655,7 +13655,7 @@
    "displayName": "Edit Scheme Code",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -14695,7 +14695,7 @@
    "displayName": "Chart Of Accounts",
    "orderNumber": 1,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Chartofaccounts",
    "navigationURL": "services/EGF/eGov_COA.jsp"
@@ -14786,7 +14786,7 @@
    "displayName": "Create Detailed Code",
    "orderNumber": 1,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Detailed Codes.Create Detailed Code",
    "navigationURL": "services/EGF/masters/chartOfAccounts-addNew.action"
@@ -14903,7 +14903,7 @@
    "displayName": "Create Scheme",
    "orderNumber": 1,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Scheme.Create Scheme",
    "navigationURL": "services/EGF/masters/scheme-newForm.action"
@@ -14916,7 +14916,7 @@
    "displayName": "View Scheme",
    "orderNumber": 2,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Scheme.View Scheme",
    "navigationURL": "services/EGF/masters/scheme-beforeSearch.action"
@@ -14929,7 +14929,7 @@
    "displayName": "Modify Scheme",
    "orderNumber": 3,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Scheme.Modify Scheme",
    "navigationURL": "services/EGF/masters/scheme-beforeSearch.action?mode=edit"
@@ -15020,7 +15020,7 @@
    "displayName": "Create Recovery",
    "orderNumber": 1,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Recovery.Create Recovery",
    "navigationURL": "services/EGF/recovery/new"
@@ -15033,7 +15033,7 @@
    "displayName": "View Recovery",
    "orderNumber": 2,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Recovery.View Recovery",
    "navigationURL": "services/EGF/recovery/search/view"
@@ -15046,7 +15046,7 @@
    "displayName": "Modify Recovery",
    "orderNumber": 3,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Recovery.Modify Recovery",
    "navigationURL": "services/EGF/recovery/search/edit"
@@ -15072,7 +15072,7 @@
    "displayName": "View Sub Scheme",
    "orderNumber": 5,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Scheme.View Sub-scheme",
    "navigationURL": "services/EGF/masters/subScheme-beforeSearch.action?showMode=view"
@@ -15111,7 +15111,7 @@
    "displayName": "Modify Sub Scheme",
    "orderNumber": 6,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Scheme.Modify Sub-scheme",
    "navigationURL": "services/EGF/masters/subScheme-beforeSearch.action?showMode=edit"
@@ -15891,7 +15891,7 @@
    "displayName": "Scheme-View",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -15930,7 +15930,7 @@
    "displayName": "Scheme-Modify",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -16203,7 +16203,7 @@
    "displayName": "Add/Modify Bank Account Cheque",
    "orderNumber": 1,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Cheque.Add/Modify Bank Account Cheque",
    "navigationURL": "services/EGF/masters/accountCheque-newform.action"
@@ -16281,7 +16281,7 @@
    "displayName": "Create Fund",
    "orderNumber": 1,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Fund.Create Fund",
    "navigationURL": "services/EGF/fund/new"
@@ -16294,10 +16294,10 @@
    "displayName": "View Fund",
    "orderNumber": 2,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Fund.View Fund",
-   "navigationURL": "services/EGF/fund/search/edit"
+   "navigationURL": "services/EGF/fund/search/view"
  },
  {
    "id": 1960,
@@ -16307,7 +16307,7 @@
    "displayName": "Modify Fund",
    "orderNumber": 3,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Fund.Modify Fund",
    "navigationURL": "services/EGF/fund/search/edit"
@@ -16320,7 +16320,7 @@
    "displayName": "Create Other Masters",
    "orderNumber": 1,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Other Masters.Create other masters",
    "navigationURL": "services/EGF/accountentity/new"
@@ -16346,7 +16346,7 @@
    "displayName": "Modify Other Masters",
    "orderNumber": 3,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Other Masters.Modify Other Masters",
    "navigationURL": "services/EGF/accountentity/search/edit"
@@ -16398,7 +16398,7 @@
    "displayName": "Fund",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -16411,7 +16411,7 @@
    "displayName": "Fund-BeforeModify",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -16424,7 +16424,7 @@
    "displayName": "User Defined Codes",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -16437,7 +16437,7 @@
    "displayName": "Create Function",
    "orderNumber": 1,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Function.Create Function",
    "navigationURL": "services/EGF/function/new"
@@ -16450,7 +16450,7 @@
    "displayName": "View Function",
    "orderNumber": 2,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Function.View Function",
    "navigationURL": "services/EGF/function/search/view"
@@ -16463,7 +16463,7 @@
    "displayName": "Modify Function",
    "orderNumber": 3,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Function.Modify Function",
    "navigationURL": "services/EGF/function/search/edit"
@@ -16489,7 +16489,7 @@
    "displayName": "Create Sub Scheme",
    "orderNumber": 4,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Scheme.Create Sub-scheme",
    "navigationURL": "services/EGF/masters/subScheme-newForm.action"
@@ -16502,7 +16502,7 @@
    "displayName": "User Defined Codes-BeforeModify",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -16528,7 +16528,7 @@
    "displayName": "Function-BeforeModify",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -16749,7 +16749,7 @@
    "displayName": "Modify Bank",
    "orderNumber": 1,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Bank.Modify Bank",
    "navigationURL": "services/EGF/bank/search/edit"
@@ -16762,7 +16762,7 @@
    "displayName": "BankAccountMaster",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -16775,7 +16775,7 @@
    "displayName": "BankBranchMaster",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -16801,7 +16801,7 @@
    "displayName": "Create Bank",
    "orderNumber": 1,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Bank.Create Bank",
    "navigationURL": "services/EGF/bank/new"
@@ -17347,7 +17347,7 @@
    "displayName": "Create Scheme",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -17360,7 +17360,7 @@
    "displayName": "Search Scheme",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -17373,7 +17373,7 @@
    "displayName": "Search Scheme",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -17386,7 +17386,7 @@
    "displayName": "Search Scheme",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -17399,7 +17399,7 @@
    "displayName": "Search SubScheme",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -17503,7 +17503,7 @@
    "displayName": "BillVouchersList",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -17516,7 +17516,7 @@
    "displayName": "BillVouchersList",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -17529,7 +17529,7 @@
    "displayName": "BillVouchersList",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -17542,7 +17542,7 @@
    "displayName": "BillVouchersList",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -17555,7 +17555,7 @@
    "displayName": "BillVouchersList",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -17633,7 +17633,7 @@
    "displayName": "saveBank",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -17646,7 +17646,7 @@
    "displayName": "modifyBank",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "",
    "navigationURL": ""
@@ -17698,7 +17698,7 @@
    "displayName": "Create Contractor",
    "orderNumber": 1,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Contractor.Create Contractor",
    "navigationURL": "services/EGF/contractor/newform"
@@ -17711,7 +17711,7 @@
    "displayName": "View Contractor",
    "orderNumber": 2,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Contractor. View Contractor",
    "navigationURL": "services/EGF/contractor/search/view"
@@ -17724,7 +17724,7 @@
    "displayName": "Modify Contractor",
    "orderNumber": 3,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Contractor.Modify Contractor",
    "navigationURL": "services/EGF/contractor/search/edit"
@@ -17737,7 +17737,7 @@
    "displayName": "Create Supplier",
    "orderNumber": 1,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Supplier.Create Supplier",
    "navigationURL": "services/EGF/supplier/newform"
@@ -17750,7 +17750,7 @@
    "displayName": "View Supplier",
    "orderNumber": 2,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Supplier.View Supplier",
    "navigationURL": "services/EGF/supplier/search/view"
@@ -17763,7 +17763,7 @@
    "displayName": "Modify Supplier",
    "orderNumber": 3,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Supplier.Modify Supplier",
    "navigationURL": "services/EGF/supplier/search/edit"
@@ -18154,7 +18154,7 @@
    "displayName": "View Detailed Code",
    "orderNumber": 2,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Detailed Codes.View Detailed Code",
    "navigationURL": "services/EGF/masters/chartOfAccounts-viewDetailedCode.action"
@@ -18167,7 +18167,7 @@
    "displayName": "Modify Detailed Code",
    "orderNumber": 3,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Detailed Codes.Modify Detailed Code",
    "navigationURL": "services/EGF/masters/chartOfAccounts-editDetailedCode.action"
@@ -18453,7 +18453,7 @@
    "displayName": "View Bank",
    "orderNumber": 2,
    "enabled": true,
-   "serviceCode": "",
+   "serviceCode": "FinanceMaster",
    "code": "null",
    "path": "Finance.Masters.Bank.View Bank",
    "navigationURL": "services/EGF/bank/search/view"
