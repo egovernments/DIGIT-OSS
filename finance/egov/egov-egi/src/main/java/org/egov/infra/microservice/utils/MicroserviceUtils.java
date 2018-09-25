@@ -504,7 +504,7 @@ public class MicroserviceUtils {
 
     public List<Assignment> getAssignments(String department, String designation) {
         List<Assignment> assignmentList = new ArrayList<>();
-        List<EmployeeInfo> employeeInfos = getEmployee(0l, new Date(), department, designation);
+        List<EmployeeInfo> employeeInfos = getApprovers(department, designation);
         for (EmployeeInfo ei : employeeInfos) {
             for (Assignment a : ei.getAssignments()) {
                 a.setEmployeeName(ei.getName());

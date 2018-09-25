@@ -115,12 +115,12 @@
 				test="%{isFieldMandatory('department')}">
 				<span class="bluebox"><span class="mandatory1">*</span></span>
 			</s:if></td>
-		<td class="greybox"><s:select name="vouchermis.departmentid"
+		<td class="greybox"><s:select name="vouchermis.departmentcode"
 				id="vouchermis.departmentid" list="dropdownData.departmentList"
-				listKey="id" listValue="name" headerKey=""
+				listKey="code" listValue="name" headerKey=""
 				headerValue="----Choose----"
-				value="voucherHeader.vouchermis.departmentid.id"
-				onChange="populateApproverDept(this);" /></td>
+				value="voucherHeader.vouchermis.departmentid.code"
+				 /></td>
 	</s:if>
 	<s:if test="%{shouldShowHeaderField('field')}">
 		<td class="greybox"><s:text name="voucher.field" /> <s:if
@@ -178,6 +178,9 @@ function populatesubSchemes(scheme){
 function populateFundSource(subSchemeId){
 	
 	populatefundsourceId({subSchemeId:subSchemeId.options[subSchemeId.selectedIndex].value});	
+}
+function populateApproverDept(dept){
+//	populateApprverDeptId({departmentId:departmentId.options[departmentId.selectedIndex].value});
 }
 function validateMIS(){
 	// Javascript validation of the MIS Manadate attributes.
@@ -252,8 +255,7 @@ function validateMIS(){
 			</s:if>
 			return  true;
 }
-function populateApproverDept(dept){
-}
+
 	/* 
 		if(null != document.getElementById('departmentid') &&  null != document.getElementById('approverUserId')){
 			if(dept.options[dept.selectedIndex].value != ""){

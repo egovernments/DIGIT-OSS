@@ -451,7 +451,7 @@ function onSubmit()
 	}
 	else if(jQuery("#bankBalanceCheck").val()==noBalanceCheck)
 		{
-		document.dbpform.action = '/EGF/payment/directBankPayment-create.action';
+		document.dbpform.action = '/services/EGF/payment/directBankPayment-create.action';
 		return true;
 		}
 	else if(!balanceCheck() && jQuery("#bankBalanceCheck").val()==balanceCheckMandatory){
@@ -461,7 +461,7 @@ function onSubmit()
 	else if(!balanceCheck() && jQuery("#bankBalanceCheck").val()==balanceCheckWarning){
 		 var msg = confirm("Insufficient Bank Balance. Do you want to process ?");
 		 if (msg == true) {
-			 document.dbpform.action = '/EGF/payment/directBankPayment-create.action';
+			 document.dbpform.action = '/services/EGF/payment/directBankPayment-create.action';
 			 document.dbpform.submit();
 			return true;
 		 } else {
@@ -470,7 +470,7 @@ function onSubmit()
 			}
 		}
 	else{
-		document.dbpform.action = '/EGF/payment/directBankPayment-create.action';
+		document.dbpform.action = '/services/EGF/payment/directBankPayment-create.action';
 		document.dbpform.submit();
 	}
 		

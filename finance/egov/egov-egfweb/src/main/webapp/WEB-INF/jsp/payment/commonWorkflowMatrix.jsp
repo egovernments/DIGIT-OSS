@@ -52,7 +52,7 @@
 <%@ include file="/includes/taglibs.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<script>
+<script type="text/javascript">
 	function getUsersByDesignationAndDept() {
 		populateapproverPositionId({
 			approverDepartmentId : document
@@ -125,16 +125,21 @@
 </script>
 <s:if test="%{getNextAction()!='END'}">
 	<s:if test="%{getCurrentState()!='Closed'}">
-		<s:hidden id="currentState" name="currentState" value="%{getCurrentState()}" />
+		<s:hidden id="currentState" name="currentState"
+			value="%{getCurrentState()}" />
 	</s:if>
 	<s:else>
 		<s:hidden id="currentState" name="currentState" value="" />
 	</s:else>
-	<s:hidden id="currentDesignation" name="currentDesignation" value="%{currentDesignation}" />
-	<s:hidden id="additionalRule" name="additionalRule" value="%{additionalRule}" />
+	<s:hidden id="currentDesignation" name="currentDesignation"
+		value="%{currentDesignation}" />
+	<s:hidden id="additionalRule" name="additionalRule"
+		value="%{additionalRule}" />
 	<s:hidden id="amountRule" name="amountRule" value="%{amountRule}" />
-	<s:hidden id="workFlowDepartment" name="workFlowDepartment" value="%{workFlowDepartment}" />
-	<s:hidden id="pendingActions" name="pendingActions" value="%{pendingActions}" />
+	<s:hidden id="workFlowDepartment" name="workFlowDepartment"
+		value="%{workFlowDepartment}" />
+	<s:hidden id="pendingActions" name="pendingActions"
+		value="%{pendingActions}" />
 	<s:hidden id="approverName" name="approverName" />
 
 	<s:if test="%{#request.approverOddTextCss==null}">
@@ -154,26 +159,45 @@
 			</div>
 
 		</tr>
-		</br>
+		<br></br>
 		<tr>
 			<td class="${approverOddCSS}" width="5%">&nbsp;</td>
 			<td class="${approverOddCSS}" id="deptLabel" width="14%"><s:text
 					name="wf.approver.department" />:</td>
 			<td class="${approverOddTextCss}" width="14%">
-				<s:select name="approverDepartment" id="approverDepartment" list="dropdownData.approverDepartmentList" listKey="id" listValue="name" headerKey="-1" headerValue="----Choose----" value="%{approverDepartment}" onchange="loadDesignationFromMatrix();" cssClass="dropDownCss" />
-				<egov:ajaxdropdown fields="['Text','Value']" url="workflow/ajaxWorkFlow-getDesignationsByObjectType.action" id="approverDesignation" dropdownId="approverDesignation" contextToBeUsed="/services/eis" afterSuccess="setDesignation();" /></td>
+				<s:select name="approverDepartment" id="approverDepartment"
+					list="dropdownData.approverDepartmentList" listKey="code"
+					listValue="name" headerKey="-1" headerValue="----Choose----"
+					value="%{approverDepartment}"
+					onchange="loadDesignationFromMatrix();" cssClass="dropDownCss" />
+				<egov:ajaxdropdown fields="['Text','Value']"
+					url="workflow/ajaxWorkFlow-getDesignationsByObjectType.action"
+					id="approverDesignation" dropdownId="approverDesignation"
+					contextToBeUsed="/services/eis" afterSuccess="setDesignation();" />
+			</td>
 			<td class="${approverOddCSS}" width="14%">
-				<s:text	name="wf.approver.designation" />:
-			</td>
+				<s:text	name="wf.approver.designation" />:</td>
 			<td class="${approverOddTextCss}" width="14%">
-				<s:select id="approverDesignation" name="approverDesignation" list="dropdownData.designationList" listKey="designationId" headerKey="-1" listValue="designationName" headerValue="----Choose----" onchange="populateApprover();" onfocus="callAlertForDepartment();" cssClass="dropDownCss" /> 
-				<egov:ajaxdropdown id="approverPositionId" fields="['Text','Value']" dropdownId="approverPositionId" url="workflow/ajaxWorkFlow-getPositionByPassingDesigId.action" contextToBeUsed="/services/eis" afterSuccess="setApprover();" /></td>
+				<s:select	id="approverDesignation" name="approverDesignation"
+					list="dropdownData.designationList" listKey="designationId"
+					headerKey="-1" listValue="designationName"
+					headerValue="----Choose----" onchange="populateApprover();"
+					onfocus="callAlertForDepartment();" cssClass="dropDownCss" /> 
+					<egov:ajaxdropdown id="approverPositionId" fields="['Text','Value']"
+					dropdownId="approverPositionId"
+					url="workflow/ajaxWorkFlow-getPositionByPassingDesigId.action"
+					contextToBeUsed="/services/eis" afterSuccess="setApprover();" />
+			</td>
 			<td class="${approverOddCSS}" width="14%">
-				<s:text name="wf.approver" />:
-			</td>
+				<s:text	name="wf.approver" />:</td>
 			<td class="${approverOddTextCss}" width="14%">
-				<s:select id="approverPositionId" name="approverPositionId" list="dropdownData.approverList" headerKey="-1" headerValue="----Choose----" listKey="id" listValue="firstName" onfocus="callAlertForDesignation();" value="%{approverPositionId}" cssClass="dropDownCss" />
+				<s:select	id="approverPositionId" name="approverPositionId"
+					list="dropdownData.approverList" headerKey="-1"
+					headerValue="----Choose----" listKey="id" listValue="firstName"
+					onfocus="callAlertForDesignation();" value="%{approverPositionId}"
+					cssClass="dropDownCss" />
 			</td>
+
 			<td class="${approverOddCSS}" width="5%">&nbsp;</td>
 		</tr>
 	</table>
@@ -185,8 +209,10 @@
 		<tr>
 			<td width="10%" class="${approverEvenCSS}">&nbsp;</td>
 			<td width="20%" class="${approverEvenCSS}">&nbsp;</td>
-			<td class="${approverEvenCSS}" width="13%"><s:text name="wf.approver.remarks" />:</td>
-			<td class="${approverEvenTextCSS}"><textarea id="approverComments" name="approverComments" rows="2" cols="35"></textarea></td>
+			<td class="${approverEvenCSS}" width="13%"><s:text
+					name="wf.approver.remarks" />:</td>
+			<td class="${approverEvenTextCSS}"><textarea
+					id="approverComments" name="approverComments" rows="2" cols="35"></textarea></td>
 			<td class="${approverEvenCSS}">&nbsp;</td>
 			<td width="10%" class="${approverEvenCSS}">&nbsp;</td>
 			<td class="${approverEvenCSS}">&nbsp;</td>

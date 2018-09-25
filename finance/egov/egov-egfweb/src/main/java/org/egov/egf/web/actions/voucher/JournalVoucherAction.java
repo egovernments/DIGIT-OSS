@@ -258,8 +258,8 @@ public class JournalVoucherAction extends BaseVoucherAction
                                 + " Created Sucessfully"
                                 + "\\n"
                                 + getText("pjv.voucher.approved",
-                                        new String[] { voucherService.getEmployeeNameForPositionId(voucherHeader.getState()
-                                                .getOwnerPosition()) });
+                                        new String[] { this.getEmployeeName(voucherHeader.getState()
+                                                .getCreatedBy()) });
                         target = "success";
                     }
 
@@ -274,8 +274,8 @@ public class JournalVoucherAction extends BaseVoucherAction
                                         .getBudgetaryAppnumber() })
                                 + "\\n"
                                 + getText("pjv.voucher.approved",
-                                        new String[] { voucherService.getEmployeeNameForPositionId(voucherHeader.getState()
-                                                .getOwnerPosition()) });
+                                        new String[] { this.getEmployeeName(voucherHeader.getState()
+                                                .getCreatedBy()) });
 
                         target = "success";
 
@@ -362,6 +362,10 @@ public class JournalVoucherAction extends BaseVoucherAction
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("position===" + pos.getId());
         return pos;
+    }
+    public String getEmployeeName(Long empId){
+        
+       return microserviceUtils.getEmployee(empId, new Date(), null, null).get(0).getName();
     }
 
     public List<VoucherDetails> getBillDetailslist() {

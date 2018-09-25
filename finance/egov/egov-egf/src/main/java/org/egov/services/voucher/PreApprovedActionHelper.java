@@ -51,7 +51,10 @@ import com.exilant.exility.common.TaskFailedException;
 import org.egov.billsaccounting.services.CreateVoucher;
 import org.egov.commons.CVoucherHeader;
 import org.egov.eis.service.PositionMasterService;
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.EmployeeInfo;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.utils.StringUtils;
 import org.egov.infra.validation.exception.ValidationError;
@@ -83,9 +86,12 @@ public class PreApprovedActionHelper {
     @Qualifier("createVoucher")
     private CreateVoucher createVoucher;
 
-    @Autowired
-    PositionMasterService positionMasterService;
+//    @Autowired
+//    PositionMasterService positionMasterService;
 
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
+    
     @Autowired
     SecurityUtils securityUtils;
     @Transactional
@@ -143,8 +149,25 @@ public class PreApprovedActionHelper {
     }
 
     private Boolean validateOwner(State state) {
-        List<Position> positionsForUser = positionMasterService.getPositionsForEmployee(securityUtils.getCurrentUser().getId());
-        return positionsForUser.contains(state.getOwnerPosition());
+//        List<Position> positionsForUser = positionMasterService.getPositionsForEmployee(securityUtils.getCurrentUser().getId());
+//        return positionsForUser.contains(state.getOwnerPosition());
+        Boolean check = false;
+//        
+        List<Long> positions = new ArrayList();
+        Long empId = ApplicationThreadLocals.getUserId();
+        List<EmployeeInfo> employs = microserviceUtils.getEmployee(empId, new Date(),null, null);
+        
+        if(null !=employs && employs.size()>0 )
+                
+        employs.get(0).getAssignments().forEach(assignment->{
+                positions.add(assignment.getPosition());
+        });
+        
+        for (final Long pos : positions)
+            if (state.getOwnerPosition()==pos) {
+                check = true;
+            }
+        return check;
 
     }
 
