@@ -74,7 +74,7 @@
     	doLoadingMask();
     	document.getElementById("resultDiv").style.display="none";
         var formObj = jQuery(document.getElementById("dayBookForm"));
-        var formURL = '/EGF/report/dayBookReport-ajaxSearch.action';
+        var formURL = '/services/EGF/report/dayBookReport-ajaxSearch.action';
         var formData = new FormData(document.getElementById("dayBookForm"));
         jQuery.ajax({
             url: formURL,
