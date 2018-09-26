@@ -4,19 +4,19 @@
   "StructureType": [
     {
       "code": "IMMOVABLE.PUCCA",
-      "active": true,
+      "active": true
     },
     {
       "code": "IMMOVABLE.KUTCHA",
-      "active": true,
+      "active": true
     },
     {
       "code": "MOVABLE.HDV",
-      "active": true,
+      "active": true
     },
     {
       "code": "MOVABLE.MDV",
-      "active": true,
+      "active": true
     }
   ]
 }

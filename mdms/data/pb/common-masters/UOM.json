@@ -4,15 +4,15 @@
   "UOM": [
     {
       "code": "GALLONS",
-      "active": true,
+      "active": true
     },
     {
       "code": "GROSSUNITS",
-      "active": true,
+      "active": true
     },
     {
       "code": "HP",
-      "active": true,
+      "active": true
     }
   ]
 }

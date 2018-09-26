@@ -4,27 +4,27 @@
   "OwnerType": [
     {
       "code": "FREEDOMFIGHTER",
-      "active": true,
+      "active": true
     },
     {
       "code": "WIDOW",
-      "active": true,
+      "active": true
     },
     {
       "code": "HANDICAPPED",
-      "active": true,
+      "active": true
     },
     {
       "code": "BPL",
-      "active": true,
+      "active": true
     },
     {
       "code": "DEFENSE",
-      "active": true,
+      "active": true
     },
     {
       "code": "NONE",
-      "active": true,
+      "active": true
     }
   ]
 }

@@ -5,27 +5,27 @@
     {
       "code": "ACC-1",
       "uom": "HP",
-      "active": true,
+      "active": true
     },
     {
       "code": "ACC-2",
       "uom": "HP",
-      "active": true,
+      "active": true
     },
     {
       "code": "ACC-3",
       "uom": "HP",
-      "active": true,
+      "active": true
     },
     {
       "code": "ACC-4",
       "uom": null,
-      "active": true,
+      "active": true
     },
     {
       "code": "ACC-5",
       "uom": null,
-      "active": true,
+      "active": true
     }
   ]
 }

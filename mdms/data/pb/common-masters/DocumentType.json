@@ -4,11 +4,11 @@
   "DocumentType": [
     {
       "code": "OWNERIDPROOF",
-      "active": true,
+      "active": true
     },
     {
       "code": "OWNERSHIPPROOF",
-      "active": true,
+      "active": true
     }
   ]
 }
