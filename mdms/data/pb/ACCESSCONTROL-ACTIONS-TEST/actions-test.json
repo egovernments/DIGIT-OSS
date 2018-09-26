@@ -12557,7 +12557,20 @@
    "code": "null",
    "path": "Finance.Period End Activities.Opening Balance Entry",
    "navigationURL":"services/EGF/transactionsummary/new"
- }
+ },
 
+{
+   "id": 1675,
+   "name": "cheque create",
+   "url": "/services/EGF/masters/accountCheque-save.action",
+   "parentModule": "",
+   "displayName": "Chequemaster",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "FinanceMaster",
+   "code": "null",
+   "path": "",
+   "navigationURL":""
+ }
   ]
 }
