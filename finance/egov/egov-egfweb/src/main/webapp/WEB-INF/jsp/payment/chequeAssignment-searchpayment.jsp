@@ -208,6 +208,7 @@
 							class="mandatory1">*</span> <s:select
 								name="vouchermis.departmentcode" id="departmentid"
 								list="dropdownData.departmentList" listKey="code" listValue="name"
+								headerKey="-1" headerValue="----Choose----"
 								value="%{voucherHeader.vouchermis.departmentcode}"
 								onChange="populateYearcode(this);" /></td>
 
