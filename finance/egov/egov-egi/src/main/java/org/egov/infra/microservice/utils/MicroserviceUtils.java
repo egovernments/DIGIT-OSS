@@ -663,8 +663,8 @@ public class MicroserviceUtils {
     public void removeSessionFromRedis(String access_token) {
         LOGGER.info("Logout for access/auth token called :: " + access_token);
         if (redisTemplate.hasKey(access_token)) {
-            while (redisTemplate.opsForList().size(access_token) > 0)
-                redisTemplate.delete(redisTemplate.opsForList().leftPop(access_token));
+            String sessionId = String.valueOf(redisTemplate.opsForValue().get(access_token));
+            redisTemplate.delete(sessionId);
             redisTemplate.delete(access_token);
         }
 

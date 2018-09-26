@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.Designation;
 import org.egov.infra.microservice.models.EmployeeInfo;
+import org.egov.infra.microservice.models.RequestInfoWrapper;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.web.support.ui.Inbox;
 import org.egov.infra.workflow.entity.StateAware;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,20 +64,21 @@ public class MSCommController {
 		return approvers;
 	}
 	
-	@RequestMapping(value="/ClearToken",method=RequestMethod.POST)
-	private void logout(@RequestParam(value="auth_token")String access_token){
+	@RequestMapping(value="/rest/ClearToken",method=RequestMethod.POST)
+	private void logout(@RequestBody RequestInfoWrapper request){
+	    String access_token = request.getRequestInfo().getAuthToken();
 		if(null != access_token){
 			microserviceUtils.removeSessionFromRedis(access_token);
 		}
 	}
 	
-	@RequestMapping(value="/refreshToken",method=RequestMethod.POST)
-	private void refreshToken(@RequestParam(value="oldToken")String oldToken,@RequestParam(value="newToken")String newToken){
-		
-		if(null!=oldToken && null!=newToken){
-			microserviceUtils.refreshToken(oldToken, newToken);
-		}
-	}
+//	@RequestMapping(value="/refreshToken",method=RequestMethod.POST)
+//	private void refreshToken(@RequestParam(value="oldToken")String oldToken,@RequestParam(value="newToken")String newToken){
+//		
+//		if(null!=oldToken && null!=newToken){
+//			microserviceUtils.refreshToken(oldToken, newToken);
+//		}
+//	}
 	
 	@GetMapping(value="inbox/items",produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody

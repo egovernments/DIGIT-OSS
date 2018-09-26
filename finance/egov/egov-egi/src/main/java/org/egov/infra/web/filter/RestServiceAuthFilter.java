@@ -2,7 +2,9 @@ package org.egov.infra.web.filter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.Filter;
@@ -14,23 +16,31 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
+import org.egov.infra.admin.master.entity.User;
+import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
 import org.egov.infra.microservice.contract.Error;
 import org.egov.infra.microservice.contract.ErrorResponse;
 import org.egov.infra.microservice.contract.RequestInfoWrapper;
 import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.web.rest.handler.RestErrorHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
@@ -48,54 +58,37 @@ public class RestServiceAuthFilter implements Filter {
     @Autowired
     public MicroserviceUtils microserviceUtils;
 
+    @Autowired
+    private SecurityUtils securityUtils;
+
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        // TODO Auto-generated method stub
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) res;
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        mapper.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+        chain.doFilter(req, res);
+        
+        
+//        HttpServletRequest request = (HttpServletRequest) req;
+//        HttpServletResponse response = (HttpServletResponse) res;
+//
+//        if (request.getRequestURI().contains("ClearToken")) {
+//         
+//            ObjectMapper mapper = new ObjectMapper();
+////            mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+////            mapper.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+//            
+////            String strReq = request.getReader().lines().collect(Collectors.joining("\n"));
+//            String strReq =  IOUtils.toString(request.getInputStream());
+//              HashMap<String,String>reqMap = mapper.readValue(strReq, new TypeReference<Map<String, String>>(){});
+//              String authToken = reqMap.get("authtoken");
+//              
+//              
+//            
+//            
+//            request.getRequestDispatcher(request.getServletPath()).forward(request, response);
+////            return;
 
-        try {
+//        }
 
-            String strReq = request.getReader().lines().collect(Collectors.joining());
-            RequestInfoWrapper wrapper = mapper.readValue(strReq, RequestInfoWrapper.class);
-            String authToken = wrapper.getRequestInfo().getAuthToken();
-            System.out.println("AuthToken ::" + authToken);
-            CustomUserDetails user = getUserDetails(authToken);
-
-            if (null != user && user.getId() != null)
-                request.getRequestDispatcher(request.getServletPath()).forward(req, res);
-            else
-                response.getWriter()
-                        .write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(getErrorResponse(INVALID_TOKEN)));
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter()
-                    .write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(getErrorResponse(INVALID_REQUEST)));
-        }
-
-    }
-
-    private CustomUserDetails getUserDetails(String authtoken) {
-        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(HttpClients.createDefault());
-        RestTemplate restTemplate = new RestTemplate(requestFactory);
-        restTemplate.setErrorHandler(new RestErrorHandler());
-
-        final String authurl = authSrvcUrl + "?access_token=" + authtoken;
-
-        RequestInfo reqInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        reqInfo.setAuthToken(authtoken);
-        reqWrapper.setRequestInfo(reqInfo);
-
-        CustomUserDetails user = restTemplate.postForObject(authurl, reqWrapper, CustomUserDetails.class);
-        return user;
     }
 
     private ErrorResponse getErrorResponse(String errorType) {

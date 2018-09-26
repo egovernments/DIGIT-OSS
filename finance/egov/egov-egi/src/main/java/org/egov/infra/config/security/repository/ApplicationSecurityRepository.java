@@ -1,24 +1,22 @@
 package org.egov.infra.config.security.repository;
 
-import java.util.ArrayList;
-import java.util.Date;
+import static org.egov.infra.utils.ApplicationConstant.MS_ADMIN_TOKEN;
+import static org.egov.infra.utils.ApplicationConstant.MS_TENANTID_KEY;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.Role;
 import org.egov.infra.admin.master.entity.User;
-import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
 import org.egov.infra.microservice.contract.UserSearchResponse;
 import org.egov.infra.microservice.contract.UserSearchResponseContent;
@@ -26,15 +24,9 @@ import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.persistence.entity.enums.Gender;
 import org.egov.infra.persistence.entity.enums.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.CustomEditorConfigurer;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.messaging.simp.user.UserSessionRegistryAdapter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
@@ -42,10 +34,12 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.context.HttpRequestResponseHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
 
-import redis.clients.jedis.JedisShardInfo;
-
-import static org.egov.infra.utils.ApplicationConstant.MS_TENANTID_KEY;
-import static org.egov.infra.utils.ApplicationConstant.MS_ADMIN_TOKEN;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 
 public class ApplicationSecurityRepository implements SecurityContextRepository {
 
@@ -71,6 +65,7 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 			if (cur_user==null) {
 				LOGGER.info("Session is not available in redis and trying to login");
 				cur_user = new CurrentUser(this.getUserDetails(request));
+				if(!request.getRequestURI().contains("rest"))
 				this.microserviceUtils.savetoRedis(request.getSession().getId(), "current_user", cur_user);
 
 			}
@@ -109,19 +104,27 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 	}
 
 	private User getUserDetails(HttpServletRequest request) throws Exception{
-		String user_token = request.getParameter("auth_token");
+		String user_token = null;
+		if(request.getRequestURI().contains("rest"))
+		        user_token= readAuthToken(request);
+		else
+		        user_token =request.getParameter("auth_token");
+		
 		if(user_token==null)
 			throw new Exception("AuthToken not found");
 		HttpSession session = request.getSession();
-		this.microserviceUtils.savetoRedis(session.getId(), "auth_token", user_token);
 		String admin_token = this.microserviceUtils.generateAdminToken();
 		session.setAttribute(MS_ADMIN_TOKEN, admin_token);
-		//this.microserviceUtils.savetoRedis(session.getId(), "admin_token", admin_token);
 		CustomUserDetails user = this.microserviceUtils.getUserDetails(user_token, admin_token);
 		session.setAttribute(MS_TENANTID_KEY, user.getTenantId());
-		
-		this.microserviceUtils.savetoRedis(session.getId(), "_details", user);
 		UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token,user.getTenantId(),user.getUserName());
+		
+		if(!request.getRequestURI().contains("rest")){
+		    this.microserviceUtils.savetoRedis(session.getId(), "auth_token", user_token);
+		    this.microserviceUtils.savetoRedis(session.getId(), "_details", user);
+		    this.microserviceUtils.saveAuthToken(user_token, session.getId());
+		}
+		
 		return this.parepareCurrentUser(response.getUserSearchResponseContent().get(0));
 	}
 
@@ -149,6 +152,32 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 
 		return user;
 
+	}
+	
+	private String  readAuthToken(HttpServletRequest request){
+	    
+	    try {
+            ObjectMapper mapper = new ObjectMapper();
+                mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+                mapper.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+                
+                String strReq =  IOUtils.toString(request.getInputStream());
+                  HashMap<Object,Object>reqMap = mapper.readValue(strReq, HashMap.class);
+                  HashMap<Object,Object> reqInfo = null;
+                  reqInfo = (HashMap)reqMap.get("RequestInfo");
+                  
+                  String authToken = (String)reqInfo.get("authToken");
+                  
+                  return authToken;
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	    return null;
+	    
 	}
 
 }

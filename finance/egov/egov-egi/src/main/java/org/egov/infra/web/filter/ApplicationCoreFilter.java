@@ -164,7 +164,7 @@ public class ApplicationCoreFilter implements Filter {
             if (authentication.isPresent() && authentication.get().getPrincipal() instanceof CurrentUser) {
                 session.setAttribute(USERID_KEY, ((CurrentUser) authentication.get().getPrincipal()).getUserId());
             } else if ((!authentication.isPresent() || !(authentication.get().getPrincipal() instanceof User))
-            		&& securityUtils.getCurrentUser()!=null) {
+            		&& !"anonymous".equalsIgnoreCase(String.valueOf(authentication.get().getPrincipal()))) {
             		session.setAttribute(USERID_KEY, securityUtils.getCurrentUser().getId());
             }
         }else
