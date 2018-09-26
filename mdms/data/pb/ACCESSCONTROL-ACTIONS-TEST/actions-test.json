@@ -18762,10 +18762,10 @@
    "name": "Create TradeLicense",
    "url": "/tl-services/v1/_create",
    "parentModule": "",
-   "displayName": "Create TL",
+   "displayName": "Create TradeLicense",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "tl-services",
    "code": "null",
    "path": ""
    
@@ -18775,10 +18775,10 @@
    "name": "Update TradeLicense",
    "url": "/tl-services/v1/_update",
    "parentModule": "",
-   "displayName": "Update TL",
+   "displayName": "Update TradeLicense",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "tl-services",
    "code": "null",
    "path": ""
    
@@ -18788,10 +18788,10 @@
    "name": "Search TradeLicense",
    "url": "/tl-services/v1/_search",
    "parentModule": "",
-   "displayName": "Search TL",
+   "displayName": "Search TradeLicense",
    "orderNumber": 0,
    "enabled": false,
-   "serviceCode": "",
+   "serviceCode": "tl-services",
    "code": "null",
    "path": ""
    
