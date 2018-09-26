@@ -132,7 +132,7 @@
 											type="text" name="detailCode" id="detailCode"
 											autocomplete='off' onblur="splitEntities(this)"> <span
 											id="genricimage"><img
-												src="/egi/resources/erp2/images/plus1.gif"
+												src="/services/egi/resources/erp2/images/plus1.gif"
 												onclick="openSearchWindow(this, 'subledger');"></span>&nbsp;&nbsp;
 									</td>
 									<td colspan="2" class="greybox"><input type="text"
