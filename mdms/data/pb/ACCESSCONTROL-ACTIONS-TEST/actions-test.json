@@ -11562,7 +11562,7 @@
       "enabled": true,
       "serviceCode": "FinanceBill",
       "code": "null",
-      "path": "Finance.Bills Accounting.Expense Bill"
+      "path": "Finance.Transactions.Bills Accounting.Expense Bill"
     },
     
     {
@@ -11952,8 +11952,8 @@
    "name": "View Vouchers",
    "url": "/services/EGF/voucher/voucherSearch-beforesearch.action",
    "parentModule": "",
-   "displayName": "View Vouchers",
-   "orderNumber": 1,
+   "displayName": "View Voucher",
+   "orderNumber": 4,
    "enabled": true,
    "serviceCode": "FinanceGeneral",
    "code": "null",
@@ -12544,6 +12544,19 @@
    "code": "null",
    "path": ""
    
+ },
+{
+   "id": 1674,
+   "name": "openingbalance create",
+   "url": "url",
+   "parentModule": "",
+   "displayName": "Opening Balance Entry",
+   "orderNumber": 0,
+   "enabled": true,
+   "serviceCode": "FinanceAdmin",
+   "code": "null",
+   "path": "Finance.Period End Activities.Opening Balance Entry",
+   "navigationURL":"services/EGF/transactionsummary/new"
  }
 
   ]
