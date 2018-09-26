@@ -15530,13 +15530,6 @@
     "actionid": 1674,
     "actioncode": "",
     "tenantId": "pb"
-  },
-{
-    "rolecode": "SUPERUSER",
-    "actionid": 1675,
-    "actioncode": "",
-    "tenantId": "pb"
   }
-
   ]
 }

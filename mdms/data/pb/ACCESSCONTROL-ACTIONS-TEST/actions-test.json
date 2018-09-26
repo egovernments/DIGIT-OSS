@@ -12004,12 +12004,12 @@
    "name": "Add/Modify Bank Account Cheque",
    "url": "/services/EGF/masters/accountCheque-newform.action",
    "parentModule": "",
-   "displayName": "Add/Modify Bank Account Cheque",
-   "orderNumber": 1,
+   "displayName": "Account Cheques",
+   "orderNumber": 10,
    "enabled": true,
    "serviceCode": "FinanceMaster",
    "code": "null",
-   "path": "Finance.Masters.Cheque.Add/Modify Bank Account Cheque",
+   "path": "Finance.Masters.Bank.Account Cheques",
    "navigationURL": "services/EGF/masters/accountCheque-newform.action"
  },
 {
@@ -12134,7 +12134,7 @@
    "name": "TrialBalance",
    "url": "/services/EGF/report/trialBalance-newForm.action",
    "parentModule": "",
-   "displayName": "TrialBalance",
+   "displayName": "Trial Balance",
    "orderNumber": 2,
    "enabled": true,
    "serviceCode": "FinanceReport",
@@ -12187,7 +12187,7 @@
    "url": "url",
    "parentModule": "",
    "displayName": "Modify Bank",
-   "orderNumber": 1,
+   "orderNumber": 3,
    "enabled": true,
    "serviceCode": "FinanceMaster",
    "code": "null",
@@ -12557,20 +12557,6 @@
    "code": "null",
    "path": "Finance.Period End Activities.Opening Balance Entry",
    "navigationURL":"services/EGF/transactionsummary/new"
- },
-
-{
-   "id": 1675,
-   "name": "cheque create",
-   "url": "/services/EGF/masters/accountCheque-save.action",
-   "parentModule": "",
-   "displayName": "Chequemaster",
-   "orderNumber": 0,
-   "enabled": false,
-   "serviceCode": "FinanceMaster",
-   "code": "null",
-   "path": "",
-   "navigationURL":""
  }
   ]
 }
