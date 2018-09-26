@@ -956,7 +956,6 @@ public class PaymentAction extends BasePaymentAction {
             miscBillList = paymentActionHelper.getPaymentBills(paymentheader);
             // sendForApproval();// this should not be called here as it is
             // public method which is called from jsp submit
-            EmployeeInfo employee = microserviceUtils.getEmployeeByPositionId(paymentheader.getState().getOwnerPosition());
             if (!cutOffDate.isEmpty() && cutOffDate != null)
                 try {
                     date = sdf1.parse(cutOffDate);
@@ -973,7 +972,7 @@ public class PaymentAction extends BasePaymentAction {
                         new String[] { paymentheader.getVoucherheader().getVoucherNumber() }));
                 if (FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
                     addActionMessage(
-                            getMessage("payment.voucher.approved", new String[] { employee != null ? employee.getName() : "" }));
+                            getMessage("payment.voucher.approved", new String[] { approverName }));
 
             }
 
@@ -997,8 +996,18 @@ public class PaymentAction extends BasePaymentAction {
         }
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed createPayment.");
+        populateDepartmentName();
         setMode("view");
         return VIEW;
+    }
+
+    private void populateDepartmentName() {
+        if (paymentheader.getVoucherheader() != null && paymentheader.getVoucherheader().getVouchermis() != null
+                && paymentheader.getVoucherheader().getVouchermis().getDepartmentcode() != null) {
+            org.egov.infra.microservice.models.Department dept = microserviceUtils
+                    .getDepartmentByCode(paymentheader.getVoucherheader().getVouchermis().getDepartmentcode());
+            paymentheader.getVoucherheader().getVouchermis().setDepartmentName(dept != null ? dept.getName() : "");
+        }
     }
 
     @ValidationErrorPage(value = VIEW)
@@ -1030,6 +1039,7 @@ public class PaymentAction extends BasePaymentAction {
         }
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed sendForApproval.");
+        populateDepartmentName();
         setMode("view");
         return VIEW;
     }

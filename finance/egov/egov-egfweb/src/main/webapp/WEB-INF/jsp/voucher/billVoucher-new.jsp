@@ -175,7 +175,7 @@
 							<td class="bluebox setborder" style="text-align: right"><s:text name="format.number"> <s:param value="%{billamount}" /> </s:text></td>
 							<td class="bluebox setborder" style="text-align: right"><s:text name="format.number"> <s:param value="%{passedamount}" /> </s:text></td>
 							<td class="bluebox setborder" style="text-align: center"><s:property value="%{expendituretype}" /></td>
-							<td class="bluebox setborder" style="text-align: center"><s:property value="%{egBillregistermis.departmentcode}" /></td>
+							<td class="bluebox setborder" style="text-align: center"><s:property value="%{egBillregistermis.departmentName}" /></td>
 						</tr>
 					</s:iterator>
 				</table>

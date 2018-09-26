@@ -125,7 +125,7 @@ $(document).ready(function()
 				$('#approvalPosition').append($("<option value=''>Select from below</option>"));
 				$.each(response, function(index, value) {
 					//$('#approvalPosition').append($('<option>').text(value.userName+'/'+value.positionName).attr('value', value.positionId));  
-					$('#approvalPosition').append($('<option>').text(value.userName).attr('value', value.assignments[0].position));  
+					$('#approvalPosition').append($('<option>').text(value.name).attr('value', value.assignments[0].position));  
 				});
 				$('#approvalPosition').val($('#approvalPositionValue').val());
 			}, 

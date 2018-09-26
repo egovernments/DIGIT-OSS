@@ -602,14 +602,12 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                                     new String[] { voucherHeader.getVouchermis().getBudgetaryAppnumber() }));
                 }
             } else {
-                EmployeeInfo employee = microserviceUtils.getEmployeeByPositionId(voucherHeader.getState().getOwnerPosition());
                 if (voucherHeader.getVouchermis().getBudgetaryAppnumber() == null) {
                     addActionMessage(getText(egBillregister.getExpendituretype() + ".voucher.created",
-                            new String[] { voucherHeader.getVoucherNumber(), employee != null ? employee.getName() : "" }));
+                            new String[] { voucherHeader.getVoucherNumber(), approverName }));
                 } else {
                     addActionMessage(getText(egBillregister.getExpendituretype() + ".voucher.created",
-                            new String[] { voucherHeader.getVoucherNumber(),
-                                    employee != null ? employee.getName() : "" })
+                            new String[] { voucherHeader.getVoucherNumber(), approverName })
                             + " And " + getText("budget.recheck.sucessful",
                                     new String[] { voucherHeader.getVouchermis().getBudgetaryAppnumber() }));
 

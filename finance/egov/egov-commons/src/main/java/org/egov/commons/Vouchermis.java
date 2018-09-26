@@ -82,6 +82,7 @@ public class Vouchermis implements java.io.Serializable {
     private Boundary divisionid;
 
     private String departmentcode;
+    private String departmentName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schemeid")
@@ -235,4 +236,13 @@ public class Vouchermis implements java.io.Serializable {
     public void setFunction(CFunction function) {
         this.function = function;
     }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
 }

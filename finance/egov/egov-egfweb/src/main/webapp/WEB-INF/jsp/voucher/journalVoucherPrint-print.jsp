@@ -95,11 +95,11 @@
 </style>
 <script>
 function exportXls(){
-	window.open('/EGF/voucher/journalVoucherPrint-exportXls.action?id=<s:property value="id"/>','','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+	window.open('/services/EGF/voucher/journalVoucherPrint-exportXls.action?id=<s:property value="id"/>','','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
 }
 
 function exportPdf(){
-	window.open('/EGF/voucher/journalVoucherPrint-exportPdf.action?id=<s:property value="id"/>','','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+	window.open('/services/EGF/voucher/journalVoucherPrint-exportPdf.action?id=<s:property value="id"/>','','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
 }
 </script>
 <body>
