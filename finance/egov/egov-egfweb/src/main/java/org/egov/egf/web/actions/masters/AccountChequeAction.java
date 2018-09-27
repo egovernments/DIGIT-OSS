@@ -62,7 +62,6 @@ import org.egov.commons.CFinancialYear;
 import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.commons.service.BankAccountService;
 import org.egov.egf.commons.EgovCommon;
-import org.egov.infra.microservice.models.Department;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.services.PersistenceService;
@@ -174,8 +173,8 @@ public class AccountChequeAction extends BaseFormAction {
 
 	private void prepareChequeDetails(final List<ChequeDeptMapping> chequeList) {
 		Map<String, String> depMap = new HashMap<>();
-		List<Department> list = masterDataCache.get("egi-department");
-		for (Department dep : list) {
+		List<org.egov.infra.microservice.models.Department> list = masterDataCache.get("egi-department");
+		for (org.egov.infra.microservice.models.Department dep : list) {
 			depMap.put(dep.getCode(), dep.getName());
 		}
 		chequeDetailsList = new ArrayList<ChequeDetail>();

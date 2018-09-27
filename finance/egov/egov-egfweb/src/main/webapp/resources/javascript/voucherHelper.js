@@ -619,7 +619,7 @@ function loadDropDownCodesForEntities(obj)
 function autocompleteEntitiesBy20()
 {
 		
-	   oACDS = new YAHOO.widget.DS_XHR(path+"/voucher/common-ajaxLoadEntitesBy20.action", [ "~^"]);
+	   oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common-ajaxLoadEntitesBy20.action", [ "~^"]);
 	   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 	   oACDS.scriptQueryParam = "startsWith";
 	   var oAutoComp1 = new YAHOO.widget.AutoComplete('detailCode','codescontainer',oACDS);
@@ -714,7 +714,7 @@ var oAutoCompEntityForJV;
 function autocompleteEntities1By20(obj)
 {
   
-	 oACDS = new YAHOO.widget.DS_XHR(path+"/voucher/common-ajaxLoadEntitesBy20.action", [ "~^"]);
+	 oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common-ajaxLoadEntitesBy20.action", [ "~^"]);
 	   oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 	   oACDS.scriptQueryParam = "startsWith";
 	 //bootbox.alert(obj.name);

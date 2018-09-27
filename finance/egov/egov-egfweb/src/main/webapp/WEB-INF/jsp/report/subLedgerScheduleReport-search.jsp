@@ -187,7 +187,7 @@
 						<td class="bluebox"><s:text name="subLedger.department" /></td>
 						<td class="bluebox"><s:select name="deptId" id="deptId"
 								value='%{deptId}' list="dropdownData.departmentList"
-								listKey="id" listValue="name" headerKey=""
+								listKey="code" listValue="name" headerKey=""
 								headerValue="----Choose----" /></td>
 					</tr>
 

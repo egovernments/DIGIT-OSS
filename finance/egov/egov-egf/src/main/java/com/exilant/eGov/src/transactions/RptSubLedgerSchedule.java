@@ -170,9 +170,9 @@ public class RptSubLedgerSchedule {
         totalOpgBal = 0.0;
         totalClosingBal = 0.0;
         if (deptId != null && !deptId.equalsIgnoreCase("")) {
-            departmentConditionTran = " and DEPARTMENTID=? ";
+            departmentConditionTran = " and DEPARTMENTCODE=? ";
             departmentFromCondition = ",vouchermis vmis";
-            departmentWhereCondition = "AND vh.id = vmis.voucherheaderid and vmis.departmentid=? ";
+            departmentWhereCondition = "AND vh.id = vmis.voucherheaderid and vmis.departmentcode=? ";
         }
         final List<AppConfigValues> listAppConfVal = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
                 "statusexcludeReport");
@@ -247,7 +247,7 @@ public class RptSubLedgerSchedule {
             pst.setString(i++, endDate);
             pst.setLong(i++, Long.parseLong(fundId));
             if (deptId != null && !deptId.equalsIgnoreCase(""))
-                pst.setLong(i++, Long.parseLong(deptId));
+                pst.setString(i++,deptId);
   
             pst.setLong(i++, Integer.valueOf(accEntityId));
             pst.setString(i++, glCode);
@@ -255,7 +255,7 @@ public class RptSubLedgerSchedule {
             pst.setString(i++, endDate);
             pst.setLong(i++, Long.parseLong(fundId));
             if (deptId != null && !deptId.equalsIgnoreCase(""))
-                pst.setLong(i++, Long.parseLong(deptId));
+                pst.setString(i++,deptId);
  
             pst.setLong(i++, Integer.valueOf(accEntityId));
             pst.setString(i++, glCode);
@@ -263,7 +263,7 @@ public class RptSubLedgerSchedule {
             pst.setString(i++, endDate);
             pst.setString(i++, startDate);
             if (deptId != null && !deptId.equalsIgnoreCase(""))
-                pst.setLong(i++, Long.parseLong(deptId));
+                pst.setString(i++, deptId);
             pst.setLong(i++, Long.parseLong(fundId));
 
             pst.setLong(i++, Integer.valueOf(accEntityId));
@@ -272,7 +272,7 @@ public class RptSubLedgerSchedule {
             pst.setString(i++, endDate);
             pst.setString(i++, startDate);
             if (deptId != null && !deptId.equalsIgnoreCase(""))
-                pst.setLong(i++, Long.parseLong(deptId));
+                pst.setString(i++, deptId);
             pst.setLong(i++, Long.parseLong(fundId));
 
             pst.setString(i++, glCode);
@@ -280,7 +280,7 @@ public class RptSubLedgerSchedule {
             pst.setLong(i++, Long.parseLong(fundId));
             pst.setLong(i++, Long.parseLong(fyId));
             if (deptId != null && !deptId.equalsIgnoreCase(""))
-                pst.setLong(i++, Long.parseLong(deptId));
+                pst.setString(i++, deptId);
 
             if (LOGGER.isInfoEnabled())
             LOGGER.info("Main QUERY..." + query);

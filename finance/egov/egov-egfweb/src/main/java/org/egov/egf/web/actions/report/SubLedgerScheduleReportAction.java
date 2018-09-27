@@ -66,6 +66,7 @@ import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.utils.FinancialConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -96,6 +97,8 @@ public class SubLedgerScheduleReportAction extends BaseFormAction {
     protected DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
     protected LinkedList subLedgerScheduleDisplayList = new LinkedList();
     String heading = "";
+    @Autowired
+	private EgovMasterDataCaching masterDataCache;
 
     public SubLedgerScheduleReportAction() {
         super();
@@ -110,7 +113,7 @@ public class SubLedgerScheduleReportAction extends BaseFormAction {
         super.prepare();
         addDropdownData("fundList",
                 persistenceService.findAllBy(" from Fund where isactive=true and isnotleaf=false order by name"));
-        addDropdownData("departmentList", persistenceService.findAllBy("from Department order by name"));
+        addDropdownData("departmentList", masterDataCache.get("egi-department"));
         if (subLedgerScheduleReport != null && subLedgerScheduleReport.getGlcode() != null
                 && !subLedgerScheduleReport.getGlcode().equalsIgnoreCase(""))
             addDropdownData(
