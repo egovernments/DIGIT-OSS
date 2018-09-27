@@ -60,7 +60,7 @@
 <script type="text/javascript"
 	src="/services/EGF/resources/javascript/accountCheque.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
-	src="/egi/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}"></script>
+	src="/services/egi/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}"></script>
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252">
 

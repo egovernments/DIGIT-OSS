@@ -178,5 +178,5 @@
 					<input type="hidden" name="relation" value="${relation.id}" />
 
                     <script type="text/javascript"
-                            src="/egi/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}"></script>
+                            src="/services/egi/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}"></script>
 					

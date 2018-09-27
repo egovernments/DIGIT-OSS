@@ -49,7 +49,7 @@
 
 <jsp:include page="../voucher/vouchertrans-filter-new.jsp" />
 <script type="text/javascript"
-	src="/egi/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}"></script>
+	src="/services/egi/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}"></script>
 <%@ taglib prefix="s" uri="/WEB-INF/tags/struts-tags.tld"%>
 <tr>
 	<td class="greybox"></td>
