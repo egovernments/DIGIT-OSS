@@ -260,7 +260,7 @@
 				return false;
 				} 
 			
- 			document.forms[0].action='/EGF/report/voucherStatusReport-search.action';
+ 			document.forms[0].action='/services/EGF/report/voucherStatusReport-search.action';
 			document.forms[0].submit();
 			return true;
 		}

@@ -90,6 +90,7 @@ import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infra.web.utils.EgovPaginatedList;
 import org.egov.infra.workflow.entity.State;
 import org.egov.infstr.services.PersistenceService;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.contra.ContraJournalVoucher;
 import org.egov.model.payment.Paymentheader;
 import org.egov.utils.Constants;
@@ -136,13 +137,16 @@ public class VoucherStatusReportAction extends BaseFormAction
     private EgovPaginatedList pagedResults;
     private String countQry;
     private String modeOfPayment;
-   @Autowired 
-    private AppConfigValueService appConfigValueService;
- @Autowired
- @Qualifier("persistenceService")
- private PersistenceService persistenceService;
- @Autowired
+	@Autowired
+	private AppConfigValueService appConfigValueService;
+	@Autowired
+	@Qualifier("persistenceService")
+	private PersistenceService persistenceService;
+	@Autowired
+	private EgovMasterDataCaching masterDataCache;
+    @Autowired
     private FinancialYearDAO financialYearDAO;
+    private Department deptImpl = new Department();
 
     List<String> voucherTypes = VoucherHelper.VOUCHER_TYPES;
     Map<String, List<String>> voucherNames = VoucherHelper.VOUCHER_TYPE_NAMES;
@@ -155,7 +159,7 @@ public class VoucherStatusReportAction extends BaseFormAction
     public VoucherStatusReportAction()
     {
         voucherHeader.setVouchermis(new Vouchermis());
-        addRelatedEntity("vouchermis.departmentid", Department.class);
+        //addRelatedEntity("vouchermis.departmentid", Department.class);
         addRelatedEntity("fundId", Fund.class);
         addRelatedEntity("vouchermis.schemeid", Scheme.class);
         addRelatedEntity("vouchermis.subschemeid", SubScheme.class);
@@ -198,7 +202,7 @@ public class VoucherStatusReportAction extends BaseFormAction
     private void loadDropDowns() {
 
         if (headerFields.contains("department"))
-            addDropdownData("departmentList", persistenceService.findAllBy("from Department order by name"));
+            addDropdownData("departmentList", masterDataCache.get("egi-department"));
         if (headerFields.contains("functionary"))
             addDropdownData("functionaryList", persistenceService.findAllBy(" from Functionary where isactive=true order by name"));
         if (headerFields.contains("fund"))
@@ -361,9 +365,8 @@ public class VoucherStatusReportAction extends BaseFormAction
         if (voucherHeader.getStatus() != -1)
             sql = sql + " and vh.status=" + voucherHeader.getStatus();
 
-        if (voucherHeader.getVouchermis().getDepartmentcode() != null
-                && voucherHeader.getVouchermis().getDepartmentcode() != "-1")
-            sql = sql + " and vh.vouchermis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode()+"'";
+        if (deptImpl.getCode() != null && !deptImpl.getCode().equals("-1"))
+            sql = sql + " and vh.vouchermis.departmentcode='" + deptImpl.getCode() +"'";
 
         if (voucherHeader.getVouchermis().getSchemeid() != null)
             sql = sql + " and vh.vouchermis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId();
@@ -376,7 +379,7 @@ public class VoucherStatusReportAction extends BaseFormAction
         if (!modeOfPayment.equals("-1"))
             sql = sql + " and upper(ph.type) ='" + getModeOfPayment() + "'";
         countQry = "select count(*) " + sql;
-        sql = "select vh " + sql + " order by vh.vouchermis.departmentid.name ,vh.voucherDate, vh.voucherNumber";
+        sql = "select vh " + sql + " order by vh.vouchermis.departmentcode ,vh.voucherDate, vh.voucherNumber";
         final Query query = persistenceService.getSession().createQuery(sql);
         return query;
     }
@@ -671,5 +674,12 @@ public class VoucherStatusReportAction extends BaseFormAction
     public void setInputStream(InputStream inputStream) {
         this.inputStream = inputStream;
     }
+    
+	public Department getDeptImpl() {
+		return deptImpl;
+	}
 
+	public void setDeptImpl(Department deptImpl) {
+		this.deptImpl = deptImpl;
+	}
 }
