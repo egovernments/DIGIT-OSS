@@ -154,7 +154,7 @@
 			<s:submit value="Search" onclick="return validateAndSubmit()"
 				cssClass="buttonsubmit" />
 			<input type="button" value="Close"
-				onclick="javascript:window.close()" class="button" />
+				onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 		</div>
 		<br />
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">

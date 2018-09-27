@@ -146,7 +146,7 @@ function loadNamesForSelectedType()
 	<div class="buttonbottom">
 		<input type="submit" class="buttonsubmit" value="Search" id="Search" name="button" onclick="return loadSearch();" />
 		 <input type="reset" value="Reset" class="buttonsubmit" onclick="return fieldReset();" />
-		<input type="button" value="Close" onclick="javascript:window.close()" class="button" />
+		<input type="button" value="Close" onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 	</div>
 	<s:if test="%{voucherSearchList.size!=0}">
 		<div id="listid">

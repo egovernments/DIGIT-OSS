@@ -173,9 +173,8 @@ function validateCancel()
 				</tr>
 			</table>
 			<div class="buttonbottom">
-				<s:submit method="search" value="Search" id="searchBtn"
-					onclick="return validate()" cssClass="buttonsubmit" />
-				<input type="button" value="Close" onclick="javascript:window.close()" class="button" />
+				<s:submit method="search" value="Search" id="searchBtn" onclick="return validate()" cssClass="buttonsubmit" />
+				<input type="button" value="Close" onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 			</div>
 		</div>
 		<s:if test="%{billListDisplay.size()!=0}">

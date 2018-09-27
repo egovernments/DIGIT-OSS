@@ -114,7 +114,7 @@
 			<input type="submit" class="buttonsubmit" value="Search" id="Search"
 				name="button" onclick="return validateFormAndSubmit();" /> <input
 				type="button" id="Close" value="Close"
-				onclick="javascript:window.close()" class="button" />
+				onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 		</div>
 		<br />
 		<s:if test="%{billList.size!=0 || billList!=null}">
