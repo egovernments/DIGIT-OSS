@@ -12557,6 +12557,58 @@
    "code": "null",
    "path": "Finance.Period End Activities.Opening Balance Entry",
    "navigationURL":"services/EGF/transactionsummary/new"
+ },
+{
+   "id": 1675,
+   "name": "business category search",
+   "url": "/egov-common-masters/businessCategory/_search",
+   "parentModule": "",
+   "displayName": "business category search",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "Collections",
+   "code": "null",
+   "path": "",
+   "navigationURL": ""
+ },
+{
+   "id": 1676,
+   "name": "businessDetails search",
+   "url": "/egov-common-masters/businessDetails/_search",
+   "parentModule": "",
+   "displayName": "",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "Collections",
+   "code": "null",
+   "path": "",
+   "navigationURL": ""
+ },
+{
+   "id": 1677,
+   "name": "business category create",
+   "url": "/egov-common-masters/businessCategory/_create",
+   "parentModule": "",
+   "displayName": "business category search",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "Collections",
+   "code": "null",
+   "path": "",
+   "navigationURL": ""
+ },
+{
+   "id": 1678,
+   "name": "businessDetails create",
+   "url": "/egov-common-masters/businessDetails/_create",
+   "parentModule": "",
+   "displayName": "",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "Collections",
+   "code": "null",
+   "path": "",
+   "navigationURL": ""
  }
   ]
 }
