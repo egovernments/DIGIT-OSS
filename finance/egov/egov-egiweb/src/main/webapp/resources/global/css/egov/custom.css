@@ -60,7 +60,7 @@ body {
   word-wrap: break-word;
 }
 body {
-  padding-top: 72px;
+  padding-top: 0px;
 }
 body #loadingMask {
   position: absolute;
