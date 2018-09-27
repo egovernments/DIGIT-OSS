@@ -82,7 +82,6 @@ public abstract class GenericWorkFlowController {
 
     @ModelAttribute(value = "approvalDepartmentList")
     public List<Department> addAllDepartments() {
-        System.out.println("************************Retriveing all departments information****************");
         List<Department> deptlist = getDepartmentsFromMs();
 
         return deptlist;

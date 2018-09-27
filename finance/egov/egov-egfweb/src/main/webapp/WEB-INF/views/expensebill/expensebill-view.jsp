@@ -130,7 +130,7 @@
             <c:if test="${egBillregister.documentDetail != null &&  !egBillregister.documentDetail.isEmpty()}">
                 <jsp:include page="billdocument-upload.jsp"/>
             </c:if>
-            <jsp:include page="expensebill-budgetdetails.jsp"/>
+            <%-- <jsp:include page="expensebill-budgetdetails.jsp"/> --%>
         </div>
         <div class="tab-pane fade" id="checklist">
             <jsp:include page="expensebill-view-checklist.jsp"/>

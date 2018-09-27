@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -120,6 +121,7 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 		UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token,user.getTenantId(),user.getUserName());
 		
 		if(!request.getRequestURI().contains("rest")){
+		    this.microserviceUtils.removeSessionFromRedis(user_token);
 		    this.microserviceUtils.savetoRedis(session.getId(), "auth_token", user_token);
 		    this.microserviceUtils.savetoRedis(session.getId(), "_details", user);
 		    this.microserviceUtils.saveAuthToken(user_token, session.getId());
@@ -161,6 +163,7 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
                 mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
                 mapper.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
                 
+//                String strReq = request.getReader().lines().collect(Collectors.joining("\n"));
                 String strReq =  IOUtils.toString(request.getInputStream());
                   HashMap<Object,Object>reqMap = mapper.readValue(strReq, HashMap.class);
                   HashMap<Object,Object> reqInfo = null;

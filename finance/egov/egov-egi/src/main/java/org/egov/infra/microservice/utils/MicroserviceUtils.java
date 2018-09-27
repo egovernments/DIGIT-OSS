@@ -203,7 +203,10 @@ public class MicroserviceUtils {
     }
 
     public String getAdminToken() {
-        return ApplicationThreadLocals.getAdminToken();
+       String adminToken = ApplicationThreadLocals.getAdminToken();
+       if(adminToken==null)
+           adminToken= this.generateAdminToken();
+        return adminToken;
     }
 
     public void createUserMicroservice(final User user) {
@@ -242,7 +245,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-
+        LOGGER.info("call :"+ dept_url);
         DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
         return depResponse.getDepartment();
     }
@@ -258,13 +261,13 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-
+        LOGGER.info("call:"+dept_url);
         DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
         return depResponse.getDepartment();
     }
 
     public Department getDepartmentByCode(String departmentCode) {
-        final RestTemplate restTemplate = new RestTemplate();
+        final RestTemplate restTemplate = createRestTemplate();
         final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId() + "&code=" + departmentCode;
 
         RequestInfo requestInfo = new RequestInfo();
@@ -273,7 +276,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-
+        LOGGER.info("call:"+dept_url);
         DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
 
         if (depResponse.getDepartment() != null && !depResponse.getDepartment().isEmpty())
@@ -297,7 +300,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-
+        LOGGER.info("call:"+design_url);
         DesignationResponse designResponse = restTemplate.postForObject(design_url, reqWrapper,
                 DesignationResponse.class);
         return designResponse.getDesignation();
@@ -324,7 +327,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-
+        LOGGER.info("call:"+approver_url);
         EmployeeInfoResponse empResponse = restTemplate.postForObject(approver_url, reqWrapper,
                 EmployeeInfoResponse.class);
 
@@ -343,7 +346,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-
+        LOGGER.info("call:"+employee_by_position_url);
         EmployeeInfoResponse empResponse = restTemplate.postForObject(employee_by_position_url, reqWrapper,
                 EmployeeInfoResponse.class);
         if (empResponse.getEmployees() != null && !empResponse.getEmployees().isEmpty())
@@ -361,7 +364,7 @@ public class MicroserviceUtils {
 
         reqInfo.setAuthToken(admin_token);
         reqWrapper.setRequestInfo(reqInfo);
-
+        LOGGER.info("call:"+authurl);
         CustomUserDetails user = restT.postForObject(authurl, reqWrapper, CustomUserDetails.class);
         return user;
     }
@@ -384,6 +387,7 @@ public class MicroserviceUtils {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, header);
 
         try {
+            LOGGER.info("call:"+tokenGenUrl);
             Object response = restTemplate.postForObject(tokenGenUrl, request, Object.class);
             if (response != null)
                 return String.valueOf(((HashMap) response).get("access_token"));
@@ -404,7 +408,7 @@ public class MicroserviceUtils {
         request.setRequestInfo(req_header);
         request.setUserName(userName);
         request.setTenantId(tenantId);
-
+        LOGGER.info("call:"+userSrcUrl);
         UserSearchResponse response = restT.postForObject(userSrcUrl, request, UserSearchResponse.class);
         return response;
     }
@@ -419,7 +423,7 @@ public class MicroserviceUtils {
         req_header.setAuthToken(access_token);
         posrequest.setRequestInfo(req_header);
         posrequest.setPosition(positions);
-
+        LOGGER.info("call:"+positionSrvcUrl);
         PositionResponse response = restT.postForObject(positionSrvcUrl, posrequest, PositionResponse.class);
 
         return response;
@@ -438,7 +442,7 @@ public class MicroserviceUtils {
         request.setRoleCodes(roles);
         request.setActionMaster("actions-test");
         request.setEnabled(true);
-
+        LOGGER.info("call:"+actionSrvcUrl);
         ActionResponse response = restT.postForObject(actionSrvcUrl, request, ActionResponse.class);
 
         // response.getActions()
@@ -468,9 +472,10 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-
+        
         EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper,
                 EmployeeInfoResponse.class);
+        LOGGER.info("call:"+empUrl.toString());
         return empResponse.getEmployees();
     }
 
@@ -496,6 +501,7 @@ public class MicroserviceUtils {
 
         EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper,
                 EmployeeInfoResponse.class);
+        LOGGER.info("call:"+empUrl.toString());
         if (empResponse.getEmployees() != null && !empResponse.getEmployees().isEmpty())
             return empResponse.getEmployees().get(0);
         else
@@ -526,7 +532,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-
+        LOGGER.info("call:"+bc_url);
         BusinessCategoryResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,
                 BusinessCategoryResponse.class);
         return bcResponse.getBusinessCategoryInfo();
@@ -545,7 +551,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-
+        LOGGER.info("call:"+bc_url);
         BusinessDetailsResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,
                 BusinessDetailsResponse.class);
         return bcResponse.getBusinessDetails();
@@ -563,7 +569,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-
+        LOGGER.info("call:"+bc_url);
         BusinessDetailsResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,
                 BusinessDetailsResponse.class);
         if (bcResponse.getBusinessDetails() != null && !bcResponse.getBusinessDetails().isEmpty())
@@ -584,7 +590,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-
+        LOGGER.info("call:"+bc_url);
         BusinessDetailsResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,
                 BusinessDetailsResponse.class);
         if (bcResponse.getBusinessDetails() != null && !bcResponse.getBusinessDetails().isEmpty())
@@ -603,6 +609,7 @@ public class MicroserviceUtils {
                 RequestInfo createRequestInfo = createRequestInfo();
                 RequestInfoWrapper requestInfo = new RequestInfoWrapper();
                 requestInfo.setRequestInfo(createRequestInfo);
+                LOGGER.info("call:"+workflowServiceUrl);
                 tresp = restTemplate.postForObject(workflowServiceUrl, requestInfo, TaskResponse.class);
                 tasks = tresp.getTasks();
             } catch (final Exception e) {
