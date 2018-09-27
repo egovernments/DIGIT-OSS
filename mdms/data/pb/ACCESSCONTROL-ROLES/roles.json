@@ -296,6 +296,16 @@
       "rolecode": "COLL_REMIT_TO_BANK",
       "name": "Collections Remitter",
       "description": "One who can remit the instruments to bank"
+    },
+   {
+      "rolecode": "SYS_INTEGRATOR_FINANCE",
+      "name": "System Integrator Finance",
+      "description": "Role for allowing system integration of Finance app with rainmaker"
+    },
+    {
+      "rolecode": "SYS_INTEGRATOR_WATER_SEW",
+      "name": "System Integrator W&S",
+      "description": "Role for allowing system integration of Water and Sewerage app with rainmaker"
     }
   ]
 }
