@@ -325,7 +325,7 @@
 		var tableIndex=getIndexForTableType(tableType);
 		var value = (YAHOO.lang.isValue(oData))?oData:"";
 		var imgsuffix=suffix+"img";
-		el.innerHTML = " <input type='"+type+"' id='"+prefix+"["+tableIndex+"]"+suffix+"' name='"+prefix+"["+tableIndex+"]"+suffix+"' readonly='true' style='width:90px;' /><img src='/egi/resources/erp2/images/searchicon.gif' id='"+prefix+"["+tableIndex+"]"+imgsuffix+"' name='"+prefix+"["+tableIndex+"]"+imgsuffix+"' onclick='openViewVouchers(this)'/>";
+		el.innerHTML = " <input type='"+type+"' id='"+prefix+"["+tableIndex+"]"+suffix+"' name='"+prefix+"["+tableIndex+"]"+suffix+"' readonly='true' style='width:90px;' /><img src='/services/egi/resources/erp2/images/searchicon.gif' id='"+prefix+"["+tableIndex+"]"+imgsuffix+"' name='"+prefix+"["+tableIndex+"]"+imgsuffix+"' onclick='openViewVouchers(this)'/>";
 		}    
 	}
 	function loadChequeNoAndDate(billVhId,name){

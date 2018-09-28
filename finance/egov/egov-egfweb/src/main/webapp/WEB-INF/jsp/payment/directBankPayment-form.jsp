@@ -113,7 +113,7 @@
 	<td class="bluebox"><s:textfield
 			name="commonBean.linkReferenceNumber"
 			id="commonBean.linkReferenceNumber" size="25" /> <img
-		src="/egi/resources/erp2/images/searchicon.gif"
+		src="/services/egi/resources/erp2/images/searchicon.gif"
 		onclick="openViewVouchers()" /> <s:hidden
 			name="commonBean.documentId" id="commonBean.documentId" /></td>
 	<TD></TD>

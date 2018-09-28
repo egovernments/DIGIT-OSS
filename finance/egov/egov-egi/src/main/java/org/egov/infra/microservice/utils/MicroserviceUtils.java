@@ -164,6 +164,23 @@ public class MicroserviceUtils {
 
     @Value("${egov.services.user.businessdetails.url}")
     private String businessDetailsServiceUrl;
+  
+    /*---- SI user details-----*/
+    @Value("${si.microservice.user}")
+    private String siUser;
+    
+    @Value("${si.microservice.password}")
+    private String siPassword;
+    
+    @Value("${si.microservice.usertype}")
+    private String siUserType;
+    
+    @Value("${si.microservice.scope}")
+    private String siScope;
+    
+    @Value("${si.microservice.granttype}")
+    private String siGrantType;
+    
 
     public RequestInfo createRequestInfo() {
         final RequestInfo requestInfo = new RequestInfo();
@@ -377,12 +394,12 @@ public class MicroserviceUtils {
         header.add("Authorization", "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0");
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("username", "rama");
-        map.add("scope", "read");
-        map.add("password", "12345678");
-        map.add("grant_type", "password");
+        map.add("username", this.siUser);
+        map.add("scope", this.siScope);
+        map.add("password", this.siPassword);
+        map.add("grant_type", this.siGrantType);
         map.add("tenantId", "pb.jalandhar");
-        map.add("userType", "EMPLOYEE");
+        map.add("userType", this.siUserType);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, header);
 
