@@ -685,7 +685,7 @@ public class MicroserviceUtils {
     }
 
     public void removeSessionFromRedis(String access_token) {
-        LOGGER.info("Logout for access/auth token called :: " + access_token);
+        LOGGER.info("Deleting token from redis :: " + access_token);
         if (redisTemplate.hasKey(access_token)) {
             String sessionId = String.valueOf(redisTemplate.opsForValue().get(access_token));
             redisTemplate.delete(sessionId);

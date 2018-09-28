@@ -83,6 +83,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.http.HttpStatus;
+import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.config.security.authentication.provider.ApplicationAuthenticationProvider;
@@ -102,6 +103,7 @@ import org.springframework.security.web.authentication.session.CompositeSessionA
 
 public class ApplicationCoreFilter implements Filter {
 
+    private static final Logger LOGGER = Logger.getLogger(ApplicationCoreFilter.class);
 
     @Autowired
     private CityService cityService;
@@ -133,7 +135,8 @@ public class ApplicationCoreFilter implements Filter {
     	HttpServletRequest request = (HttpServletRequest) req;
     	HttpServletResponse response = (HttpServletResponse)resp;
         HttpSession session = request.getSession();
-       
+  
+        LOGGER.info(request.getRequestURL());
         try {
         
         	 prepareUserSession(request,response,session);
@@ -163,9 +166,9 @@ public class ApplicationCoreFilter implements Filter {
             Optional<Authentication> authentication = getCurrentAuthentication();
             if (authentication.isPresent() && authentication.get().getPrincipal() instanceof CurrentUser) {
                 session.setAttribute(USERID_KEY, ((CurrentUser) authentication.get().getPrincipal()).getUserId());
-            } else if ((!authentication.isPresent() || !(authentication.get().getPrincipal() instanceof User))
-            		&& !"anonymous".equalsIgnoreCase(String.valueOf(authentication.get().getPrincipal()))) {
-            		session.setAttribute(USERID_KEY, securityUtils.getCurrentUser().getId());
+//            } else if ((!authentication.isPresent() || !(authentication.get().getPrincipal() instanceof User))
+//            		&& !"anonymous".equalsIgnoreCase(String.valueOf(authentication.get().getPrincipal()))) {
+//            		session.setAttribute(USERID_KEY, securityUtils.getCurrentUser().getId());
             }
         }else
         {

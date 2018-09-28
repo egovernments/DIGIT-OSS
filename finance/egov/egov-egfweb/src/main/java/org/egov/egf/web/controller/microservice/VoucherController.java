@@ -20,6 +20,7 @@ import org.egov.egf.contract.model.VoucherResponse;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.ResponseInfo;
 import org.egov.infra.microservice.models.RequestInfo;
+import org.egov.infra.microservice.models.RequestInfoWrapper;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.bills.EgBillPayeedetails;
@@ -112,6 +113,12 @@ public class VoucherController {
 		return response;
 	}
 
-	
+	@PostMapping("/rest/voucher/test")
+	@ResponseBody
+	public VoucherResponse testme(@RequestBody RequestInfoWrapper request)
+	{
+	    System.out.println("*******************working fine************************");
+	    return new VoucherResponse();
+	}
 
 }

@@ -24,6 +24,7 @@ import org.egov.infra.microservice.contract.UserSearchResponseContent;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.persistence.entity.enums.Gender;
 import org.egov.infra.persistence.entity.enums.UserType;
+import org.egov.infra.web.filter.RestRequestWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -65,9 +66,16 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 			cur_user = (CurrentUser)this.microserviceUtils.readFromRedis(request.getSession().getId(), "current_user");
 			if (cur_user==null) {
 				LOGGER.info("Session is not available in redis and trying to login");
-				cur_user = new CurrentUser(this.getUserDetails(request));
-				if(!request.getRequestURI().contains("rest"))
+				
+				if(request.getRequestURI().contains("rest")){
+				   RestRequestWrapper restRequestWapper = new RestRequestWrapper(request);
+				   requestResponseHolder.setRequest(request);
+				   cur_user = new CurrentUser(this.getUserDetails(restRequestWapper));
+				}
+				else{
+				 cur_user = new CurrentUser(this.getUserDetails(request));
 				this.microserviceUtils.savetoRedis(request.getSession().getId(), "current_user", cur_user);
+				}
 
 			}
 			context.setAuthentication(this.prepareAuthenticationObj(request, cur_user));

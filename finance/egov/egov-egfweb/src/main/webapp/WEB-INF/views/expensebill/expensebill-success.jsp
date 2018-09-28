@@ -53,8 +53,8 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <script>
 			function processRequest(){
-		console.log('hi got the request');
-				window.parent.postMessage('message',"*");
+		
+				
 				
 				
 		console.log('posted the message');
@@ -74,6 +74,6 @@
 			</div>
 		</div>
 	</div>			
-	<div class="text-center"><input type="button" name="button2" id="button2" value="Close" class="btn btn-default" onclick="processRequest()"/></div>		
+	<div class="text-center"><input type="button" name="button2" id="button2" value="Close" class="btn btn-default" onclick="window.parent.postMessage('close','*');"/></div>		
 </div>					
 </div>
