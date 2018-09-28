@@ -60,7 +60,7 @@
 				<spring:message code='lbl.create' />
 			</button>
 			<a href='javascript:void(0)' class='btn btn-default'
-				onclick='self.close()'><spring:message code='lbl.close' /></a>
+				onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' /></a>
 		</div>
 	</div>
 </form:form>

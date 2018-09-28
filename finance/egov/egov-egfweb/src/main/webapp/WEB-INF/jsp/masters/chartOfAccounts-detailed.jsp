@@ -174,7 +174,7 @@
 			<div class="buttonbottom">
 				<input type="submit" class="buttonsubmit" value="Save" id="Save"
 					name="Save" onclick="return validateAndSubmit();" /> <input
-					type="button" value="Close" onclick="javascript:window.close()"
+					type="button" value="Close" onclick="javascript:window.parent.postMessage('close','*');"
 					class="button" />
 			</div>
 			<s:token />

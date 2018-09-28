@@ -100,7 +100,7 @@
 	<div class="buttonbottom" style="padding-bottom: 10px;">
 		<input type="submit" class="buttonsubmit" value="Search and View"
 			id="Search" name="Search" onclick="return validateAndSubmit(this);" />
-		<input type="button" value="Close" onclick="javascript:window.close()"
+		<input type="button" value="Close" onclick="javascript:window.parent.postMessage('close','*');"
 			class="button" />
 	</div>
 	</s:form>
