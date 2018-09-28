@@ -234,7 +234,7 @@
 								<td><s:submit cssClass="buttonsubmit" value="Search"
 										method="search" onclick="return validate()" /></td>
 								<td><input type="button" id="Close" value="Close"
-									onclick="javascript:window.close()" class="button" /></td>
+									onclick="javascript:window.parent.postMessage('close','*');" class="button" /></td>
 							</tr>
 						</table>
 					</div>

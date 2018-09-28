@@ -268,7 +268,7 @@ today = dd+'/'+mm+'/'+yyyy;
 			<s:submit value="Export PDF" method="search" cssClass="button"
 				onClick="return validate('pdf');" />
 			<input type="button" value="Close"
-				onclick="javascript:window.close()" class="button" />
+				onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 		</div>
 	</s:form>
 	<s:if test="%{al.size!=0}">

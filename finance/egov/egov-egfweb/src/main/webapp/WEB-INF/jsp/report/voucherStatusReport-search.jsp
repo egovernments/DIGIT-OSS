@@ -138,7 +138,7 @@
 				<s:submit method="beforeSearch" value="Reset" cssClass="button"
 					onclick="return resetAndSubmit();" />
 				<input type="button" value="Close"
-					onclick="javascript:window.close()" class="button" />
+					onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 
 			</div>
 

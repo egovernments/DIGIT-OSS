@@ -135,7 +135,7 @@
 												</div></td>
 											<td class="blueborderfortd"><div align="center">
 													<a
-														href='/EGF/report/chequeIssueRegisterReport-bankAdviceExcel.action?instrumentHeaderId=<s:property value="instrumentHeaderId" />'>
+														href='/services/EGF/report/chequeIssueRegisterReport-bankAdviceExcel.action?instrumentHeaderId=<s:property value="instrumentHeaderId" />'>
 														<s:text name="instrument.bankadvice" />
 													</a>
 												</div></td>
@@ -164,10 +164,10 @@
 						<td>
 							<div class="excelpdf">
 								<a
-									href='/EGF/report/chequeIssueRegisterReport-generateXls.action?fromDate=<s:property value="fromDate"/>&toDate=<s:property value="toDate"/>&accountNumber.id=<s:property value="accountNumber.id"/>&deptImpl.code=<s:property value="deptImpl.code"/>&function.id=<s:property value="function.id"/>&functionary.id=<s:property value="functionary.id"/>&fund.id=<s:property value="fund.id"/>&field.id=<s:property value="field.id"/>&bank=<s:property value="bank"/>'>Excel</a>
+									href='/services/EGF/report/chequeIssueRegisterReport-generateXls.action?fromDate=<s:property value="fromDate"/>&toDate=<s:property value="toDate"/>&accountNumber.id=<s:property value="accountNumber.id"/>&deptImpl.code=<s:property value="deptImpl.code"/>&function.id=<s:property value="function.id"/>&functionary.id=<s:property value="functionary.id"/>&fund.id=<s:property value="fund.id"/>&field.id=<s:property value="field.id"/>&bank=<s:property value="bank"/>'>Excel</a>
 								<img align="absmiddle"
 									src="/egi/resources/erp2/images/excel.png"> | <a
-									href='/EGF/report/chequeIssueRegisterReport-generatePdf.action?fromDate=<s:property value="fromDate"/>&toDate=<s:property value="toDate"/>&accountNumber.id=<s:property value="accountNumber.id"/>&deptImpl.code=<s:property value="deptImpl.code"/>&function.id=<s:property value="function.id"/>&functionary.id=<s:property value="functionary.id"/>&fund.id=<s:property value="fund.id"/>&field.id=<s:property value="field.id"/>&bank=<s:property value="bank"/>'>PDF</a>
+									href='/services/EGF/report/chequeIssueRegisterReport-generatePdf.action?fromDate=<s:property value="fromDate"/>&toDate=<s:property value="toDate"/>&accountNumber.id=<s:property value="accountNumber.id"/>&deptImpl.code=<s:property value="deptImpl.code"/>&function.id=<s:property value="function.id"/>&functionary.id=<s:property value="functionary.id"/>&fund.id=<s:property value="fund.id"/>&field.id=<s:property value="field.id"/>&bank=<s:property value="bank"/>'>PDF</a>
 								<img align="absmiddle" src="/egi/resources/erp2/images/pdf.png">
 							</div>
 						</td>

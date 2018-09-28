@@ -251,7 +251,7 @@
 				<s:submit method="exportXls" value="Save As Xls"
 					cssClass="buttonsubmit" onclick="return submitForm('exportXls')" />
 				<input type="button" value="Close"
-					onclick="javascript:window.close()" class="button" />
+					onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 
 			</div>
 			<br>

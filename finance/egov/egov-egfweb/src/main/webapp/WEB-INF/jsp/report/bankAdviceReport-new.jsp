@@ -148,7 +148,7 @@ table.its th {
 				<s:submit method="search" value="Search" cssClass="buttonsubmit"
 					onclick="return validate();" />
 				<input type="button" value="Close"
-					onclick="javascript:window.close()" class="button" />
+					onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 
 			</div>
 			<br>
