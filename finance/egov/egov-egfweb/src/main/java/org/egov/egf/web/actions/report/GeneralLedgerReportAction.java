@@ -223,10 +223,10 @@ public class GeneralLedgerReportAction extends BaseFormAction {
 				fund = (Fund) persistenceService.find("from Fund where id = ?",
 						Integer.parseInt(generalLedgerReportBean.getFund_id()));
 		}
-		if (fund == null) {
+		if (fund == null && glCode!=null) {
 			heading = "General Ledger Report for " + glCode.getGlcode() + ":" + glCode.getName() + " from "
 					+ generalLedgerReportBean.getStartDate() + " to " + generalLedgerReportBean.getEndDate();
-		} else
+		} else if(glCode!=null)
 			heading = "General Ledger Report for " + glCode.getGlcode() + ":" + glCode.getName() + " for "
 					+ fund.getName() + " from " + generalLedgerReportBean.getStartDate() + " to "
 					+ generalLedgerReportBean.getEndDate();

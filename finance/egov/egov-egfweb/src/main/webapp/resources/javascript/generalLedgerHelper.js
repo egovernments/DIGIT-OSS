@@ -105,7 +105,6 @@
 	var oAutoCompEntityForJV;
 	function autocompleteAccountCodes(obj)
 	{
-		
 		console.log("autocompleteAccountCodes");
 	  	   oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common-ajaxLoadGLreportCodes.action", [ "~^"]);
 	  	 console.log("outside");
@@ -133,20 +132,20 @@
 
 			};  
 	}
-	function splitAccountCodes(obj) 
-	{	
-		var entity=obj.value;
-		if(entity.trim()!="")
-		{
-			var entity_array=entity.split("`~`");
-			if(entity_array.length==2)
-			{
-				document.getElementById("glCode1").value=entity_array[0].split("`-`")[0];
-				
-			}
-		}
+	function splitAccountCodes(obj) {
+	var entity = obj.value;
+	if (entity.trim() != "") {
+		var entity_array = entity.split("`~`");
+		if (entity_array.length == 2) {
+			document.getElementById("glCode1").value = entity_array[0]
+					.split("`-`")[0];
 
+		} else {
+			document.getElementById("glCode1").value = "";
+		}
 	}
+
+  }
 	function autocompleteFunction(obj)
 	{
 	  	   oACDS = new YAHOO.widget.DS_XHR("/services/EGF/voucher/common-ajaxLoadFunctionCodes.action", [ "~^"]);

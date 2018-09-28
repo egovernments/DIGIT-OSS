@@ -281,7 +281,7 @@ public class GeneralLedgerReport {
                 pstmt.setString(0, glCode1);
                 final List res = pstmt.list();
                 String aName = "";
-                if (res != null)
+                if (res != null && !res.isEmpty())
                     aName = res.get(0).toString();
                 arr[1] = "";
                 arr[2] = arr[3] = arr[6] = arr[7] = arr[10] = arr[11] = arr[12] = arr[13] = "";
@@ -1133,24 +1133,24 @@ public class GeneralLedgerReport {
         return opBal;
     }
 
-    private String getAccountName(final String glCode) throws TaskFailedException {
-        String accountName = "";
-        Query pst = null;
-        try {
-            final String query = "select name as \"name\" from  CHARTOFACCOUNTS where GLCODE=?";
-            pst = persistenceService.getSession().createSQLQuery(query);
-            pst.setString(0, glCode);
-            final List list = pst.list();
-            final Object[] objects = list.toArray();
-            accountName = objects[0].toString();
-
-        } catch (final Exception e) {
-            LOGGER.error("Exp in getAccountName:" + e.getMessage(), e);
-            throw taskExc;
-        }
-
-        return accountName;
-    }
+	private String getAccountName(final String glCode) throws TaskFailedException {
+		String accountName = "";
+		Query pst = null;
+		try {
+			final String query = "select name as \"name\" from  CHARTOFACCOUNTS where GLCODE=?";
+			pst = persistenceService.getSession().createSQLQuery(query);
+			pst.setString(0, glCode);
+			final List list = pst.list();
+			if (list != null && !list.isEmpty()) {
+				final Object[] objects = list.toArray();
+				accountName = objects[0].toString();
+			}
+		} catch (final Exception e) {
+			LOGGER.error("Exp in getAccountName:" + e.getMessage(), e);
+			throw taskExc;
+		}
+		return accountName;
+	}
 
     private String getFundName(final String fundId) throws TaskFailedException {
         String fundName = "";
