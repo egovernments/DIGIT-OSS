@@ -138,7 +138,6 @@ public class ApplicationCoreFilter implements Filter {
   
         LOGGER.info(request.getRequestURL());
         try {
-        
         	 prepareUserSession(request,response,session);
         	 prepareRequestOriginDetails(session, request);
         	 prepareApplicationThreadLocal(session);
@@ -159,7 +158,7 @@ public class ApplicationCoreFilter implements Filter {
             session.getServletContext().setAttribute(CDN_ATTRIB_NAME, cdnURL);
      
      
-        
+        LOGGER.info(getCurrentAuthentication());
         
         if (session.getAttribute(USERID_KEY) == null) {
              

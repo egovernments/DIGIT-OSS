@@ -1,10 +1,15 @@
 package org.egov.infra.web.filter;
 
+import static org.egov.infra.utils.ApplicationConstant.MS_ADMIN_TOKEN;
+import static org.egov.infra.utils.ApplicationConstant.MS_TENANTID_KEY;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.Filter;
@@ -15,18 +20,24 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
+import org.egov.infra.admin.master.entity.Role;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
 import org.egov.infra.microservice.contract.Error;
 import org.egov.infra.microservice.contract.ErrorResponse;
 import org.egov.infra.microservice.contract.RequestInfoWrapper;
+import org.egov.infra.microservice.contract.UserSearchResponse;
+import org.egov.infra.microservice.contract.UserSearchResponseContent;
 import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.egov.infra.persistence.entity.enums.Gender;
+import org.egov.infra.persistence.entity.enums.UserType;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.web.rest.handler.RestErrorHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +47,16 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 
@@ -64,34 +79,34 @@ public class RestServiceAuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        chain.doFilter(req, res);
         
+        RestRequestWrapper request = new RestRequestWrapper((HttpServletRequest)req);
         
-//        HttpServletRequest request = (HttpServletRequest) req;
-//        HttpServletResponse response = (HttpServletResponse) res;
-//
-//        if (request.getRequestURI().contains("ClearToken")) {
-//         
-//            ObjectMapper mapper = new ObjectMapper();
-////            mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-////            mapper.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
-//            
-////            String strReq = request.getReader().lines().collect(Collectors.joining("\n"));
-//            String strReq =  IOUtils.toString(request.getInputStream());
-//              HashMap<String,String>reqMap = mapper.readValue(strReq, new TypeReference<Map<String, String>>(){});
-//              String authToken = reqMap.get("authtoken");
-//              
-//              
-//            
-//            
-//            request.getRequestDispatcher(request.getServletPath()).forward(request, response);
-////            return;
-
-//        }
+        try {
+            CurrentUser user = new CurrentUser(this.getUserDetails(request));
+            Authentication auth = this.prepareAuthenticationObj(request, user);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            chain.doFilter(request, res);
+            
+        } catch (Exception e) {
+//            e.printStackTrace();
+            res.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            res.getWriter().write(getErrorResponse(INVALID_TOKEN));
+            try {
+                throw e;
+            } catch (Exception e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+        
+       
+        
+ 
 
     }
 
-    private ErrorResponse getErrorResponse(String errorType) {
+    private String getErrorResponse(String errorType) throws JsonProcessingException {
         ErrorResponse errorResp = new ErrorResponse();
         List<Error> errorlist = new ArrayList<>();
 
@@ -119,7 +134,9 @@ public class RestServiceAuthFilter implements Filter {
 
         errorlist.add(error);
         errorResp.setErrors(errorlist);
-        return errorResp;
+        ObjectMapper mapper = new ObjectMapper();
+        String response = mapper.writeValueAsString(errorResp);
+        return response;
 
     }
 
@@ -131,4 +148,82 @@ public class RestServiceAuthFilter implements Filter {
     public void destroy() {
     }
 
+    private Authentication prepareAuthenticationObj(HttpServletRequest request, CurrentUser user) {
+
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, "dummy",
+                user.getAuthorities());
+        WebAuthenticationDetails details = new WebAuthenticationDetails(request);
+        auth.setDetails(details);
+        return auth;
+    }
+
+    private User getUserDetails(HttpServletRequest request) throws Exception {
+      
+         String user_token = readAuthToken(request);
+      
+        if (user_token == null)
+            throw new Exception("AuthToken not found");
+        HttpSession session = request.getSession();
+        String admin_token = this.microserviceUtils.generateAdminToken();
+        session.setAttribute(MS_ADMIN_TOKEN, admin_token);
+        CustomUserDetails user = this.microserviceUtils.getUserDetails(user_token, admin_token);
+        session.setAttribute(MS_TENANTID_KEY, user.getTenantId());
+        UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token, user.getTenantId(), user.getUserName());
+       
+        return this.parepareCurrentUser(response.getUserSearchResponseContent().get(0));
+    }
+
+    private User parepareCurrentUser(UserSearchResponseContent userinfo) {
+
+        User user = new User(UserType.EMPLOYEE);
+        user.setId(userinfo.getId());
+        user.setUsername(userinfo.getUserName());
+        user.setActive(userinfo.getActive());
+        user.setAccountLocked(userinfo.getAccountLocked());
+        user.setGender(Gender.FEMALE);
+        user.setPassword("demo");
+        user.setName(userinfo.getName());
+        user.setPwdExpiryDate(userinfo.getPwdExpiryDate());
+        user.setLocale(userinfo.getLocale());
+
+        Set<Role> roles = new HashSet<>();
+
+        userinfo.getRoles().forEach(roleReq -> {
+            Role role = new Role();
+            role.setId(roleReq.getId());
+            role.setName(roleReq.getName());
+            roles.add(role);
+        });
+
+        return user;
+
+    }
+
+    private String readAuthToken(HttpServletRequest request) {
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+            mapper.setVisibilityChecker(
+                    VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+
+            // String strReq = request.getReader().lines().collect(Collectors.joining("\n"));
+            String strReq = IOUtils.toString(request.getInputStream());
+            HashMap<Object, Object> reqMap = mapper.readValue(strReq, HashMap.class);
+            HashMap<Object, Object> reqInfo = null;
+            reqInfo = (HashMap) reqMap.get("RequestInfo");
+
+            String authToken = (String) reqInfo.get("authToken");
+
+            return authToken;
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
 }

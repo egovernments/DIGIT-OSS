@@ -68,9 +68,7 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 				LOGGER.info("Session is not available in redis and trying to login");
 				
 				if(request.getRequestURI().contains("rest")){
-				   RestRequestWrapper restRequestWapper = new RestRequestWrapper(request);
-				   requestResponseHolder.setRequest(request);
-				   cur_user = new CurrentUser(this.getUserDetails(restRequestWapper));
+				    return SecurityContextHolder.createEmptyContext();
 				}
 				else{
 				 cur_user = new CurrentUser(this.getUserDetails(request));
@@ -112,31 +110,28 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 		return auth;
 	}
 
-	private User getUserDetails(HttpServletRequest request) throws Exception{
-		String user_token = null;
-		if(request.getRequestURI().contains("rest"))
-		        user_token= readAuthToken(request);
-		else
-		        user_token =request.getParameter("auth_token");
-		
-		if(user_token==null)
-			throw new Exception("AuthToken not found");
-		HttpSession session = request.getSession();
-		String admin_token = this.microserviceUtils.generateAdminToken();
-		session.setAttribute(MS_ADMIN_TOKEN, admin_token);
-		CustomUserDetails user = this.microserviceUtils.getUserDetails(user_token, admin_token);
-		session.setAttribute(MS_TENANTID_KEY, user.getTenantId());
-		UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token,user.getTenantId(),user.getUserName());
-		
-		if(!request.getRequestURI().contains("rest")){
-		    this.microserviceUtils.removeSessionFromRedis(user_token);
-		    this.microserviceUtils.savetoRedis(session.getId(), "auth_token", user_token);
-		    this.microserviceUtils.savetoRedis(session.getId(), "_details", user);
-		    this.microserviceUtils.saveAuthToken(user_token, session.getId());
-		}
-		
-		return this.parepareCurrentUser(response.getUserSearchResponseContent().get(0));
-	}
+    private User getUserDetails(HttpServletRequest request) throws Exception {
+        String user_token = null;
+        user_token = request.getParameter("auth_token");
+
+        if (user_token == null)
+            throw new Exception("AuthToken not found");
+        HttpSession session = request.getSession();
+        String admin_token = this.microserviceUtils.generateAdminToken();
+        session.setAttribute(MS_ADMIN_TOKEN, admin_token);
+        CustomUserDetails user = this.microserviceUtils.getUserDetails(user_token, admin_token);
+        if(null==user || user.getId()==null)
+            throw new Exception("Invalid Token");
+        session.setAttribute(MS_TENANTID_KEY, user.getTenantId());
+        UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token, user.getTenantId(), user.getUserName());
+        
+        this.microserviceUtils.removeSessionFromRedis(user_token);
+        this.microserviceUtils.savetoRedis(session.getId(), "auth_token", user_token);
+        this.microserviceUtils.savetoRedis(session.getId(), "_details", user);
+        this.microserviceUtils.saveAuthToken(user_token, session.getId());
+
+        return this.parepareCurrentUser(response.getUserSearchResponseContent().get(0));
+    }
 
 	private User parepareCurrentUser(UserSearchResponseContent userinfo) {
 
@@ -164,31 +159,4 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 
 	}
 	
-	private String  readAuthToken(HttpServletRequest request){
-	    
-	    try {
-            ObjectMapper mapper = new ObjectMapper();
-                mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-                mapper.setVisibilityChecker(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
-                
-//                String strReq = request.getReader().lines().collect(Collectors.joining("\n"));
-                String strReq =  IOUtils.toString(request.getInputStream());
-                  HashMap<Object,Object>reqMap = mapper.readValue(strReq, HashMap.class);
-                  HashMap<Object,Object> reqInfo = null;
-                  reqInfo = (HashMap)reqMap.get("RequestInfo");
-                  
-                  String authToken = (String)reqInfo.get("authToken");
-                  
-                  return authToken;
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-	    return null;
-	    
-	}
-
 }
