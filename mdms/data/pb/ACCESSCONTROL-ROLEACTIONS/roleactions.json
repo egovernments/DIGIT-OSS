@@ -15578,6 +15578,24 @@
    "actionid":  604,
    "actioncode": "",
    "tenantId": "pb"
+ },
+{
+   "rolecode": "SUPERUSER",
+   "actionid":  1679,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+{
+   "rolecode": "SUPERUSER",
+   "actionid":  1680,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+{
+   "rolecode": "SUPERUSER",
+   "actionid":  1681,
+   "actioncode": "",
+   "tenantId": "pb"
  }
   ]
 }

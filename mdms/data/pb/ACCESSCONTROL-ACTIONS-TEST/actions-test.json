@@ -12609,6 +12609,46 @@
    "code": "null",
    "path": "",
    "navigationURL": ""
- }
+ },
+    {
+      "id": 1679,
+      "name": "createAccountEntiy",
+      "url": "url",
+      "displayName": "Create Accounting Entity",
+      "orderNumber": 11,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "code": "null",
+      "navigationURL": "services/EGF/accountdetailtype/new",
+      "path": "Finance.Masters.Accounting Entity.Create Accounting Entity"
+    },
+    {
+      "id": 1680,
+      "name": "updateAccountEntiy",
+      "url": "url",
+      "displayName": "Modify Accounting Entity",
+      "orderNumber": 13,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "code": "null",
+      "navigationURL": "services/EGF/accountdetailtype/search/edit",
+      "path": "Finance.Masters.Accounting Entity.Modify Accounting Entity"
+    },
+    {
+      "id": 1681,
+      "name": "searchAccountEntiy",
+      "url": "ur;",
+      "displayName": "View Account Entity",
+      "orderNumber": 12,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "navigationURL": "services/EGF/accountdetailtype/search/view",
+      "code": "null",
+      "path": "Finance.Masters.Accounting Entity.View Accounting Entity"
+    }
+    
   ]
 }
