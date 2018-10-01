@@ -64,6 +64,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.dispatcher.multipart.MultiPartRequestWrapper;
 import org.apache.struts2.dispatcher.multipart.UploadedFile;
 import org.egov.egf.budget.model.BudgetControlType;
@@ -98,6 +99,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping(value = "/expensebill")
 public class CreateExpenseBillController extends BaseBillController {
 
+    private static final Logger LOGGER = Logger.getLogger(CreateExpenseBillController.class);
 
     private static final String DESIGNATION = "designation";
 
@@ -113,6 +115,7 @@ public class CreateExpenseBillController extends BaseBillController {
 
     private static final int BUFFER_SIZE = 4096;
 
+    
     @Autowired
     @Qualifier("messageSource")
     private MessageSource messageSource;
@@ -136,8 +139,8 @@ public class CreateExpenseBillController extends BaseBillController {
 
     @RequestMapping(value = "/newform", method = RequestMethod.POST)
     public String showNewForm(@ModelAttribute("egBillregister") final EgBillregister egBillregister, final Model model,HttpServletRequest request) {
-    	System.out.println("*********** New ExpenseBill recieved*********************");
-    	Cookie[] cookies = request.getCookies();
+        LOGGER.info("New expensebill creation request created");
+        Cookie[] cookies = request.getCookies();
     	
     	
     	if(null!=cookies && cookies.length>0)
@@ -162,7 +165,7 @@ public class CreateExpenseBillController extends BaseBillController {
     public String create(@ModelAttribute("egBillregister") final EgBillregister egBillregister, final Model model,
                          final BindingResult resultBinder, final HttpServletRequest request, @RequestParam final String workFlowAction)
             throws IOException {
-    	System.out.println("************** Session User Id :"+ApplicationThreadLocals.getUserId());
+        LOGGER.info("ExpenseBill is creating with user ::"+ApplicationThreadLocals.getUserId());
       //User createdBy = new User();
      // createdBy.setId(ApplicationThreadLocals.getUserId());
       egBillregister.setCreatedBy(ApplicationThreadLocals.getUserId());
@@ -206,7 +209,7 @@ public class CreateExpenseBillController extends BaseBillController {
             Long approvalPosition = 0l;
             String approvalComment = "";
             String approvalDesignation = "";
-            if (request.getParameter("approvalComment") != null)
+            if (request.getParameter("approvalComent") != null)
                 approvalComment = request.getParameter("approvalComent");
             if (request.getParameter(APPROVAL_POSITION) != null && !request.getParameter(APPROVAL_POSITION).isEmpty())
                 approvalPosition = Long.valueOf(request.getParameter(APPROVAL_POSITION));

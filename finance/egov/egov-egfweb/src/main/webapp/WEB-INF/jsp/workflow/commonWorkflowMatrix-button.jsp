@@ -104,7 +104,7 @@
 							onclick="return validateWorkFlowApprover('%{validAction}','jsValidationErrors');" />
 					</s:if>
 				</s:iterator> <input type="button" name="button2" id="button2" value="Close"
-				class="button" onclick="window.parent.postMessage('close','*');" /></td>
+				class="button" onclick="window.parent.postMessage('close','*');window.close();" /></td>
 		</tr>
 	</table>
 </div>

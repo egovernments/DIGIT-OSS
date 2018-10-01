@@ -59,6 +59,7 @@ import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.AppConfigService;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.filestore.service.FileStoreService;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.EmployeeInfo;
 import org.egov.infra.microservice.models.EmployeeInfoResponse;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
@@ -261,6 +262,7 @@ public class FinancialUtils {
 
     public List<HashMap<String, Object>> getHistory(final State state, final List<StateHistory> history) {
         User user = null;
+        EmployeeInfo ownerobj = null;
         final List<HashMap<String, Object>> historyTable = new ArrayList<>();
         final HashMap<String, Object> map = new HashMap<>(0);
         if (null != state) {
@@ -275,12 +277,17 @@ public class FinancialUtils {
                 workflowHistory.put("status", stateHistory.getValue());
                 final Long owner = stateHistory.getOwnerPosition();
                 final State _sowner = stateHistory.getState();
+               ownerobj=    this.microServiceUtil.getEmployeeByPositionId(owner);
                 // user = stateHistory.getOwnerUser();
-                if (null != user) {
-                    workflowHistory.put("user", user.getUsername() + "::" + user.getName());
-                    workflowHistory.put("department",
-                            null != eisCommonService.getDepartmentForUser(user.getId()) ? eisCommonService
-                                    .getDepartmentForUser(user.getId()).getName() : "");
+                if (null != ownerobj) {
+//                    workflowHistory.put("user", user.getUsername() + "::" + user.getName());
+                    workflowHistory.put("user",ownerobj.getUserName()+"::"+ownerobj.getName());
+                    Department department=   this.microServiceUtil.getDepartmentByCode(ownerobj.getAssignments().get(0).getDepartment());
+                    if(null != department)
+                        workflowHistory.put("department", department.getName());
+//                    workflowHistory.put("department",
+//                            null != eisCommonService.getDepartmentForUser(user.getId()) ? eisCommonService
+//                                    .getDepartmentForUser(user.getId()).getName() : "");
                 } else if (null != _sowner && null != _sowner.getDeptName()) {
                     user = eisCommonService.getUserForPosition(owner, new Date());
                     workflowHistory
@@ -295,10 +302,16 @@ public class FinancialUtils {
             map.put("status", state.getValue());
             final Long ownerPosition = state.getOwnerPosition();
             // user = state.getOwnerUser();
-            if (null != user) {
-                map.put("user", user.getUsername() + "::" + user.getName());
-                map.put("department", null != eisCommonService.getDepartmentForUser(user.getId()) ? eisCommonService
-                        .getDepartmentForUser(user.getId()).getName() : "");
+            ownerobj=    this.microServiceUtil.getEmployeeByPositionId(ownerPosition);
+            
+//            if (null != user) {
+            if(null != ownerobj){
+                map.put("user", ownerobj.getUserName() + "::" + ownerobj.getName());
+              Department department=   this.microServiceUtil.getDepartmentByCode(ownerobj.getAssignments().get(0).getDepartment());
+              if(null != department)
+                  map.put("department", department.getName());
+              //                map.put("department", null != eisCommonService.getDepartmentForUser(user.getId()) ? eisCommonService
+//                        .getDepartmentForUser(user.getId()).getName() : "");
             } else if (null != ownerPosition && null != state.getDeptName()) {
                 user = eisCommonService.getUserForPosition(ownerPosition, new Date());
                 map.put("user", null != user.getUsername() ? user.getUsername() + "::" + user.getName() : "");
