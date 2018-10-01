@@ -321,11 +321,13 @@ public class ExpenseBillService {
             deleteCheckList(updatedegBillregister);
             createCheckList(updatedegBillregister, checkLists);
             egBillregister.getEgBillregistermis().setBudgetaryAppnumber(null);
-            try {
-                checkBudgetAndGenerateBANumber(egBillregister);
-            } catch (final ValidationException e) {
-                throw new ValidationException(e.getErrors());
-            }
+      
+//            commented as budget check was disabled
+//            try {
+//                checkBudgetAndGenerateBANumber(egBillregister);
+//            } catch (final ValidationException e) {
+//                throw new ValidationException(e.getErrors());
+//            }
 
         }
         if (updatedegBillregister != null) {
