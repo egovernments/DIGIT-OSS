@@ -686,10 +686,10 @@ public class BankBookReportAction extends BaseFormAction {
 		}
 
 		if (getVouchermis() != null && getVouchermis().getDepartmentcode() != null
-				&& getVouchermis().getDepartmentcode() != null && getVouchermis().getDepartmentcode() != "-1") {
+				&& getVouchermis().getDepartmentcode() != null && !getVouchermis().getDepartmentcode().equals("-1")) {
 			query.append(" and vmis.DEPARTMENTCODE='").append(getVouchermis().getDepartmentcode() + "'");
-			Department depList = microserviceUtils.getDepartmentByCode(getVouchermis().getDepartmentcode());
-			header.append(" in " + depList.getName() + " ");
+			Department department = microserviceUtils.getDepartmentByCode(getVouchermis().getDepartmentcode());
+			header.append(" in " + department.getName() + " ");
 		}
 		if (getVouchermis() != null && getVouchermis().getFunctionary() != null
 				&& getVouchermis().getFunctionary().getId() != null && getVouchermis().getFunctionary().getId() != -1)
