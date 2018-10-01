@@ -75,7 +75,7 @@
         doLoadingMask();
     	document.getElementById("resultDiv").style.display="none";
         var formObj = jQuery(document.getElementById("journalBookForm"));
-        var formURL = '/EGF/report/journalBookReport-ajaxSearch.action';
+        var formURL = '/services/EGF/report/journalBookReport-ajaxSearch.action';
         var formData = new FormData(document.getElementById("journalBookForm"));
         jQuery.ajax({
             url: formURL,

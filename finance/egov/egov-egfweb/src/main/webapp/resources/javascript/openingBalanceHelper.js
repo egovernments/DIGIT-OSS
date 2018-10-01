@@ -53,7 +53,7 @@
         doLoadingMask();
     	document.getElementById("resultDiv").style.display="none";
         var formObj = jQuery(document.getElementById("openingBalanceForm"));
-        var formURL = '/EGF/report/openingBalanceReport-ajaxSearch.action';
+        var formURL = '/services/EGF/report/openingBalanceReport-ajaxSearch.action';
         var formData = new FormData(document.getElementById("openingBalanceForm"));
         jQuery.ajax({
             url: formURL,

@@ -172,7 +172,11 @@ public class OpeningBalanceReportAction extends BaseFormAction {
 	}
 
 	private String getGLHeading() {
-
+		Map<String, String> depMap = new HashMap<>();
+		List<org.egov.infra.microservice.models.Department> list = masterDataCache.get("egi-department");
+		for (org.egov.infra.microservice.models.Department dep : list) {
+			depMap.put(dep.getCode(), dep.getName());
+		}
 		String heading = "Opening Balance for the Year ";
 		CFinancialYear finYear = new CFinancialYear();
 		Fund fund = new Fund();
@@ -186,10 +190,8 @@ public class OpeningBalanceReportAction extends BaseFormAction {
 					Integer.parseInt(openingBalanceReport.getObFund_id()));
 			heading = heading + " under " + fund.getName();
 		}
-
 		if (checkNullandEmpty(openingBalanceReport.getDeptId())) {
-			Department list = microserviceUtils.getDepartmentByCode(openingBalanceReport.getDeptId());
-			heading = heading + " and " + list.getName() + " Department ";
+			heading = heading + " and " + depMap.get(openingBalanceReport.getDeptId()) + " Department ";
 		}
 		return heading;
 	}

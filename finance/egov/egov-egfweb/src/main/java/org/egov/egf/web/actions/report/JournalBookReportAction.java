@@ -60,6 +60,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.egov.commons.CFunction;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.reporting.util.ReportUtil;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
@@ -78,7 +79,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ParentPackage("egov")
 @Results({
@@ -116,7 +119,7 @@ public class JournalBookReportAction extends BaseFormAction {
                 persistenceService.findAllBy(" from Fund where isactive=true and isnotleaf=false order by name"));
         addDropdownData("fundsourceList",
                 persistenceService.findAllBy(" from Fundsource where isactive=true order by name"));
-        addDropdownData("departmentList", persistenceService.findAllBy("from Department order by name"));
+        addDropdownData("departmentList", masterDataCache.get("egi-department"));
         addDropdownData("functionList", masterDataCache.get("egi-function"));
 
         addDropdownData("voucherNameList", VoucherHelper.VOUCHER_TYPE_NAMES.get(FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL));
@@ -219,7 +222,7 @@ public class JournalBookReportAction extends BaseFormAction {
         if (journalBookReport.getVoucher_name() != null && !journalBookReport.getVoucher_name().equals(""))
             subQuery = subQuery + " and vh.Name='" + journalBookReport.getVoucher_name() + "' ";
         if (journalBookReport.getDept_name() != null && !journalBookReport.getDept_name().equals(""))
-            subQuery = subQuery + " and vmis.departmentid=" + journalBookReport.getDept_name() + " ";
+            subQuery = subQuery + " and vmis.departmentcode='" + journalBookReport.getDept_name() + "' ";
         if (journalBookReport.getFunctionId() != null && !journalBookReport.getFunctionId().equals(""))
             subQuery = subQuery + " and vmis.functionid  =" + journalBookReport.getFunctionId() + " ";
         query = "SELECT TO_CHAR(vh.voucherdate,'dd-Mon-yyyy') AS voucherdate,vh.vouchernumber AS vouchernumber,f.name AS fund,gl.glcode AS code,coa.name AS accName,"
@@ -237,16 +240,18 @@ public class JournalBookReportAction extends BaseFormAction {
     }
 
     private String getGLHeading() {
-
+    	Map<String, String> depMap = new HashMap<>();
+		List<org.egov.infra.microservice.models.Department> list = masterDataCache.get("egi-department");
+		for (org.egov.infra.microservice.models.Department dep : list) {
+			depMap.put(dep.getCode(), dep.getName());
+		}
         String heading = "";
         heading = "Journal Book Report under " + journalBookReport.getFundName() + " from " + journalBookReport.getStartDate()
                 + " to " + journalBookReport.getEndDate();
         Department dept = new Department();
         CFunction function = new CFunction();
         if (checkNullandEmpty(journalBookReport.getDept_name())) {
-            dept = (Department) persistenceService.find("from Department where  id = ?",
-                    Long.parseLong(journalBookReport.getDept_name()));
-            heading = heading + " and Department : " + dept.getName();
+            heading = heading + " and Department : " + depMap.get(dept.getName());
         }
         if (checkNullandEmpty(journalBookReport.getFunctionId())) {
             function = (CFunction) persistenceService.find("from CFunction where  id = ?",
