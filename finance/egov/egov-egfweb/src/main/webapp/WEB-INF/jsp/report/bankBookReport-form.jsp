@@ -85,7 +85,7 @@ function getData(){
 		}
 	
 	//doLoadingMask();
-	var url = '/EGF/report/bankBookReport-ajaxLoadBankBook.action?skipPrepare=true&bankAccount.id='+bankAccount+'&startDate='+startDate+'&endDate='+endDate+getMiscData();
+	var url = '/services/EGF/report/bankBookReport-ajaxLoadBankBook.action?skipPrepare=true&bankAccount.id='+bankAccount+'&startDate='+startDate+'&endDate='+endDate+getMiscData();
 	YAHOO.util.Connect.asyncRequest('POST', url, callback, null);
 }
 
@@ -141,7 +141,7 @@ function exportXls(){
 	var startDate = document.getElementById('startDate').value;
 	var endDate = document.getElementById('endDate').value;
 	//var fund2 = document.getElementById('fund').value;
-	window.open('/EGF/report/bankBookReport-exportXls.action?skipPrepare=true&bankAccount.id='+bankAccount+'&startDate='+startDate+'&endDate='+endDate+getMiscData(),'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+	window.open('/services/EGF/report/bankBookReport-exportXls.action?skipPrepare=true&bankAccount.id='+bankAccount+'&startDate='+startDate+'&endDate='+endDate+getMiscData(),'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
 }
 
 function exportPdf(){
@@ -149,7 +149,7 @@ function exportPdf(){
 	var startDate = document.getElementById('startDate').value;
 	var endDate = document.getElementById('endDate').value;
 	//var fund2 = document.getElementById('fund').value;
-	window.open('/EGF/report/bankBookReport-exportPdf.action?skipPrepare=true&bankAccount.id='+bankAccount+'&startDate='+startDate+'&endDate='+endDate+getMiscData(),'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+	window.open('/services/EGF/report/bankBookReport-exportPdf.action?skipPrepare=true&bankAccount.id='+bankAccount+'&startDate='+startDate+'&endDate='+endDate+getMiscData(),'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
 }
 
 function validateDataa(){

@@ -37,7 +37,7 @@ public class VoucherController {
 	@Autowired
 	private MicroserviceUtils microserviceUtils;
 
-	@PostMapping(value = "/rest/voucher/_create")
+	@PostMapping(value = "/voucher/_create")
 	@ResponseBody
 	public VoucherResponse create(@RequestBody VoucherRequest voucherRequest) {
 
@@ -115,7 +115,7 @@ public class VoucherController {
 
 	@PostMapping("/rest/voucher/test")
 	@ResponseBody
-	public VoucherResponse testme(@RequestBody VoucherRequest request)
+	public VoucherResponse testme(@RequestBody RequestInfoWrapper request)
 	{
 	    System.out.println("*******************working fine************************");
 	    return new VoucherResponse();
