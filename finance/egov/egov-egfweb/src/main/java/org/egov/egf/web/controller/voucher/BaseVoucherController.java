@@ -91,7 +91,7 @@ public abstract class BaseVoucherController extends GenericWorkFlowController {
     private ChartOfAccountsService chartOfAccountsService;
 
     @Autowired
-    private EgovMasterDataCaching masterDataCache;
+    protected EgovMasterDataCaching masterDataCache;
 
     @Autowired
     private VoucherTypeForULB voucherTypeForULB;

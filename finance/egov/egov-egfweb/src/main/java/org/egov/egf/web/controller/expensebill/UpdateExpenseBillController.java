@@ -56,6 +56,8 @@ import org.egov.egf.utils.FinancialUtils;
 import org.egov.eis.web.contract.WorkflowContainer;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.exception.ApplicationException;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infstr.models.EgChecklists;
 import org.egov.model.bills.DocumentUpload;
@@ -78,6 +80,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/expensebill")
@@ -105,6 +108,8 @@ public class UpdateExpenseBillController extends BaseBillController {
     private FinancialUtils financialUtils;
     @Autowired
     private CheckListService checkListService;
+    @Autowired
+    private MicroserviceUtils microServiceUtil;
     
     public UpdateExpenseBillController(final AppConfigValueService appConfigValuesService) {
         super(appConfigValuesService);
@@ -146,6 +151,11 @@ public class UpdateExpenseBillController extends BaseBillController {
                 model.addAttribute(NET_PAYABLE_AMOUNT, details.getCreditamount());
             }
         prepareCheckListForEdit(egBillregister, model);
+        
+        String department= this.getDepartmentName(egBillregister.getEgBillregistermis().getDepartmentcode());
+       
+       if(department!=null)
+           egBillregister.getEgBillregistermis().setDepartmentName(department);
         model.addAttribute(EG_BILLREGISTER, egBillregister);
         if (egBillregister.getState() != null
                 && (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue())
@@ -157,6 +167,7 @@ public class UpdateExpenseBillController extends BaseBillController {
             if (egBillregister.getEgBillregistermis().getBudgetaryAppnumber() != null && !egBillregister.getEgBillregistermis().getBudgetaryAppnumber().isEmpty()) {
                 budgetDetails = expenseBillService.getBudgetDetailsForBill(egBillregister);
             }
+            
             model.addAttribute("budgetDetails", budgetDetails);
             return EXPENSEBILL_VIEW;
         }
@@ -304,6 +315,29 @@ public class UpdateExpenseBillController extends BaseBillController {
     @Override
     protected void setDropDownValues(final Model model) {
         super.setDropDownValues(model);
+    }
+    
+    private String getDepartmentName(String departmentCode){
+        
+        List<Department> deptlist = this.masterDataCache.get("egi-department");
+        String departmentName = null;
+        
+        if(null!=deptlist && !deptlist.isEmpty()){
+           
+        List<Department> dept =    deptlist.stream()
+                                .filter(department->departmentCode.equalsIgnoreCase(department.getCode()))
+                                .collect(Collectors.toList());     
+        if(null!=dept && dept.size()>0)
+            departmentName = dept.get(0).getName();
+        }
+        
+        if(null==departmentName){
+            Department dept = this.microServiceUtil.getDepartmentByCode(departmentCode);
+            if(null!= dept)
+                departmentName= dept.getName();
+        }
+        
+        return departmentName;
     }
 
 }
