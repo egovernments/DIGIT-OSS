@@ -65,8 +65,8 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 			HttpServletRequest request = requestResponseHolder.getRequest();
 			cur_user = (CurrentUser)this.microserviceUtils.readFromRedis(request.getSession().getId(), "current_user");
 			if (cur_user==null) {
-				LOGGER.info("Session is not available in redis and trying to login");
-				
+				LOGGER.info("Session is not available in redis.... , trying to login");
+				   //TOD-DO - Mani :  Change this to /rest/ else other words also will get intercepted
 				if(request.getRequestURI().contains("rest")){
 				    return SecurityContextHolder.createEmptyContext();
 				}

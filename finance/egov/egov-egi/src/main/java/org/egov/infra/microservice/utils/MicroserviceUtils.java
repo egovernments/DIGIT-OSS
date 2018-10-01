@@ -398,6 +398,7 @@ public class MicroserviceUtils {
         map.add("scope", this.siScope);
         map.add("password", this.siPassword);
         map.add("grant_type", this.siGrantType);
+        //TOD-DO - Mani :  why this hard coding ?
         map.add("tenantId", "pb.jalandhar");
         map.add("userType", this.siUserType);
 
@@ -409,7 +410,7 @@ public class MicroserviceUtils {
             if (response != null)
                 return String.valueOf(((HashMap) response).get("access_token"));
         } catch (RestClientException e) {
-            // TODO Auto-generated catch block
+            LOGGER.info("Eror while getting admin authtoken", e);
             return null;
         }
         return null;

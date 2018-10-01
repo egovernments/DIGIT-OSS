@@ -91,13 +91,8 @@ public class RestServiceAuthFilter implements Filter {
         } catch (Exception e) {
 //            e.printStackTrace();
             res.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            res.getWriter().write(getErrorResponse(INVALID_TOKEN));
-            try {
-                throw e;
-            } catch (Exception e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
+            res.getWriter().write(getErrorResponse(INVALID_TOKEN));  
+           
         }
         
        
@@ -150,6 +145,8 @@ public class RestServiceAuthFilter implements Filter {
 
     private Authentication prepareAuthenticationObj(HttpServletRequest request, CurrentUser user) {
 
+    	 // TOD-DO - Mani : what is this dummy ?
+    	
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, "dummy",
                 user.getAuthorities());
         WebAuthenticationDetails details = new WebAuthenticationDetails(request);
@@ -164,23 +161,28 @@ public class RestServiceAuthFilter implements Filter {
         if (user_token == null)
             throw new Exception("AuthToken not found");
         HttpSession session = request.getSession();
+        // TOD-DO - Mani :  This should be saved in redis and used multitime. If token expired then only regenerate
         String admin_token = this.microserviceUtils.generateAdminToken();
+        // TOD-DO - Mani : Handle null of admin token else if password or some thing changed you dont know why it is failing
         session.setAttribute(MS_ADMIN_TOKEN, admin_token);
         CustomUserDetails user = this.microserviceUtils.getUserDetails(user_token, admin_token);
+        // TOD-DO - Mani : This should be requestInfo tenantId;
         session.setAttribute(MS_TENANTID_KEY, user.getTenantId());
         UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token, user.getTenantId(), user.getUserName());
        
-        return this.parepareCurrentUser(response.getUserSearchResponseContent().get(0));
+        return parepareCurrentUser(response.getUserSearchResponseContent().get(0));
     }
 
     private User parepareCurrentUser(UserSearchResponseContent userinfo) {
 
+    	   //TOD-DO - Mani :  why this hard coding ? how about SI ?
         User user = new User(UserType.EMPLOYEE);
         user.setId(userinfo.getId());
         user.setUsername(userinfo.getUserName());
         user.setActive(userinfo.getActive());
         user.setAccountLocked(userinfo.getAccountLocked());
         user.setGender(Gender.FEMALE);
+        //TOD-DO - Mani :  why this hard coding ?
         user.setPassword("demo");
         user.setName(userinfo.getName());
         user.setPwdExpiryDate(userinfo.getPwdExpiryDate());

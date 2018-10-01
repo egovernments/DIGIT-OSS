@@ -141,7 +141,7 @@ public class ApplicationCoreFilter implements Filter {
         	 prepareUserSession(request,response,session);
         	 prepareRequestOriginDetails(session, request);
         	 prepareApplicationThreadLocal(session);
-            chain.doFilter(request, resp);
+             chain.doFilter(request, resp);
         } finally {
             ApplicationThreadLocals.clearValues();
         }
