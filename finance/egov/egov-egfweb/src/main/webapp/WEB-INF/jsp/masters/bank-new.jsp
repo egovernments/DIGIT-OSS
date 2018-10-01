@@ -136,7 +136,7 @@
 					<s:submit name="Save" value="Save" method="create"
 						cssClass="buttonsubmit" />
 					<input type="button" id="Close" value="Close"
-						onclick="javascript:window.close()" class="button" />
+						onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 				</div>
 			</s:push>
 		</s:form>

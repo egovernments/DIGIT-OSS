@@ -56,7 +56,7 @@
 			<button type='submit' class='btn btn-primary' id="buttonSubmit">
 				<spring:message code='lbl.create' />
 			</button>
-			<a href='javascript:void(0)' class='btn btn-default' onclick='self.close()'><spring:message code='lbl.close' /></a>
+			<a href='javascript:void(0)' class='btn btn-default' onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' /></a>
 		</div>
 	</div>
 </form:form>

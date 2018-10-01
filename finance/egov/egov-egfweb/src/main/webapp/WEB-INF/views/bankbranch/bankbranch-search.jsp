@@ -130,7 +130,7 @@
 		<button type='button' class='btn btn-primary' id="btnsearch">
 			<spring:message code='lbl.search' />
 		</button>
-		<a href='javascript:void(0)' class='btn btn-default' onclick='self.close()'><spring:message code='lbl.close' /></a>
+		<a href='javascript:void(0)' class='btn btn-default' onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' /></a>
 	</div>
 </form:form>
 <div class="row display-hide report-section">

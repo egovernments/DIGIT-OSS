@@ -90,7 +90,7 @@
 				onclick="addModifyChq();" class="buttonsubmit" />
 			<s:reset id="Reset" value="Cancel" cssClass="buttonsubmit" />
 			<input type="button" id="Close" value="Close"
-				onclick="javascript:window.close()" class="button" />
+				onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 		</div>
 		</div>
 	</s:form>

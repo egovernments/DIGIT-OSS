@@ -101,7 +101,7 @@
 				id="modifyButton" name="View" onclick="return validateAndSubmit();" />
 		</s:else>
 		<input type="button" id="Close" value="Close"
-			onclick="javascript:window.close()" class="button" />
+			onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 	</div>
 	</s:form>
 	<script type="text/javascript">
