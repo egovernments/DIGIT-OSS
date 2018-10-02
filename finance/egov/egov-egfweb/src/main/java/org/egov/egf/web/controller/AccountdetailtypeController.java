@@ -94,7 +94,7 @@ public class AccountdetailtypeController {
 
 	}
 
-	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	@RequestMapping(value = "/new", method = RequestMethod.POST)
 	public String newForm(final Model model) {
 		prepareNewForm(model);
 		model.addAttribute("accountdetailtype", new Accountdetailtype());
@@ -166,7 +166,7 @@ public class AccountdetailtypeController {
 		return ACCOUNTDETAILTYPE_RESULT;
 	}
 
-	@RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
+	@RequestMapping(value = "/search/{mode}", method = RequestMethod.POST)
 	public String search(@PathVariable("mode") final String mode, Model model) {
 		Accountdetailtype accountdetailtype = new Accountdetailtype();
 		prepareNewForm(model);
