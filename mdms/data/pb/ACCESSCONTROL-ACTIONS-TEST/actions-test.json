@@ -12648,7 +12648,45 @@
       "navigationURL": "services/EGF/accountdetailtype/search/view",
       "code": "null",
       "path": "Finance.Masters.Accounting Entity.View Accounting Entity"
+    },
+    {
+      "id": 1682,
+      "name": "billing slab create",
+      "url": "/tl-calculator/billingslab/_create",
+      "parentModule": "",
+      "displayName": "",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "TradeLicense",
+      "code": "null",
+      "path": "",
+      "navigationURL": ""
+    },
+    {
+      "id": 1683,
+      "name": "billing slab update",
+      "url": "/tl-calculator/billingslab/_update",
+      "parentModule": "",
+      "displayName": "",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "TradeLicense",
+      "code": "null",
+      "path": "",
+      "navigationURL": ""
+    },
+    {
+      "id": 1684,
+      "name": "billing slab search",
+      "url": "/tl-calculator/billingslab/_search",
+      "parentModule": "",
+      "displayName": "",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "TradeLicense",
+      "code": "null",
+      "path": "",
+      "navigationURL": ""
     }
-    
   ]
 }
