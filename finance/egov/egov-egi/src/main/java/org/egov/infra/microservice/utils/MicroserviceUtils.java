@@ -90,8 +90,16 @@ import org.egov.infra.microservice.models.Designation;
 import org.egov.infra.microservice.models.DesignationResponse;
 import org.egov.infra.microservice.models.EmployeeInfo;
 import org.egov.infra.microservice.models.EmployeeInfoResponse;
+import org.egov.infra.microservice.models.GlCodeMaster;
+import org.egov.infra.microservice.models.GlCodeMasterResponse;
+import org.egov.infra.microservice.models.InstrumentAccountCode;
+import org.egov.infra.microservice.models.InstrumentAccountCodeResponse;
 import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.microservice.models.ResponseInfo;
+import org.egov.infra.microservice.models.TaxHeadMaster;
+import org.egov.infra.microservice.models.TaxHeadMasterResponse;
+import org.egov.infra.microservice.models.TaxPeriod;
+import org.egov.infra.microservice.models.TaxPeriodResponse;
 import org.egov.infra.microservice.models.UserInfo;
 import org.egov.infra.persistence.entity.enums.UserType;
 import org.egov.infra.security.utils.SecurityUtils;
@@ -129,6 +137,9 @@ public class MicroserviceUtils {
     @Autowired
     private RoleService roleService;
 
+    @Value("${egov.services.host}")
+    private String hostUrl;
+
     @Value("${egov.services.workflow.url}")
     private String workflowServiceUrl;
 
@@ -159,28 +170,39 @@ public class MicroserviceUtils {
     @Value("${egov.services.user.token.url}")
     private String tokenGenUrl;
 
-    @Value("${egov.services.user.businesscategory.url}")
+    @Value("${egov.services.common.masters.businesscategory.url}")
     private String businessCategoryServiceUrl;
 
-    @Value("${egov.services.user.businessdetails.url}")
+    @Value("${egov.services.common.masters.businessdetails.url}")
     private String businessDetailsServiceUrl;
-  
+
+    @Value("${egov.services.billing.service.taxheads.url}")
+    private String taxheadsSearchUrl;
+
+    @Value("${egov.services.billing.service.glcode.master.url}")
+    private String glcodeMasterSearchUrl;
+
+    @Value("${egov.services.egf.instrument.accountcode.search.url}")
+    private String accountCodesSearchUrl;
+
     /*---- SI user details-----*/
     @Value("${si.microservice.user}")
     private String siUser;
-    
+
     @Value("${si.microservice.password}")
     private String siPassword;
-    
+
     @Value("${si.microservice.usertype}")
     private String siUserType;
-    
+
     @Value("${si.microservice.scope}")
     private String siScope;
-    
+
     @Value("${si.microservice.granttype}")
     private String siGrantType;
-    
+
+    @Value("${egov.services.billing.service.taxperiods.search}")
+    private String taxperiodsSearchUrl;
 
     public RequestInfo createRequestInfo() {
         final RequestInfo requestInfo = new RequestInfo();
@@ -194,7 +216,6 @@ public class MicroserviceUtils {
     public RestTemplate createRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setErrorHandler(new RestErrorHandler());
-
         return restTemplate;
     }
 
@@ -220,9 +241,9 @@ public class MicroserviceUtils {
     }
 
     public String getAdminToken() {
-       String adminToken = ApplicationThreadLocals.getAdminToken();
-       if(adminToken==null)
-           adminToken= this.generateAdminToken();
+        String adminToken = ApplicationThreadLocals.getAdminToken();
+        if (adminToken == null)
+            adminToken = this.generateAdminToken();
         return adminToken;
     }
 
@@ -262,7 +283,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call :"+ dept_url);
+        LOGGER.info("call :" + dept_url);
         DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
         return depResponse.getDepartment();
     }
@@ -278,7 +299,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:"+dept_url);
+        LOGGER.info("call:" + dept_url);
         DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
         return depResponse.getDepartment();
     }
@@ -293,7 +314,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:"+dept_url);
+        LOGGER.info("call:" + dept_url);
         DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
 
         if (depResponse.getDepartment() != null && !depResponse.getDepartment().isEmpty())
@@ -317,9 +338,8 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:"+design_url);
-        DesignationResponse designResponse = restTemplate.postForObject(design_url, reqWrapper,
-                DesignationResponse.class);
+
+        DesignationResponse designResponse = restTemplate.postForObject(design_url, reqWrapper, DesignationResponse.class);
         return designResponse.getDesignation();
     }
 
@@ -344,9 +364,8 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:"+approver_url);
-        EmployeeInfoResponse empResponse = restTemplate.postForObject(approver_url, reqWrapper,
-                EmployeeInfoResponse.class);
+
+        EmployeeInfoResponse empResponse = restTemplate.postForObject(approver_url, reqWrapper, EmployeeInfoResponse.class);
 
         return empResponse.getEmployees();
     }
@@ -363,7 +382,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:"+employee_by_position_url);
+        LOGGER.info("call:" + employee_by_position_url);
         EmployeeInfoResponse empResponse = restTemplate.postForObject(employee_by_position_url, reqWrapper,
                 EmployeeInfoResponse.class);
         if (empResponse.getEmployees() != null && !empResponse.getEmployees().isEmpty())
@@ -381,7 +400,7 @@ public class MicroserviceUtils {
 
         reqInfo.setAuthToken(admin_token);
         reqWrapper.setRequestInfo(reqInfo);
-        LOGGER.info("call:"+authurl);
+        LOGGER.info("call:" + authurl);
         CustomUserDetails user = restT.postForObject(authurl, reqWrapper, CustomUserDetails.class);
         return user;
     }
@@ -405,7 +424,7 @@ public class MicroserviceUtils {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, header);
 
         try {
-            LOGGER.info("call:"+tokenGenUrl);
+            LOGGER.info("call:" + tokenGenUrl);
             Object response = restTemplate.postForObject(tokenGenUrl, request, Object.class);
             if (response != null)
                 return String.valueOf(((HashMap) response).get("access_token"));
@@ -426,7 +445,7 @@ public class MicroserviceUtils {
         request.setRequestInfo(req_header);
         request.setUserName(userName);
         request.setTenantId(tenantId);
-        LOGGER.info("call:"+userSrcUrl);
+        LOGGER.info("call:" + userSrcUrl);
         UserSearchResponse response = restT.postForObject(userSrcUrl, request, UserSearchResponse.class);
         return response;
     }
@@ -441,7 +460,7 @@ public class MicroserviceUtils {
         req_header.setAuthToken(access_token);
         posrequest.setRequestInfo(req_header);
         posrequest.setPosition(positions);
-        LOGGER.info("call:"+positionSrvcUrl);
+        LOGGER.info("call:" + positionSrvcUrl);
         PositionResponse response = restT.postForObject(positionSrvcUrl, posrequest, PositionResponse.class);
 
         return response;
@@ -460,7 +479,7 @@ public class MicroserviceUtils {
         request.setRoleCodes(roles);
         request.setActionMaster("actions-test");
         request.setEnabled(true);
-        LOGGER.info("call:"+actionSrvcUrl);
+        LOGGER.info("call:" + actionSrvcUrl);
         ActionResponse response = restT.postForObject(actionSrvcUrl, request, ActionResponse.class);
 
         // response.getActions()
@@ -490,10 +509,8 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-        
-        EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper,
-                EmployeeInfoResponse.class);
-        LOGGER.info("call:"+empUrl.toString());
+
+        EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper, EmployeeInfoResponse.class);
         return empResponse.getEmployees();
     }
 
@@ -507,7 +524,7 @@ public class MicroserviceUtils {
 
         if (empId != 0)
             empUrl.append("&id=" + empId);
-        
+
         empUrl.append("&asOnDate" + dateFormat.format(new Date()));
 
         RequestInfo requestInfo = new RequestInfo();
@@ -516,10 +533,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-
-        EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper,
-                EmployeeInfoResponse.class);
-        LOGGER.info("call:"+empUrl.toString());
+        EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper, EmployeeInfoResponse.class);
         if (empResponse.getEmployees() != null && !empResponse.getEmployees().isEmpty())
             return empResponse.getEmployees().get(0);
         else
@@ -542,7 +556,7 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String bc_url = businessCategoryServiceUrl + "?tenantId=" + getTenentId();
+        final String bc_url = hostUrl + businessCategoryServiceUrl + "?tenantId=" + getTenentId();
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -550,7 +564,7 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:"+bc_url);
+        LOGGER.info("call:" + bc_url);
         BusinessCategoryResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,
                 BusinessCategoryResponse.class);
         return bcResponse.getBusinessCategoryInfo();
@@ -560,7 +574,7 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String bc_url = businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&businessCategoryCode="
+        final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&businessCategoryCode="
                 + categoryCode;
 
         RequestInfo requestInfo = new RequestInfo();
@@ -569,9 +583,8 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:"+bc_url);
-        BusinessDetailsResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,
-                BusinessDetailsResponse.class);
+
+        BusinessDetailsResponse bcResponse = restTemplate.postForObject(bd_url, reqWrapper, BusinessDetailsResponse.class);
         return bcResponse.getBusinessDetails();
     }
 
@@ -579,7 +592,7 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String bc_url = businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&code=" + code;
+        final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&code=" + code;
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -587,9 +600,8 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:"+bc_url);
-        BusinessDetailsResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,
-                BusinessDetailsResponse.class);
+
+        BusinessDetailsResponse bcResponse = restTemplate.postForObject(bd_url, reqWrapper, BusinessDetailsResponse.class);
         if (bcResponse.getBusinessDetails() != null && !bcResponse.getBusinessDetails().isEmpty())
             return bcResponse.getBusinessDetails().get(0);
         else
@@ -600,7 +612,7 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String bc_url = businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&id=" + id;
+        final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&id=" + id;
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -608,11 +620,94 @@ public class MicroserviceUtils {
         requestInfo.setAuthToken(getAdminToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:"+bc_url);
-        BusinessDetailsResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,
-                BusinessDetailsResponse.class);
+
+        BusinessDetailsResponse bcResponse = restTemplate.postForObject(bd_url, reqWrapper, BusinessDetailsResponse.class);
         if (bcResponse.getBusinessDetails() != null && !bcResponse.getBusinessDetails().isEmpty())
             return bcResponse.getBusinessDetails().get(0);
+        else
+            return null;
+    }
+
+    public List<TaxHeadMaster> getTaxheadsByService(String service) {
+
+        final RestTemplate restTemplate = createRestTemplate();
+
+        final String url = hostUrl + taxheadsSearchUrl + "?tenantId=" + getTenentId() + "&service=" + service;
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+        requestInfo.setAuthToken(getAdminToken());
+        reqWrapper.setRequestInfo(requestInfo);
+        TaxHeadMasterResponse response = restTemplate.postForObject(url, reqWrapper, TaxHeadMasterResponse.class);
+        return response.getTaxHeadMasters();
+    }
+
+    public List<TaxHeadMaster> getTaxheads() {
+
+        final RestTemplate restTemplate = createRestTemplate();
+
+        final String url = hostUrl + taxheadsSearchUrl + "?tenantId=" + getTenentId();
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getAdminToken());
+        reqWrapper.setRequestInfo(requestInfo);
+
+        TaxHeadMasterResponse response = restTemplate.postForObject(url, reqWrapper, TaxHeadMasterResponse.class);
+        return response.getTaxHeadMasters();
+    }
+
+    public List<GlCodeMaster> getGlcodeMastersByService(String service) {
+
+        final RestTemplate restTemplate = createRestTemplate();
+
+        final String url = hostUrl + glcodeMasterSearchUrl + "?tenantId=" + getTenentId() + "&service=" + service;
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getAdminToken());
+        reqWrapper.setRequestInfo(requestInfo);
+
+        GlCodeMasterResponse response = restTemplate.postForObject(url, reqWrapper, GlCodeMasterResponse.class);
+        return response.getGlCodeMasters();
+    }
+
+    public TaxPeriod getTaxPeriodsByService(String type) {
+
+        final RestTemplate restTemplate = createRestTemplate();
+
+        final String url = hostUrl + taxperiodsSearchUrl + "?tenantId=" + getTenentId() + "&service=" + type;
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getAdminToken());
+        reqWrapper.setRequestInfo(requestInfo);
+
+        TaxPeriodResponse response = restTemplate.postForObject(url, reqWrapper, TaxPeriodResponse.class);
+        if (response != null && response.getTaxPeriods() != null && !response.getTaxPeriods().isEmpty())
+            return response.getTaxPeriods().get(0);
+        else
+            return null;
+    }
+
+    public InstrumentAccountCode getInstrumentAccountCodeByService(String type) {
+
+        final RestTemplate restTemplate = createRestTemplate();
+
+        final String url = hostUrl + accountCodesSearchUrl + "?tenantId=" + getTenentId() + "&instrumentType.name=" + type;
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getAdminToken());
+        reqWrapper.setRequestInfo(requestInfo);
+
+        InstrumentAccountCodeResponse response = restTemplate.postForObject(url, reqWrapper, InstrumentAccountCodeResponse.class);
+        if (response != null && response.getInstrumentAccountCodes() != null && !response.getInstrumentAccountCodes().isEmpty())
+            return response.getInstrumentAccountCodes().get(0);
         else
             return null;
     }
@@ -627,7 +722,7 @@ public class MicroserviceUtils {
                 RequestInfo createRequestInfo = createRequestInfo();
                 RequestInfoWrapper requestInfo = new RequestInfoWrapper();
                 requestInfo.setRequestInfo(createRequestInfo);
-                LOGGER.info("call:"+workflowServiceUrl);
+                LOGGER.info("call:" + workflowServiceUrl);
                 tresp = restTemplate.postForObject(workflowServiceUrl, requestInfo, TaskResponse.class);
                 tasks = tresp.getTasks();
             } catch (final Exception e) {

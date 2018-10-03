@@ -51,11 +51,11 @@
 {
 "ResultSet": {
     "Result":[
-    <s:iterator var="s" value="accountDetails" status="status">
-    {"glcodeIdDetail":"<s:property value="%{glCodeId.id}" />",
-    "glcodeDetail":"<s:property value="%{glCodeId.glcode}" />",
-    "accounthead":"<s:property value="%{glCodeId.name}" />",
-    "creditAmountDetail":"<s:property value='getText(\'format.amount\',{amount})' />"
+    <s:iterator var="s" value="taxHeadMastersList" status="status">
+    {"glcodeIdDetail":"<s:property value="%{code}" />",
+    "glcodeDetail":"<s:property value="%{glCodes[0].glCode}" />",
+    "accounthead":"<s:property value="%{name}" />",
+    "creditAmountDetail":"<s:property value='getText(\'format.amount\',{0})' />"
     }<s:if test="!#status.last">,</s:if>
     </s:iterator>       
     ]

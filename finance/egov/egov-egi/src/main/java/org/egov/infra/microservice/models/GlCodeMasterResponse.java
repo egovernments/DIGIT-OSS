@@ -1,15 +1,17 @@
 package org.egov.infra.microservice.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class BusinessCategoryResponse {
+public class GlCodeMasterResponse {
+
     @JsonProperty("ResponseInfo")
     private ResponseInfo responseInfo;
 
-    @JsonProperty("BusinessCategory")
-    private List<BusinessCategory> businessCategoryInfo;
+    @JsonProperty("GlCodeMasters")
+    private List<GlCodeMaster> glCodeMasters = new ArrayList<>();
 
     public ResponseInfo getResponseInfo() {
         return responseInfo;
@@ -19,12 +21,12 @@ public class BusinessCategoryResponse {
         this.responseInfo = responseInfo;
     }
 
-    public List<BusinessCategory> getBusinessCategoryInfo() {
-        return businessCategoryInfo;
+    public List<GlCodeMaster> getGlCodeMasters() {
+        return glCodeMasters;
     }
 
-    public void setBusinessCategoryInfo(List<BusinessCategory> businessCategoryInfo) {
-        this.businessCategoryInfo = businessCategoryInfo;
+    public void setGlCodeMasters(List<GlCodeMaster> glCodeMasters) {
+        this.glCodeMasters = glCodeMasters;
     }
 
 }

@@ -212,7 +212,7 @@ function onBodyLoadMiscReceipt()
 {
     document.getElementById("voucherDate").value=currDate;
     document.getElementById("rebateDetails").style.display="none";
-    loadDropDownCodes();
+    //loadDropDownCodes();
     loadDropDownRebateCodes();
     loadDropDownCodesFunction();
     checkData();
@@ -280,7 +280,7 @@ function getSchemelist(fund)
     }
     
     // if a subscheme had been chosen, set fund source to default value 'Select'
-    if(document.getElementById("subschemeId").value!=-1){
+    if(document.getElementById("subschemeId") && document.getElementById("subschemeId").value!=-1){
         document.getElementById("fundSourceId").value=-1;
     }
     
@@ -456,11 +456,9 @@ var totaldbamt=0,totalcramt=0;
     var makeCreditDetailTable = function() {
         var creditDetailColumns = [
             {key:"glcodeid",hidden:true,width:10, formatter:createTextFieldFormatterCredit(VOUCHERCREDITDETAILLIST,".glcodeIdDetail","hidden",VOUCHERCREDITDETAILTABLE)},
-            {key:"accounthead", label:'Account Head <span class="mandatory"></span>',formatter:createLongTextFieldFormatterCredit(VOUCHERCREDITDETAILLIST,".accounthead",VOUCHERCREDITDETAILTABLE)},               
+            {key:"accounthead", label:'Account Head <span class="mandatory"></span>',formatter:createTextFieldFormatterCredit(VOUCHERCREDITDETAILLIST,".accounthead","text",VOUCHERCREDITDETAILTABLE)},               
             {key:"glcode",label:'Account Code ', formatter:createTextFieldFormatterCredit(VOUCHERCREDITDETAILLIST,".glcodeDetail","text",VOUCHERCREDITDETAILTABLE)},
-            {key:"creditamount",label:'Amount (Rs.)', formatter:createAmountFieldFormatterRebate(VOUCHERCREDITDETAILLIST,".creditAmountDetail","updateCreditAmount()",VOUCHERCREDITDETAILTABLE)},
-            {key:'Add',label:'Add',formatter:createAddImageFormatter("${pageContext.request.contextPath}")},
-            {key:'Delete',label:'Delete',formatter:createDeleteImageFormatter("${pageContext.request.contextPath}")}
+            {key:"creditamount",label:'Amount (Rs.)', formatter:createAmountFieldFormatterRebate(VOUCHERCREDITDETAILLIST,".creditAmountDetail","updateCreditAmount()",VOUCHERCREDITDETAILTABLE)}
         ];
         
         var creditDetailDS = new YAHOO.util.DataSource(); 
@@ -469,7 +467,7 @@ var totaldbamt=0,totalcramt=0;
             var target = oArgs.target;
             var record = this.getRecord(target);
             var column = this.getColumn(target);
-            if (column.key == 'Add') { 
+       /*      if (column.key == 'Add') { 
                 billCreditDetailsTable.addRow({SlNo:billCreditDetailsTable.getRecordSet().getLength()+1});
                 updateAccountTableIndex();
             }
@@ -487,7 +485,7 @@ var totaldbamt=0,totalcramt=0;
                 else{
                     bootbox.alert("This row can not be deleted");
                 }
-            }
+            } */
             
              
         });
@@ -512,7 +510,7 @@ var totaldbamt=0,totalcramt=0;
         var tr = tfoot.insertRow(-1);
         var td1 = tr.insertCell(-1);
         td1.align="center";
-        td1.colSpan = 5;
+        td1.colSpan = 3;
         td1.setAttribute('class','tdfortotal');
         td1.style.textAlign="right";
         td1.style.borderTop = '1px #c8c8c8 solid';
@@ -536,7 +534,7 @@ var totaldbamt=0,totalcramt=0;
         td2.style.borderTop = '1px #c8c8c8 solid';
         td2.setAttribute('class','tdfortotal');
         td2.className='tdfortotal';
-        td2.innerHTML='&nbsp;';
+       // td2.innerHTML='&nbsp;';
         
     }
     
@@ -752,25 +750,23 @@ var totaldbamt=0,totalcramt=0;
         <td width="4%" class="bluebox">&nbsp;</td>
          
         <td width="21%" class="bluebox"><s:text name="miscreceipt.service.category" /><span class="mandatory"/> </td>
-        <td width="30%" class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="serviceCategory" id="serviceCategoryid" cssClass="selectwk" list="dropdownData.serviceCategoryList" listKey="code" listValue="name" value="%{service.serviceCategory}" onChange="populateService(this);" />
-       		<egov:ajaxdropdown id="service" fields="['Text','Value']" dropdownId="serviceId" url="receipts/ajaxReceiptCreate-ajaxLoadServiceByCategoryForMisc.action" /></td>
+        <td width="30%" class="bluebox">
+        	<s:select headerKey="-1" headerValue="----Choose----" name="serviceCategory" id="serviceCategoryid" cssClass="selectwk" list="dropdownData.serviceCategoryList" listKey="code" listValue="name" value="%{service.serviceCategory}" onChange="populateService(this);" />
+       		<egov:ajaxdropdown id="service" fields="['Text','Value']" dropdownId="serviceId" url="receipts/ajaxReceiptCreate-ajaxLoadServiceByCategoryForMisc.action" />
+       	</td>
         <td width="21%" class="bluebox"><s:text name="miscreceipt.service" /><span class="mandatory"/> </td>
         <td width="30%" class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="serviceId" id="serviceId" cssClass="selectwk" list="dropdownData.serviceList" listKey="id" listValue="name" value="%{serviceId}" onchange="loadFinDetails(this);getBankBranchList();"/>
 <!-- 	 		<egov:ajaxdropdown id="bankBranchMasterDropdown" fields="['Text','Value']" dropdownId='bankBranchMaster' 	url='receipts/ajaxBankRemittance-bankBranchList.action' selectedValue="%{bankbranch.id}"/> --> 
         </td>
-         
-       
         </tr>
-        
-        
         
         <s:if test="%{shouldShowHeaderField('fund') || shouldShowHeaderField('department')}">
          <tr>
           <td width="4%" class="bluebox">&nbsp;</td>
            <s:if test="%{shouldShowHeaderField('fund')}">
           <td width="21%" class="bluebox"><s:text name="miscreceipt.fund"/><s:if test="%{isFieldMandatory('fund')}"><span class="bluebox"><span class="mandatory"/></s:if></td>
-          <td width="24%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="fundId" id="fundId" cssClass="selectwk" onChange="setFundId();getSchemelist(this);getBankBranchList();" list="dropdownData.fundList" listKey="id" listValue="name" value="%{fund.id}" />
-          <!-- <egov:ajaxdropdown id="bankBranchMasterDropdown" fields="['Text','Value']" dropdownId='bankBranchMaster'url='receipts/ajaxBankRemittance-bankBranchList.action' selectedValue="%{bankbranch.id}"/> --> 
+          <td width="24%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="fundId" id="fundId" cssClass="selectwk" onChange="setFundId();" list="dropdownData.fundList" listKey="id" listValue="name" value="%{fund.id}" />
+          <!-- <egov:ajaxdropdown id="bankBranchMasterDropdown" fields="['Text','Value']" dropdownId='bankBranchMaster' url='receipts/ajaxBankRemittance-bankBranchList.action' selectedValue="%{bankbranch.id}"/> --> 
           <!-- <egov:ajaxdropdown id="schemeIdDropdown" fields="['Text','Value']" dropdownId='schemeId' url='receipts/ajaxReceiptCreate-ajaxLoadSchemes.action' /> -->
          <s:hidden label="receiptMisc.fund.id" id="receiptMisc.fund.id"  name="receiptMisc.fund.id"/>
           </td>
@@ -834,8 +830,7 @@ var totaldbamt=0,totalcramt=0;
 
          <td width="30%" class="bluebox">
           <s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="subschemeId" id="subschemeId" onchange="setSubSchemeId();getFundSourcelist(this)" onclick="checkscheme()" cssClass="selectwk" list="dropdownData.subschemeList" listKey="id" listValue="name"  /></td>
-          <egov:ajaxdropdown id="fundSourceId" fields="['Text','Value']" dropdownId='fundSourceId'
-           url='../../services/EGF/voucher/common-ajaxLoadFundSource.action'  />
+          <egov:ajaxdropdown id="fundSourceId" fields="['Text','Value']" dropdownId='fundSourceId' url='../../services/EGF/voucher/common-ajaxLoadFundSource.action'  />
            <s:hidden label="receiptMisc.subscheme.id" id="receiptMisc.subscheme.id"  name="receiptMisc.subscheme.id"/>
          
         </tr>

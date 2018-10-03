@@ -47,18 +47,21 @@
  */
 package org.egov.collection.integration.services;
 
+import java.math.BigDecimal;
+
 import org.egov.collection.constants.CollectionConstants;
 import org.egov.collection.entity.ReceiptDetail;
 import org.egov.collection.entity.ReceiptHeader;
 import org.egov.collection.integration.models.BillAccountDetails.PURPOSE;
 import org.egov.commons.CChartOfAccounts;
-import org.egov.infstr.services.PersistenceService;
-
-import java.math.BigDecimal;
+import org.egov.commons.dao.ChartOfAccountsHibernateDAO;
+import org.egov.infra.microservice.models.InstrumentAccountCode;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 
 public class DebitAccountHeadDetailsServiceImpl implements DebitAccountHeadDetailsService {
 
-    protected PersistenceService persistenceService;
+    protected MicroserviceUtils microserviceUtils;
+    private ChartOfAccountsHibernateDAO chartOfAccountsHibernateDAO;
 
     public ReceiptDetail addDebitAccountHeadDetails(final BigDecimal debitAmount, final ReceiptHeader receiptHeader,
             final BigDecimal chequeInstrumenttotal, final BigDecimal otherInstrumenttotal, final String instrumentType) {
@@ -68,9 +71,13 @@ public class DebitAccountHeadDetailsServiceImpl implements DebitAccountHeadDetai
         if (chequeInstrumenttotal.toString() != null
                 && !chequeInstrumenttotal.toString().trim().equals(CollectionConstants.ZERO_INT)
                 && !chequeInstrumenttotal.toString().trim().equals(CollectionConstants.ZERO_DOUBLE)) {
-
-            newReceiptDetail.setAccounthead((CChartOfAccounts) persistenceService.findByNamedQuery(
-                    CollectionConstants.QUERY_CHARTOFACCOUNT_BY_INSTRTYPE, CollectionConstants.INSTRUMENTTYPE_CHEQUE));
+            InstrumentAccountCode ac = microserviceUtils
+                    .getInstrumentAccountCodeByService(CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE);
+            CChartOfAccounts coa = null;
+            if (ac != null && ac.getAccountCode() != null && ac.getAccountCode().getGlcode() != null) {
+                coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getAccountCode().getGlcode());
+            }
+            newReceiptDetail.setAccounthead(coa);
 
             newReceiptDetail.setDramount(debitAmount);
             newReceiptDetail.setCramount(BigDecimal.valueOf(0));
@@ -81,24 +88,34 @@ public class DebitAccountHeadDetailsServiceImpl implements DebitAccountHeadDetai
         if (otherInstrumenttotal.toString() != null
                 && !otherInstrumenttotal.toString().trim().equals(CollectionConstants.ZERO_INT)
                 && !otherInstrumenttotal.toString().trim().equals(CollectionConstants.ZERO_DOUBLE)) {
-            if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_CASH))
-                newReceiptDetail
-                .setAccounthead((CChartOfAccounts) persistenceService.findByNamedQuery(
-                        CollectionConstants.QUERY_CHARTOFACCOUNT_BY_INSTRTYPE,
-                        CollectionConstants.INSTRUMENTTYPE_CASH));
-            else if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_CARD))
-                newReceiptDetail
-                .setAccounthead((CChartOfAccounts) persistenceService.findByNamedQuery(
-                        CollectionConstants.QUERY_CHARTOFACCOUNT_BY_INSTRTYPE,
-                        CollectionConstants.INSTRUMENTTYPE_CARD));
-            else if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_BANK))
+            if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_CASH)) {
+                InstrumentAccountCode ac = microserviceUtils
+                        .getInstrumentAccountCodeByService(CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE);
+                CChartOfAccounts coa = null;
+                if (ac != null && ac.getAccountCode() != null && ac.getAccountCode().getGlcode() != null) {
+                    coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getAccountCode().getGlcode());
+                }
+                newReceiptDetail.setAccounthead(coa);
+            } else if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_CARD)) {
+                InstrumentAccountCode ac = microserviceUtils
+                        .getInstrumentAccountCodeByService(CollectionConstants.INSTRUMENTTYPE_NAME_CARD);
+                CChartOfAccounts coa = null;
+                if (ac != null && ac.getAccountCode() != null && ac.getAccountCode().getGlcode() != null) {
+                    coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getAccountCode().getGlcode());
+                }
+                newReceiptDetail.setAccounthead(coa);
+            } else if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_BANK))
                 newReceiptDetail.setAccounthead(receiptHeader.getReceiptInstrument().iterator().next()
                         .getBankAccountId().getChartofaccounts());
-            else if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_ONLINE))
-                newReceiptDetail.setAccounthead((CChartOfAccounts) persistenceService.findByNamedQuery(
-                        CollectionConstants.QUERY_CHARTOFACCOUNT_BY_INSTRTYPE_SERVICE,
-                        CollectionConstants.INSTRUMENTTYPE_ONLINE, receiptHeader.getOnlinePayment().getService()
-                        .getId()));
+            else if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_ONLINE)) {
+                InstrumentAccountCode ac = microserviceUtils
+                        .getInstrumentAccountCodeByService(CollectionConstants.INSTRUMENTTYPE_ONLINE);
+                CChartOfAccounts coa = null;
+                if (ac != null && ac.getAccountCode() != null && ac.getAccountCode().getGlcode() != null) {
+                    coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getAccountCode().getGlcode());
+                }
+                newReceiptDetail.setAccounthead(coa);
+            }
             newReceiptDetail.setDramount(debitAmount);
             newReceiptDetail.setCramount(BigDecimal.ZERO);
             newReceiptDetail.setReceiptHeader(receiptHeader);
@@ -107,7 +124,12 @@ public class DebitAccountHeadDetailsServiceImpl implements DebitAccountHeadDetai
         return newReceiptDetail;
     }
 
-    public void setPersistenceService(final PersistenceService persistenceService) {
-        this.persistenceService = persistenceService;
+    public void setMicroserviceUtils(MicroserviceUtils microserviceUtils) {
+        this.microserviceUtils = microserviceUtils;
     }
+
+    public void setChartOfAccountsHibernateDAO(ChartOfAccountsHibernateDAO chartOfAccountsHibernateDAO) {
+        this.chartOfAccountsHibernateDAO = chartOfAccountsHibernateDAO;
+    }
+
 }

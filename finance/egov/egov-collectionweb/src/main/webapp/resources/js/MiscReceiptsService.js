@@ -58,17 +58,22 @@
         	
         	var path = '/services/collection';
         	
-        	var url1 = path+"/receipts/ajaxReceiptCreate-ajaxFinMiscDtlsByService.action?serviceId="+service+"&deptId="+dept;
-        	var transaction = YAHOO.util.Connect.asyncRequest('POST', url1,loadMiscDetails, null);
+        	if(service != "-1" && dept != "-1"){
+	        	var url1 = path+"/receipts/ajaxReceiptCreate-ajaxFinMiscDtlsByService.action?serviceId="+service+"&deptId="+dept;
+	        	var transaction = YAHOO.util.Connect.asyncRequest('POST', url1,loadMiscDetails, null);
+        	}
         	
+    		if(service != "-1"){
+	        	var url2 = path+"/receipts/ajaxReceiptCreate-ajaxTaxHeadMasterByService.action";
+	        	makeJSONCall(["glcodeIdDetail","glcodeDetail","accounthead","creditAmountDetail"]
+	        	,url2,{serviceId:service},loadFinAccSuccessHandler,loadFinAccFailureHandler);
+    		}
     		
-        	var url2 = path+"/receipts/ajaxReceiptCreate-ajaxFinAccDtlsByService.action";
-        	makeJSONCall(["glcodeIdDetail","glcodeDetail","accounthead","creditAmountDetail"]
-        	,url2,{serviceId:service,deptId:dept},loadFinAccSuccessHandler,loadFinAccFailureHandler);
-        
-        	var url3 = path+"/receipts/ajaxReceiptCreate-ajaxFinSubledgerByService.action";
-        	makeJSONCall(["subledgerCode","glcodeId","detailTypeId","detailTypeName","detailCode","detailKeyId",
-        	"detailKey","amount"],url3,{serviceId:service,deptId:dept},loadFinSubledgerSuccessHandler,loadFinSubledgerFailureHandler);
+    		if(service != "-1" && dept != "-1"){
+	        	var url3 = path+"/receipts/ajaxReceiptCreate-ajaxFinSubledgerByService.action";
+	        	makeJSONCall(["subledgerCode","glcodeId","detailTypeId","detailTypeName","detailCode","detailKeyId",
+	        	"detailKey","amount"],url3,{serviceId:service,deptId:dept},loadFinSubledgerSuccessHandler,loadFinSubledgerFailureHandler);
+    		}
         }
 
 var miscArray;

@@ -1,8 +1,8 @@
 /*
- *    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
+ * eGov suite of products aim to improve the internal efficiency,transparency,
  *    accountability and the service delivery of the government  organizations.
  *
- *     Copyright (C) 2017  eGovernments Foundation
+ *     Copyright (C) <2015>  eGovernments Foundation
  *
  *     The updated version of eGov suite of products as by eGovernments Foundation
  *     is available at http://www.egovernments.org
@@ -26,50 +26,74 @@
  *
  *         1) All versions of this program, verbatim or modified must carry this
  *            Legal Notice.
- *            Further, all user interfaces, including but not limited to citizen facing interfaces,
- *            Urban Local Bodies interfaces, dashboards, mobile applications, of the program and any
- *            derived works should carry eGovernments Foundation logo on the top right corner.
- *
- *            For the logo, please refer http://egovernments.org/html/logo/egov_logo.png.
- *            For any further queries on attribution, including queries on brand guidelines,
- *            please contact contact@egovernments.org
  *
  *         2) Any misrepresentation of the origin of the material is prohibited. It
  *            is required that all modified versions of this material be marked in
  *            reasonable ways as different from the original version.
  *
- *         3) This license does not grant any rights to any user of the program
+ *         3) This license does not grant any rights to any Long of the program
  *            with regards to rights under trademark law for use of the trade names
  *            or trademarks of eGovernments Foundation.
  *
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
- *
  */
-
 package org.egov.infra.microservice.models;
 
-public class ChartOfAccounts {
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
+public class Bank {
 
     private Long id;
 
-    private String glcode;
+    @JsonProperty(access = Access.WRITE_ONLY)
+    private List<Long> ids = new ArrayList<Long>();
 
+    @NotNull
+    @Length(max = 50, min = 1)
+    private String code;
+
+    @NotNull
+    @Length(max = 100, min = 2)
     private String name;
+
+    @Length(max = 250)
+    private String description;
+
+    @NotNull
+    private Boolean active;
+    // is this required?
+
+    @Length(max = 50)
+    private String type;
+
+    private String tenantId;
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public List<Long> getIds() {
+        return ids;
     }
 
-    public String getGlcode() {
-        return glcode;
+    public void setIds(List<Long> ids) {
+        this.ids = ids;
     }
 
-    public void setGlcode(String glcode) {
-        this.glcode = glcode;
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
@@ -78,6 +102,42 @@ public class ChartOfAccounts {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
 }

@@ -450,7 +450,7 @@ public class CollectionCommon {
             if (!FinancialsUtil.isRevenueAccountHead(rDetails.getAccounthead(), bankCOAList, persistenceService)) {
                 final ReceiptDetailInfo rInfo = new ReceiptDetailInfo();
                 rInfo.setGlcodeDetail(rDetails.getAccounthead().getGlcode());
-                rInfo.setGlcodeIdDetail(rDetails.getAccounthead().getId());
+                rInfo.setGlcodeIdDetail(rDetails.getAccounthead().getId().toString());
                 rInfo.setCreditAmountDetail(rDetails.getCramount().setScale(
                         CollectionConstants.AMOUNT_PRECISION_DEFAULT, BigDecimal.ROUND_UP));
                 rInfo.setDebitAmountDetail(rDetails.getDramount().setScale(

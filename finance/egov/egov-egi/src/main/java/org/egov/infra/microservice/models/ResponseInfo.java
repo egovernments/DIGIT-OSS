@@ -56,7 +56,7 @@ public class ResponseInfo {
 
     private String ver;
 
-   	private String ts;
+    private String ts;
 
     private String resMsgId;
 

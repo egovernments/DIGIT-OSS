@@ -1,8 +1,8 @@
 /*
- *    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
+ * eGov suite of products aim to improve the internal efficiency,transparency,
  *    accountability and the service delivery of the government  organizations.
  *
- *     Copyright (C) 2017  eGovernments Foundation
+ *     Copyright (C) <2015>  eGovernments Foundation
  *
  *     The updated version of eGov suite of products as by eGovernments Foundation
  *     is available at http://www.egovernments.org
@@ -26,13 +26,6 @@
  *
  *         1) All versions of this program, verbatim or modified must carry this
  *            Legal Notice.
- *            Further, all user interfaces, including but not limited to citizen facing interfaces,
- *            Urban Local Bodies interfaces, dashboards, mobile applications, of the program and any
- *            derived works should carry eGovernments Foundation logo on the top right corner.
- *
- *            For the logo, please refer http://egovernments.org/html/logo/egov_logo.png.
- *            For any further queries on attribution, including queries on brand guidelines,
- *            please contact contact@egovernments.org
  *
  *         2) Any misrepresentation of the origin of the material is prohibited. It
  *            is required that all modified versions of this material be marked in
@@ -43,41 +36,79 @@
  *            or trademarks of eGovernments Foundation.
  *
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
- *
  */
-
 package org.egov.infra.microservice.models;
 
-public class ChartOfAccounts {
+public class TaxPeriod {
 
-    private Long id;
+    private String id;
 
-    private String glcode;
+    private String tenantId;
 
-    private String name;
+    private Long fromDate;
 
-    public Long getId() {
+    private Long toDate;
+
+    private String service;
+
+    private String code;
+
+    private String financialYear;
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getGlcode() {
-        return glcode;
+    public String getTenantId() {
+        return tenantId;
     }
 
-    public void setGlcode(String glcode) {
-        this.glcode = glcode;
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 
-    public String getName() {
-        return name;
+    public Long getFromDate() {
+        return fromDate;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFromDate(Long fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public Long getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Long toDate) {
+        this.toDate = toDate;
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getFinancialYear() {
+        return financialYear;
+    }
+
+    public void setFinancialYear(String financialYear) {
+        this.financialYear = financialYear;
     }
 
 }

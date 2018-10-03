@@ -59,7 +59,7 @@ import java.math.BigDecimal;
 public class ReceiptDetailInfo {
     private Long functionIdDetail;
     private String functionDetail;
-    private Long glcodeIdDetail;
+    private String glcodeIdDetail;
     private String glcodeDetail;
     private String accounthead;
     private BigDecimal debitAmountDetail = BigDecimal.ZERO;
@@ -91,11 +91,11 @@ public class ReceiptDetailInfo {
         this.functionDetail = functionDetail;
     }
 
-    public Long getGlcodeIdDetail() {
+    public String getGlcodeIdDetail() {
         return glcodeIdDetail;
     }
 
-    public void setGlcodeIdDetail(final Long glcodeIdDetail) {
+    public void setGlcodeIdDetail(final String glcodeIdDetail) {
         this.glcodeIdDetail = glcodeIdDetail;
     }
 

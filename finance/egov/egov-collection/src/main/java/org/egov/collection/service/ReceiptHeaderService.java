@@ -52,6 +52,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -91,8 +92,24 @@ import org.egov.eis.service.EmployeeService;
 import org.egov.infra.admin.master.entity.Boundary;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.DepartmentService;
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.contract.RequestInfoWrapper;
+import org.egov.infra.microservice.models.Bank;
+import org.egov.infra.microservice.models.BillResponse;
 import org.egov.infra.microservice.models.BusinessDetails;
+import org.egov.infra.microservice.models.Demand;
+import org.egov.infra.microservice.models.DemandDetail;
+import org.egov.infra.microservice.models.DemandRequest;
+import org.egov.infra.microservice.models.DemandResponse;
+import org.egov.infra.microservice.models.Instrument;
+import org.egov.infra.microservice.models.Receipt;
+import org.egov.infra.microservice.models.ReceiptRequest;
+import org.egov.infra.microservice.models.ReceiptResponse;
+import org.egov.infra.microservice.models.RequestInfo;
+import org.egov.infra.microservice.models.TaxPeriod;
+import org.egov.infra.microservice.models.User;
+import org.egov.infra.microservice.models.UserInfo;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.reporting.engine.ReportFormat;
 import org.egov.infra.reporting.engine.ReportRequest;
@@ -105,11 +122,15 @@ import org.egov.model.instrument.InstrumentHeader;
 import org.egov.model.instrument.InstrumentType;
 import org.egov.pims.commons.Designation;
 import org.egov.pims.commons.Position;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Provides services related to receipt header
@@ -143,9 +164,21 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
 
     @Autowired
     protected SecurityUtils securityUtils;
-    
+
     @Autowired
-	private MicroserviceUtils microserviceUtils;
+    private MicroserviceUtils microserviceUtils;
+
+    @Value("${egov.services.host}")
+    private String hostUrl;
+
+    @Value("${egov.services.billing.service.demand.create.url}")
+    private String demandCreateUrl;
+
+    @Value("${egov.services.billing.service.bill.generate}")
+    private String billGenerateUrl;
+
+    @Value("${egov.services.collection.service.receipts.create}")
+    private String receiptCreateUrl;
 
     public ReceiptHeaderService() {
         super(ReceiptHeader.class);
@@ -634,19 +667,19 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
     public void endReceiptWorkFlowOnCancellation(final ReceiptHeader receiptHeaderToBeCancelled) {
         // End work-flow for the cancelled receipt
         Position position = null;
-        /*if (!collectionsUtil.isEmployee(receiptHeaderToBeCancelled.getCreatedBy()))
-            position = collectionsUtil.getPositionByDeptDesgAndBoundary(receiptHeaderToBeCancelled.getReceiptMisc()
-                    .getBoundary());
-        else
-            position = collectionsUtil.getPositionOfUser(receiptHeaderToBeCancelled.getCreatedBy());
-*/
+        /*
+         * if (!collectionsUtil.isEmployee(receiptHeaderToBeCancelled.getCreatedBy())) position =
+         * collectionsUtil.getPositionByDeptDesgAndBoundary(receiptHeaderToBeCancelled.getReceiptMisc() .getBoundary()); else
+         * position = collectionsUtil.getPositionOfUser(receiptHeaderToBeCancelled.getCreatedBy());
+         */
         if (position != null)
             receiptHeaderToBeCancelled
                     .transition()
                     .end()
-                    /*.withSenderName(
-                            receiptHeaderToBeCancelled.getCreatedBy().getUsername() + "::"
-                                    + receiptHeaderToBeCancelled.getCreatedBy().getName())*/
+                    /*
+                     * .withSenderName( receiptHeaderToBeCancelled.getCreatedBy().getUsername() + "::" +
+                     * receiptHeaderToBeCancelled.getCreatedBy().getName())
+                     */
                     .withComments("Receipt Cancelled - Workflow ends").withStateValue(CollectionConstants.WF_STATE_END)
                     .withOwner(position).withDateInfo(new Date());
     }
@@ -914,7 +947,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
                     CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
                     CollectionConstants.COLLECTION_DEPARTMENTFORWORKFLOWAPPROVER));
             final Designation designation = collectionsUtil.getDesignationForApprover();
-            final Boolean isEmployee = null;//collectionsUtil.isEmployee(receiptHeader.getCreatedBy());
+            final Boolean isEmployee = null;// collectionsUtil.isEmployee(receiptHeader.getCreatedBy());
             if (!isEmployee)
                 employee = employeeService.getEmployeeById(collectionsUtil.getLoggedInUser().getId());
             Boundary boundary = null;
@@ -946,11 +979,11 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
                 perform(receiptHeader, CollectionConstants.WF_STATE_APPROVED,
                         CollectionConstants.RECEIPT_STATUS_CODE_APPROVED, "", approverPosition, remarks);
             else if (actionName.equals(CollectionConstants.WF_ACTION_REJECT)) {
-                /*if (!isEmployee)
-                    operatorPosition = collectionsUtil.getPositionByDeptDesgAndBoundary(receiptHeader.getReceiptMisc()
-                            .getBoundary());
-                else
-                    operatorPosition = collectionsUtil.getPositionOfUser(receiptHeader.getCreatedBy());*/
+                /*
+                 * if (!isEmployee) operatorPosition =
+                 * collectionsUtil.getPositionByDeptDesgAndBoundary(receiptHeader.getReceiptMisc() .getBoundary()); else
+                 * operatorPosition = collectionsUtil.getPositionOfUser(receiptHeader.getCreatedBy());
+                 */
                 perform(receiptHeader, CollectionConstants.WF_STATE_REJECTED,
                         CollectionConstants.RECEIPT_STATUS_CODE_TO_BE_SUBMITTED, CollectionConstants.WF_ACTION_SUBMIT,
                         operatorPosition, remarks);
@@ -995,7 +1028,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
 
     public Position getApproverPosition(final ReceiptHeader receiptHeader) {
         Employee employee;
-        final Boolean isEmployee = null;//collectionsUtil.isEmployee(receiptHeader.getCreatedBy());
+        final Boolean isEmployee = null;// collectionsUtil.isEmployee(receiptHeader.getCreatedBy());
         if (!isEmployee)
             employee = employeeService.getEmployeeById(collectionsUtil.getLoggedInUser().getId());
         else
@@ -1030,12 +1063,11 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
 
     public Position getOperatorPosition(final ReceiptHeader receiptHeader) {
         Position operatorPosition = null;
-        /*final Boolean isEmployee = collectionsUtil.isEmployee(receiptHeader.getCreatedBy());
-        if (!isEmployee)
-            operatorPosition = collectionsUtil.getPositionByDeptDesgAndBoundary(receiptHeader.getReceiptMisc()
-                    .getBoundary());
-        else
-            operatorPosition = collectionsUtil.getPositionOfUser(receiptHeader.getCreatedBy());*/
+        /*
+         * final Boolean isEmployee = collectionsUtil.isEmployee(receiptHeader.getCreatedBy()); if (!isEmployee) operatorPosition
+         * = collectionsUtil.getPositionByDeptDesgAndBoundary(receiptHeader.getReceiptMisc() .getBoundary()); else
+         * operatorPosition = collectionsUtil.getPositionOfUser(receiptHeader.getCreatedBy());
+         */
         return operatorPosition;
     }
 
@@ -1049,16 +1081,20 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
             receiptHeader
                     .transition()
                     .end()
-                    /*.withSenderName(
-                            receiptHeader.getCreatedBy().getUsername() + "::" + receiptHeader.getCreatedBy().getName())*/
+                    /*
+                     * .withSenderName( receiptHeader.getCreatedBy().getUsername() + "::" +
+                     * receiptHeader.getCreatedBy().getName())
+                     */
                     .withComments("Receipt Approved - Workflow ends").withStateValue(CollectionConstants.WF_STATE_END)
                     .withOwner(ownerPosition).withDateInfo(new Date());
         else
             receiptHeader
                     .transition()
                     .progressWithStateCopy()
-                   /* .withSenderName(
-                            receiptHeader.getCreatedBy().getUsername() + "::" + receiptHeader.getCreatedBy().getName())*/
+                    /*
+                     * .withSenderName( receiptHeader.getCreatedBy().getUsername() + "::" +
+                     * receiptHeader.getCreatedBy().getName())
+                     */
                     .withComments(remarks).withStateValue(wfState).withOwner(ownerPosition).withDateInfo(new Date())
                     .withNextAction(nextAction);
         super.persist(receiptHeader);
@@ -1122,33 +1158,154 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
      * created receipts are collectively populated to be shown on the print screen
      */
     @Transactional
-    public void populateAndPersistReceipts(final ReceiptHeader receiptHeader,
+    public ReceiptResponse populateAndPersistReceipts(final ReceiptHeader receiptHeader,
             final List<InstrumentHeader> receiptInstrList) {
-        try {
-            LOGGER.info("Workflow started for newly created receipts");
-            if (true)//isReceiptCreateApprovedStatus(receiptHeader))
-                setReceiptApprovedStatus(receiptHeader);
-            else
-                startWorkflow(receiptHeader);
-            LOGGER.info("Persisted receipts");
-            persist(receiptHeader);
+        String consumerCode = getConsumerCode(receiptHeader);
+        saveDemand(consumerCode, receiptHeader);
+        BillResponse billResponse = generateBill(consumerCode, receiptHeader.getService());
+        ReceiptResponse response = generateReceipt(receiptHeader, billResponse);
+
+        /*if (response != null && response.getReceipts() != null && !response.getReceipts().isEmpty()) {
             // create voucher based on configuration.
             if (collectionsUtil.checkVoucherCreation(receiptHeader))
                 createVoucherForReceipt(receiptHeader);
-            BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(receiptHeader.getService());
-            if (bd.getBusinessType().equalsIgnoreCase(CollectionConstants.SERVICE_TYPE_BILLING)) {
-                updateBillingSystemWithReceiptInfo(receiptHeader, null, null);
-                LOGGER.info("Updated billing system ");
-            }/* else
-                updateCollectionIndexAndPushMail(receiptHeader);*/
-        } catch (final HibernateException e) {
-            LOGGER.error("Receipt Service HException while persisting ReceiptHeader", e);
-            throw new ApplicationRuntimeException("Receipt Service Exception while persisting ReceiptHeader : ", e);
-        } catch (final ApplicationRuntimeException e) {
-            LOGGER.error("Receipt Service AException while persisting ReceiptHeader!", e);
-            throw new ApplicationRuntimeException("Receipt Service Exception while persisting ReceiptHeader : ", e);
+        }*/
+        return response;
+    }
+
+    private DemandResponse saveDemand(String consumerCode, ReceiptHeader receiptHeader) {
+        DemandRequest request = new DemandRequest();
+        final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
+        final String url = hostUrl + demandCreateUrl;
+        RequestInfo requestInfo = new RequestInfo();
+        requestInfo.setAuthToken(microserviceUtils.getAdminToken());
+        request.setRequestInfo(requestInfo);
+
+        Demand demand = new Demand();
+        demand.setTenantId(microserviceUtils.getTenentId());
+        demand.setConsumerCode(consumerCode);
+        demand.setConsumerType(CollectionConstants.MISCELLANEOUS_RECEIPT);
+        demand.setBusinessService(receiptHeader.getService());
+        demand.setMinimumAmountPayable(receiptHeader.getTotalcramount());
+        demand.setDemandDetails(new ArrayList<>());
+        User owner = new User();
+        // Need to remove once we fix Citizen validation issue TO-DO
+        owner.setId(23278l);
+        demand.setOwner(owner);
+        TaxPeriod tp = microserviceUtils.getTaxPeriodsByService(receiptHeader.getService());
+        if (tp != null) {
+            demand.setTaxPeriodFrom(tp.getFromDate());
+            demand.setTaxPeriodTo(tp.getToDate());
         }
-    }// end of method
+        DemandDetail dd = null;
+        if (receiptHeader.getReceiptDetails() != null) {
+            for (ReceiptDetail rd : receiptHeader.getReceiptDetails()) {
+                if (rd.getTaxheadCode() != null && !rd.getTaxheadCode().isEmpty()) {
+                    dd = new DemandDetail();
+                    dd.setTaxAmount(rd.getCramount());
+                    // dd.setCollectionAmount(rd.getCramount());
+                    dd.setTenantId(demand.getTenantId());
+                    dd.setTaxHeadMasterCode(rd.getTaxheadCode());
+                    demand.getDemandDetails().add(dd);
+                }
+            }
+
+        }
+        request.setDemands(Collections.singletonList(demand));
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString = "";
+
+        try {
+            jsonInString = mapper.writeValueAsString(request);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        System.out.println(jsonInString);
+        DemandResponse response = restTemplate.postForObject(url, request, DemandResponse.class);
+        return response;
+    }
+
+    private BillResponse generateBill(String consumerCode, String service) {
+        final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
+        final String url = hostUrl + billGenerateUrl + "?tenantId=" + microserviceUtils.getTenentId() + "&businessService="
+                + service + "&consumerCode=" + consumerCode;
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+        RequestInfo requestInfo = new RequestInfo();
+        requestInfo.setAuthToken(microserviceUtils.getAdminToken());
+        reqWrapper.setRequestInfo(requestInfo);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString = "";
+
+        try {
+            jsonInString = mapper.writeValueAsString(reqWrapper);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        System.out.println(jsonInString);
+        BillResponse response = restTemplate.postForObject(url, reqWrapper, BillResponse.class);
+        return response;
+    }
+
+    private ReceiptResponse generateReceipt(ReceiptHeader receiptHeader, BillResponse billResponse) {
+        String tenantId = microserviceUtils.getTenentId();
+        final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
+        final String url = hostUrl + receiptCreateUrl;
+        ReceiptRequest request = new ReceiptRequest();
+        RequestInfo requestInfo = new RequestInfo();
+        requestInfo.setAuthToken(microserviceUtils.getAdminToken());
+        requestInfo.setUserInfo(new UserInfo());
+        requestInfo.getUserInfo().setId(ApplicationThreadLocals.getUserId());
+        Receipt receipt = new Receipt();
+        billResponse.getBill().get(0).getBillDetails().get(0)
+                .setAmountPaid(billResponse.getBill().get(0).getBillDetails().get(0).getTotalAmount());
+        receipt.setBill(billResponse.getBill());
+        Instrument instrument = new Instrument();
+
+        instrument.setInstrumentNumber(
+                receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentNumber());
+        instrument.setInstrumentDate(
+                receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate() != null
+                        ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate().getTime()
+                        : null);
+        instrument
+                .setTransactionDate(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate());
+        instrument.setTransactionNumber(
+                receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionNumber());
+
+        instrument.setInstrumentType(new org.egov.infra.microservice.models.InstrumentType());
+        instrument.getInstrumentType().setName(CollectionConstants.INSTRUMENT_MODES_MAP.get(receiptHeader.getInstrumentType()));
+        instrument.setPayee(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getPayee());
+        instrument.setAmount(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentAmount());
+        instrument.setBank(new Bank());
+        instrument.getBank()
+                .setId(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId() != null
+                        ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId().getId().longValue()
+                        : null);
+        instrument.setBranchName(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankBranchName());
+
+        receipt.setInstrument(instrument);
+        receipt.getBill().get(0).setPaidBy(receiptHeader.getPaidBy());
+        receipt.getBill().get(0).setPayeeAddress(receiptHeader.getPayeeAddress());
+        receipt.setTenantId(tenantId);
+        request.setTenantId(tenantId);
+        request.setReceipt(Collections.singletonList(receipt));
+        request.setRequestInfo(requestInfo);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString = "";
+
+        try {
+            jsonInString = mapper.writeValueAsString(request);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        System.out.println(jsonInString);
+        ReceiptResponse response = restTemplate.postForObject(url, request, ReceiptResponse.class);
+        return response;
+    }
+
+    private String getConsumerCode(ReceiptHeader receiptHeader) {
+        return receiptHeader.getServiceCategory() + "-" + receiptHeader.getService() + "-" + String.valueOf(new Date().getTime());
+    }
 
     public Date getDataEntryCutOffDate() {
         final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -1185,7 +1342,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
                 bouncedInstrumentInfo));
 
         if (receiptHeader.getService().equals(CollectionConstants.SERVICECODE_LAMS)
-                || true){//updateBillingSystem(receiptHeader.getService(), billReceipts, billingService)) {
+                || true) {// updateBillingSystem(receiptHeader.getService(), billReceipts, billingService)) {
             receiptHeader.setIsReconciled(true);
             // the receipts should be persisted again
             super.persist(receiptHeader);

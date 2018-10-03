@@ -1378,7 +1378,7 @@ public class CollectionObjectFactory {
 		vd.setDebitAmountDetail(new BigDecimal(0));
 		vd.setAmount(new BigDecimal(0));
 		vd.setGlcodeDetail("testGLCODE");
-		vd.setGlcodeIdDetail(Long.valueOf(355));
+		vd.setGlcodeIdDetail("355");
 		billCreditDetailslist.add(vd);
 		return billCreditDetailslist;
 	}
@@ -1437,7 +1437,7 @@ public class CollectionObjectFactory {
 		vd.setDebitAmountDetail(new BigDecimal(100));
 		vd.setAmount(new BigDecimal(0));
 		vd.setGlcodeDetail("testBRGLCode");
-		vd.setGlcodeIdDetail(Long.valueOf(757));
+		vd.setGlcodeIdDetail("757");
 		billRebateDetailslist.add(vd);
 		return billRebateDetailslist;
 	}
@@ -1754,7 +1754,7 @@ public class CollectionObjectFactory {
 		receiptDetailInfo.setDebitAmountDetail(debitAmt);
 		receiptDetailInfo.setAmount(new BigDecimal(0));
 		receiptDetailInfo.setGlcodeDetail(glCode);
-		receiptDetailInfo.setGlcodeIdDetail(Long.valueOf(355));
+		receiptDetailInfo.setGlcodeIdDetail("355");
 		receiptDetailInfo.setFunctionDetail("testFunction");
 		receiptDetailInfo.setFunctionIdDetail(Long.valueOf(2));
 		return receiptDetailInfo;
@@ -1771,7 +1771,7 @@ public class CollectionObjectFactory {
 
 		vd.setGlcodeDetail("testGLCODE");
 
-		vd.setGlcodeIdDetail(Long.valueOf(355));
+		vd.setGlcodeIdDetail("355");
 		vd.setFinancialYearId(Long.valueOf("4"));
 		vd.setFunctionDetail("testFunction");
 		vd.setFunctionIdDetail(Long.valueOf(2));
@@ -1789,7 +1789,7 @@ public class CollectionObjectFactory {
 		vd.setAmount(new BigDecimal(0));
 
 		vd.setGlcodeDetail(account.getGlcode());
-		vd.setGlcodeIdDetail(account.getId());
+		vd.setGlcodeIdDetail(account.getId().toString());
 
 		vd.setFinancialYearId(Long.valueOf("4"));
 		vd.setFunctionDetail("testFunction");

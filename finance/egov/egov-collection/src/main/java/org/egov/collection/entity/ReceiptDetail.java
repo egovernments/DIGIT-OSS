@@ -93,6 +93,8 @@ public class ReceiptDetail implements java.io.Serializable {
 
     private Long groupId;
 
+    private String taxheadCode;
+
     public ReceiptDetail() {
     }
 
@@ -285,4 +287,13 @@ public class ReceiptDetail implements java.io.Serializable {
     public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
+
+    public String getTaxheadCode() {
+        return taxheadCode;
+    }
+
+    public void setTaxheadCode(String taxheadCode) {
+        this.taxheadCode = taxheadCode;
+    }
+
 }

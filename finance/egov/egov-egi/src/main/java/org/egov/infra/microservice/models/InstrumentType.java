@@ -1,8 +1,8 @@
 /*
- *    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
+ * eGov suite of products aim to improve the internal efficiency,transparency,
  *    accountability and the service delivery of the government  organizations.
  *
- *     Copyright (C) 2017  eGovernments Foundation
+ *     Copyright (C) <2015>  eGovernments Foundation
  *
  *     The updated version of eGov suite of products as by eGovernments Foundation
  *     is available at http://www.egovernments.org
@@ -26,13 +26,6 @@
  *
  *         1) All versions of this program, verbatim or modified must carry this
  *            Legal Notice.
- *            Further, all user interfaces, including but not limited to citizen facing interfaces,
- *            Urban Local Bodies interfaces, dashboards, mobile applications, of the program and any
- *            derived works should carry eGovernments Foundation logo on the top right corner.
- *
- *            For the logo, please refer http://egovernments.org/html/logo/egov_logo.png.
- *            For any further queries on attribution, including queries on brand guidelines,
- *            please contact contact@egovernments.org
  *
  *         2) Any misrepresentation of the origin of the material is prohibited. It
  *            is required that all modified versions of this material be marked in
@@ -43,33 +36,25 @@
  *            or trademarks of eGovernments Foundation.
  *
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
- *
  */
-
 package org.egov.infra.microservice.models;
 
-public class ChartOfAccounts {
+public class InstrumentType {
 
-    private Long id;
-
-    private String glcode;
+    private String id;
 
     private String name;
 
-    public Long getId() {
+    private String description;
+
+    private Boolean active;
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public String getGlcode() {
-        return glcode;
-    }
-
-    public void setGlcode(String glcode) {
-        this.glcode = glcode;
     }
 
     public String getName() {
@@ -78,6 +63,22 @@ public class ChartOfAccounts {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
 }

@@ -89,7 +89,12 @@ public final class CollectionConstants {
     public static final String INSTRUMENTTYPE_BANK = FinancialConstants.INSTRUMENT_TYPE_BANK;
     public static final String INSTRUMENTTYPE_ONLINE = FinancialConstants.INSTRUMENT_TYPE_ONLINE;
     public static final String INSTRUMENTTYPE_ATM = FinancialConstants.INSTRUMENT_TYPE_ATM;
+    public static final String INSTRUMENTTYPE_NAME_CHEQUE = "Cheque";
+    public static final String INSTRUMENTTYPE_NAME_CASH = "Cash";
+    public static final String INSTRUMENTTYPE_NAME_CARD = "Card";
+    public static final String INSTRUMENTTYPE_NAME_DD = "DD";
 
+    
     // Receipt types
     public static final char RECEIPT_TYPE_ADHOC = 'A';
     public static final char RECEIPT_TYPE_BILL = 'B';
@@ -565,6 +570,8 @@ public final class CollectionConstants {
         {
             put("cheque", "Cheque");
             put("dd", "DD");
+            put("cash", "Cash");
+            put("card", "Card");
         }
     };
     // Named query for dishonor changes
@@ -674,5 +681,5 @@ public final class CollectionConstants {
             add("P");
         }
     };
-
+    public static final String MISCELLANEOUS_RECEIPT = "MISCELLANEOUS_RECEIPT";
 }

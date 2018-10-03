@@ -116,7 +116,6 @@ import org.egov.infra.reporting.engine.ReportService;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
-import org.egov.infstr.models.ServiceDetails;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.pims.commons.Designation;
 import org.egov.pims.commons.Position;
@@ -822,9 +821,10 @@ public class CollectionsUtil {
                 billReceipts.add(billReceipt);
                 if (receiptHeader.getService().equals(CollectionConstants.SERVICECODE_LAMS))
                     receiptAmountInfo = updateReceiptDetailsAndGetReceiptAmountInfo(new BillReceiptReq(billReceipt),
-                    		receiptHeader.getService());
+                            receiptHeader.getService());
                 else {
-                    final BillingIntegrationService billingServiceBean = (BillingIntegrationService) getBean(receiptHeader.getService() + CollectionConstants.COLLECTIONS_INTERFACE_SUFFIX);
+                    final BillingIntegrationService billingServiceBean = (BillingIntegrationService) getBean(
+                            receiptHeader.getService() + CollectionConstants.COLLECTIONS_INTERFACE_SUFFIX);
                     receiptAmountInfo = billingServiceBean.receiptAmountBifurcation(billReceipt);
                 }
             } catch (final Exception e) {
@@ -848,7 +848,7 @@ public class CollectionsUtil {
                         receiptHeader.getOnlinePayment() != null ? receiptHeader.getOnlinePayment().getService()
                                 .getName() : "")
                 .withConsumerName(receiptHeader.getPayeeName() != null ? receiptHeader.getPayeeName() : "")
-                /*.withReceiptCreator(receiptHeader.getCreatedBy() != null ? receiptHeader.getCreatedBy().getName() : "")*/
+                /* .withReceiptCreator(receiptHeader.getCreatedBy() != null ? receiptHeader.getCreatedBy().getName() : "") */
                 .withArrearAmount(receiptAmountInfo.getArrearsAmount())
                 .withAdvanceAmount(receiptAmountInfo.getAdvanceAmount())
                 .withCurrentAmount(receiptAmountInfo.getCurrentInstallmentAmount())
@@ -868,13 +868,16 @@ public class CollectionsUtil {
 
     public Boolean checkVoucherCreation(final ReceiptHeader receiptHeader) {
         Boolean createVoucherForBillingService = Boolean.FALSE;
-        /*if (receiptHeader.getService().getVoucherCutOffDate() != null
-                && receiptHeader.getReceiptdate().compareTo(receiptHeader.getService().getVoucherCutOffDate()) > 0) {
-            if (receiptHeader.getService().getVoucherCreation() != null)
-                createVoucherForBillingService = receiptHeader.getService().getVoucherCreation();
-        } else if (receiptHeader.getService().getVoucherCutOffDate() == null
-                && receiptHeader.getService().getVoucherCreation() != null)
-            createVoucherForBillingService = receiptHeader.getService().getVoucherCreation();*/// Need to fix
+        BusinessDetails servcie = microserviceUtils.getBusinessDetailsByCode(receiptHeader.getService());
+        if (servcie != null) {
+            if (servcie.getVoucherCutoffDate() != null
+                    && receiptHeader.getReceiptdate().compareTo(new Date(servcie.getVoucherCutoffDate())) > 0) {
+                if (servcie.getVoucherCreation() != null)
+                    createVoucherForBillingService = servcie.getVoucherCreation();
+            } else if (servcie.getVoucherCutoffDate() == null
+                    && servcie.getVoucherCreation() != null)
+                createVoucherForBillingService = servcie.getVoucherCreation();
+        }
         return createVoucherForBillingService;
     }
 
@@ -897,7 +900,7 @@ public class CollectionsUtil {
     public List<ReceiptDetail> reconstructReceiptDetail(final ReceiptHeader receiptHeader,
             final List<ReceiptDetail> receiptDetailList) {
         final BillingIntegrationService billingService = (BillingIntegrationService) getBean(receiptHeader.getService()
-                 + CollectionConstants.COLLECTIONS_INTERFACE_SUFFIX);
+                + CollectionConstants.COLLECTIONS_INTERFACE_SUFFIX);
         return billingService.reconstructReceiptDetail(receiptHeader.getReferencenumber(),
                 receiptHeader.getTotalAmount(), receiptDetailList);
     }

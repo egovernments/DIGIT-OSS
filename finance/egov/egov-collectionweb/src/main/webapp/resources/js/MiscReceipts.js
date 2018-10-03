@@ -147,7 +147,12 @@ rec=billDetailTableIndex;
 else 
 rec=rebateDetailTableIndex;
 		var value = (YAHOO.lang.isValue(oData))?oData:"";
-		el.innerHTML = "<input type='"+type+"' id='"+prefix+"["+rec+"]"+suffix+"' name='"+prefix+"["+rec+"]"+suffix+"' style='width:90;' readOnly tabindex='-1' />";
+		if(suffix == ".accounthead"){
+			el.innerHTML = "<input type='"+type+"' id='"+prefix+"["+rec+"]"+suffix+"' name='"+prefix+"["+rec+"]"+suffix+"' style='width:400px;' readOnly tabindex='-1' />";
+		}else{
+			el.innerHTML = "<input type='"+type+"' id='"+prefix+"["+rec+"]"+suffix+"' name='"+prefix+"["+rec+"]"+suffix+"' style='width:90;' readOnly tabindex='-1' />";
+		}
+		
 	
 	}
 }

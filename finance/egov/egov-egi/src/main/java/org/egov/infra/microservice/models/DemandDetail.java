@@ -1,8 +1,8 @@
 /*
- *    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
+ * eGov suite of products aim to improve the internal efficiency,transparency,
  *    accountability and the service delivery of the government  organizations.
  *
- *     Copyright (C) 2017  eGovernments Foundation
+ *     Copyright (C) <2015>  eGovernments Foundation
  *
  *     The updated version of eGov suite of products as by eGovernments Foundation
  *     is available at http://www.egovernments.org
@@ -26,13 +26,6 @@
  *
  *         1) All versions of this program, verbatim or modified must carry this
  *            Legal Notice.
- *            Further, all user interfaces, including but not limited to citizen facing interfaces,
- *            Urban Local Bodies interfaces, dashboards, mobile applications, of the program and any
- *            derived works should carry eGovernments Foundation logo on the top right corner.
- *
- *            For the logo, please refer http://egovernments.org/html/logo/egov_logo.png.
- *            For any further queries on attribution, including queries on brand guidelines,
- *            please contact contact@egovernments.org
  *
  *         2) Any misrepresentation of the origin of the material is prohibited. It
  *            is required that all modified versions of this material be marked in
@@ -43,41 +36,71 @@
  *            or trademarks of eGovernments Foundation.
  *
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
- *
  */
-
 package org.egov.infra.microservice.models;
 
-public class ChartOfAccounts {
+import java.math.BigDecimal;
 
-    private Long id;
+public class DemandDetail {
 
-    private String glcode;
+    private String id;
 
-    private String name;
+    private String demandId;
 
-    public Long getId() {
+    private String taxHeadMasterCode;
+
+    private BigDecimal taxAmount;
+
+    private BigDecimal collectionAmount = BigDecimal.valueOf(0d);
+
+    private String tenantId;
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getGlcode() {
-        return glcode;
+    public String getDemandId() {
+        return demandId;
     }
 
-    public void setGlcode(String glcode) {
-        this.glcode = glcode;
+    public void setDemandId(String demandId) {
+        this.demandId = demandId;
     }
 
-    public String getName() {
-        return name;
+    public String getTaxHeadMasterCode() {
+        return taxHeadMasterCode;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTaxHeadMasterCode(String taxHeadMasterCode) {
+        this.taxHeadMasterCode = taxHeadMasterCode;
+    }
+
+    public BigDecimal getTaxAmount() {
+        return taxAmount;
+    }
+
+    public void setTaxAmount(BigDecimal taxAmount) {
+        this.taxAmount = taxAmount;
+    }
+
+    public BigDecimal getCollectionAmount() {
+        return collectionAmount;
+    }
+
+    public void setCollectionAmount(BigDecimal collectionAmount) {
+        this.collectionAmount = collectionAmount;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 
 }
