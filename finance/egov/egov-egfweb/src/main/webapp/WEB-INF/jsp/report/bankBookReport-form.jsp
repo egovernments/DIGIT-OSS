@@ -288,7 +288,7 @@ function showChequeDetails(voucherId){
 				<s:reset name="button" type="submit" cssClass="button" id="button"
 					value="Cancel" />
 				<input type="button" value="Close"
-					onclick="javascript:window.close()" class="button" />
+					onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 			</div>
 	</div>
 	</s:form>
