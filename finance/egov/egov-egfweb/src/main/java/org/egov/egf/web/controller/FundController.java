@@ -144,6 +144,7 @@ public class FundController {
 		final Fund fund = fundService.findOne(id);
 		prepareNewForm(model);
 		model.addAttribute("fund", fund);
+		model.addAttribute("mode", "view");
 		return FUND_VIEW;
 	}
 
@@ -151,6 +152,7 @@ public class FundController {
 	public String result(@PathVariable("id") final Integer id, final Model model) {
 		final Fund fund = fundService.findOne(id);
 		model.addAttribute("fund", fund);
+		model.addAttribute("mode", "create");
 		return FUND_RESULT;
 	}
 

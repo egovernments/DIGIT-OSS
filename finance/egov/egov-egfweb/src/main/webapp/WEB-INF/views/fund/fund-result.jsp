@@ -49,4 +49,5 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
+<input type="hidden" id="mode" name="mode" value="${mode}" />
 <div class="alert alert-success" role="alert"><strong>${message}</strong></div><%@ include file="fund-view.jsp"%>
