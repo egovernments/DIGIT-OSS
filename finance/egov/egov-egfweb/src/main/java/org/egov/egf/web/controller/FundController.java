@@ -113,7 +113,7 @@ public class FundController {
 		fundService.create(fund);
 		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.fund.success", null, null));
 		EgovMasterDataCaching.removeFromCache("egi-fund");
-		return "redirect:/fund/result/" + fund.getId()+"create";
+		return "redirect:/fund/result/" + fund.getId()+"/"+"create";
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
@@ -148,7 +148,7 @@ public class FundController {
 		return FUND_VIEW;
 	}
 
-	@RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
 	public String result(@PathVariable("id") final Integer id,@PathVariable("mode") final String mode, final Model model) {
 		final Fund fund = fundService.findOne(id);
 		model.addAttribute("fund", fund);
