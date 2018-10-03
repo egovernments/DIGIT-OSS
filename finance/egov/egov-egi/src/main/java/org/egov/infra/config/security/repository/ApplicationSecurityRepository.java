@@ -57,15 +57,16 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 	public SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder) {
 		// TODO Auto-generated method stub
 
-		LOGGER.debug("Loading security context:  " + requestResponseHolder);
+		//LOGGER.debug("Loading security context:  " + requestResponseHolder);
 		SecurityContext context = new SecurityContextImpl();
 		CurrentUser cur_user= null;
 		try {
-
+			
 			HttpServletRequest request = requestResponseHolder.getRequest();
+			LOGGER.info(" *** URI " + request.getRequestURI());
 			cur_user = (CurrentUser)this.microserviceUtils.readFromRedis(request.getSession().getId(), "current_user");
 			if (cur_user==null) {
-				LOGGER.info("Session is not available in redis.... , trying to login");
+				LOGGER.info(" ***  Session is not available in redis.... , trying to login");
 				   //TOD-DO - Mani :  Change this to /rest/ else other words also will get intercepted
 				if(request.getRequestURI().contains("rest")){
 				    return SecurityContextHolder.createEmptyContext();
@@ -76,10 +77,11 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 				}
 
 			}
+			LOGGER.error(" ***  Session   found  in redis.... ," + request.getSession().getId());
 			context.setAuthentication(this.prepareAuthenticationObj(request, cur_user));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
-			LOGGER.error("Session is not found in Redis. Creating empty security context");
+			LOGGER.error(" ***  Session is not found in Redis. Creating empty security context");
 			return SecurityContextHolder.createEmptyContext();
 		}
 		return context;
@@ -113,7 +115,7 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
     private User getUserDetails(HttpServletRequest request) throws Exception {
         String user_token = null;
         user_token = request.getParameter("auth_token");
-
+        LOGGER.info(" *** authtoken "+user_token);
         if (user_token == null)
             throw new Exception("AuthToken not found");
         HttpSession session = request.getSession();

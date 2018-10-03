@@ -48,8 +48,10 @@
 
 package org.egov.infra.web.filter;
 
+import org.apache.log4j.Logger;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.config.core.EnvironmentSettings;
+import org.egov.infra.config.security.repository.ApplicationSecurityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.Filter;
@@ -65,6 +67,7 @@ import static org.egov.infra.web.utils.WebUtils.extractRequestDomainURL;
 import static org.egov.infra.web.utils.WebUtils.extractRequestedDomainName;
 
 public class ApplicationTenantResolverFilter implements Filter {
+	private static final Logger LOGGER = Logger.getLogger(ApplicationTenantResolverFilter.class);
 
     @Autowired
     private EnvironmentSettings environmentSettings;
@@ -76,6 +79,10 @@ public class ApplicationTenantResolverFilter implements Filter {
         String domainURL = extractRequestDomainURL((HttpServletRequest) request, false);
         String domainName = extractRequestedDomainName(domainURL);
         ApplicationThreadLocals.setTenantID(environmentSettings.schemaName(domainName));
+        LOGGER.info(" *** Schema name  :"+environmentSettings.schemaName(domainName) );
+        LOGGER.info(" *** domainName  :"+domainName);
+        LOGGER.info(" *** domainURL  :"+domainURL);
+        
         ApplicationThreadLocals.setDomainName(domainName);
         ApplicationThreadLocals.setDomainURL(domainURL);
         chain.doFilter(request, response);
