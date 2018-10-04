@@ -221,10 +221,8 @@
 					</script>
 					<br />
 					<div class="buttonbottom">
-						<input type="button" id="save" value="Save"
-							onclick="submitForm();" class="buttonsubmit" /> <input
-							type="button" id="Close" value="Close"
-							onclick="javascript:window.close()" class="button" />
+						<input type="button" id="save" value="Save"	onclick="submitForm();" class="buttonsubmit" /> 
+						<input type="button" id="Close" value="Close" onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 					</div>
 				</div>
 			</div>

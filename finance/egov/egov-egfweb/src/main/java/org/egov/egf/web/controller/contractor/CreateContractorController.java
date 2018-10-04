@@ -126,7 +126,7 @@ public class CreateContractorController {
 
 		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.contractor.success", null, null));
 
-		return "redirect:/contractor/result/" + contractor.getId();
+		return "redirect:/contractor/result/" + contractor.getId()+"/create";
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
@@ -146,7 +146,7 @@ public class CreateContractorController {
 		}
 		contractorService.update(contractor);
 		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.contractor.success", null, null));
-		return "redirect:/contractor/result/" + contractor.getId();
+		return "redirect:/contractor/result/" + contractor.getId()+"/view";
 	}
 
 	@RequestMapping(value = "/view/{id}", method = RequestMethod.POST)
@@ -154,6 +154,7 @@ public class CreateContractorController {
 		final Contractor contractor = contractorService.getById(id);
 		prepareNewForm(model);
 		model.addAttribute("contractor", contractor);
+		model.addAttribute("mode", "view");
 		return VIEW;
 	}
 
@@ -181,9 +182,10 @@ public class CreateContractorController {
 	}
 
 	@RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
-	public String result(@PathVariable("id") final Long id, final Model model) {
+	public String result(@PathVariable("id") final Long id,@PathVariable("mode") final String mode, final Model model) {
 		final Contractor contractor = contractorService.getById(id);
 		model.addAttribute("contractor", contractor);
+		model.addAttribute("mode", mode);
 		return RESULT;
 	}
 

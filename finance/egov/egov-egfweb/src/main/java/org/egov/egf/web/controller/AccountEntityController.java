@@ -114,7 +114,7 @@ public class AccountEntityController {
 		 * accountEntity.getAccountdetailtype().getId())); }
 		 */ accountEntityService.create(accountEntity);
 		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.accountentity.success", null, null));
-		return "redirect:/accountentity/result/" + accountEntity.getId();
+		return "redirect:/accountentity/result/" + accountEntity.getId()+"/create";
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
@@ -135,7 +135,7 @@ public class AccountEntityController {
 
 		accountEntityService.update(accountEntity);
 		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.accountentity.success", null, null));
-		return "redirect:/accountentity/result/" + accountEntity.getId();
+		return "redirect:/accountentity/result/" + accountEntity.getId()+"/view";
 	}
 
 	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
@@ -143,13 +143,15 @@ public class AccountEntityController {
 		AccountEntity accountEntity = accountEntityService.findOne(id);
 		prepareNewForm(model);
 		model.addAttribute("accountEntity", accountEntity);
+		model.addAttribute("mode","view");
 		return ACCOUNTENTITY_VIEW;
 	}
 
 	@RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
-	public String result(@PathVariable("id") final Integer id, Model model) {
+	public String result(@PathVariable("id") final Integer id,@PathVariable("mode") final String mode, Model model) {
 		AccountEntity accountEntity = accountEntityService.findOne(id);
 		model.addAttribute("accountEntity", accountEntity);
+		model.addAttribute("mode",mode);
 		return ACCOUNTENTITY_RESULT;
 	}
 

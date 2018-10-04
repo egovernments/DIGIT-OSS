@@ -66,7 +66,11 @@
 	</div>
 	<div class="form-group">
 		<div class="text-center">
-			<a href='javascript:void(0)' class='btn btn-default'
-				onclick='self.close()'><spring:message code='lbl.close' /></a>
+		<c:if test="${mode == 'create'}">
+			<a href='javascript:void(0)' class='btn btn-default' onclick="javascript:window.parent.postMessage('close','*');"><spring:message code='lbl.close' /></a>
+		</c:if>
+		<c:if test="${mode == 'update'}">
+			<a href='javascript:void(0)' class='btn btn-default' onclick='self.close()'><spring:message code='lbl.close' /></a>
+		</c:if>		
 		</div>
 	</div>

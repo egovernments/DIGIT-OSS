@@ -126,7 +126,7 @@ public class CreateSupplierController {
 
 		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.supplier.success", null, null));
 
-		return "redirect:/supplier/result/" + supplier.getId();
+		return "redirect:/supplier/result/" + supplier.getId()+"/create";
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
@@ -146,7 +146,7 @@ public class CreateSupplierController {
 		}
 		supplierService.update(supplier);
 		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.supplier.success", null, null));
-		return "redirect:/supplier/result/" + supplier.getId();
+		return "redirect:/supplier/result/" + supplier.getId()+"/view";
 	}
 
 	@RequestMapping(value = "/view/{id}", method = RequestMethod.POST)
@@ -154,6 +154,7 @@ public class CreateSupplierController {
 		final Supplier supplier = supplierService.getById(id);
 		prepareNewForm(model);
 		model.addAttribute("supplier", supplier);
+		model.addAttribute("mode", "view");
 		return VIEW;
 	}
 
@@ -180,10 +181,11 @@ public class CreateSupplierController {
 		return gson.toJson(object);
 	}
 
-	@RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
-	public String result(@PathVariable("id") final Long id, final Model model) {
+	@RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
+	public String result(@PathVariable("id") final Long id,@PathVariable("mode") final String mode, final Model model) {
 		final Supplier supplier = supplierService.getById(id);
 		model.addAttribute("supplier", supplier);
+		model.addAttribute("mode", mode);
 		return RESULT;
 	}
 

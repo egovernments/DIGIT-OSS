@@ -119,7 +119,7 @@ public class AccountdetailtypeController {
 		accountdetailtypeService.create(accountdetailtype);
 		redirectAttrs.addFlashAttribute("message",
 				messageSource.getMessage("msg.accountdetailtype.success", null, null));
-		return "redirect:/accountdetailtype/result/" + accountdetailtype.getId();
+		return "redirect:/accountdetailtype/result/" + accountdetailtype.getId()+"/create";
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
@@ -148,7 +148,7 @@ public class AccountdetailtypeController {
 		accountdetailtypeService.update(accountdetailtype);
 		redirectAttrs.addFlashAttribute("message",
 				messageSource.getMessage("msg.accountdetailtype.success", null, Locale.ENGLISH));
-		return "redirect:/accountdetailtype/result/" + accountdetailtype.getId();
+		return "redirect:/accountdetailtype/result/" + accountdetailtype.getId()+"/update";
 	}
 
 	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
@@ -159,10 +159,11 @@ public class AccountdetailtypeController {
 		return ACCOUNTDETAILTYPE_VIEW;
 	}
 
-	@RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
-	public String result(@PathVariable("id") final Integer id, Model model) {
+	@RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
+	public String result(@PathVariable("id") final Integer id,@PathVariable("mode") final String mode, Model model) {
 		Accountdetailtype accountdetailtype = accountdetailtypeService.findOne(id);
 		model.addAttribute("accountdetailtype", accountdetailtype);
+		model.addAttribute("mode", mode);
 		return ACCOUNTDETAILTYPE_RESULT;
 	}
 

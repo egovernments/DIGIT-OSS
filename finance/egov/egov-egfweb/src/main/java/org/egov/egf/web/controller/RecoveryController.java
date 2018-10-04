@@ -140,7 +140,7 @@ public class RecoveryController {
 		recovery.setCreatedBy(ApplicationThreadLocals.getUserId().longValue());
 		recoveryService.create(recovery);
 		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.recovery.success", null, null));
-		return "redirect:/recovery/result/" + recovery.getId();
+		return "redirect:/recovery/result/" + recovery.getId()+"/create";
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
@@ -173,7 +173,7 @@ public class RecoveryController {
 		recovery.setEgPartytype(egPartyTypeService.findById(recovery.getEgPartytype().getId(), false));
 		recoveryService.update(recovery);
 		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.recovery.success", null, null));
-		return "redirect:/recovery/result/" + recovery.getId();
+		return "redirect:/recovery/result/" + recovery.getId()+"/update";
 	}
 
 	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
@@ -186,10 +186,11 @@ public class RecoveryController {
 		return RECOVERY_VIEW;
 	}
 
-	@RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
-	public String result(@PathVariable("id") final Long id, Model model) {
+	@RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
+	public String result(@PathVariable("id") final Long id,@PathVariable("mode") final String mode, Model model) {
 		Recovery recovery = recoveryService.findOne(id);
 		model.addAttribute("recovery", recovery);
+		model.addAttribute("mode", mode);
 		return RECOVERY_RESULT;
 	}
 

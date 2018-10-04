@@ -103,6 +103,7 @@ public class BankController {
     public String view(@PathVariable("id") final Integer id, final Model model) {
         final Bank bank = createBankService.getById(id);
         model.addAttribute(BANK, bank);
+        model.addAttribute("mode","view");
         return "bank-view";
     }
 
@@ -114,10 +115,11 @@ public class BankController {
 
     }
 
-    @RequestMapping(value = "/success/{id}", method = RequestMethod.GET)
-    public String success(@PathVariable("id") final Integer id, final Model model) {
+    @RequestMapping(value = "/success/{id}/{mode}", method = RequestMethod.GET)
+    public String success(@PathVariable("id") final Integer id,@PathVariable("mode") final String mode, final Model model) {
         final Bank bank = createBankService.getById(id);
         model.addAttribute(BANK, bank);
+        model.addAttribute("mode", mode);
         return "bank-success";
     }
 
@@ -128,7 +130,7 @@ public class BankController {
             return "bank-new";
         createBankService.create(bank);
         redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.bank.success", null, null));
-        return "redirect:/bank/success/" + bank.getId();
+        return "redirect:/bank/success/" + bank.getId()+"/create";
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
@@ -138,7 +140,7 @@ public class BankController {
             return "bank-update";
         createBankService.update(bank);
         redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.bank.success", null, null));
-        return "redirect:/bank/success/" + bank.getId();
+        return "redirect:/bank/success/" + bank.getId()+"/view";
     }
 
     @RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)

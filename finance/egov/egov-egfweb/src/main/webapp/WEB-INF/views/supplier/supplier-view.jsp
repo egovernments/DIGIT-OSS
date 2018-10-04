@@ -137,7 +137,12 @@
       </div>
     </div>
     <div class="row text-center">
-      <div class="add-margin">
-        <a href="javascript:void(0)" class="btn btn-default" onclick="self.close()">Close</a>
-      </div>
-    </div>
+			<div class="add-margin">
+				<c:if test="${mode == 'view'}">
+					<a href="javascript:void(0)" class="btn btn-default" onclick="self.close()">Close</a>
+				</c:if>
+				<c:if test="${mode == 'create'}">
+					<a href="javascript:void(0)" class="btn btn-default" onclick="javascript:window.parent.postMessage('close','*');">Close</a>
+				</c:if>
+			</div>
+		</div>

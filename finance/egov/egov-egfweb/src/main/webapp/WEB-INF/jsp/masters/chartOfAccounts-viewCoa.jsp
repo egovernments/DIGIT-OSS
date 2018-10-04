@@ -152,7 +152,7 @@
 		</div>
 		<div class="buttonbottom">
 			<input type="button" value="Close"
-				onclick="javascript:window.close()" class="button" />
+				onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 		</div>
 	</s:form>
 </body>

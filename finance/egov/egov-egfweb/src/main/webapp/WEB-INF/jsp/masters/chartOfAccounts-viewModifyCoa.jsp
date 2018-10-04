@@ -174,7 +174,7 @@
 					name="Modify" onclick="return submitForm();" />
 			</s:if>
 			<input type="button" value="Close"
-				onclick="javascript:window.close()" class="button" />
+				onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 		</div>
 	</s:form>
 </body>

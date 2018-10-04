@@ -111,16 +111,18 @@ public class BankBranchController {
     }
 
     @RequestMapping(value = "/success/{id}", method = RequestMethod.GET)
-    public String success(@PathVariable("id") final Integer id, final Model model) {
+    public String success(@PathVariable("id") final Integer id,@PathVariable("mode") final String mode, final Model model) {
         final Bankbranch bankbranch = createBankBranchService.getById(id);
         model.addAttribute(BANKBRANCH, bankbranch);
+        model.addAttribute("mode", mode);
         return "bankbranch-success";
     }
 
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
     public String view(@PathVariable("id") final Integer id, final Model model) {
         final Bankbranch bankbranch = createBankBranchService.getById(id);
-        model.addAttribute(BANKBRANCH, bankbranch);
+		model.addAttribute(BANKBRANCH, bankbranch);
+		model.addAttribute("mode", "view");
         return "bankbranch-view";
     }
 
@@ -144,7 +146,7 @@ public class BankBranchController {
         }
         createBankBranchService.create(bankbranch);
         redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.bankbranch.success", null, null));
-        return "redirect:/bankbranch/success/" + bankbranch.getId();
+        return "redirect:/bankbranch/success/" + bankbranch.getId()+"/create";
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
@@ -157,7 +159,7 @@ public class BankBranchController {
         }
         createBankBranchService.update(bankbranch);
         redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.bankbranch.success", null, null));
-        return "redirect:/bankbranch/success/" + bankbranch.getId();
+        return "redirect:/bankbranch/success/" + bankbranch.getId()+"/view";
     }
 
     @RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)

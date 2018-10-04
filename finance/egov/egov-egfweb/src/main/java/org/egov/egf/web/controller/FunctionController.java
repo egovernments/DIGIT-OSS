@@ -118,7 +118,7 @@ public class FunctionController {
 				messageSource.getMessage("msg.function.success", null, null));
 		egovMasterDataCaching.removeFromCache("egi-activeFunctions");
 		egovMasterDataCaching.removeFromCache("egi-function");
-		return "redirect:/function/result/" + function.getId();
+		return "redirect:/function/result/" + function.getId()+"/create";
 	}
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
@@ -142,7 +142,7 @@ public class FunctionController {
 				messageSource.getMessage("msg.function.success", null, null));
 		egovMasterDataCaching.removeFromCache("egi-activeFunctions");
 		 egovMasterDataCaching.removeFromCache("egi-function");
-		return "redirect:/function/result/" + function.getId();
+		return "redirect:/function/result/" + function.getId()+"/view";
 	}
 
 	@RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
@@ -150,13 +150,15 @@ public class FunctionController {
 		CFunction function = functionService.findOne(id);
 		prepareNewForm(model);
 		model.addAttribute("function", function);
+		model.addAttribute("mode","view");
 		return FUNCTION_VIEW;
 	}
 
-	@RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
-	public String result(@PathVariable("id") final Long id, Model model) {
+	@RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
+	public String result(@PathVariable("id") final Long id,@PathVariable("mode") final String mode, Model model) {
 		CFunction function = functionService.findOne(id);
 		model.addAttribute("function", function);
+		model.addAttribute("mode", mode);
 		return FUNCTION_RESULT;
 	}
 
