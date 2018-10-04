@@ -228,11 +228,9 @@
 			<br /> <br />
 		</div>
 		<div class="buttonbottom">
-			<input type="hidden" name="model.id"
-				value='<s:property value="model.id"/>' /> <input type="button"
-				class="buttonsubmit" value="Save" id="Search" name="Search"
-				onclick="return validateAndSubmit();" /> <input type="button"
-				value="Close" onclick="javascript:window.close()" class="button" />
+			<input type="hidden" name="model.id" value='<s:property value="model.id"/>' />
+		    <input type="button" class="buttonsubmit" value="Save" id="Search" name="Search" onclick="return validateAndSubmit();" /> 
+			<input type="button" value="Close" onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" />
 		</div>
 		<s:token />
 	</s:form>

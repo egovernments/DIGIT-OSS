@@ -176,7 +176,7 @@
 				</s:if>
 			</s:if>
 			<input type="button" value="Close"
-				onclick="javascript:window.parent.postMessage('close','*');" class="button" />
+				onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" />
 		</div>
 	</s:form>
 </body>
