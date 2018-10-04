@@ -12507,45 +12507,6 @@
    "navigationURL": "services/EGF/bankbranch/search/edit"
  },
 {
-   "id": 2149,
-   "name": "Create TradeLicense",
-   "url": "/tl-services/v1/_create",
-   "parentModule": "",
-   "displayName": "Create TradeLicense",
-   "orderNumber": 0,
-   "enabled": false,
-   "serviceCode": "tl-services",
-   "code": "null",
-   "path": ""
-   
- },
- {
-   "id": 2150,
-   "name": "Update TradeLicense",
-   "url": "/tl-services/v1/_update",
-   "parentModule": "",
-   "displayName": "Update TradeLicense",
-   "orderNumber": 0,
-   "enabled": false,
-   "serviceCode": "tl-services",
-   "code": "null",
-   "path": ""
-   
- },
- {
-   "id": 2151,
-   "name": "Search TradeLicense",
-   "url": "/tl-services/v1/_search",
-   "parentModule": "",
-   "displayName": "Search TradeLicense",
-   "orderNumber": 0,
-   "enabled": false,
-   "serviceCode": "tl-services",
-   "code": "null",
-   "path": ""
-   
- },
-{
    "id": 1674,
    "name": "openingbalance create",
    "url": "url",
@@ -12687,6 +12648,54 @@
       "code": "null",
       "path": "",
       "navigationURL": ""
-    }
+    },
+   {
+     "id": 1685,
+     "name": "Create TradeLicense",
+     "url": "/tl-services/v1/_create",
+     "parentModule": "",
+     "displayName": "Create TradeLicense",
+     "orderNumber": 0,
+     "enabled": false,
+     "serviceCode": "tl-services",
+     "code": "null",
+     "path": ""
+   },
+   {
+   "id": 1686,
+   "name": "Update TradeLicense",
+   "url": "/tl-services/v1/_update",
+   "parentModule": "",
+   "displayName": "Update TradeLicense",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "tl-services",
+   "code": "null",
+   "path": ""
+   },
+  {
+   "id": 1687,
+   "name": "Search TradeLicense",
+   "url": "/tl-services/v1/_search",
+   "parentModule": "",
+   "displayName": "Search TradeLicense",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "tl-services",
+   "code": "null",
+   "path": ""
+  },
+   {
+   "id": 1688,
+   "name": "Get Bill",
+   "url": "/tl-calculator/v1/_getbill",
+   "parentModule": "",
+   "displayName": "Get Bill",
+   "orderNumber": 0,
+   "enabled": false,
+   "serviceCode": "tl-calculator",
+   "code": "null",
+   "path": ""
+   }
   ]
 }
