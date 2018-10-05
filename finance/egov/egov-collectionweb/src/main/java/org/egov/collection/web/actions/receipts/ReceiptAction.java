@@ -786,7 +786,7 @@ public class ReceiptAction extends BaseFormAction {
             // (in effect the newly created receipts)
             selectedReceipts = new Long[noOfNewlyCreatedReceipts];
             int i = 0;
-            if (!receiptHeader.getId().equals(oldReceiptId)) {
+            if (receiptHeader.getId()!=null && !receiptHeader.getId().equals(oldReceiptId)) {
                 selectedReceipts[i] = receiptHeader.getId();
                 i++;
             }

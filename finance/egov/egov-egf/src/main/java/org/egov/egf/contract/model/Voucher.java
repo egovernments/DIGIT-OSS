@@ -50,7 +50,7 @@ package org.egov.egf.contract.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Voucher{
+public class Voucher {
 
     private Long id;
     private String name;
@@ -59,6 +59,7 @@ public class Voucher{
     private String description;
     private String voucherDate;
     private FundContract fund;
+    private FunctionContract function;
     private FiscalPeriodContract fiscalPeriod;
     private EgwStatusContract status;
     private Long originalVhId;
@@ -68,7 +69,7 @@ public class Voucher{
     private String department;
     private String source;
     private SchemeContract scheme;
-    private SchemeContract subScheme;
+    private SubSchemeContract subScheme;
     private FunctionaryContract functionary;
     private FundsourceContract fundsource;
     private List<AccountDetailContract> ledgers = new ArrayList<>(0);
@@ -76,14 +77,14 @@ public class Voucher{
     private String tenantId;
 
     public String getTenantId() {
-		return tenantId;
-	}
+        return tenantId;
+    }
 
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 
-	public String getName() {
+    public String getName() {
         return name;
     }
 
@@ -129,6 +130,14 @@ public class Voucher{
 
     public void setFund(final FundContract fund) {
         this.fund = fund;
+    }
+
+    public FunctionContract getFunction() {
+        return function;
+    }
+
+    public void setFunction(FunctionContract function) {
+        this.function = function;
     }
 
     public FiscalPeriodContract getFiscalPeriod() {
@@ -235,11 +244,11 @@ public class Voucher{
         this.fundsource = fundsource;
     }
 
-    public SchemeContract getSubScheme() {
+    public SubSchemeContract getSubScheme() {
         return subScheme;
     }
 
-    public void setSubScheme(final SchemeContract subScheme) {
+    public void setSubScheme(final SubSchemeContract subScheme) {
         this.subScheme = subScheme;
     }
 

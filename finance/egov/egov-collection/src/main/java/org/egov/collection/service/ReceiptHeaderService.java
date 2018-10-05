@@ -1,4 +1,5 @@
 /*
+
  *    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
  *    accountability and the service delivery of the government  organizations.
  *
@@ -1165,11 +1166,10 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         BillResponse billResponse = generateBill(consumerCode, receiptHeader.getService());
         ReceiptResponse response = generateReceipt(receiptHeader, billResponse);
 
-        /*if (response != null && response.getReceipts() != null && !response.getReceipts().isEmpty()) {
-            // create voucher based on configuration.
-            if (collectionsUtil.checkVoucherCreation(receiptHeader))
-                createVoucherForReceipt(receiptHeader);
-        }*/
+        /*
+         * if (response != null && response.getReceipts() != null && !response.getReceipts().isEmpty()) { // create voucher based
+         * on configuration. if (collectionsUtil.checkVoucherCreation(receiptHeader)) createVoucherForReceipt(receiptHeader); }
+         */
         return response;
     }
 
@@ -1212,17 +1212,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
 
         }
         request.setDemands(Collections.singletonList(demand));
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonInString = "";
-
-        try {
-            jsonInString = mapper.writeValueAsString(request);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        System.out.println(jsonInString);
-        DemandResponse response = restTemplate.postForObject(url, request, DemandResponse.class);
-        return response;
+        return restTemplate.postForObject(url, request, DemandResponse.class);
     }
 
     private BillResponse generateBill(String consumerCode, String service) {
@@ -1233,17 +1223,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(microserviceUtils.getAdminToken());
         reqWrapper.setRequestInfo(requestInfo);
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonInString = "";
-
-        try {
-            jsonInString = mapper.writeValueAsString(reqWrapper);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        System.out.println(jsonInString);
-        BillResponse response = restTemplate.postForObject(url, reqWrapper, BillResponse.class);
-        return response;
+        return restTemplate.postForObject(url, reqWrapper, BillResponse.class);
     }
 
     private ReceiptResponse generateReceipt(ReceiptHeader receiptHeader, BillResponse billResponse) {
@@ -1299,8 +1279,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
             e.printStackTrace();
         }
         System.out.println(jsonInString);
-        ReceiptResponse response = restTemplate.postForObject(url, request, ReceiptResponse.class);
-        return response;
+        return restTemplate.postForObject(url, request, ReceiptResponse.class);
     }
 
     private String getConsumerCode(ReceiptHeader receiptHeader) {
