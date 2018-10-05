@@ -12696,6 +12696,18 @@
    "serviceCode": "tl-calculator",
    "code": "null",
    "path": ""
-   }
+   },
+  {
+      "id": 1689,
+      "name": "VoucherCreate",
+      "url": "/services/EGF/rest/voucher/_create",
+      "displayName": "Create Voucher",
+      "orderNumber": 0,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "VOUCHER",
+      "code": "null",
+      "path": ""
+    }
   ]
 }
