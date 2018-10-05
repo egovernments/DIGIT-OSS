@@ -1164,13 +1164,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         String consumerCode = getConsumerCode(receiptHeader);
         saveDemand(consumerCode, receiptHeader);
         BillResponse billResponse = generateBill(consumerCode, receiptHeader.getService());
-        ReceiptResponse response = generateReceipt(receiptHeader, billResponse);
-
-        /*
-         * if (response != null && response.getReceipts() != null && !response.getReceipts().isEmpty()) { // create voucher based
-         * on configuration. if (collectionsUtil.checkVoucherCreation(receiptHeader)) createVoucherForReceipt(receiptHeader); }
-         */
-        return response;
+        return generateReceipt(receiptHeader, billResponse);
     }
 
     private DemandResponse saveDemand(String consumerCode, ReceiptHeader receiptHeader) {
@@ -1270,15 +1264,6 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         request.setTenantId(tenantId);
         request.setReceipt(Collections.singletonList(receipt));
         request.setRequestInfo(requestInfo);
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonInString = "";
-
-        try {
-            jsonInString = mapper.writeValueAsString(request);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        System.out.println(jsonInString);
         return restTemplate.postForObject(url, request, ReceiptResponse.class);
     }
 
