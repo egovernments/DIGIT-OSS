@@ -1570,7 +1570,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
         } else
             sql.append(" and ph.bankaccountnumberid=ba.id")
                     .append(" and lower(ph.type)=lower('" + parameters.get("paymentMode")[0] + "')");
-        sql.append(" and vmis.departmentid     =dept.id  ");
+//        sql.append(" and vmis.departmentid     =dept.id  ");
         final List<AppConfigValues> appList = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
                 "APPROVEDVOUCHERSTATUS");
         final String approvedstatus = appList.get(0).getValue();
@@ -1713,7 +1713,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
         } else
             sql.append(" and ph.bankaccountnumberid=ba.id")
                     .append(" and lower(ph.type)=lower('" + parameters.get("paymentMode")[0] + "')");
-        sql.append(" and vmis.departmentid     =dept.id  ");
+//        sql.append(" and vmis.departmentid     =dept.id  ");
         final List<AppConfigValues> appList = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
                 "APPROVEDVOUCHERSTATUS");
         final String approvedstatus = appList.get(0).getValue();
@@ -1765,7 +1765,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                             + " AND bmis.billid = bill.id AND  " + TNEBsql
                             + " AND bmis.voucherheaderid = misbill.billvhid ) AND ph.voucherheaderid = vh.id "
                             + " AND vmis.voucherheaderid  = vh.id AND vh.status = " + approvedstatus + " " + sql + " "
-                            + " AND ph.bankaccountnumberid=ba.id AND vmis.departmentid = dept.id AND IV.VOUCHERHEADERID IS NULL AND "
+//                            + " AND ph.bankaccountnumberid=ba.id AND vmis.departmentid = dept.id AND IV.VOUCHERHEADERID IS NULL AND "
+                            + " AND ph.bankaccountnumberid=ba.id AND vmis.departmentcode = dept.code AND IV.VOUCHERHEADERID IS NULL AND "
                             + " vh.type = '" + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT
                             + "' AND vh.name NOT IN " + " ('" + FinancialConstants.PAYMENTVOUCHER_NAME_REMITTANCE
                             + "' , '" + FinancialConstants.PAYMENTVOUCHER_NAME_SALARY + "', '"
@@ -1798,7 +1799,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                                     + " AND bmis.voucherheaderid = misbill.billvhid ) AND ph.voucherheaderid = vh.id "
                                     + " AND vmis.voucherheaderid  = vh.id AND vh.status = " + approvedstatus + " " + sql
                                     + " "
-                                    + " AND ph.bankaccountnumberid=ba.id AND vmis.departmentid = dept.id AND IV.VOUCHERHEADERID IS NOT NULL AND iv.instrumentheaderid = table1.maxihid AND table1.iv1vhid = vh.id AND "
+//                                    + " AND ph.bankaccountnumberid=ba.id AND vmis.departmentid = dept.id AND IV.VOUCHERHEADERID IS NOT NULL AND iv.instrumentheaderid = table1.maxihid AND table1.iv1vhid = vh.id AND "
+                                    + " AND ph.bankaccountnumberid=ba.id AND vmis.departmentcode = dept.code AND IV.VOUCHERHEADERID IS NOT NULL AND iv.instrumentheaderid = table1.maxihid AND table1.iv1vhid = vh.id AND "
                                     + " ih.id_status NOT IN (" + statusId + ") AND vh.type = '"
                                     + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT + "' AND vh.name NOT IN " + " ('"
                                     + FinancialConstants.PAYMENTVOUCHER_NAME_REMITTANCE + "' , '"
@@ -1856,7 +1858,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
         } else
             sql.append(" and ph.bankaccountnumberid=ba.id")
                     .append(" and lower(ph.type)=lower('" + parameters.get("paymentMode")[0] + "')");
-        sql.append(" and vmis.departmentid     =dept.id  ");
+//        sql.append(" and vmis.departmentid     =dept.id  ");
         final List<AppConfigValues> appList = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
                 "APPROVEDVOUCHERSTATUS");
         final String approvedstatus = appList.get(0).getValue();
@@ -1893,8 +1895,9 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                                     + " ON (pvh.id    =iv.VOUCHERHEADERID) WHERE ph.voucherheaderid  =misbill.payvhid AND ph.voucherheaderid    =vh.id AND vh.name  ='"
                                     + FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK + "'"
                                     + " AND vmis.voucherheaderid  = vh.id  AND vh.status   =" + approvedstatus + sql
-                                    + " AND pvh.id      =vh.id AND iv.id     IS NULL"
-                                    + " AND dept.id  = vmis.departmentid AND ph.bankaccountnumberid= ba.id GROUP BY vh.id,   vh.voucherNumber,  dept.name , "
+                                    + " AND dept.code = vmis.departmentcode AND pvh.id      =vh.id AND iv.id     IS NULL"
+//                                    + " AND dept.id  = vmis.departmentid AND ph.bankaccountnumberid= ba.id GROUP BY vh.id,   vh.voucherNumber,  dept.name , "
+                                    + " AND ph.bankaccountnumberid= ba.id GROUP BY vh.id,   vh.voucherNumber,  dept.name , "
                                     + " vh.voucherDate,  misbill.paidto,ba.accountnumber,  ba.id,vh.name"
                                     + " UNION SELECT vh.id  AS voucherid ,vh.voucherNumber AS voucherNumber ,dept.name AS departmentName,vh.voucherDate          AS voucherDate ,"
                                     + "  misbill.paidto          AS paidTo, SUM(misbill.paidamount) AS paidAmount, current_date   AS chequeDate,ba.accountnumber  AS bankAccNumber,"
@@ -1903,7 +1906,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                                     + " ON (ih.ID   =iv.INSTRUMENTHEADERID) WHERE ph.voucherheaderid  =misbill.payvhid AND ph.voucherheaderid    =vh.id AND vh.name ='"
                                     + FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK + "'"
                                     + " AND vmis.voucherheaderid  = vh.id AND vh.status  =" + approvedstatus + sql
-                                    + " AND pvh.id   =vh.id AND dept.id          = vmis.departmentid"
+//                                    + " AND pvh.id   =vh.id AND dept.id          = vmis.departmentid"
+                                    + " AND pvh.id   =vh.id AND dept.code = vmis.departmentcode"
                                     + " AND ph.bankaccountnumberid= ba.id AND ih.id IN  (SELECT MAX(ih.id)  FROM egf_instrumentvoucher iv  RIGHT OUTER JOIN voucherheader pvh"
                                     + " ON (pvh.id=iv.VOUCHERHEADERID) LEFT OUTER JOIN egf_instrumentheader ih   ON (ih.ID    =iv.INSTRUMENTHEADERID)  WHERE pvh.id =vh.id   "
                                     + "  " + " ) and ih.id_status not in (" + statusId
@@ -2855,7 +2859,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
             sql.append(" and gl.glcodeid = " + recovery.getChartofaccounts().getId());
         } else
             sql.append(" and gl.glcodeid in (select distinct glcodeid from tds where remittance_mode='A')");
-        sql.append(" and vmis.departmentid     =dept.id  ");
+//        sql.append(" and vmis.departmentid     =dept.id  ");
         final List<AppConfigValues> appList = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
                 "APPROVEDVOUCHERSTATUS");
         final String approvedstatus = appList.get(0).getValue();

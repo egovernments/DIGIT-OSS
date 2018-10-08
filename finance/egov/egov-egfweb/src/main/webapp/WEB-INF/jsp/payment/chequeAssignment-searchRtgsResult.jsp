@@ -196,7 +196,7 @@
 					value="Assign RTGS Number" cssClass="buttonsubmit"
 					onclick="return validate();" />
 				<input type="button" value="Close"
-					onclick="javascript:window.close()" class="button" />
+					onclick="javascript:window.close();window.parent.postMessage('close','*');" class="button" />
 			</div>
 		</div>
 		<s:token />

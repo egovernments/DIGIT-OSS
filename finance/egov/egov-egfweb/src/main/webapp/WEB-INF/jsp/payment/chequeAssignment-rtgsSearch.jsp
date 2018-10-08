@@ -150,7 +150,7 @@
 				<s:submit method="searchRTGS" value="Search" id="searchBtn"
 					cssClass="buttonsubmit" onclick="submitForm();" />
 				<input type="button" value="Close"
-					onclick="javascript:window.close()" class="button" />
+					onclick="javascript:window.close();window.parent.postMessage('close','*');" class="button" />
 			</div>
 		</div>
 		<s:hidden name="bankbranch" id="bankbranch" />
@@ -192,7 +192,7 @@
 
 		}
 		function submitForm() {
-			document.chequeAssignment.action = '/EGF/payment/chequeAssignment-searchRTGS.action';
+			document.chequeAssignment.action = '/services/EGF/payment/chequeAssignment-searchRTGS.action';
 			document.chequeAssignment.submit();
 		}
 	</script>

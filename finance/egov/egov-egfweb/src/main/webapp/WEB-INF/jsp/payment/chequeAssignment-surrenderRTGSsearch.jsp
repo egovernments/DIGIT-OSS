@@ -137,7 +137,7 @@
 				<s:submit onclick="onSubmit();" value="Search" id="searchBtn"
 					cssClass="buttonsubmit" />
 				<input type="button" value="Close"
-					onclick="javascript:window.close()" class="button" />
+					onclick="javascript:window.close();window.parent.postMessage('close','*');" class="button" />
 			</div>
 		</div>
 		<s:hidden name="bankbranch" id="bankbranch" />
@@ -150,7 +150,7 @@
 	</s:if>
 	<script>
 		function onSubmit() {
-			document.chequeAssignment.action = '/EGF/payment/chequeAssignment-searchForRTGSSurrender.action';
+			document.chequeAssignment.action = '/services/EGF/payment/chequeAssignment-searchForRTGSSurrender.action';
 			document.chequeAssignment.submit();
 		}
 		var date = '<s:date name="currentDate" format="dd/MM/yyyy"/>';
