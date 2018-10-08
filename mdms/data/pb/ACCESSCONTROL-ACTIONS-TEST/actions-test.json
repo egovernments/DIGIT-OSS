@@ -12697,7 +12697,7 @@
    "code": "null",
    "path": ""
    },
-  {
+   {
       "id": 1689,
       "name": "VoucherCreate",
       "url": "/services/EGF/rest/voucher/_create",
@@ -12708,6 +12708,19 @@
       "serviceCode": "VOUCHER",
       "code": "null",
       "path": ""
-    }
+    },
+    {
+     "id": 1690,
+     "name": "TradeLicenseApplication",
+     "url": "url",
+     "displayName": "Application",
+     "orderNumber": 13,
+     "parentModule": "",
+     "enabled": true,
+     "serviceCode": "TradeLicense",
+     "code": "null",
+     "navigationURL": "services/TradeLicense/application",
+     "path": "TradeLicense.Application"
+   }
   ]
 }
