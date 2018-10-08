@@ -441,7 +441,7 @@ function validateTransactionNumber()
 								<td class="bluebox">&nbsp;</td>
 								<td class="bluebox">&nbsp;</td>
 							</tr>
-							<tr id="chequeaddrow">
+							<!-- <tr id="chequeaddrow">
 								<td colspan="5" class="blueborderfortd4">
 									<div id="addchequerow" style="display: none">
 										<a href="#" id="addchequelink"
@@ -462,7 +462,7 @@ function validateTransactionNumber()
 											onclick="deleteChequeObj(this,'chequegrid','delerror')" />
 									</div>
 								</td>
-							</tr>
+							</tr> -->
 						</s:if>
 						<s:else>
 							<s:iterator value="(instrumentProxyList.size).{#this}"
@@ -526,7 +526,7 @@ function validateTransactionNumber()
 									<td class="bluebox2">&nbsp;</td>
 									<td class="bluebox2">&nbsp;</td>
 								</tr>
-								<tr id="chequeaddrow">
+								<%-- <tr id="chequeaddrow">
 									<td colspan="5" class="blueborderfortd4">
 										<div id="addchequerow" style="display: none">
 											<a href="#" id="addchequelink"
@@ -549,7 +549,7 @@ function validateTransactionNumber()
 												onclick="deleteChequeObj(this,'chequegrid','delerror')" />
 										</div>
 									</td>
-								</tr>
+								</tr> --%>
 							</s:iterator>
 						</s:else>
 					</table> <!-- End of table 'chequegrid' --></td>

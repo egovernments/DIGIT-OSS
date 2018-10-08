@@ -53,6 +53,8 @@ public class Instrument {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date transactionDate;
 
+    private Long transactionDateInput;
+
     private BigDecimal amount;
 
     private InstrumentType instrumentType;
@@ -99,6 +101,14 @@ public class Instrument {
 
     public void setTransactionDate(Date transactionDate) {
         this.transactionDate = transactionDate;
+    }
+
+    public Long getTransactionDateInput() {
+        return transactionDateInput;
+    }
+
+    public void setTransactionDateInput(Long transactionDateInput) {
+        this.transactionDateInput = transactionDateInput;
     }
 
     public BigDecimal getAmount() {

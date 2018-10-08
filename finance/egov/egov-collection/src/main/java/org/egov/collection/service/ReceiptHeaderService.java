@@ -1242,9 +1242,19 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
                         ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate().getTime()
                         : null);
         instrument
-                .setTransactionDate(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate());
+                .setTransactionDateInput(
+                        receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate() != null
+                                ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate()
+                                        .getTime()
+                                : (receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0)
+                                        .getInstrumentDate() != null
+                                                ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0)
+                                                        .getInstrumentDate().getTime()
+                                                : null));
         instrument.setTransactionNumber(
-                receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionNumber());
+                receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionNumber() != null
+                        ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionNumber()
+                        : receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentNumber());
 
         instrument.setInstrumentType(new org.egov.infra.microservice.models.InstrumentType());
         instrument.getInstrumentType().setName(CollectionConstants.INSTRUMENT_MODES_MAP.get(receiptHeader.getInstrumentType()));
@@ -1264,6 +1274,16 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         request.setTenantId(tenantId);
         request.setReceipt(Collections.singletonList(receipt));
         request.setRequestInfo(requestInfo);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString = "";
+
+        try {
+            jsonInString = mapper.writeValueAsString(request);
+        } catch (JsonProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println(jsonInString);
         return restTemplate.postForObject(url, request, ReceiptResponse.class);
     }
 
