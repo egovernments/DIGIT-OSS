@@ -306,6 +306,16 @@
       "rolecode": "SYS_INTEGRATOR_WATER_SEW",
       "name": "System Integrator W&S",
       "description": "Role for allowing system integration of Water and Sewerage app with rainmaker"
+    },
+    {
+      "rolecode": "TL_CEMP",
+      "name": "TL Counter Employee",
+      "description": "Counter Employee in Trade License who files TL on behalf of the citizen"
+    },
+    {
+      "rolecode": "TL_APPROVER",
+      "name": "TL Approver",
+      "description": "Approver who verifies and approves the TL application"
     }
   ]
 }
