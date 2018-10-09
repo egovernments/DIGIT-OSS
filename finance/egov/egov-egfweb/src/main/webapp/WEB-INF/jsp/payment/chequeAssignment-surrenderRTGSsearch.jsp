@@ -123,7 +123,7 @@
 								<span class="bluebox"><span class="mandatory"></span></span>
 							</s:if></td>
 						<td class="greybox"><s:select name="department"
-								id="department" list="dropdownData.departmentList" listKey="id"
+								id="department" list="dropdownData.departmentList" listKey="code"
 								listValue="name" headerKey="" headerValue="----Choose----"
 								value="%{department}" />
 						<td>

@@ -1600,11 +1600,11 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                                                                                                                    // screen
             query = getSession()
                     .createSQLQuery(" select  vh.id as voucherid ,vh.voucherNumber as voucherNumber ,"
-                            + " dept.name   AS departmentName, vh.voucherDate as voucherDate,"
+                            + " vmis.departmentcode   AS departmentName, vh.voucherDate as voucherDate,"
                             + " misbill.paidto as paidTo,sum(misbill.paidamount) as paidAmount,current_date as chequeDate"
                             + " , ba.accountnumber   AS bankAccNumber, ba.id  AS bankAccountId ,"
                             + " bill.id                 as billId, bill.billnumber       as billNumber ,bill.expenditureType as expenditureType"
-                            + " from Paymentheader ph, eg_department dept,"
+                            + " from Paymentheader ph,"
                             + " bankaccount ba, voucherheader vh   LEFT JOIN "
                             + " EGF_INSTRUMENTVOUCHER IV ON VH.ID=IV.VOUCHERHEADERID LEFT JOIN EGF_INSTRUMENTHEADER IH ON IV.INSTRUMENTHEADERID=IH.ID,"
                             + " vouchermis vmis, Miscbilldetail misbill ,eg_billregistermis bmis, eg_billregister bill "
@@ -1616,9 +1616,9 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                             + FinancialConstants.PAYMENTVOUCHER_NAME_REMITTANCE + "' , '"
                             + FinancialConstants.PAYMENTVOUCHER_NAME_SALARY + "','"
                             + FinancialConstants.PAYMENTVOUCHER_NAME_PENSION + "') "
-                            + " group by vh.id,  vh.voucherNumber,  dept.name ,  vh.voucherDate,misbill.paidto, "
+                            + " group by vh.id,  vh.voucherNumber,  vmis.departmentcode ,  vh.voucherDate,misbill.paidto, "
                             + " ba.accountnumber, ba.id , bill.id, bill.billnumber,bill.expenditureType "
-                            + " order by ba.id,dept.name,vh.voucherNumber ")
+                            + " order by ba.id,vmis.departmentcode,vh.voucherNumber ")
                     .addScalar("voucherid", LongType.INSTANCE).addScalar("voucherNumber").addScalar("departmentName")
                     .addScalar("voucherDate").addScalar("paidTo").addScalar("paidAmount", BigDecimalType.INSTANCE)
                     .addScalar("chequeDate").addScalar("bankAccNumber").addScalar("bankAccountId", LongType.INSTANCE)
@@ -1635,11 +1635,11 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                 LOGGER.debug("checking  cheque assigned and surrendard");
             query = getSession()
                     .createSQLQuery("select vh.id as voucherid ,vh.voucherNumber as voucherNumber ,"
-                            + " dept.name   AS departmentName, vh.voucherDate as voucherDate, misbill.paidto as         paidTo"
+                            + " vmis.departmentcode AS departmentName, vh.voucherDate as voucherDate, misbill.paidto as         paidTo"
                             + ",sum(misbill.paidamount) as paidAmount,current_date as chequeDate , ba.accountnumber AS bankAccNumber "
                             + " , ba.id  AS bankAccountId , "
                             + " bill.id    as billId, bill.billnumber as billNumber ,bill.expenditureType as expenditureType"
-                            + " from Paymentheader ph,eg_department dept, bankaccount ba,eg_billregistermis bmis, "
+                            + " from Paymentheader ph,bankaccount ba,eg_billregistermis bmis, "
                             + " eg_billregister bill ,voucherheader vh   LEFT "
                             + " JOIN EGF_INSTRUMENTVOUCHER IV ON VH.ID=IV.VOUCHERHEADERID LEFT JOIN EGF_INSTRUMENTHEADER IH "
                             + " ON IV.INSTRUMENTHEADERID=IH.ID,vouchermis vmis, Miscbilldetail misbill "
@@ -1652,8 +1652,8 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                             + "' and vh.name NOT IN ('" + FinancialConstants.PAYMENTVOUCHER_NAME_REMITTANCE + "' , '"
                             + FinancialConstants.PAYMENTVOUCHER_NAME_SALARY + "', '"
                             + FinancialConstants.PAYMENTVOUCHER_NAME_PENSION + "') "
-                            + " group by   vh.id,  vh.voucherNumber,  dept.name ,  vh.voucherDate,misbill.paidto,ba.accountnumber,"
-                            + " ba.id , bill.id, bill.billnumber ,bill.expenditureType order by ba.id,dept.name,vh.voucherNumber ")
+                            + " group by   vh.id,  vh.voucherNumber,  vmis.departmentcode ,  vh.voucherDate,misbill.paidto,ba.accountnumber,"
+                            + " ba.id , bill.id, bill.billnumber ,bill.expenditureType order by ba.id,vmis.departmentcode,vh.voucherNumber ")
                     .addScalar("voucherid", LongType.INSTANCE).addScalar("voucherNumber").addScalar("departmentName")
                     .addScalar("voucherDate").addScalar("paidTo").addScalar("paidAmount", BigDecimalType.INSTANCE)
                     .addScalar("chequeDate").addScalar("bankAccNumber").addScalar("bankAccountId", LongType.INSTANCE)

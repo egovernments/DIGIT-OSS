@@ -61,6 +61,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -68,6 +69,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
@@ -644,7 +646,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
     public String searchRTGS() throws ApplicationException, ParseException {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Starting searchRTGS...");
-        List<ChequeAssignment> rtgsChequeAssignmentList = null;
+        CopyOnWriteArrayList<ChequeAssignment> rtgsChequeAssignmentList = null;
         List<ChequeAssignment> dbpRtgsAssignmentList = null;
         List<ChequeAssignment> rtgsEntry = new ArrayList<ChequeAssignment>();
         rtgsContractorAssignment = true;
@@ -655,7 +657,15 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
         ArrayList<Bankaccount> bankAccntList = new ArrayList<Bankaccount>();
         ChequeAssignment obj = new ChequeAssignment();
 
-        rtgsChequeAssignmentList = paymentService.getPaymentVoucherForRTGSInstrument(parameters, voucherHeader);
+        rtgsChequeAssignmentList = new CopyOnWriteArrayList(paymentService.getPaymentVoucherForRTGSInstrument(parameters, voucherHeader));
+        
+        Iterator<ChequeAssignment> rtgsItr = rtgsChequeAssignmentList.iterator(); 
+        
+        while(rtgsItr.hasNext()){
+            ChequeAssignment cheqA = rtgsItr.next(); 
+            cheqA.setDepartmentName(this.getDepartmentbyId(cheqA.getDepartmentName()).getName());
+        }
+        
         dbpRtgsAssignmentList = paymentService.getDirectBankPaymentVoucherForRTGSInstrument(parameters, voucherHeader);
 
         rtgsChequeAssignmentList.addAll(dbpRtgsAssignmentList);
