@@ -239,7 +239,7 @@
 				<s:if test="%{paymentMode=='rtgs'}">
 					//result= validateForRtgsMode();  
 				</s:if>    
-				document.chequeAssignment.action='/EGF/payment/chequeAssignment-update.action';
+				document.chequeAssignment.action='/services/EGF/payment/chequeAssignment-update.action';
 	    		document.chequeAssignment.submit();
 								 
 				return true;                   

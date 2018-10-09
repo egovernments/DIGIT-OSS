@@ -119,7 +119,7 @@
 
 
 				<input type="button" value="Close"
-					onclick="javascript:window.close()" class="buttonsubmit" />
+					onclick="javascript:window.close();window.parent.postMessage('close','*');" class="buttonsubmit" />
 			</div>
 		</div>
 	</s:form>

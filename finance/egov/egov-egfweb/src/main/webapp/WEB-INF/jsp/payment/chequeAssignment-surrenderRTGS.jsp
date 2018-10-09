@@ -236,7 +236,7 @@ href="/services/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
  		resetSelectedRowsId();
  		disableAll();
  		document.getElementById('button').value='surrender';
- 		document.chequeAssignment.action = '/EGF/payment/chequeAssignment-save.action?containsRTGS=true';
+ 		document.chequeAssignment.action = '/services/EGF/payment/chequeAssignment-save.action?containsRTGS=true';
 		document.chequeAssignment.submit();
 		return true;
  	}
@@ -284,7 +284,7 @@ href="/services/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
 	 	
  		}
 	 	disableAll();
-	 	document.chequeAssignment.action = '/EGF/payment/chequeAssignment-save.action?containsRTGS='+document.getElementById('containsRTGS').value;
+	 	document.chequeAssignment.action = '/services/EGF/payment/chequeAssignment-save.action?containsRTGS='+document.getElementById('containsRTGS').value;
 		document.chequeAssignment.submit();
 		
  	}

@@ -68,6 +68,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -1447,7 +1448,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
         }
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed validateData.");
-        checkMandatory("vouchermis.departmentid", Constants.DEPARTMENT, voucherHeader.getVouchermis().getDepartmentcode(),
+        checkMandatory("vouchermis.departmentcode", Constants.DEPARTMENT, voucherHeader.getVouchermis().getDepartmentcode(),
                 "voucher.department.mandatory");
     }
 
@@ -1503,8 +1504,8 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
                 sql.append(" and  ih.bankAccountId.id=" + bankaccount);
             if (instrumentNumber != null && !instrumentNumber.isEmpty())
                 sql.append(" and  ih.instrumentNumber='" + instrumentNumber + "'");
-            if (department != null && !department.equalsIgnoreCase("-1") && !department.equalsIgnoreCase("0"))
-                sql.append(" and  iv.voucherHeaderId.vouchermis.departmentid.id=" + department);
+            if (department != null /*&& !department.equalsIgnoreCase("-1") && !department.equalsIgnoreCase("0")*/)
+                sql.append(" and  iv.voucherHeaderId.vouchermis.departmentcode='" + department+"'");
             if (voucherHeader.getVoucherNumber() != null && !voucherHeader.getVoucherNumber().isEmpty())
                 sql.append(" and  iv.voucherHeaderId.voucherNumber='" + voucherHeader.getVoucherNumber() + "'");
             final String mainquery = "select ih from  InstrumentVoucher iv ,InstrumentHeader ih ,InstrumentType it where iv.instrumentHeaderId.id =ih.id and ih.instrumentNumber is not null and ih.instrumentType=it.id and ( it.type = 'cheque' or it.type = 'cash' ) and   iv.voucherHeaderId.status=0  and iv.voucherHeaderId.type='"
@@ -1568,7 +1569,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
             if (instrumentNumber != null && !instrumentNumber.isEmpty())
                 sql.append(" and  ih.transactionNumber='" + instrumentNumber + "'");
             if (department != null && !department.equalsIgnoreCase("-1") && !department.equalsIgnoreCase("0"))
-                sql.append(" and  iv.voucherHeaderId.vouchermis.departmentid.id=" + department);
+                sql.append(" and  iv.voucherHeaderId.vouchermis.departmentcode='" + department+"'");
             if (voucherHeader.getVoucherNumber() != null && !voucherHeader.getVoucherNumber().isEmpty())
                 sql.append(" and  iv.voucherHeaderId.voucherNumber='" + voucherHeader.getVoucherNumber() + "'");
             final String mainquery = "select ih from  InstrumentVoucher iv,InstrumentHeader ih ,InstrumentType it where iv.instrumentHeaderId.id =ih.id and ih.transactionNumber is not null and ih.instrumentType=it.id and it.type = 'advice' and   iv.voucherHeaderId.status=0  and iv.voucherHeaderId.type='"
@@ -1659,12 +1660,27 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
         final Bankaccount account = (Bankaccount) persistenceService.find("from Bankaccount where id=?", bankaccount.longValue());
         bank_account_dept = account.getBankbranch().getBank().getName() + "-" + account.getBankbranch().getBranchname()
                 + "-" + account.getAccountnumber();
+       
         if (department != null && !department.equalsIgnoreCase("-1") && !department.equalsIgnoreCase("0")) {
-            final Department dept = (Department) persistenceService.find("from Department where code=?", department);
+//            final Department dept = (Department) persistenceService.find("from Department where code=?", department);
+            org.egov.infra.microservice.models.Department dept = this.getDepartmentbyId(department);
             bank_account_dept = bank_account_dept + "-" + dept.getName();
         }
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed getheader.");
+    }
+    
+    private org.egov.infra.microservice.models.Department getDepartmentbyId(String departmentCode){
+        
+        List<org.egov.infra.microservice.models.Department> departments= this.masterDataCache.get("egi-department");
+       
+        if(null!=departments && !departments.isEmpty()){
+        List<org.egov.infra.microservice.models.Department> selecteddept = departments.stream().filter(department->department.getCode().equalsIgnoreCase(departmentCode)).collect(Collectors.toList());     
+         if(!selecteddept.isEmpty())
+             return selecteddept.get(0);
+        }
+        
+        return new org.egov.infra.microservice.models.Department();
     }
 
     @SkipValidation

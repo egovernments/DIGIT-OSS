@@ -1895,9 +1895,9 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                                     + " ON (pvh.id    =iv.VOUCHERHEADERID) WHERE ph.voucherheaderid  =misbill.payvhid AND ph.voucherheaderid    =vh.id AND vh.name  ='"
                                     + FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK + "'"
                                     + " AND vmis.voucherheaderid  = vh.id  AND vh.status   =" + approvedstatus + sql
-                                    + " AND dept.code = vmis.departmentcode AND pvh.id      =vh.id AND iv.id     IS NULL"
+                                    + " AND pvh.id      =vh.id AND iv.id     IS NULL"
 //                                    + " AND dept.id  = vmis.departmentid AND ph.bankaccountnumberid= ba.id GROUP BY vh.id,   vh.voucherNumber,  dept.name , "
-                                    + " AND ph.bankaccountnumberid= ba.id GROUP BY vh.id,   vh.voucherNumber,  dept.name , "
+                                    +" AND dept.code  = vmis.departmentcode AND ph.bankaccountnumberid= ba.id GROUP BY vh.id,   vh.voucherNumber,  dept.name , "
                                     + " vh.voucherDate,  misbill.paidto,ba.accountnumber,  ba.id,vh.name"
                                     + " UNION SELECT vh.id  AS voucherid ,vh.voucherNumber AS voucherNumber ,dept.name AS departmentName,vh.voucherDate          AS voucherDate ,"
                                     + "  misbill.paidto          AS paidTo, SUM(misbill.paidamount) AS paidAmount, current_date   AS chequeDate,ba.accountnumber  AS bankAccNumber,"

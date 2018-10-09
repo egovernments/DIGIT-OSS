@@ -207,7 +207,7 @@
 							onclick="return Reassign();" method="save" />
 					</s:if>
 					<input type="button" value="Close"
-						onclick="javascript:window.close()" class="button" />
+						onclick="javascript:window.close();window.parent.postMessage('close','*');" class="button" />
 				</div>
 			</s:if>
 			<s:else>
@@ -273,7 +273,7 @@
  		resetSelectedRowsId();
  		disableAll();
  		document.getElementById('button').value='surrender';
- 		document.chequeAssignment.action = '/EGF/payment/chequeAssignment-save.action';
+ 		document.chequeAssignment.action = '/services/EGF/payment/chequeAssignment-save.action';
 		document.chequeAssignment.submit();
 		 return true;
 		
@@ -330,7 +330,7 @@
 	 	
  		}
 	 	disableAll();
-	 	document.chequeAssignment.action = '/EGF/payment/chequeAssignment-save.action?containsRTGS='+document.getElementById('containsRTGS').value;
+	 	document.chequeAssignment.action = '/services/EGF/payment/chequeAssignment-save.action?containsRTGS='+document.getElementById('containsRTGS').value;
 		document.chequeAssignment.submit();
 		
  	}

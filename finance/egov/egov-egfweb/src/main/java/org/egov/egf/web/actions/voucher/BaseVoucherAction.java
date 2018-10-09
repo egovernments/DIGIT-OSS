@@ -133,7 +133,7 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 	Map<String, List<String>> voucherNames = VoucherHelper.VOUCHER_TYPE_NAMES;
 
 	@Autowired
-	private EgovMasterDataCaching masterDataCache;
+	protected EgovMasterDataCaching masterDataCache;
 	@Autowired
 	protected AppConfigValueService appConfigValuesService;
 
