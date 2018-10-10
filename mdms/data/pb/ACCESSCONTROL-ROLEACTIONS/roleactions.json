@@ -15715,6 +15715,12 @@
       "actionid": 696,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "SYS_INTEGRATOR_FINANCE",
+      "actionid": 743,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
