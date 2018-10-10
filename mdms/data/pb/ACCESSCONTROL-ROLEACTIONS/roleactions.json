@@ -15691,6 +15691,30 @@
       "actionid": 604,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "SYS_INTEGRATOR_WATER_SEW",
+      "actionid": 926,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SYS_INTEGRATOR_FINANCE",
+      "actionid": 926,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SYS_INTEGRATOR_WATER_SEW",
+      "actionid": 696,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SYS_INTEGRATOR_FINANCE",
+      "actionid": 696,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
