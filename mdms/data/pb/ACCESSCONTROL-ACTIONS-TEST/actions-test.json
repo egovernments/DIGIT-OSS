@@ -11513,7 +11513,7 @@
     {
       "id": 1590,
       "name": "Collection Search Reciept",
-      "url": "/tR-services/receipts/_search",
+      "url": "/collection-services/receipts/_search",
       "displayName": "Search Reciept",
       "orderNumber": 1,
       "enabled": false,
