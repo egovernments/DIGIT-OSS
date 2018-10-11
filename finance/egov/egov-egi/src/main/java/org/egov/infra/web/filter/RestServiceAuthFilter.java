@@ -1,6 +1,6 @@
 package org.egov.infra.web.filter;
 
-import static org.egov.infra.utils.ApplicationConstant.MS_ADMIN_TOKEN;
+import static org.egov.infra.utils.ApplicationConstant.MS_USER_TOKEN;
 import static org.egov.infra.utils.ApplicationConstant.MS_TENANTID_KEY;
 
 import java.io.IOException;
@@ -145,9 +145,8 @@ public class RestServiceAuthFilter implements Filter {
 
     private Authentication prepareAuthenticationObj(HttpServletRequest request, CurrentUser user) {
 
-    	 // TOD-DO - Mani : what is this dummy ?
     	
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, "dummy",
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, " ",
                 user.getAuthorities());
         WebAuthenticationDetails details = new WebAuthenticationDetails(request);
         auth.setDetails(details);
@@ -161,10 +160,9 @@ public class RestServiceAuthFilter implements Filter {
         if (user_token == null)
             throw new Exception("AuthToken not found");
         HttpSession session = request.getSession();
-        // TOD-DO - Mani :  This should be saved in redis and used multitime. If token expired then only regenerate
-        String admin_token = this.microserviceUtils.generateAdminToken();
+        String admin_token = this.microserviceUtils.generateAdminToken("pb.jalandhar");
         // TOD-DO - Mani : Handle null of admin token else if password or some thing changed you dont know why it is failing
-        session.setAttribute(MS_ADMIN_TOKEN, admin_token);
+        session.setAttribute(MS_USER_TOKEN, admin_token);
         CustomUserDetails user = this.microserviceUtils.getUserDetails(user_token, admin_token);
         // TOD-DO - Mani : This should be requestInfo tenantId;
         session.setAttribute(MS_TENANTID_KEY, user.getTenantId());
@@ -175,15 +173,13 @@ public class RestServiceAuthFilter implements Filter {
 
     private User parepareCurrentUser(UserSearchResponseContent userinfo) {
 
-    	   //TOD-DO - Mani :  why this hard coding ? how about SI ?
-        User user = new User(UserType.EMPLOYEE);
+        User user = new User(UserType.valueOf(userinfo.getType().toUpperCase()));
         user.setId(userinfo.getId());
         user.setUsername(userinfo.getUserName());
         user.setActive(userinfo.getActive());
         user.setAccountLocked(userinfo.getAccountLocked());
-        user.setGender(Gender.FEMALE);
-        //TOD-DO - Mani :  why this hard coding ?
-        user.setPassword("demo");
+        user.setGender(Gender.valueOf(userinfo.getGender().toUpperCase()));
+        user.setPassword(" ");
         user.setName(userinfo.getName());
         user.setPwdExpiryDate(userinfo.getPwdExpiryDate());
         user.setLocale(userinfo.getLocale());

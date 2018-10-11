@@ -62,7 +62,7 @@ import static org.egov.infra.security.utils.SecurityConstants.SESSION_COOKIE_NAM
 import static org.egov.infra.security.utils.SecurityConstants.SESSION_COOKIE_PATH;
 
 @Configuration
-@EnableRedisHttpSession
+@EnableRedisHttpSession(/*maxInactiveIntervalInSeconds=30*/)
 public class RedisHttpSessionConfiguration {
 
     @Bean
@@ -87,6 +87,7 @@ public class RedisHttpSessionConfiguration {
 
     @Bean
     public UserSessionDestroyListener httpSessionEventPublisher() {
+        System.out.println("****************************** UserSessionDestroyListener object created *******************");
         return new UserSessionDestroyListener();
     }
 }

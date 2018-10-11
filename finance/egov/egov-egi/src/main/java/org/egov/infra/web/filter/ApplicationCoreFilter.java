@@ -61,7 +61,7 @@ import static org.egov.infra.utils.ApplicationConstant.CITY_CODE_KEY;
 import static org.egov.infra.utils.ApplicationConstant.CITY_CORP_NAME_KEY;
 import static org.egov.infra.utils.ApplicationConstant.CITY_NAME_KEY;
 import static org.egov.infra.utils.ApplicationConstant.COMMA;
-import static org.egov.infra.utils.ApplicationConstant.MS_ADMIN_TOKEN;
+import static org.egov.infra.utils.ApplicationConstant.MS_USER_TOKEN;
 import static org.egov.infra.utils.ApplicationConstant.MS_TENANTID_KEY;
 import static org.egov.infra.utils.ApplicationConstant.TENANTID_KEY;
 import static org.egov.infra.utils.ApplicationConstant.UNKNOWN;
@@ -183,7 +183,7 @@ public class ApplicationCoreFilter implements Filter {
         ApplicationThreadLocals.setUserId((Long) session.getAttribute(USERID_KEY));
         ApplicationThreadLocals.setIPAddress((String) session.getAttribute(IP_ADDRESS));
         ApplicationThreadLocals.setUserTenantId((String) session.getAttribute(MS_TENANTID_KEY));
-        ApplicationThreadLocals.setAdminToken((String)session.getAttribute(MS_ADMIN_TOKEN));
+        ApplicationThreadLocals.setUserToken((String)session.getAttribute(MS_USER_TOKEN));
     }
 
     private void prepareRequestOriginDetails(HttpSession session, HttpServletRequest request) {

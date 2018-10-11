@@ -1172,7 +1172,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
         final String url = hostUrl + demandCreateUrl;
         RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setAuthToken(microserviceUtils.getAdminToken());
+        requestInfo.setAuthToken(microserviceUtils.getUserToken());
         request.setRequestInfo(requestInfo);
 
         Demand demand = new Demand();
@@ -1215,7 +1215,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
                 + service + "&consumerCode=" + consumerCode;
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
         RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setAuthToken(microserviceUtils.getAdminToken());
+        requestInfo.setAuthToken(microserviceUtils.getUserToken());
         reqWrapper.setRequestInfo(requestInfo);
         return restTemplate.postForObject(url, reqWrapper, BillResponse.class);
     }
@@ -1226,7 +1226,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         final String url = hostUrl + receiptCreateUrl;
         ReceiptRequest request = new ReceiptRequest();
         RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setAuthToken(microserviceUtils.getAdminToken());
+        requestInfo.setAuthToken(microserviceUtils.getUserToken());
         requestInfo.setUserInfo(new UserInfo());
         requestInfo.getUserInfo().setId(ApplicationThreadLocals.getUserId());
         Receipt receipt = new Receipt();

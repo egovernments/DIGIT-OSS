@@ -106,7 +106,7 @@
 		id="paidTo" maxlength="250" data-pattern="alphanumericwithspaceanddot"
 			cssStyle="text-align:right"/></td>
 </tr>
-<tr>
+<%-- <tr>
 	<td class="bluebox"></td>
 	<td class="bluebox"><s:text name="link.ref.number" /><span
 		class="bluebox"></td>
@@ -118,7 +118,7 @@
 			name="commonBean.documentId" id="commonBean.documentId" /></td>
 	<TD></TD>
 	<TD></TD>
-</tr>
+</tr> --%>
 <tr>
 	<td class="greybox"></td>
 	<td class="greybox"><s:text name="document.number" /><span

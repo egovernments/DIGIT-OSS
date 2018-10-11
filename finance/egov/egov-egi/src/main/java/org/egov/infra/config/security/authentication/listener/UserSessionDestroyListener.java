@@ -55,6 +55,7 @@ import org.egov.infra.security.audit.service.LoginAuditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import javax.servlet.http.HttpSession;
@@ -75,6 +76,9 @@ public class UserSessionDestroyListener implements HttpSessionListener {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
 
     @Autowired
     @Qualifier("entityValidator")
@@ -90,6 +94,12 @@ public class UserSessionDestroyListener implements HttpSessionListener {
 
     @Override
     public void sessionDestroyed(HttpSessionEvent event) {
+        
+       
+       Object auth_token =  redisTemplate.opsForHash().get(event.getSession().getId(), "auth_token");
+        redisTemplate.delete(event.getSession().getId());
+        redisTemplate.delete(auth_token);
+                
         if (masterServer)
             auditUserLogin(event.getSession());
     }

@@ -59,7 +59,7 @@ public class ApplicationThreadLocals {
     private static ThreadLocal<String> domainURL = new ThreadLocal<>();
     private static ThreadLocal<String> ipAddress = new ThreadLocal<>();
     private static ThreadLocal<String> userTenantId = new ThreadLocal<>();
-    private static ThreadLocal<String> adminToken = new ThreadLocal<>();
+    private static ThreadLocal<String> userToken = new ThreadLocal<>();
     
     private ApplicationThreadLocals() {
         //Not to be initialized
@@ -137,13 +137,13 @@ public class ApplicationThreadLocals {
     	userTenantId.set(tenantId);
     }
     
-    public static String getAdminToken(){
+    public static String getUserToken(){
     	
-    	return adminToken.get();
+    	return userToken.get();
     }
     
-    public static void setAdminToken(String token){
-    	adminToken.set(token);
+    public static void setUserToken(String token){
+    	userToken.set(token);
     }
     
     public static void clearValues() {
@@ -156,6 +156,6 @@ public class ApplicationThreadLocals {
         domainURL.remove();
         ipAddress.remove();
         userTenantId.remove();
-        adminToken.remove();
+        userToken.remove();
     }
 }

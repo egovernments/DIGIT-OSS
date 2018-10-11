@@ -91,7 +91,7 @@ public final class ApplicationConstant {
     public static final String SYSTEM_USERNAME = "system";
     public static final String TENANTID_KEY = "tenant_id";
     public static final String MS_TENANTID_KEY="ms_tenant_id";
-    public static final String MS_ADMIN_TOKEN="ms_admin_token";
+    public static final String MS_USER_TOKEN="ms_user_token";
 
     public static final String CONTENT_DISPOSITION_ATTACH = "attachment;filename=%s";
     public static final String CONTENT_DISPOSITION_INLINE = "inline;filename=%s";

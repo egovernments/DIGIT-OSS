@@ -168,7 +168,8 @@ public class ContractorService implements EntityTypeService {
     @Override
     public List<? extends org.egov.commons.utils.EntityType> getAllActiveEntities(Integer accountDetailTypeId) {
         // TODO Auto-generated method stub
-        return null;
+        
+        return contractorRepository.findAll();
     }
 
     @Override
@@ -180,6 +181,8 @@ public class ContractorService implements EntityTypeService {
     @Override
     public List getAssetCodesForProjectCode(Integer accountdetailkey) throws ValidationException {
         // TODO Auto-generated method stub
+       
+        
         return null;
     }
 

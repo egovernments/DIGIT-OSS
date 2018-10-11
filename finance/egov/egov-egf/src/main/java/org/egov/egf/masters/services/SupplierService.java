@@ -179,7 +179,7 @@ public class SupplierService implements EntityTypeService {
     @Override
     public List getAssetCodesForProjectCode(Integer accountdetailkey) throws ValidationException {
         // TODO Auto-generated method stub
-        return null;
+        return supplierRepository.findAll();
     }
 
     @Override

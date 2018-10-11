@@ -60,6 +60,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
@@ -127,6 +128,9 @@ public class MicroserviceUtils {
 
     @Autowired
     private SecurityUtils securityUtils;
+    
+//    @Autowired
+//    private RestTemplate restTemplate;
 
     @Autowired
     private Environment environment;
@@ -215,7 +219,8 @@ public class MicroserviceUtils {
 
     public RestTemplate createRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setErrorHandler(new RestErrorHandler());
+//        if(restTemplate.getErrorHandler() == null)
+            restTemplate.setErrorHandler(new RestErrorHandler());
         return restTemplate;
     }
 
@@ -240,11 +245,11 @@ public class MicroserviceUtils {
         return tenantId;
     }
 
-    public String getAdminToken() {
-        String adminToken = ApplicationThreadLocals.getAdminToken();
-        if (adminToken == null)
-            adminToken = this.generateAdminToken();
-        return adminToken;
+    public String getUserToken() {
+        String userToken = ApplicationThreadLocals.getUserToken();
+//        if (adminToken == null)
+//            adminToken = this.generateAdminToken(ApplicationThreadLocals.getUserTenantId());
+        return userToken;
     }
 
     public void createUserMicroservice(final User user) {
@@ -280,7 +285,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call :" + dept_url);
@@ -296,7 +301,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call:" + dept_url);
@@ -311,7 +316,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call:" + dept_url);
@@ -335,7 +340,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
 
@@ -361,7 +366,7 @@ public class MicroserviceUtils {
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
         // tenantId=default&assignment.departmentId=1&assignment.designationId=1&asOnDate=28/07/2018
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
 
@@ -379,7 +384,7 @@ public class MicroserviceUtils {
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call:" + employee_by_position_url);
@@ -405,7 +410,7 @@ public class MicroserviceUtils {
         return user;
     }
 
-    public String generateAdminToken() {
+    public String generateAdminToken(String tenantId) {
         final RestTemplate restTemplate = createRestTemplate();
 
         HttpHeaders header = new HttpHeaders();
@@ -418,7 +423,7 @@ public class MicroserviceUtils {
         map.add("password", this.siPassword);
         map.add("grant_type", this.siGrantType);
         //TOD-DO - Mani :  why this hard coding ?
-        map.add("tenantId", "pb.jalandhar");
+        map.add("tenantId", tenantId);
         map.add("userType", this.siUserType);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, header);
@@ -506,7 +511,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
 
@@ -530,7 +535,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
         EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper, EmployeeInfoResponse.class);
@@ -561,7 +566,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call:" + bc_url);
@@ -580,7 +585,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
 
@@ -597,7 +602,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
 
@@ -617,7 +622,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
 
@@ -636,7 +641,7 @@ public class MicroserviceUtils {
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         reqWrapper.setRequestInfo(requestInfo);
         TaxHeadMasterResponse response = restTemplate.postForObject(url, reqWrapper, TaxHeadMasterResponse.class);
         return response.getTaxHeadMasters();
@@ -651,7 +656,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         reqWrapper.setRequestInfo(requestInfo);
 
         TaxHeadMasterResponse response = restTemplate.postForObject(url, reqWrapper, TaxHeadMasterResponse.class);
@@ -667,7 +672,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         reqWrapper.setRequestInfo(requestInfo);
 
         GlCodeMasterResponse response = restTemplate.postForObject(url, reqWrapper, GlCodeMasterResponse.class);
@@ -683,7 +688,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         reqWrapper.setRequestInfo(requestInfo);
 
         TaxPeriodResponse response = restTemplate.postForObject(url, reqWrapper, TaxPeriodResponse.class);
@@ -702,7 +707,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
-        requestInfo.setAuthToken(getAdminToken());
+        requestInfo.setAuthToken(getUserToken());
         reqWrapper.setRequestInfo(requestInfo);
 
         InstrumentAccountCodeResponse response = restTemplate.postForObject(url, reqWrapper, InstrumentAccountCodeResponse.class);
@@ -774,6 +779,10 @@ public class MicroserviceUtils {
 
     public void savetoRedis(String sessionId, String key, Object obj) {
         redisTemplate.opsForHash().putIfAbsent(sessionId, key, obj);
+    }
+    
+    public void setExpire(String key){
+        redisTemplate.expire(key, 30, TimeUnit.MINUTES);
     }
 
     public Object readFromRedis(String sessionId, String key) {

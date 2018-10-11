@@ -1,6 +1,6 @@
 package org.egov.infra.config.security.repository;
 
-import static org.egov.infra.utils.ApplicationConstant.MS_ADMIN_TOKEN;
+import static org.egov.infra.utils.ApplicationConstant.MS_USER_TOKEN;
 import static org.egov.infra.utils.ApplicationConstant.MS_TENANTID_KEY;
 
 import java.io.IOException;
@@ -114,13 +114,15 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 
     private User getUserDetails(HttpServletRequest request) throws Exception {
         String user_token = null;
+        String tenantid = null;
         user_token = request.getParameter("auth_token");
+        tenantid = request.getParameter("tenantId");
         LOGGER.info(" *** authtoken "+user_token);
         if (user_token == null)
             throw new Exception("AuthToken not found");
         HttpSession session = request.getSession();
-        String admin_token = this.microserviceUtils.generateAdminToken();
-        session.setAttribute(MS_ADMIN_TOKEN, admin_token);
+        String admin_token = this.microserviceUtils.generateAdminToken(tenantid);
+        session.setAttribute(MS_USER_TOKEN, user_token);
         CustomUserDetails user = this.microserviceUtils.getUserDetails(user_token, admin_token);
         if(null==user || user.getId()==null)
             throw new Exception("Invalid Token");
@@ -131,19 +133,22 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
         this.microserviceUtils.savetoRedis(session.getId(), "auth_token", user_token);
         this.microserviceUtils.savetoRedis(session.getId(), "_details", user);
         this.microserviceUtils.saveAuthToken(user_token, session.getId());
+//        this.microserviceUtils.setExpire(session.getId());
+//        this.microserviceUtils.setExpire(user_token);
+        
 
         return this.parepareCurrentUser(response.getUserSearchResponseContent().get(0));
     }
 
 	private User parepareCurrentUser(UserSearchResponseContent userinfo) {
 
-		User user = new User(UserType.EMPLOYEE);
+		User user = new User(UserType.valueOf(userinfo.getType().toUpperCase()));
 		user.setId(userinfo.getId());
 		user.setUsername(userinfo.getUserName());
 		user.setActive(userinfo.getActive());
 		user.setAccountLocked(userinfo.getAccountLocked());
-		user.setGender(Gender.FEMALE);
-		user.setPassword("demo");
+		user.setGender(Gender.valueOf(userinfo.getGender().toUpperCase()));
+		user.setPassword(" ");
 		user.setName(userinfo.getName());
 		user.setPwdExpiryDate(userinfo.getPwdExpiryDate());
 		user.setLocale(userinfo.getLocale());
