@@ -12719,6 +12719,19 @@
       "code": "null",
       "navigationURL": "tradelicense/search",
       "path": "TradeLicense.Application"
+    },
+    {
+      "id": 1691,
+      "name": "Misc.Receipts",
+      "url": "url",
+      "displayName": "Miscellaneous Receipts",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "Collections",
+      "code": "null",
+      "navigationURL": "services/collection/receipts/receipt-newform.action?Receipt=Misc#no-back-button",
+      "path": "Collections.Miscellaneous Receipts"
     }
   ]
 }

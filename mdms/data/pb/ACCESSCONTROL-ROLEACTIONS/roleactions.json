@@ -16285,6 +16285,18 @@
    "actionid": 1589,
    "actioncode": "",
    "tenantId": "pb"
+ },
+ {
+   "rolecode": "SUPERUSER",
+   "actionid": 1691,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_RECEIPT_CREATOR",
+   "actionid": 1691,
+   "actioncode": "",
+   "tenantId": "pb"
  }
   ]
 }
