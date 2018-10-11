@@ -15764,13 +15764,7 @@
       "actioncode": "",
       "tenantId": "pb"
     },
-    {
-      "rolecode": "EGF-BILL_CREATOR",
-      "actionid": 696,
-      "actioncode": "",
-      "tenantId": "pb"
-    },
-    {
+     {
       "rolecode": "EGF-BILL_CREATOR",
       "actionid": 743,
       "actioncode": "",
