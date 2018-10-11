@@ -1266,7 +1266,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
                         ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId().getId().longValue()
                         : null);
         instrument.setBranchName(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankBranchName());
-
+        instrument.setTenantId(tenantId);     
         receipt.setInstrument(instrument);
         receipt.getBill().get(0).setPaidBy(receiptHeader.getPaidBy());
         receipt.getBill().get(0).setPayeeAddress(receiptHeader.getPayeeAddress());
