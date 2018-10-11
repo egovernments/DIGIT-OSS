@@ -48,22 +48,6 @@
 
 package org.egov.infra.admin.master.service;
 
-import org.egov.infra.admin.master.entity.City;
-import org.egov.infra.admin.master.repository.CityRepository;
-import org.egov.infra.notification.service.NotificationService;
-import org.egov.infra.utils.FileStoreUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-
 import static java.lang.String.format;
 import static org.egov.infra.config.core.ApplicationThreadLocals.getDomainName;
 import static org.egov.infra.config.core.ApplicationThreadLocals.getDomainURL;
@@ -75,6 +59,23 @@ import static org.egov.infra.utils.ApplicationConstant.CITY_CORP_NAME_KEY;
 import static org.egov.infra.utils.ApplicationConstant.CITY_DIST_NAME_KEY;
 import static org.egov.infra.utils.ApplicationConstant.CITY_LOGO_FS_UUID_KEY;
 import static org.egov.infra.utils.ApplicationConstant.CITY_LOGO_URL;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.egov.infra.admin.master.entity.City;
+import org.egov.infra.admin.master.repository.CityRepository;
+import org.egov.infra.notification.service.NotificationService;
+import org.egov.infra.utils.FileStoreUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)

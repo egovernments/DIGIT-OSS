@@ -1241,16 +1241,16 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
                 receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate() != null
                         ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate().getTime()
                         : null);
-        instrument
-                .setTransactionDateInput(
-                        receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate() != null
-                                ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate()
-                                        .getTime()
-                                : (receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0)
-                                        .getInstrumentDate() != null
-                                                ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0)
-                                                        .getInstrumentDate().getTime()
-                                                : null));
+
+        Long transactionDateInput = null;
+        transactionDateInput = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate() != null
+                ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate().getTime() : null;
+        if (transactionDateInput == null && receiptHeader.getInstruments(receiptHeader.getInstrumentType()) != null
+                && receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate() != null) {
+            transactionDateInput = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate()
+                    .getTime();
+        }
+        instrument.setTransactionDateInput(transactionDateInput);
         instrument.setTransactionNumber(
                 receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionNumber() != null
                         ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionNumber()
