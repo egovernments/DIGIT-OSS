@@ -16165,7 +16165,126 @@
    "actionid": 1631,
    "actioncode": "",
    "tenantId": "pb"
+ },
+ {
+   "rolecode": "EMPLOYEE",
+   "actionid": 1601,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "EMPLOYEE",
+   "actionid": 604,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_RECEIPT_CREATOR",
+   "actionid": 709,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_RECEIPT_CREATOR",
+   "actionid": 719,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_RECEIPT_CREATOR",
+   "actionid": 1657,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_RECEIPT_CREATOR",
+   "actionid": 1676,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_RECEIPT_CREATOR",
+   "actionid": 705,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_RECEIPT_CREATOR",
+   "actionid": 575,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_RECEIPT_CREATOR",
+   "actionid": 710,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_RECEIPT_CREATOR",
+   "actionid": 722,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_RECEIPT_CREATOR",
+   "actionid": 1589,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+{
+   "rolecode": "COLL_REMIT_TO_BANK",
+   "actionid": 709,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_REMIT_TO_BANK",
+   "actionid": 719,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_REMIT_TO_BANK",
+   "actionid": 1657,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_REMIT_TO_BANK",
+   "actionid": 1676,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_REMIT_TO_BANK",
+   "actionid": 705,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_REMIT_TO_BANK",
+   "actionid": 575,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_REMIT_TO_BANK",
+   "actionid": 710,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_REMIT_TO_BANK",
+   "actionid": 722,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_REMIT_TO_BANK",
+   "actionid": 1589,
+   "actioncode": "",
+   "tenantId": "pb"
  }
-
   ]
 }
