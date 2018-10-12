@@ -82,8 +82,6 @@ import org.egov.infra.microservice.contract.UserRequest;
 import org.egov.infra.microservice.contract.UserSearchRequest;
 import org.egov.infra.microservice.contract.UserSearchResponse;
 import org.egov.infra.microservice.models.Assignment;
-import org.egov.infra.microservice.models.BankAccountServiceMapping;
-import org.egov.infra.microservice.models.BankAccountServiceMappingResponse;
 import org.egov.infra.microservice.models.BusinessCategory;
 import org.egov.infra.microservice.models.BusinessCategoryResponse;
 import org.egov.infra.microservice.models.BusinessDetails;
@@ -213,8 +211,8 @@ public class MicroserviceUtils {
     @Value("${egov.services.billing.service.taxperiods.search}")
     private String taxperiodsSearchUrl;
 
-    @Value("${egov.services.collection.master.basm.search}")
-    private String bankAccountServiceMappingSearchUrl;
+    /*@Value("${egov.services.collection.master.basm.search}")
+    private String bankAccountServiceMappingSearchUrl;*/
 
     public RequestInfo createRequestInfo() {
         final RequestInfo requestInfo = new RequestInfo();
@@ -727,7 +725,7 @@ public class MicroserviceUtils {
             return null;
     }
 
-    public List<BankAccountServiceMapping> getBankAcntServiceMappings() {
+   /* public List<BankAccountServiceMapping> getBankAcntServiceMappings() {
 
         final RestTemplate restTemplate = createRestTemplate();
 
@@ -745,7 +743,7 @@ public class MicroserviceUtils {
             return response.getBankAccountServiceMapping();
         else
             return null;
-    }
+    }*/
 
     public List<Task> getTasks() {
 
