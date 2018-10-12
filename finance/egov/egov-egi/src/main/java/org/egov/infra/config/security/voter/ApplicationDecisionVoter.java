@@ -39,31 +39,10 @@ public class ApplicationDecisionVoter implements AccessDecisionVoter<Object>{
 	@Override
 	public int vote(Authentication authentication, Object object, Collection attributes) {
 		
-	    System.out.println("*************************** auth value in decision voter***********"+ authentication);
 	    if(null==authentication || ! (authentication.getPrincipal() instanceof CurrentUser))
 	        return ACCESS_DENIED;
-		/*try {
-			String sessionId = ((WebAuthenticationDetails)auth.getDetails()).getSessionId(),
-				   current_url = String.valueOf(object);
-				
-			CustomUserDetails userDetails = (CustomUserDetails) this.msUtil.readFromRedis(sessionId, "_details");
 			
-			if(userDetails==null)
-				return ACCESS_DENIED;
-			
-			Iterator<ActionT> actlistItr = userDetails.getActions().iterator();
-			
-			while(actlistItr.hasNext()){
-				ActionT action = actlistItr.next();
-				if(action.getUrl().equalsIgnoreCase(current_url)){
-					  return ACCESS_GRANTED;
-				  }
-			}
-		} catch (Exception e) {
-			return ACCESS_DENIED;
-		}*/
-		
-		return ACCESS_GRANTED;
+	return ACCESS_GRANTED;
 	}
 
 }

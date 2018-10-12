@@ -13,6 +13,8 @@ import org.egov.infra.web.support.ui.Inbox;
 import org.egov.infra.workflow.entity.StateAware;
 import org.egov.infra.workflow.inbox.InboxRenderServiceDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,11 +67,19 @@ public class MSCommController {
 	}
 	
 	@RequestMapping(value="/rest/ClearToken",method=RequestMethod.POST)
-	private void logout(@RequestBody RequestInfoWrapper request){
+	@ResponseBody
+	private ResponseEntity logout(@RequestBody RequestInfoWrapper request){
+	    try{
 	    String access_token = request.getRequestInfo().getAuthToken();
+	    
 		if(null != access_token){
 			microserviceUtils.removeSessionFromRedis(access_token);
 		}
+	    }catch(Exception ex){
+	        
+	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	    }
+	    return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 //	@RequestMapping(value="/refreshToken",method=RequestMethod.POST)

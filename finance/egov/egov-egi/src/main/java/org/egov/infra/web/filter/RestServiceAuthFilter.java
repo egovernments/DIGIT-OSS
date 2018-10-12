@@ -80,7 +80,17 @@ public class RestServiceAuthFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
         LOGGER.info("Rest service authentication initiated");
-        RestRequestWrapper request = new RestRequestWrapper((HttpServletRequest)req);
+        
+        HttpServletRequest httpRequest = (HttpServletRequest)req;
+        
+        if (httpRequest.getRequestURI().contains("/ClearToken"))
+        {
+            LOGGER.info("Clear Token request recieved ");
+            httpRequest.getRequestDispatcher(httpRequest.getServletPath()).forward(req, res);
+        }
+        else{
+        
+        RestRequestWrapper request = new RestRequestWrapper(httpRequest);
         
         try {
             CurrentUser user = new CurrentUser(this.getUserDetails(request));
@@ -94,7 +104,7 @@ public class RestServiceAuthFilter implements Filter {
             res.getWriter().write(getErrorResponse(e.getMessage()));  
            
         }
-        
+        }
         LOGGER.info("Rest service authentication completed");
         
  

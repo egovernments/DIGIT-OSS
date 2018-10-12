@@ -744,7 +744,7 @@ public class MicroserviceUtils {
         else
             return null;
     }*/
-
+    
     public List<Task> getTasks() {
 
         List<Task> tasks = new ArrayList<>();
@@ -818,12 +818,17 @@ public class MicroserviceUtils {
     }
 
     public void removeSessionFromRedis(String access_token) {
-        LOGGER.info("Deleting token from redis :: " + access_token);
-        if (redisTemplate.hasKey(access_token)) {
+        LOGGER.info("Logout for authtoken : " + access_token);
+        if (null!=access_token && redisTemplate.hasKey(access_token)) {
             String sessionId = String.valueOf(redisTemplate.opsForValue().get(access_token));
-            redisTemplate.delete(sessionId);
+            if(sessionId!=null)
+                redisTemplate.delete(sessionId);
+            else
+                LOGGER.info("session not found in redis for : "+access_token);
             redisTemplate.delete(access_token);
         }
+        else
+            LOGGER.info("authtoken not found in redis : "+access_token);
 
     }
 

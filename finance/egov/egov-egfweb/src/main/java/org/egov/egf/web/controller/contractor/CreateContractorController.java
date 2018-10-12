@@ -181,7 +181,7 @@ public class CreateContractorController {
 		return gson.toJson(object);
 	}
 
-	@RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
 	public String result(@PathVariable("id") final Long id,@PathVariable("mode") final String mode, final Model model) {
 		final Contractor contractor = contractorService.getById(id);
 		model.addAttribute("contractor", contractor);

@@ -147,7 +147,7 @@ public class AccountEntityController {
 		return ACCOUNTENTITY_VIEW;
 	}
 
-	@RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
 	public String result(@PathVariable("id") final Integer id,@PathVariable("mode") final String mode, Model model) {
 		AccountEntity accountEntity = accountEntityService.findOne(id);
 		model.addAttribute("accountEntity", accountEntity);
