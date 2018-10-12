@@ -11479,7 +11479,7 @@
     {
       "id": 1587,
       "name": "bankAccountServiceMapping search",
-      "url": "/collection/bankAccountServiceMapping/_search",
+      "url": "/collection-masters/bankAccountServiceMapping/_search",
       "displayName": "BankAccountServiceMapping Create",
       "orderNumber": 1,
       "parentModule": null,
