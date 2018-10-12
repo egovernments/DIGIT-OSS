@@ -82,6 +82,8 @@ import org.egov.infra.microservice.contract.UserRequest;
 import org.egov.infra.microservice.contract.UserSearchRequest;
 import org.egov.infra.microservice.contract.UserSearchResponse;
 import org.egov.infra.microservice.models.Assignment;
+import org.egov.infra.microservice.models.BankAccountServiceMapping;
+import org.egov.infra.microservice.models.BankAccountServiceMappingResponse;
 import org.egov.infra.microservice.models.BusinessCategory;
 import org.egov.infra.microservice.models.BusinessCategoryResponse;
 import org.egov.infra.microservice.models.BusinessDetails;
@@ -115,7 +117,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -123,8 +124,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class MicroserviceUtils {
@@ -134,9 +133,9 @@ public class MicroserviceUtils {
 
     @Autowired
     private SecurityUtils securityUtils;
-    
-//    @Autowired
-//    private RestTemplate restTemplate;
+
+    // @Autowired
+    // private RestTemplate restTemplate;
 
     @Autowired
     private Environment environment;
@@ -214,23 +213,21 @@ public class MicroserviceUtils {
     @Value("${egov.services.billing.service.taxperiods.search}")
     private String taxperiodsSearchUrl;
 
+    @Value("${egov.services.collection.master.basm.search}")
+    private String bankAccountServiceMappingSearchUrl;
+
     public RequestInfo createRequestInfo() {
         final RequestInfo requestInfo = new RequestInfo();
         requestInfo.setApiId("apiId");
         requestInfo.setVer("ver");
         requestInfo.setTs(new Date());
-        // requestInfo.setUserInfo(getUserInfo());
         return requestInfo;
     }
 
     public RestTemplate createRestTemplate() {
-        
-        ClientHttpRequestFactory requestFactory = new     
-                HttpComponentsClientHttpRequestFactory(HttpClients.createDefault());
+        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(HttpClients.createDefault());
         RestTemplate restTemplate = new RestTemplate(requestFactory);
-        
-//        if(restTemplate.getErrorHandler() == null)
-            restTemplate.setErrorHandler(new RestErrorHandler());
+        restTemplate.setErrorHandler(new RestErrorHandler());
         return restTemplate;
     }
 
@@ -257,8 +254,8 @@ public class MicroserviceUtils {
 
     public String getUserToken() {
         String userToken = ApplicationThreadLocals.getUserToken();
-//        if (adminToken == null)
-//            adminToken = this.generateAdminToken(ApplicationThreadLocals.getUserTenantId());
+        // if (adminToken == null)
+        // adminToken = this.generateAdminToken(ApplicationThreadLocals.getUserTenantId());
         return userToken;
     }
 
@@ -417,9 +414,9 @@ public class MicroserviceUtils {
         reqWrapper.setRequestInfo(reqInfo);
         LOGGER.info("call:" + authurl);
         CustomUserDetails user = restT.postForObject(authurl, reqWrapper, CustomUserDetails.class);
-//        ResponseEntity<Object> response = restT.postForEntity(authurl,reqWrapper,Object.class);
-//        this.processResponse(response.getBody());
-      //  CustomUserDetails user= null;
+        // ResponseEntity<Object> response = restT.postForEntity(authurl,reqWrapper,Object.class);
+        // this.processResponse(response.getBody());
+        // CustomUserDetails user= null;
         return user;
     }
 
@@ -435,7 +432,7 @@ public class MicroserviceUtils {
         map.add("scope", this.siScope);
         map.add("password", this.siPassword);
         map.add("grant_type", this.siGrantType);
-        //TOD-DO - Mani :  why this hard coding ?
+        // TOD-DO - Mani : why this hard coding ?
         map.add("tenantId", tenantId);
         map.add("userType", this.siUserType);
 
@@ -592,7 +589,7 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&businessCategoryCode="
+        final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&businessType=MISCELLANEOUS&businessCategoryCode="
                 + categoryCode;
 
         RequestInfo requestInfo = new RequestInfo();
@@ -730,13 +727,26 @@ public class MicroserviceUtils {
             return null;
     }
 
-    
-   public Object  processResponse(Object response) {
-       ObjectMapper mapper =new ObjectMapper();
-       
-       System.out.println(response);
-       return null;
-   }
+    public List<BankAccountServiceMapping> getBankAcntServiceMappings() {
+
+        final RestTemplate restTemplate = createRestTemplate();
+
+        final String url = hostUrl + bankAccountServiceMappingSearchUrl + "?tenantId=" + getTenentId();
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getUserToken());
+        reqWrapper.setRequestInfo(requestInfo);
+
+        BankAccountServiceMappingResponse response = restTemplate.postForObject(url, reqWrapper,
+                BankAccountServiceMappingResponse.class);
+        if (response != null && response.getBankAccountServiceMapping() != null)
+            return response.getBankAccountServiceMapping();
+        else
+            return null;
+    }
+
     public List<Task> getTasks() {
 
         List<Task> tasks = new ArrayList<>();
@@ -800,8 +810,8 @@ public class MicroserviceUtils {
     public void savetoRedis(String sessionId, String key, Object obj) {
         redisTemplate.opsForHash().putIfAbsent(sessionId, key, obj);
     }
-    
-    public void setExpire(String key){
+
+    public void setExpire(String key) {
         redisTemplate.expire(key, 30, TimeUnit.MINUTES);
     }
 
@@ -819,26 +829,26 @@ public class MicroserviceUtils {
 
     }
 
-//    public void refreshToken(String oldToken, String newToken) {
-//        LOGGER.info("Refresh Token is called OLD::NEW" + oldToken + " :: " + newToken);
-//        if (redisTemplate.hasKey(oldToken)) {
-//
-//            while (redisTemplate.opsForList().size(oldToken) > 0) {
-//
-//                Object sessionId = redisTemplate.opsForList().leftPop(oldToken);
-//                if (redisTemplate.hasKey(sessionId))
-//                    if (oldToken.equals(redisTemplate.opsForHash().get(sessionId, "ACCESS_TOKEN"))) {
-//                        redisTemplate.opsForHash().delete(sessionId, "ACCESS_TOKEN");
-//                        redisTemplate.opsForHash().put(sessionId, "ACCESS_TOKEN", newToken);
-//                        redisTemplate.delete(oldToken);
-//                        redisTemplate.opsForValue().set(newToken, sessionId);
-//                    }
-//                redisTemplate.opsForList().leftPush(newToken, sessionId);
-//            }
-//            redisTemplate.delete(oldToken);
-//
-//        }
-//    }
+    // public void refreshToken(String oldToken, String newToken) {
+    // LOGGER.info("Refresh Token is called OLD::NEW" + oldToken + " :: " + newToken);
+    // if (redisTemplate.hasKey(oldToken)) {
+    //
+    // while (redisTemplate.opsForList().size(oldToken) > 0) {
+    //
+    // Object sessionId = redisTemplate.opsForList().leftPop(oldToken);
+    // if (redisTemplate.hasKey(sessionId))
+    // if (oldToken.equals(redisTemplate.opsForHash().get(sessionId, "ACCESS_TOKEN"))) {
+    // redisTemplate.opsForHash().delete(sessionId, "ACCESS_TOKEN");
+    // redisTemplate.opsForHash().put(sessionId, "ACCESS_TOKEN", newToken);
+    // redisTemplate.delete(oldToken);
+    // redisTemplate.opsForValue().set(newToken, sessionId);
+    // }
+    // redisTemplate.opsForList().leftPush(newToken, sessionId);
+    // }
+    // redisTemplate.delete(oldToken);
+    //
+    // }
+    // }
 
     public static ResponseInfo getResponseInfo(RequestInfo requestInfo, Integer status, String apiId) {
         ResponseInfo info = new ResponseInfo();
