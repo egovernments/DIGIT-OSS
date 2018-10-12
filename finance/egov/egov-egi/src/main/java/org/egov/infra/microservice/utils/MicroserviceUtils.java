@@ -61,6 +61,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
@@ -107,6 +108,7 @@ import org.egov.infra.persistence.entity.enums.UserType;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.web.rest.handler.RestErrorHandler;
 import org.egov.infra.web.support.ui.Inbox;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -132,8 +134,11 @@ public class MicroserviceUtils {
     @Autowired
     private SecurityUtils securityUtils;
 
-    // @Autowired
-    // private RestTemplate restTemplate;
+     @Autowired
+     private RestTemplate restTemplate;
+     
+     @Autowired
+     protected EgovMasterDataCaching masterDataCache;
 
     @Autowired
     private Environment environment;
@@ -223,9 +228,7 @@ public class MicroserviceUtils {
     }
 
     public RestTemplate createRestTemplate() {
-        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(HttpClients.createDefault());
-        RestTemplate restTemplate = new RestTemplate(requestFactory);
-        restTemplate.setErrorHandler(new RestErrorHandler());
+       
         return restTemplate;
     }
 
@@ -281,7 +284,7 @@ public class MicroserviceUtils {
 
     public List<Department> getDepartments() {
 
-        final RestTemplate restTemplate = createRestTemplate();
+//        final RestTemplate restTemplate = createRestTemplate();
 
         final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId();
 
@@ -315,6 +318,32 @@ public class MicroserviceUtils {
     }
 
     public Department getDepartmentByCode(String departmentCode) {
+        
+        
+        List<Department> deptlist = this.masterDataCache.get("egi-department");
+        
+        Department  sDepartment = null;
+        if(null!=deptlist && !deptlist.isEmpty()){
+           
+        List<org.egov.infra.microservice.models.Department> dept =    deptlist.stream()
+                                .filter(department->departmentCode.equalsIgnoreCase(department.getCode()))
+                                .collect(Collectors.toList());     
+        if(null!=dept && dept.size()>0)
+            sDepartment = dept.get(0);
+        }
+        
+        if(null==sDepartment){
+            sDepartment = this.fetchByDepartmentCode(departmentCode);
+          
+        }
+        
+        return sDepartment;
+      
+       
+    }
+    
+    private Department fetchByDepartmentCode(String departmentCode){
+        
         final RestTemplate restTemplate = createRestTemplate();
         final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId() + "&code=" + departmentCode;
 
@@ -331,6 +360,7 @@ public class MicroserviceUtils {
             return depResponse.getDepartment().get(0);
         else
             return null;
+    
     }
 
     public List<Designation> getDesignation(String code) {

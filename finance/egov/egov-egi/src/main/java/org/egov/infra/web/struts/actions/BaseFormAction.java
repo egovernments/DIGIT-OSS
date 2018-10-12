@@ -217,11 +217,5 @@ public abstract class BaseFormAction extends ActionSupport
         return this.getClass().getSimpleName() + UUID.randomUUID();
     }
     
-  
-    public List<Department> getDepartmentsFromMs() {
-    	
-    	List<Department>departments = microserviceUtils.getDepartments();
-    	return departments;
-    }
 
 }

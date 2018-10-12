@@ -121,6 +121,7 @@ import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.models.ServiceCategory;
 import org.egov.infstr.models.ServiceDetails;
 import org.egov.infstr.services.PersistenceService;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.instrument.InstrumentHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -309,6 +310,9 @@ public class ReceiptAction extends BaseFormAction {
     private ApplicationContext beanProvider;
 
     private String receipt;
+    
+    @Autowired
+    protected EgovMasterDataCaching masterDataCache;
 
     @Override
     public void prepare() {
@@ -818,7 +822,7 @@ public class ReceiptAction extends BaseFormAction {
         headerFields.remove(CollectionConstants.SCHEME);
         headerFields.remove(CollectionConstants.SUBSCHEME);
         if (headerFields.contains(CollectionConstants.DEPARTMENT))
-            addDropdownData("departmentList", getDepartmentsFromMs());
+            addDropdownData("departmentList", masterDataCache.get("egi-department"));
         if (headerFields.contains(CollectionConstants.FUNCTIONARY))
             addDropdownData("functionaryList",
                     persistenceService.findAllByNamedQuery(CollectionConstants.QUERY_ALL_FUNCTIONARY));

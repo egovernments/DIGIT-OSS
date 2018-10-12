@@ -169,7 +169,7 @@ public class ContractorService implements EntityTypeService {
     public List<? extends org.egov.commons.utils.EntityType> getAllActiveEntities(Integer accountDetailTypeId) {
         // TODO Auto-generated method stub
         
-        return contractorRepository.findAll();
+        return contractorRepository.findByStatus();
     }
 
     @Override

@@ -51,6 +51,7 @@ package org.egov.infra.config.core;
 import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.infra.reporting.engine.ReportService;
 import org.egov.infra.reporting.engine.jasper.JasperReportService;
+import org.egov.infra.web.rest.handler.RestTemplateLoggerInterceptor;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,7 +61,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
@@ -68,6 +73,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -148,5 +154,14 @@ public class ApplicationConfiguration {
         methodInvokingFactoryBean.setArguments(new Object[]{properties});
         methodInvokingFactoryBean.prepare();
         methodInvokingFactoryBean.invoke();
+    }
+    
+    @Bean
+    public RestTemplate restTemplate(){
+        System.out.println("************************* RestTemplate object created*********************");
+        ClientHttpRequestFactory factory = new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
+        RestTemplate restTemplate = new RestTemplate(factory);
+        restTemplate.setInterceptors(Collections.singletonList(new RestTemplateLoggerInterceptor()));
+        return restTemplate;
     }
 }

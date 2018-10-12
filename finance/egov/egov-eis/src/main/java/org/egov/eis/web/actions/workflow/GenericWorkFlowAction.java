@@ -53,6 +53,8 @@ import org.egov.infra.workflow.entity.State;
 import org.egov.infra.workflow.entity.StateAware;
 import org.egov.infra.workflow.matrix.entity.WorkFlowMatrix;
 import org.egov.infra.workflow.matrix.service.CustomizedWorkFlowService;
+import org.egov.infstr.utils.EgovMasterDataCaching;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -84,11 +86,14 @@ public abstract class GenericWorkFlowAction extends BaseFormAction {
 
     @Override
     public abstract StateAware getModel();
+    
+    @Autowired
+    protected EgovMasterDataCaching masterDataCache;
 
     @Override
     public void prepare() {
         super.prepare();
-        addDropdownData("approverDepartmentList", getDepartmentsFromMs());
+        addDropdownData("approverDepartmentList", masterDataCache.get("egi-department"));
         addDropdownData("approverList", Collections.EMPTY_LIST);
         addDropdownData("designationList", Collections.EMPTY_LIST);
     }
