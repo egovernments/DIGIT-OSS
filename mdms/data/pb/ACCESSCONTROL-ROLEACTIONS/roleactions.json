@@ -16297,6 +16297,24 @@
    "actionid": 1691,
    "actioncode": "",
    "tenantId": "pb"
- }
+ },
+ {
+   "rolecode": "SYS_INTEGRATOR_FINANCE",
+   "actionid": 1675,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_RECEIPT_CREATOR",
+   "actionid": 1675,
+   "actioncode": "",
+   "tenantId": "pb"
+ },
+ {
+   "rolecode": "COLL_REMIT_TO_BANK",
+   "actionid": 1675,
+   "actioncode": "",
+   "tenantId": "pb"
+  }
   ]
 }
