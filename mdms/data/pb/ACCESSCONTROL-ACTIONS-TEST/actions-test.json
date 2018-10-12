@@ -11467,7 +11467,7 @@
     {
       "id": 1586,
       "name": "bankAccountServiceMapping create",
-      "url": "/collection/bankAccountServiceMapping/_create",
+      "url": "/collection-services/bankAccountServiceMapping/_create",
       "displayName": "BankAccountServiceMapping Create",
       "orderNumber": 1,
       "parentModule": null,
@@ -11479,7 +11479,7 @@
     {
       "id": 1587,
       "name": "bankAccountServiceMapping search",
-      "url": "/collection-masters/bankAccountServiceMapping/_search",
+      "url": "/collection-services/bankAccountServiceMapping/_search",
       "displayName": "BankAccountServiceMapping Create",
       "orderNumber": 1,
       "parentModule": null,
