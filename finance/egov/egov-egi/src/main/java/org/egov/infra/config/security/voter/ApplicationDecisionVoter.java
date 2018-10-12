@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.egov.infra.admin.master.entity.ActionT;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
+import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
@@ -35,8 +37,11 @@ public class ApplicationDecisionVoter implements AccessDecisionVoter<Object>{
 	}
 
 	@Override
-	public int vote(Authentication auth, Object object, Collection attributes) {
+	public int vote(Authentication authentication, Object object, Collection attributes) {
 		
+	    System.out.println("*************************** auth value in decision voter***********"+ authentication);
+	    if(null==authentication || ! (authentication.getPrincipal() instanceof CurrentUser))
+	        return ACCESS_DENIED;
 		/*try {
 			String sessionId = ((WebAuthenticationDetails)auth.getDetails()).getSessionId(),
 				   current_url = String.valueOf(object);

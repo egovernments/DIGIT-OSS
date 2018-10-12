@@ -79,7 +79,7 @@ public class RestServiceAuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        
+        LOGGER.info("Rest service authentication initiated");
         RestRequestWrapper request = new RestRequestWrapper((HttpServletRequest)req);
         
         try {
@@ -91,42 +91,25 @@ public class RestServiceAuthFilter implements Filter {
         } catch (Exception e) {
 //            e.printStackTrace();
             res.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            res.getWriter().write(getErrorResponse(INVALID_TOKEN));  
+            res.getWriter().write(getErrorResponse(e.getMessage()));  
            
         }
         
-       
+        LOGGER.info("Rest service authentication completed");
         
  
 
     }
 
-    private String getErrorResponse(String errorType) throws JsonProcessingException {
+    private String getErrorResponse(String errorMsg) throws JsonProcessingException {
         ErrorResponse errorResp = new ErrorResponse();
         List<Error> errorlist = new ArrayList<>();
 
         Error error = new Error();
-
-        switch (errorType) {
-        case INVALID_REQUEST: {
-
-            error.setCode(403);
-            error.setDescription(INVALID_REQUEST);
-            error.setMessage(INVALID_REQUEST);
-            break;
-        }
-        case INVALID_TOKEN: {
-            error.setCode(401);
-            error.setDescription(INVALID_TOKEN);
-            error.setMessage(INVALID_TOKEN);
-            break;
-        }
-        default:
-            error.setCode(401);
-            error.setDescription(INVALID_TOKEN);
-            error.setMessage(INVALID_TOKEN);
-        }
-
+        error.setCode(401);
+        error.setDescription(errorMsg);
+        error.setMessage(errorMsg);
+        
         errorlist.add(error);
         errorResp.setErrors(errorlist);
         ObjectMapper mapper = new ObjectMapper();
@@ -156,15 +139,16 @@ public class RestServiceAuthFilter implements Filter {
     private User getUserDetails(HttpServletRequest request) throws Exception {
       
          String user_token = readAuthToken(request);
+         String tenantId = readTenantId(request);
       
         if (user_token == null)
             throw new Exception("AuthToken not found");
         HttpSession session = request.getSession();
-        String admin_token = this.microserviceUtils.generateAdminToken("pb.jalandhar");
-        // TOD-DO - Mani : Handle null of admin token else if password or some thing changed you dont know why it is failing
-        session.setAttribute(MS_USER_TOKEN, admin_token);
+        String admin_token = this.microserviceUtils.generateAdminToken(tenantId);
+        if(admin_token==null)
+            throw new Exception("SI token generation failed");
+        session.setAttribute(MS_USER_TOKEN, user_token);
         CustomUserDetails user = this.microserviceUtils.getUserDetails(user_token, admin_token);
-        // TOD-DO - Mani : This should be requestInfo tenantId;
         session.setAttribute(MS_TENANTID_KEY, user.getTenantId());
         UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token, user.getTenantId(), user.getUserName());
        
@@ -197,7 +181,8 @@ public class RestServiceAuthFilter implements Filter {
 
     }
 
-    private String readAuthToken(HttpServletRequest request) {
+    private String readAuthToken(HttpServletRequest request) throws Exception {
+        LOGGER.info("Rest service - reading authtoken");
 
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -207,21 +192,56 @@ public class RestServiceAuthFilter implements Filter {
 
             // String strReq = request.getReader().lines().collect(Collectors.joining("\n"));
             String strReq = IOUtils.toString(request.getInputStream());
+            LOGGER.info("Rest service request json : "+ strReq);
+            
             HashMap<Object, Object> reqMap = mapper.readValue(strReq, HashMap.class);
             HashMap<Object, Object> reqInfo = null;
             reqInfo = (HashMap) reqMap.get("RequestInfo");
 
             String authToken = (String) reqInfo.get("authToken");
+            if(authToken==null)
+                throw new Exception("authToken not found");
 
             return authToken;
         } catch (JsonParseException e) {
             e.printStackTrace();
+            throw new Exception("Request parsing failed");
         } catch (JsonMappingException e) {
             e.printStackTrace();
+            throw new Exception("Request object Mapping failed");
         } catch (IOException e) {
             e.printStackTrace();
+            throw new Exception("Request processing failed");
         }
-        return null;
+    }
+    
+    private String readTenantId(HttpServletRequest request) throws Exception{
+        LOGGER.info("Rest service - reading tenantId");
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+            mapper.setVisibilityChecker(
+                    VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
 
+            // String strReq = request.getReader().lines().collect(Collectors.joining("\n"));
+            String strReq = IOUtils.toString(request.getInputStream());
+            HashMap<Object, Object> reqMap = mapper.readValue(strReq, HashMap.class);
+            String tenantId = String.valueOf(reqMap.get("tenantId"));
+            if(tenantId==null)
+                throw new Exception("tenantId is found");
+
+            return tenantId;
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+            throw new Exception("Request parsing failed");
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+            throw new Exception("Request object Mapping failed");
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new Exception("Request processing failed");
+        }
+
+        
     }
 }

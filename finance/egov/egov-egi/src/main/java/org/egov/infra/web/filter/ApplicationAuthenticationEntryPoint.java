@@ -13,11 +13,9 @@ import org.springframework.stereotype.Component;
 public class ApplicationAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 	@Override
-	public void commence(HttpServletRequest arg0, HttpServletResponse arg1, AuthenticationException arg2)
+	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
 			throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		arg1.sendError( HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized" );
-//		arg1.setStatus(org.apache.http.HttpStatus.SC_OK);
+		response.sendRedirect(request.getContextPath()+"/error/accessdenied.jsp");
 	}
 
 }

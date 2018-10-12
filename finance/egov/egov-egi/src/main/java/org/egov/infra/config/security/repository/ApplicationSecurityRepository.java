@@ -55,20 +55,17 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 
 	@Override
 	public SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder) {
-		// TODO Auto-generated method stub
 
-		//LOGGER.debug("Loading security context:  " + requestResponseHolder);
-		SecurityContext context = new SecurityContextImpl();
+		SecurityContext context = new SecurityContextImpl();;
 		CurrentUser cur_user= null;
 		try {
 			
 			HttpServletRequest request = requestResponseHolder.getRequest();
-			LOGGER.info(" *** URI " + request.getRequestURI());
+			LOGGER.info(" *** URI " + request.getRequestURL().toString());
 			cur_user = (CurrentUser)this.microserviceUtils.readFromRedis(request.getSession().getId(), "current_user");
 			if (cur_user==null) {
 				LOGGER.info(" ***  Session is not available in redis.... , trying to login");
-				   //TOD-DO - Mani :  Change this to /rest/ else other words also will get intercepted
-				if(request.getRequestURI().contains("rest")){
+				if(request.getRequestURI().contains("/rest/")){
 				    return SecurityContextHolder.createEmptyContext();
 				}
 				else{
@@ -77,7 +74,8 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 				}
 
 			}
-			LOGGER.error(" ***  Session   found  in redis.... ," + request.getSession().getId());
+			LOGGER.info(" ***  Session   found  in redis.... ," + request.getSession().getId());
+			
 			context.setAuthentication(this.prepareAuthenticationObj(request, cur_user));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());

@@ -62,6 +62,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.User;
@@ -114,11 +115,16 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class MicroserviceUtils {
@@ -218,7 +224,11 @@ public class MicroserviceUtils {
     }
 
     public RestTemplate createRestTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
+        
+        ClientHttpRequestFactory requestFactory = new     
+                HttpComponentsClientHttpRequestFactory(HttpClients.createDefault());
+        RestTemplate restTemplate = new RestTemplate(requestFactory);
+        
 //        if(restTemplate.getErrorHandler() == null)
             restTemplate.setErrorHandler(new RestErrorHandler());
         return restTemplate;
@@ -407,6 +417,9 @@ public class MicroserviceUtils {
         reqWrapper.setRequestInfo(reqInfo);
         LOGGER.info("call:" + authurl);
         CustomUserDetails user = restT.postForObject(authurl, reqWrapper, CustomUserDetails.class);
+//        ResponseEntity<Object> response = restT.postForEntity(authurl,reqWrapper,Object.class);
+//        this.processResponse(response.getBody());
+      //  CustomUserDetails user= null;
         return user;
     }
 
@@ -717,6 +730,13 @@ public class MicroserviceUtils {
             return null;
     }
 
+    
+   public Object  processResponse(Object response) {
+       ObjectMapper mapper =new ObjectMapper();
+       
+       System.out.println(response);
+       return null;
+   }
     public List<Task> getTasks() {
 
         List<Task> tasks = new ArrayList<>();
@@ -799,26 +819,26 @@ public class MicroserviceUtils {
 
     }
 
-    public void refreshToken(String oldToken, String newToken) {
-        LOGGER.info("Refresh Token is called OLD::NEW" + oldToken + " :: " + newToken);
-        if (redisTemplate.hasKey(oldToken)) {
-
-            while (redisTemplate.opsForList().size(oldToken) > 0) {
-
-                Object sessionId = redisTemplate.opsForList().leftPop(oldToken);
-                if (redisTemplate.hasKey(sessionId))
-                    if (oldToken.equals(redisTemplate.opsForHash().get(sessionId, "ACCESS_TOKEN"))) {
-                        redisTemplate.opsForHash().delete(sessionId, "ACCESS_TOKEN");
-                        redisTemplate.opsForHash().put(sessionId, "ACCESS_TOKEN", newToken);
-                        redisTemplate.delete(oldToken);
-                        redisTemplate.opsForValue().set(newToken, sessionId);
-                    }
-                redisTemplate.opsForList().leftPush(newToken, sessionId);
-            }
-            redisTemplate.delete(oldToken);
-
-        }
-    }
+//    public void refreshToken(String oldToken, String newToken) {
+//        LOGGER.info("Refresh Token is called OLD::NEW" + oldToken + " :: " + newToken);
+//        if (redisTemplate.hasKey(oldToken)) {
+//
+//            while (redisTemplate.opsForList().size(oldToken) > 0) {
+//
+//                Object sessionId = redisTemplate.opsForList().leftPop(oldToken);
+//                if (redisTemplate.hasKey(sessionId))
+//                    if (oldToken.equals(redisTemplate.opsForHash().get(sessionId, "ACCESS_TOKEN"))) {
+//                        redisTemplate.opsForHash().delete(sessionId, "ACCESS_TOKEN");
+//                        redisTemplate.opsForHash().put(sessionId, "ACCESS_TOKEN", newToken);
+//                        redisTemplate.delete(oldToken);
+//                        redisTemplate.opsForValue().set(newToken, sessionId);
+//                    }
+//                redisTemplate.opsForList().leftPush(newToken, sessionId);
+//            }
+//            redisTemplate.delete(oldToken);
+//
+//        }
+//    }
 
     public static ResponseInfo getResponseInfo(RequestInfo requestInfo, Integer status, String apiId) {
         ResponseInfo info = new ResponseInfo();

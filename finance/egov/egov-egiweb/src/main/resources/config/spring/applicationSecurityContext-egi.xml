@@ -42,9 +42,9 @@
 		class="org.springframework.security.web.FilterChainProxy">
 		<constructor-arg>
 			<list>
-			<!-- 	<security:filter-chain pattern="/resources/**"
+				<security:filter-chain pattern="/resources/**"
 					filters="none" />
-				<security:filter-chain pattern="/help*"
+			<!-- 	<security:filter-chain pattern="/help*"
 					filters="none" />
 				<security:filter-chain pattern="/jcaptcha*"
 					filters="none" />
@@ -57,7 +57,7 @@
 				<security:filter-chain
 					pattern="/login/password/reset**" filters="none" />
 				<security:filter-chain
-					pattern="/login/requiredlocations*" filters="none" />
+					pattern="/login/requiredlocations*" filters="none" /> -->
 				<security:filter-chain
 					pattern="/downloadfile/logo**" filters="none" />
 				<security:filter-chain
@@ -65,7 +65,7 @@
 				<security:filter-chain pattern="/error/**"
 					filters="none" />
 				<security:filter-chain pattern="/city/details"
-					filters="none" /> -->
+					filters="none" />
 				<security:filter-chain pattern="/**"  filters="concurrentSessionFilter,securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,rememberMeAuthenticationFilter,anonymousAuthenticationFilter,exceptionTranslationFilter,filterSecurityInterceptor" />
 				<!-- <security:filter-chain pattern="/public/**" filters="anonymousAuthenticationFilter"/> 
 					<security:filter-chain pattern="/**" filters="concurrentSessionFilter,securityContextPersistenceFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,rememberMeAuthenticationFilter,anonymousAuthenticationFilter,exceptionTranslationFilter,filterSecurityInterceptor" 
