@@ -66,7 +66,7 @@ public abstract class RemittanceService implements Serializable {
     public abstract List<ReceiptHeader> createCashBankRemittance(final String[] serviceNameArr,
             final String[] totalCashAmount, final String[] totalChequeAmount, final String[] totalCardAmount,
             final String[] receiptDateArray, final String[] fundCodeArray,
-            final String[] departmentCodeArray, final Integer accountNumberId, final Integer positionUser,
+            final String[] departmentCodeArray, final String accountNumberId, final Integer positionUser,
             final String[] receiptNumberArray, final Date remittanceDate);
 
     public abstract List<HashMap<String, Object>> findCashRemittanceDetailsForServiceAndFund(final String boundaryIdList,

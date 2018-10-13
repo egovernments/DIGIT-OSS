@@ -48,11 +48,19 @@
 
 package org.egov.infra.web.struts.actions;
 
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.ModelDriven;
-import com.opensymphony.xwork2.Preparable;
-import com.opensymphony.xwork2.interceptor.ParameterNameAware;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.interceptor.ParameterAware;
 import org.apache.struts2.interceptor.RequestAware;
@@ -66,19 +74,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.servlet.http.HttpServletRequest;
-
-import java.util.UUID;
-
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ModelDriven;
+import com.opensymphony.xwork2.Preparable;
+import com.opensymphony.xwork2.interceptor.ParameterNameAware;
 
 @ParentPackage("egov")
 public abstract class BaseFormAction extends ActionSupport
@@ -94,9 +94,9 @@ public abstract class BaseFormAction extends ActionSupport
     protected transient PersistenceService persistenceService;
     @Autowired
     public HttpServletRequest serRequest;
-    
+
     @Autowired
-    MicroserviceUtils microserviceUtils;
+    public MicroserviceUtils microserviceUtils;
     protected transient Map<String, Object> request;
     protected transient Map<String, List> dropdownData = new HashMap<>();
     protected transient Map<String, Class> relations = new HashMap<>();
@@ -216,6 +216,11 @@ public abstract class BaseFormAction extends ActionSupport
     public String tokenName() {
         return this.getClass().getSimpleName() + UUID.randomUUID();
     }
-    
+
+    public List<Department> getDepartmentsFromMs() {
+
+        List<Department> departments = microserviceUtils.getDepartments();
+        return departments;
+    }
 
 }

@@ -71,11 +71,11 @@ import org.egov.collection.entity.ReceiptHeader;
 import org.egov.collection.service.RemittanceServiceImpl;
 import org.egov.collection.utils.CollectionsUtil;
 import org.egov.commons.Bankaccount;
-import org.egov.commons.Bankbranch;
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.dao.BankaccountHibernateDAO;
 import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.BankAccountServiceMapping;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
@@ -95,7 +95,7 @@ public class BankRemittanceAction extends BaseFormAction {
     protected static final String PRINT_BANK_CHALLAN = "printBankChallan";
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger(BankRemittanceAction.class);
-    private static final String BANK_ACCOUNT_NUMBER_QUERY = "select distinct ba.accountnumber from BANKACCOUNT ba where ba.id =:accountNumberId";
+    private static final String BANK_ACCOUNT_NUMBER_QUERY = "select distinct ba.accountnumber from BANKACCOUNT ba where ba.accountnumber =:accountNumberId";
     private static final String SERVICE_FUND_QUERY = new StringBuilder()
             .append("select distinct sd.code as servicecode,fd.code as fundcode from BANKACCOUNT ba,")
             .append("EGCL_BANKACCOUNTSERVICEMAPPING asm,EGCL_SERVICEDETAILS sd,FUND fd where asm.BANKACCOUNT=ba.ID ")
@@ -112,7 +112,7 @@ public class BankRemittanceAction extends BaseFormAction {
     private String[] fundCodeArray;
     private String[] departmentCodeArray;
     private String[] instrumentIdArray;
-    private Integer accountNumberId;
+    private String accountNumberId;
     private transient CollectionsUtil collectionsUtil;
     private Integer branchId;
     private static final String ACCOUNT_NUMBER_LIST = "accountNumberList";
@@ -151,6 +151,24 @@ public class BankRemittanceAction extends BaseFormAction {
         this.collectionsUtil = collectionsUtil;
     }
 
+    @Override
+    public void prepare() {
+        super.prepare();
+        final String showColumn = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
+                CollectionConstants.APPCONFIG_VALUE_COLLECTION_BANKREMITTANCE_SHOWCOLUMNSCARDONLINE);
+        if (!showColumn.isEmpty() && showColumn.equals(CollectionConstants.YES))
+            showCardAndOnlineColumn = true;
+        final String showRemitDate = collectionsUtil.getAppConfigValue(
+                CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
+                CollectionConstants.APPCONFIG_VALUE_COLLECTION_BANKREMITTANCE_SHOWREMITDATE);
+        if (!showRemitDate.isEmpty() && showRemitDate.equals(CollectionConstants.YES))
+            showRemittanceDate = true;
+
+        isBankCollectionRemitter = collectionsUtil.isBankCollectionOperator(collectionsUtil.getLoggedInUser());
+        addDropdownData("bankBranchList", Collections.emptyList());
+        addDropdownData(ACCOUNT_NUMBER_LIST, Collections.emptyList());
+    }
+
     @Action(value = "/receipts/bankRemittance-newform")
     @SkipValidation
     public String newform() {
@@ -162,23 +180,7 @@ public class BankRemittanceAction extends BaseFormAction {
         final AjaxBankRemittanceAction ajaxBankRemittanceAction = new AjaxBankRemittanceAction();
         ajaxBankRemittanceAction.setPersistenceService(getPersistenceService());
         ajaxBankRemittanceAction.setCollectionsUtil(collectionsUtil);
-        ajaxBankRemittanceAction.bankBranchListOfService();
-        addDropdownData("bankBranchList", ajaxBankRemittanceAction.getBankBranchArrayList());
-        if (collectionsUtil.isBankCollectionRemitter(collectionsUtil.getLoggedInUser())) {
-            if (ajaxBankRemittanceAction.getBankBranchArrayList().isEmpty())
-                throw new ValidationException(Arrays.asList(new ValidationError(
-                        "The user is not mapped to any bank branch, please contact system administrator.",
-                        "bankremittance.error.bankcollectionoperator")));
-            else
-                branchId = ((Bankbranch) ajaxBankRemittanceAction.getBankBranchArrayList().get(0)).getId();
-        }
-
-        if (branchId != null) {
-            ajaxBankRemittanceAction.setBranchId(branchId);
-            ajaxBankRemittanceAction.accountListOfService();
-            addDropdownData(ACCOUNT_NUMBER_LIST, ajaxBankRemittanceAction.getBankAccountArrayList());
-        } else
-            addDropdownData(ACCOUNT_NUMBER_LIST, Collections.emptyList());
+        addDropdownData("accountNumberList", microserviceUtils.getBankAcntServiceMappings());
         addDropdownData("financialYearList", financialYearDAO.getAllActivePostingAndNotClosedFinancialYears());
     }
 
@@ -190,7 +192,7 @@ public class BankRemittanceAction extends BaseFormAction {
         if (accountNumberId != null) {
 
             final Query bankAccountQry = persistenceService.getSession().createSQLQuery(BANK_ACCOUNT_NUMBER_QUERY);
-            bankAccountQry.setLong("accountNumberId", accountNumberId);
+            bankAccountQry.setString("accountNumberId", accountNumberId);
             final Object bankAccountResult = bankAccountQry.uniqueResult();
             remitAccountNumber = (String) bankAccountResult;
         }
@@ -199,22 +201,17 @@ public class BankRemittanceAction extends BaseFormAction {
         if (fromDate != null && toDate != null && toDate.before(fromDate))
             addActionError(getText("bankremittance.before.fromdate"));
         if (!hasErrors() && accountNumberId != null) {
-            final Query serviceFundQuery = persistenceService.getSession().createSQLQuery(SERVICE_FUND_QUERY);
-            serviceFundQuery.setLong("accountNumberId", accountNumberId);
-            final List<Object[]> queryResults = serviceFundQuery.list();
-
             final List<String> serviceCodeList = new ArrayList<>(0);
             final HashSet<String> fundCodeSet = new HashSet<>(0);
-            for (int i = 0; i < queryResults.size(); i++) {
-                final Object[] arrayObjectInitialIndex = queryResults.get(i);
-                serviceCodeList.add(arrayObjectInitialIndex[0].toString());
-                fundCodeSet.add(arrayObjectInitialIndex[1].toString());
+            List<BankAccountServiceMapping> mappings = microserviceUtils
+                    .getBankAcntServiceMappingsByBankAcc(accountNumberId.toString());
+            for (BankAccountServiceMapping basm : mappings) {
+                serviceCodeList.add(basm.getBusinessDetails());
             }
             final CFinancialYear financialYear = financialYearDAO.getFinancialYearById(finYearId);
-            paramList = remittanceService.findCashRemittanceDetailsForServiceAndFund(collectionsUtil.getJurisdictionBoundary(),
-                    "'"
-                            + StringUtils.join(serviceCodeList, "','") + "'",
-                    "'" + StringUtils.join(fundCodeSet, "','") + "'",
+            paramList = remittanceService.findCashRemittanceDetailsForServiceAndFund("",
+                    StringUtils.join(serviceCodeList, ","),
+                    StringUtils.join(fundCodeSet, ","),
                     fromDate == null ? financialYear.getStartingDate() : fromDate,
                     toDate == null ? financialYear.getEndingDate() : toDate);
             if (fromDate != null && toDate != null)
@@ -239,29 +236,11 @@ public class BankRemittanceAction extends BaseFormAction {
         return SUCCESS;
     }
 
-    @Override
-    public void prepare() {
-        super.prepare();
-        final String showColumn = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
-                CollectionConstants.APPCONFIG_VALUE_COLLECTION_BANKREMITTANCE_SHOWCOLUMNSCARDONLINE);
-        if (!showColumn.isEmpty() && showColumn.equals(CollectionConstants.YES))
-            showCardAndOnlineColumn = true;
-        final String showRemitDate = collectionsUtil.getAppConfigValue(
-                CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
-                CollectionConstants.APPCONFIG_VALUE_COLLECTION_BANKREMITTANCE_SHOWREMITDATE);
-        if (!showRemitDate.isEmpty() && showRemitDate.equals(CollectionConstants.YES))
-            showRemittanceDate = true;
-
-        isBankCollectionRemitter = collectionsUtil.isBankCollectionOperator(collectionsUtil.getLoggedInUser());
-        addDropdownData("bankBranchList", Collections.emptyList());
-        addDropdownData(ACCOUNT_NUMBER_LIST, Collections.emptyList());
-    }
-
     @ValidationErrorPage(value = "error")
     @Action(value = "/receipts/bankRemittance-create")
     public String create() {
         final long startTimeMillis = System.currentTimeMillis();
-        if (accountNumberId == null || accountNumberId == -1)
+        if (accountNumberId == null || accountNumberId.isEmpty() || accountNumberId.equalsIgnoreCase("-1"))
             throw new ValidationException(Arrays.asList(new ValidationError("Please select Account number",
                     "bankremittance.error.noaccountNumberselected")));
         voucherHeaderValues = remittanceService.createCashBankRemittance(getServiceNameArray(), getTotalCashAmountArray(),
@@ -492,11 +471,11 @@ public class BankRemittanceAction extends BaseFormAction {
         this.branchId = branchId;
     }
 
-    public Integer getAccountNumberId() {
+    public String getAccountNumberId() {
         return accountNumberId;
     }
 
-    public void setAccountNumberId(final Integer accountNumberId) {
+    public void setAccountNumberId(final String accountNumberId) {
         this.accountNumberId = accountNumberId;
     }
 

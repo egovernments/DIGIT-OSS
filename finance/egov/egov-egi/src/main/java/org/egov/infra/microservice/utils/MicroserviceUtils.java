@@ -63,7 +63,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.User;
@@ -83,6 +82,8 @@ import org.egov.infra.microservice.contract.UserRequest;
 import org.egov.infra.microservice.contract.UserSearchRequest;
 import org.egov.infra.microservice.contract.UserSearchResponse;
 import org.egov.infra.microservice.models.Assignment;
+import org.egov.infra.microservice.models.BankAccountServiceMapping;
+import org.egov.infra.microservice.models.BankAccountServiceMappingResponse;
 import org.egov.infra.microservice.models.BusinessCategory;
 import org.egov.infra.microservice.models.BusinessCategoryResponse;
 import org.egov.infra.microservice.models.BusinessDetails;
@@ -93,10 +94,16 @@ import org.egov.infra.microservice.models.Designation;
 import org.egov.infra.microservice.models.DesignationResponse;
 import org.egov.infra.microservice.models.EmployeeInfo;
 import org.egov.infra.microservice.models.EmployeeInfoResponse;
+import org.egov.infra.microservice.models.FinancialStatus;
+import org.egov.infra.microservice.models.FinancialStatusResponse;
 import org.egov.infra.microservice.models.GlCodeMaster;
 import org.egov.infra.microservice.models.GlCodeMasterResponse;
+import org.egov.infra.microservice.models.Instrument;
 import org.egov.infra.microservice.models.InstrumentAccountCode;
 import org.egov.infra.microservice.models.InstrumentAccountCodeResponse;
+import org.egov.infra.microservice.models.InstrumentResponse;
+import org.egov.infra.microservice.models.Receipt;
+import org.egov.infra.microservice.models.ReceiptResponse;
 import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.microservice.models.ResponseInfo;
 import org.egov.infra.microservice.models.TaxHeadMaster;
@@ -106,7 +113,6 @@ import org.egov.infra.microservice.models.TaxPeriodResponse;
 import org.egov.infra.microservice.models.UserInfo;
 import org.egov.infra.persistence.entity.enums.UserType;
 import org.egov.infra.security.utils.SecurityUtils;
-import org.egov.infra.web.rest.handler.RestErrorHandler;
 import org.egov.infra.web.support.ui.Inbox;
 import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.jfree.util.Log;
@@ -117,8 +123,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -134,11 +138,11 @@ public class MicroserviceUtils {
     @Autowired
     private SecurityUtils securityUtils;
 
-     @Autowired
-     private RestTemplate restTemplate;
-     
-     @Autowired
-     protected EgovMasterDataCaching masterDataCache;
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
+    protected EgovMasterDataCaching masterDataCache;
 
     @Autowired
     private Environment environment;
@@ -216,9 +220,18 @@ public class MicroserviceUtils {
     @Value("${egov.services.billing.service.taxperiods.search}")
     private String taxperiodsSearchUrl;
 
-    /*@Value("${egov.services.collection.master.basm.search}")
-    private String bankAccountServiceMappingSearchUrl;*/
+    @Value("${egov.services.collection.service.basm.search}")
+    private String bankAccountServiceMappingSearchUrl;
 
+    @Value("${egov.services.egf.master.financialstatuses.search}")
+    private String financialStatusesSearchUrl;
+
+    @Value("${egov.services.egf.instrument.search.url}")
+    private String instrumentSearchUrl;
+
+    @Value("${egov.services.collection.service.receipts.search}")
+    private String receiptSearchUrl;
+    
     public RequestInfo createRequestInfo() {
         final RequestInfo requestInfo = new RequestInfo();
         requestInfo.setApiId("apiId");
@@ -228,7 +241,7 @@ public class MicroserviceUtils {
     }
 
     public RestTemplate createRestTemplate() {
-       
+
         return restTemplate;
     }
 
@@ -284,7 +297,7 @@ public class MicroserviceUtils {
 
     public List<Department> getDepartments() {
 
-//        final RestTemplate restTemplate = createRestTemplate();
+        // final RestTemplate restTemplate = createRestTemplate();
 
         final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId();
 
@@ -318,32 +331,30 @@ public class MicroserviceUtils {
     }
 
     public Department getDepartmentByCode(String departmentCode) {
-        
-        
+
         List<Department> deptlist = this.masterDataCache.get("egi-department");
-        
-        Department  sDepartment = null;
-        if(null!=deptlist && !deptlist.isEmpty()){
-           
-        List<org.egov.infra.microservice.models.Department> dept =    deptlist.stream()
-                                .filter(department->departmentCode.equalsIgnoreCase(department.getCode()))
-                                .collect(Collectors.toList());     
-        if(null!=dept && dept.size()>0)
-            sDepartment = dept.get(0);
+
+        Department sDepartment = null;
+        if (null != deptlist && !deptlist.isEmpty()) {
+
+            List<org.egov.infra.microservice.models.Department> dept = deptlist.stream()
+                    .filter(department -> departmentCode.equalsIgnoreCase(department.getCode()))
+                    .collect(Collectors.toList());
+            if (null != dept && dept.size() > 0)
+                sDepartment = dept.get(0);
         }
-        
-        if(null==sDepartment){
+
+        if (null == sDepartment) {
             sDepartment = this.fetchByDepartmentCode(departmentCode);
-          
+
         }
-        
+
         return sDepartment;
-      
-       
+
     }
-    
-    private Department fetchByDepartmentCode(String departmentCode){
-        
+
+    private Department fetchByDepartmentCode(String departmentCode) {
+
         final RestTemplate restTemplate = createRestTemplate();
         final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId() + "&code=" + departmentCode;
 
@@ -360,7 +371,7 @@ public class MicroserviceUtils {
             return depResponse.getDepartment().get(0);
         else
             return null;
-    
+
     }
 
     public List<Designation> getDesignation(String code) {
@@ -617,7 +628,8 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&businessType=MISCELLANEOUS&businessCategoryCode="
+        final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId()
+                + "&businessType=MISCELLANEOUS&businessCategoryCode="
                 + categoryCode;
 
         RequestInfo requestInfo = new RequestInfo();
@@ -755,7 +767,7 @@ public class MicroserviceUtils {
             return null;
     }
 
-   /* public List<BankAccountServiceMapping> getBankAcntServiceMappings() {
+    public List<BankAccountServiceMapping> getBankAcntServiceMappings() {
 
         final RestTemplate restTemplate = createRestTemplate();
 
@@ -773,8 +785,79 @@ public class MicroserviceUtils {
             return response.getBankAccountServiceMapping();
         else
             return null;
-    }*/
+    }
+
+    public List<BankAccountServiceMapping> getBankAcntServiceMappingsByBankAcc(String bankAccount) {
+
+        final RestTemplate restTemplate = createRestTemplate();
+
+        final String url = hostUrl + bankAccountServiceMappingSearchUrl + "?tenantId=" + getTenentId() + "&bankAccount="
+                + bankAccount;
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getUserToken());
+        reqWrapper.setRequestInfo(requestInfo);
+
+        BankAccountServiceMappingResponse response = restTemplate.postForObject(url, reqWrapper,
+                BankAccountServiceMappingResponse.class);
+        if (response != null && response.getBankAccountServiceMapping() != null)
+            return response.getBankAccountServiceMapping();
+        else
+            return null;
+    }
+
+    public FinancialStatus getFinancialStatusByCode(String code) {
+
+        final String url = hostUrl + financialStatusesSearchUrl + "?tenantId="
+                + getTenentId() + "&moduleType=Instrument&code=" + code;
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getUserToken());
+        reqWrapper.setRequestInfo(requestInfo);
+        LOGGER.info("call:" + url);
+        FinancialStatusResponse response = restTemplate.postForObject(url, reqWrapper, FinancialStatusResponse.class);
+        if (response.getFinancialStatuses() != null && !response.getFinancialStatuses().isEmpty())
+            return response.getFinancialStatuses().get(0);
+        else
+            return null;
+    }
+
+    public List<Instrument> getInstruments(String instrumentType, String transactionType, String financialStatus) {
+
+        final String url = hostUrl + instrumentSearchUrl + "?tenantId=" + getTenentId() + "&instrumentTypes=" + instrumentType
+                + "&transactionType=" + transactionType + "&financialStatuses=" + financialStatus;
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getUserToken());
+        reqWrapper.setRequestInfo(requestInfo);
+        LOGGER.info("call:" + url);
+        InstrumentResponse response = restTemplate.postForObject(url, reqWrapper, InstrumentResponse.class);
+
+        return response.getInstruments();
+    }
     
+    public List<Receipt> getReceipts(String ids, String status, String serviceCodes) {
+
+        final String url = hostUrl + receiptSearchUrl + "?tenantId=" + getTenentId() + "&status=" + status
+                + "&ids=" + ids + "&businessCodes=" + serviceCodes;
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getUserToken());
+        reqWrapper.setRequestInfo(requestInfo);
+        LOGGER.info("call:" + url);
+        ReceiptResponse response = restTemplate.postForObject(url, reqWrapper, ReceiptResponse.class);
+
+        return response.getReceipts();
+    }
+
     public List<Task> getTasks() {
 
         List<Task> tasks = new ArrayList<>();
@@ -849,16 +932,15 @@ public class MicroserviceUtils {
 
     public void removeSessionFromRedis(String access_token) {
         LOGGER.info("Logout for authtoken : " + access_token);
-        if (null!=access_token && redisTemplate.hasKey(access_token)) {
+        if (null != access_token && redisTemplate.hasKey(access_token)) {
             String sessionId = String.valueOf(redisTemplate.opsForValue().get(access_token));
-            if(sessionId!=null)
+            if (sessionId != null)
                 redisTemplate.delete(sessionId);
             else
-                LOGGER.info("session not found in redis for : "+access_token);
+                LOGGER.info("session not found in redis for : " + access_token);
             redisTemplate.delete(access_token);
-        }
-        else
-            LOGGER.info("authtoken not found in redis : "+access_token);
+        } else
+            LOGGER.info("authtoken not found in redis : " + access_token);
 
     }
 

@@ -61,6 +61,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.billsaccounting.services.VoucherConstant;
 import org.egov.collection.constants.CollectionConstants;
@@ -82,6 +83,11 @@ import org.egov.commons.dao.FunctionHibernateDAO;
 import org.egov.commons.dao.FundHibernateDAO;
 import org.egov.commons.entity.Source;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.FinancialStatus;
+import org.egov.infra.microservice.models.Instrument;
+import org.egov.infra.microservice.models.InstrumentVoucher;
+import org.egov.infra.microservice.models.Receipt;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infstr.models.ServiceDetails;
@@ -116,6 +122,8 @@ public class RemittanceServiceImpl extends RemittanceService {
     private PersistenceService<RemittanceInstrument, Long> remittanceInstrumentService;
     @Autowired
     private transient RemittanceSchedulerService remittanceSchedulerService;
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
 
     /**
      * Create Contra Vouchers for String array passed of serviceName, totalCashAmount, totalChequeAmount, totalCardAmount and
@@ -129,7 +137,7 @@ public class RemittanceServiceImpl extends RemittanceService {
     @Override
     public List<ReceiptHeader> createCashBankRemittance(final String[] serviceNameArr, final String[] totalCashAmount,
             final String[] totalAmount, final String[] totalCardAmount, final String[] receiptDateArray,
-            final String[] fundCodeArray, final String[] departmentCodeArray, final Integer accountNumberId,
+            final String[] fundCodeArray, final String[] departmentCodeArray, final String accountNumberId,
             final Integer positionUser, final String[] receiptNumberArray, final Date remittanceDate) {
 
         final List<ReceiptHeader> bankRemittanceList = new ArrayList<>(0);
@@ -189,8 +197,8 @@ public class RemittanceServiceImpl extends RemittanceService {
                 .equals(CollectionConstants.YES))
             showRemitDate = true;
 
-        final Bankaccount depositedBankAccount = (Bankaccount) persistenceService.find("from Bankaccount where id=?",
-                Long.valueOf(accountNumberId.longValue()));
+        final Bankaccount depositedBankAccount = (Bankaccount) persistenceService.find("from Bankaccount where accountnumber=?",
+               accountNumberId);
         final String serviceGlCode = depositedBankAccount.getChartofaccounts().getGlcode();
         for (int i = 0; i < serviceNameArr.length; i++) {
             final String serviceName = serviceNameArr[i].trim();
@@ -263,7 +271,7 @@ public class RemittanceServiceImpl extends RemittanceService {
             receiptHeader.setStatus(receiptStatusRemitted);
             receiptHeader.setRemittanceReferenceNumber(remittance.getReferenceNumber());
             receiptHeaderService.update(receiptHeader);
-            //receiptHeaderService.updateCollectionIndexAndPushMail(receiptHeader);
+            // receiptHeaderService.updateCollectionIndexAndPushMail(receiptHeader);
         }
         return bankRemitList;
     }
@@ -370,8 +378,8 @@ public class RemittanceServiceImpl extends RemittanceService {
         remittanceInstrument.setRemittance(remittance);
         remittanceInstrument.setInstrumentHeader(instrumentHeader);
         remittanceInstrument.setReconciled(Boolean.FALSE);
-        remittanceInstrument =  (RemittanceInstrument) persistenceService.persist(remittanceInstrument);
-        return remittanceInstrument;  
+        remittanceInstrument = (RemittanceInstrument) persistenceService.persist(remittanceInstrument);
+        return remittanceInstrument;
     }
 
     public HashMap<String, Object> prepareAccountCodeDetails(final String glCode, final String functionCode,
@@ -421,6 +429,17 @@ public class RemittanceServiceImpl extends RemittanceService {
     public List<HashMap<String, Object>> findCashRemittanceDetailsForServiceAndFund(final String boundaryIdList,
             final String serviceCodes, final String fundCodes, final Date startDate, final Date endDate) {
 
+        FinancialStatus status = microserviceUtils.getFinancialStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
+        List<Instrument> instruments = microserviceUtils.getInstruments(CollectionConstants.INSTRUMENTTYPE_NAME_CASH, "Debit",
+                status.getId());
+        List<String> receiptIds = new ArrayList<>();
+        for (Instrument i : instruments) {
+            if (i.getInstrumentVouchers() != null)
+                for (InstrumentVoucher iv : i.getInstrumentVouchers()) {
+                    receiptIds.add(iv.getReceiptHeaderId());
+                }
+        }
+      List<Receipt> receipts =   microserviceUtils.getReceipts(StringUtils.join(receiptIds, ","), "Approved", serviceCodes);
         final List<HashMap<String, Object>> paramList = new ArrayList<>();
         final String whereClauseBeforInstumentType = " where ch.id=cm.collectionheader AND "
                 + "fnd.id=cm.fund AND dpt.id=cm.department and ci.INSTRUMENTHEADER=ih.ID and "

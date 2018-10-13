@@ -1162,12 +1162,12 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
     public ReceiptResponse populateAndPersistReceipts(final ReceiptHeader receiptHeader,
             final List<InstrumentHeader> receiptInstrList) {
         String consumerCode = getConsumerCode(receiptHeader);
-        saveDemand(consumerCode, receiptHeader);
+        DemandResponse demandResponse = generateDemand(consumerCode, receiptHeader);
         BillResponse billResponse = generateBill(consumerCode, receiptHeader.getService());
         return generateReceipt(receiptHeader, billResponse);
     }
 
-    private DemandResponse saveDemand(String consumerCode, ReceiptHeader receiptHeader) {
+    private DemandResponse generateDemand(String consumerCode, ReceiptHeader receiptHeader) {
         DemandRequest request = new DemandRequest();
         final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
         final String url = hostUrl + demandCreateUrl;
@@ -1206,6 +1206,16 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
 
         }
         request.setDemands(Collections.singletonList(demand));
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString = "";
+
+        try {
+            jsonInString = mapper.writeValueAsString(request);
+        } catch (JsonProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println(jsonInString);
         return restTemplate.postForObject(url, request, DemandResponse.class);
     }
 
@@ -1217,6 +1227,16 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(microserviceUtils.getUserToken());
         reqWrapper.setRequestInfo(requestInfo);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString = "";
+
+        try {
+            jsonInString = mapper.writeValueAsString(reqWrapper);
+        } catch (JsonProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println(jsonInString);
         return restTemplate.postForObject(url, reqWrapper, BillResponse.class);
     }
 
@@ -1266,7 +1286,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
                         ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId().getId().longValue()
                         : null);
         instrument.setBranchName(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankBranchName());
-        instrument.setTenantId(tenantId);     
+        instrument.setTenantId(tenantId);
         receipt.setInstrument(instrument);
         receipt.getBill().get(0).setPaidBy(receiptHeader.getPaidBy());
         receipt.getBill().get(0).setPayeeAddress(receiptHeader.getPayeeAddress());

@@ -40,7 +40,9 @@
 package org.egov.infra.microservice.models;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -78,6 +80,8 @@ public class Instrument {
     private String drawer;
 
     private String tenantId;
+
+    private List<InstrumentVoucher> instrumentVouchers = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -205,6 +209,14 @@ public class Instrument {
 
     public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
+    }
+
+    public List<InstrumentVoucher> getInstrumentVouchers() {
+        return instrumentVouchers;
+    }
+
+    public void setInstrumentVouchers(List<InstrumentVoucher> instrumentVouchers) {
+        this.instrumentVouchers = instrumentVouchers;
     }
 
 }
