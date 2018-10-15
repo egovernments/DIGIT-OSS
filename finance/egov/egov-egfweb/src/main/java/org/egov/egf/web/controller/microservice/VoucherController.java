@@ -51,6 +51,8 @@ public class VoucherController {
                 headerDetails.put(VoucherConstant.VOUCHERNUMBER, voucher.getVoucherNumber());
                 headerDetails.put(VoucherConstant.VOUCHERDATE, vDate);
                 headerDetails.put(VoucherConstant.DESCRIPTION, voucher.getDescription());
+                headerDetails.put(VoucherConstant.MODULEID, voucher.getModuleId());
+                headerDetails.put(VoucherConstant.SOURCEPATH, voucher.getSource());
                 // headerDetails.put(VoucherConstant.BUDGETCHECKREQ, voucher());
                 if (voucher.getFund() != null)
                     headerDetails.put(VoucherConstant.FUNDCODE, voucher.getFund().getCode());
