@@ -248,42 +248,42 @@
       "description": "Admin role that as access over a state"
     },
     {
-      "rolecode": "EGF-BILL_CREATOR",
+      "rolecode": "EGF_BILL_CREATOR",
       "name": "EGF Bill Creator",
       "description": "Employee who creates Bills in finance "
     },
     {
-      "rolecode": "EGF-BILL_APPROVER",
+      "rolecode": "EGF_BILL_APPROVER",
       "name": "EGF Bill Approver",
       "description": "Employee who takes part in  Bills  approval in finance "
     },
     {
-      "rolecode": "EGF-VOUCHER_CREATOR",
+      "rolecode": "EGF_VOUCHER_CREATOR",
       "name": "Finance Voucher Creator",
       "description": "One who can create a voucher"
     },
     {
-      "rolecode": "EGF-VOUCHER_APPROVER",
+      "rolecode": "EGF_VOUCHER_APPROVER",
       "name": "Finance Voucher Approver",
       "description": "One who can approve a voucher"
     },
     {
-      "rolecode": "EGF-PAYMENT_CREATOR",
+      "rolecode": "EGF_PAYMENT_CREATOR",
       "name": "Finance Payment Creator",
       "description": "One who can create a payment"
     },
     {
-      "rolecode": "EGF-PAYMENT_APPROVER",
+      "rolecode": "EGF_PAYMENT_APPROVER",
       "name": "Finance Payment Approver",
       "description": "One who can approve a payment"
     },
     {
-      "rolecode": "EGF-MASTER_ADMIN",
+      "rolecode": "EGF_MASTER_ADMIN",
       "name": "Finance Master Admin",
       "description": "One who is the administrator for all master data in Finance"
     },
     {
-      "rolecode": "EGF-REPORT_VIEW",
+      "rolecode": "EGF_REPORT_VIEW",
       "name": "Finance Report View",
       "description": "One who has acess to all financial reports"
     },
