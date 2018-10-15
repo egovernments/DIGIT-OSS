@@ -316,6 +316,11 @@
       "rolecode": "TL_APPROVER",
       "name": "TL Approver",
       "description": "Approver who verifies and approves the TL application"
+    },
+   {
+      "rolecode": "EMPLOYEE_FINANCE",
+      "name": "Employee Finance",
+      "description": "All Employees who use Finance application"
     }
   ]
 }
