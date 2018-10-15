@@ -211,6 +211,7 @@ function resetMisc(){
 function onBodyLoadMiscReceipt()
 {
     document.getElementById("voucherDate").value=currDate;
+    document.getElementById("voucherDate").disabled = true;
     document.getElementById("rebateDetails").style.display="none";
     //loadDropDownCodes();
     loadDropDownRebateCodes();
@@ -704,6 +705,12 @@ var totaldbamt=0,totalcramt=0;
             </s:iterator>
         
     }
+    
+    function ismaxlength(obj){
+    	var mlength=obj.getAttribute? parseInt(obj.getAttribute("maxlength")) : ""
+    	if (obj.getAttribute && obj.value.length>mlength)
+    	obj.value=obj.value.substring(0,mlength)
+    }
 </script>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" >
 
@@ -765,10 +772,10 @@ var totaldbamt=0,totalcramt=0;
           <td width="4%" class="bluebox">&nbsp;</td>
            <s:if test="%{shouldShowHeaderField('fund')}">
           <td width="21%" class="bluebox"><s:text name="miscreceipt.fund"/><s:if test="%{isFieldMandatory('fund')}"><span class="bluebox"><span class="mandatory"/></s:if></td>
-          <td width="24%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="fundId" id="fundId" cssClass="selectwk" onChange="setFundId();" list="dropdownData.fundList" listKey="id" listValue="name" value="%{fund.id}" />
+          <td width="24%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="fundId" id="fundId" cssClass="selectwk" onChange="setFundId();" list="dropdownData.fundList" listKey="code" listValue="name" value="%{fund.code}" />
           <!-- <egov:ajaxdropdown id="bankBranchMasterDropdown" fields="['Text','Value']" dropdownId='bankBranchMaster' url='receipts/ajaxBankRemittance-bankBranchList.action' selectedValue="%{bankbranch.id}"/> --> 
           <!-- <egov:ajaxdropdown id="schemeIdDropdown" fields="['Text','Value']" dropdownId='schemeId' url='receipts/ajaxReceiptCreate-ajaxLoadSchemes.action' /> -->
-         <s:hidden label="receiptMisc.fund.id" id="receiptMisc.fund.id"  name="receiptMisc.fund.id"/>
+         <s:hidden label="receiptMisc.fund.id" id="receiptMisc.fund.id"  name="receiptMisc.fund.code"/>
           </td>
           </s:if>
            <s:else>
@@ -788,7 +795,7 @@ var totaldbamt=0,totalcramt=0;
          <s:if test="%{shouldShowHeaderField('function')}">
          <td width="4%" class="bluebox">&nbsp;</td>
            <td width="21%" class="bluebox"><s:text name="miscreceipt.function"/><s:if test="%{isFieldMandatory('function')}"><span class="bluebox"><span class="mandatory"/></s:if></td>
-          <td width="24%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="functionId" id="functionId" cssClass="selectwk" list="dropdownData.functionList" listKey="id" listValue="name" value="%{service.function.id}" /> </td>
+          <td width="24%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="functionId" id="functionId" cssClass="selectwk" list="dropdownData.functionList" listKey="code" listValue="name" value="%{service.function.id}" /> </td>
             </s:if>
            <s:else>
             <td colspan=2 class="bluebox"></td>

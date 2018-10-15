@@ -440,6 +440,7 @@ public class RemittanceServiceImpl extends RemittanceService {
                 }
         }
       List<Receipt> receipts =   microserviceUtils.getReceipts(StringUtils.join(receiptIds, ","), "Approved", serviceCodes);
+      
         final List<HashMap<String, Object>> paramList = new ArrayList<>();
         final String whereClauseBeforInstumentType = " where ch.id=cm.collectionheader AND "
                 + "fnd.id=cm.fund AND dpt.id=cm.department and ci.INSTRUMENTHEADER=ih.ID and "

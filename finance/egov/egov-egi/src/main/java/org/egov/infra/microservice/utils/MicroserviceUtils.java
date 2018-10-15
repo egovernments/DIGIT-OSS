@@ -129,6 +129,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Service
 public class MicroserviceUtils {
 
@@ -231,7 +234,7 @@ public class MicroserviceUtils {
 
     @Value("${egov.services.collection.service.receipts.search}")
     private String receiptSearchUrl;
-    
+
     public RequestInfo createRequestInfo() {
         final RequestInfo requestInfo = new RequestInfo();
         requestInfo.setApiId("apiId");
@@ -619,8 +622,7 @@ public class MicroserviceUtils {
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call:" + bc_url);
-        BusinessCategoryResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,
-                BusinessCategoryResponse.class);
+        BusinessCategoryResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,BusinessCategoryResponse.class);
         return bcResponse.getBusinessCategoryInfo();
     }
 
@@ -841,7 +843,7 @@ public class MicroserviceUtils {
 
         return response.getInstruments();
     }
-    
+
     public List<Receipt> getReceipts(String ids, String status, String serviceCodes) {
 
         final String url = hostUrl + receiptSearchUrl + "?tenantId=" + getTenentId() + "&status=" + status

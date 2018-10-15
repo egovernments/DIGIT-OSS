@@ -540,6 +540,10 @@ function validate()
 		return false;
 	}
 	else {
+		document.getElementById("voucherDate").disabled = false;
+		document.getElementById("fundId").disabled = false;
+		document.getElementById("functionId").disabled = false;
+		document.getElementById("deptId").disabled = false;
 		document.getElementById("receipt_error_area").style.display="block";
 		document.collDetails.action="receipt-save.action";
 		return validation;

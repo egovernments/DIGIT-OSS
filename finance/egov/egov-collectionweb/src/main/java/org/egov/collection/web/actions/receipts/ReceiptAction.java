@@ -300,7 +300,7 @@ public class ReceiptAction extends BaseFormAction {
 
     private List<CChartOfAccounts> bankCOAList;
 
-    private Long functionId;
+    private String functionId;
 
     private String instrumentType;
 
@@ -400,7 +400,7 @@ public class ReceiptAction extends BaseFormAction {
         } else // to load branch list and account list while returning after an
                // error
         if (getServiceName() != null && receiptMisc.getFund() != null) {
-            final Fund fund = fundDAO.fundById(receiptMisc.getFund().getId(), false);
+            final Fund fund = fundDAO.fundByCode(receiptMisc.getFund().getCode());
             ajaxBankRemittanceAction.setFundName(fund.getName());
             ajaxBankRemittanceAction.bankBranchList();
             addDropdownData(BANK_BRANCH_LIST, ajaxBankRemittanceAction.getBankBranchArrayList());
@@ -487,7 +487,7 @@ public class ReceiptAction extends BaseFormAction {
         BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(CollectionConstants.SERVICE_CODE_COLLECTIONS);
         receiptHeader.setPartPaymentAllowed(false);
         receiptHeader.setService(serviceId);
-        final Fund fund = fundDAO.fundById(receiptMisc.getFund().getId(), false);
+        final Fund fund = fundDAO.fundByCode(receiptMisc.getFund().getCode());
         Functionary functionary = null;
         Scheme scheme = null;
         SubScheme subscheme = null;
@@ -519,7 +519,7 @@ public class ReceiptAction extends BaseFormAction {
                         .getCChartOfAccountsByGlCode(voucherDetails.getGlcodeDetail());
                 CFunction function = null;
                 if (functionId != null)
-                    function = functionDAO.getFunctionById(functionId);
+                    function = functionDAO.getFunctionByCode(functionId);
                 ReceiptDetail receiptDetail = new ReceiptDetail(account, function,
                         voucherDetails.getCreditAmountDetail(), voucherDetails.getDebitAmountDetail(), BigDecimal.ZERO,
                         Long.valueOf(m), null, true, receiptHeader, PURPOSE.OTHERS.toString());
@@ -1879,11 +1879,11 @@ public class ReceiptAction extends BaseFormAction {
         this.serviceCategoryService = serviceCategoryService;
     }
 
-    public Long getFunctionId() {
+    public String getFunctionId() {
         return functionId;
     }
 
-    public void setFunctionId(final Long functionId) {
+    public void setFunctionId(final String functionId) {
         this.functionId = functionId;
     }
 

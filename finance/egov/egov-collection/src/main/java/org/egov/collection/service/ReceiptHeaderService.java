@@ -1233,7 +1233,6 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         try {
             jsonInString = mapper.writeValueAsString(reqWrapper);
         } catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         System.out.println(jsonInString);

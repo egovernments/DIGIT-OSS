@@ -479,14 +479,16 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
                     .append("-1").append('~') // subScheme
                     .append(null != service.getFundSource() ? service.getFundSource() : "-1").append('~') // fundsource
                     .append(null != service.getFunctionary() ? service.getFunctionary() : "-1").append('~') // functionary
-                    .append(null != service.getFunction() ? service.getFunction() : "-1"); // function
+                    .append(null != service.getFunction() ? service.getFunction() : "-1").append('~')// function
+                    .append(null != service.getDepartment() ? service.getDepartment() : "-1"); // department
         else
             miscDetails.append("-1").append('~') // fund
                     .append("-1").append('~') // scheme
                     .append("-1").append('~') // subscheme
                     .append("-1").append('~') // fundsource
                     .append("-1").append('~') // functionary
-                    .append("-1"); // function
+                    .append("-1").append('~') // function
+                    .append("-1"); // department
         value = miscDetails.toString();
         return RESULT;
 
