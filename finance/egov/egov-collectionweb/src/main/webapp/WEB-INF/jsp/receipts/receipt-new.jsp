@@ -215,7 +215,7 @@ function validate()
 	document.getElementById("invaliddateformat").style.display="none";
 	document.getElementById("receipt_dateerror_area").style.display="none";
 	var validation = true;
-		<s:if test="%{!isBillSourcemisc() && manualReceiptNumberAndDateReq}"> 
+		<s:if test="%{manualReceiptNumberAndDateReq}"> 
 		if(document.getElementById('manualreceiptinfo').checked==true){
 				if(document.getElementById("manualReceiptDate").value=="" ){
 							document.getElementById("receipt_error_area").innerHTML+=
@@ -606,7 +606,7 @@ function verifyChequeDetails(table,len1)
 	    //validate if valid date has been entered
 	    if(getControlInBranch(table.rows[j],'instrumentDate')!=null){
 	    var instrDate=getControlInBranch(table.rows[j],'instrumentDate');
-	    <s:if test="%{!isBillSourcemisc() && manualReceiptNumberAndDateReq}">
+	    <s:if test="%{manualReceiptNumberAndDateReq}">
 	    	if(instrDate.value==null || instrDate.value=="" || instrDate.value=="DD/MM/YYYY"){
 	    		if(instrDateErrMsg==""){
 	    		    instrDateErrMsg='<s:text name="billreceipt.missingchequedate.errormessage" />' + '<br>';
@@ -816,7 +816,7 @@ function onBodyLoad()
 	displayPaytModes();
 	displayPaymentDetails();
 	loadchequedetails();
-	clearManualReceiptData();
+	//clearManualReceiptData();
 }
 
 function checkandcalculatecredittotal(index,elem){
@@ -948,7 +948,7 @@ function checkForCurrentDate(obj)
 	var receiptDate;
 	   document.getElementById("receipt_dateerror_area").style.display="none";
 		document.getElementById("receipt_dateerror_area").innerHTML="";
-	   <s:if test="%{!isBillSourcemisc() && manualReceiptNumberAndDateReq}">
+	   <s:if test="%{manualReceiptNumberAndDateReq}">
 		   if (  document.getElementById('manualreceiptinfo').checked==true){
 			   if(document.getElementById("manualReceiptDate").value != null  && document.getElementById("manualReceiptDate").value != ''){
 			   receiptDate = document.getElementById("manualReceiptDate").value;
@@ -976,7 +976,7 @@ function checkForCurrentDate(obj)
 
 	   if(obj.value != null && obj.value != "") {
 	   if(!validatedays(obj.value,receiptDate)){
-		   <s:if test="%{!isBillSourcemisc() && manualReceiptNumberAndDateReq}">
+		   <s:if test="%{manualReceiptNumberAndDateReq}">
 		   if (document.getElementById("manualReceiptDate").value != null && document.getElementById("manualReceiptDate").value != '') {
 			if(receiptDateFormat<finDate) {
 				 document.getElementById("receipt_dateerror_area").style.display="block";
@@ -1141,7 +1141,6 @@ function showHideMandataryMark(obj){
 		<s:hidden label="callbackForApportioning" id="callbackForApportioning" value="%{callbackForApportioning}" name="callbackForApportioning"/>
 		<s:hidden label="instrumenttotal" id="instrumenttotal" name="instrumenttotal"/>
 		<s:hidden label="manualReceiptNumberAndDateReq" id="manualReceiptNumberAndDateReq" name="manualReceiptNumberAndDateReq" value="%{manualReceiptNumberAndDateReq}"/>
-				
 		<s:if test="%{!isBillSourcemisc()}">
 		      	<%@ include file='collection-billdetails.jsp'%>
 		</s:if> 
@@ -1191,15 +1190,15 @@ function showHideMandataryMark(obj){
 	    </s:if>
 		<table id="manualreceipt" >    
 		
-		<s:if test="%{!isBillSourcemisc() && manualReceiptNumberAndDateReq}">
-					<tr>
+			<s:if test="%{manualReceiptNumberAndDateReq}">
+				<tr>
 					<td class="bluebox" width="3%" ></td>
 					<td class="bluebox"><s:text name="billreceipt.manualreceiptinfo"/><span id="asteriskId"  class="mandatory1">*</span></td>
 					 <td class="bluebox"><s:checkbox label="manualreceiptinfo" id="manualreceiptinfo" name="receiptInfo" onChange="showHideMandataryMark(this)"/></td>
-					</tr>
-		 </s:if>
-		 
-		 <s:if test="%{!isBillSourcemisc() && manualReceiptNumberAndDateReq}">
+				</tr>
+			 </s:if>
+			 
+			 <s:if test="%{manualReceiptNumberAndDateReq}">
 				<tr>
 				    <td class="bluebox" width="3%" ></td>
 					<td class="bluebox"><s:text name="billreceipt.manualreceipt.receiptnumber"/></td>
@@ -1207,7 +1206,7 @@ function showHideMandataryMark(obj){
 					<td class="bluebox"><s:text name="billreceipt.manualreceipt.receiptdate"/></td>
 					<td class="bluebox"><s:textfield id="manualReceiptDate" name="manualReceiptDate" cssClass="datepicker"  styleId="manualReceiptDate" onblur="validateManualReceiptDate(this);" data-inputmask="'mask': 'd/m/y'"/><div>(DD/MM/YYYY)</div></td>
 				</tr>
-		 </s:if>
+			 </s:if>
 		
 		</table>
 		

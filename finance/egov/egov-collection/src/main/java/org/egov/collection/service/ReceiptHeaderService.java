@@ -1289,6 +1289,9 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         receipt.setInstrument(instrument);
         receipt.getBill().get(0).setPaidBy(receiptHeader.getPaidBy());
         receipt.getBill().get(0).setPayeeAddress(receiptHeader.getPayeeAddress());
+        receipt.getBill().get(0).getBillDetails().get(0).setManualReceiptNumber(receiptHeader.getManualreceiptnumber());
+        receipt.getBill().get(0).getBillDetails().get(0).setManualReceiptDate(
+                receiptHeader.getManualreceiptdate() != null ? receiptHeader.getManualreceiptdate().getTime() : null);
         receipt.setTenantId(tenantId);
         request.setTenantId(tenantId);
         request.setReceipt(Collections.singletonList(receipt));
