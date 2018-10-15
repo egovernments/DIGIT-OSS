@@ -16484,24 +16484,35 @@
       "actioncode": "",
       "tenantId": "pb"
     },
-   {
+    {
       "rolecode": "EMPLOYEE_FINANCE",
       "actionid": 1534,
       "actioncode": "",
       "tenantId": "pb"
     },
-   {
+    {
       "rolecode": "EMPLOYEE_FINANCE",
       "actionid": 870,
       "actioncode": "",
       "tenantId": "pb"
     },
-   {
+    {
       "rolecode": "EMPLOYEE_FINANCE",
       "actionid": 604,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "TL_APPROVER",
+      "actionid": 1680,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "TL_CEMP",
+      "actionid": 1690,
+      "actioncode": "",
+      "tenantId": "pb"
     }
-
   ]
 }
