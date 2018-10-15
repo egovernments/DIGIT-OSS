@@ -41,6 +41,11 @@
       "name": "Complaint Cell",
       "code": "DEPT_8",
       "active": "true"
+    },
+    {
+      "name": "Tax Branch",
+      "code": "DEPT_13",
+      "active": "true"
     }
   ]
 }
