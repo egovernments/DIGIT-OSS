@@ -82,13 +82,22 @@ public class MSCommController {
 	    return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-//	@RequestMapping(value="/refreshToken",method=RequestMethod.POST)
-//	private void refreshToken(@RequestParam(value="oldToken")String oldToken,@RequestParam(value="newToken")String newToken){
-//		
-//		if(null!=oldToken && null!=newToken){
-//			microserviceUtils.refreshToken(oldToken, newToken);
-//		}
-//	}
+	@RequestMapping(value="/rest/refreshToken",method=RequestMethod.POST)
+	@ResponseBody
+	private ResponseEntity refreshToken(@RequestParam(value="oldToken")String oldToken,@RequestParam(value="newToken")String newToken){
+		
+	    try{
+		if(null!=oldToken && null!=newToken){
+			microserviceUtils.refreshToken(oldToken, newToken);
+		}
+	    }
+	    catch(Exception ex){
+                
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 	
 	@GetMapping(value="inbox/items",produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody

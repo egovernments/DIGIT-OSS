@@ -880,7 +880,7 @@ public class MicroserviceUtils {
         return response.getReceipts();
     }
 
-    public List<Receipt> searchReciepts(String classification,Date fromDate,Date toDate,String businessCode){
+    public List<Receipt> searchReciepts(String classification,Date fromDate,Date toDate,String businessCode,String receiptNo){
        
         final StringBuilder url = new StringBuilder(hostUrl + receiptSearchUrl);
         final RequestInfoWrapper request = new RequestInfoWrapper();
@@ -894,9 +894,18 @@ public class MicroserviceUtils {
         
         url.append("?tenantId="+tenantId);
         url.append("&classification="+classification);
-        url.append("&fromDate="+fromDate.getTime());
-        url.append("&toDate="+toDate.getTime());
+       
+        if(null!=fromDate)
+            url.append("&fromDate="+fromDate.getTime());
+        
+        if(null!=toDate)
+            url.append("&toDate="+toDate.getTime());
+        
         url.append("&businessCode="+businessCode);
+        
+        if(null!=receiptNo&&!receiptNo.isEmpty()){
+            url.append("&receiptNumbers=["+receiptNo+"]");
+        }
         
         ReceiptResponse response = restTemplate.postForObject(url.toString(), request, ReceiptResponse.class);
         
@@ -975,7 +984,10 @@ public class MicroserviceUtils {
     }
 
     public Object readFromRedis(String sessionId, String key) {
-        return redisTemplate.opsForHash().get(sessionId, key);
+        if(redisTemplate.hasKey(sessionId))
+            return redisTemplate.opsForHash().get(sessionId, key);
+        else
+            return null;
     }
 
     public void removeSessionFromRedis(String access_token) {
@@ -992,26 +1004,26 @@ public class MicroserviceUtils {
 
     }
 
-    // public void refreshToken(String oldToken, String newToken) {
-    // LOGGER.info("Refresh Token is called OLD::NEW" + oldToken + " :: " + newToken);
-    // if (redisTemplate.hasKey(oldToken)) {
-    //
-    // while (redisTemplate.opsForList().size(oldToken) > 0) {
-    //
-    // Object sessionId = redisTemplate.opsForList().leftPop(oldToken);
-    // if (redisTemplate.hasKey(sessionId))
-    // if (oldToken.equals(redisTemplate.opsForHash().get(sessionId, "ACCESS_TOKEN"))) {
-    // redisTemplate.opsForHash().delete(sessionId, "ACCESS_TOKEN");
-    // redisTemplate.opsForHash().put(sessionId, "ACCESS_TOKEN", newToken);
-    // redisTemplate.delete(oldToken);
-    // redisTemplate.opsForValue().set(newToken, sessionId);
-    // }
-    // redisTemplate.opsForList().leftPush(newToken, sessionId);
-    // }
-    // redisTemplate.delete(oldToken);
-    //
-    // }
-    // }
+    public void refreshToken(String oldToken, String newToken) {
+        LOGGER.info("Refresh Token is called OLD::NEW" + oldToken + " :: " + newToken);
+        if (redisTemplate.hasKey(oldToken)) {
+
+            while (redisTemplate.opsForList().size(oldToken) > 0) {
+
+                Object sessionId = redisTemplate.opsForList().leftPop(oldToken);
+                if (redisTemplate.hasKey(sessionId))
+                    if (oldToken.equals(redisTemplate.opsForHash().get(sessionId, "ACCESS_TOKEN"))) {
+                        redisTemplate.opsForHash().delete(sessionId, "ACCESS_TOKEN");
+                        redisTemplate.opsForHash().put(sessionId, "ACCESS_TOKEN", newToken);
+                        redisTemplate.delete(oldToken);
+                        redisTemplate.opsForValue().set(newToken, sessionId);
+                    }
+                redisTemplate.opsForList().leftPush(newToken, sessionId);
+            }
+            redisTemplate.delete(oldToken);
+
+        }
+    }
 
     public static ResponseInfo getResponseInfo(RequestInfo requestInfo, Integer status, String apiId) {
         ResponseInfo info = new ResponseInfo();

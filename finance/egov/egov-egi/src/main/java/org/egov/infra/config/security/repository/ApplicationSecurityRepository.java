@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.Role;
 import org.egov.infra.admin.master.entity.User;
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
 import org.egov.infra.microservice.contract.UserSearchResponse;
 import org.egov.infra.microservice.contract.UserSearchResponseContent;
@@ -61,6 +62,7 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 		try {
 			
 			HttpServletRequest request = requestResponseHolder.getRequest();
+			HttpSession session = request.getSession();
 			LOGGER.info(" *** URI " + request.getRequestURL().toString());
 			cur_user = (CurrentUser)this.microserviceUtils.readFromRedis(request.getSession().getId(), "current_user");
 			if (cur_user==null) {
@@ -70,9 +72,16 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 				}
 				else{
 				 cur_user = new CurrentUser(this.getUserDetails(request));
-				this.microserviceUtils.savetoRedis(request.getSession().getId(), "current_user", cur_user);
+				this.microserviceUtils.savetoRedis(session.getId(), "current_user", cur_user);
 				}
 
+			}{
+			    String oldToken = (String)session.getAttribute(MS_USER_TOKEN);
+			    String newToken = (String)this.microserviceUtils.readFromRedis(session.getId(), "auth_token");
+			    if(null!=oldToken && null!=newToken && !oldToken.equals(newToken)){
+			        ApplicationThreadLocals.setUserToken(newToken);
+			        session.setAttribute(MS_USER_TOKEN, newToken);
+			    }
 			}
 			LOGGER.info(" ***  Session   found  in redis.... ," + request.getSession().getId());
 			

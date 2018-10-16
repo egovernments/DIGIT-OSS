@@ -83,7 +83,7 @@ public class RestServiceAuthFilter implements Filter {
         
         HttpServletRequest httpRequest = (HttpServletRequest)req;
         
-        if (httpRequest.getRequestURI().contains("/ClearToken"))
+        if (httpRequest.getRequestURI().contains("/ClearToken")||httpRequest.getRequestURI().contains("/refreshToken"))
         {
             LOGGER.info("Clear Token request recieved ");
             httpRequest.getRequestDispatcher(httpRequest.getServletPath()).forward(req, res);

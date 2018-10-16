@@ -243,14 +243,25 @@ function validate()
 {
 	var fromdate=dom.get("fromDate").value;
 	var todate=dom.get("toDate").value;
+	var serviceType=dom.get("serviceType").value;
+	console.log("serviceType : "+serviceType);
 	var valSuccess = true;
-	if(null!= document.getElementById('serviceClass') && document.getElementById('serviceClass').value == '-1'){
+	/* if(null!= document.getElementById('serviceClass') && document.getElementById('serviceClass').value == '-1'){
 		dom.get("error_area").style.display="block";
 		dom.get("error_area").innerHTML = '<s:text name="service.servictype.null" />' + '<br>';
 		window.scroll(0,0);
 		valSuccess=false;
 		return false;
+	} */
+
+	if(serviceType==-1){
+		valSuccess=false;
+		dom.get("error_area").style.display="block";
+		dom.get("error_area").innerHTML = '<s:text name="service.servictype.null" />' + '<br>';
+		window.scroll(0,0);
+		return false;
 	}
+	
 	if(fromdate!="" && todate!="" && fromdate!=todate)
 	{
 		if(!checkFdateTdate(fromdate,todate))
@@ -401,7 +412,7 @@ function onChangeServiceClass(obj)
 			</td>
 			<%--  <egov:ajaxdropdown id="serviceTypeDropdown" fields="['Text','Value']" dropdownId='serviceType'
                 url='receipts/ajaxReceiptCreate-ajaxLoadServiceByClassification.action' /> --%>
-	      <td width="21%" class="bluebox"><s:text name="searchreceipts.criteria.servicetype"/></td>
+	      <td width="21%" class="bluebox"><s:text name="searchreceipts.criteria.servicetype"/> <span class="mandatory"></td>
 	      <td width="24%" class="bluebox"><s:select headerKey="-1"  headerValue="%{getText('searchreceipts.servicetype.select')}"  name="serviceTypeId" id="serviceType" cssClass="selectwk" list="dropdownData.serviceTypeList" listKey="code" listValue="name" value="%{serviceTypeId}" /> </td>
 	      
 	      <%-- <td width="21%" class="bluebox"><s:text name="searchreceipts.criteria.counter"/></td>
@@ -460,9 +471,9 @@ function onChangeServiceClass(obj)
 	      <td width="30%" class="bluebox">&nbsp;</td>
 	    </tr> --%>
 	    </table>
-		<div align="left" class="mandatory1">
+		<%-- <div align="left" class="mandatory1">
 		              <s:text name="report.bankbranch.note"/>
-		</div>
+		</div> --%>
 </div>
 <div id="loadingMask" style="display: none; overflow: hidden; text-align: center"><img src="/services/collection/resources/images/bar_loader.gif"/> <span style="color: red">Please wait....</span></div>
     <div class="buttonbottom">
@@ -487,21 +498,21 @@ function onChangeServiceClass(obj)
 <display:table name="searchResult" uid="currentRow" pagesize = "20" style="width:100%;border-left: 1px solid #DFDFDF;" cellpadding="0" cellspacing="0" export="false" requestURI="">
 <display:caption media="pdf">&nbsp;</display:caption>
 <display:column headerClass="bluebgheadtd"  class="blueborderfortd" style="width:3%">
-<input name="selectedReceipts" type="checkbox" id="selectedReceipts"
-				value="${currentRow.referencenumber}"/>
+<%-- <input name="selectedReceipts" type="checkbox" id="selectedReceipts"
+				value="${currentRow.referencenumber}"/> --%>
 <input type="hidden" name="receiptstatus" id="receiptstatus" value="${currentRow.curretnStatus}" />
 <input type="hidden" name="receipttype" id="receipttype" value="${currentreceipttype}" />
 </display:column>
 <display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Receipt No." style="width:8%;text-align:center" property="receiptnumber"/>
-<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Manual receipt number" style="width:8%;text-align:center" property="manualreceiptnumber"/>
-<display:column headerClass="bluebgheadtd" class="blueborderfortd" property="receiptdate" title="Receipt Date" format="{0,date,dd/MM/yyyy}" style="width:8%;text-align: center" />
+<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="G8 Receipt number" style="width:8%;text-align:center" property="manualreceiptnumber"/>
+<display:column headerClass="bluebgheadtd" class="blueborderfortd" property="receiptdate" title="G8 Receipt Date" format="{0,date,dd/MM/yyyy}" style="width:8%;text-align: center" />
 <display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Service" style="width:12%;text-align:center" property="service" />
 <display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Bill Number" style="width:8%;text-align:center" property="referencenumber" />
 <display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Bill Description" style="width:27%;text-align:center" property="referenceDesc" />
 <display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Paid By" style="width:27%;text-align:center" property="paidBy" />
 <display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Amount (Rs.)" property="totalAmount" style="width:8%; text-align: right" format="{0, number, #,##0.00}" />
-<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Mode of Payment" style="width:8%" >
-<div align="center">
+<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Mode of Payment" style="width:8%"  property="modOfPayment"/>
+<%-- <div align="center">
 <s:set var="instrtype" value="" />
 <s:iterator status="stat1" value="#attr.currentRow.receiptInstrument">
 <s:if test="instrumentType.type!=null">
@@ -512,19 +523,19 @@ function onChangeServiceClass(obj)
 </s:iterator>&nbsp;
 </div>
 <input type="hidden" name="instrumenttype" id="instrumenttype" value="${instrtype}" />
-</display:column>
-<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Status" style="width:8%;text-align:center" property="status.description"></display:column>
-<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Owner" style="width:8%;text-align:center" property="workflowUserName"></display:column>
+</display:column> --%>
+<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Status" style="width:8%;text-align:center" property="curretnStatus"></display:column>
+<%-- <display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Owner" style="width:8%;text-align:center" property="workflowUserName"></display:column> --%>
 </display:table>	 
 </div>
 <br/>
 <div class="buttonbottom">
-  <input name="button32" type="button" class="buttonsubmit" id="button32" value="View" onclick="return checkviewforselectedrecord()"/>
-  <input name="button32" type="button" class="buttonsubmit" id="button32" value="Print" onclick="return checkprintforselectedrecord()"/>
-   <egov-authz:authorize actionName="CancelReceipt">
+ <!--  <input name="button32" type="button" class="buttonsubmit" id="button32" value="View" onclick="return checkviewforselectedrecord()"/>
+  <input name="button32" type="button" class="buttonsubmit" id="button32" value="Print" onclick="return checkprintforselectedrecord()"/> -->
+   <%-- <egov-authz:authorize actionName="CancelReceipt">
   <input name="button32" type="button" class="buttonsubmit" id="button32" value="Cancel Receipt" onclick="return checkcancelforselectedrecord()"/>
-  </egov-authz:authorize>
-  <input name="button32" type="button" class="button" id="button32" value="Close" onclick="window.close();"/>
+  </egov-authz:authorize> --%>
+  <input name="button32" type="button" class="button" id="button32" value="Close" onclick="window.parent.postMessage('close','*');window.close();"/>
 </div>
 </s:if>
 </s:form>

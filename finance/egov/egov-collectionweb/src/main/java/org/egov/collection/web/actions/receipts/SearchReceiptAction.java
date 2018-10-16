@@ -208,7 +208,7 @@ public class SearchReceiptAction extends SearchFormAction {
         target = "searchresult";
         
         List<ReceiptHeader> receiptList =new ArrayList<>();
-        List<Receipt>  receipts = microserviceUtils.searchReciepts("MISCELLANEOUS",getFromDate(), getToDate(), getServiceTypeId());
+        List<Receipt>  receipts = microserviceUtils.searchReciepts("MISCELLANEOUS",getFromDate(), getToDate(), getServiceTypeId(),getReceiptNumber());
         
         
         
@@ -228,7 +228,8 @@ public class SearchReceiptAction extends SearchFormAction {
                         receiptHeader.setTotalAmount(billDetail.getTotalAmount());
                         receiptHeader.setCurretnStatus(billDetail.getStatus());
                         receiptHeader.setCurrentreceipttype(billDetail.getReceiptType());
-                       
+                        receiptHeader.setManualreceiptnumber(billDetail.getManualReceiptNumber());
+                        receiptHeader.setModOfPayment(receipt.getInstrument().getInstrumentType().getName());
                         receiptList.add(receiptHeader);
                         
                     }
@@ -240,7 +241,7 @@ public class SearchReceiptAction extends SearchFormAction {
         
         if(searchResult==null)
         {
-            Page page = new Page<ReceiptHeader>(1, 10, receiptList);
+            Page page = new Page<ReceiptHeader>(1, receiptList.size(), receiptList);
             searchResult = new EgovPaginatedList(page, receiptList.size());
         }
         else
