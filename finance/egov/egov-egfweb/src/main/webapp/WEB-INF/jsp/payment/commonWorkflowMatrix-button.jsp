@@ -110,7 +110,7 @@
 		</s:iterator>
 		<div class="col-md-2 col-sm-2">
 			<input type="button" name="button2" id="button2" value="Close"
-				class="button" onclick="window.close();" />
+				class="button" onclick="window.parent.postMessage('close','*');window.close();" />
 		</div>
 	</div>
 </div>

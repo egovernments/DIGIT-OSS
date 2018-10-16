@@ -27,12 +27,17 @@ public class RestTemplateLoggerInterceptor implements ClientHttpRequestIntercept
     
 
     private void logRequest(HttpRequest request,byte[] body) throws IOException{
-        if(LOGGER.isDebugEnabled()){
-            LOGGER.debug("URI          "+request.getURI());
-            LOGGER.debug("Method       "+request.getMethod());
-            LOGGER.debug("Headers      "+request.getHeaders());
-            LOGGER.debug("Request body "+new String(body,"UTF-8"));
-        }
+//        if(LOGGER.isDebugEnabled()){
+//            LOGGER.debug("URI          "+request.getURI());
+//            LOGGER.debug("Method       "+request.getMethod());
+//            LOGGER.debug("Headers      "+request.getHeaders());
+//            LOGGER.debug("Request body "+new String(body,"UTF-8"));
+//        }
+        
+        LOGGER.info("URI          "+request.getURI());
+        LOGGER.info("Method       "+request.getMethod());
+        LOGGER.info("Headers      "+request.getHeaders());
+        LOGGER.info("Request body "+new String(body,"UTF-8"));
       
         
         
@@ -40,12 +45,17 @@ public class RestTemplateLoggerInterceptor implements ClientHttpRequestIntercept
     
     private void logResponse(ClientHttpResponse response) throws IOException{
         
-        if(LOGGER.isDebugEnabled()){
-            LOGGER.debug("Status       "+response.getRawStatusCode());
-            LOGGER.debug("Status text  "+response.getStatusText());
-            LOGGER.debug("Headers      "+response.getHeaders());
-            LOGGER.debug("Response body"+StreamUtils.copyToString(response.getBody(), Charset.defaultCharset()));
-        }
+//        if(LOGGER.isDebugEnabled()){
+//            LOGGER.debug("Status       "+response.getRawStatusCode());
+//            LOGGER.debug("Status text  "+response.getStatusText());
+//            LOGGER.debug("Headers      "+response.getHeaders());
+//            LOGGER.debug("Response body"+StreamUtils.copyToString(response.getBody(), Charset.defaultCharset()));
+//        }
+        
+      LOGGER.info("Status       "+response.getRawStatusCode());
+      LOGGER.info("Status text  "+response.getStatusText());
+      LOGGER.info("Headers      "+response.getHeaders());
+      LOGGER.info("Response body"+StreamUtils.copyToString(response.getBody(), Charset.defaultCharset()));
        
         
     }

@@ -119,6 +119,8 @@ public class ReceiptHeader extends StateAware implements Auditable {
     private String serviceCategory;
     private BigDecimal totalcramount;
 
+    private String curretnStatus;
+    private String currentreceipttype;
     public ReceiptHeader() {
     }
 
@@ -783,6 +785,22 @@ public class ReceiptHeader extends StateAware implements Auditable {
 
     public void setTotalcramount(BigDecimal totalcramount) {
         this.totalcramount = totalcramount;
+    }
+
+    public String getCurretnStatus() {
+        return curretnStatus;
+    }
+
+    public void setCurretnStatus(String curretnStatus) {
+        this.curretnStatus = curretnStatus;
+    }
+
+    public String getCurrentreceipttype() {
+        return currentreceipttype;
+    }
+
+    public void setCurrentreceipttype(String currentreceipttype) {
+        this.currentreceipttype = currentreceipttype;
     }
 
 }

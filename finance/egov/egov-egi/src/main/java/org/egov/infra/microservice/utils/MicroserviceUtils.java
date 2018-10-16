@@ -63,6 +63,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.User;
@@ -223,6 +224,9 @@ public class MicroserviceUtils {
     @Value("${egov.services.billing.service.taxperiods.search}")
     private String taxperiodsSearchUrl;
 
+    @Value("${egov.services.collection.service.receipts.search}")
+    private String receiptSearchUrl;
+    
     @Value("${egov.services.collection.service.basm.search}")
     private String bankAccountServiceMappingSearchUrl;
 
@@ -231,9 +235,6 @@ public class MicroserviceUtils {
 
     @Value("${egov.services.egf.instrument.search.url}")
     private String instrumentSearchUrl;
-
-    @Value("${egov.services.collection.service.receipts.search}")
-    private String receiptSearchUrl;
 
     public RequestInfo createRequestInfo() {
         final RequestInfo requestInfo = new RequestInfo();
@@ -645,6 +646,25 @@ public class MicroserviceUtils {
         return bcResponse.getBusinessDetails();
     }
 
+    public List<BusinessDetails> getBusinessDetailsByType(String type){
+    
+        final RestTemplate restTemplate = createRestTemplate();
+
+        final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&businessType=" + type;
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getUserToken());
+        requestInfo.setTs(new Date());
+        reqWrapper.setRequestInfo(requestInfo);
+
+        BusinessDetailsResponse bcResponse = restTemplate.postForObject(bd_url, reqWrapper, BusinessDetailsResponse.class);
+        if (bcResponse.getBusinessDetails() != null && !bcResponse.getBusinessDetails().isEmpty())
+            return bcResponse.getBusinessDetails();
+        else
+            return null;
+    }
     public BusinessDetails getBusinessDetailsByCode(String code) {
 
         final RestTemplate restTemplate = createRestTemplate();
@@ -860,6 +880,32 @@ public class MicroserviceUtils {
         return response.getReceipts();
     }
 
+    public List<Receipt> searchReciepts(String classification,Date fromDate,Date toDate,String businessCode){
+       
+        final StringBuilder url = new StringBuilder(hostUrl + receiptSearchUrl);
+        final RequestInfoWrapper request = new RequestInfoWrapper();
+        final RequestInfo requestinfo = new RequestInfo();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        
+        String tenantId = getTenentId();
+        requestinfo.setAuthToken(getUserToken());
+        
+        request.setRequestInfo(requestinfo);
+        
+        url.append("?tenantId="+tenantId);
+        url.append("&classification="+classification);
+        url.append("&fromDate="+fromDate.getTime());
+        url.append("&toDate="+toDate.getTime());
+        url.append("&businessCode="+businessCode);
+        
+        ReceiptResponse response = restTemplate.postForObject(url.toString(), request, ReceiptResponse.class);
+        
+        return response.getReceipts();
+        
+         
+    }
+    
+    
     public List<Task> getTasks() {
 
         List<Task> tasks = new ArrayList<>();

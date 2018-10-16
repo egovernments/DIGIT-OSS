@@ -108,7 +108,7 @@
 			</table>
 			<div class="buttonbottom">
 				<s:submit method="search" value="Search" id="searchBtn" cssClass="buttonsubmit" onclick="return validateSearch()" />
-				<input type="button" value="Close" onclick="javascript:window.close()" class="button" />
+				<input type="button" value="Close" onclick="window.parent.postMessage('close','*');window.close();" class="button" />
 			</div>
 		</div>
 		<s:hidden name="bankbranch" id="bankbranch" />

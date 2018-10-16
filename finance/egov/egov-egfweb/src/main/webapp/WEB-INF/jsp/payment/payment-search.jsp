@@ -149,7 +149,7 @@
 	<div align="center" class="buttonbottom">
 		<input type="submit" class="buttonsubmit" value="Search"
 			id="searchBtn" name="searchBtn" onclick="return search();" /> <input
-			type="button" value="Close" onclick="javascript:window.close()"
+			type="button" value="Close" onclick="window.parent.postMessage('close','*');window.close();"
 			class="button" />
 	</div>
 	<script>

@@ -395,13 +395,14 @@ function onChangeServiceClass(obj)
 	      <td width="4%" class="bluebox">&nbsp;</td>
 	      <td class="bluebox"><s:text name="service.master.classification"/> <span class="mandatory"></td>
 			<td class="bluebox"> 
-				<s:select list="serviceClassMap" headerKey="-1" headerValue="%{getText('miscreceipt.select')}"
-				name="serviceClass" id="serviceClass" onchange="onChangeServiceClass(this);"></s:select>
+				<%-- <s:select list="serviceClassMap" headerKey="-1" headerValue="%{getText('miscreceipt.select')}"
+				name="serviceClass" id="serviceClass" onchange="onChangeServiceClass(this);"></s:select> --%>
+				<s:select name='type' list="#{'type':'MISCELLANEOUS' }"></s:select>
 			</td>
-			 <egov:ajaxdropdown id="serviceTypeDropdown" fields="['Text','Value']" dropdownId='serviceType'
-                url='receipts/ajaxReceiptCreate-ajaxLoadServiceByClassification.action' />
+			<%--  <egov:ajaxdropdown id="serviceTypeDropdown" fields="['Text','Value']" dropdownId='serviceType'
+                url='receipts/ajaxReceiptCreate-ajaxLoadServiceByClassification.action' /> --%>
 	      <td width="21%" class="bluebox"><s:text name="searchreceipts.criteria.servicetype"/></td>
-	      <td width="24%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('searchreceipts.servicetype.select')}" name="serviceTypeId" id="serviceType" cssClass="selectwk" list="dropdownData.serviceTypeList" listKey="id" listValue="name" value="%{serviceTypeId}" /> </td>
+	      <td width="24%" class="bluebox"><s:select headerKey="-1"  headerValue="%{getText('searchreceipts.servicetype.select')}"  name="serviceTypeId" id="serviceType" cssClass="selectwk" list="dropdownData.serviceTypeList" listKey="code" listValue="name" value="%{serviceTypeId}" /> </td>
 	      
 	      <%-- <td width="21%" class="bluebox"><s:text name="searchreceipts.criteria.counter"/></td>
 	      <td width="30%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('searchreceipts.counter.select')}" name="counterId" id="counter" cssClass="selectwk" list="dropdownData.counterList" listKey="id" listValue="name" value="%{counterId}" /> </td> --%>
@@ -410,21 +411,21 @@ function onChangeServiceClass(obj)
 	      <td width="4%" class="bluebox">&nbsp;</td>
 	      <td width="21%" class="bluebox"><s:text name="searchreceipts.criteria.fromdate"/></td>
 		  <s:date name="fromDate" var="cdFormat" format="dd/MM/yyyy"/>
-		  <td width="24%" class="bluebox"><s:textfield id="fromDate" name="fromDate" value="%{cdFormat}" onfocus="javascript:vDateType='3';" onkeyup="DateFormat(this,this.value,event,false,'3')"/><a href="javascript:show_calendar('forms[0].fromDate');" onmouseover="window.status='Date Picker';return true;"  onmouseout="window.status='';return true;"  ><img src="/egi/resources/erp2/images/calendaricon.gif" alt="Date" width="18" height="18" border="0" align="absmiddle" /></a><div class="highlight2" style="width: 80px">DD/MM/YYYY</div></td>
+		  <td width="24%" class="bluebox"><s:textfield id="fromDate" name="fromDate" value="%{cdFormat}" onfocus="javascript:vDateType='3';" onkeyup="DateFormat(this,this.value,event,false,'3')"/><a href="javascript:show_calendar('forms[0].fromDate');" onmouseover="window.status='Date Picker';return true;"  onmouseout="window.status='';return true;"  ><img src="/services/egi/resources/erp2/images/calendaricon.gif" alt="Date" width="18" height="18" border="0" align="absmiddle" /></a><div class="highlight2" style="width: 80px">DD/MM/YYYY</div></td>
 	      <td width="21%" class="bluebox"><s:text name="searchreceipts.criteria.todate"/></td>
 	      <s:date name="toDate" var="cdFormat1" format="dd/MM/yyyy"/>
-		  <td width="30%" class="bluebox"><s:textfield id="toDate" name="toDate" value="%{cdFormat1}" onfocus="javascript:vDateType='3';" onkeyup="DateFormat(this,this.value,event,false,'3')"/><a href="javascript:show_calendar('forms[0].toDate');" onmouseover="window.status='Date Picker';return true;"  onmouseout="window.status='';return true;"  ><img src="/egi/resources/erp2/images/calendaricon.gif" alt="Date" width="18" height="18" border="0" align="absmiddle" /></a><div class="highlight2" style="width: 80px">DD/MM/YYYY</div></td>
+		  <td width="30%" class="bluebox"><s:textfield id="toDate" name="toDate" value="%{cdFormat1}" onfocus="javascript:vDateType='3';" onkeyup="DateFormat(this,this.value,event,false,'3')"/><a href="javascript:show_calendar('forms[0].toDate');" onmouseover="window.status='Date Picker';return true;"  onmouseout="window.status='';return true;"  ><img src="/services/egi/resources/erp2/images/calendaricon.gif" alt="Date" width="18" height="18" border="0" align="absmiddle" /></a><div class="highlight2" style="width: 80px">DD/MM/YYYY</div></td>
 	    </tr>
 	    <tr>
 	      <td width="4%" class="bluebox">&nbsp;</td>
 	      <td width="21%" class="bluebox"><s:text name="searchreceipts.criteria.receiptno"/></td>
 	      <td width="24%" class="bluebox">
 	      <div class="yui-skin-sam"><s:textfield id="receiptNumber" type="text" name="receiptNumber"/></td>
-	      <td width="21%" class="bluebox"><s:text name="searchreceipts.criteria.user"/></td>
+	     <%--  <td width="21%" class="bluebox"><s:text name="searchreceipts.criteria.user"/></td>
 	      <td width="30%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('searchreceipts.user.select')}" name="userId" id="user" cssClass="selectwk" list="dropdownData.userList" listKey="id" listValue="name" value="%{userId}" /> </td>
-	   
+	    --%>
 	    </tr>	    
-	    <tr>
+	 <%--    <tr>
 	      <td width="4%" class="bluebox">&nbsp;</td>
 	      <td width="21%" class="bluebox"><s:text name="searchreceipts.criteria.status"/></td>
 	      <td width="24%" class="bluebox"><s:select id="searchStatus" name="searchStatus" headerKey="-1" headerValue="%{getText('searchreceipts.status.select')}" cssClass="selectwk" list="%{receiptStatuses}" value="%{searchStatus}" listKey="id" listValue="description" /> </td>
@@ -437,8 +438,8 @@ function onChangeServiceClass(obj)
 	      <td width="24%" class="bluebox"><s:textfield id="manualReceiptNumber" type="text" name="manualReceiptNumber"/></td>
 	      <td width="21%" class="bluebox"> &nbsp; </td>
 	      <td width="30%" class="bluebox"> &nbsp; </td>   
-	    </tr>
-	    
+	    </tr> --%>
+	   <%--  
 	    <tr>
 					<td>
 						<div class="subheadsmallnew"><span class="subheadnew">
@@ -457,7 +458,7 @@ function onChangeServiceClass(obj)
 								value="%{branchId}" /> </td>
 	      <td width="21%" class="bluebox">&nbsp;</td>
 	      <td width="30%" class="bluebox">&nbsp;</td>
-	    </tr>
+	    </tr> --%>
 	    </table>
 		<div align="left" class="mandatory1">
 		              <s:text name="report.bankbranch.note"/>
@@ -487,14 +488,14 @@ function onChangeServiceClass(obj)
 <display:caption media="pdf">&nbsp;</display:caption>
 <display:column headerClass="bluebgheadtd"  class="blueborderfortd" style="width:3%">
 <input name="selectedReceipts" type="checkbox" id="selectedReceipts"
-				value="${currentRow.id}"/>
-<input type="hidden" name="receiptstatus" id="receiptstatus" value="${currentRow.status.description}" />
-<input type="hidden" name="receipttype" id="receipttype" value="${currentRow.receipttype}" />
+				value="${currentRow.referencenumber}"/>
+<input type="hidden" name="receiptstatus" id="receiptstatus" value="${currentRow.curretnStatus}" />
+<input type="hidden" name="receipttype" id="receipttype" value="${currentreceipttype}" />
 </display:column>
 <display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Receipt No." style="width:8%;text-align:center" property="receiptnumber"/>
 <display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Manual receipt number" style="width:8%;text-align:center" property="manualreceiptnumber"/>
 <display:column headerClass="bluebgheadtd" class="blueborderfortd" property="receiptdate" title="Receipt Date" format="{0,date,dd/MM/yyyy}" style="width:8%;text-align: center" />
-<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Service" style="width:12%;text-align:center" property="service.name" />
+<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Service" style="width:12%;text-align:center" property="service" />
 <display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Bill Number" style="width:8%;text-align:center" property="referencenumber" />
 <display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Bill Description" style="width:27%;text-align:center" property="referenceDesc" />
 <display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Paid By" style="width:27%;text-align:center" property="paidBy" />

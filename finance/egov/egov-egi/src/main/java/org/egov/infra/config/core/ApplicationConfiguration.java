@@ -51,6 +51,7 @@ package org.egov.infra.config.core;
 import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.infra.reporting.engine.ReportService;
 import org.egov.infra.reporting.engine.jasper.JasperReportService;
+import org.egov.infra.web.rest.handler.RestErrorHandler;
 import org.egov.infra.web.rest.handler.RestTemplateLoggerInterceptor;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,6 +163,7 @@ public class ApplicationConfiguration {
         ClientHttpRequestFactory factory = new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
         RestTemplate restTemplate = new RestTemplate(factory);
         restTemplate.setInterceptors(Collections.singletonList(new RestTemplateLoggerInterceptor()));
+        restTemplate.setErrorHandler(new RestErrorHandler());
         return restTemplate;
     }
 }

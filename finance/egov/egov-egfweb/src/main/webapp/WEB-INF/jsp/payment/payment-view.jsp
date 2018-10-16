@@ -456,7 +456,7 @@ function openVoucher(vid)
 					<s:submit cssClass="button" id="printPreview" value="Print Preview"
 						onclick="printVoucher()" />
 					<input type="button" name="button2" id="button2" value="Close"
-						class="button" onclick="window.close();" />
+						class="button" onclick="window.parent.postMessage('close','*');window.close();" />
 				</s:else>
 			</div>
 

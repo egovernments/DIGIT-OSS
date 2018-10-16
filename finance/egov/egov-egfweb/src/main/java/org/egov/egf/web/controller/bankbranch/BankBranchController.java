@@ -110,7 +110,7 @@ public class BankBranchController {
         return "bankbranch-update";
     }
 
-    @RequestMapping(value = "/success/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/success/{id}/{mode}", method = RequestMethod.GET)
     public String success(@PathVariable("id") final Integer id,@PathVariable("mode") final String mode, final Model model) {
         final Bankbranch bankbranch = createBankBranchService.getById(id);
         model.addAttribute(BANKBRANCH, bankbranch);

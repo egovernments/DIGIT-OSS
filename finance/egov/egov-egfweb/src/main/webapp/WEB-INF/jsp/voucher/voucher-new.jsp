@@ -321,7 +321,7 @@ PageManager.DataService.callDataService("subschemelist");
 									cssClass="button" id="save&new" name="save&new"
 									value="Save & New" method="create" onclick="return validate()" />
 								<input type="submit" value="Close"
-								onclick="javascript:window.close()" class="button" /></td>
+								onclick="window.parent.postMessage('close','*');window.close();" class="button" /></td>
 						</tr>
 					</table>
 

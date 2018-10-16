@@ -100,6 +100,19 @@ public class Page<T> {
         }
         this.results = criteria.list();
     }
+    
+    public Page(int pageNumber,int pageSize,List<T> results)
+    {
+        int currentPageNo = pageNumber;
+        if (pageNumber < 1) {
+            currentPageNo = 1;
+        }
+
+        this.pageNumber = currentPageNo;
+        this.pageSize = pageSize;
+        this.results= results;
+        
+    }
 
     public Page(TypedQuery<T> query, int pageNumber, int pageSize, int recordTotal) {
         int currentPageNo = pageNumber;
