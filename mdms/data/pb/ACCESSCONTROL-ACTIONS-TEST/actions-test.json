@@ -12744,6 +12744,19 @@
      "serviceCode": "Billing-service",
      "code": "null",
      "path": ""
-   }
+   },
+  {
+      "id": 1693,
+      "name": "Receipts Search",
+      "url": "url",
+      "displayName": "Search Receipts",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "Collections",
+      "code": "null",
+      "navigationURL": "services/collection/receipts/searchReceipt.action",
+      "path": "Collections.Search Receipts"
+    }
   ]
 }
