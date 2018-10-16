@@ -47,23 +47,9 @@
  */
 package org.egov.egf.commons.bankaccount.service;
 
-import org.egov.commons.Bankaccount;
-import org.egov.commons.Bankbranch;
-import org.egov.commons.CChartOfAccounts;
-import org.egov.commons.service.ChartOfAccountsService;
-import org.egov.egf.commons.bankaccount.repository.BankAccountRepository;
-import org.egov.egf.commons.bankbranch.service.CreateBankBranchService;
-import org.egov.infra.admin.master.entity.AppConfigValues;
-import org.egov.infra.admin.master.entity.User;
-import org.egov.infra.admin.master.service.AppConfigValueService;
-import org.egov.infra.config.core.ApplicationThreadLocals;
-import org.egov.infstr.utils.EGovConfig;
-import org.egov.utils.FinancialConstants;
-import org.hibernate.Session;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -74,9 +60,26 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.egov.commons.Bankaccount;
+import org.egov.commons.Bankbranch;
+import org.egov.commons.CChartOfAccounts;
+import org.egov.commons.service.ChartOfAccountsService;
+import org.egov.egf.commons.bankaccount.repository.BankAccountRepository;
+import org.egov.egf.commons.bankbranch.service.CreateBankBranchService;
+import org.egov.infra.admin.master.entity.AppConfigValues;
+import org.egov.infra.admin.master.service.AppConfigValueService;
+import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infstr.utils.EGovConfig;
+import org.egov.utils.FinancialConstants;
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.exilant.GLEngine.CoaCache;
 
 /**
  * @author venki
@@ -85,7 +88,11 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 public class CreateBankAccountService {
+
     private final String code = EGovConfig.getProperty("egf_config.xml", "glcodeMaxLength", "", "AccountCode");
+
+    private static final Logger LOGGER = Logger.getLogger(CreateBankAccountService.class);
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -100,6 +107,9 @@ public class CreateBankAccountService {
 
     @Autowired
     private CreateBankBranchService createBankBranchService;
+
+    @Autowired
+    private CoaCache coaCache;
 
     public Session getCurrentSession() {
         return entityManager.unwrap(Session.class);
@@ -121,7 +131,7 @@ public class CreateBankAccountService {
     public List<Bankaccount> getByBranchId(final Integer branchId) {
         return bankAccountRepository.findByBankbranch_Id(branchId);
     }
-    
+
     @Transactional
     public Bankaccount create(final Bankaccount bankaccount) {
         String newGLCode;
@@ -141,9 +151,10 @@ public class CreateBankAccountService {
             bankaccount
                     .setChartofaccounts(chartOfAccountsService.getByGlCode(bankaccount.getChartofaccounts().getGlcode()));
         bankaccount.setCreatedDate(new Date());
-        bankaccount.setCreatedBy( ApplicationThreadLocals.getUserId());
-
-        return bankAccountRepository.save(bankaccount);
+        bankaccount.setCreatedBy(ApplicationThreadLocals.getUserId());
+        Bankaccount account = bankAccountRepository.save(bankaccount);
+        clearCache();
+        return account;
     }
 
     @Transactional
@@ -173,17 +184,17 @@ public class CreateBankAccountService {
 
         if (bankaccount.getFund() != null && bankaccount.getFund().getId() != null)
             predicates.add(cb.equal(bankaccounts.get("fund").get("id"), bankaccount.getFund().getId()));
-        
 
         if (bankaccount.getBankbranch() != null && bankaccount.getBankbranch().getBank() != null)
-            predicates.add(cb.equal(bankaccounts.get("bankbranch").get("bank").get("id"), bankaccount.getBankbranch().getBank().getId()));
-
+            predicates.add(cb.equal(bankaccounts.get("bankbranch").get("bank").get("id"),
+                    bankaccount.getBankbranch().getBank().getId()));
 
         if (bankaccount.getBankbranch() != null && bankaccount.getBankbranch().getId() != null)
             predicates.add(cb.equal(bankaccounts.get("bankbranch").get("id"), bankaccount.getBankbranch().getId()));
 
         if (bankaccount.getChartofaccounts() != null && bankaccount.getChartofaccounts().getGlcode() != null)
-            predicates.add(cb.equal(bankaccounts.get("chartofaccounts").get("glcode"), bankaccount.getChartofaccounts().getGlcode()));
+            predicates.add(
+                    cb.equal(bankaccounts.get("chartofaccounts").get("glcode"), bankaccount.getChartofaccounts().getGlcode()));
 
         if (bankaccount.getAccounttype() != null)
             predicates.add(cb.equal(bankaccounts.get("accounttype"), bankaccount.getAccounttype()));
@@ -254,5 +265,13 @@ public class CreateBankAccountService {
         chart.setMajorCode(chart.getGlcode().substring(0, majorCodeLength));
         chartOfAccountsService.persist(chart);
         return chart.getId();
+    }
+
+    void clearCache() {
+        try {
+            coaCache.reLoad();
+        } catch (Exception e) {
+            LOGGER.error("Error while reloading coa cache");
+        }
     }
 }
