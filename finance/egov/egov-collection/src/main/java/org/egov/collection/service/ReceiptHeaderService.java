@@ -1182,10 +1182,6 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         demand.setBusinessService(receiptHeader.getService());
         demand.setMinimumAmountPayable(receiptHeader.getTotalcramount());
         demand.setDemandDetails(new ArrayList<>());
-        User owner = new User();
-        // Need to remove once we fix Citizen validation issue TO-DO
-        owner.setId(23278l);
-        demand.setOwner(owner);
         TaxPeriod tp = microserviceUtils.getTaxPeriodsByService(receiptHeader.getService());
         if (tp != null) {
             demand.setTaxPeriodFrom(tp.getFromDate());
@@ -1288,6 +1284,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         instrument.setTenantId(tenantId);
         receipt.setInstrument(instrument);
         receipt.getBill().get(0).setPaidBy(receiptHeader.getPaidBy());
+        receipt.getBill().get(0).setPayeeName(receiptHeader.getPayeeName());
         receipt.getBill().get(0).setPayeeAddress(receiptHeader.getPayeeAddress());
         receipt.getBill().get(0).getBillDetails().get(0).setManualReceiptNumber(receiptHeader.getManualreceiptnumber());
         receipt.getBill().get(0).getBillDetails().get(0).setManualReceiptDate(
