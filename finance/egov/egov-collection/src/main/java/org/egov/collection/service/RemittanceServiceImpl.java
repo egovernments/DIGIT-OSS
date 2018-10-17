@@ -64,6 +64,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.billsaccounting.services.VoucherConstant;
+import org.egov.collection.bean.ReceiptBean;
 import org.egov.collection.constants.CollectionConstants;
 import org.egov.collection.entity.BranchUserMap;
 import org.egov.collection.entity.ReceiptHeader;
@@ -88,6 +89,7 @@ import org.egov.infra.microservice.models.Instrument;
 import org.egov.infra.microservice.models.InstrumentVoucher;
 import org.egov.infra.microservice.models.Receipt;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.egov.infra.utils.DateUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infstr.models.ServiceDetails;
@@ -198,7 +200,7 @@ public class RemittanceServiceImpl extends RemittanceService {
             showRemitDate = true;
 
         final Bankaccount depositedBankAccount = (Bankaccount) persistenceService.find("from Bankaccount where accountnumber=?",
-               accountNumberId);
+                accountNumberId);
         final String serviceGlCode = depositedBankAccount.getChartofaccounts().getGlcode();
         for (int i = 0; i < serviceNameArr.length; i++) {
             final String serviceName = serviceNameArr[i].trim();
@@ -426,7 +428,7 @@ public class RemittanceServiceImpl extends RemittanceService {
      * @return List of HashMap
      */
     @Override
-    public List<HashMap<String, Object>> findCashRemittanceDetailsForServiceAndFund(final String boundaryIdList,
+    public List<ReceiptBean> findCashRemittanceDetailsForServiceAndFund(final String boundaryIdList,
             final String serviceCodes, final String fundCodes, final Date startDate, final Date endDate) {
 
         FinancialStatus status = microserviceUtils.getFinancialStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
@@ -439,96 +441,91 @@ public class RemittanceServiceImpl extends RemittanceService {
                     receiptIds.add(iv.getReceiptHeaderId());
                 }
         }
-      List<Receipt> receipts =   microserviceUtils.getReceipts(StringUtils.join(receiptIds, ","), "Approved", serviceCodes);
-      
-        final List<HashMap<String, Object>> paramList = new ArrayList<>();
-        final String whereClauseBeforInstumentType = " where ch.id=cm.collectionheader AND "
-                + "fnd.id=cm.fund AND dpt.id=cm.department and ci.INSTRUMENTHEADER=ih.ID and "
-                + "ch.SERVICEDETAILS=sd.ID and ch.ID=ci.COLLECTIONHEADER and ih.INSTRUMENTTYPE=it.ID and ";
+        List<Receipt> receipts = microserviceUtils.getReceipts(StringUtils.join(receiptIds, ","), "Approved", serviceCodes);
+        Map<String, List<Receipt>> receiptDateWiseMap = new HashMap<>();
+        Map<String, List<Receipt>> serviceWiseMap = new HashMap<>();
+        Map<String, List<Receipt>> instrumentWiseMap = new HashMap<>();
+        List<ReceiptBean> result = new ArrayList<>();
 
-        final String whereClauseForServiceAndFund = " sd.code in (" + serviceCodes + ")" + " and fnd.code in ("
-                + fundCodes + ")" + " and ";
+        groupByReceiptDate(receiptDateWiseMap, receipts);
 
-        StringBuilder whereClause = new StringBuilder(" AND ih.ID_STATUS=(select id from egw_status where moduletype='")
-                .append(CollectionConstants.MODULE_NAME_INSTRUMENTHEADER).append("' " + "and description='")
-                .append(CollectionConstants.INSTRUMENT_NEW_STATUS)
-                .append("') and ih.ISPAYCHEQUE='0' and ch.STATUS=(select id from egw_status where moduletype='")
-                .append(CollectionConstants.MODULE_NAME_RECEIPTHEADER).append("' and code='")
-                .append(CollectionConstants.RECEIPT_STATUS_CODE_APPROVED).append("') AND ch.source='").append(Source.SYSTEM)
-                .append("' ");
-        if (startDate != null && endDate != null)
-            whereClause.append(" AND date(ch.receiptdate) between '").append(startDate).append("' and '").append(endDate)
-                    .append("' ");
-
-        final String groupByClause = " group by date(ch.RECEIPTDATE),sd.NAME,it.TYPE,fnd.name,dpt.name,fnd.code,dpt.code";
-        final String orderBy = " order by RECEIPTDATE";
-
-        /**
-         * Query to get the collection of the instrument types Cash for bank remittance
-         */
-        final StringBuilder queryStringForCash = new StringBuilder(
-                "SELECT sum(ih.instrumentamount) as INSTRUMENTMAOUNT,date(ch.RECEIPTDATE) AS RECEIPTDATE,")
-                        .append("sd.NAME as SERVICENAME,it.TYPE as INSTRUMENTTYPE,fnd.name AS FUNDNAME,dpt.name AS DEPARTMENTNAME,")
-                        .append("fnd.code AS FUNDCODE,dpt.code AS DEPARTMENTCODE from EGCL_COLLECTIONHEADER ch,")
-                        .append("EGF_INSTRUMENTHEADER ih,EGCL_COLLECTIONINSTRUMENT ci,EGCL_SERVICEDETAILS sd,")
-                        .append("EGF_INSTRUMENTTYPE it,EGCL_COLLECTIONMIS cm,FUND fnd,EG_DEPARTMENT dpt")
-                        .append(whereClauseBeforInstumentType + whereClauseForServiceAndFund + "it.TYPE in ('")
-                        .append(CollectionConstants.INSTRUMENTTYPE_CASH + "')");
-
-        if (collectionsUtil.isBankCollectionRemitter(collectionsUtil.getLoggedInUser())) {
-            BranchUserMap branchUserMap = branchUserMapService.findByNamedQuery(
-                    CollectionConstants.QUERY_ACTIVE_BRANCHUSER_BY_USER,
-                    collectionsUtil.getLoggedInUser().getId());
-            queryStringForCash
-                    .append(whereClause + " AND cm.depositedbranch=" + branchUserMap.getBankbranch().getId());
-        } else
-            queryStringForCash.append(whereClause
-                    + " AND cm.depositedbranch is null AND ch.CREATEDBY in (select distinct ujl.employee from egeis_jurisdiction ujl where ujl.boundary in ("
-                    + boundaryIdList + "))");
-
-        queryStringForCash.append(groupByClause);
-
-        final Query query = receiptHeaderService.getSession()
-                .createSQLQuery(queryStringForCash.toString() + orderBy);
-
-        final List<Object[]> queryResults = query.list();
-
-        for (int i = 0; i < queryResults.size(); i++) {
-            final Object[] arrayObjectInitialIndex = queryResults.get(i);
-            HashMap<String, Object> objHashMap = new HashMap<>(0);
-
-            if (i == 0) {
-                objHashMap.put(CollectionConstants.BANKREMITTANCE_RECEIPTDATE, arrayObjectInitialIndex[1]);
-                objHashMap.put(CollectionConstants.BANKREMITTANCE_SERVICENAME, arrayObjectInitialIndex[2]);
-                objHashMap.put(CollectionConstants.BANKREMITTANCE_FUNDNAME, arrayObjectInitialIndex[4]);
-                objHashMap.put(CollectionConstants.BANKREMITTANCE_DEPARTMENTNAME, arrayObjectInitialIndex[5]);
-                objHashMap.put(CollectionConstants.BANKREMITTANCE_FUNDCODE, arrayObjectInitialIndex[6]);
-                objHashMap.put(CollectionConstants.BANKREMITTANCE_DEPARTMENTCODE, arrayObjectInitialIndex[7]);
-                objHashMap.put(CollectionConstants.BANKREMITTANCE_SERVICETOTALCASHAMOUNT,
-                        arrayObjectInitialIndex[0]);
-            } else {
-                final int checknew = receiptHeaderService.checkIfMapObjectExist(paramList, arrayObjectInitialIndex);
-                if (checknew == -1) {
-                    objHashMap.put(CollectionConstants.BANKREMITTANCE_RECEIPTDATE, arrayObjectInitialIndex[1]);
-                    objHashMap.put(CollectionConstants.BANKREMITTANCE_SERVICENAME, arrayObjectInitialIndex[2]);
-                    objHashMap.put(CollectionConstants.BANKREMITTANCE_FUNDNAME, arrayObjectInitialIndex[4]);
-                    objHashMap.put(CollectionConstants.BANKREMITTANCE_DEPARTMENTNAME, arrayObjectInitialIndex[5]);
-                    objHashMap.put(CollectionConstants.BANKREMITTANCE_FUNDCODE, arrayObjectInitialIndex[6]);
-                    objHashMap.put(CollectionConstants.BANKREMITTANCE_DEPARTMENTCODE, arrayObjectInitialIndex[7]);
-                    objHashMap.put(CollectionConstants.BANKREMITTANCE_SERVICETOTALCASHAMOUNT,
-                            arrayObjectInitialIndex[0]);
-                } else {
-                    objHashMap = paramList.get(checknew);
-                    paramList.remove(checknew);
-                    objHashMap.put(CollectionConstants.BANKREMITTANCE_SERVICETOTALCASHAMOUNT,
-                            arrayObjectInitialIndex[0]);
-                }
-            }
-            if (objHashMap.get(CollectionConstants.BANKREMITTANCE_RECEIPTDATE) != null
-                    && objHashMap.get(CollectionConstants.BANKREMITTANCE_SERVICENAME) != null)
-                paramList.add(objHashMap);
+        for (String key : receiptDateWiseMap.keySet()) {
+            List<Receipt> tempList = receiptDateWiseMap.get(key);
+            groupByService(key, serviceWiseMap, tempList);
         }
-        return paramList;
+
+        for (String key : serviceWiseMap.keySet()) {
+            List<Receipt> tempList = serviceWiseMap.get(key);
+            groupByInstrument(key, instrumentWiseMap, tempList);
+        }
+
+        for (String key : instrumentWiseMap.keySet()) {
+            List<Receipt> tempList = instrumentWiseMap.get(key);
+            populateResultList(key, result, tempList);
+        }
+        return result;
+    }
+
+    private void populateResultList(String key, List<ReceiptBean> result, List<Receipt> tempList) {
+        ReceiptBean receipt = new ReceiptBean();
+        BigDecimal amount = BigDecimal.ZERO;
+
+        for (Receipt r : tempList) {
+            amount = amount.add(r.getInstrument().getAmount());
+        }
+        
+        receipt.setReceiptDate(key.split("-")[0]);
+        receipt.setService(key.split("-")[1]);
+        receipt.setInstrumentType(key.split("-")[2]);
+        receipt.setInstrumentAmount(amount);
+        result.add(receipt);
+    }
+
+    private void groupByInstrument(String receiptDateAndService, Map<String, List<Receipt>> instrumentWiseMap,
+            List<Receipt> tempList) {
+        String instrument;
+        for (Receipt r : tempList) {
+            instrument = r.getInstrument().getInstrumentType().getName();
+            if (!instrumentWiseMap.containsKey(receiptDateAndService + "-" + instrument)) {
+                List<Receipt> list = new ArrayList<Receipt>();
+                list.add(r);
+                instrumentWiseMap.put(receiptDateAndService + "-" + instrument, list);
+            } else {
+                instrumentWiseMap.get(receiptDateAndService + "-" + instrument).add(r);
+            }
+        }
+    }
+
+    private void groupByService(String receiptDate, Map<String, List<Receipt>> serviceWiseMap, List<Receipt> tempList) {
+        String service;
+        for (Receipt r : tempList) {
+            service = r.getBill().get(0).getBillDetails().get(0).getBusinessService();
+            if (!serviceWiseMap.containsKey(receiptDate + "-" + service)) {
+                List<Receipt> list = new ArrayList<Receipt>();
+                list.add(r);
+                serviceWiseMap.put(receiptDate + "-" + service, list);
+            } else {
+                serviceWiseMap.get(receiptDate + "-" + service).add(r);
+            }
+        }
+    }
+
+    private void groupByReceiptDate(Map<String, List<Receipt>> receiptDateWiseMap, List<Receipt> receipts) {
+        String receiptDate;
+        for (Receipt receipt : receipts) {
+            receiptDate = DateUtils
+                    .toDefaultDateFormat(new Date(receipt.getBill().get(0).getBillDetails().get(0).getReceiptDate()));
+            if (!receiptDateWiseMap.containsKey(receiptDate)) {
+                List<Receipt> list = new ArrayList<Receipt>();
+                list.add(receipt);
+
+                receiptDateWiseMap.put(receiptDate, list);
+            } else {
+                receiptDateWiseMap.get(receiptDate).add(receipt);
+            }
+
+        }
+
     }
 
     /**

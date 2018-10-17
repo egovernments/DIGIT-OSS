@@ -65,6 +65,7 @@ import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.egov.collection.bean.ReceiptBean;
 import org.egov.collection.constants.CollectionConstants;
 import org.egov.collection.entity.CollectionBankRemittanceReport;
 import org.egov.collection.entity.ReceiptHeader;
@@ -143,6 +144,8 @@ public class BankRemittanceAction extends BaseFormAction {
     private static final String REMITTANCE_LIST = "REMITTANCE_LIST";
     private Boolean isBankCollectionRemitter;
     private String remitAccountNumber;
+    private List<ReceiptBean> resultList = new ArrayList<>();
+    private List<ReceiptBean> finalList = new ArrayList<>();
 
     /**
      * @param collectionsUtil the collectionsUtil to set
@@ -198,6 +201,7 @@ public class BankRemittanceAction extends BaseFormAction {
         }
 
         populateRemittanceList();
+
         if (fromDate != null && toDate != null && toDate.before(fromDate))
             addActionError(getText("bankremittance.before.fromdate"));
         if (!hasErrors() && accountNumberId != null) {
@@ -209,13 +213,11 @@ public class BankRemittanceAction extends BaseFormAction {
                 serviceCodeList.add(basm.getBusinessDetails());
             }
             final CFinancialYear financialYear = financialYearDAO.getFinancialYearById(finYearId);
-            paramList = remittanceService.findCashRemittanceDetailsForServiceAndFund("",
-                    StringUtils.join(serviceCodeList, ","),
-                    StringUtils.join(fundCodeSet, ","),
-                    fromDate == null ? financialYear.getStartingDate() : fromDate,
+            resultList = remittanceService.findCashRemittanceDetailsForServiceAndFund("", StringUtils.join(serviceCodeList, ","),
+                    StringUtils.join(fundCodeSet, ","), fromDate == null ? financialYear.getStartingDate() : fromDate,
                     toDate == null ? financialYear.getEndingDate() : toDate);
             if (fromDate != null && toDate != null)
-                pageSize = paramList.size();
+                pageSize = resultList.size();
             else
                 pageSize = CollectionConstants.DEFAULT_PAGE_SIZE;
         }
@@ -625,6 +627,22 @@ public class BankRemittanceAction extends BaseFormAction {
 
     public void setInstrumentIdArray(String[] instrumentIdArray) {
         this.instrumentIdArray = instrumentIdArray;
+    }
+
+    public List<ReceiptBean> getResultList() {
+        return resultList;
+    }
+
+    public void setResultList(List<ReceiptBean> resultList) {
+        this.resultList = resultList;
+    }
+
+    public List<ReceiptBean> getFinalList() {
+        return finalList;
+    }
+
+    public void setFinalList(List<ReceiptBean> finalList) {
+        this.finalList = finalList;
     }
 
 }
