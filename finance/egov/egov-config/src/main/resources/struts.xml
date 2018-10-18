@@ -131,11 +131,15 @@
 			<result name="genericError">/error/genericError.jsp</result>
 			<result name="accessDeniedError">/error/accessDenied.jsp</result>
 			<result name="invalid.token">/error/invalidRequest.jsp</result>
+			<result name="msinvalidtoken">/error/msinvalidtoken.jsp</result>
+			<result name="msnotauthroized">/error/msnotauthroized.jsp</result>
 		</global-results>
 		<global-exception-mappings>
 			<exception-mapping exception="java.lang.Exception" result="genericError" />
 			<exception-mapping exception="org.hibernate.HibernateException" result="genericError" />
 			<exception-mapping exception="org.springframework.security.access.AccessDeniedException" result="accessDeniedError" />
+			<exception-mapping exception="org.egov.infra.exception.MicroServiceInvalidTokenException" result="msinvalidtoken" ></exception-mapping>
+			<exception-mapping exception="org.egov.infra.exception.MicroServiceNotAuthroizedException" result="msnotauthroized" ></exception-mapping>
 		</global-exception-mappings>
 		<action name="CatchAll">
 			<result>/error/genericError.jsp</result>

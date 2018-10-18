@@ -160,7 +160,11 @@ public class ApplicationConfiguration {
     @Bean
     public RestTemplate restTemplate(){
         System.out.println("************************* RestTemplate object created*********************");
-        ClientHttpRequestFactory factory = new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
+
+        SimpleClientHttpRequestFactory simpleCFactory = new  SimpleClientHttpRequestFactory();
+        simpleCFactory.setOutputStreaming(false);
+        
+        ClientHttpRequestFactory factory = new BufferingClientHttpRequestFactory(simpleCFactory);
         RestTemplate restTemplate = new RestTemplate(factory);
         restTemplate.setInterceptors(Collections.singletonList(new RestTemplateLoggerInterceptor()));
         restTemplate.setErrorHandler(new RestErrorHandler());

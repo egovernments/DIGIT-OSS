@@ -68,6 +68,8 @@ import javax.persistence.PersistenceContext;
 
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.exception.MicroServiceInvalidTokenException;
+import org.egov.infra.exception.MicroServiceNotAuthroizedException;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.hibernate.Query;
@@ -166,7 +168,10 @@ public class EgovMasterDataCaching {
 
         } catch (final Exception e) {
             LOGGER.error("Error occurred in EgovMasterDataCaching", e);
-            throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching", e);
+            if(e instanceof MicroServiceInvalidTokenException || e instanceof MicroServiceNotAuthroizedException)
+                throw e;
+            else
+                throw new ApplicationRuntimeException("Error occurred in EgovMasterDataCaching", e);
         }
         return dataList;
     }

@@ -50,6 +50,8 @@ package org.egov.infra.web.spring.handler;
 
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.exception.ApplicationValidationException;
+import org.egov.infra.exception.MicroServiceInvalidTokenException;
+import org.egov.infra.exception.MicroServiceNotAuthroizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -66,24 +68,38 @@ public final class GlobalExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     private static final String DEFAULT_ERROR_VIEW = "/error/500";
+    private static final String MS_INVALID_TOKEN="/error/msinvalidtoken";
+    private static final String MS_NOTAUTHROIZED_TOKEN="/error/msnotauthroized";
     private static final String ERROR_MESSAGE = "An error occurred while processing the request";
     private static final String VALIDATION_ERROR_MESSAGE = "Validation failed";
 
     @ExceptionHandler({Exception.class, ApplicationRuntimeException.class})
     public RedirectView handleGenericException(HttpServletRequest request, Exception e) {
         LOG.error(ERROR_MESSAGE, e);
-        return errorView(request, e.getMessage());
+        return errorView(request, e.getMessage(),DEFAULT_ERROR_VIEW);
     }
 
     @ExceptionHandler(ApplicationValidationException.class)
     public RedirectView handleValidationException(HttpServletRequest request, ApplicationValidationException e) {
         if (LOG.isWarnEnabled())
             LOG.warn(VALIDATION_ERROR_MESSAGE, e);
-        return errorView(request, e.getMessage());
+        return errorView(request, e.getMessage(),DEFAULT_ERROR_VIEW);
     }
 
-    public RedirectView errorView(HttpServletRequest request, String message) {
-        RedirectView rw = new RedirectView(DEFAULT_ERROR_VIEW, true);
+    @ExceptionHandler(MicroServiceInvalidTokenException.class)
+    public RedirectView handleMicroServiceInvalidTokenException(HttpServletRequest request,MicroServiceInvalidTokenException e){
+        LOG.error(ERROR_MESSAGE, e);
+        return errorView(request, e.getMessage(),MS_INVALID_TOKEN);
+    }
+    
+    @ExceptionHandler(MicroServiceNotAuthroizedException.class)
+    public RedirectView handleMicroServiceNotAuthroizedException(HttpServletRequest request,MicroServiceNotAuthroizedException e){
+        LOG.error(ERROR_MESSAGE, e);
+        return errorView(request, e.getMessage(),MS_NOTAUTHROIZED_TOKEN);
+    }
+    
+    public RedirectView errorView(HttpServletRequest request, String message,String view) {
+        RedirectView rw = new RedirectView(view, true);
         FlashMap outputFlashMap = RequestContextUtils.getOutputFlashMap(request);
         if (outputFlashMap != null) {
             outputFlashMap.put("error", message);

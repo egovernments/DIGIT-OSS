@@ -55,6 +55,9 @@ var billamount = 0;
 var debitamount = 0;
 var creditamount = 0;
 var netpayableamount = 0;
+var debitAmountrowcount=0;
+var creditAmoutrowcount=0;
+
 $(document).ready(function(){
 	
 	$('#subLedgerType').trigger("change");
@@ -448,7 +451,8 @@ function addDebitDetailsRow() {
 			$('#tbldebitdetails tbody tr:eq('+rowcount+')').find('.debitDetailGlcode').val('');
 			$('#tbldebitdetails tbody tr:eq('+rowcount+')').find('.debitdetailname').val('');
 			$('#tbldebitdetails tbody tr:eq('+rowcount+')').find('.debitAmount').val('');
-			debitGlcode_initialize();
+			$('#tbldebitdetails tbody tr:eq('+rowcount+')').blur(calcualteNetpaybleAmount);
+			++debitAmountrowcount;
 		}
 	} else {
 		  bootbox.alert('limit reached!');
@@ -462,6 +466,7 @@ function deleteDebitDetailsRow(obj) {
 		return false;
 	} else {
 		deleteRow(obj,'tbldebitdetails');
+		--debitAmountrowcount;
 		return true;
 	}
     
@@ -479,7 +484,9 @@ function addCreditDetailsRow() {
 			$('#tblcreditdetails tbody tr:eq('+rowcount+')').find('.creditDetailGlcode').val('');
 			$('#tblcreditdetails tbody tr:eq('+rowcount+')').find('.creditdetailname').val('');
 			$('#tblcreditdetails tbody tr:eq('+rowcount+')').find('.creditAmount').val('');
+			$('#tblcreditdetails tbody tr:eq('+rowcount+')').find('.creditAmount').blur(calcualteNetpaybleAmount);
 			creditGlcode_initialize();
+			++creditAmoutrowcount;
 		}
 	} else {
 		  bootbox.alert('limit reached!');
@@ -493,6 +500,7 @@ function deleteCreditDetailsRow(obj) {
 		return false;
 	} else {
 		deleteRow(obj,'tblcreditdetails');
+		--creditAmoutrowcount;
 		return true;
 	}	
 }
@@ -923,4 +931,38 @@ function validateCutOff()
 		return false;
 	}
 	return false;
+}
+function calcualteNetpaybleAmount(){
+	
+
+	var debitamt = 0;
+	var creditamt = 0;
+	// var debitAmountrowcount=0;
+	// var creditAmoutrowcount=0;
+	for (var count = 0; count <=debitAmountrowcount; ++count) {
+
+		if (null != document.getElementById("tempDebitDetails[" + count
+				+ "].debitamount")) {
+			var val = document.getElementById("tempDebitDetails[" + count
+					+ "].debitamount").value;
+			if (val != "" && !isNaN(val)) {
+				debitamt = debitamt + parseFloat(val);
+			}
+		}
+	}
+
+	for (var count = 0; count <=creditAmoutrowcount; ++count) {
+
+		if (null != document.getElementById("tempCreditDetails[" + count
+				+ "].creditamount")) {
+			var val = document.getElementById("tempCreditDetails[" + count
+					+ "].creditamount").value;
+			if (val != "" && !isNaN(val)) {
+				creditamt = creditamt + parseFloat(val);
+			}
+		}
+	}
+	netPayableAmount=debitamt-creditamt;
+	$("#expensenetPayableAmount").val(netPayableAmount);
+	document.getElementById("expensenetPayableAmount").value= (debitamt-creditamt);
 }

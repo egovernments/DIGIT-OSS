@@ -46,8 +46,9 @@
   ~
   --%>
 
+
 <%@ page language="java" pageEncoding="UTF-8"%>
-<%@ taglib prefix="s" uri="/WEB-INF/taglib/struts-tags.tld"%>
+<%@ taglib prefix="s" uri="/WEB-INF/tags/struts-tags.tld"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -74,7 +75,7 @@
 </style>
 </head>
 <body>
-	<!-- <div id="loadImg" class="loadImg"><img src="/collection/resources/images/loading.gif"  />&nbsp;<span class="loadspan">Please wait... Sending error report...</span></div> -->
+	<!-- <div id="loadImg" class="loadImg"><img src="/egi/resources/erp2/images/loading.gif"  />&nbsp;<span class="loadspan">Please wait... Sending error report...</span></div> -->
 	<div class="formmainbox">
 		<div class="insidecontent">
 			<div class="errorroundbox2">
@@ -86,13 +87,12 @@
 						<tr>
 							<td width="59%">
 								<div class="logouttext">
-									<img src="/services/collection/resources/images/error.png" width="128" height="128"
+									<img src="/services/egi/resources/erp2/images/error.png" width="128" height="128"
 										alt="Error" />
-									<div class="oopstext">
+									<!-- <div class="oopstext">
 										Oops! Sorry your request cannot be processed!
-									</div>
-									<span class="bold">An error has occurred. Please try
-										again or contact system administrator if the problem persists.</span>
+									</div> -->
+									<span class="bold">Session expired ,please relogin and retry</span>
 								</div>
 								<s:actionerror />
 								<s:fielderror />
