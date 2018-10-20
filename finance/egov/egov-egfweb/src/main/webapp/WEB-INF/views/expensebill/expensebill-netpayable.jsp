@@ -80,7 +80,7 @@
 						<form:option value=""> <spring:message code="lbl.select" /> </form:option>
 					</form:select>
 				</td>
-				<td><input type="text" id="expensenetPayableAmount" name="netPayableAmount"  class="form-control text-right" onkeyup="decimalvalue(this);" data-pattern="decimalvalue"> 
+				<td><input type="text" id="expense-netPayableAmount" name="netPayableAmount"  class="form-control text-right" onkeyup="decimalvalue(this);" data-pattern="decimalvalue"> 
 				</td>
 			</tr>
 		</tbody>

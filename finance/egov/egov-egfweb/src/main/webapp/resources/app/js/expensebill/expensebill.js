@@ -735,16 +735,16 @@ $("#populateAccountDetails").click(function () {
 				if(accountDetailsCount!=0){
 					addRow('tblaccountdetails', 'accountdetailsrow');
 				}
-				netpayableamount =  parseFloat(Number($(this).find("#netPayableAmount").val())).toFixed();
+				netpayableamount =  parseFloat(Number($(this).find("#expense-netPayableAmount").val())).toFixed();
 				$('#accountdetailsrow').removeAttr("hidden");
 				$('#accountdetailsrow').removeAttr('accountdetailsinvisible');
 				$('#accountDetailsGlCodeId_' + accountDetailsCount).val($(this).find("#netPayableAccountCode").val());    
 			    $('.accountDetailsGlCode_' + accountDetailsCount).html($(this).find("#netPayableGlcode").val());
 				$('.accountDetailsAccountHead_' + accountDetailsCount).html($(this).find("#netPayableAccountHead").val().split("~")[0]);
 				$('.accountDetailsDebitAmount_' + accountDetailsCount).html('0.00');
-				$('.accountDetailsCreditAmount_' + accountDetailsCount).html($(this).find("#netPayableAmount").val());
+				$('.accountDetailsCreditAmount_' + accountDetailsCount).html($(this).find("#expense-netPayableAmount").val());
 				$('#accountDetailsDebitAmount_' + accountDetailsCount).val('0.00');
-				$('#accountDetailsCreditAmount_' + accountDetailsCount).val($(this).find("#netPayableAmount").val());
+				$('#accountDetailsCreditAmount_' + accountDetailsCount).val($(this).find("#expense-netPayableAmount").val());
 				$('.accountDetailsDebitDetailTypeId_' + accountDetailsCount).val($(this).find("#netPayableDetailTypeId").val());
 				$('.accountDetailsDebitDetailKeyId_' + accountDetailsCount).val($(this).find("#netPayableDetailKeyId").val());
 				$netPayableAccountCodeId = $(this).find("#netPayableAccountCode").val();
@@ -754,7 +754,7 @@ $("#populateAccountDetails").click(function () {
 					populateSubLedgerDetails($(this).find("#netPayableAccountCode").val(),$(this).find("#netPayableGlcode").val(),
 							$(this).find("#netPayableDetailTypeId").val(),$(this).find("#netPayableDetailKeyId").val(),
 							$(this).find("#netPayableDetailTypeName").val(),$(this).find("#netPayableDetailKeyName").val(),
-							$(this).find("#netPayableAmount").val(),false);
+							$(this).find("#expense-netPayableAmount").val(),false);
 				}
 			}
 		 });
@@ -825,7 +825,7 @@ function clearAllDetails() {
 	$("#netPayableDetailTypeId").val("");
 	$("#netPayableDetailKeyId").val("");
 	$("#netPayableAccountCode").val("");
-	$("#netPayableAmount").val("");
+	$("#expense-netPayableAmount").val("");
 	
 	
 	
@@ -962,7 +962,14 @@ function calcualteNetpaybleAmount(){
 			}
 		}
 	}
-	netPayableAmount=debitamt-creditamt;
-	$("#expensenetPayableAmount").val(netPayableAmount);
-	document.getElementById("expensenetPayableAmount").value= (debitamt-creditamt);
+	netPayableAmount=amountConverter(debitamt-creditamt);
+	$("#expense-netPayableAmount").val(netPayableAmount);
+	$("#expenseNetPayableAmount").html(netpayableamount);
+	$("#expenseBillTotalDebitAmount").html(debitamt);
+	$("#expenseBillTotalCreditAmount").html(creditamt);
+//	document.getElementById("expense-netPayableAmount").value= amountConverter(debitamt-creditamt);
+}
+function amountConverter(amt) {
+	var formattedAmt = amt.toFixed(2);
+	return formattedAmt;
 }
