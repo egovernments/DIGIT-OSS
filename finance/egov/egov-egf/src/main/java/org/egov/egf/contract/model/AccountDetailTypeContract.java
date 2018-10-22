@@ -108,4 +108,9 @@ public class AccountDetailTypeContract {
     public void setFullyQualifiedName(final String fullyQualifiedName) {
         this.fullyQualifiedName = fullyQualifiedName;
     }
+
+	public AccountDetailTypeContract name(String name2) {
+		 this.setName(name2);
+		 return this;
+	}
 }

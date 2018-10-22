@@ -50,89 +50,49 @@ package org.egov.egf.contract.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.egov.commons.CGeneralLedger;
-import org.egov.commons.CGeneralLedgerDetail;
+import javax.validation.constraints.NotNull;
 
-public class AccountDetailContract {
+import org.egov.infra.microservice.models.RequestInfo;
 
-    private Long id;
-    private Long orderId;
-    private String glcode;
-    private Double debitAmount;
-    private Double creditAmount;
-    private FunctionContract function;
-    private List<SubledgerDetailContract> subledgerDetails = new ArrayList<>(0);
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    public AccountDetailContract(CGeneralLedger gl) {
-		 this.id=gl.getId();
-		 this.glcode=gl.getGlcode();
-		 this.creditAmount=gl.getCreditAmount();
-		 this.debitAmount=gl.getDebitAmount();
-		 if(gl.getFunctionId()!=null)
-		 {
-			 this.function=new FunctionContract().code(gl.getFunctionId().toString());
-		 }
-		 for(CGeneralLedgerDetail sub:gl.getGeneralLedgerDetails())
-		 {
-			this.subledgerDetails.add( new SubledgerDetailContract(sub));
-		 }
-		 
+public class VoucherSearchRequest {
+
+    @NotNull
+    @JsonProperty("tenantId")
+    private String tenantId;
+
+    @JsonProperty("RequestInfo")
+    private RequestInfo requestInfo;
+
+    private String voucherNumbers;
+
+  
+
+	public String getVoucherNumbers() {
+		return voucherNumbers;
 	}
 
-	public Long getId() {
-        return id;
+	public void setVoucherNumbers(String voucherNumbers) {
+		this.voucherNumbers = voucherNumbers;
+	}
+
+	public void setRequestInfo(RequestInfo requestInfo) {
+		this.requestInfo = requestInfo;
+	}
+
+	public String getTenantId() {
+        return tenantId;
     }
 
-    public void setId(final Long id) {
-        this.id = id;
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public RequestInfo getRequestInfo() {
+        return requestInfo;
     }
 
-    public void setOrderId(final Long orderId) {
-        this.orderId = orderId;
-    }
-
-    public String getGlcode() {
-        return glcode;
-    }
-
-    public void setGlcode(final String glcode) {
-        this.glcode = glcode;
-    }
-
-    public Double getDebitAmount() {
-        return debitAmount;
-    }
-
-    public void setDebitAmount(final Double debitAmount) {
-        this.debitAmount = debitAmount;
-    }
-
-    public Double getCreditAmount() {
-        return creditAmount;
-    }
-
-    public void setCreditAmount(final Double creditAmount) {
-        this.creditAmount = creditAmount;
-    }
-
-    public FunctionContract getFunction() {
-        return function;
-    }
-
-    public void setFunction(final FunctionContract function) {
-        this.function = function;
-    }
-
-    public List<SubledgerDetailContract> getSubledgerDetails() {
-        return subledgerDetails;
-    }
-
-    public void setSubledgerDetails(final List<SubledgerDetailContract> subledgerDetails) {
-        this.subledgerDetails = subledgerDetails;
-    }
+  
 
 }

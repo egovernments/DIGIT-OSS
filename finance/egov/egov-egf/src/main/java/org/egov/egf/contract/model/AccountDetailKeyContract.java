@@ -79,4 +79,10 @@ public class AccountDetailKeyContract {
         this.key = key;
     }
 
+	public AccountDetailKeyContract key(Integer detailKeyId) {
+	this.setKey(Long.valueOf(detailKeyId));
+	return this;
+	
+	}
+
 }

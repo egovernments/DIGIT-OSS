@@ -113,4 +113,9 @@ public class FunctionContract {
         this.active = active;
     }
 
+	public FunctionContract code(String code2) {
+		this.code=code2;
+		return this;
+	}
+
 }

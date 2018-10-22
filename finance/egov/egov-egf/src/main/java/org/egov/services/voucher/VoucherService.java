@@ -59,6 +59,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.egov.commons.Accountdetailtype;
 import org.egov.commons.CChartOfAccounts;
@@ -80,6 +81,9 @@ import org.egov.dao.budget.BudgetDetailsHibernateDAO;
 import org.egov.dao.voucher.VoucherHibernateDAO;
 import org.egov.egf.autonumber.JVBillNumberGenerator;
 import org.egov.egf.commons.EgovCommon;
+import org.egov.egf.contract.model.Voucher;
+import org.egov.egf.contract.model.VoucherResponse;
+import org.egov.egf.contract.model.VoucherSearchRequest;
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.entity.Employee;
 import org.egov.eis.entity.EmployeeView;
@@ -94,6 +98,8 @@ import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.egov.infra.persistence.utils.Page;
 import org.egov.infra.script.entity.Script;
 import org.egov.infra.script.service.ScriptService;
 import org.egov.infra.utils.DateUtils;
@@ -120,6 +126,7 @@ import org.egov.utils.Constants;
 import org.egov.utils.FinancialConstants;
 import org.egov.utils.VoucherHelper;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -1416,6 +1423,88 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 
 	public void setVoucherHelper(final VoucherHelper voucherHelper) {
 		this.voucherHelper = voucherHelper;
+	}
+
+	public VoucherResponse findVouchers(VoucherSearchRequest voucherSearchRequest) {
+		List<Voucher> vouchers=new ArrayList<>();
+		Voucher voucher=null;
+		List<String> voucherNumbers=new ArrayList<>();
+		String query="from CVoucherHeader vh where voucherNumber in (:voucherNumbers)"; 
+		if(voucherSearchRequest.getVoucherNumbers()!=null )
+		{
+			String[] numbers = voucherSearchRequest.getVoucherNumbers().split(",");
+			for(String s:numbers)
+			{
+				voucherNumbers.add(s)	;
+			}
+		} 
+	
+		
+		// add page info in search
+		//Page findPageByNamedQuery = findPageByNamedQuery(query,1,20,voucherNumbers);
+	//	List<CVoucherHeader> cvouchers = findAllBy(query,voucherNumbers);
+		Query createQuery = getSession().createQuery(query);
+		createQuery.setParameterList("voucherNumbers", voucherNumbers);
+		List<CVoucherHeader> cvouchers=	createQuery.list();
+		for(CVoucherHeader vh:cvouchers)
+		{
+			voucher=new Voucher(vh);
+			voucher.setTenantId(voucherSearchRequest.getTenantId());
+			vouchers.add(voucher);
+			
+		}
+		
+		 VoucherResponse response = new VoucherResponse();
+    	 response.setVouchers(vouchers);
+        
+		
+		return response;
+		 
+	}
+
+	public VoucherResponse cancel(VoucherSearchRequest voucherSearchRequest) {
+	
+		List<Voucher> vouchers=new ArrayList<>();
+		Voucher voucher=null;
+		List<String> voucherNumbers=new ArrayList<>();
+		String cancelQuery="update CVoucherHeader set status='4'  where voucherNumber in (:voucherNumbers)"; 
+		if(voucherSearchRequest.getVoucherNumbers()!=null )
+		{
+			String[] numbers = voucherSearchRequest.getVoucherNumbers().split(",");
+			for(String s:numbers)
+			{
+				voucherNumbers.add(s)	;
+			}
+		} 
+	
+		
+		// add page info in search
+		//Page findPageByNamedQuery = findPageByNamedQuery(query,1,20,voucherNumbers);
+	//	List<CVoucherHeader> cvouchers = findAllBy(query,voucherNumbers);
+		Query createQuery = getSession().createQuery(cancelQuery);
+		createQuery.setParameterList("voucherNumbers", voucherNumbers);
+		int count=createQuery.executeUpdate();
+		String query="from CVoucherHeader vh where voucherNumber in (:voucherNumbers)"; 
+		 createQuery = getSession().createQuery(query);
+		createQuery.setParameterList("voucherNumbers", voucherNumbers);
+		List<CVoucherHeader> cvouchers=createQuery.list();
+		
+		
+		for(CVoucherHeader vh:cvouchers)
+		{
+			voucher=new Voucher(vh);
+			voucher.setTenantId(voucherSearchRequest.getTenantId());
+			vouchers.add(voucher);
+			
+		}
+		
+		 VoucherResponse response = new VoucherResponse();
+    	 response.setVouchers(vouchers);
+        
+		
+		return response;
+	
+	
 	}
 
 }

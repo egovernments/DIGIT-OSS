@@ -48,6 +48,8 @@
 
 package org.egov.egf.contract.model;
 
+import org.egov.commons.CGeneralLedgerDetail;
+
 public class SubledgerDetailContract {
 
     private Long id;
@@ -58,7 +60,14 @@ public class SubledgerDetailContract {
 
     private Double amount;
 
-    public Long getId() {
+    public SubledgerDetailContract(CGeneralLedgerDetail sub) {
+		 this.id=sub.getId();
+		 this.accountDetailType=new AccountDetailTypeContract().name(sub.getDetailTypeId().getName());
+		 this.accountDetailKey=new AccountDetailKeyContract().key(sub.getDetailKeyId());
+		 this.amount=sub.getAmount().doubleValue();
+	}
+
+	public Long getId() {
         return id;
     }
 

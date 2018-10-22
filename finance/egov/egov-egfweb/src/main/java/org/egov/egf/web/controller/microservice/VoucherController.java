@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.HttpStatus;
+import org.apache.log4j.Logger;
 import org.egov.billsaccounting.services.CreateVoucher;
 import org.egov.billsaccounting.services.VoucherConstant;
 import org.egov.commons.CVoucherHeader;
@@ -16,9 +17,12 @@ import org.egov.egf.contract.model.SubledgerDetailContract;
 import org.egov.egf.contract.model.Voucher;
 import org.egov.egf.contract.model.VoucherRequest;
 import org.egov.egf.contract.model.VoucherResponse;
+import org.egov.egf.contract.model.VoucherSearchRequest;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationException;
+import org.egov.services.voucher.VoucherService;
+import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,87 +31,122 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class VoucherController {
-    @Autowired
-    private CreateVoucher createVoucher;
+	private static final Logger LOGGER = Logger.getLogger(VoucherController.class);
+	@Autowired
+	private CreateVoucher createVoucher;
+	@Autowired
+	private VoucherService voucherService;
 
-    @PostMapping(value = "/rest/voucher/_create")
-    @ResponseBody
-    public VoucherResponse create(@RequestBody VoucherRequest voucherRequest) {
+	@PostMapping(value = "/rest/voucher/_search")
+	@ResponseBody
+	public VoucherResponse create(@RequestBody VoucherSearchRequest voucherSearchRequest) {
+		try {
+			VoucherResponse response = voucherService.findVouchers(voucherSearchRequest);
+			response.setResponseInfo(MicroserviceUtils.getResponseInfo(voucherSearchRequest.getRequestInfo(),
+					HttpStatus.SC_OK, null));
+			
+			return response;
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ApplicationRuntimeException(e.getMessage());
+		}
 
-        VoucherResponse response = new VoucherResponse();
-        final HashMap<String, Object> headerDetails = new HashMap<String, Object>();
-        HashMap<String, Object> detailMap = null;
-        HashMap<String, Object> subledgertDetailMap = null;
-        final List<HashMap<String, Object>> accountdetails = new ArrayList<>();
-        final List<HashMap<String, Object>> subledgerDetails = new ArrayList<>();
+	}
 
-        for (Voucher voucher : voucherRequest.getVouchers()) {
-            try {
-                SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yyyy");
-                Date vDate = fm.parse(voucher.getVoucherDate());
-                headerDetails.put(VoucherConstant.DEPARTMENTCODE, voucher.getDepartment());
-                headerDetails.put(VoucherConstant.VOUCHERNAME, voucher.getName());
-                headerDetails.put(VoucherConstant.VOUCHERTYPE, voucher.getType());
-                headerDetails.put(VoucherConstant.VOUCHERNUMBER, voucher.getVoucherNumber());
-                headerDetails.put(VoucherConstant.VOUCHERDATE, vDate);
-                headerDetails.put(VoucherConstant.DESCRIPTION, voucher.getDescription());
-                headerDetails.put(VoucherConstant.MODULEID, voucher.getModuleId());
-                headerDetails.put(VoucherConstant.SOURCEPATH, voucher.getSource());
-                // headerDetails.put(VoucherConstant.BUDGETCHECKREQ, voucher());
-                if (voucher.getFund() != null)
-                    headerDetails.put(VoucherConstant.FUNDCODE, voucher.getFund().getCode());
+	@PostMapping(value = "/rest/voucher/_create")
+	@ResponseBody
+	public VoucherResponse create(@RequestBody VoucherRequest voucherRequest) {
 
-                if (voucher.getFunction() != null)
-                    headerDetails.put(VoucherConstant.FUNCTIONCODE, voucher.getFunction().getCode());
+		VoucherResponse response = new VoucherResponse();
+		final HashMap<String, Object> headerDetails = new HashMap<String, Object>();
+		HashMap<String, Object> detailMap = null;
+		HashMap<String, Object> subledgertDetailMap = null;
+		final List<HashMap<String, Object>> accountdetails = new ArrayList<>();
+		final List<HashMap<String, Object>> subledgerDetails = new ArrayList<>();
 
-                if (voucher.getFunctionary() != null)
-                    headerDetails.put(VoucherConstant.FUNCTIONARYCODE, voucher.getFunctionary().getCode());
-                if (voucher.getScheme() != null)
-                    headerDetails.put(VoucherConstant.SCHEMECODE, voucher.getScheme().getCode());
-                if (voucher.getSubScheme() != null)
-                    headerDetails.put(VoucherConstant.SUBSCHEMECODE, voucher.getSubScheme().getCode());
+		for (Voucher voucher : voucherRequest.getVouchers()) {
+			try {
+				SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yyyy");
+				Date vDate = fm.parse(voucher.getVoucherDate());
+				headerDetails.put(VoucherConstant.DEPARTMENTCODE, voucher.getDepartment());
+				headerDetails.put(VoucherConstant.VOUCHERNAME, voucher.getName());
+				headerDetails.put(VoucherConstant.VOUCHERTYPE, voucher.getType());
+				headerDetails.put(VoucherConstant.VOUCHERNUMBER, voucher.getVoucherNumber());
+				headerDetails.put(VoucherConstant.VOUCHERDATE, vDate);
+				headerDetails.put(VoucherConstant.DESCRIPTION, voucher.getDescription());
+				headerDetails.put(VoucherConstant.MODULEID, voucher.getModuleId());
+				headerDetails.put(VoucherConstant.SOURCEPATH, voucher.getSource());
+				// headerDetails.put(VoucherConstant.BUDGETCHECKREQ, voucher());
+				if (voucher.getFund() != null)
+					headerDetails.put(VoucherConstant.FUNDCODE, voucher.getFund().getCode());
 
-                for (AccountDetailContract ac : voucher.getLedgers()) {
+				if (voucher.getFunction() != null)
+					headerDetails.put(VoucherConstant.FUNCTIONCODE, voucher.getFunction().getCode());
 
-                    detailMap = new HashMap<>();
-                    detailMap.put(VoucherConstant.GLCODE, ac.getGlcode());
-                    detailMap.put(VoucherConstant.DEBITAMOUNT, ac.getDebitAmount());
-                    detailMap.put(VoucherConstant.CREDITAMOUNT, ac.getCreditAmount());
-                    if (ac.getFunction() != null)
-                        detailMap.put(VoucherConstant.FUNCTIONCODE, ac.getFunction().getCode());
+				if (voucher.getFunctionary() != null)
+					headerDetails.put(VoucherConstant.FUNCTIONARYCODE, voucher.getFunctionary().getCode());
+				if (voucher.getScheme() != null)
+					headerDetails.put(VoucherConstant.SCHEMECODE, voucher.getScheme().getCode());
+				if (voucher.getSubScheme() != null)
+					headerDetails.put(VoucherConstant.SUBSCHEMECODE, voucher.getSubScheme().getCode());
 
-                    accountdetails.add(detailMap);
+				for (AccountDetailContract ac : voucher.getLedgers()) {
 
-                    for (SubledgerDetailContract sl : ac.getSubledgerDetails()) {
+					detailMap = new HashMap<>();
+					detailMap.put(VoucherConstant.GLCODE, ac.getGlcode());
+					detailMap.put(VoucherConstant.DEBITAMOUNT, ac.getDebitAmount());
+					detailMap.put(VoucherConstant.CREDITAMOUNT, ac.getCreditAmount());
+					if (ac.getFunction() != null)
+						detailMap.put(VoucherConstant.FUNCTIONCODE, ac.getFunction().getCode());
 
-                        subledgertDetailMap = new HashMap<>();
-                        subledgertDetailMap.put(VoucherConstant.GLCODE, ac.getGlcode());
-                        subledgertDetailMap.put(VoucherConstant.DETAILAMOUNT, sl.getAmount());
-                        subledgertDetailMap.put(VoucherConstant.DETAIL_TYPE_ID, sl.getAccountDetailType().getId());
-                        subledgertDetailMap.put(VoucherConstant.DETAIL_KEY_ID, sl.getAccountDetailKey().getId());
-                        subledgerDetails.add(subledgertDetailMap);
-                    }
-                }
+					accountdetails.add(detailMap);
 
-                CVoucherHeader voucherHeader = createVoucher.createVoucher(headerDetails, accountdetails,
-                        subledgerDetails);
-                voucher.setId(voucherHeader.getId());
-                voucher.setVoucherNumber(voucherHeader.getVoucherNumber());
-                response.getVouchers().add(voucher);
-                response.setResponseInfo(
-                        MicroserviceUtils.getResponseInfo(voucherRequest.getRequestInfo(), HttpStatus.SC_CREATED, null));
-            } catch (ValidationException e) {
-                throw e;
+					for (SubledgerDetailContract sl : ac.getSubledgerDetails()) {
 
-            } catch (ApplicationRuntimeException e) {
+						subledgertDetailMap = new HashMap<>();
+						subledgertDetailMap.put(VoucherConstant.GLCODE, ac.getGlcode());
+						subledgertDetailMap.put(VoucherConstant.DETAILAMOUNT, sl.getAmount());
+						subledgertDetailMap.put(VoucherConstant.DETAIL_TYPE_ID, sl.getAccountDetailType().getId());
+						subledgertDetailMap.put(VoucherConstant.DETAIL_KEY_ID, sl.getAccountDetailKey().getId());
+						subledgerDetails.add(subledgertDetailMap);
+					}
+				}
 
-                throw e;
-            } catch (ParseException e) {
+				CVoucherHeader voucherHeader = createVoucher.createVoucher(headerDetails, accountdetails,
+						subledgerDetails);
+				voucher.setId(voucherHeader.getId());
+				voucher.setVoucherNumber(voucherHeader.getVoucherNumber());
+				response.getVouchers().add(voucher);
+				response.setResponseInfo(MicroserviceUtils.getResponseInfo(voucherRequest.getRequestInfo(),
+						HttpStatus.SC_CREATED, null));
+			} catch (ValidationException e) {
+				throw e;
 
-                throw new ApplicationRuntimeException(e.getMessage());
-            }
+			} catch (ApplicationRuntimeException e) {
 
-        }
-        return response;
-    }
+				throw e;
+			} catch (ParseException e) {
+
+				throw new ApplicationRuntimeException(e.getMessage());
+			}
+
+		}
+		return response;
+	}
+	@PostMapping(value = "/rest/voucher/_cancel")
+	@ResponseBody
+	public VoucherResponse cancel(@RequestBody VoucherSearchRequest voucherSearchRequest) {
+		try {
+			VoucherResponse response = voucherService.cancel(voucherSearchRequest);
+			response.setResponseInfo(MicroserviceUtils.getResponseInfo(voucherSearchRequest.getRequestInfo(),
+					HttpStatus.SC_OK, null));
+			
+			return response;
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			throw new ApplicationRuntimeException(e.getMessage());
+		}
+
+	}
+
 }

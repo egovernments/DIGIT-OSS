@@ -61,6 +61,13 @@ public class FundContract {
     public Long getId() {
         return id;
     }
+    
+  public  FundContract()
+    {
+    	 
+    }
+    
+  
 
     public void setId(final Long id) {
         this.id = id;
@@ -121,5 +128,10 @@ public class FundContract {
     public void setActive(final Boolean active) {
         this.active = active;
     }
+
+	public FundContract code(String code2) {
+		 this.code=code2;
+		 return this;
+	}
 
 }

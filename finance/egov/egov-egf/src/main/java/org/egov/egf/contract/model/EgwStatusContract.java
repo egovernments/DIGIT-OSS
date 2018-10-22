@@ -85,4 +85,9 @@ public class EgwStatusContract {
         this.description = description;
     }
 
+	public EgwStatusContract code(Integer status) {
+	this.setCode(status.toString());
+	return this;
+	}
+
 }
