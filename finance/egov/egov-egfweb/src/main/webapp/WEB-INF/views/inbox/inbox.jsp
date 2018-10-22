@@ -23,6 +23,36 @@
                         </thead>
                     </table>
 </div>
+<div class="modal fade history-inbox">
+    <div class="modal-dialog history">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><spring:message code="lbl.task.history"/></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="historyTable" class="table table-bordered datatable dataTable no-footer">
+                            <thead>
+                            <tr>
+                                <th><spring:message code="lbl.created.date"/></th>
+                                <th><spring:message code="lbl.sender"/></th>
+                                <th><spring:message code="lbl.natureoftask"/></th>
+                                <th><spring:message code="lbl.status"/></th>
+                                <th><spring:message code="lbl.comments"/></th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="lbl.cancel"/></button>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/jquery.dataTables.min.js' context='/services/EGF'/>"></script>
 <script src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/dataTables.bootstrap.js' context='/services/EGF'/>"></script>
 <script src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/responsive/js/datatables.responsive.js' context='/services/EGF'/>"></script>

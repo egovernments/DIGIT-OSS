@@ -4,7 +4,7 @@
 
 
 $(document).ready(function () {
-    $('#new-pass').popover({trigger: "focus", placement: "bottom"});
+//    $('#new-pass').popover({trigger: "focus", placement: "bottom"});
 
     $(document).on("keydown", disableRefresh);
 
@@ -21,68 +21,68 @@ $(document).ready(function () {
             $(this).children('ul').hide();
         });
 
-    $('#feedback-form').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: 'home/feedback/sent',
-            type: 'GET',
-            data: {'subject': $("#subject").val(), 'message': $("#comment").val()},
-            success: function (data) {
-                bootbox.alert("Your feedback successfully submitted.");
-            },
-            error: function () {
+//    $('#feedback-form').on('submit', function (e) {
+//        e.preventDefault();
+//        $.ajax({
+//            url: 'home/feedback/sent',
+//            type: 'GET',
+//            data: {'subject': $("#subject").val(), 'message': $("#comment").val()},
+//            success: function (data) {
+//                bootbox.alert("Your feedback successfully submitted.");
+//            },
+//            error: function () {
+//
+//            }, complete: function () {
+//                $('.add-feedback').modal('hide');
+//            }
+//        });
+//
+//    });
 
-            }, complete: function () {
-                $('.add-feedback').modal('hide');
-            }
-        });
-
-    });
-
-    $('#password-form').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: 'home/password/update',
-            type: 'GET',
-            data: {
-                'currentPwd': $("#old-pass").val(),
-                'newPwd': $("#new-pass").val(),
-                'retypeNewPwd': $("#retype-pass").val()
-            },
-            success: function (data) {
-                var msg = "";
-                if (data == "SUCCESS") {
-                    $("#old-pass").val("");
-                    $("#new-pass").val("");
-                    $("#retype-pass").val("");
-                    $('.change-password').modal('hide');
-                    bootbox.alert("Your password has been updated.");
-                    $('.pass-cancel').removeAttr('disabled');
-                    $('#pass-alert').hide();
-                } else if (data == "NEWPWD_UNMATCH") {
-                    msg = "New password you have entered does not match with retyped password.";
-                    $("#new-pass").val("");
-                    $("#retype-pass").val("");
-                    $('.change-password').modal('show');
-                } else if (data == "CURRPWD_UNMATCH") {
-                    msg = "Old password you have entered is incorrect.";
-                    $("#old-pass").val("");
-                    $('.change-password').modal('show');
-                } else if (data == "NEWPWD_INVALID") {
-                    msg = $('.password-error-msg').html();
-                    $("#new-pass").val("");
-                    $("#retype-pass").val("");
-                    $('.change-password').modal('show');
-                }
-                $('.password-error').html(msg).show();
-
-            },
-            error: function () {
-                bootbox.alert("Internal server error occurred, please try after sometime.");
-            }
-        });
-
-    });
+//    $('#password-form').on('submit', function (e) {
+//        e.preventDefault();
+//        $.ajax({
+//            url: 'home/password/update',
+//            type: 'GET',
+//            data: {
+//                'currentPwd': $("#old-pass").val(),
+//                'newPwd': $("#new-pass").val(),
+//                'retypeNewPwd': $("#retype-pass").val()
+//            },
+//            success: function (data) {
+//                var msg = "";
+//                if (data == "SUCCESS") {
+//                    $("#old-pass").val("");
+//                    $("#new-pass").val("");
+//                    $("#retype-pass").val("");
+//                    $('.change-password').modal('hide');
+//                    bootbox.alert("Your password has been updated.");
+//                    $('.pass-cancel').removeAttr('disabled');
+//                    $('#pass-alert').hide();
+//                } else if (data == "NEWPWD_UNMATCH") {
+//                    msg = "New password you have entered does not match with retyped password.";
+//                    $("#new-pass").val("");
+//                    $("#retype-pass").val("");
+//                    $('.change-password').modal('show');
+//                } else if (data == "CURRPWD_UNMATCH") {
+//                    msg = "Old password you have entered is incorrect.";
+//                    $("#old-pass").val("");
+//                    $('.change-password').modal('show');
+//                } else if (data == "NEWPWD_INVALID") {
+//                    msg = $('.password-error-msg').html();
+//                    $("#new-pass").val("");
+//                    $("#retype-pass").val("");
+//                    $('.change-password').modal('show');
+//                }
+//                $('.password-error').html(msg).show();
+//
+//            },
+//            error: function () {
+//                bootbox.alert("Internal server error occurred, please try after sometime.");
+//            }
+//        });
+//
+//    });
 
     worklist();
 
@@ -119,24 +119,24 @@ $(document).ready(function () {
         e.stopPropagation();
     });
 
-    $('.workspace').click(function () {
-        $('.main-space').hide();
-        $('.workspace').removeClass('active');
-        clearnow();
-        $('#' + $(this).attr('data-work')).find('input').val('');
-        $(this).addClass('active');
-        if ($(this).attr('data-work') == 'worklist') {
-            focussedmenu = "worklist";
-            worklist();
-        } else if ($(this).attr('data-work') == 'drafts') {
-            focussedmenu = "drafts";
-            drafts();
-        } else if ($(this).attr('data-work') == 'notifications') {
-            focussedmenu = "notifications";
-            notifications();
-        }
-        $('#' + $(this).attr('data-work')).show();
-    });
+//    $('.workspace').click(function () {
+//        $('.main-space').hide();
+//        $('.workspace').removeClass('active');
+//        clearnow();
+//        $('#' + $(this).attr('data-work')).find('input').val('');
+//        $(this).addClass('active');
+//        if ($(this).attr('data-work') == 'worklist') {
+//            focussedmenu = "worklist";
+//            worklist();
+//        } else if ($(this).attr('data-work') == 'drafts') {
+//            focussedmenu = "drafts";
+//            drafts();
+//        } else if ($(this).attr('data-work') == 'notifications') {
+//            focussedmenu = "notifications";
+//            notifications();
+//        }
+//        $('#' + $(this).attr('data-work')).show();
+//    });
 
     $('.search-table').keyup(function () {
         tableContainer1.dataTable().fnFilter(this.value);
@@ -160,14 +160,14 @@ $(document).ready(function () {
         }
     });
 
-    $('.check-password').blur(function () {
-        if (($('#new-pass').val() != "") && ($('#retype-pass').val() != "")) {
-            if ($('#new-pass').val() !== $('#retype-pass').val()) {
-                $('.password-error').show();
-                $('#retype-pass').addClass('error');
-            }
-        }
-    });
+//    $('.check-password').blur(function () {
+//        if (($('#new-pass').val() != "") && ($('#retype-pass').val() != "")) {
+//            if ($('#new-pass').val() !== $('#retype-pass').val()) {
+//                $('.password-error').show();
+//                $('#retype-pass').addClass('error');
+//            }
+//        }
+//    });
 
     $('#natureofwork').on('click', 'ul li a', function () {
         $('#natureofwork ul li').removeClass('active');
@@ -613,11 +613,12 @@ function refreshnow(taskName, moduleName) {
 
 function inboxloadmethod() {
     clearnow();
-    if (focussedmenu == 'worklist') {
-        worklist();
-    } else if (focussedmenu == 'drafts') {
-        drafts();
-    } else if (focussedmenu == 'notifications') {
-        notifications();
-    }
+    worklist();
+//    if (focussedmenu == 'worklist') {
+//        worklist();
+//    } else if (focussedmenu == 'drafts') {
+//        drafts();
+//    } else if (focussedmenu == 'notifications') {
+//        notifications();
+//    }
 }

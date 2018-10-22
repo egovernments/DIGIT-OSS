@@ -24,85 +24,90 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 @Controller
 public class MSCommController {
 
-	@Autowired
-	MicroserviceUtils microserviceUtils;
-	@Autowired
-	
-	private HttpServletRequest servletrequest;
+    @Autowired
+    MicroserviceUtils microserviceUtils;
+    @Autowired
 
-	 @Autowired
-	 private InboxRenderServiceDelegate<StateAware> inboxRenderServiceDelegate;
-	 
-	
-	@RequestMapping(value = "/depratments",method=RequestMethod.GET)
-	@ResponseBody
-	public List<Department> getDetapartments(){
-	
-		List<Department> departments = microserviceUtils.getDepartments();
-		return departments;
-	}
-	
-	@RequestMapping(value = "/designations",method=RequestMethod.GET)
-	@ResponseBody
-	public List<Designation> getDesignations(){
-		
-		List<Designation> designations = microserviceUtils.getDesignations();
-		
-		return designations;
-	}
-	
-	@RequestMapping(value="/approvers/{deptId}/{desgId}",method=RequestMethod.GET)
-	@ResponseBody
-	public List<EmployeeInfo> getApprovers(@PathVariable(name="deptId")String deptId,@PathVariable(name="desgId")String desgnId){
-		
-		List<EmployeeInfo> approvers = microserviceUtils.getApprovers(deptId,desgnId);
-		
-		return approvers;
-	}
-	
-	@RequestMapping(value="/rest/ClearToken",method=RequestMethod.POST)
-	@ResponseBody
-	private ResponseEntity logout(@RequestBody RequestInfoWrapper request){
-	    try{
-	    String access_token = request.getRequestInfo().getAuthToken();
-	    
-		if(null != access_token){
-			microserviceUtils.removeSessionFromRedis(access_token);
-		}
-	    }catch(Exception ex){
-	        
-	        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	    }
-	    return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	@RequestMapping(value="/rest/refreshToken",method=RequestMethod.POST)
-	@ResponseBody
-	private ResponseEntity refreshToken(@RequestParam(value="oldToken")String oldToken,@RequestParam(value="newToken")String newToken){
-		
-	    try{
-		if(null!=oldToken && null!=newToken){
-			microserviceUtils.refreshToken(oldToken, newToken);
-		}
-	    }
-	    catch(Exception ex){
-                
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-		
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	@GetMapping(value="inbox/items",produces = APPLICATION_JSON_UTF8_VALUE)
+    private HttpServletRequest servletrequest;
+
+    @Autowired
+    private InboxRenderServiceDelegate<StateAware> inboxRenderServiceDelegate;
+
+    @RequestMapping(value = "/depratments", method = RequestMethod.GET)
     @ResponseBody
-    public List<Inbox>showInbox() {
-        
+    public List<Department> getDetapartments() {
+
+        List<Department> departments = microserviceUtils.getDepartments();
+        return departments;
+    }
+
+    @RequestMapping(value = "/designations", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Designation> getDesignations() {
+
+        List<Designation> designations = microserviceUtils.getDesignations();
+
+        return designations;
+    }
+
+    @RequestMapping(value = "/approvers/{deptId}/{desgId}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<EmployeeInfo> getApprovers(@PathVariable(name = "deptId") String deptId,
+            @PathVariable(name = "desgId") String desgnId) {
+
+        List<EmployeeInfo> approvers = microserviceUtils.getApprovers(deptId, desgnId);
+
+        return approvers;
+    }
+
+    @RequestMapping(value = "/rest/ClearToken", method = RequestMethod.POST)
+    @ResponseBody
+    private ResponseEntity logout(@RequestBody RequestInfoWrapper request) {
+        try {
+            String access_token = request.getRequestInfo().getAuthToken();
+
+            if (null != access_token) {
+                microserviceUtils.removeSessionFromRedis(access_token);
+            }
+        } catch (Exception ex) {
+
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/rest/refreshToken", method = RequestMethod.POST)
+    @ResponseBody
+    private ResponseEntity refreshToken(@RequestParam(value = "oldToken") String oldToken,
+            @RequestParam(value = "newToken") String newToken) {
+
+        try {
+            if (null != oldToken && null != newToken) {
+                microserviceUtils.refreshToken(oldToken, newToken);
+            }
+        } catch (Exception ex) {
+
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "inbox/items", produces = APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public List<Inbox> showInbox() {
+
         return inboxRenderServiceDelegate.getCurrentUserInboxItems();
+    }
+
+    @GetMapping(value = "inbox/history", produces = APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public List<Inbox> showInboxHistory(@RequestParam Long stateId) {
+        return inboxRenderServiceDelegate.getWorkflowHistoryItems(stateId);
     }
 }
