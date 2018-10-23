@@ -963,6 +963,14 @@ public class MicroserviceUtils {
     public void saveAuthToken(String auth_token, String sessionId) {
         redisTemplate.opsForValue().set(auth_token, sessionId);
     }
+    
+    public String readSesionIdByAuthToken(String auth_token){
+        
+        if(redisTemplate.hasKey(auth_token)){
+            return (String)redisTemplate.opsForValue().get(auth_token);
+        }
+        return null;
+    }
 
     public void SaveSessionToRedis(String access_token, String sessionId, Map<String, String> values) {
 
@@ -994,8 +1002,14 @@ public class MicroserviceUtils {
         LOGGER.info("Logout for authtoken : " + access_token);
         if (null != access_token && redisTemplate.hasKey(access_token)) {
             String sessionId = String.valueOf(redisTemplate.opsForValue().get(access_token));
-            if (sessionId != null)
+            if (sessionId != null){
+                System.out.println("***********sessionId**** "+sessionId);
                 redisTemplate.delete(sessionId);
+                System.out.println("spring:session:sessions:" + sessionId);
+                System.out.println("spring:session:sessions:expires:" + sessionId);
+                redisTemplate.delete("spring:session:sessions:" + sessionId);
+                redisTemplate.delete("spring:session:sessions:expires:" + sessionId);
+            }
             else
                 LOGGER.info("session not found in redis for : " + access_token);
             redisTemplate.delete(access_token);

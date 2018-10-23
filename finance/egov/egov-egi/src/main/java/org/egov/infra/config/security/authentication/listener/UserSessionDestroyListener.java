@@ -95,6 +95,7 @@ public class UserSessionDestroyListener implements HttpSessionListener {
     @Override
     public void sessionDestroyed(HttpSessionEvent event) {
         String sessionId = event.getSession().getId();
+        System.out.println("***********sessionDestroyed Event****** "+sessionId);
         if (redisTemplate.hasKey(sessionId)) {
             Object auth_token = redisTemplate.opsForHash().get(sessionId, "auth_token");
             if (auth_token != null) {

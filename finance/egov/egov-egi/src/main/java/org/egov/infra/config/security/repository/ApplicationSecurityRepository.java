@@ -1,6 +1,7 @@
 package org.egov.infra.config.security.repository;
 
 import static org.egov.infra.utils.ApplicationConstant.MS_USER_TOKEN;
+import static org.egov.infra.utils.ApplicationConstant.USERID_KEY;
 import static org.egov.infra.utils.ApplicationConstant.MS_TENANTID_KEY;
 
 import java.io.IOException;
@@ -67,10 +68,11 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 			cur_user = (CurrentUser)this.microserviceUtils.readFromRedis(request.getSession().getId(), "current_user");
 			if (cur_user==null) {
 				LOGGER.info(" ***  Session is not available in redis.... , trying to login");
-				if(request.getRequestURI().contains("/rest/")){
+				/*if(request.getRequestURI().contains("/rest/")){
 				    return SecurityContextHolder.createEmptyContext();
 				}
-				else{
+				else*/{
+//				    ApplicationThreadLocals.clearValues();
 				 cur_user = new CurrentUser(this.getUserDetails(request));
 				this.microserviceUtils.savetoRedis(session.getId(), "current_user", cur_user);
 				}
@@ -79,7 +81,6 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 			    String oldToken = (String)session.getAttribute(MS_USER_TOKEN);
 			    String newToken = (String)this.microserviceUtils.readFromRedis(session.getId(), "auth_token");
 			    if(null!=oldToken && null!=newToken && !oldToken.equals(newToken)){
-			        ApplicationThreadLocals.setUserToken(newToken);
 			        session.setAttribute(MS_USER_TOKEN, newToken);
 			    }
 			}
@@ -134,12 +135,14 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
         if(null==user || user.getId()==null)
             throw new Exception("Invalid Token");
         session.setAttribute(MS_TENANTID_KEY, user.getTenantId());
+        session.setAttribute(USERID_KEY,user.getId());
         UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token, user.getTenantId(), user.getUserName());
         
         this.microserviceUtils.removeSessionFromRedis(user_token);
         this.microserviceUtils.savetoRedis(session.getId(), "auth_token", user_token);
         this.microserviceUtils.savetoRedis(session.getId(), "_details", user);
         this.microserviceUtils.saveAuthToken(user_token, session.getId());
+        
 //        this.microserviceUtils.setExpire(session.getId());
 //        this.microserviceUtils.setExpire(user_token);
         
