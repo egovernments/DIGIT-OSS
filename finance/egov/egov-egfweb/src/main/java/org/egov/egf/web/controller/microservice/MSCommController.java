@@ -75,8 +75,10 @@ public class MSCommController {
             String access_token = request.getRequestInfo().getAuthToken();
             
             String sessionId =(String) microserviceUtils.readSesionIdByAuthToken(access_token);
-            if(sessionId!=null && sessionId.equalsIgnoreCase("null")){
+            if(sessionId!=null && !sessionId.equalsIgnoreCase("null")){
+                System.out.println("********* Retrieved session::authtoken******** "+sessionId+"::"+access_token);
                 if(redisRepository!=null){
+                 System.out.println("*********** Deleting the session for redisrepository "+ sessionId);   
                     redisRepository.delete(sessionId);
                 }
                 
