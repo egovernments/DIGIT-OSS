@@ -102,6 +102,10 @@ public class Voucher {
 
 	}
 
+	public Voucher() {
+		super();
+	}
+
 	public String getTenantId() {
 		return tenantId;
 	}

@@ -55,7 +55,11 @@ import org.egov.commons.CGeneralLedgerDetail;
 
 public class AccountDetailContract {
 
-    private Long id;
+    public AccountDetailContract() {
+		super();
+	}
+
+	private Long id;
     private Long orderId;
     private String glcode;
     private Double debitAmount;

@@ -71,7 +71,11 @@ public class SubledgerDetailContract {
         return id;
     }
 
-    public void setId(final Long id) {
+    public SubledgerDetailContract() {
+		super();
+	}
+
+	public void setId(final Long id) {
         this.id = id;
     }
 
