@@ -72,7 +72,7 @@ public class DebitAccountHeadDetailsServiceImpl implements DebitAccountHeadDetai
                 && !chequeInstrumenttotal.toString().trim().equals(CollectionConstants.ZERO_INT)
                 && !chequeInstrumenttotal.toString().trim().equals(CollectionConstants.ZERO_DOUBLE)) {
             InstrumentAccountCode ac = microserviceUtils
-                    .getInstrumentAccountCodeByService(CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE);
+                    .getInstrumentAccountCodeByType(CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE);
             CChartOfAccounts coa = null;
             if (ac != null && ac.getAccountCode() != null && ac.getAccountCode().getGlcode() != null) {
                 coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getAccountCode().getGlcode());
@@ -90,7 +90,7 @@ public class DebitAccountHeadDetailsServiceImpl implements DebitAccountHeadDetai
                 && !otherInstrumenttotal.toString().trim().equals(CollectionConstants.ZERO_DOUBLE)) {
             if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_CASH)) {
                 InstrumentAccountCode ac = microserviceUtils
-                        .getInstrumentAccountCodeByService(CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE);
+                        .getInstrumentAccountCodeByType(CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE);
                 CChartOfAccounts coa = null;
                 if (ac != null && ac.getAccountCode() != null && ac.getAccountCode().getGlcode() != null) {
                     coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getAccountCode().getGlcode());
@@ -98,7 +98,7 @@ public class DebitAccountHeadDetailsServiceImpl implements DebitAccountHeadDetai
                 newReceiptDetail.setAccounthead(coa);
             } else if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_CARD)) {
                 InstrumentAccountCode ac = microserviceUtils
-                        .getInstrumentAccountCodeByService(CollectionConstants.INSTRUMENTTYPE_NAME_CARD);
+                        .getInstrumentAccountCodeByType(CollectionConstants.INSTRUMENTTYPE_NAME_CARD);
                 CChartOfAccounts coa = null;
                 if (ac != null && ac.getAccountCode() != null && ac.getAccountCode().getGlcode() != null) {
                     coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getAccountCode().getGlcode());
@@ -109,7 +109,7 @@ public class DebitAccountHeadDetailsServiceImpl implements DebitAccountHeadDetai
                         .getBankAccountId().getChartofaccounts());
             else if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_ONLINE)) {
                 InstrumentAccountCode ac = microserviceUtils
-                        .getInstrumentAccountCodeByService(CollectionConstants.INSTRUMENTTYPE_ONLINE);
+                        .getInstrumentAccountCodeByType(CollectionConstants.INSTRUMENTTYPE_ONLINE);
                 CChartOfAccounts coa = null;
                 if (ac != null && ac.getAccountCode() != null && ac.getAccountCode().getGlcode() != null) {
                     coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getAccountCode().getGlcode());

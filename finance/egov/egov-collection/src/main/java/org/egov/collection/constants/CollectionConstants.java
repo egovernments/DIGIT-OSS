@@ -126,6 +126,7 @@ public final class CollectionConstants {
     public static final String RECEIPT_STATUS_CODE_TO_BE_SUBMITTED = "TO_BE_SUBMITTED";
     public static final String RECEIPT_STATUS_CODE_SUBMITTED = "SUBMITTED";
     public static final String RECEIPT_STATUS_CODE_APPROVED = "APPROVED";
+    public static final String RECEIPT_STATUS_APPROVED = "Approved";
     public static final String RECEIPT_STATUS_CODE_INSTRUMENT_BOUNCED = "INSTR_BOUNCED";
     public static final String RECEIPT_STATUS_CODE_CANCELLED = "CANCELLED";
     public static final String RECEIPT_STATUS_CODE_FAILED = "FAILED";
@@ -137,6 +138,7 @@ public final class CollectionConstants {
     public static final String RECEIPT_STATUS_CODE_CANCELLATION_REJECTED = "CANCELLATION_REJECTED";
     public static final String DISHONORCHEQUE_STATUS_CODE_CREATED = "CREATED";
     public static final String DISHONORCHEQUE_STATUS_CODE_APPROVED = "APPROVED";
+    public static final String RECEIPT_STATUS_REMITTED = "Remitted";
 
     // Status descriptions - ideally we should not be using these - to be
     // discussed
@@ -585,7 +587,7 @@ public final class CollectionConstants {
     public static final String ESTIMATION_CHARGES_WATERTAX_MODULE = "Estimation Charges";
 
     public static final String USER_TYPE_FOR_CITIZEN = "CITIZEN";
-    public static final String DEPT_CODE_FOR_ACCOUNTS = "ACC";
+    public static final String DEPT_CODE_FOR_ACCOUNTS = "DEPT_1";
 
     public static final String REPORT_TEMPLATE_REMITTANCE_STATEMENT = "collection_remittanc_statement_report";
     public static final String REMITTANCEVOUCHERREPORT_BRV = "BRV";

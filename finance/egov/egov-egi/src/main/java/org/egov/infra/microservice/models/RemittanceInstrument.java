@@ -45,56 +45,58 @@
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  *
  */
-package org.egov.collection.entity;
+package org.egov.infra.microservice.models;
 
-import javax.persistence.Transient;
+public class RemittanceInstrument {
 
-import org.egov.infra.microservice.models.Instrument;
-import org.egov.infstr.models.BaseModel;
-import org.egov.model.instrument.InstrumentHeader;
+    private String tenantId;
 
-public class RemittanceInstrument extends BaseModel {
+    private String id;
 
-    private static final long serialVersionUID = 1L;
+    private String remittance;
 
-    private Remittance remittance;
-
-    private InstrumentHeader instrumentHeader;
-
-    @Transient
-    private Instrument instrument;
+    private String instrument;
 
     private Boolean reconciled;
 
-    public Remittance getRemittance() {
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getRemittance() {
         return remittance;
     }
 
-    public void setRemittance(final Remittance remit) {
-        this.remittance = remit;
+    public void setRemittance(String remittance) {
+        this.remittance = remittance;
     }
 
-    public InstrumentHeader getInstrumentHeader() {
-        return instrumentHeader;
+    public String getInstrument() {
+        return instrument;
     }
 
-    public void setInstrumentHeader(final InstrumentHeader instrumentHead) {
-        this.instrumentHeader = instrumentHead;
+    public void setInstrument(String instrument) {
+        this.instrument = instrument;
     }
 
     public Boolean getReconciled() {
         return reconciled;
     }
 
-    public void setReconciled(final Boolean reconcile) {
-        this.reconciled = reconcile;
+    public void setReconciled(Boolean reconciled) {
+        this.reconciled = reconciled;
     }
 
-    public Instrument getInstrument() {
-        return instrument;
-    }
-
-    public void setInstrument(Instrument instrument) {
-        this.instrument = instrument;
-    }
 }

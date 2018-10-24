@@ -60,6 +60,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -79,15 +80,20 @@ import org.egov.commons.Bankaccount;
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.CVoucherHeader;
 import org.egov.commons.EgwStatus;
+import org.egov.commons.Fund;
 import org.egov.commons.dao.ChartOfAccountsDAO;
 import org.egov.commons.dao.FunctionHibernateDAO;
 import org.egov.commons.dao.FundHibernateDAO;
 import org.egov.commons.entity.Source;
-import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.BusinessDetails;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.FinancialStatus;
 import org.egov.infra.microservice.models.Instrument;
+import org.egov.infra.microservice.models.InstrumentAccountCode;
+import org.egov.infra.microservice.models.InstrumentResponse;
 import org.egov.infra.microservice.models.InstrumentVoucher;
 import org.egov.infra.microservice.models.Receipt;
+import org.egov.infra.microservice.models.RemittanceResponse;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.utils.DateUtils;
 import org.egov.infra.validation.exception.ValidationError;
@@ -128,71 +134,45 @@ public class RemittanceServiceImpl extends RemittanceService {
     private MicroserviceUtils microserviceUtils;
 
     /**
-     * Create Contra Vouchers for String array passed of serviceName, totalCashAmount, totalChequeAmount, totalCardAmount and
+     * Create Contra Vouchers
      *
-     * @param serviceName
-     * @param totalCashAmount
-     * @param totalAmount
      * @return List of Contra Vouchers Created
      */
     @Transactional
     @Override
-    public List<ReceiptHeader> createCashBankRemittance(final String[] serviceNameArr, final String[] totalCashAmount,
-            final String[] totalAmount, final String[] totalCardAmount, final String[] receiptDateArray,
-            final String[] fundCodeArray, final String[] departmentCodeArray, final String accountNumberId,
-            final Integer positionUser, final String[] receiptNumberArray, final Date remittanceDate) {
+    public List<Receipt> createCashBankRemittance(List<ReceiptBean> receiptList, final String accountNumberId,
+            final Date remittanceDate) {
 
-        final List<ReceiptHeader> bankRemittanceList = new ArrayList<>(0);
-        final List<ReceiptHeader> bankRemitList = new ArrayList<>();
-        final SimpleDateFormat dateFomatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        financialsUtil.prepareForUpdateInstrumentDepositSQL();
-        final String cashInHandQueryString = "SELECT COA.GLCODE FROM CHARTOFACCOUNTS COA,EGF_INSTRUMENTACCOUNTCODES IAC,EGF_INSTRUMENTTYPE IT "
-                + "WHERE IT.ID=IAC.TYPEID AND IAC.GLCODEID=COA.ID AND IT.TYPE= '" + CollectionConstants.INSTRUMENTTYPE_CASH
+        final Set<Receipt> bankRemittanceList = new HashSet<>();
+        final SimpleDateFormat dateFomatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+        InstrumentAccountCode accountCode = microserviceUtils
+                .getInstrumentAccountCodeByType(CollectionConstants.INSTRUMENTTYPE_NAME_CASH);
+
+        final String cashInHandQueryString = "SELECT COA.GLCODE FROM CHARTOFACCOUNTS COA WHERE COA.GLCODE = '"
+                + accountCode.getAccountCode().getGlcode()
                 + "'";
-        final String receiptInstrumentQueryString = "select DISTINCT (instruments) from org.egov.collection.entity.ReceiptHeader receipt "
-                + "join receipt.receiptInstrument as instruments join receipt.receiptMisc as receiptMisc where ";
-        final String serviceNameCondition = "receipt.service.name=? ";
-        final String receiptDateCondition = "and date(receipt.receiptdate)=? ";
-        final String instrumentStatusCondition = "and instruments.statusId.id=? ";
-        final String instrumentTypeCondition = "and instruments.instrumentType.type = ? ";
-        final String receiptFundCondition = "and receiptMisc.fund.code = ? ";
-        final String receiptDepartmentCondition = "and receiptMisc.department.code = ? ";
-        final String receiptSourceCondition = "and receipt.source = ? ";
-        String depositedBranchCondition = "";
-        if (collectionsUtil.isBankCollectionRemitter(collectionsUtil.getLoggedInUser())) {
-            BranchUserMap branchUserMap = branchUserMapService.findByNamedQuery(
-                    CollectionConstants.QUERY_ACTIVE_BRANCHUSER_BY_USER,
-                    collectionsUtil.getLoggedInUser().getId());
-            depositedBranchCondition = "and receiptMisc.depositedBranch.id=" + branchUserMap.getBankbranch().getId();
-        } else
-            depositedBranchCondition = "and receiptMisc.depositedBranch is null";
-
         final Query cashInHand = persistenceService.getSession().createSQLQuery(cashInHandQueryString);
 
         String cashInHandGLCode = null;
 
-        final String createVoucher = collectionsUtil.getAppConfigValue(
-                CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
-                CollectionConstants.APPCONFIG_VALUE_CREATEVOUCHER_FOR_REMITTANCE);
-        final String functionCode = collectionsUtil.getAppConfigValue(
-                CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
-                CollectionConstants.APPCONFIG_VALUE_COLLECTION_BANKREMITTANCE_FUNCTIONCODE);
-        final EgwStatus instrmentStatusNew = collectionsUtil.getStatusForModuleAndCode(
-                CollectionConstants.MODULE_NAME_INSTRUMENTHEADER, CollectionConstants.INSTRUMENT_NEW_STATUS);
-        final EgwStatus receiptStatusRemitted = collectionsUtil
-                .getReceiptStatusForCode(CollectionConstants.RECEIPT_STATUS_CODE_REMITTED);
-        final EgwStatus instrumentStatusReconciled = collectionsUtil.getStatusForModuleAndCode(
-                CollectionConstants.MODULE_NAME_INSTRUMENTHEADER, CollectionConstants.INSTRUMENT_RECONCILED_STATUS);
-
         if (!cashInHand.list().isEmpty())
             cashInHandGLCode = cashInHand.list().get(0).toString();
-        collectionsUtil.getVoucherType();
+
+        final String createVoucher = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
+                CollectionConstants.APPCONFIG_VALUE_CREATEVOUCHER_FOR_REMITTANCE);
+
+        final String functionCode = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
+                CollectionConstants.APPCONFIG_VALUE_COLLECTION_BANKREMITTANCE_FUNCTIONCODE);
+
+        FinancialStatus instrmentStatusNew = microserviceUtils
+                .getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
+
         Boolean showRemitDate = false;
         BigDecimal totalCashAmt = BigDecimal.ZERO;
         BigDecimal totalCashVoucherAmt = BigDecimal.ZERO;
         String fundCode = "";
         Date voucherDate = null;
-        List<InstrumentHeader> instrumentHeaderListCash;
         if (collectionsUtil
                 .getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
                         CollectionConstants.APPCONFIG_VALUE_COLLECTION_BANKREMITTANCE_SHOWREMITDATE)
@@ -202,63 +182,47 @@ public class RemittanceServiceImpl extends RemittanceService {
         final Bankaccount depositedBankAccount = (Bankaccount) persistenceService.find("from Bankaccount where accountnumber=?",
                 accountNumberId);
         final String serviceGlCode = depositedBankAccount.getChartofaccounts().getGlcode();
-        for (int i = 0; i < serviceNameArr.length; i++) {
-            final String serviceName = serviceNameArr[i].trim();
+        List<Receipt> receipts;
+        final HashSet<String> receiptIds = new HashSet<>(0);
+        for (ReceiptBean receipt : receiptList) {
+            if (receipt.getFund() != null && !receipt.getFund().isEmpty())
+                fundCode = receipt.getFund();
             if (showRemitDate && remittanceDate != null)
                 voucherDate = remittanceDate;
             else
                 try {
-                    collectionsUtil.getRemittanceVoucherDate(dateFomatter.parse(receiptDateArray[i]));
+                    voucherDate = collectionsUtil.getRemittanceVoucherDate(dateFomatter.parse(receipt.getReceiptDate()));
                 } catch (final ParseException e) {
                     LOGGER.error("Error Parsing Date", e);
                 }
-            if (serviceName != null && serviceName.length() > 0) {
-                final ServiceDetails serviceDetails = (ServiceDetails) persistenceService
-                        .findByNamedQuery(CollectionConstants.QUERY_SERVICE_BY_NAME, serviceName);
-
+            if (receipt.getService() != null && receipt.getService().length() > 0) {
+                BusinessDetails businessDetails = microserviceUtils.getBusinessDetailsByCode(receipt.getService());
                 // If Cash Amount is present
-                if (totalCashAmount[i].trim() != null && totalCashAmount[i].trim().length() > 0
-                        && cashInHandGLCode != null) {
-                    final StringBuilder cashQueryBuilder = new StringBuilder(receiptInstrumentQueryString);
-                    cashQueryBuilder.append(serviceNameCondition);
-                    cashQueryBuilder.append(receiptDateCondition);
-                    cashQueryBuilder.append(instrumentStatusCondition);
-                    cashQueryBuilder.append(instrumentTypeCondition);
-                    cashQueryBuilder.append(receiptFundCondition);
-                    cashQueryBuilder.append(receiptDepartmentCondition);
-                    cashQueryBuilder.append(
-                            "and receipt.status.id=(select id from org.egov.commons.EgwStatus where moduletype=? and code=?) ");
-                    cashQueryBuilder.append(receiptSourceCondition);
-                    cashQueryBuilder.append(depositedBranchCondition);
-                    final Object arguments[] = new Object[9];
-                    arguments[0] = serviceName;
-                    try {
-                        arguments[1] = dateFomatter.parse(receiptDateArray[i]);
-                    } catch (final ParseException exp) {
-                        LOGGER.debug("Exception in parsing date  " + receiptDateArray[i] + " - " + exp.getMessage());
-                        throw new ApplicationRuntimeException("Exception while parsing date", exp);
+                if (receipt.getInstrumentAmount() != null && cashInHandGLCode != null) {
+
+                    receipts = microserviceUtils.getReceipts(CollectionConstants.RECEIPT_STATUS_APPROVED, receipt.getService(),
+                            receipt.getFund(), receipt.getDepartment(), receipt.getReceiptDate());
+                    if (receipts != null) {
+                        for (Receipt r : receipts) {
+                            receiptIds.add(r.getBill().get(0).getBillDetails().get(0).getId());
+                        }
                     }
-                    arguments[2] = instrmentStatusNew.getId();
-                    arguments[3] = CollectionConstants.INSTRUMENTTYPE_CASH;
-                    arguments[4] = fundCodeArray[i];
-                    arguments[5] = departmentCodeArray[i];
-                    arguments[6] = CollectionConstants.MODULE_NAME_RECEIPTHEADER;
-                    arguments[7] = CollectionConstants.RECEIPT_STATUS_CODE_APPROVED;
-                    arguments[8] = Source.SYSTEM.toString();
-                    fundCode = fundCodeArray[i];
-                    instrumentHeaderListCash = persistenceService.findAllBy(cashQueryBuilder.toString(), arguments);
-                    totalCashAmt = totalCashAmt.add(new BigDecimal(totalCashAmount[i]));
-                    if (CollectionConstants.YES.equalsIgnoreCase(createVoucher) && serviceDetails.getVoucherCreation())
-                        totalCashVoucherAmt = totalCashVoucherAmt.add(new BigDecimal(totalCashAmount[i]));
-                    else
-                        financialsUtil.updateInstrumentHeader(instrumentHeaderListCash, instrumentStatusReconciled,
-                                depositedBankAccount);
-                    bankRemittanceList.addAll(getRemittanceList(serviceDetails, instrumentHeaderListCash));
+
+                    List<Instrument> instruments = microserviceUtils.getInstrumentsByReceiptIds(
+                            CollectionConstants.INSTRUMENTTYPE_NAME_CASH, instrmentStatusNew.getId(),
+                            StringUtils.join(receiptIds, ","));
+
+                    totalCashAmt = totalCashAmt.add(receipt.getInstrumentAmount());
+                    if (CollectionConstants.YES.equalsIgnoreCase(createVoucher) && businessDetails.getVoucherCreation()) {
+                        totalCashVoucherAmt = totalCashVoucherAmt.add(receipt.getInstrumentAmount());
+                    } else {
+                        InstrumentResponse instrumentResponse = microserviceUtils.reconcileInstruments(instruments,
+                                accountNumberId);
+                    }
+
+                    bankRemittanceList.addAll(receipts);
                 }
             }
-            for (final ReceiptHeader receiptHeader : bankRemittanceList)
-                if (!bankRemitList.contains(receiptHeader))
-                    bankRemitList.add(receiptHeader);
         }
         if (totalCashVoucherAmt.compareTo(totalCashAmt) != 0) {
             String validationMessage = "There is a difference of amount " + totalCashAmt.subtract(totalCashVoucherAmt)
@@ -266,16 +230,14 @@ public class RemittanceServiceImpl extends RemittanceService {
             throw new ValidationException(Arrays.asList(new ValidationError(validationMessage, validationMessage)));
         }
         final Remittance remittance = populateAndPersistRemittance(totalCashAmt, BigDecimal.ZERO, fundCode,
-                cashInHandGLCode, null, serviceGlCode, functionCode, bankRemitList, createVoucher,
+                cashInHandGLCode, null, serviceGlCode, functionCode, bankRemittanceList, createVoucher,
                 voucherDate, depositedBankAccount, totalCashVoucherAmt, BigDecimal.ZERO, Collections.EMPTY_LIST);
 
-        for (final ReceiptHeader receiptHeader : bankRemitList) {
-            receiptHeader.setStatus(receiptStatusRemitted);
-            receiptHeader.setRemittanceReferenceNumber(remittance.getReferenceNumber());
-            receiptHeaderService.update(receiptHeader);
-            // receiptHeaderService.updateCollectionIndexAndPushMail(receiptHeader);
+        for (final Receipt receiptHeader : bankRemittanceList) {
+            receiptHeader.getBill().get(0).getBillDetails().get(0).setStatus("Remitted");
         }
-        return bankRemitList;
+        microserviceUtils.updateReceipts(new ArrayList<>(bankRemittanceList));
+        return new ArrayList(bankRemittanceList);
     }
 
     @Transactional
@@ -323,9 +285,11 @@ public class RemittanceServiceImpl extends RemittanceService {
     @Transactional
     public Remittance populateAndPersistRemittance(final BigDecimal totalCashAmount, final BigDecimal totalChequeAmount,
             final String fundCode, final String cashInHandGLCode, final String chequeInHandGLcode,
-            final String serviceGLCode, final String functionCode, final List<ReceiptHeader> receiptHeadList,
+            final String serviceGLCode, final String functionCode, final Set<Receipt> receiptHeadList,
             final String createVoucher, final Date voucherDate, final Bankaccount depositedBankAccount,
             final BigDecimal totalCashVoucherAmt, final BigDecimal totalChequeVoucherAmt, List<String> instrumentId) {
+        FinancialStatus instrmentStatusNew = microserviceUtils
+                .getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
         CVoucherHeader voucherHeader;
         final CFinancialYear financialYear = collectionsUtil.getFinancialYearforDate(new Date());
         BigDecimal totalAmount = BigDecimal.ZERO;
@@ -339,7 +303,7 @@ public class RemittanceServiceImpl extends RemittanceService {
         remittance.setReferenceNumber(collectionsNumberGenerator.generateRemittanceNumber(financialYear));
         remittance.setFund(fundHibernateDAO.fundByCode(fundCode));
         remittance.setFunction(functionHibernateDAO.getFunctionByCode(functionCode));
-        remittance.setCollectionRemittance(new HashSet<ReceiptHeader>(receiptHeadList));
+        remittance.setCollectionRemittance(new HashSet<ReceiptHeader>());
         remittance.setBankAccount(depositedBankAccount);
         if (totalCashAmount != null && totalCashAmount.compareTo(BigDecimal.ZERO) > 0 && cashInHandGLCode != null) {
             remittanceDetailsList
@@ -356,31 +320,63 @@ public class RemittanceServiceImpl extends RemittanceService {
         remittanceDetailsList.addAll(getRemittanceDetailsList(BigDecimal.ZERO, totalAmount, serviceGLCode, remittance));
         remittance.setRemittanceDetails(new HashSet<RemittanceDetail>(remittanceDetailsList));
         HashSet<RemittanceInstrument> remittanceInstrumentSet = new HashSet<RemittanceInstrument>();
-        remittancePersistService.persist(remittance);
         if (CollectionConstants.YES.equalsIgnoreCase(createVoucher)
                 && (totalCashVoucherAmt.compareTo(BigDecimal.ZERO) > 0
                         || totalChequeVoucherAmt.compareTo(BigDecimal.ZERO) > 0)) {
             voucherHeader = createVoucherForRemittance(cashInHandGLCode, chequeInHandGLcode, serviceGLCode,
                     functionCode, totalCashVoucherAmt, totalChequeVoucherAmt, voucherDate, fundCode);
             remittance.setVoucherHeader(voucherHeader);
-            for (ReceiptHeader receiptHeader : receiptHeadList) {
-                for (InstrumentHeader instHead : receiptHeader.getReceiptInstrument()) {
+            for (Receipt receiptHeader : receiptHeadList) {
+                List<Instrument> instruments = microserviceUtils.getInstrumentsByReceiptIds(
+                        CollectionConstants.INSTRUMENTTYPE_NAME_CASH, instrmentStatusNew.getId(),
+                        receiptHeader.getBill().get(0).getBillDetails().get(0).getId());
+                for (Instrument instHead : instruments) {
                     if (!isChequeAmount || (isChequeAmount && instrumentId.contains(instHead.getId().toString())))
                         remittanceInstrumentSet.add(prepareRemittanceInstrument(remittance, instHead));
                 }
             }
             remittance.setRemittanceInstruments(remittanceInstrumentSet);
-            remittancePersistService.persist(remittance);
+            RemittanceResponse response = create(remittance);
         }
         return remittance;
     }
 
-    private RemittanceInstrument prepareRemittanceInstrument(Remittance remittance, InstrumentHeader instrumentHeader) {
+    private RemittanceResponse create(Remittance remittance) {
+        org.egov.infra.microservice.models.Remittance r = new org.egov.infra.microservice.models.Remittance();
+        r.setBankaccount(remittance.getBankAccount().getAccountnumber());
+        r.setFunction(remittance.getFunction().getCode());
+        r.setFund(remittance.getFund().getCode());
+        r.setReasonForDelay(remittance.getReasonForDelay());
+        r.setReferenceNumber(remittance.getReferenceNumber());
+        r.setReferenceDate(remittance.getReferenceDate().getTime());
+        r.setRemarks(remittance.getRemarks());
+        r.setTenantId(microserviceUtils.getTenentId());
+        r.setVoucherHeader(remittance.getVoucherHeader().getVoucherNumber());
+        r.setRemittanceDetails(new HashSet<>());
+        r.setRemittanceInstruments(new HashSet<>());
+        org.egov.infra.microservice.models.RemittanceDetail rd;
+        for (RemittanceDetail detail : remittance.getRemittanceDetails()) {
+            rd = new org.egov.infra.microservice.models.RemittanceDetail();
+            rd.setChartOfAccount(detail.getChartOfAccount().getGlcode());
+            rd.setCreditAmount(detail.getCreditAmount());
+            rd.setDebitAmount(detail.getDebitAmount());
+            r.getRemittanceDetails().add(rd);
+        }
+        org.egov.infra.microservice.models.RemittanceInstrument ri;
+        for (RemittanceInstrument instrument : remittance.getRemittanceInstruments()) {
+            ri = new org.egov.infra.microservice.models.RemittanceInstrument();
+            ri.setInstrument(instrument.getInstrument().getId());
+            ri.setReconciled(instrument.getReconciled());
+            r.getRemittanceInstruments().add(ri);
+        }
+        return microserviceUtils.createRemittance(Collections.singletonList(r));
+    }
+
+    private RemittanceInstrument prepareRemittanceInstrument(Remittance remittance, Instrument instrumentHeader) {
         RemittanceInstrument remittanceInstrument = new RemittanceInstrument();
         remittanceInstrument.setRemittance(remittance);
-        remittanceInstrument.setInstrumentHeader(instrumentHeader);
+        remittanceInstrument.setInstrument(instrumentHeader);
         remittanceInstrument.setReconciled(Boolean.FALSE);
-        remittanceInstrument = (RemittanceInstrument) persistenceService.persist(remittanceInstrument);
         return remittanceInstrument;
     }
 
@@ -431,7 +427,7 @@ public class RemittanceServiceImpl extends RemittanceService {
     public List<ReceiptBean> findCashRemittanceDetailsForServiceAndFund(final String boundaryIdList,
             final String serviceCodes, final String fundCodes, final Date startDate, final Date endDate) {
 
-        FinancialStatus status = microserviceUtils.getFinancialStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
+        FinancialStatus status = microserviceUtils.getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
         List<Instrument> instruments = microserviceUtils.getInstruments(CollectionConstants.INSTRUMENTTYPE_NAME_CASH, "Debit",
                 status.getId());
         List<String> receiptIds = new ArrayList<>();
@@ -445,7 +441,9 @@ public class RemittanceServiceImpl extends RemittanceService {
         Map<String, List<Receipt>> receiptDateWiseMap = new HashMap<>();
         Map<String, List<Receipt>> serviceWiseMap = new HashMap<>();
         Map<String, List<Receipt>> instrumentWiseMap = new HashMap<>();
-        List<ReceiptBean> result = new ArrayList<>();
+        Map<String, List<Receipt>> fundWiseMap = new HashMap<>();
+        Map<String, List<Receipt>> departmentWiseMap = new HashMap<>();
+        List<ReceiptBean> resultList = new ArrayList<>();
 
         groupByReceiptDate(receiptDateWiseMap, receipts);
 
@@ -461,9 +459,46 @@ public class RemittanceServiceImpl extends RemittanceService {
 
         for (String key : instrumentWiseMap.keySet()) {
             List<Receipt> tempList = instrumentWiseMap.get(key);
-            populateResultList(key, result, tempList);
+            groupByFund(key, fundWiseMap, tempList);
         }
-        return result;
+
+        for (String key : fundWiseMap.keySet()) {
+            List<Receipt> tempList = fundWiseMap.get(key);
+            groupByDepartment(key, departmentWiseMap, tempList);
+        }
+
+        for (String key : departmentWiseMap.keySet()) {
+            List<Receipt> tempList = departmentWiseMap.get(key);
+            populateResultList(key, resultList, tempList);
+        }
+
+        populateFundAndDepartmentNames(resultList);
+
+        return resultList;
+    }
+
+    private void populateFundAndDepartmentNames(List<ReceiptBean> resultList) {
+        List<Fund> fundList = fundHibernateDAO.findAllActiveFunds();
+        List<Department> departmentList = microserviceUtils.getDepartments();
+        Map<String, String> fundCodeNameMap = new HashMap<>();
+        Map<String, String> deptCodeNameMap = new HashMap<>();
+
+        if (fundList != null)
+            for (Fund f : fundList) {
+                fundCodeNameMap.put(f.getCode(), f.getName());
+            }
+
+        if (departmentList != null)
+            for (Department dept : departmentList) {
+                deptCodeNameMap.put(dept.getCode(), dept.getName());
+            }
+
+        for (ReceiptBean rb : resultList) {
+            if (rb.getFund() != null && !rb.getFund().isEmpty())
+                rb.setFundName(fundCodeNameMap.get(rb.getFund()));
+            if (rb.getDepartment() != null && !rb.getDepartment().isEmpty())
+                rb.setDepartmentName(deptCodeNameMap.get(rb.getDepartment()));
+        }
     }
 
     private void populateResultList(String key, List<ReceiptBean> result, List<Receipt> tempList) {
@@ -473,12 +508,66 @@ public class RemittanceServiceImpl extends RemittanceService {
         for (Receipt r : tempList) {
             amount = amount.add(r.getInstrument().getAmount());
         }
-        
+
         receipt.setReceiptDate(key.split("-")[0]);
         receipt.setService(key.split("-")[1]);
         receipt.setInstrumentType(key.split("-")[2]);
+        if (key.split("-").length > 3)
+            receipt.setFund(key.split("-")[3]);
+        if (key.split("-").length > 4)
+            receipt.setDepartment(key.split("-")[4]);
         receipt.setInstrumentAmount(amount);
         result.add(receipt);
+    }
+
+    private void groupByDepartment(String key, Map<String, List<Receipt>> departmentWiseMap,
+            List<Receipt> tempList) {
+        String department;
+        for (Receipt r : tempList) {
+            department = r.getBill().get(0).getBillDetails().get(0).getDepartment();
+            if (department != null && !department.isEmpty()) {
+                if (!departmentWiseMap.containsKey(key + "-" + department)) {
+                    List<Receipt> list = new ArrayList<Receipt>();
+                    list.add(r);
+                    departmentWiseMap.put(key + "-" + department, list);
+                } else {
+                    departmentWiseMap.get(key + "-" + department).add(r);
+                }
+            } else {
+                if (!departmentWiseMap.containsKey(key)) {
+                    List<Receipt> list = new ArrayList<Receipt>();
+                    list.add(r);
+                    departmentWiseMap.put(key, list);
+                } else {
+                    departmentWiseMap.get(key).add(r);
+                }
+            }
+        }
+    }
+
+    private void groupByFund(String key, Map<String, List<Receipt>> fundWiseMap,
+            List<Receipt> tempList) {
+        String fund;
+        for (Receipt r : tempList) {
+            fund = r.getBill().get(0).getBillDetails().get(0).getFund();
+            if (fund != null && !fund.isEmpty()) {
+                if (!fundWiseMap.containsKey(key + "-" + fund)) {
+                    List<Receipt> list = new ArrayList<Receipt>();
+                    list.add(r);
+                    fundWiseMap.put(key + "-" + fund, list);
+                } else {
+                    fundWiseMap.get(key + "-" + fund).add(r);
+                }
+            } else {
+                if (!fundWiseMap.containsKey(key)) {
+                    List<Receipt> list = new ArrayList<Receipt>();
+                    list.add(r);
+                    fundWiseMap.put(key, list);
+                } else {
+                    fundWiseMap.get(key).add(r);
+                }
+            }
+        }
     }
 
     private void groupByInstrument(String receiptDateAndService, Map<String, List<Receipt>> instrumentWiseMap,
@@ -755,9 +844,12 @@ public class RemittanceServiceImpl extends RemittanceService {
             throw new ValidationException(Arrays.asList(new ValidationError(validationMessage, validationMessage)));
         }
         List<String> instrumentIdList = Arrays.asList(instrumentIdArray);
-        final Remittance remittance = populateAndPersistRemittance(BigDecimal.ZERO, totalChequeAmount, fundCode,
-                null, chequeInHandGlcode, serviceGlCode, functionCode, bankRemitList, createVoucher,
-                voucherDate, depositedBankAccount, BigDecimal.ZERO, totalChequeVoucherAmt, instrumentIdList);
+        final Remittance remittance = null;/*
+                                            * populateAndPersistRemittance(BigDecimal.ZERO, totalChequeAmount, fundCode, null,
+                                            * chequeInHandGlcode, serviceGlCode, functionCode, bankRemitList, createVoucher,
+                                            * voucherDate, depositedBankAccount, BigDecimal.ZERO, totalChequeVoucherAmt,
+                                            * instrumentIdList);
+                                            */
 
         // For cheque update instrument status to deposited.
         for (final RemittanceInstrument bankRemitInstrument : remittance.getRemittanceInstruments()) {

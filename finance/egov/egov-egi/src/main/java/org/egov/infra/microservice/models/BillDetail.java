@@ -89,6 +89,12 @@ public class BillDetail {
 
     private String boundary;
 
+    private String fund;
+
+    private String function;
+
+    private String department;
+
     private String reasonForCancellation;
 
     private BigDecimal amountPaid;
@@ -276,6 +282,30 @@ public class BillDetail {
 
     public void setBoundary(String boundary) {
         this.boundary = boundary;
+    }
+
+    public String getFund() {
+        return fund;
+    }
+
+    public void setFund(String fund) {
+        this.fund = fund;
+    }
+
+    public String getFunction() {
+        return function;
+    }
+
+    public void setFunction(String function) {
+        this.function = function;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     public String getReasonForCancellation() {

@@ -59,16 +59,14 @@ import org.egov.collection.bean.ReceiptBean;
 import org.egov.collection.constants.CollectionConstants;
 import org.egov.collection.entity.CollectionBankRemittanceReport;
 import org.egov.collection.entity.ReceiptHeader;
+import org.egov.infra.microservice.models.Receipt;
 import org.egov.model.instrument.InstrumentHeader;
 
 public abstract class RemittanceService implements Serializable {
     private static final long serialVersionUID = 1849734164810403255L;
 
-    public abstract List<ReceiptHeader> createCashBankRemittance(final String[] serviceNameArr,
-            final String[] totalCashAmount, final String[] totalChequeAmount, final String[] totalCardAmount,
-            final String[] receiptDateArray, final String[] fundCodeArray,
-            final String[] departmentCodeArray, final String accountNumberId, final Integer positionUser,
-            final String[] receiptNumberArray, final Date remittanceDate);
+    public abstract List<Receipt> createCashBankRemittance(List<ReceiptBean> receiptList, final String accountNumberId,
+            final Date remittanceDate);
 
     public abstract List<ReceiptBean> findCashRemittanceDetailsForServiceAndFund(final String boundaryIdList,
             final String serviceCodes, final String fundCodes, Date startDate, Date endDate);

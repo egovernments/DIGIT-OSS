@@ -63,7 +63,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.User;
@@ -83,6 +82,7 @@ import org.egov.infra.microservice.contract.UserRequest;
 import org.egov.infra.microservice.contract.UserSearchRequest;
 import org.egov.infra.microservice.contract.UserSearchResponse;
 import org.egov.infra.microservice.models.Assignment;
+import org.egov.infra.microservice.models.BankAccount;
 import org.egov.infra.microservice.models.BankAccountServiceMapping;
 import org.egov.infra.microservice.models.BankAccountServiceMappingResponse;
 import org.egov.infra.microservice.models.BusinessCategory;
@@ -102,9 +102,14 @@ import org.egov.infra.microservice.models.GlCodeMasterResponse;
 import org.egov.infra.microservice.models.Instrument;
 import org.egov.infra.microservice.models.InstrumentAccountCode;
 import org.egov.infra.microservice.models.InstrumentAccountCodeResponse;
+import org.egov.infra.microservice.models.InstrumentRequest;
 import org.egov.infra.microservice.models.InstrumentResponse;
 import org.egov.infra.microservice.models.Receipt;
+import org.egov.infra.microservice.models.ReceiptRequest;
 import org.egov.infra.microservice.models.ReceiptResponse;
+import org.egov.infra.microservice.models.Remittance;
+import org.egov.infra.microservice.models.RemittanceRequest;
+import org.egov.infra.microservice.models.RemittanceResponse;
 import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.microservice.models.ResponseInfo;
 import org.egov.infra.microservice.models.TaxHeadMaster;
@@ -114,6 +119,7 @@ import org.egov.infra.microservice.models.TaxPeriodResponse;
 import org.egov.infra.microservice.models.UserInfo;
 import org.egov.infra.persistence.entity.enums.UserType;
 import org.egov.infra.security.utils.SecurityUtils;
+import org.egov.infra.utils.DateUtils;
 import org.egov.infra.web.support.ui.Inbox;
 import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.jfree.util.Log;
@@ -129,9 +135,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class MicroserviceUtils {
@@ -226,7 +229,7 @@ public class MicroserviceUtils {
 
     @Value("${egov.services.collection.service.receipts.search}")
     private String receiptSearchUrl;
-    
+
     @Value("${egov.services.collection.service.basm.search}")
     private String bankAccountServiceMappingSearchUrl;
 
@@ -235,6 +238,15 @@ public class MicroserviceUtils {
 
     @Value("${egov.services.egf.instrument.search.url}")
     private String instrumentSearchUrl;
+
+    @Value("${egov.services.egf.instrument.update.url}")
+    private String instrumentUpdateUrl;
+
+    @Value("${egov.services.collection.service.remittance.create}")
+    private String remittanceCreateUrl;
+
+    @Value("${egov.services.collection.service.receipt.update}")
+    private String receiptUpdateUrl;
 
     public RequestInfo createRequestInfo() {
         final RequestInfo requestInfo = new RequestInfo();
@@ -623,7 +635,7 @@ public class MicroserviceUtils {
         requestInfo.setTs(new Date());
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call:" + bc_url);
-        BusinessCategoryResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper,BusinessCategoryResponse.class);
+        BusinessCategoryResponse bcResponse = restTemplate.postForObject(bc_url, reqWrapper, BusinessCategoryResponse.class);
         return bcResponse.getBusinessCategoryInfo();
     }
 
@@ -646,8 +658,8 @@ public class MicroserviceUtils {
         return bcResponse.getBusinessDetails();
     }
 
-    public List<BusinessDetails> getBusinessDetailsByType(String type){
-    
+    public List<BusinessDetails> getBusinessDetailsByType(String type) {
+
         final RestTemplate restTemplate = createRestTemplate();
 
         final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&businessType=" + type;
@@ -665,11 +677,13 @@ public class MicroserviceUtils {
         else
             return null;
     }
+
     public BusinessDetails getBusinessDetailsByCode(String code) {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&businessDetailsCodes=" + code;
+        final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&businessDetailsCodes="
+                + code;
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -770,7 +784,7 @@ public class MicroserviceUtils {
             return null;
     }
 
-    public InstrumentAccountCode getInstrumentAccountCodeByService(String type) {
+    public InstrumentAccountCode getInstrumentAccountCodeByType(String type) {
 
         final RestTemplate restTemplate = createRestTemplate();
 
@@ -830,7 +844,7 @@ public class MicroserviceUtils {
             return null;
     }
 
-    public FinancialStatus getFinancialStatusByCode(String code) {
+    public FinancialStatus getInstrumentStatusByCode(String code) {
 
         final String url = hostUrl + financialStatusesSearchUrl + "?tenantId="
                 + getTenentId() + "&moduleType=Instrument&code=" + code;
@@ -848,10 +862,26 @@ public class MicroserviceUtils {
             return null;
     }
 
-    public List<Instrument> getInstruments(String instrumentType, String transactionType, String financialStatus) {
+    public List<Instrument> getInstruments(String instrumentType, String transactionType, String instrumentStatus) {
 
         final String url = hostUrl + instrumentSearchUrl + "?tenantId=" + getTenentId() + "&instrumentTypes=" + instrumentType
-                + "&transactionType=" + transactionType + "&financialStatuses=" + financialStatus;
+                + "&transactionType=" + transactionType + "&financialStatuses=" + instrumentStatus;
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getUserToken());
+        reqWrapper.setRequestInfo(requestInfo);
+        LOGGER.info("call:" + url);
+        InstrumentResponse response = restTemplate.postForObject(url, reqWrapper, InstrumentResponse.class);
+
+        return response.getInstruments();
+    }
+
+    public List<Instrument> getInstrumentsByReceiptIds(String instrumentType, String instrumentStatus, String receiptIds) {
+
+        final String url = hostUrl + instrumentSearchUrl + "?tenantId=" + getTenentId() + "&instrumentTypes=" + instrumentType
+                + "&receiptIds=" + receiptIds + "&financialStatuses=" + instrumentStatus;
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -880,41 +910,105 @@ public class MicroserviceUtils {
         return response.getReceipts();
     }
 
-    public List<Receipt> searchReciepts(String classification,Date fromDate,Date toDate,String businessCode,String receiptNo){
-       
+    public List<Receipt> getReceipts(String status, String serviceCode, String fund, String department, String receiptDate) {
+
+        final String url = hostUrl + receiptSearchUrl + "?tenantId=" + getTenentId() + "&status=" + status
+                + "&businessCodes=" + serviceCode + "&fund=" + fund + "&department=" + department + "&fromDate="
+                + DateUtils.toDateUsingDefaultPattern(receiptDate).getTime() + "&toDate="
+                + DateUtils.toDateUsingDefaultPattern(receiptDate).getTime();
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getUserToken());
+        reqWrapper.setRequestInfo(requestInfo);
+        LOGGER.info("call:" + url);
+        ReceiptResponse response = restTemplate.postForObject(url, reqWrapper, ReceiptResponse.class);
+
+        return response.getReceipts();
+    }
+
+    public List<Receipt> searchReciepts(String classification, Date fromDate, Date toDate, String businessCode,
+            String receiptNo) {
+
         final StringBuilder url = new StringBuilder(hostUrl + receiptSearchUrl);
         final RequestInfoWrapper request = new RequestInfoWrapper();
         final RequestInfo requestinfo = new RequestInfo();
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        
+
         String tenantId = getTenentId();
         requestinfo.setAuthToken(getUserToken());
-        
+
         request.setRequestInfo(requestinfo);
-        
-        url.append("?tenantId="+tenantId);
-        url.append("&classification="+classification);
-       
-        if(null!=fromDate)
-            url.append("&fromDate="+fromDate.getTime());
-        
-        if(null!=toDate)
-            url.append("&toDate="+toDate.getTime());
-        
-        url.append("&businessCode="+businessCode);
-        
-        if(null!=receiptNo&&!receiptNo.isEmpty()){
-            url.append("&receiptNumbers=["+receiptNo+"]");
+
+        url.append("?tenantId=" + tenantId);
+        url.append("&classification=" + classification);
+
+        if (null != fromDate)
+            url.append("&fromDate=" + fromDate.getTime());
+
+        if (null != toDate)
+            url.append("&toDate=" + toDate.getTime());
+
+        url.append("&businessCode=" + businessCode);
+
+        if (null != receiptNo && !receiptNo.isEmpty()) {
+            url.append("&receiptNumbers=[" + receiptNo + "]");
         }
-        
+
         ReceiptResponse response = restTemplate.postForObject(url.toString(), request, ReceiptResponse.class);
-        
+
         return response.getReceipts();
-        
-         
+
     }
-    
-    
+
+    public InstrumentResponse reconcileInstruments(List<Instrument> instruments, String depositedBankAccountNum) {
+
+        final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
+        FinancialStatus instrumentStatusReconciled = getInstrumentStatusByCode("Reconciled");
+        for (Instrument i : instruments) {
+            i.setFinancialStatus(instrumentStatusReconciled);
+            i.setBankAccount(new BankAccount());
+            i.getBankAccount().setAccountNumber(depositedBankAccountNum);
+        }
+        InstrumentRequest request = new InstrumentRequest();
+        request.setInstruments(instruments);
+        final RequestInfo requestinfo = new RequestInfo();
+
+        requestinfo.setAuthToken(getUserToken());
+
+        request.setRequestInfo(requestinfo);
+
+        return restTemplate.postForObject(url.toString(), request, InstrumentResponse.class);
+    }
+
+    public RemittanceResponse createRemittance(List<Remittance> remittanceList) {
+
+        final StringBuilder url = new StringBuilder(hostUrl + remittanceCreateUrl);
+        RemittanceRequest request = new RemittanceRequest();
+        request.setRemittances(remittanceList);
+        final RequestInfo requestinfo = new RequestInfo();
+
+        requestinfo.setAuthToken(getUserToken());
+
+        request.setRequestInfo(requestinfo);
+
+        return restTemplate.postForObject(url.toString(), request, RemittanceResponse.class);
+    }
+
+    public ReceiptResponse updateReceipts(List<Receipt> receiptList) {
+
+        final StringBuilder url = new StringBuilder(hostUrl + receiptUpdateUrl);
+        ReceiptRequest request = new ReceiptRequest();
+        request.setReceipt(receiptList);
+        final RequestInfo requestinfo = new RequestInfo();
+
+        requestinfo.setAuthToken(getUserToken());
+
+        request.setRequestInfo(requestinfo);
+
+        return restTemplate.postForObject(url.toString(), request, ReceiptResponse.class);
+    }
+
     public List<Task> getTasks() {
 
         List<Task> tasks = new ArrayList<>();
@@ -963,11 +1057,11 @@ public class MicroserviceUtils {
     public void saveAuthToken(String auth_token, String sessionId) {
         redisTemplate.opsForValue().set(auth_token, sessionId);
     }
-    
-    public String readSesionIdByAuthToken(String auth_token){
-        
-        if(redisTemplate.hasKey(auth_token)){
-            return (String)redisTemplate.opsForValue().get(auth_token);
+
+    public String readSesionIdByAuthToken(String auth_token) {
+
+        if (redisTemplate.hasKey(auth_token)) {
+            return (String) redisTemplate.opsForValue().get(auth_token);
         }
         return null;
     }
@@ -992,7 +1086,7 @@ public class MicroserviceUtils {
     }
 
     public Object readFromRedis(String sessionId, String key) {
-        if(redisTemplate.hasKey(sessionId))
+        if (redisTemplate.hasKey(sessionId))
             return redisTemplate.opsForHash().get(sessionId, key);
         else
             return null;
@@ -1002,15 +1096,14 @@ public class MicroserviceUtils {
         LOGGER.info("Logout for authtoken : " + access_token);
         if (null != access_token && redisTemplate.hasKey(access_token)) {
             String sessionId = String.valueOf(redisTemplate.opsForValue().get(access_token));
-            if (sessionId != null){
-                System.out.println("***********sessionId**** "+sessionId);
+            if (sessionId != null) {
+                System.out.println("***********sessionId**** " + sessionId);
                 redisTemplate.delete(sessionId);
                 System.out.println("spring:session:sessions:" + sessionId);
                 System.out.println("spring:session:sessions:expires:" + sessionId);
                 redisTemplate.delete("spring:session:sessions:" + sessionId);
                 redisTemplate.delete("spring:session:sessions:expires:" + sessionId);
-            }
-            else
+            } else
                 LOGGER.info("session not found in redis for : " + access_token);
             redisTemplate.delete(access_token);
         } else

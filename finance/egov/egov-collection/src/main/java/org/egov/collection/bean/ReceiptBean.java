@@ -59,6 +59,8 @@ public class ReceiptBean {
     private String instrumentType;
     private String fund;
     private String department;
+    private String fundName;
+    private String departmentName;
 
     public Boolean getSelected() {
         return selected;
@@ -114,5 +116,21 @@ public class ReceiptBean {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public String getFundName() {
+        return fundName;
+    }
+
+    public void setFundName(String fundName) {
+        this.fundName = fundName;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 }

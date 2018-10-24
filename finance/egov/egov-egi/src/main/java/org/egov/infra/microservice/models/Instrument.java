@@ -65,6 +65,8 @@ public class Instrument {
 
     private String instrumentNumber;
 
+    private FinancialStatus financialStatus;
+
     private Bank bank;
 
     private String branchName;
@@ -145,6 +147,14 @@ public class Instrument {
 
     public void setInstrumentNumber(String instrumentNumber) {
         this.instrumentNumber = instrumentNumber;
+    }
+
+    public FinancialStatus getFinancialStatus() {
+        return financialStatus;
+    }
+
+    public void setFinancialStatus(FinancialStatus financialStatus) {
+        this.financialStatus = financialStatus;
     }
 
     public Bank getBank() {
