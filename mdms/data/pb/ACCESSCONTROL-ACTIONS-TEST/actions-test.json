@@ -12757,6 +12757,54 @@
       "code": "null",
       "navigationURL": "services/collection/receipts/searchReceipt.action",
       "path": "Collections.Search Receipts"
-    }
+    },
+   {
+     "id": 1694,
+     "name": "Cancel Voucher",
+     "url": "/services/EGF/rest/voucher/_cancel",
+     "displayName": "Cancel Voucher",
+     "orderNumber": 1,
+     "parentModule": "",
+     "enabled": false,
+     "serviceCode": "VOUCHER",
+     "code": "null",
+     "path": ""
+   },
+   {
+     "id": 1695,
+     "name": "Search Voucher",
+     "url": "/services/EGF/rest/voucher/_search",
+     "displayName": "Search Voucher",
+     "orderNumber": 1,
+     "parentModule": "",
+     "enabled": false,
+     "serviceCode": "VOUCHER",
+     "code": "null",
+     "path": ""
+   },
+  {
+     "id": 1696,
+     "name": "Create Remittance",
+     "url": "/collection-services/remittances/_create",
+     "displayName": "Create Remittance",
+     "orderNumber": 1,
+     "parentModule": "",
+     "enabled": false,
+     "serviceCode": "COLLECTION",
+     "code": "null",
+     "path": ""
+   },
+   {
+     "id": 1697,
+     "name": "Search Remittance",
+     "url": "/collection-services/remittances/_search",
+     "displayName": "Search Remittance",
+     "orderNumber": 1,
+     "parentModule": "",
+     "enabled": false,
+     "serviceCode": "COLLECTION",
+     "code": "null",
+     "path": ""
+   }
   ]
 }
