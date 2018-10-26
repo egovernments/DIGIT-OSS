@@ -16663,6 +16663,18 @@
       "actionid": 1695,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1698,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "COLL_REMIT_TO_BANK",
+      "actionid": 1698,
+      "actioncode": "",
+      "tenantId": "pb"
     }
 
   ]

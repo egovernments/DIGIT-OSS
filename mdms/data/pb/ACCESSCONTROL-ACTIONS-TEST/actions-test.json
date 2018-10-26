@@ -12750,7 +12750,7 @@
       "name": "Receipts Search",
       "url": "url",
       "displayName": "Search Receipts",
-      "orderNumber": 1,
+      "orderNumber": 2,
       "parentModule": "",
       "enabled": true,
       "serviceCode": "Collections",
@@ -12805,6 +12805,19 @@
      "serviceCode": "COLLECTION",
      "code": "null",
      "path": ""
+   },
+   {
+      "id": 1698,
+      "name": "Cash Remittance",
+      "url": "url",
+      "displayName": "Cash Remittance",
+      "orderNumber": 3,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "Collections",
+      "code": "null",
+      "navigationURL": "services/collection/receipts/bankRemittance-newform.action",
+      "path": "Collections.Cash Remittance"
    }
   ]
 }
