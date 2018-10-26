@@ -161,8 +161,7 @@ public class RemittanceServiceImpl extends RemittanceService {
         if (!cashInHand.list().isEmpty())
             cashInHandGLCode = cashInHand.list().get(0).toString();
 
-        final String createVoucher = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
-                CollectionConstants.APPCONFIG_VALUE_CREATEVOUCHER_FOR_REMITTANCE);
+        String createVoucher = "N";
 
         final String functionCode = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
                 CollectionConstants.APPCONFIG_VALUE_COLLECTION_BANKREMITTANCE_FUNCTIONCODE);
@@ -221,7 +220,8 @@ public class RemittanceServiceImpl extends RemittanceService {
                                 StringUtils.join(receiptIds, ","));
 
                         totalCashAmt = totalCashAmt.add(receipt.getInstrumentAmount());
-                        if (CollectionConstants.YES.equalsIgnoreCase(createVoucher) && businessDetails.getVoucherCreation()) {
+                        if (businessDetails.getVoucherCreation()) {
+                            createVoucher = "Y";
                             totalCashVoucherAmt = totalCashVoucherAmt.add(receipt.getInstrumentAmount());
                         } else {
                             InstrumentResponse instrumentResponse = microserviceUtils.reconcileInstruments(instrumentsList,

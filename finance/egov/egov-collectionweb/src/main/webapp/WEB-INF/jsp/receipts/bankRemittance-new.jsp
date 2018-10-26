@@ -515,7 +515,7 @@
 							<td class="bluebox"><s:text name="bankremittance.remittanceamount" /></td>
 							<td class="bluebox"><s:textfield id="remittanceAmount" name="remittanceAmount" readonly="true" /></td>								
 							<td class="bluebox"><s:text name="bankremittance.accountnumber" /></td>
-							<td class="bluebox"><s:textfield id="remitAccountNumber" name="remitAccountNumber" readonly="true" /></td>		
+							<td class="bluebox"><s:textfield id="remitAccountNumber" name="remitAccountNumber" value = "${accountNumberId}" readonly="true" /></td>		
 						</tr>
 					</table>
 				</div>
