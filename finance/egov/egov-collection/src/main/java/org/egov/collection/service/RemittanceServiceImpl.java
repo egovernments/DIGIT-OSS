@@ -167,7 +167,7 @@ public class RemittanceServiceImpl extends RemittanceService {
         final String functionCode = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
                 CollectionConstants.APPCONFIG_VALUE_COLLECTION_BANKREMITTANCE_FUNCTIONCODE);
 
-        FinancialStatus instrmentStatusNew = microserviceUtils
+        FinancialStatus instrumentStatusNew = microserviceUtils
                 .getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
 
         Boolean showRemitDate = false;
@@ -185,6 +185,9 @@ public class RemittanceServiceImpl extends RemittanceService {
                 accountNumberId);
         final String serviceGlCode = depositedBankAccount.getChartofaccounts().getGlcode();
         List<Receipt> receipts;
+        Set<Instrument> instruments;
+        Map<String, Receipt> receiptMap = new HashMap<>();
+        Map<String, Set<Instrument>> receiptInstrumentMap = new HashMap<>();
         final HashSet<String> receiptIds = new HashSet<>(0);
         for (ReceiptBean receipt : receiptList) {
             if (receipt.getSelected() != null && receipt.getSelected()) {
@@ -208,23 +211,35 @@ public class RemittanceServiceImpl extends RemittanceService {
                                 receipt.getFund(), receipt.getDepartment(), receipt.getReceiptDate());
                         if (receipts != null) {
                             for (Receipt r : receipts) {
+                                receiptMap.put(r.getBill().get(0).getBillDetails().get(0).getId(), r);
                                 receiptIds.add(r.getBill().get(0).getBillDetails().get(0).getId());
                             }
                         }
 
-                        List<Instrument> instruments = microserviceUtils.getInstrumentsByReceiptIds(
-                                CollectionConstants.INSTRUMENTTYPE_NAME_CASH, instrmentStatusNew.getId(),
+                        List<Instrument> instrumentsList = microserviceUtils.getInstrumentsByReceiptIds(
+                                CollectionConstants.INSTRUMENTTYPE_NAME_CASH, instrumentStatusNew.getId(),
                                 StringUtils.join(receiptIds, ","));
 
                         totalCashAmt = totalCashAmt.add(receipt.getInstrumentAmount());
                         if (CollectionConstants.YES.equalsIgnoreCase(createVoucher) && businessDetails.getVoucherCreation()) {
                             totalCashVoucherAmt = totalCashVoucherAmt.add(receipt.getInstrumentAmount());
                         } else {
-                            InstrumentResponse instrumentResponse = microserviceUtils.reconcileInstruments(instruments,
+                            InstrumentResponse instrumentResponse = microserviceUtils.reconcileInstruments(instrumentsList,
                                     accountNumberId);
                         }
+                        for (Instrument i : instrumentsList) {
+                            for (InstrumentVoucher iv : i.getInstrumentVouchers()) {
+                                if (receiptInstrumentMap.get(iv.getReceiptHeaderId()) != null) {
+                                    instruments = receiptInstrumentMap.get(iv.getReceiptHeaderId());
+                                    instruments.add(i);
+                                    receiptInstrumentMap.put(iv.getReceiptHeaderId(), instruments);
+                                } else {
+                                    receiptInstrumentMap.put(iv.getReceiptHeaderId(), Collections.singleton(i));
+                                }
+                                bankRemittanceList.add(receiptMap.get(iv.getReceiptHeaderId()));
+                            }
+                        }
 
-                        bankRemittanceList.addAll(receipts);
                     }
                 }
             }
@@ -236,7 +251,8 @@ public class RemittanceServiceImpl extends RemittanceService {
         }
         final Remittance remittance = populateAndPersistRemittance(totalCashAmt, BigDecimal.ZERO, fundCode,
                 cashInHandGLCode, null, serviceGlCode, functionCode, bankRemittanceList, createVoucher,
-                voucherDate, depositedBankAccount, totalCashVoucherAmt, BigDecimal.ZERO, Collections.EMPTY_LIST);
+                voucherDate, depositedBankAccount, totalCashVoucherAmt, BigDecimal.ZERO, Collections.EMPTY_LIST,
+                receiptInstrumentMap);
 
         for (final Receipt receiptHeader : bankRemittanceList) {
             receiptHeader.getBill().get(0).getBillDetails().get(0).setStatus("Remitted");
@@ -245,6 +261,10 @@ public class RemittanceServiceImpl extends RemittanceService {
             receiptHeader.setRemittanceReferenceNumber(remittance.getReferenceNumber());
         }
         ReceiptResponse response = microserviceUtils.updateReceipts(new ArrayList<>(bankRemittanceList));
+        for (String key : receiptInstrumentMap.keySet()) {
+            microserviceUtils.reconcileInstrumentsWithPayinSlipId(new ArrayList<>(receiptInstrumentMap.get(key))        , accountNumberId,
+                    remittance.getVoucherHeader().getVoucherNumber());
+        }
         return new ArrayList(bankRemittanceList);
     }
 
@@ -295,9 +315,8 @@ public class RemittanceServiceImpl extends RemittanceService {
             final String fundCode, final String cashInHandGLCode, final String chequeInHandGLcode,
             final String serviceGLCode, final String functionCode, final Set<Receipt> receiptHeadList,
             final String createVoucher, final Date voucherDate, final Bankaccount depositedBankAccount,
-            final BigDecimal totalCashVoucherAmt, final BigDecimal totalChequeVoucherAmt, List<String> instrumentId) {
-        FinancialStatus instrmentStatusNew = microserviceUtils
-                .getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
+            final BigDecimal totalCashVoucherAmt, final BigDecimal totalChequeVoucherAmt, List<String> instrumentId,
+            Map<String, Set<Instrument>> receiptInstrumentMap) {
         CVoucherHeader voucherHeader;
         final CFinancialYear financialYear = collectionsUtil.getFinancialYearforDate(new Date());
         BigDecimal totalAmount = BigDecimal.ZERO;
@@ -335,10 +354,8 @@ public class RemittanceServiceImpl extends RemittanceService {
                     functionCode, totalCashVoucherAmt, totalChequeVoucherAmt, voucherDate, fundCode);
             remittance.setVoucherHeader(voucherHeader);
             for (Receipt receiptHeader : receiptHeadList) {
-                List<Instrument> instruments = microserviceUtils.getInstrumentsByReceiptIds(
-                        CollectionConstants.INSTRUMENTTYPE_NAME_CASH, instrmentStatusNew.getId(),
-                        receiptHeader.getBill().get(0).getBillDetails().get(0).getId());
-                for (Instrument instHead : instruments) {
+                for (Instrument instHead : receiptInstrumentMap
+                        .get(receiptHeader.getBill().get(0).getBillDetails().get(0).getId())) {
                     if (!isChequeAmount || (isChequeAmount && instrumentId.contains(instHead.getId().toString())))
                         remittanceInstrumentSet.add(prepareRemittanceInstrument(remittance, instHead));
                 }
@@ -453,7 +470,8 @@ public class RemittanceServiceImpl extends RemittanceService {
                     receiptIds.add(iv.getReceiptHeaderId());
                 }
         }
-        List<Receipt> receipts = microserviceUtils.getReceipts(StringUtils.join(receiptIds, ","), "Approved", serviceCodes);
+        List<Receipt> receipts = microserviceUtils.getReceipts(StringUtils.join(receiptIds, ","), "Approved", serviceCodes,
+                startDate, endDate);
         Map<String, List<Receipt>> receiptDateWiseMap = new HashMap<>();
         Map<String, List<Receipt>> serviceWiseMap = new HashMap<>();
         Map<String, List<Receipt>> instrumentWiseMap = new HashMap<>();

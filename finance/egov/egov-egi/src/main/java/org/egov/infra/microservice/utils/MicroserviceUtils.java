@@ -894,10 +894,11 @@ public class MicroserviceUtils {
         return response.getInstruments();
     }
 
-    public List<Receipt> getReceipts(String ids, String status, String serviceCodes) {
+    public List<Receipt> getReceipts(String ids, String status, String serviceCodes, Date fromDate, Date toDate) {
 
         final String url = hostUrl + receiptSearchUrl + "?tenantId=" + getTenentId() + "&status=" + status
-                + "&ids=" + ids + "&businessCodes=" + serviceCodes;
+                + "&ids=" + ids + "&businessCodes=" + serviceCodes + "&fromDate=" + fromDate.getTime() + "&toDate="
+                + toDate.getTime();
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -970,6 +971,28 @@ public class MicroserviceUtils {
             i.setBankAccount(new BankAccount());
             i.getBankAccount().setAccountNumber(depositedBankAccountNum);
         }
+        InstrumentRequest request = new InstrumentRequest();
+        request.setInstruments(instruments);
+        final RequestInfo requestinfo = new RequestInfo();
+
+        requestinfo.setAuthToken(getUserToken());
+
+        request.setRequestInfo(requestinfo);
+
+        return restTemplate.postForObject(url.toString(), request, InstrumentResponse.class);
+    }
+    
+    public InstrumentResponse reconcileInstrumentsWithPayinSlipId(List<Instrument> instruments, String depositedBankAccountNum,String payinSlipId) {
+
+        final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
+        FinancialStatus instrumentStatusReconciled = getInstrumentStatusByCode("Reconciled");
+        for (Instrument i : instruments) {
+            i.setFinancialStatus(instrumentStatusReconciled);
+            i.setBankAccount(new BankAccount());
+            i.getBankAccount().setAccountNumber(depositedBankAccountNum);
+            i.setPayinSlipId(payinSlipId);
+        }
+        
         InstrumentRequest request = new InstrumentRequest();
         request.setInstruments(instruments);
         final RequestInfo requestinfo = new RequestInfo();

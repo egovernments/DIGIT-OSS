@@ -83,6 +83,14 @@ public class Instrument {
 
     private String tenantId;
 
+    private String serialNo;
+
+    private String payinSlipId;
+
+    private BigDecimal reconciledAmount;
+
+    private Date reconciledOn;
+
     private List<InstrumentVoucher> instrumentVouchers = new ArrayList<>();
 
     public String getId() {
@@ -227,6 +235,38 @@ public class Instrument {
 
     public void setInstrumentVouchers(List<InstrumentVoucher> instrumentVouchers) {
         this.instrumentVouchers = instrumentVouchers;
+    }
+
+    public String getSerialNo() {
+        return serialNo;
+    }
+
+    public void setSerialNo(String serialNo) {
+        this.serialNo = serialNo;
+    }
+
+    public String getPayinSlipId() {
+        return payinSlipId;
+    }
+
+    public void setPayinSlipId(String payinSlipId) {
+        this.payinSlipId = payinSlipId;
+    }
+
+    public BigDecimal getReconciledAmount() {
+        return reconciledAmount;
+    }
+
+    public void setReconciledAmount(BigDecimal reconciledAmount) {
+        this.reconciledAmount = reconciledAmount;
+    }
+
+    public Date getReconciledOn() {
+        return reconciledOn;
+    }
+
+    public void setReconciledOn(Date reconciledOn) {
+        this.reconciledOn = reconciledOn;
     }
 
 }
