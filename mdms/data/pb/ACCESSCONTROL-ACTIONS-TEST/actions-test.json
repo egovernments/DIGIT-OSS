@@ -11805,7 +11805,7 @@
     {
       "id": 1620,
       "name": "Scheme-Create",
-      "url": "/services/EGF/masters/scheme-newForm.action",
+      "url": "url",
       "parentModule": "",
       "displayName": "Create Scheme",
       "orderNumber": 1,
@@ -11818,7 +11818,7 @@
     {
       "id": 1621,
       "name": "View Schemes-Search",
-      "url": "/services/EGF/masters/scheme-beforeSearch.action",
+      "url": "url",
       "parentModule": "",
       "displayName": "View Scheme",
       "orderNumber": 2,
@@ -11839,7 +11839,7 @@
       "serviceCode": "FinanceMaster",
       "code": "null",
       "path": "Finance.Masters.Scheme.Modify Scheme",
-      "navigationURL": "services/EGF/masters/scheme-beforeSearch.action?mode=edit"
+      "navigationURL": "services/EGF/masters/scheme-beforeEdit.action"
     },
     {
       "id": 1623,
@@ -11891,7 +11891,7 @@
       "serviceCode": "FinanceMaster",
       "code": "null",
       "path": "Finance.Masters.Scheme.View Sub-scheme",
-      "navigationURL": "services/EGF/masters/subScheme-beforeSearch.action?showMode=view"
+      "navigationURL": "services/EGF/masters/subScheme-beforeSearch.action"
     },
     {
       "id": 1627,
@@ -11904,7 +11904,7 @@
       "serviceCode": "FinanceMaster",
       "code": "null",
       "path": "Finance.Masters.Scheme.Modify Sub-scheme",
-      "navigationURL": "services/EGF/masters/subScheme-beforeSearch.action?showMode=edit"
+      "navigationURL": "services/EGF/masters/subScheme-beforeEdit.action"
     },
     {
       "id": 1628,
@@ -12143,7 +12143,7 @@
     {
       "id": 1646,
       "name": "Create Sub Scheme",
-      "url": "/services/EGF/masters/subScheme-newForm.action",
+      "url": "url",
       "parentModule": "",
       "displayName": "Create Sub Scheme",
       "orderNumber": 4,
