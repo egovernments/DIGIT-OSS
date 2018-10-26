@@ -6,7 +6,7 @@
       "code": "pb.jalandhar",
       "name": "Jalandhar",
       "description": "Jalandhar",
-      "logoId": null,
+      "logoId": "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mohali/logo.png",
       "imageId": "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.jalandhar/logo.png",
       "domainUrl": "www.mcjalandhar.in",
       "type": "CITY",
