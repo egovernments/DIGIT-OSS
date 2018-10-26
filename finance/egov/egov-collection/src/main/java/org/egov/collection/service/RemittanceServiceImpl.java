@@ -291,7 +291,7 @@ public class RemittanceServiceImpl extends RemittanceService {
                     totalDebitAmount);
             accountCodeList.add(accountcodedetailsHashMap);
         }
-        voucherHeader = financialsUtil.createRemittanceVoucher(prepareHeaderDetails(fundCode, voucherDate),
+        voucherHeader = financialsUtil.createRemittanceVoucher(prepareHeaderDetails(fundCode,functionCode, voucherDate),
                 accountCodeList, new ArrayList<HashMap<String, Object>>(0));
         return voucherHeader;
     }
@@ -423,8 +423,12 @@ public class RemittanceServiceImpl extends RemittanceService {
         return accountcodedetailsHashMap;
     }
 
-    public HashMap<String, Object> prepareHeaderDetails(final String fundCode, final Date voucherDate) {
+    public HashMap<String, Object> prepareHeaderDetails(final String fundCode,final String functionCode, final Date voucherDate) {
         final HashMap<String, Object> headerdetails = new HashMap<>(0);
+        
+        final String deptCode = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
+                CollectionConstants.APPCONFIG_VALUE_COLLECTION_BANKREMITTANCE_DEPTCODE);
+        
         if (collectionsUtil.getVoucherType()) {
             headerdetails.put(VoucherConstant.VOUCHERNAME, CollectionConstants.FINANCIAL_RECEIPTS_VOUCHERNAME);
             headerdetails.put(VoucherConstant.VOUCHERTYPE, CollectionConstants.FINANCIAL_RECEIPTS_VOUCHERTYPE);
@@ -435,7 +439,8 @@ public class RemittanceServiceImpl extends RemittanceService {
         headerdetails.put(VoucherConstant.DESCRIPTION, CollectionConstants.FINANCIAL_VOUCHERDESCRIPTION);
         headerdetails.put(VoucherConstant.VOUCHERDATE, voucherDate);
         headerdetails.put(VoucherConstant.FUNDCODE, fundCode);
-        headerdetails.put(VoucherConstant.DEPARTMENTCODE, CollectionConstants.DEPT_CODE_FOR_ACCOUNTS);
+        headerdetails.put(VoucherConstant.DEPARTMENTCODE, deptCode);
+        headerdetails.put(VoucherConstant.FUNCTIONCODE,functionCode);
         return headerdetails;
     }
 
