@@ -16,6 +16,8 @@ public class Receipt {
 
     private Instrument instrument;
 
+    private String remittanceReferenceNumber;
+
     public String getTenantId() {
         return tenantId;
     }
@@ -46,6 +48,14 @@ public class Receipt {
 
     public void setInstrument(Instrument instrument) {
         this.instrument = instrument;
+    }
+
+    public String getRemittanceReferenceNumber() {
+        return remittanceReferenceNumber;
+    }
+
+    public void setRemittanceReferenceNumber(String remittanceReferenceNumber) {
+        this.remittanceReferenceNumber = remittanceReferenceNumber;
     }
 
 }

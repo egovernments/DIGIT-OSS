@@ -986,11 +986,12 @@ public class MicroserviceUtils {
         final StringBuilder url = new StringBuilder(hostUrl + remittanceCreateUrl);
         RemittanceRequest request = new RemittanceRequest();
         request.setRemittances(remittanceList);
-        final RequestInfo requestinfo = new RequestInfo();
+        final RequestInfo requestInfo = new RequestInfo();
 
-        requestinfo.setAuthToken(getUserToken());
-
-        request.setRequestInfo(requestinfo);
+        requestInfo.setAuthToken(getUserToken());
+        requestInfo.setUserInfo(new UserInfo());
+        requestInfo.getUserInfo().setId(ApplicationThreadLocals.getUserId());
+        request.setRequestInfo(requestInfo);
 
         return restTemplate.postForObject(url.toString(), request, RemittanceResponse.class);
     }

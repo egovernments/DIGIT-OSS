@@ -77,6 +77,7 @@ import org.egov.commons.dao.BankaccountHibernateDAO;
 import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.BankAccountServiceMapping;
+import org.egov.infra.microservice.models.Receipt;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
@@ -246,21 +247,28 @@ public class BankRemittanceAction extends BaseFormAction {
             throw new ValidationException(Arrays.asList(new ValidationError("Please select Account number",
                     "bankremittance.error.noaccountNumberselected")));
         // voucherHeaderValues =
-        remittanceService.createCashBankRemittance(finalList, accountNumberId, remittanceDate);
+        List<Receipt> receipts = remittanceService.createCashBankRemittance(finalList, accountNumberId, remittanceDate);
         final long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
         LOGGER.info("$$$$$$ Time taken to persist the remittance list (ms) = " + elapsedTimeMillis);
-        bankRemittanceList = remittanceService.prepareCashRemittanceReport(voucherHeaderValues);
+        bankRemittanceList = remittanceService.prepareCashRemittanceReport(receipts);
         if (getSession().get(REMITTANCE_LIST) != null)
             getSession().remove(REMITTANCE_LIST);
         getSession().put(REMITTANCE_LIST, bankRemittanceList);
         final Bankaccount bankAcc = bankaccountHibernateDAO.findById(Long.valueOf(accountNumberId), false);
         bankAccount = bankAcc.getAccountnumber();
         bank = bankAcc.getBankbranch().getBank().getName();
-        totalCashAmount = getSum(getTotalCashAmountArray());
-        totalChequeAmount = getSum(getTotalChequeAmountArray());
+        totalCashAmount = getSum(finalList);
         return INDEX;
     }
 
+    private Double getSum(List<ReceiptBean> finalList) {
+        Double sum = 0.0;
+        for (final ReceiptBean r : finalList)
+            if (r.getInstrumentAmount()!=null)
+                sum = sum + r.getInstrumentAmount().doubleValue();
+        return sum;
+    }
+    
     private Double getSum(final String[] array) {
         Double sum = 0.0;
         for (final String num : array)
