@@ -16675,7 +16675,36 @@
       "actionid": 1698,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "COLL_REMIT_TO_BANK",
+      "actionid": 1631,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "COLL_RECEIPT_CREATOR",
+      "actionid": 1631,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EGF_VOUCHER_CREATOR",
+      "actionid": 1631,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EGF_VOUCHER_APPROVER",
+      "actionid": 1631,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EGF_PAYMENT_APPROVER",
+      "actionid": 1631,
+      "actioncode": "",
+      "tenantId": "pb"
     }
-
   ]
 }
