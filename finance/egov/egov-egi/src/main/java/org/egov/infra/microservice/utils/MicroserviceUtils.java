@@ -55,6 +55,7 @@ import static org.egov.infra.utils.DateUtils.toDefaultDateTimeFormat;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -63,6 +64,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.User;
@@ -932,6 +934,13 @@ public class MicroserviceUtils {
     public List<Receipt> searchReciepts(String classification, Date fromDate, Date toDate, String businessCode,
             String receiptNo) {
 
+        return this.searchReciepts(classification,fromDate,toDate,businessCode,Arrays.asList(receiptNo));
+        
+
+    }
+    public List<Receipt> searchReciepts(String classification, Date fromDate, Date toDate, String businessCode,
+            List<String> receiptNos) {
+        
         final StringBuilder url = new StringBuilder(hostUrl + receiptSearchUrl);
         final RequestInfoWrapper request = new RequestInfoWrapper();
         final RequestInfo requestinfo = new RequestInfo();
@@ -942,7 +951,9 @@ public class MicroserviceUtils {
         request.setRequestInfo(requestinfo);
 
         url.append("?tenantId=" + tenantId);
-        url.append("&classification=" + classification);
+        
+        if (null != classification)
+            url.append("&classification=" + classification);
 
         if (null != fromDate)
             url.append("&fromDate=" + fromDate.getTime());
@@ -950,18 +961,18 @@ public class MicroserviceUtils {
         if (null != toDate)
             url.append("&toDate=" + toDate.getTime());
 
+        if(null!=businessCode)
         url.append("&businessCode=" + businessCode);
 
-        if (null != receiptNo && !receiptNo.isEmpty()) {
-            url.append("&receiptNumbers=[" + receiptNo + "]");
+        if (null != receiptNos && receiptNos.size()>0) {
+            url.append("&receiptNumbers="+StringUtils.join(receiptNos,","));
         }
 
         ReceiptResponse response = restTemplate.postForObject(url.toString(), request, ReceiptResponse.class);
 
         return response.getReceipts();
-
     }
-
+    
     public InstrumentResponse reconcileInstruments(List<Instrument> instruments, String depositedBankAccountNum) {
 
         final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);

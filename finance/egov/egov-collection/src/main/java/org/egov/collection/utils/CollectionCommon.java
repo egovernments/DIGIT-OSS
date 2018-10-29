@@ -340,6 +340,7 @@ public class CollectionCommon {
         final char receiptType = receipts[0].getReceipttype();
         final List<BillReceiptInfo> receiptList = new ArrayList<>(0);
 
+        
         final String templateName = collectionsUtil.getReceiptTemplateName(receiptType, serviceCode);
         LOGGER.info(" template name : " + templateName);
         final Map<String, Object> reportParams = new HashMap<>(0);

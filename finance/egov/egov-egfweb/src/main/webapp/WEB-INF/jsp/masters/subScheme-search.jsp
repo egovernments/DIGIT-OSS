@@ -242,7 +242,7 @@
 		    	bootbox.alert("Please select Fund");
 				return false;
 			    }
-	    	document.subSchemeForm.action='/EGF/masters/subScheme-search.action';
+	    	document.subSchemeForm.action='/services/EGF/masters/subScheme-search.action';
 	    	document.subSchemeForm.submit();
 	    	return true;
 	    }     

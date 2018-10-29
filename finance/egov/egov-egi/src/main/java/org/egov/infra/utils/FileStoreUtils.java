@@ -67,9 +67,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -192,6 +196,32 @@ public class FileStoreUtils {
             LOGGER.error("Error occurred while converting file to byte array", ioe);
             return new byte[0];
         }
+    }
+    
+    public byte[] httpImageAsByteArray(String imageUrl){
+        
+//        String _imageUrl = "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.mohali/logo.png";
+        
+        try {
+            URL url = new URL(imageUrl);
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            
+            try (InputStream inputStream = url.openStream()) {
+                int n = 0;
+                byte [] buffer = new byte[ 1024 ];
+                while (-1 != (n = inputStream.read(buffer))) {
+                    output.write(buffer, 0, n);
+                }
+                return output.toByteArray();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return new byte[0];
     }
 
     public ResponseEntity<InputStreamResource> fileAsPDFResponse(String fileStoreId, String fileName, String moduleName) {

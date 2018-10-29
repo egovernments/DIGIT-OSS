@@ -180,4 +180,9 @@ public interface BillReceiptInfo {
      * @return receipt instrument type
      */
     public abstract String getReceiptInstrumentType();
+    
+    /**
+     * @return receipt created user
+     */
+    public abstract String getCreatedUser();
 }

@@ -122,6 +122,7 @@ public class ReceiptHeader extends StateAware implements Auditable {
     private String curretnStatus;
     private String currentreceipttype;
     private String modOfPayment;
+    private String createdUser;
     public ReceiptHeader() {
     }
 
@@ -810,6 +811,14 @@ public class ReceiptHeader extends StateAware implements Auditable {
 
     public void setModOfPayment(String modOfPayment) {
         this.modOfPayment = modOfPayment;
+    }
+
+    public String getCreatedUser() {
+        return createdUser;
+    }
+
+    public void setCreatedUser(String createdUser) {
+        this.createdUser = createdUser;
     }
 
 }

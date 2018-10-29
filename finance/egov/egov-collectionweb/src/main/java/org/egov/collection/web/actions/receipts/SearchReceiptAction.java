@@ -208,7 +208,8 @@ public class SearchReceiptAction extends SearchFormAction {
         target = "searchresult";
         
         List<ReceiptHeader> receiptList =new ArrayList<>();
-        List<Receipt>  receipts = microserviceUtils.searchReciepts("MISCELLANEOUS",getFromDate(), getToDate(), getServiceTypeId(),getReceiptNumber());
+        List<Receipt>  receipts = microserviceUtils.searchReciepts("MISCELLANEOUS",getFromDate(), getToDate(), getServiceTypeId(),
+                (getReceiptNumber()!=null && !getReceiptNumber().isEmpty() && !"".equalsIgnoreCase(getReceiptNumber()))?getReceiptNumber():null );
         
         
         

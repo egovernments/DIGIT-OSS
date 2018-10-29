@@ -13,6 +13,8 @@ public class Receipt {
 
     @JsonProperty("Bill")
     private List<Bill> bill = new ArrayList<>();
+    
+    private AuditDetails auditDetails;
 
     private Instrument instrument;
 
@@ -56,6 +58,14 @@ public class Receipt {
 
     public void setRemittanceReferenceNumber(String remittanceReferenceNumber) {
         this.remittanceReferenceNumber = remittanceReferenceNumber;
+    }
+
+    public AuditDetails getAuditDetails() {
+        return auditDetails;
+    }
+
+    public void setAuditDetails(AuditDetails auditDetails) {
+        this.auditDetails = auditDetails;
     }
 
 }

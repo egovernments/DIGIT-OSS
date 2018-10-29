@@ -52,6 +52,7 @@ import static java.lang.String.format;
 import static org.egov.infra.config.core.ApplicationThreadLocals.getDomainName;
 import static org.egov.infra.config.core.ApplicationThreadLocals.getDomainURL;
 import static org.egov.infra.config.core.ApplicationThreadLocals.getTenantID;
+import static org.egov.infra.config.core.ApplicationThreadLocals.getUserTenantId;
 import static org.egov.infra.utils.ApplicationConstant.CITY_CODE_KEY;
 import static org.egov.infra.utils.ApplicationConstant.CITY_CORP_EMAIL_KEY;
 import static org.egov.infra.utils.ApplicationConstant.CITY_CORP_GRADE_KEY;
@@ -66,12 +67,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-
+import org.apache.commons.lang.StringUtils;
 import org.egov.infra.admin.master.entity.City;
 import org.egov.infra.admin.master.repository.CityRepository;
 import org.egov.infra.notification.service.NotificationService;
+import org.egov.infra.utils.ApplicationConstant;
 import org.egov.infra.utils.FileStoreUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -101,6 +104,9 @@ public class CityService {
 
     @Autowired
     private FileStoreUtils fileStoreUtils;
+    
+    @Value("${city_logo_aws_url}")
+    private String city_logo_aws_url;
 
     @Autowired
     public CityService(final CityRepository cityRepository) {
@@ -171,7 +177,11 @@ public class CityService {
     public byte[] getCityLogoAsBytes() {
         byte[] cityLogo = (byte[]) cityLogoCache.get(cityLogoCacheKey(), CITY_LOGO_HASH_KEY);
         if (cityLogo == null || cityLogo.length < 1) {
-            cityLogo = fileStoreUtils.fileAsByteArray(getCityLogoFileStoreId(), getCityCode());
+//            cityLogo = fileStoreUtils.fileAsByteArray(getCityLogoFileStoreId(), getCityCode());
+            String logo_http_url = this.city_logo_aws_url;
+            logo_http_url= StringUtils.replace(logo_http_url, ApplicationConstant.CITY_LOGO_URL_REPLACE_KEY, getUserTenantId());
+            cityLogo = fileStoreUtils.httpImageAsByteArray(logo_http_url);
+            
             cityLogoCache.put(cityLogoCacheKey(), CITY_LOGO_HASH_KEY, cityLogo);
         }
         return cityLogo;

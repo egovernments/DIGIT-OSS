@@ -99,6 +99,10 @@ public final class CollectionConstants {
     public static final char RECEIPT_TYPE_ADHOC = 'A';
     public static final char RECEIPT_TYPE_BILL = 'B';
     public static final char RECEIPT_TYPE_CHALLAN = 'C';
+    
+    //microservices Receipt types
+    public static final String RECEIPT_M_TYPE_MISCELLANEOUS="MISCELLANEOUS";
+    public static final String RECEIPT_M_TYPE_BILLBASED="BILLBASED";
 
     // Collection type
     public static final char COLLECTION_TYPE_COUNTER = 'C';

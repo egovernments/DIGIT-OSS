@@ -110,7 +110,7 @@ public class SubSchemeAction extends BaseFormAction {
 
     public SubSchemeAction() {
         addRelatedEntity("scheme", Scheme.class, "name");
-        addRelatedEntity("department", Department.class, "name");
+//        addRelatedEntity("department", Department.class, "name");
     }
 
     @Override
@@ -118,6 +118,7 @@ public class SubSchemeAction extends BaseFormAction {
         super.prepare();
         setupDropdownDataExcluding();
         dropdownData.put("schemeList", persistenceService.findAllBy("from Scheme where isactive=true order by name"));
+        dropdownData.put("departmentList", egovMasterDataCaching.get("egi-department"));
 
     }
 
@@ -212,6 +213,18 @@ public class SubSchemeAction extends BaseFormAction {
                 .findAllBy("from Fund where isActive=true order by name"));
         dropdownData.put("schemeList", Collections.emptyList());
         dropdownData.put("subSchemeList", Collections.emptyList());
+        fundId = 0;
+        return SEARCH;
+    }
+    
+    @SkipValidation
+    @Action(value = "/masters/subScheme-beforeSearch-edit")
+    public String beforeSearchEdit(){
+        dropdownData.put("fundList", persistenceService
+                .findAllBy("from Fund where isActive=true order by name"));
+        dropdownData.put("schemeList", Collections.emptyList());
+        dropdownData.put("subSchemeList", Collections.emptyList());
+        showMode="edit";
         fundId = 0;
         return SEARCH;
     }

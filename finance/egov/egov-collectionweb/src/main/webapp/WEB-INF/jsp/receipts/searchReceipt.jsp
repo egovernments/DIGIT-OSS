@@ -237,6 +237,8 @@ function checkprintforselectedrecord()
 		document.searchReceiptForm.action="receipt-printReceipts.action";
 		document.searchReceiptForm.submit();
 	}
+	//document.searchReceiptForm.action="receipt-printReceipts.action";
+	//document.searchReceiptForm.submit();
 }
 
 function validate()
@@ -498,8 +500,8 @@ function onChangeServiceClass(obj)
 <display:table name="searchResult" uid="currentRow" pagesize = "20" style="width:100%;border-left: 1px solid #DFDFDF;" cellpadding="0" cellspacing="0" export="false" requestURI="">
 <display:caption media="pdf">&nbsp;</display:caption>
 <display:column headerClass="bluebgheadtd"  class="blueborderfortd" style="width:3%">
-<%-- <input name="selectedReceipts" type="checkbox" id="selectedReceipts"
-				value="${currentRow.referencenumber}"/> --%>
+<input name="selectedReceipts" type="checkbox" id="selectedReceipts"
+				value="${currentRow.receiptnumber}"/>
 <input type="hidden" name="receiptstatus" id="receiptstatus" value="${currentRow.curretnStatus}" />
 <input type="hidden" name="receipttype" id="receipttype" value="${currentreceipttype}" />
 </display:column>
@@ -530,8 +532,8 @@ function onChangeServiceClass(obj)
 </div>
 <br/>
 <div class="buttonbottom">
- <!--  <input name="button32" type="button" class="buttonsubmit" id="button32" value="View" onclick="return checkviewforselectedrecord()"/>
-  <input name="button32" type="button" class="buttonsubmit" id="button32" value="Print" onclick="return checkprintforselectedrecord()"/> -->
+ <!--  <input name="button32" type="button" class="buttonsubmit" id="button32" value="View" onclick="return checkviewforselectedrecord()"/>-->
+  <input name="button32" type="button" class="buttonsubmit" id="button32" value="Print" onclick="return checkprintforselectedrecord()"/> 
    <%-- <egov-authz:authorize actionName="CancelReceipt">
   <input name="button32" type="button" class="buttonsubmit" id="button32" value="Cancel Receipt" onclick="return checkcancelforselectedrecord()"/>
   </egov-authz:authorize> --%>

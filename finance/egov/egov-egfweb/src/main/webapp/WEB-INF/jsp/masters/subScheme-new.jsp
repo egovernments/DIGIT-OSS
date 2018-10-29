@@ -79,9 +79,9 @@
 		}
 		var showMode = document.getElementById('showMode').value;
 		if (showMode == 'edit')
-			var url = '/EGF/masters/subScheme-edit.action';
+			var url = '/services/EGF/masters/subScheme-edit.action';
 		else
-			var url = '/EGF/masters/subScheme-create.action';
+			var url = '/services/EGF/masters/subScheme-create.action';
 		document.subSchemeForm.action = url;
 		document.subSchemeForm.submit();
 		return true;
@@ -215,9 +215,9 @@
 						<td class="greybox">&nbsp;</td>
 						<td class="greybox"><strong>Department</strong></td>
 						<td class="greybox"><s:select
-								list="dropdownData.departmentList" listKey="id" listValue="name"
+								list="dropdownData.departmentList" listKey="code" listValue="name"
 								headerKey="0" headerValue="--- Select ---" name="department"
-								id="department" value="%{subScheme.department.id}"></s:select></td>
+								id="department" value="%{subScheme.department}"></s:select></td>
 						<td class="greybox"><strong>Initial Estimate Amount</strong></td>
 						<td class="greybox"><s:textfield
 								cssStyle="text-align: right;" id="initialEstimateAmount"

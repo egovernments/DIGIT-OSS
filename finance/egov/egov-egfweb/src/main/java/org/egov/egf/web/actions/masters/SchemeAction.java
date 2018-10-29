@@ -133,6 +133,15 @@ public class SchemeAction extends BaseFormAction {
             LOGGER.info("Scheme Mode=" + mode);
         return SEARCH;
     }
+    
+    @SkipValidation
+    @Action(value = "/masters/scheme-beforeSearch-edit")
+    public String beforeSearchforEdit(){
+        mode="edit";
+        if (LOGGER.isInfoEnabled())
+            LOGGER.info("Scheme Mode=" + mode);
+        return SEARCH;
+    }
 
     @SkipValidation
     @Action(value = "/masters/scheme-beforeEdit")

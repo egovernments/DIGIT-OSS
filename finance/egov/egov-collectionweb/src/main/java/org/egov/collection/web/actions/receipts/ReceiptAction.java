@@ -58,6 +58,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
@@ -83,6 +84,7 @@ import org.egov.collection.utils.CollectionsUtil;
 import org.egov.collection.utils.FinancialsUtil;
 import org.egov.commons.Accountdetailkey;
 import org.egov.commons.Accountdetailtype;
+import org.egov.commons.Bank;
 import org.egov.commons.Bankaccount;
 import org.egov.commons.Bankbranch;
 import org.egov.commons.CChartOfAccountDetail;
@@ -112,6 +114,10 @@ import org.egov.infra.admin.master.entity.Role;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.BusinessDetails;
+import org.egov.infra.microservice.models.CollectionType;
+import org.egov.infra.microservice.models.EmployeeInfo;
+import org.egov.infra.microservice.models.Instrument;
+import org.egov.infra.microservice.models.Receipt;
 import org.egov.infra.microservice.models.ReceiptResponse;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.utils.NumberUtil;
@@ -123,6 +129,7 @@ import org.egov.infstr.models.ServiceDetails;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.instrument.InstrumentHeader;
+import org.egov.model.instrument.InstrumentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -151,7 +158,7 @@ public class ReceiptAction extends BaseFormAction {
     /**
      * A <code>Long</code> array of receipt header ids , which have to be displayed for view/print/cancel purposes
      */
-    private Long[] selectedReceipts;
+    private String[] selectedReceipts;
     /**
      * An array of <code>ReceiptHeader</code> instances which have to be displayed for view/print/cancel purposes
      */
@@ -786,10 +793,10 @@ public class ReceiptAction extends BaseFormAction {
                 + receiptResponse.getReceipts().get(0).getBill().get(0).getBillDetails().get(0).getReceiptNumber();
         // populate all receipt header ids except the cancelled receipt
         // (in effect the newly created receipts)
-        selectedReceipts = new Long[noOfNewlyCreatedReceipts];
+        selectedReceipts = new String[noOfNewlyCreatedReceipts];
         int i = 0;
         if (receiptHeader.getId() != null && !receiptHeader.getId().equals(oldReceiptId)) {
-            selectedReceipts[i] = receiptHeader.getId();
+            selectedReceipts[i] = receiptHeader.getReceiptnumber();
             i++;
         }
 
@@ -1095,13 +1102,125 @@ public class ReceiptAction extends BaseFormAction {
             throw new ApplicationRuntimeException("No receipts selected to view!");
 
         receipts = new ReceiptHeader[selectedReceipts.length];
-        for (int i = 0; i < selectedReceipts.length; i++)
-            try {
-                receipts[i] = receiptHeaderService.findById(selectedReceipts[i], false);
-            } catch (final Exception e) {
-                LOGGER.error("Error in printReceipts", e);
-            }
+//        receipts = new ReceiptHeader[1];
+//        for (int i = 0; i < selectedReceipts.length; i++)
+//            try {
+//                receipts[i] = receiptHeaderService.findById(selectedReceipts[i], false);
+//            } catch (final Exception e) {
+//                LOGGER.error("Error in printReceipts", e);
+//            }
 
+        List<Receipt> receiptlist =  this.microserviceUtils.searchReciepts(null, null, null, null, Arrays.asList(selectedReceipts));
+        
+        receiptlist.stream().forEach(receipt ->{
+            
+            
+            
+            receipt.getBill().forEach(bill->{
+                bill.getBillDetails().forEach(billDetail ->{
+                    ReceiptHeader header = new ReceiptHeader();
+                    receiptHeader.setReceiptnumber(billDetail.getReceiptNumber());
+                    receiptHeader.setReceiptdate(new Date(billDetail.getReceiptDate()));
+                    receiptHeader.setService(billDetail.getBusinessService());
+                    receiptHeader.setReferencenumber(billDetail.getBillNumber());
+                    receiptHeader.setReferenceDesc(billDetail.getBillDescription());
+                    receiptHeader.setPaidBy(bill.getPaidBy());
+                    receiptHeader.setPayeeName(bill.getPayeeName());
+                    receiptHeader.setPayeeAddress(bill.getPayeeAddress());
+                    receiptHeader.setTotalAmount(billDetail.getTotalAmount());
+                    receiptHeader.setCurretnStatus(billDetail.getStatus());
+                    receiptHeader.setCurrentreceipttype(billDetail.getReceiptType());
+                    receiptHeader.setManualreceiptnumber(billDetail.getManualReceiptNumber());
+                    receiptHeader.setModOfPayment(receipt.getInstrument().getInstrumentType().getName());
+                    receiptHeader.setConsumerCode(billDetail.getConsumerCode());
+                    
+                    
+                    
+                    if(billDetail.getCollectionType().equals(CollectionType.COUNTER))
+                        receiptHeader.setCollectiontype(CollectionConstants.COLLECTION_TYPE_COUNTER);
+                    else if(billDetail.getCollectionType().equals(CollectionType.FIELD))
+                        receiptHeader.setCollectiontype(CollectionConstants.COLLECTION_TYPE_FIELDCOLLECTION);
+                    else if(billDetail.getCollectionType().equals(CollectionType.ONLINE))
+                        receiptHeader.setCollectiontype(CollectionConstants.COLLECTION_TYPE_ONLINECOLLECTION);
+                    
+                    if(billDetail.getReceiptType().equalsIgnoreCase(CollectionConstants.RECEIPT_M_TYPE_MISCELLANEOUS))
+                        receiptHeader.setReceipttype(CollectionConstants.RECEIPT_TYPE_ADHOC);
+                    else
+                        if(billDetail.getReceiptType().equalsIgnoreCase(CollectionConstants.RECEIPT_M_TYPE_BILLBASED))
+                            receiptHeader.setReceipttype(CollectionConstants.RECEIPT_TYPE_BILL);
+                        
+                    Set<ReceiptDetail> receiptdetailslist = new HashSet<>();
+                    billDetail.getBillAccountDetails().forEach(billAccountDetail->{
+                        ReceiptDetail receiptDetail= new ReceiptDetail();
+                        
+                        CChartOfAccounts accountHead = new CChartOfAccounts();
+                        accountHead.setGlcode(billAccountDetail.getGlcode());
+//                        accountHead.setName(name);
+                        receiptDetail.setAccounthead(new CChartOfAccounts());
+                        
+//                        CFunction function = new CFunction();
+//                        function.setCode(billDetail.get);
+//                        receiptDetail.setFunction(function);
+                        receiptDetail.setDramount(billAccountDetail.getDebitAmount());
+                        receiptDetail.setCramount(billAccountDetail.getCreditAmount());
+                        receiptDetail.setOrdernumber(billAccountDetail.getOrder().longValue());
+                        receiptDetail.setDescription(billAccountDetail.getAccountDescription());
+                        
+//                        CFinancialYear financialYear = new CFinancialYear();
+//                        receiptDetail.setFinancialYear(financialYear);
+                        
+                        receiptDetail.setCramountToBePaid(billAccountDetail.getCrAmountToBePaid());
+                        receiptDetail.setPurpose(billAccountDetail.getPurpose().toString());
+                        
+//                        receiptDetail.setGroupId(groupId);
+                        receiptdetailslist.add(receiptDetail);
+                    });
+                    receiptHeader.setReceiptDetails(receiptdetailslist);
+                    receiptHeader.setReceiptHeader(header);
+                    InstrumentHeader instrumentHeader = new InstrumentHeader();
+                   
+                   Instrument instrument=  receipt.getInstrument();
+                    instrumentHeader.setInstrumentNumber(instrument.getInstrumentNumber());
+                    instrumentHeader.setInstrumentDate(new Date(instrument.getInstrumentDate()));
+                    
+                    InstrumentType instrumentType = new InstrumentType();
+                    instrumentType.setType(instrument.getInstrumentType().getName().toLowerCase());
+                    instrumentHeader.setInstrumentType(instrumentType);
+                    
+                    instrumentHeader.setInstrumentAmount(instrument.getAmount());
+//                    instrumentHe  instrument.getFinancialStatus();
+                    instrumentHeader.setBankBranchName(instrument.getBranchName());
+                  
+                    Bankaccount account = new Bankaccount();
+                    if(null!=instrument.getBankAccount())
+                    account.setAccountnumber(instrument.getBankAccount().getAccountNumber());
+//                    account.setAccountt
+                    instrumentHeader.setBankAccountId(account);
+                    Bank bank = new Bank();
+                    bank.setCode(instrument.getBank().getCode());
+                    bank.setIsactive(instrument.getBank().getActive());
+                    bank.setName(instrument.getBank().getName());
+                    bank.setType(instrument.getBank().getType());
+                    instrumentHeader.setBankId(bank);
+                    
+                    //                    instrumentHeader.setb
+                    
+                    
+                    receiptHeader.addInstrument(instrumentHeader);
+                    EmployeeInfo empInfo = this.microserviceUtils.getEmployeeById(receipt.getAuditDetails().getCreatedBy());
+                    if(null!=empInfo && empInfo.getUserName()!=null)
+                    receiptHeader.setCreatedUser(empInfo.getUserName());
+//                    receiptHeaderList.add(receiptHeader);
+                    receipts[0]=receiptHeader;
+                  
+                });
+            });
+            
+        }); 
+
+        
+        
+        
         try {
             reportId = collectionCommon.generateReport(receipts, printReceipts);
         } catch (final Exception e) {
@@ -1783,11 +1902,11 @@ public class ReceiptAction extends BaseFormAction {
         this.receipts = receipts;
     }
 
-    public Long[] getSelectedReceipts() {
+    public String[] getSelectedReceipts() {
         return selectedReceipts;
     }
 
-    public void setSelectedReceipts(final Long[] selectedReceipts) {
+    public void setSelectedReceipts(final String[] selectedReceipts) {
         this.selectedReceipts = selectedReceipts;
     }
 

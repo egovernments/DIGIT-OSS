@@ -67,6 +67,8 @@ import org.egov.infra.admin.master.entity.Location;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.model.instrument.InstrumentHeader;
 
+import com.opensymphony.xwork2.util.reflection.ReflectionExceptionHandler;
+
 /**
  * The bill receipt information class. Provides details of a bill receipt.
  */
@@ -110,7 +112,8 @@ public class BillReceiptInfoImpl implements BillReceiptInfo {
         this.receiptHeader = receiptHeader;
         receiptURL = CollectionConstants.RECEIPT_VIEW_SOURCEPATH + receiptHeader.getId();
         additionalInfo = null;
-        final String receiptStatus = receiptHeader.getStatus().getCode();
+//        final String receiptStatus = receiptHeader.getStatus().getCode();
+        final String receiptStatus = receiptHeader.getCurretnStatus();
 
         // Populate set of account info objects using receipt details
         for (final ReceiptDetail receiptDetail : receiptHeader.getReceiptDetails())
@@ -479,5 +482,9 @@ public class BillReceiptInfoImpl implements BillReceiptInfo {
             } else
                 instrumentType = instrumentInfo.getInstrumentType();
         return instrumentType;
+    }
+    @Override
+    public  String getCreatedUser(){
+        return receiptHeader.getCreatedUser() == null?"":receiptHeader.getCreatedUser();
     }
 }

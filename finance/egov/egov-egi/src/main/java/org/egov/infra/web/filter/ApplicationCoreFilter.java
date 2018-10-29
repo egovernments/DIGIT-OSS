@@ -128,6 +128,8 @@ public class ApplicationCoreFilter implements Filter {
 
     @Value("${app.version}_${app.build.no}")
     private String applicationRelease;
+    
+    
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {

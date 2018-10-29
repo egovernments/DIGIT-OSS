@@ -69,7 +69,7 @@ public class SubScheme implements java.io.Serializable {
 	private Boolean isactive;
 
 	private Date lastmodifieddate;
-	private Department department;
+	private String department;
 	private BigDecimal initialEstimateAmount;
 	private String councilLoanProposalNumber;
 	private String councilAdminSanctionNumber;
@@ -143,11 +143,11 @@ public class SubScheme implements java.io.Serializable {
 		this.lastmodifieddate = lastmodifieddate;
 	}
 
-	public void setDepartment(Department department) {
+	public void setDepartment(String department) {
 		this.department = department;
 	}
 
-	public Department getDepartment() {
+	public String getDepartment() {
 		return department;
 	}
 

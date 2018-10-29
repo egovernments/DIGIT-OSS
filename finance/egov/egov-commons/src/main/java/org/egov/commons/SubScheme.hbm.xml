@@ -80,10 +80,9 @@
 		<property name="lastmodifieddate" type="date">
 			<column name="LASTMODIFIEDDATE" length="7" not-null="true" />
 		</property>
-		<many-to-one name="department" class="org.egov.infra.admin.master.entity.Department"
-			fetch="select">
+		<property name="department" type="string">
 			<column name="department" />
-		</many-to-one>
+		</property>
 		<property name="initialEstimateAmount">
 			<column name="initial_estimate_amount" />
 		</property>
