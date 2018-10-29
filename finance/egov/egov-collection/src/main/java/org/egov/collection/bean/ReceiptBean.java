@@ -54,13 +54,20 @@ public class ReceiptBean {
 
     private Boolean selected;
     private String receiptDate;
+    private String receiptNumber;
     private BigDecimal instrumentAmount;
     private String service;
     private String instrumentType;
+    private String instrumentNumber;
+    private String instrumentDate;
+    private String instrumentId;
     private String fund;
     private String department;
     private String fundName;
     private String departmentName;
+    private String serviceName;
+    private String bankBranch;
+    private String bank;
 
     public Boolean getSelected() {
         return selected;
@@ -133,4 +140,61 @@ public class ReceiptBean {
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
+
+    public String getReceiptNumber() {
+        return receiptNumber;
+    }
+
+    public void setReceiptNumber(String receiptNumber) {
+        this.receiptNumber = receiptNumber;
+    }
+
+    public String getInstrumentNumber() {
+        return instrumentNumber;
+    }
+
+    public void setInstrumentNumber(String instrumentNumber) {
+        this.instrumentNumber = instrumentNumber;
+    }
+
+    public String getInstrumentDate() {
+        return instrumentDate;
+    }
+
+    public void setInstrumentDate(String instrumentDate) {
+        this.instrumentDate = instrumentDate;
+    }
+
+    public String getInstrumentId() {
+        return instrumentId;
+    }
+
+    public void setInstrumentId(String instrumentId) {
+        this.instrumentId = instrumentId;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public String getBankBranch() {
+        return bankBranch;
+    }
+
+    public void setBankBranch(String bankBranch) {
+        this.bankBranch = bankBranch;
+    }
+
+    public String getBank() {
+        return bank;
+    }
+
+    public void setBank(String bank) {
+        this.bank = bank;
+    }
+
 }

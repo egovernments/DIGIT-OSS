@@ -57,6 +57,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -181,10 +182,11 @@ public class BankRemittanceAction extends BaseFormAction {
     }
 
     private void populateRemittanceList() {
-        final AjaxBankRemittanceAction ajaxBankRemittanceAction = new AjaxBankRemittanceAction();
-        ajaxBankRemittanceAction.setPersistenceService(getPersistenceService());
-        ajaxBankRemittanceAction.setCollectionsUtil(collectionsUtil);
-        addDropdownData("accountNumberList", microserviceUtils.getBankAcntServiceMappings());
+        Map<String, BankAccountServiceMapping> accountNumberMap = new HashMap<>();
+        for (BankAccountServiceMapping basm : microserviceUtils.getBankAcntServiceMappings()) {
+            accountNumberMap.put(basm.getBankAccount(), basm);
+        }
+        addDropdownData("accountNumberList", new ArrayList<>(accountNumberMap.values()));
         addDropdownData("financialYearList", financialYearDAO.getAllActivePostingAndNotClosedFinancialYears());
     }
 
@@ -264,11 +266,11 @@ public class BankRemittanceAction extends BaseFormAction {
     private Double getSum(List<ReceiptBean> finalList) {
         Double sum = 0.0;
         for (final ReceiptBean r : finalList)
-            if (r.getInstrumentAmount()!=null)
+            if (r.getSelected() != null && r.getSelected() && r.getInstrumentAmount() != null)
                 sum = sum + r.getInstrumentAmount().doubleValue();
         return sum;
     }
-    
+
     private Double getSum(final String[] array) {
         Double sum = 0.0;
         for (final String num : array)

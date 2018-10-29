@@ -109,7 +109,6 @@ import org.egov.infra.microservice.models.ReceiptRequest;
 import org.egov.infra.microservice.models.ReceiptResponse;
 import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.microservice.models.TaxPeriod;
-import org.egov.infra.microservice.models.User;
 import org.egov.infra.microservice.models.UserInfo;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.reporting.engine.ReportFormat;
@@ -1294,16 +1293,6 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         request.setTenantId(tenantId);
         request.setReceipt(Collections.singletonList(receipt));
         request.setRequestInfo(requestInfo);
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonInString = "";
-
-        try {
-            jsonInString = mapper.writeValueAsString(request);
-        } catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.out.println(jsonInString);
         return restTemplate.postForObject(url, request, ReceiptResponse.class);
     }
 

@@ -151,108 +151,43 @@
 	var isSelected;
 	function handleReceiptSelectionEvent() {
 
-		isSelected = document.getElementsByName('receiptIds');
 		dom.get("multipleserviceselectionerror").style.display = "none";
 		dom.get("selectremittanceerror").style.display = "none";
 
 		dom.get("button32").disabled = false;
 		dom.get("button32").className = "buttonsubmit";
-		var j = 0;
-		for (i = 0; i < isSelected.length; i++) {
-			if (isSelected[i].checked == true) {
-				document.getElementsByName('serviceNameArray')[i].value = document
-						.getElementsByName('serviceNameTempArray')[i].value;
-				document.getElementsByName('fundCodeArray')[i].value = document
-				.getElementsByName('fundCodeTempArray')[i].value;
-				document.getElementsByName('departmentCodeArray')[i].value = document
-						.getElementsByName('departmentCodeTempArray')[i].value;
-				document.getElementsByName('totalCashAmountArray')[i].value = document
-						.getElementsByName('totalCashAmountTempArray')[i].value;
-				document.getElementsByName('totalChequeAmountArray')[i].value = document
-						.getElementsByName('totalChequeAmountTempArray')[i].value;
-				document.getElementsByName('totalCardAmountArray')[i].value = document
-						.getElementsByName('totalCardAmountTempArray')[i].value;
-				document.getElementsByName('totalOnlineAmountArray')[i].value = document
-						.getElementsByName('totalOnlineAmountTempArray')[i].value;
-				document.getElementsByName('receiptDateArray')[i].value = document
-						.getElementsByName('receiptDateTempArray')[i].value;
-				document.getElementsByName('instrumentIdArray')[i].value = document
-				.getElementsByName('instrumentIdTempArray')[i].value;
-			} else if (isSelected[i].checked == false) {
-				document.chequeRemittanceForm.serviceNameArray[i].value = "";
-				document.chequeRemittanceForm.fundCodeArray[i].value = "";
-				document.chequeRemittanceForm.departmentCodeArray[i].value = "";
-				document.chequeRemittanceForm.totalCashAmountArray[i].value = "";
-				document.chequeRemittanceForm.totalChequeAmountArray[i].value = "";
-				document.chequeRemittanceForm.totalCardAmountArray[i].value = "";
-				document.chequeRemittanceForm.totalOnlineAmountArray[i].value = "";
-				document.chequeRemittanceForm.receiptDateArray[i].value = "";
-				document.chequeRemittanceForm.instrumentIdArray[i].value = "";
-			}
-			j++;
-		}
+		
+		var instrumentAmount = document.getElementsByName('instrumentAmount');
 		var totalAmtDisplay = 0.00;
-		var totalChequeAmt = document
-				.getElementsByName('totalChequeAmountArray');
-		for (i = 0; i < totalChequeAmt.length; i++) {
-			totalAmtDisplay = totalAmtDisplay
-					+ +document.getElementsByName('totalChequeAmountArray')[i].value;
-		}
-		document.getElementById("remittanceAmount").value = totalAmtDisplay
-				.toFixed(2);
-		//TODO: uncomment the validation after go live
-		/* var receiptDateArray=document.getElementsByName('receiptDateArray');
-		for(j=0; j<receiptDateArray.length; j++)
-		{
-			if(document.getElementsByName('receiptDateArray')[j].value!="")
-			{
-				for (k = 0; k < isSelected.length; k++)
-				{
-					if (isSelected[k].checked == true)
-					{
-						if((document.getElementsByName('receiptDateArray')[j].value==document.getElementsByName('receiptDateArray')[k].value)){}
-						else
-						{
-							dom.get("multipleserviceselectionerror").style.display="block";
-							dom.get("button32").disabled=true;
-							dom.get("button32").className="button";
-							window.scroll(0,0);
-							return false;
-						}
-					}
-				}
+		for (i = 0; i < instrumentAmount.length; i++) {
+			if(document.getElementById("selected_"+i).checked){
+				document.getElementById("selected_"+i).value= true;
+				totalAmtDisplay = parseInt(totalAmtDisplay) + parseInt(document.getElementById("instrumentAmount_"+i).value);
+			}else{
+				document.getElementById("selected_"+i).value= false;
 			}
-		} */
+		}
+		document.getElementById("remittanceAmount").value = totalAmtDisplay;
 	}
 
-	// Check if at least one receipt is selected
-	function isChecked(chk) {
-		if (chk.length == undefined) {
-			if (chk.checked == true) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			for (i = 0; i < chk.length; i++) {
-				if (chk[i].checked == true) {
-					return true;
-				}
-			}
-			return false;
-		}
-	}
 
 	// Changes selection of all receipts to given value (checked/unchecked)
 	function changeSelectionOfAllReceipts(checked) {
-		chk = document.getElementsByName('receiptIds');
-		if (chk.length == undefined) {
-			chk.checked = checked;
-		} else {
-			for (j = 0; j < chk.length; j++) {
-				chk[j].checked = checked;
+		
+		var list = document.getElementsByName('instrumentAmount');
+		for (i = 0; i < list.length; i++) {
+			document.getElementById("selected_"+i).value= checked;
+			document.getElementById("selected_"+i).checked = checked;
+		}
+		
+		var totalAmtDisplay = 0.00;
+		for (i = 0; i < list.length; i++) {
+			if(document.getElementById("selected_"+i).checked){
+				totalAmtDisplay = parseInt(totalAmtDisplay) + parseInt(document.getElementById("instrumentAmount_"+i).value);
 			}
 		}
+		document.getElementById("remittanceAmount").value = totalAmtDisplay;
+		
 	}
 	
 	function validate() {
@@ -335,11 +270,6 @@
 			bootbox.alert("Please enter either financial year or from date and to date");
 			return false;
 		}
-		if (dom.get("bankBranchMaster").value != null
-				&& dom.get("bankBranchMaster").value == -1) {
-			dom.get("bankselectionerror").style.display = "block";
-			return false;
-		}
 		if (dom.get("accountNumberId").value != null
 				&& dom.get("accountNumberId").value == -1) {
 			dom.get("bankselectionerror").innerHTML = "";
@@ -388,20 +318,13 @@
 
 	// Check if at least one receipt is selected
 	function isChecked(chk) {
-		if (chk.length == undefined) {
-			if (chk.checked == true) {
+		var list = document.getElementsByName('instrumentAmount');
+		for (i = 0; i < list.length; i++) {
+			if(document.getElementById("selected_"+i).checked){
 				return true;
-			} else {
-				return false;
-			}
-		} else {
-			for (i = 0; i < chk.length; i++) {
-				if (chk[i].checked == true) {
-					return true;
-				}
-			}
-			return false;
+			};
 		}
+		return false;
 	}
 
 	//DeSelect all receipts
@@ -436,36 +359,24 @@
 			deSelectAll();
 		}
 	}
-	function onBodyLoad()
-	{
-		<s:if test="%{isBankCollectionRemitter}">
-			document.getElementById('bankBranchMaster').disabled=true;
-		</s:if>
-	}
 </script>
 </head>
-<body  onload="onBodyLoad();">
+<body >
 	<div class="errorstyle" id="error_area" style="display: none;"></div>
 	<span align="center" style="display: none" id="selectremittanceerror">
-		<li><font size="2" color="red"><b><s:text
-						name="bankremittance.error.norecordselected" /> </b></font></li>
+		<li><font size="2" color="red"><b><s:text name="bankremittance.error.norecordselected" /> </b></font></li>
 	</span>
-	<span align="center" style="display: none"
-		id="multipleserviceselectionerror">
-		<li><font size="2" color="red"><b><s:text
-						name="bankremittance.error.multipleserviceselectionerror" /> </b></font></li>
+	<span align="center" style="display: none" id="multipleserviceselectionerror">
+		<li><font size="2" color="red"><b><s:text name="bankremittance.error.multipleserviceselectionerror" /> </b></font></li>
 	</span>
 	<span align="center" style="display: none" id="bankselectionerror">
-		<li><font size="2" color="red"><b><s:text
-						name="bankremittance.error.nobankselected" /> </b></font></li>
+		<li><font size="2" color="red"><b><s:text name="bankremittance.error.nobankselected" /> </b></font></li>
 	</span>
 	<span align="center" style="display: none" id="accountselectionerror">
-		<li><font size="2" color="red"><b><s:text
-						name="bankremittance.error.noaccountNumberselected" /> </b></font></li>
+		<li><font size="2" color="red"><b><s:text name="bankremittance.error.noaccountNumberselected" /> </b></font></li>
 	</span>
 	<span align="center" style="display: none" id="approvalSelectionError">
-		<li><font size="2" color="red"><b><s:text
-						name="bankremittance.error.noApproverselected" /> </b></font></li>
+		<li><font size="2" color="red"><b><s:text name="bankremittance.error.noApproverselected" /> </b></font></li>
 	</span>
 	<s:form theme="simple" name="chequeRemittanceForm" >
 		<s:push value="model">
@@ -489,152 +400,73 @@
 					<table width="100%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
 							<td width="4%" class="bluebox">&nbsp;</td>
-							<td class="bluebox"><s:text name="bankremittance.bank" /> : <span
-									class="mandatory1">*</span></td>
-							<td class="bluebox"><s:select headerValue="--Select--"
-									headerKey="-1" list="dropdownData.bankBranchList" listKey="id"
-									id="bankBranchMaster" listValue="branchname"
-									label="bankBranchMaster" name="branchId" value="%{branchId}"
-									onChange="onChangeBankAccount(this.value)" /> <egov:ajaxdropdown
-									id="accountNumberIdDropdown" fields="['Text','Value']"
-									dropdownId='accountNumberId'
-									url='receipts/ajaxBankRemittance-accountListOfService.action'
-									selectedValue="%{accountNumberId}" /></td>
-							<td class="bluebox"><s:text
-									name="bankremittance.accountnumber" />: <span
-				                       class="mandatory1">*</span></td>
-							<td class="bluebox"><s:select headerValue="--Select--"
-									headerKey="-1" list="dropdownData.accountNumberList"
-									listKey="id" id="accountNumberId" listValue="accountnumber"
-									label="accountNumberMaster" name="accountNumberId"
-									value="%{accountNumberId}" /></td>
+							<td class="bluebox"><s:text name="bankremittance.accountnumber" />: <span class="mandatory1">*</span></td>
+							<td class="bluebox">
+								<select id="accountNumberId" name="accountNumberId" value="%{accountNumberId}">
+										<option value="-1">Select</option>
+										<c:forEach items="${dropdownData.accountNumberList}" var="accNum">
+											<c:if test="${accNum.bankAccount == accountNumberId }">
+												<option value="${accNum.bankAccount}" selected="selected">${accNum.bank} - ${accNum.bankAccount}</option>
+											</c:if>
+											<c:if test="${accNum.bankAccount != accountNumberId }">
+												<option value="${accNum.bankAccount}" >${accNum.bank} - ${accNum.bankAccount}</option>
+											</c:if>
+										</c:forEach>
+								</select>		
+							</td>
 						</tr>
 						<tr>
 							<td width="4%" class="bluebox">&nbsp;</td>
-							<td class="bluebox"><s:text
-									name="bankremittance.financialyear" />:</td>
-							<td class="bluebox"><s:select headerKey="-1" headerValue="--Select--"
-									list="dropdownData.financialYearList" listKey="id"
-									id="finYearId" listValue="finYearRange" label="finYearRange"
-									name="finYearId" value="%{finYearId}" /></td>
+							<td class="bluebox"><s:text name="bankremittance.financialyear" />:</td>
+							<td class="bluebox"><s:select headerKey="-1" headerValue="--Select--" list="dropdownData.financialYearList" listKey="id" id="finYearId" listValue="finYearRange" label="finYearRange" name="finYearId" value="%{finYearId}" /></td>
 							<td class="bluebox">&nbsp;</td>
 							<td class="bluebox">&nbsp;</td>
 						</tr>
 						<tr id="dateDiv">
 							<td width="4%" class="bluebox">&nbsp;</td>
 							<td class="bluebox"><s:text name="bankremittance.fromdate" /></td>
-							<s:date name="fromDate" var="fromFormat" format="dd/MM/yyyy" />
-							<td class="bluebox"><s:textfield id="fromDate"
-									name="fromDate" data-inputmask="'mask': 'd/m/y'"
-									value="%{fromFormat}" placeholder="DD/MM/YYYY" /></td>
+								<s:date name="fromDate" var="fromFormat" format="dd/MM/yyyy" />
+							<td class="bluebox"><s:textfield id="fromDate" name="fromDate" data-inputmask="'mask': 'd/m/y'" value="%{fromFormat}" placeholder="DD/MM/YYYY" /></td>
 							<td class="bluebox"><s:text name="bankremittance.todate" /></td>
-							<s:date name="toDate" var="toFormat" format="dd/MM/yyyy" />
-							<td class="bluebox"><s:textfield id="toDate" name="toDate"
-									value="%{toFormat}" data-inputmask="'mask': 'd/m/y'"
-									placeholder="DD/MM/YYYY" /></td>
+								<s:date name="toDate" var="toFormat" format="dd/MM/yyyy" />
+							<td class="bluebox"><s:textfield id="toDate" name="toDate" value="%{toFormat}" data-inputmask="'mask': 'd/m/y'" placeholder="DD/MM/YYYY" /></td>
 						</tr>
 					</table>
 					</div>
 					<div class="buttonbottom">
-						<input name="search" type="submit" class="buttonsubmit"
-							id="search" value="Search" onclick="return searchDataToRemit()" />
+						<input name="search" type="submit" class="buttonsubmit" id="search" value="Search" onclick="return searchDataToRemit()" />
 					</div>
-					<s:if test="%{!paramList.isEmpty()}">
-						<display:table name="paramList" uid="currentRow"
-							pagesize="${pageSize}" style="border:1px;width:100%"
-							cellpadding="0" cellspacing="0" export="false" requestURI=""
-							excludedParams="serviceNameArray fundCodeArray departmentCodeArray totalCashAmountArray totalChequeAmountArray totalCardAmountArray totalATMAmountArray totalATMAmountTempArray departmentCodeTempArray totalOnlineAmountTempArray receiptDateTempArray serviceNameTempArray totalCardAmountTempArray totalCashAmountTempArray totalChequeAmountTempArray  instrumentIdTempArray">
-							<display:column headerClass="bluebgheadtd"
-								class="blueborderfortd"
-								title="Select<input type='checkbox' name='selectAllReceipts' value='on' onClick='setCheckboxStatuses(this.checked);handleReceiptSelectionEvent(this.checked);'/>"
-								style="width:5%; text-align: center">
-								<s:checkbox name="receiptIds" id="receiptIds"
-									value="#currentRow.id" onClick="handleReceiptSelectionEvent()" />
-								<input type="hidden" name="serviceNameTempArray"
-									disabled="disabled" id="serviceNameTempArray"
-									value="${currentRow.SERVICENAME}" />
-								<input type="hidden" name="fundCodeTempArray"
-									disabled="disabled" id="fundCodeTempArray"
-									value="${currentRow.FUNDCODE}" />	
-								<input type="hidden" name="instrumentIdTempArray"
-									disabled="disabled" id="instrumentIdTempArray"
-									value="${currentRow.INSTRUMENTID}" />
-								<input type="hidden" name="departmentCodeTempArray"
-									id="departmentCodeTempArray" disabled="disabled"
-									value="${currentRow.DEPARTMENTCODE}" />
-								<input type="hidden" name="totalCashAmountTempArray"
-									disabled="disabled" id="totalCashAmountTempArray"
-									value="${currentRow.SERVICETOTALCASHAMOUNT}" />
-								<input type="hidden" name="totalChequeAmountTempArray"
-									disabled="disabled" id="totalChequeAmountTempArray"
-									value="${currentRow.SERVICETOTALCHEQUEAMOUNT}" />
-								<input type="hidden" name="totalCardAmountTempArray"
-									disabled="disabled" id="totalCardAmountTempArray"
-									value="${currentRow.SERVICETOTALCARDPAYMENTAMOUNT}" />
-								<input type="hidden" name="totalOnlineAmountTempArray"
-									disabled="disabled" id="totalOnlineAmountTempArray"
-									value="${currentRow.SERVICETOTALONLINEPAYMENTAMOUNT}" />
-								<input type="hidden" name="receiptDateTempArray"
-									disabled="disabled" id="receiptDateTempArray"
-									value="${currentRow.RECEIPTDATE}" />
-								<input type="hidden" name="serviceNameArray"
-									id="serviceNameArray"
-									value="${serviceNameArray[currentRow_rowNum-1]}" />
-								<input type="hidden" name="fundCodeArray" id="fundCodeArray"
-									value="${fundCodeArray[currentRow_rowNum-1]}" />
-								<input type="hidden" name="departmentCodeArray"
-									id="departmentCodeArray"
-									value="${departmentCodeArray[currentRow_rowNum-1]}" />
-								<input type="hidden" name="totalCashAmountArray"
-									id="totalCashAmountArray"
-									value="${totalCashAmountArray[currentRow_rowNum-1]}" />
-								<input type="hidden" name="totalChequeAmountArray"
-									id="totalChequeAmountArray"
-									value="${totalChequeAmountArray[currentRow_rowNum-1]}" />
-								<input type="hidden" name="totalCardAmountArray"
-									disabled="disabled" id="totalCardAmountArray" />
-								<input type="hidden" name="totalOnlineAmountArray"
-									disabled="disabled" id="totalOnlineAmountArray" />
-								<input type="hidden" name="receiptDateArray"
-									id="receiptDateArray"
-									value="${receiptDateArray[currentRow_rowNum-1]}" />
-								<input type="hidden" name="instrumentIdArray"
-									id="instrumentIdArray"
-									value="${instrumentIdArray[currentRow_rowNum-1]}" />
+					<s:if test="%{!receiptBeanList.isEmpty()}">
+						<display:table name="receiptBeanList" uid="currentRow" pagesize="${pageSize}" style="border:1px;width:100%" cellpadding="0" cellspacing="0" export="false" requestURI="">
+							<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Select<input type='checkbox' name='selectAllReceipts' value='on' onClick='setCheckboxStatuses(this.checked);handleReceiptSelectionEvent(this.checked);'/>" style="width:5%; text-align: center">
+							
+							
+								<c:set var="rowNumber" value="${currentRow_rowNum-1}" ></c:set>
+								<input type='checkbox' name='receiptBeanList[${rowNumber}].selected'  id='selected_${rowNumber}' value ="false" onClick="handleReceiptSelectionEvent()" />
+								<input type="hidden" name="receiptBeanList[${rowNumber}].service"  id="service_${rowNumber}" value="${currentRow.service}" />
+								<input type="hidden" name="receiptBeanList[${rowNumber}].fund"  id="fund_${rowNumber}" value="${currentRow.fund}" />
+								<input type="hidden" name="receiptBeanList[${rowNumber}].department" id="department_${rowNumber}"  value="${currentRow.department}" />
+								<input type="hidden" name="receiptBeanList[${rowNumber}].instrumentAmount"  id="instrumentAmount_${rowNumber}" value="${currentRow.instrumentAmount}" />
+								<input type="hidden" name="receiptBeanList[${rowNumber}].instrumentNumber"  id="instrumentNumber_${rowNumber}" value="${currentRow.instrumentNumber}" />
+								<input type="hidden" name="receiptBeanList[${rowNumber}].instrumentDate"  id="instrumentDate_${rowNumber}" value="${currentRow.instrumentDate}" />
+								<input type="hidden" name="receiptBeanList[${rowNumber}].instrumentId"  id="instrumentId_${rowNumber}" value="${currentRow.instrumentId}" />
+								<input type="hidden" name="receiptBeanList[${rowNumber}].bank"  id="bank_${rowNumber}" value="${currentRow.bank}" />
+								<input type="hidden" name="receiptBeanList[${rowNumber}].bankBranch"  id="bankBranch_${rowNumber}" value="${currentRow.bankBranch}" />
+								<input type="hidden" name="receiptBeanList[${rowNumber}].receiptNumber"  id="receiptNumber_${rowNumber}" value="${currentRow.receiptNumber}" />
+								<input type="hidden" name="receiptBeanList[${rowNumber}].receiptDate"  id="receiptDate_${rowNumber}" value="${currentRow.receiptDate}" />
+								<input type="hidden" name="instrumentAmount" disabled="disabled" id="instrumentAmount" value="${currentRow.instrumentAmount}" />
 							</display:column>
 
-							<display:column headerClass="bluebgheadtd"
-								class="blueborderfortd" title="Receipt date"
-								style="width:10%;text-align: center"
-								value="${currentRow.RECEIPTDATE}" format="{0,date,dd/MM/yyyy}" />
-							<display:column headerClass="bluebgheadtd"
-								class="blueborderfortd" title="Receipt number"
-								style="width:10%;text-align: center"
-								value="${currentRow.RECEIPTNUMBER}" />
-								
-							<display:column headerClass="bluebgheadtd"
-								class="blueborderfortd" title="Cheque/DD number and date"
-								style="width:20%;text-align: center"
-								value="${currentRow.CHEQUEDDNUMBER}  ${currentRow.CHEQUEDDDATE}"  />
-							<display:column headerClass="bluebgheadtd"
-								class="blueborderfortd" title="Drawee bank and branch"
-								style="width:20%;text-align: center"
-								value="${currentRow.DRAWEEBANK}  ${currentRow.DRAWEEBANKBRANCH}"  />
-							<display:column headerClass="bluebgheadtd"
-								class="blueborderfortd" title="Service Name"
-								style="width:15%;text-align: center"
-								value="${currentRow.SERVICENAME}" />
-
-							<display:column headerClass="bluebgheadtd"
-								class="blueborderfortd" title="Department"
-								style="width:15%;text-align: center"
-								value="${currentRow.DEPARTMENTNAME}" />
-							<display:column headerClass="bluebgheadtd"
-									class="blueborderfortd" title="Cheque /DD Amount (Rs)"
-									style="width:10%;text-align: center">
+							<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Receipt date" style="width:10%;text-align: center" value="${currentRow.receiptDate}" format="{0,date,dd/MM/yyyy}" />
+							<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Receipt number" style="width:10%;text-align: center" value="${currentRow.receiptNumber}" />
+							<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Cheque/DD number and date"  style="width:20%;text-align: center" value="${currentRow.instrumentNumber}  ${currentRow.instrumentDate}"  />
+							<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Drawee bank and branch" style="width:20%;text-align: center" value="${currentRow.bank}  ${currentRow.bankBranch}"  />
+							<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Service Name" style="width:15%;text-align: center" value="${currentRow.serviceName}" />
+							<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Department" style="width:15%;text-align: center" value="${currentRow.departmentName}" />
+							<display:column headerClass="bluebgheadtd" class="blueborderfortd" title="Cheque /DD Amount (Rs)" style="width:10%;text-align: center">
 									<div align="center">
-										<c:if test="${not empty currentRow.SERVICETOTALCHEQUEAMOUNT}">
-											<c:out value="${currentRow.SERVICETOTALCHEQUEAMOUNT}" />
+										<c:if test="${not empty currentRow.instrumentAmount}">
+											<c:out value="${currentRow.instrumentAmount}" />
 										</c:if>
 										&nbsp;
 									</div>
@@ -642,10 +474,8 @@
 						</display:table>
 				
 				<br />
-				<div id="loadingMask"
-					style="display: none; overflow: hidden; text-align: center">
-					<img src="/services/collection/resources/images/bar_loader.gif" alt="" /> <span
-						style="color: red">Please wait....</span>
+				<div id="loadingMask" style="display: none; overflow: hidden; text-align: center">
+					<img src="/services/collection/resources/images/bar_loader.gif" alt="" /> <span style="color: red">Please wait....</span>
 				</div>
 
 				<div align="center">
@@ -653,21 +483,13 @@
 						<tr>					
 							<s:if test="showRemittanceDate">
 								<td class="bluebox" colspan="3">&nbsp;</td>
-								<td class="bluebox"><s:text
-										name="bankremittance.remittancedate" /><span
-									class="mandatory" /></td>
-								<td class="bluebox"><s:textfield id="remittanceDate"
-										name="remittanceDate" readonly="true"
-										data-inputmask="'mask': 'd/m/y'" placeholder="DD/MM/YYYY" /></td>
+								<td class="bluebox"><s:text name="bankremittance.remittancedate" /><span class="mandatory" /></td>
+								<td class="bluebox"><s:textfield id="remittanceDate" name="remittanceDate" readonly="true" data-inputmask="'mask': 'd/m/y'" placeholder="DD/MM/YYYY" /></td>
 							</s:if>
-							<td class="bluebox"><s:text
-									name="bankremittance.remittanceamount" /></td>
-							<td class="bluebox"><s:textfield id="remittanceAmount"
-									name="remittanceAmount" readonly="true" /></td>								
-							<td class="bluebox"><s:text
-									name="bankremittance.accountnumber" /></td>
-							<td class="bluebox"><s:textfield id="remitAccountNumber"
-									name="remitAccountNumber" readonly="true" /></td>		
+							<td class="bluebox"><s:text name="bankremittance.remittanceamount" /></td>
+							<td class="bluebox"><s:textfield id="remittanceAmount" name="remittanceAmount" readonly="true" /></td>								
+							<td class="bluebox"><s:text name="bankremittance.accountnumber" /></td>
+							<td class="bluebox"><s:textfield id="remitAccountNumber" name="remitAccountNumber" readonly="true" /></td>		
 						</tr>
 					</table>
 				</div>
@@ -676,17 +498,15 @@
 					<s:text name="common.mandatoryfields" />
 				</div>
 				<div class="buttonbottom">
-					<input name="button32" type="submit" class="buttonsubmit"
-						id="button32" value="Remit to Bank" onclick="return validate();" />
-					&nbsp; <input name="buttonClose" type="button" class="button"
-						id="button" value="Close" onclick="window.close()" />
+					<input name="button32" type="submit" class="buttonsubmit" id="button32" value="Remit to Bank" onclick="return validate();" />
+						&nbsp; 
+					<input name="buttonClose" type="button" class="button" id="button" value="Close" onclick="window.close()" />
 				</div>
 				</s:if>
 				<s:if test="%{isListData}">
-					<s:if test="%{paramList.isEmpty()}">
+					<s:if test="%{receiptBeanList.isEmpty()}">
 						<div class="formmainbox">
-							<table width="90%" border="0" align="center" cellpadding="0"
-								cellspacing="0">
+							<table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
 								<tr>
 									<div>&nbsp;</div>
 									<div class="billhead2">
@@ -697,8 +517,7 @@
 							<br />
 						</div>
 						<div class="buttonbottom">
-							<input name="buttonClose" type="button" class="button"
-								id="buttonClose" value="Close" onclick="window.close()" />
+							<input name="buttonClose" type="button" class="button" id="buttonClose" value="Close" onclick="window.close()" />
 						</div>
 					</s:if>
 				</s:if>

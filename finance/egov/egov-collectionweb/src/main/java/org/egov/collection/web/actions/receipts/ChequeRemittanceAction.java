@@ -57,6 +57,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -65,17 +66,18 @@ import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.egov.collection.bean.ReceiptBean;
 import org.egov.collection.constants.CollectionConstants;
 import org.egov.collection.entity.CollectionBankRemittanceReport;
 import org.egov.collection.entity.ReceiptHeader;
 import org.egov.collection.service.RemittanceServiceImpl;
 import org.egov.collection.utils.CollectionsUtil;
 import org.egov.commons.Bankaccount;
-import org.egov.commons.Bankbranch;
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.dao.BankaccountHibernateDAO;
 import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.BankAccountServiceMapping;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
@@ -95,17 +97,18 @@ public class ChequeRemittanceAction extends BaseFormAction {
     protected static final String PRINT_BANK_CHALLAN = "printBankChallan";
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger(ChequeRemittanceAction.class);
-    private static final String BANK_ACCOUNT_NUMBER_QUERY = "select distinct ba.accountnumber from BANKACCOUNT ba where ba.id =:accountNumberId";
+    private static final String BANK_ACCOUNT_NUMBER_QUERY = "select distinct ba.accountnumber from BANKACCOUNT ba where ba.accountnumber =:accountNumberId";
     private static final String SERVICE_QUERY = new StringBuilder()
             .append("select distinct sd.code as servicecode from ")
             .append("EGCL_BANKACCOUNTSERVICEMAPPING asm,EGCL_SERVICEDETAILS sd where ")
             .append("asm.servicedetails=sd.ID and asm.bankaccount= :accountNumberId").toString();
     private static final String FUND_QUERY = new StringBuilder()
             .append("select fd.code as fundcode from BANKACCOUNT ba,FUND fd")
-            .append(" where fd.ID=ba.FUNDID and ba.id= :accountNumberId").toString();
+            .append(" where fd.ID=ba.FUNDID and ba.accountnumber= :accountNumberId").toString();
     private transient List<HashMap<String, Object>> paramList = null;
     private final ReceiptHeader receiptHeaderIntsance = new ReceiptHeader();
     private List<ReceiptHeader> remittedReceiptHeaderList = new ArrayList<>(0);
+    private List<ReceiptBean> receiptBeanList = new ArrayList<>();
     private String[] serviceNameArray;
     private String[] totalCashAmountArray;
     private String[] totalChequeAmountArray;
@@ -115,7 +118,7 @@ public class ChequeRemittanceAction extends BaseFormAction {
     private String[] fundCodeArray;
     private String[] departmentCodeArray;
     private String[] instrumentIdArray;
-    private Integer accountNumberId;
+    private String accountNumberId;
     private transient CollectionsUtil collectionsUtil;
     private Integer branchId;
     private static final String ACCOUNT_NUMBER_LIST = "accountNumberList";
@@ -162,26 +165,11 @@ public class ChequeRemittanceAction extends BaseFormAction {
     }
 
     private void populateRemittanceList() {
-        final AjaxBankRemittanceAction ajaxBankRemittanceAction = new AjaxBankRemittanceAction();
-        ajaxBankRemittanceAction.setPersistenceService(getPersistenceService());
-        ajaxBankRemittanceAction.setCollectionsUtil(collectionsUtil);
-        ajaxBankRemittanceAction.bankBranchListOfService();
-        addDropdownData("bankBranchList", ajaxBankRemittanceAction.getBankBranchArrayList());
-        if (collectionsUtil.isBankCollectionRemitter(collectionsUtil.getLoggedInUser())) {
-            if (ajaxBankRemittanceAction.getBankBranchArrayList().isEmpty())
-                throw new ValidationException(Arrays.asList(new ValidationError(
-                        "The user is not mapped to any bank branch, please contact system administrator.",
-                        "bankremittance.error.bankcollectionoperator")));
-            else
-                branchId = ((Bankbranch) ajaxBankRemittanceAction.getBankBranchArrayList().get(0)).getId();
+        Map<String, BankAccountServiceMapping> accountNumberMap = new HashMap<>();
+        for (BankAccountServiceMapping basm : microserviceUtils.getBankAcntServiceMappings()) {
+            accountNumberMap.put(basm.getBankAccount(), basm);
         }
-
-        if (branchId != null) {
-            ajaxBankRemittanceAction.setBranchId(branchId);
-            ajaxBankRemittanceAction.accountListOfService();
-            addDropdownData(ACCOUNT_NUMBER_LIST, ajaxBankRemittanceAction.getBankAccountArrayList());
-        } else
-            addDropdownData(ACCOUNT_NUMBER_LIST, Collections.emptyList());
+        addDropdownData("accountNumberList", new ArrayList<>(accountNumberMap.values()));
         addDropdownData("financialYearList", financialYearDAO.getAllActivePostingAndNotClosedFinancialYears());
     }
 
@@ -192,7 +180,7 @@ public class ChequeRemittanceAction extends BaseFormAction {
         remitAccountNumber = "";
         if (accountNumberId != null) {
             final Query bankAccountQry = persistenceService.getSession().createSQLQuery(BANK_ACCOUNT_NUMBER_QUERY);
-            bankAccountQry.setLong("accountNumberId", accountNumberId);
+            bankAccountQry.setString("accountNumberId", accountNumberId);
             final Object bankAccountResult = bankAccountQry.uniqueResult();
             remitAccountNumber = (String) bankAccountResult;
         }
@@ -202,21 +190,23 @@ public class ChequeRemittanceAction extends BaseFormAction {
             addActionError(getText("bankremittance.before.fromdate"));
         if (!hasErrors() && accountNumberId != null) {
 
-            final Query serviceQuery = persistenceService.getSession().createSQLQuery(SERVICE_QUERY);
-            serviceQuery.setLong("accountNumberId", accountNumberId);
-            final List<String> serviceCodeList = serviceQuery.list();
-
+            final List<String> serviceCodeList = new ArrayList<>(0);
+            List<BankAccountServiceMapping> mappings = microserviceUtils
+                    .getBankAcntServiceMappingsByBankAcc(accountNumberId.toString());
+            for (BankAccountServiceMapping basm : mappings) {
+                serviceCodeList.add(basm.getBusinessDetails());
+            }
             final Query fundQuery = persistenceService.getSession().createSQLQuery(FUND_QUERY);
-            fundQuery.setLong("accountNumberId", accountNumberId);
+            fundQuery.setString("accountNumberId", accountNumberId);
             final String fundCode = fundQuery.list().get(0).toString();
 
             final CFinancialYear financialYear = financialYearDAO.getFinancialYearById(finYearId);
-            paramList = remittanceService.findChequeRemittanceDetailsForServiceAndFund(collectionsUtil.getJurisdictionBoundary(),
-                    "'" + StringUtils.join(serviceCodeList, "','") + "'", "'" + fundCode + "'",
+            receiptBeanList = remittanceService.findChequeRemittanceDetailsForServiceAndFund("",
+                    StringUtils.join(serviceCodeList, "','"), fundCode,
                     fromDate == null ? financialYear.getStartingDate() : fromDate,
                     toDate == null ? financialYear.getEndingDate() : toDate);
             if (fromDate != null && toDate != null)
-                pageSize = paramList.size();
+                pageSize = receiptBeanList.size();
             else
                 pageSize = CollectionConstants.DEFAULT_PAGE_SIZE;
         }
@@ -259,7 +249,7 @@ public class ChequeRemittanceAction extends BaseFormAction {
     @Action(value = "/receipts/chequeRemittance-create")
     public String create() {
         final long startTimeMillis = System.currentTimeMillis();
-        if (accountNumberId == null || accountNumberId == -1)
+        if (accountNumberId == null || accountNumberId.isEmpty())
             throw new ValidationException(Arrays.asList(new ValidationError("Please select Account number",
                     "bankremittance.error.noaccountNumberselected")));
         remittedReceiptHeaderList = remittanceService.createChequeBankRemittance(getServiceNameArray(), getTotalCashAmountArray(),
@@ -479,11 +469,11 @@ public class ChequeRemittanceAction extends BaseFormAction {
         this.branchId = branchId;
     }
 
-    public Integer getAccountNumberId() {
+    public String getAccountNumberId() {
         return accountNumberId;
     }
 
-    public void setAccountNumberId(final Integer accountNumberId) {
+    public void setAccountNumberId(final String accountNumberId) {
         this.accountNumberId = accountNumberId;
     }
 
@@ -641,6 +631,14 @@ public class ChequeRemittanceAction extends BaseFormAction {
 
     public void setRemittedReceiptHeaderList(List<ReceiptHeader> remittedReceiptHeaderList) {
         this.remittedReceiptHeaderList = remittedReceiptHeaderList;
+    }
+
+    public List<ReceiptBean> getReceiptBeanList() {
+        return receiptBeanList;
+    }
+
+    public void setReceiptBeanList(List<ReceiptBean> receiptBeanList) {
+        this.receiptBeanList = receiptBeanList;
     }
 
 }
