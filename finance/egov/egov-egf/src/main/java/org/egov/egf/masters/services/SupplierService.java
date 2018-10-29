@@ -121,7 +121,7 @@ public class SupplierService implements EntityTypeService {
 
         Accountdetailkey accountdetailkey = new Accountdetailkey();
         accountdetailkey.setDetailkey(supplier.getId().intValue());
-        accountdetailkey.setDetailname("supplier_id");
+        accountdetailkey.setDetailname(supplier.getName());
         accountdetailkey.setAccountdetailtype(accountdetailtypeService.findByName(supplier.getClass().getSimpleName()));
         accountdetailkey.setGroupid(1);
         accountDetailKeyService.create(accountdetailkey);

@@ -24,11 +24,11 @@ public class AccountDetailKeyController {
 	@PostMapping(value = "/rest/accountdetailkey/_create")
 	public AccountDetailKeyContractResponse create(@RequestBody AccountDetailKeyContractRequest request) {
 		Accountdetailkey accoundDetailKey = new Accountdetailkey();
-		accoundDetailKey.setDetailname("employee_id");
+		accoundDetailKey.setDetailname(request.getAccountDetailKey().getKeyName());
 		Accountdetailtype accountDetailsType = accountDetailtypeservice.findByName("EMPLOYEE");
 		accoundDetailKey.setAccountdetailtype(accountDetailsType);
 		accoundDetailKey.setGroupid(1);
-		accoundDetailKey.setDetailkey(request.getAccountDetailKey().getKey());
+		accoundDetailKey.setDetailkey(Integer.getInteger(request.getAccountDetailKey().getKeyId()));
 		accountDetailKeyservice.create(accoundDetailKey);
 		AccountDetailKeyContractResponse accountDetailresponse = new AccountDetailKeyContractResponse();
 		ResponseInfo response = new ResponseInfo();

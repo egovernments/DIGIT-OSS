@@ -39,38 +39,40 @@
  */
 
 package org.egov.egf.web.controller.microservice.entity;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class AccountDetailKeyContract {
 
-	private Long id;
+    private String keyId;
 
-	private List<Long> ids = new ArrayList<Long>();
+    private List<Long> ids = new ArrayList<Long>();
 
-	private Integer key;
+    private String keyName;
 
-	public Long getId() {
-		return id;
-	}
+    public String getKeyId() {
+        return keyId;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setKeyId(String keyId) {
+        this.keyId = keyId;
+    }
 
-	public List<Long> getIds() {
-		return ids;
-	}
+    public List<Long> getIds() {
+        return ids;
+    }
 
-	public void setIds(List<Long> ids) {
-		this.ids = ids;
-	}
+    public void setIds(List<Long> ids) {
+        this.ids = ids;
+    }
 
-	public Integer getKey() {
-		return key;
-	}
+    public String getKeyName() {
+        return keyName;
+    }
 
-	public void setKey(Integer key) {
-		this.key = key;
-	}
+    public void setKeyName(String keyName) {
+        this.keyName = keyName;
+    }
+
 }

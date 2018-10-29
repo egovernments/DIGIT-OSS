@@ -116,7 +116,7 @@ public class ContractorService implements EntityTypeService {
 
         Accountdetailkey accountdetailkey = new Accountdetailkey();
         accountdetailkey.setDetailkey(contractor.getId().intValue());
-        accountdetailkey.setDetailname("contractor_id");
+        accountdetailkey.setDetailname(contractor.getName());
         accountdetailkey.setAccountdetailtype(accountdetailtypeService.findByName(contractor.getClass().getSimpleName()));
         accountdetailkey.setGroupid(1);
         accountDetailKeyService.create(accountdetailkey);
