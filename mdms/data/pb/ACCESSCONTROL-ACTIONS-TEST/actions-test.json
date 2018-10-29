@@ -12818,6 +12818,18 @@
       "code": "null",
       "navigationURL": "services/collection/receipts/bankRemittance-newform.action",
       "path": "Collections.Cash Remittance"
+   },
+   {
+     "id": 1699,
+     "name": "Property Plain Search",
+     "url": "/pt-services-v2/property/_plainsearch",
+     "displayName": "Create Remittance",
+     "orderNumber": 1,
+     "parentModule": "",
+     "enabled": false,
+     "serviceCode": "Property Tax",
+     "code": "null",
+     "path": ""
    }
   ]
 }
