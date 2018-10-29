@@ -11839,7 +11839,7 @@
       "serviceCode": "FinanceMaster",
       "code": "null",
       "path": "Finance.Masters.Scheme.Modify Scheme",
-      "navigationURL": "services/EGF/masters/scheme-beforeEdit.action"
+      "navigationURL": "services/EGF/masters/scheme-beforeSearch-edit.action"
     },
     {
       "id": 1623,
@@ -11904,7 +11904,7 @@
       "serviceCode": "FinanceMaster",
       "code": "null",
       "path": "Finance.Masters.Scheme.Modify Sub-scheme",
-      "navigationURL": "services/EGF/masters/subScheme-beforeEdit.action"
+      "navigationURL": "services/EGF/masters/subScheme-beforeSearch-edit.action"
     },
     {
       "id": 1628,
