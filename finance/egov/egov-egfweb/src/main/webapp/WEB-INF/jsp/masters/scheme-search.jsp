@@ -163,7 +163,7 @@
 					<td><input type="submit" class="buttonsubmit" value="Search"
 						id="search" name="button" onclick="return validateAndSubmit();" />&nbsp;</td>
 					<td><input type="button" id="Close" value="Close"
-						onclick="javascript:window.close()" class="button" /></td>
+						onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" /></td>
 			</table>
 		</div>
 

@@ -206,7 +206,7 @@ public class DirectBankPaymentAction extends BasePaymentAction {
         voucherHeader.setName(FinancialConstants.PAYMENTVOUCHER_NAME_DIRECTBANK);
         modeOfPaymentMap = new LinkedHashMap<String, String>();
         modeOfPaymentMap.put(MDP_CHEQUE, getText(MDP_CHEQUE));
-        modeOfPaymentMap.put(MDP_CASH, getText(MDP_CASH));
+//        modeOfPaymentMap.put(MDP_CASH, getText(MDP_CASH));
         modeOfPaymentMap.put(MDP_RTGS, getText(MDP_RTGS));
 
         addDropdownData("designationList", Collections.EMPTY_LIST);

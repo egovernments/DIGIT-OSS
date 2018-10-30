@@ -54,7 +54,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">Recovery</div>
+					<div class="panel-title">Deductions</div>
 				</div>
 				<div class="panel-body">
 					<div class="panel-title text-center no-float">

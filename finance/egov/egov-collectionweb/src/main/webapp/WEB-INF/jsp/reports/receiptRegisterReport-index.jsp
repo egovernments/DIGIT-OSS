@@ -157,7 +157,7 @@
 					<td class="bluebox"><s:select headerKey="-1"
 							headerValue="%{getText('collectionReport.dept.all')}"
 							name="deptId" id="dept" cssClass="selectwk"
-							list="dropdownData.departmentList" listKey="id" listValue="name"
+							list="dropdownData.departmentList" listKey="code" listValue="name"
 							value="%{deptId}" /></td>
 					<td class="bluebox"><s:text
 							name="collectionReport.criteria.payment.mode" /></td>

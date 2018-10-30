@@ -293,7 +293,7 @@
 				<s:hidden id="bankaccount" name="bankaccount" value="%{bankaccount}" />
 				<input type="button" class="buttonsubmit" value="Assign Cheque" id="assignChequeBtn"  onclick="validate();" />
 				<input type="button" value="Close"
-					onclick="javascript:window.close()" class="button" />
+					onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" />
 			</div>
 		</div>
 		<s:token />

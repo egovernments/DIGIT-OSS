@@ -135,7 +135,7 @@
 		<input type="submit" class="buttonsubmit" value="Search"
 			id="saveButton" name="button" onclick="return submitForm();" /> <input
 			type="button" id="Close" value="Close"
-			onclick="javascript:window.close()" class="button" />
+			onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" />
 	</div>
 
 	<s:if test="%{subSchemeList.size!=0}">

@@ -366,7 +366,6 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
         // overriding department Mandatory Condition only for cheque assignment search
         mandatoryFields.remove("department");
         mandatoryFields.remove("function");
-
         deptNonMandatory = true;
         functionNonMandatory = true;
         return "search";

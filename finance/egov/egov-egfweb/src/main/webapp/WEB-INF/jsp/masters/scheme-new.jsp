@@ -231,7 +231,7 @@
 					</s:elseif>
 					<s:else>
 						<td><input type="button" id="Close" value="Close"
-							onclick="javascript:window.close()" class="button" />&nbsp;</td>
+							onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" />&nbsp;</td>
 					</s:else>
 
 				</tr>

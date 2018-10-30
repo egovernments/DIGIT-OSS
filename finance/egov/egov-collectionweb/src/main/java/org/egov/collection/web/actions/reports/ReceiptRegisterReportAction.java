@@ -61,6 +61,7 @@ import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.reporting.engine.ReportDataSourceType;
 import org.egov.infra.reporting.engine.ReportFormat;
 import org.egov.infra.web.struts.actions.ReportFormAction;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
@@ -102,6 +103,8 @@ public class ReceiptRegisterReportAction extends ReportFormAction {
     private EntityManager entityManager;
     @Autowired
     private CityService cityService;
+    @Autowired
+    private EgovMasterDataCaching egovMasterDataCaching;
 
     /**
      * @return the payment mode list to be shown to user in criteria screen
@@ -135,6 +138,7 @@ public class ReceiptRegisterReportAction extends ReportFormAction {
         addDropdownData(DROPDOWN_BRANCHUSER_BRANCH, query.getResultList());
         setReportFormat(ReportFormat.PDF);
         setDataSourceType(ReportDataSourceType.SQL);
+        dropdownData.put("departmentList", egovMasterDataCaching.get("egi-department"));
     }
 
     /**
