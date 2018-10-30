@@ -165,5 +165,25 @@
 		</form:select>
 		<form:errors path="status" cssClass="add-margin error-msg" />
 	</div>
+	<label class="col-sm-2 control-label text-right" for="gstRegisteredState"> <spring:message code="supplier.gst.registered.state" /><span class="mandatory"></span> 
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:textarea path="gstRegisteredState" cols="35" cssClass="form-control textfieldsvalidate patternvalidation" id="gstRegisteredState" data-pattern="address" maxlength = "250" required="required"/>
+		<form:errors path="gstRegisteredState" cssClass="add-margin error-msg" />
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-sm-2 control-label text-right" for="epfNumber"> <spring:message code="supplier.epfNo" />
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:input path="epfNumber" id="epfNumber" maxlength="21" cssClass="form-control patternvalidation" data-pattern="numericslashhyphen"/>
+		<form:errors path="epfNumber" cssClass="add-margin error-msg" />
+	</div>
+	<label class="col-sm-2 control-label text-right" for="esiNumber"> <spring:message code="supplier.esiNo" />
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:input path="esiNumber" id="esiNumber" maxlength="24" cssClass="form-control patternvalidation" data-pattern="specialName"/>
+		<form:errors path="esiNumber" cssClass="add-margin error-msg" />
+	</div>
 </div>
 <input type="hidden" name="supplier" value="${supplier.id}" />

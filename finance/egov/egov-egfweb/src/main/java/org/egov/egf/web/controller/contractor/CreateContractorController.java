@@ -82,111 +82,111 @@ import com.google.gson.GsonBuilder;
 @RequestMapping(value = "/contractor")
 public class CreateContractorController {
 
-	private static final String NEW = "contractor-new";
-	private static final String RESULT = "contractor-result";
-	private static final String EDIT = "contractor-edit";
-	private static final String VIEW = "contractor-view";
-	private static final String SEARCH = "contractor-search";
+    private static final String NEW = "contractor-new";
+    private static final String RESULT = "contractor-result";
+    private static final String EDIT = "contractor-edit";
+    private static final String VIEW = "contractor-view";
+    private static final String SEARCH = "contractor-search";
 
-	@Autowired
-	private CreateBankService createBankService;
+    @Autowired
+    private CreateBankService createBankService;
 
-	@Autowired
-	private EgwStatusHibernateDAO egwStatusHibDAO;
+    @Autowired
+    private EgwStatusHibernateDAO egwStatusHibDAO;
 
-	@Autowired
-	private ContractorService contractorService;
+    @Autowired
+    private ContractorService contractorService;
 
-	@Autowired
-	private MessageSource messageSource;
+    @Autowired
+    private MessageSource messageSource;
 
-	private void prepareNewForm(final Model model) {
-		model.addAttribute("banks", createBankService.getByIsActiveTrueOrderByName());
-		model.addAttribute("statuses",
-				egwStatusHibDAO.getStatusByModule(FinancialConstants.STATUS_MODULE_NAME_CONTRACTOR));
-	}
+    private void prepareNewForm(final Model model) {
+        model.addAttribute("banks", createBankService.getByIsActiveTrueOrderByName());
+        model.addAttribute("statuses",
+                egwStatusHibDAO.getStatusByModule(FinancialConstants.STATUS_MODULE_NAME_CONTRACTOR));
+    }
 
-	@RequestMapping(value = "/newform", method = RequestMethod.POST)
-	public String showNewForm(@ModelAttribute("contractor") final Contractor contractor, final Model model) {
-		prepareNewForm(model);
-		model.addAttribute("contractor", new Contractor());
-		return NEW;
-	}
+    @RequestMapping(value = "/newform", method = RequestMethod.POST)
+    public String showNewForm(@ModelAttribute("contractor") final Contractor contractor, final Model model) {
+        prepareNewForm(model);
+        model.addAttribute("contractor", new Contractor());
+        return NEW;
+    }
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@Valid @ModelAttribute final Contractor contractor, final BindingResult errors,
-			final Model model, final RedirectAttributes redirectAttrs) throws IOException {
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public String create(@Valid @ModelAttribute final Contractor contractor, final BindingResult errors,
+            final Model model, final RedirectAttributes redirectAttrs) throws IOException {
 
-		if (errors.hasErrors()) {
-			prepareNewForm(model);
-			return NEW;
-		}
+        if (errors.hasErrors()) {
+            prepareNewForm(model);
+            return NEW;
+        }
 
-		contractorService.create(contractor);
+        contractorService.create(contractor);
 
-		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.contractor.success", null, null));
+        redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.contractor.success", null, null));
 
-		return "redirect:/contractor/result/" + contractor.getId()+"/create";
-	}
+        return "redirect:/contractor/result/" + contractor.getId() + "/create";
+    }
 
-	@RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
-	public String edit(@PathVariable("id") final Long id, final Model model) {
-		final Contractor contractor = contractorService.getById(id);
-		prepareNewForm(model);
-		model.addAttribute("contractor", contractor);
-		return EDIT;
-	}
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+    public String edit(@PathVariable("id") final Long id, final Model model) {
+        final Contractor contractor = contractorService.getById(id);
+        prepareNewForm(model);
+        model.addAttribute("contractor", contractor);
+        return EDIT;
+    }
 
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@Valid @ModelAttribute final Contractor contractor, final BindingResult errors,
-			final Model model, final RedirectAttributes redirectAttrs) {
-		if (errors.hasErrors()) {
-			prepareNewForm(model);
-			return EDIT;
-		}
-		contractorService.update(contractor);
-		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.contractor.success", null, null));
-		return "redirect:/contractor/result/" + contractor.getId()+"/view";
-	}
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String update(@Valid @ModelAttribute final Contractor contractor, final BindingResult errors,
+            final Model model, final RedirectAttributes redirectAttrs) {
+        if (errors.hasErrors()) {
+            prepareNewForm(model);
+            return EDIT;
+        }
+        contractorService.update(contractor);
+        redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.contractor.success", null, null));
+        return "redirect:/contractor/result/" + contractor.getId() + "/view";
+    }
 
-	@RequestMapping(value = "/view/{id}", method = RequestMethod.POST)
-	public String view(@PathVariable("id") final Long id, final Model model) {
-		final Contractor contractor = contractorService.getById(id);
-		prepareNewForm(model);
-		model.addAttribute("contractor", contractor);
-		model.addAttribute("mode", "view");
-		return VIEW;
-	}
+    @RequestMapping(value = "/view/{id}", method = RequestMethod.POST)
+    public String view(@PathVariable("id") final Long id, final Model model) {
+        final Contractor contractor = contractorService.getById(id);
+        prepareNewForm(model);
+        model.addAttribute("contractor", contractor);
+        model.addAttribute("mode", "view");
+        return VIEW;
+    }
 
-	@RequestMapping(value = "/search/{mode}", method = RequestMethod.POST)
-	public String search(@PathVariable("mode") final String mode, final Model model) {
-		final Contractor contractor = new Contractor();
-		prepareNewForm(model);
-		model.addAttribute("contractor", contractor);
-		return SEARCH;
+    @RequestMapping(value = "/search/{mode}", method = RequestMethod.POST)
+    public String search(@PathVariable("mode") final String mode, final Model model) {
+        final Contractor contractor = new Contractor();
+        prepareNewForm(model);
+        model.addAttribute("contractor", contractor);
+        return SEARCH;
 
-	}
+    }
 
-	@RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
-	@ResponseBody
-	public String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
-			@ModelAttribute final Contractor contractor) {
-		final List<Contractor> searchResultList = contractorService.search(contractor);
-		return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
-	}
+    @RequestMapping(value = "/ajaxsearch/{mode}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseBody
+    public String ajaxsearch(@PathVariable("mode") final String mode, final Model model,
+            @ModelAttribute final Contractor contractor) {
+        final List<Contractor> searchResultList = contractorService.search(contractor);
+        return new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}").toString();
+    }
 
-	public Object toSearchResultJson(final Object object) {
-		final GsonBuilder gsonBuilder = new GsonBuilder();
-		final Gson gson = gsonBuilder.registerTypeAdapter(Contractor.class, new ContractorJsonAdaptor()).create();
-		return gson.toJson(object);
-	}
+    public Object toSearchResultJson(final Object object) {
+        final GsonBuilder gsonBuilder = new GsonBuilder();
+        final Gson gson = gsonBuilder.registerTypeAdapter(Contractor.class, new ContractorJsonAdaptor()).create();
+        return gson.toJson(object);
+    }
 
-	@RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
-	public String result(@PathVariable("id") final Long id,@PathVariable("mode") final String mode, final Model model) {
-		final Contractor contractor = contractorService.getById(id);
-		model.addAttribute("contractor", contractor);
-		model.addAttribute("mode", mode);
-		return RESULT;
-	}
+    @RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
+    public String result(@PathVariable("id") final Long id, @PathVariable("mode") final String mode, final Model model) {
+        final Contractor contractor = contractorService.getById(id);
+        model.addAttribute("contractor", contractor);
+        model.addAttribute("mode", mode);
+        return RESULT;
+    }
 
 }

@@ -132,6 +132,20 @@
               <spring:message code="contractor.status" />
             </div>
             <div class="col-sm-3 add-margin view-content">${contractor.status.description}</div>
+            <div class="col-xs-3 add-margin">
+              <spring:message code="contractor.gst.registered.state" />
+            </div>
+            <div class="col-sm-3 add-margin view-content">${contractor.gstRegisteredState}</div>
+          </div>
+          <div class="row add-border">
+            <div class="col-xs-3 add-margin">
+              <spring:message code="contractor.epfNo" />
+            </div>
+            <div class="col-sm-3 add-margin view-content">${contractor.epfNumber}</div>
+            <div class="col-xs-3 add-margin">
+              <spring:message code="contractor.esiNo" />
+            </div>
+            <div class="col-sm-3 add-margin view-content">${contractor.esiNumber}</div>
           </div>
         </div>
       </div>
