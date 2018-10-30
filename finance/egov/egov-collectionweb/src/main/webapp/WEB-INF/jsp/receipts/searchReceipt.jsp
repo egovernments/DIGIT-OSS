@@ -497,7 +497,7 @@ function onChangeServiceClass(obj)
 <s:if test='%{!resultList.isEmpty()}'>
 
 <div align="center">		
-<display:table name="searchResult" uid="currentRow" pagesize = "20" style="width:100%;border-left: 1px solid #DFDFDF;" cellpadding="0" cellspacing="0" export="false" requestURI="">
+<display:table name="searchResult" uid="currentRow"  style="width:100%;border-left: 1px solid #DFDFDF;" cellpadding="0" cellspacing="0" export="false" requestURI="">
 <display:caption media="pdf">&nbsp;</display:caption>
 <display:column headerClass="bluebgheadtd"  class="blueborderfortd" style="width:3%">
 <input name="selectedReceipts" type="checkbox" id="selectedReceipts"
@@ -532,7 +532,7 @@ function onChangeServiceClass(obj)
 </div>
 <br/>
 <div class="buttonbottom">
- <!--  <input name="button32" type="button" class="buttonsubmit" id="button32" value="View" onclick="return checkviewforselectedrecord()"/>-->
+  <input name="button32" type="button" class="buttonsubmit" id="button32" value="View" onclick="return checkviewforselectedrecord()"/>-->
   <input name="button32" type="button" class="buttonsubmit" id="button32" value="Print" onclick="return checkprintforselectedrecord()"/> 
    <%-- <egov-authz:authorize actionName="CancelReceipt">
   <input name="button32" type="button" class="buttonsubmit" id="button32" value="Cancel Receipt" onclick="return checkcancelforselectedrecord()"/>

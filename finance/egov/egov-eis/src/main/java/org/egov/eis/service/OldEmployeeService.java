@@ -95,7 +95,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
-public class EmployeeService implements EntityTypeService {
+public class OldEmployeeService implements EntityTypeService {
 
     private final EmployeeRepository employeeRepository;
 
@@ -142,7 +142,7 @@ public class EmployeeService implements EntityTypeService {
     private DepartmentService departmentService;
 
     @Autowired
-    public EmployeeService(final EmployeeRepository employeeRepository) {
+    public OldEmployeeService(final EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 

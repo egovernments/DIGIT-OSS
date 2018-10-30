@@ -52,7 +52,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.eis.contract.EmployeeDetailsResponse;
 import org.egov.eis.contract.EmployeeRequest;
 import org.egov.eis.contract.EmployeeResponse;
-import org.egov.eis.service.EmployeeService;
+import org.egov.eis.service.OldEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -72,7 +72,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class EmployeePositionController {
 
     @Autowired
-    private EmployeeService employeeService;
+    private OldEmployeeService employeeService;
 
     @RequestMapping(value = "/_search", method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public

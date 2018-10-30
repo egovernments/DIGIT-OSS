@@ -66,7 +66,7 @@ import org.egov.collection.service.RemittanceServiceImpl;
 import org.egov.collection.utils.CollectionsUtil;
 import org.egov.eis.entity.Employee;
 import org.egov.eis.entity.Jurisdiction;
-import org.egov.eis.service.EmployeeService;
+import org.egov.eis.service.OldEmployeeService;
 import org.egov.infra.admin.master.entity.Boundary;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.CityService;
@@ -115,7 +115,7 @@ public class RemittanceStatementReportAction extends ReportFormAction {
     private static final String EGOV_BANKCOLL_BANKBRANCH_ID = "EGOV_BANKCOLL_BANKBRANCH_ID";
     private final Map<String, Object> critParams = new HashMap<String, Object>(0);
     @Autowired
-    private EmployeeService employeeService;
+    private OldEmployeeService employeeService;
     @Autowired
     private ReportService reportService;
     @Autowired

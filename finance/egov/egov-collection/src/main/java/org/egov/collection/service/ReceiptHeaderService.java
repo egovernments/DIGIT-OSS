@@ -89,7 +89,7 @@ import org.egov.eis.entity.Assignment;
 import org.egov.eis.entity.Employee;
 import org.egov.eis.entity.Jurisdiction;
 import org.egov.eis.service.AssignmentService;
-import org.egov.eis.service.EmployeeService;
+import org.egov.eis.service.OldEmployeeService;
 import org.egov.infra.admin.master.entity.Boundary;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.DepartmentService;
@@ -144,7 +144,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
     private FinancialsUtil financialsUtil;
     private PersistenceService persistenceService;
     @Autowired
-    private EmployeeService employeeService;
+    private OldEmployeeService employeeService;
     @Autowired
     private DepartmentService departmentService;
 

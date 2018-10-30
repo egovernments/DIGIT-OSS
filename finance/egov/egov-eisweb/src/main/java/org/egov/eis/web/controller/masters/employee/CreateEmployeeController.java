@@ -55,7 +55,7 @@ import org.egov.commons.service.AccountDetailKeyService;
 import org.egov.eis.entity.Employee;
 import org.egov.eis.entity.enums.EmployeeStatus;
 import org.egov.eis.repository.EmployeeTypeRepository;
-import org.egov.eis.service.EmployeeService;
+import org.egov.eis.service.OldEmployeeService;
 import org.egov.eis.utils.constants.EisConstants;
 import org.egov.infra.admin.master.service.BoundaryTypeService;
 import org.egov.infra.admin.master.service.DepartmentService;
@@ -87,7 +87,7 @@ public class CreateEmployeeController {
     private EmployeeTypeRepository employeeTypeRepository;
 
     @Autowired
-    private EmployeeService employeeService;
+    private OldEmployeeService employeeService;
 
     @Autowired
     private BoundaryTypeService boundaryTypeService;

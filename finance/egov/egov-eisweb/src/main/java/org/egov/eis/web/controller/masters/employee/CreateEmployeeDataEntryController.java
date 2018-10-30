@@ -60,7 +60,7 @@ import org.egov.eis.entity.enums.EmployeeStatus;
 import org.egov.eis.repository.EmployeeTypeRepository;
 import org.egov.eis.service.DeptDesigService;
 import org.egov.eis.service.DesignationService;
-import org.egov.eis.service.EmployeeService;
+import org.egov.eis.service.OldEmployeeService;
 import org.egov.eis.service.PositionMasterService;
 import org.egov.eis.utils.constants.EisConstants;
 import org.egov.infra.admin.master.entity.Department;
@@ -113,7 +113,7 @@ public class CreateEmployeeDataEntryController {
     private EmployeeTypeRepository employeeTypeRepository;
 
     @Autowired
-    private EmployeeService employeeService;
+    private OldEmployeeService employeeService;
 
     @Autowired
     private BoundaryTypeService boundaryTypeService;

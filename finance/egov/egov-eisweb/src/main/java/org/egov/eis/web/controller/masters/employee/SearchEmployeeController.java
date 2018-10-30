@@ -54,7 +54,7 @@ import org.egov.eis.entity.EmployeeSearchDTO;
 import org.egov.eis.entity.enums.EmployeeStatus;
 import org.egov.eis.repository.EmployeeTypeRepository;
 import org.egov.eis.service.DesignationService;
-import org.egov.eis.service.EmployeeService;
+import org.egov.eis.service.OldEmployeeService;
 import org.egov.infra.admin.master.service.DepartmentService;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +88,7 @@ public class SearchEmployeeController {
     private DepartmentService departmentService;
 
     @Autowired
-    private EmployeeService employeeService;
+    private OldEmployeeService employeeService;
 
     @Autowired
     private EmployeeTypeRepository employeeTypeRepository;

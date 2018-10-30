@@ -61,7 +61,7 @@ import org.egov.commons.service.FunctionService;
 import org.egov.egf.model.BudgetAmountView;
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.service.AssignmentService;
-import org.egov.eis.service.EmployeeService;
+import org.egov.eis.service.OldEmployeeService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -120,7 +120,7 @@ public class BudgetProposalDetailAction extends BaseBudgetDetailAction {
     private FunctionService functionService;
 
     @Autowired
-    private EmployeeService employeeService;
+    private OldEmployeeService employeeService;
 
     @Autowired
     private CFinancialYearService financialYearService;

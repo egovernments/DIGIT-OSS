@@ -48,11 +48,22 @@
 package org.egov.commons.repository;
 
 
+import java.util.List;
+
+import javax.persistence.NamedNativeQuery;
+
 import org.egov.commons.Accountdetailkey;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AccountDetailKeyRepository extends JpaRepository<Accountdetailkey, Integer> {
 
+    @Query("from Accountdetailkey where accountdetailtype.id=:detailtypeid and (upper(detailname) like upper(:detailname)) ")
+    public List<Accountdetailkey> findBy20(@Param("detailtypeid") Integer typeid,@Param("detailname") String detailname);  
+    
+    @Query("from Accountdetailkey where accountdetailtype.id=:detailtypeid")
+    public List<Accountdetailkey> findByDetailType(@Param("detailtypeid")Integer typeid);
 }

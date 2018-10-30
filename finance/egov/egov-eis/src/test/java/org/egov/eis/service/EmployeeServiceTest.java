@@ -64,7 +64,7 @@ import static org.junit.Assert.assertTrue;
 public class EmployeeServiceTest extends EISAbstractSpringIntegrationTest {
 
     @Autowired
-    private EmployeeService employeeService;
+    private OldEmployeeService employeeService;
 
     private Employee employee;
 

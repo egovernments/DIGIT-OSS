@@ -91,7 +91,7 @@ import org.egov.eis.entity.Jurisdiction;
 import org.egov.eis.service.AssignmentService;
 import org.egov.eis.service.DesignationService;
 import org.egov.eis.service.EisCommonService;
-import org.egov.eis.service.EmployeeService;
+import org.egov.eis.service.OldEmployeeService;
 import org.egov.eis.service.PositionMasterService;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Boundary;
@@ -206,7 +206,7 @@ public class CollectionsUtil {
     private PersistenceService<BranchUserMap, Long> branchUserMapService;
 
     @Autowired
-    private transient EmployeeService employeeService;
+    private transient OldEmployeeService employeeService;
 
     /**
      * Returns the Status object for given status code for a receipt

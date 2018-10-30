@@ -51,7 +51,7 @@ import org.egov.eis.entity.Employee;
 import org.egov.eis.reports.entity.EmployeeAssignmentSearch;
 import org.egov.eis.service.AssignmentService;
 import org.egov.eis.service.DesignationService;
-import org.egov.eis.service.EmployeeService;
+import org.egov.eis.service.OldEmployeeService;
 import org.egov.eis.web.adaptor.EmployeeAssignmentSearchJson;
 import org.egov.infra.utils.JsonUtils;
 import org.egov.pims.commons.Designation;
@@ -73,7 +73,7 @@ import java.util.List;
 public class AjaxEmployeeAssignmentReportController {
     
     @Autowired
-    private EmployeeService employeeService;
+    private OldEmployeeService employeeService;
     
     @Autowired
     private DesignationService designationService;

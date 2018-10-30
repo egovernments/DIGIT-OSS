@@ -882,16 +882,24 @@ public class MicroserviceUtils {
 
     public List<Instrument> getInstrumentsByReceiptIds(String instrumentType, String instrumentStatus, String receiptIds) {
 
-        final String url = hostUrl + instrumentSearchUrl + "?tenantId=" + getTenentId() + "&instrumentTypes=" + instrumentType
-                + "&receiptIds=" + receiptIds + "&financialStatuses=" + instrumentStatus;
-
+        final StringBuilder instrumentUrl = new StringBuilder(hostUrl + instrumentSearchUrl + "?tenantId=" + getTenentId());
+        
+        if(null!=instrumentType)
+            instrumentUrl.append("&instrumentTypes="+instrumentType);
+        if(null!=instrumentStatus)
+            instrumentUrl.append("&financialStatuses=" + instrumentStatus);
+        
+        if(null!=receiptIds)
+            instrumentUrl.append("&receiptIds=" + receiptIds);
+        
+        
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
         reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:" + url);
-        InstrumentResponse response = restTemplate.postForObject(url, reqWrapper, InstrumentResponse.class);
+        LOGGER.info("call:" + instrumentUrl.toString());
+        InstrumentResponse response = restTemplate.postForObject(instrumentUrl.toString(), reqWrapper, InstrumentResponse.class);
 
         return response.getInstruments();
     }

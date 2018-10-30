@@ -58,7 +58,7 @@ import org.egov.eis.entity.EmployeeGrievance;
 import org.egov.eis.entity.enums.EmployeeGrievanceStatus;
 import org.egov.eis.service.EmployeeGrievanceService;
 import org.egov.eis.service.EmployeeGrievanceTypeService;
-import org.egov.eis.service.EmployeeService;
+import org.egov.eis.service.OldEmployeeService;
 import org.egov.eis.web.adaptor.EmployeeGrievanceJsonAdaptor;
 import org.egov.infra.filestore.entity.FileStoreMapper;
 import org.egov.infra.filestore.service.FileStoreService;
@@ -105,7 +105,7 @@ public class EmployeeGrievanceController {
     @Autowired
     private EmployeeGrievanceTypeService employeeGrievanceTypeService;
     @Autowired
-    private EmployeeService employeeService;
+    private OldEmployeeService employeeService;
     @Autowired
     private SecurityUtils securityUtils;
     @Qualifier("fileStoreService")

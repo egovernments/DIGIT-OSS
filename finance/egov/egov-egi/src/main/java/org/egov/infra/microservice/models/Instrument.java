@@ -90,6 +90,8 @@ public class Instrument {
     private BigDecimal reconciledAmount;
 
     private Date reconciledOn;
+    
+    private String instrumentStatus;
 
     private List<InstrumentVoucher> instrumentVouchers = new ArrayList<>();
 
@@ -267,6 +269,14 @@ public class Instrument {
 
     public void setReconciledOn(Date reconciledOn) {
         this.reconciledOn = reconciledOn;
+    }
+
+    public String getInstrumentStatus() {
+        return instrumentStatus;
+    }
+
+    public void setInstrumentStatus(String instrumentStatus) {
+        this.instrumentStatus = instrumentStatus;
     }
 
 }

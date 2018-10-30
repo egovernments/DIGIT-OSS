@@ -47,6 +47,8 @@
  */
 package org.egov.commons.service;
 
+import java.util.List;
+
 import org.egov.commons.Accountdetailkey;
 import org.egov.commons.repository.AccountDetailKeyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,5 +74,17 @@ public class AccountDetailKeyService {
 	public Accountdetailkey create(Accountdetailkey ac) {
 		return	accountDetailKeyRepository.save(ac);
 
+	}
+	
+	public List<Accountdetailkey> findByDetailTypeId(Integer typeId){
+	    
+	   return accountDetailKeyRepository.findByDetailType(typeId);
+	    
+	}
+	
+	public List<Accountdetailkey> findByDetailName(Integer typeId,String name){
+	    String detailname = "%"+name+"%";
+	    
+	    return accountDetailKeyRepository.findBy20(typeId, detailname);
 	}
 }
