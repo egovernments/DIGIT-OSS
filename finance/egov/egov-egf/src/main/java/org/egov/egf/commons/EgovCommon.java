@@ -65,6 +65,7 @@ import org.egov.commons.dao.FinancialYearHibernateDAO;
 import org.egov.commons.dao.FundHibernateDAO;
 import org.egov.commons.service.EntityTypeService;
 import org.egov.commons.utils.EntityType;
+import org.egov.eis.entity.Employee;
 import org.egov.eis.service.EisCommonService;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Boundary;
@@ -788,6 +789,19 @@ public class EgovCommon {
         try {
             final Class aClass = Class.forName(accountdetailtype
                     .getFullQualifiedName());
+            if(aClass.equals(Employee.class)){
+                Accountdetailkey accdetailKey = (Accountdetailkey) persistenceService.find("from Accountdetailkey where detailkey=?",(Integer)detailkey);
+                if(null==accdetailKey || accdetailKey.getDetailname()==null){
+                    throw new Exception("Employee not found for "+ detailkey);
+                }
+                String[] detailNames = accdetailKey.getDetailname().split("-");
+                Employee employee = new Employee();
+                employee.setId(accdetailKey.getDetailkey().longValue());
+                employee.setCode(detailNames[0]);
+                employee.setName(detailNames[1]);
+                
+                entity = (EntityType) employee;
+            }else{
             final java.lang.reflect.Method method = aClass.getMethod("getId");
             final String dataType = method.getReturnType().getSimpleName();
             if (LOGGER.isDebugEnabled())
@@ -796,6 +810,7 @@ public class EgovCommon {
                 entity = (EntityType) persistenceService.getSession().load(aClass, Long.valueOf(detailkey.toString()));
             else
                 entity = (EntityType) persistenceService.getSession().load(aClass, detailkey);
+            }
 
         } catch (final ClassCastException e) {
             LOGGER.error(e);

@@ -54,7 +54,7 @@
 <link rel="stylesheet"
 	href="/services/EGF/resources/css/tabber.css?rnd=${app_release_no}"
 	TYPE="text/css">
-	<script type="text/javascript"
+<script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/javascript/voucherHelper.js?rnd=${app_release_no}"></script>
 <script type="text/javascript"
 	src="/services/EGF/resources/javascript/tabber.js?rnd=${app_release_no}"></script>
@@ -376,24 +376,16 @@
 																		<table id="billdetailsTable" align="center" border="0"
 																			cellpadding="0" cellspacing="0" width="100%">
 																			<tr>
-																				<th class="bluebgheadtdnew">Bill Number
-																				</th>
-																				<th class="bluebgheadtdnew">Bill Date
-																				</th>
+																				<th class="bluebgheadtdnew">Bill Number</th>
+																				<th class="bluebgheadtdnew">Bill Date</th>
 																				<th class="bluebgheadtdnew">Bill Voucher Number
 																				</th>
-																				<th class="bluebgheadtdnew">Bill Voucher Date
-																				</th>
-																				<th class="bluebgheadtdnew">Payee Name
-																				</th>
-																				<th class="bluebgheadtdnew">Net Amount
-																				</th>
-																				<th class="bluebgheadtdnew">Earlier Payment
-																				</th>
-																				<th class="bluebgheadtdnew">Payable Amount
-																				</th>
-																				<th class="bluebgheadtdnew">Payment Amount
-																				</th>
+																				<th class="bluebgheadtdnew">Bill Voucher Date</th>
+																				<th class="bluebgheadtdnew">Payee Name</th>
+																				<th class="bluebgheadtdnew">Net Amount</th>
+																				<th class="bluebgheadtdnew">Earlier Payment</th>
+																				<th class="bluebgheadtdnew">Payable Amount</th>
+																				<th class="bluebgheadtdnew">Payment Amount</th>
 																			</tr>
 																			<s:if test="%{billList.size>0}">
 																				<s:iterator var="p" value="billList" status="s">
@@ -413,18 +405,20 @@
 																						<td style="text-align: center"
 																							class="blueborderfortdnew"><s:hidden
 																								name="billList[%{#s.index}].billVoucherId"
-																								id="billVoucherId%{#s.index}" value="%{billVoucherId}" />
-																							<s:hidden name="billList[%{#s.index}].billVoucherNumber"
+																								id="billVoucherId%{#s.index}"
+																								value="%{billVoucherId}" /> <s:hidden
+																								name="billList[%{#s.index}].billVoucherNumber"
 																								id="billNumber" value="%{billVoucherNumber}" />
-																								<a href="#" onclick="openVoucher('<s:property value='%{billVoucherId}'/>');">
-																								 	<s:property value="%{billVoucherNumber}" />
-																								 </a>
-																						</td>
+																							<a href="#"
+																							onclick="openVoucher('<s:property value='%{billVoucherId}'/>');">
+																								<s:property value="%{billVoucherNumber}" />
+																						</a></td>
 																						<td style="text-align: center"
 																							class="blueborderfortdnew"><s:hidden
 																								name="billList[%{#s.index}].billVoucherDate"
-																								id="billVoucherDate%{#s.index}" value="%{billVoucherDate}" />
-																							<s:date name="%{billVoucherDate}" format="dd/MM/yyyy" /></td>
+																								id="billVoucherDate%{#s.index}"
+																								value="%{billVoucherDate}" /> <s:date
+																								name="%{billVoucherDate}" format="dd/MM/yyyy" /></td>
 																						<td style="text-align: center"
 																							class="blueborderfortdnew"><s:hidden
 																								name="billList[%{#s.index}].expType"
@@ -454,7 +448,7 @@
 																							<s:text name="payment.format.number">
 																								<s:param value="%{payableAmt}" />
 																							</s:text></td>
-																						<s:if
+																						<%-- <s:if
 																							test="%{expType == finConstExpendTypeContingency}">
 
 																							<td class="blueborderfortdnew"><div
@@ -467,19 +461,19 @@
 																									<!-- <s:textfield name="billList[%{#s.index}].paymentAmt" id="paymentAmt%{#s.index}" value="%{getText('payment.format.number',{'paymentAmt'})}" style="text-align:right" readonly="true"/> -->
 																								</div></td>
 																						</s:if>
-																						<s:else>
-																							<td class="blueborderfortdnew"><div
-																									align="center">
-																									<input type="text"
-																										name='billList[<s:property value="%{#s.index}"/>].paymentAmt'
-																										value='<s:text name="payment.format.number" ><s:param value="%{paymentAmt}"/></s:text>'
-																										id='paymentAmt<s:property value="%{#s.index}"/>'
-																										style="text-align: right"
-																										onchange="calcGrandTotal(this)"
-																										onfocus="updateHidden(this)" />
-																									<!-- <s:textfield name="billList[%{#s.index}].paymentAmt" id="paymentAmt%{#s.index}" value="%{paymentAmt}" style="text-align:right" onchange="calcGrandTotal(this)" onfocus="updateHidden(this)"/> -->
-																								</div></td>
-																						</s:else>
+																						<s:else> --%>
+																						<td class="blueborderfortdnew"><div
+																								align="center">
+																								<input type="text"
+																									name='billList[<s:property value="%{#s.index}"/>].paymentAmt'
+																									value='<s:text name="payment.format.number" ><s:param value="%{paymentAmt}"/></s:text>'
+																									id='paymentAmt<s:property value="%{#s.index}"/>'
+																									style="text-align: right"
+																									onchange="calcGrandTotal(this)"
+																									onfocus="updateHidden(this)" />
+																								<!-- <s:textfield name="billList[%{#s.index}].paymentAmt" id="paymentAmt%{#s.index}" value="%{paymentAmt}" style="text-align:right" onchange="calcGrandTotal(this)" onfocus="updateHidden(this)"/> -->
+																							</div></td>
+																						<%-- </s:else> --%>
 																						<c:set var="totalAmt"
 																							value="${totalAmt+paymentAmt}" />
 																					</tr>
@@ -525,8 +519,9 @@
 					</tr>
 				</table>
 				<s:hidden name="cutOffDate" id="cutOffDate" />
-				<s:hidden name="bankBalanceCheck" id="bankBalanceCheck" value="%{bankBalanceCheck}" />
-			 
+				<s:hidden name="bankBalanceCheck" id="bankBalanceCheck"
+					value="%{bankBalanceCheck}" />
+
 				<%@ include file='../payment/commonWorkflowMatrix.jsp'%>
 				<%@ include file='../workflow/commonWorkflowMatrix-button.jsp'%>
 			</div>

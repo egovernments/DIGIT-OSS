@@ -220,14 +220,14 @@
 						<td><input type="reset" class="button" value="Reset"
 							 name="button" onclick="return resetForm();" />&nbsp;</td>
 						<td><input type="button" id="Close" value="Close"
-							onclick="javascript:window.close()" class="button" />&nbsp;</td>
+							onclick="javascript:window.parent.postMessage('close','*');window.close()" class="button" />&nbsp;</td>
 					</s:if>
 					<s:elseif test="%{mode=='edit'}">
 						<td><input type="submit" class="buttonsubmit" value="Modify"
 							id="Modify" name="button"
 							onclick="return validateFormAndSubmit();" />&nbsp;</td>
 						<td><input type="button" id="Close" value="Close"
-							onclick="javascript:window.close()" class="button" />&nbsp;</td>
+							onclick="javascript:window.parent.postMessage('close','*');window.close();" class="button" />&nbsp;</td>
 					</s:elseif>
 					<s:else>
 						<td><input type="button" id="Close" value="Close"
