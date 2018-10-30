@@ -11846,12 +11846,12 @@
       "name": "Recovery-Create",
       "url": "url",
       "parentModule": "",
-      "displayName": "Create Recovery",
+      "displayName": "Create Deductions",
       "orderNumber": 1,
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
-      "path": "Finance.Masters.Recovery.Create Recovery",
+      "path": "Finance.Masters.Deductions.Create Deductions",
       "navigationURL": "services/EGF/recovery/new"
     },
     {
@@ -11859,12 +11859,12 @@
       "name": "View Recoveries-Search",
       "url": "url",
       "parentModule": "",
-      "displayName": "View Recovery",
+      "displayName": "View Deductions",
       "orderNumber": 2,
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
-      "path": "Finance.Masters.Recovery.View Recovery",
+      "path": "Finance.Masters.Deductions.View Deductions",
       "navigationURL": "services/EGF/recovery/search/view"
     },
     {
@@ -11872,12 +11872,12 @@
       "name": "Modify Recoveries-Search",
       "url": "url",
       "parentModule": "",
-      "displayName": "Modify Recovery",
+      "displayName": "Modify Deductions",
       "orderNumber": 3,
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
-      "path": "Finance.Masters.Recovery.Modify Recovery",
+      "path": "Finance.Masters.Deductions.Modify Deductions",
       "navigationURL": "services/EGF/recovery/search/edit"
     },
     {
