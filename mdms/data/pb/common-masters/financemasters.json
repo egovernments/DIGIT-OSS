@@ -1,0 +1,12 @@
+{
+  "tenantId": "pb",
+  "moduleName": "common-masters",
+ 
+ "mapping": [
+   {
+       "departments": "DEPT_1,DEPT_2",
+       "designation": "DESIG_01,DESIG_02" 
+   }
+   ]
+}
+
