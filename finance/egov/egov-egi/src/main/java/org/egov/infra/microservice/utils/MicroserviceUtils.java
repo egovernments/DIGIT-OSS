@@ -62,6 +62,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
@@ -106,6 +107,11 @@ import org.egov.infra.microservice.models.InstrumentAccountCode;
 import org.egov.infra.microservice.models.InstrumentAccountCodeResponse;
 import org.egov.infra.microservice.models.InstrumentRequest;
 import org.egov.infra.microservice.models.InstrumentResponse;
+import org.egov.infra.microservice.models.MasterDetail;
+import org.egov.infra.microservice.models.MdmsCriteria;
+import org.egov.infra.microservice.models.MdmsCriteriaReq;
+import org.egov.infra.microservice.models.MdmsResponse;
+import org.egov.infra.microservice.models.ModuleDetail;
 import org.egov.infra.microservice.models.Receipt;
 import org.egov.infra.microservice.models.ReceiptRequest;
 import org.egov.infra.microservice.models.ReceiptResponse;
@@ -125,6 +131,9 @@ import org.egov.infra.utils.DateUtils;
 import org.egov.infra.web.support.ui.Inbox;
 import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.jfree.util.Log;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -137,6 +146,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.core.JsonParser;
 
 @Service
 public class MicroserviceUtils {
@@ -249,7 +260,10 @@ public class MicroserviceUtils {
 
     @Value("${egov.services.collection.service.receipt.update}")
     private String receiptUpdateUrl;
-
+    
+    @Value("${egov.services.master.mdms.search.url}")
+    private String mdmsSearchUrl;
+    
     public RequestInfo createRequestInfo() {
         final RequestInfo requestInfo = new RequestInfo();
         requestInfo.setApiId("apiId");
@@ -313,14 +327,58 @@ public class MicroserviceUtils {
         }
     }
 
+    private Object getFinanceDeptCodes() {
+
+        HashMap mdmsObj = this.getFinanceMdmsObj();
+        if (mdmsObj != null)
+            return mdmsObj.get("departments");
+        return null;
+    }
+
+    private Object getFinanceDesginCodes() {
+
+        HashMap mdmsObj = this.getFinanceMdmsObj();
+        if (mdmsObj != null)
+            return mdmsObj.get("designation");
+        return null;
+    }
+    
+    private HashMap getFinanceMdmsObj() {
+
+        String mdmsUrl = this.hostUrl + this.mdmsSearchUrl;
+
+        RequestInfo requestInfo = new RequestInfo();
+        requestInfo.setAuthToken(getUserToken());
+        MasterDetail masterDetail = new MasterDetail();
+        masterDetail.setName("mapping");
+        ModuleDetail moduleDetail = new ModuleDetail();
+        moduleDetail.setMasterDetails(Arrays.asList(masterDetail));
+        moduleDetail.setModuleName("common-masters");
+        MdmsCriteria mdmscriteria = new MdmsCriteria();
+        mdmscriteria.setTenantId(getTenentId().split(Pattern.quote("."))[0]);
+        mdmscriteria.setModuleDetails(Arrays.asList(moduleDetail));
+        MdmsCriteriaReq mdmsrequest = new MdmsCriteriaReq();
+        mdmsrequest.setRequestInfo(requestInfo);
+        mdmsrequest.setMdmsCriteria(mdmscriteria);
+        MdmsResponse response = restTemplate.postForObject(mdmsUrl, mdmsrequest, MdmsResponse.class);
+
+        Map<String, JSONArray> mdmsmap = response.getMdmsRes().get("common-masters");
+        if (null != mdmsmap && mdmsmap.size() > 0) {
+            HashMap mdmObj =  (HashMap)mdmsmap.get("mapping").get(0);
+            return mdmObj;
+        }
+
+        return null;
+
+    }
+    
     public List<Department> getDepartments() {
 
         // final RestTemplate restTemplate = createRestTemplate();
-
-        final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId();
-
-        // final String dept_url = deptServiceUrl+"?tenantId="+"default";
-
+        final String deptCodes = (String)this.getFinanceDeptCodes();
+        final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId()
+        +(deptCodes!=null?"&codes="+deptCodes:"");
+               
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
@@ -395,11 +453,18 @@ public class MicroserviceUtils {
     public List<Designation> getDesignation(String code) {
 
         final RestTemplate restTemplate = createRestTemplate();
+        
         String design_url = designServiceUrl + "?tenantId=" + getTenentId();
+        
         // String design_url = designServiceUrl+"?tenantId="+"default";
 
         if (code != null)
             design_url = design_url + "&code=" + code;
+        else
+        {
+            String desgCodes = (String)this.getFinanceDesginCodes(); 
+            design_url = design_url + "&codes=" + desgCodes;
+        }
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
