@@ -99,13 +99,13 @@
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.panNo" />
-            </div>
-            <div class="col-sm-3 add-margin view-content">${supplier.panNumber}</div>
-            <div class="col-xs-3 add-margin">
               <spring:message code="supplier.tinNo" />
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.tinNumber}</div>
+            <div class="col-xs-3 add-margin">
+              <spring:message code="supplier.gst.registered.state" />
+            </div>
+            <div class="col-sm-3 add-margin view-content">${supplier.gstRegisteredState}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
@@ -132,10 +132,10 @@
               <spring:message code="supplier.status" />
             </div>
             <div class="col-sm-3 add-margin view-content">${supplier.status.description}</div>
-             <div class="col-xs-3 add-margin">
-              <spring:message code="supplier.gst.registered.state" />
+            <div class="col-xs-3 add-margin">
+              <spring:message code="supplier.panNo" />
             </div>
-            <div class="col-sm-3 add-margin view-content">${supplier.gstRegisteredState}</div>
+            <div class="col-sm-3 add-margin view-content">${supplier.panNumber}</div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">

@@ -143,12 +143,12 @@ public class Supplier extends AbstractAuditable implements EntityType {
     @JoinColumn(name = "status")
     private EgwStatus status;
 
-    @Length(max = 21, message = "Maximum of 17 Characters allowed for EPF No")
-    @OptionalPattern(regex = FinancialConstants.numericwithoutspecialchar, message = "Special Characters are not allowed in EPF No")
+    @Length(max = 24, message = "Maximum of 20 Characters allowed for EPF No")
+    @OptionalPattern(regex = FinancialConstants.alphaNumericwithoutspecialchar, message = "Special Characters are not allowed in EPF No")
     private String epfNumber;
 
-    @Length(max = 24, message = "Maximum of 20 Characters allowed for ESI No")
-    @OptionalPattern(regex = FinancialConstants.alphaNumericwithoutspecialchar, message = "Special Characters are not allowed in ESI No")
+    @Length(max = 21, message = "Maximum of 17 Characters allowed for ESI No")
+    @OptionalPattern(regex = FinancialConstants.numericwithoutspecialchar, message = "Special Characters are not allowed in ESI No")
     private String esiNumber;
 
     @NotNull
