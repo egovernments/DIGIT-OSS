@@ -4,7 +4,7 @@
  
  "mapping": [
    {
-       "departments": "DEPT_1,DEPT_2",
+       "departments": "DEPT_3,DEPT_9,DEPT_13,DEPT_25,DEPT_35,DEPT_24",
        "designation": "DESIG_01,DESIG_02" 
    }
    ]
