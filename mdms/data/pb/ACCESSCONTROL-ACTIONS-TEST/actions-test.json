@@ -12734,18 +12734,18 @@
       "path": "Collections.Miscellaneous Receipts"
     },
     {
-     "id": 1692,
-     "name": "Fetch Bill",
-     "url": "/billing-service/bill/_fetchBill",
-     "displayName": "Fetch Bill",
-     "orderNumber": 1,
-     "parentModule": "",
-     "enabled": false,
-     "serviceCode": "Billing-service",
-     "code": "null",
-     "path": ""
-   },
-  {
+      "id": 1692,
+      "name": "Fetch Bill",
+      "url": "/billing-service/bill/_fetchBill",
+      "displayName": "Fetch Bill",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "Billing-service",
+      "code": "null",
+      "path": ""
+    },
+    {
       "id": 1693,
       "name": "Receipts Search",
       "url": "url",
@@ -12758,55 +12758,55 @@
       "navigationURL": "services/collection/receipts/searchReceipt.action",
       "path": "Collections.Search Receipts"
     },
-   {
-     "id": 1694,
-     "name": "Cancel Voucher",
-     "url": "/services/EGF/rest/voucher/_cancel",
-     "displayName": "Cancel Voucher",
-     "orderNumber": 1,
-     "parentModule": "",
-     "enabled": false,
-     "serviceCode": "VOUCHER",
-     "code": "null",
-     "path": ""
-   },
-   {
-     "id": 1695,
-     "name": "Search Voucher",
-     "url": "/services/EGF/rest/voucher/_search",
-     "displayName": "Search Voucher",
-     "orderNumber": 1,
-     "parentModule": "",
-     "enabled": false,
-     "serviceCode": "VOUCHER",
-     "code": "null",
-     "path": ""
-   },
-  {
-     "id": 1696,
-     "name": "Create Remittance",
-     "url": "/collection-services/remittances/_create",
-     "displayName": "Create Remittance",
-     "orderNumber": 1,
-     "parentModule": "",
-     "enabled": false,
-     "serviceCode": "COLLECTION",
-     "code": "null",
-     "path": ""
-   },
-   {
-     "id": 1697,
-     "name": "Search Remittance",
-     "url": "/collection-services/remittances/_search",
-     "displayName": "Search Remittance",
-     "orderNumber": 1,
-     "parentModule": "",
-     "enabled": false,
-     "serviceCode": "COLLECTION",
-     "code": "null",
-     "path": ""
-   },
-   {
+    {
+      "id": 1694,
+      "name": "Cancel Voucher",
+      "url": "/services/EGF/rest/voucher/_cancel",
+      "displayName": "Cancel Voucher",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "VOUCHER",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1695,
+      "name": "Search Voucher",
+      "url": "/services/EGF/rest/voucher/_search",
+      "displayName": "Search Voucher",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "VOUCHER",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1696,
+      "name": "Create Remittance",
+      "url": "/collection-services/remittances/_create",
+      "displayName": "Create Remittance",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "COLLECTION",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1697,
+      "name": "Search Remittance",
+      "url": "/collection-services/remittances/_search",
+      "displayName": "Search Remittance",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "COLLECTION",
+      "code": "null",
+      "path": ""
+    },
+    {
       "id": 1698,
       "name": "Cash Remittance",
       "url": "url",
@@ -12818,20 +12818,20 @@
       "code": "null",
       "navigationURL": "services/collection/receipts/bankRemittance-newform.action",
       "path": "Collections.Cash Remittance"
-   },
-   {
-     "id": 1699,
-     "name": "Property Plain Search",
-     "url": "/pt-services-v2/property/_plainsearch",
-     "displayName": "Create Remittance",
-     "orderNumber": 1,
-     "parentModule": "",
-     "enabled": false,
-     "serviceCode": "Property Tax",
-     "code": "null",
-     "path": ""
-   },
-   {
+    },
+    {
+      "id": 1699,
+      "name": "Property Plain Search",
+      "url": "/pt-services-v2/property/_plainsearch",
+      "displayName": "Create Remittance",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "Property Tax",
+      "code": "null",
+      "path": ""
+    },
+    {
       "id": 1700,
       "name": "updateUsernovalidate",
       "url": "/user/users/_updatenovalidate",
@@ -12839,6 +12839,30 @@
       "orderNumber": 1,
       "enabled": false,
       "serviceCode": "ADMIN",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1701,
+      "name": "EmployeeStatusSearch",
+      "url": "/hr-masters-v2/hrstatuses/_search",
+      "displayName": "DesignationSearch",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "hr-masters",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1702,
+      "name": "EmployeeTypeSearch",
+      "url": "/hr-masters-v2/employeetypes/_search",
+      "displayName": "DesignationSearch",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "hr-masters",
       "code": "null",
       "path": ""
     }

@@ -16574,7 +16574,7 @@
       "actioncode": "",
       "tenantId": "pb"
     },
-   {
+    {
       "rolecode": "EMPLOYEE_FINANCE",
       "actionid": 1676,
       "actioncode": "",
@@ -16586,7 +16586,7 @@
       "actioncode": "",
       "tenantId": "pb"
     },
-     {
+    {
       "rolecode": "EMPLOYEE_FINANCE",
       "actionid": 570,
       "actioncode": "",
@@ -16610,7 +16610,7 @@
       "actioncode": "",
       "tenantId": "pb"
     },
-     {
+    {
       "rolecode": "SYS_INTEGRATOR_FINANCE",
       "actionid": 1695,
       "actioncode": "",
@@ -16628,13 +16628,13 @@
       "actioncode": "",
       "tenantId": "pb"
     },
-   {
+    {
       "rolecode": "SUPERUSER",
       "actionid": 1694,
       "actioncode": "",
       "tenantId": "pb"
     },
-     {
+    {
       "rolecode": "SUPERUSER",
       "actionid": 1695,
       "actioncode": "",
@@ -16652,13 +16652,13 @@
       "actioncode": "",
       "tenantId": "pb"
     },
-   {
+    {
       "rolecode": "SYS_INTEGRATOR_WATER_SEW",
       "actionid": 1694,
       "actioncode": "",
       "tenantId": "pb"
     },
-     {
+    {
       "rolecode": "SYS_INTEGRATOR_WATER_SEW",
       "actionid": 1695,
       "actioncode": "",
@@ -16712,27 +16712,51 @@
       "actioncode": "",
       "tenantId": "pb"
     },
-   {
+    {
       "rolecode": "SUPERUSER",
       "actionid": 1700,
       "actioncode": "",
       "tenantId": "pb"
     },
-   {
+    {
       "rolecode": "EGF_ADMINISTRATOR",
       "actionid": 1629,
       "actioncode": "",
       "tenantId": "pb"
     },
-   {
+    {
       "rolecode": "EGF_ADMINISTRATOR",
       "actionid": 1611,
       "actioncode": "",
       "tenantId": "pb"
     },
-   {
+    {
       "rolecode": "EGF_ADMINISTRATOR",
       "actionid": 1674,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1701,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1701,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1702,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPEUSER",
+      "actionid": 1702,
       "actioncode": "",
       "tenantId": "pb"
     }
