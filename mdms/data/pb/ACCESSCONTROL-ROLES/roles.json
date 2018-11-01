@@ -321,6 +321,11 @@
       "rolecode": "EMPLOYEE_FINANCE",
       "name": "Employee Finance",
       "description": "All Employees who use Finance application"
+    },
+    {
+      "rolecode": "EGF_ADMINISTRATOR",
+      "name": "Finance Adminsitrator",
+      "description": "All Employees who are Finance application administrator"
     }
   ]
 }
