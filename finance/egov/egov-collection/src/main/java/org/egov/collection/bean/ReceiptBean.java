@@ -53,6 +53,7 @@ import java.math.BigDecimal;
 public class ReceiptBean {
 
     private Boolean selected;
+    private String receiptId;
     private String receiptDate;
     private String receiptNumber;
     private BigDecimal instrumentAmount;
@@ -68,6 +69,7 @@ public class ReceiptBean {
     private String serviceName;
     private String bankBranch;
     private String bank;
+    private String remittanceReferenceNumber;
 
     public Boolean getSelected() {
         return selected;
@@ -75,6 +77,14 @@ public class ReceiptBean {
 
     public void setSelected(Boolean selected) {
         this.selected = selected;
+    }
+
+    public String getReceiptId() {
+        return receiptId;
+    }
+
+    public void setReceiptId(String receiptId) {
+        this.receiptId = receiptId;
     }
 
     public String getReceiptDate() {
@@ -195,6 +205,14 @@ public class ReceiptBean {
 
     public void setBank(String bank) {
         this.bank = bank;
+    }
+
+    public String getRemittanceReferenceNumber() {
+        return remittanceReferenceNumber;
+    }
+
+    public void setRemittanceReferenceNumber(String remittanceReferenceNumber) {
+        this.remittanceReferenceNumber = remittanceReferenceNumber;
     }
 
 }

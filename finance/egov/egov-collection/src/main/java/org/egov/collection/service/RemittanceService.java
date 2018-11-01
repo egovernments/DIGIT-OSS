@@ -51,7 +51,6 @@ package org.egov.collection.service;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -60,6 +59,7 @@ import org.egov.collection.constants.CollectionConstants;
 import org.egov.collection.entity.CollectionBankRemittanceReport;
 import org.egov.collection.entity.ReceiptHeader;
 import org.egov.infra.microservice.models.Receipt;
+import org.egov.infra.utils.DateUtils;
 import org.egov.model.instrument.InstrumentHeader;
 
 public abstract class RemittanceService implements Serializable {
@@ -99,27 +99,21 @@ public abstract class RemittanceService implements Serializable {
         return reportList;
     }
 
-    public List<CollectionBankRemittanceReport> prepareChequeRemittanceReport(final List<ReceiptHeader> receiptHeaders,
-            List<String> instrumentIdList) {
+    public List<CollectionBankRemittanceReport> prepareChequeRemittanceReport(final List<ReceiptBean> receiptHeaders) {
         final List<CollectionBankRemittanceReport> reportList = new ArrayList<CollectionBankRemittanceReport>(0);
-        for (final ReceiptHeader receiptHead : receiptHeaders) {
-            @SuppressWarnings("rawtypes")
-            final Iterator itr = receiptHead.getReceiptInstrument().iterator();
-            while (itr.hasNext()) {
-                final CollectionBankRemittanceReport collBankRemitReport = new CollectionBankRemittanceReport();
-                final InstrumentHeader instHead = (InstrumentHeader) itr.next();
-                if (instrumentIdList.contains(instHead.getId().toString())) {
-                    collBankRemitReport.setChequeNo(instHead.getInstrumentNumber());
-                    collBankRemitReport.setBranchName(instHead.getBankBranchName());
-                    collBankRemitReport.setBankName(instHead.getBankId() != null ? instHead.getBankId().getName() : "");
-                    collBankRemitReport.setChequeDate(instHead.getInstrumentDate());
-                    collBankRemitReport.setPaymentMode(instHead.getInstrumentType().getType());
-                    collBankRemitReport.setAmount(instHead.getInstrumentAmount().doubleValue());
-                    collBankRemitReport.setReceiptNumber(receiptHead.getReceiptnumber());
-                    collBankRemitReport.setReceiptDate(receiptHead.getReceiptDate());
-                    collBankRemitReport.setVoucherNumber(receiptHead.getRemittanceReferenceNumber());
-                    reportList.add(collBankRemitReport);
-                }
+        for (final ReceiptBean receiptHead : receiptHeaders) {
+            final CollectionBankRemittanceReport collBankRemitReport = new CollectionBankRemittanceReport();
+            if (receiptHead.getSelected() != null && receiptHead.getSelected()) {
+                collBankRemitReport.setChequeNo(receiptHead.getInstrumentNumber());
+                collBankRemitReport.setBranchName(receiptHead.getBankBranch());
+                collBankRemitReport.setBankName(receiptHead.getBank());
+                collBankRemitReport.setChequeDate(DateUtils.toDateUsingDefaultPattern(receiptHead.getInstrumentDate().split(" ")[0]));
+                collBankRemitReport.setPaymentMode(receiptHead.getInstrumentType());
+                collBankRemitReport.setAmount(receiptHead.getInstrumentAmount().doubleValue());
+                collBankRemitReport.setReceiptNumber(receiptHead.getReceiptNumber());
+                collBankRemitReport.setReceiptDate(DateUtils.toDateUsingDefaultPattern(receiptHead.getReceiptDate().split(" ")[0]));
+                collBankRemitReport.setVoucherNumber(receiptHead.getRemittanceReferenceNumber());
+                reportList.add(collBankRemitReport);
             }
         }
         return reportList;
@@ -141,9 +135,6 @@ public abstract class RemittanceService implements Serializable {
     public abstract List<ReceiptBean> findChequeRemittanceDetailsForServiceAndFund(final String boundaryIdList,
             final String serviceCodes, final String fundCodes, Date startDate, Date endDate);
 
-    public abstract List<ReceiptHeader> createChequeBankRemittance(final String[] serviceNameArr,
-            final String[] totalCashAmount, final String[] totalChequeAmount, final String[] totalCardAmount,
-            final String[] receiptDateArray, final String[] fundCodeArray,
-            final String[] departmentCodeArray, final String accountNumberId, final Integer positionUser,
-            final String[] receiptNumberArray, final Date remittanceDate, final String[] instrumentIdArray);
+    public abstract List<Receipt> createChequeBankRemittance(List<ReceiptBean> receiptList, String accountNumberId,
+            final Date remittanceDate, final String[] instrumentIdArray);
 }

@@ -231,7 +231,7 @@
 			}
 		}
 		</s:if>
-		if(document.getElementById('accountNumberId').options[document.getElementById('accountNumberId').selectedIndex].text != dom.get("remitAccountNumber").value.trim())
+		if(document.getElementById('accountNumberId').value != dom.get("remitAccountNumber").value.trim())
 			{
 				 alert("Account number for which search result has displayed and selected account number in search drop down are different. \n Please make sure account number in drop down and account number for which search has done are same.");
 				 return false;
@@ -442,18 +442,19 @@
 							
 							
 								<c:set var="rowNumber" value="${currentRow_rowNum-1}" ></c:set>
-								<input type='checkbox' name='receiptBeanList[${rowNumber}].selected'  id='selected_${rowNumber}' value ="false" onClick="handleReceiptSelectionEvent()" />
-								<input type="hidden" name="receiptBeanList[${rowNumber}].service"  id="service_${rowNumber}" value="${currentRow.service}" />
-								<input type="hidden" name="receiptBeanList[${rowNumber}].fund"  id="fund_${rowNumber}" value="${currentRow.fund}" />
-								<input type="hidden" name="receiptBeanList[${rowNumber}].department" id="department_${rowNumber}"  value="${currentRow.department}" />
-								<input type="hidden" name="receiptBeanList[${rowNumber}].instrumentAmount"  id="instrumentAmount_${rowNumber}" value="${currentRow.instrumentAmount}" />
-								<input type="hidden" name="receiptBeanList[${rowNumber}].instrumentNumber"  id="instrumentNumber_${rowNumber}" value="${currentRow.instrumentNumber}" />
-								<input type="hidden" name="receiptBeanList[${rowNumber}].instrumentDate"  id="instrumentDate_${rowNumber}" value="${currentRow.instrumentDate}" />
-								<input type="hidden" name="receiptBeanList[${rowNumber}].instrumentId"  id="instrumentId_${rowNumber}" value="${currentRow.instrumentId}" />
-								<input type="hidden" name="receiptBeanList[${rowNumber}].bank"  id="bank_${rowNumber}" value="${currentRow.bank}" />
-								<input type="hidden" name="receiptBeanList[${rowNumber}].bankBranch"  id="bankBranch_${rowNumber}" value="${currentRow.bankBranch}" />
-								<input type="hidden" name="receiptBeanList[${rowNumber}].receiptNumber"  id="receiptNumber_${rowNumber}" value="${currentRow.receiptNumber}" />
-								<input type="hidden" name="receiptBeanList[${rowNumber}].receiptDate"  id="receiptDate_${rowNumber}" value="${currentRow.receiptDate}" />
+								<input type='checkbox' name='finalBeanList[${rowNumber}].selected'  id='selected_${rowNumber}' value ="false" onClick="handleReceiptSelectionEvent()" />
+								<input type="hidden" name="finalBeanList[${rowNumber}].service"  id="service_${rowNumber}" value="${currentRow.service}" />
+								<input type="hidden" name="finalBeanList[${rowNumber}].fund"  id="fund_${rowNumber}" value="${currentRow.fund}" />
+								<input type="hidden" name="finalBeanList[${rowNumber}].department" id="department_${rowNumber}"  value="${currentRow.department}" />
+								<input type="hidden" name="finalBeanList[${rowNumber}].instrumentAmount"  id="instrumentAmount_${rowNumber}" value="${currentRow.instrumentAmount}" />
+								<input type="hidden" name="finalBeanList[${rowNumber}].instrumentNumber"  id="instrumentNumber_${rowNumber}" value="${currentRow.instrumentNumber}" />
+								<input type="hidden" name="finalBeanList[${rowNumber}].instrumentDate"  id="instrumentDate_${rowNumber}" value="${currentRow.instrumentDate}" />
+								<input type="hidden" name="finalBeanList[${rowNumber}].instrumentId"  id="instrumentId_${rowNumber}" value="${currentRow.instrumentId}" />
+								<input type="hidden" name="finalBeanList[${rowNumber}].bank"  id="bank_${rowNumber}" value="${currentRow.bank}" />
+								<input type="hidden" name="finalBeanList[${rowNumber}].bankBranch"  id="bankBranch_${rowNumber}" value="${currentRow.bankBranch}" />
+								<input type="hidden" name="finalBeanList[${rowNumber}].receiptNumber"  id="receiptNumber_${rowNumber}" value="${currentRow.receiptNumber}" />
+								<input type="hidden" name="finalBeanList[${rowNumber}].receiptId"  id="receiptId_${rowNumber}" value="${currentRow.receiptId}" />
+								<input type="hidden" name="finalBeanList[${rowNumber}].receiptDate"  id="receiptDate_${rowNumber}" value="${currentRow.receiptDate}" />
 								<input type="hidden" name="instrumentAmount" disabled="disabled" id="instrumentAmount" value="${currentRow.instrumentAmount}" />
 							</display:column>
 

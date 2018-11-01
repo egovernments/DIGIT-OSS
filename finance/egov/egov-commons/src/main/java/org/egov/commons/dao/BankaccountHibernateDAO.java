@@ -47,18 +47,19 @@
  */
 package org.egov.commons.dao;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.egov.commons.Bankaccount;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.List;
-
 @Repository
-public class BankaccountHibernateDAO  {
+public class BankaccountHibernateDAO {
     @Transactional
     public Bankaccount update(final Bankaccount entity) {
         getCurrentSession().update(entity);
@@ -87,20 +88,27 @@ public class BankaccountHibernateDAO  {
     @PersistenceContext
     private EntityManager entityManager;
 
-    
     public Session getCurrentSession() {
         return entityManager.unwrap(Session.class);
     }
-
-    
 
     public List<Bankaccount> getAllBankAccounts() {
         return getCurrentSession().createQuery("from Bankaccount BA order by BA.accountnumber").list();
     }
 
+    public Bankaccount getByAccountNumber(final String bankAccNum) {
+        final Query qry = getCurrentSession().createQuery(
+                "from Bankaccount bankacc where bankacc.accountnumber=:accNum");
+        qry.setString("accNum", bankAccNum);
+        Bankaccount bankAccount = null;
+        if (qry.list().size() != 0) {
+            bankAccount = (Bankaccount) qry.list().get(0);
+        }
+        return bankAccount;
+    }
+
     /**
-     * This method will return the BankAccount object based on matching
-     * bankcode,branchcode,bankaccountanumber
+     * This method will return the BankAccount object based on matching bankcode,branchcode,bankaccountanumber
      * 
      * @return
      */
@@ -120,8 +128,7 @@ public class BankaccountHibernateDAO  {
     }
 
     /**
-     * This method will return List of BankAccounts object based on matching
-     * bankBranchId
+     * This method will return List of BankAccounts object based on matching bankBranchId
      * 
      * @return
      */
@@ -135,7 +142,7 @@ public class BankaccountHibernateDAO  {
         }
         return bankAccount;
     }
-    
+
     public List<Bankaccount> getBankAccountByBankBranchForReceiptsPayments(final Integer bankBranchId, Integer fundId) {
         final StringBuilder query = new StringBuilder(
                 "from Bankaccount bankacc where bankacc.isactive=true and bankacc.type in ('RECEIPTS_PAYMENTS','RECEIPTS') and bankacc.bankbranch.id=:bankBranchId");

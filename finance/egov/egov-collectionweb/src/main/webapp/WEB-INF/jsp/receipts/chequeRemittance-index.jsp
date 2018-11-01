@@ -71,12 +71,12 @@
 			<th class="bluebgheadtd" width="20%" ><s:text name="bankremittance.receiptdate"/></th>
 			<th class="bluebgheadtd" width="20%" ><s:text name="bankremittance.servicename"/></th>
 		</tr>
-		<s:iterator value="%{remittedReceiptHeaderList}" status="s"> 
+		<s:iterator value="%{remittedReceiptList}" status="s"> 
 		<tr>
 			<td width="5%"  class="blueborderfortd"><div align="center"><s:property value="#s.index+1" /></div>  </td>
-			<td class="blueborderfortd"><div align="center"><s:property value="%{receiptnumber}" /></div></td>
-			<td class="blueborderfortd"><div align="center"><s:date name="%{receiptdate}" format="dd/MM/yyyy" /></div></td>
-			<td class="blueborderfortd"><div align="center"><s:property value="%{service.name}" /></div></td>
+			<td class="blueborderfortd"><div align="center"><s:property value="%{bill[0].billDetails[0].receiptNumber}" /></div></td>
+			<td class="blueborderfortd"><div align="center"><s:date name="%{bill[0].billDetails[0].receiptDate}" format="dd/MM/yyyy" /></div></td>
+			<td class="blueborderfortd"><div align="center"><s:property value="%{bill[0].billDetails[0].businessService}" /></div></td>
 			
 		</s:iterator>
 		<s:hidden name="totalCashAmount" value="%{totalCashAmount}"/>

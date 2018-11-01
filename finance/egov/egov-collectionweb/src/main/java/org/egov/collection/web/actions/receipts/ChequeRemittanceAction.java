@@ -78,6 +78,7 @@ import org.egov.commons.dao.BankaccountHibernateDAO;
 import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.BankAccountServiceMapping;
+import org.egov.infra.microservice.models.Receipt;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
@@ -108,7 +109,9 @@ public class ChequeRemittanceAction extends BaseFormAction {
     private transient List<HashMap<String, Object>> paramList = null;
     private final ReceiptHeader receiptHeaderIntsance = new ReceiptHeader();
     private List<ReceiptHeader> remittedReceiptHeaderList = new ArrayList<>(0);
+    private List<Receipt> remittedReceiptList = new ArrayList<>(0);
     private List<ReceiptBean> receiptBeanList = new ArrayList<>();
+    private List<ReceiptBean> finalBeanList = new ArrayList<>();
     private String[] serviceNameArray;
     private String[] totalCashAmountArray;
     private String[] totalChequeAmountArray;
@@ -252,31 +255,28 @@ public class ChequeRemittanceAction extends BaseFormAction {
         if (accountNumberId == null || accountNumberId.isEmpty())
             throw new ValidationException(Arrays.asList(new ValidationError("Please select Account number",
                     "bankremittance.error.noaccountNumberselected")));
-        remittedReceiptHeaderList = remittanceService.createChequeBankRemittance(getServiceNameArray(), getTotalCashAmountArray(),
-                getTotalChequeAmountArray(), getTotalCardAmountArray(), getReceiptDateArray(), getFundCodeArray(),
-                getDepartmentCodeArray(), accountNumberId, positionUser, getReceiptNumberArray(), remittanceDate,
+        remittedReceiptList = remittanceService.createChequeBankRemittance(finalBeanList, accountNumberId, remittanceDate,
                 getInstrumentIdArray());
 
         final long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
         LOGGER.info("$$$$$$ Time taken to persist the remittance list (ms) = " + elapsedTimeMillis);
-        bankRemittanceList = remittanceService.prepareChequeRemittanceReport(remittedReceiptHeaderList,
-                Arrays.asList(instrumentIdArray));
+        bankRemittanceList = remittanceService.prepareChequeRemittanceReport(finalBeanList);
         if (getSession().get(REMITTANCE_LIST) != null)
             getSession().remove(REMITTANCE_LIST);
         getSession().put(REMITTANCE_LIST, bankRemittanceList);
-        final Bankaccount bankAcc = bankaccountHibernateDAO.findById(Long.valueOf(accountNumberId), false);
+        final Bankaccount bankAcc = bankaccountHibernateDAO.getByAccountNumber(accountNumberId);
         bankAccount = bankAcc.getAccountnumber();
         bank = bankAcc.getBankbranch().getBank().getName();
         totalCashAmount = 0.0;
-        totalChequeAmount = getSum(getTotalChequeAmountArray());
+        totalChequeAmount = getSum(finalBeanList);
         return INDEX;
     }
 
-    private Double getSum(final String[] array) {
+    private Double getSum(List<ReceiptBean> receiptBeanList) {
         Double sum = 0.0;
-        for (final String num : array)
-            if (!num.isEmpty())
-                sum = sum + Double.valueOf(num);
+        for (final ReceiptBean rb : receiptBeanList)
+            if (rb.getSelected() != null && rb.getSelected())
+                sum = sum + rb.getInstrumentAmount().doubleValue();
         return sum;
     }
 
@@ -639,6 +639,22 @@ public class ChequeRemittanceAction extends BaseFormAction {
 
     public void setReceiptBeanList(List<ReceiptBean> receiptBeanList) {
         this.receiptBeanList = receiptBeanList;
+    }
+
+    public List<Receipt> getRemittedReceiptList() {
+        return remittedReceiptList;
+    }
+
+    public void setRemittedReceiptList(List<Receipt> remittedReceiptList) {
+        this.remittedReceiptList = remittedReceiptList;
+    }
+
+    public List<ReceiptBean> getFinalBeanList() {
+        return finalBeanList;
+    }
+
+    public void setFinalBeanList(List<ReceiptBean> finalBeanList) {
+        this.finalBeanList = finalBeanList;
     }
 
 }

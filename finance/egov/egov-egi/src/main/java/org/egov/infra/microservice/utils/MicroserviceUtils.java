@@ -945,19 +945,33 @@ public class MicroserviceUtils {
         return response.getInstruments();
     }
 
+    public List<Instrument> getInstruments(String ids) {
+
+        final String url = hostUrl + instrumentSearchUrl + "?tenantId=" + getTenentId() + "&ids=" + ids;
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getUserToken());
+        reqWrapper.setRequestInfo(requestInfo);
+        LOGGER.info("call:" + url);
+        InstrumentResponse response = restTemplate.postForObject(url, reqWrapper, InstrumentResponse.class);
+
+        return response.getInstruments();
+    }
+
     public List<Instrument> getInstrumentsByReceiptIds(String instrumentType, String instrumentStatus, String receiptIds) {
 
         final StringBuilder instrumentUrl = new StringBuilder(hostUrl + instrumentSearchUrl + "?tenantId=" + getTenentId());
-        
-        if(null!=instrumentType)
-            instrumentUrl.append("&instrumentTypes="+instrumentType);
-        if(null!=instrumentStatus)
+
+        if (null != instrumentType)
+            instrumentUrl.append("&instrumentTypes=" + instrumentType);
+        if (null != instrumentStatus)
             instrumentUrl.append("&financialStatuses=" + instrumentStatus);
-        
-        if(null!=receiptIds)
+
+        if (null != receiptIds)
             instrumentUrl.append("&receiptIds=" + receiptIds);
-        
-        
+
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
@@ -974,6 +988,21 @@ public class MicroserviceUtils {
         final String url = hostUrl + receiptSearchUrl + "?tenantId=" + getTenentId() + "&status=" + status
                 + "&ids=" + ids + "&businessCodes=" + serviceCodes + "&fromDate=" + fromDate.getTime() + "&toDate="
                 + toDate.getTime();
+
+        RequestInfo requestInfo = new RequestInfo();
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+
+        requestInfo.setAuthToken(getUserToken());
+        reqWrapper.setRequestInfo(requestInfo);
+        LOGGER.info("call:" + url);
+        ReceiptResponse response = restTemplate.postForObject(url, reqWrapper, ReceiptResponse.class);
+
+        return response.getReceipts();
+    }
+
+    public List<Receipt> getReceipts(String receiptNumbers) {
+
+        final String url = hostUrl + receiptSearchUrl + "?tenantId=" + getTenentId() + "&receiptNumbers=" + receiptNumbers;
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -1007,13 +1036,13 @@ public class MicroserviceUtils {
     public List<Receipt> searchReciepts(String classification, Date fromDate, Date toDate, String businessCode,
             String receiptNo) {
 
-        return this.searchReciepts(classification,fromDate,toDate,businessCode,Arrays.asList(receiptNo));
-        
+        return this.searchReciepts(classification, fromDate, toDate, businessCode, Arrays.asList(receiptNo));
 
     }
+
     public List<Receipt> searchReciepts(String classification, Date fromDate, Date toDate, String businessCode,
             List<String> receiptNos) {
-        
+
         final StringBuilder url = new StringBuilder(hostUrl + receiptSearchUrl);
         final RequestInfoWrapper request = new RequestInfoWrapper();
         final RequestInfo requestinfo = new RequestInfo();
@@ -1024,7 +1053,7 @@ public class MicroserviceUtils {
         request.setRequestInfo(requestinfo);
 
         url.append("?tenantId=" + tenantId);
-        
+
         if (null != classification)
             url.append("&classification=" + classification);
 
@@ -1034,22 +1063,44 @@ public class MicroserviceUtils {
         if (null != toDate)
             url.append("&toDate=" + toDate.getTime());
 
-        if(null!=businessCode)
-        url.append("&businessCode=" + businessCode);
+        if (null != businessCode)
+            url.append("&businessCode=" + businessCode);
 
-        if (null != receiptNos && receiptNos.size()>0) {
-            url.append("&receiptNumbers="+StringUtils.join(receiptNos,","));
+        if (null != receiptNos && receiptNos.size() > 0) {
+            url.append("&receiptNumbers=" + StringUtils.join(receiptNos, ","));
         }
 
         ReceiptResponse response = restTemplate.postForObject(url.toString(), request, ReceiptResponse.class);
 
         return response.getReceipts();
     }
-    
+
     public InstrumentResponse reconcileInstruments(List<Instrument> instruments, String depositedBankAccountNum) {
 
         final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
         FinancialStatus instrumentStatusReconciled = getInstrumentStatusByCode("Reconciled");
+        for (Instrument i : instruments) {
+            i.setFinancialStatus(instrumentStatusReconciled);
+            if (depositedBankAccountNum != null) {
+                i.setBankAccount(new BankAccount());
+                i.getBankAccount().setAccountNumber(depositedBankAccountNum);
+            }
+        }
+        InstrumentRequest request = new InstrumentRequest();
+        request.setInstruments(instruments);
+        final RequestInfo requestinfo = new RequestInfo();
+
+        requestinfo.setAuthToken(getUserToken());
+
+        request.setRequestInfo(requestinfo);
+
+        return restTemplate.postForObject(url.toString(), request, InstrumentResponse.class);
+    }
+
+    public InstrumentResponse depositeInstruments(List<Instrument> instruments, String depositedBankAccountNum) {
+
+        final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
+        FinancialStatus instrumentStatusReconciled = getInstrumentStatusByCode("Deposited");
         for (Instrument i : instruments) {
             i.setFinancialStatus(instrumentStatusReconciled);
             i.setBankAccount(new BankAccount());
@@ -1065,8 +1116,9 @@ public class MicroserviceUtils {
 
         return restTemplate.postForObject(url.toString(), request, InstrumentResponse.class);
     }
-    
-    public InstrumentResponse reconcileInstrumentsWithPayinSlipId(List<Instrument> instruments, String depositedBankAccountNum,String payinSlipId) {
+
+    public InstrumentResponse reconcileInstrumentsWithPayinSlipId(List<Instrument> instruments, String depositedBankAccountNum,
+            String payinSlipId) {
 
         final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
         FinancialStatus instrumentStatusReconciled = getInstrumentStatusByCode("Reconciled");
@@ -1076,7 +1128,7 @@ public class MicroserviceUtils {
             i.getBankAccount().setAccountNumber(depositedBankAccountNum);
             i.setPayinSlipId(payinSlipId);
         }
-        
+
         InstrumentRequest request = new InstrumentRequest();
         request.setInstruments(instruments);
         final RequestInfo requestinfo = new RequestInfo();

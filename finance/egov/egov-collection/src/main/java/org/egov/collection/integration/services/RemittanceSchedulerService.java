@@ -56,9 +56,10 @@ import org.egov.collection.utils.CollectionsUtil;
 import org.egov.collection.utils.FinancialsUtil;
 import org.egov.commons.Bankaccount;
 import org.egov.commons.CVoucherHeader;
+import org.egov.infra.microservice.models.Instrument;
+import org.egov.infra.microservice.models.TransactionType;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infstr.services.PersistenceService;
-import org.egov.model.instrument.InstrumentHeader;
-import org.egov.model.instrument.InstrumentType;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -83,6 +84,9 @@ public class RemittanceSchedulerService {
     @Autowired
     private CollectionsUtil collectionsUtil;
 
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
+
     @SuppressWarnings("unchecked")
     @Transactional
     public void remittanceInstrumentProcess(final String instrumentType, Integer modulo) {
@@ -106,7 +110,7 @@ public class RemittanceSchedulerService {
                     if (remittanceInstrument.getRemittance().getVoucherHeader().getId() != null) {
                         final Map<String, Object> cashMap = constructInstrumentMap(instrumentDepositMap,
                                 remittanceInstrument.getRemittance().getBankAccount(),
-                                remittanceInstrument.getInstrumentHeader(), remittanceInstrument.getRemittance()
+                                remittanceInstrument.getInstrument(), remittanceInstrument.getRemittance()
                                         .getVoucherHeader());
                         financialsUtil.updateCashDeposit(cashMap, remittanceInstrument.getRemittance()
                                 .getVoucherHeader(), remittanceInstrument.getInstrumentHeader(), remittanceInstrument
@@ -119,7 +123,7 @@ public class RemittanceSchedulerService {
                 for (final RemittanceInstrument bankRemit : reconcileList) {
                     if (bankRemit.getRemittance().getVoucherHeader().getId() != null) {
                         final Map<String, Object> chequeMap = constructInstrumentMap(instrumentDepositMap, bankRemit
-                                .getRemittance().getBankAccount(), bankRemit.getInstrumentHeader(), bankRemit
+                                .getRemittance().getBankAccount(), bankRemit.getInstrument(), bankRemit
                                         .getRemittance().getVoucherHeader());
                         if (voucherTypeForChequeDDCard)
                             financialsUtil.updateCheque_DD_Card_Deposit_Receipt(chequeMap);
@@ -134,17 +138,19 @@ public class RemittanceSchedulerService {
     }
 
     public Map<String, Object> constructInstrumentMap(final Map<String, Object> instrumentDepositMap,
-            final Bankaccount bankaccount, final InstrumentHeader instrumentHeader, final CVoucherHeader voucherHeader) {
-        final InstrumentType instrumentType = (InstrumentType) persistenceService.find(
-                "select it from InstrumentType it,InstrumentHeader ih where " + "ih.instrumentType=it.id and ih.id=?",
-                instrumentHeader.getId());
+            final Bankaccount bankaccount, final Instrument instrumentHeader, final CVoucherHeader voucherHeader) {
+
+        List<Instrument> instruments = microserviceUtils.getInstruments(instrumentHeader.getId().toString());
+
         instrumentDepositMap.put("instrumentheader", instrumentHeader.getId());
         instrumentDepositMap.put("bankaccountid", bankaccount.getId());
-        instrumentDepositMap.put("instrumentamount", instrumentHeader.getInstrumentAmount());
-        instrumentDepositMap.put("instrumenttype", instrumentType.getType());
+        instrumentDepositMap.put("instrumentamount", instrumentHeader.getAmount());
+        instrumentDepositMap.put("instrumenttype",
+                (instruments != null && !instruments.isEmpty()) ? instruments.get(0).getInstrumentType().getName() : "");
         instrumentDepositMap.put("depositdate", voucherHeader.getVoucherDate());
         instrumentDepositMap.put("createdby", voucherHeader.getCreatedBy());
-        instrumentDepositMap.put("ispaycheque", instrumentHeader.getIsPayCheque());
+        instrumentDepositMap.put("ispaycheque", (instrumentHeader.getTransactionType() != null
+                && TransactionType.Debit.equals(instrumentHeader.getTransactionType())) ? "0" : "1");
         instrumentDepositMap.put("payinid", voucherHeader.getId());
         return instrumentDepositMap;
     }

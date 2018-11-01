@@ -76,6 +76,8 @@ import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Instrument;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.model.contra.ContraBean;
 import org.egov.model.contra.ContraJournalVoucher;
@@ -131,6 +133,9 @@ public class ContraService extends PersistenceService<ContraJournalVoucher, Long
     private int preapprovalStatus = 0;
 
     private @Autowired EgovCommon egovCommon;
+
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
 
     public ContraService() {
         super(ContraJournalVoucher.class);
@@ -475,8 +480,8 @@ public class ContraService extends PersistenceService<ContraJournalVoucher, Long
     }
 
     public Boundary getBoundaryForUser(final ContraJournalVoucher rv) {
-       // return egovCommon.getBoundaryForUser(rv.getCreatedBy());
-    	return null;
+        // return egovCommon.getBoundaryForUser(rv.getCreatedBy());
+        return null;
     }
 
     public Position getPositionForEmployee(final Employee emp) throws ApplicationRuntimeException {
@@ -604,32 +609,18 @@ public class ContraService extends PersistenceService<ContraJournalVoucher, Long
     }
 
     private void updateInstrumentAndPayinSql(final Map instrumentDetailsMap) {
-        final String ioSql = "update EGF_INSTRUMENTOTHERDETAILS set PAYINSLIPID=:payinId,INSTRUMENTSTATUSDATE=:ihStatusDate," +
-                " LASTMODIFIEDBY=:modifiedBy, LASTMODIFIEDDATE =:modifiedDate where INSTRUMENTHEADERID=:ihId";
 
-        final SQLQuery ioSQLQuery = getSession().createSQLQuery(ioSql);
-        ioSQLQuery.setLong("payinId", (Long) instrumentDetailsMap.get("payinid"))
-                .setLong("ihId", (Long) instrumentDetailsMap.get("instrumentheader"))
-                .setDate("ihStatusDate", (Date) instrumentDetailsMap.get("depositdate"))
-                .setDate("modifiedDate", new Date())
-                .setLong("modifiedBy", (Long) instrumentDetailsMap.get("createdby"));
-        ioSQLQuery.executeUpdate();
+        List<Instrument> instruments = microserviceUtils.getInstruments(instrumentDetailsMap.get("instrumentheader").toString());
 
-        final String ihSql = "update EGF_instrumentheader  set ID_STATUS=:statusId,BANKACCOUNTID=:bankAccId,LASTMODIFIEDBY=:modifiedBy,"
-                + " LASTMODIFIEDDATE =:modifiedDate where id=:ihId";
+        for (Instrument i : instruments) {
+            i.setPayinSlipId(instrumentDetailsMap.get("payinid").toString());
+        }
 
-        final SQLQuery ihSQLQuery = getSession().createSQLQuery(ihSql);
         if (instrumentDetailsMap.get("instrumenttype").equals(FinancialConstants.INSTRUMENT_TYPE_DD)
                 || instrumentDetailsMap.get("instrumenttype").equals(FinancialConstants.INSTRUMENT_TYPE_CHEQUE))
-            ihSQLQuery.setLong("statusId", (Long) instrumentDetailsMap.get("instrumentDepositedStatus"));
+            microserviceUtils.depositeInstruments(instruments, instrumentDetailsMap.get("bankaccountid").toString());
         else if (instrumentDetailsMap.get("instrumenttype").equals(FinancialConstants.INSTRUMENT_TYPE_CASH))
-            ihSQLQuery.setLong("statusId", (Long) instrumentDetailsMap.get("instrumentReconciledStatus"));
-
-        ihSQLQuery.setLong("ihId", (Long) instrumentDetailsMap.get("instrumentheader"))
-                .setLong("bankAccId", (Long) instrumentDetailsMap.get("bankaccountid"))
-                .setDate("modifiedDate", new Date())
-                .setLong("modifiedBy", (Long) instrumentDetailsMap.get("createdby"));
-        ihSQLQuery.executeUpdate();
+            microserviceUtils.reconcileInstruments(instruments, instrumentDetailsMap.get("bankaccountid").toString());
 
     }
 
@@ -650,7 +641,7 @@ public class ContraService extends PersistenceService<ContraJournalVoucher, Long
         brsSQLQuery.setLong("bankAccId", (Long) instrumentDetailsMap.get("bankaccountid"))
                 .setBigDecimal("amount", (BigDecimal) instrumentDetailsMap.get("instrumentamount"))
                 .setString("trType", "1".equalsIgnoreCase((String) instrumentDetailsMap.get("ispaycheque")) ? "Cr" : "Dr")
-                .setLong("ihId", (Long) instrumentDetailsMap.get("instrumentheader"));
+                .setString("ihId", (String) instrumentDetailsMap.get("instrumentheader"));
         brsSQLQuery.executeUpdate();
 
         if (FinancialConstants.INSTRUMENT_TYPE_CASH.equalsIgnoreCase((String) instrumentDetailsMap.get("instrumenttype"))
@@ -661,27 +652,15 @@ public class ContraService extends PersistenceService<ContraJournalVoucher, Long
                         .get("instrumenttype"))
                 ||
                 FinancialConstants.INSTRUMENT_TYPE_ECS.equalsIgnoreCase((String) instrumentDetailsMap.get("instrumenttype"))) {
-            final String ioSql = "update EGF_instrumentOtherdetails set reconciledamount=:reconciledAmt,INSTRUMENTSTATUSDATE=:ihStatusDate,LASTMODIFIEDBY=:modifiedBy,"
-                    +
-                    " LASTMODIFIEDDATE =:modifiedDate where INSTRUMENTHEADERID=:ihId";
 
-            final SQLQuery ioSQLQuery = getSession().createSQLQuery(ioSql);
-            ioSQLQuery.setLong("ihId", (Long) instrumentDetailsMap.get("instrumentheader"))
-                    .setBigDecimal("reconciledAmt", (BigDecimal) instrumentDetailsMap.get("instrumentamount"))
-                    .setDate("ihStatusDate", (Date) instrumentDetailsMap.get("depositdate"))
-                    .setDate("modifiedDate", new Date())
-                    .setLong("modifiedBy", (Long) instrumentDetailsMap.get("createdby"));
-            ioSQLQuery.executeUpdate();
+            List<Instrument> instruments = microserviceUtils
+                    .getInstruments(instrumentDetailsMap.get("instrumentheader").toString());
 
-            final String ihSql = "update EGF_instrumentheader  set ID_STATUS=:statusId,LASTMODIFIEDBY=:modifiedBy," +
-                    " LASTMODIFIEDDATE =:modifiedDate where id=:ihId";
-            final SQLQuery ihSQLQuery = getSession().createSQLQuery(ihSql);
-            ihSQLQuery.setLong("statusId", (Long) instrumentDetailsMap.get("instrumentReconciledStatus"))
-                    .setLong("ihId", (Long) instrumentDetailsMap.get("instrumentheader"))
-                    .setDate("modifiedDate", new Date())
-                    .setLong("modifiedBy", (Long) instrumentDetailsMap.get("createdby"));
-            ihSQLQuery.executeUpdate();
+            for (Instrument i : instruments) {
+                i.setReconciledAmount((BigDecimal) instrumentDetailsMap.get("instrumentamount"));
+            }
 
+            microserviceUtils.reconcileInstruments(instruments, null);
         }
 
     }
