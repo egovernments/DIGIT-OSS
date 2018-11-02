@@ -139,6 +139,30 @@
       "name": "Citizen service representative",
       "description": "Citizen service representative",
       "active": true
+    },
+    {
+      "name": "Deputy Controller Finance and Accounts",
+      "description": "Deputy Controller Finance and Accounts",
+      "code": "DESIG_1001",
+      "active": true
+    },
+   {
+      "name": "Accountant",
+      "description": "Accountant",
+      "code": "DESIG_58",
+      "active": true
+    },
+   {
+      "code": "DESIG_24",
+      "name": "Assistant Commissioner",
+      "description": "Assistant Commissioner",
+      "active": true
+    },    
+    {
+      "name": "Superintendent",
+      "description": "Superintendent",
+      "code": "DESIG_47",
+      "active": true
     }
   ]
 }
