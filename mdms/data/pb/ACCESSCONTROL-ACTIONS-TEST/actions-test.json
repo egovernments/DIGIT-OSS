@@ -12865,6 +12865,19 @@
       "serviceCode": "hr-masters",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1703,
+      "name": "Cheque Remittance",
+      "url": "url",
+      "displayName": "Cheque Remittance",
+      "orderNumber": 4,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "Collections",
+      "code": "null",
+      "navigationURL": "services/collection/receipts/chequeRemittance-newform.action",
+      "path": "Collections.Cheque Remittance"
     }
   ]
 }

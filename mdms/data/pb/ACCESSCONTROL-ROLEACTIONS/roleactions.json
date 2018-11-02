@@ -16759,6 +16759,18 @@
       "actionid": 1702,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPEUSER",
+      "actionid": 1703,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "COLL_REMIT_TO_BANK",
+      "actionid": 1703,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
