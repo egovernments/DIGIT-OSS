@@ -87,7 +87,7 @@
 	</div>
 	<div class="buttonbottom">
 		<input type="button" id="Close" value="Close"
-			onclick="javascript:window.close()" class="button" />
+			onclick="javascript:window.parent.postMessage('close','*');window.close()" class="button" />
 	</div>
 	<script src="../resources/javascript/jquery/grid.locale-en.js"
 		type="text/javascript"></script>

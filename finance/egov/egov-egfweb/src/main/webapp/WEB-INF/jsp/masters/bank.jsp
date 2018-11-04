@@ -76,7 +76,7 @@
 		<input type="submit" class="button"
 			value="Save" id="saveButton" name="button"
 			onclick="validateFormAndSubmit();" /> <input type="button"
-			id="Close" value="Close" onclick="javascript:window.close()"
+			id="Close" value="Close" onclick="javascript:window.parent.postMessage('close','*');window.close()"
 			class="button" />
 	</div>
 </body>
