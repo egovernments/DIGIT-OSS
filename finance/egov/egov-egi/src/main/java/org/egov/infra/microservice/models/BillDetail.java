@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class BillDetail {
 
@@ -115,6 +116,8 @@ public class BillDetail {
     private Boolean partPaymentAllowed;
 
     private CollectionType collectionType;
+    
+    private JsonNode additionalDetails;
 
     public String getId() {
         return id;
@@ -386,6 +389,14 @@ public class BillDetail {
 
     public void setCollectionType(CollectionType collectionType) {
         this.collectionType = collectionType;
+    }
+
+    public JsonNode getAdditionalDetails() {
+        return additionalDetails;
+    }
+
+    public void setAdditionalDetails(JsonNode additionalDetails) {
+        this.additionalDetails = additionalDetails;
     }
 
 }

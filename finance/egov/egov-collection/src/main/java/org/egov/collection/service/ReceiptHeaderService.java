@@ -97,6 +97,7 @@ import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.contract.RequestInfoWrapper;
 import org.egov.infra.microservice.models.Bank;
+import org.egov.infra.microservice.models.BillDetailAdditional;
 import org.egov.infra.microservice.models.BillResponse;
 import org.egov.infra.microservice.models.BusinessDetails;
 import org.egov.infra.microservice.models.Demand;
@@ -130,6 +131,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -1289,6 +1291,18 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         receipt.getBill().get(0).getBillDetails().get(0).setManualReceiptDate(
                 receiptHeader.getManualreceiptdate() != null ? receiptHeader.getManualreceiptdate().getTime() : null);
         receipt.getBill().get(0).getBillDetails().get(0).setBillDescription(receiptHeader.getReferenceDesc());
+        
+        BillDetailAdditional additional = new BillDetailAdditional();
+        additional.setScheme(receiptHeader.getReceiptMisc().getScheme().getCode());
+        additional.setSubScheme(receiptHeader.getReceiptMisc().getSubscheme().getCode());
+        additional.setNarration(receiptHeader.getReferenceDesc());
+        additional.setPayeeaddress(receiptHeader.getPayeeAddress());
+        additional.setBusinessReason(receiptHeader.getServiceIdText());
+        
+        JsonNode jsonNode = new ObjectMapper().convertValue(additional, JsonNode.class);
+        System.out.println("******************* additional details**********  "+jsonNode.toString());
+        receipt.getBill().get(0).getBillDetails().get(0).setAdditionalDetails(jsonNode);
+               
         receipt.setTenantId(tenantId);
         request.setTenantId(tenantId);
         request.setReceipt(Collections.singletonList(receipt));

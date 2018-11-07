@@ -1141,6 +1141,7 @@ function showHideMandataryMark(obj){
 		<s:hidden label="callbackForApportioning" id="callbackForApportioning" value="%{callbackForApportioning}" name="callbackForApportioning"/>
 		<s:hidden label="instrumenttotal" id="instrumenttotal" name="instrumenttotal"/>
 		<s:hidden label="manualReceiptNumberAndDateReq" id="manualReceiptNumberAndDateReq" name="manualReceiptNumberAndDateReq" value="%{manualReceiptNumberAndDateReq}"/>
+		<s:hidden label="serviceIdText" id="serviceIdText" name="serviceIdText" value="%{serviceIdText}" />
 		<s:if test="%{!isBillSourcemisc()}">
 		      	<%@ include file='collection-billdetails.jsp'%>
 		</s:if> 

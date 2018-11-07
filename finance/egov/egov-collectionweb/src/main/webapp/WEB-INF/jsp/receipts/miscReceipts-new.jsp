@@ -265,11 +265,13 @@ function checkData(){
         else{
             document.getElementById("receiptMisc.subscheme.id").value="-1"; 
         } 
-        if(document.getElementById("receiptMisc.fundsource.id").value!="" && document.getElementById("receiptMisc.fundsource.id").value!="-1"){
-            document.getElementById('fundSourceId').value=document.getElementById('receiptMisc.fundsource.id').value;
-        }
-        else{
-            document.getElementById("receiptMisc.fundsource.id").value="-1";    
+        if(document.getElementById("receiptMisc.fundsource.id")!=null){
+	        if(document.getElementById("receiptMisc.fundsource.id").value!="" && document.getElementById("receiptMisc.fundsource.id").value!="-1"){
+	            document.getElementById('fundSourceId').value=document.getElementById('receiptMisc.fundsource.id').value;
+	        }
+	        else{
+	            document.getElementById("receiptMisc.fundsource.id").value="-1";    
+	        }
         }
     }
 }
@@ -287,7 +289,7 @@ function getSchemelist(fund)
     
     document.getElementById("subschemeId").value=-1;
     document.getElementById("subschemeId").options.length = 1;
-    populatefundSourceId({subSchemeId:-1})
+   // populatefundSourceId({subSchemeId:-1})
 }
 
 function getBankBranchList(){
@@ -837,7 +839,7 @@ var totaldbamt=0,totalcramt=0;
 
          <td width="30%" class="bluebox">
           <s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="subschemeId" id="subschemeId" onchange="setSubSchemeId();getFundSourcelist(this)" onclick="checkscheme()" cssClass="selectwk" list="dropdownData.subschemeList" listKey="id" listValue="name"  /></td>
-          <egov:ajaxdropdown id="fundSourceId" fields="['Text','Value']" dropdownId='fundSourceId' url='../../services/EGF/voucher/common-ajaxLoadFundSource.action'  />
+         <!--  <egov:ajaxdropdown id="fundSourceId" fields="['Text','Value']" dropdownId='fundSourceId' url='../../services/EGF/voucher/common-ajaxLoadFundSource.action'  /> -->
            <s:hidden label="receiptMisc.subscheme.id" id="receiptMisc.subscheme.id"  name="receiptMisc.subscheme.id"/>
          
         </tr>

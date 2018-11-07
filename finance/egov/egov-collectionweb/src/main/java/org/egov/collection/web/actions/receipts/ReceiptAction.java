@@ -66,6 +66,7 @@ import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.egov.collection.constants.CollectionConstants;
 import org.egov.collection.entity.AccountPayeeDetail;
 import org.egov.collection.entity.ReceiptDetail;
@@ -113,6 +114,7 @@ import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.entity.Role;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.BillDetailAdditional;
 import org.egov.infra.microservice.models.BusinessDetails;
 import org.egov.infra.microservice.models.CollectionType;
 import org.egov.infra.microservice.models.EmployeeInfo;
@@ -132,6 +134,8 @@ import org.egov.model.instrument.InstrumentHeader;
 import org.egov.model.instrument.InstrumentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 @ParentPackage("egov")
 @Results({ @Result(name = ReceiptAction.NEW, location = "receipt-new.jsp"),
@@ -268,6 +272,7 @@ public class ReceiptAction extends BaseFormAction {
     private PersistenceService<ServiceDetails, Long> serviceDetailsService;
 
     private String serviceId;
+    private String serviceIdText;
 
     @Autowired
     private FundHibernateDAO fundDAO;
@@ -494,6 +499,7 @@ public class ReceiptAction extends BaseFormAction {
         BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(CollectionConstants.SERVICE_CODE_COLLECTIONS);
         receiptHeader.setPartPaymentAllowed(false);
         receiptHeader.setService(serviceId);
+        receiptHeader.setServiceIdText(serviceIdText);
         final Fund fund = fundDAO.fundByCode(receiptMisc.getFund().getCode());
         Functionary functionary = null;
         Scheme scheme = null;
@@ -825,9 +831,9 @@ public class ReceiptAction extends BaseFormAction {
         getHeaderMandateFields();
         setupDropdownDataExcluding();
 
-        headerFields.remove(CollectionConstants.FUNDSOURCE);
-        headerFields.remove(CollectionConstants.SCHEME);
-        headerFields.remove(CollectionConstants.SUBSCHEME);
+//        headerFields.remove(CollectionConstants.FUNDSOURCE);
+//        headerFields.remove(CollectionConstants.SCHEME);
+//        headerFields.remove(CollectionConstants.SUBSCHEME);
         if (headerFields.contains(CollectionConstants.DEPARTMENT))
             addDropdownData("departmentList", masterDataCache.get("egi-department"));
         if (headerFields.contains(CollectionConstants.FUNCTIONARY))
@@ -1132,7 +1138,45 @@ public class ReceiptAction extends BaseFormAction {
                     receiptHeader.setManualreceiptnumber(billDetail.getManualReceiptNumber());
                     receiptHeader.setModOfPayment(receipt.getInstrument().getInstrumentType().getName());
                     receiptHeader.setConsumerCode(billDetail.getConsumerCode());
+                    
+                    JsonNode jsonNode = billDetail.getAdditionalDetails();
+                    BillDetailAdditional additional = null;
+                    try {
+                        if(null!= jsonNode)
+                        additional =(BillDetailAdditional) new ObjectMapper().readValue(jsonNode.toString(), BillDetailAdditional.class);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
+                    if (null != additional) {
+                        ReceiptMisc receiptMisc = new ReceiptMisc();
+                        if (null != additional.getScheme()) {
+                            Scheme scheme = this.schemeDAO.getSchemeByCode(additional.getScheme());
+                            receiptMisc.setScheme(scheme);
+                        }
+                        
+                        if(null != additional.getSubScheme()){
+                            SubScheme subScheme = this.subSchemeDAO.getSubSchemeByCode(additional.getSubScheme());
+                            receiptMisc.setSubscheme(subScheme);
+                        }
+                        
+                        if(null!= additional.getBusinessReason()){
+                           if( additional.getBusinessReason().contains("-"))
+                           {
+                               receiptHeader.setService(additional.getBusinessReason().split("-")[0]);
+                           }else
+                           {
+                            receiptHeader.setService(additional.getBusinessReason());
+                           }
+                        }
+                        
+                        receiptHeader.setReceiptMisc(receiptMisc);
+                        if(null!= additional.getNarration())
+                            receiptHeader.setReferenceDesc(additional.getNarration());
+                        if(null!= additional.getPayeeaddress())
+                            receiptHeader.setPayeeAddress(additional.getPayeeaddress());
+                    }
+                    
                     if (billDetail.getCollectionType().equals(CollectionType.COUNTER))
                         receiptHeader.setCollectiontype(CollectionConstants.COLLECTION_TYPE_COUNTER);
                     else if (billDetail.getCollectionType().equals(CollectionType.FIELD))
@@ -2064,6 +2108,14 @@ public class ReceiptAction extends BaseFormAction {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getServiceIdText() {
+        return serviceIdText;
+    }
+
+    public void setServiceIdText(String serviceIdText) {
+        this.serviceIdText = serviceIdText;
     }
 
 }

@@ -57,6 +57,9 @@ function loadFinDetails(service) {
 
 	var dept = dom.get('deptId').value;
 	var service = dom.get('serviceId').value;
+	var selectedService = dom.get('serviceId');
+	var selectedIdText = selectedService.options[selectedService.selectedIndex].text;
+	dom.get('serviceIdText').value = selectedIdText;
 
 	var path = '/services/collection';
 
@@ -92,7 +95,6 @@ function loadFinDetails(service) {
 var miscArray;
 var loadMiscDetails = {
 	success : function(o) {
-
 		var result = o.responseText;
 
 		if (null != result && result.length != 0) {
@@ -104,7 +106,7 @@ var loadMiscDetails = {
 				setFundId();
 			}
 			if (null != dom.get('schemeId')) {
-				var url = "/collection/receipts/ajaxReceiptCreate-ajaxLoadSchemes.action";
+				var url = "/services/collection/receipts/ajaxReceiptCreate-ajaxLoadSchemes.action";
 				var fundId = dom.get('fundId').value;
 				makeJSONCall([ "Text", "Value" ], url, {
 					fundId : miscArray[0]
@@ -112,7 +114,7 @@ var loadMiscDetails = {
 			}
 			if (null != dom.get('subschemeId')) {
 
-				var url = "/collection/receipts/ajaxReceiptCreate-ajaxLoadSubSchemes.action";
+				var url = "/services/collection/receipts/ajaxReceiptCreate-ajaxLoadSubSchemes.action";
 				var schemeId = dom.get('schemeId').value;
 				makeJSONCall([ "Text", "Value" ], url, {
 					schemeId : miscArray[1]
@@ -183,7 +185,7 @@ subschemeDropDownSuccessHandler = function(req, res) {
 		dropDownLength = dropDownLength - 1;
 	}
 	subschemeId.value = miscArray[2];
-	setFundSourceId();
+//	setFundSourceId();
 }
 
 subschemeDropDownFailureHandler = function() {
