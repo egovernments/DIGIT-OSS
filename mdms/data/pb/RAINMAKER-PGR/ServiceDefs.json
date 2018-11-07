@@ -3,13 +3,6 @@
   "moduleName": "RAINMAKER-PGR",
   "ServiceDefs": [
     {
-      "serviceCode": "NoStreetlight",
-      "keywords": "streetlight, light, repair, work, pole, electric, power, repair, damage, fix",
-      "department": "Streetights",
-      "slaHours": 336,
-      "menuPath": "StreetLights"
-    },
-    {
       "serviceCode": "StreetLightNotWorking",
       "keywords": "streetlight, light, repair, work, pole, electric, power, repair, fix",
       "department": "Streetlights",
@@ -24,7 +17,7 @@
       "menuPath": "Garbage"
     },
     {
-      "serviceCode": "ReplaceOrProvideGarbageBin",
+      "serviceCode": "DamagedGarbageBin",
       "keywords": "garbage, waste, bin, dustbin, clean, remove, sanitation, overflow, smell, health, throw, dispose",
       "department": "Health & Sanitation",
       "slaHours": 336,
@@ -66,7 +59,7 @@
       "menuPath": "WaterandSewage"
     },
     {
-      "serviceCode": "NotWaterSupply",
+      "serviceCode": "NoWaterSupply",
       "keywords": "water, supply, connection, drink, tap",
       "department": "Operation & Maintenance",
       "slaHours": 336,
