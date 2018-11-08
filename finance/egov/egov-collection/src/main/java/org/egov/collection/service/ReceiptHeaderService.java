@@ -1293,8 +1293,10 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         receipt.getBill().get(0).getBillDetails().get(0).setBillDescription(receiptHeader.getReferenceDesc());
         
         BillDetailAdditional additional = new BillDetailAdditional();
-        additional.setScheme(receiptHeader.getReceiptMisc().getScheme().getCode());
-        additional.setSubScheme(receiptHeader.getReceiptMisc().getSubscheme().getCode());
+        if (null != receiptHeader.getReceiptMisc().getScheme())
+            additional.setScheme(receiptHeader.getReceiptMisc().getScheme().getCode());
+        if (null != receiptHeader.getReceiptMisc().getSubscheme())
+            additional.setSubScheme(receiptHeader.getReceiptMisc().getSubscheme().getCode());
         additional.setNarration(receiptHeader.getReferenceDesc());
         additional.setPayeeaddress(receiptHeader.getPayeeAddress());
         additional.setBusinessReason(receiptHeader.getServiceIdText());
