@@ -43,13 +43,18 @@
       "active": "true"
     },
     {
-      "name": "Tax Branch",
-      "code": "DEPT_13",
+      "name": "Executive Branch",
+      "code": "DEPT_9",
       "active": "true"
     },
     {
-      "name": "Executive Branch",
-      "code": "DEPT_9",
+      "name": "Others",
+      "code": "DEPT_10",
+      "active": "true"
+    },
+    {
+      "name": "Tax Branch",
+      "code": "DEPT_13",
       "active": "true"
     },
     {
