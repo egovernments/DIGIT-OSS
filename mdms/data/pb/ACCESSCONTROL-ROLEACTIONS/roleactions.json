@@ -14349,6 +14349,12 @@
       "tenantId": "pb"
     },
     {
+      "rolecode": "CITIZEN",
+      "actionid": 1552,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
       "rolecode": "EMPLOYEE",
       "actionid": 1552,
       "actioncode": "",
