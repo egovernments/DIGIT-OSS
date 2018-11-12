@@ -205,7 +205,7 @@ public class ChequeRemittanceAction extends BaseFormAction {
 
             final CFinancialYear financialYear = financialYearDAO.getFinancialYearById(finYearId);
             receiptBeanList = remittanceService.findChequeRemittanceDetailsForServiceAndFund("",
-                    StringUtils.join(serviceCodeList, "','"), fundCode,
+                    StringUtils.join(serviceCodeList, ","), fundCode,
                     fromDate == null ? financialYear.getStartingDate() : fromDate,
                     toDate == null ? financialYear.getEndingDate() : toDate);
             if (fromDate != null && toDate != null)
