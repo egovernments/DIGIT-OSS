@@ -449,6 +449,7 @@
 								<input type="hidden" name="finalBeanList[${rowNumber}].instrumentAmount"  id="instrumentAmount_${rowNumber}" value="${currentRow.instrumentAmount}" />
 								<input type="hidden" name="finalBeanList[${rowNumber}].instrumentNumber"  id="instrumentNumber_${rowNumber}" value="${currentRow.instrumentNumber}" />
 								<input type="hidden" name="finalBeanList[${rowNumber}].instrumentDate"  id="instrumentDate_${rowNumber}" value="${currentRow.instrumentDate}" />
+								<input type="hidden" name="finalBeanList[${rowNumber}].instrumentType"  id="instrumentType_${rowNumber}" value="${currentRow.instrumentType}" />
 								<input type="hidden" name="finalBeanList[${rowNumber}].instrumentId"  id="instrumentId_${rowNumber}" value="${currentRow.instrumentId}" />
 								<input type="hidden" name="finalBeanList[${rowNumber}].bank"  id="bank_${rowNumber}" value="${currentRow.bank}" />
 								<input type="hidden" name="finalBeanList[${rowNumber}].bankBranch"  id="bankBranch_${rowNumber}" value="${currentRow.bankBranch}" />

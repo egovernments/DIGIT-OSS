@@ -714,9 +714,10 @@ public class RemittanceServiceImpl extends RemittanceService {
             rb.setInstrumentNumber(
                     receiptInstrumentMap.get(r.getBill().get(0).getBillDetails().get(0).getId()).getTransactionNumber());
             if (receiptInstrumentMap.get(r.getBill().get(0).getBillDetails().get(0).getId()).getTransactionDate() != null)
-                rb.setInstrumentDate(DateUtils.toDefaultDateTimeFormat(
+                rb.setInstrumentDate(DateUtils.toDefaultDateFormat(
                         receiptInstrumentMap.get(r.getBill().get(0).getBillDetails().get(0).getId())
                                 .getTransactionDate()));
+            rb.setInstrumentType(receiptInstrumentMap.get(r.getBill().get(0).getBillDetails().get(0).getId()).getInstrumentType().getName());
             rb.setBankBranch(receiptInstrumentMap.get(r.getBill().get(0).getBillDetails().get(0).getId()).getBranchName());
             rb.setBank(receiptInstrumentMap.get(r.getBill().get(0).getBillDetails().get(0).getId()).getBank().getName());
             rb.setReceiptId(r.getBill().get(0).getBillDetails().get(0).getId());
@@ -823,6 +824,7 @@ public class RemittanceServiceImpl extends RemittanceService {
                 instruments = microserviceUtils.getInstruments(receipt.getInstrumentId());
                 receiptInstrumentMap.put(receipt.getReceiptId(), new HashSet<>(instruments));
                 instrumentIdList.add(receipt.getInstrumentId());
+                receiptNumbers.append(",");
                 receiptNumbers.append(receipt.getReceiptNumber());
 
                 if (showRemitDate && remittanceDate != null)
