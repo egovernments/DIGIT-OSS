@@ -11042,7 +11042,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "PGR.MyComplaints",
-      "navigationURL": "PGR.all-complaints",
+      "navigationURL": "all-complaints",
       "leftIcon": "custom:open-complaints",
       "rightIcon": ""
     },
@@ -11057,7 +11057,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "PGR.MyComplaints",
-      "navigationURL": "PGR.closed-complaints",
+      "navigationURL": "closed-complaints",
       "leftIcon": "custom:closed-complaints",
       "rightIcon": ""
     },
