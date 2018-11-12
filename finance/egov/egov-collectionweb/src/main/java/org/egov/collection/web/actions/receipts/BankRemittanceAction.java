@@ -256,7 +256,7 @@ public class BankRemittanceAction extends BaseFormAction {
         if (getSession().get(REMITTANCE_LIST) != null)
             getSession().remove(REMITTANCE_LIST);
         getSession().put(REMITTANCE_LIST, bankRemittanceList);
-        final Bankaccount bankAcc = bankaccountHibernateDAO.findById(Long.valueOf(accountNumberId), false);
+        final Bankaccount bankAcc = bankaccountHibernateDAO.getByAccountNumber(accountNumberId);
         bankAccount = bankAcc.getAccountnumber();
         bank = bankAcc.getBankbranch().getBank().getName();
         totalCashAmount = getSum(finalList);
