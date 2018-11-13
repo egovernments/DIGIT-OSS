@@ -76,6 +76,7 @@ import org.egov.collection.integration.services.RemittanceSchedulerService;
 import org.egov.collection.utils.CollectionsNumberGenerator;
 import org.egov.collection.utils.CollectionsUtil;
 import org.egov.collection.utils.FinancialsUtil;
+import org.egov.commons.Bank;
 import org.egov.commons.Bankaccount;
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.CVoucherHeader;
@@ -717,9 +718,12 @@ public class RemittanceServiceImpl extends RemittanceService {
                 rb.setInstrumentDate(DateUtils.toDefaultDateFormat(
                         receiptInstrumentMap.get(r.getBill().get(0).getBillDetails().get(0).getId())
                                 .getTransactionDate()));
-            rb.setInstrumentType(receiptInstrumentMap.get(r.getBill().get(0).getBillDetails().get(0).getId()).getInstrumentType().getName());
+            rb.setInstrumentType(
+                    receiptInstrumentMap.get(r.getBill().get(0).getBillDetails().get(0).getId()).getInstrumentType().getName());
             rb.setBankBranch(receiptInstrumentMap.get(r.getBill().get(0).getBillDetails().get(0).getId()).getBranchName());
-            rb.setBank(receiptInstrumentMap.get(r.getBill().get(0).getBillDetails().get(0).getId()).getBank().getName());
+            final Bank bank = (Bank) persistenceService.find("from Bank where id=?",
+                    receiptInstrumentMap.get(r.getBill().get(0).getBillDetails().get(0).getId()).getBank().getId().intValue());
+            rb.setBank(bank != null ? bank.getName() : "");
             rb.setReceiptId(r.getBill().get(0).getBillDetails().get(0).getId());
             rb.setReceiptNumber(r.getBill().get(0).getBillDetails().get(0).getReceiptNumber());
             rb.setReceiptDate(

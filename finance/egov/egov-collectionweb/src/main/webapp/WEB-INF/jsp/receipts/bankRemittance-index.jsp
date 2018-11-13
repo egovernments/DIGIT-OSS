@@ -76,7 +76,7 @@
 			<td width="5%"  class="blueborderfortd"><div align="center"><s:property value="#s.index+1" /></div>  </td>
 			<td class="blueborderfortd"><div align="center"><s:property value="%{receiptNumber}" /></div></td>
 			<td class="blueborderfortd"><div align="center"><s:date name="%{receiptDate}" format="dd/MM/yyyy" /></div></td>
-			<td class="blueborderfortd"><div align="center"><s:property value="%{serviceType}" /></div></td>
+			<td class="blueborderfortd"><div align="center"><s:property value="%{serviceName}" /></div></td>
 			
 		</s:iterator>
 		<s:hidden name="totalCashAmount" value="%{totalCashAmount}"/>

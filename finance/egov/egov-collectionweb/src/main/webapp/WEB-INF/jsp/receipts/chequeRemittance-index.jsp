@@ -76,7 +76,7 @@
 			<td width="5%"  class="blueborderfortd"><div align="center"><s:property value="#s.index+1" /></div>  </td>
 			<td class="blueborderfortd"><div align="center"><s:property value="%{bill[0].billDetails[0].receiptNumber}" /></div></td>
 			<td class="blueborderfortd"><div align="center"><s:date name="%{bill[0].billDetails[0].receiptDate}" format="dd/MM/yyyy" /></div></td>
-			<td class="blueborderfortd"><div align="center"><s:property value="%{bill[0].billDetails[0].businessService}" /></div></td>
+			<td class="blueborderfortd"><div align="center"><s:property value="%{serviceName}" /></div></td>
 			
 		</s:iterator>
 		<s:hidden name="totalCashAmount" value="%{totalCashAmount}"/>

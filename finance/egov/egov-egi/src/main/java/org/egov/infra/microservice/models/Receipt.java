@@ -13,12 +13,14 @@ public class Receipt {
 
     @JsonProperty("Bill")
     private List<Bill> bill = new ArrayList<>();
-    
+
     private AuditDetails auditDetails;
 
     private Instrument instrument;
 
     private String remittanceReferenceNumber;
+
+    private String serviceName;
 
     public String getTenantId() {
         return tenantId;
@@ -66,6 +68,14 @@ public class Receipt {
 
     public void setAuditDetails(AuditDetails auditDetails) {
         this.auditDetails = auditDetails;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
 }

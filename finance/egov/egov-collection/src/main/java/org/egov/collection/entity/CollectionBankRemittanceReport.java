@@ -62,6 +62,7 @@ public class CollectionBankRemittanceReport implements Serializable {
     private Double amount;
     private String voucherNumber;
     private String serviceType;
+    private String serviceName;
 
     public String getReceiptNumber() {
         return receiptNumber;
@@ -142,5 +143,13 @@ public class CollectionBankRemittanceReport implements Serializable {
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
-    
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
 }

@@ -78,6 +78,7 @@ import org.egov.commons.dao.BankaccountHibernateDAO;
 import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.BankAccountServiceMapping;
+import org.egov.infra.microservice.models.BusinessDetails;
 import org.egov.infra.microservice.models.Receipt;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -256,11 +257,27 @@ public class BankRemittanceAction extends BaseFormAction {
         if (getSession().get(REMITTANCE_LIST) != null)
             getSession().remove(REMITTANCE_LIST);
         getSession().put(REMITTANCE_LIST, bankRemittanceList);
+        populateNames(bankRemittanceList);
         final Bankaccount bankAcc = bankaccountHibernateDAO.getByAccountNumber(accountNumberId);
         bankAccount = bankAcc.getAccountnumber();
         bank = bankAcc.getBankbranch().getBank().getName();
         totalCashAmount = getSum(finalList);
         return INDEX;
+    }
+
+    private void populateNames(List<CollectionBankRemittanceReport> bankRemittanceList) {
+        List<BusinessDetails> businessDetailsList = microserviceUtils.getBusinessDetailsByType("MISCELLANEOUS");
+        Map<String, String> businessDetailsCodeNameMap = new HashMap<>();
+
+        if (businessDetailsList != null)
+            for (BusinessDetails bd : businessDetailsList) {
+                businessDetailsCodeNameMap.put(bd.getCode(), bd.getName());
+            }
+
+        for (CollectionBankRemittanceReport rb : bankRemittanceList) {
+            if (rb.getServiceType() != null && !rb.getServiceType().isEmpty())
+                rb.setServiceName(businessDetailsCodeNameMap.get(rb.getServiceType()));
+        }
     }
 
     private Double getSum(List<ReceiptBean> finalList) {
