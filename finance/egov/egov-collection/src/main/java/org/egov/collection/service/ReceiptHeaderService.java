@@ -53,6 +53,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -1259,13 +1260,17 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
                         : null);
 
         Long transactionDateInput = null;
-        transactionDateInput = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate() != null
-                ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate().getTime() : null;
-        if (transactionDateInput == null && receiptHeader.getInstruments(receiptHeader.getInstrumentType()) != null
-                && receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate() != null) {
-            transactionDateInput = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate()
-                    .getTime();
+        Date transactionDate = null;
+        if (receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate() != null) {
+            transactionDate = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate();
+        } else {
+            transactionDate = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate();
         }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(transactionDate);
+        cal.add(Calendar.HOUR_OF_DAY, 5);
+        cal.add(Calendar.MINUTE, 30);
+        transactionDateInput = cal.getTime().getTime();
         instrument.setTransactionDateInput(transactionDateInput);
         instrument.setTransactionNumber(
                 receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionNumber() != null
@@ -1291,7 +1296,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         receipt.getBill().get(0).getBillDetails().get(0).setManualReceiptDate(
                 receiptHeader.getManualreceiptdate() != null ? receiptHeader.getManualreceiptdate().getTime() : null);
         receipt.getBill().get(0).getBillDetails().get(0).setBillDescription(receiptHeader.getReferenceDesc());
-        
+
         BillDetailAdditional additional = new BillDetailAdditional();
         if (null != receiptHeader.getReceiptMisc().getScheme())
             additional.setScheme(receiptHeader.getReceiptMisc().getScheme().getCode());
@@ -1300,11 +1305,11 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         additional.setNarration(receiptHeader.getReferenceDesc());
         additional.setPayeeaddress(receiptHeader.getPayeeAddress());
         additional.setBusinessReason(receiptHeader.getServiceIdText());
-        
+
         JsonNode jsonNode = new ObjectMapper().convertValue(additional, JsonNode.class);
-        System.out.println("******************* additional details**********  "+jsonNode.toString());
+        System.out.println("******************* additional details**********  " + jsonNode.toString());
         receipt.getBill().get(0).getBillDetails().get(0).setAdditionalDetails(jsonNode);
-               
+
         receipt.setTenantId(tenantId);
         request.setTenantId(tenantId);
         request.setReceipt(Collections.singletonList(receipt));
