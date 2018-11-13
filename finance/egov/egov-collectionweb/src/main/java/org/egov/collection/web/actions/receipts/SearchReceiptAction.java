@@ -52,12 +52,14 @@ import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.egov.collection.constants.CollectionConstants;
 import org.egov.collection.entity.ReceiptHeader;
 import org.egov.collection.utils.CollectionsUtil;
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.service.AssignmentService;
 import org.egov.infra.microservice.models.BillDetail;
+import org.egov.infra.microservice.models.BillDetailAdditional;
 import org.egov.infra.microservice.models.Receipt;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.persistence.utils.Page;
@@ -68,6 +70,8 @@ import org.egov.infstr.search.SearchQuery;
 import org.egov.infstr.search.SearchQueryHQL;
 import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -231,6 +235,32 @@ public class SearchReceiptAction extends SearchFormAction {
                         receiptHeader.setCurrentreceipttype(billDetail.getReceiptType());
                         receiptHeader.setManualreceiptnumber(billDetail.getManualReceiptNumber());
                         receiptHeader.setModOfPayment(receipt.getInstrument().getInstrumentType().getName());
+                        
+                        JsonNode jsonNode = billDetail.getAdditionalDetails();
+                        BillDetailAdditional additional = null;
+                        try {
+                            if(null!= jsonNode)
+                            additional =(BillDetailAdditional) new ObjectMapper().readValue(jsonNode.toString(), BillDetailAdditional.class);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (null != additional) {
+                            if(null!= additional.getBusinessReason()){
+                                if( additional.getBusinessReason().contains("-"))
+                                {
+                                    receiptHeader.setService(additional.getBusinessReason().split("-")[0]);
+                                }else
+                                {
+                                 receiptHeader.setService(additional.getBusinessReason());
+                                }
+                             }
+                            
+                            if(null!= additional.getNarration())
+                                receiptHeader.setReferenceDesc(additional.getNarration());
+                            if(null!= additional.getPayeeaddress())
+                                receiptHeader.setPayeeAddress(additional.getPayeeaddress());
+                        }
+                        
                         receiptList.add(receiptHeader);
                         
                     }
