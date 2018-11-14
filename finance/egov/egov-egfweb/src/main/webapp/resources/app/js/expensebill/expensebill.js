@@ -452,6 +452,7 @@ function addDebitDetailsRow() {
 			$('#tbldebitdetails tbody tr:eq('+rowcount+')').find('.debitdetailname').val('');
 			$('#tbldebitdetails tbody tr:eq('+rowcount+')').find('.debitAmount').val('');
 			$('#tbldebitdetails tbody tr:eq('+rowcount+')').blur(calcualteNetpaybleAmount);
+			debitGlcode_initialize();
 			++debitAmountrowcount;
 		}
 	} else {
