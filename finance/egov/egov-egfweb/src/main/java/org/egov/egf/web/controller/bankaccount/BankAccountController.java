@@ -178,6 +178,7 @@ public class BankAccountController {
             return "bankaccount-new";
         }
         createBankAccountService.create(bankaccount);
+        createBankAccountService.clearCache();
         redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.bankaccount.success", null, null));
         return "redirect:/bankaccount/success/" + bankaccount.getId()+"/create";
     }

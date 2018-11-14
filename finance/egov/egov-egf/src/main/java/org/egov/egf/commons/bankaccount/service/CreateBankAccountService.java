@@ -153,7 +153,6 @@ public class CreateBankAccountService {
         bankaccount.setCreatedDate(new Date());
         bankaccount.setCreatedBy(ApplicationThreadLocals.getUserId());
         Bankaccount account = bankAccountRepository.save(bankaccount);
-        clearCache();
         return account;
     }
 
@@ -267,7 +266,7 @@ public class CreateBankAccountService {
         return chart.getId();
     }
 
-    void clearCache() {
+    public void clearCache() {
         try {
             coaCache.reLoad();
         } catch (Exception e) {
