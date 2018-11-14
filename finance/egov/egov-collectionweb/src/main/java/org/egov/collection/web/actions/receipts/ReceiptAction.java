@@ -1138,7 +1138,9 @@ public class ReceiptAction extends BaseFormAction {
                     receiptHeader.setManualreceiptnumber(billDetail.getManualReceiptNumber());
                     receiptHeader.setModOfPayment(receipt.getInstrument().getInstrumentType().getName());
                     receiptHeader.setConsumerCode(billDetail.getConsumerCode());
-                    
+                    receiptHeader.setManualreceiptnumber(billDetail.getManualReceiptNumber());
+                    if(billDetail.getManualReceiptDate()!=0)
+                        receiptHeader.setManualreceiptdate(new Date(billDetail.getManualReceiptDate()));
                     JsonNode jsonNode = billDetail.getAdditionalDetails();
                     BillDetailAdditional additional = null;
                     try {
@@ -1237,7 +1239,8 @@ public class ReceiptAction extends BaseFormAction {
                     instrumentHeader.setInstrumentAmount(instrument.getAmount());
                     // instrumentHe instrument.getFinancialStatus();
                     
-                    if (instrumentType.getType().equalsIgnoreCase(CollectionConstants.INSTRUMENTTYPE_CHEQUE)) {
+                    if (instrumentType.getType().equalsIgnoreCase(CollectionConstants.INSTRUMENTTYPE_CHEQUE)||
+                            instrumentType.getType().equalsIgnoreCase(CollectionConstants.INSTRUMENTTYPE_DD)) {
                         Bankaccount account = new Bankaccount();
                         if (null != instrument.getBankAccount())
                             account.setAccountnumber(instrument.getBankAccount().getAccountNumber());

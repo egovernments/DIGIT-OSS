@@ -234,6 +234,8 @@ public class SearchReceiptAction extends SearchFormAction {
                         receiptHeader.setCurretnStatus(billDetail.getStatus());
                         receiptHeader.setCurrentreceipttype(billDetail.getReceiptType());
                         receiptHeader.setManualreceiptnumber(billDetail.getManualReceiptNumber());
+                        if(billDetail.getManualReceiptDate()!=0)
+                        receiptHeader.setManualreceiptdate(new Date(billDetail.getManualReceiptDate()));
                         receiptHeader.setModOfPayment(receipt.getInstrument().getInstrumentType().getName());
                         
                         JsonNode jsonNode = billDetail.getAdditionalDetails();
