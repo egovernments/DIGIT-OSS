@@ -1266,11 +1266,13 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         } else {
             transactionDate = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate();
         }
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(transactionDate);
-        cal.add(Calendar.HOUR_OF_DAY, 5);
-        cal.add(Calendar.MINUTE, 30);
-        transactionDateInput = cal.getTime().getTime();
+        if (transactionDate != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(transactionDate);
+            cal.add(Calendar.HOUR_OF_DAY, 5);
+            cal.add(Calendar.MINUTE, 30);
+            transactionDateInput = cal.getTime().getTime();
+        }
         instrument.setTransactionDateInput(transactionDateInput);
         instrument.setTransactionNumber(
                 receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionNumber() != null
