@@ -12878,6 +12878,19 @@
       "code": "null",
       "navigationURL": "services/collection/receipts/chequeRemittance-newform.action",
       "path": "Collections.Cheque Remittance"
+    },
+    {
+      "id": 1704,
+      "name": "Service Bankaccount",
+      "url": "url",
+      "displayName": "Bankaccount Mapping",
+      "orderNumber": 5,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "Collections",
+      "code": "null",
+      "navigationURL": "services/collection/service/serviceTypeToBankAccountMapping-newform.action",
+      "path": "Collections.Administration.Bankaccount Mapping"
     }
   ]
 }
