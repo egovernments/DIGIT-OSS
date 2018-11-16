@@ -212,7 +212,7 @@ public class BankRemittanceAction extends BaseFormAction {
             final List<String> serviceCodeList = new ArrayList<>(0);
             final HashSet<String> fundCodeSet = new HashSet<>(0);
             List<BankAccountServiceMapping> mappings = microserviceUtils
-                    .getBankAcntServiceMappingsByBankAcc(accountNumberId.toString());
+                    .getBankAcntServiceMappingsByBankAcc(accountNumberId.toString(),null);
             for (BankAccountServiceMapping basm : mappings) {
                 serviceCodeList.add(basm.getBusinessDetails());
             }

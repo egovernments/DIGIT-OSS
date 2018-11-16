@@ -101,61 +101,32 @@
 					<s:text name="service.master.bankmappping.view.header" />
 				</div>
 
-				<table width="100%" border="0" cellspacing="0" cellpadding="0"
-					style="max-width: 960px; margin: 0 auto;">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 960px; margin: 0 auto;">
+					<%-- <tr>
+						<td class="bluebox">&nbsp;</td>
+						<td class="bluebox"><s:text name="service.master.bankname" /> </td>
+						<td class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="bankId" id="bankId" cssClass="selectwk" list="dropdownData.bankNameList" listKey="id" listValue="name" value="%{bankId}" onchange="onChangeBankBranch(this.value)" /> 
+							<egov:ajaxdropdown id="bankIdDropdown" fields="['Text','Value']" dropdownId='branchId' url='receipts/ajaxBankRemittance-bankBranchsByBankForReceiptPayments.action' />
+						</td>
+						<td class="bluebox"><s:text name="service.master.branchName" /> </td>
+						<td class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="branchId" id="branchId" cssClass="selectwk" list="dropdownData.bankBranchList" listKey="id" listValue="branchname" value="%{branchId}" onChange="onChangeBankAccount(this.value,document.getElementById('serviceDetailsId').value)" /> 
+							<egov:ajaxdropdown id="bankbranchIdDropDown" fields="['Text','Value']" dropdownId='bankAccountId' url='receipts/ajaxBankRemittance-bankAccountByBankBranch.action' />
+						</td>
+					</tr> --%>
 					<tr>
 						<td class="bluebox">&nbsp;</td>
-						<td class="bluebox"><s:text name="service.master.bankname" />
-							</td>
-						<td class="bluebox"><s:select headerKey="-1"
-								headerValue="----Choose----" name="bankId" id="bankId"
-								cssClass="selectwk" list="dropdownData.bankNameList"
-								listKey="id" listValue="name" value="%{bankId}"
-								onchange="onChangeBankBranch(this.value)" /> <egov:ajaxdropdown
-								id="bankIdDropdown" fields="['Text','Value']"
-								dropdownId='branchId'
-								url='receipts/ajaxBankRemittance-bankBranchsByBankForReceiptPayments.action' /></td>
-						<td class="bluebox"><s:text name="service.master.branchName" />
-							</td>
-						<td class="bluebox"><s:select headerKey="-1"
-								headerValue="----Choose----" name="branchId" id="branchId"
-								cssClass="selectwk" list="dropdownData.bankBranchList"
-								listKey="id" listValue="branchname" value="%{branchId}"
-								onChange="onChangeBankAccount(this.value,document.getElementById('serviceDetailsId').value)" /> <egov:ajaxdropdown
-								id="bankbranchIdDropDown" fields="['Text','Value']"
-								dropdownId='bankAccountId'
-								url='receipts/ajaxBankRemittance-bankAccountByBankBranch.action' /></td>
+						<td class="bluebox"><s:text name="service.master.accountnumber" /> </td>
+						<td class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="bankAccountId.accountnumber" id="bankAccountId" cssClass="selectwk"  list="dropdownData.bankAccountIdList" listKey="accountnumber" listValue="accountnumber" value="%{bankAccountId.accountnumber}" /></td>
 					</tr>
 					<tr>
 						<td class="bluebox">&nbsp;</td>
-						<td class="bluebox"><s:text
-								name="service.master.accountnumber" /> </td>
-						<td class="bluebox"><s:select headerKey="-1"
-								headerValue="----Choose----" name="bankAccountId"
-								id="bankAccountId" cssClass="selectwk" 
-								list="dropdownData.bankAccountIdList" listKey="id"
-								listValue="accountnumber" value="%{bankAccountId.id}" /></td>
-					</tr>
-					<tr>
-						<td class="bluebox">&nbsp;</td>
-						<td class="bluebox"><s:text
-								name="service.master.search.category" /></td>
-						<td class="bluebox"><s:select headerKey="-1"
-								headerValue="----Choose----" name="serviceCategory"
-								id="serviceCategory" cssClass="selectwk"
-								list="dropdownData.serviceCategoryList" listKey="id"
-								listValue="name" value="%{serviceCategory}"
-								onChange="populateService(this.value);" /> <egov:ajaxdropdown
-								id="service" fields="['Text','Value']"
-								dropdownId="serviceDetailsId"
-								url="receipts/ajaxReceiptCreate-ajaxLoadServiceByCategory.action" /></td>
-						<td class="bluebox"><s:text name="service.master.servicetype" />
-							</td>
-						<td class="bluebox"><s:select headerKey="-1"
-								headerValue="----Choose----" name="serviceDetails"
-								id="serviceDetailsId" cssClass="selectwk"
-								list="dropdownData.serviceDetailsList" listKey="id"
-								listValue="name" value="%{serviceDetails.id}" /></td>
+						<td class="bluebox"><s:text name="service.master.search.category" /></td>
+						<td class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="serviceCategory" id="serviceCategory" cssClass="selectwk" list="dropdownData.serviceCategoryList" listKey="code" listValue="name" value="%{serviceCategory}" onChange="populateService(this.value);" /> 
+							<egov:ajaxdropdown id="service" fields="['Text','Value']" dropdownId="serviceDetailsId" url="receipts/ajaxReceiptCreate-ajaxLoadServiceByCategoryForMisc.action" />
+							
+						</td>
+						<td class="bluebox"><s:text name="service.master.servicetype" /> </td>
+						<td class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="serviceDetails.code" id="serviceDetailsId" cssClass="selectwk" list="dropdownData.serviceDetailsList" listKey="code" listValue="name" value="%{serviceDetails.code}" /></td>
 					</tr>
 				</table>
 				<div align="left" class="mandatorycoll">
@@ -165,73 +136,31 @@
 				<br />
 			</div>
 			<div class="buttonbottom">
-				<s:submit name="sumbit" cssClass="buttonsubmit" id="button32"
-					onclick="document.serviceBankMappingForm.action='serviceTypeToBankAccountMapping-search.action';"
-					value="View" />
-					<input type="button" class="button" value="Reset"
-						id="resetbutton" name="clear" onclick="resetValues();">
-				<input name="close" type="button" class="button" id="button"
-					onclick="window.close()" value="Close" />
+				<s:submit name="sumbit" cssClass="buttonsubmit" id="button32" onclick="document.serviceBankMappingForm.action='serviceTypeToBankAccountMapping-search.action';" value="View" />
+				<input type="button" class="button" value="Reset" id="resetbutton" name="clear" onclick="resetValues();">
+				<input name="close" type="button" class="button" id="button" onclick="window.close()" value="Close" />
 			</div>
 			<s:hidden id="serviceAccountId" name="serviceAccountId" />
 			<s:hidden id="sourcePage" name="sourcePage" value="modify" />
 			<div>
 				<s:if
-					test="%{null != bankAccountServices && bankAccountServices.size() >0}">
+					test="%{null != mappings && mappings.size() >0}">
 					<div align="center">
 						<table width="100%" border="1">
 							<tr>
-								<th class="bluebgheadtd"><s:text
-										name="service.select.table.header" /></th>
-								<th class="bluebgheadtd" style="text-align: left;"><s:text
-										name="service.master.search.category" /></th>
-								<th class="bluebgheadtd" style="text-align: left;"><s:text
-										name="service.master.servicetype" /></th>
-								<th class="bluebgheadtd" style="text-align: left;"><s:text
-										name="service.master.bankname" /></th>
-								<th class="bluebgheadtd" style="text-align: left;"><s:text
-										name="service.master.branchName" /></th>
-								<th class="bluebgheadtd" style="text-align: left;"><s:text
-										name="billreceipt.accountdetails.description" /></th>
-								<th class="bluebgheadtd" style="text-align: left;"><s:text
-										name="service.master.accountnumber" /></th>
-								<th class="bluebgheadtd" style="text-align: left;"><s:text
-										name="service.master.bankmappping.glcode" /></th>
+								<th class="bluebgheadtd" style="text-align: left;"><s:text name="service.master.servicetype" /></th>
+								<th class="bluebgheadtd" style="text-align: left;"><s:text name="service.master.bankname" /></th>
+								<th class="bluebgheadtd" style="text-align: left;"><s:text name="service.master.accountnumber" /></th>
 							</tr>
-							<s:iterator var="p" value="%{bankAccountServices}" status="s">
+							<s:iterator var="p" value="%{mappings}" status="s">
 								<tr>
-									<td width="5%" class="bluebox"><input type="radio"
-										onclick='dom.get("serviceAccountId").value = <s:property value="id"/>'
-										name="radioButton1" /></td>
-									<td class="bluebox"><div align="left">
-											<s:property value="serviceDetails.serviceCategory.name" />
-										</div></td>
-									<td class="bluebox"><div align="left">
-											<s:property value="serviceDetails.name" />
-										</div></td>
-									<td class="bluebox"><div align="left">
-											<s:property value="bankAccountId.bankbranch.bank.name" />
-										</div></td>
-									<td class="bluebox"><div align="left">
-											<s:property value="bankAccountId.bankbranch.branchname" />
-										</div></td>
-									<td class="bluebox"><div align="left">
-											<s:property value="bankAccountId.narration" />
-										</div></td>
-									<td class="bluebox"><div align="left">
-											<s:property value="bankAccountId.accountnumber" />
-										</div></td>
-									<td class="bluebox"><div align="left">
-											<s:property value="bankAccountId.chartofaccounts.glcode" />
-										</div></td>
+									<td class="bluebox"><div align="left"> <s:property value="businessDetailsName" /> </div></td>
+									<td class="bluebox"><div align="left"> <s:property value="bank" /> </div></td>
+									<td class="bluebox"><div align="left"> <s:property value="bankAccount" /> </div></td>
 								</tr>
 							</s:iterator>
 						</table>
-						<s:submit type="submit" cssClass="buttonsubmit" id="button32"
-							value="Modify"
-							onclick="return validate('serviceTypeToBankAccountMapping-newform.action');" />
-						<input type="button" id="Close" value="Close"
-							onclick="javascript:window.close()" class="buttonsubmit" />
+						<input type="button" id="Close" value="Close" onclick="javascript:window.close()" class="buttonsubmit" />
 					</div>
 				</s:if>
 				<s:else>

@@ -496,7 +496,7 @@ public class ReceiptAction extends BaseFormAction {
         if (CollectionConstants.BLANK.equals(payeename))
             payeename = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
                     CollectionConstants.APPCONFIG_VALUE_PAYEEFORMISCRECEIPTS);
-        BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(CollectionConstants.SERVICE_CODE_COLLECTIONS);
+        BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(CollectionConstants.SERVICE_CODE_COLLECTIONS).get(0);
         receiptHeader.setPartPaymentAllowed(false);
         receiptHeader.setService(serviceId);
         receiptHeader.setServiceIdText(serviceIdText);
@@ -1040,7 +1040,7 @@ public class ReceiptAction extends BaseFormAction {
             setCollectionModesNotAllowed(Arrays.asList(oldReceiptHeader.getCollModesNotAllwd().split(",")));
         setOverrideAccountHeads(oldReceiptHeader.getOverrideAccountHeads());
         setPartPaymentAllowed(oldReceiptHeader.getPartPaymentAllowed());
-        BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(oldReceiptHeader.getService());
+        BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(oldReceiptHeader.getService()).get(0);
         setServiceName(bd.getName());
 
         receiptHeader.setReceiptMisc(new ReceiptMisc(oldReceiptHeader.getReceiptMisc().getBoundary(),
@@ -1348,7 +1348,7 @@ public class ReceiptAction extends BaseFormAction {
 
             populateReceiptModelWithExistingReceiptInfo(receiptHeaderToBeCancelled);
             setFundName(receiptHeaderToBeCancelled.getReceiptMisc().getFund().getName());
-            BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(receiptHeaderToBeCancelled.getService());
+            BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(receiptHeaderToBeCancelled.getService()).get(0);
             setServiceName(bd.getName());
             setServiceId(bd.getCode());
             addDropdownData("serviceList",

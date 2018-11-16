@@ -50,13 +50,14 @@ package org.egov.collection.web.actions.service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
-import org.egov.collection.constants.CollectionConstants;
 import org.egov.commons.Bank;
 import org.egov.commons.Bankaccount;
 import org.egov.commons.dao.BankBranchHibernateDAO;
@@ -64,6 +65,7 @@ import org.egov.commons.dao.BankHibernateDAO;
 import org.egov.commons.dao.BankaccountHibernateDAO;
 import org.egov.commons.entity.BankAccountServiceMap;
 import org.egov.infra.microservice.models.BankAccountServiceMapping;
+import org.egov.infra.microservice.models.BusinessDetails;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPageExt;
 import org.egov.infstr.models.ServiceDetails;
@@ -90,6 +92,7 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
     @Autowired
     private BankaccountHibernateDAO bankAccountHibernateDAO;
     private List<BankAccountServiceMap> bankAccountServices = new ArrayList<>();
+    private List<BankAccountServiceMapping> mappings = new ArrayList<>();
     private Integer bankId;
     private Integer branchId;
     private String serviceCategory;
@@ -136,13 +139,10 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
 
     private void populateListsForView() {
         addDropdownData("serviceCategoryList", microserviceUtils.getBusinessCategories());
-        addDropdownData(
-                "serviceDetailsList",
-                serviceCategory != null && !serviceCategory.isEmpty() && !serviceCategory.equalsIgnoreCase("-1")
-                        ? getPersistenceService().findAllByNamedQuery(
-                                CollectionConstants.QUERY_SERVICE_DETAIL_BY_CATEGORY, Long.valueOf(serviceCategory),
-                                Boolean.TRUE)
-                        : Collections.emptyList());
+        if (serviceCategory != null && !serviceCategory.isEmpty() && !serviceCategory.equalsIgnoreCase("-1"))
+            addDropdownData("serviceDetailsList", microserviceUtils.getBusinessDetailsByCategoryCode(serviceCategory));
+        else
+            addDropdownData("serviceDetailsList", Collections.emptyList());
         if (sourcePage != null && "modify".equals(sourcePage))
             addDropdownData(BANK_NAME_LIST, bankHibernateDAO.getAllBankHavingBranchAndAccounts());
         else
@@ -152,16 +152,35 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
                 bankId != null && bankId != -1 ? bankBrankHibernateDAO
                         .getAllBankBranchsByBankForReceiptPayments(bankId) : Collections.emptyList());
         addDropdownData(
-                BANK_ACCOUNT_LIST,
-                branchId != null && branchId != -1 ? bankAccountHibernateDAO
-                        .getBankAccountByBankBranchForReceiptsPayments(branchId, fundId) : Collections.emptyList());
+                BANK_ACCOUNT_LIST, getBankAccountMappedToService());
     }
 
     @SuppressWarnings("unchecked")
     private List<Bank> getBankMappedToService() {
-        final String serviceBankQueryString = "select distinct asm.bankAccountId.bankbranch.bank from BankAccountServiceMap asm)";
+        List<BankAccountServiceMapping> mappings = microserviceUtils.getBankAcntServiceMappings();
+        List<String> accountNumbers = new ArrayList<String>();
+        for (BankAccountServiceMapping basm : mappings) {
+            accountNumbers.add(basm.getBankAccount());
+        }
+        final String serviceBankQueryString = "select distinct ba.bankbranch.bank from Bankaccount ba where ba.accountnumber in(:accountnumbers))";
+
         final Query bankListQuery = persistenceService.getSession().createQuery(serviceBankQueryString);
+        bankListQuery.setParameterList("accountnumbers", accountNumbers);
         return bankListQuery.list();
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<Bankaccount> getBankAccountMappedToService() {
+        List<BankAccountServiceMapping> mappings = microserviceUtils.getBankAcntServiceMappings();
+        List<String> accountNumbers = new ArrayList<String>();
+        for (BankAccountServiceMapping basm : mappings) {
+            accountNumbers.add(basm.getBankAccount());
+        }
+        final String serviceBankQueryString = "select distinct ba from Bankaccount ba where ba.accountnumber in(:accountnumbers))";
+
+        final Query bankAccListQuery = persistenceService.getSession().createQuery(serviceBankQueryString);
+        bankAccListQuery.setParameterList("accountnumbers", accountNumbers);
+        return bankAccListQuery.list();
     }
 
     @Action(value = "/service/serviceTypeToBankAccountMapping-list")
@@ -175,34 +194,58 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
     public String search() {
         populateListsForView();
         final StringBuilder searchkQueryString = new StringBuilder();
-        searchkQueryString.append("select distinct asm from BankAccountServiceMap asm where 1=1");
-        if (bankId != null && bankId != -1)
-            searchkQueryString.append(" and asm.bankAccountId.bankbranch.bank.id=:bankId");
-        if (branchId != null && branchId != -1)
-            searchkQueryString.append(" and asm.bankAccountId.bankbranch.id=:branchId");
-        if (bankAccountServiceMap.getBankAccountId() != null && bankAccountServiceMap.getBankAccountId().getId() != -1)
-            searchkQueryString.append(" and asm.bankAccountId.id=:accountId");
-        if (serviceCategory != null && !serviceCategory.isEmpty() && !serviceCategory.equalsIgnoreCase("-1"))
-            searchkQueryString.append(" and asm.serviceDetails.serviceCategory.id=:serviceCatId");
-        if (bankAccountServiceMap.getServiceDetails() != null
-                && bankAccountServiceMap.getServiceDetails().getId() != -1)
-            searchkQueryString.append(" and asm.serviceDetails.id=:serviceId");
-        final Query searchBankAccountListQuery = persistenceService.getSession().createQuery(
-                searchkQueryString.toString());
-        if (bankId != null && bankId != -1)
-            searchBankAccountListQuery.setParameter("bankId", bankId);
-        if (branchId != null && branchId != -1)
-            searchBankAccountListQuery.setParameter("branchId", branchId);
-        if (bankAccountServiceMap.getBankAccountId() != null && bankAccountServiceMap.getBankAccountId().getId() != -1)
-            searchBankAccountListQuery.setParameter("accountId", bankAccountServiceMap.getBankAccountId().getId());
-        if (serviceCategory != null && !serviceCategory.isEmpty() && !serviceCategory.equalsIgnoreCase("-1"))
-            searchBankAccountListQuery.setParameter("serviceCatId", serviceCategory);
-        if (bankAccountServiceMap.getServiceDetails() != null
-                && bankAccountServiceMap.getServiceDetails().getId() != -1)
-            searchBankAccountListQuery.setParameter("serviceId", bankAccountServiceMap.getServiceDetails().getId());
-        bankAccountServices = searchBankAccountListQuery.list();
+        StringBuilder businessDetails = new StringBuilder();
+
+        if (serviceCategory != null && !serviceCategory.isEmpty() && !serviceCategory.equalsIgnoreCase("-1")
+                && (bankAccountServiceMap.getServiceDetails() == null
+                        || bankAccountServiceMap.getServiceDetails().getCode() == null
+                        || bankAccountServiceMap.getServiceDetails().getCode().equalsIgnoreCase("-1"))) {
+            List<BusinessDetails> bds = microserviceUtils.getBusinessDetailsByCategoryCode(serviceCategory);
+            for (BusinessDetails bd : bds) {
+                if (businessDetails.length() > 0) {
+                    businessDetails.append(",");
+                }
+                businessDetails.append(bd.getCode());
+            }
+
+        }
+        if (bankAccountServiceMap.getServiceDetails() != null && !bankAccountServiceMap.getServiceDetails().getCode().isEmpty()
+                && !bankAccountServiceMap.getServiceDetails().getCode().equalsIgnoreCase("-1")) {
+            businessDetails = new StringBuilder();
+            businessDetails.append(bankAccountServiceMap.getServiceDetails().getCode());
+        }
+        mappings = microserviceUtils
+                .getBankAcntServiceMappingsByBankAcc(bankAccountServiceMap.getBankAccountId().getAccountnumber(),
+                        businessDetails.toString());
+        populateNames(mappings);
         target = "searchresult";
         return INDEX;
+    }
+
+    private void populateNames(List<BankAccountServiceMapping> mappings2) {
+
+        StringBuilder businessDetails = new StringBuilder();
+
+        for (BankAccountServiceMapping bd : mappings2) {
+            if (businessDetails.length() > 0) {
+                businessDetails.append(",");
+            }
+            businessDetails.append(bd.getBusinessDetails());
+        }
+
+        List<BusinessDetails> businessDetailsList = microserviceUtils.getBusinessDetailsByCode(businessDetails.toString());
+        Map<String, String> businessDetailsCodeNameMap = new HashMap<>();
+
+        if (businessDetailsList != null)
+            for (BusinessDetails bd : businessDetailsList) {
+                businessDetailsCodeNameMap.put(bd.getCode(), bd.getName());
+            }
+
+        for (BankAccountServiceMapping r : mappings2) {
+            if (r.getBusinessDetails() != null
+                    && !r.getBusinessDetails().isEmpty())
+                r.setBusinessDetailsName(businessDetailsCodeNameMap.get(r.getBusinessDetails()));
+        }
     }
 
     @ValidationErrorPageExt(action = NEW, makeCall = true, toMethod = "newform")
@@ -219,7 +262,7 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
         basm.setTenantId(microserviceUtils.getTenentId());
         microserviceUtils.createBankAcntServiceMappings(basm);
         bankAccountServiceMap.getServiceDetails().setName(
-                microserviceUtils.getBusinessDetailsByCode(bankAccountServiceMap.getServiceDetails().getCode()).getName());
+                microserviceUtils.getBusinessDetailsByCode(bankAccountServiceMap.getServiceDetails().getCode()).get(0).getName());
         addActionMessage(getText("service.master.successmessage.create", new String[] {
                 bankAccountServiceMap.getServiceDetails().getName(),
                 bankAccountServiceMap.getBankAccountId().getBankbranch().getBank().getName(),
@@ -313,6 +356,14 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
 
     public void setTarget(final String target) {
         this.target = target;
+    }
+
+    public List<BankAccountServiceMapping> getMappings() {
+        return mappings;
+    }
+
+    public void setMappings(List<BankAccountServiceMapping> mappings) {
+        this.mappings = mappings;
     }
 
 }

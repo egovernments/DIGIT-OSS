@@ -470,17 +470,17 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
     public String ajaxFinMiscDtlsByService() {
 
         final String serviceId = parameters.get(SERVICEID)[0];
-        BusinessDetails service = microserviceUtils.getBusinessDetailsByCode(serviceId);
+        List<BusinessDetails> service = microserviceUtils.getBusinessDetailsByCode(serviceId);
 
         final StringBuilder miscDetails = new StringBuilder();
-        if (null != service)
-            miscDetails.append(null != service.getFund() ? service.getFund() : "-1").append('~') // fund
+        if (null != service && !service.isEmpty())
+            miscDetails.append(null != service.get(0).getFund() ? service.get(0).getFund() : "-1").append('~') // fund
                     .append("-1").append('~') // scheme
                     .append("-1").append('~') // subScheme
-                    .append(null != service.getFundSource() ? service.getFundSource() : "-1").append('~') // fundsource
-                    .append(null != service.getFunctionary() ? service.getFunctionary() : "-1").append('~') // functionary
-                    .append(null != service.getFunction() ? service.getFunction() : "-1").append('~')// function
-                    .append(null != service.getDepartment() ? service.getDepartment() : "-1"); // department
+                    .append(null != service.get(0).getFundSource() ? service.get(0).getFundSource() : "-1").append('~') // fundsource
+                    .append(null != service.get(0).getFunctionary() ? service.get(0).getFunctionary() : "-1").append('~') // functionary
+                    .append(null != service.get(0).getFunction() ? service.get(0).getFunction() : "-1").append('~')// function
+                    .append(null != service.get(0).getDepartment() ? service.get(0).getDepartment() : "-1"); // department
         else
             miscDetails.append("-1").append('~') // fund
                     .append("-1").append('~') // scheme
@@ -498,10 +498,10 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
     public String ajaxFinAccDtlsByService() {
 
         final String serviceId = parameters.get(SERVICEID)[0];
-        BusinessDetails service = microserviceUtils.getBusinessDetailsByCode(serviceId);
+        List<BusinessDetails> service = microserviceUtils.getBusinessDetailsByCode(serviceId);
         accountDetails = new ArrayList<>();
-        if (null != service && service.getAccountDetails() != null) {
-            accountDetails.addAll(service.getAccountDetails());
+        if (null != service && !service.isEmpty() && service.get(0).getAccountDetails() != null) {
+            accountDetails.addAll(service.get(0).getAccountDetails());
             for (BusinessAccountDetails bad : accountDetails) {
                 if (bad.getChartOfAccounts() != null) {
                     CChartOfAccounts coa = chartOfAccountsService.getByGlCode(bad.getChartOfAccounts().toString());
@@ -552,11 +552,11 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
     @Action(value = "/receipts/ajaxReceiptCreate-ajaxFinSubledgerByService")
     public String ajaxFinSubledgerByService() {
         final String serviceId = parameters.get(SERVICEID)[0];
-        BusinessDetails service = microserviceUtils.getBusinessDetailsByCode(serviceId);
+        List<BusinessDetails> service = microserviceUtils.getBusinessDetailsByCode(serviceId);
         subledgerDetails = new ArrayList<>();
         BusinessAccountSubLedger servicInfo;
-        if (null != service)
-            for (final BusinessAccountDetails account : service.getAccountDetails()) {
+        if (null != service && !service.isEmpty())
+            for (final BusinessAccountDetails account : service.get(0).getAccountDetails()) {
                 if (account.getSubledgerDetails() != null)
                     subledgerDetails.addAll(account.getSubledgerDetails());
                 if (subledgerDetails.isEmpty()) {

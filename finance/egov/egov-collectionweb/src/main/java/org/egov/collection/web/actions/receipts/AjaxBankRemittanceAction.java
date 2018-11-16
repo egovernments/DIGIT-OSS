@@ -132,8 +132,8 @@ public class AjaxBankRemittanceAction extends BaseFormAction {
             setFundName(fund.getName());
         }
         if (serviceName == null && serviceId != null && !serviceId.isEmpty() && !serviceId.equalsIgnoreCase("-1")) {
-            BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(serviceId);
-            setServiceName(bd.getName());
+            List<BusinessDetails> bds = microserviceUtils.getBusinessDetailsByCode(serviceId);
+            setServiceName(bds.get(0).getName());
         }
         final String bankBranchQueryString = "select distinct(bb.id) as branchid,b.NAME||'-'||bb.BRANCHNAME as branchname from BANK b,BANKBRANCH bb, BANKACCOUNT ba,"
                 + "EGCL_BANKACCOUNTSERVICEMAPPING asm,EGCL_SERVICEDETAILS sd,FUND fd where asm.bankaccount=ba.ID and asm.servicedetails=sd.ID and "
@@ -292,10 +292,10 @@ public class AjaxBankRemittanceAction extends BaseFormAction {
     @Action(value = "/receipts/ajaxBankRemittance-bankAccountByBankBranch")
     public String bankAccountByBankBranch() {
         if (serviceId != null && !serviceId.isEmpty() && !serviceId.equalsIgnoreCase("-1")) {
-            BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(serviceId);
+            List<BusinessDetails> bds = microserviceUtils.getBusinessDetailsByCode(serviceId);
             Fund fund = null;
-            if (bd.getFund() != null) {
-                fund = fundService.findByCode(bd.getFund());
+            if (bds.get(0).getFund() != null) {
+                fund = fundService.findByCode(bds.get(0).getFund());
             }
             fundId = fund != null ? fund.getId() : null;
         }

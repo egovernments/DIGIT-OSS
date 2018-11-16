@@ -745,7 +745,7 @@ public class MicroserviceUtils {
             return null;
     }
 
-    public BusinessDetails getBusinessDetailsByCode(String code) {
+    public List<BusinessDetails> getBusinessDetailsByCode(String code) {
 
         final RestTemplate restTemplate = createRestTemplate();
 
@@ -761,7 +761,7 @@ public class MicroserviceUtils {
 
         BusinessDetailsResponse bcResponse = restTemplate.postForObject(bd_url, reqWrapper, BusinessDetailsResponse.class);
         if (bcResponse.getBusinessDetails() != null && !bcResponse.getBusinessDetails().isEmpty())
-            return bcResponse.getBusinessDetails().get(0);
+            return bcResponse.getBusinessDetails();
         else
             return null;
     }
@@ -890,12 +890,20 @@ public class MicroserviceUtils {
             return null;
     }
 
-    public List<BankAccountServiceMapping> getBankAcntServiceMappingsByBankAcc(String bankAccount) {
+    public List<BankAccountServiceMapping> getBankAcntServiceMappingsByBankAcc(String bankAccount, String businessDetails) {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String url = hostUrl + bankAccountServiceMappingSearchUrl + "?tenantId=" + getTenentId() + "&bankAccount="
-                + bankAccount;
+        String url = hostUrl + bankAccountServiceMappingSearchUrl + "?tenantId=" + getTenentId();
+
+        if (bankAccount != null && !bankAccount.isEmpty() && !bankAccount.equalsIgnoreCase("-1")) {
+            url = url + "&bankAccount="
+                    + bankAccount;
+        }
+        if (businessDetails != null && !businessDetails.isEmpty() && !businessDetails.equalsIgnoreCase("-1")) {
+            url = url + "&businessDetails="
+                    + businessDetails;
+        }
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();

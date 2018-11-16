@@ -43,6 +43,8 @@ public class BankAccountServiceMapping {
 
     private String businessDetails;
 
+    private String businessDetailsName;
+
     private String bankAccount;
 
     private String bank;
@@ -57,6 +59,14 @@ public class BankAccountServiceMapping {
 
     public void setBusinessDetails(String businessDetails) {
         this.businessDetails = businessDetails;
+    }
+
+    public String getBusinessDetailsName() {
+        return businessDetailsName;
+    }
+
+    public void setBusinessDetailsName(String businessDetailsName) {
+        this.businessDetailsName = businessDetailsName;
     }
 
     public String getBankAccount() {
