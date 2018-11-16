@@ -104,7 +104,7 @@
 	function populateService(serviceId) {
 		document.getElementById('serviceDetailsId').value = "-1"
 		populateserviceDetailsId({
-			serviceId : serviceId,
+			serviceCatId : serviceId,
 		});
 	}
 </script>
@@ -142,57 +142,27 @@
 						<s:hidden id="id" name="id" />
 						<s:hidden id="sourcePage" name="sourcePage" />
 						<td class="bluebox">&nbsp;</td>
-						<td class="bluebox"><s:text
-								name="service.master.search.category" /> <span
-							class="mandatory" /></td>
-						<td class="bluebox"><s:select headerKey="-1"
-								headerValue="----Choose----" name="serviceCategory"
-								id="serviceCategory" cssClass="selectwk"
-								list="dropdownData.serviceCategoryList" listKey="id"
-								listValue="name" value="%{serviceCategory}"
-								onChange="populateService(this.value);" /> <egov:ajaxdropdown
-								id="service" fields="['Text','Value']"
-								dropdownId="serviceDetailsId"
-								url="receipts/ajaxBankRemittance-serviceListNotMappedToAccount.action" /></td>
-						<td class="bluebox"><s:text name="service.master.servicetype" />
-							<span class="mandatory" /></td>
-						<td class="bluebox"><s:select headerKey="-1"
-								headerValue="----Choose----" name="serviceDetails"
-								id="serviceDetailsId" cssClass="selectwk"
-								list="dropdownData.serviceDetailsList" listKey="id"
-								listValue="name" value="%{serviceDetails.id}" /></td>
+						<td class="bluebox"><s:text name="service.master.search.category" /> <span class="mandatory" /></td>
+						<td class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="serviceCategory" id="serviceCategory" cssClass="selectwk" list="dropdownData.serviceCategoryList" listKey="code" listValue="name" value="%{serviceCategory}" onChange="populateService(this.value);" />
+						    <egov:ajaxdropdown id="service" fields="['Text','Value']" dropdownId="serviceDetailsId" url="receipts/ajaxReceiptCreate-ajaxLoadServiceByCategoryForMisc.action" />
+						</td>
+						<td class="bluebox"><s:text name="service.master.servicetype" /> <span class="mandatory" /></td>
+						<td class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="serviceDetails.code" id="serviceDetailsId" cssClass="selectwk" list="dropdownData.serviceDetailsList" listKey="id" listValue="name" value="%{serviceDetails.code}" /></td>
 					</tr>
 					<tr>
 						<td class="bluebox">&nbsp;</td>
-						<td class="bluebox"><s:text name="service.master.bankname" />
-							<span class="mandatory" /></td>
-						<td class="bluebox"><s:select headerKey="-1"
-								headerValue="----Choose----" name="bankId" id="bankName"
-								cssClass="selectwk" list="dropdownData.bankNameList"
-								listKey="id" listValue="name" value="%{bankId}"
-								onchange="onChangeBankBranch(this.value)" /> <egov:ajaxdropdown
-								id="accountNumberIdDropdown" fields="['Text','Value']"
-								dropdownId='branchName'
-								url='receipts/ajaxBankRemittance-bankBranchsByBankForReceiptPayments.action' /></td>
-						<td class="bluebox"><s:text name="service.master.branchName" />
-							<span class="mandatory" /></td>
-						<td class="bluebox"><s:select headerKey="-1"
-								headerValue="----Choose----" name="branchId" id="branchName"
-								cssClass="selectwk" list="dropdownData.bankBranchList"
-								listKey="id" listValue="branchname"
-								onChange="onChangeBankAccount(this.value,document.getElementById('serviceDetailsId').value)" value="%{branchId}" />
-							<egov:ajaxdropdown id="bankAccountIdDropDown"
-								fields="['Text','Value']" dropdownId='bankAccountId'
-								url='receipts/ajaxBankRemittance-bankAccountByBankBranch.action' /></td>
+						<td class="bluebox"><s:text name="service.master.bankname" /> <span class="mandatory" /></td>
+						<td class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="bankId" id="bankName" cssClass="selectwk" list="dropdownData.bankNameList" listKey="id" listValue="name" value="%{bankId}" onchange="onChangeBankBranch(this.value)" /> 
+							<egov:ajaxdropdown id="accountNumberIdDropdown" fields="['Text','Value']" dropdownId='branchName' url='receipts/ajaxBankRemittance-bankBranchsByBankForReceiptPayments.action' />
+						</td>
+						<td class="bluebox"><s:text name="service.master.branchName" /> <span class="mandatory" /></td>
+						<td class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="branchId" id="branchName" cssClass="selectwk" list="dropdownData.bankBranchList" listKey="id" listValue="branchname" onChange="onChangeBankAccount(this.value,document.getElementById('serviceDetailsId').value)" value="%{branchId}" />
+							<egov:ajaxdropdown id="bankAccountIdDropDown" fields="['Text','Value']" dropdownId='bankAccountId' url='receipts/ajaxBankRemittance-bankAccountByBankBranch.action' />
+						</td>
 					</tr>
 					<td class="bluebox">&nbsp;</td>
-					<td class="bluebox"><s:text
-							name="service.master.accountnumber" /> <span class="mandatory" /></td>
-					<td class="bluebox"><s:select headerKey="-1"
-							headerValue="----Choose----" name="bankAccountId"
-							id="bankAccountId" cssClass="selectwk"
-							list="dropdownData.bankAccountIdList" listKey="id"
-							listValue="accountnumber" value="%{bankAccountId.id}" /></td>
+					<td class="bluebox"><s:text name="service.master.accountnumber" /> <span class="mandatory" /></td>
+					<td class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="bankAccountId" id="bankAccountId" cssClass="selectwk" list="dropdownData.bankAccountIdList" listKey="id" listValue="accountnumber" value="%{bankAccountId.id}" /></td>
 					<tr>
 					</tr>
 				</table>
@@ -204,12 +174,9 @@
 			</div>
 
 			<div class="buttonbottom">
-				<s:submit name="sumbit" cssClass="buttonsubmit" id="button32"
-					onclick="document.serviceBankMappingForm.action='serviceTypeToBankAccountMapping-create.action'; return validate();"
-					value="Create Mapping" />
+				<s:submit name="sumbit" cssClass="buttonsubmit" id="button32" onclick="document.serviceBankMappingForm.action='serviceTypeToBankAccountMapping-create.action'; return validate();" value="Create Mapping" />
 				<s:reset name="reset" cssClass="button" id="button" value="Reset" />
-				<input name="close" type="button" class="button" id="button"
-					onclick="window.close()" value="Close" />
+				<input name="close" type="button" class="button" id="button" onclick="window.close()" value="Close" />
 			</div>
 		</s:push>
 	</s:form>

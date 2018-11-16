@@ -63,6 +63,7 @@ import org.egov.commons.Fund;
 import org.egov.commons.dao.BankBranchHibernateDAO;
 import org.egov.commons.dao.BankaccountHibernateDAO;
 import org.egov.commons.exception.NoSuchObjectException;
+import org.egov.commons.service.FundService;
 import org.egov.eis.entity.EmployeeView;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.BusinessDetails;
@@ -105,6 +106,8 @@ public class AjaxBankRemittanceAction extends BaseFormAction {
     private BankaccountHibernateDAO bankaccountHibernateDAO;
     @Autowired
     private MicroserviceUtils microserviceUtils;
+    @Autowired
+    private FundService fundService;
     private PersistenceService<ServiceDetails, Long> serviceDetailsService;
 
     /**
@@ -113,7 +116,7 @@ public class AjaxBankRemittanceAction extends BaseFormAction {
     private Integer fundId;
     private Integer branchId;
     private Integer bankAccountId;
-    private Long serviceId;
+    private String serviceId;
     private Integer bankId;
     private List<Bankbranch> bankBranchArrayList = new ArrayList<Bankbranch>(0);
     private List<Bankaccount> bankAccountArrayList;
@@ -128,8 +131,8 @@ public class AjaxBankRemittanceAction extends BaseFormAction {
                         "Fund information not available")));
             setFundName(fund.getName());
         }
-        if (serviceName == null && serviceId != null && serviceId != -1) {
-        	BusinessDetails bd = microserviceUtils.getBusinessDetailsById(serviceId);
+        if (serviceName == null && serviceId != null && !serviceId.isEmpty() && !serviceId.equalsIgnoreCase("-1")) {
+            BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(serviceId);
             setServiceName(bd.getName());
         }
         final String bankBranchQueryString = "select distinct(bb.id) as branchid,b.NAME||'-'||bb.BRANCHNAME as branchname from BANK b,BANKBRANCH bb, BANKACCOUNT ba,"
@@ -191,7 +194,7 @@ public class AjaxBankRemittanceAction extends BaseFormAction {
                         "Fund information not available")));
             setFundName(fund.getName());
         }
-        if (serviceName == null && serviceId != null && serviceId != -1) {
+        if (serviceName == null && serviceId != null && !serviceId.isEmpty() && !serviceId.equalsIgnoreCase("-1")) {
             final ServiceDetails serviceDetails = (ServiceDetails) persistenceService.find(
                     "from ServiceDetails where id=?", serviceId);
             setServiceName(serviceDetails.getName());
@@ -288,9 +291,13 @@ public class AjaxBankRemittanceAction extends BaseFormAction {
 
     @Action(value = "/receipts/ajaxBankRemittance-bankAccountByBankBranch")
     public String bankAccountByBankBranch() {
-        if (serviceId != -1) {
-            ServiceDetails sd = serviceDetailsService.findById(serviceId, false);
-            fundId = sd.getFund().getId();
+        if (serviceId != null && !serviceId.isEmpty() && !serviceId.equalsIgnoreCase("-1")) {
+            BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(serviceId);
+            Fund fund = null;
+            if (bd.getFund() != null) {
+                fund = fundService.findByCode(bd.getFund());
+            }
+            fundId = fund != null ? fund.getId() : null;
         }
         bankAccountArrayList = bankaccountHibernateDAO.getBankAccountByBankBranchForReceiptsPayments(branchId, fundId);
         return BANKACCOUNTLIST;
@@ -411,11 +418,11 @@ public class AjaxBankRemittanceAction extends BaseFormAction {
         this.bankAccountId = bankAccountId;
     }
 
-    public Long getServiceId() {
+    public String getServiceId() {
         return serviceId;
     }
 
-    public void setServiceId(final Long serviceId) {
+    public void setServiceId(final String serviceId) {
         this.serviceId = serviceId;
     }
 

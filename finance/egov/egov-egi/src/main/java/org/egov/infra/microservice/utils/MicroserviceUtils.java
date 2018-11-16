@@ -56,6 +56,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -87,6 +88,7 @@ import org.egov.infra.microservice.contract.UserSearchResponse;
 import org.egov.infra.microservice.models.Assignment;
 import org.egov.infra.microservice.models.BankAccount;
 import org.egov.infra.microservice.models.BankAccountServiceMapping;
+import org.egov.infra.microservice.models.BankAccountServiceMappingReq;
 import org.egov.infra.microservice.models.BankAccountServiceMappingResponse;
 import org.egov.infra.microservice.models.BusinessCategory;
 import org.egov.infra.microservice.models.BusinessCategoryResponse;
@@ -132,8 +134,6 @@ import org.egov.infra.web.support.ui.Inbox;
 import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.jfree.util.Log;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
@@ -146,8 +146,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
-import com.fasterxml.jackson.core.JsonParser;
 
 @Service
 public class MicroserviceUtils {
@@ -243,6 +241,9 @@ public class MicroserviceUtils {
     @Value("${egov.services.collection.service.receipts.search}")
     private String receiptSearchUrl;
 
+    @Value("${egov.services.collection.service.basm.create}")
+    private String bankAccountServiceMappingCreateUrl;
+
     @Value("${egov.services.collection.service.basm.search}")
     private String bankAccountServiceMappingSearchUrl;
 
@@ -260,10 +261,10 @@ public class MicroserviceUtils {
 
     @Value("${egov.services.collection.service.receipt.update}")
     private String receiptUpdateUrl;
-    
+
     @Value("${egov.services.master.mdms.search.url}")
     private String mdmsSearchUrl;
-    
+
     public RequestInfo createRequestInfo() {
         final RequestInfo requestInfo = new RequestInfo();
         requestInfo.setApiId("apiId");
@@ -342,7 +343,7 @@ public class MicroserviceUtils {
             return mdmsObj.get("designation");
         return null;
     }
-    
+
     private HashMap getFinanceMdmsObj() {
 
         String mdmsUrl = this.hostUrl + this.mdmsSearchUrl;
@@ -364,21 +365,21 @@ public class MicroserviceUtils {
 
         Map<String, JSONArray> mdmsmap = response.getMdmsRes().get("common-masters");
         if (null != mdmsmap && mdmsmap.size() > 0) {
-            HashMap mdmObj =  (HashMap)mdmsmap.get("mapping").get(0);
+            HashMap mdmObj = (HashMap) mdmsmap.get("mapping").get(0);
             return mdmObj;
         }
 
         return null;
 
     }
-    
+
     public List<Department> getDepartments() {
 
         // final RestTemplate restTemplate = createRestTemplate();
-        final String deptCodes = (String)this.getFinanceDeptCodes();
+        final String deptCodes = (String) this.getFinanceDeptCodes();
         final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId()
-        +(deptCodes!=null?"&codes="+deptCodes:"");
-               
+                + (deptCodes != null ? "&codes=" + deptCodes : "");
+
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
@@ -453,16 +454,15 @@ public class MicroserviceUtils {
     public List<Designation> getDesignation(String code) {
 
         final RestTemplate restTemplate = createRestTemplate();
-        
+
         String design_url = designServiceUrl + "?tenantId=" + getTenentId();
-        
+
         // String design_url = designServiceUrl+"?tenantId="+"default";
 
         if (code != null)
             design_url = design_url + "&code=" + code;
-        else
-        {
-            String desgCodes = (String)this.getFinanceDesginCodes(); 
+        else {
+            String desgCodes = (String) this.getFinanceDesginCodes();
             design_url = design_url + "&codes=" + desgCodes;
         }
 
@@ -904,6 +904,28 @@ public class MicroserviceUtils {
         reqWrapper.setRequestInfo(requestInfo);
 
         BankAccountServiceMappingResponse response = restTemplate.postForObject(url, reqWrapper,
+                BankAccountServiceMappingResponse.class);
+        if (response != null && response.getBankAccountServiceMapping() != null)
+            return response.getBankAccountServiceMapping();
+        else
+            return null;
+    }
+
+    public List<BankAccountServiceMapping> createBankAcntServiceMappings(BankAccountServiceMapping basm) {
+
+        final RestTemplate restTemplate = createRestTemplate();
+
+        final String url = hostUrl + bankAccountServiceMappingCreateUrl;
+
+        RequestInfo requestInfo = new RequestInfo();
+
+        requestInfo.setAuthToken(getUserToken());
+
+        BankAccountServiceMappingReq request = new BankAccountServiceMappingReq();
+        request.setRequestInfo(requestInfo);
+        request.setBankAccountServiceMapping(Collections.singletonList(basm));
+
+        BankAccountServiceMappingResponse response = restTemplate.postForObject(url, request,
                 BankAccountServiceMappingResponse.class);
         if (response != null && response.getBankAccountServiceMapping() != null)
             return response.getBankAccountServiceMapping();
