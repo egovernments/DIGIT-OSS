@@ -12883,14 +12883,27 @@
       "id": 1704,
       "name": "Service Bankaccount",
       "url": "url",
-      "displayName": "Bankaccount Mapping",
+      "displayName": "Create Bankaccount Mapping",
       "orderNumber": 5,
       "parentModule": "",
       "enabled": true,
       "serviceCode": "Collections",
       "code": "null",
       "navigationURL": "services/collection/service/serviceTypeToBankAccountMapping-newform.action",
-      "path": "Collections.Administration.Bankaccount Mapping"
+      "path": "Collections.Administration.Create Bankaccount Mapping"
+    },
+    {
+      "id": 1705,
+      "name": "Service Bankaccount",
+      "url": "url",
+      "displayName": "View Bankaccount Mapping",
+      "orderNumber": 6,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "Collections",
+      "code": "null",
+      "navigationURL": "/services/collection/service/serviceTypeToBankAccountMapping-list.action",
+      "path": "Collections.Administration.View Bankaccount Mapping"
     }
   ]
 }
