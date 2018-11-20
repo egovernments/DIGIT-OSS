@@ -12902,7 +12902,7 @@
       "enabled": true,
       "serviceCode": "Collections",
       "code": "null",
-      "navigationURL": "/services/collection/service/serviceTypeToBankAccountMapping-list.action",
+      "navigationURL": "services/collection/service/serviceTypeToBankAccountMapping-list.action",
       "path": "Collections.Administration.View Bankaccount Mapping"
     }
   ]
