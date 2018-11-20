@@ -50,7 +50,9 @@ package org.egov.infra.microservice.models;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RequestInfo {
 
     private String apiId;

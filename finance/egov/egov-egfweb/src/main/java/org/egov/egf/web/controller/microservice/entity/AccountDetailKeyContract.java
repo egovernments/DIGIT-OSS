@@ -41,6 +41,7 @@
 package org.egov.egf.web.controller.microservice.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AccountDetailKeyContract {
@@ -50,6 +51,16 @@ public class AccountDetailKeyContract {
     private List<Long> ids = new ArrayList<Long>();
 
     private String keyName;
+    private Long createdBy;
+    
+
+    private Date createdDate;
+
+    private Long lastModifiedBy;
+
+    private Date lastModifiedDate;
+
+    private String tenantId;
 
     public String getKeyId() {
         return keyId;
@@ -73,6 +84,46 @@ public class AccountDetailKeyContract {
 
     public void setKeyName(String keyName) {
         this.keyName = keyName;
+    }
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Long getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(Long lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 
 }

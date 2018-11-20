@@ -51,6 +51,9 @@ public class AccountDetailKeyContractRequest {
 
 	@JsonProperty("accountDetailKey")
 	private AccountDetailKeyContract accountDetailKey;
+	
+	@JsonProperty("tenantId")
+	private String tenantId;
 
 	public RequestInfo getRequestInfo() {
 		return requestInfo;
@@ -67,6 +70,14 @@ public class AccountDetailKeyContractRequest {
 	public void setAccountDetailKey(AccountDetailKeyContract accountDetailKey) {
 		this.accountDetailKey = accountDetailKey;
 	}
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
 
 
 }

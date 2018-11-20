@@ -28,7 +28,7 @@ public class AccountDetailKeyController {
 		Accountdetailtype accountDetailsType = accountDetailtypeservice.findByName("EMPLOYEE");
 		accoundDetailKey.setAccountdetailtype(accountDetailsType);
 		accoundDetailKey.setGroupid(1);
-		accoundDetailKey.setDetailkey(Integer.getInteger(request.getAccountDetailKey().getKeyId()));
+		accoundDetailKey.setDetailkey(Integer.valueOf(request.getAccountDetailKey().getKeyId()));
 		accountDetailKeyservice.create(accoundDetailKey);
 		AccountDetailKeyContractResponse accountDetailresponse = new AccountDetailKeyContractResponse();
 		ResponseInfo response = new ResponseInfo();
