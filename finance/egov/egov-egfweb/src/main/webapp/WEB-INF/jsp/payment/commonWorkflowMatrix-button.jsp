@@ -98,9 +98,9 @@
 <div class="buttonbottom">
 	<s:hidden id="workFlowAction" name="workFlowAction" />
 	<div class="row text-center">
-		<div class="col-md-4 col-sm-2"></div>
+		<div class="col-md-2 col-sm-2"></div>
 		<s:iterator value="%{getValidActions()}" var="validAction">
-			<div class="col-md-1 col-sm-2">
+			<div class="col-md-2 col-sm-2">
 				<s:if test="%{validAction!=''}">
 					<s:submit type="submit" cssClass="buttonsubmit"
 						value="%{validAction}" id="%{validAction}" name="%{validAction}"
@@ -108,7 +108,7 @@
 				</s:if>
 			</div>
 		</s:iterator>
-		<div class="col-md-2 col-sm-2">
+		<div class="col-md-1 col-sm-2">
 			<input type="button" name="button2" id="button2" value="Close"
 				class="button" onclick="window.parent.postMessage('close','*');window.close();" />
 		</div>
