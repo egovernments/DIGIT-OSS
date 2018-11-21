@@ -125,10 +125,14 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
         String tenantid = null;
         user_token = request.getParameter("auth_token");
         tenantid = request.getParameter("tenantId");
-        LOGGER.info(" *** authtoken "+user_token);
-        if (user_token == null)
-            throw new Exception("AuthToken not found");
         HttpSession session = request.getSession();
+        LOGGER.info(" *** authtoken "+user_token);
+        
+        if (user_token == null){
+            session.setAttribute("error-code", 440);
+            throw new Exception("AuthToken not found");
+        }
+        
         String admin_token = this.microserviceUtils.generateAdminToken(tenantid);
         session.setAttribute(MS_USER_TOKEN, user_token);
         CustomUserDetails user = this.microserviceUtils.getUserDetails(user_token, admin_token);
