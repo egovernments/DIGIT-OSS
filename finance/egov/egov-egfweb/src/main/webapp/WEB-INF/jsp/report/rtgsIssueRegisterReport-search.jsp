@@ -289,7 +289,7 @@
 				bootbox.alert("Please select a Fund");
 				return false;
 			}
-			document.rtgsIssueRegisterReport.action = '/EGF/report/rtgsIssueRegisterReport-'
+			document.rtgsIssueRegisterReport.action = '/services/EGF/report/rtgsIssueRegisterReport-'
 					+ method + '.action';
 			document.rtgsIssueRegisterReport.submit();
 			return true;
