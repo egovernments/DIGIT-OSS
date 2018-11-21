@@ -30,9 +30,11 @@ public class EmployeeService implements EntityTypeService {
         
         accdetails.forEach(accdetail->{
             Employee employee = new Employee();
-            employee.setName(accdetail.getDetailname());
+            
+            String[] detailNames = accdetail.getDetailname().split("-");
             employee.setId(accdetail.getDetailkey().longValue());
-//            employee.setCode(code);
+            employee.setCode(detailNames[0]);
+            employee.setName(detailNames[1]);
             employees.add(employee);
         });
         
