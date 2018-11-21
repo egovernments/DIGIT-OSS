@@ -1,0 +1,18 @@
+{
+  "tenantId": "pb.amritsar",
+  "moduleName": "TradeLicense",
+  "CalculationType": [
+    {
+      "tradeType": "AVERAGE",
+      "accessory":"MAX",
+      "financialYear": "2015-16",
+      "active": true
+    },
+   {
+      "tradeType": "MAX",
+      "accessory":"MIN",
+      "financialYear": "2017-18",
+      "active": true
+    }
+]
+}
