@@ -12904,6 +12904,28 @@
       "code": "null",
       "navigationURL": "services/collection/service/serviceTypeToBankAccountMapping-list.action",
       "path": "Collections.Administration.View Bankaccount Mapping"
+    },
+    {
+      "id": 1706,
+      "name": "TL Report",
+      "url": "/report/rainmaker-tl/_get",
+      "displayName": "TL Report",
+      "orderNumber": 0,
+      "enabled": true,
+      "serviceCode": "TLREPORTS",
+      "code": "null",
+      "path": "TL Report"
+    },
+    {
+      "id": 1707,
+      "name": "TLReportMetadata",
+      "url": "/report/rainmaker-tl/metadata/_get",
+      "displayName": "Rainmaker TL report metadata",
+      "orderNumber": 1,
+      "enabled": true,
+      "serviceCode": "TLREPORTS",
+      "code": "null",
+      "path": "TL Report Metadata "
     }
   ]
 }
