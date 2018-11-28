@@ -12960,6 +12960,66 @@
       "serviceCode": "COLLECTIONS",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1711,
+      "name": "ConsumersDashboard",
+      "url": "url",
+      "displayName": "Consumers Dashboard",
+      "orderNumber": 1,
+      "parentModule": "W&S",
+      "enabled": true,
+      "serviceCode": "W&S",
+      "code": "null",
+      "path": "Dashboard.W&S.ConsumersDashboard",
+      "navigationURL": "dashboard/ws-consumers",
+      "leftIcon": "action:assignment",
+      "rightIcon": ""
+    },
+    {
+      "id": 1712,
+      "name": "CollectionsTrend",
+      "url": "url",
+      "displayName": "Collections Trend",
+      "orderNumber": 2,
+      "parentModule": "W&S",
+      "enabled": true,
+      "serviceCode": "W&S",
+      "code": "null",
+      "path": "Dashboard.W&S.CollectionsTrend",
+      "navigationURL": "dashboard/ws-collectionstrend",
+      "leftIcon": "action:assignment",
+      "rightIcon": ""
+    },
+    {
+      "id": 1713,
+      "name": "Collections",
+      "url": "url",
+      "displayName": "Collections",
+      "orderNumber": 3,
+      "parentModule": "W&S",
+      "enabled": true,
+      "serviceCode": "W&S",
+      "code": "null",
+      "path": "Dashboard.W&S.Collections",
+      "navigationURL": "dashboard/ws-collections",
+      "leftIcon": "action:assignment",
+      "rightIcon": ""
+    },
+    {
+      "id": 1714,
+      "name": "FinancialIndicators",
+      "url": "url",
+      "displayName": "Financial Indicators",
+      "orderNumber": 4,
+      "parentModule": "W&S",
+      "enabled": true,
+      "serviceCode": "W&S",
+      "code": "null",
+      "path": "Dashboard.W&S.FinancialIndicators",
+      "navigationURL": "dashboard/ws-financialindicators",
+      "leftIcon": "action:assignment",
+      "rightIcon": ""
     }
   ]
 }
