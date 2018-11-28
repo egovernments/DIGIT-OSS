@@ -16784,7 +16784,7 @@
       "actioncode": "",
       "tenantId": "pb"
     },
-   {
+    {
       "rolecode": "SUPERUSER",
       "actionid": 1704,
       "actioncode": "",
@@ -16796,7 +16796,7 @@
       "actioncode": "",
       "tenantId": "pb"
     },
-   {
+    {
       "rolecode": "SUPERUSER",
       "actionid": 1705,
       "actioncode": "",
@@ -16805,6 +16805,18 @@
     {
       "rolecode": "EGF_MASTER_ADMIN",
       "actionid": 1705,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1706,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1707,
       "actioncode": "",
       "tenantId": "pb"
     }
