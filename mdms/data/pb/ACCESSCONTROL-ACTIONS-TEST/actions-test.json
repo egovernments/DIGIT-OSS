@@ -12948,7 +12948,7 @@
       "enabled": true,
       "serviceCode": "COLLECTIONS",
       "code": "null",
-      "path": null
+      "path": ""
     },
    {
       "id": 1710,
@@ -12959,7 +12959,7 @@
       "enabled": true,
       "serviceCode": "COLLECTIONS",
       "code": "null",
-      "path": null
+      "path": ""
     }
   ]
 }
