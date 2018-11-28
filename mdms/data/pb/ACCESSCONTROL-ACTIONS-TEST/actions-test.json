@@ -12930,7 +12930,7 @@
     {
       "id": 1708,
       "name": "ReceiptRegisterMisc",
-      "url": null,
+      "url": "url",
       "displayName": "Receipt Register",
       "orderNumber": 1,
       "enabled": true,
