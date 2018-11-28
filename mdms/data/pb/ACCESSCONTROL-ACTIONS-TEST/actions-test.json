@@ -12926,6 +12926,40 @@
       "serviceCode": "TLREPORTS",
       "code": "null",
       "path": "TL Report Metadata "
+    },
+    {
+      "id": 1708,
+      "name": "ReceiptRegisterMisc",
+      "url": null,
+      "displayName": "Receipt Register",
+      "orderNumber": 1,
+      "enabled": true,
+      "serviceCode": "COLLECTIONS",
+      "code": "null",
+      "navigationURL": "report/finance/ReceiptRegister",
+      "path": "Collections.Reports.Receipt Register "
+    },
+   {
+      "id": 1709,
+      "name": "ReceiptRegisterMiscMeta",
+      "url": "/report/finance/metadata/_get",
+      "displayName": "Report metadata",
+      "orderNumber": 1,
+      "enabled": true,
+      "serviceCode": "COLLECTIONS",
+      "code": "null",
+      "path": null
+    },
+   {
+      "id": 1710,
+      "name": "ReceiptRegisterMiscData",
+      "url": "/report/finance/_get",
+      "displayName": "Report data",
+      "orderNumber": 1,
+      "enabled": true,
+      "serviceCode": "COLLECTIONS",
+      "code": "null",
+      "path": null
     }
   ]
 }
