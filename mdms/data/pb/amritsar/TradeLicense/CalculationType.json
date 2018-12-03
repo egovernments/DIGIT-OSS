@@ -3,14 +3,14 @@
   "moduleName": "TradeLicense",
   "CalculationType": [
     {
-      "tradeType": "AVERAGE",
-      "accessory":"MAX",
+      "tradeType": "SUM",
+      "accessory":"SUM",
       "financialYear": "2015-16",
       "active": true
     },
    {
-      "tradeType": "MAX",
-      "accessory":"MIN",
+      "tradeType": "SUM",
+      "accessory":"SUM",
       "financialYear": "2017-18",
       "active": true
     }
