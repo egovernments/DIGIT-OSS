@@ -132,11 +132,11 @@
 				test="%{isFieldMandatory('department')}">
 				<span class="bluebox"></span>
 			</s:if></td>
-		<td class="greybox"><s:select name="vouchermis.departmentid"
+		<td class="greybox"><s:select name="vouchermis.departmentcode"
 				id="vouchermis.departmentid" list="dropdownData.departmentList"
-				listKey="id" listValue="name" headerKey="-1"
+				listKey="code" listValue="name" headerKey="-1"
 				headerValue="----Choose----"
-				value="voucherHeader.vouchermis.departmentid.id" /></td>
+				value="voucherHeader.vouchermis.departmentcode" /></td>
 	<s:if test="%{shouldShowHeaderField('field')}">
 		<td class="greybox"><s:text name="voucher.field" /> <s:if
 				test="%{isFieldMandatory('field')}">

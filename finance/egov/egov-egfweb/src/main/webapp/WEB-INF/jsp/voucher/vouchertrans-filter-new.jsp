@@ -119,7 +119,7 @@
 				id="vouchermis.departmentid" list="dropdownData.departmentList"
 				listKey="code" listValue="name" headerKey=""
 				headerValue="----Choose----"
-				value="voucherHeader.vouchermis.departmentid.code"
+				value="%{voucherHeader.vouchermis.departmentcode}"
 				 /></td>
 	</s:if>
 	<s:if test="%{shouldShowHeaderField('field')}">

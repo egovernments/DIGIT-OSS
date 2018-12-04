@@ -84,7 +84,7 @@ public class RemittanceBean implements Predicate {
     private Integer remittance_gl_dtlId;
     private String fromDate;
     private Date fromVhDate;
-    private Long departmentId;
+    private String departmentId;
     private Long functionId;
 
     public Long getFunctionId() {
@@ -279,11 +279,11 @@ public class RemittanceBean implements Predicate {
         this.fromVhDate = fromVhDate;
     }
 
-    public Long getDepartmentId() {
+    public String getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(final Long departmentId) {
+    public void setDepartmentId(final String departmentId) {
         this.departmentId = departmentId;
     }
 

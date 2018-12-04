@@ -173,7 +173,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
     private PersistenceService persistenceService;
     @Autowired
     CreateVoucher createVoucher;
-    private Integer departmentId;
+    private String departmentId;
     private String wfitemstate;
     private String comments;
     private static final String DD_MMM_YYYY = "dd-MMM-yyyy";
@@ -230,7 +230,6 @@ public class RemitRecoveryAction extends BasePaymentAction {
 
     public RemitRecoveryAction() {
         voucherHeader.setVouchermis(new Vouchermis());
-        addRelatedEntity("vouchermis.departmentcode", Department.class);
         addRelatedEntity("fundId", Fund.class);
         addRelatedEntity("vouchermis.schemeid", Scheme.class);
         addRelatedEntity("vouchermis.subschemeid", SubScheme.class);
@@ -283,7 +282,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
         if (listRemitBean == null || listRemitBean.isEmpty())
             listRemitBean = new ArrayList<RemittanceBean>();
         else {
-            departmentId = listRemitBean.get(0).getDepartmentId().intValue();
+            departmentId = listRemitBean.get(0).getDepartmentId();
             functionId = listRemitBean.get(0).getFunctionId();
         }
 
@@ -1029,7 +1028,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
         return functionId;
     }
 
-    public Integer getDepartmentId() {
+    public String getDepartmentId() {
         return departmentId;
     }
 
@@ -1041,7 +1040,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
         this.functionId = functionId;
     }
 
-    public void setDepartmentId(final Integer departmentId) {
+    public void setDepartmentId(final String departmentId) {
         this.departmentId = departmentId;
     }
 

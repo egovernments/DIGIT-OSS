@@ -234,7 +234,7 @@ function validateSearch()
 			return false;
 		}
 	}
-	document.remitRecoveryForm.action='/EGF/deduction/remitRecovery-search.action';
+	document.remitRecoveryForm.action='/services/EGF/deduction/remitRecovery-search.action';
 	document.remitRecoveryForm.submit();
 	return true;
 }
@@ -335,7 +335,7 @@ function validateRemit(){
 		 return false;
 	}
 	disableAll();
-	document.remitRecoveryForm.action='/EGF/deduction/remitRecovery-remit.action';
+	document.remitRecoveryForm.action='/services/EGF/deduction/remitRecovery-remit.action';
 	document.remitRecoveryForm.submit();
 	return true;
 }
@@ -354,7 +354,7 @@ function disableAll()
 						&& document.forms[0].elements[i].name != 'remittanceBean.fromVhDate' && document.forms[0].elements[i].name != 'voucherDate' && document.forms[0].elements[i].name != 'vouchermis.fundsource'
 							&& document.forms[0].elements[i].name != 'vouchermis.schemeid' && document.forms[0].elements[i].name != 'vouchermis.subschemeid' 
 							&& document.forms[0].elements[i].name != 'fundId'                
-								&& document.forms[0].elements[i].name!='vouchermis.departmentid' && document.forms[0].elements[i].name!='vouchermis.function'
+								&& document.forms[0].elements[i].name!='vouchermis.departmentcode' && document.forms[0].elements[i].name!='vouchermis.function'
 									&& document.forms[0].elements[i].name!='departmentId' && document.forms[0].elements[i].name!='functionId'){
 						document.forms[frmIndex].elements[i].disabled =true;   
 					}						
@@ -364,7 +364,7 @@ function disableAll()
 
 function resetSubmit()
 {
-	document.remitRecoveryForm.action='/EGF/deduction/remitRecovery-newform.action';
+	document.remitRecoveryForm.action='/services/EGF/deduction/remitRecovery-newform.action';
 	document.remitRecoveryForm.submit();
 	
 	}

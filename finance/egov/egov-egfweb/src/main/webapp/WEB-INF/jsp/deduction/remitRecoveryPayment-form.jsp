@@ -322,7 +322,7 @@ function disableAll()
 			for(var i=0;i<document.forms[0].length;i++)
 				{
 					if(document.forms[0].elements[i].name != 'voucherDate' && document.forms[0].elements[i].name != 'fundId'
-						&& document.forms[0].elements[i].name != 'vouchermis.departmentid' && document.forms[0].elements[i].name != 'vouchermis.function' 
+						&& document.forms[0].elements[i].name != 'vouchermis.departmentcode' && document.forms[0].elements[i].name != 'vouchermis.function' 
 						&& document.forms[0].elements[i].name != 'bank' && document.forms[0].elements[i].name != 'commonBean.accountNumberId'
 						&& document.forms[0].elements[i].name != 'commonBean.availableBalance' && document.forms[0].elements[i].name != 'modeOfPayment' 
 						&& document.forms[0].elements[i].name != 'remittedTo' && document.forms[0].elements[i].name != 'description'

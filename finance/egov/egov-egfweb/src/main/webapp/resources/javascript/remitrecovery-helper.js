@@ -52,7 +52,7 @@ function populateNarration(accnumObj){
 	var bankbranchId = bankbranchObj.options[bankbranchObj.selectedIndex].value;
 	var index=bankbranchId.indexOf("-");
 	var branchId=bankbranchId.substring(index+1,bankbranchId.length);
-	var url = '../voucher/common!loadAccNumNarration.action?accnum='+accnum+'&branchId='+branchId;
+	var url = '../EGF/voucher/common-loadAccNumNarration.action?accnum='+accnum+'&branchId='+branchId;
 	YAHOO.util.Connect.asyncRequest('POST', url, postTypeFrom, null);
 }
 

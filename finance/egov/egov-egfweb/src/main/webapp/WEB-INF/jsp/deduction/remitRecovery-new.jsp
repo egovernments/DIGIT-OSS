@@ -89,53 +89,34 @@
 					<td class="greybox"></td>
 					<td class="greybox"><s:text name="remit.recovery.search.code" /><span
 						class="mandatory"></span></td>
-					<td class="greybox"><s:select name="remittanceBean.recoveryId"
-							id="recoveryId" list="dropdownData.recoveryList" listKey="id"
-							listValue="type+'-'+recoveryName" headerKey="-1" headerValue="----Choose----"
-							value="%{remittanceBean.recoveryId}" /></td>
+					<td class="greybox">
+						<s:select name="remittanceBean.recoveryId" id="recoveryId" list="dropdownData.recoveryList" listKey="id" listValue="type+'-'+recoveryName" headerKey="-1" headerValue="----Choose----" value="%{remittanceBean.recoveryId}" />
+					</td>
 					<td class="greybox" width="10%">
 					<td class="greybox">
 				<tr>
 					<td class="bluebox"></td>
-					<td class="bluebox"><s:text
-							name="remit.recovery.search.fromdate" /></td>
-					<td class="greybox"><s:date name="remittanceBean.fromVhDate"
-							var="fromVhDateId" format="dd/MM/yyyy" /> <s:textfield
-							id="fromVhDate" name="remittanceBean.fromVhDate"
-							value="%{voucherDateId}"
-							onkeyup="DateFormat(this,this.value,event,false,'3')"
-							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
-							data-inputmask="'mask': 'd/m/y'" /></td>
-
-					<td class="bluebox"><s:text
-							name="remit.recovery.search.todate" /><span class="mandatory"></span></td>
-					<td class="greybox"><s:date name="voucherDate"
-							var="voucherDateId" format="dd/MM/yyyy" /> <s:textfield
-							id="voucherDate" name="voucherDate" value="%{voucherDateId}"
-							onkeyup="DateFormat(this,this.value,event,false,'3')"
-							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
-							data-inputmask="'mask': 'd/m/y'" /></td>
+					<td class="bluebox"><s:text name="remit.recovery.search.fromdate" /></td>
+					<td class="greybox"><s:date name="remittanceBean.fromVhDate" var="fromVhDateId" format="dd/MM/yyyy" /> 
+						<s:textfield id="fromVhDate" name="remittanceBean.fromVhDate" value="%{voucherDateId}" onkeyup="DateFormat(this,this.value,event,false,'3')" placeholder="DD/MM/YYYY" cssClass="form-control datepicker" data-inputmask="'mask': 'd/m/y'" />
+					</td>
+					<td class="bluebox"><s:text	name="remit.recovery.search.todate" /><span class="mandatory"></span></td>
+					<td class="greybox">
+						<s:date name="voucherDate" var="voucherDateId" format="dd/MM/yyyy" /> 
+						<s:textfield id="voucherDate" name="voucherDate" value="%{voucherDateId}" onkeyup="DateFormat(this,this.value,event,false,'3')" placeholder="DD/MM/YYYY" cssClass="form-control datepicker" data-inputmask="'mask': 'd/m/y'" />
+					</td>
 				</tr>
 				<tr>
 					<td class="greybox"></td>
 					<td class="greybox"><s:text name="remit.recovery.search.bank" /></td>
-					<td class="greybox"><s:select name="remittanceBean.bank"
-							id="bank" list="dropdownData.bankList" listKey="id"
-							listValue="name" headerKey="" headerValue="----Choose----"
-							value="%{remittanceBean.bank}" /></td>
+					<td class="greybox"><s:select name="remittanceBean.bank" id="bank" list="dropdownData.bankList" listKey="id"  listValue="name" headerKey="" headerValue="----Choose----" value="%{remittanceBean.bank}" /></td>
 					<td class="greybox"><s:text name="remit.recovery.search.bankbranch" /></td>
-					<td class="greybox"><s:select name="remittanceBean.bankBranchId"
-							id="bankBranch" list="dropdownData.branchList" listKey="id"
-							listValue="name" headerKey="" headerValue="----Choose----"
-							value="%{remittanceBean.bankBranchId}" /></td>
+					<td class="greybox"><s:select name="remittanceBean.bankBranchId" id="bankBranch" list="dropdownData.branchList" listKey="id" listValue="name" headerKey="" headerValue="----Choose----"  value="%{remittanceBean.bankBranchId}" /></td>
 					</tr>
 					<tr>
 					<td class="greybox"></td>		
 					<td class="greybox"><s:text name="remit.recovery.search.bankaccount" /></td>
-					<td class="greybox"><s:select name="remittanceBean.bankAccountId"
-							id="bankAccount" list="dropdownData.accNumList" listKey="id"
-							listValue="accountnumber" headerKey="" headerValue="----Choose----"
-							value="%{remittanceBean.bankAccountId}" /></td>
+					<td class="greybox"><s:select name="remittanceBean.bankAccountId" id="bankAccount" list="dropdownData.accNumList" listKey="id" listValue="accountnumber" headerKey="" headerValue="----Choose----" value="%{remittanceBean.bankAccountId}" /></td>
 				</tr>
 				<%@ include file="../payment/paymenttrans-filter.jsp"%>
 
@@ -144,11 +125,8 @@
 			<label style="text-align: right;"></label>
 
 			<div class="buttonbottom" style="padding-bottom: 10px;">
-				<s:submit type="submit" cssClass="buttonsubmit" value="Search"
-					id="search" name="search" method="search"
-					onclick="return validateSearch();" />
-				<input type="button" id="Close" value="Close"
-					onclick="javascript:window.close()" class="button" />
+				<s:submit type="submit" cssClass="buttonsubmit" value="Search" id="search" name="search" method="search" onclick="return validateSearch();" />
+				<input type="button" id="Close" value="Close" onclick="javascript:window.close()" class="button" />
 			</div>
 		</div>
 		<s:if test='%{listRemitBean != null }'>
@@ -167,8 +145,7 @@
 					<tr>
 						<td width="1050"></td>
 						<td><s:text name="remit.SelectDeSelectAll" /></td>
-						<td><s:checkbox id="selectAll" name="selectAll"
-								onclick="selectAllORNone(this);"></s:checkbox></td>
+						<td><s:checkbox id="selectAll" name="selectAll" onclick="selectAllORNone(this);"></s:checkbox></td>
 					</tr>
 				</table>
 
@@ -186,23 +163,17 @@
 					<tr>
 						<td width="850"></td>
 						<td>Total Amount</td>
-						<td><s:textfield name="remittanceBean.totalAmount"
-								id="totalAmount" style="width:90px;text-align:right"
-								readonly="true" value="0" /></td>
+						<td><s:textfield name="remittanceBean.totalAmount" id="totalAmount" style="width:90px;text-align:right" readonly="true" value="0" /></td>
 					</tr>
 				</table>
 				<div id ="remitTotal" />
-				<s:hidden type="hidden" id="selectedrRemit"
-					name="remittanceBean.selectedrRemit" />
+				<s:hidden type="hidden" id="selectedrRemit" name="remittanceBean.selectedrRemit" />
 				<div class="buttonbottom" style="padding-bottom: 10px;">
-					<s:submit type="submit" cssClass="buttonsubmit"
-						value="Generate Payment" id="genPayment" name="save&genPayment"
-						method="remit" onclick="return validateRemit()" />
+					<s:submit type="submit" cssClass="buttonsubmit" value="Generate Payment" id="genPayment" name="save&genPayment" method="remit" onclick="return validateRemit()" />
 			</s:if>
 			<s:else>
 				<div class="error">
-					<span class="bluebgheadtd" colspan="7"><s:text
-							name="no.data.found" /></span>
+					<span class="bluebgheadtd" colspan="7"><s:text name="no.data.found" /></span>
 				</div>
 			</s:else>
 		</s:if>
