@@ -1,0 +1,16 @@
+
+  "tenantId": "pb",
+  "moduleName": "common-masters",
+  "Ui-Common-Config": [
+   {
+   "tradelicense":{
+      "routes":{
+         "search":{
+            "routePath":"/employee-tradelicence/mihy-ui-framework/tradelicence/search",
+            "isOrigin":true
+         }
+      }
+     }
+    }
+  ]
+}
