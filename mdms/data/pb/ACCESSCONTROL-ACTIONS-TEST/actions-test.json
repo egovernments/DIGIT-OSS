@@ -13123,6 +13123,18 @@
       "navigationURL": "services/EGF/deduction/remitRecovery-newform.action",
       "code": "null",
       "path": "Finance.Transactions.Deductions.Deduction Payments"
+    },
+    {
+      "id": 1722,
+      "name": "BankRemittance",
+      "url": "url",
+      "displayName": "Bank Remittance",
+      "orderNumber": 2,
+      "enabled": true,
+      "serviceCode": "COLLECTIONS",
+      "code": "null",
+      "navigationURL": "report/finance/BankRemittance",
+      "path": "Collections.Reports.Bank Remittance"
     }
 
   ]

@@ -16909,6 +16909,18 @@
       "actionid": 1721,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "EGF_REPORT_VIEW",
+      "actionid": 1722,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1722,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
