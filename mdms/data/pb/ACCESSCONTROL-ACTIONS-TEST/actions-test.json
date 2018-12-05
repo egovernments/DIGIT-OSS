@@ -11951,7 +11951,7 @@
       "url": "/services/EGF/voucher/voucherSearch-beforesearch.action",
       "parentModule": "",
       "displayName": "View Voucher",
-      "orderNumber": 4,
+      "orderNumber": 5,
       "enabled": true,
       "serviceCode": "FinanceGeneral",
       "code": "null",
@@ -13110,6 +13110,20 @@
       "navigationURL": "report/rainmaker-tl/StateLevelTLReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
+    },
+    {
+      "id": 1721,
+      "name": "remittancepayment",
+      "url": "ur;",
+      "displayName": "Deduction Payments",
+      "orderNumber": 4,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "FinancePayment",
+      "navigationURL": "services/EGF/deduction/remitRecovery-newform.action",
+      "code": "null",
+      "path": "Finance.Transactions.Deductions.Deduction Payments"
     }
+
   ]
 }
