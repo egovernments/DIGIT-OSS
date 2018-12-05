@@ -201,8 +201,8 @@
 					<tr>
 						<td class="greybox"><s:text name="chq.assignment.department" /><span
 							class="mandatory"></span> <s:select
-								name="vouchermis.departmentid" id="departmentid"
-								list="dropdownData.departmentList" listKey="id" listValue="name"
+								name="vouchermis.departmentcode" id="departmentid"
+								list="dropdownData.departmentList" listKey="code" listValue="name"
 								headerKey="-1" headerValue="----Choose----"
 								value="%{voucherHeader.vouchermis.departmentid.id}" /></td>
 						<td class="greybox"><s:text

@@ -50,13 +50,45 @@
  */
 package org.egov.egf.web.actions.voucher;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
-import org.egov.commons.*;
+import org.egov.commons.Accountdetailtype;
+import org.egov.commons.Bank;
+import org.egov.commons.Bankaccount;
+import org.egov.commons.Bankbranch;
+import org.egov.commons.CChartOfAccountDetail;
+import org.egov.commons.CChartOfAccounts;
+import org.egov.commons.CFinancialYear;
+import org.egov.commons.CFunction;
+import org.egov.commons.CGeneralLedger;
+import org.egov.commons.CGeneralLedgerDetail;
+import org.egov.commons.CVoucherHeader;
+import org.egov.commons.Functionary;
+import org.egov.commons.Fundsource;
+import org.egov.commons.Relation;
+import org.egov.commons.Scheme;
+import org.egov.commons.SubScheme;
 import org.egov.commons.service.EntityTypeService;
 import org.egov.commons.service.RelationService;
 import org.egov.commons.utils.BankAccountType;
@@ -95,23 +127,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 //import com.exilant.eGov.src.domain.Bank;
 
@@ -1285,7 +1300,8 @@ public class CommonAction extends BaseFormAction {
                     + "'");
             functionaryId = functionary != null ? functionary.getId().toString() : null;
         }
-        if (!departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0") && designationId != -1 && null != functionaryName && functionaryName.trim().length() != 0) {
+        if (!departmentId.equalsIgnoreCase("-1") && !departmentId.equalsIgnoreCase("0") && designationId != -1
+                && null != functionaryName && functionaryName.trim().length() != 0) {
             final List<EmployeeView> empInfoList = voucherService.getUserByDeptAndDesgName(departmentId.toString(),
                     designationId.toString(), functionaryId);
             for (final EmployeeView employeeView : empInfoList)
@@ -1791,7 +1807,6 @@ public class CommonAction extends BaseFormAction {
         this.instrumentService = instrumentService;
     }
 
-    
     public String getDepartmentId() {
         return departmentId;
     }
@@ -2336,71 +2351,13 @@ public class CommonAction extends BaseFormAction {
         try {
             StringBuffer queryString = new StringBuffer();
             queryString = queryString
-                    .append("select distinct concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),"
-                            +
-                            "bankBranch.branchname) as bankbranchname "
-                            +
-                            "from voucherheader vh,Bank bank,Bankbranch bankBranch,Bankaccount bankaccount,vouchermis vmis, eg_department d,eg_remittance rem,"
-                            +
-                            "generalledger gl left outer join function f on gl.functionid=f.id,paymentheader ph,"
-                            +
-                            "egf_instrumentvoucher iv right outer join voucherheader vh1 on vh1.id =iv.VOUCHERHEADERID,egw_status egws "
-                            +
-                            "where  ph.voucherheaderid=vh.id and vh.id= vmis.voucherheaderid and vmis.departmentid= d.id and vh.status=0 "
-                            +
-                            "and rem.paymentvhid=vh.id ");
-            if (recoveryId != null && recoveryId != 0)
-                queryString = queryString.append(" and rem.tdsid=" + recoveryId);
-            queryString = queryString.append(
-                    " and gl.voucherheaderid=vh.id and ph.voucherheaderid=vh.id and bank.isactive=true  and bankBranch.isactive=true "
-                            +
-                            "and bank.id = bankBranch.bankid and bankBranch.id = bankaccount.branchid and bankaccount.type in ('RECEIPTS_PAYMENTS','PAYMENTS')"
-                            +
-                            " and  vh1.id=vh.id and iv.VOUCHERHEADERID is null ");
+                    .append("select distinct concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '), bankBranch.branchname) as bankbranchname  "
+                            + "from Bank bank,Bankbranch bankBranch,Bankaccount bankaccount "
+                            + "where  bank.id = bankBranch.bankid and bankBranch.id = bankaccount.branchid and bankaccount.type in ('RECEIPTS_PAYMENTS','PAYMENTS') ");
             if (fundId != null && fundId != 0 && fundId != -1)
                 queryString = queryString.append(" and bankaccount.fundid=" + fundId.longValue());
-            queryString = queryString
-                    .append(" and gl.debitamount!=0 and gl.debitamount is not null and vh.voucherdate <= :date1")
-                    .append(" and ph.bankaccountnumberid=bankaccount.id and ph.type='" + FinancialConstants.MODEOFPAYMENT_CASH
-                            + "'  and vh.type='" + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT + "' and vh.name='"
-                            + FinancialConstants.PAYMENTVOUCHER_NAME_REMITTANCE + "' ");
 
-            queryString
-                    .append(" union select distinct concat(concat(bank.id,'-'),bankBranch.id) as bankbranchid,concat(concat(bank.name,' '),"
-                            +
-                            "bankBranch.branchname) as bankbranchname from egf_instrumentvoucher iv,voucherheader vh,eg_remittance rem,"
-                            +
-                            "Bank bank,Bankbranch bankBranch,Bankaccount bankaccount,vouchermis vmis, eg_department d,generalledger gl left outer join function f on "
-                            +
-                            "gl.functionid=f.id,paymentheader ph, egw_status egws,(select ih1.id,ih1.id_status from egf_instrumentheader ih1, "
-                            +
-                            "(select bankid,bankaccountid,instrumentnumber,max(lastmodifieddate) as lastmodifieddate from egf_instrumentheader group by bankid,bankaccountid,"
-                            +
-                            "instrumentnumber) max_rec where max_rec.bankid=ih1.bankid and max_rec.bankaccountid=ih1.bankaccountid and max_rec.instrumentnumber=ih1.instrumentnumber "
-                            +
-                            "and max_rec.lastmodifieddate=ih1.lastmodifieddate) ih where ph.voucherheaderid=vh.id and vh.id= vmis.voucherheaderid and "
-                            +
-                            "vmis.departmentid= d.id and vh.status=0 and gl.voucherheaderid=vh.id and ph.voucherheaderid=vh.id "
-                            +
-                            "and bank.isactive=true  and bankBranch.isactive=true and bank.id = bankBranch.bankid and bankBranch.id = bankaccount.branchid and "
-                            +
-                            "bankaccount.type in ('RECEIPTS_PAYMENTS','PAYMENTS') and  iv.voucherheaderid=vh.id and iv.instrumentheaderid=ih.id and "
-                            +
-                            " rem.paymentvhid=vh.id ");
-            if (recoveryId != null && recoveryId != 0)
-                queryString = queryString.append(" and rem.tdsid=" + recoveryId);
-            queryString = queryString
-                    .append(" and ih.id_status=egws.id and egws.description in ('Surrendered','Surrender_For_Reassign') ");
-            if (fundId != null && fundId != 0 && fundId != -1)
-                queryString = queryString.append(" and bankaccount.fundid=" + fundId.longValue());
-            queryString = queryString
-                    .append(" and gl.debitamount!=0 and gl.debitamount is not null and vh.voucherdate <= :date2")
-                    .append(" and ph.bankaccountnumberid=bankaccount.id and ph.type='" + FinancialConstants.MODEOFPAYMENT_CASH
-                            + "' and vh.type='" + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT + "' and vh.name='"
-                            + FinancialConstants.PAYMENTVOUCHER_NAME_REMITTANCE + "' order by 2 ");
             final List<Object[]> bankBranch = persistenceService.getSession().createSQLQuery(queryString.toString())
-                    .setDate("date1", getAsOnDate())
-                    .setDate("date2", getAsOnDate())
                     .list();
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("Bank list size is " + bankBranch.size());
@@ -2949,65 +2906,10 @@ public class CommonAction extends BaseFormAction {
             StringBuffer queryString = new StringBuffer();
             queryString = queryString
                     .append("select distinct bankaccount.accountnumber as accountnumber,bank.name as bankName,cast(bankaccount.id as integer) as id,coa.glcode as glCode "
-                            +
-                            "from chartofaccounts coa,voucherheader vh,Bank bank,Bankbranch bankBranch,Bankaccount bankaccount,vouchermis vmis, eg_department d,EG_REMITTANCE rem ,"
-                            +
-                            "generalledger gl left outer join function f on gl.functionid=f.id,paymentheader ph,"
-                            +
-                            "egf_instrumentvoucher iv right outer join voucherheader vh1 on vh1.id =iv.VOUCHERHEADERID  "
-                            +
-                            "where ph.voucherheaderid=vh.id and vh.id= vmis.voucherheaderid and vmis.departmentid= d.id and vh.status=0 "
-                            +
-                            "and rem.paymentvhid=vh.id ");
-            if (recoveryId != null && recoveryId != 0)
-                queryString = queryString.append(" and rem.tdsid=" + recoveryId);
-            queryString = queryString.append(
-                    " and coa.id=bankaccount.glcodeid and gl.voucherheaderid=vh.id and ph.voucherheaderid=vh.id and bank.isactive=true  and bankBranch.isactive=true "
-                            +
-                            " and bank.id = bankBranch.bankid and bankBranch.id = bankaccount.branchid and bankaccount.type in ('RECEIPTS_PAYMENTS','PAYMENTS') and bankaccount.branchid="
-                            + branchId +
-                            " and  vh1.id=vh.id and iv.VOUCHERHEADERID is null");
-
-            if (fundId != null && fundId != 0 && fundId != -1)
-                queryString = queryString.append(" and bankaccount.fundid=" + fundId.longValue());
-            queryString = queryString.append(" and ph.bankaccountnumberid=bankaccount.id and ph.type='"
-                    + FinancialConstants.MODEOFPAYMENT_CASH + "' and vh.type='"
-                    + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT + "' and vh.name='"
-                    + FinancialConstants.PAYMENTVOUCHER_NAME_REMITTANCE + "'");
-
-            queryString
-                    .append(" union select bankaccount.accountnumber as accountnumber,bank.name as bankName,cast(bankaccount.id as integer) as id,coa.glcode as glCode "
-                            +
-                            " from chartofaccounts coa,egf_instrumentvoucher iv,voucherheader vh,"
-                            +
-                            "Bank bank,Bankbranch bankBranch,Bankaccount bankaccount,vouchermis vmis, eg_department d,eg_remittance rem ,generalledger gl left outer join function f on "
-                            +
-                            "gl.functionid=f.id,paymentheader ph,egw_status egws,(select ih1.id,ih1.id_status from egf_instrumentheader ih1, "
-                            +
-                            "(select bankid,bankaccountid,instrumentnumber,max(lastmodifieddate) as lastmodifieddate from egf_instrumentheader group by bankid,bankaccountid,"
-                            +
-                            " instrumentnumber) max_rec where max_rec.bankid=ih1.bankid and max_rec.bankaccountid=ih1.bankaccountid and max_rec.instrumentnumber=ih1.instrumentnumber "
-                            +
-                            " and max_rec.lastmodifieddate=ih1.lastmodifieddate) ih where ph.voucherheaderid=vh.id and vh.id= vmis.voucherheaderid  "
-                            +
-                            " and rem.paymentvhid=vh.id ");
-            if (recoveryId != null && recoveryId != 0)
-                queryString = queryString.append(" and rem.tdsid=" + recoveryId);
-            queryString = queryString.append(
-                    " and vmis.departmentid= d.id and coa.id=bankaccount.glcodeid and vh.status=0 and gl.voucherheaderid=vh.id and ph.voucherheaderid=vh.id "
-                            +
-                            " and bank.isactive=true  and bankBranch.isactive=true and bank.id = bankBranch.bankid and bankBranch.id = bankaccount.branchid and bankaccount.branchid="
-                            + branchId
-                            +
-                            " and  bankaccount.type in ('RECEIPTS_PAYMENTS','PAYMENTS') and  iv.voucherheaderid=vh.id and iv.instrumentheaderid=ih.id and "
-                            +
-                            "ih.id_status=egws.id and egws.description in ('Surrendered','Surrender_For_Reassign')");
-            if (fundId != null && fundId != 0 && fundId != -1)
-                queryString = queryString.append(" and bankaccount.fundid=" + fundId.longValue());
-            queryString = queryString.append(" and ph.bankaccountnumberid=bankaccount.id and  ph.type='"
-                    + FinancialConstants.MODEOFPAYMENT_CASH + "' and vh.type='"
-                    + FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT + "' and vh.name='"
-                    + FinancialConstants.PAYMENTVOUCHER_NAME_REMITTANCE + "' order by 4 ");
+                            + "from Bank bank,Bankbranch bankBranch,Bankaccount bankaccount,chartofaccounts coa "
+                            + "where  bank.id = bankBranch.bankid and bankBranch.id = bankaccount.branchid and bankaccount.type in ('RECEIPTS_PAYMENTS','PAYMENTS') and coa.id=bankaccount.glcodeid  and bankaccount.branchid=");
+            queryString = queryString
+                    .append(branchId);
 
             final List<Object[]> bankAccounts = persistenceService.getSession().createSQLQuery(queryString.toString())
                     .list();
