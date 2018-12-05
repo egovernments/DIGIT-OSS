@@ -13119,7 +13119,7 @@
       "orderNumber": 4,
       "parentModule": "",
       "enabled": true,
-      "serviceCode": "FinancePayment",
+      "serviceCode": "FinanceDeductions",
       "navigationURL": "services/EGF/deduction/remitRecovery-newform.action",
       "code": "null",
       "path": "Finance.Transactions.Deductions.Deduction Payments"
@@ -13135,6 +13135,19 @@
       "code": "null",
       "navigationURL": "report/finance/BankRemittance",
       "path": "Collections.Reports.Bank Remittance"
+    },
+    {
+      "id": 1723,
+      "name": "remittancechequeassignment",
+      "url": "ur;",
+      "displayName": "Deductions Cheque Assignment",
+      "orderNumber": 2,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "FinanceDeductions",
+      "navigationURL": "services/EGF/payment/chequeAssignment-beforeSearchForRemittance.action",
+      "code": "null",
+      "path": "Finance.Transactions.Deductions.Deductions Cheque Assignment"
     }
 
   ]
