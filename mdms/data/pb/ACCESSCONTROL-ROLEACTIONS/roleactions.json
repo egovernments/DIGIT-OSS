@@ -16933,6 +16933,12 @@
       "actionid": 1723,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1724,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
