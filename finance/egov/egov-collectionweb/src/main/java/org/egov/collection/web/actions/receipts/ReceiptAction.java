@@ -496,7 +496,6 @@ public class ReceiptAction extends BaseFormAction {
         if (CollectionConstants.BLANK.equals(payeename))
             payeename = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
                     CollectionConstants.APPCONFIG_VALUE_PAYEEFORMISCRECEIPTS);
-        BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(CollectionConstants.SERVICE_CODE_COLLECTIONS).get(0);
         receiptHeader.setPartPaymentAllowed(false);
         receiptHeader.setService(serviceId);
         receiptHeader.setServiceIdText(serviceIdText);
@@ -831,9 +830,9 @@ public class ReceiptAction extends BaseFormAction {
         getHeaderMandateFields();
         setupDropdownDataExcluding();
 
-//        headerFields.remove(CollectionConstants.FUNDSOURCE);
-//        headerFields.remove(CollectionConstants.SCHEME);
-//        headerFields.remove(CollectionConstants.SUBSCHEME);
+        // headerFields.remove(CollectionConstants.FUNDSOURCE);
+        // headerFields.remove(CollectionConstants.SCHEME);
+        // headerFields.remove(CollectionConstants.SUBSCHEME);
         if (headerFields.contains(CollectionConstants.DEPARTMENT))
             addDropdownData("departmentList", masterDataCache.get("egi-department"));
         if (headerFields.contains(CollectionConstants.FUNCTIONARY))
@@ -1040,8 +1039,9 @@ public class ReceiptAction extends BaseFormAction {
             setCollectionModesNotAllowed(Arrays.asList(oldReceiptHeader.getCollModesNotAllwd().split(",")));
         setOverrideAccountHeads(oldReceiptHeader.getOverrideAccountHeads());
         setPartPaymentAllowed(oldReceiptHeader.getPartPaymentAllowed());
-        BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(oldReceiptHeader.getService()).get(0);
-        setServiceName(bd.getName());
+        List<BusinessDetails> bsList = microserviceUtils.getBusinessDetailsByCode(oldReceiptHeader.getService());
+        BusinessDetails bd = bsList != null && !bsList.isEmpty() ? bsList.get(0) : null;
+        setServiceName(bd != null ? bd.getName() : "");
 
         receiptHeader.setReceiptMisc(new ReceiptMisc(oldReceiptHeader.getReceiptMisc().getBoundary(),
                 oldReceiptHeader.getReceiptMisc().getFund(), oldReceiptHeader.getReceiptMisc().getIdFunctionary(),
@@ -1139,13 +1139,14 @@ public class ReceiptAction extends BaseFormAction {
                     receiptHeader.setModOfPayment(receipt.getInstrument().getInstrumentType().getName());
                     receiptHeader.setConsumerCode(billDetail.getConsumerCode());
                     receiptHeader.setManualreceiptnumber(billDetail.getManualReceiptNumber());
-                    if(billDetail.getManualReceiptDate()!=0)
+                    if (billDetail.getManualReceiptDate() != 0)
                         receiptHeader.setManualreceiptdate(new Date(billDetail.getManualReceiptDate()));
                     JsonNode jsonNode = billDetail.getAdditionalDetails();
                     BillDetailAdditional additional = null;
                     try {
-                        if(null!= jsonNode)
-                        additional =(BillDetailAdditional) new ObjectMapper().readValue(jsonNode.toString(), BillDetailAdditional.class);
+                        if (null != jsonNode)
+                            additional = (BillDetailAdditional) new ObjectMapper().readValue(jsonNode.toString(),
+                                    BillDetailAdditional.class);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1156,29 +1157,27 @@ public class ReceiptAction extends BaseFormAction {
                             Scheme scheme = this.schemeDAO.getSchemeByCode(additional.getScheme());
                             receiptMisc.setScheme(scheme);
                         }
-                        
-                        if(null != additional.getSubScheme()){
+
+                        if (null != additional.getSubScheme()) {
                             SubScheme subScheme = this.subSchemeDAO.getSubSchemeByCode(additional.getSubScheme());
                             receiptMisc.setSubscheme(subScheme);
                         }
-                        
-                        if(null!= additional.getBusinessReason()){
-                           if( additional.getBusinessReason().contains("-"))
-                           {
-                               receiptHeader.setService(additional.getBusinessReason().split("-")[0]);
-                           }else
-                           {
-                            receiptHeader.setService(additional.getBusinessReason());
-                           }
+
+                        if (null != additional.getBusinessReason()) {
+                            if (additional.getBusinessReason().contains("-")) {
+                                receiptHeader.setService(additional.getBusinessReason().split("-")[0]);
+                            } else {
+                                receiptHeader.setService(additional.getBusinessReason());
+                            }
                         }
-                        
+
                         receiptHeader.setReceiptMisc(receiptMisc);
-                        if(null!= additional.getNarration())
+                        if (null != additional.getNarration())
                             receiptHeader.setReferenceDesc(additional.getNarration());
-                        if(null!= additional.getPayeeaddress())
+                        if (null != additional.getPayeeaddress())
                             receiptHeader.setPayeeAddress(additional.getPayeeaddress());
                     }
-                    
+
                     if (billDetail.getCollectionType().equals(CollectionType.COUNTER))
                         receiptHeader.setCollectiontype(CollectionConstants.COLLECTION_TYPE_COUNTER);
                     else if (billDetail.getCollectionType().equals(CollectionType.FIELD))
@@ -1186,7 +1185,7 @@ public class ReceiptAction extends BaseFormAction {
                     else if (billDetail.getCollectionType().equals(CollectionType.ONLINE))
                         receiptHeader.setCollectiontype(CollectionConstants.COLLECTION_TYPE_ONLINECOLLECTION);
 
-                    if (billDetail.getReceiptType().equalsIgnoreCase(CollectionConstants.RECEIPT_M_TYPE_MISCELLANEOUS)||
+                    if (billDetail.getReceiptType().equalsIgnoreCase(CollectionConstants.RECEIPT_M_TYPE_MISCELLANEOUS) ||
                             billDetail.getReceiptType().equalsIgnoreCase(CollectionConstants.RECEIPT_M_TYPE_ADHOC))
                         receiptHeader.setReceipttype(CollectionConstants.RECEIPT_TYPE_ADHOC);
                     else if (billDetail.getReceiptType().equalsIgnoreCase(CollectionConstants.RECEIPT_M_TYPE_BILLBASED))
@@ -1238,8 +1237,8 @@ public class ReceiptAction extends BaseFormAction {
 
                     instrumentHeader.setInstrumentAmount(instrument.getAmount());
                     // instrumentHe instrument.getFinancialStatus();
-                    
-                    if (instrumentType.getType().equalsIgnoreCase(CollectionConstants.INSTRUMENTTYPE_CHEQUE)||
+
+                    if (instrumentType.getType().equalsIgnoreCase(CollectionConstants.INSTRUMENTTYPE_CHEQUE) ||
                             instrumentType.getType().equalsIgnoreCase(CollectionConstants.INSTRUMENTTYPE_DD)) {
                         Bankaccount account = new Bankaccount();
                         if (null != instrument.getBankAccount())
@@ -1348,9 +1347,10 @@ public class ReceiptAction extends BaseFormAction {
 
             populateReceiptModelWithExistingReceiptInfo(receiptHeaderToBeCancelled);
             setFundName(receiptHeaderToBeCancelled.getReceiptMisc().getFund().getName());
-            BusinessDetails bd = microserviceUtils.getBusinessDetailsByCode(receiptHeaderToBeCancelled.getService()).get(0);
-            setServiceName(bd.getName());
-            setServiceId(bd.getCode());
+            List<BusinessDetails> bsList = microserviceUtils.getBusinessDetailsByCode(receiptHeaderToBeCancelled.getService());
+            BusinessDetails bd = bsList != null && !bsList.isEmpty() ? bsList.get(0) : null;
+            setServiceName(bd != null ? bd.getName() : "");
+            setServiceId(bd != null ? bd.getCode() : "");
             addDropdownData("serviceList",
                     receiptHeaderToBeCancelled.getService() != null ? getPersistenceService().findAllByNamedQuery(
                             CollectionConstants.QUERY_SERVICE_DETAIL_BY_CATEGORY, bd.getBusinessCategory(),
