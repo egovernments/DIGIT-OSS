@@ -196,13 +196,14 @@ public class ChequeRemittanceAction extends BaseFormAction {
 
             final List<String> serviceCodeList = new ArrayList<>(0);
             List<BankAccountServiceMapping> mappings = microserviceUtils
-                    .getBankAcntServiceMappingsByBankAcc(accountNumberId.toString(),null);
+                    .getBankAcntServiceMappingsByBankAcc(accountNumberId.toString(), null);
             for (BankAccountServiceMapping basm : mappings) {
                 serviceCodeList.add(basm.getBusinessDetails());
             }
             final Query fundQuery = persistenceService.getSession().createSQLQuery(FUND_QUERY);
             fundQuery.setString("accountNumberId", accountNumberId);
-            final String fundCode = fundQuery.list().get(0).toString();
+            List<String> fundCodeList = fundQuery.list();
+            final String fundCode = fundCodeList != null && !fundCodeList.isEmpty() ? fundCodeList.get(0).toString() : null;
 
             final CFinancialYear financialYear = financialYearDAO.getFinancialYearById(finYearId);
             receiptBeanList = remittanceService.findChequeRemittanceDetailsForServiceAndFund("",
