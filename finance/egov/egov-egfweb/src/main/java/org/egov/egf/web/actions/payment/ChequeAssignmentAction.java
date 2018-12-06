@@ -626,6 +626,8 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
     public String beforeSearchForRemittance() {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Starting beforeSearchForRemittance...");
+        headerFields.remove("scheme");
+        headerFields.remove("subscheme");
         paymentMode = FinancialConstants.MODEOFPAYMENT_CASH;
         modeOfPaymentMap = new LinkedHashMap<String, String>();
         modeOfPaymentMap.put(FinancialConstants.MODEOFPAYMENT_CASH, getText("cash.consolidated.cheque"));

@@ -66,6 +66,67 @@
 		<td class="greybox"></td>
 		<td class="greybox"></td>
 	</s:else>
+	<s:if test="%{shouldShowHeaderField('department')}">
+		<td class="greybox" id="deptLabel"><s:text
+				name="voucher.department" /> <s:if
+				test="%{isFieldMandatory('department')}">
+				<span class="bluebox"><span class="mandatory1">*</span></span>
+			</s:if></td>
+		<td class="greybox"><s:select name="vouchermis.departmentcode"
+				id="vouchermis.departmentid" list="dropdownData.departmentList"
+				listKey="code" listValue="name" headerKey="-1"
+				headerValue="----Choose----"
+				value="voucherHeader.vouchermis.departmentcode" /></td>
+	</s:if>
+	<s:else>
+		<td class="greybox"></td>
+		<td class="greybox"></td>
+	</s:else>
+</tr>
+<s:if test="%{shouldShowHeaderField('scheme') || shouldShowHeaderField('subscheme')}">
+	<tr>
+		<td style="width: 5%"></td>
+		<s:if test="%{shouldShowHeaderField('scheme')}">
+			<egov:ajaxdropdown id="scheme" fields="['Text','Value']"
+				dropdownId="schemeid" url="voucher/common-ajaxLoadSchemes.action" />
+	
+			<td class="greybox"><s:text name="voucher.scheme" /> <s:if
+					test="%{isFieldMandatory('scheme')}">
+					<span class="mandatory1">*</span>
+				</s:if></td>
+			<td class="greybox"><s:select list="dropdownData.schemeList"
+					name="vouchermis.schemeid" id="schemeid" listKey="id"
+					listValue="name" headerKey="-1" headerValue="----Choose----"
+					onChange="populatesubSchemes(this)"
+					value="voucherHeader.vouchermis.schemeid.id" /></td>
+		</s:if>
+		<s:else>
+			<td class="greybox"></td>
+			<td class="greybox"></td>
+		</s:else>
+		<s:if test="%{shouldShowHeaderField('subscheme')}">
+			<egov:ajaxdropdown id="subscheme" fields="['Text','Value']"
+				dropdownId="subschemeid"
+				url="voucher/common-ajaxLoadSubSchemes.action" />
+			<td class="bluebox"><s:text name="voucher.subscheme" /> <s:if
+					test="%{isFieldMandatory('subscheme')}">
+					<span class="mandatory1">*</span>
+				</s:if></td>
+			<td class="bluebox"><s:select name="vouchermis.subschemeid"
+					id="subschemeid" list="dropdownData.subschemeList" listKey="id"
+					listValue="name" headerKey="-1" headerValue="----Choose----"
+					value="voucherHeader.vouchermis.subschemeid.id"
+					onChange="populateFundSource(this)" /></td>
+		</s:if>
+		<s:else>
+			<td class="greybox"></td>
+			<td class="greybox"></td>
+		</s:else>
+	</tr>
+</s:if>
+<tr>
+	<td style="width: 5%"></td>
+
 	<s:if test="%{shouldShowHeaderField('fundsource')}">
 		<egov:ajaxdropdown id="fundsource" fields="['Text','Value']"
 			dropdownId="fundsourceId"
@@ -78,66 +139,6 @@
 				id="fundsourceId" list="dropdownData.fundsourceList" listKey="id"
 				listValue="name" headerKey="-1" headerValue="----Choose----"
 				value="voucherHeader.vouchermis.fundsource.id" /></td>
-	</s:if>
-	<s:else>
-		<td class="greybox"></td>
-		<td class="greybox"></td>
-	</s:else>
-</tr>
-
-<tr>
-	<td style="width: 5%"></td>
-	<s:if test="%{shouldShowHeaderField('scheme')}">
-		<egov:ajaxdropdown id="scheme" fields="['Text','Value']"
-			dropdownId="schemeid" url="voucher/common-ajaxLoadSchemes.action" />
-
-		<td class="greybox"><s:text name="voucher.scheme" /> <s:if
-				test="%{isFieldMandatory('scheme')}">
-				<span class="mandatory1">*</span>
-			</s:if></td>
-		<td class="greybox"><s:select list="dropdownData.schemeList"
-				name="vouchermis.schemeid" id="schemeid" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
-				onChange="populatesubSchemes(this)"
-				value="voucherHeader.vouchermis.schemeid.id" /></td>
-	</s:if>
-	<s:else>
-		<td class="greybox"></td>
-		<td class="greybox"></td>
-	</s:else>
-	<s:if test="%{shouldShowHeaderField('subscheme')}">
-		<egov:ajaxdropdown id="subscheme" fields="['Text','Value']"
-			dropdownId="subschemeid"
-			url="voucher/common-ajaxLoadSubSchemes.action" />
-		<td class="bluebox"><s:text name="voucher.subscheme" /> <s:if
-				test="%{isFieldMandatory('subscheme')}">
-				<span class="mandatory1">*</span>
-			</s:if></td>
-		<td class="bluebox"><s:select name="vouchermis.subschemeid"
-				id="subschemeid" list="dropdownData.subschemeList" listKey="id"
-				listValue="name" headerKey="-1" headerValue="----Choose----"
-				value="voucherHeader.vouchermis.subschemeid.id"
-				onChange="populateFundSource(this)" /></td>
-	</s:if>
-	<s:else>
-		<td class="greybox"></td>
-		<td class="greybox"></td>
-	</s:else>
-</tr>
-<tr>
-	<td style="width: 5%"></td>
-
-	<s:if test="%{shouldShowHeaderField('department')}">
-		<td class="greybox" id="deptLabel"><s:text
-				name="voucher.department" /> <s:if
-				test="%{isFieldMandatory('department')}">
-				<span class="bluebox"><span class="mandatory1">*</span></span>
-			</s:if></td>
-		<td class="greybox"><s:select name="vouchermis.departmentcode"
-				id="vouchermis.departmentid" list="dropdownData.departmentList"
-				listKey="code" listValue="name" headerKey="-1"
-				headerValue="----Choose----"
-				value="voucherHeader.vouchermis.departmentcode" /></td>
 	</s:if>
 	<s:else>
 		<td class="greybox"></td>
