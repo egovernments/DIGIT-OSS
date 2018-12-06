@@ -13148,7 +13148,17 @@
       "navigationURL": "services/EGF/payment/chequeAssignment-beforeSearchForRemittance.action",
       "code": "null",
       "path": "Finance.Transactions.Deductions.Deductions Cheque Assignment"
+    },
+    {
+      "id": 1724,
+      "name": "Receipts Workflow",
+      "url": "/collection-services/receipts/_workflow",
+      "displayName": "Receipts Workflow",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "COLLECTION",
+      "code": "null"
     }
-
   ]
 }
