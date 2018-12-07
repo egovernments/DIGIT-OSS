@@ -58,72 +58,72 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 public class ContractorJsonAdaptor implements JsonSerializer<Contractor> {
-	@Override
-	public JsonElement serialize(final Contractor contractor, final Type type, final JsonSerializationContext jsc) {
-		final JsonObject jsonObject = new JsonObject();
-		if (contractor != null) {
-			if (contractor.getName() != null)
-				jsonObject.addProperty("name", contractor.getName());
-			else
-				jsonObject.addProperty("name", "");
-			if (contractor.getCode() != null)
-				jsonObject.addProperty("code", contractor.getCode());
-			else
-				jsonObject.addProperty("code", "");
-			if (contractor.getBank() != null && contractor.getBank().getName() != null)
-				jsonObject.addProperty("bank", contractor.getBank().getName());
-			else
-				jsonObject.addProperty("bank", "");
-			if (contractor.getBankaccount() != null)
-				jsonObject.addProperty("bankAccount", contractor.getBankaccount());
-			else
-				jsonObject.addProperty("bankAccount", "");
-			if (contractor.getContactPerson() != null)
-				jsonObject.addProperty("contactPerson", contractor.getContactPerson());
-			else
-				jsonObject.addProperty("contactPerson", "");
-			if (contractor.getCorrespondenceAddress() != null)
-				jsonObject.addProperty("correspondenceAddress", contractor.getCorrespondenceAddress());
-			else
-				jsonObject.addProperty("correspondenceAddress", "");
-			if (contractor.getEgwStatus() != null && contractor.getEgwStatus().getDescription() != null)
-				jsonObject.addProperty("status", contractor.getEgwStatus().getDescription());
-			else
-				jsonObject.addProperty("status", "");
-			if (contractor.getEmail() != null)
-				jsonObject.addProperty("email", contractor.getEmail());
-			else
-				jsonObject.addProperty("email", "");
-			if (contractor.getIfsccode() != null)
-				jsonObject.addProperty("ifscCode", contractor.getIfsccode());
-			else
-				jsonObject.addProperty("ifscCode", "");
-			if (contractor.getMobileNumber() != null)
-				jsonObject.addProperty("mobileNumber", contractor.getMobileNumber());
-			else
-				jsonObject.addProperty("mobileNumber", "");
-			if (contractor.getNarration() != null)
-				jsonObject.addProperty("narration", contractor.getNarration());
-			else
-				jsonObject.addProperty("narration", "");
-			if (contractor.getPanno() != null)
-				jsonObject.addProperty("panNumber", contractor.getPanno());
-			else
-				jsonObject.addProperty("panNumber", "");
-			if (contractor.getPaymentAddress() != null)
-				jsonObject.addProperty("paymentAddress", contractor.getPaymentAddress());
-			else
-				jsonObject.addProperty("paymentAddress", "");
-			if (contractor.getRegistrationNumber() != null)
-				jsonObject.addProperty("registrationNumber", contractor.getRegistrationNumber());
-			else
-				jsonObject.addProperty("registrationNumber", "");
-			if (contractor.getTinno() != null)
-				jsonObject.addProperty("tinNumber", contractor.getTinno());
-			else
-				jsonObject.addProperty("tinNumber", "");
-			jsonObject.addProperty("id", contractor.getId());
-		}
-		return jsonObject;
-	}
+    @Override
+    public JsonElement serialize(final Contractor contractor, final Type type, final JsonSerializationContext jsc) {
+        final JsonObject jsonObject = new JsonObject();
+        if (contractor != null) {
+            if (contractor.getName() != null)
+                jsonObject.addProperty("name", contractor.getName());
+            else
+                jsonObject.addProperty("name", "");
+            if (contractor.getCode() != null)
+                jsonObject.addProperty("code", contractor.getCode());
+            else
+                jsonObject.addProperty("code", "");
+            if (contractor.getBank() != null && contractor.getBank().getName() != null)
+                jsonObject.addProperty("bank", contractor.getBank().getName());
+            else
+                jsonObject.addProperty("bank", "");
+            if (contractor.getBankaccount() != null)
+                jsonObject.addProperty("bankAccount", contractor.getBankaccount());
+            else
+                jsonObject.addProperty("bankAccount", "");
+            if (contractor.getContactPerson() != null)
+                jsonObject.addProperty("contactPerson", contractor.getContactPerson());
+            else
+                jsonObject.addProperty("contactPerson", "");
+            if (contractor.getCorrespondenceAddress() != null)
+                jsonObject.addProperty("correspondenceAddress", contractor.getCorrespondenceAddress());
+            else
+                jsonObject.addProperty("correspondenceAddress", "");
+            if (contractor.getEgwStatus() != null && contractor.getEgwStatus().getDescription() != null)
+                jsonObject.addProperty("status", contractor.getEgwStatus().getDescription());
+            else
+                jsonObject.addProperty("status", "");
+            if (contractor.getEmail() != null)
+                jsonObject.addProperty("email", contractor.getEmail());
+            else
+                jsonObject.addProperty("email", "");
+            if (contractor.getIfsccode() != null)
+                jsonObject.addProperty("ifscCode", contractor.getIfsccode());
+            else
+                jsonObject.addProperty("ifscCode", "");
+            if (contractor.getMobileNumber() != null)
+                jsonObject.addProperty("mobileNumber", contractor.getMobileNumber());
+            else
+                jsonObject.addProperty("mobileNumber", "");
+            if (contractor.getNarration() != null)
+                jsonObject.addProperty("narration", contractor.getNarration());
+            else
+                jsonObject.addProperty("narration", "");
+            if (contractor.getPanno() != null)
+                jsonObject.addProperty("panNumber", contractor.getPanno());
+            else
+                jsonObject.addProperty("panNumber", "");
+            if (contractor.getPaymentAddress() != null)
+                jsonObject.addProperty("paymentAddress", contractor.getPaymentAddress());
+            else
+                jsonObject.addProperty("paymentAddress", "");
+            if (contractor.getRegistrationNumber() != null)
+                jsonObject.addProperty("registrationNumber", contractor.getRegistrationNumber());
+            else
+                jsonObject.addProperty("registrationNumber", "");
+            if (contractor.getTinno() != null)
+                jsonObject.addProperty("tinNumber", contractor.getTinno());
+            else
+                jsonObject.addProperty("tinNumber", "");
+            jsonObject.addProperty("id", contractor.getId());
+        }
+        return jsonObject;
+    }
 }

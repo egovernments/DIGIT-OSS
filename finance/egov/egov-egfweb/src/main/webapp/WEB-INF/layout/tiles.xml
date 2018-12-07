@@ -709,4 +709,29 @@
         <put-attribute name="page-title" value="title.supplier.search" cascade="true"/>
         <put-attribute name="body" value="/WEB-INF/views/supplier/supplier-search.jsp"/>
     </definition>
+    
+    <definition name="purchaseorder-new" extends="base_layout">
+        <put-attribute name="page-title" value="title.purchaseorder.create" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/purchaseorder/purchaseorder-new.jsp"/>
+    </definition>
+    
+    <definition name="purchaseorder-result" extends="base_layout">
+        <put-attribute name="page-title" value="title.purchaseorder.result" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/purchaseorder/purchaseorder-result.jsp"/>
+    </definition>
+    
+    <definition name="purchaseorder-edit" extends="base_layout">
+        <put-attribute name="page-title" value="title.purchaseorder.edit" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/purchaseorder/purchaseorder-edit.jsp"/>
+    </definition>
+    
+    <definition name="purchaseorder-view" extends="base_layout">
+        <put-attribute name="page-title" value="title.purchaseorder.view" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/purchaseorder/purchaseorder-view.jsp"/>
+    </definition>
+    
+    <definition name="purchaseorder-search" extends="base_layout">
+        <put-attribute name="page-title" value="title.purchaseorder.search" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/purchaseorder/purchaseorder-search.jsp"/>
+    </definition>
 </tiles-definitions>

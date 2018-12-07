@@ -1,0 +1,184 @@
+<%--
+  ~    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
+  ~    accountability and the service delivery of the government  organizations.
+  ~
+  ~     Copyright (C) 2017  eGovernments Foundation
+  ~
+  ~     The updated version of eGov suite of products as by eGovernments Foundation
+  ~     is available at http://www.egovernments.org
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program. If not, see http://www.gnu.org/licenses/ or
+  ~     http://www.gnu.org/licenses/gpl.html .
+  ~
+  ~     In addition to the terms of the GPL license to be adhered to in using this
+  ~     program, the following additional terms are to be complied with:
+  ~
+  ~         1) All versions of this program, verbatim or modified must carry this
+  ~            Legal Notice.
+  ~            Further, all user interfaces, including but not limited to citizen facing interfaces,
+  ~            Urban Local Bodies interfaces, dashboards, mobile applications, of the program and any
+  ~            derived works should carry eGovernments Foundation logo on the top right corner.
+  ~
+  ~            For the logo, please refer http://egovernments.org/html/logo/egov_logo.png.
+  ~            For any further queries on attribution, including queries on brand guidelines,
+  ~            please contact contact@egovernments.org
+  ~
+  ~         2) Any misrepresentation of the origin of the material is prohibited. It
+  ~            is required that all modified versions of this material be marked in
+  ~            reasonable ways as different from the original version.
+  ~
+  ~         3) This license does not grant any rights to any user of the program
+  ~            with regards to rights under trademark law for use of the trade names
+  ~            or trademarks of eGovernments Foundation.
+  ~
+  ~   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
+  ~
+  --%>
+  
+  
+<div class="form-group">
+	<label class="col-sm-2 control-label text-right" for="orderNumber"> <spring:message code="purchaseorder.number" /><span class="mandatory"></span> 
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:input path="orderNumber" id="orderNumber" maxlength="50" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" required="required"/>
+		<form:errors path="orderNumber" cssClass="add-margin error-msg" />
+	</div>
+	<label class="col-sm-2 control-label text-right" for="orderDate"> <spring:message code="purchaseorder.date" /><span class="mandatory"></span>
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:input path="orderDate" class="form-control datepicker" required="required" id="orderDate"  data-date-end-date="0d" data-inputmask="'mask': 'd/m/y'"/>
+		<form:errors path="orderDate" cssClass="add-margin error-msg" />
+	</div>
+</div>
+
+
+<div class="form-group">
+	<label class="col-sm-2 control-label text-right" for="code"> <spring:message code="purchaseorder.code" /><span class="mandatory"></span> 
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:input path="code" id="code" maxlength="50" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" required="required"/>
+		<form:errors path="code" cssClass="add-margin error-msg" />
+	</div>
+	<label class="col-sm-2 control-label text-right" for="name"> <spring:message code="purchaseorder.name" /><span class="mandatory"></span>
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:input path="name" id="name" size="40" maxlength="100" cssClass="form-control patternvalidation" data-pattern="alphabetwithspace" required="required"/>
+		<form:errors path="name" cssClass="add-margin error-msg" />
+	</div>
+</div>
+
+<div class="form-group">
+	<label class="col-sm-2 control-label text-right" for="description" > <spring:message code="purchaseorder.description"   /></label>
+	<div class="col-sm-3 add-margin">
+		<form:textarea path="description" id="description" cols="35" cssClass="form-control textfieldsvalidate patternvalidation"  maxlength = "250" />
+		<form:errors path="description" cssClass="add-margin error-msg" />
+	</div>
+	<label class="col-sm-2 control-label text-right" for="active"> <spring:message code="purchaseorder.active" />
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:checkbox path="active" />
+		<form:errors path="active" cssClass="add-margin error-msg" />
+	</div>
+</div>
+
+<div class="form-group">
+	<label class="col-sm-2 control-label text-right" for="supplier"> <spring:message code="purchaseorder.supplier" /><span class="mandatory"></span> 
+	</label>
+	<div class="col-sm-3 add-margin contactPerson"> 
+		<form:select path="supplier" data-first-option="false" id="supplier" class="form-control" required="required" >
+			<form:option value=""><spring:message code="lbl.select" /></form:option>
+			<form:options items="${suppliers}" itemValue="id" itemLabel="name" />
+		</form:select>
+		<form:errors path="supplier" cssClass="add-margin error-msg" />
+	</div>
+	<label class="col-sm-2 control-label text-right" for="suppliercode"> <spring:message code="purchaseorder.suppliercode" />
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:input path="" id="suppliercode" maxlength="100" disabled="disabled" cssClass="form-control"/>
+	</div>
+</div>
+
+<div class="form-group">
+	<label class="col-sm-2 control-label text-right" for="orderValue"> <spring:message code="purchaseorder.ordervalue" /><span class="mandatory"></span> 
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:input path="orderValue" id="orderValue" cssClass="form-control patternvalidation" data-pattern="decimalvalue" required="required" />
+		<form:errors path="orderValue" cssClass="add-margin error-msg" />
+	</div>
+	<label class="col-sm-2 control-label text-right" for="advancePayable"> <spring:message code="purchaseorder.advancepayable" />
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:input path="advancePayable" id="advancePayable" cssClass="form-control patternvalidation" data-pattern="decimalvalue" />
+		<form:errors path="advancePayable" cssClass="add-margin error-msg" />
+	</div>
+</div>
+
+<div class="form-group">
+	<label class="col-sm-2 control-label text-right" for="fund"> <spring:message code="purchaseorder.fund" /><span class="mandatory"></span> 
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:select path="fund" data-first-option="false" id="fund" class="form-control" required="required" >
+			<form:option value=""><spring:message code="lbl.select" /></form:option>
+			<form:options items="${funds}" itemValue="id" itemLabel="name" />
+		</form:select>
+		<form:errors path="fund" cssClass="add-margin error-msg" />
+	</div>
+	<label class="col-sm-2 control-label text-right" for="department"> <spring:message code="purchaseorder.department" /><span class="mandatory"></span> 
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:select path="department" data-first-option="false" id="department" class="form-control"  required="required">
+			<form:option value=""><spring:message code="lbl.select" /></form:option>
+			<form:options items="${departments}" itemValue="id" itemLabel="name" />
+		</form:select>
+		<form:errors path="department" cssClass="add-margin error-msg" />
+	</div>
+</div>
+
+<div class="form-group">
+	<label class="col-sm-2 control-label text-right" for="scheme"> <spring:message code="purchaseorder.scheme" />
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:select path="scheme" data-first-option="false" id="scheme" class="form-control"  >
+			<form:option value=""><spring:message code="lbl.select" /></form:option>
+			<form:options items="${schemes}" itemValue="id" itemLabel="name" />
+		</form:select>
+		<form:errors path="scheme" cssClass="add-margin error-msg" />
+	</div>
+	<label class="col-sm-2 control-label text-right" for="subScheme"> <spring:message code="purchaseorder.subscheme" />
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:select path="subScheme" data-first-option="false" id="subScheme" class="form-control">
+			<form:option value=""><spring:message code="lbl.select" /></form:option>
+			<form:options items="${subSchemes}" itemValue="id" itemLabel="name" />
+		</form:select>
+		<form:errors path="subScheme" cssClass="add-margin error-msg" />
+	</div>
+</div>
+
+<div class="form-group">
+	<label class="col-sm-2 control-label text-right" for="sanctionNumber"> <spring:message code="purchaseorder.sanctionnumber" />
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:input path="sanctionNumber" id="sanctionNumber" maxlength="50" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" />
+		<form:errors path="sanctionNumber" cssClass="add-margin error-msg" />
+	</div>
+	<label class="col-sm-2 control-label text-right" for="sanctionDate"> <spring:message code="purchasesanction.date" />
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:input path="sanctionDate" class="form-control datepicker" id="sanctionDate"  data-date-end-date="0d" data-inputmask="'mask': 'd/m/y'"/>
+		<form:errors path="sanctionDate" cssClass="add-margin error-msg" />
+	</div>
+</div>
+
+<input type="hidden" name="purchaseOrder" value="${purchaseOrder.id}" />
