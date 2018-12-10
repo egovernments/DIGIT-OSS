@@ -13114,7 +13114,7 @@
     {
       "id": 1721,
       "name": "remittancepayment",
-      "url": "ur;",
+      "url": "url",
       "displayName": "Deduction Payments",
       "orderNumber": 4,
       "parentModule": "",
@@ -13139,7 +13139,7 @@
     {
       "id": 1723,
       "name": "remittancechequeassignment",
-      "url": "ur;",
+      "url": "url",
       "displayName": "Deductions Cheque Assignment",
       "orderNumber": 5,
       "parentModule": "",
@@ -13159,6 +13159,45 @@
       "enabled": false,
       "serviceCode": "COLLECTION",
       "code": "null"
+    },
+   {
+      "id": 1725,
+      "name": "purchaseordercreate",
+      "url": "url",
+      "displayName": "Create Purchase Order",
+      "orderNumber": 12,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "navigationURL": "services/EGF/purchaseorder/newform",
+      "code": "null",
+      "path": "Finance.Masters.Purchase Order.Create Purchase Order"
+    },
+    {
+      "id": 1726,
+      "name": "purchaseorderview",
+      "url": "url",
+      "displayName": "View Purchase Order",
+      "orderNumber": 12,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "navigationURL": "services/EGF/purchaseorder/search/view",
+      "code": "null",
+      "path": "Finance.Masters.Purchase Order.View Purchase Order"
+    },
+    {
+      "id": 1727,
+      "name": "purchaseordermodify",
+      "url": "url",
+      "displayName": "Modify Purchase Order",
+      "orderNumber": 13,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "navigationURL": "services/EGF/purchaseorder/search/edit",
+      "code": "null",
+      "path": "Finance.Masters.Purchase Order.Modify Purchase Order"
     }
   ]
 }
