@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.Role;
 import org.egov.infra.admin.master.entity.User;
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.config.security.authentication.userdetail.CurrentUser;
 import org.egov.infra.microservice.contract.Error;
 import org.egov.infra.microservice.contract.ErrorResponse;
@@ -150,7 +151,7 @@ public class RestServiceAuthFilter implements Filter {
       
          String user_token = readAuthToken(request);
          String tenantId = readTenantId(request);
-      
+         setSchema(tenantId);
         if (user_token == null)
             throw new Exception("AuthToken not found");
         HttpSession session = request.getSession();
@@ -237,8 +238,12 @@ public class RestServiceAuthFilter implements Filter {
             String strReq = IOUtils.toString(request.getInputStream());
             HashMap<Object, Object> reqMap = mapper.readValue(strReq, HashMap.class);
             String tenantId = String.valueOf(reqMap.get("tenantId"));
-            if(tenantId==null)
-                throw new Exception("tenantId is found");
+            if(tenantId==null || "null".equalsIgnoreCase(tenantId)){
+                LOGGER.info("Trying to read tenantid in query string ");
+                tenantId= request.getParameter("tenantId");
+            }
+            if(tenantId==null || "null".equalsIgnoreCase(tenantId))
+                throw new Exception("tenantId is not found");
 
             return tenantId;
         } catch (JsonParseException e) {
@@ -252,6 +257,17 @@ public class RestServiceAuthFilter implements Filter {
             throw new Exception("Request processing failed");
         }
 
+        
+    }
+    
+    private void setSchema(String tenantid)
+    {
+        if(null!=tenantid && ""!=tenantid){
+        String[] tenantParts = tenantid.split("\\.");
+            if(tenantParts != null||tenantParts.length>1){
+                ApplicationThreadLocals.setTenantID(tenantParts[1]); 
+            }
+        }
         
     }
 }

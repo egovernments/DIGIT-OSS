@@ -5,9 +5,12 @@ import java.util.List;
 
 import org.egov.infra.microservice.models.RequestInfo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BankRequest implements Serializable {
 
-	private RequestInfo requestInfo;
+//	private RequestInfo requestInfo;
 	private String tenantId;
 	private List<Long> ids;
 	private String name;
@@ -20,9 +23,9 @@ public class BankRequest implements Serializable {
 	
 	public BankRequest(){}
 
-	public BankRequest(RequestInfo requestInfo,String tenantId, List<Long> ids, String name, String code, boolean active,
+	public BankRequest(/*RequestInfo requestInfo,*/String tenantId, List<Long> ids, String name, String code, boolean active,
 			Integer offset, Integer pageSize, String sortBy) {
-		this.requestInfo = requestInfo;
+//		this.requestInfo = requestInfo;
 		this.tenantId= tenantId;
 		this.ids = ids;
 		this.name = name;
@@ -41,13 +44,13 @@ public class BankRequest implements Serializable {
 		this.tenantId = tenantId;
 	}
 
-	public RequestInfo getRequestInfo() {
-		return requestInfo;
-	}
-
-	public void setRequestInfo(RequestInfo requestInfo) {
-		this.requestInfo = requestInfo;
-	}
+//	public RequestInfo getRequestInfo() {
+//		return requestInfo;
+//	}
+//
+//	public void setRequestInfo(RequestInfo requestInfo) {
+//		this.requestInfo = requestInfo;
+//	}
 
 	public List<Long> getIds() {
 		return ids;

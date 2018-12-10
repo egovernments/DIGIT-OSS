@@ -267,4 +267,10 @@ public class BankService extends PersistenceService<Bank, Integer> {
     	
     	return criteria.list();
     }
+    
+    public List<Bank> getAllBanks(){
+        Criteria criteria = getSession().createCriteria(Bank.class);
+        criteria.add(Restrictions.eq("isactive", true));
+        return criteria.list();
+    }
 }

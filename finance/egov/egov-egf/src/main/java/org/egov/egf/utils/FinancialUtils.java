@@ -47,6 +47,20 @@
  */
 package org.egov.egf.utils;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.egov.commons.EgwStatus;
 import org.egov.commons.dao.EgwStatusHibernateDAO;
 import org.egov.eis.entity.Assignment;
@@ -61,7 +75,6 @@ import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.EmployeeInfo;
-import org.egov.infra.microservice.models.EmployeeInfoResponse;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.workflow.entity.State;
@@ -75,18 +88,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @author venki
@@ -318,6 +319,17 @@ public class FinancialUtils {
                 map.put("department", null != state.getDeptName() ? state.getDeptName() : "");
             }
             historyTable.add(map);
+            Collections.sort(historyTable, new Comparator<Map<String, Object>> () {
+
+                public int compare(Map<String, Object> mapObject1, Map<String, Object> mapObject2) {
+
+                    return ((java.sql.Timestamp) mapObject1.get("date")).compareTo((java.sql.Timestamp) mapObject2.get("date")); //ascending order
+
+                    //return ((java.sql.Timestamp) mapObject1.get("num")).compareTo((java.sql.Timestamp) mapObject1.get("num")); //descending order
+
+                }
+
+            });
         }
         return historyTable;
     }

@@ -2,17 +2,24 @@ package org.egov.egf.web.controller.microservice;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.egov.commons.Bank;
 import org.egov.commons.Bankbranch;
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.CFunction;
 import org.egov.commons.Fund;
+import org.egov.commons.service.BankAccountService;
 import org.egov.commons.service.BankBranchService;
 import org.egov.commons.service.FinancialYearService;
 import org.egov.commons.service.FunctionService;
 import org.egov.commons.service.FundService;
 import org.egov.egf.contract.model.AuditDetails;
+import org.egov.egf.contract.model.BankAccount;
+import org.egov.egf.contract.model.BankAccountRequest;
+import org.egov.egf.contract.model.BankAccountResponse;
 import org.egov.egf.contract.model.BankBranch;
 import org.egov.egf.contract.model.BankBranchRequest;
 import org.egov.egf.contract.model.BankBranchResponse;
@@ -26,12 +33,16 @@ import org.egov.egf.contract.model.FunctionRequest;
 import org.egov.egf.contract.model.FunctionResponse;
 import org.egov.egf.contract.model.FundRequest;
 import org.egov.egf.contract.model.FundResponse;
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.microservice.contract.Pagination;
+import org.egov.infra.microservice.contract.RequestInfoWrapper;
 import org.egov.infra.microservice.contract.ResponseInfo;
 import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.services.masters.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,6 +60,8 @@ public class FinanceController {
 	private BankService bankService;
 	@Autowired
 	private BankBranchService branchService;
+	@Autowired
+	private BankAccountService bankaccountService;
 
 	@PostMapping(value = "/funds/_search")
 	@ResponseBody
@@ -105,19 +118,29 @@ public class FinanceController {
 
 	@PostMapping(value = "/bank")
 	@ResponseBody
-	public BankResponse BankSearch(@RequestBody BankRequest bankRequest) {
+	public BankResponse BankSearch(@ModelAttribute @Valid BankRequest bankRequest,BindingResult modelAttributeBindingResult
+              ,@RequestBody @Valid RequestInfoWrapper request,BindingResult requestBodyBindingResult) {
 
-		Bank bank = new Bank();
-		bank.setCode(bankRequest.getCode());
-		bank.setName(bankRequest.getName());
-		bank.setIsactive(bankRequest.isActive());
-
-		List<Bank> banks = bankService.search(bank, bankRequest.getIds(), bankRequest.getSortBy(),
-				bankRequest.getOffset(), bankRequest.getPageSize());
-
-		return getSuccessBankResponse(banks, bankRequest);
+//		Bank bank = new Bank();
+//		bank.setCode(bankRequest.getCode());
+//		bank.setName(bankRequest.getName());
+//		bank.setIsactive(bankRequest.isActive());
+//
+//		List<Bank> banks = bankService.search(bank, bankRequest.getIds(), bankRequest.getSortBy(),
+//				bankRequest.getOffset(), bankRequest.getPageSize());
+//
+//		return getSuccessBankResponse(banks, bankRequest);
+	    return null;
 	}
-
+	
+	@PostMapping(value="/rest/bank/all")
+	@ResponseBody
+	public BankResponse getAllBanks(@ModelAttribute @Valid BankRequest bankRequest,BindingResult modelAttributeBindingResult
+	              ,@RequestBody @Valid RequestInfoWrapper request,BindingResult requestBodyBindingResult) {
+	    setSchema(bankRequest.getTenantId());
+	    List<Bank> banks = bankService.getAllBanks();
+	    return getSuccessBankResponse(banks, bankRequest,request.getRequestInfo());
+	}
 	@PostMapping(value = "/bankbranch")
 	@ResponseBody
 	public BankBranchResponse BankBranchSearch(@RequestBody BankBranchRequest bbRequest) {
@@ -132,10 +155,22 @@ public class FinanceController {
 		return getSuccessBankBranchResponse(branchList, bbRequest);
 	}
 
-	@PostMapping(value = "/bankaccount")
-	public void BankAccountSearch() {
+	@PostMapping(value = "/rest/bankaccount")
+	@ResponseBody
+	public BankAccountResponse BankAccountSearch(@ModelAttribute @Valid BankAccountRequest bankaccountrequest,BindingResult modelAttributeBindingResult
+                ,@RequestBody @Valid RequestInfoWrapper request,BindingResult requestBodyBindingResult) {
+	    setSchema(bankaccountrequest.getTenantId());
+	Map<String,String> accounts =   bankaccountService.getAllBankAccounts();
+	  
+	return getSuccessBankAccountResponse(request.getRequestInfo(), accounts);
 	}
-
+	@PostMapping(value= "/rest/test")
+	@ResponseBody
+	public  String testme(@ModelAttribute @Valid BankRequest bankRequest,BindingResult modelAttributeBindingResult
+	        ,@RequestBody @Valid RequestInfoWrapper request,BindingResult requestBodyBindingResult){
+	    return "success";
+	}
+	
 	@PostMapping(value = "/recovery")
 	public void RecoverySearch() {
 	}
@@ -240,9 +275,9 @@ public class FinanceController {
 
 	}
 
-	private BankResponse getSuccessBankResponse(List<Bank> banks, BankRequest bankRequest) {
+	private BankResponse getSuccessBankResponse(List<Bank> banks, BankRequest bankRequest,RequestInfo requestInfo) {
 
-		ResponseInfo responseInfo = createResponseObj(bankRequest.getRequestInfo(), true);
+		ResponseInfo responseInfo = createResponseObj(requestInfo, true);
 
 		List<org.egov.egf.contract.model.Bank> bankList = new ArrayList<>();
 		banks.forEach(bank -> {
@@ -318,5 +353,27 @@ public class FinanceController {
 		page.setTotalResults(branchList.size());
 
 		return new BankBranchResponse(responseInfo, branchList, page);
+	}
+	
+	private BankAccountResponse getSuccessBankAccountResponse(RequestInfo requestInfo,Map<String,String> accounts){
+	 
+	    ResponseInfo responseInfo = createResponseObj(requestInfo, true);
+	    List<BankAccount> accountlist = new ArrayList<>();
+	    accounts.forEach((key,value)->{
+	        accountlist.add(new BankAccount(key,value));
+	     });;
+	    
+	    return new BankAccountResponse(responseInfo, accountlist, new Pagination());
+	}
+	
+	private void setSchema(String tenantid)
+	{
+	    if(null!=tenantid && ""!=tenantid){
+	    String[] tenantParts = tenantid.split("\\.");
+	        if(tenantParts == null||tenantParts.length<2){
+	            throw new Error("tenantid not formed properly");
+	        }
+	       ApplicationThreadLocals.setTenantID(tenantParts[1]); 
+	    }else throw new Error("tenantid not formed properly");
 	}
 }

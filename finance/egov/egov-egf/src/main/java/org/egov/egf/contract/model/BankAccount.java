@@ -4,8 +4,25 @@ import java.io.Serializable;
 
 public class BankAccount implements Serializable {
 	
-	private Long id;
-	private BankBranch branch;
+	private String code;
+	private String account;
+    public BankAccount(String code, String account) {
+        this.code = code;
+        this.account = account;
+    }
+    public BankAccount() {
+    }
+    public String getCode() {
+        return code;
+    }
+    public void setCode(String code) {
+        this.code = code;
+    }
+    public String getAccount() {
+        return account;
+    }
+    public void setAccount(String account) {
+        this.account = account;
+    }
 	
-
 }

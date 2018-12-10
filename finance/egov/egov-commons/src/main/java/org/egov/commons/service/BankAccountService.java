@@ -47,21 +47,25 @@
  */
 package org.egov.commons.service;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 import org.egov.commons.Bank;
 import org.egov.commons.Bankaccount;
 import org.egov.commons.Bankbranch;
 import org.egov.commons.CChartOfAccounts;
 import org.egov.commons.utils.BankAccountType;
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infstr.services.PersistenceService;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.apache.commons.lang3.StringUtils.EMPTY;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Transactional(readOnly = true)
 public class BankAccountService extends PersistenceService<Bankaccount, Long> {
@@ -185,7 +189,19 @@ public class BankAccountService extends PersistenceService<Bankaccount, Long> {
         }
         return bankaccounts;
     }
-
+    
+    public Map<String,String> getAllBankAccounts(){
+        Map<String,String> accounts = new HashMap<>();
+        
+        List<Object[]>bankaccounts = this.fetchAllBankAccounts();
+        
+        for(Object[] account:bankaccounts){
+            accounts.put((String)account[0], (String)account[1]);
+        }
+        
+        return accounts;
+    }
+    
     private List<Object[]> fetchBankaccountsWithAssignedRTGS(final Integer branchId, final Date asOnDate) {
         StringBuilder queryString = new StringBuilder();
         queryString.append("select bankaccount.accountnumber as accountnumber,bankaccount.accounttype as accounttype,cast(bankaccount.id as integer) as id,coa.glcode as glCode ").
@@ -253,5 +269,16 @@ public class BankAccountService extends PersistenceService<Bankaccount, Long> {
                 setInteger(BRANCH_ID, branchId).
                 list();
     }
+    
+    private List<Object[]> fetchAllBankAccounts(){
+        /**
+         * This method used for Remittance report. 
+         */
+        String tenantId = ApplicationThreadLocals.getTenantID();
+        String query = "SELECT bankaccount.accountnumber,concat(concat(bankaccount.accountnumber,'-'),bank.name) from"
+                + " tenantId.Bankaccount bankaccount,tenantId.Bankbranch bankbranch,tenantId.Bank bank"
+                + " where bankaccount.branchid=bankbranch.id and bankbranch.bankid=bank.id";
+       query= StringUtils.replace(query, "tenantId", tenantId);
+        return getSession().createSQLQuery(query).list();    }
 
 }
