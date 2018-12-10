@@ -65,7 +65,7 @@
             <div class="col-xs-3 add-margin">
               <spring:message code="purchaseorder.date" />
             </div>
-            <div class="col-sm-3 add-margin view-content">${purchaseOrder.orderDate}</div>
+            <div class="col-sm-3 add-margin view-content"><fmt:formatDate value="${purchaseOrder.orderDate}" pattern="dd/MM/yyyy" /></div>
           </div>
           <div class="row add-border">
             <div class="col-xs-3 add-margin">
@@ -131,7 +131,7 @@
             <div class="col-xs-3 add-margin">
               <spring:message code="purchaseorder.sanctiondate" />
             </div>
-            <div class="col-sm-3 add-margin view-content">${purchaseOrder.sanctionDate}</div>
+            <div class="col-sm-3 add-margin view-content"><fmt:formatDate value="${purchaseOrder.sanctionDate}" pattern="dd/MM/yyyy" /></div>
           </div>
         </div>
       </div>
