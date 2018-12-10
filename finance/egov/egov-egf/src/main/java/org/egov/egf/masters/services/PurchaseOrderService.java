@@ -65,10 +65,13 @@ import org.egov.commons.Accountdetailkey;
 import org.egov.commons.service.AccountDetailKeyService;
 import org.egov.commons.service.AccountdetailtypeService;
 import org.egov.commons.service.EntityTypeService;
+import org.egov.commons.service.FundService;
 import org.egov.egf.masters.repository.PurchaseOrderRepository;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.masters.PurchaseOrder;
+import org.egov.services.masters.SchemeService;
+import org.egov.services.masters.SubSchemeService;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,6 +97,18 @@ public class PurchaseOrderService implements EntityTypeService {
     @Autowired
     private AccountdetailtypeService accountdetailtypeService;
 
+    @Autowired
+    private FundService fundService;
+
+    @Autowired
+    private SupplierService supplierService;
+
+    @Autowired
+    private SchemeService schemeService;
+
+    @Autowired
+    private SubSchemeService subSchemeService;
+
     public Session getCurrentSession() {
         return entityManager.unwrap(Session.class);
     }
@@ -106,6 +121,22 @@ public class PurchaseOrderService implements EntityTypeService {
     public PurchaseOrder create(PurchaseOrder purchaseOrder) {
 
         setAuditDetails(purchaseOrder);
+        if (purchaseOrder.getFund() != null && purchaseOrder.getFund().getId() != null) {
+            purchaseOrder.setFund(fundService.findOne(purchaseOrder.getFund().getId()));
+        }
+        if (purchaseOrder.getScheme() != null && purchaseOrder.getScheme().getId() != null) {
+            purchaseOrder.setScheme(schemeService.findById(purchaseOrder.getScheme().getId(), false));
+        } else {
+            purchaseOrder.setScheme(null);
+        }
+        if (purchaseOrder.getSubScheme() != null && purchaseOrder.getSubScheme().getId() != null) {
+            purchaseOrder.setSubScheme(subSchemeService.findById(purchaseOrder.getSubScheme().getId(), false));
+        } else {
+            purchaseOrder.setSubScheme(null);
+        }
+        if (purchaseOrder.getSupplier() != null && purchaseOrder.getSupplier().getId() != null) {
+            purchaseOrder.setSupplier(supplierService.getById(purchaseOrder.getSupplier().getId()));
+        }
         purchaseOrder = purchaseOrderRepository.save(purchaseOrder);
         saveAccountDetailKey(purchaseOrder);
         return purchaseOrder;
@@ -125,6 +156,22 @@ public class PurchaseOrderService implements EntityTypeService {
     @Transactional
     public PurchaseOrder update(final PurchaseOrder purchaseOrder) {
         setAuditDetails(purchaseOrder);
+        if (purchaseOrder.getFund() != null && purchaseOrder.getFund().getId() != null) {
+            purchaseOrder.setFund(fundService.findOne(purchaseOrder.getFund().getId()));
+        }
+        if (purchaseOrder.getScheme() != null && purchaseOrder.getScheme().getId() != null) {
+            purchaseOrder.setScheme(schemeService.findById(purchaseOrder.getScheme().getId(), false));
+        } else {
+            purchaseOrder.setScheme(null);
+        }
+        if (purchaseOrder.getSubScheme() != null && purchaseOrder.getSubScheme().getId() != null) {
+            purchaseOrder.setSubScheme(subSchemeService.findById(purchaseOrder.getSubScheme().getId(), false));
+        } else {
+            purchaseOrder.setSubScheme(null);
+        }
+        if (purchaseOrder.getSupplier() != null && purchaseOrder.getSupplier().getId() != null) {
+            purchaseOrder.setSupplier(supplierService.getById(purchaseOrder.getSupplier().getId()));
+        }
         return purchaseOrderRepository.save(purchaseOrder);
     }
 
@@ -152,11 +199,11 @@ public class PurchaseOrderService implements EntityTypeService {
             predicates.add(cb.like(
                     cb.lower(purchaseOrders.get(PurchaseOrder_.getDeclaredSingularAttribute("name", String.class))), name));
         }
-        if (purchaseOrder.getCode() != null) {
-            final String code = "%" + purchaseOrder.getCode().toLowerCase() + "%";
-            predicates.add(cb.isNotNull(purchaseOrders.get("code")));
+        if (purchaseOrder.getOrderNumber() != null) {
+            final String code = "%" + purchaseOrder.getOrderNumber().toLowerCase() + "%";
+            predicates.add(cb.isNotNull(purchaseOrders.get("orderNumber")));
             predicates.add(cb.like(
-                    cb.lower(purchaseOrders.get(PurchaseOrder_.getDeclaredSingularAttribute("code", String.class))), code));
+                    cb.lower(purchaseOrders.get(PurchaseOrder_.getDeclaredSingularAttribute("orderNumber", String.class))), code));
         }
 
         createQuery.where(predicates.toArray(new Predicate[] {}));
@@ -174,7 +221,7 @@ public class PurchaseOrderService implements EntityTypeService {
     @Override
     public List<? extends org.egov.commons.utils.EntityType> filterActiveEntities(String filterKey, int maxRecords,
             Integer accountDetailTypeId) {
-        return purchaseOrderRepository.findByNameLikeOrCodeLike(filterKey + "%", filterKey + "%");
+        return purchaseOrderRepository.findByNameLikeOrOrderNumberLike(filterKey + "%", filterKey + "%");
     }
 
     @Override

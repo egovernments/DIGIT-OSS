@@ -71,10 +71,6 @@ public class PurchaseOrderJsonAdaptor implements JsonSerializer<PurchaseOrder> {
                 jsonObject.addProperty("name", purchaseOrder.getName());
             else
                 jsonObject.addProperty("name", "");
-            if (purchaseOrder.getCode() != null)
-                jsonObject.addProperty("code", purchaseOrder.getCode());
-            else
-                jsonObject.addProperty("code", "");
             if (purchaseOrder.getOrderDate() != null)
                 jsonObject.addProperty("orderDate", DateUtils.getDefaultFormattedDate(purchaseOrder.getOrderDate()));
             else
@@ -123,6 +119,7 @@ public class PurchaseOrderJsonAdaptor implements JsonSerializer<PurchaseOrder> {
                 jsonObject.addProperty("active", purchaseOrder.getActive());
             else
                 jsonObject.addProperty("active", "");
+            jsonObject.addProperty("id", purchaseOrder.getId());
         }
         return jsonObject;
     }

@@ -45,6 +45,116 @@
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  *
  */
+var $fundId = 0;
+var $schemeId = 0;
+var $subSchemeId = 0;
+var $supplierId = 0;
+
+$(document).ready(function(){
+	$fundId = $('#fund').val();
+	$schemeId = $('#schemeId').val();
+	$subSchemeId = $('#subSchemeId').val();
+	$supplierId = $('#subSchemeId').val();
+	if($fundId)
+		$("#fund").val($fundId).prop('selected','selected');
+	if($supplierId){
+		$("#supplier").val($supplierId).prop('selected','selected');
+		$('#supplier').trigger("change");
+	}
+	$('#fund').trigger("change");
+	if($schemeId)
+		$("#scheme").val($schemeId).prop('selected','selected');
+	loadSubScheme($schemeId);
+	if($subSchemeId)
+		$("#subScheme").val($subSchemeId).prop('selected','selected');
+});
+
+
+function loadScheme(fundId){
+	if (!fundId) {
+		$('#scheme').empty();
+		$('#scheme').append($('<option>').text('Select from below').attr('value', ''));
+		$('#subScheme').empty();
+		$('#subScheme').append($('<option>').text('Select from below').attr('value', ''));
+		return;
+	} else {
+		
+		$.ajax({
+			method : "GET",
+			url : "/services/EGF/common/getschemesbyfundid",
+			data : {
+				fundId : fundId
+			},
+			async : true
+		}).done(
+				function(response) {
+					$('#scheme').empty();
+					$('#scheme').append($("<option value=''>Select from below</option>"));
+					$.each(response, function(index, value) {
+						var selected="";
+						if($schemeId && $schemeId==value.id)
+						{
+								selected="selected";
+						}
+						$('#scheme').append($('<option '+ selected +'>').text(value.name).attr('value', value.id));
+					});
+				});
+
+	}
+}
+
+function loadSubScheme(schemeId){
+	if (!schemeId) {
+		$('#subScheme').empty();
+		$('#subScheme').append($('<option>').text('Select from below').attr('value', ''));
+		return;
+	} else {
+		
+		$.ajax({
+			method : "GET",
+			url : "/services/EGF/common/getsubschemesbyschemeid",
+			data : {
+				schemeId : schemeId
+			},
+			async : true
+		}).done(
+				function(response) {
+					$('#subScheme').empty();
+					$('#subScheme').append($("<option value=''>Select from below</option>"));
+					$.each(response, function(index, value) {
+						var selected="";
+						if($subSchemeId && $subSchemeId==value.id)
+						{
+								selected="selected";
+						}
+						$('#subScheme').append($('<option '+ selected +'>').text(value.name).attr('value', value.id));
+					});
+				});
+		
+	}
+}
+
+
+$('#fund').change(function () {
+	/*$schemeId = "";
+	$subSchemeId = "";*/
+	$('#scheme').empty();
+	$('#scheme').append($('<option>').text('Select from below').attr('value', ''));
+	$('#subScheme').empty();
+	$('#subScheme').append($('<option>').text('Select from below').attr('value', ''));
+	loadScheme($('#fund').val());
+});
+
+
+$('#scheme').change(function () {
+	$('#subScheme').empty();
+	$('#subScheme').append($('<option>').text('Select from below').attr('value', ''));
+	loadSubScheme($('#scheme').val());
+});
+
+$('#supplier').change(function () {
+	$('#suppliercode').val($("#supplier option:selected").text().split('-')[1]);
+});
 
 jQuery('#btnsearch').click(function(e) {
 

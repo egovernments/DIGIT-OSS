@@ -64,16 +64,10 @@
 
 
 <div class="form-group">
-	<label class="col-sm-2 control-label text-right" for="code"> <spring:message code="purchaseorder.code" /><span class="mandatory"></span> 
-	</label>
-	<div class="col-sm-3 add-margin">
-		<form:input path="code" id="code" maxlength="50" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" required="required"/>
-		<form:errors path="code" cssClass="add-margin error-msg" />
-	</div>
 	<label class="col-sm-2 control-label text-right" for="name"> <spring:message code="purchaseorder.name" /><span class="mandatory"></span>
 	</label>
 	<div class="col-sm-3 add-margin">
-		<form:input path="name" id="name" size="40" maxlength="100" cssClass="form-control patternvalidation" data-pattern="alphabetwithspace" required="required"/>
+		<form:input path="name" id="name" maxlength="100" cssClass="form-control patternvalidation" data-pattern="alphabetwithspace" required="required"/>
 		<form:errors path="name" cssClass="add-margin error-msg" />
 	</div>
 </div>
@@ -96,16 +90,21 @@
 	<label class="col-sm-2 control-label text-right" for="supplier"> <spring:message code="purchaseorder.supplier" /><span class="mandatory"></span> 
 	</label>
 	<div class="col-sm-3 add-margin contactPerson"> 
-		<form:select path="supplier" data-first-option="false" id="supplier" class="form-control" required="required" >
+		<form:hidden path="" name="supplierId" id="supplierId" value="${purchaseOrder.supplier.id }"/>
+		<form:select path="supplier" data-first-option="false" id="supplier" class="form-control" required="required" value="${purchaseOrder.supplier.id}" >
 			<form:option value=""><spring:message code="lbl.select" /></form:option>
-			<form:options items="${suppliers}" itemValue="id" itemLabel="name" />
+			<c:forEach var="supplier" items="${suppliers}">
+				<form:option  value="${supplier.id}" >
+					<c:out value="${supplier.name} - ${supplier.code}"/>
+				</form:option>
+			</c:forEach>
 		</form:select>
 		<form:errors path="supplier" cssClass="add-margin error-msg" />
 	</div>
 	<label class="col-sm-2 control-label text-right" for="suppliercode"> <spring:message code="purchaseorder.suppliercode" />
 	</label>
 	<div class="col-sm-3 add-margin">
-		<form:input path="" id="suppliercode" maxlength="100" disabled="disabled" cssClass="form-control"/>
+		<form:input path="" id="suppliercode" maxlength="100" disabled="true" cssClass="form-control"/>
 	</div>
 </div>
 
@@ -128,18 +127,18 @@
 	<label class="col-sm-2 control-label text-right" for="fund"> <spring:message code="purchaseorder.fund" /><span class="mandatory"></span> 
 	</label>
 	<div class="col-sm-3 add-margin">
-		<form:select path="fund" data-first-option="false" id="fund" class="form-control" required="required" >
+		<form:select path="fund.id" data-first-option="false" id="fund" class="form-control" required="required" >
 			<form:option value=""><spring:message code="lbl.select" /></form:option>
 			<form:options items="${funds}" itemValue="id" itemLabel="name" />
 		</form:select>
-		<form:errors path="fund" cssClass="add-margin error-msg" />
+		<form:errors path="fund.id" cssClass="add-margin error-msg" />
 	</div>
 	<label class="col-sm-2 control-label text-right" for="department"> <spring:message code="purchaseorder.department" /><span class="mandatory"></span> 
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:select path="department" data-first-option="false" id="department" class="form-control"  required="required">
 			<form:option value=""><spring:message code="lbl.select" /></form:option>
-			<form:options items="${departments}" itemValue="id" itemLabel="name" />
+			<form:options items="${departments}" itemValue="code" itemLabel="name" />
 		</form:select>
 		<form:errors path="department" cssClass="add-margin error-msg" />
 	</div>
@@ -149,20 +148,20 @@
 	<label class="col-sm-2 control-label text-right" for="scheme"> <spring:message code="purchaseorder.scheme" />
 	</label>
 	<div class="col-sm-3 add-margin">
-		<form:select path="scheme" data-first-option="false" id="scheme" class="form-control"  >
+		<form:hidden path="" name="schemeId" id="schemeId" value="${purchaseOrder.scheme.id }"/>
+		<form:select path="scheme.id" data-first-option="false" id="scheme" class="form-control"  value="${purchaseOrder.scheme.id}">
 			<form:option value=""><spring:message code="lbl.select" /></form:option>
-			<form:options items="${schemes}" itemValue="id" itemLabel="name" />
 		</form:select>
-		<form:errors path="scheme" cssClass="add-margin error-msg" />
+		<form:errors path="scheme.id" cssClass="add-margin error-msg" />
 	</div>
 	<label class="col-sm-2 control-label text-right" for="subScheme"> <spring:message code="purchaseorder.subscheme" />
 	</label>
 	<div class="col-sm-3 add-margin">
-		<form:select path="subScheme" data-first-option="false" id="subScheme" class="form-control">
+		<form:hidden path="" name="subSchemeId" id="subSchemeId" value="${purchaseOrder.subScheme.id }"/>
+		<form:select path="subScheme.id" data-first-option="false" id="subScheme" class="form-control" value="${purchaseOrder.subScheme.id}">
 			<form:option value=""><spring:message code="lbl.select" /></form:option>
-			<form:options items="${subSchemes}" itemValue="id" itemLabel="name" />
 		</form:select>
-		<form:errors path="subScheme" cssClass="add-margin error-msg" />
+		<form:errors path="subScheme.id" cssClass="add-margin error-msg" />
 	</div>
 </div>
 
@@ -173,12 +172,12 @@
 		<form:input path="sanctionNumber" id="sanctionNumber" maxlength="50" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" />
 		<form:errors path="sanctionNumber" cssClass="add-margin error-msg" />
 	</div>
-	<label class="col-sm-2 control-label text-right" for="sanctionDate"> <spring:message code="purchasesanction.date" />
+	<label class="col-sm-2 control-label text-right" for="sanctionDate"> <spring:message code="purchaseorder.sanctiondate" />
 	</label>
 	<div class="col-sm-3 add-margin">
 		<form:input path="sanctionDate" class="form-control datepicker" id="sanctionDate"  data-date-end-date="0d" data-inputmask="'mask': 'd/m/y'"/>
 		<form:errors path="sanctionDate" cssClass="add-margin error-msg" />
 	</div>
-</div>
+</div> 
 
 <input type="hidden" name="purchaseOrder" value="${purchaseOrder.id}" />

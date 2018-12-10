@@ -52,9 +52,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.egov.egf.commons.bank.service.CreateBankService;
+import org.egov.commons.service.FundService;
 import org.egov.egf.masters.services.PurchaseOrderService;
+import org.egov.egf.masters.services.SupplierService;
 import org.egov.egf.web.adaptor.PurchaseOrderJsonAdaptor;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.model.masters.PurchaseOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -87,16 +90,24 @@ public class PurchaseOrderController {
     private static final String SEARCH = "purchaseorder-search";
 
     @Autowired
-    private CreateBankService createBankService;
+    private FundService fundService;
 
     @Autowired
     private PurchaseOrderService purchaseOrderService;
 
     @Autowired
+    private MicroserviceUtils microserviceUtils;
+
+    @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private SupplierService supplierService;
+
     private void prepareNewForm(final Model model) {
-        model.addAttribute("banks", createBankService.getByIsActiveTrueOrderByName());
+        model.addAttribute("funds", fundService.findAllActiveAndIsnotleaf());
+        model.addAttribute("departments", microserviceUtils.getDepartments());
+        model.addAttribute("suppliers", supplierService.getAllActiveEntities(null));
     }
 
     @RequestMapping(value = "/newform", method = RequestMethod.POST)
@@ -119,7 +130,7 @@ public class PurchaseOrderController {
 
         redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.purchaseOrder.success", null, null));
 
-        return "redirect:/purchaseOrder/result/" + purchaseOrder.getId() + "/create";
+        return "redirect:/purchaseorder/result/" + purchaseOrder.getId() + "/create";
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
@@ -139,12 +150,13 @@ public class PurchaseOrderController {
         }
         purchaseOrderService.update(purchaseOrder);
         redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.purchaseOrder.success", null, null));
-        return "redirect:/purchaseOrder/result/" + purchaseOrder.getId() + "/view";
+        return "redirect:/purchaseorder/result/" + purchaseOrder.getId() + "/view";
     }
 
     @RequestMapping(value = "/view/{id}", method = RequestMethod.POST)
     public String view(@PathVariable("id") final Long id, final Model model) {
         final PurchaseOrder purchaseOrder = purchaseOrderService.getById(id);
+        populateDepartmentName(purchaseOrder);
         prepareNewForm(model);
         model.addAttribute("purchaseOrder", purchaseOrder);
         model.addAttribute("mode", "view");
@@ -177,9 +189,15 @@ public class PurchaseOrderController {
     @RequestMapping(value = "/result/{id}/{mode}", method = RequestMethod.GET)
     public String result(@PathVariable("id") final Long id, @PathVariable("mode") final String mode, final Model model) {
         final PurchaseOrder purchaseOrder = purchaseOrderService.getById(id);
+        populateDepartmentName(purchaseOrder);
         model.addAttribute("purchaseOrder", purchaseOrder);
         model.addAttribute("mode", mode);
         return RESULT;
+    }
+
+    private void populateDepartmentName(PurchaseOrder purchaseOrder) {
+        Department dept = microserviceUtils.getDepartmentByCode(purchaseOrder.getDepartment());
+        purchaseOrder.setDepartmentName(dept.getName());
     }
 
 }

@@ -47,6 +47,7 @@
  */
 package org.egov.model.masters;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -73,7 +74,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "EGF_PURCHASEORDER")
-@Unique(fields = { "code" }, id = "id", tableName = "EGF_PURCHASEORDER", enableDfltMsg = true)
+@Unique(fields = { "orderNumber" }, id = "id", tableName = "EGF_PURCHASEORDER", enableDfltMsg = true)
 @SequenceGenerator(name = PurchaseOrder.SEQ_EGF_PURCHASEORDER, sequenceName = PurchaseOrder.SEQ_EGF_PURCHASEORDER, allocationSize = 1)
 public class PurchaseOrder extends AbstractAuditable implements EntityType {
 
@@ -89,10 +90,6 @@ public class PurchaseOrder extends AbstractAuditable implements EntityType {
     @NotEmpty
     private String orderNumber;
 
-    @Length(max = 50, message = "Maximum of 50 Characters allowed for Code")
-    @NotEmpty
-    private String code;
-
     @Required(message = "Please Enter the Name")
     @Length(max = 100, message = "Maximum of 100 Characters allowed for Name")
     @NotEmpty
@@ -107,9 +104,9 @@ public class PurchaseOrder extends AbstractAuditable implements EntityType {
     private Supplier supplier;
 
     @NotNull
-    private Boolean orderValue;
+    private BigDecimal orderValue;
 
-    private Boolean advancePayable;
+    private BigDecimal advancePayable;
 
     private String description;
 
@@ -172,7 +169,7 @@ public class PurchaseOrder extends AbstractAuditable implements EntityType {
     @Override
     public String getName() {
         // TODO Auto-generated method stub
-        return null;
+        return name;
     }
 
     @Override
@@ -184,7 +181,7 @@ public class PurchaseOrder extends AbstractAuditable implements EntityType {
     @Override
     public String getCode() {
         // TODO Auto-generated method stub
-        return null;
+        return orderNumber;
     }
 
     @Override
@@ -208,12 +205,11 @@ public class PurchaseOrder extends AbstractAuditable implements EntityType {
     @Override
     public Long getId() {
         // TODO Auto-generated method stub
-        return null;
+        return id;
     }
 
     @Override
     protected void setId(Long id) {
-        // TODO Auto-generated method stub
 
     }
 
@@ -241,19 +237,19 @@ public class PurchaseOrder extends AbstractAuditable implements EntityType {
         this.supplier = supplier;
     }
 
-    public Boolean getOrderValue() {
+    public BigDecimal getOrderValue() {
         return orderValue;
     }
 
-    public void setOrderValue(Boolean orderValue) {
+    public void setOrderValue(BigDecimal orderValue) {
         this.orderValue = orderValue;
     }
 
-    public Boolean getAdvancePayable() {
+    public BigDecimal getAdvancePayable() {
         return advancePayable;
     }
 
-    public void setAdvancePayable(Boolean advancePayable) {
+    public void setAdvancePayable(BigDecimal advancePayable) {
         this.advancePayable = advancePayable;
     }
 
@@ -319,10 +315,6 @@ public class PurchaseOrder extends AbstractAuditable implements EntityType {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public void setName(String name) {
