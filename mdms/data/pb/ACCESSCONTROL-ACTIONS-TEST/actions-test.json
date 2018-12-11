@@ -10914,7 +10914,8 @@
       "serviceCode": "PT",
       "code": "false",
       "path": "Property Tax.PT Masters.PropertySubType",
-      "navigationURL": "mdms/PropertyTax/PropertySubType "
+      "navigationURL": "mdms/PropertyTax/PropertySubType ",
+      "leftIcon": "custom:dashboard-complaint"
     },
     {
       "id": 1548,
@@ -11041,9 +11042,9 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.MyComplaints",
+      "path": "Complaints.MyComplaints",
       "navigationURL": "all-complaints",
-      "leftIcon": "custom:open-complaints",
+      "leftIcon": "action:announcement",
       "rightIcon": ""
     },
     {
@@ -11056,7 +11057,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.MyComplaints",
+      "path": "Complaints.MyComplaints",
       "navigationURL": "closed-complaints",
       "leftIcon": "custom:closed-complaints",
       "rightIcon": ""
@@ -11071,7 +11072,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.CreateComplaint",
+      "path": "Complaints.CreateComplaint",
       "navigationURL": "create-complaint",
       "leftIcon": "content:add",
       "rightIcon": ""
@@ -11086,7 +11087,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.PGR Reports.ComplaintTypeWiseReport",
+      "path": "Complaints.PGR Reports.ComplaintTypeWiseReport",
       "navigationURL": "report/rainmaker-pgr-nonframework/ComplaintTypeWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11101,7 +11102,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.PGR Reports.DepartmentWiseReport",
+      "path": "Complaints.PGR Reports.DepartmentWiseReport",
       "navigationURL": "report/rainmaker-pgr-nonframework/DepartmentWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11116,7 +11117,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.PGR Reports.AOWiseReport",
+      "path": "Complaints.PGR Reports.AOWiseReport",
       "navigationURL": "report/rainmaker-pgr-nonframework/AOWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11131,7 +11132,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.PGR Reports.ULBEmployeeWiseReport",
+      "path": "Complaints.PGR Reports.ULBEmployeeWiseReport",
       "navigationURL": "report/rainmaker-pgr-nonframework/ULBEmployeeWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11146,7 +11147,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.PGR Reports.SourceWiseReport",
+      "path": "Complaints.PGR Reports.SourceWiseReport",
       "navigationURL": "report/rainmaker-pgr-nonframework/SourceWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11531,7 +11532,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.PGR Reports.DescriptionReport",
+      "path": "Complaints.PGR Reports.DescriptionReport",
       "navigationURL": "report/rainmaker-pgr/DescriptionReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -11546,7 +11547,7 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "PGR.PGR Reports.EmployeeReport",
+      "path": "Complaints.PGR Reports.EmployeeReport",
       "navigationURL": "report/rainmaker-pgr/EmployeeReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
@@ -12718,7 +12719,8 @@
       "serviceCode": "TradeLicense",
       "code": "null",
       "navigationURL": "integration/tradelicense/search",
-      "path": "TradeLicense.Application"
+      "path": "TradeLicense.Application",
+      "leftIcon": "places:business-center"
     },
     {
       "id": 1691,
