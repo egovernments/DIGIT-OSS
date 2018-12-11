@@ -1,16 +1,38 @@
 {
-  "tenantId": "pb",
-  "moduleName": "common-masters",
-  "Ui-Common-Config": [
-   {
-   "tradelicense":{
-      "routes":{
-         "search":{
-            "routePath":"/employee-tradelicence/mihy-ui-framework/tradelicence/search",
-            "isOrigin":true
+   "tenantId":"pb",
+   "moduleName":"common-masters",
+   "Ui-Common-Config":[
+      {
+         "action-component-mapping":{
+            "rainmaker-common-share":{
+               "/complaint-details/:serviceRequestId":{
+                  "EMPLOYEE":{
+                     "metaData":{
+                        "jsonPaths":[
+                           "complaint.filedBy",
+                           "complaint.filedUserMobileNumber",
+                           "complaint.complaint",
+                           "complaint.description",
+                           "complaint.addressDetail.houseNoAndStreetName",
+                           "complaint.addressDetail.locality",
+                           "complaint.addressDetail.landMark",
+                           "complaint.timelineSLAStatus.slaStatement"
+                        ],
+                        "title":"Complaint Summary",
+                        "template":"Dear Sir/Madam,\nPlease find complaint detail given below :\n{0}, {1},\n{2}, {3}\nAddress: {4},\n{5},\n{6}\nSLA: {7}\nThanks"
+                     }
+                  }
+               }
+            }
+         },
+         "tradelicense":{
+            "routes":{
+               "search":{
+                  "routePath":"/employee-tradelicence/mihy-ui-framework/tradelicence/search",
+                  "isOrigin":true
+               }
+            }
          }
       }
-     }
-    }
-  ]
+   ]
 }
