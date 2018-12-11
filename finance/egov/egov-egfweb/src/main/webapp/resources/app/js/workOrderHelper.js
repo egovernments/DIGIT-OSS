@@ -48,18 +48,18 @@
 var $fundId = 0;
 var $schemeId = 0;
 var $subSchemeId = 0;
-var $supplierId = 0;
+var $contractorId = 0;
 
 $(document).ready(function(){
 	$fundId = $('#fund').val();
 	$schemeId = $('#schemeId').val();
 	$subSchemeId = $('#subSchemeId').val();
-	$supplierId = $('#supplierId').val();
+	$contractorId = $('#contractorId').val();
 	if($fundId)
 		$("#fund").val($fundId).prop('selected','selected');
-	if($supplierId){
-		$("#supplier").val($supplierId).prop('selected','selected');
-		$('#supplier').trigger("change");
+	if($contractorId){
+		$("#contractor").val($contractorId).prop('selected','selected');
+		$('#contractor').trigger("change");
 	}
 	$('#fund').trigger("change");
 	if($schemeId)
@@ -152,8 +152,8 @@ $('#scheme').change(function () {
 	loadSubScheme($('#scheme').val());
 });
 
-$('#supplier').change(function () {
-	$('#suppliercode').val($("#supplier option:selected").text().split('-')[1]);
+$('#contractor').change(function () {
+	$('#contractorcode').val($("#contractor option:selected").text().split('-')[1]);
 });
 
 jQuery('#btnsearch').click(function(e) {
@@ -178,7 +178,7 @@ function callAjaxSearch() {
 	reportdatatable = drillDowntableContainer
 			.dataTable({
 				ajax : {
-					url : "/services/EGF/purchaseorder/ajaxsearch/" + $('#mode').val(),
+					url : "/services/EGF/workorder/ajaxsearch/" + $('#mode').val(),
 					type : "POST",
 					"data" : getFormData(jQuery('form'))
 				},
@@ -189,7 +189,7 @@ function callAjaxSearch() {
 								console.log(data.id);
 								 var form = document.createElement("form");
 								 form.setAttribute("method", "post");
-								 form.setAttribute("action", '/services/EGF/purchaseorder/' + $('#mode').val()+ '/' + data.id, '');
+								 form.setAttribute("action", '/services/EGF/workorder/' + $('#mode').val()+ '/' + data.id, '');
 								 form.setAttribute("target", "NewFile");
 								 document.body.appendChild(form);
 								 window.open("post.htm", "NewFile", 'width=800, height=600');

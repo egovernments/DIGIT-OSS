@@ -66,10 +66,10 @@ import org.egov.commons.service.AccountDetailKeyService;
 import org.egov.commons.service.AccountdetailtypeService;
 import org.egov.commons.service.EntityTypeService;
 import org.egov.commons.service.FundService;
-import org.egov.egf.masters.repository.PurchaseOrderRepository;
+import org.egov.egf.masters.repository.WorkOrderRepository;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.validation.exception.ValidationException;
-import org.egov.model.masters.PurchaseOrder;
+import org.egov.model.masters.WorkOrder;
 import org.egov.services.masters.SchemeService;
 import org.egov.services.masters.SubSchemeService;
 import org.hibernate.Session;
@@ -83,10 +83,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-public class PurchaseOrderService implements EntityTypeService {
+public class WorkOrderService implements EntityTypeService {
 
     @Autowired
-    private PurchaseOrderRepository purchaseOrderRepository;
+    private WorkOrderRepository workOrderRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -101,7 +101,7 @@ public class PurchaseOrderService implements EntityTypeService {
     private FundService fundService;
 
     @Autowired
-    private SupplierService supplierService;
+    private ContractorService contractorService;
 
     @Autowired
     private SchemeService schemeService;
@@ -113,101 +113,101 @@ public class PurchaseOrderService implements EntityTypeService {
         return entityManager.unwrap(Session.class);
     }
 
-    public PurchaseOrder getById(final Long id) {
-        return purchaseOrderRepository.findOne(id);
+    public WorkOrder getById(final Long id) {
+        return workOrderRepository.findOne(id);
     }
 
     @Transactional
-    public PurchaseOrder create(PurchaseOrder purchaseOrder) {
+    public WorkOrder create(WorkOrder workOrder) {
 
-        setAuditDetails(purchaseOrder);
-        if (purchaseOrder.getFund() != null && purchaseOrder.getFund().getId() != null) {
-            purchaseOrder.setFund(fundService.findOne(purchaseOrder.getFund().getId()));
+        setAuditDetails(workOrder);
+        if (workOrder.getFund() != null && workOrder.getFund().getId() != null) {
+            workOrder.setFund(fundService.findOne(workOrder.getFund().getId()));
         }
-        if (purchaseOrder.getScheme() != null && purchaseOrder.getScheme().getId() != null) {
-            purchaseOrder.setScheme(schemeService.findById(purchaseOrder.getScheme().getId(), false));
+        if (workOrder.getScheme() != null && workOrder.getScheme().getId() != null) {
+            workOrder.setScheme(schemeService.findById(workOrder.getScheme().getId(), false));
         } else {
-            purchaseOrder.setScheme(null);
+            workOrder.setScheme(null);
         }
-        if (purchaseOrder.getSubScheme() != null && purchaseOrder.getSubScheme().getId() != null) {
-            purchaseOrder.setSubScheme(subSchemeService.findById(purchaseOrder.getSubScheme().getId(), false));
+        if (workOrder.getSubScheme() != null && workOrder.getSubScheme().getId() != null) {
+            workOrder.setSubScheme(subSchemeService.findById(workOrder.getSubScheme().getId(), false));
         } else {
-            purchaseOrder.setSubScheme(null);
+            workOrder.setSubScheme(null);
         }
-        if (purchaseOrder.getSupplier() != null && purchaseOrder.getSupplier().getId() != null) {
-            purchaseOrder.setSupplier(supplierService.getById(purchaseOrder.getSupplier().getId()));
+        if (workOrder.getContractor() != null && workOrder.getContractor().getId() != null) {
+            workOrder.setContractor(contractorService.getById(workOrder.getContractor().getId()));
         }
-        purchaseOrder = purchaseOrderRepository.save(purchaseOrder);
-        saveAccountDetailKey(purchaseOrder);
-        return purchaseOrder;
+        workOrder = workOrderRepository.save(workOrder);
+        saveAccountDetailKey(workOrder);
+        return workOrder;
     }
 
     @Transactional
-    public void saveAccountDetailKey(PurchaseOrder purchaseOrder) {
+    public void saveAccountDetailKey(WorkOrder workOrder) {
 
         Accountdetailkey accountdetailkey = new Accountdetailkey();
-        accountdetailkey.setDetailkey(purchaseOrder.getId().intValue());
-        accountdetailkey.setDetailname(purchaseOrder.getName());
-        accountdetailkey.setAccountdetailtype(accountdetailtypeService.findByName(purchaseOrder.getClass().getSimpleName()));
+        accountdetailkey.setDetailkey(workOrder.getId().intValue());
+        accountdetailkey.setDetailname(workOrder.getName());
+        accountdetailkey.setAccountdetailtype(accountdetailtypeService.findByName(workOrder.getClass().getSimpleName()));
         accountdetailkey.setGroupid(1);
         accountDetailKeyService.create(accountdetailkey);
     }
 
     @Transactional
-    public PurchaseOrder update(final PurchaseOrder purchaseOrder) {
-        setAuditDetails(purchaseOrder);
-        if (purchaseOrder.getFund() != null && purchaseOrder.getFund().getId() != null) {
-            purchaseOrder.setFund(fundService.findOne(purchaseOrder.getFund().getId()));
+    public WorkOrder update(final WorkOrder workOrder) {
+        setAuditDetails(workOrder);
+        if (workOrder.getFund() != null && workOrder.getFund().getId() != null) {
+            workOrder.setFund(fundService.findOne(workOrder.getFund().getId()));
         }
-        if (purchaseOrder.getScheme() != null && purchaseOrder.getScheme().getId() != null) {
-            purchaseOrder.setScheme(schemeService.findById(purchaseOrder.getScheme().getId(), false));
+        if (workOrder.getScheme() != null && workOrder.getScheme().getId() != null) {
+            workOrder.setScheme(schemeService.findById(workOrder.getScheme().getId(), false));
         } else {
-            purchaseOrder.setScheme(null);
+            workOrder.setScheme(null);
         }
-        if (purchaseOrder.getSubScheme() != null && purchaseOrder.getSubScheme().getId() != null) {
-            purchaseOrder.setSubScheme(subSchemeService.findById(purchaseOrder.getSubScheme().getId(), false));
+        if (workOrder.getSubScheme() != null && workOrder.getSubScheme().getId() != null) {
+            workOrder.setSubScheme(subSchemeService.findById(workOrder.getSubScheme().getId(), false));
         } else {
-            purchaseOrder.setSubScheme(null);
+            workOrder.setSubScheme(null);
         }
-        if (purchaseOrder.getSupplier() != null && purchaseOrder.getSupplier().getId() != null) {
-            purchaseOrder.setSupplier(supplierService.getById(purchaseOrder.getSupplier().getId()));
+        if (workOrder.getContractor() != null && workOrder.getContractor().getId() != null) {
+            workOrder.setContractor(contractorService.getById(workOrder.getContractor().getId()));
         }
-        return purchaseOrderRepository.save(purchaseOrder);
+        return workOrderRepository.save(workOrder);
     }
 
-    private void setAuditDetails(PurchaseOrder purchaseOrder) {
-        if (purchaseOrder.getId() == null) {
-            purchaseOrder.setCreatedDate(new Date());
-            purchaseOrder.setCreatedBy(ApplicationThreadLocals.getUserId());
+    private void setAuditDetails(WorkOrder workOrder) {
+        if (workOrder.getId() == null) {
+            workOrder.setCreatedDate(new Date());
+            workOrder.setCreatedBy(ApplicationThreadLocals.getUserId());
         }
-        purchaseOrder.setLastModifiedDate(new Date());
-        purchaseOrder.setLastModifiedBy(ApplicationThreadLocals.getUserId());
+        workOrder.setLastModifiedDate(new Date());
+        workOrder.setLastModifiedBy(ApplicationThreadLocals.getUserId());
     }
 
-    public List<PurchaseOrder> search(final PurchaseOrder purchaseOrder) {
+    public List<WorkOrder> search(final WorkOrder workOrder) {
         final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<PurchaseOrder> createQuery = cb.createQuery(PurchaseOrder.class);
-        final Root<PurchaseOrder> purchaseOrders = createQuery.from(PurchaseOrder.class);
-        createQuery.select(purchaseOrders);
+        final CriteriaQuery<WorkOrder> createQuery = cb.createQuery(WorkOrder.class);
+        final Root<WorkOrder> workOrders = createQuery.from(WorkOrder.class);
+        createQuery.select(workOrders);
         final Metamodel m = entityManager.getMetamodel();
-        final EntityType<PurchaseOrder> PurchaseOrder_ = m.entity(PurchaseOrder.class);
+        final EntityType<WorkOrder> WorkOrder_ = m.entity(WorkOrder.class);
 
         final List<Predicate> predicates = new ArrayList<Predicate>();
-        if (purchaseOrder.getName() != null) {
-            final String name = "%" + purchaseOrder.getName().toLowerCase() + "%";
-            predicates.add(cb.isNotNull(purchaseOrders.get("name")));
+        if (workOrder.getName() != null) {
+            final String name = "%" + workOrder.getName().toLowerCase() + "%";
+            predicates.add(cb.isNotNull(workOrders.get("name")));
             predicates.add(cb.like(
-                    cb.lower(purchaseOrders.get(PurchaseOrder_.getDeclaredSingularAttribute("name", String.class))), name));
+                    cb.lower(workOrders.get(WorkOrder_.getDeclaredSingularAttribute("name", String.class))), name));
         }
-        if (purchaseOrder.getOrderNumber() != null) {
-            final String code = "%" + purchaseOrder.getOrderNumber().toLowerCase() + "%";
-            predicates.add(cb.isNotNull(purchaseOrders.get("orderNumber")));
+        if (workOrder.getOrderNumber() != null) {
+            final String code = "%" + workOrder.getOrderNumber().toLowerCase() + "%";
+            predicates.add(cb.isNotNull(workOrders.get("orderNumber")));
             predicates.add(cb.like(
-                    cb.lower(purchaseOrders.get(PurchaseOrder_.getDeclaredSingularAttribute("orderNumber", String.class))), code));
+                    cb.lower(workOrders.get(WorkOrder_.getDeclaredSingularAttribute("orderNumber", String.class))), code));
         }
 
         createQuery.where(predicates.toArray(new Predicate[] {}));
-        final TypedQuery<PurchaseOrder> query = entityManager.createQuery(createQuery);
+        final TypedQuery<WorkOrder> query = entityManager.createQuery(createQuery);
         return query.getResultList();
 
     }
@@ -215,13 +215,13 @@ public class PurchaseOrderService implements EntityTypeService {
     @Override
     public List<? extends org.egov.commons.utils.EntityType> getAllActiveEntities(Integer accountDetailTypeId) {
 
-        return purchaseOrderRepository.findActiveOrders();
+        return workOrderRepository.findActiveOrders();
     }
 
     @Override
     public List<? extends org.egov.commons.utils.EntityType> filterActiveEntities(String filterKey, int maxRecords,
             Integer accountDetailTypeId) {
-        return purchaseOrderRepository.findByNameLikeOrOrderNumberLikeAndActive(filterKey + "%", filterKey + "%",true);
+        return workOrderRepository.findByNameLikeOrOrderNumberLikeAndActive(filterKey + "%", filterKey + "%",true);
     }
 
     @Override

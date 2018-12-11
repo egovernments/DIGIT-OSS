@@ -1,0 +1,2 @@
+Insert into ACCOUNTDETAILTYPE (ID,NAME,DESCRIPTION,TABLENAME,COLUMNNAME,ATTRIBUTENAME,NBROFLEVELS,ISACTIVE,CREATEDDATE,LASTMODIFIEDDATE,LASTMODIFIEDBY ,CREATEDBY,FULL_QUALIFIED_NAME,VERSION)
+ values (nextval('seq_accountdetailtype'),'WorkOrder','WorkOrder','EGF_WORKORDER','id','WorkOrder_id',1,true,current_date,current_date,null,null,'org.egov.model.masters.WorkOrder',0);

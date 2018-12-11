@@ -49,7 +49,7 @@ package org.egov.egf.masters.repository;
 
 import java.util.List;
 
-import org.egov.model.masters.PurchaseOrder;
+import org.egov.model.masters.WorkOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -60,11 +60,11 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Long> {
+public interface WorkOrderRepository extends JpaRepository<WorkOrder, Long> {
 
-    public List<PurchaseOrder> findByNameLikeOrOrderNumberLikeAndActive(String name, String orderNumber,Boolean active);
+    public List<WorkOrder> findByNameLikeOrOrderNumberLikeAndActive(String name, String orderNumber,Boolean active);
 
-    @Query("from PurchaseOrder where active=true")
-    public List<PurchaseOrder> findActiveOrders();
+    @Query("from WorkOrder where active=true")
+    public List<WorkOrder> findActiveOrders();
 
 }

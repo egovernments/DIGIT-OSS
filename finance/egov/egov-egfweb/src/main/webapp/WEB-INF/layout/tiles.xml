@@ -734,4 +734,29 @@
         <put-attribute name="page-title" value="title.purchaseorder.search" cascade="true"/>
         <put-attribute name="body" value="/WEB-INF/views/purchaseorder/purchaseorder-search.jsp"/>
     </definition>
+    
+    <definition name="workorder-new" extends="base_layout">
+        <put-attribute name="page-title" value="title.workorder.create" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/workorder/workorder-new.jsp"/>
+    </definition>
+    
+    <definition name="workorder-result" extends="base_layout">
+        <put-attribute name="page-title" value="title.workorder.result" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/workorder/workorder-result.jsp"/>
+    </definition>
+    
+    <definition name="workorder-edit" extends="base_layout">
+        <put-attribute name="page-title" value="title.workorder.edit" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/workorder/workorder-edit.jsp"/>
+    </definition>
+    
+    <definition name="workorder-view" extends="base_layout">
+        <put-attribute name="page-title" value="title.workorder.view" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/workorder/workorder-view.jsp"/>
+    </definition>
+    
+    <definition name="workorder-search" extends="base_layout">
+        <put-attribute name="page-title" value="title.workorder.search" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/workorder/workorder-search.jsp"/>
+    </definition>
 </tiles-definitions>
