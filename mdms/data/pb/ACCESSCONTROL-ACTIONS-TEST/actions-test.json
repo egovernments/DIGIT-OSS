@@ -13202,20 +13202,20 @@
       "path": "Finance.Masters.Purchase Order.Modify Purchase Order"
     },
     {
-  "id": 1728,
-  "name": "rainmaker-common-share",
-  "url": "/dummyurl",
-  "displayName": "",
-  "orderNumber": -1,
-  "parentModule": "",
-  "enabled": true,
-  "serviceCode": "",
-  "code": "",
-  "path": "",
-  "navigationURL": "",
-  "leftIcon": "",
-  "rightIcon": "",
-  "queryParams": "",
-}
+      "id": 1728,
+      "name": "rainmaker-common-share",
+      "url": "",
+      "displayName": "",
+      "orderNumber": -1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "",
+      "path": "",
+      "navigationURL": "",
+      "leftIcon": "",
+      "rightIcon": "",
+      "queryParams": ""
+    }
   ]
 }
