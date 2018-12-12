@@ -45,37 +45,43 @@
   ~   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
   ~
   --%>
-
-
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ include file="/includes/taglibs.jsp"%>
-<form:form role="form" action="/services/EGF/workorder/update" modelAttribute="workOrder" id="workOrderForm" cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
-<div class="main-content">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="panel panel-primary" data-collapsed="0">
-				<div class="panel-heading">
-					<div class="panel-title"><spring:message code="title.workorder.edit" /></div>
-				</div>	
-				<%@ include file="workorder-edit-form.jsp"%>
-				<div class="form-group">
-					<div class="text-center">
-						<button type='submit' class='btn btn-primary' id="buttonSubmit"> <spring:message code='lbl.update' /> </button>
-						<a href='javascript:void(0)' class='btn btn-default' onclick='self.close()'><spring:message code='lbl.close' /></a>
-					</div>
-				</div>
-			</div>
-		</div>
+  
+<div class="form-group">
+	<label class="col-sm-2 control-label text-right" for="name"> <spring:message code="workorder.name" /><span class="mandatory"></span>
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:input path="name" id="name" maxlength="100" cssClass="form-control patternvalidation" data-pattern="alphabetwithspace" required="required"/>
+		<form:errors path="name" cssClass="add-margin error-msg" />
 	</div>
 </div>
-</form:form>
-<script>
-	$('#buttonSubmit').click(function(e) {
-		if ($('form').valid()) {
-		} else {
-			e.preventDefault();
-		}
-	});
-</script>
-<script src="<cdn:url value='/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
-<script type="text/javascript" src="<cdn:url value='/resources/app/js/workOrderHelper.js?rnd=${app_release_no}' context='/services/EGF'/>"></script>
+
+<div class="form-group">
+	<label class="col-sm-2 control-label text-right" for="description" > <spring:message code="workorder.description"   /></label>
+	<div class="col-sm-3 add-margin">
+		<form:textarea path="description" id="description" cols="35" cssClass="form-control textfieldsvalidate patternvalidation"  maxlength = "250" />
+		<form:errors path="description" cssClass="add-margin error-msg" />
+	</div>
+	<label class="col-sm-2 control-label text-right" for="active"> <spring:message code="workorder.active" />
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:checkbox path="active" />
+		<form:errors path="active" cssClass="add-margin error-msg" />
+	</div>
+</div>
+
+<div class="form-group">
+	<label class="col-sm-2 control-label text-right" for="sanctionNumber"> <spring:message code="workorder.sanctionnumber" />
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:input path="sanctionNumber" id="sanctionNumber" maxlength="50" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" />
+		<form:errors path="sanctionNumber" cssClass="add-margin error-msg" />
+	</div>
+	<label class="col-sm-2 control-label text-right" for="sanctionDate"> <spring:message code="workorder.sanctiondate" />
+	</label>
+	<div class="col-sm-3 add-margin">
+		<form:input path="sanctionDate" class="form-control datepicker" id="sanctionDate"  data-date-end-date="0d" data-inputmask="'mask': 'd/m/y'"/>
+		<form:errors path="sanctionDate" cssClass="add-margin error-msg" />
+	</div>
+</div> 
+
+<input type="hidden" name="workOrder" value="${workOrder.id}" />

@@ -155,14 +155,14 @@ public class PurchaseOrderService implements EntityTypeService {
 
     @Transactional
     public PurchaseOrder update(final PurchaseOrder purchaseOrder) {
-        PurchaseOrder savedUrchaseOrder = purchaseOrderRepository.findOne(purchaseOrder.getId());
-        savedUrchaseOrder.setName(purchaseOrder.getName());
-        savedUrchaseOrder.setDescription(purchaseOrder.getDescription());
-        savedUrchaseOrder.setActive(purchaseOrder.getActive());
-        savedUrchaseOrder.setSanctionNumber(purchaseOrder.getSanctionNumber());
-        savedUrchaseOrder.setSanctionDate(purchaseOrder.getSanctionDate());
-        setAuditDetails(savedUrchaseOrder);
-        return purchaseOrderRepository.save(savedUrchaseOrder);
+        PurchaseOrder savedPurchaseOrder = purchaseOrderRepository.findOne(purchaseOrder.getId());
+        savedPurchaseOrder.setName(purchaseOrder.getName());
+        savedPurchaseOrder.setDescription(purchaseOrder.getDescription());
+        savedPurchaseOrder.setActive(purchaseOrder.getActive());
+        savedPurchaseOrder.setSanctionNumber(purchaseOrder.getSanctionNumber());
+        savedPurchaseOrder.setSanctionDate(purchaseOrder.getSanctionDate());
+        setAuditDetails(savedPurchaseOrder);
+        return purchaseOrderRepository.save(savedPurchaseOrder);
     }
 
     private void setAuditDetails(PurchaseOrder purchaseOrder) {

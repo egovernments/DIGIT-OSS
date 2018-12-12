@@ -67,7 +67,7 @@
 	<label class="col-sm-2 control-label text-right" for="name"> <spring:message code="workorder.name" /><span class="mandatory"></span>
 	</label>
 	<div class="col-sm-3 add-margin">
-		<form:input path="name" id="name" maxlength="100" cssClass="form-control patternvalidation" data-pattern="alphabetwithspace" required="required"/>
+		<form:input path="name" id="name" maxlength="100" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" required="required"/>
 		<form:errors path="name" cssClass="add-margin error-msg" />
 	</div>
 </div>

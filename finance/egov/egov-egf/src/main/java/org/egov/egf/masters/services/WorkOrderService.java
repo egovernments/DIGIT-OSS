@@ -156,22 +156,12 @@ public class WorkOrderService implements EntityTypeService {
     @Transactional
     public WorkOrder update(final WorkOrder workOrder) {
         setAuditDetails(workOrder);
-        if (workOrder.getFund() != null && workOrder.getFund().getId() != null) {
-            workOrder.setFund(fundService.findOne(workOrder.getFund().getId()));
-        }
-        if (workOrder.getScheme() != null && workOrder.getScheme().getId() != null) {
-            workOrder.setScheme(schemeService.findById(workOrder.getScheme().getId(), false));
-        } else {
-            workOrder.setScheme(null);
-        }
-        if (workOrder.getSubScheme() != null && workOrder.getSubScheme().getId() != null) {
-            workOrder.setSubScheme(subSchemeService.findById(workOrder.getSubScheme().getId(), false));
-        } else {
-            workOrder.setSubScheme(null);
-        }
-        if (workOrder.getContractor() != null && workOrder.getContractor().getId() != null) {
-            workOrder.setContractor(contractorService.getById(workOrder.getContractor().getId()));
-        }
+        WorkOrder savedWorkOrder = workOrderRepository.findOne(workOrder.getId());
+        savedWorkOrder.setName(workOrder.getName());
+        savedWorkOrder.setDescription(workOrder.getDescription());
+        savedWorkOrder.setActive(workOrder.getActive());
+        savedWorkOrder.setSanctionNumber(workOrder.getSanctionNumber());
+        savedWorkOrder.setSanctionDate(workOrder.getSanctionDate());
         return workOrderRepository.save(workOrder);
     }
 
@@ -206,6 +196,13 @@ public class WorkOrderService implements EntityTypeService {
                     cb.lower(workOrders.get(WorkOrder_.getDeclaredSingularAttribute("orderNumber", String.class))), code));
         }
 
+        if (workOrder.getContractor() != null && workOrder.getContractor().getId() != null) {
+            predicates.add(cb.equal(workOrders.get("contractor").get("id"), workOrder.getContractor().getId()));
+        }
+        if (workOrder.getFund() != null && workOrder.getFund().getId() != null) {
+            predicates.add(cb.equal(workOrders.get("fund").get("id"), workOrder.getFund().getId()));
+        }
+
         createQuery.where(predicates.toArray(new Predicate[] {}));
         final TypedQuery<WorkOrder> query = entityManager.createQuery(createQuery);
         return query.getResultList();
@@ -221,7 +218,7 @@ public class WorkOrderService implements EntityTypeService {
     @Override
     public List<? extends org.egov.commons.utils.EntityType> filterActiveEntities(String filterKey, int maxRecords,
             Integer accountDetailTypeId) {
-        return workOrderRepository.findByNameLikeOrOrderNumberLikeAndActive(filterKey + "%", filterKey + "%",true);
+        return workOrderRepository.findByNameLikeOrOrderNumberLikeAndActive(filterKey + "%", filterKey + "%", true);
     }
 
     @Override
