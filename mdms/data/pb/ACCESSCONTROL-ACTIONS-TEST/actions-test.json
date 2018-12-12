@@ -12941,7 +12941,7 @@
       "navigationURL": "report/finance/ReceiptRegister",
       "path": "Collections.Reports.Receipt Register "
     },
-   {
+    {
       "id": 1709,
       "name": "ReceiptRegisterMiscMeta",
       "url": "/report/finance/metadata/_get",
@@ -12952,7 +12952,7 @@
       "code": "null",
       "path": ""
     },
-   {
+    {
       "id": 1710,
       "name": "ReceiptRegisterMiscData",
       "url": "/report/finance/_get",
@@ -13162,7 +13162,7 @@
       "serviceCode": "COLLECTION",
       "code": "null"
     },
-   {
+    {
       "id": 1725,
       "name": "purchaseordercreate",
       "url": "url",
@@ -13216,6 +13216,30 @@
       "leftIcon": "",
       "rightIcon": "",
       "queryParams": ""
+    },
+    {
+      "id": 1729,
+      "name": "Workflow transition",
+      "url": "/egov-workflow-v2/egov-wf/process/_transition",
+      "parentModule": "",
+      "displayName": "Workflow transition",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-workflow-v2",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1730,
+      "name": "Workflow search",
+      "url": "/egov-workflow-v2/egov-wf/process/_search",
+      "parentModule": "",
+      "displayName": "Workflow search",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-workflow-v2",
+      "code": "null",
+      "path": ""
     }
   ]
 }
