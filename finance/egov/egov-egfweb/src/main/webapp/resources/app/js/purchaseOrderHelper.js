@@ -206,14 +206,21 @@ function callAjaxSearch() {
 				},
 				aaSorting : [],
 				columns : [ {
+					"data" : "orderNumber",
+					"sClass" : "text-left"
+				},{
 					"data" : "name",
 					"sClass" : "text-left"
 				}, {
-					"data" : "orderNumber",
+					"data" : "orderValue",
+					"sClass" : "text-left"
+				},
+				{
+					"data" : "supplier",
 					"sClass" : "text-left"
 				}, {
-					"data" : "orderDate",
+					"data" : "active",
 					"sClass" : "text-left"
-				} ]
+				}]
 			});
 }

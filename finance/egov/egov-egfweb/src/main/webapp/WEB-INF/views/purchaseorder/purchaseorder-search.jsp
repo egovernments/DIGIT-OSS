@@ -62,19 +62,51 @@
           <div class="panel-body">
           <input type="hidden" id="mode" name="mode" value="${mode}" />
              <div class="form-group">
-	           	 <label class="col-sm-3 control-label text-right"><spring:message code="lbl.name" /> </label>
-	              <div class="col-sm-3 add-margin">
-	                <form:input path="name" class="form-control text-left patternvalidation" data-pattern="alphanumeric"
-	                  maxlength="50" />
-	                <form:errors path="name" cssClass="error-msg" />
-	              </div>
-	              <label class="col-sm-3 control-label text-right"><spring:message code="purchaseorder.number" /> </label>
+             	  <label class="col-sm-2 control-label text-right"><spring:message code="purchaseorder.number" /> </label>
 	              <div class="col-sm-3 add-margin">
 	                <form:input path="orderNumber" class="form-control text-left patternvalidation" data-pattern="alphanumeric"
 	                  maxlength="50" />
 	                <form:errors path="orderNumber" cssClass="error-msg" />
 	              </div>
+	           	 <label class="col-sm-2 control-label text-right"><spring:message code="lbl.name" /> </label>
+	              <div class="col-sm-3 add-margin">
+	                <form:input path="name" class="form-control text-left patternvalidation" data-pattern="alphanumeric"
+	                  maxlength="50" />
+	                <form:errors path="name" cssClass="error-msg" />
+	              </div>
               </div>
+              <div class="form-group">
+				<label class="col-sm-2 control-label text-right" for="supplier"> <spring:message code="purchaseorder.supplier" />
+				</label>
+				<div class="col-sm-3 add-margin contactPerson"> 
+					<form:select path="supplier" data-first-option="false" id="supplier" class="form-control">
+						<form:option value=""><spring:message code="lbl.select" /></form:option>
+						<c:forEach var="supplier" items="${suppliers}">
+							<form:option  value="${supplier.id}" >
+								<c:out value="${supplier.name} - ${supplier.code}"/>
+							</form:option>
+						</c:forEach>
+					</form:select>
+					<form:errors path="supplier" cssClass="add-margin error-msg" />
+				</div>
+				<label class="col-sm-2 control-label text-right" for="suppliercode"> <spring:message code="purchaseorder.suppliercode" />
+				</label>
+				<div class="col-sm-3 add-margin">
+					<form:input path="" id="suppliercode" maxlength="100" disabled="true" cssClass="form-control"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label text-right" for="fund"> 
+					<spring:message code="purchaseorder.fund" />
+				</label>
+				<div class="col-sm-3 add-margin">
+					<form:select path="fund.id" data-first-option="false" id="fund" class="form-control"  >
+						<form:option value=""><spring:message code="lbl.select" /></form:option>
+						<form:options items="${funds}" itemValue="id" itemLabel="name" />
+					</form:select>
+					<form:errors path="fund.id" cssClass="add-margin error-msg" />
+				</div>
+			</div>
             <div class="form-group">
               <div class="text-center">
                 <button type='button' class='btn btn-primary' id="btnsearch">
@@ -96,9 +128,11 @@
     <table class="table table-bordered table-hover multiheadertbl" id="resultTable">
       <thead>
         <tr>
-          <th><spring:message code="lbl.name" /></th>
           <th><spring:message code="purchaseorder.number" /></th>
-          <th><spring:message code="purchaseorder.date" /></th>
+          <th><spring:message code="lbl.name" /></th>
+          <th><spring:message code="purchaseorder.ordervalue" /></th>
+          <th><spring:message code="purchaseorder.supplier" /></th>
+          <th><spring:message code="purchaseorder.active" /></th>
         </tr>
       </thead>
     </table>
