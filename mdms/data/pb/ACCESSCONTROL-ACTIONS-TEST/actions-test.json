@@ -13240,6 +13240,45 @@
       "serviceCode": "egov-workflow-v2",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1731,
+      "name": "workordercreate",
+      "url": "url",
+      "displayName": "Create Work Order",
+      "orderNumber": 13,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "navigationURL": "services/EGF/workorder/newform",
+      "code": "null",
+      "path": "Finance.Masters.Work Order.Create Work Order"
+    },
+    {
+      "id": 1732,
+      "name": "workorderview",
+      "url": "url",
+      "displayName": "View Work Order",
+      "orderNumber": 14,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "navigationURL": "services/EGF/workorder/search/view",
+      "code": "null",
+      "path": "Finance.Masters.Work Order.View Work Order"
+    },
+    {
+      "id": 1733,
+      "name": "workordermodify",
+      "url": "url",
+      "displayName": "Modify Work Order",
+      "orderNumber": 15,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "navigationURL": "services/EGF/workorder/search/edit",
+      "code": "null",
+      "path": "Finance.Masters.Work Order.Modify Work Order"
     }
   ]
 }
