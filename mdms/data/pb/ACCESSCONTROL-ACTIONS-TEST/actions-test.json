@@ -13279,6 +13279,18 @@
       "navigationURL": "services/EGF/workorder/search/edit",
       "code": "null",
       "path": "Finance.Masters.Work Order.Modify Work Order"
+    },
+    {
+      "id": 1734,
+      "name": "LocalizationMessagesUpsert",
+      "url": "/localization/messages/v1/_upsert",
+      "displayName": "Localization Messages Upsert",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "filestore url",
+      "code": "null",
+      "path": ""
     }
   ]
 }
