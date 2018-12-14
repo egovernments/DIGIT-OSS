@@ -171,6 +171,7 @@ public class PendingTDSReportAction extends BaseFormAction {
         persistenceService.getSession().setDefaultReadOnly(true);
         persistenceService.getSession().setFlushMode(FlushMode.MANUAL);
         super.prepare();
+      //TO-DO Get department list from MS
         addDropdownData("departmentList", persistenceService.findAllBy("from Department order by name"));
         addDropdownData("fundList", persistenceService.findAllBy(" from Fund where isactive=true and isnotleaf=false order by name"));  
 
@@ -254,6 +255,7 @@ public class PendingTDSReportAction extends BaseFormAction {
         paramMap.put("fundName", fund.getName());
         paramMap.put("partyName", partyName);
         if (department.getId() != null && department.getId() != -1) {
+          //TO-DO Get department from MS
             department = (Department) persistenceService.find("from Department where id=?", department.getId());
             paramMap.put("departmentName", department.getName());
         }
@@ -273,7 +275,7 @@ public class PendingTDSReportAction extends BaseFormAction {
         String partyNameQuery = "";
         final RemittanceBean remittanceBean = new RemittanceBean();
         remittanceBean.setRecoveryId(recovery.getId());
-        if (department.getId() != null && department.getId() != -1)
+        if (department.getId() != null && department.getId() != -1)//TO-DO change departmentid.id to departmentcode and get department code from UI and pass
             deptQuery = " and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.vouchermis.departmentid.id="
                     + department.getId();
         if (detailKey != null && detailKey != -1)
@@ -332,7 +334,7 @@ public class PendingTDSReportAction extends BaseFormAction {
             inWorkflowTDS.add(tds);
         }
         if (showRemittedEntries) {
-            if (department.getId() != null && department.getId() != -1)
+            if (department.getId() != null && department.getId() != -1)//TO-DO change departmentid.id to departmentcode and get department code from UI and pass
                 deptQuery = " and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.vouchermis.departmentid.id="
                         + department.getId();
             if (detailKey != null && detailKey != -1)
