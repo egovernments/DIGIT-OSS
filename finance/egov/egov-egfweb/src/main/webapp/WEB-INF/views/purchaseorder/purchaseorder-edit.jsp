@@ -56,8 +56,14 @@
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
 					<div class="panel-title"><spring:message code="title.purchaseorder.edit" /></div>
-				</div>	
-				<%@ include file="purchaseorder-edit-form.jsp"%>
+				</div>
+				<input type="hidden" name="editAllFields" value="${purchaseOrder.editAllFields}" />
+				<c:if test="${purchaseOrder.editAllFields}">
+					<%@ include file="purchaseorder-form.jsp"%>
+				</c:if>
+				<c:if test="${!purchaseOrder.editAllFields}">
+					<%@ include file="purchaseorder-edit-form.jsp"%>
+				</c:if>
 				<div class="form-group">
 					<div class="text-center">
 						<button type='submit' class='btn btn-primary' id="buttonSubmit"> <spring:message code='lbl.update' /> </button>

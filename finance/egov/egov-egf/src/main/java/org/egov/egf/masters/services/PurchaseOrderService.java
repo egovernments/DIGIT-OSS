@@ -154,15 +154,38 @@ public class PurchaseOrderService implements EntityTypeService {
     }
 
     @Transactional
-    public PurchaseOrder update(final PurchaseOrder purchaseOrder) {
-        PurchaseOrder savedPurchaseOrder = purchaseOrderRepository.findOne(purchaseOrder.getId());
-        savedPurchaseOrder.setName(purchaseOrder.getName());
-        savedPurchaseOrder.setDescription(purchaseOrder.getDescription());
-        savedPurchaseOrder.setActive(purchaseOrder.getActive());
-        savedPurchaseOrder.setSanctionNumber(purchaseOrder.getSanctionNumber());
-        savedPurchaseOrder.setSanctionDate(purchaseOrder.getSanctionDate());
-        setAuditDetails(savedPurchaseOrder);
-        return purchaseOrderRepository.save(savedPurchaseOrder);
+    public PurchaseOrder update(PurchaseOrder purchaseOrder) {
+
+        if (purchaseOrder.getEditAllFields()) {
+            setAuditDetails(purchaseOrder);
+            if (purchaseOrder.getFund() != null && purchaseOrder.getFund().getId() != null) {
+                purchaseOrder.setFund(fundService.findOne(purchaseOrder.getFund().getId()));
+            }
+            if (purchaseOrder.getScheme() != null && purchaseOrder.getScheme().getId() != null) {
+                purchaseOrder.setScheme(schemeService.findById(purchaseOrder.getScheme().getId(), false));
+            } else {
+                purchaseOrder.setScheme(null);
+            }
+            if (purchaseOrder.getSubScheme() != null && purchaseOrder.getSubScheme().getId() != null) {
+                purchaseOrder.setSubScheme(subSchemeService.findById(purchaseOrder.getSubScheme().getId(), false));
+            } else {
+                purchaseOrder.setSubScheme(null);
+            }
+            if (purchaseOrder.getSupplier() != null && purchaseOrder.getSupplier().getId() != null) {
+                purchaseOrder.setSupplier(supplierService.getById(purchaseOrder.getSupplier().getId()));
+            }
+            purchaseOrder = purchaseOrderRepository.save(purchaseOrder);
+        } else {
+            PurchaseOrder savedPurchaseOrder = purchaseOrderRepository.findOne(purchaseOrder.getId());
+            savedPurchaseOrder.setName(purchaseOrder.getName());
+            savedPurchaseOrder.setDescription(purchaseOrder.getDescription());
+            savedPurchaseOrder.setActive(purchaseOrder.getActive());
+            savedPurchaseOrder.setSanctionNumber(purchaseOrder.getSanctionNumber());
+            savedPurchaseOrder.setSanctionDate(purchaseOrder.getSanctionDate());
+            setAuditDetails(savedPurchaseOrder);
+            purchaseOrder = purchaseOrderRepository.save(savedPurchaseOrder);
+        }
+        return purchaseOrder;
     }
 
     private void setAuditDetails(PurchaseOrder purchaseOrder) {

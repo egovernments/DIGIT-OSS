@@ -58,7 +58,9 @@ import org.egov.egf.masters.services.SupplierService;
 import org.egov.egf.web.adaptor.PurchaseOrderJsonAdaptor;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.egov.model.bills.EgBillregister;
 import org.egov.model.masters.PurchaseOrder;
+import org.egov.services.bills.EgBillRegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
@@ -104,6 +106,9 @@ public class PurchaseOrderController {
     @Autowired
     private SupplierService supplierService;
 
+    @Autowired
+    private EgBillRegisterService egBillRegisterService;
+
     private void prepareNewForm(final Model model) {
         model.addAttribute("funds", fundService.findAllActiveAndIsnotleaf());
         model.addAttribute("departments", microserviceUtils.getDepartments());
@@ -136,6 +141,12 @@ public class PurchaseOrderController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
     public String edit(@PathVariable("id") final Long id, final Model model) {
         final PurchaseOrder purchaseOrder = purchaseOrderService.getById(id);
+        List<EgBillregister> bills = egBillRegisterService.getBillsByWorkOrderNumber(purchaseOrder.getOrderNumber());
+        if (bills != null && !bills.isEmpty()) {
+            purchaseOrder.setEditAllFields(false);
+        } else {
+            purchaseOrder.setEditAllFields(true);
+        }
         prepareNewForm(model);
         model.addAttribute("purchaseOrder", purchaseOrder);
         return EDIT;

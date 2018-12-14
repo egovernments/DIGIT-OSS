@@ -136,6 +136,9 @@ public class PurchaseOrder extends AbstractAuditable implements EntityType {
     @Transient
     private String departmentName;
 
+    @Transient
+    private Boolean editAllFields;
+
     @Override
     public String getBankname() {
         // TODO Auto-generated method stub
@@ -327,6 +330,14 @@ public class PurchaseOrder extends AbstractAuditable implements EntityType {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    public Boolean getEditAllFields() {
+        return editAllFields;
+    }
+
+    public void setEditAllFields(Boolean editAllFields) {
+        this.editAllFields = editAllFields;
     }
 
 }
