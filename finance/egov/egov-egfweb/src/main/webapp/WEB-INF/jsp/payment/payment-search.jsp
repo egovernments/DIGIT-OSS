@@ -160,6 +160,8 @@
 				if(fund == "-1"){
 					bootbox.alert("Please select fund");     
 				}else{
+					console.log("department code new");
+					console.log(document.getElementById('departmentid').value);
 					document.forms[0].action='${pageContext.request.contextPath}/payment/payment-search.action';
 	    			document.forms[0].submit();
 				}

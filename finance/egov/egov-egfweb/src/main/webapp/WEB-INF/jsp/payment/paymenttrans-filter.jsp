@@ -133,10 +133,10 @@
 				<span class="bluebox"></span>
 			</s:if></td>
 		<td class="greybox"><s:select name="vouchermis.departmentcode"
-				id="vouchermis.departmentid" list="dropdownData.departmentList"
+				id="departmentid" list="dropdownData.departmentList"
 				listKey="code" listValue="name" headerKey="-1"
 				headerValue="----Choose----"
-				value="voucherHeader.vouchermis.departmentcode" /></td>
+				 /></td>
 	<s:if test="%{shouldShowHeaderField('field')}">
 		<td class="greybox"><s:text name="voucher.field" /> <s:if
 				test="%{isFieldMandatory('field')}">
@@ -224,7 +224,7 @@ function validateMIS(){
 				 }
 			 </s:if>
 			<s:if test="%{isFieldMandatory('department')}"> 
-				 if(null!= document.getElementById('vouchermis.departmentid') && document.getElementById('vouchermis.departmentid').value == -1){
+				 if(null!= document.getElementById('departmentid') && document.getElementById('departmentid').value == -1){
 
 					document.getElementById('lblError').innerHTML = "Please select a department";
 					return false;

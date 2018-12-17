@@ -427,7 +427,8 @@ public class PaymentAction extends BasePaymentAction {
         if (voucherHeader.getVouchermis().getFundsource() != null)
             sql.append(" and bill.egBillregistermis.fundsource.id="
                     + voucherHeader.getVouchermis().getFundsource().getId());
-        if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+        if (voucherHeader.getVouchermis().getDepartmentcode() != null
+                && !voucherHeader.getVouchermis().getDepartmentcode().equalsIgnoreCase("-1"))
             sql.append(" and bill.egBillregistermis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode() + "'");
         if (voucherHeader.getVouchermis().getSchemeid() != null)
             sql.append(" and bill.egBillregistermis.scheme.id=" + voucherHeader.getVouchermis().getSchemeid().getId());
