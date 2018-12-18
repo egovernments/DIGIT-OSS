@@ -83,17 +83,17 @@
 </style>
 <script>
 function exportXls(){
-	window.open('/EGF/report/billPaymentVoucherPrint-exportXls.action?id=<s:property value="id"/>','','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+	window.open('/services/EGF/report/billPaymentVoucherPrint-exportXls.action?id=<s:property value="id"/>','','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
 }
 
 function exportPdf(){
-	window.open('/EGF/report/billPaymentVoucherPrint-exportPdf.action?id=<s:property value="id"/>','','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+	window.open('/services/EGF/report/billPaymentVoucherPrint-exportPdf.action?id=<s:property value="id"/>','','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
 }
 </script>
 <body>
 	<div id="container">
 		<iframe id="report" name="report"
-			src='/EGF/report/billPaymentVoucherPrint-ajaxPrint.action?id=<s:property value="id"/>'></iframe>
+			src='/services/EGF/report/billPaymentVoucherPrint-ajaxPrint.action?id=<s:property value="id"/>'></iframe>
 	</div>
 	<s:form name="billPaymentVoucherPrint" action="billPaymentVoucherPrint"
 		theme="simple">

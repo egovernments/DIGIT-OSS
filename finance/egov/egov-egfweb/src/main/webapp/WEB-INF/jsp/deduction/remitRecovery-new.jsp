@@ -106,7 +106,7 @@
 						<s:textfield id="voucherDate" name="voucherDate" value="%{voucherDateId}" onkeyup="DateFormat(this,this.value,event,false,'3')" placeholder="DD/MM/YYYY" cssClass="form-control datepicker" data-inputmask="'mask': 'd/m/y'" />
 					</td>
 				</tr>
-				<tr>
+				<%-- <tr>
 					<td class="greybox"></td>
 					<td class="greybox"><s:text name="remit.recovery.search.bank" /></td>
 					<td class="greybox"><s:select name="remittanceBean.bank" id="bank" list="dropdownData.bankList" listKey="id"  listValue="name" headerKey="" headerValue="----Choose----" value="%{remittanceBean.bank}" /></td>
@@ -117,7 +117,7 @@
 					<td class="greybox"></td>		
 					<td class="greybox"><s:text name="remit.recovery.search.bankaccount" /></td>
 					<td class="greybox"><s:select name="remittanceBean.bankAccountId" id="bankAccount" list="dropdownData.accNumList" listKey="id" listValue="accountnumber" headerKey="" headerValue="----Choose----" value="%{remittanceBean.bankAccountId}" /></td>
-				</tr>
+				</tr> --%>
 				<%@ include file="../payment/paymenttrans-filter.jsp"%>
 
 			</table>

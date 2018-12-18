@@ -61,9 +61,10 @@
 	{key:"voucherName",label:'<s:text name="remit.nature.deduction"/>', formatter:createLabelLarge(RECOVERYLIST,".voucherNameLable")},
 	{key:"partyName",label:'<s:text name="remit.party.name"/>', formatter:createLabelLarge(RECOVERYLIST,".partyNameLable")},
 	{key:"partyCode",label:'<s:text name="remit.party.code"/>', formatter:createLabelLarge(RECOVERYLIST,".partyCodeLable")},
-	{key:"panNo",label:'<s:text name="remit.party.panno"/>', formatter:createLabelMed(RECOVERYLIST,".panNoLable")},
+	/* {key:"panNo",label:'<s:text name="remit.party.panno"/>', formatter:createLabelMed(RECOVERYLIST,".panNoLable")}, */
 	{key:"deductionAmount",label:'<s:text name="remit.deduction.amount"/>', formatter:createLabelMed(RECOVERYLIST,".deductionAmountLable")},
-	{key:"earlierPayment",label:'<s:text name="remit.earlier.payment"/>', formatter:createLabelMed(RECOVERYLIST,".earlierPaymentLable")},
+	/*TO-DO make it conf*/
+	/* {key:"earlierPayment",label:'<s:text name="remit.earlier.payment"/>', formatter:createLabelMed(RECOVERYLIST,".earlierPaymentLable")}, */
 	{key:"amount",label:'<s:text name="remit.amount"/>',formatter:createAmount(RECOVERYLIST,".amountLable")},
 	{key:"amount",hidden:true,formatter:createDivFormatter(RECOVERYLIST,".amount")},
 	{key:"chkremit",label:'Select', formatter:createcheckbox(RECOVERYLIST,".chkremit")},
@@ -81,9 +82,9 @@
 		updateLabel('voucherNameLable',index,'<s:property value="voucherName"/>');
 		updateLabel('partyNameLable',index,"<s:property value="partyName"/>");
 		updateLabel('partyCodeLable',index,'<s:property value="partyCode"/>');
-		updateLabel('panNoLable',index,'<s:property value="panNo"/>');
+		//updateLabel('panNoLable',index,'<s:property value="panNo"/>');
 		updateLabel('deductionAmountLable',index,'<s:text name="format.number" ><s:param value="%{deductionAmount}"/></s:text>');
-		updateLabel('earlierPaymentLable',index,'<s:text name="format.number" ><s:param value="%{earlierPayment}"/></s:text>');
+		/* updateLabel('earlierPaymentLable',index,'<s:text name="format.number" ><s:param value="%{earlierPayment}"/></s:text>'); */
 		updateFieldValue('amountLable',index,'<s:text name="format.number" ><s:param value="%{amount}"/></s:text>');
 		updateDivValue('amount',index,'<s:property value="amount"/>');
 		updateDivValue('remittance_gl_dtlId',index,'<s:property value="remittance_gl_dtlId"/>');

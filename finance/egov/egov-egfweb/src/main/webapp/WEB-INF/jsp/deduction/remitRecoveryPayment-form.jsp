@@ -69,12 +69,12 @@
 	{key:"partyName",hidden:true,formatter:createHiddenField(RECOVERYLIST,".partyName","hidden")}, 
 	{key:"partyCode",label:'<s:text name="remit.party.code"/>', formatter:createLabelLarge(RECOVERYLIST,".partyCodeLable")},
 	{key:"partyCode",hidden:true,formatter:createHiddenField(RECOVERYLIST,".partyCode","hidden")}, 
-	{key:"panNo",label:'<s:text name="remit.party.panno"/>', formatter:createLabelMed(RECOVERYLIST,".panNoLable")},
+	/* {key:"panNo",label:'<s:text name="remit.party.panno"/>', formatter:createLabelMed(RECOVERYLIST,".panNoLable")}, */
 	{key:"panNo",hidden:true,formatter:createHiddenField(RECOVERYLIST,".panNo","hidden")},       
 	{key:"detailTypeId",hidden:true,formatter:createHiddenField(RECOVERYLIST,".detailTypeId","hidden")},
 	{key:"detailKeyid",hidden:true,formatter:createHiddenField(RECOVERYLIST,".detailKeyid","hidden")},
 	{key:"deductionAmount",label:'<s:text name="remit.deduction.amount"/>', formatter:createLabelMed(RECOVERYLIST,".deductionAmount")},
-	{key:"earlierPayment",label:'<s:text name="remit.earlier.payment"/>', formatter:createLabelMed(RECOVERYLIST,".earlierPayment")},
+	/* {key:"earlierPayment",label:'<s:text name="remit.earlier.payment"/>', formatter:createLabelMed(RECOVERYLIST,".earlierPayment")}, */
 	{key:"chkremit",label:'Amount', formatter:createAmount(RECOVERYLIST,".partialAmount")},
 	{key:"remittance_gl_dtlId",hidden:true, formatter:createTextFieldFormatter1(RECOVERYLIST,".remittance_gl_dtlId","hidden")},
 	{key:"remittanceId",hidden:true, formatter:createTextFieldFormatter1(RECOVERYLIST,".remittanceId","hidden")}
@@ -93,9 +93,9 @@
 		updateLabel('voucherNameLable',index,'<s:property value="voucherName"/>');
 		updateLabel('partyNameLable',index,"<s:property value="partyName"/>");
 		updateLabel('partyCodeLable',index,'<s:property value="partyCode"/>');
-		updateLabel('panNoLable',index,'<s:property value="panNo"/>');
+		/* updateLabel('panNoLable',index,'<s:property value="panNo"/>'); */
 		updateLabel('deductionAmount',index,'<s:text name="format.number" ><s:param value="%{deductionAmount}"/></s:text>');
-		updateLabel('earlierPayment',index,'<s:text name="format.number" ><s:param value="%{earlierPayment}"/></s:text>');
+		/* updateLabel('earlierPayment',index,'<s:text name="format.number" ><s:param value="%{earlierPayment}"/></s:text>'); */
 		updateFieldValue('voucherNumber',index,'<s:property value="voucherNumber"/>');
 		updateFieldValue('voucherDate',index,'<s:property value="voucherDate"/>');
 		updateFieldValue('voucherName',index,'<s:property value="voucherName"/>');
