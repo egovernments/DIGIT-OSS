@@ -72,10 +72,11 @@ import org.egov.commons.utils.EntityType;
 import org.egov.deduction.model.EgRemittanceDetail;
 import org.egov.egf.commons.EgovCommon;
 import org.egov.egf.model.TDSEntry;
-import org.egov.infra.admin.master.entity.Department;
+//import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.reporting.engine.ReportFormat;
 import org.egov.infra.reporting.engine.ReportOutput;
 import org.egov.infra.reporting.engine.ReportRequest;
@@ -83,6 +84,7 @@ import org.egov.infra.reporting.engine.ReportService;
 import org.egov.infra.utils.DateUtils;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infstr.services.PersistenceService;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.deduction.RemittanceBean;
 import org.egov.model.instrument.InstrumentVoucher;
 import org.egov.model.recoveries.Recovery;
@@ -146,6 +148,8 @@ public class PendingTDSReportAction extends BaseFormAction {
     private String message = "";
     private String mode = "";
     private static Logger LOGGER = Logger.getLogger(PendingTDSReportAction.class);
+    @Autowired
+    private EgovMasterDataCaching masterDataCache;
     
     public void setFinancialYearDAO(final FinancialYearHibernateDAO financialYearDAO) {
         this.financialYearDAO = financialYearDAO;
@@ -171,8 +175,8 @@ public class PendingTDSReportAction extends BaseFormAction {
         persistenceService.getSession().setDefaultReadOnly(true);
         persistenceService.getSession().setFlushMode(FlushMode.MANUAL);
         super.prepare();
-      //TO-DO Get department list from MS
-        addDropdownData("departmentList", persistenceService.findAllBy("from Department order by name"));
+//        addDropdownData("departmentList", persistenceService.findAllBy("from Department order by name"));
+        addDropdownData("departmentList",this.masterDataCache.get("egi-department"));
         addDropdownData("fundList", persistenceService.findAllBy(" from Fund where isactive=true and isnotleaf=false order by name"));  
 
         addDropdownData("recoveryList",
@@ -254,9 +258,10 @@ public class PendingTDSReportAction extends BaseFormAction {
         fund = (Fund) persistenceService.find("from Fund where id=?", fund.getId());
         paramMap.put("fundName", fund.getName());
         paramMap.put("partyName", partyName);
-        if (department.getId() != null && department.getId() != -1) {
+        if (department.getCode() != null ) {
           //TO-DO Get department from MS
-            department = (Department) persistenceService.find("from Department where id=?", department.getId());
+            department = this.microserviceUtils.getDepartmentByCode(department.getCode());
+//            department = (Department) persistenceService.find("from Department where id=?", department.getId());
             paramMap.put("departmentName", department.getName());
         }
         recovery = (Recovery) persistenceService.find("from Recovery where id=?", recovery.getId());
@@ -275,9 +280,9 @@ public class PendingTDSReportAction extends BaseFormAction {
         String partyNameQuery = "";
         final RemittanceBean remittanceBean = new RemittanceBean();
         remittanceBean.setRecoveryId(recovery.getId());
-        if (department.getId() != null && department.getId() != -1)//TO-DO change departmentid.id to departmentcode and get department code from UI and pass
-            deptQuery = " and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.vouchermis.departmentid.id="
-                    + department.getId();
+        if (department.getCode() != null )//TO-DO change departmentid.id to departmentcode and get department code from UI and pass
+            deptQuery = " and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.vouchermis.departmentcode="
+                    + department.getCode();
         if (detailKey != null && detailKey != -1)
             partyNameQuery = " and egRemittanceGldtl.generalledgerdetail.detailkeyid=" + detailKey;
         if (fromDate != null)

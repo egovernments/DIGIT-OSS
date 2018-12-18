@@ -312,7 +312,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
         if (voucherHeader.getVouchermis().getDepartmentcode() == null) {
             voucherHeader.getVouchermis().setDepartmentcode(departmentId.toString());
         }
-        if (voucherHeader.getVouchermis().getFunction() == null) {
+        if (voucherHeader.getVouchermis().getFunction() == null && functionId!=null) {
             final CFunction function = functionService.findOne(functionId);
             voucherHeader.getVouchermis().setFunction(function);
         }

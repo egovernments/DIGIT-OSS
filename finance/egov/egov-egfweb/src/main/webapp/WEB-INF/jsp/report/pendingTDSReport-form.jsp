@@ -97,7 +97,7 @@
 			<tr>
 				<td class="greybox" width="10%">Department:</td>
 				<td class="greybox"><s:select name="department" id="department"
-						list="dropdownData.departmentList" listKey="id"
+						list="dropdownData.departmentList" listKey="code"
 						listValue="name" headerKey="-1" headerValue="----Choose----" />
 				</td>
 				<td class="greybox" width="10%">Party Name:</td>
