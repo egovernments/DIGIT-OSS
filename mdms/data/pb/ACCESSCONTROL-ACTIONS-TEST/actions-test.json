@@ -13291,6 +13291,30 @@
       "serviceCode": "filestore url",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1735,
+      "name": "PendingDeductions",
+      "url": "url",
+      "displayName": "Remittance Pending",
+      "orderNumber": 6,
+      "enabled": true,
+      "serviceCode": "FinanceReport",
+      "code": "null",
+      "navigationURL": "services/EGF/report/pendingTDSReport.action",
+      "path": "Finance.Reports.Deduction Reports.Remittance Pending "
+    },
+    {
+      "id": 1736,
+      "name": "DeductionSummary",
+      "url": "url",
+      "displayName": "Deductions Summary",
+      "orderNumber": 7,
+      "enabled": true,
+      "serviceCode": "FinanceReport",
+      "code": "null",
+      "navigationURL": "services/EGF/report/pendingTDSReport-summaryReport.action",
+      "path": "Finance.Reports.Deduction Reports.Deductions Summary "
     }
   ]
 }
