@@ -11748,7 +11748,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
-      "path": "Finance.Masters.Chartofaccounts",
+      "path": "Finance.Masters.Chartofaccounts.Tree View",
       "navigationURL": "services/EGF/eGov_COA.jsp"
     },
     {
@@ -11761,7 +11761,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
-      "path": "Finance.Masters.Detailed Codes.Create Detailed Code",
+      "path": "Finance.Masters.Chartofaccounts.Detailed Codes.Create Detailed Code",
       "navigationURL": "services/EGF/masters/chartOfAccounts-addNew.action"
     },
     {
@@ -11809,7 +11809,7 @@
       "url": "url",
       "parentModule": "",
       "displayName": "Create Scheme",
-      "orderNumber": 1,
+      "orderNumber": 3,
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
@@ -12017,7 +12017,7 @@
       "url": "url",
       "parentModule": "",
       "displayName": "Create Fund",
-      "orderNumber": 1,
+      "orderNumber": 2,
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
@@ -12095,7 +12095,7 @@
       "url": "url",
       "parentModule": "",
       "displayName": "Create Function",
-      "orderNumber": 1,
+      "orderNumber": 3,
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
@@ -12398,7 +12398,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
-      "path": "Finance.Masters.Detailed Codes.View Detailed Code",
+      "path": "Finance.Masters.Chartofaccounts.Detailed Codes.View Detailed Code",
       "navigationURL": "services/EGF/masters/chartOfAccounts-viewDetailedCode.action"
     },
     {
@@ -12411,7 +12411,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
-      "path": "Finance.Masters.Detailed Codes.Modify Detailed Code",
+      "path": "Finance.Masters.Chartofaccounts.Detailed Codes.Modify Detailed Code",
       "navigationURL": "services/EGF/masters/chartOfAccounts-editDetailedCode.action"
     },
     {
