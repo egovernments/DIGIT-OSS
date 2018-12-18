@@ -154,15 +154,38 @@ public class WorkOrderService implements EntityTypeService {
     }
 
     @Transactional
-    public WorkOrder update(final WorkOrder workOrder) {
-        setAuditDetails(workOrder);
-        WorkOrder savedWorkOrder = workOrderRepository.findOne(workOrder.getId());
-        savedWorkOrder.setName(workOrder.getName());
-        savedWorkOrder.setDescription(workOrder.getDescription());
-        savedWorkOrder.setActive(workOrder.getActive());
-        savedWorkOrder.setSanctionNumber(workOrder.getSanctionNumber());
-        savedWorkOrder.setSanctionDate(workOrder.getSanctionDate());
-        return workOrderRepository.save(workOrder);
+    public WorkOrder update(WorkOrder workOrder) {
+        if (workOrder.getEditAllFields()) {
+            setAuditDetails(workOrder);
+            if (workOrder.getFund() != null && workOrder.getFund().getId() != null) {
+                workOrder.setFund(fundService.findOne(workOrder.getFund().getId()));
+            }
+            if (workOrder.getScheme() != null && workOrder.getScheme().getId() != null) {
+                workOrder.setScheme(schemeService.findById(workOrder.getScheme().getId(), false));
+            } else {
+                workOrder.setScheme(null);
+            }
+            if (workOrder.getSubScheme() != null && workOrder.getSubScheme().getId() != null) {
+                workOrder.setSubScheme(subSchemeService.findById(workOrder.getSubScheme().getId(), false));
+            } else {
+                workOrder.setSubScheme(null);
+            }
+            if (workOrder.getContractor() != null && workOrder.getContractor().getId() != null) {
+                workOrder.setContractor(contractorService.getById(workOrder.getContractor().getId()));
+            }
+            workOrder = workOrderRepository.save(workOrder);
+        } else {
+            setAuditDetails(workOrder);
+            WorkOrder savedWorkOrder = workOrderRepository.findOne(workOrder.getId());
+            savedWorkOrder.setName(workOrder.getName());
+            savedWorkOrder.setDescription(workOrder.getDescription());
+            savedWorkOrder.setActive(workOrder.getActive());
+            savedWorkOrder.setSanctionNumber(workOrder.getSanctionNumber());
+            savedWorkOrder.setSanctionDate(workOrder.getSanctionDate());
+
+            workOrder = workOrderRepository.save(savedWorkOrder);
+        }
+        return workOrder;
     }
 
     private void setAuditDetails(WorkOrder workOrder) {

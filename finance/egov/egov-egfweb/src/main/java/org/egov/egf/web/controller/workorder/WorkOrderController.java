@@ -58,7 +58,9 @@ import org.egov.egf.masters.services.WorkOrderService;
 import org.egov.egf.web.adaptor.WorkOrderJsonAdaptor;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.egov.model.bills.EgBillregister;
 import org.egov.model.masters.WorkOrder;
+import org.egov.services.bills.EgBillRegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
@@ -104,6 +106,9 @@ public class WorkOrderController {
     @Autowired
     private ContractorService contractorService;
 
+    @Autowired
+    private EgBillRegisterService egBillRegisterService;
+
     private void prepareNewForm(final Model model) {
         model.addAttribute("funds", fundService.findAllActiveAndIsnotleaf());
         model.addAttribute("departments", microserviceUtils.getDepartments());
@@ -136,6 +141,12 @@ public class WorkOrderController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
     public String edit(@PathVariable("id") final Long id, final Model model) {
         final WorkOrder workOrder = workOrderService.getById(id);
+        List<EgBillregister> bills = egBillRegisterService.getBillsByWorkOrderNumber(workOrder.getOrderNumber());
+        if (bills != null && !bills.isEmpty()) {
+            workOrder.setEditAllFields(false);
+        } else {
+            workOrder.setEditAllFields(true);
+        }
         prepareNewForm(model);
         model.addAttribute("workOrder", workOrder);
         return EDIT;

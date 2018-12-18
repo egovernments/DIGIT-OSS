@@ -57,7 +57,16 @@
 				<div class="panel-heading">
 					<div class="panel-title"><spring:message code="title.workorder.edit" /></div>
 				</div>	
-				<%@ include file="workorder-edit-form.jsp"%>
+				
+				<input type="hidden" name="editAllFields" value="${workOrder.editAllFields}" />
+				
+				<c:if test="${workOrder.editAllFields}">
+					<%@ include file="workorder-form.jsp"%>
+				</c:if>
+				<c:if test="${!workOrder.editAllFields}">
+					<%@ include file="workorder-edit-form.jsp"%>
+				</c:if>
+				
 				<div class="form-group">
 					<div class="text-center">
 						<button type='submit' class='btn btn-primary' id="buttonSubmit"> <spring:message code='lbl.update' /> </button>

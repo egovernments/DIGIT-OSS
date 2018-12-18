@@ -81,7 +81,7 @@
 	<label class="col-sm-2 control-label text-right" for="active"> <spring:message code="purchaseorder.active" />
 	</label>
 	<div class="col-sm-3 add-margin">
-		<form:checkbox path="active" />
+		<form:checkbox path="active" checked="checked"/>
 		<form:errors path="active" cssClass="add-margin error-msg" />
 	</div>
 </div>
