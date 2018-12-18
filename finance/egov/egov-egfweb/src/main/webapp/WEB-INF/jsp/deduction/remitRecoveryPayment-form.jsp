@@ -73,7 +73,7 @@
 	{key:"panNo",hidden:true,formatter:createHiddenField(RECOVERYLIST,".panNo","hidden")},       
 	{key:"detailTypeId",hidden:true,formatter:createHiddenField(RECOVERYLIST,".detailTypeId","hidden")},
 	{key:"detailKeyid",hidden:true,formatter:createHiddenField(RECOVERYLIST,".detailKeyid","hidden")},
-	{key:"deductionAmount",label:'<s:text name="remit.deduction.amount"/>', formatter:createLabelMed(RECOVERYLIST,".deductionAmount")},
+	/* {key:"deductionAmount",label:'<s:text name="remit.deduction.amount"/>', formatter:createLabelMed(RECOVERYLIST,".deductionAmount")}, */
 	/* {key:"earlierPayment",label:'<s:text name="remit.earlier.payment"/>', formatter:createLabelMed(RECOVERYLIST,".earlierPayment")}, */
 	{key:"chkremit",label:'Amount', formatter:createAmount(RECOVERYLIST,".partialAmount")},
 	{key:"remittance_gl_dtlId",hidden:true, formatter:createTextFieldFormatter1(RECOVERYLIST,".remittance_gl_dtlId","hidden")},
@@ -94,7 +94,7 @@
 		updateLabel('partyNameLable',index,"<s:property value="partyName"/>");
 		updateLabel('partyCodeLable',index,'<s:property value="partyCode"/>');
 		/* updateLabel('panNoLable',index,'<s:property value="panNo"/>'); */
-		updateLabel('deductionAmount',index,'<s:text name="format.number" ><s:param value="%{deductionAmount}"/></s:text>');
+		/* updateLabel('deductionAmount',index,'<s:text name="format.number" ><s:param value="%{deductionAmount}"/></s:text>'); */
 		/* updateLabel('earlierPayment',index,'<s:text name="format.number" ><s:param value="%{earlierPayment}"/></s:text>'); */
 		updateFieldValue('voucherNumber',index,'<s:property value="voucherNumber"/>');
 		updateFieldValue('voucherDate',index,'<s:property value="voucherDate"/>');
