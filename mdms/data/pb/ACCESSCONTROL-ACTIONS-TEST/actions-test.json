@@ -13315,6 +13315,59 @@
       "code": "null",
       "navigationURL": "services/EGF/report/pendingTDSReport-summaryReport.action",
       "path": "Finance.Reports.Deduction Reports.Deductions Summary "
+    },
+    {
+      "id": 1737,
+      "name": "UploaderHome",
+      "url": "url",
+      "displayName": "Home",
+      "orderNumber": 13,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "Uploader",
+      "code": "null",
+      "navigationURL": "integration/uplaoder/home",
+      "path": "Uploader.Home",
+      "leftIcon": "places:business-center"
+   },
+   {
+     "id": 1738,
+      "name": "uploader jobs create",
+      "url": "/data-uploader/v1/jobs/_create",
+      "parentModule": "",
+      "displayName": "",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "Uploader",
+      "code": "null",
+      "path": "",
+      "navigationURL": ""
+    },
+    {
+      "id": 1739,
+      "name": "uploader jobs search",
+      "url": "/data-uploader/v1/jobs/_search",
+     "parentModule": "",
+     "displayName": "",
+     "orderNumber": 0,
+     "enabled": false,
+     "serviceCode": "Uploader",
+     "code": "null",
+     "path": "",
+     "navigationURL": ""
+    },
+    {
+     "id": 1740,
+      "name": "uploader defination search",
+      "url": "/data-uploader/v1/upload-definitions/_search",
+      "parentModule": "",
+      "displayName": "",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "Uploader",
+      "code": "null",
+      "path": "",
+      "navigationURL": ""
     }
   ]
 }
