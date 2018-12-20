@@ -19,7 +19,16 @@
             "domain": "http://a928e49ebd60d11e78b04069afc6531d-1602439604.ap-southeast-1.elb.amazonaws.com:5601"
           }
         }
+      },
+      "uploader": {
+        "iframe-routes": {
+          "home": {
+            "routePath": "/app/v2/uploader/file-uploader",
+            "isOrigin": true
+          }
+        }
       }
     }
   ]
 }
+
