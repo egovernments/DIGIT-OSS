@@ -13368,6 +13368,42 @@
       "code": "null",
       "path": "",
       "navigationURL": ""
+    },
+    {
+      "id": 1741,
+      "name": "BusinessService Create",
+      "url": "/egov-workflow-v2/egov-wf/businessservice/_create",
+      "parentModule": "",
+      "displayName": "BusinessService Create",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-workflow-v2",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1742,
+      "name": "BusinessService Update",
+      "url": "/egov-workflow-v2/egov-wf/businessservice/_update",
+      "parentModule": "",
+      "displayName": "BusinessService Update",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-workflow-v2",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1743,
+      "name": "BusinessService Search",
+      "url": "/egov-workflow-v2/egov-wf/businessservice/_search",
+      "parentModule": "",
+      "displayName": "BusinessService Search",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-workflow-v2",
+      "code": "null",
+      "path": ""
     }
   ]
 }
