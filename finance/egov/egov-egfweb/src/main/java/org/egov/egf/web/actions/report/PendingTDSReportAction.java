@@ -258,7 +258,7 @@ public class PendingTDSReportAction extends BaseFormAction {
         fund = (Fund) persistenceService.find("from Fund where id=?", fund.getId());
         paramMap.put("fundName", fund.getName());
         paramMap.put("partyName", partyName);
-        if (department.getCode() != null ) {
+        if (department.getCode() != null && !department.getCode().equals("-1") ) {
           //TO-DO Get department from MS
             department = this.microserviceUtils.getDepartmentByCode(department.getCode());
 //            department = (Department) persistenceService.find("from Department where id=?", department.getId());
@@ -280,9 +280,9 @@ public class PendingTDSReportAction extends BaseFormAction {
         String partyNameQuery = "";
         final RemittanceBean remittanceBean = new RemittanceBean();
         remittanceBean.setRecoveryId(recovery.getId());
-        if (department.getCode() != null )//TO-DO change departmentid.id to departmentcode and get department code from UI and pass
-            deptQuery = " and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.vouchermis.departmentcode="
-                    + department.getCode();
+        if (department.getCode() != null && !department.getCode().equals("-1") )//TO-DO change departmentid.id to departmentcode and get department code from UI and pass
+            deptQuery = " and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.vouchermis.departmentcode='"
+                    + department.getCode()+"'";
         if (detailKey != null && detailKey != -1)
             partyNameQuery = " and egRemittanceGldtl.generalledgerdetail.detailkeyid=" + detailKey;
         if (fromDate != null)
@@ -339,9 +339,9 @@ public class PendingTDSReportAction extends BaseFormAction {
             inWorkflowTDS.add(tds);
         }
         if (showRemittedEntries) {
-            if (department.getId() != null && department.getId() != -1)//TO-DO change departmentid.id to departmentcode and get department code from UI and pass
-                deptQuery = " and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.vouchermis.departmentid.id="
-                        + department.getId();
+            if (department.getCode() != null && !department.getCode().equals("-1") )//TO-DO change departmentid.id to departmentcode and get department code from UI and pass
+                deptQuery = " and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.vouchermis.departmentid.id='"
+                        + department.getCode()+"'";
             if (detailKey != null && detailKey != -1)
                 partyNameQuery = " and egRemittanceGldtl.generalledgerdetail.detailkeyid=" + detailKey;
             final StringBuffer query = new StringBuffer(1000);
@@ -409,8 +409,8 @@ public class PendingTDSReportAction extends BaseFormAction {
         type = recovery.getType();
         String deptQuery = "";
         String partyNameQuery = "";
-        if (department.getId() != null && department.getId() != -1)
-            deptQuery = " and mis.departmentid=" + department.getId();
+        if (department.getCode() != null && !department.getCode().equals("-1"))
+            deptQuery = " and mis.departmentcode='" + department.getCode()+"'";
         if (detailKey != null && detailKey != -1)
             partyNameQuery = " and gld.detailkeyid=" + detailKey;
         List<Object[]> result = new ArrayList<Object[]>();

@@ -52,7 +52,7 @@
 	style='color: red; font-weight: bold'> <s:actionerror /> <s:fielderror />
 		<s:actionmessage /></font>
 </span>
-<table width="99%" border="0" cellspacing="0" cellpadding="0">
+<%-- <table width="99%" border="0" cellspacing="0" cellpadding="0">
 
 	<tr>
 		<s:if test="%{fromDate!=null}">
@@ -70,7 +70,7 @@
 			</td>
 		</s:else>
 	</tr>
-</table>
+</table> --%>
 <s:if test="%{pendingTDS.size()>0}">
 	<br />
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -94,9 +94,9 @@
 							<th class="bluebgheadtd">Reference Number</th>
 							<th class="bluebgheadtd">Voucher Date</th>
 							<th class="bluebgheadtd">Party Name</th>
-							<th class="bluebgheadtd">PAN Number</th>
+						<!-- 	<th class="bluebgheadtd">PAN Number</th>
 							<th class="bluebgheadtd">TotalDeduction(Rs)</th>
-							<th class="bluebgheadtd">Paid(Rs)</th>
+							<th class="bluebgheadtd">Paid(Rs)</th> -->
 							<th class="bluebgheadtd">Pending(Rs)</th>
 						</tr>
 						<s:iterator value="pendingTDS" status="stat" var="p">
@@ -121,7 +121,7 @@
 										<s:property value="partyName" />
 										&nbsp;
 									</div></td>
-								<td class="blueborderfortd"><div align="left">
+								<%-- <td class="blueborderfortd"><div align="left">
 										<s:property value="panNo" />
 										&nbsp;
 									</div></td>
@@ -134,7 +134,7 @@
 										<s:text name="format.number">
 											<s:param name="value" value="earlierPayment" />
 										</s:text>
-									</div></td>
+									</div></td> --%>
 								<td class="blueborderfortd"><div align="right">
 										<s:text name="format.number">
 											<s:param name="value" value="Amount" />
@@ -174,7 +174,7 @@
 							<th class="bluebgheadtd">Reference Number</th>
 							<th class="bluebgheadtd">Voucher Date</th>
 							<th class="bluebgheadtd">Party Name</th>
-							<th class="bluebgheadtd">PAN Number</th>
+							<!-- <th class="bluebgheadtd">PAN Number</th> -->
 							<th class="bluebgheadtd">Payment Voucher</th>
 							<th class="bluebgheadtd">Remitted On</th>
 							<th class="bluebgheadtd">Payment Amount</th>
@@ -204,10 +204,10 @@
 										<s:property value="partyName" />
 										&nbsp;
 									</div></td>
-								<td class="blueborderfortd"><div align="left">
+								<%-- <td class="blueborderfortd"><div align="left">
 										<s:property value="panNo" />
 										&nbsp;
-									</div></td>
+									</div></td> --%>
 								<td class="blueborderfortd"><div align="left">
 										<s:property value="paymentVoucherNumber" />
 										&nbsp;
@@ -270,7 +270,7 @@
 							<th class="bluebgheadtd">Reference Number</th>
 							<th class="bluebgheadtd">Voucher Date</th>
 							<th class="bluebgheadtd">Party Name</th>
-							<th class="bluebgheadtd">PAN Number</th>
+							<!-- <th class="bluebgheadtd">PAN Number</th> -->
 							<th class="bluebgheadtd">Payment Voucher</th>
 							<th class="bluebgheadtd">Remitted On</th>
 							<th class="bluebgheadtd">Payment Amount</th>
@@ -300,10 +300,10 @@
 										<s:property value="partyName" />
 										&nbsp;
 									</div></td>
-								<td class="blueborderfortd"><div align="left">
+								<%-- <td class="blueborderfortd"><div align="left">
 										<s:property value="panNo" />
 										&nbsp;
-									</div></td>
+									</div></td> --%>
 								<td class="blueborderfortd"><div align="left">
 										<s:property value="paymentVoucherNumber" />
 										&nbsp;
