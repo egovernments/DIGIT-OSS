@@ -673,11 +673,6 @@ public class SupplierBillService {
         return null;
     }
 
-    private Assignment getPrimaryUserAssignment() {
-
-        return null;
-    }
-
     private Department getDepartmentDetails(String deptCode) {
 
         Department dept = microServiceUtil.getDepartmentByCode(deptCode);
