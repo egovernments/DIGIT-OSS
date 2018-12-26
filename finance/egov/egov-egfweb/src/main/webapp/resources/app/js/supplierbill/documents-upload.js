@@ -45,30 +45,69 @@
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  *
  */
-package org.egov.egf.masters.repository;
+var maxSize = 2097152;
+var inMB = maxSize/1024/1024;
+var fileformatsinclude = ['doc','docx','xls','xlsx','rtf','pdf','jpeg','jpg','png','txt','zip','dxf'];
 
-import java.util.List;
+function addFileInputField() {
+    var uploaderTbl = document.getElementById("uploadertbl");
+    var tbody = uploaderTbl.lastChild;
+    var trNo = (tbody.childElementCount ? tbody.childElementCount : tbody.childNodes.length) + 1;
+    var tempTrNo = trNo - 1;
+    var curFieldValue = $("#file" + tempTrNo).val();
+    var documentsSize = parseFloat($("#documentsSize").val()) + parseFloat(trNo);
+    if(curFieldValue == "") {
+        bootbox.alert("Field is empty!");
+        return;
+    }
 
-import org.egov.model.masters.PurchaseOrder;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+    var tr = document.createElement("tr");
+    tr.setAttribute("id", "row"+trNo);
+    var td = document.createElement("td");
+    var inputFile = document.createElement("input");
+    inputFile.setAttribute("type", "file");
+    inputFile.setAttribute("name", "file");
+    inputFile.setAttribute("id", "file" + trNo);
+    inputFile.setAttribute("class", "padding-10");
+    inputFile.setAttribute("onchange", "isValidFile(this.id)");
+    td.appendChild(inputFile);
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+}
 
-/**
- * @author venki
- *
- */
+function getTotalFileSize() {
+    var uploaderTbl = document.getElementById("uploadertbl");
+    var tbody = uploaderTbl.lastChild;
+    var trNo = (tbody.childElementCount ? tbody.childElementCount : tbody.childNodes.length) + 1;
+    var totalSize = 0;
+    for(var i = 1; i < trNo; i++) {
+        totalSize += $("#file"+i)[0].files[0].size; // in bytes
+        if(totalSize > maxSize) {
+            bootbox.alert('File size should not exceed '+ inMB +' MB!');
+            $("#file"+i).val('');
+            return;
+        }
+    }
+}
 
-@Repository
-public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Long> {
+function isValidFile(id) {
+    var myfile= $("#"+id).val();
+    var ext = myfile.split('.').pop();
+    if($.inArray(ext.toLowerCase(), fileformatsinclude) > -1){
+        getTotalFileSize();
+    } else {
+        bootbox.alert("Please upload .doc, .docx, .xls, .xlsx, .rtf, .pdf, jpeg, .jpg, .png, .txt, .zip and .dxf format documents only");
+        $("#"+id).val('');
+        return false;
+    }
+}
 
-    public List<PurchaseOrder> findByNameLikeOrOrderNumberLikeAndActive(String name, String orderNumber, Boolean active);
+function deleteFileInputField(id){
+    var uploaderTbl = document.getElementById("uploadertbl");
+    uploaderTbl.deleteRow(document.getElementById(id));
+}
 
-    @Query("from PurchaseOrder where active=true")
-    public List<PurchaseOrder> findActiveOrders();
-
-    public List<PurchaseOrder> findBySupplier_Id(Long id);
-
-    public PurchaseOrder findByOrderNumber(String orderNumber);
-
+function addSelectedFiles() {
+    var uploaderTbl = $("#uploadertbl");
+    window.opener.$("#documentDetails").append($(uploaderTbl));
 }

@@ -45,30 +45,14 @@
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  *
  */
-package org.egov.egf.masters.repository;
 
-import java.util.List;
+package org.egov.egf.autonumber;
 
-import org.egov.model.masters.PurchaseOrder;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+import org.egov.model.bills.EgBillregister;
+import org.springframework.stereotype.Service;
 
-/**
- * @author venki
- *
- */
-
-@Repository
-public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Long> {
-
-    public List<PurchaseOrder> findByNameLikeOrOrderNumberLikeAndActive(String name, String orderNumber, Boolean active);
-
-    @Query("from PurchaseOrder where active=true")
-    public List<PurchaseOrder> findActiveOrders();
-
-    public List<PurchaseOrder> findBySupplier_Id(Long id);
-
-    public PurchaseOrder findByOrderNumber(String orderNumber);
+@Service
+public interface SupplierBillNumberGenerator {
+    public String getNextNumber(EgBillregister br);
 
 }

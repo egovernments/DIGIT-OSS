@@ -164,10 +164,14 @@ public class SupplierService implements EntityTypeService {
 
     }
 
+    public List<Supplier> getAllActiveSuppliers() {
+        return supplierRepository.findByStatus();
+    }
+
     @Override
     public List<? extends org.egov.commons.utils.EntityType> getAllActiveEntities(Integer accountDetailTypeId) {
         // TODO Auto-generated method stub
-        return  supplierRepository.findByStatus();
+        return supplierRepository.findByStatus();
     }
 
     @Override

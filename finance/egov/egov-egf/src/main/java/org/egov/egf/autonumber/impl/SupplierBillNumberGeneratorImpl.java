@@ -45,30 +45,46 @@
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  *
  */
-package org.egov.egf.masters.repository;
 
-import java.util.List;
+package org.egov.egf.autonumber.impl;
 
-import org.egov.model.masters.PurchaseOrder;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+import java.io.Serializable;
 
-/**
- * @author venki
- *
- */
+import org.egov.commons.CFinancialYear;
+import org.egov.commons.dao.FinancialYearDAO;
+import org.egov.egf.autonumber.SupplierBillNumberGenerator;
+import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.persistence.utils.GenericSequenceNumberGenerator;
+import org.egov.model.bills.EgBillregister;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-@Repository
-public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Long> {
+@Service
+public class SupplierBillNumberGeneratorImpl implements SupplierBillNumberGenerator {
 
-    public List<PurchaseOrder> findByNameLikeOrOrderNumberLikeAndActive(String name, String orderNumber, Boolean active);
+    @Autowired
+    private FinancialYearDAO financialYearDAO;
 
-    @Query("from PurchaseOrder where active=true")
-    public List<PurchaseOrder> findActiveOrders();
+    @Autowired
+    private GenericSequenceNumberGenerator genericSequenceNumberGenerator;
 
-    public List<PurchaseOrder> findBySupplier_Id(Long id);
+    /**
+     * 
+     * Format DepartmentCode/PJV/seqnumber/financialyear but sequence is running number for a year
+     * 
+     */
+    public String getNextNumber(EgBillregister br) {
+        String supplierBillNumber = "";
 
-    public PurchaseOrder findByOrderNumber(String orderNumber);
+        String sequenceName = "";
 
+        final CFinancialYear financialYear = financialYearDAO.getFinancialYearByDate(br.getBilldate());
+        if (financialYear == null)
+            throw new ApplicationRuntimeException("Financial Year is not defined for the voucher date");
+        sequenceName = "seq_supplier_billnumber_" + financialYear.getFinYearRange();
+        Serializable nextSequence = genericSequenceNumberGenerator.getNextSequence(sequenceName);
+        supplierBillNumber = String.format("%s/%s/%04d/%s", br.getEgBillregistermis().getDepartmentcode(), "PJV", nextSequence,
+                financialYear.getFinYearRange());
+        return supplierBillNumber;
+    }
 }

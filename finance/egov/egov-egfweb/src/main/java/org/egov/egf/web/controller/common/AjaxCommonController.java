@@ -47,8 +47,12 @@
  */
 package org.egov.egf.web.controller.common;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSerializer;
+import static org.egov.infra.web.support.json.adapter.HibernateProxyTypeAdapter.FACTORY;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.egov.commons.Accountdetailtype;
 import org.egov.commons.Bankaccount;
 import org.egov.commons.Bankbranch;
@@ -66,12 +70,14 @@ import org.egov.commons.utils.EntityType;
 import org.egov.egf.billsubtype.service.EgBillSubTypeService;
 import org.egov.egf.commons.bankaccount.service.CreateBankAccountService;
 import org.egov.egf.commons.bankbranch.service.CreateBankBranchService;
+import org.egov.egf.masters.services.PurchaseOrderService;
 import org.egov.egf.web.adaptor.ChartOfAccountsAdaptor;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.model.bills.EgBillSubType;
+import org.egov.model.masters.PurchaseOrder;
 import org.egov.services.masters.SchemeService;
 import org.egov.services.masters.SubSchemeService;
 import org.egov.utils.FinancialConstants;
@@ -85,11 +91,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import static org.egov.infra.web.support.json.adapter.HibernateProxyTypeAdapter.FACTORY;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSerializer;
 
 /**
  * @author venki
@@ -135,11 +138,21 @@ public class AjaxCommonController {
     @Autowired
     private CreateBankAccountService createBankAccountService;
 
+    @Autowired
+    private PurchaseOrderService purchaseOrderService;
+
     @RequestMapping(value = "/getschemesbyfundid", method = RequestMethod.GET)
     @ResponseBody
     public List<Scheme> getAllSchemesByFundId(@RequestParam("fundId") final String fundId)
             throws ApplicationException {
         return schemeService.getByFundId(Integer.parseInt(fundId));
+    }
+
+    @RequestMapping(value = "/getpurchaseodersbysupplierid", method = RequestMethod.GET)
+    @ResponseBody
+    public List<PurchaseOrder> getAllPurchaseOrdersBySupplierId(@RequestParam("supplierId") final String supplierId)
+            throws ApplicationException {
+        return purchaseOrderService.getBySupplierId(Long.parseLong(supplierId));
     }
 
     @RequestMapping(value = "/getsubschemesbyschemeid", method = RequestMethod.GET)
@@ -191,6 +204,30 @@ public class AjaxCommonController {
             entityNames.add(entity.getCode() + " - " + entity.getName() + "~" + entity.getEntityId());
 
         return entityNames;
+    }
+
+    @RequestMapping(value = "/getsupplierdebitcodes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findSupplierDebitAccountCodes(@RequestParam final String glcode) {
+        final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getSupplierDebitAccountCodes(glcode);
+        for (final CChartOfAccounts coa : chartOfAccounts)
+            if (coa.getChartOfAccountDetails().isEmpty())
+                coa.setIsSubLedger(false);
+            else
+                coa.setIsSubLedger(true);
+        return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
+    }
+
+    @RequestMapping(value = "/getsuppliercreditcodes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findSupplierCreditAccountCodes(@RequestParam final String glcode) {
+        final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getSupplierCreditAccountCodes(glcode);
+        for (final CChartOfAccounts coa : chartOfAccounts)
+            if (coa.getChartOfAccountDetails().isEmpty())
+                coa.setIsSubLedger(false);
+            else
+                coa.setIsSubLedger(true);
+        return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
     }
 
     @RequestMapping(value = "/getaccountcodesforaccountdetailtype", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

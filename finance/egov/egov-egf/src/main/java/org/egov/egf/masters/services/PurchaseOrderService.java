@@ -117,6 +117,14 @@ public class PurchaseOrderService implements EntityTypeService {
         return purchaseOrderRepository.findOne(id);
     }
 
+    public List<PurchaseOrder> getBySupplierId(final Long supplierId) {
+        return purchaseOrderRepository.findBySupplier_Id(supplierId);
+    }
+
+    public PurchaseOrder getByOrderNumber(final String orderNumber) {
+        return purchaseOrderRepository.findByOrderNumber(orderNumber);
+    }
+
     @Transactional
     public PurchaseOrder create(PurchaseOrder purchaseOrder) {
 

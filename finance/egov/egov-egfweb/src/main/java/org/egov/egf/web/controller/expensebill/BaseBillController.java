@@ -202,7 +202,9 @@ public abstract class BaseBillController extends BaseVoucherController {
     @SuppressWarnings("unchecked")
     protected void populateBillDetails(final EgBillregister egBillregister) {
         egBillregister.getEgBilldetailes().clear();
-        egBillregister.getEgBilldetailes().addAll(egBillregister.getBillDetails());
+        egBillregister.getEgBilldetailes().addAll(egBillregister.getCreditDetails());
+        egBillregister.getEgBilldetailes().addAll(egBillregister.getDebitDetails());
+        egBillregister.getEgBilldetailes().addAll(egBillregister.getNetPayableDetails());
         for (final EgBilldetails details : egBillregister.getEgBilldetailes()) {
             if (egBillregister.getEgBillregistermis().getFunction() != null)
                 details.setFunctionid(BigDecimal.valueOf(egBillregister.getEgBillregistermis().getFunction().getId()));

@@ -45,13 +45,12 @@
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  *
  */
-package org.egov.egf.masters.repository;
+package org.egov.egf.supplierbill.repository;
 
 import java.util.List;
 
-import org.egov.model.masters.PurchaseOrder;
+import org.egov.model.bills.EgBillregister;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -60,15 +59,10 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Long> {
+public interface SupplierBillRepository extends JpaRepository<EgBillregister, Long> {
 
-    public List<PurchaseOrder> findByNameLikeOrOrderNumberLikeAndActive(String name, String orderNumber, Boolean active);
+    EgBillregister findByBillnumber(final String billNumber);
 
-    @Query("from PurchaseOrder where active=true")
-    public List<PurchaseOrder> findActiveOrders();
-
-    public List<PurchaseOrder> findBySupplier_Id(Long id);
-
-    public PurchaseOrder findByOrderNumber(String orderNumber);
+    List<EgBillregister> findByBillnumberContainingIgnoreCase(final String billNumber);
 
 }

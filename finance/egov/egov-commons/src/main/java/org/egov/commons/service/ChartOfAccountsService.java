@@ -47,6 +47,13 @@
  */
 package org.egov.commons.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.egov.commons.CChartOfAccountDetail;
 import org.egov.commons.CChartOfAccounts;
 import org.egov.infra.admin.master.entity.AppConfigValues;
@@ -57,11 +64,6 @@ import org.egov.infstr.services.PersistenceService;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Transactional(readOnly = true)
 public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts, Long> {
@@ -100,6 +102,44 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
                         "update chartofaccounts set isactiveforposting = true where isactiveforposting = false and id in (select distinct bg.mincode from egf_budgetgroup bg,egf_budgetdetail bd where bd.budgetgroup = bg.id  and bd.materializedpath like'"
                                 + materializedPath + "%') ")
                 .executeUpdate();
+    }
+
+    public List<CChartOfAccounts> getSupplierDebitAccountCodes(final String glcode) {
+        final Query entitysQuery = getSession()
+                .createQuery(
+                        " from CChartOfAccounts a where a.isActiveForPosting=true and a.classification=4  and (glcode like :glcode or lower(name) like :name) and  type in ('E','A') order by a.id");
+        entitysQuery.setString(GLCODE, glcode + "%");
+        entitysQuery.setString("name", glcode.toLowerCase() + "%");
+        return entitysQuery.list();
+    }
+
+    public List<CChartOfAccounts> getSupplierCreditAccountCodes(final String glcode) {
+        final Query entitysQuery = getSession()
+                .createQuery(
+                        " from CChartOfAccounts a where a.isActiveForPosting=true and a.classification=4 and (a.glcode like :glcode or lower(a.name) like :name) and a.type in ('I','L') order by a.id");
+        entitysQuery.setString(GLCODE, glcode + "%");
+        entitysQuery.setString("name", glcode.toLowerCase() + "%");
+
+        List<CChartOfAccounts> netPayableCodes = getSupplierNetPayableAccountCodes();
+        Map<String, CChartOfAccounts> netPayableMap = new HashMap<>();
+        for (CChartOfAccounts coa : netPayableCodes) {
+            netPayableMap.put(coa.getGlcode(), coa);
+        }
+        List<CChartOfAccounts> tempList = entitysQuery.list();
+        List<CChartOfAccounts> finalList = new ArrayList<>();
+        for (CChartOfAccounts coa : tempList) {
+            if (netPayableMap.get(coa.getGlcode()) == null) {
+                finalList.add(coa);
+            }
+        }
+        return finalList;
+    }
+
+    public List<CChartOfAccounts> getSupplierNetPayableAccountCodes() {
+        final Query entitysQuery = getSession()
+                .createQuery(
+                        " select a from CChartOfAccounts a,EgfAccountcodePurpose purpose where a.purposeId = purpose.id and a.isActiveForPosting=true and a.classification=4 and purpose.name = 'Creditors-Supplier Payable'  order by a.id");
+        return entitysQuery.list();
     }
 
     public List<CChartOfAccounts> getSubledgerAccountCodesForAccountDetailTypeAndNonSubledgers(

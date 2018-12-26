@@ -685,7 +685,7 @@
         <put-attribute name="body" value="/WEB-INF/views/contractor/contractor-search.jsp"/>
     </definition>
     
-        <definition name="supplier-new" extends="base_layout">
+    <definition name="supplier-new" extends="base_layout">
         <put-attribute name="page-title" value="title.supplier.create" cascade="true"/>
         <put-attribute name="body" value="/WEB-INF/views/supplier/supplier-new.jsp"/>
     </definition>
@@ -759,4 +759,25 @@
         <put-attribute name="page-title" value="title.workorder.search" cascade="true"/>
         <put-attribute name="body" value="/WEB-INF/views/workorder/workorder-search.jsp"/>
     </definition>
+    
+   	<definition name="supplierbill-form" extends="base_layout">
+        <put-attribute name="page-title" value="title.supplierbill.create" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/supplierbill/supplierbill-form.jsp"/>
+    </definition>
+
+    <definition name="supplierbill-success" extends="base_layout">
+        <put-attribute name="page-title" value="lbl.supplierbill" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/supplierbill/supplierbill-success.jsp"/>
+    </definition>
+
+    <definition name="supplierbill-view" extends="base_layout">
+        <put-attribute name="page-title" value="lbl.supplierbill" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/supplierbill/supplierbill-view.jsp"/>
+    </definition>
+
+    <definition name="supplierbill-update" extends="base_layout">
+        <put-attribute name="page-title" value="title.supplierbill.create" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/supplierbill/supplierbill-update.jsp"/>
+    </definition>
+    
 </tiles-definitions>
