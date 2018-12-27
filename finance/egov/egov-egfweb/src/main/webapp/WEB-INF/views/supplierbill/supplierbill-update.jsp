@@ -55,7 +55,7 @@
 .position_alert {
 	position: fixed;
 	z-index: 9999;
-	top: 85px;
+	top: 50px;
 	right: 20px;
 	background: #F2DEDE;
 	padding: 10px 20px;
@@ -65,7 +65,7 @@
 .position_alert1 {
 	position: fixed;
 	z-index: 9999;
-	top: 85px;
+	top: 50px;
 	right: 520px;
 	background: #F2DEDE;
 	padding: 10px 20px;
@@ -75,7 +75,7 @@
 .position_alert2 {
 	position: fixed;
 	z-index: 9999;
-	top: 85px;
+	top: 50px;
 	right: 270px;
 	background: #F2DEDE;
 	padding: 10px 20px;
@@ -97,7 +97,7 @@
 				value="${supplierBillTotalDebitAmount}" default="0.0"></c:out></span>
 	</div>
 	<div class="position_alert2">
-		<spring:message code="lbl.total.credit.amount" />
+		<spring:message code="lbl.total.deduction.amount" />
 		: &#8377 <span id="supplierBillTotalCreditAmount"> <c:out
 				value="${supplierBillTotalCreditAmount}" default="0.0"></c:out></span>
 	</div>
@@ -106,7 +106,6 @@
 		value="${selectedCheckList}" />
 	<form:hidden path="" id="cutOffDate" value="${cutOffDate}" />
 	<form:hidden path="" name="mode" id="mode" value="${mode}" />
-	<form:hidden path="billamount" id="billamount" class="billamount" />
 	<form:hidden path="" name="netPayableId" id="netPayableId"
 		value="${netPayableId}" />
 	<form:hidden path="" name="netPayableAmount" id="netPayableAmount"
@@ -122,44 +121,28 @@
 			<br />
 		</div>
 	</spring:hasBindErrors>
-	<ul class="nav nav-tabs" id="settingstab">
-		<li class="active"><a data-toggle="tab" href="#supplierbillheader"
-			data-tabidx=0><spring:message code="lbl.header" /></a></li>
-		<li><a data-toggle="tab" href="#checklist" data-tabidx=1><spring:message
-					code="lbl.checklist" /> </a></li>
-	</ul>
 
-	<div class="tab-content">
-		<div class="tab-pane fade in active" id="supplierbillheader">
-			<jsp:include page="supplierbill-header.jsp" />
-			<jsp:include page="supplierbill-subledgerdetails.jsp" />
-			<div class="panel panel-primary" data-collapsed="0">
-				<jsp:include page="supplierbill-debitdetails.jsp" />
-				<jsp:include page="supplierbill-creditdetails.jsp" />
-				<jsp:include page="supplierbill-netpayable.jsp" />
-			</div>
-			<jsp:include page="supplierbill-accountdetails.jsp" />
-			<jsp:include page="supplierbill-subledgeraccountdetails.jsp" />
-            <c:if test="${egBillregister.documentDetail != null &&  !egBillregister.documentDetail.isEmpty()}">
-                <jsp:include page="billdocument-upload.jsp"/>
-            </c:if>
+		<jsp:include page="supplierbill-header.jsp" />
+		<div class="panel panel-primary" data-collapsed="0">
+			<jsp:include page="supplierbill-debitdetails.jsp" />
+			<jsp:include page="supplierbill-creditdetails.jsp" />
+			<jsp:include page="supplierbill-netpayable.jsp" />
 		</div>
-		<div class="tab-pane fade" id="checklist">
-			<jsp:include page="supplierbill-checklist.jsp" />
-		</div>
-		<jsp:include page="../common/commonworkflowmatrix.jsp" />
+         <c:if test="${egBillregister.documentDetail != null &&  !egBillregister.documentDetail.isEmpty()}">
+             <jsp:include page="billdocument-upload.jsp"/>
+         </c:if>
+		<jsp:include page="../common/commonworkflowmatrix-expensebill.jsp" />
 		<div class="buttonbottom" align="center">
 			<jsp:include page="../common/commonworkflowmatrix-button.jsp" />
 		</div>
-	</div>
 
 </form:form>
 <script
-	src="<cdn:url value='/resources/app/js/common/helper.js?rnd=${app_release_no}'/>"></script>
+	src="<cdn:url value='/resources/app/js/common/helper.js?rnd=${app_release_no}'  context='/services/EGF'/>"></script>
 <script
-	src="<cdn:url value='/resources/app/js/common/voucherBillHelper.js?rnd=${app_release_no}'/>"></script>
+	src="<cdn:url value='/resources/app/js/common/voucherBillHelper.js?rnd=${app_release_no}'  context='/services/EGF'/>"></script>
 <script
-	src="<cdn:url value='/resources/app/js/supplierbill/supplierbill.js?rnd=${app_release_no}'/>"></script>
+	src="<cdn:url value='/resources/app/js/supplierbill/supplierbill.js?rnd=${app_release_no}'  context='/services/EGF'/>"></script>
 <script
 	src="<cdn:url value='/resources/global/js/egov/patternvalidation.js?rnd=${app_release_no}' context='/services/egi'/>"></script>
 <script

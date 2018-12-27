@@ -58,6 +58,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -258,15 +259,17 @@ public class CreateSupplierBillController extends BaseBillController {
     }
 
     private void populateSubLedgerDetails(final EgBillregister egBillregister, final BindingResult resultBinder) {
-        EgBillPayeedetails payeeDetail;
+        EgBillPayeedetails payeeDetail = null;
         Boolean check = false;
         Boolean poExist = false;
         Boolean supplierExist = false;
         for (final EgBilldetails details : egBillregister.getEgBilldetailes()) {
+            details.setEgBillPaydetailes(new HashSet<>());
             check = false;
             poExist = false;
             supplierExist = false;
-            if (details.getChartOfAccounts().getChartOfAccountDetails() != null)
+            if (details.getChartOfAccounts().getChartOfAccountDetails() != null
+                    && !details.getChartOfAccounts().getChartOfAccountDetails().isEmpty()) {
                 for (CChartOfAccountDetail cad : details.getChartOfAccounts().getChartOfAccountDetails()) {
                     if (cad.getDetailTypeId() != null) {
                         if (cad.getDetailTypeId().getName().equalsIgnoreCase("PurchaseOrder")) {
@@ -286,29 +289,31 @@ public class CreateSupplierBillController extends BaseBillController {
                     }
                 }
 
-            if (poExist || (poExist && supplierExist)) {
-                payeeDetail = new EgBillPayeedetails();
-                payeeDetail.setEgBilldetailsId(details);
-                if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1)
-                    payeeDetail.setDebitAmount(details.getDebitamount());
-                if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1)
-                    payeeDetail.setCreditAmount(details.getCreditamount());
-                payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("PurchaseOrder").getId());
-                payeeDetail.setAccountDetailKeyId(
-                        purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getId().intValue());
-            } else if (supplierExist) {
-                payeeDetail = new EgBillPayeedetails();
-                payeeDetail.setEgBilldetailsId(details);
-                if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1)
-                    payeeDetail.setDebitAmount(details.getDebitamount());
-                if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1)
-                    payeeDetail.setCreditAmount(details.getCreditamount());
-                payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("Supplier").getId());
-                payeeDetail.setAccountDetailKeyId(
-                        purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId()
-                                .intValue());
+                if (poExist || (poExist && supplierExist)) {
+                    payeeDetail = new EgBillPayeedetails();
+                    payeeDetail.setEgBilldetailsId(details);
+                    if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1)
+                        payeeDetail.setDebitAmount(details.getDebitamount());
+                    if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1)
+                        payeeDetail.setCreditAmount(details.getCreditamount());
+                    payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("PurchaseOrder").getId());
+                    payeeDetail.setAccountDetailKeyId(
+                            purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getId().intValue());
+                } else if (supplierExist) {
+                    payeeDetail = new EgBillPayeedetails();
+                    payeeDetail.setEgBilldetailsId(details);
+                    if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1)
+                        payeeDetail.setDebitAmount(details.getDebitamount());
+                    if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1)
+                        payeeDetail.setCreditAmount(details.getCreditamount());
+                    payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("Supplier").getId());
+                    payeeDetail.setAccountDetailKeyId(
+                            purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId()
+                                    .intValue());
+                }
+                payeeDetail.setLastUpdatedTime(new Date());
+                details.getEgBillPaydetailes().add(payeeDetail);
             }
-
         }
     }
 

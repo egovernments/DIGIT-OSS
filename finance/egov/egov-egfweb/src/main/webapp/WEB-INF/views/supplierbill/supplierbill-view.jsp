@@ -114,27 +114,15 @@
     <div class="panel-title text-center" style="color: green;">
         <c:out value="${message}"/><br/>
     </div>
-    <ul class="nav nav-tabs" id="settingstab">
-        <li class="active"><a data-toggle="tab" href="#supplierbillheader"
-                              data-tabidx=0><spring:message code="lbl.header"/></a></li>
-        <li><a data-toggle="tab" href="#checklist" data-tabidx=1><spring:message
-                code="lbl.checklist"/> </a></li>
-    </ul>
 
-    <div class="tab-content">
-        <div class="tab-pane fade in active" id="supplierbillheader">
-            <jsp:include page="supplierbill-view-header.jsp"/>
-            <jsp:include page="supplierbill-view-subledgerdetails.jsp"/>
-            <jsp:include page="supplierbill-view-accountdetails.jsp"/>
-            <jsp:include page="supplierbill-view-subledgeraccountdetails.jsp"/>
-            <c:if test="${egBillregister.documentDetail != null &&  !egBillregister.documentDetail.isEmpty()}">
-                <jsp:include page="billdocument-upload.jsp"/>
-            </c:if>
-            <%-- <jsp:include page="supplierbill-budgetdetails.jsp"/> --%>
-        </div>
-        <div class="tab-pane fade" id="checklist">
-            <jsp:include page="supplierbill-view-checklist.jsp"/>
-        </div>
+        <jsp:include page="supplierbill-view-header.jsp"/>
+        <jsp:include page="supplierbill-view-subledgerdetails.jsp"/>
+        <jsp:include page="supplierbill-view-accountdetails.jsp"/>
+        <jsp:include page="supplierbill-view-subledgeraccountdetails.jsp"/>
+        <c:if test="${egBillregister.documentDetail != null &&  !egBillregister.documentDetail.isEmpty()}">
+            <jsp:include page="billdocument-upload.jsp"/>
+        </c:if>
+        <%-- <jsp:include page="supplierbill-budgetdetails.jsp"/> --%>
         <c:if test="${!workflowHistory.isEmpty() && mode != 'readOnly'}">
             <jsp:include page="../common/commonworkflowhistory-view.jsp"></jsp:include>
         </c:if>
@@ -152,7 +140,6 @@
                 </div>
             </div>
         </c:if>
-    </div>
 
 </form:form>
 <script src="<cdn:url value='/resources/app/js/supplierbill/viewsupplierbill.js?rnd=${app_release_no}'/>"></script>

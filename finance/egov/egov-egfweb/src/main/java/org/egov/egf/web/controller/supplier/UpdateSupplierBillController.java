@@ -45,21 +45,31 @@
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  *
  */
-package org.egov.egf.web.controller.expensebill;
+package org.egov.egf.web.controller.supplier;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.egov.commons.CChartOfAccountDetail;
 import org.egov.commons.CChartOfAccounts;
+import org.egov.commons.service.AccountdetailtypeService;
 import org.egov.commons.service.ChartOfAccountsService;
 import org.egov.commons.service.CheckListService;
 import org.egov.egf.expensebill.repository.DocumentUploadRepository;
-import org.egov.egf.expensebill.service.ExpenseBillService;
+import org.egov.egf.masters.services.PurchaseOrderService;
+import org.egov.egf.masters.services.SupplierService;
+import org.egov.egf.supplierbill.service.SupplierBillService;
 import org.egov.egf.utils.FinancialUtils;
+import org.egov.egf.web.controller.expensebill.BaseBillController;
 import org.egov.eis.web.contract.WorkflowContainer;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.exception.ApplicationException;
@@ -68,6 +78,7 @@ import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infstr.models.EgChecklists;
 import org.egov.model.bills.DocumentUpload;
+import org.egov.model.bills.EgBillPayeedetails;
 import org.egov.model.bills.EgBilldetails;
 import org.egov.model.bills.EgBillregister;
 import org.egov.utils.FinancialConstants;
@@ -84,8 +95,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping(value = "/expensebill")
-public class UpdateExpenseBillController extends BaseBillController {
+@RequestMapping(value = "/supplierbill")
+public class UpdateSupplierBillController extends BaseBillController {
 
     private static final String NET_PAYABLE_AMOUNT = "netPayableAmount";
 
@@ -95,13 +106,13 @@ public class UpdateExpenseBillController extends BaseBillController {
 
     private static final String APPROVAL_POSITION = "approvalPosition";
 
-    private static final String EXPENSEBILL_VIEW = "expensebill-view";
+    private static final String SUPPLIERBILL_VIEW = "supplierbill-view";
 
     private static final String NET_PAYABLE_ID = "netPayableId";
     @Autowired
     private DocumentUploadRepository documentUploadRepository;
     @Autowired
-    private ExpenseBillService expenseBillService;
+    private SupplierBillService supplierBillService;
     @Autowired
     @Qualifier("chartOfAccountsService")
     private ChartOfAccountsService chartOfAccountsService;
@@ -111,9 +122,22 @@ public class UpdateExpenseBillController extends BaseBillController {
     private CheckListService checkListService;
     @Autowired
     private MicroserviceUtils microServiceUtil;
+    @Autowired
+    private SupplierService supplierService;
+    @Autowired
+    private PurchaseOrderService purchaseOrderService;
+    @Autowired
+    private AccountdetailtypeService accountdetailtypeService;
 
-    public UpdateExpenseBillController(final AppConfigValueService appConfigValuesService) {
+    public UpdateSupplierBillController(final AppConfigValueService appConfigValuesService) {
         super(appConfigValuesService);
+    }
+
+    @Override
+    protected void setDropDownValues(final Model model) {
+        super.setDropDownValues(model);
+        model.addAttribute("suppliers", supplierService.getAllActiveSuppliers());
+        model.addAttribute("netPayableCodes", chartOfAccountsService.getSupplierNetPayableAccountCodes());
     }
 
     @ModelAttribute(EG_BILLREGISTER)
@@ -122,16 +146,13 @@ public class UpdateExpenseBillController extends BaseBillController {
             String[] billIds = billId.split("\\&");
             billId = billIds[0];
         }
-        return expenseBillService.getById(Long.parseLong(billId));
+        return supplierBillService.getById(Long.parseLong(billId));
     }
 
     @RequestMapping(value = "/update/{billId}", method = RequestMethod.GET)
     public String updateForm(final Model model, @PathVariable final String billId,
             final HttpServletRequest request) throws ApplicationException {
-        final EgBillregister egBillregister = expenseBillService.getById(Long.parseLong(billId));
-        if (egBillregister.getExpendituretype().equalsIgnoreCase(FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE)) {
-            return "redirect:/supplierbill/update/" + billId;
-        }
+        final EgBillregister egBillregister = supplierBillService.getById(Long.parseLong(billId));
         final List<DocumentUpload> documents = documentUploadRepository.findByObjectId(Long.valueOf(billId));
         egBillregister.setDocumentDetail(documents);
         List<Map<String, Object>> budgetDetails = null;
@@ -141,40 +162,142 @@ public class UpdateExpenseBillController extends BaseBillController {
             model.addAttribute("currentState", egBillregister.getState().getValue());
         model.addAttribute("workflowHistory",
                 financialUtils.getHistory(egBillregister.getState(), egBillregister.getStateHistory()));
-
+        model.addAttribute("supplierId",
+                purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId());
         prepareWorkflow(model, egBillregister, new WorkflowContainer());
         egBillregister.getBillDetails().addAll(egBillregister.getEgBilldetailes());
         prepareBillDetailsForView(egBillregister);
-        expenseBillService.validateSubledgeDetails(egBillregister);
-        final List<CChartOfAccounts> expensePayableAccountList = chartOfAccountsService
+        prepareSupplierBillDetailsForView(egBillregister);
+        supplierBillService.validateSubledgeDetails(egBillregister);
+        final List<CChartOfAccounts> supplierPayableAccountList = chartOfAccountsService
                 .getNetPayableCodes();
         for (final EgBilldetails details : egBillregister.getBillDetails())
-            if (expensePayableAccountList != null && !expensePayableAccountList.isEmpty()
-                    && expensePayableAccountList.contains(details.getChartOfAccounts())) {
+            if (supplierPayableAccountList != null && !supplierPayableAccountList.isEmpty()
+                    && supplierPayableAccountList.contains(details.getChartOfAccounts())) {
                 model.addAttribute(NET_PAYABLE_ID, details.getChartOfAccounts().getId());
                 model.addAttribute(NET_PAYABLE_AMOUNT, details.getCreditamount());
             }
-        prepareCheckListForEdit(egBillregister, model);
 
         String department = this.getDepartmentName(egBillregister.getEgBillregistermis().getDepartmentcode());
 
         if (department != null)
             egBillregister.getEgBillregistermis().setDepartmentName(department);
+
+        if (egBillregister.getEgBillregistermis().getScheme() != null
+                && egBillregister.getEgBillregistermis().getScheme().getId() != null) {
+            egBillregister.getEgBillregistermis()
+                    .setSchemeId(egBillregister.getEgBillregistermis().getScheme().getId().longValue());
+        }
+
+        if (egBillregister.getEgBillregistermis().getSubScheme() != null
+                && egBillregister.getEgBillregistermis().getSubScheme().getId() != null) {
+            egBillregister.getEgBillregistermis()
+                    .setSubSchemeId(egBillregister.getEgBillregistermis().getSubScheme().getId().longValue());
+        }
+
         model.addAttribute(EG_BILLREGISTER, egBillregister);
-        if (egBillregister.getState() != null
-                && (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue())
-                        || financialUtils.isBillEditable(egBillregister.getState()))) {
+
+        if (egBillregister.getState() != null &&
+                (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue()) ||
+                        financialUtils.isBillEditable(egBillregister.getState()))) {
             model.addAttribute("mode", "edit");
-            return "expensebill-update";
+            return "supplierbill-update";
         } else {
             model.addAttribute("mode", "view");
-            if (egBillregister.getEgBillregistermis().getBudgetaryAppnumber() != null
-                    && !egBillregister.getEgBillregistermis().getBudgetaryAppnumber().isEmpty()) {
-                budgetDetails = expenseBillService.getBudgetDetailsForBill(egBillregister);
+            if (egBillregister.getEgBillregistermis().getBudgetaryAppnumber() != null &&
+                    !egBillregister.getEgBillregistermis().getBudgetaryAppnumber().isEmpty()) {
+                budgetDetails = supplierBillService.getBudgetDetailsForBill(egBillregister);
+            }
+            model.addAttribute("budgetDetails", budgetDetails);
+            return SUPPLIERBILL_VIEW;
+        }
+
+    }
+
+    private void populateSubLedgerDetails(final EgBillregister egBillregister, final BindingResult resultBinder) {
+        EgBillPayeedetails payeeDetail = null;
+        Boolean check = false;
+        Boolean poExist = false;
+        Boolean supplierExist = false;
+        for (final EgBilldetails details : egBillregister.getEgBilldetailes()) {
+            details.setEgBillPaydetailes(new HashSet<>());
+            check = false;
+            poExist = false;
+            supplierExist = false;
+            if (details.getChartOfAccounts().getChartOfAccountDetails() != null
+                    && !details.getChartOfAccounts().getChartOfAccountDetails().isEmpty()) {
+                for (CChartOfAccountDetail cad : details.getChartOfAccounts().getChartOfAccountDetails()) {
+                    if (cad.getDetailTypeId() != null) {
+                        if (cad.getDetailTypeId().getName().equalsIgnoreCase("PurchaseOrder")) {
+                            poExist = true;
+                        }
+                        if (cad.getDetailTypeId().getName().equalsIgnoreCase("Supplier")) {
+                            supplierExist = true;
+                        }
+                        if (!cad.getDetailTypeId().getName().equalsIgnoreCase("PurchaseOrder")
+                                && !cad.getDetailTypeId().getName().equalsIgnoreCase("Supplier")) {
+                            check = true;
+                        }
+                        if (check) {
+                            resultBinder.reject("msg.supplier.bill.wrong.sub.ledger.mapped",
+                                    new String[] { details.getChartOfAccounts().getGlcode() }, null);
+                        }
+                    }
+                }
+
+                if (poExist || (poExist && supplierExist)) {
+                    payeeDetail = new EgBillPayeedetails();
+                    payeeDetail.setEgBilldetailsId(details);
+                    if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1)
+                        payeeDetail.setDebitAmount(details.getDebitamount());
+                    if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1)
+                        payeeDetail.setCreditAmount(details.getCreditamount());
+                    payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("PurchaseOrder").getId());
+                    payeeDetail.setAccountDetailKeyId(
+                            purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getId().intValue());
+                } else if (supplierExist) {
+                    payeeDetail = new EgBillPayeedetails();
+                    payeeDetail.setEgBilldetailsId(details);
+                    if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1)
+                        payeeDetail.setDebitAmount(details.getDebitamount());
+                    if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1)
+                        payeeDetail.setCreditAmount(details.getCreditamount());
+                    payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("Supplier").getId());
+                    payeeDetail.setAccountDetailKeyId(
+                            purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId()
+                                    .intValue());
+                }
+                payeeDetail.setLastUpdatedTime(new Date());
+                details.getEgBillPaydetailes().add(payeeDetail);
+            }
+        }
+    }
+
+    private void prepareSupplierBillDetailsForView(final EgBillregister egBillregister) {
+
+        List<CChartOfAccounts> netPayableList = chartOfAccountsService.getSupplierNetPayableAccountCodes();
+        Map<String, CChartOfAccounts> coaMap = new HashMap<>();
+        for (CChartOfAccounts coa : netPayableList) {
+            coaMap.put(coa.getGlcode(), coa);
+        }
+        egBillregister.setCreditDetails(new ArrayList<>());
+        egBillregister.setDebitDetails(new ArrayList<>());
+        egBillregister.setNetPayableDetails(new ArrayList<>());
+        for (EgBilldetails bd : egBillregister.getEgBilldetailes()) {
+            if (bd.getDebitamount() != null && bd.getDebitamount().compareTo(BigDecimal.ZERO) == 1) {
+                egBillregister.getDebitDetails().add(bd);
             }
 
-            model.addAttribute("budgetDetails", budgetDetails);
-            return EXPENSEBILL_VIEW;
+            if (bd.getCreditamount() != null && bd.getCreditamount().compareTo(BigDecimal.ZERO) == 1
+                    && coaMap.get(bd.getChartOfAccounts().getGlcode()) == null) {
+                egBillregister.getCreditDetails().add(bd);
+            }
+
+            if (bd.getCreditamount() != null && bd.getCreditamount().compareTo(BigDecimal.ZERO) == 1
+                    && coaMap.get(bd.getChartOfAccounts().getGlcode()) != null) {
+                egBillregister.getNetPayableDetails().add(bd);
+            }
+
         }
     }
 
@@ -211,11 +334,17 @@ public class UpdateExpenseBillController extends BaseBillController {
                 && (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue())
                         || financialUtils.isBillEditable(egBillregister.getState()))) {
             populateBillDetails(egBillregister);
+            populateSubLedgerDetails(egBillregister, resultBinder);
             validateBillNumber(egBillregister, resultBinder);
             validateLedgerAndSubledger(egBillregister, resultBinder);
         }
+        model.addAttribute("supplierId",
+                purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId());
+
         if (resultBinder.hasErrors()) {
             setDropDownValues(model);
+            model.addAttribute("supplierId",
+                    purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId());
             model.addAttribute("stateType", egBillregister.getClass().getSimpleName());
             prepareWorkflow(model, egBillregister, new WorkflowContainer());
             model.addAttribute(APPROVAL_DESIGNATION, request.getParameter(APPROVAL_DESIGNATION));
@@ -228,15 +357,15 @@ public class UpdateExpenseBillController extends BaseBillController {
                             || financialUtils.isBillEditable(egBillregister.getState()))) {
                 prepareValidActionListByCutOffDate(model);
                 model.addAttribute("mode", "edit");
-                return "expensebill-update";
+                return "supplierbill-update";
             } else {
                 model.addAttribute("mode", "view");
-                return EXPENSEBILL_VIEW;
+                return SUPPLIERBILL_VIEW;
             }
         } else {
             try {
                 if (null != workFlowAction)
-                    updatedEgBillregister = expenseBillService.update(egBillregister, approvalPosition, approvalComment, null,
+                    updatedEgBillregister = supplierBillService.update(egBillregister, approvalPosition, approvalComment, null,
                             workFlowAction, mode, apporverDesignation);
             } catch (final ValidationException e) {
                 setDropDownValues(model);
@@ -252,10 +381,10 @@ public class UpdateExpenseBillController extends BaseBillController {
                                 || financialUtils.isBillEditable(egBillregister.getState()))) {
                     prepareValidActionListByCutOffDate(model);
                     model.addAttribute("mode", "edit");
-                    return "expensebill-update";
+                    return "supplierbill-update";
                 } else {
                     model.addAttribute("mode", "view");
-                    return EXPENSEBILL_VIEW;
+                    return SUPPLIERBILL_VIEW;
                 }
             }
 
@@ -263,14 +392,14 @@ public class UpdateExpenseBillController extends BaseBillController {
 
             // For Get Configured ApprovalPosition from workflow history
             if (approvalPosition == null || approvalPosition.equals(Long.valueOf(0)))
-                approvalPosition = expenseBillService.getApprovalPositionByMatrixDesignation(
+                approvalPosition = supplierBillService.getApprovalPositionByMatrixDesignation(
                         egBillregister, null, mode, workFlowAction);
 
             final String approverName = String.valueOf(request.getParameter("approverName"));
             final String approverDetails = financialUtils.getApproverDetails(workFlowAction,
                     updatedEgBillregister.getState(), updatedEgBillregister.getId(), approvalPosition, approverName);
 
-            return "redirect:/expensebill/success?approverDetails=" + approverDetails + "&billNumber="
+            return "redirect:/supplierbill/success?approverDetails=" + approverDetails + "&billNumber="
                     + updatedEgBillregister.getBillnumber();
         }
     }
@@ -282,44 +411,25 @@ public class UpdateExpenseBillController extends BaseBillController {
             String[] billIds = billId.split("\\&");
             billId = billIds[0];
         }
-        final EgBillregister egBillregister = expenseBillService.getById(Long.parseLong(billId));
+        final EgBillregister egBillregister = supplierBillService.getById(Long.parseLong(billId));
         setDropDownValues(model);
         egBillregister.getBillDetails().addAll(egBillregister.getEgBilldetailes());
         model.addAttribute("mode", "readOnly");
         prepareBillDetailsForView(egBillregister);
         prepareCheckList(egBillregister);
-        final List<CChartOfAccounts> expensePayableAccountList = chartOfAccountsService
+        final List<CChartOfAccounts> supplierPayableAccountList = chartOfAccountsService
                 .getNetPayableCodesByAccountDetailType(0);
         for (final EgBilldetails details : egBillregister.getBillDetails())
-            if (expensePayableAccountList != null && !expensePayableAccountList.isEmpty()
-                    && expensePayableAccountList.contains(details.getChartOfAccounts()))
+            if (supplierPayableAccountList != null && !supplierPayableAccountList.isEmpty()
+                    && supplierPayableAccountList.contains(details.getChartOfAccounts()))
                 model.addAttribute(NET_PAYABLE_AMOUNT, details.getCreditamount());
         model.addAttribute(EG_BILLREGISTER, egBillregister);
-        return EXPENSEBILL_VIEW;
+        return SUPPLIERBILL_VIEW;
     }
 
     private void prepareCheckList(final EgBillregister egBillregister) {
         final List<EgChecklists> checkLists = checkListService.getByObjectId(egBillregister.getId());
         egBillregister.getCheckLists().addAll(checkLists);
-    }
-
-    private void prepareCheckListForEdit(final EgBillregister egBillregister, final Model model) {
-        final List<EgChecklists> checkLists = checkListService.getByObjectId(egBillregister.getId());
-        egBillregister.getCheckLists().addAll(checkLists);
-        final StringBuilder selectedCheckList = new StringBuilder();
-        for (final EgChecklists checkList : egBillregister.getCheckLists()) {
-            selectedCheckList.append(checkList.getAppconfigvalue().getId());
-            selectedCheckList.append("-");
-            selectedCheckList.append(checkList.getChecklistvalue());
-            selectedCheckList.append(",");
-        }
-        if (!checkLists.isEmpty())
-            model.addAttribute("selectedCheckList", selectedCheckList.toString().substring(0, selectedCheckList.length() - 1));
-    }
-
-    @Override
-    protected void setDropDownValues(final Model model) {
-        super.setDropDownValues(model);
     }
 
     private String getDepartmentName(String departmentCode) {

@@ -97,7 +97,7 @@ public abstract class BaseBillController extends BaseVoucherController {
     @Autowired
     @Qualifier("persistenceService")
     private PersistenceService persistenceService;
-    
+
     public BaseBillController(final AppConfigValueService appConfigValuesService) {
         super(appConfigValuesService);
     }
@@ -165,31 +165,34 @@ public abstract class BaseBillController extends BaseVoucherController {
                 detailAmt = details.getCreditamount();
 
             for (final EgBillPayeedetails payeeDetails : details.getEgBillPaydetailes()) {
+                if (payeeDetails != null) {
+                    if (payeeDetails.getDebitAmount() != null && payeeDetails.getCreditAmount() != null
+                            && payeeDetails.getDebitAmount().equals(BigDecimal.ZERO)
+                            && payeeDetails.getCreditAmount().equals(BigDecimal.ZERO))
+                        resultBinder.reject("msg.expense.bill.subledger.amountzero",
+                                new String[] { details.getChartOfAccounts().getGlcode() }, null);
 
-                if (payeeDetails.getDebitAmount() != null && payeeDetails.getCreditAmount() != null
-                        && payeeDetails.getDebitAmount().equals(BigDecimal.ZERO)
-                        && payeeDetails.getCreditAmount().equals(BigDecimal.ZERO))
-                    resultBinder.reject("msg.expense.bill.subledger.amountzero",
-                            new String[] { details.getChartOfAccounts().getGlcode() }, null);
+                    if (payeeDetails.getDebitAmount() != null && payeeDetails.getCreditAmount() != null
+                            && payeeDetails.getDebitAmount().compareTo(BigDecimal.ZERO) == 1
+                            && payeeDetails.getCreditAmount().compareTo(BigDecimal.ZERO) == 1)
+                        resultBinder.reject("msg.expense.bill.subledger.amount",
+                                new String[] { details.getChartOfAccounts().getGlcode() }, null);
 
-                if (payeeDetails.getDebitAmount() != null && payeeDetails.getCreditAmount() != null
-                        && payeeDetails.getDebitAmount().compareTo(BigDecimal.ZERO) == 1
-                        && payeeDetails.getCreditAmount().compareTo(BigDecimal.ZERO) == 1)
-                    resultBinder.reject("msg.expense.bill.subledger.amount",
-                            new String[] { details.getChartOfAccounts().getGlcode() }, null);
+                    if (payeeDetails.getDebitAmount() != null && payeeDetails.getDebitAmount().compareTo(BigDecimal.ZERO) == 1)
+                        payeeDetailAmt = payeeDetailAmt.add(payeeDetails.getDebitAmount());
+                    else if (payeeDetails.getCreditAmount() != null
+                            && payeeDetails.getCreditAmount().compareTo(BigDecimal.ZERO) == 1)
+                        payeeDetailAmt = payeeDetailAmt.add(payeeDetails.getCreditAmount());
 
-                if (payeeDetails.getDebitAmount() != null && payeeDetails.getDebitAmount().compareTo(BigDecimal.ZERO) == 1)
-                    payeeDetailAmt = payeeDetailAmt.add(payeeDetails.getDebitAmount());
-                else if (payeeDetails.getCreditAmount() != null && payeeDetails.getCreditAmount().compareTo(BigDecimal.ZERO) == 1)
-                    payeeDetailAmt = payeeDetailAmt.add(payeeDetails.getCreditAmount());
+                    check = false;
+                    for (final CChartOfAccountDetail coaDetails : details.getChartOfAccounts().getChartOfAccountDetails())
+                        if (payeeDetails.getAccountDetailTypeId() == coaDetails.getDetailTypeId().getId())
+                            check = true;
+                    if (!check)
+                        resultBinder.reject("msg.expense.bill.subledger.mismatch",
+                                new String[] { details.getChartOfAccounts().getGlcode() }, null);
 
-                check = false;
-                for (final CChartOfAccountDetail coaDetails : details.getChartOfAccounts().getChartOfAccountDetails())
-                    if (payeeDetails.getAccountDetailTypeId() == coaDetails.getDetailTypeId().getId())
-                        check = true;
-                if (!check)
-                    resultBinder.reject("msg.expense.bill.subledger.mismatch",
-                            new String[] { details.getChartOfAccounts().getGlcode() }, null);
+                }
 
             }
 
@@ -231,7 +234,7 @@ public abstract class BaseBillController extends BaseVoucherController {
                     details.getEgBillPaydetailes().add(payeeDetail);
                 }
     }
-    
+
     protected void prepareBillDetailsForView(final EgBillregister egBillregister) {
         for (final EgBilldetails details : egBillregister.getBillDetails()) {
             details.setChartOfAccounts(chartOfAccountsService.findById(details.getGlcodeid().longValue(), false));
