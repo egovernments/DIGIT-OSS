@@ -108,16 +108,16 @@
 </div>
 
 <div class="form-group">
-	<label class="col-sm-2 control-label text-right" for="tinNumber"> <spring:message code="supplier.tinNo" /><span class="mandatory"></span> 
+	<label class="col-sm-2 control-label text-right" for="tinNumber"> <spring:message code="supplier.tinNo" />
 	</label>
 	<div class="col-sm-3 add-margin">
-		<form:input path="tinNumber" id="tinNumber" minlength="15" maxlength="15" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" required="required"/>
+		<form:input path="tinNumber" id="tinNumber" minlength="15" maxlength="15" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" />
 		<form:errors path="tinNumber" cssClass="add-margin error-msg" />
 	</div>
-	<label class="col-sm-2 control-label text-right" for="gstRegisteredState"> <spring:message code="supplier.gst.registered.state" /><span class="mandatory"></span> 
+	<label class="col-sm-2 control-label text-right" for="gstRegisteredState"> <spring:message code="supplier.gst.registered.state" />
 	</label>
 	<div class="col-sm-3 add-margin">
-		<form:input path="gstRegisteredState" id="gstRegisteredState" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace" required="required"/>
+		<form:input path="gstRegisteredState" id="gstRegisteredState" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace"/>
 		<form:errors path="gstRegisteredState" cssClass="add-margin error-msg" />
 	</div>
 </div>

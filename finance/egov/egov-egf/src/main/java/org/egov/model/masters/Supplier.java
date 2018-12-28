@@ -55,7 +55,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.egov.commons.Bank;
 import org.egov.commons.EgwStatus;
@@ -151,7 +150,6 @@ public class Supplier extends AbstractAuditable implements EntityType {
     @OptionalPattern(regex = FinancialConstants.numericwithoutspecialchar, message = "Special Characters are not allowed in ESI No")
     private String esiNumber;
 
-    @NotNull
     private String gstRegisteredState;
 
     @Override
