@@ -75,6 +75,18 @@ $('#supplier').change(function () {
 	loadPurchaseOrder($('#supplier').val());
 });
 
+$('#purchaseOrder').change(function () {
+	$('#fundId').val("");
+	$('#fundName').val("");
+	$('#departmentCode').val("");
+	$('#departmentName').val("");
+	$('#schemeId').val("");
+	$('#schemeName').val("");
+	$('#subSchemeId').val("");
+	$('#subSchemeName').val("");
+	loadMisAttributes($('#purchaseOrder').val());
+});
+
 $('.btn-wf-primary').click(function(){
 	var button = $(this).attr('id');
 	if (button != null && (button == 'Forward')) {
@@ -442,6 +454,44 @@ function loadPurchaseOrder(supplierId){
 								selected="selected";
 						}
 						$('#purchaseOrder').append($('<option '+ selected +'>').text(value.name).attr('value', value.orderNumber));
+					});
+				});
+
+	}
+}
+
+
+function loadMisAttributes(orderNumber){
+	if (!orderNumber) {
+		$('#fundId').val("");
+		$('#fundName').val("");
+		$('#departmentCode').val("");
+		$('#departmentName').val("");
+		$('#schemeId').val("");
+		$('#schemeName').val("");
+		$('#subSchemeId').val("");
+		$('#subSchemeName').val("");
+		return;
+	} else {
+		
+		$.ajax({
+			method : "GET",
+			url : "/services/EGF/common/getpurchaseoderbyordernumber",
+			data : {
+				orderNumber : orderNumber
+			},
+			async : true
+		}).done(
+				function(response) {
+					$.each(response, function(index, value) {
+						$('#fundId').val(value.fund.id);
+						$('#fundName').val(value.fund.name);
+						$('#departmentCode').val(value.department);
+						$('#departmentName').val(value.description);
+						$('#schemeId').val(value.scheme.id);
+						$('#schemeName').val(value.scheme.name);
+						$('#subSchemeId').val(value.subScheme.id);
+						$('#subSchemeName').val(value.subScheme.name);
 					});
 				});
 

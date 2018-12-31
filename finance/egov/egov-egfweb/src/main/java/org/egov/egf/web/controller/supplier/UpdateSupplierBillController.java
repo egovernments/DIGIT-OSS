@@ -417,8 +417,7 @@ public class UpdateSupplierBillController extends BaseBillController {
         model.addAttribute("mode", "readOnly");
         prepareBillDetailsForView(egBillregister);
         prepareCheckList(egBillregister);
-        final List<CChartOfAccounts> supplierPayableAccountList = chartOfAccountsService
-                .getNetPayableCodesByAccountDetailType(0);
+        final List<CChartOfAccounts> supplierPayableAccountList = chartOfAccountsService.getSupplierNetPayableAccountCodes();
         for (final EgBilldetails details : egBillregister.getBillDetails())
             if (supplierPayableAccountList != null && !supplierPayableAccountList.isEmpty()
                     && supplierPayableAccountList.contains(details.getChartOfAccounts()))

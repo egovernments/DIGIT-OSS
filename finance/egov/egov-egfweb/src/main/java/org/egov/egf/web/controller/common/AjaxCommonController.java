@@ -51,6 +51,7 @@ import static org.egov.infra.web.support.json.adapter.HibernateProxyTypeAdapter.
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.egov.commons.Accountdetailtype;
@@ -76,6 +77,8 @@ import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.model.bills.EgBillSubType;
 import org.egov.model.masters.PurchaseOrder;
 import org.egov.services.masters.SchemeService;
@@ -141,6 +144,9 @@ public class AjaxCommonController {
     @Autowired
     private PurchaseOrderService purchaseOrderService;
 
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
+
     @RequestMapping(value = "/getschemesbyfundid", method = RequestMethod.GET)
     @ResponseBody
     public List<Scheme> getAllSchemesByFundId(@RequestParam("fundId") final String fundId)
@@ -153,6 +159,16 @@ public class AjaxCommonController {
     public List<PurchaseOrder> getAllPurchaseOrdersBySupplierId(@RequestParam("supplierId") final String supplierId)
             throws ApplicationException {
         return purchaseOrderService.getBySupplierId(Long.parseLong(supplierId));
+    }
+
+    @RequestMapping(value = "/getpurchaseoderbyordernumber", method = RequestMethod.GET)
+    @ResponseBody
+    public List<PurchaseOrder> getAllPurchaseOrderByOrderNumber(@RequestParam("orderNumber") final String orderNumber)
+            throws ApplicationException {
+        PurchaseOrder po = purchaseOrderService.getByOrderNumber(orderNumber);
+        Department dept = microserviceUtils.getDepartmentByCode(po.getDepartment());
+        po.setDescription(dept.getName());
+        return Collections.singletonList(po);
     }
 
     @RequestMapping(value = "/getsubschemesbyschemeid", method = RequestMethod.GET)

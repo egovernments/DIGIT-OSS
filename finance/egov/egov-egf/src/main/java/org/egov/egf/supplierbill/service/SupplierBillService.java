@@ -241,10 +241,10 @@ public class SupplierBillService {
 
         if (workFlowAction.equals(FinancialConstants.CREATEANDAPPROVE)) {
             if (FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE.equals(egBillregister.getExpendituretype()))
-                savedEgBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SUPPLIERBILL,
+                savedEgBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
                         FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS));
         } else {
-            savedEgBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SUPPLIERBILL,
+            savedEgBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
                     FinancialConstants.CONTINGENCYBILL_CREATED_STATUS));
             createSupplierBillRegisterWorkflowTransition(savedEgBillregister, approvalPosition, approvalComent, additionalRule,
                     workFlowAction, approvalDesignation);
@@ -310,7 +310,7 @@ public class SupplierBillService {
         }
         if (updatedegBillregister != null) {
             if (workFlowAction.equals(FinancialConstants.CREATEANDAPPROVE))
-                updatedegBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SUPPLIERBILL,
+                updatedegBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
                         FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS));
             else {
                 supplierBillRegisterStatusChange(updatedegBillregister, workFlowAction);
@@ -321,7 +321,7 @@ public class SupplierBillService {
             updatedegBillregister = supplierBillRepository.save(updatedegBillregister);
         } else {
             if (workFlowAction.equals(FinancialConstants.CREATEANDAPPROVE))
-                egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SUPPLIERBILL,
+                egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
                         FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS));
             else {
                 supplierBillRegisterStatusChange(egBillregister, workFlowAction);
@@ -340,18 +340,18 @@ public class SupplierBillService {
                 && null != egBillregister.getStatus().getCode())
             if (FinancialConstants.CONTINGENCYBILL_CREATED_STATUS.equals(egBillregister.getStatus().getCode())
                     && egBillregister.getState() != null && workFlowAction.equalsIgnoreCase(FinancialConstants.BUTTONAPPROVE))
-                egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SUPPLIERBILL,
+                egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
                         FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS));
             else if (workFlowAction.equals(FinancialConstants.BUTTONREJECT))
-                egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SUPPLIERBILL,
+                egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
                         FinancialConstants.CONTINGENCYBILL_REJECTED_STATUS));
             else if (FinancialConstants.CONTINGENCYBILL_REJECTED_STATUS.equals(egBillregister.getStatus().getCode())
                     && workFlowAction.equals(FinancialConstants.BUTTONCANCEL))
-                egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SUPPLIERBILL,
+                egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
                         FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS));
             else if (FinancialConstants.CONTINGENCYBILL_REJECTED_STATUS.equals(egBillregister.getStatus().getCode())
                     && workFlowAction.equals(FinancialConstants.BUTTONFORWARD))
-                egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SUPPLIERBILL,
+                egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
                         FinancialConstants.CONTINGENCYBILL_CREATED_STATUS));
 
     }

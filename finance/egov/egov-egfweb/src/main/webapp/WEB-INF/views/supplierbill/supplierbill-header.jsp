@@ -114,7 +114,45 @@
 	
 	</div>
 
-	<jsp:include page="supplier-trans-filter.jsp"/>
+	<div class="form-group">
+		<label class="col-sm-3 control-label text-right">
+			<spring:message code="lbl.fund" />
+		</label>
+		<div class="col-sm-3 add-margin">
+			<form:hidden class="form-control patternvalidation" path="egBillregistermis.fund" id="fundId"  />
+			<form:input class="form-control patternvalidation" path="egBillregistermis.fund.name" id="fundName"  value="${fundName}" disabled="true"/>
+		</div>
+		
+		<label class="col-sm-2 control-label text-right">
+			<spring:message code="lbl.department" />
+		</label>
+		<div class="col-sm-3 add-margin">
+			<form:hidden class="form-control patternvalidation" path="egBillregistermis.departmentcode" id="departmentCode"  />
+			<form:input class="form-control patternvalidation" path="egBillregistermis.departmentName" id="departmentName"  value="${departmentName}" disabled="true"/>
+		</div>
+	
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-3 control-label text-right">
+			<spring:message code="lbl.scheme" />
+		</label>
+		<div class="col-sm-3 add-margin">
+			<form:hidden class="form-control patternvalidation" path="egBillregistermis.schemeId" id="schemeId"  />
+			<form:input class="form-control patternvalidation" path="egBillregistermis.scheme.name" id="schemeName"  value="${schemeName}" disabled="true"/>
+		</div>
+		
+		<label class="col-sm-2 control-label text-right">
+			<spring:message code="lbl.subscheme" />
+		</label>
+		<div class="col-sm-3 add-margin">
+			<form:hidden class="form-control patternvalidation" path="egBillregistermis.subSchemeId" id="subSchemeId"  />
+			<form:input class="form-control patternvalidation" path="egBillregistermis.subScheme.name" id="subSchemeName"  value="${subSchemeName}" disabled="true"/>
+		</div>
+	
+	</div>
+	
+	<%-- <jsp:include page="supplier-trans-filter.jsp"/> --%>
 	
 	<div class="form-group">
 		<label class="col-sm-3 control-label text-right">
