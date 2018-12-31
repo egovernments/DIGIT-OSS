@@ -88,32 +88,30 @@
 			</div>
 		</c:otherwise>
 	</c:choose>
-	
 	<c:choose>
-		<c:when test="${headerFields.contains('fundsource')}">
-		<form:hidden path="" name="fundSourceId" id="fundSourceId" value="${egBillregister.egBillregistermis.fundsource.id }"/>
+		<c:when test="${headerFields.contains('department')}">
 			<c:choose>
-				<c:when test="${mandatoryFields.contains('fundsource')}">
-					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.sourcefund" />
+				<c:when test="${mandatoryFields.contains('department')}">
+					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.department" />
 						<span class="mandatory"></span>
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:select path="egBillregistermis.fundsource" data-first-option="false" id="fundSource" class="form-control" required="required">
+						<form:select path="egBillregistermis.departmentcode" data-first-option="false" id="department" class="form-control" required="required">
 							<form:option value=""><spring:message code="lbl.select" /></form:option>
-							<form:options items="${fundsources}" itemValue="id" itemLabel="name" />
+							<form:options items="${departments}" itemValue="code" itemLabel="name" />
 						</form:select>
-						<form:errors path="egBillregistermis.fundsource" cssClass="add-margin error-msg" />
+						<form:errors path="egBillregistermis.departmentcode" cssClass="add-margin error-msg" />
 					</div>
 				</c:when>
 				<c:otherwise>
-					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.sourcefund" />
+					<label class="col-sm-2 control-label text-right"><spring:message code="lbl.department" />
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:select path="egBillregistermis.fundsource" data-first-option="false" id="fundSource" class="form-control" >
+						<form:select path="egBillregistermis.departmentcode" data-first-option="false" id="department" class="form-control">
 							<form:option value=""><spring:message code="lbl.select" /></form:option>
-							<form:options items="${fundsources}" itemValue="id" itemLabel="name" />
+							<form:options items="${departments}" itemValue="id" itemLabel="name" />
 						</form:select>
-						<form:errors path="egBillregistermis.fundsource" cssClass="add-margin error-msg" />
+						<form:errors path="egBillregistermis.departmentcode" cssClass="add-margin error-msg" />
 					</div>
 				</c:otherwise>
 			</c:choose>
@@ -124,6 +122,7 @@
 			</div>
 		</c:otherwise>
 	</c:choose>
+	
 </div>
 
 <div class="form-group">
@@ -200,29 +199,30 @@
 
 <div class="form-group">
 	<c:choose>
-		<c:when test="${headerFields.contains('department')}">
+		<c:when test="${headerFields.contains('fundsource')}">
+		<form:hidden path="" name="fundSourceId" id="fundSourceId" value="${egBillregister.egBillregistermis.fundsource.id }"/>
 			<c:choose>
-				<c:when test="${mandatoryFields.contains('department')}">
-					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.department" />
+				<c:when test="${mandatoryFields.contains('fundsource')}">
+					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.sourcefund" />
 						<span class="mandatory"></span>
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:select path="egBillregistermis.departmentcode" data-first-option="false" id="department" class="form-control" required="required">
+						<form:select path="egBillregistermis.fundsource" data-first-option="false" id="fundSource" class="form-control" required="required">
 							<form:option value=""><spring:message code="lbl.select" /></form:option>
-							<form:options items="${departments}" itemValue="code" itemLabel="name" />
+							<form:options items="${fundsources}" itemValue="id" itemLabel="name" />
 						</form:select>
-						<form:errors path="egBillregistermis.departmentcode" cssClass="add-margin error-msg" />
+						<form:errors path="egBillregistermis.fundsource" cssClass="add-margin error-msg" />
 					</div>
 				</c:when>
 				<c:otherwise>
-					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.department" />
+					<label class="col-sm-3 control-label text-right"><spring:message code="lbl.sourcefund" />
 					</label>
 					<div class="col-sm-3 add-margin">
-						<form:select path="egBillregistermis.departmentcode" data-first-option="false" id="department" class="form-control">
+						<form:select path="egBillregistermis.fundsource" data-first-option="false" id="fundSource" class="form-control" >
 							<form:option value=""><spring:message code="lbl.select" /></form:option>
-							<form:options items="${departments}" itemValue="id" itemLabel="name" />
+							<form:options items="${fundsources}" itemValue="id" itemLabel="name" />
 						</form:select>
-						<form:errors path="egBillregistermis.departmentcode" cssClass="add-margin error-msg" />
+						<form:errors path="egBillregistermis.fundsource" cssClass="add-margin error-msg" />
 					</div>
 				</c:otherwise>
 			</c:choose>

@@ -204,8 +204,6 @@ public class SupplierBillService {
             final String additionalRule, final String workFlowAction, final String approvalDesignation) {
         if (StringUtils.isBlank(egBillregister.getBilltype()))
             egBillregister.setBilltype(FinancialConstants.BILLTYPE_FINAL_BILL);
-        if (StringUtils.isBlank(egBillregister.getExpendituretype()))
-            egBillregister.setExpendituretype(FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE);
         egBillregister.setPassedamount(egBillregister.getBillamount());
         egBillregister.getEgBillregistermis().setEgBillregister(egBillregister);
         egBillregister.getEgBillregistermis().setLastupdatedtime(new Date());
