@@ -16989,12 +16989,18 @@
       "tenantId": "pb"
     },
     {
+      "rolecode": "CITIZEN",
+      "actionid": 1729,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
       "rolecode": "EMPLOYEE",
       "actionid": 1730,
       "actioncode": "",
       "tenantId": "pb"
     },
-   {
+    {
       "rolecode": "SUPERUSER",
       "actionid": 1731,
       "actioncode": "",
