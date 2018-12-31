@@ -117,7 +117,7 @@
 	<label class="col-sm-2 control-label text-right" for="gstRegisteredState"> <spring:message code="supplier.gst.registered.state" />
 	</label>
 	<div class="col-sm-3 add-margin">
-		<form:input path="gstRegisteredState" id="gstRegisteredState" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace"/>
+		<form:input path="gstRegisteredState" id="gstRegisteredState" maxlength="250" cssClass="form-control patternvalidation" data-pattern="alphanumericwithspace"/>
 		<form:errors path="gstRegisteredState" cssClass="add-margin error-msg" />
 	</div>
 </div>
