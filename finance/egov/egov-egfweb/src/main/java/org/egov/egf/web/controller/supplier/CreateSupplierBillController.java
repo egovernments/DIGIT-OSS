@@ -291,27 +291,44 @@ public class CreateSupplierBillController extends BaseBillController {
                     }
                 }
 
-                if (poExist || (poExist && supplierExist)) {
-                    payeeDetail = new EgBillPayeedetails();
-                    payeeDetail.setEgBilldetailsId(details);
-                    if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1)
+                if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1) {
+                    if (poExist || (poExist && supplierExist)) {
+                        payeeDetail = new EgBillPayeedetails();
+                        payeeDetail.setEgBilldetailsId(details);
                         payeeDetail.setDebitAmount(details.getDebitamount());
-                    if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1)
-                        payeeDetail.setCreditAmount(details.getCreditamount());
-                    payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("PurchaseOrder").getId());
-                    payeeDetail.setAccountDetailKeyId(
-                            purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getId().intValue());
-                } else if (supplierExist) {
-                    payeeDetail = new EgBillPayeedetails();
-                    payeeDetail.setEgBilldetailsId(details);
-                    if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1)
+                        payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("PurchaseOrder").getId());
+                        payeeDetail.setAccountDetailKeyId(
+                                purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getId().intValue());
+                    } else if (supplierExist) {
+                        payeeDetail = new EgBillPayeedetails();
+                        payeeDetail.setEgBilldetailsId(details);
                         payeeDetail.setDebitAmount(details.getDebitamount());
-                    if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1)
+                        payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("Supplier").getId());
+                        payeeDetail.setAccountDetailKeyId(
+                                purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId()
+                                        .intValue());
+                    }
+
+                }
+
+                if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1) {
+                    if (supplierExist || (poExist && supplierExist)) {
+                        payeeDetail = new EgBillPayeedetails();
+                        payeeDetail.setEgBilldetailsId(details);
                         payeeDetail.setCreditAmount(details.getCreditamount());
-                    payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("Supplier").getId());
-                    payeeDetail.setAccountDetailKeyId(
-                            purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId()
-                                    .intValue());
+                        payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("Supplier").getId());
+                        payeeDetail.setAccountDetailKeyId(
+                                purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId()
+                                        .intValue());
+                    } else if (poExist) {
+                        payeeDetail = new EgBillPayeedetails();
+                        payeeDetail.setEgBilldetailsId(details);
+                        payeeDetail.setCreditAmount(details.getCreditamount());
+                        payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("PurchaseOrder").getId());
+                        payeeDetail.setAccountDetailKeyId(
+                                purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getId().intValue());
+                    }
+
                 }
                 payeeDetail.setLastUpdatedTime(new Date());
                 details.getEgBillPaydetailes().add(payeeDetail);
