@@ -11679,7 +11679,7 @@
       "url": "/services/EGF/voucher/billVoucher-newForm.action",
       "parentModule": "",
       "displayName": "Voucher from bill",
-      "orderNumber": 1,
+      "orderNumber": 4,
       "enabled": true,
       "serviceCode": "FinanceBill",
       "code": "null",
@@ -11796,7 +11796,7 @@
       "url": "/services/EGF/bill/billRegisterSearch-newform.action",
       "parentModule": "",
       "displayName": "View Bill Registers",
-      "orderNumber": 1,
+      "orderNumber": 5,
       "enabled": true,
       "serviceCode": "FinanceBill",
       "code": "null",
@@ -13410,6 +13410,32 @@
       "serviceCode": "egov-workflow-v2",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1744,
+      "name": "Financial Contractor bill create",
+      "navigationURL": "/services/EGF/contractorbill/newform",
+      "url": "url",
+      "parentModule": "EGF",
+      "displayName": "Contractor Bill",
+      "orderNumber": 2,
+      "enabled": true,
+      "serviceCode": "FinanceBill",
+      "code": "null",
+      "path": "Finance.Transactions.Bills Accounting.Contractor Bill"
+    },
+    {
+      "id": 1745,
+      "name": "Financial Supplier bill create",
+      "navigationURL": "/services/EGF/supplierbill/newform",
+      "url": "url",
+      "parentModule": "EGF",
+      "displayName": "Supplier Bill",
+      "orderNumber": 3,
+      "enabled": true,
+      "serviceCode": "FinanceBill",
+      "code": "null",
+      "path": "Finance.Transactions.Bills Accounting.Supplier Bill"
     }
   ]
 }

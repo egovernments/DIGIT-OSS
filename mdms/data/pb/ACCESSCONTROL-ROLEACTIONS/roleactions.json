@@ -15777,6 +15777,18 @@
       "tenantId": "pb"
     },
     {
+      "rolecode": "EGF_BILL_CREATOR",
+      "actionid": 1744,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EGF_BILL_CREATOR",
+      "actionid": 1745,
+      "actioncode": "",
+      "tenantId": "pb"
+    }
+    {
       "rolecode": "EGF_MASTER_ADMIN",
       "actionid": 1612,
       "actioncode": "",
