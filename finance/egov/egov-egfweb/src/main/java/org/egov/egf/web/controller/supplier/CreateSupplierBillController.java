@@ -87,6 +87,7 @@ import org.egov.model.bills.DocumentUpload;
 import org.egov.model.bills.EgBillPayeedetails;
 import org.egov.model.bills.EgBilldetails;
 import org.egov.model.bills.EgBillregister;
+import org.egov.model.masters.PurchaseOrder;
 import org.egov.utils.FinancialConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -106,6 +107,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping(value = "/supplierbill")
 public class CreateSupplierBillController extends BaseBillController {
+
+    private static final String NET_PAYABLE_CODES = "netPayableCodes";
+
+    private static final String SUPPLIERS = "suppliers";
+
+    private static final String SUPPLIER_ID = "supplierId";
+
+    private static final String APPROVER_DETAILS = "approverDetails";
+
+    private static final String APPROVER_NAME = "approverName";
+
+    private static final String APPROVAL_COMENT = "approvalComent";
+
+    private static final String SUPPLIER = "Supplier";
+
+    private static final String FILE = "file";
+
+    private static final String PURCHASE_ORDER = "PurchaseOrder";
 
     private static final String DESIGNATION = "designation";
 
@@ -156,8 +175,8 @@ public class CreateSupplierBillController extends BaseBillController {
     @Override
     protected void setDropDownValues(final Model model) {
         super.setDropDownValues(model);
-        model.addAttribute("suppliers", supplierService.getAllActiveSuppliers());
-        model.addAttribute("netPayableCodes", chartOfAccountsService.getSupplierNetPayableAccountCodes());
+        model.addAttribute(SUPPLIERS, supplierService.getAllActiveSuppliers());
+        model.addAttribute(NET_PAYABLE_CODES, chartOfAccountsService.getSupplierNetPayableAccountCodes());
     }
 
     @RequestMapping(value = "/newform", method = RequestMethod.POST)
@@ -180,10 +199,10 @@ public class CreateSupplierBillController extends BaseBillController {
         egBillregister.setCreatedBy(ApplicationThreadLocals.getUserId());
         if (StringUtils.isBlank(egBillregister.getExpendituretype()))
             egBillregister.setExpendituretype(FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE);
-        String[] contentType = ((MultiPartRequestWrapper) request).getContentTypes("file");
+        String[] contentType = ((MultiPartRequestWrapper) request).getContentTypes(FILE);
         List<DocumentUpload> list = new ArrayList<>();
-        UploadedFile[] uploadedFiles = ((MultiPartRequestWrapper) request).getFiles("file");
-        String[] fileName = ((MultiPartRequestWrapper) request).getFileNames("file");
+        UploadedFile[] uploadedFiles = ((MultiPartRequestWrapper) request).getFiles(FILE);
+        String[] fileName = ((MultiPartRequestWrapper) request).getFileNames(FILE);
         if (uploadedFiles != null)
             for (int i = 0; i < uploadedFiles.length; i++) {
 
@@ -213,15 +232,15 @@ public class CreateSupplierBillController extends BaseBillController {
             egBillregister.getBillPayeedetails().clear();
             prepareBillDetailsForView(egBillregister);
             prepareValidActionListByCutOffDate(model);
-            model.addAttribute("supplierId",
+            model.addAttribute(SUPPLIER_ID,
                     purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId());
             return SUPPLIERBILL_FORM;
         } else {
             Long approvalPosition = 0l;
             String approvalComment = "";
             String approvalDesignation = "";
-            if (request.getParameter("approvalComent") != null)
-                approvalComment = request.getParameter("approvalComent");
+            if (request.getParameter(APPROVAL_COMENT) != null)
+                approvalComment = request.getParameter(APPROVAL_COMENT);
             if (request.getParameter(APPROVAL_POSITION) != null && !request.getParameter(APPROVAL_POSITION).isEmpty())
                 approvalPosition = Long.valueOf(request.getParameter(APPROVAL_POSITION));
             if (request.getParameter(APPROVAL_DESIGNATION) != null && !request.getParameter(APPROVAL_DESIGNATION).isEmpty())
@@ -244,12 +263,12 @@ public class CreateSupplierBillController extends BaseBillController {
                 egBillregister.getBillPayeedetails().clear();
                 prepareBillDetailsForView(egBillregister);
                 prepareValidActionListByCutOffDate(model);
-                model.addAttribute("supplierId",
+                model.addAttribute(SUPPLIER_ID,
                         purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId());
                 resultBinder.reject("", e.getErrors().get(0).getMessage());
                 return SUPPLIERBILL_FORM;
             }
-            final String approverName = String.valueOf(request.getParameter("approverName"));
+            final String approverName = String.valueOf(request.getParameter(APPROVER_NAME));
 
             final String approverDetails = financialUtils.getApproverDetails(workFlowAction,
                     savedEgBillregister.getState(), savedEgBillregister.getId(), approvalPosition, approverName);
@@ -265,6 +284,11 @@ public class CreateSupplierBillController extends BaseBillController {
         Boolean check = false;
         Boolean poExist = false;
         Boolean supplierExist = false;
+        Integer poAccountDetailTypeId, supplierAccountDetailTypeId = null;
+        PurchaseOrder po = null;
+        poAccountDetailTypeId = accountdetailtypeService.findByName(PURCHASE_ORDER).getId();
+        supplierAccountDetailTypeId = accountdetailtypeService.findByName(SUPPLIER).getId();
+        po = purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber());
         for (final EgBilldetails details : egBillregister.getEgBilldetailes()) {
             details.setEgBillPaydetailes(new HashSet<>());
             check = false;
@@ -274,14 +298,14 @@ public class CreateSupplierBillController extends BaseBillController {
                     && !details.getChartOfAccounts().getChartOfAccountDetails().isEmpty()) {
                 for (CChartOfAccountDetail cad : details.getChartOfAccounts().getChartOfAccountDetails()) {
                     if (cad.getDetailTypeId() != null) {
-                        if (cad.getDetailTypeId().getName().equalsIgnoreCase("PurchaseOrder")) {
+                        if (cad.getDetailTypeId().getName().equalsIgnoreCase(PURCHASE_ORDER)) {
                             poExist = true;
                         }
-                        if (cad.getDetailTypeId().getName().equalsIgnoreCase("Supplier")) {
+                        if (cad.getDetailTypeId().getName().equalsIgnoreCase(SUPPLIER)) {
                             supplierExist = true;
                         }
-                        if (!cad.getDetailTypeId().getName().equalsIgnoreCase("PurchaseOrder")
-                                && !cad.getDetailTypeId().getName().equalsIgnoreCase("Supplier")) {
+                        if (!cad.getDetailTypeId().getName().equalsIgnoreCase(PURCHASE_ORDER)
+                                && !cad.getDetailTypeId().getName().equalsIgnoreCase(SUPPLIER)) {
                             check = true;
                         }
                         if (check) {
@@ -293,40 +317,24 @@ public class CreateSupplierBillController extends BaseBillController {
 
                 if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1) {
                     if (poExist || (poExist && supplierExist)) {
-                        payeeDetail = new EgBillPayeedetails();
-                        payeeDetail.setEgBilldetailsId(details);
-                        payeeDetail.setDebitAmount(details.getDebitamount());
-                        payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("PurchaseOrder").getId());
-                        payeeDetail.setAccountDetailKeyId(
-                                purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getId().intValue());
+                        payeeDetail = prepareBillPayeeDetails(details, details.getDebitamount(), BigDecimal.ZERO,
+                                poAccountDetailTypeId,
+                                po.getId().intValue());
                     } else if (supplierExist) {
-                        payeeDetail = new EgBillPayeedetails();
-                        payeeDetail.setEgBilldetailsId(details);
-                        payeeDetail.setDebitAmount(details.getDebitamount());
-                        payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("Supplier").getId());
-                        payeeDetail.setAccountDetailKeyId(
-                                purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId()
-                                        .intValue());
+                        payeeDetail = prepareBillPayeeDetails(details, details.getDebitamount(), BigDecimal.ZERO,
+                                supplierAccountDetailTypeId, po.getSupplier().getId().intValue());
                     }
 
                 }
 
                 if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1) {
                     if (supplierExist || (poExist && supplierExist)) {
-                        payeeDetail = new EgBillPayeedetails();
-                        payeeDetail.setEgBilldetailsId(details);
-                        payeeDetail.setCreditAmount(details.getCreditamount());
-                        payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("Supplier").getId());
-                        payeeDetail.setAccountDetailKeyId(
-                                purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId()
-                                        .intValue());
+                        payeeDetail = prepareBillPayeeDetails(details, BigDecimal.ZERO, details.getCreditamount(),
+                                supplierAccountDetailTypeId, po.getSupplier().getId().intValue());
+
                     } else if (poExist) {
-                        payeeDetail = new EgBillPayeedetails();
-                        payeeDetail.setEgBilldetailsId(details);
-                        payeeDetail.setCreditAmount(details.getCreditamount());
-                        payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("PurchaseOrder").getId());
-                        payeeDetail.setAccountDetailKeyId(
-                                purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getId().intValue());
+                        payeeDetail = prepareBillPayeeDetails(details, BigDecimal.ZERO, details.getCreditamount(),
+                                poAccountDetailTypeId, po.getId().intValue());
                     }
 
                 }
@@ -336,10 +344,22 @@ public class CreateSupplierBillController extends BaseBillController {
         }
     }
 
+    private EgBillPayeedetails prepareBillPayeeDetails(EgBilldetails details, BigDecimal debitamount, BigDecimal creditamount,
+            Integer detailTypeId, int detailKeyId) {
+        EgBillPayeedetails payeeDetail = new EgBillPayeedetails();
+        payeeDetail.setEgBilldetailsId(details);
+        payeeDetail.setDebitAmount(debitamount);
+        payeeDetail.setCreditAmount(creditamount);
+        payeeDetail.setAccountDetailTypeId(detailTypeId);
+        payeeDetail.setAccountDetailKeyId(detailKeyId);
+        return payeeDetail;
+
+    }
+
     @RequestMapping(value = "/success", method = RequestMethod.GET)
     public String showSuccessPage(@RequestParam("billNumber") final String billNumber, final Model model,
             final HttpServletRequest request) {
-        final String[] keyNameArray = request.getParameter("approverDetails").split(",");
+        final String[] keyNameArray = request.getParameter(APPROVER_DETAILS).split(",");
         Long id = 0L;
         String approverName = "";
         String nextDesign = "";
@@ -354,7 +374,7 @@ public class CreateSupplierBillController extends BaseBillController {
                 approverName = keyNameArray[1];
             }
         if (id != null)
-            model.addAttribute("approverName", approverName);
+            model.addAttribute(APPROVER_NAME, approverName);
 
         final EgBillregister supplierBill = supplierBillService.getByBillnumber(billNumber);
 
