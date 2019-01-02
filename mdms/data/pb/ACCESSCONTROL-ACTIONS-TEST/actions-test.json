@@ -13414,7 +13414,7 @@
     {
       "id": 1744,
       "name": "Financial Contractor bill create",
-      "navigationURL": "/services/EGF/contractorbill/newform",
+      "navigationURL": "services/EGF/contractorbill/newform",
       "url": "url",
       "parentModule": "EGF",
       "displayName": "Contractor Bill",
@@ -13427,7 +13427,7 @@
     {
       "id": 1745,
       "name": "Financial Supplier bill create",
-      "navigationURL": "/services/EGF/supplierbill/newform",
+      "navigationURL": "services/EGF/supplierbill/newform",
       "url": "url",
       "parentModule": "EGF",
       "displayName": "Supplier Bill",
