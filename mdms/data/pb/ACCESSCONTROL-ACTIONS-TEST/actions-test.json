@@ -13436,6 +13436,18 @@
       "serviceCode": "FinanceBill",
       "code": "null",
       "path": "Finance.Transactions.Bills Accounting.Supplier Bill"
+    },
+    {
+      "id": 1746,
+      "name": "Receipts Workflow",
+      "url": "/collection-services/receipts/_workflow",
+      "displayName": "Receipts Workflow",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "COLLECTION",
+      "code": "null",
+      "path": ""
     }
   ]
 }
