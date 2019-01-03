@@ -65,6 +65,10 @@ $(document).ready(function(){
 		$('#supplier').val($supplierId);
 		loadPurchaseOrder($supplierId);
 	}
+	if($purchaseOrderId){
+		$('#purchaseOrder').val($purchaseOrderId);
+		loadMisAttributes($purchaseOrderId);
+	}
 	calcualteNetpaybleAmount();
 });
 
