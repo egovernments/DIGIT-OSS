@@ -17115,16 +17115,22 @@
       "tenantId": "pb"
     },
     {
-      "rolecode": "SUPERUSER",
+      "rolecode": "EMPLOYEE",
       "actionid": 743,
       "actioncode": "",
       "tenantId": "pb"
     },
     {
       "rolecode": "SUPERUSER",
-      "actionid": 1566,
+      "actionid": 1746,
       "actioncode": "",
       "tenantId": "pb"
-    } 
+    },
+    {
+      "rolecode": "COLL_OPERATOR",
+      "actionid": 1746,
+      "actioncode": "",
+      "tenantId": "pb"
+    }
   ]
 }
