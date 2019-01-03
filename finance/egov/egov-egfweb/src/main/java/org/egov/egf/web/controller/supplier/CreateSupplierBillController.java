@@ -320,9 +320,11 @@ public class CreateSupplierBillController extends BaseBillController {
                         payeeDetail = prepareBillPayeeDetails(details, details.getDebitamount(), BigDecimal.ZERO,
                                 poAccountDetailTypeId,
                                 po.getId().intValue());
+                        egBillregister.getEgBillregistermis().setPayto(po.getName());
                     } else if (supplierExist) {
                         payeeDetail = prepareBillPayeeDetails(details, details.getDebitamount(), BigDecimal.ZERO,
                                 supplierAccountDetailTypeId, po.getSupplier().getId().intValue());
+                        egBillregister.getEgBillregistermis().setPayto(po.getSupplier().getName());
                     }
 
                 }
@@ -331,15 +333,19 @@ public class CreateSupplierBillController extends BaseBillController {
                     if (supplierExist || (poExist && supplierExist)) {
                         payeeDetail = prepareBillPayeeDetails(details, BigDecimal.ZERO, details.getCreditamount(),
                                 supplierAccountDetailTypeId, po.getSupplier().getId().intValue());
+                        egBillregister.getEgBillregistermis().setPayto(po.getSupplier().getName());
 
                     } else if (poExist) {
                         payeeDetail = prepareBillPayeeDetails(details, BigDecimal.ZERO, details.getCreditamount(),
                                 poAccountDetailTypeId, po.getId().intValue());
+                        egBillregister.getEgBillregistermis().setPayto(po.getName());
                     }
 
                 }
                 payeeDetail.setLastUpdatedTime(new Date());
                 details.getEgBillPaydetailes().add(payeeDetail);
+            } else {
+                egBillregister.getEgBillregistermis().setPayto(po.getSupplier().getName());
             }
         }
     }

@@ -683,7 +683,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
         // miscbilldetail.setPaidby(user);
         // need to change the signature
         miscbilldetail.setPaidby(null);
-        miscbilldetail.setPaidto(egBillregister.getEgBillregistermis().getPayto().trim());
+        miscbilldetail.setPaidto(egBillregister.getEgBillregistermis().getPayto()!=null?egBillregister.getEgBillregistermis().getPayto().trim():"");
         miscbilldetail.setBillVoucherHeader(egBillregister.getEgBillregistermis().getVoucherHeader());
         miscBillList.add(miscbilldetail);
         if (LOGGER.isDebugEnabled())
