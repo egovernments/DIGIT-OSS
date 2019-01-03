@@ -17095,6 +17095,18 @@
       "actionid": 1743,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1744,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1745,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
