@@ -2590,6 +2590,18 @@
       "serviceCode": "Employee",
       "code": "null",
       "path": "Employee Management.Employee Masters.Employee.CreateEmployees"
+    },
+    {
+      "id": 1566,
+      "name": "Receipts Workflow",
+      "url": "/collection-services/receipts/_workflow",
+      "displayName": "Receipts Workflow",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "COLLECTION",
+      "code": "null",
+      "path": ""
     }
   ]
 }
