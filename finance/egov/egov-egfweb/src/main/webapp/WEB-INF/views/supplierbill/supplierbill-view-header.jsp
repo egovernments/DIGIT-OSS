@@ -101,23 +101,18 @@
 				<fmt:formatDate value="${egBillregister.egBillregistermis.partyBillDate}" pattern="dd/MM/yyyy" />
 			</div>
 		</div>
-		
-		
 		<div class="row add-border">
-			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.billsubtype" />
-			</div>
-			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
-				<c:out default="N/A" value="${egBillregister.egBillregistermis.egBillSubType.name }" />
-			</div>
-			<%-- <div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.ban.number" />
-			</div>
-			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-email">
-				<c:out default="N/A" value="${egBillregister.egBillregistermis.budgetaryAppnumber }" />
-			</div> --%>
+				<div class="col-md-3 col-xs-6 add-margin">
+					<spring:message code="lbl.payto" />
+				</div>
+				<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
+					<c:out default="N/A" value="${egBillregister.egBillregistermis.payto}" />
+				</div>
+				<div class="col-md-3 col-xs-6 add-margin">
+				</div>
+				<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-email">
+				</div>
 		</div>
-		
 	</div>
 	
 </div>

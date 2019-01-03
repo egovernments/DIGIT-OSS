@@ -66,19 +66,17 @@
 			</div>
 		</c:otherwise>
 	</c:choose>
-	
 	<c:choose>
-		<c:when test="${headerFields.contains('fundsource')}">
+		<c:when test="${headerFields.contains('department')}">
 			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.sourcefund" />
+				<spring:message code="lbl.department" />
 			</div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
-				<c:out default="N/A" value="${egBillregister.egBillregistermis.fundsource.name }" />
+				<c:out default="N/A" value="${egBillregister.egBillregistermis.departmentName }" />
 			</div>
 		</c:when>
 		<c:otherwise>
-			<div class="col-md-3 col-xs-6 add-margin">
-			</div>
+			<div class="col-md-3 col-xs-6 add-margin"></div>
 			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
 			</div>
 		</c:otherwise>
@@ -119,40 +117,46 @@
 	</c:choose>
 </div>
 
-<div class="row add-border">
-	<c:choose>
-		<c:when test="${headerFields.contains('department')}">
-			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.department" />
-			</div>
-			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
-				<c:out default="N/A" value="${egBillregister.egBillregistermis.departmentName }" />
+<c:choose>
+		<c:when test="${headerFields.contains('fundsource') && headerFields.contains('field')}">
+			<div class="row add-border">
+				<c:choose>
+					<c:when test="${headerFields.contains('fundsource')}">
+						<div class="col-md-3 col-xs-6 add-margin">
+							<spring:message code="lbl.sourcefund" />
+						</div>
+						<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
+							<c:out default="N/A" value="${egBillregister.egBillregistermis.fundsource.name }" />
+						</div>
+					</c:when>
+					<c:otherwise>
+						<div class="col-md-3 col-xs-6 add-margin">
+						</div>
+						<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
+						</div>
+					</c:otherwise>
+				</c:choose>
+				<c:choose>
+					<c:when test="${headerFields.contains('field')}">
+						<div class="col-md-3 col-xs-6 add-margin">
+							<spring:message code="lbl.field" />
+							<span class="mandatory"></span>
+						</div>
+						<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
+							<c:out default="N/A" value="${egBillregister.egBillregistermis.fieldid.name }" />
+						</div>
+					</c:when>
+					<c:otherwise>
+						<div class="col-md-3 col-xs-6 add-margin"></div>
+						<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
+						</div>
+					</c:otherwise>
+				</c:choose>
 			</div>
 		</c:when>
 		<c:otherwise>
-			<div class="col-md-3 col-xs-6 add-margin"></div>
-			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
-			</div>
 		</c:otherwise>
-	</c:choose>
-	
-	<c:choose>
-		<c:when test="${headerFields.contains('field')}">
-			<div class="col-md-3 col-xs-6 add-margin">
-				<spring:message code="lbl.field" />
-				<span class="mandatory"></span>
-			</div>
-			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
-				<c:out default="N/A" value="${egBillregister.egBillregistermis.fieldid.name }" />
-			</div>
-		</c:when>
-		<c:otherwise>
-			<div class="col-md-3 col-xs-6 add-margin"></div>
-			<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-mobno">
-			</div>
-		</c:otherwise>
-	</c:choose>
-</div>
+</c:choose>
 <c:choose>
 	<c:when test="${headerFields.contains('functionary')}">
 		<div class="row add-border">

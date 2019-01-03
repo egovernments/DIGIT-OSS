@@ -52,52 +52,8 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
-<style>
-    .position_alert {
-        position: fixed;
-        z-index: 9999;
-        top: 85px;
-        right: 20px;
-        background: #F2DEDE;
-        padding: 10px 20px;
-        border-radius: 5px;
-    }
-
-    .position_alert1 {
-        position: fixed;
-        z-index: 9999;
-        top: 85px;
-        right: 520px;
-        background: #F2DEDE;
-        padding: 10px 20px;
-        border-radius: 5px;
-    }
-
-    .position_alert2 {
-        position: fixed;
-        z-index: 9999;
-        top: 85px;
-        right: 270px;
-        background: #F2DEDE;
-        padding: 10px 20px;
-        border-radius: 5px;
-    }
-</style>
 <form:form name="supplierBillForm" role="form" action="" modelAttribute="egBillregister" id="egBillregister"
            class="form-horizontal form-groups-bordered" enctype="multipart/form-data">
-    <div class="position_alert">
-        <spring:message code="lbl.netpayable.amount"/> : &#8377 <span id="supplierNetPayableAmount"><c:out
-            value="${supplierNetPayableAmount}" default="0.0"></c:out></span>
-    </div>
-    <div class="position_alert1">
-        <spring:message code="lbl.total.debit.amount"/> : &#8377 <span id="supplierBillTotalDebitAmount"> <c:out
-            value="${supplierBillTotalDebitAmount}" default="0.0"></c:out></span>
-    </div>
-    <div class="position_alert2">
-        <spring:message code="lbl.total.credit.amount"/> : &#8377 <span id="supplierBillTotalCreditAmount"> <c:out
-            value="${supplierBillTotalCreditAmount}" default="0.0"></c:out></span>
-    </div>
-
     <div>
         <spring:hasBindErrors name="egBillregister">
             <div class="alert alert-danger col-md-10 col-md-offset-1">
@@ -116,7 +72,6 @@
     </div>
 
         <jsp:include page="supplierbill-view-header.jsp"/>
-        <jsp:include page="supplierbill-view-subledgerdetails.jsp"/>
         <jsp:include page="supplierbill-view-accountdetails.jsp"/>
         <jsp:include page="supplierbill-view-subledgeraccountdetails.jsp"/>
         <c:if test="${egBillregister.documentDetail != null &&  !egBillregister.documentDetail.isEmpty()}">

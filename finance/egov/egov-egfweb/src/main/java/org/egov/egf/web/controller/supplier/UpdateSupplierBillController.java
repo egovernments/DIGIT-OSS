@@ -412,6 +412,8 @@ public class UpdateSupplierBillController extends BaseBillController {
             billId = billIds[0];
         }
         final EgBillregister egBillregister = supplierBillService.getById(Long.parseLong(billId));
+        Department dept = microServiceUtil.getDepartmentByCode(egBillregister.getEgBillregistermis().getDepartmentcode());
+        egBillregister.getEgBillregistermis().setDepartmentName(dept.getName());
         setDropDownValues(model);
         egBillregister.getBillDetails().addAll(egBillregister.getEgBilldetailes());
         model.addAttribute("mode", "readOnly");

@@ -209,17 +209,19 @@ public abstract class BaseBillController extends BaseVoucherController {
         if (egBillregister.getExpendituretype().equalsIgnoreCase(FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT)) {
             egBillregister.getEgBilldetailes().addAll(egBillregister.getBillDetails());
         } else {
-            egBillregister.getEgBilldetailes().addAll(egBillregister.getCreditDetails());
             egBillregister.getEgBilldetailes().addAll(egBillregister.getDebitDetails());
+            egBillregister.getEgBilldetailes().addAll(egBillregister.getCreditDetails());
             egBillregister.getEgBilldetailes().addAll(egBillregister.getNetPayableDetails());
         }
 
         for (final EgBilldetails details : egBillregister.getEgBilldetailes()) {
-            if (egBillregister.getEgBillregistermis().getFunction() != null)
-                details.setFunctionid(BigDecimal.valueOf(egBillregister.getEgBillregistermis().getFunction().getId()));
-            details.setEgBillregister(egBillregister);
-            details.setLastupdatedtime(new Date());
-            details.setChartOfAccounts(chartOfAccountsService.findById(details.getGlcodeid().longValue(), false));
+            if (details.getGlcodeid() != null) {
+                if (egBillregister.getEgBillregistermis().getFunction() != null)
+                    details.setFunctionid(BigDecimal.valueOf(egBillregister.getEgBillregistermis().getFunction().getId()));
+                details.setEgBillregister(egBillregister);
+                details.setLastupdatedtime(new Date());
+                details.setChartOfAccounts(chartOfAccountsService.findById(details.getGlcodeid().longValue(), false));
+            }
         }
         if (!egBillregister.getBillPayeedetails().isEmpty())
             populateBillPayeeDetails(egBillregister);

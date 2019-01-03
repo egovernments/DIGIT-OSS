@@ -60,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -219,6 +220,7 @@ public class CreateSupplierBillController extends BaseBillController {
         populateBillDetails(egBillregister);
         populateSubLedgerDetails(egBillregister, resultBinder);
         validateBillNumber(egBillregister, resultBinder);
+        removeEmptyRows(egBillregister);
         validateLedgerAndSubledger(egBillregister, resultBinder);
 
         if (resultBinder.hasErrors()) {
@@ -279,6 +281,17 @@ public class CreateSupplierBillController extends BaseBillController {
         }
     }
 
+    void removeEmptyRows(EgBillregister egBillregister) {
+        Set<EgBilldetails> billDetails = new HashSet<>();
+        for (EgBilldetails details : egBillregister.getEgBilldetailes()) {
+            if (!(details.getDebitamount() == null && details.getCreditamount() == null
+                    && details.getChartOfAccounts() == null)) {
+                billDetails.add(details);
+            }
+        }
+        egBillregister.setEgBilldetailes(new HashSet<>(billDetails));
+    }
+
     private void populateSubLedgerDetails(final EgBillregister egBillregister, final BindingResult resultBinder) {
         EgBillPayeedetails payeeDetail = null;
         Boolean check = false;
@@ -294,7 +307,7 @@ public class CreateSupplierBillController extends BaseBillController {
             check = false;
             poExist = false;
             supplierExist = false;
-            if (details.getChartOfAccounts().getChartOfAccountDetails() != null
+            if (details.getChartOfAccounts() != null && details.getChartOfAccounts().getChartOfAccountDetails() != null
                     && !details.getChartOfAccounts().getChartOfAccountDetails().isEmpty()) {
                 for (CChartOfAccountDetail cad : details.getChartOfAccounts().getChartOfAccountDetails()) {
                     if (cad.getDetailTypeId() != null) {
