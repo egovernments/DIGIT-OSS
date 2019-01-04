@@ -353,9 +353,8 @@ public class CreateSupplierBillController extends BaseBillController {
                                 poAccountDetailTypeId, po.getId().intValue());
                         egBillregister.getEgBillregistermis().setPayto(po.getName());
                     }
-
                 }
-                payeeDetail.setLastUpdatedTime(new Date());
+
                 details.getEgBillPaydetailes().add(payeeDetail);
             } else {
                 egBillregister.getEgBillregistermis().setPayto(po.getSupplier().getName());
@@ -371,6 +370,7 @@ public class CreateSupplierBillController extends BaseBillController {
         payeeDetail.setCreditAmount(creditamount);
         payeeDetail.setAccountDetailTypeId(detailTypeId);
         payeeDetail.setAccountDetailKeyId(detailKeyId);
+        payeeDetail.setLastUpdatedTime(new Date());
         return payeeDetail;
 
     }
