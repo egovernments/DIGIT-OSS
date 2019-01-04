@@ -102,14 +102,13 @@
 				value="${supplierBillTotalCreditAmount}" default="0.0"></c:out></span>
 	</div>
 
-	<form:hidden path="" id="selectedCheckList"
-		value="${selectedCheckList}" />
+	<form:hidden path="" id="selectedCheckList" value="${selectedCheckList}" />
 	<form:hidden path="" id="cutOffDate" value="${cutOffDate}" />
 	<form:hidden path="" name="mode" id="mode" value="${mode}" />
-	<form:hidden path="" name="netPayableId" id="netPayableId"
-		value="${netPayableId}" />
-	<form:hidden path="" name="netPayableAmount" id="netPayableAmount"
-		value="${netPayableAmount}" />
+	<form:hidden path="" name="netPayableId" id="netPayableId" value="${netPayableId}" />
+	<form:hidden path="" name="netPayableAmount" id="netPayableAmount" value="${netPayableAmount}" />
+	<form:hidden path="passedamount" name="passedamount" id="passedamount" value="${egBillregister.passedamount}"/>
+	
 	<div class="panel-title text-center" style="color: green;">
 		<c:out value="${message}" />
 		<br />

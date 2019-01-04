@@ -309,10 +309,13 @@ function deleteCreditDetailsRow(obj) {
 
 
 function validate(){
+var billamount = $("#billamount").val();
 var netpayableamount = $("#supplierNetPayableAmount")["0"].innerHTML;
 var debitamount = $("#supplierBillTotalDebitAmount")["0"].innerHTML;
 var creditamount = $("#supplierBillTotalCreditAmount")["0"].innerHTML;
 	
+	$("#passedamount").val(debitamount);
+
 	if(debitamount != Number(Number(creditamount) + Number(netpayableamount))){
 		bootbox.alert("Debit amount and credit amount is not matching");
 		return false;
@@ -328,6 +331,17 @@ var creditamount = $("#supplierBillTotalCreditAmount")["0"].innerHTML;
 		bootbox.alert("Please select one Net payable account detail");
 		return false;
 	}
+	
+	if(billamount < debitamount){
+		bootbox.alert("Bill amount should be greater then passed amount");
+		return false;
+	}
+	
+	if(debitamount > billamount){
+		bootbox.alert("Passed amount should not be greater then bill amount");
+		return false;
+	}
+	
 	return true;
 }
 

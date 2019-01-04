@@ -98,6 +98,28 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping(value = "/supplierbill")
 public class UpdateSupplierBillController extends BaseBillController {
 
+    private static final String APPROVER_NAME = "approverName";
+
+    private static final String DESIGNATION = "designation";
+
+    private static final String APPROVAL_COMENT = "approvalComent";
+
+    private static final String SUPPLIER = "Supplier";
+
+    private static final String PURCHASE_ORDER = "PurchaseOrder";
+
+    private static final String SUPPLIER_ID = "supplierId";
+
+    private static final String WORKFLOW_HISTORY = "workflowHistory";
+
+    private static final String CURRENT_STATE = "currentState";
+
+    private static final String STATE_TYPE = "stateType";
+
+    private static final String NET_PAYABLE_CODES = "netPayableCodes";
+
+    private static final String SUPPLIERS = "suppliers";
+
     private static final String NET_PAYABLE_AMOUNT = "netPayableAmount";
 
     private static final String APPROVAL_DESIGNATION = "approvalDesignation";
@@ -136,8 +158,8 @@ public class UpdateSupplierBillController extends BaseBillController {
     @Override
     protected void setDropDownValues(final Model model) {
         super.setDropDownValues(model);
-        model.addAttribute("suppliers", supplierService.getAllActiveSuppliers());
-        model.addAttribute("netPayableCodes", chartOfAccountsService.getSupplierNetPayableAccountCodes());
+        model.addAttribute(SUPPLIERS, supplierService.getAllActiveSuppliers());
+        model.addAttribute(NET_PAYABLE_CODES, chartOfAccountsService.getSupplierNetPayableAccountCodes());
     }
 
     @ModelAttribute(EG_BILLREGISTER)
@@ -157,12 +179,12 @@ public class UpdateSupplierBillController extends BaseBillController {
         egBillregister.setDocumentDetail(documents);
         List<Map<String, Object>> budgetDetails = null;
         setDropDownValues(model);
-        model.addAttribute("stateType", egBillregister.getClass().getSimpleName());
+        model.addAttribute(STATE_TYPE, egBillregister.getClass().getSimpleName());
         if (egBillregister.getState() != null)
-            model.addAttribute("currentState", egBillregister.getState().getValue());
-        model.addAttribute("workflowHistory",
+            model.addAttribute(CURRENT_STATE, egBillregister.getState().getValue());
+        model.addAttribute(WORKFLOW_HISTORY,
                 financialUtils.getHistory(egBillregister.getState(), egBillregister.getStateHistory()));
-        model.addAttribute("supplierId",
+        model.addAttribute(SUPPLIER_ID,
                 purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId());
         prepareWorkflow(model, egBillregister, new WorkflowContainer());
         egBillregister.getBillDetails().addAll(egBillregister.getEgBilldetailes());
@@ -228,14 +250,14 @@ public class UpdateSupplierBillController extends BaseBillController {
                     && !details.getChartOfAccounts().getChartOfAccountDetails().isEmpty()) {
                 for (CChartOfAccountDetail cad : details.getChartOfAccounts().getChartOfAccountDetails()) {
                     if (cad.getDetailTypeId() != null) {
-                        if (cad.getDetailTypeId().getName().equalsIgnoreCase("PurchaseOrder")) {
+                        if (cad.getDetailTypeId().getName().equalsIgnoreCase(PURCHASE_ORDER)) {
                             poExist = true;
                         }
-                        if (cad.getDetailTypeId().getName().equalsIgnoreCase("Supplier")) {
+                        if (cad.getDetailTypeId().getName().equalsIgnoreCase(SUPPLIER)) {
                             supplierExist = true;
                         }
-                        if (!cad.getDetailTypeId().getName().equalsIgnoreCase("PurchaseOrder")
-                                && !cad.getDetailTypeId().getName().equalsIgnoreCase("Supplier")) {
+                        if (!cad.getDetailTypeId().getName().equalsIgnoreCase(PURCHASE_ORDER)
+                                && !cad.getDetailTypeId().getName().equalsIgnoreCase(SUPPLIER)) {
                             check = true;
                         }
                         if (check) {
@@ -252,7 +274,7 @@ public class UpdateSupplierBillController extends BaseBillController {
                         payeeDetail.setDebitAmount(details.getDebitamount());
                     if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1)
                         payeeDetail.setCreditAmount(details.getCreditamount());
-                    payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("PurchaseOrder").getId());
+                    payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName(PURCHASE_ORDER).getId());
                     payeeDetail.setAccountDetailKeyId(
                             purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getId().intValue());
                 } else if (supplierExist) {
@@ -262,7 +284,7 @@ public class UpdateSupplierBillController extends BaseBillController {
                         payeeDetail.setDebitAmount(details.getDebitamount());
                     if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1)
                         payeeDetail.setCreditAmount(details.getCreditamount());
-                    payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName("Supplier").getId());
+                    payeeDetail.setAccountDetailTypeId(accountdetailtypeService.findByName(SUPPLIER).getId());
                     payeeDetail.setAccountDetailKeyId(
                             purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId()
                                     .intValue());
@@ -317,8 +339,8 @@ public class UpdateSupplierBillController extends BaseBillController {
         String approvalComment = "";
         String apporverDesignation = "";
 
-        if (request.getParameter("approvalComent") != null)
-            approvalComment = request.getParameter("approvalComent");
+        if (request.getParameter(APPROVAL_COMENT) != null)
+            approvalComment = request.getParameter(APPROVAL_COMENT);
 
         if (request.getParameter(APPROVAL_POSITION) != null && !request.getParameter(APPROVAL_POSITION).isEmpty())
             approvalPosition = Long.valueOf(request.getParameter(APPROVAL_POSITION));
@@ -338,20 +360,20 @@ public class UpdateSupplierBillController extends BaseBillController {
             validateBillNumber(egBillregister, resultBinder);
             validateLedgerAndSubledger(egBillregister, resultBinder);
         }
-        model.addAttribute("supplierId",
+        model.addAttribute(SUPPLIER_ID,
                 purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId());
 
         if (resultBinder.hasErrors()) {
             setDropDownValues(model);
-            model.addAttribute("supplierId",
+            model.addAttribute(SUPPLIER_ID,
                     purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId());
-            model.addAttribute("stateType", egBillregister.getClass().getSimpleName());
+            model.addAttribute(STATE_TYPE, egBillregister.getClass().getSimpleName());
             prepareWorkflow(model, egBillregister, new WorkflowContainer());
             model.addAttribute(APPROVAL_DESIGNATION, request.getParameter(APPROVAL_DESIGNATION));
             model.addAttribute(APPROVAL_POSITION, request.getParameter(APPROVAL_POSITION));
             model.addAttribute(NET_PAYABLE_ID, request.getParameter(NET_PAYABLE_ID));
             model.addAttribute(NET_PAYABLE_AMOUNT, request.getParameter(NET_PAYABLE_AMOUNT));
-            model.addAttribute("designation", request.getParameter("designation"));
+            model.addAttribute(DESIGNATION, request.getParameter(DESIGNATION));
             if (egBillregister.getState() != null
                     && (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue())
                             || financialUtils.isBillEditable(egBillregister.getState()))) {
@@ -369,13 +391,13 @@ public class UpdateSupplierBillController extends BaseBillController {
                             workFlowAction, mode, apporverDesignation);
             } catch (final ValidationException e) {
                 setDropDownValues(model);
-                model.addAttribute("stateType", egBillregister.getClass().getSimpleName());
+                model.addAttribute(STATE_TYPE, egBillregister.getClass().getSimpleName());
                 prepareWorkflow(model, egBillregister, new WorkflowContainer());
                 model.addAttribute(APPROVAL_DESIGNATION, request.getParameter(APPROVAL_DESIGNATION));
                 model.addAttribute(APPROVAL_POSITION, request.getParameter(APPROVAL_POSITION));
                 model.addAttribute(NET_PAYABLE_ID, request.getParameter(NET_PAYABLE_ID));
                 model.addAttribute(NET_PAYABLE_AMOUNT, request.getParameter(NET_PAYABLE_AMOUNT));
-                model.addAttribute("designation", request.getParameter("designation"));
+                model.addAttribute(DESIGNATION, request.getParameter(DESIGNATION));
                 if (egBillregister.getState() != null
                         && (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(egBillregister.getState().getValue())
                                 || financialUtils.isBillEditable(egBillregister.getState()))) {
@@ -395,7 +417,7 @@ public class UpdateSupplierBillController extends BaseBillController {
                 approvalPosition = supplierBillService.getApprovalPositionByMatrixDesignation(
                         egBillregister, null, mode, workFlowAction);
 
-            final String approverName = String.valueOf(request.getParameter("approverName"));
+            final String approverName = String.valueOf(request.getParameter(APPROVER_NAME));
             final String approverDetails = financialUtils.getApproverDetails(workFlowAction,
                     updatedEgBillregister.getState(), updatedEgBillregister.getId(), approvalPosition, approverName);
 
