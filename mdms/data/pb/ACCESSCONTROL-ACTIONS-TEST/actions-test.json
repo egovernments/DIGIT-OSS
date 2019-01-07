@@ -13438,6 +13438,7 @@
       "path": "Finance.Transactions.Bills Accounting.Supplier Bill"
     },
     {
+<<<<<<< Updated upstream
       "id": 1746,
       "name": "Receipts Workflow",
       "url": "/collection-services/receipts/_workflow",
@@ -13448,6 +13449,19 @@
       "serviceCode": "COLLECTION",
       "code": "null",
       "path": ""
+=======
+      "id": 1747,
+      "name": "Financial Bank to Bank Transfer",
+      "navigationURL": "services/EGF/contra/contraBTB-newform.action",
+      "url": "url",
+      "parentModule": "EGF",
+      "displayName": "Bank to Bank Transfer",
+      "orderNumber": 1,
+      "enabled": true,
+      "serviceCode": "FinanceBill",
+      "code": "null",
+      "path": "Finance.Transactions.Contra Entries.Bank to Bank Transfer"
+>>>>>>> Stashed changes
     }
   ]
 }
