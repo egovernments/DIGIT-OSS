@@ -311,7 +311,7 @@ function validate() {
 		bootbox.alert("Amount should be greater than zero ");
 		return false;
 	}
-	document.cbtbform.action='/EGF/contra/contraBTB-create.action';
+	document.cbtbform.action='/services/EGF/contra/contraBTB-create.action';
 	document.cbtbform.submit();
 	return true;
 }
