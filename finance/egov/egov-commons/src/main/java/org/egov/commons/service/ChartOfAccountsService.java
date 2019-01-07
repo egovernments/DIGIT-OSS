@@ -135,10 +135,48 @@ public class ChartOfAccountsService extends PersistenceService<CChartOfAccounts,
         return finalList;
     }
 
+    public List<CChartOfAccounts> getContractorDebitAccountCodes(final String glcode) {
+        final Query entitysQuery = getSession()
+                .createQuery(
+                        " from CChartOfAccounts a where a.isActiveForPosting=true and a.classification=4  and (glcode like :glcode or lower(name) like :name) and  type in ('E','A') order by a.id");
+        entitysQuery.setString(GLCODE, glcode + "%");
+        entitysQuery.setString("name", glcode.toLowerCase() + "%");
+        return entitysQuery.list();
+    }
+
+    public List<CChartOfAccounts> getContractorCreditAccountCodes(final String glcode) {
+        final Query entitysQuery = getSession()
+                .createQuery(
+                        " from CChartOfAccounts a where a.isActiveForPosting=true and a.classification=4 and (a.glcode like :glcode or lower(a.name) like :name) and a.type in ('I','L') order by a.id");
+        entitysQuery.setString(GLCODE, glcode + "%");
+        entitysQuery.setString("name", glcode.toLowerCase() + "%");
+
+        List<CChartOfAccounts> netPayableCodes = getContractorNetPayableAccountCodes();
+        Map<String, CChartOfAccounts> netPayableMap = new HashMap<>();
+        for (CChartOfAccounts coa : netPayableCodes) {
+            netPayableMap.put(coa.getGlcode(), coa);
+        }
+        List<CChartOfAccounts> tempList = entitysQuery.list();
+        List<CChartOfAccounts> finalList = new ArrayList<>();
+        for (CChartOfAccounts coa : tempList) {
+            if (netPayableMap.get(coa.getGlcode()) == null) {
+                finalList.add(coa);
+            }
+        }
+        return finalList;
+    }
+
     public List<CChartOfAccounts> getSupplierNetPayableAccountCodes() {
         final Query entitysQuery = getSession()
                 .createQuery(
                         " select a from CChartOfAccounts a,EgfAccountcodePurpose purpose where a.purposeId = purpose.id and a.isActiveForPosting=true and a.classification=4 and purpose.name = 'Creditors-Supplier Payable'  order by a.id");
+        return entitysQuery.list();
+    }
+
+    public List<CChartOfAccounts> getContractorNetPayableAccountCodes() {
+        final Query entitysQuery = getSession()
+                .createQuery(
+                        " select a from CChartOfAccounts a,EgfAccountcodePurpose purpose where a.purposeId = purpose.id and a.isActiveForPosting=true and a.classification=4 and purpose.name = 'Creditors-Contractor Payable'  order by a.id");
         return entitysQuery.list();
     }
 

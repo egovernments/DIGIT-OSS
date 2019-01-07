@@ -109,7 +109,7 @@ public interface FinancialConstants {
 	public static final String SUPPLIERBILL_PASSED_STATUS = "Passed";
 	public static final String SUPPLIERBILL_PAID_STATUS = "Paid";
 	// Status for Contrator Bills
-	public static final String CONTRACTORBILL_CREATED_STATUS = "Pending";
+	public static final String CONTRACTORBILL_CREATED_STATUS = "CREATED";
 	public static final String CONTRACTORBILL_CANCELLED_STATUS = "Cancelled";
 	public static final String CONTRACTORBILL_APPROVED_STATUS = "APPROVED";
 	public static final String CONTRACTORBILL_PASSED_STATUS = "Passed";

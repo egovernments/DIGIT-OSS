@@ -45,13 +45,12 @@
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  *
  */
-package org.egov.egf.masters.repository;
+package org.egov.egf.contractorbill.repository;
 
 import java.util.List;
 
-import org.egov.model.masters.WorkOrder;
+import org.egov.model.bills.EgBillregister;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -60,15 +59,10 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface WorkOrderRepository extends JpaRepository<WorkOrder, Long> {
+public interface ContractorBillRepository extends JpaRepository<EgBillregister, Long> {
 
-    public List<WorkOrder> findByNameLikeOrOrderNumberLikeAndActive(String name, String orderNumber, Boolean active);
+    EgBillregister findByBillnumber(final String billNumber);
 
-    @Query("from WorkOrder where active=true")
-    public List<WorkOrder> findActiveOrders();
-
-    public List<WorkOrder> findByContractor_Id(Long id);
-
-    public WorkOrder findByOrderNumber(String orderNumber);
+    List<EgBillregister> findByBillnumberContainingIgnoreCase(final String billNumber);
 
 }

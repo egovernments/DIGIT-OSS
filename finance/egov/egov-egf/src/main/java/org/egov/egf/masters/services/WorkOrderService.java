@@ -117,6 +117,14 @@ public class WorkOrderService implements EntityTypeService {
         return workOrderRepository.findOne(id);
     }
 
+    public List<WorkOrder> getByContractorId(final Long contractorId) {
+        return workOrderRepository.findByContractor_Id(contractorId);
+    }
+
+    public WorkOrder getByOrderNumber(final String orderNumber) {
+        return workOrderRepository.findByOrderNumber(orderNumber);
+    }
+
     @Transactional
     public WorkOrder create(WorkOrder workOrder) {
 

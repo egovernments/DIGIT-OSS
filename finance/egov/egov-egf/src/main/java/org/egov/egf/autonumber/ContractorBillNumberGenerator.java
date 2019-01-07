@@ -45,30 +45,14 @@
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  *
  */
-package org.egov.egf.masters.repository;
 
-import java.util.List;
+package org.egov.egf.autonumber;
 
-import org.egov.model.masters.WorkOrder;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+import org.egov.model.bills.EgBillregister;
+import org.springframework.stereotype.Service;
 
-/**
- * @author venki
- *
- */
-
-@Repository
-public interface WorkOrderRepository extends JpaRepository<WorkOrder, Long> {
-
-    public List<WorkOrder> findByNameLikeOrOrderNumberLikeAndActive(String name, String orderNumber, Boolean active);
-
-    @Query("from WorkOrder where active=true")
-    public List<WorkOrder> findActiveOrders();
-
-    public List<WorkOrder> findByContractor_Id(Long id);
-
-    public WorkOrder findByOrderNumber(String orderNumber);
+@Service
+public interface ContractorBillNumberGenerator {
+    public String getNextNumber(EgBillregister br);
 
 }

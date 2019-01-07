@@ -72,6 +72,7 @@ import org.egov.egf.billsubtype.service.EgBillSubTypeService;
 import org.egov.egf.commons.bankaccount.service.CreateBankAccountService;
 import org.egov.egf.commons.bankbranch.service.CreateBankBranchService;
 import org.egov.egf.masters.services.PurchaseOrderService;
+import org.egov.egf.masters.services.WorkOrderService;
 import org.egov.egf.web.adaptor.ChartOfAccountsAdaptor;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.service.AppConfigValueService;
@@ -81,6 +82,7 @@ import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.model.bills.EgBillSubType;
 import org.egov.model.masters.PurchaseOrder;
+import org.egov.model.masters.WorkOrder;
 import org.egov.services.masters.SchemeService;
 import org.egov.services.masters.SubSchemeService;
 import org.egov.utils.FinancialConstants;
@@ -145,6 +147,9 @@ public class AjaxCommonController {
     private PurchaseOrderService purchaseOrderService;
 
     @Autowired
+    private WorkOrderService workOrderService;
+
+    @Autowired
     private MicroserviceUtils microserviceUtils;
 
     @RequestMapping(value = "/getschemesbyfundid", method = RequestMethod.GET)
@@ -169,6 +174,23 @@ public class AjaxCommonController {
         Department dept = microserviceUtils.getDepartmentByCode(po.getDepartment());
         po.setDescription(dept.getName());
         return Collections.singletonList(po);
+    }
+
+    @RequestMapping(value = "/getworkordersbycontractorid", method = RequestMethod.GET)
+    @ResponseBody
+    public List<WorkOrder> getAllWorkOrdersByContractorId(@RequestParam("contractorId") final String contractorId)
+            throws ApplicationException {
+        return workOrderService.getByContractorId(Long.parseLong(contractorId));
+    }
+
+    @RequestMapping(value = "/getworkorderbyordernumber", method = RequestMethod.GET)
+    @ResponseBody
+    public List<WorkOrder> getAllWorkOrderByOrderNumber(@RequestParam("orderNumber") final String orderNumber)
+            throws ApplicationException {
+        WorkOrder wo = workOrderService.getByOrderNumber(orderNumber);
+        Department dept = microserviceUtils.getDepartmentByCode(wo.getDepartment());
+        wo.setDescription(dept.getName());
+        return Collections.singletonList(wo);
     }
 
     @RequestMapping(value = "/getsubschemesbyschemeid", method = RequestMethod.GET)
@@ -238,6 +260,30 @@ public class AjaxCommonController {
     @ResponseBody
     public String findSupplierCreditAccountCodes(@RequestParam final String glcode) {
         final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getSupplierCreditAccountCodes(glcode);
+        for (final CChartOfAccounts coa : chartOfAccounts)
+            if (coa.getChartOfAccountDetails().isEmpty())
+                coa.setIsSubLedger(false);
+            else
+                coa.setIsSubLedger(true);
+        return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
+    }
+
+    @RequestMapping(value = "/getcontractordebitcodes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findContractorDebitAccountCodes(@RequestParam final String glcode) {
+        final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getContractorDebitAccountCodes(glcode);
+        for (final CChartOfAccounts coa : chartOfAccounts)
+            if (coa.getChartOfAccountDetails().isEmpty())
+                coa.setIsSubLedger(false);
+            else
+                coa.setIsSubLedger(true);
+        return toJSON(chartOfAccounts, CChartOfAccounts.class, ChartOfAccountsAdaptor.class);
+    }
+
+    @RequestMapping(value = "/getcontractorcreditcodes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String findContractorCreditAccountCodes(@RequestParam final String glcode) {
+        final List<CChartOfAccounts> chartOfAccounts = chartOfAccountsService.getContractorCreditAccountCodes(glcode);
         for (final CChartOfAccounts coa : chartOfAccounts)
             if (coa.getChartOfAccountDetails().isEmpty())
                 coa.setIsSubLedger(false);

@@ -780,4 +780,24 @@
         <put-attribute name="body" value="/WEB-INF/views/supplierbill/supplierbill-update.jsp"/>
     </definition>
     
+    <definition name="contractorbill-form" extends="base_layout">
+        <put-attribute name="page-title" value="title.contractorbill.create" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/contractorbill/contractorbill-form.jsp"/>
+    </definition>
+
+    <definition name="contractorbill-success" extends="base_layout">
+        <put-attribute name="page-title" value="lbl.contractorbill" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/contractorbill/contractorbill-success.jsp"/>
+    </definition>
+
+    <definition name="contractorbill-view" extends="base_layout">
+        <put-attribute name="page-title" value="lbl.contractorbill" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/contractorbill/contractorbill-view.jsp"/>
+    </definition>
+
+    <definition name="contractorbill-update" extends="base_layout">
+        <put-attribute name="page-title" value="title.contractorbill.create" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/contractorbill/contractorbill-update.jsp"/>
+    </definition>
+    
 </tiles-definitions>

@@ -69,6 +69,7 @@ import org.egov.egf.masters.repository.ContractorRepository;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.masters.Contractor;
+import org.egov.model.masters.Contractor;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -165,6 +166,9 @@ public class ContractorService implements EntityTypeService {
 
     }
 
+    public List<Contractor> getAllActiveContractors() {
+        return contractorRepository.findByStatus();
+    }
     @Override
     public List<? extends org.egov.commons.utils.EntityType> getAllActiveEntities(Integer accountDetailTypeId) {
         // TODO Auto-generated method stub
