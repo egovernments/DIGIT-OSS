@@ -13332,7 +13332,7 @@
       "enabled": true,
       "serviceCode": "Uploader",
       "code": "null",
-      "navigationURL": "integration/uplaoder/home",
+      "navigationURL": "integration/uploader/home",
       "path": "Uploader.Home",
       "leftIcon": "places:business-center"
     },
