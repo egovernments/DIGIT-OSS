@@ -202,5 +202,18 @@
 			<form:input  path="billamount" id="billamount" class="form-control patternvalidation" data-pattern="decimalvalue" required="required"/>
 			<form:errors path="billamount" cssClass="add-margin error-msg" />		
 		</div>
+		
+		<label class="col-sm-2 control-label text-right">
+			<spring:message code="lbl.billtype" /><span class="mandatory"></span>
+		</label>
+		<div class="col-sm-3 add-margin">
+			<form:select path="billtype" data-first-option="false" id="billtype" class="form-control" required="required"  >
+				<form:option value=""><spring:message code="lbl.select" /></form:option>
+					<c:forEach items="${billTypes}" var="billType">
+						<form:option value="${billType}"> ${billType} </form:option>
+					</c:forEach>
+			</form:select>
+			<form:errors path="billtype" cssClass="add-margin error-msg" />
+		</div>
 	</div>
 </div>

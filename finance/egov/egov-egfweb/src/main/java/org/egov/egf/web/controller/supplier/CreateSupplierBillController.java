@@ -84,6 +84,7 @@ import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.infra.validation.exception.ValidationException;
+import org.egov.model.bills.BillType;
 import org.egov.model.bills.DocumentUpload;
 import org.egov.model.bills.EgBillPayeedetails;
 import org.egov.model.bills.EgBilldetails;
@@ -113,6 +114,8 @@ public class CreateSupplierBillController extends BaseBillController {
 
     private static final String SUPPLIERS = "suppliers";
 
+    private static final String BILL_TYPES = "billTypes";
+
     private static final String SUPPLIER_ID = "supplierId";
 
     private static final String APPROVER_DETAILS = "approverDetails";
@@ -138,7 +141,7 @@ public class CreateSupplierBillController extends BaseBillController {
     private static final String APPROVAL_POSITION = "approvalPosition";
 
     private static final String APPROVAL_DESIGNATION = "approvalDesignation";
-    
+
     private static final String PASSEDAMOUNT = "supplierBillTotalDebitAmount";
 
     private static final int BUFFER_SIZE = 4096;
@@ -178,6 +181,7 @@ public class CreateSupplierBillController extends BaseBillController {
     @Override
     protected void setDropDownValues(final Model model) {
         super.setDropDownValues(model);
+        model.addAttribute(BILL_TYPES, BillType.values());
         model.addAttribute(SUPPLIERS, supplierService.getAllActiveSuppliers());
         model.addAttribute(NET_PAYABLE_CODES, chartOfAccountsService.getSupplierNetPayableAccountCodes());
     }
