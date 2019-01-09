@@ -327,11 +327,13 @@ public class CreateSupplierBillController extends BaseBillController {
                                 && !cad.getDetailTypeId().getName().equalsIgnoreCase(SUPPLIER)) {
                             check = true;
                         }
-                        if (check) {
-                            resultBinder.reject("msg.supplier.bill.wrong.sub.ledger.mapped",
-                                    new String[] { details.getChartOfAccounts().getGlcode() }, null);
-                        }
                     }
+
+                }
+
+                if (check && !supplierExist && !poExist) {
+                    resultBinder.reject("msg.supplier.bill.wrong.sub.ledger.mapped",
+                            new String[] { details.getChartOfAccounts().getGlcode() }, null);
                 }
 
                 if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1) {

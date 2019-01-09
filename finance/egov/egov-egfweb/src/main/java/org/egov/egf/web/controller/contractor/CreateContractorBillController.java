@@ -143,7 +143,7 @@ public class CreateContractorBillController extends BaseBillController {
     private static final int BUFFER_SIZE = 4096;
 
     private static final String BILL_TYPES = "billTypes";
-    
+
     @Autowired
     @Qualifier("messageSource")
     private MessageSource messageSource;
@@ -325,11 +325,12 @@ public class CreateContractorBillController extends BaseBillController {
                                 && !cad.getDetailTypeId().getName().equalsIgnoreCase(CONTRACTOR)) {
                             check = true;
                         }
-                        if (check) {
-                            resultBinder.reject("msg.contractor.bill.wrong.sub.ledger.mapped",
-                                    new String[] { details.getChartOfAccounts().getGlcode() }, null);
-                        }
                     }
+                }
+
+                if (check && !contractorExist && !woExist) {
+                    resultBinder.reject("msg.contractor.bill.wrong.sub.ledger.mapped",
+                            new String[] { details.getChartOfAccounts().getGlcode() }, null);
                 }
 
                 if (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1) {
