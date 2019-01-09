@@ -73,7 +73,7 @@ public class ChequeAssignmentHelper {
     @Transactional
     public List<InstrumentHeader> reassignInstrument(final List<ChequeAssignment> chequeAssignmentList,
             final String paymentMode, final Integer bankaccount, final Map<String, String[]> parameters,
-            final Long dept) throws Exception {
+            final String dept) throws Exception {
         List<InstrumentHeader> instHeaderList = new ArrayList<InstrumentHeader>();
         try {
             instHeaderList = paymentService.reassignInstrument(chequeAssignmentList, paymentMode, bankaccount,

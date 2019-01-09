@@ -2417,7 +2417,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
     @Transactional
     public List<InstrumentHeader> reassignInstrument(final List<ChequeAssignment> chequeAssignmentList,
             final String paymentMode, final Integer bankaccount, final Map<String, String[]> parameters,
-            final Long dept) throws ApplicationRuntimeException, Exception {
+            final String dept) throws ApplicationRuntimeException, Exception {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Starting reassignInstrument...");
         List<InstrumentHeader> instHeaderList = new ArrayList<InstrumentHeader>();

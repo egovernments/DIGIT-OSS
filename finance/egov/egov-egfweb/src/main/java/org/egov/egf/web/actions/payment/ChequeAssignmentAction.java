@@ -1110,7 +1110,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
             if (getFieldErrors().isEmpty()) {
                 if (reassignSurrenderChq && !paymentMode.equalsIgnoreCase(FinancialConstants.MODEOFPAYMENT_RTGS))
                     instHeaderList = chequeAssignmentHelper.reassignInstrument(chequeAssignmentList, paymentMode, bankaccount,
-                            parameters, Long.valueOf(voucherHeader.getVouchermis().getDepartmentcode()));
+                            parameters, voucherHeader.getVouchermis().getDepartmentcode());
                 else
                     instHeaderList = chequeAssignmentHelper.createInstrument(chequeAssignmentList, paymentMode, bankaccount,
                             parameters, voucherHeader.getVouchermis().getDepartmentcode());
@@ -1320,7 +1320,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
             if (getFieldErrors().isEmpty()) {
                 if (reassignSurrenderChq && !paymentMode.equalsIgnoreCase(FinancialConstants.MODEOFPAYMENT_RTGS))
                     instHeaderList = paymentService.reassignInstrument(chequeAssignmentList, paymentMode, bankaccount,
-                            parameters, Long.valueOf(voucherHeader.getVouchermis().getDepartmentcode()));
+                            parameters, voucherHeader.getVouchermis().getDepartmentcode());
                 else
                     instHeaderList = paymentService.createInstrument(chequeAssignmentList, paymentMode, bankaccount, parameters,
                             voucherHeader.getVouchermis().getDepartmentcode());
@@ -1371,7 +1371,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
             if (getFieldErrors().isEmpty()) {
                 if (reassignSurrenderChq && !paymentMode.equalsIgnoreCase(FinancialConstants.MODEOFPAYMENT_RTGS))
                     instHeaderList = paymentService.reassignInstrument(chequeAssignmentList, paymentMode, bankaccount,
-                            parameters, Long.valueOf(voucherHeader.getVouchermis().getDepartmentcode()));
+                            parameters, voucherHeader.getVouchermis().getDepartmentcode());
                 else
                     instHeaderList = paymentService.createInstrument(chequeAssignmentList, paymentMode, bankaccount, parameters,
                             voucherHeader.getVouchermis().getDepartmentcode());
