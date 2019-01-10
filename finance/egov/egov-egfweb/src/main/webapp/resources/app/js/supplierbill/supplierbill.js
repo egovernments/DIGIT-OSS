@@ -332,12 +332,12 @@ var creditamount = $("#supplierBillTotalCreditAmount")["0"].innerHTML;
 		return false;
 	}
 	
-	if(billamount < debitamount){
+	if(parseFloat(billamount) < parseFloat(debitamount)){
 		bootbox.alert("Bill amount should be greater then passed amount");
 		return false;
 	}
 	
-	if(debitamount > billamount){
+	if(parseFloat(debitamount) > parseFloat(billamount)){
 		bootbox.alert("Passed amount should not be greater then bill amount");
 		return false;
 	}

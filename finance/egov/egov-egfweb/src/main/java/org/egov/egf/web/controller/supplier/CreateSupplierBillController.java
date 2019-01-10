@@ -342,10 +342,12 @@ public class CreateSupplierBillController extends BaseBillController {
                                 poAccountDetailTypeId,
                                 po.getId().intValue());
                         egBillregister.getEgBillregistermis().setPayto(po.getName());
+                        details.getEgBillPaydetailes().add(payeeDetail);
                     } else if (supplierExist) {
                         payeeDetail = prepareBillPayeeDetails(details, details.getDebitamount(), BigDecimal.ZERO,
                                 supplierAccountDetailTypeId, po.getSupplier().getId().intValue());
                         egBillregister.getEgBillregistermis().setPayto(po.getSupplier().getName());
+                        details.getEgBillPaydetailes().add(payeeDetail);
                     }
 
                 }
@@ -355,15 +357,15 @@ public class CreateSupplierBillController extends BaseBillController {
                         payeeDetail = prepareBillPayeeDetails(details, BigDecimal.ZERO, details.getCreditamount(),
                                 supplierAccountDetailTypeId, po.getSupplier().getId().intValue());
                         egBillregister.getEgBillregistermis().setPayto(po.getSupplier().getName());
-
+                        details.getEgBillPaydetailes().add(payeeDetail);
                     } else if (poExist) {
                         payeeDetail = prepareBillPayeeDetails(details, BigDecimal.ZERO, details.getCreditamount(),
                                 poAccountDetailTypeId, po.getId().intValue());
                         egBillregister.getEgBillregistermis().setPayto(po.getName());
+                        details.getEgBillPaydetailes().add(payeeDetail);
                     }
                 }
 
-                details.getEgBillPaydetailes().add(payeeDetail);
             } else {
                 egBillregister.getEgBillregistermis().setPayto(po.getSupplier().getName());
             }

@@ -339,10 +339,12 @@ public class CreateContractorBillController extends BaseBillController {
                                 woAccountDetailTypeId,
                                 wo.getId().intValue());
                         egBillregister.getEgBillregistermis().setPayto(wo.getName());
+                        details.getEgBillPaydetailes().add(payeeDetail);
                     } else if (contractorExist) {
                         payeeDetail = prepareBillPayeeDetails(details, details.getDebitamount(), BigDecimal.ZERO,
                                 contractorAccountDetailTypeId, wo.getContractor().getId().intValue());
                         egBillregister.getEgBillregistermis().setPayto(wo.getContractor().getName());
+                        details.getEgBillPaydetailes().add(payeeDetail);
                     }
 
                 }
@@ -352,15 +354,15 @@ public class CreateContractorBillController extends BaseBillController {
                         payeeDetail = prepareBillPayeeDetails(details, BigDecimal.ZERO, details.getCreditamount(),
                                 contractorAccountDetailTypeId, wo.getContractor().getId().intValue());
                         egBillregister.getEgBillregistermis().setPayto(wo.getContractor().getName());
+                        details.getEgBillPaydetailes().add(payeeDetail);
 
                     } else if (woExist) {
                         payeeDetail = prepareBillPayeeDetails(details, BigDecimal.ZERO, details.getCreditamount(),
                                 woAccountDetailTypeId, wo.getId().intValue());
                         egBillregister.getEgBillregistermis().setPayto(wo.getName());
+                        details.getEgBillPaydetailes().add(payeeDetail);
                     }
-                }
-
-                details.getEgBillPaydetailes().add(payeeDetail);
+                }                
             } else {
                 egBillregister.getEgBillregistermis().setPayto(wo.getContractor().getName());
             }
