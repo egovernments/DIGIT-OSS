@@ -8,6 +8,14 @@
           "search": {
             "routePath": "/employee-tradelicence/mihy-ui-framework/tradelicence/search",
             "isOrigin": true
+          },
+          "search-preview": {
+            "routePath": "/employee-tradelicence/mihy-ui-framework/tradelicence/search-preview",
+            "isOrigin": true
+          },
+          "apply": {
+            "routePath": "/employee-tradelicence/mihy-ui-framework/tradelicence/apply",
+            "isOrigin": true
           }
         }
       },
