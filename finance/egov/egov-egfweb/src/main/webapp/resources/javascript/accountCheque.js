@@ -230,15 +230,15 @@ function validateCheque(obj) {
 				+ '].fromChqNo').value * 1;
 		var tochqNum = document.getElementById(CHQDETAILSLIST + '[' + index
 				+ '].toChqNo').value * 1;
-		var deptId = document.getElementById(CHQDETAILSLIST + '[' + index
-				+ '].deptId').value;
+		var deptCode = document.getElementById(CHQDETAILSLIST + '[' + index
+				+ '].deptCode').value;
 		var deptName = document.getElementById(CHQDETAILSLIST + '[' + index
 				+ '].deptName').innerHTML;
-		var serialNo1 = document.getElementById(CHQDETAILSLIST + '[' + index
-				+ '].serialNo');
-		var serialNo =serialNo1.options[serialNo1.selectedIndex].value; 
+		var serialNo = document.getElementById(CHQDETAILSLIST + '[' + index
+				+ '].serialNo').value;
+//		var serialNo =serialNo1.options[serialNo1.selectedIndex].value; 
 		chequeRangeArray.splice(index, 1, fromchqNum + "-" + tochqNum + "-"
-				+ deptId + "-" + serialNo);
+				+ deptCode + "-" + serialNo);
 
 		if (parseInt(fromchqNum) >= parseInt(tochqNum)) {
 			document.getElementById("lblErrorGrid").innerHTML = "from cheque number should be less than to cheque number";
@@ -252,7 +252,7 @@ function validateCheque(obj) {
 				continue;
 			} else if (fromchqNum == parseInt(tokens[0] * 1)
 					&& tochqNum == parseInt(tokens[1] * 1)
-					&& deptId == tokens[2] * 1 && serialNo == tokens[3]) {
+					&& deptCode == tokens[2] * 1 && serialNo == tokens[3]) {
 
 				count = count + 1;
 				if (count > 1) {

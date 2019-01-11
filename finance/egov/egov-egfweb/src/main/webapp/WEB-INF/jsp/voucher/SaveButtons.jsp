@@ -65,7 +65,7 @@
 					onclick="document.getElementById('button').value='Save_Close';return validate();"
 					method="create" /></td> --%>
 			<td><input type="button" id="closeButton" value="Close"
-				onclick="javascript:window.close()" class="button" /></td>
+				onclick="javascript:window.parent.postMessage('close','*');" class="button" /></td>
 		</tr>
 	</table>
 </div>

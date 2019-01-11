@@ -78,7 +78,7 @@
 				<s:actionmessage />
 			</span>
 			<div class="subheadnew">Bill Payment</div>
-			<div id="budgetSearchGrid" style="display: block; width: 100%;">
+			<div id="budgetSearchGrid" style="display: block; width: 100%; margin-top:-25px">
 				<table width="100%" cellpadding="0" cellspacing="0" border="0">
 					<tr>
 						<td>
@@ -89,7 +89,7 @@
 										<td>
 											<div class="tabber">
 												<div class="tabbertab">
-													<h2>Payment Details</h2>
+													<h3 style="margin-left:25px">Payment Details</h3>
 													<span>
 														<table width="100%" border="0" cellspacing="0"
 															cellpadding="0">
