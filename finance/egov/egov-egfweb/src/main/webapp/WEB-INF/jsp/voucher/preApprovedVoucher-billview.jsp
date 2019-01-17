@@ -288,7 +288,7 @@ jQuery("#voucherDate").datepicker().datepicker("setDate", new Date());
 				<s:else>
 					<div class="buttonbottom" align="center">
 						<input type="button" name="button2" id="button2" value="Close"
-							class="button" onclick="window.close();" />
+							class="button" onclick="javascript:window.parent.postMessage('close','*');" />
 					</div>
 				</s:else>
 			</div>
