@@ -181,7 +181,7 @@
 						<td class="greybox" colspan="3"><s:text
 								name="chq.issued.department" /><span class="mandatory1">*</span>
 							<s:select name="department" id="department"
-								list="dropdownData.departmentList" listKey="id" listValue="name"
+								list="dropdownData.departmentList" listKey="code" listValue="name"
 								headerKey="-1" headerValue="----Choose----"
 								value="%{department}" onChange="populateYearcode(this);" /></td>
 						<td class="greybox" colspan="10"></td>

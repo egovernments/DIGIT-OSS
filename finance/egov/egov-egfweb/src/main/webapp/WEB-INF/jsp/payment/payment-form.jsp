@@ -362,7 +362,7 @@
 													</span>
 												</div>
 												<div class="tabbertab">
-													<h2>Bill Details</h2>
+													<h3 style="margin-left:25px">Bill Details</h3>
 													<span>
 														<table align="center" border="0" cellpadding="0"
 															cellspacing="0" class="newtable">
