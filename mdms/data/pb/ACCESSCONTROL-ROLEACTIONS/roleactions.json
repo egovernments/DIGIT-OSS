@@ -17109,6 +17109,12 @@
       "tenantId": "pb"
     },
     {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1743,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
       "rolecode": "SUPERUSER",
       "actionid": 1744,
       "actioncode": "",
