@@ -78,7 +78,7 @@ public class ContraBean {
     private Integer toFundId;
     private String sourceGlcode;
     private String destinationGlcode;
-    private Integer toDepartment;
+    private String toDepartment;
 
     /**
      * @return the fromBankBalance
@@ -318,11 +318,11 @@ public class ContraBean {
         this.toFundId = toFundId;
     }
 
-    public Integer getToDepartment() {
+    public String getToDepartment() {
         return toDepartment;
     }
 
-    public void setToDepartment(final Integer toDepartment) {
+    public void setToDepartment(final String toDepartment) {
         this.toDepartment = toDepartment;
     }
 

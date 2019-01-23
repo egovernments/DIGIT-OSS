@@ -56,6 +56,7 @@ import org.egov.commons.Fund;
 import org.egov.egf.commons.EgovCommon;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infstr.services.PersistenceService;
@@ -107,6 +108,9 @@ public class ContraBTBActionHelper {
 	private ContraJournalVoucherService contraJournalVoucherService;
 
 	private CVoucherHeader voucherHeader2 = null;
+	
+        @Autowired
+        protected MicroserviceUtils microserviceUtils;
 
 	@Transactional
 	public CVoucherHeader create(ContraBean contraBean, ContraJournalVoucher contraVoucher,
@@ -280,10 +284,9 @@ public class ContraBTBActionHelper {
 			final ContraJournalVoucher contraVoucher, ContraBean contraBean) {
 		try {
 			final Fund toFund = (Fund) persistenceService.find("from Fund where id=?", contraBean.getToFundId());
-			Department toDepartment = new Department();
-			if (contraBean.getToDepartment() != null && !contraBean.getToDepartment().equals("-1"))
-				toDepartment = (Department) persistenceService.find("from Department where id=?",
-						contraBean.getToDepartment().longValue());
+			org.egov.infra.microservice.models.Department toDepartment = new org.egov.infra.microservice.models.Department();
+			if (contraBean.getToDepartment() != null && !contraBean.getToDepartment().equals(""))
+				toDepartment = microserviceUtils.getDepartmentByCode(contraBean.getToDepartment());
 			// validateInterFundAccount(voucherHeader.getFundId(),toFund);
 			final HashMap<String, Object> headerDetails = createHeaderAndMisDetails(voucher);
 

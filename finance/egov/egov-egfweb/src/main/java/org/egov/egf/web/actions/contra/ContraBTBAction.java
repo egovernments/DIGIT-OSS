@@ -862,10 +862,9 @@ public class ContraBTBAction extends BaseVoucherAction {
 			final ContraJournalVoucher contraVoucher) {
 		try {
 			final Fund toFund = (Fund) persistenceService.find("from Fund where id=?", contraBean.getToFundId());
-			Department toDepartment = new Department();
-			if (contraBean.getToDepartment() != null && !contraBean.getToDepartment().equals("-1"))
-				toDepartment = (Department) persistenceService.find("from Department where id=?",
-						contraBean.getToDepartment().longValue());
+			org.egov.infra.microservice.models.Department toDepartment = new org.egov.infra.microservice.models.Department();
+			if (contraBean.getToDepartment() != null && !contraBean.getToDepartment().equals(""))
+			     toDepartment = microserviceUtils.getDepartmentByCode(contraBean.getToDepartment());
 			// validateInterFundAccount(voucherHeader.getFundId(),toFund);
 			final HashMap<String, Object> headerDetails = createHeaderAndMisDetails();
 

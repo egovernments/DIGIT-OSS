@@ -57,10 +57,12 @@
 		<div id="Errors">
 			<s:actionerror />
 			<s:fielderror />
-		</div> <s:actionmessage />
+		</div> 
 	</span>
 	</br>
+	<span style="color: green;font-size: 21px"><s:actionmessage /></span>
 	</br>
+	
 	<div align="center">
 		<input type="button" id="closeButton" value="Close"
 			onclick="javascript:window.close()" class="button" />
