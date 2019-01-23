@@ -283,6 +283,8 @@ public class UpdateExpenseBillController extends BaseBillController {
             billId = billIds[0];
         }
         final EgBillregister egBillregister = expenseBillService.getById(Long.parseLong(billId));
+        final List<DocumentUpload> documents = documentUploadRepository.findByObjectId(Long.valueOf(billId));
+        egBillregister.setDocumentDetail(documents);
         setDropDownValues(model);
         egBillregister.getBillDetails().addAll(egBillregister.getEgBilldetailes());
         model.addAttribute("mode", "readOnly");

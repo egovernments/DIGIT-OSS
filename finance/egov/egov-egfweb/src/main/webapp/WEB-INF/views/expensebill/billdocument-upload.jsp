@@ -75,7 +75,6 @@
                 <spring:message code="lbl.documents" />
             </c:if>
         </div>
-    </div>
     <c:if test="${egBillregister.documentDetail != null &&  !egBillregister.documentDetail.isEmpty()}">
         <c:forEach items="${egBillregister.documentDetail }" var="documentDetials">
             <a href="/services/EGF/expensebill/downloadBillDoc?egBillRegisterId=${egBillregister.id }&fileStoreId=${documentDetials.fileStore.fileStoreId }">${documentDetials.fileStore.fileName }</a><br />
@@ -84,6 +83,7 @@
     <c:if test="${mode == 'view' && egBillregister.documentDetail.isEmpty()}">
         <spring:message code="msg.no.documents" />
     </c:if>
+    </div>
     <input type="hidden" value="${fn:length(egBillregister.documentDetail)}" id="documentsSize">
     <c:if test="${mode != 'view' && mode != 'readOnly' }">
         <div>
