@@ -102,6 +102,11 @@ public class CancelVoucherAction extends BaseFormAction {
 	@Autowired
 	@Qualifier("persistenceService")
 	private PersistenceService persistenceService;
+	
+	@Autowired
+        @Qualifier("voucherHelper")
+        private VoucherHelper voucherHelpers;
+	
 	private static final long serialVersionUID = -8065315728701853083L;
 	private static final Logger LOGGER = Logger.getLogger(CancelVoucherAction.class);
 	public static final Locale LOCALE = new Locale("en", "IN");
@@ -124,7 +129,7 @@ public class CancelVoucherAction extends BaseFormAction {
 	private PersistenceService<CVoucherHeader, Long> cVoucherHeaderPersistanceService;
 	List<CVoucherHeader> voucherList;
 	List<String> voucherTypes = VoucherHelper.VOUCHER_TYPES;
-	Map<String, List<String>> voucherNames = VoucherHelper.VOUCHER_TYPE_NAMES;
+	Map<String, List<String>> voucherNames;
 	private FinancialYearDAO financialYearDAO;
 
 	@Autowired
@@ -563,6 +568,7 @@ public class CancelVoucherAction extends BaseFormAction {
 		// CVoucherHeader vh order by vh.type")); //where
 		// vh.status!=4
 		addDropdownData("typeList", VoucherHelper.VOUCHER_TYPES);
+		voucherNames = voucherHelpers.getVoucherNamesAndTypes();
 		nameMap = new LinkedHashMap<String, String>();
 	}
 

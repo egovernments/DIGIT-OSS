@@ -82,7 +82,9 @@ import org.egov.model.bills.EgBillregister;
 import org.egov.model.voucher.VoucherDetails;
 import org.egov.pims.service.EisUtilService;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.exilant.eGov.src.common.EGovernCommon;
 import com.exilant.exility.common.TaskFailedException;
@@ -379,6 +381,13 @@ public class VoucherHelper {
 		}
 		return departmentList;
 	}
+	
+	public List<String> getVoucherNamesByType(String voucherType){
+	    Query query = this.persistenceService.getSession().createSQLQuery("select distinct(name) from voucherheader vh where vh.type = :type");
+	    query.setString("type", voucherType);
+	    List<String> list = query.list();
+	    return list;
+	}
 
 	public static final List<String> VOUCHER_TYPES = new ArrayList<String>() {
 		/**
@@ -423,6 +432,7 @@ public class VoucherHelper {
 		}
 
 	};
+	
 	public static final List<String> PAYMENTVOUCHER_NAMES = new ArrayList<String>() {
 		/**
 		 *
@@ -487,6 +497,7 @@ public class VoucherHelper {
 			put(VOUCHER_TYPES.get(3), JOURNALVOUCHER_NAMES);
 		}
 	};
+	
 	public static final List<String> TNEB_REGIONS = new ArrayList<String>() {
 		/**
 		 *
@@ -502,6 +513,15 @@ public class VoucherHelper {
 		}
 
 	};
+	
+	public Map<String, List<String>> getVoucherNamesAndTypes() {
+	    Map<String,List<String>> voucherNamesTypes = new HashMap<>();
+	    voucherNamesTypes.put(VOUCHER_TYPES.get(0), getVoucherNamesByType(VOUCHER_TYPES.get(0)));
+	    voucherNamesTypes.put(VOUCHER_TYPES.get(1), getVoucherNamesByType(VOUCHER_TYPES.get(1)));
+	    voucherNamesTypes.put(VOUCHER_TYPES.get(2), getVoucherNamesByType(VOUCHER_TYPES.get(2)));
+	    voucherNamesTypes.put(VOUCHER_TYPES.get(3), getVoucherNamesByType(VOUCHER_TYPES.get(3)));
+	    return voucherNamesTypes;
+	}
 
 	public EisCommonService getEisCommonService() {
 		return eisCommonService;
