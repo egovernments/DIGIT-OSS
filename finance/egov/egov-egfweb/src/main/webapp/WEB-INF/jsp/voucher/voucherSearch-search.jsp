@@ -120,7 +120,7 @@
 							value="%{tempFromDate}"  data-date-end-date="0d" 
 							onkeyup="DateFormat(this,this.value,event,false,'3')"
 							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
-							data-inputmask="'mask': 'd/m/y'" />
+							data-inputmask="'mask': 'd/m/y'" autocomplete="off"/>
 							</td>
 					<s:date name="toDate" format="dd/MM/yyyy" var="tempToDate" />
 					<td class="greybox"><s:text name="voucher.todate" /><span
@@ -130,7 +130,7 @@
 							value="%{tempToDate}"  data-date-end-date="0d" 
 							onkeyup="DateFormat(this,this.value,event,false,'3')"
 							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
-							data-inputmask="'mask': 'd/m/y'" />
+							data-inputmask="'mask': 'd/m/y'" autocomplete="off"/>
 							
 							</td>
 				</tr>

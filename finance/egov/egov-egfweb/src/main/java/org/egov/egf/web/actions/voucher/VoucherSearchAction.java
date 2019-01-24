@@ -94,6 +94,7 @@ import org.egov.utils.FinancialConstants;
 import org.egov.utils.VoucherHelper;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 @ParentPackage("egov")
 @Results({ @Result(name = VoucherSearchAction.SEARCH, location = "voucherSearch-search.jsp"),
@@ -114,6 +115,9 @@ public class VoucherSearchAction extends BaseFormAction {
 	protected MicroserviceUtils microserviceUtils;
 	@Autowired
 	protected EgovMasterDataCaching masterDataCache;
+	@Autowired
+        @Qualifier("voucherHelper")
+        private VoucherHelper voucherHelpers;
 
 	private final List<String> headerFields = new ArrayList<String>();
 	private final List<String> mandatoryFields = new ArrayList<String>();
@@ -126,7 +130,7 @@ public class VoucherSearchAction extends BaseFormAction {
 	private Integer pageSize = 30;
 	private EgovPaginatedList pagedResults;
 	List<String> voucherTypes = VoucherHelper.VOUCHER_TYPES;
-	Map<String, List<String>> voucherNames = VoucherHelper.VOUCHER_TYPE_NAMES;
+	Map<String, List<String>> voucherNames;
 	private FinancialYearDAO financialYearDAO;
 	private Department deptImpl = new Department();
 
@@ -194,6 +198,7 @@ public class VoucherSearchAction extends BaseFormAction {
 			// CVoucherHeader vh where vh.status!=4 order by vh.type"));
 		} else
 			addDropdownData("typeList", VoucherHelper.VOUCHER_TYPES);
+		voucherNames = voucherHelpers.getVoucherNamesAndTypes();
 		// addDropdownData("typeList",
 		// persistenceService.findAllBy(" select distinct vh.type from
 		// CVoucherHeader vh where vh.status!=4 order by vh.type"));

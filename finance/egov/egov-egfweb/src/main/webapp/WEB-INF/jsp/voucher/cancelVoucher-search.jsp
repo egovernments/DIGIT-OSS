@@ -133,11 +133,11 @@ function loadNamesForSelectedType()
 					<td class="bluebox"><s:text name="voucher.fromdate" /><span	class="mandatory1">*</span></td>
 					<s:date name="fromDate" format="dd/MM/yyyy" var="tempFromDate" />
 					<td class="bluebox"><s:textfield id="fromDate" name="fromDate" value="%{tempFromDate}" onkeyup="DateFormat(this,this.value,event,false,'3')"
-							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"	data-inputmask="'mask': 'd/m/y'" /></td>
+							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"	data-inputmask="'mask': 'd/m/y'" autocomplete="off"/></td>
 					<td class="bluebox"><s:text name="voucher.todate" /><span class="mandatory1">*</span></td>
 					<s:date name="toDate" format="dd/MM/yyyy" var="tempToDate" />
 					<td class="bluebox"><s:textfield id="toDate" name="toDate" value="%{tempToDate}" onkeyup="DateFormat(this,this.value,event,false,'3')"
-							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"	data-inputmask="'mask': 'd/m/y'" /></td>
+							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"	data-inputmask="'mask': 'd/m/y'" autocomplete="off"/></td>
 				</tr>
 			</table>
 			<div class="subheadsmallnew"></div>
