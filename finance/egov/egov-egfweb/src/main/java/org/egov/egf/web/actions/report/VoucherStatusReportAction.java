@@ -144,10 +144,14 @@ public class VoucherStatusReportAction extends BaseFormAction {
 	private EgovMasterDataCaching masterDataCache;
 	@Autowired
 	private FinancialYearDAO financialYearDAO;
+	@Autowired
+        @Qualifier("voucherHelper")
+        private VoucherHelper voucherHelpers;
+	
 	private Department deptImpl = new Department();
 
 	List<String> voucherTypes = VoucherHelper.VOUCHER_TYPES;
-	Map<String, List<String>> voucherNames = VoucherHelper.VOUCHER_TYPE_NAMES;
+	Map<String, List<String>> voucherNames;
 
 	@Override
 	public Object getModel() {
@@ -222,6 +226,7 @@ public class VoucherStatusReportAction extends BaseFormAction {
 		addDropdownData("typeList", VoucherHelper.VOUCHER_TYPES);
 		addDropdownData("modeOfPaymentList",
 				persistenceService.findAllBy(" select DISTINCT upper(type) from Paymentheader "));
+		voucherNames = voucherHelpers.getVoucherNamesAndTypes();
 		nameMap = new LinkedHashMap<String, String>();
 	}
 

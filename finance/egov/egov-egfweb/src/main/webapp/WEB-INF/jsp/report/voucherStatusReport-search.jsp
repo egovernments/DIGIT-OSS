@@ -107,7 +107,7 @@
 					<td class="greybox"><s:textfield name="fromDate" id="fromDate"
 							maxlength="20"
 							onkeyup="DateFormat(this,this.value,event,false,'3')"
-							value="%{tempFromDate}" /><a
+							value="%{tempFromDate}" autocomplete="off"/><a
 						href="javascript:show_calendar('forms[0].fromDate');"
 						style="text-decoration: none">&nbsp;<img
 							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a></td>
@@ -117,7 +117,7 @@
 					<td class="greybox"><s:textfield name="toDate" id="toDate"
 							maxlength="20"
 							onkeyup="DateFormat(this,this.value,event,false,'3')"
-							value="%{tempToDate}" /><a
+							value="%{tempToDate}" autocomplete="off"/><a
 						href="javascript:show_calendar('forms[0].toDate');"
 						style="text-decoration: none">&nbsp;<img
 							src="/services/egi/resources/erp2/images/calendaricon.gif" border="0" /></a>(dd/mm/yyyy)</td>
