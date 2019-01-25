@@ -1649,6 +1649,19 @@ public class PaymentAction extends BasePaymentAction {
             }
         }
     }
+    
+    public String getMasterName(String name){
+        String val = "";
+        if (voucherHeader != null) {
+            if (name.equals("department") && paymentheader.getVoucherheader().getVouchermis().getDepartmentcode() != null
+                    && !paymentheader.getVoucherheader().getVouchermis().getDepartmentcode().equals("")) {
+                org.egov.infra.microservice.models.Department list = microserviceUtils
+                        .getDepartmentByCode(paymentheader.getVoucherheader().getVouchermis().getDepartmentcode());
+                val = list.getName();
+            }
+        }
+        return val;
+    }
 
     protected String getMessage(final String key) {
         return getText(key);

@@ -285,6 +285,8 @@ public class UpdateExpenseBillController extends BaseBillController {
         final EgBillregister egBillregister = expenseBillService.getById(Long.parseLong(billId));
         final List<DocumentUpload> documents = documentUploadRepository.findByObjectId(Long.valueOf(billId));
         egBillregister.setDocumentDetail(documents);
+        String departmentCode = this.getDepartmentName(egBillregister.getEgBillregistermis().getDepartmentcode());
+        egBillregister.getEgBillregistermis().setDepartmentName(departmentCode);
         setDropDownValues(model);
         egBillregister.getBillDetails().addAll(egBillregister.getEgBilldetailes());
         model.addAttribute("mode", "readOnly");
@@ -346,5 +348,4 @@ public class UpdateExpenseBillController extends BaseBillController {
 
         return departmentName;
     }
-
 }

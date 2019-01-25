@@ -109,9 +109,8 @@ function openVoucher(vid)
 			<font style='color: red;'>
 				<p id="lblError" style="font: bold"></p>
 			</font>
-			<span class="mandatory1"> <s:actionerror /> <s:fielderror />
-				<s:actionmessage />
-			</span>
+			<span class="mandatory1"> <s:actionerror /> <s:fielderror /></span>
+			<span style="color: green"><s:actionmessage /></span>
 			<div class="formmainbox">
 				<div class="subheadnew">Bill Payment View</div>
 				<table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -149,8 +148,7 @@ function openVoucher(vid)
 																<s:if test="%{shouldShowHeaderField('department')}">
 																	<td class="greybox"><strong><s:text
 																				name="voucher.department" /></strong></td>
-																	<td class="greybox"><s:property
-																			value="%{paymentheader.voucherheader.vouchermis.departmentcode}" /></td>
+																	<td class="greybox"><s:property value="%{getMasterName('department')}" /></td>
 																</s:if>
 																<s:if test="%{shouldShowHeaderField('functionary')}">
 																	<td class="greybox"><strong><s:text

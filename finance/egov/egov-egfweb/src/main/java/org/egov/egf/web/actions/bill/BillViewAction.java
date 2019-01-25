@@ -205,6 +205,19 @@ public class BillViewAction extends BaseFormAction
             LOGGER.debug("-----------End of loadBillDetails()-----------");
         return tempMap;
             }
+    
+    public String getMasterName(String name){
+        String val = "";
+        if (egBillRegister.getEgBillregistermis() != null) {
+            if (name.equals("department") && egBillRegister.getEgBillregistermis().getDepartmentcode() != null
+                    && !egBillRegister.getEgBillregistermis().getDepartmentcode().equals("")) {
+                org.egov.infra.microservice.models.Department list = microserviceUtils
+                        .getDepartmentByCode(egBillRegister.getEgBillregistermis().getDepartmentcode());
+                val = list.getName();
+            }
+        }
+        return val;
+    }
 
     public void setBillId(final long billId) {
         egBillRegister = (EgBillregister) persistenceService.find(" from EgBillregister where id = ?", billId);
