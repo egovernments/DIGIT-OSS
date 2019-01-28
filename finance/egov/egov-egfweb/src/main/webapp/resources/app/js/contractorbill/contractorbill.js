@@ -69,6 +69,8 @@ $(document).ready(function(){
 		$('#workOrder').val($workOrderId);
 		loadMisAttributes($workOrderId);
 	}
+	creditAmoutrowcount=$("#creditAmoutrowcount").val() == undefined ? creditAmoutrowcount : $("#creditAmoutrowcount").val();
+	debitAmountrowcount=$("#debitAmountrowcount").val() == undefined ? debitAmountrowcount : $("#debitAmountrowcount").val();
 	calcualteNetpaybleAmount();
 });
 
@@ -333,7 +335,7 @@ function validate(){
 	}
 	
 	if(parseFloat(billamount) < parseFloat(debitamount)){
-		bootbox.alert("Bill amount should be greater then passed amount");
+		bootbox.alert("Bill amount should be greater than passed amount");
 		return false;
 	}
 	
@@ -407,7 +409,6 @@ function validateCutOff()
 	return false;
 }
 function calcualteNetpaybleAmount(){
-	
 
 	var debitamt = 0;
 	var creditamt = 0;

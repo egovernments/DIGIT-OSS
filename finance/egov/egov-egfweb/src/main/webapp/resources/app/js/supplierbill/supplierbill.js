@@ -69,6 +69,8 @@ $(document).ready(function(){
 		$('#purchaseOrder').val($purchaseOrderId);
 		loadMisAttributes($purchaseOrderId);
 	}
+	creditAmoutrowcount=$("#creditAmoutrowcount").val() == undefined ? creditAmoutrowcount : $("#creditAmoutrowcount").val();
+	debitAmountrowcount=$("#debitAmountrowcount").val() == undefined ? debitAmountrowcount : $("#debitAmountrowcount").val();
 	calcualteNetpaybleAmount();
 });
 
@@ -333,7 +335,7 @@ var creditamount = $("#supplierBillTotalCreditAmount")["0"].innerHTML;
 	}
 	
 	if(parseFloat(billamount) < parseFloat(debitamount)){
-		bootbox.alert("Bill amount should be greater then passed amount");
+		bootbox.alert("Bill amount should be greater than passed amount");
 		return false;
 	}
 	

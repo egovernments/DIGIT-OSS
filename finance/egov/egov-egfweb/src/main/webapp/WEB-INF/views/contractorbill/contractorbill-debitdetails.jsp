@@ -56,6 +56,7 @@
 	</div>
 </div>
 <div class="panel-body">
+<input type="hidden" value="${egBillregister.debitDetails.size()}" id="debitAmountrowcount"/>
 	<table class="table table-bordered" id="tbldebitdetails">
 		<thead>
 			<tr>

@@ -56,6 +56,7 @@
 	</div>
 </div>
 <div class="panel-body">
+<input type="hidden" value="${egBillregister.creditDetails.size()}" id="creditAmoutrowcount"/>
 	<table class="table table-bordered" id="tblcreditdetails">
 		<thead>
 			<tr>
