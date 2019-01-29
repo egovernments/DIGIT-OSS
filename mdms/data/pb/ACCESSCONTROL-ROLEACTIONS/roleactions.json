@@ -17155,6 +17155,36 @@
       "actionid": 1747,
       "actioncode": "",
       "tenantId": "pb"
-    } 
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1750,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1751,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1751,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1752,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1752,
+      "actioncode": "",
+      "tenantId": "pb"
+    }
   ]
 }
