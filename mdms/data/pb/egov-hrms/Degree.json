@@ -1,0 +1,56 @@
+{
+  "tenantId": "pb",
+  "moduleName": "egov-hrms",
+  "Degree": [
+    {
+      "status": "Matriculation",
+      "code": "MATRICULATION",
+      "active": true
+    },
+    {
+      "status": "10+2/Equivalent Diploma",
+      "code": "10+2/EQUIVALENT DIPLOMA",
+      "active": true
+    },
+    {
+      "status": "B.A/B.Sc./B.Com/BBA",
+      "code": "B.A/B.SC./B.COM/BBA",
+      "active": true
+    },
+    {
+      "status": "LLB/LLM",
+      "code": "LLB/LLM",
+      "active": true
+    },
+    {
+      "status": "B.E/B.Tech.",
+      "code": "B.E/B.TECH.",
+      "active": true
+    },
+    {
+      "status": "M.A/M.Com./M.Sc.",
+      "code": "M.A/M.COM./M.SC.",
+      "active": true
+    },
+    {
+      "status": "M.E/M.Tech.",
+      "code": "M.E/M.TECH.",
+      "active": true
+    },
+    {
+      "status": "MBA/PGDM",
+      "code": "MBA/PGDM",
+      "active": true
+    },
+    {
+      "status": "Doctorate",
+      "code": "DOCTORATE",
+      "active": true
+    },
+    {
+      "status": "Other",
+      "code": "OTHER",
+      "active": true
+    }
+  ]
+}
