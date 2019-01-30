@@ -60,8 +60,8 @@ import org.egov.commons.Functionary;
 import org.egov.commons.Fund;
 import org.egov.egf.model.Statement;
 import org.egov.infra.admin.master.entity.Boundary;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.reporting.util.ReportUtil;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infstr.services.PersistenceService;
@@ -182,10 +182,12 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
                     incomeExpenditureStatement.getFund().getId()));
             heading.append(" in " + incomeExpenditureStatement.getFund().getName());
         }
-        if (incomeExpenditureStatement.getDepartment() != null && incomeExpenditureStatement.getDepartment().getId() != null
-                && incomeExpenditureStatement.getDepartment().getId() != 0) {
-            incomeExpenditureStatement.setDepartment((Department) getPersistenceService().find("from Department where id=?",
-                    incomeExpenditureStatement.getDepartment().getId()));
+        if (incomeExpenditureStatement.getDepartment() != null && incomeExpenditureStatement.getDepartment().getCode() != null
+                && !"null".equalsIgnoreCase(incomeExpenditureStatement.getDepartment().getCode())) {
+//            incomeExpenditureStatement.setDepartment((Department) getPersistenceService().find("from Department where id=?",
+//                    incomeExpenditureStatement.getDepartment().getId()));
+            Department dept = microserviceUtils.getDepartmentByCode(incomeExpenditureStatement.getDepartment().getCode());
+            incomeExpenditureStatement.setDepartment(dept);
             heading.append(" in " + incomeExpenditureStatement.getDepartment().getName() + " Department");
         } else
             incomeExpenditureStatement.setDepartment(null);

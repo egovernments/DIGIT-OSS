@@ -173,13 +173,13 @@ public class BalanceSheetService extends ReportService {
         StringBuffer qry = new StringBuffer(256);
         //TODO- We are only grouping by fund here. Instead here grouping should happen based on the filter like -department and Function also
         qry = qry.append("select sum(g.creditamount)-sum(g.debitamount),v.fundid from voucherheader v,");
-        if (balanceSheet.getDepartment() != null && balanceSheet.getDepartment().getId() != -1)
+        if (balanceSheet.getDepartment() != null && !"null".equals(balanceSheet.getDepartment().getCode()))
             qry.append("VoucherMis mis ,");
         qry.append("generalledger g, chartofaccounts coa   where  v.ID=g.VOUCHERHEADERID and " +
                 "v.status not in(" + voucherStatusToExclude + ") and  v.voucherdate>='" + getFormattedDate(fromDate)
                 + "' and v.voucherdate<='" + getFormattedDate(toDate) + "'");
-        if (balanceSheet.getDepartment() != null && balanceSheet.getDepartment().getId() != -1)
-            qry.append(" and v.id= mis.voucherheaderid  and mis.departmentid= " + balanceSheet.getDepartment().getId());
+        if (balanceSheet.getDepartment() != null && !"null".equals(balanceSheet.getDepartment().getCode()))
+            qry.append(" and v.id= mis.voucherheaderid  and mis.departmentcode= '"+balanceSheet.getDepartment().getCode()+"'");
         qry.append(" and coa.ID=g.glcodeid and coa.type in ('I','E') " + filterQuery + " group by v.fundid");
         final Query query = persistenceService.getSession().createSQLQuery(qry.toString());
         final List<Object[]> excessieAmountList = query.list();
@@ -218,13 +218,13 @@ public class BalanceSheetService extends ReportService {
             formattedToDate = getFormattedDate(getPreviousYearFor(toDate));
         StringBuffer qry = new StringBuffer(256);
         qry = qry.append("		select sum(g.creditamount)-sum(g.debitamount),v.fundid  from voucherheader v,generalledger g, ");
-        if (balanceSheet.getDepartment() != null && balanceSheet.getDepartment().getId() != -1)
+        if (balanceSheet.getDepartment() != null && !"null".equals(balanceSheet.getDepartment().getCode()))
             qry.append("  VoucherMis mis ,");
         qry.append(" chartofaccounts coa   where  v.ID=g.VOUCHERHEADERID and v.status not in(" + voucherStatusToExclude
                 + ") and  " +
                 "v.voucherdate>='" + getFormattedDate(getPreviousYearFor(fromDate)) + "' and v.voucherdate<='" + formattedToDate
                 + "' and coa.ID=g.glcodeid ");
-        if (balanceSheet.getDepartment() != null && balanceSheet.getDepartment().getId() != -1)
+        if (balanceSheet.getDepartment() != null && !"null".equals(balanceSheet.getDepartment().getCode()))
             qry.append(" and v.id= mis.voucherheaderid");
 
         qry.append(" and coa.type in ('I','E') " + filterQuery + " group by v.fundid,g.functionid");

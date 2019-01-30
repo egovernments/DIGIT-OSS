@@ -233,10 +233,10 @@ public class BalanceSheetScheduleService extends ScheduleService {
             formattedToDate = balanceSheetService.getFormattedDate(balanceSheetService.getPreviousYearFor(toDate));
         final StringBuffer qry = new StringBuffer(512);
         qry.append("select sum(debitamount)-sum(creditamount),c.glcode from generalledger g,chartofaccounts c,voucherheader v   ");
-        if (balanceSheet.getDepartment() != null && balanceSheet.getDepartment().getId() != -1)
+        if (balanceSheet.getDepartment() != null && balanceSheet.getDepartment().getCode() != null)
             qry.append(", VoucherMis mis ");
         qry.append(" where  v.id=g.voucherheaderid and c.id=g.glcodeid and v.status not in(" + voucherStatusToExclude + ") ");
-        if (balanceSheet.getDepartment() != null && balanceSheet.getDepartment().getId() != -1)
+        if (balanceSheet.getDepartment() != null && balanceSheet.getDepartment().getCode() != null)
             qry.append(" and v.id= mis.voucherheaderid ");
         qry.append(" AND v.voucherdate <= '" + formattedToDate + "' and v.voucherdate >='"
                 +balanceSheetService.getFormattedDate(balanceSheetService.getPreviousYearFor(fromDate)) +

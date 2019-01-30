@@ -51,6 +51,8 @@ import org.egov.commons.Fund;
 import org.egov.egf.model.IEStatementEntry;
 import org.egov.egf.model.Statement;
 import org.egov.egf.model.StatementResultObject;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.utils.Constants;
 import org.hibernate.SQLQuery;
@@ -72,6 +74,9 @@ public class IncomeExpenditureService extends ReportService {
  @Autowired
  @Qualifier("persistenceService")
  private PersistenceService persistenceService;
+ 
+ @Autowired
+ public MicroserviceUtils microserviceUtils;
 
     private static final String I = "I";
     private static final String E = "E";
@@ -466,8 +471,10 @@ public class IncomeExpenditureService extends ReportService {
         if (incomeExpenditureStatement.getFund() != null && incomeExpenditureStatement.getFund().getId() != null
                 && incomeExpenditureStatement.getFund().getId() != 0)
             queryStr.append(" and bd.fund=" + incomeExpenditureStatement.getFund().getId());
-        if (incomeExpenditureStatement.getDepartment() != null && incomeExpenditureStatement.getDepartment().getId() != 0)
-            queryStr.append(" and bd.executing_department=" + incomeExpenditureStatement.getDepartment().getId());
+        if (incomeExpenditureStatement.getDepartment() != null && !"null".equals(incomeExpenditureStatement.getDepartment().getCode())){
+            Department dept =this.microserviceUtils.getDepartmentByCode(incomeExpenditureStatement.getDepartment().getCode());
+            queryStr.append(" and bd.executing_department=" + dept.getId());
+        }
         if (incomeExpenditureStatement.getFunction() != null && incomeExpenditureStatement.getFunction().getId() != null
                 && incomeExpenditureStatement.getFunction().getId() != 0)
             queryStr.append("  and bd.function= " + incomeExpenditureStatement.getFunction().getId());
@@ -499,8 +506,10 @@ public class IncomeExpenditureService extends ReportService {
         if (incomeExpenditureStatement.getFund() != null && incomeExpenditureStatement.getFund().getId() != null
                 && incomeExpenditureStatement.getFund().getId() != 0)
             queryStr.append(" and bd.fund=" + incomeExpenditureStatement.getFund().getId());
-        if (incomeExpenditureStatement.getDepartment() != null && incomeExpenditureStatement.getDepartment().getId() != 0)
-            queryStr.append(" and bd.executing_department=" + incomeExpenditureStatement.getDepartment().getId());
+        if (incomeExpenditureStatement.getDepartment() != null && !"null".equals(incomeExpenditureStatement.getDepartment().getCode())){
+            Department dept =this.microserviceUtils.getDepartmentByCode(incomeExpenditureStatement.getDepartment().getCode());
+            queryStr.append(" and bd.executing_department=" + dept.getId());
+        }
         if (incomeExpenditureStatement.getFunction() != null && incomeExpenditureStatement.getFunction().getId() != null
                 && incomeExpenditureStatement.getFunction().getId() != 0)
             queryStr.append("  and bd.function= " + incomeExpenditureStatement.getFunction().getId());

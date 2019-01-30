@@ -52,7 +52,8 @@ import org.egov.commons.CFunction;
 import org.egov.commons.Functionary;
 import org.egov.commons.Fund;
 import org.egov.infra.admin.master.entity.Boundary;
-import org.egov.infra.admin.master.entity.Department;
+//import org.egov.infra.admin.master.entity.Department;
+import org.egov.infra.microservice.models.Department;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

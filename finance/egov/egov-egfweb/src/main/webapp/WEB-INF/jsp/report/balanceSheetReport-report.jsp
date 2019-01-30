@@ -93,7 +93,7 @@ function validateMandatoryFields(){
 	function balanceSheetReportSubmit()
 	{
 		if(validateMandatoryFields()){
-	document.balanceSheetReport.action='/EGF/report/balanceSheetReport-printBalanceSheetReport.action';
+	document.balanceSheetReport.action='/services/EGF/report/balanceSheetReport-printBalanceSheetReport.action';
 	document.balanceSheetReport.submit();
 	return true;
 		}
@@ -103,10 +103,10 @@ function validateMandatoryFields(){
 
 function showAllSchedules(){
 	if(validateMandatoryFields()){
- 		//window.open('/EGF/report/balanceSheetReport-generateScheduleReport.action?showDropDown=false&model.period='+document.getElementById('period').value+'&model.currency='+document.getElementById('currency').value+'&model.financialYear.id='+document.getElementById('financialYear').value+'&model.department.id='+document.getElementById('department').value+'&model.fund.id='+document.getElementById('fund').value+'&model.function.id='+document.getElementById('function').value+'&model.asOndate='+document.getElementById('asOndate').value,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+ 		window.open('/services/EGF/report/balanceSheetReport-generateScheduleReport.action?showDropDown=false&model.period='+document.getElementById('period').value+'&model.currency='+document.getElementById('currency').value+'&model.financialYear.id='+document.getElementById('financialYear').value+'&model.department.code='+document.getElementById('department').value+'&model.fund.id='+document.getElementById('fund').value+'&model.function.id='+document.getElementById('function').value+'&model.asOndate='+document.getElementById('asOndate').value,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
 
- 		document.balanceSheetReport.action='/EGF/report/balanceSheetReport-generateScheduleReport.action?showDropDown=false&model.period='+document.getElementById('period').value+'&model.currency='+document.getElementById('currency').value+'&model.financialYear.id='+document.getElementById('financialYear').value+'&model.department.id='+document.getElementById('department').value+'&model.fund.id='+document.getElementById('fund').value+'&model.function.id='+document.getElementById('function').value+'&model.asOndate='+document.getElementById('asOndate').value,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no';
- 		document.balanceSheetReport.submit();
+ 		//document.balanceSheetReport.action='/services/EGF/report/balanceSheetReport-generateScheduleReport.action?showDropDown=false&model.period='+document.getElementById('period').value+'&model.currency='+document.getElementById('currency').value+'&model.financialYear.id='+document.getElementById('financialYear').value+'&model.department.code='+document.getElementById('department').value+'&model.fund.id='+document.getElementById('fund').value+'&model.function.id='+document.getElementById('function').value+'&model.asOndate='+document.getElementById('asOndate').value,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no';
+ 		//document.balanceSheetReport.submit();
  		return true;
     }
 	return false;
@@ -125,17 +125,17 @@ function showAllSchedulesDetailed(){
  */		var asOndate=document.getElementById('asOndate').value;
 
 
+ 	window.open("/services/EGF/report/balanceSheetReport-generateScheduleReportDetailed.action?showDropDown=false&model.period="+period+"&model.currency="+currency+"&model.financialYear.id="+financialYear+"&model.department.code="+department+"&model.fund.id="+fund+"&model.function.id="+functionId+"&model.asOndate="+asOndate,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+	//document.balanceSheetReport.action="/services/EGF/report/balanceSheetReport-generateScheduleReportDetailed.action?showDropDown=false&model.period="+period+"&model.currency="+currency+"&model.financialYear.id="+financialYear+"&model.department.code="+department+"&model.fund.id="+fund+"&model.function.id="+functionId+"&model.asOndate="+asOndate;
 
-	document.balanceSheetReport.action="/services/EGF/report/balanceSheetReport-generateScheduleReportDetailed.action?showDropDown=false&model.period="+period+"&model.currency="+currency+"&model.financialYear.id="+financialYear+"&model.department.id="+department+"&model.fund.id="+fund+"&model.function.id="+functionId+"&model.asOndate="+asOndate;
-
-	document.balanceSheetReport.submit();
+	//document.balanceSheetReport.submit();
 	return true;
     }
 	return false;
 }
 
 function showSchedule(majorCode){
-	window.open('/EGF/report/balanceSheetReport-generateBalanceSheetSubReport.action?showDropDown=false&model.period=<s:property value="model.period"/>&model.currency=<s:property value="model.currency"/>&model.financialYear.id=<s:property value="model.financialYear.id"/>&model.department.id=<s:property value="model.department.id"/>&model.fund.id=<s:property value="model.fund.id"/>&model.asOndate=<s:property value="model.asOndate"/>&model.function.id=<s:property value="model.function.id"/>&model.functionary.id=<s:property value="model.functionary.id"/>&model.field.id=<s:property value="model.field.id"/>&majorCode='+majorCode,'','height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+	window.open('/services/EGF/report/balanceSheetReport-generateBalanceSheetSubReport.action?showDropDown=false&model.period=<s:property value="model.period"/>&model.currency=<s:property value="model.currency"/>&model.financialYear.id=<s:property value="model.financialYear.id"/>&model.department.code=<s:property value="model.department.code"/>&model.fund.id=<s:property value="model.fund.id"/>&model.asOndate=<s:property value="model.asOndate"/>&model.function.id=<s:property value="model.function.id"/>&model.functionary.id=<s:property value="model.functionary.id"/>&model.field.id=<s:property value="model.field.id"/>&majorCode='+majorCode,'','height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
 }
 </script>
 <style>
@@ -194,9 +194,9 @@ th.bluebgheadtd {
 					<td class="bluebox">&nbsp;</td>
 					<td class="bluebox"><s:text name="report.department" />:</td>
 					<td class="bluebox"><s:select name="department"
-							id="department" list="dropdownData.departmentList" listKey="id"
-							listValue="name" headerKey="0" headerValue="----Select----"
-							value="model.department.id" /></td>
+							id="department" list="dropdownData.departmentList" listKey="code"
+							listValue="name" headerKey="null" headerValue="----Select----"
+							value="model.department.code" /></td>
 					<td class="bluebox"><s:text name="report.fund" />:</td>
 					<td class="bluebox"><s:select name="fund" id="fund"
 							list="dropdownData.fundList" listKey="id" listValue="name"
@@ -245,9 +245,9 @@ th.bluebgheadtd {
 					cssClass="buttonsubmit" onclick="return balanceSheetReportSubmit()" />
 				<input name="button" type="button" class="buttonsubmit" id="button3"
 					value="Print" onclick="window.print()" />&nbsp;&nbsp;  <input
-					type="Submit" value="View All Minor Schedules" class="buttonsubmit" method="generateScheduleReport"
+					type="button" value="View All Minor Schedules" class="buttonsubmit" method="generateScheduleReport"
 					onclick="return showAllSchedules()" /> &nbsp;&nbsp; <input
-					type="Submit" value="View All Schedules" class="buttonsubmit" method="generateScheduleReportDetailed"
+					type="button" value="View All Schedules" class="buttonsubmit" method="generateScheduleReportDetailed"
 					onclick="return showAllSchedulesDetailed()" /> &nbsp;&nbsp;
 
 
