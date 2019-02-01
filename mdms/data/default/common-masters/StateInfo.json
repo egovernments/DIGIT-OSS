@@ -3,7 +3,6 @@
   "moduleName": "common-masters",
   "StateInfo": [
     {
-      "tenantId": "default",
       "name": "Karnataka",
       "code":"kar",
       "bannerUrl": "https://raw.githubusercontent.com/egovernments/egov-web-app/rainmaker-v1-dynamic-state/web/rainmaker/packages/assets/images/kar/state-images/Jog%20falls%20High%20Resolution%20images.jpg",
