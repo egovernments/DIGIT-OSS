@@ -10,7 +10,7 @@ insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,create
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-07','Income from Investment',1,current_date);
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-08','INTEREST EARNED',1,current_date);
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-09','OTHER INCOME',1,current_date);
-insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-10','PRIOR PERIOD ITEM',1
+insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-10','INCOME-PRIOR PERIOD ITEM',1,current_date);
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-11','Establishment Expenses',1,current_date);
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-12','Administrative Expenses',1,current_date);
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-13','OPERATION AND  MAINTENANCE EXPENSES',1,current_date);
@@ -20,4 +20,4 @@ insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,create
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-17','PROVISIONS AND WRITE OFF',1,current_date);
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-18','MISCELLANEOUS EXPENSES',1,current_date);
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-19','Depreciation',1,current_date);
-insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-20','PRIOR PERIOD ITEMS',1,current_date);1,current_date);
+insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-20','EXPENSE-PRIOR PERIOD ITEMS',1,current_date);
