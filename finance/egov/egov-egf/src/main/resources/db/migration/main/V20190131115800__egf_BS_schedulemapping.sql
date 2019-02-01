@@ -1,3 +1,5 @@
+delete from schedulemapping where reporttype='BS';
+
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'BS','B-01','Fund Balance',1,current_date);
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'BS','B-02','EARMARKED FUNDS',1,current_date);
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'BS','B-03','RESERVE',1,current_date);

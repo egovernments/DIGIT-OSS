@@ -1,3 +1,5 @@
+delete from schedulemapping where reporttype='IE';
+
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-01','TAX REVENUE',1,current_date);
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-02','ASSIGNED REVENUE  AND  COMPENSATIONS',1,current_date);
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-03','RENTAL INCOME FROM MUNICIPAL PROPERTIES',1,current_date);
