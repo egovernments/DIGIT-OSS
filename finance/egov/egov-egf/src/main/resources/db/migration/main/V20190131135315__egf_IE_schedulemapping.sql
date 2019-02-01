@@ -1,3 +1,4 @@
+update chartofaccounts set scheduleid=null where scheduleid in(select id from schedulemapping where reporttype='IE');
 delete from schedulemapping where reporttype='IE';
 
 insert into schedulemapping(id,reporttype,schedule,schedulename,createdby,createddate) values(nextval('seq_schedulemapping'),'IE','I-01','TAX REVENUE',1,current_date);
