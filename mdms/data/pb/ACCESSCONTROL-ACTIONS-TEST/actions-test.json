@@ -12718,7 +12718,7 @@
       "enabled": true,
       "serviceCode": "TradeLicense",
       "code": "null",
-      "navigationURL": "integration/tradelicense/search",
+      "navigationURL": "/tradelicence/search",
       "path": "TradeLicense.Application",
       "leftIcon": "places:business-center"
     },
