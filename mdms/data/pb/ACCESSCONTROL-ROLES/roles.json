@@ -223,107 +223,107 @@
       "description": "Employee who files and follows up complaints on behalf of the citizen"
     },
     {
-      "rolecode": "PGR-ADMIN",
+      "code": "PGR-ADMIN",
       "name": "PGR Administrator",
       "description": "Admin role that has super access over the system"
     },
     {
-      "rolecode": "CEMP",
+      "code": "CEMP",
       "name": "Counter Employee",
       "description": "Employee at the counter who performs assessment on behalf of citizen"
     },
     {
-      "rolecode": "FEMP",
+      "code": "FEMP",
       "name": "Field Employee",
       "description": "Employee on the field"
     },
     {
-      "rolecode": "PTADMIN",
+      "code": "PTADMIN",
       "name": "ULB Administrator",
       "description": "Admin role that as access over an ulb"
     },
     {
-      "rolecode": "STADMIN",
+      "code": "STADMIN",
       "name": "State Administrator",
       "description": "Admin role that as access over a state"
     },
     {
-      "rolecode": "EGF_BILL_CREATOR",
+      "code": "EGF_BILL_CREATOR",
       "name": "EGF Bill Creator",
       "description": "Employee who creates Bills in finance "
     },
     {
-      "rolecode": "EGF_BILL_APPROVER",
+      "code": "EGF_BILL_APPROVER",
       "name": "EGF Bill Approver",
       "description": "Employee who takes part in  Bills  approval in finance "
     },
     {
-      "rolecode": "EGF_VOUCHER_CREATOR",
+      "code": "EGF_VOUCHER_CREATOR",
       "name": "Finance Voucher Creator",
       "description": "One who can create a voucher"
     },
     {
-      "rolecode": "EGF_VOUCHER_APPROVER",
+      "code": "EGF_VOUCHER_APPROVER",
       "name": "Finance Voucher Approver",
       "description": "One who can approve a voucher"
     },
     {
-      "rolecode": "EGF_PAYMENT_CREATOR",
+      "code": "EGF_PAYMENT_CREATOR",
       "name": "Finance Payment Creator",
       "description": "One who can create a payment"
     },
     {
-      "rolecode": "EGF_PAYMENT_APPROVER",
+      "code": "EGF_PAYMENT_APPROVER",
       "name": "Finance Payment Approver",
       "description": "One who can approve a payment"
     },
     {
-      "rolecode": "EGF_MASTER_ADMIN",
+      "code": "EGF_MASTER_ADMIN",
       "name": "Finance Master Admin",
       "description": "One who is the administrator for all master data in Finance"
     },
     {
-      "rolecode": "EGF_REPORT_VIEW",
+      "code": "EGF_REPORT_VIEW",
       "name": "Finance Report View",
       "description": "One who has acess to all financial reports"
     },
     {
-      "rolecode": "COLL_RECEIPT_CREATOR",
+      "code": "COLL_RECEIPT_CREATOR",
       "name": "Collections Receipt Creator",
       "description": "One who can create and approve a receipt and receipt voucher"
     },
     {
-      "rolecode": "COLL_REMIT_TO_BANK",
+      "code": "COLL_REMIT_TO_BANK",
       "name": "Collections Remitter",
       "description": "One who can remit the instruments to bank"
     },
    {
-      "rolecode": "SYS_INTEGRATOR_FINANCE",
+      "code": "SYS_INTEGRATOR_FINANCE",
       "name": "System Integrator Finance",
       "description": "Role for allowing system integration of Finance app with rainmaker"
     },
     {
-      "rolecode": "SYS_INTEGRATOR_WATER_SEW",
+      "code": "SYS_INTEGRATOR_WATER_SEW",
       "name": "System Integrator W&S",
       "description": "Role for allowing system integration of Water and Sewerage app with rainmaker"
     },
     {
-      "rolecode": "TL_CEMP",
+      "code": "TL_CEMP",
       "name": "TL Counter Employee",
       "description": "Counter Employee in Trade License who files TL on behalf of the citizen"
     },
     {
-      "rolecode": "TL_APPROVER",
+      "code": "TL_APPROVER",
       "name": "TL Approver",
       "description": "Approver who verifies and approves the TL application"
     },
    {
-      "rolecode": "EMPLOYEE_FINANCE",
+      "code": "EMPLOYEE_FINANCE",
       "name": "Employee Finance",
       "description": "All Employees who use Finance application"
     },
     {
-      "rolecode": "EGF_ADMINISTRATOR",
+      "code": "EGF_ADMINISTRATOR",
       "name": "Finance Adminsitrator",
       "description": "All Employees who are Finance application administrator"
     }
