@@ -5,57 +5,57 @@
     {
       "name": "Street Lights",
       "code": "DEPT_1",
-      "active": "true"
+      "active": true
     },
     {
       "name": "Building & Roads",
       "code": "DEPT_2",
-      "active": "true"
+      "active": true
     },
     {
       "name": "Health & Sanitation",
       "code": "DEPT_3",
-      "active": "true"
+      "active": true
     },
     {
       "name": "Operation & Maintenance",
       "code": "DEPT_4",
-      "active": "true"
+      "active": true
     },
     {
       "name": "Horticulture",
       "code": "DEPT_5",
-      "active": "true"
+      "active": true
     },
     {
       "name": "Building Branch",
       "code": "DEPT_6",
-      "active": "true"
+      "active": true
     },
     {
       "name": "Citizen service desk",
       "code": "DEPT_7",
-      "active": "true"
+      "active": true
     },
     {
       "name": "Complaint Cell",
       "code": "DEPT_8",
-      "active": "true"
+      "active": true
     },
     {
       "name": "Executive Branch",
       "code": "DEPT_9",
-      "active": "true"
+      "active": true
     },
     {
       "name": "Others",
       "code": "DEPT_10",
-      "active": "true"
+      "active": true
     },
     {
       "name": "Tax Branch",
       "code": "DEPT_13",
-      "active": "true"
+      "active": true
     },
     {
       "name": "Accounts Branch",
