@@ -80,7 +80,7 @@
 							headerValue="----Choose----" value="%{expType}" /></td>
 					<td class="greybox"><s:text name="bill.search.billnumber" /></td>
 					<td class="greybox"><s:textfield name="billnumber"
-							id="billnumber" maxlength="25" value="%{billnumber}"
+							id="billnumber" value="%{billnumber}"
 							onblur="changeMandatoryField()" /></td>
 				</tr>
 				<tr>

@@ -138,7 +138,7 @@
 				</div>
 				<div id="labelAD" align="center">
 					<table width="100%" border=0 id="recoveryDetails">
-						<th>Recovery Details</th>
+						<th style="border-left-width: -;padding-left: 67px;">Recovery Details</th>
 					</table>
 				</div>
 				<table align="center" id="totalAmtTable">

@@ -53,7 +53,7 @@
 <head>
 <link rel="stylesheet" type="text/css"
 	href="/services/EGF/resources/css/ccMenu.css?rnd=${app_release_no}" />
-<title>Cheque Assignment Search</title>
+<title>Deduction Payments Search</title>
 </head>
 <body>
 	<s:form action="chequeAssignment" theme="simple"
