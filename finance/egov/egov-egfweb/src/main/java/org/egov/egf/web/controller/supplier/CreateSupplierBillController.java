@@ -194,7 +194,9 @@ public class CreateSupplierBillController extends BaseBillController {
         model.addAttribute(STATE_TYPE, egBillregister.getClass().getSimpleName());
         prepareWorkflow(model, egBillregister, new WorkflowContainer());
         prepareValidActionListByCutOffDate(model);
-        egBillregister.setBilldate(new Date());
+        if(isBillDateDefaultValue){
+            egBillregister.setBilldate(new Date());            
+        }
         return SUPPLIERBILL_FORM;
     }
 

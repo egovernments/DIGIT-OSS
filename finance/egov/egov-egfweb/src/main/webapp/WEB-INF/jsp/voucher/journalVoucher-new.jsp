@@ -406,13 +406,6 @@
 	}
 function onloadtask(){
 //autocompleteEntities1By20();
-
-	var currentTime = new Date()
-	var month = currentTime.getMonth() + 1
-	var day = currentTime.getDate()
-	var year = currentTime.getFullYear()
-	if(document.getElementById('voucherDate').value  =="")  
-		document.getElementById('voucherDate').value = day + "/" + month + "/" + year ;
 	var VTypeFromBean = '<s:property value="voucherTypeBean.voucherSubType"/>';
 	if(VTypeFromBean == "") 
 		VTypeFromBean = '-1';

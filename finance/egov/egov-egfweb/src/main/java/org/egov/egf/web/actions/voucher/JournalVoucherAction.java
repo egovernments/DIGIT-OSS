@@ -156,6 +156,9 @@ public class JournalVoucherAction extends BaseVoucherAction
         billDetailslist.add(new VoucherDetails());
         billDetailslist.add(new VoucherDetails());
         subLedgerlist.add(new VoucherDetails());
+        if(isDateAutoPopulateDefaultValueEnable()){
+            voucherHeader.setVoucherDate(new Date());
+        }
         // setting the typa as default for reusing billvoucher.nextdesg workflow
         showMode = NEW;
         if (LOGGER.isDebugEnabled())

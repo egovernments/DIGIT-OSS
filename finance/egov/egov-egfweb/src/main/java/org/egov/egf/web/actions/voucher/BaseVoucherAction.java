@@ -874,6 +874,11 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 			return false;
 		}
 	}
+	
+	protected boolean isDateAutoPopulateDefaultValueEnable(){
+	    List<AppConfigValues> configValuesByModuleAndKey = appConfigValuesService.getConfigValuesByModuleAndKey("EGF", "DEFAULT_AUTO_POPULATE_CURR_DATE");
+            return !configValuesByModuleAndKey.isEmpty() ? "Y".equalsIgnoreCase(configValuesByModuleAndKey.get(0).getValue()) : true;
+	}
 
 	public void setEisService(final EisUtilService eisService) {
 		this.eisService = eisService;

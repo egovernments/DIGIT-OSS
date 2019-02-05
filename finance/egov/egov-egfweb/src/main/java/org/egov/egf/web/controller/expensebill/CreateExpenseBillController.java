@@ -128,6 +128,8 @@ public class CreateExpenseBillController extends BaseBillController {
     private FileStoreService fileStoreService;
     @Autowired
     private FinancialUtils financialUtils;
+    
+    
 
     public CreateExpenseBillController(final AppConfigValueService appConfigValuesService) {
         super(appConfigValuesService);
@@ -154,7 +156,9 @@ public class CreateExpenseBillController extends BaseBillController {
         model.addAttribute(STATE_TYPE, egBillregister.getClass().getSimpleName());
         prepareWorkflow(model, egBillregister, new WorkflowContainer());
         prepareValidActionListByCutOffDate(model);
-        egBillregister.setBilldate(new Date());
+        if(isBillDateDefaultValue){
+            egBillregister.setBilldate(new Date());            
+        }
 //        User createdBy = new User();
 //        createdBy.setId(ApplicationThreadLocals.getUserId());
 //        egBillregister.setCreatedBy(createdBy);

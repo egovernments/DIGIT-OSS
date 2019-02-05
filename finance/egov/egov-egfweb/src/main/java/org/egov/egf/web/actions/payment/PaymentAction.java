@@ -845,7 +845,9 @@ public class PaymentAction extends BasePaymentAction {
             }
             if (LOGGER.isInfoEnabled())
                 LOGGER.info("Expenditure type is--------------------------------- " + expType);
-            voucherdate = formatter.format(new Date());
+            if(isDateAutoPopulateDefaultValueEnable()){
+                voucherdate = formatter.format(new Date());                
+            }
         } catch (final ValidationException e) {
             try {
                 search();

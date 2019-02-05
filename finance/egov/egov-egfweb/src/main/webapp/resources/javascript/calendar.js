@@ -333,7 +333,7 @@ function DateFormat(vDateName, vDateValue, e, dateCheck, dateType)
 		{ 
 			if(whichCode==13) return false; //check for enter key
 			else{
-				vDateName.value = vDateName.value.substr(0, (vDateValue.length-1));
+				vDateName.value = vDateName.value.substr(0, (vDateValue.length));
 				return false;
 			}
 		}

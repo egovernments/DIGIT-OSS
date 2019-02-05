@@ -52,6 +52,9 @@ package org.egov.egf.web.actions.payment;
 
 import com.exilant.eGov.src.transactions.VoucherTypeForULB;
 import com.opensymphony.xwork2.validator.annotations.Validations;
+
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -61,6 +64,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.egov.egf.web.actions.voucher.BaseVoucherAction;
 import org.egov.eis.service.EisCommonService;
 import org.egov.infra.admin.master.entity.AppConfig;
+import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.service.AppConfigService;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.workflow.service.SimpleWorkflowService;
@@ -200,6 +204,11 @@ public class BasePaymentAction extends BaseVoucherAction {
             else if (NONE.equalsIgnoreCase(appValue))
                 bankBalanceCheck = appValue.toLowerCase();
         }
+    }
+    
+    protected boolean isDateAutoPopulateDefaultValueEnable(){
+        List<AppConfigValues> configValuesByModuleAndKey = appConfigValuesService.getConfigValuesByModuleAndKey("EGF", "DEFAULT_AUTO_POPULATE_CURR_DATE");
+        return !configValuesByModuleAndKey.isEmpty() ? "Y".equalsIgnoreCase(configValuesByModuleAndKey.get(0).getValue()) : true;
     }
 
     public String getAction() {

@@ -98,6 +98,8 @@ public abstract class BaseBillController extends BaseVoucherController {
     @Qualifier("persistenceService")
     private PersistenceService persistenceService;
 
+    protected boolean isBillDateDefaultValue;
+
     public BaseBillController(final AppConfigValueService appConfigValuesService) {
         super(appConfigValuesService);
     }
@@ -108,6 +110,7 @@ public abstract class BaseBillController extends BaseVoucherController {
         model.addAttribute("billNumberGenerationAuto", expenseBillService.isBillNumberGenerationAuto());
         model.addAttribute("billSubTypes", getBillSubTypes());
         model.addAttribute("subLedgerTypes", accountdetailtypeService.findAll());
+        isBillDateDefaultValue = expenseBillService.isDefaultAutoPopulateCurrDateEnable();
     }
 
     public List<EgBillSubType> getBillSubTypes() {

@@ -245,7 +245,9 @@ public class DirectBankPaymentAction extends BasePaymentAction {
         billDetailslist.add(new VoucherDetails());
         subLedgerlist = new ArrayList<VoucherDetails>();
         subLedgerlist.add(new VoucherDetails());
-        loadDefalutDates();
+        if(isDateAutoPopulateDefaultValueEnable()){
+            loadDefalutDates();            
+        }
         // loadApproverUser(FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
         if (getBankBalanceCheck() == null || "".equals(getBankBalanceCheck()))
             addActionMessage(getText("payment.bankbalance.controltype"));

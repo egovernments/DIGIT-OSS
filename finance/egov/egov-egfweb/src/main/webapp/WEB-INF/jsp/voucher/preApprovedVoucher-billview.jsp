@@ -128,9 +128,6 @@ function onSubmit()
 		return false;
 		}
 }
-jQuery(document).ready(function() {
-jQuery("#voucherDate").datepicker().datepicker("setDate", new Date());
-});
 
 </script>
 <body onload="checkBillIdBillview()">

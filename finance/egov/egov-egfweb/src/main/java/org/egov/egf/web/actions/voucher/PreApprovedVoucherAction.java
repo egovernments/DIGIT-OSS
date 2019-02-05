@@ -278,7 +278,9 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                 "pjv_saveasworkingcopy_enabled");
         final String pjv_wc_enabled = appList.get(0).getValue();
         // loading aprover user info
-        preApprovedVoucher.setVoucherDate(new Date());
+        if(isDefaultAutoPopulateCurrDateEnable()){
+            preApprovedVoucher.setVoucherDate(new Date());            
+        }
         type = egBillregister.getExpendituretype();
         getHeaderMandateFields();
         String purposeValueVN = "";
@@ -1232,6 +1234,11 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
             }
         return check;
 
+    }
+    
+    protected Boolean isDefaultAutoPopulateCurrDateEnable(){
+        List<AppConfigValues> appConfigByModuleNameAndKeyName = appConfigValuesService.getConfigValuesByModuleAndKey("EGF", "DEFAULT_AUTO_POPULATE_CURR_DATE");
+        return !appConfigByModuleNameAndKeyName.isEmpty() ? "Y".equalsIgnoreCase(appConfigByModuleNameAndKeyName.get(0).getValue()) : true;
     }
 
     public void setVoucherService(final VoucherService voucherService) {

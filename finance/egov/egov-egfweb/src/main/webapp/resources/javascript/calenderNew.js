@@ -890,7 +890,7 @@ this.wwriteA("<FONT FACE='" + fontface + "' style='font-size:12px;color:#444444;
 	    }
 	    else
 	    {
-	    vDateName.value = vDateName.value.substr(0, (vDateValue.length-1));
+	    vDateName.value = vDateName.value.substr(0, (vDateValue.length));
 	    return false;
 	             }
 	          }

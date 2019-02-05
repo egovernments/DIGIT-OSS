@@ -385,6 +385,12 @@ public class ExpenseBillService {
         else
             return false;
     }
+    
+    @Transactional(readOnly = true)
+    public boolean isDefaultAutoPopulateCurrDateEnable(){
+        List<AppConfigValues> configValuesByModuleAndKey = appConfigValuesService.getConfigValuesByModuleAndKey("EGF", "DEFAULT_AUTO_POPULATE_CURR_DATE");
+        return configValuesByModuleAndKey.isEmpty() ? true : "Y".equalsIgnoreCase(configValuesByModuleAndKey.get(0).getValue());
+    }
 
     private String getNextBillNumber(final EgBillregister bill) {
         if (FinancialConstants.STANDARD_EXPENDITURETYPE_WORKS.equals(bill.getExpendituretype())) {
