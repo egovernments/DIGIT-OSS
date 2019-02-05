@@ -141,7 +141,7 @@ public abstract class BaseFormAction extends ActionSupport
         final String[] ids = parameters.get(relationshipName);
         if (ids != null && ids.length > 0) {
             final String id = ids[0];
-            if (isNotBlank(id) && Long.valueOf(id) > 0) {
+            if (!"department".equals(relationshipName) && isNotBlank(id) && Long.valueOf(id) > 0) {
                 final PropertyDescriptor propDiscriptor = new PropertyDescriptor("id", class1);
                 if (class1 != null && "Fund".equals(class1.getSimpleName()))
                     setValue(relationshipName, getPersistenceService().load(Integer.valueOf(id), class1));
@@ -149,6 +149,9 @@ public abstract class BaseFormAction extends ActionSupport
                     setValue(relationshipName, getPersistenceService().getSession().get(class1, Long.valueOf(id)));
                 else
                     setValue(relationshipName, getPersistenceService().load(Integer.valueOf(id), class1));
+            }else if("department".equals(relationshipName) && id != null){
+                Department dept = microserviceUtils.getDepartmentByCode(id);
+                setValue(relationshipName, dept);
             }
 
         }

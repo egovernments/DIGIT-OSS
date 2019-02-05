@@ -64,8 +64,12 @@ function showDetails(glcode){
 		 var todayDay = todayDate.getDate();
 		 var todayYear = todayDate.getFullYear();
 		 var todayDateText = todayDay + "/" + todayMonth + "/" +  todayYear;
-		
-			if(endDate > todayDateText)
+		 var chkd1=endDate.split('/');
+		 var chkd2=todayDateText.split('/');
+
+		 var endDateTemp=new Date(chkd1[2],chkd1[1],chkd1[0]);
+		 var todayDateTextTemp=new Date(chkd2[2],chkd2[1],chkd2[0]);
+			if(endDateTemp > todayDateTextTemp)
 				{ 
 				endDate=todayDateText;
 				}
