@@ -326,6 +326,11 @@
       "code": "EGF_ADMINISTRATOR",
       "name": "Finance Adminsitrator",
       "description": "All Employees who are Finance application administrator"
+    },
+    {
+      "code": "PGR_LME",
+      "name": "PGR Last Mile Employee",
+      "description": "PGR Last mile employee to whom the request can be assigned"
     }
   ]
 }
