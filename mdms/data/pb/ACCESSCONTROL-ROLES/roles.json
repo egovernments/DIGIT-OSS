@@ -331,6 +331,11 @@
       "code": "PGR_LME",
       "name": "PGR Last Mile Employee",
       "description": "PGR Last mile employee to whom the request can be assigned"
+    },
+    {
+      "code": "TL_FIELD_INSPECTOR",
+      "name": "TL Field Inspector",
+      "description": "Trade license field inspector"
     }
   ]
 }
