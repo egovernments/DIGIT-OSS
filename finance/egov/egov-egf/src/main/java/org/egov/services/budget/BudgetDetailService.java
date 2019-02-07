@@ -630,7 +630,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         StringBuffer query = new StringBuffer();
         query = query
                 .append("select bd.id,SUM(gl.debitAmount)-SUM(gl.creditAmount) from egf_budgetdetail bd,generalledger gl,voucherheader vh,"
-                        + "vouchermis vmis," + budgetGroupQuery
+                        + "vouchermis vmis, eg_department dept , " + budgetGroupQuery
                         + ",egf_budget b where bd.budget=b.id and vmis.VOUCHERHEADERID=vh.id and gl.VOUCHERHEADERID=vh.id and bd.budgetgroup=bg.id and "
                         + "(bg.ACCOUNTTYPE='REVENUE_EXPENDITURE' or bg.ACCOUNTTYPE='CAPITAL_EXPENDITURE') and vh.status not in ("
                         + voucherstatusExclude + ") and " + "vh.voucherDate>= to_date('" + fromDate
@@ -638,7 +638,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         + miscQuery + " and (gl.glcode = bg.mincode or gl.glcode=bg.majorcode) group by bd.id"
                         + " union "
                         + "select bd.id,SUM(gl.creditAmount)-SUM(gl.debitAmount) from egf_budgetdetail bd,generalledger gl,voucherheader vh,"
-                        + "vouchermis vmis," + budgetGroupQuery
+                        + "vouchermis vmis,eg_department dept , " + budgetGroupQuery
                         + ",egf_budget b where bd.budget=b.id and vmis.VOUCHERHEADERID=vh.id and gl.VOUCHERHEADERID=vh.id and bd.budgetgroup=bg.id and "
                         + "(bg.ACCOUNTTYPE='REVENUE_RECEIPTS' or bg.ACCOUNTTYPE='CAPITAL_RECEIPTS') and vh.status not in ("
                         + voucherstatusExclude + ") and " + "vh.voucherDate>= to_date('" + fromDate
@@ -712,7 +712,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         StringBuffer query = new StringBuffer();
 
         query = query.append("  select bd.uniqueno,SUM(gl.debitAmount)-SUM(gl.creditAmount) from egf_budgetdetail bd,"
-                + "vouchermis vmis,egf_budgetgroup bg,egf_budget b,financialyear f,fiscalperiod p,voucherheader vh,generalledger gl "
+                + "vouchermis vmis,egf_budgetgroup bg,egf_budget b,financialyear f,fiscalperiod p,voucherheader vh,generalledger gl,eg_department dept "
                 + "where bd.budget=b.id and p.financialyearid=f.id and f.id=" + fy.getId()
                 + " and vh.fiscalperiodid=p.id " + dateCondition + " and " + " b.financialyearid="
                 + topBudget.getFinancialYear().getId() + " and b.MATERIALIZEDPATH like '"
@@ -773,7 +773,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
             sum = "SUM(gl.debitAmount)-SUM(gl.creditAmount)";
 
         query = query.append("  select bd.uniqueno," + sum + " from egf_budgetdetail bd,"
-                + "vouchermis vmis,egf_budgetgroup bg,egf_budget b,financialyear f,fiscalperiod p,voucherheader vh,generalledger gl "
+                + "vouchermis vmis,egf_budgetgroup bg,egf_budget b,financialyear f,fiscalperiod p,voucherheader vh,generalledger gl, eg_department dept "
                 + "where bd.budget=b.id and p.financialyearid=f.id and f.id=" + fy.getId()
                 + " and vh.fiscalperiodid=p.id " + dateCondition + " and " + " b.financialyearid="
                 + topBudget.getFinancialYear().getId() + " and b.MATERIALIZEDPATH like '"
@@ -1517,7 +1517,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         final StringBuffer miscQuery = getMiscQuery(mandatoryFields, "bmis", "bdetail", "bmis");
         StringBuffer query = new StringBuffer();
         query = query
-                .append("select bd.id,SUM(case when bdetail.debitAmount = null then 0  else bdetail.debitAmount  end)-SUM(case when bdetail.creditAmount=null then 0 else bdetail.creditAmount end) from egf_budgetdetail bd,eg_billdetails bdetail, eg_billregistermis bmis, eg_billregister br,"
+                .append("select bd.id,SUM(case when bdetail.debitAmount = null then 0  else bdetail.debitAmount  end)-SUM(case when bdetail.creditAmount=null then 0 else bdetail.creditAmount end) from egf_budgetdetail bd,eg_billdetails bdetail, eg_billregistermis bmis, eg_billregister br, eg_department dept,"
                         + "egf_budgetgroup bg where bmis.billid=br.id and bdetail.billid=br.id and bd.budgetgroup=bg.id and "
                         + "(bg.ACCOUNTTYPE='REVENUE_EXPENDITURE' or bg.ACCOUNTTYPE='CAPITAL_EXPENDITURE') and br.billstatus != 'Cancelled'  and "
                         + "bmis.voucherheaderid is null and br.billdate>=to_date('" + fromDate
@@ -1525,7 +1525,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         + miscQuery + " and " + " (bmis.budgetCheckReq is null or bmis.budgetCheckReq=true) and "
                         + "((bdetail.glcodeid between bg.mincode and bg.maxcode) or bdetail.glcodeid=bg.majorcode) group by bd.id"
                         + " union "
-                        + "select bd.id,SUM(case when bdetail.creditAmount=null then 0 else bdetail.creditAmount end)-SUM(case when bdetail.debitAmount = null then 0  else bdetail.debitAmount  end) from egf_budgetdetail bd,eg_billdetails bdetail, eg_billregistermis bmis, eg_billregister br,"
+                        + "select bd.id,SUM(case when bdetail.creditAmount=null then 0 else bdetail.creditAmount end)-SUM(case when bdetail.debitAmount = null then 0  else bdetail.debitAmount  end) from egf_budgetdetail bd,eg_billdetails bdetail, eg_billregistermis bmis, eg_billregister br, eg_department dept,"
                         + "egf_budgetgroup bg where bmis.billid=br.id and bdetail.billid=br.id and bd.budgetgroup=bg.id and "
                         + " (bmis.budgetCheckReq is null or bmis.budgetCheckReq=true) and "
                         + "(bg.ACCOUNTTYPE='REVENUE_RECEIPTS' or bg.ACCOUNTTYPE='CAPITAL_RECEIPTS') and br.billstatus != 'Cancelled' and bmis.voucherheaderid "
@@ -1679,7 +1679,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         if (mandatoryFields.contains(Constants.FUNCTION))
             miscQuery = miscQuery.append(" and " + gl + ".functionId=bd.function ");
         if (mandatoryFields.contains(Constants.EXECUTING_DEPARTMENT))
-            miscQuery = miscQuery.append(" and " + mis + ".departmentid=bd.executing_department ");
+            miscQuery = miscQuery.append(" and " + mis + ".departmentcode=dept.code and bd.executing_department=dept.id ");
         return miscQuery;
     }
 

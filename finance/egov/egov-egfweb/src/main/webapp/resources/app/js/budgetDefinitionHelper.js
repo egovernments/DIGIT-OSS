@@ -80,7 +80,7 @@ function callAjaxSearch() {
 									function() {
 										console.log(data.id);
 										window
-												.open('/EGF/budgetdefinition/'
+												.open('/services/EGF/budgetdefinition/'
 														+ $('#mode').val()
 														+ '/' + data.id, '',
 														'width=800, height=600,scrollbars=yes');

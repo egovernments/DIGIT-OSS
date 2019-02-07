@@ -126,7 +126,7 @@ function validateCancel()
 				<td class="bluebox" width="10%" ></td>
 					<td class="bluebox"><s:text name="bill.Number" /></td>
 					<td class="bluebox"><s:textfield name="billNumber"
-							id="billNumber" maxlength="25" value="%{billNumber}" /></td>
+							id="billNumber" value="%{billNumber}" /></td>
 					<td class="bluebox"><s:text name="voucher.fund" /><span
 						class="mandatory1">*</span></td>
 					<td class="bluebox"><s:select name="fund.id" id="fund.id"

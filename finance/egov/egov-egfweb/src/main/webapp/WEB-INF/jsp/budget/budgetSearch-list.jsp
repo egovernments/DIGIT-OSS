@@ -68,7 +68,7 @@
 
 			function validateAndSubmit()
 			{
-				document.forms[0].action='/EGF/budget/budgetSearch-groupedBudgets.action';
+				document.forms[0].action='/services/EGF/budget/budgetSearch-groupedBudgets.action';
 				document.forms[0].submit();
 				}
 			
@@ -85,7 +85,7 @@
 					  onclick="return validateAndSubmit()" />
 				<s:reset value="Reset" cssClass="button" /> 
 				<input type="button" value="Close"
-					onclick="javascript:window.close()" class="button" />
+					onclick="window.parent.postMessage('close','*');window.close();" class="button" />
 			</div>
 			<h5 style="color:red">
 			<s:actionerror/>
