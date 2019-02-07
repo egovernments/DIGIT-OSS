@@ -434,6 +434,8 @@ public class UpdateSupplierBillController extends BaseBillController {
             billId = billIds[0];
         }
         final EgBillregister egBillregister = supplierBillService.getById(Long.parseLong(billId));
+        final List<DocumentUpload> documents = documentUploadRepository.findByObjectId(Long.valueOf(billId));
+        egBillregister.setDocumentDetail(documents);
         Department dept = microServiceUtil.getDepartmentByCode(egBillregister.getEgBillregistermis().getDepartmentcode());
         egBillregister.getEgBillregistermis().setDepartmentName(dept.getName());
         setDropDownValues(model);

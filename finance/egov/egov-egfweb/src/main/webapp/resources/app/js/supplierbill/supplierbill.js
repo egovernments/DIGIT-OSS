@@ -318,7 +318,7 @@ var creditamount = $("#supplierBillTotalCreditAmount")["0"].innerHTML;
 	
 	$("#passedamount").val(debitamount);
 
-	if(debitamount != Number(Number(creditamount) + Number(netpayableamount))){
+	if(debitamount != Number(Number(creditamount) + Number(netpayableamount)).toFixed(2)){
 		bootbox.alert("Debit amount and credit amount is not matching");
 		return false;
 	}
@@ -420,7 +420,9 @@ function calcualteNetpaybleAmount(){
 			var val = document.getElementById("debitDetails[" + count
 					+ "].debitamount").value;
 			if (val != "" && !isNaN(val)) {
-				debitamt = debitamt + parseFloat(val);
+//				debitamt = debitamt + parseFloat(val);
+				debitamt = parseFloat(Number(debitamt) + Number(val)).toFixed(2);
+				document.getElementById("debitDetails[" + count + "].debitamount").value = Number(val).toFixed(2);
 			}
 		}
 	}
@@ -432,7 +434,9 @@ function calcualteNetpaybleAmount(){
 			var val = document.getElementById("creditDetails[" + count
 					+ "].creditamount").value;
 			if (val != "" && !isNaN(val)) {
-				creditamt = creditamt + parseFloat(val);
+//				creditamt = creditamt + parseFloat(val);
+				creditamt = parseFloat(Number(creditamt) + Number(val)).toFixed(2);
+				document.getElementById("creditDetails[" + count + "].creditamount").value = Number(val).toFixed(2);
 			}
 		}
 	}
