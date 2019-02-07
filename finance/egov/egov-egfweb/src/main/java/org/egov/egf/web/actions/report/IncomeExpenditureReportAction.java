@@ -166,9 +166,9 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
         if (!parameters.containsKey("showDropDown")) {
             addDropdownData("departmentList", masterDataCache.get("egi-department"));
             addDropdownData("functionList", masterDataCache.get("egi-function"));
-            addDropdownData("functionaryList", masterDataCache.get("egi-functionary"));
+//            addDropdownData("functionaryList", masterDataCache.get("egi-functionary"));
             addDropdownData("fundDropDownList", masterDataCache.get("egi-fund"));
-            addDropdownData("fieldList", masterDataCache.get("egi-ward"));
+//            addDropdownData("fieldList", masterDataCache.get("egi-ward"));
             addDropdownData("financialYearList",
                     getPersistenceService().findAllBy("from CFinancialYear where isActive=true  order by finYearRange desc "));
         }
