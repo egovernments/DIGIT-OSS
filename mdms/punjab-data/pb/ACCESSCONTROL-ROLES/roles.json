@@ -123,6 +123,11 @@
       "description": "Who has a access to Trade License Workflow"
     },
     {
+      "code": "TL_FIELD_INSPECTOR",
+      "name": "TL Field Inspector",
+      "description": "Trade license field inspector"
+    },
+    {
       "code": "COLL_REP_VIEW",
       "name": "Collection Report Viewer",
       "description": "Collection Report Viewer can view Reports"
