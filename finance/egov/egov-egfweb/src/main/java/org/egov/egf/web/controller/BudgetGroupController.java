@@ -101,7 +101,7 @@ public class BudgetGroupController {
 
 	}
 
-	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	@RequestMapping(value = "/new", method = {RequestMethod.GET,RequestMethod.POST})
 	public String newForm(final Model model) {
 		prepareNewForm(model);
 		model.addAttribute("budgetGroup", new BudgetGroup());
@@ -178,7 +178,7 @@ public class BudgetGroupController {
 		return BUDGETGROUP_RESULT;
 	}
 
-	@RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
+	@RequestMapping(value = "/search/{mode}", method = {RequestMethod.GET,RequestMethod.POST})
 	public String search(@PathVariable("mode") final String mode, final Model model) {
 		final BudgetGroup budgetGroup = new BudgetGroup();
 		prepareNewForm(model);

@@ -52,7 +52,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="panel-title text-center no-float">
-				<strong>${message}</strong>
+				<strong><font color="green">${message}</font></strong>
 				<%@ include file="budgetgroup-view.jsp"%>
 			</div>
 		</div>

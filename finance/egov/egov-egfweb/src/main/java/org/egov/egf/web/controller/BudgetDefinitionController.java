@@ -100,7 +100,7 @@ public class BudgetDefinitionController {
 		model.addAttribute("isBereList", Arrays.asList(BeReType.values()));
 	}
 
-	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	@RequestMapping(value = "/new", method = {RequestMethod.GET,RequestMethod.POST})
 	public String newForm(final Model model) {
 		model.addAttribute(BUDGET, new Budget());
 		prepareNewForm(model);
@@ -166,7 +166,7 @@ public class BudgetDefinitionController {
 		return BUDGET_RESULT;
 	}
 
-	@RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
+	@RequestMapping(value = "/search/{mode}", method = {RequestMethod.GET,RequestMethod.POST})
 	public String search(@PathVariable("mode") final String mode, final Model model) {
 		final Budget budget = new Budget();
 		prepareNewForm(model);
