@@ -17293,6 +17293,18 @@
       "actionid": 1761,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "Financial Administrator",
+      "actionid": 1762,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1762,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
