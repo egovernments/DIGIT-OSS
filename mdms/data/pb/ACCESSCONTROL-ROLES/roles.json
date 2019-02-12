@@ -336,6 +336,11 @@
       "code": "TL_FIELD_INSPECTOR",
       "name": "TL Field Inspector",
       "description": "Trade license field inspector"
+    },
+    {
+      "code": "TL_DOC_VERIFIER",
+      "name": "TL doc verifier",
+      "description": "Trade license document verifier"
     }
   ]
 }
