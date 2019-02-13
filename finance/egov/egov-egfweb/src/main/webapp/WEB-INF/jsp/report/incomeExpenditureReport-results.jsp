@@ -93,10 +93,10 @@
 								<th class="bluebgheadtd"><s:text
 										name="report.headOfAccount" /></th>
 								<th class="bluebgheadtd"><s:text name="report.scheduleNo" /></th>
-								<th class="bluebgheadtd"><s:text
+								<%--<th class="bluebgheadtd"><s:text
 										name="report.revisedestimate" />
 									<s:property
-										value="incomeExpenditureStatement.financialYear.finYearRange" /></th>
+										value="incomeExpenditureStatement.financialYear.finYearRange" /></th> --%>
 								<s:iterator value="incomeExpenditureStatement.funds"
 									status="stat">
 									<th class="bluebgheadtd" width="30%" colspan="2"><s:property
@@ -107,7 +107,7 @@
 								<th class="bluebgheadtd"><s:text name="" /></th>
 								<th class="bluebgheadtd"><s:text name="" /></th>
 								<th class="bluebgheadtd"><s:text name="" /></th>
-								<th class="bluebgheadtd"><s:text name="" /></th>
+								<%--<th class="bluebgheadtd"><s:text name="" /></th> --%>
 								<s:if test="%{incomeExpenditureStatement.getFunds().size()==1}">
 									<s:iterator value="incomeExpenditureStatement.funds"
 										status="stat">
@@ -167,7 +167,7 @@
 													value="scheduleNo" /></a>&nbsp;
 										</div>
 									</td>
-									<td class="blueborderfortd">
+									<%--<td class="blueborderfortd">
 										<div align="right">
 											<s:if test='%{displayBold == true}'>
 												<strong><s:property value="budgetAmount" /></strong>
@@ -177,7 +177,7 @@
 											</s:else>
 											&nbsp;
 										</div>
-									</td>
+									</td> --%>
 									<s:iterator value="incomeExpenditureStatement.funds"
 										status="stat">
 										<td class="blueborderfortd">

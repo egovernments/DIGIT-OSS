@@ -363,8 +363,8 @@ public class ReportHelper {
         if (showScheduleColumn)
             drb.addColumn("Schedule No", "scheduleNo", String.class.getName(),
                     60, columnStyle);
-        drb.addColumn("Revised Estimate" + balanceSheet.getFinancialYear().getFinYearRange(), "budgetAmount", BigDecimal.class
-                .getName(), 70, false, "0.00", detailAmountStyle);
+//        drb.addColumn("Revised Estimate" + balanceSheet.getFinancialYear().getFinYearRange(), "budgetAmount", BigDecimal.class
+//                .getName(), 70, false, "0.00", detailAmountStyle);
         drb.setTitle(heading)
         .setSubtitle(
                 subtitle
