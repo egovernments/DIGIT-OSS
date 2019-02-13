@@ -140,8 +140,8 @@ function onSubmit()
 			<p class="error-block" id="lblError" style="font: bold"></p>
 		</font>
 		<span class="mandatory1"> <s:actionerror /> <s:fielderror />
-			<s:actionmessage />
 		</span>
+		<span style="color: green;"><s:actionmessage /></span>
 		<div class="formmainbox">
 			<div class="subheadnew">
 				Generate

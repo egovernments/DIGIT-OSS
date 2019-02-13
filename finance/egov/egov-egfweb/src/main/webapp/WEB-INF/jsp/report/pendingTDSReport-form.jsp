@@ -121,7 +121,7 @@
 			<input type="button" value="Search" class="buttonsubmit"
 				onclick="return getData()" /> &nbsp;
 			<s:reset name="button" type="submit" cssClass="button" id="button"
-				value="Cancel" />
+				value="Reset" />
 			<input type="button" value="Close" onclick="javascript: self.close()"
 				Class="button" />
 		</div>

@@ -55,30 +55,30 @@
     .position_alert {
         position: fixed;
         z-index: 9999;
-        top: 50px;
+        top: 41px;
         right: 20px;
         background: #F2DEDE;
-        padding: 10px 20px;
+        padding: 7px 20px;
         border-radius: 5px;
     }
 
     .position_alert1 {
         position: fixed;
         z-index: 9999;
-        top: 50px;
+        top: 41px;
         right: 520px;
         background: #F2DEDE;
-        padding: 10px 20px;
+        padding: 7px 20px;
         border-radius: 5px;
     }
 
     .position_alert2 {
         position: fixed;
         z-index: 9999;
-        top: 50px;
+        top: 41px;
         right: 270px;
         background: #F2DEDE;
-        padding: 10px 20px;
+        padding: 7px 20px;
         border-radius: 5px;
     }
 </style>

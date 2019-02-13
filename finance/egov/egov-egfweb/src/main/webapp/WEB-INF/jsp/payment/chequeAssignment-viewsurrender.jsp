@@ -59,8 +59,9 @@
 		<jsp:include page="../budget/budgetHeader.jsp">
 			<jsp:param name="heading" value="Cheque Assignment View" />
 		</jsp:include>
-		<span class="mandatory1"> <s:actionerror /> <s:fielderror /> <s:actionmessage />
+		<span class="mandatory1"> <s:actionerror /> <s:fielderror />
 		</span>
+		<span><font color="green"><s:actionmessage /></font></span>
 		<div class="formmainbox">
 			<div class="subheadnew">
 				<s:text name="chq.assignment.heading.view" />

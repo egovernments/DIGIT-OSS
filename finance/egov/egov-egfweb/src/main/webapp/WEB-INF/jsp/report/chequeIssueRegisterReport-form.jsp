@@ -205,7 +205,7 @@ function printCheque(id)
 				<input type="button" value="Submit" class="buttonsubmit"
 					onclick="return generateReport()" /> &nbsp;
 				<s:reset name="button" type="submit" cssClass="button" id="button"
-					value="Cancel" />
+					value="Reset" />
 				<input type="button" value="Close"
 					onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 			</div>

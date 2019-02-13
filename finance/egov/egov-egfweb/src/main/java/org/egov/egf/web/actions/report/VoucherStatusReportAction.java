@@ -260,6 +260,7 @@ public class VoucherStatusReportAction extends BaseFormAction {
 	@SkipValidation
 	@Action(value = "/report/voucherStatusReport-beforeSearch")
 	public String beforeSearch() {
+	        deptImpl = null;  
 		voucherHeader.reset();
 		finYearDate();
 
@@ -550,13 +551,13 @@ public class VoucherStatusReportAction extends BaseFormAction {
 
 	public void setParamMap(Map<String, String> depMap) {
 		paramMap.put("fund", voucherHeader.getFundId().getName());
-		if (voucherHeader.getVouchermis() != null && voucherHeader.getVouchermis().getDepartmentcode() != null)
-			paramMap.put("deptName", depMap.get(voucherHeader.getVouchermis().getDepartmentcode()));
+		if (deptImpl != null && deptImpl.getCode()!= null && !"-1".equals(deptImpl.getCode()))
+			paramMap.put("deptName", depMap.get(deptImpl.getCode()));
 		paramMap.put("status", getVoucherStatus(voucherHeader.getStatus()));
 		paramMap.put("toDate", toDate);
 		paramMap.put("fromDate", fromDate);
-		paramMap.put("voucherName", voucherHeader.getName());
-		paramMap.put("voucherType", voucherHeader.getType());
+		paramMap.put("voucherName", voucherHeader.getName().equals("-1") || voucherHeader.getName().equals("0") ? "" : voucherHeader.getName());
+		paramMap.put("voucherType", voucherHeader.getType().equals("-1") || voucherHeader.getType().equals("0") ? "" : voucherHeader.getType());
 	}
 
 	public void setReportHelper(final ReportHelper reportHelper) {
