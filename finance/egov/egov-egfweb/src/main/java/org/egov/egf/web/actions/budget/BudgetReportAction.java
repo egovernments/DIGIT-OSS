@@ -476,7 +476,7 @@ public class BudgetReportAction extends BaseFormAction {
         if (budgetDetailList.isEmpty())
             return budgetReportList;
 
-        Integer deptId = 0;
+        String deptCode = "";
         Long functionId = 0L;
         String type = "", majorCode = "", glcode = "", glType = "", glName = "", tempMajorCode = "";
         BigDecimal totalAmt = BigDecimal.ZERO;
@@ -510,7 +510,7 @@ public class BudgetReportAction extends BaseFormAction {
             }
             tempMajorCode = glcode.substring(0, majorCodeLength);
 
-            if (detail.getExecutingDepartment().getId().compareTo(deptId.longValue()) != 0) // for dept heading
+            if (!detail.getExecutingDepartment().equals(deptCode)) // for dept heading
             {
                 if (totalAmt.compareTo(BigDecimal.ZERO) != 0 && !isFirst)
                 {
@@ -520,8 +520,7 @@ public class BudgetReportAction extends BaseFormAction {
                     totalAmt = BigDecimal.ZERO;
                     totalAppropriationAmt = BigDecimal.ZERO;
                 }
-                budgetReportList.add(new BudgetReportView(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING, detail.getExecutingDepartment()
-                        .getName(), EMPTYSTRING, null, null, null, "deptrow"));
+                budgetReportList.add(new BudgetReportView(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING, microserviceUtils.getDepartmentByCode(detail.getExecutingDepartment()).getName(), EMPTYSTRING, null, null, null, "deptrow"));
                 type = "";
                 functionId = null;
                 majorCode = "";
@@ -555,7 +554,7 @@ public class BudgetReportAction extends BaseFormAction {
                 }
                 budgetReportList.add(new BudgetReportView(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING, "FUNCTION CENTRE-"
                         + detail.getFunction().getName(), EMPTYSTRING, null, null, null, "functionrow"));
-                final List<Object> majorCodeList = getAmountForMajorcodewise(detail.getExecutingDepartment().getId().intValue(),
+                final List<Object> majorCodeList = getAmountForMajorcodewise(detail.getExecutingDepartment(),
                         detail.getFunction().getId(), glType);  // majorcodewise total
                 budgetReportList.addAll(majorCodeList);
                 printed = false;
@@ -578,11 +577,11 @@ public class BudgetReportAction extends BaseFormAction {
             // detail
             if (detail.getExecutingDepartment() != null && detail.getFunction() != null
                     && detail.getBudgetGroup().getMajorCode() == null)
-                budgetReportList.add(new BudgetReportView(detail.getExecutingDepartment().getCode(), detail.getFunction()
+                budgetReportList.add(new BudgetReportView(detail.getExecutingDepartment(), detail.getFunction()
                         .getCode(), glcode, glName, "", detail.getApprovedAmount(),
                         reAppropriationAmt, detail.getApprovedAmount().add(reAppropriationAmt), "detailrow"));
             if (detail.getExecutingDepartment() != null)
-                deptId = detail.getExecutingDepartment().getId().intValue();
+                deptCode = detail.getExecutingDepartment();
             if (detail.getFunction() != null)
                 functionId = detail.getFunction().getId();
             type = glType;
@@ -630,7 +629,7 @@ public class BudgetReportAction extends BaseFormAction {
         if (budgetDetailList.isEmpty())
             return budgetReportList;
 
-        Integer deptId = 0;
+        String deptCode = "";
         Long functionId = 0L;
         String type = "", majorCode = "", glcode = "", glType = "", glName = "", tempMajorCode = "";
         BigDecimal totalAmt = BigDecimal.ZERO;
@@ -663,7 +662,7 @@ public class BudgetReportAction extends BaseFormAction {
             }
             tempMajorCode = glcode.substring(0, majorCodeLength);
 
-            if (!detail.getExecutingDepartment().getId().equals(deptId)) // for dept heading
+            if (!detail.getExecutingDepartment().equals(deptCode)) // for dept heading
             {
                 if (totalAmt.compareTo(BigDecimal.ZERO) != 0 && !isFirst)
                 {
@@ -673,8 +672,7 @@ public class BudgetReportAction extends BaseFormAction {
                     totalAmt = BigDecimal.ZERO;
                     totalAppropriationAmt = BigDecimal.ZERO;
                 }
-                budgetReportList.add(new BudgetReportView(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING, detail.getExecutingDepartment()
-                        .getName(), EMPTYSTRING, null, null, null, "deptrow"));
+                budgetReportList.add(new BudgetReportView(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING, microserviceUtils.getDepartmentByCode(detail.getExecutingDepartment()).getName(), EMPTYSTRING, null, null, null, "deptrow"));
                 type = "";
                 functionId = null;
                 majorCode = "";
@@ -708,7 +706,7 @@ public class BudgetReportAction extends BaseFormAction {
                 }
                 budgetReportList.add(new BudgetReportView(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING, "FUNCTION CENTRE-"
                         + detail.getFunction().getName(), EMPTYSTRING, null, null, null, "functionrow"));
-                final List<Object> majorCodeList = getAmountForMajorcodewise(detail.getExecutingDepartment().getId().intValue(),
+                final List<Object> majorCodeList = getAmountForMajorcodewise(detail.getExecutingDepartment(),
                         detail.getFunction().getId(), glType);  // majorcodewise total
                 budgetReportList.addAll(majorCodeList);
                 printed = false;
@@ -731,11 +729,11 @@ public class BudgetReportAction extends BaseFormAction {
             // detail
             if (detail.getExecutingDepartment() != null && detail.getFunction() != null
                     && detail.getBudgetGroup().getMajorCode() == null)
-                budgetReportList.add(new BudgetReportView(detail.getExecutingDepartment().getCode(), detail.getFunction()
+                budgetReportList.add(new BudgetReportView(detail.getExecutingDepartment(), detail.getFunction()
                         .getCode(), glcode, glName, "", detail.getApprovedAmount(),
                         reAppropriationAmt, detail.getApprovedAmount().add(reAppropriationAmt), "detailrow"));
             if (detail.getExecutingDepartment() != null)
-                deptId = detail.getExecutingDepartment().getId().intValue();
+                deptCode = detail.getExecutingDepartment();
             if (detail.getFunction() != null)
                 functionId = detail.getFunction().getId();
             type = glType;
@@ -1001,7 +999,7 @@ public class BudgetReportAction extends BaseFormAction {
 
     }
 
-    public List<Object> getAmountForMajorcodewise(final Integer deptId, final Long functionId, final String type) {
+    public List<Object> getAmountForMajorcodewise(final String deptCode, final Long functionId, final String type) {
         BigDecimal grandAmt = BigDecimal.ZERO;
         BigDecimal totalAmt = BigDecimal.ZERO;
         BigDecimal appropriationGrandAmt = BigDecimal.ZERO;
@@ -1009,7 +1007,7 @@ public class BudgetReportAction extends BaseFormAction {
         final List<Object> majorCodeList = new ArrayList<Object>();
         final Map<String, BudgetReportView> entries = new TreeMap<String, BudgetReportView>();
         for (final BudgetReportView reportStore : reportStoreList)
-            if (deptId.equals(reportStore.getDeptId()) && functionId.equals(reportStore.getFunctionId())
+            if (deptCode.equals(reportStore.getDeptCode()) && functionId.equals(reportStore.getFunctionId())
                     && type.equals(reportStore.getType())) {
                 if (entries.get(reportStore.getMajorCode()) == null) {
                     totalAmt = BigDecimal.ZERO;
@@ -1044,7 +1042,7 @@ public class BudgetReportAction extends BaseFormAction {
         return majorCodeList;
     }
 
-    public List<Object> getAmountForMajorcodewiseForWorkingCopy(final Integer deptId, final Long functionId, final String type) {
+    public List<Object> getAmountForMajorcodewiseForWorkingCopy(final String deptCode, final Long functionId, final String type) {
         BigDecimal reProposalTotalAmountLocal = BigDecimal.ZERO;
         BigDecimal beProposalTotalAmountLocal = BigDecimal.ZERO;
         BigDecimal reRecomTotalAmountLocal = BigDecimal.ZERO;
@@ -1057,7 +1055,7 @@ public class BudgetReportAction extends BaseFormAction {
         final List<Object> majorCodeList = new ArrayList<Object>();
         final Map<String, BudgetReportView> entries = new TreeMap<String, BudgetReportView>();
         for (final BudgetReportView reportStore : reportStoreList)
-            if (deptId.equals(reportStore.getDeptId()) && functionId.equals(reportStore.getFunctionId())
+            if (deptCode.equals(reportStore.getDeptCode()) && functionId.equals(reportStore.getFunctionId())
                     && type.equals(reportStore.getType())) {
                 if (entries.get(reportStore.getMajorCode()) == null) {
                     reProposalTotalAmountLocal = BigDecimal.ZERO;
@@ -1408,7 +1406,7 @@ public class BudgetReportAction extends BaseFormAction {
      * Assumes budgetDetails are sorted by deptId,glCode
      */
     void addRowsToReport(List<BudgetDetail> budgetDetails, final String isBeRe) {
-        Integer deptId = 0;
+        String deptCode = "";
         BudgetReportView row = new BudgetReportView(null, null, null, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
         String glcode = null;
         String glName;
@@ -1421,8 +1419,8 @@ public class BudgetReportAction extends BaseFormAction {
             // continue;
             // }
             // details for next department have started
-            if (budgetDetail.getExecutingDepartment() != null && budgetDetail.getExecutingDepartment().getId().compareTo(deptId.longValue())!=0) {
-                if (!deptId.equals(0))
+            if (budgetDetail.getExecutingDepartment() != null && deptCode.equals(budgetDetail.getExecutingDepartment())) {
+                if (!deptCode.equals(""))
                     if ("RE".equalsIgnoreCase(isBeRe) && !getConsiderReAppropriationAsSeperate())
                         budgetReportList.add(new BudgetReportView("", "Total", "", sum.add(appropriationSum), BigDecimal.ZERO,
                                 sum.add(appropriationSum)));
@@ -1431,9 +1429,9 @@ public class BudgetReportAction extends BaseFormAction {
                                 .add(appropriationSum)));
                 sum = BigDecimal.ZERO;
                 addEmptyRow();
-                budgetReportList.add(new BudgetReportView("", budgetDetail.getExecutingDepartment().getName().toUpperCase(), "",
+                budgetReportList.add(new BudgetReportView("", microserviceUtils.getDepartmentByCode(budgetDetail.getExecutingDepartment()).getName().toUpperCase(), "",
                         null, null, null));
-                deptId = budgetDetail.getExecutingDepartment().getId().intValue();
+                deptCode = budgetDetail.getExecutingDepartment();
                 glcode = null;
             }
             // next glcode within same department
@@ -1528,7 +1526,7 @@ public class BudgetReportAction extends BaseFormAction {
         if (budgetDetailListForRE.isEmpty())
             return budgetReportList;
 
-        Integer deptId = 0;
+        String deptCode = "";
         Long functionId = 0L;
         String type = "", majorCode = "", glcode = "", glType = "", glName = "", tempMajorCode = "";
         BigDecimal reProposalTotalLocal = BigDecimal.ZERO;
@@ -1547,7 +1545,7 @@ public class BudgetReportAction extends BaseFormAction {
             BudgetDetail beDetail = new BudgetDetail();
 
             for (final BudgetDetail detail1 : budgetDetailListForBE)
-                if (detail.getExecutingDepartment().getId() == detail1.getExecutingDepartment().getId()
+                if (detail.getExecutingDepartment().equals(detail1.getExecutingDepartment())
                         && detail.getFunction().getId() == detail1.getFunction().getId()
                         && detail.getBudgetGroup().getId() == detail1.getBudgetGroup().getId()) {
                     beDetail = detail1;
@@ -1570,7 +1568,7 @@ public class BudgetReportAction extends BaseFormAction {
             }
             tempMajorCode = glcode.substring(0, majorCodeLength);
 
-            if (!detail.getExecutingDepartment().getId().equals(deptId)) // for
+            if (!detail.getExecutingDepartment().equals(deptCode)) // for
             // dept
             // heading
             {
@@ -1583,8 +1581,7 @@ public class BudgetReportAction extends BaseFormAction {
                     reRecomTotalLocal = BigDecimal.ZERO;
                     beRecomTotalLocal = BigDecimal.ZERO;
                 }
-                budgetReportList.add(new BudgetReportView(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING, detail.getExecutingDepartment()
-                        .getName(), EMPTYSTRING, null,
+                budgetReportList.add(new BudgetReportView(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING, microserviceUtils.getDepartmentByCode(detail.getExecutingDepartment()).getName(), EMPTYSTRING, null,
                         null, null, "deptrow"));
                 type = "";
                 functionId = null;
@@ -1624,8 +1621,7 @@ public class BudgetReportAction extends BaseFormAction {
                 budgetReportList.add(new BudgetReportView(EMPTYSTRING, EMPTYSTRING, EMPTYSTRING, "FUNCTION CENTRE-"
                         + detail.getFunction().getName(), EMPTYSTRING,
                         null, null, null, "functionrow"));
-                final List<Object> majorCodeList = getAmountForMajorcodewiseForWorkingCopy(detail.getExecutingDepartment()
-                        .getId().intValue(), detail.getFunction()
+                final List<Object> majorCodeList = getAmountForMajorcodewiseForWorkingCopy(detail.getExecutingDepartment(), detail.getFunction()
                         .getId(), glType); // majorcodewise total
                 budgetReportList.addAll(majorCodeList);
                 printed = false;
@@ -1653,20 +1649,20 @@ public class BudgetReportAction extends BaseFormAction {
             if (detail.getExecutingDepartment() != null && detail.getFunction() != null
                     && detail.getBudgetGroup().getMajorCode() == null)
                 if (onSaveOrForward && !canViewApprovedAmount)
-                    budgetReportList.add(new BudgetReportView(detail.getExecutingDepartment().getCode(), detail.getFunction()
+                    budgetReportList.add(new BudgetReportView(detail.getExecutingDepartment(), detail.getFunction()
                             .getCode(), glcode, glName,
                             EMPTYSTRING, detail.getOriginalAmount(), detail.getApprovedAmount(), beDetail.getOriginalAmount(),
                             beDetail.getApprovedAmount(),
                             "detailrow"));
                 else
-                    budgetReportList.add(new BudgetReportView(detail.getExecutingDepartment().getCode(), detail.getFunction()
+                    budgetReportList.add(new BudgetReportView(detail.getExecutingDepartment(), detail.getFunction()
                             .getCode(), glcode, glName,
                             EMPTYSTRING, detail.getOriginalAmount(), detail.getApprovedAmount(), beDetail.getOriginalAmount(),
                             beDetail.getApprovedAmount(),
                             "detailrow"));
 
             if (detail.getExecutingDepartment() != null)
-                deptId = detail.getExecutingDepartment().getId().intValue();
+                deptCode = detail.getExecutingDepartment();
             if (detail.getFunction() != null)
                 functionId = detail.getFunction().getId();
             type = glType;
@@ -1779,7 +1775,7 @@ public class BudgetReportAction extends BaseFormAction {
         String glName;
         for (final BudgetDetail detail : details)
         {
-            key = detail.getFunction().getName() + "-" + detail.getExecutingDepartment().getCode();
+            key = detail.getFunction().getName() + "-" + detail.getExecutingDepartment();
             if (function_dept_DetailedBudgetMap.get(key) == null)
             {
                 final List<BudgetDetail> fun_dept_dtlList = new ArrayList<BudgetDetail>();
@@ -1797,7 +1793,7 @@ public class BudgetReportAction extends BaseFormAction {
         final List<BudgetDetail> beDetails = persistenceService.findAllBy(query.toString());
         for (final BudgetDetail beDetail : beDetails)
         {
-            key = beDetail.getFunction().getName() + "-" + beDetail.getExecutingDepartment().getCode();
+            key = beDetail.getFunction().getName() + "-" + beDetail.getExecutingDepartment();
             for (final BudgetDetail reDetail : function_dept_DetailedBudgetMap.get(key))
                 if (reDetail == null)
                 {
@@ -1815,7 +1811,7 @@ public class BudgetReportAction extends BaseFormAction {
 
                     final BudgetReportView bv = new BudgetReportView();
                     bv.setNarration(glName);
-                    bv.setDeptCode(beDetail.getExecutingDepartment().getCode());
+                    bv.setDeptCode(beDetail.getExecutingDepartment());
                     bv.setGlCode(glcode);
                     bv.setFunctionCode(reDetail.getFunction().getCode());
                     bv.setReProposalAmount(reDetail.getOriginalAmount());
@@ -1848,7 +1844,7 @@ public class BudgetReportAction extends BaseFormAction {
 
                     final BudgetReportView bv = new BudgetReportView();
                     bv.setNarration(glName);
-                    bv.setDeptCode(beDetail.getExecutingDepartment().getCode());
+                    bv.setDeptCode(beDetail.getExecutingDepartment());
                     bv.setGlCode(glcode);
                     bv.setFunctionCode(reDetail.getFunction().getCode());
                     bv.setReProposalAmount(reDetail.getOriginalAmount());

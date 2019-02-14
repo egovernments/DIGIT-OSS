@@ -64,15 +64,16 @@ import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.commons.dao.FunctionDAO;
 import org.egov.commons.dao.FundHibernateDAO;
 import org.egov.commons.service.ChartOfAccountsService;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.DepartmentService;
 import org.egov.infra.filestore.entity.FileStoreMapper;
 import org.egov.infra.filestore.service.FileStoreService;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.services.PersistenceService;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.budget.BudgetUpload;
 import org.egov.services.budget.BudgetDetailService;
 import org.egov.utils.FinancialConstants;
@@ -154,6 +155,10 @@ public class BudgetLoadAction extends BaseFormAction {
 
     @Autowired
     protected FileStoreService fileStoreService;
+    
+    @Autowired
+    @Qualifier("masterDataCache")
+    private EgovMasterDataCaching masterDataCache;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -419,7 +424,7 @@ public class BudgetLoadAction extends BaseFormAction {
             Map<String, CChartOfAccounts> coaMap = new HashMap<String, CChartOfAccounts>();
             List<Fund> fundList = fundDAO.findAllActiveIsLeafFunds();
             List<CFunction> functionList = functionDAO.getAllActiveFunctions();
-            List<Department> departmentList = departmentService.getAllDepartments();
+            List<Department> departmentList = masterDataCache.get("egi-department");
             List<CChartOfAccounts> coaList = chartOfAccountsService.findAll();
             for (Fund fund : fundList)
                 fundMap.put(fund.getCode(), fund);
@@ -447,7 +452,7 @@ public class BudgetLoadAction extends BaseFormAction {
                         && departmentMap.get(budget.getDeptCode()) == null)
                     error = error + " " + getText("department.is.not.exist") + budget.getDeptCode();
                 else
-                    budget.setDept(departmentMap.get(budget.getDeptCode()));
+                    budget.setDeptCode(budget.getDeptCode());
 
                 if (budget.getBudgetHead() != null && !budget.getBudgetHead().equalsIgnoreCase("")
                         && coaMap.get(budget.getBudgetHead()) == null)

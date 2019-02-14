@@ -66,11 +66,11 @@ import org.egov.egf.model.BudgetAmountView;
 import org.egov.eis.service.EisCommonService;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Boundary;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.workflow.service.SimpleWorkflowService;
 import org.egov.infstr.services.PersistenceService;
@@ -259,8 +259,8 @@ public class BudgetSearchAction extends BaseFormAction {
             addRelatedEntity(Constants.SCHEME, Scheme.class);
         if (shouldShowField(Constants.SUB_SCHEME))
             addRelatedEntity(Constants.SUB_SCHEME, SubScheme.class);
-        if (shouldShowField(Constants.EXECUTING_DEPARTMENT))
-            addRelatedEntity(Constants.EXECUTING_DEPARTMENT, Department.class);
+//        if (shouldShowField(Constants.EXECUTING_DEPARTMENT))
+//            addRelatedEntity(Constants.EXECUTING_DEPARTMENT, String.class);
         if (shouldShowField(Constants.BOUNDARY))
             addRelatedEntity(Constants.BOUNDARY, Boundary.class);
         if (!parameters.containsKey("skipPrepare")) {
@@ -337,6 +337,7 @@ public class BudgetSearchAction extends BaseFormAction {
     @Action(value = "/budget/budgetSearch-groupedBudgets")
     public String groupedBudgets() {
         final Budget budget = budgetDetail.getBudget();
+        final Budget selectedBudget=budget;
         // Dont restrict search by the selected budget, but by all budgets in the tree of selected budget
         budgetDetail.setBudget(null);
         if (budget != null && budget.getId() != null && budget.getId() != 0)
@@ -347,6 +348,8 @@ public class BudgetSearchAction extends BaseFormAction {
         getSession().put(Constants.SEARCH_CRITERIA_KEY, budgetDetail);
         if (budgetList.isEmpty())
             addActionError(getText("budget.no.details.found"));
+        budgetDetail.setBudget(selectedBudget);
+        setRelatedEntitiesOn();
         return Constants.LIST;
     }
 
@@ -360,6 +363,30 @@ public class BudgetSearchAction extends BaseFormAction {
 
     public final boolean shouldShowGridField(final String field) {
         return gridFields.isEmpty() || gridFields.contains(field);
+    }
+    
+    public String getDepartmentNameByCode(String deptCode){
+        try{
+            List<Department> list = masterDataCache.get("egi-department");
+            for(Department dept : list){
+                if(dept.getCode().equals(deptCode))
+                    return dept.getName();
+            }
+        }catch(Exception excep){
+            excep.printStackTrace();
+        }
+        return "";
+    }
+    
+    public void setRelatedEntitiesOn(){
+        if(budgetDetail.getBudget() != null && budgetDetail.getBudget().getId() != 0){
+            budgetDetail.setBudget(budgetService.find("from Budget where id=?", budgetDetail.getBudget().getId()));
+        }else if(budgetDetail.getBudget().getFinancialYear() != null && budgetDetail.getBudget().getFinancialYear().getId() != 0){
+            budgetDetail.getBudget().setFinancialYear((CFinancialYear) getPersistenceService().find("from CFinancialYear where id=?",
+                    budgetDetail.getBudget().getFinancialYear().getId()));
+        }
+        financialYear = budgetDetail.getBudget().getFinancialYear().getId();
+        dropdownData.put("budgetList", budgetDetailService.findApprovedBudgetsForFY(financialYear));
     }
 
     public boolean showApprovalDetails() {

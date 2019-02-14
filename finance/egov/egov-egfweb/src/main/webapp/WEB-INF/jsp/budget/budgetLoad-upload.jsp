@@ -63,12 +63,12 @@
 			bootbox.alert("Select File to upload");
 			return false;
 		}
-		document.budgetLoad.action = '/EGF/budget/budgetLoad-upload.action';
+		document.budgetLoad.action = '/services/EGF/budget/budgetLoad-upload.action';
 		document.budgetLoad.submit();
 		return true;
 	}
 	function urlLoad(fileStoreId) {
-		var sUrl = "/egi/downloadfile?fileStoreId=" + fileStoreId
+		var sUrl = "/services/egi/downloadfile?fileStoreId=" + fileStoreId
 				+ "&moduleName=EGF";
 		window.open(sUrl, "window",
 				'scrollbars=yes,resizable=no,height=400,width=400,status=yes');

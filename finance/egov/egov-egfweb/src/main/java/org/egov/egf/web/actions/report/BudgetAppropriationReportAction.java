@@ -185,11 +185,9 @@ public class BudgetAppropriationReportAction extends BaseFormAction {
 		String fundQry = "";
 		String functionQry = "";
 
-		if (budgetRep.getBudgetDetail().getExecutingDepartment() != null
-				&& budgetRep.getBudgetDetail().getExecutingDepartment().getId() != null)
+		if (budgetRep.getBudgetDetail().getExecutingDepartment() != null)
 			deptQry = " and bd.EXECUTING_DEPARTMENT="
-					+ budgetRep.getBudgetDetail().getExecutingDepartment()
-							.getId();
+					+ budgetRep.getBudgetDetail().getExecutingDepartment();
 		if (budgetRep.getBudgetDetail().getFund() != null
 				&& budgetRep.getBudgetDetail().getFund().getId() != null)
 			fundQry = "  and bd.fund="

@@ -52,9 +52,9 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.egov.commons.CFinancialYear;
 import org.egov.egf.model.BudgetAmountView;
 import org.egov.infra.admin.master.entity.AppConfigValues;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.script.service.ScriptService;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -261,7 +261,7 @@ public class BudgetSearchAndModify extends BudgetSearchAction {
                         "from BudgetDetail where materializedPath like ?",
                         topBudget.getMaterializedPath() + ".%");
                 if (detail != null)
-                    department = detail.getExecutingDepartment();
+                    department = microserviceUtils.getDepartmentByCode(detail.getExecutingDepartment());
             }
             showDetails = true;
         }
@@ -685,7 +685,7 @@ public class BudgetSearchAndModify extends BudgetSearchAction {
     private void loadApproverUser(final List<BudgetDetail> budgetDetailList) {
         final Map<String, Object> map = voucherService.getDesgBYPassingWfItem("BudgetDetail.nextDesg", null, budgetDetailList
                 .get(0)
-                .getExecutingDepartment().getCode());
+                .getExecutingDepartment());
         addDropdownData("departmentList", masterDataCache.get("egi-department"));
 
         final List<Map<String, Object>> desgList = (List<Map<String, Object>>) map.get("designationList");
@@ -716,21 +716,21 @@ public class BudgetSearchAndModify extends BudgetSearchAction {
         addDropdownData("designationList", (List<Designation>) map.get("designationList"));
         if (bDefaultDeptId && !dName.equals("")) {
             final Department dept = (Department) persistenceService.find("from Department where deptName like '%" + dName + "' ");
-            defaultDept = dept.getId().intValue();
+//            defaultDept = dept.getId().intValue();
         }
         wfitemstate = map.get("wfitemstate") != null ? map.get("wfitemstate").toString() : "";
     }
 
     private String wfitemstate;
     private VoucherService voucherService;
-    private Integer defaultDept;
+    private String defaultDept;
     private Department department;
 
-    public Integer getDefaultDept() {
+    public String getDefaultDept() {
         return defaultDept;
     }
 
-    public void setDefaultDept(final Integer defaultDept) {
+    public void setDefaultDept(final String defaultDept) {
         this.defaultDept = defaultDept;
     }
 

@@ -255,7 +255,7 @@ public class BudgetReportAction extends BaseFormAction {
         for (final BudgetDetail detail : results) {
             final BudgetReportView view = new BudgetReportView();
             view.setId(detail.getId());
-            view.setDepartmentCode(detail.getExecutingDepartment().getCode());
+            view.setDepartmentCode(detail.getExecutingDepartment());
             view.setFunctionCode(detail.getFunction().getCode());
             view.setBudgetGroupName(detail.getBudgetGroup().getName());
             if ("BE".equalsIgnoreCase(detail.getBudget().getIsbere())) {
@@ -308,7 +308,7 @@ public class BudgetReportAction extends BaseFormAction {
 
     private boolean compareDetails(final BudgetDetail nextYear, final BudgetDetail current) {
         if (nextYear.getExecutingDepartment() != null && current.getExecutingDepartment() != null
-                && current.getExecutingDepartment().getId() != nextYear.getExecutingDepartment().getId())
+                && current.getExecutingDepartment().equals(nextYear.getExecutingDepartment()))
             return false;
         if (nextYear.getFunction() != null && current.getFunction() != null
                 && current.getFunction().getId() != nextYear.getFunction().getId())

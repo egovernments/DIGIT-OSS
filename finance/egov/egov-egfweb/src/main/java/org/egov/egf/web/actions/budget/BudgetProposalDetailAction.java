@@ -315,7 +315,8 @@ public class BudgetProposalDetailAction extends BaseBudgetDetailAction {
             final Budget budget = budgetService.find("from Budget where id=?", getBudgetDetail().getBudget().getId());
             final String budgetName = budget.getName();
 
-            final Integer deptId = getBudgetDetail().getExecutingDepartment().getId().intValue();
+            final Integer deptId = 0;
+//            getBudgetDetail().getExecutingDepartment().getId().intValue();
 
             String accountType;
             accountType = budgetDetailHelper.accountTypeForFunctionDeptMap(budgetName);
@@ -425,7 +426,7 @@ public class BudgetProposalDetailAction extends BaseBudgetDetailAction {
 
             BudgetDetail reCurrentYear = budgetDetailService.createBudgetDetail(detail, null, getPersistenceService());
             reCurrentYear
-                    .setUniqueNo(reCurrentYear.getFund().getId() + "-" + reCurrentYear.getExecutingDepartment().getId()
+                    .setUniqueNo(reCurrentYear.getFund().getId() + "-" + reCurrentYear.getExecutingDepartment()
                             + "-" + reCurrentYear.getFunction().getId() + "-" + reCurrentYear.getBudgetGroup().getId());
             budgetDetailService.applyAuditing(reCurrentYear);
             reCurrentYear = budgetDetailService.transitionWorkFlow(reCurrentYear, workflowBean);
@@ -443,7 +444,7 @@ public class BudgetProposalDetailAction extends BaseBudgetDetailAction {
             beNextYear.setDocumentNumber(detail.getDocumentNumber());
             beNextYear.setAnticipatoryAmount(reCurrentYear.getAnticipatoryAmount());
             beNextYear = budgetDetailService.createBudgetDetail(beNextYear, null, getPersistenceService());
-            beNextYear.setUniqueNo(beNextYear.getFund().getId() + "-" + beNextYear.getExecutingDepartment().getId()
+            beNextYear.setUniqueNo(beNextYear.getFund().getId() + "-" + beNextYear.getExecutingDepartment()
                     + "-" + beNextYear.getFunction().getId() + "-" + beNextYear.getBudgetGroup().getId());
             budgetDetailService.applyAuditing(beNextYear);
             beNextYear.setStatus(egwStatusHibernateDAO.getStatusByModuleAndCode(FinancialConstants.BUDGETDETAIL,

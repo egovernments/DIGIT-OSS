@@ -221,12 +221,12 @@ public abstract class BaseBudgetDetailAction extends GenericWorkFlowAction {
             Assignment assignment = new Assignment();
             if (!FinancialConstants.BUTTONSAVE.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
 
-                final List<Assignment> assignmentList = assignmentService
-                        .findAllAssignmentsByHODDeptAndDates(budgetDetail.getExecutingDepartment().getId(), new Date());
-                if (assignmentList.isEmpty())
-                    throw new ValidationException(Arrays.asList(new ValidationError(HOD_NOT_FOUND, HOD_NOT_FOUND)));
-                assignment = assignmentList.get(0);
-                approverPositionId = assignment.getPosition().getId();
+//                final List<Assignment> assignmentList = assignmentService
+//                        .findAllAssignmentsByHODDeptAndDates(budgetDetail.getExecutingDepartment().getId(), new Date());
+//                if (assignmentList.isEmpty())
+//                    throw new ValidationException(Arrays.asList(new ValidationError(HOD_NOT_FOUND, HOD_NOT_FOUND)));
+//                assignment = assignmentList.get(0);
+//                approverPositionId = assignment.getPosition().getId();
             } else
                 approverPositionId = getPosition().getId();
             populateWorkflowBean();
@@ -287,7 +287,7 @@ public abstract class BaseBudgetDetailAction extends GenericWorkFlowAction {
     }
 
     private void setRelatedValues(final BudgetDetail detail) {
-        if (detail.getExecutingDepartment() != null && detail.getExecutingDepartment().getId() == 0)
+        if (detail.getExecutingDepartment() != null)
             detail.setExecutingDepartment(null);
         if (detail.getFunction() != null && detail.getFunction().getId() == 0)
             detail.setFunction(null);
@@ -618,7 +618,7 @@ public abstract class BaseBudgetDetailAction extends GenericWorkFlowAction {
 
     protected boolean compareDetails(final BudgetDetail nextYear, final BudgetDetail current) {
         if (nextYear.getExecutingDepartment() != null && current.getExecutingDepartment() != null
-                && current.getExecutingDepartment().getId() != nextYear.getExecutingDepartment().getId())
+                && !current.getExecutingDepartment().equals(nextYear.getExecutingDepartment()))
             return false;
         if (nextYear.getFunction() != null && current.getFunction() != null
                 && current.getFunction().getId() != nextYear.getFunction().getId())
@@ -649,7 +649,7 @@ public abstract class BaseBudgetDetailAction extends GenericWorkFlowAction {
 
     protected boolean compareREandBEDetails(final BudgetDetail nextYear, final BudgetDetail current) {
         if (nextYear.getExecutingDepartment() != null && current.getExecutingDepartment() != null && current
-                .getExecutingDepartment().getId().intValue() != nextYear.getExecutingDepartment().getId().intValue())
+                .getExecutingDepartment().equals(nextYear.getExecutingDepartment()))
             return false;
         if (nextYear.getFunction() != null && current.getFunction() != null
                 && current.getFunction().getId().intValue() != nextYear.getFunction().getId().intValue())

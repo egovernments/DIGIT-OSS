@@ -97,11 +97,11 @@
 				<td class="greybox"><s:text
 						name="budgetdetail.executingDepartment" /></td>
 				<td width="22%" class="greybox"><s:select
-						list="dropdownData.executingDepartmentList" listKey="id"
-						listValue="name" name="executingDepartment.id" headerKey="0"
+						list="dropdownData.executingDepartmentList" listKey="code"
+						listValue="name" name="executingDepartment" headerKey="0"
 						headerValue="--- Select ---"
-						onchange="updateGrid('executingDepartment.id',document.getElementById('budgetDetail_executingDepartment').selectedIndex)"
-						value="executingDepartment.id"
+						onchange="updateGrid('executingDepartment',document.getElementById('budgetDetail_executingDepartment').selectedIndex)"
+						value="model.executingDepartment"
 						id="budgetDetail_executingDepartment"></s:select></td>
 			</s:if>
 		</tr>

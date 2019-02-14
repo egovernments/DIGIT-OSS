@@ -88,7 +88,7 @@
 					{key:"budget.id",label:'Budget',width:90,className:"budgetSearch", sortable:true},
 					{key:"budgetGroup.id",label:'Budget Group',className:"budgetSearch",sortable:true,width:200},
 					<s:if test="%{shouldShowHeaderField('executingDepartment') || shouldShowGridField('executingDepartment')}">
-						{key:"executingDepartment.id", label:'Executing Department',className:"budgetSearch",sortable:true},
+						{key:"executingDepartment", label:'Executing Department',className:"budgetSearch",sortable:true},
 					</s:if>
 					<s:if test="%{shouldShowHeaderField('functionary') || shouldShowGridField('functionary')}">				
 						{key:"functionary.id",label:'Functionary',className:"budgetSearch",sortable:true} ,
@@ -148,7 +148,7 @@
 							"budget.id":"<s:property value='budget.name'/>",
 							"budgetGroup.id":"<s:property value='budgetGroup.name'/>",
 							<s:if test="%{shouldShowHeaderField('executingDepartment') || shouldShowGridField('executingDepartment')}">
-								"executingDepartment.id":"<s:property value='executingDepartment.name'/>",
+								"executingDepartment":"<s:property value='%{getDepartmentNameByCode(executingDepartment)}'/>",
 							</s:if>
 							<s:if test="%{shouldShowHeaderField('functionary') || shouldShowGridField('functionary')}">				
 								"functionary.id":"<s:property value='functionary.name'/>",

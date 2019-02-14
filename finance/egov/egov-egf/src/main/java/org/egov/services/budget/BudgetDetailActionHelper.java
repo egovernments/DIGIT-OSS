@@ -171,7 +171,7 @@ public class BudgetDetailActionHelper {
     }
 
     public String generateUniqueNo(final BudgetDetail detail) {
-        return detail.getFund().getId() + "-" + detail.getExecutingDepartment().getId() + "-"
+        return detail.getFund().getId() + "-" + detail.getExecutingDepartment() + "-"
                 + detail.getFunction().getId() + "-" + detail.getBudgetGroup().getId();
 
     }

@@ -54,10 +54,11 @@ import org.egov.commons.dao.EgwStatusHibernateDAO;
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.entity.Employee;
 import org.egov.eis.service.EisCommonService;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.workflow.service.SimpleWorkflowService;
@@ -99,6 +100,9 @@ public class BudgetService extends PersistenceService<Budget, Long> {
 
     @Autowired
     private EgwStatusHibernateDAO egwStatusDAO;
+    
+    @Autowired
+    public MicroserviceUtils microserviceUtils;
 
     public void setEisCommonService(final EisCommonService eisCommonService) {
         this.eisCommonService = eisCommonService;
@@ -134,7 +138,7 @@ public class BudgetService extends PersistenceService<Budget, Long> {
     public Department getDepartmentForBudget(final Budget budget) throws ApplicationRuntimeException
     {
 
-        Department dept = null;
+        String dept = null;
         final List<BudgetDetail> detailList = ((PersistenceService) this).findAllBy(
                 "from  BudgetDetail budgetDetail where budgetDetail.budget=?", budget);
         if (detailList.isEmpty() || detailList.size() == 0)
@@ -143,7 +147,7 @@ public class BudgetService extends PersistenceService<Budget, Long> {
             throw new ApplicationRuntimeException("Department not found for the Budget" + budget.getName());
         else
             dept = detailList.get(0).getExecutingDepartment();
-        return dept;
+        return microserviceUtils.getDepartmentByCode(dept);
     }
 
     /**
@@ -156,8 +160,8 @@ public class BudgetService extends PersistenceService<Budget, Long> {
         Department dept = null;
         final Date currDate = new Date();
         try {
-            final Assignment empAssignment = eisCommonService.getLatestAssignmentForEmployeeByToDate(emp.getId(), currDate);
-            dept = empAssignment.getDepartment();
+//            final Assignment empAssignment = eisCommonService.getLatestAssignmentForEmployeeByToDate(emp.getId(), currDate);
+//            dept = empAssignment.getDepartment();
             return dept;
         } catch (final NullPointerException ne)
         {

@@ -85,6 +85,7 @@ import org.egov.infra.admin.master.entity.Boundary;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.persistence.utils.GenericSequenceNumberGenerator;
 import org.egov.infra.script.service.ScriptService;
 import org.egov.infra.utils.autonumber.AutonumberServiceBeanResolver;
@@ -195,6 +196,9 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
     private static Logger LOG = Logger.getLogger(BudgetDetailsHibernateDAO.class);
     @Autowired
     private BudgetControlTypeService budgetCheckConfigService;
+    
+    @Autowired
+    public MicroserviceUtils microserviceUtils;
 
     /**
      * This API is to check whether the planning budget is available or not.For
@@ -1618,7 +1622,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
 
         for (final BudgetDetail bd : bdList) {
             approvedAmt = BigDecimal.ZERO;
-            deptName = bd.getExecutingDepartment().getName();
+            deptName = microserviceUtils.getDepartmentByCode(bd.getExecutingDepartment()).getName();
 
             if (bd.getApprovedAmount() != null)
                 approvedAmt = bd.getApprovedAmount();

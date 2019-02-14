@@ -123,7 +123,7 @@ $('#reBudget').change(function() {
 	console.log($('#reBudget').val());
 	if($('#reBudget').val()!=''){
 		$.ajax({
-			url : '/EGF/budgetuploadreport/ajax/getReferenceBudget',
+			url : '/services/EGF/budgetuploadreport/ajax/getReferenceBudget',
 			type : "get",
 			data : {
 				budgetId : $('#reBudget').val()

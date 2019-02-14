@@ -118,13 +118,11 @@ public class BudgetDetail extends StateAware {
     @Column(name = "anticipatory_amount")
     private BigDecimal anticipatoryAmount = new BigDecimal("0.0");
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "using_department")
-    private Department usingDepartment;
+    @Column(name = "using_department")
+    private String usingDepartment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "executing_department")
-    private Department executingDepartment;
+    @Column(name = "executing_department")
+    private String executingDepartment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "function")
@@ -204,19 +202,19 @@ public class BudgetDetail extends StateAware {
         approvedAmount = fixedAmount;
     }
 
-    public Department getUsingDepartment() {
+    public String getUsingDepartment() {
         return usingDepartment;
     }
 
-    public void setUsingDepartment(final Department department) {
+    public void setUsingDepartment(final String department) {
         usingDepartment = department;
     }
 
-    public Department getExecutingDepartment() {
+    public String getExecutingDepartment() {
         return executingDepartment;
     }
 
-    public void setExecutingDepartment(final Department department) {
+    public void setExecutingDepartment(final String department) {
         executingDepartment = department;
     }
 
@@ -408,8 +406,8 @@ public class BudgetDetail extends StateAware {
                 && !boundary.getId().equals(other.getBoundary().getId()))
             same = false;
         if ((executingDepartment != null) && (other.executingDepartment != null)
-                && !executingDepartment.getId()
-                .equals(other.getExecutingDepartment().getId()))
+                && !executingDepartment
+                .equals(other.getExecutingDepartment()))
             same = false;
         if ((scheme != null) && (other.scheme != null)
                 && !scheme.getId().equals(other.getScheme().getId()))

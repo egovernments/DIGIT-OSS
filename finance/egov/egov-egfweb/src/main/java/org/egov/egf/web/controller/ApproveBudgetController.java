@@ -81,7 +81,7 @@ public class ApproveBudgetController {
         model.addAttribute("budgets", budgetService.getBudgetsForUploadReport());
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    @RequestMapping(value = "/search", method = {RequestMethod.GET,RequestMethod.POST})
     public String search(Model model)
     {
         BudgetUploadReport budgetUploadReport = new BudgetUploadReport();

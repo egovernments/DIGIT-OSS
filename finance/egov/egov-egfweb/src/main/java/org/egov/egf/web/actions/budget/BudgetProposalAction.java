@@ -62,10 +62,10 @@ import org.egov.eis.service.AssignmentService;
 import org.egov.eis.service.EisCommonService;
 import org.egov.eis.web.actions.workflow.GenericWorkFlowAction;
 import org.egov.infra.admin.master.entity.AppConfigValues;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.reporting.engine.ReportService;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.workflow.entity.State;
@@ -196,7 +196,7 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
     private Map<Long, BudgetGroup> budgetGroupMap;
     private Map<Integer, Fund> fundMap;
     private Map<Long, CFunction> functionMap;
-    private Map<Long, Department> deptMap;
+    private Map<String, Department> deptMap;
     private List<AppConfigValues> excludelist = new ArrayList<AppConfigValues>();
     protected EisUtilService eisService;
 
@@ -339,9 +339,9 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
         for (final Fund f : fundList)
             fundMap.put(f.getId(), f);
         final List<Department> deptList = masterDataCache.get("egi-department");
-        deptMap = new HashMap<Long, Department>();
+        deptMap = new HashMap<String, Department>();
         for (final Department d : deptList)
-            deptMap.put(d.getId().longValue(), d);
+            deptMap.put(d.getCode(), d);
         excludelist = appConfigValuesService.getConfigValuesByModuleAndKey(Constants.EGF,
                 "exclude_status_forbudget_actual");
         if (excludelist.isEmpty())
@@ -502,7 +502,7 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
         }
 
         if (deptHeading) {
-            bpBeanList.add(new BudgetProposalBean(budgetDetail.getExecutingDepartment().getName(), HEADING));
+            bpBeanList.add(new BudgetProposalBean(microserviceUtils.getDepartmentByCode(budgetDetail.getExecutingDepartment()).getName(), HEADING));
             deptHeading = false;
         }
         if (functionHeading) {
@@ -615,7 +615,7 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
                 .fetchMajorCodeAndBENextYrApproved(topBudget, budgetDetail, null, pos);
         addToMapStringBigDecimal(resultMajorCodeBENextYrApproved, majorCodeAndBENextYrApprovedMap);
 
-        bpBeanList.add(new BudgetProposalBean(budgetDetail.getExecutingDepartment().getName(), HEADING));
+        bpBeanList.add(new BudgetProposalBean(microserviceUtils.getDepartmentByCode(budgetDetail.getExecutingDepartment()).getName(), HEADING));
         deptHeading = false;
         bpBeanList.add(new BudgetProposalBean("DEPARTMENTWISE BUDGET SUMMARY", HEADING));
 
@@ -680,18 +680,18 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
                 .getTwoPreviousYearByDate(financialYear.getStartingDate());
 
         final List<Object[]> resultCurrentActuals = budgetDetailService.fetchActualsForFinYear(financialYear,
-                mandatoryFields, topBudget, null, asOndate, budgetDetail.getExecutingDepartment().getId().intValue(),
+                mandatoryFields, topBudget, null, asOndate, budgetDetail.getExecutingDepartment(),
                 budgetDetail.getFunction().getId(), excludelist);
         addToMapStringBigDecimal(resultCurrentActuals, budgetDetailIdsAndAmount);
 
         final List<Object[]> resultPreviousActuals = budgetDetailService.fetchActualsForFinYear(lastFinancialYearByDate,
-                mandatoryFields, topBudget, null, null, budgetDetail.getExecutingDepartment().getId().intValue(),
+                mandatoryFields, topBudget, null, null, budgetDetail.getExecutingDepartment(),
                 budgetDetail.getFunction().getId(), excludelist);
         addToMapStringBigDecimal(resultPreviousActuals, previousYearBudgetDetailIdsAndAmount);
 
         final List<Object[]> resultTwoPreviousActuals = budgetDetailService.fetchActualsForFinYear(
                 beforeLastFinancialYearByDate, mandatoryFields, topBudget, null, null,
-                budgetDetail.getExecutingDepartment().getId().intValue(), budgetDetail.getFunction().getId(),
+                budgetDetail.getExecutingDepartment(), budgetDetail.getFunction().getId(),
                 excludelist);
         addToMapStringBigDecimal(resultTwoPreviousActuals, twopreviousYearBudgetDetailIdsAndAmount);
 
@@ -743,7 +743,7 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
         bpbean.setFund(fundMap.get(bd.getFund().getId()).getName());
         bpbean.setFunction(functionMap.get(bd.getFunction().getId()).getName());
         bpbean.setBudgetGroup(budgetGroupMap.get(bd.getBudgetGroup().getId()).getName());
-        bpbean.setExecutingDepartment(deptMap.get(bd.getExecutingDepartment().getId()).getCode());
+        bpbean.setExecutingDepartment(deptMap.get(bd.getExecutingDepartment()).getName());
         bpbean.setPreviousYearActuals(previousYearBudgetDetailIdsAndAmount.get(bd.getUniqueNo()) == null
                 ? BigDecimal.ZERO.setScale(2).toString()
                 : previousYearBudgetDetailIdsAndAmount.get(bd.getUniqueNo()).toString());
@@ -915,28 +915,28 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
             budgetDetail = budgetDetailService.find("from BudgetDetail where id=?", bpBean.getId());
             break;
         }
-        final List<Assignment> assignment = assignmentService.findAllAssignmentsByHODDeptAndDates(
-                budgetDetail.getExecutingDepartment().getId(), budgetDetail.getBudget().getAsOnDate());
-        if (!assignment.isEmpty())
-            approverPositionId = assignment.get(0).getPosition().getId();
-        populateWorkflowBean();
-
-        if (actionName.contains("Forward")) {
-            if (!assignment.isEmpty())
-                addActionMessage(getText("budgetdetail.forward",
-                        new String[] { assignment.get(0).getEmployee().getName() }));
-            else
-                throw new ValidationException(org.apache.commons.lang.StringUtils.EMPTY,
-                        "Approver doesn't exists for the selected department");
-        } else if (actionName.contains("Verify"))
-            addActionMessage(getText("budgetdetail.verify"));
-        else if (actionName.contains("Cancel"))
-            addActionMessage(getText("budgetdetail.cancel"));
-        else {
-            final Assignment initiator = budgetDetailService.getWorkflowInitiator(budgetDetail);
-            addActionMessage(getText("budgetdetail.reject",
-                    new String[] { initiator.getEmployee().getName() }));
-        }
+//        final List<Assignment> assignment = assignmentService.findAllAssignmentsByHODDeptAndDates(
+//                budgetDetail.getExecutingDepartment().getId(), budgetDetail.getBudget().getAsOnDate());
+//        if (!assignment.isEmpty())
+//            approverPositionId = assignment.get(0).getPosition().getId();
+//        populateWorkflowBean();
+//
+//        if (actionName.contains("Forward")) {
+//            if (!assignment.isEmpty())
+//                addActionMessage(getText("budgetdetail.forward",
+//                        new String[] { assignment.get(0).getEmployee().getName() }));
+//            else
+//                throw new ValidationException(org.apache.commons.lang.StringUtils.EMPTY,
+//                        "Approver doesn't exists for the selected department");
+//        } else if (actionName.contains("Verify"))
+//            addActionMessage(getText("budgetdetail.verify"));
+//        else if (actionName.contains("Cancel"))
+//            addActionMessage(getText("budgetdetail.cancel"));
+//        else {
+//            final Assignment initiator = budgetDetailService.getWorkflowInitiator(budgetDetail);
+//            addActionMessage(getText("budgetdetail.reject",
+//                    new String[] { initiator.getEmployee().getName() }));
+//        }
         budgetDetailActionHelper.update(bpBeanList, workflowBean);
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed updation .....");
@@ -984,23 +984,23 @@ public class BudgetProposalAction extends GenericWorkFlowAction {
     }
 
     private boolean validateForAllFunctionsMappedForDept(final Budget topBudget, final Position position) {
-        final BudgetDetail bd = budgetDetailService.find("from BudgetDetail  where budget.id=?", topBudget.getId());
-        final String Query = "select distinct(f.name) as functionid from eg_dept_functionmap m,function f where departmentid="
-                + bd.getExecutingDepartment().getId() + " and f.id= m.functionid and m.budgetaccount_Type='"
-                + budgetDetailHelper.accountTypeForFunctionDeptMap(topBudget.getName()) + "'" + " EXCEPT "
-                + " select distinct(f.name) as functionid from egf_budgetdetail bd,eg_wf_states s,function f where bd.budget="
-                + topBudget.getId() + " and bd.state_id=s.id and s.owner_pos=" + position.getId()
-                + " and bd.function=f.id order by functionid";
-        final Query functionsNotUsed = persistenceService.getSession().createSQLQuery(Query);
-        final List<String> notUsedList = functionsNotUsed.list();
-
-        if (notUsedList.size() > 0) {
-            functionsNotYetReceiced = "";
-            for (final String s : notUsedList)
-                functionsNotYetReceiced = functionsNotYetReceiced + s + " ,";
-            return false;
-
-        } else
+//        final BudgetDetail bd = budgetDetailService.find("from BudgetDetail  where budget.id=?", topBudget.getId());
+//        final String Query = "select distinct(f.name) as functionid from eg_dept_functionmap m,function f where departmentid="
+//                + bd.getExecutingDepartment().getId() + " and f.id= m.functionid and m.budgetaccount_Type='"
+//                + budgetDetailHelper.accountTypeForFunctionDeptMap(topBudget.getName()) + "'" + " EXCEPT "
+//                + " select distinct(f.name) as functionid from egf_budgetdetail bd,eg_wf_states s,function f where bd.budget="
+//                + topBudget.getId() + " and bd.state_id=s.id and s.owner_pos=" + position.getId()
+//                + " and bd.function=f.id order by functionid";
+//        final Query functionsNotUsed = persistenceService.getSession().createSQLQuery(Query);
+//        final List<String> notUsedList = functionsNotUsed.list();
+//
+//        if (notUsedList.size() > 0) {
+//            functionsNotYetReceiced = "";
+//            for (final String s : notUsedList)
+//                functionsNotYetReceiced = functionsNotYetReceiced + s + " ,";
+//            return false;
+//
+//        } else
             return true;
     }
 

@@ -182,7 +182,7 @@ public class BudgetReAppropriationService extends PersistenceService<BudgetReApp
     }
 
     public BudgetDetail setRelatedValues(final BudgetDetail detail) {
-        if (detail.getExecutingDepartment() != null && detail.getExecutingDepartment().getId() == 0)
+        if (detail.getExecutingDepartment() != null && "".equals(detail.getExecutingDepartment()))
             detail.setExecutingDepartment(null);
         if (detail.getFunction() != null && detail.getFunction().getId() == 0)
             detail.setFunction(null);
@@ -221,12 +221,12 @@ public class BudgetReAppropriationService extends PersistenceService<BudgetReApp
             if (Constants.EXECUTING_DEPARTMENT.equalsIgnoreCase(entry)
                     && budgetDetailConfig.getMandatoryFields().contains(Constants.EXECUTING_DEPARTMENT)
                     && (appropriation.getBudgetDetail().getExecutingDepartment() == null || appropriation.getBudgetDetail()
-                            .getExecutingDepartment().getId() == 0))
+                            .getExecutingDepartment().equals("")))
                 return true;
             if (Constants.FUND.equalsIgnoreCase(entry)
                     && budgetDetailConfig.getMandatoryFields().contains(Constants.FUND)
                     && (appropriation.getBudgetDetail().getExecutingDepartment() == null || appropriation.getBudgetDetail()
-                            .getExecutingDepartment().getId() == 0))
+                            .getExecutingDepartment().equals("")))
                 return true;
             if (Constants.SCHEME.equalsIgnoreCase(entry)
                     && budgetDetailConfig.getMandatoryFields().contains(Constants.SCHEME)
@@ -328,8 +328,8 @@ public class BudgetReAppropriationService extends PersistenceService<BudgetReApp
         final BudgetDetail budgetDetail = appropriation.getBudgetDetail();
         if (budgetDetail.getFund() != null && budgetDetail.getFund().getId() != null)
             paramMap.put("fundid", budgetDetail.getFund().getId());
-        if (budgetDetail.getExecutingDepartment() != null && budgetDetail.getExecutingDepartment().getId() != null)
-            paramMap.put("deptid", budgetDetail.getExecutingDepartment().getId());
+        if (budgetDetail.getExecutingDepartment() != null)
+            paramMap.put("deptid", budgetDetail.getExecutingDepartment());
         if (budgetDetail.getFunction() != null && budgetDetail.getFunction().getId() != null)
             paramMap.put("functionid", budgetDetail.getFunction().getId());
         if (budgetDetail.getFunctionary() != null && budgetDetail.getFunctionary().getId() != null)
@@ -460,9 +460,9 @@ public class BudgetReAppropriationService extends PersistenceService<BudgetReApp
         StringBuffer query = new StringBuffer();
         query.append("from BudgetReAppropriation where state.value='NEW' and createdBy.id=" + userId
                 + " and budgetDetail.budget.financialYear.id=" + financialYear.getId());
-        if (budgetDetail.getExecutingDepartment() != null && budgetDetail.getExecutingDepartment().getId() != null
-                && budgetDetail.getExecutingDepartment().getId() != 0)
-            query.append(" and budgetDetail.executingDepartment.id=" + budgetDetail.getExecutingDepartment().getId());
+        if (budgetDetail.getExecutingDepartment() != null
+                && budgetDetail.getExecutingDepartment().equals(""))
+            query.append(" and budgetDetail.executingDepartment=" + budgetDetail.getExecutingDepartment());
         if (budgetDetail.getFund() != null && budgetDetail.getFund().getId() != null && budgetDetail.getFund().getId() != 0)
             query.append(" and budgetDetail.fund.id=" + budgetDetail.getFund().getId());
         if (budgetDetail.getFunction() != null && budgetDetail.getFunction().getId() != null
@@ -577,7 +577,7 @@ public class BudgetReAppropriationService extends PersistenceService<BudgetReApp
                 for (final BudgetReAppropriationView appropriation : newBudgetReAppropriationList) {
                     if (budgetDetailService.getBudgetDetail(appropriation.getBudgetDetail().getFund().getId(), appropriation
                             .getBudgetDetail().getFunction().getId(), appropriation.getBudgetDetail().getExecutingDepartment()
-                            .getId(), appropriation.getBudgetDetail().getBudgetGroup().getId()) == null) {
+                            , appropriation.getBudgetDetail().getBudgetGroup().getId()) == null) {
                         detail = createApprovedBudgetDetail(appropriation, position);
                         if (!checkRowEmpty(appropriation)) {
                             validateMandatoryFields(newBudgetReAppropriationList);

@@ -56,7 +56,7 @@
 <title><s:text name="budgetload" /></title>
 <script type="text/javascript">
 	function urlLoad(fileStoreId) {
-		var sUrl = "/egi/downloadfile?fileStoreId=" + fileStoreId
+		var sUrl = "/services/egi/downloadfile?fileStoreId=" + fileStoreId
 				+ "&moduleName=EGF";
 		window.open(sUrl, "window",
 				'scrollbars=yes,resizable=no,height=400,width=400,status=yes');
@@ -85,8 +85,9 @@
 				<div id="Errors">
 					<s:actionerror />
 					<s:fielderror />
-				</div> <s:actionmessage />
+				</div> 
 			</span>
+			<span style="color: green"><s:actionmessage /></span>
 			<center>
 				<table align="center" width="100%">
 					<tr align="center">
@@ -109,7 +110,7 @@
 					<table>
 						<tr>
 							<td><input type="button" value="Close"
-								onclick="javascript:window.close()" class="buttonsubmit" /></td>
+								onclick="window.parent.postMessage('close','*');window.close();" class="buttonsubmit" /></td>
 						</tr>
 					</table>
 				</div>

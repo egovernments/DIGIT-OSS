@@ -66,9 +66,9 @@ import org.egov.egf.commons.EgovCommon;
 import org.egov.egf.model.BudgetVarianceEntry;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Boundary;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.reporting.engine.ReportFormat;
 import org.egov.infra.reporting.engine.ReportOutput;
 import org.egov.infra.reporting.engine.ReportRequest;
@@ -77,6 +77,7 @@ import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.services.PersistenceService;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.budget.BudgetDetail;
 import org.egov.model.budget.BudgetGroup;
 import org.egov.model.payment.Paymentheader;
@@ -140,10 +141,13 @@ public class BudgetVarianceReportAction extends BaseFormAction {
     private String type = "Budget";
     private BudgetService budgetService;
     String budgetType = Constants.BE;
-    private final Map<String, Integer> queryParamMap = new HashMap<String, Integer>();
+    private final Map<String, String> queryParamMap = new HashMap<String, String>();
     private Department department = new Department();
     private CFunction function = new CFunction();
     private Fund fund = new Fund();
+    @Autowired
+    @Qualifier("masterDataCache")
+    private EgovMasterDataCaching masterDataCache;
 
     @ValidationErrorPage(value = "form")
     @SkipValidation
@@ -192,7 +196,7 @@ public class BudgetVarianceReportAction extends BaseFormAction {
             dropdownData.put("budgetGroupList",
                     persistenceService.findAllBy("from BudgetGroup where isActive=true order by name"));
             if (isFieldMandatory(Constants.EXECUTING_DEPARTMENT))
-                addDropdownData("departmentList", persistenceService.findAllBy("from Department order by name"));
+                addDropdownData("departmentList", masterDataCache.get("egi-department"));
             if (isFieldMandatory(Constants.FUNCTION))
                 addDropdownData("functionList",
                         persistenceService.findAllBy("from CFunction where isactive=true and isnotleaf=false  order by name"));
@@ -238,26 +242,26 @@ public class BudgetVarianceReportAction extends BaseFormAction {
         StringBuffer miscQuery = new StringBuffer();
         if (shouldShowHeaderField(Constants.FUND) && queryParamMap.containsKey("fundId")) {
             miscQuery = miscQuery.append(" and " + detail + ".fundId=bd.fund ");
-            miscQuery = miscQuery.append(" and bd.fund= " + queryParamMap.get("fundId"));
+            miscQuery = miscQuery.append(" and bd.fund= " + Integer.parseInt(queryParamMap.get("fundId")));
         }
         if (shouldShowHeaderField(Constants.SCHEME) && queryParamMap.containsKey("schemeId")) {
             miscQuery = miscQuery.append(" and " + mis + ".schemeid=bd.scheme ");
-            miscQuery = miscQuery.append(" and bd.scheme= " + queryParamMap.get("schemeId"));
+            miscQuery = miscQuery.append(" and bd.scheme= " + Integer.parseInt(queryParamMap.get("schemeId")));
         }
         if (shouldShowHeaderField(Constants.SUB_SCHEME) && queryParamMap.containsKey("subSchemeId")) {
             miscQuery = miscQuery.append(" and " + mis + ".subschemeid=bd.subscheme ");
-            miscQuery = miscQuery.append(" and bd.subscheme= " + queryParamMap.get("subSchemeId"));
+            miscQuery = miscQuery.append(" and bd.subscheme= " + Integer.parseInt(queryParamMap.get("subSchemeId")));
         }
         if (shouldShowHeaderField(Constants.FUNCTIONARY) && queryParamMap.containsKey("functionaryId")) {
             miscQuery = miscQuery.append(" and " + mis + ".functionaryid=bd.functionary ");
-            miscQuery = miscQuery.append(" and bd.functionary= " + queryParamMap.get("functionaryId"));
+            miscQuery = miscQuery.append(" and bd.functionary= " + Integer.parseInt(queryParamMap.get("functionaryId")));
         }
         if (shouldShowHeaderField(Constants.FUNCTION) && queryParamMap.containsKey("functionId")) {
             miscQuery = miscQuery.append(" and " + gl + ".functionId=bd.function ");
-            miscQuery = miscQuery.append(" and bd.function= " + Long.parseLong(queryParamMap.get("functionId").toString()));
+            miscQuery = miscQuery.append(" and bd.function= " + Long.parseLong(queryParamMap.get("functionId")));
         }
         if (shouldShowHeaderField(Constants.EXECUTING_DEPARTMENT) && queryParamMap.containsKey("deptId")) {
-            miscQuery = miscQuery.append(" and " + mis + ".departmentid=bd.executing_department ");
+            miscQuery = miscQuery.append(" and " + mis + ".departmentcode=bd.executing_department ");
             miscQuery = miscQuery.append(" and bd.executing_department= " + queryParamMap.get("deptId"));
         }
         return miscQuery;
@@ -325,8 +329,8 @@ public class BudgetVarianceReportAction extends BaseFormAction {
             final BudgetVarianceEntry budgetVarianceEntry = new BudgetVarianceEntry();
             budgetVarianceEntry.setBudgetHead(budgetDetail.getBudgetGroup().getName());
             if (budgetDetail.getExecutingDepartment() != null) {
-                budgetVarianceEntry.setDepartmentCode(budgetDetail.getExecutingDepartment().getCode());
-                budgetVarianceEntry.setDepartmentName(budgetDetail.getExecutingDepartment().getName());
+                budgetVarianceEntry.setDepartmentCode(budgetDetail.getExecutingDepartment());
+                budgetVarianceEntry.setDepartmentName(microserviceUtils.getDepartmentByCode(budgetDetail.getExecutingDepartment()).getName());
             }
             if (budgetDetail.getFund() != null)
                 budgetVarianceEntry.setFundCode(budgetDetail.getFund().getName());
@@ -355,9 +359,8 @@ public class BudgetVarianceReportAction extends BaseFormAction {
 
     private String getMiscQuery() {
         final StringBuilder query = new StringBuilder();
-        if (budgetDetail.getExecutingDepartment() != null && budgetDetail.getExecutingDepartment().getId() != null
-                && budgetDetail.getExecutingDepartment().getId() != -1)
-            query.append(" and executingDepartment.id=").append(budgetDetail.getExecutingDepartment().getId());
+        if (budgetDetail.getExecutingDepartment() != null && "".equals(budgetDetail.getExecutingDepartment()))
+            query.append(" and executingDepartment=").append(budgetDetail.getExecutingDepartment());
         if (budgetDetail.getBudgetGroup() != null && budgetDetail.getBudgetGroup().getId() != null
                 && budgetDetail.getBudgetGroup().getId() != -1)
             query.append(" and budgetGroup.id=").append(budgetDetail.getBudgetGroup().getId());
@@ -385,28 +388,27 @@ public class BudgetVarianceReportAction extends BaseFormAction {
 
     private void setQueryParams() {
         if (shouldShowHeaderField(Constants.EXECUTING_DEPARTMENT) && budgetDetail.getExecutingDepartment() != null
-                && budgetDetail.getExecutingDepartment().getId() != null && budgetDetail.getExecutingDepartment().getId() != -1
-                && budgetDetail.getExecutingDepartment().getId() != 0)
-            queryParamMap.put("deptId", budgetDetail.getExecutingDepartment().getId().intValue());
+                && budgetDetail.getExecutingDepartment() == "")
+            queryParamMap.put("deptId", budgetDetail.getExecutingDepartment());
         if (shouldShowHeaderField(Constants.FUNCTION) && budgetDetail.getFunction() != null
                 && budgetDetail.getFunction().getId() != null && budgetDetail.getFunction().getId() != -1
                 && budgetDetail.getFunction().getId() != 0)
-            queryParamMap.put("functionId", Integer.parseInt(budgetDetail.getFunction().getId().toString()));
+            queryParamMap.put("functionId", budgetDetail.getFunction().getId().toString());
         if (shouldShowHeaderField(Constants.FUND) && budgetDetail.getFund() != null && budgetDetail.getFund().getId() != null
                 && budgetDetail.getFund().getId() != -1 && budgetDetail.getFund().getId() != 0)
-            queryParamMap.put("fundId", budgetDetail.getFund().getId());
+            queryParamMap.put("fundId", budgetDetail.getFund().getId().toString());
         if (shouldShowHeaderField(Constants.SCHEME) && budgetDetail.getScheme() != null
                 && budgetDetail.getScheme().getId() != null && budgetDetail.getScheme().getId() != -1
                 && budgetDetail.getScheme().getId() != 0)
-            queryParamMap.put("schemeId", budgetDetail.getScheme().getId());
+            queryParamMap.put("schemeId", budgetDetail.getScheme().getId().toString());
         if (shouldShowHeaderField(Constants.SUBSCHEME) && budgetDetail.getSubScheme() != null
                 && budgetDetail.getSubScheme().getId() != null && budgetDetail.getSubScheme().getId() != -1
                 && budgetDetail.getSubScheme().getId() != 0)
-            queryParamMap.put("subSchemeId", budgetDetail.getSubScheme().getId());
+            queryParamMap.put("subSchemeId", budgetDetail.getSubScheme().getId().toString());
         if (shouldShowHeaderField(Constants.FUNCTIONARY) && budgetDetail.getFunctionary() != null
                 && budgetDetail.getFunctionary().getId() != null && budgetDetail.getFunctionary().getId() != -1
                 && budgetDetail.getFunctionary().getId() != 0)
-            queryParamMap.put("functionaryId", budgetDetail.getFunctionary().getId());
+            queryParamMap.put("functionaryId", budgetDetail.getFunctionary().getId().toString());
     }
 
     private void populateActualData(final CFinancialYear financialYear) {
@@ -468,8 +470,7 @@ public class BudgetVarianceReportAction extends BaseFormAction {
         checkMandatoryField("fund", Constants.FUND, budgetDetail.getFund() == null ? Integer.parseInt("0") : budgetDetail
                 .getFund().getId(), "voucher.fund.mandatory");
         checkMandatoryField("executingDepartment", Constants.EXECUTING_DEPARTMENT,
-                budgetDetail.getExecutingDepartment() == null ? Integer.parseInt("0") : budgetDetail.getExecutingDepartment()
-                        .getId(),
+                budgetDetail.getExecutingDepartment() == null ? "" : budgetDetail.getExecutingDepartment(),
                 "voucher.department.mandatory");
         checkMandatoryField("scheme", Constants.SCHEME, budgetDetail.getScheme() == null ? Integer.parseInt("0") : budgetDetail
                 .getScheme().getId(), "voucher.scheme.mandatory");
@@ -567,10 +568,8 @@ public class BudgetVarianceReportAction extends BaseFormAction {
     }
 
     public String getDepartmentName() {
-        if (budgetDetail.getExecutingDepartment() != null && budgetDetail.getExecutingDepartment().getId() != null
-                && budgetDetail.getExecutingDepartment().getId() != -1) {
-            final Department department = (Department) persistenceService.find("from Department where id=?", budgetDetail
-                    .getExecutingDepartment().getId());
+        if (budgetDetail.getExecutingDepartment() != null && budgetDetail.getExecutingDepartment() != "") {
+            final Department department = microserviceUtils.getDepartmentByCode(budgetDetail.getExecutingDepartment());
             return department.getName();
         }
         return "";

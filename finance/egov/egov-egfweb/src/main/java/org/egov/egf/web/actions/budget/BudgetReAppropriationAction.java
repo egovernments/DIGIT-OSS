@@ -530,8 +530,8 @@ public class BudgetReAppropriationAction extends BaseFormAction {
                 + budgetDetail.getBudget().getIsbere() + "' ";
         if (budgetDetail.getFund().getId() != null && budgetDetail.getFund().getId() != 0)
             sql = sql + " and ba.budgetDetail.fund=" + budgetDetail.getFund().getId();
-        if (budgetDetail.getExecutingDepartment() != null && budgetDetail.getExecutingDepartment().getId() != 0)
-            sql = sql + " and ba.budgetDetail.executingDepartment=" + budgetDetail.getExecutingDepartment().getId();
+        if (budgetDetail.getExecutingDepartment() != null && "".equals(budgetDetail.getExecutingDepartment()))
+            sql = sql + " and ba.budgetDetail.executingDepartment=" + budgetDetail.getExecutingDepartment();
         if (budgetDetail.getFunction() != null && budgetDetail.getFunction().getId() != 0)
             sql = sql + " and ba.budgetDetail.function=" + budgetDetail.getFunction().getId();
         if (budgetDetail.getFunctionary() != null && budgetDetail.getFunctionary().getId() != 0)

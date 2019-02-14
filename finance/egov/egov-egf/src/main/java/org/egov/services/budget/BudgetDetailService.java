@@ -65,12 +65,13 @@ import org.egov.eis.service.AssignmentService;
 import org.egov.eis.service.EisCommonService;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Boundary;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.admin.master.service.DepartmentService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.persistence.utils.DatabaseSequenceProvider;
 import org.egov.infra.script.entity.Script;
 import org.egov.infra.script.service.ScriptService;
@@ -81,6 +82,7 @@ import org.egov.infra.workflow.entity.State;
 import org.egov.infra.workflow.service.SimpleWorkflowService;
 import org.egov.infra.workflow.service.WorkflowService;
 import org.egov.infstr.services.PersistenceService;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.budget.Budget;
 import org.egov.model.budget.BudgetDetail;
 import org.egov.model.budget.BudgetGroup;
@@ -142,6 +144,11 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
     @Qualifier("persistenceService")
     private PersistenceService persistenceService;
 
+    
+    @Autowired
+    @Qualifier("masterDataCache")
+    private EgovMasterDataCaching masterDataCache;
+    
     @Autowired
     @Qualifier("budgetService")
     private BudgetService budgetService;
@@ -181,6 +188,9 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
 
     @Autowired
     private BudgetDetailRepository budgetDetailRepository;
+    
+    @Autowired
+    public MicroserviceUtils microserviceUtils;
 
     private static final String DUPLICATE = "budgetDetail.duplicate";
     private static final String EXISTS = "budgetdetail.exists";
@@ -276,8 +286,8 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         map.put("functionary", detail.getFunctionary() == null ? 0 : detail.getFunctionary().getId());
         map.put("scheme", detail.getScheme() == null ? 0 : detail.getScheme().getId());
         map.put("subScheme", detail.getSubScheme() == null ? 0 : detail.getSubScheme().getId());
-        map.put("executingDepartment",
-                detail.getExecutingDepartment() == null ? 0 : detail.getExecutingDepartment().getId());
+//        map.put("executingDepartmentCode",
+//                detail.getExecutingDepartmentCode() == null ? 0 : detail.getExecutingDepartmentCode());
         map.put("boundary", detail.getBoundary() == null ? 0 : detail.getBoundary().getId());
         map.put("fund", detail.getFund() == null ? 0 : detail.getFund().getId());
         map.put("status", detail.getStatus() == null ? 0 : detail.getStatus().getId());
@@ -376,20 +386,22 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
             return Collections.EMPTY_SET;
         final Criteria budgetDetailCriteria = constructCriteria(example);
         budgetDetailCriteria.createCriteria(Constants.BUDGET);
+        if(!"0".equals(example.getExecutingDepartment()) && example.getExecutingDepartment() != null)
+            budgetDetailCriteria.add(Restrictions.eq("executingDepartment", example.getExecutingDepartment()));
         final List<Budget> leafBudgets = budgetDetailCriteria
                 .setProjection(Projections.distinct(Projections.property(Constants.BUDGET))).list();
         final List<Budget> parents = new ArrayList<Budget>();
         final Set<Budget> budgetTree = new LinkedHashSet<Budget>();
         for (Budget leaf : leafBudgets) {
             parents.clear();
-            while (leaf != null && leaf.getId() != budget.getId()) {
+            while (leaf != null && !leaf.getId().equals(budget.getId())) {
                 parents.add(leaf);
                 leaf = leaf.getParent();
             }
             if (leaf != null) {
                 parents.add(leaf);
                 budgetTree.addAll(parents);
-            }
+            }    
         }
         return budgetTree;
     }
@@ -438,7 +450,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
     @Transactional
     public BudgetDetail persist(final BudgetDetail detail) {
         try {
-            detail.setUniqueNo(detail.getFund().getId() + "-" + detail.getExecutingDepartment().getId() + "-"
+            detail.setUniqueNo(detail.getFund().getId() + "-" + detail.getExecutingDepartment() + "-"
                     + detail.getFunction().getId() + "-" + detail.getBudgetGroup().getId());
             if (!chequeUnique(detail) && detail.getId() == null)
                 throw new ValidationException(
@@ -458,7 +470,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         criteria.add(Restrictions.eq("budgetGroup.id", detail.getBudgetGroup().getId()));
         criteria.add(Restrictions.eq("fund.id", detail.getFund().getId()));
         criteria.add(Restrictions.eq("function.id", detail.getFunction().getId()));
-        criteria.add(Restrictions.eq("executingDepartment.id", detail.getExecutingDepartment().getId()));
+//        criteria.add(Restrictions.eq("executingDepartmentCode", detail.getExecutingDepartmentCode()));
 
         return criteria.list().isEmpty();
     }
@@ -516,13 +528,13 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
      * @return department of the budgetdetail
      * @throws ApplicationRuntimeException
      */
-    public Department getDepartmentForBudget(final BudgetDetail detail) throws ApplicationRuntimeException {
-        Department dept = null;
+    public org.egov.infra.microservice.models.Department getDepartmentForBudget(final BudgetDetail detail) throws ApplicationRuntimeException {
+        String dept = null;
         if (detail.getExecutingDepartment() != null)
             dept = detail.getExecutingDepartment();
         else
             throw new ApplicationRuntimeException("Department not found for the Budget" + detail.getId());
-        return dept;
+        return microserviceUtils.getDepartmentByCode(dept);
     }
 
     /**
@@ -535,9 +547,9 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         Department dept = null;
         final Date currDate = new Date();
         try {
-            final Assignment empAssignment = eisCommonService.getLatestAssignmentForEmployeeByToDate(emp.getId(),
-                    currDate);
-            dept = empAssignment.getDepartment();
+//            final Assignment empAssignment = eisCommonService.getLatestAssignmentForEmployeeByToDate(emp.getId(),
+//                    currDate);
+//            dept = empAssignment.getDepartment();
             return dept;
         } catch (final NullPointerException ne) {
             throw new ApplicationRuntimeException(ne.getMessage());
@@ -578,7 +590,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                     persistenceService.getSession().load(Functionary.class, detail.getFunctionary().getId()));
         if (detail.getExecutingDepartment() != null)
             detail.setExecutingDepartment(
-                    persistenceService.getSession().load(Department.class, detail.getExecutingDepartment().getId()));
+                    detail.getExecutingDepartment());
         if (detail.getScheme() != null)
             detail.setScheme(persistenceService.getSession().load(Scheme.class, detail.getScheme().getId()));
         if (detail.getSubScheme() != null)
@@ -630,7 +642,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         StringBuffer query = new StringBuffer();
         query = query
                 .append("select bd.id,SUM(gl.debitAmount)-SUM(gl.creditAmount) from egf_budgetdetail bd,generalledger gl,voucherheader vh,"
-                        + "vouchermis vmis, eg_department dept , " + budgetGroupQuery
+                        + "vouchermis vmis," + budgetGroupQuery
                         + ",egf_budget b where bd.budget=b.id and vmis.VOUCHERHEADERID=vh.id and gl.VOUCHERHEADERID=vh.id and bd.budgetgroup=bg.id and "
                         + "(bg.ACCOUNTTYPE='REVENUE_EXPENDITURE' or bg.ACCOUNTTYPE='CAPITAL_EXPENDITURE') and vh.status not in ("
                         + voucherstatusExclude + ") and " + "vh.voucherDate>= to_date('" + fromDate
@@ -638,7 +650,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         + miscQuery + " and (gl.glcode = bg.mincode or gl.glcode=bg.majorcode) group by bd.id"
                         + " union "
                         + "select bd.id,SUM(gl.creditAmount)-SUM(gl.debitAmount) from egf_budgetdetail bd,generalledger gl,voucherheader vh,"
-                        + "vouchermis vmis,eg_department dept , " + budgetGroupQuery
+                        + "vouchermis vmis," + budgetGroupQuery
                         + ",egf_budget b where bd.budget=b.id and vmis.VOUCHERHEADERID=vh.id and gl.VOUCHERHEADERID=vh.id and bd.budgetgroup=bg.id and "
                         + "(bg.ACCOUNTTYPE='REVENUE_RECEIPTS' or bg.ACCOUNTTYPE='CAPITAL_RECEIPTS') and vh.status not in ("
                         + voucherstatusExclude + ") and " + "vh.voucherDate>= to_date('" + fromDate
@@ -657,7 +669,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
      */
     public String generateUniqueNo(final BudgetDetail detail) {
         return detail.getFund().getId() + "-"
-                + detail.getExecutingDepartment().getId() + "-"
+                + detail.getExecutingDepartment() + "-"
                 + detail.getFunction().getId() + "-"
                 + detail.getBudgetGroup().getId();
 
@@ -712,7 +724,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         StringBuffer query = new StringBuffer();
 
         query = query.append("  select bd.uniqueno,SUM(gl.debitAmount)-SUM(gl.creditAmount) from egf_budgetdetail bd,"
-                + "vouchermis vmis,egf_budgetgroup bg,egf_budget b,financialyear f,fiscalperiod p,voucherheader vh,generalledger gl,eg_department dept "
+                + "vouchermis vmis,egf_budgetgroup bg,egf_budget b,financialyear f,fiscalperiod p,voucherheader vh,generalledger gl "
                 + "where bd.budget=b.id and p.financialyearid=f.id and f.id=" + fy.getId()
                 + " and vh.fiscalperiodid=p.id " + dateCondition + " and " + " b.financialyearid="
                 + topBudget.getFinancialYear().getId() + " and b.MATERIALIZEDPATH like '"
@@ -735,7 +747,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
      */
 
     public List<Object[]> fetchActualsForFinYear(final CFinancialYear fy, final List<String> mandatoryFields,
-            final Budget topBudget, final Budget referingTopBudget, final Date date, final Integer dept, final Long fun,
+            final Budget topBudget, final Budget referingTopBudget, final Date date, final String dept, final Long fun,
             final List<AppConfigValues> list) {
 
         if (LOGGER.isInfoEnabled())
@@ -773,7 +785,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
             sum = "SUM(gl.debitAmount)-SUM(gl.creditAmount)";
 
         query = query.append("  select bd.uniqueno," + sum + " from egf_budgetdetail bd,"
-                + "vouchermis vmis,egf_budgetgroup bg,egf_budget b,financialyear f,fiscalperiod p,voucherheader vh,generalledger gl, eg_department dept "
+                + "vouchermis vmis,egf_budgetgroup bg,egf_budget b,financialyear f,fiscalperiod p,voucherheader vh,generalledger gl "
                 + "where bd.budget=b.id and p.financialyearid=f.id and f.id=" + fy.getId()
                 + " and vh.fiscalperiodid=p.id " + dateCondition + " and " + " b.financialyearid="
                 + topBudget.getFinancialYear().getId() + " and b.MATERIALIZEDPATH like '"
@@ -797,7 +809,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
      */
 
     public List<Object[]> fetchMajorCodeAndActuals(final CFinancialYear financialYear, final Budget topBudget,
-            final Date date, final CFunction function, final Department dept, final Position pos) {
+            final Date date, final CFunction function, final String dept, final Position pos) {
         if (LOGGER.isInfoEnabled())
             LOGGER.info("Starting fetchMajorCodeAndActuals................");
         StringBuffer query = new StringBuffer();
@@ -826,7 +838,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                 + " AND vmis.VOUCHERHEADERID=vh.id AND gl.VOUCHERHEADERID  =vh.id"
                 + " AND bd.budgetgroup      =bg.id  AND vh.status NOT      IN (" + voucherstatusExclude
                 + ") AND vh.fundId =bd.fund AND gl.functionId =bd.function " + functionCondition + ""
-                + " AND vmis.departmentid   =bd.executing_department and bd.executing_department =" + dept.getId()
+                + " AND vmis.departmentid   =bd.executing_department and bd.executing_department =" + dept
                 + " AND gl.glcodeid         =bg.mincode AND gl.glcodeid         =bg.maxcode AND bg.majorcode       IS NULL AND (wf.value='END' OR wf.owner_pos="
                 + pos.getId() + ") AND bd.state_id = wf.id GROUP BY substr(gl.glcode,1,3)");
 
@@ -853,7 +865,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         + " AND b.MATERIALIZEDPATH LIKE '" + topBudget.getMaterializedPath()
                         + "%' AND bd.budgetgroup=bg.id "
                         + " AND cao.id=bg.mincode AND cao.id=bg.maxcode AND bg.majorcode IS NULL AND bd.executing_department = "
-                        + budgetDetail.getExecutingDepartment().getId() + functionCondition
+                        + budgetDetail.getExecutingDepartment() + functionCondition
                         + " and cao1.glcode = cao.majorcode AND (wf.value='END' OR wf.owner_pos=" + pos.getId()
                         + ") AND bd.state_id = wf.id GROUP BY cao.majorcode, cao1.glcode||'-'||cao1.name");
 
@@ -884,8 +896,8 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         + topBudget.getFinancialYear().getId() + " AND b1.MATERIALIZEDPATH LIKE '"
                         + topBudget.getMaterializedPath() + "%' and b2.isbere='BE' AND bd2.budgetgroup =bg.id  "
                         + " AND cao.id =bg.mincode AND cao.id =bg.maxcode AND bg.majorcode IS NULL AND bd2.executing_department = "
-                        + budgetDetail.getExecutingDepartment().getId() + functionCondition2
-                        + " AND bd1.executing_department = " + budgetDetail.getExecutingDepartment().getId()
+                        + budgetDetail.getExecutingDepartment()+ functionCondition2
+                        + " AND bd1.executing_department = " + budgetDetail.getExecutingDepartment()
                         + functionCondition1 + " AND bd1.uniqueno = bd2.uniqueno AND (wf.value='END' OR wf.owner_pos="
                         + pos.getId() + ") AND bd1.state_id = wf.id GROUP BY cao.majorcode");
 
@@ -916,8 +928,8 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         + topBudget.getFinancialYear().getId() + " AND b1.MATERIALIZEDPATH LIKE '"
                         + topBudget.getMaterializedPath() + "%' and b2.isbere='BE' AND bd2.budgetgroup =bg.id  "
                         + " AND cao.id =bg.mincode AND cao.id =bg.maxcode AND bg.majorcode IS NULL AND bd2.executing_department = "
-                        + budgetDetail.getExecutingDepartment().getId() + functionCondition2
-                        + " AND bd1.executing_department = " + budgetDetail.getExecutingDepartment().getId()
+                        + budgetDetail.getExecutingDepartment() + functionCondition2
+                        + " AND bd1.executing_department = " + budgetDetail.getExecutingDepartment()
                         + functionCondition1 + " AND bd1.uniqueno = bd2.uniqueno AND (wf.value='END' OR wf.owner_pos="
                         + pos.getId() + ") AND bd1.state_id = wf.id GROUP BY bd2.uniqueno");
 
@@ -957,8 +969,8 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         + topBudget.getMaterializedPath() + "%' and b2.isbere='BE' AND bd2.budgetgroup          =bg.id "
                         + dateCondition
                         + " AND cao.id=bg.mincode AND cao.id=bg.maxcode AND bg.majorcode IS NULL AND bd1.executing_department = "
-                        + budgetDetail.getExecutingDepartment().getId() + " " + functionCondition1
-                        + " AND bd2.executing_department = " + budgetDetail.getExecutingDepartment().getId() + "" + " "
+                        + budgetDetail.getExecutingDepartment() + " " + functionCondition1
+                        + " AND bd2.executing_department = " + budgetDetail.getExecutingDepartment() + "" + " "
                         + functionCondition2 + " AND bapp.budgetdetail  = bd2.id AND (wf.value ='END' OR wf.owner_pos ="
                         + pos.getId()
                         + ") AND bd1.state_id             = wf.id and bd1.uniqueno = bd2.uniqueno GROUP BY cao.majorcode");
@@ -990,8 +1002,8 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         + topBudget.getFinancialYear().getId() + " AND b1.MATERIALIZEDPATH LIKE '"
                         + topBudget.getMaterializedPath() + "%' and b2.isbere='BE' AND bd2.budgetgroup          =bg.id "
                         + " AND cao.id                  =bg.mincode AND cao.id                  =bg.maxcode AND bg.majorcode           IS NULL AND bd1.executing_department = "
-                        + budgetDetail.getExecutingDepartment().getId() + " " + functionCondition1
-                        + " AND bd2.executing_department = " + budgetDetail.getExecutingDepartment().getId() + "" + " "
+                        + budgetDetail.getExecutingDepartment() + " " + functionCondition1
+                        + " AND bd2.executing_department = " + budgetDetail.getExecutingDepartment() + "" + " "
                         + functionCondition2
                         + " AND bapp.budgetdetail = bd2.id AND (wf.value               ='END' OR wf.owner_pos                 ="
                         + pos.getId()
@@ -1018,7 +1030,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         + " AND b.financialyearid=" + topBudget.getFinancialYear().getId()
                         + " AND b.MATERIALIZEDPATH LIKE '" + topBudget.getMaterializedPath()
                         + "%' AND bd.budgetgroup =bg.id  AND cao.id =bg.mincode AND cao.id =bg.maxcode AND bg.majorcode IS NULL AND bd.executing_department = "
-                        + budgetDetail.getExecutingDepartment().getId() + functionCondition
+                        + budgetDetail.getExecutingDepartment() + functionCondition
                         + " AND (wf.value='END' OR wf.owner_pos=" + pos.getId()
                         + ") AND bd.state_id = wf.id GROUP BY cao.majorcode");
 
@@ -1044,7 +1056,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         + " AND b.financialyearid=" + topBudget.getFinancialYear().getId()
                         + " AND b.MATERIALIZEDPATH LIKE '" + topBudget.getMaterializedPath()
                         + "%' AND bd.budgetgroup =bg.id  AND cao.id =bg.mincode AND cao.id =bg.maxcode AND bg.majorcode IS NULL AND bd.executing_department = "
-                        + budgetDetail.getExecutingDepartment().getId() + functionCondition
+                        + budgetDetail.getExecutingDepartment() + functionCondition
                         + " AND (wf.value='END' OR wf.owner_pos=" + pos.getId()
                         + ") AND bd.state_id = wf.id GROUP BY cao.majorcode");
 
@@ -1073,8 +1085,8 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         + topBudget.getFinancialYear().getId() + " AND b1.MATERIALIZEDPATH LIKE '"
                         + topBudget.getMaterializedPath() + "%' AND bd2.budgetgroup =bg.id "
                         + " AND cao.id =bg.mincode AND cao.id =bg.maxcode AND bg.majorcode IS NULL AND bd2.executing_department = "
-                        + budgetDetail.getExecutingDepartment().getId() + functionCondition2
-                        + " AND bd1.executing_department = " + budgetDetail.getExecutingDepartment().getId()
+                        + budgetDetail.getExecutingDepartment() + functionCondition2
+                        + " AND bd1.executing_department = " + budgetDetail.getExecutingDepartment()
                         + functionCondition1
                         + " AND bd1.uniqueno = bd2.uniqueno AND b2.reference_budget = b1.id AND (wf.value='END' OR wf.owner_pos="
                         + pos.getId() + ") AND bd1.state_id = wf.id GROUP BY cao.majorcode");
@@ -1101,7 +1113,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         + " AND b.financialyearid=" + topBudget.getFinancialYear().getId()
                         + " AND b.MATERIALIZEDPATH LIKE '" + topBudget.getMaterializedPath()
                         + "%' AND bd.budgetgroup =bg.id  AND cao.id =bg.mincode AND cao.id =bg.maxcode AND bg.majorcode IS NULL AND bd.executing_department = "
-                        + budgetDetail.getExecutingDepartment().getId() + functionCondition
+                        + budgetDetail.getExecutingDepartment() + functionCondition
                         + " AND (wf.value='END' OR wf.owner_pos=" + pos.getId()
                         + ") AND bd.state_id = wf.id GROUP BY cao.majorcode");
 
@@ -1130,8 +1142,8 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         + topBudget.getFinancialYear().getId() + " AND b1.MATERIALIZEDPATH LIKE '"
                         + topBudget.getMaterializedPath() + "%' AND bd2.budgetgroup =bg.id "
                         + " AND cao.id =bg.mincode AND cao.id =bg.maxcode AND bg.majorcode IS NULL AND bd2.executing_department = "
-                        + budgetDetail.getExecutingDepartment().getId() + functionCondition2
-                        + " AND bd1.executing_department = " + budgetDetail.getExecutingDepartment().getId()
+                        + budgetDetail.getExecutingDepartment() + functionCondition2
+                        + " AND bd1.executing_department = " + budgetDetail.getExecutingDepartment()
                         + functionCondition1
                         + " AND bd1.uniqueno = bd2.uniqueno AND b2.reference_budget = b1.id AND (wf.value='END' OR wf.owner_pos="
                         + pos.getId() + ") AND bd1.state_id = wf.id GROUP BY cao.majorcode");
@@ -1517,7 +1529,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         final StringBuffer miscQuery = getMiscQuery(mandatoryFields, "bmis", "bdetail", "bmis");
         StringBuffer query = new StringBuffer();
         query = query
-                .append("select bd.id,SUM(case when bdetail.debitAmount = null then 0  else bdetail.debitAmount  end)-SUM(case when bdetail.creditAmount=null then 0 else bdetail.creditAmount end) from egf_budgetdetail bd,eg_billdetails bdetail, eg_billregistermis bmis, eg_billregister br, eg_department dept,"
+                .append("select bd.id,SUM(case when bdetail.debitAmount = null then 0  else bdetail.debitAmount  end)-SUM(case when bdetail.creditAmount=null then 0 else bdetail.creditAmount end) from egf_budgetdetail bd,eg_billdetails bdetail, eg_billregistermis bmis, eg_billregister br,"
                         + "egf_budgetgroup bg where bmis.billid=br.id and bdetail.billid=br.id and bd.budgetgroup=bg.id and "
                         + "(bg.ACCOUNTTYPE='REVENUE_EXPENDITURE' or bg.ACCOUNTTYPE='CAPITAL_EXPENDITURE') and br.billstatus != 'Cancelled'  and "
                         + "bmis.voucherheaderid is null and br.billdate>=to_date('" + fromDate
@@ -1525,7 +1537,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
                         + miscQuery + " and " + " (bmis.budgetCheckReq is null or bmis.budgetCheckReq=true) and "
                         + "((bdetail.glcodeid between bg.mincode and bg.maxcode) or bdetail.glcodeid=bg.majorcode) group by bd.id"
                         + " union "
-                        + "select bd.id,SUM(case when bdetail.creditAmount=null then 0 else bdetail.creditAmount end)-SUM(case when bdetail.debitAmount = null then 0  else bdetail.debitAmount  end) from egf_budgetdetail bd,eg_billdetails bdetail, eg_billregistermis bmis, eg_billregister br, eg_department dept,"
+                        + "select bd.id,SUM(case when bdetail.creditAmount=null then 0 else bdetail.creditAmount end)-SUM(case when bdetail.debitAmount = null then 0  else bdetail.debitAmount  end) from egf_budgetdetail bd,eg_billdetails bdetail, eg_billregistermis bmis, eg_billregister br,"
                         + "egf_budgetgroup bg where bmis.billid=br.id and bdetail.billid=br.id and bd.budgetgroup=bg.id and "
                         + " (bmis.budgetCheckReq is null or bmis.budgetCheckReq=true) and "
                         + "(bg.ACCOUNTTYPE='REVENUE_RECEIPTS' or bg.ACCOUNTTYPE='CAPITAL_RECEIPTS') and br.billstatus != 'Cancelled' and bmis.voucherheaderid "
@@ -1679,7 +1691,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         if (mandatoryFields.contains(Constants.FUNCTION))
             miscQuery = miscQuery.append(" and " + gl + ".functionId=bd.function ");
         if (mandatoryFields.contains(Constants.EXECUTING_DEPARTMENT))
-            miscQuery = miscQuery.append(" and " + mis + ".departmentcode=dept.code and bd.executing_department=dept.id ");
+            miscQuery = miscQuery.append(" and " + mis + ".departmentcode=bd.executing_department_code ");
         return miscQuery;
     }
 
@@ -1744,7 +1756,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
             if (budget == null) {
                 final Set<String> deptSet = new TreeSet<String>();
                 final List<String> deptList = new ArrayList<String>();
-                final List<Department> departments = departmentService.getAllDepartments();
+                final List<Department> departments =   masterDataCache.get("egi-department");
 
                 for (final Department dept : departments)
                     deptSet.add(dept.getCode());
@@ -1780,9 +1792,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
             for (final BudgetUpload budgetUpload : budgetUploadList) {
                 BudgetDetail budgetDetail = new BudgetDetail();
                 final BudgetDetail temp = getBudgetDetail(budgetUpload.getFund().getId(),
-                        budgetUpload.getFunction().getId(), budgetUpload.getDept()
-
-                                .getId(),
+                        budgetUpload.getFunction().getId(), budgetUpload.getDeptCode(),
                         budgetUpload.getCoa().getId(), fyear, budgetType);
 
                 if (temp != null) {
@@ -1816,7 +1826,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
 
                     budgetDetail.setFund(budgetUpload.getFund());
                     budgetDetail.setFunction(budgetUpload.getFunction());
-                    budgetDetail.setExecutingDepartment(budgetUpload.getDept());
+                    budgetDetail.setExecutingDepartment(budgetUpload.getDeptCode());
                     budgetDetail.setAnticipatoryAmount(BigDecimal.ZERO);
                     budgetDetail.setPlanningPercent(BigDecimal.valueOf(budgetUpload.getPlanningPercentage()));
                     if (budgetType.equalsIgnoreCase(RE)) {
@@ -2097,12 +2107,12 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
 
                 if (budgetType.equalsIgnoreCase(BE)) {
                     budgetName = deptCode + "-" + budgetType + "-" + revOrCap + "-" + beFYear.getFinYearRange();
-                    budgetDes = departmentService.getDepartmentByCode(deptCode).getName() + " " + budgetType + " "
+                    budgetDes = microserviceUtils.getDepartmentByCode(deptCode).getName() + " " + budgetType + " "
                             + capitalOrRevenue + "Budget for the year " + beFYear.getFinYearRange();
                     budgetFinancialYear = beFYear;
                 } else {
                     budgetName = deptCode + "-" + budgetType + "-" + revOrCap + "-" + reFYear.getFinYearRange();
-                    budgetDes = departmentService.getDepartmentByCode(deptCode).getName() + " " + budgetType + " "
+                    budgetDes = microserviceUtils.getDepartmentByCode(deptCode).getName() + " " + budgetType + " "
                             + capitalOrRevenue + "Budget for the year " + reFYear.getFinYearRange();
                     budgetFinancialYear = reFYear;
                 }
@@ -2149,19 +2159,19 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         }
     }
 
-    public BudgetDetail getBudgetDetail(final Integer fundId, final Long functionId, final Long deptId,
+    public BudgetDetail getBudgetDetail(final Integer fundId, final Long functionId, final String deptCode,
             final Long glCodeId, final CFinancialYear fYear, final String budgetType) {
         return find(
-                "from BudgetDetail bd where bd.fund.id = ? and bd.function.id = ? and bd.executingDepartment.id = ? and bd.budgetGroup.maxCode.id = ? and bd.budget.financialYear.id = ? and bd.budget.isbere = ?",
-                fundId, functionId, deptId, glCodeId, fYear.getId(), budgetType);
+                "from BudgetDetail bd where bd.fund.id = ? and bd.function.id = ? and bd.executingDepartment = ? and bd.budgetGroup.maxCode.id = ? and bd.budget.financialYear.id = ? and bd.budget.isbere = ?",
+                fundId, functionId, deptCode, glCodeId, fYear.getId(), budgetType);
 
     }
 
-    public BudgetDetail getBudgetDetail(final Integer fundId, final Long functionId, final Long deptId,
+    public BudgetDetail getBudgetDetail(final Integer fundId, final Long functionId, final String deptCode,
             final Long budgetGroupId) {
         return find(
-                "from BudgetDetail bd where bd.fund.id = ? and bd.function.id = ? and bd.executingDepartment.id = ? and bd.budgetGroup.id= ?",
-                fundId, functionId, deptId, budgetGroupId);
+                "from BudgetDetail bd where bd.fund.id = ? and bd.function.id = ? and bd.executingDepartment = ? and bd.budgetGroup.id= ?",
+                fundId, functionId, deptCode, budgetGroupId);
     }
 
     public List<BudgetDetail> getDepartmentFromBudgetDetailByFundId(final Integer fundId) {
@@ -2200,8 +2210,15 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
     }
 
     public List<BudgetDetail> sortByDepartmentName(final List<BudgetDetail> budgetDetails) {
-        Collections.sort(budgetDetails, (o1, o2) -> o1.getExecutingDepartment().getName().toUpperCase()
-                .compareTo(o2.getExecutingDepartment().getName().toUpperCase()));
+        
+        List<Department> departmentList = masterDataCache.get("egi-department");
+        Map<String,String> deptMap = new HashMap<>();
+        for(Department dep : departmentList){
+            deptMap.put(dep.getCode(), dep.getName());
+        }
+        
+        Collections.sort(budgetDetails, (o1, o2) -> deptMap.get(o1.getExecutingDepartment()).toUpperCase()
+                .compareTo(deptMap.get(o2.getExecutingDepartment()).toUpperCase()));
         return budgetDetails;
     }
 
@@ -2352,9 +2369,10 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
     }
 
     public String getDeptNameForBudgetId(final Long budgetId) {
-        final BudgetDetail bg = budgetDetailRepository.findByBudgetIdAndStatusId(budgetId,
+       final BudgetDetail bg = budgetDetailRepository.findByBudgetIdAndStatusId(budgetId,
                 getBudgetDetailStatus(FinancialConstants.BUDGETDETAIL_VERIFIED_STATUS).getId()).get(0);
-        return bg == null ? StringUtils.EMPTY : bg.getExecutingDepartment().getName();
+       String deptName = microserviceUtils.getDepartmentByCode(bg.getExecutingDepartment()).getName();
+        return bg == null ? StringUtils.EMPTY : deptName;
     }
 
     public String getNextYrBEName(final Budget budget) {
