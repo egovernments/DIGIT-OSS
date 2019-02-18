@@ -205,9 +205,9 @@ function clearHeaderData() {
 	document.getElementById("receivedDate").value = "";
 	document.getElementById("serialNo").value = "-1";
 	var deptObj = document.getElementById("departmentList");
-	while (deptObj.selectedIndex != -1) {
-		deptObj.options[deptObj.selectedIndex].selected = false;
-
+	var isDefaultDeptEnabled = document.getElementById("isDefaultDeptEnabled").value;
+	while (!(isDefaultDeptEnabled == 'true') && deptObj.selectedIndex != -1) {
+			deptObj.options[deptObj.selectedIndex].selected = false;			
 	}
 }
 // used to check the cheque range overlapping on blur of from cheque and to

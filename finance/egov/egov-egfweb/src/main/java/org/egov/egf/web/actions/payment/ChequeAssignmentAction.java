@@ -1472,6 +1472,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
             LOGGER.debug("Starting beforeSearchForSurrender...");
         addDropdownData("bankaccountList", Collections.EMPTY_LIST);
         loadBankAndAccounForSurender();
+        department = getDefaultDepartmentValueForPayment();
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed beforeSearchForSurrender.");
         return SURRENDERSEARCH;
@@ -1484,6 +1485,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
             LOGGER.debug("Starting beforeSearchForSurrender...");
         addDropdownData("bankaccountList", Collections.EMPTY_LIST);
         loadBankAndAccounForRTGSSurender();
+        department = getDefaultDepartmentValueForPayment();
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed beforeSearchForSurrender.");
         return SURRENDERRTGSSEARCH;

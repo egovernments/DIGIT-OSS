@@ -248,6 +248,7 @@ public class DirectBankPaymentAction extends BasePaymentAction {
         if(isDateAutoPopulateDefaultValueEnable()){
             loadDefalutDates();            
         }
+        voucherHeader.getVouchermis().setDepartmentcode(getDefaultDepartmentValueForPayment());
         // loadApproverUser(FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
         if (getBankBalanceCheck() == null || "".equals(getBankBalanceCheck()))
             addActionMessage(getText("payment.bankbalance.controltype"));

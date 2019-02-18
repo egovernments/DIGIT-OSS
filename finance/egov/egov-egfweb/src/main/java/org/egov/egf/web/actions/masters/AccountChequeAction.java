@@ -62,6 +62,9 @@ import org.egov.commons.CFinancialYear;
 import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.commons.service.BankAccountService;
 import org.egov.egf.commons.EgovCommon;
+import org.egov.infra.admin.master.entity.AppConfigValues;
+import org.egov.infra.admin.master.service.AppConfigValueService;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.services.PersistenceService;
@@ -105,6 +108,10 @@ public class AccountChequeAction extends BaseFormAction {
     private BankAccountService bankAccountService;
 
     private String deletedChqDeptId;
+    private String defaultSelectedDepartments = "";
+    
+    @Autowired
+    protected AppConfigValueService appConfigValuesService;
 
     public AccountChequeAction() {
 
@@ -153,6 +160,8 @@ public class AccountChequeAction extends BaseFormAction {
         // Get cheque leafs presents for this particular account number
         bankaccount = bankAccountService.findById(bankAccId, false);
         chequeList = accountChequesService.getChequesByBankAccIdFinId(bankAccId, Long.valueOf(financialYearId));
+        String defaultDepartmentValueForPayment = getDefaultDepartmentValueForPayment();
+        defaultSelectedDepartments = defaultDepartmentValueForPayment !=null ? defaultDepartmentValueForPayment : "";
         if (chequeList.size() > 0)
             prepareChequeDetails(chequeList);
         return "manipulateCheques";
@@ -249,6 +258,11 @@ public class AccountChequeAction extends BaseFormAction {
             chequeDetailsList.remove(cd);
         trash.clear();
     }
+    
+    protected String getDefaultDepartmentValueForPayment(){
+        List<AppConfigValues> configValuesByModuleAndKey = appConfigValuesService.getConfigValuesByModuleAndKey("EGF", "DEFAULT_DEPARTMENT_FOR_PAYMENT");
+        return configValuesByModuleAndKey.isEmpty() ? null : configValuesByModuleAndKey.get(0).getValue(); 
+    }
 
     public AccountCheques getAccountCheques() {
         return accountCheques;
@@ -299,5 +313,13 @@ public class AccountChequeAction extends BaseFormAction {
 
     public void setFinancialYearId(final Long financialYearId) {
         this.financialYearId = financialYearId;
+    }
+
+    public String getDefaultSelectedDepartments() {
+        return defaultSelectedDepartments;
+    }
+
+    public void setDefaultSelectedDepartments(String defaultSelectedDepartment) {
+        this.defaultSelectedDepartments = defaultSelectedDepartment;
     }
 }

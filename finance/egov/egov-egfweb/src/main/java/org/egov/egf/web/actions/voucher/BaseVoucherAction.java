@@ -194,6 +194,7 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 		addDropdownData("typeList", VoucherHelper.VOUCHER_TYPES);
 		 addDropdownData("approverDepartmentList",
 				 masterDataCache.get("egi-department"));
+		 voucherHeader.getVouchermis().setDepartmentcode(getDefaultDepartmentValueForPayment());
 		
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Number of  MIS attributes are :" + headerFields.size());
@@ -878,6 +879,11 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 	protected boolean isDateAutoPopulateDefaultValueEnable(){
 	    List<AppConfigValues> configValuesByModuleAndKey = appConfigValuesService.getConfigValuesByModuleAndKey("EGF", "DEFAULT_AUTO_POPULATE_CURR_DATE");
             return !configValuesByModuleAndKey.isEmpty() ? "Y".equalsIgnoreCase(configValuesByModuleAndKey.get(0).getValue()) : true;
+	}
+	
+	protected String getDefaultDepartmentValueForPayment(){
+	    List<AppConfigValues> configValuesByModuleAndKey = appConfigValuesService.getConfigValuesByModuleAndKey("EGF", "DEFAULT_DEPARTMENT_FOR_PAYMENT");
+	    return configValuesByModuleAndKey.isEmpty() ? null : configValuesByModuleAndKey.get(0).getValue(); 
 	}
 
 	public void setEisService(final EisUtilService eisService) {

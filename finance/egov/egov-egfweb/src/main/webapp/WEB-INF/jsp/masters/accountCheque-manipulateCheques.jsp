@@ -68,7 +68,6 @@
 
 </head>
 
-
 <body onload="clearHeaderData();">
 
 	<jsp:include page="../budget/budgetHeader.jsp">
@@ -119,6 +118,7 @@
 
 				<s:hidden name="bankAccId" id="bankAccId" value="%{bankaccount.id}" />
 				<s:hidden name="financialYearId" id="financialYearId" value="%{financialYearId}" />
+				<s:hidden name="isDefaultDeptEnabled" id="isDefaultDeptEnabled" value="%{defaultSelectedDepartments != ''}" />
 			</s:if>
 			<br />
 			<table width="100%" cellspacing="0" cellpadding="0" border="0"
@@ -165,8 +165,8 @@
 					<td class="bluebox"><s:select name="departmentList"
 							id="departmentList" list="dropdownData.departmentList"
 							listKey="code" listValue="name" multiple="true" required="true"
+							value="%{defaultSelectedDepartments}"
 							style="height:auto;" /></td>
-
 				</tr>
 
 				<tr>

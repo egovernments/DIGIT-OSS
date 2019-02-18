@@ -113,9 +113,9 @@
 							name="voucher.department" /></td>
 					<td class="greybox"><s:select name="vouchermis.departmentid"
 							id="vouchermis.departmentid" list="dropdownData.departmentList"
-							listKey="id" listValue="name" headerKey="-1"
+							listKey="code" listValue="name" headerKey="-1"
 							headerValue="----Choose----"
-							value="voucherHeader.vouchermis.departmentid.id" /></td>
+							value="voucherHeader.vouchermis.departmentcode" /></td>
 				</tr>
 				<tr>
 					<egov:ajaxdropdown id="bank_branch" fields="['Text','Value']"
