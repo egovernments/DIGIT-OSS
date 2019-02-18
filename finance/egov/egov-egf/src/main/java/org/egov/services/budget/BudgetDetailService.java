@@ -1691,7 +1691,7 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
         if (mandatoryFields.contains(Constants.FUNCTION))
             miscQuery = miscQuery.append(" and " + gl + ".functionId=bd.function ");
         if (mandatoryFields.contains(Constants.EXECUTING_DEPARTMENT))
-            miscQuery = miscQuery.append(" and " + mis + ".departmentcode=bd.executing_department_code ");
+            miscQuery = miscQuery.append(" and " + mis + ".departmentcode=bd.executing_department ");
         return miscQuery;
     }
 
