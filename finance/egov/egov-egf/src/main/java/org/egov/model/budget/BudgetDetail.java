@@ -47,6 +47,7 @@
  */
 package org.egov.model.budget;
 
+import org.apache.log4j.Logger;
 import org.egov.commons.CFunction;
 import org.egov.commons.EgwStatus;
 import org.egov.commons.Functionary;
@@ -168,6 +169,9 @@ public class BudgetDetail extends StateAware {
 
     @Transient
     private String comment;
+    
+    @Transient
+    private static final Logger LOGGER = Logger.getLogger(BudgetDetail.class);
 
     public Set<BudgetReAppropriation> getBudgetReAppropriations() {
         return budgetReAppropriations;
@@ -357,15 +361,17 @@ public class BudgetDetail extends StateAware {
         budgetReAppropriations = budgetReAppropriations == null
                 ? new HashSet<>()
                 : budgetReAppropriations;
-        for (final BudgetReAppropriation entry : budgetReAppropriations)
+        for (final BudgetReAppropriation entry : budgetReAppropriations){
             if (!entry.getStatus().getDescription()
-                    .equalsIgnoreCase("Cancelled"))
+                    .equalsIgnoreCase("Cancelled")){
                 if ((entry.getAdditionAmount() != null)
                         && BigDecimal.ZERO
                         .compareTo(entry.getAdditionAmount()) != 0)
                     total = total.add(entry.getAdditionAmount());
                 else
-                    total = total.subtract(entry.getDeductionAmount());
+                    total = total.subtract(entry.getDeductionAmount());            
+            }
+        }
         return total;
     }
 

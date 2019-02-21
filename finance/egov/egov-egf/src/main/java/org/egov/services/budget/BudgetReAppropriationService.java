@@ -182,8 +182,8 @@ public class BudgetReAppropriationService extends PersistenceService<BudgetReApp
     }
 
     public BudgetDetail setRelatedValues(final BudgetDetail detail) {
-        if (detail.getExecutingDepartment() != null && "".equals(detail.getExecutingDepartment()))
-            detail.setExecutingDepartment(null);
+//        if (detail.getExecutingDepartment() != null && "".equals(detail.getExecutingDepartment()))
+//            detail.setExecutingDepartment(null);
         if (detail.getFunction() != null && detail.getFunction().getId() == 0)
             detail.setFunction(null);
         if (detail.getScheme() != null && detail.getScheme().getId() == 0)

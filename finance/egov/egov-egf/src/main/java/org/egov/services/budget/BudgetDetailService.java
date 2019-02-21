@@ -267,10 +267,13 @@ public class BudgetDetailService extends PersistenceService<BudgetDetail, Long> 
 
             return criteria.createCriteria(Constants.BUDGET).add(Restrictions.eq("financialYear.id", financialYear))
                     .add(Restrictions.eq("isbere", type)).list();
-        } else
-            return constructCriteria(detail).createCriteria(Constants.BUDGET)
+        } else{
+            Criteria constructCriteria = constructCriteria(detail);
+            constructCriteria.add(Restrictions.eq("executingDepartment", detail.getExecutingDepartment()));
+            return constructCriteria.createCriteria(Constants.BUDGET)
                     .add(Restrictions.eq("financialYear.id", financialYear)).add(Restrictions.eq("isbere", type))
-                    .list();
+                    .list();            
+        }
     }
 
     private Map<String, Object> createCriteriaMap(final BudgetDetail detail) {

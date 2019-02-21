@@ -66,9 +66,9 @@ import org.egov.dao.budget.BudgetDetailsDAO;
 import org.egov.egf.model.BudgetReAppropriationView;
 import org.egov.eis.service.EisCommonService;
 import org.egov.infra.admin.master.entity.Boundary;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
@@ -232,7 +232,7 @@ public class BudgetReAppropriationAction extends BaseFormAction {
     }
 
     protected void setupDropdownsInHeader() {
-        setupDropdownDataExcluding(Constants.SUB_SCHEME);
+        setupDropdownDataExcluding(Constants.SUB_SCHEME,Constants.EXECUTING_DEPARTMENT);
         finalStatus = getFinalStatus();
         dropdownData.put("financialYearList", getFinancialYearDropDown());
         if (financialYear != null && financialYear.getId() != 0L)
@@ -349,17 +349,24 @@ public class BudgetReAppropriationAction extends BaseFormAction {
         if (financialYear != null && financialYear.getId() != 0)
             financialYear = (CFinancialYear) persistenceService.find("from CFinancialYear where id=?", financialYear.getId());
         try {
+            String executingDepartment = budgetDetail.getExecutingDepartment();
+            budgetReAppropriationList.stream().forEach(reAppr -> {
+                reAppr.getBudgetDetail().setExecutingDepartment(executingDepartment);
+            });
+            newBudgetReAppropriationList.stream().forEach(reAppr -> {
+                reAppr.getBudgetDetail().setExecutingDepartment(executingDepartment);
+            });
             misc = budgetReAppropriationService.createBudgetReAppropriationMisc(parameters.get(ACTIONNAME)[0] + "|" + userId,
-                    beRe, financialYear, appropriationMisc, getPosition());
+                    beRe, financialYear, appropriationMisc, null);
             removeEmptyReAppropriation(budgetReAppropriationList);
             reAppropriationCreated = budgetReAppropriationService.createReAppropriation(parameters.get(ACTIONNAME)[0] + "|"
                     + userId,
-                    budgetReAppropriationList, getPosition(), financialYear, beRe, misc,
+                    budgetReAppropriationList, null, financialYear, beRe, misc,
                     parameters.get("appropriationMisc.reAppropriationDate")[0]);
             removeEmptyReAppropriation(newBudgetReAppropriationList);
             reAppForNewBudgetCreated = budgetReAppropriationService.createReAppropriationForNewBudgetDetail(
                     parameters.get(ACTIONNAME)[0] + "|" + userId,
-                    newBudgetReAppropriationList, getPosition(), misc);
+                    newBudgetReAppropriationList, null, misc);
             if (!reAppropriationCreated && !reAppForNewBudgetCreated)
                 throw new ValidationException(Arrays.asList(new ValidationError("budgetDetail.budgetGroup.mandatory",
                         "budgetDetail.budgetGroup.mandatory")));
@@ -395,7 +402,7 @@ public class BudgetReAppropriationAction extends BaseFormAction {
         budget.setFinancialYear(financialYear);
         final BudgetDetail budgetDetail = new BudgetDetail();
         budgetDetail.setBudget(budget);
-        return budgetReAppropriationService.createReAppropriationMisc(actionName, appropriationMisc, budgetDetail, getPosition());
+        return budgetReAppropriationService.createReAppropriationMisc(actionName, appropriationMisc, budgetDetail, null);
     }
 
     public void setBudgetDetailService(final BudgetDetailService budgetDetailService) {
@@ -430,6 +437,11 @@ public class BudgetReAppropriationAction extends BaseFormAction {
     public String loadActuals() {
         removeEmptyReAppropriation(budgetReAppropriationList);
         removeEmptyReAppropriation(newBudgetReAppropriationList);
+        //Updating the ExecutingDepartment in BudgetReAppropriation
+        String executingDepartment = budgetDetail.getExecutingDepartment();
+        budgetReAppropriationList.stream().forEach(bReApp -> {
+            bReApp.getBudgetDetail().setExecutingDepartment(executingDepartment);
+        });
         if (budgetReAppropriationService.rowsToAddForExistingDetails(budgetReAppropriationList))
             loadData(budgetReAppropriationList);
         if (budgetReAppropriationService.rowsToAddExists(newBudgetReAppropriationList))
@@ -447,7 +459,11 @@ public class BudgetReAppropriationAction extends BaseFormAction {
                 final BudgetDetail budgetDetail = detailList.get(0);
                 final Map<String, Object> paramMap = budgetDetailHelper.constructParamMap(getValueStack(), budgetDetail);
                 paramMap.put(Constants.ASONDATE, appropriationMisc.getReAppropriationDate());
-                entry.setActuals(budgetDetailHelper.getTotalActualsFor(paramMap, appropriationMisc.getReAppropriationDate()));
+                budgetDetail.getBudgetReAppropriations().stream().forEach(app -> {
+                    LOGGER.info("app.getStatus()  :: "+app.getStatus());
+                });
+                BigDecimal totalActualsFor = budgetDetailHelper.getTotalActualsFor(paramMap, appropriationMisc.getReAppropriationDate());
+                entry.setActuals(totalActualsFor);
                 entry.setApprovedAmount(budgetDetail.getApprovedAmount());
                 // this is total of reappropriated amount
                 entry.setAppropriatedAmount(budgetDetail.getApprovedReAppropriationsTotal());

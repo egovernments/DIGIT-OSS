@@ -162,9 +162,40 @@
 				if(!checkUser){
 					document.getElementById("actionName").value = 'save';
 				}
-				document.budgetDetailForm.action='/EGF/budget/budgetReAppropriation-'+method+'.action';
+				document.budgetDetailForm.action='/services/EGF/budget/budgetReAppropriation-'+method+'.action';
 	    		document.budgetDetailForm.submit();
 				return;
+			}
+
+			var validateMandatoryForGetActual =  () => {
+				if(document.getElementById('financialYear').value==0){
+					bootbox.alert('Please select a Financial year');
+					return false;
+				}
+				if(document.getElementById('budgetReAppropriation_executingDepartment').value==0){
+					bootbox.alert('Please select a Executing Department');
+					return false;
+				}		
+				for(i=0;i<budgetDetailsTable.getRecordSet().getLength();i++){
+					if(document.getElementById('budgetReAppropriationList['+i+'].budgetDetail.budgetGroup.id').value === '0'){
+						bootbox.alert('Please select a Budget Group');
+						return false;
+						}
+					<s:if test="%{shouldShowField('function')}">				
+					if(document.getElementById('budgetReAppropriationList['+i+'].budgetDetail.function.id').value === '0'){
+						bootbox.alert('Please select a Function');
+						return false;	
+						}
+					</s:if>
+					<s:if test="%{shouldShowField('fund')}">				
+					if(document.getElementById('budgetReAppropriationList['+i+'].budgetDetail.fund.id').value === '0'){
+						bootbox.alert('Please select a Fund');
+						return false;
+						}
+					</s:if>
+					
+				}
+				return true;
 			}
 
 			function alertMessage(estimate,anticipatory){
@@ -182,6 +213,10 @@
 			function validateMandatoryFields(){
 				if(document.getElementById('financialYear').value==0){
 					bootbox.alert('Please select a Financial year');
+					return false;
+				}
+				if(document.getElementById('budgetReAppropriation_executingDepartment').value==0){
+					bootbox.alert('Please select a Executing Department');
 					return false;
 				}
 				return true;
@@ -220,10 +255,14 @@
 					copyOptions(newBudgetList,element)
 				}
 			}
-			function loadActuals(){
-				document.budgetDetailForm.action='/EGF/budget/budgetReAppropriation-loadActuals.action';
+			function loadActuals(event){
+				event.preventDefault();
+				var isValid =validateMandatoryForGetActual();
+				if(isValid){
+				document.budgetDetailForm.action='/services/EGF/budget/budgetReAppropriation-loadActuals.action';
 	    		document.budgetDetailForm.submit();
-				}
+				};
+			}
 		</script>
 	<s:actionmessage theme="simple" />
 	<s:actionerror />
@@ -268,11 +307,11 @@
 											<span class="mandatory1">*</span>
 										</s:if></td>
 									<td width="22%" class="greybox"><s:select
-											list="dropdownData.executingDepartmentList" listKey="id"
-											listValue="name" name="budgetDetail.executingDepartment.id"
+											list="dropdownData.executingDepartmentList" listKey="code"
+											listValue="name" name="budgetDetail.executingDepartment"
 											headerKey="0" headerValue="--- Select ---"
 											onchange="updateGrid('budgetDetail.executingDepartment.id',document.getElementById('budgetReAppropriation_executingDepartment').selectedIndex);updateReAppGrid('budgetDetail.executingDepartment.id',document.getElementById('budgetReAppropriation_executingDepartment').selectedIndex);"
-											value="budgetDetail.executingDepartment.id"
+											value="budgetDetail.executingDepartment"
 											id="budgetReAppropriation_executingDepartment"></s:select></td>
 								</s:if>
 								<s:if test="%{shouldShowHeaderField('fund')}">
@@ -391,7 +430,7 @@
 								<td>
 									<div align="center">
 										<s:submit method="loadActuals" value="Get Actuals"
-											cssClass="buttonsubmit" onclick="loadActuals()" />
+											cssClass="buttonsubmit" onclick="loadActuals(event)" />
 									</div>
 								</td>
 							</tr>
