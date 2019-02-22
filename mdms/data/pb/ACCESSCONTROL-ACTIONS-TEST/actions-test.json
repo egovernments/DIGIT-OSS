@@ -13677,6 +13677,19 @@
       "serviceCode": "FinanceBudget",
       "code": "null",
       "path": "Finance.Budgeting.searchBudgetMaster"
+    },
+    {
+      "id": 1765,
+      "name": "budgetControlTypeSetUp",
+      "navigationURL": "services/EGF/budgetcheckconfig/new",
+      "url": "url",
+      "parentModule": "EGF",
+      "displayName": "Create/Update-Budget Control Type",
+      "orderNumber": 7,
+      "enabled": true,
+      "serviceCode": "FinanceBudget",
+      "code": "null",
+      "path": "Finance.Set-up.Budget Control Type.Create/Update-Budget Control Type"
     }
   ]
 }
