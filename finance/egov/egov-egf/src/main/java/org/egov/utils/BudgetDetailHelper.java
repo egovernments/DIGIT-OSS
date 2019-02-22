@@ -153,8 +153,8 @@ public class BudgetDetailHelper {
         final Map<String, Object> paramMap = new HashMap<String, Object>();
         valueStack.setValue("budgetDetail", detail);
         paramMap.put(Constants.DEPTID,
-                Constants.INT_ZERO.equals(valueStack.findValue("budgetDetail.executingDepartment.id")) ? null
-                        : valueStack.findValue("budgetDetail.executingDepartment.id"));
+                Constants.INT_ZERO.equals(valueStack.findValue("budgetDetail.executingDepartment")) ? null
+                        : valueStack.findValue("budgetDetail.executingDepartment"));
         paramMap.put(
                 Constants.FUNCTIONID,
                 Constants.LONG_ZERO.equals(valueStack.findValue("budgetDetail.function.id")) ? null : valueStack

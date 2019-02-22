@@ -253,12 +253,12 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
 
     @Override
     public boolean consumeEncumbranceBudget(final Long financialyearid, final Integer moduleid,
-            final String referencenumber, final Integer departmentid, final Long functionid,
+            final String referencenumber, final String departmentcode, final Long functionid,
             final Integer functionaryid, final Integer schemeid, final Integer subschemeid, final Integer boundaryid,
             final List<Long> budgetheadid, final Integer fundid, final double amount,
             final String appropriationnumber) {
 
-        final BigDecimal bd = getDetails(financialyearid, moduleid, referencenumber, departmentid, functionid,
+        final BigDecimal bd = getDetails(financialyearid, moduleid, referencenumber, departmentcode, functionid,
                 functionaryid, schemeid, subschemeid, boundaryid, budgetheadid, fundid, amount, true,
                 appropriationnumber);
         return bd.intValue() == 1;
@@ -288,11 +288,11 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
     @Override
     @Deprecated
     public BudgetUsage consumeEncumbranceBudget(final String appropriationnumber, final Long financialyearid,
-            final Integer moduleid, final String referencenumber, final Integer departmentid, final Long functionid,
+            final Integer moduleid, final String referencenumber, final String departmentcode, final Long functionid,
             final Integer functionaryid, final Integer schemeid, final Integer subschemeid, final Integer boundaryid,
             final List<Long> budgetheadid, final Integer fundid, final double amount) {
 
-        return getBudgetUsageDetails(financialyearid, moduleid, referencenumber, departmentid, functionid,
+        return getBudgetUsageDetails(financialyearid, moduleid, referencenumber, departmentcode, functionid,
                 functionaryid, schemeid, subschemeid, boundaryid, budgetheadid, fundid, amount, true,
                 appropriationnumber);
     }
@@ -334,11 +334,11 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
     @Override
     @Deprecated
     public void releaseEncumbranceBudget(final Long financialyearid, final Integer moduleid,
-            final String referencenumber, final Integer departmentid, final Long functionid,
+            final String referencenumber, final String departmentcode, final Long functionid,
             final Integer functionaryid, final Integer schemeid, final Integer subschemeid, final Integer boundaryid,
             final List<Long> budgetheadid, final Integer fundid, final double amount,
             final String appropriationnumber) {
-        getDetails(financialyearid, moduleid, referencenumber, departmentid, functionid, functionaryid, schemeid,
+        getDetails(financialyearid, moduleid, referencenumber, departmentcode, functionid, functionaryid, schemeid,
                 subschemeid, boundaryid, budgetheadid, fundid, amount, false, appropriationnumber);
     }
 
@@ -365,10 +365,10 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
     @Override
     @Transactional
     public BudgetUsage releaseEncumbranceBudget(final String appropriationnumber, final Long financialyearid,
-            final Integer moduleid, final String referencenumber, final Integer departmentid, final Long functionid,
+            final Integer moduleid, final String referencenumber, final String departmentcode, final Long functionid,
             final Integer functionaryid, final Integer schemeid, final Integer subschemeid, final Integer boundaryid,
             final List<Long> budgetheadid, final Integer fundid, final double amount) {
-        return getBudgetUsageDetails(financialyearid, moduleid, referencenumber, departmentid, functionid,
+        return getBudgetUsageDetails(financialyearid, moduleid, referencenumber, departmentcode, functionid,
                 functionaryid, schemeid, subschemeid, boundaryid, budgetheadid, fundid, amount, false,
                 appropriationnumber);
     }
@@ -377,7 +377,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
         Long financialyearid = null;
         Integer moduleid = null;
         String referencenumber = null;
-        Integer departmentid = null;
+        String departmentcode = null;
         Long functionid = null;
         Integer functionaryid = null;
         Integer schemeid = null;
@@ -396,7 +396,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
         if (detailsMap.containsKey(Constants.REFERENCENUMBER))
             referencenumber = (String) detailsMap.get(Constants.REFERENCENUMBER);
         if (detailsMap.containsKey(Constants.DEPARTMENTID))
-            departmentid = (Integer) detailsMap.get(Constants.DEPARTMENTID);
+            departmentcode = detailsMap.get(Constants.DEPARTMENTID).toString();
         if (detailsMap.containsKey(Constants.FUNCTIONID))
             functionid = (Long) detailsMap.get(Constants.FUNCTIONID);
         if (detailsMap.containsKey(Constants.FUNCTIONARYID))
@@ -421,12 +421,12 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
         try {
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("financialyearid==" + financialyearid + ",moduleid==" + moduleid + ",referencenumber=="
-                        + referencenumber + ",departmentid==" + departmentid + ",functionid==" + functionid
+                        + referencenumber + ",departmentcode==" + departmentcode + ",functionid==" + functionid
                         + ",functionaryid==" + functionaryid + ",schemeid==" + schemeid + ",subschemeid==" + subschemeid
                         + ",boundaryid==" + boundaryid + ",budgetheadid==" + budgetheadid + ",amount==" + amount);
 
             validateMandatoryParameters(moduleid, referencenumber);
-            BigDecimal amtavailable = getPlanningBudgetAvailable(financialyearid, departmentid, functionid,
+            BigDecimal amtavailable = getPlanningBudgetAvailable(financialyearid, departmentcode, functionid,
                     functionaryid, schemeid, subschemeid, boundaryid, budgetheadid, fundid);
 
             if (consumeOrRelease)
@@ -438,7 +438,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
 
             if (amtavailable != null && amtavailable.compareTo(BigDecimal.ZERO) >= 0) {
                 // need to update budget details
-                final String query = prepareQuery(departmentid, functionid, functionaryid, schemeid, subschemeid,
+                final String query = prepareQuery(departmentcode, functionid, functionaryid, schemeid, subschemeid,
                         boundaryid, fundid);
                 final Query q = getCurrentSession().createQuery(
                         " from BudgetDetail bd where  bd.budget.financialYear.id=:finYearId and bd.budget.isbere=:type and bd.budgetGroup.id in (:bgId)"
@@ -492,18 +492,18 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
 
     @Deprecated
     private BigDecimal getDetails(final Long financialyearid, final Integer moduleid, final String referencenumber,
-            final Integer departmentid, final Long functionid, final Integer functionaryid, final Integer schemeid,
+            final String departmentcode, final Long functionid, final Integer functionaryid, final Integer schemeid,
             final Integer subschemeid, final Integer boundaryid, final List<Long> budgetheadid, final Integer fundid,
             final double amount, final boolean consumeOrRelease, final String appropriationnumber) {
         try {
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("financialyearid==" + financialyearid + ",moduleid==" + moduleid + ",referencenumber=="
-                        + referencenumber + ",departmentid==" + departmentid + ",functionid==" + functionid
+                        + referencenumber + ",departmentcode==" + departmentcode + ",functionid==" + functionid
                         + ",functionaryid==" + functionaryid + ",schemeid==" + schemeid + ",subschemeid==" + subschemeid
                         + ",boundaryid==" + boundaryid + ",budgetheadid==" + budgetheadid + ",amount==" + amount);
 
             validateMandatoryParameters(moduleid, referencenumber);
-            BigDecimal amtavailable = getPlanningBudgetAvailable(financialyearid, departmentid, functionid,
+            BigDecimal amtavailable = getPlanningBudgetAvailable(financialyearid, departmentcode, functionid,
                     functionaryid, schemeid, subschemeid, boundaryid, budgetheadid, fundid);
 
             if (consumeOrRelease)
@@ -515,7 +515,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
 
             if (amtavailable != null && amtavailable.compareTo(BigDecimal.ZERO) >= 0) {
                 // need to update budget details
-                final String query = prepareQuery(departmentid, functionid, functionaryid, schemeid, subschemeid,
+                final String query = prepareQuery(departmentcode, functionid, functionaryid, schemeid, subschemeid,
                         boundaryid, fundid);
                 final Query q = persistenceService.getSession().createQuery(
                         " from BudgetDetail bd where  bd.budget.financialYear.id=:finYearId  and  bd.budget.isbere=:type and bd.budgetGroup.id in (:bgId)"
@@ -568,19 +568,19 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
     @Deprecated
     @Transactional
     private BudgetUsage getBudgetUsageDetails(final Long financialyearid, final Integer moduleid,
-            final String referencenumber, final Integer departmentid, final Long functionid,
+            final String referencenumber, final String departmentcode, final Long functionid,
             final Integer functionaryid, final Integer schemeid, final Integer subschemeid, final Integer boundaryid,
             final List<Long> budgetheadid, final Integer fundid, final double amount, final boolean consumeOrRelease,
             final String appropriationnumber) {
         try {
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("financialyearid==" + financialyearid + ",moduleid==" + moduleid + ",referencenumber=="
-                        + referencenumber + ",departmentid==" + departmentid + ",functionid==" + functionid
+                        + referencenumber + ",departmentcode==" + departmentcode + ",functionid==" + functionid
                         + ",functionaryid==" + functionaryid + ",schemeid==" + schemeid + ",subschemeid==" + subschemeid
                         + ",boundaryid==" + boundaryid + ",budgetheadid==" + budgetheadid + ",amount==" + amount);
 
             validateMandatoryParameters(moduleid, referencenumber);
-            BigDecimal amtavailable = getPlanningBudgetAvailable(financialyearid, departmentid, functionid,
+            BigDecimal amtavailable = getPlanningBudgetAvailable(financialyearid, departmentcode, functionid,
                     functionaryid, schemeid, subschemeid, boundaryid, budgetheadid, fundid);
 
             if (consumeOrRelease)
@@ -596,7 +596,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
             }
 
             // need to update budget details
-            final String query = prepareQuery(departmentid, functionid, functionaryid, schemeid, subschemeid,
+            final String query = prepareQuery(departmentcode, functionid, functionaryid, schemeid, subschemeid,
                     boundaryid, fundid);
             final Query q = persistenceService.getSession().createQuery(
                     " from BudgetDetail bd where  bd.budget.financialYear.id=:finYearId  and  bd.budget.isbere=:type and bd.budgetGroup.id in (:bgId)"
@@ -694,7 +694,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
         return " and bd.budget.status.code = 'Approved' " + query;
     }
 
-    private String prepareQuery(final Integer departmentid, final Long functionid, final Integer functionaryid,
+    private String prepareQuery(final String departmentCode, final Long functionid, final Integer functionaryid,
             final Integer schemeid, final Integer subschemeid, final Integer boundaryid, final Integer fundid) {
         String query = EMPTY_STRING;
 
@@ -707,11 +707,11 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
             final String[] values = StringUtils.split(appConfigValues.getValue(), ",");
             for (final String value : values)
                 if (value.equals("department")) {
-                    if (departmentid == null || departmentid == 0)
+                    if (departmentCode == null || departmentCode == "0" || departmentCode == "")
                         throw new ValidationException(EMPTY_STRING, "Department is required");
                     else
                         query = query
-                                + getQuery(Department.class, departmentid.longValue(), " and bd.executingDepartment=");
+                                + ( " and bd.executingDepartment='"+departmentCode+"'");
                 } else if (value.equals("function")) {
                     if (functionid == null || functionid == 0)
                         throw new ValidationException(EMPTY_STRING, "Function is required");
@@ -820,18 +820,18 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
      * @return @
      */
     @Override
-    public BigDecimal getPlanningBudgetAvailable(final Long financialyearid, final Integer departmentid,
+    public BigDecimal getPlanningBudgetAvailable(final Long financialyearid, final String departmentcode,
             final Long functionid, final Integer functionaryid, final Integer schemeid, final Integer subschemeid,
             final Integer boundaryid, final List<Long> budgetheadid, final Integer fundid) {
         try {
             if (LOGGER.isDebugEnabled())
-                LOGGER.debug("financialyearid===" + financialyearid + ",departmentid===" + departmentid
+                LOGGER.debug("financialyearid===" + financialyearid + ",departmentid===" + departmentcode
                         + ",functionid===" + functionid + ",functionaryid===" + functionaryid + ",schemeid==="
                         + schemeid + ",subschemeid===" + subschemeid + ",boundaryid===" + boundaryid
                         + ",budgetheadid===" + budgetheadid);
 
             validateParameters(financialyearid, functionid, budgetheadid);
-            final String query = prepareQuery(departmentid, functionid, functionaryid, schemeid, subschemeid,
+            final String query = prepareQuery(departmentcode, functionid, functionaryid, schemeid, subschemeid,
                     boundaryid, fundid);
 
             session = getCurrentSession();
@@ -934,7 +934,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
     // budgetheadid
     @Override
     public BigDecimal getActualBudgetUtilized(final Map<String, Object> paramMap) {
-        Long deptid = null;
+        String deptCode = null;
         Long functionid = null;
         Integer functionaryid = null;
         Integer schemeid = null;
@@ -949,7 +949,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
         BudgetGroup budgetgroup = null;
         try {
             if (paramMap.get(Constants.DEPTID) != null)
-                deptid = (Long) paramMap.get(Constants.DEPTID);
+                deptCode = paramMap.get(Constants.DEPTID).toString();
             if (paramMap.get(Constants.FUNCTIONID) != null)
                 functionid = (Long) paramMap.get(Constants.FUNCTIONID);
             if (paramMap.get(Constants.FUNCTIONARYID) != null)
@@ -967,7 +967,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
             if (paramMap.get(Constants.ASONDATE) != null)
                 asondate = (java.util.Date) paramMap.get(Constants.ASONDATE);
             if (LOGGER.isDebugEnabled())
-                LOGGER.debug("deptid=" + deptid + ",functionid=" + functionid + ",functionaryid=" + functionaryid
+                LOGGER.debug("deptCode=" + deptCode + ",functionid=" + functionid + ",functionaryid=" + functionaryid
                         + ",schemeid=" + schemeid + ",subschemeid=" + subschemeid + ",boundaryid=" + boundaryid
                         + ",budgetheadid=" + budgetheadid + ",asondate=" + asondate);
 
@@ -983,7 +983,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
             fromdate = finyear.getStartingDate();
 
             query = query + getQuery(CFunction.class, functionid, " and gl.functionId=");
-            query = query + getQuery(Department.class, deptid, " and vmis.departmentid=");
+            query = query + (" and vmis.departmentcode='"+deptCode+"'");
             query = query + getQuery(Functionary.class, functionaryid, " and vmis.functionary=");
             query = query + getQuery(Scheme.class, schemeid, " and vmis.schemeid=");
             query = query + getQuery(SubScheme.class, subschemeid, " and vmis.subschemeid=");
@@ -1086,7 +1086,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
     // budgetheadid
     @Override
     public BigDecimal getActualBudgetUtilizedForBudgetaryCheck(final Map<String, Object> paramMap) {
-        Long deptid = null;
+        String deptCode = null;
         Long functionid = null;
         Integer functionaryid = null;
         Integer schemeid = null;
@@ -1100,7 +1100,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
         String query = EMPTY_STRING, select = EMPTY_STRING;
         try {
             if (paramMap.get(Constants.DEPTID) != null)
-                deptid = (Long) paramMap.get(Constants.DEPTID);
+                deptCode = paramMap.get(Constants.DEPTID).toString();
             if (paramMap.get(Constants.FUNCTIONID) != null)
                 functionid = (Long) paramMap.get(Constants.FUNCTIONID);
             if (paramMap.get(Constants.FUNCTIONARYID) != null)
@@ -1121,7 +1121,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
                 asondate = (java.util.Date) paramMap.get(Constants.ASONDATE);
 
             if (LOGGER.isDebugEnabled())
-                LOGGER.debug("deptid=" + deptid + ",functionid=" + functionid + ",functionaryid=" + functionaryid
+                LOGGER.debug("deptCode=" + deptCode + ",functionid=" + functionid + ",functionaryid=" + functionaryid
                         + ",schemeid=" + schemeid + ",subschemeid=" + subschemeid + ",boundaryid=" + boundaryid
                         + ",budgetheadid=" + budgetheadid + ",asondate=" + asondate);
 
@@ -1146,7 +1146,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
                 final String[] values = StringUtils.split(appConfigValues.getValue(), ",");
                 for (final String value : values)
                     if (value.equals("department"))
-                        query = query + getQuery(Department.class, deptid, " and vmis.departmentid=");
+                        query = query + ( " and vmis.departmentcode='"+deptCode+"'");
                     else if (value.equals("function"))
                         query = query + getQuery(CFunction.class, functionid, " and gl.functionId=");
                     else if (value.equals("functionary"))
@@ -1260,7 +1260,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
      */
     @Override
     public BigDecimal getBudgetedAmtForYear(final Map<String, Object> paramMap) {
-        Long deptid = null;
+        String deptCode = null;
         Long functionid = null;
         Integer functionaryid = null;
         Integer schemeid = null;
@@ -1273,7 +1273,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
         String query = EMPTY_STRING;
         try {
             if (paramMap.get(Constants.DEPTID) != null)
-                deptid = (Long) paramMap.get(Constants.DEPTID);
+                deptCode = paramMap.get(Constants.DEPTID).toString();
             if (paramMap.get(Constants.FUNCTIONID) != null)
                 functionid = (Long) paramMap.get(Constants.FUNCTIONID);
             if (paramMap.get(Constants.FUNCTIONARYID) != null)
@@ -1292,11 +1292,11 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
                 financialyearid = (Long) paramMap.get("financialyearid");
 
             if (LOGGER.isDebugEnabled())
-                LOGGER.debug("deptid " + deptid + ",functionid " + functionid + ",functionaryid " + functionaryid
+                LOGGER.debug("deptCode " + deptCode + ",functionid " + functionid + ",functionaryid " + functionaryid
                         + ",schemeid " + schemeid + ",subschemeid " + subschemeid + ",boundaryid " + boundaryid
                         + ",budgetheadids " + budgetHeadList + ",financialyearid " + financialyearid);
 
-            query = prepareQuery(deptid.intValue(), functionid, functionaryid, schemeid, subschemeid,
+            query = prepareQuery(deptCode, functionid, functionaryid, schemeid, subschemeid,
                     boundaryid != null ? boundaryid.intValue() : null, fundid);
 
             // handle the list
@@ -1350,7 +1350,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
      */
     @Override
     public BigDecimal getBudgetedAmtForYearAsOnDate(final Map<String, Object> paramMap, final Date asOnDate) {
-        Integer deptid = null;
+        String deptCode = null;
         Long functionid = null;
         Integer functionaryid = null;
         Integer schemeid = null;
@@ -1363,7 +1363,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
         String query = EMPTY_STRING;
         try {
             if (paramMap.get(Constants.DEPTID) != null)
-                deptid = (Integer) paramMap.get(Constants.DEPTID);
+                deptCode = paramMap.get(Constants.DEPTID).toString();
             if (paramMap.get(Constants.FUNCTIONID) != null)
                 functionid = (Long) paramMap.get(Constants.FUNCTIONID);
             if (paramMap.get(Constants.FUNCTIONARYID) != null)
@@ -1382,11 +1382,11 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
                 financialyearid = (Long) paramMap.get("financialyearid");
 
             if (LOGGER.isDebugEnabled())
-                LOGGER.debug("deptid " + deptid + ",functionid " + functionid + ",functionaryid " + functionaryid
+                LOGGER.debug("deptCode " + deptCode + ",functionid " + functionid + ",functionaryid " + functionaryid
                         + ",schemeid " + schemeid + ",subschemeid " + subschemeid + ",boundaryid " + boundaryid
                         + ",budgetheadids " + budgetHeadList + ",financialyearid " + financialyearid);
 
-            query = prepareQuery(deptid, functionid, functionaryid, schemeid, subschemeid, boundaryid, fundid);
+            query = prepareQuery(deptCode, functionid, functionaryid, schemeid, subschemeid, boundaryid, fundid);
 
             // handle the list
 
@@ -1427,7 +1427,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
 
     @Override
     public BigDecimal getPlanningPercentForYear(final Map<String, Object> paramMap) {
-        Integer deptid = null;
+        String deptcode = null;
         Long functionid = null;
         Integer functionaryid = null;
         Integer schemeid = null;
@@ -1440,7 +1440,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
         String query = EMPTY_STRING;
         try {
             if (paramMap.get(Constants.DEPTID) != null)
-                deptid = (Integer) paramMap.get(Constants.DEPTID);
+                deptcode = paramMap.get(Constants.DEPTID).toString();
             if (paramMap.get(Constants.FUNCTIONID) != null)
                 functionid = (Long) paramMap.get(Constants.FUNCTIONID);
             if (paramMap.get(Constants.FUNCTIONARYID) != null)
@@ -1459,11 +1459,11 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
                 financialyearid = (Long) paramMap.get("financialyearid");
 
             if (LOGGER.isDebugEnabled())
-                LOGGER.debug("deptid " + deptid + ",functionid " + functionid + ",functionaryid " + functionaryid
+                LOGGER.debug("deptcode " + deptcode + ",functionid " + functionid + ",functionaryid " + functionaryid
                         + ",schemeid " + schemeid + ",subschemeid " + subschemeid + ",boundaryid " + boundaryid
                         + ",budgetheadids " + budgetHeadList + ",financialyearid " + financialyearid);
 
-            query = prepareQuery(deptid, functionid, functionaryid, schemeid, subschemeid, boundaryid, fundid);
+            query = prepareQuery(deptcode, functionid, functionaryid, schemeid, subschemeid, boundaryid, fundid);
 
             // handle the list
 
@@ -2252,7 +2252,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
 
     @Override
     public BigDecimal getBillAmountForBudgetCheck(final Map<String, Object> paramMap) {
-        Long deptid = null;
+        String deptCode = null;
         Long functionid = null;
         Integer functionaryid = null;
         Integer schemeid = null;
@@ -2268,7 +2268,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
         String query1 = EMPTY_STRING;
         try {
             if (paramMap.get(Constants.DEPTID) != null)
-                deptid = (Long) paramMap.get(Constants.DEPTID);
+                deptCode = paramMap.get(Constants.DEPTID).toString();
             if (paramMap.get(Constants.FUNCTIONID) != null)
                 functionid = (Long) paramMap.get(Constants.FUNCTIONID);
             if (paramMap.get(Constants.FUNCTIONARYID) != null)
@@ -2301,7 +2301,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
             paramMap.put(Constants.ASONDATE, finyear.getEndingDate());
 
             if (LOGGER.isDebugEnabled())
-                LOGGER.debug("deptid=" + deptid + ",functionid=" + functionid + ",functionaryid=" + functionaryid
+                LOGGER.debug("deptCode=" + deptCode + ",functionid=" + functionid + ",functionaryid=" + functionaryid
                         + ",schemeid=" + schemeid + ",subschemeid=" + subschemeid + ",boundaryid=" + boundaryid
                         + ",glcodeid=" + glcodeid + ",asondate=" + asondate);
 
@@ -2318,10 +2318,10 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
                 final String[] values = StringUtils.split(appConfigValues.getValue(), ",");
                 for (final String value : values)
                     if (value.equals("department")) {
-                        if (deptid == null || deptid == 0)
+                        if (deptCode == null || deptCode == "0")
                             throw new ValidationException(EMPTY_STRING, "Department is required");
                         else
-                            query = query + getQuery(Department.class, deptid, " and bmis.departmentid=");
+                            query = query + ( " and bmis.departmentcode='"+deptCode+"'");
                     } else if (value.equals("function")) {
                         if (functionid == null || functionid == 0)
                             throw new ValidationException(EMPTY_STRING, "Function is required");
@@ -2438,7 +2438,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
      */
     @Override
     public BigDecimal getBudgetedAmtForYearRegardingBEorRE(final Map<String, Object> paramMap, final String typeBeRe) {
-        Integer deptid = null;
+        String deptcode = null;
         Long functionid = null;
         Integer functionaryid = null;
         Integer schemeid = null;
@@ -2452,7 +2452,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
 
         try {
             if (paramMap.get(Constants.DEPTID) != null)
-                deptid = (Integer) paramMap.get(Constants.DEPTID);
+                deptcode = paramMap.get(Constants.DEPTID).toString();
             if (paramMap.get(Constants.FUNCTIONID) != null)
                 functionid = (Long) paramMap.get(Constants.FUNCTIONID);
             if (paramMap.get(Constants.FUNCTIONARYID) != null)
@@ -2471,11 +2471,11 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
                 financialyearid = (Long) paramMap.get("financialyearid");
 
             if (LOGGER.isDebugEnabled())
-                LOGGER.debug("deptid " + deptid + ",functionid " + functionid + ",functionaryid " + functionaryid
+                LOGGER.debug("deptcode " + deptcode + ",functionid " + functionid + ",functionaryid " + functionaryid
                         + ",schemeid " + schemeid + ",subschemeid " + subschemeid + ",boundaryid " + boundaryid
                         + ",budgetheadid " + budgetheadid + ",financialyearid " + financialyearid);
 
-            query = prepareQuery(deptid, functionid, functionaryid, schemeid, subschemeid, boundaryid, fundid);
+            query = prepareQuery(deptcode, functionid, functionaryid, schemeid, subschemeid, boundaryid, fundid);
 
             if (budgetheadid == null)
                 throw new ValidationException(EMPTY_STRING, "Budget head id is null or empty");
