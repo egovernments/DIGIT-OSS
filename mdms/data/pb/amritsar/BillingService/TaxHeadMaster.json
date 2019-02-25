@@ -1,0 +1,42 @@
+{
+  "tenantId": "pb.amritsar",
+  "moduleName": "BillingService",
+  "TaxHeadMaster": [
+    {
+      "category": "TAX",
+      "service": "PT",
+      "name": "Pt adhoc penalty",
+      "code": "PT_ADHOC_PENALTY",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": 1
+    },
+    {
+      "category": "TAX",
+      "service": "PT",
+      "name": "propertytax",
+      "code": "PT_TAX",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": 2
+    },
+    {
+      "category": "TAX",
+      "service": "PT",
+      "name": "Pt fire cess",
+      "code": "PT_FIRE_CESS",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": 1
+    },
+    {
+      "category": "EXEMPTION",
+      "service": "PT",
+      "name": "Pt time based rebate",
+      "code": "PT_TIME_REBATE",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": 99
+    }
+  ]
+}
