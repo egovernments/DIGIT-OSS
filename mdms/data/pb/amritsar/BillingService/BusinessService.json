@@ -1,0 +1,27 @@
+{
+  "tenantId": "pb.amritsar",
+  "moduleName": "BillingService",
+  "BusinessService": [
+    {
+      "businessService": "PT",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": true
+    },
+    {
+      "businessService": "WC",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false
+    },
+    {
+      "businessService": "TL",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false
+    }
+  ]
+}
