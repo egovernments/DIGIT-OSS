@@ -89,7 +89,7 @@
             </div>
         </div>
     </div>
-    <tiles:insertAttribute name="footer"/>
+    <!-- tiles:insertAttribute name="footer"/> -->
 </div>
 <script>
     if (window.opener && window.opener !== window)
