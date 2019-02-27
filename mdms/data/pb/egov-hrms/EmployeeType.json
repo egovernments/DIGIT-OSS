@@ -3,27 +3,22 @@
   "moduleName": "egov-hrms",
   "EmployeeType": [
     {
-      "status": "Permanent",
       "code": "PERMANENT",
       "active": true
     },
     {
-      "status": "Temporary",
       "code": "TEMPORARY",
       "active": true
     },
     {
-      "status": "Daily Wages",
       "code": "DAILYWAGES",
       "active": true
     },
     {
-      "status": "Contract",
       "code": "CONTRACT",
       "active": true
     },
     {
-      "status": "Deputation",
       "code": "DEPUTATION",
       "active": true
     }
