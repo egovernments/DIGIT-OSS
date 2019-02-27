@@ -3,21 +3,24 @@
   "moduleName": "BillingService",
   "BusinessService": [
     {
-      "businessService": "PT",
+      "businessService": "PropertyTax",
+      "code":"PT",
       "collectionModesNotAllowed": [
         "DD"
       ],
       "partPaymentAllowed": true
     },
     {
-      "businessService": "WC",
+      "businessService": "WaterCharges",
+      "code":"WC",
       "collectionModesNotAllowed": [
         "DD"
       ],
       "partPaymentAllowed": false
     },
     {
-      "businessService": "TL",
+      "businessService": "TradeLicense",
+      "code":"TL",
       "collectionModesNotAllowed": [
         "DD"
       ],
