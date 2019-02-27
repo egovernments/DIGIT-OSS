@@ -3,37 +3,30 @@
   "moduleName": "egov-hrms",
   "EmployeeStatus": [
     {
-      "status": "Employed",
       "code": "EMPLOYED",
       "active": true
     },
     {
-      "status": "Retired",
       "code": "RETIRED",
       "active": true
     },
     {
-      "status": "Resigned",
       "code": "RESIGNED",
       "active": true
     },
     {
-      "status": "Terminated",
       "code": "TERMINATED",
       "active": true
     },
     {
-      "status": "Deceased",
       "code": "DECEASED",
       "active": true
     },
     {
-      "status": "Suspended",
       "code": "SUSPENDED",
       "active": true
     },
     {
-      "status": "Transferred",
       "code": "TRANSFERRED",
       "active": true
     }
