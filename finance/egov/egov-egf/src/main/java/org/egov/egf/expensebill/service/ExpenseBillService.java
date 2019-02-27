@@ -222,12 +222,11 @@ public class ExpenseBillService {
         if (isBillNumberGenerationAuto())
             egBillregister.setBillnumber(getNextBillNumber(egBillregister));
 
-//       	commented as budget check was disabled
-//        try {
-//            checkBudgetAndGenerateBANumber(egBillregister);
-//        } catch (final ValidationException e) {
-//            throw new ValidationException(e.getErrors());
-//        }
+        try {
+            checkBudgetAndGenerateBANumber(egBillregister);
+        } catch (final ValidationException e) {
+            throw new ValidationException(e.getErrors());
+        }
 
         final List<EgChecklists> checkLists = egBillregister.getCheckLists();
 

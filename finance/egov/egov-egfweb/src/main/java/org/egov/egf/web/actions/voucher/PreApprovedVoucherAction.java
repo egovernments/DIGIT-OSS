@@ -856,6 +856,8 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                 val = ((EgBillregister) getPersistenceService()
                         .find(" from EgBillregister br where br.egBillregistermis.voucherHeader=?", voucherHeader))
                                 .getBillnumber();
+            else if ("budgetaryAppnumber".equals(name))
+                val = voucherHeader.getVouchermis().getBudgetaryAppnumber();
         } else if (name.equals("fund") && egBillregister.getEgBillregistermis().getFund() != null)
             val = egBillregister.getEgBillregistermis().getFund().getName();
         else if (name.equals("fundsource") && egBillregister.getEgBillregistermis().getFundsource() != null)

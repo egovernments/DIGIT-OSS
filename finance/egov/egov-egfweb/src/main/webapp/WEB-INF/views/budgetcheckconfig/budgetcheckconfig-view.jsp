@@ -69,6 +69,6 @@
 		<div class="row text-center">
 			<div class="add-margin">
 				<a href="javascript:void(0)" class="btn btn-default"
-					onclick="self.close()">Close</a>
+					onclick="window.parent.postMessage('close','*');window.close();">Close</a>
 			</div>
 		</div>

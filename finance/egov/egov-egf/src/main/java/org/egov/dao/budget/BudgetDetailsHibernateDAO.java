@@ -1870,7 +1870,7 @@ public class BudgetDetailsHibernateDAO implements BudgetDetailsDAO {
     }
 
     private void generateBanNumber(final Map<String, Object> paramMap, EgBillregister bill) {
-        if (bill == null || bill.getEgBillregistermis().getBudgetaryAppnumber() == null)
+        if (bill == null || bill.getEgBillregistermis().getBudgetaryAppnumber() == null || "".equals(bill.getEgBillregistermis().getBudgetaryAppnumber()))
             if (paramMap.get("voucherHeader") != null && ((CVoucherHeader) paramMap.get("voucherHeader"))
                     .getVouchermis().getBudgetaryAppnumber() == null) {
                 if (LOGGER.isDebugEnabled())

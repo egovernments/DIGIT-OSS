@@ -87,6 +87,7 @@ import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.script.service.ScriptService;
 import org.egov.infra.security.utils.SecurityUtils;
 import org.egov.infra.utils.autonumber.AutonumberServiceBeanResolver;
+import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.workflow.matrix.entity.WorkFlowMatrix;
 import org.egov.infra.workflow.service.SimpleWorkflowService;
 import org.egov.model.bills.DocumentUpload;
@@ -231,11 +232,11 @@ public class ContractorBillService {
             egBillregister.setBillnumber(getNextBillNumber(egBillregister));
 
         // commented as budget check was disabled
-        // try {
-        // checkBudgetAndGenerateBANumber(egBillregister);
-        // } catch (final ValidationException e) {
-        // throw new ValidationException(e.getErrors());
-        // }
+         try {
+             checkBudgetAndGenerateBANumber(egBillregister);
+         } catch (final ValidationException e) {
+         throw new ValidationException(e.getErrors());
+         }
 
         final EgBillregister savedEgBillregister = contractorBillRepository.save(egBillregister);
 

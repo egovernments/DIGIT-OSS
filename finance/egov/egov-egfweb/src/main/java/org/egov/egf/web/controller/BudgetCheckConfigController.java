@@ -84,7 +84,7 @@ public class BudgetCheckConfigController {
 		}
 	}
 
-	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	@RequestMapping(value = "/new", method = {RequestMethod.GET,RequestMethod.POST})
 	public String newForm(final Model model) {
 		// prepareNewForm(model);
 		model.addAttribute("budgetControlType", prepareNewForm(model));

@@ -115,6 +115,14 @@
 					<c:out default="N/A" value="${egBillregister.billtype}" />
 				</div>
 		</div>
+		<div class="row add-border">
+				<div class="col-md-3 col-xs-6 add-margin">
+					<spring:message code="lbl.ban.number" />
+				</div>
+				<div class="col-md-3 col-xs-6 add-margin view-content" id="ct-email">
+					<c:out default="N/A" value="${egBillregister.egBillregistermis.budgetaryAppnumber }" />
+				</div>
+		</div>
 	</div>
 	
 </div>
