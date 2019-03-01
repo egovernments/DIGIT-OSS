@@ -17443,6 +17443,12 @@
       "actionid": 1771,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1772,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
