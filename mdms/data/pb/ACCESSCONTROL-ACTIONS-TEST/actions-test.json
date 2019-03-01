@@ -4620,6 +4620,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-REPORTS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Collection.Collection Reports.GetReportData"
     },
     {
@@ -4631,6 +4632,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-REPORTS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Collection.Collection Reports.GetReportMetadata"
     },
     {
@@ -4642,6 +4644,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-REPORTS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Collection.Collection Reports.ReloadReport"
     },
     {
@@ -4654,6 +4657,7 @@
       "enabled": false,
       "serviceCode": "Workflow_MS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Workflow_MS.designationsMSSearch"
     },
     {
@@ -6006,6 +6010,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Collection.Collection Transactions.StartWorkflow"
     },
     {
@@ -6017,6 +6022,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Collection.Collection Transactions.UpdateWorkflow"
     },
     {
@@ -6066,6 +6072,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Collection.Collection Transactions.UpdateReceipt"
     },
     {
@@ -6230,6 +6237,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Collection.Collection Transactions.GetDistinctCollectedBy"
     },
     {
@@ -6241,6 +6249,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Collection.Collection Transactions.Collection status"
     },
     {
@@ -6252,6 +6261,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Collection.Collection Transactions.Business Details"
     },
     {
@@ -6263,6 +6273,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Collection.Collection Transactions.Chart Of Accounts"
     },
     {
@@ -6296,6 +6307,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-MASTERS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Collection.Collection Masters.GetBusinessTypes"
     },
     {
@@ -6424,6 +6436,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-REPORTS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Collection.Collection Reports.ReportMetaData"
     },
     {
@@ -6436,6 +6449,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-REPORTS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Collection.Collection Reports.ReportGet"
     },
     {
@@ -6954,6 +6968,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
+      "leftIcon":"image:how_to_vote",
       "path": "Collection.Collection Transactions.LegacyCreateReceipt"
     },
     {
@@ -11563,6 +11578,7 @@
       "enabled": true,
       "serviceCode": "FinanceBill",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Bills Accounting.Expense Bill"
     },
     {
@@ -11683,6 +11699,7 @@
       "enabled": true,
       "serviceCode": "FinanceBill",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Bills Accounting.Create Voucher",
       "navigationURL": "services/EGF/voucher/billVoucher-newForm.action"
     },
@@ -11696,6 +11713,7 @@
       "enabled": true,
       "serviceCode": "FinanceAdmin",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Administration.Cancel Voucher",
       "navigationURL": "services/EGF/voucher/cancelVoucher-beforeSearch.action"
     },
@@ -11709,6 +11727,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Period End Activities.Financial Year",
       "navigationURL": "services/EGF/HTML/FinancialYearEnq.htm"
     },
@@ -11722,6 +11741,7 @@
       "enabled": true,
       "serviceCode": "FinancePayment",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Payments.Direct Bank Payments",
       "navigationURL": "services/EGF/payment/directBankPayment-newform.action"
     },
@@ -11735,6 +11755,7 @@
       "enabled": true,
       "serviceCode": "FinanceBill",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Journal Voucher",
       "navigationURL": "services/EGF/voucher/journalVoucher-newForm.action"
     },
@@ -11748,6 +11769,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Chartofaccounts.Tree View",
       "navigationURL": "services/EGF/eGov_COA.jsp"
     },
@@ -11761,6 +11783,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Chartofaccounts.Detailed Codes.Create Detailed Code",
       "navigationURL": "services/EGF/masters/chartOfAccounts-addNew.action"
     },
@@ -11774,6 +11797,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.Accounting Records.Bank book",
       "navigationURL": "services/EGF/report/bankBookReport.action"
     },
@@ -11787,6 +11811,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.MIS Reports.Cheque Issue Register",
       "navigationURL": "services/EGF/report/chequeIssueRegisterReport.action"
     },
@@ -11800,6 +11825,7 @@
       "enabled": true,
       "serviceCode": "FinanceBill",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Bills Accounting.View Bills",
       "navigationURL": "services/EGF/bill/billRegisterSearch-newform.action"
     },
@@ -11813,6 +11839,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Scheme.Create Scheme",
       "navigationURL": "services/EGF/masters/scheme-newForm.action"
     },
@@ -11826,6 +11853,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Scheme.View Scheme",
       "navigationURL": "services/EGF/masters/scheme-beforeSearch.action"
     },
@@ -11839,6 +11867,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Scheme.Modify Scheme",
       "navigationURL": "services/EGF/masters/scheme-beforeSearch-edit.action"
     },
@@ -11852,6 +11881,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Deductions.Create Deductions",
       "navigationURL": "services/EGF/recovery/new"
     },
@@ -11865,6 +11895,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Deductions.View Deductions",
       "navigationURL": "services/EGF/recovery/search/view"
     },
@@ -11878,6 +11909,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Deductions.Modify Deductions",
       "navigationURL": "services/EGF/recovery/search/edit"
     },
@@ -11891,6 +11923,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Scheme.View Sub-scheme",
       "navigationURL": "services/EGF/masters/subScheme-beforeSearch.action"
     },
@@ -11904,6 +11937,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Scheme.Modify Sub-scheme",
       "navigationURL": "services/EGF/masters/subScheme-beforeSearch-edit.action"
     },
@@ -11917,6 +11951,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.MIS Reports.Voucher Status Report",
       "navigationURL": "services/EGF/report/voucherStatusReport-beforeSearch.action"
     },
@@ -11930,6 +11965,7 @@
       "enabled": true,
       "serviceCode": "FinanceAdmin",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Administration.Cancel Bills",
       "navigationURL": "services/EGF/voucher/cancelBill-beforeSearch.action"
     },
@@ -11943,6 +11979,7 @@
       "enabled": true,
       "serviceCode": "FinancePayment",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Payments.RTGS Assignment",
       "navigationURL": "services/EGF/payment/chequeAssignment-beforeRtgsSearch.action"
     },
@@ -11956,6 +11993,7 @@
       "enabled": true,
       "serviceCode": "FinanceGeneral",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.View Vouchers",
       "navigationURL": "services/EGF/voucher/voucherSearch-beforesearch.action"
     },
@@ -11969,6 +12007,7 @@
       "enabled": true,
       "serviceCode": "FinancePayment",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Payments.Bill Payment",
       "navigationURL": "services/EGF/payment/payment-beforeSearch.action"
     },
@@ -11982,6 +12021,7 @@
       "enabled": true,
       "serviceCode": "FinancePayment",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Payments.Cheque Assignment",
       "navigationURL": "services/EGF/payment/chequeAssignment-beforeSearch.action"
     },
@@ -11995,6 +12035,7 @@
       "enabled": true,
       "serviceCode": "FinancePayment",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Payments.Surrender/Reassign Cheque",
       "navigationURL": "services/EGF/payment/chequeAssignment-beforeSearchForSurrender.action"
     },
@@ -12008,6 +12049,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Bank.Account Cheques",
       "navigationURL": "services/EGF/masters/accountCheque-newform.action"
     },
@@ -12021,6 +12063,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Fund.Create Fund",
       "navigationURL": "services/EGF/fund/new"
     },
@@ -12034,6 +12077,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Fund.View Fund",
       "navigationURL": "services/EGF/fund/search/view"
     },
@@ -12047,6 +12091,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Fund.Modify Fund",
       "navigationURL": "services/EGF/fund/search/edit"
     },
@@ -12060,6 +12105,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Other Masters.Create other masters",
       "navigationURL": "services/EGF/accountentity/new"
     },
@@ -12073,6 +12119,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Other Masters.View Other Masters",
       "navigationURL": "services/EGF/accountentity/search/view"
     },
@@ -12086,6 +12133,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Other Masters.Modify Other Masters",
       "navigationURL": "services/EGF/accountentity/search/edit"
     },
@@ -12099,6 +12147,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Function.Create Function",
       "navigationURL": "services/EGF/function/new"
     },
@@ -12112,6 +12161,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Function.View Function",
       "navigationURL": "services/EGF/function/search/view"
     },
@@ -12125,6 +12175,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Function.Modify Function",
       "navigationURL": "services/EGF/function/search/edit"
     },
@@ -12138,6 +12189,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.Accounting Records.Trial Balance",
       "navigationURL": "services/EGF/report/trialBalance-newForm.action"
     },
@@ -12151,6 +12203,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Scheme.Create Sub-scheme",
       "navigationURL": "services/EGF/masters/subScheme-newForm.action"
     },
@@ -12164,6 +12217,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.MIS Reports.Bill Register Detailed Report",
       "navigationURL": "services/EGF/report/billRegisterReport-searchform.action"
     },
@@ -12177,6 +12231,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.MIS Reports.Bank Advice Report(RTGS)",
       "navigationURL": "services/EGF/report/bankAdviceReport-newForm.action"
     },
@@ -12190,6 +12245,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Bank.Modify Bank",
       "navigationURL": "services/EGF/bank/search/edit"
     },
@@ -12203,6 +12259,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Bank.Create Bank",
       "navigationURL": "services/EGF/bank/new"
     },
@@ -12216,6 +12273,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.MIS Reports.RTGS Register",
       "navigationURL": "services/EGF/report/rtgsIssueRegisterReport-newForm.action"
     },
@@ -12229,6 +12287,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.Accounting Records.General Ledger",
       "navigationURL": "services/EGF/report/generalLedgerReport-newForm.action"
     },
@@ -12242,6 +12301,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.Accounting Records.Subledger Schedule",
       "navigationURL": "services/EGF/report/subLedgerScheduleReport-newForm.action"
     },
@@ -12255,6 +12315,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.Accounting Records.Sub Ledger",
       "navigationURL": "services/EGF/report/subLedgerReport-newForm.action"
     },
@@ -12268,6 +12329,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.Accounting Records.Day Book",
       "navigationURL": "services/EGF/report/dayBookReport-newForm.action"
     },
@@ -12281,6 +12343,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.Accounting Records.Journal Book",
       "navigationURL": "services/EGF/report/journalBookReport-newForm.action"
     },
@@ -12294,6 +12357,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.Accounting Records.Opening Balance",
       "navigationURL": "services/EGF/report/openingBalanceReport-newForm.action"
     },
@@ -12307,6 +12371,7 @@
       "enabled": true,
       "serviceCode": "FinancePayment",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Payments.Surrender RTGS",
       "navigationURL": "services/EGF/payment/chequeAssignment-beforeSearchForRTGSSurrender.action"
     },
@@ -12320,6 +12385,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Contractor.Create Contractor",
       "navigationURL": "services/EGF/contractor/newform"
     },
@@ -12333,6 +12399,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Contractor. View Contractor",
       "navigationURL": "services/EGF/contractor/search/view"
     },
@@ -12346,6 +12413,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Contractor.Modify Contractor",
       "navigationURL": "services/EGF/contractor/search/edit"
     },
@@ -12359,6 +12427,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Supplier.Create Supplier",
       "navigationURL": "services/EGF/supplier/newform"
     },
@@ -12372,6 +12441,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Supplier.View Supplier",
       "navigationURL": "services/EGF/supplier/search/view"
     },
@@ -12385,6 +12455,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Supplier.Modify Supplier",
       "navigationURL": "services/EGF/supplier/search/edit"
     },
@@ -12398,6 +12469,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Chartofaccounts.Detailed Codes.View Detailed Code",
       "navigationURL": "services/EGF/masters/chartOfAccounts-viewDetailedCode.action"
     },
@@ -12411,6 +12483,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Chartofaccounts.Detailed Codes.Modify Detailed Code",
       "navigationURL": "services/EGF/masters/chartOfAccounts-editDetailedCode.action"
     },
@@ -12424,6 +12497,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Bank.View Bank",
       "navigationURL": "services/EGF/bank/search/view"
     },
@@ -12437,6 +12511,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Bank.Create Bank Account",
       "navigationURL": "services/EGF/bankaccount/new"
     },
@@ -12450,6 +12525,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Bank.View Bank Account",
       "navigationURL": "services/EGF/bankaccount/search/view"
     },
@@ -12463,6 +12539,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Bank.Modify Bank Account",
       "navigationURL": "services/EGF/bankaccount/search/edit"
     },
@@ -12476,6 +12553,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Bank.Create Bank Branch",
       "navigationURL": "services/EGF/bankbranch/new"
     },
@@ -12489,6 +12567,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Bank.View Bank Branch",
       "navigationURL": "services/EGF/bankbranch/search/view"
     },
@@ -12502,6 +12581,7 @@
       "enabled": true,
       "serviceCode": "FinanceMaster",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Bank.Modify Bank Branch",
       "navigationURL": "services/EGF/bankbranch/search/edit"
     },
@@ -12515,6 +12595,7 @@
       "enabled": true,
       "serviceCode": "FinanceAdmin",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Period End Activities.Opening Balance Entry",
       "navigationURL": "services/EGF/transactionsummary/new"
     },
@@ -12581,6 +12662,7 @@
       "serviceCode": "FinanceMaster",
       "code": "null",
       "navigationURL": "services/EGF/accountdetailtype/new",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Accounting Entity.Create Accounting Entity"
     },
     {
@@ -12594,6 +12676,7 @@
       "serviceCode": "FinanceMaster",
       "code": "null",
       "navigationURL": "services/EGF/accountdetailtype/search/edit",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Accounting Entity.Modify Accounting Entity"
     },
     {
@@ -12607,6 +12690,7 @@
       "serviceCode": "FinanceMaster",
       "navigationURL": "services/EGF/accountdetailtype/search/view",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Accounting Entity.View Accounting Entity"
     },
     {
@@ -13124,6 +13208,7 @@
       "serviceCode": "FinanceDeductions",
       "navigationURL": "services/EGF/deduction/remitRecovery-newform.action",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Deductions.Deduction Payments"
     },
     {
@@ -13149,6 +13234,7 @@
       "serviceCode": "FinanceDeductions",
       "navigationURL": "services/EGF/payment/chequeAssignment-beforeSearchForRemittance.action",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Deductions.Deductions Cheque Assignment"
     },
     {
@@ -13173,6 +13259,7 @@
       "serviceCode": "FinanceMaster",
       "navigationURL": "services/EGF/purchaseorder/newform",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Purchase Order.Create Purchase Order"
     },
     {
@@ -13186,6 +13273,7 @@
       "serviceCode": "FinanceMaster",
       "navigationURL": "services/EGF/purchaseorder/search/view",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Purchase Order.View Purchase Order"
     },
     {
@@ -13199,6 +13287,7 @@
       "serviceCode": "FinanceMaster",
       "navigationURL": "services/EGF/purchaseorder/search/edit",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Purchase Order.Modify Purchase Order"
     },
     {
@@ -13252,6 +13341,7 @@
       "serviceCode": "FinanceMaster",
       "navigationURL": "services/EGF/workorder/newform",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Work Order.Create Work Order"
     },
     {
@@ -13265,6 +13355,7 @@
       "serviceCode": "FinanceMaster",
       "navigationURL": "services/EGF/workorder/search/view",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Work Order.View Work Order"
     },
     {
@@ -13278,6 +13369,7 @@
       "serviceCode": "FinanceMaster",
       "navigationURL": "services/EGF/workorder/search/edit",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Masters.Work Order.Modify Work Order"
     },
     {
@@ -13302,6 +13394,7 @@
       "serviceCode": "FinanceReport",
       "code": "null",
       "navigationURL": "services/EGF/report/pendingTDSReport.action",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.Deduction Reports.Remittance Pending "
     },
     {
@@ -13314,6 +13407,7 @@
       "serviceCode": "FinanceReport",
       "code": "null",
       "navigationURL": "services/EGF/report/pendingTDSReport-summaryReport.action",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.Deduction Reports.Deductions Summary "
     },
     {
@@ -13416,6 +13510,7 @@
       "enabled": true,
       "serviceCode": "FinanceBill",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Bills Accounting.Contractor Bill"
     },
     {
@@ -13429,6 +13524,7 @@
       "enabled": true,
       "serviceCode": "FinanceBill",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Bills Accounting.Supplier Bill"
     },
     {
@@ -13454,6 +13550,7 @@
       "enabled": true,
       "serviceCode": "FinanceBill",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Transactions.Contra Entries.Bank to Bank Transfer"
     },
     {
@@ -13533,6 +13630,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.Financial Statements.Income - Expenditures Statement"
     },
     {
@@ -13546,6 +13644,7 @@
       "enabled": true,
       "serviceCode": "FinanceReport",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Reports.Financial Statements.Balance Sheet"
     },
     {
@@ -13559,6 +13658,7 @@
       "enabled": true,
       "serviceCode": "FinanceBudget",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Budgeting.Budget Group.createBudgetGroup_Master"
     },
     {
@@ -13572,6 +13672,7 @@
       "enabled": true,
       "serviceCode": "FinanceBudget",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Budgeting.Budget Group.viewBudgetGroup_Master"
     },
     {
@@ -13585,6 +13686,7 @@
       "enabled": true,
       "serviceCode": "FinanceBudget",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Budgeting.Budget Group.updateBudgetGroup_Master"
     },
     {
@@ -13598,6 +13700,7 @@
       "enabled": true,
       "serviceCode": "FinanceBudget",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Budgeting.Budget Definition.createBudgetDefinition_Master"
     },
     {
@@ -13611,6 +13714,7 @@
       "enabled": true,
       "serviceCode": "FinanceBudget",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Budgeting.Budget Definition.viewBudgetDefinition_Master"
     },
     {
@@ -13624,6 +13728,7 @@
       "enabled": true,
       "serviceCode": "FinanceBudget",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Budgeting.Budget Definition.updateBudgetDefinition_Master"
     },
     {
@@ -13637,6 +13742,7 @@
       "enabled": true,
       "serviceCode": "FinanceBudget",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Budgeting.Budget Addition Appropriation.budgetAdditionalAppropriation_Master"
     },
     {
@@ -13650,6 +13756,7 @@
       "enabled": true,
       "serviceCode": "FinanceBudget",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Budgeting.uploadBudgetMaster"
     },
     {
@@ -13663,6 +13770,7 @@
       "enabled": true,
       "serviceCode": "FinanceBudget",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Budgeting.approveBudgetMaster"
     },
     {
@@ -13676,6 +13784,7 @@
       "enabled": true,
       "serviceCode": "FinanceBudget",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Budgeting.searchBudgetMaster"
     },
     {
@@ -13689,6 +13798,7 @@
       "enabled": true,
       "serviceCode": "FinanceBudget",
       "code": "null",
+      "leftIcon": "editor:insert_chart",
       "path": "Finance.Set-up.Budget Control Type.Create/Update-Budget Control Type"
     },
     {
