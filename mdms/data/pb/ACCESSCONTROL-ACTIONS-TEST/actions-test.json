@@ -13771,6 +13771,18 @@
       "code": "null",
       "path": "Finance.Reports.Budget Reports.Budget Upload Report",
       "navigationURL": "services/EGF/budgetuploadreport/search"
+    },
+    {
+      "id": 1772,
+      "name": "Apportion Service",
+      "url": "/apportion-service/v1/_apportion",
+      "parentModule": "",
+      "displayName": "Apportion Service",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-apportion-service",
+      "code": "null",
+      "path": ""
     }
   ]
 }
