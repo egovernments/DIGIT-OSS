@@ -13706,6 +13706,71 @@
       "leftIcon": "",
       "rightIcon": "",
       "queryParams": ""
+    },
+    {
+      "id": 1767,
+      "name": "departmentwiseBudgetReports_master",
+      "url": "",
+      "parentModule": "EGF",
+      "displayName": "Departmentwise Budget",
+      "orderNumber": 1,
+      "enabled": true,
+      "serviceCode": "FinanceReport",
+      "code": "null",
+      "path": "Finance.Reports.Budget Reports.Departmentwise Budget",
+      "navigationURL": "services/EGF/budget/budgetReport-departmentWiseReport.action"
+    },
+    {
+      "id": 1768,
+      "name": "functioniseBudgetReports_master",
+      "url": "",
+      "parentModule": "EGF",
+      "displayName": "Functionwise Budget",
+      "orderNumber": 2,
+      "enabled": true,
+      "serviceCode": "FinanceReport",
+      "code": "null",
+      "path": "Finance.Reports.Budget Reports.Functionwise Budget",
+      "navigationURL": "services/EGF/budget/budgetReport-functionwise.action"
+    },
+    {
+      "id": 1769,
+      "name": "budgetWatchRegister_master",
+      "url": "",
+      "parentModule": "EGF",
+      "displayName": "Budget Watch Register",
+      "orderNumber": 3,
+      "enabled": true,
+      "serviceCode": "FinanceReport",
+      "code": "null",
+      "path": "Finance.Reports.Budget Reports.Budget Watch Register",
+      "navigationURL": "services/EGF/report/budgetAppropriationRegisterReport.action"
+    },
+    {
+      "id": 1770,
+      "name": "budgetVarianceReport_master",
+      "url": "",
+      "parentModule": "EGF",
+      "displayName": "Budget Variance Report",
+      "orderNumber": 4,
+      "enabled": true,
+      "serviceCode": "FinanceReport",
+      "code": "null",
+      "path": "Finance.Reports.Budget Reports.Budget Variance Report",
+      "navigationURL": "services/EGF/report/budgetVarianceReport.action"
+    },
+    {
+      "id": 1771,
+      "name": "budgetUploadReport_master",
+      "url": "",
+      "parentModule": "EGF",
+      "displayName": "Budget Upload Report",
+      "orderNumber": 5,
+      "enabled": true,
+      "serviceCode": "FinanceReport",
+      "code": "null",
+      "path": "Finance.Reports.Budget Reports.Budget Upload Report",
+      "navigationURL": "services/EGF/budgetuploadreport/search"
     }
   ]
 }
