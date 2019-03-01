@@ -37,6 +37,24 @@
       "isDebit": false,
       "isActualDemand": true,
       "order": 99
+    },
+    {
+      "category": "ADVANCE_COLLECTION",
+      "service": "PT",
+      "name": "Pt advance collection",
+      "code": "PT_ADVANCE_COLLECTION",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": 100
+    },
+    {
+      "category": "ADVANCE_COLLECTION",
+      "service": "TL",
+      "name": "TL advance collection",
+      "code": "TL_ADVANCE_COLLECTION",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": 100
     }
   ]
 }
