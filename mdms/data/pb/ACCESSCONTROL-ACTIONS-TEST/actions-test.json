@@ -13885,7 +13885,7 @@
     {
       "id": 1772,
       "name": "Apportion Service",
-      "url": "/apportion-service/apportion/v1/_apportion",
+      "url": "/apportion-service/v1/_apportion",
       "parentModule": "",
       "displayName": "Apportion Service",
       "orderNumber": 0,
