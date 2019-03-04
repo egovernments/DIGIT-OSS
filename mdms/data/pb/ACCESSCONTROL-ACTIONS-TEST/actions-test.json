@@ -12817,7 +12817,7 @@
       "serviceCode": "Collections",
       "code": "null",
       "navigationURL": "services/collection/receipts/receipt-newform.action?Receipt=Misc#no-back-button",
-      "leftIcon": "editor:collections",
+      "leftIcon": "image:collections",
       "path": "Collections.Miscellaneous Receipts"
     },
     {
@@ -12843,7 +12843,7 @@
       "serviceCode": "Collections",
       "code": "null",
       "navigationURL": "services/collection/receipts/searchReceipt.action",
-      "leftIcon": "editor:collections",
+      "leftIcon": "image:collections",
       "path": "Collections.Search Receipts"
     },
     {
@@ -12905,7 +12905,7 @@
       "serviceCode": "Collections",
       "code": "null",
       "navigationURL": "services/collection/receipts/bankRemittance-newform.action",
-      "leftIcon": "editor:collections",
+      "leftIcon": "image:collections",      
       "path": "Collections.Cash Remittance"
     },
     {
@@ -12966,7 +12966,7 @@
       "serviceCode": "Collections",
       "code": "null",
       "navigationURL": "services/collection/receipts/chequeRemittance-newform.action",
-      "leftIcon": "editor:collections",
+      "leftIcon": "image:collections",  
       "path": "Collections.Cheque Remittance"
     },
     {
@@ -12980,7 +12980,7 @@
       "serviceCode": "Collections",
       "code": "null",
       "navigationURL": "services/collection/service/serviceTypeToBankAccountMapping-newform.action",
-      "leftIcon": "editor:collections",
+      "leftIcon": "image:collections",
       "path": "Collections.Administration.Create Bankaccount Mapping"
     },
     {
@@ -12994,7 +12994,7 @@
       "serviceCode": "Collections",
       "code": "null",
       "navigationURL": "services/collection/service/serviceTypeToBankAccountMapping-list.action",
-      "leftIcon": "editor:collections",
+      "leftIcon": "image:collections",
       "path": "Collections.Administration.View Bankaccount Mapping"
     },
     {
@@ -13029,7 +13029,7 @@
       "serviceCode": "COLLECTIONS",
       "code": "null",
       "navigationURL": "report/finance/ReceiptRegister",
-      "leftIcon": "editor:collections",
+      "leftIcon": "image:collections",
       "path": "Collections.Reports.Receipt Register "
     },
     {
@@ -13228,7 +13228,7 @@
       "serviceCode": "COLLECTIONS",
       "code": "null",
       "navigationURL": "report/finance/BankRemittance",
-      "leftIcon": "editor:collections",
+      "leftIcon": "image:collections",
       "path": "Collections.Reports.Bank Remittance"
     },
     {
