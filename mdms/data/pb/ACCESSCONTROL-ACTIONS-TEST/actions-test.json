@@ -13995,7 +13995,7 @@
       "queryParams": ""
     },
     {
-      "id": 1778,
+      "id": 1779,
       "name": "rainmaker-common-hrms",
       "url": "",
       "displayName": "",
@@ -14005,8 +14005,8 @@
       "serviceCode": "",
       "code": "",
       "path": "",
-      "navigationURL": "tradelicence/search",
-      "leftIcon": "places:business-center",
+      "navigationURL": "hrms/search",
+      "leftIcon": "social:people",
       "rightIcon": "",
       "queryParams": ""
     }
