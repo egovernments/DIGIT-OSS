@@ -4620,7 +4620,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-REPORTS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Collection.Collection Reports.GetReportData"
     },
     {
@@ -4632,7 +4632,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-REPORTS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Collection.Collection Reports.GetReportMetadata"
     },
     {
@@ -4644,7 +4644,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-REPORTS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Collection.Collection Reports.ReloadReport"
     },
     {
@@ -4657,7 +4657,7 @@
       "enabled": false,
       "serviceCode": "Workflow_MS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Workflow_MS.designationsMSSearch"
     },
     {
@@ -6010,7 +6010,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Collection.Collection Transactions.StartWorkflow"
     },
     {
@@ -6022,7 +6022,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Collection.Collection Transactions.UpdateWorkflow"
     },
     {
@@ -6072,7 +6072,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Collection.Collection Transactions.UpdateReceipt"
     },
     {
@@ -6237,7 +6237,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Collection.Collection Transactions.GetDistinctCollectedBy"
     },
     {
@@ -6249,7 +6249,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Collection.Collection Transactions.Collection status"
     },
     {
@@ -6261,7 +6261,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Collection.Collection Transactions.Business Details"
     },
     {
@@ -6273,7 +6273,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Collection.Collection Transactions.Chart Of Accounts"
     },
     {
@@ -6307,7 +6307,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-MASTERS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Collection.Collection Masters.GetBusinessTypes"
     },
     {
@@ -6436,7 +6436,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-REPORTS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Collection.Collection Reports.ReportMetaData"
     },
     {
@@ -6449,7 +6449,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-REPORTS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Collection.Collection Reports.ReportGet"
     },
     {
@@ -6968,7 +6968,7 @@
       "enabled": false,
       "serviceCode": "COLLECTION-TRANSACTIONS",
       "code": "null",
-      "leftIcon":"editor:collections",
+      "leftIcon": "editor:collections",
       "path": "Collection.Collection Transactions.LegacyCreateReceipt"
     },
     {
@@ -10930,7 +10930,7 @@
       "code": "false",
       "path": "Property Tax.PT Masters.PropertySubType",
       "navigationURL": "mdms/PropertyTax/PropertySubType ",
-      "leftIcon": "custom:dashboard-complaint"
+      "leftIcon": "action:store"
     },
     {
       "id": 1548,
@@ -12905,7 +12905,7 @@
       "serviceCode": "Collections",
       "code": "null",
       "navigationURL": "services/collection/receipts/bankRemittance-newform.action",
-      "leftIcon": "image:collections",      
+      "leftIcon": "image:collections",
       "path": "Collections.Cash Remittance"
     },
     {
@@ -12966,7 +12966,7 @@
       "serviceCode": "Collections",
       "code": "null",
       "navigationURL": "services/collection/receipts/chequeRemittance-newform.action",
-      "leftIcon": "image:collections",  
+      "leftIcon": "image:collections",
       "path": "Collections.Cheque Remittance"
     },
     {
@@ -13066,7 +13066,7 @@
       "code": "null",
       "path": "Dashboard.W&S.ConsumersDashboard",
       "navigationURL": "dashboard/ws-consumers",
-      "leftIcon": "action:assignment",
+      "leftIcon": "av:web",
       "rightIcon": ""
     },
     {
@@ -13081,7 +13081,7 @@
       "code": "null",
       "path": "Dashboard.W&S.CollectionsTrend",
       "navigationURL": "dashboard/ws-collectionstrend",
-      "leftIcon": "action:assignment",
+      "leftIcon": "av:web",
       "rightIcon": ""
     },
     {
@@ -13096,7 +13096,7 @@
       "code": "null",
       "path": "Dashboard.W&S.Collections",
       "navigationURL": "dashboard/ws-collections",
-      "leftIcon": "action:assignment",
+      "leftIcon": "av:web",
       "rightIcon": ""
     },
     {
@@ -13111,7 +13111,7 @@
       "code": "null",
       "path": "Dashboard.W&S.FinancialIndicators",
       "navigationURL": "dashboard/ws-financialindicators",
-      "leftIcon": "action:assignment",
+      "leftIcon": "av:web",
       "rightIcon": ""
     },
     {
@@ -13901,6 +13901,114 @@
       "serviceCode": "egov-apportion-service",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1773,
+      "name": "HRMS",
+      "url": "url",
+      "displayName": "Search",
+      "orderNumber": 2,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "HRMS",
+      "code": "null",
+      "navigationURL": "hrms/search",
+      "path": "HRMS.Search",
+      "leftIcon": "social:people"
+    },
+    {
+      "id": 1774,
+      "name": "HRMS",
+      "url": "url",
+      "displayName": "Create",
+      "orderNumber": 2,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "HRMS",
+      "code": "null",
+      "navigationURL": "hrms/create",
+      "path": "HRMS.Create",
+      "leftIcon": "social:people"
+    },
+    {
+      "id": 1775,
+      "name": "rainmaker-common-complaints",
+      "url": "",
+      "displayName": "",
+      "orderNumber": 2,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "",
+      "path": "",
+      "navigationURL": "all-complaints",
+      "leftIcon": "action:announcement",
+      "rightIcon": "",
+      "queryParams": ""
+    },
+    {
+      "id": 1776,
+      "name": "rainmaker-common-propertytax",
+      "url": "",
+      "displayName": "",
+      "orderNumber": 2,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "",
+      "path": "",
+      "navigationURL": "property-tax",
+      "leftIcon": "action:store",
+      "rightIcon": "",
+      "queryParams": ""
+    },
+    {
+      "id": 1777,
+      "name": "rainmaker-common-finance",
+      "url": "",
+      "displayName": "",
+      "orderNumber": 2,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "",
+      "path": "",
+      "navigationURL": "services/EGF/inbox",
+      "leftIcon": "editor:insert-chart",
+      "rightIcon": "",
+      "queryParams": ""
+    },
+    {
+      "id": 1778,
+      "name": "rainmaker-common-tradelicence",
+      "url": "",
+      "displayName": "",
+      "orderNumber": 2,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "",
+      "path": "",
+      "navigationURL": "tradelicence/search",
+      "leftIcon": "places:business-center",
+      "rightIcon": "",
+      "queryParams": ""
+    },
+    {
+      "id": 1778,
+      "name": "rainmaker-common-hrms",
+      "url": "",
+      "displayName": "",
+      "orderNumber": 2,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "",
+      "path": "",
+      "navigationURL": "tradelicence/search",
+      "leftIcon": "places:business-center",
+      "rightIcon": "",
+      "queryParams": ""
     }
   ]
 }
