@@ -17521,6 +17521,12 @@
       "actionid": 1779,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "DGRO",
+      "actionid": 1752,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
