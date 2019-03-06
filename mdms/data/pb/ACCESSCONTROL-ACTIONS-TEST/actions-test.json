@@ -13906,7 +13906,7 @@
       "id": 1773,
       "name": "HRMS",
       "url": "url",
-      "displayName": "Search",
+      "displayName": "Search Employee",
       "orderNumber": 2,
       "parentModule": "",
       "enabled": true,
@@ -13914,20 +13914,6 @@
       "code": "null",
       "navigationURL": "hrms/search",
       "path": "HRMS.Search",
-      "leftIcon": "social:people"
-    },
-    {
-      "id": 1774,
-      "name": "HRMS",
-      "url": "url",
-      "displayName": "Create",
-      "orderNumber": 2,
-      "parentModule": "",
-      "enabled": true,
-      "serviceCode": "HRMS",
-      "code": "null",
-      "navigationURL": "hrms/create",
-      "path": "HRMS.Create",
       "leftIcon": "social:people"
     },
     {
