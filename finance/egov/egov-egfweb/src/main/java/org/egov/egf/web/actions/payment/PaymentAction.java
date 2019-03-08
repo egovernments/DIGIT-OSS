@@ -1075,10 +1075,10 @@ public class PaymentAction extends BasePaymentAction {
         EmployeeInfo employee = microserviceUtils.getEmployeeByPositionId(paymentheader.getState().getOwnerPosition());
         if (FinancialConstants.BUTTONREJECT.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
             addActionMessage(getText("payment.voucher.rejected", new String[] {
-                    employee != null ? employee.getUser().getName() : "" }));
+                    employee != null ? employee.getName() : "" }));
         if (FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
             addActionMessage(getMessage("payment.voucher.approved", new String[] {
-                    employee != null ? employee.getUser().getName() : "" }));
+                    employee != null ? employee.getName() : "" }));
         if (FinancialConstants.BUTTONCANCEL.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
             addActionMessage(getText("payment.voucher.cancelled"));
         else if (FinancialConstants.BUTTONAPPROVE.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
@@ -1467,7 +1467,7 @@ public class PaymentAction extends BasePaymentAction {
                  * paymentheader.getVoucherheader().getDescription());
                  */
                 addActionMessage(getMessage("payment.voucher.approved", new String[] {
-                        employee != null ? employee.getUser().getName() : "" }));
+                        employee != null ? employee.getName() : "" }));
             } else {
                 if (LOGGER.isDebugEnabled())
                     LOGGER.debug("Completed updateAdvancePayment.");
