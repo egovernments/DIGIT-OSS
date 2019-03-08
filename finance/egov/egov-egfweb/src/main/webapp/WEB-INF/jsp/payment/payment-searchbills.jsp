@@ -62,7 +62,8 @@
 	src="/services/EGF/resources/javascript/tabber2.js?rnd=${app_release_no}"></script>
 </head>
 <script>
-
+var mode="";
+var selectedRowsArr=new Array();
 function validateTab(indexx)
 {
 	if(indexx==0)
@@ -144,10 +145,9 @@ function checkMiscAttributes(obj)
 }
 function check()                   
 {
-
-	
-    
-   
+	resetSelectedRowsId('contingentList','selectedContingentRows');
+	resetSelectedRowsId('contractorList','selectedContractorRows');
+	resetSelectedRowsId('supplierList','selectedSupplierRows');
 	var rtgsMode = document.getElementById("rtgsDefaultMode").value;
 	//var restrictionDate = document.getElementById("paymentRestrictionDateForCJV").value;
 	var restrictionDateForCJV = document.getElementById("rtgsModeRestrictionDateForCJV").value;
@@ -174,10 +174,11 @@ function check()
 			bootbox.alert("Mode of payment for contractor bills should only be RTGS");
 			return false;
 		}	
-       addSelectedToForm2();   
+       addSelectedToForm2();
+       disableSelectedRows();
 		document.form2.action='${pageContext.request.contextPath}/payment/payment-save.action';
 		document.form2.submit();
-	}	             
+	}             
 	if(document.getElementById('miscount').value==0)
 	{
 		bootbox.alert('Please select a bill before making the payment');
@@ -186,6 +187,10 @@ function check()
 	if(document.getElementById('vouchermis.departmentid'))
 		document.getElementById('vouchermis.departmentid').disabled=false;
     addSelectedToForm2();  
+    if(document.getElementById("paymentMode").value!="cash")
+	{
+    	disableSelectedRows();
+	} 
 	document.form2.action='${pageContext.request.contextPath}/payment/payment-save.action';
 	document.form2.submit();
 	return true;
@@ -446,9 +451,8 @@ for (i = 0; i < length; i++){
 {
 var k=document.getElementsByName(field+'['+i+'].isSelected')[0].parentNode.parentNode.innerHTML;
 k="<tr>"+k+"</tr>";
-console.log(k);
 document.getElementById("exp2").innerHTML=document.getElementById("exp2").innerHTML+k;
-console.log(document.getElementById("exp2").innerHTML);
+//console.log(document.getElementById("exp2").innerHTML);
 }
 }
  document.getElementById("sup2").innerHTML="";
@@ -479,7 +483,7 @@ document.getElementById("con2").innerHTML=document.getElementById("con2").innerH
 
 document.getElementById("search").innerHTML="";
 document.getElementById("search").innerHTML=document.getElementById("searchtab").innerHTML;
-console.log(document.getElementById("exp2").innerHTML);
+//console.log(document.getElementById("exp2").innerHTML);
 } 
  
 function checkSupplierForSameMisAttribs(obj,len)
@@ -627,6 +631,72 @@ function checkContingentForSameMisAttribs(obj,len)
 		     </s:if>	  
 		   }
 		   return expcount;
+}
+
+function resetSelectedRowsId(billTypeObj,selectedRowsId){
+	
+	if(document.getElementById("paymentMode").value!="cash")
+		{
+		var	length = 0;
+		if(billTypeObj == "contingentList"){
+			length = <s:property value="%{contingentList.size()}"/>;
+			}
+		if(billTypeObj == "contractorList"){
+			length = <s:property value="%{contractorList.size()}"/>;
+			}
+		if(billTypeObj == "supplierList"){
+			length = <s:property value="%{supplierList.size()}"/>;
+			}
+	selectedRowsArr = new Array();
+		for(var index=0;index<length;index++){
+			var isChecked = document.getElementsByName(billTypeObj+"["+index+"].isSelected")[0].checked;
+			if(isChecked){
+			var deptName = document.getElementsByName(billTypeObj+"["+index+"].deptName")[0];
+			deptName = deptName == undefined || deptName == 'undefined' == 'undefined'? '' : deptName.value;
+			var functionName = document.getElementsByName(billTypeObj+"["+index+"].functionName")[0];
+			functionName = functionName == undefined || functionName == 'undefined' ? '' : functionName.value;
+			var schemeName = document.getElementsByName(billTypeObj+"["+index+"].schemeName")[0];
+			schemeName = schemeName == schemeName || schemeName == 'undefined'? '' : schemeName.value;
+			var subschemeName = document.getElementsByName(billTypeObj+"["+index+"].subschemeName")[0];
+			subschemeName = subschemeName == undefined || subschemeName == 'undefined'? '' : subschemeName.value;
+				selectedRowsArr.push(
+			document.getElementsByName(billTypeObj+"["+index+"].csBillId")[0].value+"~"+
+			document.getElementsByName("__checkbox_"+billTypeObj+"["+index+"].isSelected")[0].value+"~"+
+			document.getElementsByName(billTypeObj+"["+index+"].expType")[0].value+"~"+
+			document.getElementsByName(billTypeObj+"["+index+"].billNumber")[0].value+"~"+
+			document.getElementsByName(billTypeObj+"["+index+"].billDate")[0].value+"~"+
+			document.getElementsByName(billTypeObj+"["+index+"].billVoucherNumber")[0].value+"~"+
+			document.getElementsByName(billTypeObj+"["+index+"].billVoucherId")[0].value+"~"+
+			document.getElementsByName(billTypeObj+"["+index+"].billVoucherDate")[0].value+"~"+
+			document.getElementsByName(billTypeObj+"["+index+"].payTo")[0].value+"~"+
+			document.getElementsByName(billTypeObj+"["+index+"].netAmt")[0].value+"~"+
+			document.getElementsByName(billTypeObj+"["+index+"].earlierPaymentAmt")[0].value+"~"+
+			document.getElementsByName(billTypeObj+"["+index+"].payableAmt")[0].value+"~"+
+			document.getElementsByName(billTypeObj+"["+index+"].paymentAmt")[0].value+"~"+
+			deptName+"~"+functionName+"~"+schemeName+"~"+subschemeName+";");
+			}
+		}
+		document.getElementById(selectedRowsId).value = selectedRowsArr;
+}
+}
+
+function disableSelectedRows()
+{
+			for(var i=0;i<document.form2.length;i++)
+				{
+					if(document.form2.elements[i].name != 'billNumber' && document.form2.elements[i].name != 'toDate' && 
+						document.form2.elements[i].name != 'fromDate' && document.form2.elements[i].name != 'paymentMode' &&
+						document.form2.elements[i].name != 'expType' && document.form2.elements[i].name != 'fundId' &&
+						document.form2.elements[i].name != 'vouchermis.schemeid' && document.form2.elements[i].name != 'vouchermis.subschemeid' && 
+						document.form2.elements[i].name != 'vouchermis.departmentcode' && document.form2.elements[i].name != 'vouchermis.function' && 
+						document.form2.elements[i].name != 'miscount' && document.form2.elements[i].name != 'miscattributes' &&
+						document.form2.elements[i].name != 'rtgsDefaultMode' && document.form2.elements[i].name != 'rtgsModeRestrictionDateForCJV' &&
+						document.form2.elements[i].name != 'paymentRestrictionDateForCJV' && document.form2.elements[i].name != 'selectedContingentRows' &&
+						document.form2.elements[i].name != 'selectedContractorRows' && document.form2.elements[i].name != 'selectedSupplierRows' &&
+						document.form2.elements[i].name != 'selectedRows'){
+						document.form2.elements[i].disabled =true;
+					}					
+				}	
 }
 /*function defaultModeOfPayment()
 {
@@ -1314,7 +1384,13 @@ function checkContingentForSameMisAttribs(obj,len)
 					</tr>
 	
 					<tr>
-						<td colspan="2" class="buttonbottomnew" align="center"><br> <input
+						<td colspan="2" class="buttonbottomnew" align="center"><br> 
+					<s:hidden id="selectedContingentRows" name="selectedContingentRows" value="%{selectedContingentRows}" />
+					<s:hidden id="selectedContractorRows" name="selectedContractorRows" value="%{selectedContractorRows}" />
+					<s:hidden id="selectedSupplierRows" name="selectedSupplierRows" value="%{selectedSupplierRows}" />
+					<s:hidden id="selectedRows" name="selectedRows" value="%{selectedRows}" />
+					<s:hidden id="paymentMode" name="paymentMode" value="%{paymentMode}" />
+						<input
 							type="button" class="buttonsubmit" value="Generate Payment"
 							id="generatePayment" onclick="return check();" /></td>
 					</tr>

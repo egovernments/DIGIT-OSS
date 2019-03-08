@@ -135,6 +135,9 @@ public class PaymentAction extends BasePaymentAction {
     private int miscount = 0;
     private boolean isDepartmentDefault;
     private BigDecimal balance;
+    private String selectedContingentRows;
+    private String selectedContractorRows;
+    private String selectedSupplierRows;
     @Autowired
     private EgwStatusHibernateDAO egwStatusHibernateDAO;
     private Paymentheader paymentheader = new Paymentheader();
@@ -790,6 +793,9 @@ public class PaymentAction extends BasePaymentAction {
             }
         try {
             final String paymentMd = parameters.get("paymentMode")[0];
+                contingentList = prepareBillTypeList(contingentList,selectedContingentRows);
+                contractorList = prepareBillTypeList(contractorList,selectedContractorRows);
+                supplierList = prepareBillTypeList(supplierList,selectedSupplierRows);
             if (LOGGER.isDebugEnabled())
                 LOGGER.debug("Starting generatePayment...");
             if (LOGGER.isInfoEnabled())
@@ -879,6 +885,47 @@ public class PaymentAction extends BasePaymentAction {
             addActionMessage(getText("payment.bankbalance.controltype"));
         return "form";
 
+    }
+    
+    
+
+    private List<PaymentBean> prepareBillTypeList(List<PaymentBean> typeOfBillList,String selectedRowsRequest){
+        // TODO Auto-generated method stub
+        typeOfBillList = new ArrayList<>();
+        String[] selectedRows = selectedRowsRequest.split(";,");
+        if(!selectedRowsRequest.isEmpty())
+        for(String selectedRow : selectedRows){
+            PaymentBean paymentBean = new PaymentBean();
+            try {
+                    String[] columns = selectedRow.split("~");
+                    paymentBean.setCsBillId(Long.parseLong(columns[0]));
+                    paymentBean.setExpType(columns[2]);
+                    paymentBean.setBillNumber(columns[3]);
+                    paymentBean.setBillDate(formatter.parse(columns[4]));
+                    paymentBean.setBillVoucherDate(formatter.parse(columns[7]));
+                    paymentBean.setBillVoucherNumber(columns[5]);
+                    paymentBean.setBillVoucherId(Long.parseLong(columns[6]));
+                    paymentBean.setPayTo(columns[8]);
+                    paymentBean.setNetAmt(new BigDecimal(columns[9]));
+                    paymentBean.setEarlierPaymentAmt(new BigDecimal(columns[10]));
+                    paymentBean.setPayableAmt(new BigDecimal(columns[11]));
+                    paymentBean.setPaymentAmt(new BigDecimal(columns[12]));
+                    paymentBean.setDeptName(columns[13]);
+                    paymentBean.setFunctionName(columns[14]);
+                    paymentBean.setSchemeName(columns[15]);
+                    String subschemeName = columns[16].contains(";") ? columns[16].replace(";", "") : columns[16];
+                    paymentBean.setSubschemeName(subschemeName);
+            } catch (ParseException | ArrayIndexOutOfBoundsException | NumberFormatException e) {
+                // TODO Auto-generated catch block
+                if (LOGGER.isDebugEnabled())
+                    LOGGER.debug("Exception caught in prepareBillTypeList method : "+e.getMessage());
+                else{
+                    e.printStackTrace();
+                }
+            }
+            typeOfBillList.add(paymentBean);
+    }
+        return typeOfBillList;
     }
 
     private String populateBillListFor(final List<PaymentBean> list, String ids) {
@@ -1028,10 +1075,10 @@ public class PaymentAction extends BasePaymentAction {
         EmployeeInfo employee = microserviceUtils.getEmployeeByPositionId(paymentheader.getState().getOwnerPosition());
         if (FinancialConstants.BUTTONREJECT.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
             addActionMessage(getText("payment.voucher.rejected", new String[] {
-                    employee != null ? employee.getName() : "" }));
+                    employee != null ? employee.getUser().getName() : "" }));
         if (FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
             addActionMessage(getMessage("payment.voucher.approved", new String[] {
-                    employee != null ? employee.getName() : "" }));
+                    employee != null ? employee.getUser().getName() : "" }));
         if (FinancialConstants.BUTTONCANCEL.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
             addActionMessage(getText("payment.voucher.cancelled"));
         else if (FinancialConstants.BUTTONAPPROVE.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
@@ -1420,7 +1467,7 @@ public class PaymentAction extends BasePaymentAction {
                  * paymentheader.getVoucherheader().getDescription());
                  */
                 addActionMessage(getMessage("payment.voucher.approved", new String[] {
-                        employee != null ? employee.getName() : "" }));
+                        employee != null ? employee.getUser().getName() : "" }));
             } else {
                 if (LOGGER.isDebugEnabled())
                     LOGGER.debug("Completed updateAdvancePayment.");
@@ -2216,5 +2263,31 @@ public class PaymentAction extends BasePaymentAction {
     public void setCutOffDate(final String cutOffDate) {
         this.cutOffDate = cutOffDate;
     }
+
+    public String getSelectedContingentRows() {
+        return selectedContingentRows;
+    }
+
+    public void setSelectedContingentRows(String selectedContingentRows) {
+        this.selectedContingentRows = selectedContingentRows;
+    }
+
+    public String getSelectedContractorRows() {
+        return selectedContractorRows;
+    }
+
+    public void setSelectedContractorRows(String selectedContractorRows) {
+        this.selectedContractorRows = selectedContractorRows;
+    }
+
+    public String getSelectedSupplierRows() {
+        return selectedSupplierRows;
+    }
+
+    public void setSelectedSupplierRows(String selectedSupplierRows) {
+        this.selectedSupplierRows = selectedSupplierRows;
+    }
+
+    
 
 }
