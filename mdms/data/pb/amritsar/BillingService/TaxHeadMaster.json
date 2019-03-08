@@ -57,11 +57,11 @@
       "order": 100
     },
     {
-      "category": "EXEMPTION",
+      "category": "REBATE",
       "service": "PT",
       "name": "Pt time based rebate",
       "code": "PT_TIME_REBATE",
-      "isDebit": false,
+      "isDebit": true,
       "isActualDemand": true,
       "order": 99
     },
@@ -70,7 +70,7 @@
       "service": "PT",
       "name": "Pt advance collection",
       "code": "PT_ADVANCE_COLLECTION",
-      "isDebit": false,
+      "isDebit": true,
       "isActualDemand": true,
       "order": 100
     },
@@ -79,7 +79,7 @@
       "service": "TL",
       "name": "TL advance collection",
       "code": "TL_ADVANCE_COLLECTION",
-      "isDebit": false,
+      "isDebit": true,
       "isActualDemand": true,
       "order": 100
     },
@@ -88,7 +88,7 @@
       "service": "PT",
       "name": "Pt unit usage exemption",
       "code": "PT_UNIT_USAGE_EXEMPTION",
-      "isDebit": false,
+      "isDebit": true,
       "isActualDemand": true,
       "order": 2
     },
@@ -97,16 +97,16 @@
       "service": "PT",
       "name": "Pt owner usage exemption",
       "code": "PT_OWNER_EXEMPTION",
-      "isDebit": false,
+      "isDebit": true,
       "isActualDemand": true,
       "order": 3
     },
     {
-      "category": "EXEMPTION",
+      "category": "REBATE",
       "service": "PT",
       "name": "Pt adhoc rebate",
       "code": "PT_ADHOC_REBATE",
-      "isDebit": false,
+      "isDebit": true,
       "isActualDemand": true,
       "order": 1
     },
@@ -124,7 +124,7 @@
       "service": "PT",
       "name": "Pt decimal debit",
       "code": "PT_DECIMAL_CEILING_DEBIT",
-      "isDebit": false,
+      "isDebit": true,
       "isActualDemand": true,
       "order": 1
     }
