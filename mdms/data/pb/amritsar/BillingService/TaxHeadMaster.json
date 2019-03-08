@@ -14,6 +14,24 @@
     {
       "category": "TAX",
       "service": "PT",
+      "name": "Pt time interest",
+      "code": "PT_TIME_INTEREST",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": 100
+    },
+    {
+      "category": "TAX",
+      "service": "PT",
+      "name": "Pt time penalty",
+      "code": "PT_TIME_PENALTY",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": 100
+    },
+    {
+      "category": "TAX",
+      "service": "PT",
       "name": "propertytax",
       "code": "PT_TAX",
       "isDebit": false,
@@ -27,14 +45,23 @@
       "code": "PT_FIRE_CESS",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 1
+      "order": 100
     },
     {
-      "category": "EXEMPTION",
+      "category": "TAX",
+      "service": "PT",
+      "name": "Pt cancer cess",
+      "code": "PT_CANCER_CESS",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": 100
+    },
+    {
+      "category": "REBATE",
       "service": "PT",
       "name": "Pt time based rebate",
       "code": "PT_TIME_REBATE",
-      "isDebit": false,
+      "isDebit": true,
       "isActualDemand": true,
       "order": 99
     },
@@ -43,7 +70,7 @@
       "service": "PT",
       "name": "Pt advance collection",
       "code": "PT_ADVANCE_COLLECTION",
-      "isDebit": false,
+      "isDebit": true,
       "isActualDemand": true,
       "order": 100
     },
@@ -52,9 +79,54 @@
       "service": "TL",
       "name": "TL advance collection",
       "code": "TL_ADVANCE_COLLECTION",
+      "isDebit": true,
+      "isActualDemand": true,
+      "order": 100
+    },
+    {
+      "category": "EXEMPTION",
+      "service": "PT",
+      "name": "Pt unit usage exemption",
+      "code": "PT_UNIT_USAGE_EXEMPTION",
+      "isDebit": true,
+      "isActualDemand": true,
+      "order": 2
+    },
+    {
+      "category": "EXEMPTION",
+      "service": "PT",
+      "name": "Pt owner usage exemption",
+      "code": "PT_OWNER_EXEMPTION",
+      "isDebit": true,
+      "isActualDemand": true,
+      "order": 3
+    },
+    {
+      "category": "REBATE",
+      "service": "PT",
+      "name": "Pt adhoc rebate",
+      "code": "PT_ADHOC_REBATE",
+      "isDebit": true,
+      "isActualDemand": true,
+      "order": 1
+    },
+    {
+      "category": "TAX",
+      "service": "PT",
+      "name": "Pt decimal credit",
+      "code": "PT_DECIMAL_CEILING_CREDIT",
       "isDebit": false,
       "isActualDemand": true,
       "order": 100
+    },
+    {
+      "category": "EXEMPTION",
+      "service": "PT",
+      "name": "Pt decimal debit",
+      "code": "PT_DECIMAL_CEILING_DEBIT",
+      "isDebit": true,
+      "isActualDemand": true,
+      "order": 1
     }
   ]
 }
