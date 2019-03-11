@@ -13828,7 +13828,7 @@
     {
       "id": 1767,
       "name": "departmentwiseBudgetReports_master",
-      "url": "",
+      "url": "url",
       "parentModule": "EGF",
       "displayName": "Departmentwise Budget",
       "orderNumber": 1,
@@ -13842,7 +13842,7 @@
     {
       "id": 1768,
       "name": "functioniseBudgetReports_master",
-      "url": "",
+      "url": "url",
       "parentModule": "EGF",
       "displayName": "Functionwise Budget",
       "orderNumber": 2,
@@ -13856,7 +13856,7 @@
     {
       "id": 1769,
       "name": "budgetWatchRegister_master",
-      "url": "",
+      "url": "url",
       "parentModule": "EGF",
       "displayName": "Budget Watch Register",
       "orderNumber": 3,
@@ -13870,7 +13870,7 @@
     {
       "id": 1770,
       "name": "budgetVarianceReport_master",
-      "url": "",
+      "url": "url",
       "parentModule": "EGF",
       "displayName": "Budget Variance Report",
       "orderNumber": 4,
@@ -13884,7 +13884,7 @@
     {
       "id": 1771,
       "name": "budgetUploadReport_master",
-      "url": "",
+      "url": "url",
       "parentModule": "EGF",
       "displayName": "Budget Upload Report",
       "orderNumber": 5,
