@@ -173,7 +173,7 @@ function check()
 		{
 			bootbox.alert("Mode of payment for contractor bills should only be RTGS");
 			return false;
-		}	
+		}
        addSelectedToForm2();
        disableSelectedRows();
 		document.form2.action='${pageContext.request.contextPath}/payment/payment-save.action';
@@ -186,11 +186,8 @@ function check()
 	}
 	if(document.getElementById('vouchermis.departmentid'))
 		document.getElementById('vouchermis.departmentid').disabled=false;
-    addSelectedToForm2();  
-    if(document.getElementById("paymentMode").value!="cash")
-	{
-    	disableSelectedRows();
-	} 
+    addSelectedToForm2();
+    disableSelectedRows();
 	document.form2.action='${pageContext.request.contextPath}/payment/payment-save.action';
 	document.form2.submit();
 	return true;
@@ -634,9 +631,6 @@ function checkContingentForSameMisAttribs(obj,len)
 }
 
 function resetSelectedRowsId(billTypeObj,selectedRowsId){
-	
-	if(document.getElementById("paymentMode").value!="cash")
-		{
 		var	length = 0;
 		if(billTypeObj == "contingentList"){
 			length = <s:property value="%{contingentList.size()}"/>;
@@ -677,7 +671,6 @@ function resetSelectedRowsId(billTypeObj,selectedRowsId){
 			}
 		}
 		document.getElementById(selectedRowsId).value = selectedRowsArr;
-}
 }
 
 function disableSelectedRows()
@@ -1389,7 +1382,6 @@ function disableSelectedRows()
 					<s:hidden id="selectedContractorRows" name="selectedContractorRows" value="%{selectedContractorRows}" />
 					<s:hidden id="selectedSupplierRows" name="selectedSupplierRows" value="%{selectedSupplierRows}" />
 					<s:hidden id="selectedRows" name="selectedRows" value="%{selectedRows}" />
-					<s:hidden id="paymentMode" name="paymentMode" value="%{paymentMode}" />
 						<input
 							type="button" class="buttonsubmit" value="Generate Payment"
 							id="generatePayment" onclick="return check();" /></td>
