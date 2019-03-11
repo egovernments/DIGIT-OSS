@@ -13836,7 +13836,8 @@
       "serviceCode": "FinanceReport",
       "code": "null",
       "path": "Finance.Reports.Budget Reports.Departmentwise Budget",
-      "navigationURL": "services/EGF/budget/budgetReport-departmentWiseReport.action"
+      "navigationURL": "services/EGF/budget/budgetReport-departmentWiseReport.action",
+      "leftIcon": "editor:insert-chart"
     },
     {
       "id": 1768,
@@ -13849,7 +13850,8 @@
       "serviceCode": "FinanceReport",
       "code": "null",
       "path": "Finance.Reports.Budget Reports.Functionwise Budget",
-      "navigationURL": "services/EGF/budget/budgetReport-functionwise.action"
+      "navigationURL": "services/EGF/budget/budgetReport-functionwise.action",
+      "leftIcon": "editor:insert-chart"
     },
     {
       "id": 1769,
@@ -13862,7 +13864,8 @@
       "serviceCode": "FinanceReport",
       "code": "null",
       "path": "Finance.Reports.Budget Reports.Budget Watch Register",
-      "navigationURL": "services/EGF/report/budgetAppropriationRegisterReport.action"
+      "navigationURL": "services/EGF/report/budgetAppropriationRegisterReport.action",
+      "leftIcon": "editor:insert-chart"
     },
     {
       "id": 1770,
@@ -13875,7 +13878,8 @@
       "serviceCode": "FinanceReport",
       "code": "null",
       "path": "Finance.Reports.Budget Reports.Budget Variance Report",
-      "navigationURL": "services/EGF/report/budgetVarianceReport.action"
+      "navigationURL": "services/EGF/report/budgetVarianceReport.action",
+      "leftIcon": "editor:insert-chart"
     },
     {
       "id": 1771,
@@ -13888,7 +13892,8 @@
       "serviceCode": "FinanceReport",
       "code": "null",
       "path": "Finance.Reports.Budget Reports.Budget Upload Report",
-      "navigationURL": "services/EGF/budgetuploadreport/search"
+      "navigationURL": "services/EGF/budgetuploadreport/search",
+      "leftIcon": "editor:insert-chart"
     },
     {
       "id": 1772,
