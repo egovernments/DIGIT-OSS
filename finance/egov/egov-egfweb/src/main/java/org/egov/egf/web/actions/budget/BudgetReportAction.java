@@ -60,11 +60,11 @@ import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.service.EisCommonService;
 import org.egov.infra.admin.master.entity.AppConfigValues;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
@@ -318,7 +318,7 @@ public class BudgetReportAction extends BaseFormAction {
         String sql = "";
         sql = " bd.budget.financialYear=" + budgetReport.getFinancialYear().getId();
         if (budgetReport.getDepartment() != null && budgetReport.getDepartment().getId() != null)
-            sql = sql + " and bd.executingDepartment.id=" + budgetReport.getDepartment().getId();
+            sql = sql + " and bd.executingDepartment='" + budgetReport.getDepartment().getCode()+"'";
         if (budgetReport.getFunction() != null && budgetReport.getFunction().getId() != null)
             sql = sql + " and bd.function.id=" + budgetReport.getFunction().getId();
         return sql;
@@ -782,7 +782,7 @@ public class BudgetReportAction extends BaseFormAction {
             }
         }
         if (dept != null && dept.getId() != null)
-            miscQuery = miscQuery + " and bd.executingDepartment.id=" + dept.getId();
+            miscQuery = miscQuery + " and bd.executingDepartment='" + dept.getCode()+"'";
         if (function != null && function.getId() != null)
             miscQuery = miscQuery + " and bd.function.id=" + function.getId();
         List<Object[]> amountList = getPersistenceService()
@@ -792,7 +792,7 @@ public class BudgetReportAction extends BaseFormAction {
                                 + ") ,"
                                 + ""
                                 + floatingColumn
-                                + ",bd.executingDepartment.id,bd.function.id,bd.budgetGroup.minCode.type,bd.id from BudgetDetail bd where "
+                                + ",bd.executingDepartment,bd.function.id,bd.budgetGroup.minCode.type,bd.id from BudgetDetail bd where "
                                 + "bd.budget.financialYear=? and bd.budget.state in (from org.egov.infra.workflow.entity.State where type='Budget' and value='"
                                 + finalStatus
                                 + "' ) "
@@ -801,10 +801,10 @@ public class BudgetReportAction extends BaseFormAction {
                                 + isBERE
                                 + "' group by substr(bd.budgetGroup.minCode.glcode,0,"
                                 + majorCodeLength
-                                + "),bd.executingDepartment.id,"
+                                + "),bd.executingDepartment,"
                                 + "bd.function.id,bd.budgetGroup.minCode.type,bd.id order by  substr(bd.budgetGroup.minCode.glcode,0,"
                                 + majorCodeLength
-                                + "),bd.executingDepartment.id,bd.function.id", finyear);
+                                + "),bd.executingDepartment,bd.function.id", finyear);
         BigDecimal reAppropriationAmt = BigDecimal.ZERO;
         for (final Object[] obj : amountList)
             if (obj[0] != null && obj[1] != null && obj[2] != null && obj[3] != null && obj[4] != null
@@ -822,13 +822,13 @@ public class BudgetReportAction extends BaseFormAction {
                                 + majorCodeLength
                                 + ") ,"
                                 + floatingColumn
-                                + ",bd.executingDepartment.id,bd.function.id,bd.budgetGroup.majorCode.type,bd.id from BudgetDetail bd where bd.budget.financialYear=? and bd.budget.state in (from org.egov.infra.workflow.entity.State where type='Budget' and value='"
+                                + ",bd.executingDepartment,bd.function.id,bd.budgetGroup.majorCode.type,bd.id from BudgetDetail bd where bd.budget.financialYear=? and bd.budget.state in (from org.egov.infra.workflow.entity.State where type='Budget' and value='"
                                 + finalStatus
                                 + "' )  and bd.budget.isbere='"
                                 + isBERE
                                 + "' group by substr(bd.budgetGroup.majorCode.glcode,0,"
                                 + majorCodeLength
-                                + "),bd.executingDepartment.id,bd.function.id,bd.budgetGroup.majorCode.type,bd.id order by  substr(bd.budgetGroup.majorCode.glcode,0,"
+                                + "),bd.executingDepartment,bd.function.id,bd.budgetGroup.majorCode.type,bd.id order by  substr(bd.budgetGroup.majorCode.glcode,0,"
                                 + majorCodeLength + ")", finyear);
         for (final Object[] obj : amountList)
             if (obj[0] != null && obj[1] != null && obj[2] != null && obj[3] != null && obj[4] != null
@@ -848,7 +848,7 @@ public class BudgetReportAction extends BaseFormAction {
         final String floatingColumn = "sum(bd.approvedAmount)";
 
         if (dept != null && dept.getId() != null)
-            miscQuery = miscQuery + " and bd.executingDepartment.id=" + dept.getId();
+            miscQuery = miscQuery + " and bd.executingDepartment='" + dept.getCode()+"'";
         if (function != null && function.getId() != null)
             miscQuery = miscQuery + " and bd.function.id=" + function.getId();
         final List<Object[]> amountList = getPersistenceService()
@@ -858,7 +858,7 @@ public class BudgetReportAction extends BaseFormAction {
                                 + ") ,"
                                 + ""
                                 + floatingColumn
-                                + ",bd.executingDepartment.id,bd.function.id,bd.budgetGroup.minCode.type,bd.id from BudgetDetail bd where "
+                                + ",bd.executingDepartment,bd.function.id,bd.budgetGroup.minCode.type,bd.id from BudgetDetail bd where "
                                 + "bd.budget.financialYear=? and( bd.state.value ='END'  or bd.state.owner=?) and bd.budget=?"
                                 +
                                 miscQuery
@@ -866,10 +866,10 @@ public class BudgetReportAction extends BaseFormAction {
                                 + isBERE
                                 + "' group by substr(bd.budgetGroup.minCode.glcode,0,"
                                 + majorCodeLength
-                                + "),bd.executingDepartment.id,"
+                                + "),bd.executingDepartment,"
                                 + "bd.function.id,bd.budgetGroup.minCode.type,bd.id order by  substr(bd.budgetGroup.minCode.glcode,0,"
                                 + majorCodeLength
-                                + "),bd.executingDepartment.id,bd.function.id", finyear, pos, topBudget);
+                                + "),bd.executingDepartment,bd.function.id", finyear, pos, topBudget);
         BigDecimal reAppropriationAmt = BigDecimal.ZERO;
         for (final Object[] obj : amountList)
             if (obj[0] != null && obj[1] != null && obj[2] != null && obj[3] != null && obj[4] != null
@@ -884,10 +884,10 @@ public class BudgetReportAction extends BaseFormAction {
         /*
          * amountList = getPersistenceService() .findAllBy( "select substr(bd.budgetGroup.majorCode.glcode,0," + majorCodeLength +
          * ") ," + floatingColumn +
-         * ",bd.executingDepartment.id,bd.function.id,bd.budgetGroup.majorCode.type,bd.id from BudgetDetail bd where bd.budget.financialYear=? and bd.budget.state in (from org.egov.infra.workflow.entity.State where type='Budget' and value='"
+         * ",bd.executingDepartment,bd.function.id,bd.budgetGroup.majorCode.type,bd.id from BudgetDetail bd where bd.budget.financialYear=? and bd.budget.state in (from org.egov.infra.workflow.entity.State where type='Budget' and value='"
          * + finalStatus + "' )  and bd.budget.isbere='"+isBERE+"' group by substr(bd.budgetGroup.majorCode.glcode,0," +
          * majorCodeLength +
-         * "),bd.executingDepartment.id,bd.function.id,bd.budgetGroup.majorCode.type,bd.id order by  substr(bd.budgetGroup.majorCode.glcode,0,"
+         * "),bd.executingDepartment,bd.function.id,bd.budgetGroup.majorCode.type,bd.id order by  substr(bd.budgetGroup.majorCode.glcode,0,"
          * + majorCodeLength + ")", finyear); for (Object[] obj : amountList) { if (obj[0] != null && obj[1] != null && obj[2] !=
          * null && obj[3] != null && obj[4] != null &&
          * !(BigDecimal.ZERO.compareTo(BigDecimal.valueOf(Double.valueOf(obj[1].toString())))==0)) { reAppropriationAmt =
@@ -912,15 +912,15 @@ public class BudgetReportAction extends BaseFormAction {
                                 + ") ,"
                                 + ""
                                 + floatingColumn
-                                + ",bd.executingDepartment.id,bd.function.id,bd.budgetGroup.minCode.type,bd.budgetGroup.minCode.glcode,bd.id from BudgetDetail bd where "
+                                + ",bd.executingDepartment,bd.function.id,bd.budgetGroup.minCode.type,bd.budgetGroup.minCode.glcode,bd.id from BudgetDetail bd where "
                                 + " "
                                 + miscQuery
                                 + workFlowstateCondn
                                 + " and bd.budget.isbere='RE' group by substr(bd.budgetGroup.minCode.glcode,0,"
                                 + majorCodeLength
-                                + "),bd.executingDepartment.id,"
+                                + "),bd.executingDepartment,"
                                 + "bd.function.id,bd.budgetGroup.minCode.type,bd.budgetGroup.minCode.glcode,bd.id order by  substr(bd.budgetGroup.minCode.glcode,0,"
-                                + majorCodeLength + "),bd.executingDepartment.id,bd.function.id");
+                                + majorCodeLength + "),bd.executingDepartment,bd.function.id");
 
         amountListForRE
                 .addAll(getPersistenceService()
@@ -929,12 +929,12 @@ public class BudgetReportAction extends BaseFormAction {
                                         + majorCodeLength
                                         + ") ,"
                                         + floatingColumn
-                                        + ",bd.executingDepartment.id,bd.function.id,bd.budgetGroup.majorCode.type,bd.id from BudgetDetail bd where "
+                                        + ",bd.executingDepartment,bd.function.id,bd.budgetGroup.majorCode.type,bd.id from BudgetDetail bd where "
                                         + miscQuery
                                         + workFlowstateCondn
                                         + "  and bd.budget.isbere='RE'  group by substr(bd.budgetGroup.majorCode.glcode,0,"
                                         + majorCodeLength
-                                        + "),bd.executingDepartment.id,bd.function.id,bd.budgetGroup.majorCode.type,bd.budgetGroup.majorCode.glcode,bd.budgetGroup.minCode.glcode,bd.id order by  substr(bd.budgetGroup.majorCode.glcode,0,"
+                                        + "),bd.executingDepartment,bd.function.id,bd.budgetGroup.majorCode.type,bd.budgetGroup.majorCode.glcode,bd.budgetGroup.minCode.glcode,bd.id order by  substr(bd.budgetGroup.majorCode.glcode,0,"
                                         + majorCodeLength + ")"));
         miscQuery = getSqlForFinYearBE(financialYearForBE.getId());
 
@@ -950,15 +950,15 @@ public class BudgetReportAction extends BaseFormAction {
                                 + ""
                                 + floatingColumn
 
-                                + ",bd.executingDepartment.id,bd.function.id,bd.budgetGroup.minCode.type,bd.budgetGroup.minCode.glcode,bd.id from BudgetDetail bd where "
+                                + ",bd.executingDepartment,bd.function.id,bd.budgetGroup.minCode.type,bd.budgetGroup.minCode.glcode,bd.id from BudgetDetail bd where "
                                 + " "
                                 + miscQuery
                                 + workFlowstateCondn
                                 + "   and bd.budget.isbere='BE'  group by substr(bd.budgetGroup.minCode.glcode,0,"
                                 + majorCodeLength
-                                + "),bd.executingDepartment.id,"
+                                + "),bd.executingDepartment,"
                                 + "bd.function.id,bd.budgetGroup.minCode.type,bd.budgetGroup.minCode.glcode,bd.id order by  substr(bd.budgetGroup.minCode.glcode,0,"
-                                + majorCodeLength + "),bd.executingDepartment.id,bd.function.id");
+                                + majorCodeLength + "),bd.executingDepartment,bd.function.id");
         amountListForBE
                 .addAll(getPersistenceService()
                         .findAllBy(
@@ -967,12 +967,12 @@ public class BudgetReportAction extends BaseFormAction {
                                         + ") ,"
                                         + floatingColumn
 
-                                        + ",bd.executingDepartment.id,bd.function.id,bd.budgetGroup.majorCode.type,bd.budgetGroup.majorCode.glcode,bd.id from BudgetDetail bd where "
+                                        + ",bd.executingDepartment,bd.function.id,bd.budgetGroup.majorCode.type,bd.budgetGroup.majorCode.glcode,bd.id from BudgetDetail bd where "
                                         + miscQuery
                                         + workFlowstateCondn
                                         + "   and bd.budget.isbere='BE'  group by substr(bd.budgetGroup.majorCode.glcode,0,"
                                         + majorCodeLength
-                                        + "),bd.executingDepartment.id,bd.function.id,bd.budgetGroup.majorCode.type,bd.budgetGroup.majorCode.glcode,bd.id order by  substr(bd.budgetGroup.majorCode.glcode,0,"
+                                        + "),bd.executingDepartment,bd.function.id,bd.budgetGroup.majorCode.type,bd.budgetGroup.majorCode.glcode,bd.id order by  substr(bd.budgetGroup.majorCode.glcode,0,"
                                         + majorCodeLength + ")"));
 
         // Merge both and set to budget Report
@@ -1171,11 +1171,10 @@ public class BudgetReportAction extends BaseFormAction {
     }
 
     protected void setRelatedEntitesOn() {
-        if (budgetReport.getDepartment() == null || budgetReport.getDepartment().getId() == null)
+        if (budgetReport.getDepartment() == null || budgetReport.getDepartment().getCode() == null)
             budgetReport.setDepartment(null);
         else
-            budgetReport.setDepartment((Department) getPersistenceService().find("from Department where id=?",
-                    budgetReport.getDepartment().getId()));
+            budgetReport.setDepartment(microserviceUtils.getDepartmentByCode(budgetReport.getDepartment().getCode()));
 
         if (budgetReport.getFinancialYear() != null)
             budgetReport.setFinancialYear((CFinancialYear) getPersistenceService().find("from CFinancialYear where id=?",
@@ -1285,8 +1284,8 @@ public class BudgetReportAction extends BaseFormAction {
         final String finalStatus = getFinalStatus();
         final String isBeRe = getBudgetType(finalStatus);
         String deptQuery = "";
-        if (budgetReport.getDepartment() != null && budgetReport.getDepartment().getId() != null)
-            deptQuery = " and bd.executingDepartment.id=" + budgetReport.getDepartment().getId().toString();
+        if (budgetReport.getDepartment() != null && budgetReport.getDepartment().getCode() != null && budgetReport.getDepartment().getCode() != "" && !"".equals(budgetReport.getDepartment().getCode()))
+            deptQuery = " and bd.executingDepartment='" + budgetReport.getDepartment().getCode()+"'";
         getBudgetReappropriationAmt();
         final String budgetType = BudgetReport.getValueFor(budgetReport.getType());
         if (budgetType != null && !"ALL".equals(budgetReport.getType()))
@@ -1486,7 +1485,7 @@ public class BudgetReportAction extends BaseFormAction {
                                 + deptQuery + " and bd.budget.isbere='"
                                 + budgetType
                                 + "' and bd.budget.status.code ='" + finalStatus + "' "
-                                + getQueryForSelectedType(code) + "  order by bd.executingDepartment.name,bd.budgetGroup."
+                                + getQueryForSelectedType(code) + "  order by bd.budgetGroup."
                                 + code + ".glcode").list();
         budgetDetails.addAll(results);
     }
@@ -1964,7 +1963,7 @@ public class BudgetReportAction extends BaseFormAction {
         String sql = "";
         sql = " bd.budget.financialYear.id=" + finYearForRE;
         if (budgetReport.getDepartment() != null && budgetReport.getDepartment().getId() != null)
-            sql = sql + " and bd.executingDepartment.id=" + budgetReport.getDepartment().getId();
+            sql = sql + " and bd.executingDepartment='" + budgetReport.getDepartment().getCode()+"'";
         if (budgetReport.getFunction() != null && budgetReport.getFunction().getId() != null)
             sql = sql + " and bd.function.id=" + budgetReport.getFunction().getId();
         if (topBudget != null)
@@ -1977,7 +1976,7 @@ public class BudgetReportAction extends BaseFormAction {
         String sql = "";
         sql = " bd.budget.financialYear.id=" + finYearForRE;
         if (budgetReport.getDepartment() != null && budgetReport.getDepartment().getId() != null)
-            sql = sql + " and bd.executingDepartment.id=" + budgetReport.getDepartment().getId();
+            sql = sql + " and bd.executingDepartment=" + budgetReport.getDepartment().getCode()+"'";
         if (budgetReport.getFunction() != null && budgetReport.getFunction().getId() != null)
             sql = sql + " and bd.function.id=" + budgetReport.getFunction().getId();
         if (topBudget != null)

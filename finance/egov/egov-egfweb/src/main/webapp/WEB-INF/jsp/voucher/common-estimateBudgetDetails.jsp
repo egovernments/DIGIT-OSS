@@ -44,4 +44,11 @@
   ~
   ~   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
   ~
-  --%>{ "ResultSet": { "Result":[<s:iterator var="s" value="budgetDetailList" status="status"> {"Text":"<s:property value="%{name}" />","Value":"<s:property value="%{id}" />"}<s:if test="!#status.last">,</s:if></s:iterator>] } }
+  --%>
+  <s:if test="%{!listOfDepartments.isEmpty()}">
+  { "ResultSet": { "Result":[<s:iterator var="s" value="listOfDepartments" status="status"> {"Text":"<s:property value="%{name}" />","Value":"<s:property value="%{code}" />"}<s:if test="!#status.last">,</s:if></s:iterator>] } }
+  </s:if>
+  <s:else>
+  { "ResultSet": { "Result":[<s:iterator var="s" value="budgetDetailList" status="status"> {"Text":"<s:property value="%{name}" />","Value":"<s:property value="%{id}" />"}<s:if test="!#status.last">,</s:if></s:iterator>] } }
+  </s:else>
+  

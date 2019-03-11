@@ -61,15 +61,16 @@ import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.dao.budget.BudgetDetailsDAO;
 import org.egov.egf.model.BudgetAppDisplay;
 import org.egov.infra.admin.master.entity.AppConfigValues;
-import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.budget.BudgetDetail;
 import org.egov.model.budget.BudgetGroup;
+import org.egov.services.budget.BudgetDetailService;
 import org.egov.services.budget.BudgetService;
 import org.egov.utils.BudgetDetailConfig;
 import org.egov.utils.BudgetingType;
@@ -138,11 +139,42 @@ public class BudgetAppropriationRegisterReportAction extends BaseFormAction {
     private EgovMasterDataCaching masterDataCache;
     @Autowired
     private BudgetDetailConfig budgetDetailConfig;
+    @Autowired
+    private BudgetDetailService budgetDetailService;
 
     public BudgetAppropriationRegisterReportAction() {
         addRelatedEntity(Constants.FUNCTION, CFunction.class);
         addRelatedEntity(Constants.EXECUTING_DEPARTMENT, Department.class);
         addRelatedEntity(Constants.FUND, Fund.class);
+        addRelatedEntity(Constants.FUND, Fund.class);
+    }
+    private void populateSelectedData() {
+        // TODO Auto-generated method stub
+        if (fund.getId() != null && fund.getId() != -1){
+            fund = (Fund) persistenceService.find("from Fund where id=?", fund.getId());
+            if (department.getCode() != null && department.getCode() != 0+""){
+                department = microserviceUtils.getDepartmentByCode(department.getCode());
+                ArrayList<Department> listOfDepartments = new ArrayList<Department>();
+                List<String> deptCodeList = budgetDetailService.getDepartmentFromBudgetDetailByFundId(fund.getId());
+                if(deptCodeList != null && !deptCodeList.isEmpty()){
+                    deptCodeList.stream().forEach(bd -> {
+                    listOfDepartments.add(microserviceUtils.getDepartmentByCode(bd));
+                    });
+                }
+                dropdownData.put("executingDepartmentList",listOfDepartments);
+                if (function.getId() != null && function.getId() != -1){
+                    function = (CFunction) persistenceService.find("from CFunction where id=?", function.getId());
+                    List<BudgetDetail> functionList = budgetDetailService.getFunctionFromBudgetDetailByDepartmentId(department.getCode());
+                    dropdownData.put("functionList", functionList);
+                    if (budgetGroup.getId() != null && budgetGroup.getId() != -1){
+                        budgetGroup = (BudgetGroup) persistenceService.find("from BudgetGroup where id=?", budgetGroup.getId());
+                        List<BudgetDetail> budgetDetailList = budgetDetailService.getBudgetDetailByFunctionId(function.getId());
+                        dropdownData.put("budgetGroupList", budgetDetailList);
+                    }
+                }
+            }
+        }
+        
     }
 
     @Override
@@ -153,14 +185,7 @@ public class BudgetAppropriationRegisterReportAction extends BaseFormAction {
         dropdownData.put("executingDepartmentList",Collections.EMPTY_LIST);
         dropdownData.put("budgetGroupList", Collections.EMPTY_LIST);
         dropdownData.put("fundList", masterDataCache.get("egi-fund"));
-        if (department.getId() != null && department.getId() != -1)
-            department = (Department) persistenceService.find("from Department where id=?", department.getId());
-        if (function.getId() != null && function.getId() != -1)
-            function = (CFunction) persistenceService.find("from CFunction where id=?", function.getId());
-        if (fund.getId() != null && fund.getId() != -1)
-            fund = (Fund) persistenceService.find("from Fund where id=?", fund.getId());
-        if (budgetGroup.getId() != null && budgetGroup.getId() != -1)
-            budgetGroup = (BudgetGroup) persistenceService.find("from BudgetGroup where id=?", budgetGroup.getId());
+        populateSelectedData();
     }
 
     @ReadOnly
@@ -199,6 +224,7 @@ public class BudgetAppropriationRegisterReportAction extends BaseFormAction {
         generateReport();
         return "result";
     }
+
 
     private void generateReport() {
         CFinancialYear financialYr = new CFinancialYear();

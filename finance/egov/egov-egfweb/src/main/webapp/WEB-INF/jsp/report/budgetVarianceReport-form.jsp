@@ -77,7 +77,7 @@ function getData(){
 		bootbox.alert("Please enter a valid date")
 		return false;
 	}
-	document.budgetVarianceReport.action='/EGF/report/budgetVarianceReport-loadData.action?asOnDate='+asOnDate;
+	document.budgetVarianceReport.action='/services/EGF/report/budgetVarianceReport-loadData.action?asOnDate='+asOnDate;
 	document.budgetVarianceReport.submit();  
 	return true;
 }
@@ -89,8 +89,8 @@ function exportXls(){
 	var budgetGroup =  document.getElementById('budgetGroup').value;
 	var functionId =  document.getElementById('function').value;
 	var fund = document.getElementById('fund').value;
-	window.open('/EGF/report/budgetVarianceReport-exportXls.action?asOnDate='+asOnDate+'&accountType='+accountType+
-			'&budgetDetail.budgetGroup.id='+budgetGroup+'&budgetDetail.fund.id='+fund+'&budgetDetail.executingDepartment.id='
+	window.open('/services/EGF/report/budgetVarianceReport-exportXls.action?asOnDate='+asOnDate+'&accountType='+accountType+
+			'&budgetDetail.budgetGroup.id='+budgetGroup+'&budgetDetail.fund.id='+fund+'&budgetDetail.executingDepartment='
 			+departmentid+'&budgetDetail.function.id='+functionId,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
 }
 
@@ -101,8 +101,8 @@ function exportPdf(){
 	var budgetGroup =  document.getElementById('budgetGroup').value;
 	var functionId =  document.getElementById('function').value;
 	var fund = document.getElementById('fund').value;
-	window.open('/EGF/report/budgetVarianceReport-exportPdf.action?asOnDate='+asOnDate+'&accountType='+accountType+
-			'&budgetDetail.budgetGroup.id='+budgetGroup+'&budgetDetail.fund.id='+fund+'&budgetDetail.executingDepartment.id='
+	window.open('/services/EGF/report/budgetVarianceReport-exportPdf.action?asOnDate='+asOnDate+'&accountType='+accountType+
+			'&budgetDetail.budgetGroup.id='+budgetGroup+'&budgetDetail.fund.id='+fund+'&budgetDetail.executingDepartment='
 			+departmentid+'&budgetDetail.function.id='+functionId,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
 }
 
@@ -177,8 +177,8 @@ function resetSubmit()
 							class="mandatory1">*</span></td>
 						<td class="bluebox"><s:select name="executingDepartment"
 								id="executingDepartment" list="dropdownData.departmentList"
-								listKey="id" listValue="name" headerKey="-1"
-								value="%{budgetDetail.executingDepartment.id}"
+								listKey="code" listValue="name" headerKey="-1"
+								value="%{budgetDetail.executingDepartment}"
 								headerValue="----Choose----" /></td>
 					</s:if>
 					<s:if test="%{isFieldMandatory('function')}">
@@ -278,9 +278,9 @@ function resetSubmit()
 			<div class="buttonbottom">
 				<input type="submit" value="Search" class="buttonsubmit"
 					onclick="return getData();" /> &nbsp <input name="button"
-					type="submit" class="button" id="button" value="Cancel"
+					type="submit" class="button" id="button" value="Reset"
 					onclick="resetSubmit();" /> <input type="button" value="Close"
-					onclick="javascript:window.close()" class="button" />
+					onclick="window.parent.postMessage('close','*');window.close();" class="button" />
 			</div>
 	</div>
 

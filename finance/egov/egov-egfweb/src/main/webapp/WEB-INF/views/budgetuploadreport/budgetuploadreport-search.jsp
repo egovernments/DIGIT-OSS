@@ -100,12 +100,12 @@
 							<label class="col-sm-2 control-label text-right"><spring:message
 									code="lbl.department" /> </label>
 							<div class="col-sm-3 add-margin">
-								<form:select path="department.id" id="department.id"
+								<form:select path="department.code" id="department.code"
 									cssClass="form-control" cssErrorClass="form-control error">
 									<form:option value="">
 										<spring:message code="lbl.select" />
 									</form:option>
-									<form:options items="${departments}" itemValue="id"
+									<form:options items="${departments}" itemValue="code"
 										itemLabel="name" />
 								</form:select>
 								<form:errors path="department" cssClass="error-msg" />

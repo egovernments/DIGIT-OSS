@@ -101,6 +101,7 @@ import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.Department;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infstr.services.PersistenceService;
@@ -261,6 +262,7 @@ public class CommonAction extends BaseFormAction {
     private Long functionId;
     @Autowired
     private BudgetDetailService budgetDetailService;
+    private ArrayList<Department> listOfDepartments;
 
     public String getSerialNo() {
         return serialNo;
@@ -3548,8 +3550,15 @@ public class CommonAction extends BaseFormAction {
 
     @Action(value = "/voucher/common-ajaxLoadEstimateBudgetDetailsByFundId")
     public String ajaxLoadEstimateBudgetDetailsByFundId() {
+        List<String> deptCodeList = null;
         if (fundId != null && fundId != 0)
-            budgetDetailList = budgetDetailService.getDepartmentFromBudgetDetailByFundId(fundId);
+            deptCodeList = budgetDetailService.getDepartmentFromBudgetDetailByFundId(fundId);
+        listOfDepartments = new ArrayList<Department>();
+        if(deptCodeList != null && !deptCodeList.isEmpty()){
+            deptCodeList.stream().forEach(bd -> {
+            listOfDepartments.add(microserviceUtils.getDepartmentByCode(bd));
+            });
+        }
         return "estimateBudgetDetails";
     }
 
@@ -4083,5 +4092,15 @@ public class CommonAction extends BaseFormAction {
     public void setBudgetDetailList(List<BudgetDetail> budgetDetailList) {
         this.budgetDetailList = budgetDetailList;
     }
+
+    public ArrayList<Department> getListOfDepartments() {
+        return listOfDepartments;
+    }
+
+    public void setListOfDepartments(ArrayList<Department> listOfDepartments) {
+        this.listOfDepartments = listOfDepartments;
+    }
+    
+    
 
 }

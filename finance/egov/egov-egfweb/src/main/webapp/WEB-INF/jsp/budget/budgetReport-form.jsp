@@ -70,9 +70,9 @@
 				headerValue="----Select----" value="%{model.financialYear.id}" /></td>
 		<td class="greybox"><s:text name="report.department" /></td>
 		<td class="greybox"><s:select name="department" id="department"
-				list="dropdownData.departmentList" listKey="id" listValue="name"
+				list="dropdownData.departmentList" listKey="code" listValue="name"
 				headerKey="0" headerValue="----Select----"
-				value="%{model.department.id}" /></td>
+				value="%{model.department.code}" /></td>
 	</tr>
 	<tr>
 		<td class="bluebox" width="5%" />

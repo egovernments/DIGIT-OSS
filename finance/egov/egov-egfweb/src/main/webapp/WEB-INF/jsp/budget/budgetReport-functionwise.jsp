@@ -66,9 +66,9 @@
 				<s:submit value="Search" cssClass="buttonsubmit"
 					onclick="return validateFinYear('getFunctionwiseReport');" />
 					<s:reset name="button" type="submit" cssClass="button" id="button"
-					value="Cancel" />
+					value="Reset" />
 				<input type="button" value="Close"
-					onclick="javascript:window.close()" class="button" />
+					onclick="window.parent.postMessage('close','*');window.close();" class="button" />
 			</div>
 		</div>
 	</s:form>

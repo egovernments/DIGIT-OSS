@@ -123,7 +123,7 @@ function generateReport(){
 	if(isValid == false)
 		return false;
 
-	document.budgetAppropriationRegister.action='/EGF/report/budgetAppropriationRegisterReport-search.action';
+	document.budgetAppropriationRegister.action='/services/EGF/report/budgetAppropriationRegisterReport-search.action';
 	document.budgetAppropriationRegister.submit();  
 }
 </script>
@@ -145,7 +145,7 @@ function generateReport(){
 						</s:if></td>
 					<td class="bluebox"><s:select list="dropdownData.fundList"
 							listKey="id" listValue="name" name="fund.id" headerKey="0"
-							headerValue="--- Select ---" value="fund" id="fund"
+							headerValue="--- Select ---" value="fund.id" id="fund"
 							onChange="populateDepartment(this);"></s:select></td>
 
 					<egov:ajaxdropdown id="department" fields="['Text','Value']"
@@ -156,9 +156,9 @@ function generateReport(){
 							<span class="mandatory1">*</span>
 						</s:if></td>
 					<td class="bluebox"><s:select
-							list="dropdownData.executingDepartmentList" listKey="id"
-							listValue="name" name="department.id" headerKey="0"
-							headerValue="--- Select ---" value="department.id"
+							list="dropdownData.executingDepartmentList" listKey="code"
+							listValue="name" name="department.code" headerKey="0"
+							headerValue="--- Select ---" value="department.code"
 							id="department" onChange="populateFunction(this);"></s:select></td>
 
 
@@ -193,7 +193,7 @@ function generateReport(){
 					<td class="greybox">As on Date:<span class="mandatory1">*</span></td>
 					<td class="greybox"><s:date name="asOnDate" var="asOnDate"
 							format="dd/MM/yyyy" /> <s:textfield id="asOnDate"
-							name="asOnDate" value="%{asOnDate}"
+							name="asOnDate" value="%{strAsOnDate}"
 							onkeyup="DateFormat(this,this.value,event,false,'3')"
 							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
 							data-inputmask="'mask': 'd/m/y'" /></td>
@@ -205,9 +205,9 @@ function generateReport(){
 				<input type="submit" value="Search" class="buttonsubmit"
 					onclick="return generateReport()" /> &nbsp;
 				<s:reset name="button" type="submit" cssClass="button" id="button"
-					value="Cancel" />
+					value="Reset" />
 				<input type="button" value="Close"
-					onclick="javascript:window.close()" class="button" />
+					onclick="window.parent.postMessage('close','*');window.close();" class="button" />
 			</div>
 			<input type="hidden" name="accountNumber.id" id="accountNumber.id" />
 	</div>

@@ -85,7 +85,7 @@
 <body>
 	<div id="container">
 		<iframe id="report" name="report"
-			src='/EGF/budget/budgetReport-ajaxGenerateDepartmentWiseHtml.action?model.financialYear.id=<s:property value="model.financialYear.id"/>&model.department.id=<s:property value="model.department.id"/>&model.type=<s:property value="model.type"/>'></iframe>
+			src='/services/EGF/budget/budgetReport-ajaxGenerateDepartmentWiseHtml.action?model.financialYear.id=<s:property value="model.financialYear.id"/>&model.department.code=<s:property value="model.department.code"/>&model.type=<s:property value="model.type"/>'></iframe>
 	</div>
 
 	<s:form name="budgetDetailReportForm" action="budgetReport"

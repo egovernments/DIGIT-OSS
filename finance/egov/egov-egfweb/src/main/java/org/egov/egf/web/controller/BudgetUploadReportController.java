@@ -54,6 +54,7 @@ import org.egov.commons.dao.FunctionDAO;
 import org.egov.commons.dao.FundHibernateDAO;
 import org.egov.egf.web.adaptor.BudgetUploadReportJsonAdaptor;
 import org.egov.infra.admin.master.service.DepartmentService;
+import org.egov.infstr.utils.EgovMasterDataCaching;
 import org.egov.model.budget.Budget;
 import org.egov.model.budget.BudgetUploadReport;
 import org.egov.model.service.BudgetUploadReportService;
@@ -91,15 +92,17 @@ public class BudgetUploadReportController {
 	@Autowired
 	@Qualifier("budgetDetailService")
 	private BudgetDetailService budgetDetailService;
+	@Autowired
+	private EgovMasterDataCaching masterDataCache;
 
 	private void prepareNewForm(Model model) {
 		model.addAttribute("budgets", budgetService.getBudgetsForUploadReport());
 		model.addAttribute("funds", fundDAO.findAllActiveIsLeafFunds());
-		model.addAttribute("departments", departmentService.getAllDepartments());
+		model.addAttribute("departments", masterDataCache.get("egi-department"));
 		model.addAttribute("functions", functionDAO.getAllActiveFunctions());
 	}
 
-	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	@RequestMapping(value = "/search", method = {RequestMethod.GET,RequestMethod.POST})
 	public String search(Model model) {
 		BudgetUploadReport budgetUploadReport = new BudgetUploadReport();
 		prepareNewForm(model);

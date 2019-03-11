@@ -49,7 +49,7 @@ package org.egov.egf.web.actions.budget;
 
 import org.egov.commons.CFinancialYear;
 import org.egov.commons.CFunction;
-import org.egov.infra.admin.master.entity.Department;
+import org.egov.infra.microservice.models.Department;
 
 import java.util.HashMap;
 import java.util.Map;
