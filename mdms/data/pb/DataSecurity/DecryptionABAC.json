@@ -1,0 +1,76 @@
+{
+    "tenantId" : "pb",
+    "moduleName" : "DataSecurity",
+    "DecryptionABAC" : [
+        {
+          "objectStructureId": "PGR-Complaints-Report",
+          "roleAttributeAccessList": [
+            {
+              "roleCode": "LME",
+              "attributeAccessList": [
+                {
+                  "attribute": {
+                    "jsonPath": "User/name"
+                  },
+                  "accessType": "PLAIN"
+                },
+                {
+                  "attribute": {
+                    "jsonPath": "User/mobileNumber"
+                  },
+                  "accessType": "PLAIN"
+                }
+              ]
+            },
+            {
+              "roleCode": "GRO",
+              "attributeAccessList": [
+                {
+                  "attribute": {
+                    "jsonPath": "User/name"
+                  },
+                  "accessType": "PLAIN"
+                },
+                {
+                  "attribute": {
+                    "jsonPath": "User/mobileNumber",
+                    "maskingTechnique": "mobile"
+                  },
+                  "accessType": "MASK"
+                },
+                {
+                  "attribute" : {
+                    "jsonPath" : "User/userName"
+                  },
+                  "accessType": "NONE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "objectStructureId": "PT-Report",
+          "roleAttributeAccessList": [
+            {
+              "roleCode" : "PTCOL",
+              "attributeAccessList" : [
+                {
+                  "attribute": {
+                    "jsonPath": "*/owner/name"
+                  },
+                  "accessType": "PLAIN"
+                },
+                {
+                  "attribute": {
+                    "jsonPath": "*/owner/mobileNumber",
+                    "maskingTechnique": "mobile"
+                  },
+                  "accessType": "MASK"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+
+}

@@ -1,0 +1,32 @@
+{
+    "tenantId" : "pb",
+    "moduleName" : "DataSecurity",
+    "EncryptionPolicy" : [
+        {
+            "key" : "UserCreate",
+            "attributeList" : [
+                {
+                    "jsonPath" : "User/name",
+                    "type" : "Normal"
+                },
+                {
+                    "jsonPath" : "User/mobileNumber",
+                    "type" : "Normal"
+                }
+            ]
+        },
+        {
+            "key" : "UserSearch",
+            "attributeList" : [
+                {
+                    "jsonPath" : "SearchCriteria/name",
+                    "type" : "Normal"
+                },
+                {
+                    "jsonPath" : "SearchCriteria/mobileNumber",
+                    "type" : "Normal"
+                }
+            ]
+        }
+    ]
+}
