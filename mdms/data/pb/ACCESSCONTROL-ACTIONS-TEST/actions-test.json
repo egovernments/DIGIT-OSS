@@ -14072,6 +14072,33 @@
       "serviceCode": "BILLING_SERVICE",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1788,
+      "name": "CreateReceipt",
+      "url": "/collection-services-v1/receipts/_create",
+      "displayName": "Create Receipt",
+      "serviceCode": "COLLECTION_SERVICE",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1789,
+      "name": "UpdateReceipt",
+      "url": "/collection-services-v1/receipts/_update",
+      "displayName": "Update Receipt",
+      "serviceCode": "COLLECTION_SERVICE",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1790,
+      "name": "SearchReceipt",
+      "url": "/collection-services-v1/receipts/_search",
+      "displayName": "Receipt Search",
+      "serviceCode": "COLLECTION_SERVICE",
+      "code": "null",
+      "path": ""
     }
   ]
 }
