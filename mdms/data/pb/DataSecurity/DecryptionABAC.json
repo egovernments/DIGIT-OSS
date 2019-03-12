@@ -2,369 +2,363 @@
     "tenantId" : "pb",
     "moduleName" : "DataSecurity",
     "DecryptionABAC" : [
-  {
-    "key": "PGR-Complaints-Report",
-    "roleAttributeAccessList": [
       {
-        "roleCode": "LME",
-        "attributeAccessList": [
+        "key" : "User",
+        "roleAttributeAccessList" : [
           {
-            "attribute": {
-              "jsonPath": "User/name"
-            },
-            "accessType": "PLAIN"
+            "roleCode" : "CITIZEN",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "mobileNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "emailId"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "username"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "altContactNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "pan"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "aadhaarNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "guardian"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "permanentAddress/address"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "correspondenceAddress/address"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "addresses/*/address"
+                },
+                "accessType" : "PLAIN"
+              }
+            ]
           },
           {
-            "attribute": {
-              "jsonPath": "User/mobileNumber"
-            },
-            "accessType": "PLAIN"
+            "roleCode" : "EMPLOYEE",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "mobileNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "emailId"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "username"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "altContactNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "pan"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "aadhaarNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "guardian"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "permanentAddress/address"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "correspondenceAddress/address"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "addresses/*/address"
+                },
+                "accessType" : "PLAIN"
+              }
+            ]
           }
         ]
       },
       {
-        "roleCode": "GRO",
-        "attributeAccessList": [
+        "key" : "UserList",
+        "roleAttributeAccessList" : [
           {
-            "attribute": {
-              "jsonPath": "User/name"
-            },
-            "accessType": "PLAIN"
+            "roleCode" : "CITIZEN",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "*/name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/mobileNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/emailId"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/username"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/altContactNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/pan"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/aadhaarNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/guardian"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/permanentAddress/address"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/correspondenceAddress/address"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/addresses/*/address"
+                },
+                "accessType" : "PLAIN"
+              }
+            ]
           },
           {
-            "attribute": {
-              "jsonPath": "User/mobileNumber",
-              "maskingTechnique": "mobile"
-            },
-            "accessType": "MASK"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "User/userName"
-            },
-            "accessType": "NONE"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "key": "PT-Report",
-    "roleAttributeAccessList": [
-      {
-        "roleCode" : "PTCOL",
-        "attributeAccessList" : [
-          {
-            "attribute": {
-              "jsonPath": "*/owner/name"
-            },
-            "accessType": "PLAIN"
-          },
-          {
-            "attribute": {
-              "jsonPath": "*/owner/mobileNumber",
-              "maskingTechnique": "mobile"
-            },
-            "accessType": "MASK"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "key" : "User",
-    "roleAttributeAccessList" : [
-      {
-        "roleCode" : "CITIZEN",
-        "attributeAccessList" : [
-          {
-            "attribute" : {
-              "jsonPath" : "name"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "mobileNumber"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "emailId"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "username"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "altContactNumber"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "pan"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "aadhaarNumber"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "guardian"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "permanentAddress/address"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "correspondenceAddress/address"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "addresses/*/address"
-            },
-            "accessType" : "PLAIN"
-          }
-        ]
-      },
-      {
-        "roleCode" : "EMPLOYEE",
-        "attributeAccessList" : [
-          {
-            "attribute" : {
-              "jsonPath" : "name"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "mobileNumber"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "emailId"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "username"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "altContactNumber"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "pan"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "aadhaarNumber"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "guardian"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "permanentAddress/address"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "correspondenceAddress/address"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "addresses/*/address"
-            },
-            "accessType" : "PLAIN"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "key" : "UserList",
-    "roleAttributeAccessList" : [
-      {
-        "roleCode" : "CITIZEN",
-        "attributeAccessList" : [
-          {
-            "attribute" : {
-              "jsonPath" : "*/name"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/mobileNumber"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/emailId"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/username"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/altContactNumber"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/pan"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/aadhaarNumber"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/guardian"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/permanentAddress/address"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/correspondenceAddress/address"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/addresses/*/address"
-            },
-            "accessType" : "PLAIN"
+            "roleCode" : "EMPLOYEE",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "*/name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/mobileNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/emailId"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/username"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/altContactNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/pan"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/aadhaarNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/guardian"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/permanentAddress/address"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/correspondenceAddress/address"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/addresses/*/address"
+                },
+                "accessType" : "PLAIN"
+              }
+            ]
           }
         ]
       },
       {
-        "roleCode" : "EMPLOYEE",
-        "attributeAccessList" : [
+        "key" : "TradeLicenseRegistryReport",
+        "roleAttributeAccessList" : [
           {
-            "attribute" : {
-              "jsonPath" : "*/name"
-            },
-            "accessType" : "PLAIN"
+            "roleCode" : "TL_APPROVER",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "*/name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/mobilenumber",
+                  "maskingTechnique" : "mobile"
+                },
+                "accessType" : "MASK"
+              }
+            ]
           },
           {
-            "attribute" : {
-              "jsonPath" : "*/mobileNumber"
-            },
-            "accessType" : "PLAIN"
-          },
+            "roleCode" : "TL_CEMP",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "*/name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/mobilenumber",
+                  "maskingTechnique" : "mobile"
+                },
+                "accessType" : "MASK"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key" : "StateLevelTradeLicenseRegistryReport",
+        "roleAttributeAccessList" : [
           {
-            "attribute" : {
-              "jsonPath" : "*/emailId"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/username"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/altContactNumber"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/pan"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/aadhaarNumber"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/guardian"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/permanentAddress/address"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/correspondenceAddress/address"
-            },
-            "accessType" : "PLAIN"
-          },
-          {
-            "attribute" : {
-              "jsonPath" : "*/addresses/*/address"
-            },
-            "accessType" : "PLAIN"
+            "roleCode" : "TL_ADMIN",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "*/name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/mobilenumber",
+                  "maskingTechnique" : "mobile"
+                },
+                "accessType" : "MASK"
+              }
+            ]
           }
         ]
       }
     ]
-  }
-]
-
 }
