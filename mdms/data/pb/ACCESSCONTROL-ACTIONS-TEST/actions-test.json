@@ -14000,6 +14000,78 @@
       "leftIcon": "social:people",
       "rightIcon": "",
       "queryParams": ""
+    },
+    {
+      "id": 1780,
+      "name": "SearchDemand",
+      "url": "/billing-service-v1/demand/_search",
+      "displayName": "Search Demand",
+      "serviceCode": "BILLING_SERVICE",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1781,
+      "name": "CreateDemand",
+      "url": "/billing-service-v1/demand/_create",
+      "displayName": "Create Demand",
+      "serviceCode": "BILLING_SERVICE",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1782,
+      "name": "UpdateDemand",
+      "url": "/billing-service-v1/demand/_update",
+      "displayName": "Update Demand",
+      "serviceCode": "BILLING_SERVICE",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1783,
+      "name": "GenerateBill",
+      "url": "/billing-service-v1/bill/_generate",
+      "displayName": "Generate Bill",
+      "serviceCode": "BILLING_SERVICE",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1784,
+      "name": "FetchBill",
+      "url": "/billing-service-v1/bill/_fetchbill",
+      "displayName": "Fetch Bill",
+      "serviceCode": "BILLING_SERVICE",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1785,
+      "name": "TaxheadSearch",
+      "url": "/billing-service-v1/taxheads/_search",
+      "displayName": "Taxhead Search",
+      "serviceCode": "BILLING_SERVICE",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1786,
+      "name": "TaxperiodsSearch",
+      "url": "/billing-service-v1/taxperiods/_search",
+      "displayName": "Taxperiods Search",
+      "serviceCode": "BILLING_SERVICE",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1787,
+      "name": "BusinessservicesSearch",
+      "url": "/billing-service-v1/businessservices/_search",
+      "displayName": "businessservices Search",
+      "serviceCode": "BILLING_SERVICE",
+      "code": "null",
+      "path": ""
     }
   ]
 }
