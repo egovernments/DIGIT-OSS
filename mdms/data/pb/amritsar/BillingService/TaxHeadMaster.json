@@ -77,6 +77,15 @@
     {
       "category": "TAX",
       "service": "PT",
+      "name": "Pt cancer cess",
+      "code": "PT_CANCER_CESS",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": 2
+    },
+    {
+      "category": "TAX",
+      "service": "PT",
       "name": "Pt time penalty",
       "code": "PT_TIME_PENALTY",
       "isDebit": false,
