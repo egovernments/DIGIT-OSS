@@ -23,8 +23,8 @@
     {
       "category": "TAX",
       "service": "PT",
-      "name": "Pt owner excemption",
-      "code": "PT_OWNER_EXCEMPTION",
+      "name": "Pt owner exemption",
+      "code": "PT_OWNER_EXEMPTION",
       "isDebit": false,
       "isActualDemand": true,
       "order": 0
