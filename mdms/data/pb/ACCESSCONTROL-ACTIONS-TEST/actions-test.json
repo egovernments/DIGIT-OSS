@@ -14099,6 +14099,15 @@
       "serviceCode": "COLLECTION_SERVICE",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1791,
+      "name": "FetchBill",
+      "url": "/billing-service-v1/bill/_search",
+      "displayName": "Fetch Bill",
+      "serviceCode": "BILLING_SERVICE",
+      "code": "null",
+      "path": ""
     }
   ]
 }
