@@ -42,7 +42,7 @@
       "category": "TAX",
       "service": "PT",
       "name": "Pt unit usage excemption",
-      "code": "PT_UNIT_USAGE_EXCEMPTION",
+      "code": "PT_UNIT_USAGE_EXEMPTION",
       "isDebit": false,
       "isActualDemand": true,
       "order": 0
