@@ -59,8 +59,7 @@ public class RequestInfo {
 
     private String ver;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss", timezone = "IST")
-    private Date ts;
+    private Long ts;
 
     private String action;
 
@@ -92,11 +91,11 @@ public class RequestInfo {
         this.ver = ver;
     }
 
-    public Date getTs() {
+    public Long getTs() {
         return ts;
     }
 
-    public void setTs(final Date ts) {
+    public void setTs(final Long ts) {
         this.ts = ts;
     }
 

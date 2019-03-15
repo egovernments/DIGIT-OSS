@@ -700,10 +700,10 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
             EmployeeInfo employee = microserviceUtils.getEmployeeByPositionId(voucherHeader.getState().getOwnerPosition());
             if (FinancialConstants.BUTTONREJECT.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
                 addActionMessage(getText("pjv.voucher.rejected", new String[] {
-                        employee != null ? employee.getName() : "" }));
+                        employee != null ? employee.getUser().getName() : "" }));
             if (FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
                 addActionMessage(getText("pjv.voucher.approved", new String[] {
-                        employee != null ? employee.getName() : "" }));
+                        employee != null ? employee.getUser().getName() : "" }));
             if (FinancialConstants.BUTTONCANCEL.equalsIgnoreCase(workflowBean.getWorkFlowAction()))
                 addActionMessage(getText("billVoucher.file.canceled"));
             else if (FinancialConstants.BUTTONAPPROVE.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {

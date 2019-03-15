@@ -207,7 +207,7 @@ public class FinancialUtils {
         
       List<EmployeeInfo>empList =  microServiceUtil.getEmployee(employeeId, new Date(),null, null);
       if(null!=empList && !empList.isEmpty())  
-      return empList.get(0).getName();
+      return empList.get(0).getUser().getName();
       else
           return "";
     }
@@ -282,7 +282,7 @@ public class FinancialUtils {
                 // user = stateHistory.getOwnerUser();
                 if (null != ownerobj) {
 //                    workflowHistory.put("user", user.getUsername() + "::" + user.getName());
-                    workflowHistory.put("user",ownerobj.getUserName()+"::"+ownerobj.getName());
+                    workflowHistory.put("user",ownerobj.getUser().getUserName()+"::"+ownerobj.getUser().getName());
                     Department department=   this.microServiceUtil.getDepartmentByCode(ownerobj.getAssignments().get(0).getDepartment());
                     if(null != department)
                         workflowHistory.put("department", department.getName());
@@ -307,7 +307,7 @@ public class FinancialUtils {
             
 //            if (null != user) {
             if(null != ownerobj){
-                map.put("user", ownerobj.getUserName() + "::" + ownerobj.getName());
+                map.put("user", ownerobj.getUser().getUserName() + "::" + ownerobj.getUser().getName());
               Department department=   this.microServiceUtil.getDepartmentByCode(ownerobj.getAssignments().get(0).getDepartment());
               if(null != department)
                   map.put("department", department.getName());

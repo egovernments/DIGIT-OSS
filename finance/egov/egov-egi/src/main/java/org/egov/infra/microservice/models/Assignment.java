@@ -53,7 +53,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Assignment {
 
-    private Long id;
+    private String id;
 
     @NotNull
     private Long position;
@@ -76,15 +76,9 @@ public class Assignment {
     @NotNull
     private Boolean isPrimary;
 
-    @NotNull
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date fromDate;
+    private float fromDate;
 
-    @NotNull
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date toDate;
+    private float toDate;
 
     private Long grade;
 
@@ -111,8 +105,8 @@ public class Assignment {
     public Assignment() {
     }
 
-    public Assignment(Long id, Long position, Long fund, Long functionary, Long function, String department,
-            String designation, List<HODDepartment> hod, Boolean isPrimary, Date fromDate, Date toDate, Long grade,
+    public Assignment(String id, Long position, Long fund, Long functionary, Long function, String department,
+            String designation, List<HODDepartment> hod, Boolean isPrimary, float fromDate, float toDate, Long grade,
             String govtOrderNumber, List<String> documents, Long createdBy, Date createdDate, Long lastModifiedBy,
             Date lastModifiedDate, String tenantId) {
         this.id = id;
@@ -136,11 +130,11 @@ public class Assignment {
         this.tenantId = tenantId;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -208,19 +202,19 @@ public class Assignment {
         this.isPrimary = isPrimary;
     }
 
-    public Date getFromDate() {
+    public float getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(Date fromDate) {
+    public void setFromDate(float fromDate) {
         this.fromDate = fromDate;
     }
 
-    public Date getToDate() {
+    public float getToDate() {
         return toDate;
     }
 
-    public void setToDate(Date toDate) {
+    public void setToDate(float toDate) {
         this.toDate = toDate;
     }
 
@@ -356,10 +350,10 @@ public class Assignment {
                 return false;
         } else if (!documents.equals(other.documents))
             return false;
-        if (fromDate == null) {
-            if (other.fromDate != null)
+        if (fromDate == 0) {
+            if (other.fromDate != 0)
                 return false;
-        } else if (!fromDate.equals(other.fromDate))
+        } else if (fromDate != other.fromDate)
             return false;
         if (function == null) {
             if (other.function != null)
@@ -421,10 +415,10 @@ public class Assignment {
                 return false;
         } else if (!tenantId.equals(other.tenantId))
             return false;
-        if (toDate == null) {
-            if (other.toDate != null)
+        if (toDate == 0) {
+            if (other.toDate != 0)
                 return false;
-        } else if (!toDate.equals(other.toDate))
+        } else if (toDate != other.toDate)
             return false;
         return true;
     }

@@ -3,20 +3,18 @@ package org.egov.infra.microservice.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class EmployeeInfoResponse {
 
 	@JsonProperty("ResponseInfo")
 	private ResponseInfo responseInfo;
 
-	@JsonProperty("Employee")
+	@JsonProperty("Employees")
 	private List<EmployeeInfo> employees = new ArrayList<EmployeeInfo>();
 
-	public EmployeeInfoResponse(ResponseInfo responseInfo, List<EmployeeInfo> employees) {
-		this.responseInfo = responseInfo;
-		this.employees = employees;
-	}
+	 
 
 	public EmployeeInfoResponse(){}
 

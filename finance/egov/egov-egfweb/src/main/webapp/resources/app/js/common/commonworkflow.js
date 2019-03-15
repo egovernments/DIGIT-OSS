@@ -109,20 +109,18 @@ $('#approvalDesignation').change(function(){
 	todayDate = new Date(Date.now()).toLocaleString(),
 	departmentId = $('#approvalDepartment').val(),
 	designationId= $('#approvalDesignation').val();
-
-
+if(departmentId && designationId)
 $.ajax({
 url: "/services/EGF/approvers/"+departmentId+"/"+designationId,     
 type: "GET",
 contentType:'application/json',
 //data: JSON.stringify(jsonData),
 success: function (response) {
-	console.log("success"+response);
 	$('#approvalPosition').empty();
 	$('#approvalPosition').append($("<option value=''>Select from below</option>"));
 	$.each(response, function(index, value) {
 		//$('#approvalPosition').append($('<option>').text(value.userName+'/'+value.positionName).attr('value', value.positionId));  
-		$('#approvalPosition').append($('<option>').text(value.userName).attr('value', value.assignments[0].position));  
+		$('#approvalPosition').append($('<option>').text(value.user.name).attr('value', value.assignments[0].position));  
 	});
 	$('#approvalPosition').val($('#approvalPositionValue').val());
 }, 

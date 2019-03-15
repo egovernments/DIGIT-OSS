@@ -311,7 +311,7 @@ public class JournalVoucherModifyAction extends BaseVoucherAction {
             if (FinancialConstants.BUTTONFORWARD.equalsIgnoreCase(workflowBean.getWorkFlowAction())){
                 EmployeeInfo employee = microserviceUtils.getEmployeeByPositionId(voucherHeader.getState().getOwnerPosition());
                 addActionMessage(getText("pjv.voucher.approved",
-                        new String[] { employee != null ? employee.getName() : "" }));
+                        new String[] { employee != null ? employee.getUser().getName() : "" }));
             }
         } catch (final ValidationException e) {
             resetVoucherHeader();
