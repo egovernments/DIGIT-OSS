@@ -3,7 +3,7 @@
     "moduleName" : "DataSecurity",
     "DecryptionABAC" : [
       {
-        "key" : "User",
+        "key" : "UserSelf",
         "roleAttributeAccessList" : [
           {
             "roleCode" : "CITIZEN",
@@ -150,7 +150,7 @@
         ]
       },
       {
-        "key" : "UserList",
+        "key" : "UserListSelf",
         "roleAttributeAccessList" : [
           {
             "roleCode" : "CITIZEN",
@@ -289,6 +289,84 @@
               {
                 "attribute" : {
                   "jsonPath" : "*/addresses/*/address"
+                },
+                "accessType" : "PLAIN"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key" : "UserOther",
+        "roleAttributeAccessList" : [
+          {
+            "roleCode" : "CITIZEN",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "mobileNumber"
+                },
+                "accessType" : "PLAIN"
+              }
+            ]
+          },
+          {
+            "roleCode" : "EMPLOYEE",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "mobileNumber"
+                },
+                "accessType" : "PLAIN"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key" : "UserListOther",
+        "roleAttributeAccessList" : [
+          {
+            "roleCode" : "CITIZEN",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "*/name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/mobileNumber"
+                },
+                "accessType" : "PLAIN"
+              }
+            ]
+          },
+          {
+            "roleCode" : "EMPLOYEE",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "*/name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/mobileNumber"
                 },
                 "accessType" : "PLAIN"
               }
