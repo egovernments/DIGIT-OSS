@@ -273,7 +273,7 @@ public class MicroserviceUtils {
         final RequestInfo requestInfo = new RequestInfo();
         requestInfo.setApiId("apiId");
         requestInfo.setVer("ver");
-        requestInfo.setTs(getEpochDate());
+        requestInfo.setTs(getEpochDate(new Date()));
         return requestInfo;
     }
 
@@ -388,7 +388,7 @@ public class MicroserviceUtils {
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate());
+        requestInfo.setTs(getEpochDate(new Date()));
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call :" + dept_url);
         DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
@@ -404,7 +404,7 @@ public class MicroserviceUtils {
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate());
+        requestInfo.setTs(getEpochDate(new Date()));
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call:" + dept_url);
         DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
@@ -443,7 +443,7 @@ public class MicroserviceUtils {
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate());
+        requestInfo.setTs(getEpochDate(new Date()));
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call:" + dept_url);
         DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
@@ -474,7 +474,7 @@ public class MicroserviceUtils {
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate());
+        requestInfo.setTs(getEpochDate(new Date()));
         reqWrapper.setRequestInfo(requestInfo);
 
         DesignationResponse designResponse = restTemplate.postForObject(design_url, reqWrapper, DesignationResponse.class);
@@ -500,7 +500,7 @@ public class MicroserviceUtils {
         // tenantId=default&assignment.departmentId=1&assignment.designationId=1&asOnDate=28/07/2018
 
         requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate());
+        requestInfo.setTs(getEpochDate(new Date()));
         
         reqWrapper.setRequestInfo(requestInfo);
 
@@ -518,7 +518,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
         requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate());
+        requestInfo.setTs(getEpochDate(new Date()));
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call:" + employee_by_position_url);
         EmployeeInfoResponse empResponse = restTemplate.postForObject(employee_by_position_url, reqWrapper,
@@ -636,19 +636,19 @@ public class MicroserviceUtils {
         empUrl.append("?tenantId=" + getTenentId());
 
         if (empId != 0)
-            empUrl.append("&id=" + empId);
+            empUrl.append("&ids=" + empId);
         if (toDay != null)
-            empUrl.append("&asOnDate" + dateFormat.format(toDay));
+            empUrl.append("&asOnDate=" + getEpochDate(toDay));
         if (departmentId != null)
-            empUrl.append("&departments" + departmentId);
+            empUrl.append("&departments=" + departmentId);
         if (designationId != null)
-            empUrl.append("&designations" + designationId);
+            empUrl.append("&designations=" + designationId);
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate());
+        requestInfo.setTs(getEpochDate(new Date()));
         reqWrapper.setRequestInfo(requestInfo);
 
         EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper, EmployeeInfoResponse.class);
@@ -672,7 +672,7 @@ public class MicroserviceUtils {
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate());
+        requestInfo.setTs(getEpochDate(new Date()));
         reqWrapper.setRequestInfo(requestInfo);
         EmployeeInfoResponse empResponse = restTemplate.postForObject(empUrl.toString(), reqWrapper, EmployeeInfoResponse.class);
         if (empResponse.getEmployees() != null && !empResponse.getEmployees().isEmpty())
@@ -722,7 +722,7 @@ public class MicroserviceUtils {
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate());
+        requestInfo.setTs(getEpochDate(new Date()));
         reqWrapper.setRequestInfo(requestInfo);
 
         BusinessDetailsResponse bcResponse = restTemplate.postForObject(bd_url, reqWrapper, BusinessDetailsResponse.class);
@@ -739,7 +739,7 @@ public class MicroserviceUtils {
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate());
+        requestInfo.setTs(getEpochDate(new Date()));
         reqWrapper.setRequestInfo(requestInfo);
 
         BusinessDetailsResponse bcResponse = restTemplate.postForObject(bd_url, reqWrapper, BusinessDetailsResponse.class);
@@ -760,7 +760,7 @@ public class MicroserviceUtils {
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate());
+        requestInfo.setTs(getEpochDate(new Date()));
         reqWrapper.setRequestInfo(requestInfo);
 
         BusinessDetailsResponse bcResponse = restTemplate.postForObject(bd_url, reqWrapper, BusinessDetailsResponse.class);
@@ -780,7 +780,7 @@ public class MicroserviceUtils {
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate());
+        requestInfo.setTs(getEpochDate(new Date()));
         reqWrapper.setRequestInfo(requestInfo);
 
         BusinessDetailsResponse bcResponse = restTemplate.postForObject(bd_url, reqWrapper, BusinessDetailsResponse.class);
@@ -1344,10 +1344,10 @@ public class MicroserviceUtils {
         return info;
     }
     
-    public static Long getEpochDate(){
+    public static Long getEpochDate(Date date){
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
                 .withZone(ZoneOffset.UTC);
-        Date date = new Date();  
+//        Date date = new Date();  
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
         String strDate = dateFormat.format(date);
         long epoch = Instant.from(fmt.parse(strDate)).toEpochMilli();

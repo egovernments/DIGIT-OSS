@@ -165,7 +165,7 @@ public class BudgetVarianceReportAction extends BaseFormAction {
         gridFields = budgetDetailConfig.getGridFields();
         mandatoryFields = budgetDetailConfig.getMandatoryFields();
         if (isFieldMandatory(Constants.EXECUTING_DEPARTMENT))
-            addRelatedEntity("executingDepartment", Department.class);
+            addRelatedEntity("executingDepartment", String.class);
         if (isFieldMandatory(Constants.FUND))
             addRelatedEntity("fund", Fund.class);
         if (isFieldMandatory(Constants.FUNCTION))

@@ -237,6 +237,8 @@ public class AccountChequeAction extends BaseFormAction {
         }
         accountChequesService.createCheques(chequeDetailsList, chequeIdMap, chequeMap, bankaccount, deletedChqDeptId);
         accountChequesService.deleteRecords(deletedChqDeptId, bankaccount);
+        String defaultDepartmentValueForPayment = getDefaultDepartmentValueForPayment();
+        defaultSelectedDepartments = defaultDepartmentValueForPayment !=null ? defaultDepartmentValueForPayment : "";
         // Get cheque leafs presents for this particular account number
         final StringBuffer query = new StringBuffer(200);
         chequeList = accountChequesService.getChequesByBankAccIdFinId(bankaccount.getId(),

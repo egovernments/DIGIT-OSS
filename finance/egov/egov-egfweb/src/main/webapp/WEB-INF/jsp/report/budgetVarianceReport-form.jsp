@@ -89,9 +89,9 @@ function exportXls(){
 	var budgetGroup =  document.getElementById('budgetGroup').value;
 	var functionId =  document.getElementById('function').value;
 	var fund = document.getElementById('fund').value;
-	window.open('/services/EGF/report/budgetVarianceReport-exportXls.action?asOnDate='+asOnDate+'&accountType='+accountType+
+	window.location = '/services/EGF/report/budgetVarianceReport-exportXls.action?asOnDate='+asOnDate+'&accountType='+accountType+
 			'&budgetDetail.budgetGroup.id='+budgetGroup+'&budgetDetail.fund.id='+fund+'&budgetDetail.executingDepartment='
-			+departmentid+'&budgetDetail.function.id='+functionId,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+			+departmentid+'&budgetDetail.function.id='+functionId,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no';
 }
 
 function exportPdf(){
@@ -101,9 +101,9 @@ function exportPdf(){
 	var budgetGroup =  document.getElementById('budgetGroup').value;
 	var functionId =  document.getElementById('function').value;
 	var fund = document.getElementById('fund').value;
-	window.open('/services/EGF/report/budgetVarianceReport-exportPdf.action?asOnDate='+asOnDate+'&accountType='+accountType+
+	window.location = '/services/EGF/report/budgetVarianceReport-exportPdf.action?asOnDate='+asOnDate+'&accountType='+accountType+
 			'&budgetDetail.budgetGroup.id='+budgetGroup+'&budgetDetail.fund.id='+fund+'&budgetDetail.executingDepartment='
-			+departmentid+'&budgetDetail.function.id='+functionId,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+			+departmentid+'&budgetDetail.function.id='+functionId,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no';
 }
 
 function validateData(){

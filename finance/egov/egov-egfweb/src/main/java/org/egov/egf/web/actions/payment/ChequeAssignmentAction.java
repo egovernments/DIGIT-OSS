@@ -348,7 +348,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
 
         // overriding function Mandatory Condition only for cheque assignment search
         mandatoryFields.remove("function");
-
+        voucherHeader.getVouchermis().setDepartmentcode(getDefaultDepartmentValueForPayment());
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed prepare.");
     }

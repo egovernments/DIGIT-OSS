@@ -139,7 +139,7 @@
 																			id="department" list="dropdownData.departmentList"
 																			listKey="code" listValue="name" headerKey="-1"
 																			headerValue="----Choose----"
-																			value="%{billregister.egBillregistermis.departmentid}" /></td>
+																			value="%{billregister.egBillregistermis.departmentcode}" /></td>
 																	<%-- <s:property
 																	value="%{billregister.egBillregistermis.egDepartment.name}" /> --%>
 																</s:if>

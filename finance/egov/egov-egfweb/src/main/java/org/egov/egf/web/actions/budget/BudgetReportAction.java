@@ -1158,7 +1158,7 @@ public class BudgetReportAction extends BaseFormAction {
     @Action(value = "/budget/budgetReport-ajaxGenerateDepartmentWiseHtml")
     public String ajaxGenerateDepartmentWiseHtml() throws Exception {
         populateData();
-        inputStream = reportHelper.exportHtml(inputStream, DEPTWISEPATH, getParamMap(), budgetReportList, "px");
+        inputStream = reportHelper.exportHtml(inputStream, DEPTWISEPATH, getParamMap(), budgetReportList, "pt");
         return "department-HTML";
     }
 

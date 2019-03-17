@@ -149,9 +149,12 @@ public abstract class BaseFormAction extends ActionSupport
                     setValue(relationshipName, getPersistenceService().getSession().get(class1, Long.valueOf(id)));
                 else
                     setValue(relationshipName, getPersistenceService().load(Integer.valueOf(id), class1));
-            }else if(("department".equals(relationshipName) || "executingDepartment".equals(relationshipName)) && id != null){
+            }else if("department".equals(relationshipName) && id != null){
                 Department dept = microserviceUtils.getDepartmentByCode(id);
                 setValue(relationshipName, dept);
+            }else if("executingDepartment".equals(relationshipName) && id != null){
+                Department dept = microserviceUtils.getDepartmentByCode(id);
+                setValue(relationshipName, dept.getCode());
             }
 
         }

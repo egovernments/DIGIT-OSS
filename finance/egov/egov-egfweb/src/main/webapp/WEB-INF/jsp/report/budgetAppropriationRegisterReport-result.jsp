@@ -175,9 +175,9 @@
 					</tr>
 					<tr>
 						<td align="center"><a
-							href='/EGF/report/budgetAppropriationRegisterReport-generatePdf.action?asOnDate=<s:property value="strAsOnDate"/>&department.id=<s:property value="department.id"/>&function.id=<s:property value="function.id"/>&budgetGroup.id=<s:property value="budgetGroup.id"/>&fund.id=<s:property value="fund.id"/>'>PDF
+							href='/services/EGF/report/budgetAppropriationRegisterReport-generatePdf.action?asOnDate=<s:property value="strAsOnDate"/>&department.code=<s:property value="department.code"/>&function.id=<s:property value="function.id"/>&budgetGroup.id=<s:property value="budgetGroup.id"/>&fund.id=<s:property value="fund.id"/>'>PDF
 								| </a> <a
-							href='/EGF/report/budgetAppropriationRegisterReport-generateXls.action?asOnDate=<s:property value="strAsOnDate"/>&department.id=<s:property value="department.id"/>&function.id=<s:property value="function.id"/>&budgetGroup.id=<s:property value="budgetGroup.id"/>&fund.id=<s:property value="fund.id"/>'>Excel</a>
+							href='/services/EGF/report/budgetAppropriationRegisterReport-generateXls.action?asOnDate=<s:property value="strAsOnDate"/>&department.code=<s:property value="department.code"/>&function.id=<s:property value="function.id"/>&budgetGroup.id=<s:property value="budgetGroup.id"/>&fund.id=<s:property value="fund.id"/>'>Excel</a>
 						</td>
 					</tr>
 					</td>

@@ -368,7 +368,7 @@ public class JournalVoucherAction extends BaseVoucherAction
     }
     public String getEmployeeName(Long empId){
         
-       return microserviceUtils.getEmployee(empId, new Date(), null, null).get(0).getUser().getName();
+       return microserviceUtils.getEmployee(empId, null, null, null).get(0).getUser().getName();
     }
 
     public List<VoucherDetails> getBillDetailslist() {

@@ -194,7 +194,7 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 		addDropdownData("typeList", VoucherHelper.VOUCHER_TYPES);
 		 addDropdownData("approverDepartmentList",
 				 masterDataCache.get("egi-department"));
-		 voucherHeader.getVouchermis().setDepartmentcode(getDefaultDepartmentValueForPayment());
+//		 voucherHeader.getVouchermis().setDepartmentcode(getDefaultDepartmentValueForPayment());
 		
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Number of  MIS attributes are :" + headerFields.size());

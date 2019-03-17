@@ -52,7 +52,7 @@
 <style type="text/css">
 #container iframe {
 	width: 100%;
-	height: 2000px;
+	height: 100%;
 	border: none;
 }
 
@@ -60,7 +60,7 @@
 	width: 100%;
 	height: 550px;
 	padding: 0;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 
 @media print {
@@ -98,13 +98,16 @@
 			value='<s:property value="model.type"/>' />
 		<div id="buttons" class="buttonbottom">
 			<input type="button" id="btnPrint"
-				onclick="javascript:parent.report.print();" value="PRINT"
+				onclick="javascript:report.print();" value="PRINT"
 				class="buttonsubmit" />
 			<s:submit value="SAVE AS PDF"
 				onclick="submitForm('generateDepartmentWisePdf')"
 				cssClass="buttonsubmit" />
 			<s:submit value="SAVE AS EXCEL"
 				onclick="submitForm('generateDepartmentWiseXls')"
+				cssClass="buttonsubmit" />
+			<s:submit value="Close"
+				onclick="window.parent.postMessage('close','*');window.close();"
 				cssClass="buttonsubmit" />
 		</div>
 	</s:form>

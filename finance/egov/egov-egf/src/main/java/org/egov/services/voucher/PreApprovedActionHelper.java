@@ -155,7 +155,7 @@ public class PreApprovedActionHelper {
 //        
         List<Long> positions = new ArrayList();
         Long empId = ApplicationThreadLocals.getUserId();
-        List<EmployeeInfo> employs = microserviceUtils.getEmployee(empId, new Date(),null, null);
+        List<EmployeeInfo> employs = microserviceUtils.getEmployee(empId, null,null, null);
         
         if(null !=employs && employs.size()>0 )
                 

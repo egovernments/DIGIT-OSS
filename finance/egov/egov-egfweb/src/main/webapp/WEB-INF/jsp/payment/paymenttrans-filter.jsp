@@ -135,7 +135,7 @@
 		<td class="greybox"><s:select name="vouchermis.departmentcode"
 				id="departmentid" list="dropdownData.departmentList"
 				listKey="code" listValue="name" headerKey="-1"
-				headerValue="----Choose----"
+				headerValue="----Choose----" value="-1"
 				 /></td>
 	<s:if test="%{shouldShowHeaderField('field')}">
 		<td class="greybox"><s:text name="voucher.field" /> <s:if

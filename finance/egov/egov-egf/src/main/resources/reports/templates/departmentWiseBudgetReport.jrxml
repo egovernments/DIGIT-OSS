@@ -1,57 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
-  ~    accountability and the service delivery of the government  organizations.
-  ~
-  ~     Copyright (C) 2017  eGovernments Foundation
-  ~
-  ~     The updated version of eGov suite of products as by eGovernments Foundation
-  ~     is available at http://www.egovernments.org
-  ~
-  ~     This program is free software: you can redistribute it and/or modify
-  ~     it under the terms of the GNU General Public License as published by
-  ~     the Free Software Foundation, either version 3 of the License, or
-  ~     any later version.
-  ~
-  ~     This program is distributed in the hope that it will be useful,
-  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~     GNU General Public License for more details.
-  ~
-  ~     You should have received a copy of the GNU General Public License
-  ~     along with this program. If not, see http://www.gnu.org/licenses/ or
-  ~     http://www.gnu.org/licenses/gpl.html .
-  ~
-  ~     In addition to the terms of the GPL license to be adhered to in using this
-  ~     program, the following additional terms are to be complied with:
-  ~
-  ~         1) All versions of this program, verbatim or modified must carry this
-  ~            Legal Notice.
-  ~            Further, all user interfaces, including but not limited to citizen facing interfaces,
-  ~            Urban Local Bodies interfaces, dashboards, mobile applications, of the program and any
-  ~            derived works should carry eGovernments Foundation logo on the top right corner.
-  ~
-  ~            For the logo, please refer http://egovernments.org/html/logo/egov_logo.png.
-  ~            For any further queries on attribution, including queries on brand guidelines,
-  ~            please contact contact@egovernments.org
-  ~
-  ~         2) Any misrepresentation of the origin of the material is prohibited. It
-  ~            is required that all modified versions of this material be marked in
-  ~            reasonable ways as different from the original version.
-  ~
-  ~         3) This license does not grant any rights to any user of the program
-  ~            with regards to rights under trademark law for use of the trade names
-  ~            or trademarks of eGovernments Foundation.
-  ~
-  ~   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
-  ~
-  -->
-<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-08-28T22:10:18 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="departmentWiseBudgetReport" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dc74b75f-a60f-4e9b-b870-918a995b4fbb">
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="departmentWiseBudgetReport" pageWidth="1000" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dc74b75f-a60f-4e9b-b870-918a995b4fbb">
 	<property name="net.sf.jasperreports.export.pdf.exclude.origin.keep.first.band.columnHeader" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.columnHeader" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.html.exclude.origin.keep.first.band.columnHeader" value="columnHeader"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="narration" fontName="SansSerif">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[new Boolean($F{glCode}=="" || $F{glCode} == null)]]></conditionExpression>
@@ -82,33 +35,33 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="37" splitType="Stretch">
+		<band height="40" splitType="Stretch">
 			<frame>
-				<reportElement x="14" y="0" width="539" height="37" uuid="4fe42627-9e00-45e1-a48a-c7d81397488c"/>
+				<reportElement x="30" y="0" width="900" height="40" uuid="4fe42627-9e00-45e1-a48a-c7d81397488c"/>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textField isBlankWhenNull="true">
-					<reportElement x="171" y="21" width="202" height="16" uuid="641273bd-ae87-4fa8-9b01-205c67b1f65a"/>
+					<reportElement x="430" y="21" width="142" height="19" uuid="641273bd-ae87-4fa8-9b01-205c67b1f65a"/>
 					<textElement textAlignment="Center">
 						<font size="12" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[( $P{type} )]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement x="380" y="0" width="240" height="20" uuid="bfb85223-9982-4da9-8cc3-3cb714d5cd66"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Departmentwise Budget Summary]]></text>
+				</staticText>
 			</frame>
-			<staticText>
-				<reportElement x="149" y="0" width="304" height="21" uuid="bfb85223-9982-4da9-8cc3-3cb714d5cd66"/>
-				<textElement>
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Departmentwise Budget Summary]]></text>
-			</staticText>
 		</band>
 	</title>
 	<columnHeader>
 		<band height="50" splitType="Stretch">
 			<staticText>
-				<reportElement x="14" y="0" width="86" height="50" uuid="b3002690-d7e3-477e-90ff-a2dc8567ad57"/>
+				<reportElement x="30" y="0" width="100" height="50" uuid="b3002690-d7e3-477e-90ff-a2dc8567ad57"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -122,7 +75,7 @@
 				<text><![CDATA[Account Code]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="100" y="0" width="170" height="50" uuid="5144a4e3-29d3-4c4c-9d86-e59043c9a9bc"/>
+				<reportElement x="130" y="0" width="360" height="50" uuid="5144a4e3-29d3-4c4c-9d86-e59043c9a9bc"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -136,7 +89,7 @@
 				<text><![CDATA[Description]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="270" y="0" width="136" height="50" uuid="b1e21985-a548-454d-b83d-ad0d77b550f7"/>
+				<reportElement x="490" y="0" width="170" height="50" uuid="b1e21985-a548-454d-b83d-ad0d77b550f7"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -150,7 +103,7 @@
 				<textFieldExpression><![CDATA["Budget Estimate "+$P{finYear}+" (Rs.)"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="406" y="0" width="79" height="50" uuid="2a73bcf0-4af9-44e7-8bab-4aef8971ab6d"/>
+				<reportElement x="660" y="0" width="169" height="50" uuid="2a73bcf0-4af9-44e7-8bab-4aef8971ab6d"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -164,7 +117,7 @@
 				<textFieldExpression><![CDATA["ReAppropriation "+$P{finYear}+" (Rs.)"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="485" y="0" width="68" height="50" uuid="c37ff73a-f51d-4541-9576-e962bb11f49c"/>
+				<reportElement x="829" y="0" width="101" height="50" uuid="c37ff73a-f51d-4541-9576-e962bb11f49c"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -182,7 +135,7 @@
 	<detail>
 		<band height="33" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement x="14" y="0" width="86" height="33" uuid="f7a5273a-749b-472c-a7ae-b277273e090a"/>
+				<reportElement x="30" y="0" width="100" height="33" uuid="f7a5273a-749b-472c-a7ae-b277273e090a"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -196,7 +149,7 @@
 				<textFieldExpression><![CDATA[$F{glCode}==null?" ":$F{glCode}+" "]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="100" y="0" width="170" height="33" uuid="ad66ca5e-c4bf-47da-ac36-167c70e0595b"/>
+				<reportElement x="130" y="0" width="360" height="33" uuid="ad66ca5e-c4bf-47da-ac36-167c70e0595b"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -210,7 +163,7 @@
 				<textFieldExpression><![CDATA[$F{narration}==null?" ":$F{narration}+" "]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00" isBlankWhenNull="true">
-				<reportElement x="270" y="0" width="136" height="33" uuid="c04ae8e5-bb3c-41e7-9691-52fbbb84cb47"/>
+				<reportElement x="490" y="0" width="170" height="33" uuid="c04ae8e5-bb3c-41e7-9691-52fbbb84cb47"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -224,7 +177,7 @@
 				<textFieldExpression><![CDATA[$F{amount}==null?" ":$F{amount}+" "]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00" isBlankWhenNull="true">
-				<reportElement x="406" y="0" width="79" height="33" uuid="b31ad7d3-34d6-40cc-b7e6-b77837916304"/>
+				<reportElement x="660" y="0" width="169" height="33" uuid="b31ad7d3-34d6-40cc-b7e6-b77837916304"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -238,7 +191,7 @@
 				<textFieldExpression><![CDATA[$F{appropriationAmount}==null?" ":$F{appropriationAmount}+" "]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00" isBlankWhenNull="true">
-				<reportElement x="485" y="0" width="68" height="33" uuid="19b36837-4e6e-4347-ad9f-60ff37f3e9b2"/>
+				<reportElement x="829" y="0" width="101" height="33" uuid="19b36837-4e6e-4347-ad9f-60ff37f3e9b2"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>

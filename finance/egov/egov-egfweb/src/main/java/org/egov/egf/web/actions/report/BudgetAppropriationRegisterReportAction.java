@@ -247,7 +247,7 @@ public class BudgetAppropriationRegisterReportAction extends BaseFormAction {
             strQuery.append(" and (vmis.budgetary_appnumber  != 'null' and vmis.budgetary_appnumber is not null) and vh.status != 4 and vh.voucherdate  >=:strStDate");
             strQuery.append(" and vh.voucherdate <=:strAODate");
             strQuery.append(getFunctionQuery("gl.functionid"));
-            strQuery.append(getDepartmentQuery("vmis.departmentid"));
+            strQuery.append(getDepartmentQuery("vmis.departmentcode"));
             strQuery.append(getFundQuery("vh.fundid"));
             strQuery.append(" ");
             strQuery.append(" union select distinct bmis.budgetary_appnumber as bdgApprNumber, vh1.vouchernumber as VoucherNumber, vh1.voucherdate as  voucherDate , br.narration as description,vh1.createddate as createdDate, br.billnumber as billNumber, br.billdate as billDate,br.createddate as billCreatedDate ,  bd.debitamount as debitAmount, bd.creditamount as creditAmount  ");
@@ -255,7 +255,7 @@ public class BudgetAppropriationRegisterReportAction extends BaseFormAction {
             strQuery.append(" and (bmis.budgetary_appnumber != 'null' and bmis.budgetary_appnumber is not null) and br.statusid not in (select id from egw_status where description='Cancelled' and moduletype in ('EXPENSEBILL', 'SALBILL', 'WORKSBILL', 'PURCHBILL', 'CBILL', 'SBILL', 'CONTRACTORBILL')) and (vh1.id = bmis.voucherheaderid )  and br.billdate  >=:strStDate");
             strQuery.append(" and br.billdate  <=:strAODate");
             strQuery.append(getFunctionQuery("bd.functionid"));
-            strQuery.append(getDepartmentQuery("bmis.departmentid"));
+            strQuery.append(getDepartmentQuery("bmis.departmentcode"));
             strQuery.append(getFundQuery("bmis.fundid"));
             strQuery.append("  ");
             strQuery.append(" union select distinct bmis1.budgetary_appnumber as bdgApprNumber, null as VoucherNumber,cast( null as date) voucherDate , ");
@@ -265,7 +265,7 @@ public class BudgetAppropriationRegisterReportAction extends BaseFormAction {
             strQuery.append(" and br.statusid not in (select id from egw_status where description='Cancelled' and moduletype in ('EXPENSEBILL', 'SALBILL', 'WORKSBILL', 'PURCHBILL', 'CBILL', 'SBILL', 'CONTRACTORBILL')) and bmis1.voucherheaderid is null and br.billdate   >=:strStDate");
             strQuery.append(" and br.billdate <=:strAODate");
             strQuery.append(getFunctionQuery("bd1.functionid"));
-            strQuery.append(getDepartmentQuery("bmis1.departmentid"));
+            strQuery.append(getDepartmentQuery("bmis1.departmentcode"));
             strQuery.append(getFundQuery("bmis1.fundid"));
             strQuery.append("  order by bdgApprNumber ");
 
@@ -356,8 +356,8 @@ public class BudgetAppropriationRegisterReportAction extends BaseFormAction {
 
     private String getDepartmentQuery(final String string) {
         final String query = "";
-        if (department.getId() != null && department.getId() != -1)
-            return " and " + string + " =:departmentId ";
+        if (department.getCode() != null && "-1".equals(department.getCode()))
+            return " and " + string + " =:departmentcode ";
         return query;
     }
 
@@ -466,8 +466,8 @@ public class BudgetAppropriationRegisterReportAction extends BaseFormAction {
 
             List<BudgetDetail> budgedDetailList = new ArrayList<BudgetDetail>();
             String query = " from BudgetDetail bd where bd.budget.isbere=? and bd.budgetGroup=? and bd.budget.financialYear=? ";
-            if (department.getId() != null && department.getId() != -1)
-                query = query + " and bd.executingDepartment.id=" + department.getId();
+            if (department.getCode() != null && "-1".equals(department.getCode()))
+                query = query + " and bd.executingDepartment=" + department.getCode();
             if (function.getId() != null && function.getId() != -1)
                 query = query + " and bd.function.id=" + function.getId();
             if (fund.getId() != null && fund.getId() != -1)
@@ -548,9 +548,9 @@ public class BudgetAppropriationRegisterReportAction extends BaseFormAction {
         {
             query.setLong("functionId", function.getId()) ; 
         }
-        if (department.getId() != null && department.getId() != -1)
+        if (department.getCode() != null && "-1".equals(department.getCode()))
         {
-            query.setLong("departmentId", department.getId()) ; 
+            query.setString("departmentcode", department.getCode()) ; 
         }
         if (fund.getId() != null && fund.getId() != -1)
         {

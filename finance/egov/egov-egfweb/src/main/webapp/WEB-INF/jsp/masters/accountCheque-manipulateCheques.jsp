@@ -166,7 +166,7 @@
 							id="departmentList" list="dropdownData.departmentList"
 							listKey="code" listValue="name" multiple="true" required="true"
 							value="%{defaultSelectedDepartments}"
-							style="height:auto;" /></td>
+							style="height:auto;" /></td>							
 				</tr>
 
 				<tr>
@@ -239,9 +239,9 @@
 			var receivedDate = document.getElementById("receivedDate").value;
 			var department = document.getElementById("departmentList").value;
 			var serialNo = document.getElementById("serialNo").value;
+			var isDefaultDeptEnabled = document.getElementById("isDefaultDeptEnabled").value;
 
-			if (fromChequeNo != "" || toChequeNo != "" || receivedDate != ""
-					|| department != "" || serialNo != "-1")
+			if ((fromChequeNo != "" || toChequeNo != "" || receivedDate != "" || serialNo != "-1") ? true : isDefaultDeptEnabled == 'true' ? false : department != "")
 				document.getElementById("lblError").innerHTML = "Please click on add new cheque or unselect required fields";
 			else {
 				document.chequeMaster.action = '/services/EGF/masters/accountCheque-save.action';
