@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="budgetReportFunctionwise" pageWidth="1000" pageHeight="842" columnWidth="462" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="7f6aec9e-2404-44de-a191-e152fb4b78c5">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="budgetReportFunctionwise" pageWidth="750" pageHeight="842" columnWidth="462" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="7f6aec9e-2404-44de-a191-e152fb4b78c5">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
@@ -68,7 +68,7 @@
 	<title>
 		<band height="40" splitType="Stretch">
 			<staticText>
-				<reportElement key="staticText-1" x="50" y="0" width="900" height="40" uuid="b97c2538-9aa8-472d-9c49-3e903d985b44"/>
+				<reportElement key="staticText-1" x="39" y="0" width="661" height="39" uuid="b97c2538-9aa8-472d-9c49-3e903d985b44"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
@@ -79,7 +79,7 @@
 	<pageHeader>
 		<band height="60" splitType="Stretch">
 			<staticText>
-				<reportElement key="staticText-2" x="50" y="0" width="100" height="40" uuid="0e2ac243-a36c-48a2-8e27-786d315e3b17"/>
+				<reportElement key="staticText-2" x="39" y="0" width="47" height="60" uuid="0e2ac243-a36c-48a2-8e27-786d315e3b17"/>
 				<box>
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -87,13 +87,13 @@
 					<bottomPen lineWidth="0.25"/>
 					<rightPen lineWidth="0.25"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Dept Code]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-3" x="150" y="0" width="100" height="40" uuid="4790d7f9-ee40-4b6b-90e4-9546e4d8ad57"/>
+				<reportElement key="staticText-3" x="86" y="0" width="68" height="60" uuid="4790d7f9-ee40-4b6b-90e4-9546e4d8ad57"/>
 				<box>
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -101,13 +101,13 @@
 					<bottomPen lineWidth="0.25"/>
 					<rightPen lineWidth="0.25"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Function Code]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-4" x="250" y="0" width="100" height="40" uuid="6569298e-8145-4952-a7c5-f2b36ca67dec"/>
+				<reportElement key="staticText-4" x="154" y="0" width="76" height="60" uuid="6569298e-8145-4952-a7c5-f2b36ca67dec"/>
 				<box>
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -115,13 +115,13 @@
 					<bottomPen lineWidth="0.25"/>
 					<rightPen lineWidth="0.25"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Account Code]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-5" x="350" y="0" width="300" height="40" uuid="5f5c1f1c-a623-4743-b047-3efedcf84da8"/>
+				<reportElement key="staticText-5" x="230" y="0" width="270" height="60" uuid="5f5c1f1c-a623-4743-b047-3efedcf84da8"/>
 				<box>
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -129,13 +129,13 @@
 					<bottomPen lineWidth="0.25"/>
 					<rightPen lineWidth="0.25"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[Description]]></text>
 			</staticText>
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField-1" x="650" y="0" width="100" height="40" uuid="c881bb10-93ee-4014-a38b-08a0bb6cd4cc"/>
+				<reportElement key="textField-1" x="500" y="0" width="90" height="60" uuid="c881bb10-93ee-4014-a38b-08a0bb6cd4cc"/>
 				<box>
 					<pen lineWidth="0.25"/>
 					<topPen lineWidth="0.25"/>
@@ -143,31 +143,31 @@
 					<bottomPen lineWidth="0.25"/>
 					<rightPen lineWidth="0.25"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Budget Estimate "+$P{finYear}+" (Rs.)"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="750" y="0" width="100" height="40" uuid="9b4101b6-8fff-42eb-adcd-f4f24fe855ef"/>
+				<reportElement x="590" y="0" width="67" height="60" uuid="9b4101b6-8fff-42eb-adcd-f4f24fe855ef"/>
 				<box>
 					<topPen lineWidth="0.25"/>
 					<bottomPen lineWidth="0.25"/>
 					<rightPen lineWidth="0.25"/>
 				</box>
-				<textElement>
+				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Re Appropriation "+$P{finYear}+" (Rs.)"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="850" y="0" width="100" height="40" uuid="b3024e05-0c31-4111-b64b-55a78d1a9626"/>
+				<reportElement x="657" y="0" width="43" height="60" uuid="b3024e05-0c31-4111-b64b-55a78d1a9626"/>
 				<box>
 					<topPen lineWidth="0.25"/>
 					<bottomPen lineWidth="0.25"/>
 					<rightPen lineWidth="0.25"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total (Rs.)]]></text>
@@ -178,9 +178,9 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="42" splitType="Stretch">
+		<band height="35" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement key="textField" x="50" y="-20" width="100" height="35" uuid="2c9d6eae-45c9-4cf2-9c2b-d590a7237640"/>
+				<reportElement key="textField" x="39" y="0" width="47" height="35" uuid="2c9d6eae-45c9-4cf2-9c2b-d590a7237640"/>
 				<box>
 					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
@@ -194,7 +194,7 @@
 				<textFieldExpression><![CDATA[$F{deptCode}==null?"":$F{deptCode}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement key="textField" x="150" y="-20" width="100" height="35" uuid="606c867a-7885-48de-9f18-457c9da78284"/>
+				<reportElement key="textField" x="86" y="0" width="68" height="35" uuid="606c867a-7885-48de-9f18-457c9da78284"/>
 				<box>
 					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
@@ -208,7 +208,7 @@
 				<textFieldExpression><![CDATA[$F{functionCode}==null?"":$F{functionCode}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement key="textField" x="250" y="-20" width="100" height="35" uuid="a09b30a5-bcc7-4393-9745-78ecbdd38275"/>
+				<reportElement key="textField" x="154" y="0" width="76" height="35" uuid="a09b30a5-bcc7-4393-9745-78ecbdd38275"/>
 				<box>
 					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
@@ -222,7 +222,7 @@
 				<textFieldExpression><![CDATA[$F{glCode}==null?"":$F{glCode}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00" isBlankWhenNull="true">
-				<reportElement key="textField" x="650" y="-20" width="100" height="35" uuid="5edd7726-45fb-4fe5-97b5-82ca38ed33bb"/>
+				<reportElement key="textField" x="500" y="0" width="90" height="35" uuid="5edd7726-45fb-4fe5-97b5-82ca38ed33bb"/>
 				<box>
 					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
@@ -236,7 +236,7 @@
 				<textFieldExpression><![CDATA[$F{amount}==null?"":$F{amount}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField-2" style="amountStyle" x="350" y="-20" width="300" height="35" uuid="bead945c-4481-4161-ad71-c8f89018745c"/>
+				<reportElement key="textField-2" style="amountStyle" x="230" y="0" width="270" height="35" uuid="bead945c-4481-4161-ad71-c8f89018745c"/>
 				<box>
 					<bottomPen lineWidth="0.25"/>
 					<rightPen lineWidth="0.25"/>
@@ -247,7 +247,7 @@
 				<textFieldExpression><![CDATA[$F{narration}==null?"":$F{narration}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00" isBlankWhenNull="true">
-				<reportElement x="750" y="-20" width="100" height="35" uuid="bdca023c-5a98-4217-b1c1-aa05b970c632"/>
+				<reportElement x="590" y="0" width="67" height="35" uuid="bdca023c-5a98-4217-b1c1-aa05b970c632"/>
 				<box>
 					<bottomPen lineWidth="0.25"/>
 					<rightPen lineWidth="0.25"/>
@@ -258,7 +258,7 @@
 				<textFieldExpression><![CDATA[$F{appropriationAmount}==null?"":$F{appropriationAmount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00" isBlankWhenNull="true">
-				<reportElement x="850" y="-20" width="100" height="35" uuid="f82d0c45-fe05-42b8-a567-6d8840655461"/>
+				<reportElement x="657" y="0" width="43" height="35" uuid="f82d0c45-fe05-42b8-a567-6d8840655461"/>
 				<box>
 					<bottomPen lineWidth="0.25"/>
 					<rightPen lineWidth="0.25"/>
@@ -268,13 +268,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalAmount}==null?"":$F{totalAmount}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement key="staticText-7" x="50" y="15" width="410" height="27" isRemoveLineWhenBlank="true" uuid="5f05cb6b-6228-44c1-bbde-58725cd4790b"/>
-				<textElement textAlignment="Center">
-					<font isBold="true" pdfFontName="Helvetica-Bold"/>
-				</textElement>
-				<text><![CDATA[No Record Found]]></text>
-			</staticText>
 		</band>
 	</detail>
 	<columnFooter>
@@ -287,6 +280,14 @@
 		<band splitType="Stretch"/>
 	</summary>
 	<noData>
-		<band height="27" splitType="Prevent"/>
+		<band height="44" splitType="Prevent">
+			<staticText>
+				<reportElement key="staticText-7" x="38" y="0" width="460" height="27" isRemoveLineWhenBlank="true" uuid="5f05cb6b-6228-44c1-bbde-58725cd4790b"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[No Record Found]]></text>
+			</staticText>
+		</band>
 	</noData>
 </jasperReport>

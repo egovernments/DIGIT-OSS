@@ -52,8 +52,19 @@
 <style type="text/css">
 #container iframe {
 	width: 100%;
-	height: 2000px;
+	height: 100%;
 	border: none;
+	padding-top: 123px;
+}
+
+.page-container .main-content{
+    position: absolute;
+    display: block;
+    vertical-align: top;
+    padding: 20px;
+    width: 100%;
+    padding-bottom: 0px;
+    bottom: 0px;
 }
 
 #container {

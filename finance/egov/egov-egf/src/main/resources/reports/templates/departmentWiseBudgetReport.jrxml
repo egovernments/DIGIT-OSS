@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="departmentWiseBudgetReport" pageWidth="1000" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dc74b75f-a60f-4e9b-b870-918a995b4fbb">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="departmentWiseBudgetReport" pageWidth="750" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dc74b75f-a60f-4e9b-b870-918a995b4fbb">
 	<property name="net.sf.jasperreports.export.pdf.exclude.origin.keep.first.band.columnHeader" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.columnHeader" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.html.exclude.origin.keep.first.band.columnHeader" value="columnHeader"/>
@@ -37,21 +37,16 @@
 	<title>
 		<band height="40" splitType="Stretch">
 			<frame>
-				<reportElement x="30" y="0" width="900" height="40" uuid="4fe42627-9e00-45e1-a48a-c7d81397488c"/>
+				<reportElement x="30" y="0" width="651" height="40" uuid="4fe42627-9e00-45e1-a48a-c7d81397488c">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+				</reportElement>
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
-				<textField isBlankWhenNull="true">
-					<reportElement x="430" y="21" width="142" height="19" uuid="641273bd-ae87-4fa8-9b01-205c67b1f65a"/>
-					<textElement textAlignment="Center">
-						<font size="12" isBold="true"/>
-					</textElement>
-					<textFieldExpression><![CDATA[( $P{type} )]]></textFieldExpression>
-				</textField>
 				<staticText>
-					<reportElement x="380" y="0" width="240" height="20" uuid="bfb85223-9982-4da9-8cc3-3cb714d5cd66"/>
-					<textElement>
-						<font size="14" isBold="true"/>
+					<reportElement x="0" y="0" width="651" height="40" uuid="916e7721-7d2d-4a0d-a345-ecc5645dae32"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="18" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Departmentwise Budget Summary]]></text>
 				</staticText>
@@ -75,7 +70,7 @@
 				<text><![CDATA[Account Code]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="130" y="0" width="360" height="50" uuid="5144a4e3-29d3-4c4c-9d86-e59043c9a9bc"/>
+				<reportElement x="130" y="0" width="250" height="50" uuid="5144a4e3-29d3-4c4c-9d86-e59043c9a9bc"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -89,7 +84,7 @@
 				<text><![CDATA[Description]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="490" y="0" width="170" height="50" uuid="b1e21985-a548-454d-b83d-ad0d77b550f7"/>
+				<reportElement x="380" y="0" width="100" height="50" uuid="b1e21985-a548-454d-b83d-ad0d77b550f7"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -103,7 +98,7 @@
 				<textFieldExpression><![CDATA["Budget Estimate "+$P{finYear}+" (Rs.)"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="660" y="0" width="169" height="50" uuid="2a73bcf0-4af9-44e7-8bab-4aef8971ab6d"/>
+				<reportElement x="480" y="0" width="100" height="50" uuid="2a73bcf0-4af9-44e7-8bab-4aef8971ab6d"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -117,7 +112,7 @@
 				<textFieldExpression><![CDATA["ReAppropriation "+$P{finYear}+" (Rs.)"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="829" y="0" width="101" height="50" uuid="c37ff73a-f51d-4541-9576-e962bb11f49c"/>
+				<reportElement x="580" y="0" width="101" height="50" uuid="c37ff73a-f51d-4541-9576-e962bb11f49c"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -143,13 +138,13 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{glCode}==null?" ":$F{glCode}+" "]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="130" y="0" width="360" height="33" uuid="ad66ca5e-c4bf-47da-ac36-167c70e0595b"/>
+				<reportElement x="130" y="0" width="250" height="33" uuid="ad66ca5e-c4bf-47da-ac36-167c70e0595b"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -157,13 +152,13 @@
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textElement verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{narration}==null?" ":$F{narration}+" "]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00" isBlankWhenNull="true">
-				<reportElement x="490" y="0" width="170" height="33" uuid="c04ae8e5-bb3c-41e7-9691-52fbbb84cb47"/>
+				<reportElement x="380" y="0" width="100" height="33" uuid="c04ae8e5-bb3c-41e7-9691-52fbbb84cb47"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -177,7 +172,7 @@
 				<textFieldExpression><![CDATA[$F{amount}==null?" ":$F{amount}+" "]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00" isBlankWhenNull="true">
-				<reportElement x="660" y="0" width="169" height="33" uuid="b31ad7d3-34d6-40cc-b7e6-b77837916304"/>
+				<reportElement x="480" y="0" width="100" height="33" uuid="b31ad7d3-34d6-40cc-b7e6-b77837916304"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -191,7 +186,7 @@
 				<textFieldExpression><![CDATA[$F{appropriationAmount}==null?" ":$F{appropriationAmount}+" "]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00" isBlankWhenNull="true">
-				<reportElement x="829" y="0" width="101" height="33" uuid="19b36837-4e6e-4347-ad9f-60ff37f3e9b2"/>
+				<reportElement x="580" y="0" width="101" height="33" uuid="19b36837-4e6e-4347-ad9f-60ff37f3e9b2"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
