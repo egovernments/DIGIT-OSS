@@ -127,6 +127,24 @@
       "isDebit": false,
       "isActualDemand": true,
       "order": 1
+    },
+    {
+      "category": "REBATE",
+      "service": "PT",
+      "name": "pt debit decimal",
+      "code": "PT_DECIMAL_CEILING_DEBIT",
+      "isDebit": true,
+      "isActualDemand": true,
+      "order": 0
+    },
+    {
+      "category": "TAX",
+      "service": "PT",
+      "name": "pt credit decimal",
+      "code": "PT_DECIMAL_CEILING_CREDIT",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": 1
     }
   ]
 }
