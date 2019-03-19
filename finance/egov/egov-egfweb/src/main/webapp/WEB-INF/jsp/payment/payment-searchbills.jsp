@@ -845,7 +845,7 @@ function disableSelectedRows()
 																					<s:property value="%{billNumber}" /></td>
 																				<td class="blueborderfortdnew"><s:hidden
 																						name="contractorList[%{#s.index}].billDate"
-																						id="billDate%{#s.index}" value="%{billDate}" /> <s:date
+																						id="billDate%{#s.index}" value="%{getFormattedDate1({billDate})}"/> <s:date
 																						name="%{billDate}" format="dd/MM/yyyy" /></td>
 
 																				<td align="left" class="blueborderfortdnew"><s:hidden
@@ -863,7 +863,8 @@ function disableSelectedRows()
 																					class="blueborderfortdnew"><s:hidden
 																						name="contractorList[%{#s.index}].billVoucherDate"
 																						id="billVoucherDate%{#s.index}"
-																						value="%{billVoucherDate}" /> <s:date
+																						value="%{getFormattedDate1({billVoucherDate})}"
+																						/> <s:date
 																						name="%{billVoucherDate}" format="dd/MM/yyyy" /></td>
 
 																				<td align="left" class="blueborderfortdnew"><s:hidden
@@ -1010,7 +1011,7 @@ function disableSelectedRows()
 																					<s:property value="%{billNumber}" /></td>
 																				<td class="blueborderfortdnew"><s:hidden
 																						name="supplierList[%{#s.index}].billDate"
-																						id="billDate%{#s.index}" value="%{billDate}" /> <s:date
+																						id="billDate%{#s.index}" value="%{getFormattedDate1({billDate})}"/> <s:date
 																						name="%{billDate}" format="dd/MM/yyyy" /></td>
 
 																				<td align="left" class="blueborderfortdnew"><s:hidden
@@ -1028,7 +1029,7 @@ function disableSelectedRows()
 																					class="blueborderfortdnew"><s:hidden
 																						name="supplierList[%{#s.index}].billVoucherDate"
 																						id="billVoucherDate%{#s.index}"
-																						value="%{billVoucherDate}" /> <s:date
+																						value="%{getFormattedDate1({billVoucherDate})}"/> <s:date
 																						name="%{billVoucherDate}" format="dd/MM/yyyy" /></td>
 
 																				<td align="left" class="blueborderfortdnew"><s:hidden
@@ -1176,7 +1177,7 @@ function disableSelectedRows()
 																					<s:property value="%{billNumber}" /></td>
 																				<td class="blueborderfortdnew"><s:hidden
 																						name="contingentList[%{#s.index}].billDate"
-																						id="billDate%{#s.index}" value="%{billDate}" /> <s:date
+																						id="billDate%{#s.index}" value="%{getFormattedDate1({billDate})}"/> <s:date
 																						name="%{billDate}" format="dd/MM/yyyy" /></td>
 
 																				<td align="left" class="blueborderfortdnew"><s:hidden
@@ -1194,7 +1195,8 @@ function disableSelectedRows()
 																					class="blueborderfortdnew"><s:hidden
 																						name="contingentList[%{#s.index}].billVoucherDate"
 																						id="billVoucherDate%{#s.index}"
-																						value="%{billVoucherDate}" /> <s:date
+																						value="%{getFormattedDate1({billVoucherDate})}"
+																						/> <s:date
 																						name="%{billVoucherDate}" format="dd/MM/yyyy" /></td>
 
 																				<td align="left" class="blueborderfortdnew"><s:hidden

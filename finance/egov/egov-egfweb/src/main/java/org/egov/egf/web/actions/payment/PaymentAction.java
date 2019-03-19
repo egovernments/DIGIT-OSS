@@ -1711,6 +1711,20 @@ public class PaymentAction extends BasePaymentAction {
         }
         return val;
     }
+    
+    public String getFormattedDate1(String date){
+        if(date != null){
+            try {
+                String substring = date.substring(1, 11);
+                Date parse = new Date();
+                parse = formatter1.parse(substring);
+                return sdf1.format(parse);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 
     protected String getMessage(final String key) {
         return getText(key);
@@ -2286,6 +2300,5 @@ public class PaymentAction extends BasePaymentAction {
 
     public void setSelectedSupplierRows(String selectedSupplierRows) {
         this.selectedSupplierRows = selectedSupplierRows;
-    }
-    
+    } 
 }

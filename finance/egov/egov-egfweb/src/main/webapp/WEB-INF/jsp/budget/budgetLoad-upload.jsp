@@ -70,9 +70,7 @@
 	function urlLoad(fileStoreId) {
 		var sUrl = "/services/egi/downloadfile?fileStoreId=" + fileStoreId
 				+ "&moduleName=EGF";
-		window.open(sUrl, "window",
-				'scrollbars=yes,resizable=no,height=400,width=400,status=yes');
-
+		window.location = sUrl;
 	}
 	jQuery(document).ready(function() {
 		var fileformats = [ 'xls' ];

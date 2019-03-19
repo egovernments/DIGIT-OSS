@@ -48,9 +48,11 @@
 package org.egov.egf.web.actions.budget;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -121,6 +123,7 @@ public class BudgetLoadAction extends BaseFormAction {
     private static final int BEAMOUNT_CELL_INDEX = 5;
     private static final int PLANNINGPERCENTAGE_CELL_INDEX = 6;
     private boolean errorInMasterData = false;
+    private boolean isBudgetUploadFileEmpty = true;
     private MultipartFile[] originalFile = new MultipartFile[1];
     private MultipartFile[] outPutFile = new MultipartFile[1];
     private String originalFileStoreId, outPutFileStoreId;
@@ -232,8 +235,12 @@ public class BudgetLoadAction extends BaseFormAction {
             originalFileStoreId = originalFileStore.getFileStoreId();
 
             List<BudgetUpload> budgetUploadList = loadToBudgetUpload(sheet);
+            if(isBudgetUploadFileEmpty){
+                fsIP.close();
+                throw new ValidationException(new ValidationError(getText("error.while.counting.upload.records"), "There should be atleast one record in the upload file"));
+            }
             budgetUploadList = validateMasterData(budgetUploadList);
-            budgetUploadList = validateDuplicateData(budgetUploadList);
+            budgetUploadList = !errorInMasterData ? validateDuplicateData(budgetUploadList) : budgetUploadList;
 
             if (errorInMasterData) {
                 fsIP.close();
@@ -277,7 +284,6 @@ public class BudgetLoadAction extends BaseFormAction {
         FileInputStream fsIP;
         try {
             fsIP = new FileInputStream(budgetInXls);
-
             Map<String, String> errorsMap = new HashMap<String, String>();
             final POIFSFileSystem fs = new POIFSFileSystem(fsIP);
             final HSSFWorkbook wb = new HSSFWorkbook(fs);
@@ -286,7 +292,11 @@ public class BudgetLoadAction extends BaseFormAction {
             HSSFRow row = sheet.getRow(3);
             HSSFCell cell = row.createCell(7);
             cell.setCellValue("Error Reason");
-
+            cell.setAsActiveCell();
+            HSSFCellStyle cellStyle = wb.createCellStyle();
+            cellStyle.setFillForegroundColor(HSSFColor.RED.index);
+            cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+            cell.setCellStyle(cellStyle);
             for (BudgetUpload budget : budgetUploadList)
                 errorsMap.put(budget.getFundCode() + "-" + budget.getFunctionCode() + "-" + budget.getDeptCode()
                         + "-"
@@ -294,11 +304,19 @@ public class BudgetLoadAction extends BaseFormAction {
 
             for (int i = DATA_STARTING_ROW_INDEX; i <= sheet.getLastRowNum(); i++) {
                 HSSFRow errorRow = sheet.getRow(i);
-                HSSFCell errorCell = errorRow.createCell(7);
-                errorCell.setCellValue(errorsMap.get((getStrValue(sheet.getRow(i).getCell(FUNDCODE_CELL_INDEX)) + "-"
-                        + getStrValue(sheet.getRow(i).getCell(FUNCTIONCODE_CELL_INDEX)) + "-"
-                        + getStrValue(sheet.getRow(i).getCell(DEPARTMENTCODE_CELL_INDEX)) + "-" + getStrValue(sheet.getRow(i)
-                        .getCell(GLCODE_CELL_INDEX)))));
+                if(!isRowEmpty(errorRow)){
+                    HSSFCell errorCell = errorRow.createCell(7);
+                    String fundCode = getStrValue(sheet.getRow(i).getCell(FUNDCODE_CELL_INDEX));
+                    fundCode = fundCode != null ? fundCode : "";
+                    String funcCode = getStrValue(sheet.getRow(i).getCell(FUNCTIONCODE_CELL_INDEX));
+                    funcCode = funcCode != null ? funcCode : "";
+                    String deptCode = getStrValue(sheet.getRow(i).getCell(DEPARTMENTCODE_CELL_INDEX));
+                    deptCode = deptCode != null ? deptCode : "";
+                    String coaCode = getStrValue(sheet.getRow(i).getCell(GLCODE_CELL_INDEX));
+                    coaCode = coaCode != null ? coaCode : "";
+                    String errorMsg = fundCode + "-" + funcCode + "-" + deptCode + "-" + coaCode;
+                    errorCell.setCellValue(errorsMap.get(errorMsg));
+                }
             }
 
             FileOutputStream output_file = new FileOutputStream(budgetInXls);
@@ -437,28 +455,39 @@ public class BudgetLoadAction extends BaseFormAction {
 
             for (BudgetUpload budget : budgetUploadList) {
                 error = "";
-                if (budget.getFundCode() != null && !budget.getFundCode().equalsIgnoreCase("")
-                        && fundMap.get(budget.getFundCode()) == null)
+                if(budget.getFundCode() != null && budget.getFundCode().isEmpty())
+                    error = error + getText("error.while.checking.fund.value");
+                else if (fundMap.get(budget.getFundCode()) == null)
                     error = error + getText("fund.is.not.exist") + budget.getFundCode();
                 else
                     budget.setFund(fundMap.get(budget.getFundCode()));
-                if (budget.getFunctionCode() != null && !budget.getFunctionCode().equalsIgnoreCase("")
-                        && functionMap.get(budget.getFunctionCode()) == null)
+                if (budget.getFunctionCode() != null && budget.getFunctionCode().isEmpty())
+                    error = error + getText("error.while.checking.function.value");
+                else if(functionMap.get(budget.getFunctionCode()) == null)
                     error = error + " " + getText("function.is.not.exist") + budget.getFunctionCode();
                 else
                     budget.setFunction(functionMap.get(budget.getFunctionCode()));
 
-                if (budget.getDeptCode() != null && !budget.getFundCode().equalsIgnoreCase("")
-                        && departmentMap.get(budget.getDeptCode()) == null)
+                if (budget.getDeptCode() != null && budget.getFundCode().isEmpty())
+                    error = error + getText("error.while.checking.dept.value");
+                else if(departmentMap.get(budget.getDeptCode()) == null)
                     error = error + " " + getText("department.is.not.exist") + budget.getDeptCode();
                 else
                     budget.setDeptCode(budget.getDeptCode());
 
-                if (budget.getBudgetHead() != null && !budget.getBudgetHead().equalsIgnoreCase("")
-                        && coaMap.get(budget.getBudgetHead()) == null)
+                if (budget.getBudgetHead() != null && budget.getBudgetHead().isEmpty())
+                    error = error + getText("error.while.checking.coa.value");
+                else if(coaMap.get(budget.getBudgetHead()) == null)
                     error = error + " " + getText("coa.is.not.exist") + budget.getBudgetHead();
                 else
                     budget.setCoa(coaMap.get(budget.getBudgetHead()));
+                
+                if(budget.getBeAmount() != null && budget.getBeAmount().compareTo(new BigDecimal(0)) == 0)
+                    error = error + " " + getText("error.while.checking.be.value");
+                
+                if(budget.getReAmount() != null && budget.getReAmount().compareTo(new BigDecimal(0)) == 0)
+                    error = error + " " + getText("error.while.checking.re.value");
+                
                 budget.setErrorReason(error);
                 if (!error.equalsIgnoreCase("")) {
                     errorInMasterData = true;
@@ -524,7 +553,10 @@ public class BudgetLoadAction extends BaseFormAction {
         try {
 
             for (int i = DATA_STARTING_ROW_INDEX; i <= sheet.getLastRowNum(); i++)
-                budgetUploadList.add(getBudgetUpload(sheet.getRow(i)));
+                if(!isRowEmpty(sheet.getRow(i))){
+                    budgetUploadList.add(getBudgetUpload(sheet.getRow(i)));
+                    isBudgetUploadFileEmpty = false;
+                }
         } catch (final ValidationException e)
         {
             throw new ValidationException(Arrays.asList(new ValidationError(e.getErrors().get(0).getMessage(),
@@ -536,6 +568,15 @@ public class BudgetLoadAction extends BaseFormAction {
         }
         return budgetUploadList;
 
+    }
+    
+    public static boolean isRowEmpty(HSSFRow row) {
+        for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
+            HSSFCell cell = row.getCell(c);
+            if (cell != null && cell.getCellType() != HSSFCell.CELL_TYPE_BLANK)
+                return false;
+        }
+        return true;
     }
 
     private BudgetUpload getBudgetUpload(HSSFRow row) {
@@ -601,7 +642,7 @@ public class BudgetLoadAction extends BaseFormAction {
     }
 
     private String getStrValue(final HSSFCell cell) {
-        if (cell == null)
+        if (cell == null && cell.getCellType() == HSSFCell.CELL_TYPE_BLANK)
             return null;
         double numericCellValue = 0d;
         String strValue = "";
@@ -616,12 +657,12 @@ public class BudgetLoadAction extends BaseFormAction {
             strValue = cell.getStringCellValue();
             break;
         }
-        return strValue;
+        return strValue.trim().isEmpty() ? null : strValue.trim();
 
     }
 
     private BigDecimal getNumericValue(final HSSFCell cell) {
-        if (cell == null)
+        if (cell == null && cell.getCellType() == HSSFCell.CELL_TYPE_BLANK)
             return null;
         double numericCellValue = 0d;
         BigDecimal bigDecimalValue = BigDecimal.ZERO;

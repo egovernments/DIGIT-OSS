@@ -117,9 +117,7 @@
 			<s:submit value="SAVE AS EXCEL"
 				onclick="submitForm('generateDepartmentWiseXls')"
 				cssClass="buttonsubmit" />
-			<s:submit value="Close"
-				onclick="window.parent.postMessage('close','*');window.close();"
-				cssClass="buttonsubmit" />
+			<input type="button" name="button2" id="button2" value="Close" class="btn btn-default" onclick="window.parent.postMessage('close','*');window.close();">
 		</div>
 	</s:form>
 	<script>
