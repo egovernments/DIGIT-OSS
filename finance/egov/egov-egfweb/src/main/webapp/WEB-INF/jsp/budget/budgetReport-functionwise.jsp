@@ -67,7 +67,8 @@
 					onclick="return validateFinYear('getFunctionwiseReport');" />
 					<s:reset name="button" type="submit" cssClass="button" id="button"
 					value="Reset" />
-				<input type="button" name="button2" id="button2" value="Close" class="btn btn-default" onclick="window.parent.postMessage('close','*');window.close();">
+				<input type="button" value="Close"
+					onclick="window.parent.postMessage('close','*');window.close();" class="button" />
 			</div>
 		</div>
 	</s:form>

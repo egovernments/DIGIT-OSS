@@ -119,8 +119,8 @@
 				onclick="submitForm('generateFunctionWisePdf')" cssClass="buttonsubmit" />
 			<s:submit id="printXLS" value="SAVE AS EXCEL"
 				onclick="submitForm('generateFunctionWiseXls')" cssClass="buttonsubmit" />
-			<s:submit id="printXLS" value="Close"
-				onclick="window.parent.postMessage('close','*');window.close();" cssClass="buttonsubmit" />
+			<input type="button" value="Close"
+					onclick="window.parent.postMessage('close','*');window.close();" class="button" />
 		</div>
 	</s:form>
 	<script>
