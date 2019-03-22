@@ -153,23 +153,6 @@
         "key" : "UserListOther",
         "roleAttributeAccessList" : [
           {
-            "roleCode" : "CITIZEN",
-            "attributeAccessList" : [
-              {
-                "attribute" : {
-                  "jsonPath" : "*/name"
-                },
-                "accessType" : "PLAIN"
-              },
-              {
-                "attribute" : {
-                  "jsonPath" : "*/mobileNumber"
-                },
-                "accessType" : "PLAIN"
-              }
-            ]
-          },
-          {
             "roleCode" : "EMPLOYEE",
             "attributeAccessList" : [
               {
@@ -181,6 +164,24 @@
               {
                 "attribute" : {
                   "jsonPath" : "*/mobileNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/permanentAddress/address"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/correspondenceAddress/address"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/addresses/*/address"
                 },
                 "accessType" : "PLAIN"
               }
