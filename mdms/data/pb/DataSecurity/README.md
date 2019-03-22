@@ -44,7 +44,7 @@ List of possible values for AccessType listed according to its priority is as fo
 Each role will have this list AttributeAccess :
 ```
 class RoleAttributeAccess {
-    String role;
+    String roleCode;
     List<AttributeAccess> attributeAccessList;
 }
 ```
