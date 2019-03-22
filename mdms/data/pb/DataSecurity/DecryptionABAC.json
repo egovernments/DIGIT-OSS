@@ -193,25 +193,7 @@
         "key" : "TradeLicenseRegistryReport",
         "roleAttributeAccessList" : [
           {
-            "roleCode" : "TL_APPROVER",
-            "attributeAccessList" : [
-              {
-                "attribute" : {
-                  "jsonPath" : "*/name"
-                },
-                "accessType" : "PLAIN"
-              },
-              {
-                "attribute" : {
-                  "jsonPath" : "*/mobilenumber",
-                  "maskingTechnique" : "mobile"
-                },
-                "accessType" : "MASK"
-              }
-            ]
-          },
-          {
-            "roleCode" : "TL_CEMP",
+            "roleCode" : "EMPLOYEE",
             "attributeAccessList" : [
               {
                 "attribute" : {
@@ -234,7 +216,7 @@
         "key" : "StateLevelTradeLicenseRegistryReport",
         "roleAttributeAccessList" : [
           {
-            "roleCode" : "TL_ADMIN",
+            "roleCode" : "EMPLOYEE",
             "attributeAccessList" : [
               {
                 "attribute" : {
