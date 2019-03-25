@@ -150,6 +150,54 @@
         ]
       },
       {
+        "key" : "DescriptionReport",
+        "roleAttributeAccessList" : [
+          {
+            "roleCode" : "EMPLOYEE",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "*/name"
+                },
+                "accessType" : "PLAIN"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key" : "EmployeeReport",
+        "roleAttributeAccessList" : [
+          {
+            "roleCode" : "EMPLOYEE",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "*/name"
+                },
+                "accessType" : "PLAIN"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key" : "ULBEmployeeWiseReport",
+        "roleAttributeAccessList" : [
+          {
+            "roleCode" : "EMPLOYEE",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "*/employee"
+                },
+                "accessType" : "PLAIN"
+              }
+            ]
+          }
+        ]
+      },
+      {
         "key" : "TradeLicenseRegistryReport",
         "roleAttributeAccessList" : [
           {
@@ -166,7 +214,7 @@
                   "jsonPath" : "*/mobilenumber",
                   "maskingTechnique" : "mobile"
                 },
-                "accessType" : "MASK"
+                "accessType" : "PLAIN"
               }
             ]
           }
@@ -189,7 +237,7 @@
                   "jsonPath" : "*/mobilenumber",
                   "maskingTechnique" : "mobile"
                 },
-                "accessType" : "MASK"
+                "accessType" : "PLAIN"
               }
             ]
           }
