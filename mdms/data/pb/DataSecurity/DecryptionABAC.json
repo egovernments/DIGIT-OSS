@@ -3,6 +3,199 @@
     "moduleName" : "DataSecurity",
     "DecryptionABAC" : [
       {
+        "key" : "ALL_ACCESS",
+        "roleAttributeAccessList" : [
+          {
+            "roleCode" : "CITIZEN",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "*/name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/mobileNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/emailId"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/username"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/altContactNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/pan"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/aadhaarNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/guardian"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/permanentAddress/address"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/correspondenceAddress/address"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/addresses/*/address"
+                },
+                "accessType" : "PLAIN"
+              }
+            ]
+          },
+          {
+            "roleCode" : "EMPLOYEE",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "*/name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/mobileNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/emailId"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/username"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/altContactNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/pan"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/aadhaarNumber"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/guardian"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/permanentAddress/address"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/correspondenceAddress/address"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/addresses/*/address"
+                },
+                "accessType" : "PLAIN"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key" : "TradeLicenseRegistryReport",
+        "roleAttributeAccessList" : [
+          {
+            "roleCode" : "EMPLOYEE",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "*/name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/mobilenumber",
+                  "maskingTechnique" : "mobile"
+                },
+                "accessType" : "MASK"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key" : "StateLevelTradeLicenseRegistryReport",
+        "roleAttributeAccessList" : [
+          {
+            "roleCode" : "EMPLOYEE",
+            "attributeAccessList" : [
+              {
+                "attribute" : {
+                  "jsonPath" : "*/name"
+                },
+                "accessType" : "PLAIN"
+              },
+              {
+                "attribute" : {
+                  "jsonPath" : "*/mobilenumber",
+                  "maskingTechnique" : "mobile"
+                },
+                "accessType" : "MASK"
+              }
+            ]
+          }
+        ]
+      },
+      {
         "key" : "UserListSelf",
         "roleAttributeAccessList" : [
           {
@@ -885,52 +1078,6 @@
               {
                 "attribute" : {
                   "jsonPath" : "*/mobileNumber",
-                  "maskingTechnique" : "mobile"
-                },
-                "accessType" : "MASK"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "key" : "TradeLicenseRegistryReport",
-        "roleAttributeAccessList" : [
-          {
-            "roleCode" : "EMPLOYEE",
-            "attributeAccessList" : [
-              {
-                "attribute" : {
-                  "jsonPath" : "*/name"
-                },
-                "accessType" : "PLAIN"
-              },
-              {
-                "attribute" : {
-                  "jsonPath" : "*/mobilenumber",
-                  "maskingTechnique" : "mobile"
-                },
-                "accessType" : "MASK"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "key" : "StateLevelTradeLicenseRegistryReport",
-        "roleAttributeAccessList" : [
-          {
-            "roleCode" : "EMPLOYEE",
-            "attributeAccessList" : [
-              {
-                "attribute" : {
-                  "jsonPath" : "*/name"
-                },
-                "accessType" : "PLAIN"
-              },
-              {
-                "attribute" : {
-                  "jsonPath" : "*/mobilenumber",
                   "maskingTechnique" : "mobile"
                 },
                 "accessType" : "MASK"
