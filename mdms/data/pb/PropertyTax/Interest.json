@@ -8,7 +8,7 @@
       "flatAmount": null,
       "maxAmount": null,
       "fromFY": "2015-16",
-      "startingDay": "1/01"
+      "startingDay": "1/01/2016"
     },
     {
       "rate": 12,
@@ -16,7 +16,7 @@
       "flatAmount": null,
       "maxAmount": null,
       "fromFY": "2015-16",
-      "startingDay": "1/04"
+      "startingDay": "1/04/2016"
     },
     {
       "rate": 4,
@@ -24,7 +24,7 @@
       "flatAmount": null,
       "maxAmount": null,
       "fromFY": "2018-19",
-      "startingDay": "01/04"
+      "startingDay": "01/04/2019"
     },
     {
       "rate": 9,
@@ -32,7 +32,7 @@
       "flatAmount": null,
       "maxAmount": null,
       "fromFY": "2018-19",
-      "startingDay": "11/12"
+      "startingDay": "11/12/2018"
     }
   ]
 }
