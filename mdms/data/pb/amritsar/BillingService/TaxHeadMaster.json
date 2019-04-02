@@ -154,6 +154,15 @@
       "isDebit": false,
       "isActualDemand": true,
       "order": 1
+    },
+    {
+      "category": "TAX",
+      "service": "PT",
+      "name": "pt decimal roundOff",
+      "code": "PT_ROUNDOFF",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": 0
     }
   ]
 }
