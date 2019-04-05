@@ -12,7 +12,7 @@
       "order": 0
     },
     {
-      "category": "EXEMPTION",
+      "category": "ADVANCE_COLLECTION",
       "service": "PT",
       "name": "Pt advance carry forward",
       "code": "PT_ADVANCE_CARRYFORWARD",
