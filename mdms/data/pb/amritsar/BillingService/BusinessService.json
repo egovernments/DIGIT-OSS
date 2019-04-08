@@ -8,7 +8,8 @@
       "collectionModesNotAllowed": [
         "DD"
       ],
-      "partPaymentAllowed": true
+      "partPaymentAllowed": true,
+      "isAdvanceAllowed": true
     },
     {
       "businessService": "WaterCharges",
@@ -16,7 +17,8 @@
       "collectionModesNotAllowed": [
         "DD"
       ],
-      "partPaymentAllowed": false
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": true
     },
     {
       "businessService": "TradeLicense",
@@ -24,7 +26,8 @@
       "collectionModesNotAllowed": [
         "DD"
       ],
-      "partPaymentAllowed": false
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false
     }
   ]
 }
