@@ -9,7 +9,8 @@
         "DD"
       ],
       "partPaymentAllowed": true,
-      "isAdvanceAllowed": true
+      "isAdvanceAllowed": true,
+      "demandUpdateTime": 86400000
     },
     {
       "businessService": "WaterCharges",
@@ -18,7 +19,8 @@
         "DD"
       ],
       "partPaymentAllowed": false,
-      "isAdvanceAllowed": true
+      "isAdvanceAllowed": true,
+      "demandUpdateTime": 86400000
     },
     {
       "businessService": "TradeLicense",
@@ -27,7 +29,8 @@
         "DD"
       ],
       "partPaymentAllowed": false,
-      "isAdvanceAllowed": false
+      "isAdvanceAllowed": false,
+      "demandUpdateTime": 604800000
     }
   ]
 }
