@@ -1,1 +1,0 @@
-{"tenantId":"testtenant.ulb1","moduleName":"ASSET","NewMaster":[{"unitOfMeasurement":"NOS","isAssetAllow":false,"code":"002","isAssetAllowFromUi":true,"depreciationMethod":"STRAIGHT_LINE_METHOD","tenantId":"testtenant","name":"Infrastructure assets","isDepreciationApplicable":true,"id":"678","version":"1.0","assetCategoryType":"IMMOVABLE"}]}
