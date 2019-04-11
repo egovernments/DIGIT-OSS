@@ -63,12 +63,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -186,7 +188,7 @@ public class MicroserviceUtils {
 
     @Value("${egov.services.user.deparment.url}")
     private String deptServiceUrl;
-
+    
     @Value("${egov.services.user.designation.url}")
     private String designServiceUrl;
 
@@ -378,21 +380,22 @@ public class MicroserviceUtils {
     }
 
     public List<Department> getDepartments() {
-
-        // final RestTemplate restTemplate = createRestTemplate();
-        final String deptCodes = (String) this.getFinanceDeptCodes();
-        final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId()
-                + (deptCodes != null ? "&codes=" + deptCodes : "");
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate(new Date()));
-        reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call :" + dept_url);
-        DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
-        return depResponse.getDepartment();
+        List<Department> deptList = new ArrayList<>();
+        try {
+            JSONArray mdmObj = getFinanceMdmsByModuleNameAndMasterDetails("common-masters", "Department", null);
+            mdmObj.stream().forEach(obj ->{
+                LinkedHashMap<String, Object> lhm = (LinkedHashMap)obj;
+                Department dept = new Department();
+                dept.setCode(lhm.get("code").toString());
+                dept.setName(lhm.get("name").toString());
+                dept.setActive((Boolean)lhm.get("active"));
+                deptList.add(dept);
+            });
+            return deptList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public List<Department> getDepartmentsById(Long departmentId) {
@@ -435,50 +438,66 @@ public class MicroserviceUtils {
     }
 
     private Department fetchByDepartmentCode(String departmentCode) {
-
-        final RestTemplate restTemplate = createRestTemplate();
-        final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId() + "&code=" + departmentCode;
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate(new Date()));
-        reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:" + dept_url);
-        DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
-
-        if (depResponse.getDepartment() != null && !depResponse.getDepartment().isEmpty())
-            return depResponse.getDepartment().get(0);
-        else
-            return null;
-
+        List<Department> departments = getDepartments();
+        try {
+            List<Department> filterDept = departments.stream().filter(dept -> dept.getCode().equals(departmentCode)).collect(Collectors.toList());
+            return !filterDept.isEmpty() ? filterDept.get(0) : null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public List<Designation> getDesignation(String code) {
-
-        final RestTemplate restTemplate = createRestTemplate();
-
-        String design_url = designServiceUrl + "?tenantId=" + getTenentId();
-
-        // String design_url = designServiceUrl+"?tenantId="+"default";
-
-        if (code != null)
-            design_url = design_url + "&code=" + code;
-        else {
-            String desgCodes = (String) this.getFinanceDesginCodes();
-            design_url = design_url + "&codes=" + desgCodes;
-        }
-
+            List<Designation> desgList = new ArrayList<>();
+            try {
+                JSONArray mdmObj =  getFinanceMdmsByModuleNameAndMasterDetails("common-masters", "Designation", null);
+                mdmObj.stream().forEach(obj ->{
+                    LinkedHashMap<String, Object> lhm = (LinkedHashMap)obj;
+                    Designation designation = new Designation();
+                    designation.setCode(lhm.get("code").toString());
+                    designation.setName(lhm.get("name").toString());
+                    designation.setDescription(lhm.get("description").toString());
+                    designation.setActive((Boolean)lhm.get("active"));
+                    desgList.add(designation);
+                });
+                if(null != code){
+                    List<Designation> collect = desgList.stream().filter(desg -> desg.getCode().equals(code)).collect(Collectors.toList());
+                    return collect;
+                }
+                return desgList;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+}
+    
+    public JSONArray getFinanceMdmsByModuleNameAndMasterDetails(String moduleName,String name, String filter){
+        String mdmsUrl = this.hostUrl + this.mdmsSearchUrl;
         RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
         requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate(new Date()));
-        reqWrapper.setRequestInfo(requestInfo);
-
-        DesignationResponse designResponse = restTemplate.postForObject(design_url, reqWrapper, DesignationResponse.class);
-        return designResponse.getDesignation();
+        MasterDetail masterDetail = new MasterDetail();
+        masterDetail.setName(name);
+        masterDetail.setFilter(filter);
+        ModuleDetail moduleDetail = new ModuleDetail();
+        moduleDetail.setMasterDetails(Arrays.asList(masterDetail));
+        moduleDetail.setModuleName(moduleName);
+        MdmsCriteria mdmscriteria = new MdmsCriteria();
+        mdmscriteria.setTenantId(getTenentId().split(Pattern.quote("."))[0]);
+        mdmscriteria.setModuleDetails(Arrays.asList(moduleDetail));
+        MdmsCriteriaReq mdmsrequest = new MdmsCriteriaReq();
+        mdmsrequest.setRequestInfo(requestInfo);
+        mdmsrequest.setMdmsCriteria(mdmscriteria);
+        try {
+            MdmsResponse response = restTemplate.postForObject(mdmsUrl, mdmsrequest, MdmsResponse.class);
+            Map<String, JSONArray> mdmsmap = response.getMdmsRes().get(moduleName);
+            if (null != mdmsmap && mdmsmap.size() > 0) {
+                return mdmsmap.get(name);
+            }
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+        return null;
     }
 
     public List<Designation> getDesignations() {
