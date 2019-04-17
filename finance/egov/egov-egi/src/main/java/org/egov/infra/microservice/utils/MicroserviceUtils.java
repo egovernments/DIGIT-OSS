@@ -186,11 +186,11 @@ public class MicroserviceUtils {
     @Value("${egov.services.user.create.url}")
     private String userServiceUrl;
 
-    @Value("${egov.services.user.deparment.url}")
-    private String deptServiceUrl;
+//    @Value("${egov.services.user.deparment.url}")
+//    private String deptServiceUrl;
     
-    @Value("${egov.services.user.designation.url}")
-    private String designServiceUrl;
+//    @Value("${egov.services.user.designation.url}")
+//    private String designServiceUrl;
 
     @Value("${egov.services.user.approvers.url}")
     private String approverSrvcUrl;
@@ -398,21 +398,21 @@ public class MicroserviceUtils {
         return null;
     }
 
-    public List<Department> getDepartmentsById(Long departmentId) {
-
-        final RestTemplate restTemplate = createRestTemplate();
-        final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId() + "&id=" + departmentId;
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setTs(getEpochDate(new Date()));
-        reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:" + dept_url);
-        DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
-        return depResponse.getDepartment();
-    }
+//    public List<Department> getDepartmentsById(Long departmentId) {
+//
+//        final RestTemplate restTemplate = createRestTemplate();
+//        final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId() + "&id=" + departmentId;
+//
+//        RequestInfo requestInfo = new RequestInfo();
+//        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+//
+//        requestInfo.setAuthToken(getUserToken());
+//        requestInfo.setTs(getEpochDate(new Date()));
+//        reqWrapper.setRequestInfo(requestInfo);
+//        LOGGER.info("call:" + dept_url);
+//        DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
+//        return depResponse.getDepartment();
+//    }
 
     public Department getDepartmentByCode(String departmentCode) {
 
