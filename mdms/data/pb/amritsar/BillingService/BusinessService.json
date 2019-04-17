@@ -10,7 +10,8 @@
       ],
       "partPaymentAllowed": true,
       "isAdvanceAllowed": true,
-      "demandUpdateTime": 86400000
+      "demandUpdateTime": 86400000,
+      "isVoucherCreationEnabled": true
     },
     {
       "businessService": "WaterCharges",
@@ -20,7 +21,8 @@
       ],
       "partPaymentAllowed": false,
       "isAdvanceAllowed": true,
-      "demandUpdateTime": 86400000
+      "demandUpdateTime": 86400000,
+      "isVoucherCreationEnabled": false
     },
     {
       "businessService": "TradeLicense",
@@ -30,7 +32,8 @@
       ],
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
-      "demandUpdateTime": 604800000
+      "demandUpdateTime": 604800000,
+      "isVoucherCreationEnabled": true
     }
   ]
 }
