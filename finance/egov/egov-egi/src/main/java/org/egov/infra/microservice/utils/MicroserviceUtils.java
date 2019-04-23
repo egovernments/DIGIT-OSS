@@ -72,6 +72,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
@@ -153,6 +158,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Service
 public class MicroserviceUtils {
 
@@ -185,12 +192,6 @@ public class MicroserviceUtils {
 
     @Value("${egov.services.user.create.url}")
     private String userServiceUrl;
-
-//    @Value("${egov.services.user.deparment.url}")
-//    private String deptServiceUrl;
-    
-//    @Value("${egov.services.user.designation.url}")
-//    private String designServiceUrl;
 
     @Value("${egov.services.user.approvers.url}")
     private String approverSrvcUrl;
@@ -378,11 +379,22 @@ public class MicroserviceUtils {
         return null;
 
     }
-
+    
     public List<Department> getDepartments() {
+        return getDepartments(null);
+    }
+
+    public List<Department> getDepartments(String code) {
         List<Department> deptList = new ArrayList<>();
+        FilterRequest filterReq = new FilterRequest();
         try {
-            JSONArray mdmObj = getFinanceMdmsByModuleNameAndMasterDetails("common-masters", "Department", null);
+            if(!StringUtils.isEmpty(code) && code != null){
+                filterReq.setCode(code);
+            }else{
+                final String deptCodes = (String) this.getFinanceDeptCodes();
+                filterReq.setCodes(Arrays.asList(deptCodes.split(",")));
+            }
+            JSONArray mdmObj = getFinanceMdmsByModuleNameAndMasterDetails("common-masters", "Department", filterReq);
             mdmObj.stream().forEach(obj ->{
                 LinkedHashMap<String, Object> lhm = (LinkedHashMap)obj;
                 Department dept = new Department();
@@ -397,22 +409,6 @@ public class MicroserviceUtils {
         }
         return null;
     }
-
-//    public List<Department> getDepartmentsById(Long departmentId) {
-//
-//        final RestTemplate restTemplate = createRestTemplate();
-//        final String dept_url = deptServiceUrl + "?tenantId=" + getTenentId() + "&id=" + departmentId;
-//
-//        RequestInfo requestInfo = new RequestInfo();
-//        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-//
-//        requestInfo.setAuthToken(getUserToken());
-//        requestInfo.setTs(getEpochDate(new Date()));
-//        reqWrapper.setRequestInfo(requestInfo);
-//        LOGGER.info("call:" + dept_url);
-//        DepartmentResponse depResponse = restTemplate.postForObject(dept_url, reqWrapper, DepartmentResponse.class);
-//        return depResponse.getDepartment();
-//    }
 
     public Department getDepartmentByCode(String departmentCode) {
 
@@ -438,10 +434,9 @@ public class MicroserviceUtils {
     }
 
     private Department fetchByDepartmentCode(String departmentCode) {
-        List<Department> departments = getDepartments();
+        List<Department> departments = getDepartments(departmentCode);
         try {
-            List<Department> filterDept = departments.stream().filter(dept -> dept.getCode().equals(departmentCode)).collect(Collectors.toList());
-            return !filterDept.isEmpty() ? filterDept.get(0) : null;
+            return !departments.isEmpty() ? departments.get(0) : null;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -450,8 +445,15 @@ public class MicroserviceUtils {
 
     public List<Designation> getDesignation(String code) {
             List<Designation> desgList = new ArrayList<>();
+            FilterRequest filterReq =new FilterRequest();
             try {
-                JSONArray mdmObj =  getFinanceMdmsByModuleNameAndMasterDetails("common-masters", "Designation", null);
+                if(!StringUtils.isEmpty(code) && code != null){
+                    filterReq.setCode(code);
+                }else{
+                    String desginCodes = (String) getFinanceDesginCodes();
+                    filterReq.setCodes(Arrays.asList(desginCodes.split(",")));
+                }
+                JSONArray mdmObj =  getFinanceMdmsByModuleNameAndMasterDetails("common-masters", "Designation", filterReq);
                 mdmObj.stream().forEach(obj ->{
                     LinkedHashMap<String, Object> lhm = (LinkedHashMap)obj;
                     Designation designation = new Designation();
@@ -461,10 +463,6 @@ public class MicroserviceUtils {
                     designation.setActive((Boolean)lhm.get("active"));
                     desgList.add(designation);
                 });
-                if(null != code){
-                    List<Designation> collect = desgList.stream().filter(desg -> desg.getCode().equals(code)).collect(Collectors.toList());
-                    return collect;
-                }
                 return desgList;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -472,13 +470,39 @@ public class MicroserviceUtils {
             return null;
 }
     
-    public JSONArray getFinanceMdmsByModuleNameAndMasterDetails(String moduleName,String name, String filter){
+    public JSONArray getFinanceMdmsByModuleNameAndMasterDetails(String moduleName,String name, FilterRequest filter){
         String mdmsUrl = this.hostUrl + this.mdmsSearchUrl;
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(getUserToken());
         MasterDetail masterDetail = new MasterDetail();
         masterDetail.setName(name);
-        masterDetail.setFilter(filter);
+        //Apply filter in the request
+        if(null != filter){
+            if(!StringUtils.isEmpty(filter.getCode()))
+                masterDetail.setFilter("[?(@.code=='" + filter.getCode() + "')]");
+            
+            if(!StringUtils.isEmpty(filter.getName()))
+                masterDetail.setFilter("[?(@.name=='" + filter.getName() + "')]");
+            
+            if(null != filter.getActive())
+                masterDetail.setFilter("[?(@.active=='" + filter.getActive() + "')]");
+            
+            if(null != filter.getNames()) {
+                List<String> names = filter.getNames().parallelStream()
+                        .map(obj -> {
+                            return "'"+obj+"'";
+                        }).collect(Collectors.toList());
+                masterDetail.setFilter("[?(@.name IN " + names + ")]");
+            }
+            
+            if(null != filter.getCodes()) {
+                List<String> codes = filter.getCodes().parallelStream()
+                        .map(obj -> {
+                            return "'"+obj+"'";
+                        }).collect(Collectors.toList());
+                masterDetail.setFilter("[?(@.code IN " + codes + ")]");
+            }
+        }
         ModuleDetail moduleDetail = new ModuleDetail();
         moduleDetail.setMasterDetails(Arrays.asList(masterDetail));
         moduleDetail.setModuleName(moduleName);
@@ -1373,4 +1397,117 @@ public class MicroserviceUtils {
         return epoch;
     }
 
+}
+
+class FilterRequest {
+    private List<Long> id;
+    
+    private String name;
+
+    private String code;
+
+    @Size(min=8, max=64)
+    @JsonProperty("names")
+    private List<String> names;
+
+    @Size(min=1, max=10)
+    @JsonProperty("codes")
+    private List<String> codes;
+
+    private Boolean active;
+
+    @NotNull
+    private String tenantId;
+
+    private String sortBy;
+
+    private String sortOrder;
+
+    @Min(1)
+    @Max(500)
+    private Short pageSize;
+
+    private Short pageNumber;
+
+    public List<Long> getId() {
+        return id;
+    }
+
+    public void setId(List<Long> id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public List<String> getNames() {
+        return names;
+    }
+
+    public void setNames(List<String> names) {
+        this.names = names;
+    }
+
+    public List<String> getCodes() {
+        return codes;
+    }
+
+    public void setCodes(List<String> codes) {
+        this.codes = codes;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public String getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
+
+    public String getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    public Short getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Short pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Short getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(Short pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+    
+    
 }
