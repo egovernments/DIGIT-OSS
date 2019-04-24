@@ -11724,7 +11724,7 @@
       "parentModule": "",
       "displayName": "Financial Year",
       "orderNumber": 9,
-      "enabled": true,
+      "enabled": false,
       "serviceCode": "FinanceMaster",
       "code": "null",
       "leftIcon": "editor:insert-chart",
@@ -14108,6 +14108,62 @@
       "serviceCode": "BILLING_SERVICE",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1792,
+      "name": "Financial Year-SetUp",
+      "url": "url",
+      "parentModule": "",
+      "displayName": "View Financial Year",
+      "orderNumber": 1,
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Period End Activities.Financial Year.View Financial Year",
+      "navigationURL": "services/EGF/cfinancialyear/search/view"
+    },
+    {
+      "id": 1793,
+      "name": "Financial Year-SetUp",
+      "url": "url",
+      "parentModule": "",
+      "displayName": "Edit Financial Year",
+      "orderNumber": 2,
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Period End Activities.Financial Year.Edit Financial Year",
+      "navigationURL": "services/EGF/cfinancialyear/search/edit"
+    },
+    {
+      "id": 1794,
+      "name": "Financial Year-SetUp",
+      "url": "url",
+      "parentModule": "",
+      "displayName": "Transfer Closing Balance",
+      "orderNumber": 2,
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Period End Activities.Transfer Closing Balance",
+      "navigationURL": "services/EGF/pea/transferClosingBalance-new.action"
+    },
+    {
+      "id": 1795,
+      "name": "Financial Year-SetUp",
+      "url": "url",
+      "parentModule": "",
+      "displayName": "Close Period",
+      "orderNumber": 3,
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Period End Activities.Close Period",
+      "navigationURL": "services/EGF/closedperiod/search/edit"
     }
   ]
 }
