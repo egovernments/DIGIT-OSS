@@ -14164,6 +14164,20 @@
       "leftIcon": "editor:insert-chart",
       "path": "Finance.Period End Activities.Close Period",
       "navigationURL": "services/EGF/closedperiod/search/edit"
+    },
+    {
+      "id": 1796,
+      "name": "Financial Year-SetUp",
+      "url": "url",
+      "parentModule": "",
+      "displayName": "Create Financial Year",
+      "orderNumber": 2,
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Period End Activities.Financial Year.Create Financial Year",
+      "navigationURL": "services/EGF/cfinancialyear/new"
     }
   ]
 }

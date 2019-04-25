@@ -17725,6 +17725,18 @@
       "actionid": 1795,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "EGF_ADMINISTRATOR",
+      "actionid": 1796,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1796,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
