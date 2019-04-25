@@ -63,7 +63,7 @@
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-3 control-label text-right"><spring:message
+							<label class="col-sm-5 control-label text-right"><spring:message
 									code="lbl.finyearrange" /> </label>
 							<div class="col-sm-3 add-margin">
 								<form:select path="finYearRange" id="finYearRange"
@@ -84,7 +84,7 @@
 									<spring:message code='lbl.search' />
 								</button>
 								<a href='javascript:void(0)' class='btn btn-default'
-									onclick='self.close()'><spring:message code='lbl.close' /></a>
+									onclick="window.parent.postMessage('close','*');window.close();"><spring:message code='lbl.close' /></a>
 							</div>
 						</div>
 

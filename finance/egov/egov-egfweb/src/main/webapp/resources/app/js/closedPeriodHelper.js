@@ -77,7 +77,7 @@ function callAjaxSearch() {
 							'click',
 							function() {
 								console.log(data.id);
-								window.open('/EGF/closedperiod/'
+								window.open('/services/EGF/closedperiod/'
 										+ $('#mode').val() + '/' + data.id, '',
 										'width=800, height=600');
 							});

@@ -99,7 +99,7 @@ public class CFinancialYearController {
 	private void prepareNewForm(final Model model) {
 	}
 
-	@RequestMapping(value = "/new", method = RequestMethod.GET)
+	@RequestMapping(value = "/new", method = {RequestMethod.GET,RequestMethod.POST})
 	public String newForm(final Model model) {
 		prepareNewForm(model);
 		final SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -183,7 +183,7 @@ public class CFinancialYearController {
 		return CFINANCIALYEAR_RESULT;
 	}
 
-	@RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
+	@RequestMapping(value = "/search/{mode}", method = {RequestMethod.GET,RequestMethod.POST})
 	public String search(@PathVariable("mode") final String mode, final Model model) {
 		final CFinancialYear cFinancialYear = new CFinancialYear();
 		model.addAttribute("financialYears", cFinancialYearService.findAll());

@@ -75,10 +75,12 @@
 			<div class="subheadnew">Transfer Closing Balance</div>
 
 			<div align="center">
-				<font style='color: red;'>
+				<font style='color: green;'>
 					<div id="msg">
 						<s:property value="message" />
 					</div>
+				</font>
+				<font style='color: red;'>
 					<p class="error-block" id="lblError"></p>
 				</font>
 			</div>
@@ -86,7 +88,10 @@
 				<div id="Errors">
 					<s:actionerror />
 					<s:fielderror />
-				</div> <s:actionmessage />
+				</div> 
+			</span>
+			<span>
+				<font color="green"><s:actionmessage /></font>
 			</span>
 
 			<center>
@@ -120,7 +125,7 @@
 									value="Transfer" name="transfer" method="transfer"
 									onclick="return transfer();" /></td>
 							<td><input type="button" value="Close"
-								onclick="javascript:window.close()" class="buttonsubmit" /></td>
+								onclick="window.parent.postMessage('close','*');window.close();" class="buttonsubmit"/></td>
 						</tr>
 					</table>
 				</div>

@@ -142,7 +142,7 @@ public class ClosedPeriodController {
 		return CLOSEDPERIOD_RESULT;
 	}
 
-	@RequestMapping(value = "/search/{mode}", method = RequestMethod.GET)
+	@RequestMapping(value = "/search/{mode}", method = {RequestMethod.GET, RequestMethod.POST})
 	public String search(@PathVariable("mode") final String mode, final Model model) {
 		final ClosedPeriod closedPeriod = new ClosedPeriod();
 		prepareNewForm(model);
