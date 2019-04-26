@@ -15519,6 +15519,18 @@
       "tenantId": "pb"
     },
     {
+      "rolecode": "TL_DOC_VERIFIER",
+      "actionid": 1686,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "TL_FIELD_INSPECTOR",
+      "actionid": 1686,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
       "rolecode": "CITIZEN",
       "actionid": 1687,
       "actioncode": "",
