@@ -11194,7 +11194,7 @@
     {
       "id": 1567,
       "name": "propertytax Calculation",
-      "url": "/pt-calculator-v2/propertytax/_calculation",
+      "url": "/pt-calculator-v2/propertytax/_calculate",
       "displayName": "PropertyTaxCalculation",
       "orderNumber": 0,
       "parentModule": null,
