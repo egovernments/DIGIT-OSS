@@ -225,7 +225,7 @@ public class RemitRecoveryService {
         query.append(" AND mis.VOUCHERHEADERID  =vh.ID AND vh.STATUS    =0 ");
         query.append(" and egr.id in ( ");
         query.append(selectedRows);
-        query.append(" ) ");
+        query.append(" ) and recovery5_.isactive=true");
         query.append(" AND egr.GLDTLAMT-");
         query.append(
                 " (select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end from EG_REMITTANCE_GLDTL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh");
