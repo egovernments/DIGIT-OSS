@@ -3,6 +3,14 @@
   "moduleName": "BillingService",
   "TaxPeriod": [
     {
+      "fromDate": 1554076799000,
+      "toDate": 1585679399000,
+      "periodCycle": "ANNUAL",
+      "service": "PT",
+      "code": "PTAN2019",
+      "financialYear": "2019-20"
+    },
+    {
       "fromDate": 1522540800000,
       "toDate": 1554076799000,
       "periodCycle": "ANNUAL",
