@@ -341,6 +341,28 @@
       "code": "TL_DOC_VERIFIER",
       "name": "TL doc verifier",
       "description": "Trade license document verifier"
+    },
+    {
+      "code": "NOC_CEMP",
+      "name": "NoC counter employee",
+      "description": "Fire NOC Counter Employee"
+    },
+    {
+      "code": "NOC_DOC_VERIFIER",
+      "name": "NoC Doc Verifier",
+      "description": "Fire NOC document verifier"
+    },
+    {
+      "code": "NOC_FIELD_INSPECTOR",
+      "name": "NoC Field Inpector",
+      "description": "Fire NOC  Field Inpector"
+    },
+    {
+      "code": "NOC_APPROVER",
+      "name": "NoC counter Approver",
+      "description": "Fire NOC Approver"
     }
+
   ]
 }
+
