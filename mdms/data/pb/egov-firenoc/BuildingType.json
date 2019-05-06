@@ -1,0 +1,130 @@
+{
+  "tenantId": "pb",
+  "moduleName": "egov-firenoc",
+  "BuildingType": [
+   {
+     "code": "GROUP_A_RESIDENTIAL.SUBDIVISIONA-1",
+     "active": true
+   },
+   {
+     "code": "GROUP_A_RESIDENTIAL.SUBDIVISIONA-2",
+     "active": true
+   },
+   {
+     "code": "GROUP_A_RESIDENTIAL.SUBDIVISIONA-3",
+     "active": true
+   },
+   {
+     "code": "GROUP_A_RESIDENTIAL.SUBDIVISIONA-4",
+     "active": true
+   },
+   {
+     "code": "GROUP_A_RESIDENTIAL.SUBDIVISIONA-5",
+     "active": true
+   },
+   {
+     "code": "GROUP_A_RESIDENTIAL.SUBDIVISIONA-6",
+     "active": true
+   },
+   {
+     "code": "GROUP_B_EDUCATIONAL.SUBDIVISIONB-1",
+     "active": true
+   },
+   {
+     "code": "GROUP_B_EDUCATIONAL.SUBDIVISIONB-2",
+     "active": true
+   },
+   {
+     "code": "GROUP_C_INSTITUTIONAL.SUBDIVISIONC-1",
+     "active": true
+   },
+   {
+     "code": "GROUP_C_INSTITUTIONAL.SUBDIVISIONC-2",
+     "active": true
+   },
+   {
+     "code": "GROUP_C_INSTITUTIONAL.SUBDIVISIONC-3",
+     "active": true
+   },
+   {
+     "code": "GROUP_D_ASSEMBLY.SUBDIVISIOND-1",
+     "active": true
+   },
+   {
+     "code": "GROUP_D_ASSEMBLY.SUBDIVISIOND-2",
+     "active": true
+   },
+   {
+     "code": "GROUP_D_ASSEMBLY.SUBDIVISIOND-3",
+     "active": true
+   },
+   {
+     "code": "GROUP_D_ASSEMBLY.SUBDIVISIOND-4",
+     "active": true
+   },
+   {
+     "code": "GROUP_D_ASSEMBLY.SUBDIVISIOND-5",
+     "active": true
+   },
+   {
+     "code": "GROUP_D_ASSEMBLY.SUBDIVISIOND-6",
+     "active": true
+   },
+   {
+     "code": "GROUP_D_ASSEMBLY.SUBDIVISIOND-7",
+     "active": true
+   },
+   {
+     "code": "GROUP_E_BUSINESS.SUBDIVISIONE-1",
+     "active": true
+   },
+   {
+     "code": "GROUP_E_BUSINESS.SUBDIVISIONE-2",
+     "active": true
+   },
+   {
+     "code": "GROUP_E_BUSINESS.SUBDIVISIONE-3",
+     "active": true
+   },
+   {
+     "code": "GROUP_E_BUSINESS.SUBDIVISIONE-4",
+     "active": true
+   },
+   {
+     "code": "GROUP_E_BUSINESS.SUBDIVISIONE-5",
+     "active": true
+   },
+   {
+     "code": "GROUP_F_MERCANTILE.SUBDIVISIONF-1",
+     "active": true
+   },
+   {
+     "code": "GROUP_F_MERCANTILE.SUBDIVISIONF-2",
+     "active": true
+   },
+   {
+     "code": "GROUP_F_MERCANTILE.SUBDIVISIONF-3",
+     "active": true
+   },
+   {
+     "code": "GROUP_G_INDUSTRIAL.SUBDIVISIONG-1",
+     "active": true
+   },
+   {
+     "code": "GROUP_G_INDUSTRIAL.SUBDIVISIONG-2",
+     "active": true
+   },
+   {
+     "code": "GROUP_G_INDUSTRIAL.SUBDIVISIONG-3",
+     "active": true
+   },
+   {
+     "code": "GROUP_H_STORAGE.GROUP_H_STORAGE",
+     "active": true
+   },
+   {
+     "code": "GROUP_J_HAZARDOUS.GROUP_H_STORAGE",
+     "active": true
+   }
+]
+}
