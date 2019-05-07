@@ -1,6 +1,6 @@
 {
   "tenantId": "pb",
-  "moduleName": "egov-firenoc",
+  "moduleName": "firenoc",
   "BuildingType": [
    {
      "code": "GROUP_A_RESIDENTIAL.SUBDIVISIONA-1",
@@ -119,11 +119,11 @@
      "active": true
    },
    {
-     "code": "GROUP_H_STORAGE.GROUP_H_STORAGE",
+     "code": "GROUP_H_STORAGE",
      "active": true
    },
    {
-     "code": "GROUP_J_HAZARDOUS.GROUP_H_STORAGE",
+     "code": "GROUP_J_HAZARDOUS",
      "active": true
    }
 ]

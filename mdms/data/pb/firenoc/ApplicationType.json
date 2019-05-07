@@ -1,6 +1,6 @@
 {
   "tenantId": "pb",
-  "moduleName": "egov-firenoc",
+  "moduleName": "firenoc",
   "ApplicationType": [
     {
       "code": "PROVISIONAL",
