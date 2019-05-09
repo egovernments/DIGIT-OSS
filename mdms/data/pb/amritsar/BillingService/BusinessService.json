@@ -34,6 +34,30 @@
       "isAdvanceAllowed": false,
       "demandUpdateTime": 604800000,
       "isVoucherCreationEnabled": true
+    },
+    {
+      "businessService": "WaterCharges.Metered",
+      "code":"WaterCharges.Metered",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": true,
+      "demandUpdateTime": 86400000,
+      "isVoucherCreationEnabled": false,
+      "type": "Adhoc"
+    },
+    {
+      "businessService": "WaterCharges.NonMetered",
+      "code":"WaterCharges.NonMetered",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": true,
+      "demandUpdateTime": 86400000,
+      "isVoucherCreationEnabled": false,
+      "type": "Adhoc"
     }
   ]
 }
