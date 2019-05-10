@@ -68,6 +68,7 @@ import org.egov.commons.CFiscalPeriod;
 import org.egov.commons.CGeneralLedger;
 import org.egov.commons.CGeneralLedgerDetail;
 import org.egov.commons.CVoucherHeader;
+import org.egov.commons.EgModules;
 import org.egov.commons.EgfRecordStatus;
 import org.egov.commons.EgwStatus;
 import org.egov.commons.dao.AccountdetailtypeHibernateDAO;
@@ -75,6 +76,7 @@ import org.egov.commons.dao.ChartOfAccountsDAO;
 import org.egov.commons.dao.FinancialYearHibernateDAO;
 import org.egov.commons.dao.FunctionDAO;
 import org.egov.commons.service.ChartOfAccountDetailService;
+import org.egov.commons.service.EgModulesService;
 import org.egov.commons.utils.EntityType;
 import org.egov.dao.budget.BudgetDetailsDAO;
 import org.egov.dao.budget.BudgetDetailsHibernateDAO;
@@ -200,6 +202,9 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 
 	@Autowired
 	private ChartOfAccountDetailService chartOfAccountDetailService;
+	
+	@Autowired
+	private EgModulesService egModuleService;
 
 	public VoucherService(final Class<CVoucherHeader> voucherHeader) {
 		super(voucherHeader);
@@ -1505,6 +1510,16 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 		return response;
 	
 	
+	}
+	
+	public boolean isManualReceiptDateEnabledForVoucher(){
+            List<AppConfigValues> appConfigValue = appConfigValuesService.getConfigValuesByModuleAndKey(FinancialConstants.MODULE_NAME_APPCONFIG, "IsManualReceiptDateConsideredForVoucher");
+            return appConfigValue.isEmpty() ? false : appConfigValue.get(0).getValue().equalsIgnoreCase("Yes");
+        }
+	
+	public Integer getModulesIdByName(String name){
+	    List<EgModules> egModuleServiceByName = egModuleService.getEgModuleServiceByName(name);
+	    return !egModuleServiceByName.isEmpty() ? egModuleServiceByName.get(0).getId() : null;
 	}
 
 }

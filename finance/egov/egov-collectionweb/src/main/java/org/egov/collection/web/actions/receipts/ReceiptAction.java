@@ -1212,7 +1212,7 @@ public class ReceiptAction extends BaseFormAction {
                         // receiptDetail.setFinancialYear(financialYear);
 
                         receiptDetail.setCramountToBePaid(billAccountDetail.getCrAmountToBePaid());
-                        receiptDetail.setPurpose(billAccountDetail.getPurpose().toString());
+                        receiptDetail.setPurpose(billAccountDetail.getPurpose()!=null?billAccountDetail.getPurpose().toString():"");
 
                         // receiptDetail.setGroupId(groupId);
                         receiptdetailslist.add(receiptDetail);

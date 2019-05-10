@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.http.HttpRequest;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.egov.billsaccounting.services.CreateVoucher;
@@ -24,8 +27,12 @@ import org.egov.infra.validation.exception.ValidationException;
 import org.egov.services.voucher.VoucherService;
 import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,6 +59,28 @@ public class VoucherController {
 		}
 
 	}
+	
+	@PostMapping(value = "/rest/voucher/_ismanualreceiptdateenabled")
+        @ResponseBody
+        public boolean getManualReceiptDateConsiderationForVoucher() {
+                try {
+                        return voucherService.isManualReceiptDateEnabledForVoucher();
+                } catch (Exception e) {
+                        LOGGER.error(e.getMessage(), e);
+                        throw new ApplicationRuntimeException(e.getMessage());
+                }
+        }
+	
+	@PostMapping(value = "/rest/voucher/_getmoduleidbyname")
+        @ResponseBody
+        public Integer getEgModuleIdByName(@Param("moduleName") String moduleName) {
+                try {
+                        return voucherService.getModulesIdByName(moduleName);
+                } catch (Exception e) {
+                        LOGGER.error(e.getMessage(), e);
+                        throw new ApplicationRuntimeException(e.getMessage());
+                }
+        }
 
 	@PostMapping(value = "/rest/voucher/_create")
 	@ResponseBody
