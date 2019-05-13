@@ -17829,13 +17829,13 @@
       "tenantId": "pb"
     },
     {
-      "rolecode": "SUPERUSER",
+      "rolecode": "NOC_CEMP",
       "actionid": 1800,
       "actioncode": "",
       "tenantId": "pb"
     },
     {
-      "rolecode": "SUPERUSER",
+      "rolecode": "NOC_CEMP",
       "actionid": 1801,
       "actioncode": "",
       "tenantId": "pb"
