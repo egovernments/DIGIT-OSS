@@ -14182,7 +14182,7 @@
     {
       "id": 1797,
       "name": "Create FireNoc",
-      "url": "/firenoc-service/v1/_create",
+      "url": "/firenoc-services/v1/_create",
       "parentModule": "",
       "displayName": "Create FireNoc",
       "orderNumber": 0,
@@ -14194,7 +14194,7 @@
     {
       "id": 1798,
       "name": "Update FireNoc",
-      "url": "/firenoc-service/v1/_update",
+      "url": "/firenoc-services/v1/_update",
       "parentModule": "",
       "displayName": "Update FireNoc",
       "orderNumber": 0,
@@ -14206,7 +14206,7 @@
     {
       "id": 1799,
       "name": "Search FireNoc",
-      "url": "/firenoc-service/v1/_search",
+      "url": "/firenoc-services/v1/_search",
       "parentModule": "",
       "displayName": "Search FireNoc",
       "orderNumber": 0,
