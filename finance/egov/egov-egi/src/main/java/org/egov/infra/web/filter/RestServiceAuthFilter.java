@@ -93,7 +93,10 @@ public class RestServiceAuthFilter implements Filter {
                 // TODO : Need to identify the external and internal to enable/disable authentication.
                 RestRequestWrapper request = new RestRequestWrapper(httpRequest);
                 String tenantId = readTenantId(request);
-                ApplicationThreadLocals.setUserTenantId(tenantId);
+                String user_token = readAuthToken(request);
+                HttpSession session = httpRequest.getSession();
+                session.setAttribute(MS_TENANTID_KEY, tenantId);
+                session.setAttribute(MS_USER_TOKEN, user_token);
                 chain.doFilter(request, res);
             } catch (Exception e) {
                 e.printStackTrace();
