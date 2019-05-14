@@ -88,8 +88,17 @@ public class RestServiceAuthFilter implements Filter {
         {
             LOGGER.info("Clear Token request recieved ");
             httpRequest.getRequestDispatcher(httpRequest.getServletPath()).forward(req, res);
-        }
-        else{
+        }else if(httpRequest.getRequestURI().contains("/rest/voucher/")){
+            try {
+                // TODO : Need to identify the external and internal to enable/disable authentication.
+                RestRequestWrapper request = new RestRequestWrapper(httpRequest);
+                String tenantId = readTenantId(request);
+                ApplicationThreadLocals.setUserTenantId(tenantId);
+                chain.doFilter(request, res);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else{
         
         RestRequestWrapper request = new RestRequestWrapper(httpRequest);
         
