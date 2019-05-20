@@ -4,6 +4,7 @@
   "Documents": [
     {
       "code": "IDENTITYPROOF",
+      "documentType": "OWNER",
       "required": true,
       "active": true,
       "hasDropdown": true,
@@ -16,6 +17,7 @@
     },
     {
       "code": "ADDRESS",
+      "documentType": "OWNER",
       "required": true,
       "active": true,
       "hasDropdown": true,
@@ -28,6 +30,7 @@
     },
     {
       "code": "BUILDING_PLAN",
+      "documentType": "BUILDING",
       "active": true,
       "hasMultipleRows": true,
       "options": [
@@ -41,6 +44,7 @@
     },
     {
       "code": "FIRE_FIGHTING_PLAN",
+      "documentType": "BUILDING",
       "active": true,
       "hasMultipleRows": true,
       "options": [
@@ -59,6 +63,7 @@
     },
     {
       "code": "OWNERS_CHECKLIST",
+      "documentType": "BUILDING",
       "active": true,
       "hasMultipleRows": true,
       "options": [
