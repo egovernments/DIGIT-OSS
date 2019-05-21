@@ -276,7 +276,7 @@ function creditGlcode_initialize() {
 
   custom.initialize();
 
-  $('.creditGlcode').typeahead({
+  var dt=$('.creditGlcode').typeahead({
   	hint : true,
 		highlight : true,
 		minLength : 3
