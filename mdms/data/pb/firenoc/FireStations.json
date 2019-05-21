@@ -1,0 +1,21 @@
+{
+  "tenantId": "pb",
+  "moduleName": "firenoc",
+  "FireStations": [
+    {
+      "code": "FS_AMRITSAR_01",
+      "baseTenantId": "pb.amritsar",
+      "active": true
+    },
+    {
+      "code": "FS_JALANDHAR_01",
+      "baseTenantId": "pb.jalandhar",
+      "active": true
+    },
+    {
+      "code": "FS_MOHALI_01",
+      "baseTenantId": "pb.mohali",
+      "active": true
+    }
+  ]
+}
