@@ -589,9 +589,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
                         else
                             tmpsublegDetailMap.put(tmp, tempBillList.get(i + conBillIdlength).getPaymentAmt());
 
-                    } else if (FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT
-                            .equalsIgnoreCase(tempBillList.get(i + conBillIdlength).getExpType()))
-                        tmpsublegDetailMap.put(tmp, tmpsublegDetailMap.get(tmp).add(ledgerDetail.getAmount()));
+                    }
                     else if (gl.getGeneralLedgerDetails().size() > 1 && tempBillList.get(i + conBillIdlength)
                             .getPaymentAmt().compareTo(BigDecimal.valueOf(gl.getCreditAmount())) == 0)
                         tmpsublegDetailMap.put(tmp, tmpsublegDetailMap.get(tmp).add(ledgerDetail.getAmount()));
