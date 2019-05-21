@@ -57,6 +57,14 @@
       "service": "TL",
       "code": "TLAN2016",
       "financialYear": "2016-17"
+    },
+    {
+      "fromDate": 1554076799000,
+      "toDate": 1585679399000,
+      "periodCycle": "ANNUAL",
+      "service": "TL",
+      "code": "TLAN2019",
+      "financialYear": "2019-20"
     }
   ]
 }
