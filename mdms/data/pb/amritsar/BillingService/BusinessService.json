@@ -4,52 +4,47 @@
   "BusinessService": [
     {
       "businessService": "PropertyTax",
-      "code":"PT",
+      "code": "PT",
       "collectionModesNotAllowed": [
         "DD"
       ],
       "partPaymentAllowed": true,
       "isAdvanceAllowed": true,
-      "demandUpdateTime": 86400000,
       "isVoucherCreationEnabled": true
     },
     {
       "businessService": "WaterCharges",
-      "code":"WC",
+      "code": "WC",
       "collectionModesNotAllowed": [
         "DD"
       ],
       "partPaymentAllowed": false,
       "isAdvanceAllowed": true,
-      "demandUpdateTime": 86400000,
       "isVoucherCreationEnabled": false
     },
     {
       "businessService": "TradeLicense",
-      "code":"TL",
+      "code": "TL",
       "collectionModesNotAllowed": [
         "DD"
       ],
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
-      "demandUpdateTime": 604800000,
       "isVoucherCreationEnabled": true
     },
     {
-      "businessService": "WaterCharges.Metered",
-      "code":"WaterCharges.Metered",
+      "businessService": "Taxes.No Dues Certificate",
+      "code": "TX.No_Dues_Certificate",
       "collectionModesNotAllowed": [
         "DD"
       ],
       "partPaymentAllowed": false,
-      "isAdvanceAllowed": true,
-      "demandUpdateTime": 86400000,
-      "isVoucherCreationEnabled": false,
-      "type": "Adhoc"
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true
     },
     {
-      "businessService": "WaterCharges.NonMetered",
-      "code":"WaterCharges.NonMetered",
+      "businessService": "Advertisement Tax.Hoardings",
+      "code": "ADVT.Hoardings",
       "collectionModesNotAllowed": [
         "DD"
       ],
@@ -62,12 +57,801 @@
     {
       "businessService": "FIRENOC",
       "code":"FIRENOC",
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "businessService": "Advertisement Tax.Unipolls",
+      "code": "ADVT.Unipolls",
       "collectionModesNotAllowed": [
         "DD"
       ],
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
-      "isVoucherCreationEnabled": true
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "businessService": "Rents.Municipal Shops Rent",
+      "code": "RT.Municipal_Shops_Rent",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Rents.Land Rent",
+      "code": "RT.Land_Rent",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Rents.Tower Rent",
+      "code": "RT.Tower_Rent",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Rents.Parking Fee",
+      "code": "RT.Parking_Fee",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Rents.Jamin Theka",
+      "code": "RT.Jamin_Theka",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "ADMIN Fees.Election rally fees",
+      "code": "ADMN.Election_rally_fees",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "ADMIN Fees.Parking during election",
+      "code": "ADMN.Parking_during_election",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "ADMIN Fees.Road show",
+      "code": "ADMN.Road_show",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Finance Fees.Advance Provident Fund",
+      "code": "FN.Advance_Provident_Fund",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Stationary.Stationary (Not Income)",
+      "code": "ST.Stationary_Not_Income",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Stationary.Expenditure santitation (Not Income)",
+      "code": "ST.Expenditure_santitation_Not_Income",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Challans.Santitation dumping garbage",
+      "code": "CH.Santitation_dumping_garbage",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Fee Town Planning.Telecom tower fees",
+      "code": "FTP.Telecom_tower_fees",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Taxes.Electricity Chungi",
+      "code": "TX.Electricity_Chungi",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Fee Town Planning.Draftsmen fees",
+      "code": "FTP.Draftsmen_fees",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Fee Town Planning.Compremasing fees",
+      "code": "FTP.Compremasing_fees",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Fee Town Planning.Building planner renew",
+      "code": "FTP.Building_planner_renew",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Naksha/Building Manual Fees.Naksha samjota fees",
+      "code": "NKS.Naksha_samjota_fees",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Naksha/Building Manual Fees.Naksha changes ",
+      "code": "NKS.Naksha_changes",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Fee Town Planning.License fees building branch",
+      "code": "FTP.License_fees_building_branch",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "O&M Fee.Water connection/disconnection fees",
+      "code": "OM.Water_connection/disconnection_fees",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Naksha/Building Manual Fees.Naksha renew fees",
+      "code": "NKS.Naksha_renew_fees",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Naksha/Building Manual Fees.NOC/Completion of building approval",
+      "code": "NKS.NOC/Completion_of_building_approval",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Naksha/Building Manual Fees.Alteration additional charge",
+      "code": "NKS.Alteration_additional_charge",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Naksha/Building Manual Fees.2 year time limit of Renewal Building Naksha",
+      "code": "NKS.2_year_time_limit_of_Renewal_Building_Naksha",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Fee Town Planning.Leave encashment and gratuty",
+      "code": "FTP.Leave_encashment_and_gratuty",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Challans.Plastic Challan",
+      "code": "CH.Plastic_Challan",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Challans.Rehri Challan",
+      "code": "CH.Rehri_Challan",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Challans.Challan for Misuse of Water",
+      "code": "CH.Challan_for_Misuse_of_Water",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Challans.Dengue Challan",
+      "code": "CH.Dengue_Challan",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Challans.Littering Challan",
+      "code": "CH.Littering_Challan",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Sanitation.Licence Pure food",
+      "code": "SNT.Licence_Pure_food",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "OTHER.Misc Challans",
+      "code": "OTHER.Misc_Challans",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Naksha/Building Manual Fees.Regularisation of Buildings",
+      "code": "NKS.Regularisation_of_Buildings",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Work Fee.Contractor Enlistment",
+      "code": "WF.Contractor_Enlistment",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Work Fee.Tender Form Fee",
+      "code": "WF.Tender Form Fee",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Tehbazaari Fee.Advertisement fee",
+      "code": "TB.Advertisement_fee",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Tehbazaari Fee.Tehbazaari",
+      "code": "TB.Tehbazaari",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Finance Fees.PF transfer (Accounts)",
+      "code": "FN.PF_transfer_(Accounts)",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Taxes.TS1 copy register for old survey",
+      "code": "TX.TS1_copy_register_for_old_survey",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Taxes.Transfer Property Fees",
+      "code": "TX.Transfer_Property_Fees",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "ADMIN Fees.RTI",
+      "code": "ADMN.RTI",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "ADMIN Fees.No Dues Certificate",
+      "code": "ADMN.No_Dues_Certificate",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Fee Town Planning.Architect license fee",
+      "code": "FTP.Architect_license_fee",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Tehbazaari Fee.Challan Under section 156",
+      "code": "Tehbazaari Fee.Challan_Under_section_156",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Finance Fees.Recovery employee/contractor",
+      "code": "FN.Recovery_employee/contractor",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Finance Fees.Grants cheque",
+      "code": "FN.Grants_cheque",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "OTHER.No due certificate electricity",
+      "code": "OTHER.No_due_certificate_electricity",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "OTHER.registery and bank loan",
+      "code": "OTHER.registery_and_bank_loan",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "SBM garbage plastic polythene challan",
+      "code": "CH",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Sanitation.Dead animals contract",
+      "code": "SNT.Dead_animals_contract",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Finance Fees.GPF",
+      "code": "FN.GPF",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Finance Fees.CPF received check",
+      "code": "FN.CPF_received_check",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Rents.Tower Installation",
+      "code": "RT.Tower_Installation",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Rents.Tower Annual Rent",
+      "code": "RT.Tower_Annual_Rent",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Cess.Cow Cess",
+      "code": "CSS.cow_cess",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Challans.Cattle Challan",
+      "code": "CH.Cattle_Challan",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Tehbazaari Fee.Rehri Challan",
+      "code": "TB.Rehri_Challan",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "License Fee.Manual Rikshaw",
+      "code": "LCF.Manual_Rikshaw",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Challans.Dairy Animals Challan",
+      "code": "CH.Dairy_Animals_Challan",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Challans.Bidi & Cigrette Challan",
+      "code": "CH.Bidi_&_Cigrette_Challan",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Rents.Community Centre Booking Fee",
+      "code": "RT.Community_Centre_Booking_Fee",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Rents.Commercial Use of Municipal Land",
+      "code": "RT.Commercial_Use_of_Municipal_Land",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Rents.Street Vendor",
+      "code": "RT.Street_Vendor",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Fee Town Planning.Construction Waste",
+      "code": "FTP.Construction_Waste",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Fee Town Planning.Demolition Waste",
+      "code": "FTP.Demolition_Waste",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Sanitation.SNT Clean/Safai Sanitation",
+      "code": "SNT.clean_safai_sanitation",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "O&M Fee.Plumber License Fee",
+      "code": "OM.Plumber_License_Fee",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Advertisement Tax.Light Wala Board",
+      "code": "ADVT.Light_Wala_Board",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Advertisement Tax.Wall Paint Advertisement",
+      "code": "ADVT.Wall_Paint_Advertisement",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    },
+    {
+      "Service Type": "Advertisement Tax.Gas Balloon Advertisement",
+      "code": "ADVT.Gas_Balloon_Advertisement",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
     }
   ]
 }
