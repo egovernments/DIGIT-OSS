@@ -58,6 +58,16 @@
       "demandUpdateTime": 86400000,
       "isVoucherCreationEnabled": false,
       "type": "Adhoc"
+    },
+    {
+      "businessService": "FIRENOC",
+      "code":"FIRENOC",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true
     }
   ]
 }
