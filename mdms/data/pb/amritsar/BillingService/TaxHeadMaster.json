@@ -180,7 +180,7 @@
       "code": "FIRENOC_ADHOC_PENALTY",
       "isDebit": false,
       "isActualDemand": false,
-      "order": 15
+      "order": 2
     },
     {
       "category": "FEE",
@@ -189,7 +189,7 @@
       "code": "FIRENOC_FEES",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 5
+      "order": 3
     },
     {
       "category": "TAX",
@@ -198,36 +198,9 @@
       "code": "FIRENOC_TAXES",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 10
+      "order": 4
     },
     {
-      "category": "REBATE",
-      "service": "FIRENOC",
-      "name": "firenoc exemption",
-      "code": "FIRENOC_EXEMPTION",
-      "isDebit": true,
-      "isActualDemand": false,
-      "order": 0
-    },
-    {
-      "category": "PENALTY",
-      "service": "FIRENOC",
-      "name": "firenoc penalty",
-      "code": "FIRENOC_PENALTY",
-      "isDebit": false,
-      "isActualDemand": false,
-      "order": 20
-    },
-    {
-      "category": "REBATE",
-      "service": "FIRENOC",
-      "name": "firenoc rebate",
-      "code": "FIRENOC_REBATE",
-      "isDebit": true,
-      "isActualDemand": false,
-      "order": 0
-    },
-        {
       "category": "TAX",
       "service": "FIRENOC",
       "name": "firenoc roundoff",
@@ -236,7 +209,5 @@
       "isActualDemand": true,
       "order": 1
     }
-
-
   ]
 }
