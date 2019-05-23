@@ -10,6 +10,7 @@
       ],
       "partPaymentAllowed": true,
       "isAdvanceAllowed": true,
+      "demandUpdateTime": 86400000,
       "isVoucherCreationEnabled": true
     },
     {
@@ -20,6 +21,7 @@
       ],
       "partPaymentAllowed": false,
       "isAdvanceAllowed": true,
+      "demandUpdateTime": 86400000,
       "isVoucherCreationEnabled": false
     },
     {
@@ -30,8 +32,42 @@
       ],
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
-      "isVoucherCreationEnabled": true,
+      "demandUpdateTime": 604800000,
+      "isVoucherCreationEnabled": true
+    },
+    {
+      "businessService": "WaterCharges.Metered",
+      "code": "WaterCharges.Metered",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": true,
+      "demandUpdateTime": 86400000,
+      "isVoucherCreationEnabled": false,
       "type": "Adhoc"
+    },
+    {
+      "businessService": "WaterCharges.NonMetered",
+      "code": "WaterCharges.NonMetered",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": true,
+      "demandUpdateTime": 86400000,
+      "isVoucherCreationEnabled": false,
+      "type": "Adhoc"
+    },
+    {
+      "businessService": "FIRENOC",
+      "code": "FIRENOC",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true
     },
     {
       "businessService": "Taxes.No Dues Certificate",
@@ -89,7 +125,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Rents.Land Rent",
+      "businessService": "Rents.Land Rent",
       "code": "RT.Land_Rent",
       "collectionModesNotAllowed": [
         "DD"
@@ -101,7 +137,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Rents.Tower Rent",
+      "businessService": "Rents.Tower Rent",
       "code": "RT.Tower_Rent",
       "collectionModesNotAllowed": [
         "DD"
@@ -113,7 +149,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Rents.Parking Fee",
+      "businessService": "Rents.Parking Fee",
       "code": "RT.Parking_Fee",
       "collectionModesNotAllowed": [
         "DD"
@@ -125,7 +161,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Rents.Jamin Theka",
+      "businessService": "Rents.Jamin Theka",
       "code": "RT.Jamin_Theka",
       "collectionModesNotAllowed": [
         "DD"
@@ -137,7 +173,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "ADMIN Fees.Election rally fees",
+      "businessService": "ADMIN Fees.Election rally fees",
       "code": "ADMN.Election_rally_fees",
       "collectionModesNotAllowed": [
         "DD"
@@ -149,7 +185,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "ADMIN Fees.Parking during election",
+      "businessService": "ADMIN Fees.Parking during election",
       "code": "ADMN.Parking_during_election",
       "collectionModesNotAllowed": [
         "DD"
@@ -161,7 +197,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "ADMIN Fees.Road show",
+      "businessService": "ADMIN Fees.Road show",
       "code": "ADMN.Road_show",
       "collectionModesNotAllowed": [
         "DD"
@@ -173,7 +209,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Finance Fees.Advance Provident Fund",
+      "businessService": "Finance Fees.Advance Provident Fund",
       "code": "FN.Advance_Provident_Fund",
       "collectionModesNotAllowed": [
         "DD"
@@ -185,7 +221,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Stationary.Stationary (Not Income)",
+      "businessService": "Stationary.Stationary (Not Income)",
       "code": "ST.Stationary_Not_Income",
       "collectionModesNotAllowed": [
         "DD"
@@ -197,7 +233,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Stationary.Expenditure santitation (Not Income)",
+      "businessService": "Stationary.Expenditure santitation (Not Income)",
       "code": "ST.Expenditure_santitation_Not_Income",
       "collectionModesNotAllowed": [
         "DD"
@@ -209,7 +245,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Challans.Santitation dumping garbage",
+      "businessService": "Challans.Santitation dumping garbage",
       "code": "CH.Santitation_dumping_garbage",
       "collectionModesNotAllowed": [
         "DD"
@@ -221,7 +257,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Fee Town Planning.Telecom tower fees",
+      "businessService": "Fee Town Planning.Telecom tower fees",
       "code": "FTP.Telecom_tower_fees",
       "collectionModesNotAllowed": [
         "DD"
@@ -233,7 +269,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Taxes.Electricity Chungi",
+      "businessService": "Taxes.Electricity Chungi",
       "code": "TX.Electricity_Chungi",
       "collectionModesNotAllowed": [
         "DD"
@@ -245,7 +281,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Fee Town Planning.Draftsmen fees",
+      "businessService": "Fee Town Planning.Draftsmen fees",
       "code": "FTP.Draftsmen_fees",
       "collectionModesNotAllowed": [
         "DD"
@@ -257,7 +293,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Fee Town Planning.Compremasing fees",
+      "businessService": "Fee Town Planning.Compremasing fees",
       "code": "FTP.Compremasing_fees",
       "collectionModesNotAllowed": [
         "DD"
@@ -269,7 +305,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Fee Town Planning.Building planner renew",
+      "businessService": "Fee Town Planning.Building planner renew",
       "code": "FTP.Building_planner_renew",
       "collectionModesNotAllowed": [
         "DD"
@@ -281,7 +317,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Naksha/Building Manual Fees.Naksha samjota fees",
+      "businessService": "Naksha/Building Manual Fees.Naksha samjota fees",
       "code": "NKS.Naksha_samjota_fees",
       "collectionModesNotAllowed": [
         "DD"
@@ -293,7 +329,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Naksha/Building Manual Fees.Naksha changes ",
+      "businessService": "Naksha/Building Manual Fees.Naksha changes ",
       "code": "NKS.Naksha_changes",
       "collectionModesNotAllowed": [
         "DD"
@@ -305,7 +341,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Fee Town Planning.License fees building branch",
+      "businessService": "Fee Town Planning.License fees building branch",
       "code": "FTP.License_fees_building_branch",
       "collectionModesNotAllowed": [
         "DD"
@@ -317,7 +353,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "O&M Fee.Water connection/disconnection fees",
+      "businessService": "O&M Fee.Water connection/disconnection fees",
       "code": "OM.Water_connection/disconnection_fees",
       "collectionModesNotAllowed": [
         "DD"
@@ -329,7 +365,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Naksha/Building Manual Fees.Naksha renew fees",
+      "businessService": "Naksha/Building Manual Fees.Naksha renew fees",
       "code": "NKS.Naksha_renew_fees",
       "collectionModesNotAllowed": [
         "DD"
@@ -341,7 +377,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Naksha/Building Manual Fees.NOC/Completion of building approval",
+      "businessService": "Naksha/Building Manual Fees.NOC/Completion of building approval",
       "code": "NKS.NOC/Completion_of_building_approval",
       "collectionModesNotAllowed": [
         "DD"
@@ -353,7 +389,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Naksha/Building Manual Fees.Alteration additional charge",
+      "businessService": "Naksha/Building Manual Fees.Alteration additional charge",
       "code": "NKS.Alteration_additional_charge",
       "collectionModesNotAllowed": [
         "DD"
@@ -365,7 +401,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Naksha/Building Manual Fees.2 year time limit of Renewal Building Naksha",
+      "businessService": "Naksha/Building Manual Fees.2 year time limit of Renewal Building Naksha",
       "code": "NKS.2_year_time_limit_of_Renewal_Building_Naksha",
       "collectionModesNotAllowed": [
         "DD"
@@ -377,7 +413,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Fee Town Planning.Leave encashment and gratuty",
+      "businessService": "Fee Town Planning.Leave encashment and gratuty",
       "code": "FTP.Leave_encashment_and_gratuty",
       "collectionModesNotAllowed": [
         "DD"
@@ -389,7 +425,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Challans.Plastic Challan",
+      "businessService": "Challans.Plastic Challan",
       "code": "CH.Plastic_Challan",
       "collectionModesNotAllowed": [
         "DD"
@@ -401,7 +437,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Challans.Rehri Challan",
+      "businessService": "Challans.Rehri Challan",
       "code": "CH.Rehri_Challan",
       "collectionModesNotAllowed": [
         "DD"
@@ -413,7 +449,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Challans.Challan for Misuse of Water",
+      "businessService": "Challans.Challan for Misuse of Water",
       "code": "CH.Challan_for_Misuse_of_Water",
       "collectionModesNotAllowed": [
         "DD"
@@ -425,7 +461,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Challans.Dengue Challan",
+      "businessService": "Challans.Dengue Challan",
       "code": "CH.Dengue_Challan",
       "collectionModesNotAllowed": [
         "DD"
@@ -437,7 +473,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Challans.Littering Challan",
+      "businessService": "Challans.Littering Challan",
       "code": "CH.Littering_Challan",
       "collectionModesNotAllowed": [
         "DD"
@@ -449,7 +485,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Sanitation.Licence Pure food",
+      "businessService": "Sanitation.Licence Pure food",
       "code": "SNT.Licence_Pure_food",
       "collectionModesNotAllowed": [
         "DD"
@@ -461,7 +497,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "OTHER.Misc Challans",
+      "businessService": "OTHER.Misc Challans",
       "code": "OTHER.Misc_Challans",
       "collectionModesNotAllowed": [
         "DD"
@@ -473,7 +509,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Naksha/Building Manual Fees.Regularisation of Buildings",
+      "businessService": "Naksha/Building Manual Fees.Regularisation of Buildings",
       "code": "NKS.Regularisation_of_Buildings",
       "collectionModesNotAllowed": [
         "DD"
@@ -485,7 +521,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Work Fee.Contractor Enlistment",
+      "businessService": "Work Fee.Contractor Enlistment",
       "code": "WF.Contractor_Enlistment",
       "collectionModesNotAllowed": [
         "DD"
@@ -497,7 +533,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Work Fee.Tender Form Fee",
+      "businessService": "Work Fee.Tender Form Fee",
       "code": "WF.Tender Form Fee",
       "collectionModesNotAllowed": [
         "DD"
@@ -509,7 +545,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Tehbazaari Fee.Advertisement fee",
+      "businessService": "Tehbazaari Fee.Advertisement fee",
       "code": "TB.Advertisement_fee",
       "collectionModesNotAllowed": [
         "DD"
@@ -521,7 +557,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Tehbazaari Fee.Tehbazaari",
+      "businessService": "Tehbazaari Fee.Tehbazaari",
       "code": "TB.Tehbazaari",
       "collectionModesNotAllowed": [
         "DD"
@@ -533,7 +569,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Finance Fees.PF transfer (Accounts)",
+      "businessService": "Finance Fees.PF transfer (Accounts)",
       "code": "FN.PF_transfer_(Accounts)",
       "collectionModesNotAllowed": [
         "DD"
@@ -545,7 +581,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Taxes.TS1 copy register for old survey",
+      "businessService": "Taxes.TS1 copy register for old survey",
       "code": "TX.TS1_copy_register_for_old_survey",
       "collectionModesNotAllowed": [
         "DD"
@@ -557,7 +593,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Taxes.Transfer Property Fees",
+      "businessService": "Taxes.Transfer Property Fees",
       "code": "TX.Transfer_Property_Fees",
       "collectionModesNotAllowed": [
         "DD"
@@ -569,7 +605,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "ADMIN Fees.RTI",
+      "businessService": "ADMIN Fees.RTI",
       "code": "ADMN.RTI",
       "collectionModesNotAllowed": [
         "DD"
@@ -581,7 +617,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "ADMIN Fees.No Dues Certificate",
+      "businessService": "ADMIN Fees.No Dues Certificate",
       "code": "ADMN.No_Dues_Certificate",
       "collectionModesNotAllowed": [
         "DD"
@@ -593,7 +629,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Fee Town Planning.Architect license fee",
+      "businessService": "Fee Town Planning.Architect license fee",
       "code": "FTP.Architect_license_fee",
       "collectionModesNotAllowed": [
         "DD"
@@ -605,7 +641,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Tehbazaari Fee.Challan Under section 156",
+      "businessService": "Tehbazaari Fee.Challan Under section 156",
       "code": "Tehbazaari Fee.Challan_Under_section_156",
       "collectionModesNotAllowed": [
         "DD"
@@ -617,7 +653,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Finance Fees.Recovery employee/contractor",
+      "businessService": "Finance Fees.Recovery employee/contractor",
       "code": "FN.Recovery_employee/contractor",
       "collectionModesNotAllowed": [
         "DD"
@@ -629,7 +665,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Finance Fees.Grants cheque",
+      "businessService": "Finance Fees.Grants cheque",
       "code": "FN.Grants_cheque",
       "collectionModesNotAllowed": [
         "DD"
@@ -641,7 +677,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "OTHER.No due certificate electricity",
+      "businessService": "OTHER.No due certificate electricity",
       "code": "OTHER.No_due_certificate_electricity",
       "collectionModesNotAllowed": [
         "DD"
@@ -653,7 +689,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "OTHER.registery and bank loan",
+      "businessService": "OTHER.registery and bank loan",
       "code": "OTHER.registery_and_bank_loan",
       "collectionModesNotAllowed": [
         "DD"
@@ -665,7 +701,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "SBM garbage plastic polythene challan",
+      "businessService": "SBM garbage plastic polythene challan",
       "code": "CH.SBM_garbage_plastic_polythene_challan",
       "collectionModesNotAllowed": [
         "DD"
@@ -677,7 +713,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Sanitation.Dead animals contract",
+      "businessService": "Sanitation.Dead animals contract",
       "code": "SNT.Dead_animals_contract",
       "collectionModesNotAllowed": [
         "DD"
@@ -689,7 +725,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Finance Fees.GPF",
+      "businessService": "Finance Fees.GPF",
       "code": "FN.GPF",
       "collectionModesNotAllowed": [
         "DD"
@@ -701,7 +737,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Finance Fees.CPF received check",
+      "businessService": "Finance Fees.CPF received check",
       "code": "FN.CPF_received_check",
       "collectionModesNotAllowed": [
         "DD"
@@ -713,7 +749,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Rents.Tower Installation",
+      "businessService": "Rents.Tower Installation",
       "code": "RT.Tower_Installation",
       "collectionModesNotAllowed": [
         "DD"
@@ -725,7 +761,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Rents.Tower Annual Rent",
+      "businessService": "Rents.Tower Annual Rent",
       "code": "RT.Tower_Annual_Rent",
       "collectionModesNotAllowed": [
         "DD"
@@ -737,7 +773,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Cess.Cow Cess",
+      "businessService": "Cess.Cow Cess",
       "code": "CSS.cow_cess",
       "collectionModesNotAllowed": [
         "DD"
@@ -749,7 +785,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Challans.Cattle Challan",
+      "businessService": "Challans.Cattle Challan",
       "code": "CH.Cattle_Challan",
       "collectionModesNotAllowed": [
         "DD"
@@ -761,7 +797,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Tehbazaari Fee.Rehri Challan",
+      "businessService": "Tehbazaari Fee.Rehri Challan",
       "code": "TB.Rehri_Challan",
       "collectionModesNotAllowed": [
         "DD"
@@ -773,7 +809,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "License Fee.Manual Rikshaw",
+      "businessService": "License Fee.Manual Rikshaw",
       "code": "LCF.Manual_Rikshaw",
       "collectionModesNotAllowed": [
         "DD"
@@ -785,7 +821,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Challans.Dairy Animals Challan",
+      "businessService": "Challans.Dairy Animals Challan",
       "code": "CH.Dairy_Animals_Challan",
       "collectionModesNotAllowed": [
         "DD"
@@ -797,7 +833,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Challans.Bidi & Cigrette Challan",
+      "businessService": "Challans.Bidi & Cigrette Challan",
       "code": "CH.Bidi_&_Cigrette_Challan",
       "collectionModesNotAllowed": [
         "DD"
@@ -809,7 +845,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Rents.Community Centre Booking Fee",
+      "businessService": "Rents.Community Centre Booking Fee",
       "code": "RT.Community_Centre_Booking_Fee",
       "collectionModesNotAllowed": [
         "DD"
@@ -821,7 +857,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Rents.Commercial Use of Municipal Land",
+      "businessService": "Rents.Commercial Use of Municipal Land",
       "code": "RT.Commercial_Use_of_Municipal_Land",
       "collectionModesNotAllowed": [
         "DD"
@@ -833,7 +869,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Rents.Street Vendor",
+      "businessService": "Rents.Street Vendor",
       "code": "RT.Street_Vendor",
       "collectionModesNotAllowed": [
         "DD"
@@ -845,7 +881,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Fee Town Planning.Construction Waste",
+      "businessService": "Fee Town Planning.Construction Waste",
       "code": "FTP.Construction_Waste",
       "collectionModesNotAllowed": [
         "DD"
@@ -857,7 +893,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Fee Town Planning.Demolition Waste",
+      "businessService": "Fee Town Planning.Demolition Waste",
       "code": "FTP.Demolition_Waste",
       "collectionModesNotAllowed": [
         "DD"
@@ -869,7 +905,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Sanitation.SNT Clean/Safai Sanitation",
+      "businessService": "Sanitation.SNT Clean/Safai Sanitation",
       "code": "SNT.clean_safai_sanitation",
       "collectionModesNotAllowed": [
         "DD"
@@ -881,7 +917,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "O&M Fee.Plumber License Fee",
+      "businessService": "O&M Fee.Plumber License Fee",
       "code": "OM.Plumber_License_Fee",
       "collectionModesNotAllowed": [
         "DD"
@@ -893,7 +929,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Advertisement Tax.Light Wala Board",
+      "businessService": "Advertisement Tax.Light Wala Board",
       "code": "ADVT.Light_Wala_Board",
       "collectionModesNotAllowed": [
         "DD"
@@ -905,7 +941,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Advertisement Tax.Wall Paint Advertisement",
+      "businessService": "Advertisement Tax.Wall Paint Advertisement",
       "code": "ADVT.Wall_Paint_Advertisement",
       "collectionModesNotAllowed": [
         "DD"
@@ -917,7 +953,7 @@
       "type": "Adhoc"
     },
     {
-      "Service Type": "Advertisement Tax.Gas Balloon Advertisement",
+      "businessService": "Advertisement Tax.Gas Balloon Advertisement",
       "code": "ADVT.Gas_Balloon_Advertisement",
       "collectionModesNotAllowed": [
         "DD"
