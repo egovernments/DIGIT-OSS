@@ -30,7 +30,8 @@
       ],
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
-      "isVoucherCreationEnabled": true
+      "isVoucherCreationEnabled": true,
+      "type": "Adhoc"
     },
     {
       "businessService": "Taxes.No Dues Certificate",
@@ -40,7 +41,8 @@
       ],
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
-      "isVoucherCreationEnabled": true
+      "isVoucherCreationEnabled": true,
+      "type": "Adhoc"
     },
     {
       "businessService": "Advertisement Tax.Hoardings",
@@ -59,7 +61,8 @@
       "code":"FIRENOC",
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "businessService": "Advertisement Tax.Unipolls",
@@ -70,7 +73,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "businessService": "Rents.Municipal Shops Rent",
@@ -81,7 +85,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Rents.Land Rent",
@@ -92,7 +97,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Rents.Tower Rent",
@@ -103,7 +109,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Rents.Parking Fee",
@@ -114,7 +121,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Rents.Jamin Theka",
@@ -125,7 +133,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "ADMIN Fees.Election rally fees",
@@ -136,7 +145,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "ADMIN Fees.Parking during election",
@@ -147,7 +157,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "ADMIN Fees.Road show",
@@ -158,7 +169,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Finance Fees.Advance Provident Fund",
@@ -169,7 +181,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Stationary.Stationary (Not Income)",
@@ -180,7 +193,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Stationary.Expenditure santitation (Not Income)",
@@ -191,7 +205,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Challans.Santitation dumping garbage",
@@ -202,7 +217,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Fee Town Planning.Telecom tower fees",
@@ -213,7 +229,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Taxes.Electricity Chungi",
@@ -224,7 +241,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Fee Town Planning.Draftsmen fees",
@@ -235,7 +253,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Fee Town Planning.Compremasing fees",
@@ -246,7 +265,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Fee Town Planning.Building planner renew",
@@ -257,7 +277,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Naksha/Building Manual Fees.Naksha samjota fees",
@@ -268,7 +289,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Naksha/Building Manual Fees.Naksha changes ",
@@ -279,7 +301,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Fee Town Planning.License fees building branch",
@@ -290,7 +313,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "O&M Fee.Water connection/disconnection fees",
@@ -301,7 +325,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Naksha/Building Manual Fees.Naksha renew fees",
@@ -312,7 +337,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Naksha/Building Manual Fees.NOC/Completion of building approval",
@@ -323,7 +349,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Naksha/Building Manual Fees.Alteration additional charge",
@@ -334,7 +361,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Naksha/Building Manual Fees.2 year time limit of Renewal Building Naksha",
@@ -345,7 +373,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Fee Town Planning.Leave encashment and gratuty",
@@ -356,7 +385,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Challans.Plastic Challan",
@@ -367,7 +397,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Challans.Rehri Challan",
@@ -378,7 +409,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Challans.Challan for Misuse of Water",
@@ -389,7 +421,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Challans.Dengue Challan",
@@ -400,7 +433,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Challans.Littering Challan",
@@ -411,7 +445,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Sanitation.Licence Pure food",
@@ -422,7 +457,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "OTHER.Misc Challans",
@@ -433,7 +469,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Naksha/Building Manual Fees.Regularisation of Buildings",
@@ -444,7 +481,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Work Fee.Contractor Enlistment",
@@ -455,7 +493,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Work Fee.Tender Form Fee",
@@ -466,7 +505,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Tehbazaari Fee.Advertisement fee",
@@ -477,7 +517,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Tehbazaari Fee.Tehbazaari",
@@ -488,7 +529,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Finance Fees.PF transfer (Accounts)",
@@ -499,7 +541,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Taxes.TS1 copy register for old survey",
@@ -510,7 +553,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Taxes.Transfer Property Fees",
@@ -521,7 +565,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "ADMIN Fees.RTI",
@@ -532,7 +577,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "ADMIN Fees.No Dues Certificate",
@@ -543,7 +589,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Fee Town Planning.Architect license fee",
@@ -554,7 +601,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Tehbazaari Fee.Challan Under section 156",
@@ -565,7 +613,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Finance Fees.Recovery employee/contractor",
@@ -576,7 +625,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Finance Fees.Grants cheque",
@@ -587,7 +637,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "OTHER.No due certificate electricity",
@@ -598,7 +649,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "OTHER.registery and bank loan",
@@ -609,18 +661,20 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "SBM garbage plastic polythene challan",
-      "code": "CH",
+      "code": "CH.SBM_garbage_plastic_polythene_challan",
       "collectionModesNotAllowed": [
         "DD"
       ],
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Sanitation.Dead animals contract",
@@ -631,7 +685,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Finance Fees.GPF",
@@ -642,7 +697,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Finance Fees.CPF received check",
@@ -653,7 +709,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Rents.Tower Installation",
@@ -664,7 +721,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Rents.Tower Annual Rent",
@@ -675,7 +733,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Cess.Cow Cess",
@@ -686,7 +745,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Challans.Cattle Challan",
@@ -697,7 +757,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Tehbazaari Fee.Rehri Challan",
@@ -708,7 +769,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "License Fee.Manual Rikshaw",
@@ -719,7 +781,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Challans.Dairy Animals Challan",
@@ -730,7 +793,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Challans.Bidi & Cigrette Challan",
@@ -741,7 +805,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Rents.Community Centre Booking Fee",
@@ -752,7 +817,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Rents.Commercial Use of Municipal Land",
@@ -763,7 +829,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Rents.Street Vendor",
@@ -774,7 +841,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Fee Town Planning.Construction Waste",
@@ -785,7 +853,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Fee Town Planning.Demolition Waste",
@@ -796,7 +865,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Sanitation.SNT Clean/Safai Sanitation",
@@ -807,7 +877,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "O&M Fee.Plumber License Fee",
@@ -818,7 +889,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Advertisement Tax.Light Wala Board",
@@ -829,7 +901,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Advertisement Tax.Wall Paint Advertisement",
@@ -840,7 +913,8 @@
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
       "isVoucherCreationEnabled": true,
-      "isActive": true
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "Service Type": "Advertisement Tax.Gas Balloon Advertisement",
