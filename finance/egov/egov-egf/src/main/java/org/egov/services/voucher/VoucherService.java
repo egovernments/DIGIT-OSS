@@ -1512,14 +1512,14 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 	
 	}
 	
-	public boolean isManualReceiptDateEnabledForVoucher(){
+	public AppConfigValues isManualReceiptDateEnabledForVoucher(){
             List<AppConfigValues> appConfigValue = appConfigValuesService.getConfigValuesByModuleAndKey(FinancialConstants.MODULE_NAME_APPCONFIG, "IsManualReceiptDateConsideredForVoucher");
-            return appConfigValue.isEmpty() ? false : appConfigValue.get(0).getValue().equalsIgnoreCase("Yes");
+            return appConfigValue.isEmpty() ? null : appConfigValue.get(0);
         }
 	
-	public Integer getModulesIdByName(String name){
+	public EgModules getModulesIdByName(String name){
 	    List<EgModules> egModuleServiceByName = egModuleService.getEgModuleServiceByName(name);
-	    return !egModuleServiceByName.isEmpty() ? egModuleServiceByName.get(0).getId() : null;
+	    return !egModuleServiceByName.isEmpty() ? egModuleServiceByName.get(0) : null;
 	}
 
 }
