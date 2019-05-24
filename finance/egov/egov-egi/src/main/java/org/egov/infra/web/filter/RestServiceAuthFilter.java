@@ -20,9 +20,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpStatus;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
@@ -83,6 +85,7 @@ public class RestServiceAuthFilter implements Filter {
         LOGGER.info("Rest service authentication initiated");
         
         HttpServletRequest httpRequest = (HttpServletRequest)req;
+        HttpServletResponse httpResponse = (HttpServletResponse)res;
         
         if (httpRequest.getRequestURI().contains("/ClearToken")||httpRequest.getRequestURI().contains("/refreshToken"))
         {
@@ -99,7 +102,9 @@ public class RestServiceAuthFilter implements Filter {
                 session.setAttribute(MS_USER_TOKEN, user_token);
                 chain.doFilter(request, res);
             } catch (Exception e) {
-                e.printStackTrace();
+                httpResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                httpResponse.setStatus(HttpStatus.SC_UNAUTHORIZED);
+                httpResponse.getWriter().write(getErrorResponse(e.getMessage()));
             }
         }else{
         
