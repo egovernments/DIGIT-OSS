@@ -386,19 +386,19 @@ function checkcontractorForSameMisAttribs(obj,len)
 		  	concount++; break;}}
 		  	</s:if>                     
 		   
-		   <s:if test="%{shouldShowHeaderField('department')}"> 
+		   /** <s:if test="%{shouldShowHeaderField('department')}"> 
 		   if((document.getElementsByName(obj+"["+i+"].deptName").item(0)).value!=null){  	
 		   if(dept1[0].value != null &&  dept1[0].value !=(document.getElementsByName(obj+"["+i+"].deptName").item(0)).value) {
 		   document.getElementsByName(obj+"["+i+"].isSelected")[0].checked = false;
 		   concount++; break;}}
 		   </s:if>
 		   
-		   <s:if test="%{shouldShowHeaderField('function')}"> 
+		   /** <s:if test="%{shouldShowHeaderField('function')}"> 
 		   if((document.getElementsByName(obj+"["+i+"].functionName").item(0)).value!=null){  	
 		   if(function1[0].value != null &&  function1[0].value !=(document.getElementsByName(obj+"["+i+"].functionName").item(0)).value) {
 		   document.getElementsByName(obj+"["+i+"].isSelected")[0].checked = false;
 		   concount++; break;}}
-		   </s:if>
+		   </s:if> **/
 		    
 		     <s:if test="%{shouldShowHeaderField('functionary')}">
 		    if(document.getElementsByName(obj+"["+i+"].functionaryName")!=null){
