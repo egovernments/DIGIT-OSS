@@ -67,7 +67,9 @@
       ],
       "partPaymentAllowed": false,
       "isAdvanceAllowed": false,
-      "isVoucherCreationEnabled": true
+      "isVoucherCreationEnabled": true,
+      "isActive": true,
+      "type": "Adhoc"
     },
     {
       "businessService": "Taxes.No Dues Certificate",
@@ -90,14 +92,6 @@
       "isAdvanceAllowed": true,
       "demandUpdateTime": 86400000,
       "isVoucherCreationEnabled": false,
-      "type": "Adhoc"
-    },
-    {
-      "businessService": "FIRENOC",
-      "code":"FIRENOC",
-      "isAdvanceAllowed": false,
-      "isVoucherCreationEnabled": true,
-      "isActive": true,
       "type": "Adhoc"
     },
     {
