@@ -371,9 +371,9 @@ public class CollectionCommon {
                         billReceiptInfo.getAccountDetails().addAll(receiptAccountInfoList);
                         receiptList.add(billReceiptInfo);
                     } else {
-                        additionalMessage = receiptHeaderService.getAdditionalInfoForReceipt(serviceCode,
-                                new BillReceiptInfoImpl(receiptHeader, chartOfAccountsHibernateDAO, persistenceService,
-                                        null));
+//                        additionalMessage = receiptHeaderService.getAdditionalInfoForReceipt(serviceCode,
+//                                new BillReceiptInfoImpl(receiptHeader, chartOfAccountsHibernateDAO, persistenceService,
+//                                        null));
                     }
                 }
 

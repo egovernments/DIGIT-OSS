@@ -953,8 +953,9 @@ public class CollectionsUtil {
 
         switch (receiptType) {
         case CollectionConstants.RECEIPT_TYPE_BILL:
-            templateName = serviceCode + CollectionConstants.SEPARATOR_UNDERSCORE
-                    + CollectionConstants.RECEIPT_TEMPLATE_NAME;// <servicecode>_collection_receipt
+//            templateName = serviceCode + CollectionConstants.SEPARATOR_UNDERSCORE
+//                    + CollectionConstants.RECEIPT_TEMPLATE_NAME;// <servicecode>_collection_receipt 
+            templateName = CollectionConstants.RECEIPT_TEMPLATE_NAME;
             if (!isValidTemplate(templateName)) {
                 LOGGER.info("Billing system specific report template [" + templateName
                         + "] not available. Using the default template [" + CollectionConstants.RECEIPT_TEMPLATE_NAME
