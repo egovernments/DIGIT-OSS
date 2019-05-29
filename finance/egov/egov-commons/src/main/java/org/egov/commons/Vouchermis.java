@@ -62,6 +62,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.egov.infra.admin.master.entity.Boundary;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "VOUCHERMIS")
@@ -105,6 +106,9 @@ public class Vouchermis implements java.io.Serializable {
     @Column(name = "budgetary_appnumber")
     private String budgetaryAppnumber;
     private Boolean budgetCheckReq = true;
+    @Length(max=50)
+    @Column(name="referencedocument")
+    private String referenceDocument;
 
     public Vouchermis() {
     }
@@ -245,6 +249,14 @@ public class Vouchermis implements java.io.Serializable {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    public String getReferenceDocument() {
+        return referenceDocument;
+    }
+
+    public void setReferenceDocument(String referenceDocument) {
+        this.referenceDocument = referenceDocument;
     }
 
 }

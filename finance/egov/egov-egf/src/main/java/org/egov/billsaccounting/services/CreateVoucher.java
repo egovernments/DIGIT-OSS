@@ -1831,6 +1831,11 @@ public class CreateVoucher {
 			vouchermis.setBudgetCheckReq((Boolean) headerdetails.get(VoucherConstant.BUDGETCHECKREQ));
 		else
 			vouchermis.setBudgetCheckReq(true);
+		if (headerdetails.containsKey(VoucherConstant.REFERENCEDOC)
+                        && null != headerdetails.get(VoucherConstant.REFERENCEDOC)) {
+                final String referencedoc = headerdetails.get(VoucherConstant.REFERENCEDOC).toString();
+                vouchermis.setReferenceDocument(referencedoc);
+        }
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("END | createVouchermis");
 		return vouchermis;

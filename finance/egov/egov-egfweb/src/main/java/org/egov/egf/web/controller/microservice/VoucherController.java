@@ -100,7 +100,10 @@ public class VoucherController {
 				headerDetails.put(VoucherConstant.VOUCHERDATE, vDate);
 				headerDetails.put(VoucherConstant.DESCRIPTION, voucher.getDescription());
 				headerDetails.put(VoucherConstant.MODULEID, voucher.getModuleId());
-				headerDetails.put(VoucherConstant.SOURCEPATH, voucher.getSource());
+				String source = voucher.getSource();
+				headerDetails.put(VoucherConstant.SOURCEPATH, source);
+				String receiptNumber = !source.isEmpty() & source != null ? source.indexOf("?selectedReceipts=") != -1 ? source.substring(source.indexOf("?selectedReceipts=")).split("=")[1]: "" : "";
+				headerDetails.put(VoucherConstant.REFERENCEDOC, receiptNumber);
 				// headerDetails.put(VoucherConstant.BUDGETCHECKREQ, voucher());
 				if (voucher.getFund() != null)
 					headerDetails.put(VoucherConstant.FUNDCODE, voucher.getFund().getCode());
