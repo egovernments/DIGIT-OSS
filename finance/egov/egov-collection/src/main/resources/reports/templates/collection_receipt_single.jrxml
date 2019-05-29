@@ -68,10 +68,6 @@
 				</textElement>
 				<text><![CDATA[RECEIPT]]></text>
 			</staticText>
-			<image>
-				<reportElement x="47" y="1" width="33" height="35" uuid="e806626d-3d2f-4264-9b7c-66bc13608c85"/>
-				<imageExpression><![CDATA[net.sf.jasperreports.engine.util.JRImageLoader.loadImage((byte[])$P{CITY_LOGO_PATH})]]></imageExpression>
-			</image>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToTallestObject" x="469" y="3" width="97" height="17" uuid="cbbecbc4-3320-4efe-af74-54832fa32032"/>
 				<box leftPadding="5" rightPadding="5">
@@ -282,7 +278,7 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="10" pdfFontName="Times-Roman" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalAmount}.setScale(2, BigDecimal.ROUND_UP)]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalAmount}.setScale(2, BigDecimal.ROUND_UP)+" ("+ReportUtil.amountInWords($F{totalAmount})+")"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="240" y="0" width="326" height="15" uuid="f22db335-66d7-4162-8ba3-f69929989b37">
