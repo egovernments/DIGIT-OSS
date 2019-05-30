@@ -25,7 +25,7 @@
       "service": "PT",
       "name": "Pt owner exemption",
       "code": "PT_OWNER_EXEMPTION",
-      "isDebit": false,
+      "isDebit": true,
       "isActualDemand": true,
       "order": 0
     },
@@ -34,7 +34,7 @@
       "service": "PT",
       "name": "Pt time rebate",
       "code": "PT_TIME_REBATE",
-      "isDebit": false,
+      "isDebit": true,
       "isActualDemand": true,
       "order": 0
     },
@@ -43,7 +43,7 @@
       "service": "PT",
       "name": "Pt unit usage excemption",
       "code": "PT_UNIT_USAGE_EXEMPTION",
-      "isDebit": false,
+      "isDebit": true,
       "isActualDemand": true,
       "order": 0
     },
