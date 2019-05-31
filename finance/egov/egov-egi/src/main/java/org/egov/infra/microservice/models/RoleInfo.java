@@ -57,8 +57,11 @@ public class RoleInfo implements Serializable {
     private static final long serialVersionUID = -1786060370499871338L;
 
     private Long id;
-    private final String name;
+    private String name;
 
+    public RoleInfo() {
+        // TODO Auto-generated constructor stub
+    }
     public RoleInfo(final String name) {
         this.name = name;
     }
@@ -70,5 +73,14 @@ public class RoleInfo implements Serializable {
     public String getName() {
         return name;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
 
 }
