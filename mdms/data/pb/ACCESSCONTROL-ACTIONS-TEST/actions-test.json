@@ -14256,7 +14256,21 @@
       "serviceCode": "UC",
       "code": "null",
       "navigationURL": "uc/search",
-      "path": "",
+      "path": "UC",
+      "leftIcon": "image:collections-bookmark"
+    },
+    {
+      "id": 1803,
+      "name": "Receipts",
+      "url": "url",
+      "displayName": "Receipts",
+      "orderNumber": 4,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "UC",
+      "code": "null",
+      "navigationURL": "uc-citizen/search",
+      "path": "UC",
       "leftIcon": "image:collections-bookmark"
     },
     {
