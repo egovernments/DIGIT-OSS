@@ -12823,7 +12823,7 @@
     {
       "id": 1692,
       "name": "Fetch Bill",
-      "url": "/billing-service/bill/_fetchBill",
+      "url": "/billing-service/bill/_fetchbill",
       "displayName": "Fetch Bill",
       "orderNumber": 1,
       "parentModule": "",
