@@ -182,7 +182,8 @@ public class ReceiptInstrumentInfoImpl implements ReceiptInstrumentInfo {
         if (bank == null)
             return null;
         else
-            return bank.getName();
+//            return bank.getName();
+            return null;
     }
 
     /*
