@@ -14284,6 +14284,51 @@
       "serviceCode": "Searcher",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1805,
+      "name": "Complaints",
+      "url": "url",
+      "displayName": "Complaints",
+      "orderNumber": 1,
+      "parentModule": "rainmaker-pgr",
+      "enabled": true,
+      "serviceCode": "PGR",
+      "code": "null",
+      "path": "Complaints",
+      "navigationURL": "pgr-home",
+      "leftIcon": "action:announcement",
+      "rightIcon": ""
+    },
+    {
+      "id": 1806,
+      "name": "PropertyTax",
+      "url": "url",
+      "displayName": "Property Tax",
+      "orderNumber": 1,
+      "queryParams": "",
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",  
+      "path": "Property Tax",
+      "navigationURL": "property-tax",
+      "leftIcon": "communication:business",
+      "rightIcon": ""
+    },
+    {
+      "id": 1807,
+      "name": "TradeLicense",
+      "url": "url",
+      "displayName": "Trade License",
+      "orderNumber": 13,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "TradeLicense",
+      "code": "null",
+      "navigationURL": "tradelicense-citizen/home",
+      "path": "TradeLicense",
+      "leftIcon": "places:business-center",
+      "rightIcon": ""
     }
   ]
 }
