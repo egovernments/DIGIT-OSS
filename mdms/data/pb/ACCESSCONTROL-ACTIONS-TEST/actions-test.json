@@ -14329,6 +14329,63 @@
       "path": "TradeLicense",
       "leftIcon": "places:business-center",
       "rightIcon": ""
+    },
+     {
+      "id": 1808,
+      "name": "CollectionRegister",
+      "url": "url",
+      "displayName": "Collection Register",
+      "orderNumber": 1,
+      "enabled": true,
+      "serviceCode": "COLLECTIONS",
+      "code": "null",
+      "navigationURL": "report/rainmaker-common/CollectionRegister",
+      "path": "Reports.Collection Register"
+    },
+   {
+      "id": 1809,
+      "name": "CollectionReport",
+      "url": "url",
+      "displayName": "Collection Report",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "null",
+      "path": "FIRE-NOC.Reports.CollectionReport",
+      "navigationURL": "report/rainmaker-noc/CollectionReport",
+      "leftIcon": "action:assignment",
+      "rightIcon": ""
+    },
+    {
+      "id": 1810,
+      "name": "ApplicationStatusReport",
+      "url": "url",
+      "displayName": "Application Status Report",
+      "orderNumber": 2,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "null",
+      "path": "FIRE-NOC.Reports.ApplicationStatusReport",
+      "navigationURL": "report/rainmaker-noc/ApplicationStatusReport",
+      "leftIcon": "action:assignment",
+      "rightIcon": ""
+    },
+    {
+      "id": 1811,
+      "name": "ChannelsReport",
+      "url": "url",
+      "displayName": "Channels Report",
+      "orderNumber": 3,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "null",
+      "path": "FIRE-NOC.Reports.ChannelsReport",
+      "navigationURL": "report/rainmaker-noc/ChannelsReport",
+      "leftIcon": "action:assignment",
+      "rightIcon": ""
     }
   ]
 }
