@@ -14386,6 +14386,28 @@
       "navigationURL": "report/rainmaker-noc/ChannelsReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
+    },
+    {
+      "id": 1812,
+      "name": "UC Report",
+      "url": "/report/rainmaker-common/_get",
+      "displayName": "Universal Collection Report",
+      "orderNumber": 0,
+      "enabled": true,
+      "serviceCode": "REPORTS",
+      "code": "null",
+      "path": "UC Report"
+    },
+    {
+      "id": 1813,
+      "name": "UCReportMetadata",
+      "url": "/report/rainmaker-common/metadata/_get",
+      "displayName": "Universal Collection Report metadata",
+      "orderNumber": 1,
+      "enabled": true,
+      "serviceCode": "UCREPORTS",
+      "code": "null",
+      "path": "UC Collection Metadata "
     }
   ]
 }
