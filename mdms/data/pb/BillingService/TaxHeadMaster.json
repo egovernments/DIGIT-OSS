@@ -9,7 +9,8 @@
       "code": "PT_ADHOC_REBATE",
       "isDebit": true,
       "isActualDemand": false,
-      "order": 0
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "ADVANCE_COLLECTION",
@@ -18,7 +19,8 @@
       "code": "PT_ADVANCE_CARRYFORWARD",
       "isDebit": true,
       "isActualDemand": false,
-      "order": 0
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -27,7 +29,8 @@
       "code": "PT_OWNER_EXEMPTION",
       "isDebit": true,
       "isActualDemand": true,
-      "order": 0
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -36,7 +39,8 @@
       "code": "PT_TIME_REBATE",
       "isDebit": true,
       "isActualDemand": true,
-      "order": 0
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -45,7 +49,8 @@
       "code": "PT_UNIT_USAGE_EXEMPTION",
       "isDebit": true,
       "isActualDemand": true,
-      "order": 0
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -54,7 +59,8 @@
       "code": "PT_ADHOC_PENALTY",
       "isDebit": false,
       "isActualDemand": false,
-      "order": 1
+      "order": "1",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -63,7 +69,8 @@
       "code": "PT_TAX",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 3
+      "order": "3",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -72,7 +79,8 @@
       "code": "PT_FIRE_CESS",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 2
+      "order": "2",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -81,7 +89,8 @@
       "code": "PT_CANCER_CESS",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 2
+      "order": "2",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -90,7 +99,8 @@
       "code": "PT_TIME_PENALTY",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 2
+      "order": "2",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -99,7 +109,8 @@
       "code": "PT_TIME_INTEREST",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 1
+      "order": "1",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -108,7 +119,8 @@
       "code": "TL_TAX",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 2
+      "order": "2",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -117,7 +129,8 @@
       "code": "TL_ROUNDOFF",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 0
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -126,7 +139,8 @@
       "code": "TL_ADHOC_REBATE",
       "isDebit": true,
       "isActualDemand": false,
-      "order": 0
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -135,7 +149,8 @@
       "code": "TL_ADHOC_PENALTY",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 1
+      "order": "1",
+      "isRequired": false
     },
     {
       "category": "REBATE",
@@ -144,7 +159,8 @@
       "code": "PT_DECIMAL_CEILING_DEBIT",
       "isDebit": true,
       "isActualDemand": true,
-      "order": 0
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -153,7 +169,8 @@
       "code": "PT_DECIMAL_CEILING_CREDIT",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 1
+      "order": "1",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -162,7 +179,8 @@
       "code": "PT_ROUNDOFF",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 0
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "REBATE",
@@ -171,7 +189,8 @@
       "code": "FIRENOC_ADHOC_REBATE",
       "isDebit": true,
       "isActualDemand": false,
-      "order": 0
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "PENALTY",
@@ -180,7 +199,8 @@
       "code": "FIRENOC_ADHOC_PENALTY",
       "isDebit": false,
       "isActualDemand": false,
-      "order": 2
+      "order": "2",
+      "isRequired": false
     },
     {
       "category": "FEE",
@@ -189,7 +209,8 @@
       "code": "FIRENOC_FEES",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 3
+      "order": "3",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -198,7 +219,8 @@
       "code": "FIRENOC_TAXES",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 4
+      "order": "4",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -207,7 +229,8 @@
       "code": "FIRENOC_ROUNDOFF",
       "isDebit": false,
       "isActualDemand": true,
-      "order": 1
+      "order": "1",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -215,8 +238,9 @@
       "name": "TX.NO_DUES_CERTIFICATE_TAX",
       "code": "TX.NO_DUES_CERTIFICATE_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -224,8 +248,9 @@
       "name": "TX.NO_DUES_CERTIFICATE_FIELD_FEE",
       "code": "TX.NO_DUES_CERTIFICATE_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -233,8 +258,9 @@
       "name": "ADVT.HOARDINGS_TAX",
       "code": "ADVT.HOARDINGS_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -242,8 +268,9 @@
       "name": "ADVT.HOARDINGS_FIELD_FEE",
       "code": "ADVT.HOARDINGS_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -251,8 +278,9 @@
       "name": "ADVT.UNIPOLLS_TAX",
       "code": "ADVT.UNIPOLLS_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -260,8 +288,9 @@
       "name": "ADVT.UNIPOLLS_FIELD_FEE",
       "code": "ADVT.UNIPOLLS_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -269,8 +298,9 @@
       "name": "RT.MUNICIPAL_SHOPS_RENT_TAX",
       "code": "RT.MUNICIPAL_SHOPS_RENT_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -278,8 +308,9 @@
       "name": "RT.MUNICIPAL_SHOPS_RENT_FIELD_FEE",
       "code": "RT.MUNICIPAL_SHOPS_RENT_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -287,8 +318,9 @@
       "name": "RT.LAND_RENT_TAX",
       "code": "RT.LAND_RENT_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -296,8 +328,9 @@
       "name": "RT.LAND_RENT_FIELD_FEE",
       "code": "RT.LAND_RENT_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -305,8 +338,9 @@
       "name": "RT.TOWER_RENT_TAX",
       "code": "RT.TOWER_RENT_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -314,8 +348,9 @@
       "name": "RT.TOWER_RENT_FIELD_FEE",
       "code": "RT.TOWER_RENT_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -323,8 +358,9 @@
       "name": "RT.PARKING_FEE_TAX",
       "code": "RT.PARKING_FEE_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -332,8 +368,9 @@
       "name": "RT.PARKING_FEE_FIELD_FEE",
       "code": "RT.PARKING_FEE_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -341,8 +378,9 @@
       "name": "RT.JAMIN_THEKA_TAX",
       "code": "RT.JAMIN_THEKA_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -350,8 +388,9 @@
       "name": "RT.JAMIN_THEKA_FIELD_FEE",
       "code": "RT.JAMIN_THEKA_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -359,8 +398,9 @@
       "name": "ADMN.ELECTION_RALLY_FEES_TAX",
       "code": "ADMN.ELECTION_RALLY_FEES_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -368,8 +408,9 @@
       "name": "ADMN.ELECTION_RALLY_FEES_FIELD_FEE",
       "code": "ADMN.ELECTION_RALLY_FEES_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -377,8 +418,9 @@
       "name": "ADMN.PARKING_DURING_ELECTION_TAX",
       "code": "ADMN.PARKING_DURING_ELECTION_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -386,8 +428,9 @@
       "name": "ADMN.PARKING_DURING_ELECTION_FIELD_FEE",
       "code": "ADMN.PARKING_DURING_ELECTION_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -395,8 +438,9 @@
       "name": "ADMN.ROAD_SHOW_TAX",
       "code": "ADMN.ROAD_SHOW_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -404,8 +448,9 @@
       "name": "ADMN.ROAD_SHOW_FIELD_FEE",
       "code": "ADMN.ROAD_SHOW_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -413,8 +458,9 @@
       "name": "FN.ADVANCE_PROVIDENT_FUND_TAX",
       "code": "FN.ADVANCE_PROVIDENT_FUND_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -422,8 +468,9 @@
       "name": "FN.ADVANCE_PROVIDENT_FUND_FIELD_FEE",
       "code": "FN.ADVANCE_PROVIDENT_FUND_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -431,8 +478,9 @@
       "name": "ST.STATIONARY_NOT_INCOME_TAX",
       "code": "ST.STATIONARY_NOT_INCOME_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -440,8 +488,9 @@
       "name": "ST.STATIONARY_NOT_INCOME_FIELD_FEE",
       "code": "ST.STATIONARY_NOT_INCOME_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -449,8 +498,9 @@
       "name": "ST.EXPENDITURE_SANTITATION_NOT_INCOME_TAX",
       "code": "ST.EXPENDITURE_SANTITATION_NOT_INCOME_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -458,8 +508,9 @@
       "name": "ST.EXPENDITURE_SANTITATION_NOT_INCOME_FIELD_FEE",
       "code": "ST.EXPENDITURE_SANTITATION_NOT_INCOME_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -467,8 +518,9 @@
       "name": "CH.SANTITATION_DUMPING_GARBAGE_TAX",
       "code": "CH.SANTITATION_DUMPING_GARBAGE_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -476,8 +528,9 @@
       "name": "CH.SANTITATION_DUMPING_GARBAGE_FIELD_FEE",
       "code": "CH.SANTITATION_DUMPING_GARBAGE_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -485,8 +538,9 @@
       "name": "FTP.TELECOM_TOWER_FEES_TAX",
       "code": "FTP.TELECOM_TOWER_FEES_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -494,8 +548,9 @@
       "name": "FTP.TELECOM_TOWER_FEES_FIELD_FEE",
       "code": "FTP.TELECOM_TOWER_FEES_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -503,8 +558,9 @@
       "name": "TX.ELECTRICITY_CHUNGI_TAX",
       "code": "TX.ELECTRICITY_CHUNGI_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -512,8 +568,9 @@
       "name": "TX.ELECTRICITY_CHUNGI_FIELD_FEE",
       "code": "TX.ELECTRICITY_CHUNGI_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -521,8 +578,9 @@
       "name": "FTP.DRAFTSMEN_FEES_TAX",
       "code": "FTP.DRAFTSMEN_FEES_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -530,8 +588,9 @@
       "name": "FTP.DRAFTSMEN_FEES_FIELD_FEE",
       "code": "FTP.DRAFTSMEN_FEES_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -539,8 +598,9 @@
       "name": "FTP.COMPREMASING_FEES_TAX",
       "code": "FTP.COMPREMASING_FEES_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -548,8 +608,9 @@
       "name": "FTP.COMPREMASING_FEES_FIELD_FEE",
       "code": "FTP.COMPREMASING_FEES_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -557,8 +618,9 @@
       "name": "FTP.BUILDING_PLANNER_RENEW_TAX",
       "code": "FTP.BUILDING_PLANNER_RENEW_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -566,8 +628,9 @@
       "name": "FTP.BUILDING_PLANNER_RENEW_FIELD_FEE",
       "code": "FTP.BUILDING_PLANNER_RENEW_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -575,8 +638,9 @@
       "name": "NKS.NAKSHA_SAMJOTA_FEES_TAX",
       "code": "NKS.NAKSHA_SAMJOTA_FEES_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -584,8 +648,9 @@
       "name": "NKS.NAKSHA_SAMJOTA_FEES_FIELD_FEE",
       "code": "NKS.NAKSHA_SAMJOTA_FEES_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -593,8 +658,9 @@
       "name": "NKS.NAKSHA_CHANGES_TAX",
       "code": "NKS.NAKSHA_CHANGES_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -602,8 +668,9 @@
       "name": "NKS.NAKSHA_CHANGES_FIELD_FEE",
       "code": "NKS.NAKSHA_CHANGES_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -611,8 +678,9 @@
       "name": "FTP.LICENSE_FEES_BUILDING_BRANCH_TAX",
       "code": "FTP.LICENSE_FEES_BUILDING_BRANCH_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -620,8 +688,9 @@
       "name": "FTP.LICENSE_FEES_BUILDING_BRANCH_FIELD_FEE",
       "code": "FTP.LICENSE_FEES_BUILDING_BRANCH_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -629,8 +698,9 @@
       "name": "OM.WATER_CONNECTION/DISCONNECTION_FEES_TAX",
       "code": "OM.WATER_CONNECTION/DISCONNECTION_FEES_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -638,8 +708,9 @@
       "name": "OM.WATER_CONNECTION/DISCONNECTION_FEES_FIELD_FEE",
       "code": "OM.WATER_CONNECTION/DISCONNECTION_FEES_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -647,8 +718,9 @@
       "name": "NKS.NAKSHA_RENEW_FEES_TAX",
       "code": "NKS.NAKSHA_RENEW_FEES_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -656,8 +728,9 @@
       "name": "NKS.NAKSHA_RENEW_FEES_FIELD_FEE",
       "code": "NKS.NAKSHA_RENEW_FEES_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -665,8 +738,9 @@
       "name": "NKS.NOC/COMPLETION_OF_BUILDING_APPROVAL_TAX",
       "code": "NKS.NOC/COMPLETION_OF_BUILDING_APPROVAL_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -674,8 +748,9 @@
       "name": "NKS.NOC/COMPLETION_OF_BUILDING_APPROVAL_FIELD_FEE",
       "code": "NKS.NOC/COMPLETION_OF_BUILDING_APPROVAL_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -683,8 +758,9 @@
       "name": "NKS.ALTERATION_ADDITIONAL_CHARGE_TAX",
       "code": "NKS.ALTERATION_ADDITIONAL_CHARGE_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -692,8 +768,9 @@
       "name": "NKS.ALTERATION_ADDITIONAL_CHARGE_FIELD_FEE",
       "code": "NKS.ALTERATION_ADDITIONAL_CHARGE_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -701,8 +778,9 @@
       "name": "NKS.2_YEAR_TIME_LIMIT_OF_RENEWAL_BUILDING_NAKSHA_TAX",
       "code": "NKS.2_YEAR_TIME_LIMIT_OF_RENEWAL_BUILDING_NAKSHA_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -710,8 +788,9 @@
       "name": "NKS.2_YEAR_TIME_LIMIT_OF_RENEWAL_BUILDING_NAKSHA_FIELD_FEE",
       "code": "NKS.2_YEAR_TIME_LIMIT_OF_RENEWAL_BUILDING_NAKSHA_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -719,8 +798,9 @@
       "name": "FTP.LEAVE_ENCASHMENT_AND_GRATUTY_TAX",
       "code": "FTP.LEAVE_ENCASHMENT_AND_GRATUTY_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -728,8 +808,9 @@
       "name": "FTP.LEAVE_ENCASHMENT_AND_GRATUTY_FIELD_FEE",
       "code": "FTP.LEAVE_ENCASHMENT_AND_GRATUTY_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -737,8 +818,9 @@
       "name": "CH.PLASTIC_CHALLAN_TAX",
       "code": "CH.PLASTIC_CHALLAN_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -746,8 +828,9 @@
       "name": "CH.PLASTIC_CHALLAN_FIELD_FEE",
       "code": "CH.PLASTIC_CHALLAN_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -755,8 +838,9 @@
       "name": "CH.REHRI_CHALLAN_TAX",
       "code": "CH.REHRI_CHALLAN_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -764,8 +848,9 @@
       "name": "CH.REHRI_CHALLAN_FIELD_FEE",
       "code": "CH.REHRI_CHALLAN_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -773,8 +858,9 @@
       "name": "CH.CHALLAN_FOR_MISUSE_OF_WATER_TAX",
       "code": "CH.CHALLAN_FOR_MISUSE_OF_WATER_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -782,8 +868,9 @@
       "name": "CH.CHALLAN_FOR_MISUSE_OF_WATER_FIELD_FEE",
       "code": "CH.CHALLAN_FOR_MISUSE_OF_WATER_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -791,8 +878,9 @@
       "name": "CH.DENGUE_CHALLAN_TAX",
       "code": "CH.DENGUE_CHALLAN_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -800,8 +888,9 @@
       "name": "CH.DENGUE_CHALLAN_FIELD_FEE",
       "code": "CH.DENGUE_CHALLAN_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -809,8 +898,9 @@
       "name": "CH.LITTERING_CHALLAN_TAX",
       "code": "CH.LITTERING_CHALLAN_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -818,8 +908,9 @@
       "name": "CH.LITTERING_CHALLAN_FIELD_FEE",
       "code": "CH.LITTERING_CHALLAN_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -827,8 +918,9 @@
       "name": "SNT.LICENCE_PURE_FOOD_TAX",
       "code": "SNT.LICENCE_PURE_FOOD_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -836,8 +928,9 @@
       "name": "SNT.LICENCE_PURE_FOOD_FIELD_FEE",
       "code": "SNT.LICENCE_PURE_FOOD_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -845,8 +938,9 @@
       "name": "OTHER.MISC_CHALLANS_TAX",
       "code": "OTHER.MISC_CHALLANS_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -854,8 +948,9 @@
       "name": "OTHER.MISC_CHALLANS_FIELD_FEE",
       "code": "OTHER.MISC_CHALLANS_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -863,8 +958,9 @@
       "name": "NKS.REGULARISATION_OF_BUILDINGS_TAX",
       "code": "NKS.REGULARISATION_OF_BUILDINGS_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -872,8 +968,9 @@
       "name": "NKS.REGULARISATION_OF_BUILDINGS_FIELD_FEE",
       "code": "NKS.REGULARISATION_OF_BUILDINGS_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -881,8 +978,9 @@
       "name": "WF.CONTRACTOR_ENLISTMENT_TAX",
       "code": "WF.CONTRACTOR_ENLISTMENT_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -890,8 +988,9 @@
       "name": "WF.CONTRACTOR_ENLISTMENT_FIELD_FEE",
       "code": "WF.CONTRACTOR_ENLISTMENT_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -899,8 +998,9 @@
       "name": "WF.TENDER FORM FEE_TAX",
       "code": "WF.TENDER FORM FEE_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -908,8 +1008,9 @@
       "name": "WF.TENDER FORM FEE_FIELD_FEE",
       "code": "WF.TENDER FORM FEE_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -917,8 +1018,9 @@
       "name": "TB.ADVERTISEMENT_FEE_TAX",
       "code": "TB.ADVERTISEMENT_FEE_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -926,8 +1028,9 @@
       "name": "TB.ADVERTISEMENT_FEE_FIELD_FEE",
       "code": "TB.ADVERTISEMENT_FEE_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -935,8 +1038,9 @@
       "name": "TB.TEHBAZAARI_TAX",
       "code": "TB.TEHBAZAARI_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -944,8 +1048,9 @@
       "name": "TB.TEHBAZAARI_FIELD_FEE",
       "code": "TB.TEHBAZAARI_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -953,8 +1058,9 @@
       "name": "FN.PF_TRANSFER_(ACCOUNTS)_TAX",
       "code": "FN.PF_TRANSFER_(ACCOUNTS)_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -962,8 +1068,9 @@
       "name": "FN.PF_TRANSFER_(ACCOUNTS)_FIELD_FEE",
       "code": "FN.PF_TRANSFER_(ACCOUNTS)_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -971,8 +1078,9 @@
       "name": "TX.TS1_COPY_REGISTER_FOR_OLD_SURVEY_TAX",
       "code": "TX.TS1_COPY_REGISTER_FOR_OLD_SURVEY_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -980,8 +1088,9 @@
       "name": "TX.TS1_COPY_REGISTER_FOR_OLD_SURVEY_FIELD_FEE",
       "code": "TX.TS1_COPY_REGISTER_FOR_OLD_SURVEY_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -989,8 +1098,9 @@
       "name": "TX.TRANSFER_PROPERTY_FEES_TAX",
       "code": "TX.TRANSFER_PROPERTY_FEES_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -998,8 +1108,9 @@
       "name": "TX.TRANSFER_PROPERTY_FEES_FIELD_FEE",
       "code": "TX.TRANSFER_PROPERTY_FEES_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1007,8 +1118,9 @@
       "name": "ADMN.RTI_TAX",
       "code": "ADMN.RTI_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1016,8 +1128,9 @@
       "name": "ADMN.RTI_FIELD_FEE",
       "code": "ADMN.RTI_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1025,8 +1138,9 @@
       "name": "ADMN.NO_DUES_CERTIFICATE_TAX",
       "code": "ADMN.NO_DUES_CERTIFICATE_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1034,8 +1148,9 @@
       "name": "ADMN.NO_DUES_CERTIFICATE_FIELD_FEE",
       "code": "ADMN.NO_DUES_CERTIFICATE_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1043,8 +1158,9 @@
       "name": "FTP.ARCHITECT_LICENSE_FEE_TAX",
       "code": "FTP.ARCHITECT_LICENSE_FEE_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1052,8 +1168,9 @@
       "name": "FTP.ARCHITECT_LICENSE_FEE_FIELD_FEE",
       "code": "FTP.ARCHITECT_LICENSE_FEE_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1061,8 +1178,9 @@
       "name": "TEHBAZAARI FEE.CHALLAN_UNDER_SECTION_156_TAX",
       "code": "TEHBAZAARI FEE.CHALLAN_UNDER_SECTION_156_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1070,8 +1188,9 @@
       "name": "TEHBAZAARI FEE.CHALLAN_UNDER_SECTION_156_FIELD_FEE",
       "code": "TEHBAZAARI FEE.CHALLAN_UNDER_SECTION_156_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1079,8 +1198,9 @@
       "name": "FN.RECOVERY_EMPLOYEE/CONTRACTOR_TAX",
       "code": "FN.RECOVERY_EMPLOYEE/CONTRACTOR_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1088,8 +1208,9 @@
       "name": "FN.RECOVERY_EMPLOYEE/CONTRACTOR_FIELD_FEE",
       "code": "FN.RECOVERY_EMPLOYEE/CONTRACTOR_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1097,8 +1218,9 @@
       "name": "FN.GRANTS_CHEQUE_TAX",
       "code": "FN.GRANTS_CHEQUE_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1106,8 +1228,9 @@
       "name": "FN.GRANTS_CHEQUE_FIELD_FEE",
       "code": "FN.GRANTS_CHEQUE_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1115,8 +1238,9 @@
       "name": "OTHER.NO_DUE_CERTIFICATE_ELECTRICITY_TAX",
       "code": "OTHER.NO_DUE_CERTIFICATE_ELECTRICITY_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1124,8 +1248,9 @@
       "name": "OTHER.NO_DUE_CERTIFICATE_ELECTRICITY_FIELD_FEE",
       "code": "OTHER.NO_DUE_CERTIFICATE_ELECTRICITY_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1133,8 +1258,9 @@
       "name": "OTHER.REGISTERY_AND_BANK_LOAN_TAX",
       "code": "OTHER.REGISTERY_AND_BANK_LOAN_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1142,8 +1268,9 @@
       "name": "OTHER.REGISTERY_AND_BANK_LOAN_FIELD_FEE",
       "code": "OTHER.REGISTERY_AND_BANK_LOAN_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1151,8 +1278,9 @@
       "name": "CH.SBM_GARBAGE_PLASTIC_POLYTHENE_CHALLAN_TAX",
       "code": "CH.SBM_GARBAGE_PLASTIC_POLYTHENE_CHALLAN_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1160,8 +1288,9 @@
       "name": "CH.SBM_GARBAGE_PLASTIC_POLYTHENE_CHALLAN_FIELD_FEE",
       "code": "CH.SBM_GARBAGE_PLASTIC_POLYTHENE_CHALLAN_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1169,8 +1298,9 @@
       "name": "SNT.DEAD_ANIMALS_CONTRACT_TAX",
       "code": "SNT.DEAD_ANIMALS_CONTRACT_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1178,8 +1308,9 @@
       "name": "SNT.DEAD_ANIMALS_CONTRACT_FIELD_FEE",
       "code": "SNT.DEAD_ANIMALS_CONTRACT_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1187,8 +1318,9 @@
       "name": "FN.GPF_TAX",
       "code": "FN.GPF_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1196,8 +1328,9 @@
       "name": "FN.GPF_FIELD_FEE",
       "code": "FN.GPF_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1205,8 +1338,9 @@
       "name": "FN.CPF_RECEIVED_CHECK_TAX",
       "code": "FN.CPF_RECEIVED_CHECK_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1214,8 +1348,9 @@
       "name": "FN.CPF_RECEIVED_CHECK_FIELD_FEE",
       "code": "FN.CPF_RECEIVED_CHECK_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1223,8 +1358,9 @@
       "name": "RT.TOWER_INSTALLATION_TAX",
       "code": "RT.TOWER_INSTALLATION_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1232,8 +1368,9 @@
       "name": "RT.TOWER_INSTALLATION_FIELD_FEE",
       "code": "RT.TOWER_INSTALLATION_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1241,8 +1378,9 @@
       "name": "RT.TOWER_ANNUAL_RENT_TAX",
       "code": "RT.TOWER_ANNUAL_RENT_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1250,8 +1388,9 @@
       "name": "RT.TOWER_ANNUAL_RENT_FIELD_FEE",
       "code": "RT.TOWER_ANNUAL_RENT_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1259,8 +1398,9 @@
       "name": "CSS.COW_CESS_TAX",
       "code": "CSS.COW_CESS_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1268,8 +1408,9 @@
       "name": "CSS.COW_CESS_FIELD_FEE",
       "code": "CSS.COW_CESS_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1277,8 +1418,9 @@
       "name": "CH.CATTLE_CHALLAN_TAX",
       "code": "CH.CATTLE_CHALLAN_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1286,8 +1428,9 @@
       "name": "CH.CATTLE_CHALLAN_FIELD_FEE",
       "code": "CH.CATTLE_CHALLAN_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1295,8 +1438,9 @@
       "name": "TB.REHRI_CHALLAN_TAX",
       "code": "TB.REHRI_CHALLAN_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1304,8 +1448,9 @@
       "name": "TB.REHRI_CHALLAN_FIELD_FEE",
       "code": "TB.REHRI_CHALLAN_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1313,8 +1458,9 @@
       "name": "LCF.MANUAL_RIKSHAW_TAX",
       "code": "LCF.MANUAL_RIKSHAW_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1322,8 +1468,9 @@
       "name": "LCF.MANUAL_RIKSHAW_FIELD_FEE",
       "code": "LCF.MANUAL_RIKSHAW_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1331,8 +1478,9 @@
       "name": "CH.DAIRY_ANIMALS_CHALLAN_TAX",
       "code": "CH.DAIRY_ANIMALS_CHALLAN_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1340,8 +1488,9 @@
       "name": "CH.DAIRY_ANIMALS_CHALLAN_FIELD_FEE",
       "code": "CH.DAIRY_ANIMALS_CHALLAN_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1349,8 +1498,9 @@
       "name": "CH.BIDI_&_CIGRETTE_CHALLAN_TAX",
       "code": "CH.BIDI_&_CIGRETTE_CHALLAN_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1358,8 +1508,9 @@
       "name": "CH.BIDI_&_CIGRETTE_CHALLAN_FIELD_FEE",
       "code": "CH.BIDI_&_CIGRETTE_CHALLAN_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1367,8 +1518,9 @@
       "name": "RT.COMMUNITY_CENTRE_BOOKING_FEE_TAX",
       "code": "RT.COMMUNITY_CENTRE_BOOKING_FEE_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1376,8 +1528,9 @@
       "name": "RT.COMMUNITY_CENTRE_BOOKING_FEE_FIELD_FEE",
       "code": "RT.COMMUNITY_CENTRE_BOOKING_FEE_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1385,8 +1538,9 @@
       "name": "RT.COMMERCIAL_USE_OF_MUNICIPAL_LAND_TAX",
       "code": "RT.COMMERCIAL_USE_OF_MUNICIPAL_LAND_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1394,8 +1548,9 @@
       "name": "RT.COMMERCIAL_USE_OF_MUNICIPAL_LAND_FIELD_FEE",
       "code": "RT.COMMERCIAL_USE_OF_MUNICIPAL_LAND_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1403,8 +1558,9 @@
       "name": "RT.STREET_VENDOR_TAX",
       "code": "RT.STREET_VENDOR_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1412,8 +1568,9 @@
       "name": "RT.STREET_VENDOR_FIELD_FEE",
       "code": "RT.STREET_VENDOR_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1421,8 +1578,9 @@
       "name": "FTP.CONSTRUCTION_WASTE_TAX",
       "code": "FTP.CONSTRUCTION_WASTE_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1430,8 +1588,9 @@
       "name": "FTP.CONSTRUCTION_WASTE_FIELD_FEE",
       "code": "FTP.CONSTRUCTION_WASTE_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1439,8 +1598,9 @@
       "name": "FTP.DEMOLITION_WASTE_TAX",
       "code": "FTP.DEMOLITION_WASTE_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1448,8 +1608,9 @@
       "name": "FTP.DEMOLITION_WASTE_FIELD_FEE",
       "code": "FTP.DEMOLITION_WASTE_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1457,8 +1618,9 @@
       "name": "SNT.CLEAN_SAFAI_SANITATION_TAX",
       "code": "SNT.CLEAN_SAFAI_SANITATION_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1466,8 +1628,9 @@
       "name": "SNT.CLEAN_SAFAI_SANITATION_FIELD_FEE",
       "code": "SNT.CLEAN_SAFAI_SANITATION_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1475,8 +1638,9 @@
       "name": "OM.PLUMBER_LICENSE_FEE_TAX",
       "code": "OM.PLUMBER_LICENSE_FEE_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1484,8 +1648,9 @@
       "name": "OM.PLUMBER_LICENSE_FEE_FIELD_FEE",
       "code": "OM.PLUMBER_LICENSE_FEE_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1493,8 +1658,9 @@
       "name": "ADVT.LIGHT_WALA_BOARD_TAX",
       "code": "ADVT.LIGHT_WALA_BOARD_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1502,8 +1668,9 @@
       "name": "ADVT.LIGHT_WALA_BOARD_FIELD_FEE",
       "code": "ADVT.LIGHT_WALA_BOARD_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1511,8 +1678,9 @@
       "name": "ADVT.WALL_PAINT_ADVERTISEMENT_TAX",
       "code": "ADVT.WALL_PAINT_ADVERTISEMENT_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1520,8 +1688,9 @@
       "name": "ADVT.WALL_PAINT_ADVERTISEMENT_FIELD_FEE",
       "code": "ADVT.WALL_PAINT_ADVERTISEMENT_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     },
     {
       "category": "TAX",
@@ -1529,8 +1698,9 @@
       "name": "ADVT.GAS_BALLOON_ADVERTISEMENT_TAX",
       "code": "ADVT.GAS_BALLOON_ADVERTISEMENT_TAX",
       "isDebit": false,
-      "isActualDemand":  true,
-      "order": "1"
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": true
     },
     {
       "category": "CHARGES",
@@ -1538,8 +1708,9 @@
       "name": "ADVT.GAS_BALLOON_ADVERTISEMENT_FIELD_FEE",
       "code": "ADVT.GAS_BALLOON_ADVERTISEMENT_FIELD_FEE",
       "isDebit": false,
-      "isActualDemand":  false,
-      "order": "0"
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     }
   ]
 }
