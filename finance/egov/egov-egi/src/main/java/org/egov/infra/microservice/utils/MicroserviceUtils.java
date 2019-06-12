@@ -271,6 +271,12 @@ public class MicroserviceUtils {
 
     @Value("${egov.services.master.mdms.search.url}")
     private String mdmsSearchUrl;
+    
+    @Value("${egov.services.egov-indexer.url}")
+    private String egovIndexerUrl;
+    
+    @Value("${egov.finance.indexer.topic.name}")
+    private String finIndexerTopic;
 
     public RequestInfo createRequestInfo() {
         final RequestInfo requestInfo = new RequestInfo();
@@ -1395,6 +1401,10 @@ public class MicroserviceUtils {
         String strDate = dateFormat.format(date);
         long epoch = Instant.from(fmt.parse(strDate)).toEpochMilli();
         return epoch;
+    }
+    
+    public void pushDataToIndexer(Object data){
+        Object postForObject = restTemplate.postForObject(egovIndexerUrl, data, Object.class, finIndexerTopic);
     }
 
 }
