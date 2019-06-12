@@ -14309,7 +14309,7 @@
       "queryParams": "",
       "parentModule": "",
       "enabled": true,
-      "serviceCode": "",  
+      "serviceCode": "",
       "path": "Property Tax",
       "navigationURL": "property-tax",
       "leftIcon": "communication:business",
@@ -14342,7 +14342,7 @@
       "navigationURL": "report/rainmaker-common/CollectionRegister",
       "path": "Reports.Collection Register"
     },
-   {
+    {
       "id": 1809,
       "name": "CollectionReport",
       "url": "url",
@@ -14530,6 +14530,18 @@
       "orderNumber": 0,
       "enabled": false,
       "serviceCode": "firenoc-calculator",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1823,
+      "name": "Indexer finance rolloutadoption",
+      "url": "/egov-indexer/index-operations/finance-adoption-topic/_index",
+      "parentModule": "",
+      "displayName": "",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-indexer",
       "code": "null",
       "path": ""
     }
