@@ -206,14 +206,14 @@
       "active": true
     },
     {
-      "code": "GROUP_H_STORAGE.",
+      "code": "GROUP_H_STORAGE.GROUP_H_STORAGE",
       "uom": [
         "PLOT_SIZE"
       ],
       "active": true
     },
     {
-      "code": "GROUP_J_HAZARDOUS.",
+      "code": "GROUP_J_HAZARDOUS.GROUP_J_HAZARDOUS",
       "uom": [
         "PLOT_SIZE"
       ],
