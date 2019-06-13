@@ -14309,7 +14309,7 @@
       "queryParams": "",
       "parentModule": "",
       "enabled": true,
-      "serviceCode": "",  
+      "serviceCode": "",
       "path": "Property Tax",
       "navigationURL": "property-tax",
       "leftIcon": "communication:business",
@@ -14330,7 +14330,7 @@
       "leftIcon": "places:business-center",
       "rightIcon": ""
     },
-     {
+    {
       "id": 1808,
       "name": "CollectionRegister",
       "url": "url",
@@ -14342,7 +14342,7 @@
       "navigationURL": "report/rainmaker-common/CollectionRegister",
       "path": "Reports.Collection Register"
     },
-   {
+    {
       "id": 1809,
       "name": "CollectionReport",
       "url": "url",
@@ -14472,6 +14472,100 @@
       "leftIcon": "custom:fire",
       "rightIcon": "",
       "queryParams": ""
+    },
+    {
+      "id": 1818,
+      "name": "Firenoc Get Bill",
+      "url": "/firenoc-calculator/v1/_getbill",
+      "parentModule": "",
+      "displayName": "Get Bill",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "firenoc-calculator",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1819,
+      "name": "Firenoc Calculate",
+      "url": "/firenoc-calculator/v1/_calculate",
+      "parentModule": "",
+      "displayName": "Calculate",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "firenoc-calculator",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1820,
+      "name": "Firenoc billing slab create",
+      "url": "/firenoc-calculator/billingslab/_create",
+      "parentModule": "",
+      "displayName": "",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "firenoc-calculator",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1821,
+      "name": "Firenoc billing slab update",
+      "url": "/firenoc-calculator/billingslab/_update",
+      "parentModule": "",
+      "displayName": "",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "firenoc-calculator",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1822,
+      "name": "Firenoc billing slab search",
+      "url": "/firenoc-calculator/billingslab/_search",
+      "parentModule": "",
+      "displayName": "",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "firenoc-calculator",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1823,
+      "name": "Indexer finance rolloutadoption",
+      "url": "/egov-indexer/index-operations/finance-adoption-topic/_index",
+      "parentModule": "",
+      "displayName": "",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-indexer",
+      "code": "null",
+      "path": ""
+    },
+     {
+      "id": 1824,
+      "name": "FIRENOC Report",
+      "url": "/report/rainmaker-noc/_get",
+      "displayName": "FIRENOC Report",
+      "orderNumber": 0,
+      "enabled": true,
+      "serviceCode": "REPORTS",
+      "code": "null",
+      "path": "FIRENOC Report"
+    },
+    {
+      "id": 1825,
+      "name": "FIRENOCReportMetadata",
+      "url": "/report/rainmaker-noc/metadata/_get",
+      "displayName": "FIRENOC Report metadata",
+      "orderNumber": 1,
+      "enabled": true,
+      "serviceCode": "FIRENOCREPORTS",
+      "code": "null",
+      "path": "FIRENOC Metadata "
     }
   ]
 }
