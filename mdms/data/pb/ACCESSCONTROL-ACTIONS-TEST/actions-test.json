@@ -14544,6 +14544,28 @@
       "serviceCode": "egov-indexer",
       "code": "null",
       "path": ""
+    },
+     {
+      "id": 1824,
+      "name": "FIRENOC Report",
+      "url": "/report/rainmaker-noc/_get",
+      "displayName": "FIRENOC Report",
+      "orderNumber": 0,
+      "enabled": true,
+      "serviceCode": "REPORTS",
+      "code": "null",
+      "path": "FIRENOC Report"
+    },
+    {
+      "id": 1825,
+      "name": "FIRENOCReportMetadata",
+      "url": "/report/rainmaker-noc/metadata/_get",
+      "displayName": "FIRENOC Report metadata",
+      "orderNumber": 1,
+      "enabled": true,
+      "serviceCode": "FIRENOCREPORTS",
+      "code": "null",
+      "path": "FIRENOC Metadata "
     }
   ]
 }
