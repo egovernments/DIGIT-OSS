@@ -126,6 +126,7 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 	protected String reversalVoucherDate;
 	private Integer voucherNumberPrefixLength;
 	public static final String ZERO = "0";
+	private static final String PARTIAL_DEDUCTION_PAYMENT_KEY = "PARTIAL_DEDUCTION_PAYMENT_ENABLED";
 	private FinancingSourceService financingSourceService;
 	List<String> voucherTypes = VoucherHelper.VOUCHER_TYPES;
 	@Autowired
@@ -885,6 +886,15 @@ public class BaseVoucherAction extends GenericWorkFlowAction {
 	    List<AppConfigValues> configValuesByModuleAndKey = appConfigValuesService.getConfigValuesByModuleAndKey("EGF", "DEFAULT_DEPARTMENT_FOR_PAYMENT");
 	    return configValuesByModuleAndKey.isEmpty() ? null : configValuesByModuleAndKey.get(0).getValue(); 
 	}
+	
+	public Boolean isPartialPaymentEnabled(String type){
+	    String configKey = null;
+	    if(type.equals("deduction")){
+	        configKey = PARTIAL_DEDUCTION_PAYMENT_KEY;
+	    }
+            List<AppConfigValues> configValuesByModuleAndKey = appConfigValuesService.getConfigValuesByModuleAndKey("EGF", configKey);
+            return configValuesByModuleAndKey.isEmpty() ? false : configValuesByModuleAndKey.get(0).getValue().equalsIgnoreCase("Yes"); 
+        }
 
 	public void setEisService(final EisUtilService eisService) {
 		this.eisService = eisService;

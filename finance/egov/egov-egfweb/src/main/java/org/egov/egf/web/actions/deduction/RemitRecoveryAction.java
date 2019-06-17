@@ -212,6 +212,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
     private BankAccountService bankAccountService;
     @Autowired
     private BankHibernateDAO bankHibernateDAO;
+    private Boolean isPartialPaymentEnabled = false;
     
     public BigDecimal getBalance() {
         return balance;
@@ -285,7 +286,6 @@ public class RemitRecoveryAction extends BasePaymentAction {
             departmentId = listRemitBean.get(0).getDepartmentId();
             functionId = listRemitBean.get(0).getFunctionId();
         }
-
         return NEW;
     }
 
@@ -338,6 +338,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
 
     private void prepareListRemitBean(final String selectedRows) {
         listRemitBean = remitRecoveryService.getRecoveryDetails(selectedRows);
+        this.setPartialPayment("deduction");
         if (listRemitBean == null)
             listRemitBean = new ArrayList<RemittanceBean>();
 
@@ -850,6 +851,10 @@ public class RemitRecoveryAction extends BasePaymentAction {
                         State.DEFAULT_STATE_VALUE_CREATED, getPendingActions(), paymentheader.getCreatedDate());
         return wfMatrix == null ? "" : wfMatrix.getNextAction();
     }
+    
+    public void setPartialPayment(String type){
+        isPartialPaymentEnabled  = isPartialPaymentEnabled(type);
+    }
 
     @Override
     public CVoucherHeader getVoucherHeader() {
@@ -1043,5 +1048,14 @@ public class RemitRecoveryAction extends BasePaymentAction {
     public void setDepartmentId(final String departmentId) {
         this.departmentId = departmentId;
     }
+
+    public Boolean getIsPartialPaymentEnabled() {
+        return isPartialPaymentEnabled;
+    }
+
+    public void setIsPartialPaymentEnabled(Boolean isPartialPaymentEnabled) {
+        this.isPartialPaymentEnabled = isPartialPaymentEnabled;
+    }
+    
 
 }
