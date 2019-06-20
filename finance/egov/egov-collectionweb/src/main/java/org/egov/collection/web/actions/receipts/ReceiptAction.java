@@ -1223,32 +1223,38 @@ public class ReceiptAction extends BaseFormAction {
 
                     Instrument _instrument = receipt.getInstrument();
 
-                    List<Instrument> instruments = microserviceUtils.getInstrumentsByReceiptIds(
-                            _instrument.getInstrumentType().getName(),
-                            null, billDetail.getId());
+//                    List<Instrument> instruments = microserviceUtils.getInstrumentsByReceiptIds(
+//                            _instrument.getInstrumentType().getName(),
+//                            null, billDetail.getId());
 
-                    Instrument instrument = instruments.get(0);
-                    instrumentHeader.setInstrumentNumber(_instrument.getInstrumentNumber());
-                    instrumentHeader.setInstrumentDate(new Date(_instrument.getInstrumentDate()));
+//                    Instrument instrument = instruments.get(0);
+                    instrumentHeader.setInstrumentNumber(_instrument.getInstrumentNumber() != null ? _instrument.getInstrumentNumber() : _instrument.getTransactionNumber());
+                    instrumentHeader.setInstrumentDate(new Date(_instrument.getTransactionDateInput()));
 
                     InstrumentType instrumentType = new InstrumentType();
-                    instrumentType.setType(instrument.getInstrumentType().getName().toLowerCase());
+                    instrumentType.setType(_instrument.getInstrumentType().getName().toLowerCase());
                     instrumentHeader.setInstrumentType(instrumentType);
 
-                    instrumentHeader.setInstrumentAmount(instrument.getAmount());
+                    instrumentHeader.setInstrumentAmount(_instrument.getAmount());
                     // instrumentHe instrument.getFinancialStatus();
 
                     if (instrumentType.getType().equalsIgnoreCase(CollectionConstants.INSTRUMENTTYPE_CHEQUE) ||
                             instrumentType.getType().equalsIgnoreCase(CollectionConstants.INSTRUMENTTYPE_DD)) {
                         Bankaccount account = new Bankaccount();
-                        if (null != instrument.getBankAccount())
-                            account.setAccountnumber(instrument.getBankAccount().getAccountNumber());
+                        if (null != _instrument.getBankAccount())
+                            account.setAccountnumber(_instrument.getBankAccount().getAccountNumber());
                         // account.setAccountt
                         instrumentHeader.setBankAccountId(account);
 
-                        Bank bank = this.bankDAO.findById(instrument.getBank().getId().intValue(), false);
-                        instrumentHeader.setBankId(bank);
-                        instrumentHeader.setBankBranchName(instrument.getBranchName());
+                        if(_instrument.getBank() != null){
+//                            Bank bank = this.bankDAO.findById(_instrument.getBank().getId().intValue(), false);
+                           // Todo : Have to handle the Bank Details 
+                            Bank bank = new Bank();
+                            bank.setName(_instrument.getBank().getName());
+                            instrumentHeader.setBankId(bank);                            
+                        }
+                        instrumentHeader.setIfscCode(_instrument.getIfscCode());
+                        instrumentHeader.setBankBranchName(_instrument.getBranchName());
                     }
 
                     receiptHeader.addInstrument(instrumentHeader);

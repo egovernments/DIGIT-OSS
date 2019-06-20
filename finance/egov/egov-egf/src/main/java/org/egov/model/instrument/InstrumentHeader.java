@@ -88,6 +88,7 @@ public class InstrumentHeader extends BaseModel {
     private String surrendarReason;
     private CFinancialYear serialNo;
     private ECSType ECSType;
+    private String ifscCode;
 
     private Set<InstrumentVoucher> instrumentVouchers = new HashSet<InstrumentVoucher>(0);
 
@@ -348,6 +349,7 @@ public class InstrumentHeader extends BaseModel {
         newInstrumentHeader.setTransactionDate(transactionDate);
         newInstrumentHeader.setTransactionNumber(transactionNumber);
         newInstrumentHeader.setSurrendarReason(surrendarReason);
+        newInstrumentHeader.setIfscCode(ifscCode);
         return newInstrumentHeader;
 
     }
@@ -443,6 +445,14 @@ public class InstrumentHeader extends BaseModel {
 
     public void setSurrendarReason(final String surrendarReason) {
         this.surrendarReason = surrendarReason;
+    }
+
+    public String getIfscCode() {
+        return ifscCode;
+    }
+
+    public void setIfscCode(String ifscCode) {
+        this.ifscCode = ifscCode;
     }
 
 }

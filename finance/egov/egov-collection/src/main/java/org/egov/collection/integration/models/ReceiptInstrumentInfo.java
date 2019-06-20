@@ -111,5 +111,10 @@ public interface ReceiptInstrumentInfo {
      * @return Bank branch name of the instrument (in case of cheque/dd)
      */
     public abstract String getBankBranchName();
+    
+    /**
+     * @return Bank IFSC code of the instrument (in case of cheque/dd)
+     */
+    public abstract String getIfscCode();
 
 }

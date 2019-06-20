@@ -182,8 +182,7 @@ public class ReceiptInstrumentInfoImpl implements ReceiptInstrumentInfo {
         if (bank == null)
             return null;
         else
-//            return bank.getName();
-            return null;
+            return bank.getName();
     }
 
     /*
@@ -210,5 +209,10 @@ public class ReceiptInstrumentInfoImpl implements ReceiptInstrumentInfo {
     @Override
     public String getBankBranchName() {
         return instrumentHeader.getBankBranchName();
+    }
+
+    @Override
+    public String getIfscCode() {
+        return instrumentHeader.getIfscCode();
     }
 }
