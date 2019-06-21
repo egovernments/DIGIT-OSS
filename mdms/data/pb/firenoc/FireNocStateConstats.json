@@ -1,0 +1,16 @@
+{
+  "tenantId": "pb",
+  "moduleName": "BillingService",
+  "FireNocStateConstats": [
+    {
+      "code": "CALCULATON_TYPE",
+      "value": "SINGLESLAB",
+      "active": true
+    },
+    {
+      "code": "MULTI_BUILDING_CALC_METHOD",
+      "value": "SUM",
+      "active": true
+    }
+]
+}
