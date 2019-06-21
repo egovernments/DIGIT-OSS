@@ -14339,6 +14339,7 @@
       "enabled": true,
       "serviceCode": "COLLECTIONS",
       "code": "null",
+      "leftIcon": "action:description",
       "navigationURL": "report/rainmaker-common/CollectionRegister",
       "path": "Reports.Collection Register"
     },
