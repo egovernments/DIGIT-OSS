@@ -1,6 +1,6 @@
 {
   "tenantId": "pb.amritsar",
-  "moduleName": "BillingService",
+  "moduleName": "firenoc",
   "FireNocULBConstats": [    {
       "code": "MINIMUM_PROVISIONAL",
       "value": 2000,
