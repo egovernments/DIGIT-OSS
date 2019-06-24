@@ -61,7 +61,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
-    public List<Supplier> findByNameLikeOrCodeLike(String name, String code);
+    public List<Supplier> findByNameLikeIgnoreCaseOrCodeLikeIgnoreCase(String name, String code);
     
     @Query("from Supplier where status.code='Active'")
     public List<Supplier> findByStatus();

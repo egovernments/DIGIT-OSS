@@ -69,7 +69,6 @@ import org.egov.egf.masters.repository.ContractorRepository;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.masters.Contractor;
-import org.egov.model.masters.Contractor;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -179,7 +178,7 @@ public class ContractorService implements EntityTypeService {
     @Override
     public List<? extends org.egov.commons.utils.EntityType> filterActiveEntities(String filterKey, int maxRecords,
             Integer accountDetailTypeId) {
-        return contractorRepository.findByNameLikeOrCodeLike(filterKey + "%", filterKey + "%");
+        return contractorRepository.findByNameLikeIgnoreCaseOrCodeLikeIgnoreCase(filterKey + "%", filterKey + "%");
     }
 
     @Override
