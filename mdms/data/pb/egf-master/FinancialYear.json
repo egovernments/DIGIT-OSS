@@ -3,6 +3,34 @@
   "moduleName": "egf-master",
   "FinancialYear": [
     {
+      "id": "9",
+      "tenantId": "pb",
+      "finYearRange": "2019-20",
+      "name": "2019-20",
+      "code": "2019-20",
+      "startingDate": 1522540800000,
+      "endingDate": 1554076799000,
+      "active": true,
+      "isActiveForPosting": false,
+      "isClosed": false,
+      "transferClosingBalance": false,
+      "module": "FN"
+    },
+    {
+      "id": "8",
+      "tenantId": "pb",
+      "finYearRange": "2018-19",
+      "name": "2018-19",
+      "code": "2018-19",
+      "startingDate": 1522540800000,
+      "endingDate": 1554076799000,
+      "active": true,
+      "isActiveForPosting": false,
+      "isClosed": false,
+      "transferClosingBalance": false,
+      "module": "FN"
+    },
+    {
       "id": "7",
       "tenantId": "pb",
       "finYearRange": "2019-20",

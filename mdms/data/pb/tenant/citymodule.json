@@ -70,6 +70,21 @@
           "code": "pb.derabassi"
         }
       ]
+    },
+    {
+      "module": "FIRENOC",
+      "code": "FIRENOC",
+      "tenants": [
+        {
+          "code": "pb.jalandhar"
+        },
+        {
+          "code": "pb.nawanshahr"
+        },
+        {
+          "code": "pb.amritsar"
+        }
+      ]
     }
   ]
 }

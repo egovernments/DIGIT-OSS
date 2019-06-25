@@ -33,6 +33,10 @@
     {
       "code": "PLOT_SIZE",
       "active": true
+    },
+    {
+      "code": "NO_OF_BASEMENTS",
+      "active": true
     }
   ]
 }
