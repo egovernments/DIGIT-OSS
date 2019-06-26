@@ -164,6 +164,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
     public boolean showApprove = false;
     private CommonBean commonBean;
     private String modeOfPayment;
+    private String selectedPartialDeductionRows = "";
 
     @Autowired
     private FunctionService functionService;
@@ -286,6 +287,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
             departmentId = listRemitBean.get(0).getDepartmentId();
             functionId = listRemitBean.get(0).getFunctionId();
         }
+        this.setPartialPayment("deduction");
         return NEW;
     }
 
@@ -353,6 +355,9 @@ public class RemitRecoveryAction extends BasePaymentAction {
             final String voucherDate = formatter1.format(date1);
             String cutOffDate1 = null;
             prepareListRemitBean(selectedRows);
+            if(isPartialPaymentEnabled){
+                setPartialAmountForSelectedDeduction();
+            }
             validateFields();
             voucherHeader.setType(FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
             voucherHeader.setName(FinancialConstants.PAYMENTVOUCHER_NAME_REMITTANCE);
@@ -394,6 +399,24 @@ public class RemitRecoveryAction extends BasePaymentAction {
             throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
         }
         return MESSAGES;
+    }
+
+    private void setPartialAmountForSelectedDeduction() {
+        if(!selectedPartialDeductionRows.isEmpty()){
+            String[] selectedList = selectedPartialDeductionRows.trim().split(",");
+            Map<Integer, BigDecimal> recovIdPartialAmtMap = new HashMap<>();
+            for(String idAmnt : selectedList){
+                String[] split = idAmnt.split("~");
+                recovIdPartialAmtMap.put(Integer.parseInt(split[0]), new BigDecimal(split[1]));
+            }
+            List<RemittanceBean> tempListBean = new ArrayList<>();
+            for(RemittanceBean rb : listRemitBean){
+                rb.setPartialAmount(recovIdPartialAmtMap.get(rb.getRemittance_gl_dtlId()));
+                tempListBean.add(rb);
+            }
+            listRemitBean.clear();
+            listRemitBean.addAll(tempListBean);
+        }
     }
 
     /**
@@ -1055,6 +1078,14 @@ public class RemitRecoveryAction extends BasePaymentAction {
 
     public void setIsPartialPaymentEnabled(Boolean isPartialPaymentEnabled) {
         this.isPartialPaymentEnabled = isPartialPaymentEnabled;
+    }
+
+    public String getSelectedPartialDeductionRows() {
+        return selectedPartialDeductionRows;
+    }
+
+    public void setSelectedPartialDeductionRows(String selectedPartialDeductionRows) {
+        this.selectedPartialDeductionRows = selectedPartialDeductionRows;
     }
     
 

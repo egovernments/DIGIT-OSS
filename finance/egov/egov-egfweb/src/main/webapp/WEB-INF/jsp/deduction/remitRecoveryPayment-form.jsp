@@ -79,7 +79,7 @@
 		                        	{key:"earlierPayment",label:'<s:text name="remit.earlier.payment"/>', formatter:createLabelMed(RECOVERYLIST,".earlierPayment")},
 		                        	{key:"chkremit",label:'Amount', formatter:createAmount(RECOVERYLIST,".partialAmount")},
 		                        	{key:"remittance_gl_dtlId",hidden:true, formatter:createTextFieldFormatter1(RECOVERYLIST,".remittance_gl_dtlId","hidden")},
-		                        	{key:"remittanceId",hidden:true, formatter:createTextFieldFormatter1(RECOVERYLIST,".remittanceId","hidden")}
+		                        	{key:"remittanceId",hidden:true, formatter:createTextFieldFormatter1(RECOVERYLIST,".remittanceId","hidden")},
 		                        	];
 		</s:if>
 		<s:else>
@@ -210,12 +210,18 @@ function calcTotal(index,obj){
 
 function calcTotalForPayment(){
  var totalAmount=0;
+ var selectedDedRowForPartialPayment='';
+ var selectedRows=document.getElementById('selectedRows').value.split(",");
 	for(var index=0;index<recoveryTableIndex;index++){
-				totalAmount = parseFloat(totalAmount) + parseFloat(document.getElementById('listRemitBean['+index+'].partialAmount').value);
+				var partialAmt = parseFloat(document.getElementById('listRemitBean['+index+'].partialAmount').value);
+				totalAmount = parseFloat(totalAmount + partialAmt);
+				selectedDedRowForPartialPayment += selectedRows[index]+"~"+partialAmt+",";
 		}
+	console.log('selectedDedRowForPartialPayment : '+selectedDedRowForPartialPayment);
 	totalAmount= totalAmount.toFixed(2);
 	document.getElementById('totalAmount').value = totalAmount;
 	document.getElementById("remitAmount").innerHTML=totalAmount;
+	document.getElementById('remittanceForm_selectedPartialDeductionRows').value = selectedDedRowForPartialPayment;
 }
 
 function isNumber(evt) {
@@ -356,6 +362,7 @@ String.prototype.trim = function () {
 
 function disableAll()
 {
+	console.log("remitRecoveryPayment");
 	var frmIndex=0;
 	for(var i=0;i<document.forms[frmIndex].length;i++)
 		{
@@ -371,7 +378,8 @@ function disableAll()
 						&& document.forms[0].elements[i].name != 'bankBalanceCheck' && document.forms[0].elements[i].name != 'approverName' 
 						&& document.forms[0].elements[i].name != 'approverDepartment' && document.forms[0].elements[i].name != 'approverDesignation'									
 						&& document.forms[0].elements[i].name != 'approverPositionId' && document.forms[0].elements[i].name != 'approverComments'
-						&& document.forms[0].elements[i].name != 'workFlowAction' && document.forms[0].elements[i].name != 'remittanceBean.recoveryId'){
+						&& document.forms[0].elements[i].name != 'workFlowAction' && document.forms[0].elements[i].name != 'remittanceBean.recoveryId'
+						&& document.forms[0].elements[i].name != 'selectedPartialDeductionRows'){
 						document.forms[frmIndex].elements[i].disabled =true;   
 					}						
 				}	

@@ -456,6 +456,9 @@ else{
 																			<div class="yui-skin-sam" align="center">
 																				<div id="recoveryDetailsTableNew"></div>
 																			</div>
+																			<s:if test="%{isPartialPaymentEnabled}">
+																			<s:hidden name="selectedPartialDeductionRows"/>
+																			</s:if>
 
 																			<script>
 								populateRecoveryDetailsForPayment();

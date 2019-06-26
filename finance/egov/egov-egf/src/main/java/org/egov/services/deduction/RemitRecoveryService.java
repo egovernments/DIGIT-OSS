@@ -385,8 +385,13 @@ public class RemitRecoveryService {
                                 + remitBean.getVoucherNumber())));
             }
             // Exception here
-            if (voucherHeader == null)
-                remitBean.setPartialAmount(remitBean.getDeductionAmount());
+            if (voucherHeader == null){
+                if (remitBean.getEarlierPayment() != null && remitBean.getEarlierPayment().compareTo(BigDecimal.ZERO) != 0)
+                    remitBean.setPartialAmount(remitBean.getDeductionAmount().subtract(remitBean.getEarlierPayment()));
+                else{
+                    remitBean.setPartialAmount(remitBean.getDeductionAmount());
+                }
+            }
             remitBean.setPartyCode(entity.getCode());
             remitBean.setPartyName(entity.getName());
             remitBean.setPanNo(entity.getPanno());
