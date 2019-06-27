@@ -14577,6 +14577,20 @@
       "serviceCode": "PT-SERVICES-V2",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1827,
+      "name": "BillGenie",
+      "url": "url",
+      "displayName": "BillGenie",
+      "orderNumber": 5,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "BG",
+      "code": "null",
+      "navigationURL": "abg/groupBills",
+      "path": "BG",
+      "leftIcon": "action:receipt"
     }
   ]
 }
