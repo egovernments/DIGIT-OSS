@@ -17841,6 +17841,30 @@
       "tenantId": "pb"
     },
     {
+      "rolecode": "CITIZEN",
+      "actionid": 1801,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "NOC_DOC_VERIFIER",
+      "actionid": 1801,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "NOC_FIELD_INSPECTOR",
+      "actionid": 1801,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "NOC_APPROVER",
+      "actionid": 1801,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
       "rolecode": "SYS_INTEGRATOR_FINANCE",
       "actionid": 575,
       "actioncode": "",
@@ -18301,6 +18325,12 @@
       "actionid": 713,
       "actioncode": "",
       "tenantId": "pb"
-    }   
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1826,
+      "actioncode": "",
+      "tenantId": "pb"
+    }
   ]
 }

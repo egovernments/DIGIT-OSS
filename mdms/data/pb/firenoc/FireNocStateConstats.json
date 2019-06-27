@@ -1,6 +1,6 @@
 {
   "tenantId": "pb",
-  "moduleName": "BillingService",
+  "moduleName": "firenoc",
   "FireNocStateConstats": [
     {
       "code": "CALCULATON_TYPE",

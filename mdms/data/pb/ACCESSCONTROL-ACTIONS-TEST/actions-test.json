@@ -14567,6 +14567,17 @@
       "serviceCode": "FIRENOCREPORTS",
       "code": "null",
       "path": "FIRENOC Metadata "
+    },
+    {
+      "id": 1826,
+      "name": "Demand Based system generate demands",
+      "url": "/pt-services-v2/demandBased/_generate",
+      "displayName": "pt-services demand based system",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "PT-SERVICES-V2",
+      "code": "null",
+      "path": ""
     }
   ]
 }
