@@ -400,7 +400,7 @@ function checkcontractorForSameMisAttribs(obj,len)
 		   concount++; break;}}
 		   </s:if> **/
 		    
-		     <s:if test="%{shouldShowHeaderField('functionary')}">
+		    /** <s:if test="%{shouldShowHeaderField('functionary')}">
 		    if(document.getElementsByName(obj+"["+i+"].functionaryName")!=null){
 		    if(functionaryName1[0].value != null && functionaryName1[0].value != (document.getElementsByName(obj+"["+i+"].functionaryName").item(0)).value) {
 		    document.getElementsByName(obj+"["+i+"].isSelected")[0].checked = false; 
@@ -433,7 +433,7 @@ function checkcontractorForSameMisAttribs(obj,len)
 		    if(field1[0].value != null && field1[0].value != (document.getElementsByName(obj+"["+i+"].fieldName").item(0)).value) {
 		    document.getElementsByName(obj+"["+i+"].isSelected")[0].checked = false; 
 		    concount++; break;}}
-		    </s:if>	  		  
+		    </s:if>	 **/ 		  
 		   }
 		   return concount;
 }
@@ -504,7 +504,7 @@ function checkSupplierForSameMisAttribs(obj,len)
 		  	suppcount++; break;}}
 		  	 </s:if>		   
 		   
-		   <s:if test="%{shouldShowHeaderField('department')}"> 
+		   /** <s:if test="%{shouldShowHeaderField('department')}"> 
 		    if((document.getElementsByName(obj+"["+i+"].deptName").item(0)).value!=null){ 	
 		   if(dept1[0].value != null && dept1[0].value !=(document.getElementsByName(obj+"["+i+"].deptName").item(0)).value) {
 		    document.getElementsByName(obj+"["+i+"].isSelected")[0].checked = false;
@@ -551,7 +551,7 @@ function checkSupplierForSameMisAttribs(obj,len)
 		    if(field1[0].value != null && field1[0].value != document.getElementsByName(obj+"["+i+"].fieldName")[0].value) {
 		    document.getElementsByName(obj+"["+i+"].isSelected")[0].checked = false; 
 		    suppcount++; break;}}
-		    </s:if>
+		    </s:if> **/
 		   			  
 		   }
 		   return suppcount;
@@ -578,7 +578,7 @@ function checkContingentForSameMisAttribs(obj,len)
 		  	expcount++; break;}}
 		  	</s:if>
 		   
-		   <s:if test="%{shouldShowHeaderField('department')}"> 
+		  /** <s:if test="%{shouldShowHeaderField('department')}"> 
 		    if((document.getElementsByName(obj+"["+i+"].deptName").item(0)).value!=null){   	
 		   if(dept1[0].value != null && dept1[0].value !=(document.getElementsByName(obj+"["+i+"].deptName").item(0)).value) {
 		   document.getElementsByName(obj+"["+i+"].isSelected")[0].checked = false;
@@ -625,7 +625,7 @@ function checkContingentForSameMisAttribs(obj,len)
 		    if(field1[0].value != null && field1[0].value != (document.getElementsByName(obj+"["+i+"].fieldName").item(0)).value) {
 		    document.getElementsByName(obj+"["+i+"].isSelected")[0].checked = false; 
 		    expcount++; break;}}
-		     </s:if>	  
+		     </s:if>**/  
 		   }
 		   return expcount;
 }
