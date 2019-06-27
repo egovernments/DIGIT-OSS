@@ -254,17 +254,18 @@ public class PaymentActionHelper {
         for (final Entry<Integer, List<Integer>> o : entrySet)
         {
             final List<Integer> value = o.getValue();
+            final Integer detailId = o.getKey();
             for (final Integer detailKey : value)
             {
                 BigDecimal sumPerDetailKey = BigDecimal.ZERO;
                 // int lastIndexOf = tempRemitBean.lastIndexOf(detailKey);
                 for (final RemittanceBean remittanceBean2 : tempRemitBean)
-                    if (remittanceBean2.getDetailKeyid() != null && remittanceBean2.getDetailKeyid().equals(detailKey))
+                    if (remittanceBean2.getDetailKeyid() != null && remittanceBean2.getDetailKeyid().equals(detailKey) && remittanceBean2.getDetailTypeId() != null && remittanceBean2.getDetailTypeId().equals(detailId))
                         sumPerDetailKey = sumPerDetailKey.add(remittanceBean2.getPartialAmount());
                 subledgertDetailMap = new HashMap<String, Object>();
                 subledgertDetailMap.put(VoucherConstant.DEBITAMOUNT, sumPerDetailKey);
                 subledgertDetailMap.put(VoucherConstant.CREDITAMOUNT, BigDecimal.ZERO);
-                subledgertDetailMap.put(VoucherConstant.DETAILTYPEID, o.getKey().toString());
+                subledgertDetailMap.put(VoucherConstant.DETAILTYPEID, detailId.toString());
                 subledgertDetailMap.put(VoucherConstant.DETAILKEYID, detailKey);
                 subledgertDetailMap.put(VoucherConstant.GLCODE, glcode);
                 subledgerDetails.add(subledgertDetailMap);
