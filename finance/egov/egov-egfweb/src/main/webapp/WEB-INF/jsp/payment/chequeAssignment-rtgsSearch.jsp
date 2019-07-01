@@ -111,8 +111,8 @@
 
 					<td class="greybox" id="deptLabel"><s:text
 							name="voucher.department" /></td>
-					<td class="greybox"><s:select name="vouchermis.departmentid"
-							id="vouchermis.departmentid" list="dropdownData.departmentList"
+					<td class="greybox"><s:select name="vouchermis.departmentcode"
+							id="vouchermis.departmentcode" list="dropdownData.departmentList"
 							listKey="code" listValue="name" headerKey="-1"
 							headerValue="----Choose----"
 							value="voucherHeader.vouchermis.departmentcode" /></td>

@@ -1551,7 +1551,7 @@ public class PaymentService extends PersistenceService<Paymentheader, Long> {
             sql.append(" and vh.fundId=" + voucherHeader.getFundId().getId());
         if (voucherHeader.getVouchermis().getFundsource() != null)
             sql.append(" and vmis.fundsourceId=" + voucherHeader.getVouchermis().getFundsource().getId());
-        if (voucherHeader.getVouchermis().getDepartmentcode() != null)
+        if (voucherHeader.getVouchermis().getDepartmentcode() != null && !voucherHeader.getVouchermis().getDepartmentcode().equals("-1"))
             sql.append(" and vmis.departmentcode='" + voucherHeader.getVouchermis().getDepartmentcode() + "'");
         if (voucherHeader.getVouchermis().getSchemeid() != null)
             sql.append(" and vmis.schemeid=" + voucherHeader.getVouchermis().getSchemeid().getId());
