@@ -79,6 +79,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @ParentPackage("egov")
 @Results({
@@ -102,6 +103,7 @@ public class DayBookReportAction extends BaseFormAction {
     String heading = "";
     private Date todayDate = new Date();
     private String currentDate;
+    private String titleName = "";
 
     public DayBookReportAction() {
         super();
@@ -146,6 +148,7 @@ public class DayBookReportAction extends BaseFormAction {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("dayBookAction | list | End");
         heading = getGLHeading();
+        titleName = microserviceUtils.getHeaderNameForTenant().toUpperCase()+" \\n";
         prepareNewForm();
 
         persistenceService.getSession().setFlushMode(FlushMode.AUTO);
@@ -291,4 +294,12 @@ public class DayBookReportAction extends BaseFormAction {
         this.currentDate = currentDate;
     }
 
+    public String getTitleName() {
+        return titleName;
+    }
+
+    public void setTitleName(String titleName) {
+        this.titleName = titleName;
+    }
+    
 }

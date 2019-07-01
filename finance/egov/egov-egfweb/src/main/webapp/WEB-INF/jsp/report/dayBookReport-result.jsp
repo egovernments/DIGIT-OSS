@@ -108,8 +108,8 @@
 		<display:column headerClass="bluebgheadtd" class="blueborderfortd"
 			title="Credit Amount(Rs.)" style="width:5%;text-align:right"
 			property="creditamount" />
-		<display:caption media="pdf">
-		 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		   <display:caption media="pdf">
+		   <s:property value="%{titleName}" />
 		   <s:property value="%{heading}" />
 		</display:caption>
 		<display:caption media="excel">

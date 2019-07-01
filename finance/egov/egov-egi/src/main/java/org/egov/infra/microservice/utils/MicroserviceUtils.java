@@ -53,7 +53,6 @@ import static org.egov.infra.utils.ApplicationConstant.CITIZEN_ROLE_NAME;
 import static org.egov.infra.utils.DateUtils.toDefaultDateTimeFormat;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -70,7 +69,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -106,9 +104,7 @@ import org.egov.infra.microservice.models.BusinessCategoryResponse;
 import org.egov.infra.microservice.models.BusinessDetails;
 import org.egov.infra.microservice.models.BusinessDetailsResponse;
 import org.egov.infra.microservice.models.Department;
-import org.egov.infra.microservice.models.DepartmentResponse;
 import org.egov.infra.microservice.models.Designation;
-import org.egov.infra.microservice.models.DesignationResponse;
 import org.egov.infra.microservice.models.EmployeeInfo;
 import org.egov.infra.microservice.models.EmployeeInfoResponse;
 import org.egov.infra.microservice.models.FinancialStatus;
@@ -159,6 +155,9 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 
 @Service
 public class MicroserviceUtils {
@@ -277,6 +276,13 @@ public class MicroserviceUtils {
     
     @Value("${egov.finance.indexer.topic.name}")
     private String finIndexerTopic;
+    
+    private ObjectMapper mapper;
+    
+    public MicroserviceUtils() {
+        mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    }
 
     public RequestInfo createRequestInfo() {
         final RequestInfo requestInfo = new RequestInfo();
@@ -1405,6 +1411,65 @@ public class MicroserviceUtils {
     
     public void pushDataToIndexer(Object data){
         Object postForObject = restTemplate.postForObject(egovIndexerUrl, data, Object.class, finIndexerTopic);
+    }
+    
+    public Object getMdmsData(List<ModuleDetail> moduleDetails,boolean isStateLevel){
+        String mdmsUrl = this.hostUrl + this.mdmsSearchUrl;
+        RequestInfo requestInfo = new RequestInfo();
+        requestInfo.setAuthToken(getUserToken());
+        MdmsCriteria mdmscriteria = new MdmsCriteria();
+        if(isStateLevel){
+            mdmscriteria.setTenantId(getTenentId().split(Pattern.quote("."))[0]);
+        }else{
+            mdmscriteria.setTenantId(getTenentId());
+        }
+        mdmscriteria.setModuleDetails(moduleDetails);
+        MdmsCriteriaReq mdmsrequest = new MdmsCriteriaReq();
+        mdmsrequest.setRequestInfo(requestInfo);
+        mdmsrequest.setMdmsCriteria(mdmscriteria);
+        return restTemplate.postForObject(mdmsUrl, mdmsrequest, Map.class);
+    }
+    
+    public String getHeaderNameForTenant(){
+        String ulbGrade = "";
+        List<ModuleDetail> moduleDetailList = new ArrayList<>();
+        String tenentId = getTenentId();
+        this.prepareModuleDetails(moduleDetailList, "tenant", "tenants", "code", tenentId);
+        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailList, true), Map.class);
+        if(postForObject != null){
+            ulbGrade = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.tenant.tenants[0].city.ulbGrade"),String.class);
+        }
+        if(ulbGrade != null && !ulbGrade.isEmpty())
+            ulbGrade = environment.getProperty(ulbGrade.replaceAll(" ", ""));
+        return tenentId.split(Pattern.quote("."))[1]+" "+(ulbGrade != null ? ulbGrade : "");
+    }
+    
+    private void prepareModuleDetails(List<ModuleDetail> moduleDetailsList,String moduleNme,String masterName,String filterKey, String filterValue){
+        List<MasterDetail> masterDetails = new ArrayList<>();
+        for(int i=0;i<moduleDetailsList.size()-1;i++){
+            ModuleDetail md = moduleDetailsList.get(0);
+            if(md.getModuleName().equals(moduleNme)){
+                this.prepareMasterDetails(md.getMasterDetails(), masterName, filterKey, filterValue);
+                moduleDetailsList.remove(i);
+                moduleDetailsList.add(i, md);
+                break;
+            }
+        }
+        this.prepareMasterDetails(masterDetails , masterName, filterKey, filterValue);
+        moduleDetailsList.add(new ModuleDetail(moduleNme, masterDetails));
+    }
+    
+    private void prepareMasterDetails(List<MasterDetail> masterDetailList,String masterName,String filterKey,String filterValue){
+        for(MasterDetail md : masterDetailList){
+            if(md.getName().equals(masterName))
+                break;
+        }
+        StringBuilder filterBuilder = null;
+        if(filterKey != null && filterValue != null){
+            filterBuilder = new StringBuilder();
+            filterBuilder.append("[?(@.").append(filterKey).append(" in [").append(filterValue).append("])]");
+        }
+        masterDetailList.add(new MasterDetail(masterName, filterBuilder.toString()));
     }
 
 }

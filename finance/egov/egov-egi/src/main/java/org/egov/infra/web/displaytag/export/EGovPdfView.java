@@ -92,6 +92,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.util.Iterator;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class EGovPdfView implements BinaryExportView {
 	// private PdfView pdfView ;
@@ -226,7 +228,6 @@ public class EGovPdfView implements BinaryExportView {
 	protected void generateCaption() throws BadElementException {
 		final Paragraph caption = new Paragraph(new Chunk(removeHtmlTagsAndSpaces(this.model.getCaption()), this.getCaptionFont()));
 		caption.setAlignment(this.getCaptionHorizontalAlignment());
-
 		this.tableCaption = caption;
 
 	}
@@ -256,7 +257,18 @@ public class EGovPdfView implements BinaryExportView {
 			// writer.writeTable(this.model, "-1");
 			// document.setFooter(footer);
 			// document.setHeader(footer);
-			document.add(this.tableCaption);
+			String str = tableCaption.get(0).toString();
+			if(str.contains("\\n")){
+			    String[] strArr = str.split(Pattern.quote("\\n"));
+			    Paragraph titleElement = new Paragraph(new Chunk(strArr[0], this.getCaptionFont()));
+			    titleElement.setAlignment(Element.ALIGN_CENTER);
+                            document.add(titleElement);
+			    Paragraph headerElement = new Paragraph(new Chunk(strArr[1], this.getCaptionFont1()));
+			    headerElement.setAlignment(headerElement.ALIGN_CENTER);
+                            document.add(headerElement);
+			}else{
+	                    document.add(this.tableCaption);
+	                }
 			document.add(this.tablePDF);
 			document.close();
 
@@ -306,6 +318,10 @@ public class EGovPdfView implements BinaryExportView {
 	protected Font getCaptionFont() {
 		return FontFactory.getFont(FontFactory.HELVETICA, 17, Font.BOLD, new Color(0x00, 0x00, 0x00));
 	}
+	
+	protected Font getCaptionFont1() {
+            return FontFactory.getFont(FontFactory.HELVETICA, 14, Font.BOLD, new Color(0x00, 0x00, 0x00));
+        }
 
 	/**
 	 * Wraps IText-generated exceptions.
