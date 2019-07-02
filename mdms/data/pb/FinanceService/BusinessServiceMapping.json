@@ -4,7 +4,7 @@
   "BusinessServiceMapping": [
     {
       "code":"PT",
-      "voucherCreationEnabled":true,
+      "voucherCreationEnabled":false,
       "fund":"01",
       "function":"909100",
       "department":"DEPT_13",
