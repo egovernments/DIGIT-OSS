@@ -57,7 +57,7 @@
 	<label class="col-sm-2 control-label text-right" for="name"> <spring:message code="contractor.name" /><span class="mandatory"></span>
 	</label>
 	<div class="col-sm-3 add-margin">
-		<form:input path="name" id="name" size="40" maxlength="100" cssClass="form-control patternvalidation" data-pattern="alphabetwithspace" required="required"/>
+		<form:input path="name" id="name" size="40" maxlength="100" cssClass="form-control patternvalidation" data-pattern="alphabetWithSpecialCharForContraAndWorkOrder" required="required"/>
 		<form:errors path="name" cssClass="add-margin error-msg" />
 	</div>
 </div>

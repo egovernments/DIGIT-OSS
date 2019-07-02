@@ -78,6 +78,8 @@ var regexp_alphanumericdot = /[^a-zA-Z0-9 .]/g ;
 //This will allow you to enter alphabets and numbers with specified special characters like dot(.), slash(/), hash(#), ampersand(&), plus(+), minus(-). If you need some additional special characters, add those characters to the corresponding regular expression. (eg: data-pattern="alphanumericwithspecialcharacters")
 var regexp_alphanumericspecialcharacters = /[^a-zA-Z0-9_@./#&+-]/g ;
 
+var regexp_alphabetWithSpecialCharForContraAndWorkOrder = /[^a-zA-Z0-9 @#&/\\()-.*,\":]/g ;
+
 //This will allow you to enter alphabets and numbers with space, hyphen(-) and underscore(_). (eg: data-pattern="alphanumericwithspacehyphenunderscore")
 var regexp_alphanumerichyphenunderscore = /[^a-zA-Z0-9 _-]/g ;
 
@@ -230,5 +232,11 @@ function numerichyphen(obj){
 function specialName(obj){
     if(jQuery(obj).val().match(regexp_special_name)){
         jQuery(obj).val( jQuery(obj).val().replace(regexp_special_name,'') );
+    }
+}
+
+function alphabetWithSpecialCharForContraAndWorkOrder(obj){
+	if(jQuery(obj).val().match(regexp_alphabetWithSpecialChar)){
+        jQuery(obj).val( jQuery(obj).val().replace(regexp_alphabetWithSpecialCharForContraAndWorkOrder,'') );
     }
 }
