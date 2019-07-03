@@ -86,7 +86,7 @@ public class Supplier extends AbstractAuditable implements EntityType {
     private String code;
 
     @Required(message = "Please Enter the Name")
-    @OptionalPattern(regex = FinancialConstants.alphaNumericwithspecialchar, message = "Special Characters are not allowed in Name")
+    @OptionalPattern(regex = FinancialConstants.alphaNumericwithspecialcharForContraWOAndSupplierName, message = "Special Characters are not allowed in Name")
     @Length(max = 100, message = "Maximum of 100 Characters allowed for Name")
     private String name;
 

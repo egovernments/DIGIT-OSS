@@ -87,7 +87,7 @@ public class Contractor extends AbstractAuditable implements EntityType {
     private String code;
 
     @Required(message = "Please Enter the Name")
-    @OptionalPattern(regex = FinancialConstants.alphaNumericwithspecialcharForContraAndWorkOrderName, message = "Special Characters are not allowed in NameAtique")
+    @OptionalPattern(regex = FinancialConstants.alphaNumericwithspecialcharForContraWOAndSupplierName, message = "Special Characters are not allowed in NameAtique")
     @Length(max = 100, message = "Maximum of 100 Characters allowed for Name")
     private String name;
 
