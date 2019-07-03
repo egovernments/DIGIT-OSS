@@ -1434,13 +1434,17 @@ public class MicroserviceUtils {
         String ulbGrade = "";
         List<ModuleDetail> moduleDetailList = new ArrayList<>();
         String tenentId = getTenentId();
-        this.prepareModuleDetails(moduleDetailList, "tenant", "tenants", "code", tenentId);
-        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailList, true), Map.class);
-        if(postForObject != null){
-            ulbGrade = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.tenant.tenants[0].city.ulbGrade"),String.class);
+        try {
+            this.prepareModuleDetails(moduleDetailList, "tenant", "tenants", "code", tenentId);
+            Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailList, true), Map.class);
+            if(postForObject != null){
+                ulbGrade = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.tenant.tenants[0].city.ulbGrade"),String.class);
+            }
+            if(ulbGrade != null && !ulbGrade.isEmpty())
+                ulbGrade = environment.getProperty(ulbGrade.replaceAll(" ", ""));
+        } catch (Exception e) {
+            LOGGER.error("ERROR occurred while fetching header name of tenant in getHeaderNameForTenant : ",e);
         }
-        if(ulbGrade != null && !ulbGrade.isEmpty())
-            ulbGrade = environment.getProperty(ulbGrade.replaceAll(" ", ""));
         return tenentId.split(Pattern.quote("."))[1]+" "+(ulbGrade != null ? ulbGrade : "");
     }
     
@@ -1471,7 +1475,21 @@ public class MicroserviceUtils {
         }
         masterDetailList.add(new MasterDetail(masterName, filterBuilder.toString()));
     }
-
+    
+    public String getBusinessServiceNameByCode(String code){
+        String serviceName = "";
+        List<ModuleDetail> moduleDetailsList = new ArrayList<>();
+        try {
+            this.prepareModuleDetails(moduleDetailsList , "BillingService", "BusinessService", "code", code);
+            Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true), Map.class);
+            if(postForObject != null){
+                serviceName = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.BillingService.BusinessService[0].businessService"),String.class);
+            }
+        } catch (Exception e) {
+            LOGGER.error("ERROR occurred while fetching business service details in getBusinessServiceNameByCode method: ",e);
+        }
+        return serviceName.isEmpty() ? code : serviceName;
+    }
 }
 
 class FilterRequest {

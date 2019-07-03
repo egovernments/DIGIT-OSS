@@ -1126,7 +1126,8 @@ public class ReceiptAction extends BaseFormAction {
                     ReceiptHeader header = new ReceiptHeader();
                     receiptHeader.setReceiptnumber(billDetail.getReceiptNumber());
                     receiptHeader.setReceiptdate(new Date(billDetail.getReceiptDate()));
-                    receiptHeader.setService(billDetail.getBusinessService());
+                    String businessServiceCode = billDetail.getBusinessService();
+                    receiptHeader.setService(microserviceUtils.getBusinessServiceNameByCode(businessServiceCode));
                     receiptHeader.setReferencenumber(billDetail.getBillNumber());
                     receiptHeader.setReferenceDesc(billDetail.getBillDescription());
                     receiptHeader.setPaidBy(bill.getPaidBy());
@@ -1260,7 +1261,7 @@ public class ReceiptAction extends BaseFormAction {
                     receiptHeader.addInstrument(instrumentHeader);
                     EmployeeInfo empInfo = this.microserviceUtils.getEmployeeById(receipt.getAuditDetails().getCreatedBy());
                     if (null != empInfo && empInfo.getUser().getUserName() != null)
-                        receiptHeader.setCreatedUser(empInfo.getUser().getUserName());
+                        receiptHeader.setCreatedUser(empInfo.getUser().getName());
                     // receiptHeaderList.add(receiptHeader);
                     receipts[0] = receiptHeader;
 
