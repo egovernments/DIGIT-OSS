@@ -153,7 +153,8 @@ $('#scheme').change(function () {
 });
 
 $('#supplier').change(function () {
-	$('#suppliercode').val($("#supplier option:selected").text().split('-')[1]);
+	var suppValue = $("#supplier option:selected").text().split('-');
+	$('#suppliercode').val(suppValue[suppValue.length-1]);
 });
 
 jQuery('#btnsearch').click(function(e) {

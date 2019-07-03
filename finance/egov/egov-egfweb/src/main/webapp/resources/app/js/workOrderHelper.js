@@ -153,7 +153,8 @@ $('#scheme').change(function () {
 });
 
 $('#contractor').change(function () {
-	$('#contractorcode').val($("#contractor option:selected").text().split('-')[1]);
+	var contraValue = $("#contractor option:selected").text().split('-');
+	$('#contractorcode').val(contraValue[contraValue.length-1]);
 });
 
 jQuery('#btnsearch').click(function(e) {
