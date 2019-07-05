@@ -7,6 +7,18 @@
       "glcode": "4502001",
       "validFrom": 1234567890,
       "validTo": 2345678901
+    },
+   {
+      "servicecode": "TL",
+      "glcode": "4502001",
+      "validFrom": 1234567890,
+      "validTo": 2345678901
+    },
+   {
+      "servicecode": "FIRENOC",
+      "glcode": "4502001",
+      "validFrom": 1234567890,
+      "validTo": 2345678901
     }
   ]
 }
