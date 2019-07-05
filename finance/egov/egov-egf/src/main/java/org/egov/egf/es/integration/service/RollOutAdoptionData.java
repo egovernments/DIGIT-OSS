@@ -44,6 +44,8 @@ public class RollOutAdoptionData {
     private Integer numberOfPayments;
     @JsonProperty("numberofvouchersforbill")
     private Integer numberOfVouchersForBill;
+    @JsonProperty("numberofbillspaid")
+    private Integer numberOfBillsPaid;
     @JsonProperty("timestamp")
     private Long timeStamp;
     
@@ -55,7 +57,7 @@ public class RollOutAdoptionData {
             String grade, Integer numberOfbills, Integer numberofvouchersforbill, Integer numberofpayments,
             BigDecimal totalbillamounts, BigDecimal billamountpaid, BigDecimal totalpaymentamounts, Integer numberOfReceiptVoucher,
             BigDecimal totalReceiptVoucherAmounts, Integer numberofmiscreceipts, BigDecimal totalamountofmiscreceipt,
-            Integer numberofcontractorsuppliers, Integer numberofbankaccounts, Long timeStamp) {
+            Integer numberofcontractorsuppliers, Integer numberofbankaccounts, Integer numberOfBillsPaid, Long timeStamp) {
         this.id=id;
         this.ulbName=ulbName;
         this.ulbCode=ulbcode;
@@ -74,6 +76,7 @@ public class RollOutAdoptionData {
         this.totalAmountOfMiscReceipt=totalamountofmiscreceipt;
         this.numberOfContractorSuppliers=numberofcontractorsuppliers;
         this.numberOfbankAccounts=numberofbankaccounts;
+        this.numberOfBillsPaid=numberOfBillsPaid;
         this.timeStamp=timeStamp;
     }
 
@@ -86,7 +89,7 @@ public class RollOutAdoptionData {
                 + ", numberofmiscreceipts=" + numberOfMiscReceipts + ", totalReceiptVoucherAmounts=" + totalReceiptVoucherAmounts
                 + ", numberOfReceiptVoucher=" + numberOfReceiptVoucher + ", totalpaymentamounts=" + totalPaymentAmounts
                 + ", billamountpaid=" + billAmountPaid + ", totalbillamounts=" + totalBillAmounts + ", numberofpayments="
-                + numberOfPayments + ", numberofvouchersforbill=" + numberOfVouchersForBill+ ", timeStamp=" + timeStamp + "]";
+                + numberOfPayments + ", numberofvouchersforbill=" + numberOfVouchersForBill + ", numberOfBillsPaid=" + numberOfBillsPaid +", timeStamp=" + timeStamp + "]";
     }
 
     public String getId() {
@@ -239,6 +242,14 @@ public class RollOutAdoptionData {
 
     public void setNumberOfReceiptVoucher(Integer numberOfReceiptVoucher) {
         this.numberOfReceiptVoucher = numberOfReceiptVoucher;
+    }
+
+    public Integer getNumberOfBillsPaid() {
+        return numberOfBillsPaid;
+    }
+
+    public void setNumberOfBillsPaid(Integer numberOfBillsPaid) {
+        this.numberOfBillsPaid = numberOfBillsPaid;
     }
     
 

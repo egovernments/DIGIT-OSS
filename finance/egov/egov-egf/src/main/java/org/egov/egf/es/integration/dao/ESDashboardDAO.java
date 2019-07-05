@@ -51,7 +51,8 @@ public class ESDashboardDAO {
         query.append("(select 0) as numberofmiscreceipts,");
         query.append("(select 0) as totalamountofmiscreceipt,");
         query.append("((select count(*) from egf_contractor cr,egw_status status where cr.status = status.id and status.code = 'Active') + (select count(*) from egf_supplier sr,egw_status status where sr.status = status.id and status.code = 'Active')) as numberofcontractorsuppliers,");
-        query.append("(select count(*) from bankaccount where isactive  = true) as numberofbankaccounts");
+        query.append("(select count(*) from bankaccount where isactive  = true) as numberofbankaccounts,");
+        query.append("(select count(*) from voucherheader bvh,eg_billregistermis bmis,miscbilldetail misc where bvh.id = bmis.voucherheaderid and bvh.id = misc.billvhid and bvh.status != 4) as numberofbillspaid");
         return query.toString();
     }
 }

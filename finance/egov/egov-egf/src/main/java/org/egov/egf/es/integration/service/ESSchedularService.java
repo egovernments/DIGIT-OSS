@@ -43,9 +43,10 @@ public class ESSchedularService {
                 BigDecimal totalamountofmiscreceipt = obj[15] != null ? new BigDecimal(obj[15].toString()) : new BigDecimal(0);
                 Integer numberofcontractorsuppliers = obj[16] != null ? Integer.parseInt(obj[16].toString()) : 0;
                 Integer numberofbankaccounts = obj[17] != null ? Integer.parseInt(obj[17].toString()) : 0;
+                Integer numberofbillspaid = obj[18] != null ? Integer.parseInt(obj[18].toString()) : 0;
                 RollOutAdoptionData rollOutAdoptionData = new RollOutAdoptionData(id,ulbName,ulbcode,districtname,regionname,grade,numberOfbills,numberofvouchersforbill,numberofpayments,
                         totalbillamounts,billamountpaid,totalpaymentamounts,numberOfReceiptVoucher,totalReceiptVoucherAmounts,numberofmiscreceipts,
-                        totalamountofmiscreceipt,numberofcontractorsuppliers,numberofbankaccounts,microServiceUtil.getEpochDate(new Date()));
+                        totalamountofmiscreceipt,numberofcontractorsuppliers,numberofbankaccounts,numberofbillspaid,microServiceUtil.getEpochDate(new Date()));
                 LOGGER.info("*************** RollOutAdoptionData : "+rollOutAdoptionData);
                 this.pushDataToEsIndex(rollOutAdoptionData);
             }
