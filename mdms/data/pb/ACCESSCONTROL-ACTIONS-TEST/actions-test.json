@@ -14546,7 +14546,7 @@
       "code": "null",
       "path": ""
     },
-     {
+    {
       "id": 1824,
       "name": "FIRENOC Report",
       "url": "/report/rainmaker-noc/_get",
@@ -14592,6 +14592,61 @@
       "navigationURL": "abg/groupBills",
       "path": "BG",
       "leftIcon": "action:receipt"
+    },
+    {
+      "id": 1828,
+      "name": "mSeva Event Create",
+      "url": "/egov-user-event/v1/events/_create",
+      "displayName": "mSeva Event Notification",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "msea-event-notification",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1829,
+      "name": "mSeva Event Update",
+      "url": "/egov-user-event/v1/events/_update",
+      "displayName": "mSeva Event Notification",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "msea-event-notification",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1830,
+      "name": "mSeva Event Search",
+      "url": "/egov-user-event/v1/events/_search",
+      "displayName": "mSeva Event Notification",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "msea-event-notification",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1831,
+      "name": "mSeva Event Count",
+      "url": "/egov-user-event/v1/events/notifications/_count",
+      "displayName": "mSeva Event Notification",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "msea-event-notification",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1832,
+      "name": "mSeva Event llt Update",
+      "url": "/egov-user-event/v1/events/llt/_update",
+      "displayName": "mSeva Event Notification",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "msea-event-notification",
+      "code": "null",
+      "path": ""
     }
   ]
 }
