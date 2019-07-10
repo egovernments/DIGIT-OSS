@@ -11,7 +11,21 @@
       "defaultUrl" : {
           "citizen" : "/user/register",
           "employee" : "/user/login"
-      }
+      },
+      "languages" : [
+        {
+          "label": "ENGLISH",
+          "value": "en_IN"
+        },
+        {
+          "label": "हिंदी",
+          "value": "hi_IN"
+        },
+        {
+          "label": "ਪੰਜਾਬੀ",
+          "value": "pn_IN"
+        }
+      ]
     }
   ]
 }
