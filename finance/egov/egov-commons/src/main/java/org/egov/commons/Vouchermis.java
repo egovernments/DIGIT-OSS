@@ -109,6 +109,9 @@ public class Vouchermis implements java.io.Serializable {
     @Length(max=50)
     @Column(name="referencedocument")
     private String referenceDocument;
+    @Length(max=100)
+    @Column(name="servicename")
+    private String serviceName;
 
     public Vouchermis() {
     }
@@ -259,4 +262,11 @@ public class Vouchermis implements java.io.Serializable {
         this.referenceDocument = referenceDocument;
     }
 
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
 }

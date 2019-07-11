@@ -79,6 +79,8 @@ public class Voucher {
 	private List<AccountDetailContract> ledgers = new ArrayList<>(0);
 	// this is only to keep standard .As of now this field is not used
 	private String tenantId;
+	private String serviceName;
+	private String referenceDocument;
 
 	public Voucher(CVoucherHeader vh) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -99,7 +101,8 @@ public class Voucher {
 
 			this.getLedgers().add(new AccountDetailContract(gl));
 		}
-
+		this.setServiceName(vh.getVouchermis().getServiceName());
+		this.setReferenceDocument(vh.getVouchermis().getReferenceDocument());
 	}
 
 	public Voucher() {
@@ -281,5 +284,22 @@ public class Voucher {
 	public void setSubScheme(final SubSchemeContract subScheme) {
 		this.subScheme = subScheme;
 	}
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public String getReferenceDocument() {
+        return referenceDocument;
+    }
+
+    public void setReferenceDocument(String referenceDocument) {
+        this.referenceDocument = referenceDocument;
+    }
+	
 
 }

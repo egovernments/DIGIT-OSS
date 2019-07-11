@@ -80,6 +80,7 @@ public interface VoucherConstant {
     public static final String FUNCTIONARYCODE = "functionarycode";
     public static final String SOURCEPATH = "sourcepath";
     public static final String REFERENCEDOC = "referencedocument";
+    public static final String SERVICE_NAME = "serviceName";
 
     public static final String MODEOFCOLLECTION = "modeofcollection";
     public static final String BANKACCOUNTNUMBER = "bankaccountnumber";

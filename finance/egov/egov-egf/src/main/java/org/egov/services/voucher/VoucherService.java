@@ -75,6 +75,7 @@ import org.egov.commons.dao.AccountdetailtypeHibernateDAO;
 import org.egov.commons.dao.ChartOfAccountsDAO;
 import org.egov.commons.dao.FinancialYearHibernateDAO;
 import org.egov.commons.dao.FunctionDAO;
+import org.egov.commons.dao.VouchermisHibernateDAO;
 import org.egov.commons.service.ChartOfAccountDetailService;
 import org.egov.commons.service.EgModulesService;
 import org.egov.commons.utils.EntityType;
@@ -205,6 +206,9 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 	
 	@Autowired
 	private EgModulesService egModuleService;
+	
+	@Autowired
+        private VouchermisHibernateDAO vmisHibernateDao;
 
 	public VoucherService(final Class<CVoucherHeader> voucherHeader) {
 		super(voucherHeader);
@@ -1468,7 +1472,6 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 	}
 
 	public VoucherResponse cancel(VoucherSearchRequest voucherSearchRequest) {
-	
 		List<Voucher> vouchers=new ArrayList<>();
 		Voucher voucher=null;
 		List<String> voucherNumbers=new ArrayList<>();
@@ -1481,35 +1484,25 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 				voucherNumbers.add(s)	;
 			}
 		} 
-	
-		
-		// add page info in search
-		//Page findPageByNamedQuery = findPageByNamedQuery(query,1,20,voucherNumbers);
-	//	List<CVoucherHeader> cvouchers = findAllBy(query,voucherNumbers);
+		//      add page info in search
+		//      Page findPageByNamedQuery = findPageByNamedQuery(query,1,20,voucherNumbers);
+		//	List<CVoucherHeader> cvouchers = findAllBy(query,voucherNumbers);
 		Query createQuery = getSession().createQuery(cancelQuery);
 		createQuery.setParameterList("voucherNumbers", voucherNumbers);
 		int count=createQuery.executeUpdate();
 		String query="from CVoucherHeader vh where voucherNumber in (:voucherNumbers)"; 
-		 createQuery = getSession().createQuery(query);
+		createQuery = getSession().createQuery(query);
 		createQuery.setParameterList("voucherNumbers", voucherNumbers);
 		List<CVoucherHeader> cvouchers=createQuery.list();
-		
-		
 		for(CVoucherHeader vh:cvouchers)
 		{
 			voucher=new Voucher(vh);
 			voucher.setTenantId(voucherSearchRequest.getTenantId());
 			vouchers.add(voucher);
-			
 		}
-		
 		 VoucherResponse response = new VoucherResponse();
-    	 response.setVouchers(vouchers);
-        
-		
-		return response;
-	
-	
+    	         response.setVouchers(vouchers);
+    	         return response;
 	}
 	
 	public AppConfigValues isManualReceiptDateEnabledForVoucher(){
@@ -1521,5 +1514,9 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 	    List<EgModules> egModuleServiceByName = egModuleService.getEgModuleServiceByName(name);
 	    return !egModuleServiceByName.isEmpty() ? egModuleServiceByName.get(0) : null;
 	}
+	
+	public CVoucherHeader getVoucherByServiceNameAndReferenceDocument( String serviceName, String referenceDocument) {
+            return vmisHibernateDao.getRecentVoucherByServiceNameAndReferenceDoc(serviceName, referenceDocument);
+        }
 
 }

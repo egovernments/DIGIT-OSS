@@ -91,6 +91,7 @@ import org.egov.commons.dao.FundSourceHibernateDAO;
 import org.egov.commons.dao.SchemeHibernateDAO;
 import org.egov.commons.dao.SubSchemeHibernateDAO;
 import org.egov.commons.dao.VoucherHeaderDAO;
+import org.egov.commons.dao.VouchermisHibernateDAO;
 import org.egov.commons.exception.NoSuchObjectException;
 import org.egov.commons.exception.TooManyValuesException;
 import org.egov.commons.service.ChartOfAccountDetailService;
@@ -225,6 +226,9 @@ public class CreateVoucher {
 
 	@Autowired
 	private EgBillRegisterHibernateDAO egBillRegisterHibernateDAO;
+	
+	@Autowired
+	private VouchermisHibernateDAO vmisHibernateDao;
 
 	@Autowired
 	@Qualifier("voucherService")
@@ -243,14 +247,8 @@ public class CreateVoucher {
 	private static final String IS_EMPTY = "is empty";
 	private static final String TYPE = "Reversal voucher type";
 	private static final String REVERSAL_VOUCHER_NUMBER = "Reversal voucher number";
-
-	@Autowired
-	private DepartmentService deptM;
 	@Autowired
 	private BoundaryService boundary;
-
-	@Autowired
-	private UserService userMngr;
 	@Autowired
 	private EisCommonService eisCommonService;
 
@@ -1109,7 +1107,12 @@ public class CreateVoucher {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("start | createVoucher API");
 		try {
-			validateMandateFields(headerdetails);
+                        if(headerdetails.containsKey(VoucherConstant.SERVICE_NAME) && headerdetails.containsKey(VoucherConstant.REFERENCEDOC)){
+                            String serviceName = headerdetails.get(VoucherConstant.SERVICE_NAME).toString();
+                            String referenceDocument = headerdetails.get(VoucherConstant.REFERENCEDOC).toString();
+                            validateReferenceDocument(referenceDocument,serviceName);
+                        }
+		        validateMandateFields(headerdetails);
 			validateLength(headerdetails);
 			validateVoucherMIS(headerdetails);
 			validateTransaction(accountcodedetails, subledgerdetails);
@@ -1196,7 +1199,18 @@ public class CreateVoucher {
 
 	}
 
-	/**
+	public void validateReferenceDocument(String referenceDocument, String serviceName) {
+	    CVoucherHeader cVoucherHeader = vmisHibernateDao.getRecentVoucherByServiceNameAndReferenceDoc(serviceName, referenceDocument);
+	    if(cVoucherHeader != null && cVoucherHeader.getStatus() != 4){
+	        throw new ApplicationRuntimeException("Already voucher exists ("+cVoucherHeader.getVoucherNumber()+") for service "+serviceName+" with reference number "+referenceDocument+".");
+	    }
+	}
+	
+	public CVoucherHeader getVoucherByServiceNameAndReferenceDocument(String referenceDocument, String serviceName) {
+            return vmisHibernateDao.getRecentVoucherByServiceNameAndReferenceDoc(serviceName, referenceDocument);
+        }
+
+    /**
 	 *
 	 * @param headerdetails
 	 * @param accountcodedetails
@@ -1836,6 +1850,10 @@ public class CreateVoucher {
                 final String referencedoc = headerdetails.get(VoucherConstant.REFERENCEDOC).toString();
                 vouchermis.setReferenceDocument(referencedoc);
         }
+		if(headerdetails.containsKey(VoucherConstant.SERVICE_NAME) && null != headerdetails.get(VoucherConstant.SERVICE_NAME)){
+		    final String serviceName = headerdetails.get(VoucherConstant.SERVICE_NAME).toString();
+		    vouchermis.setServiceName(serviceName);
+		}
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("END | createVouchermis");
 		return vouchermis;
@@ -1866,7 +1884,7 @@ public class CreateVoucher {
 			if (accDetailMap.containsKey(VoucherConstant.GLCODE) && null != accDetailMap.get(VoucherConstant.GLCODE)) {
 				glcode = accDetailMap.get(VoucherConstant.GLCODE).toString();
 				if (null == chartOfAccountsDAO.getCChartOfAccountsByGlCode(glcode))
-					throw new ApplicationRuntimeException("Not a valid account code" + glcode);
+					throw new ApplicationRuntimeException("Not a valid account code " + glcode);
 			} else
 				throw new ApplicationRuntimeException("glcode is missing or null");
 			if (debitAmount.compareTo(BigDecimal.ZERO) != 0 && creditAmount.compareTo(BigDecimal.ZERO) != 0)

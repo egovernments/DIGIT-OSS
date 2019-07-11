@@ -1,13 +1,18 @@
 package org.egov.egf.web.controller.microservice;
 
+import java.net.URLDecoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.egov.billsaccounting.services.CreateVoucher;
@@ -27,8 +32,11 @@ import org.egov.infra.validation.exception.ValidationException;
 import org.egov.services.voucher.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -102,8 +110,13 @@ public class VoucherController {
 				headerDetails.put(VoucherConstant.MODULEID, voucher.getModuleId());
 				String source = voucher.getSource();
 				headerDetails.put(VoucherConstant.SOURCEPATH, source);
-				String receiptNumber = !source.isEmpty() & source != null ? source.indexOf("?selectedReceipts=") != -1 ? source.substring(source.indexOf("?selectedReceipts=")).split("=")[1]: "" : "";
-				headerDetails.put(VoucherConstant.REFERENCEDOC, receiptNumber);
+//				String receiptNumber = !source.isEmpty() & source != null ? source.indexOf("?selectedReceipts=") != -1 ? source.substring(source.indexOf("?selectedReceipts=")).split("=")[1]: "" : "";
+				if(voucher.getReferenceDocument() != null & !voucher.getReferenceDocument().isEmpty()){
+				    headerDetails.put(VoucherConstant.REFERENCEDOC, voucher.getReferenceDocument());
+				}
+				if(voucher.getServiceName() != null && !voucher.getServiceName().isEmpty()){
+				    headerDetails.put(VoucherConstant.SERVICE_NAME, voucher.getServiceName());
+				}
 				// headerDetails.put(VoucherConstant.BUDGETCHECKREQ, voucher());
 				if (voucher.getFund() != null)
 					headerDetails.put(VoucherConstant.FUNDCODE, voucher.getFund().getCode());
@@ -176,5 +189,25 @@ public class VoucherController {
 		}
 
 	}
+	
+	@PostMapping(value = "/rest/voucher/_searchbyserviceandreference",produces="application/json")
+        @ResponseBody
+        public VoucherResponse searchVoucherByServiceCodeAndReferenceDoc(@RequestParam("servicecode")  String serviceCode, @RequestParam("referencedocument")  String referenceDocument) {
+                try {
+                        referenceDocument = URLDecoder.decode(referenceDocument, "UTF-8");
+                        CVoucherHeader cVoucherHeader = voucherService.getVoucherByServiceNameAndReferenceDocument(serviceCode, referenceDocument);
+                        VoucherResponse res = new VoucherResponse();
+                        if(cVoucherHeader == null){
+                            res.setResponseInfo(MicroserviceUtils.getResponseInfo(null,
+                                    HttpStatus.SC_NOT_FOUND, null));
+                        }else{
+                            res.setVouchers(Arrays.asList(new Voucher(cVoucherHeader)));
+                        }
+                        return res;
+                } catch (Exception e) {
+                        LOGGER.error(e.getMessage(), e);
+                        throw new ApplicationRuntimeException(e.getMessage());
+                }
+        }
 
 }

@@ -47,15 +47,17 @@
  */
 package org.egov.commons.dao;
 
+import org.egov.commons.CVoucherHeader;
 import org.egov.commons.Vouchermis;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
-
+@Repository
 public class VouchermisHibernateDAO  {
     @Transactional
     public Vouchermis update(final Vouchermis entity) {
@@ -95,6 +97,18 @@ public class VouchermisHibernateDAO  {
         final Query qry = getCurrentSession().createQuery("from Vouchermis where voucherheaderid =:vhId");
         qry.setInteger("vhId", vhId);
         return (Vouchermis) qry.uniqueResult();
+    }
+    
+    public CVoucherHeader getRecentVoucherByServiceNameAndReferenceDoc(String serviceName,String referenceDocument){
+        final Query qry = getCurrentSession().createQuery("select vh from Vouchermis vmis,CVoucherHeader vh "
+                                                        + "where vmis.voucherheaderid=vh.id and vmis.serviceName=:serviceName "
+                                                        + "and vmis.referenceDocument=:referenceDocument "
+                                                        + "order by vh.createdDate desc");
+        qry.setString("serviceName", serviceName);
+        qry.setString("referenceDocument", referenceDocument);
+        qry.setMaxResults(1);
+        List list = qry.list();
+        return list.isEmpty() ? null : (CVoucherHeader)list.get(0) ;
     }
 
 }
