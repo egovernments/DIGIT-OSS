@@ -14640,7 +14640,7 @@
     {
       "id": 1832,
       "name": "mSeva Event llt Update",
-      "url": "/egov-user-event/v1/events/llt/_update",
+      "url": "/egov-user-event/v1/events/lat/_update",
       "displayName": "mSeva Event Notification",
       "orderNumber": 1,
       "enabled": false,
