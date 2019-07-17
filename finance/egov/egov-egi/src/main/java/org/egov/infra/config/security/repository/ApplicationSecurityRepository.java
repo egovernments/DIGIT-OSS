@@ -142,13 +142,13 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
         session.setAttribute(USERID_KEY,user.getId());
         UserSearchResponse response = this.microserviceUtils.getUserInfo(user_token, user.getTenantId(), user.getUserName());
         
-        this.microserviceUtils.removeSessionFromRedis(user_token);
+        this.microserviceUtils.removeSessionFromRedis(user_token, session.getId());
         this.microserviceUtils.savetoRedis(session.getId(), "auth_token", user_token);
         this.microserviceUtils.savetoRedis(session.getId(), "_details", user);
         this.microserviceUtils.saveAuthToken(user_token, session.getId());
         
-//        this.microserviceUtils.setExpire(session.getId());
-//        this.microserviceUtils.setExpire(user_token);
+        this.microserviceUtils.setExpire(session.getId());
+        this.microserviceUtils.setExpire(user_token);
         
 
         return this.parepareCurrentUser(response.getUserSearchResponseContent().get(0));

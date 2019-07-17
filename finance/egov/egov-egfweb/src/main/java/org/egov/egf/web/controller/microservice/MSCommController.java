@@ -70,16 +70,17 @@ public class MSCommController {
 
     @RequestMapping(value = "/rest/ClearToken", method = RequestMethod.POST)
     @ResponseBody
-    private ResponseEntity logout(@RequestBody RequestInfoWrapper request) {
+    private ResponseEntity logout(@RequestBody RequestInfoWrapper request,HttpServletRequest httpReq) {
         try {
             String access_token = request.getRequestInfo().getAuthToken();
-            
-            String sessionId =(String) microserviceUtils.readSesionIdByAuthToken(access_token);
+            String sessionId = httpReq.getSession().getId();
+//            String sessionId =(String) microserviceUtils.readSesionIdByAuthToken(access_token);
             if(sessionId!=null && !sessionId.equalsIgnoreCase("null")){
                 System.out.println("********* Retrieved session::authtoken******** "+sessionId+"::"+access_token);
                 if(redisRepository!=null){
                  System.out.println("*********** Deleting the session for redisrepository "+ sessionId);   
-                    redisRepository.delete(sessionId);
+//                    redisRepository.delete(sessionId);
+                    microserviceUtils.removeSessionFromRedis(access_token, sessionId);
                 }
                 
             }

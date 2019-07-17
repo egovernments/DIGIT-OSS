@@ -65,6 +65,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -1304,7 +1305,7 @@ public class MicroserviceUtils {
     }
 
     public void saveAuthToken(String auth_token, String sessionId) {
-        redisTemplate.opsForValue().set(auth_token, sessionId);
+        redisTemplate.opsForHash().putIfAbsent(auth_token, sessionId, sessionId);
     }
 
     public String readSesionIdByAuthToken(String auth_token) {
@@ -1341,10 +1342,10 @@ public class MicroserviceUtils {
             return null;
     }
 
-    public void removeSessionFromRedis(String access_token) {
-        LOGGER.info("Logout for authtoken : " + access_token);
-        if (null != access_token && redisTemplate.hasKey(access_token)) {
-            String sessionId = String.valueOf(redisTemplate.opsForValue().get(access_token));
+    public void removeSessionFromRedis(String access_token, String sessionId) {
+        LOGGER.info("Logout for authtoken : " + access_token +" and session : "+sessionId);
+        if (null != access_token && redisTemplate.hasKey(access_token)){
+            sessionId = (String)redisTemplate.opsForHash().get(sessionId, sessionId);
             if (sessionId != null) {
                 System.out.println("***********sessionId**** " + sessionId);
                 redisTemplate.delete(sessionId);
@@ -1352,12 +1353,12 @@ public class MicroserviceUtils {
                 System.out.println("spring:session:sessions:expires:" + sessionId);
                 redisTemplate.delete("spring:session:sessions:" + sessionId);
                 redisTemplate.delete("spring:session:sessions:expires:" + sessionId);
+                redisTemplate.opsForHash().delete(access_token,sessionId);
             } else
                 LOGGER.info("session not found in redis for : " + access_token);
-            redisTemplate.delete(access_token);
-        } else
+        }else{
             LOGGER.info("authtoken not found in redis : " + access_token);
-
+        }
     }
 
     public void refreshToken(String oldToken, String newToken) {
@@ -1450,13 +1451,13 @@ public class MicroserviceUtils {
     
     private void prepareModuleDetails(List<ModuleDetail> moduleDetailsList,String moduleNme,String masterName,String filterKey, String filterValue){
         List<MasterDetail> masterDetails = new ArrayList<>();
-        for(int i=0;i<moduleDetailsList.size()-1;i++){
-            ModuleDetail md = moduleDetailsList.get(0);
-            if(md.getModuleName().equals(moduleNme)){
-                this.prepareMasterDetails(md.getMasterDetails(), masterName, filterKey, filterValue);
-                moduleDetailsList.remove(i);
-                moduleDetailsList.add(i, md);
-                break;
+        ListIterator<ModuleDetail> listIterator = moduleDetailsList.listIterator();
+        while(listIterator.hasNext()){
+             ModuleDetail existModName = listIterator.next();
+            if(existModName.equals(moduleNme)){
+                this.prepareMasterDetails(existModName.getMasterDetails(), masterName, filterKey, filterValue);
+                listIterator.add(existModName);
+                return;
             }
         }
         this.prepareMasterDetails(masterDetails , masterName, filterKey, filterValue);
