@@ -111,7 +111,7 @@ public class VoucherController {
 				String source = voucher.getSource();
 				headerDetails.put(VoucherConstant.SOURCEPATH, source);
 //				String receiptNumber = !source.isEmpty() & source != null ? source.indexOf("?selectedReceipts=") != -1 ? source.substring(source.indexOf("?selectedReceipts=")).split("=")[1]: "" : "";
-				if(voucher.getReferenceDocument() != null & !voucher.getReferenceDocument().isEmpty()){
+				if(voucher.getReferenceDocument() != null && !voucher.getReferenceDocument().isEmpty()){
 				    headerDetails.put(VoucherConstant.REFERENCEDOC, voucher.getReferenceDocument());
 				}
 				if(voucher.getServiceName() != null && !voucher.getServiceName().isEmpty()){
