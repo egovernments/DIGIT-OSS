@@ -175,6 +175,9 @@ public class User extends AbstractAuditable {
     private byte[] signature;
 
     private boolean accountLocked;
+    
+    @Transient
+    private String uuid;
 
     public User() {
         //Default constructor
@@ -415,4 +418,13 @@ public class User extends AbstractAuditable {
     public int hashCode() {
         return Objects.hash(username);
     }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+   
 }

@@ -7,24 +7,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class AuditDetails implements Serializable {
 
     private static final long serialVersionUID = -7014596797379473651L;
-    
     @JsonProperty("createdBy")
-    private Long createdBy = null;
-    
+    private String createdBy = null;
+
     @JsonProperty("createdDate")
     private Long createdDate = null;
-    
+
     @JsonProperty("lastModifiedBy")
-    private Long lastModifiedBy = null;
-    
+    private String lastModifiedBy = null;
+
     @JsonProperty("lastModifiedDate")
     private Long lastModifiedDate = null;
 
-    public Long getCreatedBy() {
+    public String getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(Long createdBy) {
+    public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -36,11 +35,11 @@ public class AuditDetails implements Serializable {
         this.createdDate = createdDate;
     }
 
-    public Long getLastModifiedBy() {
+    public String getLastModifiedBy() {
         return lastModifiedBy;
     }
 
-    public void setLastModifiedBy(Long lastModifiedBy) {
+    public void setLastModifiedBy(String lastModifiedBy) {
         this.lastModifiedBy = lastModifiedBy;
     }
 
@@ -56,6 +55,4 @@ public class AuditDetails implements Serializable {
         return serialVersionUID;
     }
     
-    
-
 }

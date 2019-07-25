@@ -166,6 +166,7 @@ public class ApplicationSecurityRepository implements SecurityContextRepository 
 		user.setName(userinfo.getName());
 		user.setPwdExpiryDate(userinfo.getPwdExpiryDate());
 		user.setLocale(userinfo.getLocale());
+		user.setUuid(userinfo.getUuid());
 
 		Set<Role> roles = new HashSet<>();
 

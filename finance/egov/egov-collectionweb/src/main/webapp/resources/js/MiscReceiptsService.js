@@ -55,41 +55,38 @@ function populateService(serviceCategory) {
 
 function loadFinDetails(service) {
 
-	var dept = dom.get('deptId').value;
-	var service = dom.get('serviceId').value;
+	var serviceCategory = dom.get('serviceCategoryid').value;
+	var service = dom.get('serviceId') != null ? dom.get('serviceId').value : -1;
 	var selectedService = dom.get('serviceId');
-	var selectedIdText = selectedService.options[selectedService.selectedIndex].text;
-	dom.get('serviceIdText').value = selectedIdText;
-
 	var path = '/services/collection';
+//	if (service != "-1" || dept != "-1") {
+//		var url1 = path
+//				+ "/receipts/ajaxReceiptCreate-ajaxFinMiscDtlsByService.action?serviceId="
+//				+ service + "&deptId=" + dept;
+//		var transaction = YAHOO.util.Connect.asyncRequest('POST', url1,
+//				loadMiscDetails, null);
+//	}
 
-	if (service != "-1" || dept != "-1") {
-		var url1 = path
-				+ "/receipts/ajaxReceiptCreate-ajaxFinMiscDtlsByService.action?serviceId="
-				+ service + "&deptId=" + dept;
-		var transaction = YAHOO.util.Connect.asyncRequest('POST', url1,
-				loadMiscDetails, null);
-	}
-
-	if (service != "-1") {
+	if (serviceCategory != -1 || service != "-1") {
+		service = service != -1 ? serviceCategory+"."+service : serviceCategory;
 		var url2 = path
 				+ "/receipts/ajaxReceiptCreate-ajaxTaxHeadMasterByService.action";
-		makeJSONCall([ "glcodeIdDetail", "glcodeDetail", "accounthead",
-				"creditAmountDetail" ], url2, {
+		makeJSONCall([ "glcodeIdDetail", "accounthead",
+				"creditAmountDetail","amountType" ], url2, {
 			serviceId : service
 		}, loadFinAccSuccessHandler, loadFinAccFailureHandler);
 	}
 
-	if (service != "-1" || dept != "-1") {
-		var url3 = path
-				+ "/receipts/ajaxReceiptCreate-ajaxFinSubledgerByService.action";
-		makeJSONCall([ "subledgerCode", "glcodeId", "detailTypeId",
-				"detailTypeName", "detailCode", "detailKeyId", "detailKey",
-				"amount" ], url3, {
-			serviceId : service,
-			deptId : dept
-		}, loadFinSubledgerSuccessHandler, loadFinSubledgerFailureHandler);
-	}
+//	if (service != "-1" || dept != "-1") {
+//		var url3 = path
+//				+ "/receipts/ajaxReceiptCreate-ajaxFinSubledgerByService.action";
+//		makeJSONCall([ "subledgerCode", "glcodeId", "detailTypeId",
+//				"detailTypeName", "detailCode", "detailKeyId", "detailKey",
+//				"amount" ], url3, {
+//			serviceId : service,
+//			deptId : dept
+//		}, loadFinSubledgerSuccessHandler, loadFinSubledgerFailureHandler);
+//	}
 }
 
 var miscArray;
@@ -220,9 +217,9 @@ loadFinAccSuccessHandler = function(req, res) {
 	billCreditDetailsTable.addRow({
 		SlNo : billCreditDetailsTable.getRecordSet().getLength() + 1,
 		"glcodeid" : "",
-		"glcode" : "",
 		"accounthead" : "",
-		"creditamount" : ""
+		"creditamount" : "",
+		"amounttype" : ""
 	});
 	updateGridMisc(VOUCHERCREDITDETAILLIST, 'creditAmountDetail', 0, "0");
 	totalcramt = "0";
@@ -231,22 +228,30 @@ loadFinAccSuccessHandler = function(req, res) {
 		billCreditDetailsTable.addRow({
 			SlNo : billCreditDetailsTable.getRecordSet().getLength() + 1,
 			"glcodeid" : res.results[i].glcodeIdDetail,
-			"glcode" : res.results[i].glcodeDetail,
 			"accounthead" : res.results[i].accounthead,
-			"creditamount" : res.results[i].creditAmountDetail
+			"creditamount" : res.results[i].creditAmountDetail,
+			"amounttype" : res.results[i].amountType,
 		});
 		updateAccountTableIndex();
 	}
+	console.log('res.results :: ',res.results);
 
 	for (i = 0; i < res.results.length; i++) {
 		updateGridMisc(VOUCHERCREDITDETAILLIST, 'glcodeIdDetail', i,
 				res.results[i].glcodeIdDetail);
-		updateGridMisc(VOUCHERCREDITDETAILLIST, 'glcodeDetail', i,
-				res.results[i].glcodeDetail);
+//		updateGridMisc(VOUCHERCREDITDETAILLIST, 'glcodeDetail', i,
+//				res.results[i].glcodeDetail);
 		updateGridMisc(VOUCHERCREDITDETAILLIST, 'accounthead', i,
 				res.results[i].accounthead);
 		updateGridMisc(VOUCHERCREDITDETAILLIST, 'creditAmountDetail', i,
 				res.results[i].creditAmountDetail);
+		var amounttype = res.results[i].amountType == "false" ? 'Credit' : 'Debit';
+		var amountTypeSign = res.results[i].amountType == "false" ? '+' : '-';
+		console.log('amounttype : ',amounttype);
+		updateSpanMisc(VOUCHERCREDITDETAILLIST, 'amounttype', i,
+				amounttype);
+		updateSpanMisc(VOUCHERCREDITDETAILLIST, 'creditAmountDetailamountTypeLabel', i,
+				amountTypeSign);
 		totalcramt = parseFloat(totalcramt)
 				+ parseFloat(res.results[i].creditAmountDetail);
 		if (totalcramt > 0) {

@@ -45,7 +45,31 @@
   ~   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
   ~
   --%>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
 
+#chequebankrow .searchBoxCls button{
+    float: inherit;
+    width: 8%;
+    padding: 5px;
+    background: #21bef3;
+    color: white;
+    font-size: 17px;
+    border: 1px solid grey;
+    /* border-left: none; */
+    cursor: pointer;
+}
+
+#chequebankrow .searchBoxCls button:hover {
+  background: #0b7dda;
+}
+
+#chequebankrow .searchBoxCls::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
 <script>
 
 function callpopulateapportioningamountforbills(){
@@ -221,6 +245,7 @@ apportionLoadFailureHandler= function(){
 
 
 function showInstrumentDetails(obj){
+	console.log('obj.id : ',obj.id);
 	if(obj.id=='cashradiobutton'){
 		document.getElementById('cashdetails').style.display='table-row';
 		document.getElementById('chequeDDdetails').style.display='none';
@@ -241,6 +266,7 @@ function showInstrumentDetails(obj){
 		document.getElementById('bankdetails').style.display='none';
 		document.getElementById('onlinedetails').style.display='none';
 		document.getElementById('instrumentTypeCashOrCard').value="";
+		document.getElementById('instrumentChequeAmount').value = document.getElementById('totalamountdisplay').value;
 		clearCashDetails();
 		clearCardDetails();
 		clearBankDetails();
@@ -253,6 +279,7 @@ function showInstrumentDetails(obj){
 		document.getElementById('bankdetails').style.display='none';
 		document.getElementById('onlinedetails').style.display='none';
 		document.getElementById('instrumentTypeCashOrCard').value="";
+		document.getElementById('instrumentChequeAmount').value = document.getElementById('totalamountdisplay').value;
 		clearCashDetails();
 		clearCardDetails();
 		clearBankDetails();
@@ -265,6 +292,7 @@ function showInstrumentDetails(obj){
 		document.getElementById('bankdetails').style.display='none';
 		document.getElementById('onlinedetails').style.display='none';
 		document.getElementById('instrumentTypeCashOrCard').value="card";
+		document.getElementById('instrHeaderCard.instrumentAmount').value = document.getElementById('totalamountdisplay').value;
 		clearCashDetails();
 		clearBankDetails();
 		clearChequeDDDetails();
@@ -324,6 +352,38 @@ function validateTransactionNumber()
 					}
 			}
 		 }
+}
+
+function findBankDetailsByIfsc(){
+	var ifscCode = document.getElementById("instrumentIfscCode").value;
+        if(ifscCode.length == 11){
+        	const Http = new XMLHttpRequest();
+        	const url='https://ifsc.razorpay.com/'+ifscCode;
+        	Http.onreadystatechange = function() {
+        	if (this.readyState == 4 && this.status == 200) {
+        	    var response = JSON.parse(this.responseText);
+        	    loadBankDetailSuccessHandler(response);
+        	}else if(this.readyState == 4 && this.status == 404){
+        		loadBankDetailFailureHandler();
+            };
+        	}
+        	Http.open("GET", url, true);
+        	Http.send();
+        }else{
+        	document.getElementById("bankExistenceResponseMessageId").innerHTML="<p style='color:red'>Please Enter 11 digit IFSC code</p>";
+        }
+}
+loadBankDetailSuccessHandler = function(response){
+	document.getElementById("bankExistenceResponseMessageId").innerHTML="";
+	document.getElementById("bankName").value = response.BANK;
+	document.getElementById("instrumentBranchName").value = response.BRANCH;
+	document.getElementById("bankCode").value = response.BANKCODE;
+}
+loadBankDetailFailureHandler = function(){
+	document.getElementById("bankName").value = "";
+	document.getElementById("instrumentBranchName").value = "";
+	document.getElementById("bankCode").value = "";
+	document.getElementById("bankExistenceResponseMessageId").innerHTML="<p style='color:red'>IFSC code is not valid</p>";
 }
 </script>
 <tr>
@@ -410,24 +470,34 @@ function validateTransactionNumber()
 							<tr id="chequebankrow">
 								<td class="bluebox" width="3%"></td>
 								<td class="bluebox"><s:text
+										name="billreceipt.payment.ifsccode" /><span
+									class="mandatory1">*</span></td>
+								<td class="bluebox"><s:textfield
+										label="instrumentIfscCode" id="instrumentIfscCode"
+										maxlength="50" name="instrumentProxyList[0].ifscCode"
+										size="18" placeholder='Search...'/>
+										<span class="searchBoxCls">
+										<button type="button" onclick='findBankDetailsByIfsc()'><i class="fa fa-search"></i></button>
+										</span>
+										<div id='bankExistenceResponseMessageId'></div>
+								</td>
+								<td class="bluebox"><s:text
 										name="billreceipt.payment.bankname" /><span
 									class="mandatory1">*</span></td>
 								<td class="bluebox"><s:textfield id="bankName" type="text"
-										name="instrumentProxyList[0].bankId.name"
-										onfocus='autocompletecodeBank(this,event)'
-										onblur='fillAfterSplitBank(this)' /> <s:hidden id="bankID"
-										name="instrumentProxyList[0].bankId.id" />
+										name="instrumentProxyList[0].bankId.name" readonly="true"/> <s:hidden id="bankCode"
+										name="instrumentProxyList[0].bankId.code" />
 									<div id="bankcodescontainer"></div></td>
+							</tr>
+							<tr id="chequebankrow">
+								<td class="bluebox" width="3%"></td>
 								<td class="bluebox"><s:text
-										name="billreceipt.payment.branchname" /></td>
+										name="billreceipt.payment.branchname" /><span
+									class="mandatory1">*</span></td>
 								<td class="bluebox"><s:textfield
 										label="instrumentBranchName" id="instrumentBranchName"
 										maxlength="50" name="instrumentProxyList[0].bankBranchName"
-										size="18" /></td>
-							</tr>
-							<!-- This row captures the cheque/DD Amount -->
-							<tr id="chequeamountrow">
-								<td class="bluebox" width="3%"></td>
+										size="18" readonly="true"/></td>
 								<td class="bluebox"><s:text
 										name="billreceipt.payment.instrumentAmount" /><span
 									class="mandatory1">*</span></td>
@@ -435,12 +505,9 @@ function validateTransactionNumber()
 										id="instrumentChequeAmount" maxlength="14"
 										name="instrumentProxyList[0].instrumentAmount" size="18"
 										cssClass="form-control patternvalidation text-right"
-										data-pattern="number" placeholder="0"
-										onblur="callpopulateapportioningamountforbills();"
-										onkeyup="callpopulateapportioningamountforbills();" /></td>
-								<td class="bluebox">&nbsp;</td>
-								<td class="bluebox">&nbsp;</td>
+										data-pattern="number" placeholder="0" readonly="true"/></td>
 							</tr>
+							
 							<!-- <tr id="chequeaddrow">
 								<td colspan="5" class="blueborderfortd4">
 									<div id="addchequerow" style="display: none">
@@ -595,9 +662,7 @@ function validateTransactionNumber()
 									id="instrHeaderCard.instrumentAmount" maxlength="14"
 									name="instrHeaderCard.instrumentAmount" size="18"
 									cssClass="form-control patternvalidation text-right"
-									data-pattern="number" placeholder="0"
-									onblur="callpopulateapportioningamountforbills();setCardInstrumentDetails(this);"
-									onkeyup="setCardInstrumentDetails(this);" /></td>
+									data-pattern="number" placeholder="0" readonly="true"/></td>
 						</tr>
 
 					</table> <!-- End of table 'cardgrid' -->

@@ -3,24 +3,37 @@ package org.egov.infra.microservice.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Receipt {
-
+    @NotNull
     private String tenantId;
 
     private String transactionId;
 
+    // Read only, populated during search
+    private String receiptNumber;
+
+    // Read only, populated during search
+    private String consumerCode;
+
+    // Read only, populated during search
+    private Long receiptDate;
+
+    @NotNull
+    @Size(min = 1, max = 1)
+    @Valid
     @JsonProperty("Bill")
     private List<Bill> bill = new ArrayList<>();
 
     private AuditDetails auditDetails;
 
+    @Valid
     private Instrument instrument;
-
-    private String remittanceReferenceNumber;
-
-    private String serviceName;
 
     public String getTenantId() {
         return tenantId;
@@ -38,28 +51,36 @@ public class Receipt {
         this.transactionId = transactionId;
     }
 
+    public String getReceiptNumber() {
+        return receiptNumber;
+    }
+
+    public void setReceiptNumber(String receiptNumber) {
+        this.receiptNumber = receiptNumber;
+    }
+
+    public String getConsumerCode() {
+        return consumerCode;
+    }
+
+    public void setConsumerCode(String consumerCode) {
+        this.consumerCode = consumerCode;
+    }
+
+    public Long getReceiptDate() {
+        return receiptDate;
+    }
+
+    public void setReceiptDate(Long receiptDate) {
+        this.receiptDate = receiptDate;
+    }
+
     public List<Bill> getBill() {
         return bill;
     }
 
     public void setBill(List<Bill> bill) {
         this.bill = bill;
-    }
-
-    public Instrument getInstrument() {
-        return instrument;
-    }
-
-    public void setInstrument(Instrument instrument) {
-        this.instrument = instrument;
-    }
-
-    public String getRemittanceReferenceNumber() {
-        return remittanceReferenceNumber;
-    }
-
-    public void setRemittanceReferenceNumber(String remittanceReferenceNumber) {
-        this.remittanceReferenceNumber = remittanceReferenceNumber;
     }
 
     public AuditDetails getAuditDetails() {
@@ -70,12 +91,12 @@ public class Receipt {
         this.auditDetails = auditDetails;
     }
 
-    public String getServiceName() {
-        return serviceName;
+    public Instrument getInstrument() {
+        return instrument;
     }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public void setInstrument(Instrument instrument) {
+        this.instrument = instrument;
     }
-
+    
 }

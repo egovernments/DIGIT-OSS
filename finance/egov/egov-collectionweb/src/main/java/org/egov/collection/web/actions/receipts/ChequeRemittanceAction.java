@@ -284,11 +284,11 @@ public class ChequeRemittanceAction extends BaseFormAction {
                 businessDetailsCodeNameMap.put(bd.getCode(), bd.getName());
             }
 
-        for (Receipt r : receiptList) {
-            if (r.getBill().get(0).getBillDetails().get(0).getBusinessService() != null
-                    && !r.getBill().get(0).getBillDetails().get(0).getBusinessService().isEmpty())
-                r.setServiceName(businessDetailsCodeNameMap.get(r.getBill().get(0).getBillDetails().get(0).getBusinessService()));
-        }
+//        for (Receipt r : receiptList) {
+//            if (r.getBill().get(0).getBillDetails().get(0).getBusinessService() != null
+//                    && !r.getBill().get(0).getBillDetails().get(0).getBusinessService().isEmpty())
+//                r.setServiceName(businessDetailsCodeNameMap.get(r.getBill().get(0).getBillDetails().get(0).getBusinessService()));
+//        }
     }
 
     private Double getSum(List<ReceiptBean> receiptBeanList) {

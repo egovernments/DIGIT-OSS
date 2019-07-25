@@ -62,11 +62,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -104,6 +106,7 @@ import org.egov.infra.microservice.models.BusinessCategory;
 import org.egov.infra.microservice.models.BusinessCategoryResponse;
 import org.egov.infra.microservice.models.BusinessDetails;
 import org.egov.infra.microservice.models.BusinessDetailsResponse;
+import org.egov.infra.microservice.models.BusinessService;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.Designation;
 import org.egov.infra.microservice.models.EmployeeInfo;
@@ -156,6 +159,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
@@ -304,7 +308,7 @@ public class MicroserviceUtils {
         user.getRoles()
                 .forEach(authority -> roles.add(new org.egov.infra.microservice.models.RoleInfo(authority.getName())));
 
-        return new UserInfo(roles, user.getId(), user.getUsername(), user.getName(), user.getEmailId(),
+        return new UserInfo(roles, user.getId(), user.getUuid(), user.getUsername(), user.getName(), user.getEmailId(),
                 user.getMobileNumber(), user.getType().toString(), getTenentId());
     }
 
@@ -897,7 +901,6 @@ public class MicroserviceUtils {
         final RestTemplate restTemplate = createRestTemplate();
 
         final String url = hostUrl + taxperiodsSearchUrl + "?tenantId=" + getTenentId() + "&service=" + type;
-
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
@@ -1139,7 +1142,7 @@ public class MicroserviceUtils {
 
         String tenantId = getTenentId();
         requestinfo.setAuthToken(getUserToken());
-
+        requestinfo.setUserInfo(getUserInfo());
         request.setRequestInfo(requestinfo);
 
         url.append("?tenantId=" + tenantId);
@@ -1490,6 +1493,28 @@ public class MicroserviceUtils {
             LOGGER.error("ERROR occurred while fetching business service details in getBusinessServiceNameByCode method: ",e);
         }
         return serviceName.isEmpty() ? code : serviceName;
+    }
+    
+    public List<BusinessService> getBusinessService(String type) {
+        List<BusinessService> list = null;
+        List<ModuleDetail> moduleDetailsList = new ArrayList<>();
+        this.prepareModuleDetails(moduleDetailsList, "BillingService", "BusinessService", "type", type);
+        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true), Map.class);
+        if(postForObject != null){
+             list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.BillingService.BusinessService"),new TypeReference<List<BusinessService>>(){});
+        }
+        return list;
+    }
+    
+    public List<TaxHeadMaster> getTaxheadsByServiceCode(String serviceCode) {
+        List<TaxHeadMaster> list = null;
+        List<ModuleDetail> moduleDetailsList = new ArrayList<>();
+        this.prepareModuleDetails(moduleDetailsList, "BillingService", "TaxHeadMaster", "service", serviceCode);
+        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true), Map.class);
+        if(postForObject != null){
+             list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.BillingService.TaxHeadMaster"),new TypeReference<List<TaxHeadMaster>>(){});
+        }
+        return list;
     }
 }
 

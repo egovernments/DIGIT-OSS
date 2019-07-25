@@ -123,7 +123,7 @@ public abstract class RemittanceService implements Serializable {
         final List<CollectionBankRemittanceReport> reportList = new ArrayList<CollectionBankRemittanceReport>(0);
         for (final Receipt receiptHead : receiptHeaders) {
             final CollectionBankRemittanceReport collBankRemitReport = new CollectionBankRemittanceReport();
-            collBankRemitReport.setVoucherNumber(receiptHead.getRemittanceReferenceNumber());
+            collBankRemitReport.setVoucherNumber(receiptHead.getReceiptNumber());
             collBankRemitReport.setReceiptNumber(receiptHead.getBill().get(0).getBillDetails().get(0).getReceiptNumber());
             collBankRemitReport.setReceiptDate(new Date(receiptHead.getBill().get(0).getBillDetails().get(0).getReceiptDate()));
             collBankRemitReport.setServiceType(receiptHead.getBill().get(0).getBillDetails().get(0).getBusinessService());

@@ -117,6 +117,9 @@ function resetTables(){
 function updateGridMisc(prefix,field,index,value){
 	document.getElementById(prefix+'['+index+'].'+field).value=value;
 }
+function updateSpanMisc(prefix,field,index,value){
+	document.getElementById(prefix+'['+index+'].'+field).innerHTML=value;
+}
 
 function updateSLGrid(field,index,value){
 	if(field=='detailCode' && value==''){
@@ -149,6 +152,8 @@ rec=rebateDetailTableIndex;
 		var value = (YAHOO.lang.isValue(oData))?oData:"";
 		if(suffix == ".accounthead"){
 			el.innerHTML = "<input type='"+type+"' id='"+prefix+"["+rec+"]"+suffix+"' name='"+prefix+"["+rec+"]"+suffix+"' style='width:400px;' readOnly tabindex='-1' />";
+		}else if(suffix == ".amounttype"){
+			el.innerHTML = "<span id='"+prefix+"["+rec+"]"+suffix+"' name='"+prefix+"["+rec+"]"+suffix+"' style='width:90;' tabindex='-1' />";
 		}else{
 			el.innerHTML = "<input type='"+type+"' id='"+prefix+"["+rec+"]"+suffix+"' name='"+prefix+"["+rec+"]"+suffix+"' style='width:90;' readOnly tabindex='-1' />";
 		}
@@ -240,7 +245,7 @@ function createAmountFieldFormatterRebate(prefix,suffix,onblurfunction,table){
 	}
 
 		var value = (YAHOO.lang.isValue(oData))?oData:"";
-		el.innerHTML = "<input type='text' id='"+prefix+"["+rec+"]"+suffix+"' name='"+prefix+"["+rec+"]"+suffix+"' style='text-align:right;width:80px;' maxlength='10' class='form-control patternvalidation text-right' data-pattern='number' onblur='"+onblurfunction+";updatetotalAmount()'/>";
+		el.innerHTML = "<div style='display: inline-flex;'><span id='"+prefix+"["+rec+"]"+suffix+"amountTypeLabel'></span><input type='text' id='"+prefix+"["+rec+"]"+suffix+"' name='"+prefix+"["+rec+"]"+suffix+"' style='text-align:right;width:100px;height:auto' maxlength='10' class='form-control patternvalidation text-right' data-pattern='number' onblur='"+onblurfunction+";updatetotalAmounts()'/></div>";
 	}
 }
 
@@ -271,6 +276,12 @@ function createTextFieldReadOnly(prefix,suffix){
     return function(el, oRecord, oColumn, oData) {
 		var value = (YAHOO.lang.isValue(oData))?oData:"";
 		el.innerHTML = "<input type='text' id='"+prefix+"["+billDetailsTable.getRecordIndex(oRecord)+"]"+suffix+"' name='"+prefix+"["+billDetailsTable.getRecordIndex(oRecord)+"]"+suffix+"' tabindex='-1' readOnly style='width:90px;'/>";
+	}
+}
+function createSpanFieldReadOnly(prefix,suffix){
+    return function(el, oRecord, oColumn, oData) {
+		var value = (YAHOO.lang.isValue(oData))?oData:"";
+		el.innerHTML = "<span id='"+prefix+"["+billDetailsTable.getRecordIndex(oRecord)+"]"+suffix+"' name='"+prefix+"["+billDetailsTable.getRecordIndex(oRecord)+"]"+suffix+"' tabindex='-1' style='width:90px;'></span>";
 	}
 }
 function createcheckbox(prefix,suffix,onclickfunction){
@@ -1115,6 +1126,27 @@ function updatetotalAmount(){
 		document.getElementById('instrHeaderCash.instrumentAmount').value=totalAmountStr;	
 }
 
+function updatetotalAmounts(){
+	var totalamount = 0;
+	console.log('billDetailTableIndex : ',billDetailTableIndex);
+	for(var index=0;index<billDetailTableIndex;index++){
+		var inputAmount=parseFloat(document.getElementById('billCreditDetailslist['+index+'].creditAmountDetail').value);
+		if(document.getElementById('billCreditDetailslist['+index+'].amounttype') !=null){
+			var amountType = document.getElementById('billCreditDetailslist['+index+'].amounttype').innerText;
+			if(amountType.toLowerCase()=='credit'){
+				totalamount += parseFloat(inputAmount);
+			}else{
+				totalamount -= parseFloat(inputAmount);
+			}
+		}
+	}
+	var totalAmountStr=(totalamount>0?totalamount:totalamount);
+	document.getElementById('totalcramount').value = totalAmountStr;
+	document.getElementById('misctotalAmount').value=totalAmountStr;
+	document.getElementById('totalamountdisplay').value=document.getElementById('misctotalAmount').value;
+	document.getElementById('instrHeaderCash.instrumentAmount').value=totalAmountStr;
+}
+
 function validateDetailCode(obj)
 {
 	var index = getRowIndex(obj);
@@ -1310,6 +1342,7 @@ function validateAccountDetail(){
 	}
 	return true;
 }
+
 function validateSubLedgerDetailforCredit(){
 
 var subledgerselected = new Array();
@@ -1635,3 +1668,11 @@ function onElementFocused(e)
     return document.activeElement ==e?true:false;
        
 } 
+
+function validateTaxheadMasterEntry(){
+	if(document.getElementById('totalcramount').value < 0){
+		document.getElementById('receipt_error_area').innerHTML+='Total amount could not be negative<br>';
+		return false;
+	}
+	return true;
+}

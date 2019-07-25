@@ -98,9 +98,11 @@ import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.contract.RequestInfoWrapper;
 import org.egov.infra.microservice.models.Bank;
+import org.egov.infra.microservice.models.Bill;
 import org.egov.infra.microservice.models.BillDetailAdditional;
 import org.egov.infra.microservice.models.BillResponse;
 import org.egov.infra.microservice.models.BusinessDetails;
+import org.egov.infra.microservice.models.CollectionType;
 import org.egov.infra.microservice.models.Demand;
 import org.egov.infra.microservice.models.DemandDetail;
 import org.egov.infra.microservice.models.DemandRequest;
@@ -111,7 +113,6 @@ import org.egov.infra.microservice.models.ReceiptRequest;
 import org.egov.infra.microservice.models.ReceiptResponse;
 import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.microservice.models.TaxPeriod;
-import org.egov.infra.microservice.models.UserInfo;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.reporting.engine.ReportFormat;
 import org.egov.infra.reporting.engine.ReportRequest;
@@ -1175,6 +1176,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         final String url = hostUrl + demandCreateUrl;
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(microserviceUtils.getUserToken());
+        requestInfo.setUserInfo(microserviceUtils.getUserInfo());
         request.setRequestInfo(requestInfo);
 
         Demand demand = new Demand();
@@ -1203,6 +1205,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
             }
 
         }
+        
         request.setDemands(Collections.singletonList(demand));
         ObjectMapper mapper = new ObjectMapper();
         String jsonInString = "";
@@ -1224,6 +1227,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(microserviceUtils.getUserToken());
+        requestInfo.setUserInfo(microserviceUtils.getUserInfo());
         reqWrapper.setRequestInfo(requestInfo);
         ObjectMapper mapper = new ObjectMapper();
         String jsonInString = "";
@@ -1244,21 +1248,41 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         ReceiptRequest request = new ReceiptRequest();
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(microserviceUtils.getUserToken());
-        requestInfo.setUserInfo(new UserInfo());
+        requestInfo.setUserInfo(microserviceUtils.getUserInfo());
         requestInfo.getUserInfo().setId(ApplicationThreadLocals.getUserId());
         Receipt receipt = new Receipt();
-        billResponse.getBill().get(0).getBillDetails().get(0)
-                .setAmountPaid(billResponse.getBill().get(0).getBillDetails().get(0).getTotalAmount());
-        receipt.setBill(billResponse.getBill());
+        List<Bill> bills = billResponse.getBill();
+        if(!bills.isEmpty() && bills.get(0) != null){
+            Bill bill = bills.get(0);
+            bill.getBillDetails().get(0)
+            .setAmountPaid(billResponse.getBill().get(0).getBillDetails().get(0).getTotalAmount());
+            bill.getTaxAndPayments().get(0).setAmountPaid(billResponse.getBill().get(0).getBillDetails().get(0).getTotalAmount());
+            bill.setPaidBy(receiptHeader.getPaidBy());
+            bill.setPayerName(receiptHeader.getPayeeName());
+            bill.setPayerAddress(receiptHeader.getPayeeAddress());
+            bill.getBillDetails().get(0).setCollectionType(CollectionType.COUNTER);
+            bill.getBillDetails().get(0).setManualReceiptNumber(receiptHeader.getManualreceiptnumber());
+            bill.getBillDetails().get(0).setManualReceiptDate(
+                    receiptHeader.getManualreceiptdate() != null ? receiptHeader.getManualreceiptdate().getTime() : null);
+            bill.getBillDetails().get(0).setBillDescription(receiptHeader.getReferenceDesc());
+            
+            /* Setting Additional Detils in bill payload*/
+            BillDetailAdditional additional = new BillDetailAdditional();
+            additional.setNarration(receiptHeader.getReferenceDesc());
+            additional.setPayeeaddress(receiptHeader.getPayeeAddress());
+            additional.setBusinessReason(receiptHeader.getServiceIdText());
+            JsonNode jsonNode = new ObjectMapper().convertValue(additional, JsonNode.class);
+            bill.getBillDetails().get(0).setAdditionalDetails(jsonNode);
+            receipt.setBill(Arrays.asList(bill));
+        }
+        /* Setting Instrument Data in Receipt payload*/
         Instrument instrument = new Instrument();
-
         instrument.setInstrumentNumber(
                 receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentNumber());
         instrument.setInstrumentDate(
                 receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate() != null
                         ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate().getTime()
                         : null);
-
         Long transactionDateInput = null;
         Date transactionDate = null;
         if (receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate() != null) {
@@ -1285,38 +1309,19 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         instrument.setAmount(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentAmount());
         instrument.setBank(new Bank());
         instrument.getBank()
-                .setId(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId() != null
-                        ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId().getId().longValue()
+                .setCode(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId() != null
+                        ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId().getCode()
                         : null);
         instrument.setBranchName(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankBranchName());
         instrument.setTenantId(tenantId);
+        instrument.setIfscCode(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getIfscCode());
         receipt.setInstrument(instrument);
-        receipt.getBill().get(0).setPaidBy(receiptHeader.getPaidBy());
-        receipt.getBill().get(0).setPayeeName(receiptHeader.getPayeeName());
-        receipt.getBill().get(0).setPayeeAddress(receiptHeader.getPayeeAddress());
-        receipt.getBill().get(0).getBillDetails().get(0).setManualReceiptNumber(receiptHeader.getManualreceiptnumber());
-        receipt.getBill().get(0).getBillDetails().get(0).setManualReceiptDate(
-                receiptHeader.getManualreceiptdate() != null ? receiptHeader.getManualreceiptdate().getTime() : null);
-        receipt.getBill().get(0).getBillDetails().get(0).setBillDescription(receiptHeader.getReferenceDesc());
-
-        BillDetailAdditional additional = new BillDetailAdditional();
-        if (null != receiptHeader.getReceiptMisc().getScheme())
-            additional.setScheme(receiptHeader.getReceiptMisc().getScheme().getCode());
-        if (null != receiptHeader.getReceiptMisc().getSubscheme())
-            additional.setSubScheme(receiptHeader.getReceiptMisc().getSubscheme().getCode());
-        additional.setNarration(receiptHeader.getReferenceDesc());
-        additional.setPayeeaddress(receiptHeader.getPayeeAddress());
-        additional.setBusinessReason(receiptHeader.getServiceIdText());
-
-        JsonNode jsonNode = new ObjectMapper().convertValue(additional, JsonNode.class);
-        System.out.println("******************* additional details**********  " + jsonNode.toString());
-        receipt.getBill().get(0).getBillDetails().get(0).setAdditionalDetails(jsonNode);
 
         receipt.setTenantId(tenantId);
-        request.setTenantId(tenantId);
         request.setReceipt(Collections.singletonList(receipt));
         request.setRequestInfo(requestInfo);
-        return restTemplate.postForObject(url, request, ReceiptResponse.class);
+        ReceiptResponse postForObject = restTemplate.postForObject(url, request, ReceiptResponse.class);
+        return postForObject;
     }
 
     private String getConsumerCode(ReceiptHeader receiptHeader) {
