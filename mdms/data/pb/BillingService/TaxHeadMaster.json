@@ -1711,6 +1711,26 @@
       "isActualDemand": false,
       "order": "0",
       "isRequired": false
+    },
+    {
+      "category": "CHARGES",
+      "service": "GRANTS.DEPOSIT",
+      "name": "Security Deposit",
+      "code": "GRANTS.SECURTIY_DEPOSIT",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "CHARGES",
+      "service": "GRANTS.DEPOSIT",
+      "name": "EMD",
+      "code": "GRANTS.EMD",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     }
   ]
 }

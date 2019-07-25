@@ -217,6 +217,14 @@
       "service": "RT.Jamin_Theka",
       "code": "RTJTAN2017",
       "financialYear": "2017-18"
+    },
+    {
+      "fromDate": 1554076801000,
+      "toDate": 1585699199000,
+      "periodCycle": "ANNUAL",
+      "service": "GRANTS.DEPOSIT",
+      "code": "GTDEPAN2019",
+      "financialYear": "2019-20"
     }
   ]
 }
