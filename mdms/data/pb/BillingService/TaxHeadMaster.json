@@ -1735,16 +1735,6 @@
     {
       "category": "ADVANCE_COLLECTION",
       "service": "REV_GRANTS",
-      "name": "Govt. Aid for Primary Education",
-      "code": "REV_GRANTS_GOVT_AID_PRIM_EDU",
-      "isDebit": false,
-      "isActualDemand": false,
-      "order": "0",
-      "isRequired": false
-    },
-    {
-      "category": "ADVANCE_COLLECTION",
-      "service": "REV_GRANTS",
       "name": "Family Welfare Grant",
       "code": "REV_GRANTS_FAM_WF_GRANT",
       "isDebit": false,
