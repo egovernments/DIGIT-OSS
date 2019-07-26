@@ -188,7 +188,7 @@ public class SearchReceiptAction extends SearchFormAction {
         // serviceClassMap.remove(CollectionConstants.SERVICE_TYPE_PAYMENT);
         // addDropdownData("serviceTypeList", Collections.EMPTY_LIST);
         addDropdownData("businessCategorylist", microserviceUtils.getBusinessCategories());
-        addDropdownData("serviceTypeList", microserviceUtils.getBusinessDetailsByType("MISCELLANEOUS"));
+        addDropdownData("serviceTypeList", microserviceUtils.getBusinessService("Finance"));
 
         // addDropdownData("bankBranchList", collectionsUtil.getBankCollectionBankBranchList());
     }
@@ -255,13 +255,13 @@ public class SearchReceiptAction extends SearchFormAction {
                         e.printStackTrace();
                     }
                     if (null != additional) {
-                        if (null != additional.getBusinessReason()) {
-                            if (additional.getBusinessReason().contains("-")) {
-                                receiptHeader.setService(additional.getBusinessReason().split("-")[0]);
-                            } else {
-                                receiptHeader.setService(additional.getBusinessReason());
-                            }
-                        }
+//                        if (null != additional.getBusinessReason()) {
+//                            if (additional.getBusinessReason().contains("-")) {
+//                                receiptHeader.setService(additional.getBusinessReason().split("-")[0]);
+//                            } else {
+//                                receiptHeader.setService(additional.getBusinessReason());
+//                            }
+//                        }
 
                         if (null != additional.getNarration())
                             receiptHeader.setReferenceDesc(additional.getNarration());

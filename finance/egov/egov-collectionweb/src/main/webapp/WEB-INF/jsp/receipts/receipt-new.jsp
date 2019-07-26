@@ -240,8 +240,10 @@ function validate()
 	var checkpartpaymentvalue=document.getElementById("partPaymentAllowed").value;
 	var collectiontotal=0,cashamount=0,chequeamount=0,cardamount=0,bankamount=0,billingtotal=0;
 	var zeroAccHeads=false;
+	console.log('checkpartpaymentvalue :',checkpartpaymentvalue);
 	<s:if test="%{isBillSourcemisc()}"> 
 		billingtotal=document.forms[0].misctotalAmount.value;
+		console.log('checkpartpaymentvalue :',checkpartpaymentvalue);
  	</s:if>
  	<s:else>
 		var noofaccounts=document.getElementById("totalNoOfAccounts").value;
@@ -273,9 +275,8 @@ function validate()
 	var instrTypeCard = document.getElementById("cardradiobutton").checked;
 	var instrTypeBank = document.getElementById("bankradiobutton").checked;
 	var instrTypeOnline = document.getElementById("onlineradiobutton").checked;
-	var chequetable=document.getElementById('chequegrid')
+	var chequetable=document.getElementById('chequegrid');
 	var chequetablelen1 =chequetable.rows.length;
-
 	//if mode of payment is cash
 	if(instrTypeCash){
 		if(document.getElementById("instrHeaderCash.instrumentAmount")!=null)
@@ -476,6 +477,7 @@ function validate()
 	if(zeroAccHeads==true){
 	    advancePaymentAllowed=true;
 	}
+	console.log('collectiontotal : ',collectiontotal);
 	if(collectiontotal!=0){
 		var billingTotalNumberFormat=Number(billingtotal);
 	    //display error if actual payment amt > original billed amt, and there is no 'zero' account head.
@@ -536,14 +538,11 @@ function validate()
 	    	document.getElementById('instrumentDate').value="";
 	    }
 	}
+	console.log('validation : ',validation);
 	if(validation==false){
 		return false;
 	}
 	else {
-		document.getElementById("voucherDate").disabled = false;
-		document.getElementById("fundId").disabled = false;
-		document.getElementById("functionId").disabled = false;
-		document.getElementById("deptId").disabled = false;
 		document.getElementById("receipt_error_area").style.display="block";
 		document.collDetails.action="receipt-save.action";
 		return validation;
@@ -592,16 +591,21 @@ function verifyChequeDetails(table,len1)
 	    }
 
 	    //validate if bank name has been entered
-	    if(getControlInBranch(table.rows[j],'bankName')!=null && getControlInBranch(table.rows[j],'bankID')!=null){
+	    if(getControlInBranch(table.rows[j],'instrumentIfscCode')!=null ){
+	    	var ifscCode=getControlInBranch(table.rows[j],'instrumentIfscCode').value;
 	    	var bankName=getControlInBranch(table.rows[j],'bankName').value;
-	    	var bankId=getControlInBranch(table.rows[j],'bankID').value;
-	    	if(bankName==null || bankName=="" || bankId==null || bankId==""){
+	    	if(ifscCode==null || ifscCode==""){
 	    		if(bankNameErrMsg==""){
-	    		    bankNameErrMsg='<s:text name="billreceipt.missingbankid.errormessage" />' + '<br>';
+	    		    bankNameErrMsg='<s:text name="billreceipt.missingifsc.code.errormessage" />' + '<br>';
 	    			document.getElementById("receipt_error_area").innerHTML+=bankNameErrMsg;
 	    		}
 	    		check=false;
-	    	}
+	    	}else if(bankName==null || bankName==""){
+	    		if(bankNameErrMsg==""){
+	    		    bankNameErrMsg='<s:text name="billreceipt.invalidifsc.code.errormessage" />' + '<br>';
+	    			document.getElementById("receipt_error_area").innerHTML+=bankNameErrMsg;
+	    		}
+		    }
 	    }
 	    //validate if valid date has been entered
 	    if(getControlInBranch(table.rows[j],'instrumentDate')!=null){
@@ -1233,7 +1237,7 @@ function showHideMandataryMark(obj){
 			      <input name="button" type="button" class="button" id="buttonclose2" value="Close" onclick="window.close();" />
 				</div>
 
-<table width="100%" >
+<!-- <table width="100%" >
 
      <tr> 
        <td colspan="5">
@@ -1263,7 +1267,7 @@ function showHideMandataryMark(obj){
      <tr>
        <td colspan="5"></td>
      </tr>
-</table>
+</table> -->
 
 
 

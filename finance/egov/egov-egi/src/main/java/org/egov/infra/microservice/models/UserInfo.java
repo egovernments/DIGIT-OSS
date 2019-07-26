@@ -55,6 +55,8 @@ public class UserInfo implements Serializable {
     private static final long serialVersionUID = -6099520777478122089L;
 
     private Long id;
+    
+    private String uuid;
 
     private String userName;
 
@@ -70,11 +72,12 @@ public class UserInfo implements Serializable {
 
     private String tenantId;
 
-    public UserInfo(final List<RoleInfo> roles, final Long id, final String userName, final String name, final String emailId,
+    public UserInfo(final List<RoleInfo> roles, final Long id, String uuid, final String userName, final String name, final String emailId,
             final String mobileNumber, final String type, final String tenantId) {
         super();
         this.roles = roles;
         this.id = id;
+        this.uuid = uuid;
         this.userName = userName;
         this.name = name;
         this.emailId = emailId;
@@ -149,5 +152,14 @@ public class UserInfo implements Serializable {
     public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
     }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+    
 
 }

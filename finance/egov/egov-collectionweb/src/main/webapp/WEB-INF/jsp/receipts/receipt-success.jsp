@@ -58,7 +58,7 @@
 <div class="subheadnew">
 </div>
 <span class="mandatory1"> 
-	<font style='color: red; font-weight: bold'> 
+	<font style='color: green;font-weight: bold;text-align: center;' > 
 		<s:actionerror /> 
 		<s:fielderror />
 		<s:actionmessage />

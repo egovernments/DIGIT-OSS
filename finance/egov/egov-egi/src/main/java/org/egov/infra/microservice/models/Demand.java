@@ -43,106 +43,247 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public class Demand {
 
+    @JsonProperty("id")
     private String id;
 
+    @NotNull
+    @JsonProperty("tenantId")
     private String tenantId;
 
+    @NotNull
+    @JsonProperty("consumerCode")
     private String consumerCode;
 
+    @NotNull
+    @JsonProperty("consumerType")
     private String consumerType;
 
+    @NotNull
+    @JsonProperty("businessService")
     private String businessService;
 
-    private User owner;
+    @Valid
+    @JsonProperty("payer")
+    private User payer;
 
+    @NotNull
+    @JsonProperty("taxPeriodFrom")
     private Long taxPeriodFrom;
 
+    @NotNull
+    @JsonProperty("taxPeriodTo")
     private Long taxPeriodTo;
 
+    @JsonProperty("demandDetails")
+    @Valid
+    @NotNull
+    @Size(min=1)
     private List<DemandDetail> demandDetails = new ArrayList<>();
 
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails;
+    
+    @JsonProperty("billExpiryTime")
+    private Long billExpiryTime;
+
+    @JsonProperty("additionalDetails")
+    private Object additionalDetails;
+
+    @JsonProperty("minimumAmountPayable")
     private BigDecimal minimumAmountPayable = BigDecimal.ZERO;
+
+          /**
+* Gets or Sets status
+*/
+public enum StatusEnum {
+      
+ACTIVE("ACTIVE"),
+
+CANCELLED("CANCELLED"),
+
+ADJUSTED("ADJUSTED");
+
+private String value;
+
+StatusEnum(String value) {
+  this.value = value;
+}
+
+@Override
+@JsonValue
+public String toString() {
+  return String.valueOf(value);
+}
+
+@JsonCreator
+public static StatusEnum fromValue(String text) {
+  for (StatusEnum b : StatusEnum.values()) {
+    if (String.valueOf(b.value).equalsIgnoreCase(text)) {
+      return b;
+    }
+  }
+  return null;
+}
+}
+
+    @JsonProperty("status")
+    private StatusEnum status;
+
+
+    public Demand addDemandDetailsItem(DemandDetail demandDetailsItem) {
+    this.demandDetails.add(demandDetailsItem);
+    return this;
+    }
+
 
     public String getId() {
         return id;
     }
 
+
     public void setId(String id) {
         this.id = id;
     }
+
 
     public String getTenantId() {
         return tenantId;
     }
 
+
     public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
     }
+
 
     public String getConsumerCode() {
         return consumerCode;
     }
 
+
     public void setConsumerCode(String consumerCode) {
         this.consumerCode = consumerCode;
     }
+
 
     public String getConsumerType() {
         return consumerType;
     }
 
+
     public void setConsumerType(String consumerType) {
         this.consumerType = consumerType;
     }
+
 
     public String getBusinessService() {
         return businessService;
     }
 
+
     public void setBusinessService(String businessService) {
         this.businessService = businessService;
     }
 
-    public User getOwner() {
-        return owner;
+
+    public User getPayer() {
+        return payer;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+
+    public void setPayer(User payer) {
+        this.payer = payer;
     }
+
 
     public Long getTaxPeriodFrom() {
         return taxPeriodFrom;
     }
 
+
     public void setTaxPeriodFrom(Long taxPeriodFrom) {
         this.taxPeriodFrom = taxPeriodFrom;
     }
+
 
     public Long getTaxPeriodTo() {
         return taxPeriodTo;
     }
 
+
     public void setTaxPeriodTo(Long taxPeriodTo) {
         this.taxPeriodTo = taxPeriodTo;
     }
+
 
     public List<DemandDetail> getDemandDetails() {
         return demandDetails;
     }
 
+
     public void setDemandDetails(List<DemandDetail> demandDetails) {
         this.demandDetails = demandDetails;
     }
+
+
+    public AuditDetails getAuditDetails() {
+        return auditDetails;
+    }
+
+
+    public void setAuditDetails(AuditDetails auditDetails) {
+        this.auditDetails = auditDetails;
+    }
+
+
+    public Long getBillExpiryTime() {
+        return billExpiryTime;
+    }
+
+
+    public void setBillExpiryTime(Long billExpiryTime) {
+        this.billExpiryTime = billExpiryTime;
+    }
+
+
+    public Object getAdditionalDetails() {
+        return additionalDetails;
+    }
+
+
+    public void setAdditionalDetails(Object additionalDetails) {
+        this.additionalDetails = additionalDetails;
+    }
+
 
     public BigDecimal getMinimumAmountPayable() {
         return minimumAmountPayable;
     }
 
+
     public void setMinimumAmountPayable(BigDecimal minimumAmountPayable) {
         this.minimumAmountPayable = minimumAmountPayable;
     }
+
+
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+
+    public void setStatus(StatusEnum status) {
+        this.status = status;
+    }
+    
 
 }

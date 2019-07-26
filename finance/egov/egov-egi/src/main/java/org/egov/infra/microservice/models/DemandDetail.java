@@ -41,18 +41,34 @@ package org.egov.infra.microservice.models;
 
 import java.math.BigDecimal;
 
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class DemandDetail {
 
+    @JsonProperty("id")
     private String id;
-
+    
+    @JsonProperty("demandId")
     private String demandId;
 
+    @NotNull @JsonProperty("taxHeadMasterCode")
     private String taxHeadMasterCode;
 
+    @NotNull @JsonProperty("taxAmount")
     private BigDecimal taxAmount;
 
-    private BigDecimal collectionAmount = BigDecimal.valueOf(0d);
+    @NotNull @JsonProperty("collectionAmount")
+    private BigDecimal collectionAmount = BigDecimal.ZERO;
 
+    @JsonProperty("additionalDetails")
+    private Object additionalDetails;
+
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails;
+
+    @JsonProperty("tenantId")
     private String tenantId;
 
     public String getId() {
@@ -93,6 +109,22 @@ public class DemandDetail {
 
     public void setCollectionAmount(BigDecimal collectionAmount) {
         this.collectionAmount = collectionAmount;
+    }
+
+    public Object getAdditionalDetails() {
+        return additionalDetails;
+    }
+
+    public void setAdditionalDetails(Object additionalDetails) {
+        this.additionalDetails = additionalDetails;
+    }
+
+    public AuditDetails getAuditDetails() {
+        return auditDetails;
+    }
+
+    public void setAuditDetails(AuditDetails auditDetails) {
+        this.auditDetails = auditDetails;
     }
 
     public String getTenantId() {

@@ -265,8 +265,8 @@ public class RemittanceServiceImpl extends RemittanceService {
         for (final Receipt receiptHeader : bankRemittanceList) {
             receiptHeader.getBill().get(0).getBillDetails().get(0).setStatus("Remitted");
             receiptHeader.getInstrument().setTenantId(receiptHeader.getTenantId());
-            receiptHeader.getBill().get(0).setPayeeName(receiptHeader.getBill().get(0).getPaidBy());
-            receiptHeader.setRemittanceReferenceNumber(remittance.getReferenceNumber());
+            receiptHeader.getBill().get(0).setPayerName(receiptHeader.getBill().get(0).getPaidBy());
+            receiptHeader.setReceiptNumber(remittance.getReferenceNumber());
         }
         ReceiptResponse response = microserviceUtils.updateReceipts(new ArrayList<>(bankRemittanceList));
         for (String key : receiptInstrumentMap.keySet()) {
@@ -885,8 +885,8 @@ public class RemittanceServiceImpl extends RemittanceService {
         for (final Receipt receiptHeader : receiptList) {
             receiptHeader.getBill().get(0).getBillDetails().get(0).setStatus("Remitted");
             receiptHeader.getInstrument().setTenantId(receiptHeader.getTenantId());
-            receiptHeader.getBill().get(0).setPayeeName(receiptHeader.getBill().get(0).getPaidBy());
-            receiptHeader.setRemittanceReferenceNumber(remittance.getReferenceNumber());
+            receiptHeader.getBill().get(0).setPayerName(receiptHeader.getBill().get(0).getPaidBy());
+            receiptHeader.setReceiptNumber(remittance.getReferenceNumber());
         }
         for (ReceiptBean receipt : receiptBeanList) {
             receipt.setRemittanceReferenceNumber(remittance.getReferenceNumber());

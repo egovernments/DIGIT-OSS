@@ -538,7 +538,7 @@ public class AjaxReceiptCreateAction extends BaseFormAction {
     public String ajaxTaxHeadMasterByService() {
 
         final String serviceId = parameters.get(SERVICEID)[0];
-        List<TaxHeadMaster> taxHeadMasters = microserviceUtils.getTaxheadsByService(serviceId);
+        List<TaxHeadMaster> taxHeadMasters = microserviceUtils.getTaxheadsByServiceCode(serviceId);
         taxHeadMastersList = new ArrayList<>();
         if (null != taxHeadMasters && !taxHeadMasters.isEmpty()) {
             taxHeadMastersList.addAll(taxHeadMasters);

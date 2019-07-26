@@ -43,81 +43,145 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
+import org.springframework.util.CollectionUtils;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class BillDetail {
+    @JsonProperty("id")
+    private String id = null;
 
-    private String id;
+    @JsonProperty("tenantId")
+    private String tenantId = null;
 
-    private String bill;
+    @JsonProperty("demandId")
+    private String demandId = null;
 
-    private Long billDate;
+    @JsonProperty("bill")
+    private String bill = null;
+
+    @JsonProperty("businessService")
+    private String businessService = null;
+
+    @JsonProperty("billNumber")
+    private String billNumber = null;
+
+    @JsonProperty("billDate")
+    private Long billDate = null;
+
+    @JsonProperty("consumerCode")
+    private String consumerCode = null;
+
+    @JsonProperty("consumerType")
+    private String consumerType = null;
+
+    @JsonProperty("minimumAmount")
+    private BigDecimal minimumAmount = null;
+
+    @JsonProperty("totalAmount")
+    @NotNull
+    private BigDecimal totalAmount = null;
+
+    @JsonProperty("amountPaid")
+    private BigDecimal amountPaid = null;
+
+    @JsonProperty("fromPeriod")
+    private Long fromPeriod = null;
+
+    @JsonProperty("toPeriod")
+    private Long toPeriod = null;
+
+    @JsonProperty("collectedAmount")
+    private BigDecimal collectedAmount = null;
+
+    @JsonProperty("collectionModesNotAllowed")
+    private List<String> collectionModesNotAllowed = null;
+
+    @JsonProperty("partPaymentAllowed")
+    private Boolean partPaymentAllowed = null;
+
+    @JsonProperty("additionalDetails")
+    private JsonNode additionalDetails = null;
+
+    @JsonProperty("receiptNumber")
+    private String receiptNumber = null;
+
+    @JsonProperty("receiptDate")
+    private Long receiptDate = null;
+
+    @JsonProperty("receiptType")
+    private String receiptType = null;
+
+    @JsonProperty("channel")
+    private String channel = null;
+
+    @JsonProperty("voucherHeader")
+    private String voucherHeader = null;
+
+    @JsonProperty("boundary")
+    private String boundary = null;
+
+    @JsonProperty("reasonForCancellation")
+    private String reasonForCancellation = null;
+
+    @JsonProperty("manualReceiptNumber")
+    private String manualReceiptNumber = null;
+
+    @JsonProperty("manualReceiptDate")
+    private Long manualReceiptDate = null;
+
+    @JsonProperty("stateId")
+    private String stateId = null;
+
+    @JsonProperty("fund")
+    private String fund = null;
+
+    @JsonProperty("function")
+    private String function = null;
+
+    @JsonProperty("department")
+    private String department = null;
+
+    @JsonProperty("billAccountDetails")
+    private List<BillAccountDetail> billAccountDetails = null;
+
+    @JsonProperty("status")
+    private String status = null;
+
+    @NotNull
+    @JsonProperty("collectionType")
+    private CollectionType collectionType = null;
+
+    @JsonProperty("isAdvanceAllowed")
+    private Boolean isAdvanceAllowed;
 
     private String billDescription;
 
-    private String billNumber; // refNo
-
-    private String consumerCode;
-
-    private String consumerType;
-
-    private BigDecimal minimumAmount;
-
-    private BigDecimal totalAmount;
-
-    private BigDecimal collectedAmount;
-
-    private List<String> collectionModesNotAllowed = new ArrayList<>();
-
-    private String tenantId;
-
-    private String businessService; // buisnessDetailsCode
+    private Long expiryDate;
 
     private String displayMessage;
 
     private Boolean callBackForApportioning;
 
-    private String receiptNumber;
-
-    private Long receiptDate;
-
-    private String receiptType;
-
-    private String channel;
-
-    private String voucherHeader;
-
-    private String boundary;
-
-    private String fund;
-
-    private String function;
-
-    private String department;
-
-    private String reasonForCancellation;
-
-    private BigDecimal amountPaid;
-
     private String cancellationRemarks;
 
-    private String status;
+    public Boolean addBillAccountDetail(BillAccountDetail billAccountDetail) {
 
-    @JsonProperty("billAccountDetails")
-    private List<BillAccountDetail> billAccountDetails = new ArrayList<>();
+            if (CollectionUtils.isEmpty(billAccountDetails)) {
 
-    private String manualReceiptNumber;
+                    billAccountDetails = new ArrayList<>();
+                    return billAccountDetails.add(billAccountDetail);
+            } else {
 
-    private Long manualReceiptDate;
-
-    private Long stateId;
-
-    private Boolean partPaymentAllowed;
-
-    private CollectionType collectionType;
-    
-    private JsonNode additionalDetails;
+                    if (!billAccountDetails.contains(billAccountDetail))
+                            return billAccountDetails.add(billAccountDetail);
+                    else
+                            return false;
+            }
+    }
 
     public String getId() {
         return id;
@@ -125,6 +189,22 @@ public class BillDetail {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
+    }
+
+    public String getDemandId() {
+        return demandId;
+    }
+
+    public void setDemandId(String demandId) {
+        this.demandId = demandId;
     }
 
     public String getBill() {
@@ -135,20 +215,12 @@ public class BillDetail {
         this.bill = bill;
     }
 
-    public Long getBillDate() {
-        return billDate;
+    public String getBusinessService() {
+        return businessService;
     }
 
-    public void setBillDate(Long billDate) {
-        this.billDate = billDate;
-    }
-
-    public String getBillDescription() {
-        return billDescription;
-    }
-
-    public void setBillDescription(String billDescription) {
-        this.billDescription = billDescription;
+    public void setBusinessService(String businessService) {
+        this.businessService = businessService;
     }
 
     public String getBillNumber() {
@@ -157,6 +229,14 @@ public class BillDetail {
 
     public void setBillNumber(String billNumber) {
         this.billNumber = billNumber;
+    }
+
+    public Long getBillDate() {
+        return billDate;
+    }
+
+    public void setBillDate(Long billDate) {
+        this.billDate = billDate;
     }
 
     public String getConsumerCode() {
@@ -191,6 +271,30 @@ public class BillDetail {
         this.totalAmount = totalAmount;
     }
 
+    public BigDecimal getAmountPaid() {
+        return amountPaid;
+    }
+
+    public void setAmountPaid(BigDecimal amountPaid) {
+        this.amountPaid = amountPaid;
+    }
+
+    public Long getFromPeriod() {
+        return fromPeriod;
+    }
+
+    public void setFromPeriod(Long fromPeriod) {
+        this.fromPeriod = fromPeriod;
+    }
+
+    public Long getToPeriod() {
+        return toPeriod;
+    }
+
+    public void setToPeriod(Long toPeriod) {
+        this.toPeriod = toPeriod;
+    }
+
     public BigDecimal getCollectedAmount() {
         return collectedAmount;
     }
@@ -207,36 +311,20 @@ public class BillDetail {
         this.collectionModesNotAllowed = collectionModesNotAllowed;
     }
 
-    public String getTenantId() {
-        return tenantId;
+    public Boolean getPartPaymentAllowed() {
+        return partPaymentAllowed;
     }
 
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
+    public void setPartPaymentAllowed(Boolean partPaymentAllowed) {
+        this.partPaymentAllowed = partPaymentAllowed;
     }
 
-    public String getBusinessService() {
-        return businessService;
+    public JsonNode getAdditionalDetails() {
+        return additionalDetails;
     }
 
-    public void setBusinessService(String businessService) {
-        this.businessService = businessService;
-    }
-
-    public String getDisplayMessage() {
-        return displayMessage;
-    }
-
-    public void setDisplayMessage(String displayMessage) {
-        this.displayMessage = displayMessage;
-    }
-
-    public Boolean getCallBackForApportioning() {
-        return callBackForApportioning;
-    }
-
-    public void setCallBackForApportioning(Boolean callBackForApportioning) {
-        this.callBackForApportioning = callBackForApportioning;
+    public void setAdditionalDetails(JsonNode additionalDetails) {
+        this.additionalDetails = additionalDetails;
     }
 
     public String getReceiptNumber() {
@@ -287,6 +375,38 @@ public class BillDetail {
         this.boundary = boundary;
     }
 
+    public String getReasonForCancellation() {
+        return reasonForCancellation;
+    }
+
+    public void setReasonForCancellation(String reasonForCancellation) {
+        this.reasonForCancellation = reasonForCancellation;
+    }
+
+    public String getManualReceiptNumber() {
+        return manualReceiptNumber;
+    }
+
+    public void setManualReceiptNumber(String manualReceiptNumber) {
+        this.manualReceiptNumber = manualReceiptNumber;
+    }
+
+    public Long getManualReceiptDate() {
+        return manualReceiptDate;
+    }
+
+    public void setManualReceiptDate(Long manualReceiptDate) {
+        this.manualReceiptDate = manualReceiptDate;
+    }
+
+    public String getStateId() {
+        return stateId;
+    }
+
+    public void setStateId(String stateId) {
+        this.stateId = stateId;
+    }
+
     public String getFund() {
         return fund;
     }
@@ -311,28 +431,12 @@ public class BillDetail {
         this.department = department;
     }
 
-    public String getReasonForCancellation() {
-        return reasonForCancellation;
+    public List<BillAccountDetail> getBillAccountDetails() {
+        return billAccountDetails;
     }
 
-    public void setReasonForCancellation(String reasonForCancellation) {
-        this.reasonForCancellation = reasonForCancellation;
-    }
-
-    public BigDecimal getAmountPaid() {
-        return amountPaid;
-    }
-
-    public void setAmountPaid(BigDecimal amountPaid) {
-        this.amountPaid = amountPaid;
-    }
-
-    public String getCancellationRemarks() {
-        return cancellationRemarks;
-    }
-
-    public void setCancellationRemarks(String cancellationRemarks) {
-        this.cancellationRemarks = cancellationRemarks;
+    public void setBillAccountDetails(List<BillAccountDetail> billAccountDetails) {
+        this.billAccountDetails = billAccountDetails;
     }
 
     public String getStatus() {
@@ -343,46 +447,6 @@ public class BillDetail {
         this.status = status;
     }
 
-    public List<BillAccountDetail> getBillAccountDetails() {
-        return billAccountDetails;
-    }
-
-    public void setBillAccountDetails(List<BillAccountDetail> billAccountDetails) {
-        this.billAccountDetails = billAccountDetails;
-    }
-
-    public String getManualReceiptNumber() {
-        return manualReceiptNumber;
-    }
-
-    public void setManualReceiptNumber(String manualReceiptNumber) {
-        this.manualReceiptNumber = manualReceiptNumber;
-    }
-
-    public Long getManualReceiptDate() {
-        return manualReceiptDate;
-    }
-
-    public void setManualReceiptDate(Long manualReceiptDate) {
-        this.manualReceiptDate = manualReceiptDate;
-    }
-
-    public Long getStateId() {
-        return stateId;
-    }
-
-    public void setStateId(Long stateId) {
-        this.stateId = stateId;
-    }
-
-    public Boolean getPartPaymentAllowed() {
-        return partPaymentAllowed;
-    }
-
-    public void setPartPaymentAllowed(Boolean partPaymentAllowed) {
-        this.partPaymentAllowed = partPaymentAllowed;
-    }
-
     public CollectionType getCollectionType() {
         return collectionType;
     }
@@ -391,12 +455,52 @@ public class BillDetail {
         this.collectionType = collectionType;
     }
 
-    public JsonNode getAdditionalDetails() {
-        return additionalDetails;
+    public Boolean getIsAdvanceAllowed() {
+        return isAdvanceAllowed;
     }
 
-    public void setAdditionalDetails(JsonNode additionalDetails) {
-        this.additionalDetails = additionalDetails;
+    public void setIsAdvanceAllowed(Boolean isAdvanceAllowed) {
+        this.isAdvanceAllowed = isAdvanceAllowed;
     }
 
+    public String getBillDescription() {
+        return billDescription;
+    }
+
+    public void setBillDescription(String billDescription) {
+        this.billDescription = billDescription;
+    }
+
+    public Long getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(Long expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public String getDisplayMessage() {
+        return displayMessage;
+    }
+
+    public void setDisplayMessage(String displayMessage) {
+        this.displayMessage = displayMessage;
+    }
+
+    public Boolean getCallBackForApportioning() {
+        return callBackForApportioning;
+    }
+
+    public void setCallBackForApportioning(Boolean callBackForApportioning) {
+        this.callBackForApportioning = callBackForApportioning;
+    }
+
+    public String getCancellationRemarks() {
+        return cancellationRemarks;
+    }
+
+    public void setCancellationRemarks(String cancellationRemarks) {
+        this.cancellationRemarks = cancellationRemarks;
+    }
+    
 }
