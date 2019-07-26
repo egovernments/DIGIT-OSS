@@ -1711,6 +1711,56 @@
       "isActualDemand": false,
       "order": "0",
       "isRequired": false
+    },
+    {
+      "category": "ADVANCE_COLLECTION",
+      "service": "REV_GRANTS",
+      "name": "Education Cess Grants",
+      "code": "REV_GRANTS_EDU_CESS_GRANTS",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "ADVANCE_COLLECTION",
+      "service": "REV_GRANTS",
+      "name": "Govt. Aid for Primary Education",
+      "code": "REV_GRANTS_GOVT_AID_PRIM_EDU",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "ADVANCE_COLLECTION",
+      "service": "REV_GRANTS",
+      "name": "Family Welfare Grant",
+      "code": "REV_GRANTS_FAM_WF_GRANT",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "ADVANCE_COLLECTION",
+      "service": "REV_GRANTS",
+      "name": "Family Planning Aid from Central Government",
+      "code": "REV_GRANTS_FAM_PLANNIG_AID_CENT_GOVT",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "ADVANCE_COLLECTION",
+      "service": "REV_GRANTS",
+      "name": "SJSRY Salary Grant",
+      "code": "REV_GRANTS_SJSRY_SAL_GRANT",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     }
   ]
 }
