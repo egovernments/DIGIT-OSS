@@ -958,8 +958,8 @@
       "isActive": true
     },
     {
-      "businessService": "Grants.Deposit",
-      "code": "GRANTS.DEPOSIT",
+      "businessService": "Revenue Grants",
+      "code": "REV_GRANTS",
       "collectionModesNotAllowed": [
         "DD"
       ],

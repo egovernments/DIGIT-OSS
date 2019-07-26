@@ -39,7 +39,7 @@
       "validTo":2345678901
     },
     {
-      "code":"GRANTS.DEPOSIT",
+      "code":"REV_GRANTS",
       "voucherCreationEnabled":true,
       "fund":"01",
       "function":"000201",
