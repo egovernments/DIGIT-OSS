@@ -1145,6 +1145,8 @@ function updatetotalAmounts(){
 	document.getElementById('misctotalAmount').value=totalAmountStr;
 	document.getElementById('totalamountdisplay').value=document.getElementById('misctotalAmount').value;
 	document.getElementById('instrHeaderCash.instrumentAmount').value=totalAmountStr;
+	document.getElementById('instrumentChequeAmount').value=totalAmountStr;
+	document.getElementById('instrHeaderCard.instrumentAmount').value=totalAmountStr;
 }
 
 function validateDetailCode(obj)
