@@ -4,17 +4,17 @@
   "EventCategories": [
     {
       "code": "PUBLICHEALTH",
-      "eventType":"EVENTSONGROUND"
+      "eventType":"EVENTSONGROUND",
       "active": true
     },
     {
       "code": "CULTURAL",
-      "eventType":"EVENTSONGROUND"
+      "eventType":"EVENTSONGROUND",
       "active": true
     },
     {
       "code": "WARDCOMMITTEEMEETING",
-      "eventType":"EVENTSONGROUND"
+      "eventType":"EVENTSONGROUND",
       "active": true
     }
   ]
