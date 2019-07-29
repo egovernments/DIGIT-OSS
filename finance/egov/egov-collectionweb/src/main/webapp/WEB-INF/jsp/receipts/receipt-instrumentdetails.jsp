@@ -427,9 +427,7 @@ loadBankDetailFailureHandler = function(){
 			label="instrumentAmount" id="instrHeaderCash.instrumentAmount"
 			name="instrHeaderCash.instrumentAmount" maxlength="14" size="18"
 			cssClass="form-control patternvalidation text-right"
-			data-pattern="number" placeholder="0"
-			onblur="callpopulateapportioningamountforbills();setCashInstrumentDetails(this);"
-			onkeyup="callpopulateapportioningamountforbills();setCashInstrumentDetails(this);" /></td>
+			data-pattern="number" placeholder="0" readonly='true'/></td>
 </tr>
 <tr>
 	<td colspan="5">
