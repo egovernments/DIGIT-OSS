@@ -478,6 +478,7 @@ function validate()
 	    advancePaymentAllowed=true;
 	}
 	console.log('collectiontotal : ',collectiontotal);
+	console.log('validation : ',validation);
 	if(collectiontotal!=0){
 		var billingTotalNumberFormat=Number(billingtotal);
 	    //display error if actual payment amt > original billed amt, and there is no 'zero' account head.
@@ -605,8 +606,10 @@ function verifyChequeDetails(table,len1)
 	    		    bankNameErrMsg='<s:text name="billreceipt.invalidifsc.code.errormessage" />' + '<br>';
 	    			document.getElementById("receipt_error_area").innerHTML+=bankNameErrMsg;
 	    		}
+	    		check=false;
 		    }
 	    }
+	    
 	    //validate if valid date has been entered
 	    if(getControlInBranch(table.rows[j],'instrumentDate')!=null){
 	    var instrDate=getControlInBranch(table.rows[j],'instrumentDate');

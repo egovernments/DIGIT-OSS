@@ -247,7 +247,6 @@ loadFinAccSuccessHandler = function(req, res) {
 				res.results[i].creditAmountDetail);
 		var amounttype = res.results[i].amountType == "false" ? 'Credit' : 'Debit';
 		var amountTypeSign = res.results[i].amountType == "false" ? '+' : '-';
-		console.log('amounttype : ',amounttype);
 		updateSpanMisc(VOUCHERCREDITDETAILLIST, 'amounttype', i,
 				amounttype);
 		updateSpanMisc(VOUCHERCREDITDETAILLIST, 'creditAmountDetailamountTypeLabel', i,
