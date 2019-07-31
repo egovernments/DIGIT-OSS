@@ -1761,6 +1761,96 @@
       "isActualDemand": false,
       "order": "0",
       "isRequired": false
+    },
+    {
+      "category": "FEE",
+      "service": "DISP_FIXED_ASSET.LAND",
+      "name": "Land Fee",
+      "code": "DISP_FIXED_ASSET_LAND_FEE",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "TAX",
+      "service": "DISP_FIXED_ASSET.LAND",
+      "name": "GST",
+      "code": "DISP_FIXED_ASSET_LAND_GST",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "TAX",
+      "service": "DISP_FIXED_ASSET.LAND",
+      "name": "Rebate",
+      "code": "DISP_FIXED_ASSET_LAND_REBATE",
+      "isDebit": true,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "FEE",
+      "service": "DISP_FIXED_ASSET.BUILDING",
+      "name": "Buidling Fee",
+      "code": "DISP_FIXED_ASSET_BUILDING_FEE",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "TAX",
+      "service": "DISP_FIXED_ASSET.BUILDING",
+      "name": "GST",
+      "code": "DISP_FIXED_ASSET_BUILDING_GST",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "TAX",
+      "service": "DISP_FIXED_ASSET.BUILDING",
+      "name": "Rebate",
+      "code": "DISP_FIXED_ASSET_BUILDING_REBATE",
+      "isDebit": true,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "FEE",
+      "service": "DISP_FIXED_ASSET.MOTOR_VEHICLE",
+      "name": "Vehicle Fee",
+      "code": "DISP_FIXED_ASSET_VEHICLE_FEE",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "TAX",
+      "service": "DISP_FIXED_ASSET.MOTOR_VEHICLE",
+      "name": "GST",
+      "code": "DISP_FIXED_ASSET_VEHICLE_GST",
+      "isDebit": false,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
+    },
+    {
+      "category": "TAX",
+      "service": "DISP_FIXED_ASSET.MOTOR_VEHICLE",
+      "name": "Rebate",
+      "code": "DISP_FIXED_ASSET_VEHICLE_REBATE",
+      "isDebit": true,
+      "isActualDemand": false,
+      "order": "0",
+      "isRequired": false
     }
   ]
 }

@@ -968,6 +968,42 @@
       "isVoucherCreationEnabled": true,
       "isActive": true,
       "type": "Finance"
+    },
+    {
+      "businessService": "Disposal of Fixed Asset.Land",
+      "code": "DISP_FIXED_ASSET.LAND",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true,
+      "type": "Finance"
+    },
+    {
+      "businessService": "Disposal of Fixed Asset.Building",
+      "code": "DISP_FIXED_ASSET.BUILDING",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true,
+      "type": "Finance"
+    },
+    {
+      "businessService": "Disposal of Fixed Asset.Motor Vehicle",
+      "code": "DISP_FIXED_ASSET.MOTOR_VEHICLE",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true,
+      "type": "Finance"
     }
   ]
 }
