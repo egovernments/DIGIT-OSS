@@ -14647,6 +14647,21 @@
       "serviceCode": "msea-event-notification",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1833,
+      "name": "ULBInformation",
+      "url": "url",
+      "displayName": "ULB Information",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "msea-event-notification",
+      "code": "null",
+      "path": "ULBInformation",
+      "navigationURL": "notifications",
+      "leftIcon": "action:description",
+      "rightIcon": ""
     }
   ]
 }
