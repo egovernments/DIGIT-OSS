@@ -12,7 +12,7 @@
     },
     {
       "code": "SYSTEMGENERATED",
-      "active": false
+      "active": true
     },
     {
       "code": "OTHERS",
