@@ -1,0 +1,21 @@
+{
+  "tenantId": "pb",
+  "moduleName": "mseva",
+  "EventCategories": [
+    {
+      "code": "PUBLICHEALTH",
+      "eventType":"EVENTSONGROUND",
+      "active": true
+    },
+    {
+      "code": "CULTURAL",
+      "eventType":"EVENTSONGROUND",
+      "active": true
+    },
+    {
+      "code": "WARDCOMMITTEEMEETING",
+      "eventType":"EVENTSONGROUND",
+      "active": true
+    }
+  ]
+}
