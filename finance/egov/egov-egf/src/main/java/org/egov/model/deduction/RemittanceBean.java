@@ -82,6 +82,7 @@ public class RemittanceBean implements Predicate {
     private Integer detailKeyid;
     private BigDecimal partialAmount;
     private Integer remittance_gl_dtlId;
+    private Integer remittance_gl_Id;
     private String fromDate;
     private Date fromVhDate;
     private String departmentId;
@@ -302,5 +303,15 @@ public class RemittanceBean implements Predicate {
     public void setBankAccountId(final Long bankAccountId) {
         this.bankAccountId = bankAccountId;
     }
+
+    public Integer getRemittance_gl_Id() {
+        return remittance_gl_Id;
+    }
+
+    public void setRemittance_gl_Id(Integer remittance_gl_Id) {
+        this.remittance_gl_Id = remittance_gl_Id;
+    }
+    
+    
 
 }

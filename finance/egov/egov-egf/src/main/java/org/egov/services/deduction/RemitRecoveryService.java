@@ -61,17 +61,20 @@ import java.util.Locale;
 import org.apache.log4j.Logger;
 import org.egov.commons.CVoucherHeader;
 import org.egov.commons.utils.EntityType;
+import org.egov.dao.recoveries.TdsHibernateDAO;
 import org.egov.dao.voucher.VoucherHibernateDAO;
 import org.egov.egf.model.AutoRemittanceBeanReport;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.model.deduction.RemittanceBean;
+import org.egov.model.recoveries.Recovery;
 import org.egov.utils.Constants;
 import org.egov.utils.VoucherHelper;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author manoranjan
@@ -85,6 +88,8 @@ public class RemitRecoveryService {
     private static final SimpleDateFormat DDMMYYYY = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
     private static final SimpleDateFormat YYYYMMDD = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
     private VoucherHibernateDAO voucherHibDAO;
+    @Autowired
+    private TdsHibernateDAO tdsHibernateDAO;
 
     public List<RemittanceBean> getPendingRecoveryDetails(final RemittanceBean remittanceBean,
             final CVoucherHeader voucherHeader,
@@ -167,6 +172,61 @@ public class RemitRecoveryService {
             LOGGER.debug("RemitRecoveryService | getRecoveryDetails | End");
         return listRemitBean;
     }
+    
+    public boolean isNonControlledCodeTds(RemittanceBean remittanceBean){
+        Recovery recovery = tdsHibernateDAO.findById(remittanceBean.getRecoveryId(), false);
+        final String query = "from CChartOfAccountDetail where glCodeId.id="+recovery.getChartofaccounts().getId();
+        Query pst = persistenceService.getSession().createQuery(query);
+        return pst.list().isEmpty();
+    }
+    
+    public List<RemittanceBean> getRecoveryDetailsForNonControlledCode(final RemittanceBean remittanceBean, final CVoucherHeader voucherHeader){
+            final List<RemittanceBean> listRemitBean = new ArrayList<>();
+            StringBuilder query2 = new StringBuilder();
+            final StringBuilder dateQry = new StringBuilder();
+            if (remittanceBean.getFromVhDate() != null && voucherHeader.getVoucherDate() != null)
+                dateQry.append(" and vh.VOUCHERDATE >='" + Constants.DDMMYYYYFORMAT1.format(remittanceBean.getFromVhDate())
+                        + "' and vh.VOUCHERDATE <='" + Constants.DDMMYYYYFORMAT1.format(voucherHeader.getVoucherDate()) + "' ");
+            else
+                dateQry.append(" and vh.VOUCHERDATE <='" + Constants.DDMMYYYYFORMAT1.format(voucherHeader.getVoucherDate()) + "' ");
+            query2.append("SELECT vh.NAME,  vh.VOUCHERNUMBER,  vh.VOUCHERDATE, egr.glamt, egr.ID, ");
+            query2.append("(select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end from EG_REMITTANCE_GL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh where vh.status!=4 and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id and egr1.glid=egd.generalledgerid  and egr1.id=egr.id) As col_7_0 , ");
+            query2.append("mis.departmentcode,mis.functionid  ");
+            query2.append("FROM VOUCHERHEADER vh,  VOUCHERMIS mis,  GENERALLEDGER gl,  EG_REMITTANCE_GL egr,  TDS recovery5_ ");
+            query2.append("WHERE recovery5_.GLCODEID  =gl.GLCODEID AND gl.id=egr.glid and ");
+            query2.append("vh.ID =gl.VOUCHERHEADERID AND mis.VOUCHERHEADERID  =vh.ID AND ");
+            query2.append("vh.STATUS =0 AND vh.FUNDID =");
+            query2.append(voucherHeader.getFundId().getId());
+            query2.append(" AND egr.glamt- (select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end from EG_REMITTANCE_GL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh where vh.status not in (1,2,4) and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id and egr1.glid=egd.generalledgerid and egr1.id=egr.id) <>0 AND ");
+            query2.append("recovery5_.ID  = ");
+            query2.append(remittanceBean.getRecoveryId());
+            query2.append(" AND (egr.TDSID = ");
+            query2.append(remittanceBean.getRecoveryId());
+            query2.append(" OR egr.TDSID  IS NULL) ");
+            query2.append(dateQry);
+            query2.append(getMisSQlQuery(voucherHeader));
+            query2.append(" ORDER BY vh.VOUCHERNUMBER,  vh.VOUCHERDATE");
+            populateNonConrolledTdsDataBySQL(voucherHeader, listRemitBean, query2);
+            return listRemitBean;
+    }
+    
+    public List<RemittanceBean> getRecoveryDetailsForNonControlledCode(final String selectedRows){
+        final List<RemittanceBean> listRemitBean = new ArrayList<>();
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT vh.NAME,  vh.VOUCHERNUMBER,  vh.VOUCHERDATE, egr.glamt, egr.ID, ");
+        query.append("(select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end from EG_REMITTANCE_GL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh where vh.status!=4 and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id and egr1.glid=egd.generalledgerid  and egr1.id=egr.id) As col_7_0 , ");
+        query.append("mis.departmentcode,mis.functionid  ");
+        query.append("FROM VOUCHERHEADER vh,  VOUCHERMIS mis,  GENERALLEDGER gl,  EG_REMITTANCE_GL egr,  TDS recovery5_ ");
+        query.append("WHERE recovery5_.GLCODEID  =gl.GLCODEID AND gl.id=egr.glid and ");
+        query.append("vh.ID =gl.VOUCHERHEADERID AND mis.VOUCHERHEADERID  =vh.ID AND ");
+        query.append("vh.STATUS =0 AND egr.id in ( ");
+        query.append(selectedRows);
+        query.append(" ) and recovery5_.isactive=true");
+        query.append(" AND egr.glamt- (select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end from EG_REMITTANCE_GL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh where vh.status not in (1,2,4) and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id and egr1.glid=egd.generalledgerid and egr1.id=egr.id) <>0 ");
+        query.append("ORDER BY vh.VOUCHERNUMBER,  vh.VOUCHERDATE");
+        populateNonConrolledTdsDataBySQL(null, listRemitBean, query);
+        return listRemitBean;
+}
 
     public StringBuilder getRecoveryListForSelectedBank(final RemittanceBean remittanceBean, final CVoucherHeader voucherHeader,
             final StringBuilder dateQuery) {
@@ -398,6 +458,61 @@ public class RemitRecoveryService {
             remitBean.setDetailTypeId(Integer.valueOf(element[4].toString()));
             remitBean.setDetailKeyid(Integer.valueOf(element[5].toString()));
             remitBean.setRemittance_gl_dtlId(Integer.valueOf(element[6].toString()));
+            listRemitBean.add(remitBean);
+        }
+    }
+    
+    private void populateNonConrolledTdsDataBySQL(final CVoucherHeader voucherHeader, final List<RemittanceBean> listRemitBean,
+            final StringBuilder query) {
+        RemittanceBean remitBean;
+        final SQLQuery searchSQLQuery = persistenceService.getSession().createSQLQuery(query.toString());
+        final List<Object[]> list = searchSQLQuery.list();
+        for (final Object[] element : list) {
+            remitBean = new RemittanceBean();
+            remitBean.setVoucherName(element[0].toString());
+            remitBean.setVoucherNumber(element[1].toString());
+            try {
+                remitBean.setVoucherDate(DDMMYYYY.format(YYYYMMDD.parse(element[2].toString())));
+            } catch (final ParseException e) {
+                LOGGER.error("Exception Occured while Parsing instrument date" + e.getMessage());
+            }
+            remitBean.setDeductionAmount(BigDecimal.valueOf(Double.parseDouble(element[3].toString())));
+            if (element[5] != null)
+                remitBean.setEarlierPayment(BigDecimal.valueOf(Double.parseDouble(element[5].toString())));
+            else
+                remitBean.setEarlierPayment(BigDecimal.ZERO);
+            if (remitBean.getEarlierPayment() != null && remitBean.getEarlierPayment().compareTo(BigDecimal.ZERO) != 0)
+                remitBean.setAmount(remitBean.getDeductionAmount().subtract(remitBean.getEarlierPayment()));
+            else
+                remitBean.setAmount(remitBean.getDeductionAmount());
+            remitBean.setDepartmentId(element[6].toString());
+            if(element[7]!=null)
+                remitBean.setFunctionId(Long.valueOf(element[7].toString()));
+//            final EntityType entity = voucherHibDAO.getEntityInfo(Integer.valueOf(element[5].toString()),
+//                    Integer.valueOf(element[4].toString()));
+//            if (entity == null) {
+//                LOGGER.error("Entity Might have been deleted........................");
+//                LOGGER.error("The detail key " + Integer.valueOf(element[5].toString()) + " of detail type "
+//                        + Integer.valueOf(element[4].toString())
+//                        + "Missing in voucher" + remitBean.getVoucherNumber());
+//                throw new ValidationException(Arrays.asList(new ValidationError("Entity information not available for voucher "
+//                        + remitBean.getVoucherNumber(), "Entity information not available for voucher "
+//                                + remitBean.getVoucherNumber())));
+//            }
+            // Exception here
+            if (voucherHeader == null){
+                if (remitBean.getEarlierPayment() != null && remitBean.getEarlierPayment().compareTo(BigDecimal.ZERO) != 0)
+                    remitBean.setPartialAmount(remitBean.getDeductionAmount().subtract(remitBean.getEarlierPayment()));
+                else{
+                    remitBean.setPartialAmount(remitBean.getDeductionAmount());
+                }
+            }
+//            remitBean.setPartyCode(entity.getCode());
+//            remitBean.setPartyName(entity.getName());
+//            remitBean.setPanNo(entity.getPanno());
+//            remitBean.setDetailTypeId(Integer.valueOf(element[4].toString()));
+//            remitBean.setDetailKeyid(Integer.valueOf(element[5].toString()));
+            remitBean.setRemittance_gl_Id(Integer.valueOf(element[4].toString()));
             listRemitBean.add(remitBean);
         }
     }
