@@ -75,12 +75,12 @@
 					</div>
 					<div class="form-group">
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.accountDetailType" /> <span class="mandatory1">*</span></label>
+								code="lbl.accountDetailType" /></label>
 						<div class="col-sm-3 add-margin">
 							<form:select path="egPartytype.id" id="egPartytype"
-								required="required" cssClass="form-control mandatory"
+								cssClass="form-control mandatory"
 								cssErrorClass="form-control error">
-								<form:option value="">
+								<form:option value="0">
 									<spring:message code="lbl.select" />
 								</form:option>
 								<form:options items="${egPartytypes}" itemValue="id"
@@ -91,7 +91,7 @@
 						<label class="col-sm-2 control-label text-right"><spring:message
 								code="lbl.chartofaccounts" /> <span class="mandatory1">*</span></label>
 						<div class="col-sm-3 add-margin">
-							<form:select path="chartofaccounts.id" id="chartofaccounts"
+							<form:select path="chartofaccounts.id" id="chartofaccounts" listKey='chartofaccounts.glcode' listValue='chartofaccounts.glcode'
 								required="required" cssClass="form-control mandatory"
 								cssErrorClass="form-control error">
 								<form:option value="">
@@ -99,7 +99,7 @@
 								</form:option>
 								<c:forEach var="chartOfAccounts" items="${chartOfAccountss}">
 									<option value="${chartOfAccounts.id}">
-										${chartOfAccounts.glcode} - ${chartOfAccounts.name}</option>
+										${chartOfAccounts.glcode}-${chartOfAccounts.name}</option>
 								</c:forEach>
 							</form:select>
 							<form:errors path="chartofaccounts" cssClass="error-msg" />

@@ -214,6 +214,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
     @Autowired
     private BankHibernateDAO bankHibernateDAO;
     private Boolean isPartialPaymentEnabled = false;
+    private boolean isNonControlledCodeTds = false;
     
     public BigDecimal getBalance() {
         return balance;
@@ -280,7 +281,12 @@ public class RemitRecoveryAction extends BasePaymentAction {
         listRemitBean = new ArrayList<RemittanceBean>();
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("RemitRecoveryAction | Search | Start");
-        listRemitBean = remitRecoveryService.getRecoveryDetails(remittanceBean, voucherHeader);
+        if(remitRecoveryService.isNonControlledCodeTds(remittanceBean)){
+            isNonControlledCodeTds = true;
+            listRemitBean = remitRecoveryService.getRecoveryDetailsForNonControlledCode(remittanceBean, voucherHeader);
+        }else{
+            listRemitBean = remitRecoveryService.getRecoveryDetails(remittanceBean, voucherHeader);
+        }
         if (listRemitBean == null || listRemitBean.isEmpty())
             listRemitBean = new ArrayList<RemittanceBean>();
         else {
@@ -339,7 +345,12 @@ public class RemitRecoveryAction extends BasePaymentAction {
     }
 
     private void prepareListRemitBean(final String selectedRows) {
-        listRemitBean = remitRecoveryService.getRecoveryDetails(selectedRows);
+        if(remitRecoveryService.isNonControlledCodeTds(remittanceBean)){
+            isNonControlledCodeTds = true;
+            listRemitBean = remitRecoveryService.getRecoveryDetailsForNonControlledCode(selectedRows);
+        }else{
+            listRemitBean = remitRecoveryService.getRecoveryDetails(selectedRows);
+        }
         this.setPartialPayment("deduction");
         if (listRemitBean == null)
             listRemitBean = new ArrayList<RemittanceBean>();
@@ -1087,6 +1098,13 @@ public class RemitRecoveryAction extends BasePaymentAction {
     public void setSelectedPartialDeductionRows(String selectedPartialDeductionRows) {
         this.selectedPartialDeductionRows = selectedPartialDeductionRows;
     }
-    
 
+    public boolean getIsNonControlledCodeTds() {
+        return isNonControlledCodeTds;
+    }
+
+    public void setNonControlledCodeTds(boolean isNonControlledCodeTds) {
+        this.isNonControlledCodeTds = isNonControlledCodeTds;
+    }
+    
 }

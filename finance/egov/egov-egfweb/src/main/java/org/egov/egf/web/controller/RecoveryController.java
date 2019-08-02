@@ -110,7 +110,7 @@ public class RecoveryController {
 	private AccountdetailtypeService accountdetailtypeService;
 
 	private void prepareNewForm(Model model) {
-		model.addAttribute("chartOfAccountss", Collections.EMPTY_LIST);
+		model.addAttribute("chartOfAccountss", chartOfAccountsDAO.getNonControlledGlcode());
 		model.addAttribute("chartOfAccounts", chartOfAccountsDAO.getForRecovery());
 		model.addAttribute("egPartytypes", egPartyTypeService.findAll());
 		model.addAttribute("banks", bankService.findAll());
@@ -170,7 +170,9 @@ public class RecoveryController {
 		else
 			recovery.setBank(null);
 		recovery.setChartofaccounts(chartOfAccountsService.findById(recovery.getChartofaccounts().getId(), false));
-		recovery.setEgPartytype(egPartyTypeService.findById(recovery.getEgPartytype().getId(), false));
+		if(recovery.getEgPartytype() != null){
+		    recovery.setEgPartytype(egPartyTypeService.findById(recovery.getEgPartytype().getId(), false));
+		}
 		recoveryService.update(recovery);
 		redirectAttrs.addFlashAttribute("message", messageSource.getMessage("msg.recovery.success", null, null));
 		return "redirect:/recovery/result/" + recovery.getId()+"/update";
@@ -216,8 +218,13 @@ public class RecoveryController {
 
 	@RequestMapping(value = "/ajax/getAccountCodes", method = RequestMethod.GET)
 	public @ResponseBody List<CChartOfAccounts> getAccountCodes(@RequestParam("subLedgerCode") String subLedgerCode) {
-		List<CChartOfAccounts> accounts = chartOfAccountsDAO.getBySubLedgerCode(subLedgerCode);
-		return accounts;
+	    List<CChartOfAccounts> accounts = null;
+	    if(subLedgerCode.equalsIgnoreCase("Select")){
+	        accounts = chartOfAccountsDAO.getNonControlledGlcode();
+	    }else{
+	        accounts = chartOfAccountsDAO.getBySubLedgerCode(subLedgerCode);
+	    }
+	    return accounts;
 	}
 
 	public Object toSearchResultJson(final Object object) {
