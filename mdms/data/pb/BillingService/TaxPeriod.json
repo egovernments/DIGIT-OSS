@@ -244,75 +244,27 @@
     },
     {
       "fromDate": 1554076801000,
-      "toDate": 1585699199000,
+      "toDate": 1648771199000,
       "periodCycle": "ANNUAL",
       "service": "DISP_FIXED_ASSET.LAND",
       "code": "DFALAN2019",
-      "financialYear": "2019-20"
-    },
-    {
-      "fromDate": 1585699201000,
-      "toDate": 1617235199000,
-      "periodCycle": "ANNUAL",
-      "service": "DISP_FIXED_ASSET.LAND",
-      "code": "DFALAN2020",
-      "financialYear": "2020-21"
-    },
-    {
-      "fromDate": 1617235201000,
-      "toDate": 1648771199000,
-      "periodCycle": "ANNUAL",
-      "service": "DISP_FIXED_ASSET.LAND",
-      "code": "DFALAN2021",
-      "financialYear": "2021-22"
+      "financialYear": "2019-22"
     },
     {
       "fromDate": 1554076801000,
-      "toDate": 1585699199000,
-      "periodCycle": "ANNUAL",
+      "toDate": 1648771199000,
+      "periodCycle": "FINANCIAL",
       "service": "DISP_FIXED_ASSET.BUILDING",
       "code": "DFABAN2019",
-      "financialYear": "2019-20"
-    },
-    {
-      "fromDate": 1585699201000,
-      "toDate": 1617235199000,
-      "periodCycle": "ANNUAL",
-      "service": "DISP_FIXED_ASSET.BUILDING",
-      "code": "DFABAN2020",
-      "financialYear": "2020-21"
-    },
-    {
-      "fromDate": 1617235201000,
-      "toDate": 1648771199000,
-      "periodCycle": "ANNUAL",
-      "service": "DISP_FIXED_ASSET.BUILDING",
-      "code": "DFABAN2021",
-      "financialYear": "2021-22"
+      "financialYear": "2019-22"
     },
     {
       "fromDate": 1554076801000,
-      "toDate": 1585699199000,
-      "periodCycle": "ANNUAL",
-      "service": "DISP_FIXED_ASSET.MOTOR_VEHICLE",
-      "code": "DFABMVAN2019",
-      "financialYear": "2019-20"
-    },
-    {
-      "fromDate": 1585699201000,
-      "toDate": 1617235199000,
-      "periodCycle": "ANNUAL",
-      "service": "DISP_FIXED_ASSET.MOTOR_VEHICLE",
-      "code": "DFABMVAN2020",
-      "financialYear": "2020-21"
-    },
-    {
-      "fromDate": 1617235201000,
       "toDate": 1648771199000,
       "periodCycle": "ANNUAL",
       "service": "DISP_FIXED_ASSET.MOTOR_VEHICLE",
       "code": "DFABMVAN2021",
-      "financialYear": "2021-22"
+      "financialYear": "2019-22"
     }
   ]
 }
