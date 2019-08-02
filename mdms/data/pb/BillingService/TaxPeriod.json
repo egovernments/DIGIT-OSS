@@ -243,28 +243,28 @@
       "financialYear": "2021-22"
     },
     {
-      "fromDate": 1554076801000,
-      "toDate": 1648771199000,
-      "periodCycle": "ANNUAL",
+      "fromDate": 1522540801000,
+      "toDate": 1838159999000,
+      "periodCycle": "FORTENYEARS",
       "service": "DISP_FIXED_ASSET.LAND",
-      "code": "DFALAN2019",
-      "financialYear": "2019-22"
+      "code": "DFAL10YRS2018",
+      "financialYear": "2018-28"
     },
     {
-      "fromDate": 1554076801000,
-      "toDate": 1648771199000,
-      "periodCycle": "FINANCIAL",
+      "fromDate": 1522540801000,
+      "toDate": 1838159999000,
+      "periodCycle": "FORTENYEARS",
       "service": "DISP_FIXED_ASSET.BUILDING",
-      "code": "DFABAN2019",
-      "financialYear": "2019-22"
+      "code": "DFAB10YRS2018",
+      "financialYear": "2018-28"
     },
     {
-      "fromDate": 1554076801000,
-      "toDate": 1648771199000,
-      "periodCycle": "ANNUAL",
+      "fromDate": 1522540801000,
+      "toDate": 1838159999000,
+      "periodCycle": "FORTENYEARS",
       "service": "DISP_FIXED_ASSET.MOTOR_VEHICLE",
-      "code": "DFABMVAN2021",
-      "financialYear": "2019-22"
+      "code": "DFAMV10YRS2018",
+      "financialYear": "2018-28"
     }
   ]
 }
