@@ -137,12 +137,12 @@
 				<tr>
 					<jsp:include page="../voucher/voucher-filter.jsp" />
 				</tr>
-				<tr>
+				<!-- tr>
 					<td style="width: 5%"></td>
 					<td class="greybox"><s:text name="voucher.source" /></td>
 					<td class="greybox"><s:select name="moduleId" id="moduleId"
 							list="sourceMap" headerKey="-1" headerValue="----Choose----" /></td>
-				</tr>
+				</tr>  -->
 				<s:hidden name="mode" value="%{mode}" id="mode" />
 			</table>
 			<br />
