@@ -98,6 +98,7 @@ import org.egov.services.payment.MiscbilldetailService;
 import org.egov.services.payment.PaymentService;
 import org.egov.utils.FinancialConstants;
 import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -352,34 +353,35 @@ public class PaymentActionHelper {
         final Date currDate = new Date();
         for (final RemittanceBean rbean : listRemitBean)
         {
-            if(rbean.getRemittance_gl_dtlId() != null){
+            if (rbean.getRemittance_gl_dtlId() != null) {
                 final EgRemittanceGldtl remittancegldtl = (EgRemittanceGldtl) persistenceService.find(
                         "from EgRemittanceGldtl where id=?",
                         rbean.getRemittance_gl_dtlId());
                 remittancegldtl.setRemittedamt(rbean.getPartialAmount());
                 persistenceService.persist(remittancegldtl);
-                
+
                 remitDetail = new EgRemittanceDetail();
                 remitDetail.setEgRemittance(remit);
                 remitDetail.setEgRemittanceGldtl(remittancegldtl);
                 remitDetail.setRemittedamt(rbean.getPartialAmount());
                 remitDetail.setLastmodifieddate(currDate);
                 egRemittanceDetail.add(remitDetail);
-            }else if(rbean.getRemittance_gl_Id() != null){
-                final EgRemittanceGl remittancegl = (EgRemittanceGl) persistenceService.find(
-                        "from EgRemittanceGl where id=?",
-                        rbean.getRemittance_gl_Id());
-                remittancegl.setRemittedamt(rbean.getPartialAmount());
-                persistenceService.persist(remittancegl);
-                
-                remitDetail = new EgRemittanceDetail();
-                remitDetail.setEgRemittance(remit);
-                remitDetail.setGeneralLedger(remittancegl.getGlid());
-                remitDetail.setRemittedamt(rbean.getPartialAmount());
-                remitDetail.setLastmodifieddate(currDate);
-                egRemittanceDetail.add(remitDetail);
+            } else if (rbean.getRemittance_gl_Id() != null) {
+                SQLQuery createSQLQuery = persistenceService.getSession()
+                        .createSQLQuery("select * from eg_remittance_gl where id=" + rbean.getRemittance_gl_Id());
+                List<EgRemittanceGl> list = createSQLQuery.addEntity(EgRemittanceGl.class).list();
+                if (!list.isEmpty()) {
+                    EgRemittanceGl remittancegl = list.get(0);
+                    remittancegl.setRemittedamt(rbean.getPartialAmount());
+                    persistenceService.persist(remittancegl);
+                    remitDetail = new EgRemittanceDetail();
+                    remitDetail.setEgRemittance(remit);
+                    remitDetail.setGeneralLedger(remittancegl.getGlid());
+                    remitDetail.setRemittedamt(rbean.getPartialAmount());
+                    remitDetail.setLastmodifieddate(currDate);
+                    egRemittanceDetail.add(remitDetail);
+                }
             }
-
         }
         remit.setEgRemittanceDetail(egRemittanceDetail);
         persistenceService.persist(remit);

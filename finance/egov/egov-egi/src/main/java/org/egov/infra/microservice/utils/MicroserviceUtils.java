@@ -1418,8 +1418,7 @@ public class MicroserviceUtils {
     }
     
     public Object getMdmsData(List<ModuleDetail> moduleDetails,boolean isStateLevel){
-//        String mdmsUrl = this.hostUrl + this.mdmsSearchUrl;
-        String mdmsUrl = "http://jalandhar.lgpunjab.com:8094/egov-mdms-service-test/v1/_search";
+        String mdmsUrl = this.hostUrl + this.mdmsSearchUrl;
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(getUserToken());
         MdmsCriteria mdmscriteria = new MdmsCriteria();

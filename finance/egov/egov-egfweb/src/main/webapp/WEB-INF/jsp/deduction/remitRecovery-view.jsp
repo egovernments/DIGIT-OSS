@@ -340,7 +340,7 @@ function printVoucher(){
 
 																			<table align="center" id="totalAmtTable">
 																				<tr>
-																					<td width="800"></td>
+																					<td width="80%"></td>
 																					<td>Total Amount</td>
 																					<td><s:textfield
 																							name="remittanceBean.totalAmount"
