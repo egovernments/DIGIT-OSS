@@ -241,6 +241,31 @@
       "service": "REV_GRANTS",
       "code": "REVGRAN2021",
       "financialYear": "2021-22"
+    },
+    {
+      "fromDate": 1522540801000,
+      "toDate": 1838159999000,
+      "periodCycle": "FORTENYEARS",
+      "service": "DISP_FIXED_ASSET.LAND",
+      "code": "DFAL10YRS2018",
+      "financialYear": "2018-28"
+    },
+    {
+      "fromDate": 1522540801000,
+      "toDate": 1838159999000,
+      "periodCycle": "FORTENYEARS",
+      "service": "DISP_FIXED_ASSET.BUILDING",
+      "code": "DFAB10YRS2018",
+      "financialYear": "2018-28"
+    },
+    {
+      "fromDate": 1522540801000,
+      "toDate": 1838159999000,
+      "periodCycle": "FORTENYEARS",
+      "service": "DISP_FIXED_ASSET.MOTOR_VEHICLE",
+      "code": "DFAMV10YRS2018",
+      "financialYear": "2018-28"
+
     }
   ]
 }
