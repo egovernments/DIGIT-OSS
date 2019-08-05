@@ -100,7 +100,7 @@ function exportPdf(){
 		<input type="hidden" name="id" value='<s:property value="id"/>' />
 		<div id="buttons" class="buttonbottom">
 			<input type="button" id="btnPrint"
-				onclick="javascript:parent.report.print();" value="Print"
+				onclick="window.print();" value="Print"
 				class="button" /> <input type="button" id="printPDF"
 				onclick="return exportPdf();" value="Save as PDF" class="button" />
 			<input type="button" id="printXLS" onclick="return exportXls();"
