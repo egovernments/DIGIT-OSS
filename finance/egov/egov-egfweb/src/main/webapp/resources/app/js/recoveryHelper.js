@@ -131,11 +131,13 @@ $('#egPartytype').change(
 
 		function() {
 			console.log("inside function");
+			var selectedType = $('#egPartytype').find('option:selected').text().trim();
+			console.log("selected party type : ",selectedType);
 			$.ajax({
 				method : "GET",
 				url : "ajax/getAccountCodes",
 				data : {
-					subLedgerCode : $('#egPartytype').find('option:selected').text()
+					subLedgerCode : selectedType
 				},
 				async : true
 			}).done(

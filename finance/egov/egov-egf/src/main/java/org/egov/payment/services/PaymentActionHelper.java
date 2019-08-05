@@ -69,6 +69,7 @@ import org.egov.commons.CVoucherHeader;
 import org.egov.commons.dao.FinancialYearHibernateDAO;
 import org.egov.deduction.model.EgRemittance;
 import org.egov.deduction.model.EgRemittanceDetail;
+import org.egov.deduction.model.EgRemittanceGl;
 import org.egov.deduction.model.EgRemittanceGldtl;
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.service.AssignmentService;
@@ -97,6 +98,7 @@ import org.egov.services.payment.MiscbilldetailService;
 import org.egov.services.payment.PaymentService;
 import org.egov.utils.FinancialConstants;
 import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -232,22 +234,23 @@ public class PaymentActionHelper {
         for (final RemittanceBean rbean : listRemitBean)
         {
             detailTypeId = rbean.getDetailTypeId();
-            if (detailTypeList.contains(detailTypeId))
-            {
-                if (detailTypesMap.get(detailTypeId).contains(rbean.getDetailKeyid()))
-                    continue;
+            if(detailTypeId != null){
+                if (detailTypeList.contains(detailTypeId))
+                {
+                    if (detailTypesMap.get(detailTypeId).contains(rbean.getDetailKeyid()))
+                        continue;
+                    else
+                        detailTypesMap.get(detailTypeId).add(rbean.getDetailKeyid());
+
+                }
                 else
+                {
+                    detailTypeList.add(detailTypeId);
+                    detailTypesMap.put(detailTypeId, new ArrayList<Integer>());
                     detailTypesMap.get(detailTypeId).add(rbean.getDetailKeyid());
 
+                }
             }
-            else
-            {
-                detailTypeList.add(detailTypeId);
-                detailTypesMap.put(detailTypeId, new ArrayList<Integer>());
-                detailTypesMap.get(detailTypeId).add(rbean.getDetailKeyid());
-
-            }
-
         }
         final Set<Entry<Integer, List<Integer>>> entrySet = detailTypesMap.entrySet();
         final List<RemittanceBean> tempRemitBean = listRemitBean;
@@ -350,19 +353,35 @@ public class PaymentActionHelper {
         final Date currDate = new Date();
         for (final RemittanceBean rbean : listRemitBean)
         {
-            final EgRemittanceGldtl remittancegldtl = (EgRemittanceGldtl) persistenceService.find(
-                    "from EgRemittanceGldtl where id=?",
-                    rbean.getRemittance_gl_dtlId());
-            remittancegldtl.setRemittedamt(rbean.getPartialAmount());
-            persistenceService.persist(remittancegldtl);
+            if (rbean.getRemittance_gl_dtlId() != null) {
+                final EgRemittanceGldtl remittancegldtl = (EgRemittanceGldtl) persistenceService.find(
+                        "from EgRemittanceGldtl where id=?",
+                        rbean.getRemittance_gl_dtlId());
+                remittancegldtl.setRemittedamt(rbean.getPartialAmount());
+                persistenceService.persist(remittancegldtl);
 
-            remitDetail = new EgRemittanceDetail();
-            remitDetail.setEgRemittance(remit);
-            remitDetail.setEgRemittanceGldtl(remittancegldtl);
-            remitDetail.setRemittedamt(rbean.getPartialAmount());
-            remitDetail.setLastmodifieddate(currDate);
-            egRemittanceDetail.add(remitDetail);
-
+                remitDetail = new EgRemittanceDetail();
+                remitDetail.setEgRemittance(remit);
+                remitDetail.setEgRemittanceGldtl(remittancegldtl);
+                remitDetail.setRemittedamt(rbean.getPartialAmount());
+                remitDetail.setLastmodifieddate(currDate);
+                egRemittanceDetail.add(remitDetail);
+            } else if (rbean.getRemittance_gl_Id() != null) {
+                SQLQuery createSQLQuery = persistenceService.getSession()
+                        .createSQLQuery("select * from eg_remittance_gl where id=" + rbean.getRemittance_gl_Id());
+                List<EgRemittanceGl> list = createSQLQuery.addEntity(EgRemittanceGl.class).list();
+                if (!list.isEmpty()) {
+                    EgRemittanceGl remittancegl = list.get(0);
+                    remittancegl.setRemittedamt(rbean.getPartialAmount());
+                    persistenceService.persist(remittancegl);
+                    remitDetail = new EgRemittanceDetail();
+                    remitDetail.setEgRemittance(remit);
+                    remitDetail.setGeneralLedger(remittancegl.getGlid());
+                    remitDetail.setRemittedamt(rbean.getPartialAmount());
+                    remitDetail.setLastmodifieddate(currDate);
+                    egRemittanceDetail.add(remitDetail);
+                }
+            }
         }
         remit.setEgRemittanceDetail(egRemittanceDetail);
         persistenceService.persist(remit);

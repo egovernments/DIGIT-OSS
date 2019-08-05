@@ -54,22 +54,30 @@
 	var totalAmount = 0;
 	var recoveryDetailColumns;
 	var populateRecoveryDetails = function() {
+		var partyNameBasedOnTdsType = {key:"partyName",label:'<s:text name="remit.party.name"/>', formatter:createLabelLarge(RECOVERYLIST,".partyNameLable")};
+		var partyCodeBasedOnTdsType = {key:"partyCode",label:'<s:text name="remit.party.code"/>', formatter:createLabelLarge(RECOVERYLIST,".partyCodeLable")};
+		<s:if test="%{isNonControlledCodeTds}">
+			partyNameBasedOnTdsType = {key:"partyName",hidden:true,label:'<s:text name="remit.party.name"/>', formatter:createLabelLarge(RECOVERYLIST,".partyNameLable")};
+			partyCodeBasedOnTdsType = {key:"partyCode",hidden:true,label:'<s:text name="remit.party.code"/>', formatter:createLabelLarge(RECOVERYLIST,".partyCodeLable")};
+		</s:if>
 		<s:if test="%{isPartialPaymentEnabled}">
 		recoveryDetailColumns = [ 
-		             			
+		             	
 		                     	{key:"serialNo",label:'Sl no',width:50,formatter:createLabelSamll(RECOVERYLIST,".serialNo")},				
 		                     	{key:"voucherNumber",label:'<s:text name="remit.ref.number"/>', formatter:createLabelLarge(RECOVERYLIST,".voucherNumberLabel")}, 
 		                     	{key:"voucherDate",label:'<s:text name="remit.date"/>', formatter:createLabelMed(RECOVERYLIST,".voucherDateLabel")},
 		                     	{key:"voucherName",label:'<s:text name="remit.nature.deduction"/>', formatter:createLabelLarge(RECOVERYLIST,".voucherNameLable")},
-		                     	{key:"partyName",label:'<s:text name="remit.party.name"/>', formatter:createLabelLarge(RECOVERYLIST,".partyNameLable")},
-		                     	{key:"partyCode",label:'<s:text name="remit.party.code"/>', formatter:createLabelLarge(RECOVERYLIST,".partyCodeLable")},
+		                     	partyNameBasedOnTdsType,partyCodeBasedOnTdsType,
+		                     	/* {key:"partyName",label:'<s:text name="remit.party.name"/>', formatter:createLabelLarge(RECOVERYLIST,".partyNameLable")},
+		                     	{key:"partyCode",label:'<s:text name="remit.party.code"/>', formatter:createLabelLarge(RECOVERYLIST,".partyCodeLable")},*/
 		                     	/* {key:"panNo",label:'<s:text name="remit.party.panno"/>', formatter:createLabelMed(RECOVERYLIST,".panNoLable")}, */
 		                     	{key:"deductionAmount",label:'<s:text name="remit.deduction.amount"/>', formatter:createLabelMed(RECOVERYLIST,".deductionAmountLable")},
 		                     	{key:"earlierPayment",label:'<s:text name="remit.earlier.payment"/>', formatter:createLabelMed(RECOVERYLIST,".earlierPaymentLable")},
 		                     	{key:"amount",label:'<s:text name="remit.amount"/>',formatter:createAmount(RECOVERYLIST,".amountLable")},
 		                     	{key:"amount",hidden:true,formatter:createDivFormatter(RECOVERYLIST,".amount")},
 		                     	{key:"chkremit",label:'Select', formatter:createcheckbox(RECOVERYLIST,".chkremit")},
-		                     	{key:"remittance_gl_dtlId",hidden:true, formatter:createDivFormatter(RECOVERYLIST,".remittance_gl_dtlId")}
+		                     	{key:"remittance_gl_dtlId",hidden:true, formatter:createDivFormatter(RECOVERYLIST,".remittance_gl_dtlId")},
+		                     	{key:"remittance_gl_Id",hidden:true, formatter:createDivFormatter(RECOVERYLIST,".remittance_gl_Id")}
 		                     	];
 		</s:if>
 		<s:else>
@@ -79,8 +87,9 @@
 		                     	{key:"voucherNumber",label:'<s:text name="remit.ref.number"/>', formatter:createLabelLarge(RECOVERYLIST,".voucherNumberLabel")}, 
 		                     	{key:"voucherDate",label:'<s:text name="remit.date"/>', formatter:createLabelMed(RECOVERYLIST,".voucherDateLabel")},
 		                     	{key:"voucherName",label:'<s:text name="remit.nature.deduction"/>', formatter:createLabelLarge(RECOVERYLIST,".voucherNameLable")},
-		                     	{key:"partyName",label:'<s:text name="remit.party.name"/>', formatter:createLabelLarge(RECOVERYLIST,".partyNameLable")},
-		                     	{key:"partyCode",label:'<s:text name="remit.party.code"/>', formatter:createLabelLarge(RECOVERYLIST,".partyCodeLable")},
+		                     	partyNameBasedOnTdsType,partyCodeBasedOnTdsType,
+		                     	/*{key:"partyName",label:'<s:text name="remit.party.name"/>', formatter:createLabelLarge(RECOVERYLIST,".partyNameLable")},
+		                     	{key:"partyCode",label:'<s:text name="remit.party.code"/>', formatter:createLabelLarge(RECOVERYLIST,".partyCodeLable")},*/
 		                     	/* {key:"panNo",label:'<s:text name="remit.party.panno"/>', formatter:createLabelMed(RECOVERYLIST,".panNoLable")}, */
 		                     	/* {key:"deductionAmount",label:'<s:text name="remit.deduction.amount"/>', formatter:createLabelMed(RECOVERYLIST,".deductionAmountLable")}, */
 		                     	/*TO-DO make it conf*/
@@ -88,7 +97,8 @@
 		                     	{key:"amount",label:'<s:text name="remit.amount"/>',formatter:createAmount(RECOVERYLIST,".amountLable")},
 		                     	{key:"amount",hidden:true,formatter:createDivFormatter(RECOVERYLIST,".amount")},
 		                     	{key:"chkremit",label:'Select', formatter:createcheckbox(RECOVERYLIST,".chkremit")},
-		                     	{key:"remittance_gl_dtlId",hidden:true, formatter:createDivFormatter(RECOVERYLIST,".remittance_gl_dtlId")}
+		                     	{key:"remittance_gl_dtlId",hidden:true, formatter:createDivFormatter(RECOVERYLIST,".remittance_gl_dtlId")},
+		                     	{key:"remittance_gl_Id",hidden:true, formatter:createDivFormatter(RECOVERYLIST,".remittance_gl_Id")}
 		                     	];
 		</s:else>
 	 var recoveryDetailDS = new YAHOO.util.DataSource(); 
@@ -101,7 +111,7 @@
 		updateLabel('voucherNumberLabel',index,'<s:property value="voucherNumber"/>');                           
 		updateLabel('voucherDateLabel',index,'<s:property value="voucherDate"/>');
 		updateLabel('voucherNameLable',index,'<s:property value="voucherName"/>');
-		updateLabel('partyNameLable',index,"<s:property value="partyName"/>");
+		updateLabel('partyNameLable',index,'<s:property value="partyName"/>');
 		updateLabel('partyCodeLable',index,'<s:property value="partyCode"/>');
 		//updateLabel('panNoLable',index,'<s:property value="panNo"/>');
 		updateLabel('deductionAmountLable',index,'<s:text name="format.number" ><s:param value="%{deductionAmount}"/></s:text>');
@@ -109,6 +119,7 @@
 		updateFieldValue('amountLable',index,'<s:text name="format.number" ><s:param value="%{amount}"/></s:text>');
 		updateDivValue('amount',index,'<s:property value="amount"/>');
 		updateDivValue('remittance_gl_dtlId',index,'<s:property value="remittance_gl_dtlId"/>');
+		updateDivValue('remittance_gl_Id',index,'<s:property value="remittance_gl_Id"/>');
 		recoveryTableIndex = recoveryTableIndex +1;
 		</s:iterator>
 	}
@@ -178,11 +189,16 @@ function updateDivValue(field,index,value){
 		document.getElementById(RECOVERYLIST+'['+index+'].'+field).innerHTML =value;
 }
 function resetSelectedRows(){
+		var isNonControlledCodeTds = document.getElementById('isNonControlledCodeTds').value;
 	   selectedRows = new Array();
 		for(var index=0;index<recoveryTableIndex;index++){
 			var obj = document.getElementById('listRemitBean['+index+'].chkremit');
 			if(obj.checked == true){
-				selectedRows.push(document.getElementById('listRemitBean['+index+'].remittance_gl_dtlId').innerHTML);
+				if(isNonControlledCodeTds == 'true'){
+					selectedRows.push(document.getElementById('listRemitBean['+index+'].remittance_gl_Id').innerHTML);
+				}else{
+					selectedRows.push(document.getElementById('listRemitBean['+index+'].remittance_gl_dtlId').innerHTML);					
+				}
 			}
 		}
 		document.getElementById('selectedRows').value = selectedRows;

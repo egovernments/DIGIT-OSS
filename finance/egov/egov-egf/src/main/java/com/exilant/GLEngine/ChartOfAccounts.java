@@ -79,6 +79,7 @@ import org.egov.commons.dao.FinancialYearHibernateDAO;
 import org.egov.commons.service.ChartOfAccountDetailService;
 import org.egov.dao.budget.BudgetDetailsHibernateDAO;
 import org.egov.dao.recoveries.TdsHibernateDAO;
+import org.egov.deduction.model.EgRemittanceGl;
 import org.egov.deduction.model.EgRemittanceGldtl;
 import org.egov.infra.cache.impl.ApplicationCacheManager;
 import org.egov.infra.exception.ApplicationRuntimeException;
@@ -140,6 +141,10 @@ public class ChartOfAccounts {
 	@Autowired
 	@Qualifier("persistenceService")
 	private PersistenceService<EgRemittanceGldtl, Long> remitanceDetPersistenceService;
+	
+	@Autowired
+        @Qualifier("persistenceService")
+        private PersistenceService<EgRemittanceGl, Long> remitanceNonDirectCodePersistenceService;
 
 	@Autowired
 	@Qualifier("chartOfAccountDetailService")
@@ -762,6 +767,8 @@ public class ChartOfAccounts {
 					// LOGGER.info("inside the postin gl function before insert
 					// ----");
 					generalLedgerPersistenceService.persist(gLedger);
+					//populating the data related to non controlled remitted code
+					populateDataForNonControlledRemittedCode(gLedger);
 				} catch (final Exception e) {
 					LOGGER.error("error in the gl++++++++++" + e, e);
 					return false;
@@ -836,7 +843,29 @@ public class ChartOfAccounts {
 		return true;
 	}
 
-	private boolean updateInGL(final Transaxtion txnList[], final DataCollection dc)
+	/**
+	 * 
+	 * @param gLedger
+	 * @throws TaskFailedException
+	 * Method which is used to store the data in eg_remitted_gl table related to non controlled recovery(TDS)
+	 */
+    private void populateDataForNonControlledRemittedCode(CGeneralLedger gLedger) throws TaskFailedException {
+        Long glCode = gLedger.getGlcodeId().getId();
+        final String query = "from CChartOfAccountDetail where glCodeId.id=" + glCode;
+        Query pst = persistenceService.getSession().createQuery(query);
+        // If it is not the controlled code And if it the recovery code and credit amount must be greater than zero
+        if (pst.list().isEmpty() && validRecoveryGlcode(String.valueOf(glCode)) && gLedger.getCreditAmount() > 0) {
+            EgRemittanceGl egRemitGl = new EgRemittanceGl();
+            egRemitGl.setGlid(gLedger);
+            egRemitGl.setGlamt(new BigDecimal(gLedger.getCreditAmount()));
+            Recovery tdsentry = tdsHibernateDAO.findActiveTdsByGlcodeId(glCode);
+            egRemitGl.setRecovery(tdsentry);
+            egRemitGl.setLastmodifieddate(new Date());
+            remitanceNonDirectCodePersistenceService.persist(egRemitGl);
+        }
+    }
+
+    private boolean updateInGL(final Transaxtion txnList[], final DataCollection dc)
 			throws TaskFailedException, ParseException, SQLException {
 		List<Object[]> resultset;
 		CGeneralLedger gLedger = null;

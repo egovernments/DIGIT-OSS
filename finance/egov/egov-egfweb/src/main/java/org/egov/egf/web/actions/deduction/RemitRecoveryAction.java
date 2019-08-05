@@ -214,6 +214,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
     @Autowired
     private BankHibernateDAO bankHibernateDAO;
     private Boolean isPartialPaymentEnabled = false;
+    private boolean isNonControlledCodeTds = false;
     
     public BigDecimal getBalance() {
         return balance;
@@ -254,6 +255,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
         addDropdownData("recoveryList", listRecovery);
         addDropdownData("accNumList", Collections.EMPTY_LIST);
         modeOfCollectionMap.put("cash", getText("cash.consolidated.cheque"));
+        this.setPartialPayment("deduction");
     }
 
     @Override
@@ -280,14 +282,18 @@ public class RemitRecoveryAction extends BasePaymentAction {
         listRemitBean = new ArrayList<RemittanceBean>();
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("RemitRecoveryAction | Search | Start");
-        listRemitBean = remitRecoveryService.getRecoveryDetails(remittanceBean, voucherHeader);
+        if(remitRecoveryService.isNonControlledCodeTds(remittanceBean)){
+            isNonControlledCodeTds = true;
+            listRemitBean = remitRecoveryService.getRecoveryDetailsForNonControlledCode(remittanceBean, voucherHeader);
+        }else{
+            listRemitBean = remitRecoveryService.getRecoveryDetails(remittanceBean, voucherHeader);
+        }
         if (listRemitBean == null || listRemitBean.isEmpty())
             listRemitBean = new ArrayList<RemittanceBean>();
         else {
             departmentId = listRemitBean.get(0).getDepartmentId();
             functionId = listRemitBean.get(0).getFunctionId();
         }
-        this.setPartialPayment("deduction");
         return NEW;
     }
 
@@ -339,8 +345,12 @@ public class RemitRecoveryAction extends BasePaymentAction {
     }
 
     private void prepareListRemitBean(final String selectedRows) {
-        listRemitBean = remitRecoveryService.getRecoveryDetails(selectedRows);
-        this.setPartialPayment("deduction");
+        if(remitRecoveryService.isNonControlledCodeTds(remittanceBean)){
+            isNonControlledCodeTds = true;
+            listRemitBean = remitRecoveryService.getRecoveryDetailsForNonControlledCode(selectedRows);
+        }else{
+            listRemitBean = remitRecoveryService.getRecoveryDetails(selectedRows);
+        }
         if (listRemitBean == null)
             listRemitBean = new ArrayList<RemittanceBean>();
 
@@ -411,7 +421,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
             }
             List<RemittanceBean> tempListBean = new ArrayList<>();
             for(RemittanceBean rb : listRemitBean){
-                rb.setPartialAmount(recovIdPartialAmtMap.get(rb.getRemittance_gl_dtlId()));
+                rb.setPartialAmount(recovIdPartialAmtMap.get(!isNonControlledCodeTds ? rb.getRemittance_gl_dtlId() : rb.getRemittance_gl_Id()));
                 tempListBean.add(rb);
             }
             listRemitBean.clear();
@@ -729,6 +739,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
                     rbean.setVoucherName(remitDtl.getEgRemittanceGldtl().getGeneralledgerdetail().getGeneralLedgerId()
                             .getVoucherHeaderId().getName());
                 } else if (remitDtl.getGeneralLedger().getVoucherHeaderId() != null) {
+                    isNonControlledCodeTds = true;
                     rbean.setVoucherDate(sdf.format(remitDtl.getGeneralLedger().getVoucherHeaderId().getVoucherDate()));
                     rbean.setVoucherNumber(remitDtl.getGeneralLedger().getVoucherHeaderId().getVoucherNumber());
                     rbean.setVoucherName(remitDtl.getGeneralLedger().getVoucherHeaderId().getName());
@@ -1087,6 +1098,13 @@ public class RemitRecoveryAction extends BasePaymentAction {
     public void setSelectedPartialDeductionRows(String selectedPartialDeductionRows) {
         this.selectedPartialDeductionRows = selectedPartialDeductionRows;
     }
-    
 
+    public boolean getIsNonControlledCodeTds() {
+        return isNonControlledCodeTds;
+    }
+
+    public void setNonControlledCodeTds(boolean isNonControlledCodeTds) {
+        this.isNonControlledCodeTds = isNonControlledCodeTds;
+    }
+    
 }

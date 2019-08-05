@@ -122,6 +122,7 @@
 
 			</table>
 			<jsp:include page="remitRecovery-form.jsp" />
+			<s:hidden type="hidden" id="isNonControlledCodeTds" name="isNonControlledCodeTds" />
 			<label style="text-align: right;"></label>
 
 			<div class="buttonbottom" style="padding-bottom: 10px;">

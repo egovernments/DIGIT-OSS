@@ -109,6 +109,8 @@ public interface ChartOfAccountsDAO {
             String string, Long classification);
 
     public List<CChartOfAccounts> getBySubLedgerCode(String subLedgerCode);
+    
+    public List<CChartOfAccounts> getNonControlledGlcode();
 
     public List<CChartOfAccounts> getForRecovery();
 

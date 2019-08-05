@@ -58,6 +58,12 @@
 	
 	var populateRecoveryDetailsForPayment = function() {
 		var recoveryDetailColumnsNew;
+		var partyNameBasedOnTdsType = {key:"partyName",label:'<s:text name="remit.party.name"/>', formatter:createLabelLarge(RECOVERYLIST,".partyNameLable")};
+		var partyCodeBasedOnTdsType = {key:"partyCode",label:'<s:text name="remit.party.code"/>', formatter:createLabelLarge(RECOVERYLIST,".partyCodeLable")};
+		<s:if test="%{isNonControlledCodeTds}">
+			partyNameBasedOnTdsType = {key:"partyName",hidden:true,label:'<s:text name="remit.party.name"/>', formatter:createLabelLarge(RECOVERYLIST,".partyNameLable")};
+			partyCodeBasedOnTdsType = {key:"partyCode",hidden:true,label:'<s:text name="remit.party.code"/>', formatter:createLabelLarge(RECOVERYLIST,".partyCodeLable")};
+		</s:if>
 		<s:if test="%{isPartialPaymentEnabled}">
 		recoveryDetailColumnsNew = [ 
 		                        	{key:"serialNo",label:'Sl no',formatter:createLabelSamll(RECOVERYLIST,".serialNo")},				
@@ -65,18 +71,20 @@
 		                        	{key:"voucherNumber",hidden:true,formatter:createHiddenField(RECOVERYLIST,".voucherNumber","hidden")}, 
 		                        	{key:"voucherDate",label:'<s:text name="remit.date"/>', formatter:createLabelMed(RECOVERYLIST,".voucherDateLabel")},
 		                        	{key:"voucherDate",hidden:true,formatter:createHiddenField(RECOVERYLIST,".voucherDate","hidden")}, 
-		                        	{key:"voucherName",label:'<s:text name="remit.nature.deduction"/>', formatter:createLabelLarge(RECOVERYLIST,".voucherNameLable")},
 		                        	{key:"voucherName",hidden:true,formatter:createHiddenField(RECOVERYLIST,".voucherName","hidden")}, 
-		                        	{key:"partyName",label:'<s:text name="remit.party.name"/>', formatter:createLabelLarge(RECOVERYLIST,".partyNameLable")},
-		                        	{key:"partyName",hidden:true,formatter:createHiddenField(RECOVERYLIST,".partyName","hidden")}, 
-		                        	{key:"partyCode",label:'<s:text name="remit.party.code"/>', formatter:createLabelLarge(RECOVERYLIST,".partyCodeLable")},
-		                        	{key:"partyCode",hidden:true,formatter:createHiddenField(RECOVERYLIST,".partyCode","hidden")}, 
+		                        	{key:"voucherName",label:'<s:text name="remit.nature.deduction"/>', formatter:createLabelLarge(RECOVERYLIST,".voucherNameLable")},
+		                        	/*{key:"partyName",label:'<s:text name="remit.party.name"/>', formatter:createLabelLarge(RECOVERYLIST,".partyNameLable")},*/
+		                        	partyNameBasedOnTdsType,
+		                        	/*{key:"partyCode",label:'<s:text name="remit.party.code"/>', formatter:createLabelLarge(RECOVERYLIST,".partyCodeLable")},*/
+		                        	partyCodeBasedOnTdsType,
 		                        	/* {key:"panNo",label:'<s:text name="remit.party.panno"/>', formatter:createLabelMed(RECOVERYLIST,".panNoLable")}, */
 		                        	{key:"panNo",hidden:true,formatter:createHiddenField(RECOVERYLIST,".panNo","hidden")},       
+		                        	{key:"deductionAmount",label:'<s:text name="remit.deduction.amount"/>', formatter:createLabelMed(RECOVERYLIST,".deductionAmount")},
+		                        	{key:"partyName",hidden:true,formatter:createHiddenField(RECOVERYLIST,".partyName","hidden")}, 
+		                        	{key:"earlierPayment",label:'<s:text name="remit.earlier.payment"/>', formatter:createLabelMed(RECOVERYLIST,".earlierPayment")},
+		                        	{key:"partyCode",hidden:true,formatter:createHiddenField(RECOVERYLIST,".partyCode","hidden")}, 
 		                        	{key:"detailTypeId",hidden:true,formatter:createHiddenField(RECOVERYLIST,".detailTypeId","hidden")},
 		                        	{key:"detailKeyid",hidden:true,formatter:createHiddenField(RECOVERYLIST,".detailKeyid","hidden")},
-		                        	{key:"deductionAmount",label:'<s:text name="remit.deduction.amount"/>', formatter:createLabelMed(RECOVERYLIST,".deductionAmount")},
-		                        	{key:"earlierPayment",label:'<s:text name="remit.earlier.payment"/>', formatter:createLabelMed(RECOVERYLIST,".earlierPayment")},
 		                        	{key:"chkremit",label:'Amount', formatter:createAmount(RECOVERYLIST,".partialAmount")},
 		                        	{key:"remittance_gl_dtlId",hidden:true, formatter:createTextFieldFormatter1(RECOVERYLIST,".remittance_gl_dtlId","hidden")},
 		                        	{key:"remittanceId",hidden:true, formatter:createTextFieldFormatter1(RECOVERYLIST,".remittanceId","hidden")},
@@ -89,12 +97,12 @@
 		                        	{key:"voucherNumber",hidden:true,formatter:createHiddenField(RECOVERYLIST,".voucherNumber","hidden")}, 
 		                        	{key:"voucherDate",label:'<s:text name="remit.date"/>', formatter:createLabelMed(RECOVERYLIST,".voucherDateLabel")},
 		                        	{key:"voucherDate",hidden:true,formatter:createHiddenField(RECOVERYLIST,".voucherDate","hidden")}, 
-		                        	{key:"voucherName",label:'<s:text name="remit.nature.deduction"/>', formatter:createLabelLarge(RECOVERYLIST,".voucherNameLable")},
 		                        	{key:"voucherName",hidden:true,formatter:createHiddenField(RECOVERYLIST,".voucherName","hidden")}, 
-		                        	{key:"partyName",label:'<s:text name="remit.party.name"/>', formatter:createLabelLarge(RECOVERYLIST,".partyNameLable")},
-		                        	{key:"partyName",hidden:true,formatter:createHiddenField(RECOVERYLIST,".partyName","hidden")}, 
-		                        	{key:"partyCode",label:'<s:text name="remit.party.code"/>', formatter:createLabelLarge(RECOVERYLIST,".partyCodeLable")},
-		                        	{key:"partyCode",hidden:true,formatter:createHiddenField(RECOVERYLIST,".partyCode","hidden")}, 
+		                        	{key:"voucherName",label:'<s:text name="remit.nature.deduction"/>', formatter:createLabelLarge(RECOVERYLIST,".voucherNameLable")},
+		                        	/*{key:"partyName",label:'<s:text name="remit.party.name"/>', formatter:createLabelLarge(RECOVERYLIST,".partyNameLable")},*/
+		                        	partyNameBasedOnTdsType,
+		                        	/*{key:"partyCode",label:'<s:text name="remit.party.code"/>', formatter:createLabelLarge(RECOVERYLIST,".partyCodeLable")},*/
+		                        	partyCodeBasedOnTdsType,
 		                        	/* {key:"panNo",label:'<s:text name="remit.party.panno"/>', formatter:createLabelMed(RECOVERYLIST,".panNoLable")}, */
 		                        	{key:"panNo",hidden:true,formatter:createHiddenField(RECOVERYLIST,".panNo","hidden")},       
 		                        	{key:"detailTypeId",hidden:true,formatter:createHiddenField(RECOVERYLIST,".detailTypeId","hidden")},
@@ -102,6 +110,8 @@
 		                        	/* {key:"deductionAmount",label:'<s:text name="remit.deduction.amount"/>', formatter:createLabelMed(RECOVERYLIST,".deductionAmount")}, */
 		                        	/* {key:"earlierPayment",label:'<s:text name="remit.earlier.payment"/>', formatter:createLabelMed(RECOVERYLIST,".earlierPayment")}, */
 		                        	{key:"chkremit",label:'Amount', formatter:createAmount(RECOVERYLIST,".partialAmount")},
+		                        	{key:"partyName",hidden:true,formatter:createHiddenField(RECOVERYLIST,".partyName","hidden")}, 
+		                        	{key:"partyCode",hidden:true,formatter:createHiddenField(RECOVERYLIST,".partyCode","hidden")}, 
 		                        	{key:"remittance_gl_dtlId",hidden:true, formatter:createTextFieldFormatter1(RECOVERYLIST,".remittance_gl_dtlId","hidden")},
 		                        	{key:"remittanceId",hidden:true, formatter:createTextFieldFormatter1(RECOVERYLIST,".remittanceId","hidden")}
 		                        	];
