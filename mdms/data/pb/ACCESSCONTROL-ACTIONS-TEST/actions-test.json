@@ -14662,6 +14662,29 @@
       "navigationURL": "notifications",
       "leftIcon": "action:description",
       "rightIcon": ""
+    },
+    {
+      "id": 1834,
+      "name": "Pdf Generator create",
+      "url": "/pdf/_create",
+      "displayName": "Pdf Generator create",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "pdf-generator-create",
+      "code": "null",
+      "path": ""
+    },
+    
+    {
+      "id": 1835,
+      "name": "Pdf Generator search",
+      "url": "/pdf/_search",
+      "displayName": "Pdf Generator search",
+      "orderNumber": 2,
+      "enabled": false,
+      "serviceCode": "pdf-generator-search",
+      "code": "null",
+      "path": ""
     }
   ]
 }
