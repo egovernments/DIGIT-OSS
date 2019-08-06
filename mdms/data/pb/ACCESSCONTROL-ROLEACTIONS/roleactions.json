@@ -18445,6 +18445,18 @@
       "actionid": 1833,
       "actioncode": "",
       "tenantId": "pb"
+    },
+        {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1834,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+        {
+      "rolecode": "SUPERUSER",
+      "actionid": 1834,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
