@@ -72,8 +72,8 @@ import static org.egov.eis.entity.DrawingOfficer.SEQ_DRAWINGOFFICER;
 public class DrawingOfficer extends AbstractAuditable implements EntityType {
     public static final String SEQ_DRAWINGOFFICER = "SEQ_EG_DRAWINGOFFICER";
     private static final long serialVersionUID = 1678672850806848215L;
-    String accountNumber;
-    String tan;
+    private String accountNumber;
+    private String tan;
     @Id
     @GeneratedValue(generator = SEQ_DRAWINGOFFICER, strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -155,6 +155,7 @@ public class DrawingOfficer extends AbstractAuditable implements EntityType {
 
     @Override
     public String getBankname() {
+        // TODO : Need to find the alternate way to get IFSC code. for now i am passing the branch code.
         return bank != null ? bank.getName() : null;
     }
 
@@ -175,7 +176,7 @@ public class DrawingOfficer extends AbstractAuditable implements EntityType {
 
     @Override
     public String getIfsccode() {
-        return null;
+        return bankBranch != null ? bankBranch.getBranchcode() : null;
     }
 
     @Override
