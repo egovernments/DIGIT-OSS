@@ -155,7 +155,6 @@ public class DrawingOfficer extends AbstractAuditable implements EntityType {
 
     @Override
     public String getBankname() {
-        // TODO : Need to find the alternate way to get IFSC code. for now i am passing the branch code.
         return bank != null ? bank.getName() : null;
     }
 
@@ -176,6 +175,7 @@ public class DrawingOfficer extends AbstractAuditable implements EntityType {
 
     @Override
     public String getIfsccode() {
+     // TODO : Need to find the alternate way to get IFSC code. for now i am passing the branch code.
         return bankBranch != null ? bankBranch.getBranchcode() : null;
     }
 
