@@ -155,22 +155,22 @@ public class DrawingOfficer extends AbstractAuditable implements EntityType {
 
     @Override
     public String getBankname() {
-        return null;
+        return bank != null ? bank.getName() : null;
     }
 
     @Override
     public String getBankaccount() {
-        return null;
+        return accountNumber;
     }
 
     @Override
     public String getPanno() {
-        return null;
+        return tan;
     }
 
     @Override
     public String getTinno() {
-        return null;
+        return tan;
     }
 
     @Override
