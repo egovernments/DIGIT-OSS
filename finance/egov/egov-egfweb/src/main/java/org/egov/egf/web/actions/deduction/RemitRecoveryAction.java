@@ -215,6 +215,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
     private BankHibernateDAO bankHibernateDAO;
     private Boolean isPartialPaymentEnabled = false;
     private boolean isNonControlledCodeTds = false;
+    private String defaultPaymentMode = null;
     
     public BigDecimal getBalance() {
         return balance;
@@ -254,8 +255,10 @@ public class RemitRecoveryAction extends BasePaymentAction {
         addDropdownData("branchList", Collections.EMPTY_LIST);
         addDropdownData("recoveryList", listRecovery);
         addDropdownData("accNumList", Collections.EMPTY_LIST);
-        modeOfCollectionMap.put("cash", getText("cash.consolidated.cheque"));
+        modeOfCollectionMap.put(FinancialConstants.MODEOFPAYMENT_CHEQUE, getText("cash.consolidated.cheque"));
+        modeOfCollectionMap.put(FinancialConstants.MODEOFPAYMENT_RTGS, "RTGS");
         this.setPartialPayment("deduction");
+        setDefaultPaymentMode(FinancialConstants.MODEOFPAYMENT_CHEQUE);
     }
 
     @Override
@@ -305,46 +308,63 @@ public class RemitRecoveryAction extends BasePaymentAction {
     @ValidationErrorPage(value = "new")
     @Action(value = "/deduction/remitRecovery-remit")
     public String remit() {
+        try{
+            prepareListRemitBean(selectedRows);
+            final List<AppConfigValues> cutOffDateconfigValue = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
+                    "DataEntryCutOffDate");
+            if (cutOffDateconfigValue != null && !cutOffDateconfigValue.isEmpty())
+                try {
+                    date = df.parse(cutOffDateconfigValue.get(0).getValue());
+                    setCutOffDate(formatter.format(date));
+                } catch (final ParseException e) {
 
-        prepareListRemitBean(selectedRows);
-        final List<AppConfigValues> cutOffDateconfigValue = appConfigValuesService.getConfigValuesByModuleAndKey("EGF",
-                "DataEntryCutOffDate");
-        if (cutOffDateconfigValue != null && !cutOffDateconfigValue.isEmpty())
-            try {
-                date = df.parse(cutOffDateconfigValue.get(0).getValue());
-                setCutOffDate(formatter.format(date));
-            } catch (final ParseException e) {
-
+                }
+            voucherHeader.setType(FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
+            if (voucherHeader.getVouchermis().getDepartmentcode() == null) {
+                voucherHeader.getVouchermis().setDepartmentcode(departmentId.toString());
             }
-        voucherHeader.setType(FinancialConstants.STANDARD_VOUCHER_TYPE_PAYMENT);
-        if (voucherHeader.getVouchermis().getDepartmentcode() == null) {
-            voucherHeader.getVouchermis().setDepartmentcode(departmentId.toString());
+            if (voucherHeader.getVouchermis().getFunction() == null && functionId!=null) {
+                final CFunction function = functionService.findOne(functionId);
+                voucherHeader.getVouchermis().setFunction(function);
+            }
+            if (LOGGER.isDebugEnabled())
+                LOGGER.debug("RemitRecoveryAction | remit | start");
+            if (LOGGER.isDebugEnabled())
+                LOGGER.debug("RemitRecoveryAction | remit | size before filter" + listRemitBean.size());
+            final Recovery recov = (Recovery) persistenceService.find("from Recovery where id=?",
+                    remittanceBean.getRecoveryId());
+            if (recov != null)
+                remittedTo = recov.getRemitted();
+            for (final RemittanceBean rbean : listRemitBean)
+                rbean.setPartialAmount(rbean.getAmount());
+            if (LOGGER.isDebugEnabled())
+                LOGGER.debug("RemitRecoveryAction | remit | size after filter" + listRemitBean.size());
+            setModeOfPayment(FinancialConstants.MODEOFPAYMENT_CASH);
+            if (LOGGER.isDebugEnabled())
+                LOGGER.debug("RemitRecoveryAction | remit | end");
+            if (getBankBalanceCheck() == null || "".equals(getBankBalanceCheck()))
+                addActionMessage(getText("payment.bankbalance.controltype"));
+        }catch (final ValidationException e) {
+            search();
+            LOGGER.error(e.getMessage(), e);
+            final List<ValidationError> errors = new ArrayList<ValidationError>();
+            errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
+            throw new ValidationException(errors);
+        } catch (final Exception e) {
+            search();
+            LOGGER.error(e.getMessage());
+            throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
         }
-        if (voucherHeader.getVouchermis().getFunction() == null && functionId!=null) {
-            final CFunction function = functionService.findOne(functionId);
-            voucherHeader.getVouchermis().setFunction(function);
-        }
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("RemitRecoveryAction | remit | start");
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("RemitRecoveryAction | remit | size before filter" + listRemitBean.size());
-        final Recovery recov = (Recovery) persistenceService.find("from Recovery where id=?",
-                remittanceBean.getRecoveryId());
-        if (recov != null)
-            remittedTo = recov.getRemitted();
-        for (final RemittanceBean rbean : listRemitBean)
-            rbean.setPartialAmount(rbean.getAmount());
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("RemitRecoveryAction | remit | size after filter" + listRemitBean.size());
-        setModeOfPayment(FinancialConstants.MODEOFPAYMENT_CASH);
-        if (LOGGER.isDebugEnabled())
-            LOGGER.debug("RemitRecoveryAction | remit | end");
-        if (getBankBalanceCheck() == null || "".equals(getBankBalanceCheck()))
-            addActionMessage(getText("payment.bankbalance.controltype"));
+
+        
         return "remitDetail";
     }
 
     private void prepareListRemitBean(final String selectedRows) {
+        setDefaultPaymentMode(modeOfPayment);
+        if(modeOfPayment.equals(FinancialConstants.MODEOFPAYMENT_RTGS)){
+            remitRecoveryService.validateRtgsForRemittedBean(remittanceBean);
+        }
         if(remitRecoveryService.isNonControlledCodeTds(remittanceBean)){
             isNonControlledCodeTds = true;
             listRemitBean = remitRecoveryService.getRecoveryDetailsForNonControlledCode(selectedRows);
@@ -1105,6 +1125,14 @@ public class RemitRecoveryAction extends BasePaymentAction {
 
     public void setNonControlledCodeTds(boolean isNonControlledCodeTds) {
         this.isNonControlledCodeTds = isNonControlledCodeTds;
+    }
+
+    public String getDefaultPaymentMode() {
+        return defaultPaymentMode;
+    }
+
+    public void setDefaultPaymentMode(String defaultPaymentMode) {
+        this.defaultPaymentMode = defaultPaymentMode;
     }
     
 }

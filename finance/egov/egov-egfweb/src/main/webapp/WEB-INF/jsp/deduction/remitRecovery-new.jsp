@@ -166,6 +166,9 @@
 						<td>Total Amount</td>
 						<td><s:textfield name="remittanceBean.totalAmount" id="totalAmount" style="width:90px;text-align:right" readonly="true" value="0" /></td>
 					</tr>
+					<tr>
+						<td colspan="2" class="modeofpayment"><strong><s:text name="payment.mode"/><span class="mandatory1">*</span></strong><s:radio name="modeOfPayment" list="modeOfCollectionMap" value="defaultPaymentMode"/></td>
+					</tr>
 				</table>
 				<div id ="remitTotal" />
 				<s:hidden type="hidden" id="selectedrRemit" name="remittanceBean.selectedrRemit" />

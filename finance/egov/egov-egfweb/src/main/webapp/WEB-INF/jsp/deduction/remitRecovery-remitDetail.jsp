@@ -416,8 +416,9 @@ else{
 																<tr>
 																	<td class="bluebox">&nbsp;</td>
 																	<td class="bluebox"><s:text name="modeofpayment" />&nbsp;</td>
-																	<td class="bluebox"><s:radio name="modeOfPayment"
-																			id="paymentMode" list="%{modeOfCollectionMap}" /></td>
+																	<td class="bluebox">
+																	<s:radio name="modeOfPayment"
+																			id="paymentMode" list="%{modeOfCollectionMap}" value="defaultPaymentMode"/></td>
 																	<td class="bluebox"><s:text name="remit.party.to" />&nbsp;</td>
 																	<td class="bluebox"><s:textfield name="remittedTo"
 																			id="remittedTo" />&nbsp;</td>

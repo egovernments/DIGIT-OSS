@@ -60,7 +60,7 @@
 			<jsp:param name="heading" value="Remittance Recovery -Approval" />
 		</jsp:include>
 		<div align="center">
-			<span class="mandatory1" style="color: red"> <s:actionmessage />
+			<span class="mandatory1" style="color: green"> <s:actionmessage />
 			</span>
 		</div>
 		<br />

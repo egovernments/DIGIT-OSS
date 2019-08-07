@@ -379,6 +379,7 @@ public class PaymentActionHelper {
                     remitDetail.setGeneralLedger(remittancegl.getGlid());
                     remitDetail.setRemittedamt(rbean.getPartialAmount());
                     remitDetail.setLastmodifieddate(currDate);
+                    remitDetail.setEgRemittanceGl(remittancegl);
                     egRemittanceDetail.add(remitDetail);
                 }
             }

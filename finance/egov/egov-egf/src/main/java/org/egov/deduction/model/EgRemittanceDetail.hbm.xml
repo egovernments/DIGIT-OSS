@@ -63,7 +63,10 @@
         </many-to-one>
         <many-to-one name="egRemittanceGldtl" class="org.egov.deduction.model.EgRemittanceGldtl" fetch="select">
             <column name="REMITTANCEGLDTLID" precision="22" scale="0" />
-        </many-to-one>    
+        </many-to-one> 
+        <many-to-one name="egRemittanceGl" class="org.egov.deduction.model.EgRemittanceGl" fetch="select">
+            <column name="REMITTANCEGLID" precision="22" scale="0" />
+        </many-to-one>   
         <property name="lastmodifieddate" type="date">
             <column name="LASTMODIFIEDDATE" />
         </property>

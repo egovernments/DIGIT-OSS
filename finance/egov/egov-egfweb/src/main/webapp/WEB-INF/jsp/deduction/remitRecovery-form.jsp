@@ -399,7 +399,8 @@ function disableAll()
 							&& document.forms[0].elements[i].name != 'vouchermis.schemeid' && document.forms[0].elements[i].name != 'vouchermis.subschemeid' 
 							&& document.forms[0].elements[i].name != 'fundId'                
 								&& document.forms[0].elements[i].name!='vouchermis.departmentcode' && document.forms[0].elements[i].name!='vouchermis.function'
-									&& document.forms[0].elements[i].name!='departmentId' && document.forms[0].elements[i].name!='functionId'){
+									&& document.forms[0].elements[i].name!='departmentId' && document.forms[0].elements[i].name!='functionId'
+										&& document.forms[0].elements[i].name!='modeOfPayment'){
 						document.forms[frmIndex].elements[i].disabled =true;   
 					}						
 				}	
