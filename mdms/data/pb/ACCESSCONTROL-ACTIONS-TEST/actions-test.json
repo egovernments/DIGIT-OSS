@@ -14685,6 +14685,20 @@
       "serviceCode": "pdf-generator-search",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1836,
+      "name": "remittancertgsassignment",
+      "url": "url",
+      "displayName": "Deductions RTGS Assignment",
+      "orderNumber": 5,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "FinanceDeductions",
+      "navigationURL": "services/EGF/payment/chequeAssignment-beforeRemittanceRtgsSearch.action",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Transactions.Deductions.Deductions RTGS Assignment"
     }
   ]
 }
