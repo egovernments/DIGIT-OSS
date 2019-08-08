@@ -417,8 +417,15 @@ else{
 																	<td class="bluebox">&nbsp;</td>
 																	<td class="bluebox"><s:text name="modeofpayment" />&nbsp;</td>
 																	<td class="bluebox">
-																	<s:radio name="modeOfPayment"
-																			id="paymentMode" list="%{modeOfCollectionMap}" value="defaultPaymentMode"/></td>
+																	<!-- s:radio name="modeOfPayment"
+																			id="paymentMode" list="%{modeOfCollectionMap}" value="defaultPaymentMode"/> -->
+																	<s:iterator value="modeOfCollectionMap" var="mop">
+																	<s:if test="#mop.key eq defaultPaymentMode">
+																		<s:property value="#mop.value"/>
+																		<s:hidden name="modeOfPayment" value="%{defaultPaymentMode}"/>
+																	</s:if>
+																	</s:iterator>
+																	</td>
 																	<td class="bluebox"><s:text name="remit.party.to" />&nbsp;</td>
 																	<td class="bluebox"><s:textfield name="remittedTo"
 																			id="remittedTo" />&nbsp;</td>
