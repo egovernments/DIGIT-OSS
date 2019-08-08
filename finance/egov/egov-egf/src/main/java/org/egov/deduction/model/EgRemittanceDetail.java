@@ -70,6 +70,8 @@ public class EgRemittanceDetail implements java.io.Serializable
     private EgRemittance egRemittance;
 
     private EgRemittanceGldtl egRemittanceGldtl;
+    
+    private EgRemittanceGl egRemittanceGl;
 
     private Date lastmodifieddate;
 
@@ -155,5 +157,14 @@ public class EgRemittanceDetail implements java.io.Serializable
     public void setGeneralLedger(final CGeneralLedger generalLedger) {
         this.generalLedger = generalLedger;
     }
+
+    public EgRemittanceGl getEgRemittanceGl() {
+        return egRemittanceGl;
+    }
+
+    public void setEgRemittanceGl(EgRemittanceGl egRemittanceGl) {
+        this.egRemittanceGl = egRemittanceGl;
+    }
+    
 
 }

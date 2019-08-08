@@ -122,7 +122,7 @@
 				<tr>
 					<egov:ajaxdropdown id="bank_branch" fields="['Text','Value']"
 						dropdownId="bank_branch"
-						url="voucher/common!ajaxLoadBanksWithPayGenAndRTGSNotAssigned.action" />
+						url="voucher/common-ajaxLoadBanksWithPayGenAndRTGSNotAssigned.action" />
 					<td class="greybox"><s:text name="chq.assignment.bank" /></td>
 					<td class="greybox"><s:select name="bank_branch"
 							id="bank_branch" list="bankBranchMap" headerKey="-1"
@@ -130,7 +130,7 @@
 							value="%{bank_branch}" /></td>
 					<egov:ajaxdropdown id="bankaccount" fields="['Text','Value']"
 						dropdownId="bankaccount"
-						url="voucher/common!ajaxLoadBankAccountsWithPayGenAndRTGSNotAssigned.action" />
+						url="voucher/common-ajaxLoadBankAccountsWithPayGenAndRTGSNotAssigned.action" />
 					<td class="greybox"><s:text name="chq.assignment.bankaccount" /></td>
 					<td class="greybox" colspan="2"><s:select name="bankaccount"
 							id="bankaccount" list="dropdownData.bankaccountList" listKey="id"

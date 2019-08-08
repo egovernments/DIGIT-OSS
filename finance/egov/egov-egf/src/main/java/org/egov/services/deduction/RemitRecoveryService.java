@@ -73,6 +73,8 @@ import org.egov.utils.Constants;
 import org.egov.utils.VoucherHelper;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -190,14 +192,14 @@ public class RemitRecoveryService {
             else
                 dateQry.append(" and vh.VOUCHERDATE <='" + Constants.DDMMYYYYFORMAT1.format(voucherHeader.getVoucherDate()) + "' ");
             query2.append("SELECT vh.NAME,  vh.VOUCHERNUMBER,  vh.VOUCHERDATE, egr.glamt, egr.ID, ");
-            query2.append("(select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end from EG_REMITTANCE_GL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh where vh.status!=4 and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id and egr1.glid=egd.generalledgerid  and egr1.id=egr.id) As col_7_0 , ");
+            query2.append("(select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end from EG_REMITTANCE_GL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh where vh.status!=4 and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id and egd.REMITTANCEGLID=egr1.id  and egr1.id=egr.id) As col_7_0 , ");
             query2.append("mis.departmentcode,mis.functionid  ");
             query2.append("FROM VOUCHERHEADER vh,  VOUCHERMIS mis,  GENERALLEDGER gl,  EG_REMITTANCE_GL egr,  TDS recovery5_ ");
             query2.append("WHERE recovery5_.GLCODEID  =gl.GLCODEID AND gl.id=egr.glid and ");
             query2.append("vh.ID =gl.VOUCHERHEADERID AND mis.VOUCHERHEADERID  =vh.ID AND ");
             query2.append("vh.STATUS =0 AND vh.FUNDID =");
             query2.append(voucherHeader.getFundId().getId());
-            query2.append(" AND egr.glamt- (select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end from EG_REMITTANCE_GL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh where vh.status not in (1,2,4) and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id and egr1.glid=egd.generalledgerid and egr1.id=egr.id) <>0 AND ");
+            query2.append(" AND egr.glamt- (select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end from EG_REMITTANCE_GL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh where vh.status not in (1,2,4) and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id and egd.REMITTANCEGLID=egr1.id and egr1.id=egr.id) <>0 AND ");
             query2.append("recovery5_.ID  = ");
             query2.append(remittanceBean.getRecoveryId());
             query2.append(" AND (egr.TDSID = ");
@@ -214,7 +216,7 @@ public class RemitRecoveryService {
         final List<RemittanceBean> listRemitBean = new ArrayList<>();
         StringBuilder query = new StringBuilder();
         query.append("SELECT vh.NAME,  vh.VOUCHERNUMBER,  vh.VOUCHERDATE, egr.glamt, egr.ID, ");
-        query.append("(select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end from EG_REMITTANCE_GL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh where vh.status!=4 and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id and egr1.glid=egd.generalledgerid  and egr1.id=egr.id) As col_7_0 , ");
+        query.append("(select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end from EG_REMITTANCE_GL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh where vh.status!=4 and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id and egd.REMITTANCEGLID=egr1.id and egr1.id=egr.id) As col_7_0 , ");
         query.append("mis.departmentcode,mis.functionid  ");
         query.append("FROM VOUCHERHEADER vh,  VOUCHERMIS mis,  GENERALLEDGER gl,  EG_REMITTANCE_GL egr,  TDS recovery5_ ");
         query.append("WHERE recovery5_.GLCODEID  =gl.GLCODEID AND gl.id=egr.glid and ");
@@ -222,7 +224,7 @@ public class RemitRecoveryService {
         query.append("vh.STATUS =0 AND egr.id in ( ");
         query.append(selectedRows);
         query.append(" ) and recovery5_.isactive=true");
-        query.append(" AND egr.glamt- (select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end from EG_REMITTANCE_GL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh where vh.status not in (1,2,4) and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id and egr1.glid=egd.generalledgerid and egr1.id=egr.id) <>0 ");
+        query.append(" AND egr.glamt- (select  case when sum(egd.remittedamt) is null then 0 else sum(egd.remittedamt) end from EG_REMITTANCE_GL egr1,eg_remittance_detail egd,eg_remittance  eg,voucherheader vh where vh.status not in (1,2,4) and  eg.PAYMENTVHID=vh.id and egd.remittanceid=eg.id and egd.REMITTANCEGLID=egr1.id and egr1.id=egr.id) <>0 ");
         query.append("ORDER BY vh.VOUCHERNUMBER,  vh.VOUCHERDATE");
         populateNonConrolledTdsDataBySQL(null, listRemitBean, query);
         return listRemitBean;
@@ -488,18 +490,6 @@ public class RemitRecoveryService {
             remitBean.setDepartmentId(element[6].toString());
             if(element[7]!=null)
                 remitBean.setFunctionId(Long.valueOf(element[7].toString()));
-//            final EntityType entity = voucherHibDAO.getEntityInfo(Integer.valueOf(element[5].toString()),
-//                    Integer.valueOf(element[4].toString()));
-//            if (entity == null) {
-//                LOGGER.error("Entity Might have been deleted........................");
-//                LOGGER.error("The detail key " + Integer.valueOf(element[5].toString()) + " of detail type "
-//                        + Integer.valueOf(element[4].toString())
-//                        + "Missing in voucher" + remitBean.getVoucherNumber());
-//                throw new ValidationException(Arrays.asList(new ValidationError("Entity information not available for voucher "
-//                        + remitBean.getVoucherNumber(), "Entity information not available for voucher "
-//                                + remitBean.getVoucherNumber())));
-//            }
-            // Exception here
             if (voucherHeader == null){
                 if (remitBean.getEarlierPayment() != null && remitBean.getEarlierPayment().compareTo(BigDecimal.ZERO) != 0)
                     remitBean.setPartialAmount(remitBean.getDeductionAmount().subtract(remitBean.getEarlierPayment()));
@@ -507,11 +497,6 @@ public class RemitRecoveryService {
                     remitBean.setPartialAmount(remitBean.getDeductionAmount());
                 }
             }
-//            remitBean.setPartyCode(entity.getCode());
-//            remitBean.setPartyName(entity.getName());
-//            remitBean.setPanNo(entity.getPanno());
-//            remitBean.setDetailTypeId(Integer.valueOf(element[4].toString()));
-//            remitBean.setDetailKeyid(Integer.valueOf(element[5].toString()));
             remitBean.setRemittance_gl_Id(Integer.valueOf(element[4].toString()));
             listRemitBean.add(remitBean);
         }
@@ -653,5 +638,18 @@ public class RemitRecoveryService {
                     autoRemittanceList.add(autoRemittanceBeannReport);
                 }
         return autoRemittanceList;
+    }
+    
+    public boolean validateRtgsForRemittedBean(RemittanceBean remittedBean){
+        final List<ValidationError> errors = new ArrayList<ValidationError>();
+        Recovery recovery = (Recovery)persistenceService.getSession().createCriteria(Recovery.class).add(Restrictions.idEq(remittedBean.getRecoveryId())).uniqueResult();
+        if(recovery != null){
+            if(recovery.getAccountNumber() == null || recovery.getAccountNumber().isEmpty() || recovery.getIfscCode() == null || recovery.getIfscCode().isEmpty()){
+                errors.add(new ValidationError("RTGS not allowed",
+                        "Bank Account or IFSC code are not mapped with Recovery : " + recovery.getRecoveryName()));
+                throw new ValidationException(errors);
+            }
+        }
+        return true;
     }
 }

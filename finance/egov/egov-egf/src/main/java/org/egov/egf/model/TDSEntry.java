@@ -66,6 +66,7 @@ public class TDSEntry {
     private BigDecimal totalDeduction = BigDecimal.ZERO;
     private BigDecimal totalRemitted = BigDecimal.ZERO;
     private Integer egRemittanceGlDtlId;
+    private Integer egRemittanceGlId;
 
     public Integer getEgRemittanceGlDtlId() {
         return egRemittanceGlDtlId;
@@ -194,4 +195,13 @@ public class TDSEntry {
     public BigDecimal getTotalRemitted() {
         return totalRemitted;
     }
+
+    public Integer getEgRemittanceGlId() {
+        return egRemittanceGlId;
+    }
+
+    public void setEgRemittanceGlId(Integer egRemittanceGlId) {
+        this.egRemittanceGlId = egRemittanceGlId;
+    }
+    
 }
