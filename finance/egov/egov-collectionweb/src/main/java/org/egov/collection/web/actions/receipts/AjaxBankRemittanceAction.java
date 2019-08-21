@@ -291,14 +291,15 @@ public class AjaxBankRemittanceAction extends BaseFormAction {
 
     @Action(value = "/receipts/ajaxBankRemittance-bankAccountByBankBranch")
     public String bankAccountByBankBranch() {
-        if (serviceId != null && !serviceId.isEmpty() && !serviceId.equalsIgnoreCase("-1")) {
-            List<BusinessDetails> bds = microserviceUtils.getBusinessDetailsByCode(serviceId);
-            Fund fund = null;
-            if (bds.get(0).getFund() != null) {
-                fund = fundService.findByCode(bds.get(0).getFund());
-            }
-            fundId = fund != null ? fund.getId() : null;
-        }
+        //TODO : We need to filter out the account based on fund which is mapped to the service
+//        if (serviceId != null && !serviceId.isEmpty() && !serviceId.equalsIgnoreCase("-1")) {
+//            List<BusinessDetails> bds = microserviceUtils.getBusinessDetailsByCode(serviceId);
+//            Fund fund = null;
+//            if (bds.get(0).getFund() != null) {
+//                fund = fundService.findByCode(bds.get(0).getFund());
+//            }
+//            fundId = fund != null ? fund.getId() : null;
+//        }
         bankAccountArrayList = bankaccountHibernateDAO.getBankAccountByBankBranchForReceiptsPayments(branchId, fundId);
         return BANKACCOUNTLIST;
     }

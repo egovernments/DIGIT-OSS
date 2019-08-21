@@ -1482,17 +1482,30 @@ public class MicroserviceUtils {
     
     public String getBusinessServiceNameByCode(String code){
         String serviceName = "";
-        List<ModuleDetail> moduleDetailsList = new ArrayList<>();
         try {
-            this.prepareModuleDetails(moduleDetailsList , "BillingService", "BusinessService", "code", code);
-            Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true), Map.class);
-            if(postForObject != null){
-                serviceName = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.BillingService.BusinessService[0].businessService"),String.class);
+            List<BusinessService> serviceByCodes = this.getBusinessServiceByCodes(code);
+            if(serviceByCodes!=null && !serviceByCodes.isEmpty()){
+                serviceName = serviceByCodes.get(0).getBusinessService();
             }
         } catch (Exception e) {
             LOGGER.error("ERROR occurred while fetching business service details in getBusinessServiceNameByCode method: ",e);
         }
         return serviceName.isEmpty() ? code : serviceName;
+    }
+    
+    public List<BusinessService> getBusinessServiceByCodes(String codes){
+        List<BusinessService> list = null;
+        List<ModuleDetail> moduleDetailsList = new ArrayList<>();
+        try {
+            this.prepareModuleDetails(moduleDetailsList , "BillingService", "BusinessService", "code", codes);
+            Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true), Map.class);
+            if(postForObject != null){
+                return list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.BillingService.BusinessService"),new TypeReference<List<BusinessService>>(){});
+            }
+        } catch (Exception e) {
+            LOGGER.error("ERROR occurred while fetching business service details in getBusinessServiceByCodes method: ",e);
+        }
+        return null;
     }
     
     public List<BusinessService> getBusinessService(String type) {

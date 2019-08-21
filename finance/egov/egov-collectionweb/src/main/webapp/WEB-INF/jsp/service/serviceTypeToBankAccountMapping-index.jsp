@@ -71,6 +71,40 @@
 		});
 	}
 
+	function populateServiceType(selected){
+        var isServiceTypeExist = false;
+        document.getElementById('serviceTable').innerHTML='';
+        if(selected == -1){
+			return;
+        }
+        <s:iterator value="serviceCategoryNames" var="obj">
+        var serTypeKey = '<s:property value="#obj.key"/>';
+        var serTypeValue = '<s:property value="serviceTypeMap[#obj.key]"/>';
+        if(selected == serTypeKey && serTypeValue != ''){
+        	isServiceTypeExist = true;
+        	addServiceTypeDropdown('serviceTable');
+ 			<s:iterator value="serviceTypeMap[#obj.key]" status="stat" var="names">
+ 				var stKey = '<s:property value="#names.key"/>';
+ 				var stValue = '<s:property value="#names.value"/>';
+ 				document.getElementById('serviceDetailsId').options[<s:property value="#stat.index+1"/>]= new Option(stValue,stKey);
+			</s:iterator>
+        }
+		 </s:iterator>
+	}
+	function addServiceTypeDropdown(tableId){
+        var table = document.getElementById(tableId);
+        var row = table.insertRow(0);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        cell1.className='bluebox';
+        cell2.className='bluebox';
+        cell1.innerHTML = '<s:text name="miscreceipt.service" /><span class="mandatory"/>';
+        cell2.innerHTML = '<select name="serviceDetails.code" id="serviceDetailsId"/>';
+		document.getElementById('serviceDetailsId').options.length=0;
+		document.getElementById('serviceDetailsId').options[0]= new Option('--------Choose--------','0');
+	
+	}
+
 	function validate(obj){
 		dom.get('error_area').innerHTML = '';
 		dom.get("error_area").style.display="none";
@@ -121,12 +155,27 @@
 					<tr>
 						<td class="bluebox">&nbsp;</td>
 						<td class="bluebox"><s:text name="service.master.search.category" /></td>
-						<td class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="serviceCategory" id="serviceCategory" cssClass="selectwk" list="dropdownData.serviceCategoryList" listKey="code" listValue="name" value="%{serviceCategory}" onChange="populateService(this.value);" /> 
-							<egov:ajaxdropdown id="service" fields="['Text','Value']" dropdownId="serviceDetailsId" url="receipts/ajaxReceiptCreate-ajaxLoadServiceByCategoryForMisc.action" />
-							
+						<td class="bluebox">
+						<!--<s:select headerKey="-1" headerValue="----Choose----" name="serviceCategory" id="serviceCategory" cssClass="selectwk" list="dropdownData.serviceCategoryList" listKey="code" listValue="name" value="%{serviceCategory}" onChange="populateService(this.value);" />-->
+						<s:select headerKey="-1" headerValue="----Choose----" name="serviceCategory" id="serviceCategoryid" cssClass="selectwk" list="serviceCategoryNames" value="%{serviceCategory}" onChange="populateServiceType(this.value);" /> 
+							<!--<egov:ajaxdropdown id="service" fields="['Text','Value']" dropdownId="serviceDetailsId" url="receipts/ajaxReceiptCreate-ajaxLoadServiceByCategoryForMisc.action" />-->
 						</td>
-						<td class="bluebox"><s:text name="service.master.servicetype" /> </td>
-						<td class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="serviceDetails.code" id="serviceDetailsId" cssClass="selectwk" list="dropdownData.serviceDetailsList" listKey="code" listValue="name" value="%{serviceDetails.code}" /></td>
+						<td colspan="2">
+						<table width="100%" id='serviceTable'>
+						</table>
+						</td>
+							<script type="text/javascript">
+							console.log(document.getElementById("serviceCategoryid").value);
+							if(document.getElementById("serviceCategoryid").value != -1){
+								populateServiceType(document.getElementById("serviceCategoryid").value);
+								jQuery('#serviceTable option').each(function() {
+								    if(jQuery(this).val() == "<s:property value='%{serviceTypeCode}'/>") {
+								    	jQuery(this).prop("selected", true);
+								    }
+								});
+							}
+							</script>
+						
 					</tr>
 				</table>
 				<div align="left" class="mandatorycoll">
