@@ -205,8 +205,9 @@ function exportXls(){
 		showRemittedEntries = true;
 	else
 		showRemittedEntries = false;
-	window.open('/services/EGF/report/pendingTDSReport-exportXls.action?skipPrepare=true&asOnDate='+asOnDate+'&fromDate='+fromDate+'&department.code='+department+'&fund.id='+fund+
-	'&recovery.id='+recovery+'&detailKey='+detailKey+'&showRemittedEntries='+showRemittedEntries+'&partyName='+partyName,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+	var url = '/services/EGF/report/pendingTDSReport-exportXls.action?skipPrepare=true&asOnDate='+asOnDate+'&fromDate='+fromDate+'&department.code='+department+'&fund.id='+fund+
+	'&recovery.id='+recovery+'&detailKey='+detailKey+'&showRemittedEntries='+showRemittedEntries+'&partyName='+partyName;
+	window.location.href = url;
 }
 
 function exportPdf(){
@@ -226,8 +227,9 @@ function exportPdf(){
 		showRemittedEntries = true;
 	else
 		showRemittedEntries = false;
-	window.open('/services/EGF/report/pendingTDSReport-exportPdf.action?skipPrepare=true&asOnDate='+asOnDate+'&fromDate='+fromDate+'&department.code='+department+'&fund.id='+
-	fund+'&recovery.id='+recovery+'&detailKey='+detailKey+'&showRemittedEntries='+showRemittedEntries+'&partyName='+partyName,'','resizable=yes,height=650,width=900,scrollbars=yes,left=30,top=30,status=no');
+	var url ='/services/EGF/report/pendingTDSReport-exportPdf.action?skipPrepare=true&asOnDate='+asOnDate+'&fromDate='+fromDate+'&department.code='+department+'&fund.id='+
+	fund+'&recovery.id='+recovery+'&detailKey='+detailKey+'&showRemittedEntries='+showRemittedEntries+'&partyName='+partyName;
+	window.location.href = url;
 }
 </script>
 <body onload="loadEntities();">

@@ -398,7 +398,7 @@ public class PendingTDSReportAction extends BaseFormAction {
                 deptQuery = " and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.vouchermis.departmentcode='"
                         + department.getCode()+"'";
             if (detailKey != null && detailKey != -1)
-                partyNameQuery = " and egRemittanceGldtl.generalledgerdetail.detailkeyid=" + detailKey;
+                partyNameQuery = " and egRemittanceGldtl.generalledgerdetail.detailKeyId=" + detailKey;
             pendingTDS = remitRecoveryService.getRecoveryDetailsForReport(remittanceBean, getVoucherHeader(), detailKey);
             query1.append("from EgRemittanceDetail where  egRemittanceGldtl.generalledgerdetail.generalLedgerId.glcodeId.id=? "
                     +
@@ -453,7 +453,7 @@ public class PendingTDSReportAction extends BaseFormAction {
                     deptQuery = " and egRemittanceGldtl.generalledgerdetail.generalLedgerId.voucherHeaderId.vouchermis.departmentcode='"
                             + department.getCode()+"'";
                 if (detailKey != null && detailKey != -1)
-                    partyNameQuery = " and egRemittanceGldtl.generalledgerdetail.detailkeyid=" + detailKey;
+                    partyNameQuery = " and egRemittanceGldtl.generalledgerdetail.detailKeyId=" + detailKey;
                 final StringBuffer query = new StringBuffer(1000);
                 
                 List<EgRemittanceDetail> result = new ArrayList<EgRemittanceDetail>();
