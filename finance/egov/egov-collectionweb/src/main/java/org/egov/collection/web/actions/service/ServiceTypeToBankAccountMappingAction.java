@@ -174,7 +174,9 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
         final String serviceBankQueryString = "select distinct ba.bankbranch.bank from Bankaccount ba where ba.accountnumber in(:accountnumbers))";
 
         final Query bankListQuery = persistenceService.getSession().createQuery(serviceBankQueryString);
-        bankListQuery.setParameterList("accountnumbers", accountNumbers);
+        if(!accountNumbers.isEmpty()){
+            bankListQuery.setParameterList("accountnumbers", accountNumbers);
+        }
         return bankListQuery.list();
     }
 
@@ -310,7 +312,7 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
     }
     
     private void getServiceCategoryList() {
-        List<BusinessService> businessService = microserviceUtils.getBusinessService("Finance");
+        List<BusinessService> businessService = microserviceUtils.getBusinessService(null);
         for(BusinessService bs : businessService){
             String[] splitServName = bs.getBusinessService().split(Pattern.quote("."));
             String[] splitSerCode = bs.getCode().split(Pattern.quote("."));

@@ -1078,9 +1078,14 @@ public class MicroserviceUtils {
 
     public List<Receipt> getReceipts(String ids, String status, String serviceCodes, Date fromDate, Date toDate) {
 
-        final String url = hostUrl + receiptSearchUrl + "?tenantId=" + getTenentId() + "&status=" + status
-                + "&ids=" + ids + "&businessCodes=" + serviceCodes + "&fromDate=" + fromDate.getTime() + "&toDate="
+        String url = hostUrl + receiptSearchUrl + "?tenantId=" + getTenentId() + "&status=" + status
+                + "&businessCodes=" + serviceCodes + "&fromDate=" + fromDate.getTime() + "&toDate="
                 + toDate.getTime();
+        if(StringUtils.isBlank(ids)){
+            url += "&ids=''";
+        }else{
+            url += "&ids=" + ids;
+        }
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -1472,12 +1477,13 @@ public class MicroserviceUtils {
             if(md.getName().equals(masterName))
                 break;
         }
-        StringBuilder filterBuilder = null;
+        String filter = null;
         if(filterKey != null && filterValue != null){
-            filterBuilder = new StringBuilder();
+            StringBuilder filterBuilder = new StringBuilder();
             filterBuilder.append("[?(@.").append(filterKey).append(" in [").append(filterValue).append("])]");
+            filter = filterBuilder.toString();
         }
-        masterDetailList.add(new MasterDetail(masterName, filterBuilder.toString()));
+        masterDetailList.add(new MasterDetail(masterName, filter));
     }
     
     public String getBusinessServiceNameByCode(String code){
