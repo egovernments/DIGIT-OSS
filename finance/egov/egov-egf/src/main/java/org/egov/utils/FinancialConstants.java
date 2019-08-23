@@ -104,11 +104,12 @@ public interface FinancialConstants {
 	public static final String CONTINGENCYBILL_PAID_STATUS = "payment confirmed";
 	public static final String CONTINGENCYBILL_REJECTED_STATUS = "Rejected";
 	// Status for Supplier Bills
-	public static final String SUPPLIERBILL_CREATED_STATUS = "Pending";
+	public static final String SUPPLIERBILL_CREATED_STATUS = "Created";
 	public static final String SUPPLIERBILL_CANCELLED_STATUS = "Cancelled";
-	// public static final String SUPPLIERBILL_APPROVED_STATUS="Approved";
+	public static final String SUPPLIERBILL_APPROVED_STATUS="Approved";
 	public static final String SUPPLIERBILL_PASSED_STATUS = "Passed";
 	public static final String SUPPLIERBILL_PAID_STATUS = "Paid";
+	public static final String SUPPLIERBILL_REJECTED_STATUS = "Rejected";
 	// Status for Contrator Bills
 	public static final String CONTRACTORBILL_CREATED_STATUS = "CREATED";
 	public static final String CONTRACTORBILL_CANCELLED_STATUS = "Cancelled";
@@ -375,6 +376,8 @@ public interface FinancialConstants {
 	public static final String BUDGETDETAIL_CREATED_STATUS = "Created";
 	public static final String BUDGETDETAIL_VERIFIED_STATUS = "VERIFIED";
 	public static final String WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME = "Expense Bill";
+	public static final String WORKFLOWTYPE_WORKS_BILL_DISPLAYNAME = "Works Bill";
+	public static final String WORKFLOWTYPE_SBILL_DISPLAYNAME = "Supplier Bill";
 	public static final String WORKFLOWTYPE_VOUCHER_DISPLAYNAME = "Voucher";
 
 	public static final String WORKFLOW_STATUS_CODE_REJECTED = "REJECTED";

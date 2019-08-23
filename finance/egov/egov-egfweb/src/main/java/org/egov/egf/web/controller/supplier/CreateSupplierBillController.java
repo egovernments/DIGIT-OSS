@@ -419,7 +419,7 @@ public class CreateSupplierBillController extends BaseBillController {
     private String getMessageByStatus(final EgBillregister supplierBill, final String approverName, final String nextDesign) {
         String message = "";
 
-        if (FinancialConstants.CONTINGENCYBILL_CREATED_STATUS.equals(supplierBill.getStatus().getCode())) {
+        if (FinancialConstants.SUPPLIERBILL_CREATED_STATUS.equals(supplierBill.getStatus().getCode())) {
             if (org.apache.commons.lang.StringUtils
                     .isNotBlank(supplierBill.getEgBillregistermis().getBudgetaryAppnumber())
                     && !BudgetControlType.BudgetCheckOption.NONE.toString()
@@ -432,7 +432,7 @@ public class CreateSupplierBillController extends BaseBillController {
                 message = messageSource.getMessage("msg.supplier.bill.create.success",
                         new String[] { supplierBill.getBillnumber(), approverName, nextDesign }, null);
 
-        } else if (FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS.equals(supplierBill.getStatus().getCode()))
+        } else if (FinancialConstants.SUPPLIERBILL_APPROVED_STATUS.equals(supplierBill.getStatus().getCode()))
             message = messageSource.getMessage("msg.supplier.bill.approved.success",
                     new String[] { supplierBill.getBillnumber() }, null);
         else if (FinancialConstants.WORKFLOW_STATE_REJECTED.equals(supplierBill.getState().getValue()))

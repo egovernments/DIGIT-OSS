@@ -51,6 +51,7 @@ package org.egov.infra.workflow.inbox;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
 import org.egov.infra.microservice.models.EmployeeInfo;
+import org.egov.infra.microservice.models.FinancialStatus;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.web.support.ui.Inbox;
 import org.egov.infra.workflow.entity.OwnerGroup;
@@ -89,6 +90,9 @@ import static org.egov.infra.config.core.ApplicationThreadLocals.getUserId;
 @Service
 @Transactional(readOnly = true)
 public class InboxRenderServiceDelegate<T extends StateAware> {
+    private static final String SUPPLIER_BILL = "Supplier Bill";
+    private static final String EXPENSE_BILL = "Expense Bill";
+    private static final String WORKS_BILL = "Works Bill";
     private static final Logger LOG = LoggerFactory.getLogger(InboxRenderServiceDelegate.class);
     private static final String INBOX_RENDER_SERVICE_SUFFIX = "%sInboxRenderService";
     private static final Map<String, WorkflowTypes> WORKFLOW_TYPE_CACHE = new ConcurrentHashMap<>();
@@ -179,9 +183,20 @@ public class InboxRenderServiceDelegate<T extends StateAware> {
     private List<Inbox> buildInbox(List<T> items) {
         List<Inbox> inboxItems = new ArrayList<>();
         for (StateAware stateAware : items) {
+            WorkflowTypes workflowType = getWorkflowType(stateAware.getStateType());
+            if(WORKS_BILL.equals(stateAware.getCurrentState().getNatureOfTask())){
+                workflowType.setLink(workflowType.getLink().replace("/expensebill/", "/contractorbill/"));
+                workflowType.setLink(workflowType.getLink().replace("/supplierbill/", "/contractorbill/"));
+            }else if(EXPENSE_BILL.equals(stateAware.getCurrentState().getNatureOfTask())){
+                workflowType.setLink(workflowType.getLink().replace("/contractorbill/", "/expensebill/"));
+                workflowType.setLink(workflowType.getLink().replace("/supplierbill/", "/expensebill/"));
+            }else if(SUPPLIER_BILL.equals(stateAware.getCurrentState().getNatureOfTask())){
+                workflowType.setLink(workflowType.getLink().replace("/expensebill/", "/supplierbill/"));
+                workflowType.setLink(workflowType.getLink().replace("/contractorbill/", "/supplierbill/"));
+            }
             inboxItems.add(Inbox
                     .build(stateAware,
-                            getWorkflowType(stateAware.getStateType()),
+                            workflowType,
                             getNextAction(stateAware.getState())));
         }
         inboxItems.addAll(microserviceUtils.getInboxItems());

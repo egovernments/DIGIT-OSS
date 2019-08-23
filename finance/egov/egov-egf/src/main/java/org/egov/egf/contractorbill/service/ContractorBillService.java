@@ -342,7 +342,7 @@ public class ContractorBillService {
             if (FinancialConstants.CONTINGENCYBILL_CREATED_STATUS.equals(egBillregister.getStatus().getCode())
                     && egBillregister.getState() != null && workFlowAction.equalsIgnoreCase(FinancialConstants.BUTTONAPPROVE))
                 egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.CONTRACTOR_BILL,
-                        FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS));
+                        FinancialConstants.CONTRACTORBILL_APPROVED_STATUS));
             else if (workFlowAction.equals(FinancialConstants.BUTTONREJECT))
                 egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.CONTRACTOR_BILL,
                         FinancialConstants.CONTINGENCYBILL_REJECTED_STATUS));
@@ -411,7 +411,7 @@ public class ContractorBillService {
                     .withStateValue(stateValue).withDateInfo(currentDate.toDate())
                     .withOwner(wfInitiator.getPosition())
                     .withNextAction("")
-                    .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME);
+                    .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_WORKS_BILL_DISPLAYNAME);
         } else {
             // if (null != approvalPosition && approvalPosition != -1 && !approvalPosition.equals(Long.valueOf(0)))
             // wfInitiator = assignmentService.getAssignmentsForPosition(approvalPosition).get(0);
@@ -446,7 +446,7 @@ public class ContractorBillService {
                         .withComments(approvalComent)
                         .withStateValue(stateValue).withDateInfo(new Date()).withOwner(owenrPos)
                         .withNextAction(wfmatrix.getNextAction())
-                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME)
+                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_WORKS_BILL_DISPLAYNAME)
                         .withCreatedBy(user.getId())
                         .withtLastModifiedBy(user.getId());
             } else if (FinancialConstants.BUTTONCANCEL.equalsIgnoreCase(workFlowAction)) {
@@ -455,7 +455,7 @@ public class ContractorBillService {
                         .withComments(approvalComent)
                         .withStateValue(stateValue).withDateInfo(currentDate.toDate())
                         .withNextAction("")
-                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME);
+                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_WORKS_BILL_DISPLAYNAME);
             } else if (FinancialConstants.BUTTONAPPROVE.equalsIgnoreCase(workFlowAction)) {
                 wfmatrix = egBillregisterRegisterWorkflowService.getWfMatrix(egBillregister.getStateType(), null,
                         null, additionalRule, egBillregister.getCurrentState().getValue(), null);
@@ -467,7 +467,7 @@ public class ContractorBillService {
                         .withComments(approvalComent)
                         .withStateValue(stateValue).withDateInfo(new Date())
                         .withNextAction(wfmatrix.getNextAction())
-                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME);
+                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_WORKS_BILL_DISPLAYNAME);
             } else {
                 if (designation != null
                         && finalDesignationNames.get(designation.getName().toUpperCase()) != null)
@@ -483,7 +483,7 @@ public class ContractorBillService {
                         .withComments(approvalComent)
                         .withStateValue(stateValue).withDateInfo(new Date()).withOwner(owenrPos)
                         .withNextAction(wfmatrix.getNextAction())
-                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME);
+                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_WORKS_BILL_DISPLAYNAME);
             }
         }
         if (LOG.isDebugEnabled())

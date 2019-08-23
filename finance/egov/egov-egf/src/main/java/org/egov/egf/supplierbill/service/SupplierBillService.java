@@ -242,10 +242,10 @@ public class SupplierBillService {
         if (workFlowAction.equals(FinancialConstants.CREATEANDAPPROVE)) {
             if (FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE.equals(egBillregister.getExpendituretype()))
                 savedEgBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
-                        FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS));
+                        FinancialConstants.SUPPLIERBILL_APPROVED_STATUS));
         } else {
             savedEgBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
-                    FinancialConstants.CONTINGENCYBILL_CREATED_STATUS));
+                    FinancialConstants.SUPPLIERBILL_CREATED_STATUS));
             createSupplierBillRegisterWorkflowTransition(savedEgBillregister, approvalPosition, approvalComent, additionalRule,
                     workFlowAction, approvalDesignation);
         }
@@ -311,7 +311,7 @@ public class SupplierBillService {
         if (updatedegBillregister != null) {
             if (workFlowAction.equals(FinancialConstants.CREATEANDAPPROVE))
                 updatedegBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
-                        FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS));
+                        FinancialConstants.SUPPLIERBILL_APPROVED_STATUS));
             else {
                 supplierBillRegisterStatusChange(updatedegBillregister, workFlowAction);
                 createSupplierBillRegisterWorkflowTransition(updatedegBillregister, approvalPosition, approvalComent,
@@ -322,7 +322,7 @@ public class SupplierBillService {
         } else {
             if (workFlowAction.equals(FinancialConstants.CREATEANDAPPROVE))
                 egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
-                        FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS));
+                        FinancialConstants.SUPPLIERBILL_APPROVED_STATUS));
             else {
                 supplierBillRegisterStatusChange(egBillregister, workFlowAction);
                 createSupplierBillRegisterWorkflowTransition(egBillregister, approvalPosition, approvalComent,
@@ -338,21 +338,21 @@ public class SupplierBillService {
     public void supplierBillRegisterStatusChange(final EgBillregister egBillregister, final String workFlowAction) {
         if (null != egBillregister && null != egBillregister.getStatus()
                 && null != egBillregister.getStatus().getCode())
-            if (FinancialConstants.CONTINGENCYBILL_CREATED_STATUS.equals(egBillregister.getStatus().getCode())
+            if (FinancialConstants.SUPPLIERBILL_CREATED_STATUS.equals(egBillregister.getStatus().getCode())
                     && egBillregister.getState() != null && workFlowAction.equalsIgnoreCase(FinancialConstants.BUTTONAPPROVE))
                 egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
-                        FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS));
+                        FinancialConstants.SUPPLIERBILL_APPROVED_STATUS));
             else if (workFlowAction.equals(FinancialConstants.BUTTONREJECT))
                 egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
-                        FinancialConstants.CONTINGENCYBILL_REJECTED_STATUS));
-            else if (FinancialConstants.CONTINGENCYBILL_REJECTED_STATUS.equals(egBillregister.getStatus().getCode())
+                        FinancialConstants.SUPPLIERBILL_REJECTED_STATUS));
+            else if (FinancialConstants.SUPPLIERBILL_REJECTED_STATUS.equals(egBillregister.getStatus().getCode())
                     && workFlowAction.equals(FinancialConstants.BUTTONCANCEL))
                 egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
-                        FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS));
-            else if (FinancialConstants.CONTINGENCYBILL_REJECTED_STATUS.equals(egBillregister.getStatus().getCode())
+                        FinancialConstants.SUPPLIERBILL_CANCELLED_STATUS));
+            else if (FinancialConstants.SUPPLIERBILL_CANCELLED_STATUS.equals(egBillregister.getStatus().getCode())
                     && workFlowAction.equals(FinancialConstants.BUTTONFORWARD))
                 egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.SBILL,
-                        FinancialConstants.CONTINGENCYBILL_CREATED_STATUS));
+                        FinancialConstants.SUPPLIERBILL_CREATED_STATUS));
 
     }
 
@@ -410,7 +410,7 @@ public class SupplierBillService {
                     .withStateValue(stateValue).withDateInfo(currentDate.toDate())
                     .withOwner(wfInitiator.getPosition())
                     .withNextAction("")
-                    .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME);
+                    .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_SBILL_DISPLAYNAME);
         } else {
             // if (null != approvalPosition && approvalPosition != -1 && !approvalPosition.equals(Long.valueOf(0)))
             // wfInitiator = assignmentService.getAssignmentsForPosition(approvalPosition).get(0);
@@ -445,7 +445,7 @@ public class SupplierBillService {
                         .withComments(approvalComent)
                         .withStateValue(stateValue).withDateInfo(new Date()).withOwner(owenrPos)
                         .withNextAction(wfmatrix.getNextAction())
-                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME)
+                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_SBILL_DISPLAYNAME)
                         .withCreatedBy(user.getId())
                         .withtLastModifiedBy(user.getId());
             } else if (FinancialConstants.BUTTONCANCEL.equalsIgnoreCase(workFlowAction)) {
@@ -454,7 +454,7 @@ public class SupplierBillService {
                         .withComments(approvalComent)
                         .withStateValue(stateValue).withDateInfo(currentDate.toDate())
                         .withNextAction("")
-                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME);
+                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_SBILL_DISPLAYNAME);
             } else if (FinancialConstants.BUTTONAPPROVE.equalsIgnoreCase(workFlowAction)) {
                 wfmatrix = egBillregisterRegisterWorkflowService.getWfMatrix(egBillregister.getStateType(), null,
                         null, additionalRule, egBillregister.getCurrentState().getValue(), null);
@@ -466,7 +466,7 @@ public class SupplierBillService {
                         .withComments(approvalComent)
                         .withStateValue(stateValue).withDateInfo(new Date())
                         .withNextAction(wfmatrix.getNextAction())
-                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME);
+                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_SBILL_DISPLAYNAME);
             } else {
                 if (designation != null
                         && finalDesignationNames.get(designation.getName().toUpperCase()) != null)
@@ -482,7 +482,7 @@ public class SupplierBillService {
                         .withComments(approvalComent)
                         .withStateValue(stateValue).withDateInfo(new Date()).withOwner(owenrPos)
                         .withNextAction(wfmatrix.getNextAction())
-                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_EXPENSE_BILL_DISPLAYNAME);
+                        .withNatureOfTask(FinancialConstants.WORKFLOWTYPE_SBILL_DISPLAYNAME);
             }
         }
         if (LOG.isDebugEnabled())
