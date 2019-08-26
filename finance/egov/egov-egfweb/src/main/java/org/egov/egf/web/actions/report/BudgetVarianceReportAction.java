@@ -262,7 +262,7 @@ public class BudgetVarianceReportAction extends BaseFormAction {
         }
         if (shouldShowHeaderField(Constants.EXECUTING_DEPARTMENT) && queryParamMap.containsKey("deptId")) {
             miscQuery = miscQuery.append(" and " + mis + ".departmentcode=bd.executing_department ");
-            miscQuery = miscQuery.append(" and bd.executing_department= " + queryParamMap.get("deptId"));
+            miscQuery = miscQuery.append(" and bd.executing_department= '" + queryParamMap.get("deptId")+"' ");
         }
         return miscQuery;
     }
@@ -359,8 +359,8 @@ public class BudgetVarianceReportAction extends BaseFormAction {
 
     private String getMiscQuery() {
         final StringBuilder query = new StringBuilder();
-        if (budgetDetail.getExecutingDepartment() != null && "".equals(budgetDetail.getExecutingDepartment()))
-            query.append(" and executingDepartment=").append(budgetDetail.getExecutingDepartment());
+        if (budgetDetail.getExecutingDepartment() != null && !"".equals(budgetDetail.getExecutingDepartment()))
+            query.append(" and executingDepartment='").append(budgetDetail.getExecutingDepartment()).append("' ");
         if (budgetDetail.getBudgetGroup() != null && budgetDetail.getBudgetGroup().getId() != null
                 && budgetDetail.getBudgetGroup().getId() != -1)
             query.append(" and budgetGroup.id=").append(budgetDetail.getBudgetGroup().getId());
@@ -388,7 +388,7 @@ public class BudgetVarianceReportAction extends BaseFormAction {
 
     private void setQueryParams() {
         if (shouldShowHeaderField(Constants.EXECUTING_DEPARTMENT) && budgetDetail.getExecutingDepartment() != null
-                && budgetDetail.getExecutingDepartment() == "")
+                && budgetDetail.getExecutingDepartment() != "")
             queryParamMap.put("deptId", budgetDetail.getExecutingDepartment());
         if (shouldShowHeaderField(Constants.FUNCTION) && budgetDetail.getFunction() != null
                 && budgetDetail.getFunction().getId() != null && budgetDetail.getFunction().getId() != -1
