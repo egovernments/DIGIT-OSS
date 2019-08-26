@@ -219,7 +219,7 @@ table.its th {
 
 	<script>
 		function validate() {
-			document.bankAdviceReport.action = '/EGF/report/bankAdviceReport-search.action';
+			document.bankAdviceReport.action = '/services/EGF/report/bankAdviceReport-search.action';
 			document.bankAdviceReport.submit();
 			return true;
 		}
@@ -236,9 +236,8 @@ table.its th {
 					+ "&bankaccount.id="
 					+ bankaccount
 					+ "&instrumentnumber.id=" + instrumentnumber;
-			window
-					.open(url, '',
-							'height=650,width=980,scrollbars=yes,left=0,top=0,status=yes');
+			//window.open(url, '','height=650,width=980,scrollbars=yes,left=0,top=0,status=yes');
+			window.location.href = url;
 		}
 		function exportExcel() {
 			var bank = document.getElementById("bank.id").value;
@@ -252,9 +251,8 @@ table.its th {
 					+ "&bankaccount.id="
 					+ bankaccount
 					+ "&instrumentnumber.id=" + instrumentnumber;
-			window
-					.open(url, '',
-							'height=650,width=980,scrollbars=yes,left=0,top=0,status=yes');
+			// window.open(url, '','height=650,width=980,scrollbars=yes,left=0,top=0,status=yes');
+			window.location.href = url;
 		}
 		function exportHtml() {
 			var bank = document.getElementById("bank.id").value;
@@ -268,9 +266,8 @@ table.its th {
 					+ "&bankaccount.id="
 					+ bankaccount
 					+ "&instrumentnumber.id=" + instrumentnumber;
-			window
-					.open(url, '',
-							'height=650,width=980,scrollbars=yes,left=0,top=0,status=yes');
+			// window.open(url, '','height=650,width=980,scrollbars=yes,left=0,top=0,status=yes');
+			window.location.href = url;
 		}
 	</script>
 </body>
