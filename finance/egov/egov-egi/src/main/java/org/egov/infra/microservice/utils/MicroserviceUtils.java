@@ -401,12 +401,14 @@ public class MicroserviceUtils {
         return getDepartments(null);
     }
 
-    public List<Department> getDepartments(String code) {
+    public List<Department> getDepartments(String codes) {
         List<Department> deptList = new ArrayList<>();
         FilterRequest filterReq = new FilterRequest();
         try {
-            if(!StringUtils.isEmpty(code) && code != null){
-                filterReq.setCode(code);
+            if(!StringUtils.isEmpty(codes) && codes != null && StringUtils.contains(codes, ",")){
+                filterReq.setCodes(Arrays.asList(codes.split(",")));
+            }else if(!StringUtils.isEmpty(codes) && codes != null){
+                filterReq.setCode(codes);
             }else{
                 final String deptCodes = (String) this.getFinanceDeptCodes();
                 filterReq.setCodes(Arrays.asList(deptCodes.split(",")));

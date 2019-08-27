@@ -49,6 +49,7 @@ package org.egov.egf.web.actions.report;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
+
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
@@ -64,6 +65,8 @@ import org.egov.commons.service.EntityTypeService;
 import org.egov.commons.utils.EntityType;
 import org.egov.egf.model.BankAdviceReportInfo;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
+import org.egov.infra.microservice.models.Department;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.reporting.util.ReportUtil;
 import org.egov.infra.web.struts.annotation.ValidationErrorPage;
 import org.egov.infstr.services.PersistenceService;
@@ -89,6 +92,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Results(value = { @Result(name = "search", location = "rtgsIssueRegisterReport-search.jsp"),
 		@Result(name = "PDF", type = "stream", location = "inputStream", params = { "inputName", "inputStream",
@@ -122,6 +127,9 @@ public class RtgsIssueRegisterReportAction extends ReportAction {
 	Boolean searchResult = Boolean.FALSE;
 	@Autowired
 	private FinancialYearDAO financialYearDAO;
+
+	@Autowired
+        private MicroserviceUtils microserviceUtils;
 
 	@Override
 	public Object getModel() {
@@ -270,11 +278,31 @@ public class RtgsIssueRegisterReportAction extends ReportAction {
 		query.setResultTransformer(Transformers.aliasToBean(BankAdviceReportInfo.class));
 		rtgsDisplayList = query.list();
 		populateSubLedgerDetails();
+		this.populateDepartmentsName();
 		rtgsReportList.addAll(rtgsDisplayList);
 		return "search";
 	}
 
-	private StringBuffer getQueryString() {
+    private void populateDepartmentsName() {
+        Set<String> deptCodes = null;
+        if(rtgsDisplayList != null && !rtgsDisplayList.isEmpty()){
+            deptCodes = rtgsDisplayList.stream().map(bankAdvice -> {
+                return bankAdvice.getDepartment();
+            }).collect(Collectors.toSet());
+            List<Department> departments = microserviceUtils.getDepartments(String.join(",", deptCodes));
+            Map<String, Department> deptCodeMaps = new HashMap<>();
+            departments.stream().forEach(dept -> {
+                deptCodeMaps.put(dept.getCode(), dept);
+            });
+            rtgsDisplayList.stream().forEach(bankAdive -> {
+                String departCode = bankAdive.getDepartment();
+                Department department = deptCodeMaps.get(departCode);
+                bankAdive.setDepartment(department != null ? department.getName() : departCode);
+            });
+        }
+    }
+
+    private StringBuffer getQueryString() {
 		StringBuffer queryString = new StringBuffer();
 		String deptQry = "";
 		String fundQry = "";
