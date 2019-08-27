@@ -1360,12 +1360,6 @@ function disableSelectedRows()
 						<td width="10%" class="text-right view-content"><div id="totalPaymentAmount">0.00</div></td>
 					</tr>
 					<tr>
-						<td colspan="2" class="text-center">
-					 		<font size="small" color="red">*Maximum of 500 records are
-								displayed here<br>*You can select Maximum of 125 bills for single payment</font>
-						</td>
-					</tr>
-					<tr>
 						<td colspan="2" class="modeofpayment"><strong><s:text
 									name="payment.mode" /><span class="mandatory1">*</span></strong> <input
 							name="paymentMode" id="paymentModecheque" checked="checked"
@@ -1377,21 +1371,22 @@ function disableSelectedRows()
 							id="paymentModertgs" value="rtgs" type="radio"><label
 							for="paymentModertgs">RTGS</label></td>
 					</tr>
-	
 					<tr>
-						<td colspan="2" class="buttonbottomnew" align="center"><br> 
+						<td colspan="2" align="center">
 					<s:hidden id="selectedContingentRows" name="selectedContingentRows" value="%{selectedContingentRows}" />
 					<s:hidden id="selectedContractorRows" name="selectedContractorRows" value="%{selectedContractorRows}" />
 					<s:hidden id="selectedSupplierRows" name="selectedSupplierRows" value="%{selectedSupplierRows}" />
 					<s:hidden id="selectedRows" name="selectedRows" value="%{selectedRows}" />
-						<input
-							type="button" class="buttonsubmit" value="Generate Payment"
-							id="generatePayment" onclick="return check();" /></td>
+						</td>
 					</tr>
-					
 					<tr>
-					
-						
+					<td align="center" colspan="2"><br/><input type="button" class="buttonsubmit" value="Generate Payment" id="generatePayment" onclick="return check();"/></td>
+					</tr>
+					<tr>
+						<td colspan="2" class="text-center">
+					 		<font size="small" color="red">*Maximum of 500 records are
+								displayed here<br>*You can select Maximum of 125 bills for single payment</font>
+						</td>
 					</tr>
 </table>
 </div>
