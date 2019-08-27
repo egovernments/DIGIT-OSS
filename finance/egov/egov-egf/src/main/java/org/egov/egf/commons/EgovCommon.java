@@ -1066,7 +1066,7 @@ public class EgovCommon {
         String fundConidtion = "";
         if (fundCode != null)
             fundConidtion = " and fund.code='" + fundCode + "'";
-        if (deptCode != null && !deptCode.isEmpty())
+        if (deptCode != null && !deptCode.isEmpty() && !deptCode.equals("-1"))
             deptCondition = " and departmentcode='" + deptCode+"'";
 
         opBalncQuery
@@ -1179,7 +1179,7 @@ public class EgovCommon {
         String fundCond = "";
         if (fundcode != null)
             fundCond = " and vh.fundId.code='" + fundcode + "'";
-        if (deptCode != null && !deptCode.isEmpty()) {
+        if (deptCode != null && !deptCode.isEmpty() && !deptCode.equals("-1")) {
             misTab = ",Vouchermis mis";
             deptCond = " and mis.voucherheaderid.id=vh.id and mis.departmentcode='" + deptCode + "'";
         }
