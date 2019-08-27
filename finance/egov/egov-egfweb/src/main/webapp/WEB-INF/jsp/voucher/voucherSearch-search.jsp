@@ -195,9 +195,6 @@
 							<display:column title="Status" style="text-align:center;">
 								<s:property value="%{#attr.currentRowObject.status}" />
 							</display:column>
-							<display:column title="Source" style="text-align:center;">
-								<s:property value="%{#attr.currentRowObject.source}" />
-							</display:column>
 
 						</display:table></td>
 				<tr>
@@ -218,7 +215,7 @@
 							<th class="bluebgheadtd">Department Name</th>
 							<th class="bluebgheadtd">Amount(Rs)</th>
 							<th class="bluebgheadtd">Status</th>
-							<th class="bluebgheadtd">Source</th>
+							<!-- <th class="bluebgheadtd">Source</th> -->
 						</tr>
 						<c:set var="trclass" value="greybox" />
 
@@ -247,8 +244,8 @@
 									</s:text></td>
 								<td class="<c:out value="${trclass}"/>"><s:text
 										name="%{status}" /></td>
-								<td class="<c:out value="${trclass}"/>"><s:text
-										name="%{source}" /></td>
+								<!-- <td class="<c:out value="${trclass}"/>"><s:text
+										name="%{source}" /></td> -->
 								<c:choose>
 									<c:when test="${trclass=='greybox'}">
 										<c:set var="trclass" value="bluebox" />
