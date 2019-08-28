@@ -61,5 +61,7 @@ public interface RecoveryRepository extends JpaRepository<Recovery, Long> {
     List<Recovery> findByIsactive(Boolean isActive);
     List<Recovery> findByChartofaccounts(CChartOfAccounts chartofaccounts);
     List<Recovery> findByIsactiveAndRemittanceModeOrderByType(Boolean isActive,Character remittanceMode);
+    List<Recovery> findByTypeContainingIgnoreCaseAndRecoveryNameContainingIgnoreCase(String type,String name);
+    List<Recovery> findByChartofaccountsAndTypeContainingIgnoreCaseAndRecoveryNameContainingIgnoreCase(CChartOfAccounts chartofaccounts,String type,String name);
 
 }

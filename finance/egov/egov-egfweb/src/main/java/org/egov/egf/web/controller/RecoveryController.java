@@ -210,7 +210,7 @@ public class RecoveryController {
 			@ModelAttribute final Recovery recovery) {
 		if (recovery != null && recovery.getChartofaccounts().getId() != null)
 			recovery.setChartofaccounts(chartOfAccountsService.findById(recovery.getChartofaccounts().getId(), false));
-		List<Recovery> searchResultList = recoveryService.search(recovery);
+		List<Recovery> searchResultList = recoveryService.search(recovery,recovery.getType(),recovery.getRecoveryName());
 		String result = new StringBuilder("{ \"data\":").append(toSearchResultJson(searchResultList)).append("}")
 				.toString();
 		return result;

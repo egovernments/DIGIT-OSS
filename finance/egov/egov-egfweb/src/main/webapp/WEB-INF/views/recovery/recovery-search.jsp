@@ -57,14 +57,14 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="panel panel-primary" data-collapsed="0">
-					<div class="panel-heading">
-						<div class="panel-title">Search Deductions</div>
+					<div class="panel-heading" align="center">
+						<div class="panel-title" align="center">Search Deductions</div>
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-3 control-label text-right"><spring:message
+							<label class="col-sm-2 control-label text-left"><spring:message
 									code="lbl.chartofaccounts" /> </label>
-							<div class="col-sm-3 add-margin">
+							<div class="col-sm-3">
 								<form:select path="chartofaccounts.id" id="chartofaccounts.id"
 									cssClass="form-control" cssErrorClass="form-control error">
 									<form:option value="">
@@ -76,6 +76,21 @@
 									</c:forEach>
 								</form:select>
 								<form:errors path="chartofaccounts" cssClass="error-msg" />
+							</div>
+							<label class="col-sm-2 control-label text-left"><spring:message
+									code="lbl.deductions.code" /> </label>
+							<div class="col-sm-3 add-margin">
+								<form:input path="type" id="type" cssClass="form-control" cssErrorClass="form-control error"/>
+								<form:errors path="type" cssClass="error-msg" />
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-left"><spring:message
+									code="lbl.deductions.name" /> </label>
+							<div class="col-sm-3 add-margin">
+								<form:input path="recoveryName" id="recoveryName" cssClass="form-control" cssErrorClass="form-control error"/>
+								<form:errors path="recoveryName" cssClass="error-msg" />
 							</div>
 							<input type="hidden" id="mode" name="mode" value="${mode}" />
 						</div>

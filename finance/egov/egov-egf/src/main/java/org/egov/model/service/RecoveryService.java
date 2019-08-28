@@ -48,6 +48,7 @@
 
 package org.egov.model.service;
 
+import org.apache.commons.lang.StringUtils;
 import org.egov.commons.CChartOfAccounts;
 import org.egov.model.recoveries.Recovery;
 import org.egov.model.repository.RecoveryRepository;
@@ -96,6 +97,15 @@ public class RecoveryService {
             return recoveryRepository.findByChartofaccounts(recovery.getChartofaccounts());
         else
             return recoveryRepository.findAll();
+    }
+    
+    public List<Recovery> search(Recovery recovery,String type,String recoveryName) {
+        type = StringUtils.isNotBlank(type) ? type : "" ;
+        recoveryName = StringUtils.isNotBlank(recoveryName) ? recoveryName : "";
+        if(recovery.getChartofaccounts().getId() == null){
+            return recoveryRepository.findByTypeContainingIgnoreCaseAndRecoveryNameContainingIgnoreCase(type, recoveryName);
+        }
+        return recoveryRepository.findByChartofaccountsAndTypeContainingIgnoreCaseAndRecoveryNameContainingIgnoreCase(recovery.getChartofaccounts(), type, recoveryName);
     }
 
     public List<Recovery> getAllActiveRecoverys() {
