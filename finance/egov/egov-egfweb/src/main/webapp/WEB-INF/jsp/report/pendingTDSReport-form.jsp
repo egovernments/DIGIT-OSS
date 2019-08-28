@@ -49,6 +49,13 @@
 
 <%@ taglib prefix="s" uri="/WEB-INF/tags/struts-tags.tld"%>
 <%@ taglib prefix="egov" tagdir="/WEB-INF/tags"%>
+<head>
+<script>
+function resetPage(){
+	jQuery("#results").empty();
+}
+</script>
+</head>
 <div class="formmainbox">
 	<div class="formheading"></div>
 	<s:if test="%{mode == 'deduction' }">
@@ -121,8 +128,8 @@
 			<input type="button" value="Search" class="buttonsubmit"
 				onclick="return getData()" /> &nbsp;
 			<s:reset name="button" type="submit" cssClass="button" id="button"
-				value="Reset" />
-			<input type="button" value="Close" onclick="javascript: self.close()"
+				value="Reset" onclick="resetPage();"/>
+			<input type="button" value="Close" onclick="window.parent.postMessage('close','*');window.close();"
 				Class="button" />
 		</div>
 		<s:hidden name="detailKey" id="detailKey"></s:hidden>
