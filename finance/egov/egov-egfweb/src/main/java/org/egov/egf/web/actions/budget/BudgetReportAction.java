@@ -1410,7 +1410,9 @@ public class BudgetReportAction extends BaseFormAction {
         String glcode = null;
         String glName;
         BigDecimal sum = BigDecimal.ZERO;
-        final BigDecimal appropriationSum = BigDecimal.ZERO;
+        BigDecimal appropriationSum = BigDecimal.ZERO;
+        BigDecimal approvedAmount = BigDecimal.ZERO;
+        BigDecimal reAppAmount = BigDecimal.ZERO;
         budgetDetails = budgetDetailService.sortByDepartmentName(budgetDetails);
         // not interested in major code details
         for (final BudgetDetail budgetDetail : budgetDetails) {
@@ -1418,7 +1420,7 @@ public class BudgetReportAction extends BaseFormAction {
             // continue;
             // }
             // details for next department have started
-            if (budgetDetail.getExecutingDepartment() != null && deptCode.equals(budgetDetail.getExecutingDepartment())) {
+            if (budgetDetail.getExecutingDepartment() != null && !deptCode.equals(budgetDetail.getExecutingDepartment())) {
                 if (!deptCode.equals(""))
                     if ("RE".equalsIgnoreCase(isBeRe) && !getConsiderReAppropriationAsSeperate())
                         budgetReportList.add(new BudgetReportView("", "Total", "", sum.add(appropriationSum), BigDecimal.ZERO,
@@ -1427,11 +1429,14 @@ public class BudgetReportAction extends BaseFormAction {
                         budgetReportList.add(new BudgetReportView("", "Total", "", sum, appropriationSum, sum
                                 .add(appropriationSum)));
                 sum = BigDecimal.ZERO;
+                appropriationSum = BigDecimal.ZERO;
                 addEmptyRow();
                 budgetReportList.add(new BudgetReportView("", microserviceUtils.getDepartmentByCode(budgetDetail.getExecutingDepartment()).getName().toUpperCase(), "",
                         null, null, null));
-                deptCode = budgetDetail.getExecutingDepartment();
                 glcode = null;
+            }
+            if(budgetDetail.getExecutingDepartment() != null){
+                deptCode = budgetDetail.getExecutingDepartment();
             }
             // next glcode within same department
             if (!getGlCode(budgetDetail).equals(glcode)) {
@@ -1439,10 +1444,13 @@ public class BudgetReportAction extends BaseFormAction {
                 glName = getGlName(budgetDetail);
                 row = new BudgetReportView(glcode, glName, "", BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
                 budgetReportList.add(row);
+                approvedAmount = BigDecimal.ZERO;
+                reAppAmount = BigDecimal.ZERO;
             }
-            final BigDecimal approvedAmount = budgetDetail.getApprovedAmount() == null ? BigDecimal.ZERO : budgetDetail
-                    .getApprovedAmount();
-            final BigDecimal reAppAmount = reAppropriationMap.get(budgetDetail.getId());
+            BigDecimal tempApprAmnt = budgetDetail.getApprovedAmount() == null ? BigDecimal.ZERO : budgetDetail.getApprovedAmount();
+            approvedAmount = approvedAmount.add(tempApprAmnt);
+            BigDecimal tempReAppAmnt = reAppropriationMap.get(budgetDetail.getId()) == null ? BigDecimal.ZERO : reAppropriationMap.get(budgetDetail.getId());
+            reAppAmount = reAppAmount.add(tempReAppAmnt);
             if ("RE".equalsIgnoreCase(isBeRe) && !getConsiderReAppropriationAsSeperate())
             {
                 row.setAmount(approvedAmount.add(reAppAmount == null ? BigDecimal.ZERO : reAppAmount));
@@ -1455,8 +1463,9 @@ public class BudgetReportAction extends BaseFormAction {
                 row.setAppropriationAmount(reAppAmount == null ? BigDecimal.ZERO : reAppAmount);
                 row.setTotalAmount(approvedAmount.add(reAppAmount == null ? BigDecimal.ZERO : reAppAmount));
             }
+            sum = sum.add(tempApprAmnt);
+            appropriationSum = appropriationSum.add(tempReAppAmnt);
 
-            sum = sum.add(approvedAmount);
         }
         if (!budgetDetails.isEmpty())
             if ("RE".equalsIgnoreCase(isBeRe) && !getConsiderReAppropriationAsSeperate())
