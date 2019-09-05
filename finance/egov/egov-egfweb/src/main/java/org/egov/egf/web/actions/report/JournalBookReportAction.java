@@ -173,6 +173,7 @@ public class JournalBookReportAction extends BaseFormAction {
                 .addScalar("creditamount", StringType.INSTANCE)
                 .addScalar("voucherName", StringType.INSTANCE)
                 .addScalar("vhId", StringType.INSTANCE)
+                .setParameterList("voucherName", VoucherHelper.VOUCHER_TYPE_NAMES.get(FinancialConstants.STANDARD_VOUCHER_TYPE_JOURNAL))
                 .setResultTransformer(Transformers.aliasToBean(GeneralLedgerBean.class));
         journalBookDisplayList = query.list();
         for (GeneralLedgerBean bean : journalBookDisplayList) {
@@ -234,10 +235,13 @@ public class JournalBookReportAction extends BaseFormAction {
                 + startDate
                 + "' "
                 + " and vh.voucherdate<='"
-                + endDate + "'";
+                + endDate + "'"
+                + " and vh.name in (:voucherName)";
         return query;
 
     }
+    
+    
 
     private String getGLHeading() {
     	Map<String, String> depMap = new HashMap<>();
