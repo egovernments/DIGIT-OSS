@@ -1,0 +1,1 @@
+ALTER TABLE eg_pgr_service ADD COLUMN active boolean DEFAULT true;

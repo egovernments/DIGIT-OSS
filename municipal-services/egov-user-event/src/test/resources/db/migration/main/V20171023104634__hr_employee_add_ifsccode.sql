@@ -1,0 +1,1 @@
+alter table egeis_employee add column ifscCode CHARACTER VARYING(20);

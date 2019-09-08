@@ -1,0 +1,53 @@
+serviceMaps:
+ serviceName: tl-calculator
+ mappings:
+ - version: 1.0
+   description: Persists tradeLicense calculation details in EG_TL_CALCULATION  table
+   fromTopic: save-tl-calculation
+   isTransaction: true
+   queryMaps:
+
+       - query: INSERT INTO eg_tl_calculator_tradetype(id,tenantId,consumercode,tradeTypeFeeAndBillingSlabIds,createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?);
+         basePath: Calculations.*.tradeLicense
+         jsonMaps:
+          - jsonPath: $.Calculations.*.tradeTypeBillingIds.id
+
+          - jsonPath: $.Calculations.*.tradeLicense.tenantId
+
+          - jsonPath: $.Calculations.*.tradeLicense.applicationNumber
+
+          - jsonPath: $.Calculations.*.tradeTypeBillingIds
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.Calculations.*.tradeLicense.auditDetails.createdBy
+
+          - jsonPath: $.Calculations.*.tradeLicense.auditDetails.lastModifiedBy
+
+          - jsonPath: $.Calculations.*.tradeLicense.auditDetails.createdTime
+
+          - jsonPath: $.Calculations.*.tradeLicense.auditDetails.lastModifiedTime
+
+
+       - query: INSERT INTO eg_tl_calculator_accessory(id,tenantId,consumercode,accessoryFeeAndBillingSlabIds,createdby,lastmodifiedby, createdtime, lastmodifiedtime) SELECT * FROM (VALUES ( ?, ?, ?, ?::JSONB, ?, ?, ?::BIGINT, ?::BIGINT)) AS t WHERE (NOT (SELECT coalesce(field, '') = '' FROM (VALUES (?))sub(field)));
+         basePath: Calculations.*.tradeLicense
+         jsonMaps:
+          - jsonPath: $.Calculations.*.accessoryBillingIds.id
+
+          - jsonPath: $.Calculations.*.tradeLicense.tenantId
+
+          - jsonPath: $.Calculations.*.tradeLicense.applicationNumber
+
+          - jsonPath: $.Calculations.*.accessoryBillingIds
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.Calculations.*.tradeLicense.auditDetails.createdBy
+
+          - jsonPath: $.Calculations.*.tradeLicense.auditDetails.lastModifiedBy
+
+          - jsonPath: $.Calculations.*.tradeLicense.auditDetails.createdTime
+
+          - jsonPath: $.Calculations.*.tradeLicense.auditDetails.lastModifiedTime
+
+          - jsonPath: $.Calculations.*.accessoryBillingIds.id
