@@ -1,0 +1,207 @@
+ServiceMaps:
+ serviceName: Property Tax - rainmaker
+ version: 1.0.0
+ mappings:
+  - topic: save-pt-property
+    configKey: INDEX
+    indexes:
+    - name: ptindex-v1
+      type: property
+      id: $.propertyId, $.tenantId
+      isBulk: true
+      timeStampField: $.auditDetails.createdTime
+      jsonPath: $.Properties.*
+      customJsonMapping:
+        indexMapping: {"Data":{"propertyId":"","tenantId":"","propertyDetails":{},"address":{},"ward":{},"tenantData":{},"@timestamp":"timestamp"}}
+        fieldMapping:
+        - inJsonPath: $.propertyId
+          outJsonPath: $.Data.propertyId
+        - inJsonPath: $.tenantId
+          outJsonPath: $.Data.tenantId
+        - inJsonPath: $.propertyDetails
+          outJsonPath: $.Data.propertyDetails
+        - inJsonPath: $.address
+          outJsonPath: $.Data.address
+        - inJsonPath: $.@timestamp
+          outJsonPath: $.Data.@timestamp
+        externalUriMapping:
+        - path: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search
+          queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
+          apiRequest: {"RequestInfo": {"apiId": "org.egov.pt","ver": "1.0","ts": 1502890899493,"action": "asd","did": "4354648646","key": "xyz","msgId": "654654", "requesterId": "61",
+          "authToken": "02dbe5be-28df-4d82-954f-3d27c56cca7d","userInfo":{"id":73}}}
+          uriResponseMapping:
+          - inJsonPath: $.TenantBoundary[0].boundary[0]
+            outJsonPath: $.Data.ward
+        mdmsMapping:
+        - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
+          moduleName: tenant
+          masterName: tenants
+          tenantId: pb
+          filter: "[?(@.code == $tenant)]"
+          filterMapping:
+          - variable: $tenant
+            valueJsonpath: $.tenantId
+          uriResponseMapping:
+          - inJsonPath: $.MdmsRes.tenant.tenants
+            outJsonPath: $.Data.tenantData
+
+
+  - topic: update-pt-property
+    configKey: INDEX
+    indexes:
+    - name: ptindex-v1
+      type: property
+      id: $.propertyId, $.tenantId
+      isBulk: true
+      timeStampField: $.auditDetails.createdTime
+      jsonPath: $.Properties.*
+      customJsonMapping:
+        indexMapping: {"Data":{"propertyId":"","tenantId":"","propertyDetails":{},"address":{},"ward":{},"tenantData":{},"@timestamp":"timestamp"}}
+        fieldMapping:
+        - inJsonPath: $.propertyId
+          outJsonPath: $.Data.propertyId
+        - inJsonPath: $.tenantId
+          outJsonPath: $.Data.tenantId
+        - inJsonPath: $.propertyDetails
+          outJsonPath: $.Data.propertyDetails
+        - inJsonPath: $.address
+          outJsonPath: $.Data.address
+        - inJsonPath: $.@timestamp
+          outJsonPath: $.Data.@timestamp
+        externalUriMapping:
+        - path: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search
+          queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
+          apiRequest: {"RequestInfo": {"apiId": "org.egov.pt","ver": "1.0","ts": 1502890899493,"action": "asd","did": "4354648646","key": "xyz","msgId": "654654", "requesterId": "61",
+          "authToken": "02dbe5be-28df-4d82-954f-3d27c56cca7d","userInfo":{"id":73}}}
+          uriResponseMapping:
+          - inJsonPath: $.TenantBoundary[0].boundary[0]
+            outJsonPath: $.Data.ward
+        mdmsMapping:
+        - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
+          moduleName: tenant
+          masterName: tenants
+          tenantId: pb
+          filter: "[?(@.code == $tenant)]"
+          filterMapping:
+          - variable: $tenant
+            valueJsonpath: $.tenantId
+          uriResponseMapping:
+          - inJsonPath: $.MdmsRes.tenant.tenants
+            outJsonPath: $.Data.tenantData
+      
+  - topic: pt-property-reindex
+    configKey: REINDEX
+    indexes:
+    - name: ptreindex-v1
+      type: property
+      id: $.propertyId, $.tenantId
+      isBulk: true
+      timeStampField: $.auditDetails.createdTime
+      jsonPath: $.hits.*
+      
+  - topic: pt-property-legacyindex
+    configKey: LEGACYINDEX
+    indexes:
+    - name: ptindex-v1
+      type: property
+      id: $.propertyId, $.tenantId
+      isBulk: true
+      timeStampField: $.auditDetails.createdTime
+      jsonPath: $.Properties.*
+      customJsonMapping:
+        indexMapping: {"Data":{"propertyId":"","tenantId":"","propertyDetails":{},"address":{},"ward":{},"tenantData":{},"@timestamp":"timestamp"}}
+        fieldMapping:
+        - inJsonPath: $.propertyId
+          outJsonPath: $.Data.propertyId
+        - inJsonPath: $.tenantId
+          outJsonPath: $.Data.tenantId
+        - inJsonPath: $.propertyDetails
+          outJsonPath: $.Data.propertyDetails
+        - inJsonPath: $.address
+          outJsonPath: $.Data.address
+        - inJsonPath: $.@timestamp
+          outJsonPath: $.Data.@timestamp
+        externalUriMapping:
+        - path: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search
+          queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
+          apiRequest: {"RequestInfo": {"apiId": "org.egov.pt","ver": "1.0","ts": 1502890899493,"action": "asd","did": "4354648646","key": "xyz","msgId": "654654", "requesterId": "61",
+          "authToken": "02dbe5be-28df-4d82-954f-3d27c56cca7d","userInfo":{"id":73}}}
+          uriResponseMapping:
+          - inJsonPath: $.TenantBoundary[0].boundary[0]
+            outJsonPath: $.Data.ward
+        mdmsMapping:
+        - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
+          moduleName: tenant
+          masterName: tenants
+          tenantId: pb
+          filter: "[?(@.code == $tenant)]"
+          filterMapping:
+          - variable: $tenant
+            valueJsonpath: $.tenantId
+          uriResponseMapping:
+          - inJsonPath: $.MdmsRes.tenant.tenants
+            outJsonPath: $.Data.tenantData
+            
+            
+  - topic: save-pt-property-dcb
+    configKey: INDEX
+    indexes:
+    - name: ptindex-dcb-v1
+      type: property
+      id: $.propertyId, $.tenantId
+      isBulk: true
+      timeStampField: $.auditDetails.createdTime
+      jsonPath: $.Properties.*
+      customJsonMapping:
+        indexMapping: {"Data":{"propertyId":"","tenantId":"","propertyDetails":{},"address":{},"ward":{},"tenantData":{},"collections":{},"demands":{},"@timestamp":"timestamp"}}
+        fieldMapping:
+        - inJsonPath: $.propertyId
+          outJsonPath: $.Data.propertyId
+        - inJsonPath: $.tenantId
+          outJsonPath: $.Data.tenantId
+        - inJsonPath: $.propertyDetails
+          outJsonPath: $.Data.propertyDetails
+        - inJsonPath: $.address
+          outJsonPath: $.Data.address
+        - inJsonPath: $.@timestamp
+          outJsonPath: $.Data.@timestamp
+        externalUriMapping:
+        - path: http://egov-location.egov:8080/egov-location/location/v11/boundarys/_search
+          queryParam: hierarchyTypeCode=REVENUE,boundaryType=Block,codes=$.address.locality.code,tenantId=$.tenantId
+          apiRequest: {"RequestInfo": {"apiId": "org.egov.pt","ver": "1.0","ts": 1502890899493,"action": "asd","did": "4354648646","key": "xyz","msgId": "654654", "requesterId": "61",
+          "authToken": "02dbe5be-28df-4d82-954f-3d27c56cca7d","userInfo":{"id":73}}}
+          uriResponseMapping:
+          - inJsonPath: $.TenantBoundary[0].boundary[0]
+            outJsonPath: $.Data.ward
+        - path: http://collection-services.egov:8080/collection-services/receipts/_search
+          queryParam: consumerCode=$.consumerCodes
+          apiRequest: {"RequestInfo": {"apiId": "org.egov.pt","ver": "1.0","ts": 1502890899493,"action": "asd","did": "4354648646","key": "xyz","msgId": "654654", "requesterId": "61",
+          "authToken": "02dbe5be-28df-4d82-954f-3d27c56cca7d","userInfo":{"id":73}}}
+          uriResponseMapping:
+          - inJsonPath: $.Receipt
+            outJsonPath: $.Data.collections
+        - path: http://billing-service.egov:8080/billing-service/demand//_search
+          queryParam: consumerCode=$.consumerCodes,tenantId=$.propertyDetails[0].tenantId
+          apiRequest: {"RequestInfo": {"apiId": "org.egov.pt","ver": "1.0","ts": 1502890899493,"action": "asd","did": "4354648646","key": "xyz","msgId": "654654", "requesterId": "61",
+          "authToken": "02dbe5be-28df-4d82-954f-3d27c56cca7d","userInfo":{"id":73}}}
+          uriResponseMapping:
+          - inJsonPath: $.Demands
+            outJsonPath: $.Data.demands
+        mdmsMapping:
+        - path: http://egov-mdms-service.egov:8080/egov-mdms-service/v1/_search
+          moduleName: tenant
+          masterName: tenants
+          tenantId: pb
+          filter: "[?(@.code == $tenant)]"
+          filterMapping:
+          - variable: $tenant
+            valueJsonpath: $.tenantId
+          uriResponseMapping:
+          - inJsonPath: $.MdmsRes.tenant.tenants
+            outJsonPath: $.Data.tenantData
+      
+      
+#JOURNEY: rainmakerpt -> rainmakerptlegacyindex
+#configKey=INDEX: Index that currently receives live data from the services
+#configKey=REINDEX: Configuration for reindexing that will be enabled only during reindexing activity.
+#configKey=LEGACYINDEX: Configuration for reindexing the database to es that will be enabled only during reindexing activity.

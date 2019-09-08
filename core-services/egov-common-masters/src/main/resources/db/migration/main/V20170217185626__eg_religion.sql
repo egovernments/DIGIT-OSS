@@ -1,0 +1,17 @@
+CREATE TABLE eg_religion (
+	id BIGINT NOT NULL,
+	name CHARACTER VARYING(100) NOT NULL,
+	description CHARACTER VARYING(250),
+	active BOOLEAN NOT NULL,
+	tenantId CHARACTER VARYING(250) NOT NULL,
+
+	CONSTRAINT pk_eg_religion PRIMARY KEY (id),
+	CONSTRAINT uk_eg_religion_name UNIQUE (name)
+);
+
+CREATE SEQUENCE seq_eg_religion
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;

@@ -1,0 +1,14 @@
+version: '2'
+services:
+  redis:
+    image: redis:3.2.8-alpine
+    ports:
+      - "6379:6379"
+  postgres:
+    image: postgres:9.4
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

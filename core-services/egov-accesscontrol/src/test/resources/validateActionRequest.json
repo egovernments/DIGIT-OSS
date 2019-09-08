@@ -1,0 +1,27 @@
+{
+  "requestInfo": {
+    "apiId": "string",
+    "ver": "string",
+    "ts": 0,
+    "action": "string",
+    "did": "string",
+    "key": "string",
+    "msgId": "string",
+    "requesterId": "string",
+    "authToken": "string"
+  },
+  "validateAction": {
+    "tenantRole": {
+      "tenantId": "ap.public",
+      "roles": [
+        {
+          "name": "Citizen"
+        },
+        {
+          "name": "Employee"
+        }
+      ]
+    },
+    "actionUrl": "/pgr/_statuses"
+  }
+}

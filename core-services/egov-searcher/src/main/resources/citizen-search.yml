@@ -1,0 +1,47 @@
+SearchDefinitions:
+ moduleName: citizen-service
+ summary: Citizen Services Report
+ version: 1.0.0
+ definitions:
+ - name: citizenrequestsearch
+   query: 
+    baseQuery: select row_to_json(citizenreq) from (select id,servicecode,consumercode,email,(select array_to_json(array_agg(row_to_json(comments)))from (
+         select srn,commentfrom,comment from egov_citizen_service_req_comments where srn=egov_citizen_service_req.id order by srn asc) comments) as citizencomments,(
+         select array_to_json(array_agg(row_to_json(documents)))from (select srn,uploadedby,filestoreid from egov_citizen_service_req_documents where srn=egov_citizen_service_req.id order by srn asc )  documents) as citizendocuments  
+         from egov_citizen_service_req $where ) citizenreq
+    groupBy:    
+    orderBy: id,ASC
+   searchParams:
+    condition: OR
+    params:
+    - name: tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+    - name: id
+      isMandatory: false
+      jsonPath: $.searchCriteria.id
+   output:
+    jsonFormat: {"ResponseInfo": {},"ServiceRequests": []}
+    outJsonPath: $.ServiceRequests
+    responseInfoPath: $.ResponseInfo
+
+ - name: commentsearch
+   query: 
+    baseQuery: (select array_to_json(array_agg(row_to_json(comments)))from (select srn,commentfrom,comment from egov_citizen_service_req_comments $where) comments)
+    groupBy:    
+    orderBy: srn,DESC
+   searchParams:
+    condition: AND
+    params:
+    - name: tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+    - name: srn
+      isMandatory: false
+      jsonPath: $.searchCriteria.id
+   output:
+    jsonFormat: {"ResponseInfo": {},"Comments": []}
+    outJsonPath: $.Comments
+    responseInfoPath: $.ResponseInfo
+
+

@@ -1,0 +1,19 @@
+{
+    "requestInfo": {
+    },
+    "tenantId": null,
+    "messages": [
+        {
+            "code": "wcms.create.connection.login",
+            "message": "kannada message for login",
+            "locale": "locale",
+            "module": "module"
+        },
+        {
+            "code": "",
+            "message": "",
+            "locale": null,
+            "module": null
+        }
+    ]
+}

@@ -1,0 +1,27 @@
+version: '2'
+services:
+  zookeeper:
+    image: egovio/zookeeper:latest
+    ports:
+      - "2181:2181"
+  kafka:
+    image: egovio/kafka:latest
+    links:
+      - zookeeper:zk
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_CREATE_TOPICS: "egov-notification-sms:1:1"
+      KAFKA_ZOOKEEPER_CONNECT: zk:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  notification_sms:
+    image: egovio/notification-sms:latest
+    ports:
+      - "8080:8080"
+      - "9990:9990"
+    links:
+      - kafka

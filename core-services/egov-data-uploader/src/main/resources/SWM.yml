@@ -1,0 +1,34 @@
+UploadDefinitions: 
+ moduleName: swm
+ summary: solid waste managment module
+ version: 1.0.0
+ definitions:
+ - defName: create vendor-create case
+   apiRequest: {"RequestInfo":{},"vendors":[{"tenantId":"","name":"","servicedLocations":[{"code":""}],"registrationNo":"","supplier":{"tenantId":"","supplierNo":"","name":"","agencyName":"","mobileNo":"","contactNo":"","faxNumber":"","email":"","address":"","tinNumber":"","gst":"","aadharNo":""},"agreementDocument":{"fileStoreId":""},"servicesOffered":[{"code":""}],"details":""}]} 
+   
+   headerJsonPathMap: {"Vendor Name":["$.vendors.*.name"],"Serviced locations":["$.vendors.*.servicedLocations.*.code"],"Registration No":["$.vendors.*.registrationNo"],"Supplier No":["$.vendors.*.supplier.supplierNo"],"Supplier Name":["$.vendors.*.supplier.name"],"Agency Name":["$.vendors.*.supplier.agencyName"],"Mobile No":["$.vendors.*.supplier.mobileNo"],"Contact No":["$.vendors.*.supplier.contactNo"],"FaxNo":["$.vendors.*.supplier.faxNumber"],"Email":["$.vendors.*.supplier.email"],"Address":["$.vendors.*.supplier.address"],"Supplier TinNo":["$.vendors.*.supplier.tinNumber"],"GST":["$.vendors.*.supplier.gst"],"Aadhar No":["$.vendors.*.supplier.aadharNo"],"Agreement":["$.vendors.*.agreementDocument.fileStoreId"],"Services Offered":["$.vendors.*.servicesOffered.*.code"],"Details":["$.vendors.*.details"]}
+
+   isBulkApi: true
+   arrayPath: $.vendors.*
+   isParentChild: true
+   uniqueParentKeys: ["Registration No"]
+   tenantIdPaths: ["$.vendors.*.tenantId"]
+   uniqueKeysForInnerObject: []
+   uri: /swm-services/vendors/_create
+   additionalResFields:
+   templateFileName: swm_vendor_create.xls
+
+ - defName: vehicle-create case
+   apiRequest: {"requestInfo":{},"vehicles":[{"tenantId":"","vehicleType":{"code":""},"purchaseInfo":{"purchaseDate":0,"price":0,"sourceOfPurchase":""},"fuelType":{"code":""},"operatorsReq":0,"driver":{"code":""},"vendor":{"vendorNo":""},"manufacturingDetails":{"engineSrNumber":"","chassisSrNumber":"","vehicleCapacity":0,"model":""},"insuranceDetails":{"insuranceNumber":"","insuranceValidityDate":0,"insuranceDocuments":{"fileStoreId":""}},"kilometers":0,"endOfWarranty":0,"remarks":"","isVehicleUnderWarranty":true,"isVehicleUlbOwned":true}]} 
+   
+   headerJsonPathMap: {"Vehicle Type":["$.vehicles.*.vehicleType.code"],"Purchase Date":["$.vehicles.*.purchaseInfo.purchaseDate"],"Purchase Price":["$.vehicles.*.purchaseInfo.price"],"Source of Purchase":["$.vehicles.*.purchaseInfo.sourceOfPurchase"],"Fuel Type":["$.vehicles.*.fuelType.code"],"Operators Required":["$.vehicles.*.operatorsReq"],"Driver":["$.vehicles.*.driver.code"],"Vendor No":["$.vehicles.*.vendor.vendorNo"],"Engine No":["$.vehicles.*.manufacturingDetails.engineSrNumber"],"Chassis SrNo":["$.vehicles.*.manufacturingDetails.chassisSrNumber"],"Vehicle Capacity":["$.vehicles.*.manufacturingDetails.vehicleCapacity"],"Model":["$.vehicles.*.manufacturingDetails.model"],"Insurance No":["$.vehicles.*.insuranceDetails.insuranceNumber"],"Insurance Validity Date":["$.vehicles.*.insuranceDetails.insuranceValidityDate"],"Insurance Documents":["$.vehicles.*.insuranceDetails.insuranceDocuments.fileStoreId"],"Kilometers":["$.vehicles.*.kilometers"],"End Of Warranty":["$.vehicles.*.endOfWarranty"],"Remarks":["$.vehicles.*.remarks"],"Under warranty":["$.vehicles.*.isVehicleUnderWarranty"],"ULB Owned":["$.vehicles.*.isVehicleUlbOwned"]}
+
+   isBulkApi: true
+   arrayPath: $.vehicles.*
+   isParentChild: false
+   uniqueParentKeys: ["Chassis SrNo","Engine No"]
+   tenantIdPaths: ["$.vehicles.*.tenantId"]
+   uniqueKeysForInnerObject: []
+   uri: /swm-services/vehicles/_create
+   additionalResFields:
+   templateFileName: swm_vehicles_create.xls

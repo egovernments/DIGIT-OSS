@@ -1,0 +1,42 @@
+{
+    "responseInfo": {
+        "apiId": null,
+        "ver": null,
+        "ts": null,
+        "resMsgId": null,
+        "msgId": null,
+        "status": null
+    },
+    "error": {
+        "code": 400,
+        "message": null,
+        "description": null,
+        "fields": [
+            {
+                "code": "NotEmpty",
+                "message": "may not be empty",
+                "field": "messages[1].message"
+            },
+            {
+                "code": "NotEmpty",
+                "message": "may not be empty",
+                "field": "messages[1].module"
+            },
+            {
+                "code": "NotEmpty",
+                "message": "may not be empty",
+                "field": "messages[1].code"
+            },
+            {
+                "code": "NotEmpty",
+                "message": "may not be empty",
+                "field": "tenantId"
+            },
+            {
+                "code": "NotEmpty",
+                "message": "may not be empty",
+                "field": "messages[1].locale"
+            }
+        ]
+    }
+}

@@ -1,0 +1,15 @@
+{
+"RequestInfo":{
+ }
+,
+"Boundary": {
+	
+	"name" : "test",
+	"code" : "TEST",
+	"boundaryType" : {
+		"code" : "2"
+	},
+	"boundaryNum" : 2
+
+}
+}

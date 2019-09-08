@@ -1,0 +1,1 @@
+{"RequestInfo":{"apiId":null,"ver":null,"ts":null,"action":null,"did":null,"key":null,"msgId":null,"authToken":null,"correlationId":null,"userInfo":null},"MdmsCriteria":{"tenantId":"ap","moduleDetails":[{"moduleName":"ACCESSCONTROL-ROLES","masterDetails":[{"name":"roles","filter":"[?(@.code IN ['EMP'])]"}]}]}}

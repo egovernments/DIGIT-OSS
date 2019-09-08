@@ -1,0 +1,7 @@
+{
+  "requestInfo": null,
+  "otp": {
+    "identity": "identity",
+    "tenantId": "tenantId"
+  }
+}

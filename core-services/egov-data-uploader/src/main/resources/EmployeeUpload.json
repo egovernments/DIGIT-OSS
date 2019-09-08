@@ -1,0 +1,138 @@
+{
+  "moduleName": "HR-Employee",
+  "Definitions": [
+    {
+      "name": "Upload-Employee-Data",
+      "uniqueParentKeys": ["$.code"],
+      "templateFileName": "employee_template.xlsx",
+      "isParentChild": true,
+      "requests": [
+        {
+          "apiRequest": {
+            "RequestInfo": {
+              "apiId": "org.egov.pgr",
+              "ver": "1.0",
+              "ts": "24-04-2016 12:12:12",
+              "action": "asd",
+              "did": "4354648646",
+              "key": "xyz",
+              "msgId": null,
+              "correlationId": null,
+              "authToken": "7a09f859-af51-4621-878a-f3b77980607a"
+            },
+            "Employee": {
+              "code": "code",
+              "dateOfAppointment": "dateOfAppointment",
+              "employeeStatus": "employeeStatus",
+              "employeeType": "employeeType",
+              "assignments": [
+                {
+                  "fromDate": "fromDate",
+                  "toDate": "toDate",
+                  "department": "department",
+                  "designation": "designation",
+                  "position": 0,
+                  "isPrimary": true,
+                  "hod": []
+                }
+              ],
+              "physicallyDisabled": false,
+              "transferredEmployee": false,
+              "medicalReportProduced": true,
+              "languagesKnown": [],
+              "maritalStatus": "MARRIED",
+              "ifscCode": "ffwe",
+              "documents": [],
+              "serviceHistory": [],
+              "probation": [],
+              "regularisation": [],
+              "technical": [],
+              "education": [],
+              "test": [],
+              "user": {
+                "roles": [
+                  {
+                    "code": "code",
+                    "name": "name",
+                    "tenantId": "tenantId"
+                  }
+                ],
+                "userName": "userName",
+                "name": "name",
+                "gender": "gender",
+                "mobileNumber": "mobileNumber",
+                "emailId": "emailId",
+                "permanentAddress": "permanentAddress",
+                "correspondenceAddress": "correspondenceAddress",
+                "active": true,
+                "dob": "dob",
+                "signature": "fghdfgewfg374823",
+                "type": "EMPLOYEE",
+                "tenantId": "tenantId"
+              },
+              "tenantId": "tenantId"
+            }
+          },
+          "excelHeadersToRequestMap": {
+            "Name": [
+              "$.Employee.user.name"
+            ],
+            "Gender": [
+              "$.Employee.user.gender"
+            ],
+            "Mobile Number": [
+              "$.Employee.user.mobileNumber"
+            ],
+            "Email ID": [
+              "$.Employee.user.emailId"
+            ],
+            "PAN No": [
+              "$.Employee.user.pan"
+            ],
+            "Aadhar No": [
+              "$.Employee.user.aadhar"
+            ],
+            "Permanent Address": [
+              "$.Employee.user.permanentAddress"
+            ],
+            "Correspondence Address": [
+              "$.Employee.user.correspondenceAddress"
+            ],
+            "DoB": [
+              "$.Employee.user.dob"
+            ],
+            "Employee Code": [
+              "$.Employee.code", "$.Employee.user.userName"
+            ],
+            "Date of Appointment": [
+              "$.Employee.dateOfAppointment"
+            ],
+            "Department": [
+              "$.Employee.assignments.*.department"
+            ],
+            "Designation": [
+              "$.Employee.assignments.*.designation"
+            ],
+            "fromDate": [
+              "$.Employee.assignments.*.fromDate"
+            ],
+            "toDate": [
+              "$.Employee.assignments.*.toDate"
+            ],
+            "Jurisduction": [
+              "$.Employee.assignments.*.jurisdiction"
+            ]
+          },
+          "arrayPath": null,
+          "tenantIdPaths": [
+            "$.Employee.tenantId", "$.Employee.user.role.*.tenantId"
+          ],
+          "url": "http://hr-employee-v2:8080/hr-employee-v2/employees/_create",
+          "additionalResFields": {
+            "$.Employee.*.id[0]": "Employee ID"
+          }
+        }
+      ]
+    }
+  ]
+}

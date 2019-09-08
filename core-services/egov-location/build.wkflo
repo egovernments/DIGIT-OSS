@@ -1,0 +1,9 @@
+def build(path, ci_image) {
+    stage("Build"){
+        docker.image("${ci_image}").inside {
+            sh "cd ${path}; mvn clean package -U -s settings.xml";
+        }
+    }
+}
+
+return this;

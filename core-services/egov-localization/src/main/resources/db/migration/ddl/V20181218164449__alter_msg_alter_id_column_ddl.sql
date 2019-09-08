@@ -1,0 +1,1 @@
+ALTER TABLE message ALTER COLUMN id TYPE varchar(512);

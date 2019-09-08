@@ -1,0 +1,1 @@
+INSERT INTO id_generator(idname, tenantid, format, sequencenumber) VALUES ('swm.vehicle.trip.number', 'default', 'MH-SWM-VHL-TRIP-[SEQ_SWM_VHL_TRIP_NUM]', 1);

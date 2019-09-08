@@ -1,0 +1,67 @@
+{
+  "moduleName": "Collections",
+  "Definitions": [
+    {
+      "name": "Upload-Receipt-Workflow-Data",
+      "uniqueParentKeys": [],
+      "templateFileName": "collection_receipt_workflow_template.xls",
+      "isParentChild": false,
+      "requests": [
+        {
+          "apiRequest": {
+            "ReceiptWorkflow": [
+              {
+                "consumerCode": "",
+                "receiptNumber": "",
+                "action": "",
+                "reason": "",
+                "additionalDetails": {
+                  "temp": ""
+                }
+              }
+            ],
+            "RequestInfo": {
+              "apiId": "Rainmaker",
+              "ver": ".01",
+              "ts": 0,
+              "action": "_create",
+              "did": "1",
+              "key": "",
+              "msgId": "20170310130900|en_IN",
+              "authToken": "8040b93b-03ea-4532-81b7-164538cee9d4",
+              "correlationId": "a2e4642e-8cb5-483b-8ea2-827cbe822c5f",
+              "userInfo": {
+                "id": 1
+              }
+            }
+          },
+          "excelHeadersToRequestMap": {
+            "consumerCode": [
+              "$.ReceiptWorkflow.*.consumerCode"
+            ],
+            "receiptNumber": [
+              "$.ReceiptWorkflow.*.receiptNumber"
+            ],
+            "action": [
+              "$.ReceiptWorkflow.*.action"
+            ],
+            "reason": [
+              "$.ReceiptWorkflow.*.reason"
+            ],
+            "additionalDetails": [
+              "$.ReceiptWorkflow.*.additionalDetails"
+            ]
+          },
+          "arrayPath": "$.ReceiptWorkflow.*",
+          "tenantIdPaths": [
+            "$.ReceiptWorkflow.*.tenantId"
+          ],
+          "url": "http://collection-services:8080/collection-services/receipts/_workflow",
+          "additionalResFields": {
+            "$.ReceiptWorkflow.*.code[0]": "Response"
+          }
+        }
+      ]
+    }
+  ]
+}

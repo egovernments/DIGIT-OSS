@@ -1,0 +1,203 @@
+{
+	"info": {
+		"_postman_id": "4578ff36-17a2-4fc0-8614-ed3094f71a68",
+		"name": "egov-enc-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Encrypt",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"encryptionRequests\": [\n    {\n      \"tenantId\": \"pb\",\n      \"type\": \"Imp\",\n      \"value\": \"My email\"\n    },\n    {\n      \"tenantId\": \"pb.jalandhar\",\n      \"type\": \"Normal\",\n      \"value\": [\n        \"Personal\",\n        \"Private\"\n      ]\n    },\n    {\n      \"tenantId\": \"pb.mohali\",\n      \"type\": \"Normal\",\n      \"value\": {\n        \"userObject1\": {\n          \"name\": \"John Doe\",\n          \"mobileNumber\": \"98989121234\"\n        }\n      }\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "localhost:1234//egov-enc-service/crypto/v1/_encrypt",
+					"host": [
+						"localhost"
+					],
+					"port": "1234",
+					"path": [
+						"",
+						"egov-enc-service",
+						"crypto",
+						"v1",
+						"_encrypt"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Decrypt",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n    \"437506|A5ag4DfbhHAHiqXRKFcAedFKtNOelHX+8+jB0ckNG/tihwimx7xu6akEoa+kaQPcIhSnYeveloIhdPBCOgrXWvkWGZfShx1i2bE2vAcWB+r0YIDdwZLKJbQGBHDqcEOn8mfO+LnmpJ5P4zPETtE+2EHhta+vKcE5OQj8ZQawHS4=\",\n    [\n        \"896077|I/8Xwqr5MwB6UucEP8/Q5wiCHpbaNqGE\",\n        \"896077|I+gMx6TjN0BcLxudEiYQKIDKtSlmpJY=\"\n    ],\n    {\n        \"userObject1\": {\n            \"mobileNumber\": \"395551|eSfiPrQ1UK07d0SupYQYqbr2QFNOWSuYJYcU\",\n            \"name\": \"395551|CnCzaK1ADfnx+4FINXIQ9zjnUs1ieAtz\"\n        }\n    }\n]"
+				},
+				"url": {
+					"raw": "localhost:1234//egov-enc-service/crypto/v1/_decrypt",
+					"host": [
+						"localhost"
+					],
+					"port": "1234",
+					"path": [
+						"",
+						"egov-enc-service",
+						"crypto",
+						"v1",
+						"_decrypt"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"tenantId\": \"pb.jalandhar\",\n\t\"value\": \"value\"\n}"
+				},
+				"url": {
+					"raw": "localhost:1234//egov-enc-service/crypto/v1/_sign",
+					"host": [
+						"localhost"
+					],
+					"port": "1234",
+					"path": [
+						"",
+						"egov-enc-service",
+						"crypto",
+						"v1",
+						"_sign"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"value\": \"value\",\n    \"signature\": \"553916|dyQwMYZw7an2FhXg14yKki5L/jd2WrUMAfp1uzMPkNlwXILNeW0VMxa7USFI71QvCQCLPnQGCXcPXSo6jXiIJrZhSn8B4etGWrXXEjxSoSF8l/t+XiTJZoeBxnefb112iMxJCW2ZIDRdp83wItPJwxVfWHxnWOTHemQHUNNwzk4=\"\n}"
+				},
+				"url": {
+					"raw": "localhost:1234//egov-enc-service/crypto/v1/_verify",
+					"host": [
+						"localhost"
+					],
+					"port": "1234",
+					"path": [
+						"",
+						"egov-enc-service",
+						"crypto",
+						"v1",
+						"_verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rotate Key",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"tenantId\": \"pb.phagwara\"\n}"
+				},
+				"url": {
+					"raw": "localhost:1234/egov-enc-service/crypto/v1/_rotatekey",
+					"host": [
+						"localhost"
+					],
+					"port": "1234",
+					"path": [
+						"egov-enc-service",
+						"crypto",
+						"v1",
+						"_rotatekey"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Tenants",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Postman-Token",
+						"value": "5f9b2036-0eab-475d-9314-eb8ba585471f"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"RequestInfo\": {\n   \"apiId\": \"asset-services\",\n   \"ver\": null,\n   \"ts\": null,\n   \"action\": null,\n   \"did\": null,\n   \"key\": null,\n   \"msgId\": \"search with from and to values\",\n   \"authToken\": \"59854f79-7031-4157-9cb5-21c51cb61981\"\n },\n \"MdmsCriteria\": {\n   \"tenantId\": \"pb\",\n   \"moduleDetails\": [\n     {\n       \"moduleName\": \"tenant\",\n       \"masterDetails\": [\n         {\n           \"name\": \"tenants\",\n           \"filter\":\"$.*.code\"\n         }\n       ]\n     }\n   ]\n }\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/egov-mdms-service/v1/_search",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"egov-mdms-service",
+						"v1",
+						"_search"
+					]
+				},
+				"description": "Generated from a curl request: \ncurl -X POST \\\n https://egov-micro-dev.egovernments.org/egov-mdms-service/v1/_search \\\n -H 'Cache-Control: no-cache' \\\n -H 'Content-Type: application/json' \\\n -H 'Postman-Token: 5f9b2036-0eab-475d-9314-eb8ba585471f' \\\n -d '{\n \\\"RequestInfo\\\": {\n   \\\"apiId\\\": \\\"asset-services\\\",\n   \\\"ver\\\": null,\n   \\\"ts\\\": null,\n   \\\"action\\\": null,\n   \\\"did\\\": null,\n   \\\"key\\\": null,\n   \\\"msgId\\\": \\\"search with from and to values\\\",\n   \\\"authToken\\\": \\\"59854f79-7031-4157-9cb5-21c51cb61981\\\"\n },\n \\\"MdmsCriteria\\\": {\n   \\\"tenantId\\\": \\\"pb\\\",\n   \\\"moduleDetails\\\": [\n     {\n       \\\"moduleName\\\": \\\"tenant\\\",\n       \\\"masterDetails\\\": [\n         {\n           \\\"name\\\": \\\"tenants\\\",\n           \\\"filter\\\":\\\"$.*.code\\\"\n         }\n       ]\n     }\n   ]\n }\n}'"
+			},
+			"response": []
+		}
+	]
+}

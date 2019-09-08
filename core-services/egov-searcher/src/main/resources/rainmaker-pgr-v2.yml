@@ -1,0 +1,215 @@
+SearchDefinitions:
+ moduleName: rainmaker-pgr-V2
+ summary: PGR resolver for Rainmaker
+ version: 1.0.0
+ definitions:
+ - name: serviceSearchWithDetails
+   query: 
+    baseQuery: select array_to_json(array_agg(row_to_json(serviceRequests))) from (select (select (select (row_to_json(services)) from ( select *, (select (select row_to_json(auditDetails) from (select createdtime, lastmodifiedtime, createdby, lastmodifiedby from eg_pgr_service where svc.serviceRequestId=eg_pgr_service.serviceRequestId) auditDetails) as auditDetails), (select (select (row_to_json(addressDetail)) from (select * from eg_pgr_address where eg_pgr_address.uuid=eg_pgr_service.addressid) addressDetail) as addressDetail) from eg_pgr_service svc where svc.serviceRequestId=eg_pgr_service.serviceRequestId order by createdtime desc) services) as services),(select (select array_to_json(array_agg(row_to_json(actionHistory))) from ( select * from eg_pgr_action where businessKey=eg_pgr_service.serviceRequestId order by "when" desc) actionHistory) as actionHistory) from eg_pgr_service $where order by createdtime desc $pagination) serviceRequests
+    groupBy:    
+    orderBy: 
+   searchParams:
+    condition: AND
+    params:
+    - name: tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+      operator: LIKE
+    - name: servicerequestid
+      isMandatory: false
+      jsonPath: $.searchCriteria.serviceRequestId
+    - name: servicerequestid
+      isMandatory: false
+      jsonPath: $.searchCriteria.complaintId
+      operator: LIKE
+    - name: accountid
+      isMandatory: false
+      jsonPath: $.searchCriteria.accountId
+    - name: status
+      isMandatory: false
+      jsonPath: $.searchCriteria.status
+    - name: createdtime
+      isMandatory: false
+      operator: GE
+      jsonPath: $.searchCriteria.startDate
+    - name: createdtime
+      isMandatory: false
+      operator: LE
+      jsonPath: $.searchCriteria.endDate
+    - name: lastmodifiedtime
+      isMandatory: false
+      jsonPath: $.searchCriteria.lastUpdatedSince
+    - name: serviceCode
+      isMandatory: false
+      jsonPath: $.searchCriteria.serviceCodes
+    - name: phone
+      isMandatory: false
+      jsonPath: $.searchCriteria.phone
+    - name: createdby
+      isMandatory: false
+      jsonPath: $.searchCriteria.createdBy
+    - name: active
+      isMandatory: false
+      jsonPath: $.searchCriteria.active
+    pagination:
+      noOfRecords: $.searchCriteria.noOfRecords
+      offset: $.searchCriteria.offset
+
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.services
+    responseInfoPath: $.ResponseInfo
+
+ - name: getServiceRequestsOnAssignedTo
+   query: 
+    baseQuery: select array_to_json(array_agg(row_to_json(servicesRequestIds))) from (select businessKey from eg_pgr_action $where AND eg_pgr_action.when IN (select max("when") from eg_pgr_action where assignee NOTNULL group by businessKey)) servicesRequestIds
+    groupBy:    
+    orderBy: 
+   searchParams:
+    condition: AND
+    params:
+    - name: tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+    - name: assignee
+      isMandatory: true
+      jsonPath: $.searchCriteria.assignedTo
+
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.servicesRequestIds
+    responseInfoPath: $.ResponseInfo
+    
+    
+ - name: count
+   query: 
+    baseQuery: select array_to_json(array_agg(row_to_json(services))) from (select (row_to_json(services)) from ( select count(*) from eg_pgr_service $where) as services) services
+    groupBy:    
+    orderBy: 
+   searchParams:
+    condition: AND
+    params:
+    - name: tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+      operator: LIKE
+    - name: servicerequestid
+      isMandatory: false
+      jsonPath: $.searchCriteria.serviceRequestId
+      operator: LIKE
+    - name: accountid
+      isMandatory: false
+      jsonPath: $.searchCriteria.accountId
+    - name: status
+      isMandatory: false
+      jsonPath: $.searchCriteria.status
+    - name: createdtime
+      isMandatory: false
+      operator: GE
+      jsonPath: $.searchCriteria.startDate
+    - name: createdtime
+      isMandatory: false
+      operator: LE
+      jsonPath: $.searchCriteria.endDate
+    - name: lastmodifiedtime
+      isMandatory: false
+      jsonPath: $.searchCriteria.lastUpdatedSince
+    - name: serviceCode
+      isMandatory: false
+      jsonPath: $.searchCriteria.serviceCodes
+    - name: phone
+      isMandatory: false
+      jsonPath: $.searchCriteria.phone
+    - name: active
+      isMandatory: false
+      jsonPath: $.searchCriteria.active
+      
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.count
+    responseInfoPath: $.ResponseInfo
+    
+ - name: plainSearch
+   query: 
+    baseQuery: SELECT Array_to_json(Array_agg(Row_to_json(servicerequests))) FROM (SELECT (SELECT (SELECT ( Row_to_json(services) )FROM (SELECT *, (SELECT (SELECT Row_to_json(auditdetails) FROM (SELECT createdtime FROM eg_pgr_service WHERE  svc.servicerequestid = eg_pgr_service.servicerequestid) auditDetails) AS auditDetails), (SELECT (SELECT ( Row_to_json( addressdetail) ) FROM (SELECT * FROM eg_pgr_address WHERE  eg_pgr_address.uuid = eg_pgr_service.addressid) addressDetail) AS addressDetail) FROM eg_pgr_service svc WHERE  svc.servicerequestid = eg_pgr_service.servicerequestid ORDER  BY createdtime DESC) services) AS services), (SELECT (SELECT Array_to_json(Array_agg(Row_to_json(actionhistory))) FROM (SELECT * FROM eg_pgr_action WHERE  businesskey = eg_pgr_service.servicerequestid ORDER  BY "when" DESC) actionHistory) AS actionHistory) FROM eg_pgr_service $where AND servicerequestid in (Select servicerequestid from eg_pgr_service ORDER  BY createdtime ASC $pagination) ORDER  BY createdtime ASC) serviceRequests; 
+    groupBy:    
+    orderBy: 
+   searchParams:
+    condition: AND
+    params:
+    - name: tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+      operator: LIKE
+    - name: servicerequestid
+      isMandatory: false
+      jsonPath: $.searchCriteria.serviceRequestId
+    - name: servicerequestid
+      isMandatory: false
+      jsonPath: $.searchCriteria.complaintId
+      operator: LIKE
+    - name: accountid
+      isMandatory: false
+      jsonPath: $.searchCriteria.accountId
+    - name: status
+      isMandatory: false
+      jsonPath: $.searchCriteria.status
+    - name: createdtime
+      isMandatory: false
+      operator: GE
+      jsonPath: $.searchCriteria.startDate
+    - name: createdtime
+      isMandatory: false
+      operator: LE
+      jsonPath: $.searchCriteria.endDate
+    - name: lastmodifiedtime
+      isMandatory: false
+      jsonPath: $.searchCriteria.lastUpdatedSince
+    - name: serviceCode
+      isMandatory: false
+      jsonPath: $.searchCriteria.serviceCodes
+    - name: phone
+      isMandatory: false
+      jsonPath: $.searchCriteria.phone
+    - name: createdby
+      isMandatory: false
+      jsonPath: $.searchCriteria.createdBy
+    - name: active
+      isMandatory: false
+      jsonPath: $.searchCriteria.active
+    pagination:
+      noOfRecords: $.searchCriteria.noOfRecords
+      offset: $.searchCriteria.offset
+      
+   output:
+    jsonFormat: {"ResponseInfo": {}}
+    outJsonPath: $.services
+    responseInfoPath: $.ResponseInfo
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

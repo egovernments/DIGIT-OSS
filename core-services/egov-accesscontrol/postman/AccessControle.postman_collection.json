@@ -1,0 +1,229 @@
+{
+	"id": "4eabcd36-50a8-2e8f-ed10-055fa391cea6",
+	"name": "AccessControle",
+	"description": "",
+	"order": [
+		"349f0bf6-01f6-bffc-eaca-4d6fdd70b33a",
+		"bd294692-42c8-9b85-d912-5084ea21a6a5",
+		"d014d91a-f3ed-3610-f44c-6966931fd9cc",
+		"378c619f-0a1e-63fe-e175-2c061f61c618",
+		"50132d25-bb98-b42b-a469-56df2e904ded",
+		"ec67a125-d28c-c7d3-7b04-1321115ab7f2",
+		"02da2a9c-a6d2-aec2-f050-10f07f8b4469"
+	],
+	"folders": [],
+	"folders_order": [],
+	"timestamp": 1499077423309,
+	"owner": "2070265",
+	"public": false,
+	"requests": [
+		{
+			"id": "02da2a9c-a6d2-aec2-f050-10f07f8b4469",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://egov-micro-dev.egovernments.org/access/v1/actions/_update",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502703686188,
+			"name": "http://localhost:8091/access/v1/actions/_create",
+			"description": "",
+			"collectionId": "4eabcd36-50a8-2e8f-ed10-055fa391cea6",
+			"responses": [],
+			"rawModeData": "{\n  \"RequestInfo\": {\n    \"apiId\" : null,\n    \"ver\" : null,\n    \"msgId\" : null,\n    \"ts\" : \"10-03-2017 00:00:00\",\n    \"authToken\" : \"76ca3d52-c266-43b1-99af-0a8be5f6abe8\",\n    \"userInfo\" : {\n    \t\n    \t\"id\" : 1\n    }\n    \n  },\n  \n  \"actions\" : [\n  \t\n  \t{\n  \t\t\"name\" : \"adsad\",\n  \t\t\"url\" : \"test1/test1/test1\",\n  \t\t\"displayName\" : \"TEstjhfjE\",\n  \t\t\"enabled\" : false\n  \t\t\n  \t\t\n  \t},\n  \t\n  \t{\n  \t   \"name\" : \"asdasd\",\n  \t\t\"url\" : \"test2/test2/test2\",\n  \t\t\"displayName\" : \"TEtskjadhfkjdsh\",\n  \t\t\"enabled\" : false\n  \t\t\n  \t}\n  \t\n  \t\n  \t\n  \t]\n  \n}"
+		},
+		{
+			"id": "349f0bf6-01f6-bffc-eaca-4d6fdd70b33a",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://egov-micro-dev.egovernments.org/access/v1/actions/_get",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502703425838,
+			"name": "http://localhost:8091/access/v1/actions/_get",
+			"description": "",
+			"collectionId": "4eabcd36-50a8-2e8f-ed10-055fa391cea6",
+			"responses": [],
+			"rawModeData": "{\n  \"tenantId\": \"default\",\n  \"roleCodes\": [\n    \"EMPLOYEE\"\n  ],\n  \"enabled\": true,\n  \"RequestInfo\": {\n    \"apiId\": \"org.egov.pt\",\n    \"ver\": \"1.0\",\n    \"ts\": \"27-06-2017 10:30:12\",\n    \"action\": \"asd\",\n    \"did\": \"4354648646\",\n    \"key\": \"xyz\",\n    \"msgId\": \"654654\",\n    \"requesterId\": \"61\",\n    \"authToken\": \"76ca3d52-c266-43b1-99af-0a8be5f6abe8\"\n  }\n}"
+		},
+		{
+			"id": "378c619f-0a1e-63fe-e175-2c061f61c618",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://egov-micro-dev.egovernments.org/access/v1/roles/_update",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502703799268,
+			"name": "http://localhost:8091/access/v1/roles/_update",
+			"description": "",
+			"collectionId": "4eabcd36-50a8-2e8f-ed10-055fa391cea6",
+			"responses": [],
+			"rawModeData": "{\n   \"RequestInfo\": {\n       \"apiId\" : \"emp\",\n       \"ver\" : \"1.0\",\n       \"ts\" : \"10-03-2017 00:00:00\",\n       \"action\" : \"create\",\n       \"did\" : \"1\",\n       \"key\" : \"abcdkey\",\n       \"msgId\" : \"20170310130900\",\n       \"requesterId\" : \"rajesh\",\n       \"authToken\" : \"76ca3d52-c266-43b1-99af-0a8be5f6abe8\",\n       \"userInfo\":{\n       \t\"id\":\"1\"\n       }\n       \n   },\n   \"roles\":[\n   \t{\n   \t\"name\":\"test3test2\",\n   \t\"code\" :\"testonecode112234324\",\n   \t\"description\" :\"test123description\"\n\n   \t},{\n \n \t\"name\":\"test4test1\",\n   \t\"code\" :\"testtwocode11234354\",\n   \t\"description\" :\"testcodedescription\"\n   \t\t\n   \t}\n   ]\n\n}"
+		},
+		{
+			"id": "50132d25-bb98-b42b-a469-56df2e904ded",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://egov-micro-dev.egovernments.org/access/v1/role-actions/_create",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502703579932,
+			"name": "http://localhost:8091/access/v1/role-actions/_create",
+			"description": "",
+			"collectionId": "4eabcd36-50a8-2e8f-ed10-055fa391cea6",
+			"responses": [],
+			"rawModeData": "{\n   \t\"RequestInfo\": {\n       \"apiId\" : \"emp\",\n       \"ver\" : \"1.0\",\n       \"ts\" : \"10-03-2017 00:00:00\",\n       \"action\" : \"create\",\n       \"did\" : \"1\",\n       \"key\" : \"abcdkey\",\n       \"msgId\" : \"20170310130900\",\n       \"requesterId\" : \"rajesh\",\n       \"authToken\" : \"76ca3d52-c266-43b1-99af-0a8be5f6abe8\",\n       \"userInfo\" :{\n       \"id\" : \"1\"\n       \n       }\n        \n   },\n   \n   \"role\" : {\n   \t\n   \t\"code\" : \"TEST\"\n   },\n   \n   \"actions\" : [\n   \t{\n   \t\t\n   \t\t\"name\" : \"testAction1\"\n   \t}\n],\n   \"tenantId\" : \"default\"\n \n}"
+		},
+		{
+			"id": "bd294692-42c8-9b85-d912-5084ea21a6a5",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://egov-micro-dev.egovernments.org/access/v1/actions/_update",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502703474881,
+			"name": "http://localhost:8091/access/v1/actions/_update",
+			"description": "",
+			"collectionId": "4eabcd36-50a8-2e8f-ed10-055fa391cea6",
+			"responses": [],
+			"rawModeData": "{\n  \"RequestInfo\": {\n    \"apiId\" : null,\n    \"ver\" : null,\n    \"msgId\" : null,\n    \"ts\" : \"10-03-2017 00:00:00\",\n        \"userInfo\":{\n       \t\"id\":\"1\"\n       },\n       \"authToken\": \"76ca3d52-c266-43b1-99af-0a8be5f6abe8\"\n  },\n  \"actions\": [\n    {\n      \"id\": 1,\n      \"name\": \"testfive\",\n      \"url\": \"/test\",\n      \"displayName\" : \"Create  Test\",\n      \"enabled\": false,\n      \"orderNumber\": 1,\n      \"createdBy\": 1,\n      \"lastModifiedBy\": 1,\n      \"tenantId\" : \"default\"\n      \n    },\n    {\n      \"id\": 2,\n      \"name\": \"testtesttest\",\n      \"url\": \"/test/test2\",\n      \"displayName\" : \"Update Test\",\n      \"enabled\": false,\n      \"orderNumber\": 2,\n      \"createdBy\": 1,\n      \"lastModifiedBy\": 1,\n      \"tenantId\" : \"default\"\n    }\n  ]\n}"
+		},
+		{
+			"id": "d014d91a-f3ed-3610-f44c-6966931fd9cc",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://egov-micro-dev.egovernments.org/access/v1/roles/_create",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502703536314,
+			"name": "http://localhost:8091/access/v1/roles/_create",
+			"description": "",
+			"collectionId": "4eabcd36-50a8-2e8f-ed10-055fa391cea6",
+			"responses": [],
+			"rawModeData": "{\n   \"RequestInfo\": {\n       \"apiId\" : \"emp\",\n       \"ver\" : \"1.0\",\n       \"ts\" : \"10-03-2017 00:00:00\",\n       \"action\" : \"create\",\n       \"did\" : \"1\",\n       \"key\" : \"abcdkey\",\n       \"msgId\" : \"20170310130900\",\n       \"requesterId\" : \"rajesh\",\n       \"authToken\" : \"76ca3d52-c266-43b1-99af-0a8be5f6abe8\",\n       \"userInfo\":{\n       \t\"id\":\"1\"\n       }\n       \n   },\n   \"roles\":[\n   \t{\n   \t\"name\":\"test3test2\",\n   \t\"code\" :\"testonecode112234324\",\n   \t\"description\" :\"test123description\"\n\n   \t},{\n \n \t\"name\":\"test4test1\",\n   \t\"code\" :\"testtwocode11234354\",\n   \t\"description\" :\"testcodedescription\"\n   \t\t\n   \t}\n   ]\n\n}"
+		},
+		{
+			"id": "ec67a125-d28c-c7d3-7b04-1321115ab7f2",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "http://egov-micro-dev.egovernments.org/access/v1/roles/_search",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "POST",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1502703639738,
+			"name": "http://localhost:8091/access/v1/roles/_search",
+			"description": "",
+			"collectionId": "4eabcd36-50a8-2e8f-ed10-055fa391cea6",
+			"responses": [],
+			"rawModeData": "{\n\n\t\"RequestInfo\": {\n       \"apiId\" : \"emp\",\n       \"ver\" : \"1.0\",\n       \"ts\" : \"10-03-2017 00:00:00\",\n       \"action\" : \"create\",\n       \"did\" : \"1\",\n       \"key\" : \"abcdkey\",\n       \"msgId\" : \"20170310130900\",\n       \"requesterId\" : \"rajesh\",\n       \"authToken\" : \"76ca3d52-c266-43b1-99af-0a8be5f6abe8\"\n      \n   }\n   \t\t\n\n}"
+		}
+	]
+}

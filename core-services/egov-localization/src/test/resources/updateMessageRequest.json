@@ -1,0 +1,20 @@
+{
+    "RequestInfo": {
+        "userInfo": {
+            "id": "1"
+        }
+    },
+    "tenantId": "default",
+    "module": "wcms",
+    "locale": "kn_IN",
+    "messages": [
+        {
+            "code": "wcms.create.connection.login",
+            "message": "kannada message for login"
+        },
+        {
+            "code": "wcms.create.connection.logout",
+            "message": "kannada message for logout"
+        }
+    ]
+}

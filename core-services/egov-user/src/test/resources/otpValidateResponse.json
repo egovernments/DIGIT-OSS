@@ -1,0 +1,12 @@
+{
+  "responseInfo": {
+
+  },
+  "otp": {
+    "otp": "1234",
+    "UUID": null,
+    "identity": "9988776655",
+    "tenantId": "default",
+    "isValidationSuccessful": true
+  }
+}

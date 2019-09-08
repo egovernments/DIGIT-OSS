@@ -1,0 +1,26 @@
+{
+    "responseInfo": null,
+    "error": {
+        "code": 400,
+        "message": "BoundaryTypeRequest is invalid",
+        "description": null,
+        "errorFields": [
+            {
+                "code": "boundary.0013",
+                "message": "BoundaryType Name is Required",
+                "field": "name"
+            },
+            {
+                "code": "boundary.0014",
+                "message": "BoundaryType Hierarchy is Required",
+                "field": "hierarchy"
+            },
+            {
+                "code": "boundary.0016",
+                "message": "BoundaryType HierarchyTypeCode is Required",
+                "field": "code"
+            }
+        ],
+        "fields": null
+    }
+}

@@ -1,0 +1,2 @@
+INSERT INTO id_generator(idname, tenantid, format, sequencenumber) VALUES ('propertytax.acknumber', 'ap.propertytax.acknumber' , 'AP-PT-[yyyy/MM/dd]-[SEQ_ACK_NUM]-[d{2}]', 1);
+INSERT INTO id_generator(idname, tenantid, format, sequencenumber) VALUES ('propertytax.assessmentnumber', 'mh.propertytax.assessmentnumber', 'MH-PT-[yyyy/MM/dd]-[SEQ_ASSESMNT_NUM]-[d{2}]', 2);

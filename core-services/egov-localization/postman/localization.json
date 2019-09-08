@@ -1,0 +1,136 @@
+{
+	"variables": [],
+	"info": {
+		"name": "localization",
+		"_postman_id": "edb7f3a5-54db-0eab-407f-ceab4d4d399b",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "fetch messages",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8087/localization/messages/v1/_search?locale=en_IN&tenantId=default&module=default",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8087",
+					"path": [
+						"localization",
+						"messages",
+						"v1",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "locale",
+							"value": "en_IN",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "tenantId",
+							"value": "default",
+							"equals": true,
+							"description": ""
+						},
+						{
+							"key": "module",
+							"value": "default",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"RequestInfo\": {\n\t\t\n\t},\n\t\"user\": {\n      \"permanentAddress\": \"new padd1\",\n      \"permanentCity\": \"new pcity1\",\n      \"permanentPinCode\": \"new 1\",\n      \"correspondenceAddress\": \"new cadd2\",\n      \"correspondenceCity\": \"new ccity2\",\n      \"correspondencePinCode\": \"new pin2\",\n      \"tenantId\": \"ap.public\"\n\t}\n}"
+				},
+				"description": "Fetch messages for given locale"
+			},
+			"response": []
+		},
+		{
+			"name": "bust localization cache",
+			"request": {
+				"url": "http://localhost:8087/localization/messages/cache-bust",
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"description": "Bust Redis cache for localization messages"
+			},
+			"response": []
+		},
+		{
+			"name": "create messages",
+			"request": {
+				"url": "http://localhost:8087/localization/messages/v1/_create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"tenantId\": \"kerala.pl\",\n    \"messages\": [\n        {\n            \"code\": \"cs.foo\",\n            \"message\": \"Foo\",\n            \"module\": \"cs\",\n            \"locale\": \"kl_IN\"\n        },\n        {\n            \"code\": \"cs.bar\",\n            \"message\": \"Bar\",\n            \"module\": \"cs\",\n            \"locale\": \"kl_IN\"\n        }\n    ]\n}\n"
+				},
+				"description": "Fetch messages for given locale"
+			},
+			"response": []
+		},
+		{
+			"name": "update messages",
+			"request": {
+				"url": "http://localhost:8087/localization/messages/v1/_update",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"tenantId\": \"kerala.pl\",\n    \"locale\": \"kl_IN\",\n    \"module\": \"cs\",\n    \"messages\": [\n        {\n            \"code\": \"cs.foo\",\n            \"message\": \"Foo2\"\n        },\n        {\n            \"code\": \"cs.bar\",\n            \"message\": \"Bar2\"\n        }\n    ]\n}\n"
+				},
+				"description": "Fetch messages for given locale"
+			},
+			"response": []
+		},
+		{
+			"name": "delete messages",
+			"request": {
+				"url": "http://localhost:8087/localization/messages/v1/_delete",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"tenantId\": \"kerala.pl\",\n    \"messages\": [\n        {\n            \"code\": \"cs.foo\",\n            \"message\": \"Foo2\",\n            \"locale\": \"kl_IN\",\n    \t\t\"module\": \"cs\"\n        },\n        {\n            \"code\": \"cs.bar\",\n            \"message\": \"Bar2\",\n            \"locale\": \"kl_IN\",\n    \t\t\"module\": \"cs\"\n        }\n    ]\n}\n"
+				},
+				"description": "Fetch messages for given locale"
+			},
+			"response": []
+		}
+	]
+}
