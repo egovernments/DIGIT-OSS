@@ -1,0 +1,28 @@
+{
+  "requestInfo": {
+	    "action": "action",
+	    "did": "did",
+	    "msgId": "msgId",
+	    "requesterId": "requesterId",
+	    "ts": "01-01-2017 01:01:01",
+	    "authToken": null
+    },
+	"recoverys": [
+		{
+			"code": "12312313132",
+			"name": "name",
+			"chartOfAccount": {
+				"glcode": "341",
+				"tenantId": "default"
+			},
+			"active": true,
+			"type": "M",
+			"remitted": "S",
+			"ifscCode": "SBIN0005532",
+			"accountNumber": "3049223457",
+			"tenantId": "default",
+			"mode": "M",
+			"remittanceMode": "M"
+		}
+	]
+}

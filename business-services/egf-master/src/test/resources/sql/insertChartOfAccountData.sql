@@ -1,0 +1,7 @@
+insert into egf_chartofaccount (id, glcode,name,accountcodepurposeid,description,isactiveforposting,parentid,type,classification,functionrequired,budgetcheckrequired,majorcode,issubledger,createdby,createddate,lastmodifiedby,lastmodifieddate,version,tenantid) values('2','glcode','name','P','description',true,'1','B',123456,true,true,'majorcode',true,'',now(),'',now(),'1','default');
+
+insert into egf_chartofaccount (id, glcode,name,accountcodepurposeid,description,isactiveforposting,parentid,type,classification,functionrequired,budgetcheckrequired,majorcode,issubledger,createdby,createddate,lastmodifiedby,lastmodifieddate,version,tenantid) values('1','glcode','name','P','description',true,'','B',123456,true,true,'majorcode',true,'',now(),'',now(),'1','default');
+
+insert into egf_chartofaccount (id, glcode,name,accountcodepurposeid,description,isactiveforposting,parentid,type,classification,functionrequired,budgetcheckrequired,majorcode,issubledger,createdby,createddate,lastmodifiedby,lastmodifieddate,version,tenantid) values('4','glcode','name','P','description',true,'3','B',123456,true,true,'majorcode',true,'',now(),'',now(),'1','default');
+
+insert into egf_chartofaccount (id, glcode,name,accountcodepurposeid,description,isactiveforposting,parentid,type,classification,functionrequired,budgetcheckrequired,majorcode,issubledger,createdby,createddate,lastmodifiedby,lastmodifieddate,version,tenantid) values('3','glcode','name','P','description',true,'','B',123456,true,true,'majorcode',true,'',now(),'',now(),'1','default');

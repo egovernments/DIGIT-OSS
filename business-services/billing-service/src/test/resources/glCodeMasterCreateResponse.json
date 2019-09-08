@@ -1,0 +1,22 @@
+{
+  "ResponseInfo": {
+    "apiId": null,
+    "ver": null,
+    "ts": null,
+    "resMsgId": null,
+    "msgId": null,
+    "status": null
+  },
+  "GlCodeMasters": [
+    {
+      "id":"12",
+      "tenantId":"ap.kurnool",
+      "service":"string",
+      "taxHead":"string",
+      "glCode":"string",
+      "fromDate":0,
+      "toDate":0,
+      "auditDetails": null
+    }
+  ]
+}

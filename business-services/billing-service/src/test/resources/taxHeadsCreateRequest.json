@@ -1,0 +1,26 @@
+{
+  "RequestInfo": {
+    "apiId": null,
+    "ver": null,
+    "ts": null,
+    "resMsgId": null,
+    "msgId": null,
+    "status": null
+  },
+  "TaxHeadMasters": [
+    {
+      "id": "23",
+      "tenantId": "ap.kurnool",
+      "category": "TAX",
+      "service": "string",
+      "name": "string",
+      "code": "string",
+      "isDebit": true,
+      "isActualDemand": true,
+      "validFrom":324,
+      "validTill":23,
+      "order":12,
+      "auditDetail": null
+    }
+  ]
+}

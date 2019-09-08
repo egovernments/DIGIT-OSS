@@ -1,0 +1,16 @@
+"accountEntities":
+[
+		{
+			"id":"1",
+			"name":"nameU",
+			"code":"codeU",
+			"accountDetailType":{
+				"id":"1",
+				"tenantId":"default"
+			},
+			"active":true,
+			"description":"entity",
+			"tenantId":"default"
+		}
+
+]

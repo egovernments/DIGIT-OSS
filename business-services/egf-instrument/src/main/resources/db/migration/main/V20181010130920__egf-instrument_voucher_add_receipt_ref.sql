@@ -1,0 +1,1 @@
+ALTER TABLE egf_instrumentvoucher ADD COLUMN receiptHeaderId varchar(256);

@@ -1,0 +1,40 @@
+{
+	"info": {
+		"_postman_id": "199db000-e1ea-41e0-a559-2fca1e4d5d9d",
+		"name": "Apportion",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "apportion",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"ts\": \"\",\n    \"ver\": \".01\",\n    \"userInfo\": {\n                           \n                        \"id\": 104,\n                        \"uuid\": \"1dc1db2c-6f26-4803-a3a7-028eb4abff6e\",\n                        \"userName\": \"9999999999\",\n                            \"name\": \"dfghj\",\n                        \"gender\": null,\n                        \"mobileNumber\": \"9999999999\",\n                            \"type\": \"CITIZEN\",\n                            \"roles\": [\n                                {\n                                    \"id\": null,\n                                    \"name\": \"Citizen\",\n                                    \"code\": \"CITIZEN\"\n                                }\n                            ],\n                            \"tenantId\": \"pb\"\n                        },\n    \"authToken\":  \"7f7d617b-f7b4-4e2c-907d-dfd0256f2331\"\n  },\n  \"tenantId\":\"pb.amritsar\",\n  \"Bills\":[\n  {\n      \"id\": \"10090\",\n      \"payeeName\": \"NAMEchanged\",\n      \"payeeAddress\": \"ADDRESS\",\n      \"mobileNumber\": \"9999999999\",\n      \"payeeEmail\": null,\n      \"isActive\": true,\n      \"isCancelled\": false,\n      \"collectionMap\": {\n        \"PT\": \"213409\"\n        },\n      \"billDetails\": [\n        {\n          \"id\": \"10166\",\n          \"bill\": \"10090\",\n          \"billDate\": 1551249289654,\n          \"billDescription\": \"PT Consumer Code: PT-107-016526:AS-2019-02-27-016985\",\n          \"billNumber\": \"10166\",\n          \"consumerCode\": \"PT-107-016526:AS-2019-02-27-016985\",\n          \"consumerType\": \"BUILTUP\",\n          \"minimumAmount\": 100,\n          \"totalAmount\": 213409,\n          \"collectedAmount\": 0,\n          \"collectionModesNotAllowed\": [\n            \"\"\n          ],\n          \"tenantId\": \"pb.amritsar\",\n          \"businessService\": \"PT\",\n          \"displayMessage\": \"PT Consumer Code: PT-107-016526:AS-2019-02-27-016985\",\n          \"callBackForApportioning\": false,\n          \"receiptNumber\": null,\n          \"receiptDate\": null,\n          \"receiptType\": null,\n          \"channel\": null,\n          \"voucherHeader\": null,\n          \"boundary\": null,\n          \"reasonForCancellation\": null,\n          \"amountPaid\": null,\n          \"cancellationRemarks\": null,\n          \"status\": null,\n          \"billAccountDetails\": [\n            {\n              \"id\": \"37770\",\n              \"tenantId\": \"pb.amritsar\",\n              \"billDetail\": \"10166\",\n              \"glcode\": \"1100101\",\n              \"order\": 2,\n              \"accountDescription\": \"PT_CANCER_CESS-1522540800000-1554076799000\",\n              \"amount\": 8750,\n              \"adjustedAmount\": 0,\n              \"isActualDemand\": true,\n              \"purpose\": \"CURRENT_AMOUNT\"\n            },\n            {\n              \"id\": \"37771\",\n              \"tenantId\": \"pb.amritsar\",\n              \"billDetail\": \"10166\",\n              \"glcode\": \"1405019\",\n              \"order\": 99,\n              \"accountDescription\": \"PT_DECIMAL_CEILING_CREDIT-1522540800000-1554076799000\",\n              \"amount\": 0.1,\n              \"adjustedAmount\": 0,\n              \"isActualDemand\": true,\n              \"purpose\": \"CURRENT_AMOUNT\"\n            },\n            {\n              \"id\": \"37772\",\n              \"tenantId\": \"pb.amritsar\",\n              \"billDetail\": \"10166\",\n              \"glcode\": \"1405013\",\n              \"order\": 2,\n              \"accountDescription\": \"PT_FIRE_CESS-1522540800000-1554076799000\",\n              \"amount\": 8750,\n              \"adjustedAmount\": 0,\n              \"isActualDemand\": true,\n              \"purpose\": \"CURRENT_AMOUNT\"\n            },\n            {\n              \"id\": \"37773\",\n              \"tenantId\": \"pb.amritsar\",\n              \"billDetail\": \"10166\",\n              \"glcode\": \"1405015\",\n              \"order\": 1,\n              \"accountDescription\": \"PT_OWNER_EXEMPTION-1522540800000-1554076799000\",\n              \"amount\": -5000,\n              \"adjustedAmount\": 0,\n              \"isActualDemand\": true,\n              \"purpose\": \"EXEMPTION\"\n            },\n            {\n              \"id\": \"37774\",\n              \"tenantId\": \"pb.amritsar\",\n              \"billDetail\": \"10166\",\n              \"glcode\": \"1405013\",\n              \"order\": 3,\n              \"accountDescription\": \"PT_TAX-1522540800000-1554076799000\",\n              \"amount\": 180000,\n              \"adjustedAmount\": 0,\n              \"isActualDemand\": true,\n              \"purpose\": \"CURRENT_AMOUNT\"\n            },\n            {\n              \"id\": \"37775\",\n              \"tenantId\": \"pb.amritsar\",\n              \"billDetail\": \"10166\",\n              \"glcode\": \"1405019\",\n              \"order\": 10,\n              \"accountDescription\": \"PT_TIME_INTEREST-1522540800000-1554076799000\",\n              \"amount\": 3408.9,\n              \"adjustedAmount\": 0,\n              \"isActualDemand\": true,\n              \"purpose\": \"OTHERS\"\n            },\n            {\n              \"id\": \"37776\",\n              \"tenantId\": \"pb.amritsar\",\n              \"billDetail\": \"10166\",\n              \"glcode\": \"1405013\",\n              \"order\": 1,\n              \"accountDescription\": \"PT_TIME_PENALTY-1522540800000-1554076799000\",\n              \"amount\": 17500,\n              \"adjustedAmount\": 0,\n              \"isActualDemand\": true,\n              \"purpose\": \"OTHERS\"\n            },\n            {\n              \"id\": \"37777\",\n              \"tenantId\": \"pb.amritsar\",\n              \"billDetail\": \"10166\",\n              \"glcode\": \"1405016\",\n              \"order\": 1,\n              \"accountDescription\": \"PT_TIME_REBATE-1522540800000-1554076799000\",\n              \"amount\": 0,\n              \"adjustedAmount\": 0,\n              \"isActualDemand\": true,\n              \"purpose\": \"REBATE\"\n            },\n            {\n              \"id\": \"37778\",\n              \"tenantId\": \"pb.amritsar\",\n              \"billDetail\": \"10166\",\n              \"glcode\": \"1405019\",\n              \"order\": 100,\n              \"accountDescription\": \"PT_UNIT_USAGE_EXEMPTION-1522540800000-1554076799000\",\n              \"amount\": 0,\n              \"adjustedAmount\": 0,\n              \"isActualDemand\": true,\n              \"purpose\": \"EXEMPTION\"\n            }\n          ],\n          \"manualReceiptNumber\": null,\n          \"stateId\": null\n        }       \n      ],\n      \"tenantId\": \"pb.amritsar\",\n      \"auditDetails\": null\n    }\n  \t]\n\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/apportion-service/v1/_apportion",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"apportion-service",
+						"v1",
+						"_apportion"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

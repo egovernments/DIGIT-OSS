@@ -1,0 +1,9 @@
+"accountCodePurposes": 
+	   [
+		   	{
+		   	    "id":"1",
+			    "name":"name",
+		   		"tenantId":"default"
+		   	}
+	   	
+	   ]

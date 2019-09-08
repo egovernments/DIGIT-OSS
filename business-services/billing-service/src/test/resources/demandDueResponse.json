@@ -1,0 +1,56 @@
+{
+  "ResponseInfo": {
+    "apiId": "apiId",
+    "ver": "ver",
+    "ts": null,
+    "resMsgId": null,
+    "msgId": null,
+    "status": null
+  },
+  "DemandDue": {
+    "consolidatedTax": {
+      "arrearsDemand": 0,
+      "arrearsCollection": 0,
+      "arrearsBalance": 0,
+      "currentDemand": 255,
+      "currentCollection": 205,
+      "currentBalance": 50
+    },
+   "demands": [
+        {
+            "id": null,
+            "tenantId": "ap.kurnool",
+            "consumerCode": "consumercode",
+            "consumerType": "consumertype",
+            "businessService": "businessservice",
+            "minimumAmountPayable": 200,
+            "owner": {
+                "id": 1,
+                "userName": null,
+                "name": null,
+                "mobileNumber": null,
+                "emailId": null
+            },
+            "taxPeriodFrom": 12345,
+            "taxPeriodTo": 1234567890,
+
+            "demandDetails": [
+                {
+                    "id": null,
+                    "demandId": null,
+                    "taxHeadMasterCode" : "0002",
+                    "taxAmount": 100,
+                    "collectionAmount": 0
+               },
+                {
+                    "id": null,
+                    "demandId": null,
+                    "taxHeadMasterCode" : "0003",
+                    "taxAmount": 200,
+                    "collectionAmount": 0
+                }
+            ]
+            }
+    ]
+  }
+}

@@ -1,0 +1,501 @@
+serviceMaps:
+  serviceName: HRMS
+  mappings:
+  - version: 1.0
+    name: hrms
+    description: Persists employee details in the table
+    fromTopic: save-hrms-employee
+    isTransaction: true
+    queryMaps:
+    - query: INSERT INTO eg_hrms_employee(tenantid, id, uuid, code, dateOfAppointment, employeestatus, employeetype, active, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*
+      jsonMaps:
+
+
+      - jsonPath: $.Employees.*.tenantId
+
+      - jsonPath: $.Employees.*.id
+
+      - jsonPath: $.Employees.*.uuid
+
+      - jsonPath: $.Employees.*.code
+
+      - jsonPath: $.Employees.*.dateOfAppointment
+
+      - jsonPath: $.Employees.*.employeeStatus
+
+      - jsonPath: $.Employees.*.employeeType
+
+      - jsonPath: $.Employees.*.isActive
+
+      - jsonPath: $.Employees.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.auditDetails.lastModifiedDate
+
+
+
+    - query: INSERT INTO eg_hrms_assignment(tenantid, uuid, position, department, designation, fromdate, todate, govtordernumber, reportingto, isHOD, iscurrentassignment, employeeid, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*.assignments.*
+      jsonMaps:
+
+
+      - jsonPath: $.Employees[*][?({id} in @.assignments[*].id)].tenantId
+
+      - jsonPath: $.Employees.*.assignments.*.id
+
+      - jsonPath: $.Employees.*.assignments.*.position
+
+      - jsonPath: $.Employees.*.assignments.*.department
+
+      - jsonPath: $.Employees.*.assignments.*.designation
+
+      - jsonPath: $.Employees.*.assignments.*.fromDate
+
+      - jsonPath: $.Employees.*.assignments.*.toDate
+
+      - jsonPath: $.Employees.*.assignments.*.govtOrderNumber
+
+      - jsonPath: $.Employees.*.assignments.*.reportingTo
+
+      - jsonPath: $.Employees.*.assignments.*.isHOD
+
+      - jsonPath: $.Employees.*.assignments.*.isCurrentAssignment
+
+      - jsonPath: $.Employees[*][?({id} in @.assignments[*].id)].uuid
+
+      - jsonPath: $.Employees.*.assignments.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.assignments.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.assignments.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.assignments.*.auditDetails.lastModifiedDate
+
+
+
+
+    - query: INSERT INTO eg_hrms_educationaldetails(tenantid, uuid, employeeid, qualification, stream, yearofpassing, university, remarks, isactive, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*.education.*
+      jsonMaps:
+
+
+      - jsonPath: $.Employees[*][?({id} in @.education[*].id)].tenantId
+
+      - jsonPath: $.Employees.*.education.*.id
+
+      - jsonPath: $.Employees[*][?({id} in @.education[*].id)].uuid
+
+      - jsonPath: $.Employees.*.education.*.qualification
+
+      - jsonPath: $.Employees.*.education.*.stream
+
+      - jsonPath: $.Employees.*.education.*.yearOfPassing
+
+      - jsonPath: $.Employees.*.education.*.university
+
+      - jsonPath: $.Employees.*.education.*.remarks
+
+      - jsonPath: $.Employees.*.education.*.isActive
+
+      - jsonPath: $.Employees.*.education.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.education.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.education.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.education.*.auditDetails.lastModifiedDate
+
+
+    - query: INSERT INTO eg_hrms_departmentaltests(tenantid, uuid, employeeid, test, yearofpassing, remarks, isactive, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*.tests.*
+      jsonMaps:
+
+
+      - jsonPath: $.Employees[*][?({id} in @.tests[*].id)].tenantId
+
+      - jsonPath: $.Employees.*.tests.*.id
+
+      - jsonPath: $.Employees[*][?({id} in @.tests[*].id)].uuid
+
+      - jsonPath: $.Employees.*.tests.*.test
+
+      - jsonPath: $.Employees.*.tests.*.yearOfPassing
+
+      - jsonPath: $.Employees.*.tests.*.remarks
+
+      - jsonPath: $.Employees.*.tests.*.isActive
+
+      - jsonPath: $.Employees.*.tests.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.tests.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.tests.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.tests.*.auditDetails.lastModifiedDate
+
+
+    - query: INSERT INTO eg_hrms_empdocuments(tenantid, uuid, employeeid, documentid, documentname, referencetype, referenceid, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*.documents.*
+      jsonMaps:
+
+
+      - jsonPath: $.Employees[*][?({id} in @.documents[*].id)].tenantId
+
+      - jsonPath: $.Employees.*.documents.*.id
+
+      - jsonPath: $.Employees[*][?({id} in @.documents[*].id)].uuid
+
+      - jsonPath: $.Employees.*.documents.*.documentId
+
+      - jsonPath: $.Employees.*.documents.*.documentName
+
+      - jsonPath: $.Employees.*.documents.*.referenceType
+
+      - jsonPath: $.Employees.*.documents.*.referenceId
+
+      - jsonPath: $.Employees.*.documents.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.documents.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.documents.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.documents.*.auditDetails.lastModifiedDate
+
+
+    - query: INSERT INTO eg_hrms_servicehistory(tenantid, uuid, employeeid, servicestatus, servicefrom, serviceto, ordernumber, isCurrentPosition, location, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*.serviceHistory.*
+      jsonMaps:
+
+
+      - jsonPath: $.Employees[*][?({id} in @.serviceHistory[*].id)].tenantId
+
+      - jsonPath: $.Employees.*.serviceHistory.*.id
+
+      - jsonPath: $.Employees[*][?({id} in @.serviceHistory[*].id)].uuid
+
+      - jsonPath: $.Employees.*.serviceHistory.*.serviceStatus
+
+      - jsonPath: $.Employees.*.serviceHistory.*.serviceFrom
+
+      - jsonPath: $.Employees.*.serviceHistory.*.serviceTo
+
+      - jsonPath: $.Employees.*.serviceHistory.*.orderNo
+
+      - jsonPath: $.Employees.*.serviceHistory.*.isCurrentPosition
+
+      - jsonPath: $.Employees.*.serviceHistory.*.location
+
+      - jsonPath: $.Employees.*.serviceHistory.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.serviceHistory.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.serviceHistory.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.serviceHistory.*.auditDetails.lastModifiedDate
+
+
+    - query: INSERT INTO eg_hrms_jurisdiction (uuid, employeeid, hierarchy, boundarytype, boundary, tenantid, isActive, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*.jurisdictions.*
+      jsonMaps:
+
+      - jsonPath: $.Employees.*.jurisdictions.*.id
+
+      - jsonPath: $.Employees[*][?({id} in @.jurisdictions[*].id)].uuid
+
+      - jsonPath: $.Employees.*.jurisdictions.*.hierarchy
+
+      - jsonPath: $.Employees.*.jurisdictions.*.boundaryType
+
+      - jsonPath: $.Employees.*.jurisdictions.*.boundary
+
+      - jsonPath: $.Employees[*][?({id} in @.jurisdictions[*].id)].tenantId
+
+      - jsonPath: $.Employees.*.jurisdictions.*.isActive
+
+      - jsonPath: $.Employees.*.jurisdictions.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.jurisdictions.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.jurisdictions.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.jurisdictions.*.auditDetails.lastModifiedDate
+
+
+
+
+  - version: 1.0
+    name: hrms
+    description: Persists employee details in the table
+    fromTopic: update-hrms-employee
+    isTransaction: true
+    queryMaps:
+    - query: DELETE from eg_hrms_employee WHERE uuid=?
+
+      basePath: Employees.*
+      jsonMaps:
+
+      - jsonPath:  $.Employees.*.uuid
+
+    - query: INSERT INTO eg_hrms_employee(tenantid, id, uuid, code, dateOfAppointment, employeestatus, employeetype, active, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*
+      jsonMaps:
+
+
+      - jsonPath: $.Employees.*.tenantId
+
+      - jsonPath: $.Employees.*.id
+
+      - jsonPath: $.Employees.*.uuid
+
+      - jsonPath: $.Employees.*.code
+
+      - jsonPath: $.Employees.*.dateOfAppointment
+
+      - jsonPath: $.Employees.*.employeeStatus
+
+      - jsonPath: $.Employees.*.employeeType
+
+      - jsonPath: $.Employees.*.isActive
+
+      - jsonPath: $.Employees.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.auditDetails.lastModifiedDate
+
+
+
+    - query: INSERT INTO eg_hrms_assignment(tenantid, uuid, position, department, designation, fromdate, todate, govtordernumber, reportingto, isHOD, iscurrentassignment, employeeid, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*.assignments.*
+      jsonMaps:
+
+
+      - jsonPath: $.Employees[*][?({id} in @.assignments[*].id)].tenantId
+
+      - jsonPath: $.Employees.*.assignments.*.id
+
+      - jsonPath: $.Employees.*.assignments.*.position
+
+      - jsonPath: $.Employees.*.assignments.*.department
+
+      - jsonPath: $.Employees.*.assignments.*.designation
+
+      - jsonPath: $.Employees.*.assignments.*.fromDate
+
+      - jsonPath: $.Employees.*.assignments.*.toDate
+
+      - jsonPath: $.Employees.*.assignments.*.govtOrderNumber
+
+      - jsonPath: $.Employees.*.assignments.*.reportingTo
+
+      - jsonPath: $.Employees.*.assignments.*.isHOD
+
+      - jsonPath: $.Employees.*.assignments.*.isCurrentAssignment
+
+      - jsonPath: $.Employees[*][?({id} in @.assignments[*].id)].uuid
+
+      - jsonPath: $.Employees.*.assignments.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.assignments.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.assignments.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.assignments.*.auditDetails.lastModifiedDate
+
+
+
+
+    - query: INSERT INTO eg_hrms_educationaldetails(tenantid, uuid, employeeid, qualification, stream, yearofpassing, university, remarks, isactive, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*.education.*
+      jsonMaps:
+
+
+      - jsonPath: $.Employees[*][?({id} in @.education[*].id)].tenantId
+
+      - jsonPath: $.Employees.*.education.*.id
+
+      - jsonPath: $.Employees[*][?({id} in @.education[*].id)].uuid
+
+      - jsonPath: $.Employees.*.education.*.qualification
+
+      - jsonPath: $.Employees.*.education.*.stream
+
+      - jsonPath: $.Employees.*.education.*.yearOfPassing
+
+      - jsonPath: $.Employees.*.education.*.university
+
+      - jsonPath: $.Employees.*.education.*.remarks
+
+      - jsonPath: $.Employees.*.education.*.isActive
+
+      - jsonPath: $.Employees.*.education.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.education.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.education.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.education.*.auditDetails.lastModifiedDate
+
+
+    - query: INSERT INTO eg_hrms_departmentaltests(tenantid, uuid, employeeid, test, yearofpassing, remarks, isactive, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*.tests.*
+      jsonMaps:
+
+
+      - jsonPath: $.Employees[*][?({id} in @.tests[*].id)].tenantId
+
+      - jsonPath: $.Employees.*.tests.*.id
+
+      - jsonPath: $.Employees[*][?({id} in @.tests[*].id)].uuid
+
+      - jsonPath: $.Employees.*.tests.*.test
+
+      - jsonPath: $.Employees.*.tests.*.yearOfPassing
+
+      - jsonPath: $.Employees.*.tests.*.remarks
+
+      - jsonPath: $.Employees.*.tests.*.isActive
+
+      - jsonPath: $.Employees.*.tests.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.tests.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.tests.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.tests.*.auditDetails.lastModifiedDate
+
+
+    - query: INSERT INTO eg_hrms_empdocuments(tenantid, uuid, employeeid, documentid, documentname, referencetype, referenceid, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*.documents.*
+      jsonMaps:
+
+
+      - jsonPath: $.Employees[*][?({id} in @.documents[*].id)].tenantId
+
+      - jsonPath: $.Employees.*.documents.*.id
+
+      - jsonPath: $.Employees[*][?({id} in @.documents[*].id)].uuid
+
+      - jsonPath: $.Employees.*.documents.*.documentId
+
+      - jsonPath: $.Employees.*.documents.*.documentName
+
+      - jsonPath: $.Employees.*.documents.*.referenceType
+
+      - jsonPath: $.Employees.*.documents.*.referenceId
+
+      - jsonPath: $.Employees.*.documents.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.documents.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.documents.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.documents.*.auditDetails.lastModifiedDate
+
+
+    - query: INSERT INTO eg_hrms_servicehistory(tenantid, uuid, employeeid, servicestatus, servicefrom, serviceto, ordernumber, isCurrentPosition, location, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*.serviceHistory.*
+      jsonMaps:
+
+
+      - jsonPath: $.Employees[*][?({id} in @.serviceHistory[*].id)].tenantId
+
+      - jsonPath: $.Employees.*.serviceHistory.*.id
+
+      - jsonPath: $.Employees[*][?({id} in @.serviceHistory[*].id)].uuid
+
+      - jsonPath: $.Employees.*.serviceHistory.*.serviceStatus
+
+      - jsonPath: $.Employees.*.serviceHistory.*.serviceFrom
+
+      - jsonPath: $.Employees.*.serviceHistory.*.serviceTo
+
+      - jsonPath: $.Employees.*.serviceHistory.*.orderNo
+
+      - jsonPath: $.Employees.*.serviceHistory.*.isCurrentPosition
+
+      - jsonPath: $.Employees.*.serviceHistory.*.location
+
+      - jsonPath: $.Employees.*.serviceHistory.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.serviceHistory.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.serviceHistory.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.serviceHistory.*.auditDetails.lastModifiedDate
+
+
+    - query: INSERT INTO eg_hrms_jurisdiction (uuid, employeeid, hierarchy, boundarytype, boundary, tenantid, isActive, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*.jurisdictions.*
+      jsonMaps:
+
+      - jsonPath: $.Employees.*.jurisdictions.*.id
+
+      - jsonPath: $.Employees[*][?({id} in @.jurisdictions[*].id)].uuid
+
+      - jsonPath: $.Employees.*.jurisdictions.*.hierarchy
+
+      - jsonPath: $.Employees.*.jurisdictions.*.boundaryType
+
+      - jsonPath: $.Employees.*.jurisdictions.*.boundary
+
+      - jsonPath: $.Employees[*][?({id} in @.jurisdictions[*].id)].tenantId
+
+      - jsonPath: $.Employees.*.jurisdictions.*.isActive
+
+      - jsonPath: $.Employees.*.jurisdictions.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.jurisdictions.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.jurisdictions.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.jurisdictions.*.auditDetails.lastModifiedDate
+
+
+
+    - query: INSERT INTO eg_hrms_deactivationdetails(uuid, employeeid, reasonfordeactivation, effectivefrom, ordernumber, remarks, tenantid, createdby, createddate, lastmodifiedby, lastModifiedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+      basePath: Employees.*.deactivationDetails.*
+      jsonMaps:
+
+      - jsonPath: $.Employees.*.deactivationDetails.*.id
+
+      - jsonPath: $.Employees[*][?({id} in @.deactivationDetails[*].id)].uuid
+
+      - jsonPath: $.Employees.*.deactivationDetails.*.reasonForDeactivation
+
+      - jsonPath: $.Employees.*.deactivationDetails.*.effectiveFrom
+
+      - jsonPath: $.Employees.*.deactivationDetails.*.orderNo
+
+      - jsonPath: $.Employees.*.deactivationDetails.*.remarks
+
+      - jsonPath: $.Employees[*][?({id} in @.deactivationDetails[*].id)].tenantId
+
+      - jsonPath: $.Employees.*.deactivationDetails.*.auditDetails.createdBy
+
+      - jsonPath: $.Employees.*.deactivationDetails.*.auditDetails.createdDate
+
+      - jsonPath: $.Employees.*.deactivationDetails.*.auditDetails.lastModifiedBy
+
+      - jsonPath: $.Employees.*.deactivationDetails.*.auditDetails.lastModifiedDate
