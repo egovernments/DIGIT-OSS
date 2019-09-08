@@ -1,0 +1,9 @@
+def build(path, ci_image) {
+    stage("Build") {
+        docker.image("node:6-alpine").inside {
+            sh "npm set registry http://egov-micro-dev.egovernments.org/verdaccio";
+        }
+    }
+}
+
+return this;

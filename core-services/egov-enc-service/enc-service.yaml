@@ -1,0 +1,181 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: eGov Encryption Service
+  description: API for encryption / decryption
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+
+paths:
+
+  /crypto/v1/_encrypt:
+    post:
+      summary: Encrypts the given input value/s OR values of the object.
+      requestBody:
+        description: The request body can contain an array of Encryption Requests to support bulk encryption. The key for encryption will be decided based on the tenantId. Each tenant will have its own seperate key. The value to be encrypted can be simple string OR an array of string OR can be a JSON Object. In case the value is a JSON Object, all the values will get encrypted and keys will be left untouched. 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EncryptionRequest'
+            example:
+              {
+                "encryptionRequests": [
+                  {
+                    "tenantId": "pb",
+                    "type": "Important",
+                    "value": "My email"
+                  },
+                  {
+                    "tenantId": "pb.jalandhar",
+                    "type": "Normal",
+                    "value": [
+                      "Personal",
+                      "Private"
+                    ]
+                  },
+                  {
+                    "tenantId": "pb.mohali",
+                    "type": "Normal",
+                    "value": {
+                      "userObject1": {
+                        "name": "John Doe",
+                        "mobileNumber": "98989121234"
+                      }
+                    }
+                  }
+                ]
+              }
+
+      responses:
+        '200':
+          description: The returned encrypted value will have the same structure as the input value.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+              example:
+                  [
+                    "437506|A5ag4DfbhHAHiqXRKFcAedFKtNOelHX+8+jB0ckNG/tihwimx7xu6akEoa+kaQPcIhSnYeveloIhdPBCOgrXWvkWGZfShx1i2bE2vAcWB+r0YIDdwZLKJbQGBHDqcEOn8mfO+LnmpJ5P4zPETtE+2EHhta+vKcE5OQj8ZQawHS4=",
+                    [
+                        "896077|I/8Xwqr5MwB6UucEP8/Q5wiCHpbaNqGE",
+                        "896077|I+gMx6TjN0BcLxudEiYQKIDKtSlmpJY="
+                    ],
+                    {
+                        "userObject1": {
+                            "mobileNumber": "395551|eSfiPrQ1UK07d0SupYQYqbr2QFNOWSuYJYcU",
+                            "name": "395551|CnCzaK1ADfnx+4FINXIQ9zjnUs1ieAtz"
+                        }
+                    }
+                  ]
+
+
+      tags:
+        - Crypto
+
+  /crypto/v1/_decrypt:
+    post:
+      summary: Decrypts the given input value/s OR values of the object.
+      requestBody:
+        description: Input to a decryption request may be an simple string OR an array OR a JSON Object. Every Object/Array will be navigated through to find simple strings, and those strings will be decrypted.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+            example:
+               [
+                [
+                    "896077|I/8Xwqr5MwB6UucEP8/Q5wiCHpbaNqGE",
+                    "896077|I+gMx6TjN0BcLxudEiYQKIDKtSlmpJY="
+                ],
+                {
+                    "userObject1": {
+                        "mobileNumber": "395551|eSfiPrQ1UK07d0SupYQYqbr2QFNOWSuYJYcU",
+                        "name": "395551|CnCzaK1ADfnx+4FINXIQ9zjnUs1ieAtz"
+                    }
+                }
+              ]
+
+      responses:
+        '200':
+          description: The response to a decryption request will have the same structure as the input.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+              example:
+                [
+                  [
+                      "Personal",
+                      "Private"
+                  ],
+                  {
+                      "userObject1": {
+                          "mobileNumber": "98989121234",
+                          "name": "John Doe"
+                      }
+                  }
+                ]
+
+
+      tags:
+        - Crypto
+
+
+components:
+  schemas:
+
+    EncReqObject:
+      type: object
+      description: EncrReqObject contains data to be encrypted and meta-data required to perform the encryption.
+      properties:
+        tenantId:
+          type: string
+          description: Encryption Key will be decided based on tenant id.
+        type:
+          type: string
+          description: Method to be used for encryption ( AES / RSA )
+          enum:
+          - Important
+          - Normal
+        value:
+          type: array
+          description: Value/s to be encrypted. Can be a string or object or array
+          items: {}
+          example: ["Personal", "Private"]
+
+      example:
+          tenantId: "pb.jalandhar"
+          type: "Important"
+          value: {
+            "key": "secret"
+          }
+
+
+
+    EncryptionRequest:
+      type: object
+      description: An encryption request can contain multiple EncReqObject. This will help to encrypt bulk requests which may have different tenant-id and/or method ( AES / RSA ).
+      properties:
+        encryptionRequests:
+          type: array
+          items: 
+            $ref: '#/components/schemas/EncReqObject'
+      example:
+        {
+          "encryptionRequests": [
+              {
+                "tenantId": "pb.amritsar",
+                "type": "Important",
+                "value": {
+                  "key": "secret"
+                }
+              }
+            ]
+        }

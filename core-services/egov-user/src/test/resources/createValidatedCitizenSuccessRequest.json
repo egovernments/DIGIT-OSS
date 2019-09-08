@@ -1,0 +1,49 @@
+{
+  "RequestInfo": {
+    "apiId": "ap.public",
+    "ver": "1",
+    "ts": null,
+    "action": "POST",
+    "did": null,
+    "key": null,
+    "msgId": "8c11c5ca-03bd-11e7-93ae-92361f002671",
+    "userInfo" :{
+    "id" : 1
+    },
+    "requesterId": "62",
+    "authToken": "96a70a9a-03bd-11e7-93ae-92361f002671"
+  },
+  "User": {
+    "id": 0,
+    "userName": "jamaalbhai",
+    "password": "dawakhana@charminar",
+    "salutation": "dawakhana@charminar",
+    "name": "Jamaal Bhai",
+    "gender": "MALE",
+    "mobileNumber": "9988776655",
+    "emailId": "jamalbhai@maildrop.cc",
+    "altContactNumber": "",
+    "pan": "AITGC5624P",
+    "aadhaarNumber": "96a70a9a-03bd-11e7-93ae-92361f002671",
+    "permanentAddress": "Dawakhana",
+    "permanentCity": "Kaikoo",
+    "permanentPincode": "111111",
+    "correspondenceCity": null,
+    "correspondencePincode": null,
+    "correspondenceAddress": null,
+    "active": true,
+    "dob": "03/08/1917",
+    "pwdExpiryDate": null,
+    "locale": "string",
+    "type": "CITIZEN",
+    "signature": "",
+    "accountLocked": false,
+    "fatherOrHusbandName": "Hamaal",
+    "bloodGroup": "O_POSITIVE",
+    "identificationMark": "Head is missing on the body",
+    "photo": null,
+    "otpReference": "88a9ea58-2342-4a4d-bbec-3211b5140722",
+    "tenantId": "default",
+    "roles": []
+  }
+}

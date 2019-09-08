@@ -1,0 +1,26 @@
+SearchDefinitions:
+  moduleName: billing-service-indexer
+  summary: Searcher for billing-1.1
+  version: 1.0.0
+  definitions:
+  - name: serviceDemands
+    query:
+      baseQuery: select array_to_json(array_agg(row_to_json(result))) from  (select id,tenantid, consumercode,consumertype,businessservice, (select row_to_json(ownerr) from (select u.uuid,u.id,userName,  u.type,salutation,name,(CASE u.gender   WHEN 1 THEN 'FEMALE'   WHEN 2 THEN 'MALE' WHEN 3 THEN 'OTHERS' ELSE NULL  END) AS gender,mobileNumber,emailId,  altContactNumber,pan,aadhaarNumber, addr1.address  as permanentaddress,   addr1.city  as permanentcity,   addr1.pincode as permanentpincode, addr2.address  as correspondenceaddress,   addr2.city  as correspondencecity, addr2.pincode  as correspondencepincode ,active, u.tenantId from eg_user u left outer join eg_user_address  addr1 ON u.id = addr1.userid and addr1.type='PERMANENT' left outer join eg_user_address  addr2 ON u.id = addr2.userid and addr2.type='CORRESPONDANCE') ownerr where ownerr.uuid = demand.payer) payer, taxperiodfrom,taxperiodto, (select array_to_json(array_agg(row_to_json(demanddetail))) from  (select id,demandid,taxheadcode taxHeadMasterCode,taxamount,collectionamount, additionalDetails,(select row_to_json(audit) from (select demanddetail.createdBy,demanddetail.lastModifiedBy,demanddetail.createdTime,demanddetail.lastModifiedTime) as audit) as  auditdetails,tenantid  from egbs_demanddetail_v1 demanddetail) demanddetail where demand.id=demanddetail.demandid AND demand.tenantid=demanddetail.tenantid  ) demanddetails, (select row_to_json(audit) from (select demand.createdBy,demand.lastModifiedBy,demand.createdTime,demand.lastModifiedTime) as audit) as  auditdetails ,billExpiryTime,additionalDetails,minimumamountpayable,status from egbs_demand_v1 demand $where AND demand.id in ( select id from egbs_demand_v1 order by createdtime ASC $pagination)) result
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: tenantid
+        isMandatory: true
+        jsonPath: $.searchCriteria.tenantId
+        operator: LIKE
+      pagination:
+        noOfRecords: $.searchCriteria.noOfRecords
+        offset: $.searchCriteria.offset
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Demands
+      responseInfoPath: $.ResponseInfo
+

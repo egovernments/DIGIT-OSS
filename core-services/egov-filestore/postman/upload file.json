@@ -1,0 +1,53 @@
+{
+	"variables": [],
+	"info": {
+		"name": "upload file",
+		"_postman_id": "f1e121ca-d880-0577-f240-d019fef55e94",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://egov-micro-dev.egovernments.org/filestore/v1/files",
+			"request": {
+				"url": "http://egov-micro-dev.egovernments.org/filestore/v1/files",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/mixed",
+						"description": "",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "Parrots-HD-Wallpapers-Beautiful-Flying.jpg"
+						},
+						{
+							"key": "tenantId",
+							"value": "default",
+							"type": "text"
+						},
+						{
+							"key": "module",
+							"value": "pgr",
+							"type": "text"
+						},
+						{
+							"key": "tag",
+							"value": "00040-2017-QR",
+							"type": "text"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

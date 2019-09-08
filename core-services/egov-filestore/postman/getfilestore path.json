@@ -1,0 +1,22 @@
+{
+	"variables": [],
+	"info": {
+		"name": "filestore by id",
+		"_postman_id": "812a3be1-a180-9918-2fc9-60d5128bf28c",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://egov-micro-dev.egovernments.org/filestore/v1/files/id?tenantId=default&fileStoreId=6ab99e84-6217-4d40-814f-8641f36b328d",
+			"request": {
+				"url": "http://egov-micro-dev.egovernments.org/filestore/v1/files/id?tenantId=default&fileStoreId=6ab99e84-6217-4d40-814f-8641f36b328d",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

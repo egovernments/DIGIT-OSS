@@ -1,0 +1,12 @@
+{
+  "ResponseInfo": {
+
+  },
+  "otp": {
+    "otp": "1234",
+    "UUID": "2b936aae-c3b6-4c89-b3b3-a098cdcbb706",
+    "identity":"9988776655",
+    "tenantId": "ap.hyd",
+    "isValidationSuccessful": false
+  }
+}

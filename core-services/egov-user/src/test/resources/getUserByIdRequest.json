@@ -1,0 +1,27 @@
+{
+  "RequestInfo": {
+    "apiId": "apiId",
+    "ver": "version",
+    "action": "action",
+    "did": "did",
+    "key": "key",
+    "msgId": "msgId",
+    "requesterId": "requestId",
+    "authToken": "authToken"
+  },
+
+  "id": [1, 2],
+  "userName": "userName",
+  "name": "name",
+  "mobileNumber": "mobileNumber",
+  "aadhaarNumber": "aadhaarNumber",
+  "pan": "pan",
+  "emailId": "emailId",
+  "fuzzyLogic": true,
+  "active": true,
+  "userType": "CITIZEN",
+  "roleCodes": [
+    "roleCode1",
+    "roleCode2"
+  ]
+}

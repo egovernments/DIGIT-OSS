@@ -1,0 +1,4 @@
+insert into eg_userrole (roleid,roleidtenantid,userid,tenantid) values((select id from eg_role where name='Service request Creator'),'default',(select id from eg_user where username='mahaadmin'),'default');
+insert into eg_userrole (roleid,roleidtenantid,userid,tenantid) values((select id from eg_role where name='Service request administrator'),'default',(select id from eg_user where username='mahaadmin'),'default');
+insert into eg_userrole (roleid,roleidtenantid,userid,tenantid) values((select id from eg_role where name='Service request status update'),'default',(select id from eg_user where username='mahaadmin'),'default');
+insert into eg_userrole (roleid,roleidtenantid,userid,tenantid) values((select id from eg_role where name='Service request Report viewer'),'default',(select id from eg_user where username='mahaadmin'),'default');

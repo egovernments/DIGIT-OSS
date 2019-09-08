@@ -1,0 +1,1 @@
+INSERT INTO id_generator(idname, tenantid, format, sequencenumber) VALUES ('swm.contract.number', 'default', 'MH-SWM-CTRT-[SEQ_SWM_CTRT_NUM]', 1);

@@ -1,0 +1,23 @@
+ServiceMaps:
+ serviceName: Trade License
+ version: 1.0.0
+ mappings:
+  - topic: save-tl-tradelicense
+    configKey: INDEX
+    indexes:
+    - name: tradelicense-v1
+      type: licenses
+      id: $.id, $.tenantId
+      isBulk: true
+      timeStampField: $.auditDetails.createdTime
+      jsonPath: $.Licenses
+      
+  - topic: update-tl-tradelicense
+    configKey: INDEX
+    indexes:
+    - name: tradelicense-v1
+      type: licenses
+      id: $.id, $.tenantId
+      isBulk: true
+      timeStampField: $.auditDetails.createdTime
+      jsonPath: $.Licenses

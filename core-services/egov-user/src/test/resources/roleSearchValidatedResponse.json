@@ -1,0 +1,29 @@
+{
+  "ResponseInfo": null,
+  "MdmsRes": {
+    "ACCESSCONTROL-ROLES": {
+      "roles": [
+        {
+          "code": "Employee",
+          "name": "Employee",
+          "description": "Employee"
+        },
+        {
+          "code": "EADMIN",
+          "name": "Employee Admin",
+          "description": "Employee Admin"
+        },
+        {
+          "code": "GRO",
+          "name": "Routing officer",
+          "description": "Routing officer"
+        },
+        {
+          "code": "EMP",
+          "name": "EMP",
+          "description": "EMP"
+        }
+      ]
+    }
+  }
+}

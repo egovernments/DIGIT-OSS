@@ -1,0 +1,322 @@
+{
+  "RequestInfo": {
+    "apiId": null,
+    "ver": "1.0",
+    "action": "create",
+    "did": "1",
+    "key": "abcdkey",
+    "msgId": "20170310130900",
+    "requesterId": "rajesh",
+    "authToken": "92071937-1f0a-458a-8534-1c2099cd9dd4",
+    "userInfo": {
+      "id": 1,
+      "userName": "testUser",
+      "name": "test user",
+      "type": "type",
+      "mobileNumber": "9999999999",
+      "emailId": "test.user@gmail.com",
+      "roles": null
+    }
+  },
+  "Bills": [
+    {
+      "payeeName": "Kavi",
+      "payeeAddress": null,
+      "mobileNumber": "9797979797",
+      "payeeEmail": "Kavi.ram@egovernments.org",
+      "isActive": true,
+      "isCancelled": false,
+      "billDetails": [
+        {
+          "tenantId": "default",
+          "businessService": "MR",
+          "billNumber": "34682736482",
+          "billDate": 1506487307728,
+          "consumerCode": "AP-PT-2017/07/30-000005-18",
+          "consumerType": "PRIVATE",
+          "billDescription": "MR Consumer Code: AP-PT-2017/07/30-000005-18",
+          "displayMessage": "MR Consumer Code: BL-PT-2017/07/30-000005-18",
+          "receiptDate": null,
+          "receiptNumber": null,
+          "minimumAmount": 1,
+          "totalAmount": 34345,
+          "collectionModesNotAllowed": [
+            "Cash",
+            "Cheque"
+          ],
+          "callBackForApportioning": false,
+          "partPaymentAllowed": true,
+          "billAccountDetails": [
+            {
+              "tenantId": "default",
+              "glcode": "78963742",
+              "order": 1,
+              "accountDescription": "EDU_CESS-1490985000000-1506796199000",
+              "crAmountToBePaid": 4648,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            },
+            {
+              "tenantId": "default",
+              "glcode": "983028301",
+              "order": 2,
+              "accountDescription": "EMP_GUA_CESS-1490985000000-1506796199000",
+              "crAmountToBePaid": 2324,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            },
+            {
+              "tenantId": "default",
+              "glcode": "3503002",
+              "order": 1,
+              "accountDescription": "LIB_CESS-1490985000000-1506796199000",
+              "crAmountToBePaid": 698,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            },
+            {
+              "tenantId": "default",
+              "glcode": "1100101",
+              "order": 1,
+              "accountDescription": "PT_TAX-1490985000000-1506796199000",
+              "crAmountToBePaid": 23237,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            }
+          ]
+        },
+        {
+          "tenantId": "default",
+          "businessService": "PT",
+          "billNumber": "4324234234",
+          "billDate": 1506487307728,
+          "consumerCode": "AP-PT-2017/07/30-000005-18",
+          "consumerType": "PRIVATE",
+          "billDescription": "AS Consumer Code: AP-PT-2017/07/30-000005-18",
+          "displayMessage": "AS Consumer Code: AP-PT-2017/07/30-000005-18",
+          "receiptDate": null,
+          "receiptNumber": null,
+          "minimumAmount": 1,
+          "totalAmount": 30907,
+          "collectionModesNotAllowed": [
+            "Cass Less"
+          ],
+          "callBackForApportioning": false,
+          "partPaymentAllowed": true,
+          "billAccountDetails": [
+            {
+              "tenantId": "default",
+              "billDetail": "1569",
+              "glcode": "3503002",
+              "order": 1,
+              "accountDescription": "EDU_CESS-1490985000000-1506796199000",
+              "crAmountToBePaid": 4648,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            },
+            {
+              "tenantId": "default",
+              "billDetail": "1569",
+              "glcode": "3503001",
+              "order": 1,
+              "accountDescription": "EMP_GUA_CESS-1490985000000-1506796199000",
+              "crAmountToBePaid": 2324,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            },
+            {
+              "tenantId": "default",
+              "billDetail": "1569",
+              "glcode": "3503002",
+              "order": 1,
+              "accountDescription": "LIB_CESS-1490985000000-1506796199000",
+              "crAmountToBePaid": 698,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            },
+            {
+              "tenantId": "default",
+              "billDetail": "1569",
+              "glcode": "1100101",
+              "order": 1,
+              "accountDescription": "PT_TAX-1490985000000-1506796199000",
+              "crAmountToBePaid": 23237,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            }
+          ]
+        }
+      ],
+      "tenantId": "default",
+      "auditDetail": null
+    },
+    {
+      "payeeName": "Saketh",
+      "payeeAddress": null,
+      "mobileNumber": "2342342342",
+      "payeeEmail": "saketh.ram@egovernments.org",
+      "isActive": true,
+      "isCancelled": false,
+      "billDetails": [
+        {
+          "tenantId": "default",
+          "bill": "1552",
+          "businessService": "PT",
+          "billNumber": "1569",
+          "billDate": 1506487307728,
+          "consumerCode": "AP-PT-2017/07/30-000005-18",
+          "consumerType": "PRIVATE",
+          "billDescription": "PT Consumer Code: AP-PT-2017/07/30-000005-18",
+          "displayMessage": "PT Consumer Code: AP-PT-2017/07/30-000005-18",
+          "receiptDate": null,
+          "receiptNumber": null,
+          "minimumAmount": 1,
+          "totalAmount": 30907,
+          "collectionModesNotAllowed": [
+            ""
+          ],
+          "callBackForApportioning": false,
+          "partPaymentAllowed": true,
+          "billAccountDetails": [
+            {
+              "tenantId": "default",
+              "billDetail": "1569",
+              "glcode": "3503002",
+              "order": 1,
+              "accountDescription": "EDU_CESS-1490985000000-1506796199000",
+              "crAmountToBePaid": 4648,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            },
+            {
+              "tenantId": "default",
+              "billDetail": "1569",
+              "glcode": "3503001",
+              "order": 1,
+              "accountDescription": "EMP_GUA_CESS-1490985000000-1506796199000",
+              "crAmountToBePaid": 2324,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            },
+            {
+              "tenantId": "default",
+              "billDetail": "1569",
+              "glcode": "3503002",
+              "order": 1,
+              "accountDescription": "LIB_CESS-1490985000000-1506796199000",
+              "crAmountToBePaid": 698,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            },
+            {
+              "tenantId": "default",
+              "billDetail": "1569",
+              "glcode": "1100101",
+              "order": 1,
+              "accountDescription": "PT_TAX-1490985000000-1506796199000",
+              "crAmountToBePaid": 23237,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            }
+          ]
+        },
+        {
+          "tenantId": "default",
+          "bill": "1552",
+          "businessService": "PT",
+          "billNumber": "1569",
+          "billDate": 1506487307728,
+          "consumerCode": "AP-PT-2017/07/30-000005-18",
+          "consumerType": "PRIVATE",
+          "billDescription": "PT Consumer Code: AP-PT-2017/07/30-000005-18",
+          "displayMessage": "PT Consumer Code: AP-PT-2017/07/30-000005-18",
+          "receiptDate": null,
+          "receiptNumber": null,
+          "minimumAmount": 1,
+          "totalAmount": 30907,
+          "collectionModesNotAllowed": [
+            ""
+          ],
+          "callBackForApportioning": false,
+          "partPaymentAllowed": true,
+          "billAccountDetails": [
+            {
+              "tenantId": "default",
+              "billDetail": "1569",
+              "glcode": "3503002",
+              "order": 1,
+              "accountDescription": "EDU_CESS-1490985000000-1506796199000",
+              "crAmountToBePaid": 4648,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            },
+            {
+              "tenantId": "default",
+              "billDetail": "1569",
+              "glcode": "3503001",
+              "order": 1,
+              "accountDescription": "EMP_GUA_CESS-1490985000000-1506796199000",
+              "crAmountToBePaid": 2324,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            },
+            {
+              "tenantId": "default",
+              "billDetail": "1569",
+              "glcode": "3503002",
+              "order": 1,
+              "accountDescription": "LIB_CESS-1490985000000-1506796199000",
+              "crAmountToBePaid": 698,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            },
+            {
+              "tenantId": "default",
+              "billDetail": "1569",
+              "glcode": "1100101",
+              "order": 1,
+              "accountDescription": "PT_TAX-1490985000000-1506796199000",
+              "crAmountToBePaid": 23237,
+              "creditAmount": null,
+              "debitAmount": null,
+              "isActualDemand": true,
+              "purpose": "CURRENT_AMOUNT"
+            }
+          ]
+        }
+      ],
+      "tenantId": "default",
+      "auditDetail": null
+    }
+  ]
+}

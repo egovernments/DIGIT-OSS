@@ -1,0 +1,34 @@
+{
+  
+  "RequestInfo": {
+       "apiId" : "emp"
+   },
+   
+  "tenant": {
+    "code": "AP.KURNOOL",
+    "name": "kurnool",
+    "description": "description",
+    "logoId": "logoId",
+    "imageId": "imageId",
+    "domainUrl": "domainUrl",
+    "type": "CITY",
+    "twitterUrl" : "twitterUrl",
+    "facebookUrl" : "faceBookUrl",
+    "emailId" : "email",
+    "address": "address",
+    "contactNumber":"contactNumber",
+    "helpLineNumber":"helpLineNumber",
+    "city": {
+      "name": "name",
+      "localName": "localname",
+      "districtCode": "districtcode",
+      "districtName": "districtname",
+      "regionName": "regionname",
+      "ulbGrade": "Corporation",
+      "longitude": 35.456,
+      "latitude": 75.443,
+      "shapeFileLocation" : "shapeFileLocation",
+      "captcha" : "captcha"
+    }
+  }
+}

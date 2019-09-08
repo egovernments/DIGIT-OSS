@@ -1,0 +1,16 @@
+{
+"RequestInfo":{
+ }
+,
+"Boundary": {
+	
+	"name" : "test",
+	"tenantId" : "default",
+	"code" : "TEST",
+	"boundaryType" : {
+		"code" : "2"
+	},
+	"boundaryNum" : 2
+
+}
+}

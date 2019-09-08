@@ -1,0 +1,49 @@
+{
+  "RequestInfo": {
+    "apiId": "ap.public",
+    "ver": "1",
+    "ts": null,
+    "action": "POST",
+    "did": null,
+    "key": null,
+    "msgId": "8c11c5ca-03bd-11e7-93ae-92361f002671",
+    "requesterId": "62",
+    "authToken": "96a70a9a-03bd-11e7-93ae-92361f002671"
+  },
+  "User": {
+    "id": 0,
+    "userName": null,
+    "password": null,
+    "salutation": null,
+    "name": null,
+    "gender": null,
+    "mobileNumber": null,
+    "emailId": null,
+    "altContactNumber": null,
+    "pan": null,
+    "aadhaarNumber": null,
+    "permanentAddress": null,
+    "permanentCity": null,
+    "permanentPincode": null,
+    "correspondenceCity": null,
+    "correspondencePincode": null,
+    "correspondenceAddress": null,
+    "active": true,
+    "dob": null,
+    "pwdExpiryDate": null,
+    "locale": null,
+    "type": null,
+    "signature": null,
+    "accountLocked": false,
+    "fatherOrHusbandName": null,
+    "bloodGroup": null,
+    "identificationMark": null,
+    "photo": null,
+    "otpReference": null,
+    "tenantId": null,
+    "roles": [
+    {"code" : "EMPLOYEE"}
+    
+    ]
+  }
+}

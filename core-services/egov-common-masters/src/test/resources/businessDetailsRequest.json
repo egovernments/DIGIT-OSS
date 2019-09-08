@@ -1,0 +1,15 @@
+{
+    "RequestInfo":{
+        "apiId":"org.egov.collection",
+        "ver":"1.0",
+        "action":"POST",
+        "did":"4354648646",
+        "key":"xyz",
+        "msgId":"654654",
+        "authToken":"aceb9362-4147-40ff-936a-34497f83d740",
+        "userInfo":
+        {
+        	"id":1
+        }
+     }
+}

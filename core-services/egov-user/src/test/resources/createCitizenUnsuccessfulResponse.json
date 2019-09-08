@@ -1,0 +1,40 @@
+{
+  "responseInfo": null,
+  "error": {
+    "code": 400,
+    "message": "Invalid user object",
+    "description": null,
+    "fields": [
+      {
+        "code": "core-user.002",
+        "message": "Type is required",
+        "field": "User.type"
+      },
+      {
+        "code": "core-user.004",
+        "message": "Mobile number is required",
+        "field": "User.mobile"
+      },
+      {
+        "code": "core-user.005",
+        "message": "Username is required",
+        "field": "User.username"
+      },
+      {
+        "code": "core-user.005",
+        "message": "Name is required",
+        "field": "User.name"
+      },
+      {
+        "code":"core-user.TENANT_MANDATORY",
+        "message":"Tenant is required",
+        "field":"tenantId"
+      },
+      {
+        "code":"core-user.ROLES_MANDATORY",
+        "message":"Role(s) is required",
+        "field":"roles"
+      }
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+ update service set parentmodule = null where code='PGR' and name='PGR' and  contextroot='pgr' and tenantid='panavel';

@@ -1,0 +1,13 @@
+[
+   {
+      "district_name":"UAT Instance",
+      "cities":
+      [
+         {
+            "city_name":"Amazon",
+            "city_code":1000,
+            "tenant_id":2
+         }
+      ]
+    }
+]

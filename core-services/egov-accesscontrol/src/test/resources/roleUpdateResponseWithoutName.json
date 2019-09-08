@@ -1,0 +1,33 @@
+[
+    {
+        "responseInfo": null,
+        "error": {
+            "code": 400,
+            "message": "Role is invalid",
+            "description": null,
+            "errorFields": [
+                {
+                    "code": "accesscontrol.0007",
+                    "message": "Role Name is required in 1 Object",
+                    "field": "name"
+                },
+                {
+                    "code": "accesscontrol.0007",
+                    "message": "Role Name is required in 2 Object",
+                    "field": "name"
+                },
+                {
+                    "code": "accesscontrol.0009",
+                    "message": "Role Name Does n't exist. in 1 Object",
+                    "field": "name"
+                },
+                {
+                    "code": "accesscontrol.0009",
+                    "message": "Role Name Does n't exist. in 2 Object",
+                    "field": "name"
+                }
+            ],
+            "fields": null
+        }
+    }
+]

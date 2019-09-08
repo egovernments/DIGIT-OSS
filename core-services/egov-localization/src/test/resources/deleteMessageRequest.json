@@ -1,0 +1,17 @@
+{
+    "requestInfo": {
+    },
+    "tenantId": "tenant1",
+    "messages": [
+        {
+            "code": "code1",
+            "module": "module1",
+            "locale": "locale1"
+        },
+        {
+            "code": "code2",
+            "module": "module2",
+            "locale": "locale2"
+        }
+    ]
+}

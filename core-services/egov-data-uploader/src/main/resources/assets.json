@@ -1,0 +1,184 @@
+{
+    "moduleName": "ASSET",
+    "Definitions": [
+        {
+            "name": "immovableassetcreation",
+            "templateFileName": "Immovable_Asset_Template.xls",
+            "isParentChild": true,
+            "uniqueParentKeys": [
+                "Asset Name",
+                "Asset Description"
+            ],
+            "requests": [
+                {
+                    "url": "/asset-services-maha/assets/_create",
+                    "apiRequest": {
+                        "RequestInfo": null,
+                        "Asset": {
+                            "anticipatedLife": 15,
+                            "orderNumber": "",
+                            "orderDate": "",
+                            "wipReferenceNo": "",
+                            "acquiredFrom": "",
+                            "warrantyAvailable": false,
+                            "securityDepositRetained": 0,
+                            "securityDepositRealized": 0,
+                            "acquisitionDate": 1417153591000,
+                            "originalValue": 0,
+                            "address": "",
+                            "longitude": "",
+                            "latitude": "",
+                            "tenantId": "default",
+                            "name": "corpoaration land",
+                            "oldCode": "oldCodecorpland",
+                            "department": {
+                                "id": null,
+                                "name": null,
+                                "code": "TP"
+                            },
+                            "assetCategory": {
+                                "name": "Open Land",
+                                "code": "043"
+                            },
+                            "modeOfAcquisition": {
+                                "code": "ACQUIRED"
+                            },
+                            "grossValue": 7000000,
+                            "accumulatedDepreciationAccount": 45653245,
+                            "revaluationReserveAccount": "",
+                            "depreciationExpenseAccount": "",
+                            "assetAccount": "",
+                            "description": "trucks",
+                            "dateOfCreation": 13112017,
+                            "defectLiabilityPeriod": {
+                                "year": "1",
+                                "month": "2",
+                                "day": "3"
+                            },
+                            "location": null,
+                            "fundSource": null,
+                            "openingDate": 123455656,
+                            "landDetails": [
+                                {}
+                            ]
+                        }
+                    },
+                    "excelHeadersToRequestMap": {
+                        "Department": [
+                            "$.Asset.department.code"
+                        ],
+                        "Asset Sub-Category": [
+                            "$.Asset.assetCategory.id"
+                        ],
+                        "Asset Name": [
+                            "$.Asset.name"
+                        ],
+                        "Asset ID No (old)": [
+                            "$.Asset.oldCode"
+                        ],
+                        "No of order": [
+                            "$.Asset.orderNumber"
+                        ],
+                        "date of order": [
+                            "$.Asset.orderDate"
+                        ],
+                        "Address": [
+                            "$.Asset.address",
+                            "$.Asset.location"
+                        ],
+                        "longitude": [
+                            "$.Asset.longitude"
+                        ],
+                        "latitude": [
+                            "$.Asset.latitude"
+                        ],
+                        "Election ward": [
+                            "$.Asset.locationDetails.electionWard"
+                        ],
+                        "Ref. No of WIP register": [
+                            "$.Asset.wipReferenceNo"
+                        ],
+                        "From whom acquired": [
+                            "$.Asset.acquiredFrom"
+                        ],
+                        "Anticipated life of asset": [
+                            "$.Asset.anticipatedLife"
+                        ],
+                        "Mode of Acquisition": [
+                            "$.Asset.modeOfAcquisition.code"
+                        ],
+                        "Warranty expiry date": [
+                            "$.Asset.warrantyExpiryDate"
+                        ],
+                        "Years": [
+                            "$.Asset.defectLiabilityPeriod.year"
+                        ],
+                        "Months": [
+                            "$.Asset.defectLiabilityPeriod.month"
+                        ],
+                        "Days": [
+                            "$.Asset.defectLiabilityPeriod.day"
+                        ],
+                        "Security deposit retained": [
+                            "$.Asset.securityDepositRetained"
+                        ],
+                        "Security deposit realized": [
+                            "$.Asset.securityDepositRealized"
+                        ],
+                        "Date of Acquisition/Purchase": [
+                            "$.Asset.acquisitionDate",
+                            "$.Asset.dateOfCreation"
+                        ],
+                        "Original Value of asset": [
+                            "$.Asset.originalValue"
+                        ],
+                        "Current WDV of asset": [
+                            "$.Asset.grossValue"
+                        ],
+                        "WDV date": [
+                            "$.Asset.openingDate"
+                        ],
+                        "Asset Description": [
+                            "$.Asset.description"
+                        ],
+                        "Asset Account": [
+                            "$.Asset.assetAccount"
+                        ],
+                        "Accumulated Depreciation Account": [
+                            "$.Asset.accumulatedDepreciationAccount"
+                        ],
+                        "Revaluation Reserve Account": [
+                            "$.Asset.revaluationReserveAccount"
+                        ],
+                        "Depreciation expenses Account": [
+                            "$.Asset.depreciationExpenseAccount"
+                        ],
+                        "Warranty (Y/N)": [
+                            "$.Asset.warrantyAvailable"
+                        ],
+                        "Source of fund": [
+                            "$.Asset.fundSource.code"
+                        ],
+                        "Survey No of land on which structure is located": [
+                            "$.Asset.landDetails.*.surveyNo"
+                        ],
+                        "Area of land on which constructed": [
+                            "$.Asset.landDetails.*.area"
+                        ],
+                        "title document available": [
+                            "$.Asset.titleDocumentsAvailable"
+                        ]
+                    },
+                    "prevResponseToRequestMap": {},
+                    "additionalResFields": {
+                        "$.Assets.*.id": "Asset ID"
+                    },
+                    "tenantIdPaths": [
+                        "$.Asset.tenantId",
+                        "$.Asset.landDetails.*.tenantId"
+                    ]
+                }
+            ]
+        }
+    ]
+}

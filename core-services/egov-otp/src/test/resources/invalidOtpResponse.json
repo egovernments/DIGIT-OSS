@@ -1,0 +1,20 @@
+{
+  "responseInfo": null,
+  "error": {
+    "code": 400,
+    "message": "Invalid OTP request",
+    "description": null,
+    "fields": [
+      {
+        "code": "OTP.IDENTITY_MANDATORY",
+        "message": "Identity field is mandatory",
+        "field": "otp.identity"
+      },
+      {
+        "code": "OTP.TENANT_ID_MANDATORY",
+        "message": "Tenant field is mandatory",
+        "field": "otp.tenantId"
+      }
+    ]
+  }
+}

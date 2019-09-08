@@ -1,0 +1,19 @@
+{
+    "ResponseInfo":{
+        "apiId" : "org.egov.collection",
+     	"ver" : "1.0",
+        "resMsgId":"uief87324",
+        "msgId":"654654",
+        "status":"200"
+    },
+    "BusinessCategoryInfo":[
+        {
+        "id":1,
+        "name":"Trade Licence",
+        "code":"TL",
+        "active":true,
+        "tenantId":"default"
+        }
+    ]
+
+}

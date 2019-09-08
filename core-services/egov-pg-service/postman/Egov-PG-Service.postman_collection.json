@@ -1,0 +1,148 @@
+{
+	"info": {
+		"_postman_id": "35333eae-21d2-4cb5-bcba-7805e1ccb0fe",
+		"name": "Egov-PG-Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Initiate Transaction",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"ts\": 0,\n    \"ver\": \".01\",\n    \"authToken\": \"80458c19-3b48-4aa8-b86e-e2e195e6753a\",\n    \"userInfo\": {\n      \"uuid\": \"asd\",\n      \"name\": \"ad\",\n      \"userName\": \"asd\",\n      \"tenantId\": \"pb.amritsar\",\n      \"id\": 4,\n      \"mobileNumber\": \"124232\"\n    }\n  },\n  \"Transaction\": {\n    \"tenantId\": \"pb.amritsar\",\n    \"txnAmount\": 100,\n    \"module\": \"PT\",\n    \"billId\": \"1967\",\n    \"moduleId\": \"prop12-assess1\",\n    \"productInfo\": \"Property Tax Payment\",\n    \"gateway\": \"AXIS\",\n    \"callbackUrl\": \"http://273f2e66.ngrok.io/pg-service/transaction/v1/_update\"\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9000/pg-service/transaction/v1/_create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"pg-service",
+						"transaction",
+						"v1",
+						"_create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transaction Update",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"ts\": 0,\n    \"ver\": \".01\",\n    \"authToken\": \"bd61c0a8-6f78-4ad9-bf6d-39ebf92ae9d9\"\n  }\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/pg-service/transaction/v1/_update?transactionId=PB_PG_2018_08_06_000072_14",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"pg-service",
+						"transaction",
+						"v1",
+						"_update"
+					],
+					"query": [
+						{
+							"key": "transactionId",
+							"value": "PB_PG_2018_08_06_000072_14"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Transactions",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"ts\": 0,\n    \"ver\": \".01\",\n    \"authToken\": \"2436306b-74c7-4f08-84dc-60fbe5c02638\"\n  }\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/pg-service/transaction/v1/_search?txnId=PB_PG_2018_07_25-000016_21",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"pg-service",
+						"transaction",
+						"v1",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "txnId",
+							"value": "PB_PG_2018_07_25-000016_21"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Available Gateways",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"ts\": 0,\n    \"ver\": \".01\",\n    \"authToken\": \"2436306b-74c7-4f08-84dc-60fbe5c02638\"\n  }\n}"
+				},
+				"url": {
+					"raw": "https://egov-micro-dev.egovernments.org/pg-service/gateway/v1/_search",
+					"protocol": "https",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"pg-service",
+						"gateway",
+						"v1",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

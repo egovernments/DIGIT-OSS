@@ -1,0 +1,29 @@
+{
+  "responseInfo": {},
+  "tenant": {
+    "code": "AP.KURNOOL",
+    "description": "testdescription",
+    "logoId": "testlogoId",
+    "imageId": "testimageId",
+    "domainUrl": "testdomainUrl",
+    "type": "CITY",
+    "twitterUrl" : "testtwitterUrl",
+    "facebookUrl" : "testfaceBookUrl",
+     "emailId" : "testemail",
+    "address": "testaddress",
+    "contactNumber":"contactNumber",
+    "helpLineNumber":"helpLineNumber",
+    "city": {
+      "name": "testname",
+      "localName": "testlocalname",
+      "districtCode": "districtcode",
+      "districtName": "testdistrictname",
+      "regionName": "testregionname",
+      "ulbGrade": "testCorporation",
+      "longitude": 35.456,
+      "latitude": 75.443,
+      "shapeFileLocation" : "testshapeFileLocation",
+      "captcha" : "testcaptcha"
+    }
+  }
+}

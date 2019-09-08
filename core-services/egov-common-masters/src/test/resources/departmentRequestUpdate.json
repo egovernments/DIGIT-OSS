@@ -1,0 +1,23 @@
+{
+  "RequestInfo": {
+    "apiId": "org.egov.commons",
+    "ver": "1.0",
+    "action": "POST",
+    "did": "4354648646",
+    "key": "xyz",
+    "msgId": "654654",
+    "authToken": "345678f",
+    "userInfo": {
+      "id": 1
+    }
+  },
+  "Department": {
+    "id": 1,
+    "name": "Health",
+    "code": "HLT",
+    "active": true,
+    "tenantId": "default",
+    "createdBy": 1,
+    "lastModifiedBy": 1
+  }
+}
