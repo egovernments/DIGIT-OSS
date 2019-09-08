@@ -1,0 +1,16 @@
+{
+"RequestInfo" : {
+  "apiId": null,
+  "userInfo": {
+    "id": "12"
+  },
+"ts" : null,
+"action" : null,
+"did" : null,
+"key" : null,
+"msgId" : null,
+"requesterId" : null,
+"authToken" : null,
+"corelationId" : null
+}
+}

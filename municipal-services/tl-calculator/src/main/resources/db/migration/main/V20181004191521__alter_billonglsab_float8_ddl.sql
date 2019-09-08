@@ -1,0 +1,2 @@
+ALTER TABLE eg_tl_billingslab ALTER COLUMN fromUom TYPE FLOAT8;
+ALTER TABLE eg_tl_billingslab ALTER COLUMN toUom TYPE FLOAT8;

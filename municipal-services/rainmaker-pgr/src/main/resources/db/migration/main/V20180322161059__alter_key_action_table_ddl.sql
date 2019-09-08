@@ -1,0 +1,1 @@
+ALTER TABLE eg_pgr_action DROP CONSTRAINT pk_eg_pgr_action,ADD CONSTRAINT pk_eg_pgr_action PRIMARY KEY (uuid,tenantid);

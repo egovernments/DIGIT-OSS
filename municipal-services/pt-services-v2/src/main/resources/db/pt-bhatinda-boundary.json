@@ -1,0 +1,134 @@
+{
+  "tenantId": "pb.bhatinda",
+  "moduleName": "egov-location",
+  "TenantBoundary": [
+    {
+      "hierarchyType": {
+        "code": "REVENUE_PTIS",
+        "name": "REVENUE_PTIS"
+      },
+      "boundary": {
+        "boundaryNum": 2,
+        "name": "Bhatinda",
+        "localname": "Bhatinda",
+        "longitude": null,
+        "latitude": null,
+        "label": "City",
+        "code": "BH",
+        "children": [
+          {
+            "boundaryNum": 1,
+            "name": "Adarsh Nagar",
+            "localname": "Adarsh Nagar",
+            "longitude": null,
+            "latitude": null,
+            "label": "Locality",
+            "code": "AdarshNagar",
+            "area": "A1",
+            "children": []
+          },
+          {
+            "boundaryNum": 2,
+            "name": "Bajakhana",
+            "localname": "Bajakhana",
+            "longitude": null,
+            "latitude": null,
+            "label": "Locality",
+            "code": "Bajakhana",
+            "area": "A3",
+            "children": []
+          },
+          {
+            "boundaryNum": 3,
+            "name": "Ganesh Nagar",
+            "localname": "Ganesh Nagar",
+            "longitude": null,
+            "latitude": null,
+            "label": "Locality",
+            "code": "GaneshNagar",
+            "area": "A1",
+            "children": []
+          },
+          {
+            "boundaryNum": 4,
+            "name": "Old City",
+            "localname": "Old City",
+            "longitude": null,
+            "latitude": null,
+            "label": "Locality",
+            "code": "OldCity",
+            "area": "A2",
+            "children": []
+          },
+          {
+            "boundaryNum": 5,
+            "name": "Shakti Nagar",
+            "localname": "Shakti Nagar",
+            "longitude": null,
+            "latitude": null,
+            "label": "Locality",
+            "code": "ShaktiNagar",
+            "area": "A3",
+            "children": []
+          },
+          {
+            "boundaryNum": 6,
+            "name": "Veer Colony",
+            "localname": "Veer Colony",
+            "longitude": null,
+            "latitude": null,
+            "label": "Locality",
+            "code": "VeerColony",
+            "area": "A2",
+            "children": []
+          },
+          {
+            "boundaryNum": 7,
+            "name": "Deon",
+            "localname": "Deon",
+            "longitude": null,
+            "latitude": null,
+            "label": "Locality",
+            "code": "Deon",
+            "area": "A2",
+            "children": []
+          },
+          {
+            "boundaryNum": 8,
+            "name": "Hardev Nagar",
+            "localname": "Hardev Nagar",
+            "longitude": null,
+            "latitude": null,
+            "label": "Locality",
+            "code": "HardevNagar",
+            "area": "A3",
+            "children": []
+          },
+          {
+            "boundaryNum": 9,
+            "name": "Model Town",
+            "localname": "Model Town",
+            "longitude": null,
+            "latitude": null,
+            "label": "Locality",
+            "code": "ModelTown",
+            "area": "A1",
+            "children": []
+          },
+          {
+            "boundaryNum": 10,
+            "name": "Talwandi Sabo",
+            "localname": "Talwandi Sabo",
+            "longitude": null,
+            "latitude": null,
+            "label": "Locality",
+            "code": "TalwandiSabo",
+            "area": "A2",
+            "children": []
+          }
+
+        ]
+      }
+    }
+  ]
+}

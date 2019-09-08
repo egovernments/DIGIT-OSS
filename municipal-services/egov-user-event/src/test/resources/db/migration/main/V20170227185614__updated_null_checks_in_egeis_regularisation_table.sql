@@ -1,0 +1,1 @@
+ALTER TABLE egeis_regularisation ALTER COLUMN orderDate DROP NOT NULL;
