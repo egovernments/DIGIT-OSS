@@ -1,0 +1,13 @@
+ServiceMaps:
+  serviceName: FinanceAdoption
+  version: 2.0.0
+  mappings:
+  - topic: finance-adoption-topic
+    configKey: INDEX
+    indexes:
+    - name: financeindex-v1
+      type: rolloutadoption
+      id: $.id
+      isBulk: false
+      timeStampField: $.timestamp
+      jsonPath: $.rollOutAdoptionData

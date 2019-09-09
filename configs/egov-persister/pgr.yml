@@ -1,0 +1,203 @@
+serviceMaps:
+ serviceName: User Service
+ mappings:
+ - version: 1.0
+   name: Asset
+   description: Persists asset details in eg_asset table
+   fromTopic: save-pgr-servicereq
+   isTransaction: true
+   queryMaps:
+    - query: INSERT INTO eg_pgr_servicereq(tenantId,serviceCode,serviceRequestId,description,lat,long,address,addressId,email,deviceId,accountId,firstName,lastName,phone,attributes,status,assignedTo,source,expectedTime,createdby,createdtime,lastmodifiedby,lastmodifiedtime) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+
+      basePath: serviceReq.*
+      jsonMaps:
+
+
+       - jsonPath: $.serviceReq.*.tenantId
+
+       - jsonPath: $.serviceReq.*.serviceCode
+
+       - jsonPath: $.serviceReq.*.serviceRequestId
+
+       - jsonPath: $.serviceReq.*.description
+
+       - jsonPath: $.serviceReq.*.lat
+
+       - jsonPath: $.serviceReq.*._long
+
+       - jsonPath: $.serviceReq.*.address
+
+       - jsonPath: $.serviceReq.*.addressId
+
+       - jsonPath: $.serviceReq.*.email
+
+       - jsonPath: $.serviceReq.*.deviceId
+
+       - jsonPath: $.serviceReq.*.accountId
+
+       - jsonPath: $.serviceReq.*.firstName
+
+       - jsonPath: $.serviceReq.*.lastName
+
+       - jsonPath: $.serviceReq.*.phone
+
+       - jsonPath: $.serviceReq.*.attributes
+         type: JSON
+         dbType: JSONB
+
+       - jsonPath: $.serviceReq.*.status
+
+       - jsonPath: $.serviceReq.*.assignedTo
+
+       - jsonPath: $.serviceReq.*.source
+
+       - jsonPath: $.serviceReq.*.expectedTime
+
+       - jsonPath: $.serviceReq.*.auditDetails.createdBy
+
+       - jsonPath: $.serviceReq.*.auditDetails.createdTime
+
+       - jsonPath: $.serviceReq.*.auditDetails.lastModifiedBy
+
+       - jsonPath: $.serviceReq.*.auditDetails.lastModifiedTime
+
+
+    - query: INSERT INTO eg_pgr_media(id, by, "when",url, tenantId,serviceRequestId) VALUES (?,?,?,?,?,?);
+
+      basePath: serviceReq.*.media.*
+      jsonMaps:
+
+       - jsonPath: $.serviceReq.*.media.*.id
+
+       - jsonPath: $.serviceReq.*.media.*.by
+
+       - jsonPath: $.serviceReq[?({id} in @.media[*].id)].auditDetails.createdTime
+
+       - jsonPath: $.serviceReq.*.media.*.url
+
+       - jsonPath: $.serviceReq[?({id} in @.media[*].id)].tenantId
+
+       - jsonPath: $.serviceReq[?({id} in @.media[*].id)].serviceRequestId
+
+
+    - query: INSERT INTO eg_pgr_comment(id, by, "when", message, tenantId,serviceRequestId, isInternal) VALUES (?,?,?,?,?,?,?);
+
+      basePath: serviceReq.*.comments.*
+      jsonMaps:
+
+       - jsonPath: $.serviceReq.*.comments.*.id
+
+       - jsonPath: $.serviceReq.*.comments.*.by
+
+       - jsonPath: $.serviceReq[?({id} in @.comments[*].id)].auditDetails.createdTime
+
+       - jsonPath: $.serviceReq.*.comments.*.message
+
+       - jsonPath: $.serviceReq[?({id} in @.comments[*].id)].tenantId
+
+       - jsonPath: $.serviceReq[?({id} in @.comments[*].id)].serviceRequestId
+
+       - jsonPath: $.serviceReq.*.comments.*.isInternal
+
+
+ - version: 1.0
+   name: Asset
+   description: Persists asset details in eg_asset table
+   fromTopic: update-pgr-servicereq
+   isTransaction: true
+   queryMaps:
+    - query: INSERT INTO eg_pgr_servicereq_audit (tenantid, servicecode, servicerequestid, description, lat, "long", address, addressid, email, deviceid, accountid, firstname,lastname, phone, attributes, status, assignedto, source, expectedtime, createdby, createdtime,auditcreatedtime) SELECT tenantid, servicecode, servicerequestid, description, lat, "long", address, addressid, email, deviceid, accountid,firstname, lastname, phone, attributes, status, assignedto, source, expectedtime,lastmodifiedby,lastmodifiedtime,(select extract (EPOCH from now())*1000)  FROM eg_pgr_servicereq where tenantId=? AND servicerequestid=?;
+
+      basePath: serviceReq.*
+      jsonMaps:
+
+       - jsonPath: $.serviceReq.*.tenantId
+
+       - jsonPath: $.serviceReq.*.serviceRequestId
+
+
+    - query: UPDATE eg_pgr_servicereq  SET  description=?, lat=?, long=?,address=?, addressid=?, email=?, deviceid=?, accountid=?, firstname=?, lastname=?, phone=?, attributes=?, status=?, assignedto=?, source=?, expectedtime=?, lastmodifiedby=?, lastmodifiedtime=? WHERE tenantid=? AND servicerequestid=?;
+
+      basePath: serviceReq.*
+      jsonMaps:
+
+       - jsonPath: $.serviceReq.*.description
+
+       - jsonPath: $.serviceReq.*.lat
+
+       - jsonPath: $.serviceReq.*._long
+
+       - jsonPath: $.serviceReq.*.address
+
+       - jsonPath: $.serviceReq.*.addressId
+
+       - jsonPath: $.serviceReq.*.email
+
+       - jsonPath: $.serviceReq.*.deviceId
+
+       - jsonPath: $.serviceReq.*.accountId
+
+       - jsonPath: $.serviceReq.*.firstName
+
+       - jsonPath: $.serviceReq.*.lastName
+
+       - jsonPath: $.serviceReq.*.phone
+
+       - jsonPath: $.serviceReq.*.attributes
+         type: JSON
+         dbType: JSONB
+
+       - jsonPath: $.serviceReq.*.status
+
+       - jsonPath: $.serviceReq.*.assignedTo
+
+       - jsonPath: $.serviceReq.*.source
+
+       - jsonPath: $.serviceReq.*.expectedTime
+
+       - jsonPath: $.serviceReq.*.auditDetails.lastModifiedBy
+
+       - jsonPath: $.serviceReq.*.auditDetails.lastModifiedTime
+
+       - jsonPath: $.serviceReq.*.tenantId
+
+       - jsonPath: $.serviceReq.*.serviceRequestId
+
+
+
+    - query: INSERT INTO eg_pgr_media(id, by, "when",url, tenantId,serviceRequestId) VALUES (?,?,?,?,?,?) ON CONFLICT (id,TenantId) DO NOTHING;
+
+      basePath: serviceReq.*.media.*
+      jsonMaps:
+
+       - jsonPath: $.serviceReq.*.media.*.id
+
+       - jsonPath: $.serviceReq.*.media.*.by
+
+       - jsonPath: $.serviceReq[?({id} in @.media[*].id)].auditDetails.lastModifiedTime
+
+       - jsonPath: $.serviceReq.*.media.*.url
+
+       - jsonPath: $.serviceReq[?({id} in @.media[*].id)].tenantId
+
+       - jsonPath: $.serviceReq[?({id} in @.media[*].id)].serviceRequestId
+
+
+    - query: INSERT INTO eg_pgr_comment(id, by, "when", message, tenantId,serviceRequestId, isInternal) VALUES (?,?,?,?,?,?,?) ON CONFLICT (id,tenantId) DO NOTHING;
+
+      basePath: serviceReq.*.comments.*
+      jsonMaps:
+
+       - jsonPath: $.serviceReq.*.comments.*.id
+
+       - jsonPath: $.serviceReq.*.comments.*.by
+
+       - jsonPath: $.serviceReq[?({id} in @.comments[*].id)].auditDetails.lastModifiedTime
+
+       - jsonPath: $.serviceReq.*.comments.*.message
+
+       - jsonPath: $.serviceReq[?({id} in @.comments[*].id)].tenantId
+
+       - jsonPath: $.serviceReq[?({id} in @.comments[*].id)].serviceRequestId
+
+       - jsonPath: $.serviceReq.*.comments.*.isInternal
