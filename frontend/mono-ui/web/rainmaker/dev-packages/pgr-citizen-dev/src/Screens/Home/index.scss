@@ -1,0 +1,55 @@
+.home-page-cont {
+  position: absolute !important;
+  top: calc(30vh - 125px);
+  left: 8px;
+  right: 8px;
+  margin-bottom: 70px;
+}
+
+.homepage-banner.user-screens-wrapper {
+  height: 30vh;
+}
+
+.homepage-banner .banner-image,
+.homepage-banner .banner-overlay {
+  position: absolute;
+  height: 100%;
+}
+
+.homepage-banner .banner-back-button {
+  display: none !important;
+}
+
+.homepage-banner .logo-wrapper {
+  position: absolute;
+  top: 30%;
+  right: 0;
+}
+
+.home-page-top-banner-cont .banner-image {
+  height: 30vh;
+}
+
+.home-page-top-banner-cont .logo-wrapper {
+  position: absolute;
+  margin: 0;
+  top: 40px;
+}
+
+.homepage-screen {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 75px !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .home-page-top-banner-cont .logo-wrapper {
+    display: block;
+  }
+  .home-page-cont {
+    top: calc(30vh - 190px);
+  }
+  .homepage-screen {
+    padding-top: 20px !important;
+  }
+}

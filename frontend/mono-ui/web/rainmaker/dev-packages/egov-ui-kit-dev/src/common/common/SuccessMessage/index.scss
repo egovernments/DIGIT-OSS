@@ -1,0 +1,41 @@
+.success-message-main-cont {
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.success-message-icon-cont {
+  margin-bottom: 21px;
+}
+
+.thankyou-text {
+  letter-spacing: 0.7px;
+}
+
+.success-message-inner-cont {
+  margin-bottom: 64px;
+}
+
+/* comment */
+
+.success-message-main-screen {
+  padding: 0 !important;
+  height: calc(100vh - 64px);
+  background: #f2f2f2;
+}
+
+.success-message-continue {
+  position: fixed;
+  width: 100%;
+  bottom: 15px;
+  left: 0;
+  padding: 0 16px;
+}
+
+.success-message-main-screen .secondary-text .label-text {
+  color: #484848 !important;
+  margin-left: 5px;
+}

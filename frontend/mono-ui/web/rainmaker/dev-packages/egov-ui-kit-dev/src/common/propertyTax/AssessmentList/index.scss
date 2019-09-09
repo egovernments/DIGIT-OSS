@@ -1,0 +1,19 @@
+.assessment-displayInline {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.assessment-button {
+  margin-top: 20px;
+}
+
+.no-assessment-message-cont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: calc(100vh - 124px);
+  top: 0;
+  position: absolute;
+  width: 100%;
+}

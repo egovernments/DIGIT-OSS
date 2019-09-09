@@ -1,0 +1,19 @@
+.update-icon {
+  background: #2ecc71;
+}
+
+.notification-top-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.home-notification {
+  border-radius: 0;
+  margin-top: 8px !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .notifications-screen-style {
+    padding: 12px 8px 60px 8px !important;
+  }
+}

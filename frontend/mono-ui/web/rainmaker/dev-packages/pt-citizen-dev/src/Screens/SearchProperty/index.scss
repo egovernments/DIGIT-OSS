@@ -1,0 +1,39 @@
+.pt-search-table-action {
+  width: 104px;
+  height: 22px;
+  button {
+    background-color: #fe7a51 !important;
+    height: 23px !important;
+    line-height: normal !important;
+    span {
+      font-family: "Roboto" !important;
+      font-size: 12px !important;
+      line-height: normal;
+      text-align: center;
+      color: #ffffff !important;
+      padding: 0 !important;
+    }
+  }
+}
+.search-no-property-found {
+  text-align: center;
+  .new-assess-btn {
+    width: 214px;
+    margin: 0px auto;
+  }
+  .no-search-text {
+    margin-bottom: 17px;
+    margin-top: 36px;
+  }
+}
+
+.inner-header-style {
+  justify-content: space-between;
+  cursor: "pointer";
+}
+
+@media only screen and (min-width: 768px) {
+  .inner-header-style {
+    padding: 0px 16px !important;
+  }
+}

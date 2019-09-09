@@ -1,0 +1,42 @@
+.moduleCardTitle {
+  margin-left: 15px;
+  padding: 0;
+}
+.moduleCardDescription {
+  padding: 5px;
+  margin: 0;
+}
+
+.landing-page-button {
+  margin: 0 !important;
+  display: flex !important;
+  padding: 0px 5px !important;
+}
+
+.parentCard {
+  background-color: red !important;
+}
+.moduleCardTitle div {
+  font-size: 20px !important;
+  letter-spacing: 0.5px;
+  color: rgba(0, 0, 0, 0.8700000047683716);
+  padding: 12px 0px;
+}
+.moduleCardDescription div {
+  font-size: 14px !important;
+  padding-bottom: 5px;
+  letter-spacing: 0.5px;
+  color: rgba(0, 0, 0, 0.6000000238418579);
+}
+@media only screen and (max-width: 768px) {
+  // .pt-landing-card {
+  //   display: none;
+  // }
+}
+
+@media only screen and (min-width: 600px) {
+  .landing-page-button-container {
+    position: absolute !important;
+    bottom: 0 !important;
+  }
+}

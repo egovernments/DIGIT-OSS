@@ -1,0 +1,14 @@
+.iframe-style {
+  width: 100%;
+  // margin-top: -52px;
+}
+
+@media screen and (max-width: 960px) {
+  .iframe-style {
+    margin-top: 0px;
+    height: 100vh;
+  }
+  #material-ui-newApplicationButton {
+    width: auto;
+  }
+}

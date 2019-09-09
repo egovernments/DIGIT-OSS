@@ -1,0 +1,39 @@
+.complaint-details-action-buttons {
+  position: fixed;
+  bottom: 0;
+  background: white;
+  padding: 6px 8px;
+  width: 100%;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.action-button-one,
+.action-button-two {
+  box-shadow: none !important;
+  background-color: transparent !important;
+  width: 45%;
+}
+.action-button-two {
+  margin-left: 20px;
+}
+
+@media only screen and (min-width: 768px) {
+  .complaint-details-action-buttons {
+    justify-content: flex-end;
+    position: fixed;
+    box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+    padding: 8px;
+  }
+
+  .complaint-details-action-buttons button {
+    width: 230px !important;
+  }
+
+  .action-button-one,
+  .action-button-two {
+    width: 230px;
+  }
+}
