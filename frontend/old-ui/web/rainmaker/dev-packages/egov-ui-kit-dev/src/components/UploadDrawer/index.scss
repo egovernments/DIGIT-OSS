@@ -1,0 +1,33 @@
+.drawerContainer {
+  border: solid 0.3px rgba(0, 0, 0, 0);
+  left: 0px;
+  bottom: 0px;
+  background-color: #ffffff;
+  width: 100%;
+  height: 140px;
+  position: fixed;
+  z-index: 1003;
+}
+
+.iconContainer {
+  margin-top: 32px;
+  display: block;
+}
+.label-icon label svg,
+.labelIconBox svg {
+  margin-left: 0px !important;
+  fill: #ffffff !important;
+}
+.labelIconBox div label {
+  text-align: inherit !important;
+}
+
+.overlayBody {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}

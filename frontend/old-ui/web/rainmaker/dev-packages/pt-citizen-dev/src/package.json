@@ -1,0 +1,8 @@
+{
+  "name": "pt-citizen",
+  "version": "0.0.2",
+  "license": "egov",
+  "private": true,
+  "main": "lib/",
+  "dependencies": {}
+}

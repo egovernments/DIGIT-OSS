@@ -1,0 +1,12 @@
+#form-wizard-tooltip {
+  font-size: 12px;
+}
+
+.hidden-field {
+  width: 0;
+}
+@media only screen and (max-width:768px){
+  .dummy-field{
+    display: none;
+  }
+}

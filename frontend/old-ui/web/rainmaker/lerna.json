@@ -1,0 +1,18 @@
+{
+  "lerna": "2.11.0",
+  "npmClient": "yarn",
+  "packages": [
+    "dev-packages/pgr-citizen-dev",
+    "dev-packages/pgr-employee-dev",
+    "dev-packages/pt-citizen-dev",
+    "dev-packages/pt-employee-dev",
+    "dev-packages/egov-workflow-dev",
+    "dev-packages/egov-tradelicence-dev",
+    "dev-packages/egov-hrms-dev",
+    "dev-packages/egov-uc-dev",
+    "packages/citizen",
+    "packages/employee",
+    "packages/lib/*"
+  ],
+  "version": "0.0.2"
+}

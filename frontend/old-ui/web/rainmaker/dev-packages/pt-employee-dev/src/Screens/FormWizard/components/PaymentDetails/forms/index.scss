@@ -1,0 +1,30 @@
+.general-form-cont-padding {
+  padding: 0 100px 0 0 !important;
+}
+
+.general-field-padding {
+  padding: 0 60px 0 0 !important;
+}
+
+.datepicker-icon {
+  position: absolute;
+  right: 80px;
+  top: 30px;
+  pointer-events: none;
+  cursor: pointer;
+}
+
+@media only screen and (max-width:768px){
+ .payment-mode-info{
+   width: 100% !important;
+   padding-right: 28px !important;
+ }
+ .general-form-cont-padding {
+  padding: 0 !important;
+}
+.general-field-padding {
+  padding:0 !important;
+  width:100%;
+}
+
+}
