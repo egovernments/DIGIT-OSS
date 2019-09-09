@@ -1,0 +1,29 @@
+.complaint-submitted-card {
+  text-align: center;
+  background-color: #f2f2f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 64px) !important;
+}
+
+.complaint-submitted-boldlabel {
+  padding-top: 20px;
+}
+.complaint-submitted-boldlabel .label-text {
+  color: #484848;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+.complaint-submitted-label .label-text {
+  padding: 0px 50px 24px 50px;
+}
+
+.complaint-submitted-complaintNo-cont {
+  margin-bottom: 20px;
+}
+
+.complaint-submitted-complaintNo-cont .label-container,
+.complaint-submitted-complaintNo-cont .label-text {
+  display: inline;
+}

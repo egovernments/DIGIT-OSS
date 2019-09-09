@@ -1,0 +1,111 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Share service
+  description: >-
+    APIs available to share content/content + link/content + link + documents to
+    users.
+  contact:
+    name: Murali M
+schemes:
+  - https
+basePath: '/egov-ui-transform-service/share/v1/[API endpoint]'
+paths:
+  /_create:
+    post:
+      summary: Share content to users.
+      description: Share content/content + link/content + link + documents to users.
+      parameters:
+        - name: ShareCreateRequest
+          in: body
+          description: Details of the sahredata that is to be shared to user.
+          required: true
+          schema:
+            $ref: '#/definitions/ShareCreateRequest'
+      tags:
+        - Share content
+      responses:
+        '201':
+          description: Content shared and recorded sucessfully.
+          schema:
+            $ref: '#/definitions/ShareCreateResponse'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+definitions:
+  ShareCreateRequest:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
+      ShareMetaData:
+        $ref: '#/definitions/ShareMetaData'
+  ShareCreateResponse:
+    type: object
+    properties:
+      ResponseInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo
+      Data:
+        type: object
+        description: content written on the file
+  ShareMetaData:
+    type: object
+    properties:
+      id:
+        description: Unique id for for a id.
+        type: string
+      tenantId:
+        description: Unique id for for a tenant.
+        type: string
+        minLength: 1
+        maxLength: 100
+        default: default
+      shareSource:
+        description: Source of the share content
+        type: string
+        enum:
+          - WEB
+          - MOBILE
+        default: WEB
+      shareMedia:
+        description: 'Media of the share content eg - sms, email etc'
+        type: string
+        enum:
+          - SMS
+          - EMAIL
+          - WHATSAPP
+        default: SMS
+      shareContent:
+        description: Data to be shared to user
+        type: array
+        items:
+          type: object
+          properties:
+            to:
+              description: Emai/phone number
+              type: string
+            content:
+              description: >-
+                Content to be sent to user and there, it can be any dynamic
+                object
+              type: object
+            expiredIn:
+              description: expiry time of the content link
+              type: integer
+            documents:
+              description: documents to be shared to user
+              type: array
+              items:
+                type: object
+                properties:
+                  filestoreId:
+                    type: string
+      shareTemplate:
+        type: string
+        description: Template name of the current share content
+    required:
+      - tenantId

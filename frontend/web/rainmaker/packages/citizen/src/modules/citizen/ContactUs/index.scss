@@ -1,0 +1,54 @@
+.contactus-list-container {
+  padding: 37px 0px 40px 0px;
+}
+
+.contactus-main-card > div {
+  padding-top: 42px;
+}
+
+.contactus-main-cont {
+  height: 100%;
+  width: 100%;
+  background: #ffffff;
+}
+
+.contactus-main-card {
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  border-radius: 0px;
+  box-shadow: none;
+}
+
+.contact-us .map-container {
+  z-index: 1111;
+  height: calc(100vh - 64px);
+  .searchBoxStyles,
+  .search-icon,
+  .myLoc {
+    display: none;
+  }
+  .back-btn {
+    position: absolute !important;
+    top: 76px;
+    background: transparent;
+    margin-left: 15px;
+    z-index: 1112;
+  }
+}
+
+.phoneNumberStyle {
+  color: #767676;
+}
+
+.contact-us-logo {
+  width: 54%;
+  margin: 0 auto;
+}
+
+@media only screen and (min-width: 768px) {
+  .contact-us-logo {
+    width: 30%;
+    margin: 0 auto;
+  }
+}

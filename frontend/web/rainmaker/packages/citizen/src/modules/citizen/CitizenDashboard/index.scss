@@ -1,0 +1,18 @@
+.home-search-input-style {
+  border-radius: 28 !important;
+  z-index: 1100;
+  top: -22px;
+}
+
+.citizen-dashboard-cont {
+  //padding: 8px !important;
+  //margin-top: 130px !important;
+  margin-top: 80px !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .citizen-dashboard-cont {
+    margin-top: 70px !important;
+    padding: 8px !important;
+  }
+}
