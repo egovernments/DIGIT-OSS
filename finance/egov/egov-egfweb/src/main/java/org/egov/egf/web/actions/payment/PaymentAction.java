@@ -138,6 +138,7 @@ public class PaymentAction extends BasePaymentAction {
     private String selectedContingentRows;
     private String selectedContractorRows;
     private String selectedSupplierRows;
+    private String billIdsToPaymentAmountsMap;
     @Autowired
     private EgwStatusHibernateDAO egwStatusHibernateDAO;
     private Paymentheader paymentheader = new Paymentheader();
@@ -988,6 +989,23 @@ public class PaymentAction extends BasePaymentAction {
     @Action(value = "/payment/payment-create")
     public String create() {
         try {
+            contingentList = prepareBillTypeList(contingentList,selectedContingentRows);
+            contractorList = prepareBillTypeList(contractorList,selectedContractorRows);
+            supplierList = prepareBillTypeList(supplierList,selectedSupplierRows);
+            billList = new ArrayList<PaymentBean>();
+            populateBillListFor(contractorList, contractorIds);
+            populateBillListFor(supplierList, supplierIds);
+            populateBillListFor(contingentList, contingentIds);
+            Map<Long,BigDecimal> idToAmntMap = new HashMap<>();
+            if(StringUtils.isNotBlank(billIdsToPaymentAmountsMap)){
+                String[] split = StringUtils.split(billIdsToPaymentAmountsMap, ",");
+                for(String str : split){
+                    idToAmntMap.put(Long.parseLong(str.split(":")[0]), new BigDecimal(str.split(":")[1]));
+                }
+                for(PaymentBean pb : billList){
+                    pb.setPaymentAmt(idToAmntMap.get(pb.getBillId()));
+                }
+            }
             final String vdate = parameters.get("voucherdate")[0];
             final Date paymentVoucherDate = DateUtils.parseDate(vdate, "dd/MM/yyyy");
             final String voucherDate = formatter1.format(paymentVoucherDate);
@@ -2300,5 +2318,13 @@ public class PaymentAction extends BasePaymentAction {
 
     public void setSelectedSupplierRows(String selectedSupplierRows) {
         this.selectedSupplierRows = selectedSupplierRows;
+    }
+
+    public String getBillIdsToPaymentAmountsMap() {
+        return billIdsToPaymentAmountsMap;
+    }
+
+    public void setBillIdsToPaymentAmountsMap(String billIdsToPaymentAmountsMap) {
+        this.billIdsToPaymentAmountsMap = billIdsToPaymentAmountsMap;
     } 
 }

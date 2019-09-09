@@ -531,6 +531,10 @@
 				<s:hidden name="actionname" id="actionName" value="%{action}" />
 				<s:hidden name="billSubType" id="billSubType" value="%{billSubType}" />
 			</div>
+			<s:hidden id="selectedContingentRows" name="selectedContingentRows" value="%{selectedContingentRows}" />
+			<s:hidden id="selectedContractorRows" name="selectedContractorRows" value="%{selectedContractorRows}" />
+			<s:hidden id="selectedSupplierRows" name="selectedSupplierRows" value="%{selectedSupplierRows}" />
+			<s:hidden id="billIdsToPaymentAmountsMapId" name="billIdsToPaymentAmountsMap" value="%{billIdsToPaymentAmountsMap}" />
 
 			<script>
 			jQuery(document).ready(function() {
@@ -709,8 +713,9 @@
 			var noBalanceCheck='<s:text name="payment.none"/>';
 			if(jQuery("#bankBalanceCheck").val()==noBalanceCheck)
 			{
+				billIdsToPaymentAmountsap('billList','billIdsToPaymentAmountsMapId');
 			 document.forms[0].action='${pageContext.request.contextPath}/payment/payment-create.action';
-			 return true;
+			 document.forms[0].submit();
 			}
 			else if(!balanceCheck() && jQuery("#bankBalanceCheck").val()==balanceCheckMandatory){
 					 bootbox.alert("Insufficient Bank Balance.");
@@ -720,8 +725,9 @@
 			else if(!balanceCheck() && jQuery("#bankBalanceCheck").val()==balanceCheckWarning){
 					 var msg = confirm("Insufficient Bank Balance. Do you want to process ?");
 					 if (msg == true) {
+						 billIdsToPaymentAmountsMap('billList','billIdsToPaymentAmountsMapId');
 						 document.forms[0].action='${pageContext.request.contextPath}/payment/payment-create.action';
-						return true;
+						 document.forms[0].submit();
 					 } else {
 						 undoLoadingMask();
 					   	return false;
@@ -729,8 +735,9 @@
 				}
 			else
 			{
+				billIdsToPaymentAmountsMap('billList','billIdsToPaymentAmountsMapId');
 				document.forms[0].action = '${pageContext.request.contextPath}/payment/payment-create.action';
-				return true;
+				document.forms[0].submit();
 			}
 		}  
 		
@@ -768,6 +775,49 @@
 			window.open(url,'','width=900, height=700');
 		}
 		document.getElementById('paymentAmountspan').innerHTML = document.getElementById('grandTotal').value;
+
+		function billIdsToPaymentAmountsMap(billTypeObj,id){
+			var	length = <s:property value="%{billList.size()}"/>;
+			var selectedRowsArr = new Array();
+			for(var index=0;index<length;index++){
+					selectedRowsArr.push(
+				document.getElementsByName(billTypeObj+"["+index+"].csBillId")[0].value+":"+
+				document.getElementsByName(billTypeObj+"["+index+"].paymentAmt")[0].value);
+				}
+			document.getElementById(id).value = selectedRowsArr;
+			disableSelectedRows();
+		}
+
+		function disableSelectedRows()
+		{
+			console.log('parameters length : ',document.forms[0]);
+					for(var i=0;i<document.forms[0].length;i++)
+						{
+							if(document.forms[0].elements[i].name != 'billregister.id' && document.forms[0].elements[i].name != 'department' && 
+								document.forms[0].elements[i].name != 'function' && document.forms[0].elements[i].name != 'voucherdate' &&
+								document.forms[0].elements[i].name != 'bankbranch' && document.forms[0].elements[i].name != 'bankaccount' &&
+								document.forms[0].elements[i].name != 'availableBalance' && document.forms[0].elements[i].name != 'description' && 
+								document.forms[0].elements[i].name != 'balance' && document.forms[0].elements[i].name != 'functionSel' && 
+								document.forms[0].elements[i].name != 'hiddenText' && document.forms[0].elements[i].name != 'paymentMode' &&
+								document.forms[0].elements[i].name != 'grandTotal' && document.forms[0].elements[i].name != 'billListSize' &&
+								document.forms[0].elements[i].name != 'cutOffDate' && document.forms[0].elements[i].name != 'bankBalanceCheck' &&
+								document.forms[0].elements[i].name != 'currentState' && document.forms[0].elements[i].name != 'currentDesignation' &&
+								document.forms[0].elements[i].name != 'additionalRule' && document.forms[0].elements[i].name != 'amountRule' &&
+								document.forms[0].elements[i].name != 'workFlowDepartment' && document.forms[0].elements[i].name != 'pendingActions' &&
+								document.forms[0].elements[i].name != 'approverName' && document.forms[0].elements[i].name != 'approverDepartment' &&
+								document.forms[0].elements[i].name != 'approverDesignation' && document.forms[0].elements[i].name != 'approverPositionId' &&
+								document.forms[0].elements[i].name != 'approverComments' && document.forms[0].elements[i].name != 'workFlowAction' &&
+								document.forms[0].elements[i].name != 'paymentid' && document.forms[0].elements[i].name != 'actionname' &&
+								document.forms[0].elements[i].name != 'contractorIds' && document.forms[0].elements[i].name != 'supplierIds' &&
+								document.forms[0].elements[i].name != 'contingentIds' && document.forms[0].elements[i].name != 'salaryIds' &&
+								document.forms[0].elements[i].name != 'billSubType' && document.forms[0].elements[i].name != 'pensionIds' &&
+								document.forms[0].elements[i].name != 'selectedContingentRows' && document.forms[0].elements[i].name != 'billIdsToPaymentAmountsMap' &&
+								document.forms[0].elements[i].name != 'selectedContractorRows' && document.forms[0].elements[i].name != 'selectedSupplierRows'){
+								document.forms[0].elements[i].disabled =true;
+							}					
+						}	
+		}
+		
 	</script>
 		</div>
 	</s:form>
