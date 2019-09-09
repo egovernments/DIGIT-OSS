@@ -13,8 +13,6 @@ config:
       - work-dir: "egov-accesscontrol"
         image-name: "egov-accesscontrol"
         dockerfile: "build/maven/Dockerfile"
-      - work-dir: "egov-accesscontrol/src/main/resources/db"
-        image-name: "egov-accesscontrol-db"
 
   - name: "core-services/egov-common-masters"
     build:
@@ -85,24 +83,18 @@ config:
       - work-dir: "egov-mdms-service"
         image-name: "egov-mdms-service"
         dockerfile: "build/maven/Dockerfile"
-      - work-dir: "egov-mdms-service/src/main/resources/db"
-        image-name: "egov-mdms-service-db"
 
   - name: "core-services/egov-notification-mail"
     build:
       - work-dir: "egov-notification-mail"
         image-name: "egov-notification-mail"
         dockerfile: "build/maven/Dockerfile"
-      - work-dir: "egov-notification-mail/src/main/resources/db"
-        image-name: "egov-notification-mail-db"
 
   - name: "core-services/egov-notification-sms"
     build:
       - work-dir: "egov-notification-sms"
         image-name: "egov-notification-sms"
         dockerfile: "build/maven/Dockerfile"
-      - work-dir: "egov-notification-sms/src/main/resources/db"
-        image-name: "egov-notification-sms-db"
 
   - name: "core-services/egov-otp"
     build:
@@ -133,16 +125,12 @@ config:
       - work-dir: "egov-searcher"
         image-name: "egov-searcher"
         dockerfile: "build/maven/Dockerfile"
-      - work-dir: "egov-searcher/src/main/resources/db"
-        image-name: "egov-searcher-db"
 
   - name: "core-services/egov-telemetry"
     build:
       - work-dir: "egov-telemetry"
         image-name: "egov-telemetry"
         dockerfile: "build/maven/Dockerfile"
-      - work-dir: "egov-telemetry/src/main/resources/db"
-        image-name: "egov-telemetry-db"
 
   - name: "core-services/egov-user"
     build:
@@ -160,6 +148,12 @@ config:
       - work-dir: "egov-workflow-v2/src/main/resources/db"
         image-name: "egov-workflow-v2-db"
 
+  - name: "core-services/report"
+    build:
+      - work-dir: "report"
+        image-name: "report"
+        dockerfile: "build/maven/Dockerfile"   
+
   - name: "core-services/tenant"
     build:
       - work-dir: "tenant"
@@ -167,3 +161,15 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "tenant/src/main/resources/db"
         image-name: "tenant-db"
+
+  - name: "core-services/user-otp"
+    build:
+      - work-dir: "user-otp"
+        image-name: "user-otp"
+        dockerfile: "build/maven/Dockerfile"
+
+  - name: "core-services/zuul"
+    build:
+      - work-dir: "zuul"
+        image-name: "zuul"
+        dockerfile: "build/maven/Dockerfile"        

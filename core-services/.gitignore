@@ -39,7 +39,7 @@ hs_err_pid*
 .classpath
 .project
 .settings/
-.mvnw
+.mvnw/
 target/
 
 # Logs

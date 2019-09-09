@@ -1,0 +1,35 @@
+{
+  "responseInfo": null,
+  "error": {
+    "code": 400,
+    "message": "Invalid OTP request",
+    "description": null,
+    "fields": [
+      {
+        "code": "OTP.TENANT_ID_MANDATORY",
+        "message": "Tenant field is mandatory",
+        "field": "otp.tenantId"
+      },
+      {
+        "code": "OTP.MOBILE_NUMBER_MANDATORY",
+        "message": "Mobile number field is mandatory",
+        "field": "otp.mobileNumber"
+      },
+      {
+        "code": "OTP.MOBILE_NUMBER_INVALID",
+        "message": "Mobile number field should be numeric.",
+        "field": "otp.mobileNumber"
+      },
+      {
+        "code": "OTP.MOBILE_NUMBER_INVALIDLENGTH",
+        "message": "Mobile number length should be min 10 and max 13 digits",
+        "field": "otp.mobileNumber"
+      },
+      {
+        "code": "OTP.REQUEST_TYPE_MANDATORY",
+        "message": "Request type (register, passwordreset,login) is mandatory",
+        "field": "otp.type"
+      }
+    ]
+  }
+}
