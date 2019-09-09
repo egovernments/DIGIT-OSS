@@ -8,7 +8,7 @@
 # -
 # -
 config:
-  - name: "core-services/egov-user-event"
+  - name: "municipal-services/egov-user-event"
     build:
       - work-dir: "egov-user-event"
         image-name: "egov-user-event"
@@ -16,7 +16,7 @@ config:
       - work-dir: "egov-user-event/src/main/resources/db"
         image-name: "egov-user-event-db"
 
-  - name: "core-services/pt-calculator-v2"
+  - name: "municipal-services/pt-calculator-v2"
     build:
       - work-dir: "pt-calculator-v2"
         image-name: "pt-calculator-v2"
@@ -24,7 +24,7 @@ config:
       - work-dir: "pt-calculator-v2/src/main/resources/db"
         image-name: "pt-calculator-v2-db"
 
-  - name: "core-services/pt-services-v2"
+  - name: "municipal-services/pt-services-v2"
     build:
       - work-dir: "pt-services-v2"
         image-name: "pt-services-v2"
@@ -32,7 +32,7 @@ config:
       - work-dir: "pt-services-v2/src/main/resources/db"
         image-name: "pt-services-v2-db"
 
-  - name: "core-services/rainmaker-pgr"
+  - name: "municipal-services/rainmaker-pgr"
     build:
       - work-dir: "rainmaker-pgr"
         image-name: "rainmaker-pgr"
@@ -40,7 +40,7 @@ config:
       - work-dir: "rainmaker-pgr/src/main/resources/db"
         image-name: "rainmaker-pgr-db"
 
-  - name: "core-services/tl-calculator"
+  - name: "municipal-services/tl-calculator"
     build:
       - work-dir: "tl-calculator"
         image-name: "tl-calculator"
@@ -48,7 +48,7 @@ config:
       - work-dir: "tl-calculator/src/main/resources/db"
         image-name: "tl-calculator-db"
         
-  - name: "core-services/tl-services"
+  - name: "municipal-services/tl-services"
     build:
       - work-dir: "tl-services"
         image-name: "tl-services"
