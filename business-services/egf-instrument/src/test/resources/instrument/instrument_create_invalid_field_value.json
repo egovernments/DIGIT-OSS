@@ -1,0 +1,25 @@
+{
+  "requestInfo": {
+	    "action": "action",
+	    "did": "did",
+	    "msgId": "msgId",
+	    "requesterId": "requesterId",
+	    "ts": "01-01-2017 01:01:01",
+	    "authToken": null
+    },
+	"instruments": [
+   	{
+            "transactionNumber": "transactionNumber",
+            "amount": 1,
+            "transactionType":"Credit",
+            "instrumentType": 
+            	{
+            		"name":"instrumenttype"
+            	}
+            ,
+            "serialNo":"serialNo",
+            "tenantId": "default"
+   	}
+   	
+   	]
+}

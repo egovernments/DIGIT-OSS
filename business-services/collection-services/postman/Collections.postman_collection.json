@@ -1,0 +1,93 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Collections",
+		"_postman_id": "74908e9c-5511-6a47-f657-564f1c036e2f",
+		"description": "Create receipt",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://egov-micro-dev.egovernments.org/collection-services/receipt/_create",
+			"request": {
+				"url": "http://egov-micro-dev.egovernments.org/collection-services/receipts/_create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"Receipt\": [\n    {\n      \"Bill\": [\n        {\n          \"id\": \"2\",\n          \"payeeName\": \"R Krishna Reddy\",\n          \"payeeAddress\": null,\n          \"payeeEmail\": null,\n          \"isActive\": true,\n          \"isCancelled\": false,\n          \"mobileNumber\" : \"9742913171\",\n          \"billDetails\": [\n            {\n              \"id\": \"17\",\n              \"tenantId\": \"default\",\n              \"bill\": \"17\",\n              \"businessService\": \"WC\",\n              \"billNumber\": \"17\",\n              \"billDate\": 1502365191113,\n              \"consumerCode\": \"1016000001\",\n              \"consumerType\": \"PRIVATE\",\n              \"billDescription\": \"Property Tax Consumer Code: 1016000001\",\n              \"displayMessage\": \"Property Tax Consumer Code: 1016000001\",\n              \"minimumAmount\": 1,\n              \"totalAmount\": 1948,\n              \"receiptDate\" : \"1503089751000\",\n              \"manualReceiptNumber\" : \"test123\",\n              \"collectionModesNotAllowed\": [\n                \"Cash\"\n              ],\n              \"callBackForApportioning\": true,\n              \"partPaymentAllowed\": true,\n              \"billAccountDetails\": [\n                {\n                  \"id\": \"48\",\n                  \"tenantId\": \"default\",\n                  \"billDetail\": \"17\",\n                  \"glcode\": \"4501001\",\n                  \"order\": 1,\n                  \"accountDescription\": \"EDU_CESS-1490985000000-1506796199000\",\n                  \"crAmountToBePaid\": 418,\n                  \"creditAmount\": null,\n                  \"debitAmount\": null,\n                  \"isActualDemand\": true,\n                  \"purpose\": \"CURRENT_AMOUNT\"\n                },\n                {\n                  \"id\": \"49\",\n                  \"tenantId\": \"default\",\n                  \"billDetail\": \"17\",\n                  \"glcode\": \"4501001\",\n                  \"order\": 0,\n                  \"accountDescription\": \"PT_TAX-1490985000000-1506796199000\",\n                  \"crAmountToBePaid\": 1500,\n                  \"creditAmount\": null,\n                  \"debitAmount\": null,\n                  \"isActualDemand\": true,\n                  \"purpose\": \"CURRENT_AMOUNT\"\n                },\n                {\n                  \"id\": \"50\",\n                  \"tenantId\": \"default\",\n                  \"billDetail\": \"17\",\n                  \"glcode\": \"4501001\",\n                  \"order\": 1,\n                  \"accountDescription\": \"LIB_CESS-1490985000000-1506796199000\",\n                  \"crAmountToBePaid\": 30,\n                  \"creditAmount\": null,\n                  \"debitAmount\": null,\n                  \"isActualDemand\": true,\n                  \"purpose\": \"CURRENT_AMOUNT\"\n                }\n              ],\n              \"amountPaid\": \"1000\"\n            }\n          ],\n          \"tenantId\": \"default\",\n          \"auditDetail\": null,\n          \"paidBy\": \"murali\"\n        }\n      ],\n      \"tenantId\": \"default\",\n      \"instrument\": {\n       \"transactionNumber\": \"657837232\",\n        \"transactionDateInput\":\"1505327400000\", \n        \"amount\": 100,\n        \"instrumentType\": {\n          \"name\": \"DD\",\n          \"tenantId\": \"default\"\n        },\n        \"branchName\":\"Bangalore\",\n        \"bank\": {\n          \"id\": \"1770\",\n          \"tenantId\": \"default\"\n        }\n      }\n    }\n  ],\n  \"RequestInfo\": {\n    \"apiId\": \"org.egov.pt\",\n    \"ver\": \"1.0\",\n    \"ts\": 1502365223899,\n    \"action\": \"asd\",\n    \"did\": \"4354648646\",\n    \"key\": \"xyz\",\n    \"msgId\": \"654654\",\n    \"requesterId\": \"61\",\n    \"authToken\": \"77b984a5-1e75-4fd7-afa2-8b6c66ffa9f7\",\n    \"userInfo\":{\n    \t\"id\":73,\n    \t\"roles\": []\n    }\n  }\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://egov-micro-dev.egovernments.org/collection-services/receipts/_search?tenantId=default",
+			"request": {
+				"url": {
+					"raw": "http://egov-micro-dev.egovernments.org/collection-services/receipts/_search?tenantId=default",
+					"protocol": "http",
+					"host": [
+						"egov-micro-dev",
+						"egovernments",
+						"org"
+					],
+					"path": [
+						"collection-services",
+						"receipts",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "tenantId",
+							"value": "default",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"RequestInfo\" : {\n        \"apiId\":\"org.egov.collection\",\n        \"ver\":\"1.0\",\n        \"action\":\"POST\",\n        \"did\":\"4354648646\",\n        \"key\":\"xyz\",\n        \"msgId\":\"654654\",\n        \"requesterId\": \"rajesh\",\n         \"correlationId\" : \"\",\n         \"ts\" : \"10-03-2017 00:00:00\",\n        \"authToken\":\"cbaebf2f-e8a2-4312-9041-01f987d40377\",\n        \"userInfo\":\n        {\n        \t\"id\":1\n        }\n     }\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://egov-micro-dev.egovernments.org/collection-services/receipt/_update",
+			"request": {
+				"url": "http://egov-micro-dev.egovernments.org/collection-services/receipts/_update",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"Receipt\": [\n    {\n      \"Bill\": [\n        {\n          \"id\": \"17\",\n          \"payeeName\": \"R Krishna Reddy\",\n          \"payeeAddress\": null,\n          \"payeeEmail\": null,\n          \"isActive\": true,\n          \"isCancelled\": false,\n          \"billDetails\": [\n            {\n              \"id\": \"17\",\n              \"tenantId\": \"default\",\n              \"bill\": \"17\",\n              \"businessService\": \"TL\",\n              \"billNumber\": \"17\",\n              \"billDate\": 1502365191113,\n              \"consumerCode\": \"1016000001\",\n              \"consumerType\": \"PRIVATE\",\n              \"billDescription\": \"Property Tax Consumer Code: 1016000001\",\n              \"displayMessage\": \"Property Tax Consumer Code: 1016000001\",\n              \"minimumAmount\": 1,\n              \"totalAmount\": 1948,\n              \"receiptDate\" : \"1503089751000\",\n              \"manualReceiptNumber\" : \"test123\",\n              \"collectionModesNotAllowed\": [\n                \"Cash\"\n              ],\n              \"callBackForApportioning\": true,\n              \"partPaymentAllowed\": true,\n              \"billAccountDetails\": [\n                {\n                  \"id\": \"48\",\n                  \"tenantId\": \"default\",\n                  \"billDetail\": \"17\",\n                  \"glcode\": \"4501001\",\n                  \"order\": 1,\n                  \"accountDescription\": \"EDU_CESS-1490985000000-1506796199000\",\n                  \"crAmountToBePaid\": 418,\n                  \"creditAmount\": null,\n                  \"debitAmount\": null,\n                  \"isActualDemand\": true,\n                  \"purpose\": \"CURRENT_AMOUNT\"\n                },\n                {\n                  \"id\": \"49\",\n                  \"tenantId\": \"default\",\n                  \"billDetail\": \"17\",\n                  \"glcode\": \"4501001\",\n                  \"order\": 0,\n                  \"accountDescription\": \"PT_TAX-1490985000000-1506796199000\",\n                  \"crAmountToBePaid\": 1500,\n                  \"creditAmount\": null,\n                  \"debitAmount\": null,\n                  \"isActualDemand\": true,\n                  \"purpose\": \"CURRENT_AMOUNT\"\n                },\n                {\n                  \"id\": \"50\",\n                  \"tenantId\": \"default\",\n                  \"billDetail\": \"17\",\n                  \"glcode\": \"4501001\",\n                  \"order\": 1,\n                  \"accountDescription\": \"LIB_CESS-1490985000000-1506796199000\",\n                  \"crAmountToBePaid\": 30,\n                  \"creditAmount\": null,\n                  \"debitAmount\": null,\n                  \"isActualDemand\": true,\n                  \"purpose\": \"CURRENT_AMOUNT\"\n                }\n              ],\n              \"amountPaid\": \"1000\"\n            }\n          ],\n          \"tenantId\": \"default\",\n          \"auditDetail\": null,\n          \"paidBy\": \"murali\"\n        }\n      ],\n      \"tenantId\": \"default\",\n      \"instrument\": {\n       \"transactionNumber\": \"1232356543\",\n        \"transactionDateInput\":\"1503089751000\",\n        \"amount\": 100,\n        \"instrumentType\": {\n          \"name\": \"Cash\",\n          \"tenantId\": \"default\"\n        },\n        \"branchName\":\"Bangalore\",\n        \"bank\": {\n          \"id\": \"1\",\n          \"tenantId\": \"default\"\n        }\n      }\n    }\n  ],\n  \"RequestInfo\": {\n    \"apiId\": \"org.egov.pt\",\n    \"ver\": \"1.0\",\n    \"ts\": 1502365223899,\n    \"action\": \"asd\",\n    \"did\": \"4354648646\",\n    \"key\": \"xyz\",\n    \"msgId\": \"654654\",\n    \"requesterId\": \"61\",\n    \"authToken\": \"a40c39dc-4158-47c2-8fc0-6d17c5a1584f\",\n    \"userInfo\":{\n    \t\"id\":73,\n    \t\"roles\": []\n    }\n  }\n}"
+				},
+				"description": "Receipt Update"
+			},
+			"response": []
+		}
+	]
+}

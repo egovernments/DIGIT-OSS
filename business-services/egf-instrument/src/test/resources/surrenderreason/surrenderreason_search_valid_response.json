@@ -1,0 +1,17 @@
+"surrenderReasons": [
+	   	{
+	   	 	"id":"1",
+			"name":"name",
+			"description":"description",
+	   		"tenantId":"default"
+	   	}
+   	],
+    "page":
+    {
+        "totalResults": 1,
+        "totalPages": 1,
+        "pageSize": 500,
+        "currentPage": 0,
+        "offset": 0
+    }
+    

@@ -1,0 +1,18 @@
+{
+  "ResponseInfo": {
+    "apiId": null,
+    "ver": null
+  },
+  "TaxPeriods": [
+    {
+      "id": "1",
+      "tenantId": "ap.kurnool",
+      "fromDate": 1478930,
+      "toDate": 4783525,
+      "service": "Test Service",
+      "code": "2017-2018-I",
+      "financialYear": "2017-18",
+      "auditDetail": null
+    }
+  ]
+}

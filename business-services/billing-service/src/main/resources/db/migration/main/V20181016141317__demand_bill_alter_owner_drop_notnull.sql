@@ -1,0 +1,3 @@
+ALTER TABLE egbs_demand ALTER COLUMN owner DROP NOT NULL;
+
+ALTER TABLE egbs_bill ALTER COLUMN payeename DROP NOT NULL;

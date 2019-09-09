@@ -1,0 +1,1 @@
+ALTER TABLE egf_function DROP COLUMN isparent;

@@ -1,0 +1,43 @@
+{
+    "RequestInfo": {
+        "apiId": "apiId",
+        "ver": "ver",
+	"did":"did"
+ 	},
+    "Demands": [
+        {
+            "id": null,
+            "tenantId": "ap.kurnool",
+            "consumerCode": "consumercode",
+            "consumerType": "consumertype",
+            "businessService": "businessservice",
+            "minimumAmountPayable": 200,
+            "owner": {
+                "id": 1,
+                "userName": null,
+                "name": null,
+                "mobileNumber": null,
+                "emailId": null
+            },
+            "taxPeriodFrom": 12345,
+            "taxPeriodTo": 1234567890,
+
+            "demandDetails": [
+                {
+                    "id": null,
+                    "demandId": null,
+                    "taxHeadMasterCode" : "0002",
+                    "taxAmount": 100,
+                    "collectionAmount": 0
+               },
+                {
+                    "id": null,
+                    "demandId": null,
+                    "taxHeadMasterCode" : "0003",
+                    "taxAmount": 200,
+                    "collectionAmount": 0
+                }
+            ]
+            }
+    ]
+}

@@ -1,0 +1,51 @@
+{
+	"variables": [],
+	"info": {
+		"name": "InstrumentAccountCodeNegative",
+		"_postman_id": "1574dd69-49ad-4925-49a8-fd0fd51a4474",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8480/egf-instrument/instrumentaccountcodes/_update",
+			"request": {
+				"url": "localhost:8480/egf-instrument/instrumentaccountcodes/_update",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"requestInfo\":{\n      \"resMsgId\":\"placeholder\",\n      \"status\":\"200\",\n      \"apiId\":null,\n      \"ver\":null,\n      \"ts\":\"01-01-2017 01:01:01\",\n      \"key\":null,\n      \"authToken\":\"\",\n      \"userInfo\":{\n         \"id\":1\n      }\n   },\n   \"instrumentAccountCodes\":[\n   \t\t{\n\t\t\t \"instrumentType\":{\n\t            \"id\":\"f3ae954c-74b0-47d9-9c17-088362c31e35\",\n\t            \"name\":\"DD\"\n        \t},\n        \t\"accountCode\":{\n        \t\t\"id\":\"1\",\n        \t\t\"glcode\":\"2\",\n        \t\t\"tenantId\":\"default\"\n        \t},\n\t\t\t\"tenantId\":\"default\"\n   \t\t}\n   \t]\n}"
+				},
+				"description": "InstrumentAccountCode update failed because no id"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8480/egf-instrument/instrumentaccountcodes/_create",
+			"request": {
+				"url": "localhost:8480/egf-instrument/instrumentaccountcodes/_create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"requestInfo\":{\n      \"resMsgId\":\"placeholder\",\n      \"status\":\"200\",\n      \"apiId\":null,\n      \"ver\":null,\n      \"ts\":\"01-01-2017 01:01:01\",\n      \"key\":null,\n      \"authToken\":\"\",\n      \"userInfo\":{\n         \"id\":1\n      }\n   },\n   \"instrumentAccountCodes\":[\n   \t\t{\n\t\t\t \"instrumentType\":{\n\t            \"id\":\"f3ae954c-74b0-47d9-9c17-088362c31e35\",\n\t            \"name\":\"DD\"\n        \t},\n        \t\"accountCode\":{\n        \t\t\"id\":\"1\",\n        \t\t\"tenantId\":\"default\"\n        \t},\n\t\t\t\"tenantId\":\"default\"\n   \t\t}\n   \t]\n}"
+				},
+				"description": "InstrumentAccountCode creation failed no glcode is passed"
+			},
+			"response": []
+		}
+	]
+}
