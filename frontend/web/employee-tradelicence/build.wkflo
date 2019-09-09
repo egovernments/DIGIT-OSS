@@ -1,9 +1,0 @@
-def build(path, ci_image) {
-    stage("Build") {
-        docker.image("egovio/ci-react:v8.15.0-alpine").inside {
-            sh "cd ${path}/rainmaker && yarn config set registry http://egov-micro-dev.egovernments.org/verdaccio && yarn && yarn run build-css-employee && cd packages/employee-tradelicence && yarn run build && cp -r build ../../../employee-tradelicence/";
-        }
-    }
-}
-
-return this;

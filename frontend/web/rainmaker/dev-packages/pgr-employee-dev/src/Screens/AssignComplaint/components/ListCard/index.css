@@ -1,0 +1,30 @@
+.assign-complaint-button-cont {
+  position: fixed;
+  width: 100%;
+  bottom: 10px;
+  left: 0;
+  padding: 0 14px; }
+
+.assign-complaint-main-card {
+  padding: 12px 0 !important; }
+
+.avatar-selected {
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+.employee-search-cont {
+  padding: 0 8px; }
+
+.assign-button {
+  position: absolute; }
+
+@media only screen and (min-width: 768px) {
+  .emp-directory-call-icon {
+    margin-right: 10px !important; }
+  .assign-button {
+    position: fixed !important; } }
+
+@media only screen and (max-width: 768px) {
+  .emp-directory-call-icon {
+    right: 0px !important; } }
