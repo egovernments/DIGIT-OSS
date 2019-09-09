@@ -109,8 +109,6 @@ config:
       - work-dir: "egov-persister"
         image-name: "egov-persister"
         dockerfile: "build/maven/Dockerfile"
-      - work-dir: "egov-persister/src/main/resources/db"
-        image-name: "egov-persister-db"
 
   - name: "core-services/egov-pg-service"
     build:
