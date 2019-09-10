@@ -188,7 +188,7 @@
 		class="bluebox"><span class="mandatory1">*</span></span></td>
 	<td class="bluebox"><s:radio name="contraBean.modeOfCollection"
 			id="modeOfCollection" list="%{modeOfCollectionMap}"
-			onclick="toggleChequeAndRefNumber(this)" checked="checked"/></td>
+			onclick="toggleChequeAndRefNumber(this)"/></td>
 	<td class="bluebox"></td>
 	<td class="bluebox"></td>
 </tr>

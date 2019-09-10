@@ -201,6 +201,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 		ModeOfCollectionMap = new LinkedHashMap<String, String>();
 		// ModeOfCollectionMap.put(MDC_CHEQUE, MDC_CHEQUE);
 		ModeOfCollectionMap.put(MDC_OTHER, MDC_OTHER);
+		ModeOfCollectionMap.put(MDC_CHEQUE, MDC_CHEQUE);
 		final List<CChartOfAccounts> glCodeList = persistenceService.findAllBy(
 				"from CChartOfAccounts coa where coa.purposeId=8 and coa.classification=4 and coa.isActiveForPosting=true order by coa.glcode ");
 		addDropdownData("interFundList", glCodeList);
@@ -572,6 +573,7 @@ public class ContraBTBAction extends BaseVoucherAction {
 			final Date currDate = new Date();
 			final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			contraBean.setChequeDate(sdf.format(currDate));
+			contraBean.setModeOfCollection(MDC_OTHER);
 			voucherDate = sdf.parse(sdf.format(currDate));
 		} catch (ParseException e) {
 

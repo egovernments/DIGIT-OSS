@@ -650,7 +650,7 @@ function resetSelectedRowsId(billTypeObj,selectedRowsId){
 			var functionName = document.getElementsByName(billTypeObj+"["+index+"].functionName")[0];
 			functionName = functionName == undefined || functionName == 'undefined' ? '' : functionName.value;
 			var schemeName = document.getElementsByName(billTypeObj+"["+index+"].schemeName")[0];
-			schemeName = schemeName == schemeName || schemeName == 'undefined'? '' : schemeName.value;
+			schemeName = schemeName == undefined || schemeName == 'undefined'? '' : schemeName.value;
 			var subschemeName = document.getElementsByName(billTypeObj+"["+index+"].subschemeName")[0];
 			subschemeName = subschemeName == undefined || subschemeName == 'undefined'? '' : subschemeName.value;
 				selectedRowsArr.push(
