@@ -242,13 +242,13 @@ public class CancelBillAction extends BaseFormAction {
 						+ "' and billmis.egBillregister.status.description='"
 						+ FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS + "'");
 			else if (FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE.equalsIgnoreCase(expType))
-				query.append(" and billmis.egBillregister.status.moduletype='" + FinancialConstants.SUPPLIERBILL
-						+ "' and billmis.egBillregister.status.description='"
-						+ FinancialConstants.SUPPLIERBILL_PASSED_STATUS + "'");
+				query.append(" and billmis.egBillregister.status.moduletype='" + FinancialConstants.SBILL
+						+ "' and billmis.egBillregister.status.code='"
+						+ FinancialConstants.SUPPLIERBILL_APPROVED_STATUS + "'");
 			else if (FinancialConstants.STANDARD_EXPENDITURETYPE_WORKS.equalsIgnoreCase(expType))
-				query.append(" and billmis.egBillregister.status.moduletype='" + FinancialConstants.CONTRACTORBILL
-						+ "' and billmis.egBillregister.status.description='"
-						+ FinancialConstants.CONTRACTORBILL_PASSED_STATUS + "'");
+				query.append(" and billmis.egBillregister.status.moduletype='" + FinancialConstants.CONTRACTOR_BILL
+						+ "' and billmis.egBillregister.status.code='"
+						+ FinancialConstants.CONTRACTORBILL_APPROVED_STATUS + "'");
 		}
 
 		return query;
@@ -347,12 +347,12 @@ public class CancelBillAction extends BaseFormAction {
 			cancelQuery.append(
 					" billstatus='" + FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS + "' , statusid=:statusId ");
 		} else if (FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE.equalsIgnoreCase(expType)) {
-			statusQuery.append("moduletype='" + FinancialConstants.SUPPLIERBILL + "' and description='"
+			statusQuery.append("moduletype='" + FinancialConstants.SBILL + "' and description='"
 					+ FinancialConstants.SUPPLIERBILL_CANCELLED_STATUS + "'");
 			cancelQuery.append(
 					" billstatus='" + FinancialConstants.SUPPLIERBILL_CANCELLED_STATUS + "' , statusid=:statusId ");
 		} else if (FinancialConstants.STANDARD_EXPENDITURETYPE_WORKS.equalsIgnoreCase(expType)) {
-			statusQuery.append("moduletype='" + FinancialConstants.CONTRACTORBILL + "' and description='"
+			statusQuery.append("moduletype='" + FinancialConstants.CONTRACTOR_BILL + "' and description='"
 					+ FinancialConstants.CONTRACTORBILL_CANCELLED_STATUS + "'");
 			cancelQuery.append(
 					" billstatus='" + FinancialConstants.CONTRACTORBILL_CANCELLED_STATUS + "' , statusid=:statusId ");
