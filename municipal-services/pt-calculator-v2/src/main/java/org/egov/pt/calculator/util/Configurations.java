@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 
 import lombok.Getter;
 
+import java.util.List;
+
 @Configuration
 @Getter
 public class Configurations {
@@ -83,4 +85,17 @@ public class Configurations {
 
 	@Value("${pt.financialyear.start.month}")
 	private String financialYearStartMonth;
+
+	// PT Service
+
+	@Value("${egov.pt.host}")
+	private String ptHost;
+
+	@Value("${egov.pt.search.endpoint}")
+	private String ptSearchEndpoint;
+
+	@Value("#{'${egov.pt.source.demand.gen.ignore}'.split(',')}")
+	private List<String> sourcesToBeIgnored;
+
+
 }

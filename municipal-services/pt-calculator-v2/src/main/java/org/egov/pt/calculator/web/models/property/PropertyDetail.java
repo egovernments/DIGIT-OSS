@@ -150,7 +150,6 @@ public class PropertyDetail   {
         @Size(min=1)
         private Set<OwnerInfo> owners;
 
-
         @JsonProperty("auditDetails")
         private AuditDetails auditDetails;
 

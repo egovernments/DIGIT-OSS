@@ -340,24 +340,24 @@ public class PayService {
 			return null;
 	}
 
-	public TaxHeadEstimate roundOfDecimals(BigDecimal amount) {
+	public TaxHeadEstimate roundOffDecimals(BigDecimal amount,BigDecimal totalRoundOffAmount) {
 
-		BigDecimal roundOffPos = BigDecimal.ZERO;
-		BigDecimal roundOffNeg = BigDecimal.ZERO;
+		BigDecimal roundOff = BigDecimal.ZERO;
 
 		BigDecimal roundOffAmount = amount.setScale(2, 2);
 		BigDecimal reminder = roundOffAmount.remainder(BigDecimal.ONE);
 
 		if (reminder.doubleValue() >= 0.5)
-			roundOffPos = roundOffPos.add(BigDecimal.ONE.subtract(reminder));
+			roundOff = roundOff.add(BigDecimal.ONE.subtract(reminder));
 		else if (reminder.doubleValue() < 0.5)
-			roundOffNeg = roundOffNeg.add(reminder).negate();
+			roundOff = roundOff.add(reminder).negate();
 
-		if (roundOffPos.doubleValue() > 0)
-			return TaxHeadEstimate.builder().estimateAmount(roundOffPos)
-					.taxHeadCode(CalculatorConstants.PT_ROUNDOFF).build();
-		else if (roundOffNeg.doubleValue() < 0)
-			return TaxHeadEstimate.builder().estimateAmount(roundOffNeg)
+		if(roundOff.doubleValue() != 0)
+			roundOff = roundOff.subtract(totalRoundOffAmount);
+
+
+		if (roundOff.doubleValue() != 0)
+			return TaxHeadEstimate.builder().estimateAmount(roundOff)
 					.taxHeadCode(CalculatorConstants.PT_ROUNDOFF).build();
 		else
 			return null;

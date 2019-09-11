@@ -25,10 +25,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class PropertyResponse   {
-        @JsonProperty("responseInfo")
+        @JsonProperty("ResponseInfo")
         private ResponseInfo responseInfo;
 
-        @JsonProperty("properties")
+        @JsonProperty("Properties")
         @Valid
         private List<Property> properties;
 

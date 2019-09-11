@@ -43,7 +43,7 @@ public class CalculatorController {
 
 	@PostMapping("/_calculate")
 	public ResponseEntity<Map<String, Calculation>> generateDemands(@RequestBody @Valid CalculationReq calculationReq) {
-		return new ResponseEntity<>(demandService.generateDemands(calculationReq), HttpStatus.OK);
+		return new ResponseEntity<>(calculatorService.calculateAndCreateDemand(calculationReq), HttpStatus.OK);
 	}
 	
 	@PostMapping("/_getbill")

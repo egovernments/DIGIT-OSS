@@ -21,7 +21,7 @@ public class GetBillCriteria {
 	
 	@Default
 	private BigDecimal amountExpected = BigDecimal.ZERO;
-	
+
 	private String propertyId;
 	
 	private String assessmentYear;
@@ -31,6 +31,13 @@ public class GetBillCriteria {
 	
 	private String billId;
 
+	@NotNull
 	private List<String> consumerCodes;
+
+	@NotNull
+	private Long fromDate;
+
+	@NotNull
+	private Long toDate;
 	
 }

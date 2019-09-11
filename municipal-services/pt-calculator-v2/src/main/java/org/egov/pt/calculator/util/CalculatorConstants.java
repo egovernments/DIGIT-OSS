@@ -137,6 +137,14 @@ public class CalculatorConstants {
 
 	public static final String STARTING_DATE_APPLICABLES = "startingDay";
 
+    public static final String RECEIPT_START_DATE_PARAM = "fromDate=";
+
+    public static final String RECEIPT_END_DATE_PARAM = "toDate=";
+
+    public static final String DEMAND_START_DATE_PARAM = "periodFrom=";
+
+    public static final String DEMAND_END_DATE_PARAM = "periodTo=";
+
 	/*
 	 * special characters
 	 */
@@ -181,6 +189,8 @@ public class CalculatorConstants {
 	public static final String URL_PARAMS_SEPARATER = "?";
 
 	public static final String SEPARATER = "&";
+
+	public static final String ASSESSMENTNUMBER_FIELD_SEARCH = "propertyDetailids=";
 
 	public static final String MDMS_FINACIALYEAR_PATH = "$.MdmsRes.egf-master.FinancialYear[?(@.code==\"{}\")]";
 

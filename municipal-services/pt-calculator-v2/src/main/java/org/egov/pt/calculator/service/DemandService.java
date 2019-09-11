@@ -71,6 +71,9 @@ public class DemandService {
 	@Autowired
 	private CalculationValidator validator;
 
+	@Autowired
+	private MasterDataService mDataService;
+
 	/**
 	 * Generates and persists the demand to billing service for the given property
 	 * 
@@ -87,11 +90,17 @@ public class DemandService {
 		List<Demand> demands = new ArrayList<>();
 		List<String> lesserAssessments = new ArrayList<>();
 		Map<String, String> consumerCodeFinYearMap = new HashMap<>();
-		
-		Map<String, Calculation> propertyCalculationMap = estimationService.getEstimationPropertyMap(request);
+		Map<String,Object> masterMap = mDataService.getMasterMap(request);
+
+
+		Map<String, Calculation> propertyCalculationMap = estimationService.getEstimationPropertyMap(request,masterMap);
 		for (CalculationCriteria criteria : criterias) {
 
-			PropertyDetail detail = criteria.getProperty().getPropertyDetails().get(0);
+			Property property = criteria.getProperty();
+
+			PropertyDetail detail = property.getPropertyDetails().get(0);
+
+			Calculation calculation = propertyCalculationMap.get(property.getPropertyDetails().get(0).getAssessmentNumber());
 			
 			String assessmentNumber = detail.getAssessmentNumber();
 
@@ -103,16 +112,15 @@ public class DemandService {
 			if(advanceCarryforwardEstimate.isPresent())
 				newTax = advanceCarryforwardEstimate.get().getEstimateAmount();
 
+			Demand oldDemand = utils.getLatestDemandForCurrentFinancialYear(request.getRequestInfo(),criteria);
+
 			// true represents that the demand should be updated from this call
 			BigDecimal carryForwardCollectedAmount = getCarryForwardAndCancelOldDemand(newTax, criteria,
-					request.getRequestInfo(), true);
+					request.getRequestInfo(),oldDemand, true);
 
 			if (carryForwardCollectedAmount.doubleValue() >= 0.0) {
-				Property property = criteria.getProperty();
 
-				Demand demand = prepareDemand(property,
-						propertyCalculationMap.get(property.getPropertyDetails().get(0).getAssessmentNumber()),
-						request.getRequestInfo());
+				Demand demand = prepareDemand(property, calculation ,oldDemand);
 
 				demands.add(demand);
 				consumerCodeFinYearMap.put(demand.getConsumerCode(), detail.getFinancialYear());
@@ -139,7 +147,7 @@ public class DemandService {
 			throw new ServiceCallException(e.getResponseBodyAsString());
 		}
 		log.info(" The demand Response is : " + res);
-		assessmentService.saveAssessments(res.getDemands(), consumerCodeFinYearMap, request.getRequestInfo());
+	//	assessmentService.saveAssessments(res.getDemands(), consumerCodeFinYearMap, request.getRequestInfo());
 		return propertyCalculationMap;
 	}
 
@@ -193,8 +201,10 @@ public class DemandService {
 		mstrDataService.setPropertyMasterValues(requestInfo, getBillCriteria.getTenantId(),
 				propertyBasedExemptionMasterMap, timeBasedExmeptionMasterMap);
 
+/*
 		if(CollectionUtils.isEmpty(getBillCriteria.getConsumerCodes()))
 			getBillCriteria.setConsumerCodes(Collections.singletonList(getBillCriteria.getPropertyId()+ CalculatorConstants.PT_CONSUMER_CODE_SEPARATOR +getBillCriteria.getAssessmentNumber()));
+*/
 
 		DemandResponse res = mapper.convertValue(
 				repository.fetchResult(utils.getDemandSearchUrl(getBillCriteria), requestInfoWrapper),
@@ -261,7 +271,7 @@ public class DemandService {
 	 * @return
 	 */
 	protected BigDecimal getCarryForwardAndCancelOldDemand(BigDecimal newTax, CalculationCriteria criteria, RequestInfo requestInfo
-			, boolean cancelDemand) {
+			,Demand demand, boolean cancelDemand) {
 
 		Property property = criteria.getProperty();
 
@@ -270,7 +280,7 @@ public class DemandService {
 
 		if(null == property.getPropertyId()) return carryForward;
 
-		Demand demand = getLatestDemandForCurrentFinancialYear(requestInfo, property);
+	//	Demand demand = getLatestDemandForCurrentFinancialYear(requestInfo, property);
 		
 		if(null == demand) return carryForward;
 
@@ -285,16 +295,12 @@ public class DemandService {
 		log.debug("The new tax amount in string : " + newTax.toPlainString());
 		
 		if (oldTaxAmt.compareTo(newTax) > 0) {
-			boolean isDepreciationAllowed = utils.isAssessmentDepreciationAllowed(
-					criteria.getAssessmentYear(),
-					property.getTenantId(),
-					property.getPropertyId(),
-					new RequestInfoWrapper(requestInfo));
+			boolean isDepreciationAllowed = utils.isAssessmentDepreciationAllowed(demand,new RequestInfoWrapper(requestInfo));
 			if (!isDepreciationAllowed)
 				carryForward = BigDecimal.valueOf(-1);
 		}
 
-		if (BigDecimal.ZERO.compareTo(carryForward) >= 0 || !cancelDemand) return carryForward;
+		if (BigDecimal.ZERO.compareTo(carryForward) > 0 || !cancelDemand) return carryForward;
 		
 		demand.setStatus(Demand.StatusEnum.CANCELLED);
 		DemandRequest request = DemandRequest.builder().demands(Arrays.asList(demand)).requestInfo(requestInfo).build();
@@ -304,11 +310,12 @@ public class DemandService {
 		return carryForward;
 	}
 
-	/**
+/*	*//**
 	 * @param requestInfo
 	 * @param property
 	 * @return
-	 */
+	 *//*
+	@Deprecated
 	public Demand getLatestDemandForCurrentFinancialYear(RequestInfo requestInfo, Property property) {
 		
 		Assessment assessment = Assessment.builder().propertyId(property.getPropertyId())
@@ -326,19 +333,12 @@ public class DemandService {
 		DemandResponse res = mapper.convertValue(
 				repository.fetchResult(utils.getDemandSearchUrl(latestAssessment), new RequestInfoWrapper(requestInfo)),
 				DemandResponse.class);
-		BigDecimal totalCollectedAmount = res.getDemands().get(0)
-				.getDemandDetails().stream()
-				.map(d -> d.getCollectionAmount())
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
-
-		if (totalCollectedAmount.remainder(BigDecimal.ONE ).compareTo(BigDecimal.ZERO) != 0 ){
-			// The total collected amount is fractional most probably because of previous
-			// round off dropping prior to BS/CS 1.1 release
-			throw new CustomException("INVALID_COLLECT_AMOUNT", "The collected amount is fractional, please contact support for data correction");
-		}
-
 		return res.getDemands().get(0);
-	}
+	}*/
+
+
+
+
 
 	/**
 	 * Prepares Demand object based on the incoming calculation object and property
@@ -347,19 +347,19 @@ public class DemandService {
 	 * @param calculation
 	 * @return
 	 */
-	private Demand prepareDemand(Property property, Calculation calculation, RequestInfo requestInfo) {
+	private Demand prepareDemand(Property property, Calculation calculation,Demand demand) {
 
 		String tenantId = property.getTenantId();
 		PropertyDetail detail = property.getPropertyDetails().get(0);
 		String propertyType = detail.getPropertyType();
-		String consumerCode = property.getPropertyId() + CalculatorConstants.PT_CONSUMER_CODE_SEPARATOR + detail.getAssessmentNumber();
+		String consumerCode = property.getPropertyId();
 		OwnerInfo owner = null;
 		if (null != detail.getCitizenInfo())
 			owner = detail.getCitizenInfo();
 		else
 			owner = detail.getOwners().iterator().next();
 		
-		Demand demand = getLatestDemandForCurrentFinancialYear(requestInfo, property);
+	//	Demand demand = getLatestDemandForCurrentFinancialYear(requestInfo, property);
 
 		List<DemandDetail> details = new ArrayList<>();
 
@@ -397,8 +397,7 @@ public class DemandService {
 		/*
 		 * method to get the latest collected time from the receipt service
 		 */
-		List<Receipt> receipts = rcptService.getReceiptsFromConsumerCode(taxPeriod.getFinancialYear(), demand,
-				requestInfoWrapper);
+		List<Receipt> receipts = rcptService.getReceiptsFromDemand(demand,requestInfoWrapper);
 
 		BigDecimal taxAmtForApplicableGeneration = utils.getTaxAmtFromDemandForApplicablesGeneration(demand);
 		BigDecimal collectedApplicableAmount = BigDecimal.ZERO;
@@ -492,8 +491,16 @@ public class DemandService {
 		/*
 		 * Summing the credit amount and Debit amount in to separate variables(based on the taxhead:isdebit map) to send to roundoffDecimal method
 		 */
+
+		BigDecimal totalRoundOffAmount = BigDecimal.ZERO;
 		for (DemandDetail detail : demand.getDemandDetails()) {
+
+			if(!detail.getTaxHeadMasterCode().equalsIgnoreCase(PT_ROUNDOFF)){
 				taxAmount = taxAmount.add(detail.getTaxAmount());
+			}
+			else{
+				totalRoundOffAmount = totalRoundOffAmount.add(detail.getTaxAmount());
+			}
 		}
 
 		/*
@@ -501,7 +508,7 @@ public class DemandService {
 		 *  
 		 *  If no decimal value found null object will be returned 
 		 */
-		TaxHeadEstimate roundOffEstimate = payService.roundOfDecimals(taxAmount);
+		TaxHeadEstimate roundOffEstimate = payService.roundOffDecimals(taxAmount,totalRoundOffAmount);
 
 
 
