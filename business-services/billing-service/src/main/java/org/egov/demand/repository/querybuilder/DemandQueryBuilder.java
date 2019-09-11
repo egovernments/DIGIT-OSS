@@ -134,7 +134,7 @@ public class DemandQueryBuilder {
 		query.append("dmd.tenantid=? ");
 		preparedStmtList.add(tenantId);
 		
-		query.append("AND dmd.status=true ");
+		query.append("AND dmd.status='ACTIVE' ");
 		
 		boolean orFlag = false;
 		for (Entry<String, Set<String>> consumerCode : businessConsumercodeMap.entrySet()) {
