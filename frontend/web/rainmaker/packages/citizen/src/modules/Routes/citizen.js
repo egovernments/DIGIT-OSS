@@ -7,8 +7,8 @@ import Profile from "modules/citizen/User/Profile";
 
 // common screens
 
-//import LandingPage from "modules/citizen/LandingPage";
-import CitizenDashboard from "modules/citizen/CitizenDashboard";
+import LandingPage from "modules/citizen/LandingPage";
+//import CitizenDashboard from "modules/citizen/CitizenDashboard";
 import HowItWorks from "modules/citizen/HowItWorks";
 import ContactUs from "modules/citizen/ContactUs";
 import MyNotifications from "modules/citizen/MyNotifications";
@@ -71,7 +71,7 @@ const routes = [
   // },
   {
     path: "/",
-    component: CitizenDashboard,
+    component: LandingPage,
     needsAuthentication: true,
     options: {
       isHomeScreen: true,
