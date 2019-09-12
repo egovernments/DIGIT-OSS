@@ -169,7 +169,7 @@ public class DemandQueryBuilder {
 
 			addAndClause(demandQuery);
 			demandQuery.append("dmd.status=?");
-			preparedStatementValues.add(demandCriteria.getBusinessService());
+			preparedStatementValues.add(demandCriteria.getStatus());
 		} else {
 
 			addAndClause(demandQuery);
