@@ -90,7 +90,7 @@
 					<td class="greybox"><s:text name="remit.recovery.search.code" /><span
 						class="mandatory"></span></td>
 					<td class="greybox">
-						<s:select name="remittanceBean.recoveryId" id="recoveryId" list="dropdownData.recoveryList" listKey="id" listValue="type+'-'+recoveryName" headerKey="-1" headerValue="----Choose----" value="%{remittanceBean.recoveryId}" />
+						<s:select name="remittanceBean.recoveryId" id="recoveryId" list="dropdownData.recoveryList" listKey="id" listValue="chartofaccounts.glcode+'-'+type+'-'+recoveryName" headerKey="-1" headerValue="----Choose----" value="%{remittanceBean.recoveryId}" />
 					</td>
 					<td class="greybox" width="10%">
 					<td class="greybox">
