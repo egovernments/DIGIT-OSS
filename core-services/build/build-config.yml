@@ -179,3 +179,11 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "egov-user-event/src/main/resources/db"
         image-name: "egov-user-event-db"
+        dockerfile: "build/maven/Dockerfile"       
+
+  - name: "core-services/pdf-service"
+    build:
+      - work-dir: "pdf-service"
+        image-name: "pdf-service"
+      - work-dir: "pdf-service/migration"
+        image-name: "pdf-service-db"
