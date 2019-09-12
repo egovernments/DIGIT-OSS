@@ -229,14 +229,26 @@ public class CalculatorUtils {
                     .append(configurations.getDemandSearchEndPoint()).append(URL_PARAMS_SEPARATER)
                     .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(getBillCriteria.getTenantId())
                     .append(SEPARATER)
-                    .append(CONSUMER_CODE_SEARCH_FIELD_NAME).append(getBillCriteria.getPropertyId() + PT_CONSUMER_CODE_SEPARATOR + getBillCriteria.getAssessmentNumber());
+                    .append(CONSUMER_CODE_SEARCH_FIELD_NAME).append(getBillCriteria.getPropertyId())
+                    .append(SEPARATER)
+                    .append(DEMAND_START_DATE_PARAM).append(getBillCriteria.getFromDate())
+                    .append(SEPARATER)
+                    .append(DEMAND_END_DATE_PARAM).append(getBillCriteria.getToDate())
+                    .append(SEPARATER)
+                    .append(DEMAND_STATUS_PARAM).append(DEMAND_STATUS_ACTIVE);
+
 
         else return new StringBuilder().append(configurations.getBillingServiceHost())
                 .append(configurations.getDemandSearchEndPoint()).append(URL_PARAMS_SEPARATER)
                 .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(getBillCriteria.getTenantId())
                 .append(SEPARATER)
-                .append(CONSUMER_CODE_SEARCH_FIELD_NAME).append(StringUtils.join(getBillCriteria.getConsumerCodes(), ","));
-
+                .append(CONSUMER_CODE_SEARCH_FIELD_NAME).append(StringUtils.join(getBillCriteria.getConsumerCodes(), ","))
+                .append(SEPARATER)
+                .append(DEMAND_START_DATE_PARAM).append(getBillCriteria.getFromDate())
+                .append(SEPARATER)
+                .append(DEMAND_END_DATE_PARAM).append(getBillCriteria.getToDate())
+                .append(SEPARATER)
+                .append(DEMAND_STATUS_PARAM).append(DEMAND_STATUS_ACTIVE);
 
     }
 
@@ -272,7 +284,9 @@ public class CalculatorUtils {
                 .append(SEPARATER)
                 .append(DEMAND_START_DATE_PARAM).append(criteria.getFromDate())
                 .append(SEPARATER)
-                .append(DEMAND_END_DATE_PARAM).append(criteria.getToDate());
+                .append(DEMAND_END_DATE_PARAM).append(criteria.getToDate())
+                .append(SEPARATER)
+                .append(DEMAND_STATUS_PARAM).append(DEMAND_STATUS_ACTIVE);
     }
 
     /**
@@ -528,7 +542,6 @@ public class CalculatorUtils {
     }
 
 
-
     /**
      * @param requestInfo
      * @param calculationCriteria
@@ -546,7 +559,7 @@ public class CalculatorUtils {
                 repository.fetchResult(getDemandSearchUrl(criteria), new RequestInfoWrapper(requestInfo)),
                 DemandResponse.class);
 
-        if(CollectionUtils.isEmpty(res.getDemands()))
+        if (CollectionUtils.isEmpty(res.getDemands()))
             return null;
 
         return res.getDemands().get(0);
@@ -555,11 +568,12 @@ public class CalculatorUtils {
 
     /**
      * Creates search query for PT based on tenantId and list of assessment numbers
-     * @param tenantId TenantId of the properties
+     *
+     * @param tenantId          TenantId of the properties
      * @param assessmentNumbers List of assessmentNumbers to search
      * @return List of properties
      */
-    public StringBuilder getPTSearchQuery(String tenantId,List<String> assessmentNumbers){
+    public StringBuilder getPTSearchQuery(String tenantId, List<String> assessmentNumbers) {
 
         StringBuilder url = new StringBuilder(configurations.getPtHost());
         url.append(configurations.getPtSearchEndpoint())
@@ -567,7 +581,7 @@ public class CalculatorUtils {
                 .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(tenantId)
                 .append(SEPARATER)
                 .append(ASSESSMENTNUMBER_FIELD_SEARCH)
-                .append(StringUtils.join(assessmentNumbers,","));
+                .append(StringUtils.join(assessmentNumbers, ","));
 
         return url;
 
@@ -576,10 +590,11 @@ public class CalculatorUtils {
 
     /**
      * Creates CalculationRequest from PropertyRequest
+     *
      * @param request PropertyRequest for which calculation has to be done
      * @return Calculation Request based on PropertyRequest
      */
-    public CalculationReq createCalculationReq(PropertyRequest request){
+    public CalculationReq createCalculationReq(PropertyRequest request) {
 
         String tenantId = request.getProperties().get(0).getTenantId();
         RequestInfo requestInfo = request.getRequestInfo();

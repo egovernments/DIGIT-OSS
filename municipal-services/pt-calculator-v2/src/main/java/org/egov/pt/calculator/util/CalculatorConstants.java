@@ -145,6 +145,10 @@ public class CalculatorConstants {
 
     public static final String DEMAND_END_DATE_PARAM = "periodTo=";
 
+	public static final String DEMAND_STATUS_PARAM = "status=";
+
+	public static final String DEMAND_STATUS_ACTIVE = DemandStatus.ACTIVE.toString();
+
 	/*
 	 * special characters
 	 */
