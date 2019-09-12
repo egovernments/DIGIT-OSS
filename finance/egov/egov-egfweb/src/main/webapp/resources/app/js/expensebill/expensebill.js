@@ -454,6 +454,8 @@ function addDebitDetailsRow() {
 			$('#tbldebitdetails tbody tr:eq('+rowcount+')').blur(calcualteNetpaybleAmount);
 			debitGlcode_initialize();
 			++debitAmountrowcount;
+			addCustomEvent(rowcount,'tempDebitDetails[index].debitamount','keydown',shortKeyFunForAltIComb);
+			addCustomEvent(rowcount,'tempDebitDetails[index].addButton','keydown',shortKeyFunForAddButton);
 		}
 	} else {
 		  bootbox.alert('limit reached!');
@@ -488,6 +490,8 @@ function addCreditDetailsRow() {
 			$('#tblcreditdetails tbody tr:eq('+rowcount+')').find('.creditAmount').blur(calcualteNetpaybleAmount);
 			creditGlcode_initialize();
 			++creditAmoutrowcount;
+			addCustomEvent(rowcount,'tempCreditDetails[index].creditamount','keydown',shortKeyFunForAltIComb);
+			addCustomEvent(rowcount,'tempCreditDetails[index].addButton','keydown',shortKeyFunForAddButton);
 		}
 	} else {
 		  bootbox.alert('limit reached!');
@@ -763,6 +767,48 @@ $("#populateAccountDetails").click(function () {
 	}
 	calculateBillAmount();
 });
+
+addCustomEvent('0','tempDebitDetails[index].debitamount','keydown',shortKeyFunForAltIComb);
+addCustomEvent('0','tempCreditDetails[index].creditamount','keydown',shortKeyFunForAltIComb);
+addCustomEvent('0','tempDebitDetails[index].addButton','keydown',shortKeyFunForAddButton);
+addCustomEvent('0','tempCreditDetails[index].addButton','keydown',shortKeyFunForAddButton);
+
+function shortKeyFunForAltIComb (zEvent) {
+	var currId = zEvent.target.id;
+    if (currId.endsWith('.debitamount') && zEvent.altKey  &&  zEvent.key === "i") {  // case sensitive
+    	zEvent.preventDefault ();
+        addDebitDetailsRow();
+    }else if (currId.endsWith('.creditamount') && zEvent.altKey  &&  zEvent.key === "i") {  // case sensitive
+    	zEvent.preventDefault ();
+    	addCreditDetailsRow();
+    }
+    zEvent.stopPropagation ();
+}
+function shortKeyFunForAddButton (zEvent) {
+	var currId = zEvent.target.id;
+	if(currId.startsWith('tempDebitDetails') && zEvent.keyCode == 32){
+		zEvent.preventDefault ();
+    	addDebitDetailsRow();
+    }else if(currId.startsWith('tempCreditDetails') && zEvent.keyCode == 32){
+    	zEvent.preventDefault ();
+    	addCreditDetailsRow();
+    }
+//	$('[data-toggle="tooltip"]').tooltip("hide");
+    zEvent.stopPropagation ();
+}
+
+function addCustomEvent(index,target,type,func){
+	target = target.replace('index',index);
+	addCustomEventListener(target, type, func);
+}
+
+function addCustomEventListener(target,type,func){
+	var targArea = document.getElementById (target);
+	if(targArea != null){
+		targArea.addEventListener(type,  func);	
+	}
+}
+
 
 function validate(){
 	if(billamount == 0){

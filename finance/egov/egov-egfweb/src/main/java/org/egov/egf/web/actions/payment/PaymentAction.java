@@ -794,6 +794,7 @@ public class PaymentAction extends BasePaymentAction {
             }
         try {
             final String paymentMd = parameters.get("paymentMode")[0];
+            selectedContingentRows = "140~true~Purchase~DEPT_25/PJV/0001/2019-20~06/08/2019~1/PJV/00000001/08/2019-20~375~06/08/2019~eGovernments Foundation~30000~3000~27000~27000~Accounts Branch~Accounts Central Cell (Finance, Accounts, Audit)~~;,86~true~Purchase~DEPT_9/PJV/0003/2018-19~03/01/2019~1/PJV/00000005/01/2018-19~239~03/01/2019~~3810~0~3810~3810~Executive Branch~Accounts Central Cell (Finance, Accounts, Audit)~~;";
                 contingentList = prepareBillTypeList(contingentList,selectedContingentRows);
                 contractorList = prepareBillTypeList(contractorList,selectedContractorRows);
                 supplierList = prepareBillTypeList(supplierList,selectedSupplierRows);
@@ -913,9 +914,11 @@ public class PaymentAction extends BasePaymentAction {
                     paymentBean.setPaymentAmt(new BigDecimal(columns[12]));
                     paymentBean.setDeptName(columns[13]);
                     paymentBean.setFunctionName(columns[14]);
-                    paymentBean.setSchemeName(columns[15]);
-                    String subschemeName = columns[16].contains(";") ? columns[16].replace(";", "") : columns[16];
-                    paymentBean.setSubschemeName(subschemeName);
+                    paymentBean.setSchemeName(columns.length>15 ? columns[15] : "");
+                    if(columns.length>16){
+                        String subschemeName = columns[16].contains(";") ? columns[16].replace(";", "") : columns[16];
+                        paymentBean.setSubschemeName(subschemeName);
+                    }
             } catch (ParseException | ArrayIndexOutOfBoundsException | NumberFormatException e) {
                 // TODO Auto-generated catch block
                 if (LOGGER.isDebugEnabled())
