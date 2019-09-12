@@ -170,4 +170,11 @@ config:
     build:
       - work-dir: "zuul"
         image-name: "zuul"
-        dockerfile: "build/maven/Dockerfile"        
+        dockerfile: "build/maven/Dockerfile"       
+
+  - name: "core-services/pdf-service"
+    build:
+      - work-dir: "pdf-service"
+        image-name: "pdf-service"
+      - work-dir: "pdf-service/migration"
+        image-name: "pdf-service-db"
