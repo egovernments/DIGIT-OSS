@@ -1,0 +1,808 @@
+{
+  "key":"pt-receipt",
+  "config":{
+    
+  "content":[
+    {
+      "style": "pt-reciept-citizen-table",
+      "margin": [
+        0,
+        0,
+        0,
+        18
+      ],
+      "table": {
+        "widths": [
+          50,
+          "*",
+          100
+        ],
+        "body": [
+          [
+            {
+              "image": "{{variable38}}",
+              "width": 30,
+              "margin": [
+                10,
+                10,
+                10,
+                10
+              ]
+            },
+            {
+              "stack": [
+                {
+                  "text": "{{variable35}} NAGAR PANCHAYAT",
+                  "style": "receipt-logo-header"
+                },
+                {
+                  "text": "Property Tax Payment Receipt ({{variable36}}) ",
+                  "style": "receipt-logo-sub-header"
+                }
+              ],
+              "alignment": "center",
+              "margin": [
+                0,
+                5,
+                0,
+                0
+              ]
+            },
+            {
+              "text": [
+                {
+                  "text": "Receipt No.: ",
+                  "bold": true
+                },
+                "{{variable15}}"
+              ],
+              "margin": [10, 10, 10, 2]
+            }
+          ]
+        ]
+      },
+      "layout": {}
+    },
+    {
+      "style": "receipt-header-details",
+      "columns": [
+        {
+          "text": [
+            {
+              "text": "Date: ",
+              "bold": true
+            },
+            "{{variable16}}"
+          ],
+          "alignment": "left"
+        },
+        {
+          "text": [
+            {
+              "text": "Contact Us: ",
+              "bold": true
+            },
+            "0183-2545155"
+          ],
+          "alignment": "right"
+        }
+      ]
+    },
+    {
+      "style": "receipt-header-details",
+      "columns": [
+        {
+          "text": [
+            {
+              "text": "Assessment Year: ",
+              "bold": true
+            },
+            "{{variable1}}"
+          ],
+          "alignment": "left"
+        },
+        {
+          "text": [
+            {
+              "text": "Website: ",
+              "bold": true
+            },
+            "www.amritsarcorp.com"
+          ],
+          "alignment": "right"
+        }
+      ]
+    },
+    {
+      "style": "pt-reciept-citizen-table",
+      "table": {
+        "body": [
+          [
+            {
+              "text": "Existing Property ID:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable2}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            },
+            {
+              "text": "Property Tax Unique ID:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable3}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            },
+            {
+              "text": "Assessment No:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable4}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            }
+          ]
+        ]
+      },
+      "layout": {}
+    },
+    {
+      "text": "PROPERTY ADDRESS",
+      "style": "pt-reciept-citizen-subheader"
+    },
+    {
+      "style": "pt-reciept-citizen-table",
+      "table": {
+        "widths": [
+          "*",
+          "*",
+          "*",
+          "*"
+        ],
+        "body": [
+          [
+            {
+              "text": "House/Door No.:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable5}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            },
+            {
+              "text": "Building/Colony Name.:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable6}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            }
+          ],
+          [
+            {
+              "text": "Street Name:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable7}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            },
+            {
+              "text": "Locality/Mohalla:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable8}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            }
+          ]
+        ]
+      },
+      "layout": {}
+    },
+    {
+      "text": "ASSESSMENT INFORMATION",
+      "style": "pt-reciept-citizen-subheader"
+    },
+    {
+      "style": "pt-reciept-citizen-table",
+      "table": {
+        "widths": [
+          "*",
+          "*",
+          "*",
+          "*"
+        ],
+        "body": [
+          [
+            {
+              "text": "Plot Size(sq yards)",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable9}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            },
+            {
+              "text": "Property Type:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable10}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            }
+          ]
+        ]
+      },
+      "layout": {}
+    },
+    {
+      "text": "BUILT-UP AREA DETAILS",
+      "style": "pt-reciept-citizen-subheader"
+    },
+    {
+      "style": "receipt-assess-table",
+      "table": {
+        "widths": [
+          "*",
+          "*",
+          "*",
+          "*",
+          "*"
+        ],
+        "body": [
+          [
+            {
+              "text": "Floor",
+              "style": "receipt-assess-table-header"
+            },
+            {
+              "text": "Usage Type",
+              "style": "receipt-assess-table-header"
+            },
+            {
+              "text": "Sub Usage Type",
+              "style": "receipt-assess-table-header"
+            },
+            {
+              "text": "Occupancy",
+              "style": "receipt-assess-table-header"
+            },
+            {
+              "text": "Built Area/Total Annual Rent(sq yards)",
+              "style": "receipt-assess-table-header"
+            }
+          ],
+          "{{variable12}}"
+        ]
+      },
+      "layout": {}
+    },
+    {
+      "text": "OWNERSHIP INFORMATION",
+      "style": "pt-reciept-citizen-subheader"
+    },
+    {
+      "style": "pt-reciept-citizen-table",
+      "table": {
+        "widths": [
+          "*",
+          "*",
+          "*",
+          "*"
+        ],
+        "body": ["{{#variable11}}[{\"text\":\"Owner  Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{name}}\",\"border\":[false,true,true,true]},{\"text\":\"Father's Name\",\"border\":[true,true,false,true],\"style\":\"receipt-table-key\"},{\"text\":\"{{fatherOrHusbandName}}\",\"border\":[false,true,true,true]}]{{/variable11}}"]
+      },
+      "layout": {}
+    },
+    {
+      "text": "PAYABLE AMOUNT",
+      "style": "pt-reciept-citizen-subheader"
+    },
+    {
+      "style": "receipt-assess-table",
+      "table": {
+        "widths": [
+          "auto",
+          "auto",
+          "auto",
+          "auto",
+          "auto",
+          "auto",
+          "auto",
+          "auto",
+          "auto",
+          "auto"
+        ],
+        "body": [
+          [
+            {
+              "text": "Property Tax"
+            },
+            {
+              "text": "Fire Cess"
+            },
+            {
+              "text": "Cancer Cess"
+            },
+            {
+              "text": "Penalty"
+            },
+            {
+              "text": "Rebate"
+            },
+            {
+              "text": "Interest"
+            },
+            {
+              "text": "Usage Exemption"
+            },
+            {
+              "text": "Special Category Exemption"
+            },
+            {
+              "text": "Round Off"
+            },
+            {
+              "text": "Total"
+            }
+          ],
+          [
+            {
+              "text": "{{variable17}}"
+            },
+            {
+              "text": "{{variable18}}"
+            },
+            {
+              "text": "{{variable19}}"
+            },
+            {
+              "text": "{{variable20}}"
+            },
+            {
+              "text": "{{variable21}}"
+            },
+            {
+              "text": "{{variable22}}"
+            },
+            {
+              "text": "{{variable23}}"
+            },
+            {
+              "text": "{{variable24}}"
+            },
+            {
+              "text": "{{variable25}}"
+            },
+            {
+              "text": "{{variable34}}"
+            }
+          ]
+        ]
+      },
+      "layout": {}
+    },
+    {
+      "text": "PAYMENT INFORMATION",
+      "style": "pt-reciept-citizen-subheader"
+    },
+    {
+      "style": "pt-reciept-citizen-table",
+      "table": {
+        "widths": [
+          "auto",
+          "auto",
+          "auto",
+          "auto"
+        ],
+        "body": [
+          [
+            {
+              "text": "Total Amount Paid:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable27}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ],
+              "style": "receipt-table-value"
+            },
+            {
+              "text": "Pending Amount:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable37}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            }
+          ],
+          [
+            {
+              "text": "Payment Mode:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable28}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            },
+            {
+              "text": "Bank Name:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable29}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            }
+          ],
+          [
+            {
+              "text": "Transaction ID/ Cheque/ DD No.:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable30}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            },
+            {
+              "text": "Transaction Date:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable31}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            }
+          ],
+          [
+            {
+              "text": "G8 Receipt No:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable32}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            },
+            {
+              "text": "G8 Receipt Issue Date:",
+              "border": [
+                true,
+                true,
+                false,
+                true
+              ],
+              "style": "receipt-table-key"
+            },
+            {
+              "text": "{{variable33}}",
+              "border": [
+                false,
+                true,
+                true,
+                true
+              ]
+            }
+          ]
+        ]
+      },
+      "layout": {}
+    },
+    {
+      "text": "Commissioner/EO",
+      "alignment": "right",
+      "color": "#484848",
+      "fontSize": 12,
+      "bold": true,
+      "margin": [
+        0,  
+        30,
+        0,
+        30
+      ]
+    },
+    {
+      "text": "Note:",
+      "alignment": "left",
+      "style": "receipt-footer"
+    },
+    {
+      "ol": [
+        {
+          "text": "Payment received by cheque/demand draft shall be subject to realization.",
+          "margin": [
+            0,
+            0,
+            0,
+            5
+          ]
+        },
+        {
+          "text": "This document is not a proof of Property Ownership and regularization of unauthorized construction.",
+          "margin": [
+            0,
+            0,
+            0,
+            5
+          ]
+        },
+        {
+          "text": "This is a computer generated document, hence requires no signature.",
+          "margin": [
+            0,
+            0,
+            0,
+            5
+          ]
+        },
+        {
+          "text": "Assessment & Payment is subject to verification/Scrutiny by competitive authority.",
+          "margin": [
+            0,
+            0,
+            0,
+            5
+          ]
+        },
+        {
+          "text": "Please deposit property tax dues for earlier years also. Ignore, if already paid.",
+          "margin": [
+            0,
+            0,
+            0,
+            5
+          ]
+        }
+      ],
+      "alignment": "left",
+      "style": "receipt-footer"
+    }
+  ],
+  "styles": {
+    "pt-reciept-citizen-subheader": {
+      "fontSize": 10,
+      "bold": true,
+      "margin": [
+        0,
+        16,
+        0,
+        8
+      ],
+      "color": "#484848"
+    },
+    "pt-reciept-citizen-table": {
+      "fontSize": 10,
+      "color": "#484848"
+    },
+    "receipt-assess-table": {
+      "fontSize": 10,
+      "color": "#484848",
+      "margin": [
+        0,
+        8,
+        0,
+        0
+      ]
+    },
+    "receipt-assess-table-header": {
+      "bold": true,
+      "fillColor": "#D8D8D8",
+      "color": "#484848"
+    },
+    "receipt-header-details": {
+      "fontSize": 9,
+      "margin": [
+        0,
+        0,
+        0,
+        8
+      ],
+      "color": "#484848"
+    },
+    "receipt-table-key": {
+      "color": "#484848",
+      "bold": true
+    },
+    "receipt-table-value": {
+      "color": "#484848"
+    },
+    "receipt-logo-header": {
+      "color": "#484848",
+      "fontSize": 16,
+      "bold": true,
+      "decoration": "underline",
+      "decorationColor": "#484848"
+    },
+    "receipt-logo-sub-header": {
+      "color": "#484848",
+      "fontSize": 13,
+      "decoration": "underline",
+      "decorationColor": "#484848"
+    },
+    "receipt-footer": {
+      "color": "#484848",
+      "fontSize": 8,
+      "margin": [
+        0,
+        0,
+        0,
+        5
+      ]
+    }
+  }
+  }
+}
