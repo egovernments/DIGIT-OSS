@@ -83,6 +83,8 @@ public class DemandCriteria {
 	
 	private String email;
 	
+	private String status;
+	
 	@Default
 	private Boolean receiptRequired=false;
 }

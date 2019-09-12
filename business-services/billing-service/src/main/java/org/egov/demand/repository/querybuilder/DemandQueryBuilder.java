@@ -165,6 +165,17 @@ public class DemandQueryBuilder {
 		demandQuery.append("dmd.tenantid=?");
 		preparedStatementValues.add(demandCriteria.getTenantId());
 
+		if (demandCriteria.getStatus() != null) {
+
+			addAndClause(demandQuery);
+			demandQuery.append("dmd.status=?");
+			preparedStatementValues.add(demandCriteria.getBusinessService());
+		} else {
+
+			addAndClause(demandQuery);
+			demandQuery.append("dmd.status='ACTIVE'");
+		}
+		
 		if (demandCriteria.getDemandId() != null && !demandCriteria.getDemandId().isEmpty()) {
 			addAndClause(demandQuery);
 			demandQuery.append("dmd.id IN (" + getIdQueryForStrings(demandCriteria.getDemandId()));
