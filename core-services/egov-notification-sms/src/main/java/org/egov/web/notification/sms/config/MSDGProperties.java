@@ -48,4 +48,10 @@ public class MSDGProperties {
 	@Value("${sms.msdg.content.parameter}")
 	public String messageParameter;
 
+	@Value("${sms.msdg.securekey.value}")
+	public String secureKey;
+	
+	@Value("${sms.msdg.key.parameter}")
+	public String keyParameter;
+	
 }

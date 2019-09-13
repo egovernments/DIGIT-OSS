@@ -37,11 +37,19 @@ public class MSDGSMSServiceImpl implements SMSService {
 	}
 
 	private void submitToExternalSmsService(Sms sms) {
+        String finalmessage = "";
+        for(int i = 0 ; i< sms.getMessage().length();i++){
+            char ch = sms.getMessage().charAt(i);
+            int j = (int) ch;
+            String sss = "&#"+j+";";
+            finalmessage = finalmessage+sss;
+        }
+        sms.setMessage(finalmessage);        
 		try {
 			String url = smsProperties.getUrl();
 			final MultiValueMap<String, String> requestBody = bodyBuilder.getSmsRequestBody(sms);
-			String final_url = UriComponentsBuilder.fromHttpUrl(url).queryParams(requestBody).toUriString();
-			restTemplate.getForObject(final_url, String.class);
+			url = UriComponentsBuilder.fromHttpUrl(url).queryParams(requestBody).toUriString();
+			restTemplate.postForObject(url, "{}", String.class);
 		} catch (RestClientException e) {
 			log.error("Error occurred while sending SMS to " + sms.getMobileNumber(), e);
 			throw e;
