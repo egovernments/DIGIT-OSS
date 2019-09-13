@@ -22,7 +22,11 @@ const CreateJobView = ({
 
       <CardUi cardTitle="File Upload">
         <div className="file-input">
-          <input type="file" onChange={handleOnChange} />
+          <input
+            type="file"
+            onChange={handleOnChange}
+            accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+          />
         </div>
       </CardUi>
 
