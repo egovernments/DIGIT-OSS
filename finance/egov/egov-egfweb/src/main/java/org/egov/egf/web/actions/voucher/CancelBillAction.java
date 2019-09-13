@@ -226,10 +226,9 @@ public class CancelBillAction extends BaseFormAction {
 			}
 		}
 		if (expType == null || expType.equalsIgnoreCase("")) {
-			query.append(" and billmis.egBillregister.expendituretype ='"
-					+ FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT + "'");
-			query.append(" and billmis.egBillregister.status.moduletype='" + FinancialConstants.CONTINGENCYBILL_FIN
-					+ "' and billmis.egBillregister.status.description='"
+//			query.append(" and billmis.egBillregister.expendituretype ='"
+//					+ FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT + "'");
+			query.append(" and billmis.egBillregister.status.description='"
 					+ FinancialConstants.CONTINGENCYBILL_APPROVED_STATUS + "'");
 		} else {
 			query.append(" and billmis.egBillregister.expendituretype ='" + expType + "'");
