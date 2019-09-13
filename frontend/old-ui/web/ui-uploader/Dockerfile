@@ -13,5 +13,5 @@ ENV WEB_DIR=/var/web/app/v2/uploader
 
 RUN mkdir -p ${WEB_DIR}
 
-COPY --from=build /app/ui-uploader/build ${WEB_DIR}/
-COPY --from=build /app/ui-uploader/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/build ${WEB_DIR}/
+COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
