@@ -22,7 +22,12 @@ const CreateJobView = ({
 
       <CardUi cardTitle="File Upload">
         <div className="file-input">
-          <input type="file" onChange={handleOnChange} />
+          <input
+            type="file"
+            onChange={e => handleOnChange(e, 5000)}
+            accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+          />
+          Only .xls and .xlsx file allowed. 5MB max file size.
         </div>
       </CardUi>
 
