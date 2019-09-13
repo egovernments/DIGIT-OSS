@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://egov-micro-dev.egovernments.org/app/v2/uploader/",
-  "proxy": "https://mseva-uat.lgpunjab.gov.in/",
+  "proxy": "https://egov-micro-qa.egovernments.org/",
   "dependencies": {
     "@material-ui/core": "1.5.1",
     "@material-ui/icons": "1.1.1",
@@ -25,6 +25,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prod:ui-uploader": "yarn install && yarn run build"
   }
 }
