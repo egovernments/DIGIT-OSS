@@ -1,13 +1,13 @@
 package org.egov.web.notification.sms.consumer;
 
+import java.util.UUID;
+
 import org.egov.web.notification.sms.consumer.contract.SMSRequest;
 import org.egov.web.notification.sms.models.RequestContext;
-import org.egov.web.notification.sms.services.SMSService;
+import org.egov.web.notification.sms.service.SMSService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class SmsNotificationListener {

@@ -40,7 +40,9 @@
 
 package org.egov.web.notification.sms.config;
 
-import lombok.Getter;
+import java.util.HashMap;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.egov.web.notification.sms.models.Priority;
 import org.egov.web.notification.sms.models.Sms;
@@ -51,8 +53,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.HashMap;
-import java.util.List;
+import lombok.Getter;
 
 @Component
 public class SmsProperties {
