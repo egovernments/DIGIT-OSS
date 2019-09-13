@@ -27,13 +27,11 @@ import {
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import filter from "lodash/filter";
-import "./index.css";
 import { convertEpochToDate } from "../../utils";
 const tradeUnitCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
   props: {
-
     scheama: getCommonGrayCard({
       header: getCommonSubHeader(
         {
@@ -66,8 +64,7 @@ const tradeUnitCard = {
               },
               props: {
                 jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
-                setDataInField: true,
-                className:"applicant-details-error"
+                setDataInField: true
               },
               sourceJsonPath:
                 "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
@@ -156,8 +153,7 @@ const tradeUnitCard = {
               },
               jsonPath: "LicensesTemp.tradeUnits[0].tradeSubType",
               props: {
-                jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
-                className:"applicant-details-error"
+                jsonPathUpdatePrefix: "LicensesTemp.tradeUnits"
               },
               sourceJsonPath:
                 "applyScreenMdmsData.TradeLicense.TradeCategoryTransformed",
@@ -226,7 +222,6 @@ const tradeUnitCard = {
                 labelName: "Trade Sub-Type",
                 labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
               },
-
               placeholder: {
                 labelName: "Select Trade Sub-Type",
                 labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_PLACEHOLDER"
@@ -676,7 +671,6 @@ const accessoriesCard = {
             },
             pattern: getPattern("UOMValue"),
             props: {
-              className:"applicant-details-error",
               disabled: true,
               setDataInField: true,
               jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uomValue"
@@ -701,7 +695,6 @@ const accessoriesCard = {
             },
             pattern: getPattern("NoOfEmp"),
             props: {
-              className:"applicant-details-error",
               setDataInField: true,
               jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].count",
               disabled: true
@@ -855,10 +848,7 @@ export const tradeDetails = getCommonCard(
           key: "TL_OLD_TL_NO"
         },
         infoIcon: "info_circle",
-        jsonPath: "Licenses[0].oldLicenseNumber",
-        props:{
-          className:"applicant-details-error"
-        }
+        jsonPath: "Licenses[0].oldLicenseNumber"
       }),
       tradeLicenseType: {
         ...getSelectField({
@@ -1053,9 +1043,6 @@ export const tradeDetails = getCommonCard(
                 tradeTypeDropdownData
               )
             );
-        },
-        props:{
-          className:"applicant-details-error"
         }
       },
       tradeCommencementDate: getDateField({
@@ -1070,10 +1057,7 @@ export const tradeDetails = getCommonCard(
         required: true,
         pattern: getPattern("Date"),
         jsonPath: "Licenses[0].commencementDate",
-        callBack: convertEpochToDate,
-        props: {
-          className:"applicant-details-error"
-        }
+        callBack: convertEpochToDate
       }),
       tradeGSTNo: getTextField({
         label: {
@@ -1096,9 +1080,6 @@ export const tradeDetails = getCommonCard(
           labelName: "Enter Operatonal Area in Sq Ft",
           labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_PLACEHOLDER"
         },
-        props:{
-          className:"applicant-details-error"
-        },
         pattern: getPattern("OperationalArea"),
         jsonPath: "Licenses[0].tradeLicenseDetail.operationalArea"
       }),
@@ -1106,9 +1087,6 @@ export const tradeDetails = getCommonCard(
         label: {
           labelName: "No. Of Employee",
           labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
-        },
-        props:{
-          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter No. Of Employee",
