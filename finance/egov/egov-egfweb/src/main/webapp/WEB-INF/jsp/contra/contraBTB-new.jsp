@@ -189,12 +189,12 @@ function	onLoadTask_new()
 }
 
 	function toggleChequeAndRefNumber(obj) {
-			if (obj.value == "other") {
+			jQuery('#chequeNum').val('');
+			document.getElementById('chequeNumberlblError').innerHTML='';
+			if (obj.value == "RTGS/NEFT") {
 			document.getElementById("chequeGrid").style.visibility="visible";
 			document.getElementById("mdcNumber").innerHTML = '<s:text name="contra.refNumber" />';
 			document.getElementById("mdcDate").innerHTML = '<s:text name="contra.refDate" />';
-			
-			
 		} else {
 		<s:if test="egovCommon.isShowChequeNumber()">
 		 document.getElementById("chequeGrid").style.visibility="visible";
@@ -207,6 +207,29 @@ function	onLoadTask_new()
 			
 		}
 	}
+
+	
+	function decimalvalue(obj){
+	var regexp_decimalvalue = /[^0-9.]/g ;
+	if(jQuery('#modeOfCollectioncheque').is(':checked')){
+		if(jQuery(obj).val().match(regexp_decimalvalue)){
+			jQuery(obj).val( jQuery(obj).val().replace(regexp_decimalvalue,'') );
+		}else if(jQuery(obj).val().length >= 7){
+			var subString = jQuery(obj).val().substring(0,6);
+			jQuery(obj).val(subString);
+		}		
+	}
+	}
+
+	function validateChequeNumber(obj){
+		if(jQuery('#modeOfCollectioncheque').is(':checked')){
+			document.getElementById('chequeNumberlblError').innerHTML='';
+			if(obj.value.length != 6){
+				document.getElementById('chequeNumberlblError').innerHTML = "Cheque number must be a 6 digits";
+			}
+		}
+	}
+
 	if('<s:text name="%{isBankBalanceMandatory()}"/>'=='')
 		document.getElementById('lblError').innerHTML = "bank_balance_mandatory parameter is not defined";
 		

@@ -199,7 +199,13 @@
 				name="contra.refNumber" /></span> <span class="greybox"><span
 			class="mandatory1">*</span></span></td>
 	<td class="greybox"><s:textfield name="contraBean.chequeNumber"
-			id="chequeNum" value="%{contraBean.chequeNumber}" /></td>
+			id="chequeNum" value="%{contraBean.chequeNumber}" onblur="validateChequeNumber(this)" onkeyup="decimalvalue(this)"/>
+				<span>
+					<font style='color: red;'>
+						<p class="error-block" id="chequeNumberlblError"></p>
+					</font>
+				</span>		
+	</td>
 	<td class="greybox"><span id="mdcDate"><s:text
 				name="contra.refDate" /></span></td>
 	<td class="greybox"><s:textfield id="chequeDate"
