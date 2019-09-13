@@ -1,7 +1,7 @@
 {
   "tenantId": "pb",
   "moduleName": "tenant",
-  "tenant-info": [
+  "tenantInfo": [
     {
       "code": "pb.jalandhar",
       "districtCode": "Barnala",
