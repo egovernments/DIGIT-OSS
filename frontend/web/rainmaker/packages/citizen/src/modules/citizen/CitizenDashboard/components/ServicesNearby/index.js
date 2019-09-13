@@ -9,16 +9,16 @@ class ServicesNearby extends React.Component {
     return [
       
       {
-        label: "Events",
+        label: "COMMON_EVENTS_LABEL",
         icon: <Icon className="service-icon" action="custom" name="calendar" />,
         route: "events",
        },
        {
-        label: "My City",
+        label: "COMMON_MYCITY_LABEL",
         icon: <Icon className="service-icon" action="custom" name="home-city-outline" />,
-        route: "",
+        route: "my-city",
       },
-      { label: "Places Near Me", icon: <Icon className="service-icon" action="custom" name="map-marker" />, route: "" },
+     // { label: "Places Near Me", icon: <Icon className="service-icon" action="custom" name="map-marker" />, route: "" },
       // { label: "Key Documents", icon: <Icon className="service-icon" action="custom" name="library-books" />, route: "" },
     ];
   };
