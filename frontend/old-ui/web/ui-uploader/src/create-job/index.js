@@ -4,6 +4,10 @@ import { connect } from "react-redux";
 import { createJob, setInputFile } from "./actions";
 import View from "./view";
 import { Redirect } from "react-router-dom";
+const getFileSize = file => {
+  const size = parseFloat(file.size / 1004).toFixed(2);
+  return size;
+};
 
 class CreateJob extends Component {
   static propTypes = {
@@ -22,9 +26,16 @@ class CreateJob extends Component {
     errorMessage: ""
   };
 
-  handleOnChange = e => {
+  handleOnChange = (e, maxFileSize) => {
+    console.log("sudhanshu", maxFileSize);
     const file = e.target.files[0];
-    this.props.setInputFile(file);
+    let uploadDocument = true;
+    let fileSize = getFileSize(file);
+    if (fileSize > maxFileSize) {
+      alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
+      uploadDocument = false;
+    }
+    if (uploadDocument) this.props.setInputFile(file);
   };
 
   // set messageBar close
