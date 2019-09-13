@@ -49,7 +49,10 @@
 
 <%@ taglib prefix="s" uri="/WEB-INF/tags/struts-tags.tld"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<style>
+  :focus { outline: 1px solid rgba(81, 203, 238, 1);
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1); }
+</style>
 <script>
 
 		path="${pageContext.request.contextPath}";
@@ -85,7 +88,7 @@
  				{key:'Delete',label:'Delete',formatter:createDeleteImageFormatter("${pageContext.request.contextPath}")}
  			];	</s:else>			
 		        
-	    var voucherDetailDS = new YAHOO.util.DataSource(); 
+	    var voucherDetailDS = new YAHOO.util.DataSource();
 		billDetailsTable = new YAHOO.widget.DataTable("billDetailTable",voucherDetailColumns, voucherDetailDS);
 		billDetailsTable.on('cellClickEvent',function (oArgs) {
 			var target = oArgs.target;
@@ -113,6 +116,33 @@
 			
 			        
 		});
+
+		YAHOO.util.Event.on('billDetailTable', 'keydown', function (e) {
+			var target = e.target;
+			var record = billDetailsTable.getRecord(target);
+			var column = billDetailsTable.getColumn(target);
+			if((column.key == 'creditamount' && e.altKey && e.key === 'i') || (column.key == 'Add' && e.keyCode == 32)){
+				e.preventDefault();
+				billDetailsTable.addRow({SlNo:billDetailsTable.getRecordSet().getLength()+1});
+				updateAccountTableIndex();
+			}else if(column.key == 'Delete' && e.keyCode == 32){
+				e.preventDefault();
+				if(billDetailsTable.getRecordSet().getLength()>1){			
+					billDetailsTable.deleteRow(record);
+					allRecords=billDetailsTable.getRecordSet();
+					for(var i=0;i<allRecords.getLength();i++){
+						billDetailsTable.updateCell(billDetailsTable.getRecord(i),billDetailsTable.getColumn('SlNo'),""+(i+1));
+					}
+					updateDebitAmountJV();updateCreditAmountJV();
+					check();
+					loadSlFunction();
+				}
+				else{
+					bootbox.alert("This row can not be deleted");
+				}
+			}
+		});
+		
 		<s:iterator value="billDetailslist" status="stat">
 			<s:if test='%{isRestrictedtoOneFunctionCenter == true}'>
 				billDetailsTable.addRow({SlNo:billDetailsTable.getRecordSet().getLength()+1,
@@ -245,6 +275,32 @@
 				}
 			}        
 		});
+
+		YAHOO.util.Event.on('subLedgerTable', 'keydown', function (e) {
+			var target = e.target;
+			var record = subLedgersTable.getRecord(target);
+			var column = subLedgersTable.getColumn(target);
+			if((column.key == 'amount' && e.altKey && e.key === 'i') || (column.key == 'Add' && e.keyCode == 32)){
+				e.preventDefault();
+				subLedgersTable.addRow({SlNo:subLedgersTable.getRecordSet().getLength()+1});
+				updateSLTableIndex();
+				check();
+				loadSlFunction();
+			}else if(column.key == 'Delete' && e.keyCode == 32){
+				e.preventDefault();
+				if(subLedgersTable.getRecordSet().getLength()>1){			
+					subLedgersTable.deleteRow(record);
+					allRecords=subLedgersTable.getRecordSet();
+					for(var i=0;i<allRecords.getLength();i++){
+						subLedgersTable.updateCell(subLedgersTable.getRecord(i),subLedgersTable.getColumn('SlNo'),""+(i+1));
+					}
+				}
+				else{
+					bootbox.alert("This row can not be deleted");
+				}
+			}
+		});
+		
 		<s:iterator value="subLedgerlist" status="stat">
 			<s:if test='%{isRestrictedtoOneFunctionCenter == true}'>  
 				subLedgersTable.addRow({SlNo:subLedgersTable.getRecordSet().getLength()+1,

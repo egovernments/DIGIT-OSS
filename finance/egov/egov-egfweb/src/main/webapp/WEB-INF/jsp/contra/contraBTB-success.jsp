@@ -64,8 +64,7 @@
 	</br>
 	
 	<div align="center">
-		<input type="button" id="closeButton" value="Close"
-			onclick="javascript:window.close()" class="button" />
+		<input type="button" name="button2" id="button2" value="Close" class="btn btn-default" onclick="window.parent.postMessage('close','*');window.close();">
 	</div>
 </body>
 </html>
