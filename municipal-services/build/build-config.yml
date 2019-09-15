@@ -55,3 +55,17 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "tl-services/src/main/resources/db"
         image-name: "tl-services-db"
+
+- name: "municipal-services/firenoc-services"
+    build:
+      - work-dir: "firenoc-services"
+        image-name: "firenoc-services"
+      - work-dir: "firenoc-services/migration"
+        image-name: "firenoc-services-db"
+
+- name: "municipal-services/firenoc-calculator"
+    build:
+      - work-dir: "firenoc-calculator"
+        image-name: "firenoc-calculator"
+      - work-dir: "firenoc-calculator/migration"
+        image-name: "firenoc-calculator-db"
