@@ -473,7 +473,20 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
       doNotDownloadReceipt = window.appOverrides.submitForm("PTReceipt", { pdf: receiptPDF });
     }
 
-    if (doNotDownloadReceipt !== true) receiptPDF.download(`${details.ReceiptNo}.pdf`);
+    if (doNotDownloadReceipt !== true)
+    {
+      receiptPDF.getBase64(data => {
+        const linkSource = "data:application/pdf;base64," + data;
+        const downloadLink = document.createElement("a");
+        const fileName = `${details.ReceiptNo}.pdf`;
+
+        downloadLink.href = linkSource;
+        downloadLink.download = fileName;
+        downloadLink.click();
+        console.log("data:application/pdf;base64," + data);
+      // receiptPDF.download(`${details.ReceiptNo}.pdf`);
+      });
+    }
   }
 };
 
