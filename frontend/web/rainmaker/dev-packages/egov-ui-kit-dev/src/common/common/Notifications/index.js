@@ -82,7 +82,7 @@ const Notifications = ({ notifications = [], history }) => {
                 </div>
               )}
               {address && (
-                <div className="rainmaker-displayInline" >
+                <div className="rainmaker-displayInline">
                   <Icon
                     name="place"
                     action="maps"
@@ -94,7 +94,12 @@ const Notifications = ({ notifications = [], history }) => {
                     }}
                     viewBox="10 0 24 24"
                   />
-                  <Label fontSize={14} color="rgba(0, 0, 0, 0.60)" label={address} containerStyle={{ marginLeft: 2, marginBottom: 10,width :"90%" }} />
+                  <Label
+                    fontSize={14}
+                    color="rgba(0, 0, 0, 0.60)"
+                    label={address}
+                    containerStyle={{ marginLeft: 2, marginBottom: 10, width: "90%" }}
+                  />
                 </div>
               )}
 
@@ -135,11 +140,10 @@ const Notifications = ({ notifications = [], history }) => {
     );
   };
 
-  return notifications && notifications.length > 0 ? (
-    <div>{notifications.map((notification, index) => renderUpdate(notification, index))}</div>
-  ) : (
-    <div className="no-assessment-message-cont">{/* <Label label="EMPTY_NOTIFICATIONS" /> */}</div>
-  );
+  return notifications && notifications.length > 0 && <div>{notifications.map((notification, index) => renderUpdate(notification, index))}</div>;
+  //  : (
+  //   <div className="no-assessment-message-cont"><Label label="EMPTY_NOTIFICATIONS" /></div>
+  // );
 };
 
 export default Notifications;

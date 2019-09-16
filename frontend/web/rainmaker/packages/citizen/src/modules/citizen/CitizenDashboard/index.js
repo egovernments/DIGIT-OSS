@@ -8,10 +8,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import ServicesNearby from "./components/ServicesNearby";
 import { Notifications, Screen } from "modules/common";
 import LogoutDialog from "egov-ui-kit/common/common/Header/components/LogoutDialog";
-import "./index.css";
-import get from "lodash/get";
-import { getTransformedNotifications, onNotificationClick } from "egov-ui-kit/utils/commons";
-import { getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
+import { getAccessToken, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import { setRoute } from "egov-ui-kit/redux/app/actions";
 
@@ -97,6 +94,16 @@ class CitizenDashboard extends Component {
     setRoute("user/profile");
   };
 
+  onServiceClick = (route) => {
+    const { history } = this.props;
+    const permanentCity = JSON.parse(getUserInfo()).permanentCity;
+    permanentCity
+      ? history.push(route)
+      : this.setState({
+          openDialog: true,
+        });
+  };
+
   render() {
     const { history, loading, whatsNewEvents } = this.props;
     const { openDialog } = this.state;
@@ -104,29 +111,33 @@ class CitizenDashboard extends Component {
       <Screen loading={loading}>
         <SearchService history={history} />
         <div className="citizen-dashboard-cont">
-          <Label
-            label="DASHBOARD_CITIZEN_SERVICES_LABEL"
-            fontSize={16}
-            color="rgba(0, 0, 0, 0.87"
-            containerStyle={{ paddingTop: 16, paddingBottom: 8 }}
-          />
+          {!loading && (
+            <Label
+              label="DASHBOARD_CITIZEN_SERVICES_LABEL"
+              fontSize={16}
+              color="rgba(0, 0, 0, 0.87"
+              containerStyle={{ paddingTop: 16, paddingBottom: 8 }}
+            />
+          )}
           <ServiceList history={history} />
-          <Label
-            label="DASHBOARD_LOCAL_INFORMATION_LABEL"
-            fontSize={16}
-            color="rgba(0, 0, 0, 0.87"
-            containerStyle={{ paddingTop: 16, paddingBottom: 8 }}
-          />
-          <ServicesNearby history={history} />
+          {!loading && (
+            <Label
+              label="DASHBOARD_LOCAL_INFORMATION_LABEL"
+              fontSize={16}
+              color="rgba(0, 0, 0, 0.87"
+              containerStyle={{ paddingTop: 16, paddingBottom: 8 }}
+            />
+          )}
+          {!loading && <ServicesNearby history={history} onSeviceClick={this.onServiceClick} />}
           {whatsNewEvents && whatsNewEvents.length > 0 && (
             <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 16 }}>
-              <Label label="DASHBOARD_WHATS_NEW_LABEL" fontSize={16}  color="rgba(0, 0, 0, 0.8700000047683716)" />
+              <Label label="DASHBOARD_WHATS_NEW_LABEL" fontSize={16} color="rgba(0, 0, 0, 0.8700000047683716)" />
               <div onClick={() => history.push("whats-new")} style={{ cursor: "pointer" }}>
                 <Label label="DASHBOARD_VIEW_ALL_LABEL" color="#fe7a51" fontSize={14} />
               </div>
             </div>
           )}
-          <Notifications notifications={whatsNewEvents} history={history} />
+          {whatsNewEvents && <Notifications notifications={whatsNewEvents} history={history} />}
         </div>
         <LogoutDialog
           logoutPopupOpen={openDialog}
