@@ -173,13 +173,12 @@ public class DemandValidatorV1 {
 			if (!businessServiceCodes.contains(demand.getBusinessService()))
 				businessServicesNotFound.add(demand.getBusinessService());
 
-			details.forEach(detail -> {
+			if (!CollectionUtils.isEmpty(taxHeadMap))
+				details.forEach(detail -> {
 
-				if (!taxHeadMap.containsKey(detail.getTaxHeadMasterCode()))
-					taxHeadsNotFound.add(detail.getTaxHeadMasterCode());
-				else if (!HttpUtils.isInterServiceCall(headers))
-					alterDebitTaxToNegativeInCaseOfPositve(taxHeadMap, detail);
-			});
+					if (!taxHeadMap.containsKey(detail.getTaxHeadMasterCode()))
+						taxHeadsNotFound.add(detail.getTaxHeadMasterCode());
+				});
 
 			validateTaxPeriod(taxPeriodBusinessMap, demand, errorMap, businessServicesWithNoTaxPeriods);
 		}
