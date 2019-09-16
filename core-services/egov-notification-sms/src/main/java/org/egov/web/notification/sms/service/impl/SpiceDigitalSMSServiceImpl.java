@@ -1,6 +1,6 @@
-package org.egov.web.notification.sms.service.msdg.impl;
+package org.egov.web.notification.sms.service.impl;
 
-import org.egov.web.notification.sms.config.MSDGProperties;
+import org.egov.web.notification.sms.config.SMSProperties;
 import org.egov.web.notification.sms.models.Sms;
 import org.egov.web.notification.sms.service.SMSBodyBuilder;
 import org.egov.web.notification.sms.service.SMSService;
@@ -15,17 +15,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
+@ConditionalOnProperty(value = "sms.gateway.to.use", havingValue = "SPICE_DIGITAL")
 @Slf4j
-@ConditionalOnProperty(value = "sms.gateway.to.use", havingValue = "MSDG")
-public class MSDGSMSServiceImpl implements SMSService {
+public class SpiceDigitalSMSServiceImpl implements SMSService {
 
+	private SMSProperties smsProperties;
 	private RestTemplate restTemplate;
-
-	@Autowired
-	private MSDGProperties smsProperties;
-
-	@Autowired
-	private SMSBodyBuilder bodyBuilder;
+	
+    @Autowired
+    private SMSBodyBuilder bodyBuilder;
 
 	@Override
 	public void sendSMS(Sms sms) {
@@ -37,19 +35,11 @@ public class MSDGSMSServiceImpl implements SMSService {
 	}
 
 	private void submitToExternalSmsService(Sms sms) {
-        String finalmessage = "";
-        for(int i = 0 ; i< sms.getMessage().length();i++){
-            char ch = sms.getMessage().charAt(i);
-            int j = (int) ch;
-            String sss = "&#"+j+";";
-            finalmessage = finalmessage+sss;
-        }
-        sms.setMessage(finalmessage);        
 		try {
 			String url = smsProperties.getUrl();
 			final MultiValueMap<String, String> requestBody = bodyBuilder.getSmsRequestBody(sms);
-			url = UriComponentsBuilder.fromHttpUrl(url).queryParams(requestBody).toUriString();
-			restTemplate.postForObject(url, "{}", String.class);
+			String final_url = UriComponentsBuilder.fromHttpUrl(url).queryParams(requestBody).toUriString();
+			restTemplate.getForObject(final_url, String.class);
 		} catch (RestClientException e) {
 			log.error("Error occurred while sending SMS to " + sms.getMobileNumber(), e);
 			throw e;
