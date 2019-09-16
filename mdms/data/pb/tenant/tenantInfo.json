@@ -10,7 +10,7 @@
       "femalePopultion": "74671",
       "workingPopulation": "37.2",
       "literacyRate": "79.2%",
-      "languagesSpoken": "Punjabi, Hindi, Malayalam"
+      "languagesSpoken": ["PN", "HN", "EN"]
     },
     {
       "code": "pb.amritsar",
@@ -20,7 +20,7 @@
       "femalePopultion": "53895",
       "workingPopulation": "35.01",
       "literacyRate": "69.46",
-      "languagesSpoken": "Hindi, Gujarati, Punjabi"
+      "languagesSpoken": ["PN", "GR", "HN"]
     },
   
     {
@@ -31,7 +31,7 @@
       "femalePopultion": "6810",
       "workingPopulation": "33.48",
       "literacyRate": "62.63",
-      "languagesSpoken": "Gujarati, Punjabi, Hindi"
+      "languagesSpoken": ["GR", "PN", "HN"]
     },
     {
       "code": "pb.nawanshahr",
@@ -41,7 +41,7 @@
       "femalePopultion": "5697",
       "workingPopulation": "33.70",
       "literacyRate": "57.41",
-      "languagesSpoken": "Malayalam, Punjabi, Hindi"
+      "languagesSpoken": ["HN", "PN", "EN"]
     }
   ]
 }
