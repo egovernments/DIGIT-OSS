@@ -56,14 +56,14 @@ config:
       - work-dir: "tl-services/src/main/resources/db"
         image-name: "tl-services-db"
 
-- name: "municipal-services/firenoc-services"
+  - name: "municipal-services/firenoc-services"
     build:
       - work-dir: "firenoc-services"
         image-name: "firenoc-services"
       - work-dir: "firenoc-services/migration"
         image-name: "firenoc-services-db"
 
-- name: "municipal-services/firenoc-calculator"
+  - name: "municipal-services/firenoc-calculator"
     build:
       - work-dir: "firenoc-calculator"
         image-name: "firenoc-calculator"
