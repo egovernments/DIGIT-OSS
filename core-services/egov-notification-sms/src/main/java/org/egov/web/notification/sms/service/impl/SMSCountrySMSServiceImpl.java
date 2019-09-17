@@ -22,10 +22,12 @@ import lombok.extern.slf4j.Slf4j;
 public class SMSCountrySMSServiceImpl implements SMSService {
 
 	private SMSProperties smsProperties;
-	private RestTemplate restTemplate;
 
 	@Autowired
 	private SMSBodyBuilder bodyBuilder;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	@Override
 	public void sendSMS(Sms sms) {
@@ -39,8 +41,9 @@ public class SMSCountrySMSServiceImpl implements SMSService {
 	private void submitToExternalSmsService(Sms sms) {
 		try {
 			String url = smsProperties.getUrl();
-			HttpEntity<MultiValueMap<String, String>> request = getRequest(sms);
-			restTemplate.postForEntity(url, request, String.class);
+            HttpEntity<HttpEntity<MultiValueMap<String, String>>> request = new HttpEntity<>(getRequest(sms), getHttpHeaders());
+			String response = restTemplate.postForObject(url, request, String.class);
+			log.info("response: "+response);
 		} catch (RestClientException e) {
 			log.error("Error occurred while sending SMS to " + sms.getMobileNumber(), e);
 			throw e;

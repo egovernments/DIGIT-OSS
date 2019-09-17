@@ -13,12 +13,13 @@ import org.egov.web.notification.sms.service.SMSBodyBuilder;
 import org.egov.web.notification.sms.service.SMSService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -53,21 +54,32 @@ public class MSDGSMSServiceImpl implements SMSService {
             String sss = "&#"+j+";";
             finalmessage = finalmessage+sss;
         }
-        sms.setMessage(finalmessage);        
+        sms.setMessage(finalmessage);      
 		try {
 			String url = smsProperties.getUrl();
 			final MultiValueMap<String, String> requestBody = bodyBuilder.getSmsRequestBody(sms);
 			postProcessor(requestBody);
-			url = UriComponentsBuilder.fromHttpUrl(url).queryParams(requestBody).toUriString();
-			log.debug("URL: "+url);
-			String response = restTemplate.postForObject(url, "{}", String.class);
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(requestBody, getHttpHeaders());
+			String response = restTemplate.postForObject(url, request, String.class);
 			log.info("response: " + response);
-		} catch (RestClientException e) {
+		} catch (Exception e) {
 			log.error("Error occurred while sending SMS to " + sms.getMobileNumber(), e);
-			throw e;
 		}
 	}
 	
+    private HttpHeaders getHttpHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        return headers;
+    }
+    
+    
+	
+    /**
+     * Performs post processing on the default parameters
+     * 
+     * @param requestBody
+     */
 	private void postProcessor(MultiValueMap<String, String> requestBody) {
 		Map<String, String> configMap = getConfigMap();
 		String password = requestBody.getFirst(configMap.get(SMSConstants.SENDER_PASSWORD_IDENTIFIER));
@@ -78,7 +90,7 @@ public class MSDGSMSServiceImpl implements SMSService {
 		
 		String encryptedPwd = MD5(password);
 		String hashMsg = hashGenerator(username, senderid, message, secureKey);
-		
+			
 		List<String> entriesToBeModified = new ArrayList<>();
 		for(String key: requestBody.keySet()) {
 			if(key.equals(configMap.get(SMSConstants.SENDER_PASSWORD_IDENTIFIER))) {
@@ -97,10 +109,15 @@ public class MSDGSMSServiceImpl implements SMSService {
 					requestBody.add(key, hashMsg);
 				}
 			}
-		}
+		}		
 	}
 	
 	
+	/**
+	 * A map to fetch the configured keys for attributes.
+	 * 
+	 * @return
+	 */
 	public Map<String, String> getConfigMap() {
 		Map<String, String> configMap = new HashMap<>();
 		for (String key : smsProperties.getConfigMap().keySet()) {
@@ -123,6 +140,16 @@ public class MSDGSMSServiceImpl implements SMSService {
 		return configMap;
 	}
 	
+	
+	/**
+	 * Hash generator
+	 * 
+	 * @param userName
+	 * @param senderId
+	 * @param content
+	 * @param secureKey
+	 * @return
+	 */
 	private String hashGenerator(String userName, String senderId, String content, String secureKey) {
 		StringBuffer finalString = new StringBuffer();
 		finalString.append(userName.trim()).append(senderId.trim()).append(content.trim()).append(secureKey.trim());
@@ -144,7 +171,14 @@ public class MSDGSMSServiceImpl implements SMSService {
 		}
 		return sb.toString();
 	}
+	
 
+	/**
+	 * MD5 encryption algorithm
+	 * 
+	 * @param text
+	 * @return
+	 */
 	private static String MD5(String text) {
 		MessageDigest md;
 		byte[] md5 = new byte[64];
