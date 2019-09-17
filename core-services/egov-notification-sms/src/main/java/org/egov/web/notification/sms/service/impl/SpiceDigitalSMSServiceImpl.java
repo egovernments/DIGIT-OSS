@@ -1,5 +1,7 @@
 package org.egov.web.notification.sms.service.impl;
 
+import java.util.Map;
+
 import org.egov.web.notification.sms.config.SMSProperties;
 import org.egov.web.notification.sms.models.Sms;
 import org.egov.web.notification.sms.service.SMSBodyBuilder;
@@ -18,12 +20,15 @@ import lombok.extern.slf4j.Slf4j;
 @ConditionalOnProperty(value = "sms.gateway.to.use", havingValue = "SPICE_DIGITAL")
 @Slf4j
 public class SpiceDigitalSMSServiceImpl implements SMSService {
-
-	private SMSProperties smsProperties;
-	private RestTemplate restTemplate;
 	
     @Autowired
     private SMSBodyBuilder bodyBuilder;
+    
+    @Autowired
+	private SMSProperties smsProperties;
+    
+    @Autowired
+	private RestTemplate restTemplate;
 
 	@Override
 	public void sendSMS(Sms sms) {
@@ -38,8 +43,10 @@ public class SpiceDigitalSMSServiceImpl implements SMSService {
 		try {
 			String url = smsProperties.getUrl();
 			final MultiValueMap<String, String> requestBody = bodyBuilder.getSmsRequestBody(sms);
-			String final_url = UriComponentsBuilder.fromHttpUrl(url).queryParams(requestBody).toUriString();
-			restTemplate.getForObject(final_url, String.class);
+			url = UriComponentsBuilder.fromHttpUrl(url).queryParams(requestBody).toUriString();
+			log.debug("URL: "+url);
+			String response = restTemplate.getForObject(url, String.class);
+			log.info("response: "+response);
 		} catch (RestClientException e) {
 			log.error("Error occurred while sending SMS to " + sms.getMobileNumber(), e);
 			throw e;

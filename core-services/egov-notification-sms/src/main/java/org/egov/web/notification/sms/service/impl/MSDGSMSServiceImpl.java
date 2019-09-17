@@ -1,7 +1,9 @@
 package org.egov.web.notification.sms.service.impl;
 
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.egov.web.notification.sms.config.SMSConstants;
@@ -12,6 +14,7 @@ import org.egov.web.notification.sms.service.SMSService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -23,14 +26,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ConditionalOnProperty(value = "sms.gateway.to.use", havingValue = "MSDG")
 public class MSDGSMSServiceImpl implements SMSService {
-
-	private RestTemplate restTemplate;
-
+	
 	@Autowired
 	private SMSProperties smsProperties;
 
 	@Autowired
 	private SMSBodyBuilder bodyBuilder;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	@Override
 	public void sendSMS(Sms sms) {
@@ -55,7 +59,9 @@ public class MSDGSMSServiceImpl implements SMSService {
 			final MultiValueMap<String, String> requestBody = bodyBuilder.getSmsRequestBody(sms);
 			postProcessor(requestBody);
 			url = UriComponentsBuilder.fromHttpUrl(url).queryParams(requestBody).toUriString();
-			restTemplate.postForObject(url, "{}", String.class);
+			log.debug("URL: "+url);
+			String response = restTemplate.postForObject(url, "{}", String.class);
+			log.info("response: " + response);
 		} catch (RestClientException e) {
 			log.error("Error occurred while sending SMS to " + sms.getMobileNumber(), e);
 			throw e;
@@ -73,13 +79,23 @@ public class MSDGSMSServiceImpl implements SMSService {
 		String encryptedPwd = MD5(password);
 		String hashMsg = hashGenerator(username, senderid, message, secureKey);
 		
+		List<String> entriesToBeModified = new ArrayList<>();
 		for(String key: requestBody.keySet()) {
 			if(key.equals(configMap.get(SMSConstants.SENDER_PASSWORD_IDENTIFIER))) {
-				requestBody.remove(key);
-				requestBody.add(key, encryptedPwd);
+				entriesToBeModified.add(key);
 			}else if(key.equals(configMap.get(SMSConstants.SENDER_SECUREKEY_IDENTIFIER))) {
-				requestBody.remove(key);
-				requestBody.add(key, hashMsg);
+				entriesToBeModified.add(key);
+			}
+		}
+		if(!CollectionUtils.isEmpty(entriesToBeModified)) {
+			for(String key: entriesToBeModified) {
+				if(key.equals(configMap.get(SMSConstants.SENDER_PASSWORD_IDENTIFIER))) {
+					requestBody.remove(key);
+					requestBody.add(key, encryptedPwd);
+				}else if(key.equals(configMap.get(SMSConstants.SENDER_SECUREKEY_IDENTIFIER))) {
+					requestBody.remove(key);
+					requestBody.add(key, hashMsg);
+				}
 			}
 		}
 	}
