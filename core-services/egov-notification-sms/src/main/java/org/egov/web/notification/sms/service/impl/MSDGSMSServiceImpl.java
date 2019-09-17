@@ -71,10 +71,10 @@ public class MSDGSMSServiceImpl implements SMSService {
 	private void postProcessor(MultiValueMap<String, String> requestBody) {
 		Map<String, String> configMap = getConfigMap();
 		String password = requestBody.getFirst(configMap.get(SMSConstants.SENDER_PASSWORD_IDENTIFIER));
-		String username = requestBody.getFirst(configMap.get(SMSConstants.SENDER_PASSWORD_IDENTIFIER));
-		String senderid = requestBody.getFirst(configMap.get(SMSConstants.SENDER_PASSWORD_IDENTIFIER));
-		String message = requestBody.getFirst(configMap.get(SMSConstants.SENDER_PASSWORD_IDENTIFIER));
-		String secureKey = requestBody.getFirst(configMap.get(SMSConstants.SENDER_PASSWORD_IDENTIFIER));
+		String username = requestBody.getFirst(configMap.get(SMSConstants.SENDER_USERNAME_IDENTIFIER));
+		String senderid = requestBody.getFirst(configMap.get(SMSConstants.SENDER_SENDERID_IDENTIFIER));
+		String message = requestBody.getFirst(configMap.get(SMSConstants.SENDER_MESSAGE_IDENTIFIER));
+		String secureKey = requestBody.getFirst(configMap.get(SMSConstants.SENDER_SECUREKEY_IDENTIFIER));
 		
 		String encryptedPwd = MD5(password);
 		String hashMsg = hashGenerator(username, senderid, message, secureKey);
