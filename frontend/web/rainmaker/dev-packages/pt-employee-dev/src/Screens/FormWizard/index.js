@@ -971,7 +971,7 @@ class FormWizard extends Component {
         break;
       case 6:
         pay();
-    
+
         break;
     }
   };

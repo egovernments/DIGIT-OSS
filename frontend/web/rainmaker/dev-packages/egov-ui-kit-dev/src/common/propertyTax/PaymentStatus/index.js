@@ -1,3 +1,4 @@
+
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import React from "react";
 import { Card, Divider, Icon } from "components";
@@ -5,7 +6,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import ActionFooter from "../../common/ActionFooter";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import generateReceipt from "./Components/receiptsPDF";
-import AcknowledgementCard from "../AcknowledgementCard";
+import AcknowledgementCard from '../AcknowledgementCard';
 import "./index.css";
 
 const labelStyle = {

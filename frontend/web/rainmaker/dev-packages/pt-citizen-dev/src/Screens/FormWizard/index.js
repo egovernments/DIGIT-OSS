@@ -97,7 +97,7 @@ class FormWizard extends Component {
     termsAccepted: false,
     termsError: "",
     calculationScreenData: [],
-    assessedPropertyDetails: {}
+    assessedPropertyDetails:{}
   };
 
   toggleTerms = () =>
@@ -477,8 +477,7 @@ class FormWizard extends Component {
       totalAmountToBePaid,
       financialYearFromQuery,
       termsAccepted,
-      termsError,
-      propertyUUID,
+      termsError, propertyUUID,
       assessedPropertyDetails
     } = this.state;
     const { form, currentTenantId, search } = this.props;
@@ -617,9 +616,12 @@ class FormWizard extends Component {
         return null;
     }
   };
-  createAndUpdate = async index => {
+  createAndUpdate = async (index) =>{
     // const { callPGService, callDraft } = this;
-    const { selected, formValidIndexArray } = this.state;
+    const {
+      selected,
+      formValidIndexArray
+    } = this.state;
     const financialYearFromQuery = getFinancialYearFromQuery();
     let { form, common, location, hideSpinner } = this.props;
     const { search } = location;
@@ -775,6 +777,164 @@ class FormWizard extends Component {
         selected: index,
         formValidIndexArray: [...formValidIndexArray, selected]
       });
+    } catch (e) {
+      hideSpinner();
+      this.setState({ nextButtonEnabled: true });
+      alert(e);
+    }
+  };
+
+    const propertyMethodAction = !!propertyId ? "_update" : "_create";
+    let prepareFormData = { ...this.props.prepareFormData };
+
+    if (
+      get(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].institution",
+        undefined
+      )
+    )
+      delete prepareFormData.Properties[0].propertyDetails[0].institution;
+    const selectedownerShipCategoryType = get(
+      form,
+      "ownershipType.fields.typeOfOwnership.value",
+      ""
+    );
+    if (financialYearFromQuery) {
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].financialYear",
+        financialYearFromQuery
+      );
+    }
+
+    if (!!propertyId) {
+      set(prepareFormData, "Properties[0].propertyId", propertyId);
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].assessmentNumber",
+        assessmentId
+      );
+    }
+    if (selectedownerShipCategoryType === "SINGLEOWNER") {
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].owners",
+        getSingleOwnerInfo(this)
+      );
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].ownershipCategory",
+        get(
+          common,
+          `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`,
+          "INDIVIDUAL"
+        )
+      );
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].subOwnershipCategory",
+        selectedownerShipCategoryType
+      );
+    }
+
+    if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].owners",
+        getMultipleOwnerInfo(this)
+      );
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].ownershipCategory",
+        get(
+          common,
+          `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`,
+          "INDIVIDUAL"
+        )
+      );
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].subOwnershipCategory",
+        selectedownerShipCategoryType
+      );
+    }
+
+    set(
+      prepareFormData,
+      "Properties[0].propertyDetails[0].citizenInfo.mobileNumber",
+      get(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].owners[0].mobileNumber"
+      )
+    );
+
+    if (
+      selectedownerShipCategoryType.toLowerCase().indexOf("institutional") !==
+      -1
+    ) {
+      const { instiObj, ownerArray } = getInstituteInfo(this);
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].owners",
+        ownerArray
+      );
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].institution",
+        instiObj
+      );
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].ownershipCategory",
+        get(form, "ownershipType.fields.typeOfOwnership.value", "")
+      );
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].subOwnershipCategory",
+        get(form, "institutionDetails.fields.type.value", "")
+      );
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].citizenInfo.mobileNumber",
+        get(
+          form,
+          "institutionAuthority.fields.mobile.value",
+          get(form, "institutionAuthority.fields.telephone.value", null)
+        )
+      );
+    }
+
+    try {
+      set(
+        prepareFormData,
+        "Properties[0].propertyDetails[0].citizenInfo.name",
+        get(prepareFormData, "Properties[0].propertyDetails[0].owners[0].name")
+      );
+
+
+        const properties = normalizePropertyDetails(
+          prepareFormData.Properties,
+          this
+        );
+        let createPropertyResponse = await httpRequest(
+          `pt-services-v2/property/${propertyMethodAction}`,
+          `${propertyMethodAction}`,
+          [],
+          {
+            Properties: properties
+          }
+        );
+  console.log(createPropertyResponse,'createPropertyResponse');
+
+
+        this.setState(
+          {
+            assessedPropertyDetails:createPropertyResponse,
+            selected: index,
+            formValidIndexArray: [...formValidIndexArray, selected]
+          });
+
     } catch (e) {
       hideSpinner();
       this.setState({ nextButtonEnabled: true });
@@ -1487,7 +1647,7 @@ class FormWizard extends Component {
       buttonLabel = "PT_PROCEED_PAYMENT";
     } else if (index == 5) {
       // buttonLabel = 'PT_GENERATE_RECEIPT'
-      buttonLabel = "PT_MAKE_PAYMENT";
+      buttonLabel = 'PT_MAKE_PAYMENT'
     } else if (index == 6) {
       buttonLabel = "PT_DOWNLOAD_RECEIPT";
     }
