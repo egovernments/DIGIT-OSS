@@ -20,10 +20,10 @@ public class SMSProperties {
 	@Value("${sms.sender.password}")
 	public String password;
 	
-	@Value("${sms.sender.senderid}")
+	@Value("${sms.sender}")
 	public String senderid;
 
-	@Value("${sms.sender.securekey}")
+	@Value("${sms.sender.secure.key}")
 	public String secureKey;
 	
 	@Value("#{${sms.config.map}}")

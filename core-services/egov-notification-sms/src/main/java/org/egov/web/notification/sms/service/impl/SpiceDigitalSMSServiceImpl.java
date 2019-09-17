@@ -1,7 +1,5 @@
 package org.egov.web.notification.sms.service.impl;
 
-import java.util.Map;
-
 import org.egov.web.notification.sms.config.SMSProperties;
 import org.egov.web.notification.sms.models.Sms;
 import org.egov.web.notification.sms.service.SMSBodyBuilder;
