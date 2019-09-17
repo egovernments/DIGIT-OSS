@@ -1,0 +1,891 @@
+---
+ReportDefinitions:
+- reportName: CaseRegisterReport
+  summary: Case Register Report
+  version: 1.0.0
+  moduleName: lcms
+  selectiveDownload: true
+  externalService:
+  - entity: $.MdmsRes.lcms.court
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=court&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_court 
+  sourceColumns:
+  - name: caseno
+    label: reports.lcms.caseNo
+    type: string
+    source: lcms
+    showColumn: true
+  - name: plantiffname
+    label: reports.lcms.nameOfPlaintiff
+    type: string
+    source: lcms
+    showColumn: true
+  - name: defendant
+    label: reports.lcms.nameOfDefendant
+    type: string
+    source: lcms
+    showColumn: true
+  - name: pleaderengagementdetails
+    label: reports.lcms.amountOfPleadersEngaged
+    type: string
+    source: lcms
+    showColumn: false
+  - name: sectionapplied
+    label: reports.lcms.sectionApplied
+    type: string
+    source: lcms
+    showColumn: false
+  - name: receiptdate
+    label: reports.lcms.dateOfReceiptOfOfficer
+    type: epoch
+    source: lcms
+    showColumn: false
+  - name: summondate
+    label: reports.lcms.dateOfSummon
+    type: epoch
+    source: lcms
+    showColumn: false
+  - name: resolutiondetails
+    label: reports.lcms.resolutionOfMunicipalDate
+    type: string
+    source: lcms
+    showColumn: false
+  - name: pleaderfee
+    label: reports.lcms.particularsOfPleadersFee
+    type: string
+    source: lcms
+    showColumn: false
+  - name: vakalatnamagenerationdate
+    label: reports.lcms.dateOfProductionOfVakalatnama
+    type: epoch
+    source: lcms
+    showColumn: false
+  - name: courtname
+    label: reports.lcms.suitFiledCourtName
+    type: string
+    source: lcms
+    showColumn: true
+  - name: departmentperson
+    label: reports.lcms.nameOfResponsibleOfficer
+    type: string
+    source: lcms
+    showColumn: false
+  - name: judgementdate
+    label: reports.lcms.dateOfJudgment
+    type: epoch
+    source: lcms
+    showColumn: false
+  - name: casejudgement
+    label: reports.lcms.judgmentDetails
+    type: string
+    source: lcms
+    showColumn: false
+  - name: advocateopinion
+    label: reports.lcms.opinionOfPleader
+    type: string
+    source: lcms
+    showColumn: false
+  - name: furtherprocessdetails
+    label: reports.lcms.furtherProcessDetails
+    type: string
+    source: lcms
+    showColumn: false
+  - name: particularsamount
+    label: reports.lcms.particularsOfActualAmount
+    type: string
+    source: lcms
+    showColumn: false
+  - name: voucherdate
+    label: reports.lcms.dateOfCredit
+    type: epoch
+    source: lcms
+    showColumn: false
+  - name: paymentdetails
+    label: reports.lcms.particularsOfPayment
+    type: string
+    source: lcms
+    showColumn: false
+  - name: voucherdate
+    label: reports.lcms.dateOfDebit
+    type: epoch
+    source: lcms
+    showColumn: false
+  - name: verificationremarks
+    label: reports.lcms.remarksRegardingReferenceToCourt
+    type: string
+    source: lcms
+    showColumn: false
+  - name: remarks
+    label: reports.lcms.remarks
+    type: string
+    source: lcms
+    showColumn: false
+  searchParams:
+  - name: fromDate
+    label: reports.lcms.fromDate
+    type: epoch
+    source: lcms
+    isMandatory: true
+  - name: toDate
+    label: reports.lcms.toDate
+    type: epoch
+    source: lcms
+    isMandatory: true
+  - name: caseNo
+    label: reports.lcms.caseNo
+    type: string
+    isMandatory: false
+    source: lcms
+    searchClause : AND upper(lc.caseno) = upper($caseNo)
+  - name: lcNumber
+    label: reports.lcms.lcNumber
+    type: string
+    isMandatory: false
+    source: lcms
+    searchClause : AND upper(lc.summonreferenceno) = upper($lcNumber)
+  - name: caseTitle
+    label: reports.lcms.caseTitle
+    type: string
+    isMandatory: false
+    source: lcms
+    searchClause : AND upper(lc.casedetails) = upper($caseTitle)
+  - name: courtName
+    label: reports.lcms.courtName
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=lcms&masterName=court|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.courtname ->> 'code' = $courtName
+  - name: plaintiff
+    label: reports.lcms.plaintiff
+    type: string
+    isMandatory: false
+    source: lcms
+    searchClause : AND upper(lc.plantiffname) = upper($plaintiff)
+  - name: defendant
+    label: reports.lcms.defendant
+    type: string
+    isMandatory: false
+    source: lcms
+    searchClause : AND upper(lc.defendant) = upper($defendant)
+  - name: department
+    label: reports.lcms.department
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=common-masters&masterName=Department|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.departmentname ->> 'code' = $department
+  - name: caseStatus
+    label: reports.lcms.caseStatus
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=lcms&masterName=caseStatus|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.casestatus ->> 'code' = $caseStatus
+  query: select lc.caseno, lc.plantiffname, lc.defendant, lc.pleaderengagementdetails  ,lc.sectionapplied, lc.summondate, CONCAT(lc.resloution, ', ', lc.resloutiondate) AS resolutiondetails, lc.vakalatnamagenerationdate, (select name from (VALUES tbl_court) as court (code,name) where court.code=lc.courtname::jsonb ->> 'code')as courtname, lc.departmentperson, lhd.judgementdate, lhd.casejudgement, lhd.advocateopinion, lhd.furtherprocessdetails, lc.remarks from egov_lcms_case lc LEFT OUTER JOIN egov_lcms_hearing_details as lhd ON (lc.code = lhd.casecode AND lhd.casestatus ->> 'code'= 'FO') WHERE lc.caseregistrationdate>=$fromDate and lc.caseregistrationdate<=$toDate AND lc.tenantid=$tenantid
+- reportName: CaseSummaryReport
+  summary: Case Summary Report
+  version: 1.0.0
+  moduleName: lcms
+  selectiveDownload: true
+  externalService:
+  - entity: $.MdmsRes.lcms.caseType
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=caseType&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_casetype
+  - entity: $.MdmsRes.lcms.court
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=court&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_court
+  - entity: $.MdmsRes.lcms.caseStatus
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=caseStatus&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_casestatus
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_department  
+  sourceColumns:
+  - name: caseno
+    label: reports.lcms.caseNo
+    type: string
+    source: lcms
+    showColumn: true
+  - name: department
+    label: reports.lcms.department
+    type: string
+    source: lcms
+    showColumn: false
+  - name: casetype
+    label: reports.lcms.caseType
+    type: string
+    source: lcms
+    showColumn: false
+  - name: plantiffname
+    label: reports.lcms.plaintiff
+    type: string
+    source: lcms
+    showColumn: true
+  - name: defendant
+    label: reports.lcms.defendant
+    type: string
+    source: lcms
+    showColumn: true
+  - name: courtname
+    label: reports.lcms.courtName
+    type: string
+    source: lcms
+    showColumn: true
+  - name: advocate
+    label: reports.lcms.advocateName
+    type: string
+    source: lcms
+    showColumn: false
+  - name: casestatus
+    label: reports.lcms.status
+    type: string
+    source: lcms
+    showColumn: false
+  searchParams:
+  - name: fromDate
+    label: reports.lcms.fromDate
+    type: epoch
+    source: lcms
+    isMandatory: true
+  - name: toDate
+    label: reports.lcms.toDate
+    type: epoch
+    source: lcms
+    isMandatory: true
+  - name: caseNo
+    label: reports.lcms.caseNo
+    type: string
+    isMandatory: false
+    source: lcms
+    searchClause : AND lc.caseno=$caseNo
+  - name: department
+    label: reports.lcms.department
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=common-masters&masterName=Department|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.departmentname ->> 'code' = $department
+  - name: advocate
+    label: reports.lcms.advocate
+    type: singlevaluelist
+    pattern: http://lcms-services:8080/lcms-services/legalcase/advocate/_search?tenantId=$tenantid&pageSize=500|$..code|$..name
+    source: lcms
+    searchClause : AND position($advocate in tempadvocate.advocatecode) > 0
+    isMandatory: false
+  - name: courtName
+    label: reports.lcms.courtName
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=lcms&masterName=court|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.courtname ->> 'code' = $courtName
+  - name: plaintiff
+    label: reports.lcms.plaintiff
+    type: string
+    isMandatory: false
+    source: lcms
+    searchClause : AND lc.plantiffname = $plaintiff
+  - name: defendant
+    label: reports.lcms.defendant
+    type: string
+    isMandatory: false
+    source: lcms
+    searchClause : AND lc.defendant = $defendant
+  query: select lc.caseno, (select name from (VALUES tbl_department) as departmentdata (code,name) where departmentdata.code= lc.departmentname->>'code')as department, (select name from (VALUES tbl_casetype) as casetype (code,name) where casetype.code=lc.casetype::jsonb ->> 'code') as casetype, lc.plantiffName, lc.defendant, (select name from (VALUES tbl_court) as court (code,name) where court.code=lc.courtname::jsonb ->> 'code') as courtname, tempadvocate.advocatename as advocate,(select name from (VALUES tbl_casestatus) as casestatus (code,name) where casestatus.code=lc.casestatus::jsonb ->> 'code') as casestatus from egov_lcms_case as lc left outer join
+    (select lca.casecode as casecode, string_agg(la.name,',') as advocatename,string_agg(la.code,',') as advocatecode  from egov_lcms_case_advocate as lca inner join  egov_lcms_advocate as la on la.code=lca.advocate->>'code' where lca.tenantid=$tenantid group by lca.casecode) as tempadvocate on lc.code=tempadvocate.casecode WHERE lc.caseregistrationdate>=$fromDate and lc.caseregistrationdate<=$toDate  and lc.tenantid=$tenantid 
+  
+- reportName: CaseDetailReport
+  summary: Case Detail Report
+  version: 1.0.0
+  moduleName: lcms
+  selectiveDownload: true
+  externalService:
+  - entity: $.MdmsRes.lcms.court
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=court&tenantId=$tenantid
+    keyOrder: code,name,type
+    tableName: tbl_court
+  - entity: $.MdmsRes.lcms.caseCategory
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=caseCategory&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_casecategory
+  - entity: $.MdmsRes.lcms.caseStatus
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=caseStatus&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_casestatus
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_department  
+  
+  sourceColumns:
+  - name: caseno
+    label: reports.lcms.caseNo
+    type: string
+    source: lcms
+    showColumn: false
+  - name: courtname
+    label: reports.lcms.courtName
+    type: string
+    source: lcms
+    showColumn: true
+  - name: courttype 
+    label: reports.lcms.courtType
+    type: string
+    source: lcms
+    showColumn: false
+  - name: department
+    label: reports.lcms.department
+    type: string
+    source: lcms
+    showColumn: false
+  - name: casecategory
+    label: reports.lcms.caseCategory
+    type: string
+    source: lcms
+    showColumn: false
+  - name: sectionapplied
+    label: reports.lcms.sectionNo
+    type: string
+    source: lcms
+    showColumn: false
+  - name: advocate
+    label: reports.lcms.advocateName
+    type: string
+    source: lcms
+    showColumn: false
+  - name: plantiffname
+    label: reports.lcms.petitionName
+    type: string
+    source: lcms
+    showColumn: true
+  - name: defendant
+    label: reports.lcms.defendant
+    type: string
+    source: lcms
+    showColumn: true  
+  - name: casestatus
+    label: reports.lcms.caseStatus
+    type: string
+    source: lcms
+    showColumn: true
+  searchParams:
+  - name: fromDate
+    label: reports.lcms.fromDate
+    type: epoch
+    source: lcms
+    isMandatory: true
+  - name: toDate
+    label: reports.lcms.toDate
+    type: epoch
+    source: lcms
+    isMandatory: true
+  - name: caseStatus
+    label: reports.lcms.caseStatus
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=lcms&masterName=caseStatus|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.casestatus ->> 'code'= $caseStatus
+  - name: sectionNo
+    label: reports.lcms.sectionNo
+    type: string
+    isMandatory: false
+    source: lcms
+    searchClause : AND lc.sectionapplied=$sectionNo
+  - name: advocate
+    label: reports.lcms.advocate
+    type: singlevaluelist
+    pattern: http://lcms-services:8080/lcms-services/legalcase/advocate/_search?tenantId=$tenantid&pageSize=500|$..code|$..name
+    source: lcms
+    isMandatory: false
+    searchClause : AND position($advocate in tempadvocate.advocatecode) > 0
+  - name: courtName
+    label: reports.lcms.courtName
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=lcms&masterName=court|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.courtname ->> 'code' = $courtName
+  - name: plaintiff
+    label: reports.lcms.plaintiff
+    type: string
+    isMandatory: false
+    source: lcms
+    searchClause : AND lc.plantiffname = $plaintiff
+  - name: defendant
+    label: reports.lcms.defendant
+    type: string
+    isMandatory: false
+    source: lcms
+    searchClause : AND lc.defendant = $defendant
+  - name: caseCategory
+    label: reports.lcms.caseCategory
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=lcms&masterName=caseCategory|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.casecategory ->> 'code' = $caseCategory
+  - name: department
+    label: reports.lcms.department
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=common-masters&masterName=Department|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.departmentname ->> 'code' = $department
+  - name: caseType
+    label: reports.lcms.caseType
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=lcms&masterName=caseType|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.casetype ->> 'code' = $caseType
+  query: select lc.caseno, (select name from (VALUES tbl_court) as court (code,name,type) where court.code=lc.courtname::jsonb ->> 'code') as courtname, (select type from (VALUES tbl_court) as court (code,name,type) where court.code=lc.courtname::jsonb ->> 'code') as courttype, (select name from (VALUES tbl_department) as departmentdata (code,name) where departmentdata.code= lc.departmentname->>'code')as department, (select name from (VALUES tbl_casecategory) as caseCategory (code,name) where caseCategory.code=lc.casecategory::jsonb ->> 'code') as casecategory, lc.sectionapplied, tempadvocate.advocatename as advocate, lc.plantiffName,lc.defendant, (select name from (VALUES tbl_casestatus) as caseStatus (code,name) where caseStatus.code=lc.casestatus::jsonb ->> 'code') as casestatus from egov_lcms_case as lc left outer join
+    (select lca.casecode as casecode, string_agg(la.name,',') as advocatename,string_agg(la.code,',') as advocatecode  from egov_lcms_case_advocate as lca inner join  egov_lcms_advocate as la on la.code=lca.advocate->>'code' where lca.tenantid=$tenantid group by lca.casecode) as tempadvocate on lc.code=tempadvocate.casecode WHERE lc.caseregistrationdate>=$fromDate and lc.caseregistrationdate<=$toDate and lc.tenantid=$tenantid
+- reportName: CaseHistoryReport
+  summary: Case History Report
+  version: 1.0.0
+  moduleName: lcms
+  selectiveDownload: true
+  externalService:
+  - entity: $.MdmsRes.lcms.caseType
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=caseType&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_casetype
+  - entity: $.MdmsRes.lcms.court
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=court&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_court
+  - entity: $.MdmsRes.lcms.caseStatus
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=caseStatus&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_casestatus 
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_department     
+  sourceColumns:
+  - name: caseno
+    label: reports.lcms.caseNo
+    type: string
+    source: lcms
+    showColumn: true
+  - name: summondate
+    label: reports.lcms.caseDate
+    type: epoch
+    source: lcms
+    showColumn: false
+  - name: courtname
+    label: reports.lcms.courtName
+    type: string
+    source: lcms
+    showColumn: true
+  - name: casetype
+    label: reports.lcms.caseType
+    type: string
+    source: lcms
+    showColumn: true
+  - name: department
+    label: reports.lcms.department
+    type: string
+    source: lcms
+    showColumn: false
+  - name: advocate
+    label: reports.lcms.advocateName
+    type: string
+    source: lcms
+    showColumn: true
+  - name: plantiffname
+    label: reports.lcms.plaintiff
+    type: string
+    source: lcms
+    showColumn: false
+  - name: defendant
+    label: reports.lcms.defendant
+    type: string
+    source: lcms
+    showColumn: false
+  - name: hearingdate
+    label: reports.lcms.hearingDate
+    type: epoch
+    source: lcms
+    showColumn: false
+  - name: casestatus
+    label: reports.lcms.status
+    type: string
+    source: lcms
+    showColumn: false
+  searchParams:
+  - name: fromDate
+    label: reports.lcms.fromDate
+    type: epoch
+    source: lcms
+    isMandatory: true
+  - name: toDate
+    label: reports.lcms.toDate
+    type: epoch
+    source: lcms
+    isMandatory: true
+    
+  - name: oragnization
+    label: reports.lcms.organization
+    type: singlevaluelist
+    pattern: http://lcms-services:8080/lcms-services/legalcase/advocate/agency/_search?tenantId=$tenantid&pageSize=500|$.agencies[*].name|$.agencies[*].name
+    source: lcms
+    isMandatory: false
+    
+  - name: advocatename
+    label: reports.lcms.advocate
+    type: url
+    pattern: /lcms-services/legalcase/advocate/agency/_search?tenantId=$tenantid&agencyName={oragnization}&pageSize=500|$.agencies[*].advocates[*].code|$.agencies[*].advocates[*].name
+    source: lcms
+    isMandatory: false
+    searchClause : AND position($advocatename in tempadvocate.advocatecode) > 0
+    
+  - name: department
+    label: reports.lcms.department
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=common-masters&masterName=Department|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.departmentname ->> 'code' = $department
+  - name: caseType
+    label: reports.lcms.caseType
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=lcms&masterName=caseType|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.casetype ->> 'code' = $caseType
+  - name: courtName
+    label: reports.lcms.courtName
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=lcms&masterName=court|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.courtname ->> 'code' = $courtName
+  
+  - name: caseStatus
+    label: reports.lcms.caseStatus
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=lcms&masterName=caseStatus|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.casestatus ->> 'code'= $caseStatus
+  query: select lc.caseno, lc.summondate, (select name from (VALUES tbl_court) as court (code,name) where court.code=lc.courtname::jsonb ->> 'code') as courtname, (select name from (VALUES tbl_casetype) as caseType (code,name) where caseType.code=lc.casetype::jsonb ->> 'code') as casetype, tempadvocate.advocatename as advocate, (select name from (VALUES tbl_department) as departmentdata (code,name) where departmentdata.code= lc.departmentname->>'code')as department, lc.plantiffName, lc.defendant, lc.hearingdate, (select name from (VALUES tbl_casestatus) as caseStatus (code,name) where caseStatus.code=lc.casestatus::jsonb ->> 'code') as casestatus from egov_lcms_case as lc left outer join  (select lca.casecode as casecode, string_agg(la.name,',') as advocatename,string_agg(la.code,',') as advocatecode  from egov_lcms_case_advocate as lca inner join  egov_lcms_advocate as la on la.code=lca.advocate->>'code' where lca.tenantid=$tenantid group by lca.casecode) as tempadvocate on lc.code=tempadvocate.casecode WHERE lc.caseregistrationdate>=$fromDate and lc.caseregistrationdate<=$toDate 
+- reportName: CasePendencyReport
+  summary: Case Pendency Report
+  version: 1.0.0
+  moduleName: lcms
+  selectiveDownload: true
+  externalService:
+  - entity: $.MdmsRes.lcms.caseType
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=caseType&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_casetype
+  - entity: $.MdmsRes.lcms.court
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=court&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_court
+  - entity: $.MdmsRes.lcms.caseStatus
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=caseStatus&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_casestatus
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_department     
+  sourceColumns:
+  - name: caseno
+    label: reports.lcms.caseNo
+    type: string
+    source: lcms
+    showColumn: true
+  - name: advocate
+    label: reports.lcms.advocateName
+    type: string
+    source: lcms
+    showColumn: true
+  - name: department
+    label: reports.lcms.department
+    type: string
+    source: lcms
+    showColumn: true
+  - name: courtname
+    label: reports.lcms.courtName
+    type: string
+    source: lcms
+    showColumn: false
+  - name: casetype
+    label: reports.lcms.caseType
+    type: string
+    source: lcms
+    showColumn: true
+  - name: plantiffname
+    label: reports.lcms.plaintiff
+    type: string
+    source: lcms
+    showColumn: false
+  - name: defendant
+    label: reports.lcms.defendant
+    type: string
+    source: lcms
+    showColumn: false
+  - name: casejudgement
+    label: reports.lcms.hearingDetails
+    type: string
+    source: lcms
+    showColumn: false
+  - name: casestatus
+    label: reports.lcms.caseStatus
+    type: string
+    source: lcms
+    showColumn: false
+  searchParams:
+  - name: fromDate
+    label: reports.lcms.fromDate
+    type: epoch
+    source: lcms
+    isMandatory: true
+  - name: toDate
+    label: reports.lcms.toDate
+    type: epoch
+    source: lcms
+    isMandatory: true
+  - name: department
+    label: reports.lcms.department
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=common-masters&masterName=Department|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.departmentname ->> 'code' = $department
+  - name: advocate
+    label: reports.lcms.advocate
+    type: singlevaluelist
+    pattern: http://lcms-services:8080/lcms-services/legalcase/advocate/_search?tenantId=$tenantid&pageSize=500|$..code|$..name
+    source: lcms
+    isMandatory: false
+    searchClause : AND position($advocate in tempadvocate.advocatecode) > 0
+  query: select lc.caseno, tempadvocate.advocatename as advocate, (select name from (VALUES tbl_department) as departmentdata (code,name) where departmentdata.code= lc.departmentname->>'code')as department, (select name from (VALUES tbl_court) as court (code,name) where court.code=lc.courtname::jsonb ->> 'code') as courtname, (select name from (VALUES tbl_casetype) as caseType (code,name) where caseType.code=lc.casetype::jsonb ->> 'code') as casetype, lc.plantiffName, lc.defendant, (select casejudgement from egov_lcms_hearing_details as lhd where lhd.casestatus->>'code'=lc.casestatus->>'code' and lhd.casecode=lc.code order by createdtime desc limit 1 ) as casejudgement, (select name from (VALUES tbl_casestatus) as caseStatus (code,name) where caseStatus.code=lc.casestatus::jsonb ->> 'code') as casestatus from egov_lcms_case as lc left outer join  (select lca.casecode as casecode, string_agg(la.name,',') as advocatename,string_agg(la.code,',') as advocatecode  from egov_lcms_case_advocate as lca inner join  egov_lcms_advocate as la on la.code=lca.advocate->>'code' where lca.tenantid=$tenantid group by lca.casecode) as tempadvocate on lc.code=tempadvocate.casecode WHERE lc.caseregistrationdate>=$fromDate and lc.caseregistrationdate<=$toDate and lc.tenantid=$tenantid
+- reportName: CaseStatusReport
+  summary: Case Status Report
+  version: 1.0.0
+  moduleName: lcms
+  selectiveDownload: true
+  externalService:
+  - entity: $.MdmsRes.lcms.caseType
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=caseType&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_casetype
+  - entity: $.MdmsRes.lcms.court
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=court&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_court
+  - entity: $.MdmsRes.lcms.caseStatus
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=caseStatus&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_casestatus
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_department 
+    
+  sourceColumns:
+  - name: caseno
+    label: reports.lcms.caseNo
+    type: string
+    source: lcms
+    showColumn: true
+  - name: advocate
+    label: reports.lcms.advocateName
+    type: string
+    source: lcms
+    showColumn: true
+  - name: department
+    label: reports.lcms.department
+    type: string
+    source: lcms
+    showColumn: false
+  - name: courtname
+    label: reports.lcms.courtName
+    type: string
+    source: lcms
+    showColumn: false
+  - name: casetype
+    label: reports.lcms.caseType
+    type: string
+    source: lcms
+    showColumn: true
+  - name: plantiffname
+    label: reports.lcms.plaintiff
+    type: string
+    source: lcms
+    showColumn: false
+  - name: defendant
+    label: reports.lcms.defendant
+    type: string
+    source: lcms
+    showColumn: false
+  - name: casejudgement
+    label: reports.lcms.hearingDetails
+    type: string
+    source: lcms
+    showColumn: false
+  - name: casestatus
+    label: reports.lcms.status
+    type: string
+    source: lcms
+    showColumn: true
+  searchParams:
+  - name: fromDate
+    label: reports.lcms.fromDate
+    type: epoch
+    source: lcms
+    isMandatory: true
+  - name: toDate
+    label: reports.lcms.toDate
+    type: epoch
+    source: lcms
+    isMandatory: true
+  - name: caseStatus
+    label: reports.lcms.caseStatus
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=lcms&masterName=caseStatus|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.casestatus ->> 'code'= $caseStatus
+  query: select lc.caseno, (select string_agg(name, ', ') from egov_lcms_advocate where code in( select advocate->>'code' from egov_lcms_case_advocate where casecode=lc.code)) as advocate, (select name from (VALUES tbl_department) as departmentdata (code,name) where departmentdata.code= lc.departmentname->>'code')as department,(select name from (VALUES tbl_court) as court (code,name) where court.code=lc.courtname::jsonb ->> 'code') as courtname, (select name from (VALUES tbl_casetype) as caseType (code,name) where caseType.code=lc.casetype::jsonb ->> 'code') as casetype, lc.plantiffName, lc.defendant,(select casejudgement from egov_lcms_hearing_details as lhd where lhd.casestatus->>'code'=lc.casestatus->>'code' and lhd.casecode=lc.code order by createdtime desc limit 1) as casejudgement, (select name from (VALUES tbl_casestatus) as caseStatus (code,name) where caseStatus.code=lc.casestatus::jsonb ->> 'code') as casestatus from egov_lcms_case as lc   WHERE lc.caseregistrationdate>=$fromDate and lc.caseregistrationdate<=$toDate and lc.tenantid=$tenantid
+- reportName: DueDateReport
+  summary: Due Date Report
+  version: 1.0.0
+  moduleName: lcms
+  selectiveDownload: true
+  externalService:
+  - entity: $.MdmsRes.lcms.caseType
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=caseType&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_casetype
+  - entity: $.MdmsRes.lcms.court
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=court&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_court
+  - entity: $.MdmsRes.lcms.caseStatus
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=lcms&masterName=caseStatus&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_casestatus  
+  - entity: $.MdmsRes.common-masters.Department
+    apiURL:  http://egov-mdms-service:8080/egov-mdms-service/v1/_get?moduleName=common-masters&masterName=Department&tenantId=$tenantid
+    keyOrder: code,name
+    tableName: tbl_department   
+  sourceColumns:
+  - name: caseno
+    label: reports.lcms.caseNo
+    type: string
+    source: lcms
+    showColumn: true
+  - name: courtname
+    label: reports.lcms.courtName
+    type: string
+    source: lcms
+    showColumn: false
+  - name: casetype
+    label: reports.lcms.caseType
+    type: string
+    source: lcms
+    showColumn: true
+  - name: department
+    label: reports.lcms.department
+    type: string
+    source: lcms
+    showColumn: false
+  - name: departmentperson
+    label: reports.lcms.concernedPersonName
+    type: string
+    source: lcms
+    showColumn: false
+  - name: advocate
+    label: reports.lcms.advocateName
+    type: string
+    source: lcms
+    showColumn: true
+  - name: plantiffname
+    label: reports.lcms.plaintiff
+    type: string
+    source: lcms
+    showColumn: false
+  - name: defendant
+    label: reports.lcms.defendant
+    type: string
+    source: lcms
+    showColumn: false
+  - name: casestatus
+    label: reports.lcms.caseStatus
+    type: string
+    source: lcms
+    showColumn: true
+  - name: hearingdate
+    label: reports.lcms.hearingDetailsDateAndTime
+    type: epoch
+    source: lcms
+    showColumn: false
+  searchParams:
+  - name: fromDate
+    label: reports.lcms.fromDate
+    type: epoch
+    source: lcms
+    isMandatory: true
+  - name: toDate
+    label: reports.lcms.toDate
+    type: epoch
+    source: lcms
+    isMandatory: true
+  - name: department
+    label: reports.lcms.department
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=common-masters&masterName=Department|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.departmentname ->> 'code' = $department
+  - name: departmentPerson
+    label: reports.lcms.departmentPerson
+    type: string
+    isMandatory: false
+    source: lcms
+    searchClause : AND lc.departmentperson=$departmentPerson
+  - name: advocate
+    label: reports.lcms.advocate
+    type: singlevaluelist
+    pattern: http://lcms-services:8080/lcms-services/legalcase/advocate/_search?tenantId=$tenantid&pageSize=500|$..code|$..name
+    source: lcms
+    isMandatory: false
+    searchClause : AND position($advocate in tempadvocate.advocatecode) > 0
+  - name: courtName
+    label: reports.lcms.courtName
+    type: singlevaluelist
+    pattern: http://egov-mdms-service:8080/egov-mdms-service/v1/_get?tenantId=$tenantid&moduleName=lcms&masterName=court|$..code|$..name
+    source: lcms
+    wrapper: true
+    isMandatory: false
+    searchClause : AND lc.courtname ->> 'code' = $courtName
+  query: select lc.caseno, (select name from (VALUES tbl_court) as court (code,name) where court.code=lc.courtname::jsonb ->> 'code') as courtname, (select name from (VALUES tbl_casetype) as caseType (code,name) where caseType.code=lc.casetype::jsonb ->> 'code') as casetype, (select name from (VALUES tbl_department) as departmentdata (code,name) where departmentdata.code= lc.departmentname->>'code')as department, lc.departmentperson, tempadvocate.advocatename as advocate, lc.plantiffName, lc.defendant, (select name from (VALUES tbl_casestatus) as caseStatus (code,name) where caseStatus.code=lc.casestatus::jsonb ->> 'code') as casestatus, lc.hearingdate from egov_lcms_case as lc left outer join  (select lca.casecode as casecode, string_agg(la.name,',') as advocatename,string_agg(la.code,',') as advocatecode from egov_lcms_case_advocate as lca inner join  egov_lcms_advocate as la on la.code=lca.advocate->>'code' where lca.tenantid=$tenantid group by lca.casecode) as tempadvocate on lc.code=tempadvocate.casecode WHERE lc.caseregistrationdate>=$fromDate and lc.caseregistrationdate<=$toDate and lc.tenantid=$tenantid

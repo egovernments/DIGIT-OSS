@@ -1,0 +1,49 @@
+---
+ReportDefinitions:
+- reportName: CitizenService
+  summary: Citizen Services Report
+  version: 1.0.0
+  moduleName: citizen
+  sourceColumns:
+  - name: receiptNo
+    label: reports.citizen.receiptno
+    type: string
+    source: citizen
+  - name: receiptDate
+    label: reports.citizen.receiptdate
+    type: number
+    source: citizen
+  - name: totalAmount
+    label: reports.citizen.totalamount
+    type: number
+    source: citizen
+  - name: payeeName
+    label: reports.citizen.payeename
+    type: number
+    source: citizen
+  - name: consumerAddress
+    label: reports.citizen.consumeraddress
+    type: number
+    source: citizen
+  - name: print
+    label: reports.citizen.print
+    type: number
+    source: citizen
+    linkedReport:
+      reportName: ReceiptDetail
+      linkedColumn: _url?/pgr/viewGrievance/:srn
+  searchParams:
+  - name: consumerno
+    label: reports.citizen.consumerno
+    type: string
+    source: citizen
+    isMandatory: false
+    searchClause: and consumerNo = $consumerno
+  - name: receiptno
+    label: reports.citizen.receiptno
+    type: string
+    source: citizen
+    isMandatory: false
+    searchClause: and receiptno = $receiptno
+  query: select receiptNo,receiptDate,totalAmount,payeeName,consumerAddress,'print' as print from egcl_legacy_receipt_header where tenantid = $tenantid
+
