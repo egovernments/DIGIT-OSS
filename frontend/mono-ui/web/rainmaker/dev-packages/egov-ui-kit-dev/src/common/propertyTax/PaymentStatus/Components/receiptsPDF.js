@@ -2,6 +2,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import msevaLogo from "egov-ui-kit/assets/images/pblogo.png";
 import store from "redux/store";
+import { downloadPDFFileUsingBase64 } from "egov-ui-framework/ui-utils/commons"
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -475,17 +476,8 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
 
     if (doNotDownloadReceipt !== true)
     {
-      receiptPDF.getBase64(data => {
-        const linkSource = "data:application/pdf;base64," + data;
-        const downloadLink = document.createElement("a");
-        const fileName = `${details.ReceiptNo}.pdf`;
-
-        downloadLink.href = linkSource;
-        downloadLink.download = fileName;
-        downloadLink.click();
-        console.log("data:application/pdf;base64," + data);
+      downloadPDFFileUsingBase64(receiptPDF, `${details.ReceiptNo}.pdf`);
       // receiptPDF.download(`${details.ReceiptNo}.pdf`);
-      });
     }
   }
 };
