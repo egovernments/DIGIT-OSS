@@ -52,7 +52,7 @@ class Feedback extends Component {
           labelName: "Please provide ratings",
           labelKey: "ERR_PLEASE_PROVIDE_RATINGS"
         },
-        true
+        "error"
       );
     }
   };

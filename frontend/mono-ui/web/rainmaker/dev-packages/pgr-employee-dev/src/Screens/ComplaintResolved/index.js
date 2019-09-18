@@ -31,7 +31,7 @@ class ComplaintResolved extends Component {
           labelName: "Please upload photo or write comments",
           labelKey: "ERR_PLEASE_UPLOAD_PHOTO"
         },
-        true
+        "error"
       );
     }
   };

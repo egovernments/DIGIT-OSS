@@ -32,7 +32,7 @@ const formSubmit = (store) => (next) => (action) => {
         dataFetchComplete({ MdmsRes: { [moduleName]: { [masterName]: mergeMDMSDataArray(currentMdmsData, newMdmsRow) } } }, moduleName, masterName)
       );
       if (mdmsToast && mdmsToast.length) {
-        dispatch(toggleSnackbarAndSetText(true, { labelName: mdmsToast, labelKey: mdmsToast }, false));
+        dispatch(toggleSnackbarAndSetText(true, { labelName: mdmsToast, labelKey: mdmsToast }, "success"));
       }
     }
     // for login/register flow
@@ -79,7 +79,7 @@ const formSubmit = (store) => (next) => (action) => {
               labelName: "Password changed successfully!",
               labelKey: "CS_COMMON_EMPLOYEEOTP_CHANGED_PASSWORD_SUCCESS",
             },
-            true
+            "success"
           )
         );
     }
@@ -102,7 +102,7 @@ const formSubmit = (store) => (next) => (action) => {
     }
 
     if (toast && toast.length) {
-      dispatch(toggleSnackbarAndSetText(true, { labelName: toast, labelKey: toast }, false));
+      dispatch(toggleSnackbarAndSetText(true, { labelName: toast, labelKey: toast }, "success"));
     }
   } else {
     next(action);
