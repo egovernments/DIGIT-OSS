@@ -92,7 +92,7 @@ const OTPForm = ({
                       labelName: "Password do not match",
                       labelKey: "ERR_PASSWORD_DO_NOT_MATCH"
                     },
-                    true
+                    "error"
                   );
                 }
               }}

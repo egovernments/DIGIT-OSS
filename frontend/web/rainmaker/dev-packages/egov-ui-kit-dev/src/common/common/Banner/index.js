@@ -12,9 +12,10 @@ const Banner = ({ children, hideBackButton, history, className = "",logoUrl,bann
           <div className="banner-overlay" />
           <div className="banner-main-content">
             {!hideBackButton && <Icon onClick={() => history.goBack()} className="banner-back-button" action="navigation" name="arrow-back" />}
-            <div className="logo-wrapper user-logo-wrapper">
-              <Image className="mseva-logo" source={logoUrl?logoUrl:logo} />
-            </div>
+            {/* <div className="logo-wrapper user-logo-wrapper">
+              {<Image className="mseva-logo" source={logoUrl?logoUrl:logo} /> }
+              <Label label="" />
+            </div> */}
             <div className="banner-form-cont">{children}</div>
           </div>
         </div>
