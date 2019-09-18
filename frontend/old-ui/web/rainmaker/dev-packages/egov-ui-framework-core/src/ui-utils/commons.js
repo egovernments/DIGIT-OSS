@@ -21,9 +21,7 @@ export const addComponentJsonpath = (components, jsonPath = "components") => {
         components[
           componentKey
         ].componentJsonpath = `${jsonPath}.${componentKey}`;
-        const childJsonpath = `${
-          components[componentKey].componentJsonpath
-        }.children`;
+        const childJsonpath = `${components[componentKey].componentJsonpath}.children`;
         addComponentJsonpath(components[componentKey].children, childJsonpath);
       } else {
         components[
@@ -515,3 +513,19 @@ export const validateFields = (
   }
   return isFormValid;
 };
+
+export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
+  if (typeof mSewaApp === "undefined") {
+    // we are running in browser
+    receiptPDF.download(filename);
+  } else {
+    // we are running under webview
+    receiptPDF.getBase64(data => {
+      mSewaApp.downloadBase64File(data, filename);
+    });
+  }
+};
+
+if (window) {
+  window.downloadPDFFileUsingBase64 = downloadPDFFileUsingBase64;
+}
