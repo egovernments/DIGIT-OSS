@@ -21,6 +21,7 @@ const formConfig = {
       hintText: "CORE_LOGIN_PASSWORD_PLACEHOLDER",
       pattern: "^([a-zA-Z0-9@])+$",
       value: "",
+      style:{},
     },
     city: {
       id: "person-city",

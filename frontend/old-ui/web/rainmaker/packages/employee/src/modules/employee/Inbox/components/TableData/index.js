@@ -81,7 +81,7 @@ class TableData extends Component {
           labelName: "Not authorized to access Business Service!",
           labelKey: "ERR_NOT_AUTHORISED_BUSINESS_SERVICE",
         },
-        true
+        "error"
       );
     }
   };
@@ -135,7 +135,7 @@ class TableData extends Component {
       });
       this.setState({ inboxData, taskboardData, tabData });
     } catch (e) {
-      toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, true);
+      toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, "error");
     }
     prepareFinalObject("InboxData", inboxData);
 

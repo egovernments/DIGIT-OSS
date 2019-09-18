@@ -27,6 +27,7 @@ const floatingLabelStyle = {
 };
 
 const MobileNumberField = ({ className, textFieldStyle = {}, prefix = "+91", prefixStyle = {}, jsonPath, errorMessage, ...textFieldProps }) => {
+  
   return (
     <div style={containerStyle}>
       <div style={{ ...prefixBaseStyle, ...prefixStyle }}>{prefix}</div>
@@ -34,6 +35,10 @@ const MobileNumberField = ({ className, textFieldStyle = {}, prefix = "+91", pre
         className={`mobile-number-field ${className}`}
         id="mobile-number-field"
         name="mobile-number-field"
+        InputProps={{
+          maxLength: 10,
+          minLength: 10,
+        }}
         errorStyle={{ marginLeft: "-35px" }}
         style={{ ...textFieldBaseStyle, ...textFieldStyle }}
         {...textFieldProps}

@@ -21,7 +21,7 @@ class App extends Component {
     props.history.listen((location, action) => {
       const { pathname: nextPath } = location;
       addBodyClass(nextPath);
-      props.toggleSnackbarAndSetText(false, { labelName: "", labelKey: "" }, false);
+      props.toggleSnackbarAndSetText(false, { labelName: "", labelKey: "" }, "success");
     });
 
     addBodyClass(currentPath);
@@ -87,7 +87,7 @@ class App extends Component {
     return (
       <div>
         <Router routes={routes} hasLocalisation={hasLocalisation} defaultUrl={defaultUrl} />
-        {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} error={toast.error} />}
+        {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} variant={"error"} />}
         {loading && <LoadingIndicator />}
         <CommonShareContainer componentId="rainmaker-common-share" />
       </div>
