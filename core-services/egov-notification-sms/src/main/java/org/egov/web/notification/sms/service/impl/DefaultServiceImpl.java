@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@ConditionalOnProperty(value = "sms.gateway.to.use", havingValue = "DEFAULT")
+@ConditionalOnProperty(value = "sms.gateway.to.use", havingValue = "DEFAULT", matchIfMissing = true)
 @Slf4j
 public class DefaultServiceImpl implements SMSService {
 	
