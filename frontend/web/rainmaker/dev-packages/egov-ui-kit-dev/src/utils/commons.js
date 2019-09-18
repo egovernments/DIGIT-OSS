@@ -729,10 +729,11 @@ export const getTransformedNotifications = async (notifications) => {
 
 export const onNotificationClick = async (history) => {
   try {
+    const permanentCity = JSON.parse(getUserInfo()).permanentCity
     let queryObject = [
       {
         key: "tenantId",
-        value: process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity,
+        value: permanentCity ? permanentCity : getTenantId(),
       },
     ];
     const requestBody = {

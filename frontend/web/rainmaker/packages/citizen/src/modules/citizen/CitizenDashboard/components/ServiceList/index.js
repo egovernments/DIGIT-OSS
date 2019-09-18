@@ -43,7 +43,7 @@ class ServiceList extends React.Component {
     });
   }
   render() {
-    const { classes, history } = this.props;
+    const { classes, history, setRoute } = this.props;
     const { actionList } = this.state;
     return (
       <Grid container>
@@ -55,9 +55,10 @@ class ServiceList extends React.Component {
               <Grid item xs={3} sm={1} align="center">
                 <Card
                   className={classes.paper}
-                  onClick={(e) => {
+                  /* onClick={(e) => {
                     history.push(service.navigationURL);
-                  }}
+                  }} */
+                  onClick={() => setRoute(service.navigationURL)}
                 >
                   <CardContent classes={{ root: "card-content-style" }}>
                     <Icon className="service-icon" action={service.leftIcon.split(":")[0]} name={service.leftIcon.split(":")[1]} />
@@ -76,9 +77,10 @@ class ServiceList extends React.Component {
               <Grid className={classes.root} item align="center">
                 <Card
                   className={`${classes.paper} service-module-style`}
-                  onClick={(e) => {
+                  /* onClick={(e) => {
                     history.push(service.navigationURL);
-                  }}
+                  }} */
+                  onClick={() => setRoute(service.navigationURL)}
                 >
                   <CardContent classes={{ root: "card-content-style" }}>
                     <Icon className="service-icon" action={service.leftIcon.split(":")[0]} name={service.leftIcon.split(":")[1]} />

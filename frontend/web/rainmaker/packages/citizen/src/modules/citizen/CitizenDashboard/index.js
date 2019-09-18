@@ -8,9 +8,12 @@ import Label from "egov-ui-kit/utils/translationNode";
 import ServicesNearby from "./components/ServicesNearby";
 import { Notifications, Screen } from "modules/common";
 import LogoutDialog from "egov-ui-kit/common/common/Header/components/LogoutDialog";
-import { getAccessToken, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getAccessToken, getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import { setRoute } from "egov-ui-kit/redux/app/actions";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import get from "lodash/get";
+import "./index.css";
 
 class CitizenDashboard extends Component {
   state = {
@@ -18,74 +21,23 @@ class CitizenDashboard extends Component {
     openDialog: false,
   };
 
-  componentDidMount = () => {
-    const { getNotificationCount, getNotifications, userInfo, notifications } = this.props;
-    if (get(userInfo, "permanentCity")) {
-      const queryObject = [
-        {
-          key: "tenantId",
-          value: get(userInfo, "permanentCity"),
-        },
-      ];
-      const requestBody = {
-        RequestInfo: {
-          apiId: "org.egov.pt",
-          ver: "1.0",
-          ts: 1502890899493,
-          action: "asd",
-          did: "4354648646",
-          key: "xyz",
-          msgId: "654654",
-          requesterId: "61",
-          authToken: getAccessToken(),
-        },
-      };
-      getNotifications(queryObject, requestBody);
-      getNotificationCount(queryObject, requestBody);
-    }
-    // else {
-    //   this.setState({
-    //     openDialog: true,
-    //   });
-    // }
-  };
-
   componentWillReceiveProps = (nextProps) => {
-    const { getNotificationCount, getNotifications } = nextProps;
-    if (!get(this.props, "userInfo.permanentCity")) {
-      if (get(nextProps, "userInfo.permanentCity")) {
-        const permanentCity = get(nextProps, "userInfo.permanentCity");
-        const queryObject = [
-          {
-            key: "tenantId",
-            value: permanentCity,
-          },
-        ];
-        const requestBody = {
-          RequestInfo: {
-            apiId: "org.egov.pt",
-            ver: "1.0",
-            ts: 1502890899493,
-            action: "asd",
-            did: "4354648646",
-            key: "xyz",
-            msgId: "654654",
-            requesterId: "61",
-            authToken: getAccessToken(),
-          },
-        };
-
-        getNotifications(queryObject, requestBody);
-        getNotificationCount(queryObject, requestBody);
-      } else {
-        this.setState({
-          openDialog: true,
-        });
+    const { cityUpdateDialog } = nextProps;
+    const permanentCity = get(nextProps, "userInfo.permanentCity");
+    if (!permanentCity) {
+      if (get(this.props, "userInfo.permanentCity") !== get(nextProps, "userInfo.permanentCity")) {
+        if (cityUpdateDialog) {
+          this.setState({
+            openDialog: true,
+          });
+        }
       }
     }
   };
 
   handleClose = () => {
+    const { prepareFinalObject } = this.props;
+    prepareFinalObject("cityUpdateDialog", false);
     this.setState({ ...this.state, openDialog: false });
   };
 
@@ -105,13 +57,13 @@ class CitizenDashboard extends Component {
   };
 
   render() {
-    const { history, loading, whatsNewEvents } = this.props;
+    const { history, loading, whatsNewEvents, setRoute } = this.props;
     const { openDialog } = this.state;
     return (
       <Screen loading={loading}>
         <SearchService history={history} />
         <div className="citizen-dashboard-cont">
-          {!loading && (
+          {whatsNewEvents && (
             <Label
               label="DASHBOARD_CITIZEN_SERVICES_LABEL"
               fontSize={16}
@@ -119,8 +71,8 @@ class CitizenDashboard extends Component {
               containerStyle={{ paddingTop: 16, paddingBottom: 8 }}
             />
           )}
-          <ServiceList history={history} />
-          {!loading && (
+          <ServiceList history={history} setRoute={setRoute} />
+          {whatsNewEvents && (
             <Label
               label="DASHBOARD_LOCAL_INFORMATION_LABEL"
               fontSize={16}
@@ -128,7 +80,7 @@ class CitizenDashboard extends Component {
               containerStyle={{ paddingTop: 16, paddingBottom: 8 }}
             />
           )}
-          {!loading && <ServicesNearby history={history} onSeviceClick={this.onServiceClick} />}
+          {whatsNewEvents && <ServicesNearby history={history} onSeviceClick={this.onServiceClick} />}
           {whatsNewEvents && whatsNewEvents.length > 0 && (
             <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 16 }}>
               <Label label="DASHBOARD_WHATS_NEW_LABEL" fontSize={16} color="rgba(0, 0, 0, 0.8700000047683716)" />
@@ -155,6 +107,7 @@ class CitizenDashboard extends Component {
 
 const mapStateToProps = (state) => {
   const notifications = get(state.app, "notificationObj.notificationsById");
+  const cityUpdateDialog = get(state.screenConfiguration, "preparedFinalObject.cityUpdateDialog");
   const userInfo = get(state.auth, "userInfo");
   const loading = get(state.app, "notificationObj.loading");
   let filteredNotifications =
@@ -163,7 +116,7 @@ const mapStateToProps = (state) => {
       return item.type === "BROADCAST" || (item.type === "SYSTEMGENERATED" && item.actions);
     });
   let whatsNewEvents = filteredNotifications && filteredNotifications.slice(0, Math.min(3, filteredNotifications.length));
-  return { notifications, userInfo, loading, whatsNewEvents };
+  return { notifications, userInfo, loading, whatsNewEvents, cityUpdateDialog };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -172,6 +125,7 @@ const mapDispatchToProps = (dispatch) => {
     getNotifications: (queryObject, requestBody) => dispatch(getNotifications(queryObject, requestBody)),
     toggleSpinner: () => dispatch(toggleSpinner()),
     setRoute: (path) => dispatch(setRoute(path)),
+    prepareFinalObject: (path, value) => dispatch(prepareFinalObject(path, value)),
   };
 };
 

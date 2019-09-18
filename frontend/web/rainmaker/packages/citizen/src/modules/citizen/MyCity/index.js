@@ -7,50 +7,6 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 
-const data = [
-  {
-    code: "pb.jalandhar",
-    districtCode: "Barnala",
-    population: "156506",
-    malePopulation: "82045",
-    femalePopultion: "74671",
-    workingPopulation: "37.2",
-    literacyRate: "79.2%",
-    languagesSpoken: ["PN", "HN", "EN"],
-  },
-  {
-    code: "pb.amritsar",
-    districtCode: "Bahadaur",
-    population: "116449",
-    malePopulation: "62554",
-    femalePopultion: "53895",
-    workingPopulation: "35.01",
-    literacyRate: "69.46",
-    languagesSpoken: ["PN", "GR", "HN"],
-  },
-
-  {
-    code: "pb.patankot",
-    districtCode: "Dhanaula",
-    population: "19920",
-    malePopulation: "10521",
-    femalePopultion: "6810",
-    workingPopulation: "33.48",
-    literacyRate: "62.63",
-    languagesSpoken: ["GR", "PN", "HN"],
-  },
-  {
-    code: "pb.nawanshahr",
-    districtCode: "Dhanaula",
-    population: "12507",
-    malePopulation: "6810",
-    femalePopultion: "5697",
-    workingPopulation: "33.70",
-    literacyRate: "57.41",
-    languagesSpoken: ["HN", "PN", "EN"],
-  },
-];
-
 class MyCity extends React.Component {
   state = {
     currentTenant: "",
