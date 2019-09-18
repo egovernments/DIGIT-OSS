@@ -6,18 +6,20 @@ import org.egov.web.notification.sms.service.SMSBodyBuilder;
 import org.egov.web.notification.sms.service.SMSService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@ConditionalOnProperty(value = "sms.gateway.to.use", havingValue = "SPICE_DIGITAL")
+@ConditionalOnProperty(value = "sms.gateway.to.use", havingValue = "DEFAULT")
 @Slf4j
-public class SpiceDigitalSMSServiceImpl implements SMSService {
+public class DefaultServiceImpl implements SMSService {
 	
     @Autowired
     private SMSBodyBuilder bodyBuilder;
@@ -40,15 +42,24 @@ public class SpiceDigitalSMSServiceImpl implements SMSService {
 	private void submitToExternalSmsService(Sms sms) {
 		try {
 			String url = smsProperties.getUrl();
-			final MultiValueMap<String, String> requestBody = bodyBuilder.getSmsRequestBody(sms);
-			url = UriComponentsBuilder.fromHttpUrl(url).queryParams(requestBody).toUriString();
-			log.debug("URL: "+url);
-			String response = restTemplate.getForObject(url, String.class);
+            HttpEntity<HttpEntity<MultiValueMap<String, String>>> request = new HttpEntity<>(getRequest(sms), getHttpHeaders());
+			String response = restTemplate.postForObject(url, request, String.class);
 			log.info("response: "+response);
 		} catch (RestClientException e) {
 			log.error("Error occurred while sending SMS to " + sms.getMobileNumber(), e);
 			throw e;
 		}
+	}
+	
+	private HttpEntity<MultiValueMap<String, String>> getRequest(Sms sms) {
+		final MultiValueMap<String, String> requestBody = bodyBuilder.getSmsRequestBody(sms);
+		return new HttpEntity<>(requestBody, getHttpHeaders());
+	}
+
+	private HttpHeaders getHttpHeaders() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		return headers;
 	}
 
 }
