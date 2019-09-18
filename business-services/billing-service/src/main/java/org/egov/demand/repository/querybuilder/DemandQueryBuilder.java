@@ -170,10 +170,6 @@ public class DemandQueryBuilder {
 			addAndClause(demandQuery);
 			demandQuery.append("dmd.status=?");
 			preparedStatementValues.add(demandCriteria.getStatus());
-		} else {
-
-			addAndClause(demandQuery);
-			demandQuery.append("dmd.status='ACTIVE'");
 		}
 		
 		if (demandCriteria.getDemandId() != null && !demandCriteria.getDemandId().isEmpty()) {
