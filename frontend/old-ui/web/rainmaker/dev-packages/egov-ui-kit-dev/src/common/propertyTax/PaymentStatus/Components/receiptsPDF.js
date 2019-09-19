@@ -3,6 +3,8 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import msevaLogo from "egov-ui-kit/assets/images/pblogo.png";
 import store from "redux/store";
 import { downloadPDFFileUsingBase64 } from "egov-ui-framework/ui-utils/commons"
+import {localStorageGet} from "egov-ui-kit/utils/localStorageUtils";
+
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -476,8 +478,10 @@ const generateReceipt = (role, details, generalMDMSDataById, receiptImageUrl, is
 
     if (doNotDownloadReceipt !== true)
     {
-      downloadPDFFileUsingBase64(receiptPDF, `${details.ReceiptNo}.pdf`);
-      // receiptPDF.download(`${details.ReceiptNo}.pdf`);
+      if (localStorageGet("rd-propertyId")==details.propertyId && localStorageGet("rd-assessmentNumber")==details.propertyDetails[0].assessmentNumber) {
+        downloadPDFFileUsingBase64(receiptPDF, `${details.ReceiptNo}.pdf`);
+        // receiptPDF.download(`${details.ReceiptNo}.pdf`);
+      }
     }
   }
 };
