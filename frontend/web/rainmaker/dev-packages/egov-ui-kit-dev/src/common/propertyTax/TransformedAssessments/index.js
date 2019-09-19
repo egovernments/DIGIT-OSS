@@ -176,7 +176,7 @@ export const getCompletedTransformedItems = (assessmentsByStatus=[], cities, loc
             </div>
          {  <Divider style={{ marginBottom: 0 ,    marginTop: "15px" }} />}
          {/* { index!=0 && <Divider style={{ marginBottom: 0 ,    marginTop: "15px" }} />} */}
-    
+
           </div>
         ),
         // secondaryText: (
