@@ -8,8 +8,15 @@ import UserJobsCodeFilter from "./UserJobsCodeFilter";
 import RequesterNamesFilter from "./RequesterNamesFilter";
 import RequesterFileNamesFilter from "./RequesterFileNamesFilter";
 import Grid from "@material-ui/core/Grid";
+import Snackbar from "material-ui/Snackbar";
 
-const FiltersView = ({ handleApplyFilter, handleResetFilter }) => {
+const FiltersView = ({
+  handleApplyFilter,
+  handleResetFilter,
+  message,
+  messageBarOpen,
+  errorMessage
+}) => {
   return (
     <div>
       <CardUi cardTitle="Uploader- Search Jobs">
@@ -21,6 +28,12 @@ const FiltersView = ({ handleApplyFilter, handleResetFilter }) => {
               paddingBottom: "8px"
             }}
           > */}
+          <Snackbar
+            open={messageBarOpen}
+            message={errorMessage}
+            autoHideDuration={2000}
+          />
+
           <Grid sm="4">
             <UserJobsCodeFilter />
           </Grid>
