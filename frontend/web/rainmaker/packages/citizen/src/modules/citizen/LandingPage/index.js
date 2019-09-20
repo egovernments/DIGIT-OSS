@@ -74,6 +74,17 @@ class LandingPage extends Component {
       route: "tradelicense-citizen/home",
       iconStyle: { width: "50px", height: "50px", marginBottom: "10px", fill: "rgba(0, 0, 0, 0.60)" },
     },
+    FIRENOC: {
+      moduleTitle: "ACTION_TEST_FIRENOC",
+      moduleDescription: "CS_LANDING_PAGE_NOC_DESCRIPTION",
+      button1: "ACTION_TEST_FIRENOC",
+      button2: "CS_HOME_HEADER_HOW_IT_WORKS",
+      id: "citizen-tl-landingpage-button",
+      iconAction: "social",
+      iconName: "people",
+      route: "fire-noc/home",
+      iconStyle: { width: "50px", height: "50px", marginBottom: "10px", fill: "rgba(0, 0, 0, 0.60)" },
+    },
   };
 
   render() {

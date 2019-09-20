@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import Label from "egov-ui-kit/utils/translationNode";
 import { Card } from "components";
-import orderBy from "lodash/orderBy";
+import { getWFConfig } from "./workflowRedirectionConfig";
 import React from "react";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
@@ -64,11 +64,11 @@ class InboxData extends React.Component {
     let contextPath =
       status === "Initiated"
         ? process.env.NODE_ENV === "production"
-          ? "/employee/tradelicence/apply"
-          : "/tradelicence/apply"
+          ? `/employee${getWFConfig(row[0].subtext).INITIATED}`
+          : getWFConfig(row[0].subtext).INITIATED
         : process.env.NODE_ENV === "production"
-        ? "/employee/tradelicence/search-preview"
-        : "/tradelicence/search-preview";
+        ? `/employee${getWFConfig(row[0].subtext).DEFAULT}`
+        : getWFConfig(row[0].subtext).DEFAULT;
 
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
     window.location.href = `${baseUrl}${contextPath}?${queryParams}`;
@@ -194,41 +194,4 @@ export const Taskboard = ({ data }) => {
 
 const onModuleCardClick = (route) => {
   window.location.href = document.location.origin + route;
-};
-
-export const Boxboard = ({ data }) => {
-  return (
-    <div className="inbox-module-container">
-      {data.map((item, i) => {
-        return (
-          <div className="inbox-module-card" onClick={() => onModuleCardClick(item.route)}>
-            <Card
-              className="inbox-card inbox-card-top"
-              key={i}
-              textChildren={
-                <div>
-                  <div
-                    style={{
-                      marginTop: 20,
-                    }}
-                    className="head"
-                  >
-                    {item.head}
-                  </div>
-                  <div
-                    style={{
-                      marginTop: 20,
-                    }}
-                    className="body"
-                  >
-                    {item.body}
-                  </div>
-                </div>
-              }
-            />
-          </div>
-        );
-      })}
-    </div>
-  );
 };

@@ -501,5 +501,7 @@ export const getPattern = type => {
       return /^[a-zA-Z0-9\s()!-@#&.,?/]{1,65}$/i;
     case "eventDescription":
       return /^[a-zA-Z0-9\s()!-@#&.,?/]{1,500}$/i;
+    case "FireNOCNo":
+      return /^[a-zA-Z0-9-]*$/i;
   }
 };

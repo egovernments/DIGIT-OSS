@@ -62,6 +62,7 @@ class CommonShareContainer extends React.Component {
 
     const roleCodes =
       localRoles &&
+      localRoles.length > 0 &&
       localRoles.map((elem) => {
         return get(elem, "code");
       });
