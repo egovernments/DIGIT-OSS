@@ -5,14 +5,17 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { TaskDialog } from "egov-workflow/ui-molecules-local";
 import { getWFConfig } from "./workflowRedirectionConfig";
-import { addWflowFileUrl, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
+import {
+  addWflowFileUrl,
+  orderWfProcessInstances
+} from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { connect } from "react-redux";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import Label from "egov-ui-kit/utils/translationNode";
 import { Card } from "components";
-import orderBy from "lodash/orderBy";
+import { getWFConfig } from "./workflowRedirectionConfig";
 import React from "react";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
@@ -20,36 +23,49 @@ import "./index.css";
 class InboxData extends React.Component {
   state = {
     dialogOpen: false,
-    workflowHistory: [],
+    workflowHistory: []
   };
 
-  getProcessIntanceData = async (pid) => {
+  getProcessIntanceData = async pid => {
     const tenantId = getTenantId();
-    const queryObject = [{ key: "businessIds", value: pid }, { key: "history", value: true }, { key: "tenantId", value: tenantId }];
-    const payload = await httpRequest("egov-workflow-v2/egov-wf/process/_search?", "", queryObject);
-    const processInstances = payload && payload.ProcessInstances.length > 0 && orderWfProcessInstances(payload.ProcessInstances);
+    const queryObject = [
+      { key: "businessIds", value: pid },
+      { key: "history", value: true },
+      { key: "tenantId", value: tenantId }
+    ];
+    const payload = await httpRequest(
+      "egov-workflow-v2/egov-wf/process/_search?",
+      "",
+      queryObject
+    );
+    const processInstances =
+      payload &&
+      payload.ProcessInstances.length > 0 &&
+      orderWfProcessInstances(payload.ProcessInstances);
     return processInstances;
   };
 
-  onHistoryClick = async (moduleNumber) => {
+  onHistoryClick = async moduleNumber => {
     const { toggleSnackbarAndSetText, prepareFinalObject } = this.props;
-    const processInstances = await this.getProcessIntanceData(moduleNumber.text);
+    const processInstances = await this.getProcessIntanceData(
+      moduleNumber.text
+    );
     if (processInstances && processInstances.length > 0) {
       await addWflowFileUrl(processInstances, prepareFinalObject);
       this.setState({
-        dialogOpen: true,
+        dialogOpen: true
       });
     } else {
       toggleSnackbarAndSetText(true, {
         labelName: "API error",
-        labelKey: "ERR_API_ERROR",
+        labelKey: "ERR_API_ERROR"
       });
     }
   };
 
   onDialogClose = () => {
     this.setState({
-      dialogOpen: false,
+      dialogOpen: false
     });
   };
 
@@ -87,7 +103,11 @@ class InboxData extends React.Component {
           <TableRow>
             {data.headers.map((item, index) => {
               let classNames = `inbox-data-table-headcell inbox-data-table-headcell-${index}`;
-              return <TableCell className={classNames}>{<Label label={item} />}</TableCell>;
+              return (
+                <TableCell className={classNames}>
+                  {<Label label={item} />}
+                </TableCell>
+              );
             })}
           </TableRow>
         </TableHead>
@@ -105,15 +125,23 @@ class InboxData extends React.Component {
                     if (item.subtext) {
                       return (
                         <TableCell className={classNames}>
-                          <div className="inbox-cell-text">{<Label label={item.text} />}</div>
-                          <div className="inbox-cell-subtext">{<Label label={item.subtext} />}</div>
+                          <div className="inbox-cell-text">
+                            {<Label label={item.text} />}
+                          </div>
+                          <div className="inbox-cell-subtext">
+                            {<Label label={item.subtext} />}
+                          </div>
                         </TableCell>
                       );
                     } else if (item.badge) {
                       return (
                         <TableCell className={classNames}>
                           <span
-                            class={item.text >= 1 ? "inbox-cell-badge-primary sla--positive-value" : "inbox-cell-badge-primary sla--negative-value"}
+                            class={
+                              item.text >= 1
+                                ? "inbox-cell-badge-primary sla--positive-value"
+                                : "inbox-cell-badge-primary sla--negative-value"
+                            }
                           >
                             {item.text}
                           </span>
@@ -122,7 +150,10 @@ class InboxData extends React.Component {
                     } else if (item.historyButton) {
                       return (
                         <TableCell className={classNames}>
-                          <div onClick={() => onHistoryClick(row[1])} style={{ cursor: "pointer" }}>
+                          <div
+                            onClick={() => onHistoryClick(row[1])}
+                            style={{ cursor: "pointer" }}
+                          >
                             <i class="material-icons">history</i>
                           </div>
                         </TableCell>
@@ -131,7 +162,10 @@ class InboxData extends React.Component {
                       return (
                         <TableCell className={classNames}>
                           {index === 1 ? (
-                            <div onClick={() => getModuleLink(item, row, index)} style={{ cursor: "pointer" }}>
+                            <div
+                              onClick={() => getModuleLink(item, row, index)}
+                              style={{ cursor: "pointer" }}
+                            >
                               <a>{item.text} </a>
                             </div>
                           ) : (
@@ -147,7 +181,11 @@ class InboxData extends React.Component {
                 </TableRow>
               );
             })}
-            <TaskDialog open={this.state.dialogOpen} onClose={onDialogClose} history={ProcessInstances} />
+            <TaskDialog
+              open={this.state.dialogOpen}
+              onClose={onDialogClose}
+              history={ProcessInstances}
+            />
           </TableBody>
         )}
       </Table>
@@ -155,7 +193,7 @@ class InboxData extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const { screenConfiguration } = state;
   const { preparedFinalObject } = screenConfiguration;
   const { workflow } = preparedFinalObject;
@@ -163,10 +201,12 @@ const mapStateToProps = (state) => {
   return { ProcessInstances };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    toggleSnackbarAndSetText: (open, message) => dispatch(toggleSnackbarAndSetText(open, message)),
-    prepareFinalObject: (path, value) => dispatch(prepareFinalObject(path, value)),
+    toggleSnackbarAndSetText: (open, message) =>
+      dispatch(toggleSnackbarAndSetText(open, message)),
+    prepareFinalObject: (path, value) =>
+      dispatch(prepareFinalObject(path, value))
   };
 };
 
@@ -196,43 +236,6 @@ export const Taskboard = ({ data }) => {
   );
 };
 
-const onModuleCardClick = (route) => {
+const onModuleCardClick = route => {
   window.location.href = document.location.origin + route;
-};
-
-export const Boxboard = ({ data }) => {
-  return (
-    <div className="inbox-module-container">
-      {data.map((item, i) => {
-        return (
-          <div className="inbox-module-card" onClick={() => onModuleCardClick(item.route)}>
-            <Card
-              className="inbox-card inbox-card-top"
-              key={i}
-              textChildren={
-                <div>
-                  <div
-                    style={{
-                      marginTop: 20,
-                    }}
-                    className="head"
-                  >
-                    {item.head}
-                  </div>
-                  <div
-                    style={{
-                      marginTop: 20,
-                    }}
-                    className="body"
-                  >
-                    {item.body}
-                  </div>
-                </div>
-              }
-            />
-          </div>
-        );
-      })}
-    </div>
-  );
 };

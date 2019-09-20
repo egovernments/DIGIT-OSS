@@ -8,6 +8,8 @@ import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import find from "lodash/find";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getModuleName } from "./moduleConfig";
+
 class ComponentInterface extends React.Component {
   constructor(props) {
     super(props);
@@ -110,25 +112,6 @@ class ComponentInterface extends React.Component {
       roleDefination = {},
       applicationStatus
     } = this.props;
-    //console.log("props applicationStatus is....", applicationStatus);
-
-    // if (visible && !isEmpty(roleDefination)) {
-    //   const splitList = get(roleDefination, "rolePath").split(".");
-    //   const localdata = JSON.parse(localStorageGet(splitList[0]));
-    //   const localRoles = get(
-    //     localdata,
-    //     splitList.slice(1).join("."),
-    //     localdata
-    //   );
-
-    //   const roleCodes = localRoles.map(elem => {
-    //     return get(elem, "code");
-    //   });
-    //   const roles = get(roleDefination, "roles");
-    //   let found = roles.some(elem => roleCodes.includes(elem));
-    //   visible = found;
-    // }
-
     if (visible && !isEmpty(roleDefination)) {
       const splitList = get(roleDefination, "rolePath").split(".");
       const localdata = JSON.parse(localStorageGet(splitList[0]));
@@ -148,9 +131,9 @@ class ComponentInterface extends React.Component {
         const businessServiceData = JSON.parse(
           localStorageGet("businessServiceData")
         );
-        const data = find(businessServiceData, { businessService: "NewTL" });
-        //let found = actions.some(item => roleCodes.includes(item));
-
+        const data = find(businessServiceData, {
+          businessService: getModuleName(window.location.pathname)
+        });
         const filteredData =
           data &&
           data.states &&
@@ -207,7 +190,16 @@ class ComponentInterface extends React.Component {
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
   const { preparedFinalObject } = screenConfiguration;
-  const applicationStatus = get(preparedFinalObject, "Licenses[0].status");
+  // const applicationStatus = get(preparedFinalObject, "Licenses[0].status");
+  const moduleName = getModuleName(window.location.pathname);
+  let jsonPath = "";
+  if (moduleName === "FIRENOC") {
+    jsonPath = "FireNOCs[0].fireNOCDetails.status";
+  } else if (moduleName === "NewTL") {
+    jsonPath = "Licenses[0].status";
+  }
+  const applicationStatus = get(preparedFinalObject, jsonPath);
+
   return { applicationStatus };
 };
 

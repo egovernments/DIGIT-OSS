@@ -77,6 +77,15 @@ class LandingPage extends Component {
       route: "tradelicense/search",
       iconStyle: { width: "50px", height: "50px", marginBottom: "10px", fill: "rgba(0, 0, 0, 0.60)" },
     },
+    NOC: {
+      moduleTitle: "NOC_COMMON_NOC",
+      button1: "NOC_COMMON_NOC",
+      // borderLeftColor: { borderLeft: "4px solid #add8e6" },
+      iconAction: "Action",
+      iconName: "description",
+      route: "fire-noc/search",
+      iconStyle: { width: "50px", height: "50px", marginBottom: "10px", fill: "rgba(0, 0, 0, 0.60)" },
+    },
   };
   render() {
     const { history, name, citiesByModule } = this.props;

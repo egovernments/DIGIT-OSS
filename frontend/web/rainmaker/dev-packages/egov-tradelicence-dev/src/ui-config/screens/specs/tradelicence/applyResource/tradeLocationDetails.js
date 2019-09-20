@@ -33,7 +33,7 @@ export const tradeLocationDetails = getCommonCard(
             labelName: "City",
             labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
           },
-          labelPrefix: {
+          localePrefix: {
             moduleName: "TENANT",
             masterName: "TENANTS"
           },
