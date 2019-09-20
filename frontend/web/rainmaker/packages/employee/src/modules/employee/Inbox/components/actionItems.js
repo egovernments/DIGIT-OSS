@@ -22,9 +22,10 @@ export const Taskboard = ({ data }) => {
   );
 };
 
-const onModuleCardClick = (route) => {
-  const url = process.env.NODE_ENV === "production" ? `employee/${route}` : route;
-  window.location.href = document.location.origin + "/" + url;
+const onModuleCardClick = (route, setRoute) => {
+  // const url = process.env.NODE_ENV === "production" ? `employee/${route}` : route;
+  // window.location.href = window.origin + "/" + url;
+  setRoute("/" + route);
 };
 
 const iconStyle = {
@@ -32,12 +33,16 @@ const iconStyle = {
   height: "46.02px",
 };
 
-export const Boxboard = ({ data }) => {
+export const Boxboard = ({ data, setRoute }) => {
   return (
     <div className="inbox-module-container">
       {data.map((item, i) => {
         return (
-          <div className="inbox-module-card" id={`emp-${item.displayName.split(" ")[0]}-card`} onClick={() => onModuleCardClick(item.navigationURL)}>
+          <div
+            className="inbox-module-card"
+            id={`emp-${item.displayName.split(" ")[0]}-card`}
+            onClick={() => onModuleCardClick(item.navigationURL, setRoute)}
+          >
             <Card
               className="inbox-card inbox-card-top"
               key={i}

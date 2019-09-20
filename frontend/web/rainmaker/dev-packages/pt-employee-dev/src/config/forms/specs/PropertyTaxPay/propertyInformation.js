@@ -7,10 +7,9 @@ import {
   dummy,
   city
 } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
-import { prepareFormData } from "egov-ui-kit/redux/common/actions";
 import set from "lodash/set";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const formConfig = {
   name: "propertyInformation",
@@ -57,7 +56,7 @@ const formConfig = {
     return action;
   },
   afterInitForm: (action, store, dispatch) => {
-    let tenantId = JSON.parse(getUserInfo()).tenantId;
+    let tenantId = getTenantId();
     dispatch(handleFieldChange("propertyInformation", "city", tenantId));
     return action;
   },

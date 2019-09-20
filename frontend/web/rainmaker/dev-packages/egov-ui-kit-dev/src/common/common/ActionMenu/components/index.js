@@ -111,6 +111,12 @@ class ActionMenuComp extends Component {
         searchText: "",
       });
     }
+    /**
+     * Reset menu after arraylist changes
+     */
+    if (nextProps && nextProps.actionListArr != this.props.actionListArr) {
+      this.initialMenuUpdate();
+    }
   }
   changeModulesActions(modules, items) {
     this.setState({

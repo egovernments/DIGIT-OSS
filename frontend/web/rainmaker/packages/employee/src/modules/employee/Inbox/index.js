@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import TableData from "./components/TableData";
 import Label from "egov-ui-kit/utils/translationNode";
 import { Boxboard } from "./components/actionItems";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const iconStyle = {
   width: "48px",
@@ -33,7 +34,7 @@ class Inbox extends Component {
     });
   }
   render() {
-    const { name } = this.props;
+    const { name, setRoute } = this.props;
     const { actionList, hasWorkflow } = this.state;
     return (
       <div>
@@ -42,7 +43,7 @@ class Inbox extends Component {
           <Label className="landingPageUser" label={name} />
         </div>
 
-        {actionList && <Boxboard data={actionList} />}
+        {actionList && <Boxboard data={actionList} setRoute={setRoute} />}
         {hasWorkflow && <TableData />}
       </div>
     );
@@ -58,7 +59,13 @@ const mapStateToProps = (state) => {
   return { name, menu };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setRoute: (route) => dispatch(setRoute(route)),
+  };
+};
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(Inbox);
