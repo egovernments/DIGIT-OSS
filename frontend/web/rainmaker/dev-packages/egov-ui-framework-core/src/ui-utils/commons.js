@@ -21,9 +21,7 @@ export const addComponentJsonpath = (components, jsonPath = "components") => {
         components[
           componentKey
         ].componentJsonpath = `${jsonPath}.${componentKey}`;
-        const childJsonpath = `${
-          components[componentKey].componentJsonpath
-        }.children`;
+        const childJsonpath = `${components[componentKey].componentJsonpath}.children`;
         addComponentJsonpath(components[componentKey].children, childJsonpath);
       } else {
         components[
@@ -514,4 +512,21 @@ export const validateFields = (
     }
   }
   return isFormValid;
+};
+
+// Get user data from uuid API call
+export const getUserDataFromUuid = async bodyObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/user/_search",
+      "",
+      [],
+      bodyObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
 };

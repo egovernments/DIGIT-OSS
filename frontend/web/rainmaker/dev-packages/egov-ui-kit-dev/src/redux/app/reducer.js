@@ -1,6 +1,7 @@
 import * as actionTypes from "./actionTypes";
 import { initLocalizationLabels } from "./utils";
 import { stat } from "fs";
+import { transformById } from "egov-ui-kit/utils/commons";
 import { getLocale, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 
 const locale = getLocale() || "en_IN";
@@ -97,7 +98,7 @@ const appReducer = (state = initialState, action) => {
         ...state,
         notificationObj: {
           loading: false,
-          notifications: action.payload,
+          notificationsById: action.payload && transformById(action.payload, "id"),
         },
       };
     }

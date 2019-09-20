@@ -7,17 +7,18 @@ import "./index.css";
 class ServicesNearby extends React.Component {
   getServicesNearBy = () => {
     return [
-      // {
-      //   label: "My City",
-      //   icon: <Icon className="service-icon" action="custom" name="home-city-outline" />,
-      //   route: "",
-      // },
-      // { label: "Places Near Me", icon: <Icon className="service-icon" action="custom" name="map-marker" />, route: "" },
+      
       {
         label: "Events",
         icon: <Icon className="service-icon" action="custom" name="calendar" />,
         route: "events",
-       }
+       },
+       {
+        label: "My City",
+        icon: <Icon className="service-icon" action="custom" name="home-city-outline" />,
+        route: "",
+      },
+      { label: "Places Near Me", icon: <Icon className="service-icon" action="custom" name="map-marker" />, route: "" },
       // { label: "Key Documents", icon: <Icon className="service-icon" action="custom" name="library-books" />, route: "" },
     ];
   };

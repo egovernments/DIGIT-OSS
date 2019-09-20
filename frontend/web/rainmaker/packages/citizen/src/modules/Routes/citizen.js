@@ -12,6 +12,7 @@ import CitizenDashboard from "modules/citizen/CitizenDashboard";
 import HowItWorks from "modules/citizen/HowItWorks";
 import ContactUs from "modules/citizen/ContactUs";
 import MyNotifications from "modules/citizen/MyNotifications";
+import WhatsNew from "modules/citizen/WhatsNew";
 import { EventDetails } from "modules/common";
 import Events from "modules/citizen/Events";
 import { ImageModalDisplay } from "modules/common";
@@ -130,6 +131,16 @@ const routes = [
     options: {
       hideFooter: true,
       title: "CS_HEADER_NOTIFICATIONS",
+      helpButton: true,
+    },
+  },
+  {
+    path: "whats-new",
+    component: WhatsNew,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      title: "CS_HEADER_WHATSNEW",
       helpButton: true,
     },
   },
