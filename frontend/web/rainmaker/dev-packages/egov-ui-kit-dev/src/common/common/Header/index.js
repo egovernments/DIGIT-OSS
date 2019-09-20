@@ -200,7 +200,15 @@ class Header extends Component {
           width={300}
           // containerStyle={{ top: "64px" }}
         />
-        <LogoutDialog logoutPopupOpen={logoutPopupOpen} closeLogoutDialog={_closeLogoutDialog} logout={_logout} />
+        <LogoutDialog
+          logoutPopupOpen={logoutPopupOpen}
+          closeLogoutDialog={_closeLogoutDialog}
+          logout={_logout}
+          oktext={"CORE_LOGOUTPOPUP_LOGOUT"}
+          canceltext={"CORE_LOGOUTPOPUP_CANCEL"}
+          title={"CORE_COMMON_LOGOUT"}
+          body={"CORE_LOGOUTPOPUP_CONFIRM"}
+        />
         <SortDialog sortPopOpen={sortPopOpen} closeSortDialog={closeSortDialog} />
       </div>
     );

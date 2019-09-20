@@ -7,7 +7,7 @@ import {
 import { getSearchResults } from "../../../../..//ui-utils/commons";
 import { getTextToLocalMapping } from "./searchResults";
 import { validateFields } from "../../utils";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 export const getDeptName = (state, codes) => {
   let deptMdmsData = get(
@@ -38,7 +38,7 @@ export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   const tenantId =
     get(state.screenConfiguration.preparedFinalObject, "searchScreen.ulb") ||
-    JSON.parse(getUserInfo()).tenantId;
+    getTenantId();
   let queryObject = [
     {
       key: "tenantId",

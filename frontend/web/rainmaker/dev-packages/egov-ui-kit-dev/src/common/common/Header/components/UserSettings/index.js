@@ -1,17 +1,22 @@
-import React, { Component } from "react";
 import { DropDown, Icon, Image, List } from "components";
+import { getTransformedLocale, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import emptyFace from "egov-ui-kit/assets/images/download.png";
-import { CommonMenuItems } from "../NavigationDrawer/commonMenuItems";
-import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { connect } from "react-redux";
+import { getLocale, getTenantId, setTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { CommonMenuItems } from "../NavigationDrawer/commonMenuItems";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import LogoutDialog from "../LogoutDialog";
 import "./index.css";
 
 class UserSettings extends Component {
   state = {
     languageSelected: getLocale(),
     displayAccInfo: false,
+    tenantSelected: getTenantId(),
+    tempTenantSelected: getTenantId(),
+    open: false,
   };
   style = {
     baseStyle: {
@@ -41,11 +46,39 @@ class UserSettings extends Component {
       display: "flex",
       alignItems: "center",
     },
+    baseTenantStyle: {
+      background: "#ffffff",
+      height: "65px",
+      marginRight: "30px",
+      width: "120px",
+      marginBottom: "24px",
+    },
   };
 
   onChange = (event, index, value) => {
-    this.setState({ languageSelected: value });
+    this.setState({ ...this.state, languageSelected: value });
     this.props.fetchLocalizationLabel(value);
+  };
+
+  handleTenantChange = () => {
+    let tenantSelected = this.state.tempTenantSelected;
+    this.setState({ ...this.state, tenantSelected: tenantSelected });
+    setTenantId(tenantSelected);
+    this.props.setRoute("/");
+  };
+
+  onTenantChange = (event, index, value) => {
+    if (location.pathname.includes("/inbox")) {
+      this.setState({ ...this.state, tenantSelected: value });
+      setTenantId(value);
+      this.props.setRoute("/");
+    } else {
+      this.setState({ ...this.state, open: true, tempTenantSelected: value });
+    }
+  };
+
+  handleClose = () => {
+    this.setState({ ...this.state, open: false });
   };
 
   toggleAccInfo() {
@@ -55,11 +88,43 @@ class UserSettings extends Component {
   }
 
   render() {
-    const { languageSelected, displayAccInfo } = this.state;
+    const { languageSelected, displayAccInfo, tenantSelected, open } = this.state;
     const { style } = this;
-    const { onIconClick, userInfo, handleItemClick, hasLocalisation, languages } = this.props;
+    const { onIconClick, userInfo, handleItemClick, hasLocalisation, languages, fetchLocalizationLabel } = this.props;
+
+    /**
+     * Get All tenant id's from (user info -> roles) to populate dropdown
+     */
+    let tenantIdsList = get(userInfo, "roles", []).map((role) => {
+      return role.tenantId;
+    });
+    tenantIdsList = [...new Set(tenantIdsList)];
+    tenantIdsList = tenantIdsList.map((tenantId) => {
+      return { value: tenantId, label: getLocaleLabels(tenantId, "TENANT_TENANTS_" + getTransformedLocale(tenantId)) };
+    });
+
     return (
       <div className="userSettingsContainer">
+        <LogoutDialog
+          logoutPopupOpen={open}
+          closeLogoutDialog={this.handleClose}
+          logout={this.handleTenantChange}
+          oktext={"CORE_CHANGE_TENANT_OK"}
+          canceltext={"CORE_CHANGE_TENANT_CANCEL"}
+          title={"CORE_CHANGE_TENANT"}
+          body={"CORE_CHANGE_TENANT_DESCRIPTION"}
+        />
+        {process.env.REACT_APP_NAME === "Employee" && (
+          <DropDown
+            onChange={this.onTenantChange}
+            listStyle={style.listStyle}
+            style={style.baseTenantStyle}
+            labelStyle={style.label}
+            dropDownData={tenantIdsList}
+            value={tenantSelected}
+            underlineStyle={{ borderBottom: "none" }}
+          />
+        )}
         {hasLocalisation && (
           <DropDown
             onChange={this.onChange}
@@ -109,7 +174,13 @@ const mapStateToProps = ({ common }) => {
   return { languages };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setRoute: (route) => dispatch(setRoute(route)),
+  };
+};
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(UserSettings);
