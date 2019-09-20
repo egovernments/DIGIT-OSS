@@ -4,6 +4,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { TaskDialog } from "egov-workflow/ui-molecules-local";
+import { getWFConfig } from "./workflowRedirectionConfig";
 import { addWflowFileUrl, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
@@ -39,7 +40,10 @@ class InboxData extends React.Component {
         dialogOpen: true,
       });
     } else {
-      toggleSnackbarAndSetText(true, { labelName: "API error", labelKey: "ERR_API_ERROR" });
+      toggleSnackbarAndSetText(true, {
+        labelName: "API error",
+        labelKey: "ERR_API_ERROR",
+      });
     }
   };
 
@@ -64,11 +68,11 @@ class InboxData extends React.Component {
     let contextPath =
       status === "Initiated"
         ? process.env.NODE_ENV === "production"
-          ? "/employee/tradelicence/apply"
-          : "/tradelicence/apply"
+          ? `/employee${getWFConfig(row[0].text).INITIATED}`
+          : getWFConfig(row[0].text).INITIATED
         : process.env.NODE_ENV === "production"
-        ? "/employee/tradelicence/search-preview"
-        : "/tradelicence/search-preview";
+        ? `/employee${getWFConfig(row[0].text).DEFAULT}`
+        : getWFConfig(row[0].text).DEFAULT;
 
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
     window.location.href = `${baseUrl}${contextPath}?${queryParams}`;

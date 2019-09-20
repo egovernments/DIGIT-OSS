@@ -1,8 +1,15 @@
 import React from "react";
 import { handleScreenConfigurationFieldChange as handleField, toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getLocaleLabels, getTransformedLocalStorgaeLabels, epochToYmd } from "egov-ui-framework/ui-utils/commons";
+import {
+  getLocaleLabels,
+  getTransformedLocalStorgaeLabels,
+  epochToYmd,
+  getUserDataFromUuid,
+  transformById,
+} from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getEventsByType, sortByEpoch, getEpochForDate } from "../utils";
+import get from "lodash/get";
 
 // function sleep(ms) {
 //   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -20,24 +27,40 @@ export const searchApiCall = async (state, dispatch) => {
   const events = await getEventsByType(queryObject);
 
   const localisationLabels = getTransformedLocalStorgaeLabels();
+  //var currentDate = new Date().getTime();
+  const uuidArray = [];
+  events &&
+    events.forEach((element) => {
+      return uuidArray.push(element.auditDetails.lastModifiedBy);
+    });
+
+  let bodyObject = {
+    uuid: uuidArray,
+  };
+  let response = await getUserDataFromUuid(bodyObject);
+  const userResponse = response && transformById(response.user, "uuid");
   try {
     let data =
       events &&
-      events.map((item) => ({
-        [getLocaleLabels("Message", "EVENTS_MESSAGE_LABEL", localisationLabels)]: item.name,
-        [getLocaleLabels("Posting Date", "EVENTS_POSTING_DATE_LABEL", localisationLabels)]: epochToYmd(item.auditDetails.lastModifiedTime),
-        [getLocaleLabels("Start Date", "EVENTS_START_DATE_LABEL", localisationLabels)]: item.eventDetails
-          ? epochToYmd(item.eventDetails.fromDate)
-          : "-",
-        [getLocaleLabels("End Date", "EVENTS_END_DATE_LABEL", localisationLabels)]: item.eventDetails ? epochToYmd(item.eventDetails.toDate) : "-",
-        [getLocaleLabels("Status", "EVENTS_STATUS_LABEL", localisationLabels)]: getLocaleLabels(
-          item.status,
-          `EVENTS_${item.status}_LABEL`,
-          localisationLabels
-        ),
-        id: item.id,
-        tenantId: item.tenantId,
-      }));
+      events.map((item) => {
+        //const status = item.eventDetails && item.eventDetails.toDate > currentDate ? item.status : "INACTIVE";
+        return {
+          [getLocaleLabels("Message", "EVENTS_MESSAGE_LABEL", localisationLabels)]: item.name,
+          [getLocaleLabels("Posting Date", "EVENTS_POSTING_DATE_LABEL", localisationLabels)]: epochToYmd(item.auditDetails.lastModifiedTime),
+          [getLocaleLabels("Start Date", "EVENTS_START_DATE_LABEL", localisationLabels)]: item.eventDetails
+            ? epochToYmd(item.eventDetails.fromDate)
+            : "-",
+          [getLocaleLabels("End Date", "EVENTS_END_DATE_LABEL", localisationLabels)]: item.eventDetails ? epochToYmd(item.eventDetails.toDate) : "-",
+          [getLocaleLabels("Posted By", "EVENTS_POSTEDBY_LABEL", localisationLabels)]: get(userResponse, item.auditDetails.lastModifiedBy).name,
+          [getLocaleLabels("Status", "EVENTS_STATUS_LABEL", localisationLabels)]: getLocaleLabels(
+            item.status,
+            `EVENTS_${item.status}_LABEL`,
+            localisationLabels
+          ),
+          id: item.id,
+          tenantId: item.tenantId,
+        };
+      });
     dispatch(handleField("search", "components.div.children.searchResults", "props.data", data));
   } catch (error) {
     dispatch(toggleSnackbar(true, error.message, "error"));
@@ -46,7 +69,7 @@ export const searchApiCall = async (state, dispatch) => {
 };
 
 const onRowClick = (rowData) => {
-  window.location.href = `create?uuid=${rowData[6]}&tenantId=${rowData[5]}`;
+  window.location.href = `create?uuid=${rowData[7]}&tenantId=${rowData[6]}`;
 };
 
 export const searchResults = () => {
@@ -60,6 +83,7 @@ export const searchResults = () => {
         getLocaleLabels("Posting Date", "EVENTS_POSTING_DATE_LABEL", localisationLabels),
         getLocaleLabels("Start Date", "EVENTS_START_DATE_LABEL", localisationLabels),
         getLocaleLabels("End Date", "EVENTS_END_DATE_LABEL", localisationLabels),
+        getLocaleLabels("Posted By", "EVENTS_POSTEDBY_LABEL", localisationLabels),
         {
           name: getLocaleLabels("Status", "EVENTS_STATUS_LABEL", localisationLabels),
           options: {

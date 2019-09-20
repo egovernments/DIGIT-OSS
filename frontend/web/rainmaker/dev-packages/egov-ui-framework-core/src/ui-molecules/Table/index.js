@@ -19,9 +19,19 @@ class Table extends React.Component {
         MUIDataTableBodyCell: {
           root: {
             "&:nth-child(2)": {
-              color: "#2196F3"
-              //fontSize: 14
+              color: "#2196F3",
+              cursor: "pointer"
             }
+          }
+        },
+        MuiTypography: {
+          caption: {
+            fontSize: "14px"
+          }
+        },
+        MuiFormLabel: {
+          root: {
+            fontSize: "14px"
           }
         },
         MuiTableCell: {

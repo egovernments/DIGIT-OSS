@@ -529,3 +529,19 @@ export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
 if (window) {
   window.downloadPDFFileUsingBase64 = downloadPDFFileUsingBase64;
 }
+// Get user data from uuid API call
+export const getUserDataFromUuid = async bodyObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/user/_search",
+      "",
+      [],
+      bodyObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};

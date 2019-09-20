@@ -80,7 +80,6 @@ const transformer = (formKey, form = {}, state = {}) => {
       const { previousRoute } = state.app;
       const { fields: otpFields } = form;
       let fields;
-      debugger;
       if (previousRoute.endsWith("register")) {
         fields = state.form["register"].fields;
         fields = {
@@ -143,6 +142,10 @@ const transformer = (formKey, form = {}, state = {}) => {
 
       try {
         const { latitude, longitude } = form.fields;
+        // if (latitude && longitude) {
+        //   const tenantId = await getTenantForLatLng(latitude.value, longitude.value);
+        //   formData.services[0].tenantId = tenantId;
+        // }
         const tenantId = await getTenantForLatLng(latitude.value, longitude.value);
         formData.services[0].tenantId = tenantId;
       } catch (error) {

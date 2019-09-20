@@ -3,7 +3,7 @@ import { updateObjectWithComponentJsonPath, prepareFinalObject } from "./utils";
 
 const intialState = {
   screenConfig: {},
-  preparedFinalObject: {},
+  preparedFinalObject: {cityUpdateDialog : true},
   spinner: false,
   toastObject: {
     message: "",

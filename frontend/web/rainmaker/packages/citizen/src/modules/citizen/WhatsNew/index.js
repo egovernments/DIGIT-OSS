@@ -8,8 +8,8 @@ import { getAccessToken, getUserInfo } from "egov-ui-kit/utils/localStorageUtils
 
 class Updates extends React.Component {
   componentDidMount = () => {
-    const { getNotifications, notifications } = this.props;
-    // if (!notifications) {
+    const { getNotifications, whatsNewNotifications } = this.props;
+    if (!whatsNewNotifications) {
       let queryObject = [
         {
           key: "tenantId",
@@ -30,15 +30,14 @@ class Updates extends React.Component {
         },
       };
       getNotifications(queryObject, requestBody);
-    // }
+    }
   };
 
   render() {
-    const { notifications, history, loading } = this.props;
+    const { whatsNewNotifications, history, loading } = this.props;
     return (
       <Screen loading={loading} className="notifications-screen-style">
-        {/* <Notifications notifications={getTransformedNotifications(notifications)} history={history} />; */}
-        {notifications && <Notifications notifications={Object.values(notifications)} history={history} />}
+        {whatsNewNotifications && <Notifications notifications={Object.values(whatsNewNotifications)} history={history} />}
       </Screen>
     );
   }
@@ -47,7 +46,12 @@ class Updates extends React.Component {
 const mapStateToProps = (state) => {
   const notifications = get(state.app, "notificationObj.notificationsById");
   const loading = get(state.app, "notificationObj.loading");
-  return { notifications, loading };
+  let whatsNewNotifications =
+    notifications &&
+    Object.values(notifications).filter((item) => {
+      return item.type === "BROADCAST" || (item.type === "SYSTEMGENERATED" && item.actions);
+    });
+  return { whatsNewNotifications, loading };
 };
 
 const mapDispatchToProps = (dispatch) => {
