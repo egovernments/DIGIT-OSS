@@ -26,24 +26,16 @@ class SingleApplication extends React.Component {
     if (moduleName === "TL") {
       switch (item.status) {
         case "INITIATED":
-          return `/tradelicense-citizen/apply?applicationNumber=${
-            item.applicationNumber
-          }&tenantId=${item.tenantId}`;
+          return `/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
         default:
-          return `/tradelicence/search-preview?applicationNumber=${
-            item.applicationNumber
-          }&tenantId=${item.tenantId}`;
+          return `/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
       }
     } else if (moduleName === "FIRENOC") {
       switch (item.fireNOCDetails.status) {
         case "INITIATED":
-          return `/fire-noc/apply?applicationNumber=${
-            item.fireNOCDetails.applicationNumber
-          }&tenantId=${item.tenantId}`;
+          return `/fire-noc/apply?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
         default:
-          return `/fire-noc/search-preview?applicationNumber=${
-            item.fireNOCDetails.applicationNumber
-          }&tenantId=${item.tenantId}`;
+          return `/fire-noc/search-preview?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
       }
     }
   };

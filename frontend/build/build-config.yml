@@ -18,5 +18,10 @@ config:
 -   name: frontend/employee
     build:
     - work-dir: web/rainmaker/
-      dockerFile: web/rainmaker/docker/employee/Dockerfile
+      dockerfile: web/rainmaker/docker/employee/Dockerfile
       image-name: employee
+
+-   name: frontend/ui-uploader
+    build:
+    - work-dir: web/ui-uploader/
+      image-name: ui-uploader
