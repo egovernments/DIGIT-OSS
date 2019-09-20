@@ -5,7 +5,7 @@ import logo from "egov-ui-kit/assets/images/mseva-punjab.png";
 import "./index.css";
 import { CityPicker } from "modules/common";
 
-const ForgotPasswd = ({ form, handleFieldChange }) => {
+const ForgotPasswd = ({ form, handleFieldChange, logoUrl }) => {
   const fields = form.fields || {};
   const submit = form.submit;
 
@@ -15,7 +15,7 @@ const ForgotPasswd = ({ form, handleFieldChange }) => {
       textChildren={
         <div>
           <div className="web-user-logo" style={{ marginBottom: "24px" }}>
-            <Image className="mseva-logo employee-login-logo" source={`${logo}`} />
+            <Image className="mseva-logo employee-login-logo" source={logoUrl ? logoUrl : `${logo}`} />
           </div>
           <Label
             style={{ marginBottom: "12px" }}
