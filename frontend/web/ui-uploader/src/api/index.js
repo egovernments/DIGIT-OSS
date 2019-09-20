@@ -15,7 +15,7 @@ export const Api = () => {
     }
   });
 
-  const tenantId = fetchFromLocalStorage("Employee.tenant-id");
+  const tenantId = fetchFromLocalStorage("tenant-id");
 
   const httpRequest = async (endPoint, requestBody, headers) => {
     let apiError = "Api Error";

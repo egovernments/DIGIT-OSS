@@ -33,6 +33,7 @@ export const statusToLocalisationKeyMapping = {
   assigned: "CS_COMMON_STATUS_ASSIGNED",
   resolved: "CS_COMMON_STATUS_RESOLVED",
   reassignrequested: "CS_COMMON_STATUS_REASSIGN_REQUESTED",
+  unassigned : "CS_COMMON_STATUS_UNASSIGNED"
 };
 
 export const displayStatus = (status) => {
