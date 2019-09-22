@@ -59,7 +59,7 @@ class PTHome extends Component {
     overflow: "visible"
   };
   getCardItems = () => {
- 
+
     return [
       {
         label: "PT_COLLECT_PAYMENT",
@@ -133,7 +133,7 @@ class PTHome extends Component {
     return (
       <Screen loading={loading} className="pt-home-screen">
         <ModuleLandingPage items={getCardItems()} history={history} />
-      
+
         <div style={{ padding: "0px 8px" }}>
           <Card
             className="property-tax-card"

@@ -9,7 +9,7 @@ import { createReceiptUIInfo } from "egov-ui-kit/common/propertyTax/PaymentStatu
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import Label from "egov-ui-kit/utils/translationNode";
-import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementCard";
+import AcknowledgementCard from 'egov-ui-kit/common/propertyTax/AcknowledgementCard';
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import ActionFooter from "egov-ui-kit/common/common/ActionFooter";
 
