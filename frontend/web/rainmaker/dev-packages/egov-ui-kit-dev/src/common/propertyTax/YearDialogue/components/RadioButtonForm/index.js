@@ -5,7 +5,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 const RadioButtonForm = ({ label, form, handleFieldChange, selectedYear, handleRadioButton, history, resetFormWizard, urlToAppend }) => {
   const fields = form.fields || {};
   return (
-  
+
     <div className="property-amount-radio">
       <div className="amt-radio">
         <input

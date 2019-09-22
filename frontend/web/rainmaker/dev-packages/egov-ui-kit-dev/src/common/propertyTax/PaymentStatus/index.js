@@ -52,6 +52,17 @@ const PaymentStatus = ({
     }
   }
   const headerValue = "(" + assessmentYear + ")";
+  console.log('ReceiptNo', receiptDetails.ReceiptNo);
+  console.log('this.props', props);
+  console.log('ReceiptNo', receiptDetails);
+if(!assessmentYear){
+  if(receiptDetails&&receiptDetails.propertyDetails&&receiptDetails.propertyDetails[0])
+   {
+    assessmentYear=receiptDetails.propertyDetails[0].financialYear;
+   }
+
+}
+  const headerValue = '(' + assessmentYear + ')';
 
   const header = "PT_PAYMENT_HEADER";
   const subHeaderValue = propertyId;
