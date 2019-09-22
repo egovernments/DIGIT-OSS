@@ -97,8 +97,8 @@ class FormWizard extends Component {
     termsAccepted: false,
     termsError: "",
     calculationScreenData: [],
-    assessedPropertyDetails:{}
-  };
+    assessedPropertyDetails: {}
+  }
 
   toggleTerms = () =>
     this.setState({
@@ -616,7 +616,7 @@ class FormWizard extends Component {
         return null;
     }
   };
-  createAndUpdate = async (index) =>{
+  createAndUpdate = async (index) => {
     // const { callPGService, callDraft } = this;
     const {
       selected,
@@ -1853,6 +1853,8 @@ class FormWizard extends Component {
           history={history}
           onPayButtonClick={onPayButtonClick}
         />
+
+
       </div>
     );
   }

@@ -55,15 +55,15 @@ const failureMessages = billAmount => {
               />
             </div>
           ) : (
-            <div>
-              <Label
-                containerStyle={{ paddingTop: "10px" }}
-                fontSize={16}
-                label={"PT_RECEIPT_FAILURE_MESSAGE"}
-                labelStyle={{ color: "#484848", fontWeight: 500 }}
-              />
-            </div>
-          )}
+              <div>
+                <Label
+                  containerStyle={{ paddingTop: "10px" }}
+                  fontSize={16}
+                  label={"PT_RECEIPT_FAILURE_MESSAGE"}
+                  labelStyle={{ color: "#484848", fontWeight: 500 }}
+                />
+              </div>
+            )}
         </div>
         <Label
           containerStyle={{ paddingTop: "10px" }}
@@ -131,6 +131,7 @@ class PaymentFailure extends Component {
   };
 
   render() {
+
     const { bill } = this.state;
     const { txnAmount, assessmentYear, propertyId } = this.props.match.params;
     const amountPaid = get(bill[0], "billDetails[0].totalAmount");
