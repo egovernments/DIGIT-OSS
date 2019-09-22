@@ -197,7 +197,7 @@ const getUnitInfo = (units = []) => {
     }];
     if (unit.occupancyType === "RENTED") {
       floor.push({
-        key: getTranslatedLabel("PT_ASSESMENT_INFO_AREA_RENT", localizationLabelsData),
+        key: getTranslatedLabel("PT_FORM2_TOTAL_ANNUAL_RENT", localizationLabelsData),
         value: unit.arv ? unit.arv + '' : "NA",
       })
     }

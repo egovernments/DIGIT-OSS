@@ -257,7 +257,7 @@ class Property extends Component {
           <div className="button-container col-xs-6 property-info-access-btn" style={{ float: "right" }}>
             <Button
               onClick={() => this.onAssessPayClick()}
-              label={<Label buttonLabel={true} label="PT_PAYMENT_ASSESS" fontSize="16px" />}
+              label={<Label buttonLabel={true} label="PT_ASSESS_PROPERTY" fontSize="16px" />}
               primary={true}
               style={{ lineHeight: "auto", minWidth: "inherit" }}
             />
@@ -509,7 +509,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                   value: institution.designation || "NA",
                 }
                 : {
-                  key: getTranslatedLabel("PT_OWNERSHIP_INFO_FATHER_NAME", localizationLabelsData),
+                  key: getTranslatedLabel("PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", localizationLabelsData),
                   value: owner.fatherOrHusbandName || "NA",
                 },
               isInstitution
