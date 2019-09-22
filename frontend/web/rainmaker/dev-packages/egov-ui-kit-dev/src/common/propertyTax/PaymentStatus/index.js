@@ -12,8 +12,7 @@ const labelStyle = {
   fontWeight: 500,
 };
 
-const PaymentStatus = ({
-  assessmentYear,
+const PaymentStatus = ({ assessmentYear,
   toggleYearDialogue,
   generalMDMSDataById,
   noExistingPropertyId,
@@ -53,7 +52,20 @@ const PaymentStatus = ({
   }
   const headerValue = "(" + assessmentYear + ")";
   console.log('ReceiptNo', receiptDetails.ReceiptNo);
-  console.log('this.props', props);
+  console.log('this.props', { assessmentYear,
+    generalMDMSDataById,
+    noExistingPropertyId,
+    receiptUIDetails,
+    receiptDetails ,
+    propertyId,
+    floatingButtonColor,
+    icon,
+    messages,
+    buttons,
+    primaryAction,
+    tenantId,
+    receiptImageUrl,
+  });
   console.log('ReceiptNo', receiptDetails);
 if(!assessmentYear){
   if(receiptDetails&&receiptDetails.propertyDetails&&receiptDetails.propertyDetails[0])
