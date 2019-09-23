@@ -106,7 +106,7 @@ class PaymentModes extends Component {
     return (
       <Card
       style={{
-        backgroundColor: "rgb(242, 242, 242)"}}
+        backgroundColor: "rgb(242, 242, 242)",boxShadow:'none!important'}}
         textChildren={
           <div className="payment-modes"  style={{ backgroundColor: "rgb(242, 242, 242)!important"}}>
             <div

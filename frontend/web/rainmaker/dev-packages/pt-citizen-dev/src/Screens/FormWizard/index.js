@@ -1673,22 +1673,7 @@ class FormWizard extends Component {
     headerObj.header = "PT_PROPERTY_INFORMATION";
     headerObj.headerValue = "";
     headerObj.subHeaderValue = propertyId;
-    // if (selected == 4) {
-    //   (isAssesment ?
-    //     buttonLabel = 'PT_PROPERTY_ASSESS_NOTIFICATION' :
-    //     (isReassesment ?
-    //       buttonLabel = "PT_PROPERTY_REASSESS_NOTIFICATION" :
-    //       buttonLabel = "PT_PROPERTY_ADD_NOTIFICATION"));
-    //   headerObj.header = 'PT_PROPERTY_INFORMATION';
-    //   headerObj.subHeaderValue = propertyId;
-    // }
-    //   "PT_REASSESS_PROPERTY",
-    // ]
-    // : [
-    //   "PT_PROPERTY_ASSESSMENT_HEADER",
-    //   `(${financialYearFromQuery})`,
-    //   ":",
-    //   "PT_ADD_NEW_PROPERTY"
+
     switch (selected) {
       case 0:
       case 1:

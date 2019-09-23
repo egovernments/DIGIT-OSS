@@ -16,7 +16,7 @@ const AdditionalDetails = ({
 
   return (
     <Card
-      style={{ marginBottom: 20,padding:'16px', backgroundColor: "rgb(242, 242, 242)" }}
+      style={{ marginBottom: 20,padding:'16px', backgroundColor: "rgb(242, 242, 242)" ,boxShadow:'none!important' }}
       initiallyExpanded={true}
     >
       <div  >

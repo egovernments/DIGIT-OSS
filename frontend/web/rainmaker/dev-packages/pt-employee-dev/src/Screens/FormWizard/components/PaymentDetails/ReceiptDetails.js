@@ -15,7 +15,7 @@ class ReceiptDetails extends Component {
     return (
       <Card
       style={{
-        backgroundColor: "rgb(242, 242, 242)"}}
+        backgroundColor: "rgb(242, 242, 242)",boxShadow:'none!important'}}
         textChildren={
           <div className="receipt-details">
             <div

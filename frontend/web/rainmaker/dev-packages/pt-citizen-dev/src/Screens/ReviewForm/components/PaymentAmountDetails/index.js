@@ -49,7 +49,7 @@ const PaymentAmountDetails = ({
   return (
     <Card
       className="tax-calculation-card-header"
-      style={{ marginBottom: 20,padding:'16px', "background-color": "rgb(242, 242, 242)", boxShadow: 'none' }}
+      style={{ marginBottom: 20,padding:'16px', "background-color": "rgb(242, 242, 242)", boxShadow: 'none!important' }}
       textChildren={
         <div>
           <div className="rainmaker-displayInline" style={{ marginTop: 10 }}>

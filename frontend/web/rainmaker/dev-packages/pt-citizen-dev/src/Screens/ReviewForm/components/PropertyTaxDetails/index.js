@@ -35,7 +35,7 @@ class PropertyTaxDetails extends React.Component {
     const { intrest, penalty, rebate } = importantDates;
     return (
       <Card
-        style={{ marginBottom: 20,padding:'16px', "background-color": "rgb(242, 242, 242)", boxShadow: 'none' }}
+        style={{ marginBottom: 20,padding:'16px', "background-color": "rgb(242, 242, 242)", boxShadow: 'none!important' }}
         expanded={isExpanded}
       >
          <div >
