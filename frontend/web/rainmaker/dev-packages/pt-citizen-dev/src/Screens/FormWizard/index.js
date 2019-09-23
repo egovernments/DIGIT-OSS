@@ -1822,12 +1822,15 @@ class FormWizard extends Component {
     const { history, location } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
-    const { header, subHeaderValue, headerValue } = this.getHeader(
-      selected,
-      search
-    );
-    console.log(header, subHeaderValue, "header,subHeaderValue");
-
+    const { header, subHeaderValue, headerValue } = this.getHeader(selected, search);
+    console.log(header, subHeaderValue, 'header,subHeaderValue');
+    let proceedToPayment = Boolean(getQueryValue(search, "proceedToPayment").replace('false', ''));
+    if(proceedToPayment&&selected==3){
+      this.setState({
+        selected: 5,
+        formValidIndexArray: [...formValidIndexArray, 5]
+      });
+    }
     return (
       <div className="wizard-form-main-cont">
         <PTHeader

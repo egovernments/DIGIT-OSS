@@ -86,7 +86,7 @@ class DropDown extends Component {
           history.push(
             `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${
               item.assessmentNo
-            }&isAssesment=true&isReassesment=true&isCompletePayment=true&propertyId=${item.propertyId}&tenantId=${item.tenantId}`
+            }&isAssesment=true&isReassesment=true&proceedToPayment=true&isCompletePayment=true&propertyId=${item.propertyId}&tenantId=${item.tenantId}`
           );
         break;
     }

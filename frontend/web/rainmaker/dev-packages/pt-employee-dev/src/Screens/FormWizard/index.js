@@ -1809,7 +1809,13 @@ class FormWizard extends Component {
     const propertyId = getQueryValue(search, "propertyId");
     const { header, subHeaderValue, headerValue } = this.getHeader(selected, search);
     console.log(header, subHeaderValue, 'header,subHeaderValue');
-
+    let proceedToPayment = Boolean(getQueryValue(search, "proceedToPayment").replace('false', ''));
+    if(proceedToPayment&&selected==3){
+      this.setState({
+        selected: 5,
+        formValidIndexArray: [...formValidIndexArray, 5]
+      });
+    }
     return (
       <div className="wizard-form-main-cont">
         <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
