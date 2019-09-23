@@ -3,7 +3,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import Label from "../../../utils/translationNode";
+import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
 
 const styles = (theme) => ({
@@ -34,7 +34,7 @@ class ModuleLandingPage extends React.Component {
       <Grid container>
         {items.map((obj) => {
           return (
-            <Grid className={classes.item} item xs={6} sm={6} align="center">
+            <Grid className={classes.item} item xs={12} sm={12} align="center">
               <Card
                 className={`${classes.paper} module-card-style`}
                 onClick={(e) => {

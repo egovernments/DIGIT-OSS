@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { List, Icon, Card } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 
-import ModuleLandingPage from "egov-ui-kit/common/common/ModuleLandingPage";
+import ModuleLandingPage from "./components/ModuleLandingPage";
 import Screen from "egov-ui-kit/common/common/Screen";
 import { connect } from "react-redux";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
