@@ -223,33 +223,34 @@ public class CalculatorUtils {
      * @return
      */
     public StringBuilder getDemandSearchUrl(GetBillCriteria getBillCriteria) {
-
-        if (CollectionUtils.isEmpty(getBillCriteria.getConsumerCodes()))
-            return new StringBuilder().append(configurations.getBillingServiceHost())
+        StringBuilder builder = new StringBuilder();
+        if (CollectionUtils.isEmpty(getBillCriteria.getConsumerCodes())) {
+            builder = builder.append(configurations.getBillingServiceHost())
                     .append(configurations.getDemandSearchEndPoint()).append(URL_PARAMS_SEPARATER)
                     .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(getBillCriteria.getTenantId())
                     .append(SEPARATER)
                     .append(CONSUMER_CODE_SEARCH_FIELD_NAME).append(getBillCriteria.getPropertyId())
                     .append(SEPARATER)
-                    .append(DEMAND_START_DATE_PARAM).append(getBillCriteria.getFromDate())
+                    .append(DEMAND_STATUS_PARAM).append(DEMAND_STATUS_ACTIVE);
+        }
+        else {
+
+             builder = builder.append(configurations.getBillingServiceHost())
+                    .append(configurations.getDemandSearchEndPoint()).append(URL_PARAMS_SEPARATER)
+                    .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(getBillCriteria.getTenantId())
                     .append(SEPARATER)
-                    .append(DEMAND_END_DATE_PARAM).append(getBillCriteria.getToDate())
+                    .append(CONSUMER_CODE_SEARCH_FIELD_NAME).append(StringUtils.join(getBillCriteria.getConsumerCodes(), ","))
                     .append(SEPARATER)
                     .append(DEMAND_STATUS_PARAM).append(DEMAND_STATUS_ACTIVE);
 
+        }
+        if (getBillCriteria.getFromDate() != null && getBillCriteria.getToDate() != null)
+            builder = builder.append(DEMAND_START_DATE_PARAM).append(getBillCriteria.getFromDate())
+                    .append(SEPARATER)
+                    .append(DEMAND_END_DATE_PARAM).append(getBillCriteria.getToDate())
+                    .append(SEPARATER);
 
-        else return new StringBuilder().append(configurations.getBillingServiceHost())
-                .append(configurations.getDemandSearchEndPoint()).append(URL_PARAMS_SEPARATER)
-                .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(getBillCriteria.getTenantId())
-                .append(SEPARATER)
-                .append(CONSUMER_CODE_SEARCH_FIELD_NAME).append(StringUtils.join(getBillCriteria.getConsumerCodes(), ","))
-                .append(SEPARATER)
-                .append(DEMAND_START_DATE_PARAM).append(getBillCriteria.getFromDate())
-                .append(SEPARATER)
-                .append(DEMAND_END_DATE_PARAM).append(getBillCriteria.getToDate())
-                .append(SEPARATER)
-                .append(DEMAND_STATUS_PARAM).append(DEMAND_STATUS_ACTIVE);
-
+        return builder;
     }
 
     /**
@@ -337,6 +338,7 @@ public class CalculatorUtils {
      *
      * @param tenantId
      * @param demandId
+     * @param consumerCode
      * @return
      */
     public StringBuilder getBillGenUrl(String tenantId, String demandId, String consumerCode) {
@@ -345,6 +347,23 @@ public class CalculatorUtils {
                 .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(tenantId)
                 .append(SEPARATER).append(DEMAND_ID_SEARCH_FIELD_NAME)
                 .append(demandId).append(SEPARATER)
+                .append(BUSINESSSERVICE_FIELD_FOR_SEARCH_URL)
+                .append(PROPERTY_TAX_SERVICE_CODE).append(SEPARATER)
+                .append(CONSUMER_CODE_SEARCH_FIELD_NAME).append(consumerCode);
+    }
+
+    /**
+     * Returns url for Bill Gen Api
+     *
+     * @param tenantId
+     * @param consumerCode
+     * @return
+     */
+    public StringBuilder getBillGenUrl(String tenantId, String consumerCode) {
+        return new StringBuilder().append(configurations.getBillingServiceHost())
+                .append(configurations.getBillGenEndPoint()).append(URL_PARAMS_SEPARATER)
+                .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(tenantId)
+                .append(SEPARATER)
                 .append(BUSINESSSERVICE_FIELD_FOR_SEARCH_URL)
                 .append(PROPERTY_TAX_SERVICE_CODE).append(SEPARATER)
                 .append(CONSUMER_CODE_SEARCH_FIELD_NAME).append(consumerCode);

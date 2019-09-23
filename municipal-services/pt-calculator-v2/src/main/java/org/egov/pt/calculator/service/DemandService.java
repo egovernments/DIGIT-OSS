@@ -173,12 +173,27 @@ public class DemandService {
 		ResponseInfo responseInfo = null;
 		StringBuilder billGenUrl;
 
-		for(Demand demand : res.getDemands()){
-			billGenUrl = utils.getBillGenUrl(getBillCriteria.getTenantId(), demand.getId(), demand.getConsumerCode());
-			billResponse = mapper.convertValue(repository.fetchResult(billGenUrl, requestInfoWrapper), BillResponse.class);
-			responseInfo = billResponse.getResposneInfo();
-			bills.addAll(billResponse.getBill());
+		Set<String> consumerCodes = res.getDemands().stream().map(Demand::getConsumerCode).collect(Collectors.toSet());
+
+		// If toDate or fromDate is not given bill is generated across all taxPeriod for the given consumerCode
+		if(getBillCriteria.getToDate()==null || getBillCriteria.getFromDate()==null){
+			for(String consumerCode : consumerCodes){
+				billGenUrl = utils.getBillGenUrl(getBillCriteria.getTenantId(), consumerCode);
+				billResponse = mapper.convertValue(repository.fetchResult(billGenUrl, requestInfoWrapper), BillResponse.class);
+				responseInfo = billResponse.getResposneInfo();
+				bills.addAll(billResponse.getBill());
+			}
 		}
+		// else if toDate and fromDate is given bill is generated for the taxPeriod corresponding to given dates for the given consumerCode
+		else {
+			for(Demand demand : res.getDemands()){
+				billGenUrl = utils.getBillGenUrl(getBillCriteria.getTenantId(),demand.getId(),demand.getConsumerCode());
+				billResponse = mapper.convertValue(repository.fetchResult(billGenUrl, requestInfoWrapper), BillResponse.class);
+				responseInfo = billResponse.getResposneInfo();
+				bills.addAll(billResponse.getBill());
+			}
+		}
+
 
 		return BillResponse.builder().resposneInfo(responseInfo).bill(bills).build();
 	}
@@ -220,8 +235,17 @@ public class DemandService {
 		 * Loop through the consumerCodes and re-calculate the time based applicables
 		 */
 
-		Map<String,Demand> consumerCodeToDemandMap = res.getDemands().stream()
-				.collect(Collectors.toMap(Demand::getConsumerCode,Function.identity()));
+
+		Map<String,List<Demand>> consumerCodeToDemandMap = new HashMap<>();
+		res.getDemands().forEach(demand -> {
+			if(consumerCodeToDemandMap.containsKey(demand.getConsumerCode()))
+				consumerCodeToDemandMap.get(demand.getConsumerCode()).add(demand);
+			else {
+				List<Demand> demands = new LinkedList<>();
+				demands.add(demand);
+				consumerCodeToDemandMap.put(demand.getConsumerCode(),demands);
+			}
+		});
 
 		List<Demand> demandsToBeUpdated = new LinkedList<>();
 
@@ -230,22 +254,23 @@ public class DemandService {
 		List<TaxPeriod> taxPeriods = mstrDataService.getTaxPeriodList(requestInfoWrapper.getRequestInfo(), tenantId);
 
 		for (String consumerCode : getBillCriteria.getConsumerCodes()) {
-			Demand demand = consumerCodeToDemandMap.get(consumerCode);
-			if (demand == null)
+			List<Demand> demands = consumerCodeToDemandMap.get(consumerCode);
+			if (CollectionUtils.isEmpty(demands))
 				throw new CustomException(CalculatorConstants.EMPTY_DEMAND_ERROR_CODE,
 						"No demand found for the consumerCode: " + consumerCode);
 
-			if (demand.getStatus() != null
-					&& CalculatorConstants.DEMAND_CANCELLED_STATUS.equalsIgnoreCase(demand.getStatus().toString()))
-				throw new CustomException(CalculatorConstants.EG_PT_INVALID_DEMAND_ERROR,
-						CalculatorConstants.EG_PT_INVALID_DEMAND_ERROR_MSG);
+			for(Demand demand : demands){
+				if (demand.getStatus() != null
+						&& CalculatorConstants.DEMAND_CANCELLED_STATUS.equalsIgnoreCase(demand.getStatus().toString()))
+					throw new CustomException(CalculatorConstants.EG_PT_INVALID_DEMAND_ERROR,
+							CalculatorConstants.EG_PT_INVALID_DEMAND_ERROR_MSG);
 
-			applytimeBasedApplicables(demand, requestInfoWrapper, timeBasedExmeptionMasterMap,taxPeriods);
+				applytimeBasedApplicables(demand, requestInfoWrapper, timeBasedExmeptionMasterMap,taxPeriods);
 
-			roundOffDecimalForDemand(demand, requestInfoWrapper);
+				roundOffDecimalForDemand(demand, requestInfoWrapper);
 
-			demandsToBeUpdated.add(demand);
-
+				demandsToBeUpdated.add(demand);
+			}
 		}
 
 

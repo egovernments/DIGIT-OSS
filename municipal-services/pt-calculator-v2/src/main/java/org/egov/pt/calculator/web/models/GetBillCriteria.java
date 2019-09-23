@@ -34,10 +34,8 @@ public class GetBillCriteria {
 	@NotNull
 	private List<String> consumerCodes;
 
-	@NotNull
 	private Long fromDate;
 
-	@NotNull
 	private Long toDate;
 	
 }

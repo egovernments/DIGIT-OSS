@@ -128,7 +128,7 @@ public class CalculationValidator {
      * Validates demand before update or create
      * @param demand Demand to be validated
      */
-	public void validateDemandForUpdate(Demand demand){
+	public void validationsBeforeDemandUpdate(Demand demand){
 
 		BigDecimal totalTaxAmount = demand.getDemandDetails().stream().map(DemandDetail::getTaxAmount).reduce(BigDecimal.ZERO,BigDecimal::add);
         BigDecimal totalCollectionAmount = demand.getDemandDetails().stream().map(DemandDetail::getCollectionAmount).reduce(BigDecimal.ZERO,BigDecimal::add);
