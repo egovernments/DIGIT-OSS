@@ -12,7 +12,7 @@ import "./index.css";
 const ptSteps = [
   "PT_PROPERTY_ADDRESS_SUB_HEADER",
   "PT_ASSESMENT_INFO_SUB_HEADER",
-  "PT_OWNER_INFORMATION_FORM_HEADING",
+  "PT_OWNERSHIP_INFO_SUB_HEADER",
   "PT_COMMON_SUMMARY"
 ];
 const downloadReceipt=()=>{
