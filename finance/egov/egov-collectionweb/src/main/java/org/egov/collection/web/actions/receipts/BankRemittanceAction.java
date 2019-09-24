@@ -59,6 +59,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
@@ -79,6 +80,7 @@ import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.BankAccountServiceMapping;
 import org.egov.infra.microservice.models.BusinessDetails;
+import org.egov.infra.microservice.models.BusinessService;
 import org.egov.infra.microservice.models.Receipt;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -266,12 +268,12 @@ public class BankRemittanceAction extends BaseFormAction {
     }
 
     private void populateNames(List<CollectionBankRemittanceReport> bankRemittanceList) {
-        List<BusinessDetails> businessDetailsList = microserviceUtils.getBusinessDetailsByType("MISCELLANEOUS");
+        List<BusinessService> businessServList = microserviceUtils.getBusinessService(null);
         Map<String, String> businessDetailsCodeNameMap = new HashMap<>();
 
-        if (businessDetailsList != null)
-            for (BusinessDetails bd : businessDetailsList) {
-                businessDetailsCodeNameMap.put(bd.getCode(), bd.getName());
+        if (businessServList != null)
+            for (BusinessService bd : businessServList) {
+                businessDetailsCodeNameMap.put(bd.getCode(), bd.getBusinessService());
             }
 
         for (CollectionBankRemittanceReport rb : bankRemittanceList) {

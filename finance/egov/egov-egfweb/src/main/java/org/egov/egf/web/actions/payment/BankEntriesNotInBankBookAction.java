@@ -190,7 +190,7 @@ public class BankEntriesNotInBankBookAction extends BasePaymentAction {
         if (bankaccount != null)
             subQuery = subQuery + "and be.bankaccountid = " + bankaccount;
         if (voucherHeader.getVouchermis().getDepartmentcode() != null)
-            subQuery = subQuery + "and bemis.departmentid = '" + voucherHeader.getVouchermis().getDepartmentcode()+"'";
+            subQuery = subQuery + "and bemis.departmentcode = '" + voucherHeader.getVouchermis().getDepartmentcode()+"'";
         if (voucherHeader.getFundId() != null)
             subQuery = subQuery + "and bemis.fundid = " + voucherHeader.getFundId().getId();
         if (voucherHeader.getVouchermis().getSchemeid() != null)

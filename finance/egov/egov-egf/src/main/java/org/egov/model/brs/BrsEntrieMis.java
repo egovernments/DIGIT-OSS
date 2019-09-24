@@ -87,10 +87,8 @@ public class BrsEntrieMis extends AbstractPersistable<Long>
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fundId")
     private Fund fund;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "departmentid")
-    private Department department;
+    
+    private String departmentcode;
 
     @ManyToOne
     @JoinColumn(name = "functionid")
@@ -148,14 +146,6 @@ public class BrsEntrieMis extends AbstractPersistable<Long>
         this.fund = fund;
     }
 
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
-
     public Fundsource getFundsource() {
         return fundsource;
     }
@@ -195,5 +185,14 @@ public class BrsEntrieMis extends AbstractPersistable<Long>
     public void setFunctionary(Functionary functionary) {
         this.functionary = functionary;
     }
+
+    public String getDepartmentcode() {
+        return departmentcode;
+    }
+
+    public void setDepartmentcode(String departmentcode) {
+        this.departmentcode = departmentcode;
+    }
+    
 
 }

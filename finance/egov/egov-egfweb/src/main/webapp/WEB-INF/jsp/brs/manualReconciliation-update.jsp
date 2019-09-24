@@ -47,4 +47,4 @@
   --%>
 
 
-<b>Reconciliation completed successfully</b>
+<b><font color="green">Reconciliation completed successfully</font></b>

@@ -93,7 +93,7 @@ public class ManualReconciliationAction extends BaseFormAction {
 	private ReconcileBean reconcileBean;
 	private Map<String,String> unReconciledDrCr;
 	private List<ReconcileBean> unReconciledCheques;
-	List<Long> instrumentHeaders;
+	List<String> instrumentHeaders;
 	List<Date> reconDates;
 	@Autowired
 	private BankHibernateDAO bankHibernateDAO;
@@ -215,11 +215,11 @@ public class ManualReconciliationAction extends BaseFormAction {
 		this.unReconciledCheques = unReconciledCheques;
 	}
 
-	public List<Long> getInstrumentHeaders() {
+	public List<String> getInstrumentHeaders() {
 		return instrumentHeaders;
 	}
 
-	public void setInstrumentHeaders(List<Long> instrumentHeaders) {
+	public void setInstrumentHeaders(List<String> instrumentHeaders) {
 		this.instrumentHeaders = instrumentHeaders;
 	}
 
