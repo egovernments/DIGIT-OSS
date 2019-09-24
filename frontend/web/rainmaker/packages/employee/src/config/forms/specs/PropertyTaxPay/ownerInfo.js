@@ -36,7 +36,7 @@ const formConfig = {
       id: "ownerGuardian",
       jsonPath: "Properties[0].propertyDetails[0].owners[0].fatherOrHusbandName",
       type: "textfield",
-      floatingLabelText: "PT_FORM3_GUARDIAN",
+      floatingLabelText: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME",
       hintText: "PT_FORM3_GUARDIAN_PLACEHOLDER",
       required: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },

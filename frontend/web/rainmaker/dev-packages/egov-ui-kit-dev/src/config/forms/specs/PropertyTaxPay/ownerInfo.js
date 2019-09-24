@@ -33,7 +33,7 @@ const formConfig = {
       id: "ownerGuardian",
       jsonPath: "Properties[0].propertyDetails[0].owners[0].fatherOrHusbandName",
       type: "textfield",
-      floatingLabelText: "PT_FORM3_GUARDIAN",
+      floatingLabelText: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME",
       hintText: "PT_FORM3_GUARDIAN_PLACEHOLDER",
       pattern: /^[a-zA-Z\.\'\-\s\`]{1,64}$/i,
       required: true,
