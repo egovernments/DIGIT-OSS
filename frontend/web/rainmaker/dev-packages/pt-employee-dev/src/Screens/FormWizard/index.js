@@ -665,30 +665,12 @@ class FormWizard extends Component {
     headerObj.header = 'PT_PROPERTY_INFORMATION';
     headerObj.headerValue = '';
     headerObj.subHeaderValue = propertyId;
-    // if (selected == 4) {
-    //   (isAssesment ?
-    //     buttonLabel = 'PT_PROPERTY_ASSESS_NOTIFICATION' :
-    //     (isReassesment ?
-    //       buttonLabel = "PT_PROPERTY_REASSESS_NOTIFICATION" :
-    //       buttonLabel = "PT_PROPERTY_ADD_NOTIFICATION"));
-    //   headerObj.header = 'PT_PROPERTY_INFORMATION';
-    //   headerObj.subHeaderValue = propertyId;
-    // }
-    //   "PT_REASSESS_PROPERTY",
-    // ]
-    // : [
-    //   "PT_PROPERTY_ASSESSMENT_HEADER",
-    //   `(${financialYearFromQuery})`,
-    //   ":",
-    //   "PT_ADD_NEW_PROPERTY"
     switch (selected) {
       case 0:
       case 1:
       case 2:
-
         headerObj.subHeaderValue = propertyId;
         headerObj.headerValue = '(' + assessmentYear + ')';
-
         (isAssesment ?
           (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
           (isReassesment ?
@@ -696,7 +678,6 @@ class FormWizard extends Component {
             (headerObj.headerValue = ':' + addNewPropertyLabel,
               headerObj.subHeaderValue = '',
               headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
-
         break;
       case 3:
         headerObj.subHeaderValue = propertyId;
@@ -707,21 +688,19 @@ class FormWizard extends Component {
             (headerObj.subHeaderValue = '',
               headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
         headerObj.headerValue = '(' + assessmentYear + ')';
-
-
-
         break;
       case 4:
-        headerObj.headerValue = '(' + assessmentYear + ')';
         headerObj.subHeaderValue = propertyId;
-        headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER';
-
+        (isAssesment ?
+          (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
+          (isReassesment ?
+            (headerObj.header = "PT_REASSESS_PROPERTY") :
+            (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
+        headerObj.headerValue = '(' + assessmentYear + ')';
         break;
       case 5:
       case 6:
-
         headerObj.headerValue = '(' + assessmentYear + ')';
-
         headerObj.header = 'PT_PAYMENT_HEADER';
         headerObj.subHeaderValue = propertyId;
         break;
@@ -729,9 +708,6 @@ class FormWizard extends Component {
         headerObj.header = 'PT_PROPERTY_INFORMATION';
         headerObj.subHeaderValue = propertyId;
     }
-
-    console.log(headerObj, 'headerObj');
-
     return headerObj;
   }
 
@@ -1353,7 +1329,6 @@ class FormWizard extends Component {
           ]
         }
       );
-      //For calculation screen
       const tenantId =
         prepareFormData.Properties[0] && prepareFormData.Properties[0].tenantId;
       const calculationScreenData = await getCalculationScreenData(
@@ -1380,7 +1355,6 @@ class FormWizard extends Component {
     }
   };
   createAndUpdate = async (index) => {
-    // const { callPGService, callDraft } = this;
     const {
       selected,
       formValidIndexArray
@@ -1390,9 +1364,6 @@ class FormWizard extends Component {
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     const assessmentId = getQueryValue(search, "assessmentId");
-    // const tenantId = getQueryValue(search, "tenantId");
-    // const isCompletePayment = getQueryValue(search, "isCompletePayment");
-
     const propertyMethodAction = !!propertyId ? "_update" : "_create";
     let prepareFormData = { ...this.props.prepareFormData };
 
@@ -1849,7 +1820,6 @@ class FormWizard extends Component {
       owners,
       propertyId
     }
-
     generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, {}, imageUrl);
   }
 
@@ -1871,12 +1841,10 @@ class FormWizard extends Component {
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     const { header, subHeaderValue, headerValue } = this.getHeader(selected, search);
-    console.log(header, subHeaderValue, 'header,subHeaderValue');
 
     return (
       <div className="wizard-form-main-cont">
         <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
-
         <WizardComponent
           downloadAcknowledgementForm={this.downloadAcknowledgementForm}
           content={renderStepperContent(selected, fromReviewPage)}
@@ -1887,7 +1855,6 @@ class FormWizard extends Component {
           formValidIndexArray={formValidIndexArray}
           updateIndex={this.updateIndex}
           backLabel="PT_COMMONS_GO_BACK"
-          // nextLabel={selected === 4 ? "PT_HOME_PAY1" : "PT_COMMONS_NEXT"}
           nextLabel={this.getButtonLabels(selected)}
           ownerInfoArr={ownerInfoArr}
           closeDialogue={closeDeclarationDialogue}

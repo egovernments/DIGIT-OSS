@@ -1619,7 +1619,6 @@ class FormWizard extends Component {
     const { formValidIndexArray, selected, propertyUUID } = this.state;
     const { location } = this.props;
     let { search } = location;
-
     let currentUUID = get(JSON.parse(getUserInfo()), "uuid");
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
     const isReassesment = getQueryValue(search, "isReassesment");
@@ -1638,20 +1637,13 @@ class FormWizard extends Component {
     } else {
     }
   };
-
   closeDeclarationDialogue = () => {
     this.setState({ dialogueOpen: false });
   };
   getButtonLabels(index) {
     let { search } = this.props.location;
-
-    let isReassesment = Boolean(
-      getQueryValue(search, "isReassesment").replace("false", "")
-    );
-    let isAssesment = Boolean(
-      getQueryValue(search, "isAssesment").replace("false", "")
-    );
-
+    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
     let buttonLabel = "PT_COMMONS_NEXT";
     if (index == 3) {
       isAssesment
@@ -1662,12 +1654,10 @@ class FormWizard extends Component {
     } else if (index == 4) {
       buttonLabel = "PT_PROCEED_PAYMENT";
     } else if (index == 5) {
-      // buttonLabel = 'PT_GENERATE_RECEIPT'
       buttonLabel = 'PT_MAKE_PAYMENT'
     } else if (index == 6) {
       buttonLabel = "PT_DOWNLOAD_RECEIPT";
     }
-
     return buttonLabel;
   }
   getHeader(selected, search) {
@@ -1689,98 +1679,69 @@ class FormWizard extends Component {
     headerObj.header = "PT_PROPERTY_INFORMATION";
     headerObj.headerValue = "";
     headerObj.subHeaderValue = propertyId;
-
     switch (selected) {
       case 0:
       case 1:
       case 2:
         headerObj.subHeaderValue = propertyId;
-        headerObj.headerValue = "(" + assessmentYear + ")";
-
-        isAssesment
-          ? (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")
-          : isReassesment
-          ? (headerObj.header = "PT_REASSESS_PROPERTY")
-          : ((headerObj.headerValue = ":" + addNewPropertyLabel),
-            (headerObj.subHeaderValue = ""),
-            (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER"));
-
+        headerObj.headerValue = '(' + assessmentYear + ')';
+        (isAssesment ?
+          (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
+          (isReassesment ?
+            (headerObj.header = "PT_REASSESS_PROPERTY") :
+            (headerObj.headerValue = ':' + addNewPropertyLabel,
+              headerObj.subHeaderValue = '',
+              headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
         break;
       case 3:
         headerObj.subHeaderValue = propertyId;
-        isAssesment
-          ? (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")
-          : isReassesment
-          ? (headerObj.header = "PT_REASSESS_PROPERTY")
-          : ((headerObj.subHeaderValue = ""),
-            (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER"));
-        headerObj.headerValue = "(" + assessmentYear + ")";
-
+        (isAssesment ?
+          (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
+          (isReassesment ?
+            (headerObj.header = "PT_REASSESS_PROPERTY") :
+            (headerObj.subHeaderValue = '',
+              headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
+        headerObj.headerValue = '(' + assessmentYear + ')';
         break;
       case 4:
-        headerObj.headerValue = "(" + assessmentYear + ")";
         headerObj.subHeaderValue = propertyId;
-        headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER";
-
+        (isAssesment ?
+          (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
+          (isReassesment ?
+            (headerObj.header = "PT_REASSESS_PROPERTY") :
+            (headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
+        headerObj.headerValue = '(' + assessmentYear + ')';
         break;
       case 5:
       case 6:
-        headerObj.headerValue = "(" + assessmentYear + ")";
-
-        headerObj.header = "PT_PAYMENT_HEADER";
+        headerObj.headerValue = '(' + assessmentYear + ')';
+        headerObj.header = 'PT_PAYMENT_HEADER';
         headerObj.subHeaderValue = propertyId;
         break;
       default:
         headerObj.header = "PT_PROPERTY_INFORMATION";
         headerObj.subHeaderValue = propertyId;
     }
-
-    console.log(headerObj, "headerObj");
-
+    console.log(headerObj, 'headerObj');
     return headerObj;
   }
 
   getMessageHeader() {
     let { search } = this.props.location;
-
-    let isReassesment = Boolean(
-      getQueryValue(search, "isReassesment").replace("false", "")
-    );
-    let isAssesment = Boolean(
-      getQueryValue(search, "isAssesment").replace("false", "")
-    );
-
+    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
     let buttonLabel = "PT_PROPERTY_ASSESS_SUCCESS";
-
-    isAssesment
-      ? (buttonLabel = "PT_PROPERTY_ASSESS_SUCCESS")
-      : isReassesment
-      ? (buttonLabel = "PT_PROPERTY_REASSESS_SUCCESS")
-      : (buttonLabel = "PT_PROPERTY_ADD_SUCCESS");
-
+    isAssesment ? buttonLabel = 'PT_PROPERTY_ASSESS_SUCCESS' : (isReassesment ? buttonLabel = "PT_PROPERTY_REASSESS_SUCCESS" : buttonLabel = "PT_PROPERTY_ADD_SUCCESS");
     return buttonLabel;
   }
   getMessage() {
     let { search } = this.props.location;
-
-    let isReassesment = Boolean(
-      getQueryValue(search, "isReassesment").replace("false", "")
-    );
-    let isAssesment = Boolean(
-      getQueryValue(search, "isAssesment").replace("false", "")
-    );
-    // PT_ASSESSMENT_NO PT_PMT_RCPT_NO
+    let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
+    let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
     let buttonLabel = "PT_PROPERTY_ASSESS_NOTIFICATION";
-
-    isAssesment
-      ? (buttonLabel = "PT_PROPERTY_ASSESS_NOTIFICATION")
-      : isReassesment
-      ? (buttonLabel = "PT_PROPERTY_REASSESS_NOTIFICATION")
-      : (buttonLabel = "PT_PROPERTY_ADD_NOTIFICATION");
-
+    isAssesment ? buttonLabel = 'PT_PROPERTY_ASSESS_NOTIFICATION' : (isReassesment ? buttonLabel = "PT_PROPERTY_REASSESS_NOTIFICATION" : buttonLabel = "PT_PROPERTY_ADD_NOTIFICATION");
     return buttonLabel;
   }
-
   onPayButtonClick = () => {
     const {
       isFullPayment,
@@ -1789,8 +1750,6 @@ class FormWizard extends Component {
       termsAccepted,
       selected
     } = this.state;
-
-    //pay-method-jagan
     if (!termsAccepted) {
       this.setState({
         termsError: "PT_CHECK_DECLARATION_BOX"
@@ -1849,7 +1808,6 @@ class FormWizard extends Component {
       owners,
       propertyId
     }
-
     generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, {}, imageUrl);
   }
   render() {
@@ -1865,12 +1823,10 @@ class FormWizard extends Component {
       dialogueOpen
     } = this.state;
     const fromReviewPage = selected === 3;
-
     const { history, location } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     const { header, subHeaderValue, headerValue } = this.getHeader(selected, search);
-    console.log(header, subHeaderValue, 'header,subHeaderValue');
 
     return (
       <div className="wizard-form-main-cont">
@@ -1898,8 +1854,6 @@ class FormWizard extends Component {
           history={history}
           onPayButtonClick={onPayButtonClick}
         />
-
-
       </div>
     );
   }

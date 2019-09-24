@@ -61,7 +61,7 @@ export const getTransformedItems = (propertiesById) => {
   );
 };
 
-export const getCompletedTransformedItems = (assessmentsByStatus=[], cities, localizationLabels,propertyId) => {
+export const getCompletedTransformedItems = (assessmentsByStatus = [], cities, localizationLabels, propertyId) => {
   console.log(assessmentsByStatus, cities, localizationLabels, 'assessmentsByStatus, cities, localizationLabels');
   assessmentsByStatus.sort((x, y) => x.financialYear.localeCompare(y.financialYear));
   return (
@@ -70,22 +70,7 @@ export const getCompletedTransformedItems = (assessmentsByStatus=[], cities, loc
       return {
         primaryText: (
           <div className="assesment-history-info" style={{ backgroundColor: 'rgb(242, 242, 242)' }}>
-            {/* <Label
-              label={`INR ${get(item, "receiptInfo.totalAmount")}`}
-              fontSize="16px"
-              color="#484848"
-              bold={true}
-              labelStyle={primaryTextLabelStyle}
-            /> */}
-
             <div style={{ height: "auto", marginTop: 0 }}>
-              {/* <Label
-                label={item && item.financialYear}
-                containerStyle={secondaryTextContainer}
-                labelStyle={secondaryTextLabelStyle}
-                color="#484848"
-              /> */}
-              {/* <div className="col-sm-12 col-xs-12" > */}
               <div style={{ padding: "5px 0px 0px 0px" }} className="pt-assessment-info  ">
                 <div className="pt-assessment-key">
                   <Label
@@ -101,12 +86,7 @@ export const getCompletedTransformedItems = (assessmentsByStatus=[], cities, loc
                   />
                 </div>
               </div>
-              {/* </div> */}
-
-
-              {/* <div className="col-sm-12 col-xs-12" > */}
-
-              {get(item, "receiptInfo.totalAmount")&&<div style={{ padding: "5px 0px 0px 0px" }} className="pt-assessment-info  ">
+              {get(item, "receiptInfo.totalAmount") != null && <div style={{ padding: "5px 0px 0px 0px" }} className="pt-assessment-info  ">
                 <div className="pt-assessment-key">
                   <Label
                     labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "19px" }}
@@ -122,8 +102,6 @@ export const getCompletedTransformedItems = (assessmentsByStatus=[], cities, loc
                   />
                 </div>
               </div>}
-              {/* </div>
-              <div className="col-sm-12 col-xs-12" > */}
               <div style={{ padding: "5px 0px 0px 0px" }} className="pt-assessment-info  ">
                 <div className="pt-assessment-key">
                   <Label
@@ -140,11 +118,7 @@ export const getCompletedTransformedItems = (assessmentsByStatus=[], cities, loc
                 </div>
               </div>
               <div style={{ padding: "5px 0px 0px 0px" }} className="pt-assessment-info  ">
-
               </div>
-              {/* </div>
-              <div className="col-sm-12 col-xs-12" > */}
-
               <div style={{ padding: "5px 0px 0px 0px" }} className="pt-assessment-info  ">
                 <div className="pt-assessment-key">
                   <Label
@@ -160,52 +134,22 @@ export const getCompletedTransformedItems = (assessmentsByStatus=[], cities, loc
                   />
                 </div>
               </div>
-              {/* </div> */}
-              {/* <Label
-                label={getCommaSeperatedAddress(item.address, cities)}
-                containerStyle={secondaryTextContainer}
-                labelStyle={secondaryTextLabelStyle}
-                color="#484848"
-              /> */}
-              {/* <Label
-                label={`Assessment No.: ${item.assessmentNumber}`}
-                containerStyle={secondaryTextContainer}
-                labelStyle={secondaryTextLabelStyle}
-                color="#484848"
-              /> */}
             </div>
-         {  <Divider style={{ marginBottom: 0 ,    marginTop: "15px" }} />}
-         {/* { index!=0 && <Divider style={{ marginBottom: 0 ,    marginTop: "15px" }} />} */}
+
+            {<Divider style={{ marginBottom: 0, marginTop: "15px" }} />}
+
 
           </div>
         ),
-        // secondaryText: (
-        //   <div style={{ height: "auto", marginTop: 0 }}>
-        //     <Label label={item && item.financialYear} containerStyle={secondaryTextContainer} labelStyle={secondaryTextLabelStyle} color="#484848" />
-        //     <Label
-        //       label={getCommaSeperatedAddress(item.address, cities)}
-        //       containerStyle={secondaryTextContainer}
-        //       labelStyle={secondaryTextLabelStyle}
-        //       color="#484848"
-        //     />
-        //     <Label
-        //       label={`Assessment No.: ${item.assessmentNumber}`}
-        //       containerStyle={secondaryTextContainer}
-        //       labelStyle={secondaryTextLabelStyle}
-        //       color="#484848"
-        //     />
-        //   </div>
-        //),
         epocDate: item.assessmentDate,
         financialYear: item.financialYear,
         assessmentNo: item.assessmentNumber,
-        latestAssessmentNumber: item.latestAssessmentNumber||item.assessmentNumber,
-        propertyId: item.propertyId||propertyId||'',
+        latestAssessmentNumber: item.latestAssessmentNumber || item.assessmentNumber,
+        propertyId: item.propertyId || propertyId || '',
         propertyDetails: item,
         property: item.property,
         tenantId: item.tenantId,
-        // date: getDateFromEpoch(item.assessmentDate),
-        status: get(item, "receiptInfo.status")||'Pending',
+        status: get(item, "receiptInfo.status") || 'Pending',
         consumerCode: `${item.propertyId}:${item.assessmentNumber}`,
         receipt: true,
         localizationLabels: localizationLabels,

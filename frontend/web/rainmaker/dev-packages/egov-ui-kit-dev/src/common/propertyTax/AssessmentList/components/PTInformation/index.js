@@ -28,18 +28,18 @@ const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, p
                             <PropertyAddressInfo properties={properties}></PropertyAddressInfo>
                             <AssessmentInfo properties={properties} ></AssessmentInfo>
                             <OwnerInfo properties={properties} ></OwnerInfo>
-                            <Card style={{ backgroundColor: 'rgb(242,242,242)' }}
+                            <Card style={{ backgroundColor: 'rgb(242,242,242)', boxShadow: 'none' }}
                                 textChildren={
-                                    <div ><List
-                                        innerDivStyle={innerDivStyle}
-                                        items={items2}
-                                        listItemStyle={{ padding: "0px", backgroundColor: 'rgb(242,242,242)', borderWidth: "10px 10px 0px" }}
-                                        nestedListStyle={{ padding: "0px", backgroundColor: 'rgb(242,242,242)' }}
-                                        // primaryTogglesNestedList={true}
-                                        onItemClick={onItemClick}
-                                    // hoverColor={hoverColor}
-                                    />
-                                    </div>} />
+                                    <div >
+                                        <List
+                                            innerDivStyle={innerDivStyle}
+                                            items={items2}
+                                            listItemStyle={{ padding: "0px", backgroundColor: 'rgb(242,242,242)', borderWidth: "10px 10px 0px" }}
+                                            nestedListStyle={{ padding: "0px", backgroundColor: 'rgb(242,242,242)' }}
+                                            onItemClick={onItemClick}
+                                        />
+                                    </div>
+                                } />
                         </div>
                     }
                 />
