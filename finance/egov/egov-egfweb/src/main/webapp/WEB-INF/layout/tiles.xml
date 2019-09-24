@@ -800,4 +800,9 @@
         <put-attribute name="body" value="/WEB-INF/views/contractorbill/contractorbill-update.jsp"/>
     </definition>
     
+     <definition name="coareport" extends="base_layout">
+        <put-attribute name="page-title" value="title.coa.report" cascade="true"/>
+        <put-attribute name="body" value="/WEB-INF/views/coareport.jsp"/>
+    </definition>
+    
 </tiles-definitions>

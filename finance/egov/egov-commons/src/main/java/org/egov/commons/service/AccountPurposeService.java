@@ -47,9 +47,12 @@
  */
 package org.egov.commons.service;
 
+import java.util.List;
+
 import org.egov.commons.EgfAccountcodePurpose;
 import org.egov.commons.repository.AccountPurposeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,5 +65,9 @@ public class AccountPurposeService {
 
     public EgfAccountcodePurpose getByPurposeId(final Long purposeId) {
         return accountPurposeRepository.findOne(Integer.valueOf(purposeId.toString()));
+    }
+
+    public List<EgfAccountcodePurpose> findAll() {
+        return accountPurposeRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
     }
 }
