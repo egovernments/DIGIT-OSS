@@ -98,12 +98,13 @@ public class InstrumentService {
 	public InstrumentResponse createInstrument(ReceiptReq receiptRequest, VoucherResponse voucherResponse, FinanceMdmsModel finSerMdms) throws VoucherCustomException {
 		
 			Receipt receipt = receiptRequest.getReceipt().get(0);
+			String receiptNumber = receipt.getBill().get(0).getBillDetails().get(0).getReceiptNumber();
 			FinancialStatus status  = microServiceUtil.getFinancialStatusByCode(receipt.getTenantId(), receiptRequest.getRequestInfo(), finSerMdms, FINANCE_STATUS_NEW);
 			Instrument instrument = receipt.getInstrument();
 			InstrumentContract instrumentContract = instrument.toContract();
 			instrumentContract.setFinancialStatus(status);
 			if (voucherResponse != null) {
-				prepareInstrumentVoucher(instrumentContract, voucherResponse.getVouchers().get(0).getVoucherNumber(), receipt.getReceiptNumber());
+				prepareInstrumentVoucher(instrumentContract, voucherResponse.getVouchers().get(0).getVoucherNumber(), receiptNumber);
 			}
 			StringBuilder url = new StringBuilder(propertiesManager.getInstrumentHostUrl() + propertiesManager.getInstrumentCreate());
 			InstrumentRequest request = new InstrumentRequest();

@@ -82,7 +82,7 @@ public class InstrumentEntity extends AuditableEntity {
         branchName = instrument.getBranchName();
         bankAccountId = instrument.getBankAccount() != null ? instrument.getBankAccount().getAccountNumber()
                 : null;
-        financialStatusId = instrument.getFinancialStatus() != null ? instrument.getFinancialStatus().getId()
+        financialStatusId = instrument.getFinancialStatus() != null ? instrument.getFinancialStatus().getCode()
                 : null;
         remittanceVoucherId = instrument.getRemittanceVoucherId();
         transactionType = instrument.getTransactionType() != null ? instrument.getTransactionType().toString()
