@@ -202,4 +202,4 @@ const createReceiptUIInfo = (property, receiptDetails, cities, totalAmountToPay,
   };
 };
 
-export { createReceiptUIInfo, createReceiptDetails };
+export { createReceiptUIInfo, createReceiptDetails,getHeaderDetails };

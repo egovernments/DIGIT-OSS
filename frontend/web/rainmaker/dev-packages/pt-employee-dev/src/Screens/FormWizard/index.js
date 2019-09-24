@@ -69,6 +69,7 @@ import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementCard";
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
+import {getHeaderDetails} from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
 
 class FormWizard extends Component {
   state = {
@@ -1809,15 +1810,20 @@ class FormWizard extends Component {
   };
   downloadAcknowledgementForm = () => {
     const { assessedPropertyDetails, imageUrl } = this.state;
+    const {common,app={}}=this.props;
     const { Properties } = assessedPropertyDetails;
     const { address, propertyDetails, propertyId } = Properties[0];
     const { owners } = propertyDetails[0];
+    const { localizationLabels } = app;
+    const { cities } = common;
+    const header = getHeaderDetails(Properties[0],cities,localizationLabels)
     let receiptDetails = {};
     receiptDetails = {
       address,
       propertyDetails,
       address,
       owners,
+      header,
       propertyId
     }
     generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, {}, imageUrl);
@@ -1869,7 +1875,7 @@ class FormWizard extends Component {
 }
 
 const mapStateToProps = state => {
-  const { form, common } = state || {};
+  const { form, common,app } = state || {};
   const { propertyAddress } = form;
   const { city } =
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
@@ -1878,7 +1884,8 @@ const mapStateToProps = state => {
     form,
     currentTenantId,
     prepareFormData: common.prepareFormData,
-    common
+    common,
+    app
   };
 };
 
