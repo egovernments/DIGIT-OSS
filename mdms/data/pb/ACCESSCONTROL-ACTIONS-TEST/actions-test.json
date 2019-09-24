@@ -14699,6 +14699,48 @@
       "code": "null",
       "leftIcon": "editor:insert-chart",
       "path": "Finance.Transactions.Deductions.Deductions RTGS Assignment"
+    },
+    {
+      "id": 1837,
+      "name": "Financial Bank Reconcilation",
+      "navigationURL": "services/EGF/brs/manualReconciliation-newForm.action",
+      "url": "url",
+      "parentModule": "EGF",
+      "displayName": "Reconcile with Bank-Manual",
+      "orderNumber": 1,
+      "enabled": true,
+      "serviceCode": "FinanceReconcile",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Transactions.Bank Reconciliation.Reconcile with Bank-Manual"
+    },
+    {
+      "id": 1838,
+      "name": "Bank Statement Entries - Not In Bank Book",
+      "navigationURL": "services/EGF/payment/bankEntriesNotInBankBook-newform.action",
+      "url": "url",
+      "parentModule": "EGF",
+      "displayName": "Bank Statement Entries - Not In Bank Book",
+      "orderNumber": 1,
+      "enabled": true,
+      "serviceCode": "FinanceReconcile",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Transactions.Bank Reconciliation.Bank Statement Entries - Not In Bank Book"
+    },
+    {
+      "id": 1839,
+      "name": "Reconciliation Summary Report",
+      "navigationURL": "services/EGF/brs/bankReconciliation-newForm.action",
+      "url": "url",
+      "parentModule": "EGF",
+      "displayName": "Reconciliation Summary Report",
+      "orderNumber": 1,
+      "enabled": true,
+      "serviceCode": "FinanceReconcile",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Transactions.Bank Reconciliation.Reconciliation Summary Report"
     }
   ]
 }
