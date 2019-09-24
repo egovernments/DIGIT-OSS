@@ -18553,6 +18553,18 @@
       "actionid": 1839,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "EGF_MASTER_ADMIN",
+      "actionid": 1840,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1840,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
