@@ -15,10 +15,11 @@ const ptSteps = [
   "PT_OWNERSHIP_INFO_SUB_HEADER",
   "PT_COMMON_SUMMARY"
 ];
-const downloadReceipt=()=>{
+const downloadReceipt = () => {
   generateReceipt("pt-reciept-citizen", receiptDetails, {}, '');
 }
 const WizardComponent = ({
+  downloadAcknowledgementForm,
   content,
   header,
   footer,
@@ -71,7 +72,7 @@ const WizardComponent = ({
         style={{ textAlign: "right" }}
       >
         <div className="button-container col-xs-10" style={{ float: "right" }}>
-          {selected != 3 && selected != 5 && <Button
+          {selected != 3 && selected != 5 && selected != 4 && <Button
             label={
               <Label buttonLabel={true}
                 label={
@@ -82,11 +83,20 @@ const WizardComponent = ({
             }
             onClick={() => {
               (selected - 1 === -1
-              ? history.push("/property-tax")
-              : onTabClick(selected - 1));
+                ? history.push("/property-tax")
+                : onTabClick(selected - 1));
               // ((selected - 1 === -1)
               //   ? ((selected != 4)? (history.push("/property-tax")):(downloadReceipt()))
               //   : (onTabClick(selected - 1)));
+            }}
+            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
+            buttonStyle={{ border: "1px solid #fe7a51" }}
+            style={{ marginRight: 45, width: "30%" }}
+          />}
+          {selected == 4 && <Button
+            label={<Label buttonLabel={true} label={backLabel} color="#fe7a51" />}
+            onClick={() => {
+              downloadAcknowledgementForm();
             }}
             labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
             buttonStyle={{ border: "1px solid #fe7a51" }}

@@ -72,6 +72,7 @@ import {
 import commonConfig from "config/common.js";
 import "./index.css";
 import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementCard";
+import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
 
 class FormWizard extends Component {
   state = {
@@ -317,6 +318,7 @@ class FormWizard extends Component {
   };
 
   componentDidMount = async () => {
+    const { selected } = this.state;
     let {
       renderCustomTitleForPt,
       fetchGeneralMDMSData,
@@ -325,6 +327,7 @@ class FormWizard extends Component {
     } = this.props;
     toggleSpinner();
     try {
+
       let { search } = this.props.location;
       const assessmentId =
         getQueryValue(search, "assessmentId") ||
@@ -402,6 +405,19 @@ class FormWizard extends Component {
     } catch (e) {
       console.log("e");
       toggleSpinner();
+    }
+    if (selected > 2) {
+
+      const { tenantId: id } = this.state.assessedPropertyDetails.Properties[0].propertyDetails[0];
+
+
+      let receiptImageUrl = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${id}/logo.png`;
+      this.convertImgToDataURLviaCanvas(
+        receiptImageUrl,
+        function (data) {
+          this.setState({ imageUrl: data });
+        }.bind(this)
+      );
     }
   };
 
@@ -1789,20 +1805,52 @@ class FormWizard extends Component {
     if (!isFullPayment && partialAmountError) return;
     this.updateIndex(selected + 1);
   };
-  componentDidUpdate(){
+  componentDidUpdate() {
     const {
       selected,
       formValidIndexArray,
     } = this.state;
-    const {  location } = this.props;
+    const { location } = this.props;
     const { search } = location;
     let proceedToPayment = Boolean(getQueryValue(search, "proceedToPayment").replace('false', ''));
-    if(proceedToPayment&&selected==3){
+    if (proceedToPayment && selected == 3) {
       this.setState({
         selected: 5,
         formValidIndexArray: [...formValidIndexArray, 5]
       });
     }
+  }
+  convertImgToDataURLviaCanvas = (url, callback, outputFormat) => {
+    var img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.onload = function () {
+      var canvas = document.createElement("CANVAS");
+      var ctx = canvas.getContext("2d");
+      var dataURL;
+      canvas.height = this.height;
+      canvas.width = this.width;
+      ctx.drawImage(this, 0, 0);
+      dataURL = canvas.toDataURL(outputFormat);
+      callback(dataURL);
+      canvas = null;
+    };
+    img.src = url;
+  };
+  downloadAcknowledgementForm = () => {
+    const { assessedPropertyDetails, imageUrl } = this.state;
+    const { Properties } = assessedPropertyDetails;
+    const { address, propertyDetails, propertyId } = Properties[0];
+    const { owners } = propertyDetails[0];
+    let receiptDetails = {};
+    receiptDetails = {
+      address,
+      propertyDetails,
+      address,
+      owners,
+      propertyId
+    }
+
+    generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, {}, imageUrl);
   }
   render() {
     const {
@@ -1823,7 +1871,7 @@ class FormWizard extends Component {
     const propertyId = getQueryValue(search, "propertyId");
     const { header, subHeaderValue, headerValue } = this.getHeader(selected, search);
     console.log(header, subHeaderValue, 'header,subHeaderValue');
-   
+
     return (
       <div className="wizard-form-main-cont">
         <PTHeader
@@ -1833,6 +1881,7 @@ class FormWizard extends Component {
           subHeaderValue={subHeaderValue}
         />
         <WizardComponent
+          downloadAcknowledgementForm={this.downloadAcknowledgementForm}
           content={renderStepperContent(selected, fromReviewPage)}
           onTabClick={this.onTabClick}
           selected={selected}

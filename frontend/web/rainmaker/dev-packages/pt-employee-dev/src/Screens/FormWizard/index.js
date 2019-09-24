@@ -68,6 +68,7 @@ import sortBy from "lodash/sortBy";
 import { getTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementCard";
+import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
 
 class FormWizard extends Component {
   state = {
@@ -95,7 +96,8 @@ class FormWizard extends Component {
     valueSelected: "Full_Amount",
     nextButtonEnabled: true,
     calculationScreenData: [],
-    assessedPropertyDetails: {}
+    assessedPropertyDetails: {},
+    imageUrl: ''
   };
 
   updateTotalAmount = (value, isFullPayment, errorText) => {
@@ -332,6 +334,7 @@ class FormWizard extends Component {
     } = this.props;
     let { search } = location;
     showSpinner();
+    const { selected } = this.state;
     const isReasses = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
     const propertyId = getQueryValue(search, "propertyId");
     const isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
@@ -365,6 +368,19 @@ class FormWizard extends Component {
         tenantId
       );
       await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
+      if (selected > 2) {
+
+        const { tenantId: id } = this.state.assessedPropertyDetails.Properties[0].propertyDetails[0];
+
+
+        let receiptImageUrl = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${id}/logo.png`;
+        this.convertImgToDataURLviaCanvas(
+          receiptImageUrl,
+          function (data) {
+            this.setState({ imageUrl: data });
+          }.bind(this)
+        );
+      }
     }
 
     const { ownerInfoArr } = this.state;
@@ -1789,21 +1805,54 @@ class FormWizard extends Component {
       hideSpinner();
     }
   };
-  componentDidUpdate(){
+  componentDidUpdate() {
     const {
       selected,
       formValidIndexArray,
     } = this.state;
-    const {  location } = this.props;
+    const { location } = this.props;
     const { search } = location;
     let proceedToPayment = Boolean(getQueryValue(search, "proceedToPayment").replace('false', ''));
-    if(proceedToPayment&&selected==3){
+    if (proceedToPayment && selected == 3) {
       this.setState({
         selected: 5,
         formValidIndexArray: [...formValidIndexArray, 5]
       });
     }
   }
+  convertImgToDataURLviaCanvas = (url, callback, outputFormat) => {
+    var img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.onload = function () {
+      var canvas = document.createElement("CANVAS");
+      var ctx = canvas.getContext("2d");
+      var dataURL;
+      canvas.height = this.height;
+      canvas.width = this.width;
+      ctx.drawImage(this, 0, 0);
+      dataURL = canvas.toDataURL(outputFormat);
+      callback(dataURL);
+      canvas = null;
+    };
+    img.src = url;
+  };
+  downloadAcknowledgementForm = () => {
+    const { assessedPropertyDetails, imageUrl } = this.state;
+    const { Properties } = assessedPropertyDetails;
+    const { address, propertyDetails, propertyId } = Properties[0];
+    const { owners } = propertyDetails[0];
+    let receiptDetails = {};
+    receiptDetails = {
+      address,
+      propertyDetails,
+      address,
+      owners,
+      propertyId
+    }
+
+    generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, {}, imageUrl);
+  }
+
   render() {
     const {
       renderStepperContent,
@@ -1823,12 +1872,13 @@ class FormWizard extends Component {
     const propertyId = getQueryValue(search, "propertyId");
     const { header, subHeaderValue, headerValue } = this.getHeader(selected, search);
     console.log(header, subHeaderValue, 'header,subHeaderValue');
- 
+
     return (
       <div className="wizard-form-main-cont">
         <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
 
         <WizardComponent
+          downloadAcknowledgementForm={this.downloadAcknowledgementForm}
           content={renderStepperContent(selected, fromReviewPage)}
           onTabClick={this.onTabClick}
           selected={selected}
