@@ -4,3 +4,18 @@
   letter-spacing: 0.58px;
   line-height: 17px;
 }
+
+
+@media only screen and (min-width: 768px) {
+  .backgroundWhite{
+    background-color: white;
+    margin-left: 5px !important;
+    margin-top: 15px !important;
+  }
+  .abcd .selected{ 
+    color:green !important;
+    background-color:rgb(31, 8, 241) !important;
+    
+  }
+}
+

@@ -143,6 +143,9 @@ body.employee-user-profile {
 .screen-title-label {
   display: inline-block;
 }
+.menu-search-container >div >svg{
+  color: rgba(0, 0, 0, 0.87) !important; 
+}
 
 @media only screen and (min-width: 768px) {
   .screenHeaderLabelStyle .label-text {
@@ -156,9 +159,17 @@ body.employee-user-profile {
   .full-menu-drawer .textfield {
     margin-left: 5px;
     width:auto !important;
+    background-color:#34495E !important;
   }
+
+.menu-search-container >div >svg{
+  color:#fff !important; 
+}
+
   .menu-search-container{
+    background-color: #34495E;
     margin: 0 5px;
+    
   }
   .icon-menu-drawer{
     svg{
@@ -253,6 +264,7 @@ body.employee-user-profile {
 }
 
 .action-menu-drawer .drawer-backGround {
+  background-color:#34495E;
   top: 64px !important;
 }
 
@@ -261,7 +273,7 @@ body.employee-user-profile {
 }
 
 .action-menu-drawer {
-  background-color: #fff;
+  background-color:#34495E;
   min-height: calc(100vh - 64px);
   position: fixed;
   z-index: 1001;
@@ -341,6 +353,13 @@ body.employee-user-profile {
   }
   .pgr-call-icon {
     pointer-events: none;
+  }
+  .menu-right-icon{
+    fill:rgba(255, 255, 255, 0.87) !important;
+  }
+  .menu-label-style{
+    color:rgba(255, 255, 255, 0.87) !important; 
+    fill:rgba(255, 255, 255, 0.87) !important; 
   }
 }
 @media only screen and (max-width: 768px) {
@@ -508,6 +527,7 @@ body.employee-user-profile {
 .icon-menu-drawer .iconClassHover{
   margin: auto !important;
   left:unset !important;
+
 }
 .drawer-toggle-button {
   background : #fe7a511f;
