@@ -1805,7 +1805,7 @@ class FormWizard extends Component {
     const { owners } = propertyDetails[0];
     const { localizationLabels } = app;
     const { cities } = common;
-    const header = getHeaderDetails(Properties[0],cities,localizationLabels)
+    const header = getHeaderDetails(Properties[0],cities,localizationLabels,true)
     let receiptDetails = {};
     receiptDetails = {
       address,
