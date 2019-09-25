@@ -78,7 +78,7 @@ public class ChartOfAccountsReportController {
         
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/search")
+    @RequestMapping(method = {RequestMethod.POST,RequestMethod.GET}, value = "/search")
     public String searchForm(final Model model) {
         prepareNewForm(model);
         return COA_REPORT;
