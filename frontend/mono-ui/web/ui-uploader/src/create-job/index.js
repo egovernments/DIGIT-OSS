@@ -27,7 +27,6 @@ class CreateJob extends Component {
   };
 
   handleOnChange = (e, maxFileSize) => {
-    console.log("sudhanshu", maxFileSize);
     const file = e.target.files[0];
     let uploadDocument = true;
     let fileSize = getFileSize(file);
