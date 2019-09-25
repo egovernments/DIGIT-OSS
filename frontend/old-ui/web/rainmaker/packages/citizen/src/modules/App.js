@@ -99,7 +99,7 @@ class App extends Component {
     return (
       <div>
         <Router routes={routes} hasLocalisation={hasLocalisation} defaultUrl={defaultUrl} />
-        {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} variant={"error"} />}
+        {toast && toast.open && !isEmpty(toast.message) && <Toast open={toast.open} message={toast.message} variant={toast.variant} />}
         {loading && <LoadingIndicator />}
       </div>
     );
