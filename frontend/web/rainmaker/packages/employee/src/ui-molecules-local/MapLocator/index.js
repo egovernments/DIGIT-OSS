@@ -112,7 +112,7 @@ class MapLocator extends Component {
 
   render() {
     let { currLoc } = this.state;
-    const { location, localizationLabels } = this.props;
+    const { location, localizationLabels ,defaultLocation} = this.props;
     var _currloc = !isEmpty(currLoc) ? currLoc : isEmpty(location) ? defaultLocation : location;
     let translatedSearchPlaceholder = getLocaleLabels("Search Address", "SEARCH_ADDRESS_MAP_PLACEHOLDER", localizationLabels);
     return (

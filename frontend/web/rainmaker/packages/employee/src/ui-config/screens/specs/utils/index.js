@@ -355,16 +355,17 @@ export const ulbFilter = getCommonCard({
         xs: 12,
         sm: 3,
       },
-      props: {
-        data: [
-          {
-            value: getTenantId(),
-            label: `TENANT_TENANTS_${getTransformedLocale(getTenantId())}`,
-          },
-        ],
-        optionValue: "value",
-        optionLabel: "label",
-      },
+      cityDropdown: "common.cities",
+      // props: {
+      //   data: [
+      //     {
+      //       value: getTenantId(),
+      //       label: `TENANT_TENANTS_${getTransformedLocale(getTenantId())}`,
+      //     },
+      //   ],
+      //   optionValue: "value",
+      //   optionLabel: "label",
+      // },
     }),
   }),
 });
