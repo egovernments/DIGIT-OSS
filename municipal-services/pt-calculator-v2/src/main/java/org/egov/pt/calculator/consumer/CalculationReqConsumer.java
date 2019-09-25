@@ -20,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-@Service
+//@Service
 @Slf4j
 public class CalculationReqConsumer {
 
