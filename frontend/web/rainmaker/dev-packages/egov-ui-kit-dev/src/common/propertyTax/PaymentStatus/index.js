@@ -4,7 +4,9 @@ import Label from "egov-ui-kit/utils/translationNode";
 import ActionFooter from "../../common/ActionFooter";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import generateReceipt from "./Components/receiptsPDF";
+import {localStorageSet} from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
+
 
 const labelStyle = {
   fontWeight: 500,
@@ -16,7 +18,7 @@ class PaymentStatus extends Component {
   }
   ptReceiptAvailableHook() {
     if (this.props.receiptDetails && this.props.receiptDetails.ReceiptNo) {
-      if (window.appOverrides && window.appOverrides.validateForm) 
+      if (window.appOverrides && window.appOverrides.validateForm)
         window.appOverrides.validateForm("PTReceiptAvailable", {extraData: this.props.extraData})
       }
     return true;
@@ -98,8 +100,11 @@ class PaymentStatus extends Component {
             ) : null}
             {receiptDetails && receiptDetails.ReceiptNo && this.ptReceiptAvailableHook() && (
               <div
-                onClick={() => {
-                  generateReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, receiptImageUrl, false, extraData);
+                onClick={(e) => {
+                  localStorageSet("rd-propertyId",receiptDetails.propertyId);
+                  localStorageSet("rd-assessmentNumber",receiptDetails.propertyDetails[0].assessmentNumber);
+                  generateReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, receiptImageUrl, false, extraData,true);
+
                 }}
               >
                 <Label
