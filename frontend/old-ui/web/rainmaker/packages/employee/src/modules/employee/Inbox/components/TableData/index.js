@@ -8,6 +8,7 @@ import Tab from "@material-ui/core/Tab";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import { withStyles } from "@material-ui/core/styles";
 // import get from "lodash";
 // import isEmpty from "lodash/isEmpty";
 import _ from "lodash";
@@ -55,6 +56,12 @@ const prepareInboxDataRows = (data) => {
     return dataRows;
   });
 };
+
+const styles = theme => ({
+  textColorPrimary: {
+    color: "red"
+  }
+})
 
 class TableData extends Component {
   state = {
@@ -167,21 +174,22 @@ class TableData extends Component {
 
   render() {
     const { value, taskboardData, tabData, inboxData, moduleName } = this.state;
+    const {classes} = this.props
     return (
       <div className="col-sm-12">
         <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
         <Taskboard data={taskboardData} />
-        <div className="col-sm-12">
+        <div className="col-sm-12 backgroundWhite">
           <Tabs
             value={value}
             onChange={this.handleChange}
-            className="inbox-tabs-container"
+            className={`inbox-tabs-container ${classes.textColorPrimary}`}
             indicatorColor="primary"
             textColor="primary"
-            style={{ borderBottom: "1px rgba(0, 0, 0, 0.11999999731779099) solid" }}
+            style={{ borderBottom: "1px rgba(0, 0, 0, 0.11999999731779099) solid" ,textColor:"red" }}
           >
             {tabData.map((item) => {
-              return <Tab className="inbox-tab" label={<Label label={item.label} dynamicArray={item.dynamicArray} />} />;
+              return <Tab className={`inbox-tab ${classes.textColorPrimary}`} label={<Label label={item.label} dynamicArray={item.dynamicArray} />} />;
             })}
           </Tabs>
           <div className="inbox-filter">
@@ -223,7 +231,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
+export default withStyles(styles)(connect(
   mapStateToProps,
   mapDispatchToProps
-)(TableData);
+)(TableData));
