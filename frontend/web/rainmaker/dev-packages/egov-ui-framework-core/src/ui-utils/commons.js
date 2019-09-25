@@ -530,3 +530,18 @@ export const getUserDataFromUuid = async bodyObject => {
     return {};
   }
 };
+export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
+  if (typeof mSewaApp === "undefined") {
+    // we are running in browser
+    receiptPDF.download(filename);
+  } else {
+    // we are running under webview
+    receiptPDF.getBase64(data => {
+      mSewaApp.downloadBase64File(data, filename);
+    });
+  }
+};
+
+if (window) {
+  window.downloadPDFFileUsingBase64 = downloadPDFFileUsingBase64;
+}
