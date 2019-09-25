@@ -183,4 +183,11 @@ public class Constants {
     
     public static final String VIEW_COA = "view coa";
     public static final String VIEW_MODIFY_COA = "view-modify coa";
+    
+    
+    public static final String INCOME_TYPE  = "Income";
+    public static final String EXPENSE_TYPE  = "Expense";
+    public static final String LIABILITY_TYPE  = "Liability";
+    public static final String ASSET_TYPE  = "Asset";
+   
 }

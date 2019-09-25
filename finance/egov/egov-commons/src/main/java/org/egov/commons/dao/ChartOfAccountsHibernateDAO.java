@@ -61,6 +61,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -646,4 +647,24 @@ public class ChartOfAccountsHibernateDAO implements ChartOfAccountsDAO {
                 .setCacheable(true).list();
 
     }
+    
+  
+    
+    public List<CChartOfAccounts> findCOAByLengthAndParentId(Integer length,Long parentId) {
+
+        final Query query = getCurrentSession().createQuery(
+                "from CChartOfAccounts coa where  " + "length(glcode)=:length and coa.parentId=:parentId order by glcode");
+        query.setInteger("length", length);
+        query.setLong("parentId", parentId);
+        return query.list();
+    }
+    
+    public List<CChartOfAccounts> findCOAByLength(Integer length) {
+
+        final Query query = getCurrentSession().createQuery(
+                "from CChartOfAccounts where  " + "length(glcode)=:length order by glcode");
+        query.setInteger("length", length);
+        return query.list();
+    }
+    
 }
