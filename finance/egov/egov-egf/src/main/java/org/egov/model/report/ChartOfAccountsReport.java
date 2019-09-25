@@ -9,23 +9,7 @@ public class ChartOfAccountsReport {
     private String majorCode;
     private Long majorCodeId;
     private Long minorCodeId;
-    public Long getMajorCodeId() {
-        return majorCodeId;
-    }
-
-    public void setMajorCodeId(Long majorCodeId) {
-        this.majorCodeId = majorCodeId;
-    }
-
-    public Long getMinorCodeId() {
-        return minorCodeId;
-    }
-
-    public void setMinorCodeId(Long minorCodeId) {
-        this.minorCodeId = minorCodeId;
-    }
-
-    private String minorCode;
+   private String minorCode;
     private String majorName;
     private String minorName;
     private Character type;
@@ -177,6 +161,22 @@ public class ChartOfAccountsReport {
 
     public void setAccountDetailType(String accountDetailType) {
         this.accountDetailType = accountDetailType;
+    }
+    
+    public Long getMajorCodeId() {
+        return majorCodeId;
+    }
+
+    public void setMajorCodeId(Long majorCodeId) {
+        this.majorCodeId = majorCodeId;
+    }
+
+    public Long getMinorCodeId() {
+        return minorCodeId;
+    }
+
+    public void setMinorCodeId(Long minorCodeId) {
+        this.minorCodeId = minorCodeId;
     }
 
 

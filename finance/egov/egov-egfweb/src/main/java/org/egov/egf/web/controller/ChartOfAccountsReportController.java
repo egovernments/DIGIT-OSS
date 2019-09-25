@@ -60,15 +60,6 @@ public class ChartOfAccountsReportController {
         return new ChartOfAccountsReport();
     }
 
-    public @ModelAttribute("type") List<String> getTypeAllCOA() {
-        final List<String> type = new ArrayList<>();
-        type.add(Constants.INCOME_TYPE);
-        type.add(Constants.EXPENSE_TYPE);
-        type.add(Constants.LIABILITY_TYPE);
-        type.add(Constants.ASSET_TYPE);
-        return type;
-    }
-
     private void prepareNewForm(Model model) {
         model.addAttribute("accountDetailTypeList", accountdetailtypeService.findAll());
         model.addAttribute("purposeList", accountPurposeService.findAll());

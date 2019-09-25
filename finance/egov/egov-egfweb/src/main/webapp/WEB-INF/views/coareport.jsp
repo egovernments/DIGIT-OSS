@@ -57,7 +57,7 @@
       <div class="col-md-12">
         <div class="panel panel-primary" data-collapsed="0">
           <div class="panel-heading">
-            <div class="panel-title">Chartofaccount Report</div>
+            <div class="panel-title">Chart Of Account Report</div>
           </div>
           <div class="panel-body">
          
@@ -65,7 +65,7 @@
             <label class="col-sm-3 control-label text-right"><spring:message
 							code="lbl.majorcode" />:</label>
 					<div class="col-sm-3 add-margin">
-						<form:select name="majorCode" path="" data-first-option="false"
+						<form:select name="majorCodeId" path="" data-first-option="false"
 							id="majorCode" cssClass="form-control">
 							<form:option value="">
 								<spring:message code="lbls.select" />
@@ -78,7 +78,7 @@
 					 <label class="col-sm-2 control-label text-right"><spring:message
 							code="lbl.minorcode" />:</label>
 					<div class="col-sm-3 add-margin">
-						<form:select name="minorCode" path="" data-first-option="false"
+						<form:select name="minorCodeId" path="" data-first-option="false"
 							id="minorCode" cssClass="form-control">
 							<form:option value="">
 								<spring:message code="lbls.select" />
@@ -116,17 +116,6 @@
 					</div>
               <label class="col-sm-2 control-label"><spring:message code="lbl.type" />:</label>
 						<div class="col-sm-3 add-margin">
-							<%-- <form:select id="type" name="type" path="type"
-								cssClass="form-control" cssErrorClass="form-control error"
-								>
-								<form:option value="">
-									<spring:message code="lbl.select" />
-								</form:option>
-								<c:forEach items="${type}" var="ty">
-									<form:option value="${ty}">${ty}</form:option>
-								</c:forEach>
-							</form:select> --%>
-							
 							<select name="type" id="type" class="form-control mandatory">
 								<option value="">
 									<spring:message code="lbl.select" />
@@ -235,25 +224,18 @@
 		</table>
 	</div>
 </div> 
-<link rel="stylesheet"
-	href="<cdn:url value='/resources/global/css/bootstrap/bootstrap-datepicker.css' context='/services/egi'/>" />
-<link rel="stylesheet" href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/jquery.dataTables.min.css' context='/services/egi'/>"/>
+<link rel="stylesheet" href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/jquery.dataTables.min.css' context='/services/egi'/>" />
 <link rel="stylesheet" href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/dataTables.bootstrap.min.css' context='/services/egi'/>">
-<script type="text/javascript"
-	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/jquery.dataTables.min.js' context='/services/egi'/>"></script>
-<script type="text/javascript"
-	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/dataTables.bootstrap.js' context='/services/egi'/>"></script>
-<script type="text/javascript"
-	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/dataTables.tableTools.js' context='/services/egi'/>"></script>
-<script type="text/javascript"
-	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/TableTools.min.js' context='/services/egi'/>"></script>
-<script type="text/javascript"
-	src="<cdn:url value='/resources/global/js/bootstrap/typeahead.bundle.js' context='/services/egi'/>"></script>
-<script
-	src="<cdn:url value='/resources/global/js/jquery/plugins/jquery.inputmask.bundle.min.js' context='/services/egi'/>"></script>
-<script type="text/javascript"
-	src="<cdn:url value='/resources/global/js/jquery/plugins/jquery.validate.min.js' context='/services/egi'/>"></script>
-<script
-	src="<cdn:url value='/resources/global/js/bootstrap/bootstrap-datepicker.js' context='/services/egi'/>"
-	type="text/javascript"></script>
+<link rel="stylesheet" href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/buttons.bootstrap.min.css' context='/services/egi'/>">
+<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/jquery.dataTables.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/dataTables.bootstrap.js' context='/services/egi'/>"></script>
+<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/dataTables.buttons.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/buttons.bootstrap.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/buttons.flash.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/jszip.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/pdfmake.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/vfs_fonts.js' context='/services/egi'/>"></script>
+<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/buttons.html5.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/buttons.print.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/jquery.validate.min.js' context='/services/egi'/>"></script>
 <script type="text/javascript" src="<cdn:url value='/resources/app/js/coareport.js?rnd=${app_release_no}'/>"></script>
