@@ -121,9 +121,9 @@ public class ChartOfAccountsReportService {
         if (coaSearchResultObj.getType() != null)
             queryStr.append(" and coa.type =:type ");
         if (coaSearchResultObj.getPurposeId() != null)
-            queryStr.append(" and accountcodePurpose.id =:purposeId");
+            queryStr.append(" and acp.id =:purposeId");
         if (coaSearchResultObj.getDetailTypeId() != null)
-            queryStr.append(" and detailtype.id =:detailTypeId ");
+            queryStr.append(" and acdt.id =:detailTypeId ");
         if (coaSearchResultObj.getIsActiveForPosting() != null)
             queryStr.append(" and coa.isActiveForPosting =:isActiveForPosting ");
         if (coaSearchResultObj.getBudgetCheckReq() != null)
