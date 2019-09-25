@@ -149,7 +149,7 @@ class Toast extends React.Component  {
           onClose={this.handleClose}
         >
           <MySnackbarContentWrapper
-            variant={variant}
+            variant={variant? variant:"error"}
             className={classes.margin}
             message={message}
             onClose={this.handleClose}
@@ -163,7 +163,7 @@ class Toast extends React.Component  {
 
 Toast.propTypes = {
   open: PropTypes.bool,
-  error: PropTypes.bool,
+  variant: PropTypes.string,
   autoHideDuration: PropTypes.number,
   classes: PropTypes.object.isRequired
 };
