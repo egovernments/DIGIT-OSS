@@ -206,12 +206,6 @@ class UserSettings extends Component {
     );
   }
 }
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setRoute: (route) => dispatch(setRoute(route)),
-  };
-};
-
 
 const mapStateToProps = ({ common }) => {
   const { stateInfoById } = common;
