@@ -3,8 +3,6 @@ import { connect } from "react-redux";
 import TableData from "./components/TableData";
 import Label from "egov-ui-kit/utils/translationNode";
 import ServiceList from "egov-ui-kit/common/common/ServiceList"
-import { Boxboard } from "./components/actionItems";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 const iconStyle = {
   width: "48px",
@@ -60,13 +58,6 @@ const mapStateToProps = (state) => {
   return { name, menu };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setRoute: (route) => dispatch(setRoute(route)),
-  };
-};
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
-)(Inbox);
+  )(Inbox);
