@@ -8,11 +8,8 @@
   "scripts": {
     "clean": "lerna clean -f --yes && rm -rf node_modules",
     "reset": "yarn run clean && yarn i",
-	 
     "dev:citizen": "yarn run build-css-citizen && cd packages/citizen && set PORT=3006 && yarn start ",
-    "
     "dev:employee": "yarn run build-css-employee && cd packages/employee && yarn start",
-     
     "prod:citizen": "yarn run go_citizen && cd packages/citizen && yarn run build",
     "prod:employee": "yarn run go_employee && cd packages/employee && yarn run build",
     "transpile-citizen-modules": "run-p pgr-citizen pt-citizen",
