@@ -442,7 +442,7 @@ class ShowForm extends Component {
     if(filledMandatoryFieldsCount!=mandatoryfields.length)
     { 
       toggleSnackbarAndSetText(true,{labelKey:"COMMON_MANDATORY_MISSING_ERROR",labelName:"Please fill all mandatory fields to search"},
-      true);
+      "error");
       return;
     }
     if (!isDrilldown) {
