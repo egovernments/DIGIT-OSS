@@ -101,11 +101,15 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                   generalMDMSDataById["OwnerType"] &&
                   generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
                 "NA",
+            }, isInstitution
+            ? {
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
+              value: owner.correspondenceAddress  || "NA",
+            }
+            : {
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
+              value: owner.permanentAddress|| "NA",    
             },
-          {
-            key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
-            value: owner.permanentAddress || "NA",
-          },
         ]
       })
     })
