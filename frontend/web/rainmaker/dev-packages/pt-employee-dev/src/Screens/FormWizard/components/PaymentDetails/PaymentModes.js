@@ -14,10 +14,11 @@ import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 class PaymentModes extends Component {
   allFormkeys = ["demandInfo", "chequeInfo", "cardInfo", "cashInfo"];
 
-  FormDetails = ({ item }) => {
+  FormDetails = ({ item={} }) => {
+    const {forms=[]} =item;
     return (
       <div className="payment-filled-details">
-        {item.forms.map((form, index) => {
+        {forms.map((form, index) => {
           const { title, comp: TransactionForm, className } = form;
           return (
             <div className={className} key={index}>

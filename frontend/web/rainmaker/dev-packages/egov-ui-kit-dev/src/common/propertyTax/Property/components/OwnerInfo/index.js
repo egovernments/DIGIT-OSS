@@ -56,14 +56,14 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
             },
           isInstitution
             ? {
-              // key: getTranslatedLabel("PT_OWNERSHIP_INFO_TYPE_INSTI", localizationLabelsData),
-              // value:
-              //   (institution &&
-              //     institution.type &&
-              //     generalMDMSDataById &&
-              //     generalMDMSDataById["SubOwnerShipCategory"] &&
-              //     generalMDMSDataById["SubOwnerShipCategory"][institution.type].name) ||
-              //   "NA",
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_TYPE_INSTI", localizationLabelsData),
+              value:
+                (institution &&
+                  institution.type &&
+                  generalMDMSDataById &&
+                  generalMDMSDataById["SubOwnerShipCategory"] &&
+                  generalMDMSDataById["SubOwnerShipCategory"][institution.type].name) ||
+                "NA",
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_DOB", localizationLabelsData),
