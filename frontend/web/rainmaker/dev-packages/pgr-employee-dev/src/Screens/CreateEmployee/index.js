@@ -911,7 +911,7 @@ class Employee extends Component {
         }
 
         if (self.getDate(this.state.subObject.assignments.fromDate).getTime() > self.getDate(this.state.subObject.assignments.toDate).getTime()) {
-          return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.date'), false, true);
+          return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.date'), false, "error");
         }
 
         let assignments = Object.assign([], this.props.Employee.assignments || []);
@@ -925,7 +925,7 @@ class Employee extends Component {
 
         delete asst.mainDepartments;
         if (!validateDates(this.props.Employee, asst, editIndex)) {
-          return this.props.toggleSnackbarAndSetText(true, translate('employee.error.message.assignmentDate'), false, true);
+          return this.props.toggleSnackbarAndSetText(true, translate('employee.error.message.assignmentDate'), false, "error");
         }
 
         if (this.state.editIndex === '') assignments.push(asst);
@@ -947,7 +947,7 @@ class Employee extends Component {
         let jurisdictions = Object.assign([], this.props.Employee.jurisdictions || []);
         var jst = this.state.subObject.jurisdictions.boundary;
         if (!checkIfNoDup(this.props.Employee, jst)) {
-          return this.props.toggleSnackbarAndSetText(true, translate('employee.error.message.dupAssignment'), false, true);
+          return this.props.toggleSnackbarAndSetText(true, translate('employee.error.message.dupAssignment'), false, "error");
         }
 
         if (this.state.editIndex === '') jurisdictions.push(jst);
@@ -2410,28 +2410,28 @@ class Employee extends Component {
           var dateParts1 = self.props.Employee.dateOfRetirement.split('/');
           var newDateStr = dateParts1[1] + '/' + dateParts1[0] + '/ ' + dateParts1[2];
           var date1 = new Date(newDateStr).getTime();
-          if (date > date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.retDate'), false, true);
+          if (date > date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.retDate'), false, "error");
         }
 
         if (self.props.Employee.dateOfTermination) {
           var dateParts1 = self.props.Employee.dateOfTermination.split('/');
           var newDateStr = dateParts1[1] + '/' + dateParts1[0] + '/ ' + dateParts1[2];
           var date1 = new Date(newDateStr).getTime();
-          if (date > date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.terDate'), false, true);
+          if (date > date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.terDate'), false, "error");
         }
 
         if (self.props.Employee.dateOfResignation) {
           var dateParts1 = self.props.Employee.dateOfResignation.split('/');
           var newDateStr = dateParts1[1] + '/' + dateParts1[0] + '/ ' + dateParts1[2];
           var date1 = new Date(newDateStr).getTime();
-          if (date > date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.regDate'), false, true);
+          if (date > date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.regDate'), false, "error");
         }
 
         if (self.props.Employee.dateOfJoining) {
           var dateParts1 = self.props.Employee.dateOfResignation.split('/');
           var newDateStr = dateParts1[1] + '/' + dateParts1[0] + '/ ' + dateParts1[2];
           var date1 = new Date(newDateStr).getTime();
-          if (date > date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.joinDate'), false, true);
+          if (date > date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.joinDate'), false, "error");
         }
         break;
       case 'joiningDate':
@@ -2440,28 +2440,28 @@ class Employee extends Component {
           var dateParts1 = self.props.Employee.dateOfAppointment.split('/');
           var newDateStr = dateParts1[1] + '/' + dateParts1[0] + '/ ' + dateParts1[2];
           var date1 = new Date(newDateStr).getTime();
-          if (date < date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.joinDate'), false, true);
+          if (date < date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.joinDate'), false, "error");
         }
 
         if (self.props.Employee.dateOfRetirement) {
           var dateParts1 = self.props.Employee.dateOfRetirement.split('/');
           var newDateStr = dateParts1[1] + '/' + dateParts1[0] + '/ ' + dateParts1[2];
           var date1 = new Date(newDateStr).getTime();
-          if (date > date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.retDate.joinDate'), false, true);
+          if (date > date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.retDate.joinDate'), false, "error");
         }
 
         if (self.props.Employee.dateOfTermination) {
           var dateParts1 = self.props.Employee.dateOfTermination.split('/');
           var newDateStr = dateParts1[1] + '/' + dateParts1[0] + '/ ' + dateParts1[2];
           var date1 = new Date(newDateStr).getTime();
-          if (date > date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.joinDate.terDate'), false, true);
+          if (date > date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.joinDate.terDate'), false, "error");
         }
 
         if (self.props.Employee.dateOfResignation) {
           var dateParts1 = self.props.Employee.dateOfTermination.split('/');
           var newDateStr = dateParts1[1] + '/' + dateParts1[0] + '/ ' + dateParts1[2];
           var date1 = new Date(newDateStr).getTime();
-          if (date > date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.joinDate.regDate'), false, true);
+          if (date > date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.joinDate.regDate'), false, "error");
         }
         break;
       case 'retirementDate':
@@ -2470,13 +2470,13 @@ class Employee extends Component {
           var dateParts1 = self.props.Employee.dateOfAppointment.split('/');
           var newDateStr = dateParts1[1] + '/' + dateParts1[0] + '/ ' + dateParts1[2];
           var date1 = new Date(newDateStr).getTime();
-          if (date < date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.retDate'), false, true);
+          if (date < date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.retDate'), false, "error");
         }
         if (self.props.Employee.dateOfJoining) {
           var dateParts1 = self.props.Employee.dateOfAppointment.split('/');
           var newDateStr = dateParts1[1] + '/' + dateParts1[0] + '/ ' + dateParts1[2];
           var date1 = new Date(newDateStr).getTime();
-          if (date < date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.retDate.joinDate'), false, true);
+          if (date < date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.retDate.joinDate'), false, "error");
         }
         break;
       case 'terminationDate':
@@ -2485,14 +2485,14 @@ class Employee extends Component {
           var dateParts1 = self.props.Employee.dateOfAppointment.split('/');
           var newDateStr = dateParts1[1] + '/' + dateParts1[0] + '/ ' + dateParts1[2];
           var date1 = new Date(newDateStr).getTime();
-          if (date < date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.terDate'), false, true);
+          if (date < date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.terDate'), false, "error");
         }
 
         if (self.props.Employee.dateOfJoining) {
           var dateParts1 = self.props.Employee.dateOfJoining.split('/');
           var newDateStr = dateParts1[1] + '/' + dateParts1[0] + '/ ' + dateParts1[2];
           var date1 = new Date(newDateStr).getTime();
-          if (date < date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.joinDate.terDate'), false, true);
+          if (date < date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.joinDate.terDate'), false, "error");
         }
         break;
       case 'resignationDate':
@@ -2501,14 +2501,14 @@ class Employee extends Component {
           var dateParts1 = self.props.Employee.dateOfAppointment.split('/');
           var newDateStr = dateParts1[1] + '/' + dateParts1[0] + '/ ' + dateParts1[2];
           var date1 = new Date(newDateStr).getTime();
-          if (date < date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.regDate'), false, true);
+          if (date < date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.appDate.regDate'), false,"error");
         }
 
         if (self.props.Employee.dateOfJoining) {
           var dateParts1 = self.props.Employee.dateOfJoining.split('/');
           var newDateStr = dateParts1[1] + '/' + dateParts1[0] + '/ ' + dateParts1[2];
           var date1 = new Date(newDateStr).getTime();
-          if (date < date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.joinDate.regDate'), false, true);
+          if (date < date1) return self.props.toggleSnackbarAndSetText(true, translate('employee.error.message.joinDate.regDate'), false, "error");
         }
         break;
     }

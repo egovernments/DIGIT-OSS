@@ -5,8 +5,9 @@ import { Button, Card, Image } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import { CityPicker } from "modules/common";
 import { startSMSRecevier } from "egov-ui-kit/utils/commons";
-import logo from "egov-ui-kit/assets/images/mseva-punjab.png";
+import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
+import { type } from "os";
 
 const RegisterForm = ({ handleFieldChange, form,logoUrl }) => {
   const fields = form.fields || {};
@@ -16,8 +17,16 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl }) => {
       className="col-sm-offset-4 col-sm-4 user-screens-card "
       textChildren={
         <div>
-          <div className="web-user-logo" style={{ marginBottom: "24px" }}>
-            <Image className="mseva-logo employee-login-logo" source={logoUrl?logoUrl:`${logo}`} />
+          <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
+            <div style={{ marginBottom: "24px" }}>
+              <Image className="mseva-logo" source={`${logo}`} />
+            </div >
+          <div style={{marginLeft:"7px", marginBottom: "24px" }}>
+          <Label bold={true}  fontSize= "23px" label="|" />
+          </div>
+           <div style={{marginLeft:"7px" }}>
+              <Label bold={true} color="black" fontSize= "24px" label="Punjab" />
+           </div>
           </div>
           <Label className="heading text-center" bold={true} dark={true} fontSize={16} label="CORE_REGISTER_HEADING" />
           <Field fieldKey="phone" field={fields.phone} handleFieldChange={handleFieldChange} />
