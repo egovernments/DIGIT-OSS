@@ -548,7 +548,7 @@ class FormWizard extends Component {
               labelName: "ULB validations failed!",
               labelKey: "ERR_ULD_VALIDATIONS_FAILED"
             },
-            true
+            "error"
           );
           break;
         }
@@ -576,7 +576,7 @@ class FormWizard extends Component {
               labelName: "ULB validations failed!",
               labelKey: "ERR_ULD_VALIDATIONS_FAILED"
             },
-            true
+            "error"
           );
           break;
         }
@@ -641,7 +641,7 @@ class FormWizard extends Component {
               labelName: "ULB validations failed!",
               labelKey: "ERR_ULD_VALIDATIONS_FAILED"
             },
-            true
+            "error"
           );
           break;
         }
@@ -857,7 +857,7 @@ class FormWizard extends Component {
           window.location = redirectionUrl;
         } else {
           toggleSpinner();
-          let moduleId = get(goToPaymentGateway, "Transaction.moduleId");
+          let moduleId = get(goToPaymentGateway, "Transaction.consumerCode");
           let tenantId = get(goToPaymentGateway, "Transaction.tenantId");
           history.push(
             "/property-tax/payment-success/" +
@@ -1017,7 +1017,7 @@ class FormWizard extends Component {
             labelName: "Error calculating tax!",
             labelKey: "ERR_ERROR_CALCULATING_TAX"
           },
-          true
+          "error"
         );
     }
   };

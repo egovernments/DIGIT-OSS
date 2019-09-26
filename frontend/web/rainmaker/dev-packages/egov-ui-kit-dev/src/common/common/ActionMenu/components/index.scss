@@ -1,5 +1,6 @@
 .actionMenuSearchBox {
-  background-color: #3d4951 !important;
+  background-color: #34495E !important;
+  border: 1px solid #fe7a511f;
   color: white;
   height: 40px !important;
   margin-top: 22px;
@@ -27,10 +28,11 @@
   transform: rotate(-20deg);
 }
 
+
 @media only screen and (min-width: 768px) {
   .sideMenuItem:hover,
   .sideMenuItem.selected {
-    background-color: rgba(254, 122, 81, 0.11999999731779099);
+    background-color: #486480;
 
     div:nth-of-type(1) > span {
       background: none !important;
@@ -41,6 +43,9 @@
     .iconClassHover {
       fill: #fe7a51 !important;
     }
+ .label-container > .label-text{
+      color : #fe7a51 !important
+    } 
   }
   .selected {
     border-left: 3px solid #fe7a51;
@@ -57,6 +62,13 @@
       width: 28px !important;
     }
   }
+  .menuStyle > .label-text{
+    color:#fff !important
+  }
+}
+
+.menuStyle  > .label-text{
+  color:rgba(0,0,0, 0.87)
 }
 
 .menu-item-title {

@@ -573,11 +573,11 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
         toggleSnackbarAndSetText(
           true,
           { labelName: "There is no admin boundary data available for this tenant", labelKey: "ERR_NO_ADMIN_BOUNDARY_FOR_TENANT" },
-          true
+          "error"
         )
       );
     } else {
-      dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, true));
+      dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message },   "error"));
     }
     return;
   }
@@ -701,6 +701,6 @@ export const onNotificationClick = async (history) => {
     await httpRequest("/egov-user-event/v1/events/lat/_update", "_update", queryObject, requestBody);
     history.push("/notifications");
   } catch (e) {
-    toggleSnackbarAndSetText(true, { labelName: "Count update error", labelKey: "Count update error" }, true);
+    toggleSnackbarAndSetText(true, { labelName: "Count update error", labelKey: "Count update error" },   "error");
   }
 };
