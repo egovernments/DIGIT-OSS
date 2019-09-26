@@ -66,11 +66,10 @@ class DropDown extends Component {
       case "Re-Assess":
         history &&
           history.push(
-            `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${item.latestAssessmentNumber}&isReassesment=true&propertyId=${
+            `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${item.latestAssessmentNumber}&isAssesment=false&isReassesment=true&propertyId=${
               item.propertyId
             }&tenantId=${item.tenantId}`
           );
-
         break;
       case "Download Receipt":
         //Need 1. Property, 2. Property Details, 3. receiptdetails
@@ -87,13 +86,12 @@ class DropDown extends Component {
         downloadReceipt(item, generalMDMSDataById, true, imageUrl);
         break;
       case "Complete Payment":
-        history &&
+          history &&
           history.push(
             `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${
               item.assessmentNo
-            }&isReassesment=true&isCompletePayment=true&propertyId=${item.propertyId}&tenantId=${item.tenantId}`
+            }&isAssesment=true&isReassesment=true&proceedToPayment=true&isCompletePayment=true&propertyId=${item.propertyId}&tenantId=${item.tenantId}`
           );
-
         break;
     }
   };
@@ -143,10 +141,12 @@ class DropDown extends Component {
 
   render() {
     const { item } = this.props;
+    console.log(this.props,'this.props of dropdown');
+    
     const { imageUrl } = this.state;
     const userType = getUserInfo() && JSON.parse(getUserInfo()).type;
     return (
-      <div>
+      <div style={{float: 'right'}}>
         <SelectField
           autoWidth={true}
           className="pt-action-dropDown"
@@ -157,12 +157,13 @@ class DropDown extends Component {
           hintStyle={styles.hintStyle}
           onChange={(event, key, payload) => this.onSelectFieldChange(event, key, payload, imageUrl)}
         >
-          {userType === "CITIZEN" && <MenuItem value="Download Receipt" primaryText={<Label label="PT_DOWNLOAD_RECEIPT" />} />}
-          {userType === "EMPLOYEE" && <MenuItem value="Download Citizen Receipt" primaryText={<Label label="PT_DOWNLOAD_CITIZEN_RECEIPT" />} />}
-          {userType === "EMPLOYEE" && <MenuItem value="Download Employee Receipt" primaryText={<Label label="PT_DOWNLOAD_EMPLOYEE_RECEIPT" />} />}
-          {(item.status === "Paid" || item.status === "Partially Paid") && (
+          {userType === "CITIZEN" && item.status !== "Pending"&&<MenuItem value="Download Receipt" primaryText={<Label label="PT_DOWNLOAD_RECEIPT" />} />}
+          {userType === "EMPLOYEE" && item.status !== "Pending"&&  <MenuItem value="Download Citizen Receipt" primaryText={<Label label="PT_DOWNLOAD_CITIZEN_RECEIPT" />} />}
+          {userType === "EMPLOYEE" && item.status !== "Pending"&& <MenuItem value="Download Employee Receipt" primaryText={<Label label="PT_DOWNLOAD_EMPLOYEE_RECEIPT" />} />}
+          {(item.status === "Paid" || item.status === "Partially Paid" || item.status === "Pending") && (
             <MenuItem value="Re-Assess" primaryText={<Label label="PT_RE_ASSESS" />} />
           )}
+          {item.status === "Pending" && <MenuItem value="Complete Payment" primaryText={<Label label="PT_COMPLETE_PAYMENT" />} />}
           {item.status === "Partially Paid" && <MenuItem value="Complete Payment" primaryText={<Label label="PT_COMPLETE_PAYMENT" />} />}
         </SelectField>
       </div>

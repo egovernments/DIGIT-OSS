@@ -50,7 +50,10 @@ class SearchProperty extends Component {
     }
     this.setState({ searchResult: [] });
   };
-
+  onResetClick = () => {
+    const { resetForm } = this.props;
+    resetForm("searchProperty");
+  };
   closeYearRangeDialogue = () => {
     this.setState({ dialogueOpen: false });
   };
@@ -102,6 +105,7 @@ class SearchProperty extends Component {
     const tableData = properties.reduce((tableData, property, index) => {
       let {
         propertyId,
+        status,
         oldPropertyId,
         address,
         propertyDetails,
@@ -115,45 +119,43 @@ class SearchProperty extends Component {
         : `${locality.name ? locality.name : ""}`;
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
+      const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
       let assessmentNo = latestAssessment.assessmentNumber;
       const uuid = get(latestAssessment, "citizenInfo.uuid");
-
       let button = (
-        <Button
+        <a
+          style={{
+            height: 20,
+            lineHeight: "auto",
+            minWidth: "inherit",
+            cursor: "pointer",
+            textDecoration: "underline"
+          }}
           onClick={
             userType === "CITIZEN"
-              ? () => {
-                  this.setState({
-                    dialogueOpen: true,
-                    urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`
-                  });
-                }
+              ?  e => {
+                history.push(
+                  `/property-tax/my-properties/property/${propertyId}/${tenantId}`
+                );
+              }
               : e => {
                   history.push(
                     `/property-tax/property/${propertyId}/${tenantId}`
                   );
                 }
           }
-          label={
-            <Label
-              buttonLabel={true}
-              label="PT_PAYMENT_ASSESS_AND_PAY"
-              fontSize="12px"
-            />
-          }
-          value={propertyId}
-          primary={true}
-          className="pt-search-table-action"
-          style={{ height: 20, lineHeight: "auto", minWidth: "inherit" }}
-        />
+        >
+          {propertyId}
+        </a>
       );
       let item = {
         index: index + 1,
+        propertyId: button,
         name: name,
-        propertyId: propertyId,
+        guardianName: guardianName,
         oldPropertyId: oldPropertyId,
         address: displayAddress,
-        action: button
+        status: status
       };
       tableData.push(item);
       return tableData;
@@ -169,6 +171,7 @@ class SearchProperty extends Component {
     this.setState({
       dialogueOpen: true
     });
+    
   };
 
   render() {
@@ -188,31 +191,57 @@ class SearchProperty extends Component {
           url={urls.length > 0 ? urls : urlArray}
           history={history}
         /> */}
+        <br />
         <div className="rainmaker-displayInline inner-header-style">
           <Label
-            label="PT_SEARCH_PROPERTY"
+            label="PT_PROPERTY_TAX"
             dark={true}
-            fontSize={16}
-            fontWeight={900}
+            fontSize={18}
+            fontWeight={500}
             bold={true}
+            labelStyle={{ marginTop: "20px" }}
           />
           <div
             className="rainmaker-displayInline"
             onClick={this.onAddButtonClick}
           >
-            <Icon
+            <Button
+              Icon={
+                <Icon
+                  action="content"
+                  name="add"
+                  color="#fe7a51"
+                  style={{ height: 22 }}
+                />
+              }
+              label={
+                <Label
+                  label="PT_ADD_ASSESS_PROPERTY"
+                  buttonLabel={true}
+                  fontSize="16px"
+                  color="white"
+                />
+              }
+              labelStyle={{ fontSize: 12 }}
+              className="new-property-assessment"
+              onClick={() => this.onAddButtonClick()}
+              primary={true}
+              fullWidth={true}
+            />
+            {/* <Icon
               action="content"
               name="add"
               color="#fe7a51"
               style={{ height: 22 }}
-            />
-            <Label label="ADD NEW PROPERTY" color="#fe7a51" />
+            /> */}
+            {/* <Label label="ADD NEW PROPERTY" color="#fe7a51" /> */}
           </div>
         </div>
 
         <PropertySearchFormHOC
           history={this.props.history}
           onSearchClick={this.onSearchClick}
+          onResetClick={this.onResetClick}
         />
         <Hidden xsDown>
           {searchResult && searchResult.length > 0 && showTable ? (
@@ -242,15 +271,25 @@ class SearchProperty extends Component {
             <div className="no-search-text">
               <Label label="PT_NO_PROPERTY_RECORD" />
             </div>
-            <div className="new-assess-btn">
-              <Button
+            <div
+              className="new-assess-btn rainmaker-displayInline"
+              onClick={() => this.onAddButtonClick()}
+            >
+              {/* <Button
                 label={"New Property Assessment"}
                 labelStyle={{ fontSize: 12 }}
                 className="new-property-assessment"
                 onClick={() => history.push("/property-tax/assess-pay")}
                 primary={true}
                 fullWidth={true}
+              /> */}
+              <Icon
+                action="content"
+                name="add"
+                color="#fe7a51"
+                style={{ height: 22 }}
               />
+              <Label  label="PT_ADD_ASSESS_PROPERTY" color="#fe7a51" />
             </div>
           </div>
         )}

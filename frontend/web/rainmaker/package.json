@@ -8,7 +8,7 @@
   "scripts": {
     "clean": "lerna clean -f --yes && rm -rf node_modules",
     "reset": "yarn run clean && yarn i",
-    "dev:citizen": "yarn run build-css-citizen && cd packages/citizen && yarn start ",
+    "dev:citizen": "yarn run build-css-citizen && cd packages/citizen && yarn start",
     "dev:employee": "yarn run build-css-employee && cd packages/employee && yarn start",
     "prod:citizen": "yarn run go_citizen && cd packages/citizen && yarn run build",
     "prod:employee": "yarn run go_employee && cd packages/employee && yarn run build",

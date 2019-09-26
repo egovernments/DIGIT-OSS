@@ -45,10 +45,10 @@ const PaymentRedirectPage = asyncComponent(() =>
   import("../Screens/Payment-rediect-page").then(module => module.default)
 );
 const HowItWorks = asyncComponent(() =>
-  import("../Screens/HowItWorks").then(module => module.default)
+  import("egov-ui-kit/common/propertyTax/HowItWorks").then(module => module.default)
 );
 const PTExamples = asyncComponent(() =>
-  import("../Screens/PTExample").then(module => module.default)
+  import("egov-ui-kit/common/propertyTax/PTExample").then(module => module.default)
 );
 const FormWizard = asyncComponent(() =>
   import("../Screens/FormWizard").then(module => module.default)
@@ -104,7 +104,7 @@ const routes = [
     needsAuthentication: true,
     options: {
       hideFooter: true,
-      title: "PT_MY_PROPERTY"
+      hideTitle:true,
       // hideBackButton: true,
     }
   },
@@ -113,6 +113,18 @@ const routes = [
     component: Property,
     needsAuthentication: true,
     options: {
+      // hideTitle:true,
+      hideFooter: true,
+      hideTitle: true
+      // hideBackButton: true,
+    }
+  },
+  {
+    path: "property-tax/my-properties/reassess-property/:propertyId/:tenantId",
+    component: Property,
+    needsAuthentication: true,
+    options: {
+      hideTitle:true,
       hideFooter: true
       // hideBackButton: true,
     }
@@ -123,7 +135,8 @@ const routes = [
     needsAuthentication: true,
     options: {
       hideFooter: true,
-      title: "PT_PAY_PROPERTY_TAX",
+      title: "PT_PROPERTY_TAX",
+      hideTitle:true,
       helpButton: true
     }
   },
@@ -163,7 +176,9 @@ const routes = [
     component: FormWizard,
     needsAuthentication: true,
     options: {
-      hideFooter: true
+      hideFooter: true,
+      hideTitle: true,
+      
       // hideBackButton: true,
     }
   },

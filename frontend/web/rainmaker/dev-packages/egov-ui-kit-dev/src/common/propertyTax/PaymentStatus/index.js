@@ -1,9 +1,11 @@
-import React, {Component} from "react";
+import PTHeader from "egov-ui-kit/common/common/PTHeader";
+import React from "react";
 import { Card, Divider, Icon } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import ActionFooter from "../../common/ActionFooter";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import generateReceipt from "./Components/receiptsPDF";
+import AcknowledgementCard from '../AcknowledgementCard';
 import {localStorageSet} from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
@@ -11,114 +13,45 @@ import "./index.css";
 const labelStyle = {
   fontWeight: 500,
 };
-
-class PaymentStatus extends Component {
-  constructor(props) {
-    super(props);
+const PaymentStatus = ({ assessmentYear,
+  toggleYearDialogue,
+  generalMDMSDataById,
+  noExistingPropertyId,
+  receiptUIDetails,
+  receiptDetails = {},
+  propertyId,
+  floatingButtonColor,
+  icon,
+  messages,
+  buttons,
+  primaryAction,
+  tenantId,
+  receiptImageUrl,
+}) => {
+  const { ReceiptNo } = receiptDetails;
+  if (!assessmentYear) {
+    if (receiptDetails && receiptDetails.propertyDetails && receiptDetails.propertyDetails[0]) {
+      assessmentYear = receiptDetails.propertyDetails[0].financialYear;
+    }
   }
-  ptReceiptAvailableHook() {
-    if (this.props.receiptDetails && this.props.receiptDetails.ReceiptNo) {
-      if (window.appOverrides && window.appOverrides.validateForm)
-        window.appOverrides.validateForm("PTReceiptAvailable", {extraData: this.props.extraData})
-      }
-    return true;
-  }
-  render (){
-    const {
-      generalMDMSDataById,
-      noExistingPropertyId,
-      receiptUIDetails,
-      receiptDetails,
-      floatingButtonColor,
-      icon,
-      messages,
-      buttons,
-      primaryAction,
-      tenantId,
-      extraData,
-      receiptImageUrl,
-    } = this.props;
-      return (
-        <div>
-          <div key={1} style={{ marginBottom: "50px" }} className="col-md-offset-4 col-lg-offset-4 col-md-4 col-lg-4">
-            <Card
-              className="pt-success-receipt "
-              textChildren={
-                <div className="pt-reciept-top-cont">
-                  <FloatingActionButton className="floating-button" style={{ boxShadow: 0 }} backgroundColor={floatingButtonColor}>
-                    {icon}
-                  </FloatingActionButton>
-                  <div>{messages.Message1}</div>
-                  <div>{messages.Message2}</div>
-                </div>
-              }
-            />
-            {noExistingPropertyId && (
-              <div
-                className="rainmaker-displayInline"
-                style={{ padding: "12px 12px 12px 12px", border: "1px solid #5aaafa", borderLeft: "5px solid #5aaafa" }}
-              >
-                <div key={"1_1"}>
-                  <Icon action="action" name="info" color="#30588c" />
-                </div>
-                <div key={"1_2"} style={{ marginLeft: 16 }}>
-                  <Label fontSize="14px" color="#484848" label="PT_FORM1_INFORMATION_MESSAGE" />
-                </div>
-              </div>
-            )}
-            {receiptUIDetails && receiptUIDetails.propertyInfo.length && receiptUIDetails.receiptInfo.length ? (
-              <Card
-                className="pt-success-receipt"
-                textChildren={
-                  <div key={"1_3"}>
-                    {receiptUIDetails &&
-                      receiptUIDetails.propertyInfo &&
-                      receiptUIDetails.propertyInfo.map((item) => {
-                        return (
-                          <div className="row pt-reciept-label">
-                            <Label className="col-xs-6" label={item.key} dynamicArray={item.dynamicArray ? item.dynamicArray : []} />
-                            <span>:</span>
-                            <Label className="col-xs-6" labelStyle={labelStyle} label={item.value || "NA"} />
-                          </div>
-                        );
-                      })}
-                    <Divider className="reciept-divider" inset={true} lineStyle={{ marginLeft: 0, marginRight: 0 }} />
-                    {receiptUIDetails &&
-                      receiptUIDetails.receiptInfo &&
-                      receiptUIDetails.receiptInfo.map((item) => {
-                        return (
-                          <div className="row pt-reciept-label">
-                            <Label className="col-xs-6" label={item.key} />
-                            <span>:</span>
-                            <Label className="col-xs-6" labelStyle={labelStyle} label={item.value || item.value === "0" ? item.value : "NA"} />
-                          </div>
-                        );
-                      })}
-                  </div>
-                }
-              />
-            ) : null}
-            {receiptDetails && receiptDetails.ReceiptNo && this.ptReceiptAvailableHook() && (
-              <div
-                onClick={(e) => {
-                  localStorageSet("rd-propertyId",receiptDetails.propertyId);
-                  localStorageSet("rd-assessmentNumber",receiptDetails.propertyDetails[0].assessmentNumber);
-                  generateReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, receiptImageUrl, false, extraData,true);
-
-                }}
-              >
-                <Label
-                  label="PT_DOWNLOAD_RECEIPT"
-                  color="#fe7a51"
-                  labelStyle={{ textAlign: "center", fontWeight: 500, fontSize: "16px", cursor: "pointer" }}
-                />
-              </div>
-            )}
-          </div>
-          <ActionFooter key={2} label2={buttons.button2} primaryAction={primaryAction} />
-        </div>
-      );
-    };
-}
+  const headerValue = '(' + assessmentYear + ')';
+  const header = 'PT_PAYMENT_HEADER';
+  const subHeaderValue = propertyId;
+  let paymentHeader = 'PT_PROPERTY_PAYMENT_SUCCESS';
+  process.env.REACT_APP_NAME !== "Citizen" ? paymentHeader = 'PT_PROPERTY_PAYMENT_SUCCESS' : paymentHeader = 'PT_PAYMENT_SUCCESS_MESSAGE'
+  let paymentMessage = 'PT_PROPERTY_PAYMENT_NOTIFICATION';
+  process.env.REACT_APP_NAME !== "Citizen" ? paymentMessage = 'PT_PROPERTY_PAYMENT_NOTIFICATION' : paymentMessage = 'PT_PROPERTY_PAYMENT_CITIZEN_NOTIFICATION'
+  return (
+    <div>
+      <div key={1} style={{ marginBottom: "50px" }} className=" col-md-12 col-lg-12">
+        <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
+        <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_PMT_RCPT_NO" messageHeader={paymentHeader} message={paymentMessage} receiptNo={ReceiptNo} />
+      </div>
+      <ActionFooter key={2} label2='PT_DOWNLOAD_RECEIPT' secondaryAction={toggleYearDialogue} label1='PT_ASSESS_PAY_FOR_NEW_YEAR' primaryAction={() => {
+        generateReceipt("pt-reciept-citizen", receiptDetails, {}, receiptImageUrl);
+      }} />
+    </div>
+  );
+};
 
 export default PaymentStatus;

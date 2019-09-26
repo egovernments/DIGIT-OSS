@@ -163,7 +163,7 @@ class AssessmentFormWizard extends Component {
           steps={steps}
           horizontal={true}
         />
-
+        
         <div>
           <Card
             style={{ margin: "24px 8px" }}

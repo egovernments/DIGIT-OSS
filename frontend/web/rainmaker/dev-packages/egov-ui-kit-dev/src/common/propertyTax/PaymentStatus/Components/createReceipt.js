@@ -67,16 +67,17 @@ const getTaxInfo = (billAccountDetails, totalAmount, localizationLabels) => {
   return taxArray;
 };
 
-const getHeaderDetails = (property, cities, localizationLabels) => {
+const getHeaderDetails = (property, cities, localizationLabels,isAcknowledgement=false) => {
   const propertyTenant = cities.filter((item) => item.code === property.tenantId);
   const ulbGrade = get(propertyTenant[0], "city.ulbGrade") ? getUlbGradeLabel(get(propertyTenant[0], "city.ulbGrade")) : "MUNICIPAL CORPORATION";
   const cityKey = `TENANT_TENANTS_${get(propertyTenant[0], "code")
     .toUpperCase()
     .replace(/[.]/g, "_")}`;
+  const subheader=isAcknowledgement? "Property Tax Assess Acknowledgement": "Property Tax Payment Receipt";
   return {
     // header: getReceiptHeaderLabel(name, ulbGrade),
     header: `${getTranslatedLabel(cityKey, localizationLabels).toUpperCase()} ${getTranslatedLabel(ulbGrade, localizationLabels)}`,
-    subheader: "Property Tax Payment Receipt",
+    subheader:subheader,
     logo: msevaLogo,
     contact: propertyTenant[0].contactNumber,
     website: propertyTenant[0].domainUrl,
@@ -202,4 +203,4 @@ const createReceiptUIInfo = (property, receiptDetails, cities, totalAmountToPay,
   };
 };
 
-export { createReceiptUIInfo, createReceiptDetails };
+export { createReceiptUIInfo, createReceiptDetails,getHeaderDetails };
