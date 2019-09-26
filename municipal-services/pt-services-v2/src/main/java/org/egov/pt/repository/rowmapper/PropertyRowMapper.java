@@ -49,7 +49,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 
 		while (rs.next()) {
 
-			String currentId = rs.getString("propertyid");
+			String currentId = rs.getString("ptid");
 			Property currentProperty = propertyMap.get(currentId);
 			String tenanId = rs.getString("tenantId");
 
@@ -76,10 +76,10 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 						.doorNo(rs.getString("doorno"))
 						.street(rs.getString("street")).tenantId(tenanId).type(rs.getString("type")).build();
 
-				Long lastModifiedTime = rs.getLong("lastModifiedTime");
+				Long lastModifiedTime = rs.getLong("propertylastModifiedTime");
 				if(rs.wasNull()){lastModifiedTime = null;}
-				AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("createdBy"))
-						.createdTime(rs.getLong("createdTime")).lastModifiedBy(rs.getString("lastModifiedBy"))
+				AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("propertyCreatedby"))
+						.createdTime(rs.getLong("propertyCreatedTime")).lastModifiedBy(rs.getString("propertylastModifiedTime"))
 						.lastModifiedTime(lastModifiedTime)
 						.build();
 

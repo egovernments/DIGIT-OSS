@@ -57,6 +57,12 @@ public class PropertyCriteria {
     @JsonProperty("limit")
     private Long limit;
 
+	@JsonProperty("asOnDate")
+	private Long asOnDate;
+
+	@JsonProperty("financialYear")
+	private String financialYear;
+
 
 
 

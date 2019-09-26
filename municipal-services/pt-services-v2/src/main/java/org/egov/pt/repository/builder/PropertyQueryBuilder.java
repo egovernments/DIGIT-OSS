@@ -64,6 +64,43 @@ public class PropertyQueryBuilder {
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY propid) offset_ FROM " + "({})" + " result) result_offset "
 			+ "WHERE offset_ > ? AND offset_ <= ?";
 
+
+
+	private static final String NEWQUERY = "SELECT asmt.*,address.*,owner.*,doc.*,unit.*,insti.*,doc.id as documentid,unit.id as unitid,"+
+			"  	 address.id as addresskeyid,insti.id as instiid, "+
+			"    ownerdoc.id as ownerdocid,ownerdoc.documenttype as ownerdocType,ownerdoc.filestore as ownerfileStore,  "+
+			"    ownerdoc.documentuid as ownerdocuid, unit.occupancyDate as unitoccupancyDate, "+
+			"    insti.name as institutionname,insti.type as institutiontype,insti.tenantid as institenantId, "+
+			"    ownerdoc.userid as docuserid,ownerdoc.propertydetail as docassessmentnumber, "+
+			"    unit.usagecategorymajor as unitusagecategorymajor,unit.usagecategoryminor as unitusagecategoryminor "+
+			"    FROM (" +
+			"    select *,pt.propertyid as ptid,ptdl.assessmentnumber as propertydetailid,pt.additionalDetails as pt_additionalDetails, "+
+			"    ptdl.additionalDetails as ptdl_additionalDetails,ptdl.createdby as assesscreatedby,"+
+			"    ptdl.lastModifiedBy as assesslastModifiedBy,ptdl.createdTime as assesscreatedTime,"+
+			"    ptdl.lastModifiedTime as assesslastModifiedTime,ptdl.createdby as assesscreatedby," +
+			"    pt.lastModifiedBy as propertyModifiedBy,pt.createdTime as propertyCreatedTime," +
+			"    pt.lastModifiedTime as propertylastModifiedTime,pt.createdby as propertyCreatedby,"+
+			"    ptdl.status as propertydetailstatus "+
+			"    FROM eg_pt_property_v2 pt INNER JOIN eg_pt_propertydetail_v2 ptdl ON pt.propertyid =ptdl.property " +
+			"    INNER JOIN (Select max(createdTime) as maxcreatedtime,property from eg_pt_propertydetail_v2 ptd " +
+			"	 WHERE_CLAUSE_PLACHOLDER_ASSESSMENT " +
+			"	 GROUP BY property,financialyear) as maxasses " +
+			"    ON maxasses.property = ptdl.property and maxasses.maxcreatedtime = ptdl.createdtime" +
+		"		 WHERE_CLAUSE_PLACHOLDER_PROPERTY) as asmt "+
+				 INNER_JOIN_STRING+
+			"    eg_pt_owner_v2 owner ON asmt.assessmentnumber=owner.propertydetail     " +
+				 INNER_JOIN_STRING+
+			"    eg_pt_address_v2 address on address.property=asmt.ptid      " +
+				 LEFT_OUTER_JOIN_STRING+
+			"    eg_pt_unit_v2 unit ON asmt.assessmentnumber=unit.propertydetail      " +
+				 LEFT_OUTER_JOIN_STRING+
+			"    eg_pt_document_propertydetail_v2 doc ON asmt.assessmentnumber=doc.propertydetail  "+
+				 LEFT_OUTER_JOIN_STRING+
+			"    eg_pt_document_owner_v2 ownerdoc ON ownerdoc.userid=owner.userid  "+
+				 LEFT_OUTER_JOIN_STRING+
+			"    eg_pt_institution_v2 insti ON asmt.assessmentnumber=insti.propertydetail WHERE_CLAUSE_PLACHOLDER ;";
+	
+
 	public String getPropertyLikeQuery(PropertyCriteria criteria, List<Object> preparedStmtList) {
 		StringBuilder builder = new StringBuilder(LIKE_QUERY);	
 		
@@ -107,90 +144,124 @@ public class PropertyQueryBuilder {
 
 	public String getPropertySearchQuery(PropertyCriteria criteria, List<Object> preparedStmtList) {
 
-		StringBuilder builder = new StringBuilder(QUERY);
+		StringBuilder builder = new StringBuilder(NEWQUERY);
+
+		StringBuilder WHERE_CLAUSE_PLACHOLDER_ASSESSMENT = new StringBuilder("");
+
+		StringBuilder WHERE_CLAUSE_PLACHOLDER_PROPERTY = new StringBuilder("");
+
+		StringBuilder WHERE_CLAUSE_PLACHOLDER = new StringBuilder("");
+
+
+		if (criteria.getAccountId() != null) {
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_ASSESSMENT);
+			WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.append(" ptd.accountid = ? ");
+			preparedStmtList.add(criteria.getAccountId());
+			return builder.toString().replace("WHERE_CLAUSE_PLACHOLDER_ASSESSMENT",WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.toString());
+		}
+		
+		if (criteria.getPropertyDetailStatus() != null) {
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_ASSESSMENT);
+			WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.append(" ptd.status = ? ");
+			preparedStmtList.add(criteria.getPropertyDetailStatus());
+		}else {
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_ASSESSMENT);
+			WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.append(" ptd.status = 'ACTIVE' ");
+		}
+
+		Set<String> propertyDetailids = criteria.getPropertyDetailids();
+		if (!CollectionUtils.isEmpty(propertyDetailids)) {
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_ASSESSMENT);
+			WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.append(" ptd.assessmentnumber IN (").append(createQuery(propertyDetailids)).append(")");
+			addToPreparedStatement(preparedStmtList, propertyDetailids);
+		}
+
+		if(criteria.getAsOnDate()!=null){
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_ASSESSMENT);
+			WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.append(" createdTime < ?");
+			preparedStmtList.add(criteria.getAsOnDate());
+		}
+
+		if(criteria.getFinancialYear()!=null){
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_ASSESSMENT);
+			WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.append(" financialYear = ?");
+			preparedStmtList.add(criteria.getFinancialYear());
+		}
+
+		addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_PROPERTY);
+		WHERE_CLAUSE_PLACHOLDER_PROPERTY.append("  pt.tenantid=? ");
+		preparedStmtList.add(criteria.getTenantId());
 
 		Set<String> statuses = new HashSet<>();
 		criteria.getStatuses().forEach(statusEnum -> {
 			statuses.add(statusEnum.toString());
 		});
+
 		if (!CollectionUtils.isEmpty(statuses)) {
-			builder.append(" pt.status IN (").append(createQuery(statuses)).append(")");
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_PROPERTY);
+			WHERE_CLAUSE_PLACHOLDER_PROPERTY.append(" pt.status IN (").append(createQuery(statuses)).append(")");
 			addToPreparedStatement(preparedStmtList, statuses);
 		}
 
-		if (criteria.getAccountId() != null) {
-			builder.append(" and ptdl.accountid = ? ");
-			preparedStmtList.add(criteria.getAccountId());
-			return builder.toString();
-		}
-		
-		if (criteria.getPropertyDetailStatus() != null) {
-			builder.append(" and ptdl.status = ? ");
-			preparedStmtList.add(criteria.getPropertyDetailStatus());
-			return builder.toString();
-		}else {
-			builder.append(" and ptdl.status = 'ACTIVE' ");
-		}
-
-		builder.append(" and pt.tenantid=? ");
-		preparedStmtList.add(criteria.getTenantId());
-
 		Set<String> ids = criteria.getIds();
 		if (!CollectionUtils.isEmpty(ids)) {
-
-			builder.append("and pt.propertyid IN (").append(createQuery(ids)).append(")");
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_PROPERTY);
+			WHERE_CLAUSE_PLACHOLDER_PROPERTY.append(" pt.propertyid IN (").append(createQuery(ids)).append(")");
 			addToPreparedStatement(preparedStmtList, ids);
 		}
 
 		Set<String> oldpropertyids = criteria.getOldpropertyids();
 		if (!CollectionUtils.isEmpty(oldpropertyids)) {
-
-			builder.append("and pt.oldpropertyid IN (").append(createQuery(oldpropertyids)).append(")");
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_PROPERTY);
+			WHERE_CLAUSE_PLACHOLDER_PROPERTY.append(" pt.oldpropertyid IN (").append(createQuery(oldpropertyids)).append(")");
 			addToPreparedStatement(preparedStmtList, oldpropertyids);
 		}
 
-		Set<String> propertyDetailids = criteria.getPropertyDetailids();
-		if (!CollectionUtils.isEmpty(propertyDetailids)) {
-
-			builder.append("and ptdl.assessmentnumber IN (").append(createQuery(propertyDetailids)).append(")");
-			addToPreparedStatement(preparedStmtList, propertyDetailids);
-		}
 
 		Set<String> addressids = criteria.getAddressids();
 		if (!CollectionUtils.isEmpty(addressids)) {
-
-			builder.append("and address.id IN (").append(createQuery(addressids)).append(")");
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER);
+			WHERE_CLAUSE_PLACHOLDER.append(" address.id IN (").append(createQuery(addressids)).append(")");
 			addToPreparedStatement(preparedStmtList, addressids);
 		}
 
 		Set<String> ownerids = criteria.getOwnerids();
 		if (!CollectionUtils.isEmpty(ownerids)) {
-
-			builder.append("and owner.userid IN (").append(createQuery(ownerids)).append(")");
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER);
+			WHERE_CLAUSE_PLACHOLDER.append(" owner.userid IN (").append(createQuery(ownerids)).append(")");
 			addToPreparedStatement(preparedStmtList, ownerids);
 		}
 
 		Set<String> unitids = criteria.getUnitids();
 		if (!CollectionUtils.isEmpty(unitids)) {
-
-			builder.append("and unit.id IN (").append(createQuery(unitids)).append(")");
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER);
+			WHERE_CLAUSE_PLACHOLDER.append(" unit.id IN (").append(createQuery(unitids)).append(")");
 			addToPreparedStatement(preparedStmtList, unitids);
 		}
 
 		Set<String> documentids = criteria.getDocumentids();
 		if (!CollectionUtils.isEmpty(documentids)) {
-
-			builder.append("and doc.id IN (").append(createQuery(documentids)).append(")");
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER);
+			WHERE_CLAUSE_PLACHOLDER.append(" doc.id IN (").append(createQuery(documentids)).append(")");
 			addToPreparedStatement(preparedStmtList, documentids);
 		}
 
 		if (criteria.getDoorNo() != null && criteria.getLocality() != null) {
-			builder.append(" and address.doorno = ? ").append(" and address.locality = ? ");
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER);
+			WHERE_CLAUSE_PLACHOLDER.append(" address.doorno = ? ").append(" and address.locality = ? ");
 			preparedStmtList.add(criteria.getDoorNo());
 			preparedStmtList.add(criteria.getLocality());
 		}
 
-		return builder.toString();
+        String query = builder.toString();
+
+		query = query.replace("WHERE_CLAUSE_PLACHOLDER_ASSESSMENT",WHERE_CLAUSE_PLACHOLDER_ASSESSMENT);
+
+		query = query.replace("WHERE_CLAUSE_PLACHOLDER_PROPERTY",WHERE_CLAUSE_PLACHOLDER_PROPERTY);
+
+		query = query.replace("WHERE_CLAUSE_PLACHOLDER",WHERE_CLAUSE_PLACHOLDER);
+
+		return query;
 	}
 
 	/*
@@ -218,6 +289,12 @@ public class PropertyQueryBuilder {
 		ids.forEach(id -> {
 			preparedStmtList.add(id);
 		});
+	}
+
+	private void addClauseIfRequired(StringBuilder builder){
+		if(builder.toString().isEmpty())
+			builder.append(" WHERE");
+		else builder.append(" AND ");
 	}
 
 }
