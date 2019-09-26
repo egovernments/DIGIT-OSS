@@ -548,7 +548,7 @@ class FormWizard extends Component {
               labelName: "ULB validations failed!",
               labelKey: "ERR_ULD_VALIDATIONS_FAILED"
             },
-            true
+            "error"
           );
           break;
         }
@@ -576,7 +576,7 @@ class FormWizard extends Component {
               labelName: "ULB validations failed!",
               labelKey: "ERR_ULD_VALIDATIONS_FAILED"
             },
-            true
+            "error"
           );
           break;
         }
@@ -641,7 +641,7 @@ class FormWizard extends Component {
               labelName: "ULB validations failed!",
               labelKey: "ERR_ULD_VALIDATIONS_FAILED"
             },
-            true
+            "error"
           );
           break;
         }
@@ -1017,7 +1017,7 @@ class FormWizard extends Component {
             labelName: "Error calculating tax!",
             labelKey: "ERR_ERROR_CALCULATING_TAX"
           },
-          true
+          "error"
         );
     }
   };

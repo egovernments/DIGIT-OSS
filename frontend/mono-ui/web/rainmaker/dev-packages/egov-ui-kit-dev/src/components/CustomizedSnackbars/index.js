@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Label from "../../utils/translationNode";
 import classNames from "classnames";
+import Label from "../../utils/translationNode";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import InfoIcon from "@material-ui/icons/Info";
@@ -12,36 +12,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
 import WarningIcon from "@material-ui/icons/Warning";
-import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { withStyles } from "@material-ui/core/styles";
-import { connect } from "react-redux";
 
-// class Toast extends React.Component {
-//   render() {
-//     const { open = false, autoHideDuration = 4000, error = true, message, variant } = this.props;
-//     const { labelKey } = message;
-//     return (
-//       <Snackbar
-//         open={open}
-//         id="toast-message"
-//         // message={message}
-//         message={<Label label={labelKey} color="#fff" />}
-//         autoHideDuration={autoHideDuration}
-//         style={{ pointerEvents: "none", width: "95%", whiteSpace: "nowrap", justifyContent: "center" }}
-//         bodyStyle={{
-//           pointerEvents: "initial",
-//           maxWidth: "none",
-//           lineHeight: "20px",
-//           height: "auto",
-//           maxHeight: "60px",
-//           padding: "5px",
-//           whiteSpace: "pre-line",
-//           textAlign: "center",
-//         }}
-//       />
-//     );
-//   }
-// }
 const variantIcon = {
   success: CheckCircleIcon,
   warning: WarningIcon,
@@ -88,7 +60,7 @@ const MySnackbarContent = props => {
       message={
         <span id="client-snackbar" className={classes.message}>
           <Icon className={classNames(classes.icon, classes.iconVariant)} />
-          <Label label={labelKey} color="#ffffff"/>
+          <Label label={labelKey} />
         </span>
       }
       action={[
@@ -123,64 +95,34 @@ const styles2 = theme => ({
   }
 });
 
-
-class Toast extends React.Component  {
-  state = {
-    open: false,
-  };
-
-
-  handleClose = (event, reason) => {
-    const { toggleSnackbarAndSetText } = this.props;
-    toggleSnackbarAndSetText(false,"", "");
-  };
-  
+class CustomizedSnackbars extends React.Component {
   render() {
-    const {  autoHideDuration=5000,classes, open, message, variant } = this.props;
+    const { classes, open, message, variant, onClose } = this.props;
     return (
       <div>
         <Snackbar
-          open={open}
-          autoHideDuration={autoHideDuration}
           anchorOrigin={{
             vertical: "bottom",
             horizontal: "center"
           }}
-          onClose={this.handleClose}
+          open={open}
+          autoHideDuration={5000}
+          onClose={onClose}
         >
           <MySnackbarContentWrapper
-            variant={variant? variant:"error"}
+            variant={variant}
             className={classes.margin}
             message={message}
-            onClose={this.handleClose}
+            onClose={onClose}
           />
         </Snackbar>
       </div>
     );
   }
-    
 }
 
-Toast.propTypes = {
-  open: PropTypes.bool,
-  variant: PropTypes.string,
-  autoHideDuration: PropTypes.number,
+CustomizedSnackbars.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-
-
-const mapDispatchToProps = dispatch => {
-  return {
-    toggleSnackbarAndSetText: (open, message, variant) => {
-      dispatch(toggleSnackbarAndSetText(open, message, variant));
-    }
-  };
-};
-
-export default withStyles(styles2)(
-  connect(
-    null,
-    mapDispatchToProps
-  )(Toast)
-);
+export default withStyles(styles2)(CustomizedSnackbars);
