@@ -84,13 +84,13 @@
     <dependency>
       <groupId>org.egov</groupId>
       <artifactId>egf-master</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.0.1</version>
       <classifier>common</classifier>
     </dependency>
     <dependency>
       <groupId>org.egov</groupId>
       <artifactId>egf-master</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.0.1</version>
       <classifier>client</classifier>
     </dependency>
     <dependency>
