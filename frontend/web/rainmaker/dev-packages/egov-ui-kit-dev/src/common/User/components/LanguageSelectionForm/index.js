@@ -37,10 +37,18 @@ const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick }) => {
       className="col-sm-offset-4 col-sm-4 user-screens-card language-selection-card"
       textChildren={
         <div>
-          <div className="web-user-logo" style={{ marginBottom: "24px" }}>
-            <Image className="mseva-logo" source={`${logo}`} />
+           <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
+            <div style={{ marginBottom: "24px" }}>
+              <Image className="mseva-logo" source={`${logo}`} />
+            </div >
+          <div style={{marginLeft:"7px", marginBottom: "24px" }}>
+          <Label bold={true}  fontSize= "23px" label="|" />
           </div>
-          <form>
+           <div style={{marginLeft:"7px" }}>
+              <Label bold={true} color="black" fontSize= "24px" label="PUNJAB" />
+           </div>
+          </div>
+        <form>
             <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
               {items &&
                 items.map((item, index) => {
@@ -69,7 +77,7 @@ const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick }) => {
                 id="continue-action"
                 onClick={onLanguageSelect}
                 primary={true}
-                label={<Label buttonLabel={true} label="CORE_COMMON_CONTINUE" />}
+                label={<Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />}
                 fullWidth={true}
               />
             </div>

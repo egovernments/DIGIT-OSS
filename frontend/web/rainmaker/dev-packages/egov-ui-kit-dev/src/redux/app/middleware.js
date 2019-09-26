@@ -14,9 +14,9 @@ const app = (store) => (next) => (action) => {
     //   next(action);
     // }
 
-    if ((action.open && action.message && !isEmpty(action.message)) || (toast.open && toast.message && !isEmpty(action.message) && !action.open)) {
+  //  if ((action.open && action.message && !isEmpty(action.message)) || (toast.open && toast.message && !isEmpty(action.message) && !action.open)) {
       next(action);
-    }
+    // }
     return;
   }
   next(action);

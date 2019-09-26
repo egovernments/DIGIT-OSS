@@ -26,7 +26,6 @@ const styles = {
     width: "21px",
     margin: 0,
     position: "relative",
-    fill: "rgba(0, 0, 0, 0.6)",
   },
   arrowIconStyle: {
     right: "-10px",
@@ -50,6 +49,7 @@ const styles = {
     textIndent: "15px",
   },
   inputStyle: {
+    color: "#FE7A51",
     bottom: "5px",
     height: "auto",
     paddingLeft: "5px",
@@ -233,9 +233,9 @@ class ActionMenuComp extends Component {
         <Icon
           name={leftIcon[1]}
           action={leftIcon[0]}
-          color="rgba(0, 0, 0, 0.6000000238418579)"
+          // color="rgba(255, 255, 255, 0.87)"
           style={styles.fibreIconStyle}
-          className={`iconClassHover material-icons whiteColor custom-style-for-${item.leftIcon.name}`}
+          className={`iconClassHover menu-right-icon material-icons whiteColor custom-style-for-${item.leftIcon.name}`}
         />
       );
     } else {
@@ -274,18 +274,18 @@ class ActionMenuComp extends Component {
                   leftIcon={this.renderLeftIcon(iconLeft, item)}
                   primaryText={
                     <Label
-                      className="menuStyle with-childs"
+                      className="menuStyle with-childs menu-label-style"
                       //defaultLabel={item.name}
                       label={item.name ? `ACTION_TEST_${item.name.toUpperCase().replace(/[.:-\s\/]/g, "_")}` : ""}
-                      color="rgba(0, 0, 0, 0.87)"
+                      // color="rgba(255, 255, 255, 0.87)"
                     />
                   }
                   rightIcon={
                     <Icon
                       name="chevron-right"
                       action="navigation"
-                      color="rgba(0, 0, 0, 0.8700000047683716)"
-                      className="iconClassHover material-icons whiteColor menu-right-icon"
+                    //  color="rgba(255, 255, 255, 0.87)"
+                    className="iconClassHover material-icons whiteColor menu-right-icon"
                       style={styles.arrowIconStyle}
                     />
                   }
@@ -335,7 +335,7 @@ class ActionMenuComp extends Component {
                           className="menuStyle"
                           //defaultLabel={item.name}
                           label={item.name ? `ACTION_TEST_${item.name.toUpperCase().replace(/[.:-\s\/]/g, "_")}` : ""}
-                          color="rgba(0, 0, 0, 0.87)"
+                     //   color="rgba(255, 255, 255, 0.87)"
                         />
                       }
                     />
@@ -367,7 +367,7 @@ class ActionMenuComp extends Component {
                           className="menuStyle"
                           //defaultLabel={item.name}
                           label={item.name ? `ACTION_TEST_${item.name.toUpperCase().replace(/[.:-\s\/]/g, "_")}` : ""}
-                          color="rgba(0, 0, 0, 0.87)"
+                         // color="rgba(255, 255, 255, 0.87)"
                         />
                       }
                     />
@@ -415,7 +415,7 @@ class ActionMenuComp extends Component {
                             className="menuStyle"
                             //defaultLabel={item.displayName}
                             label={item.name ? `ACTION_TEST_${item.displayName.toUpperCase().replace(/[.:-\s\/]/g, "_")}` : ""}
-                            color="rgba(0, 0, 0, 0.87)"
+                           // color="rgba(255, 255, 255, 0.87)"
                           />
                         }
                       />
@@ -435,6 +435,7 @@ class ActionMenuComp extends Component {
         <div className="whiteColor" />
         <div className="menu-item-title">
           <Label
+              className="menuStyle"
             label={
               menuTitle && menuTitle[menuTitle.length - 1]
                 ? `ACTION_TEST_${menuTitle[menuTitle.length - 1].toUpperCase().replace(/[.:-\s\/]/g, "_")}`
@@ -458,8 +459,9 @@ class ActionMenuComp extends Component {
               }}
             >
               <TextFieldIcon
+                className="menu-label-style"
                 value={searchText}
-                hintText={<Label label="PT_SEARCH_BUTTON" />}
+                hintText={<Label label="PT_SEARCH_BUTTON" className="menuStyle" />}
                 iconStyle={styles.inputIconStyle}
                 inputStyle={styles.inputStyle}
                 textFieldStyle={styles.textFieldStyle}
@@ -478,7 +480,7 @@ class ActionMenuComp extends Component {
                 changeLevel(path);
               }}
             >
-              <Icon name="arrow-back" action="navigation" color="rgba(0, 0, 0, 0.6000000238418579)" />
+              <Icon  className = "menu-right-icon" name="arrow-back" action="navigation" />
             </div>
           )}
           {path && (
@@ -495,7 +497,7 @@ class ActionMenuComp extends Component {
                 this.changeRoute("/");
               }}
             >
-              <Icon name="home" action="action" color="rgba(0, 0, 0, 0.6000000238418579)" />
+              <Icon  className = "menu-label-style" name="home" action="action" />
             </div>
             // </Tooltip>
           )}
@@ -528,7 +530,8 @@ class ActionMenuComp extends Component {
                     className="menuStyle"
                     defaultLabel="COMMON_ACTION_TEST_COLLAPSE"
                     label={menuDrawerOpen ? "COMMON_ACTION_TEST_COLLAPSE" : ""}
-                    color="rgba(0, 0, 0, 0.87)"
+                  //  color="rgba(255, 255, 255, 0.87)"
+
                   />
                 }
               />

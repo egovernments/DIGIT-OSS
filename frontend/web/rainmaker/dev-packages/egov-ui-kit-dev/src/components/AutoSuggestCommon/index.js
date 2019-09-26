@@ -11,7 +11,7 @@ export default class AutoSuggest extends Component {
 
   styles = {
     defaultContainerStyle: { background: "#fff", padding: "0px 10px" },
-    defaultTextFieldStyle: { border: "1px solid  #e0e0e0", background: "#f7f7f7", height: "48px" },
+    defaultTextFieldStyle: { border: "1px solid  #e0e0e0", background: "#f7f7f7", height: "48px" ,textAlign:"left" },
     defaultIconStyle: { left: "5px", color: "#767676" },
   };
 
@@ -49,8 +49,8 @@ export default class AutoSuggest extends Component {
       <div style={{ ...styles.defaultContainerStyle, ...containerStyle }} className="search-field-container">
         <TextFieldIcon
           textFieldStyle={{ ...styles.defaultTextFieldStyle, ...textFieldStyle }}
-          inputStyle={{ marginTop: "8px" }}
-          hintStyle={{ bottom: 8, ...hintStyle }}
+          inputStyle={{ marginTop: "8px"}}
+          hintStyle={{bottom: 8, textAlign:"left", ...hintStyle }}
           iconStyle={{ ...styles.defaultIconStyle, ...iconStyle }}
           iconPosition={iconPosition ? iconPosition : "before"}
           underlineShow={false}
@@ -61,6 +61,7 @@ export default class AutoSuggest extends Component {
           value={inputValue}
           id={this.props.id}
           autoFocus={autoFocus}
+         
         />
       </div>
     );
