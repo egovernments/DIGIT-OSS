@@ -167,11 +167,9 @@
 										<spring:message code="lbl.select" />
 									</option>
 									<option value="true">Yes</option>
-									<option value="false">No
-										</:option> All
-										</:option>
-		
-															</select>
+									<option value="false">No</:option>
+									<option value="">All</:option>
+									</select>
 							</div>
 
 							<label class="col-sm-2 control-label text-right"><spring:message
