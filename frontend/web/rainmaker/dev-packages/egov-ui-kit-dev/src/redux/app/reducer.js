@@ -52,7 +52,7 @@ const appReducer = (state = initialState, action) => {
         toast: {
           message: action.message,
           open: action.open,
-          error: action.error,
+          variant: action.variant,
         },
       };
     case actionTypes.SET_USER_CURRENT_LOCATION:

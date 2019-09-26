@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import TableData from "./components/TableData";
 import Label from "egov-ui-kit/utils/translationNode";
+import ServiceList from "egov-ui-kit/common/common/ServiceList"
 import { Boxboard } from "./components/actionItems";
 
 const iconStyle = {
@@ -33,7 +34,7 @@ class Inbox extends Component {
     });
   }
   render() {
-    const { name } = this.props;
+    const { name,history } = this.props;
     const { actionList, hasWorkflow } = this.state;
     return (
       <div>
@@ -42,7 +43,7 @@ class Inbox extends Component {
           <Label className="landingPageUser" label={name} />
         </div>
 
-        {actionList && <Boxboard data={actionList} />}
+        {<ServiceList history={history} />}
         {hasWorkflow && <TableData />}
       </div>
     );
