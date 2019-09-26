@@ -52,6 +52,11 @@ public class ChartOfAccountsReportService {
     }
 
     public List<ChartOfAccountsReport> getCoaReport(final ChartOfAccountsReport coaSearchResultObj) {
+        Map<Character,String> typeNameMap = new HashMap();
+        typeNameMap.put('I', "Income");
+        typeNameMap.put('E', "Expense");
+        typeNameMap.put('L', "Liability");
+        typeNameMap.put('A', "Asset");
         if (coaSearchResultObj.getAccountCode() != null) {
             final String[] accountCodes = coaSearchResultObj.getAccountCode().split("-");
             coaSearchResultObj.setAccountCode(accountCodes[0].trim());
@@ -68,7 +73,7 @@ public class ChartOfAccountsReportService {
         queryStr.append(",chartofaccounts minorcoa,chartofaccounts majorcoa,chartofaccounts parent"); 
         queryStr.append(" where coa.parentid=minorcoa.id and minorcoa.parentid=majorcoa.id and majorcoa.parentid=parent.id ");
         getAppendQuery(coaSearchResultObj, queryStr);
-        queryStr.append(" group by coa.glcode,minorcoa.glcode,majorcoa.glcode,parent.glcode,coa.name,minorcoa.name,majorcoa.name,acp.name,coa.type,coa.isactiveforposting");
+        queryStr.append(" group by coa.glcode,minorcoa.glcode,majorcoa.glcode,parent.glcode,coa.name,minorcoa.name,majorcoa.name,acp.name,coa.type,coa.isactiveforposting order by coa.glcode asc ");
 
        // getAppendQuery(coaSearchResultObj, queryStr);
         SQLQuery queryResult = persistenceService.getSession().createSQLQuery(queryStr.toString());
@@ -84,7 +89,7 @@ public class ChartOfAccountsReportService {
             report.setPurpose(obj[4] != null ? obj[4].toString():null);
             report.setAccountDetailType(obj[5] !=null ? obj[5].toString(): null );
 
-            report.setType(obj[6].toString().charAt(0));
+            report.setType(typeNameMap.get(obj[6].toString().charAt(0)));
             report.setIsActiveForPosting((Boolean) obj[7]);
             coaReport.add(report);
         }
@@ -93,6 +98,7 @@ public class ChartOfAccountsReportService {
         return coaReport;
 
     }
+    
 
     private List<ChartOfAccountsReport> prepareDetailTypeNames(List<ChartOfAccountsReport> coaReportList) {
 
@@ -144,7 +150,7 @@ public class ChartOfAccountsReportService {
             queryResult.setLong("minorCodeId", coaSearchResultObj.getMinorCodeId());
 
         if (coaSearchResultObj.getType() != null)
-            queryResult.setCharacter("type", coaSearchResultObj.getType());
+            queryResult.setString("type", coaSearchResultObj.getType());
         if (coaSearchResultObj.getPurposeId() != null)
             queryResult.setLong("purposeId", coaSearchResultObj.getPurposeId());
         if (coaSearchResultObj.getDetailTypeId() != null)

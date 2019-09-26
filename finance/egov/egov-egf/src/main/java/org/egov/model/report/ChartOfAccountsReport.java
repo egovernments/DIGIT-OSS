@@ -12,7 +12,7 @@ public class ChartOfAccountsReport {
    private String minorCode;
     private String majorName;
     private String minorName;
-    private Character type;
+    private String type;
     private Long purposeId;
     private String purpose;
     private Boolean isActiveForPosting;
@@ -99,11 +99,11 @@ public class ChartOfAccountsReport {
     }
 
 
-    public Character getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Character type) {
+    public void setType(String type) {
         this.type = type;
     }
 

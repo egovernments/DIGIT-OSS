@@ -21,13 +21,20 @@ public class ChartOfAccountReportJsonAdaptor implements JsonSerializer<ChartOfAc
         jsonObject.addProperty("majorName", coaresult.getMajorName());
         jsonObject.addProperty("minorcode", coaresult.getMinorCode());
         jsonObject.addProperty("minorname", coaresult.getMinorName());
-
         jsonObject.addProperty("type", coaresult.getType());
-        jsonObject.addProperty("purpose", coaresult.getPurpose());
+        if (coaresult.getPurpose() == null)
+            jsonObject.addProperty("purpose", "");
+        else
+            jsonObject.addProperty("purpose", coaresult.getPurpose());
 
-        jsonObject.addProperty("isActiveForPosting", coaresult.getIsActiveForPosting());
-
-        jsonObject.addProperty("accountdetailtype", coaresult.getAccountDetailType());
+        if (coaresult.getIsActiveForPosting() == null)
+            jsonObject.addProperty("isActiveForPosting", "");
+        else
+            jsonObject.addProperty("isActiveForPosting", coaresult.getIsActiveForPosting() ? "Yes" : "No");
+        if (coaresult.getAccountDetailType() == null)
+            jsonObject.addProperty("accountdetailtype", "");
+        else
+            jsonObject.addProperty("accountdetailtype", coaresult.getAccountDetailType());
 
         return jsonObject;
     }

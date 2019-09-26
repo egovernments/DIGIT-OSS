@@ -49,163 +49,194 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
-<%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn" %>
-<form:form role="form"  modelAttribute="chartOfAccountsReport" id="coaSearchResultForm"
-  cssClass="form-horizontal form-groups-bordered" enctype="multipart/form-data">
-  <div class="main-content">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="panel panel-primary" data-collapsed="0">
-          <div class="panel-heading">
-            <div class="panel-title">Chart Of Account Report</div>
-          </div>
-          <div class="panel-body">
-         
-						  <div class="form-group">
-            <label class="col-sm-3 control-label text-right"><spring:message
-							code="lbl.majorcode" />:</label>
-					<div class="col-sm-3 add-margin">
-						<form:select name="majorCodeId" path="" data-first-option="false"
-							id="majorCode" cssClass="form-control">
-							<form:option value="">
-								<spring:message code="lbls.select" />
-							</form:option>
-							<c:forEach items="${majorCodeList}" var="mc">
-									<option value="${mc.id}">${mc.glcode}----${mc.name}</option>
-								</c:forEach>
-						</form:select>
+<%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn"%>
+<style>
+.table thead:first-child>tr:first-child th {
+	border-bottom: none;
+	background: #f8f8f8;
+	color: #767676;
+	font-weight: bold;
+}
+</style>
+<form:form role="form" modelAttribute="chartOfAccountsReport"
+	id="coaSearchResultForm"
+	cssClass="form-horizontal form-groups-bordered"
+	enctype="multipart/form-data">
+	<div class="main-content">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-primary" data-collapsed="0">
+					<div class="panel-heading">
+						<div class="panel-title">Chart Of Account Report</div>
 					</div>
-					 <label class="col-sm-2 control-label text-right"><spring:message
-							code="lbl.minorcode" />:</label>
-					<div class="col-sm-3 add-margin">
-						<form:select name="minorCodeId" path="" data-first-option="false"
-							id="minorCode" cssClass="form-control">
-							<form:option value="">
-								<spring:message code="lbls.select" />
-							</form:option>  
-						 <c:forEach items="${minCodeList}" var="mn">
-									<option value="${mn.id}">${mn.glcode}----${mn.name}</option>
-								</c:forEach> 
-								<form:hidden path=""  id="minorCode" value=""/>
-						</form:select>
+					<div class="panel-body">
+
+						<div class="form-group">
+							<label class="col-sm-3 control-label text-right"><spring:message
+									code="lbl.majorcode" />:</label>
+							<div class="col-sm-3 add-margin">
+								<form:select name="majorCodeId" path=""
+									data-first-option="false" id="majorCode"
+									cssClass="form-control">
+									<form:option value="">
+										<spring:message code="lbls.select" />
+									</form:option>
+									<c:forEach items="${majorCodeList}" var="mc">
+										<option value="${mc.id}">${mc.glcode}----${mc.name}</option>
+									</c:forEach>
+								</form:select>
+							</div>
+							<label class="col-sm-2 control-label text-right"><spring:message
+									code="lbl.minorcode" />:</label>
+							<div class="col-sm-3 add-margin">
+								<form:select name="minorCodeId" path=""
+									data-first-option="false" id="minorCode"
+									cssClass="form-control">
+									<form:option value="">
+										<spring:message code="lbls.select" />
+									</form:option>
+									<c:forEach items="${minCodeList}" var="mn">
+										<option value="${mn.id}">${mn.glcode}----${mn.name}</option>
+									</c:forEach>
+									<form:hidden path="" id="minorCode" value="" />
+								</form:select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label text-right"><spring:message
+									code="lbl.accountcode" /> :</label>
+							<div class="col-sm-3 add-margin">
+								<form:input id="accountCode" type="text" class="form-control "
+									autocomplete="off" path="" name="accountCode" value=""
+									placeholder="" />
+								<input type="hidden" id="accountCodeId" value="" />
+
+							</div>
+							<label class="col-sm-2 control-label text-right"><spring:message
+									code="lbl.purpose" />:</label>
+							<div class="col-sm-3 add-margin">
+								<form:select name="purposeId" path="" data-first-option="false"
+									id="purposeId" cssClass="form-control">
+									<form:option value="">
+										<spring:message code="lbls.select" />
+									</form:option>
+									<form:options items="${purposeList}" itemValue="id"
+										itemLabel="name" />
+								</form:select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label"><spring:message
+									code="lbl.type" />:</label>
+							<div class="col-sm-3 add-margin">
+								<select name="type" id="type" class="form-control mandatory">
+									<option value="">
+										<spring:message code="lbl.select" />
+									</option>
+									<option value="I"><spring:message code="value.income" /></option>
+									<option value="E"><spring:message code="value.expense" /></option>
+									<option value="L"><spring:message
+											code="value.liability" /></option>
+									<option value="A"><spring:message code="value.asset" /></option>
+								</select>
+							</div>
+							<label class="col-sm-2 control-label text-right"><spring:message
+									code="lbl.accountdetailtype" />:</label>
+							<div class="col-sm-3 add-margin">
+								<form:select name="detailTypeId" path=""
+									data-first-option="false" id="detailTypeId"
+									cssClass="form-control">
+									<form:option value="">
+										<spring:message code="lbls.select" />
+									</form:option>
+									<form:options items="${accountDetailTypeList}" itemValue="id"
+										itemLabel="name" />
+								</form:select>
+							</div>
+
+						</div>
+
+
+						<div class="form-group">
+							<label class="col-sm-3 control-label text-right"><spring:message
+									code="lbl.isActiveForPosting" />:</label>
+							<div class="col-sm-3 add-margin">
+								<select name="isActiveForPosting" id="active"
+									class="form-control mandatory">
+									<option value="">
+										<spring:message code="lbl.select" />
+									</option>
+									<option value="true">Yes</option>
+									<option value="false">No
+										</:option> All
+										</:option>
+		
+															</select>
+							</div>
+
+							<label class="col-sm-2 control-label text-right"><spring:message
+									code="lbl.functionRequired" />:</label>
+							<div class="col-sm-3 add-margin">
+								<select name="functionReqd" id="functionReqd"
+									Class="form-control">
+									<option value="">
+										<spring:message code="lbl.select" />
+									</option>
+									<option value="true">Yes
+										</:option>
+									
+									<option value="false">No
+										</:option>
+									
+									<option value="">All
+										</:option>
+								
+								</select>
+
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-3 control-label text-right"><spring:message
+									code="lbl.budgetRequired" />:</label>
+							<div class="col-sm-3 add-margin">
+								<select name="budgetCheckReq" id="budgetCheckReq"
+									Class="form-control">
+									<option value="">
+										<spring:message code="lbl.select" />
+									</option>
+									<option value="true">Yes
+										</:option>
+									
+									<option value="false">No
+										</:option>
+									
+									<option value="">All
+										</:option>
+								
+								</select>
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<div class="text-center">
+								<button type='button' class='btn btn-primary' id="btnsearch">
+									<spring:message code='lbl.search' />
+								</button>
+								<a href='javascript:void(0)' class='btn btn-default'
+									onclick="javascript:window.parent.postMessage('close','*');"><spring:message
+										code='lbl.close' /></a>
+							</div>
+						</div>
 					</div>
 				</div>
-				 <div class="form-group">
-						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.accountcode" /> :</label>
-						<div class="col-sm-3 add-margin">
-							<form:input id="accountCode" type="text"
-								class="form-control " autocomplete="off" path="" name="accountCode"
-								value="" placeholder="" />
-							<input type="hidden" id="accountCodeId" value="" />
-
-						</div>
-						</div>
-            <div class="form-group">
-            <label class="col-sm-3 control-label text-right"><spring:message
-							code="lbl.purpose" />:</label>
-					<div class="col-sm-3 add-margin">
-						<form:select name="purposeId" path="" data-first-option="false"
-							id="purposeId" cssClass="form-control">
-							<form:option value="">
-								<spring:message code="lbls.select" />
-							</form:option>
-							<form:options items="${purposeList}" itemValue="id"
-								itemLabel="name" />
-						</form:select>
-					</div>
-              <label class="col-sm-2 control-label"><spring:message code="lbl.type" />:</label>
-						<div class="col-sm-3 add-margin">
-							<select name="type" id="type" class="form-control mandatory">
-								<option value="">
-									<spring:message code="lbl.select" />
-								</option>
-								<option value="I"><spring:message code="value.income" /></option>
-								<option value="E"><spring:message code="value.expense" /></option>
-								<option value="L"><spring:message code="value.liability" /></option>
-								<option value="A"><spring:message code="value.asset" /></option>
-							</select>
-						</div>
-              
-            </div>
-            <div class="form-group">
-              
-             <label class="col-sm-3 control-label text-right"><spring:message
-							code="lbl.accountdetailtype" />:</label>
-					<div class="col-sm-3 add-margin">
-						<form:select name="detailTypeId" path="" data-first-option="false"
-							id="detailTypeId" cssClass="form-control">
-							<form:option value="">
-								<spring:message code="lbls.select" />
-							</form:option>
-							<form:options items="${accountDetailTypeList}" itemValue="id"
-								itemLabel="name" />
-						</form:select>
-					</div>
-					
-              
-            </div>
-            
-            <div class="form-group">
-					<label class="col-sm-3 control-label text-right"><spring:message
-							code="lbl.isActiveForPosting" />:</label>
-					<div class="col-sm-1 add-margin"> 
-						<input type="checkbox" name="isActiveForPosting"
-							 />
-					</div>
-					
-					<label class="col-sm-3 control-label text-right"><spring:message
-							code="lbl.functionRequired" />:</label>
-					<div class="col-sm-1 add-margin">
-						<input type="checkbox" name="functionReqd"
-							 />
-					</div>
-					</div>
-					
-					 <div class="form-group">
-					<label class="col-sm-3 control-label text-right"><spring:message
-							code="lbl.budgetRequired" />:</label>
-					<div class="col-sm-1 add-margin"> 
-						<input type="checkbox" name="budgetCheckReq"
-						 />
-					</div>
-					</div>
-					
-            
-            <div class="form-group">
-              <div class="text-center">
-                <button type='button' class='btn btn-primary' id="btnsearch">
-                  <spring:message code='lbl.search' />
-                </button>
-                <a href='javascript:void(0)' class='btn btn-default' onclick="javascript:window.parent.postMessage('close','*');"><spring:message
-                    code='lbl.close' /></a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+			</div>
+		</div>
+	</div>
 </form:form>
-
-<%-- <div class="row">
-			<div class="col-md-6 col-xs-6 table-header">The Search result
-				is</div>
-			<div class="col-md-6 col-xs-6 add-margin text-right">
-				<span class="inline-elem"><spring:message code='lbl.search' /></span>
-				<span class="inline-elem"><input type="text" id="searchapp"
-					class="form-control input-sm"></span>
-			</div>
-			<div class="col-md-12" id="searchResultDiv">
-				<table class="table table-bordered datatable dt-responsive"
-					id="coaReportResult">
-
-				</table>
-			</div>
-		</div> --%>
 <div class="row display-hide report-section">
-	<div class="col-md-12 table-header text-left">COA Report
-		Result</div>
+	<div class="col-md-12 table-header text-left">COA Report Result</div>
 	<div class="col-md-12 form-group report-table-container">
 		<table class="table table-bordered table-hover multiheadertbl"
 			id="resultTable">
@@ -218,24 +249,39 @@
 					<th><spring:message code="lbl.type" /></th>
 					<th><spring:message code="lbl.purpose" /></th>
 					<th><spring:message code="lbl.accountdetailtype" /></th>
-					 <th><spring:message code="lbl.isActiveForPosting" /></th> 
+					<th><spring:message code="lbl.isActiveForPosting" /></th>
 				</tr>
 			</thead>
 		</table>
 	</div>
-</div> 
-<link rel="stylesheet" href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/jquery.dataTables.min.css' context='/services/egi'/>" />
-<link rel="stylesheet" href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/dataTables.bootstrap.min.css' context='/services/egi'/>">
-<link rel="stylesheet" href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/buttons.bootstrap.min.css' context='/services/egi'/>">
-<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/jquery.dataTables.min.js' context='/services/egi'/>"></script>
-<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/dataTables.bootstrap.js' context='/services/egi'/>"></script>
-<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/dataTables.buttons.min.js' context='/services/egi'/>"></script>
-<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/buttons.bootstrap.min.js' context='/services/egi'/>"></script>
-<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/buttons.flash.min.js' context='/services/egi'/>"></script>
-<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/jszip.min.js' context='/services/egi'/>"></script>
-<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/pdfmake.min.js' context='/services/egi'/>"></script>
-<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/vfs_fonts.js' context='/services/egi'/>"></script>
-<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/buttons.html5.min.js' context='/services/egi'/>"></script>
-<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/buttons.print.min.js' context='/services/egi'/>"></script>
-<script type="text/javascript" src="<cdn:url value='/resources/global/js/jquery/plugins/jquery.validate.min.js' context='/services/egi'/>"></script>
-<script type="text/javascript" src="<cdn:url value='/resources/app/js/coareport.js?rnd=${app_release_no}'/>"></script>
+</div>
+<link rel="stylesheet"
+	href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/jquery.dataTables.min.css' context='/services/egi'/>" />
+<link rel="stylesheet"
+	href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/dataTables.bootstrap.min.css' context='/services/egi'/>">
+<link rel="stylesheet"
+	href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/buttons.bootstrap.min.css' context='/services/egi'/>">
+<script type="text/javascript"
+	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/jquery.dataTables.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript"
+	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/dataTables.bootstrap.js' context='/services/egi'/>"></script>
+<script type="text/javascript"
+	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/dataTables.buttons.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript"
+	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/buttons.bootstrap.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript"
+	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/buttons.flash.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript"
+	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/jszip.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript"
+	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/pdfmake.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript"
+	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/vfs_fonts.js' context='/services/egi'/>"></script>
+<script type="text/javascript"
+	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/buttons.html5.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript"
+	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/extensions/buttons/buttons.print.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript"
+	src="<cdn:url value='/resources/global/js/jquery/plugins/jquery.validate.min.js' context='/services/egi'/>"></script>
+<script type="text/javascript"
+	src="<cdn:url value='/resources/app/js/coareport.js?rnd=${app_release_no}'/>"></script>

@@ -63,7 +63,6 @@ public class ChartOfAccountsReportController {
     private void prepareNewForm(Model model) {
         model.addAttribute("accountDetailTypeList", accountdetailtypeService.findAll());
         model.addAttribute("purposeList", accountPurposeService.findAll());
-        model.addAttribute("allChartOfAccounts", chartOfAccountsHibernateDAO.getDetailedCodesList());
         model.addAttribute("majorCodeList", chartOfAccountsReportService.getMajorCodeList());
         model.addAttribute("minCodeList", chartOfAccountsReportService.getMinorCodeList());
         
