@@ -48,7 +48,7 @@ const formConfig = {
             dispatch(removeForm(item));
           }
         });
-        dispatch(toggleSnackbarAndSetText(false, "", false));
+        dispatch(toggleSnackbarAndSetText(false, "", "success"));
         return action;
       },
     },

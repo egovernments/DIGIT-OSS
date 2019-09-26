@@ -1,6 +1,7 @@
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import { httpRequest } from "egov-ui-kit/utils/api";
+import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { createReceiptDetails } from "../../../PaymentStatus/Components/createReceipt";
 import generateReceipt from "../../../PaymentStatus/Components/receiptsPDF";
 import React, { Component } from "react";
@@ -73,12 +74,15 @@ class DropDown extends Component {
       case "Download Receipt":
         //Need 1. Property, 2. Property Details, 3. receiptdetails
         // call receiptcreate func
+
         downloadReceipt(item, generalMDMSDataById, false, imageUrl);
         break;
       case "Download Citizen Receipt":
+
         downloadReceipt(item, generalMDMSDataById, false, imageUrl);
         break;
       case "Download Employee Receipt":
+
         downloadReceipt(item, generalMDMSDataById, true, imageUrl);
         break;
       case "Complete Payment":
@@ -127,6 +131,8 @@ class DropDown extends Component {
           totalAmountToPay,
           totalAmountPaid
         );
+        localStorageSet("rd-propertyId",item.propertyId);
+        localStorageSet("rd-assessmentNumber",item.propertyDetails.assessmentNumber);
       receiptDetails && generateReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl, isEmployeeReceipt, {itemData: item, property: item.property, receipt: payload.Receipt});
     } catch (e) {
       console.log(e);

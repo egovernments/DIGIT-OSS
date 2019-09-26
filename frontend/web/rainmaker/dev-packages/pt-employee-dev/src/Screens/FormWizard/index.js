@@ -751,7 +751,7 @@ class FormWizard extends Component {
               labelName: "ULB validations failed!",
               labelKey: "ERR_ULD_VALIDATIONS_FAILED"
             },
-            true
+            "error"
           );
           break;
         }
@@ -778,7 +778,7 @@ class FormWizard extends Component {
               labelName: "ULB validations failed!",
               labelKey: "ERR_ULD_VALIDATIONS_FAILED"
             },
-            true
+            "error"
           );
           break;
         }
@@ -844,7 +844,7 @@ class FormWizard extends Component {
               labelName: "ULB validations failed!",
               labelKey: "ERR_ULD_VALIDATIONS_FAILED"
             },
-            true
+            "error"
           );
           break;
         }
@@ -1159,7 +1159,7 @@ class FormWizard extends Component {
           labelName: "Transaction numbers don't match !",
           labelKey: "ERR_TRASACTION_NUMBERS_DONT_MATCH"
         },
-        true
+        "error"
       );
       return;
     }
@@ -1349,7 +1349,7 @@ class FormWizard extends Component {
             labelName: "Error calculating tax!",
             labelKey: "ERR_ERROR_CALCULATING_TAX"
           },
-          true
+          "error"
         );
     } finally {
       hideSpinner();

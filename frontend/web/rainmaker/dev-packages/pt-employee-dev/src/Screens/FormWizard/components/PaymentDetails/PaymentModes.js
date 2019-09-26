@@ -72,7 +72,7 @@ class PaymentModes extends Component {
                 labelName: "Bank details not found for this IFSC",
                 labelKey: "ERR_BANK_DETAILS_NOT_FOUND_FOR_IFSC"
               },
-              true
+              "error"
             );
           } else {
             setFieldProperty(formKey, "BankName", "hideField", false);

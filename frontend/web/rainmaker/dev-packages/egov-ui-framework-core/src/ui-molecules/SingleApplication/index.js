@@ -24,13 +24,9 @@ class SingleApplication extends React.Component {
   onCardClick = item => {
     switch (item.status) {
       case "INITIATED":
-        return `/tradelicense-citizen/apply?applicationNumber=${
-          item.applicationNumber
-        }&tenantId=${item.tenantId}`;
+        return `/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
       default:
-        return `/tradelicence/search-preview?applicationNumber=${
-          item.applicationNumber
-        }&tenantId=${item.tenantId}`;
+        return `/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
     }
   };
 
@@ -63,7 +59,7 @@ class SingleApplication extends React.Component {
                     <Grid container style={{ marginBottom: 12 }}>
                       <Grid item xs={6}>
                         <Label
-                          label={"TL_COMMON_TABLE_COL_TRD_NAME"}
+                          labelKey={"TL_COMMON_TABLE_COL_TRD_NAME"}
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
                         />

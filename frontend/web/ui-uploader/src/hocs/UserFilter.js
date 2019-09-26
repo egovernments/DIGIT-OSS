@@ -11,7 +11,9 @@ const userFilters = (filterKey, label, placeholder = "placeholder") => {
         [filterKey]: e.target.value
           .trim()
           .split(",")
-          .map(value => value.trim())
+          .filter(value => {
+            return value.trim();
+          })
       });
     };
 

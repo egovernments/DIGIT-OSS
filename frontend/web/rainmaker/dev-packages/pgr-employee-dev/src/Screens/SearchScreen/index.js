@@ -105,7 +105,7 @@ class SearchScreen extends Component {
             labelName: "Entered value is less than 6 characters in length.",
             labelKey: `ERR_VALUE_LESS_THAN_SIX_CHARACTERS`
           },
-          true
+          "error"
         );
       }
     } else if (mobileNo) {

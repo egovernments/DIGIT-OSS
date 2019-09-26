@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import TableData from "./components/TableData";
 import Label from "egov-ui-kit/utils/translationNode";
-import { Boxboard } from "./components/actionItems";
+import ServiceList from "egov-ui-kit/common/common/ServiceList";
 
 const iconStyle = {
   width: "48px",
@@ -33,7 +33,7 @@ class Inbox extends Component {
     });
   }
   render() {
-    const { name } = this.props;
+    const { name, history } = this.props;
     const { actionList, hasWorkflow } = this.state;
     return (
       <div>
@@ -41,8 +41,10 @@ class Inbox extends Component {
           <Label className="landingPageUser" label={"CS_LANDING_PAGE_WELCOME_TEXT"} />
           <Label className="landingPageUser" label={name} />
         </div>
+        <div style={{margin : "16px 16px 0px 16px" }}>
+          <ServiceList history={history} />
+        </div>
 
-        {actionList && <Boxboard data={actionList} />}
         {hasWorkflow && <TableData />}
       </div>
     );

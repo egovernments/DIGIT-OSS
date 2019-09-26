@@ -6,7 +6,9 @@ import ActionFooter from "../../common/ActionFooter";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import generateReceipt from "./Components/receiptsPDF";
 import AcknowledgementCard from '../AcknowledgementCard';
+import {localStorageSet} from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
+
 
 const labelStyle = {
   fontWeight: 500,
