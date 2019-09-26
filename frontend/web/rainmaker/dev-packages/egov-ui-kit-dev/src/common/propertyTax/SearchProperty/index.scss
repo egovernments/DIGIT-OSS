@@ -34,3 +34,11 @@
     }
   }
 }
+.inner-header-style {
+  padding: 10px 16px !important; 
+  justify-content: space-between;
+  cursor: "pointer"; }
+
+@media only screen and (min-width: 768px) {
+  .inner-header-style {
+    padding: 10px 16px !important; } }

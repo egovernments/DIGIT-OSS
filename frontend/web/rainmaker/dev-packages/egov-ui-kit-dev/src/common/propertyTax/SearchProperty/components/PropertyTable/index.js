@@ -5,16 +5,52 @@ import TableUi from "egov-ui-kit/components/Tables";
 import Label from "egov-ui-kit/utils/translationNode";
 
 const columnData = [
-  { id: "index", numeric: true, disablePadding: false, label: "PT_SEARCHPROPERTY_TABEL_SNO" },
-  { id: "name", numeric: false, disablePadding: true, label: "PT_SEARCHPROPERTY_TABEL_OWNERNAME" },
-  { id: "fatherOrHusbandName", numeric: false, disablePadding: true, label: "PT_SEARCHPROPERTY_TABEL_FATHERNAME" },
-  { id: "propertyId", numeric: false, disablePadding: false, label: "PT_SEARCHPROPERTY_TABEL_PTUID" },
-  { id: "oldPropertyId", numeric: false, disablePadding: false, label: "PT_SEARCHPROPERTY_TABEL_EPID" },
-  { id: "address", numeric: false, disablePadding: false, label: "PT_SEARCHPROPERTY_TABEL_ADDRESS" },
-  { id: "action", numeric: false, disablePadding: false, label: "PT_SEARCHPROPERTY_TABEL_ACTION" },
+  {
+    id: "index",
+    numeric: true,
+    disablePadding: false,
+    label: "PT_SEARCHPROPERTY_TABEL_SNO"
+  },
+  {
+    id: "propertyId",
+    numeric: false,
+    disablePadding: false,
+    label: "PT_SEARCHPROPERTY_TABEL_PTUID"
+  },
+  {
+    id: "name",
+    numeric: false,
+    disablePadding: true,
+    label: "PT_SEARCHPROPERTY_TABEL_OWNERNAME"
+  },
+  {
+    id: "guardianName",
+    numeric: false,
+    disablePadding: true,
+    label: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"
+  },
+  {
+    id: "oldPropertyId",
+    numeric: false,
+    disablePadding: false,
+    label: "PT_SEARCHPROPERTY_TABEL_EPID"
+  },
+  {
+    id: "address",
+    numeric: false,
+    disablePadding: false,
+    label: "PT_SEARCHPROPERTY_TABEL_ADDRESS"
+  },
+  {
+    id: "status",
+    numeric: false,
+    disablePadding: false,
+    label: "PT_SEARCHPROPERTY_TABEL_STATUS"
+  }
 ];
 
 const PropertyTable = ({ tableData, onActionClick }) => {
+  console.log(tableData,'tableData');
   return (
     <div className="form-without-button-cont-generic">
       <Card

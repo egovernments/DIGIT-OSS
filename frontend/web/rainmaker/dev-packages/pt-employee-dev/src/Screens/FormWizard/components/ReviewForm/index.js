@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Icon, Card, Dialog } from "components";
-import PropertyAddress from "./components/PropertyAddress";
+// import PropertyAddress from "./components/PropertyAddress";
 //import AdditionalDetails from "./components/AdditionalDetails";
-import AssessmentInfo from "./components/AssessmentInfo";
-import OwnerInfo from "./components/OwnerInfo";
+// import AssessmentInfo from "./components/AssessmentInfo";
+// import OwnerInfo from "./components/OwnerInfo";
 import AddRebateExemption from "./components/addRebateBox";
 import PropertyTaxDetailsCard from "./components/PropertyTaxDetails";
 import CalculationDetails from "./components/CalculationDetails";
@@ -11,6 +11,11 @@ import propertyAddressConfig from "./formConfigs/propertyAddress";
 import { connect } from "react-redux";
 import formHoc from "egov-ui-kit/hocs/form";
 import EditIcon from "./components/EditIcon";
+
+import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/components/PropertyAddressInfo';
+import AssessmentInfo from 'egov-ui-kit/common/propertyTax/Property/components/AssessmentInfo';
+import OwnerInfo from 'egov-ui-kit/common/propertyTax/Property/components/OwnerInfo';
+
 
 import "./index.css";
 const defaultIconStyle = {
@@ -76,16 +81,30 @@ class ReviewForm extends Component {
     let { showRebateBox } = this.state;
     let { stepZero, stepTwo, stepOne, estimationDetails, importantDates, totalAmount } = this.props;
     return (
+      
       <div>
-        <PropertyAddress icon={PropAddressIcon} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />} component={stepZero} />
+      
+        {/* <PropertyAddress icon={PropAddressIcon} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />} component={stepZero} />
         <AssessmentInfo icon={AssessmentInfoIcon} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />} component={stepOne} />
         <OwnerInfo icon={OwnerInfoIcon} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />} component={stepTwo} />
-        <PropertyTaxDetailsCard
+       */}
+        <Card
+          textChildren={
+            <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
+              <PropertyTaxDetailsCard
           estimationDetails={estimationDetails}
           importantDates={importantDates}
           addRebateBox={addRebateBox}
           openCalculationDetails={this.openCalculationDetails}
         />
+              <PropertyAddressInfo properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
+              <AssessmentInfo properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
+              <OwnerInfo properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo>
+              
+            </div>
+          }
+        />
+      
         {!this.props.isCompletePayment && (
           <CalculationDetails
             open={this.state.calculationDetails}

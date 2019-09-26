@@ -3,6 +3,7 @@ import ReceiptDetails from "./ReceiptDetails";
 import TaxBreakUp from "./TaxBreakUp";
 import PaymentModes from "./PaymentModes";
 import formHoc from "egov-ui-kit/hocs/form";
+import { Card } from "components";
 import {
   CashInformation,
   ChequeInformation,
@@ -208,32 +209,37 @@ class PaymentDetails extends Component {
     } = this.props;
     let { totalAmount } = (estimationDetails && estimationDetails[0]) || {};
     return (
-      <div className="payment-details">
-        <TaxBreakUp
-          estimationDetails={estimationDetails}
-          importantDates={importantDates}
-          optionSelected={this.props.optionSelected}
-        />
-        {!isPartialPaymentInValid && (
-          <AdditionalDetails
-            value={this.props.totalAmountToBePaid}
-            onRadioButtonChange={this.props.onRadioButtonChange}
-            handleFieldChange={this.handleFieldChange}
-            optionSelected={this.props.optionSelected}
-            errorText={partialAmountError}
-            totalAmount={totalAmount && totalAmount}
-            estimationDetails={estimationDetails}
-            isPartialPaymentInValid={isPartialPaymentInValid}
-          />
-        )}
-        {totalAmount > 0 && (
-          <PaymentModes
-            paymentModeDetails={paymentModeDetails}
-            PaymentModeSelector={PaymentModeSelector}
-          />
-        )}
-        <ReceiptDetails />
-      </div>
+      <Card style={{ backgroundColor: 'white' }}
+        textChildren={
+          <div className="col-sm-12">
+
+          <div className="payment-details">
+            <TaxBreakUp
+              estimationDetails={estimationDetails}
+              importantDates={importantDates}
+              optionSelected={this.props.optionSelected}
+            />
+            {!isPartialPaymentInValid && (
+              <AdditionalDetails
+                value={this.props.totalAmountToBePaid}
+                onRadioButtonChange={this.props.onRadioButtonChange}
+                handleFieldChange={this.handleFieldChange}
+                optionSelected={this.props.optionSelected}
+                errorText={partialAmountError}
+                totalAmount={totalAmount && totalAmount}
+                estimationDetails={estimationDetails}
+                isPartialPaymentInValid={isPartialPaymentInValid}
+              />
+            )}
+            {totalAmount > 0 && (
+              <PaymentModes
+                paymentModeDetails={paymentModeDetails}
+                PaymentModeSelector={PaymentModeSelector}
+              />
+            )}
+            <ReceiptDetails />
+          </div>
+       </div> } />
     );
   }
 }

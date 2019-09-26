@@ -15,11 +15,26 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import get from "lodash/get";
 import commonConfig from "config/common.js";
+import YearDialogue from "egov-ui-kit/common/propertyTax/YearDialogue";
 
 class PaymentSuccess extends Component {
   state = {
-    imageUrl: ""
+    imageUrl: "",
+    yearDialogue: {
+      dialogueOpen: false,
+      urlToAppend: ''
+    }
   };
+  toggleYearDialogue = () => {
+    console.log("this", this.state);
+
+    this.setState({
+      yearDialogue: {
+        dialogueOpen: !this.state.yearDialogue.dialogueOpen,
+        urlToAppend: `/property-tax/assessment-form?assessmentId=${this.props.match.params.assessmentId}&isReassesment=true&isAssesment=true&propertyId=${this.props.match.params.propertyId}&tenantId=${this.props.match.params.tenantId}`
+      }
+    })
+  }
 
   icon = <Icon action="navigation" name="check" />;
 
@@ -113,7 +128,7 @@ class PaymentSuccess extends Component {
     ]);
     this.convertImgToDataURLviaCanvas(
       this.createImageUrl(match.params.tenantId),
-      function(data) {
+      function (data) {
         this.setState({ imageUrl: data });
       }.bind(this)
     );
@@ -127,7 +142,7 @@ class PaymentSuccess extends Component {
   convertImgToDataURLviaCanvas = (url, callback, outputFormat) => {
     var img = new Image();
     img.crossOrigin = "Anonymous";
-    img.onload = function() {
+    img.onload = function () {
       var canvas = document.createElement("CANVAS");
       var ctx = canvas.getContext("2d");
       var dataURL;
@@ -146,23 +161,31 @@ class PaymentSuccess extends Component {
   };
 
   render() {
-    const { generalMDMSDataById } = this.props;
+    const { generalMDMSDataById, history } = this.props;
+    const { assessmentYear, propertyId } = this.props.match.params;
     const { imageUrl } = this.state;
+    const { toggleYearDialogue } = this;
     return (
       <Screen>
+        {this.state.yearDialogue.dialogueOpen && <YearDialogue open={this.state.yearDialogue.dialogueOpen} history={history} urlToAppend={this.state.yearDialogue.urlToAppend} closeDialogue={toggleYearDialogue} />}
         <PaymentStatus
           receiptUIDetails={this.props.receiptUIDetails}
           receiptDetails={this.props.receiptDetails}
           floatingButtonColor="#22b25f"
           icon={this.icon}
-          messages={this.successMessages}
+          toggleYearDialogue={toggleYearDialogue}
           buttons={this.buttons}
+          assessmentYear={assessmentYear}
+          propertyId={propertyId}
           primaryAction={this.goToHome}
           noExistingPropertyId={!this.props.existingPropertyId}
           generalMDMSDataById={generalMDMSDataById && generalMDMSDataById}
           receiptImageUrl={imageUrl && imageUrl}
           extraData={this.props.extraData}
         />
+
+
+
       </Screen>
     );
   }

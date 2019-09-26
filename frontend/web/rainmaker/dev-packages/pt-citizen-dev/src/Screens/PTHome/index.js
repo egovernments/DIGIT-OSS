@@ -81,22 +81,22 @@ class PTHome extends Component {
   getlistItems = () => {
     const { numDrafts } = this.props;
     return [
-      {
-        primaryText: (
-          <Label label="PT_COMPLETED_ASSESSMENTS" labelStyle={labelStyle} />
-        ),
-        route: "/property-tax/completed-assessments",
-        // leftIcon: (
-        //   <div style={listIconStyle}>
-        //     <Icon action="action" name="done" />
-        //   </div>
-        // ),
-        rightIcon: (
-          <div style={listIconStyle}>
-            <Icon action="hardware" name="keyboard-arrow-right" />
-          </div>
-        )
-      },
+      // {
+      //   primaryText: (
+      //     <Label label="PT_COMPLETED_ASSESSMENTS" labelStyle={labelStyle} />
+      //   ),
+      //   route: "/property-tax/completed-assessments",
+      //   // leftIcon: (
+      //   //   <div style={listIconStyle}>
+      //   //     <Icon action="action" name="done" />
+      //   //   </div>
+      //   // ),
+      //   rightIcon: (
+      //     <div style={listIconStyle}>
+      //       <Icon action="hardware" name="keyboard-arrow-right" />
+      //     </div>
+      //   )
+      // },
       {
         primaryText: (
           <Label

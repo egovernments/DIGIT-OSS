@@ -16,80 +16,71 @@ const AdditionalDetails = ({
 
   return (
     <Card
-      style={{ marginBottom: 20, backgroundColor: "white" }}
+      style={{ marginBottom: 20,padding:'16px', backgroundColor: "rgb(242, 242, 242)" }}
       initiallyExpanded={true}
     >
-      <CardHeader
-        className="tax-calculation-card-header"
-        actAsExpander={true}
-        showExpandableButton={true}
-        closeIcon={
-          <div>
-            <div className="pt-tax-calc-details-btn">
-              <Label label="PT_VIEW_DETAILS" color="#FE7A51" />
-            </div>
-          </div>
-        }
-        iconStyle={{}}
-        title={
-          <div
-            className="tax-header-price rainmaker-displayInline"
-            style={{ marginLeft: 5 }}
-          >
-            <Icon action="custom" name="property-tax" />
-            <Label
-              label="PT_FORM4_PT_DUE"
-              fontSize="16px"
-              color="#484848"
-              containerStyle={{ marginLeft: 5 }}
-            />
-            <Label
-              className="property-dues-total-amount"
-              label={`INR ${
-                totalAmount
-                  ? `${
-                      !(optionSelected === "Partial_Amount")
-                        ? totalAmount
-                        : totalAmount -
+      <div  >
+        <div className="clearfix fare-section">
+              <div className="col-sm-12" >
+              <div style={{ float: 'left' }}>
+              <Label label="PT_HOME_PROPERTY_TAX"  lineHeight="19px" letterSpacing="0.67px" fontSize="18px" color="rgba(0, 0, 0, 0.87)" />
+                </div>
+                <div style={{ float: 'right' }}>
+                  <Label label="PT_TOTAL_AMOUNT"></Label>
+                </div>
+              </div> </div>
+            <div className="clearfix fare-section">
+              <div
+                className="col-sm-12"       >
+                <div style={{ float: 'right' }}>
+                  <Label
+                    className="property-dues-total-amount"
+                    label={`Rs ${
+                      totalAmount
+                        ? `${
+                        !(optionSelected === "Partial_Amount")
+                          ? totalAmount
+                          : totalAmount -
                           get(
                             taxHeadEstimates[
-                              taxHeadEstimates.findIndex(
-                                item =>
-                                  item.taxHeadCode
-                                    .toLowerCase()
-                                    .indexOf("rebate") !== -1
-                              )
+                            taxHeadEstimates.findIndex(
+                              item =>
+                                item.taxHeadCode
+                                  .toLowerCase()
+                                  .indexOf("rebate") !== -1
+                            )
                             ],
                             "estimateAmount",
                             0
                           )
-                    }`
-                  : totalAmount === 0
-                  ? "0"
-                  : "NA"
-              }`}
-              fontSize="16px"
-              color="#484848"
-            />
-          </div>
-        }
-      />
-      <CardText expandable={true}>
+                        }`
+                        : totalAmount === 0
+                          ? "0"
+                          : "NA"
+                      }`}
+                    fontSize="24px"
+                    color="#484848"
+                    fontWeight="600"
+                  />
+                </div>
+
+              </div>
+            </div>
         <div className="clearfix fare-section">
           <div
             className="col-sm-6 col-xs-12"
             style={{
-              backgroundColor: "#f2f2f2",
+              backgroundColor: "rgb(242, 242, 242)",
               marginRight: 100,
               padding: 16
             }}
           >
-            <Label
+            {/* <Label
               containerStyle={{ marginBottom: 16 }}
               color="#484848"
               label="PT_FORM4_DETAILED_BILL"
               bold={true}
-            />
+            /> */}
             {taxHeadEstimates &&
               taxHeadEstimates.map((item, index) => {
                 return (
@@ -173,7 +164,8 @@ const AdditionalDetails = ({
               </div>
             </div>
           </div>
-          <div className="col-sm-6 col-xs-12 date-details-container">
+          <div className="col-sm-6 col-xs-12 date-details-container"  style={{
+              backgroundColor: "white"}}>
             <div className="date-details">
               <Label
                 containerStyle={{ marginBottom: 16 }}
@@ -218,7 +210,65 @@ const AdditionalDetails = ({
             </div>
           </div>
         </div>
-      </CardText>
+      </div>
+      {/* <CardHeader
+        className="tax-calculation-card-header"
+        actAsExpander={true}
+        showExpandableButton={true}
+        closeIcon={
+          <div>
+            <div className="pt-tax-calc-details-btn">
+              <Label label="PT_VIEW_DETAILS" color="#FE7A51" />
+            </div>
+          </div>
+        }
+        iconStyle={{}}
+        title={
+          <div
+            className="tax-header-price rainmaker-displayInline"
+            style={{ marginLeft: 5 }}
+          >
+            {/* <Icon action="custom" name="property-tax" /> 
+            <Label
+              label="PT_HOME_PROPERTY_TAX"
+              fontSize="16px"
+              color="#484848"
+              containerStyle={{ marginLeft: 5 }}
+            />
+            {/* <Label
+              className="property-dues-total-amount"
+              label={`INR ${
+                totalAmount
+                  ? `${
+                      !(optionSelected === "Partial_Amount")
+                        ? totalAmount
+                        : totalAmount -
+                          get(
+                            taxHeadEstimates[
+                              taxHeadEstimates.findIndex(
+                                item =>
+                                  item.taxHeadCode
+                                    .toLowerCase()
+                                    .indexOf("rebate") !== -1
+                              )
+                            ],
+                            "estimateAmount",
+                            0
+                          )
+                    }`
+                  : totalAmount === 0
+                  ? "0"
+                  : "NA"
+              }`}
+              fontSize="16px"
+              color="#484848"
+            /> */}
+          {/* </div>
+        }
+      />
+      <CardText expandable={true}>
+        
+      </CardText> */}
     </Card>
   );
 };

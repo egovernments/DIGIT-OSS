@@ -34,7 +34,7 @@ const tabs = [
     formValid: false,
   },
   {
-    heading: "PT_REVIEW_PAY_FORM_HEADING",
+    heading: "PT_COMMON_SUMMARY",
     // icon: {
     //   name: "attach-money",
     //   action: "editor",

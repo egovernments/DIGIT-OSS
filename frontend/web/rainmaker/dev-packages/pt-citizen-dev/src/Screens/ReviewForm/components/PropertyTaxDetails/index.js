@@ -18,9 +18,9 @@ class PropertyTaxDetails extends React.Component {
     });
 
   componentDidMount = () => {
-    document
-      .getElementsByClassName("tax-calculation-card-header")[0]
-      .addEventListener("click", this.toggleExpander);
+    // document
+    //   .getElementsByClassName("tax-calculation-card-header")[0]
+    //   .addEventListener("click", this.toggleExpander);
   };
 
   render() {
@@ -35,78 +35,76 @@ class PropertyTaxDetails extends React.Component {
     const { intrest, penalty, rebate } = importantDates;
     return (
       <Card
-        style={{ marginBottom: 20, "background-color": "white" }}
+        style={{ marginBottom: 20,padding:'16px', "background-color": "rgb(242, 242, 242)", boxShadow: 'none' }}
         expanded={isExpanded}
       >
-        <CardHeader
-          className="tax-calculation-card-header"
-          actAsExpander={true}
-          showExpandableButton={true}
-          closeIcon={
-            <div>
-              <div
-                className="pt-tax-calc-details-btn"
-                onClick={this.toggleExpander}
-              >
-                <Label label="PT_VIEW_DETAILS" color="#FE7A51" />
-              </div>
-            </div>
-          }
-          iconStyle={{}}
-          title={
-            <div
-              className="tax-header-price rainmaker-displayInline"
-              onClick={this.toggleExpander}
-            >
-              <Label label="PT_FORM4_PT_DUE" fontSize="16px" color="#484848" />
-              <Label
-                className="property-dues-total-amount"
-                label={`INR ${
-                  totalAmount
-                    ? `${
+         <div >
+            <div className="clearfix fare-section">
+              <div className="col-sm-12" >
+             
+              <div style={{ float: 'left' }}>
+  
+              <Label label="PT_HOME_PROPERTY_TAX"  lineHeight="19px" letterSpacing="0.67px" fontSize="18px" color="rgba(0, 0, 0, 0.87)" />
+                </div>
+                <div style={{ float: 'right' }}>
+                  <Label label="PT_TOTAL_AMOUNT"></Label>
+                </div>
+              </div> </div>
+            <div className="clearfix fare-section">
+              <div  
+                className="col-sm-12"       >
+                <div style={{ float: 'right' }}>
+                  <Label
+                    className="property-dues-total-amount"
+                    label={`Rs ${
+                      totalAmount
+                        ? `${
                         !(optionSelected === "Partial_Amount")
                           ? totalAmount
                           : totalAmount -
-                            get(
-                              taxHeadEstimates[
-                                taxHeadEstimates.findIndex(
-                                  item =>
-                                    item.taxHeadCode
-                                      .toLowerCase()
-                                      .indexOf("rebate") !== -1
-                                )
-                              ],
-                              "estimateAmount",
-                              0
+                          get(
+                            taxHeadEstimates[
+                            taxHeadEstimates.findIndex(
+                              item =>
+                                item.taxHeadCode
+                                  .toLowerCase()
+                                  .indexOf("rebate") !== -1
                             )
-                      }`
-                    : totalAmount === 0
-                    ? "0"
-                    : "NA"
-                }`}
-                fontSize="16px"
-                color="#484848"
-              />
+                            ],
+                            "estimateAmount",
+                            0
+                          )
+                        }`
+                        : totalAmount === 0
+                          ? "0"
+                          : "NA"
+                      }`}
+                    fontSize="24px"
+                    color="#484848"
+                    fontWeight='600'
+                   
+                  />
+                </div>
+
+              </div>
             </div>
-          }
-          ref={el => (this.xyz = el)}
-        />
-        <CardText expandable={true} expanded={true}>
+          </div>
           <div className="clearfix fare-section">
+
             <div
               className="col-sm-6"
               style={{
-                backgroundColor: "#f2f2f2",
+
                 marginRight: 100,
                 padding: 16
               }}
             >
-              <Label
+              {/* <Label
                 containerStyle={{ marginBottom: 16 }}
                 color="#484848"
                 label="PT_FORM4_DETAILED_BILL"
                 bold={true}
-              />
+              /> */}
               {taxHeadEstimates &&
                 taxHeadEstimates.map((item, index) => {
                   return (
@@ -125,25 +123,26 @@ class PropertyTaxDetails extends React.Component {
                             className="pt-rf-price"
                             label={
                               (item.estimateAmount > 0 &&
-                              (item.taxHeadCode === "PT_ADVANCE_CARRYFORWARD" ||
-                                item.category === "EXEMPTION" ||
-                                item.category === "REBATE")
+                                (item.taxHeadCode === "PT_ADVANCE_CARRYFORWARD" ||
+                                  item.category === "EXEMPTION" ||
+                                  item.category === "REBATE")
                                 ? ""
                                 : "") +
                               `${
-                                !(
-                                  optionSelected === "Partial_Amount" &&
-                                  item.taxHeadCode
-                                    .toLowerCase()
-                                    .indexOf("rebate") !== -1
-                                )
-                                  ? item.estimateAmount
-                                  : 0
+                              !(
+                                optionSelected === "Partial_Amount" &&
+                                item.taxHeadCode
+                                  .toLowerCase()
+                                  .indexOf("rebate") !== -1
+                              )
+                                ? item.estimateAmount
+                                : 0
                               }`
                             }
                           />
                         </div>
                       </div>
+
                     )
                   );
                 })}
@@ -167,25 +166,25 @@ class PropertyTaxDetails extends React.Component {
                     label={
                       totalAmount
                         ? `${
-                            !(optionSelected === "Partial_Amount")
-                              ? totalAmount
-                              : totalAmount -
-                                get(
-                                  taxHeadEstimates[
-                                    taxHeadEstimates.findIndex(
-                                      item =>
-                                        item.taxHeadCode
-                                          .toLowerCase()
-                                          .indexOf("rebate") !== -1
-                                    )
-                                  ],
-                                  "estimateAmount",
-                                  0
-                                )
-                          }`
+                        !(optionSelected === "Partial_Amount")
+                          ? totalAmount
+                          : totalAmount -
+                          get(
+                            taxHeadEstimates[
+                            taxHeadEstimates.findIndex(
+                              item =>
+                                item.taxHeadCode
+                                  .toLowerCase()
+                                  .indexOf("rebate") !== -1
+                            )
+                            ],
+                            "estimateAmount",
+                            0
+                          )
+                        }`
                         : totalAmount === 0
-                        ? "0"
-                        : "NA"
+                          ? "0"
+                          : "NA"
                     }
                   />
                 </div>
@@ -213,8 +212,9 @@ class PropertyTaxDetails extends React.Component {
                 />
               </div>
             </div>
-            <div className="col-sm-6">
-              <div className="date-details">
+            <div className="col-sm-6" style={{ backgroundColor: 'white' }}>
+
+              <div className="date-details" >
                 <Label
                   containerStyle={{ marginBottom: 16 }}
                   color="#484848"
@@ -238,7 +238,7 @@ class PropertyTaxDetails extends React.Component {
                         <Label
                           label={`Penalty (${
                             penalty.rate
-                          }% of PT) applied from`}
+                            }% of PT) applied from`}
                         />
                       </span>
                       <span>{`${penalty.startingDay}`}</span>
@@ -250,7 +250,7 @@ class PropertyTaxDetails extends React.Component {
                         <Label
                           label={`Interest (${
                             intrest.rate
-                          }% p.a. daily) applied from`}
+                            }% p.a. daily) applied from`}
                         />
                       </span>
                       <span>{`${intrest.startingDay}`}</span>
@@ -260,7 +260,35 @@ class PropertyTaxDetails extends React.Component {
               </div>
             </div>
           </div>
-        </CardText>
+        {/* <CardHeader
+          className="tax-calculation-card-header"
+          actAsExpander={true}
+          showExpandableButton={true}
+          closeIcon={
+            <div>
+              <div
+                className="pt-tax-calc-details-btn"
+                onClick={this.toggleExpander}
+              >
+                <Label label="PT_VIEW_DETAILS" color="#FE7A51" />
+              </div>
+            </div>
+          }
+          iconStyle={{}}
+          title={
+            <div
+              className="tax-header-price rainmaker-displayInline"
+              onClick={this.toggleExpander}
+            >
+            
+
+            </div>
+          }
+          ref={el => (this.xyz = el)}
+        /> */}
+        {/* <CardText expandable={true} expanded={true}>
+         
+        </CardText> */}
       </Card>
     );
   }

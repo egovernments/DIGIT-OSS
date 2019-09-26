@@ -49,6 +49,7 @@ const PaymentAmountDetails = ({
   return (
     <Card
       className="tax-calculation-card-header"
+      style={{ marginBottom: 20,padding:'16px', "background-color": "rgb(242, 242, 242)", boxShadow: 'none' }}
       textChildren={
         <div>
           <div className="rainmaker-displayInline" style={{ marginTop: 10 }}>
@@ -99,6 +100,7 @@ const PaymentAmountDetails = ({
             <div className="col-sm-6">
               <TextField
                 id="amount-to-be-paid"
+               
                 onChange={(e, value) => handleFieldChange(e, value)}
                 value={value}
                 floatingLabelText={

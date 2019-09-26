@@ -105,13 +105,15 @@ class PaymentModes extends Component {
     const { PaymentModeSelector } = this.props;
     return (
       <Card
+      style={{
+        backgroundColor: "rgb(242, 242, 242)"}}
         textChildren={
-          <div className="payment-modes">
+          <div className="payment-modes"  style={{ backgroundColor: "rgb(242, 242, 242)!important"}}>
             <div
               className="payment-mode-header-cont rainmaker-displayInline"
-              style={{ padding: "0 0 0 16px", alignItems: "center" }}
+              style={{ padding: "0 0 0 16px", backgroundColor: "rgb(242, 242, 242)!important" ,alignItems: "center" }}
             >
-              <Icon name="credit-card" action="action" />
+              {/* <Icon name="credit-card" action="action" /> */}
               <Label
                 label="PT_PAYMENTMODE_MODES_OF_PAYMENT"
                 fontSize={16}

@@ -2,6 +2,8 @@ import React from "react";
 import { Icon, Button } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import PTList from "./components/PTList";
+import PTInformation from "./components/PTInformation";
+
 import BlankAssessment from "./components/BlankAssessment";
 import DropDown from "./components/DropDown";
 import "./index.css";
@@ -14,6 +16,8 @@ const getItemStatus = (item, history, generalMDMSDataById) => {
       height: "18px",
     },
   };
+  console.log(status,'statsus');
+  
   switch (status) {
     case "Paid":
     case "Paid-Disable":
@@ -30,6 +34,20 @@ const getItemStatus = (item, history, generalMDMSDataById) => {
         </div>
       );
       break;
+    
+    case "Pending":
+          return (
+            <div>
+              <div className="assessment-displayInline" style={{ marginTop: "8px" }}>
+                <Label label="PT_STATUS_COMMON_PENDING" labelStyle={{ marginLeft: "8px" }} color={"#e74c3c"} />
+                <Icon action="navigation" name="exclamation" style={styles.paidIconStyle} color={"#e74c3c"} />
+              </div>
+              <div style={{ height: "30px", marginTop: "8px" }}>
+                {history && <DropDown generalMDMSDataById={generalMDMSDataById} history={history} item={item} />}
+              </div>
+            </div>
+          );
+          break;
     case "Partially Paid":
     case "Completed":
       return (
@@ -73,7 +91,7 @@ const getItemStatus = (item, history, generalMDMSDataById) => {
             label={<Label buttonLabel={true} label="PT_PAYMENT_ASSESS_AND_PAY" fontSize="12px" />}
             primary={true}
             onClick={(e) => {
-              history && history.push(`/property-tax/assessment-form?assessmentId=${item.assessmentNo}&isReassesment=true`);
+              history && history.push(`/property-tax/assessment-form?assessmentId=${item.assessmentNo}&isReassesment=true&isAssesment=true`);
             }}
             style={{
               height: 20,
@@ -147,7 +165,7 @@ const getListItems = (items, history, generalMDMSDataById) => {
   );
 };
 
-const AssessmentList = ({
+const AssessmentList = ({properties,
   items,
   history,
   onItemClick,
@@ -171,14 +189,29 @@ const AssessmentList = ({
       history={history}
     />
   ) : (
-    <PTList
-      items={getListItems(items, history, generalMDMSDataById)}
-      history={history}
-      onItemClick={onItemClick}
-      innerDivStyle={innerDivStyle}
-      listItemStyle={listItemStyle}
-      hoverColor={hoverColor}
-    />
+ 
+    properties== null ? ( <PTList 
+      properties={properties}
+        items={getListItems(items, history, generalMDMSDataById)}
+        history={history}
+        onItemClick={onItemClick}
+        innerDivStyle={innerDivStyle}
+        listItemStyle={listItemStyle}
+        hoverColor={hoverColor}
+      />):( <PTInformation 
+      properties={properties}
+        items={getListItems(items, history, generalMDMSDataById)}
+        history={history}
+        onItemClick={onItemClick}
+        innerDivStyle={innerDivStyle}
+        listItemStyle={listItemStyle}
+        hoverColor={hoverColor}
+      />)
+   
+
+
+
+   
   );
 };
 

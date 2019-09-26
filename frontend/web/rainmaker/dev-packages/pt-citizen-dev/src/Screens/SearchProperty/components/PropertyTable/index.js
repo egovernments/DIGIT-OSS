@@ -11,16 +11,22 @@ const columnData = [
     label: "PT_SEARCHPROPERTY_TABEL_SNO"
   },
   {
+    id: "propertyId",
+    numeric: false,
+    disablePadding: false,
+    label: "PT_SEARCHPROPERTY_TABEL_PTUID"
+  },
+  {
     id: "name",
     numeric: false,
     disablePadding: true,
     label: "PT_SEARCHPROPERTY_TABEL_OWNERNAME"
   },
   {
-    id: "propertyId",
+    id: "guardianName",
     numeric: false,
-    disablePadding: false,
-    label: "PT_SEARCHPROPERTY_TABEL_PTUID"
+    disablePadding: true,
+    label: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"
   },
   {
     id: "oldPropertyId",
@@ -35,10 +41,10 @@ const columnData = [
     label: "PT_SEARCHPROPERTY_TABEL_ADDRESS"
   },
   {
-    id: "action",
+    id: "status",
     numeric: false,
     disablePadding: false,
-    label: "PT_SEARCHPROPERTY_TABEL_ACTION"
+    label: "PT_SEARCHPROPERTY_TABEL_STATUS"
   }
 ];
 

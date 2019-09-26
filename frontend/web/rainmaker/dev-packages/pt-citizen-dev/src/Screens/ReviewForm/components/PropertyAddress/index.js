@@ -8,7 +8,7 @@ const PropertyAddress = ({ form, icon, editIcon, component }) => {
   return (
     <Card
       textChildren={
-        <div>
+        <div style={{backgroundColor:'lightgray' }}>
           <div className="pt-rf-title rainmaker-displayInline" style={{ justifyContent: "space-between" }}>
             <div className="rainmaker-displayInline" style={{ alignItems: "center" }}>
               <span className="pt-rf-icon">{icon}</span>

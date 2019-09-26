@@ -44,6 +44,8 @@ const AdditionalDetails = ({
 }) => {
   return (
     <Card
+    style={{
+      backgroundColor: "rgb(242, 242, 242)"}}
       className="tax-calculation-card-header"
       textChildren={
         <div>
@@ -51,7 +53,7 @@ const AdditionalDetails = ({
             className="rainmaker-displayInline"
             style={{ marginTop: 10, alignItems: "center" }}
           >
-            <Icon action="custom" name="rupee" />
+            {/* <Icon action="custom" name="rupee" /> */}
             <Label
               label="PT_PAY_AMOUNT_TO_BE_PAID"
               fontSize={16}
@@ -97,7 +99,7 @@ const AdditionalDetails = ({
                 </div>
               </div>
             </div>
-            <div className="col-sm-6">
+            <div className="col-sm-6 amtToPay">
               <TextField
                 id="amount-to-be-paid"
                 onChange={(e, value) => handleFieldChange(e, value)}
