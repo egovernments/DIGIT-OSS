@@ -58,6 +58,7 @@
 	font-weight: bold;
 }
 </style>
+
 <form:form role="form" modelAttribute="chartOfAccountsReport"
 	id="coaSearchResultForm"
 	cssClass="form-horizontal form-groups-bordered"
@@ -234,7 +235,8 @@
 	</div>
 </form:form>
 <div class="row display-hide report-section">
-	<div class="col-md-12 table-header text-left">COA Report Result</div>
+	<div class="col-md-12 table-header text-left" id="coareportheading"></div>
+	<!-- <div class="alert alert-success" role="alert"></div> -->
 	<div class="col-md-12 form-group report-table-container">
 		<table class="table table-bordered table-hover multiheadertbl"
 			id="resultTable">

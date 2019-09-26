@@ -18,13 +18,59 @@ $(document).ready(function(){
 		return indexed_array;
 	}
 	
+	function prepareHeading(){
+		var heading= "COA Report Result ";
+		if($("#type").val()){
+			console.log($("#type").val());
+			heading = heading  + " For Type:" +  $("#type option:selected").text();
+		}
+		if($("#accountCodeId").val()){
+			heading = heading  + " For Account Code :" +  $("#accountCodeId").val();
+		}
+		if($("#majorCode").val()){
+			heading = heading  + " For Major Code :" +  $("#majorCode option:selected").text();
+			
+		}
+		if($("#minorCode").val()){
+			heading = heading  + " For Minor Code :" +  $("#minorCode option:selected").text();
+			
+		}
+		if($("#purposeId").val()){
+			heading = heading  + " For Purpose :" +  $("#purposeId option:selected").text();
+			
+		}
+		if($("#detailTypeId").val()){
+			heading = heading  + " For Account detail type : " +  $("#detailTypeId option:selected").text();
+			
+		}
+		if($("#active").val()){
+			heading = heading  + " For Active for Posting : " +  $("#active option:selected").text();
+			
+		}
+		if($("#functionReqd").val()){
+			heading = heading  + " For Function Required : " +  $("#functionReqd option:selected").text();
+			
+		}
+		if($("#budgetCheckReq").val()){
+			heading = heading  + " For Budget Required : " +  $("#budgetCheckReq option:selected").text();
+			
+		}
+			
+		$("#coareportheading").html(heading);
+
+			
+			
+	}
+	
 jQuery('#btnsearch').click(function(e) {
+	prepareHeading();
 	callAjaxSearch();
 });
 
 function callAjaxSearch() {
 	drillDowntableContainer = $("#resultTable");
 	$('.report-section').removeClass('display-hide');
+	//$('#coareportheading').html($("#filterMessageName option:selected").text());
 	reportdatatable = drillDowntableContainer
 			.dataTable({
 				ajax : {
