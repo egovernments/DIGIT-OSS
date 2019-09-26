@@ -33,7 +33,7 @@ class Inbox extends Component {
     });
   }
   render() {
-    const { name,history } = this.props;
+    const { name, history } = this.props;
     const { actionList, hasWorkflow } = this.state;
     return (
       <div>
@@ -41,8 +41,10 @@ class Inbox extends Component {
           <Label className="landingPageUser" label={"CS_LANDING_PAGE_WELCOME_TEXT"} />
           <Label className="landingPageUser" label={name} />
         </div>
+        <div style={{margin : "16px 16px 0px 16px" }}>
+          <ServiceList history={history} />
+        </div>
 
-        {<ServiceList history={history} />}
         {hasWorkflow && <TableData />}
       </div>
     );
