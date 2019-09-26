@@ -273,7 +273,7 @@ class SearchProperty extends Component {
             </div>
             <div
               className="new-assess-btn rainmaker-displayInline"
-              onClick={() => history.push("/property-tax/assess-pay")}
+              onClick={() => this.onAddButtonClick()}
             >
               {/* <Button
                 label={"New Property Assessment"}

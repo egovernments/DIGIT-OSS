@@ -249,7 +249,7 @@ class SearchProperty extends Component {
                 label={<Label label="PT_ADD_ASSESS_PROPERTY" buttonLabel={true} />}
                 labelStyle={{ fontSize: 12 }}
                 className="new-property-assessment"
-                onClick={() => history.push("/property-tax")}
+                onClick={() => this.onAddButtonClick()}
                 primary={true}
                 fullWidth={true}
               />

@@ -1691,7 +1691,7 @@ class FormWizard extends Component {
           (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
           (isReassesment ?
             (headerObj.header = "PT_REASSESS_PROPERTY") :
-            (headerObj.headerValue = ':' + addNewPropertyLabel,
+            (headerObj.headerValue = headerObj.headerValue +':' + addNewPropertyLabel,
               headerObj.subHeaderValue = '',
               headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
         break;
