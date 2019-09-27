@@ -620,7 +620,7 @@ public class ContraService extends PersistenceService<ContraJournalVoucher, Long
                 || instrumentDetailsMap.get("instrumenttype").toString().equalsIgnoreCase(FinancialConstants.INSTRUMENT_TYPE_CHEQUE))
             microserviceUtils.depositeInstruments(instruments, instrumentDetailsMap.get("bankaccountNumber").toString());
         else if (instrumentDetailsMap.get("instrumenttype").toString().equalsIgnoreCase(FinancialConstants.INSTRUMENT_TYPE_CASH))
-            microserviceUtils.reconcileInstruments(instruments, instrumentDetailsMap.get("bankaccountid").toString());
+            microserviceUtils.reconcileInstruments(instruments, instrumentDetailsMap.get("bankaccountNumber").toString());
 
     }
 

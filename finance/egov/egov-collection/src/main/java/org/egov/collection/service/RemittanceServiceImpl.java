@@ -167,9 +167,9 @@ public class RemittanceServiceImpl extends RemittanceService {
 
         final String functionCode = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
                 CollectionConstants.APPCONFIG_VALUE_COLLECTION_BANKREMITTANCE_FUNCTIONCODE);
-
-        FinancialStatus instrumentStatusNew = microserviceUtils
-                .getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
+     // TODO : need to make this call to mdms
+//        FinancialStatus instrumentStatusNew = microserviceUtils
+//                .getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
 
         Boolean showRemitDate = false;
         BigDecimal totalCashAmt = BigDecimal.ZERO;
@@ -495,8 +495,8 @@ public class RemittanceServiceImpl extends RemittanceService {
     @Override
     public List<ReceiptBean> findCashRemittanceDetailsForServiceAndFund(final String boundaryIdList,
             final String serviceCodes, final String fundCodes, final Date startDate, final Date endDate) {
-
-        FinancialStatus status = microserviceUtils.getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
+     // TODO : need to make this call to mdms
+//        FinancialStatus status = microserviceUtils.getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
         List<Instrument> instruments = microserviceUtils.getInstruments(CollectionConstants.INSTRUMENTTYPE_NAME_CASH, TransactionType.Debit,
                 CollectionConstants.INSTRUMENT_NEW_STATUS);
         List<String> receiptIds = new ArrayList<>();
@@ -704,8 +704,8 @@ public class RemittanceServiceImpl extends RemittanceService {
     @Override
     public List<ReceiptBean> findChequeRemittanceDetailsForServiceAndFund(final String boundaryIdList,
             final String serviceCodes, final String fundCodes, final Date startDate, final Date endDate) {
-
-        FinancialStatus status = microserviceUtils.getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
+        // TODO : need to make this call to mdms
+//        FinancialStatus status = microserviceUtils.getInstrumentStatusByCode(CollectionConstants.INSTRUMENT_NEW_STATUS);
         String instrumentTypes = CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE + ","
                 + CollectionConstants.INSTRUMENTTYPE_NAME_DD;
         List<Instrument> instruments = microserviceUtils.getInstruments(instrumentTypes, TransactionType.Debit,
