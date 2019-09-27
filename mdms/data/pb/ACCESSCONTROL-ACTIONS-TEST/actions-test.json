@@ -12796,14 +12796,14 @@
       "id": 1690,
       "name": "TradeLicenseApplication",
       "url": "url",
-      "displayName": "Application",
+      "displayName": "Search",
       "orderNumber": 13,
       "parentModule": "",
       "enabled": true,
       "serviceCode": "TradeLicense",
       "code": "null",
       "navigationURL": "tradelicence/search",
-      "path": "TradeLicense.Application",
+      "path": "TradeLicense.Search",
       "leftIcon": "places:business-center"
     },
     {
@@ -14755,6 +14755,20 @@
       "code": "null",
       "leftIcon": "editor:insert-chart",
       "path": "Finance.Masters.Chartofaccounts.COA Report"
-    }
+    },
+    {
+      "id": 1841,
+      "name": "TradeLicenseApplication",
+      "url": "url",
+      "displayName": "Apply",
+      "orderNumber": 13,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "TradeLicense",
+      "code": "null",
+      "navigationURL": "tradelicence/apply",
+      "path": "TradeLicense.Apply",
+      "leftIcon": "places:business-center"
+    },
   ]
 }
