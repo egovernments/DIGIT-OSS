@@ -136,8 +136,8 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
 
     private void populateLists() {
         this.getServiceCategoryList();
-        addDropdownData("serviceCategoryList", microserviceUtils.getBusinessCategories());
-        addDropdownData("serviceDetailsList", Collections.emptyList());
+//        addDropdownData("serviceCategoryList", microserviceUtils.getBusinessCategories());
+//        addDropdownData("serviceDetailsList", Collections.emptyList());
         addDropdownData(BANK_NAME_LIST, bankHibernateDAO.getAllBankHavingBranchAndAccounts());
         addDropdownData(BANK_BRANCH_LIST, Collections.emptyList());
         addDropdownData(BANK_ACCOUNT_LIST, Collections.emptyList());
@@ -184,8 +184,10 @@ public class ServiceTypeToBankAccountMappingAction extends BaseFormAction {
     private List<Bankaccount> getBankAccountMappedToService() {
         List<BankAccountServiceMapping> mappings = microserviceUtils.getBankAcntServiceMappings();
         List<String> accountNumbers = new ArrayList<String>();
-        for (BankAccountServiceMapping basm : mappings) {
-            accountNumbers.add(basm.getBankAccount());
+        if(!mappings.isEmpty()){
+            for (BankAccountServiceMapping basm : mappings) {
+                accountNumbers.add(basm.getBankAccount());
+            }
         }
         final String serviceBankQueryString = "select distinct ba from Bankaccount ba where ba.accountnumber in(:accountnumbers))";
 

@@ -79,6 +79,7 @@ import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.BankAccountServiceMapping;
 import org.egov.infra.microservice.models.BusinessDetails;
+import org.egov.infra.microservice.models.BusinessService;
 import org.egov.infra.microservice.models.Receipt;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
@@ -276,19 +277,19 @@ public class ChequeRemittanceAction extends BaseFormAction {
     }
 
     private void populateNames(List<Receipt> receiptList) {
-        List<BusinessDetails> businessDetailsList = microserviceUtils.getBusinessDetailsByType("MISCELLANEOUS");
+        List<BusinessService> businessServices = microserviceUtils.getBusinessService(null);
         Map<String, String> businessDetailsCodeNameMap = new HashMap<>();
 
-        if (businessDetailsList != null)
-            for (BusinessDetails bd : businessDetailsList) {
-                businessDetailsCodeNameMap.put(bd.getCode(), bd.getName());
+        if (businessServices != null)
+            for (BusinessService bd : businessServices) {
+                businessDetailsCodeNameMap.put(bd.getCode(), bd.getBusinessService());
             }
 
-//        for (Receipt r : receiptList) {
-//            if (r.getBill().get(0).getBillDetails().get(0).getBusinessService() != null
-//                    && !r.getBill().get(0).getBillDetails().get(0).getBusinessService().isEmpty())
-//                r.setServiceName(businessDetailsCodeNameMap.get(r.getBill().get(0).getBillDetails().get(0).getBusinessService()));
-//        }
+        for (Receipt r : receiptList) {
+            if (r.getBill().get(0).getBillDetails().get(0).getBusinessService() != null
+                    && !r.getBill().get(0).getBillDetails().get(0).getBusinessService().isEmpty())
+                r.getBill().get(0).getBillDetails().get(0).setBusinessService(businessDetailsCodeNameMap.get(r.getBill().get(0).getBillDetails().get(0).getBusinessService()));
+        }
     }
 
     private Double getSum(List<ReceiptBean> receiptBeanList) {

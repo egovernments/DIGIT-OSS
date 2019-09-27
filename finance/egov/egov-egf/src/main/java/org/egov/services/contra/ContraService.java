@@ -616,11 +616,11 @@ public class ContraService extends PersistenceService<ContraJournalVoucher, Long
             i.setPayinSlipId(instrumentDetailsMap.get("payinid").toString());
         }
 
-        if (instrumentDetailsMap.get("instrumenttype").equals(FinancialConstants.INSTRUMENT_TYPE_DD)
-                || instrumentDetailsMap.get("instrumenttype").equals(FinancialConstants.INSTRUMENT_TYPE_CHEQUE))
-            microserviceUtils.depositeInstruments(instruments, instrumentDetailsMap.get("bankaccountid").toString());
-        else if (instrumentDetailsMap.get("instrumenttype").equals(FinancialConstants.INSTRUMENT_TYPE_CASH))
-            microserviceUtils.reconcileInstruments(instruments, instrumentDetailsMap.get("bankaccountid").toString());
+        if (instrumentDetailsMap.get("instrumenttype").toString().equalsIgnoreCase(FinancialConstants.INSTRUMENT_TYPE_DD)
+                || instrumentDetailsMap.get("instrumenttype").toString().equalsIgnoreCase(FinancialConstants.INSTRUMENT_TYPE_CHEQUE))
+            microserviceUtils.depositeInstruments(instruments, instrumentDetailsMap.get("bankaccountNumber").toString());
+        else if (instrumentDetailsMap.get("instrumenttype").toString().equalsIgnoreCase(FinancialConstants.INSTRUMENT_TYPE_CASH))
+            microserviceUtils.reconcileInstruments(instruments, instrumentDetailsMap.get("bankaccountNumber").toString());
 
     }
 

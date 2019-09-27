@@ -39,11 +39,17 @@
  */
 package org.egov.infra.microservice.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class InstrumentAccountCode {
 
     private String id;
+    @JsonProperty(value="instrumenttype")
     private InstrumentType instrumentType;
     private ChartOfAccounts accountCode;
+    private String glcode;
+    private Long validFrom;
+    private Long validTo;
 
     public String getId() {
         return id;
@@ -67,6 +73,30 @@ public class InstrumentAccountCode {
 
     public void setAccountCode(ChartOfAccounts accountCode) {
         this.accountCode = accountCode;
+    }
+
+    public String getGlcode() {
+        return glcode;
+    }
+
+    public void setGlcode(String glcode) {
+        this.glcode = glcode;
+    }
+
+    public Long getValidFrom() {
+        return validFrom;
+    }
+
+    public void setValidFrom(Long validFrom) {
+        this.validFrom = validFrom;
+    }
+
+    public Long getValidTo() {
+        return validTo;
+    }
+
+    public void setValidTo(Long validTo) {
+        this.validTo = validTo;
     }
 
 }

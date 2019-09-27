@@ -2,12 +2,15 @@ package org.egov.infra.microservice.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class BusinessService {
 private String businessService;
 private String code;
 private List<String> collectionModesNotAllowed;
 private boolean partPaymentAllowed;
 private boolean isAdvanceAllowed;
+@JsonProperty("isVoucherCreationEnabled")
 private boolean isVoucherCreationEnabled;
 private boolean isActive;
 private String type;
@@ -44,12 +47,6 @@ public boolean isAdvanceAllowed() {
 public void setAdvanceAllowed(boolean isAdvanceAllowed) {
     this.isAdvanceAllowed = isAdvanceAllowed;
 }
-public boolean isVoucherCreationEnabled() {
-    return isVoucherCreationEnabled;
-}
-public void setVoucherCreationEnabled(boolean isVoucherCreationEnabled) {
-    this.isVoucherCreationEnabled = isVoucherCreationEnabled;
-}
 public boolean isActive() {
     return isActive;
 }
@@ -61,6 +58,12 @@ public String getType() {
 }
 public void setType(String type) {
     this.type = type;
+}
+public boolean isVoucherCreationEnabled() {
+    return isVoucherCreationEnabled;
+}
+public void setVoucherCreationEnabled(boolean isVoucherCreationEnabled) {
+    this.isVoucherCreationEnabled = isVoucherCreationEnabled;
 }
 
 }

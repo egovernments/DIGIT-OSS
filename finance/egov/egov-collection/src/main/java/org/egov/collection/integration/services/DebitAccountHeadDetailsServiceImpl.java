@@ -72,10 +72,10 @@ public class DebitAccountHeadDetailsServiceImpl implements DebitAccountHeadDetai
                 && !chequeInstrumenttotal.toString().trim().equals(CollectionConstants.ZERO_INT)
                 && !chequeInstrumenttotal.toString().trim().equals(CollectionConstants.ZERO_DOUBLE)) {
             InstrumentAccountCode ac = microserviceUtils
-                    .getInstrumentAccountCodeByType(CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE);
+                    .getInstrumentAccountGlCodeByType(CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE);
             CChartOfAccounts coa = null;
-            if (ac != null && ac.getAccountCode() != null && ac.getAccountCode().getGlcode() != null) {
-                coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getAccountCode().getGlcode());
+            if (ac != null && ac.getGlcode() != null && ac.getAccountCode().getGlcode() != null) {
+                coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getGlcode());
             }
             newReceiptDetail.setAccounthead(coa);
 
@@ -90,18 +90,18 @@ public class DebitAccountHeadDetailsServiceImpl implements DebitAccountHeadDetai
                 && !otherInstrumenttotal.toString().trim().equals(CollectionConstants.ZERO_DOUBLE)) {
             if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_CASH)) {
                 InstrumentAccountCode ac = microserviceUtils
-                        .getInstrumentAccountCodeByType(CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE);
+                        .getInstrumentAccountGlCodeByType(CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE);
                 CChartOfAccounts coa = null;
-                if (ac != null && ac.getAccountCode() != null && ac.getAccountCode().getGlcode() != null) {
-                    coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getAccountCode().getGlcode());
+                if (ac != null && ac.getGlcode() != null && ac.getAccountCode().getGlcode() != null) {
+                    coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getGlcode());
                 }
                 newReceiptDetail.setAccounthead(coa);
             } else if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_CARD)) {
                 InstrumentAccountCode ac = microserviceUtils
-                        .getInstrumentAccountCodeByType(CollectionConstants.INSTRUMENTTYPE_NAME_CARD);
+                        .getInstrumentAccountGlCodeByType(CollectionConstants.INSTRUMENTTYPE_NAME_CARD);
                 CChartOfAccounts coa = null;
-                if (ac != null && ac.getAccountCode() != null && ac.getAccountCode().getGlcode() != null) {
-                    coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getAccountCode().getGlcode());
+                if (ac != null && ac.getGlcode() != null && ac.getAccountCode().getGlcode() != null) {
+                    coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getGlcode());
                 }
                 newReceiptDetail.setAccounthead(coa);
             } else if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_BANK))
@@ -109,10 +109,10 @@ public class DebitAccountHeadDetailsServiceImpl implements DebitAccountHeadDetai
                         .getBankAccountId().getChartofaccounts());
             else if (instrumentType.equals(CollectionConstants.INSTRUMENTTYPE_ONLINE)) {
                 InstrumentAccountCode ac = microserviceUtils
-                        .getInstrumentAccountCodeByType(CollectionConstants.INSTRUMENTTYPE_ONLINE);
+                        .getInstrumentAccountGlCodeByType(CollectionConstants.INSTRUMENTTYPE_ONLINE);
                 CChartOfAccounts coa = null;
-                if (ac != null && ac.getAccountCode() != null && ac.getAccountCode().getGlcode() != null) {
-                    coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getAccountCode().getGlcode());
+                if (ac != null && ac.getGlcode() != null && ac.getAccountCode().getGlcode() != null) {
+                    coa = chartOfAccountsHibernateDAO.getCChartOfAccountsByGlCode(ac.getGlcode());
                 }
                 newReceiptDetail.setAccounthead(coa);
             }

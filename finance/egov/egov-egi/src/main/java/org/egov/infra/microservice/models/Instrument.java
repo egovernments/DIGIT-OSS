@@ -89,6 +89,7 @@ public class Instrument {
 
     private BigDecimal reconciledAmount;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date reconciledOn;
     
     private String instrumentStatus;

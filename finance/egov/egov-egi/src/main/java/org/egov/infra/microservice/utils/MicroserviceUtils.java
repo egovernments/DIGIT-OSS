@@ -62,13 +62,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -117,9 +115,9 @@ import org.egov.infra.microservice.models.GlCodeMaster;
 import org.egov.infra.microservice.models.GlCodeMasterResponse;
 import org.egov.infra.microservice.models.Instrument;
 import org.egov.infra.microservice.models.InstrumentAccountCode;
-import org.egov.infra.microservice.models.InstrumentAccountCodeResponse;
 import org.egov.infra.microservice.models.InstrumentRequest;
 import org.egov.infra.microservice.models.InstrumentResponse;
+import org.egov.infra.microservice.models.InstrumentSearchContract;
 import org.egov.infra.microservice.models.MasterDetail;
 import org.egov.infra.microservice.models.MdmsCriteria;
 import org.egov.infra.microservice.models.MdmsCriteriaReq;
@@ -137,6 +135,7 @@ import org.egov.infra.microservice.models.TaxHeadMaster;
 import org.egov.infra.microservice.models.TaxHeadMasterResponse;
 import org.egov.infra.microservice.models.TaxPeriod;
 import org.egov.infra.microservice.models.TaxPeriodResponse;
+import org.egov.infra.microservice.models.TransactionType;
 import org.egov.infra.microservice.models.UserInfo;
 import org.egov.infra.persistence.entity.enums.UserType;
 import org.egov.infra.security.utils.SecurityUtils;
@@ -169,7 +168,6 @@ public class MicroserviceUtils {
 
     private static final Logger LOGGER = Logger.getLogger(MicroserviceUtils.class);
     private static final String CLIENT_ID = "client.id";
-
     @Autowired
     private SecurityUtils securityUtils;
 
@@ -915,25 +913,25 @@ public class MicroserviceUtils {
         else
             return null;
     }
-
-    public InstrumentAccountCode getInstrumentAccountCodeByType(String type) {
-
-        final RestTemplate restTemplate = createRestTemplate();
-
-        final String url = hostUrl + accountCodesSearchUrl + "?tenantId=" + getTenentId() + "&instrumentType.name=" + type;
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        reqWrapper.setRequestInfo(requestInfo);
-
-        InstrumentAccountCodeResponse response = restTemplate.postForObject(url, reqWrapper, InstrumentAccountCodeResponse.class);
-        if (response != null && response.getInstrumentAccountCodes() != null && !response.getInstrumentAccountCodes().isEmpty())
-            return response.getInstrumentAccountCodes().get(0);
-        else
-            return null;
-    }
+//
+//    public InstrumentAccountCode getInstrumentAccountCodeByType(String type) {
+//
+//        final RestTemplate restTemplate = createRestTemplate();
+//
+//        final String url = hostUrl + accountCodesSearchUrl + "?tenantId=" + getTenentId() + "&instrumentType.name=" + type;
+//
+//        RequestInfo requestInfo = new RequestInfo();
+//        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+//
+//        requestInfo.setAuthToken(getUserToken());
+//        reqWrapper.setRequestInfo(requestInfo);
+//
+//        InstrumentAccountCodeResponse response = restTemplate.postForObject(url, reqWrapper, InstrumentAccountCodeResponse.class);
+//        if (response != null && response.getInstrumentAccountCodes() != null && !response.getInstrumentAccountCodes().isEmpty())
+//            return response.getInstrumentAccountCodes().get(0);
+//        else
+//            return null;
+//    }
 
     public List<BankAccountServiceMapping> getBankAcntServiceMappings() {
 
@@ -945,6 +943,7 @@ public class MicroserviceUtils {
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
+        requestInfo.setUserInfo(getUserInfo());
         reqWrapper.setRequestInfo(requestInfo);
 
         BankAccountServiceMappingResponse response = restTemplate.postForObject(url, reqWrapper,
@@ -993,6 +992,7 @@ public class MicroserviceUtils {
         RequestInfo requestInfo = new RequestInfo();
 
         requestInfo.setAuthToken(getUserToken());
+        requestInfo.setUserInfo(getUserInfo());
 
         BankAccountServiceMappingReq request = new BankAccountServiceMappingReq();
         request.setRequestInfo(requestInfo);
@@ -1024,58 +1024,62 @@ public class MicroserviceUtils {
             return null;
     }
 
-    public List<Instrument> getInstruments(String instrumentType, String transactionType, String instrumentStatus) {
-
-        final String url = hostUrl + instrumentSearchUrl + "?tenantId=" + getTenentId() + "&instrumentTypes=" + instrumentType
-                + "&transactionType=" + transactionType + "&financialStatuses=" + instrumentStatus;
-
+    public List<Instrument> getInstruments(String instrumentType, TransactionType transactionType, String instrumentStatus) {
+        InstrumentSearchContract contract = new InstrumentSearchContract();
+        contract.setInstrumentTypes(instrumentType);
+        contract.setTransactionType(transactionType);
+        contract.setFinancialStatuses(instrumentStatus);
+        return this.getInstrumentsBySearchCriteria(contract);
+    }
+    
+    public List<Instrument> getInstrumentsBySearchCriteria(InstrumentSearchContract insSearchContra) {
+        StringBuilder url = new StringBuilder().append(hostUrl).append(instrumentSearchUrl)
+                .append("?tenantId=").append(getTenentId());
+        if(StringUtils.isNotBlank(insSearchContra.getIds())){
+           url.append("&ids=").append(insSearchContra.getIds());
+        }
+        if(StringUtils.isNotBlank(insSearchContra.getBankAccountNumber())){
+            url.append("&bankAccount.accountNumber=").append(insSearchContra.getBankAccountNumber());
+        }
+        if(StringUtils.isNotBlank(insSearchContra.getInstrumentTypes())){
+            url.append("&instrumentTypes=").append(insSearchContra.getInstrumentTypes());
+        }
+        if(insSearchContra.getTransactionType() != null){
+            url.append("&transactionType=").append(insSearchContra.getTransactionType().name());
+        }
+        if(StringUtils.isNotBlank(insSearchContra.getFinancialStatuses())){
+            url.append("&financialStatuses=").append(insSearchContra.getFinancialStatuses());
+        }
+        if(StringUtils.isNotBlank(insSearchContra.getTransactionNumber())){
+            url.append("&transactionNumber=").append(insSearchContra.getTransactionNumber());
+        }
+        if(insSearchContra.getPageSize() != null){
+            url.append("&pageSize=").append(insSearchContra.getPageSize());
+        }
+        if(StringUtils.isNotBlank(insSearchContra.getReceiptIds())){
+            url.append("&receiptIds==").append(insSearchContra.getReceiptIds());
+        }
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
         requestInfo.setAuthToken(getUserToken());
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call:" + url);
-        InstrumentResponse response = restTemplate.postForObject(url, reqWrapper, InstrumentResponse.class);
-
+        InstrumentResponse response = restTemplate.postForObject(url.toString(), reqWrapper, InstrumentResponse.class);
         return response.getInstruments();
     }
 
     public List<Instrument> getInstruments(String ids) {
-
-        final String url = hostUrl + instrumentSearchUrl + "?tenantId=" + getTenentId() + "&ids=" + ids;
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:" + url);
-        InstrumentResponse response = restTemplate.postForObject(url, reqWrapper, InstrumentResponse.class);
-
-        return response.getInstruments();
+        InstrumentSearchContract contract = new InstrumentSearchContract();
+        contract.setIds(ids);
+        return this.getInstrumentsBySearchCriteria(contract);
     }
 
     public List<Instrument> getInstrumentsByReceiptIds(String instrumentType, String instrumentStatus, String receiptIds) {
-
-        final StringBuilder instrumentUrl = new StringBuilder(hostUrl + instrumentSearchUrl + "?tenantId=" + getTenentId());
-
-        if (null != instrumentType)
-            instrumentUrl.append("&instrumentTypes=" + instrumentType);
-        if (null != instrumentStatus)
-            instrumentUrl.append("&financialStatuses=" + instrumentStatus);
-
-        if (null != receiptIds)
-            instrumentUrl.append("&receiptIds=" + receiptIds);
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:" + instrumentUrl.toString());
-        InstrumentResponse response = restTemplate.postForObject(instrumentUrl.toString(), reqWrapper, InstrumentResponse.class);
-
-        return response.getInstruments();
+        InstrumentSearchContract contract = new InstrumentSearchContract();
+        contract.setInstrumentTypes(instrumentType);
+        contract.setReceiptIds(receiptIds);
+        contract.setFinancialStatuses(instrumentStatus);
+        return this.getInstrumentsBySearchCriteria(contract);
     }
 
     public List<Receipt> getReceipts(String ids, String status, String serviceCodes, Date fromDate, Date toDate) {
@@ -1084,15 +1088,16 @@ public class MicroserviceUtils {
                 + "&businessCodes=" + serviceCodes + "&fromDate=" + fromDate.getTime() + "&toDate="
                 + toDate.getTime();
         if(StringUtils.isBlank(ids)){
-            url += "&ids=''";
+            url += "&receiptNumbers=''";
         }else{
-            url += "&ids=" + ids;
+            url += "&receiptNumbers=" + ids;
         }
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
+        requestInfo.setUserInfo(getUserInfo());
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call:" + url);
         ReceiptResponse response = restTemplate.postForObject(url, reqWrapper, ReceiptResponse.class);
@@ -1108,6 +1113,7 @@ public class MicroserviceUtils {
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
+        requestInfo.setUserInfo(getUserInfo());
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call:" + url);
         ReceiptResponse response = restTemplate.postForObject(url, reqWrapper, ReceiptResponse.class);
@@ -1126,6 +1132,7 @@ public class MicroserviceUtils {
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
         requestInfo.setAuthToken(getUserToken());
+        requestInfo.setUserInfo(getUserInfo());
         reqWrapper.setRequestInfo(requestInfo);
         LOGGER.info("call:" + url);
         ReceiptResponse response = restTemplate.postForObject(url, reqWrapper, ReceiptResponse.class);
@@ -1178,7 +1185,10 @@ public class MicroserviceUtils {
     public InstrumentResponse reconcileInstruments(List<Instrument> instruments, String depositedBankAccountNum) {
 
         final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
-        FinancialStatus instrumentStatusReconciled = getInstrumentStatusByCode("Reconciled");
+//        FinancialStatus instrumentStatusReconciled = getInstrumentStatusByCode("Reconciled");
+        FinancialStatus instrumentStatusReconciled = new FinancialStatus();
+        instrumentStatusReconciled.setCode("Deposited");
+        instrumentStatusReconciled.setName("Deposited");
         for (Instrument i : instruments) {
             i.setFinancialStatus(instrumentStatusReconciled);
             if (depositedBankAccountNum != null) {
@@ -1200,7 +1210,9 @@ public class MicroserviceUtils {
     public InstrumentResponse depositeInstruments(List<Instrument> instruments, String depositedBankAccountNum) {
 
         final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
-        FinancialStatus instrumentStatusReconciled = getInstrumentStatusByCode("Deposited");
+        FinancialStatus instrumentStatusReconciled = new FinancialStatus();
+        instrumentStatusReconciled.setCode("Deposited");
+        instrumentStatusReconciled.setName("Deposited");
         for (Instrument i : instruments) {
             i.setFinancialStatus(instrumentStatusReconciled);
             i.setBankAccount(new BankAccount());
@@ -1221,7 +1233,9 @@ public class MicroserviceUtils {
             String payinSlipId) {
 
         final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
-        FinancialStatus instrumentStatusReconciled = getInstrumentStatusByCode("Reconciled");
+//        FinancialStatus instrumentStatusReconciled = getInstrumentStatusByCode("Reconciled");
+        FinancialStatus instrumentStatusReconciled = new FinancialStatus();
+        instrumentStatusReconciled.setCode("Reconciled");
         for (Instrument i : instruments) {
             i.setFinancialStatus(instrumentStatusReconciled);
             i.setBankAccount(new BankAccount());
@@ -1263,7 +1277,7 @@ public class MicroserviceUtils {
         final RequestInfo requestinfo = new RequestInfo();
 
         requestinfo.setAuthToken(getUserToken());
-
+        requestinfo.setUserInfo(getUserInfo());
         request.setRequestInfo(requestinfo);
 
         return restTemplate.postForObject(url.toString(), request, ReceiptResponse.class);
@@ -1537,6 +1551,36 @@ public class MicroserviceUtils {
         }
         return list;
     }
+    
+    public InstrumentResponse updateInstruments(List<Instrument> instruments, String depositedBankAccountNum, FinancialStatus finStatus) {
+        final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
+        for (Instrument i : instruments) {
+            i.setFinancialStatus(finStatus);
+            if (depositedBankAccountNum != null) {
+                i.setBankAccount(new BankAccount());
+                i.getBankAccount().setAccountNumber(depositedBankAccountNum);
+            }
+        }
+        InstrumentRequest request = new InstrumentRequest();
+        request.setInstruments(instruments);
+        final RequestInfo requestinfo = new RequestInfo();
+        requestinfo.setAuthToken(getUserToken());
+        request.setRequestInfo(requestinfo);
+        return restTemplate.postForObject(url.toString(), request, InstrumentResponse.class);
+    }
+    
+    public InstrumentAccountCode getInstrumentAccountGlCodeByType(String type) {
+        List<InstrumentAccountCode> list = null;
+        List<ModuleDetail> moduleDetailsList = new ArrayList<>();
+        this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "InstrumentGLcodeMapping", "instrumenttype", type);
+        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true), Map.class);
+        if(postForObject != null){
+             list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.FinanceModule.InstrumentGLcodeMapping"),new TypeReference<List<InstrumentAccountCode>>(){});
+        }
+        return !list.isEmpty() ? list.get(0) : null;
+    }
+    
+    
 }
 
 class FilterRequest {

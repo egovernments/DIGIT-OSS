@@ -144,6 +144,7 @@ public class RemittanceSchedulerService {
 
         instrumentDepositMap.put("instrumentheader", instrumentHeader.getId());
         instrumentDepositMap.put("bankaccountid", bankaccount.getId());
+        instrumentDepositMap.put("bankaccountNumber", bankaccount.getAccountnumber());
         instrumentDepositMap.put("instrumentamount", instrumentHeader.getAmount());
         instrumentDepositMap.put("instrumenttype",
                 (instruments != null && !instruments.isEmpty()) ? instruments.get(0).getInstrumentType().getName() : "");

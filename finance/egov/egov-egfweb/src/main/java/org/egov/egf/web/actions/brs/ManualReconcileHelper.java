@@ -48,30 +48,39 @@
 
 package org.egov.egf.web.actions.brs;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.egov.commons.Bankaccount;
 import org.egov.commons.EgwStatus;
 import org.egov.commons.dao.EgwStatusHibernateDAO;
 import org.egov.egf.model.ReconcileBean;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.models.FinancialStatus;
+import org.egov.infra.microservice.models.Instrument;
+import org.egov.infra.microservice.models.InstrumentSearchContract;
+import org.egov.infra.microservice.models.TransactionType;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infstr.services.PersistenceService;
 import org.egov.model.instrument.InstrumentHeader;
 import org.egov.services.instrument.InstrumentHeaderService;
 import org.egov.services.instrument.InstrumentOtherDetailsService;
 import org.egov.utils.FinancialConstants;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.BigDecimalType;
-import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +88,10 @@ import java.util.Map;
 public class ManualReconcileHelper {
 
 	private static  final Logger LOGGER = Logger.getLogger(ManualReconcileHelper.class);
+
+    private static final String INSTRUMENTTYPE_NAME_CHEQUE = "Cheque";
+
+    private static final String INSTRUMENT_NEW_STATUS = "Deposited";
 
 	@Autowired
 	private AppConfigValueService appConfigValueService;
@@ -95,6 +108,9 @@ public class ManualReconcileHelper {
 	@Autowired
 	@Qualifier("instrumentHeaderService")
 	private InstrumentHeaderService instrumentHeaderService;
+	
+	@Autowired
+	private MicroserviceUtils microserviceUtils;
 	public Map<String,String> getUnReconciledDrCr(Long bankAccId,Date fromDate,Date toDate)  
 	{
 		Map<String,String> unreconMap=new LinkedHashMap<String,String>();
@@ -245,7 +261,7 @@ public class ManualReconcileHelper {
 		+ "  ih.bankAccountId = BANK.ID AND bank.id =:bankAccId   AND IH.INSTRUMENTDATE <= :toDate  "
 		+" AND v.ID= iv.voucherheaderid  and v.STATUS not in  ("+voucherExcludeStatuses+")  "  +instrumentCondition 
 		+" AND ((ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='Deposited') and ih.ispaycheque='0') or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='New'))) "
-		+" AND rec.instrumentHeaderId=ih.id	 and iv.instrumentHeaderid=ih.id and io.instrumentheaderid=ih.id and ih.instrumentNumber is not null"
+		+" AND rec.instrumentHeaderId=cast(ih.id as varchar(100))	 and iv.instrumentHeaderid=ih.id and io.instrumentheaderid=ih.id and ih.instrumentNumber is not null"
 		+ " group by ih.id,rec.transactiontype "
 	
 		+ " union  "
@@ -256,7 +272,7 @@ public class ManualReconcileHelper {
 		+" VOUCHERHEADER v ,egf_instrumentheader ih, egf_instrumentotherdetails io, egf_instrumentVoucher iv	WHERE   ih.bankAccountId = BANK.ID AND bank.id = :bankAccId "
 		+"   AND IH.INSTRUMENTDATE <= :toDate " +instrumentCondition 
 		+" AND v.ID= iv.voucherheaderid and v.STATUS not in  ("+voucherExcludeStatuses+") AND ((ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='Deposited') and ih.ispaycheque='0')or (ih.ispaycheque='1' and  ih.id_status=(select id from egw_status where moduletype='Instrument'  and description='New'))) "
-		+" AND rec.instrumentHeaderId=ih.id	 and iv.instrumentHeaderid=ih.id and io.instrumentheaderid=ih.id and ih.transactionnumber is not null"
+		+" AND rec.instrumentHeaderId=cast(ih.id as varchar(100)) and iv.instrumentHeaderid=ih.id and io.instrumentheaderid=ih.id and ih.transactionnumber is not null"
 		+"   group by ih.id,rec.transactiontype order by 4 " );
        
         
@@ -282,42 +298,89 @@ public class ManualReconcileHelper {
 		createSQLQuery.setLong("bankAccId", reconBean.getAccountId());
 		createSQLQuery.setDate("toDate", reconBean.getReconciliationDate());
 		createSQLQuery.addScalar("voucherNumber",StringType.INSTANCE);
-		createSQLQuery.addScalar("ihId",LongType.INSTANCE);
+		createSQLQuery.addScalar("ihId",StringType.INSTANCE);
 		createSQLQuery.addScalar("chequeDate",StringType.INSTANCE);
 		createSQLQuery.addScalar("chequeNumber",StringType.INSTANCE);
 		createSQLQuery.addScalar("chequeAmount",BigDecimalType.INSTANCE);
 		createSQLQuery.addScalar("txnType",StringType.INSTANCE);
 		createSQLQuery.addScalar("type",StringType.INSTANCE);
 		createSQLQuery.setResultTransformer(Transformers.aliasToBean(ReconcileBean.class));
-	    list = (List<ReconcileBean>)createSQLQuery.list();
-         
+	        list = (List<ReconcileBean>)createSQLQuery.list();
+	        this.getUnreconsiledReceiptInstruments(reconBean,list);
 		}
 		catch(Exception e)
 		{
 			LOGGER.error("Exp in getUnReconciledCheques:"+e.getMessage());
 			throw new ApplicationRuntimeException(e.getMessage());
 		}
-		
 		return list;
 	}
 
-	@Transactional
-	public void update(List<Date> reconDates, List<Long> instrumentHeaders) {
+	private void getUnreconsiledReceiptInstruments(ReconcileBean reconBean,List<ReconcileBean> list) {
+	    InstrumentSearchContract contract = new InstrumentSearchContract();
+	    if(reconBean.getAccountId() != null){
+	        StringBuilder query = new StringBuilder("from Bankaccount ba where ba.id=:bankAccountId and isactive=true");
+	        Query createSQLQuery = persistenceService.getSession().createQuery(query.toString());
+	        List<Bankaccount> bankAccount = createSQLQuery.setLong("bankAccountId", reconBean.getAccountId()).list();
+	        contract.setBankAccountNumber(bankAccount.get(0).getAccountnumber());
+	    }
+	    if(StringUtils.isNotBlank(reconBean.getInstrumentNo())){
+	        contract.setTransactionNumber(reconBean.getInstrumentNo());
+	    }
+	    if(StringUtils.isNotBlank(reconBean.getLimit().toString())){
+                contract.setPageSize(reconBean.getLimit());
+            }
+	    contract.setInstrumentTypes(INSTRUMENTTYPE_NAME_CHEQUE);
+	    contract.setTransactionType(TransactionType.Debit);
+	    contract.setFinancialStatuses(INSTRUMENT_NEW_STATUS);
+	    List<Instrument> instruments = microserviceUtils.getInstrumentsBySearchCriteria(contract);
+	    for(Instrument ins : instruments){
+	        if(ins.getInstrumentVouchers() != null && !ins.getInstrumentVouchers().isEmpty()){
+	            ReconcileBean reconcileBean = new ReconcileBean();
+	            String txnType = ins.getTransactionType().name();;
+	            String type = TransactionType.Credit.equals(txnType) ? "Payment" : "Receipt";;
+	            String pattern = "dd/MM/yyyy";
+	            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+	            String date = simpleDateFormat.format(ins.getTransactionDate());
+	            reconcileBean.setVoucherNumber(ins.getInstrumentVouchers().get(0).getVoucherHeaderId());
+	            reconcileBean.setIhId("rm_rec~"+ins.getId());
+	            reconcileBean.setChequeDate(date);
+	            reconcileBean.setChequeNumber(ins.getTransactionNumber());
+	            reconcileBean.setChequeAmount(ins.getAmount());
+	            reconcileBean.setTxnType(txnType);
+	            reconcileBean.setType(type);
+	            list.add(reconcileBean);
+	        }
+	    }
+    }
+
+    @Transactional
+	public void update(List<Date> reconDates, List<String> instrumentHeaders) {
 		int i=0;
 		EgwStatus reconciledStatus = egwStatusHibernateDAO.getStatusByModuleAndCode(FinancialConstants.STATUS_MODULE_INSTRUMENT, FinancialConstants.INSTRUMENT_RECONCILED_STATUS);
+		Map<String,Date> instrumentIdAndDateMap = new HashMap<>();
 		for(Date reconcileOn:reconDates)
 		{
 			if(reconcileOn!=null)
 			{
-				Long ihId = instrumentHeaders.get(i);
-				InstrumentHeader ih = instrumentHeaderService.reconcile(reconcileOn, ihId,reconciledStatus ); 
-				instrumentOtherDetailsService.reconcile(reconcileOn, ihId,ih.getInstrumentAmount());
-			    
+				String ihId = instrumentHeaders.get(i);
+				if(!ihId.contains("rm_rec~")){
+				    InstrumentHeader ih = instrumentHeaderService.reconcile(reconcileOn, Long.parseLong(ihId),reconciledStatus ); 
+				    instrumentOtherDetailsService.reconcile(reconcileOn,  Long.parseLong(ihId),ih.getInstrumentAmount());
+				}else{
+				    instrumentIdAndDateMap.put(ihId.split("rm_rec~")[1],reconcileOn);
+				}
 			}
 			i++;
 		}
-		
-		
+		List<Instrument> instruments = microserviceUtils.getInstruments(StringUtils.join(instrumentIdAndDateMap.keySet(),","));
+		FinancialStatus finStatus = new FinancialStatus();
+		finStatus.setCode("Reconciled");
+		finStatus.setName("Reconciled");
+		instruments.stream().forEach(ins-> {
+		    ins.setReconciledOn(instrumentIdAndDateMap.get(ins.getId()));
+		});
+                microserviceUtils.updateInstruments(instruments, null, finStatus);
 	}
 	
 }

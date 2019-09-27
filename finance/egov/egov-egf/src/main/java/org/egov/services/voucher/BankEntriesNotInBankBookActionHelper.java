@@ -161,8 +161,7 @@ public class BankEntriesNotInBankBookActionHelper {
                         bankEntryMis
                                 .setFunction(functionDAO.getFunctionById(voucherHeader.getVouchermis().getFunction().getId()));
                     if (voucherHeader.getVouchermis().getDepartmentcode() != null)
-                        bankEntryMis.setDepartment(departmentService.getDepartmentByCode(voucherHeader.getVouchermis()
-                                .getDepartmentcode()));
+                        bankEntryMis.setDepartmentcode(voucherHeader.getVouchermis().getDepartmentcode());
                     if (voucherHeader.getFundId() != null)
                         bankEntryMis.setFund(fundDAO.fundById(voucherHeader.getFundId().getId(), false));
                     if (voucherHeader.getVouchermis().getSchemeid() != null)

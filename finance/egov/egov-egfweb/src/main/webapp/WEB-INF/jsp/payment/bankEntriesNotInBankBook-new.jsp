@@ -228,7 +228,7 @@
 				console.log(record._oData.beId);
 				if(record._oData.beId !=null && record._oData.beId!=""){
 					jQuery.ajax({
-						url : '/EGF/payment/ajaxDeleteBankEntries.action',
+						url : '/services/EGF/payment/ajaxDeleteBankEntries.action',
 						type : "get",
 						data : {
 							beId : record._oData.beId						
@@ -499,7 +499,7 @@
 		</s:if>
 			doLoadingMask();
 			enableAll();
-			document.bankEntriesNotInBankBookform.action = '/EGF/payment/bankEntriesNotInBankBook-search.action';
+			document.bankEntriesNotInBankBookform.action = '/services/EGF/payment/bankEntriesNotInBankBook-search.action';
 			document.bankEntriesNotInBankBookform.submit();
 
 		}
@@ -588,7 +588,7 @@
 		if(validate()){
 			doLoadingMask();
 			enableAll();
-			document.bankEntriesNotInBankBookform.action = '/EGF/payment/bankEntriesNotInBankBook-save.action';
+			document.bankEntriesNotInBankBookform.action = '/services/EGF/payment/bankEntriesNotInBankBook-save.action';
 			document.bankEntriesNotInBankBookform.submit();
 		}
 

@@ -100,7 +100,7 @@
 			return false;
 		}
 		
-	document.forms[0].action='/EGF/brs/bankReconciliation-brsSummary.action';
+	document.forms[0].action='/services/EGF/brs/bankReconciliation-brsSummary.action';
 	document.forms[0].submit();
 	return true;
 	

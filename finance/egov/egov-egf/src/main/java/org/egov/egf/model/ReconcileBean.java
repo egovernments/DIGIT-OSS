@@ -66,7 +66,7 @@ public class ReconcileBean {
 	private String txnType;
 	private Date reconciliationDate;
 	private Date bankStatementDate;
-	private Long ihId;
+	private String ihId;
 	private String voucherNumber;
 	private Integer limit;
 	private String instrumentNo;
@@ -150,12 +150,6 @@ public class ReconcileBean {
 	public Date getReconciliationDate() {
 		return reconciliationDate;
 	}
-	public Long getIhId() {
-		return ihId;
-	}
-	public void setIhId(Long ihId) {
-		this.ihId = ihId;
-	}
 	public String getVoucherNumber() {
 		return voucherNumber;
 	}
@@ -198,5 +192,11 @@ public class ReconcileBean {
 	public void setOtherDebitAmount(BigDecimal otherDebitAmount) {
 		this.otherDebitAmount = otherDebitAmount;
 	}
+    public String getIhId() {
+        return ihId;
+    }
+    public void setIhId(String ihId) {
+        this.ihId = ihId;
+    }
 	
 }
