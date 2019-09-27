@@ -178,7 +178,7 @@ public class PropertyQueryBuilder {
 
 		if(criteria.getAsOnDate()!=null){
 			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_ASSESSMENT);
-			WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.append(" createdTime < ?");
+			WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.append(" createdTime <= ?");
 			preparedStmtList.add(criteria.getAsOnDate());
 		}
 
