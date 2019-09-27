@@ -69,7 +69,7 @@ class SearchProperty extends Component {
           labelName: "Please fill atleast one field along with city",
           labelKey: "ERR_FILL_ATLEAST_ONE_FIELD_WITH_CITY"
         },
-        true
+        "error"
       );
     } else {
       const queryParams = [];

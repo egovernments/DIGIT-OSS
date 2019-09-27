@@ -80,7 +80,7 @@ class RequestReAssign extends Component {
           labelName: "Please mention your reason",
           labelKey: "ERR_PLEASE_MENSION_YOUR_REASON"
         },
-        true
+        "error"
       );
     } else if (valueSelected === "Other" && !commentValue) {
       e.preventDefault();
@@ -90,7 +90,7 @@ class RequestReAssign extends Component {
           labelName: "Please type your comments",
           labelKey: "ERR_TYPE_YOUR_COMMENTS"
         },
-        true
+        "error"
       );
     }
   };

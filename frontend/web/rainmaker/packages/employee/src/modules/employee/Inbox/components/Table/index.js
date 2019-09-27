@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import Label from "egov-ui-kit/utils/translationNode";
 import { Card } from "components";
+import orderBy from "lodash/orderBy";
 import { getWFConfig } from "./workflowRedirectionConfig";
 import React from "react";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
@@ -64,11 +65,11 @@ class InboxData extends React.Component {
     let contextPath =
       status === "Initiated"
         ? process.env.NODE_ENV === "production"
-          ? `/employee${getWFConfig(row[0].subtext).INITIATED}`
-          : getWFConfig(row[0].subtext).INITIATED
+          ? `/employee${getWFConfig(row[0].text).INITIATED}`
+          : getWFConfig(row[0].text).INITIATED
         : process.env.NODE_ENV === "production"
-        ? `/employee${getWFConfig(row[0].subtext).DEFAULT}`
-        : getWFConfig(row[0].subtext).DEFAULT;
+        ? `/employee${getWFConfig(row[0].text).DEFAULT}`
+        : getWFConfig(row[0].text).DEFAULT;
 
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
     window.location.href = `${baseUrl}${contextPath}?${queryParams}`;

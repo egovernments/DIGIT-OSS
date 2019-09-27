@@ -110,7 +110,8 @@ class ComponentInterface extends React.Component {
       gridDefination,
       visible = true,
       roleDefination = {},
-      applicationStatus
+      applicationStatus,
+      menu
     } = this.props;
     if (visible && !isEmpty(roleDefination)) {
       const splitList = get(roleDefination, "rolePath").split(".");
@@ -127,6 +128,13 @@ class ComponentInterface extends React.Component {
         const roles = get(roleDefination, "roles");
         let found = roles.some(elem => roleCodes.includes(elem));
         visible = found;
+      } else if (get(roleDefination, "path")) {
+        let isApplicable =
+          menu &&
+          menu.find(item => {
+            return item.navigationURL == get(roleDefination, "path");
+          });
+        visible = isApplicable ? isApplicable : false;
       } else if (get(roleDefination, "action")) {
         const businessServiceData = JSON.parse(
           localStorageGet("businessServiceData")
@@ -189,8 +197,8 @@ class ComponentInterface extends React.Component {
 
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
+  const menu = get(state.app, "menu", []);
   const { preparedFinalObject } = screenConfiguration;
-  // const applicationStatus = get(preparedFinalObject, "Licenses[0].status");
   const moduleName = getModuleName(window.location.pathname);
   let jsonPath = "";
   if (moduleName === "FIRENOC") {
@@ -200,7 +208,7 @@ const mapStateToProps = state => {
   }
   const applicationStatus = get(preparedFinalObject, jsonPath);
 
-  return { applicationStatus };
+  return { applicationStatus, menu };
 };
 
 export default connect(

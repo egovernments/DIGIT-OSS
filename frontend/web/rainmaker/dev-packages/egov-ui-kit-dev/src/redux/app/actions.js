@@ -30,12 +30,12 @@ const setLocalizationLabels = (locale, localizationLabels) => {
   return { type: actionTypes.ADD_LOCALIZATION, locale, localizationLabels };
 };
 
-export const toggleSnackbarAndSetText = (open, message = {}, error) => {
+export const toggleSnackbarAndSetText = (open, message = {}, variant) => {
   return {
     type: actionTypes.SHOW_TOAST,
     open,
     message,
-    error,
+    variant,
   };
 };
 
