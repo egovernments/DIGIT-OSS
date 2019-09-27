@@ -417,6 +417,7 @@ public class RemittanceServiceImpl extends RemittanceService {
             rd.setChartOfAccount(detail.getChartOfAccount().getGlcode());
             rd.setCreditAmount(detail.getCreditAmount());
             rd.setDebitAmount(detail.getDebitAmount());
+            rd.setTenantId(microserviceUtils.getTenentId());
             r.getRemittanceDetails().add(rd);
         }
         org.egov.infra.microservice.models.RemittanceInstrument ri;
@@ -424,12 +425,14 @@ public class RemittanceServiceImpl extends RemittanceService {
             ri = new org.egov.infra.microservice.models.RemittanceInstrument();
             ri.setInstrument(instrument.getInstrument().getId());
             ri.setReconciled(instrument.getReconciled());
+            ri.setTenantId(microserviceUtils.getTenentId());
             r.getRemittanceInstruments().add(ri);
         }
         RemittanceReceipt rr;
         for (Receipt receipt : receiptHeadList) {
             rr = new RemittanceReceipt();
             rr.setReceipt(receipt.getBill().get(0).getBillDetails().get(0).getId());
+            rr.setTenantId(microserviceUtils.getTenentId());
             r.getRemittanceReceipts().add(rr);
         }
         return microserviceUtils.createRemittance(Collections.singletonList(r));
