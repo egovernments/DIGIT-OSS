@@ -1274,6 +1274,11 @@ public class MicroserviceUtils {
 
         final StringBuilder url = new StringBuilder(hostUrl + receiptUpdateUrl);
         ReceiptRequest request = new ReceiptRequest();
+        receiptList.stream().forEach(rec -> {
+            if(rec.getInstrument().getBank() != null){
+                rec.getInstrument().getBank().setTenantId(getTenentId());
+            }
+        });
         request.setReceipt(receiptList);
         final RequestInfo requestinfo = new RequestInfo();
 
