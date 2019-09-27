@@ -1215,6 +1215,7 @@ public class MicroserviceUtils {
         instrumentStatusReconciled.setName("Deposited");
         for (Instrument i : instruments) {
             i.setFinancialStatus(instrumentStatusReconciled);
+            i.getBank().setTenantId(getTenentId());
             i.setBankAccount(new BankAccount());
             i.getBankAccount().setAccountNumber(depositedBankAccountNum);
         }
