@@ -782,7 +782,14 @@ class FormWizard extends Component {
         });
 
     } catch (e) {
-      hideSpinner();
+      try{
+        hideSpinner();
+      }catch(e){
+        console.log('====================================');
+        console.log(e);
+        console.log('====================================');
+
+      }
       this.setState({ nextButtonEnabled: true });
       alert(e);
     }

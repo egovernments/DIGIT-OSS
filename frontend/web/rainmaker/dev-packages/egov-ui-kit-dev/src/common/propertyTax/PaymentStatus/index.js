@@ -4,7 +4,7 @@ import { Card, Divider, Icon } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import ActionFooter from "../../common/ActionFooter";
 import FloatingActionButton from "material-ui/FloatingActionButton";
-import generateReceipt from "./Components/receiptsPDF";
+import generateReceipt from "./Components/receipt";
 import AcknowledgementCard from '../AcknowledgementCard';
 import {localStorageSet} from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
