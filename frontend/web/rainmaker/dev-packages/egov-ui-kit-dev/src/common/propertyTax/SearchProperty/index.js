@@ -33,11 +33,12 @@ class SearchProperty extends Component {
   }
 
   componentDidMount = () => {
-    const { location, addBreadCrumbs, title } = this.props;
+    const { location, addBreadCrumbs, title ,resetForm} = this.props;
     const pathname = location && location.pathname;
     if (userType === "CITIZEN" && !(localStorageGet("path") === pathname)) {
       title && addBreadCrumbs({ title: title, path: window.location.pathname });
     }
+    resetForm("searchProperty");
   };
   onResetClick = () => {
     const { resetForm } = this.props;
