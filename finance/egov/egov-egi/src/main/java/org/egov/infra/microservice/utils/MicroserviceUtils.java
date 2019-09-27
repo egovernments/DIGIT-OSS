@@ -1566,6 +1566,7 @@ public class MicroserviceUtils {
                 i.setBankAccount(new BankAccount());
                 i.getBankAccount().setAccountNumber(depositedBankAccountNum);
             }
+            i.getBank().setTenantId(getTenentId());
         }
         InstrumentRequest request = new InstrumentRequest();
         request.setInstruments(instruments);
