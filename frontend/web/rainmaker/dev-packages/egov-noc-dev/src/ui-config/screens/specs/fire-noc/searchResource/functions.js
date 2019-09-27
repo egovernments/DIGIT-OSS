@@ -107,9 +107,9 @@ export const searchApiCall = async (state, dispatch) => {
       const response = await getSearchResults(queryObject);
       // const response = searchSampleResponse();
 
-      let data = response.Licenses.map(item => ({
+      let data = response.FireNOCs.map(item => ({
         [getTextToLocalMapping("Application No")]:
-          item.applicationNumber || "-",
+          item.fireNOCDetails.applicationNumber || "-",
         [getTextToLocalMapping("NOC No")]: item.fireNOCNumber || "-",
         [getTextToLocalMapping("NOC Type")]:
           item.fireNOCDetails.fireNOCType || "-",
@@ -119,8 +119,7 @@ export const searchApiCall = async (state, dispatch) => {
           convertEpochToDate(parseInt(item.fireNOCDetails.applicationDate)) ||
           "-",
         tenantId: item.tenantId,
-        [getTextToLocalMapping("Status")]:
-          get(textToLocalMapping, item.fireNOCDetails.status) || "-"
+        [getTextToLocalMapping("Status")]: item.fireNOCDetails.status || "-"
       }));
 
       dispatch(
@@ -138,7 +137,7 @@ export const searchApiCall = async (state, dispatch) => {
           "props.title",
           `${getTextToLocalMapping(
             "Search Results for Fire-NOC Applications"
-          )} (${response.Licenses.length})`
+          )} (${response.FireNOCs.length})`
         )
       );
       //showHideProgress(false, dispatch);

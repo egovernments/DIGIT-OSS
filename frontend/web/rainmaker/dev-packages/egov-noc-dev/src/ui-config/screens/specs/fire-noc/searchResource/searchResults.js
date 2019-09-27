@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import get from "lodash/get";
-import { sortByEpoch, getEpochForDate,getTextToLocalMapping } from "../../utils";
+import {
+  sortByEpoch,
+  getEpochForDate,
+  getTextToLocalMapping
+} from "../../utils";
 import {
   getLocalization,
   getTenantId
@@ -128,7 +132,6 @@ export const searchResults = {
           )
         }
       },
-
       {
         name: "tenantId",
         options: {
@@ -136,9 +139,7 @@ export const searchResults = {
         }
       }
     ],
-    title: getTextToLocalMapping(
-      "Search Results for Fire-NOC Applications"
-    ),
+    title: getTextToLocalMapping("Search Results for Fire-NOC Applications"),
     options: {
       filter: false,
       download: false,

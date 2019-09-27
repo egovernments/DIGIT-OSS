@@ -2,7 +2,11 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import {
+  getQueryArg,
+  getTransformedLocalStorgaeLabels,
+  getLocaleLabels
+} from "egov-ui-framework/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
