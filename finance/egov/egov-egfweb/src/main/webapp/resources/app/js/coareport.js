@@ -8,20 +8,15 @@ $(document).ready(function(){
 	function getFormData($form) {
 		var unindexed_array = $form.serializeArray();
 		var indexed_array = {};
-		console.log("unindexed_array----->", unindexed_array);
 		$.map(unindexed_array, function(n, i) {
 			indexed_array[n['name']] = n['value'];
 		});
-        console.log("indexed_array--------------->", indexed_array);
-        
-       
 		return indexed_array;
 	}
 	
 	function prepareHeading(){
 		var heading= "COA Report Result ";
 		if($("#type").val()){
-			console.log($("#type").val());
 			heading = heading  + " For Type:" +  $("#type option:selected").text();
 		}
 		if($("#accountCodeId").val()){
@@ -58,7 +53,7 @@ $(document).ready(function(){
 			
 		$("#coareportheading").html(heading);
 
-			
+	return heading;
 			
 	}
 	
@@ -70,7 +65,8 @@ jQuery('#btnsearch').click(function(e) {
 function callAjaxSearch() {
 	drillDowntableContainer = $("#resultTable");
 	$('.report-section').removeClass('display-hide');
-	//$('#coareportheading').html($("#filterMessageName option:selected").text());
+	var heading1 = prepareHeading();
+	
 	reportdatatable = drillDowntableContainer
 			.dataTable({
 				ajax : {
@@ -83,14 +79,15 @@ function callAjaxSearch() {
 				buttons: [
 						  {
 						    extend: 'print',
-						    title: 'COA Report',
+						    title: ""+heading1+"",
 						    filename: 'COA Report'
 						},{
 						    extend: 'pdf',
-						    title: 'COA Report',
+						    title: ""+heading1+"",
 						    filename: 'COA Report'
 						},{
 						    extend: 'excel',
+						    message : ""+heading1+"",
 						    filename: 'COA Report'
 						}
 						],
