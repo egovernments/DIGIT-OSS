@@ -135,7 +135,7 @@ class ComponentInterface extends React.Component {
         menu.find(item => {
           return item.navigationURL == get(roleDefination, "path");
         });
-        visible = isApplicable;
+        visible = isApplicable ? isApplicable : false;
       } 
       else if (get(roleDefination, "action")) {
         const businessServiceData = JSON.parse(
