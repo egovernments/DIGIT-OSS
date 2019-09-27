@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon, TextField } from "components";
+import { Icon } from "components";
 import filter from "lodash/filter";
 import isUndefined from "lodash/isUndefined";
 import AutoComplete from "material-ui/AutoComplete";
