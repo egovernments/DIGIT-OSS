@@ -4,7 +4,7 @@ import { getSearchResults } from "../../../../../ui-utils/commons";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { textToLocalMapping } from "./searchResults";
-import { validateFields } from "../../utils";
+import { validateFields, getTextToLocalMapping } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 export const searchApiCall = async (state, dispatch) => {
@@ -106,23 +106,21 @@ export const searchApiCall = async (state, dispatch) => {
     try {
       const response = await getSearchResults(queryObject);
       // const response = searchSampleResponse();
-      let data =
-        response &&
-        get(response, "FireNOCs", []).map(item => ({
-          [get(textToLocalMapping, "Application No")]:
-            item.fireNOCDetails.applicationNumber || "-",
-          [get(textToLocalMapping, "NOC No")]: item.fireNOCNumber || "-",
-          [get(textToLocalMapping, "NOC Type")]:
-            item.fireNOCDetails.fireNOCType || "-",
-          [get(textToLocalMapping, "Owner Name")]:
-            get(item, "fireNOCDetails.applicantDetails.owners[0].name") || "-",
-          [get(textToLocalMapping, "Application Date")]:
-            convertEpochToDate(parseInt(item.fireNOCDetails.applicationDate)) ||
-            "-",
-          tenantId: item.tenantId,
-          [get(textToLocalMapping, "Status")]:
-            get(textToLocalMapping, item.fireNOCDetails.status) || "-"
-        }));
+
+      let data = response.FireNOCs.map(item => ({
+        [getTextToLocalMapping("Application No")]:
+          item.fireNOCDetails.applicationNumber || "-",
+        [getTextToLocalMapping("NOC No")]: item.fireNOCNumber || "-",
+        [getTextToLocalMapping("NOC Type")]:
+          item.fireNOCDetails.fireNOCType || "-",
+        [getTextToLocalMapping("Owner Name")]:
+          get(item, "fireNOCDetails.applicantDetails.owners[0].name") || "-",
+        [getTextToLocalMapping("Application Date")]:
+          convertEpochToDate(parseInt(item.fireNOCDetails.applicationDate)) ||
+          "-",
+        tenantId: item.tenantId,
+        [getTextToLocalMapping("Status")]: item.fireNOCDetails.status || "-"
+      }));
 
       dispatch(
         handleField(
@@ -137,9 +135,9 @@ export const searchApiCall = async (state, dispatch) => {
           "search",
           "components.div.children.searchResults",
           "props.title",
-          `${textToLocalMapping["Search Results for Fire-NOC Applications"]}(${
-            response.FireNOCs.length
-          })`
+          `${getTextToLocalMapping(
+            "Search Results for Fire-NOC Applications"
+          )} (${response.FireNOCs.length})`
         )
       );
       //showHideProgress(false, dispatch);
