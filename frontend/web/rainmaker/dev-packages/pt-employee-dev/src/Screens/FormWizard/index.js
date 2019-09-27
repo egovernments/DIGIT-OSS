@@ -654,11 +654,11 @@ class FormWizard extends Component {
 
     return buttonLabel;
   }
-  getHeader(selected, search) {
+  getHeader(selected, search,PTUID) {
     const locale = getLocale() || "en_IN";
     const localizationLabelsData = initLocalizationLabels(locale);
     const addNewPropertyLabel = getTranslatedLabel('PT_NEW_PROPERTY_HEADER', localizationLabelsData);
-    const propertyId = getQueryValue(search, "propertyId");
+    const propertyId = getQueryValue(search, "propertyId")||PTUID;
     const assessmentYear = getQueryValue(search, "FY");
     let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
     let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
@@ -1840,13 +1840,20 @@ class FormWizard extends Component {
       ownerInfoArr,
       formValidIndexArray,
       dialogueOpen,
-      nextButtonEnabled
+      nextButtonEnabled,assessedPropertyDetails={}
     } = this.state;
     const fromReviewPage = selected === 3;
     const { history, location } = this.props;
     const { search } = location;
-    const propertyId = getQueryValue(search, "propertyId");
-    const { header, subHeaderValue, headerValue } = this.getHeader(selected, search);
+    
+   
+
+    const { Properties=[] } = assessedPropertyDetails;
+    let   propertyId ='';
+    for(let pty of Properties){
+      propertyId=pty.propertyId;
+    }
+    const { header, subHeaderValue, headerValue } = this.getHeader(selected, search,propertyId);
 
     return (
       <div className="wizard-form-main-cont">
