@@ -45,7 +45,7 @@ public class InstrumentAccountCode {
 
     private String id;
     @JsonProperty(value="instrumenttype")
-    private InstrumentType instrumentType;
+    private String instrumentType;
     private ChartOfAccounts accountCode;
     private String glcode;
     private Long validFrom;
@@ -59,11 +59,11 @@ public class InstrumentAccountCode {
         this.id = id;
     }
 
-    public InstrumentType getInstrumentType() {
+    public String getInstrumentType() {
         return instrumentType;
     }
 
-    public void setInstrumentType(InstrumentType instrumentType) {
+    public void setInstrumentType(String instrumentType) {
         this.instrumentType = instrumentType;
     }
 
