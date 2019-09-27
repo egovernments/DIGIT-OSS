@@ -56,21 +56,6 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
             },
           isInstitution
             ? {
-              key: getTranslatedLabel("PT_OWNERSHIP_INFO_TYPE_INSTI", localizationLabelsData),
-              value:
-                (institution &&
-                  institution.type &&
-                  generalMDMSDataById &&
-                  generalMDMSDataById["SubOwnerShipCategory"] &&
-                  generalMDMSDataById["SubOwnerShipCategory"][institution.type].name) ||
-                "NA",
-            }
-            : {
-              key: getTranslatedLabel("PT_OWNERSHIP_INFO_DOB", localizationLabelsData),
-              value: owner.dob || "NA",
-            },
-          isInstitution
-            ? {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_NAME_OF_AUTH", localizationLabelsData),
               value: owner.name || "NA",
             }
@@ -94,13 +79,8 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_USER_CATEGORY", localizationLabelsData),
-              value:
-                (owner &&
-                  owner.ownerType &&
-                  generalMDMSDataById &&
-                  generalMDMSDataById["OwnerType"] &&
-                  generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
-                "NA",
+              value: latestPropertyDetails.ownershipCategory || 'NA',
+                
             }, isInstitution
             ? {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
@@ -109,6 +89,28 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
               value: owner.permanentAddress|| "NA",    
+            },
+            isInstitution
+            ? {
+              key: getTranslatedLabel("PT_OWNERSHIP_INFO_TYPE_INSTI", localizationLabelsData),
+              value:
+                (institution &&
+                  institution.type &&
+                  generalMDMSDataById &&
+                  generalMDMSDataById["SubOwnerShipCategory"] &&
+                  generalMDMSDataById["SubOwnerShipCategory"][institution.type].name) ||
+                "NA",
+            }
+            : {
+              key: ' ',
+              value:' ',
+              // key: getTranslatedLabel("PT_OWNERSHIP_INFO_DOB", localizationLabelsData),
+              // value:  (owner &&
+              //   owner.ownerType &&
+              //   generalMDMSDataById &&
+              //   generalMDMSDataById["OwnerType"] &&
+              //   generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
+              // "NA",
             },
         ]
       })
