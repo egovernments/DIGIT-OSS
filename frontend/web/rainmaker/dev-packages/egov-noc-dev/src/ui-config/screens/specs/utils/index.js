@@ -691,3 +691,97 @@ export const getRequiredDocData = async (action, state, dispatch) => {
     console.log(e);
   }
 };
+
+export const getTextToLocalMapping = label => {
+  const localisationLabels = getTransformedLocalStorgaeLabels();
+  switch (label) {
+    case "Application No":
+      return getLocaleLabels(
+        "Application No",
+        "TL_COMMON_TABLE_COL_APP_NO",
+        localisationLabels
+      );
+
+    case "NOC No":
+      return getLocaleLabels(
+        "NOC No",
+        "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
+        localisationLabels
+      );
+
+    case "NOC Type":
+      return getLocaleLabels("NOC Type", "NOC_TYPE_LABEL", localisationLabels);
+    case "Owner Name":
+      return getLocaleLabels(
+        "Owner Name",
+        "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
+        localisationLabels
+      );
+
+    case "Application Date":
+      return getLocaleLabels(
+        "Application Date",
+        "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
+        localisationLabels
+      );
+
+    case "Status":
+      return getLocaleLabels(
+        "Status",
+        "NOC_COMMON_TABLE_COL_STATUS_LABEL",
+        localisationLabels
+      );
+
+    case "INITIATED":
+      return getLocaleLabels("Initiated,", "NOC_INITIATED", localisationLabels);
+    case "APPLIED":
+      getLocaleLabels("Applied", "NOC_APPLIED", localisationLabels);
+    case "PAID":
+      getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
+
+    case "APPROVED":
+      return getLocaleLabels("Approved", "NOC_APPROVED", localisationLabels);
+    case "REJECTED":
+      return getLocaleLabels("Rejected", "NOC_REJECTED", localisationLabels);
+    case "CANCELLED":
+      return getLocaleLabels("Cancelled", "NOC_CANCELLED", localisationLabels);
+    case "PENDINGAPPROVAL ":
+      return getLocaleLabels(
+        "Pending for Approval",
+        "WF_FIRENOC_PENDINGAPPROVAL",
+        localisationLabels
+      );
+    case "PENDINGPAYMENT":
+      return getLocaleLabels(
+        "Pending payment",
+        "WF_FIRENOC_PENDINGPAYMENT",
+        localisationLabels
+      );
+    case "DOCUMENTVERIFY":
+      return getLocaleLabels(
+        "Pending for Document Verification",
+        "WF_FIRENOC_DOCUMENTVERIFY",
+        localisationLabels
+      );
+    case "FIELDINSPECTION":
+      return getLocaleLabels(
+        "Pending for Field Inspection",
+        "WF_FIRENOC_FIELDINSPECTION",
+        localisationLabels
+      );
+
+    case "Search Results for Fire-NOC Applications":
+      return getLocaleLabels(
+        "Search Results for Fire-NOC Applications",
+        "NOC_HOME_SEARCH_RESULTS_TABLE_HEADING",
+        localisationLabels
+      );
+
+    case "MY_APPLICATIONS":
+      return getLocaleLabels(
+        "My Applications",
+        "TL_MY_APPLICATIONS",
+        localisationLabels
+      );
+  }
+};
