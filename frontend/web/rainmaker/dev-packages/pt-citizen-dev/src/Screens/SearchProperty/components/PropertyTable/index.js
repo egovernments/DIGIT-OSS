@@ -48,7 +48,7 @@ const columnData = [
   }
 ];
 
-const PropertyTable = ({ tableData, onActionClick }) => {
+const PropertyTable = ({ tableData, onActionClick, sortOnObject }) => {
   return (
     <div className="form-without-button-cont-generic">
       <Card
@@ -67,6 +67,7 @@ const PropertyTable = ({ tableData, onActionClick }) => {
               }}
             />
             <TableUi
+              sortOnObject={sortOnObject}
               rowCheckBox={false}
               orderby={"index"}
               columnData={columnData}

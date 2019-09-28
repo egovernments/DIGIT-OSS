@@ -114,8 +114,8 @@ class SearchProperty extends Component {
       const { doorNo, buildingName, street, locality } = address;
       let displayAddress = doorNo
         ? `${doorNo ? doorNo + "," : ""}` +
-          `${buildingName ? buildingName + "," : ""}` +
-          `${street ? street + "," : ""}`
+        `${buildingName ? buildingName + "," : ""}` +
+        `${street ? street + "," : ""}`
         : `${locality.name ? locality.name : ""}`;
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
@@ -133,16 +133,16 @@ class SearchProperty extends Component {
           }}
           onClick={
             userType === "CITIZEN"
-              ?  e => {
+              ? e => {
                 history.push(
                   `/property-tax/my-properties/property/${propertyId}/${tenantId}`
                 );
               }
               : e => {
-                  history.push(
-                    `/property-tax/property/${propertyId}/${tenantId}`
-                  );
-                }
+                history.push(
+                  `/property-tax/property/${propertyId}/${tenantId}`
+                );
+              }
           }
         >
           {propertyId}
@@ -171,7 +171,7 @@ class SearchProperty extends Component {
     this.setState({
       dialogueOpen: true
     });
-    
+
   };
 
   render() {
@@ -202,9 +202,7 @@ class SearchProperty extends Component {
             labelStyle={{ marginTop: "20px" }}
           />
           <div
-            className="rainmaker-displayInline"
-            onClick={this.onAddButtonClick}
-          >
+            className="rainmaker-displayInline"  >
             <Button
               Icon={
                 <Icon
@@ -228,13 +226,6 @@ class SearchProperty extends Component {
               primary={true}
               fullWidth={true}
             />
-            {/* <Icon
-              action="content"
-              name="add"
-              color="#fe7a51"
-              style={{ height: 22 }}
-            /> */}
-            {/* <Label label="ADD NEW PROPERTY" color="#fe7a51" /> */}
           </div>
         </div>
 
@@ -246,6 +237,7 @@ class SearchProperty extends Component {
         <Hidden xsDown>
           {searchResult && searchResult.length > 0 && showTable ? (
             <PropertyTable
+              sortOnObject="propertyId"
               tableData={searchResult}
               onActionClick={this.onActionClick}
             />
@@ -267,29 +259,19 @@ class SearchProperty extends Component {
           />
         </Hidden>
         {showTable && searchResult.length === 0 && (
-          <div className="search-no-property-found">
+         <div className="search-no-property-found">
             <div className="no-search-text">
               <Label label="PT_NO_PROPERTY_RECORD" />
             </div>
-            <div
-              className="new-assess-btn rainmaker-displayInline"
-              onClick={() => this.onAddButtonClick()}
-            >
-              {/* <Button
-                label={"New Property Assessment"}
+            <div className="new-assess-btn">
+              <Button
+                label={<Label label="PT_ADD_ASSESS_PROPERTY" buttonLabel={true} />}
                 labelStyle={{ fontSize: 12 }}
                 className="new-property-assessment"
-                onClick={() => history.push("/property-tax/assess-pay")}
+                onClick={() => this.onAddButtonClick()}
                 primary={true}
                 fullWidth={true}
-              /> */}
-              <Icon
-                action="content"
-                name="add"
-                color="#fe7a51"
-                style={{ height: 22 }}
               />
-              <Label  label="PT_ADD_ASSESS_PROPERTY" color="#fe7a51" />
             </div>
           </div>
         )}

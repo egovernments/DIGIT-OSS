@@ -32,7 +32,7 @@
   }
 
   .search-property-btn {
-    position: fixed !important;
+    position: absolute!important;
     bottom: 0px;
     width: 50%!important;
     left: 50%;
@@ -42,7 +42,7 @@
   }
 
   .reset-property-btn {
-    position: fixed !important;
+    position: relative!important;
     bottom: 0px;
     width: 50%!important;
     left: 0;
