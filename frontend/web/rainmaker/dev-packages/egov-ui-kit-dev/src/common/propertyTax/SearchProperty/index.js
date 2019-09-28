@@ -3,7 +3,7 @@ import formHoc from "egov-ui-kit/hocs/form";
 import Label from "egov-ui-kit/utils/translationNode";
 import Screen from "egov-ui-kit/common/common/Screen";
 import YearDialogue from "../YearDialogue";
-import { Button, BreadCrumbs ,Icon} from "egov-ui-kit/components";
+import { Button, BreadCrumbs, Icon } from "egov-ui-kit/components";
 import { addBreadCrumbs, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import SearchPropertyForm from "./components/SearchPropertyForm";
 import PropertyTable from "./components/PropertyTable";
@@ -33,7 +33,7 @@ class SearchProperty extends Component {
   }
 
   componentDidMount = () => {
-    const { location, addBreadCrumbs, title ,resetForm} = this.props;
+    const { location, addBreadCrumbs, title, resetForm } = this.props;
     const pathname = location && location.pathname;
     if (userType === "CITIZEN" && !(localStorageGet("path") === pathname)) {
       title && addBreadCrumbs({ title: title, path: window.location.pathname });
@@ -43,7 +43,7 @@ class SearchProperty extends Component {
   onResetClick = () => {
     const { resetForm } = this.props;
     resetForm("searchProperty");
-   
+
   };
   onSearchClick = (form, formKey) => {
     const { city, ids, oldpropertyids, mobileNumber } = form.fields || {};
@@ -121,20 +121,20 @@ class SearchProperty extends Component {
       // );
       let button = (
         <a
-        onClick={
-                userType === "CITIZEN"
-                  ? () => {
-                    // localStorageSet("draftId", "")
-                    this.setState({
-                      dialogueOpen: true,
-                      urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=false&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`,
-                    });
-                  }
-                  : (e) => {
-                    // localStorageSet("draftId", "")
-                    history.push(`/property-tax/property/${propertyId}/${property.tenantId}`);
-                  }
+          onClick={
+            userType === "CITIZEN"
+              ? () => {
+                // localStorageSet("draftId", "")
+                this.setState({
+                  dialogueOpen: true,
+                  urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=false&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`,
+                });
               }
+              : (e) => {
+                // localStorageSet("draftId", "")
+                history.push(`/property-tax/property/${propertyId}/${property.tenantId}`);
+              }
+          }
           style={{
             height: 20,
             lineHeight: "auto",
@@ -142,8 +142,8 @@ class SearchProperty extends Component {
             cursor: "pointer",
             textDecoration: "underline"
           }}>
-      {propertyId}
-      </a>);
+          {propertyId}
+        </a>);
 
       let item = {
         index: index + 1,
@@ -153,7 +153,7 @@ class SearchProperty extends Component {
         oldPropertyId: oldPropertyId,
         address: displayAddress,
         status: status
-      
+
       };
       tableData.push(item);
       return tableData;
@@ -172,7 +172,7 @@ class SearchProperty extends Component {
     this.setState({
       dialogueOpen: true
     });
-    
+
   };
   onNewPropertyButtonClick = () => {
     this.setState({
@@ -239,7 +239,7 @@ class SearchProperty extends Component {
           </div>
         </div>
         <PropertySearchFormHOC history={this.props.history} onSearchClick={this.onSearchClick} onResetClick={this.onResetClick} />
-        {tableData.length > 0 && showTable ? <PropertyTable tableData={tableData} onActionClick={this.onActionClick} /> : null}
+        {tableData.length > 0 && showTable ? <PropertyTable tableData={tableData} sortOnObject="propertyId" onActionClick={this.onActionClick} /> : null}
         {showTable && tableData.length === 0 && (
           <div className="search-no-property-found">
             <div className="no-search-text">
