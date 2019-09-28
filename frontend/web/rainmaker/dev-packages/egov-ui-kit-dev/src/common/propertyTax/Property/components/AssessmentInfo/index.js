@@ -181,6 +181,7 @@ const getAssessmentInfo = (propertyDetails, keys = [], generalMDMSDataById) => {
 };
 
 const getUnitInfo = (units = []) => {
+  units=units||[];
   let floors = [];
   units.map(unit => {
     let floor = [{
