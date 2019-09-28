@@ -49,7 +49,7 @@ const columnData = [
   }
 ];
 
-const PropertyTable = ({ tableData, onActionClick, sortOnObject }) => {
+const PropertyTable = ({ tableData=[], onActionClick, sortOnObject }) => {
   console.log(tableData, 'tableData');
   return (
     <div className="form-without-button-cont-generic">
@@ -57,14 +57,16 @@ const PropertyTable = ({ tableData, onActionClick, sortOnObject }) => {
         textChildren={
           <div>
             <Label
+            secondaryText={'('+tableData.length+')'}
               label="PT_SEARCH_PROPERTY_TABLE_HEADERS"
               className="property-search-table-heading"
+              fontSize={16}
               labelStyle={{
                 fontFamily: "Roboto",
                 fontSize: "16px",
                 fontWeight: 500,
                 letterSpacing: "0px",
-                textAlign: "center",
+                textAlign: "left",
                 color: "#484848",
               }}
             />
