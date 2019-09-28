@@ -1682,7 +1682,6 @@ class FormWizard extends Component {
           }
         );
         //callDraft([], get(createPropertyResponse, "Properties[0].propertyDetails[0].assessmentNumber"));
-        debugger;
         callPGService(
           get(createPropertyResponse, "Properties[0].propertyId"),
           get(

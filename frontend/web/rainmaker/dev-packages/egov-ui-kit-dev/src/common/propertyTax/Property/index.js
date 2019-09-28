@@ -55,6 +55,7 @@ class Property extends Component {
       pathName: null,
       dialogueOpen: false,
       urlToAppend: "",
+      showAssessmentHistory:false,
     };
   }
 
@@ -128,21 +129,23 @@ class Property extends Component {
   onListItemClick = (item) => {
     const { getSingleAssesmentandStatus } = this.props;
     const { route } = item;
+    const {showAssessmentHistory}= this.state;
+    this.setState({
+      showAssessmentHistory:!showAssessmentHistory
+    })
     route && getSingleAssesmentandStatus(route);
   };
 
   onAssessPayClick = () => {
     const { latestPropertyDetails, propertyId, tenantId } = this.props;
     const assessmentNo = latestPropertyDetails && latestPropertyDetails.assessmentNumber;
-    //const uuid = get(latestPropertyDetails, "citizenInfo.uuid");
-    // localStorage.removeItem("draftId");
     this.setState({
       dialogueOpen: true,
       urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
     });
   };
 
-  getAssessmentListItems = (props) => {
+  getAssessmentListItems = (props,showAssessmentHistory) => {
     const { propertyItems, propertyId, history, sortedAssessments, selPropertyDetails, tenantId } = props;
     return [
       {
@@ -160,7 +163,7 @@ class Property extends Component {
       {
         primaryText: <Label label="PT_PROPERTY_ASSESSMENT_HISTORY" labelClassName="property-info-title" />,
         route: selPropertyDetails,
-        nestedItems: sortedAssessments && sortedAssessments,
+        nestedItems:showAssessmentHistory&& sortedAssessments && sortedAssessments,
         rightIcon: (
           <div style={IconStyle}>
             <Icon action="hardware" name="keyboard-arrow-down" color="#484848" />
@@ -185,70 +188,29 @@ class Property extends Component {
   render() {
     const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails } = this.props;
     const { closeYearRangeDialogue } = this;
-    const { dialogueOpen, urlToAppend } = this.state;
+    const { dialogueOpen, urlToAppend ,showAssessmentHistory} = this.state;
     let urlArray = [];
     const { pathname } = location;
     if (urls.length === 0 && localStorageGet("path") === pathname) {
       urlArray = JSON.parse(localStorageGet("breadCrumbObject"));
     }
-    //const uuid = get(latestPropertyDetails, "citizenInfo.uuid");
     let clsName = appName === "Citizen" ? "screen-with-bredcrumb" : "";
 
     return (
       <Screen className={clsName}>
-        {/* <div>
-            <Label
-              label="PT_PROPERTY_INFORMATION"
-              containerStyle={{ padding: "24px 0px 0px 0px", marginLeft: "16px", display: "inline-block" }}
-              dark={true}
-              bold={true}
-              labelStyle={{ letterSpacing: 0 }}
-              fontSize={"20px"}
-            />
-            <Label
-              bold={true}
-              label={`${getTranslatedLabel("PT_PROPERTY_PTUID", localizationLabelsData)} ${propertyId}`}
-              containerStyle={{ marginLeft: "13px", display: "inline-block" }}
-              labelStyle={{
-                backgroundColor: "rgba(0, 0, 0, 0.6)",
-                color: "rgba(255, 255, 255, 0.87)",
-                marginLeft: "8px",
-                paddingLeft: "19px",
-                paddingRight: "19px",
-                textAlign: "center",
-                verticalAlign: "middle",
-                lineHeight: "35px",
-                fontSize: "16px",
-              }}
-              fontSize={"16px"}
-            />
-          </div> */}
         <PTHeader header='PT_PROPERTY_INFORMATION' subHeaderTitle='PT_PROPERTY_PTUID' subHeaderValue={propertyId} />
         {
-
           <AssessmentList
             onItemClick={this.onListItemClick}
-            items={this.getAssessmentListItems(this.props)}
+            items={this.getAssessmentListItems(this.props,showAssessmentHistory)}
             innerDivStyle={innerDivStyle}
             listItemStyle={listItemStyle}
             history={history}
             hoverColor="#fff"
             properties={selPropertyDetails}
             generalMDMSDataById={generalMDMSDataById && generalMDMSDataById}
-          // citizenUserId={uuid}
           />
         }
-
-        {/* <div className="flex-container">
-          <div className="property-info-access-btn" onClick={this.onAssessPayClick}>
-            <Button
-              onClick={() => this.onAssessPayClick()}
-              label={<Label buttonLabel={true} label="PT_PAYMENT_ASSESS_AND_PAY" fontSize="16px" />}
-              primary={true}
-              style={{ lineHeight: "auto", minWidth: "inherit" }}
-            />
-          </div>
-        </div> */}
         <div
           id="tax-wizard-buttons"
           className="wizard-footer col-sm-12"
@@ -263,11 +225,6 @@ class Property extends Component {
             />
           </div>
         </div>
-
-        <div  >
-
-        </div>
-
         {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />}
       </Screen>
     );
@@ -276,7 +233,6 @@ class Property extends Component {
 const getYearlyAssessments = (propertiesArray) => {
   let yearlyAssessments = [];
   propertiesArray.map((property) => {
-    console.log(property.assessmentNumber, property.financialYear, property.auditDetails.lastModifiedTime);
     if (yearlyAssessments.length == 0) {
       yearlyAssessments[0] = [property];
     } else {
@@ -292,48 +248,33 @@ const getYearlyAssessments = (propertiesArray) => {
       }
     }
   })
-  console.log(yearlyAssessments, 'bef-yearlyAssessments');
   for (let eachYrAssessments of yearlyAssessments) {
     eachYrAssessments.sort((x, y) => y.assessmentDate - x.assessmentDate);
   }
-  console.log(yearlyAssessments, 'aft-yearlyAssessments');
   yearlyAssessments.sort((x, y) => x[0].financialYear.localeCompare(y[0].financialYear));
   return yearlyAssessments;
 }
 const getPendingAssessments = (selPropertyDetails, singleAssessmentByStatus = []) => {
   let pendingAssessments = [];
-  if (singleAssessmentByStatus.length === 0) {
-    return pendingAssessments;
-  }
-  console.log(selPropertyDetails, singleAssessmentByStatus, '(selPropertyDetails,singleAssessmentByStatus)');
   let propertiesArray = selPropertyDetails.propertyDetails || [];
-  console.log("assessmentNumber,financialYear,lastModifiedTime");
   let yearlyAssessments = [];
   yearlyAssessments = getYearlyAssessments(propertiesArray);
-  console.log(yearlyAssessments, 'yearlyAssessments');
   let paidAssessments = [];
   paidAssessments = getYearlyAssessments(singleAssessmentByStatus);
-  console.log(paidAssessments, 'paidAssessments');
   for (let eachYrAssessments of yearlyAssessments) {
-    // eachYrAssessments.sort((x,y)=>y.assessmentDate-x.assessmentDate);
-    // if(checkPaid(eachYrAssessments[0],singleAssessmentByStatus)){
-    //   pendingAssessments.push(eachYrAssessments[0]);
-    // }
-    let bol=true;
+    let bol = true;
     for (let paidAssessment of paidAssessments) {
       if (eachYrAssessments[0].financialYear === paidAssessment[0].financialYear) {
-        bol=false;
+        bol = false;
         pendingAssessments.push(paidAssessment[0]);
         if (eachYrAssessments[0].assessmentNumber !== paidAssessment[0].assessmentNumber) {
           pendingAssessments.push(eachYrAssessments[0]);
         }
       }
     }
-    if(bol){
+    if (bol) {
       pendingAssessments.push(eachYrAssessments[0]);
     }
-
-
   }
   return pendingAssessments;
 }
@@ -597,16 +538,12 @@ const mapStateToProps = (state, ownProps) => {
   const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
   const selPropertyDetails = propertiesById[propertyId] || {};
   const latestPropertyDetails = getLatestPropertyDetails(selPropertyDetails.propertyDetails);
-
-  console.log("Jagan-singleAssessmentByStatus", singleAssessmentByStatus);
   const pendingAssessments = getPendingAssessments(selPropertyDetails, singleAssessmentByStatus);
-  console.log(pendingAssessments, 'pendingAssessments');
+
 
   const addressInfo =
     getAddressInfo(selPropertyDetails.address, [
       { key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PROPERTY_ID", localizationLabels), value: selPropertyDetails.propertyId },
-      // ],[
-      //  , { key: getTranslatedLabel("PT_SEARCHPROPERTY_TABEL_EPID", localizationLabels), value : existingPropertyId}
     ]) || [];
   const assessmentInfoKeys = [
     { masterName: "Floor", dataKey: "floorNo" },
