@@ -1,6 +1,5 @@
 import React from "react";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
-// import { connect } from "react-redux";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import PropertyInfoCard from "../PropertyInfoCard";
@@ -16,7 +15,6 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
   if (ownerDetails && (ownerDetails.length > 0)) {
     owner = ownerDetails[0];
   }
-
   return (
     ownerDetails && ownerDetails.map((owner) => {
       return ({
@@ -56,6 +54,25 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
             },
           isInstitution
             ? {
+              key: getTranslatedLabel('PT_FORM3_OWNERSHIP_TYPE', localizationLabelsData),
+              value: (institution &&
+                institution.type &&
+                generalMDMSDataById &&
+                generalMDMSDataById["OwnerShipCategory"] &&
+                generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory].name) ||
+                "NA",
+            }
+            : {
+              key: getTranslatedLabel('PT_FORM3_OWNERSHIP_TYPE', localizationLabelsData),
+              value: (institution &&
+                institution.type &&
+                generalMDMSDataById &&
+                generalMDMSDataById["SubOwnerShipCategory"] &&
+                generalMDMSDataById["SubOwnerShipCategory"][latestPropertyDetails.ownershipCategory].name) ||
+                "NA",
+            },
+          isInstitution
+            ? {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_NAME_OF_AUTH", localizationLabelsData),
               value: owner.name || "NA",
             }
@@ -79,38 +96,20 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_USER_CATEGORY", localizationLabelsData),
-              value: latestPropertyDetails.ownershipCategory || 'NA',
-                
+              value: (owner &&
+                owner.ownerType &&
+                generalMDMSDataById &&
+                generalMDMSDataById["OwnerType"] &&
+                generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
+                "NA",
             }, isInstitution
             ? {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
-              value: owner.correspondenceAddress  || "NA",
+              value: owner.correspondenceAddress || "NA",
             }
             : {
               key: getTranslatedLabel("PT_OWNERSHIP_INFO_CORR_ADDR", localizationLabelsData),
-              value: owner.permanentAddress|| "NA",    
-            },
-            isInstitution
-            ? {
-              key: getTranslatedLabel("PT_OWNERSHIP_INFO_TYPE_INSTI", localizationLabelsData),
-              value:
-                (institution &&
-                  institution.type &&
-                  generalMDMSDataById &&
-                  generalMDMSDataById["SubOwnerShipCategory"] &&
-                  generalMDMSDataById["SubOwnerShipCategory"][institution.type].name) ||
-                "NA",
-            }
-            : {
-              key: ' ',
-              value:' ',
-              // key: getTranslatedLabel("PT_OWNERSHIP_INFO_DOB", localizationLabelsData),
-              // value:  (owner &&
-              //   owner.ownerType &&
-              //   generalMDMSDataById &&
-              //   generalMDMSDataById["OwnerType"] &&
-              //   generalMDMSDataById["OwnerType"][owner.ownerType].name) ||
-              // "NA",
+              value: owner.permanentAddress || "NA",
             },
         ]
       })
@@ -127,7 +126,7 @@ const formatOwnerInfo = (itemsArray = []) => {
     const ownerHeader = { key: ' ', value: 'Owner-' };
     for (let index = 0; index < itemsArray.length; index++) {
       let ownerInfo = [];
-      ownerInfo = itemsArray[index].items;    
+      ownerInfo = itemsArray[index].items;
       ownerInfo.unshift(...emptySpaces);
       ownerInfo.unshift({ ...ownerHeader, value: ownerHeader.value + '' + (index + 1) });
       ownersInfo.push(...ownerInfo)
@@ -136,13 +135,13 @@ const formatOwnerInfo = (itemsArray = []) => {
   return ownersInfo;
 }
 
-const OwnerInfo = ({ properties, editIcon }) => {
+const OwnerInfo = ({ properties, editIcon, generalMDMSDataById }) => {
   let ownerItems = [];
   const header = 'PT_OWNERSHIP_INFO_SUB_HEADER';
   if (properties) {
     const { propertyDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
-      ownerItems = formatOwnerInfo(getOwnerInfo(propertyDetails[0]));
+      ownerItems = formatOwnerInfo(getOwnerInfo(propertyDetails[0], generalMDMSDataById));
     }
   }
   return (

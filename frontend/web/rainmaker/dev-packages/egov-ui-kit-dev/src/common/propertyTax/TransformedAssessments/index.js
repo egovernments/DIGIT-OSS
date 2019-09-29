@@ -136,7 +136,7 @@ export const getCompletedTransformedItems = (assessmentsByStatus = [], cities, l
               </div>
             </div>
 
-            {<Divider style={{ marginBottom: 0, marginTop: "15px" }} />}
+            {(index!==Object.values(assessmentsByStatus).length-1)&&<Divider style={{ marginBottom: 0, marginTop: "15px" }} />}
 
 
           </div>

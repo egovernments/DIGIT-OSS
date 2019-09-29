@@ -4,13 +4,16 @@ import { Button } from "components";
 import RadioButtonForm from "./components/RadioButtonForm";
 import Label from "egov-ui-kit/utils/translationNode";
 import formHoc from "egov-ui-kit/hocs/form";
-import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 import { connect } from "react-redux";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import { removeForm } from "egov-ui-kit/redux/form/actions";
 import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import commonConfig from "config/common.js";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
+import { reset_property_reset } from "egov-ui-kit/redux/properties/actions";
+
+
+
 import "./index.css";
 
 // const getYearList = () => {
@@ -75,7 +78,7 @@ class YearDialog extends Component {
   };
 
   render() {
-    let { open, closeDialogue, getYearList, history, form, removeForm, urlToAppend } = this.props;
+    let { open, closeDialogue, getYearList, history, form, removeForm, urlToAppend ,reset_property_reset} = this.props;
     return getYearList ? (
       <Dialog
         open={open}
@@ -140,6 +143,7 @@ const mapDispatchToProps = (dispatch) => {
     removeForm: (formkey) => dispatch(removeForm(formkey)),
     toggleSpinner: () => dispatch(toggleSpinner()),
     prepareFormData: (path, value) => dispatch(prepareFormData(path, value)),
+    reset_property_reset:()=>dispatch(reset_property_reset())
   };
 };
 

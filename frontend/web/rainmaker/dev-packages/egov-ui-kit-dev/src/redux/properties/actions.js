@@ -7,6 +7,12 @@ import get from "lodash/get";
 import cloneDeep from "lodash/cloneDeep";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 
+const reset_property_reset = () => {
+  return {
+    type: actionTypes.RESET_PROPERTY_STATE,
+  };
+};
+
 const propertyFetchPending = () => {
   return {
     type: actionTypes.PROPERTY_FETCH_PENDING,

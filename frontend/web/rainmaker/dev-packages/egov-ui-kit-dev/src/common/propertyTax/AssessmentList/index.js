@@ -206,6 +206,7 @@ const AssessmentList = ({properties,
         innerDivStyle={innerDivStyle}
         listItemStyle={listItemStyle}
         hoverColor={hoverColor}
+        generalMDMSDataById={generalMDMSDataById}
       />)
    
 

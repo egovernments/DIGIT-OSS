@@ -239,8 +239,8 @@ class SearchProperty extends Component {
           </div>
         </div>
         <PropertySearchFormHOC history={this.props.history} onSearchClick={this.onSearchClick} onResetClick={this.onResetClick} />
-        {tableData.length > 0 && showTable ? <PropertyTable tableData={tableData} sortOnObject="propertyId" onActionClick={this.onActionClick} /> : null}
-        {showTable && tableData.length === 0 && (
+        {!loading && showTable && tableData.length > 0  ? <PropertyTable tableData={tableData} sortOnObject="propertyId" onActionClick={this.onActionClick} /> : null}
+        {!loading && showTable && !tableData.length && (
           <div className="search-no-property-found">
             <div className="no-search-text">
               <Label label="PT_NO_PROPERTY_RECORD" />

@@ -180,7 +180,7 @@ class SearchProperty extends Component {
     const { closeYearRangeDialogue } = this;
     let urlArray = [];
     const { pathname } = location;
-    // const tableData = this.extractTableData(propertiesFound);
+    const tableData = this.extractTableData(propertiesFound);
     const { searchResult } = this.state;
     if (urls.length == 0 && localStorageGet("path") === pathname) {
       urlArray = JSON.parse(localStorageGet("breadCrumbObject"));
@@ -235,21 +235,25 @@ class SearchProperty extends Component {
           onResetClick={this.onResetClick}
         />
         <Hidden xsDown>
-          {searchResult && searchResult.length > 0 && showTable ? (
+          {tableData && tableData.length > 0 && showTable ? (
             <PropertyTable
               sortOnObject="propertyId"
-              tableData={searchResult}
+              tableData={tableData}
               onActionClick={this.onActionClick}
             />
           ) : null}
         </Hidden>
         <Hidden smUp>
-          {searchResult && searchResult.length > 0 && (
+          {tableData && tableData.length > 0 && (
+
             <Label
               label="PT_SEARCH_RESULTS"
-              dynamicArray={[searchResult.length]}
+              dynamicArray={[tableData.length]}
               fontSize={16}
               color="rgba(0, 0, 0, 0.87)"
+              labelStyle={{
+                textAlign: "left",
+              }}
             />
           )}
           <SingleProperty
@@ -258,8 +262,9 @@ class SearchProperty extends Component {
             onActionClick={this.onAddButtonClick}
           />
         </Hidden>
-        {showTable && searchResult.length === 0 && (
-         <div className="search-no-property-found">
+       
+        {showTable && tableData.length === 0 && loading==false&& (
+          <div className="search-no-property-found">
             <div className="no-search-text">
               <Label label="PT_NO_PROPERTY_RECORD" />
             </div>

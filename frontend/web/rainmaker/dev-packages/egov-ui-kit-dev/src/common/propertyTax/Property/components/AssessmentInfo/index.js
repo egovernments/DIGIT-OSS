@@ -142,9 +142,9 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 //       ]
 //     );
 //   };
-const getAssessmentInfo = (propertyDetails, keys = [], generalMDMSDataById) => {
+const getAssessmentInfo = (propertyDetails, floorCount=0, generalMDMSDataById) => {
   const { units } = propertyDetails || {};
-
+const noOfFloors=floorCount||propertyDetails.noOfFloors;
   return (
     propertyDetails && [
       {
@@ -174,7 +174,7 @@ const getAssessmentInfo = (propertyDetails, keys = [], generalMDMSDataById) => {
       },
       {
         key: getTranslatedLabel("PT_ASSESMENT_INFO_NO_OF_FLOOR", localizationLabelsData),
-        value: propertyDetails.noOfFloors ? `${propertyDetails.noOfFloors}` : "NA", //noOfFloors
+        value: noOfFloors ? `${noOfFloors}` : "NA", //noOfFloors
       },
     ]
   );
@@ -183,7 +183,7 @@ const getAssessmentInfo = (propertyDetails, keys = [], generalMDMSDataById) => {
 const getUnitInfo = (units = []) => {
   units=units||[];
   let floors = [];
-  units.map(unit => {
+  units.map((unit,index) => {
     let floor = [{
       key: getTranslatedLabel("PT_ASSESMENT_INFO_USAGE_TYPE", localizationLabelsData),
       value: unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_'+unit.usageCategoryMinor : "NA",
@@ -216,22 +216,18 @@ const getUnitInfo = (units = []) => {
 
 
 
-const AssessmentInfo = ({ properties, editIcon }) => {
+const AssessmentInfo = ({ properties, editIcon,generalMDMSDataById }) => {
 
   let assessmentItems = [];
   let subUnitItems = [];
   const header = 'PT_ASSESMENT_INFO_SUB_HEADER';
   if (properties) {
-    console.log(properties, 'AssessmentInfo properties-----');
     const { propertyDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
-      assessmentItems = getAssessmentInfo(propertyDetails[0]);
       subUnitItems = getUnitInfo(propertyDetails[0]['units']);
-      console.log(subUnitItems, 'subUnitItems');
+      assessmentItems = getAssessmentInfo(propertyDetails[0],subUnitItems.length,generalMDMSDataById);
     }
   }
-
-  // assessmentItems = getAddressItems(properties);
   return (
     <PropertyInfoCard editIcon={editIcon} items={assessmentItems} header={header} subSection={subUnitItems} ></PropertyInfoCard>
   );
