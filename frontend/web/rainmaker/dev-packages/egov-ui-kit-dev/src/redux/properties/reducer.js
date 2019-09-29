@@ -184,6 +184,8 @@ const propertyReducer = (state = initialState, action) => {
         errorMessage: "",
         singleAssessmentByStatus,
       };
+    case actionTypes.RESET_PROPERTY_STATE:
+      return initialState;
     default:
       return state;
   }
