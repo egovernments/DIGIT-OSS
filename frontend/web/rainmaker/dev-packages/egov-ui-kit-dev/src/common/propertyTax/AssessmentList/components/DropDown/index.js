@@ -3,7 +3,7 @@ import MenuItem from "material-ui/MenuItem";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { createReceiptDetails } from "../../../PaymentStatus/Components/createReceipt";
-import generateReceipt from "../../../PaymentStatus/Components/receiptsPDF";
+import generateReceipt from "../../../PaymentStatus/Components/receipt";
 import React, { Component } from "react";
 import get from "lodash/get";
 import Label from "egov-ui-kit/utils/translationNode";
