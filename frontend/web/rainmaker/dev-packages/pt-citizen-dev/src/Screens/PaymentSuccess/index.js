@@ -26,8 +26,6 @@ class PaymentSuccess extends Component {
     }
   };
   toggleYearDialogue = () => {
-    console.log("this", this.state);
-
     this.setState({
       yearDialogue: {
         dialogueOpen: !this.state.yearDialogue.dialogueOpen,

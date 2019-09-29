@@ -156,7 +156,6 @@ class PaymentFailure extends Component {
 
     const header = 'PT_PAYMENT_HEADER';
     const subHeaderValue = propertyId;
-    console.log(messages, receiptUIDetails, 'receiptUIDetails')
     return (
       <Screen>
         <div>

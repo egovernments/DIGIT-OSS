@@ -16,8 +16,7 @@ const getItemStatus = (item, history, generalMDMSDataById) => {
       height: "18px",
     },
   };
-  console.log(status,'statsus');
-  
+ 
   switch (status) {
     case "Paid":
     case "Paid-Disable":

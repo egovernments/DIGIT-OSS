@@ -32,8 +32,6 @@ class PaymentSuccess extends Component {
     }
   };
   toggleYearDialogue = () => {
-    console.log("this", this.state);
-
     this.setState({
       yearDialogue: {
         dialogueOpen: !this.state.yearDialogue.dialogueOpen,
@@ -185,11 +183,10 @@ class PaymentSuccess extends Component {
   };
 
   render() {
-    const { generalMDMSDataById ,history} = this.props;
+    const { generalMDMSDataById, history } = this.props;
     const { assessmentYear } = this.props.match.params;
     const { imageUrl } = this.state;
     const { toggleYearDialogue } = this;
-    console.log(this.props, 'this.props');
 
     return (
       <Screen>

@@ -140,9 +140,7 @@ class DropDown extends Component {
   };
 
   render() {
-    const { item } = this.props;
-    console.log(this.props,'this.props of dropdown');
-    
+    const { item } = this.props;   
     const { imageUrl } = this.state;
     const userType = getUserInfo() && JSON.parse(getUserInfo()).type;
     return (
