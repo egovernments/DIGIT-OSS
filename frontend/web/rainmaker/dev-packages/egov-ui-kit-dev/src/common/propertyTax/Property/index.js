@@ -431,7 +431,6 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
         iconName: "person",
         nestedItems: true,
         items: ownerDetails.map((owner) => {
-          console.log("jagan--<?", owner.dob);
 
           return {
             items: [

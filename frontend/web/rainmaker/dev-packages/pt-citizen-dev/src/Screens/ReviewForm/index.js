@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import { Icon } from "components";
-import PropertyAddress from "./components/PropertyAddress";
-import PaymentAmountDetails from "./components/PaymentAmountDetails";
 import CalculationDetails from "./components/CalculationDetails";
-// import AssessmentInfo from "./components/AssessmentInfo";
-// import OwnerInfo from "./components/OwnerInfo";
 import PropertyTaxDetailsCard from "./components/PropertyTaxDetails";
 import { Card } from "components";
 import { httpRequest } from "egov-ui-kit/utils/api";
@@ -16,7 +12,6 @@ import {
   findCorrectDateObjPenaltyIntrest
 } from "egov-ui-kit/utils/PTCommon";
 import Label from "egov-ui-kit/utils/translationNode";
-
 import { SingleCheckbox } from "components";
 import "./index.css";
 import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/components/PropertyAddressInfo';
@@ -32,25 +27,6 @@ const defaultIconStyle = {
   marginRight: 10
 };
 
-const PropAddressIcon = (
-  <Icon style={defaultIconStyle} color="#ffffff" action="action" name="home" />
-);
-const AssessmentInfoIcon = (
-  <Icon
-    style={defaultIconStyle}
-    color="#ffffff"
-    action="action"
-    name="assignment"
-  />
-);
-const OwnerInfoIcon = (
-  <Icon
-    style={defaultIconStyle}
-    color="#ffffff"
-    action="social"
-    name="person"
-  />
-);
 
 class ReviewForm extends Component {
   state = {
@@ -64,17 +40,6 @@ class ReviewForm extends Component {
     termsAccepted: false,
     calculationDetails: false
   };
-
-  // componentWillReceiveProps(nextProps) {
-  //   let { estimationDetails: nextEstimationDetails } = nextProps;
-  //   const { totalAmountToBePaid } = this.state
-  //   const { totalAmount: nextTotalAmount } = this.props.estimationDetails[0] || 0
-  //   if (totalAmountToBePaid !== nextTotalAmount && !isNaN(parseFloat(nextTotalAmount)) && isFinite(nextTotalAmount)) {
-  //     this.setState({
-  //       totalAmountTobePaid: nextTotalAmount,
-  //     })
-  //   }
-  // }
 
   componentDidMount() {
     this.getImportantDates();
@@ -253,23 +218,24 @@ class ReviewForm extends Component {
       toggleTerms
     } = this.props;
     let { totalAmount } = estimationDetails[0] || {};
+    const { generalMDMSDataById = {} } = this.props;
     return (
       <div>
         <Card
           textChildren={
             <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
-               <PropertyTaxDetailsCard
-                  estimationDetails={estimationDetails}
-                  importantDates={importantDates}
-                  openCalculationDetails={this.openCalculationDetails}
-                  optionSelected={valueSelected}
-                />
-              <PropertyAddressInfo properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
-              <AssessmentInfo properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
-              <OwnerInfo properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo>
-            {/* {isAssesment && */}
+              <PropertyTaxDetailsCard
+                estimationDetails={estimationDetails}
+                importantDates={importantDates}
+                openCalculationDetails={this.openCalculationDetails}
+                optionSelected={valueSelected}
+              />
+              <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
+              <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
+              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo>
+              {/* {isAssesment && */}
               <div>
-               
+
                 {!this.props.isCompletePayment && (
                   <CalculationDetails
                     open={this.state.calculationDetails}
@@ -318,37 +284,26 @@ class ReviewForm extends Component {
                   />
                 )}
               </div>
-
             </div>
           }
         />
-        {/* <PropertyAddress
-          icon={PropAddressIcon}
-          editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}
-          component={stepZero}
-        /> */}
-
-        {/* <AssessmentInfo
-          icon={AssessmentInfoIcon}
-          editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}
-          component={stepOne}
-        />
-        <OwnerInfo
-          icon={OwnerInfoIcon}
-          editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}
-          component={stepTwo}
-        /> */}
-
-
       </div>
     );
   }
 }
-
+const mapStateToProps = (state, ownProps) => {
+  const { common = {} } = state;
+  const { generalMDMSDataById } = common || {};
+  return {
+    ownProps,
+    generalMDMSDataById,
+  };
+};
 const mapDispatchToProps = dispatch => ({
   setRoute: route => dispatch({ type: "SET_ROUTE", route })
 });
+
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ReviewForm);

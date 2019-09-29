@@ -7,7 +7,7 @@ import AssessmentInfo from '../../../Property/components/AssessmentInfo';
 import PropertyAddressInfo from '../../../Property/components/PropertyAddressInfo';
 import OwnerInfo from '../../../Property/components/OwnerInfo';
 
-const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, properties, style }) => {
+const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, properties, style ,generalMDMSDataById}) => {
     const items2 = [items[1]];
     return (
         <div className="form-without-button-cont-generic" >
@@ -25,9 +25,9 @@ const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, p
                 <Card
                     textChildren={
                         <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
-                            <PropertyAddressInfo properties={properties}></PropertyAddressInfo>
-                            <AssessmentInfo properties={properties} ></AssessmentInfo>
-                            <OwnerInfo properties={properties} ></OwnerInfo>
+                            <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
+                            <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></AssessmentInfo>
+                            <OwnerInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></OwnerInfo>
                             <Card style={{ backgroundColor: 'rgb(242,242,242)', boxShadow: 'none' }}
                                 textChildren={
                                     <div >
