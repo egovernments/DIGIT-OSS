@@ -135,7 +135,7 @@ class PaymentFailure extends Component {
     const { bill } = this.state;
     const { txnAmount, assessmentYear, propertyId } = this.props.match.params;
     const amountPaid = get(bill[0], "billDetails[0].totalAmount");
-    const { cities, selProperty, latestPropertyDetails } = this.props;
+    const { cities, selProperty, latestPropertyDetails ,loading} = this.props;
     const receiptUIDetails =
       selProperty &&
       bill &&
@@ -157,11 +157,11 @@ class PaymentFailure extends Component {
     const header = 'PT_PAYMENT_HEADER';
     const subHeaderValue = propertyId;
     return (
-      <Screen>
+      <Screen loading={loading}>
         <div>
           <div key={1} style={{ marginBottom: "50px" }} className=" col-md-12 col-lg-12">
             <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
-            <AcknowledgementCard acknowledgeType='failed' receiptHeader="PT_TRANSACTION_AMT" messageHeader='PT_OOPS' message='PT_FAILURE_MESSAGE' receiptNo={'Rs:' + txnAmount} />
+            <AcknowledgementCard acknowledgeType='failed' receiptHeader="PT_TRANSACTION_AMT" messageHeader='PT_OOPS' message='PT_FAILURE_MESSAGE' receiptNo={txnAmount?'Rs:' + txnAmount:txnAmount} />
             {/* <AcknowledgementCard acknowledgeType='success'  messageHeader='' message='' receiptHeader='PT_APPLICATION_NO_LABEL' receiptNo=''/> */}
           </div>
           <ActionFooter key={2} label2='PT_RETRY_BUTTON' primaryAction={this.redirectToReview} />
@@ -174,12 +174,12 @@ class PaymentFailure extends Component {
 const mapStateToProps = (state, ownProps) => {
   const { properties, common } = state || {};
   const { cities } = common;
-  const { propertiesById } = properties;
+  const { propertiesById,loading } = properties;
   const selProperty =
     propertiesById && propertiesById[ownProps.match.params.propertyId];
   const latestPropertyDetails =
     selProperty && getLatestPropertyDetails(selProperty.propertyDetails);
-  return { selProperty, cities, latestPropertyDetails };
+  return { selProperty, cities, latestPropertyDetails ,loading};
 };
 
 const mapDispatchToProps = dispatch => {

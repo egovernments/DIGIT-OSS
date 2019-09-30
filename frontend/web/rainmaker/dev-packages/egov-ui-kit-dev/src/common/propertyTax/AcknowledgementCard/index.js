@@ -29,7 +29,6 @@ const AcknowledgementCard = (props) => {
             <i id="custom-atoms-body" className="material-icons" style={{fontSize:"50px"}}>{icon}</i>
               </FloatingActionButton>
             </div>
-            
             <div className="ack-body"  id="custom-atoms-body" >
               <h1 className="MuiTypography-root-8 MuiTypography-headline-13" id="material-ui-header">
                 <span id="custom-containers-key"> <Label label={messageHeader} color='rgba(0, 0, 0, 0.87)' fontSize= '24px'  fontWeight='400' fontFamily= "Roboto"  lineHeight='1.35417em'/></span>
@@ -39,12 +38,12 @@ const AcknowledgementCard = (props) => {
               </div>
             </div>
             <div className="ack-text" id="custom-atoms-tail">
-              <h1  className="MuiTypography-root-8 MuiTypography-headline-13" id="material-ui-text" style={{fontSize: '16px' ,fontWeight:"400" ,color: 'rgba(0, 0, 0, 0.6)'}}  >
+              {receiptNo&&<h1  className="MuiTypography-root-8 MuiTypography-headline-13" id="material-ui-text" style={{fontSize: '16px' ,fontWeight:"400" ,color: 'rgba(0, 0, 0, 0.6)'}}  >
                 <span ><Label label={receiptHeader} fontSize= '16px' fontWeight="400" color='rgba(0, 0, 0, 0.6)' /></span>
-              </h1>
-              <h1 className="MuiTypography-root-8 MuiTypography-headline-13" id="material-ui-paragraph" style={{fontSize: '24px' ,fontWeight:"500"}} >
+              </h1>}
+              {receiptNo&&<h1 className="MuiTypography-root-8 MuiTypography-headline-13" id="material-ui-paragraph" style={{fontSize: '24px' ,fontWeight:"500"}} >
                 <span ><Label label={receiptNo}  fontSize= '24px' color='rgba(0, 0, 0, 0.87)' fontWeight="500"/></span>
-              </h1>
+              </h1>}
             </div>
           </div>
         </div>

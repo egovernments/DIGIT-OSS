@@ -183,13 +183,13 @@ class PaymentSuccess extends Component {
   };
 
   render() {
-    const { generalMDMSDataById, history } = this.props;
+    const { generalMDMSDataById, history,loading } = this.props;
     const { assessmentYear } = this.props.match.params;
     const { imageUrl } = this.state;
     const { toggleYearDialogue } = this;
 
     return (
-      <Screen>
+      <Screen loading={loading}>
         {this.state.yearDialogue.dialogueOpen && <YearDialogue open={this.state.yearDialogue.dialogueOpen} history={history} urlToAppend={this.state.yearDialogue.urlToAppend} closeDialogue={toggleYearDialogue} />}
         <PaymentStatus
           receiptUIDetails={this.props.receiptUIDetails}
@@ -227,7 +227,7 @@ const mapStateToProps = (state, ownProps) => {
   const { localizationLabels } = app;
   const { cities } = common;
   const { generalMDMSDataById } = state.common || {};
-  const { propertiesById, receipts } = properties;
+  const { propertiesById, receipts ,loading} = properties;
   const selProperty =
     propertiesById && propertiesById[ownProps.match.params.propertyId];
   const existingPropertyId = selProperty && selProperty.oldPropertyId;
@@ -277,6 +277,7 @@ const mapStateToProps = (state, ownProps) => {
       totalAmountPaid
     );
   return {
+    loading,
     receiptUIDetails,
     receiptDetails,
     cities,
