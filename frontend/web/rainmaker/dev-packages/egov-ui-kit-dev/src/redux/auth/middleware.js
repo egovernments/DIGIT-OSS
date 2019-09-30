@@ -31,7 +31,7 @@ const auth = (store) => (next) => (action) => {
           authToken: getAccessToken(),
         },
       };
-      if (!notifications) {
+      if ((window.location.pathname === "/" || window.location.pathname === "/citizen/" || window.location.pathname === "/employee/inbox")) {
         store.dispatch(getNotifications(queryObject, requestBody));
         store.dispatch(getNotificationCount(queryObject, requestBody));
       }
