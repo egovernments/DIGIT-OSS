@@ -161,9 +161,9 @@ class PaymentFailure extends Component {
 
     const header = "PT_PAYMENT_HEADER";
     const subHeaderValue = propertyId;
-    console.log(messages, receiptUIDetails, "receiptUIDetails");
+    const {loading}= this.props;
     return (
-      <Screen>
+      <Screen loading={loading}>
         <div>
           <div
             key={1}
@@ -181,7 +181,7 @@ class PaymentFailure extends Component {
               receiptHeader="PT_TRANSACTION_AMT"
               messageHeader="PT_OOPS"
               message="PT_FAILURE_MESSAGE"
-              receiptNo={"Rs:" + txnAmount}
+              receiptNo={txnAmount?'Rs:' + txnAmount:txnAmount}
             />
             {/* <AcknowledgementCard acknowledgeType='success'  messageHeader='' message='' receiptHeader='PT_APPLICATION_NO_LABEL' receiptNo=''/> */}
           </div>
@@ -199,12 +199,12 @@ class PaymentFailure extends Component {
 const mapStateToProps = (state, ownProps) => {
   const { properties, common } = state || {};
   const { cities } = common;
-  const { propertiesById } = properties;
+  const { propertiesById,loading } = properties;
   const selProperty =
     propertiesById && propertiesById[ownProps.match.params.propertyId];
   const latestPropertyDetails =
     selProperty && getLatestPropertyDetails(selProperty.propertyDetails);
-  return { selProperty, cities, latestPropertyDetails };
+  return { selProperty, cities, latestPropertyDetails ,loading};
 };
 
 const mapDispatchToProps = dispatch => {

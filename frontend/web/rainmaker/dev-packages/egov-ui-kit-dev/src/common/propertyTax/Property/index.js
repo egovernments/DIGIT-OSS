@@ -126,13 +126,16 @@ class Property extends Component {
     renderCustomTitleForPt(customTitle);
   };
 
-  onListItemClick = (item) => {
+  onListItemClick = (item,index) => {   
     const { getSingleAssesmentandStatus } = this.props;
     const { route } = item;
     const {showAssessmentHistory}= this.state;
-    this.setState({
-      showAssessmentHistory:!showAssessmentHistory
-    })
+    if(index===0&&item.initiallyOpen){
+      this.setState({
+        showAssessmentHistory:!showAssessmentHistory
+      })
+    }
+   
     route && getSingleAssesmentandStatus(route);
   };
 

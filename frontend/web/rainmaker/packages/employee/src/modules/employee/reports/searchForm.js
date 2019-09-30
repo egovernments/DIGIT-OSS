@@ -36,8 +36,6 @@ class ShowForm extends Component {
   resetFields = () => {
     const { metaData, resetForm, searchForm, setSearchParams } = this.props;
     if (!searchForm) {
-      //showTable(false); // Hard and elegant
-      console.log("Search Form Empty");
       return;
     } else {
       if (get(metaData, "reportDetails.searchParams")) {

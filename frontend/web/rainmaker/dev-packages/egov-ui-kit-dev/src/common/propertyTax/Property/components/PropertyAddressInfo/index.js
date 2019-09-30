@@ -12,7 +12,6 @@ const localizationLabelsData = initLocalizationLabels(locale);
 
 const getAddressItems = (properties) => {
   const {address} = properties;
-  console.log(properties,address,"address");
     return  (
      address &&    [
       // [

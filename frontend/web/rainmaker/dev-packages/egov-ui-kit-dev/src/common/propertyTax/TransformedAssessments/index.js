@@ -62,7 +62,6 @@ export const getTransformedItems = (propertiesById) => {
 };
 
 export const getCompletedTransformedItems = (assessmentsByStatus = [], cities, localizationLabels, propertyId) => {
-  console.log(assessmentsByStatus, cities, localizationLabels, 'assessmentsByStatus, cities, localizationLabels');
   assessmentsByStatus.sort((x, y) => x.financialYear.localeCompare(y.financialYear));
   return (
     assessmentsByStatus &&
