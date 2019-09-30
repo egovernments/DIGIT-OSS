@@ -87,6 +87,8 @@ import org.egov.commons.dao.FunctionHibernateDAO;
 import org.egov.commons.dao.FundHibernateDAO;
 import org.egov.infra.microservice.models.BusinessDetails;
 import org.egov.infra.microservice.models.BusinessService;
+import org.egov.infra.microservice.models.BusinessServiceCriteria;
+import org.egov.infra.microservice.models.BusinessServiceMapping;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.FinancialStatus;
 import org.egov.infra.microservice.models.Instrument;
@@ -572,14 +574,31 @@ public class RemittanceServiceImpl extends RemittanceService {
             for (BusinessService bd : businessServiceList) {
                 businessDetailsCodeNameMap.put(bd.getCode(), bd.getBusinessService());
             }
+        Set<String> bsCodes = new HashSet<>();
+        for(ReceiptBean rb : resultList){
+            bsCodes.add(rb.getService());
+        }
+        BusinessServiceCriteria criteria = new BusinessServiceCriteria();
+        criteria.setCode(StringUtils.join(bsCodes,','));
+        criteria.setVoucherCreationEnabled(true);
+        List<BusinessServiceMapping> businessServiceMappingList = microserviceUtils.getBusinessServiceMappingBySearchCriteria(criteria );
+        Map<String,BusinessServiceMapping> bsServiceMapping = new HashMap<>();
+        businessServiceMappingList.stream().forEach(bsm -> {
+            bsServiceMapping.put(bsm.getCode(), bsm);
+        });
 
         for (ReceiptBean rb : resultList) {
-            if (rb.getFund() != null && !rb.getFund().isEmpty())
-                rb.setFundName(fundCodeNameMap.get(rb.getFund()));
-            if (rb.getDepartment() != null && !rb.getDepartment().isEmpty())
-                rb.setDepartmentName(deptCodeNameMap.get(rb.getDepartment()));
-            if (rb.getService() != null && !rb.getService().isEmpty())
-                rb.setServiceName(businessDetailsCodeNameMap.get(rb.getService()));
+            String serviceCode = rb.getService();
+            if (serviceCode != null && !serviceCode.isEmpty()){
+                rb.setServiceName(businessDetailsCodeNameMap.get(serviceCode));
+                BusinessServiceMapping serviceMapping = bsServiceMapping.get(serviceCode);
+                if(StringUtils.isNumeric(serviceMapping.getFund())){
+                    rb.setFundName(fundCodeNameMap.get(serviceMapping.getFund()));
+                }
+                if(StringUtils.isNoneBlank(serviceMapping.getDepartment())){
+                    rb.setDepartmentName(deptCodeNameMap.get(serviceMapping.getDepartment()));
+                }
+            }
         }
     }
 

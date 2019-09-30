@@ -52,6 +52,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.egov.infra.utils.ApplicationConstant.CITIZEN_ROLE_NAME;
 import static org.egov.infra.utils.DateUtils.toDefaultDateTimeFormat;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -105,6 +106,8 @@ import org.egov.infra.microservice.models.BusinessCategoryResponse;
 import org.egov.infra.microservice.models.BusinessDetails;
 import org.egov.infra.microservice.models.BusinessDetailsResponse;
 import org.egov.infra.microservice.models.BusinessService;
+import org.egov.infra.microservice.models.BusinessServiceCriteria;
+import org.egov.infra.microservice.models.BusinessServiceMapping;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.Designation;
 import org.egov.infra.microservice.models.EmployeeInfo;
@@ -936,7 +939,6 @@ public class MicroserviceUtils {
     public List<BankAccountServiceMapping> getBankAcntServiceMappings() {
 
         final RestTemplate restTemplate = createRestTemplate();
-
         final String url = hostUrl + bankAccountServiceMappingSearchUrl + "?tenantId=" + getTenentId();
 
         RequestInfo requestInfo = new RequestInfo();
@@ -957,7 +959,6 @@ public class MicroserviceUtils {
     public List<BankAccountServiceMapping> getBankAcntServiceMappingsByBankAcc(String bankAccount, String businessDetails) {
 
         final RestTemplate restTemplate = createRestTemplate();
-
         String url = hostUrl + bankAccountServiceMappingSearchUrl + "?tenantId=" + getTenentId();
 
         if (bankAccount != null && !bankAccount.isEmpty() && !bankAccount.equalsIgnoreCase("-1")) {
@@ -986,7 +987,6 @@ public class MicroserviceUtils {
     public List<BankAccountServiceMapping> createBankAcntServiceMappings(BankAccountServiceMapping basm) {
 
         final RestTemplate restTemplate = createRestTemplate();
-
         final String url = hostUrl + bankAccountServiceMappingCreateUrl;
 
         RequestInfo requestInfo = new RequestInfo();
@@ -1083,7 +1083,6 @@ public class MicroserviceUtils {
     }
 
     public List<Receipt> getReceipts(String ids, String status, String serviceCodes, Date fromDate, Date toDate) {
-
         String url = hostUrl + receiptSearchUrl + "?tenantId=" + getTenentId() + "&status=" + status
                 + "&businessCodes=" + serviceCodes + "&fromDate=" + fromDate.getTime() + "&toDate="
                 + toDate.getTime();
@@ -1106,7 +1105,6 @@ public class MicroserviceUtils {
     }
 
     public List<Receipt> getReceipts(String receiptNumbers) {
-
         final String url = hostUrl + receiptSearchUrl + "?tenantId=" + getTenentId() + "&receiptNumbers=" + receiptNumbers;
 
         RequestInfo requestInfo = new RequestInfo();
@@ -1122,7 +1120,6 @@ public class MicroserviceUtils {
     }
 
     public List<Receipt> getReceipts(String status, String serviceCode, String fund, String department, String receiptDate) {
-
         final String url = hostUrl + receiptSearchUrl + "?tenantId=" + getTenentId() + "&status=" + status
                 + "&businessCodes=" + serviceCode + "&fund=" + fund + "&department=" + department + "&fromDate="
                 + DateUtils.toDateUsingDefaultPattern(receiptDate).getTime() + "&toDate="
@@ -1149,7 +1146,6 @@ public class MicroserviceUtils {
 
     public List<Receipt> searchReciepts(String classification, Date fromDate, Date toDate, String businessCode,
             List<String> receiptNos) {
-
         final StringBuilder url = new StringBuilder(hostUrl + receiptSearchUrl);
         final RequestInfoWrapper request = new RequestInfoWrapper();
         final RequestInfo requestinfo = new RequestInfo();
@@ -1183,80 +1179,30 @@ public class MicroserviceUtils {
     }
 
     public InstrumentResponse reconcileInstruments(List<Instrument> instruments, String depositedBankAccountNum) {
-
-        final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
-//        FinancialStatus instrumentStatusReconciled = getInstrumentStatusByCode("Reconciled");
         FinancialStatus instrumentStatusReconciled = new FinancialStatus();
-        instrumentStatusReconciled.setCode("Deposited");
-        instrumentStatusReconciled.setName("Deposited");
-        for (Instrument i : instruments) {
-            i.setFinancialStatus(instrumentStatusReconciled);
-            if (depositedBankAccountNum != null) {
-                i.setBankAccount(new BankAccount());
-                i.getBankAccount().setAccountNumber(depositedBankAccountNum);
-            }
-        }
-        InstrumentRequest request = new InstrumentRequest();
-        request.setInstruments(instruments);
-        final RequestInfo requestinfo = new RequestInfo();
-
-        requestinfo.setAuthToken(getUserToken());
-
-        request.setRequestInfo(requestinfo);
-
-        return restTemplate.postForObject(url.toString(), request, InstrumentResponse.class);
+        instrumentStatusReconciled.setCode("Reconciled");
+        instrumentStatusReconciled.setName("Reconciled");
+        return this.updateInstruments(instruments, depositedBankAccountNum, instrumentStatusReconciled);
     }
 
     public InstrumentResponse depositeInstruments(List<Instrument> instruments, String depositedBankAccountNum) {
-
-        final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
-        FinancialStatus instrumentStatusReconciled = new FinancialStatus();
-        instrumentStatusReconciled.setCode("Deposited");
-        instrumentStatusReconciled.setName("Deposited");
-        for (Instrument i : instruments) {
-            i.setFinancialStatus(instrumentStatusReconciled);
-            i.getBank().setTenantId(getTenentId());
-            i.setBankAccount(new BankAccount());
-            i.getBankAccount().setAccountNumber(depositedBankAccountNum);
-        }
-        InstrumentRequest request = new InstrumentRequest();
-        request.setInstruments(instruments);
-        final RequestInfo requestinfo = new RequestInfo();
-
-        requestinfo.setAuthToken(getUserToken());
-
-        request.setRequestInfo(requestinfo);
-
-        return restTemplate.postForObject(url.toString(), request, InstrumentResponse.class);
+        FinancialStatus finStatus = new FinancialStatus();
+        finStatus.setCode("Deposited");
+        finStatus.setName("Deposited");
+        return this.updateInstruments(instruments, depositedBankAccountNum, finStatus);
     }
 
     public InstrumentResponse reconcileInstrumentsWithPayinSlipId(List<Instrument> instruments, String depositedBankAccountNum,
             String payinSlipId) {
-
-        final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
-//        FinancialStatus instrumentStatusReconciled = getInstrumentStatusByCode("Reconciled");
         FinancialStatus instrumentStatusReconciled = new FinancialStatus();
         instrumentStatusReconciled.setCode("Reconciled");
         for (Instrument i : instruments) {
-            i.setFinancialStatus(instrumentStatusReconciled);
-            i.setBankAccount(new BankAccount());
-            i.getBankAccount().setAccountNumber(depositedBankAccountNum);
             i.setPayinSlipId(payinSlipId);
         }
-
-        InstrumentRequest request = new InstrumentRequest();
-        request.setInstruments(instruments);
-        final RequestInfo requestinfo = new RequestInfo();
-
-        requestinfo.setAuthToken(getUserToken());
-
-        request.setRequestInfo(requestinfo);
-
-        return restTemplate.postForObject(url.toString(), request, InstrumentResponse.class);
+        return this.updateInstruments(instruments, depositedBankAccountNum, instrumentStatusReconciled);
     }
 
     public RemittanceResponse createRemittance(List<Remittance> remittanceList) {
-
         final StringBuilder url = new StringBuilder(hostUrl + remittanceCreateUrl);
         RemittanceRequest request = new RemittanceRequest();
         request.setRemittances(remittanceList);
@@ -1271,7 +1217,6 @@ public class MicroserviceUtils {
     }
 
     public ReceiptResponse updateReceipts(List<Receipt> receiptList) {
-
         final StringBuilder url = new StringBuilder(hostUrl + receiptUpdateUrl);
         ReceiptRequest request = new ReceiptRequest();
         receiptList.stream().forEach(rec -> {
@@ -1484,8 +1429,9 @@ public class MicroserviceUtils {
         ListIterator<ModuleDetail> listIterator = moduleDetailsList.listIterator();
         while(listIterator.hasNext()){
              ModuleDetail existModName = listIterator.next();
-            if(existModName.equals(moduleNme)){
+            if(existModName.getModuleName().equals(moduleNme)){
                 this.prepareMasterDetails(existModName.getMasterDetails(), masterName, filterKey, filterValue);
+                listIterator.remove();
                 listIterator.add(existModName);
                 return;
             }
@@ -1547,6 +1493,34 @@ public class MicroserviceUtils {
         return list;
     }
     
+    public List<BusinessServiceMapping> getBusinessServiceMappingBySearchCriteria(BusinessServiceCriteria criteria) {
+        List<BusinessServiceMapping> list = null;
+        List<ModuleDetail> moduleDetailsList = new ArrayList<>();
+        Field[] declaredFields = criteria.getClass().getDeclaredFields();
+        for(Field field : declaredFields){
+            field.setAccessible(true);
+            String fieldName = field.getName();
+            String fieldValue = null;
+            try {
+                if(field.getType().equals(Boolean.TYPE)){
+                    fieldValue = (Boolean)field.get(criteria) ? "true" : "false";
+                }else{
+                    fieldValue = (String)field.get(criteria);
+                }
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            if(StringUtils.isNotBlank(fieldValue)){
+                this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "BusinessServiceMapping", fieldName, fieldValue);
+            }
+        }
+        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true), Map.class);
+        if(postForObject != null){
+             list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.FinanceModule.BusinessServiceMapping"),new TypeReference<List<BusinessServiceMapping>>(){});
+        }
+        return list;
+    }
+    
     public List<TaxHeadMaster> getTaxheadsByServiceCode(String serviceCode) {
         List<TaxHeadMaster> list = null;
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
@@ -1559,7 +1533,7 @@ public class MicroserviceUtils {
     }
     
     public InstrumentResponse updateInstruments(List<Instrument> instruments, String depositedBankAccountNum, FinancialStatus finStatus) {
-        final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
+                final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
         for (Instrument i : instruments) {
             i.setFinancialStatus(finStatus);
             if (depositedBankAccountNum != null) {
