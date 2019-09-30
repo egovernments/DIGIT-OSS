@@ -163,7 +163,7 @@ class EventDetails extends Component {
               {entryFees > 0 && (
                 <div className="rainmaker-displayInline" style={{ marginTop: 8 }}>
                   <Icon name="rupee" action="custom" viewBox="10 0 24 24" style={{ height: "20px", width: "35px" }} />
-                  <Label label={`Rs ${entryFees}`} containerStyle={{ marginLeft: 5 }} />
+                  <Label label={`${entryFees}`} containerStyle={{ marginLeft: 5 }} />
                 </div>
               )}
               {openMap && (
