@@ -62,8 +62,16 @@ class DropDown extends Component {
   };
 
   onSelectFieldChange = (event, key, payload, imageUrl) => {
-    const { generalMDMSDataById, history, item, singleAssessmentByStatus } = this.props;
+    const { generalMDMSDataById, history, item, singleAssessmentByStatus=[] } = this.props;
     const { downloadReceipt } = this;
+    const callReciept=(isEmployeeReceipt=false)=>{
+      singleAssessmentByStatus.forEach((assessment)=>{
+        if (item.financialYear === assessment.financialYear  && assessment.receiptInfo.status != "Paid-Disable") {
+          item.consumerCode = item.propertyId + ':' + assessment.assessmentNumber;
+          downloadReceipt(item, generalMDMSDataById, isEmployeeReceipt, imageUrl);
+        }
+      })
+    }
     switch (payload) {
       case "Re-Assess":
         history &&
@@ -77,32 +85,14 @@ class DropDown extends Component {
         //Need 1. Property, 2. Property Details, 3. receiptdetails
         //&& assessment.receiptInfo.status == "Paid"
         // call receiptcreate func
-        for (let assessment of singleAssessmentByStatus) {
-          if (item.financialYear === assessment.financialYear && assessment.receiptInfo.status != "Paid-Disable" ) {
-            item.propertyDetails.assessmentNumber = assessment.assessmentNumber;
-            item.consumerCode = item.propertyId + ':' + item.propertyDetails.assessmentNumber;
-            downloadReceipt(item, generalMDMSDataById, false, imageUrl);
-          }
-        }
+        callReciept()
 
         break;
       case "Download Citizen Receipt":
-        for (let assessment of singleAssessmentByStatus) {
-          if (item.financialYear === assessment.financialYear  && assessment.receiptInfo.status != "Paid-Disable") {
-            item.propertyDetails.assessmentNumber = assessment.assessmentNumber;
-            item.consumerCode = item.propertyId + ':' + item.propertyDetails.assessmentNumber;
-            downloadReceipt(item, generalMDMSDataById, false, imageUrl);
-          }
-        }
+        callReciept()
         break;
       case "Download Employee Receipt":
-        for (let assessment of singleAssessmentByStatus) {
-          if (item.financialYear === assessment.financialYear  && assessment.receiptInfo.status != "Paid-Disable" ) {
-            item.propertyDetails.assessmentNumber = assessment.assessmentNumber;
-            item.consumerCode = item.propertyId + ':' + item.propertyDetails.assessmentNumber;
-            downloadReceipt(item, generalMDMSDataById, true, imageUrl);
-          }
-        }
+        callReciept(true)
 
         break;
       case "Complete Payment":
@@ -121,39 +111,41 @@ class DropDown extends Component {
 
     try {
       const payload = await httpRequest("/collection-services/receipts/_search", "_search", queryObj, {}, [], { ts: 0 });
-      const lastAmount = payload && payload.Receipt && get(payload.Receipt[0], "Bill[0].billDetails[0].totalAmount");
-      const totalAmountBeforeLast =
-        payload &&
-        payload.Receipt &&
-        payload.Receipt.reduce((acc, curr, index) => {
-          if (index !== 0) {
-            acc += get(curr, "Bill[0].billDetails[0].amountPaid");
-          }
-          return acc;
-        }, 0);
-      const totalAmountToPay = lastAmount + totalAmountBeforeLast;
-      const totalAmountPaid =
-        payload &&
-        payload.Receipt &&
-        payload.Receipt.reduce((acc, curr) => {
-          acc += get(curr, "Bill[0].billDetails[0].amountPaid");
-          return acc;
-        }, 0);
-      const receiptDetails =
-        payload &&
-        payload.Receipt &&
-        createReceiptDetails(
-          item.property,
-          item.propertyDetails,
-          payload.Receipt[0],
-          item.localizationLabels,
-          item.cities,
-          totalAmountToPay,
-          totalAmountPaid
-        );
-      localStorageSet("rd-propertyId", item.propertyId);
-      localStorageSet("rd-assessmentNumber", item.propertyDetails.assessmentNumber);
-      receiptDetails && generateReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl, isEmployeeReceipt, { itemData: item, property: item.property, receipt: payload.Receipt });
+      // const lastAmount = payload && payload.Receipt && get(payload.Receipt[0], "Bill[0].billDetails[0].totalAmount");
+      // const totalAmountBeforeLast =
+      //   payload &&
+      //   payload.Receipt &&
+      //   payload.Receipt.reduce((acc, curr, index) => {
+      //     if (index !== 0) {
+      //       acc += get(curr, "Bill[0].billDetails[0].amountPaid");
+      //     }
+      //     return acc;
+      //   }, 0);
+      // const totalAmountToPay = lastAmount + totalAmountBeforeLast;
+      // const totalAmountPaid =
+      //   payload &&
+      //   payload.Receipt &&
+      //   payload.Receipt.reduce((acc, curr) => {
+      //     acc += get(curr, "Bill[0].billDetails[0].amountPaid");
+      //     return acc;
+      //   }, 0);
+      payload.Receipt.forEach((receipt)=>{
+        const receiptDetails =
+          payload &&
+          payload.Receipt && createReceiptDetails(
+            item.property,
+            item.propertyDetails,
+            receipt,
+            item.localizationLabels,
+            item.cities,
+            get(receipt, "Bill[0].billDetails[0].totalAmount"),
+            get(receipt, "Bill[0].billDetails[0].amountPaid")
+          );
+        localStorageSet("rd-propertyId", item.propertyId);
+        localStorageSet("rd-assessmentNumber", item.propertyDetails.assessmentNumber);
+        receiptDetails && generateReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl, isEmployeeReceipt, { itemData: item, property: item.property, receipt: payload.Receipt });
+      })
+
     } catch (e) {
       console.log(e);
     }
