@@ -78,7 +78,7 @@ class DropDown extends Component {
         //&& assessment.receiptInfo.status == "Paid"
         // call receiptcreate func
         for (let assessment of singleAssessmentByStatus) {
-          if (item.financialYear === assessment.financialYear ) {
+          if (item.financialYear === assessment.financialYear && assessment.receiptInfo.status != "Paid-Disable" ) {
             item.propertyDetails.assessmentNumber = assessment.assessmentNumber;
             item.consumerCode = item.propertyId + ':' + item.propertyDetails.assessmentNumber;
             downloadReceipt(item, generalMDMSDataById, false, imageUrl);
@@ -88,17 +88,16 @@ class DropDown extends Component {
         break;
       case "Download Citizen Receipt":
         for (let assessment of singleAssessmentByStatus) {
-          if (item.financialYear === assessment.financialYear ) {
+          if (item.financialYear === assessment.financialYear  && assessment.receiptInfo.status != "Paid-Disable") {
             item.propertyDetails.assessmentNumber = assessment.assessmentNumber;
             item.consumerCode = item.propertyId + ':' + item.propertyDetails.assessmentNumber;
             downloadReceipt(item, generalMDMSDataById, false, imageUrl);
           }
         }
-        downloadReceipt(item, generalMDMSDataById, false, imageUrl);
         break;
       case "Download Employee Receipt":
         for (let assessment of singleAssessmentByStatus) {
-          if (item.financialYear === assessment.financialYear ) {
+          if (item.financialYear === assessment.financialYear  && assessment.receiptInfo.status != "Paid-Disable" ) {
             item.propertyDetails.assessmentNumber = assessment.assessmentNumber;
             item.consumerCode = item.propertyId + ':' + item.propertyDetails.assessmentNumber;
             downloadReceipt(item, generalMDMSDataById, true, imageUrl);
