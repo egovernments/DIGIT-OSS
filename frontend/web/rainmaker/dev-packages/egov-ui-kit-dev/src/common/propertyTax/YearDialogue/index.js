@@ -73,7 +73,6 @@ class YearDialog extends Component {
 
   resetForm = () => {
     const { form, removeForm, prepareFormData } = this.props;
-    resetFormWizard(form, removeForm);
     prepareFormData("Properties", []);
   };
 
@@ -96,7 +95,6 @@ class YearDialog extends Component {
                   key={index}
                   label={item}
                   history={history}
-                  resetFormWizard={this.resetForm}
                   urlToAppend={urlToAppend}
                 />
                 ))}
