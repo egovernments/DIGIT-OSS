@@ -110,6 +110,7 @@ class YearDialog extends Component {
                 labelColor="#fe7a51"
                 buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={() => {
                   if (this.state.selectedYear !== '') {
+                    this.resetForm()
                     history && urlToAppend ? history.push(`${urlToAppend}&FY=${this.state.selectedYear}`) : history.push(`/property-tax/assessment-form?FY=${this.state.selectedYear}&type=new`);
                   }
                   else {
