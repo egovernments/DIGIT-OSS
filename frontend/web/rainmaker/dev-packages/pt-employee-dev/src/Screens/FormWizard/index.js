@@ -735,7 +735,8 @@ class FormWizard extends Component {
     const {
       selected,
       formValidIndexArray,
-      financialYearFromQuery
+      financialYearFromQuery,
+      estimation
     } = this.state;
     const { setRoute, displayFormErrorsAction, form } = this.props;
     switch (selected) {
@@ -945,9 +946,12 @@ class FormWizard extends Component {
 
         break;
       case 3:
-        // pay();
+        if (estimation[0].totalAmount < 0) {
+          alert('Property Tax amount cannot be Negative!');
+        } else {
+          createAndUpdate(index);
+        }
 
-        createAndUpdate(index);
 
         break;
       case 4:
@@ -1485,15 +1489,12 @@ class FormWizard extends Component {
         )
       );
     }
-
     try {
       set(
         prepareFormData,
         "Properties[0].propertyDetails[0].citizenInfo.name",
         get(prepareFormData, "Properties[0].propertyDetails[0].owners[0].name")
       );
-
-
       const properties = normalizePropertyDetails(
         prepareFormData.Properties,
         this
@@ -1507,8 +1508,6 @@ class FormWizard extends Component {
         }
       );
       console.log(createPropertyResponse, 'createPropertyResponse');
-
-
       this.setState(
         {
           assessedPropertyDetails: createPropertyResponse,

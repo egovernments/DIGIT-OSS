@@ -73,7 +73,7 @@ import commonConfig from "config/common.js";
 import "./index.css";
 import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementCard";
 import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/acknowledgementFormPDF";
-import {getHeaderDetails} from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
+import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
 
 
 class FormWizard extends Component {
@@ -782,9 +782,9 @@ class FormWizard extends Component {
         });
 
     } catch (e) {
-      try{
+      try {
         hideSpinner();
-      }catch(e){
+      } catch (e) {
         console.log('====================================');
         console.log(e);
         console.log('====================================');
@@ -798,7 +798,7 @@ class FormWizard extends Component {
   updateIndex = index => {
     // utils
     const { pay, estimate, createAndUpdate } = this;
-    const { selected, formValidIndexArray } = this.state;
+    const { selected, formValidIndexArray, estimation } = this.state;
     const { displayFormErrorsAction, form } = this.props;
     switch (selected) {
       //validating property address is validated
@@ -1004,7 +1004,12 @@ class FormWizard extends Component {
 
         break;
       case 3:
-        createAndUpdate(index);
+        if (estimation[0].totalAmount < 0) {
+          alert('Property Tax amount cannot be Negative!');
+        } else {
+          createAndUpdate(index);
+        }
+
 
         break;
       case 4:
@@ -1499,11 +1504,11 @@ class FormWizard extends Component {
     }
     return buttonLabel;
   }
-  getHeader(selected, search,PTUID) {
+  getHeader(selected, search, PTUID) {
     const locale = getLocale() || "en_IN";
     const localizationLabelsData = initLocalizationLabels(locale);
     const addNewPropertyLabel = getTranslatedLabel('PT_NEW_PROPERTY_HEADER', localizationLabelsData);
-    const propertyId = getQueryValue(search, "propertyId")||PTUID;
+    const propertyId = getQueryValue(search, "propertyId") || PTUID;
     const assessmentYear = getQueryValue(search, "FY");
     let isReassesment = Boolean(getQueryValue(search, "isReassesment").replace('false', ''));
     let isAssesment = Boolean(getQueryValue(search, "isAssesment").replace('false', ''));
@@ -1521,7 +1526,7 @@ class FormWizard extends Component {
           (headerObj.header = 'PT_PROPERTY_ASSESSMENT_HEADER') :
           (isReassesment ?
             (headerObj.header = "PT_REASSESS_PROPERTY") :
-            (headerObj.headerValue = headerObj.headerValue +':' + addNewPropertyLabel,
+            (headerObj.headerValue = headerObj.headerValue + ':' + addNewPropertyLabel,
               headerObj.subHeaderValue = '',
               headerObj.header = "PT_PROPERTY_ASSESSMENT_HEADER")));
         break;
@@ -1629,13 +1634,13 @@ class FormWizard extends Component {
   };
   downloadAcknowledgementForm = () => {
     const { assessedPropertyDetails, imageUrl } = this.state;
-    const {common,app={}}=this.props;
+    const { common, app = {} } = this.props;
     const { Properties } = assessedPropertyDetails;
     const { address, propertyDetails, propertyId } = Properties[0];
     const { owners } = propertyDetails[0];
     const { localizationLabels } = app;
     const { cities } = common;
-    const header = getHeaderDetails(Properties[0],cities,localizationLabels,true)
+    const header = getHeaderDetails(Properties[0], cities, localizationLabels, true)
     let receiptDetails = {};
     receiptDetails = {
       address,
@@ -1657,20 +1662,20 @@ class FormWizard extends Component {
       selected,
       ownerInfoArr,
       formValidIndexArray,
-      dialogueOpen,assessedPropertyDetails={}
+      dialogueOpen, assessedPropertyDetails = {}
     } = this.state;
 
-    
-    const { Properties=[] } = assessedPropertyDetails;
-    let   propertyId ='';
-    for(let pty of Properties){
-      propertyId=pty.propertyId;
+
+    const { Properties = [] } = assessedPropertyDetails;
+    let propertyId = '';
+    for (let pty of Properties) {
+      propertyId = pty.propertyId;
     }
     const fromReviewPage = selected === 3;
     const { history, location } = this.props;
     const { search } = location;
     // const propertyId = getQueryValue(search, "propertyId");
-    const { header, subHeaderValue, headerValue } = this.getHeader(selected, search,propertyId);
+    const { header, subHeaderValue, headerValue } = this.getHeader(selected, search, propertyId);
 
     return (
       <div className="wizard-form-main-cont">
@@ -1699,7 +1704,7 @@ class FormWizard extends Component {
 }
 
 const mapStateToProps = state => {
-  const { form, common,app } = state || {};
+  const { form, common, app } = state || {};
   const { propertyAddress } = form;
   const { city } =
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
