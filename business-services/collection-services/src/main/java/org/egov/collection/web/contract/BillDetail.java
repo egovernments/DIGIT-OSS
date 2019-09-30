@@ -85,9 +85,6 @@ public class BillDetail {
 	@JsonProperty("bill")
 	private String bill = null;
 
-	@JsonProperty("businessService")
-	private String businessService = null;
-
 	@JsonProperty("billNumber")
 	private String billNumber = null;
 
@@ -99,9 +96,6 @@ public class BillDetail {
 
 	@JsonProperty("consumerType")
 	private String consumerType = null;
-
-	@JsonProperty("minimumAmount")
-	private BigDecimal minimumAmount = null;
 
 	@JsonProperty("totalAmount")
 	@NotNull
@@ -118,12 +112,6 @@ public class BillDetail {
 
 	@JsonProperty("collectedAmount")
 	private BigDecimal collectedAmount = null;
-
-	@JsonProperty("collectionModesNotAllowed")
-	private List<String> collectionModesNotAllowed = null;
-
-	@JsonProperty("partPaymentAllowed")
-	private Boolean partPaymentAllowed = null;
 
 	@JsonProperty("additionalDetails")
 	private JsonNode additionalDetails = null;
@@ -155,17 +143,6 @@ public class BillDetail {
 	@JsonProperty("manualReceiptDate")
 	private Long manualReceiptDate = null;
 
-	@JsonProperty("stateId")
-	private String stateId = null;
-
-	@JsonProperty("fund")
-	private String fund = null;
-
-	@JsonProperty("function")
-	private String function = null;
-
-	@JsonProperty("department")
-	private String department = null;
 
 	@JsonProperty("billAccountDetails")
 	private List<BillAccountDetail> billAccountDetails = null;
@@ -177,8 +154,6 @@ public class BillDetail {
 	@JsonProperty("collectionType")
 	private CollectionType collectionType = null;
 
-	@JsonProperty("isAdvanceAllowed")
-	private Boolean isAdvanceAllowed;
 
 	private String billDescription;
 

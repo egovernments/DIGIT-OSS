@@ -50,19 +50,14 @@ public class Bill {
 	  @JsonProperty("payerId")
 	  private String payerId = null;
 
-	  @JsonProperty("isActive")
-	  private Boolean isActive = null;
+	  @JsonProperty("status")
+	  private StatusEnum status = null;
 
 	  @JsonProperty("isCancelled")
 	  private Boolean isCancelled = null;
 
 	  @JsonProperty("additionalDetails")
 	  private Object additionalDetails = null;
-
-	  @JsonProperty("taxAndPayments")
-	  @Valid
-	  @NotNull
-	  private List<TaxAndPayment> taxAndPayments = null;
 
 	  @JsonProperty("billDetails")
 	  @Valid
@@ -73,5 +68,43 @@ public class Bill {
 
 	  @JsonProperty("auditDetails")
 	  private AuditDetails auditDetails = null;
+
+	  @JsonProperty("collectionModesNotAllowed")
+	  private List<String> collectionModesNotAllowed = null;
+
+
+	  @JsonProperty("partPaymentAllowed")
+	  private Boolean partPaymentAllowed = null;
+
+	  @JsonProperty("isAdvanceAllowed")
+	  private Boolean isAdvanceAllowed;
+
+	  @JsonProperty("minimumAmountToBePaid")
+	  private BigDecimal minimumAmountToBePaid = null;
+
+	  @JsonProperty("businessService")
+	  private String businessService = null;
+
+	  @JsonProperty("totalAmount")
+	  private BigDecimal totalAmount = null;
+
+
+	  public enum StatusEnum {
+		  ACTIVE("ACTIVE"),
+
+		  CANCELLED("CANCELLED"),
+
+		  PAID("PAID"),
+
+		  EXPIRED("EXPIRED");
+
+		  private String value;
+
+		  StatusEnum(String value) {
+		  this.value = value;
+		}
+	  }
+
+
 
 }

@@ -9,22 +9,11 @@ import static org.egov.collection.model.enums.ReceiptStatus.REMITTED;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.egov.collection.model.AuditDetails;
-import org.egov.collection.model.Instrument;
-import org.egov.collection.model.TransactionType;
+import org.egov.collection.model.*;
 import org.egov.collection.model.enums.CollectionType;
 import org.egov.collection.model.enums.InstrumentStatusEnum;
 import org.egov.collection.model.enums.Purpose;
@@ -92,7 +81,7 @@ public class ReceiptEnricher {
      *
      * @param receiptReq Receipt to be enriched
      */
-    public void enrichReceiptPreValidate(ReceiptReq receiptReq) {
+   /* public void enrichReceiptPreValidate(ReceiptReq receiptReq) {
     	
         Receipt receipt = receiptReq.getReceipt().get(0);
         Bill billFromRequest = receipt.getBill().get(0);
@@ -168,87 +157,87 @@ public class ReceiptEnricher {
         List<Receipt> receipts = new ArrayList<>();
         receipts.add(receipt);
         receiptReq.setReceipt(receipts);
-    }
+    }*/
 
-    /**
-     * Validates taxAndPayment array as follows:
-     * 1. If part payment is allowed, amountPaid can be less than or equal to taxAmount.
-     * 2. If the part payment is not allowed, amountPaid should be equal to taxAmount.
-     * 3. Other sanity checks like if the businessservices sent in the request are valid etc.
-     * 4. Also, enriches the validatedBill with the amountPaid value from the request.
-     *
-     * @param billFromRequest
-     * @param validatedBill
-     */
-    public void validateTaxAndPayment(Bill billFromRequest, Bill validatedBill) {
-    	
-        Map<String, String> errorMap = new HashMap<>();
-        Map<String, BigDecimal> mapOfBusinessSvcAndAmtPaid = billFromRequest.getTaxAndPayments().stream()
-                .collect(Collectors.toMap(TaxAndPayment::getBusinessService, TaxAndPayment::getAmountPaid));
-        Map<String, BigDecimal> mapOfBusinessSvcAndTaxAmt = validatedBill.getTaxAndPayments().stream()
-                .collect(Collectors.toMap(TaxAndPayment::getBusinessService, TaxAndPayment::getTaxAmount));
-        billFromRequest.getTaxAndPayments().forEach(taxAndPayment -> {
-            BillDetail billDetail = getBillDetail(validatedBill, taxAndPayment.getBusinessService());
-            if (null == billDetail.getPartPaymentAllowed() || !billDetail.getPartPaymentAllowed()) {
-                if (mapOfBusinessSvcAndAmtPaid.keySet().size() != mapOfBusinessSvcAndTaxAmt.keySet().size()) {
-                    errorMap.put("INVALID_TAXANDPAYMENT_DATA_CODE", "taxAndPayment should have all the businessCodes as part payment is not allowed.");
-                } else {
-                    if (!new HashSet<>(mapOfBusinessSvcAndAmtPaid.keySet()).equals(new HashSet<>(mapOfBusinessSvcAndTaxAmt.keySet()))) {
-                        errorMap.put("INVALID_TAXANDPAYMENT_DATA_CODE", "taxAndPayment should have all the businessCodes as part payment is not allowed.");
-                    }
-                }
-                if (!CollectionUtils.isEmpty(errorMap.keySet())) {
-                    throw new CustomException(errorMap);
-                }
-                if (taxAndPayment.getAmountPaid().compareTo(BigDecimal.ZERO) <= 0 && taxAndPayment.getTaxAmount().compareTo(BigDecimal.ZERO) != 0) {
-                    errorMap.put("INVALID_AMT_PAID_ZERO_NEG_CODE", "Amount paid in the taxAndPayment array cannot be less than or equal to zero");
-                }
-                if (mapOfBusinessSvcAndAmtPaid.get(taxAndPayment.getBusinessService())
-                        .compareTo(mapOfBusinessSvcAndTaxAmt.get(taxAndPayment.getBusinessService())) != 0) {
-                    errorMap.put("INVALID_AMT_PAID_CODE", "Amount paid in the taxAndPayment array should be equal to Tax Amount!");
-                }
-                
-            } else {
-                if (taxAndPayment.getAmountPaid().compareTo(BigDecimal.ZERO) < 0) {
-                    errorMap.put("INVALID_AMT_PAID_NEG_CODE", "Amount paid in the taxAndPayment array cannot be less than zero");
-                }
-                if (null == mapOfBusinessSvcAndTaxAmt.get(taxAndPayment.getBusinessService())) {
-                    errorMap.put("INVALID_BUSINESSERVICE_CODE", "taxAndPayment should have payments against only valid businesservices.");
-                }
-            }
-            if (null == billDetail.getIsAdvanceAllowed() || !billDetail.getIsAdvanceAllowed()) {
-                if (taxAndPayment.getAmountPaid().compareTo(taxAndPayment.getTaxAmount()) > 0) {
-                    errorMap.put("INVALID_AMT_PAID_ADV", "Amount paid in the taxAndPayment array cannot greather than Tax Amount");
-                }
-            }
-        });
-        if (!CollectionUtils.isEmpty(errorMap.keySet())) {
-            throw new CustomException(errorMap);
+
+
+    public void enrichPaymentPreValidate(PaymentRequest paymentRequest) {
+
+        Payment payment = paymentRequest.getPayment();
+        List<String> billIds = payment.getPaymentDetails().stream().map(PaymentDetail::getBillId).collect(Collectors.toList());
+
+        AuditDetails auditDetails = AuditDetails.builder().createdBy(paymentRequest.getRequestInfo().getUserInfo().getId
+                ().toString()).createdDate(System.currentTimeMillis()).lastModifiedBy(paymentRequest.getRequestInfo().getUserInfo().getId
+                ().toString()).lastModifiedDate(System.currentTimeMillis()).build();
+
+        if (isNull(paymentRequest.getRequestInfo().getUserInfo()) || isNull(paymentRequest.getRequestInfo().getUserInfo()
+                .getId())) {
+            throw new CustomException("USER_INFO_INVALID", "Invalid user info in request info, user id is mandatory");
         }
-        validatedBill.getTaxAndPayments().forEach(taxAndPayment -> {
-            BigDecimal amount = mapOfBusinessSvcAndAmtPaid.get(taxAndPayment.getBusinessService());
-            if (null != amount)
-                taxAndPayment.setAmountPaid(amount);
+
+        List<Bill> validatedBills = billingRepository.fetchBill(paymentRequest.getRequestInfo(), payment.getTenantId(), billIds);
+
+        Map<String,Bill> billIdToBillMap = new HashMap<>();
+
+        Map<String,String> errorMap = new HashMap<>();
+
+        // If the bills is non-empty list payer info is added to the bil
+        if(CollectionUtils.isEmpty(validatedBills))
+            errorMap.put("INVALID_BILL_ID", "Bill ID provided does not exist or is in an invalid state");
+        else
+        validatedBills.forEach(bill -> {
+            billIdToBillMap.put(bill.getId(), bill);
+            if (CollectionUtils.isEmpty(bill.getBillDetails())) {
+                log.error("Bill ID provided does not exist or is in an invalid state " + bill.getId());
+                errorMap.put("INVALID_BILL_ID", "Bill ID provided does not exist or is in an invalid state");
+            }
+            else {
+                bill.setPaidBy(payment.getPaidBy());
+                bill.setPayerName(payment.getPayerName());
+                bill.setMobileNumber(payment.getMobileNumber());
+                bill.setPayerAddress(payment.getPayerAddress());
+            }
         });
+
+        // Assigns bill object to each paymentDetail if no  bill object is found the billId from paymentDetail is added in error map
+        payment.getPaymentDetails().forEach(paymentDetail -> {
+            if(billIdToBillMap.get(paymentDetail.getBillId())==null)
+                errorMap.put("INVALID PAYMENTDETAIL","No bill found for the bill id: "+paymentDetail.getBillId());
+            else {
+                validatePaymentDetailAgainstBill(payment.getPaymentMode(),billIdToBillMap.get(paymentDetail.getBillId()),paymentDetail,errorMap);
+                paymentDetail.setBill(billIdToBillMap.get(paymentDetail.getBillId()));
+                paymentDetail.setId(UUID.randomUUID().toString());
+            }
+        });
+
+        if(!errorMap.isEmpty())
+            throw new CustomException(errorMap);
+
+
+
+        payment.setAuditDetails(auditDetails);
+
     }
 
 
+
+
+
+
     /**
-     * Fetches bill detail based on businessservice
+     * Fetches bill  based on businessservice
      *
      * @param validatedBill
      * @param businessService
      * @return
      */
-    public BillDetail getBillDetail(Bill validatedBill, String businessService) {
-        BillDetail billDetail = new BillDetail();
-        for (BillDetail detail : validatedBill.getBillDetails()) {
-            if (detail.getBusinessService().equals(businessService)) {
-                billDetail = detail;
-                break;
-            }
-        }
-        return billDetail;
+    public List<Bill> getBillForBusinessService(List<Bill> validatedBill, String businessService) {
+        List<Bill> bills = new LinkedList<>();
+        validatedBill.forEach(bill -> {
+            if(bill.getBusinessService().equalsIgnoreCase(businessService))
+                bills.add(bill);
+        });
+        return bills;
     }
 
 
@@ -402,7 +391,69 @@ public class ReceiptEnricher {
                 });
             });
         }
+    }
 
+
+    /**
+     * Validates the paymentDetail with the bill
+     * @param paymentMode The payment mode
+     * @param bill Bill against which payment is made
+     * @param paymentDetail The payment detail for the bill
+     * @param errorMap Error map to catch errors
+     */
+    private void validatePaymentDetailAgainstBill(String paymentMode,Bill bill,PaymentDetail paymentDetail,Map<String,String> errorMap){
+
+        // Total amount to be paid should be same in bill and paymentDetail
+        if(paymentDetail.getTotalDue().compareTo(bill.getTotalAmount())!=0)
+            errorMap.put("INVALID_PAYMENTDETAIL","The amount to be paid is mismatching with bill for paymentDetial with bill id: "+bill.getId());
+
+        // Amount to be paid should be grater than minimum collection amount
+        if(bill.getMinimumAmountToBePaid() != null && paymentDetail.getTotalAmountPaid().compareTo(bill.getMinimumAmountToBePaid())==-1)
+            errorMap.put("INVALID_PAYMENTDETAIL","The amount to be paid cannot be less than minimum amount to be paid");
+
+        // In case of partial payment checks if it is allowed in bill
+        if((bill.getPartPaymentAllowed()==null || !bill.getPartPaymentAllowed())
+                && paymentDetail.getTotalAmountPaid().compareTo(bill.getTotalAmount())==-1)
+            errorMap.put("INVALID_PAYMENTDETAIL","The amount to be paid is less than amount due");
+
+        // In case of advance payment checks if it is allowed in bill
+        if((bill.getIsAdvanceAllowed()==null || !bill.getIsAdvanceAllowed())
+                && paymentDetail.getTotalAmountPaid().compareTo(bill.getTotalAmount())==1)
+            errorMap.put("INVALID_PAYMENTDETAIL","The amount to be paid is more than amount due");
+
+        // Checks if the payment mode is allowed by the bill
+        if(!CollectionUtils.isEmpty(bill.getCollectionModesNotAllowed()) && bill.getCollectionModesNotAllowed().contains(paymentMode))
+            errorMap.put("INVALID_PAYMENTDETAIL","The paymentMode: "+paymentMode+" is not allowed for the bill: "+bill.getId());
+
+        // Checks if the amount paid is not negative
+        if(paymentDetail.getTotalAmountPaid().compareTo(BigDecimal.ZERO)<0)
+            errorMap.put("INVALID_PAYMENTDETAIL","The amount paid for the paymentDetail with bill number: "+paymentDetail.getBillId());
+
+        // Zero amount payment is allowed only if bill amount is zero
+        if(paymentDetail.getTotalAmountPaid().compareTo(BigDecimal.ZERO)==0 && bill.getTotalAmount().compareTo(BigDecimal.ZERO) > 0)
+            errorMap.put("INVALID_PAYMENTDETAIL","The amount paid for the paymentDetail with bill number: "+paymentDetail.getBillId());
+
+        // Checks if the amount to be paid is fractional
+        if((bill.getTotalAmount().divide(BigDecimal.ONE)).doubleValue()!=0)
+            errorMap.put("INVALID_BILL","The due amount cannot be fractional");
+
+        // Checks if the amount paid is fractional
+        if((paymentDetail.getTotalAmountPaid().divide(BigDecimal.ONE)).doubleValue()!=0)
+            errorMap.put("INVALID_PAYMENTDETAIL","The amount paid cannot be fractional");
+
+        // Checks if the bill is expired
+        bill.getBillDetails().forEach(billDetail -> {
+            if (isNull(billDetail.getExpiryDate()) || System.currentTimeMillis() >= billDetail.getExpiryDate()) {
+                errorMap.put("BILL_EXPIRED", "Bill expired or invalid, regenerate bill!");
+            }
+        });
 
     }
+
+
+
+    private void enrichPaymentDetail(PaymentDetail paymentDetail){}
+
+
+
 }
