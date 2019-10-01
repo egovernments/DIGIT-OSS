@@ -41,7 +41,7 @@ class Events extends React.Component {
     let eventarray = notifications && Object.values(notifications).filter((item) => item.type === "EVENTSONGROUND" && !item.referenceId);
     return (
       <Screen className="notifications-screen-style" loading={loading}>
-        <Notifications notifications={eventarray} history={history} />;
+        <Notifications notifications={eventarray} history={history} />
       </Screen>
     );
   }
