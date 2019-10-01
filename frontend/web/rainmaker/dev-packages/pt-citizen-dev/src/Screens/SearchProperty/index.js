@@ -191,7 +191,7 @@ class SearchProperty extends Component {
           url={urls.length > 0 ? urls : urlArray}
           history={history}
         /> */}
-        <br />
+        {/* <br /> */}
         <div className="rainmaker-displayInline inner-header-style">
           <Label
             label="PT_PROPERTY_TAX"
@@ -235,6 +235,7 @@ class SearchProperty extends Component {
           onResetClick={this.onResetClick}
         />
         <Hidden xsDown>
+        {/* {showTable && tableData.length === 0 && loading==false&&  */}
           {tableData && tableData.length > 0 && showTable ? (
             <PropertyTable
               sortOnObject="propertyId"
@@ -244,7 +245,7 @@ class SearchProperty extends Component {
           ) : null}
         </Hidden>
         <Hidden smUp>
-          {tableData && tableData.length > 0 && (
+          {tableData && tableData.length > 0 && showTable &&  (
 
             <Label
               label="PT_SEARCH_RESULTS"
@@ -257,8 +258,8 @@ class SearchProperty extends Component {
             />
           )}
           <SingleProperty
-            data={searchResult}
-            action={"PT_PAYMENT_ACCESSANDPAY"}
+            data={tableData}
+            action={"PT_ADD_ASSESS_PROPERTY"}
             onActionClick={this.onAddButtonClick}
           />
         </Hidden>

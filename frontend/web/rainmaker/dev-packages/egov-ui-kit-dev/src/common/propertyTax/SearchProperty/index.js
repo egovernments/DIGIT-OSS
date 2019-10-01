@@ -203,9 +203,7 @@ class SearchProperty extends Component {
             labelStyle={{ marginTop: "20px" }}
           />
           <div
-            className="rainmaker-displayInline"
-            onClick={this.onAddButtonClick}
-          >
+            className="rainmaker-displayInline"  >
             <Button
               Icon={
                 <Icon
@@ -229,13 +227,6 @@ class SearchProperty extends Component {
               primary={true}
               fullWidth={true}
             />
-            {/* <Icon
-              action="content"
-              name="add"
-              color="#fe7a51"
-              style={{ height: 22 }}
-            /> */}
-            {/* <Label label="ADD NEW PROPERTY" color="#fe7a51" /> */}
           </div>
         </div>
         <PropertySearchFormHOC history={this.props.history} onSearchClick={this.onSearchClick} onResetClick={this.onResetClick} />
