@@ -259,7 +259,7 @@ class SearchProperty extends Component {
           )}
           <SingleProperty
             data={tableData}
-            action={"PT_ADD_ASSESS_PROPERTY"}
+            action={"PT_PAYMENT_ACCESSANDPAY"}
             onActionClick={this.onAddButtonClick}
           />
         </Hidden>
