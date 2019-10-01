@@ -59,7 +59,7 @@
 @media only screen and (min-width: 768px) {
   .service-nearby-icon-cont {
     background-color: #fff;
-    border-radius: 50%;
+    border-radius: 100%;
     padding: 16px;
     width: 98px;
     height: 98px;
@@ -79,6 +79,12 @@
   align-items: center;
 }
 
+
+.servicelist-style{
+  border-radius:inherit !important;
+  padding : 8px 8px !important;
+  margin :8px 0px !important
+}
 
 
 
