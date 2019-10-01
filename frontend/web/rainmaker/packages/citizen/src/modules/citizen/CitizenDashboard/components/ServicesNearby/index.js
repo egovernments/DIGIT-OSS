@@ -27,11 +27,18 @@ class ServicesNearby extends React.Component {
       <Grid container>
         {getServicesNearBy().map((service) => {
           return (
-            <Grid item xs={3} sm={2} align="center" 
-              style={{ padding: "0px 8px", cursor: "pointer" }} 
+            // <Grid item xs={3} sm={2} align="center" 
+            //   style={{ padding: "0px 8px", cursor: "pointer" }} 
+            //   onClick={() =>onSeviceClick(service.route)}>
+            //   <div className="service-nearby-icon-cont">{service.icon}</div>
+            //   <Label dark={true} className="service-label-cont" fontSize={14} label={service.label} />
+            // </Grid>
+            <Grid item xs={6} sm={6} align="center" 
+              style={{ paddingRight: "8px", cursor: "pointer" }} 
               onClick={() =>onSeviceClick(service.route)}>
-              <div className="service-nearby-icon-cont">{service.icon}</div>
-              <Label dark={true} className="service-label-cont" fontSize={14} label={service.label} />
+              <div className="local-information-cont" >{service.icon}
+              <Label labelStyle={{ paddingLeft: "10px" }} dark={true} fontSize={14} label={service.label}  />
+              </div>
             </Grid>
           );
         })}
