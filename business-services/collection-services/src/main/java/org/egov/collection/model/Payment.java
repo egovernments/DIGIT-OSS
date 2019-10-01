@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.egov.collection.model.enums.PaymentModeEnum;
+import org.egov.collection.model.enums.PaymentStatusEnum;
 
 import java.util.List;
 
@@ -28,13 +30,13 @@ public class Payment {
     private String transactionNumber;
 
     @JsonProperty("transactionDate")
-    private String transactionDate;
+    private Long transactionDate;
 
     @JsonProperty("paymentMode")
-    private String paymentMode;
+    private PaymentModeEnum paymentMode;
 
     @JsonProperty("instrumentDate")
-    private String instrumentDate;
+    private Long instrumentDate;
 
 
     @JsonProperty("instrumentNumber")
@@ -47,7 +49,7 @@ public class Payment {
     private AuditDetails auditDetails;
 
     @JsonProperty("additionalDetails")
-    private String additionalDetails;
+    private Object additionalDetails;
 
     @JsonProperty("paymentDetails")
     private List<PaymentDetail> paymentDetails;
@@ -69,6 +71,11 @@ public class Payment {
 
     @JsonProperty("payerId")
     private String payerId = null;
+
+    @JsonProperty("paymentStatus")
+    private PaymentStatusEnum paymentStatus;
+
+
 
 
 }

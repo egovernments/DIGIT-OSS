@@ -14,10 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.egov.collection.model.*;
-import org.egov.collection.model.enums.CollectionType;
-import org.egov.collection.model.enums.InstrumentStatusEnum;
-import org.egov.collection.model.enums.Purpose;
-import org.egov.collection.model.enums.ReceiptType;
+import org.egov.collection.model.enums.*;
 import org.egov.collection.repository.BillingServiceRepository;
 import org.egov.collection.repository.BusinessDetailsRepository;
 import org.egov.collection.repository.IdGenRepository;
@@ -79,7 +76,6 @@ public class ReceiptEnricher {
      * Ensure bill exists and amount paid details exist for all bill details
      * Set paid by and amount paid for each bill detail in the new validated bill
      *
-     * @param receiptReq Receipt to be enriched
      */
    /* public void enrichReceiptPreValidate(ReceiptReq receiptReq) {
     	
@@ -204,7 +200,7 @@ public class ReceiptEnricher {
             if(billIdToBillMap.get(paymentDetail.getBillId())==null)
                 errorMap.put("INVALID PAYMENTDETAIL","No bill found for the bill id: "+paymentDetail.getBillId());
             else {
-                validatePaymentDetailAgainstBill(payment.getPaymentMode(),billIdToBillMap.get(paymentDetail.getBillId()),paymentDetail,errorMap);
+                validatePaymentDetailAgainstBill(payment.getPaymentMode().toString(),billIdToBillMap.get(paymentDetail.getBillId()),paymentDetail,errorMap);
                 paymentDetail.setBill(billIdToBillMap.get(paymentDetail.getBillId()));
                 paymentDetail.setId(UUID.randomUUID().toString());
             }
@@ -212,8 +208,6 @@ public class ReceiptEnricher {
 
         if(!errorMap.isEmpty())
             throw new CustomException(errorMap);
-
-
 
         payment.setAuditDetails(auditDetails);
 
@@ -241,28 +235,6 @@ public class ReceiptEnricher {
     }
 
 
-    /**
-     * Fetches business details for given bill detail business service
-     *
-     * @param requestInfo Request Info of the request
-     * @param billDetail  Bill Detail for which business service to be fetched
-     */
-    private void enrichBusinessService(RequestInfo requestInfo, BillDetail billDetail) {
-        BusinessDetailsResponse businessDetailsResponse = businessDetailsRepository.getBusinessDetails(Collections.singletonList(billDetail.getBusinessService()),
-                billDetail.getTenantId(), requestInfo);
-
-        if (isNull(businessDetailsResponse.getBusinessDetails()) || businessDetailsResponse
-                .getBusinessDetails().isEmpty()) {
-            log.error("Business detail not found for {} and tenant {}", billDetail.getBusinessService(), billDetail
-                    .getTenantId());
-            throw new CustomException("BUSINESS_DETAILS_INVALID", "fetch buisness details, common masters failed to return fund, function, department and fundsource");
-        } else {
-            //  billDetail.setReceiptType(businessDetailsResponse.getBusinessDetails().get(0).getBusinessType());
-            billDetail.setFund(businessDetailsResponse.getBusinessDetails().get(0).getFund());
-            billDetail.setFunction(businessDetailsResponse.getBusinessDetails().get(0).getFunction());
-            billDetail.setDepartment(businessDetailsResponse.getBusinessDetails().get(0).getDepartment());
-        }
-    }
 
 
     /**
@@ -275,7 +247,7 @@ public class ReceiptEnricher {
      *
      * @param receiptReq Receipt request to be enriched
      */
-    public void enrichReceiptPostValidate(ReceiptReq receiptReq) {
+/*    public void enrichReceiptPostValidate(ReceiptReq receiptReq) {
         Receipt receipt = receiptReq.getReceipt().get(0);
         Bill bill = receipt.getBill().get(0);
         String instrumentType = receipt.getInstrument().getInstrumentType().getName();
@@ -302,6 +274,41 @@ public class ReceiptEnricher {
         receipts.add(receipt);
         receiptReq.setReceipt(receipts);
 
+    }*/
+
+
+    /**
+     * Enrich instrument for financials
+     * For each bill detail,
+     * - Set status to approved by default for now, no workflow
+     * - Set collection type to online or counter
+     * - Set receipt date
+     * - Generate and set receipt number
+     *
+     * @param paymentRequest paymentRequest to be enriched
+     */
+    public void enrichPaymentPostValidate(PaymentRequest paymentRequest) {
+        Payment payment = paymentRequest.getPayment();
+        List<PaymentDetail> paymentDetails = payment.getPaymentDetails();
+        String paymentMode = payment.getPaymentMode().toString();
+
+        for (PaymentDetail paymentDetail : paymentDetails) {
+            paymentDetail.setId(UUID.randomUUID().toString());
+
+            if (paymentMode.equalsIgnoreCase(ONLINE.name()) || paymentMode.equalsIgnoreCase(CARD.name()))
+                paymentDetail.setPaymentDetailStatus(PaymentDetailStatusEnum.REMITTED);
+            else
+                paymentDetail.setPaymentDetailStatus(PaymentDetailStatusEnum.APPROVED);
+
+            String receiptNumber = idGenRepository.generateReceiptNumber(paymentRequest.getRequestInfo(), paymentDetail.getBusinessService(),
+                    paymentDetail.getTenantId());
+            paymentDetail.setReceiptNumber(receiptNumber);
+
+            /*for (BillAccountDetail billAccountDetail : billDetail.getBillAccountDetails()) {
+                billAccountDetail.setId(UUID.randomUUID().toString());
+            }*/
+        }
+        enrichInstrument(paymentRequest);
     }
 
     /**
@@ -351,6 +358,29 @@ public class ReceiptEnricher {
         receiptReq.setReceipt(receipts);
     }
 
+    private void enrichInstrument(PaymentRequest paymentRequest) {
+        Payment payment = paymentRequest.getPayment();
+        String paymentMode = payment.getPaymentMode().toString();
+
+        if (paymentMode.equalsIgnoreCase(CASH.name())) {
+            String transactionId = idGenRepository.generateTransactionNumber(paymentRequest.getRequestInfo(),
+                    payment.getTenantId());
+            payment.setTransactionNumber(transactionId);
+        }
+
+        if (paymentMode.equalsIgnoreCase(CASH.name()) || paymentMode.equalsIgnoreCase(CARD.name())) {
+            payment.setTransactionDate(new Date().getTime());
+        } else {
+            payment.setTransactionDate(new Date(payment.getInstrumentDate()).getTime());
+        }
+
+        if (paymentMode.equalsIgnoreCase(ONLINE.name()) || paymentMode.equalsIgnoreCase(CARD.name()))
+            payment.setPaymentStatus(PaymentStatusEnum.DEPOSITED.DEPOSITED);
+        else
+            payment.setPaymentStatus(PaymentStatusEnum.NEW);
+    }
+
+
     /**
      * Enrich the bill account details object
      * - Copy over additional details received part of request to validated bill
@@ -377,20 +407,18 @@ public class ReceiptEnricher {
      * 
      * @param bills
      */
-    public void enrichAdvanceTaxHead(Map<String, List<Bill>> bills) {
-        for (String tenantId : bills.keySet()) {
-            bills.get(tenantId).forEach(bill -> {
+    public void enrichAdvanceTaxHead(List<Bill> bills) {
+            bills.forEach(bill -> {
                 bill.getBillDetails().forEach(billDetail -> {
                     billDetail.getBillAccountDetails().forEach(billAccountDetail -> {
                         if (StringUtils.isEmpty(billAccountDetail.getId()) && billAccountDetail.getPurpose().equals(Purpose.ADVANCE)) {
                             billAccountDetail.setId(UUID.randomUUID().toString());
-                            billAccountDetail.setTenantId(tenantId);
+                            billAccountDetail.setTenantId(bill.getTenantId());
                             billAccountDetail.setBillDetail(billDetail.getId());
                         }
                     });
                 });
             });
-        }
     }
 
 
@@ -407,7 +435,7 @@ public class ReceiptEnricher {
         if(paymentDetail.getTotalDue().compareTo(bill.getTotalAmount())!=0)
             errorMap.put("INVALID_PAYMENTDETAIL","The amount to be paid is mismatching with bill for paymentDetial with bill id: "+bill.getId());
 
-        // Amount to be paid should be grater than minimum collection amount
+        // Amount to be paid should be greater than minimum collection amount
         if(bill.getMinimumAmountToBePaid() != null && paymentDetail.getTotalAmountPaid().compareTo(bill.getMinimumAmountToBePaid())==-1)
             errorMap.put("INVALID_PAYMENTDETAIL","The amount to be paid cannot be less than minimum amount to be paid");
 
@@ -425,8 +453,8 @@ public class ReceiptEnricher {
         if(!CollectionUtils.isEmpty(bill.getCollectionModesNotAllowed()) && bill.getCollectionModesNotAllowed().contains(paymentMode))
             errorMap.put("INVALID_PAYMENTDETAIL","The paymentMode: "+paymentMode+" is not allowed for the bill: "+bill.getId());
 
-        // Checks if the amount paid is not negative
-        if(paymentDetail.getTotalAmountPaid().compareTo(BigDecimal.ZERO)<0)
+        // Checks if the amount paid is positive integer
+        if(!Utils.isPositiveInteger(paymentDetail.getTotalAmountPaid()))
             errorMap.put("INVALID_PAYMENTDETAIL","The amount paid for the paymentDetail with bill number: "+paymentDetail.getBillId());
 
         // Zero amount payment is allowed only if bill amount is zero

@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.egov.collection.config.ApplicationProperties;
+import org.egov.collection.model.Payment;
+import org.egov.collection.model.PaymentDetail;
+import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.web.contract.ApportionRequest;
 import org.egov.collection.web.contract.ApportionResponse;
 import org.egov.collection.web.contract.Bill;
@@ -33,34 +38,33 @@ public class ApportionerService {
 	/**
 	 * Makes a call to apportion service and gets all the bills apportioned.
 	 * 
-	 * @param apportionRequest
+	 * @param paymentRequest
 	 * @return
 	 */
-	public Map<String, List<Bill>> apportionBill(RequestInfo requestInfo, List<Bill> bills) {
+	public Map<String,Bill> apportionBill(PaymentRequest paymentRequest) {
+		RequestInfo requestInfo = paymentRequest.getRequestInfo();
+		Payment payment = paymentRequest.getPayment();
+		List<Bill> bills = payment.getPaymentDetails().stream().map(PaymentDetail::getBill).collect(Collectors.toList());
 		StringBuilder uri = new StringBuilder();
 		uri.append(applicationProperties.getApportionHost()).append(applicationProperties.getApportionURI());
-		Map<String, List<Bill>> mapOfBills = seggregateBillOnTenantId(bills);
-		Map<String, List<Bill>> apportionedBills = new HashMap<>();
-		for (String tenantId : mapOfBills.keySet()) {
-			ApportionRequest apportionRequest = ApportionRequest.builder().bills(bills).tenantId(tenantId)
-					.requestInfo(requestInfo).build();
-			try {
-				ApportionResponse responseForEachReq = restTemplate.postForObject(uri.toString(), apportionRequest,
-						ApportionResponse.class);
-				if (null != responseForEachReq) {
-					if(!CollectionUtils.isEmpty(responseForEachReq.getBills()))
-						apportionedBills.put(tenantId, responseForEachReq.getBills());
-					else
-						throw new CustomException("APPORTIONING_FAILED_CODE", "Apportioning of the bill Failed");
-				}else
+		ApportionRequest apportionRequest = ApportionRequest.builder().bills(bills).tenantId(payment.getTenantId())
+				.requestInfo(requestInfo).build();
+		ApportionResponse apportionResponse;
+		try {
+			apportionResponse = restTemplate.postForObject(uri.toString(), apportionRequest,ApportionResponse.class);
+			if (null != apportionResponse) {
+				if(CollectionUtils.isEmpty(apportionResponse.getBills()))
 					throw new CustomException("APPORTIONING_FAILED_CODE", "Apportioning of the bill Failed");
-			} catch (Exception e) {
-				log.error("Error while apportioning the bill: ", e);
+			}else
 				throw new CustomException("APPORTIONING_FAILED_CODE", "Apportioning of the bill Failed");
-			}
+		} catch (Exception e) {
+			log.error("Error while apportioning the bill: ", e);
+			throw new CustomException("APPORTIONING_FAILED_CODE", "Apportioning of the bill Failed");
 		}
 
-		return apportionedBills;
+		Map<String,Bill> billIdToBillMap = apportionResponse.getBills().stream().collect(Collectors.toMap(Bill::getId, Function.identity()));
+
+		return billIdToBillMap;
 	}
 	
 

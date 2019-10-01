@@ -2,13 +2,13 @@ package org.egov.collection.service;
 
 import static java.util.Objects.isNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.config.ApplicationProperties;
+import org.egov.collection.model.Payment;
+import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.model.ReceiptSearchCriteria;
 import org.egov.collection.producer.CollectionProducer;
@@ -111,8 +111,8 @@ public class CollectionService {
         Bill bill = receipt.getBill().get(0); // Why get(0)?
         List<Bill> bills = new ArrayList<>();
         bills.add(bill);
-        Map<String, List<Bill>> apportionedBills = apportionerService.apportionBill(receiptReq.getRequestInfo(), bills);
-        receiptEnricher.enrichAdvanceTaxHead(apportionedBills);
+        Map<String, Bill> apportionedBills = apportionerService.apportionBill(receiptReq.getRequestInfo(), bills);
+        receiptEnricher.enrichAdvanceTaxHead(new LinkedList<>(apportionedBills.values()));
         bill = apportionedBills.get(bill.getTenantId()).get(0); //Will be changed if get(0) is removed from the top 2 lines
         String payerId = createUser(receiptReq);
         if(!StringUtils.isEmpty(payerId))
@@ -135,26 +135,23 @@ public class CollectionService {
      * using bill id - Validate the receipt object - Enrich receipt with receipt numbers, coll type etc - Apportion paid amount -
      * Persist the receipt object - Create instrument
      *
-     * @param receiptReq Receipt request for which receipt has to be created
+     * @param paymentRequest payment request for which receipt has to be created
      * @return Created receipt
      */
     @Transactional
     public Receipt createPayment(PaymentRequest paymentRequest) {
         receiptEnricher.enrichPaymentPreValidate(paymentRequest);
-        receiptValidator.validateReceiptForCreate(receiptReq);
-        receiptEnricher.enrichReceiptPostValidate(receiptReq);
+        receiptValidator.validatePaymentForCreate(paymentRequest);
+        receiptEnricher.enrichPaymentPostValidate(paymentRequest);
 
-        Receipt receipt = receiptReq.getReceipt().get(0); // Why get(0)?
-        Bill bill = receipt.getBill().get(0); // Why get(0)?
-        List<Bill> bills = new ArrayList<>();
-        bills.add(bill);
-        Map<String, List<Bill>> apportionedBills = apportionerService.apportionBill(receiptReq.getRequestInfo(), bills);
-        receiptEnricher.enrichAdvanceTaxHead(apportionedBills);
-        bill = apportionedBills.get(bill.getTenantId()).get(0); //Will be changed if get(0) is removed from the top 2 lines
-        String payerId = createUser(receiptReq);
+        Payment payment = paymentRequest.getPayment();
+        Map<String, Bill> billIdToApportionedBill = apportionerService.apportionBill(paymentRequest);
+        receiptEnricher.enrichAdvanceTaxHead(new LinkedList<>(billIdToApportionedBill.values()));
+        setApportionedBillsToPayment(billIdToApportionedBill,payment);
+
+        String payerId = createUser(paymentRequest);
         if(!StringUtils.isEmpty(payerId))
-            bill.setPayerId(payerId);
-        receipt.getBill().set(0, bill);
+            payment.setPayerId(payerId);
         collectionRepository.saveReceipt(receipt);
 
         collectionProducer.producer(applicationProperties.getCreateReceiptTopicName(), applicationProperties
@@ -195,6 +192,26 @@ public class CollectionService {
     	return id;
     }
 
+
+    public String createUser(PaymentRequest paymentRequest) {
+        String id = null;
+        if(paymentRequest.getRequestInfo().getUserInfo().getType().equals("CITIZEN")) {
+            id = paymentRequest.getRequestInfo().getUserInfo().getUuid();
+        }else {
+            if(applicationProperties.getIsUserCreateEnabled()) {
+                Payment payment = paymentRequest.getPayment();
+                Map<String, String> res = userService.getUser(paymentRequest.getRequestInfo(), payment.getMobileNumber(), payment.getTenantId());
+                if(CollectionUtils.isEmpty(res.keySet())) {
+                    id = userService.createUser(paymentRequest);
+                }else {
+                    id = res.get("id");
+                }
+            }
+        }
+        return id;
+    }
+
+
     /**
      * Performs update of eligible receipts
      * Allows update of payee details, manual receipt number & date, additionalDetails
@@ -229,6 +246,18 @@ public class CollectionService {
         receiptValidator.validateReceiptForCreate(receiptReq);
 
         return receiptReq.getReceipt();
+    }
+
+
+    private void setApportionedBillsToPayment(Map<String, Bill> billIdToApportionedBill,Payment payment){
+        Map<String,String> errorMap = new HashMap<>();
+        payment.getPaymentDetails().forEach(paymentDetail -> {
+            if(billIdToApportionedBill.get(paymentDetail.getBillId())!=null)
+                paymentDetail.setBill(billIdToApportionedBill.get(paymentDetail.getBillId()));
+            else errorMap.put("APPORTIONING_ERROR","The bill id: "+paymentDetail.getBillId()+" not present in apportion response");
+        });
+        if(!errorMap.isEmpty())
+            throw new CustomException(errorMap);
     }
 
 }

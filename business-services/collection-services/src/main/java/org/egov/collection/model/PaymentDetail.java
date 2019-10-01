@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.egov.collection.model.enums.PaymentDetailStatusEnum;
+import org.egov.collection.model.enums.PaymentStatusEnum;
 import org.egov.collection.web.contract.Bill;
 
 import java.math.BigDecimal;
@@ -41,5 +43,7 @@ public class PaymentDetail {
     @JsonProperty("additionalDetails")
     private Object additionalDetails;
 
+    @JsonProperty("paymentDetailStatus")
+    private PaymentDetailStatusEnum paymentDetailStatus;
 
 }

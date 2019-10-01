@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.egov.collection.config.ApplicationProperties;
+import org.egov.collection.model.Payment;
+import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.web.contract.Bill;
 import org.egov.collection.web.contract.UserResponse;
 import org.egov.common.contract.request.RequestInfo;
@@ -98,6 +100,43 @@ public class UserService {
 			return null;
 		}
 		
+		return response.getReceiptCreators().get(0).getUuid();
+	}
+
+	public String createUser(PaymentRequest paymentRequest){
+		RequestInfo requestInfo = paymentRequest.getRequestInfo();
+		Payment payment = paymentRequest.getPayment();
+		Map<String, Object> request = new HashMap<>();
+		Map<String, Object> user = new HashMap<>();
+		Map<String, Object> role = new HashMap<>();
+		List<Map> roles = new ArrayList<>();
+		role.put("code", "CITIZEN");
+		role.put("name", "Citizen");
+		role.put("tenantId", payment.getTenantId().split("\\.")[0]);
+		roles.add(role);
+
+		user.put("name", payment.getPaidBy());
+		user.put("mobileNumber", payment.getMobileNumber());
+		user.put("userName", payment.getMobileNumber());
+		user.put("active", true);
+		user.put("type", "CITIZEN");
+		user.put("tenantId", payment.getTenantId().split("\\.")[0]);
+		user.put("permanentAddress", payment.getPayerAddress());
+		user.put("roles", roles);
+
+		request.put("RequestInfo", requestInfo);
+		request.put("user", user);
+
+		UserResponse response = null;
+		StringBuilder url = new StringBuilder();
+		url.append(properties.getUserHost()).append(properties.getUserCreateEnpoint());
+		try {
+			response = restTemplate.postForObject(url.toString(), request, UserResponse.class);
+		}catch(Exception e) {
+			log.error("Exception while creating user: ", e);
+			return null;
+		}
+
 		return response.getReceiptCreators().get(0).getUuid();
 	}
 
