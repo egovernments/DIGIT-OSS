@@ -193,11 +193,9 @@ public class BankReconciliationAction extends BaseFormAction {
 			unReconciledCrBrsEntry = Double.parseDouble(drcrValues[4]);
 			unReconciledDrBrsEntry = Double.parseDouble(drcrValues[5]);
 
-			subTotal = unReconciledCr + unReconciledCrOthers
+			subTotal = unReconciledCr + unReconciledCrOthers + unReconciledCrBrsEntry
 					+ accountBalance.doubleValue();
-			netTotal = unReconciledCr + unReconciledCrOthers
-					+ accountBalance.doubleValue() + unReconciledDr
-					+ unReconciledDrOthers;
+			netTotal = subTotal - ( unReconciledDr + unReconciledDrOthers + unReconciledDrBrsEntry);
 
 		} catch (Exception e) {
 

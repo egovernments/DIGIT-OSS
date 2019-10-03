@@ -284,6 +284,7 @@ public class MicroserviceUtils {
     private String finIndexerTopic;
     
     private ObjectMapper mapper;
+    SimpleDateFormat ddMMMyyyyFormat = new SimpleDateFormat("dd-MMM-yyyy");
     
     public MicroserviceUtils() {
         mapper = new ObjectMapper();
@@ -916,25 +917,6 @@ public class MicroserviceUtils {
         else
             return null;
     }
-//
-//    public InstrumentAccountCode getInstrumentAccountCodeByType(String type) {
-//
-//        final RestTemplate restTemplate = createRestTemplate();
-//
-//        final String url = hostUrl + accountCodesSearchUrl + "?tenantId=" + getTenentId() + "&instrumentType.name=" + type;
-//
-//        RequestInfo requestInfo = new RequestInfo();
-//        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-//
-//        requestInfo.setAuthToken(getUserToken());
-//        reqWrapper.setRequestInfo(requestInfo);
-//
-//        InstrumentAccountCodeResponse response = restTemplate.postForObject(url, reqWrapper, InstrumentAccountCodeResponse.class);
-//        if (response != null && response.getInstrumentAccountCodes() != null && !response.getInstrumentAccountCodes().isEmpty())
-//            return response.getInstrumentAccountCodes().get(0);
-//        else
-//            return null;
-//    }
 
     public List<BankAccountServiceMapping> getBankAcntServiceMappings() {
 
@@ -1057,7 +1039,15 @@ public class MicroserviceUtils {
             url.append("&pageSize=").append(insSearchContra.getPageSize());
         }
         if(StringUtils.isNotBlank(insSearchContra.getReceiptIds())){
-            url.append("&receiptIds==").append(insSearchContra.getReceiptIds());
+            url.append("&receiptIds=").append(insSearchContra.getReceiptIds());
+        }
+        if(insSearchContra.getTransactionFromDate() != null){
+            Date fromDate = insSearchContra.getTransactionFromDate();
+            url.append("&transactionFromDate=").append(ddMMMyyyyFormat.format(fromDate));
+        }
+        if(insSearchContra.getTransactionToDate() != null){
+            Date toDate = insSearchContra.getTransactionToDate();
+            url.append("&transactionToDate=").append(ddMMMyyyyFormat.format(toDate));
         }
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
