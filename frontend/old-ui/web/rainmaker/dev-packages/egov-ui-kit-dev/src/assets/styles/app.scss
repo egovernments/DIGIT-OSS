@@ -357,10 +357,20 @@ body.employee-user-profile {
   .menu-right-icon{
     fill:rgba(255, 255, 255, 0.87) !important;
   }
+  .left-icon-color{
+    fill:rgba(255, 255, 255, 0.87) !important;
+  }
   .menu-label-style{
     color:rgba(255, 255, 255, 0.87) !important; 
     fill:rgba(255, 255, 255, 0.87) !important; 
   }
+
+  .menu-label-style1{
+    color:rgba(255, 255, 255, 0.87) !important; 
+    fill:rgba(255, 255, 255, 0.87) !important; 
+    background-color:#34495E !important;
+  }
+  
 }
 @media only screen and (max-width: 768px) {
   .pgr-call-icon span {
