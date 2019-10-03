@@ -7,3 +7,9 @@
 #       image-name: < Docker image name  >
 # -
 # - 
+config:
+  - name: "utilities/egov-weekly-impact-notifier"
+    build:
+      - work-dir: "egov-weekly-impact-notifier"
+        image-name: "egov-weekly-impact-notifier"
+        dockerfile: "build/maven/Dockerfile"
