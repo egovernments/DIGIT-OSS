@@ -8,6 +8,7 @@ import org.egov.collection.model.enums.PaymentDetailStatusEnum;
 import org.egov.collection.model.enums.PaymentStatusEnum;
 import org.egov.collection.web.contract.Bill;
 
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 
@@ -16,9 +17,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class PaymentDetail {
 
+    @Size(max=64)
     @JsonProperty("id")
     private String id;
 
+    @Size(max=64)
     @JsonProperty("tenantId")
     private String tenantId;
 
@@ -28,12 +31,15 @@ public class PaymentDetail {
     @JsonProperty("totalAmountPaid")
     private BigDecimal totalAmountPaid;
 
+    @Size(max=64)
     @JsonProperty("receiptNumber")
     private String receiptNumber;
 
+    @Size(max=64)
     @JsonProperty("businessService")
     private String businessService;
 
+    @Size(max=64)
     @JsonProperty("billId")
     private String billId;
 
@@ -43,7 +49,11 @@ public class PaymentDetail {
     @JsonProperty("additionalDetails")
     private Object additionalDetails;
 
+    @Size(max=64)
     @JsonProperty("paymentDetailStatus")
     private PaymentDetailStatusEnum paymentDetailStatus;
+
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails;
 
 }
