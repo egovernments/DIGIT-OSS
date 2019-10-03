@@ -48,14 +48,21 @@
 
 package com.exilant.eGov.src.domain;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.egov.commons.Bankaccount;
 import org.egov.infra.admin.master.service.AppConfigValueService;
+import org.egov.infra.microservice.models.Instrument;
+import org.egov.infra.microservice.models.InstrumentSearchContract;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infstr.services.PersistenceService;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -63,11 +70,15 @@ import java.util.List;
 public class BankReconciliationSummary {
 
 	private static final Logger LOGGER = Logger.getLogger(BankReconciliationSummary.class);
+        private static final String INSTRUMENTTYPE_NAME_CHEQUE = "Cheque";
+        private static final String INSTRUMENT_DEPOSITED_STATUS = "Deposited";
 	@Autowired
 	@Qualifier("persistenceService")
 	protected PersistenceService persistenceService;
 	@Autowired
-    private AppConfigValueService appConfigValuesService;
+        private AppConfigValueService appConfigValuesService;
+	@Autowired
+        private MicroserviceUtils microserviceUtils;
 	
 
 	String defaultStatusExclude=null;
@@ -167,7 +178,9 @@ public class BankReconciliationSummary {
 				creditTotalBrsEntry=my[0]!=null?my[0].toString():null;
 				debitTotalBrsEntry=my[1]!=null?my[1].toString():null;
 			}
-
+			
+			BigDecimal recInsAmount = this.getDepositedInstrumentsOfReceipt(bankAccId, fromDate,toDate);
+			debitTotal = recInsAmount.add(StringUtils.isNumeric(debitTotal) ? new BigDecimal(debitTotal) : new BigDecimal(0)).toString();
 
 		unReconciledDrCr=(creditTotal != null ? creditTotal : "0" )+"/"+(creditOthertotal!= null ? creditOthertotal : "0")
 		+"/"+(debitTotal!= null ? debitTotal : "0") +"/"+( debitOtherTotal!= null ? debitOtherTotal : "0")+""+
@@ -181,8 +194,25 @@ public class BankReconciliationSummary {
 		return unReconciledDrCr;
 	}
 	
+	public BigDecimal getDepositedInstrumentsOfReceipt(Integer bankAccId,Date fromDate,Date toDate){
+	    InstrumentSearchContract insSearchContra = new InstrumentSearchContract();
+	    insSearchContra.setFinancialStatuses(INSTRUMENT_DEPOSITED_STATUS);
+	    insSearchContra.setBankAccountNumber(this.getBankAccountNumberById(bankAccId));
+	    insSearchContra.setInstrumentTypes(INSTRUMENTTYPE_NAME_CHEQUE);
+	    insSearchContra.setTransactionFromDate(fromDate);
+	    insSearchContra.setTransactionToDate(toDate);
+	    List<Instrument> list = microserviceUtils.getInstrumentsBySearchCriteria(insSearchContra);
+	    BigDecimal recDepositedAmount = new BigDecimal(0);
+	    for(Instrument ins : list){
+	        recDepositedAmount = recDepositedAmount.add(ins.getAmount());
+	    }
+	    return recDepositedAmount;
+	}
 	
-	
-	
-	
+	private String getBankAccountNumberById(Integer bankAccId) {
+	    StringBuilder query = new StringBuilder("from Bankaccount ba where ba.id=:bankAccountId and isactive=true");
+	    Query createSQLQuery = persistenceService.getSession().createQuery(query.toString());
+	    List<Bankaccount> bankAccount = createSQLQuery.setLong("bankAccountId", bankAccId).list();
+	    return !bankAccount.isEmpty() && bankAccount.get(0) != null ? bankAccount.get(0).getAccountnumber() : null;
+	}
 }

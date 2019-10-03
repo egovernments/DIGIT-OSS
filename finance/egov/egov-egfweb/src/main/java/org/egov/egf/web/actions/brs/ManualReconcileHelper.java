@@ -51,8 +51,10 @@ package org.egov.egf.web.actions.brs;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.commons.Bankaccount;
+import org.egov.commons.CFinancialYear;
 import org.egov.commons.EgwStatus;
 import org.egov.commons.dao.EgwStatusHibernateDAO;
+import org.egov.commons.dao.FinancialYearHibernateDAO;
 import org.egov.egf.model.ReconcileBean;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.service.AppConfigValueService;
@@ -111,6 +113,9 @@ public class ManualReconcileHelper {
 	
 	@Autowired
 	private MicroserviceUtils microserviceUtils;
+	SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+	@Autowired
+        FinancialYearHibernateDAO financialYearDAO;
 	public Map<String,String> getUnReconciledDrCr(Long bankAccId,Date fromDate,Date toDate)  
 	{
 		Map<String,String> unreconMap=new LinkedHashMap<String,String>();
@@ -333,12 +338,15 @@ public class ManualReconcileHelper {
 	    contract.setInstrumentTypes(INSTRUMENTTYPE_NAME_CHEQUE);
 	    contract.setTransactionType(TransactionType.Debit);
 	    contract.setFinancialStatuses(INSTRUMENT_NEW_STATUS);
+            CFinancialYear finYearByDate = financialYearDAO.getFinYearByDate(reconBean.getReconciliationDate());
+	    contract.setTransactionFromDate(finYearByDate.getStartingDate());
+	    contract.setTransactionToDate(reconBean.getReconciliationDate());
 	    List<Instrument> instruments = microserviceUtils.getInstrumentsBySearchCriteria(contract);
 	    for(Instrument ins : instruments){
 	        if(ins.getInstrumentVouchers() != null && !ins.getInstrumentVouchers().isEmpty()){
 	            ReconcileBean reconcileBean = new ReconcileBean();
 	            String txnType = ins.getTransactionType().name();;
-	            String type = TransactionType.Credit.equals(txnType) ? "Payment" : "Receipt";;
+	            String type = TransactionType.Credit.equals(txnType) ? "Payment" : "Receipt";
 	            String pattern = "dd/MM/yyyy";
 	            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 	            String date = simpleDateFormat.format(ins.getTransactionDate());
