@@ -171,7 +171,7 @@
 					<td class="bluebox">Bank Statement Balance:<span
 						class="bluebox"><span class="mandatory1">*</span></span></td>
 					<td class="bluebox"><s:textfield name="bankStBalance"
-							id="bankStBalance" /></td>
+							id="bankStBalance" onkeypress="return event.charCode >= 48 && event.charCode <= 57"/></td>
 				</tr>
 				<tr>
 					<td class="bluebox"></td>
