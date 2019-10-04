@@ -39,29 +39,6 @@ public class PaymentQueryBuilder {
 
 
 
-    public static MapSqlParameterSource getParametersForPaymentTaxHeadCreate(String paymentDetailId, BillAccountDetail billAccountDetail) {
-        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-
-        sqlParameterSource.addValue("id", billAccountDetail.getId());
-        sqlParameterSource.addValue("tenantid", billAccountDetail.getTenantId());
-        sqlParameterSource.addValue("paymentdetailid", paymentDetailId);
-        sqlParameterSource.addValue("billdetailid", billAccountDetail.getBillDetail());
-        sqlParameterSource.addValue("demanddetailid", billAccountDetail.getDemandDetailId());
-        sqlParameterSource.addValue("order", billAccountDetail.getOrder());
-        sqlParameterSource.addValue("amount", billAccountDetail.getAmount());
-        sqlParameterSource.addValue("isactualdemand", billAccountDetail.getIsActualDemand());
-        sqlParameterSource.addValue("taxheadcode", billAccountDetail.getTaxHeadCode());
-        sqlParameterSource.addValue("additionaldetails", billAccountDetail.getAdditionalDetails());
-        sqlParameterSource.addValue("createdby", billAccountDetail.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createddate", billAccountDetail.getAuditDetails().getCreatedDate());
-        sqlParameterSource.addValue("lastmodifiedby", billAccountDetail.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifieddate", billAccountDetail.getAuditDetails().getCreatedDate());
-
-        return sqlParameterSource;
-    }
-
-
-
     public static MapSqlParameterSource getParametersForPaymentCreate(Payment payment) {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
@@ -115,6 +92,28 @@ public class PaymentQueryBuilder {
 
     }
 
+
+
+    public static MapSqlParameterSource getParametersForPaymentTaxHeadCreate(String paymentDetailId, BillAccountDetail billAccountDetail) {
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+
+        sqlParameterSource.addValue("id", billAccountDetail.getId());
+        sqlParameterSource.addValue("tenantid", billAccountDetail.getTenantId());
+        sqlParameterSource.addValue("paymentdetailid", paymentDetailId);
+        sqlParameterSource.addValue("billdetailid", billAccountDetail.getBillDetail());
+        sqlParameterSource.addValue("demanddetailid", billAccountDetail.getDemandDetailId());
+        sqlParameterSource.addValue("order", billAccountDetail.getOrder());
+        sqlParameterSource.addValue("amount", billAccountDetail.getAmount());
+        sqlParameterSource.addValue("isactualdemand", billAccountDetail.getIsActualDemand());
+        sqlParameterSource.addValue("taxheadcode", billAccountDetail.getTaxHeadCode());
+        sqlParameterSource.addValue("additionaldetails", billAccountDetail.getAdditionalDetails());
+        sqlParameterSource.addValue("createdby", billAccountDetail.getAuditDetails().getCreatedBy());
+        sqlParameterSource.addValue("createddate", billAccountDetail.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("lastmodifiedby", billAccountDetail.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue("lastmodifieddate", billAccountDetail.getAuditDetails().getCreatedDate());
+
+        return sqlParameterSource;
+    }
 
 
 

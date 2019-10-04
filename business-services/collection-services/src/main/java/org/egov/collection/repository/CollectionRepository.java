@@ -1,6 +1,8 @@
 package org.egov.collection.repository;
 
 import lombok.extern.slf4j.Slf4j;
+import org.egov.collection.model.Payment;
+import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.ReceiptSearchCriteria;
 import org.egov.collection.repository.querybuilder.CollectionsQueryBuilder;
 import org.egov.collection.repository.rowmapper.CollectionResultSetExtractor;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 import static org.egov.collection.repository.querybuilder.CollectionsQueryBuilder.*;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.*;
 
 @Repository
 @Slf4j
@@ -60,6 +63,33 @@ public class CollectionRepository {
         }catch (Exception e){
             log.error("Failed to persist receipt to database", e);
             throw new CustomException("RECEIPT_CREATION_FAILED", e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void savePayment(Payment payment){
+        try {
+
+            List<MapSqlParameterSource> paymentDetailSource = new ArrayList<>();
+            List<MapSqlParameterSource> paymentTaxheadSource = new ArrayList<>();
+
+            for (PaymentDetail paymentDetail : payment.getPaymentDetails()) {
+                paymentDetailSource.add(getParametersForPaymentDetailCreate(payment.getId(), paymentDetail));
+
+                paymentDetail.getBill().getBillDetails().forEach(billDetail -> {
+                    billDetail.getBillAccountDetails().forEach(billAccountDetail -> {
+                        paymentTaxheadSource.add(getParametersForPaymentTaxHeadCreate(paymentDetail.getId(),billAccountDetail));
+                    });
+                });
+
+            }
+            namedParameterJdbcTemplate.update(INSERT_PAYMENT_SQL, getParametersForPaymentCreate(payment));
+            namedParameterJdbcTemplate.batchUpdate(INSERT_PAYMENTDETAIL_SQL, paymentDetailSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(INSERT_PAYMENT_TAXHEAD_SQL,  paymentTaxheadSource.toArray(new MapSqlParameterSource[0]));
+
+        }catch (Exception e){
+            log.error("Failed to persist payment to database", e);
+            throw new CustomException("PAYMENT_CREATION_FAILED", e.getMessage());
         }
     }
     
