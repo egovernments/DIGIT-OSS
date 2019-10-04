@@ -38,7 +38,7 @@ class ServicesNearby extends React.Component {
     const { onSeviceClick } = this.props;
     return (
       <Grid container>
-        <Grid item xs={6} sm={3} align="center" style={{ paddingRight : 8,cursor: "pointer" }} >
+        <Grid item xs={6} sm={6} align="center" style={{ paddingRight : 8,cursor: "pointer" }} >
           <Card className="servicelist-style"
             textChildren={
               <div className="local-information-cont" onClick={() => onSeviceClick("events")}>
@@ -48,7 +48,7 @@ class ServicesNearby extends React.Component {
             }
           />
         </Grid>
-        <Grid item xs={6} sm={3} align="center" style={{ cursor: "pointer" }} >
+        <Grid item xs={6} sm={6} align="center" style={{ cursor: "pointer" }} >
           <Card className="servicelist-style"
             textChildren={
               <div className="local-information-cont" onClick={() => onSeviceClick("my-city")}>

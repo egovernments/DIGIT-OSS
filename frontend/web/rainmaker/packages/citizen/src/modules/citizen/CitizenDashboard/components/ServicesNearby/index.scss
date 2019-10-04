@@ -67,9 +67,18 @@
     justify-content: center;
     align-items: center;
   }
+
+  .servicelist-style {
+    height: 140px !important;
+    border-radius: inherit !important;
+    display: flex;
+    align-items : center;
+    padding: 8px 8px !important;
+    margin: 8px 0px !important;
+  }
 }
 
-.local-information-cont{
+.local-information-cont {
   background-color: #fff;
   padding: 16px;
   width: 100%;
@@ -79,12 +88,14 @@
   align-items: center;
 }
 
-
-.servicelist-style{
-  border-radius:inherit !important;
-  padding : 8px 8px !important;
-  margin :8px 0px !important
+@media only screen and (max-width: 767px) {
+  .servicelist-style {
+    border-radius: inherit !important;
+    display: flex;
+    align-items : center;
+    padding: 8px 8px !important;
+    margin: 8px 0px !important;
+  }
 }
-
 
 

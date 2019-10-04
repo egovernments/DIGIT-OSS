@@ -8,9 +8,8 @@ import { getAccessToken, getUserInfo,getTenantId } from "egov-ui-kit/utils/local
 
 class Updates extends React.Component {
   componentDidMount = () => {
-    const { getNotifications, notifications } = this.props;
+    const { getNotifications } = this.props;
     const permanentCity = JSON.parse(getUserInfo()).permanentCity;
-    // if (!notifications) {
       let queryObject = [
         {
           key: "tenantId",
@@ -31,7 +30,6 @@ class Updates extends React.Component {
         },
       };
       getNotifications(queryObject, requestBody);
-    // }
   };
 
   render() {
