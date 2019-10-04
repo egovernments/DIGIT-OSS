@@ -15,6 +15,7 @@ import org.egov.egf.master.domain.model.ChartOfAccount;
 import org.egov.egf.master.domain.model.ChartOfAccountSearch;
 import org.egov.egf.master.persistence.entity.ChartOfAccountEntity;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Ignore
 public class ChartOfAccountJdbcRepositoryTest {
 	
 	private ChartOfAccountJdbcRepository chartOfAccountJdbcRepository;
