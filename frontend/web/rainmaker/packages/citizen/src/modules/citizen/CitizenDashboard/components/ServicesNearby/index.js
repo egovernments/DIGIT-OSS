@@ -35,23 +35,23 @@ class ServicesNearby extends React.Component {
   // }
 
   render() {
-    const { onSeviceClick } = this.props;
+    const { onServiceClick } = this.props;
     return (
       <Grid container>
-        <Grid item xs={6} sm={6} align="center" style={{ paddingRight : 8,cursor: "pointer" }} >
+        <Grid item xs={6} sm={6} align="center" style={{ paddingRight : 8,cursor: "pointer" }}  onClick={() => onServiceClick("events")}>
           <Card className="servicelist-style"
             textChildren={
-              <div className="local-information-cont" onClick={() => onSeviceClick("events")}>
+              <div className="local-information-cont" >
                 <Icon className="service-icon" action="custom" name="calendar" />
                 <Label labelStyle={{ paddingLeft: "10px" }} dark={true} fontSize={14} label={"COMMON_EVENTS_LABEL"} />
               </div>
             }
           />
         </Grid>
-        <Grid item xs={6} sm={6} align="center" style={{ cursor: "pointer" }} >
+        <Grid item xs={6} sm={6} align="center" style={{ cursor: "pointer" }}  onClick={() => onServiceClick("my-city")}>
           <Card className="servicelist-style"
             textChildren={
-              <div className="local-information-cont" onClick={() => onSeviceClick("my-city")}>
+              <div className="local-information-cont" >
                 <Icon className="service-icon" action="custom" name="home-city-outline" />
                 <Label labelStyle={{ paddingLeft: "10px" }} dark={true} fontSize={14} label={"COMMON_MYCITY_LABEL"} />
               </div>
