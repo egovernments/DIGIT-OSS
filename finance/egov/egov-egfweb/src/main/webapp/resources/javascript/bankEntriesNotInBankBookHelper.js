@@ -261,10 +261,7 @@ function validate() {
 				+ '].date').value;
 		var amount = document.getElementById('bankEntriesNotInBankBookList['
 				+ i + '].amount').value;
-		if (glcode == null || glcode == 0) {
-			bootbox.alert('Please select account code  for row ' + (i + 1));
-			flag = false;
-		} else if (type == null || type == 0) {
+		if (type == null || type == 0) {
 			bootbox.alert('Please select type for row ' + (i + 1));
 			flag = false;
 		} else if (date == null || date == '') {
@@ -272,6 +269,12 @@ function validate() {
 			flag = false;
 		} else if (amount == null || amount == '') {
 			bootbox.alert('Please enter amount for row  ' + (i + 1));
+			flag = false;
+		} else if (isNaN(amount)){
+			bootbox.alert('Please enter numeric amount for row  ' + (i + 1));
+			flag = false;
+		} else if (glcode == null || glcode == 0) {
+			bootbox.alert('Please select account code for row ' + (i + 1));
 			flag = false;
 		}
 	}
