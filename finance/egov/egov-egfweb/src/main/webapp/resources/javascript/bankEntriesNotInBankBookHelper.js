@@ -93,7 +93,7 @@ function createAmountFieldFormatterBENIBB(prefix, suffix) {
 				+ bankEntriesNotInBankBookTableIndex + "]" + suffix
 				+ "'  name='" + prefix + "["
 				+ bankEntriesNotInBankBookTableIndex + "]" + suffix
-				+ "' style='text-align:right;width:90px;'/>";
+				+ "' style='text-align:right;width:90px;' onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>";
 
 	}
 }
