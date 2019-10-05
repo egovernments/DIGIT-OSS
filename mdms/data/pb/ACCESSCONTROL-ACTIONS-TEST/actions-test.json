@@ -14674,7 +14674,6 @@
       "code": "null",
       "path": ""
     },
-    
     {
       "id": 1835,
       "name": "Pdf Generator search",
@@ -14769,6 +14768,213 @@
       "navigationURL": "tradelicence/apply",
       "path": "TradeLicense.Apply",
       "leftIcon": "places:business-center"
+    },
+    {
+      "id": 1842,
+      "name": "RainmakerPGR-SourceWiseReport-Metadata",
+      "url": "/report/rainmaker-pgr/SourceWiseReport/metadata/_get",
+      "displayName": "Rainmaker PGR report",
+      "orderNumber": 1,
+      "parentModule": "147",
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1843,
+      "name": "SourceWiseReport",
+      "url": "/report/rainmaker-pgr/SourceWiseReport/_get",
+      "displayName": "PGR Report",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1844,
+      "name": "RainmakerPGR-DescriptionReport-Metadata",
+      "url": "/report/rainmaker-pgr/DescriptionReport/metadata/_get",
+      "displayName": "Rainmaker PGR report",
+      "orderNumber": 1,
+      "parentModule": "147",
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1845,
+      "name": "DescriptionReport",
+      "url": "/report/rainmaker-pgr/DescriptionReport/_get",
+      "displayName": "PGR Report",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1846,
+      "name": "RainmakerPGR-EmployeeReport-Metadata",
+      "url": "/report/rainmaker-pgr/EmployeeReport/metadata/_get",
+      "displayName": "Rainmaker PGR report",
+      "orderNumber": 1,
+      "parentModule": "147",
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1847,
+      "name": "EmployeeReport",
+      "url": "/report/rainmaker-pgr/EmployeeReport/_get",
+      "displayName": "PGR Report",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1848,
+      "name": "RainmakerPGR-StateSourceReport-Metadata",
+      "url": "/report/rainmaker-pgr/StateSourceReport/metadata/_get",
+      "displayName": "Rainmaker PGR report",
+      "orderNumber": 1,
+      "parentModule": "147",
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1849,
+      "name": "StateSourceReport",
+      "url": "/report/rainmaker-pgr/StateSourceReport/_get",
+      "displayName": "PGR Report",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1850,
+      "name": "RainmakerPGR-StateULBReport-Metadata",
+      "url": "/report/rainmaker-pgr/StateULBReport/metadata/_get",
+      "displayName": "Rainmaker PGR report",
+      "orderNumber": 1,
+      "parentModule": "147",
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1851,
+      "name": "StateULBReport",
+      "url": "/report/rainmaker-pgr/StateULBReport/_get",
+      "displayName": "PGR Report",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1852,
+      "name": "RainmakerPGR-ComplaintTypesReport-Metadata",
+      "url": "/report/rainmaker-pgr/ComplaintTypesReport/metadata/_get",
+      "displayName": "Rainmaker PGR report",
+      "orderNumber": 1,
+      "parentModule": "147",
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1853,
+      "name": "ComplaintTypesReport",
+      "url": "/report/rainmaker-pgr/ComplaintTypesReport/_get",
+      "displayName": "PGR Report",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1854,
+      "name": "RainmakerPGR-DepartmentReport-Metadata",
+      "url": "/report/rainmaker-pgr/DepartmentReport/metadata/_get",
+      "displayName": "Rainmaker PGR report",
+      "orderNumber": 1,
+      "parentModule": "147",
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1855,
+      "name": "DepartmentReport",
+      "url": "/report/rainmaker-pgr/DepartmentReport/_get",
+      "displayName": "PGR Report",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1856,
+      "name": "RainmakerPGR-ULBDepartmentReport-Metadata",
+      "url": "/report/rainmaker-pgr/ULBDepartmentReport/metadata/_get",
+      "displayName": "Rainmaker PGR report",
+      "orderNumber": 1,
+      "parentModule": "147",
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1857,
+      "name": "ULBDepartmentReport",
+      "url": "/report/rainmaker-pgr/ULBDepartmentReport/_get",
+      "displayName": "PGR Report",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1858,
+      "name": "RainmakerPGR-ULBEmployeeWiseReport-Metadata",
+      "url": "/report/rainmaker-pgr/ULBEmployeeWiseReport/metadata/_get",
+      "displayName": "Rainmaker PGR report",
+      "orderNumber": 1,
+      "parentModule": "147",
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
+    },
+    {
+      "id": 1859,
+      "name": "ULBEmployeeWiseReport",
+      "url": "/report/rainmaker-pgr/ULBEmployeeWiseReport/_get",
+      "displayName": "PGR Report",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "RainmakerPGRReports",
+      "code": "null",
+      "path": "PGR Report"
     }
   ]
 }
