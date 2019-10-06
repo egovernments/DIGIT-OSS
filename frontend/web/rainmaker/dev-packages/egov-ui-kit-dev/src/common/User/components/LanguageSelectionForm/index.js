@@ -31,14 +31,14 @@ const defaultLabelStyle = {
   padding: 0,
 };
 
-const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick }) => {
+const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick, logoUrl }) => {
   return (
     <Card
       className="col-sm-offset-4 col-sm-4 user-screens-card language-selection-card"
       textChildren={
         <div>
           <div className="web-user-logo" style={{ marginBottom: "24px" }}>
-            <Image className="mseva-logo" source={`${logo}`} />
+            <Image className="mseva-logo employee-login-logo" source={logoUrl ? logoUrl : `${logo}`} />
           </div>
           <form>
             <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
