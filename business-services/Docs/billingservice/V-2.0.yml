@@ -530,14 +530,11 @@ definitions:
         type: number
         format: int64
         description: Bill date.
-      consumerCode:
-        type: string
-        description: Consumer code of the entity for which the bill is being created.
       expiryDate:
         type: number
         format: int64
         description: end of bill validity in epoch time.
-      Amount:
+      amount:
         type: number
         description: Total bill amount to be paid.
       fromPeriod:
