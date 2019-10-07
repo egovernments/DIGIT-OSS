@@ -11118,7 +11118,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "Complaints.PGR Reports.DepartmentWiseReport",
-      "navigationURL": "report/rainmaker-pgr/DepartmentWiseReport",
+      "navigationURL": "report/rainmaker-pgr/ULBDepartmentReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
     },
