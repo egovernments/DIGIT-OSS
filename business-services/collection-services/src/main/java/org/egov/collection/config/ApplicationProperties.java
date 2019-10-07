@@ -162,4 +162,13 @@ public class ApplicationProperties {
     @Value("${kafka.topics.payment.receiptlink.key}")
     private String paymentReceiptLinkTopicKey;
 
+
+
+    // Payment properties
+
+    @Value("${kafka.topics.payment.create}")
+    private String createPaymentTopicName;
+
+
+
 }

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.egov.collection.model.enums.PaymentModeEnum;
 import org.egov.collection.model.enums.PaymentStatusEnum;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class Payment {
     @JsonProperty("id")
     private String id;
 
+    @NotNull
     @Size(max=64)
     @JsonProperty("tenantId")
     private String tenantId;

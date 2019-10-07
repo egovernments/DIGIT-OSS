@@ -42,6 +42,7 @@ package org.egov.collection.web.contract;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
+import org.egov.collection.model.AuditDetails;
 import org.egov.collection.model.enums.CollectionType;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -82,31 +83,21 @@ public class BillDetail {
 	@JsonProperty("demandId")
 	private String demandId = null;
 
-	@JsonProperty("bill")
-	private String bill = null;
+	@JsonProperty("billId")
+	private String billId = null;
 
-	@JsonProperty("billNumber")
-	private String billNumber = null;
-
-	@JsonProperty("billDate")
-	private Long billDate = null;
-
-	@JsonProperty("consumerCode")
-	private String consumerCode = null;
-
-	@JsonProperty("consumerType")
-	private String consumerType = null;
-
-	@JsonProperty("totalAmount")
+	@JsonProperty("amount")
 	@NotNull
-	private BigDecimal totalAmount = null;
+	private BigDecimal amount = null;
 
 	@JsonProperty("amountPaid")
 	private BigDecimal amountPaid = null;
 
+	@NotNull
 	@JsonProperty("fromPeriod")
 	private Long fromPeriod = null;
 
+	@NotNull
 	@JsonProperty("toPeriod")
 	private Long toPeriod = null;
 
@@ -115,9 +106,6 @@ public class BillDetail {
 
 	@JsonProperty("additionalDetails")
 	private JsonNode additionalDetails = null;
-
-	@JsonProperty("receiptNumber")
-	private String receiptNumber = null;
 
 	@JsonProperty("receiptDate")
 	private Long receiptDate = null;
@@ -154,9 +142,14 @@ public class BillDetail {
 	@JsonProperty("collectionType")
 	private CollectionType collectionType = null;
 
+	@JsonProperty("auditDetails")
+	private AuditDetails auditDetails = null;
+
 
 	private String billDescription;
 
+	@NotNull
+	@JsonProperty("expiryDate")
 	private Long expiryDate;
 
 	private String displayMessage;

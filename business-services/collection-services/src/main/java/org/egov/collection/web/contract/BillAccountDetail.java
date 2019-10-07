@@ -36,8 +36,8 @@ public class BillAccountDetail {
 	private String tenantId = null;
 
 	@Size(max=64)
-	@JsonProperty("billDetail")
-	private String billDetail = null;
+	@JsonProperty("billDetailId")
+	private String billDetailId = null;
 
 	@Size(max=64)
 	@JsonProperty("demandDetailId")

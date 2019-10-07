@@ -144,68 +144,6 @@ public class ReceiptValidator {
 	}*/
 
 
-	public void validatePaymentForCreate(PaymentRequest paymentRequest) {
-
-		Map<String, String> errorMap = new HashMap<>();
-		Payment payment = paymentRequest.getPayment();
-		List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
-
-		validateUserInfo(paymentRequest, errorMap);
-
-		validateInstrument(paymentRequest.getPayment(),errorMap);
-
-		List<String> billIds = new LinkedList<>();
-
-		paymentDetails.forEach(paymentDetail -> {
-			if (paymentDetail.getBill()==null)
-				return;
-			if (org.apache.commons.lang3.StringUtils.isEmpty(paymentDetail.getBill().getPaidBy()))
-				errorMap.put(PAID_BY_MISSING_CODE, PAID_BY_MISSING_MESSAGE);
-
-			if(billIds.contains(paymentDetail.getBillId()))
-				errorMap.put("DUPLICATE_BILLID","The Bill id: "+paymentDetail.getBillId()+" is repeated for multiple payment details")
-			else billIds.add(paymentDetail.getBillId());
-
-		});
-
-
-
-		PaymentSearchCriteria criteria = PaymentSearchCriteria.builder().tenantId(payment.getTenantId())
-				.billIds(billIds).build();
-		List<Payment> payments = collectionRepository.fetchPayments(criteria);
-
-
-		if (!payments.isEmpty()) {
-			validateIPaymentForBillPresent(payments,errorMap);
-		}
-
-
-		// Loop through all bill details [one for each service], and perform various
-		// validations
-		for (PaymentDetail paymentDetail : paymentDetails) {
-
-			if (isNull(paymentDetail.getTotalDue()) || !Utils.isPositiveInteger(paymentDetail.getTotalDue())) {
-				errorMap.put("INVALID_BILL_AMOUNT",
-						"Invalid bill amount! Amount should be  greater than or equal to 0 and " + "without fractions");
-			}
-
-
-			if (org.apache.commons.lang3.StringUtils.isEmpty(paymentDetail.getBusinessService())) {
-				errorMap.put("INVALID_BUSINESS_DETAILS", "Business details code cannot be empty");
-			}
-
-		}
-
-		// Validation to ensure, Sum of amount paid on all bill details should be equal
-		// to the instrument amount
-		/*Instrument instrument = receipt.getInstrument();
-		if (instrument.getAmount().compareTo(totalAmountPaid) != 0)
-			errorMap.put("INSTRUMENT_AMOUNT_MISMATCH",
-					"Sum of amount paid of all bill details should be equal to " + "instrument amount");*/
-
-		if (!errorMap.isEmpty())
-			throw new CustomException(errorMap);
-	}
 
 	public void validateUserInfo(ReceiptReq receiptReq, Map<String, String> errorMap) {
 		if (null == receiptReq.getRequestInfo()) {
@@ -221,19 +159,6 @@ public class ReceiptValidator {
 		}
 	}
 
-	public void validateUserInfo(PaymentRequest paymentRequest, Map<String, String> errorMap) {
-		if (null == paymentRequest.getRequestInfo()) {
-			errorMap.put("INVALID_REQUEST_INFO", "RequestInfo cannot be null");
-		} else {
-			if (null == paymentRequest.getRequestInfo().getUserInfo()) {
-				errorMap.put("INVALID_USER_INFO", "UserInfo within RequestInfo cannot be null");
-			} else {
-				if (StringUtils.isEmpty(paymentRequest.getRequestInfo().getUserInfo().getUuid())) {
-					errorMap.put("INVALID_USER_ID", "UUID of the user within RequestInfo cannot be null");
-				}
-			}
-		}
-	}
 
 
 	public List<Receipt> validateAndEnrichReceiptsForUpdate(List<Receipt> receipts, RequestInfo requestInfo) {
@@ -381,39 +306,6 @@ public class ReceiptValidator {
 
 	}
 
-	private void validateInstrument(Payment payment, Map<String, String> errorMap) {
-
-		String paymentMode = payment.getPaymentMode().toString();
-		if (!PaymentModeEnum.contains(paymentMode)) {
-			throw new CustomException("INVALID_PAYMENTMODE", "Invalid payment mode provided");
-		}
-
-		if (paymentMode.equalsIgnoreCase(InstrumentTypesEnum.CHEQUE.name())
-				|| paymentMode.equalsIgnoreCase(InstrumentTypesEnum.DD.name())) {
-
-			if (isNull(payment.getTransactionDate()))
-				errorMap.put("INVALID_TXN_DATE", "Transaction Date Input is mandatory for cheque and DD");
-
-			if (isNull(payment.getTransactionNumber()) || payment.getTransactionNumber().isEmpty())
-				errorMap.put("INVALID_TXN_NUMBER", "Transaction Number is mandatory for Cheque, DD, Card");
-
-		}
-
-		if (paymentMode.equalsIgnoreCase(InstrumentTypesEnum.CARD.name())) {
-			if (org.apache.commons.lang3.StringUtils.isEmpty(payment.getTransactionNumber()))
-				errorMap.put("INVALID_TXN_NUMBER", "Transaction Number is mandatory for Cheque, DD, Card");
-
-			if (org.apache.commons.lang3.StringUtils.isEmpty(payment.getInstrumentNumber()))
-				errorMap.put("INVALID_INSTRUMENT_NUMBER", "Instrument Number is mandatory for Card");
-
-		}
-
-		if (paymentMode.equalsIgnoreCase(InstrumentTypesEnum.CHEQUE.name())
-				|| paymentMode.equalsIgnoreCase(InstrumentTypesEnum.DD.name())) {
-			validateChequeDD(payment, errorMap);
-		}
-
-	}
 
 
 	private void validateChequeDD(BillDetail billDetails, Instrument instrument, Map<String, String> errorMap) {
@@ -549,28 +441,7 @@ public class ReceiptValidator {
 	}
 
 
-	/**
-	 * Validations if no transaction exists for this bill No existing receipt should
-	 * be in approved or pending status
-	 * <p>
-	 * If not, proceed with validateIfReceiptForBillAbsent validations *
-	 *
-	 *  @param payments   List of payment Details
-	 * @param errorMap   Map of errors occurred during validations
-	 */
-	private void validateIPaymentForBillPresent(List<Payment> payments, Map<String, String> errorMap) {
-		log.info("receipt present");
-		for (Payment payment : payments) {
-			String paymentDetailStatus = payment.getPaymentStatus().toString();
-			if (paymentDetailStatus.equalsIgnoreCase(APPROVED.toString())
-					|| paymentDetailStatus.equalsIgnoreCase(APPROVALPENDING.toString())
-					|| paymentDetailStatus.equalsIgnoreCase(REMITTED.toString())) {
-				errorMap.put("BILL_ALREADY_PAID", "Bill has already been paid or is in pending state");
-				return;
-			}
-		}
-		// validateIfReceiptForBillAbsent(errorMap, billDetail);
-	}
+
 
 	/**
 	 * @param billDetail

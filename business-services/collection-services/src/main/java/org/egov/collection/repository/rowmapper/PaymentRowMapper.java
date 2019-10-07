@@ -2,12 +2,17 @@ package org.egov.collection.repository.rowmapper;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.model.AuditDetails;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
+import org.egov.collection.model.enums.CollectionType;
 import org.egov.collection.model.enums.PaymentDetailStatusEnum;
 import org.egov.collection.model.enums.PaymentModeEnum;
 import org.egov.collection.model.enums.PaymentStatusEnum;
+import org.egov.collection.web.contract.Bill;
+import org.egov.collection.web.contract.BillAccountDetail;
+import org.egov.collection.web.contract.BillDetail;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +46,9 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
 
             if(idToPaymentMap.get(id)==null){
 
-                String tenantId = rs.getString("tenantId");
+                String tenantId = rs.getString("py_tenantId");
                 BigDecimal totalDue = rs.getBigDecimal("totalDue");
-                BigDecimal totalAmountPaid = rs.getBigDecimal("totalAmountPaid");
+                BigDecimal totalAmountPaid = rs.getBigDecimal("py_totalAmountPaid");
                 String transactionNumber = rs.getString("transactionNumber");
                 Long transactionDate = rs.getLong("transactionDate");
                 String paymentMode = rs.getString("paymentMode");
@@ -52,7 +57,7 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                 if(rs.wasNull()){instrumentDate = null;}
 
                 String instrumentNumber = rs.getString("instrumentNumber");
-                String ifscCode = rs.getString("");
+                String ifscCode = rs.getString("ifscCode");
                 String paidBy = rs.getString("paidBy");
                 String mobileNumber = rs.getString("mobileNumber");
                 String payerName = rs.getString("payerName");
@@ -60,21 +65,23 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                 String payerEmail = rs.getString("payerEmail");
                 String payerId = rs.getString("payerId");
                 String paymentStatus = rs.getString("paymentStatus");
-                String createdBy = rs.getString("createdBy");
+                String createdBy = rs.getString("py_createdBy");
 
-                Long createdDate = rs.getLong("createdDate");
+                Long createdDate = rs.getLong("py_createdDate");
                 if(rs.wasNull()){createdDate = null;}
 
-                String lastModifiedBy = rs.getString("lastModifiedBy");
+                String lastModifiedBy = rs.getString("py_lastModifiedBy");
 
-                Long lastModifiedDate = rs.getLong("lastModifiedDate");
+                Long lastModifiedDate = rs.getLong("py_lastModifiedDate");
                 if(rs.wasNull()){lastModifiedDate = null;}
 
 
                 AuditDetails auditDetails = AuditDetails.builder().createdBy(createdBy).createdDate(createdDate)
                         .lastModifiedBy(lastModifiedBy).lastModifiedDate(lastModifiedDate).build();
 
-                Payment currentPayment = Payment.builder().id(id)
+                Payment currentPayment = Payment.builder()
+                        .id(id)
+                        .tenantId(tenantId)
                         .totalDue(totalDue)
                         .totalAmountPaid(totalAmountPaid)
                         .transactionNumber(transactionNumber)
@@ -132,10 +139,10 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
             String billId = rs.getString("billId");
             String paymentDetailStatus = rs.getString("paymentDetailStatus");
             PGobject obj = (PGobject) rs.getObject("pyd_additionalDetails");
-            String createdBy = rs.getString("createdBy");
-            Long createdDate =  rs.getLong("createdDate");
-            String lastModifiedBy = rs.getString("lastModifiedBy");
-            Long lastModifiedDate = rs.getLong("lastModifiedDate");
+            String createdBy = rs.getString("pyd_createdBy");
+            Long createdDate =  rs.getLong("pyd_createdDate");
+            String lastModifiedBy = rs.getString("pyd_lastModifiedBy");
+            Long lastModifiedDate = rs.getLong("pyd_lastModifiedDate");
 
             AuditDetails auditDetails = AuditDetails.builder().createdBy(createdBy).createdDate(createdDate)
                     .lastModifiedBy(lastModifiedBy).lastModifiedDate(lastModifiedDate).build();
@@ -153,10 +160,109 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                     .auditDetails(auditDetails)
                     .build();
 
+            Long billDate = rs.getLong("billdate");
+            if(rs.wasNull()){billDate = null;}
+
+            AuditDetails billAuditDetails = AuditDetails.builder().createdBy(rs.getString("bill_createdby"))
+                    .createdDate(rs.getLong("bill_createddate"))
+                    .lastModifiedBy("bill_lastmodifiedby")
+                    .lastModifiedDate(rs.getLong("bill_lastmodifieddate"))
+                    .build();
+
+            String[] collectionModesAllowed = rs.getString("collectionmodesnotallowed").split(",");
+            List<String> collectionModesAllowedList = new LinkedList<>();
+            if(collectionModesAllowed.length!=0)
+                collectionModesAllowedList = Arrays.asList(collectionModesAllowed);
+
+            PGobject billAdditionalObj = (PGobject) rs.getObject("bill_additionalDetails");
+
+
+            Bill bill = Bill.builder().id(rs.getString("bill_id"))
+            .status(Bill.StatusEnum.fromValue(rs.getString("bill_status")))
+            .isCancelled(rs.getBoolean("iscancelled"))
+            .tenantId(rs.getString("bill_tenantid"))
+            .collectionModesNotAllowed(collectionModesAllowedList)
+            .partPaymentAllowed(rs.getBoolean("partpaymentallowed"))
+            .isAdvanceAllowed(rs.getBoolean("isadvanceallowed"))
+            .minimumAmountToBePaid(rs.getBigDecimal("minimumamounttobepaid"))
+            .businessService(rs.getString("businessservice"))
+            .totalAmount(rs.getBigDecimal("bill_totalamount"))
+            .consumerCode(rs.getString("consumercode"))
+            .billNumber(rs.getString("billnumber"))
+            .billDate(billDate)
+            .auditDetails(billAuditDetails)
+            .additionalDetails(getJsonValue(billAdditionalObj))
+            .build();
+
+            paymentDetail.setBill(bill);
             payment.addpaymentDetailsItem(paymentDetail);
         }
 
 
+        // BillAccountDetail
+        AuditDetails billAccountDetailAudit = AuditDetails.builder()
+                .createdBy(rs.getString("bacdt_createdby")).createdDate(rs.getLong("bacdt_createddate"))
+                .lastModifiedBy(rs.getString("bacdt_lastmodifiedby")).lastModifiedDate(rs.getLong("bacdt_lastmodifieddate")).build();
+
+        PGobject billAccountDetailAdditionalObj = (PGobject) rs.getObject("bacdt_additionalDetails");
+
+        Integer order = rs.getInt("order");
+        if(rs.wasNull()){order = null;}
+
+        BillAccountDetail billAccountDetail = BillAccountDetail.builder()
+                .id(rs.getString("bacdt_id"))
+                .tenantId(rs.getString("bacdt_tenantid"))
+                .billDetailId(rs.getString("billdetailid"))
+                .demandDetailId(rs.getString("demanddetailid"))
+                .order(order)
+                .isActualDemand(rs.getBoolean("isactualdemand"))
+                .taxHeadCode(rs.getString("taxheadcode"))
+                .additionalDetails(getJsonValue(billAccountDetailAdditionalObj))
+                .auditDetails(billAccountDetailAudit)
+                .build();
+
+
+
+        // BillDetail
+        AuditDetails billDetailAuditDetials = AuditDetails.builder()
+                .createdBy(rs.getString("bd_createdby")).createdDate(rs.getLong("bd_createddate"))
+                .lastModifiedBy(rs.getString("bd_lastmodifiedby")).lastModifiedDate(rs.getLong("bd_lastmodifieddate"))
+                .build();
+
+        PGobject billDetailAdditionalObj = (PGobject) rs.getObject("billdetail_additionalDetails");
+
+        BillDetail billDetail = BillDetail.builder()
+                .id(rs.getString("bd_id"))
+                .tenantId(rs.getString("bd_tenantid"))
+                .demandId(rs.getString("demandid"))
+                .billId(rs.getString("billid"))
+                .amount(rs.getBigDecimal("amount"))
+                .amountPaid(rs.getBigDecimal("amountpaid"))
+                .fromPeriod(rs.getLong("fromperiod"))
+                .toPeriod(rs.getLong("toperiod"))
+                .collectedAmount(rs.getBigDecimal("collectedamount"))
+                .additionalDetails(getJsonValue(billDetailAdditionalObj))
+                .receiptDate(rs.getLong("receiptdate"))
+                .receiptType(rs.getString("receipttype"))
+                .channel(rs.getString("channel"))
+                .voucherHeader(rs.getString("voucherheader"))
+                .boundary(rs.getString("boundary"))
+                .reasonForCancellation(rs.getString("reasonforcancellation"))
+                .manualReceiptNumber(rs.getString("manualreceiptnumber"))
+                .manualReceiptDate(rs.getLong("manualreceiptdate"))
+                .status(rs.getString("status"))
+                .collectionType(CollectionType.fromValue(rs.getString("collectiontype")))
+                .billDescription(rs.getString("billdescription"))
+                .expiryDate(rs.getLong("expirydate"))
+                .displayMessage(rs.getString("displaymessage"))
+                .callBackForApportioning(rs.getBoolean("callbackforapportioning"))
+                .cancellationRemarks(rs.getString("cancellationremarks"))
+                .auditDetails(billDetailAuditDetials)
+                .build();
+
+        // Adding to Bill
+        billDetail.addBillAccountDetail(billAccountDetail);
+        paymentDetail.getBill().addBillDetail(billDetail);
 
 
     }

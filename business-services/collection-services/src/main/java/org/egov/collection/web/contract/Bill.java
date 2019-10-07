@@ -1,12 +1,15 @@
 package org.egov.collection.web.contract;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import org.egov.collection.model.AuditDetails;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,6 +21,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.util.CollectionUtils;
 
 @Getter
 @Setter
@@ -72,7 +76,6 @@ public class Bill {
 	  @JsonProperty("collectionModesNotAllowed")
 	  private List<String> collectionModesNotAllowed = null;
 
-
 	  @JsonProperty("partPaymentAllowed")
 	  private Boolean partPaymentAllowed = null;
 
@@ -88,23 +91,74 @@ public class Bill {
 	  @JsonProperty("totalAmount")
 	  private BigDecimal totalAmount = null;
 
+	  @JsonProperty("consumerCode")
+	  private String consumerCode = null;
 
-	  public enum StatusEnum {
-		  ACTIVE("ACTIVE"),
+	  @JsonProperty("billNumber")
+	  private String billNumber = null;
 
-		  CANCELLED("CANCELLED"),
+	  @JsonProperty("billDate")
+	  private Long billDate = null;
 
-		  PAID("PAID"),
 
-		  EXPIRED("EXPIRED");
 
-		  private String value;
+	public enum StatusEnum {
+	  ACTIVE("ACTIVE"),
 
-		  StatusEnum(String value) {
-		  this.value = value;
+	  CANCELLED("CANCELLED"),
+
+	  PAID("PAID"),
+
+	  EXPIRED("EXPIRED");
+
+	  private String value;
+
+	  StatusEnum(String value) {
+	  this.value = value;
+	}
+
+
+	@Override
+	@JsonValue
+	public String toString() {
+		return String.valueOf(value);
+	}
+
+	public static boolean contains(String test) {
+		for (StatusEnum val : StatusEnum.values()) {
+			if (val.name().equalsIgnoreCase(test)) {
+				return true;
+			}
 		}
-	  }
+		return false;
+	}
 
+	@JsonCreator
+	public static StatusEnum fromValue(String text) {
+		for (StatusEnum b : StatusEnum.values()) {
+			if (String.valueOf(b.value).equals(text)) {
+				return b;
+			}
+		}
+		return null;
+	}
+
+  }
+
+	public Boolean addBillDetail(BillDetail billDetail) {
+
+		if (CollectionUtils.isEmpty(billDetails)) {
+
+			billDetails = new ArrayList<>();
+			return billDetails.add(billDetail);
+		} else {
+
+			if (!billDetails.contains(billDetail))
+				return billDetails.add(billDetail);
+			else
+				return false;
+		}
+	}
 
 
 }
