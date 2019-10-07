@@ -11103,7 +11103,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "Complaints.PGR Reports.ComplaintTypeWiseReport",
-      "navigationURL": "report/rainmaker-pgr/ComplaintTypeWiseReport",
+      "navigationURL": "report/rainmaker-pgr/ComplaintTypesReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
     },
