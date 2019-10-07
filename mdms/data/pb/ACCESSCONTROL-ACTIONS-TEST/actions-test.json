@@ -11094,7 +11094,7 @@
     },
     {
       "id": 1560,
-      "name": "ComplaintTypeWiseReport",
+      "name": "ComplaintTypesReport",
       "url": "url",
       "displayName": "Complaint Types",
       "orderNumber": 2,
@@ -11102,8 +11102,8 @@
       "enabled": true,
       "serviceCode": "PGR",
       "code": "null",
-      "path": "Complaints.PGR Reports.ComplaintTypeWiseReport",
-      "navigationURL": "report/rainmaker-pgr/ComplaintTypeWiseReport",
+      "path": "Complaints.PGR Reports.ComplaintTypesReport",
+      "navigationURL": "report/rainmaker-pgr/ComplaintTypesReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
     },
