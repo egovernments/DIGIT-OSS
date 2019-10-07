@@ -14491,13 +14491,7 @@
       "actionid": 1561,
       "actioncode": "",
       "tenantId": "pb"
-    },
-    {
-      "rolecode": "GRO",
-      "actionid": 1562,
-      "actioncode": "",
-      "tenantId": "pb"
-    },
+    }
     {
       "rolecode": "GRO",
       "actionid": 1563,
