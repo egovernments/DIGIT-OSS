@@ -294,9 +294,6 @@ definitions:
       additionalDetails:
         type: object
         description: field for capturing any additional details.
-      minimumAmountPayable:
-        type: number
-        description: Minimum bill amount to be paid.
       status:
         type: string
         enum:
@@ -490,9 +487,6 @@ definitions:
       consumerCode:
         type: string
         description: Consumer code of the entity for which the bill is being created.
-      minimumAmountToBePaid:
-        type: number
-        description: Minimum bill amount to be paid.
       collectionModesNotAllowed:
         type: array
         items:
