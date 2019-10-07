@@ -390,7 +390,7 @@ class ShowForm extends Component {
       let searchParams = [];
 
       clearReportHistory();
-      let resulturl = getResultUrl(moduleName);
+      let resulturl = getResultUrl(moduleName,rptName);
       let response =
         resulturl &&
         commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: rptName || this.state.reportName, searchParams }).then(
@@ -509,7 +509,7 @@ class ShowForm extends Component {
       setSearchParams(searchParams);
 
       clearReportHistory();
-      let resulturl = getResultUrl(this.state.moduleName);
+      let resulturl = getResultUrl(this.state.moduleName,this.state.reportName);
       let response =
         resulturl &&
         commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: this.state.reportName, searchParams }).then(
@@ -527,7 +527,7 @@ class ShowForm extends Component {
     } else {
       if (_.isEmpty(JSON.parse(localStorageGet("searchCriteria")))) {
         let reportData = reportHistory[reportIndex - 1 - 1];
-        let resulturl = getResultUrl(this.state.moduleName);
+        let resulturl = getResultUrl(this.state.moduleName,this.state.reportName);
         let response =
           resulturl &&
           commonApiPost(resulturl, {}, { ...reportData }).then(

@@ -147,8 +147,10 @@ const mapStateToProps = (state) => {
     notifications.filter((item) => {
       return item.eventType === "SYSTEMGENERATED" || item.eventType === "BROADCAST";
     });
+
+    console.log("=========>",filteredNotifications)
   let whatsNewEvents =
-    filteredNotifications && getTransformedNotifications(filteredNotifications).slice(0, Math.min(3, filteredNotifications.length));
+    filteredNotifications && filteredNotifications.length > 0 &&  getTransformedNotifications(filteredNotifications).slice(0, Math.min(3, filteredNotifications.length));
 
   return { notifications, userInfo, loading, whatsNewEvents };
 };
