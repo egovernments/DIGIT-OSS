@@ -1,0 +1,14 @@
+{
+  "tenantId": "pb",
+  "moduleName": "Workflow",
+  "BusinessServiceConfig": [
+    {
+      "code": "NEWTL",
+      "isStateLevel": true
+    },
+    {
+      "code": "FIRENOC",
+      "isStateLevel": true
+    }
+  ]
+}
