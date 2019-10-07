@@ -11103,7 +11103,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "Complaints.PGR Reports.ComplaintTypeWiseReport",
-      "navigationURL": "report/rainmaker-pgr-nonframework/ComplaintTypeWiseReport",
+      "navigationURL": "report/rainmaker-pgr/ComplaintTypeWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
     },
@@ -11118,7 +11118,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "Complaints.PGR Reports.DepartmentWiseReport",
-      "navigationURL": "report/rainmaker-pgr-nonframework/DepartmentWiseReport",
+      "navigationURL": "report/rainmaker-pgr/DepartmentWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
     },
@@ -11133,7 +11133,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "Complaints.PGR Reports.AOWiseReport",
-      "navigationURL": "report/rainmaker-pgr-nonframework/AOWiseReport",
+      "navigationURL": "report/rainmaker-pgr/AOWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
     },
@@ -11148,7 +11148,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "Complaints.PGR Reports.ULBEmployeeWiseReport",
-      "navigationURL": "report/rainmaker-pgr-nonframework/ULBEmployeeWiseReport",
+      "navigationURL": "report/rainmaker-pgr/ULBEmployeeWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
     },
@@ -11163,7 +11163,7 @@
       "serviceCode": "PGR",
       "code": "null",
       "path": "Complaints.PGR Reports.SourceWiseReport",
-      "navigationURL": "report/rainmaker-pgr-nonframework/SourceWiseReport",
+      "navigationURL": "report/rainmaker-pgr/SourceWiseReport",
       "leftIcon": "action:assignment",
       "rightIcon": ""
     },
