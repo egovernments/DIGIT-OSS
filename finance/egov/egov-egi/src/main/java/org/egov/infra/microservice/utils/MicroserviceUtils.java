@@ -1198,7 +1198,7 @@ public class MicroserviceUtils {
         request.setRemittances(remittanceList);
         final RequestInfo requestInfo = new RequestInfo();
 
-        requestInfo.setAuthToken(getUserToken());
+        requestInfo.setAuthToken(generateAdminToken(getTenentId()));
         requestInfo.setUserInfo(new UserInfo());
         requestInfo.getUserInfo().setId(ApplicationThreadLocals.getUserId());
         request.setRequestInfo(requestInfo);

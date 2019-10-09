@@ -167,7 +167,7 @@ public class RemittanceServiceImpl extends RemittanceService {
 
         String createVoucher = "N";
 
-        final String functionCode = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
+        String functionCode = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
                 CollectionConstants.APPCONFIG_VALUE_COLLECTION_BANKREMITTANCE_FUNCTIONCODE);
      // TODO : need to make this call to mdms
 //        FinancialStatus instrumentStatusNew = microserviceUtils
@@ -253,6 +253,7 @@ public class RemittanceServiceImpl extends RemittanceService {
                                     List<CVoucherHeader> voucher = this.getVoucher(iv.getVoucherHeaderId());
                                     if(!voucher.isEmpty()){
                                         fundCode = voucher.get(0).getFundId().getCode();
+                                        functionCode = voucher.get(0).getVouchermis().getFunction().getCode();
                                     }else{
                                         String validationMessage = "Voucher is not exist for receipt: "+receipt.getReceiptNumber()+", contact tosystem administrator.";
                                         throw new ValidationException(Arrays.asList(new ValidationError(validationMessage, validationMessage)));
@@ -265,6 +266,7 @@ public class RemittanceServiceImpl extends RemittanceService {
                 }
             }
         }
+        
         if (totalCashVoucherAmt.compareTo(totalCashAmt) != 0) {
             String validationMessage = "There is a difference of amount " + totalCashAmt.subtract(totalCashVoucherAmt)
                     + " between bank challan and the remittance voucher , please contact system administrator ";
@@ -827,7 +829,7 @@ public class RemittanceServiceImpl extends RemittanceService {
         if (!chequeInHand.list().isEmpty())
             chequeInHandGlcode = chequeInHand.list().get(0).toString();
 
-        final String functionCode = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
+        String functionCode = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
                 CollectionConstants.APPCONFIG_VALUE_COLLECTION_BANKREMITTANCE_FUNCTIONCODE);
 
         List<String> instrumentIdList = new ArrayList<>();
@@ -886,8 +888,9 @@ public class RemittanceServiceImpl extends RemittanceService {
                     List<CVoucherHeader> voucher = this.getVoucher(instruments.get(0).getInstrumentVouchers().get(0).getVoucherHeaderId());
                     if(!voucher.isEmpty()){
                         fundCode = voucher.get(0).getFundId().getCode();
+                        functionCode = voucher.get(0).getVouchermis().getFunction().getCode();
                     }else{
-                        String validationMessage = "Voucher is not exist for receipt: "+receipt.getReceiptNumber()+", contact tosystem administrator.";
+                        String validationMessage = "Voucher is not exist for receipt: "+receipt.getReceiptNumber()+", contact to system administrator.";
                         throw new ValidationException(Arrays.asList(new ValidationError(validationMessage, validationMessage)));
                     }
                     totalChequeAmount = totalChequeAmount.add(receipt.getInstrumentAmount());
