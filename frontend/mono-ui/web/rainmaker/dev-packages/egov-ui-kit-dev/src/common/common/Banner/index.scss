@@ -89,14 +89,19 @@
     display: block !important;
   }
 
-  .banner-overlay {
-    background: transparent;
-  }
+  // .banner-overlay {
+  //   background: transparent;
+  // }
   .banner-image,
   .banner-overlay {
     // background-image: url(../../../assets/images/Banner_image.jpg);
     position: absolute;
     height: 100%;
+    background: rgba(52, 73, 94, 0.9);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 
   .banner-main-content {
