@@ -4,22 +4,39 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
 public class PaymentSearchCriteria {
 
 
-    private List<String> ids;
+    private Set<String> ids;
 
-    private List<String> billIds;
+    private Set<String> billIds;
 
     private String tenantId;
 
-    private List<String> receiptNumbers;
+    private Set<String> receiptNumbers;
 
-    private String status;
+    private Set<String> status;
 
+    private Set<String> paymentModes;
 
+    private List<String> payerIds;
+
+    private Set<String> consumerCodes;
+
+    private String transactionNumber;
+
+    private String mobileNumber;
+
+    private Long fromDate;
+
+    private Long toDate;
+
+    private Integer offset;
+
+    private Integer limit;
 
 }

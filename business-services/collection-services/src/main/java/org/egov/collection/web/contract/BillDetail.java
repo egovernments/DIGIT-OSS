@@ -122,9 +122,6 @@ public class BillDetail {
 	@JsonProperty("boundary")
 	private String boundary = null;
 
-	@JsonProperty("reasonForCancellation")
-	private String reasonForCancellation = null;
-
 	@JsonProperty("manualReceiptNumber")
 	private String manualReceiptNumber = null;
 
@@ -134,9 +131,6 @@ public class BillDetail {
 
 	@JsonProperty("billAccountDetails")
 	private List<BillAccountDetail> billAccountDetails = null;
-
-	@JsonProperty("status")
-	private String status = null;
 
 	@NotNull
 	@JsonProperty("collectionType")

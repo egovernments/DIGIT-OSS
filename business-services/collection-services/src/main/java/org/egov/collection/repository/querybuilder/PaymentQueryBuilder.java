@@ -3,23 +3,59 @@ package org.egov.collection.repository.querybuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
+import org.egov.collection.model.PaymentSearchCriteria;
 import org.egov.collection.web.contract.Bill;
 import org.egov.collection.web.contract.BillAccountDetail;
 import org.egov.collection.web.contract.BillDetail;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+
+import static java.util.Objects.isNull;
+import static java.util.stream.Collectors.toSet;
 
 @Service
 public class PaymentQueryBuilder {
 
 
+    public static final String SELECT_PAYMENT_SQL = "SELECT py.*,pyd.*,bill.*,bd.*,bacdt.*, " +
+            "py.id as py_id,py.tenantId as py_tenantId,py.totalAmountPaid as py_totalAmountPaid,py.createdBy as py_createdBy,py.createdDate as py_createdDate," +
+            "py.lastModifiedBy as py_lastModifiedBy,py.lastModifiedDate as py_lastModifiedDate," +
+            "pyd.id as pyd_id,pyd.tenantId as pyd_tenantId,pyd.createdBy as pyd_createdBy,pyd.createdDate as pyd_createdDate,pyd.lastModifiedBy as pyd_lastModifiedBy," +
+            "pyd.lastModifiedDate as pyd_lastModifiedDate," +
+            "bill.createdby as bill_createdby,bill.createddate as bill_createddate,bill.lastmodifiedby as bill_lastmodifiedby," +
+            "bill.lastmodifieddate as bill_lastmodifieddate,bill.id as bill_id," +
+            "bill.status as bill_status," +
+            "bill.tenantid as bill_tenantid,bill.totalamount as bill_totalamount," +
+            "bd.createdby as bd_createdby,bd.createddate as bd_createddate,bd.lastmodifiedby as bd_lastmodifiedby," +
+            "bd.lastmodifieddate as bd_lastmodifieddate,bd.id as bd_id,bd.tenantid as bd_tenantid," +
+            "bacdt.createdby as bacdt_createdby,bacdt.createddate as bacdt_createddate,bacdt.lastmodifiedby as bacdt_lastmodifiedby," +
+            "bacdt.lastmodifieddate as bacdt_lastmodifieddate," +
+            "bacdt.id as bacdt_id,bacdt.tenantid as bacdt_tenantid" +
+            " FROM egcl_payment py  " +
+            " INNER JOIN egcl_paymentdetail pyd ON pyd.paymentid = py.id " +
+            " INNER JOIN egcl_bill bill ON bill.id = pyd.billid " +
+            " INNER JOIN egcl_billdetial bd ON bd.billid = bill.id " +
+            " INNER JOIN egcl_billaccountdetail bacdt ON bacdt.billdetailid = bd.id  ";
+
+    private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
+            "(SELECT *, DENSE_RANK() OVER (ORDER BY py_id) offset_ FROM " +
+            "({baseQuery})" +
+            " result) result_offset " +
+            "WHERE offset_ > :offset AND offset_ <= :limit";
+
+
     public static final String INSERT_PAYMENT_SQL = "INSERT INTO egcl_payment(" +
             "            id, tenantid, totaldue, totalamountpaid, transactionnumber, transactiondate, " +
-            "            paymentmode, instrumentdate, instrumentnumber, ifsccode, additionaldetails, " +
+            "            paymentmode, instrumentdate, instrumentnumber,instrumentStatus, ifsccode, additionaldetails, " +
             "            paidby, mobilenumber, payername, payeraddress, payeremail, payerid, " +
             "            paymentstatus, createdby, createddate, lastmodifiedby, lastmodifieddate)" +
             "            VALUES (:id, :tenantid, :totaldue, :totalamountpaid, :transactionnumber, :transactiondate, " +
-            "            :paymentmode, :instrumentdate, :instrumentnumber, :ifsccode, :additionaldetails," +
+            "            :paymentmode, :instrumentdate, :instrumentnumber, :instrumentStatus, :ifsccode, :additionaldetails," +
             "            :paidby, :mobilenumber, :payername, :payeraddress, :payeremail, :payerid, " +
             "            :paymentstatus, :createdby, :createddate, :lastmodifiedby, :lastmodifieddate);";
 
@@ -69,6 +105,10 @@ public class PaymentQueryBuilder {
             "            :order, :amount, :isactualdemand, :taxheadcode, :additionaldetails," +
             "            :createdby, :createddate, :lastmodifiedby, :lastmodifieddate);";
 
+    public static final String UPDATE_STATUS_BILL_SQL = "UPDATE public.egcl_bill " +
+            "   SET  status= :status, iscancelled= :iscancelled, additionaldetails= :additionaldetails, createdby=:createdby," +
+            "   createddate= :createddate,lastmodifiedby= :lastmodifiedby, lastmodifieddate=:lastmodifieddate" +
+            "   WHERE id=:id;";
 
 
     public static MapSqlParameterSource getParametersForPaymentCreate(Payment payment) {
@@ -83,6 +123,7 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("paymentmode", payment.getPaymentMode());
         sqlParameterSource.addValue("instrumentdate", payment.getInstrumentDate());
         sqlParameterSource.addValue("instrumentnumber", payment.getInstrumentNumber());
+        sqlParameterSource.addValue("instrumentStatus", payment.getInstrumentStatus());
         sqlParameterSource.addValue("ifsccode", payment.getIfscCode());
         sqlParameterSource.addValue("additionaldetails", payment.getAdditionalDetails());
         sqlParameterSource.addValue("paidby", payment.getPaidBy());
@@ -113,7 +154,6 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("receiptnumber", paymentDetail.getReceiptNumber());
         sqlParameterSource.addValue("businessservice", paymentDetail.getBusinessService());
         sqlParameterSource.addValue("billid", paymentDetail.getBillId());
-        sqlParameterSource.addValue("paymentdetailstatus", paymentDetail.getPaymentDetailStatus());
         sqlParameterSource.addValue("additionaldetails", paymentDetail.getAdditionalDetails());
         sqlParameterSource.addValue("createdby", paymentDetail.getAuditDetails().getCreatedBy());
         sqlParameterSource.addValue("createddate", paymentDetail.getAuditDetails().getCreatedDate());
@@ -144,6 +184,8 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("consumercode", bill.getConsumerCode());
         sqlParameterSource.addValue("billnumber", bill.getBillNumber());
         sqlParameterSource.addValue("billdate", bill.getBillDate());
+        sqlParameterSource.addValue("status", bill.getStatus());
+        sqlParameterSource.addValue("reasonforcancellation", bill.getReasonForCancellation());
         sqlParameterSource.addValue("createdby", bill.getAuditDetails().getCreatedBy());
         sqlParameterSource.addValue("createddate", bill.getAuditDetails().getCreatedDate());
         sqlParameterSource.addValue("lastmodifiedby", bill.getAuditDetails().getLastModifiedBy());
@@ -172,10 +214,8 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("channel", billDetail.getChannel());
         sqlParameterSource.addValue("voucherheader", billDetail.getVoucherHeader());
         sqlParameterSource.addValue("boundary", billDetail.getBoundary());
-        sqlParameterSource.addValue("reasonforcancellation", billDetail.getReasonForCancellation());
         sqlParameterSource.addValue("manualreceiptnumber", billDetail.getManualReceiptNumber());
         sqlParameterSource.addValue("manualreceiptdate", billDetail.getManualReceiptDate());
-        sqlParameterSource.addValue("status", billDetail.getStatus());
         sqlParameterSource.addValue("collectiontype", billDetail.getCollectionType());
         sqlParameterSource.addValue("billdescription", billDetail.getBillDescription());
         sqlParameterSource.addValue("expirydate", billDetail.getExpiryDate());
@@ -210,6 +250,190 @@ public class PaymentQueryBuilder {
 
         return sqlParameterSource;
     }
+
+
+
+    public static String getPaymentSearchQuery(PaymentSearchCriteria searchCriteria,
+                                               Map<String, Object> preparedStatementValues) {
+        StringBuilder selectQuery = new StringBuilder(SELECT_PAYMENT_SQL);
+
+        addWhereClause(selectQuery, preparedStatementValues, searchCriteria);
+
+        return addPaginationClause(selectQuery, preparedStatementValues, searchCriteria);
+    }
+
+
+    private static void addWhereClause(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
+                                       PaymentSearchCriteria searchCriteria) {
+
+        if (StringUtils.isNotBlank(searchCriteria.getTenantId())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            if(searchCriteria.getTenantId().split("\\.").length > 1) {
+                selectQuery.append(" py.tenantId =:tenantId");
+                preparedStatementValues.put("tenantId", searchCriteria.getTenantId());
+            }
+            else {
+                selectQuery.append(" py.tenantId LIKE :tenantId");
+                preparedStatementValues.put("tenantId", searchCriteria.getTenantId() + "%");
+            }
+
+        }
+
+        if (searchCriteria.getReceiptNumbers() != null && !searchCriteria.getReceiptNumbers().isEmpty()) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" pyd.receiptNumber IN (:receiptnumber)  ");
+            preparedStatementValues.put("receiptnumber", searchCriteria.getReceiptNumbers());
+        }
+
+        if (CollectionUtils.isEmpty(searchCriteria.getStatus())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" UPPER(pyd.status) in (:status)");
+            preparedStatementValues.put("status",
+                    searchCriteria.getStatus()
+                            .stream()
+                            .map(String::toUpperCase)
+                            .collect(toSet())
+            );
+        }
+
+        if (!CollectionUtils.isEmpty(searchCriteria.getPaymentModes())) {
+
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" UPPER(py.paymentMode) in (:paymentMode)");
+            preparedStatementValues.put("paymentMode",
+                    searchCriteria.getPaymentModes()
+                            .stream()
+                            .map(String::toUpperCase)
+                            .collect(toSet())
+            );
+        }
+
+        if (StringUtils.isNotBlank(searchCriteria.getMobileNumber())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" py.mobileNumber = :mobileNumber");
+            preparedStatementValues.put("mobileNumber", searchCriteria.getMobileNumber());
+        }
+
+        if (StringUtils.isNotBlank(searchCriteria.getTransactionNumber())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" py.transactionNumber = :transactionNumber");
+            preparedStatementValues.put("transactionNumber", searchCriteria.getTransactionNumber());
+        }
+
+        if (searchCriteria.getFromDate() != null) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" py.transactionDate >= :fromDate");
+            preparedStatementValues.put("fromDate", searchCriteria.getFromDate());
+        }
+
+        if (searchCriteria.getToDate() != null) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" py.transactionDate <= :toDate");
+            Calendar c = Calendar.getInstance();
+            c.setTime(new Date(searchCriteria.getToDate()));
+            c.add(Calendar.DATE, 1);
+            searchCriteria.setToDate(c.getTime().getTime());
+
+            preparedStatementValues.put("toDate", searchCriteria.getToDate());
+        }
+
+        if (CollectionUtils.isEmpty(searchCriteria.getPayerIds())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" py.payerid IN (:payerid)  ");
+            preparedStatementValues.put("payerid", searchCriteria.getPayerIds());
+        }
+
+        if (!CollectionUtils.isEmpty(searchCriteria.getConsumerCodes())) {
+
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" bill.consumerCode in (:consumerCodes)");
+            preparedStatementValues.put("consumerCodes", searchCriteria.getConsumerCodes());
+        }
+
+
+    }
+
+
+    private static String addPaginationClause(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
+                                              PaymentSearchCriteria criteria) {
+
+        if (criteria.getLimit()!=null && criteria.getLimit() != 0) {
+            String finalQuery = PAGINATION_WRAPPER.replace("{baseQuery}", selectQuery);
+            preparedStatementValues.put("offset", criteria.getOffset());
+            preparedStatementValues.put("limit", criteria.getOffset() + criteria.getLimit());
+
+            return addOrderByClause(finalQuery, criteria);
+
+        } else
+            return addOrderByClause(selectQuery.toString(), criteria);
+    }
+
+    private static String addOrderByClause(String selectQuery,
+                                           PaymentSearchCriteria criteria) {
+        return selectQuery + " ORDER BY py.transactiondate DESC ";
+    }
+
+
+    private static void addClauseIfRequired(Map<String, Object> values, StringBuilder queryString) {
+        if (values.isEmpty())
+            queryString.append(" WHERE ");
+        else {
+            queryString.append(" AND");
+        }
+    }
+
+
+
+    public static MapSqlParameterSource getParamtersForBillStatusUpdate(Bill bill){
+
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+
+        sqlParameterSource.addValue("id", bill.getId());
+        sqlParameterSource.addValue("status", bill.getStatus());
+        sqlParameterSource.addValue("iscancelled", bill.getIsCancelled());
+        sqlParameterSource.addValue("additionaldetails", bill.getAdditionalDetails());
+        sqlParameterSource.addValue("status", bill.getStatus());
+        sqlParameterSource.addValue("reasonforcancellation", bill.getReasonForCancellation());
+        sqlParameterSource.addValue("createdby", bill.getAuditDetails().getCreatedBy());
+        sqlParameterSource.addValue("createddate", bill.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("lastmodifiedby", bill.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue("lastmodifieddate", bill.getAuditDetails().getLastModifiedDate());
+
+        return sqlParameterSource;
+    }
+
+
+    public static MapSqlParameterSource getParametersForPaymentDetailStatusUpdate(PaymentDetail paymentDetail) {
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+
+        sqlParameterSource.addValue("id", paymentDetail.getId());
+        sqlParameterSource.addValue("additionaldetails", paymentDetail.getAdditionalDetails());
+        sqlParameterSource.addValue("createdby", paymentDetail.getAuditDetails().getCreatedBy());
+        sqlParameterSource.addValue("createddate", paymentDetail.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("lastmodifiedby", paymentDetail.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue("lastmodifieddate", paymentDetail.getAuditDetails().getLastModifiedDate());
+
+        return sqlParameterSource;
+
+    }
+
+
+    public static MapSqlParameterSource getParametersForPaymentStatusUpdate(Payment payment) {
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+
+        sqlParameterSource.addValue("id", payment.getId());
+        sqlParameterSource.addValue("instrumentStatus", payment.getInstrumentStatus());
+        sqlParameterSource.addValue("additionaldetails", payment.getAdditionalDetails());
+        sqlParameterSource.addValue("createdby", payment.getAuditDetails().getCreatedBy());
+        sqlParameterSource.addValue("createddate", payment.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("lastmodifiedby", payment.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue("lastmodifieddate", payment.getAuditDetails().getLastModifiedDate());
+
+        return sqlParameterSource;
+
+    }
+
+
 
 
 

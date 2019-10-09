@@ -2,7 +2,6 @@ package org.egov.collection.repository.rowmapper;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.model.AuditDetails;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;

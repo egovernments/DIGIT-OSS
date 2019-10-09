@@ -2,8 +2,6 @@ package org.egov.collection.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.egov.collection.model.enums.PaymentDetailStatusEnum;
-import org.egov.collection.model.enums.PaymentStatusEnum;
 import org.egov.collection.web.contract.Bill;
 
 import javax.validation.constraints.NotNull;
@@ -54,10 +52,6 @@ public class PaymentDetail {
 
     @JsonProperty("additionalDetails")
     private Object additionalDetails;
-
-    @Size(max=64)
-    @JsonProperty("paymentDetailStatus")
-    private PaymentDetailStatusEnum paymentDetailStatus;
 
     @JsonProperty("auditDetails")
     private AuditDetails auditDetails;

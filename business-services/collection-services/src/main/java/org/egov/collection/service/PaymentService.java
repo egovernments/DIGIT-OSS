@@ -4,21 +4,22 @@ import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentRequest;
+import org.egov.collection.model.PaymentSearchCriteria;
 import org.egov.collection.producer.CollectionProducer;
 import org.egov.collection.repository.PaymentRepository;
 import org.egov.collection.util.PaymentEnricher;
 import org.egov.collection.util.PaymentValidator;
 import org.egov.collection.web.contract.Bill;
-import org.egov.collection.web.contract.Receipt;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.Objects.isNull;
 
 
 @Service
@@ -50,6 +51,39 @@ public class PaymentService {
         this.paymentValidator = paymentValidator;
         this.paymentRepository = paymentRepository;
         this.producer = producer;
+    }
+
+
+
+    /**
+     * Fetch all receipts matching the given criteria, enrich receipts with instruments
+     *
+     * @param requestInfo           Request info of the search
+     * @param paymentSearchCriteria Criteria against which search has to be performed
+     * @return List of matching receipts
+     */
+    public List<Payment> getPayments(RequestInfo requestInfo, PaymentSearchCriteria paymentSearchCriteria) {
+        Map<String, String> errorMap = new HashMap<>();
+        paymentValidator.validateUserInfo(requestInfo, errorMap);
+        if (!errorMap.isEmpty())
+            throw new CustomException(errorMap);
+
+        if (applicationProperties.isPaymentsSearchPaginationEnabled()) {
+            paymentSearchCriteria.setOffset(isNull(paymentSearchCriteria.getOffset()) ? 0 : paymentSearchCriteria.getOffset());
+            paymentSearchCriteria.setLimit(isNull(paymentSearchCriteria.getLimit()) ? applicationProperties.getReceiptsSearchDefaultLimit() :
+                    paymentSearchCriteria.getLimit());
+        } else {
+            paymentSearchCriteria.setOffset(0);
+            paymentSearchCriteria.setLimit(applicationProperties.getReceiptsSearchDefaultLimit());
+        }
+        if(requestInfo.getUserInfo().getType().equals("CITIZEN")) {
+            List<String> payerIds = new ArrayList<>();
+            payerIds.add(requestInfo.getUserInfo().getUuid());
+            paymentSearchCriteria.setPayerIds(payerIds);
+        }
+        List<Payment> payments = paymentRepository.fetchPayments(paymentSearchCriteria);
+
+        return payments;
     }
 
 

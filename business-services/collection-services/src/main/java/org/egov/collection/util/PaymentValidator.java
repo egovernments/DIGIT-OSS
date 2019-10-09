@@ -9,15 +9,15 @@ import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.model.PaymentSearchCriteria;
 import org.egov.collection.model.enums.InstrumentTypesEnum;
 import org.egov.collection.model.enums.PaymentModeEnum;
+import org.egov.collection.repository.PaymentRepository;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Objects.isNull;
 import static org.egov.collection.config.CollectionServiceConstants.*;
@@ -31,6 +31,13 @@ import static org.egov.collection.model.enums.ReceiptStatus.REMITTED;
 public class PaymentValidator {
 
 
+    private PaymentRepository paymentRepository;
+
+
+    @Autowired
+    public PaymentValidator(PaymentRepository paymentRepository) {
+        this.paymentRepository = paymentRepository;
+    }
 
 
     public void validatePaymentForCreate(PaymentRequest paymentRequest) {
@@ -39,11 +46,11 @@ public class PaymentValidator {
         Payment payment = paymentRequest.getPayment();
         List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
 
-        validateUserInfo(paymentRequest, errorMap);
+        validateUserInfo(paymentRequest.getRequestInfo(), errorMap);
 
         validateInstrument(paymentRequest.getPayment(),errorMap);
 
-        List<String> billIds = new LinkedList<>();
+        Set<String> billIds = new HashSet<>();
 
         paymentDetails.forEach(paymentDetail -> {
             if (paymentDetail.getBill()==null)
@@ -52,7 +59,7 @@ public class PaymentValidator {
                 errorMap.put(PAID_BY_MISSING_CODE, PAID_BY_MISSING_MESSAGE);
 
             if(billIds.contains(paymentDetail.getBillId()))
-                errorMap.put("DUPLICATE_BILLID","The Bill id: "+paymentDetail.getBillId()+" is repeated for multiple payment details")
+                errorMap.put("DUPLICATE_BILLID","The Bill id: "+paymentDetail.getBillId()+" is repeated for multiple payment details");
             else billIds.add(paymentDetail.getBillId());
 
         });
@@ -61,7 +68,7 @@ public class PaymentValidator {
 
         PaymentSearchCriteria criteria = PaymentSearchCriteria.builder().tenantId(payment.getTenantId())
                 .billIds(billIds).build();
-        List<Payment> payments = collectionRepository.fetchPayments(criteria);
+        List<Payment> payments = paymentRepository.fetchPayments(criteria);
 
 
         if (!payments.isEmpty()) {
@@ -97,14 +104,14 @@ public class PaymentValidator {
     }
 
 
-    public void validateUserInfo(PaymentRequest paymentRequest, Map<String, String> errorMap) {
-        if (null == paymentRequest.getRequestInfo()) {
+    public void validateUserInfo(RequestInfo requestInfo, Map<String, String> errorMap) {
+        if (null == requestInfo) {
             errorMap.put("INVALID_REQUEST_INFO", "RequestInfo cannot be null");
         } else {
-            if (null == paymentRequest.getRequestInfo().getUserInfo()) {
+            if (null == requestInfo.getUserInfo()) {
                 errorMap.put("INVALID_USER_INFO", "UserInfo within RequestInfo cannot be null");
             } else {
-                if (StringUtils.isEmpty(paymentRequest.getRequestInfo().getUserInfo().getUuid())) {
+                if (StringUtils.isEmpty(requestInfo.getUserInfo().getUuid())) {
                     errorMap.put("INVALID_USER_ID", "UUID of the user within RequestInfo cannot be null");
                 }
             }

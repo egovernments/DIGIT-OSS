@@ -5,7 +5,7 @@ import org.egov.collection.model.AuditDetails;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentRequest;
-import org.egov.collection.model.enums.PaymentDetailStatusEnum;
+import org.egov.collection.model.enums.InstrumentStatusEnum;
 import org.egov.collection.model.enums.PaymentStatusEnum;
 import org.egov.collection.model.enums.Purpose;
 import org.egov.collection.repository.BillingServiceRepository;
@@ -116,14 +116,13 @@ public class PaymentEnricher {
         List<PaymentDetail> paymentDetails = payment.getPaymentDetails();
         String paymentMode = payment.getPaymentMode().toString();
 
+        if (paymentMode.equalsIgnoreCase(ONLINE.name()) || paymentMode.equalsIgnoreCase(CARD.name()))
+            payment.setInstrumentStatus(InstrumentStatusEnum.REMITTED);
+        else
+            payment.setInstrumentStatus(InstrumentStatusEnum.APPROVED);
+
         for (PaymentDetail paymentDetail : paymentDetails) {
             paymentDetail.setId(UUID.randomUUID().toString());
-
-            if (paymentMode.equalsIgnoreCase(ONLINE.name()) || paymentMode.equalsIgnoreCase(CARD.name()))
-                paymentDetail.setPaymentDetailStatus(PaymentDetailStatusEnum.REMITTED);
-            else
-                paymentDetail.setPaymentDetailStatus(PaymentDetailStatusEnum.APPROVED);
-
             String receiptNumber = idGenRepository.generateReceiptNumber(paymentRequest.getRequestInfo(), paymentDetail.getBusinessService(),
                     paymentDetail.getTenantId());
             paymentDetail.setReceiptNumber(receiptNumber);

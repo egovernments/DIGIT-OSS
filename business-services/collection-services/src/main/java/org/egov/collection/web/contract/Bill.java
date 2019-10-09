@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.egov.collection.model.AuditDetails;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -57,11 +58,14 @@ public class Bill {
 	  @JsonProperty("status")
 	  private StatusEnum status = null;
 
+	  @JsonProperty("reasonForCancellation")
+ 	  private String reasonForCancellation = null;
+
 	  @JsonProperty("isCancelled")
 	  private Boolean isCancelled = null;
 
 	  @JsonProperty("additionalDetails")
-	  private Object additionalDetails = null;
+	  private JsonNode additionalDetails = null;
 
 	  @JsonProperty("billDetails")
 	  @Valid

@@ -48,10 +48,10 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
-import org.egov.collection.model.PaymentRequest;
-import org.egov.collection.model.ReceiptSearchCriteria;
+import org.egov.collection.model.*;
 import org.egov.collection.model.enums.ReceiptStatus;
 import org.egov.collection.service.CollectionService;
+import org.egov.collection.service.PaymentService;
 import org.egov.collection.service.WorkflowService;
 import org.egov.collection.util.migration.ReceiptMigration;
 import org.egov.collection.web.contract.Receipt;
@@ -66,6 +66,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -78,15 +79,12 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/v2/receipts")
+@RequestMapping("/payments")
 @Slf4j
-public class ReceiptControllerV2 {
+public class PaymentController {
 
     @Autowired
-    private CollectionService collectionService;
-
-    @Autowired
-    private ReceiptMigration migrationService;
+    private PaymentService paymentService;
 
     @Autowired
     private WorkflowService workflowService;
@@ -96,7 +94,7 @@ public class ReceiptControllerV2 {
 
     @RequestMapping(value = "/_search", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<ReceiptRes> search(@ModelAttribute ReceiptSearchCriteria receiptSearchCriteria,
+    public ResponseEntity<PaymentResponse> search(@ModelAttribute PaymentSearchCriteria paymentSearchCriteria,
                                              @RequestBody @Valid final RequestInfoWrapper requestInfoWrapper) {
 
         final RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
@@ -105,9 +103,9 @@ public class ReceiptControllerV2 {
         // Only do this when search ignore status has been defined in
         // application.properties
         // Only do this when status has not been already provided for the search
-        if ((receiptSearchCriteria.getReceiptNumbers() == null || receiptSearchCriteria.getReceiptNumbers().isEmpty())
+        if ((CollectionUtils.isEmpty(paymentSearchCriteria.getReceiptNumbers()))
                 && !searchIgnoreStatus.isEmpty()
-                && (receiptSearchCriteria.getStatus() == null || receiptSearchCriteria.getStatus().isEmpty())) {
+                && (CollectionUtils.isEmpty(paymentSearchCriteria.getStatus()))) {
             // Do not return ignored status for receipts by default
             Set<String> defaultStatus = new HashSet<>();
             for (ReceiptStatus receiptStatus : ReceiptStatus.values()) {
@@ -116,20 +114,20 @@ public class ReceiptControllerV2 {
                 }
             }
 
-            receiptSearchCriteria.setStatus(defaultStatus);
+            paymentSearchCriteria.setStatus(defaultStatus);
         }
 
-        List<Receipt> receipts = collectionService.getReceipts(requestInfo, receiptSearchCriteria);
+        List<Payment> payments = paymentService.getPayments(requestInfo, paymentSearchCriteria);
 
-        return getSuccessResponse(receipts, requestInfo);
+        return getSuccessResponse(payments, requestInfo);
     }
 
     @RequestMapping(value = "/_create", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<ReceiptRes> create(@RequestBody @Valid PaymentRequest paymentRequest) {
+    public ResponseEntity<PaymentResponse> create(@RequestBody @Valid PaymentRequest paymentRequest) {
 
-        Receipt receiptInfo = collectionService.createPayment(paymentRequest);
-        return getSuccessResponse(Collections.singletonList(receiptInfo), receiptRequest.getRequestInfo());
+        Payment payment = paymentService.createPayment(paymentRequest);
+        return getSuccessResponse(Collections.singletonList(payment), paymentRequest.getRequestInfo());
 
     }
 
@@ -154,25 +152,17 @@ public class ReceiptControllerV2 {
     @ResponseBody
     public ResponseEntity<?> validate(@RequestBody @Valid ReceiptReq receiptReq) {
 
-        List<Receipt> receipt = collectionService.validateReceipt(receiptReq);
+        List<Receipt> receipt = paymentService.validateReceipt(receiptReq);
         return getSuccessResponse(receipt, receiptReq.getRequestInfo());
 
     }
 
-    @PostMapping(value = "/_migratetov1")
-    @ResponseBody
-    public ResponseEntity<?> migrate(@RequestBody @Valid RequestInfoWrapper wrapper,
-                                     @RequestParam(required = false) Integer startBatch,  @RequestParam(required=true) Integer batchSizeInput) {
 
-        Map<String, String> resultMap = migrationService.migrateToV1(startBatch, batchSizeInput);
-        return new ResponseEntity<>(resultMap, HttpStatus.OK);
-    }
-
-    private ResponseEntity<ReceiptRes> getSuccessResponse(List<Receipt> receipts, RequestInfo requestInfo) {
+    private ResponseEntity<PaymentResponse> getSuccessResponse(List<Payment> payments, RequestInfo requestInfo) {
         final ResponseInfo responseInfo = ResponseInfoFactory.createResponseInfoFromRequestInfo(requestInfo, true);
         responseInfo.setStatus(HttpStatus.OK.toString());
 
-        ReceiptRes receiptResponse = new ReceiptRes(responseInfo, receipts);
-        return new ResponseEntity<>(receiptResponse, HttpStatus.OK);
+        PaymentResponse paymentResponse = new PaymentResponse(responseInfo, payments);
+        return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
     }
 }

@@ -2,10 +2,8 @@ package org.egov.collection.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.egov.collection.model.enums.InstrumentStatusEnum;
 import org.egov.collection.model.enums.PaymentModeEnum;
 import org.egov.collection.model.enums.PaymentStatusEnum;
 
@@ -19,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class Payment {
 
     @Size(max=64)
@@ -53,6 +52,10 @@ public class Payment {
     @Size(max=128)
     @JsonProperty("instrumentNumber")
     private String instrumentNumber;
+
+    @Size(max=128)
+    @JsonProperty("instrumentStatus")
+    private InstrumentStatusEnum instrumentStatus;
 
     @Size(max=64)
     @JsonProperty("ifscCode")

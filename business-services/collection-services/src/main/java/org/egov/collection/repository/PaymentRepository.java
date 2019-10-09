@@ -3,6 +3,9 @@ package org.egov.collection.repository;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
+import org.egov.collection.model.PaymentSearchCriteria;
+import org.egov.collection.repository.querybuilder.PaymentQueryBuilder;
+import org.egov.collection.repository.rowmapper.PaymentRowMapper;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -11,7 +14,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.*;
 
@@ -22,11 +27,19 @@ public class PaymentRepository {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    private PaymentQueryBuilder paymentQueryBuilder;
+
+    private PaymentRowMapper paymentRowMapper;
 
     @Autowired
-    public PaymentRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public PaymentRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, PaymentQueryBuilder paymentQueryBuilder, PaymentRowMapper paymentRowMapper) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+        this.paymentQueryBuilder = paymentQueryBuilder;
+        this.paymentRowMapper = paymentRowMapper;
     }
+
+
+
 
     @Transactional
     public void savePayment(Payment payment){
@@ -60,5 +73,42 @@ public class PaymentRepository {
         }
     }
 
+
+    public List<Payment> fetchPayments(PaymentSearchCriteria paymentSearchCriteria){
+        Map<String, Object> preparedStatementValues = new HashMap<>();
+        String query = paymentQueryBuilder.getPaymentSearchQuery(paymentSearchCriteria, preparedStatementValues);
+        log.debug(query);
+        List<Payment> payments = namedParameterJdbcTemplate.query(query, preparedStatementValues,paymentRowMapper);
+        return payments;
+    }
+
+
+
+    public void updateStatus(List<Payment> payments){
+        List<MapSqlParameterSource> paymentSource = new ArrayList<>();
+        List<MapSqlParameterSource> paymentDetailSource = new ArrayList<>();
+        List<MapSqlParameterSource> billSource = new ArrayList<>();
+        try {
+
+            for(Payment payment : payments){
+                paymentSource.add(getParametersForPaymentStatusUpdate(payment);
+                for (PaymentDetail paymentDetail : payment.getPaymentDetails()) {
+                    paymentDetailSource.add(getParametersForPaymentDetailStatusUpdate(paymentDetail));
+                    billSource.add(getParamtersForBillStatusUpdate(paymentDetail.getBill()));
+                }
+            }
+
+            namedParameterJdbcTemplate.batchUpdate(COPY_RCPT_HEADER_SQL, receiptHeaderSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(COPY_RCPT_DETALS_SQL, receiptDetailSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(COPY_INSTRUMENT_HEADER_SQL, instrumentHeaderSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(UPDATE_RECEIPT_STATUS_SQL, paymentSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(UPDATE_INSTRUMENT_STATUS_SQL, paymentDetailSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(UPDATE_INSTRUMENT_STATUS_SQL, billSource.toArray(new MapSqlParameterSource[0]));
+        }
+        catch(Exception e){
+            log.error("Failed to persist cancel Receipt to database", e);
+            throw new CustomException("CANCEL_RECEIPT_FAILED", "Unable to cancel Receipt");
+        }
+    }
 
 }
