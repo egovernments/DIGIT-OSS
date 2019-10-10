@@ -61,6 +61,7 @@ import org.egov.commons.CVoucherHeader;
 import org.egov.commons.utils.EntityType;
 import org.egov.egf.commons.EgovCommon;
 import org.egov.egf.web.actions.voucher.VoucherReport;
+import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.reporting.util.ReportUtil;
 import org.egov.infra.utils.DateUtils;
@@ -129,6 +130,10 @@ public class BillPaymentVoucherPrintAction extends BaseFormAction {
 
     @Autowired
     private transient EgovCommon egovCommon;
+    
+    @Autowired
+    private CityService cityService;
+
 
     public Map<String, Object> getParamMap() {
         final Map<String, Object> paramMap = new HashMap<>();
@@ -152,7 +157,7 @@ public class BillPaymentVoucherPrintAction extends BaseFormAction {
         paramMap.put("rtgsRefNo", rtgsRefNo);
         paramMap.put("paymentMode", paymentMode);
         paramMap.put("rtgsDate", rtgsDate);
-        paramMap.put("ulbName", ReportUtil.getCityName());
+        paramMap.put("ulbName", ReportUtil.getCityName() +" "+cityService.getCityGrade());
         paramMap.put("narration", getPaymentNarration());
 
         return paramMap;

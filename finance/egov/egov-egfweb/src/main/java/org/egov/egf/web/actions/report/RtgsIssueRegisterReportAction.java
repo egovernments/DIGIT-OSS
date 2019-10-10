@@ -64,6 +64,7 @@ import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.commons.service.EntityTypeService;
 import org.egov.commons.utils.EntityType;
 import org.egov.egf.model.BankAdviceReportInfo;
+import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
@@ -130,6 +131,9 @@ public class RtgsIssueRegisterReportAction extends ReportAction {
 
 	@Autowired
         private MicroserviceUtils microserviceUtils;
+	
+	@Autowired
+        private CityService cityService;
 
 	@Override
 	public Object getModel() {
@@ -164,7 +168,7 @@ public class RtgsIssueRegisterReportAction extends ReportAction {
 	}
 
 	private String getUlbName() {
-		return ReportUtil.getCityName();
+		return ReportUtil.getCityName() +" "+cityService.getCityGrade();
 	}
 
 	@SkipValidation

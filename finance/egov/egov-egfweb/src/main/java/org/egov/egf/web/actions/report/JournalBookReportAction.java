@@ -59,6 +59,7 @@ import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.egov.commons.CFunction;
 import org.egov.infra.admin.master.entity.Department;
+import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.reporting.util.ReportUtil;
@@ -102,6 +103,8 @@ public class JournalBookReportAction extends BaseFormAction {
     private PersistenceService persistenceService;
     @Autowired
     private EgovMasterDataCaching masterDataCache;
+    @Autowired
+    private CityService cityService;
     String heading = "";
 
     public JournalBookReportAction() {
@@ -147,7 +150,7 @@ public class JournalBookReportAction extends BaseFormAction {
     public String ajaxSearch() throws TaskFailedException {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("JournalBookAction | Search | start");
-        journalBookReport.setUlbName(ReportUtil.getCityName());
+        journalBookReport.setUlbName(ReportUtil.getCityName() +" "+cityService.getCityGrade());
         prepareResultList();
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("JournalBookAction | list | End");

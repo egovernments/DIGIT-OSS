@@ -81,6 +81,7 @@ import org.egov.egf.model.BankBookViewEntry;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Boundary;
 import org.egov.infra.admin.master.service.AppConfigValueService;
+import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
@@ -159,6 +160,9 @@ public class BankBookReportAction extends BaseFormAction {
 
 	@Autowired
 	private FinancialYearDAO financialYearDAO;
+	
+	@Autowired
+        private CityService cityService;
 
 	@Autowired
 	private MicroserviceUtils microserviceUtils;
@@ -816,7 +820,7 @@ public class BankBookReportAction extends BaseFormAction {
 
 	Map<String, Object> getParamMap() {
 		final Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("ulbName", ReportUtil.getCityName());
+		paramMap.put("ulbName", ReportUtil.getCityName()+" "+cityService.getCityGrade());
 		final String name = bankAccount.getBankbranch().getBank().getName().concat("-")
 				.concat(bankAccount.getBankbranch().getBranchname()).concat("-").concat(bankAccount.getAccountnumber());
 		paramMap.put("heading", getText("bank.book.heading", new String[] { name, header.toString(),

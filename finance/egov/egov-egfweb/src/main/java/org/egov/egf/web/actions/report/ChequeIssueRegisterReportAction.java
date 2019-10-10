@@ -73,6 +73,7 @@ import org.egov.egf.model.BankAdviceReportInfo;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.service.AppConfigValueService;
+import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.reporting.util.ReportUtil;
@@ -134,6 +135,10 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
 	private InstrumentHeaderService instrumentHeaderService;
 	@Autowired
 	private MicroserviceUtils microserviceUtils;
+	
+	@Autowired
+	private CityService cityService;
+	
 	private Department deptImpl = new Department();
 
 	public ChequeIssueRegisterReportAction() {
@@ -434,7 +439,7 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
 
 	private void populateUlbName() {
 
-		setUlbName(ReportUtil.getCityName());
+		setUlbName(ReportUtil.getCityName() +" "+cityService.getCityGrade());
 	}
 
 	public void setUlbName(final String ulbName) {

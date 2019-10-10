@@ -60,6 +60,7 @@ import org.egov.commons.CVoucherHeader;
 import org.egov.commons.utils.EntityType;
 import org.egov.egf.commons.EgovCommon;
 import org.egov.egf.web.actions.voucher.VoucherReport;
+import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infra.reporting.util.ReportUtil;
 import org.egov.infra.utils.DateUtils;
@@ -109,6 +110,9 @@ public class ExpenseJournalVoucherPrintAction extends BaseFormAction {
 
     @Autowired
     private transient EgovCommon egovCommon;
+    
+    @Autowired
+    private CityService cityService;
 
     public Long getId() {
         return id;
@@ -226,7 +230,7 @@ public class ExpenseJournalVoucherPrintAction extends BaseFormAction {
             final String amountInWords = billamount == null ? " " : NumberToWordConverter.amountInWordsWithCircumfix(billamount);
             paramMap.put("certificate", getText("ejv.report.text", new String[]{amountInFigures, amountInWords}));
         }
-        paramMap.put("ulbName", ReportUtil.getCityName());
+        paramMap.put("ulbName", ReportUtil.getCityName() +" "+cityService.getCityGrade());
 
         return paramMap;
     }

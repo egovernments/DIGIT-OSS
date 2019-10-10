@@ -54,6 +54,7 @@ import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.egov.egf.model.BudgetReAppReportBean;
+import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.reporting.util.ReportUtil;
 import org.egov.infra.web.struts.actions.BaseFormAction;
 import org.egov.infstr.services.PersistenceService;
@@ -121,6 +122,10 @@ public class BudgetAppropriationReportAction extends BaseFormAction {
 	private PersistenceService persistenceService;
 	@Autowired
 	private EgovMasterDataCaching masterDataCache;
+	
+	@Autowired
+        private CityService cityService;
+
 
 	@Override
 	public void prepare() {
@@ -269,7 +274,7 @@ public class BudgetAppropriationReportAction extends BaseFormAction {
 	public String ajaxGenerateReportXls() throws Exception {
 		populateReAppropriationData();
 		prepareFormattedList();
-		final String title = ReportUtil.getCityName();
+		final String title = ReportUtil.getCityName() +" "+cityService.getCityGrade() ;
 		final String subtitle = "Amount in Rupess";
 		final JasperPrint jasper = reportHelper
 				.generateBudgetAppropriationJasperPrint(
@@ -284,7 +289,7 @@ public class BudgetAppropriationReportAction extends BaseFormAction {
 	public String ajaxGenerateReportPdf() throws Exception {
 		populateReAppropriationData();
 		prepareFormattedList();
-		final String title = ReportUtil.getCityName();
+		final String title = ReportUtil.getCityName() +" "+cityService.getCityGrade();
 		final String subtitle = "Amount in Rupess";
 		final JasperPrint jasper = reportHelper
 				.generateBudgetAppropriationJasperPrint(

@@ -1,54 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
-  ~    accountability and the service delivery of the government  organizations.
-  ~
-  ~     Copyright (C) 2017  eGovernments Foundation
-  ~
-  ~     The updated version of eGov suite of products as by eGovernments Foundation
-  ~     is available at http://www.egovernments.org
-  ~
-  ~     This program is free software: you can redistribute it and/or modify
-  ~     it under the terms of the GNU General Public License as published by
-  ~     the Free Software Foundation, either version 3 of the License, or
-  ~     any later version.
-  ~
-  ~     This program is distributed in the hope that it will be useful,
-  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~     GNU General Public License for more details.
-  ~
-  ~     You should have received a copy of the GNU General Public License
-  ~     along with this program. If not, see http://www.gnu.org/licenses/ or
-  ~     http://www.gnu.org/licenses/gpl.html .
-  ~
-  ~     In addition to the terms of the GPL license to be adhered to in using this
-  ~     program, the following additional terms are to be complied with:
-  ~
-  ~         1) All versions of this program, verbatim or modified must carry this
-  ~            Legal Notice.
-  ~            Further, all user interfaces, including but not limited to citizen facing interfaces,
-  ~            Urban Local Bodies interfaces, dashboards, mobile applications, of the program and any
-  ~            derived works should carry eGovernments Foundation logo on the top right corner.
-  ~
-  ~            For the logo, please refer http://egovernments.org/html/logo/egov_logo.png.
-  ~            For any further queries on attribution, including queries on brand guidelines,
-  ~            please contact contact@egovernments.org
-  ~
-  ~         2) Any misrepresentation of the origin of the material is prohibited. It
-  ~            is required that all modified versions of this material be marked in
-  ~            reasonable ways as different from the original version.
-  ~
-  ~         3) This license does not grant any rights to any user of the program
-  ~            with regards to rights under trademark law for use of the trade names
-  ~            or trademarks of eGovernments Foundation.
-  ~
-  ~   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
-  ~
-  -->
-<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-08-02T14:43:41 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="bankBookReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="30" bottomMargin="20" uuid="e4464ce6-96ab-4897-83e8-12a3a3a15fd6">
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="bankBookReport" pageWidth="595" pageHeight="842" whenNoDataType="NoPages" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="30" bottomMargin="20" uuid="e4464ce6-96ab-4897-83e8-12a3a3a15fd6">
 	<property name="net.sf.jasperreports.export.pdf.exclude.origin.keep.first.band.columnHeader" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.columnHeader" value="columnHeader"/>
 	<property name="ireport.scriptlethandling" value="0"/>
@@ -176,7 +128,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textField isBlankWhenNull="true">
-					<reportElement x="161" y="0" width="212" height="20" uuid="b7fc71c5-983a-4952-ad6f-932ad031a068"/>
+					<reportElement x="132" y="0" width="287" height="20" uuid="b7fc71c5-983a-4952-ad6f-932ad031a068"/>
 					<textElement textAlignment="Center">
 						<font size="12" isBold="true"/>
 					</textElement>

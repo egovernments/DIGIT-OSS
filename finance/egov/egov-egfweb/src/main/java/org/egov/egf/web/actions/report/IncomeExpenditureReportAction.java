@@ -60,6 +60,7 @@ import org.egov.commons.Functionary;
 import org.egov.commons.Fund;
 import org.egov.egf.model.Statement;
 import org.egov.infra.admin.master.entity.Boundary;
+import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.config.persistence.datasource.routing.annotation.ReadOnly;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.reporting.util.ReportUtil;
@@ -128,6 +129,9 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
  private PersistenceService persistenceService;
  @Autowired
     private EgovMasterDataCaching masterDataCache;
+ 
+     @Autowired
+     private CityService cityService;
     
     public void setIncomeExpenditureService(final IncomeExpenditureService incomeExpenditureService) {
         this.incomeExpenditureService = incomeExpenditureService;
@@ -341,7 +345,7 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
     @Action(value = "/report/incomeExpenditureReport-generateIncomeExpenditurePdf")
     public String generateIncomeExpenditurePdf() throws Exception {
         populateDataSource();
-        final String heading = ReportUtil.getCityName() + "\\n" + statementheading.toString();
+        final String heading = ReportUtil.getCityName() +" "+cityService.getCityGrade() + "\\n" + statementheading.toString();
         final String subtitle = "Report Run Date-" + FORMATDDMMYYYY.format(getTodayDate());
         final JasperPrint jasper = reportHelper.generateIncomeExpenditureReportJasperPrint(incomeExpenditureStatement, heading,
                 getPreviousYearToDate(), getCurrentYearToDate(), subtitle, true);
@@ -353,7 +357,7 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
     @Action(value = "/report/incomeExpenditureReport-generateDetailCodePdf")
     public String generateDetailCodePdf() throws Exception {
         populateSchedulewiseDetailCodeReport();
-        final String heading = ReportUtil.getCityName() + "\\n" + statementheading.toString();
+        final String heading = ReportUtil.getCityName() +" "+cityService.getCityGrade() + "\\n" + statementheading.toString();
         final String subtitle = "Report Run Date-" + FORMATDDMMYYYY.format(getTodayDate());
         final JasperPrint jasper = reportHelper.generateIncomeExpenditureReportJasperPrint(incomeExpenditureStatement, heading,
                 getPreviousYearToDate(), getCurrentYearToDate(), subtitle, true);
@@ -365,7 +369,7 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
     @Action(value = "/report/incomeExpenditureReport-generateDetailCodeXls")
     public String generateDetailCodeXls() throws Exception {
         populateSchedulewiseDetailCodeReport();
-        final String heading = ReportUtil.getCityName() + "\\n" + statementheading.toString();
+        final String heading = ReportUtil.getCityName() +" "+cityService.getCityGrade() + "\\n" + statementheading.toString();
         final String subtitle = "Report Run Date-" + FORMATDDMMYYYY.format(getTodayDate())
                 + "                                               ";
         final JasperPrint jasper = reportHelper.generateIncomeExpenditureReportJasperPrint(incomeExpenditureStatement, heading,
@@ -388,7 +392,7 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
     @Action(value = "/report/incomeExpenditureReport-generateIncomeExpenditureXls")
     public String generateIncomeExpenditureXls() throws Exception {
         populateDataSource();
-        final String heading = ReportUtil.getCityName() + "\\n" + statementheading.toString();
+        final String heading = ReportUtil.getCityName() +" "+cityService.getCityGrade() + "\\n" + statementheading.toString();
         final String subtitle = "Report Run Date-" + FORMATDDMMYYYY.format(getTodayDate())
                 + "                                               ";
         final JasperPrint jasper = reportHelper.generateIncomeExpenditureReportJasperPrint(incomeExpenditureStatement, heading,
@@ -423,7 +427,7 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
     @Action(value = "/report/incomeExpenditureReport-generateIncomeExpenditureSchedulePdf")
     public String generateIncomeExpenditureSchedulePdf() throws Exception {
         populateDataSourceForSchedule();
-        final String heading = ReportUtil.getCityName() + "\\n" + scheduleheading.toString();
+        final String heading = ReportUtil.getCityName() +" "+cityService.getCityGrade() + "\\n" + scheduleheading.toString();
         final String subtitle = "Report Run Date-" + FORMATDDMMYYYY.format(getTodayDate())
                 + "                                             ";
         final JasperPrint jasper = reportHelper.generateIncomeExpenditureReportJasperPrint(incomeExpenditureStatement, heading,
@@ -436,7 +440,7 @@ public class IncomeExpenditureReportAction extends BaseFormAction {
     @Action(value = "/report/incomeExpenditureReport-generateIncomeExpenditureScheduleXls")
     public String generateIncomeExpenditureScheduleXls() throws Exception {
         populateDataSourceForSchedule();
-        final String heading = ReportUtil.getCityName() + "\\n" + scheduleheading.toString();
+        final String heading = ReportUtil.getCityName() +" "+cityService.getCityGrade() + "\\n" + scheduleheading.toString();
         // Blank space for space didvidion between left and right corner
         final String subtitle = "Report Run Date-" + FORMATDDMMYYYY.format(getTodayDate()) + "					  						 ";
         final JasperPrint jasper = reportHelper.generateIncomeExpenditureReportJasperPrint(incomeExpenditureStatement, heading,
