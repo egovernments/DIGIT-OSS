@@ -481,6 +481,10 @@ definitions:
       businessService:
         type: string
         description: BusinessService code.
+      billDate:
+        type: number
+        format: int64
+        description: Bill date.
       billNumber:
         type: string
         description: Bill number.
@@ -523,21 +527,14 @@ definitions:
       demandId:
         type: string
         description: Unique Identifier of the demand associated with the bill detail
-      bill:
+      billId:
         type: string
         description: Id of bill
-      billDate:
-        type: number
-        format: int64
-        description: Bill date.
-      consumerCode:
-        type: string
-        description: Consumer code of the entity for which the bill is being created.
       expiryDate:
         type: number
         format: int64
         description: end of bill validity in epoch time.
-      Amount:
+      amount:
         type: number
         description: Total bill amount to be paid.
       fromPeriod:
@@ -566,7 +563,7 @@ definitions:
         description: Unique Identifier of the tenant
         maxLength: 128
         minLength: 4
-      billDetail:
+      billDetailId:
         type: string
         description: Id of billdetail
       demandDetailId:
