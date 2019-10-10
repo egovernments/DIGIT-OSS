@@ -318,6 +318,7 @@ public class CancelBillAction extends BaseFormAction {
 	public String cancelBill() {
 		new Date();
 		EgBillregister billRegister;
+		Date date= new Date();
 
 		final Long[] idList = new Long[billListDisplay.size()];
 		int i = 0, idListLength = 0;
@@ -333,28 +334,28 @@ public class CancelBillAction extends BaseFormAction {
 			statusQuery.append("moduletype='" + FinancialConstants.CONTINGENCYBILL_FIN + "' and description='"
 					+ FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS + "'");
 			cancelQuery.append(
-					" billstatus='" + FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS + "' , statusid=:statusId ");
+					" billstatus='" + FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS + "' , statusid=:statusId ,lastmodifiedby=:lastModifiedby ,lastmodifieddate=:lastModifiedDate ");
 		} else if (FinancialConstants.STANDARD_EXPENDITURETYPE_SALARY.equalsIgnoreCase(expType)) {
 			statusQuery.append("moduletype='" + FinancialConstants.SALARYBILL + "' and description='"
 					+ FinancialConstants.SALARYBILL_CANCELLED_STATUS + "'");
 			cancelQuery.append(
-					" billstatus='" + FinancialConstants.SALARYBILL_CANCELLED_STATUS + "' , statusid=:statusId ");
+					" billstatus='" + FinancialConstants.SALARYBILL_CANCELLED_STATUS + "' , statusid=:statusId ,lastmodifiedby=:lastModifiedby ,lastmodifieddate=:lastModifiedDate");
 
 		} else if (FinancialConstants.STANDARD_EXPENDITURETYPE_CONTINGENT.equalsIgnoreCase(expType)) {
 			statusQuery.append("moduletype='" + FinancialConstants.CONTINGENCYBILL_FIN + "' and description='"
 					+ FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS + "'");
 			cancelQuery.append(
-					" billstatus='" + FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS + "' , statusid=:statusId ");
+					" billstatus='" + FinancialConstants.CONTINGENCYBILL_CANCELLED_STATUS + "' , statusid=:statusId ,lastmodifiedby=:lastModifiedby ,lastmodifieddate=:lastModifiedDate ");
 		} else if (FinancialConstants.STANDARD_EXPENDITURETYPE_PURCHASE.equalsIgnoreCase(expType)) {
 			statusQuery.append("moduletype='" + FinancialConstants.SBILL + "' and description='"
 					+ FinancialConstants.SUPPLIERBILL_CANCELLED_STATUS + "'");
 			cancelQuery.append(
-					" billstatus='" + FinancialConstants.SUPPLIERBILL_CANCELLED_STATUS + "' , statusid=:statusId ");
+					" billstatus='" + FinancialConstants.SUPPLIERBILL_CANCELLED_STATUS + "' , statusid=:statusId ,lastmodifiedby=:lastModifiedby ,lastmodifieddate=:lastModifiedDate ");
 		} else if (FinancialConstants.STANDARD_EXPENDITURETYPE_WORKS.equalsIgnoreCase(expType)) {
 			statusQuery.append("moduletype='" + FinancialConstants.CONTRACTOR_BILL + "' and description='"
 					+ FinancialConstants.CONTRACTORBILL_CANCELLED_STATUS + "'");
 			cancelQuery.append(
-					" billstatus='" + FinancialConstants.CONTRACTORBILL_CANCELLED_STATUS + "' , statusid=:statusId ");
+					" billstatus='" + FinancialConstants.CONTRACTORBILL_CANCELLED_STATUS + "' , statusid=:statusId ,lastmodifiedby=:lastModifiedby ,lastmodifieddate=:lastModifiedDate ");
 		}
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug(" Status Query - " + statusQuery.toString());
@@ -381,6 +382,8 @@ public class CancelBillAction extends BaseFormAction {
 				LOGGER.debug(" Cancel Query - " + cancelQuery.toString());
 			final SQLQuery totalSQLQuery = persistenceService.getSession().createSQLQuery(cancelQuery.toString());
 			totalSQLQuery.setLong("statusId", status.getId());
+			totalSQLQuery.setLong("lastModifiedby", ApplicationThreadLocals.getUserId());
+			totalSQLQuery.setTimestamp("lastModifiedDate", date);
 			if (isNotBlank(idString))
 				totalSQLQuery.executeUpdate();
 		}
