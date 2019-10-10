@@ -820,7 +820,7 @@ public class BankBookReportAction extends BaseFormAction {
 
 	Map<String, Object> getParamMap() {
 		final Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("ulbName", ReportUtil.getCityName() +" "+cityService.getCityGrade()==null ? "" :cityService.getCityGrade());
+		paramMap.put("ulbName", ReportUtil.getCityName() +" "+ (cityService.getCityGrade()==null ? "" :cityService.getCityGrade()));
 		final String name = bankAccount.getBankbranch().getBank().getName().concat("-")
 				.concat(bankAccount.getBankbranch().getBranchname()).concat("-").concat(bankAccount.getAccountnumber());
 		paramMap.put("heading", getText("bank.book.heading", new String[] { name, header.toString(),

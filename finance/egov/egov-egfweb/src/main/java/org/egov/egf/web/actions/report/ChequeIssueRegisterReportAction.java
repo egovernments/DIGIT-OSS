@@ -439,7 +439,7 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
 
 	private void populateUlbName() {
 
-		setUlbName(ReportUtil.getCityName() +" "+cityService.getCityGrade());
+		setUlbName(ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade()));
 	}
 
 	public void setUlbName(final String ulbName) {

@@ -230,7 +230,7 @@ public class ExpenseJournalVoucherPrintAction extends BaseFormAction {
             final String amountInWords = billamount == null ? " " : NumberToWordConverter.amountInWordsWithCircumfix(billamount);
             paramMap.put("certificate", getText("ejv.report.text", new String[]{amountInFigures, amountInWords}));
         }
-        paramMap.put("ulbName", ReportUtil.getCityName() +" "+cityService.getCityGrade());
+        paramMap.put("ulbName", ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade()));
 
         return paramMap;
     }

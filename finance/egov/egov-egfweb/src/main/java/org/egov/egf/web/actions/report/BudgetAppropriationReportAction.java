@@ -274,7 +274,7 @@ public class BudgetAppropriationReportAction extends BaseFormAction {
 	public String ajaxGenerateReportXls() throws Exception {
 		populateReAppropriationData();
 		prepareFormattedList();
-		final String title = ReportUtil.getCityName() +" "+cityService.getCityGrade() ;
+		final String title = ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade());
 		final String subtitle = "Amount in Rupess";
 		final JasperPrint jasper = reportHelper
 				.generateBudgetAppropriationJasperPrint(
@@ -289,7 +289,7 @@ public class BudgetAppropriationReportAction extends BaseFormAction {
 	public String ajaxGenerateReportPdf() throws Exception {
 		populateReAppropriationData();
 		prepareFormattedList();
-		final String title = ReportUtil.getCityName() +" "+cityService.getCityGrade();
+		final String title = ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade());
 		final String subtitle = "Amount in Rupess";
 		final JasperPrint jasper = reportHelper
 				.generateBudgetAppropriationJasperPrint(

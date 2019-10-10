@@ -157,7 +157,7 @@ public class BillPaymentVoucherPrintAction extends BaseFormAction {
         paramMap.put("rtgsRefNo", rtgsRefNo);
         paramMap.put("paymentMode", paymentMode);
         paramMap.put("rtgsDate", rtgsDate);
-        paramMap.put("ulbName", ReportUtil.getCityName() +" "+cityService.getCityGrade());
+        paramMap.put("ulbName", ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade()));
         paramMap.put("narration", getPaymentNarration());
 
         return paramMap;

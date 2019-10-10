@@ -150,7 +150,7 @@ public class JournalBookReportAction extends BaseFormAction {
     public String ajaxSearch() throws TaskFailedException {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("JournalBookAction | Search | start");
-        journalBookReport.setUlbName(ReportUtil.getCityName() +" "+cityService.getCityGrade());
+        journalBookReport.setUlbName(ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade()));
         prepareResultList();
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("JournalBookAction | list | End");

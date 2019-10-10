@@ -168,7 +168,7 @@ public class RtgsIssueRegisterReportAction extends ReportAction {
 	}
 
 	private String getUlbName() {
-		return ReportUtil.getCityName() +" "+cityService.getCityGrade();
+		return ReportUtil.getCityName() +" "+(cityService.getCityGrade()==null ? "" :cityService.getCityGrade());
 	}
 
 	@SkipValidation
