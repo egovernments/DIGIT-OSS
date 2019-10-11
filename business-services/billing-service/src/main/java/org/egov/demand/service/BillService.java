@@ -79,6 +79,7 @@ import org.egov.demand.model.TaxAndPayment;
 import org.egov.demand.model.TaxHeadMaster;
 import org.egov.demand.model.TaxHeadMasterCriteria;
 import org.egov.demand.model.enums.Category;
+import org.egov.demand.model.enums.DemandStatus;
 import org.egov.demand.repository.BillRepository;
 import org.egov.demand.repository.IdGenRepo;
 import org.egov.demand.repository.ServiceRequestRepository;
@@ -268,6 +269,7 @@ public class BillService {
 				.tenantId(billCriteria.getTenantId())
 				.email(billCriteria.getEmail())
 				.consumerCode(consumerCodes)
+				.status(DemandStatus.ACTIVE.toString())
 				.receiptRequired(false)
 				.demandId(demandIds)
 				.build();
