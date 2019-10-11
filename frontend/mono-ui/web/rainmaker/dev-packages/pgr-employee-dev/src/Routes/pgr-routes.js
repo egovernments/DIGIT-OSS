@@ -100,7 +100,6 @@ const routes = [
       title: "ES_OPEN_COMPLAINTS_HEADER",
       hideTitle: false,
       redirectionUrl,
-      isHomeScreen: true,
       hideFor: "ao",
       customFor: "csr",
       customTitle: "ES_ALL_COMPLAINTS_HEADER"
