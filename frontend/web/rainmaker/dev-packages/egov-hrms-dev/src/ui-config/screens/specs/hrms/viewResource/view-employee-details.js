@@ -7,7 +7,7 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-
+import { convertEpochToDate } from "../../utils";
 const gotoCreatePage = (state, dispatch) => {
   const createUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
@@ -114,7 +114,8 @@ export const getEmployeeDetailsView = (isReview = true) => {
       reviewDob: getLabelWithValue(
         { labelName: "Date Of Birth", labelKey: "HR_DOB_LABEL" },
         {
-          jsonPath: "Employee[0].user.dob"
+          jsonPath: "Employee[0].user.dob",
+          callBack: convertEpochToDate
         }
       ),
       reviewEmail: getLabelWithValue(
@@ -149,7 +150,8 @@ export const getEmployeeDetailsView = (isReview = true) => {
       reviewDOA: getLabelWithValue(
         { labelName: "Date of Appointment", labelKey: "HR_APPT_DATE_LABEL" },
         {
-          jsonPath: "Employee[0].dateOfAppointment"
+          jsonPath: "Employee[0].dateOfAppointment",
+          callBack: convertEpochToDate
         }
       ),
       reviewEmpType: getLabelWithValue(

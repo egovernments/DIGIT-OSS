@@ -6,6 +6,7 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import { convertEpochToDate } from "../../utils";
 
 const gotoCreatePage = (state, dispatch) => {
   const createUrl =
@@ -27,14 +28,18 @@ const assignmentCard = {
             labelName: "Assigned From Date",
             labelKey: "HR_ASMT_FROM_DATE_LABEL"
           },
-          { jsonPath: "Employee[0].assignments[0].fromDate" }
+          { jsonPath: "Employee[0].assignments[0].fromDate",
+            callBack: convertEpochToDate
+          }
         ),
         reviewAssignedTo: getLabelWithValue(
           {
             labelName: "Assigned To Date",
             labelKey: "HR_ASMT_TO_DATE_LABEL"
           },
-          { jsonPath: "Employee[0].assignments[0].toDate" }
+          { jsonPath: "Employee[0].assignments[0].toDate",
+            callBack: convertEpochToDate
+        }
         ),
         reviewCurrentAssigned: getLabelWithValue(
           {
