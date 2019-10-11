@@ -21,6 +21,8 @@ public class PaymentSearchCriteria {
 
     private Set<String> status;
 
+    private Set<String> instrumentStatus;
+
     private Set<String> paymentModes;
 
     private List<String> payerIds;

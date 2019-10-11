@@ -1,14 +1,19 @@
 package org.egov.collection.service;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.Payment;
+import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.model.PaymentSearchCriteria;
 import org.egov.collection.model.enums.InstrumentStatusEnum;
+import org.egov.collection.model.enums.PaymentModeEnum;
+import org.egov.collection.model.enums.PaymentStatusEnum;
 import org.egov.collection.producer.CollectionProducer;
 import org.egov.collection.repository.PaymentRepository;
 import org.egov.collection.util.PaymentWorkflowValidator;
 import org.egov.collection.web.contract.Bill;
+import org.egov.collection.web.contract.BillDetail;
 import org.egov.collection.web.contract.PaymentWorkflow;
 import org.egov.collection.web.contract.PaymentWorkflowRequest;
 import org.egov.common.contract.request.RequestInfo;
@@ -21,6 +26,8 @@ import java.util.*;
 
 import static java.util.Collections.reverseOrder;
 import static java.util.Collections.singleton;
+import static java.util.Objects.isNull;
+import static org.egov.collection.config.CollectionServiceConstants.VOUCHER_HEADER_KEY;
 import static org.egov.collection.util.Utils.jsonMerge;
 
 @Service
@@ -98,8 +105,8 @@ public class PaymentWorkflowService {
                         paymentWorkflowRequest.getRequestInfo(), tenantId);
                 break;
             case DISHONOUR:
-                processedReceipts = dishonour(workflowRequestByReceiptNumber, consumerCodes,
-                        receiptWorkflowRequest.getRequestInfo(), tenantId);
+                processedPayments = dishonour(workflowRequestByPaymentId, consumerCodes,
+                        paymentWorkflowRequest.getRequestInfo(), tenantId);
                 break;
             case REMIT:
                 processedReceipts = remit(workflowRequestByReceiptNumber, consumerCodes,
@@ -116,7 +123,7 @@ public class PaymentWorkflowService {
         PaymentSearchCriteria paymentSearchCriteria = PaymentSearchCriteria
                 .builder()
                 .consumerCodes(consumerCodes)
-                .status(singleton(InstrumentStatusEnum.APPROVED.toString()))
+                .instrumentStatus(singleton(InstrumentStatusEnum.APPROVED.toString()))
                 .tenantId(tenantId)
                 .build();
 
@@ -129,6 +136,7 @@ public class PaymentWorkflowService {
 
         for(Payment payment : validatedPayments) {
             payment.setInstrumentStatus(InstrumentStatusEnum.CANCELLED);
+            payment.setPaymentStatus(PaymentStatusEnum.CANCELLED);
             payment.getPaymentDetails().forEach(paymentDetail -> {
                 Bill bill = paymentDetail.getBill();
                 bill.setStatus(Bill.StatusEnum.CANCELLED);
@@ -140,12 +148,115 @@ public class PaymentWorkflowService {
             updateAuditDetails(payment, requestInfo);
         }
 
-        collectionRepository.updateStatus(validatedReceipts);
+        paymentRepository.updateStatus(validatedPayments);
 
-        collectionProducer.producer(applicationProperties.getCancelReceiptTopicName(), applicationProperties
-                .getCancelReceiptTopicKey(), new ReceiptReq(requestInfo, validatedReceipts));
+        validatedPayments.forEach(payment -> {
+            collectionProducer.producer(applicationProperties.getCancelPaymentTopicName(), applicationProperties
+                    .getCancelPaymentTopicKey(), new PaymentRequest(requestInfo, payment));
+        });
 
-        return validatedReceipts;
+
+        return validatedPayments;
+    }
+
+
+
+    private List<Payment> dishonour(Map<String, PaymentWorkflow> workflowRequestByPaymentId, Set<String> consumerCodes,
+                                    RequestInfo requestInfo, String tenantId){
+        Set<String> status = new HashSet<>();
+        status.add(InstrumentStatusEnum.APPROVED.toString());
+        status.add(InstrumentStatusEnum.REMITTED.toString());
+
+        Set<String> paymentModes = new HashSet<>();
+        paymentModes.add(PaymentModeEnum.CHEQUE.toString());
+        paymentModes.add(PaymentModeEnum.DD.toString());
+
+        PaymentSearchCriteria paymentSearchCriteria = PaymentSearchCriteria
+                .builder()
+                .consumerCodes(consumerCodes)
+                .paymentModes(paymentModes)
+                .instrumentStatus(status)
+                .tenantId(tenantId)
+                .build();
+
+        List<Payment> payments = paymentRepository.fetchPayments(paymentSearchCriteria);
+        payments.sort(reverseOrder(Comparator.comparingLong(Payment::getTransactionDate)));
+
+        List<Payment> validatedPayments = paymentWorkflowValidator.validateForCancel(new ArrayList<>(workflowRequestByPaymentId.values()), payments);
+
+        for(Payment payment : validatedPayments) {
+            payment.setPaymentStatus(PaymentStatusEnum.DISHONOURED);
+            payment.setInstrumentStatus(InstrumentStatusEnum.DISHONOURED);
+
+            payment.getPaymentDetails().forEach(paymentDetail -> {
+                BillDetail billDetail = receipt.getBill().get(0).getBillDetails().get(0);
+                billDetail.setStatus(ReceiptStatus.REJECTED.toString());
+
+                Bill bill = paymentDetail.getBill();
+                bill.setStatus(Bill.StatusEnum.CANCELLED);
+                bill.setReasonForCancellation(workflowRequestByPaymentId.get(payment.getId()).getReason());
+                bill.setAdditionalDetails(jsonMerge(bill.getAdditionalDetails(),
+                        workflowRequestByPaymentId.get(payment.getId()).getAdditionalDetails());
+            });
+
+            updateAuditDetails(payment, requestInfo);
+        }
+
+        paymentRepository.updateStatus(validatedPayments);
+
+        validatedPayments.forEach(payment -> {
+            collectionProducer.producer(applicationProperties.getCancelPaymentTopicName(), applicationProperties
+                    .getCancelPaymentTopicKey(), new PaymentRequest(requestInfo, payment));
+        });
+
+        return validatedPayments;
+    }
+
+    private List<Payment> remit(Map<String, PaymentWorkflow> workflowRequestByPaymentId, Set<String> consumerCodes,
+                                RequestInfo requestInfo, String tenantId){
+
+        Set<String> paymentModes = new HashSet<>();
+        paymentModes.add(PaymentModeEnum.CASH.toString());
+        paymentModes.add(PaymentModeEnum.CHEQUE.toString());
+        paymentModes.add(PaymentModeEnum.DD.toString());
+
+        PaymentSearchCriteria paymentSearchCriteria = PaymentSearchCriteria
+                .builder()
+                .consumerCodes(consumerCodes)
+                .instrumentStatus(singleton(InstrumentStatusEnum.APPROVED.toString()))
+                .paymentModes(paymentModes)
+                .tenantId(tenantId)
+                .build();
+
+        List<Payment> payments = paymentRepository.fetchPayments(paymentSearchCriteria);
+
+        List<Payment> validatedPayments = paymentWorkflowValidator.validateForRemit(new ArrayList<>(workflowRequestByPaymentId.values()), payments);
+
+        for(Payment payment : validatedPayments) {
+            payment.setPaymentStatus(PaymentStatusEnum.DEPOSITED);
+
+            JsonNode additionalDetails = workflowRequestByPaymentId.get(payment.getId())
+                    .getAdditionalDetails();
+            BillDetail billDetail = receipt.getBill().get(0).getBillDetails().get(0);
+            billDetail.setStatus(ReceiptStatus.REMITTED.toString());
+            billDetail.setAdditionalDetails(jsonMerge(billDetail.getAdditionalDetails(),
+                    additionalDetails));
+
+            if( ! isNull(additionalDetails) && ! additionalDetails.isNull() && additionalDetails.has(VOUCHER_HEADER_KEY))
+                billDetail.setVoucherHeader(additionalDetails.get(VOUCHER_HEADER_KEY).asText());
+
+            receipt.getInstrument().setInstrumentStatus(DEPOSITED);
+
+            updateAuditDetails(payment, requestInfo);
+        }
+
+        paymentRepository.updateStatus(validatedPayments);
+
+        validatedPayments.forEach(payment -> {
+            collectionProducer.producer(applicationProperties.getCancelPaymentTopicName(), applicationProperties
+                    .getCancelPaymentTopicKey(), new PaymentRequest(requestInfo, payment));
+        });
+        return validatedPayments;
     }
 
 

@@ -172,6 +172,12 @@ public class ApplicationProperties {
     @Value("${collection.payments.search.paginate}")
     private boolean paymentsSearchPaginationEnabled;
 
+    @Value("${kafka.topics.payment.cancel.name}")
+    private String cancelPaymentTopicName;
+
+
+    @Value("${kafka.topics.payment.cancel.key}")
+    private String cancelPaymentTopicKey;
 
 
 }

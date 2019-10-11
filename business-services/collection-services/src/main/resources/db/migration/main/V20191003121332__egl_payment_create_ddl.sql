@@ -77,7 +77,6 @@ CREATE TABLE egcl_bill(
         	billNumber VARCHAR(256) NOT NULL,
 	    	billDate BIGINT NOT NULL,
 	    	reasonForCancellation VARCHAR(2048),
-            status VARCHAR(256) NOT NULL,
         	createdBy VARCHAR(256) NOT NULL,
 		    createdDate BIGINT NOT NULL,
 		    lastModifiedBy VARCHAR(256) NOT NULL,
@@ -146,4 +145,72 @@ CREATE TABLE egcl_billAccountDetail (
 
   	ON UPDATE CASCADE
 	ON DELETE CASCADE
+);
+
+
+CREATE TABLE egcl_payment_audit (
+  	id VARCHAR(256) NOT NULL,
+  	tenantId VARCHAR(256) NOT NULL,
+  	totalDue numeric(12,2) NOT NULL,
+  	totalAmountPaid numeric(12,2) NOT NULL,
+  	transactionNumber VARCHAR(256) NOT NULL,
+  	transactionDate BIGINT NOT NULL,
+  	paymentMode VARCHAR(64) NOT NULL,
+  	instrumentDate BIGINT NOT NULL,
+  	instrumentNumber VARCHAR(256) NOT NULL,
+    instrumentStatus VARCHAR(256) NOT NULL,
+  	ifscCode VARCHAR(64) NOT NULL,
+  	additionalDetails JSONB,
+  	paidBy VARCHAR(256) ,
+  	mobileNumber VARCHAR(64) NOT NULL,
+  	payerName VARCHAR(256) NOT NULL,
+  	payerAddress VARCHAR(1024) NOT NULL,
+  	payerEmail VARCHAR(256) NOT NULL,
+  	payerId VARCHAR(256) NOT NULL,
+  	paymentStatus VARCHAR(256) NOT NULL,
+  	createdBy VARCHAR(256) NOT NULL,
+  	createdDate BIGINT NOT NULL,
+  	lastModifiedBy VARCHAR(256) NOT NULL,
+  	lastModifiedDate BIGINT NOT NULL
+
+);
+
+
+CREATE TABLE egcl_paymentDetail_audit (
+    id VARCHAR(256) NOT NULL,
+  	tenantId VARCHAR(256) NOT NULL,
+  	paymentid VARCHAR(256) NOT NULL,
+  	due numeric(12,2) NOT NULL,
+  	amountPaid numeric(12,2) NOT NULL,
+  	receiptNumber VARCHAR(256) NOT NULL,
+  	businessService VARCHAR(256) NOT NULL,
+  	billId VARCHAR(256) NOT NULL,
+	additionalDetails JSONB,
+	createdBy VARCHAR(256) NOT NULL,
+  	createdDate BIGINT NOT NULL,
+  	lastModifiedBy VARCHAR(256) NOT NULL,
+  	lastModifiedDate BIGINT NOT NULL
+);
+
+
+CREATE TABLE egcl_bill_audit(
+        	id VARCHAR(256) NOT NULL,
+        	status VARCHAR(256) NOT NULL,
+        	isCancelled boolean NOT NULL,
+        	additionalDetails JSONB,
+        	tenantId VARCHAR(256) NOT NULL,
+        	collectionModesNotAllowed VARCHAR(256),
+        	partPaymentAllowed boolean,
+        	isAdvanceAllowed boolean,
+        	minimumAmountToBePaid numeric(12,2),
+        	businessService VARCHAR(256) NOT NULL,
+        	totalAmount numeric(12,2) NOT NULL,
+        	consumerCode VARCHAR(256) NOT NULL,
+        	billNumber VARCHAR(256) NOT NULL,
+	    	billDate BIGINT NOT NULL,
+	    	reasonForCancellation VARCHAR(2048),
+        	createdBy VARCHAR(256) NOT NULL,
+		    createdDate BIGINT NOT NULL,
+		    lastModifiedBy VARCHAR(256) NOT NULL,
+		    lastModifiedDate BIGINT NOT NULL
 );

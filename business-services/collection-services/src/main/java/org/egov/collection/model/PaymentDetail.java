@@ -1,6 +1,7 @@
 package org.egov.collection.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
 import org.egov.collection.web.contract.Bill;
 
@@ -51,7 +52,7 @@ public class PaymentDetail {
     private Bill bill;
 
     @JsonProperty("additionalDetails")
-    private Object additionalDetails;
+    private JsonNode additionalDetails;
 
     @JsonProperty("auditDetails")
     private AuditDetails auditDetails;

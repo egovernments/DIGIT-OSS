@@ -1,5 +1,6 @@
 package org.egov.collection.repository.querybuilder;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
@@ -7,15 +8,18 @@ import org.egov.collection.model.PaymentSearchCriteria;
 import org.egov.collection.web.contract.Bill;
 import org.egov.collection.web.contract.BillAccountDetail;
 import org.egov.collection.web.contract.BillDetail;
+import org.egov.tracer.model.CustomException;
+import org.postgresql.util.PGobject;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
-import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toSet;
 
 @Service
@@ -73,7 +77,7 @@ public class PaymentQueryBuilder {
             "            id, status, iscancelled, additionaldetails, tenantid, collectionmodesnotallowed," +
             "            partpaymentallowed, isadvanceallowed, minimumamounttobepaid, " +
             "            businessservice, totalamount, consumercode, billnumber, billdate," +
-            "            createdby, createddate, lastmodifiedby, lastmodifieddate)" +
+            "            createdby, createddate, lastmodifiedby, lastmodifieddate) " +
             "    VALUES (:id, :status, :iscancelled, :additionaldetails, :tenantid, :collectionmodesnotallowed," +
             "            :partpaymentallowed, :isadvanceallowed, :minimumamounttobepaid," +
             "            :businessservice, :totalamount, :consumercode, :billnumber, :billdate," +
@@ -105,10 +109,25 @@ public class PaymentQueryBuilder {
             "            :order, :amount, :isactualdemand, :taxheadcode, :additionaldetails," +
             "            :createdby, :createddate, :lastmodifiedby, :lastmodifieddate);";
 
-    public static final String UPDATE_STATUS_BILL_SQL = "UPDATE public.egcl_bill " +
+    public static final String UPDATE_STATUS_BILL_SQL = "UPDATE egcl_bill " +
             "   SET  status= :status, iscancelled= :iscancelled, additionaldetails= :additionaldetails, createdby=:createdby," +
             "   createddate= :createddate,lastmodifiedby= :lastmodifiedby, lastmodifieddate=:lastmodifieddate" +
             "   WHERE id=:id;";
+
+    public static final String UPDATE_STATUS_PAYMENT_SQL = "UPDATE egcl_payment SET instrumentstatus=:instrumentstatus,additionaldetails=:additionaldetails," +
+            " paymentstatus=:paymentstatus,createdby=:createdby, createddate=:createddate, lastmodifiedby=:lastmodifiedby,lastmodifieddate=:lastmodifieddate" +
+            " WHERE id=:id;";
+
+    public static final String UPDATE_STATUS_PAYMENTDETAIL_SQL = "UPDATE egcl_paymentdetail SET  additionaldetails=:additionaldetails, createdby=:createdby," +
+            " createddate=:createddate, lastmodifiedby=:lastmodifiedby, lastmodifieddate=:lastmodifieddate " +
+            " WHERE id=:id;";
+
+    public static final String COPY_PAYMENT_SQL = "INSERT INTO egcl_payment_audit SELECT * FROM egcl_payment WHERE id = :id;";
+
+    public static final String COPY_PAYMENTDETAIL_SQL = "INSERT INTO egcl_paymentdetail_audit SELECT * FROM egcl_paymentdetail WHERE id = :id;";
+
+    public static final String COPY_BILL_SQL = "INSERT INTO egcl_bill_audit SELECT * FROM egcl_bill WHERE id = :id;";
+
 
 
     public static MapSqlParameterSource getParametersForPaymentCreate(Payment payment) {
@@ -287,8 +306,19 @@ public class PaymentQueryBuilder {
 
         if (CollectionUtils.isEmpty(searchCriteria.getStatus())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" UPPER(pyd.status) in (:status)");
+            selectQuery.append(" UPPER(py.paymentstatus) in (:status)");
             preparedStatementValues.put("status",
+                    searchCriteria.getStatus()
+                            .stream()
+                            .map(String::toUpperCase)
+                            .collect(toSet())
+            );
+        }
+
+        if (CollectionUtils.isEmpty(searchCriteria.getInstrumentStatus())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" UPPER(py.instrumentStatus) in (:instrumentStatus)");
+            preparedStatementValues.put("instrumentStatus",
                     searchCriteria.getStatus()
                             .stream()
                             .map(String::toUpperCase)
@@ -430,6 +460,80 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("lastmodifieddate", payment.getAuditDetails().getLastModifiedDate());
 
         return sqlParameterSource;
+
+    }
+
+
+
+    public static MapSqlParameterSource getParametersForPaymentUpdate(Payment payment) {
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+
+        sqlParameterSource.addValue("id", payment.getId());
+        sqlParameterSource.addValue("paidby", payment.getPaidBy());
+        sqlParameterSource.addValue("payeraddress", payment.getPayerAddress());
+        sqlParameterSource.addValue("payeremail", payment.getPayerEmail());
+        sqlParameterSource.addValue("payername", payment.getPayerName());
+        sqlParameterSource.addValue("additionalDetails", getJsonb(payment.getAdditionalDetails()));
+        sqlParameterSource.addValue("lastmodifiedby", payment.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue("lastmodifieddate", payment.getAuditDetails().getLastModifiedDate());
+
+
+        return sqlParameterSource;
+
+    }
+
+
+    public static MapSqlParameterSource getParametersForPaymentDetailUpdate(PaymentDetail paymentDetail) {
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+
+        sqlParameterSource.addValue("id", paymentDetail.getId());
+        sqlParameterSource.addValue("additionalDetails", getJsonb(paymentDetail.getAdditionalDetails()));
+        sqlParameterSource.addValue("lastmodifiedby", paymentDetail.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue("lastmodifieddate", paymentDetail.getAuditDetails().getLastModifiedDate());
+
+        // Temporary code below, to enable backward compatibility with previous API
+        sqlParameterSource.addValue("status", billDetail.getStatus());
+
+
+        return sqlParameterSource;
+
+    }
+
+    public static MapSqlParameterSource getParamtersForBillDetailUpdate(BillDetail billDetail) {
+
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+        sqlParameterSource.addValue("id", billDetail.getId());
+        sqlParameterSource.addValue("additionaldetails", billDetail.getAdditionalDetails());
+        sqlParameterSource.addValue("voucherheader", billDetail.getVoucherHeader());
+        sqlParameterSource.addValue("manualreceiptnumber", billDetail.getManualReceiptNumber());
+        sqlParameterSource.addValue("manualreceiptdate", billDetail.getManualReceiptDate());
+        sqlParameterSource.addValue("billdescription", billDetail.getBillDescription());
+        sqlParameterSource.addValue("displaymessage", billDetail.getDisplayMessage());
+        sqlParameterSource.addValue("cancellationremarks", billDetail.getCancellationRemarks());
+        sqlParameterSource.addValue("createdby", billDetail.getAuditDetails().getCreatedBy());
+        sqlParameterSource.addValue("createddate", billDetail.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("lastmodifiedby", billDetail.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue("lastmodifieddate", billDetail.getAuditDetails().getLastModifiedDate());
+
+        return sqlParameterSource;
+    }
+
+
+
+
+
+    private static PGobject getJsonb(JsonNode node) {
+        if (Objects.isNull(node))
+            return null;
+
+        PGobject pgObject = new PGobject();
+        pgObject.setType("jsonb");
+        try {
+            pgObject.setValue(node.toString());
+            return pgObject;
+        } catch (SQLException e) {
+            throw new CustomException("UNABLE_TO_CREATE_RECEIPT", "Invalid JSONB value provided");
+        }
 
     }
 
