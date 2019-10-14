@@ -214,3 +214,39 @@ CREATE TABLE egcl_bill_audit(
 		    lastModifiedBy VARCHAR(256) NOT NULL,
 		    lastModifiedDate BIGINT NOT NULL
 );
+
+
+CREATE TABLE egcl_billdetial_audit(
+        	id VARCHAR(256) NOT NULL,
+		    tenantId VARCHAR(256) NOT NULL,
+		    demandId VARCHAR(256) NOT NULL,
+        	billId VARCHAR(256) NOT NULL,
+        	amount numeric(12,2) NOT NULL,
+        	amountPaid numeric(12,2) NOT NULL,
+        	fromPeriod BIGINT NOT NULL,
+        	toPeriod BIGINT NOT NULL,
+        	collectedAmount numeric(12,2) NOT NULL,
+        	additionalDetails VARCHAR(256) NOT NULL,
+        	receiptNumber VARCHAR(256) NOT NULL,
+        	receiptDate BIGINT NOT NULL,
+        	receiptType VARCHAR(256) NOT NULL,
+        	channel VARCHAR(256),
+        	voucherHeader VARCHAR(256),
+        	boundary VARCHAR(256),
+        	manualReceiptNumber VARCHAR(256),
+        	manualReceiptDate BIGINT,
+            collectionType VARCHAR(256) NOT NULL,
+        	billDescription VARCHAR(256),
+        	expiryDate VARCHAR(256) NOT NULL,
+        	displayMessage VARCHAR(2048),
+        	callBackForApportioning VARCHAR(256) NOT NULL,
+        	cancellationRemarks VARCHAR(2048),
+		    createdBy VARCHAR(256) NOT NULL,
+		    createdDate BIGINT NOT NULL,
+		    lastModifiedBy VARCHAR(256) NOT NULL,
+    		lastModifiedDate BIGINT NOT NULL,
+
+		CONSTRAINT pk_egcl_billdetial PRIMARY KEY (id),
+        CONSTRAINT fk_egcl_billdetial FOREIGN KEY (billId) REFERENCES egcl_bill(id)
+);
+

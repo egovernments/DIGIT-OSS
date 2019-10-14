@@ -154,5 +154,21 @@ public class PaymentService {
     }
 
 
+    @Transactional
+    public List<Payment> updatePayment(PaymentRequest paymentRequest) {
+
+        List<Payment> validatedPayments = paymentValidator.validateAndEnrichPaymentsForUpdate(Collections.singletonList(paymentRequest.getPayment()),
+                paymentRequest.getRequestInfo());
+
+        paymentRepository.updatePayment(validatedPayments);
+        producer.producer(applicationProperties.getUpdateReceiptTopicName(), applicationProperties
+                .getUpdateReceiptTopicKey(), new PaymentRequest(paymentRequest.getRequestInfo(), paymentRequest.getPayment()));
+
+        return validatedPayments;
+    }
+
+
+
+
 
 }

@@ -2,6 +2,7 @@ package org.egov.collection.repository.querybuilder;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.kafka.common.protocol.types.Field;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentSearchCriteria;
@@ -109,24 +110,50 @@ public class PaymentQueryBuilder {
             "            :order, :amount, :isactualdemand, :taxheadcode, :additionaldetails," +
             "            :createdby, :createddate, :lastmodifiedby, :lastmodifieddate);";
 
-    public static final String UPDATE_STATUS_BILL_SQL = "UPDATE egcl_bill " +
-            "   SET  status= :status, iscancelled= :iscancelled, additionaldetails= :additionaldetails, createdby=:createdby," +
-            "   createddate= :createddate,lastmodifiedby= :lastmodifiedby, lastmodifieddate=:lastmodifieddate" +
-            "   WHERE id=:id;";
 
-    public static final String UPDATE_STATUS_PAYMENT_SQL = "UPDATE egcl_payment SET instrumentstatus=:instrumentstatus,additionaldetails=:additionaldetails," +
+    // Payment Status update queries
+
+    public static final String STATUS_UPDATE_PAYMENT_SQL = "UPDATE egcl_payment SET instrumentstatus=:instrumentstatus,additionaldetails=:additionaldetails," +
             " paymentstatus=:paymentstatus,createdby=:createdby, createddate=:createddate, lastmodifiedby=:lastmodifiedby,lastmodifieddate=:lastmodifieddate" +
             " WHERE id=:id;";
 
-    public static final String UPDATE_STATUS_PAYMENTDETAIL_SQL = "UPDATE egcl_paymentdetail SET  additionaldetails=:additionaldetails, createdby=:createdby," +
+    public static final String STATUS_UPDATE_PAYMENTDETAIL_SQL = "UPDATE egcl_paymentdetail SET  additionaldetails=:additionaldetails, createdby=:createdby," +
             " createddate=:createddate, lastmodifiedby=:lastmodifiedby, lastmodifieddate=:lastmodifieddate " +
             " WHERE id=:id;";
+
+    public static final String STATUS_UPDATE_BILL_SQL = "UPDATE egcl_bill " +
+            "   SET  status= :status, iscancelled= :iscancelled, additionaldetails= :additionaldetails, createdby=:createdby," +
+            "   createddate= :createddate,lastmodifiedby= :lastmodifiedby, lastmodifieddate=:lastmodifieddate" +
+            "   WHERE id=:id;";
 
     public static final String COPY_PAYMENT_SQL = "INSERT INTO egcl_payment_audit SELECT * FROM egcl_payment WHERE id = :id;";
 
     public static final String COPY_PAYMENTDETAIL_SQL = "INSERT INTO egcl_paymentdetail_audit SELECT * FROM egcl_paymentdetail WHERE id = :id;";
 
     public static final String COPY_BILL_SQL = "INSERT INTO egcl_bill_audit SELECT * FROM egcl_bill WHERE id = :id;";
+
+    public static final String COPY_BILLDETAIL_SQL = "INSERT INTO egcl_billdetial_audit SELECT * FROM egcl_billdetial WHERE id = :id;";
+
+
+
+    // Payment update queries
+
+    public static final String UPDATE_PAYMENT_SQL = "UPDATE egcl_payment SET additionaldetails=:additionaldetails, paidby=:paidby, payername=:payername," +
+            " payeraddress=:payeraddress, payeremail=:payeremail, payerid=:payerid,paymentstatus=:paymentstatus, createdby=:createdby, createddate=:createddate," +
+            " lastmodifiedby=:lastmodifiedby, lastmodifieddate=:lastmodifieddate WHERE id=:id ";
+
+    public static final String UPDATE_PAYMENTDETAIL_SQL ="UPDATE egcl_paymentdetail SET additionaldetails=:additionaldetails, createdby=:createdby," +
+            "createddate=:createddate, lastmodifiedby=:lastmodifiedby, lastmodifieddate=:lastmodifieddate" +
+            "WHERE id=:id;";
+
+    public static final String UPDATE_BILL_SQL = "UPDATE egcl_bill SET additionaldetails=:additionaldetails,createdby=:createdby,createddate=:createddate, lastmodifiedby=:lastmodifiedby,\n" +
+            "lastmodifieddate=:lastmodifieddate WHERE id=:id;";
+
+    public static final String UPDATE_BILLDETAIL_SQL = "UPDATE egcl_billdetial SET additionaldetails=:additionaldetails, voucherheader=:voucherheader," +
+            " manualreceiptnumber=:manualreceiptnumber, manualreceiptdate=:manualreceiptdate, billdescription=:billdescription,displaymessage=:displaymessage," +
+            "createdby=:createdby, createddate=:createddate, lastmodifiedby=:lastmodifiedby,lastmodifieddate=:lastmodifieddate WHERE id=:id ";
+
+
 
 
 
@@ -465,6 +492,8 @@ public class PaymentQueryBuilder {
 
 
 
+    // Payment update
+
     public static MapSqlParameterSource getParametersForPaymentUpdate(Payment payment) {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
@@ -491,13 +520,25 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("lastmodifiedby", paymentDetail.getAuditDetails().getLastModifiedBy());
         sqlParameterSource.addValue("lastmodifieddate", paymentDetail.getAuditDetails().getLastModifiedDate());
 
-        // Temporary code below, to enable backward compatibility with previous API
-        sqlParameterSource.addValue("status", billDetail.getStatus());
-
-
         return sqlParameterSource;
 
     }
+
+
+    public static MapSqlParameterSource getParamtersForBillUpdate(Bill bill){
+
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+
+        sqlParameterSource.addValue("id", bill.getId());
+        sqlParameterSource.addValue("additionaldetails", bill.getAdditionalDetails());
+        sqlParameterSource.addValue("createdby", bill.getAuditDetails().getCreatedBy());
+        sqlParameterSource.addValue("createddate", bill.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("lastmodifiedby", bill.getAuditDetails().getLastModifiedBy());
+        sqlParameterSource.addValue("lastmodifieddate", bill.getAuditDetails().getLastModifiedDate());
+
+        return sqlParameterSource;
+    }
+
 
     public static MapSqlParameterSource getParamtersForBillDetailUpdate(BillDetail billDetail) {
 
@@ -509,7 +550,6 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("manualreceiptdate", billDetail.getManualReceiptDate());
         sqlParameterSource.addValue("billdescription", billDetail.getBillDescription());
         sqlParameterSource.addValue("displaymessage", billDetail.getDisplayMessage());
-        sqlParameterSource.addValue("cancellationremarks", billDetail.getCancellationRemarks());
         sqlParameterSource.addValue("createdby", billDetail.getAuditDetails().getCreatedBy());
         sqlParameterSource.addValue("createddate", billDetail.getAuditDetails().getCreatedDate());
         sqlParameterSource.addValue("lastmodifiedby", billDetail.getAuditDetails().getLastModifiedBy());

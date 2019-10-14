@@ -109,8 +109,8 @@ public class PaymentWorkflowService {
                         paymentWorkflowRequest.getRequestInfo(), tenantId);
                 break;
             case REMIT:
-                processedReceipts = remit(workflowRequestByReceiptNumber, consumerCodes,
-                        receiptWorkflowRequest.getRequestInfo(), tenantId);
+                processedPayments = remit(workflowRequestByPaymentId, consumerCodes,
+                        paymentWorkflowRequest.getRequestInfo(), tenantId);
                 break;
         }
 
@@ -143,7 +143,7 @@ public class PaymentWorkflowService {
                 bill.setIsCancelled(true);
                 bill.setReasonForCancellation(workflowRequestByPaymentId.get(payment.getId()).getReason());
                 bill.setAdditionalDetails(jsonMerge(bill.getAdditionalDetails(),
-                        workflowRequestByPaymentId.get(payment.getId()).getAdditionalDetails());
+                        workflowRequestByPaymentId.get(payment.getId()).getAdditionalDetails()));
             });
             updateAuditDetails(payment, requestInfo);
         }
@@ -189,14 +189,11 @@ public class PaymentWorkflowService {
             payment.setInstrumentStatus(InstrumentStatusEnum.DISHONOURED);
 
             payment.getPaymentDetails().forEach(paymentDetail -> {
-                BillDetail billDetail = receipt.getBill().get(0).getBillDetails().get(0);
-                billDetail.setStatus(ReceiptStatus.REJECTED.toString());
-
                 Bill bill = paymentDetail.getBill();
                 bill.setStatus(Bill.StatusEnum.CANCELLED);
                 bill.setReasonForCancellation(workflowRequestByPaymentId.get(payment.getId()).getReason());
                 bill.setAdditionalDetails(jsonMerge(bill.getAdditionalDetails(),
-                        workflowRequestByPaymentId.get(payment.getId()).getAdditionalDetails());
+                        workflowRequestByPaymentId.get(payment.getId()).getAdditionalDetails()));
             });
 
             updateAuditDetails(payment, requestInfo);
@@ -234,18 +231,16 @@ public class PaymentWorkflowService {
 
         for(Payment payment : validatedPayments) {
             payment.setPaymentStatus(PaymentStatusEnum.DEPOSITED);
+            payment.setInstrumentStatus(InstrumentStatusEnum.REMITTED);
 
             JsonNode additionalDetails = workflowRequestByPaymentId.get(payment.getId())
                     .getAdditionalDetails();
-            BillDetail billDetail = receipt.getBill().get(0).getBillDetails().get(0);
-            billDetail.setStatus(ReceiptStatus.REMITTED.toString());
-            billDetail.setAdditionalDetails(jsonMerge(billDetail.getAdditionalDetails(),
-                    additionalDetails));
 
-            if( ! isNull(additionalDetails) && ! additionalDetails.isNull() && additionalDetails.has(VOUCHER_HEADER_KEY))
-                billDetail.setVoucherHeader(additionalDetails.get(VOUCHER_HEADER_KEY).asText());
+            payment.getPaymentDetails().forEach(paymentDetail -> {
+                paymentDetail.getBill().setAdditionalDetails(jsonMerge(paymentDetail.getBill().getAdditionalDetails(),
+                    workflowRequestByPaymentId.get(payment.getId()).getAdditionalDetails()));
+            });
 
-            receipt.getInstrument().setInstrumentStatus(DEPOSITED);
 
             updateAuditDetails(payment, requestInfo);
         }

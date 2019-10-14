@@ -101,9 +101,9 @@ public class PaymentRepository {
             namedParameterJdbcTemplate.batchUpdate(COPY_PAYMENT_SQL, paymentSource.toArray(new MapSqlParameterSource[0]));
             namedParameterJdbcTemplate.batchUpdate(COPY_PAYMENTDETAIL_SQL, paymentDetailSource.toArray(new MapSqlParameterSource[0]));
             namedParameterJdbcTemplate.batchUpdate(COPY_BILL_SQL, billSource.toArray(new MapSqlParameterSource[0]));
-            namedParameterJdbcTemplate.batchUpdate(UPDATE_STATUS_PAYMENT_SQL, paymentSource.toArray(new MapSqlParameterSource[0]));
-            namedParameterJdbcTemplate.batchUpdate(UPDATE_STATUS_PAYMENTDETAIL_SQL, paymentDetailSource.toArray(new MapSqlParameterSource[0]));
-            namedParameterJdbcTemplate.batchUpdate(UPDATE_STATUS_BILL_SQL, billSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(STATUS_UPDATE_PAYMENT_SQL, paymentSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(STATUS_UPDATE_PAYMENTDETAIL_SQL, paymentDetailSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(STATUS_UPDATE_BILL_SQL, billSource.toArray(new MapSqlParameterSource[0]));
         }
         catch(Exception e){
             log.error("Failed to persist cancel Receipt to database", e);
@@ -113,27 +113,34 @@ public class PaymentRepository {
 
 
     public void updatePayment(List<Payment> payments){
-        List<MapSqlParameterSource> paymentHeaderSource = new ArrayList<>();
+        List<MapSqlParameterSource> paymentSource = new ArrayList<>();
         List<MapSqlParameterSource> paymentDetailSource = new ArrayList<>();
-        List<MapSqlParameterSource> instrumentHeaderSource = new ArrayList<>();
+        List<MapSqlParameterSource> billSource = new ArrayList<>();
+        List<MapSqlParameterSource> billDetailSource = new ArrayList<>();
+
+
         try {
 
+            for (Payment payment : payments) {
+                paymentSource.add(getParametersForPaymentUpdate(payment));
+                payment.getPaymentDetails().forEach(paymentDetail -> {
+                    paymentDetailSource.add(getParametersForPaymentDetailUpdate(paymentDetail));
+                    billSource.add(getParamtersForBillUpdate(paymentDetail.getBill()));
 
-            for (Receipt receipt : receipts) {
-                BillDetail billDetail = receipt.getBill().get(0).getBillDetails().get(0);
-                receiptHeaderSource.add(getParametersForReceiptHeaderUpdate(receipt, billDetail));
-                for (BillAccountDetail billAccountDetail : billDetail.getBillAccountDetails()) {
-                    receiptDetailSource.add(getParametersForReceiptDetails(billAccountDetail, billDetail.getId()));
-                }
-                instrumentHeaderSource.add(getParametersForInstrumentHeaderUpdate(receipt.getInstrument(),
-                        receipt.getAuditDetails()));
+                    paymentDetail.getBill().getBillDetails().forEach(billDetail -> {
+                        billDetailSource.add(getParamtersForBillDetailUpdate(billDetail));
+                    });
+
+                });
             }
-            namedParameterJdbcTemplate.batchUpdate(COPY_RCPT_HEADER_SQL, receiptHeaderSource.toArray(new MapSqlParameterSource[0]));
-            namedParameterJdbcTemplate.batchUpdate(COPY_RCPT_DETALS_SQL, receiptDetailSource.toArray(new MapSqlParameterSource[0]));
-            namedParameterJdbcTemplate.batchUpdate(COPY_INSTRUMENT_HEADER_SQL, instrumentHeaderSource.toArray(new MapSqlParameterSource[0]));
-            namedParameterJdbcTemplate.batchUpdate(UPDATE_RECEIPT_HEADER_SQL, receiptHeaderSource.toArray(new MapSqlParameterSource[0]));
-            namedParameterJdbcTemplate.batchUpdate(UPDATE_INSTRUMENT_HEADER_SQL, instrumentHeaderSource.toArray(new MapSqlParameterSource[0]));
-
+            namedParameterJdbcTemplate.batchUpdate(UPDATE_PAYMENT_SQL, paymentSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(UPDATE_PAYMENTDETAIL_SQL, paymentDetailSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(UPDATE_BILL_SQL, billSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(UPDATE_BILLDETAIL_SQL, billDetailSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(COPY_PAYMENT_SQL, paymentSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(COPY_PAYMENTDETAIL_SQL, paymentDetailSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(COPY_BILL_SQL, billSource.toArray(new MapSqlParameterSource[0]));
+            namedParameterJdbcTemplate.batchUpdate(COPY_BILLDETAIL_SQL, billDetailSource.toArray(new MapSqlParameterSource[0]));
         }catch (Exception e){
             log.error("Failed to update receipt to database", e);
             throw new CustomException("RECEIPT_UPDATION_FAILED", "Unable to update receipt");

@@ -180,4 +180,11 @@ public class ApplicationProperties {
     private String cancelPaymentTopicKey;
 
 
+    @Value("${kafka.topics.payment.update.name}")
+    private String updatePaymentTopicName;
+
+    @Value("${kafka.topics.payment.update.key}")
+    private String updatePaymentTopicKey;
+
+
 }
