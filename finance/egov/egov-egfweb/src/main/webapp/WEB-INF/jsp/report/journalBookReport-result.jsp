@@ -105,7 +105,8 @@
 			property="creditamount" />
 		<display:caption media="pdf">
 			<div align="left" style="text-align: left;">
-				<b> <s:property value="%{heading}" /> (<s:property
+			<b><s:property value="%{titleName}" /><s:property value="%{heading}" />
+				(<s:property
 						value="%{journalBookReport.isConfirmedCount}" /> in <s:property
 						value="%{journalBookReport.totalCount}" /> are unconfirmed)
 				</b>

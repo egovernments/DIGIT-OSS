@@ -106,6 +106,7 @@ public class JournalBookReportAction extends BaseFormAction {
     @Autowired
     private CityService cityService;
     String heading = "";
+    String titleName = "";
 
     public JournalBookReportAction() {
         super();
@@ -159,6 +160,7 @@ public class JournalBookReportAction extends BaseFormAction {
             addActionMessage("No records found.");
         }
         heading = getGLHeading();
+        titleName = microserviceUtils.getHeaderNameForTenant().toUpperCase()+" \\n";
         prepareNewForm();
         return "result";
     }
@@ -301,6 +303,14 @@ public class JournalBookReportAction extends BaseFormAction {
 
     public void setJournalBookDisplayList(List<GeneralLedgerBean> journalBookDisplayList) {
         this.journalBookDisplayList = journalBookDisplayList;
+    }
+    
+    public String getTitleName() {
+        return titleName;
+    }
+
+    public void setTitleName(String titleName) {
+        this.titleName = titleName;
     }
 
 }

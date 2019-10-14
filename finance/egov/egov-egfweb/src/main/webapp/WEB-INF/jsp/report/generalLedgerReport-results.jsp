@@ -161,8 +161,9 @@
 				<s:property value="#attr.currentRowObject.creditamount" />
 			</s:else>
 		</display:column>
-		<display:caption media="pdf">
+		<display:caption media="pdf" >
 			<div align="left" style="text-align: left;">
+			 
 				<s:property value="%{generalLedgerReport.heading}" />
 				(
 				<s:property value="%{generalLedgerReport.isConfirmedCount}" />
@@ -170,9 +171,13 @@
 				<s:property value="%{generalLedgerReport.totalCount}" />
 				are unconfirmed)
 			</div>
-			 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	  General Ledger Report  
+			 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<s:property value="%{titleName}" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	  General Ledger Report 
 		</display:caption>
 		<display:caption media="excel">
 				   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

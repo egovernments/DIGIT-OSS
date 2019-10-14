@@ -97,7 +97,7 @@
 
 		<display:caption media="pdf">
 			<div align="left" style="text-align: left;">
-				<s:property value="%{heading}" />
+				<s:property value="%{titleName}" /><s:property value="%{heading}" />
 			</div>
 		</display:caption>
 		<display:caption media="excel">

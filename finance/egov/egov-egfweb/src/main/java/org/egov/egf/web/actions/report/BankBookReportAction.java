@@ -101,6 +101,7 @@ import org.hibernate.transform.Transformers;
 import org.hibernate.type.BigDecimalType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.env.Environment;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -169,6 +170,8 @@ public class BankBookReportAction extends BaseFormAction {
 
 	@Autowired
 	private EgovMasterDataCaching masterDataCache;
+	@Autowired
+	private Environment environment;
 
 	public void setReportHelper(final ReportHelper reportHelper) {
 		this.reportHelper = reportHelper;
@@ -820,7 +823,8 @@ public class BankBookReportAction extends BaseFormAction {
 
 	Map<String, Object> getParamMap() {
 		final Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("ulbName", ReportUtil.getCityName() +" "+ (cityService.getCityGrade()==null ? "" :cityService.getCityGrade()));
+		String ulbGrade = cityService.getCityGrade()==null ? "" :cityService.getCityGrade();
+                paramMap.put("ulbName", ReportUtil.getCityName() +" "+ environment.getProperty(ulbGrade,ulbGrade));
 		final String name = bankAccount.getBankbranch().getBank().getName().concat("-")
 				.concat(bankAccount.getBankbranch().getBranchname()).concat("-").concat(bankAccount.getAccountnumber());
 		paramMap.put("heading", getText("bank.book.heading", new String[] { name, header.toString(),

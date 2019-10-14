@@ -358,7 +358,7 @@
 				</display:column>
 				<display:caption media="pdf">
 					<div align="left" style="text-align: left;">
-						<b><s:property value="%{subLedgerReport.heading}" /></b>
+						<b><s:property value="%{titleName}" /><s:property value="%{subLedgerReport.heading}" /></b>
 					</div>
 				</display:caption>
 				<display:caption media="excel">

@@ -281,7 +281,7 @@ today = dd+'/'+mm+'/'+yyyy;
 			width="100%">
 			<tr>
 				<th class="bluebgheadtd" width="100%" colspan="12"><strong
-					style="font-size: 15px;"><s:property value="heading" /> </strong></th>
+					style="font-size: 15px;"> </strong></th>
 			</tr>
 			<tr>
 				<td class="bluebox" colspan="4"><strong><s:text

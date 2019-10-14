@@ -133,6 +133,7 @@ public class TrialBalanceAction extends BaseFormAction {
 	private CityService cityService;
 	private City cityWebsite;
 	private String heading = "";
+	String titleName = "";
 	public String reqFundId[];
 	public String reqFundName[];
 	public Date finStartDate;
@@ -193,18 +194,19 @@ public class TrialBalanceAction extends BaseFormAction {
 	public String exportTrialBalance() {
 		try {
 			heading = generateHeading();
+			titleName = microserviceUtils.getHeaderNameForTenant().toUpperCase()+" \\n";
 			cityWebsite = cityService.getCityByURL((String) getSession().get("cityurl"));
 			if (rb.getExportType().equalsIgnoreCase("xls")) {
 				inputStream = reportHelper.exportXls(inputStream,
-						reportHelper.exportTBDateRange(al, cityWebsite.getName(), rb, heading, fundList, "xls"));
+						reportHelper.exportTBDateRange(al, titleName, rb, heading, fundList, "xls"));
 				return "trialBalance-XLS";
 			} else if (rb.getExportType().equalsIgnoreCase("pdf")) {
 				inputStream = reportHelper.exportPdf(inputStream,
-						reportHelper.exportTBDateRange(al, cityWebsite.getName(), rb, heading, fundList, null));
+						reportHelper.exportTBDateRange(al, titleName, rb, heading, fundList, null));
 				return "trialBalance-PDF";
 			} else {
 				inputStream = reportHelper.exportHtml(inputStream,
-						reportHelper.exportTBDateRange(al, cityWebsite.getName(), rb, heading, fundList, null), "px");
+						reportHelper.exportTBDateRange(al, titleName, rb, heading, fundList, null), "px");
 				return "new";
 			}
 		} catch (final JRException e) {
@@ -1015,5 +1017,12 @@ public class TrialBalanceAction extends BaseFormAction {
 	public void setFinancialYearDAO(final FinancialYearDAO financialYearDAO) {
 		this.financialYearDAO = financialYearDAO;
 	}
+	 public String getTitleName() {
+	        return titleName;
+	    }
+
+	    public void setTitleName(String titleName) {
+	        this.titleName = titleName;
+	    }
 
 }

@@ -102,6 +102,7 @@ public class OpeningBalanceReportAction extends BaseFormAction {
 	protected DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 	protected ArrayList openingBalanceDisplayList = new ArrayList();
 	String heading = "";
+	String titleName = "";
 
 	public OpeningBalanceReportAction() {
 		super();
@@ -166,6 +167,7 @@ public class OpeningBalanceReportAction extends BaseFormAction {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("OpeningBalanceReportAction | list | End");
 		heading = getGLHeading();
+		titleName = microserviceUtils.getHeaderNameForTenant().toUpperCase()+" \\n";
 		prepareNewForm();
 		persistenceService.getSession().setFlushMode(FlushMode.AUTO);
 		return "result";
@@ -235,5 +237,13 @@ public class OpeningBalanceReportAction extends BaseFormAction {
 	public void setOpeningBalanceDisplayList(final ArrayList openingBalanceDisplayList) {
 		this.openingBalanceDisplayList = openingBalanceDisplayList;
 	}
+	
+	 public String getTitleName() {
+	        return titleName;
+	   }
+
+	  public void setTitleName(String titleName) {
+	        this.titleName = titleName;
+	    }
 
 }

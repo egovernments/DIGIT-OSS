@@ -126,6 +126,7 @@ public class BillRegisterReportAction extends SearchFormAction {
     // accounts codes based on the
     // expenditure type.
     private Date fromDate;
+    String titleName = "";
     
    
  @Autowired
@@ -219,6 +220,7 @@ public class BillRegisterReportAction extends SearchFormAction {
         toDate = fromDate = null;
         voucherHeader.reset();
         exptype = billType = null;
+        
         if (errorState)
             addActionError(getText("bill.register.report.system.error"));
         return "completeBill";
@@ -255,6 +257,7 @@ public class BillRegisterReportAction extends SearchFormAction {
         validateBeforeSearch();
         search();
         formatSearchResult();
+        titleName = microserviceUtils.getHeaderNameForTenant().toUpperCase()+" \\n";
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("BillRegisterReportAction | list | End");
 
@@ -923,6 +926,14 @@ public class BillRegisterReportAction extends SearchFormAction {
 	public void setAppConfigValueService(AppConfigValueService appConfigValueService) {
 		this.appConfigValueService = appConfigValueService;
 	}
+	
+	  public String getTitleName() {
+	        return titleName;
+	    }
+
+	    public void setTitleName(String titleName) {
+	        this.titleName = titleName;
+	    }
 
 	
 	

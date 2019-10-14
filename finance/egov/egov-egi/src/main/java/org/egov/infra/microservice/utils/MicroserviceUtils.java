@@ -1407,7 +1407,7 @@ public class MicroserviceUtils {
                 ulbGrade = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.tenant.tenants[0].city.ulbGrade"),String.class);
             }
             if(ulbGrade != null && !ulbGrade.isEmpty())
-                ulbGrade = environment.getProperty(ulbGrade.replaceAll(" ", ""));
+                ulbGrade = environment.getProperty(ulbGrade,ulbGrade);
         } catch (Exception e) {
             LOGGER.error("ERROR occurred while fetching header name of tenant in getHeaderNameForTenant : ",e);
         }

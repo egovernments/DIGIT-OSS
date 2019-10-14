@@ -109,6 +109,7 @@ public class GeneralLedgerReportAction extends BaseFormAction {
 	List<CChartOfAccounts> allChartOfAccounts;
 	String parentForDetailedCode = "";
 	private String glCode;
+	String titleName = "";
 	@Autowired
 	AppConfigValueService appConfigValuesService;
 	@Autowired
@@ -184,6 +185,7 @@ public class GeneralLedgerReportAction extends BaseFormAction {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("GeneralLedgerAction | list | End");
 		heading = getGLHeading();
+		titleName = microserviceUtils.getHeaderNameForTenant().toUpperCase()+" \\n";
 		generalLedgerReportBean.setHeading(getGLHeading());
 		prepareNewForm();
 		return "results";
@@ -203,6 +205,7 @@ public class GeneralLedgerReportAction extends BaseFormAction {
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("GeneralLedgerAction | list | End");
 		heading = getGLHeading();
+		titleName = microserviceUtils.getHeaderNameForTenant().toUpperCase()+" \\n";
 		generalLedgerReportBean.setHeading(getGLHeading());
 		prepareNewForm();
 		return "searchResult";
@@ -310,5 +313,13 @@ public class GeneralLedgerReportAction extends BaseFormAction {
 	public void setChartOfAccountsService(PersistenceService<CChartOfAccounts, Long> chartOfAccountsService) {
 		this.chartOfAccountsService = chartOfAccountsService;
 	}
+
+	public String getTitleName() {
+        return titleName;
+         }
+
+        public void setTitleName(String titleName) {
+        this.titleName = titleName;
+        }
 
 }

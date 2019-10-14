@@ -97,6 +97,7 @@ public class SubLedgerScheduleReportAction extends BaseFormAction {
     protected DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
     protected LinkedList subLedgerScheduleDisplayList = new LinkedList();
     String heading = "";
+    String titleName = "";
     @Autowired
 	private EgovMasterDataCaching masterDataCache;
 
@@ -162,6 +163,7 @@ public class SubLedgerScheduleReportAction extends BaseFormAction {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("SubLedgerScheduleReportAction | list | End");
         heading = getGLHeading();
+        titleName = microserviceUtils.getHeaderNameForTenant().toUpperCase()+" \\n";
         prepareNewForm();
         return "result";
     }
@@ -223,5 +225,12 @@ public class SubLedgerScheduleReportAction extends BaseFormAction {
     public void setSubLedgerScheduleDisplayList(final LinkedList subLedgerScheduleDisplayList) {
         this.subLedgerScheduleDisplayList = subLedgerScheduleDisplayList;
     }
+    
+    public String getTitleName() {
+        return titleName;
+   }
 
+  public void setTitleName(String titleName) {
+        this.titleName = titleName;
+    }
 }

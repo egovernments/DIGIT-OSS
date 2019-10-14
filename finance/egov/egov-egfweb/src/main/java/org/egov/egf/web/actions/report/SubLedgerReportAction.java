@@ -94,6 +94,7 @@ public class SubLedgerReportAction extends BaseFormAction {
 	protected DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 	protected LinkedList subLedgerDisplayList = new LinkedList();
 	String heading = "";
+	String titleName = "";
 	private String drillDownFromSchedule;
 	@Autowired
 	private EgovMasterDataCaching masterDataCache;
@@ -158,6 +159,7 @@ public class SubLedgerReportAction extends BaseFormAction {
 			LOGGER.debug("SubLedgerAction | list | End");
 		heading = getGLHeading();
 		subLedgerReport.setHeading(heading);
+		titleName = microserviceUtils.getHeaderNameForTenant().toUpperCase()+" \\n";
 		prepareNewForm();
 		return FinancialConstants.STRUTS_RESULT_PAGE_SEARCH;
 	}
@@ -231,5 +233,12 @@ public class SubLedgerReportAction extends BaseFormAction {
 	public void setDrillDownFromSchedule(final String drillDownFromSchedule) {
 		this.drillDownFromSchedule = drillDownFromSchedule;
 	}
+	 public String getTitleName() {
+             return titleName;
+        }
+
+       public void setTitleName(String titleName) {
+             this.titleName = titleName;
+         }
 
 }
