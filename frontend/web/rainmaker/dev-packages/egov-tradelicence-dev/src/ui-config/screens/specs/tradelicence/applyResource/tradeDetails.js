@@ -27,7 +27,7 @@ import {
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import filter from "lodash/filter";
-
+import { convertEpochToDate } from "../../utils";
 const tradeUnitCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
@@ -1056,7 +1056,8 @@ export const tradeDetails = getCommonCard(
         },
         required: true,
         pattern: getPattern("Date"),
-        jsonPath: "Licenses[0].commencementDate"
+        jsonPath: "Licenses[0].commencementDate",
+        callBack: convertEpochToDate
       }),
       tradeGSTNo: getTextField({
         label: {
