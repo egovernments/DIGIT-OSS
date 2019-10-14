@@ -22,16 +22,16 @@ const getStyles = (iconPosition, textFieldProps) => {
     color: "#969696",
     zIndex: 2,
     bottom: 0,
-    top: 36,
-  //  margin: "auto",
+    top: 0,
+    margin: "auto",
   };
   iconStyle[iconPosition === "before" ? "left" : "right"] = 0;
   textFieldStyle["textIndent"] = iconPosition === "before" ? 40 : 0;
   inputStyle["width"] = iconPosition === "after" ? "90%" : "90%";
 
-  // if (textFieldProps.floatingLabelText) {
-  //   iconStyle.top = 24;
-  // }
+  if (textFieldProps.floatingLabelText) {
+    iconStyle.top = 24;
+  }
 
   return {
     iconStyle,
