@@ -823,8 +823,8 @@ public class BankBookReportAction extends BaseFormAction {
 
 	Map<String, Object> getParamMap() {
 		final Map<String, Object> paramMap = new HashMap<String, Object>();
-		String ulbGrade = cityService.getCityGrade()==null ? "" :cityService.getCityGrade();
-                paramMap.put("ulbName", ReportUtil.getCityName() +" "+ environment.getProperty(ulbGrade,ulbGrade));
+		String ulbGrade = microserviceUtils.getHeaderNameForTenant().toUpperCase();
+                paramMap.put("ulbName", environment.getProperty(ulbGrade,ulbGrade));
 		final String name = bankAccount.getBankbranch().getBank().getName().concat("-")
 				.concat(bankAccount.getBankbranch().getBranchname()).concat("-").concat(bankAccount.getAccountnumber());
 		paramMap.put("heading", getText("bank.book.heading", new String[] { name, header.toString(),
