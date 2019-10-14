@@ -258,12 +258,14 @@ const getYearlyAssessments = (propertiesArray) => {
   return yearlyAssessments;
 }
 const getPendingAssessments = (selPropertyDetails, singleAssessmentByStatus = []) => {
+  console.log('state selPropertyDetails, singleAssessmentByStatus ',selPropertyDetails, singleAssessmentByStatus );
   let pendingAssessments = [];
   let propertiesArray = selPropertyDetails.propertyDetails || [];
   let yearlyAssessments = [];
   yearlyAssessments = getYearlyAssessments(propertiesArray);
   let paidAssessments = [];
   paidAssessments = getYearlyAssessments(singleAssessmentByStatus);
+  console.log('yearlyAssessments,paidAssessments',yearlyAssessments,paidAssessments);
   for (let eachYrAssessments of yearlyAssessments) {
     let bol = true;
     for (let paidAssessment of paidAssessments) {
@@ -542,7 +544,7 @@ const mapStateToProps = (state, ownProps) => {
   const latestPropertyDetails = getLatestPropertyDetails(selPropertyDetails.propertyDetails);
   const pendingAssessments = getPendingAssessments(selPropertyDetails, singleAssessmentByStatus);
 
-
+  console.log('state',state);
   const addressInfo =
     getAddressInfo(selPropertyDetails.address, [
       { key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PROPERTY_ID", localizationLabels), value: selPropertyDetails.propertyId },

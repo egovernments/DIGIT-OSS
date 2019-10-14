@@ -1042,17 +1042,21 @@ class FormWizard extends Component {
     const { search } = location;
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
     toggleSpinner();
+    // const queryObj = [
+    //   { key: "propertyId", value: propertyId },
+    //   { key: "assessmentNumber", value: assessmentNumber },
+    //   { key: "assessmentYear", value: assessmentYear },
+    //   { key: "tenantId", value: tenantId }
+    // ];
+    // !isCompletePayment &&
+    //   queryObj.push({
+    //     key: "amountExpected",
+    //     value: isFullPayment ? estimation[0].totalAmount : totalAmountToBePaid
+    //   });
     const queryObj = [
-      { key: "propertyId", value: propertyId },
-      { key: "assessmentNumber", value: assessmentNumber },
-      { key: "assessmentYear", value: assessmentYear },
+      { key: "consumerCodes", value: propertyId },
       { key: "tenantId", value: tenantId }
     ];
-    !isCompletePayment &&
-      queryObj.push({
-        key: "amountExpected",
-        value: isFullPayment ? estimation[0].totalAmount : totalAmountToBePaid
-      });
 
     try {
       const billResponse = await httpRequest(

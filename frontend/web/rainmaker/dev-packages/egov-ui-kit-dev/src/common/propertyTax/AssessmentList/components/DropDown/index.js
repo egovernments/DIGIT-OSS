@@ -65,12 +65,15 @@ class DropDown extends Component {
     const { generalMDMSDataById, history, item, singleAssessmentByStatus=[] } = this.props;
     const { downloadReceipt } = this;
     const callReciept=(isEmployeeReceipt=false)=>{
-      singleAssessmentByStatus.forEach((assessment)=>{
-        if (item.financialYear === assessment.financialYear  && assessment.receiptInfo.status != "Paid-Disable") {
-          item.consumerCode = item.propertyId + ':' + assessment.assessmentNumber;
-          downloadReceipt(item, generalMDMSDataById, isEmployeeReceipt, imageUrl);
-        }
-      })
+      item.consumerCode = item.propertyId;
+      downloadReceipt(item, generalMDMSDataById, isEmployeeReceipt, imageUrl);
+      // singleAssessmentByStatus.forEach((assessment)=>{
+      //   if (item.financialYear === assessment.financialYear  && assessment.receiptInfo.status != "Paid-Disable") {
+      //     item.consumerCode = item.propertyId + ':' + assessment.assessmentNumber;//todo Consumer code uniqueness
+      //     item.consumerCode = item.propertyId;
+      //     downloadReceipt(item, generalMDMSDataById, isEmployeeReceipt, imageUrl);
+      //   }
+      // })
     }
     switch (payload) {
       case "Re-Assess":
@@ -107,7 +110,7 @@ class DropDown extends Component {
   };
 
   downloadReceipt = async (item, generalMDMSDataById, isEmployeeReceipt, imageUrl) => {
-    const queryObj = [{ key: "tenantId", value: item.tenantId }, { key: "consumerCode", value: item.consumerCode }];
+    const queryObj = [{ key: "tenantId", value: item.tenantId }, { key: "consumerCode", value: item.consumerCode }];//todo Consumer code uniqueness
 
     try {
       const payload = await httpRequest("/collection-services/receipts/_search", "_search", queryObj, {}, [], { ts: 0 });
