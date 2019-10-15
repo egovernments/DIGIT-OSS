@@ -85,3 +85,32 @@
       jsonFormat: {"ResponseInfo": {}}
       outJsonPath: $.data
       responseInfoPath: $.ResponseInfo
+      
+      
+   - name: miscCollections
+     query: 
+      baseQuery: SELECT array_to_json(array_agg(row_to_json(misccollections))) from ((SELECT COUNT(*) as receiptscreated, TRUNC(SUM(ins.amount) / 10000000, 3) as revenuecollected, 'Week0' as day FROM egcl_receiptheader_v1 rh LEFT JOIN egcl_receiptinstrument_v1 rins ON rh.id = rins.receiptheader INNER JOIN egcl_instrumentheader_v1 ins ON rins.instrumentheader = ins.id $where AND (rh.receiptdate/1000) <= (extract(epoch from NOW()))) UNION (SELECT COUNT(*) as receiptscreated, TRUNC(SUM(ins.amount) / 10000000, 3) as revenuecollected, 'Week1' as day FROM egcl_receiptheader_v1 rh LEFT JOIN egcl_receiptinstrument_v1 rins ON rh.id = rins.receiptheader INNER JOIN egcl_instrumentheader_v1 ins ON rins.instrumentheader = ins.id $where AND (rh.receiptdate/1000) <= ((extract(epoch from NOW())) - 604800)) UNION (SELECT COUNT(*) as receiptscreated, TRUNC(SUM(ins.amount) / 10000000, 3) as revenuecollected, 'Week2' as day FROM egcl_receiptheader_v1 rh LEFT JOIN egcl_receiptinstrument_v1 rins ON rh.id = rins.receiptheader INNER JOIN egcl_instrumentheader_v1 ins ON rins.instrumentheader = ins.id $where AND (rh.receiptdate/1000) <= ((extract(epoch from NOW())) - 604800 * 2)) UNION (SELECT COUNT(*) as receiptscreated, TRUNC(SUM(ins.amount) / 10000000, 3) as revenuecollected, 'Week3' as day FROM egcl_receiptheader_v1 rh LEFT JOIN egcl_receiptinstrument_v1 rins ON rh.id = rins.receiptheader INNER JOIN egcl_instrumentheader_v1 ins ON rins.instrumentheader = ins.id $where AND (rh.receiptdate/1000) <= ((extract(epoch from NOW())) - 604800 * 3)) UNION (SELECT COUNT(*) as receiptscreated, TRUNC(SUM(ins.amount) / 10000000, 3) as revenuecollected, 'Week4' as day FROM egcl_receiptheader_v1 rh LEFT JOIN egcl_receiptinstrument_v1 rins ON rh.id = rins.receiptheader INNER JOIN egcl_instrumentheader_v1 ins ON rins.instrumentheader = ins.id $where AND (rh.receiptdate/1000) <= ((extract(epoch from NOW())) - 604800 * 4)) UNION (SELECT COUNT(*) as receiptscreated, TRUNC(SUM(ins.amount) / 10000000, 3) as revenuecollected, 'Week5' as day FROM egcl_receiptheader_v1 rh LEFT JOIN egcl_receiptinstrument_v1 rins ON rh.id = rins.receiptheader INNER JOIN egcl_instrumentheader_v1 ins ON rins.instrumentheader = ins.id $where AND (rh.receiptdate/1000) <= ((extract(epoch from NOW())) - 604800 * 5))) misccollections
+     searchParams:
+      condition: AND
+      params:
+      - name: rh.tenantid
+        isMandatory: true
+        operator: NE
+        jsonPath: $.searchCriteria.ignoreTenant
+      - name: rh.businessdetails
+        isMandatory: false
+        operator: IN
+        jsonPath: $.searchCriteria.taxHeads
+      - name: rh.businessdetails
+        isMandatory: false
+        operator: NOT IN
+        jsonPath: $.searchCriteria.ignoreTaxHeads
+      - name: rh.status
+        isMandatory: true
+        operator: NE
+        jsonPath: $.searchCriteria.ignoreStatus
+  
+     output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.data
+      responseInfoPath: $.ResponseInfo
