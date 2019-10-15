@@ -4,6 +4,7 @@ import { getSelectedTabIndex } from "egov-ui-framework/ui-utils/commons";
 import cloneDeep from "lodash/cloneDeep";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { convertDateToEpoch, validateFields } from "../../utils";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   toggleSnackbar,
   prepareFinalObject
@@ -243,6 +244,7 @@ const callBackForPay = async (state, dispatch) => {
   //---------------- Create Receipt ------------------//
   if (isFormValid) {
     try {
+      dispatch(toggleSpinner());
       let response = await httpRequest(
         "post",
         "collection-services/receipts/_create",
@@ -270,7 +272,9 @@ const callBackForPay = async (state, dispatch) => {
           `/uc/acknowledgement?purpose=pay&status=success&receiptNumber=${receiptNumber}&serviceCategory=${serviceCategory}`
         )
       );
+      dispatch(toggleSpinner());
     } catch (e) {
+      dispatch(toggleSpinner());
       dispatch(toggleSnackbar(true, { labelName: e.message }, "error"));
       console.log(e);
     }
