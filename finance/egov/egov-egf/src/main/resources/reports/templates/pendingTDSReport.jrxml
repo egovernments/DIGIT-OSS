@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pendingTDSReport" pageWidth="792" pageHeight="612" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="30f6656c-896e-4500-acf8-3c7c0d945ab6">
 	<property name="net.sf.jasperreports.export.pdf.exclude.origin.keep.first.band.columnHeader" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.columnHeader" value="columnHeader"/>
@@ -7,6 +7,7 @@
 	<property name="ireport.zoom" value="0.75"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="ulbName" class="java.lang.String"/>
 	<parameter name="departmentName" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="recoveryName" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="fundName" class="java.lang.String" isForPrompting="false"/>
@@ -120,6 +121,13 @@
 			<textField isBlankWhenNull="true">
 				<reportElement x="508" y="25" width="156" height="14" uuid="9e15e36d-3c97-4f47-8ca3-89c3ca4e08f1"/>
 				<textFieldExpression><![CDATA[$P{fromDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="210" y="-20" width="320" height="20" uuid="4d7551ab-44dd-48fe-8666-69dbe47d905f"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ulbName}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

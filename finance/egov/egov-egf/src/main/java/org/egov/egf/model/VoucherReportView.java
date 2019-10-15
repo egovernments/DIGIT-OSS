@@ -62,6 +62,15 @@ public class VoucherReportView {
     private String deptName;
     private String owner;
     private String paymentMode;
+    private String ulbName;
+
+    public String getUlbName() {
+        return ulbName;
+    }
+
+    public void setUlbName(String ulbName) {
+        this.ulbName = ulbName;
+    }
 
     public Date getVoucherDate() {
         return voucherDate;

@@ -94,6 +94,7 @@ import org.egov.utils.FinancialConstants;
 import org.hibernate.FlushMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.env.Environment;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -150,6 +151,9 @@ public class PendingTDSReportAction extends BaseFormAction {
     private static Logger LOGGER = Logger.getLogger(PendingTDSReportAction.class);
     @Autowired
     private EgovMasterDataCaching masterDataCache;
+    
+    @Autowired
+    private Environment environment;
     
     public void setFinancialYearDAO(final FinancialYearHibernateDAO financialYearDAO) {
         this.financialYearDAO = financialYearDAO;
@@ -266,6 +270,8 @@ public class PendingTDSReportAction extends BaseFormAction {
         }
         recovery = (Recovery) persistenceService.find("from Recovery where id=?", recovery.getId());
         paramMap.put("recoveryName", recovery.getRecoveryName());
+        String ulbName = microserviceUtils.getHeaderNameForTenant().toUpperCase();
+        paramMap.put("ulbName", environment.getProperty(ulbName,ulbName));
         return paramMap;
     }
 

@@ -99,6 +99,7 @@ import org.egov.utils.VoucherHelper;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.env.Environment;
 
 import com.opensymphony.xwork2.validator.annotations.Validation;
 
@@ -147,6 +148,8 @@ public class VoucherStatusReportAction extends BaseFormAction {
 	@Autowired
         @Qualifier("voucherHelper")
         private VoucherHelper voucherHelpers;
+	@Autowired
+        private Environment environment;
 	
 	private Department deptImpl = new Department();
 
@@ -448,6 +451,8 @@ public class VoucherStatusReportAction extends BaseFormAction {
 			vhcrRptView.setAmount(amt);
 			vhcrRptView.setOwner(getVoucherOwner(cVchrHdr));
 			vhcrRptView.setStatus(getVoucherStatus(cVchrHdr.getStatus()));
+			String ulbGrade = microserviceUtils.getHeaderNameForTenant().toUpperCase();
+			vhcrRptView.setUlbName(ulbGrade);
 			voucherReportList.add(vhcrRptView);
 			amt = BigDecimal.ZERO;
 		}
@@ -558,6 +563,8 @@ public class VoucherStatusReportAction extends BaseFormAction {
 		paramMap.put("fromDate", fromDate);
 		paramMap.put("voucherName", voucherHeader.getName().equals("-1") || voucherHeader.getName().equals("0") ? "" : voucherHeader.getName());
 		paramMap.put("voucherType", voucherHeader.getType().equals("-1") || voucherHeader.getType().equals("0") ? "" : voucherHeader.getType());
+		 String ulbGrade = microserviceUtils.getHeaderNameForTenant().toUpperCase();
+	        paramMap.put("ulbName", environment.getProperty(ulbGrade,ulbGrade));
 	}
 
 	public void setReportHelper(final ReportHelper reportHelper) {
@@ -581,7 +588,7 @@ public class VoucherStatusReportAction extends BaseFormAction {
 	}
 
 	protected Map<String, Object> getParamMap() {
-		return paramMap;
+	    return paramMap;
 	}
 
 	public void setPagedResults(final EgovPaginatedList pagedResults) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="departmentWiseBudgetReport" pageWidth="750" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dc74b75f-a60f-4e9b-b870-918a995b4fbb">
 	<property name="net.sf.jasperreports.export.pdf.exclude.origin.keep.first.band.columnHeader" value="columnHeader"/>
 	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.columnHeader" value="columnHeader"/>
@@ -11,6 +11,7 @@
 			<style fontSize="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
 		</conditionalStyle>
 	</style>
+	<parameter name="ulbName" class="java.lang.String"/>
 	<parameter name="finYear" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="type" class="java.lang.String" isForPrompting="false"/>
 	<field name="glCode" class="java.lang.String">
@@ -43,10 +44,17 @@
 				<box>
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
+				<textField>
+					<reportElement x="0" y="0" width="651" height="20" uuid="2d047952-3ec6-43be-bb8f-b5be146e4e9a"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{ulbName}]]></textFieldExpression>
+				</textField>
 				<staticText>
-					<reportElement x="0" y="0" width="651" height="40" uuid="916e7721-7d2d-4a0d-a345-ecc5645dae32"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="18" isBold="true"/>
+					<reportElement x="0" y="20" width="651" height="20" uuid="0c922dc1-c456-4f79-a567-d52f23ad98e5"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Departmentwise Budget Summary]]></text>
 				</staticText>

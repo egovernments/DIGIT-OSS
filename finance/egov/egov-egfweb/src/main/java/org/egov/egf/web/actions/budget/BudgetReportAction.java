@@ -83,6 +83,7 @@ import org.egov.utils.FinancialConstants;
 import org.egov.utils.ReportHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.env.Environment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -185,6 +186,9 @@ public class BudgetReportAction extends BaseFormAction {
     
     @Autowired
     private EgovMasterDataCaching masterDataCache;
+    
+    @Autowired
+    private Environment environment;
 
     public boolean isDepartmentBudget() {
         return departmentBudget;
@@ -1215,6 +1219,8 @@ public class BudgetReportAction extends BaseFormAction {
     @ReadOnly
     protected Map<String, Object> getParamMap() {
         Map<String, Object> paramMap = new HashMap<String, Object>();
+        String ulbGrade = microserviceUtils.getHeaderNameForTenant().toUpperCase();
+        paramMap.put("ulbName", environment.getProperty(ulbGrade,ulbGrade));
         paramMap.put("finYear", budgetReport.getFinancialYear().getFinYearRange());
         if (onSaveOrForward)
             paramMap = getReportConfigs(paramMap);
