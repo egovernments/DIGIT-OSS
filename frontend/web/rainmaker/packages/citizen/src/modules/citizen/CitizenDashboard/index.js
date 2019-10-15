@@ -114,8 +114,10 @@ const mapStateToProps = (state) => {
     Object.values(notifications).filter((item) => {
       return item.type === "BROADCAST" || (item.type === "SYSTEMGENERATED" && item.actions);
     });
-  let whatsNewEvents = filteredNotifications && filteredNotifications.slice(0, Math.min(3, filteredNotifications.length));
-  return { notifications, userInfo, loading, whatsNewEvents, cityUpdateDialog };
+  let whatsNewEvents =
+    filteredNotifications && filteredNotifications.length > 0 &&  getTransformedNotifications(filteredNotifications).slice(0, Math.min(3, filteredNotifications.length));
+
+  return { notifications, userInfo, loading, whatsNewEvents };
 };
 
 const mapDispatchToProps = (dispatch) => {
