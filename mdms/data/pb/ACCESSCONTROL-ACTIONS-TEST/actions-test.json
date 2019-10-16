@@ -12818,7 +12818,7 @@
       "code": "null",
       "navigationURL": "services/collection/receipts/receipt-newform.action?Receipt=Misc#no-back-button",
       "leftIcon": "image:collections",
-      "path": "Collections.Miscellaneous Receipts"
+      "path": "Finance.Revenue/Collections.Miscellaneous Receipts"
     },
     {
       "id": 1692,
@@ -12844,7 +12844,7 @@
       "code": "null",
       "navigationURL": "services/collection/receipts/searchReceipt.action",
       "leftIcon": "image:collections",
-      "path": "Collections.Search Receipts"
+      "path": "Finance.Revenue/Collections.Search Receipts"
     },
     {
       "id": 1694,
@@ -12906,7 +12906,7 @@
       "code": "null",
       "navigationURL": "services/collection/receipts/bankRemittance-newform.action",
       "leftIcon": "image:collections",
-      "path": "Collections.Cash Remittance"
+      "path": "Finance.Revenue/Collections.Cash Remittance"
     },
     {
       "id": 1699,
@@ -12967,7 +12967,7 @@
       "code": "null",
       "navigationURL": "services/collection/receipts/chequeRemittance-newform.action",
       "leftIcon": "image:collections",
-      "path": "Collections.Cheque Remittance"
+      "path": "Finance.Revenue/Collections.Cheque Remittance"
     },
     {
       "id": 1704,
@@ -12981,7 +12981,7 @@
       "code": "null",
       "navigationURL": "services/collection/service/serviceTypeToBankAccountMapping-newform.action",
       "leftIcon": "image:collections",
-      "path": "Collections.Administration.Create Bankaccount Mapping"
+      "path": "Finance.Set-up.Create Bankaccount Mapping"
     },
     {
       "id": 1705,
@@ -12995,7 +12995,7 @@
       "code": "null",
       "navigationURL": "services/collection/service/serviceTypeToBankAccountMapping-list.action",
       "leftIcon": "image:collections",
-      "path": "Collections.Administration.View Bankaccount Mapping"
+      "path": "Finance.Set-up.View Bankaccount Mapping"
     },
     {
       "id": 1706,
