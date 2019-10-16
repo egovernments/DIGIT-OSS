@@ -1,11 +1,23 @@
 import * as actionTypes from "./actionTypes";
-import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY } from "egov-ui-kit/utils/endPoints";
-import { httpRequest } from "egov-ui-kit/utils/api";
-import { transformById } from "egov-ui-kit/utils/commons";
+import {
+  PROPERTY,
+  DRAFT,
+  PGService,
+  RECEIPT,
+  BOUNDARY
+} from "egov-ui-kit/utils/endPoints";
+import {
+  httpRequest
+} from "egov-ui-kit/utils/api";
+import {
+  transformById
+} from "egov-ui-kit/utils/commons";
 import orderby from "lodash/orderBy";
 import get from "lodash/get";
 import cloneDeep from "lodash/cloneDeep";
-import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
+import {
+  getLatestPropertyDetails
+} from "egov-ui-kit/utils/PTCommon";
 
 const reset_property_reset = () => {
   return {
@@ -167,7 +179,9 @@ const fetchMohalla = (queryObj) => {
 
 const setMohallaInRedux = (dispatch, state, draftResponse) => {
   const tenantId = get(draftResponse, "drafts[0].tenantId");
-  const { drafts } = draftResponse || {};
+  const {
+    drafts
+  } = draftResponse || {};
   const mohallaCodes =
     drafts &&
     drafts.reduce((result, current) => {
@@ -183,14 +197,22 @@ const setMohallaInRedux = (dispatch, state, draftResponse) => {
       return result;
     }, {});
   const queryObj = Object.keys(mohallaCodes).map((item) => {
-    return [
-      {
+    return [{
         key: "tenantId",
         value: item,
       },
-      { key: "hierarchyTypeCode", value: "REVENUE" },
-      { key: "boundaryType", value: "Locality" },
-      { key: "codes", value: mohallaCodes[item].join(",") },
+      {
+        key: "hierarchyTypeCode",
+        value: "REVENUE"
+      },
+      {
+        key: "boundaryType",
+        value: "Locality"
+      },
+      {
+        key: "codes",
+        value: mohallaCodes[item].join(",")
+      },
     ];
   });
   dispatch(fetchMohalla(queryObj));
@@ -245,7 +267,9 @@ export const fetchReceipts = (queryObj) => {
   return async (dispatch) => {
     dispatch(ReceiptFetchPending());
     try {
-      const payloadReceipts = await httpRequest(RECEIPT.GET.URL, RECEIPT.GET.ACTION, queryObj, {}, [], { ts: 0 });
+      const payloadReceipts = await httpRequest(RECEIPT.GET.URL, RECEIPT.GET.ACTION, queryObj, {}, [], {
+        ts: 0
+      });
       dispatch(ReceiptFetchComplete(payloadReceipts));
     } catch (error) {
       dispatch(ReceiptFetchError(error.message));
@@ -267,9 +291,39 @@ const getStatusAndAmount = (receiptArrayItem) => {
   }
   return receiptTransformed;
 };
-
+const getFinancialYear = (fromDate,toDate)=>{
+ let  financialYear = '';
+ financialYear=(new Date(fromDate).getFullYear())+'-'+String(new Date(toDate).getFullYear()).slice(2);
+return financialYear;
+}
+const getYearlyAssessments = (propertiesArray=[]) => {
+  let yearlyAssessments = [];
+  propertiesArray&&propertiesArray.map((property) => {
+    if (yearlyAssessments.length == 0) {
+      yearlyAssessments[0] = [property];
+    } else {
+      let bool = true;
+      for (let pty of yearlyAssessments) {
+        if (pty[0].financialYear == property.financialYear) {
+          pty.push(property)
+          bool = false;
+        }
+      }
+      if (bool) {
+        yearlyAssessments.push([property]);
+      }
+    }
+  })
+  for (let eachYrAssessments of yearlyAssessments) {
+    eachYrAssessments.sort((x, y) => y.receiptDate - x.receiptDate);
+  }
+  yearlyAssessments.sort((x, y) => x[0].financialYear.localeCompare(y[0].financialYear));
+  return yearlyAssessments;
+}
 const mergeReceiptsInProperty = (receiptsArray, propertyObj) => {
-  const transformedPropertyObj = { ...propertyObj };
+  const transformedPropertyObj = {
+    ...propertyObj
+  };
   Object.keys(receiptsArray).forEach((item) => {
     if (transformedPropertyObj.hasOwnProperty(item)) {
       transformedPropertyObj[item].receiptInfo = getStatusAndAmount(orderby(receiptsArray[item], "totalAmount", "asc"));
@@ -343,10 +397,12 @@ export const getAssesmentsandStatus = (queryObjectproperty) => {
       const payloadReceipts = await httpRequest(
         RECEIPT.GET.URL,
         RECEIPT.GET.ACTION,
-        [{ key: "consumerCode", value: commaSeperatedCC.split(':')[0] }], //finalcc[0] //todo Consumer code uniqueness
+        [{
+          key: "consumerCode",
+          value: commaSeperatedCC.split(':')[0]
+        }], //finalcc[0] //todo Consumer code uniqueness
         {},
-        [],
-        {
+        [], {
           ts: 0,
         },
         true
@@ -363,8 +419,22 @@ export const getAssesmentsandStatus = (queryObjectproperty) => {
           });
           return acc;
         }, {});
-
-      dispatch(AssessmentStatusFetchComplete(mergeReceiptsInProperty(receiptDetails, finalcc)));
+        const receiptDetailsArray =
+        receiptbyId &&
+        Object.values(receiptbyId).reduce((acc, curr) => {
+          if (!acc[curr.Bill[0].billDetails[0].consumerCode]) acc[curr.Bill[0].billDetails[0].consumerCode] = [];
+          acc[curr.Bill[0].billDetails[0].consumerCode].push({
+            amountPaid: curr.Bill[0].billDetails[0].amountPaid,
+            consumerCode: curr.Bill[0].billDetails[0].consumerCode,
+            totalAmount: curr.Bill[0].billDetails[0].totalAmount,
+            fromPeriod:curr.Bill[0].billDetails[0].fromPeriod,
+            toPeriod:curr.Bill[0].billDetails[0].toPeriod,
+            receiptDate:curr.Bill[0].billDetails[0].receiptDate,
+          });
+          return acc;
+        }, {});
+      let arr = [mergeReceiptsInProperty(receiptDetails, finalcc), {receiptDetailsArray}]
+      dispatch(AssessmentStatusFetchComplete(arr));
     } catch (error) {
       dispatch(AssessmentStatusFetchError(error.message));
     }
@@ -396,10 +466,11 @@ export const getSingleAssesmentandStatus = (queryObjectproperty) => {
       const payloadReceipts = await httpRequest(
         RECEIPT.GET.URL,
         RECEIPT.GET.ACTION,
-        [{ key: "consumerCode", value: finalcc.split(':')[0] }],
-        {},
-        [],
-        {
+        [{
+          key: "consumerCode",
+          value: finalcc.split(':')[0]
+        }], {},
+        [], {
           ts: 0,
         },
         true
@@ -422,7 +493,24 @@ export const getSingleAssesmentandStatus = (queryObjectproperty) => {
           });
           return acc;
         }, {});
-      dispatch(SingleAssessmentStatusFetchComplete(mergeReceiptsInProperty(receiptDetails, consumerCodes)));
+        const receiptDetailArray =
+        receiptbyId &&
+        Object.values(receiptbyId).reduce((acc, curr) => {
+          if (!acc[curr.Bill[0].billDetails[0].consumerCode]) acc[curr.Bill[0].billDetails[0].consumerCode] = [];
+          acc[curr.Bill[0].billDetails[0].consumerCode].push({
+            amountPaid: curr.Bill[0].billDetails[0].amountPaid,
+            consumerCode: curr.Bill[0].billDetails[0].consumerCode,
+            totalAmount: curr.Bill[0].billDetails[0].totalAmount,
+            fromPeriod:curr.Bill[0].billDetails[0].fromPeriod,
+            toPeriod:curr.Bill[0].billDetails[0].toPeriod,
+            receiptDate:curr.Bill[0].billDetails[0].receiptDate,
+            financialYear:getFinancialYear(curr.Bill[0].billDetails[0].fromPeriod,curr.Bill[0].billDetails[0].toPeriod)
+          });
+          return acc;
+        }, {});
+        let receiptDetailsArray=receiptDetailArray&&getYearlyAssessments(receiptDetailArray[finalcc]);
+      let arr = [mergeReceiptsInProperty(receiptDetails, finalcc), {receiptDetailsArray}]
+      dispatch(SingleAssessmentStatusFetchComplete(arr));
     } catch (error) {
       dispatch(SingleAssessmentStatusFetchError(error.message));
     }

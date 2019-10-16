@@ -67,7 +67,7 @@ const getTaxInfo = (billAccountDetails, totalAmount, localizationLabels) => {
   return taxArray;
 };
 
-const getHeaderDetails = (property, cities, localizationLabels,isAcknowledgement=false) => {
+const getHeaderDetails = (property={}, cities, localizationLabels,isAcknowledgement=false) => {
   const propertyTenant = cities.filter((item) => item.code === property.tenantId);
   const ulbGrade = get(propertyTenant[0], "city.ulbGrade") ? getUlbGradeLabel(get(propertyTenant[0], "city.ulbGrade")) : "MUNICIPAL CORPORATION";
   const cityKey = `TENANT_TENANTS_${get(propertyTenant[0], "code")

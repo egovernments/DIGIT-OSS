@@ -1521,7 +1521,6 @@ class FormWizard extends Component {
           Properties: properties
         }
       );
-      console.log(createPropertyResponse, 'createPropertyResponse');
       this.setState(
         {
           assessedPropertyDetails: createPropertyResponse,

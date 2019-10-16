@@ -133,7 +133,8 @@ class DropDown extends Component {
       //     return acc;
       //   }, 0);
       payload.Receipt.forEach((receipt)=>{
-        const receiptDetails =
+        if(item.propertyDetails.receiptInfo.fromPeriod==receipt.Bill[0].billDetails[0].fromPeriod){
+          const receiptDetails =
           payload &&
           payload.Receipt && createReceiptDetails(
             item.property,
@@ -147,8 +148,8 @@ class DropDown extends Component {
         localStorageSet("rd-propertyId", item.propertyId);
         localStorageSet("rd-assessmentNumber", item.propertyDetails.assessmentNumber);
         receiptDetails && generateReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl, isEmployeeReceipt, { itemData: item, property: item.property, receipt: payload.Receipt });
-      })
-
+        }
+        })
     } catch (e) {
       console.log(e);
     }
