@@ -60,7 +60,7 @@ class CitizenDashboard extends Component {
     const { openDialog } = this.state;
     return (
       <Screen loading={loading}>
-        <SearchService history={history} />
+        {/* <SearchService history={history} /> */}
         <div className="citizen-dashboard-cont">
           {whatsNewEvents && (
             <Label
@@ -114,9 +114,8 @@ const mapStateToProps = (state) => {
     Object.values(notifications).filter((item) => {
       return item.type === "BROADCAST" || (item.type === "SYSTEMGENERATED" && item.actions);
     });
-    let whatsNewEvents = filteredNotifications && filteredNotifications.slice(0, Math.min(3, filteredNotifications.length));
-
-  return { notifications, userInfo, loading, whatsNewEvents };
+  let whatsNewEvents = filteredNotifications && filteredNotifications.slice(0, Math.min(3, filteredNotifications.length));
+  return { notifications, userInfo, loading, whatsNewEvents, cityUpdateDialog };
 };
 
 const mapDispatchToProps = (dispatch) => {
