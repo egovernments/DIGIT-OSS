@@ -60,7 +60,7 @@ class CitizenDashboard extends Component {
     const { openDialog } = this.state;
     return (
       <Screen loading={loading}>
-        <SearchService history={history} />
+        {/* <SearchService history={history} /> */}
         <div className="citizen-dashboard-cont">
           {whatsNewEvents && (
             <Label
