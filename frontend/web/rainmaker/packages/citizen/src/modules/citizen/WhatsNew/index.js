@@ -4,16 +4,17 @@ import get from "lodash/get";
 import { connect } from "react-redux";
 import "../index.css";
 import { getNotifications } from "egov-ui-kit/redux/app/actions";
-import { getAccessToken, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getAccessToken, getUserInfo ,getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 
 class Updates extends React.Component {
   componentDidMount = () => {
     const { getNotifications, whatsNewNotifications } = this.props;
+    const permanentCity = JSON.parse(getUserInfo()).permanentCity;
     if (!whatsNewNotifications) {
       let queryObject = [
         {
           key: "tenantId",
-          value: JSON.parse(getUserInfo()).permanentCity,
+          value: permanentCity ? permanentCity : getTenantId(),
         },
       ];
       const requestBody = {

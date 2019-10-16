@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import SearchService from "./components/SearchService";
 import ServiceList from "egov-ui-kit/common/common/ServiceList"
 import { getNotificationCount, getNotifications } from "egov-ui-kit/redux/app/actions";
@@ -8,7 +7,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import ServicesNearby from "./components/ServicesNearby";
 import { Notifications, Screen } from "modules/common";
 import LogoutDialog from "egov-ui-kit/common/common/Header/components/LogoutDialog";
-import { getAccessToken, getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import { setRoute } from "egov-ui-kit/redux/app/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -80,7 +79,7 @@ class CitizenDashboard extends Component {
               containerStyle={{ paddingTop: 16, paddingBottom: 8 }}
             />
           )}
-          {whatsNewEvents && <ServicesNearby history={history} onSeviceClick={this.onServiceClick} />}
+          {whatsNewEvents && <ServicesNearby history={history} onServiceClick={this.onServiceClick} />}
           {whatsNewEvents && whatsNewEvents.length > 0 && (
             <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 16 }}>
               <Label label="DASHBOARD_WHATS_NEW_LABEL" fontSize={16} color="rgba(0, 0, 0, 0.8700000047683716)" />
