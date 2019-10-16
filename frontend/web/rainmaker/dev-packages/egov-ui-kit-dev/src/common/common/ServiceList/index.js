@@ -10,9 +10,13 @@ import Hidden from "@material-ui/core/Hidden";
 import "./index.css";
 
 const styles = (theme) => ({
-  root: {
+  webRoot: {
     flexGrow: 1,
     width: "12.5%",
+  },
+  mobileRoot: {
+    flexGrow: 1,
+    width: "25%",
   },
   paper: {
     borderRadius: 0,
@@ -69,7 +73,7 @@ class ServiceList extends React.Component {
             const translatedLabel = service.displayName.toUpperCase().replace(/[.:\-\s]/g, "_");
 
             return (
-              <Grid item xs={3} sm={1} align="center">
+              <Grid className={classes.mobileRoot} itemalign="center">
                 <Card
                   className={classes.paper}
                   onClick={(e) => {
@@ -91,7 +95,7 @@ class ServiceList extends React.Component {
           {actionList.map((service) => {
             const translatedLabel = service.displayName.toUpperCase().replace(/[.:\-\s]/g, "_");
             return (
-              <Grid className={classes.root} item align="center">
+              <Grid className={classes.webRoot} item align="center">
                 <Card
                   className={`${classes.paper} service-module-style`}
                   onClick={(e) => {
