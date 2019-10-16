@@ -24,6 +24,11 @@ const formConfig = {
       jsonPath: "otp.tenantId",
       value: commonConfig.tenantId,
     },
+    userType: {
+      id: "user-type",
+      jsonPath: "otp.userType",
+      value: 'CITIZEN',
+    },
   },
   submit: {
     type: "submit",
