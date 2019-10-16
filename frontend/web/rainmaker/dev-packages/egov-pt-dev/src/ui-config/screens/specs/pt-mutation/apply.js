@@ -32,10 +32,9 @@ import {
 } from "../../../../ui-utils/commons";
 
 export const stepsData = [
-  { labelName: "NOC Details", labelKey: "NOC_COMMON_NOC_DETAILS" },
-  { labelName: "Property Details", labelKey: "NOC_COMMON_PROPERTY_DETAILS" },
-  { labelName: "Applicant Details", labelKey: "NOC_COMMON_APPLICANT_DETAILS" },
-  { labelName: "Documents", labelKey: "NOC_COMMON_DOCUMENTS" }
+  { labelName: "Transfer Details", labelKey: "PT_MUTATION_TRANSFER_DETAILS" },
+  { labelName: "Document Upload", labelKey: "PT_MUTATION_DOCUMENT_UPLOAD" },
+  { labelName: "Summary", labelKey: "PT_MUTATION_SUMMARY" }
 ];
 export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
@@ -63,8 +62,8 @@ const applicationNumberContainer = () => {
 
 export const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Application for Fire NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-    labelKey: "NOC_COMMON_APPLY_NOC"
+    labelName: `Transfer of Ownership (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
+    labelKey: "PT_MUTATION_TRANSFER_HEADER"
   }),
   //applicationNumber: applicationNumberContainer()
   applicationNumber: {
