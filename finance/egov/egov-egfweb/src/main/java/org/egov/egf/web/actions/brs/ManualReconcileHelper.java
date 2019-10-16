@@ -116,6 +116,9 @@ public class ManualReconcileHelper {
 	SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
 	@Autowired
         FinancialYearHibernateDAO financialYearDAO;
+
+        private int DEFAULT_LIMIT = 100;
+        
 	public Map<String,String> getUnReconciledDrCr(Long bankAccId,Date fromDate,Date toDate)  
 	{
 		Map<String,String> unreconMap=new LinkedHashMap<String,String>();
@@ -282,9 +285,11 @@ public class ManualReconcileHelper {
        
         
         
-        if(reconBean.getLimit()!=null & reconBean.getLimit()!=0)
-        {
-        	query.append(" limit "+reconBean.getLimit());
+        if(reconBean.getLimit() != null && reconBean.getLimit() != 0){
+            query.append(" limit "+reconBean.getLimit());
+        }else{
+            query.append(" limit "+DEFAULT_LIMIT );
+            reconBean.setLimit(DEFAULT_LIMIT);
         }
 		
        // if(LOGGER.isInfoEnabled())    
@@ -322,43 +327,46 @@ public class ManualReconcileHelper {
 	}
 
 	private void getUnreconsiledReceiptInstruments(ReconcileBean reconBean,List<ReconcileBean> list) {
-	    InstrumentSearchContract contract = new InstrumentSearchContract();
-	    if(reconBean.getAccountId() != null){
-	        StringBuilder query = new StringBuilder("from Bankaccount ba where ba.id=:bankAccountId and isactive=true");
-	        Query createSQLQuery = persistenceService.getSession().createQuery(query.toString());
-	        List<Bankaccount> bankAccount = createSQLQuery.setLong("bankAccountId", reconBean.getAccountId()).list();
-	        contract.setBankAccountNumber(bankAccount.get(0).getAccountnumber());
-	    }
-	    if(StringUtils.isNotBlank(reconBean.getInstrumentNo())){
-	        contract.setTransactionNumber(reconBean.getInstrumentNo());
-	    }
-	    if(StringUtils.isNotBlank(reconBean.getLimit().toString())){
-                contract.setPageSize(reconBean.getLimit());
-            }
-	    contract.setInstrumentTypes(INSTRUMENTTYPE_NAME_CHEQUE);
-	    contract.setTransactionType(TransactionType.Debit);
-	    contract.setFinancialStatuses(INSTRUMENT_NEW_STATUS);
-            CFinancialYear finYearByDate = financialYearDAO.getFinYearByDate(reconBean.getReconciliationDate());
-	    contract.setTransactionFromDate(finYearByDate.getStartingDate());
-	    contract.setTransactionToDate(reconBean.getReconciliationDate());
-	    List<Instrument> instruments = microserviceUtils.getInstrumentsBySearchCriteria(contract);
-	    for(Instrument ins : instruments){
-	        if(ins.getInstrumentVouchers() != null && !ins.getInstrumentVouchers().isEmpty()){
-	            ReconcileBean reconcileBean = new ReconcileBean();
-	            String txnType = ins.getTransactionType().name();;
-	            String type = TransactionType.Credit.equals(txnType) ? "Payment" : "Receipt";
-	            String pattern = "dd/MM/yyyy";
-	            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-	            String date = simpleDateFormat.format(ins.getTransactionDate());
-	            reconcileBean.setVoucherNumber(ins.getInstrumentVouchers().get(0).getVoucherHeaderId());
-	            reconcileBean.setIhId("rm_rec~"+ins.getId());
-	            reconcileBean.setChequeDate(date);
-	            reconcileBean.setChequeNumber(ins.getTransactionNumber());
-	            reconcileBean.setChequeAmount(ins.getAmount());
-	            reconcileBean.setTxnType(txnType);
-	            reconcileBean.setType(type);
-	            list.add(reconcileBean);
+	    if(list.size() < reconBean.getLimit()){
+	        InstrumentSearchContract contract = new InstrumentSearchContract();
+	        if(reconBean.getAccountId() != null){
+	            StringBuilder query = new StringBuilder("from Bankaccount ba where ba.id=:bankAccountId and isactive=true");
+	            Query createSQLQuery = persistenceService.getSession().createQuery(query.toString());
+	            List<Bankaccount> bankAccount = createSQLQuery.setLong("bankAccountId", reconBean.getAccountId()).list();
+	            contract.setBankAccountNumber(bankAccount.get(0).getAccountnumber());
 	        }
+	        if(StringUtils.isNotBlank(reconBean.getInstrumentNo())){
+	            contract.setTransactionNumber(reconBean.getInstrumentNo());
+	        }
+	        if(StringUtils.isNotBlank(reconBean.getLimit().toString())){
+	            contract.setPageSize(reconBean.getLimit() - list.size());
+	        }
+	        contract.setInstrumentTypes(INSTRUMENTTYPE_NAME_CHEQUE);
+	        contract.setTransactionType(TransactionType.Debit);
+	        contract.setFinancialStatuses(INSTRUMENT_NEW_STATUS);
+	        CFinancialYear finYearByDate = financialYearDAO.getFinYearByDate(reconBean.getReconciliationDate());
+	        contract.setTransactionFromDate(finYearByDate.getStartingDate());
+	        contract.setTransactionToDate(reconBean.getReconciliationDate());
+	        List<Instrument> instruments = microserviceUtils.getInstrumentsBySearchCriteria(contract);
+	        for(Instrument ins : instruments){
+	            if(ins.getInstrumentVouchers() != null && !ins.getInstrumentVouchers().isEmpty()){
+	                ReconcileBean reconcileBean = new ReconcileBean();
+	                String txnType = ins.getTransactionType().name();;
+	                String type = TransactionType.Credit.equals(txnType) ? "Payment" : "Receipt";
+	                String pattern = "dd/MM/yyyy";
+	                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+	                String date = simpleDateFormat.format(ins.getTransactionDate());
+	                reconcileBean.setVoucherNumber(ins.getInstrumentVouchers().get(0).getVoucherHeaderId());
+	                reconcileBean.setIhId("rm_rec~"+ins.getId());
+	                reconcileBean.setChequeDate(date);
+	                reconcileBean.setChequeNumber(ins.getTransactionNumber());
+	                reconcileBean.setChequeAmount(ins.getAmount());
+	                reconcileBean.setTxnType(txnType);
+	                reconcileBean.setType(type);
+	                list.add(reconcileBean);
+	            }
+	        }
+	        
 	    }
     }
 

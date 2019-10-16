@@ -97,6 +97,7 @@ public class ManualReconciliationAction extends BaseFormAction {
 	List<Date> reconDates;
 	@Autowired
 	private BankHibernateDAO bankHibernateDAO;
+        private Integer DEFAULT_LIMIT = 100;
 
 	@Override
 	public Object getModel() {
@@ -108,7 +109,7 @@ public class ManualReconciliationAction extends BaseFormAction {
 	{
 
 		reconcileBean=new ReconcileBean();
-		reconcileBean.setLimit(500);
+		reconcileBean.setLimit(DEFAULT_LIMIT );
 
 		List<Bank> allBankHavingAccounts = bankHibernateDAO.getAllBankHavingBranchAndAccounts(); 
 		dropdownData.put("bankList", allBankHavingAccounts);  
