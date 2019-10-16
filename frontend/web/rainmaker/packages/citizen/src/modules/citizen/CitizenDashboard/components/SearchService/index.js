@@ -79,7 +79,7 @@ class SearchService extends React.Component {
     const { getNameById, onChangeText, getTransformedItems } = this;
 
     return (
-      <div className={`${classes.root} dashboard-search-main-cont`}>
+      <div className={`${classes.root} dashboard-search-main-cont desktopboxalign`}>
         <Icon action="action" name="search" style={{ marginLeft: 12 }} />
         <AutoComplete
           hintText={
