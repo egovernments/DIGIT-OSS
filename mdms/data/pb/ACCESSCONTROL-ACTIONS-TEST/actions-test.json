@@ -14297,7 +14297,7 @@
       "code": "null",
       "path": "Complaints",
       "navigationURL": "pgr-home",
-      "leftIcon": "action:announcement",
+      "leftIcon": "custom:account-alert",
       "rightIcon": ""
     },
     {
