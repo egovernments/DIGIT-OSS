@@ -73,7 +73,7 @@ class ServiceList extends React.Component {
             const translatedLabel = service.displayName.toUpperCase().replace(/[.:\-\s]/g, "_");
 
             return (
-              <Grid className={classes.mobileRoot} itemalign="center">
+              <Grid className={classes.mobileRoot} item align="center">
                 <Card
                   className={classes.paper}
                   onClick={(e) => {
