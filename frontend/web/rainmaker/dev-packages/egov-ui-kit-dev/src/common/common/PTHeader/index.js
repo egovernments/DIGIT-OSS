@@ -10,10 +10,9 @@ const PTHeader = ({header = '',headerValue='', subHeaderTitle = '', subHeaderVal
     
     return (
         <div>
-            <Label
-                
+            <Label       
                 label={`${getTranslatedLabel(header, localizationLabelsData)} ${headerValue}`}
-                containerStyle={{ padding: "24px 0px 0px 0px", marginLeft: "16px", display: "inline-block" }}
+                containerStyle={{ padding: "10px 0px 0px 0px", marginLeft: "16px", display: "inline-block" }}
                 dark={true}
                 bold={true}
                 labelStyle={{ letterSpacing: 0 }}
