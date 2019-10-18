@@ -61,7 +61,7 @@ export const getTransformedItems = (propertiesById) => {
   );
 };
 
-export const getCompletedTransformedItems = (assessmentsByStatus = [], cities, localizationLabels, propertyId) => {
+export const getCompletedTransformedItems = (assessmentsByStatus = [], cities, localizationLabels, propertyId,property={}) => {
   assessmentsByStatus.sort((x, y) => x.financialYear.localeCompare(y.financialYear));
   return (
     assessmentsByStatus &&
@@ -146,10 +146,11 @@ export const getCompletedTransformedItems = (assessmentsByStatus = [], cities, l
         latestAssessmentNumber: item.latestAssessmentNumber || item.assessmentNumber,
         propertyId: item.propertyId || propertyId || '',
         propertyDetails: item,
-        property: item.property,
+        property: item.property||property,
         tenantId: item.tenantId,
         status: get(item, "receiptInfo.status") || 'Pending',
-        consumerCode: `${item.propertyId}:${item.assessmentNumber}`,
+        // consumerCode: `${item.propertyId}:${item.assessmentNumber}`,//todo Consumer code uniqueness
+        consumerCode: item.propertyId || propertyId || '',
         receipt: true,
         localizationLabels: localizationLabels,
         cities: cities,

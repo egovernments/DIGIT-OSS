@@ -490,8 +490,10 @@ div[class^="MuiPaper-root"],
     }
   }
   .stepper-container {
-    padding: 0px !important;
-    margin-top: 73px;
+    padding: 10px 0px 0px 0px !important;
+  } 
+  .form-header{
+    margin-top:50px;
   }
   // .year-dialog {
   //   // left: initial;

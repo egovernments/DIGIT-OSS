@@ -66,3 +66,32 @@
 
   }
 }
+
+
+
+#tax-wizard-buttons {
+  height: 64px;
+  padding: 8px;
+}
+
+@media only screen and (max-width: 768px) {
+  #tax-wizard-buttons {
+    text-align: initial;
+    text-align: initial;
+    margin: 0;
+    padding: 0;
+    height: initial;
+    .button-container {
+      float: none;
+      display: flex;
+      width: 100%;
+      margin: initial;
+      padding: initial;
+      div:nth-of-type(1),
+      div:nth-of-type(2) {
+        width: 100% !important;
+        margin: 0 !important;
+      }
+    }
+  }
+}
