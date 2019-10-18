@@ -181,19 +181,33 @@ export const getReviewOwner = (isEditable = true) => {
                   "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
               }
             ),
-            reviewOwnerSpecialCat: getLabelWithValue(
+            reviewRelationType: getLabelWithValue(
               {
-                labelName: "Special Owner Category",
-                labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_LABEL"
+                labelName: "Relaltion Type",
+                labelKey: "TL_NEW_OWNER_DETAILS_RELATION_sTYPE_LABEL"
               },
               {
-                jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
+                jsonPath:
+                  "Licenses[0].tradeLicenseDetail.additionalDetail.relationType",
                 localePrefix: {
-                  moduleName: "common-masters",
-                  masterName: "OwnerType"
+                  moduleName: "TradeLicense",
+                  masterName: "RelationType"
                 }
               }
             )
+            // reviewOwnerSpecialCat: getLabelWithValue(
+            //   {
+            //     labelName: "Special Owner Category",
+            //     labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_LABEL"
+            //   },
+            //   {
+            //     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
+            //     localePrefix: {
+            //       moduleName: "common-masters",
+            //       masterName: "OwnerType"
+            //     }
+            //   }
+            // )
           })
         }),
 
@@ -254,6 +268,20 @@ export const getReviewOwner = (isEditable = true) => {
               {
                 jsonPath:
                   "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+              }
+            ),
+            reviewRelationType: getLabelWithValue(
+              {
+                labelName: "Relaltion Type",
+                labelKey: "TL_NEW_OWNER_DETAILS_RELATION_sTYPE_LABEL"
+              },
+              {
+                jsonPath:
+                  "Licenses[0].tradeLicenseDetail.additionalDetail.relationType",
+                localePrefix: {
+                  moduleName: "TradeLicense",
+                  masterName: "RelationType"
+                }
               }
             )
           })

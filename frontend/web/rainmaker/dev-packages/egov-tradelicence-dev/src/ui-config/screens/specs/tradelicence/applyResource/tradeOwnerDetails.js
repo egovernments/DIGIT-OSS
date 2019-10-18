@@ -131,23 +131,114 @@ export const getFatherNameField = getTextField({
 //     }
 //   };
 // };
-export const getRelationshipRadioButton = getRadioButton(
-  [
-    {
-      labelName: "Father",
-      labelKey: "COMMON_RELATION_FATHER",
-      value: "FATHER"
-    },
-    {
-      label: "Husband",
-      labelKey: "COMMON_RELATION_HUSBAND",
-      value: "HUSBAND"
-    }
-  ],
-  "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-  ""
-);
 
+export const getRelationshipRadioButton = {
+  uiFramework: "custom-containers",
+  componentPath: "RadioGroupContainer",
+  gridDefination: {
+    xs: 12,
+    sm: 12,
+    md: 6
+  },
+  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+  props: {
+    label: {
+      name: "Relationship",
+      key: "TL_COMMON_RELATIONSHIP_LABEL"
+    },
+    buttons: [
+      {
+        labelName: "Father",
+        labelKey: "COMMON_RELATION_FATHER",
+        value: "FATHER"
+      },
+      {
+        label: "Husband",
+        labelKey: "COMMON_RELATION_HUSBAND",
+        value: "HUSBAND"
+      }
+    ],
+    jsonPath:
+      "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].relationship",
+    required: true
+  },
+  required: true,
+  type: "array"
+};
+
+export const getRelationshipRadioButtonInstitutionalOwner = {
+  uiFramework: "custom-containers",
+  componentPath: "RadioGroupContainer",
+  gridDefination: {
+    xs: 12,
+    sm: 12,
+    md: 6
+  },
+  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+  props: {
+    label: {
+      name: "Relationship",
+      key: "TL_COMMON_RELATIONSHIP_LABEL"
+    },
+    buttons: [
+      {
+        labelName: "Father",
+        labelKey: "COMMON_RELATION_FATHER",
+        value: "FATHER"
+      },
+      {
+        label: "Husband",
+        labelKey: "COMMON_RELATION_HUSBAND",
+        value: "HUSBAND"
+      }
+    ],
+    jsonPath:
+      "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].relationship",
+    required: true
+  },
+  required: true,
+  type: "array"
+};
+
+// export const getRelationshipRadioButton = getRadioButton(
+//   [
+//     {
+//       labelName: "Father",
+//       labelKey: "COMMON_RELATION_FATHER",
+//       value: "FATHER"
+//     },
+//     {
+//       label: "Husband",
+//       labelKey: "COMMON_RELATION_HUSBAND",
+//       value: "HUSBAND"
+//     }
+//   ],
+//   "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+//   ""
+// );
+
+export const relationType = {
+  ...getSelectField({
+    label: {
+      labelName: "Relation Type",
+      labelKey: "TL_RELATION_TYPE_LABEL"
+    },
+    placeholder: {
+      labelName: "Select RELATION Type",
+      labelKey: "TL_RELATION_TYPE_PLACEHOLDER"
+    },
+    localePrefix: {
+      moduleName: "TradeLicense",
+      masterName: "RelationType"
+    },
+    jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.relationType",
+    sourceJsonPath: "applyScreenMdmsData.TradeLicense.RelationType",
+    gridDefination: {
+      xs: 12,
+      sm: 6
+    }
+  })
+};
 export const ownerInfoInstitutional = {
   ...getCommonGrayCard({
     header: getCommonSubHeader(
@@ -205,7 +296,7 @@ export const ownerInfoInstitutional = {
         jsonPath: "Licenses[0].tradeLicenseDetail.institution.designation"
       }),
       getFatherNameField,
-      getRelationshipRadioButton,
+      getRelationshipRadioButtonInstitutionalOwner,
       getOwnerGenderField,
       ownerDOB: {
         ...getDateField({
@@ -242,7 +333,8 @@ export const ownerInfoInstitutional = {
         required: true,
         pattern: getPattern("Address"),
         jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
-      })
+      }),
+      relationType
     })
   }),
   visible: false
@@ -330,22 +422,24 @@ const OwnerInfoCard = {
           pattern: getPattern("Address"),
           jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
         }),
-        OwnerSpecialCategory: getSelectField({
-          label: {
-            labelName: "Special Owner Category",
-            labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_LABEL"
-          },
-          placeholder: {
-            labelName: "Select Special Owner Category",
-            labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_PLACEHOLDER"
-          },
-          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
-          sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
-          localePrefix: {
-            moduleName: "common-masters",
-            masterName: "OwnerType"
-          }
-        })
+        relationType
+
+        // OwnerSpecialCategory: getSelectField({
+        //   label: {
+        //     labelName: "Special Owner Category",
+        //     labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_LABEL"
+        //   },
+        //   placeholder: {
+        //     labelName: "Select Special Owner Category",
+        //     labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_PLACEHOLDER"
+        //   },
+        //   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
+        //   sourceJsonPath: "applyScreenMdmsData.common-masters.OwnerType",
+        //   localePrefix: {
+        //     moduleName: "common-masters",
+        //     masterName: "OwnerType"
+        //   }
+        // })
       })
     }),
     items: [],
@@ -452,9 +546,9 @@ export const tradeOwnerDetails = getCommonCard({
                 true
               )
             );
-            dispatch(
-              pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
-            );
+            // dispatch(
+            //   pFO("Licenses[0].tradeLicenseDetail.subOwnerShipCategory", "")
+            // );
           }
         } catch (e) {
           console.log(e);

@@ -308,12 +308,26 @@ export const getReviewTrade = (isEditable = true) => {
           labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
         },
         { jsonPath: "Licenses[0].tradeLicenseDetail.noOfEmployees" }
+      ),
+      reviewOccupancyType: getLabelWithValue(
+        {
+          labelName: "Occupancy Type",
+          labelKey: "TL_OCCUPANCY_TYPE"
+        },
+        {
+          jsonPath:
+            "Licenses[0].tradeLicenseDetail.additionalDetail.occupancyType",
+          localePrefix: {
+            moduleName: "TradeLicense",
+            masterName: "OccupancyType"
+          }
+        }
       )
     }),
     div1: getDivider(),
     viewTwo: tradeTypeCard,
-    div2: getDivider(),
-    viewThree: accessoriesCard,
+    // div2: getDivider(),
+    // viewThree: accessoriesCard,
 
     div3: getDivider(),
     viewFour: getCommonContainer({

@@ -48,6 +48,11 @@ const ViewBreakupContainer = Loadable({
   loading: () => <Loading />
 });
 
+const ULBSummaryCard = Loadable({
+  loader: () => import("./ULBSummaryCard"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -58,5 +63,6 @@ export {
   DocumentListContainer,
   PaymentRedirectPage,
   ViewBreakupContainer,
-  DialogContainer
+  DialogContainer,
+  ULBSummaryCard
 };

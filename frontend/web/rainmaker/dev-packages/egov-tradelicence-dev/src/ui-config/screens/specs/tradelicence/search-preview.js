@@ -114,19 +114,19 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   );
   set(payload, "Licenses[0].headerSideText", headerSideText);
 
-  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
-  get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
-    "."
-  )[0] === "INDIVIDUAL"
-    ? setMultiOwnerForSV(action, true)
-    : setMultiOwnerForSV(action, false);
+  // get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
+  // get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+  //   "."
+  // )[0] === "INDIVIDUAL"
+  //   ? setMultiOwnerForSV(action, true)
+  //   : setMultiOwnerForSV(action, false);
 
-  if (get(payload, "Licenses[0].licenseType")) {
-    setValidToFromVisibilityForSV(
-      action,
-      get(payload, "Licenses[0].licenseType")
-    );
-  }
+  // if (get(payload, "Licenses[0].licenseType")) {
+  //   setValidToFromVisibilityForSV(
+  //     action,
+  //     get(payload, "Licenses[0].licenseType")
+  //   );
+  // }
 
   await setDocuments(
     payload,
@@ -176,6 +176,20 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     );
 
     let data = get(state, "screenConfiguration.preparedFinalObject");
+
+    get(data, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
+    get(data, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
+      "."
+    )[0] === "INDIVIDUAL"
+      ? setMultiOwnerForSV(action, true)
+      : setMultiOwnerForSV(action, false);
+
+    if (get(data, "Licenses[0].licenseType")) {
+      setValidToFromVisibilityForSV(
+        action,
+        get(data, "Licenses[0].licenseType")
+      );
+    }
 
     const obj = setStatusBasedValue(status);
 
@@ -237,7 +251,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
 
     setActionItems(action, obj);
-    loadReceiptGenerationData(applicationNumber, tenantId);
+    // loadReceiptGenerationData(applicationNumber, tenantId);
   }
 };
 
@@ -320,6 +334,26 @@ const estimate = getCommonGrayCard({
 
 const reviewTradeDetails = getReviewTrade(false);
 
+const getULBCard = () => {
+  return getCommonContainer(
+    {
+      headerDiv: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-tradelicence",
+        componentPath: "ULBSummaryCard",
+        props: {
+          style: { marginBottom: "10px" },
+          sourceJsonPath: "mdmsDataForReceipt",
+          logopath: "base64UlbLogo"
+        }
+      }
+    },
+    { style: { justifyContent: "center", display: "none" } }
+  );
+};
+
+const ulbCard = getULBCard();
+
 const reviewOwnerDetails = getReviewOwner(false);
 
 const reviewDocumentDetails = getReviewDocuments(false, false);
@@ -376,7 +410,7 @@ const screenConfig = {
     );
     if (status !== "pending_payment") {
       set(
-        action.screenConfig,
+        action.screenConfgig,
         "components.div.children.tradeReviewDetails.children.cardContent.children.viewBreakupButton.visible",
         false
       );
@@ -387,6 +421,7 @@ const screenConfig = {
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, applicationNumber);
+    loadReceiptGenerationData(applicationNumber, tenantId);
     return action;
   },
 
@@ -398,6 +433,7 @@ const screenConfig = {
         className: "common-div-css search-preview"
       },
       children: {
+        ulbheader: ulbCard,
         headerDiv: {
           uiFramework: "custom-atoms",
           componentPath: "Container",

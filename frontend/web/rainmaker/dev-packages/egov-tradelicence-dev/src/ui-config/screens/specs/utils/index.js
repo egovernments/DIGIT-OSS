@@ -913,6 +913,21 @@ export const getUserDataFromUuid = async bodyObject => {
   }
 };
 
+export const getEmployeeDataFromUuid = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/egov-hrms/employees/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
 const getStatementForDocType = docType => {
   switch (docType) {
     case "OWNERIDPROOF":

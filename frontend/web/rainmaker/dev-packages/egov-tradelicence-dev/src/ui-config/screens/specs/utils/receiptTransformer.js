@@ -6,7 +6,8 @@ import {
   getReceiptData,
   getSearchResults,
   getUserDataFromUuid,
-  getFinancialYearDates
+  getFinancialYearDates,
+  getEmployeeDataFromUuid
 } from "../utils";
 import {
   getLocalization,
@@ -41,7 +42,7 @@ const epochToDate = et => {
   if (!et) return null;
   var date = new Date(Math.round(Number(et)));
   var formattedDate =
-    date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+    (date.getDate()<10? "0"+date.getDate() : date.getDate()) + "/" + ((date.getMonth() + 1)<10? "0"+(date.getMonth() + 1) : (date.getMonth() + 1)) + "/" + date.getFullYear();
   return formattedDate;
 };
 
@@ -49,6 +50,15 @@ const getMessageFromLocalization = code => {
   let messageObject = JSON.parse(getLocalization(`localization_${getLocale()}`)).find(
     item => {
       return item.code == code;
+    }
+  );
+  return messageObject ? messageObject.message : code;
+};
+
+const getMessageFromLocalizationNonTLCodes = code => {
+  let messageObject = JSON.parse(getLocalization("localization_en_IN")).find(
+    item => {
+      return item.code == code.toUpperCase().replace(/[.]/g, "_");
     }
   );
   return messageObject ? messageObject.message : code;
@@ -93,6 +103,16 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         )
       )
     );
+    data.occupancyType = getMessageFromLocalizationNonTLCodes(
+      `TRADELICENSE_OCCUPANCYTYPE_${nullToNa(
+        get(
+          response,
+          "Licenses[0].tradeLicenseDetail.additionalDetail.occupancyType",
+          "NA"
+        )
+      )}`
+    );
+
     data.licenseNumber = nullToNa(
       get(response, "Licenses[0].licenseNumber", "NA")
     );
@@ -170,16 +190,26 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         res.tradeCategory.push(getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeCategory));
 
         res.tradeTypeReceipt.push(
-          getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeType) +
+          getMessageFromLocalizationNonTLCodes(
+            `TRADELICENSE_TRADETYPE_${tradeType}`
+          ) +
             " / " +
-            getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+getTransformedLocale(tradeSubType))
+            getMessageFromLocalizationNonTLCodes(
+              `TRADELICENSE_TRADETYPE_${tradeSubType}`
+            )
         );
         res.tradeTypeCertificate.push(
-          getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeCategory) +
+          getMessageFromLocalizationNonTLCodes(
+            `TRADELICENSE_TRADETYPE_${tradeCategory}`
+          ) +
             " / " +
-            getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeType) +
+            getMessageFromLocalizationNonTLCodes(
+              `TRADELICENSE_TRADETYPE_${tradeType}`
+            ) +
             " / " +
-            getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+getTransformedLocale(tradeSubType))
+            getMessageFromLocalizationNonTLCodes(
+              `TRADELICENSE_TRADETYPE_${tradeSubType}`
+            )
         );
         return res;
       },
@@ -222,7 +252,11 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     } else {
       data.accessoriesList = "";
     }
-    loadUserNameData(response.Licenses[0].auditDetails.lastModifiedBy);
+    // loadUserNameData(response.Licenses[0].auditDetails.lastModifiedBy);
+    loadEmployeeData(
+      response.Licenses[0].auditDetails.lastModifiedBy,
+      licenseIssueDate
+    );
   }
 
   store.dispatch(prepareFinalObject("applicationDataForReceipt", data));
@@ -372,7 +406,43 @@ export const loadUserNameData = async uuid => {
   if (response && response.user && response.user.length > 0) {
     data.auditorName = get(response, "user[0].name", "NA");
   }
-  data.Disclaimer=getMessageFromLocalization("TL_RECEIPT_FOOTER_1");
+
+  data.Disclaimer = getMessageFromLocalization("TL_RECEIPT_FOOTER_1");
+  data.signature = getMessageFromLocalization("TL_RECEIPT_FOOTER_2");
+  store.dispatch(prepareFinalObject("userDataForReceipt", data));
+};
+
+export const loadEmployeeData = async (uuid, licenseIssueDate) => {
+  let data = {};
+  let queryObject = [
+    {
+      key: "uuids",
+      value: [uuid]
+    }
+  ];
+  let res = await getEmployeeDataFromUuid(queryObject);
+
+  data.auditorName = get(res, "Employees[0].user.name", "NA");
+  const assignments = get(res, "Employees[0].assignments", []);
+  // Return employee assignment as per licenseissueDate
+  const assignmentWhileIssue = assignments.filter(assignment => {
+    return (
+      assignment.fromDate <= licenseIssueDate &&
+      (!assignment.toDate ||
+        (assignment.toDate && assignment.toDate >= licenseIssueDate))
+    );
+  });
+  if (
+    assignmentWhileIssue &&
+    assignmentWhileIssue.length > 0 &&
+    assignmentWhileIssue[0].designation
+  )
+    data.designation = getMessageFromLocalizationNonTLCodes(
+      `COMMON_MASTERS_DESIGNATION_${assignmentWhileIssue[0].designation}`
+    );
+
+  data.Disclaimer = getMessageFromLocalizationNonTLCodes("TL_RECEIPT_FOOTER_1");
+  data.signature = getMessageFromLocalizationNonTLCodes("TL_RECEIPT_FOOTER_2");
   store.dispatch(prepareFinalObject("userDataForReceipt", data));
 };
 

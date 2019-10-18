@@ -104,7 +104,9 @@ export const getMdmsData = async (action, state, dispatch) => {
           masterDetails: [
             { name: "TradeType" },
             { name: "AccessoriesCategory" },
-            { name: "ApplicationType" }
+            { name: "ApplicationType" },
+            { name: "OccupancyType" },
+            { name: "RelationType" }
           ]
         },
         {
