@@ -33,6 +33,8 @@ const PTHeader = ({header = '',headerValue='', subHeaderTitle = '', subHeaderVal
                     verticalAlign: "middle",
                     lineHeight: "35px",
                     fontSize: "16px",
+                    whiteSpace: "nowrap"
+                  
                 }}
                 fontSize={"16px"}
             />}
