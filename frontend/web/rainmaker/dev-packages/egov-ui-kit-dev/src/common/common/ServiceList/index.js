@@ -18,6 +18,10 @@ const styles = (theme) => ({
     flexGrow: 1,
     width: "25%",
   },
+  mobileRoot1: {
+    flexGrow: 1,
+    width: "33%",
+  },
   paper: {
     borderRadius: 0,
     marginTop: 0,
@@ -73,7 +77,7 @@ class ServiceList extends React.Component {
             const translatedLabel = service.displayName.toUpperCase().replace(/[.:\-\s]/g, "_");
 
             return (
-              <Grid className={classes.mobileRoot} item align="center">
+              <Grid className={(actionList.length===6 ||actionList.length===5 || actionList.length===9 )? classes.mobileRoot1:classes.mobileRoot } item align="center">
                 <Card
                   className={classes.paper}
                   onClick={(e) => {
