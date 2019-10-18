@@ -1,6 +1,6 @@
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import React from "react";
-import { Card, Divider, Icon } from "components";
+import { Button } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import ActionFooter from "../../common/ActionFooter";
 import FloatingActionButton from "material-ui/FloatingActionButton";
@@ -47,9 +47,42 @@ const PaymentStatus = ({ assessmentYear,
         <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
         <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_PMT_RCPT_NO" messageHeader={paymentHeader} message={paymentMessage} receiptNo={ReceiptNo} />
       </div>
-      <ActionFooter key={2} label2='PT_DOWNLOAD_RECEIPT' secondaryAction={toggleYearDialogue} label1='PT_ASSESS_PAY_FOR_NEW_YEAR' primaryAction={() => {
+      {/* <ActionFooter key={2} label2='PT_DOWNLOAD_RECEIPT' secondaryAction={toggleYearDialogue} label1='PT_ASSESS_PAY_FOR_NEW_YEAR' primaryAction={() => {
         generateReceipt("pt-reciept-citizen", receiptDetails, {}, receiptImageUrl);
-      }} />
+      }} /> */}
+  <div
+        id="tax-wizard-buttons"
+        className="wizard-footer col-sm-10"
+        style={{ textAlign: "right" }}
+      >
+        <div className="button-container " style={{ float: "right" }}>
+          <Button
+            label={<Label buttonLabel={true}
+                label='PT_ASSESS_PAY_FOR_NEW_YEAR'
+                color="#fe7a51" />
+            }
+            className="pmt-status-back"
+            onClick={() => {toggleYearDialogue()    }}
+            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
+            buttonStyle={{ border: "1px solid #fe7a51" }}
+            style={{  }}
+          />
+          <Button
+            label={<Label buttonLabel={true} label='PT_DOWNLOAD_RECEIPT' color="#fff" />}
+           className="pmt-status-next"
+            backgroundColor="#fe7a51"
+            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fff" }}
+            buttonStyle={{ border: 0 }}
+            onClick={() => {
+              generateReceipt("pt-reciept-citizen", receiptDetails, {}, receiptImageUrl)
+            }}
+          />
+        </div>
+      </div>
+
+
+
+
     </div>
   );
 };

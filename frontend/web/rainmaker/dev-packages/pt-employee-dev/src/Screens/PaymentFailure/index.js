@@ -90,13 +90,13 @@ class PaymentFailure extends Component {
       { key: "tenantId", value: tenantId }
     ];
     try {
-      const payload = await httpRequest(
-        "pt-calculator-v2/propertytax/_getbill",
-        "_create",
-        queryObj,
-        {}
-      );
-      this.setState({ bill: payload["Bill"] });
+      // const payload = await httpRequest(
+      //   "pt-calculator-v2/propertytax/_getbill",
+      //   "_create",
+      //   queryObj,
+      //   {}
+      // );
+      // this.setState({ bill: payload["Bill"] });
     } catch (e) {
       console.log(e);
     }

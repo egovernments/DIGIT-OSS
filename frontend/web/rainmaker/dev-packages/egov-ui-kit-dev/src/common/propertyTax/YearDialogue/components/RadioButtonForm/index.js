@@ -7,7 +7,7 @@ const RadioButtonForm = ({ label, form, handleFieldChange, selectedYear, handleR
   return (
 
     <div className="property-amount-radio">
-      <div className="amt-radio">
+      <div className="amt-radio" style={{padding:'5px'}}>
         <input
           type="radio"
           onClick={handleRadioButton}

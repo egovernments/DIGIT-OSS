@@ -147,9 +147,79 @@ class Property extends Component {
       urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
     });
   };
+  getAssessmentHistory = (selPropertyDetails, receiptsByYr = []) => {
+    let assessmentList = [];
+    const {
+      propertyDetails = []
+    } = selPropertyDetails;
+    propertyDetails.map((propertyDetail) => {
+      let bool = true;
+      for (let receipts of receiptsByYr) {
 
-  getAssessmentListItems = (props,showAssessmentHistory) => {
-    const { propertyItems, propertyId, history, sortedAssessments, selPropertyDetails, tenantId } = props;
+        if (propertyDetail.financialYear == receipts[0].financialYear) {
+          let receiptInfo = {};
+          let receiptTotalAmount = 0;
+          let paidAmount = 0;
+          for (let receipt of receipts) {
+            receiptTotalAmount = receipt.totalAmount < receiptTotalAmount ? receiptTotalAmount : receipt.totalAmount;
+            paidAmount += receipt.amountPaid;
+          }
+          if (receiptTotalAmount > paidAmount) {
+            receiptInfo['status'] = 'Pending';
+            if (paidAmount > 0) {
+              receiptInfo['status'] = 'Partially Paid';
+            }
+          } else {
+            receiptInfo['status'] = 'Paid';
+          }
+          receiptInfo = {
+            ...receiptInfo,
+            ...receipts[0],
+            totalAmount: paidAmount,
+          }
+          if (propertyDetail.assessmentDate < receiptInfo.receiptDate) {
+            let assessment = {
+              ...propertyDetail,
+              receiptInfo
+            }
+            assessmentList.push(assessment);
+          } else {
+
+            let assessment = {
+              ...propertyDetail,
+              receiptInfo
+            }
+            let assessment1 = {
+              ...propertyDetail,
+              receiptInfo: {
+                ...receiptInfo,
+                status: 'Pending'
+              }
+            }
+            assessmentList.push(assessment);
+            assessmentList.push(assessment1);
+
+          }
+          bool = false;
+        }
+      }
+      if (bool) {
+        let receiptInfo = {};
+        receiptInfo['status'] = 'Pending';
+        let assessment = {
+          ...propertyDetail,
+          receiptInfo
+        }
+        assessmentList.push(assessment);
+      }
+
+    })
+    return assessmentList;
+  }
+  getAssessmentListItems = (props,showAssessmentHistory,assessmentHistory,) => {
+    const { propertyItems, propertyId, history, sortedAssessments, selPropertyDetails, tenantId,localization } = props;
+    const {cities, localizationLabels}=localization;
+    const assessments=orderby(getCompletedTransformedItems(assessmentHistory, cities, localizationLabels, propertyId,selPropertyDetails), ["epocDate"], ["desc"]);   
     return [
       {
         primaryText: (
@@ -166,7 +236,8 @@ class Property extends Component {
       {
         primaryText: <Label label="PT_PROPERTY_ASSESSMENT_HISTORY" labelClassName="property-info-title" />,
         route: selPropertyDetails,
-        nestedItems:showAssessmentHistory&& sortedAssessments && sortedAssessments,
+        // nestedItems:showAssessmentHistory&& sortedAssessments && sortedAssessments,
+            nestedItems:showAssessmentHistory&& assessments && assessments,
         rightIcon: (
           <div style={IconStyle}>
             <Icon action="hardware" name="keyboard-arrow-down" color="#484848" />
@@ -188,16 +259,22 @@ class Property extends Component {
     this.setState({ dialogueOpen: false });
   };
 
+
+
   render() {
-    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails } = this.props;
+    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails ,receiptsByYr} = this.props;
     const { closeYearRangeDialogue } = this;
     const { dialogueOpen, urlToAppend ,showAssessmentHistory} = this.state;
     let urlArray = [];
+    let assessmentHistory=[];
     const { pathname } = location;
     if (urls.length === 0 && localStorageGet("path") === pathname) {
       urlArray = JSON.parse(localStorageGet("breadCrumbObject"));
     }
     let clsName = appName === "Citizen" ? "screen-with-bredcrumb" : "";
+    if(receiptsByYr){
+     assessmentHistory=this.getAssessmentHistory(selPropertyDetails,receiptsByYr.receiptDetailsArray);
+    }
 
     return (
       <Screen className={clsName}>
@@ -205,7 +282,7 @@ class Property extends Component {
         {
           <AssessmentList
             onItemClick={this.onListItemClick}
-            items={this.getAssessmentListItems(this.props,showAssessmentHistory)}
+            items={this.getAssessmentListItems(this.props,showAssessmentHistory,assessmentHistory)}
             innerDivStyle={innerDivStyle}
             listItemStyle={listItemStyle}
             history={history}
@@ -233,7 +310,7 @@ class Property extends Component {
     );
   }
 }
-const getYearlyAssessments = (propertiesArray) => {
+const getYearlyAssessments = (propertiesArray=[]) => {
   let yearlyAssessments = [];
   propertiesArray.map((property) => {
     if (yearlyAssessments.length == 0) {
@@ -535,14 +612,17 @@ const mapStateToProps = (state, ownProps) => {
   const { urls, localizationLabels } = app;
   const { cities } = common;
   const { generalMDMSDataById } = state.common || {};
-  const { propertiesById, singleAssessmentByStatus = [], loading } = state.properties || {};
+  const { propertiesById, singleAssessmentByStatus = [], loading ,receiptsByYr} = state.properties || {};
   const tenantId = ownProps.match.params.tenantId;
   const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
   const selPropertyDetails = propertiesById[propertyId] || {};
   const latestPropertyDetails = getLatestPropertyDetails(selPropertyDetails.propertyDetails);
   const pendingAssessments = getPendingAssessments(selPropertyDetails, singleAssessmentByStatus);
-
-
+  
+const localization={
+  localizationLabels,
+  cities
+}
   const addressInfo =
     getAddressInfo(selPropertyDetails.address, [
       { key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PROPERTY_ID", localizationLabels), value: selPropertyDetails.propertyId },
@@ -575,6 +655,8 @@ const mapStateToProps = (state, ownProps) => {
     selPropertyDetails,
     sortedAssessments,
     generalMDMSDataById,
+    receiptsByYr,
+    localization
   };
 };
 
