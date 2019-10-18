@@ -42,6 +42,7 @@ const EgovAppBar = ({
   history,
   handleItemClick,
   hasLocalisation,
+  notificationsCount,
   hideDigitLogo,
   ...rest
 }) => {
