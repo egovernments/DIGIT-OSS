@@ -7,6 +7,7 @@ const TestMolecules = Loadable({
   loader: () => import("./TestMolecules"),
   loading: () => <Loading />
 });
+<<<<<<< Updated upstream
 const RadioButtonsGroup = Loadable({
   loader: () => import("./RadioGroup"),
   loading: () => <Loading />
@@ -63,4 +64,9 @@ export {
   FeesEstimateCard,
   DividerWithLabel,
   HowItWorks
+=======
+
+export {
+  TestMolecules
+>>>>>>> Stashed changes
 };
