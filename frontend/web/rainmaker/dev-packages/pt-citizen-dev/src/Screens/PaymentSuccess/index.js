@@ -25,11 +25,12 @@ class PaymentSuccess extends Component {
       urlToAppend: ''
     }
   };
-  toggleYearDialogue = () => {
+  toggleYearDialogue = (assessmentNumber) => {
+    let assessmentId=assessmentNumber;
     this.setState({
       yearDialogue: {
         dialogueOpen: !this.state.yearDialogue.dialogueOpen,
-        urlToAppend: `/property-tax/assessment-form?assessmentId=${this.props.match.params.assessmentId}&isReassesment=true&isAssesment=true&propertyId=${this.props.match.params.propertyId}&tenantId=${this.props.match.params.tenantId}`
+        urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentId}&isReassesment=true&isAssesment=true&propertyId=${this.props.match.params.propertyId}&tenantId=${this.props.match.params.tenantId}`
       }
     })
   }
@@ -165,7 +166,7 @@ class PaymentSuccess extends Component {
     const { imageUrl } = this.state;
     const { toggleYearDialogue } = this;
     return (
-      <Screen loading={loading}>>
+      <Screen loading={loading}>
         {this.state.yearDialogue.dialogueOpen && <YearDialogue open={this.state.yearDialogue.dialogueOpen} history={history} urlToAppend={this.state.yearDialogue.urlToAppend} closeDialogue={toggleYearDialogue} />}
         <PaymentStatus
           receiptUIDetails={this.props.receiptUIDetails}
@@ -182,9 +183,6 @@ class PaymentSuccess extends Component {
           receiptImageUrl={imageUrl && imageUrl}
           extraData={this.props.extraData}
         />
-
-
-
       </Screen>
     );
   }
