@@ -80,7 +80,6 @@ const transformer = (formKey, form = {}, state = {}) => {
       const { previousRoute } = state.app;
       const { fields: otpFields } = form;
       let fields;
-      debugger;
       if (previousRoute.endsWith("register")) {
         fields = state.form["register"].fields;
         fields = {

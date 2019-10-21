@@ -90,13 +90,13 @@ class PaymentFailure extends Component {
       { key: "tenantId", value: tenantId }
     ];
     try {
-      const payload = await httpRequest(
-        "pt-calculator-v2/propertytax/_getbill",
-        "_create",
-        queryObj,
-        {}
-      );
-      this.setState({ bill: payload["Bill"] });
+      // const payload = await httpRequest(
+      //   "pt-calculator-v2/propertytax/_getbill",
+      //   "_create",
+      //   queryObj,
+      //   {}
+      // );
+      // this.setState({ bill: payload["Bill"] });
     } catch (e) {
       console.log(e);
     }
@@ -118,9 +118,9 @@ class PaymentFailure extends Component {
   };
 
   redirectToReview = () => {
-    const { match, history } = this.props;
+    const { match, history,assessmentNumber } = this.props;
     const {
-      assessmentNumber,
+      
       assessmentYear,
       propertyId,
       tenantId
@@ -204,7 +204,15 @@ const mapStateToProps = (state, ownProps) => {
     propertiesById && propertiesById[ownProps.match.params.propertyId];
   const latestPropertyDetails =
     selProperty && getLatestPropertyDetails(selProperty.propertyDetails);
-  return { selProperty, cities, latestPropertyDetails ,loading};
+  let assessmentNumber;
+if(latestPropertyDetails&&latestPropertyDetails.assessmentNumber){
+ 
+      assessmentNumber=latestPropertyDetails.assessmentNumber;
+
+}
+
+
+  return { selProperty, cities, latestPropertyDetails ,loading,assessmentNumber};
 };
 
 const mapDispatchToProps = dispatch => {
