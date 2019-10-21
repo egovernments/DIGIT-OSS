@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getCommaSeperatedAddress, getTranslatedLabel } from "egov-ui-kit/utils/commons";
-import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
+import { getLatestPropertyDetails,getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import AssessmentList from "../AssessmentList";
 import YearDialogue from "../YearDialogue";
 import Screen from "egov-ui-kit/common/common/Screen";
@@ -267,7 +267,12 @@ class Property extends Component {
     const { dialogueOpen, urlToAppend ,showAssessmentHistory} = this.state;
     let urlArray = [];
     let assessmentHistory=[];
-    const { pathname } = location;
+    const { pathname ,search} = location;
+
+
+   const isMutationApplication = getQueryValue(search, "isMutationApplication");
+   console.log(isMutationApplication,'isMutationApplication');
+   
     if (urls.length === 0 && localStorageGet("path") === pathname) {
       urlArray = JSON.parse(localStorageGet("breadCrumbObject"));
     }
