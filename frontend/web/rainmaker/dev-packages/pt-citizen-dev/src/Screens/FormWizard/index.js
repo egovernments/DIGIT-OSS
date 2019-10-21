@@ -1315,8 +1315,21 @@ class FormWizard extends Component {
 
   pay = async () => {
     //utils
+
+
+  
+
+
+ 
+
+
     const { callPGService } = this;
-    const { financialYearFromQuery } = this.state;
+    const { financialYearFromQuery ,assessedPropertyDetails = {}} = this.state;
+    const { Properties = [] } = assessedPropertyDetails;
+    let propertyUID = '';
+    for (let pty of Properties) {
+      propertyUID = pty.propertyId;
+    }
     let { toggleSpinner, location, form, common } = this.props;
     let prepareFormData = { ...this.props.prepareFormData };
     if (
@@ -1328,7 +1341,10 @@ class FormWizard extends Component {
     )
       delete prepareFormData.Properties[0].propertyDetails[0].institution;
     let { search } = location;
-    const propertyId = getQueryValue(search, "propertyId");
+    let propertyId = getQueryValue(search, "propertyId");
+    if(!propertyId){
+      propertyId=propertyUID;
+    }
     const assessmentId = getQueryValue(search, "assessmentId");
     const tenantId = getQueryValue(search, "tenantId");
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
