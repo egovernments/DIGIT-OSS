@@ -111,9 +111,24 @@ export const generalMDMSFetchSuccess = (payload, moduleName, masterArray, key) =
   };
 };
 
+export const loadMDMSFetchSuccess = (payload, requestBody) => {
+  return {
+    type: actionTypes.LOAD_MDMS_FETCH_SUCCESS,
+    payload,
+    requestBody
+  };
+};
+
 const generalMDMSFetchError = (error) => {
   return {
     type: actionTypes.GENERAL_MDMS_FETCH_ERROR,
+    error,
+  };
+};
+
+const loadMDMSFetchError = (error) => {
+  return {
+    type: actionTypes.LOAD_MDMS_FETCH_ERROR,
     error,
   };
 };
@@ -188,6 +203,18 @@ export const fetchGeneralMDMSData = (requestBody, moduleName, masterArray, key, 
       dispatch(generalMDMSFetchSuccess(payload, moduleName, masterArray, key));
     } catch (error) {
       dispatch(generalMDMSFetchError(error.message));
+    }
+  };
+};
+
+
+export const loadMDMSData = (requestBody) => {
+  return async (dispatch) => {
+    try {
+      const payload = await httpRequest(MDMS.GET.URL, MDMS.GET.ACTION, [], requestBody);
+      dispatch(loadMDMSFetchSuccess(payload, requestBody));
+    } catch (error) {
+      dispatch(loadMDMSFetchError(error.message));
     }
   };
 };

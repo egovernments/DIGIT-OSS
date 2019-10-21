@@ -110,6 +110,17 @@ const formConfig = {
       numcols: 6,
       type: "dummy",
     },
+    roadType: {
+      id: "roadType",
+      jsonPath: "property.propertyDetails[0].additionalDetails.roadType",
+      localePrefix: { moduleName: "PropertyTax", masterName: "RoadType" },
+      type: "singleValueList",
+      floatingLabelText: "Road Type",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      fullWidth: true,
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+      numcols: 6,
+    },
     houseNumber: {
       id: "house-number",
       jsonPath: "Properties[0].address.doorNo",
@@ -178,7 +189,14 @@ const formConfig = {
     try {
       let state = store.getState();
       const { localizationLabels } = state.app;
-      const { cities, citiesByModule } = state.common;
+      const { cities, citiesByModule, loadMdmsData } = state.common;
+      const roadTypeData =
+        get(loadMdmsData, "PropertyTax.RoadType") &&
+        Object.values(get(loadMdmsData, "PropertyTax.RoadType")).map((item, index) => {
+          return { value: item.code, label: item.name };
+        });
+
+      dispatch(setFieldProperty("propertyAddress", "roadType", "dropDownData", roadTypeData));
       const PT = citiesByModule && citiesByModule.PT;
       if (PT) {
         const tenants = PT.tenants;
