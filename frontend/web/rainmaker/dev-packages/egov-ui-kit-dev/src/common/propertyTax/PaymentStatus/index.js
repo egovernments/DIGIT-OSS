@@ -34,6 +34,10 @@ const PaymentStatus = ({ assessmentYear,
       assessmentYear = receiptDetails.propertyDetails[0].financialYear;
     }
   }
+  let  assessmentNumber;
+  if (receiptDetails && receiptDetails.propertyDetails && receiptDetails.propertyDetails[0]) {
+    assessmentNumber = receiptDetails.propertyDetails[0].assessmentNumber;
+  }
   const headerValue = '(' + assessmentYear + ')';
   const header = 'PT_PAYMENT_HEADER';
   const subHeaderValue = propertyId;
@@ -47,9 +51,7 @@ const PaymentStatus = ({ assessmentYear,
         <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
         <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_PMT_RCPT_NO" messageHeader={paymentHeader} message={paymentMessage} receiptNo={ReceiptNo} />
       </div>
-      {/* <ActionFooter key={2} label2='PT_DOWNLOAD_RECEIPT' secondaryAction={toggleYearDialogue} label1='PT_ASSESS_PAY_FOR_NEW_YEAR' primaryAction={() => {
-        generateReceipt("pt-reciept-citizen", receiptDetails, {}, receiptImageUrl);
-      }} /> */}
+
   <div
         id="tax-wizard-buttons"
         className="wizard-footer col-sm-10"
@@ -62,7 +64,7 @@ const PaymentStatus = ({ assessmentYear,
                 color="#fe7a51" />
             }
             className="pmt-status-back"
-            onClick={() => {toggleYearDialogue()    }}
+            onClick={() => {toggleYearDialogue(assessmentNumber)    }}
             labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
             buttonStyle={{ border: "1px solid #fe7a51" }}
             style={{  }}
