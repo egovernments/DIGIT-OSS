@@ -14,15 +14,21 @@ import org.egov.pt.calculator.validator.CalculationValidator;
 import org.egov.pt.calculator.web.models.*;
 import org.egov.pt.calculator.web.models.demand.Category;
 import org.egov.pt.calculator.web.models.demand.Demand;
+import org.egov.pt.calculator.web.models.demand.DemandDetail;
+import org.egov.pt.calculator.web.models.demand.DemandRequest;
+import org.egov.pt.calculator.web.models.demand.DemandResponse;
 import org.egov.pt.calculator.web.models.demand.TaxHeadMaster;
 import org.egov.pt.calculator.web.models.property.OwnerInfo;
 import org.egov.pt.calculator.web.models.property.Property;
 import org.egov.pt.calculator.web.models.property.PropertyDetail;
 import org.egov.pt.calculator.web.models.property.Unit;
 import org.egov.tracer.model.CustomException;
+import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
@@ -62,6 +68,9 @@ public class EstimationService {
 
 	@Autowired
 	private CalculatorUtils utils;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	@Value("${customization.pbfirecesslogic:false}")
 	Boolean usePBFirecessLogic;
@@ -682,5 +691,81 @@ public class EstimationService {
 
 		return !(null != applicableUsageMasterExemption
 				&& null != applicableUsageMasterExemption.get(EXEMPTION_FIELD_NAME));
+	}
+	
+	
+	public Map<String, Calculation> mutationCalculator(List<MutationCalculationCriteria> criteria, RequestInfo requestInfo) {
+		Map<String, Calculation> feeStructure = new HashMap<>();
+		for(MutationCalculationCriteria mutation: criteria) {
+			Calculation calculation = new Calculation();
+			BigDecimal fee = getFeeFromSlabs(mutation, calculation);
+			calculation.setTaxAmount(fee);
+			postProcessTheFee(calculation);
+			feeStructure.put(mutation.getMutationApplicationNo(), calculation);
+			generateDemandsFroMutationFee(feeStructure, requestInfo);
+		}
+		
+		return feeStructure;
+	}
+	
+	private BigDecimal getFeeFromSlabs(MutationCalculationCriteria criteria, Calculation calculation) {
+		List<String> slabIds = new ArrayList<>();
+		calculation.setBillingSlabIds(slabIds); 
+		return null;
+	}
+	
+	private void postProcessTheFee(Calculation calculation) {
+		calculation.setRebate(BigDecimal.ZERO);
+		calculation.setExemption(BigDecimal.ZERO);
+		calculation.setPenalty(BigDecimal.ZERO);
+		
+		BigDecimal totalAmount = calculation.getTaxAmount()
+				.subtract(calculation.getRebate().add(calculation.getExemption())).add(calculation.getPenalty());
+		calculation.setTotalAmount(totalAmount);
+	}
+	
+	private void generateDemandsFroMutationFee(Map<String, Calculation> feeStructure, RequestInfo requestInfo) {
+		List<Demand> demands = new ArrayList<>();
+		for(String key: feeStructure.keySet()) {
+			List<DemandDetail> details = new ArrayList<>();
+			Calculation calculation = feeStructure.get(key);
+			DemandDetail detail = DemandDetail.builder().collectionAmount(null).demandId(null).id(null).taxAmount(calculation.getTaxAmount()).auditDetails(null)
+					.taxHeadMasterCode(configs.getPtMutationFeeTaxHead()).tenantId(calculation.getTenantId()).build();
+			details.add(detail);
+			if(null != calculation.getPenalty() && BigDecimal.ZERO != calculation.getPenalty()){
+				DemandDetail demandDetail = DemandDetail.builder().collectionAmount(null).demandId(null).id(null).taxAmount(calculation.getPenalty()).auditDetails(null)
+						.taxHeadMasterCode(configs.getPtMutationPenaltyTaxHead()).tenantId(calculation.getTenantId()).build();
+				details.add(demandDetail);
+			}
+			if(null != feeStructure.get(key).getRebate() && BigDecimal.ZERO != feeStructure.get(key).getRebate()){
+				DemandDetail demandDetail = DemandDetail.builder().collectionAmount(null).demandId(null).id(null).taxAmount(calculation.getRebate()).auditDetails(null)
+						.taxHeadMasterCode(configs.getPtMutationRebateTaxHead()).tenantId(feeStructure.get(key).getTenantId()).build();
+				details.add(demandDetail);
+			}
+			if(null != feeStructure.get(key).getExemption() && BigDecimal.ZERO != feeStructure.get(key).getExemption()){
+				DemandDetail demandDetail = DemandDetail.builder().collectionAmount(null).demandId(null).id(null).taxAmount(calculation.getExemption()).auditDetails(null)
+						.taxHeadMasterCode(configs.getPtMutationExemptionTaxHead()).tenantId(feeStructure.get(key).getTenantId()).build();
+				details.add(demandDetail);
+			}
+			
+			Demand demand = Demand.builder().auditDetails(null).additionalDetails(null).businessService(configs.getPtMutationBusinessCode())
+					.consumerCode(key).consumerType("").demandDetails(details).id("").minimumAmountPayable(configs.getPtMutationMinPayable()).payer(null).status(null)
+					.taxPeriodFrom(null).taxPeriodTo(null).tenantId(feeStructure.get(key).getTenantId()).build();
+			demands.add(demand);
+			
+		}
+		
+		DemandRequest dmReq = DemandRequest.builder().demands(demands).requestInfo(requestInfo).build();
+		String url = new StringBuilder().append(configs.getBillingServiceHost())
+				.append(configs.getDemandCreateEndPoint()).toString();
+		try {
+			restTemplate.postForObject(url, dmReq, Map.class);
+		} catch (Exception e) {
+			log.error("Demand creation failed: ", e);
+			throw new CustomException("DEMAND_CREATION_FAILED", "Demand creation failed!");
+		}
+		
+		
+		
 	}
 }

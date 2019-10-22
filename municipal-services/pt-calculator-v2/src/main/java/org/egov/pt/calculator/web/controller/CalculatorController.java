@@ -11,6 +11,7 @@ import org.egov.pt.calculator.web.models.Calculation;
 import org.egov.pt.calculator.web.models.CalculationReq;
 import org.egov.pt.calculator.web.models.CalculationRes;
 import org.egov.pt.calculator.web.models.GetBillCriteria;
+import org.egov.pt.calculator.web.models.MutationCalculatorReq;
 import org.egov.pt.calculator.web.models.demand.BillResponse;
 import org.egov.pt.calculator.web.models.demand.DemandResponse;
 import org.egov.pt.calculator.web.models.property.RequestInfoWrapper;
@@ -56,6 +57,11 @@ public class CalculatorController {
 	public ResponseEntity<DemandResponse> updateDemand(@RequestBody @Valid RequestInfoWrapper requestInfoWrapper,
 			@ModelAttribute @Valid GetBillCriteria getBillCriteria) {
 		return new ResponseEntity<>(demandService.updateDemands(getBillCriteria, requestInfoWrapper), HttpStatus.OK);
+	}
+	
+	@PostMapping("/mutation/_calculate")
+	public ResponseEntity<Map<String, Calculation>> mutationCalculator(@RequestBody @Valid MutationCalculatorReq request) {
+		return new ResponseEntity<>(calculatorService.mutationCalculator(request.getMutationCalculationCriteria(), request.getRequestInfo()), HttpStatus.OK);
 	}
 
 }
