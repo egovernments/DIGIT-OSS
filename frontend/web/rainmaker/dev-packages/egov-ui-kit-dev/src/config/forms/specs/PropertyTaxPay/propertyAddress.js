@@ -9,6 +9,8 @@ import sortBy from "lodash/sortBy";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
+var constructiontype =[{value : "road1" , label :"rd1" }]
+
 const formConfig = {
   name: "propertyAddress",
   fields: {
@@ -120,6 +122,36 @@ const formConfig = {
       fullWidth: true,
       hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       numcols: 6,
+    },
+    constructionType: {
+      id: "constructionType",
+      jsonPath: "",
+      localePrefix: { moduleName: "PropertyTax", masterName: "ConstructionType" },
+      type: "singleValueList",
+      floatingLabelText: "Construction Type",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      fullWidth: true,
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+      numcols: 6,
+      dropDownData:constructiontype,
+      // dropDownData:[
+      //   { name: "AccessoriesCategory" },
+      //   { name: "ApplicationType" },
+      //   { name: "OccupancyType" },
+      //   { name: "RelationType" }
+      // ]
+    },
+    thana: {
+      id: "roadType",
+      jsonPath: "",
+      localePrefix: { moduleName: "Thana", masterName: "ThanaType" },
+      type: "singleValueList",
+      floatingLabelText: "Thana",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      fullWidth: true,
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+      numcols: 6,
+      dropDownData:constructiontype,
     },
     houseNumber: {
       id: "house-number",

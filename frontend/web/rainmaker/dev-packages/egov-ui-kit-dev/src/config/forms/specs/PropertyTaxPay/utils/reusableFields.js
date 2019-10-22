@@ -123,6 +123,137 @@ export const occupancy = {
     },
   },
 };
+export const innerDimensions = {
+  innerDimensions: {
+    id: "innerDimensions",
+    // jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
+    type: "singleValueList",
+    floatingLabelText: "Inner Dimensions Known",
+    hintText: "Enter Inner Dimensions",
+    errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
+    fullWidth: true,
+    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    numcols: 4,
+    dropDownData: [],
+    // updateDependentFields: ({ formKey, field, dispatch, state }) => {
+    //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
+    //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
+    //   if (propertyType === "VACANT" || propertySubType === "INDEPENDENTPROPERTY") {
+    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
+    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
+    //   }
+    // },
+  },
+};
+export const roomArea = {
+  roomArea: {
+    id: "roomArea",
+    // jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
+    type: "number",
+    floatingLabelText: "Room Area(sq ft)",
+    hintText: "Enter Room Area",
+    errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
+    fullWidth: true,
+    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    numcols: 4,
+    // updateDependentFields: ({ formKey, field, dispatch, state }) => {
+    //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
+    //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
+    //   if (propertyType === "VACANT" || propertySubType === "INDEPENDENTPROPERTY") {
+    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
+    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
+    //   }
+    // },
+  },
+};
+export const balconyArea = {
+  balconyArea: {
+    id: "balconyArea",
+    // jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
+    type: "number",
+    floatingLabelText: "Balcony + Corridor + Kitchen + store Area(sq ft)",
+    hintText: "Enter Balcony Area",
+    errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
+    fullWidth: true,
+    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    numcols: 4,
+    // updateDependentFields: ({ formKey, field, dispatch, state }) => {
+    //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
+    //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
+    //   if (propertyType === "VACANT" || propertySubType === "INDEPENDENTPROPERTY") {
+    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
+    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
+    //   }
+    // },
+  },
+};
+
+export const garageArea = {
+  garageArea: {
+    id: "garageArea",
+    // jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
+    type: "number",
+    floatingLabelText: "Garage Area(sq ft)",
+    hintText: "Enter Garage Area",
+    errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
+    fullWidth: true,
+    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    numcols: 4,
+    // updateDependentFields: ({ formKey, field, dispatch, state }) => {
+    //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
+    //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
+    //   if (propertyType === "VACANT" || propertySubType === "INDEPENDENTPROPERTY") {
+    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
+    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
+    //   }
+    // },
+  },
+};
+
+
+export const bathroomArea = {
+  bathroomArea: {
+    id: "bathroomArea",
+    // jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
+    type: "number",
+    floatingLabelText: "Bathroom + Staircase Area(sq ft)",
+    hintText: "PT_FORM2_PLOT_SIZE_PLACEHOLDER",
+    errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
+    fullWidth: true,
+    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    numcols: 4,
+    // updateDependentFields: ({ formKey, field, dispatch, state }) => {
+    //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
+    //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
+    //   if (propertyType === "VACANT" || propertySubType === "INDEPENDENTPROPERTY") {
+    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
+    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
+    //   }
+    // },
+  },
+};
+
+export const coveredArea = {
+  coveredArea: {
+    id: "coveredArea",
+    // jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
+    type: "number",
+    floatingLabelText: "Covered Area(sq ft)",
+    hintText: "PT_FORM2_PLOT_SIZE_PLACEHOLDER",
+    errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
+    fullWidth: true,
+    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+    numcols: 4,
+    // updateDependentFields: ({ formKey, field, dispatch, state }) => {
+    //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
+    //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
+    //   if (propertyType === "VACANT" || propertySubType === "INDEPENDENTPROPERTY") {
+    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
+    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
+    //   }
+    // },
+  },
+};
 
 export const builtArea = {
   builtArea: {
