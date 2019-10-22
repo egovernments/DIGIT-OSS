@@ -29,6 +29,10 @@ const onButton2Click = (item, history) => {
     if (item.moduleTitle === "TL_COMMON_TL") {
       history && history.push("trade-license/how-it-works");
     }
+    if(item.moduleTitle === "NOC_COMMON_NOC")
+    {
+      history && history.push("fire-noc/how-it-works"); //change to NOC route
+    }
   }
 };
 

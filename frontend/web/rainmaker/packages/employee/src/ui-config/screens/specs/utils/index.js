@@ -4,8 +4,11 @@ import { getLabel, getSelectField, getCommonContainer, getCommonCard, convertDat
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { localStorageGet, getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg, validateFields } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg, validateFields, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
+import store from "../../../../redux/store";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
 import cloneDeep from "lodash/cloneDeep";
@@ -61,6 +64,7 @@ export const convertEpochToDate = (dateEpoch) => {
 };
 
 export const callBackForNext = async (state, dispatch, eventType, isDelete) => {
+  store.dispatch(toggleSpinner());
   const isEvent = eventType === "EVENTSONGROUND" ? true : false;
   const uuid = getQueryArg(window.location.href, "uuid");
   const isNative = localStorageGet("isNative");
@@ -96,6 +100,11 @@ export const callBackForNext = async (state, dispatch, eventType, isDelete) => {
   if (isDelete) {
     set(eventsData, "status", "CANCELLED");
   }
+  if (uuid) {
+    if (toDateTime > new Date().getTime() && get(eventsData, "status") === "INACTIVE") {
+      set(eventsData, "status", "ACTIVE");
+    }
+  }
   const requestBody = {
     RequestInfo: {
       apiId: "org.egov.pt",
@@ -113,26 +122,32 @@ export const callBackForNext = async (state, dispatch, eventType, isDelete) => {
   const baseUrl = isEvent ? "/events" : "/notifications";
   if (isFormValid) {
     if (!uuid) {
-      let purpose = "apply";
-      let status = "success";
-
+      let successMessage = eventType === "BROADCAST" ? "MESSAGE_ADD_SUCCESS_MESSAGE_MAIN" : "EVENT_ADD_SUCCESS_MESSAGE_MAIN";
       try {
         await httpRequest("post", "/egov-user-event/v1/events/_create", "_create", [], requestBody);
-        dispatch(setRoute(`${baseUrl}/acknowledgement?purpose=${purpose}&status=${status}`));
+        store.dispatch(toggleSpinner());
+        // dispatch(setRoute(`${baseUrl}/acknowledgement?purpose=${purpose}&status=${status}`));
+        dispatch(setRoute(`${baseUrl}/search`));
+        dispatch(toggleSnackbar(true, { labelKey: successMessage }, "success"));
       } catch (e) {
         dispatch(toggleSnackbar(true, { labelKey: e.message }, "error"));
+        store.dispatch(toggleSpinner());
       }
     } else if (uuid) {
-      let purpose = isDelete ? "delete" : "update";
-      const status = "success";
+      let successMessage = isDelete ? "MESSAGE_DELETE_SUCCESS_LABEL" : "MESSAGE_UPDATE_SUCCESS_LABEL";
       try {
         await httpRequest("post", "/egov-user-event/v1/events/_update", "_update", [], requestBody);
-        dispatch(setRoute(`${baseUrl}/acknowledgement?purpose=${purpose}&status=${status}`));
+        store.dispatch(toggleSpinner());
+        dispatch(setRoute(`${baseUrl}/search`));
+        dispatch(toggleSnackbar(true, { labelKey: successMessage }, "success"));
+        // dispatch(setRoute(`${baseUrl}/acknowledgement?purpose=${purpose}&status=${status}`));
       } catch (e) {
+        store.dispatch(toggleSpinner());
         dispatch(toggleSnackbar(true, { labelKey: e.message }, "error"));
       }
     }
   } else {
+    store.dispatch(toggleSpinner());
     dispatch(toggleSnackbar(true, { labelName: "Invalid Input!", labelKey: "Invalid Input!" }, "error"));
   }
 };
@@ -174,11 +189,12 @@ export const footer = (eventType = "BROADCAST") => {
         props: {
           variant: "contained",
           color: "primary",
-          style: {
-            minWidth: "200px",
-            height: "48px",
-            marginRight: "45px",
-          },
+          className: uuid ? "button-wizard-footer" : "single-button-wizard-footer",
+          // style: {
+          //   minWidth: "200px",
+          //   height: "48px",
+          //   marginRight: "45px",
+          // },
         },
         children: {
           submitButtonLabel: getLabel({
@@ -196,11 +212,12 @@ export const footer = (eventType = "BROADCAST") => {
         props: {
           variant: "contained",
           color: "primary",
-          style: {
-            minWidth: "200px",
-            height: "48px",
-            marginRight: "45px",
-          },
+          className: "button-wizard-footer",
+          // style: {
+          //   minWidth: "200px",
+          //   height: "48px",
+          //   marginRight: "45px",
+          // },
         },
         children: {
           submitButtonLabel: getLabel({
@@ -267,20 +284,23 @@ export const getSingleMessage = async (state, dispatch, messageTenant, uuid) => 
   //Thu Aug 08 2019 02:00:00 GMT+0530 (IST)
   const fromEpochDate = get(messageResponse[0], "eventDetails.fromDate");
   const toEpochDate = get(messageResponse[0], "eventDetails.toDate");
-  const fromTime = new Date(fromEpochDate)
-    .toString()
-    .split(" ")[4]
-    .substring(0, 5);
-  const toTime = new Date(toEpochDate)
-    .toString()
-    .split(" ")[4]
-    .substring(0, 5);
-  set(messageResponse[0], "eventDetails.fromTime", fromTime);
-  set(messageResponse[0], "eventDetails.toTime", toTime);
+
+  if (get(messageResponse[0], "eventType") === "EVENTSONGROUND") {
+    const fromTime = new Date(fromEpochDate)
+      .toString()
+      .split(" ")[4]
+      .substring(0, 5);
+    set(messageResponse[0], "eventDetails.fromTime", fromTime);
+    const toTime = new Date(toEpochDate)
+      .toString()
+      .split(" ")[4]
+      .substring(0, 5);
+    set(messageResponse[0], "eventDetails.toTime", toTime);
+  }
   messageResponse && dispatch(prepareFinalObject("events[0]", messageResponse[0]));
 };
 
-export const getDeleteButton = () => {
+export const getDeleteButton = (eventType) => {
   const uuid = getQueryArg(window.location.href, "uuid");
   const isDelete = true;
   return {
@@ -303,8 +323,8 @@ export const getDeleteButton = () => {
 
     children: {
       buttonLabel: getLabel({
-        labelName: "DELETE MESSAGE",
-        labelKey: "MESSAGE_DELETE_BUTTON_LABEL",
+        labelName: eventType === "EVENTSONGROUND" ? "DELETE EVENT" : "DELETE MESSAGE",
+        labelKey: eventType === "EVENTSONGROUND" ? "DELETE_EVENT_LABEL" : "MESSAGE_DELETE_BUTTON_LABEL",
       }),
     },
     onClickDefination: {
@@ -335,16 +355,17 @@ export const ulbFilter = getCommonCard({
         xs: 12,
         sm: 3,
       },
-      props: {
-        data: [
-          {
-            value: "pb.amritsar",
-            label: "TENANT_TENANTS_PB_AMRITSAR",
-          },
-        ],
-        optionValue: "value",
-        optionLabel: "label",
-      },
+      cityDropdown: "common.cities",
+      // props: {
+      //   data: [
+      //     {
+      //       value: getTenantId(),
+      //       label: `TENANT_TENANTS_${getTransformedLocale(getTenantId())}`,
+      //     },
+      //   ],
+      //   optionValue: "value",
+      //   optionLabel: "label",
+      // },
     }),
   }),
 });

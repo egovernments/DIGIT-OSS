@@ -1,7 +1,7 @@
 import * as actionTypes from "./actionTypes";
 import { LOCALATION, ACTIONMENU, MDMS, EVENTSCOUNT, NOTIFICATIONS } from "egov-ui-kit/utils/endPoints";
 import { httpRequest } from "egov-ui-kit/utils/api";
-import { getCurrentAddress } from "egov-ui-kit/utils/commons";
+import { getCurrentAddress, getTransformedNotifications } from "egov-ui-kit/utils/commons";
 import commonConfig from "config/common";
 import { debug } from "util";
 import { setLocale, localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
@@ -219,7 +219,8 @@ export const getNotifications = (queryObject, requestBody) => {
     dispatch(setNotificationsPending());
     try {
       const payload = await httpRequest(NOTIFICATIONS.GET.URL, NOTIFICATIONS.GET.ACTION, queryObject, requestBody);
-      dispatch(setNotificationsComplete(payload.events));
+      const transformedEvents = await getTransformedNotifications(payload.events);
+      dispatch(setNotificationsComplete(transformedEvents));
     } catch (error) {
       dispatch(setNotificationsError(error.message));
     }

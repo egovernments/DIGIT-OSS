@@ -77,6 +77,16 @@ class CityPickerDialog extends Component {
             id="person-city"
             iconPosition="after"
             Icon={DownArrow}
+            iconStyle={ {
+              position: "absolute",
+              color: "#969696",
+              zIndex: 2,
+              bottom: 0,
+              top: 10,
+            //  margin: "auto",
+            }
+
+            }
           />
         </div>
         <Dialog

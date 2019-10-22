@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon, TextField } from "components";
+import { Icon } from "components";
 import filter from "lodash/filter";
 import isUndefined from "lodash/isUndefined";
 import AutoComplete from "material-ui/AutoComplete";
@@ -79,24 +79,8 @@ class SearchService extends React.Component {
     const { getNameById, onChangeText, getTransformedItems } = this;
 
     return (
-      <div className={`${classes.root} dashboard-search-main-cont`}>
+      <div className={`${classes.root} dashboard-search-main-cont desktopboxalign`}>
         <Icon action="action" name="search" style={{ marginLeft: 12 }} />
-        {/* <TextField InputProps={{ disableUnderline: true }} className={classes.input} placeholder={"Search Services & Information"} />
-        <TextField
-          style={{ height: 56, padding: "0px 0px 20px 10px" }}
-          id="dashboard-search"
-          underlineShow={false}
-          value={this.state.searchValue}
-          hintText={
-            <Label
-              label="COMMON_SEARCH_SERVICE_INFORMATION"
-              color="rgba(0, 0, 0, 0.38)"
-              fontSize={16}
-              containerStyle={{ marginLeft: 10, paddingBottom: 5 }}
-            />
-          }
-          onChange={(e) => this.onSearchClick(e)}
-        /> */}
         <AutoComplete
           hintText={
             <Label
@@ -122,7 +106,7 @@ class SearchService extends React.Component {
           }}
         />
 
-        <Icon action="av" name="mic" style={{ marginRight: 12 }} />
+        {/* <Icon action="av" name="mic" style={{ marginRight: 12 }} /> */}
       </div>
     );
   }

@@ -148,7 +148,8 @@ const withAuthorization = (options = {}) => (Component) => {
               searchButton={searchButton}
               helpButton={helpButton}
               notificationButton={notificationButton}
-              className={isHomeScreen ? "rainmaker-header-home-small-screen" : "rainmaker-header"}
+              //className={isHomeScreen&&process.env.REACT_APP_NAME==="Citizen" ? "rainmaker-header-home-small-screen" : "rainmaker-header"}
+              className={"rainmaker-header"}
             />
           ) : null}
           <div className=" col-xs-12" style={{ padding: 0 }}>

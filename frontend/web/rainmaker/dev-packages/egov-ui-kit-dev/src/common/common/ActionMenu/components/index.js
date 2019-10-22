@@ -111,6 +111,12 @@ class ActionMenuComp extends Component {
         searchText: "",
       });
     }
+    /**
+     * Reset menu after arraylist changes
+     */
+    if (nextProps && nextProps.actionListArr != this.props.actionListArr) {
+      this.initialMenuUpdate();
+    }
   }
   changeModulesActions(modules, items) {
     this.setState({
@@ -227,9 +233,9 @@ class ActionMenuComp extends Component {
         <Icon
           name={leftIcon[1]}
           action={leftIcon[0]}
-          // color="rgba(255, 255, 255, 0.87)"
+        // color="rgba(255, 255, 255, 0.87)"
           style={styles.fibreIconStyle}
-          className={`iconClassHover menu-right-icon material-icons whiteColor custom-style-for-${item.leftIcon.name}`}
+          className={`iconClassHover left-icon-color material-icons whiteColor custom-style-for-${item.leftIcon.name}`}
         />
       );
     } else {
@@ -278,7 +284,7 @@ class ActionMenuComp extends Component {
                     <Icon
                       name="chevron-right"
                       action="navigation"
-                    //  color="rgba(255, 255, 255, 0.87)"
+                  //  color="rgba(255, 255, 255, 0.87)"
                     className="iconClassHover material-icons whiteColor menu-right-icon"
                       style={styles.arrowIconStyle}
                     />
@@ -409,7 +415,7 @@ class ActionMenuComp extends Component {
                             className="menuStyle"
                             //defaultLabel={item.displayName}
                             label={item.name ? `ACTION_TEST_${item.displayName.toUpperCase().replace(/[.:-\s\/]/g, "_")}` : ""}
-                           // color="rgba(255, 255, 255, 0.87)"
+                         // color="rgba(255, 255, 255, 0.87)"
                           />
                         }
                       />
@@ -453,7 +459,7 @@ class ActionMenuComp extends Component {
               }}
             >
               <TextFieldIcon
-                className="menu-label-style"
+                className="menu-label-style1"
                 value={searchText}
                 hintText={<Label label="PT_SEARCH_BUTTON" className="menuStyle" />}
                 iconStyle={styles.inputIconStyle}
@@ -524,7 +530,7 @@ class ActionMenuComp extends Component {
                     className="menuStyle"
                     defaultLabel="COMMON_ACTION_TEST_COLLAPSE"
                     label={menuDrawerOpen ? "COMMON_ACTION_TEST_COLLAPSE" : ""}
-                  //  color="rgba(255, 255, 255, 0.87)"
+                   //  color="rgba(255, 255, 255, 0.87)"
 
                   />
                 }

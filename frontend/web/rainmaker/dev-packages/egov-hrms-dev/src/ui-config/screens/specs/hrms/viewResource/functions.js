@@ -16,7 +16,7 @@ import {
   showHideAdhocPopup,
   validateFields
 } from "../../utils";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 // SET ALL SIMPLE DATES IN YMD FORMAT
@@ -181,7 +181,7 @@ export const createUpdateEmployee = async (state, dispatch, action) => {
     state.screenConfiguration.preparedFinalObject,
     "Employee[0].tenantId"
   );
-  const tenantId = pickedTenant || JSON.parse(getUserInfo()).tenantId;
+  const tenantId = pickedTenant || getTenantId();
   let queryObject = [
     {
       key: "tenantId",

@@ -17,6 +17,7 @@
     "datatables-buttons": "^1.0.3",
     "datatables.net-buttons": "^1.5.3",
     "datatables.net-buttons-bs": "^1.5.3",
+    "egov-noc": "0.0.1",
     "egov-tradelicence": "0.0.1",
     "egov-pt": "0.0.1",
     "egov-ui-framework": "0.1.41",

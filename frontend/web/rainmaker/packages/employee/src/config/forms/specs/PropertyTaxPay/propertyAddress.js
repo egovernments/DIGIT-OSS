@@ -4,7 +4,7 @@ import { CITY } from "egov-ui-kit/utils/endPoints";
 import { prepareFormData, fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import set from "lodash/set";
 import get from "lodash/get";
-import { getUserInfo, getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from '../../../common'
 
@@ -149,8 +149,7 @@ const formConfig = {
     },
   },
   afterInitForm: (action, store, dispatch) => {
-    let tenantId = JSON.parse(getUserInfo()).tenantId;
-    let city = JSON.parse(getUserInfo()).permanentAddress;
+    let tenantId = getTenantId();
     let state = store.getState();
     const { citiesByModule } = state.common;
     const { PT } = citiesByModule || {};

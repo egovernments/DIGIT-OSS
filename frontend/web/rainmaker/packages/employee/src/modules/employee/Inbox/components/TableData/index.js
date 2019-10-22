@@ -146,7 +146,7 @@ class TableData extends Component {
     }
     prepareFinalObject("InboxData", inboxData);
 
-    this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }, { key: "businessService", value: "newTL" }]);
+    this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
   };
 
   onModuleFilter = (event) => {
@@ -205,6 +205,9 @@ class TableData extends Component {
               </MenuItem>
               <MenuItem value={"PT"}>
                 <Label label="CS_COMMON_INBOX_PT" />
+              </MenuItem>
+              <MenuItem value={"FIRENOC"}>
+                <Label label="CS_COMMON_INBOX_FIRENOC" />
               </MenuItem>
             </Select>
           </div>

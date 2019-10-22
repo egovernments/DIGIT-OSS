@@ -3,7 +3,7 @@ import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest, loginRequest, uploadFile } from "egov-ui-kit/utils/api";
 import { FILE_UPLOAD } from "egov-ui-kit/utils/endPoints";
 import { validateForm } from "./utils";
-import transformer from "egov-ui-kit/config/forms/transformers";
+import transformer from "../../config/forms/transformers";
 
 export const initForm = (form, recordData) => {
   return {

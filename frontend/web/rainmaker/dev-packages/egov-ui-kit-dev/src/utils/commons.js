@@ -11,6 +11,8 @@ import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import get from "lodash/get";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { localStorageSet, localStorageGet, getTenantId, getUserInfo, getAccessToken } from "egov-ui-kit/utils/localStorageUtils";
+import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+
 export const statusToMessageMapping = {
   rejected: "Rejected",
   closed: "Closed",
@@ -621,7 +623,7 @@ const getEventSLA = (item) => {
     sla = (
       // <div style={{ display: "flex" }}>
       //   <Icon name="access-time" action="device" viewBox="0 0 24 24" style={{ height: "20px", width: "35px" }} />
-      <Label leftWrapperStyle fontSize={14} color="rgba(0, 0, 0, 0.60)" label={disp} containerStyle={{ marginBottom: 5 }} />
+      <Label leftWrapperStyle fontSize={14} color="rgba(0, 0, 0, 0.60)" label={disp} containerStyle={{ marginBottom: 5, marginLeft: 5 }} />
       // </div>
     );
   } else {
@@ -650,10 +652,42 @@ const getEventDate = (eventDate) => {
   return month + ":" + day;
 };
 
-export const getTransformedNotifications = (notifications) => {
+
+
+
+const setDocuments = (fileUrl) => {
+  return {
+    title: "",
+    link: (fileUrl && fileUrl.split(",")[0]) || "",
+    linkText: "View",
+    name:
+      decodeURIComponent(
+        fileUrl
+          .split(",")[0]
+          .split("?")[0]
+          .split("/")
+          .pop()
+          .slice(13)
+      ) || `Document`,
+  };
+};
+
+export const getTransformedNotifications = async (notifications) => {
   let data = [];
-  if (notifications && notifications.length > 0) {
-    data = notifications.map((item) => ({
+  let fileStoreIdArray = {};
+  let fieStoreIdString = [];
+  for (var i = 0; i < notifications.length; i++) {
+    let item = notifications[i];
+    if (item.eventDetails && item.eventDetails.documents) {
+      item.eventDetails.documents.forEach((element) => {
+        fieStoreIdString.push(element.fileStoreId);
+        if (!get(fileStoreIdArray, item.id)) set(fileStoreIdArray, item.id, []);
+        fileStoreIdArray[item.id].push(element.fileStoreId);
+      });
+    }
+
+    data.push({
+      actions: item.actions,
       name: item.name,
       description: item.description,
       eventCategory: item.eventCategory,
@@ -671,17 +705,35 @@ export const getTransformedNotifications = (notifications) => {
       id: item.id,
       tenantId: item.tenantId,
       locationObj: item.eventDetails && { lat: item.eventDetails.latitude || 12.9199988, lng: item.eventDetails.longitude || 77.67078 },
-    }));
+      entryFees: item.eventDetails && item.eventDetails.fees,
+      referenceId: item.referenceId,
+          });
   }
-  return data;
+  const fileUrls = await getFileUrlFromAPI(fieStoreIdString.join(","));
+  const finalArray =
+    data &&
+    data.reduce((result, item) => {
+      const doc =
+        get(fileStoreIdArray, item.id) &&
+        get(fileStoreIdArray, item.id).map((item, index) => {
+          return setDocuments(get(fileUrls, item));
+        });
+      result.push({
+        ...item,
+        documents: doc,
+      });
+      return result;
+    }, []);
+  return finalArray;
 };
 
 export const onNotificationClick = async (history) => {
   try {
+    const permanentCity = JSON.parse(getUserInfo()).permanentCity
     let queryObject = [
       {
         key: "tenantId",
-        value: process.env.REACT_APP_NAME === "Employee" ? getTenantId() : JSON.parse(getUserInfo()).permanentCity,
+        value: permanentCity ? permanentCity : getTenantId(),
       },
     ];
     const requestBody = {

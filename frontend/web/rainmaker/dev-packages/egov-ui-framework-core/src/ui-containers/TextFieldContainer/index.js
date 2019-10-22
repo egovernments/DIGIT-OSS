@@ -165,7 +165,8 @@ const mapStateToProps = (state, ownprops) => {
     data,
     optionValue,
     optionLabel,
-    sourceJsonPath
+    sourceJsonPath,
+    cityDropdown
   } = ownprops;
   const { screenConfiguration, app } = state;
   const { localizationLabels } = app;
@@ -191,6 +192,8 @@ const mapStateToProps = (state, ownprops) => {
       dropdownData = constructDropdown(
         get(preparedFinalObject, sourceJsonPath, [])
       );
+    } else if (cityDropdown) {
+      dropdownData = constructDropdown(get(state, cityDropdown, []));
     }
   }
 

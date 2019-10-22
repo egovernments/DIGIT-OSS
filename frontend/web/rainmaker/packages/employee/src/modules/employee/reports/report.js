@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { commonApiPost } from "egov-ui-kit/utils/api";
 import SearchForm from "./searchForm";
 import ReportResult from "./reportResult";
-import { getMetaDataUrl, getReportName, options } from "./commons/url";
+import { getMetaDataUrl, options } from "./commons/url";
 import commonConfig from "config/common.js";
 import { Screen } from "modules/common";
 import { getTenantId, setReturnUrl, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
@@ -24,7 +24,6 @@ class Report extends Component {
   }
 
   componentDidMount() {
-    // localStorageSet("searchCriteria", "{}");
     this.props.resetForm();
     this.initData(this.props.match.params.moduleName, this.props.match.params.reportName);
     this.hasReturnUrl();
@@ -39,18 +38,10 @@ class Report extends Component {
   initData = (moduleName, reportName) => {
     var _this = this;
     let { setMetaData, setFlag, showTable, setForm, setReportResult } = this.props;
-
     var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
-
-    // setFlag(1);
-    // showTable(false);
-    // setReportResult({});
-    // setMetaData(mockData);
-    let urlBase = getMetaDataUrl(moduleName);
-
-    //commonApiPost("/report/" + moduleName + "/metadata/_get", {}, { tenantId: tenantId, reportName: "SourceWiseReport" }).then(
+    let urlBase = getMetaDataUrl(moduleName,reportName);
     urlBase &&
-      commonApiPost(urlBase, {}, { tenantId: tenantId, reportName: getReportName(moduleName, reportName) }).then(
+      commonApiPost(urlBase, {}, { tenantId: tenantId, reportName: reportName}).then(
         function(response) {
           if (response && response.reportDetails) response.reportDetails.reportName = reportName; //temp soln for custom report name
           setFlag(1);
@@ -71,7 +62,8 @@ class Report extends Component {
 
   render() {
     let { match } = this.props;
-    let needDefaultSearch = options[this.props.match.params.moduleName] ? options[this.props.match.params.moduleName][0].needDefaultSearch : false;
+    // let needDefaultSearch = options[this.props.match.params.moduleName] ? options[this.props.match.params.moduleName][0].needDefaultSearch : false;
+    let needDefaultSearch = false;
     return (
       <Screen>
         <div style={{ margin: "8px" }}>

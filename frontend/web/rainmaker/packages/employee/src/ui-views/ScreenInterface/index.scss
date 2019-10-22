@@ -115,9 +115,21 @@ span[class^="MuiFormLabel-asterisk"] {
   .apply-wizard-footer {
     position: fixed;
     bottom: 0;
+    display: flex;
+    z-index: 1;
     left: 0;
     width: 100%;
     overflow: inherit !important;
+  }
+
+  .button-wizard-footer {
+    min-width: 50%;
+    height: 48px;
+  }
+
+  .single-button-wizard-footer {
+    min-width: 100%;
+    height: 48px;
   }
 }
 @media only screen and (min-width: 953px) {
@@ -132,6 +144,13 @@ span[class^="MuiFormLabel-asterisk"] {
     margin: 30px 16px 88px 16px;
   }
 
+  .button-wizard-footer,
+  .single-button-wizard-footer {
+    min-width: 200px !important;
+    height: 48px !important;
+    margin-right: 45px !important;
+  }
+
   .apply-wizard-footer {
     background-color: #ffffff;
     box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
@@ -139,6 +158,7 @@ span[class^="MuiFormLabel-asterisk"] {
     position: fixed !important;
     bottom: 0;
     right: 0;
+    z-index: 1;
     width: 83.33vw;
     text-align: right;
     overflow: inherit !important;
