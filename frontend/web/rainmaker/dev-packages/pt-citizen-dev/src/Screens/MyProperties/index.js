@@ -90,7 +90,7 @@ class MyProperties extends Component {
     this.props.history.push(
       `/property-tax/my-properties/property/${encodeURIComponent(
         propertyId
-      )}/${tenantId}`
+      )}/${tenantId}?isMutationApplication=true`
     );
   };
 
