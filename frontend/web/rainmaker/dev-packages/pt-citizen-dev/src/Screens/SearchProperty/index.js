@@ -99,6 +99,35 @@ class SearchProperty extends Component {
     }
   };
 
+  getLink = (userType, history, id, tenantId)=>{
+    return (
+      <a
+        style={{
+          height: 20,
+          lineHeight: "auto",
+          minWidth: "inherit",
+          cursor: "pointer",
+          textDecoration: "underline"
+        }}
+        onClick={
+          userType === "CITIZEN"
+            ? e => {
+              history.push(
+                `/property-tax/my-properties/property/${id}/${tenantId}?isMutationApplication=true`
+              );
+            }
+            : e => {
+              history.push(
+                `/property-tax/property/${id}/${tenantId}`
+              );
+            }
+        }
+      >
+        {id}
+      </a>
+    );
+  }
+
   extractTableData = properties => {
     const { history } = this.props;
     const userType = JSON.parse(getUserInfo()).type;
@@ -123,61 +152,10 @@ class SearchProperty extends Component {
       // const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
       // let assessmentNo = latestAssessment.assessmentNumber;
       // const uuid = get(latestAssessment, "citizenInfo.uuid");
-      let propertyLink = (
-        <a
-          style={{
-            height: 20,
-            lineHeight: "auto",
-            minWidth: "inherit",
-            cursor: "pointer",
-            textDecoration: "underline"
-          }}
-          onClick={
-            userType === "CITIZEN"
-              ? e => {
-                history.push(
-                  `/property-tax/my-properties/property/${propertyId}/${tenantId}`
-                );
-              }
-              : e => {
-                history.push(
-                  `/property-tax/property/${propertyId}/${tenantId}`
-                );
-              }
-          }
-        >
-          {propertyId}
-        </a>
-      );
-      let applicationLink = (
-        <a
-          style={{
-            height: 20,
-            lineHeight: "auto",
-            minWidth: "inherit",
-            cursor: "pointer",
-            textDecoration: "underline"
-          }}
-          onClick={
-            userType === "CITIZEN"
-              ? e => {
-                history.push(
-                  `/property-tax/my-properties/property/${applicationNo}/${tenantId}`
-                );
-              }
-              : e => {
-                history.push(
-                  `/property-tax/property/${applicationNo}/${tenantId}`
-                );
-              }
-          }
-        >
-          {applicationNo}
-        </a>
-      );
+
       let item = {
-        applicationNo: applicationLink,
-        propertyId: propertyLink,
+        applicationNo: this.getLink(userType, history, applicationNo, tenantId),
+        propertyId: this.getLink(userType, history, propertyId, tenantId),
         applicationType: applicationType,
         name: name,
         date: date,
