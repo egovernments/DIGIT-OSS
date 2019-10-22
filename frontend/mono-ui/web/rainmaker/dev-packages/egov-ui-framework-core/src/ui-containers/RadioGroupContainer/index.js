@@ -7,6 +7,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 
@@ -23,39 +24,69 @@ const styles = theme => ({
     margin: 0
   },
   radioRoot: {
-    marginBottom: 0
+    marginBottom: 12
+  },
+  formlabel:{
+    fontSize:12,
+    fontWeight:400,
+    letterSpacing:0.56
   }
 });
 
 class RadioButtonsGroup extends React.Component {
-  state = {
-    value: ""
-  };
-  componentDidMount = () => {
-    const { defaultValue } = this.props;
-    this.setState({
-      value: defaultValue
-    });
-  };
+ 
 
   handleChange = event => {
-    const { jsonPath, approveCheck } = this.props;
-    this.setState({ value: event.target.value }, () => {
-      approveCheck(jsonPath, this.state.value);
-    });
+    const {
+      screenKey,
+      componentJsonpath,
+      jsonPath,
+      approveCheck,
+      onFieldChange
+    } = this.props;
+    onFieldChange(
+      screenKey,
+      componentJsonpath,
+      "props.value",
+      event.target.value
+    );
   };
 
   render() {
-    const { classes, buttons, fieldValue } = this.props;
+  //  const { classes, buttons, fieldValue } = this.props;
+  const {
+    label,
+    classes,
+    buttons,
+    defaultValue,
+    value,
+    fieldValue,
+    required
+  } = this.props;
 
     return (
       <div className={classes.root}>
-        <FormControl component="fieldset" className={classes.formControl}>
+        {/* <FormControl component="fieldset" className={classes.formControl}> */}
+        <FormControl
+          component="fieldset"
+          className={classes.formControl}
+          required={required}
+        >
+          <FormLabel className={classes.formLabel}>
+            {label && label.key && (
+              <LabelContainer
+                className={classes.formLabel}
+                labelName={label.name}
+                labelKey={label.key}
+              />
+            )}
+          </FormLabel>
           <RadioGroup
             aria-label="Gender"
             name="gender1"
             className={classes.group}
-            value={this.state.value || fieldValue}
+           // value={this.state.value || fieldValue}
+           value={value || fieldValue || defaultValue}
             onChange={this.handleChange}
           >
             {buttons &&
@@ -66,12 +97,13 @@ class RadioButtonsGroup extends React.Component {
                     classes={{ label: "radio-button-label" }}
                     value={button.value}
                     control={
-                      <Radio
-                        classes={{
-                          root: "radio-root"
-                        }}
-                        color="primary"
-                      />
+                      // <Radio
+                      //   classes={{
+                      //     root: "radio-root"
+                      //   }}
+                      //   color="primary"
+                      // />
+                     <Radio className={classes.radioRoot} color="primary" />
                     }
                     // label={button.label}
                     label={
