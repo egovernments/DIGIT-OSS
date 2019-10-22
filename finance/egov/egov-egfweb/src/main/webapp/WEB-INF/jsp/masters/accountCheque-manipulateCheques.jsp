@@ -174,8 +174,8 @@
 					<td class="greybox">Financial Year<span class="mandatory1">*</span></td>
 					<td class="greybox"><s:select name="serialNo" id="serialNo"
 							list="dropdownData.financialYearList" listKey="id"
-							listValue="finYearRange" headerKey="-1"
-							headerValue="----Choose----" required="true" value="-1" />
+							listValue="finYearRange" headerKey="-1" value="%{financialYearId}"
+							headerValue="----Choose----" required="true" disabled="true"/>
 					<td class="greybox"></td>
 					<td class="greybox"></td>
 
@@ -241,7 +241,7 @@
 			var serialNo = document.getElementById("serialNo").value;
 			var isDefaultDeptEnabled = document.getElementById("isDefaultDeptEnabled").value;
 
-			if ((fromChequeNo != "" || toChequeNo != "" || receivedDate != "" || serialNo != "-1") ? true : isDefaultDeptEnabled == 'true' ? false : department != "")
+			if ((fromChequeNo != "" || toChequeNo != "" || receivedDate != "") ? true : isDefaultDeptEnabled == 'true' ? false : department != "")
 				document.getElementById("lblError").innerHTML = "Please click on add new cheque or unselect required fields";
 			else {
 				document.chequeMaster.action = '/services/EGF/masters/accountCheque-save.action';

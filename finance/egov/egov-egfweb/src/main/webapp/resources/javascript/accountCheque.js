@@ -119,7 +119,7 @@ function updateGridData() {
 	// validate invalid cheque range.
 	var fromchqNum = parseInt(document.getElementById("fromChqNo").value.trim() * 1);
 	var tochqNum = parseInt(document.getElementById("toChqNo").value.trim() * 1);
-	if (fromchqNum >= tochqNum) {
+	if (fromchqNum > tochqNum) {
 		document.getElementById("lblError").innerHTML = "from cheque number should be less than to cheque number";
 		return false;
 	}
@@ -199,17 +199,19 @@ function updateGridData() {
 }
 
 function clearHeaderData() {
-
 	document.getElementById("fromChqNo").value = "";
 	document.getElementById("toChqNo").value = "";
 	document.getElementById("receivedDate").value = "";
-	document.getElementById("serialNo").value = "-1";
+	//document.getElementById("serialNo").value = "-1";
 	var deptObj = document.getElementById("departmentList");
 	var isDefaultDeptEnabled = document.getElementById("isDefaultDeptEnabled").value;
 	while (!(isDefaultDeptEnabled == 'true') && deptObj.selectedIndex != -1) {
 			deptObj.options[deptObj.selectedIndex].selected = false;			
 	}
 }
+
+
+
 // used to check the cheque range overlapping on blur of from cheque and to
 // cheque number in the grid.
 function validateCheque(obj) {
@@ -240,7 +242,7 @@ function validateCheque(obj) {
 		chequeRangeArray.splice(index, 1, fromchqNum + "-" + tochqNum + "-"
 				+ deptCode + "-" + serialNo);
 
-		if (parseInt(fromchqNum) >= parseInt(tochqNum)) {
+		if (parseInt(fromchqNum) > parseInt(tochqNum)) {
 			document.getElementById("lblErrorGrid").innerHTML = "from cheque number should be less than to cheque number";
 			return false;
 		}
