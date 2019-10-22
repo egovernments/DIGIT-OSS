@@ -12,6 +12,7 @@ import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorage
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 
 let floorDropDownData = [];
+let innerDimensionsData =[{value : "yes" , label :"Yes" },{value : "no" , label :"No" }]
 
 for (var i = 1; i <= 25; i++) {
   floorDropDownData.push({ label: i, value: i });
@@ -130,19 +131,23 @@ export const innerDimensions = {
     type: "singleValueList",
     floatingLabelText: "Inner Dimensions Known",
     hintText: "Enter Inner Dimensions",
-    errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
+    // errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
-    dropDownData: [],
-    // updateDependentFields: ({ formKey, field, dispatch, state }) => {
-    //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
-    //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
-    //   if (propertyType === "VACANT" || propertySubType === "INDEPENDENTPROPERTY") {
-    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
-    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
-    //   }
-    // },
+    dropDownData: innerDimensionsData,
+    updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
+      const { value } = sourceField;
+      const dependentFields1 = ["roomArea", "balconyArea","garageArea","bathroomArea"];
+      switch (value) {
+        case "yes":
+          setDependentFields(dependentFields1, dispatch, formKey, true);
+          break;
+        default:
+          setDependentFields(dependentFields1, dispatch, formKey, false);
+          break;
+      }
+    },
   },
 };
 export const roomArea = {
