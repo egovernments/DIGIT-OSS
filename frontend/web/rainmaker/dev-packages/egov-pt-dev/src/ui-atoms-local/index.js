@@ -12,6 +12,10 @@ const ApplicationNoContainer = Loadable({
   loader: () => import("./applicationNumber"),
   loading: () => <Loading />
 });
+const PropertyIdContainer = Loadable({
+  loader: () => import("./propertyId"),
+  loading: () => <Loading />
+});
 
 const Checkbox = Loadable({
   loader: () => import("./Checkbox"),
@@ -57,5 +61,6 @@ export {
   Asteric,
   MenuButton,
   FireNocIcon,
-  MyApplicationIcon
+  MyApplicationIcon,
+  PropertyIdContainer
 };
