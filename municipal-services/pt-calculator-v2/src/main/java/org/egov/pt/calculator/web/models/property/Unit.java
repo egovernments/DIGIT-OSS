@@ -26,7 +26,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString
-@EqualsAndHashCode
 public class Unit   {
         @JsonProperty("id")
         private String id;
