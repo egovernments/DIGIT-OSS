@@ -58,7 +58,7 @@ function getFormData($form) {
 }
 
 function callAjaxSearch() {
-	doLoadingMask();
+//	doLoadingMask();
 	var fd = jQuery('#mrform').serialize();
 	jQuery.ajax({
 		url : "/services/EGF/brs/manualReconciliation-ajaxSearch.action",
@@ -74,13 +74,13 @@ function callAjaxSearch() {
 				autoclose : true
 			});
 
-			undoLoadingMask();
+//			undoLoadingMask();
 		},
 		error : function(response) {
 			console.log("failed");
 
 			bootbox.alert("Failed to search Details");
-			undoLoadingMask();
+//			undoLoadingMask();
 		}
 	});
 
