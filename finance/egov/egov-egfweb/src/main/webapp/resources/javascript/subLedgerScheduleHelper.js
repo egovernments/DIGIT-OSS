@@ -153,6 +153,7 @@
 			if(entity_array.length==2)
 			{
 				document.getElementById("glcode").value=entity_array[0].split("`-`")[0];
+				document.getElementById("accName").value=entity_array[1];
 				
 			}
 		}

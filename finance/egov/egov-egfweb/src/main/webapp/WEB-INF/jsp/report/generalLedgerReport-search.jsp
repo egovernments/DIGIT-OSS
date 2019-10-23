@@ -60,6 +60,10 @@
 	width: 9%;
 	text-align: left;
 }
+#accountName{
+background: #DEDEDE;
+}
+
 
 #codescontainer .yui-ac-content {
 	position: absolute;
@@ -146,8 +150,10 @@
 								onfocus='autocompleteAccountCodes(this);'
 								onblur='splitAccountCodes(this);' />
 							 </td>
-						<td class="bluebox"></td>
-						<td class="bluebox"></td>
+						<td class="greybox"><s:text name="generalLedger.accountName" /></td>
+						<td class="greybox">
+						<s:textfield disabled="true" name="accountName" id="accountName"></s:textfield>
+							 </td>
 					</tr>
 					<tr>
 						<td class="greybox"><s:text name="generalLedger.fund" /><span
@@ -155,7 +161,8 @@
 						<td class="greybox"><s:select name="fund_id" id="fund_id"
 								list="dropdownData.fundList" listKey="id" listValue="name"
 								headerKey="" headerValue="----Choose----" /></td>
-								<td class="greybox"><s:text name="generalLedger.department" /></td>
+								
+						<td class="greybox"><s:text name="generalLedger.department" /></td>
 						<td class="greybox"><s:select name="departmentCode"
 								id="departmentCode" list="dropdownData.departmentList"
 								listKey="code" listValue="name" headerKey=""   

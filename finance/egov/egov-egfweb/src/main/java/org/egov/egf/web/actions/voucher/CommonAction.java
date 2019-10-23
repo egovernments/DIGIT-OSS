@@ -3268,7 +3268,9 @@ public class CommonAction extends BaseFormAction {
             LOGGER.debug("Starting ajaxLoadGLreportCodes...");
         if (glCode == null)
             glCodesList = new ArrayList<CChartOfAccounts>();
-        else
+        else {
+            
+            String glCodeName = "%" + glCode.toLowerCase() + "%";
             glCodesList = persistenceService
                     .findAllBy(
                             "select ca from CChartOfAccounts ca where"
@@ -3276,8 +3278,9 @@ public class CommonAction extends BaseFormAction {
                                     " ca.glcode not in(select glcode from CChartOfAccounts where glcode like '47%' and glcode not like '471%' and glcode !='4741')"
                                     +
                                     " and ca.glcode not in (select glcode from CChartOfAccounts where glcode = '471%') " +
-                                    " and ca.isActiveForPosting=true and ca.classification=4  and ca.glcode like ?",
-                            glCode + "%");
+                                    " and ca.isActiveForPosting=true and ca.classification=4  and ca.glcode like ? or lower (ca.name) like ?",
+                            glCodeName ,glCodeName);
+        }
 
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed ajaxLoadGLreportCodes.");
@@ -3292,10 +3295,13 @@ public class CommonAction extends BaseFormAction {
         if (glCode == null)
             glCodesList = new ArrayList<CChartOfAccounts>();
         else
-            glCodesList = persistenceService.findAllBy(
-                    "select DISTINCT coa from CChartOfAccounts coa,CChartOfAccountDetail cod  where " +
-                            " coa = cod.glCodeId and coa.classification=4 and coa.glcode like ?",
-                    glCode + "%");
+        {
+            String glCodeName = "%" + glCode.toLowerCase() + "%";
+           glCodesList = persistenceService.findAllBy(
+                    "select DISTINCT coa from CChartOfAccounts coa inner join CChartOfAccountDetail cod  on " +
+                            " coa = cod.glCodeId where coa.classification=4 and coa.glcode like ? or lower(coa.name) like ? ",
+                            glCodeName ,glCodeName);
+        }
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed ajaxLoadSLreportCodes.");
         return "glCodes";
@@ -4100,7 +4106,4 @@ public class CommonAction extends BaseFormAction {
     public void setListOfDepartments(ArrayList<Department> listOfDepartments) {
         this.listOfDepartments = listOfDepartments;
     }
-    
-    
-
 }

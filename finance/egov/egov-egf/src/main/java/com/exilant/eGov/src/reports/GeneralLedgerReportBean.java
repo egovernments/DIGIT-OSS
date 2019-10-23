@@ -98,6 +98,7 @@ public class GeneralLedgerReportBean
     private String CGN;
     private String Cheque;
     private String accountCode;
+    private String accountName;
     private String fundName;
 
     private String netRcptAmount;
@@ -157,6 +158,7 @@ public class GeneralLedgerReportBean
         functionCodeId = null;
         functionCode = null;
         heading = null;
+        accountName = "";
     }
 
     public GeneralLedgerReportBean()
@@ -203,6 +205,7 @@ public class GeneralLedgerReportBean
         fundName = "";
         netRcptAmount = "&nbsp;";
         netPymntAmount = "&nbsp;";
+        accountName="";
 
     }
 
@@ -740,6 +743,14 @@ public class GeneralLedgerReportBean
 
     public void setEntityName(final String entityName) {
         this.entityName = entityName;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
     public String getAccEntitycode() {

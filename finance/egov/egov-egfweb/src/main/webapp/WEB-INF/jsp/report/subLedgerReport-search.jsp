@@ -98,6 +98,9 @@
 #codescontainer li.yui-ac-prehighlight {
 	background: #FFFFCC;
 }
+#accountName{
+background: #DEDEDE;
+}
 </style>
 <script type="text/javascript"
 	src="/services/EGF/resources/javascript/ajaxCommonFunctions.js?rnd=${app_release_no}"></script>
@@ -164,6 +167,14 @@
 									value="%{glCode1}" autocomplete="off"
 									onfocus='autocompleteAccountCodes(this);'
 									onblur='splitAccountCodes(this);' /></td>
+						<td class="greybox"><s:text name="subLedger.accountName" /></td>
+						<td class="greybox">
+						<s:textfield disabled="true" name="accountName" id="accountName"></s:textfield>
+							 </td>
+							 <td class="greybox"></td>
+							<td class="greybox"></td>
+									</tr>
+							<tr>
 							<td class="bluebox"><s:text name="subLedger.fund" /><span
 								class="mandatory"></span></td>
 							<td class="bluebox"><s:select name="fund_id" id="fund_id"

@@ -144,6 +144,7 @@ public class GeneralLedgerReport {
         final String fundSourceId = reportBean.getFundSource_id();
         reportBean.setFundName(getFundName(fundId));
         reportBean.setAccountCode(getAccountName(glCode1));
+        reportBean.setAccountName(getAccountName(glCode1));
         String formstartDate = "";
         String formendDate = "";
         final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");

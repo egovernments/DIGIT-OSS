@@ -87,6 +87,7 @@
    		}	
         document.getElementById("glCode2").value=document.getElementById("glCode1").value;
         document.getElementById("accEntityId").value=document.getElementById("subledger").value;
+        document.getElementById("accountName").value;
         
         doLoadingMask();
       	 /*var formObj = jQuery(document.getElementById("subLedgerForm"));
@@ -153,6 +154,7 @@
 			if(entity_array.length==2)
 			{
 				document.getElementById("glCode1").value=entity_array[0].split("`-`")[0];
+				document.getElementById("accountName").value=entity_array[1];
 				
 			}
 		}
