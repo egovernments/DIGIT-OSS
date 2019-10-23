@@ -17,7 +17,7 @@ import {
   import { institutionSummary } from "./propertyDetailResource/applicantSummary";
   import { documentsSummary } from "./summaryResource/documentsSummary";
   import { estimateSummary } from "./summaryResource/estimateSummary";
-  import { footer } from "./summaryResource/footer";
+  import { footer } from "./propertyDetailResource/footer";
   import { nocSummary } from "./summaryResource/nocSummary";
   import { propertySummary } from "./propertyDetailResource/propertySummary";
   import { assessmentSummary } from "./propertyDetailResource/assessmentSummary";

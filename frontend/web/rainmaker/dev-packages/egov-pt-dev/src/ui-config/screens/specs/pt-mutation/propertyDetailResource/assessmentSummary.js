@@ -67,14 +67,55 @@ export const assessmentSummary = getCommonGrayCard({
     }
   },
   cardOne: propertyDetails,
+  floorDetailHeader:{
+    uiFramework: "custom-molecules-local",
+    moduleName: "egov-pt",
+    componentPath: "DividerWithLabel",
+    props: {
+      className: "hr-generic-divider-label",
+      labelProps: {},
+      dividerProps: {},
+      label:"Ground Floor",
+      style: { marginBottom: "1px" }
+    },children: {
+      header: {
+        gridDefination: {
+          xs: 8
+        },
+        ...getCommonSubHeader({
+          labelName: "Ground Floor",
+          labelKey: "PROPERTYTAX_FLOOR_0"
+        })
+      }
+    },
+    type: "array"
+  },
   cardTwo:{
     uiFramework: "custom-containers",
     componentPath: "MultiItem",
     props: {
       className: "applicant-summary",
       scheama: getCommonCard({
-        applicantContainer: getCommonContainer({
-        
+        header: {
+          uiFramework: "custom-atoms",
+          componentPath: "Container",
+          props: {
+            style: { marginBottom: "10px" }
+          },
+          children: {
+            header: {
+              gridDefination: {
+                xs: 8
+              },
+              ...getCommonSubHeader({
+                labelName: "Unit-1",
+                labelKey: "Unit-1"
+              })
+            },
+            
+          }
+        },
+          body: getCommonContainer({
           usageCategoryMajor: getLabelWithValue(
             {
               labelName: "Unit Usage Type",
