@@ -12,7 +12,10 @@ import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorage
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 
 let floorDropDownData = [];
-let innerDimensionsData =[{value : "yes" , label :"Yes" },{value : "no" , label :"No" }]
+let innerDimensionsData =[{value : "yes" , label :"Yes" },{value : "no" , label :"No" }];
+let constructiontypes =[{value : "road1" , label :"rd1" }];
+let constructionyears =[{value:"2019",label:"2019-20"},{value:"2018",label:"2018-19"}];
+
 
 for (var i = 1; i <= 25; i++) {
   floorDropDownData.push({ label: i, value: i });
@@ -138,9 +141,9 @@ export const innerDimensions = {
     dropDownData: innerDimensionsData,
     updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
       const { value } = sourceField;
-      const dependentFields1 = ["roomArea", "balconyArea","garageArea","bathroomArea"];
+      const dependentFields1 = ["roomArea", "subUsageType","balconyArea","garageArea","bathroomArea"];
       switch (value) {
-        case "yes":
+        case "no":
           setDependentFields(dependentFields1, dispatch, formKey, true);
           break;
         default:
@@ -176,7 +179,7 @@ export const balconyArea = {
     id: "balconyArea",
     // jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
     type: "number",
-    floatingLabelText: "Balcony + Corridor + Kitchen + store Area(sq ft)",
+    floatingLabelText: "Balcony ,Corridor, Kitchen ,store Area(sq ft)",
     hintText: "Enter Balcony Area",
     errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
     fullWidth: true,
@@ -221,20 +224,12 @@ export const bathroomArea = {
     id: "bathroomArea",
     // jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
     type: "number",
-    floatingLabelText: "Bathroom + Staircase Area(sq ft)",
+    floatingLabelText: "Bathroom & Staircase Area(sq ft)",
     hintText: "PT_FORM2_PLOT_SIZE_PLACEHOLDER",
     errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
-    // updateDependentFields: ({ formKey, field, dispatch, state }) => {
-    //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
-    //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
-    //   if (propertyType === "VACANT" || propertySubType === "INDEPENDENTPROPERTY") {
-    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
-    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
-    //   }
-    // },
   },
 };
 
@@ -249,14 +244,6 @@ export const coveredArea = {
     fullWidth: true,
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
-    // updateDependentFields: ({ formKey, field, dispatch, state }) => {
-    //   let propertyType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertyType");
-    //   let propertySubType = get(state, "common.prepareFormData.Properties[0].propertyDetails[0].propertySubType");
-    //   if (propertyType === "VACANT" || propertySubType === "INDEPENDENTPROPERTY") {
-    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].landArea", field.value));
-    //     dispatch(prepareFormData("Properties[0].propertyDetails[0].buildUpArea", null));
-    //   }
-    // },
   },
 };
 
@@ -276,6 +263,35 @@ export const builtArea = {
     pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
   },
 };
+export const constructionType = {
+  constructionType: {
+    id: "constructiontype",
+    jsonPath: "",
+    // localePrefix: { moduleName: "PropertyTax", masterName: "ConstructionType" },
+    type: "singleValueList",
+    floatingLabelText: "Construction Type",
+    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    fullWidth: true,
+    hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+    numcols: 4,
+    dropDownData:constructiontypes,
+  },
+};
+export const constructionYear = {
+  constructionYear: {
+    id: "constructionYear",
+    jsonPath: "",
+    // localePrefix: { moduleName: "PropertyTax", masterName: "ConstructionYear" },
+    type: "singleValueList",
+    floatingLabelText: "Construction Year",
+    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    fullWidth: true,
+    hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+    numcols: 4,
+    dropDownData:constructionyears,
+  },
+};
+
 
 export const superArea = {
   superArea: {
@@ -748,6 +764,28 @@ export const pincode = {
     errorMessage: "PT_PINCODE_ERROR_MESSAGE",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     pattern: "^([0-9]){6}$",
+  },
+};
+export const thana ={
+  thana:{
+    id:"thana",
+    type: "singleValueList",
+    floatingLabelText: "Thana",
+    hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+    errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
+    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+    },
+};
+export const roadType = {
+  roadType: {
+    id: "road-type",
+    // jsonPath: "Properties[0].address.doorNo",
+    type: "singleValueList",
+    floatingLabelText: "Road Type",
+    hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+    numcols: 6,
+    errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
+    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
   },
 };
 

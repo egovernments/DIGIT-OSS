@@ -3,7 +3,10 @@ import {
   mohalla,
   street,
   colony,
+  roadType,
   houseNumber,
+  constructionType,
+  thana,
   dummy
 } from "egov-ui-kit/config/forms/specs/PropertyTaxPay/utils/reusableFields";
 import {
@@ -128,11 +131,14 @@ const formConfig = {
       }
     },
     ...dummy,
+    ...roadType,
     ...houseNumber,
     ...colony,
     ...street,
     ...mohalla,
     ...pincode,
+    ...constructionType,
+    ...thana,
     oldPID: {
       id: "oldpid",
       type: "textFieldIcon",
