@@ -1,4 +1,4 @@
-package org.egov.collection.repository.rowmapper;
+/*package org.egov.collection.repository.rowmapper;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -148,9 +148,9 @@ public class CollectionResultSetExtractor implements ResultSetExtractor<List<Rec
 			BillDetail billDetail = receipt.getBill().get(0).getBillDetails().get(0);
 			BillAccountDetail billAccountDetail = populateAccountDetail(resultSet, billDetail);
 			
-			/*
+			
 			 * adding paid amount only when data is not duplicate
-			 */
+			 
 			if (billDetail.addBillAccountDetail(billAccountDetail))
 				billDetail.setAmountPaid(billDetail.getAmountPaid().add(billAccountDetail.getAdjustedAmount()));
 		}
@@ -195,3 +195,4 @@ public class CollectionResultSetExtractor implements ResultSetExtractor<List<Rec
     }
 
 }
+*/

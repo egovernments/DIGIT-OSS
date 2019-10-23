@@ -1,4 +1,4 @@
-package org.egov.collection.util;
+/*package org.egov.collection.util;
 
 import static java.util.Objects.isNull;
 import static org.egov.collection.model.enums.InstrumentTypesEnum.CARD;
@@ -53,12 +53,12 @@ public class ReceiptEnricher {
         this.businessDetailsRepository = businessDetailsRepository;
     }
 
-    /**
+    *//**
      * Fetch instruments from financials for the given receipts
      *
      * @param requestInfo Request Info for the request
      * @param receipts    Receipts to be enriched
-     */
+     *//*
     public void enrichReceiptsWithInstruments(RequestInfo requestInfo, List<Receipt> receipts) {
         Set<String> instruments = receipts.stream().map(receipt -> receipt.getInstrument().getId()).collect(Collectors
                 .toSet());
@@ -71,13 +71,13 @@ public class ReceiptEnricher {
         receipts.forEach(receipt -> receipt.setInstrument(map.get(receipt.getInstrument().getId())));
     }
 
-    /**
+    *//**
      * Fetch bill from billing service for the provided bill id
      * Ensure bill exists and amount paid details exist for all bill details
      * Set paid by and amount paid for each bill detail in the new validated bill
      *
-     */
-   /* public void enrichReceiptPreValidate(ReceiptReq receiptReq) {
+     *//*
+    public void enrichReceiptPreValidate(ReceiptReq receiptReq) {
     	
         Receipt receipt = receiptReq.getReceipt().get(0);
         Bill billFromRequest = receipt.getBill().get(0);
@@ -153,7 +153,7 @@ public class ReceiptEnricher {
         List<Receipt> receipts = new ArrayList<>();
         receipts.add(receipt);
         receiptReq.setReceipt(receipts);
-    }*/
+    }
 
 
 
@@ -163,13 +163,13 @@ public class ReceiptEnricher {
 
 
 
-    /**
+    *//**
      * Fetches bill  based on businessservice
      *
      * @param validatedBill
      * @param businessService
      * @return
-     */
+     *//*
     public List<Bill> getBillForBusinessService(List<Bill> validatedBill, String businessService) {
         List<Bill> bills = new LinkedList<>();
         validatedBill.forEach(bill -> {
@@ -182,7 +182,7 @@ public class ReceiptEnricher {
 
 
 
-    /**
+    *//**
      * Enrich instrument for financials
      * For each bill detail,
      * - Set status to approved by default for now, no workflow
@@ -191,8 +191,8 @@ public class ReceiptEnricher {
      * - Generate and set receipt number
      *
      * @param receiptReq Receipt request to be enriched
-     */
-/*    public void enrichReceiptPostValidate(ReceiptReq receiptReq) {
+     *//*
+    public void enrichReceiptPostValidate(ReceiptReq receiptReq) {
         Receipt receipt = receiptReq.getReceipt().get(0);
         Bill bill = receipt.getBill().get(0);
         String instrumentType = receipt.getInstrument().getInstrumentType().getName();
@@ -219,18 +219,18 @@ public class ReceiptEnricher {
         receipts.add(receipt);
         receiptReq.setReceipt(receipts);
 
-    }*/
+    }
 
 
 
 
-    /**
+    *//**
      * Enrich the instrument object,
      * - In case of cash / card [append card digits], generate transaction number
      * - In case of online, dd, cheque use given txn number, and date
      *
      * @param receiptReq Receipt request to be enriched
-     */
+     *//*
     private void enrichInstrument(ReceiptReq receiptReq) {
         Receipt receipt = receiptReq.getReceipt().get(0);
         String instrumentType = receipt.getInstrument().getInstrumentType().getName();
@@ -273,13 +273,13 @@ public class ReceiptEnricher {
 
 
 
-    /**
+    *//**
      * Enrich the bill account details object
      * - Copy over additional details received part of request to validated bill
      *
      * @param validatedBillDetail   Validated bill detail from billing service
      * @param billDetailFromRequest Bill detail from request
-     */
+     *//*
     private void enrichBillAccountDetails(BillDetail validatedBillDetail, BillDetail billDetailFromRequest) {
         if (!Objects.isNull(billDetailFromRequest.getBillAccountDetails()) && billDetailFromRequest
                 .getBillAccountDetails().size() == validatedBillDetail.getBillAccountDetails().size()) {
@@ -294,11 +294,11 @@ public class ReceiptEnricher {
         }
     }
 
-    /**
+    *//**
      * Apportion adds another billAccDetail for Advance tax head when advance amt is paid, this method enriches that object
      * 
      * @param bills
-     */
+     *//*
     public void enrichAdvanceTaxHead(List<Bill> bills) {
             bills.forEach(bill -> {
                 bill.getBillDetails().forEach(billDetail -> {
@@ -322,3 +322,4 @@ public class ReceiptEnricher {
 
 
 }
+*/

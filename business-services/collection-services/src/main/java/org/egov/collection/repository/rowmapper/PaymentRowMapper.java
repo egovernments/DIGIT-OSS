@@ -6,7 +6,6 @@ import org.egov.collection.model.AuditDetails;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.enums.CollectionType;
-import org.egov.collection.model.enums.PaymentDetailStatusEnum;
 import org.egov.collection.model.enums.PaymentModeEnum;
 import org.egov.collection.model.enums.PaymentStatusEnum;
 import org.egov.collection.web.contract.Bill;
@@ -154,8 +153,7 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                     .receiptNumber(receiptNumber)
                     .businessService(businessService)
                     .billId(billId)
-                    .additionalDetails(obj)
-                    .paymentDetailStatus(PaymentDetailStatusEnum.fromValue(paymentDetailStatus))
+                    .additionalDetails(getJsonValue(obj))
                     .auditDetails(auditDetails)
                     .build();
 
@@ -184,6 +182,7 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
             .partPaymentAllowed(rs.getBoolean("partpaymentallowed"))
             .isAdvanceAllowed(rs.getBoolean("isadvanceallowed"))
             .minimumAmountToBePaid(rs.getBigDecimal("minimumamounttobepaid"))
+            .reasonForCancellation(rs.getString("reasonforcancellation"))
             .businessService(rs.getString("businessservice"))
             .totalAmount(rs.getBigDecimal("bill_totalamount"))
             .consumerCode(rs.getString("consumercode"))
@@ -246,10 +245,8 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                 .channel(rs.getString("channel"))
                 .voucherHeader(rs.getString("voucherheader"))
                 .boundary(rs.getString("boundary"))
-                .reasonForCancellation(rs.getString("reasonforcancellation"))
                 .manualReceiptNumber(rs.getString("manualreceiptnumber"))
                 .manualReceiptDate(rs.getLong("manualreceiptdate"))
-                .status(rs.getString("status"))
                 .collectionType(CollectionType.fromValue(rs.getString("collectiontype")))
                 .billDescription(rs.getString("billdescription"))
                 .expiryDate(rs.getLong("expirydate"))

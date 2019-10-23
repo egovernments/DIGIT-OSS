@@ -1,4 +1,4 @@
-package org.egov.collection.util;
+/*package org.egov.collection.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -49,7 +49,7 @@ public class ReceiptValidator {
 		
 	}
 
-	/**
+	*//**
 	 * Validate to ensure, - Instrument type provided is valid - Amount Paid & total
 	 * amount are not null and are integer values, no fractions allowed! - Allow
 	 * zero amount ONLY IF the total bill amount is also equal to zero - Sum of
@@ -61,8 +61,8 @@ public class ReceiptValidator {
 	 * valid, checks for purpose and GL Codes - Cheque and DD dates are correct
 	 *
 	 * @param receiptRequest Receipt request to be validated
-	 */
-	/*public void validateReceiptForCreate(ReceiptReq receiptReq) {
+	 *//*
+	public void validateReceiptForCreate(ReceiptReq receiptReq) {
 
 		Map<String, String> errorMap = new HashMap<>();
 		Receipt receipt = receiptReq.getReceipt().get(0);
@@ -141,7 +141,7 @@ public class ReceiptValidator {
 		List<Receipt> receipts = new ArrayList<>();
 		receipts.add(receipt);
 		receiptReq.setReceipt(receipts);
-	}*/
+	}
 
 
 
@@ -167,10 +167,10 @@ public class ReceiptValidator {
 
 		Set<String> receiptNumbers = new HashSet<>();
 
-		/*
+		
 		 * Collecting receipt number from bill details since receipt create/update
 		 * request doesn't not have receipt number directly
-		 */
+		 
 		for (Receipt receipt : receipts) {
 			receipt.getBill().forEach(bill -> receiptNumbers.addAll(
 					bill.getBillDetails().stream().map(BillDetail::getReceiptNumber).collect(Collectors.toSet())));
@@ -375,7 +375,7 @@ public class ReceiptValidator {
 
 	}
 
-	/**
+	*//**
 	 * Validations if no receipts exists for this bill - If part payment is allowed,
 	 * - Amount being paid should not be lower than minimum payable amount - Amount
 	 * being paid should not be greater than bill value
@@ -385,7 +385,7 @@ public class ReceiptValidator {
 	 *
 	 * @param errorMap   Map of errors occurred during validations
 	 * @param billDetail Bill detail for which payment is being made
-	 */
+	 *//*
 
 	private void validateIfReceiptForBillAbsent(Map<String, String> errorMap, BillDetail billDetail) {
 		BigDecimal totalAmount = billDetail.getTotalAmount();
@@ -416,7 +416,7 @@ public class ReceiptValidator {
 		}
 	}
 
-	/**
+	*//**
 	 * Validations if no transaction exists for this bill No existing receipt should
 	 * be in approved or pending status
 	 * <p>
@@ -424,7 +424,7 @@ public class ReceiptValidator {
 	 *
 	 * @param errorMap   Map of errors occurred during validations
 	 * @param receipts   List of receipt headers
-	 */
+	 *//*
 	private void validateIfReceiptForBillPresent(Map<String, String> errorMap, List<Receipt> receipts) {
 		log.info("receipt present");
 		for (Receipt receipt : receipts) {
@@ -443,10 +443,10 @@ public class ReceiptValidator {
 
 
 
-	/**
+	*//**
 	 * @param billDetail
 	 * @param errorMap
-	 */
+	 *//*
 	private void validateBusinessServiceCode(RequestInfo requestInfo, BillDetail billDetail,
 			Map<String, String> errorMap) {
 		BusinessDetailsResponse businessDetailsResponse = businessDetailsRepository.getBusinessDetails(
@@ -522,3 +522,4 @@ public class ReceiptValidator {
 		}
 	}
 }
+*/

@@ -55,40 +55,18 @@ public class PaymentValidator {
 
 
     public void validatePaymentForCreate(PaymentRequest paymentRequest) {
-
         Map<String, String> errorMap = new HashMap<>();
         Payment payment = paymentRequest.getPayment();
         List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
-
         validateUserInfo(paymentRequest.getRequestInfo(), errorMap);
-
         validateInstrument(paymentRequest.getPayment(),errorMap);
-
-        Set<String> billIds = new HashSet<>();
-
-        paymentDetails.forEach(paymentDetail -> {
-            if (paymentDetail.getBill()==null)
-                return;
-            if (org.apache.commons.lang3.StringUtils.isEmpty(paymentDetail.getBill().getPaidBy()))
-                errorMap.put(PAID_BY_MISSING_CODE, PAID_BY_MISSING_MESSAGE);
-
-            if(billIds.contains(paymentDetail.getBillId()))
-                errorMap.put("DUPLICATE_BILLID","The Bill id: "+paymentDetail.getBillId()+" is repeated for multiple payment details");
-            else billIds.add(paymentDetail.getBillId());
-
-        });
-
-
-
-        PaymentSearchCriteria criteria = PaymentSearchCriteria.builder().tenantId(payment.getTenantId())
-                .billIds(billIds).build();
+        Set<String> billIds = payment.getPaymentDetails().stream().map(PaymentDetail :: getBillId).collect(Collectors.toSet());
+        
+        PaymentSearchCriteria criteria = PaymentSearchCriteria.builder().tenantId(payment.getTenantId()).billIds(billIds).build();
         List<Payment> payments = paymentRepository.fetchPayments(criteria);
-
-
         if (!payments.isEmpty()) {
             validateIPaymentForBillPresent(payments,errorMap);
         }
-
 
         // Loop through all bill details [one for each service], and perform various
         // validations
@@ -99,19 +77,11 @@ public class PaymentValidator {
                         "Invalid bill amount! Amount should be  greater than or equal to 0 and " + "without fractions");
             }
 
-
-            if (org.apache.commons.lang3.StringUtils.isEmpty(paymentDetail.getBusinessService())) {
+            if (StringUtils.isEmpty(paymentDetail.getBusinessService())) {
                 errorMap.put("INVALID_BUSINESS_DETAILS", "Business details code cannot be empty");
             }
 
         }
-
-        // Validation to ensure, Sum of amount paid on all bill details should be equal
-        // to the instrument amount
-		/*Instrument instrument = receipt.getInstrument();
-		if (instrument.getAmount().compareTo(totalAmountPaid) != 0)
-			errorMap.put("INSTRUMENT_AMOUNT_MISMATCH",
-					"Sum of amount paid of all bill details should be equal to " + "instrument amount");*/
 
         if (!errorMap.isEmpty())
             throw new CustomException(errorMap);
@@ -170,7 +140,7 @@ public class PaymentValidator {
             if (isNull(payment.getTransactionDate()))
                 errorMap.put("INVALID_TXN_DATE", "Transaction Date Input is mandatory for cheque and DD");
 
-            if (isNull(payment.getTransactionNumber()) || payment.getTransactionNumber().isEmpty())
+            if (StringUtils.isEmpty(payment.getTransactionNumber()))
                 errorMap.put("INVALID_TXN_NUMBER", "Transaction Number is mandatory for Cheque, DD, Card");
 
         }
@@ -288,18 +258,12 @@ public class PaymentValidator {
 
                     // If change to manual receipt date or manual receipt number, and instrument is
                     // Cheque / DD revalidate
+                    
+                    if (!isEmpty(billDetail.getManualReceiptNumber()))
+                        billDetailFromDb.setManualReceiptNumber(billDetail.getManualReceiptNumber());
 
-                    if (!isEmpty(billDetail.getManualReceiptNumber())
-                            || (!isNull(billDetail.getManualReceiptDate()) && billDetail.getManualReceiptDate() != 0L)) {
-
-                        if (!isEmpty(billDetail.getManualReceiptNumber()))
-                            billDetailFromDb.setManualReceiptNumber(billDetail.getManualReceiptNumber());
-
-                        if (!isNull(billDetail.getManualReceiptDate()) && billDetail.getManualReceiptDate() != 0L)
-                            billDetailFromDb.setManualReceiptDate(billDetail.getManualReceiptDate());
-
-
-                    }
+                    if (!isNull(billDetail.getManualReceiptDate()) && billDetail.getManualReceiptDate() != 0L)
+                        billDetailFromDb.setManualReceiptDate(billDetail.getManualReceiptDate());
 
                     // Temporary code block below, to enable backward compatibility with previous
                     // API

@@ -1,4 +1,4 @@
-package org.egov.collection.repository;
+/*package org.egov.collection.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.egov.collection.model.Payment;
@@ -151,3 +151,4 @@ public class CollectionRepository {
     }
 
 }
+*/

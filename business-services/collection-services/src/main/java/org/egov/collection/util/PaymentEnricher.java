@@ -35,40 +35,26 @@ public class PaymentEnricher {
     private IdGenRepository idGenRepository;
 
 
-
-
-
-
-
-
-
-
     public void enrichPaymentPreValidate(PaymentRequest paymentRequest) {
 
         Payment payment = paymentRequest.getPayment();
         List<String> billIds = payment.getPaymentDetails().stream().map(PaymentDetail::getBillId).collect(Collectors.toList());
-
-        AuditDetails auditDetails = AuditDetails.builder().createdBy(paymentRequest.getRequestInfo().getUserInfo().getId
-                ().toString()).createdDate(System.currentTimeMillis()).lastModifiedBy(paymentRequest.getRequestInfo().getUserInfo().getId
-                ().toString()).lastModifiedDate(System.currentTimeMillis()).build();
-
         if (isNull(paymentRequest.getRequestInfo().getUserInfo()) || isNull(paymentRequest.getRequestInfo().getUserInfo()
                 .getId())) {
             throw new CustomException("USER_INFO_INVALID", "Invalid user info in request info, user id is mandatory");
         }
+        Set<String> billIdSet = payment.getPaymentDetails().stream().map(PaymentDetail :: getBillId).collect(Collectors.toSet());
+        if(billIdSet.size() < payment.getPaymentDetails().size())
+            throw new CustomException("DUPLICATE_BILLID","The Bill ids have been repeated for multiple payment details");
 
         List<Bill> validatedBills = billingRepository.fetchBill(paymentRequest.getRequestInfo(), payment.getTenantId(), billIds);
-
-        Map<String,Bill> billIdToBillMap = new HashMap<>();
-
-        Map<String,String> errorMap = new HashMap<>();
+        Map<String,Bill> billIdToBillMap = new HashMap<>(); Map<String,String> errorMap = new HashMap<>();
 
         // If the bills is non-empty list payer info is added to the bil
         if(CollectionUtils.isEmpty(validatedBills))
-            errorMap.put("INVALID_BILL_ID", "Bill ID provided does not exist or is in an invalid state");
+            errorMap.put("INVALID_BILL_ID", "Bill IDs provided does not exist or is in an invalid state");
         else
             validatedBills.forEach(bill -> {
-                billIdToBillMap.put(bill.getId(), bill);
                 if (CollectionUtils.isEmpty(bill.getBillDetails())) {
                     log.error("Bill ID provided does not exist or is in an invalid state " + bill.getId());
                     errorMap.put("INVALID_BILL_ID", "Bill ID provided does not exist or is in an invalid state");
@@ -79,6 +65,7 @@ public class PaymentEnricher {
                     bill.setMobileNumber(payment.getMobileNumber());
                     bill.setPayerAddress(payment.getPayerAddress());
                 }
+                billIdToBillMap.put(bill.getId(), bill);
             });
 
         // Assigns bill object to each paymentDetail if no  bill object is found the billId from paymentDetail is added in error map
@@ -94,9 +81,11 @@ public class PaymentEnricher {
 
         if(!errorMap.isEmpty())
             throw new CustomException(errorMap);
-
+        
+        AuditDetails auditDetails = AuditDetails.builder().createdBy(paymentRequest.getRequestInfo().getUserInfo().getId
+                ().toString()).createdDate(System.currentTimeMillis()).lastModifiedBy(paymentRequest.getRequestInfo().getUserInfo().getId
+                ().toString()).lastModifiedDate(System.currentTimeMillis()).build();
         payment.setAuditDetails(auditDetails);
-
     }
 
 
@@ -127,9 +116,6 @@ public class PaymentEnricher {
                     paymentDetail.getTenantId());
             paymentDetail.setReceiptNumber(receiptNumber);
 
-            /*for (BillAccountDetail billAccountDetail : billDetail.getBillAccountDetails()) {
-                billAccountDetail.setId(UUID.randomUUID().toString());
-            }*/
         }
         enrichInstrument(paymentRequest);
     }
@@ -152,14 +138,10 @@ public class PaymentEnricher {
         }
 
         if (paymentMode.equalsIgnoreCase(ONLINE.name()) || paymentMode.equalsIgnoreCase(CARD.name()))
-            payment.setPaymentStatus(PaymentStatusEnum.DEPOSITED.DEPOSITED);
+            payment.setPaymentStatus(PaymentStatusEnum.DEPOSITED);
         else
             payment.setPaymentStatus(PaymentStatusEnum.NEW);
     }
-
-
-
-
 
 
     /**

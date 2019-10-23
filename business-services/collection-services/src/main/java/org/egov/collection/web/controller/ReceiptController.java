@@ -36,7 +36,7 @@
  *         or trademarks of eGovernments Foundation.
  *
  *  In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
- */
+ 
 
 package org.egov.collection.web.controller;
 
@@ -174,4 +174,4 @@ public class ReceiptController {
 		ReceiptRes receiptResponse = new ReceiptRes(responseInfo, receipts);
 		return new ResponseEntity<>(receiptResponse, HttpStatus.OK);
 	}
-}
+}*/

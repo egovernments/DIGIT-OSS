@@ -43,21 +43,18 @@ package org.egov.collection.web.controller;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.validation.Valid;
 
-import org.egov.collection.model.*;
+import org.egov.collection.model.Payment;
+import org.egov.collection.model.PaymentRequest;
+import org.egov.collection.model.PaymentResponse;
+import org.egov.collection.model.PaymentSearchCriteria;
 import org.egov.collection.model.enums.ReceiptStatus;
-import org.egov.collection.service.CollectionService;
 import org.egov.collection.service.PaymentService;
-import org.egov.collection.service.WorkflowService;
-import org.egov.collection.util.migration.ReceiptMigration;
-import org.egov.collection.web.contract.Receipt;
-import org.egov.collection.web.contract.ReceiptReq;
-import org.egov.collection.web.contract.ReceiptRes;
-import org.egov.collection.web.contract.ReceiptWorkflowRequest;
+import org.egov.collection.service.PaymentWorkflowService;
+import org.egov.collection.web.contract.PaymentWorkflowRequest;
 import org.egov.collection.web.contract.factory.RequestInfoWrapper;
 import org.egov.collection.web.contract.factory.ResponseInfoFactory;
 import org.egov.common.contract.request.RequestInfo;
@@ -68,11 +65,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -87,7 +82,7 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @Autowired
-    private WorkflowService workflowService;
+    private PaymentWorkflowService workflowService;
 
     @Value("#{'${search.ignore.status}'.split(',')}")
     private List<String> searchIgnoreStatus;
@@ -133,29 +128,27 @@ public class PaymentController {
 
     @RequestMapping(value = "/_workflow", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> workflow(@RequestBody @Valid ReceiptWorkflowRequest receiptWorkflowRequest) {
+    public ResponseEntity<?> workflow(@RequestBody @Valid PaymentWorkflowRequest receiptWorkflowRequest) {
 
-        List<Receipt> receipts = workflowService.performWorkflow(receiptWorkflowRequest);
-        return getSuccessResponse(receipts, receiptWorkflowRequest.getRequestInfo());
+        List<Payment> payments = workflowService.performWorkflow(receiptWorkflowRequest);
+        return getSuccessResponse(payments, receiptWorkflowRequest.getRequestInfo());
     }
 
     @RequestMapping(value = "/_update", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> update(@RequestBody @Valid ReceiptReq receiptRequest) {
-
-        List<Receipt> receiptInfo = collectionService.updateReceipt(receiptRequest);
-
-        return getSuccessResponse(receiptInfo, receiptRequest.getRequestInfo());
+    public ResponseEntity<?> update(@RequestBody @Valid PaymentRequest paymentRequest) {
+        List<Payment> receiptInfo = paymentService.updatePayment(paymentRequest);
+        return getSuccessResponse(receiptInfo, paymentRequest.getRequestInfo());
     }
 
-    @RequestMapping(value = "/_validate", method = RequestMethod.POST)
+/*    @RequestMapping(value = "/_validate", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> validate(@RequestBody @Valid ReceiptReq receiptReq) {
 
         List<Receipt> receipt = paymentService.validateReceipt(receiptReq);
         return getSuccessResponse(receipt, receiptReq.getRequestInfo());
 
-    }
+    }*/
 
 
     private ResponseEntity<PaymentResponse> getSuccessResponse(List<Payment> payments, RequestInfo requestInfo) {

@@ -1,4 +1,4 @@
-package org.egov.collection.repository.querybuilder;
+/*package org.egov.collection.repository.querybuilder;
 
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toSet;
@@ -531,3 +531,4 @@ public class CollectionsQueryBuilder {
     }
 
 }
+*/

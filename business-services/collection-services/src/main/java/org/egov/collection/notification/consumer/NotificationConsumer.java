@@ -1,4 +1,4 @@
-package org.egov.collection.notification.consumer;
+/*package org.egov.collection.notification.consumer;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,7 +36,7 @@ import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 @Service
 @Slf4j
 @Data
-/**
+*//**
  * Methods with different responsibilites are written in the same class because we're not sure on where this consumer has to go.
  * Ideally, we will have one consumer that handles notifications on every payment belonging to all the modules. 
  * The reason for having all methods in the same class is to make it easy for migration when the common-consumer design is finalized.
@@ -44,7 +44,7 @@ import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
  *  
  * @author vishal
  *
- */
+ *//*
 public class NotificationConsumer {
 	
 	@Value("${coll.notification.ui.host}")
@@ -98,12 +98,12 @@ public class NotificationConsumer {
 	
 	
 
-	/**
+	*//**
 	 * Kafka consumer
 	 * 
 	 * @param record
 	 * @param topic
-	 */
+	 *//*
     @KafkaListener(topics = { "${kafka.topics.payment.receiptlink.name}" })
 	public void listen(HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
@@ -114,12 +114,12 @@ public class NotificationConsumer {
 		}
 	}
 	
-	/**
+	*//**
 	 * Method to send notifications.
 	 * 
 	 * @param receiptReq
 	 * @throws Exception 
-	 */
+	 *//*
 	private void sendNotification(ReceiptReq receiptReq){
 		Receipt receipt = receiptReq.getReceipt().get(0); //currently we dont support mutliple receipts.
 		List<String> businessServiceAllowed = fetchBusinessServiceFromMDMS(receiptReq.getRequestInfo());
@@ -149,7 +149,7 @@ public class NotificationConsumer {
 	}
 	
 	
-	/**
+	*//**
 	 * Prepares sms body based on the configuration
 	 * 
 	 * @param instrument
@@ -157,7 +157,7 @@ public class NotificationConsumer {
 	 * @param billDetail
 	 * @param requestInfo
 	 * @return
-	 */
+	 *//*
 	private String buildSmsBody(Instrument instrument, Bill bill, BillDetail billDetail, RequestInfo requestInfo) {
 		String content = fetchContentFromLocalization(requestInfo, billDetail.getTenantId(), COLLECTION_LOCALIZATION_MODULE, PAYMENT_MSG_LOCALIZATION_CODE);
 		String message = null;
@@ -181,7 +181,7 @@ public class NotificationConsumer {
 		return message;
 	}
 	
-	/**
+	*//**
 	 * Generic method to fetch data from localization.
 	 * 
 	 * @param requestInfo
@@ -189,7 +189,7 @@ public class NotificationConsumer {
 	 * @param module
 	 * @param code
 	 * @return
-	 */
+	 *//*
 	private String fetchContentFromLocalization(RequestInfo requestInfo, String tenantId, String module, String code) {
 		String message = null;
 		List<String> codes = new ArrayList<>();
@@ -219,12 +219,12 @@ public class NotificationConsumer {
 	}
 	
 	
-	/**
+	*//**
 	 * Method to fetch business service from MDMS
 	 * 
 	 * @param requestInfo
 	 * @return
-	 */
+	 *//*
 	private List<String> fetchBusinessServiceFromMDMS(RequestInfo requestInfo){
 		List<String> masterData = new ArrayList<>();
 		StringBuilder uri = new StringBuilder();
@@ -239,13 +239,13 @@ public class NotificationConsumer {
 		return masterData;
 	}
 	
-	/**
+	*//**
 	 * Util method to build MDMS request to search businessservices
 	 * 
 	 * @param requestInfo
 	 * @param tenantId
 	 * @return
-	 */
+	 *//*
 	private MdmsCriteriaReq getRequestForEvents(RequestInfo requestInfo, String tenantId) {
 		MasterDetail masterDetail = org.egov.mdms.model.MasterDetail.builder()
 				.name(BUSINESSSERVICE_MDMS_MASTER).filter(BUSINESSSERVICE_CODES_FILTER).build();
@@ -260,13 +260,13 @@ public class NotificationConsumer {
 	}
 	
 	
-	/**
+	*//**
 	 * Method to fetch year format from from and to period of the bill
 	 * 
 	 * @param fromPeriod
 	 * @param toPeriod
 	 * @return
-	 */
+	 *//*
 	private String fetchFinYear(Long fromPeriod, Long toPeriod) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(fromPeriod);
@@ -279,12 +279,12 @@ public class NotificationConsumer {
 
 	}
 	
-	/**
+	*//**
 	 * Method to format the code as per localization keys
 	 * 
 	 * @param code
 	 * @return
-	 */
+	 *//*
 	private String formatCodes(String code) {
 		String regexForSpecialCharacters = "[$&+,:;=?@#|'<>.-^*()%!]";
 		code = code.replaceAll(regexForSpecialCharacters, "_");
@@ -295,3 +295,4 @@ public class NotificationConsumer {
 	
 
 }
+*/
