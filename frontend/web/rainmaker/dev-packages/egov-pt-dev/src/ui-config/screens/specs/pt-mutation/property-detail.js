@@ -13,20 +13,30 @@ import {
   import jp from "jsonpath";
   import get from "lodash/get";
   import set from "lodash/set";
-  import { applicantSummary } from "./summaryResource/applicantSummary";
-  import { institutionSummary } from "./summaryResource/applicantSummary";
+  import { applicantSummary } from "./propertyDetailResource/applicantSummary";
+  import { institutionSummary } from "./propertyDetailResource/applicantSummary";
   import { documentsSummary } from "./summaryResource/documentsSummary";
   import { estimateSummary } from "./summaryResource/estimateSummary";
-  import { footer } from "./summaryResource/footer";
+  import { footer } from "./propertyDetailResource/footer";
   import { nocSummary } from "./summaryResource/nocSummary";
-  import { propertySummary } from "./summaryResource/propertySummary";
+  import { propertySummary } from "./propertyDetailResource/propertySummary";
+  import { assessmentSummary } from "./propertyDetailResource/assessmentSummary";
+  
   import { generateBill } from "../utils/index";
   
   const header = getCommonContainer({
     header: getCommonHeader({
-      labelName: "Fire NOC - Application Summary",
-      labelKey: "NOC_SUMMARY_HEADER"
-    })
+      labelName: "Property Information",
+      labelKey: "PT_PROPERTY_INFO_HEADER"
+    }),
+    propertyId: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-pt",
+      componentPath: "PropertyIdContainer",
+      props: {
+        number: getQueryArg(window.location.href, "propertyId")
+      }
+    },
   });
   
   const prepareDocumentsView = async (state, dispatch) => {
@@ -143,12 +153,10 @@ import {
             }
           },
           body: getCommonCard({
-            estimateSummary: estimateSummary,
-            nocSummary: nocSummary,
             propertySummary: propertySummary,
+            assessmentSummary:assessmentSummary,
             applicantSummary: applicantSummary,
-            institutionSummary: institutionSummary,
-            documentsSummary: documentsSummary
+            institutionSummary:institutionSummary
           }),
           footer: footer
         }

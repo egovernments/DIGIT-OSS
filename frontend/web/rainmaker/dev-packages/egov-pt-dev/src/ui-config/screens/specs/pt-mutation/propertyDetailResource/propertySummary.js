@@ -101,13 +101,6 @@ const propertyDetails = {
 
 const propertyLocationDetails = getCommonGrayCard({
   propertyLocationContainer: getCommonContainer({
-    propertyId: getLabelWithValue(
-      {
-        labelName: "Property ID",
-        labelKey: "NOC_PROPERTY_ID_LABEL"
-      },
-      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.propertyId" }
-    ),
     city: getLabelWithValue(
       {
         labelName: "City",
@@ -165,29 +158,14 @@ const propertyLocationDetails = getCommonGrayCard({
       },
       { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.pincode" }
     ),
-    locationOnMap: getLabelWithValue(
+    oldPropertyId: getLabelWithValue(
       {
-        labelName: "Location On Map",
-        labelKey: "NOC_PROPERTY_DETAILS_GIS_CORD_LABEL"
+        labelName: "Existing Property ID",
+        labelKey: "PT_PROPERTY_ADDRESS_EXISTING_PID"
       },
-      {
-        jsonPath:
-          "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.latitude"
-      }
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.pincode" }
     ),
-    applicableFireStation: getLabelWithValue(
-      {
-        labelName: "Applicable Fire Station",
-        labelKey: "NOC_PROPERTY_DETAILS_FIRESTATION_LABEL"
-      },
-      {
-        jsonPath: "FireNOCs[0].fireNOCDetails.firestationId",
-        localePrefix: {
-          moduleName: "firenoc",
-          masterName: "FireStations"
-        }
-      }
-    )
+ 
   })
 });
 
@@ -207,44 +185,8 @@ export const propertySummary = getCommonGrayCard({
           labelName: "Property Details",
           labelKey: "NOC_COMMON_PROPERTY_DETAILS"
         })
-      },
-      editSection: {
-        componentPath: "Button",
-        props: {
-          color: "primary",
-          style: {
-            marginTop: "-10px",
-            marginRight: "-18px"
-          }
-        },
-        gridDefination: {
-          xs: 4,
-          align: "right"
-        },
-        children: {
-          editIcon: {
-            uiFramework: "custom-atoms",
-            componentPath: "Icon",
-            props: {
-              iconName: "edit"
-            }
-          },
-          buttonLabel: getLabel({
-            labelKey: "NOC_SUMMARY_EDIT"
-          })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 1);
-          }
-        }
       }
     }
   },
-  propertyDetailsHeader: getHeader("Property Details"),
-  break: getBreak(),
-  cardOne: propertyDetails,
-  propertyLocationDetailsHeader: getHeader("Property Location Details"),
-  cardTwo: propertyLocationDetails
+  cardOne: propertyLocationDetails,
 });

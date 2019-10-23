@@ -5,12 +5,49 @@ import {
   getCommonSubHeader,
   getLabel,
   getLabelWithValue,
-  convertEpochToDate
+  convertEpochToDate,
+  getCommonCard
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+
 import { gotoApplyWithStep } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
-export const applicantSummary = getCommonGrayCard({
+
+
+const propertyDetails = getCommonGrayCard({
+  propertyContainer: getCommonContainer({
+    usageType: getLabelWithValue(
+      {
+        labelName: "Property Usage Type",
+        labelKey: "PT_ASSESMENT_INFO_USAGE_TYPE"
+      },
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo" }
+    ),
+    propertyType: getLabelWithValue(
+      {
+        labelName: "Property Type",
+        labelKey: "PT_ASSESMENT_INFO_TYPE_OF_BUILDING"
+      },
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo" }
+    ),
+    landArea: getLabelWithValue(
+      {
+        labelName: "Plot Size (sq yards)",
+        labelKey: "PT_ASSESMENT_INFO_PLOT_SIZE"
+      },
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo" }
+    ),
+    noOfFloors: getLabelWithValue(
+      {
+        labelName: "No. of Floors",
+        labelKey: "PT_ASSESMENT_INFO_NO_OF_FLOOR"
+      },
+      { jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.doorNo" }
+    ),
+ 
+  })
+});
+export const assessmentSummary = getCommonGrayCard({
   header: {
     uiFramework: "custom-atoms",
     componentPath: "Container",
@@ -23,97 +60,86 @@ export const applicantSummary = getCommonGrayCard({
           xs: 8
         },
         ...getCommonSubHeader({
-          labelName: "Owner Details",
-          labelKey: "PT_OWNERSHIP_INFO_SUB_HEADER"
+          labelName: "Assessment Details",
+          labelKey: "PT_ASSESMENT_INFO_SUB_HEADER"
         })
       }
-      // },
-      // editSection: {
-      //   componentPath: "Button",
-      //   props: {
-      //     color: "primary",
-      //     style: {
-      //       marginTop: "-10px",
-      //       marginRight: "-18px"
-      //     }
-      //   },
-      //   gridDefination: {
-      //     xs: 4,
-      //     align: "right"
-      //   },
-      //   children: {
-      //     editIcon: {
-      //       uiFramework: "custom-atoms",
-      //       componentPath: "Icon",
-      //       props: {
-      //         iconName: "edit"
-      //       }
-      //     },
-      //     buttonLabel: getLabel({
-      //       labelName: "Edit",
-      //       labelKey: "PT_EDIT"
-      //     })
-      //   }
-      // }
     }
   },
-  cardOne: {
+  cardOne: propertyDetails,
+  floorDetailHeader:{
+    uiFramework: "custom-molecules-local",
+    moduleName: "egov-pt",
+    componentPath: "DividerWithLabel",
+    props: {
+      className: "hr-generic-divider-label",
+      labelProps: {},
+      dividerProps: {},
+      label:"Ground Floor",
+      style: { marginBottom: "1px" }
+    },children: {
+      header: {
+        gridDefination: {
+          xs: 8
+        },
+        ...getCommonSubHeader({
+          labelName: "Ground Floor",
+          labelKey: "PROPERTYTAX_FLOOR_0"
+        })
+      }
+    },
+    type: "array"
+  },
+  cardTwo:{
     uiFramework: "custom-containers",
     componentPath: "MultiItem",
     props: {
       className: "applicant-summary",
-      scheama: getCommonGrayCard({
-        applicantContainer: getCommonContainer({
-          mobileNo: getLabelWithValue(
-            {
-              labelName: "Mobile No.",
-              labelKey: "NOC_APPLICANT_MOBILE_NO_LABEL"
+      scheama: getCommonCard({
+        header: {
+          uiFramework: "custom-atoms",
+          componentPath: "Container",
+          props: {
+            style: { marginBottom: "10px" }
+          },
+          children: {
+            header: {
+              gridDefination: {
+                xs: 8
+              },
+              ...getCommonSubHeader({
+                labelName: "Unit-1",
+                labelKey: "Unit-1"
+              })
             },
+            
+          }
+        },
+          body: getCommonContainer({
+          usageCategoryMajor: getLabelWithValue(
             {
-              jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber"
-              // callBack: value => {
-              //   return value.split(".")[0];
-              // }
-            }
-          ),
-          applicantName: getLabelWithValue(
-            {
-              labelName: "Name",
-              labelKey: "NOC_APPLICANT_NAME_LABEL"
-            },
-            {
-              jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
-              // callBack: value => {
-              //   return value.split(".")[1];
-              // }
-            }
-          ),
-          applicantGender: getLabelWithValue(
-            {
-              labelName: "Gender",
-              labelKey: "NOC_GENDER_LABEL"
+              labelName: "Unit Usage Type",
+              labelKey: "PT_ASSESSMENT_UNIT_USAGE_TYPE"
             },
             {
               jsonPath:
                 "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender"
             }
           ),
-          applicantFatherHusbandName: getLabelWithValue(
+          occupancyType: getLabelWithValue(
             {
-              labelName: "Father/Husband's Name",
-              labelKey: "NOC_APPLICANT_FATHER_HUSBAND_NAME_LABEL"
+              labelName: "Occupancy",
+              labelKey: "PT_ASSESMENT_INFO_OCCUPLANCY"
             },
             {
               jsonPath:
                 "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].fatherOrHusbandName"
             }
           ),
-          applicantDob: getLabelWithValue(
+          unitArea: getLabelWithValue(
             {
-              labelName: "Date of Birth",
-              labelKey: "NOC_APPLICANT_DOB_LABEL"
+              labelName: "Built-up area (sq ft)",
+              labelKey: "PT_FORM2_BUILT_AREA"
             },
             {
               jsonPath:
@@ -123,26 +149,17 @@ export const applicantSummary = getCommonGrayCard({
               }
             }
           ),
-          applicantEmail: getLabelWithValue(
+          annualRent: getLabelWithValue(
             {
-              labelName: "Email",
-              labelKey: "NOC_APPLICANT_EMAIL_LABEL"
+              labelName: "Total Annual Rent (INR)",
+              labelKey: "PT_FORM2_TOTAL_ANNUAL_RENT"
             },
             {
               jsonPath:
                 "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId"
             }
           ),
-          applicantAddress: getLabelWithValue(
-            {
-              labelName: "Correspondence Address",
-              labelKey: "NOC_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
-            },
-            {
-              jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].correspondenceAddress"
-            }
-          )
+
         })
       }),
       items: [],
