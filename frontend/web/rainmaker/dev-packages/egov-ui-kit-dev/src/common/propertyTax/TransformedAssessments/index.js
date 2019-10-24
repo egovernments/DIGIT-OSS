@@ -61,7 +61,7 @@ export const getTransformedItems = (propertiesById) => {
   );
 };
 
-export const getCompletedTransformedItems = (assessmentsByStatus = [], cities, localizationLabels, propertyId) => {
+export const getCompletedTransformedItems = (assessmentsByStatus = [], cities, localizationLabels, propertyId,property={}) => {
   assessmentsByStatus.sort((x, y) => x.financialYear.localeCompare(y.financialYear));
   return (
     assessmentsByStatus &&
@@ -134,10 +134,7 @@ export const getCompletedTransformedItems = (assessmentsByStatus = [], cities, l
                 </div>
               </div>
             </div>
-
             {(index!==Object.values(assessmentsByStatus).length-1)&&<Divider style={{ marginBottom: 0, marginTop: "15px" }} />}
-
-
           </div>
         ),
         epocDate: item.assessmentDate,
@@ -146,10 +143,10 @@ export const getCompletedTransformedItems = (assessmentsByStatus = [], cities, l
         latestAssessmentNumber: item.latestAssessmentNumber || item.assessmentNumber,
         propertyId: item.propertyId || propertyId || '',
         propertyDetails: item,
-        property: item.property,
+        property: item.property||property,
         tenantId: item.tenantId,
         status: get(item, "receiptInfo.status") || 'Pending',
-        consumerCode: `${item.propertyId}`,
+        consumerCode: item.propertyId || propertyId || '',
         receipt: true,
         localizationLabels: localizationLabels,
         cities: cities,

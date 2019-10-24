@@ -52,10 +52,10 @@ const getTaxInfo = (billAccountDetails, totalAmount, localizationLabels) => {
             ? taxHeadContent[0].amount
               ? taxHeadContent[0].amount
               : taxHeadContent[0].debitAmount
-              ? `-${taxHeadContent[0].debitAmount}`
-              : taxHeadContent[0].crAmountToBePaid
-              ? taxHeadContent[0].crAmountToBePaid
-              : "0"
+                ? `-${taxHeadContent[0].debitAmount}`
+                : taxHeadContent[0].crAmountToBePaid
+                  ? taxHeadContent[0].crAmountToBePaid
+                  : "0"
             : "NA",
         });
       return result;
@@ -67,17 +67,17 @@ const getTaxInfo = (billAccountDetails, totalAmount, localizationLabels) => {
   return taxArray;
 };
 
-const getHeaderDetails = (property, cities, localizationLabels,isAcknowledgement=false) => {
+const getHeaderDetails = (property = {}, cities, localizationLabels, isAcknowledgement = false) => {
   const propertyTenant = cities.filter((item) => item.code === property.tenantId);
   const ulbGrade = get(propertyTenant[0], "city.ulbGrade") ? getUlbGradeLabel(get(propertyTenant[0], "city.ulbGrade")) : "MUNICIPAL CORPORATION";
   const cityKey = `TENANT_TENANTS_${get(propertyTenant[0], "code")
     .toUpperCase()
     .replace(/[.]/g, "_")}`;
-  const subheader=isAcknowledgement? "Property Tax Assess Acknowledgement": "Property Tax Payment Receipt";
+  const subheader = isAcknowledgement ? "Property Tax Assess Acknowledgement" : "Property Tax Payment Receipt";
   return {
     // header: getReceiptHeaderLabel(name, ulbGrade),
     header: `${getTranslatedLabel(cityKey, localizationLabels).toUpperCase()} ${getTranslatedLabel(ulbGrade, localizationLabels)}`,
-    subheader:subheader,
+    subheader: subheader,
     logo: msevaLogo,
     contact: propertyTenant[0].contactNumber,
     website: propertyTenant[0].domainUrl,
@@ -147,13 +147,13 @@ const createReceiptUIInfo = (property, receiptDetails, cities, totalAmountToPay,
   const ownerInfo = isInstitution
     ? [{ key: "PT_INSTITUTION_NAME", value: institution.name }, { key: "PT_AUTHORISED_PERSON_NAME", value: ownerDetails[0].name }]
     : ownerDetails.map((item, index) => {
-        return {
-          //key: `Owner${ownerDetails.length > 1 ? index + 1 : ""} name:`,
-          key: "PT_OWNER_NAME_RECEIPT",
-          dynamicArray: [ownerDetails.length > 1 ? index + 1 : ""],
-          value: item.name,
-        };
-      });
+      return {
+        //key: `Owner${ownerDetails.length > 1 ? index + 1 : ""} name:`,
+        key: "PT_OWNER_NAME_RECEIPT",
+        dynamicArray: [ownerDetails.length > 1 ? index + 1 : ""],
+        value: item.name,
+      };
+    });
   return {
     propertyInfo: property && [
       ...ownerInfo,
@@ -203,4 +203,4 @@ const createReceiptUIInfo = (property, receiptDetails, cities, totalAmountToPay,
   };
 };
 
-export { createReceiptUIInfo, createReceiptDetails,getHeaderDetails };
+export { createReceiptUIInfo, createReceiptDetails, getHeaderDetails };

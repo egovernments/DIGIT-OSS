@@ -62,9 +62,9 @@ class DropDown extends Component {
   };
 
   onSelectFieldChange = (event, key, payload, imageUrl) => {
-    const { generalMDMSDataById, history, item, singleAssessmentByStatus=[] } = this.props;
+    const { generalMDMSDataById, history, item, singleAssessmentByStatus = [] } = this.props;
     const { downloadReceipt } = this;
-    const callReciept=(isEmployeeReceipt=false)=>{
+    const callReciept = (isEmployeeReceipt = false) => {
       item.consumerCode = item.propertyId;
       downloadReceipt(item, generalMDMSDataById, isEmployeeReceipt, imageUrl);
     }
@@ -125,21 +125,23 @@ class DropDown extends Component {
       //     acc += get(curr, "Bill[0].billDetails[0].amountPaid");
       //     return acc;
       //   }, 0);
-      payload.Receipt.forEach((receipt)=>{
-        const receiptDetails =
-          payload &&
-          payload.Receipt && createReceiptDetails(
-            item.property,
-            item.propertyDetails,
-            receipt,
-            item.localizationLabels,
-            item.cities,
-            get(receipt, "Bill[0].billDetails[0].totalAmount"),
-            get(receipt, "Bill[0].billDetails[0].amountPaid")
-          );
-        localStorageSet("rd-propertyId", item.propertyId);
-        localStorageSet("rd-assessmentNumber", item.propertyDetails.assessmentNumber);
-        receiptDetails && generateReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl, isEmployeeReceipt, { itemData: item, property: item.property, receipt: payload.Receipt });
+      payload.Receipt.forEach((receipt) => {
+        if (item.propertyDetails.receiptInfo.fromPeriod == receipt.Bill[0].billDetails[0].fromPeriod) {
+          const receiptDetails =
+            payload &&
+            payload.Receipt && createReceiptDetails(
+              item.property,
+              item.propertyDetails,
+              receipt,
+              item.localizationLabels,
+              item.cities,
+              get(receipt, "Bill[0].billDetails[0].totalAmount"),
+              get(receipt, "Bill[0].billDetails[0].amountPaid")
+            );
+          localStorageSet("rd-propertyId", item.propertyId);
+          localStorageSet("rd-assessmentNumber", item.propertyDetails.assessmentNumber);
+          receiptDetails && generateReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl, isEmployeeReceipt, { itemData: item, property: item.property, receipt: payload.Receipt });
+        }
       })
 
     } catch (e) {
