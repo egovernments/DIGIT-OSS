@@ -1,6 +1,7 @@
 package org.egov.tl.service.notification;
 
 import com.jayway.jsonpath.DocumentContext;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
@@ -30,14 +31,17 @@ public class PaymentNotificationService {
     private TradeLicenseService tradeLicenseService;
 
     private NotificationUtil util;
+    
+    private ObjectMapper mapper;
 
 
     @Autowired
     public PaymentNotificationService(TLConfiguration config, TradeLicenseService tradeLicenseService,
-                                      NotificationUtil util) {
+                                      NotificationUtil util,ObjectMapper mapper) {
         this.config = config;
         this.tradeLicenseService = tradeLicenseService;
         this.util = util;
+        this.mapper = mapper;
     }
 
 
@@ -68,7 +72,9 @@ public class PaymentNotificationService {
             String jsonString = new JSONObject(record).toString();
             DocumentContext documentContext = JsonPath.parse(jsonString);
             Map<String,String> valMap = enrichValMap(documentContext);
-            RequestInfo requestInfo = new RequestInfo();
+            Map<String, Object> info = documentContext.read("$.RequestInfo");
+            RequestInfo requestInfo = mapper.convertValue(info, RequestInfo.class);
+//            RequestInfo requestInfo = new RequestInfo();
 
             if(valMap.get(businessServiceKey).equalsIgnoreCase(config.getBusinessService())){
                 TradeLicense license = getTradeLicenseFromConsumerCode(valMap.get(tenantIdKey),valMap.get(consumerCodeKey),
