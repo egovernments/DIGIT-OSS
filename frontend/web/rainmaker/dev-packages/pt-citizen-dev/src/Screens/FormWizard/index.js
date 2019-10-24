@@ -1023,7 +1023,11 @@ class FormWizard extends Component {
           });
         break;
       case 5:
-        pay();
+        if (this.state.partialAmountError.length == 0) {
+          pay();
+        } else {
+          alert(this.state.partialAmountError);
+        }
         break;
       case 6:
         pay();
@@ -1310,7 +1314,8 @@ class FormWizard extends Component {
   pay = async () => {
     //utils
     const { callPGService } = this;
-    const { financialYearFromQuery } = this.state;
+    const { financialYearFromQuery, assessedPropertyDetails = {} } = this.state;
+    const { Properties = [] } = assessedPropertyDetails;
     let { toggleSpinner, location, form, common } = this.props;
     let prepareFormData = { ...this.props.prepareFormData };
     if (
@@ -1322,7 +1327,11 @@ class FormWizard extends Component {
     )
       delete prepareFormData.Properties[0].propertyDetails[0].institution;
     let { search } = location;
-    const propertyId = getQueryValue(search, "propertyId");
+    let propertyUID = get(assessedPropertyDetails, "Properties[0].propertyId");
+    let propertyId = getQueryValue(search, "propertyId");
+    if (!propertyId) {
+      propertyId = propertyUID;
+    }
     const assessmentId = getQueryValue(search, "assessmentId");
     const tenantId = getQueryValue(search, "tenantId");
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
@@ -1429,30 +1438,21 @@ class FormWizard extends Component {
         );
       } else {
         //Remove null units and do sqyd to sqft conversion.
-        const properties = normalizePropertyDetails(
-          prepareFormData.Properties,
-          this
-        );
-        let createPropertyResponse = await httpRequest(
-          `pt-services-v2/property/${propertyMethodAction}`,
-          `${propertyMethodAction}`,
-          [],
-          {
-            Properties: properties
-          }
-        );
-        //callDraft([], get(createPropertyResponse, "Properties[0].propertyDetails[0].assessmentNumber"));
+        // const properties = normalizePropertyDetails(
+        //   prepareFormData.Properties,
+        //   this
+        // );
         callPGService(
-          get(createPropertyResponse, "Properties[0].propertyId"),
+          get(assessedPropertyDetails, "Properties[0].propertyId"),
           get(
-            createPropertyResponse,
+            assessedPropertyDetails,
             "Properties[0].propertyDetails[0].assessmentNumber"
           ),
           get(
-            createPropertyResponse,
+            assessedPropertyDetails,
             "Properties[0].propertyDetails[0].financialYear"
           ),
-          get(createPropertyResponse, "Properties[0].tenantId")
+          get(assessedPropertyDetails, "Properties[0].tenantId")
         );
       }
     } catch (e) {

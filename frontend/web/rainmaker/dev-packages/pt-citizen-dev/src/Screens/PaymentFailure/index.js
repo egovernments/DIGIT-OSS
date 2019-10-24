@@ -118,9 +118,8 @@ class PaymentFailure extends Component {
   };
 
   redirectToReview = () => {
-    const { match, history } = this.props;
+    const { match, history, assessmentNumber } = this.props;
     const {
-      assessmentNumber,
       assessmentYear,
       propertyId,
       tenantId
@@ -161,7 +160,7 @@ class PaymentFailure extends Component {
 
     const header = "PT_PAYMENT_HEADER";
     const subHeaderValue = propertyId;
-    const {loading}= this.props;
+    const { loading } = this.props;
     return (
       <Screen loading={loading}>
         <div>
@@ -181,7 +180,7 @@ class PaymentFailure extends Component {
               receiptHeader="PT_TRANSACTION_AMT"
               messageHeader="PT_OOPS"
               message="PT_FAILURE_MESSAGE"
-              receiptNo={txnAmount?'Rs:' + txnAmount:txnAmount}
+              receiptNo={txnAmount ? 'Rs:' + txnAmount : txnAmount}
             />
             {/* <AcknowledgementCard acknowledgeType='success'  messageHeader='' message='' receiptHeader='PT_APPLICATION_NO_LABEL' receiptNo=''/> */}
           </div>
@@ -199,12 +198,16 @@ class PaymentFailure extends Component {
 const mapStateToProps = (state, ownProps) => {
   const { properties, common } = state || {};
   const { cities } = common;
-  const { propertiesById,loading } = properties;
+  const { propertiesById, loading } = properties;
   const selProperty =
     propertiesById && propertiesById[ownProps.match.params.propertyId];
   const latestPropertyDetails =
     selProperty && getLatestPropertyDetails(selProperty.propertyDetails);
-  return { selProperty, cities, latestPropertyDetails ,loading};
+  let assessmentNumber;
+  if (latestPropertyDetails && latestPropertyDetails.assessmentNumber) {
+    assessmentNumber = latestPropertyDetails.assessmentNumber;
+  }
+  return { selProperty, cities, latestPropertyDetails, loading, assessmentNumber };
 };
 
 const mapDispatchToProps = dispatch => {

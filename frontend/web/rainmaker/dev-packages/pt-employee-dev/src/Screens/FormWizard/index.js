@@ -731,7 +731,7 @@ class FormWizard extends Component {
   };
 
   updateIndex = index => {
-    const { pay, estimate, createReceipt, createAndUpdate } = this;
+    const { pay, estimate, createReceipt, createAndUpdate, onPayButtonClick } = this;
     const {
       selected,
       formValidIndexArray,
@@ -963,12 +963,10 @@ class FormWizard extends Component {
           });
         break;
       case 5:
-
-        pay();
+        onPayButtonClick();
         break;
       case 6:
         pay();
-
         break;
     }
   };
@@ -1533,7 +1531,13 @@ class FormWizard extends Component {
     const financialYearFromQuery = getFinancialYearFromQuery();
     let { form, common, location, hideSpinner } = this.props;
     const { search } = location;
-    const propertyId = getQueryValue(search, "propertyId");
+    const { assessedPropertyDetails = {} } = this.state;
+    const { Properties = [] } = assessedPropertyDetails;
+    let propertyUID = get(assessedPropertyDetails, "Properties[0].propertyId");
+    let propertyId = getQueryValue(search, "propertyId");
+    if (!propertyId) {
+      propertyId = propertyUID;
+    }
     const assessmentId = getQueryValue(search, "assessmentId");
     const tenantId = getQueryValue(search, "tenantId");
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
@@ -1678,26 +1682,18 @@ class FormWizard extends Component {
           prepareFormData.Properties,
           this
         );
-        let createPropertyResponse = await httpRequest(
-          `pt-services-v2/property/${propertyMethodAction}`,
-          `${propertyMethodAction}`,
-          [],
-          {
-            Properties: properties
-          }
-        );
-        //callDraft([], get(createPropertyResponse, "Properties[0].propertyDetails[0].assessmentNumber"));
+
         callPGService(
-          get(createPropertyResponse, "Properties[0].propertyId"),
+          get(assessedPropertyDetails, "Properties[0].propertyId"),
           get(
-            createPropertyResponse,
+            assessedPropertyDetails,
             "Properties[0].propertyDetails[0].assessmentNumber"
           ),
           get(
-            createPropertyResponse,
+            assessedPropertyDetails,
             "Properties[0].propertyDetails[0].financialYear"
           ),
-          get(createPropertyResponse, "Properties[0].tenantId")
+          get(assessedPropertyDetails, "Properties[0].tenantId")
         );
       }
     } catch (e) {
