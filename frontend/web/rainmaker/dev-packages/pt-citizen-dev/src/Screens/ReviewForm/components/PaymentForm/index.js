@@ -153,7 +153,8 @@ class PaymentForm extends Component {
   updateTotalAmount = value =>
     this.props.updateTotalAmount(
       value,
-      this.state.valueSelected === "Full_Amount"
+      this.state.valueSelected === "Full_Amount",
+      this.state.errorText
     );
 
   onRadioButtonChange = e => {

@@ -43,9 +43,7 @@ class PaymentRedirect extends React.Component {
           "/property-tax/payment-success/" +
             consumerCode.split(":")[0] +
             "/" +
-            tenantId +
-            "/" +
-            consumerCode.split(":")[1]
+            tenantId 
         );
       }
     } catch (e) {
