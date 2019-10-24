@@ -51,6 +51,7 @@
     "egov-workflow": "babel dev-packages/egov-workflow-dev/src --out-dir packages/lib/egov-workflow --copy-files",
     "egov-tradelicence": "babel dev-packages/egov-tradelicence-dev/src --out-dir packages/lib/egov-tradelicence --copy-files",
     "egov-uc": "babel dev-packages/egov-uc-dev/src --out-dir packages/lib/egov-uc --copy-files",
+    "egov-abg": "babel dev-packages/egov-abg-dev/src --out-dir packages/lib/egov-abg --copy-files",
     "egov-hrms": "babel dev-packages/egov-hrms-dev/src --out-dir packages/lib/egov-hrms --copy-files",
     "go": "yarn && yarn run build-css-employee && yarn run build-css-citizen && yarn run build-css-common && yarn run transpile-common-modules && yarn run transpile-citizen-modules && yarn run transpile-employee-modules && lerna bootstrap",
     "go_employee": "yarn && yarn run build-css-employee  && yarn run build-css-common && yarn run transpile-common-modules  && yarn run transpile-employee-modules && lerna bootstrap  --ignore egov-ui-transform-service --ignore RNativeApp --ignore rainmaker-citizen --ignore pgr-citizen --ignore pt-citizen  --ignore egov-hrms-dev  --ignore egov-tradelicence-core --ignore egov-uc-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev",
