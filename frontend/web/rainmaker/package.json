@@ -54,6 +54,7 @@
     "egov-tradelicence": "babel dev-packages/egov-tradelicence-dev/src --out-dir packages/lib/egov-tradelicence --copy-files",
     "egov-pt": "babel dev-packages/egov-pt-dev/src --out-dir packages/lib/egov-pt --copy-files",
     "egov-uc": "babel dev-packages/egov-uc-dev/src --out-dir packages/lib/egov-uc --copy-files",
+    "egov-abg": "babel dev-packages/egov-abg-dev/src --out-dir packages/lib/egov-abg --copy-files",
     "egov-hrms": "babel dev-packages/egov-hrms-dev/src --out-dir packages/lib/egov-hrms --copy-files",
     "egov-noc": "babel dev-packages/egov-noc-dev/src --out-dir packages/lib/egov-noc --copy-files",
     "go": "yarn && yarn run build-css-employee && yarn run build-css-citizen && yarn run build-css-common && yarn run transpile-common-modules && yarn run transpile-citizen-modules && yarn run transpile-employee-modules && lerna bootstrap",

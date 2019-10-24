@@ -11,6 +11,8 @@
     "dev-packages/egov-hrms-dev",
     "dev-packages/egov-uc-dev",
     "dev-packages/egov-pt-dev",
+    "dev-packages/egov-abg-dev",
+    "dev-packages/egov-noc-dev",
     "packages/citizen",
     "packages/employee",
     "packages/lib/*"
