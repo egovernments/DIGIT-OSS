@@ -7,6 +7,7 @@ import org.egov.collection.model.enums.InstrumentStatusEnum;
 import org.egov.collection.model.enums.PaymentModeEnum;
 import org.egov.collection.model.enums.PaymentStatusEnum;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -32,6 +33,7 @@ public class Payment {
     @JsonProperty("totalDue")
     private BigDecimal totalDue;
 
+    @NotNull
     @JsonProperty("totalAmountPaid")
     private BigDecimal totalAmountPaid;
 
@@ -42,10 +44,11 @@ public class Payment {
     @JsonProperty("transactionDate")
     private Long transactionDate;
 
-    @Size(max=64)
+    @NotNull
     @JsonProperty("paymentMode")
     private PaymentModeEnum paymentMode;
 
+    
     @JsonProperty("instrumentDate")
     private Long instrumentDate;
 
@@ -53,7 +56,6 @@ public class Payment {
     @JsonProperty("instrumentNumber")
     private String instrumentNumber;
 
-    @Size(max=128)
     @JsonProperty("instrumentStatus")
     private InstrumentStatusEnum instrumentStatus;
 
@@ -68,25 +70,31 @@ public class Payment {
     private JsonNode additionalDetails;
 
     @JsonProperty("paymentDetails")
+    @Valid
     private List<PaymentDetail> paymentDetails;
 
     @Size(max=128)
+    @NotNull
     @JsonProperty("paidBy")
     private String paidBy = null;
 
     @Size(max=64)
+    @NotNull
     @JsonProperty("mobileNumber")
     private String mobileNumber = null;
 
     @Size(max=128)
+    @NotNull
     @JsonProperty("payerName")
     private String payerName = null;
 
     @Size(max=1024)
+    @NotNull
     @JsonProperty("payerAddress")
     private String payerAddress = null;
 
     @Size(max=64)
+    @NotNull
     @JsonProperty("payerEmail")
     private String payerEmail = null;
 
@@ -94,7 +102,6 @@ public class Payment {
     @JsonProperty("payerId")
     private String payerId = null;
 
-    @Size(max=64)
     @JsonProperty("paymentStatus")
     private PaymentStatusEnum paymentStatus;
 

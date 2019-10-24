@@ -63,7 +63,7 @@ public class BillingServiceRepository {
     public List<Bill> fetchBill(RequestInfo requestInfo, String tenantId, List<String> billIds) {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("tenantId", tenantId);
-        queryParams.add("billIds", StringUtils.join(billIds,","));
+        queryParams.add("billId", StringUtils.join(billIds,","));
 
         String uri = UriComponentsBuilder
                 .fromHttpUrl(applicationProperties.getBillingServiceHostName())
