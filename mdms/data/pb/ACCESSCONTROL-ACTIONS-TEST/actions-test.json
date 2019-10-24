@@ -14975,6 +14975,39 @@
       "serviceCode": "RainmakerPGRReports",
       "code": "null",
       "path": "PGR Report"
+    },
+    {
+      "id": 1860,
+      "name": "GenerateBillV2",
+      "url": "/billing-service/bill/v2/_generate",
+      "displayName": "Generate Bill v2",
+      "orderNumber": 9,
+      "enabled": false,
+      "serviceCode": "BILLING_SERVICE",
+      "code": "null",
+      "path": "Billing Service.GenerateBill"
+    },
+    {
+      "id": 1861,
+      "name": "SearchBillV2",
+      "url": "/billing-service/bill/v2/_search",
+      "displayName": "search Bill v2",
+      "orderNumber": 9,
+      "enabled": false,
+      "serviceCode": "BILLING_SERVICE",
+      "code": "null",
+      "path": "Billing Service.GenerateBill"
+    },
+    {
+      "id": 1862,
+      "name": "FetchBillV2",
+      "url": "/billing-service/bill/v2/_fetchbill",
+      "displayName": "fetch Bill v2",
+      "orderNumber": 9,
+      "enabled": false,
+      "serviceCode": "BILLING_SERVICE",
+      "code": "null",
+      "path": "Billing Service.GenerateBill"
     }
   ]
 }
