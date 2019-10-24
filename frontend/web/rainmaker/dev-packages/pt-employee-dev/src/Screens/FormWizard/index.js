@@ -1072,16 +1072,16 @@ class FormWizard extends Component {
       ...Bill[0],
       ...prepareFormData.Receipt[0].Bill[0]
     };
-      // prepareFormData.Receipt[0].Bill[0].billDetails[0] = {
+    // prepareFormData.Receipt[0].Bill[0].billDetails[0] = {
     //   ...Bill[0].billDetails[0],
     //   ...prepareFormData.Receipt[0].Bill[0].billDetails[0]
     // };
 
-    for(let index=0;index<Bill[0].billDetails.length;index++){
+    for (let index = 0; index < Bill[0].billDetails.length; index++) {
       prepareFormData.Receipt[0].Bill[0].billDetails[index] = {
         ...Bill[0].billDetails[index],
         ...prepareFormData.Receipt[0].Bill[0].billDetails[index],
-        collectionType:'COUNTER'
+        collectionType: 'COUNTER'
       };
     }
     if (!get(prepareFormData, "Receipt[0].instrument.instrumentType.name")) {
@@ -1861,7 +1861,9 @@ class FormWizard extends Component {
 
     return (
       <div className="wizard-form-main-cont">
-        <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
+        <div className='form-header'>
+          <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
+        </div>
         <WizardComponent
           downloadAcknowledgementForm={this.downloadAcknowledgementForm}
           content={renderStepperContent(selected, fromReviewPage)}

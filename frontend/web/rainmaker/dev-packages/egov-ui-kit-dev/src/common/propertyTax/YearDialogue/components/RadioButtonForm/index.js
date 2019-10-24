@@ -5,9 +5,8 @@ import Label from "egov-ui-kit/utils/translationNode";
 const RadioButtonForm = ({ label, form, handleFieldChange, selectedYear, handleRadioButton, history, urlToAppend }) => {
   const fields = form.fields || {};
   return (
-
     <div className="property-amount-radio">
-      <div className="amt-radio">
+      <div className="amt-radio" style={{ padding: '5px' }}>
         <input
           type="radio"
           onClick={handleRadioButton}
@@ -22,7 +21,6 @@ const RadioButtonForm = ({ label, form, handleFieldChange, selectedYear, handleR
         />
       </div>
     </div>
-
   );
 };
 

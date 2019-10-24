@@ -235,7 +235,7 @@ class SearchProperty extends Component {
           onResetClick={this.onResetClick}
         />
         <Hidden xsDown>
-        {/* {showTable && tableData.length === 0 && loading==false&&  */}
+          {/* {showTable && tableData.length === 0 && loading==false&&  */}
           {tableData && tableData.length > 0 && showTable ? (
             <PropertyTable
               sortOnObject="propertyId"
@@ -245,15 +245,20 @@ class SearchProperty extends Component {
           ) : null}
         </Hidden>
         <Hidden smUp>
-          {tableData && tableData.length > 0 && showTable &&  (
+          {tableData && tableData.length > 0 && showTable && (
 
             <Label
-              label="PT_SEARCH_RESULTS"
-              dynamicArray={[tableData.length]}
+              secondaryText={'(' + tableData.length + ')'}
+              label="PT_SEARCH_PROPERTY_TABLE_HEADERS"
+              className="property-search-table-heading"
               fontSize={16}
-              color="rgba(0, 0, 0, 0.87)"
               labelStyle={{
+                fontFamily: "Roboto",
+                fontSize: "16px",
+                fontWeight: 500,
+                letterSpacing: "0px",
                 textAlign: "left",
+                color: "#484848"
               }}
             />
           )}
@@ -263,8 +268,8 @@ class SearchProperty extends Component {
             onActionClick={this.onAddButtonClick}
           />
         </Hidden>
-       
-        {showTable && tableData.length === 0 && loading==false&& (
+
+        {showTable && tableData.length === 0 && loading == false && (
           <div className="search-no-property-found">
             <div className="no-search-text">
               <Label label="PT_NO_PROPERTY_RECORD" />
