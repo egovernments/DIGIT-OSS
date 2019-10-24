@@ -119,8 +119,8 @@ CREATE TABLE egcl_billdetial(
 		    lastModifiedBy VARCHAR(256) NOT NULL,
     		lastModifiedDate BIGINT NOT NULL,
 
-		CONSTRAINT pk_egcl_billdetial PRIMARY KEY (id),
-        CONSTRAINT fk_egcl_billdetial FOREIGN KEY (billId) REFERENCES egcl_bill(id)
+		CONSTRAINT pk_egcl_billdetail PRIMARY KEY (id),
+        CONSTRAINT fk_egcl_billdetail FOREIGN KEY (billId) REFERENCES egcl_bill(id)
 );
 
 
@@ -244,9 +244,6 @@ CREATE TABLE egcl_billdetial_audit(
 		    createdBy VARCHAR(256) NOT NULL,
 		    createdDate BIGINT NOT NULL,
 		    lastModifiedBy VARCHAR(256) NOT NULL,
-    		lastModifiedDate BIGINT NOT NULL,
-
-		CONSTRAINT pk_egcl_billdetial PRIMARY KEY (id),
-        CONSTRAINT fk_egcl_billdetial FOREIGN KEY (billId) REFERENCES egcl_bill(id)
+    		lastModifiedDate BIGINT NOT NULL
 );
 

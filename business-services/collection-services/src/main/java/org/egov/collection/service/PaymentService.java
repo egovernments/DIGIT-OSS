@@ -25,7 +25,6 @@ import static java.util.Objects.isNull;
 @Service
 public class PaymentService {
 
-
     private ApportionerService apportionerService;
 
     private PaymentEnricher paymentEnricher;
@@ -166,9 +165,5 @@ public class PaymentService {
 
         return validatedPayments;
     }
-
-
-
-
 
 }
