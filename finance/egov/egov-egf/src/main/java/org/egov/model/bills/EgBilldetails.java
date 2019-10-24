@@ -48,6 +48,7 @@
 package org.egov.model.bills;
 
 import org.egov.commons.CChartOfAccounts;
+import org.egov.commons.CFunction;
 import org.egov.infra.persistence.entity.AbstractPersistable;
 import org.hibernate.validator.constraints.Length;
 
@@ -100,6 +101,9 @@ public class EgBilldetails extends AbstractPersistable<Integer> implements java.
 
     @Transient
     private CChartOfAccounts chartOfAccounts;
+    
+    @Transient
+    private CFunction function;
 
     @OrderBy("id")
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "egBilldetailsId", targetEntity = EgBillPayeedetails.class)
@@ -221,6 +225,14 @@ public class EgBilldetails extends AbstractPersistable<Integer> implements java.
 
     public void setChartOfAccounts(final CChartOfAccounts chartOfAccounts) {
         this.chartOfAccounts = chartOfAccounts;
+    }
+
+    public CFunction getFunction() {
+        return function;
+    }
+
+    public void setFunction(CFunction function) {
+        this.function = function;
     }
 
 }

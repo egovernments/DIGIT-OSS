@@ -54,9 +54,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
@@ -64,6 +69,8 @@ import org.apache.struts2.convention.annotation.Results;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.egov.commons.EgwStatus;
 import org.egov.commons.Fund;
+import org.egov.egf.dashboard.event.FinanceEventType;
+import org.egov.egf.dashboard.event.listener.FinanceDashboardService;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
@@ -105,9 +112,9 @@ public class CancelBillAction extends BaseFormAction {
 	private EgovMasterDataCaching masterDataCache;
 	@Autowired
 	private CancelBillAndVoucher cancelBillAndVoucher;
-
+	
 	@Autowired
-	private MicroserviceUtils microserviceUtils;
+	FinanceDashboardService finDashboardService;
 
 	@Override
 	public Object getModel() {
@@ -277,6 +284,7 @@ public class CancelBillAction extends BaseFormAction {
 	@ValidationErrorPage(value = "search")
 	@Action(value = "/voucher/cancelBill-search")
 	public String search() {
+	    
 		validateFund();
 		if (!hasFieldErrors()) {
 			billListDisplay.clear();
@@ -320,15 +328,15 @@ public class CancelBillAction extends BaseFormAction {
 		EgBillregister billRegister;
 		Date date= new Date();
 
-		final Long[] idList = new Long[billListDisplay.size()];
+		final HashSet<Long> idSet = new HashSet<>();
 		int i = 0, idListLength = 0;
 		String idString = "";
 		final StringBuilder statusQuery = new StringBuilder("from EgwStatus where ");
 		final StringBuilder cancelQuery = new StringBuilder("Update eg_billregister set ");
 		for (final BillRegisterBean billRgistrBean : billListDisplay)
 			if (billRgistrBean.getIsSelected()) {
-				idList[i++] = Long.parseLong(billRgistrBean.getId());
-				idListLength++;
+			    idSet.add(Long.parseLong(billRgistrBean.getId()));
+			    idListLength++;
 			}
 		if (expType == null || expType.equalsIgnoreCase("")) {
 			statusQuery.append("moduletype='" + FinancialConstants.CONTINGENCYBILL_FIN + "' and description='"
@@ -362,35 +370,21 @@ public class CancelBillAction extends BaseFormAction {
 		final EgwStatus status = (EgwStatus) persistenceService.find(statusQuery.toString());
 		persistenceService.getSession();
 		if (idListLength != 0) {
-			for (i = 0; i < idListLength; i++) {
-				billRegister = billsService.getBillRegisterById(idList[i].intValue());
-				// Need to do this change as configurable
-				/*
-				 * final boolean value =
-				 * cancelBillAndVoucher.canCancelBill(billRegister); if (!value)
-				 * { addActionMessage(getText("Bills Cancelled Failure"));
-				 * continue; }
-				 */
-				idString += idList[i] + (i == idListLength - 1 ? "" : ",");
-			}
-			if (isNotBlank(idString)) {
-				if (idString.charAt(idString.length() - 1) == ',')
-					idString = idString.replace(",", "");
-			}
-			cancelQuery.append(" where id in (" + idString + ")");
+			cancelQuery.append(" where id in (" + StringUtils.join(idSet,",") + ")");
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug(" Cancel Query - " + cancelQuery.toString());
 			final SQLQuery totalSQLQuery = persistenceService.getSession().createSQLQuery(cancelQuery.toString());
 			totalSQLQuery.setLong("statusId", status.getId());
 			totalSQLQuery.setLong("lastModifiedby", ApplicationThreadLocals.getUserId());
 			totalSQLQuery.setTimestamp("lastModifiedDate", date);
-			if (isNotBlank(idString))
-				totalSQLQuery.executeUpdate();
+			if (!idSet.isEmpty()){
+			    totalSQLQuery.executeUpdate();
+			}
 		}
-
-		if (isNotBlank(idString))
-			addActionMessage(getText("Bills Cancelled Succesfully"));
-
+		finDashboardService.publishEvent(FinanceEventType.billUpdateByIds, idSet);
+		if (!idSet.isEmpty()){
+		    addActionMessage(getText("Bills Cancelled Succesfully"));
+                }
 		prepareBeforeSearch();
 		return "search";
 	}

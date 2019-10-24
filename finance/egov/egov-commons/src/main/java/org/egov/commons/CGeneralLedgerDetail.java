@@ -56,6 +56,7 @@ public class CGeneralLedgerDetail implements Serializable {
     private Integer detailKeyId;
     private Accountdetailtype detailTypeId;
     private BigDecimal amount;
+    private String detailKeyName;
 
     public Long getId() {
         return id;
@@ -96,5 +97,14 @@ public class CGeneralLedgerDetail implements Serializable {
     public void setAmount(final BigDecimal amount) {
         this.amount = amount;
     }
+
+    public String getDetailKeyName() {
+        return detailKeyName;
+    }
+
+    public void setDetailKeyName(String detailKeyName) {
+        this.detailKeyName = detailKeyName;
+    }
+    
 
 }

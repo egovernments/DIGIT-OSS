@@ -161,9 +161,11 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.jayway.jsonpath.JsonPath;
 
 @Service
@@ -371,32 +373,14 @@ public class MicroserviceUtils {
     }
 
     private HashMap getFinanceMdmsObj() {
-
-        String mdmsUrl = this.hostUrl + this.mdmsSearchUrl;
-
-        RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setAuthToken(getUserToken());
-        MasterDetail masterDetail = new MasterDetail();
-        masterDetail.setName("mapping");
-        ModuleDetail moduleDetail = new ModuleDetail();
-        moduleDetail.setMasterDetails(Arrays.asList(masterDetail));
-        moduleDetail.setModuleName("common-masters");
-        MdmsCriteria mdmscriteria = new MdmsCriteria();
-        mdmscriteria.setTenantId(getTenentId().split(Pattern.quote("."))[0]);
-        mdmscriteria.setModuleDetails(Arrays.asList(moduleDetail));
-        MdmsCriteriaReq mdmsrequest = new MdmsCriteriaReq();
-        mdmsrequest.setRequestInfo(requestInfo);
-        mdmsrequest.setMdmsCriteria(mdmscriteria);
-        MdmsResponse response = restTemplate.postForObject(mdmsUrl, mdmsrequest, MdmsResponse.class);
-
-        Map<String, JSONArray> mdmsmap = response.getMdmsRes().get("common-masters");
-        if (null != mdmsmap && mdmsmap.size() > 0) {
-            HashMap mdmObj = (HashMap) mdmsmap.get("mapping").get(0);
-            return mdmObj;
+        HashMap mdmObj = null;
+        List<ModuleDetail> moduleDetailsList = new ArrayList<>();
+        this.prepareModuleDetails(moduleDetailsList , "common-masters", "mapping", null, null);
+        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
+        if(postForObject != null){
+            mdmObj = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.common-masters.mapping[0]"),HashMap.class);
         }
-
-        return null;
-
+        return mdmObj;
     }
     
     public List<Department> getDepartments() {
@@ -1376,18 +1360,26 @@ public class MicroserviceUtils {
     }
     
     public void pushDataToIndexer(Object data){
-        Object postForObject = restTemplate.postForObject(egovIndexerUrl, data, Object.class, finIndexerTopic);
+        try {
+            Object postForObject = restTemplate.postForObject(egovIndexerUrl, data, Object.class, finIndexerTopic);
+        } catch (Exception e) {
+            Log.error("ERROR occurred while trying to push the data to indexer : ", e);
+        }
     }
     
-    public Object getMdmsData(List<ModuleDetail> moduleDetails,boolean isStateLevel){
+    public Object getMdmsData(List<ModuleDetail> moduleDetails,boolean isStateLevel, String tenantId, String token){
         String mdmsUrl = this.hostUrl + this.mdmsSearchUrl;
         RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setAuthToken(getUserToken());
+        requestInfo.setAuthToken(token != null && !token.isEmpty() ? token : getUserToken());
         MdmsCriteria mdmscriteria = new MdmsCriteria();
-        if(isStateLevel){
-            mdmscriteria.setTenantId(getTenentId().split(Pattern.quote("."))[0]);
+        if(tenantId == null){
+            if(isStateLevel){
+                mdmscriteria.setTenantId(getTenentId().split(Pattern.quote("."))[0]);
+            }else{
+                mdmscriteria.setTenantId(getTenentId());
+            }
         }else{
-            mdmscriteria.setTenantId(getTenentId());
+            mdmscriteria.setTenantId(tenantId);
         }
         mdmscriteria.setModuleDetails(moduleDetails);
         MdmsCriteriaReq mdmsrequest = new MdmsCriteriaReq();
@@ -1402,7 +1394,7 @@ public class MicroserviceUtils {
         String tenentId = getTenentId();
         try {
             this.prepareModuleDetails(moduleDetailList, "tenant", "tenants", "code", tenentId);
-            Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailList, true), Map.class);
+            Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailList, true, null, null), Map.class);
             if(postForObject != null){
                 ulbGrade = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.tenant.tenants[0].city.ulbGrade"),String.class);
             }
@@ -1462,7 +1454,7 @@ public class MicroserviceUtils {
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
         try {
             this.prepareModuleDetails(moduleDetailsList , "BillingService", "BusinessService", "code", codes);
-            Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true), Map.class);
+            Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
             if(postForObject != null){
                 return list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.BillingService.BusinessService"),new TypeReference<List<BusinessService>>(){});
             }
@@ -1476,7 +1468,7 @@ public class MicroserviceUtils {
         List<BusinessService> list = null;
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
         this.prepareModuleDetails(moduleDetailsList, "BillingService", "BusinessService", "type", type);
-        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true), Map.class);
+        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
         if(postForObject != null){
              list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.BillingService.BusinessService"),new TypeReference<List<BusinessService>>(){});
         }
@@ -1504,7 +1496,7 @@ public class MicroserviceUtils {
                 this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "BusinessServiceMapping", fieldName, fieldValue);
             }
         }
-        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true), Map.class);
+        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
         if(postForObject != null){
              list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.FinanceModule.BusinessServiceMapping"),new TypeReference<List<BusinessServiceMapping>>(){});
         }
@@ -1515,7 +1507,7 @@ public class MicroserviceUtils {
         List<TaxHeadMaster> list = null;
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
         this.prepareModuleDetails(moduleDetailsList, "BillingService", "TaxHeadMaster", "service", serviceCode);
-        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true), Map.class);
+        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
         if(postForObject != null){
              list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.BillingService.TaxHeadMaster"),new TypeReference<List<TaxHeadMaster>>(){});
         }
@@ -1544,13 +1536,26 @@ public class MicroserviceUtils {
         List<InstrumentAccountCode> list = null;
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
         this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "InstrumentGLcodeMapping", "instrumenttype", type);
-        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true), Map.class);
+        Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
         if(postForObject != null){
              list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.FinanceModule.InstrumentGLcodeMapping"),new TypeReference<List<InstrumentAccountCode>>(){});
         }
         return !list.isEmpty() ? list.get(0) : null;
     }
     
+    public Department getDepartment(String code, String tenantId, String token){
+        List<ModuleDetail> moduleDetailsList = new ArrayList<>();
+        this.prepareModuleDetails(moduleDetailsList , "common-masters", "Department", "code", code);
+        try {
+            Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, tenantId, token), Map.class);
+            if(postForObject != null){
+                return mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.common-masters.Department[0]"),Department.class);
+            }
+        } catch (Exception e) {
+            LOGGER.error("ERROR occurred while fetching the Department for code : "+code,e);
+        }
+        return null;
+    }
     
 }
 

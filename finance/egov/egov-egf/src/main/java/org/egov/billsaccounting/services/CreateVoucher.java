@@ -97,6 +97,8 @@ import org.egov.commons.exception.TooManyValuesException;
 import org.egov.commons.service.ChartOfAccountDetailService;
 import org.egov.dao.bills.EgBillRegisterHibernateDAO;
 import org.egov.egf.autonumber.VouchernumberGenerator;
+import org.egov.egf.dashboard.event.FinanceEventType;
+import org.egov.egf.dashboard.event.listener.FinanceDashboardService;
 import org.egov.eis.service.EisCommonService;
 import org.egov.infra.admin.master.entity.AppConfig;
 import org.egov.infra.admin.master.entity.AppConfigValues;
@@ -274,6 +276,9 @@ public class CreateVoucher {
 
 	@Autowired
 	private ChartOfAccountDetailService chartOfAccountDetailService;
+	
+	@Autowired
+	FinanceDashboardService finDashboardService;
 
 	public CreateVoucher() {
 		if (LOGGER.isDebugEnabled())
@@ -398,6 +403,7 @@ public class CreateVoucher {
 			headerDetails.put(VoucherConstant.VOUCHERNAME, name);
 			headerDetails.put(VoucherConstant.VOUCHERTYPE, voucherType);
 			headerDetails.put("vouchersubtype", voucherSubType);
+			headerDetails.put(VoucherConstant.BILLNUMBER, egBillregister.getBillnumber());
 			new SimpleDateFormat(DD_MMM_YYYY);
 			headerDetails.put(VoucherConstant.VOUCHERNUMBER, voucherNumber == null ? "" : voucherNumber);
 			Date dt = new Date();
@@ -1128,7 +1134,9 @@ public class CreateVoucher {
 			final String vdt = formatter.format(vh.getVoucherDate());
 			String fiscalPeriod = null;
 			try {
-				fiscalPeriod = getFiscalPeriod(vdt);
+				CFiscalPeriod fp = getFiscalPeriod(vdt);
+                                fiscalPeriod = fp.getId().toString();
+                                vh.setFiscalName(fp.getName());
 			} catch (final TaskFailedException e) {
 				throw new ApplicationRuntimeException("error while getting fiscal period");
 			}
@@ -1183,6 +1191,9 @@ public class CreateVoucher {
 			final SimpleDateFormat formatter = new SimpleDateFormat(DD_MMM_YYYY);
 			if (!chartOfAccounts.postTransaxtions(txnList, formatter.format(vh.getVoucherDate())))
 				throw new ApplicationRuntimeException("Voucher creation Failed");
+			
+			// Generating EVENT to push the generated voucher to ES index.
+			finDashboardService.publishEvent(FinanceEventType.voucherCreateOrUpdate, vh);
 		}
 
 		catch (final ValidationException ve) {
@@ -1660,6 +1671,8 @@ public class CreateVoucher {
 
 			cVoucherHeader.setRefvhId((Long) headerdetails.get(VoucherConstant.REFVOUCHER));
 			cVoucherHeader.setEffectiveDate(new Date());
+			Object billNumber = headerdetails.get(VoucherConstant.BILLNUMBER);
+                        cVoucherHeader.setBillNumber(billNumber != null ? billNumber.toString() : "");
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug(
 						"Printing Voucher Details------------------------------------------------------------------------------");
@@ -2757,18 +2770,18 @@ public class CreateVoucher {
 		return isUnique;
 	}
 
-	public String getFiscalPeriod(final String vDate) throws TaskFailedException {
-		BigInteger fiscalPeriod = null;
+	public CFiscalPeriod getFiscalPeriod(final String vDate) throws TaskFailedException {
+	        CFiscalPeriod fiscalPeriod = null;
 		final String sql = "select id from fiscalperiod  where '" + vDate + "' between startingdate and endingdate";
 		try {
-			final Query pst = persistenceService.getSession().createSQLQuery(sql);
-			final List<BigInteger> rset = pst.list();
-			fiscalPeriod = rset != null ? rset.get(0) : BigInteger.ZERO;
+			final Query pst = persistenceService.getSession().createSQLQuery(sql).addEntity(CFiscalPeriod.class);
+			final List<CFiscalPeriod> rset = pst.list();
+			fiscalPeriod = rset != null ? rset.get(0) : null;
 		} catch (final Exception e) {
 			LOGGER.error("Exception..." + e.getMessage());
 			throw new TaskFailedException(e.getMessage());
 		}
-		return fiscalPeriod.toString();
+		return fiscalPeriod;
 	}
 
 }

@@ -744,6 +744,13 @@ public class ChartOfAccounts {
 				gLedger.setCreditAmount(Double.parseDouble(txn.getCrAmount()));
 				gLedger.setDescription(txn.getNarration());
 				CVoucherHeader cVoucherHeader = voucherService.findById(Long.valueOf(txn.getVoucherHeaderId()), false);
+				if(cVoucherHeader.getGeneralledger() == null){
+				    Set<CGeneralLedger> set = new HashSet<>();
+				    set.add(gLedger);
+				    cVoucherHeader.setGeneralLedger(set);
+				}else{
+				    cVoucherHeader.getGeneralLedger().add(gLedger);
+				}
 				gLedger.setVoucherHeaderId(cVoucherHeader);
 				gLedger.setEffectiveDate(new Date());
 				if (LOGGER.isInfoEnabled())
@@ -784,6 +791,7 @@ public class ChartOfAccounts {
 				glParamList.addAll(temp);
 				final ArrayList txnPrm = txn.getTransaxtionParam();
 				String detKeyId = "";
+				String detKeyName = "";
 				if (LOGGER.isInfoEnabled())
 					LOGGER.info("glParamList size :" + glParamList.size());
 				for (int a = 0; a < glParamList.size(); a++)
@@ -801,13 +809,14 @@ public class ChartOfAccounts {
 								if (tParam.getDetailName().equalsIgnoreCase(glPrm.getDetailName())
 										&& tParam.getGlcodeId().equals(gLedger.getGlcodeId().getId().toString())) {
 									gLedgerDet = new CGeneralLedgerDetail();
-
+									detKeyName = tParam.getDetailName();
 									detKeyId = tParam.getDetailKey();
 									gLedgerDet.setGeneralLedgerId(gLedger);
 									Accountdetailtype acctype = (Accountdetailtype) persistenceService.getSession()
 											.load(Accountdetailtype.class, glPrm.getDetailId());
 									gLedgerDet.setDetailTypeId(acctype);
 									gLedgerDet.setDetailKeyId(Integer.parseInt(detKeyId));
+									gLedgerDet.setDetailKeyName(detKeyName);
 									gLedgerDet.setAmount(new BigDecimal(tParam.getDetailAmt()));
 									generalLedgerDetPersistenceService.persist(gLedgerDet);
 									try {
@@ -830,6 +839,13 @@ public class ChartOfAccounts {
 									} catch (final Exception e) {
 										LOGGER.error("Error while inserting to eg_remittance_gldtl " + e, e);
 										return false;
+									}
+									if(gLedger.getGeneralLedgerDetails() == null){
+									    Set<CGeneralLedgerDetail> gldSet = new HashSet<>();
+									    gldSet.add(gLedgerDet);
+									    gLedger.setGeneralLedgerDetails(gldSet);
+									}else{
+									    gLedger.getGeneralLedgerDetails().add(gLedgerDet);
 									}
 								}
 							}

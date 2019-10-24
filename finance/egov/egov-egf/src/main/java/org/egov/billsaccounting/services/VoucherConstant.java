@@ -130,5 +130,6 @@ public interface VoucherConstant {
     public static final String BUDGETCHECKREQ = "Budget check required";
     public static final String TRANSACTION_NUMBER = "Transaction number";
     public static final String TRANSACTION_DATE = "Transaction date";
-	public static final String ALLOWNEGETIVE = "allow Negetive Amount In Budget"; 
+	public static final String ALLOWNEGETIVE = "allow Negetive Amount In Budget";
+    public static final String BILLNUMBER = "billnumber"; 
 }

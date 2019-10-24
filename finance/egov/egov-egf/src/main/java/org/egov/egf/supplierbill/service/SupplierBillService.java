@@ -71,6 +71,8 @@ import org.egov.dao.budget.BudgetDetailsHibernateDAO;
 import org.egov.egf.autonumber.SupplierBillNumberGenerator;
 import org.egov.egf.autonumber.WorksBillNumberGenerator;
 import org.egov.egf.billsubtype.service.EgBillSubTypeService;
+import org.egov.egf.dashboard.event.FinanceEventType;
+import org.egov.egf.dashboard.event.listener.FinanceDashboardService;
 import org.egov.egf.expensebill.repository.DocumentUploadRepository;
 import org.egov.egf.supplierbill.repository.SupplierBillRepository;
 import org.egov.egf.utils.FinancialUtils;
@@ -176,6 +178,9 @@ public class SupplierBillService {
 
     @Autowired
     private MicroserviceUtils microServiceUtil;
+    
+    @Autowired
+    FinanceDashboardService finDashboardService;
 
     @Autowired
     public SupplierBillService(final SupplierBillRepository supplierBillRepository, final ScriptService scriptExecutionService) {
@@ -263,8 +268,9 @@ public class SupplierBillService {
                 || StringUtils.isBlank(savedEgBillregister.getEgBillregistermis().getSourcePath()))
             savedEgBillregister.getEgBillregistermis().setSourcePath(
                     "/services/EGF/supplierbill/view/" + savedEgBillregister.getId().toString());
-
-        return supplierBillRepository.save(savedEgBillregister);
+        EgBillregister egbillReg = supplierBillRepository.save(savedEgBillregister);
+        finDashboardService.publishEvent(FinanceEventType.billCreateOrUpdate, egbillReg);
+        return egbillReg;
     }
 
     public void checkBudgetAndGenerateBANumber(final EgBillregister egBillregister) {
@@ -331,6 +337,7 @@ public class SupplierBillService {
             }
             updatedegBillregister = supplierBillRepository.save(egBillregister);
         }
+        finDashboardService.publishEvent(FinanceEventType.billCreateOrUpdate, updatedegBillregister);
 
         return updatedegBillregister;
     }
