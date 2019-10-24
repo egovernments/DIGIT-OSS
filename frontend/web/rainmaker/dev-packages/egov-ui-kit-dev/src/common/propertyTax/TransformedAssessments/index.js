@@ -149,7 +149,7 @@ export const getCompletedTransformedItems = (assessmentsByStatus = [], cities, l
         property: item.property,
         tenantId: item.tenantId,
         status: get(item, "receiptInfo.status") || 'Pending',
-        consumerCode: `${item.propertyId}:${item.assessmentNumber}`,
+        consumerCode: `${item.propertyId}`,
         receipt: true,
         localizationLabels: localizationLabels,
         cities: cities,

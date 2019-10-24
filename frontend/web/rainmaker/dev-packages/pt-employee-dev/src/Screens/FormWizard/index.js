@@ -990,19 +990,17 @@ class FormWizard extends Component {
     const { search } = location;
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
     const queryObj = [
-      { key: "propertyId", value: propertyId },
-      { key: "assessmentNumber", value: assessmentNumber },
-      { key: "assessmentYear", value: assessmentYear },
+      { key: "consumerCodes", value: propertyId },
       { key: "tenantId", value: tenantId }
     ];
-    amountExpected &&
-      queryObj.push({
-        key: "amountExpected",
-        value:
-          valueSelected === "Full_Amount"
-            ? estimation[0].totalAmount
-            : totalAmountToBePaid
-      });
+    // amountExpected &&
+    //   queryObj.push({
+    //     key: "amountExpected",
+    //     value:
+    //       valueSelected === "Full_Amount"
+    //         ? estimation[0].totalAmount
+    //         : totalAmountToBePaid
+    //   });
 
     try {
       const billResponse = await httpRequest(
@@ -1074,10 +1072,18 @@ class FormWizard extends Component {
       ...Bill[0],
       ...prepareFormData.Receipt[0].Bill[0]
     };
-    prepareFormData.Receipt[0].Bill[0].billDetails[0] = {
-      ...Bill[0].billDetails[0],
-      ...prepareFormData.Receipt[0].Bill[0].billDetails[0]
-    };
+      // prepareFormData.Receipt[0].Bill[0].billDetails[0] = {
+    //   ...Bill[0].billDetails[0],
+    //   ...prepareFormData.Receipt[0].Bill[0].billDetails[0]
+    // };
+
+    for(let index=0;index<Bill[0].billDetails.length;index++){
+      prepareFormData.Receipt[0].Bill[0].billDetails[index] = {
+        ...Bill[0].billDetails[index],
+        ...prepareFormData.Receipt[0].Bill[0].billDetails[index],
+        collectionType:'COUNTER'
+      };
+    }
     if (!get(prepareFormData, "Receipt[0].instrument.instrumentType.name")) {
       set(prepareFormData, "Receipt[0].instrument.instrumentType.name", "Cash");
     }
@@ -1092,11 +1098,11 @@ class FormWizard extends Component {
       "Receipt[0].Bill[0].taxAndPayments[0].amountPaid",
       this.state.totalAmountToBePaid
     );
-    set(
-      prepareFormData,
-      "Receipt[0].Bill[0].billDetails[0].collectionType",
-      "COUNTER" // HardCoding collectionType to COUNTER - Discussed with BE
-    );
+    // set(
+    //   prepareFormData,
+    //   "Receipt[0].Bill[0].billDetails[0].collectionType",
+    //   "COUNTER" // HardCoding collectionType to COUNTER - Discussed with BE
+    // );
     //----------------
     set(
       prepareFormData,

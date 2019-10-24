@@ -65,12 +65,8 @@ class DropDown extends Component {
     const { generalMDMSDataById, history, item, singleAssessmentByStatus=[] } = this.props;
     const { downloadReceipt } = this;
     const callReciept=(isEmployeeReceipt=false)=>{
-      singleAssessmentByStatus.forEach((assessment)=>{
-        if (item.financialYear === assessment.financialYear  && assessment.receiptInfo.status != "Paid-Disable") {
-          item.consumerCode = item.propertyId + ':' + assessment.assessmentNumber;
-          downloadReceipt(item, generalMDMSDataById, isEmployeeReceipt, imageUrl);
-        }
-      })
+      item.consumerCode = item.propertyId;
+      downloadReceipt(item, generalMDMSDataById, isEmployeeReceipt, imageUrl);
     }
     switch (payload) {
       case "Re-Assess":

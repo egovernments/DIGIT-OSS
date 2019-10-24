@@ -317,7 +317,7 @@ export const getAssesmentsandStatus = (queryObjectproperty) => {
             curr &&
             curr.propertyDetails &&
             curr.propertyDetails.reduce((consumerCodes, item) => {
-              consumerCodes[`${curr.propertyId}:${item.assessmentNumber}`] = {
+              consumerCodes[`${curr.propertyId}`] = {
                 ...item,
                 propertyId: curr.propertyId,
                 address: curr.address,
@@ -343,7 +343,7 @@ export const getAssesmentsandStatus = (queryObjectproperty) => {
       const payloadReceipts = await httpRequest(
         RECEIPT.GET.URL,
         RECEIPT.GET.ACTION,
-        [{ key: "consumerCode", value: commaSeperatedCC }],
+        [{ key: "consumerCode", value: commaSeperatedCC.split(':')[0] }],
         {},
         [],
         {
@@ -381,7 +381,7 @@ export const getSingleAssesmentandStatus = (queryObjectproperty) => {
         queryObjectproperty &&
         queryObjectproperty.propertyDetails &&
         queryObjectproperty.propertyDetails.reduce((acc, item) => {
-          acc[`${queryObjectproperty.propertyId}:${item.assessmentNumber}`] = {
+          acc[`${queryObjectproperty.propertyId}`] = {
             ...item,
             propertyId: queryObjectproperty.propertyId,
             address: queryObjectproperty.address,
@@ -396,7 +396,7 @@ export const getSingleAssesmentandStatus = (queryObjectproperty) => {
       const payloadReceipts = await httpRequest(
         RECEIPT.GET.URL,
         RECEIPT.GET.ACTION,
-        [{ key: "consumerCode", value: finalcc }],
+        [{ key: "consumerCode", value: finalcc.split(':')[0] }],
         {},
         [],
         {

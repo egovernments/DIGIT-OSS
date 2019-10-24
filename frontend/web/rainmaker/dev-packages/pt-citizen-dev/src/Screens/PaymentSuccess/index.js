@@ -121,7 +121,7 @@ class PaymentSuccess extends Component {
       { key: "tenantId", value: match.params.tenantId },
       {
         key: "consumerCode",
-        value: `${match.params.propertyId}:${match.params.assessmentId}`
+        value: `${match.params.propertyId}`
       }
     ]);
     this.convertImgToDataURLviaCanvas(
