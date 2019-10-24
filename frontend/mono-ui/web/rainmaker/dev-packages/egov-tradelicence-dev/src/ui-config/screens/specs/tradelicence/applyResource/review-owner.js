@@ -47,6 +47,20 @@ export const reviewOwnerFatherName = getLabelWithValue(
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName"
   }
 );
+export const reviewRelationship = getLabelWithValue(
+  {
+    labelName: "Relationship",
+    labelKey: "TL_COMMON_RELATIONSHIP_LABEL"
+  },
+  {
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+    localePrefix: {
+      moduleName: "COMMON",
+      masterName: "RELATION"
+    },
+
+  }
+);
 export const reviewOwnerGender = getLabelWithValue(
   {
     labelName: "Gender",
@@ -167,6 +181,7 @@ export const getReviewOwner = (isEditable = true) => {
               { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name" }
             ),
             reviewOwnerFatherName,
+            reviewRelationship,
             reviewOwnerGender,
             reviewOwnerDOB,
             reviewOwnerEmail,
@@ -242,6 +257,7 @@ export const getReviewOwner = (isEditable = true) => {
               }
             ),
             reviewOwnerFatherName,
+            reviewRelationship,
             reviewOwnerGender,
             reviewOwnerDOB,
 
