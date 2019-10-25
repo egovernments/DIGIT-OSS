@@ -60,7 +60,7 @@ class SearchProperty extends Component {
 
   onSearchClick = (form, formKey) => {
     const { propertiesFound } = this.props;
-    const { city, ids, oldpropertyids, mobileNumber } = form.fields || {};
+    const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
     const tableData = this.extractTableData(propertiesFound);
 
     if (!validateForm(form)) {
@@ -83,13 +83,13 @@ class SearchProperty extends Component {
         queryParams.push({ key: "ids", value: ids.value });
       }
       if (oldpropertyids.value) {
-        queryParams.push({
-          key: "oldpropertyids",
-          value: oldpropertyids.value
-        });
+        queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
       }
       if (mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
+      }
+      if (applicationNumber.value) {
+        queryParams.push({ key: "applicationNumber", value: applicationNumber.value });
       }
       this.setState({
         searchResult: tableData
@@ -99,6 +99,35 @@ class SearchProperty extends Component {
     }
   };
 
+  getLink = (userType, history, id, tenantId)=>{
+    return (
+      <a
+        style={{
+          height: 20,
+          lineHeight: "auto",
+          minWidth: "inherit",
+          cursor: "pointer",
+          textDecoration: "underline"
+        }}
+        onClick={
+          userType === "CITIZEN"
+            ? e => {
+              history.push(
+                `/property-tax/my-properties/property/${id}/${tenantId}?isMutationApplication=true`
+              );
+            }
+            : e => {
+              history.push(
+                `/property-tax/property/${id}/${tenantId}`
+              );
+            }
+        }
+      >
+        {id}
+      </a>
+    );
+  }
+
   extractTableData = properties => {
     const { history } = this.props;
     const userType = JSON.parse(getUserInfo()).type;
@@ -106,55 +135,30 @@ class SearchProperty extends Component {
       let {
         propertyId,
         status,
-        oldPropertyId,
-        address,
+        applicationNo,
+        applicationType,
+        date,
         propertyDetails,
         tenantId
       } = property;
-      const { doorNo, buildingName, street, locality } = address;
-      let displayAddress = doorNo
-        ? `${doorNo ? doorNo + "," : ""}` +
-        `${buildingName ? buildingName + "," : ""}` +
-        `${street ? street + "," : ""}`
-        : `${locality.name ? locality.name : ""}`;
+      // const { doorNo, buildingName, street, locality } = address;
+      // let displayAddress = doorNo
+      //   ? `${doorNo ? doorNo + "," : ""}` +
+      //   `${buildingName ? buildingName + "," : ""}` +
+      //   `${street ? street + "," : ""}`
+      //   : `${locality.name ? locality.name : ""}`;
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
-      const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
-      let assessmentNo = latestAssessment.assessmentNumber;
-      const uuid = get(latestAssessment, "citizenInfo.uuid");
-      let button = (
-        <a
-          style={{
-            height: 20,
-            lineHeight: "auto",
-            minWidth: "inherit",
-            cursor: "pointer",
-            textDecoration: "underline"
-          }}
-          onClick={
-            userType === "CITIZEN"
-              ? e => {
-                history.push(
-                  `/property-tax/my-properties/property/${propertyId}/${tenantId}`
-                );
-              }
-              : e => {
-                history.push(
-                  `/property-tax/property/${propertyId}/${tenantId}`
-                );
-              }
-          }
-        >
-          {propertyId}
-        </a>
-      );
+      // const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
+      // let assessmentNo = latestAssessment.assessmentNumber;
+      // const uuid = get(latestAssessment, "citizenInfo.uuid");
+
       let item = {
-        index: index + 1,
-        propertyId: button,
+        applicationNo: this.getLink(userType, history, applicationNo, tenantId),
+        propertyId: this.getLink(userType, history, propertyId, tenantId),
+        applicationType: applicationType,
         name: name,
-        guardianName: guardianName,
-        oldPropertyId: oldPropertyId,
-        address: displayAddress,
+        date: date,
         status: status
       };
       tableData.push(item);

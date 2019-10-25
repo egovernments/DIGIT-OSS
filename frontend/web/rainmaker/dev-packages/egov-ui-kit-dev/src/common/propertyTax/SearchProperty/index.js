@@ -46,7 +46,7 @@ class SearchProperty extends Component {
 
   };
   onSearchClick = (form, formKey) => {
-    const { city, ids, oldpropertyids, mobileNumber } = form.fields || {};
+    const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
     } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value) {
@@ -69,10 +69,41 @@ class SearchProperty extends Component {
       if (mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
       }
+      if (applicationNumber.value) {
+        queryParams.push({ key: "applicationNumber", value: applicationNumber.value });
+      }
       this.props.fetchProperties(queryParams);
       this.setState({ showTable: true });
     }
   };
+
+  getLink = (userType, history, propertyId, tenantId) => {
+    return (
+      <a
+        onClick={
+          userType === "CITIZEN"
+            ? () => {
+              // localStorageSet("draftId", "")
+              this.setState({
+                dialogueOpen: true,
+                urlToAppend: `/property-tax/assessment-form?isReassesment=false&propertyId=${propertyId}&tenantId=${tenantId}`,
+              });
+            }
+            : (e) => {
+              // localStorageSet("draftId", "")
+              history.push(`/property-tax/property/${propertyId}/${tenantId}?isMutationApplication=true`);
+            }
+        }
+        style={{
+          height: 20,
+          lineHeight: "auto",
+          minWidth: "inherit",
+          cursor: "pointer",
+          textDecoration: "underline"
+        }}>
+        {propertyId}
+      </a>);
+  }
 
   extractTableData = (properties) => {
     const { history } = this.props;
@@ -80,21 +111,22 @@ class SearchProperty extends Component {
       let {
         propertyId,
         status,
-        oldPropertyId,
-        address,
+        applicationNo,
+        applicationType,
+        date,
         propertyDetails,
         tenantId
       } = property;
-      const { doorNo, buildingName, street, locality } = address;
-      let displayAddress = doorNo
-        ? `${doorNo ? doorNo + "," : ""}` + `${buildingName ? buildingName + "," : ""}` + `${street ? street + "," : ""}`
-        : `${locality.name ? locality.name : ""}`;
+      // const { doorNo, buildingName, street, locality } = address;
+      // let displayAddress = doorNo
+      //   ? `${doorNo ? doorNo + "," : ""}` + `${buildingName ? buildingName + "," : ""}` + `${street ? street + "," : ""}`
+      //   : `${locality.name ? locality.name : ""}`;
 
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
-      let guardianName = latestAssessment.owners[0].fatherOrHusbandName || "";
-      let assessmentNo = latestAssessment.assessmentNumber;
-      const uuid = get(latestAssessment, "citizenInfo.uuid");
+      // let guardianName = latestAssessment.owners[0].fatherOrHusbandName || "";
+      // let assessmentNo = latestAssessment.assessmentNumber;
+      // const uuid = get(latestAssessment, "citizenInfo.uuid");
       // let button = (
       //   <Button
       //     onClick={
@@ -119,39 +151,13 @@ class SearchProperty extends Component {
       //     style={{ height: 20, lineHeight: "auto", minWidth: "inherit" }}
       //   />
       // );
-      let button = (
-        <a
-          onClick={
-            userType === "CITIZEN"
-              ? () => {
-                // localStorageSet("draftId", "")
-                this.setState({
-                  dialogueOpen: true,
-                  urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=false&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`,
-                });
-              }
-              : (e) => {
-                // localStorageSet("draftId", "")
-                history.push(`/property-tax/property/${propertyId}/${property.tenantId}`);
-              }
-          }
-          style={{
-            height: 20,
-            lineHeight: "auto",
-            minWidth: "inherit",
-            cursor: "pointer",
-            textDecoration: "underline"
-          }}>
-          {propertyId}
-        </a>);
-
+      
       let item = {
-        index: index + 1,
-        propertyId: button,
+        applicationNo: this.getLink(userType, history, applicationNo, tenantId),
+        propertyId: this.getLink(userType, history, propertyId, tenantId),
         name: name,
-        guardianName: guardianName,
-        oldPropertyId: oldPropertyId,
-        address: displayAddress,
+        applicationType: applicationType,
+        date: date,
         status: status
 
       };
