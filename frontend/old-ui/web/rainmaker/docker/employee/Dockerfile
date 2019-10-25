@@ -2,6 +2,7 @@
 FROM egovio/alpine-node-builder-10:yarn AS build  
 ARG WORK_DIR
 WORKDIR /app
+ENV NODE_OPTIONS "--max-old-space-size=1792"
 
 # copy the project files
 COPY ${WORK_DIR} .
