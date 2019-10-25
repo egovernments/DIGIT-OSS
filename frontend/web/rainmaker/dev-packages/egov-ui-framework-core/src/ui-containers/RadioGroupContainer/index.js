@@ -26,16 +26,14 @@ const styles = theme => ({
   radioRoot: {
     marginBottom: 12
   },
-  formlabel:{
-    fontSize:12,
-    fontWeight:400,
-    letterSpacing:0.56
+  formLabel: {
+    fontSize: 12,
+    fontWeight: 400,
+    letterSpacing: 0.56
   }
 });
 
 class RadioButtonsGroup extends React.Component {
- 
-
   handleChange = event => {
     const {
       screenKey,

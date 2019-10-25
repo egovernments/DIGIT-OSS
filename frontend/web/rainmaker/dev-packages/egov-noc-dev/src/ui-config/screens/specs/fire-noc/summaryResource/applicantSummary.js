@@ -114,6 +114,16 @@ export const applicantSummary = getCommonGrayCard({
               jsonPath:
                 "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].fatherOrHusbandName"
             }
+            ),
+            applicantRelation: getLabelWithValue(
+              {
+                labelName: "Relationship",
+                labelKey: "NOC_APPLICANT_RELATIONSHIP_LABEL"
+              },
+              {
+                jsonPath:
+                  "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].relationship"
+              },
           ),
           applicantDob: getLabelWithValue(
             {
