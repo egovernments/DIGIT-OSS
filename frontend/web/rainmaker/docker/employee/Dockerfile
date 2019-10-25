@@ -9,7 +9,8 @@ RUN yarn run prod:employee
 
 # Create runtime image
 FROM nginx:mainline-alpine 
-ENV WEB_DIR=/var/web/employee
+ENV WEB_DIR=/var/web/employee \
+    NODE_OPTIONS=--max-old-space-size=1792
 
 RUN mkdir -p ${WEB_DIR}
 
