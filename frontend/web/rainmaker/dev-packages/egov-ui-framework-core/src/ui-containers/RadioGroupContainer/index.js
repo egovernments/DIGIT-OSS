@@ -51,18 +51,20 @@ class RadioButtonsGroup extends React.Component {
   };
 
   render() {
-    const {
-      label,
-      classes,
-      buttons,
-      defaultValue,
-      value,
-      fieldValue,
-      required
-    } = this.props;
+  //  const { classes, buttons, fieldValue } = this.props;
+  const {
+    label,
+    classes,
+    buttons,
+    defaultValue,
+    value,
+    fieldValue,
+    required
+  } = this.props;
 
     return (
       <div className={classes.root}>
+        {/* <FormControl component="fieldset" className={classes.formControl}> */}
         <FormControl
           component="fieldset"
           className={classes.formControl}
@@ -81,7 +83,8 @@ class RadioButtonsGroup extends React.Component {
             aria-label="Gender"
             name="gender1"
             className={classes.group}
-            value={value || fieldValue || defaultValue}
+           // value={this.state.value || fieldValue}
+           value={value || fieldValue || defaultValue}
             onChange={this.handleChange}
           >
             {buttons &&
@@ -92,7 +95,13 @@ class RadioButtonsGroup extends React.Component {
                     classes={{ label: "radio-button-label" }}
                     value={button.value}
                     control={
-                      <Radio className={classes.radioRoot} color="primary" />
+                      // <Radio
+                      //   classes={{
+                      //     root: "radio-root"
+                      //   }}
+                      //   color="primary"
+                      // />
+                     <Radio className={classes.radioRoot} color="primary" />
                     }
                     // label={button.label}
                     label={

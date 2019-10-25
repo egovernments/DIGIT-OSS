@@ -24,7 +24,7 @@ class LanguageSelection extends Component {
       border: "1px solid #fe7a51",
     },
     defaultStyle: {
-      border: "1px solid #484848",
+      border: "1px solid #fe7a51",
       borderRadius: "1px",
       marginRight: "4.65%",
       height: "30px",
@@ -50,7 +50,7 @@ class LanguageSelection extends Component {
       // <div className="drawer-button-toggle-container">
       <div className="rainmaker-displayInline" style={{ marginTop: 10, marginLeft: 4 }}>
         <Icon style={{ height: "24px", width: "21px" }} action="action" name="language" />
-        <div style={{ marginLeft: 12 }}>
+        <div style={{ marginLeft: 12 , width: "100%"  }}>
           <Label
             className="menuStyle with-childs"
             containerStyle={{ marginLeft: 0, marginBottom: 10, marginRight: 80 }}

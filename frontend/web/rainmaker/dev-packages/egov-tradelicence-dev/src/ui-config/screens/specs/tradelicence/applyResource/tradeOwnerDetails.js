@@ -131,22 +131,56 @@ export const getFatherNameField = getTextField({
 //     }
 //   };
 // };
-export const getRelationshipRadioButton = getRadioButton(
-  [
-    {
-      labelName: "Father",
-      labelKey: "COMMON_RELATION_FATHER",
-      value: "FATHER"
+// export const getRelationshipRadioButton = getRadioButton(
+//   [
+//     {
+//       labelName: "Father",
+//       labelKey: "COMMON_RELATION_FATHER",
+//       value: "FATHER"
+export const getRelationshipRadioButton = {
+  uiFramework: "custom-containers",
+  componentPath: "RadioGroupContainer",
+  gridDefination: {
+    xs: 12,
+    sm: 12,
+    md: 6
+  },
+  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+  props: {
+    label: {
+      name: "Relationship",
+      key: "TL_COMMON_RELATIONSHIP_LABEL"
+
     },
-    {
-      label: "Husband",
-      labelKey: "COMMON_RELATION_HUSBAND",
-      value: "HUSBAND"
-    }
-  ],
-  "Licenses[0].tradeLicenseDetail.owners[0].relationship",
-  ""
-);
+//     {
+//       label: "Husband",
+//       labelKey: "COMMON_RELATION_HUSBAND",
+//       value: "HUSBAND"
+//     }
+//   ],
+//   "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+//   ""
+// );
+
+buttons: [
+  {
+    labelName: "Father",
+    labelKey: "COMMON_RELATION_FATHER",
+    value: "FATHER"
+  },
+  {
+    label: "Husband",
+    labelKey: "COMMON_RELATION_HUSBAND",
+    value: "HUSBAND"
+  }
+],
+jsonPath:
+  "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].relationship",
+required: true
+},
+required: true,
+type: "array"
+};
 
 export const ownerInfoInstitutional = {
   ...getCommonGrayCard({
