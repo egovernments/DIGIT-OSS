@@ -3,11 +3,11 @@ import Loadable from "react-loadable";
 import LinearProgress from "egov-ui-framework/ui-atoms/LinearSpinner";
 
 const Loading = () => <LinearProgress />;
+
 const TestMolecules = Loadable({
   loader: () => import("./TestMolecules"),
   loading: () => <Loading />
 });
-<<<<<<< Updated upstream
 const RadioButtonsGroup = Loadable({
   loader: () => import("./RadioGroup"),
   loading: () => <Loading />
@@ -38,10 +38,6 @@ const DividerWithLabel = Loadable({
   loading: () => <Loading />
 });
 
-const MapLocator = Loadable({
-  loader: () => import("./MapLocator"),
-  loading: () => <Loading />
-});
 
 const FeesEstimateCard = Loadable({
   loader: () => import("./FeesEstimateCard"),
@@ -60,13 +56,7 @@ export {
   CustomTab,
   UploadSingleFile,
   DocumentList,
-  MapLocator,
   FeesEstimateCard,
   DividerWithLabel,
   HowItWorks
-=======
-
-export {
-  TestMolecules
->>>>>>> Stashed changes
 };

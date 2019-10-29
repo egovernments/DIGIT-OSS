@@ -4,7 +4,6 @@ import LinearProgress from "egov-ui-framework/ui-atoms/LinearSpinner";
 
 const Loading = () => <LinearProgress />;
 
-<<<<<<< Updated upstream
 const CustomTabContainer = Loadable({
   loader: () => import("./CustomTabContainer"),
   loading: () => <Loading />
@@ -46,16 +45,14 @@ const DialogContainer = Loadable({
 
 const ViewBreakupContainer = Loadable({
   loader: () => import("./ViewbreakupDialogContainer"),
-=======
-
+  loading: () => <Loading />
+});
 const TestContainer = Loadable({
   loader: () => import("./TestContainer"),
->>>>>>> Stashed changes
   loading: () => <Loading />
 });
 
 export {
-<<<<<<< Updated upstream
   CustomTabContainer,
   LabelContainer,
   CheckboxContainer,
@@ -65,8 +62,6 @@ export {
   DocumentListContainer,
   PaymentRedirectPage,
   ViewBreakupContainer,
-  DialogContainer
-=======
+  DialogContainer,
   TestContainer
->>>>>>> Stashed changes
 };

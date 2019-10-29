@@ -16,7 +16,7 @@ import { compose } from "recompose";
 import ReactJson from "react-json-view";
 import { screenHoc } from "egov-ui-framework/ui-hocs";
 import CommonView from "egov-ui-framework/ui-molecules/CommonView";
-import defaultScreenConfig from "../../ui-config/screens/specs/egov-common/login";
+import defaultScreenConfig from "../../ui-config/screens/specs/egov-common/pay";
 
 const initScreenConfig = defaultScreenConfig;
 
