@@ -19,6 +19,6 @@ public class FinanceDashboardListener {
 //    @TransactionalEventListener(phase=TransactionPhase.AFTER_COMMIT)
     @EventListener
     public void handleEvent(FinanceDashboardEvent event) throws InterruptedException {
-        finDashboardService.publishEventTemp(event);
+        finDashboardService.pushtoEskIndex(event);
     }
 }

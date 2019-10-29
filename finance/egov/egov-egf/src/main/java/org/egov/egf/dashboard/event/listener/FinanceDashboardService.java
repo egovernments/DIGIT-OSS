@@ -13,7 +13,6 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.egov.commons.Accountdetailtype;
 import org.egov.commons.CGeneralLedger;
 import org.egov.commons.CGeneralLedgerDetail;
 import org.egov.commons.CVoucherHeader;
@@ -30,8 +29,6 @@ import org.egov.egf.dashboard.model.EgBilldetailsData;
 import org.egov.egf.dashboard.model.VoucherHeaderData;
 import org.egov.egf.dashboard.model.VoucherStatus;
 import org.egov.egf.expensebill.service.ExpenseBillService;
-import org.egov.infra.admin.master.entity.City;
-import org.egov.infra.admin.master.entity.CityPreferences;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.RequestInfo;
@@ -42,7 +39,6 @@ import org.egov.model.bills.EgBilldetails;
 import org.egov.model.bills.EgBillregister;
 import org.egov.model.bills.EgBillregistermis;
 import org.egov.utils.FinancialConstants;
-import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -76,9 +72,6 @@ public class FinanceDashboardService {
     private PersistenceService persistenceService;
     
     @Autowired
-    private ExpenseBillService expenseBillService;
-    
-    @Autowired
     @Qualifier("chartOfAccountsService")
     private ChartOfAccountsService chartOfAccountsService;
     
@@ -101,7 +94,7 @@ public class FinanceDashboardService {
     }
     
     @Transactional(propagation=Propagation.REQUIRED,readOnly=true)
-    public void publishEventTemp(FinanceDashboardEvent event){
+    public void pushtoEskIndex(FinanceDashboardEvent event){
         try {
             Object data = event.getData();
             String tenantId = event.getTenantId();
@@ -135,7 +128,6 @@ public class FinanceDashboardService {
                 //POST creation of voucher needs to update the voucher number for corresponding bill
                 EgBillregister egBillRegister =this.getBillRegisterByBillNumber(vh.getBillNumber());
                 egBillRegister = egBillRegister != null ? egBillRegister :  this.getEgBillRegisterByVoucherId(vh);
-//                egBillRegister = egBillRegister != null ? egBillRegister : null;
                 if(egBillRegister  != null ){
                     ApplicationThreadLocals.setUserTenantId(tenantId);
                     this.publishEvent(FinanceEventType.billUpdateByIds,new HashSet<Long>(Arrays.asList(egBillRegister.getId())));
@@ -491,7 +483,7 @@ public class FinanceDashboardService {
     
     private List<Object[]> getAccountDetails(Integer accountDetailKeyId, Integer accountDetailTypeId) {
         String queryString = "select adk.detailname as detailkeyname,adt.name as detailtypename from accountdetailkey adk inner join accountdetailtype adt on adk.detailtypeid=adt.id where adk.detailtypeid=:detailtypeid and adk.detailkey=:detailkey";
-        SQLQuery sqlQuery = persistenceService.getSession().createSQLQuery(queryString);
+        SQLQuery sqlQuery = this.getSession().createSQLQuery(queryString);
         sqlQuery.setInteger("detailtypeid", accountDetailTypeId);
         sqlQuery.setInteger("detailkey", accountDetailKeyId);
         return sqlQuery.list();
