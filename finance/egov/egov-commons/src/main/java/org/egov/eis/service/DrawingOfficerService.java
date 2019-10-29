@@ -161,7 +161,7 @@ public class DrawingOfficerService implements EntityTypeService {
 
     @Override
     public List<? extends EntityType> filterActiveEntities(String filterKey, int maxRecords, Integer accountDetailTypeId) {
-        return drawingOfficerRepository.findByNameLikeOrCodeLike(filterKey + "%", filterKey + "%");
+        return drawingOfficerRepository.findByNameLikeIgnoreCaseOrCodeLikeIgnoreCase(filterKey + "%", filterKey + "%");
     }
 
     @Override
