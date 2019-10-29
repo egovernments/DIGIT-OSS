@@ -14,7 +14,7 @@ import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 let floorDropDownData = [];
 let innerDimensionsData =[{value : "yes" , label :"Yes" },{value : "no" , label :"No" }];
 let constructiontypes =[{value : "road1" , label :"rd1" }];
-let constructionyears =[{value:"2019",label:"2019-20"},{value:"2018",label:"2018-19"}];
+
 
 
 for (var i = 1; i <= 25; i++) {
@@ -74,6 +74,7 @@ export const floorCount = {
           }
         }
       }
+
     },
   },
 };
@@ -141,14 +142,28 @@ export const innerDimensions = {
     dropDownData: innerDimensionsData,
     updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
       const { value } = sourceField;
-      const dependentFields1 = ["roomArea", "subUsageType","balconyArea","garageArea","bathroomArea"];
-      switch (value) {
-        case "no":
-          setDependentFields(dependentFields1, dispatch, formKey, true);
-          break;
-        default:
-          setDependentFields(dependentFields1, dispatch, formKey, false);
-          break;
+      const dependentFields1 = ["roomArea","subUsageType","balconyArea","garageArea","bathroomArea"];
+      const dependentFields2 = ["coveredArea"];
+      // switch (value) {
+      //   case "no":
+      //     setDependentFields(dependentFields1, dispatch, formKey, true);
+      //     setDependentFields(dependentFields2, dispatch, formKey, false);
+
+      //     break;
+      //   case "yes":
+      //     setDependentFields(dependentFields2, dispatch, formKey,true);
+      //     break;
+      //   default:
+      //     setDependentFields(dependentFields1, dispatch, formKey, false);
+      //     break;
+      // }
+      if(value === "no"){
+        setDependentFields(dependentFields1, dispatch, formKey, true);
+        setDependentFields(dependentFields2, dispatch, formKey, false);
+      }
+      else{
+        setDependentFields(dependentFields1, dispatch, formKey, false);
+        setDependentFields(dependentFields2, dispatch, formKey, true);
       }
     },
   },
@@ -277,21 +292,6 @@ export const constructionType = {
     dropDownData:constructiontypes,
   },
 };
-export const constructionYear = {
-  constructionYear: {
-    id: "constructionYear",
-    jsonPath: "",
-    // localePrefix: { moduleName: "PropertyTax", masterName: "ConstructionYear" },
-    type: "singleValueList",
-    floatingLabelText: "Construction Year",
-    errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-    fullWidth: true,
-    hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
-    numcols: 4,
-    dropDownData:constructionyears,
-  },
-};
-
 
 export const superArea = {
   superArea: {

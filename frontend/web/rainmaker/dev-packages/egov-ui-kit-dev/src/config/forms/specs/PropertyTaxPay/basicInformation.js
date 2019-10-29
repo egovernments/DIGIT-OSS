@@ -8,6 +8,7 @@ import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
 import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 
+const constructionyears =[{value:"2019",label:"2019-20"},{value:"2018",label:"2018-19"}];
 const formConfig = {
   name: "basicInformation",
   fields: {
@@ -58,6 +59,19 @@ const formConfig = {
       },
       dropDownData: [],
     },
+
+    constructionYear: {
+      id: "constructionYear",
+      jsonPath: "",
+      // localePrefix: { moduleName: "PropertyTax", masterName: "ConstructionYear" },
+      type: "singleValueList",
+      floatingLabelText: "Construction Year",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      fullWidth: true,
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+      numcols: 6,
+      dropDownData:constructionyears,
+      },
   },
   action: "",
   redirectionRoute: "",

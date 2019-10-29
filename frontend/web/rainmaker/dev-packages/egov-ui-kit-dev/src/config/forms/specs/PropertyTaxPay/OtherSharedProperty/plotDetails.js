@@ -1,5 +1,5 @@
 import { MDMS } from "egov-ui-kit/utils/endPoints";
-import { measuringUnit, annualRent, occupancy, subUsageType, beforeInitFormForPlot, superArea } from "../utils/reusableFields";
+import { measuringUnit, occupancy, subUsageType, beforeInitFormForPlot, superArea } from "../utils/reusableFields";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
 
 const formConfig = {
@@ -20,7 +20,7 @@ const formConfig = {
     ...occupancy,
     ...superArea,
     ...measuringUnit,
-    ...annualRent,
+    // ...annualRent,
   },
   isFormValid: false,
   ...beforeInitFormForPlot,

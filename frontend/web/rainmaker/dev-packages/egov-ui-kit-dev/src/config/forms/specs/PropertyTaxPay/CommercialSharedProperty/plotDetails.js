@@ -1,4 +1,4 @@
-import { annualRent, subUsageType, measuringUnit, occupancy, beforeInitFormForPlot, superArea } from "../utils/reusableFields";
+import { subUsageType, measuringUnit, occupancy, beforeInitFormForPlot, superArea } from "../utils/reusableFields";
 import { MDMS } from "egov-ui-kit/utils/endPoints";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
 
@@ -20,7 +20,7 @@ const formConfig = {
     ...occupancy,
     ...superArea,
     ...measuringUnit,
-    ...annualRent,
+    // ...annualRent,
   },
   isFormValid: false,
   ...beforeInitFormForPlot,
