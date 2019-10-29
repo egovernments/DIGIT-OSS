@@ -33,13 +33,13 @@ import org.springframework.util.CollectionUtils;
 @EqualsAndHashCode
 public class Bill {
     // TODO some of the fields are mandatory in yml, lets discuss billdetail and billaccountdetail also for more clarity
-	
+
 	  @JsonProperty("id")
 	  private String id = null;
 
 	  @JsonProperty("mobileNumber")
 	  private String mobileNumber = null;
-	  
+
 	  @JsonProperty("paidBy")
 	  private String paidBy = null;
 
@@ -51,7 +51,7 @@ public class Bill {
 
 	  @JsonProperty("payerEmail")
 	  private String payerEmail = null;
-	  
+
 	  @JsonProperty("payerId")
 	  private String payerId = null;
 
@@ -103,6 +103,9 @@ public class Bill {
 
 	  @JsonProperty("billDate")
 	  private Long billDate = null;
+
+	  @JsonProperty("amountPaid")
+	  private BigDecimal amountPaid;
 
 
 

@@ -8,6 +8,7 @@ import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.model.enums.InstrumentStatusEnum;
 import org.egov.collection.model.enums.PaymentStatusEnum;
 import org.egov.collection.model.enums.Purpose;
+import org.egov.collection.model.enums.ReceiptType;
 import org.egov.collection.repository.BillingServiceRepository;
 import org.egov.collection.repository.IdGenRepository;
 import org.egov.collection.web.contract.Bill;
@@ -73,6 +74,12 @@ public class PaymentEnricher {
 				billIdToBillMap.put(bill.getId(), bill);
 			});
 
+		AuditDetails auditDetails = AuditDetails.builder()
+				.createdBy(paymentRequest.getRequestInfo().getUserInfo().getId().toString())
+				.createdTime(System.currentTimeMillis())
+				.lastModifiedBy(paymentRequest.getRequestInfo().getUserInfo().getId().toString())
+				.lastModifiedTime(System.currentTimeMillis()).build();
+
 		// Assigns bill object to each paymentDetail if no bill object is found the
 		// billId from paymentDetail is added in error map
 		payment.getPaymentDetails().forEach(paymentDetail -> {
@@ -80,16 +87,16 @@ public class PaymentEnricher {
 					billIdToBillMap.get(paymentDetail.getBillId()), paymentDetail, errorMap);
 			paymentDetail.setBill(billIdToBillMap.get(paymentDetail.getBillId()));
 			paymentDetail.setId(UUID.randomUUID().toString());
+			paymentDetail.setTenantId(payment.getTenantId());
+			paymentDetail.setAuditDetails(auditDetails);
+			paymentDetail.setReceiptType(ReceiptType.BILLBASED.toString());
+			paymentDetail.setReceiptDate(System.currentTimeMillis());
 		});
 
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
 
-		AuditDetails auditDetails = AuditDetails.builder()
-				.createdBy(paymentRequest.getRequestInfo().getUserInfo().getId().toString())
-				.createdDate(System.currentTimeMillis())
-				.lastModifiedBy(paymentRequest.getRequestInfo().getUserInfo().getId().toString())
-				.lastModifiedDate(System.currentTimeMillis()).build();
+		payment.setId(UUID.randomUUID().toString());
 		payment.setAuditDetails(auditDetails);
 	}
 
@@ -116,6 +123,7 @@ public class PaymentEnricher {
 			String receiptNumber = idGenRepository.generateReceiptNumber(paymentRequest.getRequestInfo(),
 					paymentDetail.getBusinessService(), paymentDetail.getTenantId());
 			paymentDetail.setReceiptNumber(receiptNumber);
+			paymentDetail.getBill().setAmountPaid(paymentDetail.getTotalAmountPaid());
 
 		}
 		enrichInstrument(paymentRequest);
@@ -218,11 +226,11 @@ public class PaymentEnricher {
 					"The amount paid for the paymentDetail with bill number: " + paymentDetail.getBillId());
 
 		// Checks if the amount to be paid is fractional
-		if ((bill.getTotalAmount().divide(BigDecimal.ONE)).doubleValue() != 0)
+		if ((bill.getTotalAmount().remainder(BigDecimal.ONE)).doubleValue() != 0)
 			errorMap.put("INVALID_BILL", "The due amount cannot be fractional");
 
 		// Checks if the amount paid is fractional
-		if ((paymentDetail.getTotalAmountPaid().divide(BigDecimal.ONE)).doubleValue() != 0)
+		if ((paymentDetail.getTotalAmountPaid().remainder(BigDecimal.ONE)).doubleValue() != 0)
 			errorMap.put("INVALID_PAYMENTDETAIL", "The amount paid cannot be fractional");
 
 		// Checks if the bill is expired

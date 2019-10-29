@@ -84,17 +84,14 @@ public class Payment {
     private String mobileNumber = null;
 
     @Size(max=128)
-    @NotNull
     @JsonProperty("payerName")
     private String payerName = null;
 
     @Size(max=1024)
-    @NotNull
     @JsonProperty("payerAddress")
     private String payerAddress = null;
 
     @Size(max=64)
-    @NotNull
     @JsonProperty("payerEmail")
     private String payerEmail = null;
 

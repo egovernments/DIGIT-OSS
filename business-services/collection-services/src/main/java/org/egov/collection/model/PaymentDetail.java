@@ -21,7 +21,6 @@ public class PaymentDetail {
     @JsonProperty("id")
     private String id;
 
-    @NotNull
     @Size(max=64)
     @JsonProperty("tenantId")
     private String tenantId;
@@ -37,6 +36,12 @@ public class PaymentDetail {
     @Size(max=64)
     @JsonProperty("receiptNumber")
     private String receiptNumber;
+
+    @JsonProperty("receiptDate")
+    private Long receiptDate = null;
+
+    @JsonProperty("receiptType")
+    private String receiptType = null;
 
     @NotNull
     @Size(max=64)

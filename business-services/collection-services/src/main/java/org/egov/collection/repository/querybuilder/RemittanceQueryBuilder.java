@@ -68,9 +68,9 @@ public class RemittanceQueryBuilder {
         sqlParameterSource.addValue("bankaccount", remittance.getBankaccount());
         sqlParameterSource.addValue("tenantid", remittance.getTenantId());
         sqlParameterSource.addValue("createdby", remittance.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createddate", remittance.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("createddate", remittance.getAuditDetails().getCreatedTime());
         sqlParameterSource.addValue("lastmodifiedby", remittance.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifieddate", remittance.getAuditDetails().getLastModifiedDate());
+        sqlParameterSource.addValue("lastmodifieddate", remittance.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
 

@@ -38,11 +38,15 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
 
         Map<String,Payment> idToPaymentMap = new HashMap<>();
 
+        Payment currentPayment;
+
         while (rs.next()){
 
             String id = rs.getString("py_id");
 
-            if(idToPaymentMap.get(id)==null){
+            if(idToPaymentMap.get(id)!=null)
+                currentPayment = idToPaymentMap.get(id);
+            else{
 
                 String tenantId = rs.getString("py_tenantId");
                 BigDecimal totalDue = rs.getBigDecimal("totalDue");
@@ -65,19 +69,19 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                 String paymentStatus = rs.getString("paymentStatus");
                 String createdBy = rs.getString("py_createdBy");
 
-                Long createdDate = rs.getLong("py_createdDate");
+                Long createdDate = rs.getLong("py_createdTime");
                 if(rs.wasNull()){createdDate = null;}
 
                 String lastModifiedBy = rs.getString("py_lastModifiedBy");
 
-                Long lastModifiedDate = rs.getLong("py_lastModifiedDate");
-                if(rs.wasNull()){lastModifiedDate = null;}
+                Long lastModifiedTime = rs.getLong("py_lastModifiedTime");
+                if(rs.wasNull()){lastModifiedTime = null;}
 
 
-                AuditDetails auditDetails = AuditDetails.builder().createdBy(createdBy).createdDate(createdDate)
-                        .lastModifiedBy(lastModifiedBy).lastModifiedDate(lastModifiedDate).build();
+                AuditDetails auditDetails = AuditDetails.builder().createdBy(createdBy).createdTime(createdDate)
+                        .lastModifiedBy(lastModifiedBy).lastModifiedTime(lastModifiedTime).build();
 
-                Payment currentPayment = Payment.builder()
+                currentPayment = Payment.builder()
                         .id(id)
                         .tenantId(tenantId)
                         .totalDue(totalDue)
@@ -101,7 +105,10 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
 
                 PGobject obj = (PGobject) rs.getObject("py_additionalDetails");
                 currentPayment.setAdditionalDetails(getJsonValue(obj));
+                idToPaymentMap.put(currentPayment.getId(),currentPayment);
             }
+
+            addChildrenToPayment(rs,currentPayment);
 
         }
 
@@ -133,17 +140,18 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
             BigDecimal due  = rs.getBigDecimal("due");
             BigDecimal amountPaid = rs.getBigDecimal("amountPaid");
             String receiptNumber = rs.getString("receiptNumber");
+            Long receiptDate = rs.getLong("receiptdate");
+            String receiptType = rs.getString("receipttype");
             String businessService = rs.getString("businessService");
             String billId = rs.getString("billId");
-            String paymentDetailStatus = rs.getString("paymentDetailStatus");
             PGobject obj = (PGobject) rs.getObject("pyd_additionalDetails");
             String createdBy = rs.getString("pyd_createdBy");
-            Long createdDate =  rs.getLong("pyd_createdDate");
+            Long createdTime =  rs.getLong("pyd_createdTime");
             String lastModifiedBy = rs.getString("pyd_lastModifiedBy");
-            Long lastModifiedDate = rs.getLong("pyd_lastModifiedDate");
+            Long lastModifiedTime = rs.getLong("pyd_lastModifiedTime");
 
-            AuditDetails auditDetails = AuditDetails.builder().createdBy(createdBy).createdDate(createdDate)
-                    .lastModifiedBy(lastModifiedBy).lastModifiedDate(lastModifiedDate).build();
+            AuditDetails auditDetails = AuditDetails.builder().createdBy(createdBy).createdTime(createdTime)
+                    .lastModifiedBy(lastModifiedBy).lastModifiedTime(lastModifiedTime).build();
 
             paymentDetail = PaymentDetail.builder()
                     .id(id)
@@ -153,6 +161,8 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                     .receiptNumber(receiptNumber)
                     .businessService(businessService)
                     .billId(billId)
+                    .receiptDate(receiptDate)
+                    .receiptType(receiptType)
                     .additionalDetails(getJsonValue(obj))
                     .auditDetails(auditDetails)
                     .build();
@@ -161,9 +171,9 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
             if(rs.wasNull()){billDate = null;}
 
             AuditDetails billAuditDetails = AuditDetails.builder().createdBy(rs.getString("bill_createdby"))
-                    .createdDate(rs.getLong("bill_createddate"))
+                    .createdTime(rs.getLong("bill_createdTime"))
                     .lastModifiedBy("bill_lastmodifiedby")
-                    .lastModifiedDate(rs.getLong("bill_lastmodifieddate"))
+                    .lastModifiedTime(rs.getLong("bill_lastModifiedTime"))
                     .build();
 
             String[] collectionModesAllowed = rs.getString("collectionmodesnotallowed").split(",");
@@ -198,9 +208,9 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
 
 
         // BillAccountDetail
-        AuditDetails billAccountDetailAudit = AuditDetails.builder()
-                .createdBy(rs.getString("bacdt_createdby")).createdDate(rs.getLong("bacdt_createddate"))
-                .lastModifiedBy(rs.getString("bacdt_lastmodifiedby")).lastModifiedDate(rs.getLong("bacdt_lastmodifieddate")).build();
+//        AuditDetails billAccountDetailAudit = AuditDetails.builder()
+//                .createdBy(rs.getString("bacdt_createdby")).createdTime(rs.getLong("bacdt_createdTime"))
+//                .lastModifiedBy(rs.getString("bacdt_lastmodifiedby")).lastModifiedTime(rs.getLong("bacdt_lastModifiedTime")).build();
 
         PGobject billAccountDetailAdditionalObj = (PGobject) rs.getObject("bacdt_additionalDetails");
 
@@ -216,18 +226,17 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                 .isActualDemand(rs.getBoolean("isactualdemand"))
                 .taxHeadCode(rs.getString("taxheadcode"))
                 .additionalDetails(getJsonValue(billAccountDetailAdditionalObj))
-                .auditDetails(billAccountDetailAudit)
                 .build();
 
 
 
         // BillDetail
-        AuditDetails billDetailAuditDetials = AuditDetails.builder()
-                .createdBy(rs.getString("bd_createdby")).createdDate(rs.getLong("bd_createddate"))
-                .lastModifiedBy(rs.getString("bd_lastmodifiedby")).lastModifiedDate(rs.getLong("bd_lastmodifieddate"))
-                .build();
+       /* AuditDetails billDetailAuditDetials = AuditDetails.builder()
+                .createdBy(rs.getString("bd_createdby")).createdTime(rs.getLong("bd_createdTime"))
+                .lastModifiedBy(rs.getString("bd_lastmodifiedby")).lastModifiedTime(rs.getLong("bd_lastModifiedTime"))
+                .build();*/
 
-        PGobject billDetailAdditionalObj = (PGobject) rs.getObject("billdetail_additionalDetails");
+        PGobject billDetailAdditionalObj = (PGobject) rs.getObject("bd_additionalDetails");
 
         BillDetail billDetail = BillDetail.builder()
                 .id(rs.getString("bd_id"))
@@ -238,10 +247,7 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                 .amountPaid(rs.getBigDecimal("amountpaid"))
                 .fromPeriod(rs.getLong("fromperiod"))
                 .toPeriod(rs.getLong("toperiod"))
-                .collectedAmount(rs.getBigDecimal("collectedamount"))
                 .additionalDetails(getJsonValue(billDetailAdditionalObj))
-                .receiptDate(rs.getLong("receiptdate"))
-                .receiptType(rs.getString("receipttype"))
                 .channel(rs.getString("channel"))
                 .voucherHeader(rs.getString("voucherheader"))
                 .boundary(rs.getString("boundary"))
@@ -253,7 +259,6 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                 .displayMessage(rs.getString("displaymessage"))
                 .callBackForApportioning(rs.getBoolean("callbackforapportioning"))
                 .cancellationRemarks(rs.getString("cancellationremarks"))
-                .auditDetails(billDetailAuditDetials)
                 .build();
 
         // Adding to Bill

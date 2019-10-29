@@ -109,7 +109,7 @@ public class PaymentController {
                 }
             }
 
-            paymentSearchCriteria.setStatus(defaultStatus);
+            paymentSearchCriteria.setInstrumentStatus(defaultStatus);
         }
 
         List<Payment> payments = paymentService.getPayments(requestInfo, paymentSearchCriteria);

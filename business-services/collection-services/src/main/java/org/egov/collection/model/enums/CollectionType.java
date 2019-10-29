@@ -30,11 +30,13 @@ public enum CollectionType {
 
     @JsonCreator
 	public static CollectionType fromValue(String text) {
-		for (CollectionType b : CollectionType.values()) {
-			if (0 ==b.value.toString().compareTo(text)) {
-				return b;
-			}
-		}
+        if(text!=null){
+            for (CollectionType b : CollectionType.values()) {
+                if (0 ==b.value.compareTo(text)) {
+                    return b;
+                }
+            }
+        }
 		return null;
 	}
 }

@@ -71,7 +71,7 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"id"})
 public class BillDetail {
 
 	@JsonProperty("id")
@@ -101,17 +101,8 @@ public class BillDetail {
 	@JsonProperty("toPeriod")
 	private Long toPeriod = null;
 
-	@JsonProperty("collectedAmount")
-	private BigDecimal collectedAmount = null;
-
 	@JsonProperty("additionalDetails")
 	private JsonNode additionalDetails = null;
-
-	@JsonProperty("receiptDate")
-	private Long receiptDate = null;
-
-	@JsonProperty("receiptType")
-	private String receiptType = null;
 
 	@JsonProperty("channel")
 	private String channel = null;

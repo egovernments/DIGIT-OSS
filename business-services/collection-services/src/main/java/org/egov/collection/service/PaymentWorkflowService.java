@@ -265,13 +265,13 @@ public class PaymentWorkflowService {
     public static void updateAuditDetails(Payment payment, RequestInfo requestInfo){
         Long currentTime = System.currentTimeMillis();
         payment.getAuditDetails().setLastModifiedBy(requestInfo.getUserInfo().getId().toString());
-        payment.getAuditDetails().setLastModifiedDate(currentTime);
+        payment.getAuditDetails().setLastModifiedTime(currentTime);
 
         payment.getPaymentDetails().forEach(paymentDetail -> {
             paymentDetail.getAuditDetails().setLastModifiedBy(requestInfo.getUserInfo().getId().toString());
-            paymentDetail.getAuditDetails().setLastModifiedDate(currentTime);
+            paymentDetail.getAuditDetails().setLastModifiedTime(currentTime);
             paymentDetail.getBill().getAuditDetails().setLastModifiedBy(requestInfo.getUserInfo().getId().toString());
-            paymentDetail.getBill().getAuditDetails().setLastModifiedDate(currentTime);
+            paymentDetail.getBill().getAuditDetails().setLastModifiedTime(currentTime);
         });
 
     }

@@ -28,19 +28,16 @@ public class PaymentQueryBuilder {
 
 
     public static final String SELECT_PAYMENT_SQL = "SELECT py.*,pyd.*,bill.*,bd.*,bacdt.*, " +
-            "py.id as py_id,py.tenantId as py_tenantId,py.totalAmountPaid as py_totalAmountPaid,py.createdBy as py_createdBy,py.createdDate as py_createdDate," +
-            "py.lastModifiedBy as py_lastModifiedBy,py.lastModifiedDate as py_lastModifiedDate," +
-            "pyd.id as pyd_id,pyd.tenantId as pyd_tenantId,pyd.createdBy as pyd_createdBy,pyd.createdDate as pyd_createdDate,pyd.lastModifiedBy as pyd_lastModifiedBy," +
-            "pyd.lastModifiedDate as pyd_lastModifiedDate," +
-            "bill.createdby as bill_createdby,bill.createddate as bill_createddate,bill.lastmodifiedby as bill_lastmodifiedby," +
-            "bill.lastmodifieddate as bill_lastmodifieddate,bill.id as bill_id," +
-            "bill.status as bill_status," +
+            "py.id as py_id,py.tenantId as py_tenantId,py.totalAmountPaid as py_totalAmountPaid,py.createdBy as py_createdBy,py.createdtime as py_createdtime," +
+            "py.lastModifiedBy as py_lastModifiedBy,py.lastmodifiedtime as py_lastmodifiedtime,py.additionalDetails as py_additionalDetails," +
+            "pyd.id as pyd_id,pyd.tenantId as pyd_tenantId,pyd.createdBy as pyd_createdBy,pyd.createdtime as pyd_createdtime,pyd.lastModifiedBy as pyd_lastModifiedBy," +
+            "pyd.lastmodifiedtime as pyd_lastmodifiedtime,pyd.additionalDetails as pyd_additionalDetails," +
+            "bill.createdby as bill_createdby,bill.createdtime as bill_createdtime,bill.lastmodifiedby as bill_lastmodifiedby," +
+            "bill.lastmodifiedtime as bill_lastmodifiedtime,bill.id as bill_id," +
+            "bill.status as bill_status,bill.additionalDetails as bill_additionalDetails," +
             "bill.tenantid as bill_tenantid,bill.totalamount as bill_totalamount," +
-            "bd.createdby as bd_createdby,bd.createddate as bd_createddate,bd.lastmodifiedby as bd_lastmodifiedby," +
-            "bd.lastmodifieddate as bd_lastmodifieddate,bd.id as bd_id,bd.tenantid as bd_tenantid," +
-            "bacdt.createdby as bacdt_createdby,bacdt.createddate as bacdt_createddate,bacdt.lastmodifiedby as bacdt_lastmodifiedby," +
-            "bacdt.lastmodifieddate as bacdt_lastmodifieddate," +
-            "bacdt.id as bacdt_id,bacdt.tenantid as bacdt_tenantid" +
+            "bd.id as bd_id,bd.tenantid as bd_tenantid,bd.additionalDetails as bd_additionalDetails," +
+            "bacdt.id as bacdt_id,bacdt.tenantid as bacdt_tenantid,bacdt.additionalDetails as bacdt_additionalDetails" +
             " FROM egcl_payment py  " +
             " INNER JOIN egcl_paymentdetail pyd ON pyd.paymentid = py.id " +
             " INNER JOIN egcl_bill bill ON bill.id = pyd.billid " +
@@ -58,72 +55,68 @@ public class PaymentQueryBuilder {
             "            id, tenantid, totaldue, totalamountpaid, transactionnumber, transactiondate, " +
             "            paymentmode, instrumentdate, instrumentnumber,instrumentStatus, ifsccode, additionaldetails, " +
             "            paidby, mobilenumber, payername, payeraddress, payeremail, payerid, " +
-            "            paymentstatus, createdby, createddate, lastmodifiedby, lastmodifieddate)" +
+            "            paymentstatus, createdby, createdtime, lastmodifiedby, lastmodifiedtime)" +
             "            VALUES (:id, :tenantid, :totaldue, :totalamountpaid, :transactionnumber, :transactiondate, " +
             "            :paymentmode, :instrumentdate, :instrumentnumber, :instrumentStatus, :ifsccode, :additionaldetails," +
             "            :paidby, :mobilenumber, :payername, :payeraddress, :payeremail, :payerid, " +
-            "            :paymentstatus, :createdby, :createddate, :lastmodifiedby, :lastmodifieddate);";
+            "            :paymentstatus, :createdby, :createdtime, :lastmodifiedby, :lastmodifiedtime);";
 
 
     public static final String INSERT_PAYMENTDETAIL_SQL = "INSERT INTO egcl_paymentdetail(" +
             "            id, tenantid, paymentid, due, amountpaid, receiptnumber, businessservice, " +
-            "            billid, paymentdetailstatus, additionaldetails, createdby, createddate, " +
-            "            lastmodifiedby, lastmodifieddate)" +
+            "            billid, additionaldetails,receiptdate, receipttype, createdby, createdtime, " +
+            "            lastmodifiedby, lastmodifiedtime)" +
             "            VALUES (:id, :tenantid, :paymentid, :due, :amountpaid, :receiptnumber, :businessservice, " +
-            "            :billid, :paymentdetailstatus, :additionaldetails, :createdby, :createddate," +
-            "            :lastmodifiedby, :lastmodifieddate);";
+            "            :billid, :additionaldetails,:receiptdate, :receipttype, :createdby, :createdtime," +
+            "            :lastmodifiedby, :lastmodifiedtime);";
 
 
     public static final String INSERT_BILL_SQL = "INSERT INTO egcl_bill(" +
             "            id, status, iscancelled, additionaldetails, tenantid, collectionmodesnotallowed," +
             "            partpaymentallowed, isadvanceallowed, minimumamounttobepaid, " +
             "            businessservice, totalamount, consumercode, billnumber, billdate," +
-            "            createdby, createddate, lastmodifiedby, lastmodifieddate) " +
+            "            createdby, createdtime, lastmodifiedby, lastmodifiedtime) " +
             "    VALUES (:id, :status, :iscancelled, :additionaldetails, :tenantid, :collectionmodesnotallowed," +
             "            :partpaymentallowed, :isadvanceallowed, :minimumamounttobepaid," +
             "            :businessservice, :totalamount, :consumercode, :billnumber, :billdate," +
-            "            :createdby, :createddate, :lastmodifiedby, :lastmodifieddate);";
+            "            :createdby, :createdtime, :lastmodifiedby, :lastmodifiedtime);";
 
 
     public static final String INSERT_BILLDETAIL_SQL = "INSERT INTO egcl_billdetial(" +
             "            id, tenantid, demandid, billid, amount, amountpaid, fromperiod," +
-            "            toperiod, collectedamount, additionaldetails, receiptnumber," +
-            "            receiptdate, receipttype, channel, voucherheader, boundary, reasonforcancellation," +
-            "            manualreceiptnumber, manualreceiptdate, status, collectiontype," +
+            "            toperiod, additionaldetails," +
+            "            channel, voucherheader, boundary," +
+            "            manualreceiptnumber, manualreceiptdate, collectiontype," +
             "            billdescription, expirydate, displaymessage, callbackforapportioning," +
-            "            cancellationremarks, createdby, createddate, lastmodifiedby," +
-            "            lastmodifieddate)" +
+            "            cancellationremarks)" +
             "    VALUES (:id, :tenantid, :demandid, :billid, :amount, :amountpaid, :fromperiod," +
-            "            :toperiod, :collectedamount, :additionaldetails, :receiptnumber," +
-            "            :receiptdate, :receipttype, :channel, :voucherheader, :boundary, :reasonforcancellation," +
-            "            :manualreceiptnumber, :manualreceiptdate, :status, :collectiontype," +
-            "            :billdescription, :expirydate, :displaymessage, :callbackforapportioning" +
-            "            :cancellationremarks, :createdby, :createddate, :lastmodifiedby," +
-            "            :lastmodifieddate);";
+            "            :toperiod, :additionaldetails," +
+            "            :channel, :voucherheader, :boundary," +
+            "            :manualreceiptnumber, :manualreceiptdate, :collectiontype," +
+            "            :billdescription, :expirydate, :displaymessage, :callbackforapportioning," +
+            "            :cancellationremarks);";
 
 
     public static final String INSERT_BILLACCOUNTDETAIL_SQL = "INSERT INTO egcl_billaccountdetail(" +
-            "            id, tenantid, paymentdetailid, billdetailid, demanddetailid, " +
-            "            \"order\", amount, isactualdemand, taxheadcode, additionaldetails, " +
-            "            createdby, createddate, lastmodifiedby, lastmodifieddate)" +
-            "            VALUES (:id, :tenantid, :paymentdetailid, :billdetailid, :demanddetailid, " +
-            "            :order, :amount, :isactualdemand, :taxheadcode, :additionaldetails," +
-            "            :createdby, :createddate, :lastmodifiedby, :lastmodifieddate);";
+            "            id, tenantid, billdetailid, demanddetailid, " +
+            "            \"order\", amount, isactualdemand, taxheadcode, additionaldetails)" +
+            "            VALUES (:id, :tenantid, :billdetailid, :demanddetailid, " +
+            "            :order, :amount, :isactualdemand, :taxheadcode, :additionaldetails);";
 
 
     // Payment Status update queries
 
     public static final String STATUS_UPDATE_PAYMENT_SQL = "UPDATE egcl_payment SET instrumentstatus=:instrumentstatus,additionaldetails=:additionaldetails," +
-            " paymentstatus=:paymentstatus,createdby=:createdby, createddate=:createddate, lastmodifiedby=:lastmodifiedby,lastmodifieddate=:lastmodifieddate" +
+            " paymentstatus=:paymentstatus,createdby=:createdby, createdtime=:createdtime, lastmodifiedby=:lastmodifiedby,lastmodifiedtime=:lastmodifiedtime" +
             " WHERE id=:id;";
 
     public static final String STATUS_UPDATE_PAYMENTDETAIL_SQL = "UPDATE egcl_paymentdetail SET  additionaldetails=:additionaldetails, createdby=:createdby," +
-            " createddate=:createddate, lastmodifiedby=:lastmodifiedby, lastmodifieddate=:lastmodifieddate " +
+            " createdtime=:createdtime, lastmodifiedby=:lastmodifiedby, lastmodifiedtime=:lastmodifiedtime " +
             " WHERE id=:id;";
 
     public static final String STATUS_UPDATE_BILL_SQL = "UPDATE egcl_bill " +
             "   SET  status= :status, iscancelled= :iscancelled, additionaldetails= :additionaldetails, createdby=:createdby," +
-            "   createddate= :createddate,lastmodifiedby= :lastmodifiedby, lastmodifieddate=:lastmodifieddate" +
+            "   createdtime= :createdtime,lastmodifiedby= :lastmodifiedby, lastmodifiedtime=:lastmodifiedtime" +
             "   WHERE id=:id;";
 
     public static final String COPY_PAYMENT_SQL = "INSERT INTO egcl_payment_audit SELECT * FROM egcl_payment WHERE id = :id;";
@@ -139,19 +132,19 @@ public class PaymentQueryBuilder {
     // Payment update queries
 
     public static final String UPDATE_PAYMENT_SQL = "UPDATE egcl_payment SET additionaldetails=:additionaldetails, paidby=:paidby, payername=:payername," +
-            " payeraddress=:payeraddress, payeremail=:payeremail, payerid=:payerid,paymentstatus=:paymentstatus, createdby=:createdby, createddate=:createddate," +
-            " lastmodifiedby=:lastmodifiedby, lastmodifieddate=:lastmodifieddate WHERE id=:id ";
+            " payeraddress=:payeraddress, payeremail=:payeremail, payerid=:payerid,paymentstatus=:paymentstatus, createdby=:createdby, createdtime=:createdtime," +
+            " lastmodifiedby=:lastmodifiedby, lastmodifiedtime=:lastmodifiedtime WHERE id=:id ";
 
     public static final String UPDATE_PAYMENTDETAIL_SQL ="UPDATE egcl_paymentdetail SET additionaldetails=:additionaldetails, createdby=:createdby," +
-            "createddate=:createddate, lastmodifiedby=:lastmodifiedby, lastmodifieddate=:lastmodifieddate" +
+            "createdtime=:createdtime, lastmodifiedby=:lastmodifiedby, lastmodifiedtime=:lastmodifiedtime" +
             "WHERE id=:id;";
 
-    public static final String UPDATE_BILL_SQL = "UPDATE egcl_bill SET additionaldetails=:additionaldetails,createdby=:createdby,createddate=:createddate, lastmodifiedby=:lastmodifiedby,\n" +
-            "lastmodifieddate=:lastmodifieddate WHERE id=:id;";
+    public static final String UPDATE_BILL_SQL = "UPDATE egcl_bill SET additionaldetails=:additionaldetails,createdby=:createdby,createdtime=:createdtime, lastmodifiedby=:lastmodifiedby,\n" +
+            "lastmodifiedtime=:lastmodifiedtime WHERE id=:id;";
 
     public static final String UPDATE_BILLDETAIL_SQL = "UPDATE egcl_billdetial SET additionaldetails=:additionaldetails, voucherheader=:voucherheader," +
             " manualreceiptnumber=:manualreceiptnumber, manualreceiptdate=:manualreceiptdate, billdescription=:billdescription,displaymessage=:displaymessage," +
-            "createdby=:createdby, createddate=:createddate, lastmodifiedby=:lastmodifiedby,lastmodifieddate=:lastmodifieddate WHERE id=:id ";
+            "createdby=:createdby, createdtime=:createdtime, lastmodifiedby=:lastmodifiedby,lastmodifiedtime=:lastmodifiedtime WHERE id=:id ";
 
 
 
@@ -166,23 +159,23 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("totalamountpaid", payment.getTotalAmountPaid());
         sqlParameterSource.addValue("transactionnumber", payment.getTransactionNumber());
         sqlParameterSource.addValue("transactiondate", payment.getTransactionDate());
-        sqlParameterSource.addValue("paymentmode", payment.getPaymentMode());
+        sqlParameterSource.addValue("paymentmode", payment.getPaymentMode().toString());
         sqlParameterSource.addValue("instrumentdate", payment.getInstrumentDate());
         sqlParameterSource.addValue("instrumentnumber", payment.getInstrumentNumber());
-        sqlParameterSource.addValue("instrumentStatus", payment.getInstrumentStatus());
+        sqlParameterSource.addValue("instrumentStatus", payment.getInstrumentStatus().toString());
         sqlParameterSource.addValue("ifsccode", payment.getIfscCode());
-        sqlParameterSource.addValue("additionaldetails", payment.getAdditionalDetails());
+        sqlParameterSource.addValue("additionaldetails", getJsonb(payment.getAdditionalDetails()));
         sqlParameterSource.addValue("paidby", payment.getPaidBy());
         sqlParameterSource.addValue("mobilenumber", payment.getMobileNumber());
         sqlParameterSource.addValue("payername", payment.getPayerName());
         sqlParameterSource.addValue("payeraddress", payment.getPayerAddress());
         sqlParameterSource.addValue("payeremail", payment.getPayerEmail());
         sqlParameterSource.addValue("payerid", payment.getPayerId());
-        sqlParameterSource.addValue("paymentstatus", payment.getPaymentStatus());
+        sqlParameterSource.addValue("paymentstatus", payment.getPaymentStatus().toString());
         sqlParameterSource.addValue("createdby", payment.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createddate", payment.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("createdtime", payment.getAuditDetails().getCreatedTime());
         sqlParameterSource.addValue("lastmodifiedby", payment.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifieddate", payment.getAuditDetails().getLastModifiedDate());
+        sqlParameterSource.addValue("lastmodifiedtime", payment.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
 
@@ -200,11 +193,13 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("receiptnumber", paymentDetail.getReceiptNumber());
         sqlParameterSource.addValue("businessservice", paymentDetail.getBusinessService());
         sqlParameterSource.addValue("billid", paymentDetail.getBillId());
-        sqlParameterSource.addValue("additionaldetails", paymentDetail.getAdditionalDetails());
+        sqlParameterSource.addValue("additionaldetails", getJsonb(paymentDetail.getAdditionalDetails()));
+        sqlParameterSource.addValue("receiptdate", paymentDetail.getReceiptDate());
+        sqlParameterSource.addValue("receipttype", paymentDetail.getReceiptType());
         sqlParameterSource.addValue("createdby", paymentDetail.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createddate", paymentDetail.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("createdtime", paymentDetail.getAuditDetails().getCreatedTime());
         sqlParameterSource.addValue("lastmodifiedby", paymentDetail.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifieddate", paymentDetail.getAuditDetails().getLastModifiedDate());
+        sqlParameterSource.addValue("lastmodifiedtime", paymentDetail.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
 
@@ -217,9 +212,9 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", bill.getId());
-        sqlParameterSource.addValue("status", bill.getStatus());
+        sqlParameterSource.addValue("status", bill.getStatus().toString());
         sqlParameterSource.addValue("iscancelled", bill.getIsCancelled());
-        sqlParameterSource.addValue("additionaldetails", bill.getAdditionalDetails());
+        sqlParameterSource.addValue("additionaldetails",getJsonb(bill.getAdditionalDetails()));
         sqlParameterSource.addValue("tenantid", bill.getTenantId());
         sqlParameterSource.addValue("collectionmodesnotallowed", StringUtils.join(bill.getCollectionModesNotAllowed(),","));
         sqlParameterSource.addValue("partpaymentallowed", bill.getPartPaymentAllowed());
@@ -230,12 +225,11 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("consumercode", bill.getConsumerCode());
         sqlParameterSource.addValue("billnumber", bill.getBillNumber());
         sqlParameterSource.addValue("billdate", bill.getBillDate());
-        sqlParameterSource.addValue("status", bill.getStatus());
         sqlParameterSource.addValue("reasonforcancellation", bill.getReasonForCancellation());
         sqlParameterSource.addValue("createdby", bill.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createddate", bill.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("createdtime", bill.getAuditDetails().getCreatedTime());
         sqlParameterSource.addValue("lastmodifiedby", bill.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifieddate", bill.getAuditDetails().getLastModifiedDate());
+        sqlParameterSource.addValue("lastmodifiedtime", bill.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
     }
@@ -253,10 +247,7 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("amountpaid", billDetail.getAmountPaid());
         sqlParameterSource.addValue("fromperiod", billDetail.getFromPeriod());
         sqlParameterSource.addValue("toperiod", billDetail.getToPeriod());
-        sqlParameterSource.addValue("collectedamount", billDetail.getCollectedAmount());
-        sqlParameterSource.addValue("additionaldetails", billDetail.getAdditionalDetails());
-        sqlParameterSource.addValue("receiptdate", billDetail.getReceiptDate());
-        sqlParameterSource.addValue("receipttype", billDetail.getReceiptType());
+        sqlParameterSource.addValue("additionaldetails", getJsonb(billDetail.getAdditionalDetails()));
         sqlParameterSource.addValue("channel", billDetail.getChannel());
         sqlParameterSource.addValue("voucherheader", billDetail.getVoucherHeader());
         sqlParameterSource.addValue("boundary", billDetail.getBoundary());
@@ -268,10 +259,6 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("displaymessage", billDetail.getDisplayMessage());
         sqlParameterSource.addValue("callbackforapportioning", billDetail.getCallBackForApportioning());
         sqlParameterSource.addValue("cancellationremarks", billDetail.getCancellationRemarks());
-        sqlParameterSource.addValue("createdby", billDetail.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createddate", billDetail.getAuditDetails().getCreatedDate());
-        sqlParameterSource.addValue("lastmodifiedby", billDetail.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifieddate", billDetail.getAuditDetails().getLastModifiedDate());
 
         return sqlParameterSource;
     }
@@ -288,11 +275,7 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("amount", billAccountDetail.getAmount());
         sqlParameterSource.addValue("isactualdemand", billAccountDetail.getIsActualDemand());
         sqlParameterSource.addValue("taxheadcode", billAccountDetail.getTaxHeadCode());
-        sqlParameterSource.addValue("additionaldetails", billAccountDetail.getAdditionalDetails());
-        sqlParameterSource.addValue("createdby", billAccountDetail.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createddate", billAccountDetail.getAuditDetails().getCreatedDate());
-        sqlParameterSource.addValue("lastmodifiedby", billAccountDetail.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifieddate", billAccountDetail.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("additionaldetails", getJsonb(billAccountDetail.getAdditionalDetails()));
 
         return sqlParameterSource;
     }
@@ -304,6 +287,8 @@ public class PaymentQueryBuilder {
         StringBuilder selectQuery = new StringBuilder(SELECT_PAYMENT_SQL);
 
         addWhereClause(selectQuery, preparedStatementValues, searchCriteria);
+
+        addOrderByClause(selectQuery);
 
         return addPaginationClause(selectQuery, preparedStatementValues, searchCriteria);
     }
@@ -331,7 +316,7 @@ public class PaymentQueryBuilder {
             preparedStatementValues.put("receiptnumber", searchCriteria.getReceiptNumbers());
         }
 
-        if (CollectionUtils.isEmpty(searchCriteria.getStatus())) {
+        if (!CollectionUtils.isEmpty(searchCriteria.getStatus())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
             selectQuery.append(" UPPER(py.paymentstatus) in (:status)");
             preparedStatementValues.put("status",
@@ -342,11 +327,11 @@ public class PaymentQueryBuilder {
             );
         }
 
-        if (CollectionUtils.isEmpty(searchCriteria.getInstrumentStatus())) {
+        if (!CollectionUtils.isEmpty(searchCriteria.getInstrumentStatus())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
             selectQuery.append(" UPPER(py.instrumentStatus) in (:instrumentStatus)");
             preparedStatementValues.put("instrumentStatus",
-                    searchCriteria.getStatus()
+                    searchCriteria.getInstrumentStatus()
                             .stream()
                             .map(String::toUpperCase)
                             .collect(toSet())
@@ -394,7 +379,7 @@ public class PaymentQueryBuilder {
             preparedStatementValues.put("toDate", searchCriteria.getToDate());
         }
 
-        if (CollectionUtils.isEmpty(searchCriteria.getPayerIds())) {
+        if (!CollectionUtils.isEmpty(searchCriteria.getPayerIds())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
             selectQuery.append(" py.payerid IN (:payerid)  ");
             preparedStatementValues.put("payerid", searchCriteria.getPayerIds());
@@ -414,20 +399,15 @@ public class PaymentQueryBuilder {
     private static String addPaginationClause(StringBuilder selectQuery, Map<String, Object> preparedStatementValues,
                                               PaymentSearchCriteria criteria) {
 
-        if (criteria.getLimit()!=null && criteria.getLimit() != 0) {
             String finalQuery = PAGINATION_WRAPPER.replace("{baseQuery}", selectQuery);
             preparedStatementValues.put("offset", criteria.getOffset());
             preparedStatementValues.put("limit", criteria.getOffset() + criteria.getLimit());
 
-            return addOrderByClause(finalQuery, criteria);
-
-        } else
-            return addOrderByClause(selectQuery.toString(), criteria);
+            return finalQuery;
     }
 
-    private static String addOrderByClause(String selectQuery,
-                                           PaymentSearchCriteria criteria) {
-        return selectQuery + " ORDER BY py.transactiondate DESC ";
+    private static String addOrderByClause(StringBuilder selectQuery) {
+        return selectQuery.append(" ORDER BY py.transactiondate DESC ").toString();
     }
 
 
@@ -448,13 +428,13 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("id", bill.getId());
         sqlParameterSource.addValue("status", bill.getStatus());
         sqlParameterSource.addValue("iscancelled", bill.getIsCancelled());
-        sqlParameterSource.addValue("additionaldetails", bill.getAdditionalDetails());
-        sqlParameterSource.addValue("status", bill.getStatus());
+        sqlParameterSource.addValue("additionaldetails", getJsonb(bill.getAdditionalDetails()));
+        sqlParameterSource.addValue("status", bill.getStatus().toString());
         sqlParameterSource.addValue("reasonforcancellation", bill.getReasonForCancellation());
         sqlParameterSource.addValue("createdby", bill.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createddate", bill.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("createdtime", bill.getAuditDetails().getCreatedTime());
         sqlParameterSource.addValue("lastmodifiedby", bill.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifieddate", bill.getAuditDetails().getLastModifiedDate());
+        sqlParameterSource.addValue("lastmodifiedtime", bill.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
     }
@@ -464,11 +444,11 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", paymentDetail.getId());
-        sqlParameterSource.addValue("additionaldetails", paymentDetail.getAdditionalDetails());
+        sqlParameterSource.addValue("additionaldetails",getJsonb(paymentDetail.getAdditionalDetails()));
         sqlParameterSource.addValue("createdby", paymentDetail.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createddate", paymentDetail.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("createdtime", paymentDetail.getAuditDetails().getCreatedTime());
         sqlParameterSource.addValue("lastmodifiedby", paymentDetail.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifieddate", paymentDetail.getAuditDetails().getLastModifiedDate());
+        sqlParameterSource.addValue("lastmodifiedtime", paymentDetail.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
 
@@ -480,11 +460,11 @@ public class PaymentQueryBuilder {
 
         sqlParameterSource.addValue("id", payment.getId());
         sqlParameterSource.addValue("instrumentStatus", payment.getInstrumentStatus());
-        sqlParameterSource.addValue("additionaldetails", payment.getAdditionalDetails());
+        sqlParameterSource.addValue("additionaldetails", getJsonb(payment.getAdditionalDetails()));
         sqlParameterSource.addValue("createdby", payment.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createddate", payment.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("createdtime", payment.getAuditDetails().getCreatedTime());
         sqlParameterSource.addValue("lastmodifiedby", payment.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifieddate", payment.getAuditDetails().getLastModifiedDate());
+        sqlParameterSource.addValue("lastmodifiedtime", payment.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
 
@@ -504,7 +484,7 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("payername", payment.getPayerName());
         sqlParameterSource.addValue("additionalDetails", getJsonb(payment.getAdditionalDetails()));
         sqlParameterSource.addValue("lastmodifiedby", payment.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifieddate", payment.getAuditDetails().getLastModifiedDate());
+        sqlParameterSource.addValue("lastmodifiedtime", payment.getAuditDetails().getLastModifiedTime());
 
 
         return sqlParameterSource;
@@ -518,7 +498,7 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("id", paymentDetail.getId());
         sqlParameterSource.addValue("additionalDetails", getJsonb(paymentDetail.getAdditionalDetails()));
         sqlParameterSource.addValue("lastmodifiedby", paymentDetail.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifieddate", paymentDetail.getAuditDetails().getLastModifiedDate());
+        sqlParameterSource.addValue("lastmodifiedtime", paymentDetail.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
 
@@ -530,11 +510,11 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", bill.getId());
-        sqlParameterSource.addValue("additionaldetails", bill.getAdditionalDetails());
+        sqlParameterSource.addValue("additionaldetails", getJsonb(bill.getAdditionalDetails()) );
         sqlParameterSource.addValue("createdby", bill.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createddate", bill.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("createdtime", bill.getAuditDetails().getCreatedTime());
         sqlParameterSource.addValue("lastmodifiedby", bill.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifieddate", bill.getAuditDetails().getLastModifiedDate());
+        sqlParameterSource.addValue("lastmodifiedtime", bill.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
     }
@@ -544,16 +524,16 @@ public class PaymentQueryBuilder {
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
         sqlParameterSource.addValue("id", billDetail.getId());
-        sqlParameterSource.addValue("additionaldetails", billDetail.getAdditionalDetails());
+        sqlParameterSource.addValue("additionaldetails", getJsonb(billDetail.getAdditionalDetails()));
         sqlParameterSource.addValue("voucherheader", billDetail.getVoucherHeader());
         sqlParameterSource.addValue("manualreceiptnumber", billDetail.getManualReceiptNumber());
         sqlParameterSource.addValue("manualreceiptdate", billDetail.getManualReceiptDate());
         sqlParameterSource.addValue("billdescription", billDetail.getBillDescription());
         sqlParameterSource.addValue("displaymessage", billDetail.getDisplayMessage());
         sqlParameterSource.addValue("createdby", billDetail.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createddate", billDetail.getAuditDetails().getCreatedDate());
+        sqlParameterSource.addValue("createdtime", billDetail.getAuditDetails().getCreatedTime());
         sqlParameterSource.addValue("lastmodifiedby", billDetail.getAuditDetails().getLastModifiedBy());
-        sqlParameterSource.addValue("lastmodifieddate", billDetail.getAuditDetails().getLastModifiedDate());
+        sqlParameterSource.addValue("lastmodifiedtime", billDetail.getAuditDetails().getLastModifiedTime());
 
         return sqlParameterSource;
     }
