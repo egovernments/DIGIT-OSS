@@ -67,8 +67,10 @@ import org.egov.commons.Scheme;
 import org.egov.commons.SubScheme;
 import org.egov.commons.utils.EntityType;
 import org.egov.infra.persistence.entity.AbstractAuditable;
+import org.egov.infra.persistence.validator.annotation.OptionalPattern;
 import org.egov.infra.persistence.validator.annotation.Required;
 import org.egov.infra.persistence.validator.annotation.Unique;
+import org.egov.utils.FinancialConstants;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -87,11 +89,13 @@ public class PurchaseOrder extends AbstractAuditable implements EntityType {
     private Long id;
 
     @Length(max = 100, message = "Maximum of 100 Characters allowed for Order Number")
+    @OptionalPattern(regex = FinancialConstants.alphaNumericwithspecialcharForContraWOAndSupplierName, message = "Special Characters are not allowed in Order Number")
     @NotEmpty
     private String orderNumber;
 
     @Required(message = "Please Enter the Name")
     @Length(max = 100, message = "Maximum of 100 Characters allowed for Name")
+    @OptionalPattern(regex = FinancialConstants.alphaNumericwithspecialcharForContraWOAndSupplierName, message = "Special Characters are not allowed in Name")
     @NotEmpty
     private String name;
 
