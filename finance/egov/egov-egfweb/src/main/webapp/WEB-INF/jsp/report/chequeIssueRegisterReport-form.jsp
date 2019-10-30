@@ -114,10 +114,56 @@ function validateDates(){
 	document.getElementById('accountNumber.id').value=bankAccount;
 	return true;	
 }
-function viewVoucher(vid){
-	var url = '../voucher/preApprovedVoucher-loadvoucherview.action?vhid='+vid;
+function viewVoucher(chkNum,...vhids){
+	var inputType = 'select';
+	if(vhids.length==1){
+	var url = '../voucher/preApprovedVoucher-loadvoucherview.action?vhid='+vhids[0];
 	window.open(url,'Search','resizable=yes,scrollbars=yes,left=300,top=40, width=900, height=700');
+	}else if(inputType == 'select'){
+		var inputOpt = [{text: '---------- select atleast one ----------',value: '' }]; 
+		var len = 0;
+		while(len<vhids.length){
+			var vid = vhids[len]+"";
+			var voucherNum =getVoucherNumber(vid);
+			var map = {'text':voucherNum,'value':vid};
+			inputOpt.push(map);
+			len++;
+		}
+		
+		bootbox.prompt({
+		    title: "Select the linked voucher for cheque : "+chkNum,
+		    message: '<p>Please select an option below:</p>',
+		    inputType:inputType,
+		    inputOptions: inputOpt,
+		    buttons: {
+		        confirm: {
+		          label: "View Voucher"
+		        }
+		      },
+		    callback: function (result) {
+		        if(result != undefined && result != null && result != ''){
+		        	var url = '../voucher/preApprovedVoucher-loadvoucherview.action?vhid='+result;
+		        	window.open(url,'Search','resizable=yes,scrollbars=yes,left=300,top=40, width=900, height=700');
+		        	return false;
+			    }
+		    }
+		});
+	}
 }
+
+function getVoucherNumber(vhid){
+	  var str = jQuery("#voucherIdNumMap").val();
+	  if(str != undefined && str != 'undefined' && str != null ){
+		  str = str.substring(1,str.length-1).split(",")
+		  var map = new Map();
+		  str.forEach(function(ele){
+		 	splt = ele.trim().split("=");
+		 	map.set(splt[0],splt[1]);
+		  })
+		  return map.get(vhid);
+		  }
+}
+
 
 function printCheque(id)
 {
