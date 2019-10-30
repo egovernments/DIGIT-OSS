@@ -15008,6 +15008,50 @@
       "serviceCode": "BILLING_SERVICE",
       "code": "null",
       "path": "Billing Service.GenerateBill"
+    },
+    {
+      "id": 1863,
+      "name": "Collection Create Reciept",
+      "url": "/collection-services/payments/_create",
+      "displayName": "Create Payment",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "COLLECTION",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1864,
+      "name": "Collection Saerch Reciept",
+      "url": "/collection-services/payments/_search",
+      "displayName": "Search Payment",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "COLLECTION",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1865,
+      "name": "Collection Update Reciept",
+      "url": "/collection-services/payments/_update",
+      "displayName": "Update paymentt",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "COLLECTION",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1866,
+      "name": "Collection Reciept Workflow",
+      "url": "/collection-services/payments/_workflow",
+      "displayName": "Payment workflow",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "COLLECTION",
+      "code": "null",
+      "path": ""
     }
   ]
 }
