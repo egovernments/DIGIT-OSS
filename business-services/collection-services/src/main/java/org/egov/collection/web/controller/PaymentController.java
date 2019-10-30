@@ -54,6 +54,7 @@ import org.egov.collection.model.PaymentSearchCriteria;
 import org.egov.collection.model.enums.ReceiptStatus;
 import org.egov.collection.service.PaymentService;
 import org.egov.collection.service.PaymentWorkflowService;
+import org.egov.collection.util.PaymentValidator;
 import org.egov.collection.web.contract.PaymentWorkflowRequest;
 import org.egov.collection.web.contract.factory.RequestInfoWrapper;
 import org.egov.collection.web.contract.factory.ResponseInfoFactory;
@@ -83,6 +84,9 @@ public class PaymentController {
 
     @Autowired
     private PaymentWorkflowService workflowService;
+
+    @Autowired
+    private PaymentValidator paymentValidator;
 
     @Value("#{'${search.ignore.status}'.split(',')}")
     private List<String> searchIgnoreStatus;
@@ -137,18 +141,18 @@ public class PaymentController {
     @RequestMapping(value = "/_update", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> update(@RequestBody @Valid PaymentRequest paymentRequest) {
-        List<Payment> receiptInfo = paymentService.updatePayment(paymentRequest);
-        return getSuccessResponse(receiptInfo, paymentRequest.getRequestInfo());
+        List<Payment> payments = paymentService.updatePayment(paymentRequest);
+        return getSuccessResponse(payments, paymentRequest.getRequestInfo());
     }
 
-/*    @RequestMapping(value = "/_validate", method = RequestMethod.POST)
+    @RequestMapping(value = "/_validate", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<?> validate(@RequestBody @Valid ReceiptReq receiptReq) {
+    public ResponseEntity<?> validate(@RequestBody @Valid PaymentRequest paymentRequest) {
 
-        List<Receipt> receipt = paymentService.validateReceipt(receiptReq);
-        return getSuccessResponse(receipt, receiptReq.getRequestInfo());
+        Payment payment = paymentValidator.validatePaymentForCreate(paymentRequest);;
+        return getSuccessResponse(Collections.singletonList(payment), paymentRequest.getRequestInfo());
 
-    }*/
+    }
 
 
     private ResponseEntity<PaymentResponse> getSuccessResponse(List<Payment> payments, RequestInfo requestInfo) {

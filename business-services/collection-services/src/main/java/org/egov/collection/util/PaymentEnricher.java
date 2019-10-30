@@ -83,8 +83,6 @@ public class PaymentEnricher {
 		// Assigns bill object to each paymentDetail if no bill object is found the
 		// billId from paymentDetail is added in error map
 		payment.getPaymentDetails().forEach(paymentDetail -> {
-			validatePaymentDetailAgainstBill(payment.getPaymentMode().toString(),
-					billIdToBillMap.get(paymentDetail.getBillId()), paymentDetail, errorMap);
 			paymentDetail.setBill(billIdToBillMap.get(paymentDetail.getBillId()));
 			paymentDetail.setId(UUID.randomUUID().toString());
 			paymentDetail.setTenantId(payment.getTenantId());
@@ -172,74 +170,6 @@ public class PaymentEnricher {
 		});
 	}
 
-	/**
-	 * Validates the paymentDetail with the bill
-	 * 
-	 * @param paymentMode
-	 *            The payment mode
-	 * @param bill
-	 *            Bill against which payment is made
-	 * @param paymentDetail
-	 *            The payment detail for the bill
-	 * @param errorMap
-	 *            Error map to catch errors
-	 */
-	private void validatePaymentDetailAgainstBill(String paymentMode, Bill bill, PaymentDetail paymentDetail,
-			Map<String, String> errorMap) {
 
-		// Total amount to be paid should be same in bill and paymentDetail
-		if (paymentDetail.getTotalDue().compareTo(bill.getTotalAmount()) != 0)
-			errorMap.put("INVALID_PAYMENTDETAIL",
-					"The amount to be paid is mismatching with bill for paymentDetial with bill id: " + bill.getId());
-
-		// Amount to be paid should be greater than minimum collection amount
-		if (bill.getMinimumAmountToBePaid() != null
-				&& paymentDetail.getTotalAmountPaid().compareTo(bill.getMinimumAmountToBePaid()) == -1)
-			errorMap.put("INVALID_PAYMENTDETAIL",
-					"The amount to be paid cannot be less than minimum amount to be paid");
-
-		// In case of partial payment checks if it is allowed in bill
-		if ((bill.getPartPaymentAllowed() == null || !bill.getPartPaymentAllowed())
-				&& paymentDetail.getTotalAmountPaid().compareTo(bill.getTotalAmount()) == -1)
-			errorMap.put("INVALID_PAYMENTDETAIL", "The amount to be paid is less than amount due");
-
-		// In case of advance payment checks if it is allowed in bill
-		if ((bill.getIsAdvanceAllowed() == null || !bill.getIsAdvanceAllowed())
-				&& paymentDetail.getTotalAmountPaid().compareTo(bill.getTotalAmount()) == 1)
-			errorMap.put("INVALID_PAYMENTDETAIL", "The amount to be paid is more than amount due");
-
-		// Checks if the payment mode is allowed by the bill
-		if (!CollectionUtils.isEmpty(bill.getCollectionModesNotAllowed())
-				&& bill.getCollectionModesNotAllowed().contains(paymentMode))
-			errorMap.put("INVALID_PAYMENTDETAIL",
-					"The paymentMode: " + paymentMode + " is not allowed for the bill: " + bill.getId());
-
-		// Checks if the amount paid is positive integer
-		if (!Utils.isPositiveInteger(paymentDetail.getTotalAmountPaid()))
-			errorMap.put("INVALID_PAYMENTDETAIL",
-					"The amount paid for the paymentDetail with bill number: " + paymentDetail.getBillId());
-
-		// Zero amount payment is allowed only if bill amount is zero
-		if (paymentDetail.getTotalAmountPaid().compareTo(BigDecimal.ZERO) == 0
-				&& bill.getTotalAmount().compareTo(BigDecimal.ZERO) > 0)
-			errorMap.put("INVALID_PAYMENTDETAIL",
-					"The amount paid for the paymentDetail with bill number: " + paymentDetail.getBillId());
-
-		// Checks if the amount to be paid is fractional
-		if ((bill.getTotalAmount().remainder(BigDecimal.ONE)).doubleValue() != 0)
-			errorMap.put("INVALID_BILL", "The due amount cannot be fractional");
-
-		// Checks if the amount paid is fractional
-		if ((paymentDetail.getTotalAmountPaid().remainder(BigDecimal.ONE)).doubleValue() != 0)
-			errorMap.put("INVALID_PAYMENTDETAIL", "The amount paid cannot be fractional");
-
-		// Checks if the bill is expired
-		bill.getBillDetails().forEach(billDetail -> {
-			if (isNull(billDetail.getExpiryDate()) || System.currentTimeMillis() >= billDetail.getExpiryDate()) {
-				errorMap.put("BILL_EXPIRED", "Bill expired or invalid, regenerate bill!");
-			}
-		});
-
-	}
 
 }
