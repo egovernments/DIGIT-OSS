@@ -3,6 +3,7 @@ package org.egov.collection.repository.querybuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.common.protocol.types.Field;
+import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentSearchCriteria;
@@ -11,6 +12,8 @@ import org.egov.collection.web.contract.BillAccountDetail;
 import org.egov.collection.web.contract.BillDetail;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -25,6 +28,7 @@ import static java.util.stream.Collectors.toSet;
 
 @Service
 public class PaymentQueryBuilder {
+
 
 
     public static final String SELECT_PAYMENT_SQL = "SELECT py.*,pyd.*,bill.*,bd.*,bacdt.*, " +

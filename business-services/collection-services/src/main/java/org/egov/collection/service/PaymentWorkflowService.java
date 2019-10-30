@@ -87,6 +87,7 @@ public class PaymentWorkflowService {
         List<Payment> payments = paymentRepository.fetchPayments(PaymentSearchCriteria.builder()
                 .ids(paymentIds)
                 .tenantId(tenantId)
+                .offset(0).limit(applicationProperties.getReceiptsSearchDefaultLimit())
                 .build());
 
         Set<String> consumerCodes = new HashSet<>();
@@ -124,6 +125,7 @@ public class PaymentWorkflowService {
                 .builder()
                 .consumerCodes(consumerCodes)
                 .instrumentStatus(singleton(InstrumentStatusEnum.APPROVED.toString()))
+                .offset(0).limit(applicationProperties.getReceiptsSearchDefaultLimit())
                 .tenantId(tenantId)
                 .build();
 
@@ -177,6 +179,7 @@ public class PaymentWorkflowService {
                 .paymentModes(paymentModes)
                 .instrumentStatus(status)
                 .tenantId(tenantId)
+                .offset(0).limit(applicationProperties.getReceiptsSearchDefaultLimit())
                 .build();
 
         List<Payment> payments = paymentRepository.fetchPayments(paymentSearchCriteria);
@@ -222,6 +225,7 @@ public class PaymentWorkflowService {
                 .consumerCodes(consumerCodes)
                 .instrumentStatus(singleton(InstrumentStatusEnum.APPROVED.toString()))
                 .paymentModes(paymentModes)
+                .offset(0).limit(applicationProperties.getReceiptsSearchDefaultLimit())
                 .tenantId(tenantId)
                 .build();
 

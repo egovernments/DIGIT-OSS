@@ -3,6 +3,7 @@ package org.egov.collection.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentRequest;
@@ -47,12 +48,18 @@ public class PaymentValidator {
 
     private PaymentWorkflowService paymentWorkflowService;
 
+    private ApplicationProperties applicationProperties;
+
 
     @Autowired
-    public PaymentValidator(PaymentRepository paymentRepository, PaymentWorkflowService paymentWorkflowService) {
+    public PaymentValidator(PaymentRepository paymentRepository, PaymentWorkflowService paymentWorkflowService,
+                            ApplicationProperties applicationProperties) {
         this.paymentRepository = paymentRepository;
         this.paymentWorkflowService = paymentWorkflowService;
+        this.applicationProperties = applicationProperties;
     }
+
+
 
 
 
@@ -64,7 +71,9 @@ public class PaymentValidator {
         validateInstrument(paymentRequest.getPayment(),errorMap);
         Set<String> billIds = payment.getPaymentDetails().stream().map(PaymentDetail :: getBillId).collect(Collectors.toSet());
         
-        PaymentSearchCriteria criteria = PaymentSearchCriteria.builder().tenantId(payment.getTenantId()).billIds(billIds).build();
+        PaymentSearchCriteria criteria = PaymentSearchCriteria.builder().tenantId(payment.getTenantId())
+                .offset(0).limit(applicationProperties.getReceiptsSearchDefaultLimit()).billIds(billIds).build();
+
         List<Payment> payments = paymentRepository.fetchPayments(criteria);
         if (!payments.isEmpty()) {
             validateIPaymentForBillPresent(payments,errorMap);
@@ -204,6 +213,7 @@ public class PaymentValidator {
         List<Payment> paymentsFromDb = paymentRepository.fetchPayments(PaymentSearchCriteria
                 .builder()
                 .ids(paymentIds)
+                .offset(0).limit(applicationProperties.getReceiptsSearchDefaultLimit())
                 .instrumentStatus(InstrumentStatusEnum.statusesByCategory(InstrumentStatusEnum.Category.OPEN))
                 .build());
 
