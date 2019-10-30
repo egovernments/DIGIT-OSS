@@ -12,8 +12,13 @@ const AutoSuggest = Loadable({
   loader: () => import("./AutoSuggest"),
   loading: () => <Loading />
 });
+const ApplicationNoContainer = Loadable({
+  loader: () => import("./ApplicationNo"),
+  loading: () => <Loading />
+});
 
 export {
   TestAtoms,
-  AutoSuggest
+  AutoSuggest,
+  ApplicationNoContainer
 };
