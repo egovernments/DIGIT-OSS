@@ -62,7 +62,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WorkOrderRepository extends JpaRepository<WorkOrder, Long> {
 
-    public List<WorkOrder> findByNameLikeOrOrderNumberLikeAndActive(String name, String orderNumber, Boolean active);
+    public List<WorkOrder> findByNameLikeIgnoreCaseOrOrderNumberLikeIgnoreCaseAndActive(String name, String orderNumber, Boolean active);
 
     @Query("from WorkOrder where active=true")
     public List<WorkOrder> findActiveOrders();

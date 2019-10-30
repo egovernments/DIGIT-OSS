@@ -250,7 +250,7 @@ public class PurchaseOrderService implements EntityTypeService {
     @Override
     public List<? extends org.egov.commons.utils.EntityType> filterActiveEntities(String filterKey, int maxRecords,
             Integer accountDetailTypeId) {
-        return purchaseOrderRepository.findByNameLikeOrOrderNumberLikeAndActive(filterKey + "%", filterKey + "%", true);
+        return purchaseOrderRepository.findByNameLikeIgnoreCaseOrOrderNumberLikeIgnoreCaseAndActive(filterKey + "%", filterKey + "%", true);
     }
 
     @Override

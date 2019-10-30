@@ -249,7 +249,7 @@ public class WorkOrderService implements EntityTypeService {
     @Override
     public List<? extends org.egov.commons.utils.EntityType> filterActiveEntities(String filterKey, int maxRecords,
             Integer accountDetailTypeId) {
-        return workOrderRepository.findByNameLikeOrOrderNumberLikeAndActive(filterKey + "%", filterKey + "%", true);
+        return workOrderRepository.findByNameLikeIgnoreCaseOrOrderNumberLikeIgnoreCaseAndActive(filterKey + "%", filterKey + "%", true);
     }
 
     @Override
