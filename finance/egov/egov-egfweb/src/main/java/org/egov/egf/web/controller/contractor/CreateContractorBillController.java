@@ -69,6 +69,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.dispatcher.multipart.MultiPartRequestWrapper;
 import org.apache.struts2.dispatcher.multipart.UploadedFile;
+import org.egov.commons.Accountdetailtype;
 import org.egov.commons.CChartOfAccountDetail;
 import org.egov.commons.service.AccountdetailtypeService;
 import org.egov.commons.service.ChartOfAccountsService;
@@ -305,8 +306,12 @@ public class CreateContractorBillController extends BaseBillController {
         Boolean contractorExist = false;
         Integer woAccountDetailTypeId, contractorAccountDetailTypeId = null;
         WorkOrder wo = null;
-        woAccountDetailTypeId = accountdetailtypeService.findByName(WORK_ORDER).getId();
-        contractorAccountDetailTypeId = accountdetailtypeService.findByName(CONTRACTOR).getId();
+        Accountdetailtype woAccountdetailtype = accountdetailtypeService.findByName(WORK_ORDER);
+        woAccountDetailTypeId = woAccountdetailtype.getId();
+        String woAccountDetailTypeName = woAccountdetailtype.getName();
+        Accountdetailtype contractorAccountdetailtype = accountdetailtypeService.findByName(CONTRACTOR);
+        contractorAccountDetailTypeId = contractorAccountdetailtype.getId();
+        String contractorAccountDetailTypeName = contractorAccountdetailtype.getName();
         wo = workOrderService.getByOrderNumber(egBillregister.getWorkordernumber());
         for (final EgBilldetails details : egBillregister.getEgBilldetailes()) {
             details.setEgBillPaydetailes(new HashSet<>());
@@ -339,12 +344,12 @@ public class CreateContractorBillController extends BaseBillController {
                     if (woExist || (woExist && contractorExist)) {
                         payeeDetail = prepareBillPayeeDetails(details, details.getDebitamount(), BigDecimal.ZERO,
                                 woAccountDetailTypeId,
-                                wo.getId().intValue());
+                                wo.getId().intValue(),woAccountDetailTypeName,wo.getName());
                         egBillregister.getEgBillregistermis().setPayto(wo.getName());
                         details.getEgBillPaydetailes().add(payeeDetail);
                     } else if (contractorExist) {
                         payeeDetail = prepareBillPayeeDetails(details, details.getDebitamount(), BigDecimal.ZERO,
-                                contractorAccountDetailTypeId, wo.getContractor().getId().intValue());
+                                contractorAccountDetailTypeId, wo.getContractor().getId().intValue(),contractorAccountDetailTypeName,wo.getName());
                         egBillregister.getEgBillregistermis().setPayto(wo.getContractor().getName());
                         details.getEgBillPaydetailes().add(payeeDetail);
                     }
@@ -354,13 +359,13 @@ public class CreateContractorBillController extends BaseBillController {
                 if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1) {
                     if (contractorExist || (woExist && contractorExist)) {
                         payeeDetail = prepareBillPayeeDetails(details, BigDecimal.ZERO, details.getCreditamount(),
-                                contractorAccountDetailTypeId, wo.getContractor().getId().intValue());
+                                contractorAccountDetailTypeId, wo.getContractor().getId().intValue(),contractorAccountDetailTypeName,wo.getName());
                         egBillregister.getEgBillregistermis().setPayto(wo.getContractor().getName());
                         details.getEgBillPaydetailes().add(payeeDetail);
 
                     } else if (woExist) {
                         payeeDetail = prepareBillPayeeDetails(details, BigDecimal.ZERO, details.getCreditamount(),
-                                woAccountDetailTypeId, wo.getId().intValue());
+                                woAccountDetailTypeId, wo.getId().intValue(),woAccountDetailTypeName,wo.getName());
                         egBillregister.getEgBillregistermis().setPayto(wo.getName());
                         details.getEgBillPaydetailes().add(payeeDetail);
                     }
@@ -372,13 +377,15 @@ public class CreateContractorBillController extends BaseBillController {
     }
 
     private EgBillPayeedetails prepareBillPayeeDetails(EgBilldetails details, BigDecimal debitamount, BigDecimal creditamount,
-            Integer detailTypeId, int detailKeyId) {
+            Integer detailTypeId, int detailKeyId, String detailTypeName, String detailKeyName) {
         EgBillPayeedetails payeeDetail = new EgBillPayeedetails();
         payeeDetail.setEgBilldetailsId(details);
         payeeDetail.setDebitAmount(debitamount);
         payeeDetail.setCreditAmount(creditamount);
         payeeDetail.setAccountDetailTypeId(detailTypeId);
         payeeDetail.setAccountDetailKeyId(detailKeyId);
+        payeeDetail.setDetailTypeName(detailTypeName);
+        payeeDetail.setDetailKeyName(detailKeyName);
         payeeDetail.setLastUpdatedTime(new Date());
         return payeeDetail;
 

@@ -47,12 +47,15 @@
  */
 package org.egov.egf.web.actions.report;
 
+import org.apache.commons.lang.StringUtils;
 import org.egov.utils.Constants;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ChequeIssueRegisterDisplay {
     private Date chequeDate;
@@ -70,6 +73,7 @@ public class ChequeIssueRegisterDisplay {
     private Long serialNo;
     private Long instrumentHeaderId;
     private List<Long> voucherheaderId = new ArrayList<Long>();
+    private Set<BigDecimal> vhIds = new HashSet<>();
 
     public String getChequeDate() {
         return chequeDate == null ? "" : Constants.DDMMYYYYFORMAT1.format(chequeDate);
@@ -206,5 +210,21 @@ public class ChequeIssueRegisterDisplay {
     public void setInstrumentHeaderId(Long instrumentHeaderId) {
         this.instrumentHeaderId = instrumentHeaderId;
     }
+
+    public Set<BigDecimal> getVhIds() {
+        return vhIds;
+    }
+    
+    public void setVhIds(Set<BigDecimal> vhIds) {
+        vhIds.add(vhId);
+        this.vhIds = vhIds;
+    }
+    
+    public String getVoucherHeaderIdsForMultiple(){
+        if ("MULTIPLE".equalsIgnoreCase(voucherNumber))
+            return StringUtils.join(vhIds, ",");
+        return vhId.toString();
+    }
+
 
 }

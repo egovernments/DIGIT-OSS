@@ -49,6 +49,7 @@ package org.egov.egf.web.actions.report;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -132,9 +133,7 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
 	private boolean chequeFormatExists;
 	private String chequeFormat = "";
 	private Long instrumentHeaderId;
-	private InstrumentHeaderService instrumentHeaderService;
-	@Autowired
-	private MicroserviceUtils microserviceUtils;
+	private Map<BigDecimal,String> voucherIdNumMap = new HashMap<>();
 	
 	@Autowired
 	private CityService cityService;
@@ -279,27 +278,33 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
 		final Map<String, ChequeIssueRegisterDisplay> map = new HashMap<String, ChequeIssueRegisterDisplay>();
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("End updateVoucherNumber ");
-		for (final ChequeIssueRegisterDisplay row : chequeIssueRegisterList)
-			if (map.get(row.getChequeNumber()) == null)
-				map.put(row.getChequeNumber(), row);
-			else if (row.getVoucherNumber() != null
-					&& row.getVoucherNumber().equalsIgnoreCase(map.get(row.getChequeNumber()).getVoucherNumber()))
-				continue;
-			else if (map.get(row.getChequeNumber()).getChequeStatus()
-					.equalsIgnoreCase(FinancialConstants.INSTRUMENT_SURRENDERED_FOR_REASSIGN_STATUS)
-					|| map.get(row.getChequeNumber()).getChequeStatus()
-							.equalsIgnoreCase(FinancialConstants.INSTRUMENT_SURRENDERED_STATUS)
-					|| map.get(row.getChequeNumber()).getChequeStatus()
-							.equalsIgnoreCase(FinancialConstants.INSTRUMENT_CANCELLED_STATUS)
-					|| row.getChequeStatus()
-							.equalsIgnoreCase(FinancialConstants.INSTRUMENT_SURRENDERED_FOR_REASSIGN_STATUS)
-					|| row.getChequeStatus().equalsIgnoreCase(FinancialConstants.INSTRUMENT_SURRENDERED_STATUS)
-					|| row.getChequeStatus().equalsIgnoreCase(FinancialConstants.INSTRUMENT_CANCELLED_STATUS))
-				continue;
-			else {
-				map.get(row.getChequeNumber()).setVoucherNumber("MULTIPLE");
-				row.setVoucherNumber(MULTIPLE);
-			}
+		for (final ChequeIssueRegisterDisplay row : chequeIssueRegisterList){
+		    voucherIdNumMap.put(row.getVhId(), row.getVoucherNumber());
+		    if (map.get(row.getChequeNumber()) == null){
+		        map.put(row.getChequeNumber(), row);
+		        row.getVhIds().add(row.getVhId());
+		    }
+		    else if (row.getVoucherNumber() != null
+		            && row.getVoucherNumber().equalsIgnoreCase(map.get(row.getChequeNumber()).getVoucherNumber()))
+		        continue;
+		    else if (map.get(row.getChequeNumber()).getChequeStatus()
+		            .equalsIgnoreCase(FinancialConstants.INSTRUMENT_SURRENDERED_FOR_REASSIGN_STATUS)
+		            || map.get(row.getChequeNumber()).getChequeStatus()
+		            .equalsIgnoreCase(FinancialConstants.INSTRUMENT_SURRENDERED_STATUS)
+		            || map.get(row.getChequeNumber()).getChequeStatus()
+		            .equalsIgnoreCase(FinancialConstants.INSTRUMENT_CANCELLED_STATUS)
+		            || row.getChequeStatus()
+		            .equalsIgnoreCase(FinancialConstants.INSTRUMENT_SURRENDERED_FOR_REASSIGN_STATUS)
+		            || row.getChequeStatus().equalsIgnoreCase(FinancialConstants.INSTRUMENT_SURRENDERED_STATUS)
+		            || row.getChequeStatus().equalsIgnoreCase(FinancialConstants.INSTRUMENT_CANCELLED_STATUS))
+		        continue;
+		    else {
+		        map.get(row.getChequeNumber()).setVoucherNumber("MULTIPLE");
+		        row.setVoucherNumber(MULTIPLE);
+		        map.get(row.getChequeNumber()).getVhIds().add(row.getVhId());
+		        row.getVhIds().add(row.getVhId());
+		    }
+		}
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("End updateVoucherNumber ");
 	}
@@ -529,5 +534,15 @@ public class ChequeIssueRegisterReportAction extends BaseFormAction {
 	public void setDeptImpl(Department deptImpl) {
 		this.deptImpl = deptImpl;
 	}
+
+    public Map<BigDecimal, String> getVoucherIdNumMap() {
+        return voucherIdNumMap;
+    }
+
+    public void setVoucherIdNumMap(Map<BigDecimal, String> voucherIdNumMap) {
+        this.voucherIdNumMap = voucherIdNumMap;
+    }
+	
+	
 
 }

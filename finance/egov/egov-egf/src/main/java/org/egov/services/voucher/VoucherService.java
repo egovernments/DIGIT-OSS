@@ -87,6 +87,8 @@ import org.egov.egf.commons.EgovCommon;
 import org.egov.egf.contract.model.Voucher;
 import org.egov.egf.contract.model.VoucherResponse;
 import org.egov.egf.contract.model.VoucherSearchRequest;
+import org.egov.egf.dashboard.event.FinanceEventType;
+import org.egov.egf.dashboard.event.listener.FinanceDashboardService;
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.entity.Employee;
 import org.egov.eis.entity.EmployeeView;
@@ -209,6 +211,9 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 	
 	@Autowired
         private VouchermisHibernateDAO vmisHibernateDao;
+	
+	@Autowired
+        FinanceDashboardService finDashboardService;
 
 	public VoucherService(final Class<CVoucherHeader> voucherHeader) {
 		super(voucherHeader);
@@ -1198,6 +1203,8 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 			voucherHeader.getVouchermis().setSourcePath(
 					"/services/EGF/voucher/journalVoucherModify-beforeModify.action?voucherHeader.id=" + voucherHeader.getId());
 			update(voucherHeader);
+			//publishing event to push the created bill to ESK index.
+			finDashboardService.publishEvent(FinanceEventType.billCreateOrUpdate, egBillregister);
 			persistenceService.getSession().flush();
 		} catch (final ValidationException e) {
 			final List<ValidationError> errors = new ArrayList<>();

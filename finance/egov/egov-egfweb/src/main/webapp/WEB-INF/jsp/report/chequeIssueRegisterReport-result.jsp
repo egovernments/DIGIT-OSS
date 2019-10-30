@@ -47,8 +47,10 @@
   --%>
 
 
+
 <%@ taglib prefix="s" uri="/WEB-INF/tags/struts-tags.tld"%>
 <s:if test="%{chequeIssueRegisterList.size()>0}">
+<s:hidden name="voucherIdNumMap"></s:hidden>
 	<table width="99%" border="0" cellspacing="0" cellpadding="0">
 		<tr>
 			<td class="bluebox">
@@ -130,7 +132,7 @@
 												</div></td>
 											<td class="blueborderfortd"><div align="center">
 													<a href="javascript:void(0);"
-														onclick='viewVoucher(<s:property value="vhId"/>);'><s:property
+														onclick='viewVoucher("<s:property value='chequeNumber'/>",<s:property value="voucherHeaderIdsForMultiple"/>);'><s:property
 															value="voucherNumberAndDate" /></a>&nbsp;
 												</div></td>
 											<td class="blueborderfortd"><div align="center">

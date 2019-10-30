@@ -69,6 +69,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.dispatcher.multipart.MultiPartRequestWrapper;
 import org.apache.struts2.dispatcher.multipart.UploadedFile;
+import org.egov.commons.Accountdetailtype;
 import org.egov.commons.CChartOfAccountDetail;
 import org.egov.commons.service.AccountdetailtypeService;
 import org.egov.commons.service.ChartOfAccountsService;
@@ -306,9 +307,14 @@ public class CreateSupplierBillController extends BaseBillController {
         Boolean poExist = false;
         Boolean supplierExist = false;
         Integer poAccountDetailTypeId, supplierAccountDetailTypeId = null;
+        String poAccountDetailTypeName, supplierAccountDetailTypeName = null;
         PurchaseOrder po = null;
-        poAccountDetailTypeId = accountdetailtypeService.findByName(PURCHASE_ORDER).getId();
-        supplierAccountDetailTypeId = accountdetailtypeService.findByName(SUPPLIER).getId();
+        Accountdetailtype poAccountdetailtype = accountdetailtypeService.findByName(PURCHASE_ORDER);
+        poAccountDetailTypeId = poAccountdetailtype.getId();
+        poAccountDetailTypeName = poAccountdetailtype.getName();
+        Accountdetailtype suppAccountdetailtype = accountdetailtypeService.findByName(SUPPLIER);
+        supplierAccountDetailTypeId = suppAccountdetailtype.getId();
+        supplierAccountDetailTypeName = suppAccountdetailtype.getName();
         po = purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber());
         for (final EgBilldetails details : egBillregister.getEgBilldetailes()) {
             details.setEgBillPaydetailes(new HashSet<>());
@@ -342,12 +348,12 @@ public class CreateSupplierBillController extends BaseBillController {
                     if (poExist || (poExist && supplierExist)) {
                         payeeDetail = prepareBillPayeeDetails(details, details.getDebitamount(), BigDecimal.ZERO,
                                 poAccountDetailTypeId,
-                                po.getId().intValue());
+                                po.getId().intValue(),poAccountDetailTypeName,po.getName());
                         egBillregister.getEgBillregistermis().setPayto(po.getName());
                         details.getEgBillPaydetailes().add(payeeDetail);
                     } else if (supplierExist) {
                         payeeDetail = prepareBillPayeeDetails(details, details.getDebitamount(), BigDecimal.ZERO,
-                                supplierAccountDetailTypeId, po.getSupplier().getId().intValue());
+                                supplierAccountDetailTypeId, po.getSupplier().getId().intValue(), supplierAccountDetailTypeName, po.getSupplier().getName());
                         egBillregister.getEgBillregistermis().setPayto(po.getSupplier().getName());
                         details.getEgBillPaydetailes().add(payeeDetail);
                     }
@@ -357,12 +363,12 @@ public class CreateSupplierBillController extends BaseBillController {
                 if (details.getCreditamount() != null && details.getCreditamount().compareTo(BigDecimal.ZERO) == 1) {
                     if (supplierExist || (poExist && supplierExist)) {
                         payeeDetail = prepareBillPayeeDetails(details, BigDecimal.ZERO, details.getCreditamount(),
-                                supplierAccountDetailTypeId, po.getSupplier().getId().intValue());
+                                supplierAccountDetailTypeId, po.getSupplier().getId().intValue(), supplierAccountDetailTypeName,po.getSupplier().getName());
                         egBillregister.getEgBillregistermis().setPayto(po.getSupplier().getName());
                         details.getEgBillPaydetailes().add(payeeDetail);
                     } else if (poExist) {
                         payeeDetail = prepareBillPayeeDetails(details, BigDecimal.ZERO, details.getCreditamount(),
-                                poAccountDetailTypeId, po.getId().intValue());
+                                poAccountDetailTypeId, po.getId().intValue(), poAccountDetailTypeName, po.getName());
                         egBillregister.getEgBillregistermis().setPayto(po.getName());
                         details.getEgBillPaydetailes().add(payeeDetail);
                     }
@@ -375,13 +381,15 @@ public class CreateSupplierBillController extends BaseBillController {
     }
 
     private EgBillPayeedetails prepareBillPayeeDetails(EgBilldetails details, BigDecimal debitamount, BigDecimal creditamount,
-            Integer detailTypeId, int detailKeyId) {
+            Integer detailTypeId, int detailKeyId, String detailTypeName, String detailKeyName) {
         EgBillPayeedetails payeeDetail = new EgBillPayeedetails();
         payeeDetail.setEgBilldetailsId(details);
         payeeDetail.setDebitAmount(debitamount);
         payeeDetail.setCreditAmount(creditamount);
         payeeDetail.setAccountDetailTypeId(detailTypeId);
         payeeDetail.setAccountDetailKeyId(detailKeyId);
+        payeeDetail.setDetailTypeName(detailTypeName);
+        payeeDetail.setDetailKeyName(detailKeyName);
         payeeDetail.setLastUpdatedTime(new Date());
         return payeeDetail;
 

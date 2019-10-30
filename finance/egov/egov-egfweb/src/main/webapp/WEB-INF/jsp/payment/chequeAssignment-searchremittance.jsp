@@ -262,8 +262,8 @@
 				<s:hidden id="bankaccount" name="bankaccount" value="%{bankaccount}" />
 				<s:hidden id="selectedRowsId" name="selectedRowsId"
 					value="%{selectedRowsId}" />
-				<s:submit id="assignChequeBtn" method="create" value="Assign Cheque"
-					cssClass="buttonsubmit" onclick="return validate()" />
+				<input type="button" id="assignChequeBtn" method="create" value="Assign Cheque"
+					class="buttonsubmit" onclick="return validate()" />
 				<input type="button" value="Close"
 					onclick="javascript:window.close()" class="button" />
 			</div>

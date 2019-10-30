@@ -72,17 +72,17 @@ import org.egov.dao.budget.BudgetDetailsHibernateDAO;
 import org.egov.egf.autonumber.ExpenseBillNumberGenerator;
 import org.egov.egf.autonumber.WorksBillNumberGenerator;
 import org.egov.egf.billsubtype.service.EgBillSubTypeService;
+import org.egov.egf.dashboard.event.FinanceEventType;
+import org.egov.egf.dashboard.event.listener.FinanceDashboardService;
 import org.egov.egf.expensebill.repository.DocumentUploadRepository;
 import org.egov.egf.expensebill.repository.ExpenseBillRepository;
 import org.egov.egf.utils.FinancialUtils;
 import org.egov.eis.entity.Assignment;
-import org.egov.eis.service.AssignmentService;
 import org.egov.infra.admin.master.entity.AppConfig;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.AppConfigService;
 import org.egov.infra.admin.master.service.AppConfigValueService;
-import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.Designation;
 import org.egov.infra.microservice.models.EmployeeInfo;
@@ -141,8 +141,6 @@ public class ExpenseBillService {
     @Autowired
     private FinancialUtils financialUtils;
     @Autowired
-    private AssignmentService assignmentService;
-    @Autowired
     private AutonumberServiceBeanResolver beanResolver;
     @Autowired
     private SecurityUtils securityUtils;
@@ -167,6 +165,10 @@ public class ExpenseBillService {
     
     @Autowired
     private MicroserviceUtils microServiceUtil;
+    
+    @Autowired
+    FinanceDashboardService finDashboardService;
+    
 
     @Autowired
     public ExpenseBillService(final ExpenseBillRepository expenseBillRepository, final ScriptService scriptExecutionService) {
@@ -260,7 +262,9 @@ public class ExpenseBillService {
             savedEgBillregister.getEgBillregistermis().setSourcePath(
                     "/services/EGF/expensebill/view/" + savedEgBillregister.getId().toString());
 
-        return expenseBillRepository.save(savedEgBillregister);
+        EgBillregister egbillReg = expenseBillRepository.save(savedEgBillregister);
+        finDashboardService.publishEvent(FinanceEventType.billCreateOrUpdate, egbillReg);
+        return egbillReg;
     }
 
     @Transactional
@@ -338,6 +342,7 @@ public class ExpenseBillService {
                         workFlowAction,approverDesignation);
             }
             updatedegBillregister = expenseBillRepository.save(updatedegBillregister);
+            finDashboardService.publishEvent(FinanceEventType.billCreateOrUpdate, updatedegBillregister);
         } else {
             if (workFlowAction.equals(FinancialConstants.CREATEANDAPPROVE))
                 egBillregister.setStatus(financialUtils.getStatusByModuleAndCode(FinancialConstants.CONTINGENCYBILL_FIN,
@@ -349,8 +354,8 @@ public class ExpenseBillService {
                         workFlowAction,"");
             }
             updatedegBillregister = expenseBillRepository.save(egBillregister);
+            finDashboardService.publishEvent(FinanceEventType.billCreateOrUpdate, updatedegBillregister);
         }
-
         return updatedegBillregister;
     }
 

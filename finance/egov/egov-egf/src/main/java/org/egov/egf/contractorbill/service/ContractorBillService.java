@@ -72,6 +72,8 @@ import org.egov.egf.autonumber.ContractorBillNumberGenerator;
 import org.egov.egf.autonumber.WorksBillNumberGenerator;
 import org.egov.egf.billsubtype.service.EgBillSubTypeService;
 import org.egov.egf.contractorbill.repository.ContractorBillRepository;
+import org.egov.egf.dashboard.event.FinanceEventType;
+import org.egov.egf.dashboard.event.listener.FinanceDashboardService;
 import org.egov.egf.expensebill.repository.DocumentUploadRepository;
 import org.egov.egf.utils.FinancialUtils;
 import org.egov.eis.entity.Assignment;
@@ -176,6 +178,9 @@ public class ContractorBillService {
 
     @Autowired
     private MicroserviceUtils microServiceUtil;
+    
+    @Autowired
+    FinanceDashboardService finDashboardService;
 
     @Autowired
     public ContractorBillService(final ContractorBillRepository contractorBillRepository,
@@ -264,8 +269,9 @@ public class ContractorBillService {
                 || StringUtils.isBlank(savedEgBillregister.getEgBillregistermis().getSourcePath()))
             savedEgBillregister.getEgBillregistermis().setSourcePath(
                     "/services/EGF/contractorbill/view/" + savedEgBillregister.getId().toString());
-
-        return contractorBillRepository.save(savedEgBillregister);
+        EgBillregister egbillReg = contractorBillRepository.save(savedEgBillregister);
+        finDashboardService.publishEvent(FinanceEventType.billCreateOrUpdate, egbillReg);
+        return egbillReg;
     }
 
     public void checkBudgetAndGenerateBANumber(final EgBillregister egBillregister) {
@@ -332,7 +338,7 @@ public class ContractorBillService {
             }
             updatedegBillregister = contractorBillRepository.save(egBillregister);
         }
-
+        finDashboardService.publishEvent(FinanceEventType.billCreateOrUpdate, updatedegBillregister);
         return updatedegBillregister;
     }
 

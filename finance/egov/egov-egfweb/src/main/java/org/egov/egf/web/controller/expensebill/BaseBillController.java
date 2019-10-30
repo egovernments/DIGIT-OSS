@@ -67,6 +67,7 @@ import org.egov.model.bills.EgBillSubType;
 import org.egov.model.bills.EgBilldetails;
 import org.egov.model.bills.EgBillregister;
 import org.egov.utils.FinancialConstants;
+import org.hibernate.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -219,8 +220,10 @@ public abstract class BaseBillController extends BaseVoucherController {
 
         for (final EgBilldetails details : egBillregister.getEgBilldetailes()) {
             if (details.getGlcodeid() != null) {
-                if (egBillregister.getEgBillregistermis().getFunction() != null)
+                if (egBillregister.getEgBillregistermis().getFunction() != null){
                     details.setFunctionid(BigDecimal.valueOf(egBillregister.getEgBillregistermis().getFunction().getId()));
+                    details.setFunction(egBillregister.getEgBillregistermis().getFunction());
+                }
                 details.setEgBillregister(egBillregister);
                 details.setLastupdatedtime(new Date());
                 details.setChartOfAccounts(chartOfAccountsService.findById(details.getGlcodeid().longValue(), false));
@@ -235,15 +238,26 @@ public abstract class BaseBillController extends BaseVoucherController {
         for (final EgBilldetails details : egBillregister.getEgBilldetailes())
             for (final EgBillPayeedetails payeeDetails : egBillregister.getBillPayeedetails())
                 if (details.getGlcodeid().equals(payeeDetails.getEgBilldetailsId().getGlcodeid())) {
+                    List<Object[]> accountDetails = this.getAccountDetails(payeeDetails.getAccountDetailKeyId(), payeeDetails.getAccountDetailTypeId());
                     payeeDetail = new EgBillPayeedetails();
                     payeeDetail.setEgBilldetailsId(details);
                     payeeDetail.setAccountDetailTypeId(payeeDetails.getAccountDetailTypeId());
                     payeeDetail.setAccountDetailKeyId(payeeDetails.getAccountDetailKeyId());
                     payeeDetail.setDebitAmount(payeeDetails.getDebitAmount());
                     payeeDetail.setCreditAmount(payeeDetails.getCreditAmount());
+                    payeeDetail.setDetailKeyName(!accountDetails.isEmpty() ? (String)accountDetails.get(0)[0] : "");
+                    payeeDetail.setDetailTypeName(!accountDetails.isEmpty() ? (String)accountDetails.get(0)[1] : "");
                     payeeDetail.setLastUpdatedTime(new Date());
                     details.getEgBillPaydetailes().add(payeeDetail);
                 }
+    }
+    
+    private List<Object[]> getAccountDetails(Integer accountDetailKeyId, Integer accountDetailTypeId) {
+        String queryString = "select adk.detailname as detailkeyname,adt.name as detailtypename from accountdetailkey adk inner join accountdetailtype adt on adk.detailtypeid=adt.id where adk.detailtypeid=:detailtypeid and adk.detailkey=:detailkey";
+        SQLQuery sqlQuery = persistenceService.getSession().createSQLQuery(queryString);
+        sqlQuery.setInteger("detailtypeid", accountDetailTypeId);
+        sqlQuery.setInteger("detailkey", accountDetailKeyId);
+        return sqlQuery.list();
     }
 
     protected void prepareBillDetailsForView(final EgBillregister egBillregister) {

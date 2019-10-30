@@ -54,10 +54,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
@@ -75,6 +77,8 @@ import org.egov.commons.SubScheme;
 import org.egov.commons.Vouchermis;
 import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.egf.commons.VoucherSearchUtil;
+import org.egov.egf.dashboard.event.FinanceEventType;
+import org.egov.egf.dashboard.event.listener.FinanceDashboardService;
 import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Boundary;
 import org.egov.infra.admin.master.entity.Department;
@@ -139,6 +143,9 @@ public class CancelVoucherAction extends BaseFormAction {
 	@Autowired
 	private EgovMasterDataCaching masterDataCache;
 	private Department deptImpl = new Department();
+	
+	@Autowired
+	FinanceDashboardService finDashboardService;
 
 	public CancelVoucherAction() {
 		voucherHeader.setVouchermis(new Vouchermis());
@@ -401,10 +408,12 @@ public class CancelVoucherAction extends BaseFormAction {
 				+ FinancialConstants.CANCELLEDVOUCHERSTATUS
 				+ ",vh.lastModifiedBy=:modifiedby , vh.lastModifiedDate=:modifiedDate where vh.voucherNumber=:vhNum";
 		String voucherId = "";
+		Set<Long> ids = new HashSet<>();
 		final Session session = persistenceService.getSession();
 		for (int i = 0; i < selectedVhs.length; i++) {
 			voucherObj = (CVoucherHeader) persistenceService.find("from CVoucherHeader vh where vh.id=?",
 					selectedVhs[i]);
+			ids.add(selectedVhs[i]);
 			// Need to do this change as configurable
 			/*
 			 * final boolean value =
@@ -468,6 +477,9 @@ public class CancelVoucherAction extends BaseFormAction {
 				break;
 			}
 			}
+		}
+		if(!ids.isEmpty()){
+		    finDashboardService.publishEvent(FinanceEventType.voucherUpdateById, ids);
 		}
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug(" Cancel Voucher | CancelVoucher | Vouchers Cancelled ");

@@ -144,7 +144,7 @@ function loadNamesForSelectedType()
 			<div align="left" class="mandatory1">Either Voucher Number Or Mandatory Fields(*) Are Required</div>
 	</div>
 	<div class="buttonbottom">
-		<input type="submit" class="buttonsubmit" value="Search" id="Search" name="button" onclick="return loadSearch();" />
+		<input type="button" class="buttonsubmit" value="Search" id="Search" name="button" onclick="return loadSearch();" />
 		 <input type="reset" value="Reset" class="buttonsubmit" onclick="return fieldReset();" />
 		<input type="button" value="Close" onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 	</div>
@@ -214,7 +214,7 @@ function loadNamesForSelectedType()
 				</s:iterator>
 			</table>
 			<div class="buttonbottom" align="center">
-				<s:submit Class="buttonsubmit" value="Cancel Voucher" onclick="return validateVouchers();" />
+				<input type="button" Class="buttonsubmit" value="Cancel Voucher" onclick="return validateVouchers();" />
 			</div>
 
 		</div>

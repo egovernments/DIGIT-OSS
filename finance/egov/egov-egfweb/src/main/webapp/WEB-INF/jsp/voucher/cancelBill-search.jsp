@@ -173,7 +173,7 @@ function validateCancel()
 				</tr>
 			</table>
 			<div class="buttonbottom">
-				<s:submit method="search" value="Search" id="searchBtn" onclick="return validate()" cssClass="buttonsubmit" />
+				<input type="button" value="Search" id="searchBtn" onclick="return validate()" class="buttonsubmit" />
 				<input type="button" value="Close" onclick="javascript:window.parent.postMessage('close','*');" class="button" />
 			</div>
 		</div>
@@ -237,8 +237,8 @@ function validateCancel()
 				</s:iterator>
 			</table>
 			<div class="buttonbottom">
-				<s:submit method="cancelBill" value="Cancel Bill" id="cancelBill"
-					onclick="return validateCancel();" cssClass="buttonsubmit" />
+				<input type="button" value="Cancel Bill" id="cancelBill"
+					onclick="return validateCancel();" class="buttonsubmit" />
 			</div>
 		</s:if>
 		<s:elseif test="%{billListDisplay.size() == 0 && afterSearch}">

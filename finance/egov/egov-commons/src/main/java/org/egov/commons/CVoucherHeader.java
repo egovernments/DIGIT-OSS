@@ -142,6 +142,11 @@ public class CVoucherHeader extends StateAware implements java.io.Serializable{
     @Transient
     private String voucherNumType;
     
+    @Transient
+    private String fiscalName;
+    public CVoucherHeader() {
+        // TODO Auto-generated constructor stub
+    }
 
     public String getDepartmentName() {
 		return departmentName;
@@ -510,4 +515,11 @@ public class CVoucherHeader extends StateAware implements java.io.Serializable{
         this.voucherNumType = voucherNumType;
     }
 
+    public String getFiscalName() {
+        return fiscalName;
+    }
+
+    public void setFiscalName(String fiscalName) {
+        this.fiscalName = fiscalName;
+    }
 }
