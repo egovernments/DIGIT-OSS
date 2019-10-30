@@ -422,7 +422,13 @@ public class DemandService {
 		/*
 		 * method to get the latest collected time from the receipt service
 		 */
-		List<Receipt> receipts = rcptService.getReceiptsFromDemand(demand,requestInfoWrapper);
+
+		/*
+		* quick fix has to reverted
+		* */
+		//List<Receipt> receipts = rcptService.getReceiptsFromDemand(demand,requestInfoWrapper);
+
+		List<Receipt> receipts = null;
 
 		BigDecimal taxAmtForApplicableGeneration = utils.getTaxAmtFromDemandForApplicablesGeneration(demand);
 		BigDecimal collectedApplicableAmount = BigDecimal.ZERO;
