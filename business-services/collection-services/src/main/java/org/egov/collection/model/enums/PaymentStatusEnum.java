@@ -27,7 +27,7 @@ public enum PaymentStatusEnum {
         @JsonCreator
         public static PaymentStatusEnum fromValue(String text) {
             for (PaymentStatusEnum b : PaymentStatusEnum.values()) {
-                if (String.valueOf(b.value).equals(text)) {
+                if (String.valueOf(b.value).equalsIgnoreCase(text)) {
                     return b;
                 }
             }

@@ -35,7 +35,7 @@ public enum PaymentModeEnum {
     @JsonCreator
     public static PaymentModeEnum fromValue(String text) {
         for (PaymentModeEnum b : PaymentModeEnum.values()) {
-            if (String.valueOf(b.value).equals(text)) {
+            if (String.valueOf(b.value).equalsIgnoreCase(text)) {
                 return b;
             }
         }
