@@ -3,6 +3,7 @@ import {
     getCommonContainer,
     getCommonHeader,
     getCommonTitle,
+    getCommonSubHeader,
     getCommonParagraph,
     getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";

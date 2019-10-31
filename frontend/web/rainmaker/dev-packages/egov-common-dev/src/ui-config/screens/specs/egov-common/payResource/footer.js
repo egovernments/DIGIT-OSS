@@ -286,8 +286,28 @@ const callBackForPay = async (state, dispatch) => {
   let ReceiptBody = {
     Receipt: []
   };
-
+  let ReceiptBodyNew = {
+    Payment:{paymentDetails:[]}
+  };
+  
   ReceiptBody.Receipt.push(finalReceiptData);
+
+  ReceiptBodyNew.Payment['tenantId']=finalReceiptData.tenantId;
+  ReceiptBodyNew.Payment['totalDue']=finalReceiptData.Bill[0].totalAmount;
+  ReceiptBodyNew.Payment['totalAmountPaid']=finalReceiptData.Bill[0].totalAmount;
+   ReceiptBodyNew.Payment['paymentMode']=finalReceiptData.instrument.instrumentType.name;
+   ReceiptBodyNew.Payment['paidBy']=finalReceiptData.Bill[0].payerName;
+   ReceiptBodyNew.Payment['mobileNumber']=finalReceiptData.Bill[0].mobileNumber;
+   ReceiptBodyNew.Payment.paymentDetails.push(
+    {
+  		businessService:finalReceiptData.Bill[0].businessService,
+  		billId:finalReceiptData.Bill[0].id,
+  		totalDue:finalReceiptData.Bill[0].totalAmount,
+  		totalAmountPaid:finalReceiptData.Bill[0].totalAmount
+  	}
+   )
+   
+  
 
   // console.log(ReceiptBody);
 
@@ -299,7 +319,7 @@ const callBackForPay = async (state, dispatch) => {
         "collection-services/payments/_create",
         "_create",
         [],
-        ReceiptBody,
+        ReceiptBodyNew,
         [],
         {}
       );
@@ -423,6 +443,6 @@ export const footer = getCommonApplyFooter({
     //   roles: ["CITIZEN"],
     //   action: "PAY"
     // },
-    visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+    // visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
   }
 });
