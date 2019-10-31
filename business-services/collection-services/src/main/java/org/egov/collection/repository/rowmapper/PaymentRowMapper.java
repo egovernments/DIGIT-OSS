@@ -6,6 +6,7 @@ import org.egov.collection.model.AuditDetails;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.enums.CollectionType;
+import org.egov.collection.model.enums.InstrumentStatusEnum;
 import org.egov.collection.model.enums.PaymentModeEnum;
 import org.egov.collection.model.enums.PaymentStatusEnum;
 import org.egov.collection.web.contract.Bill;
@@ -59,6 +60,7 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                 if(rs.wasNull()){instrumentDate = null;}
 
                 String instrumentNumber = rs.getString("instrumentNumber");
+                String instrumentStatus = rs.getString("instrumentStatus");
                 String ifscCode = rs.getString("ifscCode");
                 String paidBy = rs.getString("paidBy");
                 String mobileNumber = rs.getString("mobileNumber");
@@ -91,6 +93,7 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                         .paymentMode(PaymentModeEnum.fromValue(paymentMode))
                         .instrumentDate(instrumentDate)
                         .instrumentNumber(instrumentNumber)
+                        .instrumentStatus(InstrumentStatusEnum.fromValue(instrumentStatus))
                         .ifscCode(ifscCode)
                         .paidBy(paidBy)
                         .mobileNumber(mobileNumber)

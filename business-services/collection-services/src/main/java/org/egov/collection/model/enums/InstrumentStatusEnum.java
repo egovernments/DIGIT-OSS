@@ -8,13 +8,13 @@ import java.util.Set;
 
 public enum InstrumentStatusEnum {
 
-    APPROVED("Approved", InstrumentStatusEnum.Category.OPEN),
-    APPROVALPENDING("Approval Pending", InstrumentStatusEnum.Category.OPEN),
-    TOBESUBMITTED("To be Submitted", InstrumentStatusEnum.Category.OPEN),
-    REMITTED("Remitted", InstrumentStatusEnum.Category.OPEN),
-    REJECTED("Rejected", InstrumentStatusEnum.Category.CLOSED),
-    CANCELLED("Cancelled", InstrumentStatusEnum.Category.CLOSED),
-    DISHONOURED("Dishonoured", InstrumentStatusEnum.Category.CLOSED);
+    APPROVED("APPROVED", InstrumentStatusEnum.Category.OPEN),
+    APPROVAL_PENDING("APPROVAL_PENDING", InstrumentStatusEnum.Category.OPEN),
+    TO_BE_SUBMITTED("TO_BE_SUBMITTED", InstrumentStatusEnum.Category.OPEN),
+    REMITTED("REMITTED", InstrumentStatusEnum.Category.OPEN),
+    REJECTED("REJECTED", InstrumentStatusEnum.Category.CLOSED),
+    CANCELLED("CANCELLED", InstrumentStatusEnum.Category.CLOSED),
+    DISHONOURED("DISHONOURED", InstrumentStatusEnum.Category.CLOSED);
 
 
     private String value;

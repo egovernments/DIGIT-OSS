@@ -5,10 +5,7 @@ import org.egov.collection.model.AuditDetails;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentRequest;
-import org.egov.collection.model.enums.InstrumentStatusEnum;
-import org.egov.collection.model.enums.PaymentStatusEnum;
-import org.egov.collection.model.enums.Purpose;
-import org.egov.collection.model.enums.ReceiptType;
+import org.egov.collection.model.enums.*;
 import org.egov.collection.repository.BillingServiceRepository;
 import org.egov.collection.repository.IdGenRepository;
 import org.egov.collection.web.contract.Bill;
@@ -96,6 +93,7 @@ public class PaymentEnricher {
 
 		payment.setId(UUID.randomUUID().toString());
 		payment.setAuditDetails(auditDetails);
+
 	}
 
 	/**
