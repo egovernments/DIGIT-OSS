@@ -15,6 +15,7 @@ import capturePaymentDetails from "./payResource/capture-payment-details";
 import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
 import g8Details from "./payResource/g8-details";
+import AmountToBePaid from "./payResource/amount-to-be-paid";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const header = getCommonContainer({
@@ -123,6 +124,7 @@ const screenConfig = {
                             //   "TL_PAYMENT_VIEW_BREAKUP",
                             //   "pay"
                             // ),
+                            AmountToBePaid,
                             capturePaymentDetails,
                             g8Details
                         })
