@@ -462,6 +462,6 @@ export const footer = getCommonApplyFooter({
     //   roles: ["CITIZEN"],
     //   action: "PAY"
     // },
-    // visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+    visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
   }
 });
