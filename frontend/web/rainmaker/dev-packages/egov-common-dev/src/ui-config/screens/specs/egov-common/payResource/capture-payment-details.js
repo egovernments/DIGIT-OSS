@@ -15,7 +15,7 @@ const capturePaymentDetails = getCommonGrayCard({
   ),
   tabSection: {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-noc",
+    moduleName: "egov-common",
     componentPath: "CustomTabContainer",
     props: {
       // horizontal: {
