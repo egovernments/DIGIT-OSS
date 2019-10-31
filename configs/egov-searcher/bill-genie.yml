@@ -4,10 +4,8 @@ SearchDefinitions:
  version: 1.0.0
  definitions:
  - name: billswithaddranduser
-   rowMapperKey: billsearch
    query: 
     baseQuery:   with bill_data as ( SELECT 
-  
         b.id AS b_id,b.mobilenumber,
         b.tenantid AS b_tenantid,
         b.payername AS b_payername, 
