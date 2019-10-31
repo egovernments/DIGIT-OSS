@@ -1,38 +1,9 @@
-
 import React, { Component } from "react";
-import HistoryIcon from "@material-ui/icons/History";
-import { Card, Button, Dialog } from "components";
+import { Card } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import PendingAmountDialog from "../PendingAmountDue";
 import ViewHistoryDialog from "../ViewHistory";
-
-const labelStyle = {
-  letterSpacing: 1.2,
-  fontWeight: "600",
-  lineHeight: "40px",
-}
-const buttonStyle = {
-  lineHeight: "35px",
-  height: "40px",
-  backgroundColor: "rgb(242, 242, 242)",
-  boxShadow: "none",
-  border: "1px solid rgb(254, 122, 81)",
-  borderRadius: "2px",
-  outline: "none",
-  alignItems: "right"
-}
-
-const viewHistory = {
-  color: "rgba(0, 0, 0, 0.6)",
-  fontFamily: "Roboto",
-  fontSize: "14px",
-  fontWeight: 500,
-  letterSpacing: "0.58px",
-  lineHeight: "17px",
-  textAlign: "left",
-  cursor: "pointer",
-  paddingRight: "20px"
-}
+import {ViewHistory, TransferOwnership} from "../ActionItems";
 
 class PropertyInfoCard extends Component {
   state = {
@@ -49,7 +20,7 @@ class PropertyInfoCard extends Component {
   }
 
   render(){
-    const { editIcon, header, backgroundColor = 'rgb(242, 242, 242)', items = [], subSection = [] ,hideSubsectionLabel=false, ownershipTransfer=false } = this.props;
+    const { editIcon, header, backgroundColor = 'rgb(242, 242, 242)', items = [], subSection = [] ,hideSubsectionLabel=false, ownershipTransfer=false, viewHistory=false } = this.props;
 
     return (
       <div>
@@ -66,11 +37,10 @@ class PropertyInfoCard extends Component {
               </div>
               {{ editIcon } && <span style={{ alignItems: "right" }} >{editIcon}</span>}
               {/* Transfer ownership button and View History button */}
-              <div style={{display:"flex"}}>
-                  {/* {ownershipTransfer && <div onClick={() => { this.openDialog("viewHistory") }}><HistoryIcon style={{position: "relative", top: "7px", right: "2px", cursor: "pointer"}}/><Label buttonLabel={true} label="PT_VIEW_HISTORY" color="rgb(0, 0, 0, 0.6)" height="40px" labelStyle={viewHistory}/></div>} */}
-
-                  {ownershipTransfer && <Button className="transfer-ownership" label={<Label buttonLabel={true} label="PT_OWNERSHIP_TRANSFER" color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />} buttonStyle={buttonStyle} onClick={() => { this.openDialog("pendingAmountDue") }}></Button>}
-              </div>
+              {(viewHistory || ownershipTransfer) && <div style={{ display: "flex" }}>
+                  {/* <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} /> */}
+                  <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} />
+              </div>}
               {/* ------------------------- */}
             </div>
             <div>

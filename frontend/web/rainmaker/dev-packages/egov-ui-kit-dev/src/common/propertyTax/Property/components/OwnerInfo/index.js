@@ -135,10 +135,9 @@ const formatOwnerInfo = (itemsArray = []) => {
   return ownersInfo;
 }
 
-const OwnerInfo = ({ properties, editIcon, generalMDMSDataById }) => {
+const OwnerInfo = ({ properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory }) => {
   let ownerItems = [];
   const header = 'PT_OWNERSHIP_INFO_SUB_HEADER';
-  const ownershipTransfer = true;
   if (properties) {
     const { propertyDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
@@ -146,7 +145,7 @@ const OwnerInfo = ({ properties, editIcon, generalMDMSDataById }) => {
     }
   }
   return (
-    <PropertyInfoCard editIcon={editIcon} items={ownerItems} header={header} ownershipTransfer={ownershipTransfer}></PropertyInfoCard>
+    <PropertyInfoCard editIcon={editIcon} items={ownerItems} header={header} ownershipTransfer={ownershipTransfer} viewHistory={viewHistory}></PropertyInfoCard>
   );
 };
 
