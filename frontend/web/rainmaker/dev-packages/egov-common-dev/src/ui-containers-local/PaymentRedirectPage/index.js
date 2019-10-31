@@ -22,7 +22,7 @@ class PaymentRedirect extends Component {
       let tenantId = get(pgUpdateResponse, "Transaction[0].tenantId");
       if (get(pgUpdateResponse, "Transaction[0].txnStatus") === "FAILURE") {
         this.props.setRoute(
-          `/fire-noc/acknowledgement?purpose=${"pay"}&status=${"failure"}&applicationNumber=${consumerCode}&tenantId=${tenantId}`
+          `/egov-common/acknowledgement?purpose=${"pay"}&status=${"failure"}&applicationNumber=${consumerCode}&tenantId=${tenantId}`
         );
       } else {
         let response = await getSearchResults([
@@ -45,7 +45,7 @@ class PaymentRedirect extends Component {
 
         let transactionId = get(pgUpdateResponse, "Transaction[0].txnId");
         this.props.setRoute(
-          `/fire-noc/acknowledgement?purpose=${"pay"}&status=${"success"}&applicationNumber=${consumerCode}&tenantId=${tenantId}&secondNumber=${transactionId}`
+          `/egov-common/acknowledgement?purpose=${"pay"}&status=${"success"}&applicationNumber=${consumerCode}&tenantId=${tenantId}&secondNumber=${transactionId}`
         );
       }
     } catch (e) {
