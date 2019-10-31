@@ -5,7 +5,7 @@ const screenConfig = {
   components: {
     div: {
       uiFramework: "custom-containers-local",
-      moduleName: "egov-noc",
+      moduleName: "egov-common",
       componentPath: "PaymentRedirectPage",
       props: {
         className: "payment-redirect-page"
