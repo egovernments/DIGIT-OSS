@@ -83,11 +83,6 @@ public class PaymentValidator {
         // validations
         for (PaymentDetail paymentDetail : paymentDetails) {
 
-            if (isNull(paymentDetail.getTotalDue()) || !Utils.isPositiveInteger(paymentDetail.getTotalDue())) {
-                errorMap.put("INVALID_BILL_AMOUNT",
-                        "Invalid bill amount! Amount should be  greater than or equal to 0 and " + "without fractions");
-            }
-
             if (StringUtils.isEmpty(paymentDetail.getBusinessService())) {
                 errorMap.put("INVALID_BUSINESS_DETAILS", "Business details code cannot be empty");
             }
@@ -151,26 +146,22 @@ public class PaymentValidator {
         if (paymentMode.equalsIgnoreCase(InstrumentTypesEnum.CHEQUE.name())
                 || paymentMode.equalsIgnoreCase(InstrumentTypesEnum.DD.name())) {
 
-            if (isNull(payment.getTransactionDate()))
-                errorMap.put("INVALID_TXN_DATE", "Transaction Date Input is mandatory for cheque and DD");
+            if (isNull(payment.getInstrumentDate()))
+                errorMap.put("INVALID_INST_DATE", "Instrument Date Input is mandatory for cheque and DD");
 
-            if (StringUtils.isEmpty(payment.getTransactionNumber()))
-                errorMap.put("INVALID_TXN_NUMBER", "Transaction Number is mandatory for Cheque, DD, Card");
-
+            if (StringUtils.isEmpty(payment.getInstrumentNumber()))
+                errorMap.put("INVALID_INST_NUMBER", "Instrument Number is mandatory for Cheque, DD, Card");
+            
+            validateChequeDD(payment, errorMap);
         }
 
-        if (paymentMode.equalsIgnoreCase(InstrumentTypesEnum.CARD.name())) {
+        if (paymentMode.equalsIgnoreCase(InstrumentTypesEnum.CARD.name()) || paymentMode.equalsIgnoreCase(InstrumentTypesEnum.ONLINE.name())) {
             if (org.apache.commons.lang3.StringUtils.isEmpty(payment.getTransactionNumber()))
                 errorMap.put("INVALID_TXN_NUMBER", "Transaction Number is mandatory for Cheque, DD, Card");
 
             if (org.apache.commons.lang3.StringUtils.isEmpty(payment.getInstrumentNumber()))
                 errorMap.put("INVALID_INSTRUMENT_NUMBER", "Instrument Number is mandatory for Card");
 
-        }
-
-        if (paymentMode.equalsIgnoreCase(InstrumentTypesEnum.CHEQUE.name())
-                || paymentMode.equalsIgnoreCase(InstrumentTypesEnum.DD.name())) {
-            validateChequeDD(payment, errorMap);
         }
 
     }

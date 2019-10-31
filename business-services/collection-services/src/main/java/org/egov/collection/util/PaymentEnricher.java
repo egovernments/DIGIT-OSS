@@ -1,6 +1,19 @@
 package org.egov.collection.util;
 
-import lombok.extern.slf4j.Slf4j;
+import static java.util.Objects.isNull;
+import static org.egov.collection.model.enums.InstrumentTypesEnum.CARD;
+import static org.egov.collection.model.enums.InstrumentTypesEnum.CASH;
+import static org.egov.collection.model.enums.InstrumentTypesEnum.ONLINE;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.egov.collection.model.AuditDetails;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
@@ -15,14 +28,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.Objects.isNull;
-import static org.egov.collection.model.enums.InstrumentTypesEnum.CARD;
-import static org.egov.collection.model.enums.InstrumentTypesEnum.CASH;
-import static org.egov.collection.model.enums.InstrumentTypesEnum.ONLINE;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -40,7 +46,7 @@ public class PaymentEnricher {
 		List<String> billIds = payment.getPaymentDetails().stream().map(PaymentDetail::getBillId)
 				.collect(Collectors.toList());
 		if (isNull(paymentRequest.getRequestInfo().getUserInfo())
-				|| isNull(paymentRequest.getRequestInfo().getUserInfo().getId())) {
+				|| isNull(paymentRequest.getRequestInfo().getUserInfo().getUuid())) {
 			throw new CustomException("USER_INFO_INVALID", "Invalid user info in request info, user id is mandatory");
 		}
 		Set<String> billIdSet = payment.getPaymentDetails().stream().map(PaymentDetail::getBillId)
@@ -61,7 +67,7 @@ public class PaymentEnricher {
 			validatedBills.forEach(bill -> {
 				if (CollectionUtils.isEmpty(bill.getBillDetails())) {
 					log.error("Bill ID provided does not exist or is in an invalid state " + bill.getId());
-					errorMap.put("INVALID_BILL_ID", "Bill ID provided does not exist or is in an invalid state");
+					errorMap.put("INVALID_BILL_ID", "Bill ID provided does not exist or is in an invalid state: " + bill.getId());
 				} else {
 					bill.setPaidBy(payment.getPaidBy());
 					bill.setPayerName(payment.getPayerName());
@@ -86,11 +92,13 @@ public class PaymentEnricher {
 			paymentDetail.setAuditDetails(auditDetails);
 			paymentDetail.setReceiptType(ReceiptType.BILLBASED.toString());
 			paymentDetail.setReceiptDate(System.currentTimeMillis());
+			paymentDetail.setTotalDue(billIdToBillMap.get(paymentDetail.getBillId()).getTotalAmount());
 		});
-
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
-
+		BigDecimal result = payment.getPaymentDetails().stream().map(PaymentDetail :: getTotalDue).collect(Collectors.toList())
+										.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+		payment.setTotalDue(result);
 		payment.setId(UUID.randomUUID().toString());
 		payment.setAuditDetails(auditDetails);
 
@@ -108,12 +116,12 @@ public class PaymentEnricher {
 		Payment payment = paymentRequest.getPayment();
 		List<PaymentDetail> paymentDetails = payment.getPaymentDetails();
 		String paymentMode = payment.getPaymentMode().toString();
-
+		
 		if (paymentMode.equalsIgnoreCase(ONLINE.name()) || paymentMode.equalsIgnoreCase(CARD.name()))
-			payment.setInstrumentStatus(InstrumentStatusEnum.REMITTED);
+			payment.setPaymentStatus(PaymentStatusEnum.DEPOSITED);
 		else
-			payment.setInstrumentStatus(InstrumentStatusEnum.APPROVED);
-
+			payment.setPaymentStatus(PaymentStatusEnum.NEW);
+		
 		for (PaymentDetail paymentDetail : paymentDetails) {
 			paymentDetail.setId(UUID.randomUUID().toString());
 			String receiptNumber = idGenRepository.generateReceiptNumber(paymentRequest.getRequestInfo(),
@@ -134,17 +142,16 @@ public class PaymentEnricher {
 					payment.getTenantId());
 			payment.setTransactionNumber(transactionId);
 		}
-
-		if (paymentMode.equalsIgnoreCase(CASH.name()) || paymentMode.equalsIgnoreCase(CARD.name())) {
-			payment.setTransactionDate(new Date().getTime());
-		} else {
-			payment.setTransactionDate(new Date(payment.getInstrumentDate()).getTime());
-		}
-
 		if (paymentMode.equalsIgnoreCase(ONLINE.name()) || paymentMode.equalsIgnoreCase(CARD.name()))
-			payment.setPaymentStatus(PaymentStatusEnum.DEPOSITED);
+			payment.setInstrumentStatus(InstrumentStatusEnum.REMITTED);
 		else
-			payment.setPaymentStatus(PaymentStatusEnum.NEW);
+			payment.setInstrumentStatus(InstrumentStatusEnum.APPROVED);
+		
+		payment.setTransactionDate(new Date().getTime());
+		if(paymentMode.equalsIgnoreCase(CASH.name()) || paymentMode.equalsIgnoreCase(CARD.name()) || paymentMode.equalsIgnoreCase(ONLINE.name())) {
+			payment.setInstrumentDate(payment.getTransactionDate());
+		}
+		
 	}
 
 	/**
