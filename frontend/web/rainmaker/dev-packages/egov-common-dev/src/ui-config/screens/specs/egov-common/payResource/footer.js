@@ -18,18 +18,27 @@ export const callPGService = async(state, dispatch) => {
       ? `${window.origin}/citizen`
       : window.origin
   }/egov-common/paymentRedirectPage`;
-  try {
-    const queryObj = [
-      {
-        key: "tenantId",
-        value: tenantId
-      },
-      {
-        key: "consumerCode",
-        value: consumerCode
-      }
-    ];
-    const billPayload = await getBill(queryObj);
+  console.log(state);
+  const {screenConfiguration={}}=state;
+  const {
+    preparedFinalObject={}
+  }=screenConfiguration;
+  const {
+    ReceiptTemp={}
+  }=preparedFinalObject;
+  // try {
+  //   const queryObj = [
+  //     {
+  //       key: "tenantId",
+  //       value: tenantId
+  //     },
+  //     {
+  //       key: "consumerCode",
+  //       value: consumerCode
+  //     }
+  //   ];
+  //   const billPayload = await getBill(queryObj);
+  const billPayload=ReceiptTemp[0];
     // const taxAndPayments = get(billPayload, "Bill[0].taxAndPayments", []).map(
     //   item => {
     //     if (item.businessService === businessService) {
@@ -71,13 +80,12 @@ export const callPGService = async(state, dispatch) => {
       const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl");
       window.location = redirectionUrl;
     } catch (e) {
-      
       console.log(e);
-      moveToFailure(dispatch,)
+      moveToFailure(dispatch)
     }
-  } catch (e) {
-    console.log(e);
-  }
+  // } catch (e) {
+  //   console.log(e);
+  // }
 };
 
 const moveToSuccess = (dispatch, receiptNumber) => {
@@ -104,7 +112,7 @@ const moveToFailure = (dispatch) => {
     )
   );
 };
-    
+
 const getSelectedTabIndex = paymentType => {
   switch (paymentType) {
     case "Cash":
@@ -290,7 +298,7 @@ const callBackForPay = async (state, dispatch) => {
   let ReceiptBodyNew = {
     Payment:{paymentDetails:[]}
   };
-  
+
   ReceiptBody.Receipt.push(finalReceiptData);
 
   ReceiptBodyNew.Payment['tenantId']=finalReceiptData.tenantId;
@@ -307,8 +315,8 @@ const callBackForPay = async (state, dispatch) => {
   		totalAmountPaid:finalReceiptData.Bill[0].totalAmount
   	}
    )
-   
-  
+
+
 
   // console.log(ReceiptBody);
 
