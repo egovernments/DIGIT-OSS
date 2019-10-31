@@ -27,8 +27,8 @@ const header = getCommonContainer({
   }
 });
 
-const fetchBill = async (state, dispatch, applicationNumber, tenantId) => {
-  await generateBill(dispatch, applicationNumber, tenantId);
+const fetchBill = async (state, dispatch, applicationNumber, tenantId,businessService) => {
+  await generateBill(dispatch, applicationNumber, tenantId,businessService);
 
   let payload = get(
     state,
@@ -73,17 +73,6 @@ const fetchBill = async (state, dispatch, applicationNumber, tenantId) => {
   dispatch(prepareFinalObject("ReceiptTemp[0].instrument.tenantId", tenantId));
 };
 
-const loadNocData = async (dispatch, applicationNumber, tenantId) => {
-  const response = await getSearchResults([
-    {
-      key: "tenantId",
-      value: tenantId
-    },
-    { key: "applicationNumber", value: applicationNumber }
-  ]);
-  // const response = sampleSingleSearch();
-  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
-};
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -91,11 +80,11 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     let applicationNumber = getQueryArg(
       window.location.href,
-      "applicationNumber"
+      "consumerCode"
     );
     let tenantId = getQueryArg(window.location.href, "tenantId");
-    loadNocData(dispatch, applicationNumber, tenantId);
-    fetchBill(state, dispatch, applicationNumber, tenantId);
+    let businessService= getQueryArg(window.location.href, "businessService");
+    fetchBill(state, dispatch, applicationNumber, tenantId,businessService);
     return action;
   },
   components: {

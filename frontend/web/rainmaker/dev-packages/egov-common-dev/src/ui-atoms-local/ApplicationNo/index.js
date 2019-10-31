@@ -13,8 +13,8 @@ const styles = {
 };
 
 function ApplicationNoContainer(props) {
-  const { number } = props;
-  return <div style={styles}>BILL NO.: {number}</div>;
+  const { number ,label} = props;
+  return <div style={styles}>{label || `BILL NO.:`} {number}</div>;
 }
 
 export default ApplicationNoContainer;

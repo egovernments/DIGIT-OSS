@@ -3,6 +3,7 @@ import {
   getCommonContainer,
   getCommonHeader,
   getCommonTitle,
+  getCommonParagraph,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -14,25 +15,25 @@ import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
 import g8Details from "./payResource/g8-details";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../ui-utils/commons";
 
 const header = getCommonContainer({
   header: getCommonHeader({
-    labelName: `Application for Fire NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-    labelKey: "NOC_COMMON_APPLY_NOC"
+    labelName: `Payment (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
+    labelKey: "COMMON_PAY_SCREEN_HEADER"
   }),
-  applicationNumber: {
+  consumerCode: {
     uiFramework: "custom-atoms-local",
     moduleName: "egov-noc",
     componentPath: "ApplicationNoContainer",
     props: {
-      number: getQueryArg(window.location.href, "applicationNumber")
+      number: getQueryArg(window.location.href, "consumerCode"),
+      label:"Consumer Code.:"
     }
   }
 });
 
-const fetchBill = async (state, dispatch, applicationNumber, tenantId) => {
-  await generateBill(dispatch, applicationNumber, tenantId);
+const fetchBill = async (state, dispatch, consumerCode, tenantId,businessService) => {
+  await generateBill(dispatch, consumerCode, tenantId,businessService);
 
   let payload = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0]");
 
@@ -56,26 +57,15 @@ const fetchBill = async (state, dispatch, applicationNumber, tenantId) => {
   dispatch(prepareFinalObject("ReceiptTemp[0].instrument.tenantId", tenantId));
 };
 
-const loadNocData = async (dispatch, applicationNumber, tenantId) => {
-  const response = await getSearchResults([
-    {
-      key: "tenantId",
-      value: tenantId
-    },
-    { key: "applicationNumber", value: applicationNumber }
-  ]);
-  // const response = sampleSingleSearch();
-  dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
-};
 
 const screenConfig = {
   uiFramework: "material-ui",
   name: "pay",
   beforeInitScreen: (action, state, dispatch) => {
-    let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    let consumerCode = getQueryArg(window.location.href, "consumerCode");
     let tenantId = getQueryArg(window.location.href, "tenantId");
-    loadNocData(dispatch, applicationNumber, tenantId);
-    fetchBill(state, dispatch, applicationNumber, tenantId);
+    let businessService= getQueryArg(window.location.href, "businessService");
+    fetchBill(state, dispatch, consumerCode, tenantId,businessService);
     return action;
   },
   components: {
@@ -109,27 +99,24 @@ const screenConfig = {
                 labelName: "Payment Collection Details",
                 labelKey: "NOC_PAYMENT_HEAD"
               }),
-              // paragraph: getCommonParagraph({
-              //   labelName: ""
-              // }),
               estimateDetails,
-              addPenaltyRebateButton: {
-                componentPath: "Button",
-                props: {
-                  color: "primary",
-                  style: {}
-                },
-                children: {
-                  previousButtonLabel: getLabel({
-                    labelName: "ADD REBATE/PENALTY",
-                    labelKey: "NOC_PAYMENT_ADD_RBT_PEN"
-                  })
-                },
-                onClickDefination: {
-                  action: "condition",
-                  callBack: (state, dispatch) => showHideAdhocPopup(state, dispatch, "pay")
-                }
-              },
+              // addPenaltyRebateButton: {
+              //   componentPath: "Button",
+              //   props: {
+              //     color: "primary",
+              //     style: {}
+              //   },
+              //   children: {
+              //     previousButtonLabel: getLabel({
+              //       labelName: "ADD REBATE/PENALTY",
+              //       labelKey: "NOC_PAYMENT_ADD_RBT_PEN"
+              //     })
+              //   },
+              //   onClickDefination: {
+              //     action: "condition",
+              //     callBack: (state, dispatch) => showHideAdhocPopup(state, dispatch, "pay")
+              //   }
+              // },
               // viewBreakupButton: getDialogButton(
               //   "VIEW BREAKUP",
               //   "TL_PAYMENT_VIEW_BREAKUP",
@@ -143,19 +130,19 @@ const screenConfig = {
         footer
       }
     },
-    adhocDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-noc",
-      componentPath: "DialogContainer",
-      props: {
-        open: false,
-        maxWidth: "sm",
-        screenKey: "pay"
-      },
-      children: {
-        popup: adhocPopup
-      }
-    }
+    // adhocDialog: {
+    //   uiFramework: "custom-containers-local",
+    //   moduleName: "egov-noc",
+    //   componentPath: "DialogContainer",
+    //   props: {
+    //     open: false,
+    //     maxWidth: "sm",
+    //     screenKey: "pay"
+    //   },
+    //   children: {
+    //     popup: adhocPopup
+    //   }
+    // }
     // breakUpDialog: {
     //   uiFramework: "custom-containers-local",
     //   moduleName: "egov-tradelicence",
