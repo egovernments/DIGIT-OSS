@@ -35,7 +35,7 @@ export const callPGService = async(state, dispatch) => {
         if (item.businessService === businessService) {
           item.amountPaid = get(
             billPayload,
-            "Bill[0].billDetails[0].totalAmount"
+            "Bill[0].billDetails[0].amount"
           );
         }
         return item;
@@ -45,11 +45,11 @@ export const callPGService = async(state, dispatch) => {
       const requestBody = {
         Transaction: {
           tenantId,
-          txnAmount: get(billPayload, "Bill[0].billDetails[0].totalAmount"),
+          txnAmount: get(billPayload, "Bill[0].billDetails[0].amount"),
           module: businessService,
           taxAndPayments,
           billId: get(billPayload, "Bill[0].id"),
-          consumerCode: get(billPayload, "Bill[0].billDetails[0].consumerCode"),
+          consumerCode: consumerCode,
           productInfo: "Common Payment",
           gateway: "AXIS",
           callbackUrl
@@ -355,7 +355,7 @@ export const getCommonApplyFooter = children => {
 };
 
 export const footer = getCommonApplyFooter({
-  makePayment: {
+  generateReceipt: {
     componentPath: "Button",
     props: {
       variant: "contained",
@@ -368,8 +368,8 @@ export const footer = getCommonApplyFooter({
     },
     children: {
       submitButtonLabel: getLabel({
-        labelName: "MAKE PAYMENT",
-        labelKey: "COMMON_MAKE_PAYMENT"
+        labelName: "GENERATE RECEIPT",
+        labelKey: "COMMON_GENERATE_RECEIPT"
       }),
       submitButtonIcon: {
         uiFramework: "custom-atoms",
@@ -404,7 +404,7 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "MAKE PAYMENT",
-        labelKey: "NOC_COMMON_BUTTON_MAKE_PAYMENT"
+        labelKey: "COMMON_MAKE_PAYMENT"
       }),
       submitButtonIcon: {
         uiFramework: "custom-atoms",
