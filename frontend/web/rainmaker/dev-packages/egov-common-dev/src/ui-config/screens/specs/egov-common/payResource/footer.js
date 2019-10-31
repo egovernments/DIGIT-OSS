@@ -300,22 +300,32 @@ const callBackForPay = async (state, dispatch) => {
   };
 
   ReceiptBody.Receipt.push(finalReceiptData);
+console.log(finalReceiptData,state,'finalReceiptData');
 
   ReceiptBodyNew.Payment['tenantId']=finalReceiptData.tenantId;
   ReceiptBodyNew.Payment['totalDue']=finalReceiptData.Bill[0].totalAmount;
-  ReceiptBodyNew.Payment['totalAmountPaid']=finalReceiptData.Bill[0].totalAmount;
+
    ReceiptBodyNew.Payment['paymentMode']=finalReceiptData.instrument.instrumentType.name;
    ReceiptBodyNew.Payment['paidBy']=finalReceiptData.Bill[0].payerName;
    ReceiptBodyNew.Payment['mobileNumber']=finalReceiptData.Bill[0].mobileNumber;
+   if(ReceiptBodyNew.Payment.paymentMode!=='Cash'){
+    ReceiptBodyNew.Payment['transactionNumber']=finalReceiptData.instrument.transactionNumber;
+    ReceiptBodyNew.Payment['instrumentNumber']=finalReceiptData.instrument.instrumentNumber;
+    if(ReceiptBodyNew.Payment.paymentMode==="Cheque"){
+      ReceiptBodyNew.Payment['instrumentDate']=finalReceiptData.instrument.instrumentDate;
+    }
+   }
+   let amtPaid=state.screenConfiguration.preparedFinalObject.AmountType==="partial_amount"?state.screenConfiguration.preparedFinalObject.AmountPaid:finalReceiptData.Bill[0].totalAmount;
+   amtPaid=amtPaid?amtPaid:finalReceiptData.Bill[0].totalAmount;
    ReceiptBodyNew.Payment.paymentDetails.push(
     {
   		businessService:finalReceiptData.Bill[0].businessService,
   		billId:finalReceiptData.Bill[0].id,
   		totalDue:finalReceiptData.Bill[0].totalAmount,
-  		totalAmountPaid:finalReceiptData.Bill[0].totalAmount
+  		totalAmountPaid:amtPaid
   	}
    )
-
+   ReceiptBodyNew.Payment['totalAmountPaid']=amtPaid;
 
 
   // console.log(ReceiptBody);
