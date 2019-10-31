@@ -8,7 +8,7 @@ import PropertyAddressInfo from '../../../Property/components/PropertyAddressInf
 import OwnerInfo from '../../../Property/components/OwnerInfo';
 import TotalDues from '../../../Property/components/TotalDues';
 
-const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, properties, style ,generalMDMSDataById, totalBillAmountDue}) => {
+const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, properties, style ,generalMDMSDataById, totalBillAmountDue,history}) => {
     const items2 = [items[1]];
     return (
         <div className="form-without-button-cont-generic" >
@@ -41,7 +41,7 @@ const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, p
                                         />
                                     </div>
                                 } />
-                                <Card textChildren={<TotalDues totalBillAmountDue={totalBillAmountDue} />} style={{ backgroundColor: 'rgb(242,242,242)', boxShadow: 'none' }} />
+                                <Card textChildren={<TotalDues history tenantId={properties.tenantId}  consumerCode={properties.propertyId} totalBillAmountDue={totalBillAmountDue} />} style={{ backgroundColor: 'rgb(242,242,242)', boxShadow: 'none' }} />
                                 
                         </div>
                     }

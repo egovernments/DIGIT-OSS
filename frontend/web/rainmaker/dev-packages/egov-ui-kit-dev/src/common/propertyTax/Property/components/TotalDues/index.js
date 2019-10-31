@@ -2,6 +2,7 @@ import React from "react";
 import { Tooltip } from "egov-ui-framework/ui-molecules";
 import Label from "egov-ui-kit/utils/translationNode";
 import { TotalDuesButton } from "./components";
+import { withRouter } from "react-router-dom";
 import "./index.css";
 
 const labelStyle = {
@@ -12,7 +13,11 @@ const labelStyle = {
   textAlign: "left",
   paddingRight: "20px",
 };
-const TotalDues = ({ totalBillAmountDue }) => {
+
+const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
+  console.log(process.env.REACT_APP_NAME,'process.env.REACT_APP_NAME');
+  
+  const envURL=process.env.REACT_APP_NAME === "Citizen"?'/egov-common/citizen-pay':'/egov-common/pay';
   const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
   return (
     <div className="row">
@@ -34,11 +39,15 @@ const TotalDues = ({ totalBillAmountDue }) => {
       )}
       {totalBillAmountDue > 0 && (
         <div className="col-xs-3 flex-child">
-          <TotalDuesButton labelText="PT_TOTALDUES_PAY" />
+          <TotalDuesButton labelText="PT_TOTALDUES_PAY" onClickAction={() => {
+            history.push(
+              `${envURL}?consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=PT`);
+          }} />
         </div>
       )}
     </div>
   );
 };
 
-export default TotalDues;
+export default withRouter(TotalDues);
+// /egov-common/pay?consumerCode=PT-107-017837&tenantId=pb.amritsar&businessService=PT
