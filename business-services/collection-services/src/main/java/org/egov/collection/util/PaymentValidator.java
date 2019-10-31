@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 import static java.util.Objects.isNull;
 import static org.egov.collection.config.CollectionServiceConstants.*;
 import static org.egov.collection.config.CollectionServiceConstants.CHEQUE_DD_DATE_WITH_FUTURE_DATE_MESSAGE;
-import static org.egov.collection.model.enums.InstrumentStatusEnum.APPROVALPENDING;
+import static org.egov.collection.model.enums.InstrumentStatusEnum.APPROVAL_PENDING;
 import static org.egov.collection.model.enums.InstrumentStatusEnum.APPROVED;
 import static org.egov.collection.model.enums.InstrumentStatusEnum.REMITTED;
 import static org.egov.collection.util.Utils.jsonMerge;
@@ -131,7 +131,7 @@ public class PaymentValidator {
         for (Payment payment : payments) {
             String paymentStatus = payment.getInstrumentStatus().toString();
             if (paymentStatus.equalsIgnoreCase(APPROVED.toString())
-                    || paymentStatus.equalsIgnoreCase(APPROVALPENDING.toString())
+                    || paymentStatus.equalsIgnoreCase(APPROVAL_PENDING.toString())
                     || paymentStatus.equalsIgnoreCase(REMITTED.toString())) {
                 errorMap.put("BILL_ALREADY_PAID", "Bill has already been paid or is in pending state");
                 return;
