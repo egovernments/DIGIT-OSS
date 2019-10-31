@@ -17,6 +17,8 @@ import { footer } from "./payResource/footer";
 import g8Details from "./payResource/g8-details";
 import AmountToBePaid from "./payResource/amount-to-be-paid";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 
 const header = getCommonContainer({
     header: getCommonHeader({
@@ -42,11 +44,13 @@ const fetchBill = async(state, dispatch, consumerCode, tenantId, businessService
     //Collection Type Added in CS v1.1
     payload && dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].billDetails[0].collectionType", "COUNTER"));
 
-    if (get(payload, "totalAmount") != undefined) {
+    if (get(payload, "amount") != undefined) {
         //set amount paid as total amount from bill - destination changed in CS v1.1
-        dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid", payload.totalAmount));
+        dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid", payload.amount));
         //set total amount in instrument
-        dispatch(prepareFinalObject("ReceiptTemp[0].instrument.amount", payload.totalAmount));
+        dispatch(prepareFinalObject("ReceiptTemp[0].instrument.amount", payload.amount));
+        const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
+        dispatch(handleField("pay", componentJsonpath, "props.value", payload.amount));
     }
 
     //Initially select instrument type as Cash
