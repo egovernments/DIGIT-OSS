@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getCommaSeperatedAddress, getTranslatedLabel } from "egov-ui-kit/utils/commons";
-import { getLatestPropertyDetails, getQueryValue } from "egov-ui-kit/utils/PTCommon";
+import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import AssessmentList from "../AssessmentList";
 import YearDialogue from "../YearDialogue";
 import Screen from "egov-ui-kit/common/common/Screen";
@@ -152,71 +152,6 @@ class Property extends Component {
       urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}`,
     });
   };
-  getAssessmentHistory = (selPropertyDetails, receiptsByYr = []) => {
-    let assessmentList = [];
-    const {
-      propertyDetails = []
-    } = selPropertyDetails;
-    propertyDetails.map((propertyDetail) => {
-      let bool = true;
-      for (let receipts of receiptsByYr) {
-
-        if (propertyDetail.financialYear == receipts[0].financialYear) {
-          let receiptInfo = {};
-          let receiptTotalAmount = 0;
-          let paidAmount = 0;
-          for (let receipt of receipts) {
-            receiptTotalAmount = receipt.totalAmount < receiptTotalAmount ? receiptTotalAmount : receipt.totalAmount;
-            paidAmount += receipt.amountPaid;
-          }
-          if (receiptTotalAmount > paidAmount) {
-            receiptInfo['status'] = 'Pending';
-            if (paidAmount > 0) {
-              receiptInfo['status'] = 'Partially Paid';
-            }
-          } else {
-            receiptInfo['status'] = 'Paid';
-          }
-          receiptInfo = {
-            ...receiptInfo,
-            ...receipts[0],
-            totalAmount: paidAmount,
-          }
-          if (propertyDetail.assessmentDate < receiptInfo.receiptDate) {
-            let assessment = {
-              ...propertyDetail,
-              receiptInfo
-            }
-            assessmentList.push(assessment);
-          } else {
-
-            let assessment = {
-              ...propertyDetail,
-              receiptInfo
-            }
-            let assessment1 = {
-              ...propertyDetail,
-              receiptInfo: {
-                ...receiptInfo,
-                status: 'Pending'
-              }
-            }
-            assessmentList.push(assessment);
-            assessmentList.push(assessment1);
-
-          }
-          bool = false;
-        }
-      }
-      if (bool) {
-        let receiptInfo = {};
-        receiptInfo['status'] = 'Pending';
-        let assessment = {
-          ...propertyDetail,
-          receiptInfo
-        }
-        assessmentList.push(assessment);
-      }
 
   getAssessmentHistory = (selPropertyDetails, receiptsByYr = []) => {
     let assessmentList = [];
@@ -327,8 +262,6 @@ class Property extends Component {
   closeYearRangeDialogue = () => {
     this.setState({ dialogueOpen: false });
   };
-
-
 
   render() {
     const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails, receiptsByYr ,totalBillAmountDue} = this.props;

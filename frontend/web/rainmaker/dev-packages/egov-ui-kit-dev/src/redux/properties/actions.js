@@ -15,11 +15,6 @@ const reset_property_reset = () => {
   };
 };
 
-const reset_property_reset = () => {
-  return {
-    type: actionTypes.RESET_PROPERTY_STATE,
-  };
-};
 
 const propertyFetchPending = () => {
   return {

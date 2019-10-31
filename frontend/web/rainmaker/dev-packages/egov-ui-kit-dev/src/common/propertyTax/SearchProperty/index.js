@@ -57,19 +57,19 @@ class SearchProperty extends Component {
       );
     } else {
       const queryParams = [];
-      if (city.value) {
+      if (city && city.value) {
         queryParams.push({ key: "tenantId", value: city.value });
       }
-      if (ids.value) {
+      if ( ids && ids.value) {
         queryParams.push({ key: "ids", value: ids.value });
       }
-      if (oldpropertyids.value) {
+      if (oldpropertyids && oldpropertyids.value) {
         queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
       }
-      if (mobileNumber.value) {
+      if ( mobileNumber && mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
       }
-      if (applicationNumber.value) {
+      if (applicationNumber && applicationNumber.value) {
         queryParams.push({ key: "applicationNumber", value: applicationNumber.value });
       }
       this.props.fetchProperties(queryParams);
