@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getCommaSeperatedAddress, getTranslatedLabel } from "egov-ui-kit/utils/commons";
-import { getLatestPropertyDetails,getQueryValue } from "egov-ui-kit/utils/PTCommon";
+import { getLatestPropertyDetails, getQueryValue } from "egov-ui-kit/utils/PTCommon";
 import AssessmentList from "../AssessmentList";
 import YearDialogue from "../YearDialogue";
 import Screen from "egov-ui-kit/common/common/Screen";
@@ -212,7 +212,6 @@ class Property extends Component {
         }
         assessmentList.push(assessment);
       }
-
     })
     return assessmentList;
   }
@@ -262,7 +261,7 @@ class Property extends Component {
 
 
   render() {
-    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails ,receiptsByYr} = this.props;
+    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails, receiptsByYr, totalBillAmountDue } = this.props;
     const { closeYearRangeDialogue } = this;
     const { dialogueOpen, urlToAppend ,showAssessmentHistory} = this.state;
     let urlArray = [];

@@ -88,9 +88,6 @@ class SearchProperty extends Component {
       if (mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
       }
-      if (applicationNumber.value) {
-        queryParams.push({ key: "applicationNumber", value: applicationNumber.value });
-      }
       this.setState({
         searchResult: tableData
       });
