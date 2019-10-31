@@ -4,7 +4,6 @@ SearchDefinitions:
  version: 1.0.0
  definitions:
  - name: billswithaddranduser
-   isCustomerRowMapEnabled: true
    rowMapperKey: billsearch
    query: 
     baseQuery:   with bill_data as ( SELECT 
