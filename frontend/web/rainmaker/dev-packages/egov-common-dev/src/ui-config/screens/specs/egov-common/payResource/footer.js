@@ -72,20 +72,27 @@ export const callPGService = async(state, dispatch) => {
   }
 };
 
-const moveToSuccess = (dispatch, receiptNumber) => {
-  const consumerCode = getQueryArg(window.location, "consumerCode");
-  const tenantId = getQueryArg(window.location, "tenantId");
-  const purpose = "pay";
+const moveToSuccess = (dispatch, consumerCode, tenantId,receiptNumber) => {
   const status = "success";
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   dispatch(
     setRoute(
-      `${appendUrl}/egov-commmon/acknowledgement?purpose=${purpose}&status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&secondNumber=${receiptNumber}`
+      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${receiptNumber}`
     )
   );
 };
-
+const moveToFailure = (dispatch, consumerCode, tenantId) => {
+  const status = "failure";
+  const appendUrl =
+    process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
+  dispatch(
+    setRoute(
+      `${appendUrl}/egov-common/acknowledgement?status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}`
+    )
+  );
+};
+    
 const getSelectedTabIndex = paymentType => {
   switch (paymentType) {
     case "Cash":
@@ -145,27 +152,9 @@ const updatePayAction = async (
   receiptNumber
 ) => {
   try {
-    let response = await getSearchResults([
-      {
-        key: "tenantId",
-        value: tenantId
-      },
-      { key: "consumerCode", value: consumerCode }
-    ]);
-    set(response, "FireNOCs[0].fireNOCDetails.action", "PAY");
-    response = await httpRequest(
-      "post",
-      "/firenoc-services/v1/_update",
-      "",
-      [],
-      {
-        FireNOCs: get(response, "FireNOCs", [])
-      }
-    );
-    if (get(response, "FireNOCs", []).length > 0) {
-      moveToSuccess(dispatch, receiptNumber);
-    }
+    moveToSuccess(dispatch, consumerCode, tenantId,receiptNumber);
   } catch (e) {
+    moveToFailure();
     dispatch(
       toggleSnackbar(
         true,
@@ -325,7 +314,7 @@ const callBackForPay = async (state, dispatch) => {
       );
       let receiptNumber = get(
         response,
-        "Receipt[0].Bill[0].billDetails[0].receiptNumber",
+        "Payments[0].paymentDetails[0].receiptNumber",
         null
       );
 
