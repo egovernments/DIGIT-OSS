@@ -1,0 +1,26 @@
+.flex-container {
+  display: flex;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  margin-left: 8px;
+}
+
+.flex-child {
+  width: 190px;
+  margin: 10px;
+  text-align: left !important;
+  min-width: 230px;
+}
+
+.flex-child {
+  div {
+    min-width: 130px !important;
+    button {
+      div {
+        div {
+          height: 33px !important;
+        }
+      }
+    }
+  }
+}

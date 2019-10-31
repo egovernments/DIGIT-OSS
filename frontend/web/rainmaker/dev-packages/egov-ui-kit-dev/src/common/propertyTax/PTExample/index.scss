@@ -1,0 +1,49 @@
+.descriptionPTExample {
+  color: #484848;
+  font-size: 18px !important;
+}
+.dividerPTExample {
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+.descriptionStyle a {
+  text-decoration: none;
+  color: #fe7a51;
+}
+.example-label-style .label-text {
+  margin-right: 5px;
+}
+.detailTitlePTExample {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.7px;
+  color: #484848;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.detailContentPTExample,
+.detailContentPTExample div {
+  padding-left: 0;
+  font-weight: normal !important;
+}
+.blockBox {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.blockBox .detailLeft {
+  font-weight: 500 !important;
+  color: #484848;
+}
+.block {
+  padding-bottom: 10px !important;
+}
+
+.example-main-cont div {
+  font-size: 16px;
+  letter-spacing: 0.7px;
+}
+@media only screen and (max-width: 768px) {
+  .blockBox {
+    padding-top: 20px;
+  }
+}

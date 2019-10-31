@@ -1,0 +1,15 @@
+.module-page-icon {
+  height: 30px;
+  width: 30px;
+  color: #fe7a51;
+}
+
+.card-content-style {
+  padding: 0;
+}
+
+@media only screen and (min-width: 768px) {
+  .module-card-style {
+    min-height: 200px;
+  }
+}

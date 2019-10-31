@@ -5,7 +5,7 @@ import axios from "axios";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { TENANT } from "egov-ui-kit/utils/endPoints";
 import commonConfig from "config/common.js";
-import { Icon } from "components";
+import { Icon } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import get from "lodash/get";
@@ -704,3 +704,7 @@ export const onNotificationClick = async (history) => {
     toggleSnackbarAndSetText(true, { labelName: "Count update error", labelKey: "Count update error" },   "error");
   }
 };
+
+export const getTotalAmountDue = (payload) => {
+  return payload && payload.Bill && payload.Bill.length > 0 && payload.Bill[0].totalAmount ? payload.Bill[0].totalAmount : 0;
+}

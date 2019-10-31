@@ -167,3 +167,10 @@ export const NOTIFICATIONS = {
     ACTION: "_search",
   },
 };
+
+export const FETCHBILL = {
+  GET: {
+    URL: "/billing-service/bill/v2/_fetchbill",
+    ACTION: "_get",
+  },
+};

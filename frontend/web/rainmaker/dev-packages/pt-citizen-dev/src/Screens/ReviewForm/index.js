@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import { Icon } from "components";
-import PropertyAddress from "./components/PropertyAddress";
-import PaymentAmountDetails from "./components/PaymentAmountDetails";
 import CalculationDetails from "./components/CalculationDetails";
-import AssessmentInfo from "./components/AssessmentInfo";
-import OwnerInfo from "./components/OwnerInfo";
 import PropertyTaxDetailsCard from "./components/PropertyTaxDetails";
+import { Card } from "components";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { connect } from "react-redux";
 import { MDMS } from "egov-ui-kit/utils/endPoints";
@@ -15,9 +12,13 @@ import {
   findCorrectDateObjPenaltyIntrest
 } from "egov-ui-kit/utils/PTCommon";
 import Label from "egov-ui-kit/utils/translationNode";
-
 import { SingleCheckbox } from "components";
 import "./index.css";
+import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/components/PropertyAddressInfo';
+import AssessmentInfo from 'egov-ui-kit/common/propertyTax/Property/components/AssessmentInfo';
+import OwnerInfo from 'egov-ui-kit/common/propertyTax/Property/components/OwnerInfo';
+
+
 const defaultIconStyle = {
   fill: "#767676",
   width: 22,
@@ -26,25 +27,6 @@ const defaultIconStyle = {
   marginRight: 10
 };
 
-const PropAddressIcon = (
-  <Icon style={defaultIconStyle} color="#ffffff" action="action" name="home" />
-);
-const AssessmentInfoIcon = (
-  <Icon
-    style={defaultIconStyle}
-    color="#ffffff"
-    action="action"
-    name="assignment"
-  />
-);
-const OwnerInfoIcon = (
-  <Icon
-    style={defaultIconStyle}
-    color="#ffffff"
-    action="social"
-    name="person"
-  />
-);
 
 class ReviewForm extends Component {
   state = {
@@ -58,17 +40,6 @@ class ReviewForm extends Component {
     termsAccepted: false,
     calculationDetails: false
   };
-
-  // componentWillReceiveProps(nextProps) {
-  //   let { estimationDetails: nextEstimationDetails } = nextProps;
-  //   const { totalAmountToBePaid } = this.state
-  //   const { totalAmount: nextTotalAmount } = this.props.estimationDetails[0] || 0
-  //   if (totalAmountToBePaid !== nextTotalAmount && !isNaN(parseFloat(nextTotalAmount)) && isFinite(nextTotalAmount)) {
-  //     this.setState({
-  //       totalAmountTobePaid: nextTotalAmount,
-  //     })
-  //   }
-  // }
 
   componentDidMount() {
     this.getImportantDates();
@@ -243,90 +214,96 @@ class ReviewForm extends Component {
       isPartialPaymentInValid,
       termsAccepted,
       termsError,
+      isAssesment,
       toggleTerms
     } = this.props;
     let { totalAmount } = estimationDetails[0] || {};
+    const { generalMDMSDataById = {} } = this.props;
     return (
       <div>
-        <PropertyAddress
-          icon={PropAddressIcon}
-          editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}
-          component={stepZero}
+        <Card
+          textChildren={
+            <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
+              <PropertyTaxDetailsCard
+                estimationDetails={estimationDetails}
+                importantDates={importantDates}
+                openCalculationDetails={this.openCalculationDetails}
+                optionSelected={valueSelected}
+              />
+              <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
+              <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
+              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo>
+              {/* {isAssesment && */}
+              <div>
+
+                {!this.props.isCompletePayment && (
+                  <CalculationDetails
+                    open={this.state.calculationDetails}
+                    data={this.props.calculationScreenData}
+                    closeDialogue={() => this.closeCalculationDetails()}
+                  />
+                )}
+                {/* {!isPartialPaymentInValid && (
+                  <PaymentAmountDetails
+                    value={
+                      valueSelected === "Partial_Amount"
+                        ? totalAmountToBePaid
+                        : totalAmount
+                    }
+                    onRadioButtonChange={onRadioButtonChange}
+                    handleFieldChange={handleFieldChange}
+                    optionSelected={valueSelected}
+                    totalAmount={totalAmount && totalAmount}
+                    estimationDetails={estimationDetails}
+                    errorText={errorText}
+                  />
+                )} */}
+                <p className="declaration-main-header">DECLARATION</p>
+                <SingleCheckbox
+                  id="rcpt"
+                  errorMessage={<Label label={termsError} />}
+                  errorText={<Label label={termsError} />}
+                  floatingLabelText={
+                    <Label label="PT_FINAL_DECLARATION_MESSAGE" color="#767676" />
+                  }
+                  value={termsAccepted}
+                  onCheck={() => {
+                    toggleTerms();
+                  }}
+                />
+                {termsError && (
+                  <Label
+                    label={termsError}
+                    containerStyle={{
+                      marginTop: "-22px",
+                      color: "#f44336",
+                      "margin-left": "4px"
+                    }}
+                    fontSize="14px"
+                    color="red"
+                  />
+                )}
+              </div>
+            </div>
+          }
         />
-        <AssessmentInfo
-          icon={AssessmentInfoIcon}
-          editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}
-          component={stepOne}
-        />
-        <OwnerInfo
-          icon={OwnerInfoIcon}
-          editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}
-          component={stepTwo}
-        />
-        <PropertyTaxDetailsCard
-          estimationDetails={estimationDetails}
-          importantDates={importantDates}
-          openCalculationDetails={this.openCalculationDetails}
-          optionSelected={valueSelected}
-        />
-        {!this.props.isCompletePayment && (
-          <CalculationDetails
-            open={this.state.calculationDetails}
-            data={this.props.calculationScreenData}
-            closeDialogue={() => this.closeCalculationDetails()}
-          />
-        )}
-        {!isPartialPaymentInValid && (
-          <PaymentAmountDetails
-            value={
-              valueSelected === "Partial_Amount"
-                ? totalAmountToBePaid
-                : totalAmount
-            }
-            onRadioButtonChange={onRadioButtonChange}
-            handleFieldChange={handleFieldChange}
-            optionSelected={valueSelected}
-            totalAmount={totalAmount && totalAmount}
-            estimationDetails={estimationDetails}
-            errorText={errorText}
-          />
-        )}
-        <div>
-          <p className="declaration-main-header">DECLARATION</p>
-          <SingleCheckbox
-            id="rcpt"
-            errorMessage={<Label label={termsError} />}
-            errorText={<Label label={termsError} />}
-            floatingLabelText={
-              <Label label="PT_FINAL_DECLARATION_MESSAGE" color="#767676" />
-            }
-            value={termsAccepted}
-            onCheck={() => {
-              toggleTerms();
-            }}
-          />
-          {termsError && (
-            <Label
-              label={termsError}
-              containerStyle={{
-                marginTop: "-22px",
-                color: "#f44336",
-                "margin-left": "4px"
-              }}
-              fontSize="14px"
-              color="red"
-            />
-          )}
-        </div>
       </div>
     );
   }
 }
-
+const mapStateToProps = (state, ownProps) => {
+  const { common = {} } = state;
+  const { generalMDMSDataById } = common || {};
+  return {
+    ownProps,
+    generalMDMSDataById,
+  };
+};
 const mapDispatchToProps = dispatch => ({
   setRoute: route => dispatch({ type: "SET_ROUTE", route })
 });
+
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ReviewForm);

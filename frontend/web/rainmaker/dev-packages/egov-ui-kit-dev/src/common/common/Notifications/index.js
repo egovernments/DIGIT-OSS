@@ -119,5 +119,4 @@ const Notifications = ({ notifications = [], history }) => {
   return  notifications && notifications.length > 0 && <div>{notifications.map((notification, index) => renderUpdate(notification, index))}</div>;
 };	
 
-
 export default Notifications;
