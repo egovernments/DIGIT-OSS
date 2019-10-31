@@ -9,13 +9,13 @@ import { httpRequest } from "../../../../../ui-utils/api";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { convertDateToEpoch, getBill, validateFields } from "../../utils";
 
-export const callPGService = async (state, dispatch) => {
-  const tenantId = getQueryArg(window.location.href, "tenantId");
-  const applicationNumber = getQueryArg(
-    window.location.href,
-    "applicationNumber"
-  );
-  let callbackUrl = `${
+export const callPGService = async(state, dispatch) => {
+        const tenantId = getQueryArg(window.location.href, "tenantId");
+        const consumerCode = getQueryArg(
+            window.location.href,
+            "consumerCode"
+        );
+        let callbackUrl = `${
     process.env.NODE_ENV === "production"
       ? `${window.origin}/citizen`
       : window.origin
@@ -27,8 +27,8 @@ export const callPGService = async (state, dispatch) => {
         value: tenantId
       },
       {
-        key: "applicationNumber",
-        value: applicationNumber
+        key: "consumerCode",
+        value: consumerCode
       }
     ];
     const billPayload = await getBill(queryObj);
@@ -75,7 +75,7 @@ export const callPGService = async (state, dispatch) => {
 };
 
 const moveToSuccess = (dispatch, receiptNumber) => {
-  const applicationNo = getQueryArg(window.location, "applicationNumber");
+  const consumerCode = getQueryArg(window.location, "consumerCode");
   const tenantId = getQueryArg(window.location, "tenantId");
   const purpose = "pay";
   const status = "success";
@@ -83,7 +83,7 @@ const moveToSuccess = (dispatch, receiptNumber) => {
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   dispatch(
     setRoute(
-      `${appendUrl}/fire-noc/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&secondNumber=${receiptNumber}`
+      `${appendUrl}/fire-noc/acknowledgement?purpose=${purpose}&status=${status}&consumerCode=${consumerCode}&tenantId=${tenantId}&secondNumber=${receiptNumber}`
     )
   );
 };
@@ -142,7 +142,7 @@ const allDateToEpoch = (finalObj, jsonPaths) => {
 const updatePayAction = async (
   state,
   dispatch,
-  applicationNo,
+  consumerCode,
   tenantId,
   receiptNumber
 ) => {
@@ -152,7 +152,7 @@ const updatePayAction = async (
         key: "tenantId",
         value: tenantId
       },
-      { key: "applicationNumber", value: applicationNo }
+      { key: "consumerCode", value: consumerCode }
     ]);
     set(response, "FireNOCs[0].fireNOCDetails.action", "PAY");
     response = await httpRequest(
@@ -312,12 +312,12 @@ const callBackForPay = async (state, dispatch) => {
       );
 
       // Search NOC application and update action to PAY
-      const applicationNo = getQueryArg(window.location, "applicationNumber");
+      const consumerCode = getQueryArg(window.location, "consumerCode");
       const tenantId = getQueryArg(window.location, "tenantId");
       await updatePayAction(
         state,
         dispatch,
-        applicationNo,
+        consumerCode,
         tenantId,
         receiptNumber
       );
@@ -357,41 +357,6 @@ export const getCommonApplyFooter = children => {
 };
 
 export const footer = getCommonApplyFooter({
-  submitButton: {
-    componentPath: "Button",
-    props: {
-      variant: "contained",
-      color: "primary",
-      style: {
-        minWidth: "200px",
-        height: "48px",
-        marginRight: "45px"
-      }
-    },
-    children: {
-      submitButtonLabel: getLabel({
-        labelName: "Submit",
-        labelKey: "NOC_COMMON_BUTTON_SUBMIT"
-      }),
-      submitButtonIcon: {
-        uiFramework: "custom-atoms",
-        componentPath: "Icon",
-        props: {
-          iconName: "keyboard_arrow_right"
-        }
-      }
-    },
-    onClickDefination: {
-      action: "condition",
-      callBack: callBackForPay
-    },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      roles: ["NOC_CEMP"],
-      action: "PAY"
-    },
-    visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
-  },
   makePayment: {
     componentPath: "Button",
     props: {
@@ -406,18 +371,27 @@ export const footer = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "MAKE PAYMENT",
-        labelKey: "NOC_COMMON_BUTTON_MAKE_PAYMENT"
-      })
+        labelKey: "COMMON_MAKE_PAYMENT"
+      }),
+      submitButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_right"
+        }
+      }
+
     },
     onClickDefination: {
       action: "condition",
       callBack: callPGService
-    },
-    roleDefination: {
-      rolePath: "user-info.roles",
-      roles: ["CITIZEN"],
-      action: "PAY"
-    },
-    visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+    }
+    // },
+    // roleDefination: {
+    //   rolePath: "user-info.roles",
+    //   roles: ["CITIZEN"],
+    //   action: "PAY"
+    // },
+    // visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
   }
 });
