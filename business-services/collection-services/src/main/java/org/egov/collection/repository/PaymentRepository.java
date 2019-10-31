@@ -77,6 +77,8 @@ public class PaymentRepository {
     public List<Payment> fetchPayments(PaymentSearchCriteria paymentSearchCriteria){
         Map<String, Object> preparedStatementValues = new HashMap<>();
         String query = paymentQueryBuilder.getPaymentSearchQuery(paymentSearchCriteria, preparedStatementValues);
+        log.info("Query: "+query);
+        log.info("preparedStatementValues: "+preparedStatementValues);
         List<Payment> payments = namedParameterJdbcTemplate.query(query, preparedStatementValues,paymentRowMapper);
         return payments;
     }

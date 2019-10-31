@@ -396,6 +396,11 @@ public class PaymentQueryBuilder {
             preparedStatementValues.put("consumerCodes", searchCriteria.getConsumerCodes());
         }
 
+        if (!CollectionUtils.isEmpty(searchCriteria.getBillIds())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" pyd.billid in (:billid)");
+            preparedStatementValues.put("billid", searchCriteria.getBillIds());
+        }
 
     }
 
