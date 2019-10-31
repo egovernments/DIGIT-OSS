@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon, TextField } from "components";
+import { Icon } from "components";
 import filter from "lodash/filter";
 import isUndefined from "lodash/isUndefined";
 import AutoComplete from "material-ui/AutoComplete";
@@ -79,7 +79,7 @@ class SearchService extends React.Component {
     const { getNameById, onChangeText, getTransformedItems } = this;
 
     return (
-      <div className={`${classes.root} dashboard-search-main-cont`}>
+      <div className={`${classes.root} dashboard-search-main-cont desktopboxalign`}>
         <Icon action="action" name="search" style={{ marginLeft: 12 }} />
         {/* <TextField InputProps={{ disableUnderline: true }} className={classes.input} placeholder={"Search Services & Information"} />
         <TextField

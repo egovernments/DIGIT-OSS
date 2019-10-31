@@ -7,7 +7,6 @@ import { CityPicker } from "modules/common";
 import { startSMSRecevier } from "egov-ui-kit/utils/commons";
 import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
-import { type } from "os";
 
 const RegisterForm = ({ handleFieldChange, form,logoUrl }) => {
   const fields = form.fields || {};
