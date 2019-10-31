@@ -40,8 +40,8 @@ export const paymentFailureFooter = (consumerCode, tenant) => {
             },
             onClickDefination: {
                 action: "page_change",
-                path: '/egov-common/citizen-pay?consumerCode=PT-107-017837&tenantId=pb.amritsar&businessService=PT'
-                    // egov-common/citizen-pay?consumerCode=PT-107-017837&tenantId=pb.amritsar&businessService=PT
+                path
+                // egov-common/citizen-pay?consumerCode=PT-107-017837&tenantId=pb.amritsar&businessService=PT
             }
         }
     });
