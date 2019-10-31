@@ -135,30 +135,55 @@ class SearchProperty extends Component {
       let {
         propertyId,
         status,
-        applicationNo,
-        applicationType,
-        date,
+        oldPropertyId,
+        address,
         propertyDetails,
         tenantId
       } = property;
-      // const { doorNo, buildingName, street, locality } = address;
-      // let displayAddress = doorNo
-      //   ? `${doorNo ? doorNo + "," : ""}` +
-      //   `${buildingName ? buildingName + "," : ""}` +
-      //   `${street ? street + "," : ""}`
-      //   : `${locality.name ? locality.name : ""}`;
+      const { doorNo, buildingName, street, locality } = address;
+      let displayAddress = doorNo
+        ? `${doorNo ? doorNo + "," : ""}` +
+        `${buildingName ? buildingName + "," : ""}` +
+        `${street ? street + "," : ""}`
+        : `${locality.name ? locality.name : ""}`;
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
-      // const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
-      // let assessmentNo = latestAssessment.assessmentNumber;
-      // const uuid = get(latestAssessment, "citizenInfo.uuid");
-
+      const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
+      let assessmentNo = latestAssessment.assessmentNumber;
+      const uuid = get(latestAssessment, "citizenInfo.uuid");
+      let button = (
+        <a
+          style={{
+            height: 20,
+            lineHeight: "auto",
+            minWidth: "inherit",
+            cursor: "pointer",
+            textDecoration: "underline"
+          }}
+          onClick={
+            userType === "CITIZEN"
+              ? e => {
+                history.push(
+                  `/property-tax/my-properties/property/${propertyId}/${tenantId}`
+                );
+              }
+              : e => {
+                history.push(
+                  `/property-tax/property/${propertyId}/${tenantId}`
+                );
+              }
+          }
+        >
+          {propertyId}
+        </a>
+      );
       let item = {
-        applicationNo: this.getLink(userType, history, applicationNo, tenantId),
-        propertyId: this.getLink(userType, history, propertyId, tenantId),
-        applicationType: applicationType,
+        index: index + 1,
+        propertyId: button,
         name: name,
-        date: date,
+        guardianName: guardianName,
+        oldPropertyId: oldPropertyId,
+        address: displayAddress,
         status: status
       };
       tableData.push(item);
@@ -239,7 +264,7 @@ class SearchProperty extends Component {
           onResetClick={this.onResetClick}
         />
         <Hidden xsDown>
-        {/* {showTable && tableData.length === 0 && loading==false&&  */}
+          {/* {showTable && tableData.length === 0 && loading==false&&  */}
           {tableData && tableData.length > 0 && showTable ? (
             <PropertyTable
               sortOnObject="propertyId"
@@ -249,11 +274,10 @@ class SearchProperty extends Component {
           ) : null}
         </Hidden>
         <Hidden smUp>
-          {tableData && tableData.length > 0 && showTable &&  (
+          {tableData && tableData.length > 0 && showTable && (
 
-           
             <Label
-            secondaryText={'('+tableData.length+')'}
+              secondaryText={'(' + tableData.length + ')'}
               label="PT_SEARCH_PROPERTY_TABLE_HEADERS"
               className="property-search-table-heading"
               fontSize={16}
@@ -273,8 +297,8 @@ class SearchProperty extends Component {
             onActionClick={this.onAddButtonClick}
           />
         </Hidden>
-       
-        {showTable && tableData.length === 0 && loading==false&& (
+
+        {showTable && tableData.length === 0 && loading == false && (
           <div className="search-no-property-found">
             <div className="no-search-text">
               <Label label="PT_NO_PROPERTY_RECORD" />

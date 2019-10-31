@@ -6,7 +6,7 @@ import ActionFooter from "../../common/ActionFooter";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import generateReceipt from "./Components/receipt";
 import AcknowledgementCard from '../AcknowledgementCard';
-import {localStorageSet} from "egov-ui-kit/utils/localStorageUtils";
+import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
 
@@ -34,7 +34,7 @@ const PaymentStatus = ({ assessmentYear,
       assessmentYear = receiptDetails.propertyDetails[0].financialYear;
     }
   }
-  let  assessmentNumber;
+  let assessmentNumber;
   if (receiptDetails && receiptDetails.propertyDetails && receiptDetails.propertyDetails[0]) {
     assessmentNumber = receiptDetails.propertyDetails[0].assessmentNumber;
   }
@@ -51,8 +51,7 @@ const PaymentStatus = ({ assessmentYear,
         <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
         <AcknowledgementCard acknowledgeType='success' receiptHeader="PT_PMT_RCPT_NO" messageHeader={paymentHeader} message={paymentMessage} receiptNo={ReceiptNo} />
       </div>
-
-  <div
+      <div
         id="tax-wizard-buttons"
         className="wizard-footer col-sm-10"
         style={{ textAlign: "right" }}
@@ -60,18 +59,18 @@ const PaymentStatus = ({ assessmentYear,
         <div className="button-container " style={{ float: "right" }}>
           <Button
             label={<Label buttonLabel={true}
-                label='PT_ASSESS_PAY_FOR_NEW_YEAR'
-                color="#fe7a51" />
+              label='PT_ASSESS_PAY_FOR_NEW_YEAR'
+              color="#fe7a51" />
             }
             className="pmt-status-back"
-            onClick={() => {toggleYearDialogue(assessmentNumber)    }}
+            onClick={() => { toggleYearDialogue(assessmentNumber) }}
             labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
             buttonStyle={{ border: "1px solid #fe7a51" }}
-            style={{  }}
+            style={{}}
           />
           <Button
             label={<Label buttonLabel={true} label='PT_DOWNLOAD_RECEIPT' color="#fff" />}
-           className="pmt-status-next"
+            className="pmt-status-next"
             backgroundColor="#fe7a51"
             labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fff" }}
             buttonStyle={{ border: 0 }}
@@ -81,10 +80,6 @@ const PaymentStatus = ({ assessmentYear,
           />
         </div>
       </div>
-
-
-
-
     </div>
   );
 };

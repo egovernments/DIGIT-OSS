@@ -16,7 +16,7 @@ const getItemStatus = (item, history, generalMDMSDataById) => {
       height: "18px",
     },
   };
- 
+
   switch (status) {
     case "Paid":
     case "Paid-Disable":
@@ -33,7 +33,7 @@ const getItemStatus = (item, history, generalMDMSDataById) => {
         </div>
       );
       break;
-    
+
     case "Pending":
           return (
             <div>
@@ -177,6 +177,7 @@ const AssessmentList = ({properties,
   onNewPropertyButtonClick,
   hoverColor,
   generalMDMSDataById,
+  totalBillAmountDue
 }) => {
   return items.length == 0 ? (
     <BlankAssessment
@@ -188,8 +189,8 @@ const AssessmentList = ({properties,
       history={history}
     />
   ) : (
- 
-    properties== null ? ( <PTList 
+
+    properties== null ? ( <PTList
       properties={properties}
         items={getListItems(items, history, generalMDMSDataById)}
         history={history}
@@ -197,7 +198,7 @@ const AssessmentList = ({properties,
         innerDivStyle={innerDivStyle}
         listItemStyle={listItemStyle}
         hoverColor={hoverColor}
-      />):( <PTInformation 
+      />):( <PTInformation
       properties={properties}
         items={getListItems(items, history, generalMDMSDataById)}
         history={history}
@@ -206,12 +207,13 @@ const AssessmentList = ({properties,
         listItemStyle={listItemStyle}
         hoverColor={hoverColor}
         generalMDMSDataById={generalMDMSDataById}
+        totalBillAmountDue={totalBillAmountDue}
       />)
-   
 
 
 
-   
+
+
   );
 };
 

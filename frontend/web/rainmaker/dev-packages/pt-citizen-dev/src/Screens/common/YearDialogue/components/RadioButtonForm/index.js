@@ -20,7 +20,7 @@ const RadioButtonForm = ({ label, form, handleFieldChange, selectedYear, handleR
     //   buttonStyle={{ borderRadius: "50px", border: "1px solid #fe7a51" }}
     // />
     <div className="property-amount-radio">
-      <div className="amt-radio" style={{padding:'5px'}}>
+      <div className="amt-radio" style={{ padding: '5px' }}>
         <input
           type="radio"
           // checked={optionSelected === "Full_Amount"}

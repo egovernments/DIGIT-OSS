@@ -134,10 +134,7 @@ export const getCompletedTransformedItems = (assessmentsByStatus = [], cities, l
                 </div>
               </div>
             </div>
-
             {(index!==Object.values(assessmentsByStatus).length-1)&&<Divider style={{ marginBottom: 0, marginTop: "15px" }} />}
-
-
           </div>
         ),
         epocDate: item.assessmentDate,
@@ -149,7 +146,6 @@ export const getCompletedTransformedItems = (assessmentsByStatus = [], cities, l
         property: item.property||property,
         tenantId: item.tenantId,
         status: get(item, "receiptInfo.status") || 'Pending',
-        // consumerCode: `${item.propertyId}:${item.assessmentNumber}`,//todo Consumer code uniqueness
         consumerCode: item.propertyId || propertyId || '',
         receipt: true,
         localizationLabels: localizationLabels,

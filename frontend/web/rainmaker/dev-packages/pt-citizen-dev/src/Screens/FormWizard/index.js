@@ -1023,7 +1023,11 @@ class FormWizard extends Component {
           });
         break;
       case 5:
-        pay();
+        if (this.state.partialAmountError.length == 0) {
+          pay();
+        } else {
+          alert(this.state.partialAmountError);
+        }
         break;
       case 6:
         pay();
@@ -1057,6 +1061,11 @@ class FormWizard extends Component {
       { key: "consumerCodes", value: propertyId },
       { key: "tenantId", value: tenantId }
     ];
+    // !isCompletePayment &&
+    //   queryObj.push({
+    //     key: "amountExpected",
+    //     value: isFullPayment ? estimation[0].totalAmount : totalAmountToBePaid
+    //   });
 
     try {
       const billResponse = await httpRequest(
@@ -1154,9 +1163,7 @@ class FormWizard extends Component {
             "/property-tax/payment-success/" +
             moduleId.split(":")[0] +
             "/" +
-            tenantId +
-            "/" +
-            moduleId.split(":")[1]
+            tenantId
           );
         }
       } catch (e) {
@@ -1316,9 +1323,8 @@ class FormWizard extends Component {
   pay = async () => {
 
     const { callPGService } = this;
-    const { financialYearFromQuery ,assessedPropertyDetails = {}} = this.state;
+    const { financialYearFromQuery, assessedPropertyDetails = {} } = this.state;
     const { Properties = [] } = assessedPropertyDetails;
- 
     let { toggleSpinner, location, form, common } = this.props;
     let prepareFormData = { ...this.props.prepareFormData };
     if (
@@ -1332,8 +1338,8 @@ class FormWizard extends Component {
     let { search } = location;
     let propertyUID = get(assessedPropertyDetails, "Properties[0].propertyId");
     let propertyId = getQueryValue(search, "propertyId");
-    if(!propertyId){
-      propertyId=propertyUID;
+    if (!propertyId) {
+      propertyId = propertyUID;
     }
     const assessmentId = getQueryValue(search, "assessmentId");
     const tenantId = getQueryValue(search, "tenantId");
@@ -1445,7 +1451,6 @@ class FormWizard extends Component {
         //   prepareFormData.Properties,
         //   this
         // );
-
         callPGService(
           get(assessedPropertyDetails, "Properties[0].propertyId"),
           get(
@@ -1459,7 +1464,7 @@ class FormWizard extends Component {
           get(assessedPropertyDetails, "Properties[0].tenantId")
         );
       }
-  
+
     } catch (e) {
       toggleSpinner();
       alert(e);
@@ -1682,9 +1687,9 @@ class FormWizard extends Component {
 
     return (
       <div className="wizard-form-main-cont">
-       <div className='form-header'>
-       <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
-       </div>
+        <div className='form-header'>
+          <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
+        </div>
         <WizardComponent
           downloadAcknowledgementForm={this.downloadAcknowledgementForm}
           content={renderStepperContent(selected, fromReviewPage)}

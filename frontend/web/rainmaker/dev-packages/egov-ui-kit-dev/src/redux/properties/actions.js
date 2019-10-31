@@ -1,17 +1,7 @@
 import * as actionTypes from "./actionTypes";
-import {
-  PROPERTY,
-  DRAFT,
-  PGService,
-  RECEIPT,
-  BOUNDARY
-} from "egov-ui-kit/utils/endPoints";
-import {
-  httpRequest
-} from "egov-ui-kit/utils/api";
-import {
-  transformById
-} from "egov-ui-kit/utils/commons";
+import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL } from "egov-ui-kit/utils/endPoints";
+import { httpRequest } from "egov-ui-kit/utils/api";
+import { transformById } from "egov-ui-kit/utils/commons";
 import orderby from "lodash/orderBy";
 import get from "lodash/get";
 import cloneDeep from "lodash/cloneDeep";
@@ -25,9 +15,35 @@ const reset_property_reset = () => {
   };
 };
 
+const reset_property_reset = () => {
+  return {
+    type: actionTypes.RESET_PROPERTY_STATE,
+  };
+};
+
 const propertyFetchPending = () => {
   return {
     type: actionTypes.PROPERTY_FETCH_PENDING,
+  };
+};
+
+const fetchBillPending = () => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_BILL_PENDING,
+  };
+};
+
+const fetchBillComplete = (payload) => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_BILL_COMPLETE,
+    payload,
+  };
+};
+
+const fetchBillError = (error) => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_BILL_ERROR,
+    error,
   };
 };
 
@@ -292,34 +308,34 @@ const getStatusAndAmount = (receiptArrayItem) => {
   return receiptTransformed;
 };
 const getFinancialYear = (fromDate,toDate)=>{
- let  financialYear = '';
- financialYear=(new Date(fromDate).getFullYear())+'-'+String(new Date(toDate).getFullYear()).slice(2);
-return financialYear;
-}
-const getYearlyAssessments = (propertiesArray=[]) => {
-  let yearlyAssessments = [];
-  propertiesArray&&propertiesArray.map((property) => {
-    if (yearlyAssessments.length == 0) {
-      yearlyAssessments[0] = [property];
-    } else {
-      let bool = true;
-      for (let pty of yearlyAssessments) {
-        if (pty[0].financialYear == property.financialYear) {
-          pty.push(property)
-          bool = false;
-        }
-      }
-      if (bool) {
-        yearlyAssessments.push([property]);
-      }
-    }
-  })
-  for (let eachYrAssessments of yearlyAssessments) {
-    eachYrAssessments.sort((x, y) => y.receiptDate - x.receiptDate);
-  }
-  yearlyAssessments.sort((x, y) => x[0].financialYear.localeCompare(y[0].financialYear));
-  return yearlyAssessments;
-}
+  let  financialYear = '';
+  financialYear=(new Date(fromDate).getFullYear())+'-'+String(new Date(toDate).getFullYear()).slice(2);
+ return financialYear;
+ }
+ const getYearlyAssessments = (propertiesArray=[]) => {
+   let yearlyAssessments = [];
+   propertiesArray&&propertiesArray.map((property) => {
+     if (yearlyAssessments.length == 0) {
+       yearlyAssessments[0] = [property];
+     } else {
+       let bool = true;
+       for (let pty of yearlyAssessments) {
+         if (pty[0].financialYear == property.financialYear) {
+           pty.push(property)
+           bool = false;
+         }
+       }
+       if (bool) {
+         yearlyAssessments.push([property]);
+       }
+     }
+   })
+   for (let eachYrAssessments of yearlyAssessments) {
+     eachYrAssessments.sort((x, y) => y.receiptDate - x.receiptDate);
+   }
+   yearlyAssessments.sort((x, y) => x[0].financialYear.localeCompare(y[0].financialYear));
+   return yearlyAssessments;
+ }
 const mergeReceiptsInProperty = (receiptsArray, propertyObj) => {
   const transformedPropertyObj = {
     ...propertyObj
@@ -397,10 +413,7 @@ export const getAssesmentsandStatus = (queryObjectproperty) => {
       const payloadReceipts = await httpRequest(
         RECEIPT.GET.URL,
         RECEIPT.GET.ACTION,
-        [{
-          key: "consumerCode",
-          value: commaSeperatedCC.split(':')[0]
-        }], //finalcc[0] //todo Consumer code uniqueness
+        [{ key: "consumerCode", value: commaSeperatedCC.split(':')[0] }],
         {},
         [], {
           ts: 0,
@@ -419,6 +432,7 @@ export const getAssesmentsandStatus = (queryObjectproperty) => {
           });
           return acc;
         }, {});
+
         const receiptDetailsArray =
         receiptbyId &&
         Object.values(receiptbyId).reduce((acc, curr) => {
@@ -466,11 +480,10 @@ export const getSingleAssesmentandStatus = (queryObjectproperty) => {
       const payloadReceipts = await httpRequest(
         RECEIPT.GET.URL,
         RECEIPT.GET.ACTION,
-        [{
-          key: "consumerCode",
-          value: finalcc.split(':')[0]
-        }], {},
-        [], {
+        [{ key: "consumerCode", value: finalcc.split(':')[0] }],
+        {},
+        [],
+        {
           ts: 0,
         },
         true
@@ -516,3 +529,17 @@ export const getSingleAssesmentandStatus = (queryObjectproperty) => {
     }
   };
 };
+
+export const fetchTotalBillAmount = (fetchBillQueryObject) => {
+  return async (dispatch) => {
+    if (fetchBillQueryObject) {
+      dispatch(fetchBillPending());
+      try {
+        const payloadProperty = await httpRequest(FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, fetchBillQueryObject);
+        dispatch(fetchBillComplete(payloadProperty));
+      } catch (error) {
+        dispatch(fetchBillError(error.message));
+      }
+    }
+  }
+}

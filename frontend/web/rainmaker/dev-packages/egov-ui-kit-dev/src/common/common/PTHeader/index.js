@@ -3,14 +3,12 @@ import Label from "egov-ui-kit/utils/translationNode";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
-const PTHeader = ({header = '',headerValue='', subHeaderTitle = '', subHeaderValue = ''}) => {
+const PTHeader = ({ header = '', headerValue = '', subHeaderTitle = '', subHeaderValue = '' }) => {
     const locale = getLocale() || "en_IN";
     const localizationLabelsData = initLocalizationLabels(locale);
-   
-    
     return (
         <div>
-            <Label       
+            <Label
                 label={`${getTranslatedLabel(header, localizationLabelsData)} ${headerValue}`}
                 containerStyle={{ padding: "10px 0px 0px 0px", marginLeft: "16px", display: "inline-block" }}
                 dark={true}
@@ -34,7 +32,6 @@ const PTHeader = ({header = '',headerValue='', subHeaderTitle = '', subHeaderVal
                     lineHeight: "35px",
                     fontSize: "16px",
                     whiteSpace: "nowrap"
-                  
                 }}
                 fontSize={"16px"}
             />}
@@ -42,5 +39,3 @@ const PTHeader = ({header = '',headerValue='', subHeaderTitle = '', subHeaderVal
     )
 }
 export default PTHeader;
-
-

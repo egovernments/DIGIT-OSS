@@ -6,7 +6,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import PendingAmountDialog from "../PendingAmountDue";
 import ViewHistoryDialog from "../ViewHistory";
 
-const labelStyle = { 
+const labelStyle = {
   letterSpacing: 1.2,
   fontWeight: "600",
   lineHeight: "40px",

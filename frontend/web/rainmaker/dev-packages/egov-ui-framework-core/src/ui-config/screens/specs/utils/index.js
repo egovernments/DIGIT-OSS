@@ -359,7 +359,8 @@ export const getRadioButton = (buttons, jsonPath, defaultValue) => {
       buttons,
       jsonPath,
       defaultValue
-    }
+    },
+    jsonPath
   };
 };
 

@@ -19,6 +19,15 @@ const remoteComponentPath = (moduleName, path) => {
         component = import("egov-pt/ui-containers-local");
       }
       break;
+    case "egov-common":
+        if (path === "ui-atoms-local") {
+          component = import("egov-common/ui-atoms-local");
+        } else if (path === "ui-molecules-local") {
+          component = import("egov-common/ui-molecules-local");
+        } else if (path === "ui-containers-local") {
+          component = import("egov-common/ui-containers-local");
+        }
+        break;
     case "egov-noc":
       if (path === "ui-atoms-local") {
         component = import("egov-noc/ui-atoms-local");

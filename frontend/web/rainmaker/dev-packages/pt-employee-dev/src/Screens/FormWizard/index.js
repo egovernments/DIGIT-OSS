@@ -731,7 +731,7 @@ class FormWizard extends Component {
   };
 
   updateIndex = index => {
-    const { pay, estimate, createReceipt, createAndUpdate } = this;
+    const { pay, estimate, createReceipt, createAndUpdate, onPayButtonClick } = this;
     const {
       selected,
       formValidIndexArray,
@@ -963,12 +963,10 @@ class FormWizard extends Component {
           });
         break;
       case 5:
-
-        pay();
+        onPayButtonClick();
         break;
       case 6:
         pay();
-
         break;
     }
   };
@@ -990,9 +988,6 @@ class FormWizard extends Component {
     const { search } = location;
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
     const queryObj = [
-      // { key: "propertyId", value: propertyId },
-      // { key: "assessmentNumber", value: assessmentNumber },
-      // { key: "assessmentYear", value: assessmentYear },
       { key: "consumerCodes", value: propertyId },
       { key: "tenantId", value: tenantId }
     ];
@@ -1080,11 +1075,11 @@ class FormWizard extends Component {
     //   ...prepareFormData.Receipt[0].Bill[0].billDetails[0]
     // };
 
-    for(let index=0;index<Bill[0].billDetails.length;index++){
+    for (let index = 0; index < Bill[0].billDetails.length; index++) {
       prepareFormData.Receipt[0].Bill[0].billDetails[index] = {
         ...Bill[0].billDetails[index],
         ...prepareFormData.Receipt[0].Bill[0].billDetails[index],
-        collectionType:'COUNTER'
+        collectionType: 'COUNTER'
       };
     }
     if (!get(prepareFormData, "Receipt[0].instrument.instrumentType.name")) {
@@ -1104,11 +1099,6 @@ class FormWizard extends Component {
     // set(
     //   prepareFormData,
     //   "Receipt[0].Bill[0].billDetails[0].collectionType",
-    //   "COUNTER" // HardCoding collectionType to COUNTER - Discussed with BE
-    // );
-    // set(
-    //   prepareFormData,
-    //   "Receipt[0].Bill[0].billDetails[1].collectionType",
     //   "COUNTER" // HardCoding collectionType to COUNTER - Discussed with BE
     // );
     //----------------
@@ -1540,12 +1530,12 @@ class FormWizard extends Component {
     const financialYearFromQuery = getFinancialYearFromQuery();
     let { form, common, location, hideSpinner } = this.props;
     const { search } = location;
-    const { assessedPropertyDetails = {}} = this.state;
+    const { assessedPropertyDetails = {} } = this.state;
     const { Properties = [] } = assessedPropertyDetails;
     let propertyUID = get(assessedPropertyDetails, "Properties[0].propertyId");
     let propertyId = getQueryValue(search, "propertyId");
-    if(!propertyId){
-      propertyId=propertyUID;
+    if (!propertyId) {
+      propertyId = propertyUID;
     }
     const assessmentId = getQueryValue(search, "assessmentId");
     const tenantId = getQueryValue(search, "tenantId");
@@ -1691,15 +1681,7 @@ class FormWizard extends Component {
           prepareFormData.Properties,
           this
         );
-        // let createPropertyResponse = await httpRequest(
-        //   `pt-services-v2/property/${propertyMethodAction}`,
-        //   `${propertyMethodAction}`,
-        //   [],
-        //   {
-        //     Properties: properties
-        //   }
-        // );
-        // callDraft([], get(createPropertyResponse, "Properties[0].propertyDetails[0].assessmentNumber"));
+
         callPGService(
           get(assessedPropertyDetails, "Properties[0].propertyId"),
           get(
@@ -1875,7 +1857,7 @@ class FormWizard extends Component {
     return (
       <div className="wizard-form-main-cont">
         <div className='form-header'>
-        <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
+          <PTHeader header={header} subHeaderTitle='PT_PROPERTY_PTUID' headerValue={headerValue} subHeaderValue={subHeaderValue} />
         </div>
         <WizardComponent
           downloadAcknowledgementForm={this.downloadAcknowledgementForm}

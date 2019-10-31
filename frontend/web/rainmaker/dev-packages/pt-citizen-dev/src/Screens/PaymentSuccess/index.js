@@ -26,7 +26,7 @@ class PaymentSuccess extends Component {
     }
   };
   toggleYearDialogue = (assessmentNumber) => {
-    let assessmentId=assessmentNumber;
+    let assessmentId = assessmentNumber;
     this.setState({
       yearDialogue: {
         dialogueOpen: !this.state.yearDialogue.dialogueOpen,
@@ -122,8 +122,7 @@ class PaymentSuccess extends Component {
       { key: "tenantId", value: match.params.tenantId },
       {
         key: "consumerCode",
-        value: `${match.params.propertyId}` //todo Consumer code uniqueness
-        // value: `${match.params.propertyId}:${match.params.assessmentId}` //todo Consumer code uniqueness
+        value: `${match.params.propertyId}`
       }
     ]);
     this.convertImgToDataURLviaCanvas(
@@ -161,7 +160,7 @@ class PaymentSuccess extends Component {
   };
 
   render() {
-    const { generalMDMSDataById, history ,loading} = this.props;
+    const { generalMDMSDataById, history, loading } = this.props;
     const { assessmentYear, propertyId } = this.props.match.params;
     const { imageUrl } = this.state;
     const { toggleYearDialogue } = this;
@@ -203,7 +202,7 @@ const mapStateToProps = (state, ownProps) => {
   const { localizationLabels } = app;
   const { cities } = common;
   const { generalMDMSDataById } = state.common || {};
-  const { propertiesById, receipts,loading } = properties;
+  const { propertiesById, receipts, loading } = properties;
   const selProperty =
     propertiesById && propertiesById[ownProps.match.params.propertyId];
   const existingPropertyId = selProperty && selProperty.oldPropertyId;
@@ -252,7 +251,8 @@ const mapStateToProps = (state, ownProps) => {
       totalAmountToPay,
       totalAmountPaid
     );
-  return {loading,
+  return {
+    loading,
     receiptUIDetails,
     receiptDetails,
     cities,

@@ -40,9 +40,10 @@ class RadioButtonsGroup extends React.Component {
       componentJsonpath,
       jsonPath,
       approveCheck,
-      onFieldChange
+      onFieldChange,
+      onChange
     } = this.props;
-    onFieldChange(
+    onChange?onChange(event):onFieldChange(
       screenKey,
       componentJsonpath,
       "props.value",
