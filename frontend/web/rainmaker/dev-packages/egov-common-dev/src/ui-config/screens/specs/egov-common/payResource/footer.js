@@ -30,17 +30,23 @@ export const callPGService = async(state, dispatch) => {
       }
     ];
     const billPayload = await getBill(queryObj);
-    const taxAndPayments = get(billPayload, "Bill[0].taxAndPayments", []).map(
-      item => {
-        if (item.businessService === businessService) {
-          item.amountPaid = get(
-            billPayload,
-            "Bill[0].billDetails[0].amount"
-          );
-        }
-        return item;
-      }
-    );
+    // const taxAndPayments = get(billPayload, "Bill[0].taxAndPayments", []).map(
+    //   item => {
+    //     if (item.businessService === businessService) {
+    //       item.amountPaid = get(
+    //         billPayload,
+    //         "Bill[0].billDetails[0].amount"
+    //       );
+    //     }
+    //     return item;
+    //   }
+    // );
+    let  taxAndPayments =[];
+    taxAndPayments.push({
+      taxAmount:get(billPayload, "Bill[0].billDetails[0].amount"),
+      businessService:businessService,
+      amountPaid:get(billPayload, "Bill[0].billDetails[0].amount")
+    })
     try {
       const requestBody = {
         Transaction: {
@@ -65,14 +71,18 @@ export const callPGService = async(state, dispatch) => {
       const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl");
       window.location = redirectionUrl;
     } catch (e) {
+      
       console.log(e);
+      moveToFailure(dispatch,)
     }
   } catch (e) {
     console.log(e);
   }
 };
 
-const moveToSuccess = (dispatch, consumerCode, tenantId,receiptNumber) => {
+const moveToSuccess = (dispatch, receiptNumber) => {
+  const consumerCode = getQueryArg(window.location, "consumerCode");
+  const tenantId = getQueryArg(window.location, "tenantId");
   const status = "success";
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
@@ -82,7 +92,9 @@ const moveToSuccess = (dispatch, consumerCode, tenantId,receiptNumber) => {
     )
   );
 };
-const moveToFailure = (dispatch, consumerCode, tenantId) => {
+const moveToFailure = (dispatch) => {
+  const consumerCode = getQueryArg(window.location, "consumerCode");
+  const tenantId = getQueryArg(window.location, "tenantId");
   const status = "failure";
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
@@ -152,9 +164,9 @@ const updatePayAction = async (
   receiptNumber
 ) => {
   try {
-    moveToSuccess(dispatch, consumerCode, tenantId,receiptNumber);
+    moveToSuccess(dispatch,receiptNumber);
   } catch (e) {
-    moveToFailure();
+    moveToFailure(dispatch);
     dispatch(
       toggleSnackbar(
         true,

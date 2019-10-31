@@ -97,7 +97,8 @@ export const applicationSuccessFooter = (
     state,
     dispatch,
     applicationNumber,
-    tenant
+    tenant,
+    consumerCode
 ) => {
 
     const roleExists = ifUserRoleExists("CITIZEN");

@@ -65,7 +65,8 @@ const getAcknowledgementCard = (
                 state,
                 dispatch,
                 receiptNumber,
-                tenant
+                tenant,
+                consumerCode
             )
         };
     } else if (status === "failure") {
@@ -102,7 +103,7 @@ const getAcknowledgementCard = (
                     })
                 }
             },
-            paymentFailureFooter: paymentFailureFooter(receiptNumber, tenant)
+            paymentFailureFooter: paymentFailureFooter(consumerCode, tenant)
         };
     }
 };
