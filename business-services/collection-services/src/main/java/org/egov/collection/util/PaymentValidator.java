@@ -60,9 +60,6 @@ public class PaymentValidator {
     }
 
 
-
-
-
     public Payment validatePaymentForCreate(PaymentRequest paymentRequest) {
         Map<String, String> errorMap = new HashMap<>();
         Payment payment = paymentRequest.getPayment();

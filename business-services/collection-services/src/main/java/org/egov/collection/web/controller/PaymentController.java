@@ -149,7 +149,7 @@ public class PaymentController {
     @ResponseBody
     public ResponseEntity<?> validate(@RequestBody @Valid PaymentRequest paymentRequest) {
 
-        Payment payment = paymentValidator.validatePaymentForCreate(paymentRequest);;
+        Payment payment = paymentService.vaidateProvisonalPayment(paymentRequest);;
         return getSuccessResponse(Collections.singletonList(payment), paymentRequest.getRequestInfo());
 
     }

@@ -89,11 +89,8 @@ public class PaymentService {
 
         return payments;
     }
-
-
-
-
-
+    
+    
     /**
      * Handles creation of a receipt, including multi-service, involves the following steps, - Enrich receipt from billing service
      * using bill id - Validate the receipt object - Enrich receipt with receipt numbers, coll type etc - Apportion paid amount -
@@ -169,6 +166,22 @@ public class PaymentService {
                 .getUpdateReceiptTopicKey(), new PaymentRequest(paymentRequest.getRequestInfo(), paymentRequest.getPayment()));
 
         return validatedPayments;
+    }
+    
+    
+    
+    /**
+     * Used by payment gateway to validate provisional receipts of the payment
+     * 
+     * @param paymentRequest
+     * @return
+     */
+    @Transactional
+    public Payment vaidateProvisonalPayment(PaymentRequest paymentRequest) {
+        paymentEnricher.enrichPaymentPreValidate(paymentRequest);
+        paymentValidator.validatePaymentForCreate(paymentRequest);
+        
+        return paymentRequest.getPayment();
     }
 
 
