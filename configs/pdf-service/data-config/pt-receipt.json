@@ -5,6 +5,7 @@
       "serviceName": "rainmaker-pt",
       "version": "1.0.0",
       "baseKeyPath": "$.Properties.*",
+      "entityIdPath":"$.propertyId",
       "isCommonTableBorderRequired":true,
       "mappings": [
          {
@@ -21,7 +22,7 @@
                      },  
                      {
                         "variable": "variable38",                        
-                        "url":"https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png",
+                        "url":"https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
                         "type":"image"
                      },       
                      {
