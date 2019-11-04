@@ -11,7 +11,7 @@ import org.egov.pg.models.CollectionPaymentDetail;
 import org.egov.pg.models.CollectionPaymentRequest;
 import org.egov.pg.models.CollectionPaymentResponse;
 import org.egov.pg.models.TaxAndPayment;
-import org.egov.pg.models.TransactionRequest;
+import org.egov.pg.web.models.TransactionRequest;
 import org.egov.pg.models.enums.CollectionPaymentModeEnum;
 import org.egov.pg.repository.ServiceCallRepository;
 import org.egov.tracer.model.CustomException;

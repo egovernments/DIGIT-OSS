@@ -8,6 +8,7 @@ import org.egov.pg.models.Transaction;
 import org.egov.pg.repository.TransactionRepository;
 import org.egov.pg.service.CollectionService;
 import org.egov.pg.service.GatewayService;
+import org.egov.pg.service.PaymentsService;
 import org.egov.pg.web.models.TransactionCriteria;
 import org.egov.pg.web.models.TransactionRequest;
 import org.egov.tracer.model.CustomException;
@@ -29,14 +30,14 @@ public class TransactionValidator {
 
     private GatewayService gatewayService;
     private TransactionRepository transactionRepository;
-    private CollectionService collectionService;
+    private PaymentsService paymentsService;
 
 
     @Autowired
-    public TransactionValidator(GatewayService gatewayService, TransactionRepository transactionRepository, CollectionService collectionService) {
+    public TransactionValidator(GatewayService gatewayService, TransactionRepository transactionRepository, PaymentsService paymentsService) {
         this.gatewayService = gatewayService;
         this.transactionRepository = transactionRepository;
-        this.collectionService = collectionService;
+        this.paymentsService = paymentsService;
     }
 
     /**
@@ -57,7 +58,7 @@ public class TransactionValidator {
         if (!errorMap.isEmpty())
             throw new CustomException(errorMap);
         else
-            collectionService.validateProvisionalReceipt(transactionRequest);
+        	paymentsService.validatePayment(transactionRequest);
 
     }
 

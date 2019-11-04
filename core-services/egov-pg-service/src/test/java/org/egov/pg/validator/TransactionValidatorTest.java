@@ -6,6 +6,7 @@ import org.egov.pg.models.*;
 import org.egov.pg.repository.TransactionRepository;
 import org.egov.pg.service.CollectionService;
 import org.egov.pg.service.GatewayService;
+import org.egov.pg.service.PaymentsService;
 import org.egov.pg.web.models.TransactionCriteria;
 import org.egov.pg.web.models.TransactionRequest;
 import org.egov.tracer.model.CustomException;
@@ -32,9 +33,9 @@ public class TransactionValidatorTest {
 
     @Mock
     private GatewayService gatewayService;
-
+    
     @Mock
-    private CollectionService collectionService;
+    private PaymentsService paymentsService;
 
     private TransactionValidator validator;
     private List<Bill> bills;
@@ -42,7 +43,7 @@ public class TransactionValidatorTest {
 
     @Before
     public void setUp() {
-        validator = new TransactionValidator(gatewayService, transactionRepository, collectionService);
+        validator = new TransactionValidator(gatewayService, transactionRepository, paymentsService);
         TaxAndPayment taxAndPayment = TaxAndPayment.builder()
                 .amountPaid(new BigDecimal("100"))
                 .businessService("PT")
@@ -72,7 +73,6 @@ public class TransactionValidatorTest {
 
         when(transactionRepository.fetchTransactions(any(TransactionCriteria.class))).thenReturn(Collections.emptyList());
         when(gatewayService.isGatewayActive(txn.getGateway())).thenReturn(true);
-        when(collectionService.validateProvisionalReceipt(transactionRequest)).thenReturn(Collections.singletonList(new Receipt()));
 
         validator.validateCreateTxn(transactionRequest);
 
@@ -81,7 +81,7 @@ public class TransactionValidatorTest {
     /**
      * Txn Amount lesser than bill amount but partial payment is enabled
      */
-    @Test(expected = CustomException.class)
+    @Test
     public void validateCreateTxnByValidatingProvReceipt() {
         User user = User.builder().userName("").name("XYZ").uuid("").tenantId("").mobileNumber("9999999999").build();
         RequestInfo requestInfo = RequestInfo.builder().userInfo(user).build();
@@ -89,7 +89,6 @@ public class TransactionValidatorTest {
 
         when(transactionRepository.fetchTransactions(any(TransactionCriteria.class))).thenReturn(Collections.emptyList());
         when(gatewayService.isGatewayActive(txn.getGateway())).thenReturn(true);
-        when(collectionService.validateProvisionalReceipt(transactionRequest)).thenThrow(new CustomException());
 
 
         validator.validateCreateTxn(transactionRequest);
@@ -107,8 +106,6 @@ public class TransactionValidatorTest {
 
         when(transactionRepository.fetchTransactions(any(TransactionCriteria.class))).thenReturn(Collections.singletonList(txn));
         when(gatewayService.isGatewayActive(txn.getGateway())).thenReturn(true);
-        when(collectionService.validateProvisionalReceipt(transactionRequest)).thenReturn(Collections.singletonList(new Receipt()));
-
 
         validator.validateCreateTxn(transactionRequest);
 
@@ -124,7 +121,6 @@ public class TransactionValidatorTest {
         TransactionRequest transactionRequest = new TransactionRequest(requestInfo, txn);
 
         when(gatewayService.isGatewayActive(txn.getGateway())).thenReturn(false);
-        when(collectionService.validateProvisionalReceipt(transactionRequest)).thenReturn(Collections.singletonList(new Receipt()));
 
         validator.validateCreateTxn(transactionRequest);
 
