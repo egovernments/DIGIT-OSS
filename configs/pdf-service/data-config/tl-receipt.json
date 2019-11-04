@@ -162,7 +162,7 @@
                      
                       {
                          
-                         "path": "http://collection-services:8080/collection-services/receipts/_search",
+                         "path": "https://egov-micro-qa.egovernments.org/collection-services/receipts/_search",
                          "queryParam": "consumerCode=$.applicationNumber",
                          
                          
