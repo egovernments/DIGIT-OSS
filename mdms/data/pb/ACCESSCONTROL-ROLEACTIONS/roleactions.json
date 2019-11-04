@@ -19015,6 +19015,42 @@
       "actionid": 1864,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1867,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EGF_PAYMENT_CREATOR",
+      "actionid": 1867,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "COLL_REMIT_TO_BANK",
+      "actionid": 1867,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1868,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EGF_PAYMENT_CREATOR",
+      "actionid": 1868,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "COLL_REMIT_TO_BANK",
+      "actionid": 1868,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }

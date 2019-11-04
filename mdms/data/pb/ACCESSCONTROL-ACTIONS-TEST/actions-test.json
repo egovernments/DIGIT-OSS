@@ -15052,6 +15052,34 @@
       "serviceCode": "COLLECTION",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1867,
+      "name": "Auto reconcile- Statement Upload",
+      "navigationURL": "services/EGF/brs/autoReconciliation-beforeUpload.action",
+      "url": "url",
+      "parentModule": "EGF",
+      "displayName": "Auto reconcile- Statement Upload",
+      "orderNumber": 4,
+      "enabled": true,
+      "serviceCode": "FinanceReconcile",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Transactions.Bank Reconciliation.Auto reconcile Statement Upload"
+    },
+    {
+      "id": 1868,
+      "name": "Reconcile Uploaded Statement",
+      "navigationURL": "services/EGF/brs/autoReconciliation-newForm.action",
+      "url": "url",
+      "parentModule": "EGF",
+      "displayName": "Reconcile Uploaded Statement",
+      "orderNumber": 5,
+      "enabled": true,
+      "serviceCode": "FinanceReconcile",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Transactions.Bank Reconciliation.Reconcile Uploaded Statement"
     }
   ]
 }
