@@ -81,6 +81,12 @@ public class FinanceDashboardService {
     @Value("${finance.esk.dashboard.event.enabled}")
     private boolean isEsDashboardIndexingEnabled;
     
+    @Value("${egov.finance.indexer.egbill.topic.name}")
+    private String finIndexerEgBillTopic;
+    
+    @Value("${egov.finance.indexer.voucher.topic.name}")
+    private String finIndexerVoucherTopic;
+    
     public void publishEvent(FinanceEventType eventType, Object data){
         if(isEsDashboardIndexingEnabled){
             String tenantId = microServiceUtil.getTenentId();
@@ -159,14 +165,14 @@ public class FinanceDashboardService {
                 RequestInfo requestInfo = new RequestInfo();
                 requestInfo.setAuthToken(token);
                 wrapper.setRequestInfo(requestInfo);
-                microServiceUtil.pushDataToIndexer(wrapper);
+                microServiceUtil.pushDataToIndexer(wrapper,finIndexerEgBillTopic);
                 LOG.info("SUCCESS : CREATED/UPDATED EgBillRegister with IDs : {} is getting indexed to ES successfully",StringUtils.join(idSets,","));
             }else if(!vhDataList.isEmpty()){
                 wrapper.setVoucherHeaderData(vhDataList);
                 RequestInfo requestInfo = new RequestInfo();
                 requestInfo.setAuthToken(token);
                 wrapper.setRequestInfo(requestInfo);
-                microServiceUtil.pushDataToIndexer(wrapper);
+                microServiceUtil.pushDataToIndexer(wrapper,finIndexerVoucherTopic);
                 LOG.info("SUCCESS : CREATED/UPDATED CVoucherHeader with IDs : {} is getting indexed to ES successfully",StringUtils.join(idSets,","));
             }else{
                 LOG.info("WARNING : DATA is not getting indexed to ES of ID : {}",StringUtils.join(idSets,","));

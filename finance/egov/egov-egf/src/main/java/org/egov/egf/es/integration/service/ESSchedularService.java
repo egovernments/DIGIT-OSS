@@ -10,6 +10,7 @@ import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.hibernate.HibernateException;
 import org.python.icu.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +20,8 @@ public class ESSchedularService {
     @Autowired
     private MicroserviceUtils microServiceUtil;
     private static final Logger LOGGER = Logger.getLogger(ESSchedularService.class);
+    @Value("${egov.finance.rollout.indexer.topic.name}")
+    private String finIndexerTopic;
     
     public void pushRollOutAdoption() {
         try {
@@ -63,7 +66,7 @@ public class ESSchedularService {
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(microServiceUtil.generateAdminToken("pb."+ApplicationThreadLocals.getTenantID()));
         wrapper.setRequestInfo(requestInfo);
-        microServiceUtil.pushDataToIndexer(wrapper);
+        microServiceUtil.pushDataToIndexer(wrapper,finIndexerTopic);
     }
 
 }

@@ -282,9 +282,6 @@ public class MicroserviceUtils {
     @Value("${egov.services.egov-indexer.url}")
     private String egovIndexerUrl;
     
-    @Value("${egov.finance.indexer.topic.name}")
-    private String finIndexerTopic;
-    
     private ObjectMapper mapper;
     SimpleDateFormat ddMMMyyyyFormat = new SimpleDateFormat("dd-MMM-yyyy");
     
@@ -1359,9 +1356,9 @@ public class MicroserviceUtils {
         return epoch;
     }
     
-    public void pushDataToIndexer(Object data){
+    public void pushDataToIndexer(Object data, String topicName){
         try {
-            Object postForObject = restTemplate.postForObject(egovIndexerUrl, data, Object.class, finIndexerTopic);
+            Object postForObject = restTemplate.postForObject(egovIndexerUrl, data, Object.class, topicName);
         } catch (Exception e) {
             Log.error("ERROR occurred while trying to push the data to indexer : ", e);
         }
@@ -1515,7 +1512,7 @@ public class MicroserviceUtils {
     }
     
     public InstrumentResponse updateInstruments(List<Instrument> instruments, String depositedBankAccountNum, FinancialStatus finStatus) {
-                final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
+        final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
         for (Instrument i : instruments) {
             i.setFinancialStatus(finStatus);
             if (depositedBankAccountNum != null) {
