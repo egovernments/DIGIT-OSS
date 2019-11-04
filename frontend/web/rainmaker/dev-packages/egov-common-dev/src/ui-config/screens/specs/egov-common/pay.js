@@ -104,6 +104,8 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId, businessServic
 
     let payload = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0]");
 
+    let totalAmount = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]");
+
     //Collection Type Added in CS v1.1
     payload && dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].billDetails[0].collectionType", "COUNTER"));
 
@@ -114,6 +116,11 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId, businessServic
         dispatch(prepareFinalObject("ReceiptTemp[0].instrument.amount", payload.amount));
         const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
         dispatch(handleField("pay", componentJsonpath, "props.value", payload.amount));
+    }
+
+    if (get(totalAmount, "totalAmount") != undefined) {
+        const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
+        dispatch(handleField("pay", componentJsonpath, "props.value", totalAmount.totalAmount));
     }
 
     //Initially select instrument type as Cash
