@@ -18,7 +18,8 @@ import g8Details from "./payResource/g8-details";
 import AmountToBePaid from "./payResource/amount-to-be-paid";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { ifUserRoleExists } from "../utils";
+import set from "lodash/set";
 
 const header = getCommonContainer({
     header: getCommonHeader({
@@ -35,8 +36,70 @@ const header = getCommonContainer({
         }
     }
 });
+const getPaymentCard = () => {
 
-const fetchBill = async(state, dispatch, consumerCode, tenantId, businessService) => {
+    const roleExists = ifUserRoleExists("CITIZEN");
+
+    if (roleExists) {
+        return {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            children: {
+                paymentDetails: getCommonCard({
+                    header: getCommonTitle({
+                        labelName: "Payment Collection Details",
+                        labelKey: "NOC_PAYMENT_HEAD"
+                    }),
+                    estimateDetails,
+                    AmountToBePaid
+                })
+            }
+        }
+    } else {
+        return {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            children: {
+                paymentDetails: getCommonCard({
+                    header: getCommonTitle({
+                        labelName: "Payment Collection Details",
+                        labelKey: "NOC_PAYMENT_HEAD"
+                    }),
+                    estimateDetails,
+                    AmountToBePaid,
+                    capturePaymentDetails,
+                    g8Details
+                    // addPenaltyRebateButton: {
+                    //   componentPath: "Button",
+                    //   props: {
+                    //     color: "primary",
+                    //     style: {}
+                    //   },
+                    //   children: {
+                    //     previousButtonLabel: getLabel({
+                    //       labelName: "ADD REBATE/PENALTY",
+                    //       labelKey: "NOC_PAYMENT_ADD_RBT_PEN"
+                    //     })
+                    //   },
+                    //   onClickDefination: {
+                    //     action: "condition",
+                    //     callBack: (state, dispatch) => showHideAdhocPopup(state, dispatch, "pay")
+                    //   }
+                    // },
+                    // viewBreakupButton: getDialogButton(
+                    //   "VIEW BREAKUP",
+                    //   "TL_PAYMENT_VIEW_BREAKUP",
+                    //   "pay"
+                    // ),
+                })
+            }
+        }
+    }
+}
+
+
+
+const fetchBill = async (state, dispatch, consumerCode, tenantId, businessService) => {
     await generateBill(dispatch, consumerCode, tenantId, businessService);
 
     let payload = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0]");
@@ -72,6 +135,8 @@ const screenConfig = {
         let tenantId = getQueryArg(window.location.href, "tenantId");
         let businessService = getQueryArg(window.location.href, "businessService");
         fetchBill(state, dispatch, consumerCode, tenantId, businessService);
+        const data = getPaymentCard();
+        set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
         return action;
     },
     components: {
@@ -96,44 +161,7 @@ const screenConfig = {
                         }
                     }
                 },
-                formwizardFirstStep: {
-                    uiFramework: "custom-atoms",
-                    componentPath: "Div",
-                    children: {
-                        paymentDetails: getCommonCard({
-                            header: getCommonTitle({
-                                labelName: "Payment Collection Details",
-                                labelKey: "NOC_PAYMENT_HEAD"
-                            }),
-                            estimateDetails,
-                            // addPenaltyRebateButton: {
-                            //   componentPath: "Button",
-                            //   props: {
-                            //     color: "primary",
-                            //     style: {}
-                            //   },
-                            //   children: {
-                            //     previousButtonLabel: getLabel({
-                            //       labelName: "ADD REBATE/PENALTY",
-                            //       labelKey: "NOC_PAYMENT_ADD_RBT_PEN"
-                            //     })
-                            //   },
-                            //   onClickDefination: {
-                            //     action: "condition",
-                            //     callBack: (state, dispatch) => showHideAdhocPopup(state, dispatch, "pay")
-                            //   }
-                            // },
-                            // viewBreakupButton: getDialogButton(
-                            //   "VIEW BREAKUP",
-                            //   "TL_PAYMENT_VIEW_BREAKUP",
-                            //   "pay"
-                            // ),
-                            AmountToBePaid,
-                            capturePaymentDetails,
-                            g8Details
-                        })
-                    }
-                },
+                formwizardFirstStep: {},
                 footer
             }
         },
