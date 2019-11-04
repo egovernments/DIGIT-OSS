@@ -1,10 +1,21 @@
 package org.egov.pg.validator;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
-import org.egov.pg.models.*;
+import org.egov.pg.models.Bill;
+import org.egov.pg.models.BillDetail;
+import org.egov.pg.models.TaxAndPayment;
+import org.egov.pg.models.Transaction;
 import org.egov.pg.repository.TransactionRepository;
-import org.egov.pg.service.CollectionService;
 import org.egov.pg.service.GatewayService;
 import org.egov.pg.service.PaymentsService;
 import org.egov.pg.web.models.TransactionCriteria;
@@ -15,15 +26,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionValidatorTest {
@@ -46,7 +48,6 @@ public class TransactionValidatorTest {
         validator = new TransactionValidator(gatewayService, transactionRepository, paymentsService);
         TaxAndPayment taxAndPayment = TaxAndPayment.builder()
                 .amountPaid(new BigDecimal("100"))
-                .businessService("PT")
                 .taxAmount(new BigDecimal("100"))
                 .build();
         txn = Transaction.builder().txnAmount("100")

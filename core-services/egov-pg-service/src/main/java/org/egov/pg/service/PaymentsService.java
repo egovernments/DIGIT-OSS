@@ -91,7 +91,6 @@ public class PaymentsService {
 		for(TaxAndPayment taxAndPayment: request.getTransaction().getTaxAndPayments()) {
 			CollectionPaymentDetail detail = CollectionPaymentDetail.builder()
 					.tenantId(request.getTransaction().getTenantId())
-					.businessService(taxAndPayment.getBusinessService())
 					.billId(taxAndPayment.getBillId())
 					.totalAmountPaid(taxAndPayment.getAmountPaid())
 					.build();

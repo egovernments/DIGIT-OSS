@@ -13,9 +13,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class TaxAndPayment {
-
-	@NotNull
-	private String businessService;
 	
 	private BigDecimal taxAmount;
 	

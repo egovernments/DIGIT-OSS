@@ -74,7 +74,6 @@ public class TransactionsApiControllerTest {
     public void transactionsV1CreatePostSuccess() throws Exception {
         TaxAndPayment taxAndPayment = TaxAndPayment.builder()
                 .amountPaid(new BigDecimal("100"))
-                .businessService("PT")
                 .taxAmount(new BigDecimal("100"))
                 .build();
         Transaction transaction = Transaction.builder().txnAmount("100.00")

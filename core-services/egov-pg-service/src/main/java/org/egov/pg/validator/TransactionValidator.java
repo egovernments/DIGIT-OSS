@@ -1,12 +1,19 @@
 package org.egov.pg.validator;
 
-import lombok.extern.slf4j.Slf4j;
+import static java.util.Objects.isNull;
+import static org.springframework.util.StringUtils.isEmpty;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.egov.common.contract.request.User;
 import org.egov.pg.constants.PgConstants;
 import org.egov.pg.models.TaxAndPayment;
 import org.egov.pg.models.Transaction;
 import org.egov.pg.repository.TransactionRepository;
-import org.egov.pg.service.CollectionService;
 import org.egov.pg.service.GatewayService;
 import org.egov.pg.service.PaymentsService;
 import org.egov.pg.web.models.TransactionCriteria;
@@ -15,14 +22,7 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import static java.util.Objects.isNull;
-import static org.springframework.util.StringUtils.isEmpty;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
