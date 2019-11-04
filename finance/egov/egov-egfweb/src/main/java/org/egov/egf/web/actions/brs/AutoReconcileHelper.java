@@ -50,6 +50,9 @@ package org.egov.egf.web.actions.brs;
 
 import com.exilant.eGov.src.common.EGovernCommon;
 import com.exilant.exility.common.TaskFailedException;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -65,6 +68,12 @@ import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.filestore.entity.FileStoreMapper;
 import org.egov.infra.filestore.service.FileStoreService;
+import org.egov.infra.microservice.models.FinancialStatus;
+import org.egov.infra.microservice.models.Instrument;
+import org.egov.infra.microservice.models.InstrumentResponse;
+import org.egov.infra.microservice.models.InstrumentSearchContract;
+import org.egov.infra.microservice.models.TransactionType;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationError;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infstr.services.PersistenceService;
@@ -86,6 +95,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -93,13 +103,20 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.persistence.TemporalType;
 
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -190,6 +207,10 @@ public class AutoReconcileHelper {
     private BigDecimal brsBalance;
     private BigDecimal totalNotReconciledAmount;
     private Integer statusId;
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
+    private static final String INSTRUMENTTYPE_NAME_CHEQUE = "Cheque";
+    private static final String INSTRUMENT_NEW_STATUS = "Deposited";
 
     public BigDecimal getBankBookBalance() {
         return bankBookBalance;
@@ -460,6 +481,7 @@ public class AutoReconcileHelper {
     public String schedule() {
         // Step1: mark which are all we are going to process
         count = 0;
+        String errorMessage = DID_NOT_FIND_MATCH_IN_BANKBOOK;
         // persistenceService.getSession().getTransaction().setTimeout(900);
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Started at " + new Date());
@@ -468,6 +490,19 @@ public class AutoReconcileHelper {
         // step2 :find duplicate and mark to be processed manually
         findandUpdateDuplicates();
 
+        // step3 : get all the instruments from collections
+        List<Instrument> instLists = this.getRecieptInstruments(accountId,fromDate,toDate);
+        Map<String, Instrument> instChequeMap = new HashMap<String, Instrument>();
+        if(!CollectionUtils.isEmpty(instLists)){
+            instLists.stream().forEach(ins -> {
+                if(ins.getInstrumentVouchers() != null && !ins.getInstrumentVouchers().isEmpty()){
+                    instChequeMap.put(ins.getTransactionNumber(), ins);
+                }
+            });
+        }
+        List<Instrument> receiptInstList = new ArrayList<>();
+        Set<Long> recInsIds = new HashSet<>();
+        
         final List<AutoReconcileBean> detailList = getStatmentsForProcessing(BRS_TRANSACTION_TYPE_CHEQUE);
 
         final String statusQury = "select id from EgwStatus where upper(moduletype)=upper('instrument') and  upper(description)=upper('"
@@ -509,10 +544,9 @@ public class AutoReconcileHelper {
         final SQLQuery updateQuery2 = persistenceService.getSession().createSQLQuery(recociliationAmountQuery);
 
         final String backUpdateBankStmtquery = "update " + TABLENAME + " set action='" + BRS_ACTION_PROCESSED
-                + "' ,reconciliationDate=:reconciliationDate where id=:id";
+                + "' ,reconciliationDate=:reconciliationDate where id in (:id)";
 
-        final String backUpdateFailureBRSquery = "update " + TABLENAME + " set action='" + BRS_ACTION_TO_BE_PROCESSED_MANUALLY
-                + "',errormessage=:e where id=:id";
+        final String backUpdateFailureBRSquery = "update " + TABLENAME + " set action='" + BRS_ACTION_TO_BE_PROCESSED_MANUALLY +"' , reconciliationdate=null "+ ",errormessage=:e where id in (:id)";
         final SQLQuery backupdateQuery = persistenceService.getSession().createSQLQuery(backUpdateBankStmtquery);
         final SQLQuery backupdateFailureQuery = persistenceService.getSession().createSQLQuery(backUpdateFailureBRSquery);
         rowCount = 0;
@@ -544,21 +578,24 @@ public class AutoReconcileHelper {
                     }
 
                 } else {
-                    updateQuery.setBigDecimal("amount", bean.getCredit());
-                    updateQuery.setCharacter("ispaycheque", '0');
-                    updateQuery.setString("instrumentStatus", FinancialConstants.INSTRUMENT_DEPOSITED_STATUS);
-                    updated = updateQuery.executeUpdate();
-                    if (updated != 0) {
-                        updateQuery2.setBigDecimal("amount", bean.getCredit());
-                        updateQuery2.setCharacter("ispaycheque", '0');
-                        updateQuery2.setString("instrumentStatus", FinancialConstants.INSTRUMENT_RECONCILED_STATUS);
-                        updated = updateQuery2.executeUpdate();
-                    }
+                    if(instChequeMap.get(bean.getInstrumentNo()) != null){
+                        Instrument instrument = instChequeMap.get(bean.getInstrumentNo());
+                            if(instrument.getAmount().compareTo(bean.getCredit()) == 0){
+                                receiptInstList.add(instrument);
+                                recInsIds.add(bean.getId());
+                            }else{
+                                errorMessage = "Amount is getting mismatch with the instrument amount";
+                                updated = 0;
+                            }
+                        }else{
+                            errorMessage = "Instrument not found in collection receipt";
+                            updated = 0;
+                        }
                 }
                 // if updated is 0 means nothing got updated means could not find matching row in instrumentheader
                 if (updated == 0) {
                     backupdateFailureQuery.setLong("id", bean.getId());
-                    backupdateFailureQuery.setString("e", DID_NOT_FIND_MATCH_IN_BANKBOOK);
+                    backupdateFailureQuery.setString("e", errorMessage);
                     backupdateFailureQuery.executeUpdate();
 
                 } else {
@@ -592,8 +629,47 @@ public class AutoReconcileHelper {
             }
 
         }
+        // Updating receipt instrument with reconciled status
+        if(!receiptInstList.isEmpty()){
+            FinancialStatus finStatus = new FinancialStatus();
+            finStatus.setCode("Reconciled");
+            finStatus.setName("Reconciled");
+            try {
+                InstrumentResponse response = microserviceUtils.updateInstruments(receiptInstList, null, finStatus);
+                if(response.getInstruments() != null){
+                    backupdateQuery.setParameterList("id", recInsIds);
+                    backupdateQuery.setDate("reconciliationDate", reconciliationDate);
+                    backupdateQuery.executeUpdate();
+                }else{
+                    count -= recInsIds.size();
+                    throw new Exception("Error while doing conciliation for receipt voucher instruments");
+                }
+            } catch (Exception e) {
+                backupdateFailureQuery.setParameterList("id", recInsIds);
+                backupdateFailureQuery.setString("e", e.getMessage());
+                backupdateFailureQuery.executeUpdate();
+            } 
+        }
+        
         processCSL();
         return "result";
+    }
+
+    private List<Instrument> getRecieptInstruments(Integer accountId, Date fromDate, Date toDate) {
+        InstrumentSearchContract contract = new InstrumentSearchContract();
+        if(accountId != null){
+            StringBuilder query = new StringBuilder("from Bankaccount ba where ba.id=:bankAccountId and isactive=true");
+            Query createSQLQuery = persistenceService.getSession().createQuery(query.toString());
+            List<Bankaccount> bankAccount = createSQLQuery.setLong("bankAccountId", accountId).list();
+            contract.setBankAccountNumber(bankAccount.get(0).getAccountnumber());
+        }
+        contract.setInstrumentTypes(INSTRUMENTTYPE_NAME_CHEQUE);
+        contract.setTransactionType(TransactionType.Debit);
+        contract.setFinancialStatuses(INSTRUMENT_NEW_STATUS);
+        contract.setTransactionFromDate(fromDate);
+        contract.setTransactionToDate(toDate);
+        List<Instrument> instruments = microserviceUtils.getInstrumentsBySearchCriteria(contract);
+        return instruments;
     }
 
     private Long getInstrumentType(final String typeName) {

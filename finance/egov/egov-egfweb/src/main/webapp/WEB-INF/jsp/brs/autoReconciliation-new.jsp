@@ -152,7 +152,7 @@ function validateSubmit() {
 								name="fromDate" value="%{fromDate}"
 								onkeyup="DateFormat(this,this.value,event,false,'3')"
 								placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
-								data-inputmask="'mask': 'd/m/y'" /></td>
+								data-inputmask="'mask': 'd/m/y'"  autocomplete="off"/></td>
 						<td class="greybox"><s:text name="todate" /> <span
 							class="greybox"><span class="mandatory1">*</span></span></td>
 
@@ -161,7 +161,7 @@ function validateSubmit() {
 								value="%{toDate}"
 								onkeyup="DateFormat(this,this.value,event,false,'3')"
 								placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
-								data-inputmask="'mask': 'd/m/y'" /></td>
+								data-inputmask="'mask': 'd/m/y'"  autocomplete="off"/></td>
 					</tr>
 
 				</table>
