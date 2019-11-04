@@ -136,11 +136,23 @@ public abstract class BaseBillController extends BaseVoucherController {
             if (details.getGlcodeid() == null)
                 resultBinder.reject("msg.expense.bill.accdetail.accmissing", new String[] {}, null);
 
-            if (details.getDebitamount() != null && details.getCreditamount() != null
-                    && details.getDebitamount().equals(BigDecimal.ZERO) && details.getCreditamount().equals(BigDecimal.ZERO)
-                    && details.getGlcodeid() != null)
+            /*
+             * if (details.getDebitamount() != null && details.getCreditamount()
+             * != null && details.getDebitamount().equals(BigDecimal.ZERO) &&
+             * details.getCreditamount().equals(BigDecimal.ZERO) &&
+             * details.getGlcodeid() != null)
+             * resultBinder.reject("msg.expense.bill.accdetail.amountzero", new
+             * String[] { details.getChartOfAccounts().getGlcode() }, null);
+             */
+            
+            boolean isDebitCreditAmountEmpty = (details.getDebitamount() == null
+                    || (details.getDebitamount() != null && details.getDebitamount().compareTo(BigDecimal.ZERO) == 0))
+                    && (details.getCreditamount() == null || (details.getCreditamount() != null
+                            && details.getCreditamount().compareTo(BigDecimal.ZERO) == 0));
+            if (isDebitCreditAmountEmpty) {
                 resultBinder.reject("msg.expense.bill.accdetail.amountzero",
                         new String[] { details.getChartOfAccounts().getGlcode() }, null);
+            }
 
             if (details.getDebitamount() != null && details.getCreditamount() != null
                     && details.getDebitamount().compareTo(BigDecimal.ZERO) == 1
