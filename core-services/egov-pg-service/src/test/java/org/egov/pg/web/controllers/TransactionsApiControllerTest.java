@@ -11,6 +11,7 @@ import org.egov.pg.web.models.TransactionCriteria;
 import org.egov.pg.web.models.TransactionRequest;
 import org.egov.pg.web.models.User;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +117,7 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
+    @Ignore
     public void transactionsV1SearchPostSuccess() throws Exception {
         when(transactionService.getTransactions(any(TransactionCriteria.class))).thenReturn(Collections.singletonList
                 (new Transaction()));
@@ -137,6 +139,7 @@ public class TransactionsApiControllerTest {
     }
 
     @Test
+    @Ignore
     public void transactionsV1UpdatePostSuccess() throws Exception {
         when(transactionService.updateTransaction(any(RequestInfo.class), any(Map.class)))
                 .thenReturn

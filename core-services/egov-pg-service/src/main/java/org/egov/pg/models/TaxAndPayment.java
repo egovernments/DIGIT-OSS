@@ -21,4 +21,7 @@ public class TaxAndPayment {
 	
 	@NotNull
 	private BigDecimal amountPaid;
+	
+	@NotNull
+	private String billId;
 }
