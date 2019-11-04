@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import SearchService from "./components/SearchService";
 import ServiceList from "egov-ui-kit/common/common/ServiceList"
 import { getNotificationCount, getNotifications } from "egov-ui-kit/redux/app/actions";
@@ -149,7 +148,7 @@ const mapStateToProps = (state) => {
       return item.eventType === "SYSTEMGENERATED" || item.eventType === "BROADCAST";
     });
   let whatsNewEvents =
-    filteredNotifications && getTransformedNotifications(filteredNotifications).slice(0, Math.min(3, filteredNotifications.length));
+    filteredNotifications && filteredNotifications.length > 0 &&  getTransformedNotifications(filteredNotifications).slice(0, Math.min(3, filteredNotifications.length));
 
   return { notifications, userInfo, loading, whatsNewEvents };
 };
