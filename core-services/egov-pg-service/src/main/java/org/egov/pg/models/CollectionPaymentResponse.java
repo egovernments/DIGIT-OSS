@@ -13,12 +13,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentResponse {
+public class CollectionPaymentResponse {
 
     @JsonProperty("ResponseInfo")
     private ResponseInfo responseInfo;
 
     @JsonProperty("Payments")
-    private List<Payment> payments;
+    private List<CollectionPayment> payments;
 
 }

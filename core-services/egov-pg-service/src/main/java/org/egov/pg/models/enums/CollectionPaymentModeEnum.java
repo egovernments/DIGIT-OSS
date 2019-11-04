@@ -3,7 +3,7 @@ package org.egov.pg.models.enums;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum PaymentModeEnum {
+public enum CollectionPaymentModeEnum {
     CASH("CASH"),
     CHEQUE("CHEQUE"),
     DD("DD"),
@@ -13,7 +13,7 @@ public enum PaymentModeEnum {
 
     private String value;
 
-    PaymentModeEnum(String value) {
+    CollectionPaymentModeEnum(String value) {
         this.value = value;
     }
 
@@ -24,7 +24,7 @@ public enum PaymentModeEnum {
     }
 
     public static boolean contains(String test) {
-        for (PaymentModeEnum val : PaymentModeEnum.values()) {
+        for (CollectionPaymentModeEnum val : CollectionPaymentModeEnum.values()) {
             if (val.name().equalsIgnoreCase(test)) {
                 return true;
             }
@@ -33,8 +33,8 @@ public enum PaymentModeEnum {
     }
 
     @JsonCreator
-    public static PaymentModeEnum fromValue(String text) {
-        for (PaymentModeEnum b : PaymentModeEnum.values()) {
+    public static CollectionPaymentModeEnum fromValue(String text) {
+        for (CollectionPaymentModeEnum b : CollectionPaymentModeEnum.values()) {
             if (String.valueOf(b.value).equalsIgnoreCase(text)) {
                 return b;
             }

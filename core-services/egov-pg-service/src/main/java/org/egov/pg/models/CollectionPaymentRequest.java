@@ -16,7 +16,7 @@ import org.egov.common.contract.request.RequestInfo;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PaymentRequest {
+public class CollectionPaymentRequest {
 
     @NotNull
     @Valid
@@ -26,6 +26,6 @@ public class PaymentRequest {
     @NotNull
     @Valid
     @JsonProperty("Payment")
-    private Payment payment;
+    private CollectionPayment payment;
 
 }

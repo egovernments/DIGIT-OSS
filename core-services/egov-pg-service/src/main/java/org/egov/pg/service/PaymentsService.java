@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.egov.pg.config.AppProperties;
-import org.egov.pg.models.Payment;
-import org.egov.pg.models.PaymentDetail;
-import org.egov.pg.models.PaymentRequest;
-import org.egov.pg.models.PaymentResponse;
+import org.egov.pg.models.CollectionPayment;
+import org.egov.pg.models.CollectionPaymentDetail;
+import org.egov.pg.models.CollectionPaymentRequest;
+import org.egov.pg.models.CollectionPaymentResponse;
 import org.egov.pg.models.TaxAndPayment;
 import org.egov.pg.models.TransactionRequest;
-import org.egov.pg.models.enums.PaymentModeEnum;
+import org.egov.pg.models.enums.CollectionPaymentModeEnum;
 import org.egov.pg.repository.ServiceCallRepository;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +31,9 @@ public class PaymentsService {
 	@Autowired
 	private AppProperties props;
 	
-	public Payment registerPayment(TransactionRequest request) {
-		Payment payment = getPaymentFromTransaction(request);
-		PaymentRequest paymentRequest = PaymentRequest.builder()
+	public CollectionPayment registerPayment(TransactionRequest request) {
+		CollectionPayment payment = getPaymentFromTransaction(request);
+		CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
 				.requestInfo(request.getRequestInfo()).payment(payment).build();
 		StringBuilder builder = new StringBuilder();
 		builder.append(props.getCollectionServiceHost()).append(props.getPaymentCreatePath());
@@ -41,7 +41,7 @@ public class PaymentsService {
 		if(response.isPresent()) {
 			try {
 				ObjectMapper mapper = new ObjectMapper();
-				PaymentResponse paymentResponse = mapper.convertValue(response, PaymentResponse.class);
+				CollectionPaymentResponse paymentResponse = mapper.convertValue(response, CollectionPaymentResponse.class);
 				if(!CollectionUtils.isEmpty(paymentResponse.getPayments()))
 					return paymentResponse.getPayments().get(0);
 				else
@@ -58,9 +58,9 @@ public class PaymentsService {
 	}
 	
 	
-	public Payment validatePayment(TransactionRequest request) {
-		Payment payment = getPaymentFromTransaction(request);
-		PaymentRequest paymentRequest = PaymentRequest.builder()
+	public CollectionPayment validatePayment(TransactionRequest request) {
+		CollectionPayment payment = getPaymentFromTransaction(request);
+		CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
 				.requestInfo(request.getRequestInfo()).payment(payment).build();
 		StringBuilder builder = new StringBuilder();
 		builder.append(props.getCollectionServiceHost()).append(props.getPaymentValidatePath());
@@ -68,7 +68,7 @@ public class PaymentsService {
 		if(response.isPresent()) {
 			try {
 				ObjectMapper mapper = new ObjectMapper();
-				PaymentResponse paymentResponse = mapper.convertValue(response, PaymentResponse.class);
+				CollectionPaymentResponse paymentResponse = mapper.convertValue(response, CollectionPaymentResponse.class);
 				if(!CollectionUtils.isEmpty(paymentResponse.getPayments()))
 					return paymentResponse.getPayments().get(0);
 				else
@@ -86,10 +86,10 @@ public class PaymentsService {
 	
 	
 	
-	public Payment getPaymentFromTransaction(TransactionRequest request) {
-		List<PaymentDetail> paymentDetails = new ArrayList<>();
+	public CollectionPayment getPaymentFromTransaction(TransactionRequest request) {
+		List<CollectionPaymentDetail> paymentDetails = new ArrayList<>();
 		for(TaxAndPayment taxAndPayment: request.getTransaction().getTaxAndPayments()) {
-			PaymentDetail detail = PaymentDetail.builder()
+			CollectionPaymentDetail detail = CollectionPaymentDetail.builder()
 					.tenantId(request.getTransaction().getTenantId())
 					.businessService(taxAndPayment.getBusinessService())
 					.billId(taxAndPayment.getBillId())
@@ -98,10 +98,10 @@ public class PaymentsService {
 			paymentDetails.add(detail);
 		}
 		
-		return Payment.builder().paymentDetails(paymentDetails)
+		return CollectionPayment.builder().paymentDetails(paymentDetails)
 				.tenantId(request.getTransaction().getTenantId())
 				.totalAmountPaid(new BigDecimal(request.getTransaction().getTxnAmount()))
-				.paymentMode(PaymentModeEnum.ONLINE)
+				.paymentMode(CollectionPaymentModeEnum.ONLINE)
 				.paidBy(request.getTransaction().getUser().getName())
 				.mobileNumber(request.getTransaction().getUser().getMobileNumber())
 				.build();

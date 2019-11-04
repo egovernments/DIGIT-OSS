@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.egov.pg.models.enums.InstrumentStatusEnum;
-import org.egov.pg.models.enums.PaymentModeEnum;
+import org.egov.pg.models.enums.CollectionPaymentModeEnum;
 import org.egov.pg.models.enums.PaymentStatusEnum;
 
 import java.math.BigDecimal;
@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode
-public class Payment {
+public class CollectionPayment {
 
     @Size(max=64)
     @JsonProperty("id")
@@ -48,7 +48,7 @@ public class Payment {
 
     @NotNull
     @JsonProperty("paymentMode")
-    private PaymentModeEnum paymentMode;
+    private CollectionPaymentModeEnum paymentMode;
 
     
     @JsonProperty("instrumentDate")
@@ -73,7 +73,7 @@ public class Payment {
 
     @JsonProperty("paymentDetails")
     @Valid
-    private List<PaymentDetail> paymentDetails;
+    private List<CollectionPaymentDetail> paymentDetails;
 
     @Size(max=128)
     @NotNull
@@ -105,7 +105,7 @@ public class Payment {
     private PaymentStatusEnum paymentStatus;
 
 
-    public Payment addpaymentDetailsItem(PaymentDetail paymentDetail) {
+    public CollectionPayment addpaymentDetailsItem(CollectionPaymentDetail paymentDetail) {
         if (this.paymentDetails == null) {
             this.paymentDetails = new ArrayList<>();
         }

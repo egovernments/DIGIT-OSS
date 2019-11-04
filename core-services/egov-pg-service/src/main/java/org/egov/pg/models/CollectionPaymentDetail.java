@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode
-public class PaymentDetail {
+public class CollectionPaymentDetail {
 
     @Size(max=64)
     @JsonProperty("id")
