@@ -79,8 +79,25 @@ function totalAmount(arr) {
 
 function FeesEstimateCard(props) {
   const { classes, estimate } = props;
-  const total = totalAmount(estimate.fees);
+  const total = estimate.totalAmount;
+  const arrears = total - totalAmount(estimate.fees);
   const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
+
+  if (arrears > 0 && estimate.fees.length == 9) {
+    estimate.fees.push({
+      info: {
+        labelKey: "COMMON_ARREARS",
+        labelName: "Arrears"
+      },
+      name: {
+        labelKey: "COMMON_ARREARS",
+        labelName: "Arrears"
+      },
+      value: arrears
+    });
+  }
+  console.log(estimate.fees);
+
   return (
     <Grid container>
       <Grid xs={12} sm={7}>
@@ -101,8 +118,8 @@ function FeesEstimateCard(props) {
                   </Icon>
                 </Tooltip>
               ) : (
-                ""
-              );
+                  ""
+                );
               let textLeft = fee.name ? (
                 <Grid container xs={8}>
                   <LabelContainer
@@ -113,8 +130,8 @@ function FeesEstimateCard(props) {
                   {tooltip}
                 </Grid>
               ) : (
-                <Grid xs={8} />
-              );
+                  <Grid xs={8} />
+                );
               let textRight = fee.value ? (
                 <Grid xs={4} align="right">
                   <LabelContainer
@@ -124,14 +141,14 @@ function FeesEstimateCard(props) {
                   />
                 </Grid>
               ) : (
-                <Grid xs={4} align="right">
-                  <LabelContainer
-                    labelName={0}
-                    labelKey={0}
-                    style={styles.taxStyles}
-                  />
-                </Grid>
-              );
+                  <Grid xs={4} align="right">
+                    <LabelContainer
+                      labelName={0}
+                      labelKey={0}
+                      style={styles.taxStyles}
+                    />
+                  </Grid>
+                );
               return (
                 <Grid key={key} container>
                   {textLeft}
