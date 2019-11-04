@@ -25,7 +25,6 @@ public class PaymentDetail {
     @JsonProperty("tenantId")
     private String tenantId;
 
-    @NotNull
     @JsonProperty("totalDue")
     private BigDecimal totalDue;
 
