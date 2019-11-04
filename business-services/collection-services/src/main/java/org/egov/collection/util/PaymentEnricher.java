@@ -86,6 +86,7 @@ public class PaymentEnricher {
 		// Assigns bill object to each paymentDetail if no bill object is found the
 		// billId from paymentDetail is added in error map
 		payment.getPaymentDetails().forEach(paymentDetail -> {
+			paymentDetail.setBusinessService(billIdToBillMap.get(paymentDetail.getBillId()).getBusinessService());
 			paymentDetail.setBill(billIdToBillMap.get(paymentDetail.getBillId()));
 			paymentDetail.setId(UUID.randomUUID().toString());
 			paymentDetail.setTenantId(payment.getTenantId());

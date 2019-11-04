@@ -42,8 +42,6 @@ public class PaymentDetail {
     @JsonProperty("receiptType")
     private String receiptType = null;
 
-    @NotNull
-    @Size(max=64)
     @JsonProperty("businessService")
     private String businessService;
 
