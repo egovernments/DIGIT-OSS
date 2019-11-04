@@ -8,6 +8,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { getSearchResults } from "../../../../ui-utils/commons";
+import AmountToBePaid from "./payResource/amount-to-be-paid";
 import { generateBill, getCurrentFinancialYear } from "../utils";
 import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
@@ -119,7 +120,8 @@ const screenConfig = {
                                 labelName: "Payment Collection Details",
                                 labelKey: "NOC_PAYMENT_HEAD"
                             }),
-                            estimateDetails
+                            estimateDetails,
+                            AmountToBePaid
                         })
                     }
                 },
