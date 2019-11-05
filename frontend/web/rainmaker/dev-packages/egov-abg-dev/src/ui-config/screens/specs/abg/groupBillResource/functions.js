@@ -6,13 +6,11 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   convertEpochToDate,
-  convertDateToEpoch,
-  validateFields
+  validateFields,
+  getTextToLocalMapping
 } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { textToLocalMapping } from "./searchResults";
-import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { prepareFinalBodyData } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 // const tenantId = getTenantId();
 const tenantId = getTenantId();
@@ -95,13 +93,16 @@ export const searchApiCall = async (state, dispatch) => {
         tenantId: tenantId
       };
     }
+
+    console.log("=======>",response)
     try {
       let data = response.map(item => ({
-        [get(textToLocalMapping, "Bill No.")]: item.billNo || "-",
-        [get(textToLocalMapping, "Consumer ID")]: item.consumerId || "-",
-        [get(textToLocalMapping, "Owner Name")]: item.ownerName || "-",
-        [get(textToLocalMapping, "Bill Date")]:
+        [getTextToLocalMapping("Bill No.")]: item.billNo || "-",
+        [getTextToLocalMapping("Consumer ID")]: item.consumerId || "-",
+        [getTextToLocalMapping("Owner Name")]: item.ownerName || "-",
+        [getTextToLocalMapping("Bill Date")]:
           convertEpochToDate(item.billDate) || "-",
+        [getTextToLocalMapping("Status")]: item.status || "-",
         tenantId: item.tenantId
       }));
 
@@ -113,9 +114,16 @@ export const searchApiCall = async (state, dispatch) => {
           data
         )
       );
-      // dispatch(
-      //   handleField("groupBills", "components.div.children.searchResults")
-      // );
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.searchResults",
+          "props.title",
+          `${getTextToLocalMapping(
+            "Search Results for Trade License Applications"
+          )} (${data.length})`
+        )
+      );
       showHideTable(true, dispatch);
       showHideMergeButton(true, dispatch);
     } catch (error) {
