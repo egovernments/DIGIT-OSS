@@ -94,7 +94,6 @@ export const searchApiCall = async (state, dispatch) => {
       };
     }
 
-    console.log("=======>",response)
     try {
       let data = response.map(item => ({
         [getTextToLocalMapping("Bill No.")]: item.billNo || "-",

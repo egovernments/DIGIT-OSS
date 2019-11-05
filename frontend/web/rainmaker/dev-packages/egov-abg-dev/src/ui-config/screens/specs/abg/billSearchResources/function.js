@@ -4,18 +4,15 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../../ui-utils/commons";
-import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
+import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { textToLocalMapping } from "./searchResults";
 import { validateFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
-// const tenantId = JSON.parse(getUserInfo()).tenantId;
 const tenantId = getTenantId();
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
-
   let queryObject = [
     {
       key: "tenantId",
@@ -30,14 +27,12 @@ export const searchApiCall = async (state, dispatch) => {
   );
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children",
-    // "components.div.children.fireNOCApplication.children.cardContent.children.searchContainer.children",
     state,
     dispatch,
     "billSearch"
   );
   const isSearchBoxSecondRowValid = validateFields(
     "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children",
-    // "components.div.children.fireNOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
     state,
     dispatch,
     "billSearch"
@@ -69,7 +64,6 @@ export const searchApiCall = async (state, dispatch) => {
       )
     );
   } else {
-    //  showHideProgress(true, dispatch);
     for (var key in searchScreenObject) {
       if (
         searchScreenObject.hasOwnProperty(key) &&
@@ -80,36 +74,35 @@ export const searchApiCall = async (state, dispatch) => {
     }
 
     const responseFromAPI = await getSearchResults(queryObject);
-    // console.log(responseFromAPI);
-
     const bills = (responseFromAPI && responseFromAPI.Bill) || [];
     const billTableData = bills.map(item => {
       return {
-        billNumber: get(item, `id`),
+        billNumber: get(item, `billNumber`),
         consumerName: get(item, `payerName`),
-        serviceCategory: get(item, `billDetails[0].businessService`),
-        billDate: get(item, `billDetails[0].billDate`),
-        billAmount: get(item, `taxAndPayments[0].taxAmount`),
-        status: get(item, `billDetails[0].status`),
-        action: getActionText(item)
+        serviceCategory: get(item, `businessService`),
+        billDate: get(item, `billDate`),
+        billAmount: get(item, `totalAmount`),
+        status: get(item, `status`),
+        action: getActionItem(get(item, `status`))
       };
     });
-    console.log(billTableData);
+
     dispatch(
       prepareFinalObject("searchScreenMdmsData.billSearchResponse", bills)
     );
     try {
       let data = billTableData.map(item => ({
-        [get(textToLocalMapping, "Bill No.")]: item.billNumber || "-",
-        [get(textToLocalMapping, "Consumer Name")]: item.consumerName || "-",
-        [get(textToLocalMapping, "Service Category")]:
+        [getTextToLocalMapping("Bill No.")]: item.billNumber || "-",
+        [getTextToLocalMapping("Consumer Name")]: item.consumerName || "-",
+        [getTextToLocalMapping("Service Category")]:
           item.serviceCategory || "-",
-        [get(textToLocalMapping, "Bill Date")]:
+        [getTextToLocalMapping("Bill Date")]:
           convertEpochToDate(item.billDate) || "-",
-        [get(textToLocalMapping, "Bill Amount[INR]")]: item.billAmount || "-",
-        [get(textToLocalMapping, "Status")]: item.status || "-",
-        [get(textToLocalMapping, "Action")]: item.action || "-",
-        tenantId: item.tenantId
+        [getTextToLocalMapping("Bill Amount(Rs)")]: item.billAmount || "-",
+        [getTextToLocalMapping("Status")]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
+        [getTextToLocalMapping("Action")]: item.action || "-",
+        tenantId: item.tenantId,
+        action : item.action
       }));
       dispatch(
         handleField(
@@ -119,16 +112,25 @@ export const searchApiCall = async (state, dispatch) => {
           data
         )
       );
+      // dispatch(
+      //   handleField(
+      //     "billSearch",
+      //     "components.div.children.searchResults",
+      //     "props.title",
+      //     "Search Results for Bill (" + data.length + ")"
+      //   )
+      // );
       dispatch(
         handleField(
-          "billSearch",
+          "search",
           "components.div.children.searchResults",
           "props.title",
-          "Search Results for Bill (" + data.length + ")"
+          `${getTextToLocalMapping(
+            "Search Results for Bill"
+          )} (${data.length})`
         )
       );
 
-      // dispatch(handleField("billSearch", "components.div.children.searchResults"));
       showHideTable(true, dispatch);
     } catch (error) {
       dispatch(toggleSnackbar(true, error.message, "error"));
@@ -148,6 +150,13 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
   );
 };
 
-const getActionText = item => {
-  return "Pending";
-};
+const getActionItem = (status) => {
+  switch(status){
+    case "ACTIVE" : return "PAY";
+    case "CANCELLED" : 
+    case "EXPIRED":  return "GENERATE NEW BILL"
+    case "PAID" : return "DOWNLOAD RECEIPT"
+   }
+}
+
+

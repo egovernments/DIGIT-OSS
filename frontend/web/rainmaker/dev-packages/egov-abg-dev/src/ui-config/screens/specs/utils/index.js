@@ -280,6 +280,16 @@ export const getLabelOnlyValue = (value, props = {}) => {
   };
 };
 
+
+export const onActionClick = (rowData) =>{
+  console.log("----->",rowData)
+  switch(rowData[8]){
+    case "PAY" : return "";
+    case "DOWNLOAD RECEIPT" : ""
+    case "GENERATE NEW RECEIPT" : ""
+  }
+}
+
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
@@ -293,7 +303,7 @@ export const getTextToLocalMapping = label => {
     case "Consumer Name":
       return getLocaleLabels(
         "Consumer Name",
-        "ABG_COMMON_TABLE_COL_CONSUMER_NAME﻿",
+        "ABG_COMMON_TABLE_COL_CONSUMER_NAME",
         localisationLabels
       );
 
@@ -310,9 +320,9 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
-    case "Bill Amount[INR]":
+    case "Bill Amount(Rs)":
       return getLocaleLabels(
-        "Bill Amount[INR]",
+        "Bill Amount(Rs)",
         "ABG_COMMON_TABLE_COL_BILL_AMOUNT",
         localisationLabels
       );
@@ -356,5 +366,54 @@ export const getTextToLocalMapping = label => {
         "ABG_COMMON_TABLE_COL_VIEW_BUTTON",
         localisationLabels
       );
+
+      case "ACTIVE":
+      return getLocaleLabels(
+        "Pending",
+        "BILL_GENIE_ACTIVE_LABEL",
+        localisationLabels
+      );
+
+      case "CANCELLED":
+      return getLocaleLabels(
+        "Cancelled",
+        "BILL_GENIE_CANCELLED_LABEL",
+        localisationLabels
+      );
+
+      case "PAID":
+      return getLocaleLabels(
+        "Paid",
+        "BILL_GENIE_PAID_LABEL",
+        localisationLabels
+      );
+      case "PAY":
+      return getLocaleLabels(
+        "PAY",
+        "BILL_GENIE_PAY",
+        localisationLabels
+      );
+      case "GENERATE NEW BILL":
+      return getLocaleLabels(
+        "GENERATE NEW BILL",
+        "BILL_GENIE_GENERATE_NEW_BILL",
+        localisationLabels
+      );
+
+      case "DOWNLOAD RECEIPT":
+        return getLocaleLabels(
+          "DOWNLOAD RECEIPT",
+          "BILL_GENIE_DOWNLOAD_RECEIPT",
+          localisationLabels
+        );
+
+        case "Search Results for Bill":
+        return getLocaleLabels(
+          "Search Results for Bill",
+          "BILL_GENIE_SEARCH_TABLE_HEADER",
+          localisationLabels
+        );
+        
+
   }
 };
