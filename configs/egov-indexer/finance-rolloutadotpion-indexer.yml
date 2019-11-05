@@ -11,3 +11,21 @@ ServiceMaps:
       isBulk: false
       timeStampField: $.timestamp
       jsonPath: $.rollOutAdoptionData
+  - topic: finance-bill-topic
+    configKey: INDEX
+    indexes:
+    - name: financebill-v1
+      type: billregister
+      id: $.id
+      isBulk: true
+      timeStampField: $.timestamp
+      jsonPath: $.egBillRegisterData
+  - topic: finance-voucher-topic
+    configKey: INDEX
+    indexes:
+    - name: financevoucher-v1
+      type: voucher
+      id: $.id
+      isBulk: true
+      timeStampField: $.timestamp
+      jsonPath: $.voucherHeaderData
