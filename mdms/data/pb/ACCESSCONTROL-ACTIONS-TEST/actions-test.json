@@ -15080,6 +15080,30 @@
       "code": "null",
       "leftIcon": "editor:insert-chart",
       "path": "Finance.Transactions.Bank Reconciliation.Reconcile Uploaded Statement"
+    },
+    {
+      "id": 1869,
+      "name": "Indexer finance billregister",
+      "url": "/egov-indexer/index-operations/finance-bill-topic/_index",
+      "parentModule": "",
+      "displayName": "",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-indexer",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1870,
+      "name": "Indexer finance voucher",
+      "url": "/egov-indexer/index-operations/finance-voucher-topic/_index",
+      "parentModule": "",
+      "displayName": "",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-indexer",
+      "code": "null",
+      "path": ""
     }
   ]
 }
