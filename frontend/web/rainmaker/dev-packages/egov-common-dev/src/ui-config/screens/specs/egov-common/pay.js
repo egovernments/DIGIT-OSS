@@ -20,6 +20,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../utils";
 import set from "lodash/set";
+import { componentJsonpath } from "./payResource/constants";
 
 const header = getCommonContainer({
     header: getCommonHeader({
@@ -114,12 +115,9 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid", payload.amount));
         //set total amount in instrument
         dispatch(prepareFinalObject("ReceiptTemp[0].instrument.amount", payload.amount));
-        const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
-        dispatch(handleField("pay", componentJsonpath, "props.value", payload.amount));
     }
 
     if (get(totalAmount, "totalAmount") != undefined) {
-        const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
         dispatch(handleField("pay", componentJsonpath, "props.value", totalAmount.totalAmount));
     }
 

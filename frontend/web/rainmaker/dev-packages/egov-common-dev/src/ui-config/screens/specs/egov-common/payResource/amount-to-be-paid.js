@@ -8,6 +8,8 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { validateAmountInput, getTemp } from "./utils";
+import { componentJsonpath } from "./constants";
 
 const AmountToBePaid = getCommonGrayCard({
   header: getCommonSubHeader({
@@ -33,8 +35,6 @@ const AmountToBePaid = getCommonGrayCard({
         "full_amount"
       ),
       beforeFieldChange: (action, state, dispatch) => {
-        const componentJsonpath =
-          "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
         try {
           dispatch(
             handleField(
@@ -90,46 +90,5 @@ const AmountToBePaid = getCommonGrayCard({
     }
   })
 });
-
-const validateAmountInput = (temp, pattern, action, dispatch) => {
-  if (temp === 1 || temp === 3) {
-    handleValidation(
-      action,
-      /^[0-9]{3,9}$/i,
-      dispatch,
-      temp === 1 ? "Amount can't be less than 100" : "Amount can't be empty",
-      true
-    );
-  } else if (temp === 2) {
-    handleValidation(action, pattern, dispatch, "Input field invalid", true);
-  } else {
-    handleButton(dispatch, false);
-  }
-};
-
-const getTemp = (action, pattern) => {
-  if (action.value) {
-    if (pattern.test(action.value) && parseInt(action.value) < 100) {
-      return 1;
-    }
-    if (!pattern.test(action.value)) {
-      return 2;
-    }
-  } else {
-    return 3;
-  }
-};
-
-const handleButton = (dispatch, disabled) => {
-  const buttonJsonpath = "components.div.children.footer.children.generateReceipt";
-  dispatch(handleField("pay", buttonJsonpath, "props.disabled", disabled));
-};
-
-const handleValidation = (action, pattern, dispatch, message, disabled) => {
-  dispatch(handleField("pay", action.componentJsonpath, "pattern", pattern));
-  dispatch(handleField("pay", action.componentJsonpath, "isFieldValid", !disabled));
-  dispatch(handleField("pay", action.componentJsonpath, "props.errorMessage", message));
-  handleButton(dispatch, disabled);
-};
 
 export default AmountToBePaid;
