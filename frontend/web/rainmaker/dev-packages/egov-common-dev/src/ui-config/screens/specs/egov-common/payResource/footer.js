@@ -284,10 +284,10 @@ const callBackForPay = async (state, dispatch) => {
   };
 
   ReceiptBody.Receipt.push(finalReceiptData);
-  console.log(finalReceiptData, state, 'finalReceiptData');
+  const totalAmount=Number(finalReceiptData.Bill[0].totalAmount);
 
   ReceiptBodyNew.Payment['tenantId'] = finalReceiptData.tenantId;
-  ReceiptBodyNew.Payment['totalDue'] = finalReceiptData.Bill[0].totalAmount;
+  ReceiptBodyNew.Payment['totalDue'] = totalAmount;
 
   ReceiptBodyNew.Payment['paymentMode'] = finalReceiptData.instrument.instrumentType.name;
   ReceiptBodyNew.Payment['paidBy'] = finalReceiptData.Bill[0].payerName;
@@ -301,12 +301,12 @@ const callBackForPay = async (state, dispatch) => {
   }
 
   let amtPaid = state.screenConfiguration.preparedFinalObject.AmountType === "partial_amount" ? state.screenConfiguration.preparedFinalObject.AmountPaid : finalReceiptData.Bill[0].totalAmount;
-  amtPaid = amtPaid ? amtPaid : finalReceiptData.Bill[0].totalAmount;
+  amtPaid = amtPaid ? Number(amtPaid) :totalAmount;
   ReceiptBodyNew.Payment.paymentDetails.push(
     {
       businessService: finalReceiptData.Bill[0].businessService,
       billId: finalReceiptData.Bill[0].id,
-      totalDue: finalReceiptData.Bill[0].totalAmount,
+      totalDue:totalAmount,
       totalAmountPaid: amtPaid
     }
   )
