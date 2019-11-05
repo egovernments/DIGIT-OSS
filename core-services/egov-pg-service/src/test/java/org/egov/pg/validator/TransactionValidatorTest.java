@@ -60,7 +60,7 @@ public class TransactionValidatorTest {
                 .consumerCode("PT-21055")
                 .taxAndPayments(Collections.singletonList(taxAndPayment))
                 .build();
-        BillDetail billDetail = BillDetail.builder().partPaymentAllowed(false).totalAmount(new BigDecimal(100)).build();
+        BillDetail billDetail = BillDetail.builder().amountPaid(new BigDecimal(100)).build();
         bills = Collections.singletonList(Bill.builder().billDetails(Collections.singletonList(billDetail))
                 .build());
     }

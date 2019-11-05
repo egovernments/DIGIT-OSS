@@ -141,7 +141,7 @@ public class TransactionServiceTest {
                 .build();
         TransactionRequest transactionRequest = new TransactionRequest(requestInfo, txn);
 
-        BillDetail billDetail = BillDetail.builder().receiptNumber(receiptNumber).build();
+        BillDetail billDetail = BillDetail.builder().build();
 
         Bill bill = Bill.builder().billDetails(Collections.singletonList(billDetail)).build();
 
@@ -213,7 +213,7 @@ public class TransactionServiceTest {
                 .build();
 
 
-        BillDetail billDetail = BillDetail.builder().receiptNumber("XYZ").build();
+        BillDetail billDetail = BillDetail.builder().build();
 
         Bill bill = Bill.builder().billDetails(Collections.singletonList(billDetail)).build();
 
