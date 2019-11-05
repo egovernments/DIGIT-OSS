@@ -583,7 +583,7 @@ export const createEstimateData = billObject => {
   return fees;
 };
 
-export const generateBill = async (dispatch, consumerCode, tenantId,businessService) => {
+export const generateBill = async (dispatch, consumerCode, tenantId) => {
   try {
     if (consumerCode && tenantId) {
       const queryObj = [
@@ -594,11 +594,12 @@ export const generateBill = async (dispatch, consumerCode, tenantId,businessServ
         {
           key: "consumerCode",
           value: consumerCode
-        },
-        {
-          key: "businessService",
-          value: businessService
         }
+        // ,
+        // {
+        //   key: "businessService",
+        //   value: businessService
+        // }
       ];
       const payload = await getBill(queryObj);
       // let payload = sampleGetBill();

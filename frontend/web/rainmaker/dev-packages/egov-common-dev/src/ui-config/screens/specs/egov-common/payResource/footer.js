@@ -14,7 +14,8 @@ export const callPGService = async (state, dispatch) => {
   
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const consumerCode = getQueryArg(window.location.href, "consumerCode");
-  const businessService = getQueryArg(window.location.href, "businessService");
+  const businessService =  get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService");
+  // const businessService = getQueryArg(window.location.href, "businessService"); businessService
   let callbackUrl = `${
     process.env.NODE_ENV === "production"
       ? `${window.origin}/citizen`
