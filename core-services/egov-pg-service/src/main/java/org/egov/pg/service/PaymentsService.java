@@ -10,6 +10,8 @@ import org.egov.pg.models.CollectionPayment;
 import org.egov.pg.models.CollectionPaymentDetail;
 import org.egov.pg.models.CollectionPaymentRequest;
 import org.egov.pg.models.CollectionPaymentResponse;
+import org.egov.pg.models.Instrument;
+import org.egov.pg.models.InstrumentType;
 import org.egov.pg.models.TaxAndPayment;
 import org.egov.pg.web.models.TransactionRequest;
 import org.egov.pg.models.enums.CollectionPaymentModeEnum;
@@ -62,6 +64,7 @@ public class PaymentsService {
 	
 	public CollectionPayment validatePayment(TransactionRequest request) {
 		CollectionPayment payment = getPaymentFromTransaction(request);
+		payment.setInstrumentNumber("PROV_PAYMENT_VALIDATION");
 		CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
 				.requestInfo(request.getRequestInfo()).payment(payment).build();
 		StringBuilder builder = new StringBuilder();
@@ -98,13 +101,15 @@ public class PaymentsService {
 					.build();
 			paymentDetails.add(detail);
 		}
-		
+				
 		return CollectionPayment.builder().paymentDetails(paymentDetails)
 				.tenantId(request.getTransaction().getTenantId())
 				.totalAmountPaid(new BigDecimal(request.getTransaction().getTxnAmount()))
 				.paymentMode(CollectionPaymentModeEnum.ONLINE)
 				.paidBy(request.getTransaction().getUser().getName())
 				.mobileNumber(request.getTransaction().getUser().getMobileNumber())
+				.instrumentDate(request.getTransaction().getAuditDetails().getCreatedTime())
+				.instrumentNumber(request.getTransaction().getTxnId())
 				.build();
 	}
 
