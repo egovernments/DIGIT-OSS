@@ -16,6 +16,7 @@ import org.egov.pg.models.enums.CollectionPaymentModeEnum;
 import org.egov.pg.repository.ServiceCallRepository;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service
 public class PaymentsService {
 	
 	@Autowired
