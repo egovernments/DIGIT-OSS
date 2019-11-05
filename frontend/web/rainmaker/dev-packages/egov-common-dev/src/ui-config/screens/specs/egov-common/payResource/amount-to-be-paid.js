@@ -7,9 +7,7 @@ import {
   getRadioButton
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { validateAmountInput, getTemp } from "./utils";
-import { componentJsonpath } from "./constants";
+import { validateAmountInput, getTemp, dispatchHandleField } from "./utils";
 
 const AmountToBePaid = getCommonGrayCard({
   header: getCommonSubHeader({
@@ -36,29 +34,13 @@ const AmountToBePaid = getCommonGrayCard({
       ),
       beforeFieldChange: (action, state, dispatch) => {
         try {
-          dispatch(
-            handleField(
-              "pay",
-              componentJsonpath,
-              "props.disabled",
-              action.value === "full_amount" ? true : false
-            )
-          );
+          dispatchHandleField(dispatch, "props.disabled", action.value === "full_amount" ? true : false);
           const payload = get(
             state,
             "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]"
           );
-          if (payload.totalAmount) {
-            action.value === "full_amount"
-              ? dispatch(
-                  handleField(
-                    "pay",
-                    componentJsonpath,
-                    "props.value",
-                    payload.totalAmount
-                  )
-                )
-              : "";
+          if (payload.totalAmount && action.value === "full_amount") {
+            dispatchHandleField(dispatch, "props.value", payload.totalAmount);
           }
         } catch (e) {
           console.log(e);

@@ -2,15 +2,11 @@ import {
     getCommonCard,
     getCommonContainer,
     getCommonHeader,
-    getCommonTitle,
-    getCommonSubHeader,
-    getCommonParagraph,
-    getLabel
+    getCommonTitle
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
-import { getCurrentFinancialYear, generateBill, showHideAdhocPopup } from "../utils";
-import { adhocPopup } from "./payResource/adhocPopup";
+import { getCurrentFinancialYear, generateBill } from "../utils";
 import capturePaymentDetails from "./payResource/capture-payment-details";
 import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";

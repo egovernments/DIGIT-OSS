@@ -6,8 +6,7 @@ import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
-import { getSearchResults } from "../../../../../ui-utils/commons";
-import { convertDateToEpoch, getBill, validateFields } from "../../utils";
+import { convertDateToEpoch, validateFields } from "../../utils";
 import { ifUserRoleExists } from "../../utils";
 
 export const callPGService = async (state, dispatch) => {

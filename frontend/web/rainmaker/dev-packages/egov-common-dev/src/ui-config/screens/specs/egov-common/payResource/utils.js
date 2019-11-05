@@ -1,5 +1,5 @@
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { buttonJsonpath, numberPattern } from "./constants";
+import { buttonJsonpath, numberPattern, componentJsonpath } from "./constants";
 
 export const validateAmountInput = (temp, pattern, action, dispatch) => {
     if (temp === 1 || temp === 3) {
@@ -40,3 +40,7 @@ export const validateAmountInput = (temp, pattern, action, dispatch) => {
     dispatch(handleField("pay", action.componentJsonpath, "props.errorMessage", message));
     handleButton(dispatch, disabled);
   };
+
+  export const dispatchHandleField = (dispatch, property, value) => {
+    dispatch(handleField("pay", componentJsonpath, property, value));
+  }
