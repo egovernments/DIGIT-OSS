@@ -65,6 +65,7 @@ public class PaymentsService {
 	public CollectionPayment validatePayment(TransactionRequest request) {
 		CollectionPayment payment = getPaymentFromTransaction(request);
 		payment.setInstrumentNumber("PROV_PAYMENT_VALIDATION");
+		payment.setInstrumentDate(System.currentTimeMillis());
 		CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
 				.requestInfo(request.getRequestInfo()).payment(payment).build();
 		StringBuilder builder = new StringBuilder();
