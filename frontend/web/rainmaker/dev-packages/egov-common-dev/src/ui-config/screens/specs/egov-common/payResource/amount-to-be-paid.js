@@ -74,6 +74,7 @@ const AmountToBePaid = getCommonGrayCard({
         },
         pattern: getPattern("Amount"),
         jsonPath: "AmountPaid",
+        required: true,
         props: {
           disabled: true
         }
