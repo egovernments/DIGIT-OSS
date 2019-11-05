@@ -10,12 +10,10 @@ import org.egov.pg.models.CollectionPayment;
 import org.egov.pg.models.CollectionPaymentDetail;
 import org.egov.pg.models.CollectionPaymentRequest;
 import org.egov.pg.models.CollectionPaymentResponse;
-import org.egov.pg.models.Instrument;
-import org.egov.pg.models.InstrumentType;
 import org.egov.pg.models.TaxAndPayment;
-import org.egov.pg.web.models.TransactionRequest;
 import org.egov.pg.models.enums.CollectionPaymentModeEnum;
 import org.egov.pg.repository.ServiceCallRepository;
+import org.egov.pg.web.models.TransactionRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +35,7 @@ public class PaymentsService {
 	
 	public CollectionPayment registerPayment(TransactionRequest request) {
 		CollectionPayment payment = getPaymentFromTransaction(request);
+		payment.setInstrumentDate(request.getTransaction().getAuditDetails().getCreatedTime());
 		CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
 				.requestInfo(request.getRequestInfo()).payment(payment).build();
 		StringBuilder builder = new StringBuilder();
@@ -65,7 +64,6 @@ public class PaymentsService {
 	public CollectionPayment validatePayment(TransactionRequest request) {
 		CollectionPayment payment = getPaymentFromTransaction(request);
 		payment.setInstrumentNumber("PROV_PAYMENT_VALIDATION");
-		payment.setInstrumentDate(System.currentTimeMillis());
 		CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
 				.requestInfo(request.getRequestInfo()).payment(payment).build();
 		StringBuilder builder = new StringBuilder();
@@ -109,7 +107,7 @@ public class PaymentsService {
 				.paymentMode(CollectionPaymentModeEnum.ONLINE)
 				.paidBy(request.getTransaction().getUser().getName())
 				.mobileNumber(request.getTransaction().getUser().getMobileNumber())
-				.instrumentDate(request.getTransaction().getAuditDetails().getCreatedTime())
+				.instrumentDate(System.currentTimeMillis())
 				.instrumentNumber(request.getTransaction().getTxnId())
 				.build();
 	}
