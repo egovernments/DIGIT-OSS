@@ -835,7 +835,7 @@ export const generateSingleBill = async rowData => {
   let billData = {};
   const data = allBills.find(
     item =>
-      get(item, "billDetails[0].consumerCode", "") === rowData["Consumer ID"]
+      get(item, "billDetails[0].consumerCode", "") === rowData[1]
   );
   if (isEmpty(data)) {
     alert("Bill not found !");

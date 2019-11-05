@@ -2,7 +2,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg,getTransformedLocalStorgaeLabels ,getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getCommonCard,
@@ -278,4 +278,83 @@ export const getLabelOnlyValue = (value, props = {}) => {
       value: getCommonCaption(value)
     }
   };
+};
+
+export const getTextToLocalMapping = label => {
+  const localisationLabels = getTransformedLocalStorgaeLabels();
+  switch (label) {
+    case "Bill No.":
+      return getLocaleLabels(
+        "Bill No.",
+        "ABG_COMMON_TABLE_COL_BILL_NO",
+        localisationLabels
+      );
+
+    case "Consumer Name":
+      return getLocaleLabels(
+        "Consumer Name",
+        "ABG_COMMON_TABLE_COL_CONSUMER_NAME﻿",
+        localisationLabels
+      );
+
+    case "Service Category":
+      return getLocaleLabels(
+        "Service Category",
+        "ABG_COMMON_TABLE_COL_SERVICE_CATEGORY",
+        localisationLabels
+      );
+    case "Bill Date":
+      return getLocaleLabels(
+        "Bill Date",
+        "ABG_COMMON_TABLE_COL_BILL_DATE",
+        localisationLabels
+      );
+
+    case "Bill Amount[INR]":
+      return getLocaleLabels(
+        "Bill Amount[INR]",
+        "ABG_COMMON_TABLE_COL_BILL_AMOUNT",
+        localisationLabels
+      );
+
+    case "Status":
+      return getLocaleLabels(
+        "Status",
+        "ABG_COMMON_TABLE_COL_STATUS",
+        localisationLabels
+      );
+    case "Action":
+      return getLocaleLabels(
+        "Action",
+        "ABG_COMMON_TABLE_COL_ACTION",
+        localisationLabels
+      );
+
+    case "Consumer ID":
+      return getLocaleLabels(
+        "Consumer ID",
+        "ABG_COMMON_TABLE_COL_CONSUMER_ID",
+        localisationLabels
+      );
+
+   case "Owner Name":
+      return getLocaleLabels(
+        "Owner Name",
+        "ABG_COMMON_TABLE_COL_OWN_NAME",
+        localisationLabels
+      );
+
+  case "Download":
+      return getLocaleLabels(
+        "Download",
+        "ABG_COMMON_TABLE_COL_DOWNLOAD_BUTTON"
+      );
+
+    case "View button":
+      return getLocaleLabels(
+        "Action",
+        "ABG_COMMON_TABLE_COL_VIEW_BUTTON",
+        localisationLabels
+      );
+  }
 };
