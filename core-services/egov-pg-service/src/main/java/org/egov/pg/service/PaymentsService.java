@@ -36,6 +36,9 @@ public class PaymentsService {
 	public CollectionPayment registerPayment(TransactionRequest request) {
 		CollectionPayment payment = getPaymentFromTransaction(request);
 		payment.setInstrumentDate(request.getTransaction().getAuditDetails().getCreatedTime());
+		payment.setInstrumentNumber(request.getTransaction().getTxnId());
+		payment.setTransactionNumber(request.getTransaction().getTxnId());
+		
 		CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
 				.requestInfo(request.getRequestInfo()).payment(payment).build();
 		StringBuilder builder = new StringBuilder();
@@ -63,7 +66,6 @@ public class PaymentsService {
 	
 	public CollectionPayment validatePayment(TransactionRequest request) {
 		CollectionPayment payment = getPaymentFromTransaction(request);
-		payment.setInstrumentNumber("PROV_PAYMENT_VALIDATION");
 		CollectionPaymentRequest paymentRequest = CollectionPaymentRequest.builder()
 				.requestInfo(request.getRequestInfo()).payment(payment).build();
 		StringBuilder builder = new StringBuilder();
@@ -108,7 +110,8 @@ public class PaymentsService {
 				.paidBy(request.getTransaction().getUser().getName())
 				.mobileNumber(request.getTransaction().getUser().getMobileNumber())
 				.instrumentDate(System.currentTimeMillis())
-				.instrumentNumber(request.getTransaction().getTxnId())
+				.instrumentNumber("PROV_PAYMENT_VALIDATION")
+				.transactionNumber("PROV_PAYMENT_VALIDATION")
 				.build();
 	}
 
