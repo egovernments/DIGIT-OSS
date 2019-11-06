@@ -14589,7 +14589,7 @@
       "enabled": true,
       "serviceCode": "BG",
       "code": "null",
-      "navigationURL": "abg/groupBills",
+      "navigationURL": "abg/billSearch",
       "path": "BG",
       "leftIcon": "action:receipt"
     },
