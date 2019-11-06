@@ -47,7 +47,7 @@ public class PaymentsService {
 		if(response.isPresent()) {
 			try {
 				ObjectMapper mapper = new ObjectMapper();
-				CollectionPaymentResponse paymentResponse = mapper.convertValue(response, CollectionPaymentResponse.class);
+				CollectionPaymentResponse paymentResponse = mapper.convertValue(response.get(), CollectionPaymentResponse.class);
 				if(!CollectionUtils.isEmpty(paymentResponse.getPayments()))
 					return paymentResponse.getPayments().get(0);
 				else
