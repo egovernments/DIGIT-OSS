@@ -62,7 +62,7 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "billing-service/bill/_search",
+      "billing-service/bill/v2/_search",
       "",
       queryObject,
       {}
