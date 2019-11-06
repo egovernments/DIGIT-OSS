@@ -1,1 +1,0 @@
-"egov-noc": "babel dev-packages/egov-noc-dev/src --out-dir packages/lib/egov-noc --copy-files",
