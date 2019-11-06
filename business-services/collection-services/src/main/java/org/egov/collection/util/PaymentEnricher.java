@@ -170,6 +170,7 @@ public class PaymentEnricher {
 						billAccountDetail.setId(UUID.randomUUID().toString());
 						billAccountDetail.setTenantId(bill.getTenantId());
 						billAccountDetail.setBillDetailId(billDetail.getId());
+						billAccountDetail.setDemandDetailId("advance_tax");
 					}
 				});
 			});
