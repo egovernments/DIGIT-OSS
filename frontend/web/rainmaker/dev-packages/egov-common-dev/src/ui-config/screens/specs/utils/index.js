@@ -511,7 +511,14 @@ export const getBill = async queryObject => {
     );
     return response;
   } catch (error) {
-    console.log(error);
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error,'fetxh');
   }
 };
 
@@ -617,6 +624,13 @@ export const generateBill = async (dispatch, consumerCode, tenantId) => {
       }
     }
   } catch (e) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: e.message, labelKey: e.message },
+        "error"
+      )
+    );
     console.log(e);
   }
 };

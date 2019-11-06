@@ -32,10 +32,16 @@ export const callPGService = async (state, dispatch) => {
   const taxAmount=Number(get(billPayload, "Bill[0].billDetails[0].amount"));
   let amtToPay = state.screenConfiguration.preparedFinalObject.AmountType === "partial_amount" ? state.screenConfiguration.preparedFinalObject.AmountPaid : taxAmount;
   amtToPay = amtToPay ? Number(amtToPay) :taxAmount;
+  const user={
+    name:get(billPayload, "Bill[0].payerName"),
+    mobileNumber:get(billPayload, "Bill[0].mobileNumber"),
+    tenantId
+  };
   let taxAndPayments = [];
   taxAndPayments.push({
-    taxAmount:taxAmount,
-    businessService: businessService,
+    // taxAmount:taxAmount,
+    // businessService: businessService,
+    billId: get(billPayload, "Bill[0].id"),
     amountPaid: amtToPay
   })
   try {
@@ -44,11 +50,12 @@ export const callPGService = async (state, dispatch) => {
         tenantId,
         txnAmount: amtToPay,
         module: businessService,
-        taxAndPayments,
         billId: get(billPayload, "Bill[0].id"),
         consumerCode: consumerCode,
         productInfo: "Common Payment",
         gateway: "AXIS",
+        taxAndPayments,
+        user,
         callbackUrl
       }
     };
