@@ -32,8 +32,6 @@ public class PaymentWorkflowValidator {
 
 
     public List<Payment> validateForCancel(List<PaymentWorkflow> paymentWorkflows, List<Payment> payments){
-
-
         payments.sort(reverseOrder(Comparator.comparingLong(Payment::getTransactionDate)));
 
         Map<String, String> errorMap = new HashMap<>();
@@ -56,7 +54,6 @@ public class PaymentWorkflowValidator {
             });
 
         }
-
         List<Payment> paymentsToProcess = doPaymentsExist(paymentWorkflows, paymentById);
 
         paymentsToProcess.sort(Collections.reverseOrder(Comparator.comparingLong(Payment::getTransactionDate)));
