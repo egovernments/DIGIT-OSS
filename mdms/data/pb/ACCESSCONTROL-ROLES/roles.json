@@ -361,8 +361,22 @@
       "code": "NOC_APPROVER",
       "name": "NoC counter Approver",
       "description": "Fire NOC Approver"
+    },
+    {
+      "code": "BPA_ARCHITECT",
+      "name": "BPA Architect",
+      "description": "BPA Architect"
+    },
+    {
+      "code": "BPA_ENGINEER",
+      "name": "BPA Architect",
+      "description": "BPA Engineer"
+    },
+    {
+      "code": "BPA_BUILDER",
+      "name": "BPA Builder",
+      "description": "BPA Builder"
     }
-
   ]
 }
 
