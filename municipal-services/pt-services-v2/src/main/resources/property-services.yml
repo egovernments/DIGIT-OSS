@@ -637,7 +637,7 @@ serviceMaps:
 
 
 
-    - query: INSERT INTO eg_pt_unit_v2(tenantId,id,active,propertyDetail,additionalDetails,floorNo,unitType,unitArea,usageCategoryMajor,usageCategoryMinor,usageCategorySubMinor,usageCategoryDetail,occupancyType,occupancyDate,constructionType,constructionSubType,arv,createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT (id) DO UPDATE SET active=?,additionalDetails=?,floorNo=?,unitType=?,unitArea=?,usageCategoryMajor=?,usageCategoryMinor=?,usageCategorySubMinor=?,usageCategoryDetail=?,occupancyType=?,occupancyDate=?,constructionType=?,constructionSubType=?,arv=?,lastmodifiedby=?,lastmodifiedtime=?;
+    - query: INSERT INTO eg_pt_unit_v2(tenantId,id,active,propertyDetail,additionalDetails,floorNo,unitType,unitArea,usageCategoryMajor,usageCategoryMinor,usageCategorySubMinor,usageCategoryDetail,occupancyType,occupancyDate,constructionType,constructionSubType,arv,createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT (id) DO UPDATE SET active=?,additionalDetails=?,floorNo=?,unitType=?,unitArea=?,usageCategoryMajor=?,usageCategoryMinor=?,usageCategorySubMinor=?,usageCategoryDetail=?,occupancyType=?,occupancyDate=?,constructionType=?,constructionSubType=?,arv=?,lastmodifiedby=?,lastmodifiedtime=?;
       basePath: Properties.*.propertyDetails.*.units.*
       jsonMaps:
 
@@ -766,7 +766,7 @@ serviceMaps:
       - jsonPath: $.Properties.*.address.id
 
 
-    - query: INSERT INTO eg_pt_institution_v2(tenantId, id, active,additionalDetails, propertyDetail, name, type,designation, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET active=?,additionalDetails=?,name=?,type=?,designation=?,lastmodifiedby=?,lastmodifiedtime=?;
+    - query: INSERT INTO eg_pt_institution_v2(tenantId, id, active,additionalDetails, propertyDetail, name, type,designation, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET active=?,additionalDetails=?,name=?,type=?,designation=?,lastmodifiedby=?,lastmodifiedtime=?;
       basePath: $.Properties.*.propertyDetails.*.institution
       jsonMaps:
 
