@@ -33,4 +33,10 @@ public class Institution {
   @JsonProperty("designation")
   private String designation;
 
+  @JsonProperty("active")
+  private Boolean active;
+
+  @JsonProperty("additionalDetails")
+  private Object additionalDetails;
+
 }
