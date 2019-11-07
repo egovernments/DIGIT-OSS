@@ -74,7 +74,9 @@ public class PropertyQueryBuilder {
 			"    ownerdoc.documentuid as ownerdocuid, unit.occupancyDate as unitoccupancyDate, "+
 			"    insti.name as institutionname,insti.type as institutiontype,insti.tenantid as institenantId, "+
 			"    ownerdoc.userid as docuserid,ownerdoc.propertydetail as docassessmentnumber, "+
-			"    unit.usagecategorymajor as unitusagecategorymajor,unit.usagecategoryminor as unitusagecategoryminor "+
+			"    unit.usagecategorymajor as unitusagecategorymajor,unit.usagecategoryminor as unitusagecategoryminor,"+
+			"    unit.additionalDetails as unit_additionalDetails,owner.additionalDetails as ownerInfo_additionalDetails,"+
+			"    insti.additionalDetails as insti_additionalDetails,address.additionalDetails as add_additionalDetails "+
 			"    FROM (" +
 			"    select *,pt.propertyid as ptid,ptdl.assessmentnumber as propertydetailid,pt.additionalDetails as pt_additionalDetails, "+
 			"    ptdl.additionalDetails as ptdl_additionalDetails,ptdl.createdby as assesscreatedby,"+
