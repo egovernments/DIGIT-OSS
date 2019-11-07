@@ -268,7 +268,7 @@ serviceMaps:
       - jsonPath: $.Properties.*.workflow.auditDetails.lastModifiedTime
 
 
-    - query: INSERT INTO eg_pt_unit_v2(tenantId,id,active,propertyDetail,additionalDetails,floorNo,unitType,unitArea,usageCategoryMajor,usageCategoryMinor,usageCategorySubMinor,usageCategoryDetail,occupancyType,occupancyDate,constructionType,constructionSubType,arv,createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+    - query: INSERT INTO eg_pt_unit_v2(tenantId,id,active,propertyDetail,additionalDetails,floorNo,unitType,unitArea,usageCategoryMajor,usageCategoryMinor,usageCategorySubMinor,usageCategoryDetail,occupancyType,occupancyDate,constructionType,constructionSubType,arv,createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
       basePath: Properties.*.propertyDetails.*.units.*
       jsonMaps:
 
