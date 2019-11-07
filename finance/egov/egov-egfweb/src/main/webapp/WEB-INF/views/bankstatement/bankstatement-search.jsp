@@ -88,7 +88,7 @@
 						<label class="col-sm-2 control-label text-right"><spring:message code="lbl.asondate" />
 						</label>
 						<div class="col-sm-3 add-margin">
-							<form:input  path="asOnDate" id="filedate"  class="form-control datepicker" data-date-end-date="0d"  />
+							<form:input  path="asOnDate" id="filedate"  class="form-control datepicker" data-date-end-date="0d"  autocomplete="off"/>
 						</div>
 					</div>
 

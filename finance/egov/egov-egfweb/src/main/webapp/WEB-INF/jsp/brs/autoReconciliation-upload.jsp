@@ -111,10 +111,13 @@
 			</div>
 		
 		<div align="center">
-			<font style='color: red;'>
+			<font style='color: green;'>
 				<div id="msg">
 					<s:property value="message" />
 				</div>
+				<p class="error-block" id="lblError"></p>
+			</font>
+			<font style='color: red;'>
 				<p class="error-block" id="lblError"></p>
 			</font>
 		</div>
