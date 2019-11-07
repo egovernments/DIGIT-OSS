@@ -13,13 +13,11 @@ import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.pt.calculator.repository.Repository;
-import org.egov.pt.calculator.service.ReceiptService;
+import org.egov.pt.calculator.service.PaymentService;
 import org.egov.pt.calculator.web.models.*;
-import org.egov.pt.calculator.web.models.collections.Receipt;
-import org.egov.pt.calculator.web.models.demand.BillAccountDetail;
-import org.egov.pt.calculator.web.models.demand.Demand;
-import org.egov.pt.calculator.web.models.demand.DemandDetail;
-import org.egov.pt.calculator.web.models.demand.DemandResponse;
+import org.egov.pt.calculator.web.models.collections.Payment;
+import org.egov.pt.calculator.web.models.collections.PaymentSearchCriteria;
+import org.egov.pt.calculator.web.models.demand.*;
 import org.egov.pt.calculator.web.models.property.AuditDetails;
 import org.egov.pt.calculator.web.models.property.PropertyRequest;
 import org.egov.pt.calculator.web.models.property.RequestInfoWrapper;
@@ -31,8 +29,6 @@ import lombok.Getter;
 import org.springframework.util.CollectionUtils;
 
 import static org.egov.pt.calculator.util.CalculatorConstants.*;
-import static org.egov.pt.calculator.util.CalculatorConstants.FINANCIAL_YEAR_ENDING_DATE;
-import static org.egov.pt.calculator.util.CalculatorConstants.FINANCIAL_YEAR_STARTING_DATE;
 
 @Component
 @Getter
@@ -42,7 +38,7 @@ public class CalculatorUtils {
     private Configurations configurations;
 
     @Autowired
-    private ReceiptService rcptService;
+    private PaymentService paymentService;
 
     @Value("${customization.allowdepreciationonnoreceipts:false}")
     Boolean allowDepreciationsOnNoReceipts;
@@ -208,6 +204,30 @@ public class CalculatorUtils {
                 .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(criteria.getTenantId())
                 .append(SEPARATER).append(CONSUMER_CODE_SEARCH_FIELD_NAME)
                 .append(criteria.getPropertyId())
+                .append(SEPARATER).append(RECEIPT_START_DATE_PARAM)
+                .append(criteria.getFromDate())
+                .append(SEPARATER).append(RECEIPT_END_DATE_PARAM)
+                .append(criteria.getToDate())
+                .append(CalculatorConstants.SEPARATER).append(STATUS_FIELD_FOR_SEARCH_URL)
+                .append(ALLOWED_RECEIPT_STATUS);
+    }
+
+
+    /**
+     * Returns the Receipt search Url with tenantId, cosumerCode,service name and tax period
+     * parameters
+     *
+     * @param criteria
+     * @return
+     */
+    public StringBuilder getPaymentSearchUrl(PaymentSearchCriteria criteria) {
+
+
+        return new StringBuilder().append(configurations.getCollectionServiceHost())
+                .append(configurations.getReceiptSearchEndpoint()).append(URL_PARAMS_SEPARATER)
+                .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(criteria.getTenantId())
+                .append(SEPARATER).append(CONSUMER_CODE_SEARCH_FIELD_NAME)
+                .append(criteria.getConsumerCodes())
                 .append(SEPARATER).append(RECEIPT_START_DATE_PARAM)
                 .append(criteria.getFromDate())
                 .append(SEPARATER).append(RECEIPT_END_DATE_PARAM)
@@ -512,10 +532,43 @@ public class CalculatorUtils {
      * @param receipt
      * @return
      */
-    public BigDecimal getTaxAmtFromReceiptForApplicablesGeneration(Receipt receipt) {
+/*    public BigDecimal getTaxAmtFromReceiptForApplicablesGeneration(Receipt receipt) {
         BigDecimal taxAmt = BigDecimal.ZERO;
         BigDecimal amtPaid = BigDecimal.ZERO;
         List<BillAccountDetail> billAccountDetails = receipt.getBill().get(0).getBillDetails().get(0).getBillAccountDetails();
+        for (BillAccountDetail detail : billAccountDetails) {
+            if (TAXES_TO_BE_CONSIDERD.contains(detail.getTaxHeadCode())) {
+                taxAmt = taxAmt.add(detail.getAmount());
+                amtPaid = amtPaid.add(detail.getAdjustedAmount());
+            }
+        }
+        return taxAmt.subtract(amtPaid);
+    }*/
+
+
+    /**
+     * Returns the applicable total tax amount to be paid after the receipt
+     *
+     * @param payment
+     * @return
+     */
+    public BigDecimal getTaxAmtFromPaymentForApplicablesGeneration(Payment payment,TaxPeriod taxPeriod) {
+        BigDecimal taxAmt = BigDecimal.ZERO;
+        BigDecimal amtPaid = BigDecimal.ZERO;
+
+        List<BillAccountDetail> billAccountDetails = new LinkedList<>();
+
+        payment.getPaymentDetails().forEach(paymentDetail -> {
+            if(paymentDetail.getBusinessService().equalsIgnoreCase(SERVICE_FIELD_VALUE_PT)) {
+                paymentDetail.getBill().getBillDetails().forEach(billDetail -> {
+                    if (billDetail.getFromPeriod() == taxPeriod.getFromDate() && billDetail.getToPeriod() == taxPeriod.getToDate()) {
+                        billAccountDetails.addAll(billDetail.getBillAccountDetails());
+                    }
+                });
+            }
+        });
+
+
         for (BillAccountDetail detail : billAccountDetails) {
             if (TAXES_TO_BE_CONSIDERD.contains(detail.getTaxHeadCode())) {
                 taxAmt = taxAmt.add(detail.getAmount());
@@ -551,9 +604,9 @@ public class CalculatorUtils {
     public Boolean isAssessmentDepreciationAllowed(Demand demand, RequestInfoWrapper requestInfoWrapper) {
         boolean isDepreciationAllowed = false;
         if (allowDepreciationsOnNoReceipts) {
-            List<Receipt> receipts = rcptService.getReceiptsFromDemand(demand, requestInfoWrapper);
+            List<Payment> payments = paymentService.getPaymentsFromDemand(demand, requestInfoWrapper);
 
-            if (receipts.size() == 0)
+            if (payments.size() == 0)
                 isDepreciationAllowed = true;
         }
 

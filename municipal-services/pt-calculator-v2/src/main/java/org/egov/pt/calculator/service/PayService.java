@@ -7,12 +7,8 @@ import java.util.concurrent.TimeUnit;
 import org.egov.pt.calculator.util.CalculatorConstants;
 import org.egov.pt.calculator.util.CalculatorUtils;
 import org.egov.pt.calculator.web.models.TaxHeadEstimate;
-import org.egov.pt.calculator.web.models.collections.Receipt;
-import org.egov.pt.calculator.web.models.demand.Bill;
-import org.egov.pt.calculator.web.models.demand.BillAccountDetail;
-import org.egov.pt.calculator.web.models.demand.BillDetail;
-import org.egov.pt.calculator.web.models.demand.BillRequest;
-import org.egov.pt.calculator.web.models.demand.BillResponse;
+import org.egov.pt.calculator.web.models.collections.Payment;
+import org.egov.pt.calculator.web.models.demand.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -49,8 +45,8 @@ public class PayService {
 	 * @param assessmentYear
 	 * @return
 	 */
-	public Map<String, BigDecimal> applyPenaltyRebateAndInterest(BigDecimal taxAmt, BigDecimal collectedPtTax,
-			 String assessmentYear, Map<String, JSONArray> timeBasedExmeptionMasterMap,List<Receipt> receipts) {
+	public Map<String, BigDecimal> applyPenaltyRebateAndInterest(BigDecimal taxAmt,BigDecimal collectedPtTax,
+			 String assessmentYear, Map<String, JSONArray> timeBasedExmeptionMasterMap,List<Payment> payments,TaxPeriod taxPeriod) {
 
 		if (BigDecimal.ZERO.compareTo(taxAmt) >= 0)
 			return null;
@@ -66,7 +62,7 @@ public class PayService {
 		if (rebate.equals(BigDecimal.ZERO)) {
 			penalty = getPenalty(taxAmt, assessmentYear, timeBasedExmeptionMasterMap.get(CalculatorConstants.PENANLTY_MASTER));
 			interest = getInterest(taxAmt, assessmentYear, timeBasedExmeptionMasterMap.get(CalculatorConstants.INTEREST_MASTER),
-					receipts);
+					payments,taxPeriod);
 		}
 
 		estimates.put(CalculatorConstants.PT_TIME_REBATE, rebate.setScale(2, 2).negate());
@@ -74,6 +70,8 @@ public class PayService {
 		estimates.put(CalculatorConstants.PT_TIME_INTEREST, interest.setScale(2, 2));
 		return estimates;
 	}
+
+
 
 	/**
 	 * Returns the Amount of Rebate that can be applied on the given tax amount for
@@ -132,7 +130,7 @@ public class PayService {
 	 * @return
 	 */
 	public BigDecimal getInterest(BigDecimal taxAmt, String assessmentYear,
-								  JSONArray interestMasterList, List<Receipt> receipts) {
+								  JSONArray interestMasterList, List<Payment> payments,TaxPeriod taxPeriod) {
 
 		BigDecimal interestAmt = BigDecimal.ZERO;
 		Map<String, Object> interestMap = mDService.getApplicableMaster(assessmentYear, interestMasterList);
@@ -149,7 +147,7 @@ public class PayService {
 
 		if(interestStart < currentIST){
 
-			if (CollectionUtils.isEmpty(receipts)) {
+			if (CollectionUtils.isEmpty(payments)) {
 				
 				long numberOfDaysInMillies = getEODEpoch(currentUTC) - interestStart;
 				return calculateInterest(numberOfDaysInMillies, taxAmt, interestMap);
@@ -158,36 +156,32 @@ public class PayService {
 				
 				BigDecimal applicableAmount;
 				BigDecimal interestCalculated;
-				int numberOfPeriods = receipts.size()+1;
+				int numberOfPeriods = payments.size()+1;
 				long numberOfDaysInMillies;
-				Receipt receipt;
+				Payment payment;
 
 				for (int i = 0; i < numberOfPeriods; i++) {
 
 					if (i != numberOfPeriods - 1)
-						receipt = receipts.get(i);
+						payment = payments.get(i);
 					else
-						receipt = receipts.get(i - 1);
-					
-					BillDetail detail = receipt.getBill().get(0).getBillDetails().get(0);
+						payment = payments.get(i - 1);
 
 					if (i == 0) {
 
 						applicableAmount = taxAmt;
-						numberOfDaysInMillies = getEODEpoch(detail.getReceiptDate()) - interestStart;
+						numberOfDaysInMillies = getEODEpoch(payment.getTransactionDate()) - interestStart;
 						interestCalculated = calculateInterest(numberOfDaysInMillies, applicableAmount, interestMap);
 					} else if (i == numberOfPeriods - 1) {
 
-						applicableAmount = utils.getTaxAmtFromReceiptForApplicablesGeneration(receipt);
-						numberOfDaysInMillies = getEODEpoch(currentUTC) - getEODEpoch(detail.getReceiptDate());
+						applicableAmount = utils.getTaxAmtFromPaymentForApplicablesGeneration(payment, taxPeriod);
+						numberOfDaysInMillies = getEODEpoch(currentUTC) - getEODEpoch(payment.getTransactionDate());
 						interestCalculated = calculateInterest(numberOfDaysInMillies, applicableAmount, interestMap);
 					} else {
 
-						Receipt receiptPrev = receipts.get(i - 1);
-						Bill billPrev = receiptPrev.getBill().get(0);
-						BillDetail detailPrev = billPrev.getBillDetails().get(0);
-						applicableAmount = utils.getTaxAmtFromReceiptForApplicablesGeneration(receiptPrev);
-						numberOfDaysInMillies = getEODEpoch(detail.getReceiptDate()) - getEODEpoch(detailPrev.getReceiptDate());
+						Payment paymentPrev = payments.get(i - 1);
+						applicableAmount = utils.getTaxAmtFromPaymentForApplicablesGeneration(paymentPrev, taxPeriod);
+						numberOfDaysInMillies = getEODEpoch(payment.getTransactionDate()) - getEODEpoch(paymentPrev.getTransactionDate());
 						interestCalculated = calculateInterest(numberOfDaysInMillies, applicableAmount, interestMap);
 					}
 					interestAmt = interestAmt.add(interestCalculated);
@@ -197,20 +191,7 @@ public class PayService {
 		return interestAmt;
 	}
 	
-	/**
-	 * Return the BillResponse which contains apportioned bills
-	 * 
-	 * @param billRequest
-	 * @return
-	 */
-	public BillResponse apportionBills(BillRequest billRequest) {
 
-		billRequest.getBills().forEach(bill -> bill.getBillDetails().forEach(detail -> {
-			BigDecimal amtPaid = detail.getCollectedAmount();
-			apportionBillAccountDetails(detail.getBillAccountDetails(), amtPaid);
-		}));
-		return BillResponse.builder().bill(billRequest.getBills()).build();
-	}
 
 	/**
 	 * Apportions the amount paid to the bill account details based on the tax head codes priority

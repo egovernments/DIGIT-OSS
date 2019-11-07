@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
+import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.ResponseInfo;
 import org.egov.pt.calculator.util.CalculatorConstants;
@@ -12,16 +14,10 @@ import org.egov.pt.calculator.util.Configurations;
 import org.egov.pt.calculator.util.PBFirecessUtils;
 import org.egov.pt.calculator.validator.CalculationValidator;
 import org.egov.pt.calculator.web.models.*;
-import org.egov.pt.calculator.web.models.demand.Category;
-import org.egov.pt.calculator.web.models.demand.Demand;
-import org.egov.pt.calculator.web.models.demand.DemandDetail;
-import org.egov.pt.calculator.web.models.demand.DemandRequest;
-import org.egov.pt.calculator.web.models.demand.DemandResponse;
-import org.egov.pt.calculator.web.models.demand.TaxHeadMaster;
-import org.egov.pt.calculator.web.models.property.OwnerInfo;
-import org.egov.pt.calculator.web.models.property.Property;
-import org.egov.pt.calculator.web.models.property.PropertyDetail;
-import org.egov.pt.calculator.web.models.property.Unit;
+import org.egov.pt.calculator.web.models.BillingSlabSearchCriteria;
+import org.egov.pt.calculator.web.models.collections.Payment;
+import org.egov.pt.calculator.web.models.demand.*;
+import org.egov.pt.calculator.web.models.property.*;
 import org.egov.tracer.model.CustomException;
 import org.egov.tracer.model.ServiceCallException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +67,9 @@ public class EstimationService {
 	
 	@Autowired
 	private RestTemplate restTemplate;
+
+	@Autowired
+	private PaymentService paymentService;
 
 	@Value("${customization.pbfirecesslogic:false}")
 	Boolean usePBFirecessLogic;
@@ -208,8 +207,8 @@ public class EstimationService {
 				usageExemption = getExemption(detail.getUnits().get(0), taxAmt, assessmentYear,
 						propertyBasedExemptionMasterMap);
 		}
-		List<TaxHeadEstimate> taxHeadEstimates =  getEstimatesForTax(assessmentYear, taxAmt, usageExemption, detail, propertyBasedExemptionMasterMap,
-				timeBasedExemptionMasterMap);
+		List<TaxHeadEstimate> taxHeadEstimates =  getEstimatesForTax(requestInfo,taxAmt, usageExemption, property, propertyBasedExemptionMasterMap,
+				timeBasedExemptionMasterMap,masterMap);
 
 		Map<String,List> estimatesAndBillingSlabs = new HashMap<>();
 		estimatesAndBillingSlabs.put("estimates",taxHeadEstimates);
@@ -306,20 +305,21 @@ public class EstimationService {
 	 * Return an Estimate list containing all the required tax heads
 	 * mapped with respective amt to be paid.
 	 *
-	 * @param assessmentYear year for which calculation is being done
 	 * @param taxAmt tax amount for which rebate & penalty will be applied
 	 * @param usageExemption  total exemption value given for all unit usages
-	 * @param detail proeprty detail object
+	 * @param property proeprty  object
 	 * @param propertyBasedExemptionMasterMap property masters which contains exemption values associated with them
 	 * @param timeBasedExemeptionMasterMap masters with period based exemption values
 	 */
-	private List<TaxHeadEstimate> getEstimatesForTax(String assessmentYear, BigDecimal taxAmt, BigDecimal usageExemption, PropertyDetail detail,
+	private List<TaxHeadEstimate> getEstimatesForTax(RequestInfo requestInfo,BigDecimal taxAmt, BigDecimal usageExemption, Property property,
 			Map<String, Map<String, List<Object>>> propertyBasedExemptionMasterMap,
-			Map<String, JSONArray> timeBasedExemeptionMasterMap) {
+			Map<String, JSONArray> timeBasedExemeptionMasterMap,Map<String, Object> masterMap) {
 
 		BigDecimal payableTax = taxAmt;
 		List<TaxHeadEstimate> estimates = new ArrayList<>();
 
+		PropertyDetail detail = property.getPropertyDetails().get(0);
+		String assessmentYear = detail.getFinancialYear();
 		// taxes
 		estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_TAX).estimateAmount(taxAmt.setScale(2, 2)).build());
 
@@ -356,9 +356,25 @@ public class EstimationService {
 		estimates.add(
 				TaxHeadEstimate.builder().taxHeadCode(PT_CANCER_CESS).estimateAmount(cancerCess.setScale(2, 2)).build());
 
+		Map<String, Map<String, Object>> financialYearMaster = (Map<String, Map<String, Object>>) masterMap.get(FINANCIALYEAR_MASTER_KEY);
+
+		Map<String, Object> finYearMap = financialYearMaster.get(assessmentYear);
+		Long fromDate = (Long) finYearMap.get(FINANCIAL_YEAR_STARTING_DATE);
+		Long toDate = (Long) finYearMap.get(FINANCIAL_YEAR_ENDING_DATE);
+
+		TaxPeriod taxPeriod = TaxPeriod.builder().fromDate(fromDate).toDate(toDate).build();
+
+
+		List<Payment> payments = new LinkedList<>();
+
+		if(!StringUtils.isEmpty(property.getPropertyId()) && !StringUtils.isEmpty(property.getTenantId())){
+			payments = paymentService.getPaymentsFromProperty(property, RequestInfoWrapper.builder().requestInfo(requestInfo).build());
+		}
+
+
 		// get applicable rebate and penalty
 		Map<String, BigDecimal> rebatePenaltyMap = payService.applyPenaltyRebateAndInterest(payableTax, BigDecimal.ZERO,
-				 assessmentYear, timeBasedExemeptionMasterMap,null);
+				 assessmentYear, timeBasedExemeptionMasterMap,payments,taxPeriod);
 
 		if (null != rebatePenaltyMap) {
 

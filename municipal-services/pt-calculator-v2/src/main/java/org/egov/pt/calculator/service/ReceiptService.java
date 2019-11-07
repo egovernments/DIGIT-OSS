@@ -1,3 +1,4 @@
+/*
 package org.egov.pt.calculator.service;
 
 import java.util.Comparator;
@@ -42,13 +43,15 @@ public class ReceiptService {
 			+ "FROM eg_pt_assessment where assessmentyear=? AND propertyId=?";
 
 
-	/**
+	*/
+/**
 	 * Gets all receipts corresponding to the given demand
 	 * @param assessmentYear
 	 * @param demand
 	 * @param requestInfoWrapper
 	 * @return
-	 */
+	 *//*
+
 	public List<Receipt> getReceiptsFromDemand(Demand demand, RequestInfoWrapper requestInfoWrapper) {
         ReceiptSearchCriteria criteria = new ReceiptSearchCriteria();
         criteria.setTenantId(demand.getTenantId());
@@ -58,13 +61,15 @@ public class ReceiptService {
 		return getReceiptsFromPropertyAndFY(criteria, requestInfoWrapper);
 	}
 
-	/**
+	*/
+/**
 	 * Gets all receipts corresponding to the given property and financial year
 	 * @param tenantid
 	 * @param propertyId
 	 * @param requestInfoWrapper
 	 * @return
-	 */
+	 *//*
+
 	public List<Receipt> getReceiptsFromPropertyAndFY( ReceiptSearchCriteria receiptSearchCriteria,  RequestInfoWrapper requestInfoWrapper) {
 //		List<String> consumercodes =  getCosumerCodesForDemandFromCurrentFinancialYear (assessmentYear, propertyId);
 		List<Receipt> receipts = new LinkedList<>();
@@ -76,15 +81,18 @@ public class ReceiptService {
 
 
 
-    /**
+    */
+/**
      * Fetches the receipts for the given params
      * @param receiptSearchCriteria
      * @param requestInfoWrapper
      * @return
-     */
+     *//*
+
 	private List<Receipt> 	getReceipts(ReceiptSearchCriteria receiptSearchCriteria, RequestInfoWrapper requestInfoWrapper) {
 
 		StringBuilder url = utils.getReceiptSearchUrl(receiptSearchCriteria);
 		return mapper.convertValue(repository.fetchResult(url, requestInfoWrapper), ReceiptRes.class).getReceipts();
 	}
 }
+*/

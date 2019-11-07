@@ -2,7 +2,6 @@ package org.egov.pt.calculator.service;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -13,7 +12,7 @@ import org.egov.pt.calculator.util.CalculatorUtils;
 import org.egov.pt.calculator.util.Configurations;
 import org.egov.pt.calculator.validator.CalculationValidator;
 import org.egov.pt.calculator.web.models.*;
-import org.egov.pt.calculator.web.models.collections.Receipt;
+import org.egov.pt.calculator.web.models.collections.Payment;
 import org.egov.pt.calculator.web.models.demand.*;
 import org.egov.pt.calculator.web.models.property.OwnerInfo;
 import org.egov.pt.calculator.web.models.property.Property;
@@ -64,15 +63,15 @@ public class DemandService {
 
 	@Autowired
 	private MasterDataService mstrDataService;
-	
-	@Autowired
-	private ReceiptService rcptService;
 
 	@Autowired
 	private CalculationValidator validator;
 
 	@Autowired
 	private MasterDataService mDataService;
+
+	@Autowired
+    private PaymentService paymentService;
 
 	/**
 	 * Generates and persists the demand to billing service for the given property
@@ -423,35 +422,30 @@ public class DemandService {
 		 * method to get the latest collected time from the receipt service
 		 */
 
-		/*
-		* quick fix has to reverted
-		* */
-		//List<Receipt> receipts = rcptService.getReceiptsFromDemand(demand,requestInfoWrapper);
 
-		List<Receipt> receipts = null;
+		List<Payment> payments = paymentService.getPaymentsFromDemand(demand,requestInfoWrapper);
 
-		BigDecimal taxAmtForApplicableGeneration = utils.getTaxAmtFromDemandForApplicablesGeneration(demand);
-		BigDecimal collectedApplicableAmount = BigDecimal.ZERO;
-		BigDecimal totalCollectedAmount = BigDecimal.ZERO;
-		BigDecimal oldInterest = BigDecimal.ZERO;
 
-		for (DemandDetail detail : demand.getDemandDetails()) {
-			
-			totalCollectedAmount = totalCollectedAmount.add(detail.getCollectionAmount());
-			if (CalculatorConstants.TAXES_TO_BE_CONSIDERD.contains(detail.getTaxHeadMasterCode()))
-				collectedApplicableAmount = collectedApplicableAmount.add(detail.getCollectionAmount());
-			if (detail.getTaxHeadMasterCode().equalsIgnoreCase(CalculatorConstants.PT_TIME_INTEREST))
-				oldInterest = oldInterest.add(detail.getTaxAmount());
-		}
-		
 		boolean isRebateUpdated = false;
 		boolean isPenaltyUpdated = false;
 		boolean isInterestUpdated = false;
 		
 		List<DemandDetail> details = demand.getDemandDetails();
-		
-		Map<String, BigDecimal> rebatePenaltyEstimates = payService.applyPenaltyRebateAndInterest(taxAmtForApplicableGeneration,
-				collectedApplicableAmount, taxPeriod.getFinancialYear(), timeBasedExmeptionMasterMap,receipts);
+
+		BigDecimal taxAmt = utils.getTaxAmtFromDemandForApplicablesGeneration(demand);
+		BigDecimal collectedPtTax = BigDecimal.ZERO;
+		BigDecimal totalCollectedAmount = BigDecimal.ZERO;
+
+		for (DemandDetail detail : demand.getDemandDetails()) {
+
+			totalCollectedAmount = totalCollectedAmount.add(detail.getCollectionAmount());
+			if (CalculatorConstants.TAXES_TO_BE_CONSIDERD.contains(detail.getTaxHeadMasterCode()))
+				collectedPtTax = collectedPtTax.add(detail.getCollectionAmount());
+		}
+
+
+		Map<String, BigDecimal> rebatePenaltyEstimates = payService.applyPenaltyRebateAndInterest(taxAmt,collectedPtTax,
+                taxPeriod.getFinancialYear(), timeBasedExmeptionMasterMap,payments,taxPeriod);
 		
 		if(null == rebatePenaltyEstimates) return isCurrentDemand;
 		
