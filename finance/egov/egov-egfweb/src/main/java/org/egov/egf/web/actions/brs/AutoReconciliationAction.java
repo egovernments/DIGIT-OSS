@@ -75,6 +75,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @ParentPackage("egov")
 @Results({
@@ -151,6 +152,7 @@ public class AutoReconciliationAction extends BaseFormAction {
     private BigDecimal brsBalance;
     private BigDecimal totalNotReconciledAmount;
     private Integer statusId;
+    private List<Bank> allBankHavingAccounts;
 
     public BigDecimal getBrsBalance() {
         return autoReconcileHelper.getBrsBalance();
@@ -177,7 +179,7 @@ public class AutoReconciliationAction extends BaseFormAction {
     @SuppressWarnings("unchecked")
     public void prepare()
     {
-    	List<Bank> allBankHavingAccounts = bankHibernateDAO.getAllBankHavingBranchAndAccounts(); 
+    	allBankHavingAccounts = bankHibernateDAO.getAllBankHavingBranchAndAccounts(); 
         dropdownData.put("bankList", allBankHavingAccounts);  
         dropdownData.put("branchList", branchList);
         dropdownData.put("accountList", accountList);
@@ -206,8 +208,7 @@ public class AutoReconciliationAction extends BaseFormAction {
 		autoReconcileHelper.setToDate(toDate);
 		autoReconcileHelper.setBankStatmentInXls(bankStatmentInXls);
 		autoReconcileHelper.setBankStatmentInXlsFileName(bankStatmentInXlsFileName);
-		 
-		
+		autoReconcileHelper.setBank((Bank) allBankHavingAccounts.stream().filter(bank -> bank.getId().equals(bankId)).collect(Collectors.toList()).get(0));
 	}
 
 	@Action(value = "/brs/autoReconciliation-newForm")

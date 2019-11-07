@@ -59,6 +59,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.struts2.convention.annotation.Action;
+import org.egov.commons.Bank;
 import org.egov.commons.Bankaccount;
 import org.egov.commons.Bankbranch;
 import org.egov.commons.CFinancialYear;
@@ -124,6 +125,7 @@ public class AutoReconcileHelper {
 
     private static final String DID_NOT_FIND_MATCH_IN_BANKBOOK = "did not find match in Bank Book  (InstrumentHeader)";
     private static final Logger LOGGER = LoggerFactory.getLogger(AutoReconciliationAction.class);
+    private static final int BANKNAME_ROW_INDEX = 0;
     private static final int ACCOUNTNUMBER_ROW_INDEX = 2;
     private static final int STARTOF_DETAIL_ROW_INDEX = 8;
     private static final int TXNDT_INDEX = 1;
@@ -164,6 +166,7 @@ public class AutoReconcileHelper {
     private String accNo;
     private File bankStatmentInXls;
     private String bankStatmentInXlsFileName;
+    private Bank bank;
     private String failureMessage = "Invalid data in  the  following row(s), please correct and upload again\n";
     private boolean isFailed;
     private ReportHelper reportHelper;
@@ -249,20 +252,7 @@ public class AutoReconcileHelper {
             final HSSFSheet sheet = wb.getSheetAt(0);
             sheet.getFirstRowNum();
             // Validating selected bankaccount and BankStatements bankaccount
-            final HSSFRow row = sheet.getRow(ACCOUNTNUMBER_ROW_INDEX);
-            if (row == null) {
-                bank_account_not_match_msg = bank_account_not_match_msg.replace("#name", bankStatmentInXlsFileName);
-                throw new ValidationException(Arrays.asList(new ValidationError(bank_account_not_match_msg,
-                        bank_account_not_match_msg)));
-            }
-            String strValue2 = getStrValue(row.getCell(0));
-            strValue2 = strValue2.substring(strValue2.indexOf(':') + 1, strValue2.indexOf('-')).trim();
-            if (!strValue2.equals(accNo.trim())) {
-                bank_account_not_match_msg = bank_account_not_match_msg.replace("#name", bankStatmentInXlsFileName);
-                throw new ValidationException(Arrays.asList(new ValidationError(bank_account_not_match_msg,
-                        bank_account_not_match_msg)));
-            }
-
+            this.validateBankAccountInfo(sheet);
             AutoReconcileBean ab = null;
             HSSFRow detailRow = null;
             String dateStr = null;
@@ -367,6 +357,37 @@ public class AutoReconcileHelper {
         }
 
         return "upload";
+    }
+
+    private void validateBankAccountInfo(HSSFSheet sheet) {
+        // TODO Auto-generated method stub
+        final HSSFRow bankNameRow = sheet.getRow(BANKNAME_ROW_INDEX);
+        String bankName = getStrValue(bankNameRow.getCell(0));
+        if(bankNameRow == null || StringUtils.isBlank(bankName) || !bankName.trim().equalsIgnoreCase(bank.getName())){
+            failureMessage = "Bank Name row(row no : #rowNumber) in spreadsheet #name should not be empty or different with selected bank".replace("#rowNumber", BANKNAME_ROW_INDEX+1+"").replace("#name", bankStatmentInXlsFileName);
+            throw new ValidationException(Arrays.asList(new ValidationError(failureMessage, failureMessage)));
+        }
+        final HSSFRow bankAccountRow = sheet.getRow(ACCOUNTNUMBER_ROW_INDEX);
+        String bankAccount = getStrValue(bankAccountRow.getCell(0));
+        if (bankAccountRow == null || StringUtils.isBlank(bankAccount)) {
+            failureMessage = "Bank Account row(row no : #rowNumber) in spreadsheet #name should not be empty"
+                    .replace("#rowNumber", ACCOUNTNUMBER_ROW_INDEX+1+"")
+                    .replace("#name", bankStatmentInXlsFileName);
+            throw new ValidationException(Arrays.asList(new ValidationError(failureMessage,failureMessage)));
+        }
+        if(bankAccount.indexOf(':') == -1 || bankAccount.indexOf('-') == -1){
+            failureMessage = "Bank Account row(row no : #rowNumber) in spreadsheet #name should be in suggested format"
+                    .replace("#rowNumber", ACCOUNTNUMBER_ROW_INDEX+1+"")
+                    .replace("#name", bankStatmentInXlsFileName);
+            failureMessage += ". hint : colon(:) or hyphen(-) could be missing";
+            throw new ValidationException(Arrays.asList(new ValidationError(failureMessage,failureMessage)));
+        }
+        bankAccount = bankAccount.substring(bankAccount.indexOf(':') + 1, bankAccount.indexOf('-')).trim();
+        if (!bankAccount.equals(accNo.trim())) {
+            bank_account_not_match_msg = bank_account_not_match_msg.replace("#name", bankStatmentInXlsFileName);
+            throw new ValidationException(Arrays.asList(new ValidationError(bank_account_not_match_msg,
+                    bank_account_not_match_msg)));
+        }
     }
 
     private void insert(final AutoReconcileBean ab) {
@@ -1328,6 +1349,14 @@ public class AutoReconcileHelper {
 
     public String getSuccessMessage() {
         return successMessage;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
     }
 
 }

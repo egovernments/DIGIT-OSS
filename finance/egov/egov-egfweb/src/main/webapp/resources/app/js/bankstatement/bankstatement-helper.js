@@ -180,6 +180,5 @@ function callAjaxSearch() {
     });
 }
 function downloadFile(fileStoreId) {
-    window.open("/services/EGF/bankstatement/downloadDoc?fileStoreId=" + fileStoreId, '',
-        'height=650,width=980,scrollbars=yes,left=0,top=0,status=yes');
+	window.location.href = "/services/EGF/bankstatement/downloadDoc?fileStoreId=" + fileStoreId;
 }
