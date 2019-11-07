@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   sortByEpoch,
   getEpochForDate,
@@ -24,7 +25,8 @@ export const searchResults = {
         name: getTextToLocalMapping("Action"),
         options: {
           filter: false,
-          customBodyRender: value => (
+          customBodyRender: (value, row) => (
+            <Link to={navigateToCommonPay(row.rowData)}>
             <span
               style={{
                 color: "#FE7A51",
@@ -32,9 +34,11 @@ export const searchResults = {
               }}
             >
               {getTextToLocalMapping(value)}
+              {console.log('row----', row)}
             </span>
+            </Link>
           )
-        }
+        },
       },
       {
         name: "tenantId",
@@ -73,6 +77,14 @@ export const searchResults = {
         });
         return { data: finalData, currentOrder: !order ? "asc" : "desc" };
       }
-    }
-  }
+    },
+    
+  },
+  
 };
+
+const navigateToCommonPay = (rowData)=>{
+  if(Array.isArray(rowData) && rowData.length > 0){
+    return `/egov-common/pay?consumerCode=${rowData[0]}&tenantId=${rowData[7]}&businessService=${rowData[2]}`
+  }
+}

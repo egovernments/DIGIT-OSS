@@ -83,7 +83,9 @@ export const searchApiCall = async (state, dispatch) => {
         billDate: get(item, `billDate`),
         billAmount: get(item, `totalAmount`),
         status: get(item, `status`),
-        action: getActionItem(get(item, `status`))
+        action: getActionItem(get(item, `status`)),
+        consumerCode: get(item, `consumerCode`),
+        tenantId: get(item, `tenantId`),
       };
     });
 
@@ -101,8 +103,9 @@ export const searchApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("Bill Amount(Rs)")]: item.billAmount || "-",
         [getTextToLocalMapping("Status")]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
         [getTextToLocalMapping("Action")]: item.action || "-",
-        tenantId: item.tenantId,
-        action : item.action
+        tenantId: item.tenantId || "-",
+        action : item.action,
+        consumerCode: item.consumerCode || "-"
       }));
       dispatch(
         handleField(
@@ -110,6 +113,14 @@ export const searchApiCall = async (state, dispatch) => {
           "components.div.children.searchResults",
           "props.data",
           data
+        )
+      );
+      dispatch(
+        handleField(
+          "billSearch",
+          "components.div.children.searchResults",
+          "props.tableData",
+          billTableData
         )
       );
       // dispatch(
