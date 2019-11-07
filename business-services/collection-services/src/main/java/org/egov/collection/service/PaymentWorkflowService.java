@@ -74,10 +74,8 @@ public class PaymentWorkflowService {
             if(!workflow.getAction().equals(action))
                 throw new CustomException("PAYMENT_WORKFLOW_SINGLE_ACTION_ALLOWED", "All workflow requests should be " +
                         "of the same action");
-
             if(!workflow.getTenantId().equalsIgnoreCase(tenantId))
                 throw new CustomException("CROSS_TENANT_OP_NOT_ALLOWED", "All requests should act on a single tenant ");
-
             paymentIds.add(workflow.getPaymentId());
             workflowRequestByPaymentId.put(workflow.getPaymentId(), workflow);
         }
@@ -134,7 +132,6 @@ public class PaymentWorkflowService {
 
         List<Payment> validatedPayments = paymentWorkflowValidator.validateForCancel(new ArrayList<>
                 (workflowRequestByPaymentId.values()), payments);
-
 
         for(Payment payment : validatedPayments) {
             payment.setInstrumentStatus(InstrumentStatusEnum.CANCELLED);
