@@ -613,17 +613,26 @@ const getTimeFormat = (epochTime) => {
   const Format = epochTime.getHours() % 12 > 0 ? epochTime.getHours() % 12 : 12;
   return Format.toString() + ":" + epochTime.toString().split(":")[1] + " " + Period;
 };
+const getDateFormat = (epochTime) => {
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+  "July", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+  epochTime = new Date(epochTime);
+  const day = epochTime.getDay() ;
+  const Month = epochTime.getMonth() ;
+  return day.toString() + " " + monthNames[Month-1];
+};
 
 const getEventSLA = (item) => {
   const days = (Date.now() - item.auditDetails.lastModifiedTime) / (1000 * 60 * 60 * 24);
   let sla;
 
   if (item.eventType === "EVENTSONGROUND") {
-    const disp = getTimeFormat(item.eventDetails.fromDate) + " " + "-" + " " + getTimeFormat(item.eventDetails.toDate);
+    const disp =getDateFormat(item.eventDetails.fromDate) +" "+ getTimeFormat(item.eventDetails.fromDate) +  "-"+getDateFormat(item.eventDetails.toDate) +" "+ getTimeFormat(item.eventDetails.toDate);
     sla = (
       // <div style={{ display: "flex" }}>
       //   <Icon name="access-time" action="device" viewBox="0 0 24 24" style={{ height: "20px", width: "35px" }} />
-      <Label leftWrapperStyle fontSize={14} color="rgba(0, 0, 0, 0.60)" label={disp} containerStyle={{ marginBottom: 5, marginLeft: 5 }} />
+      <Label leftWrapperStyle fontSize={13} color="rgba(0, 0, 0, 0.60)" label={disp} containerStyle={{ marginBottom: 5, marginLeft: -7 }} />
       // </div>
     );
   } else {
