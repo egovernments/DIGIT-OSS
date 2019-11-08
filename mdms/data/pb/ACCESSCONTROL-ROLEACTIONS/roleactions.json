@@ -19045,6 +19045,18 @@
       "actionid": 1870,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1871,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "COLL_REMIT_TO_BANK",
+      "actionid": 1871,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
