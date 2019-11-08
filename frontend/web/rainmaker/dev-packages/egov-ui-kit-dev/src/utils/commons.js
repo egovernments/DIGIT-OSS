@@ -618,9 +618,9 @@ const getDateFormat = (epochTime) => {
   "July", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
   epochTime = new Date(epochTime);
-  const day = epochTime.getDay() ;
+  const day = epochTime.getDate() ;
   const Month = epochTime.getMonth() ;
-  return day.toString() + " " + monthNames[Month-1];
+  return day.toString() + " " + monthNames[Month];
 };
 
 const getEventSLA = (item) => {
