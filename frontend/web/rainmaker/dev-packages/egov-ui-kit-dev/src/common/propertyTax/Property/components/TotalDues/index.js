@@ -14,10 +14,8 @@ const labelStyle = {
   paddingRight: "20px",
 };
 
-const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
-  console.log(process.env.REACT_APP_NAME,'process.env.REACT_APP_NAME');
-  
-  const envURL=process.env.REACT_APP_NAME === "Citizen"?'/egov-common/citizen-pay':'/egov-common/pay';
+const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => { 
+  const envURL='/egov-common/pay';
   const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
   return (
     <div className="row col-sm-12">
@@ -41,7 +39,7 @@ const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
         <div className="col-xs-6 col-sm-3 flex-child">
           <TotalDuesButton labelText="PT_TOTALDUES_PAY" onClickAction={() => {
             history.push(
-              `${envURL}?consumerCode=${consumerCode}&tenantId=${tenantId}&businessService=PT`);
+              `${envURL}?consumerCode=${consumerCode}&tenantId=${tenantId}`);
           }} />
         </div>
       )}
