@@ -4,6 +4,7 @@
        "serviceName": "rainmaker-noc",
        "version": "1.0.0",
        "baseKeyPath": "$.FireNOCs.*",
+       "entityIdPath":"$.fireNOCNumber",
        "isCommonTableBorderRequired":true,
        "mappings": [
           {
