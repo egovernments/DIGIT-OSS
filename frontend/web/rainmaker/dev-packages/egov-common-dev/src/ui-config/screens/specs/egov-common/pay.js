@@ -100,6 +100,7 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
     await generateBill(dispatch, consumerCode, tenantId);
 
     let payload = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0]");
+    let totalAmount = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]");
 
     let totalAmount = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]");
 
@@ -114,6 +115,7 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
     }
 
     if (get(totalAmount, "totalAmount") != undefined) {
+        const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
         dispatch(handleField("pay", componentJsonpath, "props.value", totalAmount.totalAmount));
     }
 
