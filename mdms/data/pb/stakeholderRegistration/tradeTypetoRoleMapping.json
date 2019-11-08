@@ -6,31 +6,31 @@
       "id": 1,
       "tradeType": "SERVICES.NGBS.ARCHITECT",
       "role": "BPA_ARCHITECT",
-      "applicationFee": "100"
+      "applicationFee": 100
     },
     {
       "id": 2,
       "tradeType": "SERVICES.NGBS.BUILDER",
       "role": "BPA_BUILDER",
-      "applicationFee": "200"
+      "applicationFee": 200
     },
     {
       "id": 3,
       "tradeType": "SERVICES.NGBS.ENGINEER",
       "role": "BPA_ENGINEER",
-      "applicationFee": "300"
+      "applicationFee": 300
     },
     {
       "id": 4,
       "tradeType": "SERVICES.NGBS.STRUCTURALENGINEER",
       "role": "BPA_STRUCTURALENGINEER",
-      "applicationFee": "400"
+      "applicationFee": 400
     },
     {
       "id": 5,
       "tradeType": "SERVICES.NGBS.TOWNPLANNER",
       "role": "BPA_TOWNPLANNER",
-      "applicationFee": "500"
+      "applicationFee": 500
     }
   ]
 }
