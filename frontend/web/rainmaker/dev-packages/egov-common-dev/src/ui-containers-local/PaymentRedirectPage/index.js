@@ -10,10 +10,13 @@ import { getSearchResults } from "../../ui-utils/commons";
 class PaymentRedirect extends Component {
   componentDidMount = async () => {
     let { search } = this.props.location;
+    const txnQuery=search.split('&')[0].replace('eg_pg_txnid','transactionId');
+    console.log(txnQuery,'txnQuery');
+    
     try {
       let pgUpdateResponse = await httpRequest(
         "post",
-        "pg-service/transaction/v1/_update" + search,
+        "pg-service/transaction/v1/_update" + txnQuery,
         "_update",
         [],
         {}
@@ -22,30 +25,24 @@ class PaymentRedirect extends Component {
       let tenantId = get(pgUpdateResponse, "Transaction[0].tenantId");
       if (get(pgUpdateResponse, "Transaction[0].txnStatus") === "FAILURE") {
         this.props.setRoute(
-          `/egov-common/acknowledgement?purpose=${"pay"}&status=${"failure"}&applicationNumber=${consumerCode}&tenantId=${tenantId}`
+          `/egov-common/acknowledgement?status=${"failure"}&consumerCode=${consumerCode}&tenantId=${tenantId}`
         );
       } else {
-        let response = await getSearchResults([
-          {
-            key: "tenantId",
-            value: tenantId
-          },
-          { key: "applicationNumber", value: consumerCode }
-        ]);
-        set(response, "FireNOCs[0].fireNOCDetails.action", "PAY");
-        response = await httpRequest(
+        const srcQuery=`?tenantId=${tenantId}&consumerCode=${consumerCode}`
+ 
+ 
+        let searchResponse = await httpRequest(
           "post",
-          "/firenoc-services/v1/_update",
-          "",
+          "collection-services/payments/_search" + srcQuery,
+          "_search",
           [],
-          {
-            FireNOCs: get(response, "FireNOCs", [])
-          }
+          {}
         );
 
-        let transactionId = get(pgUpdateResponse, "Transaction[0].txnId");
+        let transactionId = get(searchResponse, "Payments[0].paymentDetails[0].receiptNumber");
         this.props.setRoute(
-          `/egov-common/acknowledgement?purpose=${"pay"}&status=${"success"}&applicationNumber=${consumerCode}&tenantId=${tenantId}&secondNumber=${transactionId}`
+          // status=success&receiptNumber=PB-TL-2019-10-29-003220&consumerCode=PT-1909-208877&tenantId=pb.amritsar
+          `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}`
         );
       }
     } catch (e) {

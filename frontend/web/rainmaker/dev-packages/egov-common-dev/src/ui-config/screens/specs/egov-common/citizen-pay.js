@@ -8,9 +8,11 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import { getSearchResults } from "../../../../ui-utils/commons";
+import AmountToBePaid from "./payResource/amount-to-be-paid";
 import { generateBill, getCurrentFinancialYear } from "../utils";
 import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const header = getCommonContainer({
     header: getCommonHeader({
@@ -31,41 +33,22 @@ const header = getCommonContainer({
 const fetchBill = async(state, dispatch, consumerCode, tenantId, businessService) => {
     await generateBill(dispatch, consumerCode, tenantId, businessService);
 
-    let payload = get(
-        state,
-        "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0]"
-    );
+    let payload = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0]");
 
     //Collection Type Added in CS v1.1
-    payload &&
-        dispatch(
-            prepareFinalObject(
-                "ReceiptTemp[0].Bill[0].billDetails[0].collectionType",
-                "COUNTER"
-            )
-        );
+    payload && dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].billDetails[0].collectionType", "COUNTER"));
 
-    if (get(payload, "totalAmount") != undefined) {
+    if (get(payload, "amount") != undefined) {
         //set amount paid as total amount from bill - destination changed in CS v1.1
-        dispatch(
-            prepareFinalObject(
-                "ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid",
-                payload.totalAmount
-            )
-        );
+        dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid", payload.amount));
         //set total amount in instrument
-        dispatch(
-            prepareFinalObject(
-                "ReceiptTemp[0].instrument.amount",
-                payload.totalAmount
-            )
-        );
+        dispatch(prepareFinalObject("ReceiptTemp[0].instrument.amount", payload.amount));
+        const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
+        dispatch(handleField("citizen-pay", componentJsonpath, "props.value", payload.amount));
     }
 
     //Initially select instrument type as Cash
-    dispatch(
-        prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.name", "Cash")
-    );
+    dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.name", "Cash"));
 
     //set tenantId
     dispatch(prepareFinalObject("ReceiptTemp[0].tenantId", tenantId));
@@ -74,10 +57,9 @@ const fetchBill = async(state, dispatch, consumerCode, tenantId, businessService
     dispatch(prepareFinalObject("ReceiptTemp[0].instrument.tenantId", tenantId));
 };
 
-
 const screenConfig = {
     uiFramework: "material-ui",
-    name: "pay",
+    name: "citizen-pay",
     beforeInitScreen: (action, state, dispatch) => {
         let consumerCode = getQueryArg(
             window.location.href,
@@ -94,7 +76,7 @@ const screenConfig = {
             componentPath: "Form",
             props: {
                 className: "common-div-css",
-                id: "pay"
+                id: "citizen-pay"
             },
             children: {
                 headerDiv: {
@@ -119,7 +101,8 @@ const screenConfig = {
                                 labelName: "Payment Collection Details",
                                 labelKey: "NOC_PAYMENT_HEAD"
                             }),
-                            estimateDetails
+                            estimateDetails,
+                            AmountToBePaid
                         })
                     }
                 },

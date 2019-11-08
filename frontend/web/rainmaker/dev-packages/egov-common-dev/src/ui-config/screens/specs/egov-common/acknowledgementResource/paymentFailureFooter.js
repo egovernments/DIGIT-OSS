@@ -15,9 +15,11 @@ const getCommonApplyFooter = children => {
 export const paymentFailureFooter = (consumerCode, tenant) => {
     console.log(consumerCode, tenant);
 
-    const roleExists = ifUserRoleExists("CITIZEN");
-    const redirectionURL = roleExists ? "/egov-common/citizen-pay" : "/egov-common/pay";
-    const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}&businessService=PT`
+    // const roleExists = ifUserRoleExists("CITIZEN");
+    // const redirectionURL = roleExists ? "/egov-common/citizen-pay" : "/egov-common/pay";
+    const redirectionURL = "/egov-common/pay";
+    const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}`
+        // const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}&businessService=PT`
     console.log(path);
 
     return getCommonApplyFooter({

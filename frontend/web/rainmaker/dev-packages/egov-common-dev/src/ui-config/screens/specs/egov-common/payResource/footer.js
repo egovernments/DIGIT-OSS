@@ -6,86 +6,72 @@ import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
-import { getSearchResults } from "../../../../../ui-utils/commons";
-import { convertDateToEpoch, getBill, validateFields } from "../../utils";
+import { convertDateToEpoch, validateFields } from "../../utils";
+import { ifUserRoleExists } from "../../utils";
 
-export const callPGService = async(state, dispatch) => {
-        const tenantId = getQueryArg(window.location.href, "tenantId");
-        const consumerCode = getQueryArg(window.location.href, "consumerCode");
-        const businessService = getQueryArg(window.location.href, "businessService");
-        let callbackUrl = `${
+export const callPGService = async (state, dispatch) => {
+  
+  const tenantId = getQueryArg(window.location.href, "tenantId");
+  const consumerCode = getQueryArg(window.location.href, "consumerCode");
+  const businessService =  get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService");
+  // const businessService = getQueryArg(window.location.href, "businessService"); businessService
+  let callbackUrl = `${
     process.env.NODE_ENV === "production"
       ? `${window.origin}/citizen`
       : window.origin
-  }/egov-common/paymentRedirectPage`;
-  console.log(state);
-  const {screenConfiguration={}}=state;
+    }/egov-common/paymentRedirectPage`;
+
+  const { screenConfiguration = {} } = state;
   const {
-    preparedFinalObject={}
-  }=screenConfiguration;
+    preparedFinalObject = {}
+  } = screenConfiguration;
   const {
-    ReceiptTemp={}
-  }=preparedFinalObject;
-  // try {
-  //   const queryObj = [
-  //     {
-  //       key: "tenantId",
-  //       value: tenantId
-  //     },
-  //     {
-  //       key: "consumerCode",
-  //       value: consumerCode
-  //     }
-  //   ];
-  //   const billPayload = await getBill(queryObj);
-  const billPayload=ReceiptTemp[0];
-    // const taxAndPayments = get(billPayload, "Bill[0].taxAndPayments", []).map(
-    //   item => {
-    //     if (item.businessService === businessService) {
-    //       item.amountPaid = get(
-    //         billPayload,
-    //         "Bill[0].billDetails[0].amount"
-    //       );
-    //     }
-    //     return item;
-    //   }
-    // );
-    let  taxAndPayments =[];
-    taxAndPayments.push({
-      taxAmount:get(billPayload, "Bill[0].billDetails[0].amount"),
-      businessService:businessService,
-      amountPaid:get(billPayload, "Bill[0].billDetails[0].amount")
-    })
-    try {
-      const requestBody = {
-        Transaction: {
-          tenantId,
-          txnAmount: get(billPayload, "Bill[0].billDetails[0].amount"),
-          module: businessService,
-          taxAndPayments,
-          billId: get(billPayload, "Bill[0].id"),
-          consumerCode: consumerCode,
-          productInfo: "Common Payment",
-          gateway: "AXIS",
-          callbackUrl
-        }
-      };
-      const goToPaymentGateway = await httpRequest(
-        "post",
-        "pg-service/transaction/v1/_create",
-        "_create",
-        [],
-        requestBody
-      );
-      const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl");
-      window.location = redirectionUrl;
-    } catch (e) {
-      console.log(e);
-      moveToFailure(dispatch)
-    }
-  // } catch (e) {
-  //   console.log(e);
-  // }
+    ReceiptTemp = {}
+  } = preparedFinalObject;
+  const billPayload = ReceiptTemp[0];
+  const taxAmount=Number(get(billPayload, "Bill[0].billDetails[0].amount"));
+  let amtToPay = state.screenConfiguration.preparedFinalObject.AmountType === "partial_amount" ? state.screenConfiguration.preparedFinalObject.AmountPaid : taxAmount;
+  amtToPay = amtToPay ? Number(amtToPay) :taxAmount;
+  const user={
+    name:get(billPayload, "Bill[0].payerName"),
+    mobileNumber:get(billPayload, "Bill[0].mobileNumber"),
+    tenantId
+  };
+  let taxAndPayments = [];
+  taxAndPayments.push({
+    // taxAmount:taxAmount,
+    // businessService: businessService,
+    billId: get(billPayload, "Bill[0].id"),
+    amountPaid: amtToPay
+  })
+  try {
+    const requestBody = {
+      Transaction: {
+        tenantId,
+        txnAmount: amtToPay,
+        module: businessService,
+        billId: get(billPayload, "Bill[0].id"),
+        consumerCode: consumerCode,
+        productInfo: "Common Payment",
+        gateway: "AXIS",
+        taxAndPayments,
+        user,
+        callbackUrl
+      }
+    };
+    const goToPaymentGateway = await httpRequest(
+      "post",
+      "pg-service/transaction/v1/_create",
+      "_create",
+      [],
+      requestBody
+    );
+    const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl");
+    window.location = redirectionUrl;
+  } catch (e) {
+    console.log(e);
+    moveToFailure(dispatch);
+  }
 };
 
 const moveToSuccess = (dispatch, receiptNumber) => {
@@ -172,7 +158,7 @@ const updatePayAction = async (
   receiptNumber
 ) => {
   try {
-    moveToSuccess(dispatch,receiptNumber);
+    moveToSuccess(dispatch, receiptNumber);
   } catch (e) {
     moveToFailure(dispatch);
     dispatch(
@@ -188,7 +174,11 @@ const updatePayAction = async (
 
 const callBackForPay = async (state, dispatch) => {
   let isFormValid = true;
-
+  const roleExists = ifUserRoleExists("CITIZEN");
+  if(roleExists){
+    alert('You are not Authorized!');
+    return;
+  }
   // --- Validation related -----//
 
   const selectedPaymentType = get(
@@ -296,36 +286,37 @@ const callBackForPay = async (state, dispatch) => {
     Receipt: []
   };
   let ReceiptBodyNew = {
-    Payment:{paymentDetails:[]}
+    Payment: { paymentDetails: [] }
   };
 
   ReceiptBody.Receipt.push(finalReceiptData);
-console.log(finalReceiptData,state,'finalReceiptData');
+  const totalAmount=Number(finalReceiptData.Bill[0].totalAmount);
 
-  ReceiptBodyNew.Payment['tenantId']=finalReceiptData.tenantId;
-  ReceiptBodyNew.Payment['totalDue']=finalReceiptData.Bill[0].totalAmount;
+  ReceiptBodyNew.Payment['tenantId'] = finalReceiptData.tenantId;
+  ReceiptBodyNew.Payment['totalDue'] = totalAmount;
 
-   ReceiptBodyNew.Payment['paymentMode']=finalReceiptData.instrument.instrumentType.name;
-   ReceiptBodyNew.Payment['paidBy']=finalReceiptData.Bill[0].payerName;
-   ReceiptBodyNew.Payment['mobileNumber']=finalReceiptData.Bill[0].mobileNumber;
-   if(ReceiptBodyNew.Payment.paymentMode!=='Cash'){
-    ReceiptBodyNew.Payment['transactionNumber']=finalReceiptData.instrument.transactionNumber;
-    ReceiptBodyNew.Payment['instrumentNumber']=finalReceiptData.instrument.instrumentNumber;
-    if(ReceiptBodyNew.Payment.paymentMode==="Cheque"){
-      ReceiptBodyNew.Payment['instrumentDate']=finalReceiptData.instrument.instrumentDate;
+  ReceiptBodyNew.Payment['paymentMode'] = finalReceiptData.instrument.instrumentType.name;
+  ReceiptBodyNew.Payment['paidBy'] = finalReceiptData.Bill[0].payerName;
+  ReceiptBodyNew.Payment['mobileNumber'] = finalReceiptData.Bill[0].mobileNumber;
+  if (ReceiptBodyNew.Payment.paymentMode !== 'Cash') {
+    ReceiptBodyNew.Payment['transactionNumber'] = finalReceiptData.instrument.transactionNumber;
+    ReceiptBodyNew.Payment['instrumentNumber'] = finalReceiptData.instrument.instrumentNumber;
+    if (ReceiptBodyNew.Payment.paymentMode === "Cheque") {
+      ReceiptBodyNew.Payment['instrumentDate'] = finalReceiptData.instrument.instrumentDate;
     }
-   }
-   let amtPaid=state.screenConfiguration.preparedFinalObject.AmountType==="partial_amount"?state.screenConfiguration.preparedFinalObject.AmountPaid:finalReceiptData.Bill[0].totalAmount;
-   amtPaid=amtPaid?amtPaid:finalReceiptData.Bill[0].totalAmount;
-   ReceiptBodyNew.Payment.paymentDetails.push(
+  }
+
+  let amtPaid = state.screenConfiguration.preparedFinalObject.AmountType === "partial_amount" ? state.screenConfiguration.preparedFinalObject.AmountPaid : finalReceiptData.Bill[0].totalAmount;
+  amtPaid = amtPaid ? Number(amtPaid) :totalAmount;
+  ReceiptBodyNew.Payment.paymentDetails.push(
     {
-  		businessService:finalReceiptData.Bill[0].businessService,
-  		billId:finalReceiptData.Bill[0].id,
-  		totalDue:finalReceiptData.Bill[0].totalAmount,
-  		totalAmountPaid:amtPaid
-  	}
-   )
-   ReceiptBodyNew.Payment['totalAmountPaid']=amtPaid;
+      businessService: finalReceiptData.Bill[0].businessService,
+      billId: finalReceiptData.Bill[0].id,
+      totalDue:totalAmount,
+      totalAmountPaid: amtPaid
+    }
+  )
+  ReceiptBodyNew.Payment['totalAmountPaid'] = amtPaid;
 
 
   // console.log(ReceiptBody);
