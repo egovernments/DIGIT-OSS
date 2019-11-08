@@ -369,13 +369,24 @@
     },
     {
       "code": "BPA_ENGINEER",
-      "name": "BPA Architect",
+      "name": "BPA Engineer",
       "description": "BPA Engineer"
     },
     {
       "code": "BPA_BUILDER",
       "name": "BPA Builder",
       "description": "BPA Builder"
+    },
+    {
+      "code": "BPA_STRUCTURALENGINEER",
+      "name": "BPA Structural Engineer",
+      "description": "BPA Structural Engineer"
+    },
+    {
+    
+      "code": "BPA_TOWNPLANNER",
+      "name": "BPA Town Planner",
+      "description": "BPA Town Planner"
     }
   ]
 }
