@@ -116,7 +116,8 @@ export const applicationSuccessFooter = (
                     minWidth: "290px",
                     height: "48px",
                     marginRight: "16px"
-                }
+                },
+                disabled:true
             },
             children: {
                 downloadFormButtonLabel: getLabel({
@@ -147,7 +148,8 @@ export const applicationSuccessFooter = (
                     minWidth: "290px",
                     height: "48px",
                     marginRight: "16px"
-                }
+                },
+                disabled:true
             },
             children: {
                 printFormButtonLabel: getLabel({

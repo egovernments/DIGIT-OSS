@@ -6,15 +6,15 @@ import cloneDeep from "lodash/cloneDeep";
 import get from "lodash/get";
 import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
-import { getSearchResults } from "../../../../../ui-utils/commons";
-import { convertDateToEpoch, getBill, validateFields } from "../../utils";
+import { convertDateToEpoch, validateFields } from "../../utils";
 import { ifUserRoleExists } from "../../utils";
 
 export const callPGService = async (state, dispatch) => {
   
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const consumerCode = getQueryArg(window.location.href, "consumerCode");
-  const businessService = getQueryArg(window.location.href, "businessService");
+  const businessService =  get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService");
+  // const businessService = getQueryArg(window.location.href, "businessService"); businessService
   let callbackUrl = `${
     process.env.NODE_ENV === "production"
       ? `${window.origin}/citizen`
@@ -32,10 +32,16 @@ export const callPGService = async (state, dispatch) => {
   const taxAmount=Number(get(billPayload, "Bill[0].billDetails[0].amount"));
   let amtToPay = state.screenConfiguration.preparedFinalObject.AmountType === "partial_amount" ? state.screenConfiguration.preparedFinalObject.AmountPaid : taxAmount;
   amtToPay = amtToPay ? Number(amtToPay) :taxAmount;
+  const user={
+    name:get(billPayload, "Bill[0].payerName"),
+    mobileNumber:get(billPayload, "Bill[0].mobileNumber"),
+    tenantId
+  };
   let taxAndPayments = [];
   taxAndPayments.push({
-    taxAmount:taxAmount,
-    businessService: businessService,
+    // taxAmount:taxAmount,
+    // businessService: businessService,
+    billId: get(billPayload, "Bill[0].id"),
     amountPaid: amtToPay
   })
   try {
@@ -44,11 +50,12 @@ export const callPGService = async (state, dispatch) => {
         tenantId,
         txnAmount: amtToPay,
         module: businessService,
-        taxAndPayments,
         billId: get(billPayload, "Bill[0].id"),
         consumerCode: consumerCode,
         productInfo: "Common Payment",
         gateway: "AXIS",
+        taxAndPayments,
+        user,
         callbackUrl
       }
     };
@@ -283,10 +290,10 @@ const callBackForPay = async (state, dispatch) => {
   };
 
   ReceiptBody.Receipt.push(finalReceiptData);
-  console.log(finalReceiptData, state, 'finalReceiptData');
+  const totalAmount=Number(finalReceiptData.Bill[0].totalAmount);
 
   ReceiptBodyNew.Payment['tenantId'] = finalReceiptData.tenantId;
-  ReceiptBodyNew.Payment['totalDue'] = finalReceiptData.Bill[0].totalAmount;
+  ReceiptBodyNew.Payment['totalDue'] = totalAmount;
 
   ReceiptBodyNew.Payment['paymentMode'] = finalReceiptData.instrument.instrumentType.name;
   ReceiptBodyNew.Payment['paidBy'] = finalReceiptData.Bill[0].payerName;
@@ -300,12 +307,12 @@ const callBackForPay = async (state, dispatch) => {
   }
 
   let amtPaid = state.screenConfiguration.preparedFinalObject.AmountType === "partial_amount" ? state.screenConfiguration.preparedFinalObject.AmountPaid : finalReceiptData.Bill[0].totalAmount;
-  amtPaid = amtPaid ? amtPaid : finalReceiptData.Bill[0].totalAmount;
+  amtPaid = amtPaid ? Number(amtPaid) :totalAmount;
   ReceiptBodyNew.Payment.paymentDetails.push(
     {
       businessService: finalReceiptData.Bill[0].businessService,
       billId: finalReceiptData.Bill[0].id,
-      totalDue: finalReceiptData.Bill[0].totalAmount,
+      totalDue:totalAmount,
       totalAmountPaid: amtPaid
     }
   )
