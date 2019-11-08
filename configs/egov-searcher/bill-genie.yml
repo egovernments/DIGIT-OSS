@@ -40,7 +40,7 @@ SearchDefinitions:
             ptadd.locality as ptadd_locality, ptown.userid as ptown_userid 
             
             FROM egbs_bill_v1 b INNER JOIN egbs_billdetail_v1 bd ON b.id = bd.billid AND b.tenantid = bd.tenantid 
-            INNER egbs_billaccountdetail_v1 ad ON bd.id = ad.billdetail AND bd.tenantid = ad.tenantid 
+            INNER JOIN egbs_billaccountdetail_v1 ad ON bd.id = ad.billdetail AND bd.tenantid = ad.tenantid 
             LEFT OUTER JOIN eg_pt_property_v2 pt ON bd.consumercode = pt.propertyid 
             INNER JOIN eg_pt_address_v2 ptadd ON ptadd.property = pt.propertyid INNER JOIN eg_pt_propertydetail_v2 ptdet ON ptdet.property = pt.propertyid 
             INNER JOIN eg_pt_owner_v2 ptown ON ptdet.assessmentnumber = ptown.propertydetail $where AND b.status = 'ACTIVE')
