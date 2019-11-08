@@ -224,14 +224,10 @@ public class CalculatorUtils {
 
 
         return new StringBuilder().append(configurations.getCollectionServiceHost())
-                .append(configurations.getReceiptSearchEndpoint()).append(URL_PARAMS_SEPARATER)
+                .append(configurations.getPaymentSearchEndpoint()).append(URL_PARAMS_SEPARATER)
                 .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(criteria.getTenantId())
                 .append(SEPARATER).append(CONSUMER_CODE_SEARCH_FIELD_NAME)
                 .append(criteria.getConsumerCodes())
-                .append(SEPARATER).append(RECEIPT_START_DATE_PARAM)
-                .append(criteria.getFromDate())
-                .append(SEPARATER).append(RECEIPT_END_DATE_PARAM)
-                .append(criteria.getToDate())
                 .append(CalculatorConstants.SEPARATER).append(STATUS_FIELD_FOR_SEARCH_URL)
                 .append(ALLOWED_RECEIPT_STATUS);
     }
