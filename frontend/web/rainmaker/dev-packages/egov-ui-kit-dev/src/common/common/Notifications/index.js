@@ -98,7 +98,7 @@ const Notifications = ({ notifications = [], history }) => {
                     fontSize={14}
                     color="rgba(0, 0, 0, 0.60)"
                     label={address}
-                    containerStyle={{ marginLeft: 2, marginBottom: 10, width: "90%" }}
+                    containerStyle={{ marginLeft: -7, marginBottom: 10, width: "90%" }}
                   />
                 </div>
               )}
