@@ -39,15 +39,13 @@ SearchDefinitions:
             ptadd.city as ptadd_city, ptadd.pincode as ptadd_pincode, 
             ptadd.locality as ptadd_locality, ptown.userid as ptown_userid 
             
-            FROM egbs_bill_v1 b LEFT OUTER JOIN egbs_billdetail_v1 bd ON b.id = bd.billid AND b.tenantid = bd.tenantid 
-            LEFT OUTER JOIN egbs_billaccountdetail_v1 ad ON bd.id = ad.billdetail AND bd.tenantid = ad.tenantid 
-            INNER JOIN eg_pt_property_v2 pt ON bd.consumercode = pt.propertyid 
+            FROM egbs_bill_v1 b INNER JOIN egbs_billdetail_v1 bd ON b.id = bd.billid AND b.tenantid = bd.tenantid 
+            INNER egbs_billaccountdetail_v1 ad ON bd.id = ad.billdetail AND bd.tenantid = ad.tenantid 
+            LEFT OUTER JOIN eg_pt_property_v2 pt ON bd.consumercode = pt.propertyid 
             INNER JOIN eg_pt_address_v2 ptadd ON ptadd.property = pt.propertyid INNER JOIN eg_pt_propertydetail_v2 ptdet ON ptdet.property = pt.propertyid 
             INNER JOIN eg_pt_owner_v2 ptown ON ptdet.assessmentnumber = ptown.propertydetail $where AND b.status = 'ACTIVE')
 
-            select *, tax.collectedamount as bd_collectedamount from bill_data bd 
-            INNER JOIN (select sum(ad_adjustedamount) as collectedamount, demandid from bill_data group by demandid) tax ON tax.demandid=bd.demandid 
-            INNER JOIN (select max(bd_createddate) as createddate, bd_consumercode as consumercode from bill_data group by bd_consumercode) as maxdetail ON maxdetail.createddate = bd_createddate AND maxdetail.consumercode = bd_consumercode
+	    SELECT *, tax.collectedamount as bd_collectedamount from bill_data bd INNER JOIN (select sum(ad_adjustedamount) as collectedamount, demandid from bill_data group by demandid) tax ON 		    tax.demandid=bd.demandid
    searchParams: 
     condition: AND
     params:
