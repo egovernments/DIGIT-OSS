@@ -2,15 +2,11 @@ import {
     getCommonCard,
     getCommonContainer,
     getCommonHeader,
-    getCommonTitle,
-    getCommonSubHeader,
-    getCommonParagraph,
-    getLabel
+    getCommonTitle
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
-import { getCurrentFinancialYear, generateBill, showHideAdhocPopup } from "../utils";
-import { adhocPopup } from "./payResource/adhocPopup";
+import { getCurrentFinancialYear, generateBill } from "../utils";
 import capturePaymentDetails from "./payResource/capture-payment-details";
 import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
@@ -20,6 +16,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../utils";
 import set from "lodash/set";
+import { componentJsonpath } from "./payResource/constants";
 
 const header = getCommonContainer({
     header: getCommonHeader({
@@ -99,10 +96,11 @@ const getPaymentCard = () => {
 
 
 
-const fetchBill = async (state, dispatch, consumerCode, tenantId, businessService) => {
-    await generateBill(dispatch, consumerCode, tenantId, businessService);
+const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
+    await generateBill(dispatch, consumerCode, tenantId);
 
     let payload = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0]");
+    let totalAmount = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]");
 
     //Collection Type Added in CS v1.1
     payload && dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].billDetails[0].collectionType", "COUNTER"));
@@ -112,8 +110,11 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId, businessServic
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid", payload.amount));
         //set total amount in instrument
         dispatch(prepareFinalObject("ReceiptTemp[0].instrument.amount", payload.amount));
+    }
+
+    if (get(totalAmount, "totalAmount") != undefined) {
         const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
-        dispatch(handleField("pay", componentJsonpath, "props.value", payload.amount));
+        dispatch(handleField("pay", componentJsonpath, "props.value", totalAmount.totalAmount));
     }
 
     //Initially select instrument type as Cash
@@ -133,8 +134,8 @@ const screenConfig = {
     beforeInitScreen: (action, state, dispatch) => {
         let consumerCode = getQueryArg(window.location.href, "consumerCode");
         let tenantId = getQueryArg(window.location.href, "tenantId");
-        let businessService = getQueryArg(window.location.href, "businessService");
-        fetchBill(state, dispatch, consumerCode, tenantId, businessService);
+        // let businessService = getQueryArg(window.location.href, "businessService");
+        fetchBill(state, dispatch, consumerCode, tenantId);
         const data = getPaymentCard();
         set(action, "screenConfig.components.div.children.formwizardFirstStep", data);
         return action;

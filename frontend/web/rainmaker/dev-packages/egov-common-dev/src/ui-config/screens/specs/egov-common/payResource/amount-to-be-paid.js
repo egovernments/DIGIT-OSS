@@ -7,7 +7,7 @@ import {
   getRadioButton
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { validateAmountInput, getTemp, dispatchHandleField } from "./utils";
 
 const AmountToBePaid = getCommonGrayCard({
   header: getCommonSubHeader({
@@ -33,14 +33,14 @@ const AmountToBePaid = getCommonGrayCard({
         "full_amount"
       ),
       beforeFieldChange: (action, state, dispatch) => {
-        const componentJsonpath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.displayAmount";
         try {
-          dispatch(
-            handleField("pay", componentJsonpath, "props.disabled", action.value === "full_amount" ? true:false)
+          dispatchHandleField(dispatch, "props.disabled", action.value === "full_amount" ? true : false);
+          const payload = get(
+            state,
+            "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]"
           );
-          const payload = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0]");
-          if(payload.totalAmount){
-            action.value === "full_amount" ? dispatch(handleField("pay", componentJsonpath, "props.value", payload.totalAmount)) : "";
+          if (payload.totalAmount && action.value === "full_amount") {
+            dispatchHandleField(dispatch, "props.value", payload.totalAmount);
           }
         } catch (e) {
           console.log(e);
@@ -48,17 +48,29 @@ const AmountToBePaid = getCommonGrayCard({
       }
     },
 
-    displayAmount: getTextField({
-      label: {
-        labelName: "Amount to pay (Rs)",
-        labelKey: "AMOUNT_TO_PAY"
-      },
-      pattern: getPattern("Amount"),
-      jsonPath: "AmountPaid",
-      props: {
-        disabled: true
+    displayAmount: {
+      ...getTextField({
+        label: {
+          labelName: "Amount to pay (Rs)",
+          labelKey: "AMOUNT_TO_PAY"
+        },
+        pattern: getPattern("Amount"),
+        jsonPath: "AmountPaid",
+        required: true,
+        props: {
+          disabled: true
+        }
+      }),
+      beforeFieldChange: (action, state, dispatch) => {
+        let pattern = getPattern("Amount");
+        let temp = getTemp(action, pattern);
+        try {
+          validateAmountInput(temp, pattern, action, dispatch);
+        } catch (e) {
+          console.log(e);
+        }
       }
-    })
+    }
   })
 });
 
