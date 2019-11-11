@@ -1013,14 +1013,23 @@ class FormWizard extends Component {
 
         break;
       case 4:
-
+        const { assessedPropertyDetails = {} } = this.state;
+        const { Properties = [] } = assessedPropertyDetails;
+        let propertyId = '';
+        let tenantId = '';
+        for (let pty of Properties) {
+          propertyId = pty.propertyId;
+          tenantId = pty.tenantId;
+        }
+        this.props.history.push(`./../egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}`
+        )
         // added tryout
-        callDraft(this);
-        this.setState(
-          {
-            selected: index,
-            formValidIndexArray: [...formValidIndexArray, selected]
-          });
+        // callDraft(this);
+        // this.setState(
+        //   {
+        //     selected: index,
+        //     formValidIndexArray: [...formValidIndexArray, selected]
+        //   });
         break;
       case 5:
         if (this.state.partialAmountError.length == 0) {
@@ -1152,7 +1161,7 @@ class FormWizard extends Component {
             "/property-tax/payment-success/" +
             moduleId.split(":")[0] +
             "/" +
-            tenantId 
+            tenantId
           );
         }
       } catch (e) {

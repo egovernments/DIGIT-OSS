@@ -951,16 +951,23 @@ class FormWizard extends Component {
         } else {
           createAndUpdate(index);
         }
-
-
         break;
       case 4:
-
-        this.setState(
-          {
-            selected: index,
-            formValidIndexArray: [...formValidIndexArray, selected]
-          });
+          const { assessedPropertyDetails = {} } = this.state;
+          const { Properties = [] } = assessedPropertyDetails;
+          let propertyId = '';
+          let tenantId = '';
+          for (let pty of Properties) {
+            propertyId = pty.propertyId;
+            tenantId = pty.tenantId;
+          }
+          this.props.history.push(`./../egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}`
+          )
+        // this.setState(
+        //   {
+        //     selected: index,
+        //     formValidIndexArray: [...formValidIndexArray, selected]
+        //   });
         break;
       case 5:
         onPayButtonClick();
