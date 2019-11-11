@@ -1,7 +1,9 @@
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { buttonJsonpath, numberPattern, componentJsonpath } from "./constants";
+import { paybuttonJsonpath, numberPattern, componentJsonpath } from "./constants";
 import get from "lodash/get";
 
+
+const buttonJsonpath = paybuttonJsonpath+`${process.env.REACT_APP_NAME === "Citizen" ? 'makePayment' : 'generateReceipt'}`
 export const validateAmountInput = (temp, pattern, action, dispatch, state) => {
   const totalAmount = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].totalAmount");
     if (temp === 1 && totalAmount > 100) {
