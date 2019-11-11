@@ -39,6 +39,9 @@ public class PaymentDetail {
     @Size(max=64)
     @JsonProperty("manualReceiptNumber")
     private String manualReceiptNumber;
+    
+    @JsonProperty("manualReceiptDate")
+    private Long manualReceiptDate;
 
     @JsonProperty("receiptDate")
     private Long receiptDate = null;
