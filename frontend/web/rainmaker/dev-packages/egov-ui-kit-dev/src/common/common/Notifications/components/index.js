@@ -76,7 +76,8 @@ class EventDetails extends Component {
     const { openMap } = this.state;
     const { openMapHandler } = this;
     const { eventDetails, loading } = this.props;
-    const { description, SLA, address, locationObj, eventCategory, name, eventDate, entryFees } = eventDetails || "";
+    const { description, SLA, address, locationObj, eventCategory, name, eventDate,eventToDate, entryFees } = eventDetails || "";
+    console.log(eventDate);
     return (
       <Screen className="notifications-screen-style" loading={loading}>
         {eventCategory && <Card
@@ -87,12 +88,12 @@ class EventDetails extends Component {
             <Grid container>
               {eventDate && (
                 <Grid item xs={4} direction="column" style={{ maxWidth: "100px", maxHeight: "100px", minWidth: "100px", minHeight: "100px" }}>
-                  <div style={divStyle}>
-                    <Label label={eventDate.split(":")[0]} color="#fff" fontSize="17px" />
-                  </div>
-                  <div style={pStyle}>
-                    <Label label={eventDate.split(":")[1]} color="#FC8019" fontSize="34px" />
-                  </div>
+                 <div style={divStyle}>
+                  <Label label={(eventDate.split(":")[0]===eventToDate.split(":")[0])? eventDate.split(":")[0]:eventDate.split(":")[0]+"-"+eventToDate.split(":")[0]} color="#fff" fontSize="17px" />
+                </div>
+                <div style={pStyle}>
+                  <Label label={(eventDate.split(":")[1]===eventToDate.split(":")[1]&&eventDate.split(":")[0]===eventToDate.split(":")[0])?eventDate.split(":")[1]: eventDate.split(":")[1]+"-"+eventToDate.split(":")[1]} color="#FC8019" fontSize="34px" />
+                </div>
                 </Grid>
               )}
               <Grid item xs={8} sm container>
