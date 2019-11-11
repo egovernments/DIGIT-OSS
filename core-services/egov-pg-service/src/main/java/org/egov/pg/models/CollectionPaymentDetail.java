@@ -31,6 +31,13 @@ public class CollectionPaymentDetail {
     @NotNull
     @JsonProperty("totalAmountPaid")
     private BigDecimal totalAmountPaid;
+    
+    @Size(max=64)
+    @JsonProperty("manualReceiptNumber")
+    private String manualReceiptNumber;
+    
+    @JsonProperty("manualReceiptDate")
+    private Long manualReceiptDate;
 
     @Size(max=64)
     @JsonProperty("receiptNumber")
