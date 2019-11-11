@@ -68,10 +68,10 @@ public class PaymentQueryBuilder {
 
     public static final String INSERT_PAYMENTDETAIL_SQL = "INSERT INTO egcl_paymentdetail(" +
             "            id, tenantid, paymentid, due, amountpaid, receiptnumber, businessservice, " +
-            "            billid, additionaldetails,receiptdate, receipttype, createdby, createdtime, " +
+            "            billid, additionaldetails,receiptdate, receipttype, manualreceiptnumber, createdby, createdtime, " +
             "            lastmodifiedby, lastmodifiedtime)" +
             "            VALUES (:id, :tenantid, :paymentid, :due, :amountpaid, :receiptnumber, :businessservice, " +
-            "            :billid, :additionaldetails,:receiptdate, :receipttype, :createdby, :createdtime," +
+            "            :billid, :additionaldetails,:receiptdate, :receipttype, :manualreceiptnumber, :createdby, :createdtime," +
             "            :lastmodifiedby, :lastmodifiedtime);";
 
 
@@ -200,6 +200,7 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("additionaldetails", getJsonb(paymentDetail.getAdditionalDetails()));
         sqlParameterSource.addValue("receiptdate", paymentDetail.getReceiptDate());
         sqlParameterSource.addValue("receipttype", paymentDetail.getReceiptType());
+        sqlParameterSource.addValue("manualreceiptnumber", paymentDetail.getManualReceiptNumber());
         sqlParameterSource.addValue("createdby", paymentDetail.getAuditDetails().getCreatedBy());
         sqlParameterSource.addValue("createdtime", paymentDetail.getAuditDetails().getCreatedTime());
         sqlParameterSource.addValue("lastmodifiedby", paymentDetail.getAuditDetails().getLastModifiedBy());

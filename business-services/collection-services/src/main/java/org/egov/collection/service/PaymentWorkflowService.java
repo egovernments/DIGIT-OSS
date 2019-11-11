@@ -1,7 +1,18 @@
 package org.egov.collection.service;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
+import static java.util.Collections.reverseOrder;
+import static java.util.Collections.singleton;
+import static org.egov.collection.util.Utils.jsonMerge;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentRequest;
@@ -13,7 +24,6 @@ import org.egov.collection.producer.CollectionProducer;
 import org.egov.collection.repository.PaymentRepository;
 import org.egov.collection.util.PaymentWorkflowValidator;
 import org.egov.collection.web.contract.Bill;
-import org.egov.collection.web.contract.BillDetail;
 import org.egov.collection.web.contract.PaymentWorkflow;
 import org.egov.collection.web.contract.PaymentWorkflowRequest;
 import org.egov.common.contract.request.RequestInfo;
@@ -22,13 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-
-import static java.util.Collections.reverseOrder;
-import static java.util.Collections.singleton;
-import static java.util.Objects.isNull;
-import static org.egov.collection.config.CollectionServiceConstants.VOUCHER_HEADER_KEY;
-import static org.egov.collection.util.Utils.jsonMerge;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
 public class PaymentWorkflowService {
