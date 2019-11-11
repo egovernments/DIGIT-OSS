@@ -2,8 +2,6 @@ import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "../../../../ui-redux/store";
 import { getMdmsData } from "../utils";
-import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
-import { httpRequest } from "../../../../ui-utils";
 import {
   getTransformedLocalStorgaeLabels,
   getLocaleLabels
@@ -42,35 +40,21 @@ export const loadUlbLogo = tenantid => {
 
 export const loadPtBillData = response => {
   let data = {};
-
-  // if (response.Bill && response.Bill.length > 0) {
-  data.billDate = epochToDate(get(response, "billDetails[0].billDate"));
+console.log("=========>",response)
+  
   const fromDate = epochToDate(get(response, "billDetails[0].fromPeriod"));
   const toDate = epochToDate(get(response, "billDetails[0].toPeriod"));
-  data.taxPeriod = `${fromDate} - ${toDate}`;
-  data.billNumber = nullToNa(get(response, "billDetails[0].billNumber"));
-  data.consumerName = nullToNa(get(response, "payerName"));
-  data.mobileNumber = nullToNa(get(response, "mobileNumber"));
-  data.businessService = get(response, "billDetails[0].businessService").split(
-    "."
-  )[0];
-  const serviceType = get(response, "billDetails[0].businessService").split(
-    "."
-  )[1];
-  data.serviceType = serviceType ? serviceType : "NA";
-  data.amountPaid = get(response, "billDetails[0].amountPaid", 0);
-  data.totalAmount = get(response, "billDetails[0].totalAmount", 0);
-  data.amountDue = data.totalAmount - data.amountPaid;
+  data.billPeriod = `${fromDate} - ${toDate}`;
+  data.billDate = epochToDate(get(response, "billDate"));
   data.dueDate = epochToDate(get(response, "billDetails[0].expiryDate"));
-  data.payerAddress = nullToNa(get(response, "payerAddress"));
-  data.propertyId = get(response, "billDetails[0].consumerCode").split(":")[0];
-  data.AssessNo = get(response, "billDetails[0].consumerCode").split(":")[1];
-  data.locality = nullToNa(
-    get(response, "billDetails[0].address.locality", "NA")
-  );
-  data.paymentMode = nullToNa(
-    get(response, "instrument.instrumentType.name", "NA")
-  );
+  data.billNumber = nullToNa(get(response, "billNumber"));
+  data.payerName = nullToNa(get(response, "payerName"));
+  data.mobileNumber = nullToNa(get(response, "mobileNumber"));
+  data.amountPaid = get(response, "billDetails[0].amountPaid", 0);
+  data.totalAmount = get(response, "totalAmount", 0);
+  data.amountDue = data.totalAmount - data.amountPaid;
+  data.payerAddress = get(response, "payerAddress");
+  data.propertyId = get(response, "consumerCode").split(":")[0];
   data.g8ReceiptNo = nullToNa(
     get(response, "billDetails[0].manualReceiptNumber", "None")
   );
