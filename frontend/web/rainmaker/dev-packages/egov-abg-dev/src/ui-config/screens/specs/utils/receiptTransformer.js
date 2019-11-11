@@ -39,9 +39,7 @@ export const loadUlbLogo = tenantid => {
 };
 
 export const loadPtBillData = response => {
-  let data = {};
-console.log("=========>",response)
-  
+  let data = {};  
   const fromDate = epochToDate(get(response, "billDetails[0].fromPeriod"));
   const toDate = epochToDate(get(response, "billDetails[0].toPeriod"));
   data.billPeriod = `${fromDate} - ${toDate}`;
