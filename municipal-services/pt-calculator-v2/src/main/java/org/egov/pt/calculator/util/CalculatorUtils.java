@@ -226,7 +226,7 @@ public class CalculatorUtils {
         return new StringBuilder().append(configurations.getCollectionServiceHost())
                 .append(configurations.getPaymentSearchEndpoint()).append(URL_PARAMS_SEPARATER)
                 .append(TENANT_ID_FIELD_FOR_SEARCH_URL).append(criteria.getTenantId())
-                .append(SEPARATER).append(CONSUMER_CODE_SEARCH_FIELD_NAME)
+                .append(SEPARATER).append(CONSUMER_CODE_SEARCH_FIELD_NAME_PAYMENT)
                 .append(criteria.getConsumerCodes())
                 .append(CalculatorConstants.SEPARATER).append(STATUS_FIELD_FOR_SEARCH_URL)
                 .append(ALLOWED_RECEIPT_STATUS);
