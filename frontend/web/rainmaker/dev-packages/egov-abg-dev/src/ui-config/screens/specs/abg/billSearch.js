@@ -25,11 +25,19 @@ const getMDMSData = async (action, state, dispatch) => {
     MdmsCriteria: {
       tenantId: tenantId,
       moduleDetails: [
-        {
+       {
           moduleName: "BillingService",
           masterDetails: [
             {
               name: "BusinessService"
+            }
+          ]
+        },
+        {
+          moduleName: "tenant",
+          masterDetails: [
+            {
+              name: "tenants"
             }
           ]
         }

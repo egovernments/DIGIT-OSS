@@ -3,8 +3,11 @@ import {
   sortByEpoch,
   getEpochForDate,
   getTextToLocalMapping,
-  onActionClick
-} from "../../utils";
+  } from "../../utils";
+
+import {
+  generateSingleBill
+} from "../../utils/receiptPdf";
 
 
 export const searchResults = {
@@ -15,8 +18,13 @@ export const searchResults = {
   props: {
     columns: [
       getTextToLocalMapping("Bill No."),
+      {
+        name: "Consumer Code",
+        options: {
+          display: false
+        }
+      },
       getTextToLocalMapping("Consumer Name"),
-      getTextToLocalMapping("Service Category"),
       getTextToLocalMapping("Bill Date"),
       getTextToLocalMapping("Bill Amount[INR]"),
       getTextToLocalMapping("Status"),
@@ -42,13 +50,7 @@ export const searchResults = {
           display: false
         }
       },
-      {
-        name: "action",
-        options: {
-          display: false
-        }
-      }
-    ],
+     ],
     title: getTextToLocalMapping("Search Results for Bill"),
     options: {
       filter: false,
@@ -57,7 +59,7 @@ export const searchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => onActionClick(row)
+      onRowClick: (row, index) =>  generateSingleBill(row)
     },
     customSortColumn: {
       column: "Bill Date",

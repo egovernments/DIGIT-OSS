@@ -8,15 +8,11 @@ import {
   getCommonHeader,
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { searchApiCall } from "./function";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
-const hasButton = getQueryArg(window.location.href, "hasButton");
-//const hasApproval = getQueryArg(window.location.href, "hasApproval");
-let enableButton = true;
-//enableInbox = hasApproval && hasApproval === "false" ? false : true;
-enableButton = hasButton && hasButton === "false" ? false : true;
+const tenantId = getTenantId();
 
 const resetFields = (state, dispatch) => {
   dispatch(
@@ -63,6 +59,33 @@ export const billSearchCard = getCommonCard({
     labelKey: "ABG_SEARCH_BILL_COMMON_SUB_HEADER"
   }),
   searchContainer: getCommonContainer({
+    ulb: getSelectField({
+      label: {
+        labelName: "ULB",
+        labelKey: "ABG_ULB_LABEL"
+      },
+      labelPrefix: {
+        moduleName: "TENANT",
+        masterName: "TENANTS"
+      },
+      optionLabel: "name",
+      placeholder: {
+        labelName: "Select ULB",
+        labelKey: "ABG_ULB_PLACEHOLDER"
+      },
+      sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
+      jsonPath: "searchScreen.tenantId",
+      required: true,
+      disabled: false,
+      props: {
+        value: tenantId,
+        disabled: true
+      },
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      }
+    }),
     consumerCode: getTextField({
       label: {
         labelName: "Consumer Code",
@@ -97,23 +120,6 @@ export const billSearchCard = getCommonCard({
         sm: 4
       }
     }),
-    serviceType: getSelectField({
-      label: {
-        labelName: "Service Type",
-        labelKey: "ABG_SERVICE_TYPE_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Service Type",
-        labelKey: "ABG_SERVICE_TYPE_PLACEHOLDER"
-      },
-      required: true,
-      jsonPath: "searchScreen.service",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      sourceJsonPath: "searchScreenMdmsData.BillingService.BusinessService"
-    }),
     mobileNo: getTextField({
       label: {
         labelName: "Mobile No.",
@@ -134,7 +140,7 @@ export const billSearchCard = getCommonCard({
       required: false,
       pattern: getPattern("MobileNo"),
       errorMessage: "Invalid Mobile No..",
-      jsonPath: "searchScreen.mobileNo"
+      jsonPath: "searchScreen.mobileNumber"
     })
   }),
 

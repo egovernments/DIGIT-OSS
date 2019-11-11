@@ -8,10 +8,7 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { searchApiCall } from "./functions";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
-//const hasApproval = getQueryArg(window.location.href, "hasApproval");
-let enableButton = true;
-//enableInbox = hasApproval && hasApproval === "false" ? false : true;
-enableButton = hasButton && hasButton === "false" ? false : true;
+let enableButton = hasButton && hasButton === "false" ? false : true;
 
 export const billGenSearchCard = getCommonCard({
   searchContainer: getCommonContainer({
@@ -27,7 +24,6 @@ export const billGenSearchCard = getCommonCard({
       required: true,
       visible: true,
       jsonPath: "searchScreen.year",
-      // sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
       gridDefination: {
         xs: 12,
         sm: 4
