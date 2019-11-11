@@ -282,7 +282,6 @@ export const getLabelOnlyValue = (value, props = {}) => {
 
 
 export const onActionClick = (rowData) =>{
-  console.log("----->",rowData)
   switch(rowData[8]){
     case "PAY" : return "";
     case "DOWNLOAD RECEIPT" : ""

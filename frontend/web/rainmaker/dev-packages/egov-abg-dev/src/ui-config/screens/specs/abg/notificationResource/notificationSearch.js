@@ -7,15 +7,9 @@ import {
     getLabel,
     getDateField
   } from "egov-ui-framework/ui-config/screens/specs/utils";
-  import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
   import { searchApiCall } from "./functions";
   
-  const hasButton = getQueryArg(window.location.href, "hasButton");
-  //const hasApproval = getQueryArg(window.location.href, "hasApproval");
-  let enableButton = true;
-  //enableInbox = hasApproval && hasApproval === "false" ? false : true;
-  enableButton = hasButton && hasButton === "false" ? false : true;
-  
+    
   export const NotificationSearchCard = getCommonCard({
     searchContainer: getCommonContainer({
       usage: getSelectField({
@@ -30,7 +24,6 @@ import {
         required: true,
         visible: true,
         jsonPath: "searchScreen.usage",
-        // sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
         gridDefination: {
           xs: 12,
           sm: 4

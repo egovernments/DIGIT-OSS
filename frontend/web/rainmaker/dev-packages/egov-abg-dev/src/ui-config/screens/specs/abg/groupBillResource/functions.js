@@ -17,13 +17,6 @@ const tenantId = getTenantId();
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   showHideMergeButton(false, dispatch);
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: tenantId
-    },
-    { key: "limit", value: "10" }
-  ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
     "searchCriteria",
@@ -78,7 +71,7 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
     searchScreenObject.tenantId = tenantId;
-    const responseFromAPI = await getGroupBillSearch(searchScreenObject);
+    const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject);
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];
     dispatch(
       prepareFinalObject("searchScreenMdmsData.billSearchResponse", bills)

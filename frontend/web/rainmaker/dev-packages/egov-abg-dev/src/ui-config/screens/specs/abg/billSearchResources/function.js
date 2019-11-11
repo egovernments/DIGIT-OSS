@@ -3,7 +3,7 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults } from "../../../../../ui-utils/commons";
+import { getSearchResults,getGroupBillSearch } from "../../../../../ui-utils/commons";
 import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
@@ -25,6 +25,7 @@ export const searchApiCall = async (state, dispatch) => {
     "searchScreen",
     {}
   );
+
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children",
     state,
@@ -37,7 +38,6 @@ export const searchApiCall = async (state, dispatch) => {
     dispatch,
     "billSearch"
   );
-  console.log(searchScreenObject);
   if (!isSearchBoxFirstRowValid || !isSearchBoxSecondRowValid) {
     dispatch(
       toggleSnackbar(
@@ -72,18 +72,20 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-
-    const responseFromAPI = await getSearchResults(queryObject);
-    const bills = (responseFromAPI && responseFromAPI.Bill) || [];
+    searchScreenObject.tenantId = tenantId;
+    // const responseFromAPI = await getSearchResults(dispatch,queryObject);
+    const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject)
+    const bills = (responseFromAPI && responseFromAPI.Bills) || [];
     const billTableData = bills.map(item => {
       return {
-        billNumber: get(item, `billNumber`),
-        consumerName: get(item, `payerName`),
-        serviceCategory: get(item, `businessService`),
-        billDate: get(item, `billDate`),
-        billAmount: get(item, `totalAmount`),
-        status: get(item, `status`),
-        action: getActionItem(get(item, `status`))
+        billNumber: get(item, "billNumber"),
+        consumerCode : get(item, "consumerCode"),
+        consumerName: get(item, "payerName"),
+        billDate: get(item, "billDate"),
+        billAmount: get(item, "totalAmount"),
+        status: get(item, "status"),
+        action: getActionItem(get(item, "status")),
+
       };
     });
 
@@ -93,16 +95,14 @@ export const searchApiCall = async (state, dispatch) => {
     try {
       let data = billTableData.map(item => ({
         [getTextToLocalMapping("Bill No.")]: item.billNumber || "-",
+        "Consumer Code" : item.consumerCode || "-",
         [getTextToLocalMapping("Consumer Name")]: item.consumerName || "-",
-        [getTextToLocalMapping("Service Category")]:
-          item.serviceCategory || "-",
         [getTextToLocalMapping("Bill Date")]:
           convertEpochToDate(item.billDate) || "-",
         [getTextToLocalMapping("Bill Amount(Rs)")]: item.billAmount || "-",
         [getTextToLocalMapping("Status")]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
         [getTextToLocalMapping("Action")]: item.action || "-",
         tenantId: item.tenantId,
-        action : item.action
       }));
       dispatch(
         handleField(
