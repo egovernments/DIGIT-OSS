@@ -208,7 +208,7 @@ public class CalculatorConstants {
 	 * billing service field names
 	 */
 
-	public static final String CONSUMER_CODE_SEARCH_FIELD_NAME = "consumerCode=";
+	public static final String CONSUMER_CODE_SEARCH_FIELD_NAME = "consumerCodes=";
 
 	public static final String DEMAND_ID_SEARCH_FIELD_NAME = "demandId=";
 	
