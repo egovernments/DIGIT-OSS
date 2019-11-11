@@ -63,9 +63,9 @@ const AmountToBePaid = getCommonGrayCard({
       }),
       beforeFieldChange: (action, state, dispatch) => {
         let pattern = getPattern("Amount");
-        let temp = getTemp(action, pattern);
+        let temp = getTemp(action, state, pattern);
         try {
-          validateAmountInput(temp, pattern, action, dispatch);
+          validateAmountInput(temp, pattern, action, dispatch, state);
         } catch (e) {
           console.log(e);
         }
