@@ -710,6 +710,7 @@ export const getTransformedNotifications = async (notifications) => {
             }))
           : [],
       eventDate: (item.eventDetails && getEventDate(item.eventDetails.fromDate)) || "",
+      eventToDate: (item.eventDetails && getEventDate(item.eventDetails.toDate)) || "",
       type: item.eventType,
       id: item.id,
       tenantId: item.tenantId,
