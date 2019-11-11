@@ -235,4 +235,21 @@ public class CollectionServiceConstants {
 
     public static final String VOUCHER_HEADER_KEY = "voucherHeader";
 
+    public static final String BILLING_MASTER_CODE = "BusinessService";
+
+    public static final String BILLING_MODULE_NAME = "BillingService";
+
+    public static final String MDMS_BUSINESSSERVICE_PATH = "$.MdmsRes.BillingService.BusinessService";
+
+    public static final String MASTER_BUSINESSSERVICE_KEY = "code";
+
+    public static final String MASTER_ISADVANCEALLOWED_KEY = "isAdvanceAllowed";
+
+    public static final String MASTER_PARTPAYMENTALLOWED_KEY = "partPaymentAllowed";
+
+    public static final String MASTER_COLLECTIONMODESNOTALLOWED_KEY = "collectionModesNotAllowed";
+
+
+
+
 }

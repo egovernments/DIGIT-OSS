@@ -1,19 +1,16 @@
 package org.egov.collection.util;
 
 import static java.util.Objects.isNull;
+import static org.egov.collection.config.CollectionServiceConstants.*;
 import static org.egov.collection.model.enums.InstrumentTypesEnum.CARD;
 import static org.egov.collection.model.enums.InstrumentTypesEnum.CASH;
 import static org.egov.collection.model.enums.InstrumentTypesEnum.ONLINE;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.jayway.jsonpath.JsonPath;
 import org.egov.collection.model.AuditDetails;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
@@ -21,6 +18,7 @@ import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.model.enums.*;
 import org.egov.collection.repository.BillingServiceRepository;
 import org.egov.collection.repository.IdGenRepository;
+import org.egov.collection.service.MDMSService;
 import org.egov.collection.web.contract.Bill;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +38,13 @@ public class PaymentEnricher {
 	@Autowired
 	private IdGenRepository idGenRepository;
 
+	@Autowired
+	private MDMSService mdmsService;
+
 	public void enrichPaymentPreValidate(PaymentRequest paymentRequest) {
 
 		Payment payment = paymentRequest.getPayment();
+		String tenantId = payment.getTenantId();
 		List<String> billIds = payment.getPaymentDetails().stream().map(PaymentDetail::getBillId)
 				.collect(Collectors.toList());
 		if (isNull(paymentRequest.getRequestInfo().getUserInfo())
@@ -55,6 +57,16 @@ public class PaymentEnricher {
 			throw new CustomException("DUPLICATE_BILLID",
 					"The Bill ids have been repeated for multiple payment details");
 
+		Object mdmsData = mdmsService.mDMSCall(paymentRequest.getRequestInfo(),tenantId);
+
+		List<Map> businessServices = JsonPath.read(mdmsData,MDMS_BUSINESSSERVICE_PATH);
+
+		Map<String,Map> codeToBusinessService = new HashMap<>();
+
+		businessServices.forEach(businessService -> {
+			codeToBusinessService.put(businessService.get(MASTER_BUSINESSSERVICE_KEY).toString(),businessService);
+		});
+
 		List<Bill> validatedBills = billingRepository.fetchBill(paymentRequest.getRequestInfo(), payment.getTenantId(),
 				billIds);
 		Map<String, Bill> billIdToBillMap = new HashMap<>();
@@ -65,14 +77,29 @@ public class PaymentEnricher {
 			throw new CustomException("INVALID_BILL_ID", "Bill IDs provided does not exist or is in an invalid state");
 		else
 			validatedBills.forEach(bill -> {
+				Map billingServiceMaster = codeToBusinessService.get(bill.getBusinessService());
 				if (CollectionUtils.isEmpty(bill.getBillDetails())) {
 					log.error("Bill ID provided does not exist or is in an invalid state " + bill.getId());
 					errorMap.put("INVALID_BILL_ID", "Bill ID provided does not exist or is in an invalid state: " + bill.getId());
-				} else {
+				}
+				else if(billingServiceMaster==null){
+					log.error("BusinessService not found for bill with business service: " + bill.getBusinessService());
+					errorMap.put("INVALID_BILL_BUSINESSSERVICE", "Business service provided does not exist for bill: " + bill.getId());
+				}
+				else {
 					bill.setPaidBy(payment.getPaidBy());
 					bill.setPayerName(payment.getPayerName());
 					bill.setMobileNumber(payment.getMobileNumber());
 					bill.setPayerAddress(payment.getPayerAddress());
+					try{
+						List<String> collectionsModeNotAllowed = (List<String>)billingServiceMaster.get(MASTER_COLLECTIONMODESNOTALLOWED_KEY);
+						bill.setIsAdvanceAllowed(((Boolean)billingServiceMaster.get(MASTER_ISADVANCEALLOWED_KEY)));
+						bill.setPartPaymentAllowed((Boolean)billingServiceMaster.get(MASTER_PARTPAYMENTALLOWED_KEY));
+						bill.setCollectionModesNotAllowed(collectionsModeNotAllowed);
+					}
+					catch (Exception e){
+						errorMap.put("INVALID_BILL_BUSINESSSERVICE","Failed to parse the master data");
+					}
 				}
 				billIdToBillMap.put(bill.getId(), bill);
 			});
@@ -117,12 +144,12 @@ public class PaymentEnricher {
 		Payment payment = paymentRequest.getPayment();
 		List<PaymentDetail> paymentDetails = payment.getPaymentDetails();
 		String paymentMode = payment.getPaymentMode().toString();
-		
+
 		if (paymentMode.equalsIgnoreCase(ONLINE.name()) || paymentMode.equalsIgnoreCase(CARD.name()))
 			payment.setPaymentStatus(PaymentStatusEnum.DEPOSITED);
 		else
 			payment.setPaymentStatus(PaymentStatusEnum.NEW);
-		
+
 		for (PaymentDetail paymentDetail : paymentDetails) {
 			paymentDetail.setId(UUID.randomUUID().toString());
 			String receiptNumber = idGenRepository.generateReceiptNumber(paymentRequest.getRequestInfo(),
@@ -147,12 +174,12 @@ public class PaymentEnricher {
 			payment.setInstrumentStatus(InstrumentStatusEnum.REMITTED);
 		else
 			payment.setInstrumentStatus(InstrumentStatusEnum.APPROVED);
-		
+
 		payment.setTransactionDate(new Date().getTime());
 		if(paymentMode.equalsIgnoreCase(CASH.name()) || paymentMode.equalsIgnoreCase(CARD.name()) || paymentMode.equalsIgnoreCase(ONLINE.name())) {
 			payment.setInstrumentDate(payment.getTransactionDate());
 		}
-		
+
 	}
 
 	/**

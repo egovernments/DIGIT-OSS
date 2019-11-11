@@ -187,4 +187,13 @@ public class ApplicationProperties {
     private String updatePaymentTopicKey;
 
 
+    //MDMS
+    @Value("${egov.mdms.host}")
+    private String mdmsHost;
+
+    @Value("${egov.mdms.search.endpoint}")
+    private String mdmsSearchEndpoint;
+
+
+
 }
