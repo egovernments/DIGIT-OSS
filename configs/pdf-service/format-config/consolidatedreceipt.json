@@ -1,5 +1,5 @@
 {
-  "key": "consolidated-pdf1",
+  "key": "consolidatedreceipt",
   "config": {
     "content": [
       {
@@ -442,9 +442,9 @@
         ]
       }
     ],
-    styles: {
+    "styles": {
      "noc-head": {
-      margin: [
+      "margin": [
         -30,
         -30,
         0,
@@ -452,12 +452,12 @@
       ]
     },
     "receipt-logo-header": {
-      color: "#000000",
-      fontFamily: "Roboto",
-      fontSize: 14,
-      bold: true,
-      letterSpacing: 0.74,
-      margin: [
+      "color": "#000000",
+      "fontFamily": "Roboto",
+      "fontSize": 14,
+      "bold": true,
+      "letterSpacing": 0.74,
+      "margin": [
         0,
         0,
         0,
@@ -465,15 +465,15 @@
       ]
     },
     "receipt-logo-sub-header": {
-      color: "#000000",
-      fontFamily: "Roboto",
-      fontSize: 12,
-      letterSpacing: 0.6
+      "color": "#000000",
+      "fontFamily": "Roboto",
+      "fontSize": 12,
+      "letterSpacing": 0.6
     },
      "noc-table": {
-      fontSize: 12,
-      color: "#000000",
-      margin: [
+      "fontSize": 12,
+      "color": "#000000",
+      "margin": [
         -30,
         45,
         -8,
@@ -481,9 +481,9 @@
       ]
     },
     "noc-table2": {
-      fontSize: 12,
-      color: "#000000",
-      margin: [
+      "fontSize": 12,
+      "color": "#000000",
+      "margin": [
         -30,
         28,
         -8,
@@ -491,11 +491,11 @@
       ]
     },
      "receipt-table-value": {
-      color: "#000000",
-      bold: true,
-      fontSize: 12,
-      fontWeight: 500,
-      margin: [
+      "color": "#000000",
+      "bold": true,
+      "fontSize": 12,
+      "fontWeight": 500,
+      "margin": [
         8,
         8,
         0,
@@ -503,11 +503,11 @@
       ]
     },
     "receipt-table": {
-      color: "#000000",
-      bold: false,
-      fontSize: 12,
-      fontWeight: 400,
-      margin: [
+      "color": "#000000",
+      "bold": false,
+      "fontSize": 12,
+      "fontWeight": 400,
+      "margin": [
         -30,
         8,
         0,
@@ -515,46 +515,46 @@
       ]
     },
      "receipt-approver": {
-      fontSize: 12,
-      bold: true,
-      margin: [
+      "fontSize": 12,
+      "bold": true,
+      "margin": [
         -27,
         50,
         -10,
         0
       ],
-      color: "#484848"
+      "color": "#484848"
     },
     "no-signature": {
-      fontSize: 12,
-      margin: [
+      "fontSize": 12,
+      "margin": [
         -27,
         35,
         -10,
         0
       ],
-      color: "#484848"
+      "color": "#484848"
     },
     "pt-disclaimer": {
-      fontSize: 12,
-      margin: [
+      "fontSize": 12,
+      "margin": [
         -27,
         30,
         -10,
         0
       ],
-      color: "#484848"
+      "color": "#484848"
     },
     "pt-disclaimer-value": {
-      fontSize: 12,
-      margin: [
+      "fontSize": 12,
+      "margin": [
         0,
         5,
         0,
         0
       ],
-      color: "#484848"
-     },
+      "color": "#484848"
+     }
    }
   }
 }
