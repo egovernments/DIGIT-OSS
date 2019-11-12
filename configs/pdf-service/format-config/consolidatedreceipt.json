@@ -195,7 +195,7 @@
                 "border": [
                   false,
                   false,
-                  false,
+                  true,
                   true
                 ],
                 "style": "receipt-table"
