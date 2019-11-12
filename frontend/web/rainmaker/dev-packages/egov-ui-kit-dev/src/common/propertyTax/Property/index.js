@@ -395,6 +395,14 @@ const getAddressInfo = (addressObj, extraItems) => {
             key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PINCODE", localizationLabelsData),
             value: addressObj.pincode || "NA",
           },
+          {
+            key: getTranslatedLabel("Road Type", localizationLabelsData),
+            value: addressObj.roadType || "NA",
+          },
+          {
+            key: getTranslatedLabel("Thana", localizationLabelsData),
+            value: addressObj.thana || "NA",
+          },
           ...extraItems,
         ],
       },
@@ -456,31 +464,27 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
                   : "NA"
               : "NA",
           },
-          {
-            key: getTranslatedLabel("PT_ASSESMENT_INFO_PLOT_SIZE", localizationLabelsData),
-            value:
-              propertyDetails.propertySubType === "SHAREDPROPERTY"
-                ? "NA"
-                : propertyDetails.uom
-                  ? `${propertyDetails.landArea} ${propertyDetails.uom}`
-                  : `${Math.round(propertyDetails.landArea * 100) / 100} sq yards`,
-          },
-          {
-            key: getTranslatedLabel("PT_ASSESMENT_INFO_NO_OF_FLOOR", localizationLabelsData),
-            value: propertyDetails.noOfFloors ? `${propertyDetails.noOfFloors}` : "NA", //noOfFloors
-          },
+          
         ],
         items: {
           header: units
             ? [
-              getTranslatedLabel("PT_ASSESMENT_INFO_FLOOR", localizationLabelsData),
-              getTranslatedLabel("PT_ASSESMENT_INFO_USAGE_TYPE", localizationLabelsData),
-              // getTranslatedLabel("PT_ASSESMENT_INFO_SUB_USAGE_TYPE", localizationLabelsData),
-              getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
-              getTranslatedLabel("PT_ASSESMENT_INFO_AREA_RENT", localizationLabelsData),
-            ]
+                getTranslatedLabel("PT_ASSESMENT_INFO_FLOOR", localizationLabelsData),
+                getTranslatedLabel("PT_ASSESMENT_INFO_USAGE_TYPE", localizationLabelsData),
+                getTranslatedLabel("PT_ASSESMENT_INFO_SUB_USAGE_TYPE", localizationLabelsData),
+                getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
+                getTranslatedLabel("PT_ASSESMENT_INFO_AREA_RENT", localizationLabelsData),
+                getTranslatedLabel("Construction Date", localizationLabelsData),
+                getTranslatedLabel("Construction Type", localizationLabelsData),
+                getTranslatedLabel("Room Area", localizationLabelsData),
+                getTranslatedLabel("Balcony,Corridor,Kitchen,Store Area", localizationLabelsData),
+                getTranslatedLabel("Garage Area", localizationLabelsData),
+                getTranslatedLabel("Bathroom Area", localizationLabelsData),  
+                getTranslatedLabel("Covered Area", localizationLabelsData),            
+              ]
             : [],
           values: units
+
             ? units.map((floor) => {
               return {
                 value: keys.map((key) => {
@@ -489,6 +493,7 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
               };
             })
             : [],
+            
         },
       },
     ]

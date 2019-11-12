@@ -49,7 +49,13 @@ class YearDialog extends Component {
             masterDetails: [
               {
                 name: "RoadType"
-              }
+              },
+              {
+                name: "ConstructionType"
+              },
+              {
+                name:"Thana"
+              },
             ]
           }
         ]

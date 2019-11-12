@@ -22,7 +22,7 @@ const formConfig = {
     ...balconyArea,
     ...garageArea,
     ...bathroomArea,
-    ...coveredArea,
+    // ...coveredArea,
     ...builtArea,
     // ...annualRent,
   },

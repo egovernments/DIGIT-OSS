@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField, MobileNumberField, SingleCheckbox, DropDown, Label, TextFieldIcon, AutoSuggestDropdown } from "components";
+import { TextField, MobileNumberField, SingleCheckbox, DropDown,DatePicker, Label, TextFieldIcon, AutoSuggestDropdown } from "components";
 
 const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, ...rest }) => {
   const renderField = () => {
@@ -29,6 +29,15 @@ const Field = ({ fieldKey, handleFieldChange, field = {}, onTextFieldIconClick, 
             onChange={(e, value, selectedValue) => handleFieldChange(fieldKey, selectedValue)}
           />
         );
+
+        case "date":
+          return (
+            <DatePicker
+            {...rest}
+            {...fieldProps}
+            onChange={(e, value) => handleFieldChange(fieldKey,value)}
+            />
+          )
       case "textFieldIcon":
         return (
           <TextFieldIcon

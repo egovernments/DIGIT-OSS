@@ -12,8 +12,8 @@ import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorage
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 
 let floorDropDownData = [];
-let innerDimensionsData =[{value : "yes" , label :"Yes" },{value : "no" , label :"No" }];
-let constructiontypes =[{value : "road1" , label :"rd1" }];
+let innerDimensionsData = [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }];
+let constructiontypes = [{ value: "road1", label: "rd1" }];
 
 
 
@@ -114,7 +114,11 @@ export const occupancy = {
     required: true,
     numcols: 4,
     dropDownData: [],
-    updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
+    updateDependentFields: ({ formKey, field: sourceField, dispatch, state }) => {
+      let consturctType = Object.values(get(state, `common.loadMdmsData.PropertyTax.ConstructionType`)).map((item, index) => {
+        return { value: item.code, label: item.name };
+      });
+      dispatch(setFieldProperty(formKey, "constructionType", "dropDownData", consturctType));
       const { value } = sourceField;
       const dependentFields1 = ["annualRent"];
       switch (value) {
@@ -142,7 +146,7 @@ export const innerDimensions = {
     dropDownData: innerDimensionsData,
     updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
       const { value } = sourceField;
-      const dependentFields1 = ["roomArea","subUsageType","balconyArea","garageArea","bathroomArea"];
+      const dependentFields1 = ["roomArea", "subUsageType", "balconyArea", "garageArea", "bathroomArea"];
       const dependentFields2 = ["coveredArea"];
       // switch (value) {
       //   case "no":
@@ -157,11 +161,11 @@ export const innerDimensions = {
       //     setDependentFields(dependentFields1, dispatch, formKey, false);
       //     break;
       // }
-      if(value === "no"){
+      if (value === "no") {
         setDependentFields(dependentFields1, dispatch, formKey, true);
         setDependentFields(dependentFields2, dispatch, formKey, false);
       }
-      else{
+      else {
         setDependentFields(dependentFields1, dispatch, formKey, false);
         setDependentFields(dependentFields2, dispatch, formKey, true);
       }
@@ -281,15 +285,15 @@ export const builtArea = {
 export const constructionType = {
   constructionType: {
     id: "constructiontype",
-    jsonPath: "",
-    // localePrefix: { moduleName: "PropertyTax", masterName: "ConstructionType" },
+    jsonPath: "Properties[0].propertyDetails[0].units[0].ConstructionType",
+    localePrefix: { moduleName: "PropertyTax", masterName: "ConstructionType" },
     type: "singleValueList",
     floatingLabelText: "Construction Type",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
     fullWidth: true,
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     numcols: 4,
-    dropDownData:constructiontypes,
+    required:true,
   },
 };
 
@@ -766,15 +770,15 @@ export const pincode = {
     pattern: "^([0-9]){6}$",
   },
 };
-export const thana ={
-  thana:{
-    id:"thana",
+export const thana = {
+  thana: {
+    id: "thana",
     type: "singleValueList",
     floatingLabelText: "Thana",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-    },
+  },
 };
 export const roadType = {
   roadType: {
