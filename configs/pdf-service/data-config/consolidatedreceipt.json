@@ -1,0 +1,122 @@
+{
+  "key": "consolidated-pdf3",
+  "DataConfigs": {
+    "serviceName": "rainmaker-common",
+    "version": "1.0.0",
+    "baseKeyPath": "$.Payments.*",
+    "entityIdPath":"$.Payments[0].paymentDetails[0].receiptNumber",
+    "isCommonTableBorderRequired": true,
+    "mappings": [
+      {
+        "topic": "common-pdf-generation-3",
+        "mappings": [
+          {
+            "direct": [
+              {
+                "variable": "payerName", 
+                "value": {
+                  "path": "$.Payments[0].paymentDetails[0].bill.payerName"
+                }
+              },
+              {
+                "variable": "payerContact", 
+                "value": {
+                  "path": "$.Payments[0].paymentDetails[0].bill.mobileNumber"
+                }
+              },
+              {
+                "variable": "receiptNo", 
+                "value": {
+                  "path": "$.Payments[0].paymentDetails[0].receiptNumber"
+                }
+              },
+              {
+                "variable": "serviceType", 
+                "value": {
+                  "path": "$.Payments[0].paymentDetails[0].businessService"
+                }
+              },
+              {
+                "variable": "paidAmount", 
+                "value": {
+                  "path": "$.Payments[0].paymentDetails[0].totalAmountPaid"
+                }
+              },
+              {
+                "variable": "fromPeriod", 
+                "value": {
+                  "path": "$.Payments[0].paymentDetails[0].billDetails[0].fromPeriod"
+                }
+              },
+              {
+                "variable": "toPeriod", 
+                "value": {
+                  "path": "$.Payments[0].paymentDetails[0].billDetails[0].toPeriod"
+                }
+              },
+              {
+                "variable": "paymentMode", 
+                "value": {
+                  "path": "$.Payments[0].paymentMode"
+                }
+              },
+              {
+                "variable": "G8ReceiptNo",
+                "value": {
+                  "path": "$.Payments[0].paymentDetails[0].billDetails[0].manualReceiptNumber"
+                }
+              },
+              {
+                "variable": "G8ReceiptDate",
+                "value": {
+                  "path": "$.Payments[0].paymentDetails[0].billDetails[0].manualReceiptDate"
+                }
+              },
+              {
+                "variable": "paymentDate", 
+                "value": {
+                  "path": "$.Payments[0].transactionDate"
+                }
+              },
+              {
+                "variable": "consumerID", 
+                "value": {
+                  "path": "$.Payments[0].paymentDetails[0].bill.consumerCode"
+                }
+              },
+              {
+                "variable": "transactionID", 
+                "value": {
+                  "path": "$.Payments[0].transactionNumber"
+                }
+              },
+              {
+                "variable": "totalAmount", 
+                "value": {
+                  "path": "$.Payments[0].paymentDetails[0].totalAmount"
+                }
+              },
+	      {
+                "variable": "logoImage",                        
+                "url":"https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
+                "type":"image"      
+              }
+            ]
+          },
+          {
+            "derived": [
+              {
+                "variable": "pendingAmount", 
+                "formula": "{{totalAmount}}-{{paidAmount}}"
+              },
+              {
+                "variable": "billingPeriod", 
+                "formula": "{{fromPeriod}}-{{toPeriod}}"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
