@@ -1,0 +1,35 @@
+serviceMaps:
+  serviceName: PDF Generation Service
+  mappings:
+  - version: 1.0
+    name: PDF create
+    description: create PDF
+    fromTopic: PDF_GEN_CREATE
+    queryMaps:
+    - query: INSERT INTO egov_pdf_gen(jobid,filestoreids,tenantid,createdtime,endtime,totalcount,entityid,isconsolidated,id,createdby,modifiedby) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      basePath: $.jobs.*
+      jsonMaps:
+
+      - jsonPath: $.jobs.*.jobid
+
+      - jsonPath: $.jobs.*.filestoreids
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.jobs.*.tenantId
+
+      - jsonPath: $.jobs.*.createdtime
+
+      - jsonPath: $.jobs.*.endtime
+
+      - jsonPath: $.jobs.*.totalcount
+
+      - jsonPath: $.jobs.*.entityid
+
+      - jsonPath: $.jobs.*.isconsolidated
+
+      - jsonPath: $.jobs.*.id
+
+      - jsonPath: $.jobs.*.createdby
+
+      - jsonPath: $.jobs.*.modifiedby
