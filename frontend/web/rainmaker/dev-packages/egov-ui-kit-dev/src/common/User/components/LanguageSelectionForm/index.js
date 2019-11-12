@@ -40,7 +40,7 @@ const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick, logoUr
           <div className="web-user-logo" style={{ marginBottom: "24px" }}>
             <Image className="mseva-logo employee-login-logo" source={logoUrl ? logoUrl : `${logo}`} />
           </div>
-          <form>
+        <form>
             <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
               {items &&
                 items.map((item, index) => {
@@ -69,7 +69,7 @@ const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick, logoUr
                 id="continue-action"
                 onClick={onLanguageSelect}
                 primary={true}
-                label={<Label buttonLabel={true} label="CORE_COMMON_CONTINUE" />}
+                label={<Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />}
                 fullWidth={true}
               />
             </div>

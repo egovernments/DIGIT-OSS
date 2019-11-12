@@ -5,7 +5,7 @@ import axios from "axios";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { TENANT } from "egov-ui-kit/utils/endPoints";
 import commonConfig from "config/common.js";
-import { Icon } from "components";
+import { Icon } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 import get from "lodash/get";
@@ -574,11 +574,11 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
         toggleSnackbarAndSetText(
           true,
           { labelName: "There is no admin boundary data available for this tenant", labelKey: "ERR_NO_ADMIN_BOUNDARY_FOR_TENANT" },
-          true
+          "error"
         )
       );
     } else {
-      dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, true));
+      dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message },   "error"));
     }
     return;
   }
@@ -702,6 +702,6 @@ export const onNotificationClick = async (history) => {
     await httpRequest("/egov-user-event/v1/events/lat/_update", "_update", queryObject, requestBody);
     history.push("/notifications");
   } catch (e) {
-    toggleSnackbarAndSetText(true, { labelName: "Count update error", labelKey: "Count update error" }, true);
+    toggleSnackbarAndSetText(true, { labelName: "Count update error", labelKey: "Count update error" },   "error");
   }
 };

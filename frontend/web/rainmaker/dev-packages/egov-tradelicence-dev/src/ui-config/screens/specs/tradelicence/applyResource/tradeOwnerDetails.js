@@ -131,7 +131,6 @@ export const getFatherNameField = getTextField({
 //     }
 //   };
 // };
-
 export const getRelationshipRadioButton = {
   uiFramework: "custom-containers",
   componentPath: "RadioGroupContainer",

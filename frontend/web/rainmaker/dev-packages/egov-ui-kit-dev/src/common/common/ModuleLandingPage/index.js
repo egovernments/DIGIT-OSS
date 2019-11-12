@@ -1,11 +1,8 @@
 import React from "react";
-import Icon from "../../../components/Icon";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { withStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
 import Grid from "@material-ui/core/Grid";
-// import Icon from "@material-ui/core/Icon";
 import Label from "../../../utils/translationNode";
 import "./index.css";
 

@@ -153,13 +153,15 @@ const propertyReducer = (state = initialState, action) => {
         errorMessage: action.error,
       };
     case actionTypes.ASSESSMENT_STATUS_COMPLETE:
-      const assessmentsByStatus = action.payload;
+      const assessmentsByStatus = action.payload[0];
+      const receiptsByYear=action.payload[1];
       return {
         ...state,
         loading: false,
         error: false,
         errorMessage: "",
         assessmentsByStatus,
+        receiptsByYear
       };
     case actionTypes.SINGLE_ASSESSMENT_STATUS_PENDING:
       return {
@@ -176,14 +178,18 @@ const propertyReducer = (state = initialState, action) => {
         errorMessage: action.error,
       };
     case actionTypes.SINGLE_ASSESSMENT_STATUS_COMPLETE:
-      const singleAssessmentByStatus = action.payload;
+      const singleAssessmentByStatus =action.payload[0];
+      const receiptsByYr=action.payload[1];
       return {
         ...state,
         loading: false,
         error: false,
         errorMessage: "",
         singleAssessmentByStatus,
+        receiptsByYr
       };
+    case actionTypes.RESET_PROPERTY_STATE:
+      return initialState;
     default:
       return state;
   }

@@ -18,7 +18,7 @@
 .search-no-property-found {
   text-align: center;
   .new-assess-btn {
-    width: 214px;
+    width: 25%;
     margin: 0px auto;
   }
   .no-search-text {
@@ -26,14 +26,16 @@
     margin-top: 36px;
   }
 }
-
 .inner-header-style {
+  padding: 16px 16px 0px 16px !important;
   justify-content: space-between;
-  cursor: "pointer";
-}
+  cursor: "pointer"; }
 
-@media only screen and (min-width: 768px) {
-  .inner-header-style {
-    padding: 0px 16px !important;
-  }
-}
+
+@media only screen and (max-width: 768px) {
+.search-no-property-found {
+  .new-assess-btn {
+width: fit-content;
+ }}
+.inner-header-style {
+padding: 10px 0px 0px 0px !important; } }

@@ -1,8 +1,11 @@
+
+import { connect } from "react-redux";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import { httpRequest } from "egov-ui-kit/utils/api";
+import { localStorageSet } from "egov-ui-kit/utils/localStorageUtils";
 import { createReceiptDetails } from "../../../PaymentStatus/Components/createReceipt";
-import generateReceipt from "../../../PaymentStatus/Components/receiptsPDF";
+import generateReceipt from "../../../PaymentStatus/Components/receipt";
 import React, { Component } from "react";
 import get from "lodash/get";
 import Label from "egov-ui-kit/utils/translationNode";
@@ -31,7 +34,7 @@ class DropDown extends Component {
     tenantId &&
       this.convertImgToDataURLviaCanvas(
         this.createImageUrl(tenantId),
-        function(data) {
+        function (data) {
           this.setState({ imageUrl: data });
         }.bind(this)
       );
@@ -40,7 +43,7 @@ class DropDown extends Component {
   convertImgToDataURLviaCanvas = (url, callback, outputFormat) => {
     var img = new Image();
     img.crossOrigin = "Anonymous";
-    img.onload = function() {
+    img.onload = function () {
       var canvas = document.createElement("CANVAS");
       var ctx = canvas.getContext("2d");
       var dataURL;
@@ -59,37 +62,42 @@ class DropDown extends Component {
   };
 
   onSelectFieldChange = (event, key, payload, imageUrl) => {
-    const { generalMDMSDataById, history, item } = this.props;
+    const { generalMDMSDataById, history, item, singleAssessmentByStatus = [] } = this.props;
     const { downloadReceipt } = this;
+    const callReciept = (isEmployeeReceipt = false) => {
+      item.consumerCode = item.propertyId;
+      downloadReceipt(item, generalMDMSDataById, isEmployeeReceipt, imageUrl);
+    }
     switch (payload) {
       case "Re-Assess":
         history &&
           history.push(
-            `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${item.latestAssessmentNumber}&isReassesment=true&propertyId=${
-              item.propertyId
+            `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${item.latestAssessmentNumber}&isAssesment=false&isReassesment=true&propertyId=${
+            item.propertyId
             }&tenantId=${item.tenantId}`
           );
-
         break;
       case "Download Receipt":
         //Need 1. Property, 2. Property Details, 3. receiptdetails
+        //&& assessment.receiptInfo.status == "Paid"
         // call receiptcreate func
-        downloadReceipt(item, generalMDMSDataById, false, imageUrl);
+        callReciept()
+
         break;
       case "Download Citizen Receipt":
-        downloadReceipt(item, generalMDMSDataById, false, imageUrl);
+        callReciept()
         break;
       case "Download Employee Receipt":
-        downloadReceipt(item, generalMDMSDataById, true, imageUrl);
+        callReciept(true)
+
         break;
       case "Complete Payment":
         history &&
           history.push(
             `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${
-              item.assessmentNo
-            }&isReassesment=true&isCompletePayment=true&propertyId=${item.propertyId}&tenantId=${item.tenantId}`
+            item.assessmentNo
+            }&isAssesment=true&isReassesment=true&proceedToPayment=true&isCompletePayment=true&propertyId=${item.propertyId}&tenantId=${item.tenantId}`
           );
-
         break;
     }
   };
@@ -99,37 +107,43 @@ class DropDown extends Component {
 
     try {
       const payload = await httpRequest("/collection-services/receipts/_search", "_search", queryObj, {}, [], { ts: 0 });
-      const lastAmount = payload && payload.Receipt && get(payload.Receipt[0], "Bill[0].billDetails[0].totalAmount");
-      const totalAmountBeforeLast =
-        payload &&
-        payload.Receipt &&
-        payload.Receipt.reduce((acc, curr, index) => {
-          if (index !== 0) {
-            acc += get(curr, "Bill[0].billDetails[0].amountPaid");
-          }
-          return acc;
-        }, 0);
-      const totalAmountToPay = lastAmount + totalAmountBeforeLast;
-      const totalAmountPaid =
-        payload &&
-        payload.Receipt &&
-        payload.Receipt.reduce((acc, curr) => {
-          acc += get(curr, "Bill[0].billDetails[0].amountPaid");
-          return acc;
-        }, 0);
-      const receiptDetails =
-        payload &&
-        payload.Receipt &&
-        createReceiptDetails(
-          item.property,
-          item.propertyDetails,
-          payload.Receipt[0],
-          item.localizationLabels,
-          item.cities,
-          totalAmountToPay,
-          totalAmountPaid
-        );
-      receiptDetails && generateReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl, isEmployeeReceipt, {itemData: item, property: item.property, receipt: payload.Receipt});
+      // const lastAmount = payload && payload.Receipt && get(payload.Receipt[0], "Bill[0].billDetails[0].totalAmount");
+      // const totalAmountBeforeLast =
+      //   payload &&
+      //   payload.Receipt &&
+      //   payload.Receipt.reduce((acc, curr, index) => {
+      //     if (index !== 0) {
+      //       acc += get(curr, "Bill[0].billDetails[0].amountPaid");
+      //     }
+      //     return acc;
+      //   }, 0);
+      // const totalAmountToPay = lastAmount + totalAmountBeforeLast;
+      // const totalAmountPaid =
+      //   payload &&
+      //   payload.Receipt &&
+      //   payload.Receipt.reduce((acc, curr) => {
+      //     acc += get(curr, "Bill[0].billDetails[0].amountPaid");
+      //     return acc;
+      //   }, 0);
+      payload.Receipt.forEach((receipt) => {
+        if (item.propertyDetails.receiptInfo.fromPeriod == receipt.Bill[0].billDetails[0].fromPeriod) {
+          const receiptDetails =
+            payload &&
+            payload.Receipt && createReceiptDetails(
+              item.property,
+              item.propertyDetails,
+              receipt,
+              item.localizationLabels,
+              item.cities,
+              get(receipt, "Bill[0].billDetails[0].totalAmount"),
+              get(receipt, "Bill[0].billDetails[0].amountPaid")
+            );
+          localStorageSet("rd-propertyId", item.propertyId);
+          localStorageSet("rd-assessmentNumber", item.propertyDetails.assessmentNumber);
+          receiptDetails && generateReceipt("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl, isEmployeeReceipt, { itemData: item, property: item.property, receipt: payload.Receipt });
+        }
+      })
+
     } catch (e) {
       console.log(e);
     }
@@ -140,7 +154,7 @@ class DropDown extends Component {
     const { imageUrl } = this.state;
     const userType = getUserInfo() && JSON.parse(getUserInfo()).type;
     return (
-      <div>
+      <div style={{ float: 'right' }}>
         <SelectField
           autoWidth={true}
           className="pt-action-dropDown"
@@ -151,12 +165,13 @@ class DropDown extends Component {
           hintStyle={styles.hintStyle}
           onChange={(event, key, payload) => this.onSelectFieldChange(event, key, payload, imageUrl)}
         >
-          {userType === "CITIZEN" && <MenuItem value="Download Receipt" primaryText={<Label label="PT_DOWNLOAD_RECEIPT" />} />}
-          {userType === "EMPLOYEE" && <MenuItem value="Download Citizen Receipt" primaryText={<Label label="PT_DOWNLOAD_CITIZEN_RECEIPT" />} />}
-          {userType === "EMPLOYEE" && <MenuItem value="Download Employee Receipt" primaryText={<Label label="PT_DOWNLOAD_EMPLOYEE_RECEIPT" />} />}
-          {(item.status === "Paid" || item.status === "Partially Paid") && (
+          {userType === "CITIZEN" && item.status !== "Pending" && <MenuItem value="Download Receipt" primaryText={<Label label="PT_DOWNLOAD_RECEIPT" />} />}
+          {userType === "EMPLOYEE" && item.status !== "Pending" && <MenuItem value="Download Citizen Receipt" primaryText={<Label label="PT_DOWNLOAD_CITIZEN_RECEIPT" />} />}
+          {userType === "EMPLOYEE" && item.status !== "Pending" && <MenuItem value="Download Employee Receipt" primaryText={<Label label="PT_DOWNLOAD_EMPLOYEE_RECEIPT" />} />}
+          {(item.status === "Paid" || item.status === "Partially Paid" || item.status === "Pending") && (
             <MenuItem value="Re-Assess" primaryText={<Label label="PT_RE_ASSESS" />} />
           )}
+          {item.status === "Pending" && <MenuItem value="Complete Payment" primaryText={<Label label="PT_COMPLETE_PAYMENT" />} />}
           {item.status === "Partially Paid" && <MenuItem value="Complete Payment" primaryText={<Label label="PT_COMPLETE_PAYMENT" />} />}
         </SelectField>
       </div>
@@ -164,4 +179,21 @@ class DropDown extends Component {
   }
 }
 
-export default DropDown;
+
+const mapStateToProps = (state, ownProps) => {
+  const { properties } = state;
+
+  const { singleAssessmentByStatus = [] } = properties || {};
+
+
+  return {
+    singleAssessmentByStatus
+  };
+};
+
+
+
+export default connect(
+  mapStateToProps,
+  null
+)(DropDown);

@@ -26,7 +26,10 @@ import Label from "egov-ui-kit/utils/translationNode";
 //   return { id: counter, name, calories, fat, carbs, protein };
 // }
 
-function getSorting(order, orderBy) {
+function getSorting(order, orderBy, sortOnObject) {
+  if (orderBy == sortOnObject) {
+    return order === "desc" ? (a, b) => (b[orderBy]['props']['children'] < a[orderBy]['props']['children'] ? -1 : 1) : (a, b) => (a[orderBy]['props']['children'] < b[orderBy]['props']['children'] ? -1 : 1);
+  }
   return order === "desc" ? (a, b) => (b[orderBy] < a[orderBy] ? -1 : 1) : (a, b) => (a[orderBy] < b[orderBy] ? -1 : 1);
 }
 
@@ -88,13 +91,13 @@ const toolbarStyles = (theme) => ({
   highlight:
     theme.palette.type === "light"
       ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
+        color: theme.palette.secondary.main,
+        backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+      }
       : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
+        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.secondary.dark,
+      },
   spacer: {
     flex: "1 1 100%",
   },
@@ -121,10 +124,10 @@ let EnhancedTableToolbar = (props) => {
             {numSelected} selected
           </Typography>
         ) : (
-          <Typography variant="title" id="tableTitle">
-            Nutrition
+            <Typography variant="title" id="tableTitle">
+              Nutrition
           </Typography>
-        )}
+          )}
       </div>
       <div className={classes.spacer} />
       <div className={classes.actions}>
@@ -135,12 +138,12 @@ let EnhancedTableToolbar = (props) => {
             </IconButton>
           </Tooltip>
         ) : (
-          <Tooltip title="Filter list">
-            <IconButton aria-label="Filter list">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
+            <Tooltip title="Filter list">
+              <IconButton aria-label="Filter list">
+                <FilterListIcon />
+              </IconButton>
+            </Tooltip>
+          )}
       </div>
     </Toolbar>
   );
@@ -172,7 +175,7 @@ const styles = (theme) => ({
 class TableUi extends React.Component {
   constructor(props) {
     super(props);
-    const { actionOnRow, orderby } = this.props;
+    const { actionOnRow, orderby, sortOnObject = "" } = this.props;
     this.state = {
       order: "asc",
       orderBy: orderby,
@@ -180,6 +183,7 @@ class TableUi extends React.Component {
       selected: [],
       page: 0,
       rowsPerPage: 5,
+      sortOnObject: sortOnObject
     };
   }
 
@@ -231,7 +235,7 @@ class TableUi extends React.Component {
 
   render() {
     const { classes, rowCheckBox, rowData, columnData, orderby, tableHeading } = this.props;
-    const { order, selected, rowsPerPage, page, orderBy } = this.state;
+    const { order, selected, rowsPerPage, page, orderBy, sortOnObject } = this.state;
     const data = [...rowData];
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
@@ -254,7 +258,7 @@ class TableUi extends React.Component {
             />
             <TableBody>
               {data
-                .sort(getSorting(order, orderBy))
+                .sort(getSorting(order, orderBy, sortOnObject))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((n, index) => {
                   const isSelected = this.isSelected(n.id);

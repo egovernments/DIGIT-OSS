@@ -25,7 +25,7 @@ const onSelectFieldChange = (event, key, payload, history, item) => {
         history.push(
           `/property-tax/assessment-form?FY=${
             item.financialYear
-          }&assessmentId=${item.assessmentNo}&isReassesment=true&propertyId=${
+          }&assessmentId=${item.assessmentNo}&isReassesment=true&isAssesment=false&propertyId=${
             item.propertyId
           }&tenantId=${item.tenantId}`
         );
@@ -40,7 +40,7 @@ const onSelectFieldChange = (event, key, payload, history, item) => {
         history.push(
           `/property-tax/assessment-form?FY=${
             item.financialYear
-          }&assessmentId=${item.assessmentNo}&isReassesment=true&propertyId=${
+          }&assessmentId=${item.assessmentNo}&isReassesment=true&isAssesment=true&propertyId=${
             item.propertyId
           }&tenantId=${item.tenantId}`
         );

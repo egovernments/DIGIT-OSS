@@ -78,7 +78,7 @@ class RejectComplaint extends Component {
           labelName: "Please mention your reason",
           labelKey: "ERR_PLEASE_MENSION_YOUR_REASON"
         },
-        true
+        "error"
       );
     }
   };

@@ -3,7 +3,7 @@ import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import { httpRequest, loginRequest, uploadFile } from "egov-ui-kit/utils/api";
 import { FILE_UPLOAD } from "egov-ui-kit/utils/endPoints";
 import { validateForm } from "./utils";
-import transformer from "config/forms/transformers";
+import transformer from "egov-ui-kit/config/forms/transformers";
 
 export const initForm = (form, recordData) => {
   return {
@@ -88,7 +88,7 @@ export const submitForm = (formKey, saveUrl) => {
         const { message } = error;
         // throw new Error(error);
         dispatch(submitFormError(formKey, message));
-        dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, true));
+        dispatch(toggleSnackbarAndSetText(true, { labelName: message, labelKey: message }, "error"));
       }
     } else {
       dispatch(displayFormErrors(formKey));
@@ -129,7 +129,7 @@ export const fileUpload = (formKey, fieldKey, fileObject, ulbLevel) => {
       dispatch(fileUploadCompleted(formKey, fieldKey, fileStoreId, fileName));
     } catch (error) {
       dispatch(fileUploadError(formKey, fieldKey, error.message, fileName));
-      dispatch(toggleSnackbarAndSetText(true, { labelName: error.message, labelKey: error.message }, true));
+      dispatch(toggleSnackbarAndSetText(true, { labelName: error.message, labelKey: error.message }, "error"));
     }
   };
 };

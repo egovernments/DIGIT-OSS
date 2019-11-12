@@ -77,6 +77,16 @@ class CityPickerDialog extends Component {
             id="person-city"
             iconPosition="after"
             Icon={DownArrow}
+            iconStyle={ {
+              position: "absolute",
+              color: "#969696",
+              zIndex: 2,
+              bottom: 0,
+              top: 10,
+            //  margin: "auto",
+            }
+
+            }
           />
         </div>
         <Dialog
@@ -84,7 +94,7 @@ class CityPickerDialog extends Component {
           titleStyle={{ textAlign: "left", padding: "24px 16px" }}
           handleClose={onClose}
           bodyStyle={{ padding: "0px", overflowX: "hidden", maxHeight: "100%", minHeight: "100px" }}
-          title={<Label label="CS_SELECT_CITY_CHOOSE_CITY" fontSize="18px" containerStyle={{ padding: "20px 10px", backgroundColor: "#fff" }} />}
+          title={<Label label="CS_SELECT_CITY_CHOOSE_CITY" fontSize="16px" bold={true} color="#484848" containerStyle={{ padding: "20px 10px", backgroundColor: "#fff" }} />}
           modal={false}
           open={open}
           autoScrollBodyContent={true}
@@ -92,7 +102,7 @@ class CityPickerDialog extends Component {
           contentStyle={{ width: "90%" }}
           style={{
             paddingTop: "0",
-            // marginTop: "-30px",
+             marginTop: "-30px",
             bottom: "0",
             height: "auto",
           }}
@@ -101,16 +111,18 @@ class CityPickerDialog extends Component {
           <AutoSuggest
             id="city-picker-search"
             dataSource={cities}
-            searchInputText={<Label label="ACTION_TEST_SEARCH" />}
+            searchInputText={<Label label="ACTION_TEST_SEARCH"  color="#727272" labelStyle={{ display:"flex", justifyContent:"left" }}/>}
             searchKey="text"
             autoFocus={false}
             callback={autoSuggestCallback}
           />
           <List
             onItemClick={onItemClick}
-            innerDivStyle={{ paddingLeft: "50px" }}
-            listItemStyle={{ borderBottom: "1px solid #eee" }}
+            innerDivStyle={{ paddingLeft: "50px",color:"#484848"  }}
+            listItemStyle={{ borderBottom: "1px solid #eee",color:"#484848"}}
             items={displayInitialList ? prepareResultsForDisplay(cities) : prepareResultsForDisplay(results)}
+            
+            
           />
         </Dialog>
       </div>

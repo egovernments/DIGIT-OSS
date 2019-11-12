@@ -14,13 +14,16 @@ class ReceiptDetails extends Component {
   render() {
     return (
       <Card
+        style={{
+          backgroundColor: "rgb(242, 242, 242)", boxShadow: 'none'
+        }}
         textChildren={
           <div className="receipt-details">
             <div
               className="rainmaker-displayInline"
-              style={{ paddingLeft: 4, alignItems: "center" }}
+              style={{ paddingLeft: 4, alignItems: "center" , boxShadow: 'none!important'}}
             >
-              <Icon name="receipt" action="action" />
+              {/* <Icon name="receipt" action="action" /> */}
               <Label
                 label="PT_G8_RECEIPT_LABEL"
                 fontSize={16}

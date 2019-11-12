@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Card, TextField, Image } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
-import logo from "egov-ui-kit/assets/images/mseva-punjab.png";
+import logo from "egov-ui-kit/assets/images/logo_black.png"
 import "./index.css";
 
 const OTPForm = ({ handleFieldChange, toggleSnackbarAndSetText, form, resendOTP, phoneNumber, logoUrl }) => {
@@ -58,7 +58,7 @@ const OTPForm = ({ handleFieldChange, toggleSnackbarAndSetText, form, resendOTP,
                       labelName: "Password do not match",
                       labelKey: "ERR_PASSWORD_DO_NOT_MATCH",
                     },
-                    true
+                    "error"
                   );
                 }
               }}
