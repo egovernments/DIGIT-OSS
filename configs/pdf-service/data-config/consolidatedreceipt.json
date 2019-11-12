@@ -45,13 +45,13 @@
               {
                 "variable": "fromPeriod", 
                 "value": {
-                  "path": "$.paymentDetails[0].billDetails[0].fromPeriod"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].fromPeriod"
                 }
               },
               {
                 "variable": "toPeriod", 
                 "value": {
-                  "path": "$.paymentDetails[0].billDetails[0].toPeriod"
+                  "path": "$.paymentDetails[0].bill.billDetails[0].toPeriod"
                 }
               },
               {
@@ -108,10 +108,6 @@
               {
                 "variable": "pendingAmount", 
                 "formula": "{{totalAmount}}-{{paidAmount}}"
-              },
-              {
-                "variable": "billingPeriod", 
-                "formula": "{{fromPeriod}}-{{toPeriod}}"
               }
             ]
           }
