@@ -15118,6 +15118,17 @@
       "code": "null",
       "leftIcon": "editor:insert-chart",
       "path": "Finance.Transactions.Bank Reconciliation.View Bank Statement Uploaded Files"
+    },
+        {
+      "id": 1872,
+      "name": "Pdf Generator createnosave",
+      "url": "/pdf-service/v1/_createnosave",
+      "displayName": "Pdf Generator createnosave",
+      "orderNumber": 3,
+      "enabled": false,
+      "serviceCode": "pdf-generator-createnosave",
+      "code": "null",
+      "path": ""
     }
   ]
 }
