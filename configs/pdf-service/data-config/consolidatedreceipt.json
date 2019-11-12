@@ -15,85 +15,85 @@
               {
                 "variable": "payerName", 
                 "value": {
-                  "path": "$.Payments[0].paymentDetails[0].bill.payerName"
+                  "path": "$.paymentDetails[0].bill.payerName"
                 }
               },
               {
                 "variable": "payerContact", 
                 "value": {
-                  "path": "$.Payments[0].paymentDetails[0].bill.mobileNumber"
+                  "path": "$.paymentDetails[0].bill.mobileNumber"
                 }
               },
               {
                 "variable": "receiptNo", 
                 "value": {
-                  "path": "$.Payments[0].paymentDetails[0].receiptNumber"
+                  "path": "$.paymentDetails[0].receiptNumber"
                 }
               },
               {
                 "variable": "serviceType", 
                 "value": {
-                  "path": "$.Payments[0].paymentDetails[0].businessService"
+                  "path": "$.paymentDetails[0].businessService"
                 }
               },
               {
                 "variable": "paidAmount", 
                 "value": {
-                  "path": "$.Payments[0].paymentDetails[0].totalAmountPaid"
+                  "path": "$.paymentDetails[0].totalAmountPaid"
                 }
               },
               {
                 "variable": "fromPeriod", 
                 "value": {
-                  "path": "$.Payments[0].paymentDetails[0].billDetails[0].fromPeriod"
+                  "path": "$.paymentDetails[0].billDetails[0].fromPeriod"
                 }
               },
               {
                 "variable": "toPeriod", 
                 "value": {
-                  "path": "$.Payments[0].paymentDetails[0].billDetails[0].toPeriod"
+                  "path": "$.paymentDetails[0].billDetails[0].toPeriod"
                 }
               },
               {
                 "variable": "paymentMode", 
                 "value": {
-                  "path": "$.Payments[0].paymentMode"
+                  "path": "$.paymentMode"
                 }
               },
               {
                 "variable": "G8ReceiptNo",
                 "value": {
-                  "path": "$.Payments[0].paymentDetails[0].billDetails[0].manualReceiptNumber"
+                  "path": "$.paymentDetails[0].billDetails[0].manualReceiptNumber"
                 }
               },
               {
                 "variable": "G8ReceiptDate",
                 "value": {
-                  "path": "$.Payments[0].paymentDetails[0].billDetails[0].manualReceiptDate"
+                  "path": "$.paymentDetails[0].billDetails[0].manualReceiptDate"
                 }
               },
               {
                 "variable": "paymentDate", 
                 "value": {
-                  "path": "$.Payments[0].transactionDate"
+                  "path": "$.transactionDate"
                 }
               },
               {
                 "variable": "consumerID", 
                 "value": {
-                  "path": "$.Payments[0].paymentDetails[0].bill.consumerCode"
+                  "path": "$.paymentDetails[0].bill.consumerCode"
                 }
               },
               {
                 "variable": "transactionID", 
                 "value": {
-                  "path": "$.Payments[0].transactionNumber"
+                  "path": "$.transactionNumber"
                 }
               },
               {
                 "variable": "totalAmount", 
                 "value": {
-                  "path": "$.Payments[0].paymentDetails[0].totalAmount"
+                  "path": "$.paymentDetails[0].totalAmount"
                 }
               },
 	      {
