@@ -103,9 +103,9 @@ public class PaymentQueryBuilder {
 
     public static final String INSERT_BILLACCOUNTDETAIL_SQL = "INSERT INTO egcl_billaccountdetail(" +
             "            id, tenantid, billdetailid, demanddetailid, " +
-            "            \"order\", amount, isactualdemand, taxheadcode, additionaldetails)" +
+            "            \"order\", amount, adjustedamount, isactualdemand, taxheadcode, additionaldetails)" +
             "            VALUES (:id, :tenantid, :billdetailid, :demanddetailid, " +
-            "            :order, :amount, :isactualdemand, :taxheadcode, :additionaldetails);";
+            "            :order, :amount, :adjustedamount, :isactualdemand, :taxheadcode, :additionaldetails);";
 
 
     // Payment Status update queries
@@ -279,6 +279,7 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("demanddetailid", billAccountDetail.getDemandDetailId());
         sqlParameterSource.addValue("order", billAccountDetail.getOrder());
         sqlParameterSource.addValue("amount", billAccountDetail.getAmount());
+        sqlParameterSource.addValue("adjustedamount", billAccountDetail.getAdjustedAmount());
         sqlParameterSource.addValue("isactualdemand", billAccountDetail.getIsActualDemand());
         sqlParameterSource.addValue("taxheadcode", billAccountDetail.getTaxHeadCode());
         sqlParameterSource.addValue("additionaldetails", getJsonb(billAccountDetail.getAdditionalDetails()));
