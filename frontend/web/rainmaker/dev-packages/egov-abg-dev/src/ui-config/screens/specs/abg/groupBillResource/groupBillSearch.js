@@ -28,6 +28,14 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
+  dispatch(
+    handleField(
+      "groupBills",
+      "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.locMohalla",
+      "props.value",
+     undefined
+    )
+  );
 };
 
 export const abgSearchCard = getCommonCard({
