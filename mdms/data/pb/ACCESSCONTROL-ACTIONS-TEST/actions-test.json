@@ -14666,7 +14666,7 @@
     {
       "id": 1834,
       "name": "Pdf Generator create",
-      "url": "/pdf/v1/_create",
+      "url": "/pdf-service/v1/_create",
       "displayName": "Pdf Generator create",
       "orderNumber": 1,
       "enabled": false,
@@ -14677,7 +14677,7 @@
     {
       "id": 1835,
       "name": "Pdf Generator search",
-      "url": "/pdf/v1/_search",
+      "url": "/pdf-service/v1/_search",
       "displayName": "Pdf Generator search",
       "orderNumber": 2,
       "enabled": false,
