@@ -114,7 +114,7 @@ export const billSearchCard = getCommonCard({
       },
       required: false,
       visible: true,
-      jsonPath: "searchScreen.billNumber",
+      jsonPath: "searchScreen.billNo",
       gridDefination: {
         xs: 12,
         sm: 4

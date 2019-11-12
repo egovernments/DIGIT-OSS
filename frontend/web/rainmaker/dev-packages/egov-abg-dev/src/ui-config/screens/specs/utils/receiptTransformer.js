@@ -2,6 +2,7 @@ import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "../../../../ui-redux/store";
 import { getMdmsData } from "../utils";
+import orderBy from "lodash/orderBy";
 import {
   getTransformedLocalStorgaeLabels,
   getLocaleLabels
@@ -40,6 +41,20 @@ export const loadUlbLogo = tenantid => {
 
 export const loadPtBillData = response => {
   let data = {};  
+  let orderedResponse = orderBy(
+    response.billDetails,
+    "fromPeriod",
+    "desc");
+    
+  let taxHeads = orderedResponse[0].billAccountDetails.reduce((acc,item) =>{
+    acc[getLocaleLabels(
+      "",
+      item.taxHeadCode,
+      getTransformedLocalStorgaeLabels()
+    )] = item.amount  
+    return acc
+  },[])
+
   const fromDate = epochToDate(get(response, "billDetails[0].fromPeriod"));
   const toDate = epochToDate(get(response, "billDetails[0].toPeriod"));
   data.billPeriod = `${fromDate} - ${toDate}`;
@@ -56,12 +71,8 @@ export const loadPtBillData = response => {
   data.g8ReceiptNo = nullToNa(
     get(response, "billDetails[0].manualReceiptNumber", "None")
   );
-  // }
-  const taxes = get(response, "billDetails[0].billAccountDetails", []);
-  data.taxHeads = getTaxHeads(
-    taxes,
-    get(response, "billDetails[0].totalAmount", 0)
-  );
+  data.taxHeads = taxHeads
+ 
   return data;
   // store.dispatch(prepareFinalObject("receiptDataForReceipt", data));
 };
