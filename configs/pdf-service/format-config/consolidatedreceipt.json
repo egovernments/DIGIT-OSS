@@ -181,7 +181,7 @@
                 "style": "receipt-table"
               },
               {
-                "text" : "X",
+                "text" : " ",
                 "border": [
                   false,
                   false,
@@ -191,7 +191,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text" : "X",
+                "text" : " ",
                 "border": [
                   false,
                   false,

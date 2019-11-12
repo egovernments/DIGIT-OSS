@@ -91,23 +91,15 @@
                 }
               },
               {
-                "variable": "totalAmount", 
+                "variable": "pendingAmount", 
                 "value": {
-                  "path": "$.paymentDetails[0].totalAmount"
+                  "path": "$.paymentDetails[0].totalDue"
                 }
               },
-	      {
+	           {
                 "variable": "logoImage",                        
                 "url":"https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
                 "type":"image"      
-              }
-            ]
-          },
-          {
-            "derived": [
-              {
-                "variable": "pendingAmount", 
-                "formula": "{{totalAmount}}-{{paidAmount}}"
               }
             ]
           }
