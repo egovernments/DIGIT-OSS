@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL } from "egov-ui-kit/utils/endPoints";
+import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL,FETCHRECEIPT } from "egov-ui-kit/utils/endPoints";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { transformById } from "egov-ui-kit/utils/commons";
 import orderby from "lodash/orderBy";
@@ -42,6 +42,26 @@ const fetchBillError = (error) => {
   };
 };
 
+
+const fetchReceiptPending = () => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_RECEIPT_PENDING,
+  };
+};
+
+const fetchReceiptComplete = (payload) => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_RECEIPT_COMPLETE,
+    payload,
+  };
+};
+
+const fetchReceiptError = (error) => {
+  return {
+    type: actionTypes.PROPERTY_FETCH_RECEIPT_ERROR,
+    error,
+  };
+};
 const draftFetchPending = () => {
   return {
     type: actionTypes.DRAFT_FETCH_PENDING,
@@ -534,6 +554,19 @@ export const fetchTotalBillAmount = (fetchBillQueryObject) => {
         dispatch(fetchBillComplete(payloadProperty));
       } catch (error) {
         dispatch(fetchBillError(error.message));
+      }
+    }
+  }
+}
+export const fetchReceipt = (fetchReceiptQueryObject) => {
+  return async (dispatch) => {
+    if (fetchReceiptQueryObject) {
+      dispatch(fetchReceiptPending());
+      try {
+        const payloadProperty = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, fetchReceiptQueryObject);
+        dispatch(fetchReceiptComplete(payloadProperty));
+      } catch (error) {
+        dispatch(fetchReceiptError(error.message));
       }
     }
   }

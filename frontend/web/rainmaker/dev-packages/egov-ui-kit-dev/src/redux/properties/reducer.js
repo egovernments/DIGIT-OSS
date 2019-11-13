@@ -206,12 +206,39 @@ const propertyReducer = (state = initialState, action) => {
       };
     case actionTypes.PROPERTY_FETCH_BILL_COMPLETE:
       const totalBillAmountDue = getTotalAmountDue(action.payload);
+      const Bill=action.payload.Bill;
       return {
         ...state,
         loading: false,
         error: false,
         errorMessage: "",
         totalBillAmountDue,
+        Bill
+      };
+    case actionTypes.PROPERTY_FETCH_RECEIPT_PENDING:
+        return {
+          ...state,
+          loading: true,
+          error: false,
+          errorMessage: "",
+        };
+    case actionTypes.PROPERTY_FETCH_RECEIPT_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMessage: action.error,
+        Payments: []
+      };
+    case actionTypes.PROPERTY_FETCH_RECEIPT_COMPLETE:
+    
+      const Payments=action.payload.Payments;
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        errorMessage: "",
+        Payments
       };
     case actionTypes.RESET_PROPERTY_STATE:
       return initialState;

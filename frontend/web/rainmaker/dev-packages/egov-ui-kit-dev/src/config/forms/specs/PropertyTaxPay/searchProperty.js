@@ -24,7 +24,7 @@ const formConfig = {
     },
     mobileNumber: {
       id: "complainant-mobile-no",
-      type: "mobilenumber",
+      type: "textfield",
       jsonPath: "",
       floatingLabelText: "PT_OWNER_MOBILE_NUMBER",
       errorMessage: "CORE_COMMON_PHONENO_INVALIDMSG",
