@@ -573,7 +573,7 @@ public class Far_Client extends Far {
 			}
 		}
 
-		pl.setSurrenderRoadArea(surrenderRoadArea.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS,
+		pl.setTotalSurrenderRoadArea(surrenderRoadArea.setScale(DcrConstants.DECIMALDIGITS_MEASUREMENTS,
 				DcrConstants.ROUNDMODE_MEASUREMENTS));
 		BigDecimal plotArea = pl.getPlot() != null ? pl.getPlot().getArea().add(surrenderRoadArea) : BigDecimal.ZERO;
 		if (plotArea.doubleValue() > 0)
@@ -637,7 +637,7 @@ public class Far_Client extends Far {
 		if (StringUtils.isNotBlank(pl.getPlanInformation().getBuildingNearMonument())
 				&& "YES".equalsIgnoreCase(pl.getPlanInformation().getBuildingNearMonument())) {
 			BigDecimal minDistanceFromMonument = BigDecimal.ZERO;
-			List<BigDecimal> distancesFromMonument = pl.getDistancesFromMonument();
+			List<BigDecimal> distancesFromMonument = pl.getDistanceToExternalEntity().getMonuments();
 			if (!distancesFromMonument.isEmpty()) {
 
 				minDistanceFromMonument = distancesFromMonument.stream().reduce(BigDecimal::min).get();
