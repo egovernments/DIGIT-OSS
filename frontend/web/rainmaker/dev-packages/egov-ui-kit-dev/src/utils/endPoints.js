@@ -174,3 +174,9 @@ export const FETCHBILL = {
     ACTION: "_get",
   },
 };
+export const FETCHRECEIPT = {
+  GET: {
+    URL: "/collection-services/payments/_search",
+    ACTION: "_get",
+  },
+};

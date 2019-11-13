@@ -7,6 +7,8 @@ import AssessmentInfo from '../../../Property/components/AssessmentInfo';
 import PropertyAddressInfo from '../../../Property/components/PropertyAddressInfo';
 import OwnerInfo from '../../../Property/components/OwnerInfo';
 import TotalDues from '../../../Property/components/TotalDues';
+import AssessmentHistory from "./components/AssessmentHistory";
+import PaymentHistory from "./components/PaymentHistory";
 
 const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, properties, style ,generalMDMSDataById, totalBillAmountDue,history}) => {
     const items2 = [items[1]];
@@ -29,7 +31,7 @@ const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, p
                             <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
                             <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></AssessmentInfo>
                             <OwnerInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ownershipTransfer={true} viewHistory={true}></OwnerInfo>
-                            <Card style={{ backgroundColor: 'rgb(242,242,242)', boxShadow: 'none' }}
+                            {/* <Card style={{ backgroundColor: 'rgb(242,242,242)', boxShadow: 'none' }}
                                 textChildren={
                                     <div >
                                         <List
@@ -40,7 +42,9 @@ const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, p
                                             onItemClick={onItemClick}
                                         />
                                     </div>
-                                } />
+                                } /> */}
+                                <AssessmentHistory></AssessmentHistory>
+                                <PaymentHistory></PaymentHistory>
                                 <Card textChildren={<TotalDues history tenantId={properties.tenantId}  consumerCode={properties.propertyId} totalBillAmountDue={totalBillAmountDue} />} style={{ backgroundColor: 'rgb(242,242,242)', boxShadow: 'none' }} />
                                 
                         </div>

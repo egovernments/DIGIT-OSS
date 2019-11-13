@@ -10,7 +10,7 @@ import { Icon, BreadCrumbs } from "egov-ui-kit/components";
 import { addBreadCrumbs } from "egov-ui-kit/redux/app/actions";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import PropertyInformation from "./components/PropertyInformation";
-import { fetchProperties, getSingleAssesmentandStatus, fetchTotalBillAmount } from "egov-ui-kit/redux/properties/actions";
+import { fetchProperties, getSingleAssesmentandStatus, fetchTotalBillAmount,fetchReceipt } from "egov-ui-kit/redux/properties/actions";
 import { getCompletedTransformedItems } from "egov-ui-kit/common/propertyTax/TransformedAssessments";
 import isEqual from "lodash/isEqual";
 import orderby from "lodash/orderBy";
@@ -60,7 +60,7 @@ class Property extends Component {
   }
 
   componentDidMount = () => {
-    const { location, addBreadCrumbs, fetchGeneralMDMSData, renderCustomTitleForPt, customTitle, fetchProperties, fetchTotalBillAmount } = this.props;
+    const { location, addBreadCrumbs, fetchGeneralMDMSData, renderCustomTitleForPt, customTitle, fetchProperties, fetchTotalBillAmount,fetchReceipt } = this.props;
     const requestBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -128,6 +128,10 @@ class Property extends Component {
       { key: "consumerCode", value: decodeURIComponent(this.props.match.params.propertyId) },
       { key: "tenantId", value: this.props.match.params.tenantId },
       { key: "businessService", value: 'PT' }
+    ]);
+    fetchReceipt([
+      { key: "consumerCodes", value: decodeURIComponent(this.props.match.params.propertyId) },
+      { key: "tenantId", value: this.props.match.params.tenantId }
     ]);
   };
 
@@ -669,6 +673,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchProperties: (queryObjectProperty) => dispatch(fetchProperties(queryObjectProperty)),
     getSingleAssesmentandStatus: (queryObj) => dispatch(getSingleAssesmentandStatus(queryObj)),
     fetchTotalBillAmount: (fetchBillQueryObject) => dispatch(fetchTotalBillAmount(fetchBillQueryObject)),
+    fetchReceipt: (fetchReceiptQueryObject) => dispatch(fetchReceipt(fetchReceiptQueryObject)),
   };
 };
 
