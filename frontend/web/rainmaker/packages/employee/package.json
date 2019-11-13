@@ -22,6 +22,7 @@
     "egov-ui-kit": "^0.0.1",
     "egov-workflow": "0.0.1",
     "egov-uc": "0.0.1",
+    "egov-bpa": "0.0.1",
     "html2canvas": "^1.0.0-alpha.12",
     "jsonpath": "^1.0.0",
     "jsonpath-plus": "^0.16.0",

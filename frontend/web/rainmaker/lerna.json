@@ -10,6 +10,7 @@
     "dev-packages/egov-tradelicence-dev",
     "dev-packages/egov-hrms-dev",
     "dev-packages/egov-uc-dev",
+    "dev-packages/egov-bpa-dev",
     "packages/citizen",
     "packages/employee",
     "packages/lib/*"
