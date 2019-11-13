@@ -9,7 +9,7 @@ import {
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { searchApiCall } from "./function";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const tenantId = getTenantId();
@@ -34,19 +34,12 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "billSearch",
-      "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.serviceType",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "billSearch",
       "components.div.children.billSearchCard.children.cardContent.children.searchContainer.children.mobileNo",
       "props.value",
       ""
     )
   );
+  dispatch(prepareFinalObject("searchScreen" , {tenantId: tenantId}))
 };
 
 export const billSearchCard = getCommonCard({
