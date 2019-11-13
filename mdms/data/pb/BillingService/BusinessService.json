@@ -8,8 +8,8 @@
       "collectionModesNotAllowed": [
         "DD"
       ],
-      "partPaymentAllowed": true,
-      "isAdvanceAllowed": true,
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
       "demandUpdateTime": 86400000,
       "isVoucherCreationEnabled": true
     },
