@@ -2,6 +2,10 @@ import React from "react";
 import "./index.css";
 import Label from "egov-ui-kit/utils/translationNode";
 
+const labelContainerStyle = {
+  marginTop: "-2px"
+}
+
 const RadioButtonForm = ({ label, form, handleFieldChange, selectedYear, handleRadioButton, history, urlToAppend }) => {
   const fields = form.fields || {};
   return (
@@ -18,6 +22,7 @@ const RadioButtonForm = ({ label, form, handleFieldChange, selectedYear, handleR
           label={label}
           fontSize="18px"
           color="#484848"
+          containerStyle={labelContainerStyle}
         />
       </div>
     </div>
