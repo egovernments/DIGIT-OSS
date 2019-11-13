@@ -75,7 +75,7 @@
 
 						</div>
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.isclosed" /> </label>
+								code="lbl.isclosedyear" /> </label>
 						<div class="col-sm-3 add-margin">
 						<c:choose>
 								<c:when test="${CFinancialYear.isClosed}">
