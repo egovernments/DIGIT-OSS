@@ -1,7 +1,7 @@
 {
   "tenantId": "pb",
   "moduleName": "StakeholderRegistraition",
-  "tradeTypetoRoleMapping": [
+  "TradeTypetoRoleMapping": [
     {
       "id": "313bbadb-c0d7-49b5-b021-77a608f13a31",
       "tradeType": "SERVICES.NGBS.ARCHITECT",
