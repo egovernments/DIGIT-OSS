@@ -15129,6 +15129,20 @@
       "serviceCode": "pdf-generator-createnosave",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1873,
+      "name": "Financial Year-SetUp",
+      "url": "url",
+      "parentModule": "",
+      "displayName": "Close Financial Year",
+      "orderNumber": 4,
+      "enabled": true,
+      "serviceCode": "FinanceMaster",
+      "code": "null",
+      "leftIcon": "editor:insert-chart",
+      "path": "Finance.Period End Activities.Close Financial Year",
+      "navigationURL": "services/EGF/cfinancialyear/search/close"
     }
   ]
 }
