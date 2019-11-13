@@ -74,6 +74,12 @@
     }
   },
   "common-masters": {
+    "IdFormat": {
+      "masterName": "IdFormat",
+      "moduleDefinition": null,
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
     "Ui-Common-Config": {
       "masterName": "Ui-Common-Config",
       "moduleDefinition": null,
