@@ -492,22 +492,26 @@ const getSingleBillData = transformedData => {
               {
                 stack: [
                   {
-                    text: "Amritsar Municipal Corportaion",
+                    text: transformedData.corporationName,
                     style: "receipt-logo-header"
                   },
                   {
                     stack: [
                       {
-                        text: "C Block, Ranjit Avenue, Amritsar"
+                        text: transformedData.corporationAddress,
+                        style: "receipt-address"
                       },
                       {
-                        text: " Tel. +91-183-2502339"
+                        text: `Tel. +91 ${transformedData.corporationContact}`,
+                        style: "receipt-address"
                       },
                       {
-                        text: "website: www.amritsarcorp.com"
+                        text: `website: ${transformedData.corporationWebsite}`,
+                        style: "receipt-address"
                       },
                       {
-                        text: "Email: cmcasr@punjab.gov.in"
+                        text: `Email: ${transformedData.corporationEmail}`,
+                        style: "receipt-address"
                       }
                     ]
                   }
@@ -670,8 +674,7 @@ const getSingleBillData = transformedData => {
                 style: "receipt-table"
               }
             ],
-            [
-             
+            [         
               {
                 text: "Property ID",
                 border: [true, false, false, true],
@@ -684,17 +687,17 @@ const getSingleBillData = transformedData => {
               },
               {
                 text: "",
-                border: [false, false, false, false]
+                border: [false, false, false, false],
               },
               {
                 text: "Bill Due Date",
                 border: [true, false, false, true],
-                style: "right-receipt-table"
+                style: "receipt-table-value"
               },
               {
                 text: transformedData.dueDate,
                 border: [false, false, true, true],
-                style: "right-receipt-table2"
+                style: "receipt-table"
               }
             ]
           ]
@@ -717,7 +720,7 @@ const getSingleBillData = transformedData => {
             [
               {
                 table: {
-                  widths: ["11%", "11%", "10%", "10%", "10%", "11%", "10%", "10%","10%"],
+                  widths: ["11%", "11%", "10%", "10%", "10%", "12%", "10%", "10%","10%"],
                   body: [
                       getTaxHeadHeaders(transformedData.taxHeads),
                       getTaxHeadValues(transformedData.taxHeads)                 
@@ -885,7 +888,7 @@ const getSingleBillData = transformedData => {
                 style: "receipt-table-value"
               },
               {
-                text: transformedData.amountPaid,
+                text: transformedData.totalAmount,
                 border: [false, false, false, false],
 
                 style: "receipt-table"
@@ -920,7 +923,7 @@ const getSingleBillData = transformedData => {
       "noc-table": {
         fontSize: 12,
         color: "#484848",
-        margin: [-25, 20, -8, -8]
+        margin: [-25, 15, -8, -8]
       },
       "noc-table2": {
         fontSize: 12,
@@ -930,7 +933,7 @@ const getSingleBillData = transformedData => {
       "noc-table3": {
         fontSize: 12,
         color: "#484848",
-        margin: [-25, 30, -8, -8]
+        margin: [-25, 18, -8, -8]
       },
       "receipt-table-value": {
         color: "#000000",
@@ -941,21 +944,24 @@ const getSingleBillData = transformedData => {
       },
       "receipt-table-value2": {
         color: "#000000",
-        bold: true,
-        fontSize: 12,
-        fontWeight: 500,
+        fontSize: 11,
+        fontWeight: 400,
         margin: [3, 5, 0, 0]
       },
       "receipt-table": {
         color: "#484848",
-        bold: true,
         fontSize: 12,
         fontWeight: 400,
         margin: [-30, 5, 0, 0]
       },
+      "receipt-address": {
+        color: "#484848",
+        fontSize: 12,
+        margin: [0, -2, 0, 5],
+        minWidth: 10
+      },
       "receipt-table2": {
         color: "#484848",
-        bold: true,
         fontSize: 12,
         fontWeight: 400,
         margin: [3, 8, 0, 10]
@@ -968,10 +974,10 @@ const getSingleBillData = transformedData => {
         margin: [8, -10, 0, 10]
       },
       "right-receipt-table2": {
-        color: "#484848",
+        color: "#000000",
         bold: true,
         fontSize: 12,
-        fontWeight: 400,
+        fontWeight: 500,
         margin: [-30, -10, 0, 0]
       },
       "receipt-approver": {
@@ -1018,7 +1024,7 @@ const getSingleBillData = transformedData => {
         alignment: "center"
       },
       footer: {
-        margin: [0, 20, 0, 0],
+        margin: [0, 38, 0, 0],
         color: "#000000",
         bold: true,
         alignment: "right"
