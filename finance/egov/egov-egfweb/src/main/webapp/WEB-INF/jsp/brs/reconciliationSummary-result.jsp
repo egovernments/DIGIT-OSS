@@ -51,6 +51,7 @@
 <%@ page language="java"%>
 <%@ taglib prefix="s" uri="/WEB-INF/tags/struts-tags.tld"%>
 <%@ taglib prefix="egov" tagdir="/WEB-INF/tags"%>
+
 <html>
 <head>
 
@@ -73,6 +74,95 @@
 <SCRIPT type="text/javascript"
 	src="../resources/javascript/calendar.js?rnd=${app_release_no}"
 	type="text/javascript"></SCRIPT>
+<script type="text/javascript">
+var opt = {
+        autoOpen: false,
+        modal: true,
+        width: 650,
+        height:523,
+        title: 'Details',
+        buttons: {
+            Close: function () {
+            	jQuery(this).dialog('close');
+            }
+        }
+};
+jQuery(function () {
+		var bankStmtDate=jQuery("#bankStmtDate").val();
+		var bankAccId=jQuery("#bankAccId").val();
+        var url= "/services/EGF/brs/bankReconciliationDetails.action";
+	jQuery("#issuedChequAndDDId").click(function () {
+		opt.title="Cheques/DD issued but not presented in bank";
+		jQuery.ajax({
+            type: "POST",
+            url:url,
+            data: { bankStmtDate: bankStmtDate, bankAccId : bankAccId,actionName:"CHEQUE_DD_ISSUED_NP_IN_BANK"},
+            success: function (r) {
+                jQuery("#dialog").html(r);
+                jQuery("#dialog").dialog(opt).dialog("open");
+                jQuery('.ui-dialog-titlebar-close').hide();
+            }
+        });
+    });
+
+	jQuery("#issuedOtherInstrumentsId").click(function () {
+		opt.title="Other instruments issued but not presented in bank";
+		jQuery.ajax({
+            type: "POST",
+            url: url,
+            data: { bankStmtDate: bankStmtDate, bankAccId : bankAccId,actionName:"OTHER_INSTRUMENT_ISSUED_NP_IN_BANK"},
+            success: function (r) {
+                jQuery("#dialog").html(r);
+                jQuery("#dialog").dialog(opt).dialog("open");
+                jQuery('.ui-dialog-titlebar-close').hide();
+            }
+        });
+    });
+
+	jQuery("#unReconciledCrBrsEntryId").click(function () {
+		opt.title="Credit given by Bank either for interest or for any other account but not accounted for in Bank Book";
+		jQuery.ajax({
+            type: "POST",
+            url: url,
+            data: { bankStmtDate: bankStmtDate, bankAccId : bankAccId,actionName:"RECEIPT_BRS_ENTRIES"},
+            success: function (r) {
+                jQuery("#dialog").html(r);
+                jQuery("#dialog").dialog(opt).dialog("open");
+                jQuery('.ui-dialog-titlebar-close').hide();
+            }
+        });
+    });
+
+	jQuery("#unReconciledDrBrsEntryId").click(function () {
+		opt.title="Service Charges/Bank Charges or any other charge levied by the Bank but not accounted for Bank book";
+		jQuery.ajax({
+            type: "POST",
+            url:url,
+            data: { bankStmtDate: bankStmtDate, bankAccId : bankAccId,actionName:"PAYMENT_BRS_ENTRIES"},
+            success: function (r) {
+                jQuery("#dialog").html(r);
+                jQuery("#dialog").dialog(opt).dialog("open");
+                jQuery('.ui-dialog-titlebar-close').hide();
+            }
+        });
+    });
+
+    jQuery("#unReconciledDrId").click(function () {
+		opt.title="Cheques Deposited but not cleared";
+		jQuery.ajax({
+            type: "POST",
+            url: url,
+            data: { bankStmtDate: bankStmtDate, bankAccId : bankAccId,actionName:"CHEQUE_DEPOSITED_NOT_CLEARED"},
+            success: function (r) {
+                jQuery("#dialog").html(r);
+                jQuery("#dialog").dialog(opt).dialog("open");
+                jQuery('.ui-dialog-titlebar-close').hide();
+            }
+        });
+    });
+});
+</script>
+
 </head>
 <body>
 	<div class="formmainbox">
@@ -95,7 +185,8 @@
 					<td class="bluebox">Bank <span class="bluebox"><span
 							class="mandatory1">*</span></span></td>
 					<td class="bluebox"><s:textfield name="bank" id="bank"
-							readonly="true" /></td>
+							readonly="true" /><s:hidden name="bankAccount.id" id="bankAccId"></s:hidden>
+							</td>
 					<td class="bluebox">Branch <span class="bluebox"><span
 							class="mandatory1">*</span></span></td>
 					<td class="bluebox"><s:textfield name="branch" id="branch"
@@ -161,8 +252,11 @@
 					<td class="blueborderfortd"><div align="right"
 							name="addAmountDebit" id="addAmountDebit" readOnly>&nbsp;</div></td>
 					<td class="blueborderfortd"><div align="right"
-							name="addAmountCredit" id="addAmountCredit" readOnly>
-							<s:property value="unReconciledCr" />
+							name="addAmountCredit" id="addAmountCredit"  readOnly>
+							<s:if test='unReconciledCr != 0'>
+								<a href="#"  id="issuedChequAndDDId"><s:property value="unReconciledCr" /></a>
+							</s:if>
+							<s:else><s:property value="unReconciledCr" /></s:else>
 						</div></td>
 				</tr>
 
@@ -173,7 +267,10 @@
 							name="addAmountDebit" id="addAmountDebit" readOnly>&nbsp;</div></td>
 					<td class="blueborderfortd"><div align="right"
 							name="addAmountCredit" id="addAmountCredit" readOnly>
-							<s:property value="unReconciledCrOthers" />
+							<s:if test='unReconciledCrOthers != 0'>
+								<a href="#"  id="issuedOtherInstrumentsId"><s:property value="unReconciledCrOthers" /></a>
+							</s:if>
+							<s:else><s:property value="unReconciledCrOthers" /></s:else>
 						</div></td>
 				</tr>
 				<tr>
@@ -185,7 +282,11 @@
 							name="addOthersAmountDebit" id="addOthersAmountDebit" readOnly>&nbsp;</div></td>
 					<td class="blueborderfortd"><div align="right"
 							name="addOthersAmountCredit" id="addOthersAmountCredit" readOnly>
-							<s:property value="unReconciledCrBrsEntry" />
+							<s:if test='unReconciledCrBrsEntry != 0'>
+								<a href="#"  id="unReconciledCrBrsEntryId"><s:property value="unReconciledCrBrsEntry" /></a>
+							</s:if>
+							<s:else><s:property value="unReconciledCrBrsEntry" /></s:else>
+							
 						</div></td>
 				</tr>
 
@@ -209,7 +310,10 @@
 							name="lessAmountDebit" id="lessAmountDebit" readOnly>&nbsp;</div></td>
 					<td class="blueborderfortd"><div align="right"
 							name="lessAmountCredit" id="lessAmountCredit" readOnly>
-							<s:property value="unReconciledDr" />
+							<s:if test='unReconciledDr != 0'>
+								<a href="#" id="unReconciledDrId"><s:property value="unReconciledDr" /></a>
+							</s:if>
+							<s:else><s:property value="unReconciledDr" /></s:else>
 						</div></td>
 				</tr>
 
@@ -220,7 +324,10 @@
 							name="lessAmountDebit" id="lessAmountDebit" readOnly>&nbsp;</div></td>
 					<td class="blueborderfortd"><div align="right"
 							name="lessAmountCredit" id="lessAmountCredit" readOnly>
-							<s:property value="unReconciledDrOthers" />
+							<s:if test='unReconciledDrOthers != 0'>
+								<a href="#" id="unReconciledDrOthersId"><s:property value="unReconciledDrOthers" /></a>
+							</s:if>
+							<s:else><s:property value="unReconciledDrOthers" /></s:else>
 						</div></td>
 				</tr>
 				<tr>
@@ -234,7 +341,10 @@
 					<td class="blueborderfortd"><div align="right"
 							name="lessOthersAmountCredit" id="lessOthersAmountCredit"
 							readOnly>
-							<s:property value="unReconciledDrBrsEntry" />
+							<s:if test='unReconciledDrBrsEntry != 0'>
+								<a href="#"  id="unReconciledDrBrsEntryId"><s:property value="unReconciledDrBrsEntry" /></a>
+							</s:if>
+							<s:else><s:property value="unReconciledDrBrsEntry" /></s:else>
 						</div></td>
 				</tr>
 
@@ -279,8 +389,7 @@
 						id="button1" value="Print" onclick="window.print()" />&nbsp;</td>
 				</tr>
 			</table>
-
-
+			<div id="dialog" style="display: none">
 		</s:form>
 	</div>
 </body>
