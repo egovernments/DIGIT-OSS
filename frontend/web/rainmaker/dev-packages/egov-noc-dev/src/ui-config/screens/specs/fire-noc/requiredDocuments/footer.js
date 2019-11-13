@@ -28,13 +28,14 @@ export const footer = {
   uiFramework: "custom-atoms",
   componentPath: "Div",
   props: {
-    className: "apply-wizard-footer",
+    className: "apply-wizard-footerReq",
 
-    style: {
-      width: "100%",
-      textAlign: "center",
-      bottom: 52
-    }
+    // style: {
+    //   width: "93%",
+    //   textAlign: "center",
+    //   bottom: 52,
+    //   left:48
+    // }
   },
 
   // props: {
@@ -50,7 +51,7 @@ export const footer = {
         variant: "outlined",
         color: "primary",
         style: {
-          minWidth: "200px",
+         minWidth: "180px",
           height: "48px",
           marginRight: "16px"
         }
@@ -73,7 +74,7 @@ export const footer = {
         variant: "contained",
         color: "primary",
         style: {
-          minWidth: "200px",
+         minWidth: "180px",
           height: "48px",
           marginRight: "45px"
         }

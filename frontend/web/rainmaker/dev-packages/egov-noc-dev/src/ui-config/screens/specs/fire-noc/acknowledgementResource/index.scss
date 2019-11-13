@@ -20,4 +20,17 @@
     margin: 0 !important;
     border-radius: none !important;
   }
+  .apply-wizard-footer1 {
+    width: 100% !important;
+    margin: initial;
+    border: none;
+    margin: 0 !important;
+    border-radius: none !important;
+  }
+
+}
+@media only screen and (min-width: 551px) {
+  .apply-wizard-footer1 {
+    margin-right:20px !important;
+  }
 }
