@@ -61,11 +61,15 @@ import org.egov.commons.CFinancialYear;
 import org.egov.commons.dao.BankHibernateDAO;
 import org.egov.commons.dao.FinancialYearHibernateDAO;
 import org.egov.egf.commons.EgovCommon;
+import org.egov.infra.microservice.models.Instrument;
 import org.egov.infra.web.struts.actions.BaseFormAction;
+import org.egov.model.brs.BrsEntries;
+import org.egov.model.instrument.InstrumentHeader;
 import org.egov.services.masters.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -73,7 +77,8 @@ import java.util.List;
 
 @ParentPackage("egov")
 @Results({ @Result(name = "new", location = "reconciliationSummary-new.jsp"),
-		@Result(name = "result", location = "reconciliationSummary-result.jsp") })
+		@Result(name = "result", location = "reconciliationSummary-result.jsp"),
+		@Result(name = "brcDetails", location = "brcDetails.jsp")})
 public class BankReconciliationAction extends BaseFormAction {
 	@Autowired
 	FinancialYearHibernateDAO financialYearDAO;
@@ -107,11 +112,22 @@ public class BankReconciliationAction extends BaseFormAction {
 	double unReconciledDrBrsEntry;
 	double subTotal;
 	double netTotal;
+	//Cheques/DD issued but not presented in bank (CHEQUE_DD_ISSUED_NP_IN_BANK)
+	String actionName;
+	Long bankAccId;
+	final String CHEQUE_DD_ISSUED_NP_IN_BANK="CHEQUE_DD_ISSUED_NP_IN_BANK";
+	final String OTHER_INSTRUMENT_ISSUED_NP_IN_BANK="OTHER_INSTRUMENT_ISSUED_NP_IN_BANK";
+	final String RECEIPT_BRS_ENTRIES="RECEIPT_BRS_ENTRIES";
+	final String PAYMENT_BRS_ENTRIES="PAYMENT_BRS_ENTRIES";
+	final String CHEQUE_DEPOSITED_NOT_CLEARED="CHEQUE_DEPOSITED_NOT_CLEARED";
 	private static final Logger LOGGER = Logger
 			.getLogger(BankReconciliationAction.class);
 
 	@Autowired
 	BankReconciliationSummary bankReconciliationSummary;
+    private List<InstrumentHeader> chequDDNotPresentInBank;
+    private List<BrsEntries> unReconciledBrsEntries;
+    private List<Instrument> unReconciledDepositedInst;
 
 	@Override
 	public Object getModel() {
@@ -122,6 +138,33 @@ public class BankReconciliationAction extends BaseFormAction {
 	public String newForm() {
 		return "new";
 	}
+	
+    @Action(value = "/brs/bankReconciliationDetails")
+    public String brcDetails() {
+        bankSDate = parameters.get("bankStmtDate")[0];
+        Date dt = new Date();
+        try {
+            dt = sdf.parse(bankSDate);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        CFinancialYear finYearByDate = financialYearDAO.getFinYearByDate(dt);
+        String recDate = formatter.format(dt);
+        Date fromDate = finYearByDate.getStartingDate();
+        if (CHEQUE_DD_ISSUED_NP_IN_BANK.equals(actionName)) {
+            chequDDNotPresentInBank = bankReconciliationSummary.getIssuedInstrumentsNotPresentInBank("Cheque/DD", fromDate, dt, bankAccId);
+        }else if (OTHER_INSTRUMENT_ISSUED_NP_IN_BANK.equals(actionName)) {
+            chequDDNotPresentInBank = bankReconciliationSummary.getIssuedInstrumentsNotPresentInBank("Other", fromDate, dt, bankAccId);
+        }else if (RECEIPT_BRS_ENTRIES.equals(actionName)) {
+            unReconciledBrsEntries = bankReconciliationSummary.getBrsEntriesList("Receipt", fromDate, dt, bankAccId);
+        }else if (PAYMENT_BRS_ENTRIES.equals(actionName)) {
+            unReconciledBrsEntries = bankReconciliationSummary.getBrsEntriesList("Payment", fromDate, dt, bankAccId);
+        }else if (CHEQUE_DEPOSITED_NOT_CLEARED.equals(actionName)) {
+            unReconciledDepositedInst = bankReconciliationSummary.getDepositedInstrumentsOfReceipt(bankAccId.intValue(), fromDate, dt);
+        }
+        return "brcDetails";
+    }
 
 	public void prepare() {
 
@@ -359,5 +402,54 @@ public class BankReconciliationAction extends BaseFormAction {
 	public void setBranch(String branch) {
 		this.branch = branch;
 	}
+
+    public String getActionName() {
+        return actionName;
+    }
+
+    public void setActionName(String actionName) {
+        this.actionName = actionName;
+    }
+
+    public Bankaccount getBankAccount() {
+        return bankAccount;
+    }
+
+    public void setBankAccount(Bankaccount bankAccount) {
+        this.bankAccount = bankAccount;
+    }
+
+    public Long getBankAccId() {
+        return bankAccId;
+    }
+
+    public void setBankAccId(Long bankAccId) {
+        this.bankAccId = bankAccId;
+    }
+
+    public List<InstrumentHeader> getChequDDNotPresentInBank() {
+        return chequDDNotPresentInBank;
+    }
+
+    public void setChequDDNotPresentInBank(List<InstrumentHeader> chequDDNotPresentInBank) {
+        this.chequDDNotPresentInBank = chequDDNotPresentInBank;
+    }
+
+    public List<BrsEntries> getUnReconciledBrsEntries() {
+        return unReconciledBrsEntries;
+    }
+
+    public void setUnReconciledBrsEntries(List<BrsEntries> unReconciledBrsEntries) {
+        this.unReconciledBrsEntries = unReconciledBrsEntries;
+    }
+
+    public List<Instrument> getUnReconciledDepositedInst() {
+        return unReconciledDepositedInst;
+    }
+
+    public void setUnReconciledDepositedInst(List<Instrument> unReconciledDepositedInst) {
+        this.unReconciledDepositedInst = unReconciledDepositedInst;
+    }
+    
 
 }

@@ -190,7 +190,7 @@
 	</div>
 	<div class="buttonbottom" style="padding-bottom: 10px;">
 
-		<input type="submit" class="buttonsubmit" value="View Summary"
+		<input type="button" class="buttonsubmit" value="View Summary"
 			id="search" name="Search" onclick="return validateAndSubmit();" />
 		<input type="button" id="Close" value="Close"
 			onclick="javascript:window.close()" class="button" />
