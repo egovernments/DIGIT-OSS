@@ -7,6 +7,7 @@ import {
   getTransformedLocalStorgaeLabels,
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const ifNotNull = value => {
   return !["", "NA", "null", null].includes(value);
@@ -40,6 +41,7 @@ export const loadUlbLogo = tenantid => {
 };
 
 export const loadPtBillData = response => {
+  const ulbData = loadMdmsData(getTenantId())
   let data = {};  
   let orderedResponse = orderBy(
     response.billDetails,
@@ -54,9 +56,9 @@ export const loadPtBillData = response => {
     )] = item.amount  
     return acc
   },[])
-
   const fromDate = epochToDate(get(response, "billDetails[0].fromPeriod"));
   const toDate = epochToDate(get(response, "billDetails[0].toPeriod"));
+  data.header = get(store.getState() , "")
   data.billPeriod = `${fromDate} - ${toDate}`;
   data.billDate = epochToDate(get(response, "billDate"));
   data.dueDate = epochToDate(get(response, "billDetails[0].expiryDate"));
@@ -72,34 +74,8 @@ export const loadPtBillData = response => {
     get(response, "billDetails[0].manualReceiptNumber", "None")
   );
   data.taxHeads = taxHeads
- 
   return data;
   // store.dispatch(prepareFinalObject("receiptDataForReceipt", data));
-};
-
-const getTaxHeads = (taxes, totalAmount) => {
-  let taxHeads = [];
-  taxes.forEach(i => {
-    if (i.amount !== 0) {
-      taxHeads.push({
-        taxHeadCode: getLocaleLabels(
-          "",
-          i.taxHeadCode,
-          getTransformedLocalStorgaeLabels()
-        ),
-        amount: i.amount
-      });
-    }
-  });
-  taxHeads.push({
-    taxHeadCode: getLocaleLabels(
-      "",
-      "TOTAL_PAYABLE",
-      getTransformedLocalStorgaeLabels()
-    ),
-    amount: totalAmount
-  });
-  return taxHeads;
 };
 
 export const loadMdmsData = async tenantid => {
@@ -128,6 +104,7 @@ export const loadMdmsData = async tenantid => {
     let ulbData = response.MdmsRes.tenant.tenants.find(item => {
       return item.code == tenantid;
     });
+  
     /** START Corporation name generation logic */
     let ulbGrade = get(ulbData, "city.ulbGrade", "NA");
     let name = get(ulbData, "city.name", "NA");
@@ -150,7 +127,9 @@ export const loadMdmsData = async tenantid => {
     data.corporationWebsite = get(ulbData, "domainUrl", "NA");
     data.corporationEmail = get(ulbData, "emailId", "NA");
   }
+
   store.dispatch(prepareFinalObject("mdmsDataForReceipt", data));
+  return data;
 };
 
 /** Data used for creation of receipt is generated and stored in local storage here */
