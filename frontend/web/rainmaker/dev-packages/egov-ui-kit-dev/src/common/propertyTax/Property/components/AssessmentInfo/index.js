@@ -181,6 +181,10 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
           key: getTranslatedLabel("PT_ASSESMENT_INFO_NO_OF_FLOOR", localizationLabelsData),
           value: noOfFloors ? `${noOfFloors}` : "NA", //noOfFloors
         },
+        {
+          key :"Construction Date",
+          value: "NA"
+        }
     ]
   );
 };

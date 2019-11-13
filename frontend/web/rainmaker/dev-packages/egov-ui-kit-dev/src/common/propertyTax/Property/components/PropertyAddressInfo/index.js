@@ -43,6 +43,14 @@ const getAddressItems = (properties) => {
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_EXISTING_PID", localizationLabelsData),
         value: properties.oldPropertyId || "NA",
+      },
+      {
+        key: getTranslatedLabel("Road Type", localizationLabelsData),
+        value: address.roadType || "NA",
+      },
+      {
+        key: getTranslatedLabel("Thana", localizationLabelsData),
+        value: address.thana || "NA",
       }
     ]
   );

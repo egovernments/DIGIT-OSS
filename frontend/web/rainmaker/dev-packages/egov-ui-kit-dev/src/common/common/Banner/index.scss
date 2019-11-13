@@ -20,7 +20,7 @@
 
 .banner-overlay {
   position: absolute;
-  background: rgba(52, 73, 94, 0.9);
+  background: transparent;
   top: 0;
   left: 0;
   right: 0;
@@ -97,7 +97,7 @@
     // background-image: url(../../../assets/images/Banner_image.jpg);
     position: absolute;
     height: 100%;
-    background: rgba(52, 73, 94, 0.9);
+    background: transparent;
     top: 0;
     left: 0;
     right: 0;
