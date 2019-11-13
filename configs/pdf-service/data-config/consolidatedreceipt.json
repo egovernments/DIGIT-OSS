@@ -4,7 +4,7 @@
     "serviceName": "rainmaker-common",
     "version": "1.0.0",
     "baseKeyPath": "$.Payments.*",
-    "entityIdPath":"$.Payments[0].paymentDetails[0].receiptNumber",
+    "entityIdPath":"$.paymentDetails[0].receiptNumber",
     "isCommonTableBorderRequired": true,
     "mappings": [
       {
