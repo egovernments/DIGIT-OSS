@@ -324,3 +324,49 @@ function callAjaxSearch() {
 									"data" : "transferClosingBalance", "sClass" : "text-left"}]				
 	});
 }
+
+$('#buttonSubmit').click(function(e){
+	if ($("#isFinYrCloses").is(":checked")) {
+	e.preventDefault();
+	var id=$("#finYearRange option:selected").attr('value');
+	if ($('form').valid()) {
+	
+		$.ajax({
+			
+			url : '/services/EGF/cfinancialyear/validatedIsClosed/'+id,
+			type : "get",
+			async : false,
+			success: function (res) {
+				if (res == "true")
+				{
+					bootbox.confirm({
+						message: 'Once a year is closed there cannot be any posting made for the selected financial year. Are you sure all the accounts are verified and you are ready to proceed?. ',
+						buttons: {
+							'cancel': {
+								label: 'No',
+								className: 'btn-default pull-right'
+							},
+							'confirm': {
+								label: 'Yes',
+								className: 'btn-danger pull-right'
+							}
+						},
+						callback: function(result) {
+							if (result) {
+								$("#cFinancialYearform").submit();
+							}
+						}
+					});
+					
+				} else if (res == "false") {
+					bootbox.alert("Transfer of closing balance is not done for this year.");
+				}
+			},
+			error : function (res){
+				bootbox.alert(res);
+			}
+		})
+		}
+	}
+	
+});

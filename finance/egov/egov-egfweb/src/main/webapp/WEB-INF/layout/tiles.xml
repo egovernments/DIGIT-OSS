@@ -343,6 +343,12 @@
         <put-attribute name="body"
                        value="/WEB-INF/views/cfinancialyear/cfinancialyear-search.jsp"/>
     </definition>
+     <definition name="cfinancialyear-close" extends="base_layout">
+        <put-attribute name="page-title" value="title.cfinancialyear-close"
+                       cascade="true"/>
+        <put-attribute name="body"
+                       value="/WEB-INF/views/cfinancialyear/cfinancialyear-close.jsp"/>
+    </definition>
 
     <definition name="fund-result" extends="base_layout">
         <put-attribute name="page-title" value="title.fund.result"

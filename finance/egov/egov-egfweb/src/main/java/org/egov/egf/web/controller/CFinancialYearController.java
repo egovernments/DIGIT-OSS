@@ -55,6 +55,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.egov.commons.CFinancialYear;
@@ -86,6 +87,7 @@ public class CFinancialYearController {
 	private final static String CFINANCIALYEAR_EDIT = "cfinancialyear-edit";
 	private final static String CFINANCIALYEAR_VIEW = "cfinancialyear-view";
 	private final static String CFINANCIALYEAR_SEARCH = "cfinancialyear-search";
+	private final static String CFINANCIALYEAR_CLOSE = "cfinancialyear-close";
 
 	@Autowired
 	private CFinancialYearService cFinancialYearService;
@@ -97,7 +99,8 @@ public class CFinancialYearController {
 	private MessageSource messageSource;
 
 	private void prepareNewForm(final Model model) {
-	}
+            model.addAttribute("cFinancialYears", cFinancialYearService.findAll());
+    }
 
 	@RequestMapping(value = "/new", method = {RequestMethod.GET,RequestMethod.POST})
 	public String newForm(final Model model) {
@@ -157,14 +160,24 @@ public class CFinancialYearController {
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public String update(@ModelAttribute final CFinancialYear cFinancialYear, final BindingResult errors,
-			final Model model, final RedirectAttributes redirectAttrs) {
+			final Model model, final RedirectAttributes redirectAttrs,HttpServletRequest request) {
 		if (errors.hasErrors()) {
 			prepareNewForm(model);
 			return CFINANCIALYEAR_EDIT;
 		}
+		String mode = request.getParameter("mode");
+		String message = "msg.cFinancialYear.success";
+		
+		if("close".equalsIgnoreCase(mode)) {
+		    message = "msg.closedFinancialYear.success";
+		    if(cFinancialYear.getIsClosed() && cFinancialYear.getTransferClosingBalance()) {
+                        cFinancialYear.setIsActiveForPosting(false);
+                    }
+		}
 		cFinancialYearService.update(cFinancialYear);
 		redirectAttrs.addFlashAttribute("message",
-				messageSource.getMessage("msg.cFinancialYear.success", null, Locale.ENGLISH));
+		        messageSource.getMessage(message, null, Locale.ENGLISH));
+		redirectAttrs.addFlashAttribute("mode", mode);
 		return "redirect:/cfinancialyear/result/" + cFinancialYear.getId();
 	}
 
@@ -175,6 +188,16 @@ public class CFinancialYearController {
 		model.addAttribute("CFinancialYear", cFinancialYear);
 		return CFINANCIALYEAR_VIEW;
 	}
+	
+	@RequestMapping(value = "/close/{id}", method = RequestMethod.GET)
+        public String close(@PathVariable("id") final Long id, final Model model) {
+                final CFinancialYear cFinancialYear = cFinancialYearService.findOne(id);
+                prepareNewForm(model);
+                model.addAttribute("CFinancialYear", cFinancialYear);
+                model.addAttribute("mode", "close");
+                return CFINANCIALYEAR_CLOSE;
+        }
+
 
 	@RequestMapping(value = "/result/{id}", method = RequestMethod.GET)
 	public String result(@PathVariable("id") final Long id, final Model model) {
@@ -230,4 +253,10 @@ public class CFinancialYearController {
 		return cFinancialYear;
 
 	}
+	 @RequestMapping(value = "/validatedIsClosed/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+         @ResponseBody
+         public String validateClosingPeriods(@PathVariable("id") Long id) {
+                 final CFinancialYear cFinancialYear = cFinancialYearService.findOne(id);
+                 return cFinancialYear.getTransferClosingBalance().toString();
+         }
 }

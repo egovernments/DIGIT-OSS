@@ -46,19 +46,39 @@
   ~
   --%>
 
-
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
-<c:if test="${mode ne 'close'}">
-<div class="alert alert-success" role="alert">
-	<strong>${message}</strong>
-</div>
-</c:if>
-<input type="hidden" value="${mode}" id="mode" /> 
-	<c:if test="${mode == 'close'}">
-	<%@ include file="closedfinancialyear-result.jsp"%>
-	</c:if>
-	<c:if test="${mode ne 'close'}">
-	<%@ include file="cfinancialyear-view.jsp"%>
-	</c:if>
-
+<form:form role="form" action="../update"
+	modelAttribute="CFinancialYear" id="cFinancialYearform"
+	cssClass="form-horizontal form-groups-bordered"
+	enctype="multipart/form-data">
+	<%@ include file="closedfinancialyear-form.jsp"%>
+	 <input type="hidden" name="CFinancialYear" value="${CFinancialYear.id}" /> 
+	</div>
+	</div>
+	</div>
+	</div>
+	<div class="form-group">
+		<div class="text-center">
+		<c:if test="${!CFinancialYear.isClosed}">
+			<button type='submit' class='btn btn-primary' id="buttonSubmit">
+				<spring:message code='lbl.submit' />
+				
+			</button>
+			</c:if>
+			<a href='javascript:void(0)' class='btn btn-default'
+				onclick='self.close()'><spring:message code='lbl.close' /></a>
+				
+		</div>
+	</div>
+</form:form>
+<!-- <script>
+	$('#buttonSubmit').click(function(e) {
+		if ($('form').valid()) {
+		} else {
+			e.preventDefault();
+		}
+	});
+</script> -->
+<script type="text/javascript"
+	src="<cdn:url value='/resources/app/js/cFinancialYearHelper.js?rnd=${app_release_no}'/>"></script>

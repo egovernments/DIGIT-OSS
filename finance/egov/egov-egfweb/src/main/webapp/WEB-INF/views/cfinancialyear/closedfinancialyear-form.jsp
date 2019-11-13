@@ -46,19 +46,50 @@
   ~
   --%>
 
+<div class="main-content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-primary" data-collapsed="0">
+				<div class="panel-heading">
+					<div class="panel-title">Closed Financial Year</div>
+				</div>
+				<div class="panel-body">
 
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ include file="/includes/taglibs.jsp"%>
-<c:if test="${mode ne 'close'}">
-<div class="alert alert-success" role="alert">
-	<strong>${message}</strong>
-</div>
-</c:if>
-<input type="hidden" value="${mode}" id="mode" /> 
-	<c:if test="${mode == 'close'}">
-	<%@ include file="closedfinancialyear-result.jsp"%>
-	</c:if>
-	<c:if test="${mode ne 'close'}">
-	<%@ include file="cfinancialyear-view.jsp"%>
-	</c:if>
+					<div class="form-group">
 
+						<label class="col-sm-3 control-label text-right"><spring:message
+								code="lbl.cfinancialyearid" /> </label>
+						<div class="col-sm-3 add-margin">
+
+							<form:select path="id" id="finYearRange" cssClass="form-control"
+								cssErrorClass="form-control error"
+								style="pointer-events: none; cursor: default;">
+
+								<form:option value="">
+									<spring:message code="lbl.select" />
+								</form:option>
+								<form:options items="${cFinancialYears}" itemValue="id"
+									itemLabel="finYearRange" />
+							</form:select>
+							<form:errors path="finYearRange" cssClass="error-msg" />
+
+						</div>
+						<label class="col-sm-3 control-label text-right"><spring:message
+								code="lbl.isclosed" /> </label>
+						<div class="col-sm-3 add-margin">
+						<c:choose>
+								<c:when test="${CFinancialYear.isClosed}">
+									<form:checkbox path="isClosed" id="isFinYrCloses" disabled="true" />
+								</c:when>
+								<c:otherwise>
+									<form:checkbox path="isClosed" id="isFinYrCloses" />
+								</c:otherwise>
+							</c:choose>
+
+							<form:errors path="isClosed" cssClass="error-msg" />
+						</div>
+					</div>
+					<input type="hidden" name="CFinancialYear"
+						value="${CFinancialYear.id}" /> <input type="hidden" name="mode"
+						value="${mode}" /> <input type="hidden" name="CFinancialYear"
+						value="${CFinancialYear.isClosed}" />

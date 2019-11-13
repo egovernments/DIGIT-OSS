@@ -49,16 +49,26 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
-<c:if test="${mode ne 'close'}">
-<div class="alert alert-success" role="alert">
-	<strong>${message}</strong>
-</div>
-</c:if>
-<input type="hidden" value="${mode}" id="mode" /> 
-	<c:if test="${mode == 'close'}">
-	<%@ include file="closedfinancialyear-result.jsp"%>
-	</c:if>
-	<c:if test="${mode ne 'close'}">
-	<%@ include file="cfinancialyear-view.jsp"%>
-	</c:if>
-
+<div class="main-content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-primary" data-collapsed="0">
+				<div class="panel-heading">
+					<div class="panel-title">Closed Financial Year</div>
+				</div>
+				<div class="panel-body">
+					<div class="panel-title text-center no-float">
+						<strong>${message}</strong>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="text-center">
+			<a href='javascript:void(0)' class='btn btn-default'
+									onclick="window.parent.postMessage('close','*');window.close();"><spring:message code='lbl.close' /></a>
+		</div>
+	</div>
+	<script type="text/javascript"
+	src="<cdn:url value='/resources/app/js/cFinancialYearHelper.js?rnd=${app_release_no}'/>"></script>

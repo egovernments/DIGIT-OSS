@@ -105,7 +105,7 @@
 					<th><spring:message code="lbl.startingdate" /></th>
 					<th><spring:message code="lbl.endingdate" /></th>
 					<th><spring:message code="lbl.isactiveforposting" /></th>
-					<th><spring:message code="lbl.isclosed" /></th>
+					<th><spring:message code="lbl.closedyear" /></th>
 					<th><spring:message code="lbl.transferclosingbalance" /></th>
 				</tr>
 			</thead>

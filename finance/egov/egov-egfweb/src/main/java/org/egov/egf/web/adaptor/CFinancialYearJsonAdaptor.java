@@ -75,15 +75,15 @@ public class CFinancialYearJsonAdaptor implements JsonSerializer<CFinancialYear>
             else
                 jsonObject.addProperty("endingDate", "");
             if (cFinancialYear.getIsActiveForPosting() != null)
-                jsonObject.addProperty("isActiveForPosting", cFinancialYear.getIsActiveForPosting());
+                jsonObject.addProperty("isActiveForPosting", cFinancialYear.getIsActiveForPosting()? "Yes" : "No");
             else
                 jsonObject.addProperty("isActiveForPosting", "");
             if (cFinancialYear.getIsClosed() != null)
-                jsonObject.addProperty("isClosed", cFinancialYear.getIsClosed());
+                jsonObject.addProperty("isClosed", cFinancialYear.getIsClosed()? "Yes" : "No");
             else
                 jsonObject.addProperty("isClosed", "");
             if (cFinancialYear.getTransferClosingBalance() != null)
-                jsonObject.addProperty("transferClosingBalance", cFinancialYear.getTransferClosingBalance());
+                jsonObject.addProperty("transferClosingBalance", cFinancialYear.getTransferClosingBalance()? "Yes" : "No");
             else
                 jsonObject.addProperty("transferClosingBalance", "");
             jsonObject.addProperty("id", cFinancialYear.getId());
