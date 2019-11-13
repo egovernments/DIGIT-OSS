@@ -85,12 +85,6 @@
                 }
               },
               {
-                "variable": "payerId", 
-                "value": {
-                  "path": "$.payerId"
-                }
-              },
-              {
                 "variable": "transactionID", 
                 "value": {
                   "path": "$.transactionNumber"

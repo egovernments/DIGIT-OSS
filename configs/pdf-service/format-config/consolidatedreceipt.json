@@ -397,7 +397,7 @@
                 "bold": true
               },
               {
-                "text": "{{payerId}}",
+                "text": "Satplal Dhillon",
                 "bold": false
               }
             ],
@@ -433,17 +433,27 @@
             "style": "pt-disclaimer-value"
           },
           {
-            "text": "Lorem ipsum dolor sit amet",
+            "text": "1. Payment received by cheque/demand draft shall be subject to realization.",
             "bold": false,
             "style": "pt-disclaimer-value"
           },
           {
-            "text": "Lorem ipsum dolor sit amet",
+            "text": "2. This document is not a proof of Property Ownership and regularization of unauthorized construction.",
             "bold": false,
             "style": "pt-disclaimer-value"
           },
           {
-            "text": "Lorem ipsum dolor sit amet",
+            "text": "3. This is a computer generated document, hence requires no signature.",
+            "bold": false,
+            "style": "pt-disclaimer-value"
+          },
+          {
+            "text": "4. Assessment & Payment is subject to verifcation/Scrutiny by competitive authority.",
+            "bold": false,
+            "style": "pt-disclaimer-value"
+          },
+          {
+            "text": "5. Please deposit property tax dues for earlier years also. Ignore, if already paid.",
             "bold": false,
             "style": "pt-disclaimer-value"
           }
@@ -482,7 +492,7 @@
       "fontSize": 12,
       "color": "#000000",
       "margin": [
-        -30,
+        -25,
         45,
         -22,
         -8
@@ -492,7 +502,7 @@
       "fontSize": 12,
       "color": "#000000",
       "margin": [
-        -30,
+        -25,
         28,
         -22,
         -8
@@ -556,7 +566,7 @@
     "pt-disclaimer-value": {
       "fontSize": 12,
       "margin": [
-        0,
+        2,
         5,
         0,
         0
