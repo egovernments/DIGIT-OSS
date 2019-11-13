@@ -147,7 +147,7 @@ export const getRequiredDocuments = documents => {
     },
     {
       style: {
-        paddingBottom: 75
+       // paddingBottom: 75
       }
     }
   );

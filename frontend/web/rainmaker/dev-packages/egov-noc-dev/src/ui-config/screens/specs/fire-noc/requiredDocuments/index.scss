@@ -1,5 +1,5 @@
 @media only screen and (max-width: 551px) {
-  .apply-wizard-footer {
+  .apply-wizard-footerReq {
     background-color: #ffffff;
     -webkit-box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
     box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
@@ -13,7 +13,7 @@
     padding: initial;
   }
 
-  .apply-wizard-footer button {
+  .apply-wizard-footerReq button {
     width: 100% !important;
     margin: initial;
     border: none;
@@ -21,3 +21,16 @@
     border-radius: none !important;
   }
 }
+  @media only screen and (min-width: 768px) {
+  .apply-wizard-footerReq {
+    background-color: #ffffff;
+    box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+    padding: 8px;
+   // position: fixed !important;
+    bottom: 47;
+    left: 48;
+    width: 93.66vw;
+    text-align: right;
+    overflow: inherit !important;
+  }
+  }

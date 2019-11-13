@@ -2,6 +2,8 @@ import {
   getCommonHeader,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {CloudDownloadIcon} from '@material-ui/icons/CloudDownload';
+import {PrintIcon} from '@material-ui/icons/Print';
 import {
   applicationSuccessFooter,
   paymentSuccessFooter,
@@ -12,6 +14,9 @@ import {
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { getSearchResults } from "../../../../ui-utils/commons";
+import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import generatePdf from "../utils/receiptPdf";
+import { Icon } from "egov-ui-framework/ui-atoms";
 // import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import set from "lodash/set";
 import get from "lodash/get";
@@ -68,7 +73,93 @@ const getAcknowledgementCard = (
               labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
             },
             number: applicationNumber
-          })
+          }),
+          abc: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            children: {
+              downloadFormButton: {
+                uiFramework: "custom-atoms",
+                componentPath: "Div",
+                children: {
+
+                  div1: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Icon",
+                 
+                    props:{
+                      iconName: "cloud_download",
+                    style:{
+                      marginTop: "7px",
+                      marginRight: "8px",
+                    }
+                  },
+                    onClick: {
+                      action: "condition",
+                      callBack: () => {
+                        generatePdf(state, dispatch, "application_download");
+                      },
+                    },
+                  },
+                  div2: getLabel({
+                    labelName: "DOWNLOAD CONFIRMATION FORM",
+                    labelKey: "NOC_APPLICATION_BUTTON_DOWN_CONF"
+                  })
+
+                },
+                onClickDefination: {
+                  action: "condition",
+                  callBack: () => {
+                    generatePdf(state, dispatch, "application_download");
+                  }
+                },
+              },
+              PrintFormButton: {
+                uiFramework: "custom-atoms",
+                componentPath: "Div",
+                children: {
+                  div1: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Icon",
+                 
+                    props:{
+                      iconName: "local_printshop",
+                      style:{
+                        marginTop: "7px",
+                        marginRight: "8px",
+                        marginLeft:"10px",
+                      }
+                  },
+                   onClick: {
+                    action: "condition",
+                    callBack: () => {
+                      generatePdf(state, dispatch, "application_print");
+                    }
+                  },
+
+                  },
+                  div2: getLabel({
+                    labelName: "PRINT CONFIRMATION FORM",
+                    labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
+                  })
+
+                },
+                onClickDefination: {
+                  action: "condition",
+                  callBack: () => {
+                    generatePdf(state, dispatch, "application_print");
+                  }
+                },
+              }
+
+            },
+            props: {
+              style: {
+                display: "flex",
+
+              }
+            },
+          }
         }
       },
       iframeForPdf: {
