@@ -1,0 +1,36 @@
+{
+  "tenantId": "pb",
+  "moduleName": "StakeholderRegistraition",
+  "TradeTypetoRoleMapping": [
+    {
+      "id": "313bbadb-c0d7-49b5-b021-77a608f13a31",
+      "tradeType": "SERVICES.NGBS.ARCHITECT",
+      "role": "BPA_ARCHITECT",
+      "applicationFee": 100
+    },
+    {
+      "id": "df027b77-69c1-4749-8608-601328a2deea",
+      "tradeType": "SERVICES.NGBS.BUILDER",
+      "role": "BPA_BUILDER",
+      "applicationFee": 200
+    },
+    {
+      "id": "7f26d283-cc52-4684-9bbc-f87ade6f2228",
+      "tradeType": "SERVICES.NGBS.ENGINEER",
+      "role": "BPA_ENGINEER",
+      "applicationFee": 300
+    },
+    {
+      "id": "91d278e9-0bcd-4436-978e-793af58e325f",
+      "tradeType": "SERVICES.NGBS.STRUCTURALENGINEER",
+      "role": "BPA_STRUCTURALENGINEER",
+      "applicationFee": 400
+    },
+    {
+      "id": "57b66c2a-0033-4875-a3bd-856e5cf82427",
+      "tradeType": "SERVICES.NGBS.TOWNPLANNER",
+      "role": "BPA_TOWNPLANNER",
+      "applicationFee": 500
+    }
+  ]
+}
