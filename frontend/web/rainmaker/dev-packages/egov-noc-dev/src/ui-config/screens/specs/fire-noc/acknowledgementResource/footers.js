@@ -152,10 +152,10 @@ export const applicationSuccessFooter = (
       //Add onClickDefination and RoleDefination later
       onClickDefination: {
         action: "page_change",
-        path:
-          process.env.REACT_APP_SELF_RUNNING === "true"
-            ? `/egov-ui-framework/fire-noc/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
-            : `/fire-noc/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
+        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
+          // process.env.REACT_APP_SELF_RUNNING === "true"
+          //   ? `/egov-ui-framework/fire-noc/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
+          //   : `/fire-noc/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
       },
       roleDefination: {
         rolePath: "user-info.roles",
@@ -184,10 +184,10 @@ export const applicationSuccessFooter = (
       },
       onClickDefination: {
         action: "page_change",
-        path:
-          process.env.REACT_APP_SELF_RUNNING === "true"
-            ? `/egov-ui-framework/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
-            : `/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
+        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=NOC`,
+          // process.env.REACT_APP_SELF_RUNNING === "true"
+          //   ? `fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
+          //   : `/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
       },
       roleDefination: {
         rolePath: "user-info.roles",

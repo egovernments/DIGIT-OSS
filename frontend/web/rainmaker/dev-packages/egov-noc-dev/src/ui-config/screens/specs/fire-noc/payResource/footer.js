@@ -8,8 +8,10 @@ import set from "lodash/set";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { getSearchResults } from "../../../../../ui-utils/commons";
 import { convertDateToEpoch, getBill, validateFields } from "../../utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 export const callPGService = async (state, dispatch) => {
+ 
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const applicationNumber = getQueryArg(
     window.location.href,
@@ -32,28 +34,42 @@ export const callPGService = async (state, dispatch) => {
       }
     ];
     const billPayload = await getBill(queryObj);
-    const taxAndPayments = get(billPayload, "Bill[0].taxAndPayments", []).map(
-      item => {
-        if (item.businessService === "FIRENOC") {
-          item.amountPaid = get(
-            billPayload,
-            "Bill[0].billDetails[0].totalAmount"
-          );
-        }
-        return item;
+    const taxAndPayments = get(billPayload, "Bill[0].taxAndPayments", []).map((item,index)=>{
+      return {
+        amountPaid :item.taxAmount,
+        billId : get(billPayload, "Bill[0].id")
       }
-    );
+    })
+    // const taxAndPayments = get(billPayload, "Bill[0].taxAndPayments", []).map(
+    //   item => {        
+        // if (item.businessService === "FIRENOC") {
+        //   item.amountPaid = get(
+        //     billPayload,
+        //     "Bill[0].billDetails[0].totalAmount"
+        //   );
+        //   item.billId = get(billPayload, "Bill[0].id")
+        // }
+        // return item;
+    //   }
+    // );
     try {
+      const userMobileNumber = get(state,"auth.userInfo.mobileNumber")
+      const userName = get(state,"auth.userInfo.name")
       const requestBody = {
         Transaction: {
           tenantId,
+          billId : get(billPayload, "Bill[0].id"),
           txnAmount: get(billPayload, "Bill[0].billDetails[0].totalAmount"),
           module: "FIRENOC",
           taxAndPayments,
-          billId: get(billPayload, "Bill[0].id"),
           consumerCode: get(billPayload, "Bill[0].billDetails[0].consumerCode"),
           productInfo: "Fire NOC Payment",
           gateway: "AXIS",
+          user : {
+            mobileNumber : userMobileNumber,
+            name : userName,
+            tenantId : process.env.REACT_APP_NAME === "Employee" ? getTenantId() : get(state,"auth.userInfo.permanentCity")
+          },
           callbackUrl
         }
       };

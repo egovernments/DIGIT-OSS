@@ -240,6 +240,31 @@ const propertyReducer = (state = initialState, action) => {
         errorMessage: "",
         Payments
       };
+      case actionTypes.PROPERTY_DOWNLOAD_RECEIPT_PENDING:
+        return {
+          ...state,
+          loading: true,
+          error: false,
+          errorMessage: "",
+        };
+    case actionTypes.PROPERTY_DOWNLOAD_RECEIPT_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMessage: action.error,
+        Payments: []
+      };
+    case actionTypes.PROPERTY_DOWNLOAD_RECEIPT_COMPLETE:
+    
+      const receipt=action.payload;
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        errorMessage: "",
+        receipt
+      };
     case actionTypes.RESET_PROPERTY_STATE:
       return initialState;
     default:

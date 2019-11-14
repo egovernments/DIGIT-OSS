@@ -7,7 +7,7 @@ import {
   getRadioButton
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import { validateAmountInput, getTemp, dispatchHandleField } from "./utils";
+import { validateAmountInput, dispatchHandleField } from "./utils";
 
 const AmountToBePaid = getCommonGrayCard({
   header: getCommonSubHeader({
@@ -56,16 +56,15 @@ const AmountToBePaid = getCommonGrayCard({
         },
         pattern: getPattern("Amount"),
         jsonPath: "AmountPaid",
-        required: true,
+        // required: true,
         props: {
           disabled: true
         }
       }),
       beforeFieldChange: (action, state, dispatch) => {
-        let pattern = getPattern("Amount");
-        let temp = getTemp(action, state, pattern);
+        const pattern = getPattern("Amount");
         try {
-          validateAmountInput(temp, pattern, action, dispatch, state);
+          validateAmountInput(pattern, action, dispatch, state);
         } catch (e) {
           console.log(e);
         }

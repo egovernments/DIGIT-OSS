@@ -180,3 +180,9 @@ export const FETCHRECEIPT = {
     ACTION: "_get",
   },
 };
+export const DOWNLOADRECEIPT = {
+  GET: {
+    URL: "/pdf-service/v1/_createnosave",
+    ACTION: "_get",
+  },
+};
