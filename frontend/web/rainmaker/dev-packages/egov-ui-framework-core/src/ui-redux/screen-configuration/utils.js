@@ -22,10 +22,11 @@ export const validateField = field => {
     return { isFieldValid: true, errorText: "" };
   }
 
-  const value = field.value
-    ? typeof field.value === "string"
-      ? field.value.trim()
-      : field.value
+  const fieldValue = field.value || field.props.value;
+  const value = fieldValue
+    ? typeof fieldValue === "string"
+      ? fieldValue.trim()
+      : fieldValue
     : null;
   let errorText = "",
     isFieldValid = true,
