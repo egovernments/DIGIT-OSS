@@ -42,7 +42,7 @@ const NOCSearchAndResult = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
-    resetFields(state, dispatch);
+  //  resetFields(state, dispatch);
     const tenantId = getTenantId();
     const BSqueryObject = [
       { key: "tenantId", value: tenantId },

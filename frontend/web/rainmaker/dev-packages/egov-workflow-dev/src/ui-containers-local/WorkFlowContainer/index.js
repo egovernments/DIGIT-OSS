@@ -208,7 +208,8 @@ class WorkFlowContainer extends React.Component {
     if (moduleName === "NewTL") {
       switch (action) {
         case "PAY":
-          return `/tradelicence/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=NewTL`;
+          return `egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}&businessService=NewTL`
+         // return `/tradelicence/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=NewTL`;
         case "EDIT":
           return isAlreadyEdited
             ? `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
@@ -217,7 +218,8 @@ class WorkFlowContainer extends React.Component {
     } else if (moduleName === "FIRENOC") {
       switch (action) {
         case "PAY":
-          return `/fire-noc/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=FIRENOC`;
+          return `/egov-common/pay?consumerCode=${businessId}=${tenant}&businessService=FIRENOC`
+          // return `/fire-noc/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=FIRENOC`;
         case "EDIT":
           return isAlreadyEdited
             ? `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
@@ -231,40 +233,6 @@ class WorkFlowContainer extends React.Component {
       labelName: `${action} Application`,
       labelKey: `WF_${action}_APPLICATION`
     };
-    // switch (
-    //   action
-    // case "FORWARD":
-    //   return {
-    //     labelName: "Forward Application",
-    //     labelKey: "TL_FORWARD_APPLICATION"
-    //   };
-    // case "MARK":
-    //   return {
-    //     labelName: "Mark Application",
-    //     labelKey: "TL_MARK_APPLICATION"
-    //   };
-    // case "APPROVE":
-    //   return {
-    //     labelName: "Approve Application",
-    //     labelKey: "TL_APPROVAL_CHECKLIST_BUTTON_APPRV_APPL"
-    //   };
-    // case "CANCEL":
-    //   return {
-    //     labelName: "Cancel Application",
-    //     labelKey: "TL_WORKFLOW_CANCEL"
-    //   };
-    // case "SENDBACK":
-    //   return {
-    //     labelName: "Send Back Application",
-    //     labelKey: "TL_WORKFLOW_SENDBACK"
-    //   };
-    // default:
-    //   return {
-    //     labelName: "Reject Application",
-    //     labelKey: "TL_REJECTION_CHECKLIST_BUTTON_REJ_APPL"
-    //   };
-    // ) {
-    // }
   };
 
   getEmployeeRoles = (nextAction, currentAction, moduleName) => {
@@ -296,11 +264,15 @@ class WorkFlowContainer extends React.Component {
   };
 
   checkIfTerminatedState = (nextStateUUID, moduleName) => {
+    console.log("modulename is....",moduleName)
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
     const data = find(businessServiceData, { businessService: moduleName });
+    console.log("========>2",data)
+    console.log("=======> nextStat is",nextStateUUID)
     const nextState = find(data.states, { uuid: nextStateUUID });
+    console.log("=======> state is",nextState)
     return nextState.isTerminateState;
   };
 
@@ -343,6 +315,7 @@ class WorkFlowContainer extends React.Component {
   };
 
   prepareWorkflowContract = (data, moduleName) => {
+    console.log("========>1",data)
     const {
       getRedirectUrl,
       getHeaderName,
