@@ -34,7 +34,12 @@
                   "variable": "serviceType", 
                   "value": {
                     "path": "$.paymentDetails[0].businessService"
-                  }
+                  },
+                  "localisation":{
+                    "required":true,
+                    "prefix":"TL_EMP_HOME",   
+                    "module":"rainmaker-tl"
+                 } 
                 },
                 {
                   "variable": "paidAmount", 
