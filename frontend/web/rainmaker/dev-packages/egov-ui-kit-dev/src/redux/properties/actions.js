@@ -4,6 +4,7 @@ import { httpRequest } from "egov-ui-kit/utils/api";
 import { transformById } from "egov-ui-kit/utils/commons";
 import orderby from "lodash/orderBy";
 import get from "lodash/get";
+import FileSaver from 'file-saver';
 import cloneDeep from "lodash/cloneDeep";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 const FileDownload = require('js-file-download');
@@ -604,9 +605,35 @@ export const downloadReceipt = (receiptQueryString) => {
           { key: "key", value:"consolidatedreceipt" },
           { key: "tenantId", value: "pb"}
         ]
-        const payloadReceipt = await httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr,{Payments:payloadReceiptDetails.Payments});
-        FileDownload(payloadReceipt, receiptQueryString[0].value+'.pdf');
-        dispatch(downloadReceiptComplete(payloadReceipt));
+        
+        httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr,{Payments:payloadReceiptDetails.Payments},{'Accept': 'application/pdf'}, {responseType:'arraybuffer'})
+        .then(res => 
+          {
+            console.log(res);
+            const blob = new Blob([res], {type: 'application/pdf'});
+            FileSaver.saveAs(blob, "test.pdf");
+            FileDownload(blob, receiptQueryString[0].value+'1.pdf');
+            // var content = "What's up , hello world";
+            // // any kind of extension (.txt,.cpp,.cs,.bat)
+            // var filename = "hello.pdf";
+            // var filename1 = "hello22.pdf";
+    
+            // var blob = new Blob([payloadReceipt], {
+            //  type: "application/pdf;"
+            // });
+            
+            // saveAs(blob, filename);
+            // FileSaver.saveAs(blob, filename1);
+            // FileDownload(blob, receiptQueryString[0].value+'.pdf');
+           
+    
+            // FileDownload(payloadReceipt, receiptQueryString[0].value+'1.pdf');
+            // FileSaver.saveAs(payloadReceipt, filename1);
+            // saveAs(payloadReceipt, filename);
+    
+            dispatch(downloadReceiptComplete(res));
+          })
+      
       } catch (error) {
         dispatch(downloadReceiptError(error.message));
       }
