@@ -107,6 +107,33 @@
                 "type":"image"      
               }
             ]
+          },
+          {
+            "externalAPI": [     
+              { 
+                  "path": "https://egov-micro-qa.egovernments.org/egov-mdms-service/v1/_get",
+                  "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=[?(@.code=='$.tenantId')]",
+                  "apiRequest": null,
+                  "responseMapping":[
+                    {             
+                      "variable":"address",
+                      "value":"$.MdmsRes.tenant.tenants[0].address"
+                    },
+                    {
+                      "variable":"phoneNumber",
+                      "value":"$.MdmsRes.tenant.tenants[0].contactNumber"
+                    },
+                    {
+                      "variable":"website",
+                      "value":"$.MdmsRes.tenant.tenants[0].domainUrl"
+                    },
+                    {
+                      "variable":"email",
+                      "value":"$.MdmsRes.tenant.tenants[0].emailId"
+                    }
+                  ]
+              }
+            ]
           }
         ]
       }
