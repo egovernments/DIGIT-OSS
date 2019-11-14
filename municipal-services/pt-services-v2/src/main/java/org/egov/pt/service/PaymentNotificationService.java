@@ -67,18 +67,14 @@ public class PaymentNotificationService {
      * @param topic The topic name from which Object is received
      */
     public void process(HashMap<String, Object> record,String topic){
-        RequestInfo requestInfo;
 
         try{
             String jsonString = new JSONObject(record).toString();
             DocumentContext documentContext = JsonPath.parse(jsonString);
-          //  requestInfo = objectMapper.convertValue(record.get("RequestInfo"),RequestInfo.class);
+            RequestInfo requestInfo = mapper.convertValue(record.get("RequestInfo"),RequestInfo.class);
         //    if(requestInfo==null)
 
             List<Map<String,String>> valMaps = new LinkedList<>();
-
-            requestInfo = new RequestInfo();
-
 
             if(topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic()))
                 valMaps.addAll(getValuesFromPayment(record));
@@ -92,6 +88,7 @@ public class PaymentNotificationService {
             for(Map<String,String> valMap : valMaps) {
 
                 List<String> mobileNumbers = new LinkedList<>();
+
                 Map<String, List<String>> propertyAttributes = getPropertyAttributes(valMap, requestInfo);
                 mobileNumbers = propertyAttributes.get("mobileNumbers");
                 addUserNumber(topic, requestInfo, valMap, mobileNumbers);
@@ -104,7 +101,7 @@ public class PaymentNotificationService {
                 String messagejson = new JSONObject(responseMap).toString();
                 List<SMSRequest> smsRequests = new ArrayList<>();
                 String customMessage = null;
-                if (topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) ||
+                if (topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic()) ||
                         (topic.equalsIgnoreCase(propertyConfiguration.getPgTopic()) && "FAILURE".equalsIgnoreCase(valMap.get("txnStatus")))) {
                     String path = getJsonPath(topic, valMap);
                     Object messageObj = JsonPath.parse(messagejson).read(path);
@@ -502,7 +499,7 @@ public class PaymentNotificationService {
                 log.error("Messages from localization couldn't be fetched!");
             for(SMSRequest smsRequest: smsRequestList) {
                 producer.push(propertyConfiguration.getSmsNotifTopic(), smsRequest);
-                log.debug(smsRequest.toString());
+                log.info(smsRequest.toString());
             }
         }
     }
