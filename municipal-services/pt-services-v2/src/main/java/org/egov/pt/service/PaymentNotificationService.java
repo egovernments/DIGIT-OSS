@@ -81,7 +81,8 @@ public class PaymentNotificationService {
             else
                 valMaps.add(getValuesFromTransaction(documentContext));
 
-            if( CollectionUtils.isEmpty(valMaps) || !valMaps.get(0).get("module").equalsIgnoreCase("PT"))
+            if(topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic()) &&
+                    CollectionUtils.isEmpty(valMaps) || !valMaps.get(0).get("module").equalsIgnoreCase("PT"))
                 return;
 
 
@@ -306,14 +307,14 @@ public class PaymentNotificationService {
 
             moduleId = documentContext.read("$.Transaction.consumerCode");
             valMap.put("moduleId",moduleId);
-            valMap.put("propertyId",moduleId.split(":")[0]);
+            valMap.put("propertyId",moduleId);
          //   valMap.put("assessmentNumber",moduleId.split(":")[1]);
 
             mobileNumber = documentContext.read("$.Transaction.user.mobileNumber");
             valMap.put("mobileNumber",mobileNumber);
 
-            module = documentContext.read("$.Transaction.taxAndPayments[0].businessService");
-            valMap.put("module",module);
+//            module = documentContext.read("$.Transaction.taxAndPayments[0].businessService");
+//            valMap.put("module",module);
         }
         catch (Exception e)
         {   log.error("Transaction Object Parsing: ",e);
