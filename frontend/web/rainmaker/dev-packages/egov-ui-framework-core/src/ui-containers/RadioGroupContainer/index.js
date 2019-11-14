@@ -33,6 +33,11 @@ const styles = theme => ({
   }
 });
 
+const disableRadioButton = {
+  pointerEvents : "none",
+  opacity : 0.5
+}
+
 class RadioButtonsGroup extends React.Component {
  
 
@@ -94,6 +99,7 @@ class RadioButtonsGroup extends React.Component {
               buttons.map((button, index) => {
                 return (
                   <FormControlLabel
+                    disabled={button.disabled ? true : false}
                     key={index}
                     classes={{ label: "radio-button-label" }}
                     value={button.value}
