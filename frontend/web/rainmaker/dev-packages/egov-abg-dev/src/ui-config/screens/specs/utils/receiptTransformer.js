@@ -2,12 +2,12 @@ import get from "lodash/get";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "../../../../ui-redux/store";
 import { getMdmsData } from "../utils";
-import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
-import { httpRequest } from "../../../../ui-utils";
+import orderBy from "lodash/orderBy";
 import {
   getTransformedLocalStorgaeLabels,
   getLocaleLabels
 } from "egov-ui-framework/ui-utils/commons";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const ifNotNull = value => {
   return !["", "NA", "null", null].includes(value);
@@ -41,72 +41,41 @@ export const loadUlbLogo = tenantid => {
 };
 
 export const loadPtBillData = response => {
-  let data = {};
-
-  // if (response.Bill && response.Bill.length > 0) {
-  data.billDate = epochToDate(get(response, "billDetails[0].billDate"));
+  const ulbData = loadMdmsData(getTenantId())
+  let data = {};  
+  let orderedResponse = orderBy(
+    response.billDetails,
+    "fromPeriod",
+    "desc");
+    
+  let taxHeads = orderedResponse[0].billAccountDetails.reduce((acc,item) =>{
+    acc[getLocaleLabels(
+      "",
+      item.taxHeadCode,
+      getTransformedLocalStorgaeLabels()
+    )] = item.amount  
+    return acc
+  },[])
   const fromDate = epochToDate(get(response, "billDetails[0].fromPeriod"));
   const toDate = epochToDate(get(response, "billDetails[0].toPeriod"));
-  data.taxPeriod = `${fromDate} - ${toDate}`;
-  data.billNumber = nullToNa(get(response, "billDetails[0].billNumber"));
-  data.consumerName = nullToNa(get(response, "payerName"));
-  data.mobileNumber = nullToNa(get(response, "mobileNumber"));
-  data.businessService = get(response, "billDetails[0].businessService").split(
-    "."
-  )[0];
-  const serviceType = get(response, "billDetails[0].businessService").split(
-    "."
-  )[1];
-  data.serviceType = serviceType ? serviceType : "NA";
-  data.amountPaid = get(response, "billDetails[0].amountPaid", 0);
-  data.totalAmount = get(response, "billDetails[0].totalAmount", 0);
-  data.amountDue = data.totalAmount - data.amountPaid;
+  data.header = get(store.getState() , "")
+  data.billPeriod = `${fromDate} - ${toDate}`;
+  data.billDate = epochToDate(get(response, "billDate"));
   data.dueDate = epochToDate(get(response, "billDetails[0].expiryDate"));
-  data.payerAddress = nullToNa(get(response, "payerAddress"));
-  data.propertyId = get(response, "billDetails[0].consumerCode").split(":")[0];
-  data.AssessNo = get(response, "billDetails[0].consumerCode").split(":")[1];
-  data.locality = nullToNa(
-    get(response, "billDetails[0].address.locality", "NA")
-  );
-  data.paymentMode = nullToNa(
-    get(response, "instrument.instrumentType.name", "NA")
-  );
+  data.billNumber = nullToNa(get(response, "billNumber"));
+  data.payerName = nullToNa(get(response, "payerName"));
+  data.mobileNumber = nullToNa(get(response, "mobileNumber"));
+  data.amountPaid = get(response, "billDetails[0].amountPaid", 0);
+  data.totalAmount = get(response, "totalAmount", 0);
+  data.amountDue = data.totalAmount - data.amountPaid;
+  data.payerAddress = get(response, "payerAddress");
+  data.propertyId = get(response, "consumerCode").split(":")[0];
   data.g8ReceiptNo = nullToNa(
     get(response, "billDetails[0].manualReceiptNumber", "None")
   );
-  // }
-  const taxes = get(response, "billDetails[0].billAccountDetails", []);
-  data.taxHeads = getTaxHeads(
-    taxes,
-    get(response, "billDetails[0].totalAmount", 0)
-  );
+  data.taxHeads = taxHeads
   return data;
   // store.dispatch(prepareFinalObject("receiptDataForReceipt", data));
-};
-
-const getTaxHeads = (taxes, totalAmount) => {
-  let taxHeads = [];
-  taxes.forEach(i => {
-    if (i.amount !== 0) {
-      taxHeads.push({
-        taxHeadCode: getLocaleLabels(
-          "",
-          i.taxHeadCode,
-          getTransformedLocalStorgaeLabels()
-        ),
-        amount: i.amount
-      });
-    }
-  });
-  taxHeads.push({
-    taxHeadCode: getLocaleLabels(
-      "",
-      "TOTAL_PAYABLE",
-      getTransformedLocalStorgaeLabels()
-    ),
-    amount: totalAmount
-  });
-  return taxHeads;
 };
 
 export const loadMdmsData = async tenantid => {
@@ -135,6 +104,7 @@ export const loadMdmsData = async tenantid => {
     let ulbData = response.MdmsRes.tenant.tenants.find(item => {
       return item.code == tenantid;
     });
+  
     /** START Corporation name generation logic */
     let ulbGrade = get(ulbData, "city.ulbGrade", "NA");
     let name = get(ulbData, "city.name", "NA");
@@ -157,7 +127,9 @@ export const loadMdmsData = async tenantid => {
     data.corporationWebsite = get(ulbData, "domainUrl", "NA");
     data.corporationEmail = get(ulbData, "emailId", "NA");
   }
+
   store.dispatch(prepareFinalObject("mdmsDataForReceipt", data));
+  return data;
 };
 
 /** Data used for creation of receipt is generated and stored in local storage here */

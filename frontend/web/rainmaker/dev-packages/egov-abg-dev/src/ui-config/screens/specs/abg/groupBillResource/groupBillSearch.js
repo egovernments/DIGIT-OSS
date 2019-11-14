@@ -12,14 +12,6 @@ import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const tenantId = getTenantId();
 const resetFields = (state, dispatch) => {
-  // dispatch(
-  //   handleField(
-  //     "groupBills",
-  //     "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.locMohalla",
-  //     "props.value",
-  //     ""
-  //   )
-  // );
   dispatch(
     handleField(
       "groupBills",
@@ -28,20 +20,20 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-  // dispatch(
-  //   handleField(
-  //     "groupBills",
-  //     "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.serviceCategory",
-  //     "props.value",
-  //     ""
-  //   )
-  // );
   dispatch(
     handleField(
       "groupBills",
       "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.consumerId",
       "props.value",
       ""
+    )
+  );
+  dispatch(
+    handleField(
+      "groupBills",
+      "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.locMohalla",
+      "props.value",
+     undefined
     )
   );
 };

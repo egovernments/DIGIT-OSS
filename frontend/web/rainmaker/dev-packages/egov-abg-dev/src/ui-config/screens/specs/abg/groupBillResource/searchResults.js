@@ -1,25 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import get from "lodash/get";
-import { sortByEpoch, getEpochForDate } from "../../utils";
+import { sortByEpoch, getEpochForDate,getTextToLocalMapping } from "../../utils";
 import { generateSingleBill } from "../../utils/receiptPdf";
-import { getLocalization } from "egov-ui-kit/utils/localStorageUtils";
-import { Button, Icon } from "egov-ui-framework/ui-atoms";
-import { DownloadIcon } from "ui-atoms-local";
+import { Button } from "egov-ui-framework/ui-atoms";
 import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
-import { COPYFILE_EXCL } from "constants";
-import { objectOf } from "prop-types";
-import {
-  getTransformedLocalStorgaeLabels,
-  getLocaleLabels
-} from "egov-ui-framework/ui-utils/commons";
-
-const getLocalTextFromCode = localCode => {
-  return JSON.parse(getLocalization("localization_en_IN")).find(
-    item => item.code === localCode
-  );
-};
 
 const getConsumerDetail = propertyResponse => {
   return {
@@ -102,76 +87,52 @@ const onDownloadClick = async rowData => {
     "",
     queryObject2
   );
-
-  const consumerDetails = getConsumerDetail(propertyResponse);
-  const billDetails = getBillDetails(billResponse);
-};
-
-export const textToLocalMapping = {
-  "Consumer ID": getLocaleLabels(
-    "Consumer ID",
-    "ABG_COMMON_TABLE_COL_CONSUMER_ID",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Bill No.": getLocaleLabels(
-    "Bill No.",
-    "ABG_COMMON_TABLE_COL_BILL_NO",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Owner Name": getLocaleLabels(
-    "Owner Name",
-    "ABG_COMMON_TABLE_COL_OWN_NAME",
-    getTransformedLocalStorgaeLabels()
-  ),
-  "Bill Date": getLocaleLabels(
-    "Bill Date",
-    "ABG_COMMON_TABLE_COL_BILL_DATE",
-    getTransformedLocalStorgaeLabels()
-  ),
-  Download: getLocaleLabels("Download", "ABG_COMMON_TABLE_COL_DOWNLOAD_BUTTON"),
-  "View button": getLocaleLabels(
-    "Action",
-    "ABG_COMMON_TABLE_COL_VIEW_BUTTON",
-    getTransformedLocalStorgaeLabels()
-  )
 };
 
 export const searchResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: false,
   props: {
-    // data: [],
-    columns: {
-      [get(textToLocalMapping, "Bill No.")]: {},
-      [get(textToLocalMapping, "Consumer ID")]: {},
-      [get(textToLocalMapping, "Owner Name")]: {},
-      [get(textToLocalMapping, "Bill Date")]: {},
-      [get(textToLocalMapping, "View button")]: {
-        format: rowData => {
-          return (
-            <Button
-              color="primary"
-              primary={true}
-              onClick={() => generateSingleBill(rowData)}
-            >
-              {"View"}
-
-              {/* <DownloadIcon fill="#FE7A51" />
-              {get(textToLocalMapping, "View button")} */}
-            </Button>
-          );
+    columns: [
+      getTextToLocalMapping("Bill No."),   
+      getTextToLocalMapping("Consumer ID"),
+      getTextToLocalMapping("Owner Name"),
+      getTextToLocalMapping("Bill Date"),
+      getTextToLocalMapping("Status"),
+      // {
+      //   name:  getTextToLocalMapping("View button"),
+      //   options: {
+      //     filter: false,
+      //     customBodyRender: value => (
+      //       <Button
+      //       color="primary"
+      //       primary={true}
+      //       onClick={() => generateSingleBill(rowData)}
+      //       >
+      //         {"View"}
+      //       </Button>
+      //     )
+      //   }
+      // },
+      {
+        name: "tenantId",
+        options: {
+          display: false
         }
       }
-    },
+    ], 
+    title: getTextToLocalMapping(
+      "Search Results for Trade License Applications"
+    ),  
     options: {
       filter: false,
       download: false,
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20]
+      rowsPerPageOptions: [10, 15, 20],
+      onRowClick: (row, index) => generateSingleBill(row)
     },
     customSortColumn: {
       column: "Date Created",
@@ -191,9 +152,3 @@ export const searchResults = {
   }
 };
 
-// const onRowClick = rowData => {
-//   switch (rowData[get(textToLocalMapping, "")]) {
-//     default:
-//       return `/abg/groupBills`;
-//   }
-// };

@@ -12,7 +12,8 @@ import {
 } from "../ui-config/screens/specs/utils";
 import {
   prepareFinalObject,
-  toggleSnackbar
+  toggleSnackbar,
+  toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getTranslatedLabel,
@@ -57,18 +58,20 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   }
 };
 
-export const getSearchResults = async queryObject => {
-  // console.log("function called");
+export const getSearchResults = async (dispatch, queryObject) => {
   try {
+    dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
-      "billing-service/bill/_search",
+      "billing-service/bill/v2/_search",
       "",
       queryObject,
       {}
     );
+    dispatch(toggleSpinner());
     return response;
   } catch (error) {
+    dispatch(toggleSpinner());
     console.error(error);
     store.dispatch(
       toggleSnackbar(
@@ -80,9 +83,9 @@ export const getSearchResults = async queryObject => {
   }
 };
 
-export const getGroupBillSearch = async searchScreenObject => {
-  // console.log("function called");
+export const getGroupBillSearch = async (dispatch,searchScreenObject) => {
   try {
+    dispatch(toggleSpinner());
     const response = await httpRequest(
       "post",
       "egov-searcher/bill-genie/billswithaddranduser/_get",
@@ -90,8 +93,10 @@ export const getGroupBillSearch = async searchScreenObject => {
       [],
       { searchCriteria: searchScreenObject }
     );
+    dispatch(toggleSpinner());
     return response;
   } catch (error) {
+    dispatch(toggleSpinner());
     console.error(error);
     store.dispatch(
       toggleSnackbar(

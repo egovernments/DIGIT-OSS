@@ -6,26 +6,17 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   convertEpochToDate,
-  convertDateToEpoch,
-  validateFields
+  validateFields,
+  getTextToLocalMapping
 } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { textToLocalMapping } from "./searchResults";
-import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { prepareFinalBodyData } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 // const tenantId = getTenantId();
 const tenantId = getTenantId();
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   showHideMergeButton(false, dispatch);
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: tenantId
-    },
-    { key: "limit", value: "10" }
-  ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
     "searchCriteria",
@@ -80,7 +71,7 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
     searchScreenObject.tenantId = tenantId;
-    const responseFromAPI = await getGroupBillSearch(searchScreenObject);
+    const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject);
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];
     dispatch(
       prepareFinalObject("searchScreenMdmsData.billSearchResponse", bills)
@@ -88,20 +79,23 @@ export const searchApiCall = async (state, dispatch) => {
     const response = [];
     for (let i = 0; i < bills.length; i++) {
       response[i] = {
-        consumerId: get(bills[i], `billDetails[0].consumerCode`),
-        billNo: get(bills[i], `billDetails[0].billNumber`),
-        ownerName: get(bills[i], `payerName`),
-        billDate: get(bills[i], `billDetails[0].billDate`),
+        consumerId: get(bills[i], "consumerCode"),
+        billNo: get(bills[i], "billNumber"),
+        ownerName: get(bills[i], "payerName"),
+        billDate: get(bills[i], "billDate"),
+        status : get(bills[i], "status"),
         tenantId: tenantId
       };
     }
+
     try {
       let data = response.map(item => ({
-        [get(textToLocalMapping, "Bill No.")]: item.billNo || "-",
-        [get(textToLocalMapping, "Consumer ID")]: item.consumerId || "-",
-        [get(textToLocalMapping, "Owner Name")]: item.ownerName || "-",
-        [get(textToLocalMapping, "Bill Date")]:
+        [getTextToLocalMapping("Bill No.")]: item.billNo || "-",
+        [getTextToLocalMapping("Consumer ID")]: item.consumerId || "-",
+        [getTextToLocalMapping("Owner Name")]: item.ownerName || "-",
+        [getTextToLocalMapping("Bill Date")]:
           convertEpochToDate(item.billDate) || "-",
+        [getTextToLocalMapping("Status")]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
         tenantId: item.tenantId
       }));
 
@@ -113,9 +107,16 @@ export const searchApiCall = async (state, dispatch) => {
           data
         )
       );
-      // dispatch(
-      //   handleField("groupBills", "components.div.children.searchResults")
-      // );
+      dispatch(
+        handleField(
+          "search",
+          "components.div.children.searchResults",
+          "props.title",
+          `${getTextToLocalMapping(
+            "Search Results for Trade License Applications"
+          )} (${data.length})`
+        )
+      );
       showHideTable(true, dispatch);
       showHideMergeButton(true, dispatch);
     } catch (error) {

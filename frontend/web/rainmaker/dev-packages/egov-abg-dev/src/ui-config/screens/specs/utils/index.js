@@ -2,7 +2,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { getQueryArg,getTransformedLocalStorgaeLabels ,getLocaleLabels} from "egov-ui-framework/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getCommonCard,
@@ -278,4 +278,141 @@ export const getLabelOnlyValue = (value, props = {}) => {
       value: getCommonCaption(value)
     }
   };
+};
+
+
+export const onActionClick = (rowData) =>{
+  switch(rowData[8]){
+    case "PAY" : return "";
+    case "DOWNLOAD RECEIPT" : ""
+    case "GENERATE NEW RECEIPT" : ""
+  }
+}
+
+export const getTextToLocalMapping = label => {
+  const localisationLabels = getTransformedLocalStorgaeLabels();
+  switch (label) {
+    case "Bill No.":
+      return getLocaleLabels(
+        "Bill No.",
+        "ABG_COMMON_TABLE_COL_BILL_NO",
+        localisationLabels
+      );
+
+    case "Consumer Name":
+      return getLocaleLabels(
+        "Consumer Name",
+        "ABG_COMMON_TABLE_COL_CONSUMER_NAME",
+        localisationLabels
+      );
+
+    case "Service Category":
+      return getLocaleLabels(
+        "Service Category",
+        "ABG_COMMON_TABLE_COL_SERVICE_CATEGORY",
+        localisationLabels
+      );
+    case "Bill Date":
+      return getLocaleLabels(
+        "Bill Date",
+        "ABG_COMMON_TABLE_COL_BILL_DATE",
+        localisationLabels
+      );
+
+    case "Bill Amount(Rs)":
+      return getLocaleLabels(
+        "Bill Amount(Rs)",
+        "ABG_COMMON_TABLE_COL_BILL_AMOUNT",
+        localisationLabels
+      );
+
+    case "Status":
+      return getLocaleLabels(
+        "Status",
+        "ABG_COMMON_TABLE_COL_STATUS",
+        localisationLabels
+      );
+    case "Action":
+      return getLocaleLabels(
+        "Action",
+        "ABG_COMMON_TABLE_COL_ACTION",
+        localisationLabels
+      );
+
+    case "Consumer ID":
+      return getLocaleLabels(
+        "Consumer ID",
+        "ABG_COMMON_TABLE_COL_CONSUMER_ID",
+        localisationLabels
+      );
+
+   case "Owner Name":
+      return getLocaleLabels(
+        "Owner Name",
+        "ABG_COMMON_TABLE_COL_OWN_NAME",
+        localisationLabels
+      );
+
+  case "Download":
+      return getLocaleLabels(
+        "Download",
+        "ABG_COMMON_TABLE_COL_DOWNLOAD_BUTTON"
+      );
+
+    case "View button":
+      return getLocaleLabels(
+        "Action",
+        "ABG_COMMON_TABLE_COL_VIEW_BUTTON",
+        localisationLabels
+      );
+
+      case "ACTIVE":
+      return getLocaleLabels(
+        "Pending",
+        "BILL_GENIE_ACTIVE_LABEL",
+        localisationLabels
+      );
+
+      case "CANCELLED":
+      return getLocaleLabels(
+        "Cancelled",
+        "BILL_GENIE_CANCELLED_LABEL",
+        localisationLabels
+      );
+
+      case "PAID":
+      return getLocaleLabels(
+        "Paid",
+        "BILL_GENIE_PAID_LABEL",
+        localisationLabels
+      );
+      case "PAY":
+      return getLocaleLabels(
+        "PAY",
+        "BILL_GENIE_PAY",
+        localisationLabels
+      );
+      case "GENERATE NEW BILL":
+      return getLocaleLabels(
+        "GENERATE NEW BILL",
+        "BILL_GENIE_GENERATE_NEW_BILL",
+        localisationLabels
+      );
+
+      case "DOWNLOAD RECEIPT":
+        return getLocaleLabels(
+          "DOWNLOAD RECEIPT",
+          "BILL_GENIE_DOWNLOAD_RECEIPT",
+          localisationLabels
+        );
+
+        case "Search Results for Bill":
+        return getLocaleLabels(
+          "Search Results for Bill",
+          "BILL_GENIE_SEARCH_TABLE_HEADER",
+          localisationLabels
+        );
+        
+
+  }
 };
