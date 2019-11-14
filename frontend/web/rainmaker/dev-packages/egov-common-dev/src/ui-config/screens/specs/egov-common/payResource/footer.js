@@ -66,8 +66,34 @@ export const callPGService = async (state, dispatch) => {
       [],
       requestBody
     );
-    const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl");
-    window.location = redirectionUrl;
+
+    if(get(goToPaymentGateway, "Transaction.txnAmount")==0){
+      const srcQuery=`?tenantId=${get(goToPaymentGateway, "Transaction.tenantId")}&billIds=${get(goToPaymentGateway, "Transaction.billId")}`
+ 
+ 
+        let searchResponse = await httpRequest(
+          "post",
+          "collection-services/payments/_search" + srcQuery,
+          "_search",
+          [],
+          {}
+        );
+
+        let transactionId = get(searchResponse, "Payments[0].paymentDetails[0].receiptNumber");
+
+
+        dispatch(
+          setRoute(
+            `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}`
+          )
+        );
+       
+      
+    }else{
+      const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl")|| get(goToPaymentGateway, "Transaction.callbackUrl");
+      window.location = redirectionUrl;
+    }
+   
   } catch (e) {
     console.log(e);
     moveToFailure(dispatch);
