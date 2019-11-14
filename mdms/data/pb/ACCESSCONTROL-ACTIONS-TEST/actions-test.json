@@ -3,7 +3,7 @@
   "moduleName": "ACCESSCONTROL-ACTIONS-TEST",
   "actions-test": [
     {
-      "id": 238,1
+      "id": 238,
       "name": "CreateImmovableAsset",
       "url": "/app/asset/create-asset.html",
       "displayName": "Create Immovable Asset",
