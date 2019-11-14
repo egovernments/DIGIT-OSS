@@ -42,8 +42,7 @@ package org.egov.pt.web.models.collection;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
-import org.egov.collection.model.AuditDetails;
-import org.egov.collection.model.enums.CollectionType;
+import org.egov.pt.web.models.AuditDetails;
 import org.springframework.util.CollectionUtils;
 
 import javax.validation.constraints.NotNull;
@@ -111,7 +110,7 @@ public class BillDetail {
 
 	@NotNull
 	@JsonProperty("collectionType")
-	private CollectionType collectionType = null;
+	private String collectionType = null;
 
 	@JsonProperty("auditDetails")
 	private AuditDetails auditDetails = null;

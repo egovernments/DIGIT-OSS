@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
-import org.egov.collection.model.AuditDetails;
+import org.egov.pt.web.models.AuditDetails;
 import org.springframework.util.CollectionUtils;
 
 import javax.validation.Valid;
