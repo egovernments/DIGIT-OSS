@@ -1,62 +1,92 @@
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { paybuttonJsonpath, numberPattern, componentJsonpath } from "./constants";
+import {
+  paybuttonJsonpath,
+  numberPattern,
+  componentJsonpath
+} from "./constants";
 import get from "lodash/get";
 
-
-const buttonJsonpath = paybuttonJsonpath+`${process.env.REACT_APP_NAME === "Citizen" ? 'makePayment' : 'generateReceipt'}`
-export const validateAmountInput = (temp, pattern, action, dispatch, state) => {
-  const totalAmount = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].totalAmount");
-    if (temp === 1 && totalAmount > 100) {
+const buttonJsonpath =
+  paybuttonJsonpath +
+  `${
+    process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt"
+  }`;
+export const validateAmountInput = (pattern, action, dispatch, state) => {
+  const totalAmount = get(
+    state,
+    "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].totalAmount"
+  );
+  if (totalAmount > 100) {
+    const temp = getTemp(action, pattern);
+    if (temp === 1) {
       handleValidation(
         action,
         numberPattern,
         dispatch,
-        "Amount can't be less than 100",
-        true,
-        temp
+        "AMOUNT_LESS_THAN_100",
+        true
       );
     } else if (temp === 3) {
       handleValidation(
         action,
         numberPattern,
         dispatch,
-        "Amount can't be empty",
-        true,
-        temp
+        "AMOUNT_EMPTY",
+        true
       );
     } else if (temp === 2) {
-      handleValidation(action, pattern, dispatch, "Input field invalid", true, temp);
+      handleValidation(
+        action,
+        pattern,
+        dispatch,
+        "AMOUNT_INVALID",
+        true
+      );
     } else {
-      // handleButton(dispatch, false);
-      handleValidation(action, pattern, dispatch, "", true, temp);
+      handleValidation(action, pattern, dispatch, "", false);
     }
-  };
-  
-  export const getTemp = (action, state, pattern) => {
-    const totalAmount = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].totalAmount");
-    if (action.value) {
-      if (pattern.test(action.value) && parseInt(action.value) < 100 && totalAmount > 100) {
-        return 1;
-      }
-      if (!pattern.test(action.value)) {
-        return 2;
-      }
-    } else if(!action.value) {
-      return 3;
-    }
-  };
-  
-  const handleButton = (dispatch, disabled) => {
-    dispatch(handleField("pay", buttonJsonpath, "props.disabled", disabled));
-  };
-  
-  const handleValidation = (action, pattern, dispatch, message, disabled, temp) => {
-    dispatch(handleField("pay", action.componentJsonpath, "pattern", pattern));
-    dispatch(handleField("pay", action.componentJsonpath, "isFieldValid", !disabled));
-    dispatch(handleField("pay", action.componentJsonpath, "props.errorMessage", message));
-    temp ? handleButton(dispatch, disabled) : handleButton(dispatch, false);
-  };
-
-  export const dispatchHandleField = (dispatch, property, value) => {
-    dispatch(handleField("pay", componentJsonpath, property, value));
+  } else if (totalAmount === undefined) {
+    handleValidation(action, pattern, dispatch, "", true);
   }
+};
+
+export const getTemp = (action, pattern) => {
+  if (action.value) {
+    if (pattern.test(action.value) && parseInt(action.value) < 100) {
+      return 1;
+    }
+    if (!pattern.test(action.value)) {
+      return 2;
+    }
+  } else if (!action.value) {
+    return 3;
+  }
+};
+
+const handleButton = (dispatch, disabled) => {
+  dispatch(handleField("pay", buttonJsonpath, "props.disabled", disabled));
+};
+
+const handleValidation = (
+  action,
+  pattern,
+  dispatch,
+  message,
+  disabled
+) => {
+  dispatch(handleField("pay", action.componentJsonpath, "pattern", pattern));
+  dispatch(
+    handleField("pay", action.componentJsonpath, "isFieldValid", !disabled)
+  );
+  dispatch(
+    handleField("pay", action.componentJsonpath, "props.errorMessage", message)
+  );
+  dispatch(
+    handleField("pay", action.componentJsonpath, "props.error", disabled)
+  );
+  handleButton(dispatch, disabled);
+};
+
+export const dispatchHandleField = (dispatch, property, value) => {
+  dispatch(handleField("pay", componentJsonpath, property, value));
+};

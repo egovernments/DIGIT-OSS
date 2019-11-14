@@ -28,7 +28,7 @@ class PaymentRedirect extends Component {
           `/egov-common/acknowledgement?status=${"failure"}&consumerCode=${consumerCode}&tenantId=${tenantId}`
         );
       } else {
-        const srcQuery=`?tenantId=${tenantId}&consumerCode=${consumerCode}`
+        const srcQuery=`?tenantId=${tenantId}&consumerCodes=${consumerCode}`
  
  
         let searchResponse = await httpRequest(
