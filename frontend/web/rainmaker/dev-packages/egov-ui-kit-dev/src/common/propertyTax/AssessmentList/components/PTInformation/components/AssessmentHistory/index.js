@@ -6,6 +6,31 @@ import { connect } from "react-redux";
 import Label from "egov-ui-kit/utils/translationNode";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFormattedDate } from "../../../../../../../utils/PTCommon";
+
+export const getFullRow = (labelKey, labelValue, rowGrid = 12) => {
+    let subRowGrid = 1;
+    if (rowGrid == 6) {
+        subRowGrid = 2;
+    }
+    return (<div className={`col-sm-${rowGrid} col-xs-12`} style={{ marginBottom: 1, marginTop: 1 }}>
+        <div className={`col-sm-${2 * subRowGrid} col-xs-${2 * subRowGrid} `} style={{ padding: "3px 0px 0px 0px" }}>
+            <Label
+                labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "19px" }}
+                label={labelKey}
+                fontSize="15px"
+            />
+        </div>
+        <div className={`col-sm-${4 * subRowGrid} col-xs-${4 * subRowGrid} `} style={{ padding: "3px 0px 0px 0px" }}>
+            <Label
+                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px" }}
+                label={labelValue}
+                fontSize="15px"
+            />
+        </div>
+    </div>)
+}
+
+
 class AssessmentHistory extends Component {
 
 
@@ -37,65 +62,26 @@ class AssessmentHistory extends Component {
             outline: "none",
             alignItems: "right",
         };
-        const { propertyDetails = [] } = this.props;
+        const { propertyDetails = [], history, propertyId } = this.props;
         const paymentHistoryItems = propertyDetails.map((propertyDetail) => {
             return (
                 <div>
+                    {getFullRow("PT_HISTORY_ASSESSMENT_DATE", propertyDetail.assessmentDate ? getFormattedDate(propertyDetail.assessmentDate) : "NA", 12)}
+                    {getFullRow("PT_ASSESSMENT_NO", propertyDetail.assessmentNumber ? propertyDetail.assessmentNumber : "NA", 12)}
+                    {getFullRow("PT_ASSESSMENT_YEAR", propertyDetail.financialYear ? propertyDetail.financialYear : "NA", 6)}
 
-                    <div className="col-sm-12 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
-                        <div className="col-sm-2 col-xs-2" style={{ padding: "3px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "19px" }}
-                                label="PT_HISTORY_ASSESSMENT_DATE"
-                                fontSize="15px"
-                            />
-                        </div>
-                        <div className="col-sm-4 col-xs-4" style={{ padding: "3px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px" }}
-                                label={propertyDetail.assessmentDate ? getFormattedDate(propertyDetail.assessmentDate)  : "NA"}
-                                fontSize="15px"
-                            />
-                        </div>
-                    </div>
-                    <div className="col-sm-12 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
-                        <div className="col-sm-2 col-xs-2" style={{ padding: "3px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "19px" }}
-                                label="PT_ASSESSMENT_NO"
-                                fontSize="15px"
-                            />
-                        </div>
-                        <div className="col-sm-4 col-xs-4" style={{ padding: "3px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px" }}
-                                label={propertyDetail.assessmentNumber ? propertyDetail.assessmentNumber : "NA"}
-                                fontSize="15px"
-                            />
-                        </div>
-                    </div>
-                    <div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
-                        <div className="col-sm-4 col-xs-4" style={{ padding: "3px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "19px" }}
-                                label="PT_ASSESSMENT_YEAR"
-                                fontSize="15px"
-                            />
-                        </div>
-                        <div className="col-sm-8 col-xs-8" style={{ padding: "3px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px" }}
-                                label={propertyDetail.financialYear ? propertyDetail.financialYear : "NA"}
-                                fontSize="15px"
-                            />
-                        </div>
-                    </div>
                     <div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
                         <div style={{ float: "right" }}>
                             <Button
                                 label={<Label buttonLabel={true} label='PT_RE_ASSESS' color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
+                                    history &&
+                                        history.push(
+                                            `/property-tax/assessment-form?FY=${propertyDetail.financialYear}&assessmentId=${propertyDetail.assessmentNumber}&isAssesment=false&isReassesment=true&propertyId=${
+                                            propertyId
+                                            }&tenantId=${propertyDetail.tenantId}`
+                                        );
                                     // lastElement.onClick();
                                 }}
                             ></Button>
@@ -111,24 +97,14 @@ class AssessmentHistory extends Component {
 
     render() {
         const { propertyDetails = [], propertyId } = this.props;
-        const assessmentHistoryItems = propertyDetails.map((propertyDetail) => {
-            return {
-                financialYear: propertyDetail.financialYear,
-                assessmentNumber: propertyDetail.assessmentNumber,
-                assessmentDate: propertyDetail.assessmentDate,
-                tenantId: propertyDetail.tenantId,
-                propertyId
-            }
-        })
-
-        console.log(assessmentHistoryItems);
         let paymentHistoryItems = [];
         if (propertyDetails.length > 0) {
             paymentHistoryItems = this.getTransformedPaymentHistory();
         }
+        // console.log(this.props,'props');
 
         const items = this.state.showItems ? this.state.items : [];
-        return (<HistoryCard header={'PT_ASSESMENT_HISTORY'} items={items}  onHeaderClick={() => {
+        return (<HistoryCard header={'PT_ASSESMENT_HISTORY'} items={items} onHeaderClick={() => {
             console.log("clicked");
             this.setState({ showItems: !this.state.showItems, items: paymentHistoryItems })
         }}></HistoryCard>)

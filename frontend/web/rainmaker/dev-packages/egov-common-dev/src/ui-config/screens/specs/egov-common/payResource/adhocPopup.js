@@ -49,7 +49,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
           value: applicationNumber
         }
       ];
-      const billPayload = await getBill(queryObj);
+      const billPayload = await getBill(queryObj,dispatch);
       // let payload = sampleGetBill();
       if (billPayload && billPayload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", billPayload.Bill));
