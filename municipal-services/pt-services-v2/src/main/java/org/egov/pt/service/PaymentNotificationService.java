@@ -109,7 +109,7 @@ public class PaymentNotificationService {
                     customMessage = getCustomizedMessage(valMap, message, path);
                     smsRequests = getSMSRequests(mobileNumbers, customMessage);
                 }
-                if (valMap.get("oldPropertyId") == null && topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()))
+                if (valMap.get("oldPropertyId") == null && topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic()))
                     smsRequests.addAll(addOldpropertyIdAbsentSMS(messagejson, valMap, mobileNumbers));
                 sendSMS(smsRequests);
                 if (null == propertyConfiguration.getIsUserEventsNotificationEnabled())
@@ -369,7 +369,7 @@ public class PaymentNotificationService {
      private void addUserNumber(String topic,RequestInfo requestInfo,Map<String,String> valMap,List<String> mobileNumbers)
      {
          // If the requestInfo is of citizen add citizen's MobileNumber
-         if((topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic())
+         if((topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic())
                  || topic.equalsIgnoreCase(propertyConfiguration.getPgTopic())) && !mobileNumbers.contains(valMap.get("mobileNumber")))
              mobileNumbers.add(valMap.get("mobileNumber"));
      }
@@ -384,10 +384,10 @@ public class PaymentNotificationService {
     private String getJsonPath(String topic,Map<String,String> valMap){
         String path = "$..messages[?(@.code==\"{}\")].message";
         String paymentMode = valMap.get("paymentMode");
-        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) && paymentMode.equalsIgnoreCase("online"))
+        if(topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic()) && paymentMode.equalsIgnoreCase("online"))
             path = path.replace("{}",PTConstants.NOTIFICATION_PAYMENT_ONLINE);
 
-        if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) && !paymentMode.equalsIgnoreCase("online"))
+        if(topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic()) && !paymentMode.equalsIgnoreCase("online"))
             path = path.replace("{}",PTConstants.NOTIFICATION_PAYMENT_OFFLINE);
 
         if(topic.equalsIgnoreCase(propertyConfiguration.getPgTopic()))
