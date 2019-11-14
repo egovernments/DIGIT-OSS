@@ -3,7 +3,7 @@
   "moduleName": "ACCESSCONTROL-ACTIONS-TEST",
   "actions-test": [
     {
-      "id": 238,
+      "id": 238,1
       "name": "CreateImmovableAsset",
       "url": "/app/asset/create-asset.html",
       "displayName": "Create Immovable Asset",
@@ -11328,7 +11328,7 @@
       "orderNumber": 1,
       "queryParams": "",
       "parentModule": "",
-      "enabled": true,
+      "enabled": false,
       "serviceCode": "",
       "tenantId": "pb",
       "createdDate": null,
@@ -11342,9 +11342,9 @@
     },
     {
       "id": 1578,
-      "name": "Search Properties",
+      "name": "Assess And Search Properties",
       "url": "url",
-      "displayName": "Search Properties",
+      "displayName": "Assess And Search Properties",
       "orderNumber": 1,
       "queryParams": "",
       "parentModule": "",
@@ -11355,7 +11355,7 @@
       "createdBy": null,
       "lastModifiedDate": null,
       "lastModifiedBy": null,
-      "path": "Property Tax.Search Properties",
+      "path": "Property Tax.Assess And Search Properties",
       "navigationURL": "property-tax/search-property",
       "leftIcon": "communication:business",
       "rightIcon": ""
