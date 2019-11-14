@@ -326,6 +326,9 @@ public class PaymentValidator {
             errorMap.put("INVALID_PAYMENTDETAIL",
                     "The amount to be paid is mismatching with bill for paymentDetial with bill id: " + bill.getId());
 
+        if(!Utils.isPositiveInteger(paymentDetail.getBill().getTotalAmount()))
+            errorMap.put("INVALID_BILL_AMOUNT","The bill amount of bill: "+paymentDetail.getBill().getId()+" is fractional or less than zero");
+
         // Amount to be paid should be greater than minimum collection amount
         if (bill.getMinimumAmountToBePaid() != null
                 && paymentDetail.getTotalAmountPaid().compareTo(bill.getMinimumAmountToBePaid()) == -1)
