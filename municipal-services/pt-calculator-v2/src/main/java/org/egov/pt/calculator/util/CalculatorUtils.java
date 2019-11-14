@@ -476,7 +476,7 @@ public class CalculatorUtils {
 
             carryForward = carryForward.add(detail.getCollectionAmount());
             if (detail.getTaxHeadMasterCode().equalsIgnoreCase(PT_ADVANCE_CARRYFORWARD))
-                carryForward = carryForward.add(detail.getTaxAmount());
+                carryForward = carryForward.add(detail.getTaxAmount().negate());
         }
         return carryForward;
     }
