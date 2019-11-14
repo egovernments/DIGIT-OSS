@@ -14,7 +14,7 @@ const getCommonApplyFooter = children => {
   };
 };
 
-const generatePdfAndDownload = (
+export const generatePdfAndDownload = (
   state,
   dispatch,
   action,
@@ -180,7 +180,8 @@ export const applicationSuccessFooter = (
             tenant
           );
         }
-      }
+      },
+      visible:false
     },
     printFormButton: {
       componentPath: "Button",
@@ -210,7 +211,8 @@ export const applicationSuccessFooter = (
             tenant
           );
         }
-      }
+      },
+      visible:false
     }
   });
 };
