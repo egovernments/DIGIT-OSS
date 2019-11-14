@@ -73,8 +73,6 @@ class PaymentHistory extends Component {
         if (Payments.length > 0) {
             paymentHistoryItem = this.getTransformedPaymentHistory();
         }
-
-
         const items = this.state.showItems ? this.state.items : [];
         return (<HistoryCard header={'PT_PAYMENT_HISTORY'} items={items} onHeaderClick={() => {
             console.log("clicked");
