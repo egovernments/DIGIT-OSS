@@ -213,13 +213,13 @@ const filterData = (propertiesById, propertyName, ids) => {
   return {
     [propertyName]: {
       ...propertiesById[propertyName],
-      amountPaid: ids[0] && ids[0].amountPaid,
+      amountPaid: ids&&ids[0]&&ids[0].amountPaid && ids[0].amountPaid,
       propertyDetails:
         propertiesById &&
         propertiesById[propertyName]["propertyDetails"] &&
         propertiesById[propertyName]["propertyDetails"].filter(
           item =>
-            ids.indexOf(item.assessmentNumber) !== -1 || (ids[0] && ids[0].assessmentNo)
+            ids.indexOf(item.assessmentNumber) !== -1 ||(ids&&ids[0]&& ids[0].assessmentNo)
         )
     }
   };

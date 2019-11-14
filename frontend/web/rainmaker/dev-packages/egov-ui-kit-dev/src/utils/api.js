@@ -85,7 +85,7 @@ export const httpRequest = async (
   try {
     const response = await instance.post(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
     const responseStatus = parseInt(response.status, 10);
-    if (responseStatus === 200 || responseStatus === 201) {
+    if (responseStatus === 200 || responseStatus === 201) {    
       return response.data;
     }
   } catch (error) {
