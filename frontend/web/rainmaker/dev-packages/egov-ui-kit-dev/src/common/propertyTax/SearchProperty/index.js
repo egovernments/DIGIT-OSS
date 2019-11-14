@@ -92,7 +92,7 @@ class SearchProperty extends Component {
 
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
-      let guardianName = latestAssessment.owners[0].fatherOrHusbandName || "";
+      let guardianName = latestAssessment.owners[0].fatherOrHusbandName ? latestAssessment.owners[0].fatherOrHusbandName :"NA";
       let assessmentNo = latestAssessment.assessmentNumber;
       const uuid = get(latestAssessment, "citizenInfo.uuid");
       // let button = (
