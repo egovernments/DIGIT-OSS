@@ -161,8 +161,8 @@ public class PropertyQueryBuilder {
 			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_ASSESSMENT);
 			WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.append(" ptd.accountid = ? ");
 			preparedStmtList.add(criteria.getAccountId());
-			return builder.toString().replace("WHERE_CLAUSE_PLACHOLDER_ASSESSMENT",WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.toString())
-					.replace("WHERE_CLAUSE_PLACHOLDER_PROPERTY","").replace("WHERE_CLAUSE_PLACHOLDER","");
+			/*return builder.toString().replace("WHERE_CLAUSE_PLACHOLDER_ASSESSMENT",WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.toString())
+					.replace("WHERE_CLAUSE_PLACHOLDER_PROPERTY","").replace("WHERE_CLAUSE_PLACHOLDER","");*/
 		}
 		
 		if (criteria.getPropertyDetailStatus() != null) {
