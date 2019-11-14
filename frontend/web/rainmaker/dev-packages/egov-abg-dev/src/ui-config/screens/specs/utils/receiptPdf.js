@@ -1176,7 +1176,7 @@ const getSingleBillData = transformedData => {
         alignment: "center"
       },
       footer: {
-        margin: [0, 38, 0, 0],
+        margin: [0, 25, 0, 0],
         color: "#000000",
         bold: true,
         alignment: "right"
