@@ -501,7 +501,7 @@ export const getUserDataFromUuid = async bodyObject => {
   }
 };
 
-export const getBill = async (queryObject, dispatch) => {
+export const getBill = async (queryObject,dispatch) => {
   try {
     const response = await httpRequest(
       "post",
@@ -552,7 +552,8 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
       {
         key: "applicationNumber",
         value: applicationNumber
-      }
+      },
+      dispatch
     ]);
 
     // If pending payment then get bill else get receipt
@@ -608,7 +609,7 @@ export const generateBill = async (dispatch, consumerCode, tenantId) => {
         //   value: businessService
         // }
       ];
-      const payload = await getBill(queryObj, dispatch);
+      const payload = await getBill(queryObj,dispatch);
       // let payload = sampleGetBill();
       if (payload && payload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
