@@ -1,4 +1,5 @@
 import React from "react";
+import { LabelContainer } from "egov-ui-framework/ui-containers";
 
 const styles = {
   backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
@@ -13,8 +14,13 @@ const styles = {
 };
 
 function ApplicationNoContainer(props) {
-  const { number ,label} = props;
-  return <div style={styles}>{label || `BILL NO.:`} {number}</div>;
+  const { number, label } = props;
+  return <div style={styles}>
+    <LabelContainer
+      labelName={label.labelValue}
+      labelKey={label.labelKey}
+    />
+    {number}</div>;
 }
 
 export default ApplicationNoContainer;

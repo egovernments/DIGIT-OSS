@@ -29,7 +29,10 @@ const header = getCommonContainer({
         componentPath: "ApplicationNoContainer",
         props: {
             number: getQueryArg(window.location.href, "consumerCode"),
-            label: "Consumer Code.:"
+            label: {
+                labelValue:"Consumer Code.:",
+                labelKey:"PAYMENT_COMMON_CONSUMER_CODE"
+            }
         }
     }
 });
