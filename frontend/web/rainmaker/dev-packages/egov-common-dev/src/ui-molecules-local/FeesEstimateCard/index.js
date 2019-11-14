@@ -80,7 +80,7 @@ function totalAmount(arr) {
 function FeesEstimateCard(props) {
   const { classes, estimate } = props;
   const total = estimate.totalAmount;
-  const arrears = total - totalAmount(estimate.fees);
+  const arrears = estimate.arrears;
   const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
 
   if (arrears > 0 && estimate.fees.length == 9) {
