@@ -2,7 +2,6 @@ import React from "react";
 import get from "lodash/get";
 import { sortByEpoch, getEpochForDate,getTextToLocalMapping } from "../../utils";
 import { generateSingleBill } from "../../utils/receiptPdf";
-import { Button } from "egov-ui-framework/ui-atoms";
 import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
 import { localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 
@@ -42,12 +41,9 @@ const getBillDetails = billResponse => {
     };
     requiredData.push(obj);
   }
-
-  // console.log(requiredData);
 };
 
 const onDownloadClick = async rowData => {
-  // console.log(rowData);
   const queryObject1 = [
     {
       key: "ids",
@@ -78,7 +74,6 @@ const onDownloadClick = async rowData => {
     "",
     queryObject1
   );
-  // console.log(propertyResponse);
 
   const billendpoint = "/collection-services-v1/receipts/_search";
   const billResponse = await httpRequest(
@@ -95,26 +90,21 @@ export const searchResults = {
   visible: false,
   props: {
     columns: [
-      getTextToLocalMapping("Bill No."),   
+      {
+        name: getTextToLocalMapping("Bill No."),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <div onClick={() => generateSingleBill(value)}>
+              <a>{value}</a>
+            </div>
+          )
+        }
+      },  
       getTextToLocalMapping("Consumer ID"),
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Bill Date"),
       getTextToLocalMapping("Status"),
-      // {
-      //   name:  getTextToLocalMapping("View button"),
-      //   options: {
-      //     filter: false,
-      //     customBodyRender: value => (
-      //       <Button
-      //       color="primary"
-      //       primary={true}
-      //       onClick={() => generateSingleBill(rowData)}
-      //       >
-      //         {"View"}
-      //       </Button>
-      //     )
-      //   }
-      // },
       {
         name: "tenantId",
         options: {
@@ -132,7 +122,6 @@ export const searchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => generateSingleBill(row)
     },
     customSortColumn: {
       column: "Date Created",
