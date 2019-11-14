@@ -45,7 +45,7 @@ SearchDefinitions:
             INNER JOIN eg_pt_address_v2 ptadd ON ptadd.property = pt.propertyid INNER JOIN eg_pt_propertydetail_v2 ptdet ON ptdet.property = pt.propertyid 
             INNER JOIN eg_pt_owner_v2 ptown ON ptdet.assessmentnumber = ptown.propertydetail $where )
 
-      SELECT * from bill_data bd INNER JOIN (select max(b_createddate) as maxcreateddate, bd_consumercode as maxconsumercode from bill_data group by bd_consumercode) latestbill ON latestbill.maxconsumercode=bd.bd_consumercode
+      select * from bill_data inner join (select max(b_createddate) as maxcreateddate, bd_consumercode from bill_data group by bd_consumercode) as max ON max.maxcreateddate=b_createddate
    searchParams: 
     condition: AND
     params:
