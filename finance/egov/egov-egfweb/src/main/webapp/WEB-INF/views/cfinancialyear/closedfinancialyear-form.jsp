@@ -51,7 +51,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-primary" data-collapsed="0">
 				<div class="panel-heading">
-					<div class="panel-title">Closed Financial Year</div>
+					<div class="panel-title">Close a Financial Year</div>
 				</div>
 				<div class="panel-body">
 
@@ -82,7 +82,7 @@
 									<form:checkbox path="isClosed" id="isFinYrCloses" disabled="true" />
 								</c:when>
 								<c:otherwise>
-									<form:checkbox path="isClosed" id="isFinYrCloses" />
+									<form:checkbox path="isClosed" id="isFinYrCloses" required="required" />
 								</c:otherwise>
 							</c:choose>
 

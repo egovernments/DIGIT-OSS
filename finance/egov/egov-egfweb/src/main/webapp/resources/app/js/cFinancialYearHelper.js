@@ -359,7 +359,7 @@ $('#buttonSubmit').click(function(e){
 					});
 					
 				} else if (res == "false") {
-					bootbox.alert("Transfer of closing balance is not done for this year.");
+					bootbox.alert("Transfer the closing balance of this year to next year in order to proceed with the closing of this year.");
 				}
 			},
 			error : function (res){
