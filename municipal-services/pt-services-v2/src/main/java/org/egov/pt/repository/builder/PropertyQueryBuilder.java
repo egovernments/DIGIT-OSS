@@ -164,6 +164,7 @@ public class PropertyQueryBuilder {
 			/*return builder.toString().replace("WHERE_CLAUSE_PLACHOLDER_ASSESSMENT",WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.toString())
 					.replace("WHERE_CLAUSE_PLACHOLDER_PROPERTY","").replace("WHERE_CLAUSE_PLACHOLDER","");*/
 		}
+
 		
 		if (criteria.getPropertyDetailStatus() != null) {
 			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_ASSESSMENT);
@@ -193,9 +194,11 @@ public class PropertyQueryBuilder {
 			preparedStmtList.add(criteria.getFinancialYear());
 		}
 
-		addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_PROPERTY);
-		WHERE_CLAUSE_PLACHOLDER_PROPERTY.append("  pt.tenantid=? ");
-		preparedStmtList.add(criteria.getTenantId());
+		if(criteria.getAccountId()==null){
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_PROPERTY);
+			WHERE_CLAUSE_PLACHOLDER_PROPERTY.append("  pt.tenantid=? ");
+			preparedStmtList.add(criteria.getTenantId());
+		}
 
 		Set<String> statuses = new HashSet<>();
 		criteria.getStatuses().forEach(statusEnum -> {
