@@ -41,7 +41,7 @@ const HistoryCard = ({ header, backgroundColor = 'rgb(242, 242, 242)', items = [
                   fontSize="18px"
                 />}
               </div>
-              <span style={{ alignItems: "right" }} > <div style={IconStyle}>
+              <span style={{ alignItems: "right" , cursor:'pointer' }} > <div style={IconStyle}>
                 <Icon action="hardware" name="keyboard-arrow-down" color="#484848" onClick={() => onHeaderClick()} />
               </div></span>
             </div>
