@@ -19,6 +19,13 @@
                 }
               },
               {
+                "variable": "user-name", 
+                "value": {
+                  "path": "$.userInfo.name"
+                },
+                "type":"selectFromRequestInfo"  
+              },
+              {
                 "variable": "payerContact", 
                 "value": {
                   "path": "$.paymentDetails[0].bill.mobileNumber"
