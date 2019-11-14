@@ -19,6 +19,10 @@ import org.egov.pt.web.models.PropertyCriteria;
 import org.egov.pt.web.models.PropertyDetail;
 import org.egov.pt.web.models.PropertyRequest;
 import org.egov.pt.web.models.SMSRequest;
+import org.egov.pt.web.models.collection.Bill;
+import org.egov.pt.web.models.collection.Payment;
+import org.egov.pt.web.models.collection.PaymentDetail;
+import org.egov.pt.web.models.collection.PaymentRequest;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,8 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static org.egov.pt.util.PTConstants.BUSINESSSERVICE_CODE;
 
 @Slf4j
 @Service
@@ -52,14 +58,15 @@ public class PaymentNotificationService {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private ObjectMapper mapper;
+
     /**
      * Generates message from the received object and sends SMSRequest to kafka queue
      * @param record The Object received from kafka topic
      * @param topic The topic name from which Object is received
      */
     public void process(HashMap<String, Object> record,String topic){
-        Map<String,String> valMap;
-        List<String> mobileNumbers;
         RequestInfo requestInfo;
 
         try{
@@ -67,48 +74,56 @@ public class PaymentNotificationService {
             DocumentContext documentContext = JsonPath.parse(jsonString);
           //  requestInfo = objectMapper.convertValue(record.get("RequestInfo"),RequestInfo.class);
         //    if(requestInfo==null)
-            requestInfo = new RequestInfo();
-            if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()))
-                valMap = getValuesFromReceipt(documentContext);
-            else
-                valMap = getValuesFromTransaction(documentContext);
 
-            if(!valMap.get("module").equalsIgnoreCase("PT"))
+            List<Map<String,String>> valMaps = new LinkedList<>();
+
+            requestInfo = new RequestInfo();
+
+
+            if(topic.equalsIgnoreCase(propertyConfiguration.getPaymentTopic()))
+                valMaps.addAll(getValuesFromPayment(record));
+            else
+                valMaps.add(getValuesFromTransaction(documentContext));
+
+            if( CollectionUtils.isEmpty(valMaps) || !valMaps.get(0).get("module").equalsIgnoreCase("PT"))
                 return;
 
-            Map<String,List<String>> propertyAttributes = getPropertyAttributes(valMap,requestInfo);
-            mobileNumbers = propertyAttributes.get("mobileNumbers");
-            addUserNumber(topic,requestInfo,valMap,mobileNumbers);
-            valMap.put("financialYear",propertyAttributes.get("financialYear").get(0));
-            valMap.put("oldPropertyId",propertyAttributes.get("oldPropertyId").get(0));
-        }
-        catch (Exception e)
-        {
-            throw new CustomException("PARSING ERROR","Error while parsing the json received from kafka");
-        }
 
-        try{
-            StringBuilder uri = util.getUri(valMap.get("tenantId"),requestInfo);
-            LinkedHashMap responseMap = (LinkedHashMap)serviceRequestRepository.fetchResult(uri, requestInfo);
-            String messagejson = new JSONObject(responseMap).toString();
-            List<SMSRequest> smsRequests = new ArrayList<>();
-            String customMessage = null;
-            if(topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) ||
-                    (topic.equalsIgnoreCase(propertyConfiguration.getPgTopic()) && "FAILURE".equalsIgnoreCase(valMap.get("txnStatus")))){
-                String path = getJsonPath(topic,valMap);
-                Object messageObj = JsonPath.parse(messagejson).read(path);
-                String message = ((ArrayList<String>)messageObj).get(0);
-                customMessage = getCustomizedMessage(valMap,message,path);
-                smsRequests = getSMSRequests(mobileNumbers,customMessage);
+            for(Map<String,String> valMap : valMaps) {
+
+                List<String> mobileNumbers = new LinkedList<>();
+                Map<String, List<String>> propertyAttributes = getPropertyAttributes(valMap, requestInfo);
+                mobileNumbers = propertyAttributes.get("mobileNumbers");
+                addUserNumber(topic, requestInfo, valMap, mobileNumbers);
+                valMap.put("financialYear", propertyAttributes.get("financialYear").get(0));
+                valMap.put("oldPropertyId", propertyAttributes.get("oldPropertyId").get(0));
+
+
+                StringBuilder uri = util.getUri(valMap.get("tenantId"), requestInfo);
+                LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, requestInfo);
+                String messagejson = new JSONObject(responseMap).toString();
+                List<SMSRequest> smsRequests = new ArrayList<>();
+                String customMessage = null;
+                if (topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()) ||
+                        (topic.equalsIgnoreCase(propertyConfiguration.getPgTopic()) && "FAILURE".equalsIgnoreCase(valMap.get("txnStatus")))) {
+                    String path = getJsonPath(topic, valMap);
+                    Object messageObj = JsonPath.parse(messagejson).read(path);
+                    String message = ((ArrayList<String>) messageObj).get(0);
+                    customMessage = getCustomizedMessage(valMap, message, path);
+                    smsRequests = getSMSRequests(mobileNumbers, customMessage);
+                }
+                if (valMap.get("oldPropertyId") == null && topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()))
+                    smsRequests.addAll(addOldpropertyIdAbsentSMS(messagejson, valMap, mobileNumbers));
+                sendSMS(smsRequests);
+                if (null == propertyConfiguration.getIsUserEventsNotificationEnabled())
+                    propertyConfiguration.setIsUserEventsNotificationEnabled(true);
+                if (propertyConfiguration.getIsUserEventsNotificationEnabled()) {
+                    sendEventNotification(requestInfo, customMessage, smsRequests, valMap);
+                }
+
             }
-            if(valMap.get("oldPropertyId")==null && topic.equalsIgnoreCase(propertyConfiguration.getReceiptTopic()))
-                smsRequests.addAll(addOldpropertyIdAbsentSMS(messagejson,valMap,mobileNumbers));
-            sendSMS(smsRequests);
-            if(null == propertyConfiguration.getIsUserEventsNotificationEnabled())
-            	propertyConfiguration.setIsUserEventsNotificationEnabled(true);
-            if(propertyConfiguration.getIsUserEventsNotificationEnabled()) {
-            	sendEventNotification(requestInfo, customMessage, smsRequests, valMap);
-            }
+
+
         }
         catch(Exception e)
         {throw new CustomException("LOCALIZATION ERROR","Unable to get message from localization");}
@@ -220,6 +235,59 @@ public class PaymentNotificationService {
         return valMap;
     }
 
+
+    /**
+     * Returns the map of the values required from the record
+     * @return The required values as key,value pair
+     */
+    private List<Map<String,String>> getValuesFromPayment(HashMap<String, Object> record){
+        BigDecimal totalAmount,amountPaid;
+        String consumerCode,transactionId,paymentMode,tenantId,mobileNumber,module;
+        Map<String,String> valMap = new HashMap<>();
+        PaymentRequest paymentRequest = mapper.convertValue(record,PaymentRequest.class);
+        Payment payment = paymentRequest.getPayment();
+
+        List<Map<String,String>> listOfValMap = new LinkedList<>();
+
+        for(PaymentDetail paymentDetail : payment.getPaymentDetails())
+        {
+            if(paymentDetail.getBill().getBusinessService().equalsIgnoreCase(BUSINESSSERVICE_CODE)) {
+                Bill bill = paymentDetail.getBill();
+
+                totalAmount = bill.getTotalAmount();
+                valMap.put("totalAmount", totalAmount.toString());
+
+                amountPaid = bill.getAmountPaid();
+                valMap.put("amountPaid", amountPaid.toString());
+                valMap.put("amountDue", totalAmount.subtract(amountPaid).toString());
+
+                consumerCode = bill.getConsumerCode();
+                valMap.put("consumerCode", consumerCode);
+                valMap.put("propertyId", consumerCode);
+
+                transactionId = payment.getTransactionNumber();
+                valMap.put("transactionId", transactionId);
+
+                paymentMode = payment.getPaymentMode();
+                valMap.put("paymentMode", paymentMode);
+
+                tenantId = payment.getTenantId();
+                valMap.put("tenantId", tenantId);
+
+                mobileNumber = bill.getMobileNumber();
+                valMap.put("mobileNumber", mobileNumber);
+
+                module = bill.getBusinessService();
+                valMap.put("module", module);
+
+                listOfValMap.add(valMap);
+            }
+        }
+
+        return listOfValMap;
+    }
+
+
     /**
      * Returns the map of the values required from the record
      * @param documentContext The DocumentContext of the record Object
@@ -242,7 +310,7 @@ public class PaymentNotificationService {
             moduleId = documentContext.read("$.Transaction.consumerCode");
             valMap.put("moduleId",moduleId);
             valMap.put("propertyId",moduleId.split(":")[0]);
-            valMap.put("assessmentNumber",moduleId.split(":")[1]);
+         //   valMap.put("assessmentNumber",moduleId.split(":")[1]);
 
             mobileNumber = documentContext.read("$.Transaction.user.mobileNumber");
             valMap.put("mobileNumber",mobileNumber);
@@ -266,7 +334,7 @@ public class PaymentNotificationService {
      */
     private Map<String,List<String>> getPropertyAttributes(Map<String,String> valMap, RequestInfo requestInfo){
         PropertyCriteria propertyCriteria = new PropertyCriteria();
-        propertyCriteria.setPropertyDetailids(Collections.singleton(valMap.get("assessmentNumber")));
+        propertyCriteria.setIds(Collections.singleton(valMap.get("propertyId")));
         propertyCriteria.setTenantId(valMap.get("tenantId"));
         List<Property> properties = propertyService.getPropertiesWithOwnerInfo(propertyCriteria,requestInfo);
 
@@ -361,7 +429,7 @@ public class PaymentNotificationService {
         message = message.replace("< insert payment transaction id from PG>",valMap.get("transactionId"));
         message = message.replace("<insert Property Tax Assessment ID>",valMap.get("propertyId"));
         message = message.replace("<pt due>.",valMap.get("amountDue"));
-        message = message.replace("<FY>",valMap.get("financialYear"));
+   //     message = message.replace("<FY>",valMap.get("financialYear"));
         return message;
    }
 
@@ -376,7 +444,7 @@ public class PaymentNotificationService {
         message = message.replace("<insert mode of payment>",valMap.get("paymentMode"));
         message = message.replace("<Enter pending amount>",valMap.get("amountDue"));
         message = message.replace("<insert inactive citizen application web URL>.",propertyConfiguration.getNotificationURL());
-        message = message.replace("<Insert FY>",valMap.get("financialYear"));
+  //      message = message.replace("<Insert FY>",valMap.get("financialYear"));
         return message;
     }
 
@@ -389,7 +457,7 @@ public class PaymentNotificationService {
    private String getCustomizedPaymentFailMessage(String message,Map<String,String> valMap){
         message = message.replace("<insert amount to pay>",valMap.get("txnAmount"));
         message = message.replace("<insert ID>",valMap.get("propertyId"));
-        message = message.replace("<FY>",valMap.get("financialYear"));
+     //   message = message.replace("<FY>",valMap.get("financialYear"));
         return message;
    }
 
@@ -401,7 +469,7 @@ public class PaymentNotificationService {
      */
    private String getCustomizedOldPropertyIdAbsentMessage(String message,Map<String,String> valMap){
         message = message.replace("<insert Property Tax Assessment ID>",valMap.get("propertyId"));
-        message = message.replace("<FY>",valMap.get("financialYear"));
+    //    message = message.replace("<FY>",valMap.get("financialYear"));
         return  message;
    }
 

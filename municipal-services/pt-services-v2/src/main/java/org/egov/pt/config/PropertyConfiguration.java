@@ -96,6 +96,9 @@ public class PropertyConfiguration {
     @Value("${kafka.topics.notification.fullpayment}")
     private String receiptTopic;
 
+    @Value("${kafka.topics.notification.payment}")
+    private String paymentTopic;
+
     @Value("${kafka.topics.notification.pg.save.txns}")
     private String pgTopic;
 
