@@ -85,17 +85,17 @@ export const searchApiCall = async (state, dispatch) => {
         billAmount: get(item, "totalAmount"),
         status: get(item, "status"),
         action: getActionItem(get(item, "status")),
-
+        tenantId : get(item, "tenantId")
       };
     });
 
     dispatch(
       prepareFinalObject("searchScreenMdmsData.billSearchResponse", bills)
     );
+
     try {
       let data = billTableData.map(item => ({
         [getTextToLocalMapping("Bill No.")]: item.billNumber || "-",
-        "Consumer Code" : item.consumerCode || "-",
         [getTextToLocalMapping("Consumer Name")]: item.consumerName || "-",
         [getTextToLocalMapping("Bill Date")]:
           convertEpochToDate(item.billDate) || "-",
