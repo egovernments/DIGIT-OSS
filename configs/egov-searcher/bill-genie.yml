@@ -43,9 +43,9 @@ SearchDefinitions:
             INNER JOIN egbs_billaccountdetail_v1 ad ON bd.id = ad.billdetail AND bd.tenantid = ad.tenantid 
             LEFT OUTER JOIN eg_pt_property_v2 pt ON bd.consumercode = pt.propertyid 
             INNER JOIN eg_pt_address_v2 ptadd ON ptadd.property = pt.propertyid INNER JOIN eg_pt_propertydetail_v2 ptdet ON ptdet.property = pt.propertyid 
-            INNER JOIN eg_pt_owner_v2 ptown ON ptdet.assessmentnumber = ptown.propertydetail $where AND b.status = 'ACTIVE')
+            INNER JOIN eg_pt_owner_v2 ptown ON ptdet.assessmentnumber = ptown.propertydetail $where )
 
-      SELECT *, tax.collectedamount as bd_collectedamount from bill_data bd INNER JOIN (select sum(ad_adjustedamount) as collectedamount, demandid from bill_data group by demandid) tax ON         tax.demandid=bd.demandid
+      SELECT * from bill_data bd INNER JOIN (select max(b_createddate) as maxcreateddate, b_id as maxbillid from bill_data group by b_id) latestbill ON latestbill.maxbillid=bd.b_id
    searchParams: 
     condition: AND
     params:
