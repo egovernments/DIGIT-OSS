@@ -198,6 +198,7 @@ public class PaymentEnricher {
 						billAccountDetail.setTenantId(bill.getTenantId());
 						billAccountDetail.setBillDetailId(billDetail.getId());
 						billAccountDetail.setDemandDetailId("advance_tax");
+						billAccountDetail.setAdjustedAmount(BigDecimal.ZERO);
 						billAccountDetail.setOrder(-1);
 					}
 				});
