@@ -86,6 +86,8 @@ export const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = true;
   if (activeStep === 0) {
+    await getDocList(state, dispatch);
+
     const data = get(state.screenConfiguration, "preparedFinalObject");
     setOwnerShipDropDownFieldChange(state, dispatch, data);
 
@@ -152,8 +154,6 @@ export const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 1) {
-    await getDocList(state, dispatch);
-
     let isOwnerShipValid = validateFields(
       "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children",
       state,

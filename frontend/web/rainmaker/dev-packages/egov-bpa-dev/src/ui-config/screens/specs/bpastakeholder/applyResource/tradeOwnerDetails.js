@@ -121,7 +121,8 @@ export const getOwnerEmailField = getTextField({
     labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_PLACEHOLDER"
   },
   pattern: getPattern("Email"),
-  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
+  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId",
+  required: true
 });
 
 export const ownerInfoInstitutional = {
@@ -259,7 +260,7 @@ export const OwnerInfoCard = getCommonCard({
           labelKey: "BPA_LICENSEE_TYPE__PLACEHOLDER"
         },
         required: true,
-        jsonPath: "LicensesTemp.tradeUnits[0].tradeType",
+        jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
         localePrefix: {
           moduleName: "TRADELICENSE",
           masterName: "TRADETYPE"
@@ -268,7 +269,7 @@ export const OwnerInfoCard = getCommonCard({
           jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
           setDataInField: true
         },
-        sourceJsonPath: "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+        sourceJsonPath: "applyScreenMdmsData.TradeLicense.MdmsTradeType",
         gridDefination: {
           xs: 12,
           sm: 6

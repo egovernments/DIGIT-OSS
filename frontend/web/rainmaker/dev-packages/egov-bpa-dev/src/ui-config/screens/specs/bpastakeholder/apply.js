@@ -100,7 +100,7 @@ export const getMdmsData = async (action, state, dispatch) => {
         {
           moduleName: "TradeLicense",
           masterDetails: [
-            { name: "TradeType" },
+            { name: "TradeType", filter: `[?(@.type == "BPA")]` },
             { name: "AccessoriesCategory" },
             { name: "ApplicationType" }
           ]

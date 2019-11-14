@@ -365,7 +365,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       fY1 = fY1.substring(2, 4);
       currentFinancialYr = currentFinancialYr.split("-")[0] + "-" + fY1;
       set(queryObject[0], "financialYear", currentFinancialYr);
-      setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
+      // setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
     }
 
     set(queryObject[0], "tenantId", tenantId);
