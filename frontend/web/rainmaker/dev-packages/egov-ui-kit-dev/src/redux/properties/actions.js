@@ -1,12 +1,12 @@
 import * as actionTypes from "./actionTypes";
-import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL,FETCHRECEIPT } from "egov-ui-kit/utils/endPoints";
+import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL,FETCHRECEIPT,DOWNLOADRECEIPT } from "egov-ui-kit/utils/endPoints";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { transformById } from "egov-ui-kit/utils/commons";
 import orderby from "lodash/orderBy";
 import get from "lodash/get";
 import cloneDeep from "lodash/cloneDeep";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
-
+const FileDownload = require('js-file-download');
 const reset_property_reset = () => {
   return {
     type: actionTypes.RESET_PROPERTY_STATE,
@@ -59,6 +59,31 @@ const fetchReceiptError = (error) => {
     error,
   };
 };
+
+
+
+
+const downloadReceiptPending = () => {
+  return {
+    type: actionTypes.PROPERTY_DOWNLOAD_RECEIPT_PENDING,
+  };
+};
+
+const downloadReceiptComplete = (payload) => {
+  return {
+    type: actionTypes.PROPERTY_DOWNLOAD_RECEIPT_COMPLETE,
+    payload,
+  };
+};
+
+const downloadReceiptError = (error) => {
+  return {
+    type: actionTypes.PROPERTY_DOWNLOAD_RECEIPT_ERROR,
+    error,
+  };
+};
+
+
 const draftFetchPending = () => {
   return {
     type: actionTypes.DRAFT_FETCH_PENDING,
@@ -551,6 +576,25 @@ export const fetchReceipt = (fetchReceiptQueryObject) => {
         dispatch(fetchReceiptComplete(payloadProperty));
       } catch (error) {
         dispatch(fetchReceiptError(error.message));
+      }
+    }
+  }
+}
+export const downloadReceipt = (receiptQueryString) => {
+  return async (dispatch) => {
+    if (receiptQueryString) {
+      dispatch(downloadReceiptPending());
+      try {
+        const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
+        const queryStr=[
+          { key: "key", value:"consolidatedreceipt" },
+          { key: "tenantId", value: "pb"}
+        ]
+        const payloadReceipt = await httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr,{Payments:payloadReceiptDetails.Payments});
+        FileDownload(payloadReceipt, receiptQueryString[0].value+'.pdf');
+        dispatch(downloadReceiptComplete(payloadReceipt));
+      } catch (error) {
+        dispatch(downloadReceiptError(error.message));
       }
     }
   }

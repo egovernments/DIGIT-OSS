@@ -7,6 +7,7 @@ import Label from "egov-ui-kit/utils/translationNode";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFormattedDate } from "../../../../../../../utils/PTCommon";
 import { getFullRow } from "../AssessmentHistory";
+import { downloadReceipt } from "egov-ui-kit/redux/properties/actions";
 
 class PaymentHistory extends Component {
     constructor(props) {
@@ -39,7 +40,7 @@ class PaymentHistory extends Component {
             outline: "none",
             alignItems: "right",
         };
-        const { Payments = [] } = this.props;
+        const { Payments = [] ,downloadReceipt} = this.props;
         const paymentHistoryItems = Payments.map((payment, index) => {
             return (
                 <div>
@@ -54,6 +55,11 @@ class PaymentHistory extends Component {
                                 label={<Label buttonLabel={true} label="PT_DOWNLOAD_RECEIPT" color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
+                                    const receiptQueryString= [
+                                            { key: "receiptNumbers", value: payment.paymentDetails[0].receiptNumber },
+                                            { key: "tenantId", value: payment.paymentDetails[0].tenantId }
+                                          ]
+                                    downloadReceipt(receiptQueryString)
                                     // lastElement.onClick();
                                 }}
                             ></Button>
@@ -94,12 +100,20 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 
-
+const mapDispatchToProps = (dispatch) => {
+    return {
+     downloadReceipt: (receiptQueryString) => dispatch(downloadReceipt(receiptQueryString)),
+    };
+  };
+//   [
+//     { key: "consumerCodes", value: decodeURIComponent(this.props.match.params.propertyId) },
+//     { key: "tenantId", value: this.props.match.params.tenantId }
+// //   ]
 
 export default compose(
     withRouter,
     connect(
         mapStateToProps,
-        null
+        mapDispatchToProps
     )
 )(PaymentHistory);
