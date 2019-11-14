@@ -106,7 +106,7 @@
             {
                 "externalAPI": [     
                   { 
-                      "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                      "path": "https://egov-micro-qa.egovernments.org/egov-mdms-service/v1/_get",
                       "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=[?(@.code=='$.tenantId')]",
                       "apiRequest": null,
                       "responseMapping":[
