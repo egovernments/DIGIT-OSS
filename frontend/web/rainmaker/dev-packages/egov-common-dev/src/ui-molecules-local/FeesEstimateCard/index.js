@@ -80,7 +80,7 @@ function totalAmount(arr) {
 function FeesEstimateCard(props) {
   const { classes, estimate } = props;
   const total = estimate.totalAmount;
-  const arrears = total - totalAmount(estimate.fees);
+  const arrears = estimate.arrears;
   const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
 
   if (arrears > 0 && estimate.fees.length == 9) {
@@ -109,17 +109,20 @@ function FeesEstimateCard(props) {
         <div style={{ marginTop: 48, maxWidth: 400 }}>
           <Grid container>
             {estimate.fees.map((fee, key) => {
-              let tooltip = fee.info ? (
-                <Tooltip title={fee.info.labelName}>
-                  <Icon className={classes.toolTipIcon}>
-                    <i class="material-icons" style={{ fontSize: 18 }}>
-                      info_circle
-                    </i>
-                  </Icon>
-                </Tooltip>
-              ) : (
-                  ""
-                );
+              // let tooltip = fee.info ? (
+              //   <Tooltip title={<LabelContainer
+              //     labelName={fee.info.labelName}
+              //     labelKey={fee.info.labelName}
+              //   />}>
+              //     <Icon className={classes.toolTipIcon}>
+              //       <i class="material-icons" style={{ fontSize: 18 }}>
+              //         info_circle
+              //       </i>
+              //     </Icon>
+              //   </Tooltip>
+              // ) : (
+              //     ""
+              //   );
               let textLeft = fee.name ? (
                 <Grid container xs={8}>
                   <LabelContainer
@@ -127,7 +130,7 @@ function FeesEstimateCard(props) {
                     labelKey={fee.name.labelKey}
                     style={styles.taxStylesLeft}
                   />
-                  {tooltip}
+                  {/*tooltip*/}
                 </Grid>
               ) : (
                   <Grid xs={8} />
