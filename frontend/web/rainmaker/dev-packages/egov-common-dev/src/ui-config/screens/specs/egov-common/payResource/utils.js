@@ -23,7 +23,7 @@ export const validateAmountInput = (pattern, action, dispatch, state) => {
         action,
         numberPattern,
         dispatch,
-        "Amount can't be less than 100",
+        "AMOUNT_LESS_THAN_100",
         true
       );
     } else if (temp === 3) {
@@ -31,7 +31,7 @@ export const validateAmountInput = (pattern, action, dispatch, state) => {
         action,
         numberPattern,
         dispatch,
-        "Amount can't be empty",
+        "AMOUNT_EMPTY",
         true
       );
     } else if (temp === 2) {
@@ -39,12 +39,14 @@ export const validateAmountInput = (pattern, action, dispatch, state) => {
         action,
         pattern,
         dispatch,
-        "Input field invalid",
+        "AMOUNT_INVALID",
         true
       );
     } else {
       handleValidation(action, pattern, dispatch, "", false);
     }
+  } else if (totalAmount === undefined) {
+    handleValidation(action, pattern, dispatch, "", true);
   }
 };
 

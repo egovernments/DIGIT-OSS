@@ -501,7 +501,7 @@ export const getUserDataFromUuid = async bodyObject => {
   }
 };
 
-export const getBill = async queryObject => {
+export const getBill = async (queryObject, dispatch) => {
   try {
     const response = await httpRequest(
       "post",
@@ -608,7 +608,7 @@ export const generateBill = async (dispatch, consumerCode, tenantId) => {
         //   value: businessService
         // }
       ];
-      const payload = await getBill(queryObj);
+      const payload = await getBill(queryObj, dispatch);
       // let payload = sampleGetBill();
       if (payload && payload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));

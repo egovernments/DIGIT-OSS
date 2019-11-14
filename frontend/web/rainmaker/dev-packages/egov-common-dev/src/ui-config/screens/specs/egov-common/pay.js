@@ -16,7 +16,7 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../utils";
 import set from "lodash/set";
-import { componentJsonpath, radioButtonJsonPath } from "./payResource/constants";
+import { componentJsonpath, radioButtonJsonPath, paybuttonJsonpath } from "./payResource/constants";
 
 const header = getCommonContainer({
     header: getCommonHeader({
@@ -118,6 +118,12 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
         if (totalAmount.totalAmount === 0 || totalAmount.totalAmount <= 100) {
             dispatch(handleField("pay", radioButtonJsonPath, "props.buttons[1].disabled", true));
         }
+    }
+
+    if (get(totalAmount, "totalAmount") === undefined) {
+        const buttonJsonpath = paybuttonJsonpath + `${process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt" }`;
+        dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
+        dispatch(handleField("pay", radioButtonJsonPath, "props.buttons[1].disabled", true));
     }
 
     
