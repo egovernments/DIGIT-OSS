@@ -32,11 +32,11 @@ const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
       </div>
       {totalBillAmountDue > 0 && (
         <div className="col-xs-6 col-sm-3 flex-child">
-          <TotalDuesButton labelText="PT_TOTALDUES_VIEW" />
+          {/* <TotalDuesButton labelText="PT_TOTALDUES_VIEW" /> */}
         </div>
       )}
       {totalBillAmountDue > 0 && (
-        <div className="col-xs-6 col-sm-3 flex-child">
+        <div className="col-xs-6 col-sm-3 flex-child " style={{alignItems:'right'}}>
           <TotalDuesButton labelText="PT_TOTALDUES_PAY" onClickAction={() => {
             history.push(
               `${envURL}?consumerCode=${consumerCode}&tenantId=${tenantId}`);

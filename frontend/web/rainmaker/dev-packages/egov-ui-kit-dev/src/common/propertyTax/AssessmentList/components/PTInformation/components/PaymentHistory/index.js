@@ -1,21 +1,27 @@
 import { compose } from "recompose";
-import {  Button } from "components";
+import { Button } from "components";
 import { withRouter } from "react-router-dom";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Label from "egov-ui-kit/utils/translationNode";
 import HistoryCard from "../../../../../Property/components/HistoryCard";
 import { getFormattedDate } from "../../../../../../../utils/PTCommon";
+import { getFullRow } from "../AssessmentHistory";
+
 class PaymentHistory extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             items: [],
             showItems: false,
         };
     }
+    getBillPeriod(billDetails = []) {
+        let latest = billDetails.sort((x, y) => y.fromPeriod - x.fromPeriod);
+        const billPeriod = getFormattedDate(latest[latest.length - 1].fromPeriod) + ' to ' + getFormattedDate(latest[0].toPeriod);
+        return billPeriod;
 
+    }
     getTransformedPaymentHistory() {
         const labelStyle = {
             letterSpacing: 1.2,
@@ -34,89 +40,14 @@ class PaymentHistory extends Component {
             alignItems: "right",
         };
         const { Payments = [] } = this.props;
-        const paymentHistoryItems = Payments.map((payment) => {
+        const paymentHistoryItems = Payments.map((payment, index) => {
             return (
                 <div>
-                    <div className="col-sm-12 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
-                        <div className="col-sm-2 col-xs-2" style={{ padding: "5px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "19px" }}
-                                label="PT_HISTORY_RECEIPT_NO"
-                                fontSize="15px"
-                            />
-                        </div>
-                        <div className="col-sm-4 col-xs-4" style={{ padding: "5px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px" }}
-                                label={payment.paymentDetails[0].receiptNumber? payment.paymentDetails[0].receiptNumber: "NA"}
-                                fontSize="15px"
-                            />
-                        </div>
-                    </div>
-                    <div className="col-sm-12 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
-                        <div className="col-sm-2 col-xs-2" style={{ padding: "5px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "19px" }}
-                                label="PT_HISTORY_AMOUNT_PAID"
-                                fontSize="15px"
-                            />
-                        </div>
-                        <div className="col-sm-4 col-xs-4" style={{ padding: "5px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px" }}
-                                label={payment.totalAmountPaid ? 'Rs '+payment.totalAmountPaid : "NA"}
-                                fontSize="15px"
-                            />
-                        </div>
-                    </div>
-                    <div className="col-sm-12 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
-                        <div className="col-sm-2 col-xs-2" style={{ padding: "5px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "19px" }}
-                                label="PT_HISTORY_PAYMENT_DATE"
-                                fontSize="15px"
-                            />
-                        </div>
-                        <div className="col-sm-4 col-xs-4" style={{ padding: "5px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px" }}
-                                label={payment.transactionDate ? getFormattedDate(payment.transactionDate) : "NA"}
-                                fontSize="15px"
-                            />
-                        </div>
-                    </div>
-                    <div className="col-sm-12 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
-                        <div className="col-sm-2 col-xs-2" style={{ padding: "5px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "19px" }}
-                                label="PT_HISTORY_BILL_NO"
-                                fontSize="15px"
-                            />
-                        </div>
-                        <div className="col-sm-4 col-xs-4" style={{ padding: "5px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px" }}
-                                label={payment.transactionNumber ? ''+payment.transactionNumber : "NA"}
-                                fontSize="15px"
-                            />
-                        </div>
-                    </div>
-                    <div className="col-sm-6 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
-                        <div className="col-sm-4 col-xs-4" style={{ padding: "5px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "19px" }}
-                                label="PT_HISTORY_BILL_PERIOD"
-                                fontSize="15px"
-                            />
-                        </div>
-                        <div className="col-sm-8 col-xs-8" style={{ padding: "5px 0px 0px 0px" }}>
-                            <Label
-                                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px" }}
-                                label={payment.transactionNumber ? payment.transactionNumber : "NA"}
-                                fontSize="15px"
-                            />
-                        </div>
-                    </div>
+                    {getFullRow("PT_HISTORY_RECEIPT_NO", payment.paymentDetails[0].receiptNumber ? '' + payment.paymentDetails[0].receiptNumber : "NA", 12)}
+                    {getFullRow("PT_HISTORY_AMOUNT_PAID", payment.totalAmountPaid ? 'Rs ' + payment.totalAmountPaid : "NA", 12)}
+                    {getFullRow("PT_HISTORY_PAYMENT_DATE", payment.transactionDate ? getFormattedDate(payment.transactionDate) : "NA", 12)}
+                    {getFullRow("PT_HISTORY_BILL_NO", payment.transactionNumber ? '' + payment.transactionNumber : "NA", 12)}
+                    {getFullRow("PT_HISTORY_BILL_PERIOD", this.getBillPeriod(payment.paymentDetails[0].bill.billDetails), 6)}
                     <div className="col-sm-6 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
                         <div style={{ float: "right" }}>
                             <Button
@@ -135,26 +66,17 @@ class PaymentHistory extends Component {
     }
 
     render() {
-        console.log(this.props.Bill, 'bill');
-        console.log(this.props.Payments, 'Payments');
+
         const { Payments = [] } = this.props;
-        const paymentHistoryItems = Payments.map((payment) => {
-            return {
-                receiptNumber: payment.paymentDetails[0].receiptNumber,
-                totalAmountPaid: payment.totalAmountPaid,
-                transactionDate: payment.transactionDate,
-                transactionNumber: payment.transactionNumber,
-                financialYear: ''
-            }
-        })
+
         let paymentHistoryItem = [];
         if (Payments.length > 0) {
             paymentHistoryItem = this.getTransformedPaymentHistory();
         }
-        console.log(paymentHistoryItems);
+
 
         const items = this.state.showItems ? this.state.items : [];
-        return (<HistoryCard header={'PT_PAYMENT_HISTORY'} items={items}  onHeaderClick={() => {
+        return (<HistoryCard header={'PT_PAYMENT_HISTORY'} items={items} onHeaderClick={() => {
             console.log("clicked");
             this.setState({ showItems: !this.state.showItems, items: paymentHistoryItem })
         }}></HistoryCard>)
