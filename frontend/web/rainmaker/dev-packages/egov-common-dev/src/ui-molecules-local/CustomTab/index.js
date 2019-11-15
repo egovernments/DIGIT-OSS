@@ -9,7 +9,7 @@ import SwipeableViews from "react-swipeable-views";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
 // core components
 import GridContainer from "@material-ui/core/Grid";
 import GridItem from "@material-ui/core/Grid";
@@ -45,7 +45,10 @@ class NavPills extends React.Component {
         {tabs.map((prop, key) => {
           return (
             <Tab
-              label={prop.tabButton}
+            label={<LabelContainer
+              labelName={prop.tabButton}
+              labelKey={prop.tabButton}
+            />}
               key={key}
               classes={{ root: classes.tabRoot, selected: classes.tabSelected }}
             />
