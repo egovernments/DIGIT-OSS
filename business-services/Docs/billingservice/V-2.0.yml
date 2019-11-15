@@ -16,7 +16,7 @@ x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/mas
 paths:
   /demand/_search:
     post:
-      description: 'Returns a demand along with its list of demand details. Along with tenantId, any one parameter is mandatory. In case search is performed based on the demand amounts, then demandFrom and demandTo parameters will be mandatory. When both demandFrom and demandTo parameters are passed, the type parameter will be mandatory. By default results will be sorted by fromDate'
+      description: 'Returns a list of demands. Along with tenantId, any one of the given parameters is mandatory. By default results will be sorted by fromDate'
       parameters:
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId'
@@ -102,9 +102,9 @@ paths:
           description: Invalid input
           schema:
             $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
-  /bill/_search:
+  /bill/v2/_search:
     post:
-      description: 'Returns a Bill along with its list of bill details. By default active and non-cancelled bills will be returned when no value passed for active or cancelled. Along with tenantId, any one parameter is mandatory. By default results will be sorted by bill creation date'
+      description: 'Returns a list of bills . By default active bills will be returned when no value passed for status. Along with tenantId, any one parameter is mandatory. By default results will be sorted by bill creation date'
       parameters:
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId'
@@ -161,57 +161,14 @@ paths:
           description: Invalid input
           schema:
             $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
-  /bill/_generate:
+  
+  /bill/v2/_fetchBill:
     post:
-      description: 'Creates a Bill for collections. By default active bill will be created. Along with tenantId, any one parameter is mandatory. The bill type is AUTO here.'
-      parameters:
-        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
-        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId'
-        - name: demandId
-          in: query
-          description: Primary key of Demand object.
-          required: false
-          type: integer
-          format: int64
-        - name: consumerCode
-          in: query
-          description: A unique identification for a demand entity with respect to the consumer and the service being consumer.
-          required: false
-          type: string
-        - name: businessService
-          in: query
-          description: 'The service which demand is generated e.g., PropertyTax,Water Charges etc.'
-          required: false
-          type: string
-        - name: email
-          in: query
-          description: Email Id of Primary owner of business detail.
-          required: false
-          type: string
-        - name: mobileNumber
-          in: query
-          description: Mobile number of Primary owner of business detail.
-          required: false
-          type: string
-      tags:
-        - Bill
-      responses:
-        '201':
-          description: 'Creates a Bill along with its bill details. Ex- If search is done using mobile number, combined bill will be generated, having information for each of the services(ex-Property tax, Water charges)'
-          schema:
-            $ref: '#/definitions/BillResponse'
-        '400':
-          description: Invalid input
-          schema:
-            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
-  /bill/_fetchBill:
-    post:
-      description: | 
+      description: |
         Fetch a bill to make payment. 
-        By default active bill will be return. 
+        By default active bills will be returned. 
         Along with tenantId, any one parameter is mandatory.
-        If a bill is expired then it will return generate the new bill and that bill as response.
-        
+        If a bill is expired, paid or cancelled then a newly generated bill will be returned.
       parameters:
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId'
@@ -223,7 +180,7 @@ paths:
           format: int64
         - name: consumerCode
           in: query
-          description: | 
+          description: |
             A unique identifier for a billing entity(ex- in case of property tax property id is the consumer code).
           required: false
           type: string
@@ -244,7 +201,7 @@ paths:
         - Bill
       responses:
         '200':
-          description: 'On success it will return array of bills'
+          description: On success it will return array of bills
           schema:
             $ref: '#/definitions/BillResponse'
         '400':
@@ -479,6 +436,7 @@ definitions:
           - ACTIVE
           - CANCELLED
           - PAID
+          - PARTIALLY_PAID
           - EXPIRED
       totalAmount:
         type: number
