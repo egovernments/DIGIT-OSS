@@ -31,7 +31,9 @@ export const paymentFailureFooter = (consumerCode, tenant) => {
                 style: {
                     minWidth: "200px",
                     height: "48px",
-                    marginRight: "16px"
+                    marginRight: "16px",
+                    marginLeft:"40px"
+
                 }
             },
             children: {
@@ -39,6 +41,8 @@ export const paymentFailureFooter = (consumerCode, tenant) => {
                     labelName: "RETRY",
                     labelKey: "COMMON_RETRY"
                 })
+               
+                
             },
             onClickDefination: {
                 action: "page_change",
