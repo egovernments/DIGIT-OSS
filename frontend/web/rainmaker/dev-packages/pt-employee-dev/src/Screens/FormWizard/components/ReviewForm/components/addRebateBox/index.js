@@ -134,7 +134,7 @@ class AddRebateExemption extends React.Component {
       <div className="add-rebate-box">
         <div className="pt-emp-penalty-charges col-xs-12">
           <Label
-            label="Additional Charges"
+            label="PT_ADDITIONAL_CHARGES"
             className="rebate-box-labels"
             labelStyle={labelStyle}
           />
@@ -163,7 +163,10 @@ class AddRebateExemption extends React.Component {
           )}
         </div>
         <div className="pt-emp-rebate-charges col-xs-12">
-          <Label label="Additional Rebate" labelStyle={labelStyle} />
+          <Label
+
+            label="PT_ADDITIONAL_REBATE"
+            labelStyle={labelStyle} />
           <div className="adhocExemption col-sm-6 col-xs-12">
             <TextField
               onChange={(e, value) => {
