@@ -179,7 +179,6 @@ const propertyReducer = (state = initialState, action) => {
       };
     case actionTypes.SINGLE_ASSESSMENT_STATUS_COMPLETE:
       const singleAssessmentByStatus =action.payload[0];
-
       const receiptsByYr=action.payload[1];
       return {
         ...state,
