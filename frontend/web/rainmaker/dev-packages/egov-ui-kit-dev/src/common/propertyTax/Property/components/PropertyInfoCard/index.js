@@ -39,7 +39,7 @@ class PropertyInfoCard extends Component {
               {/* Transfer ownership button and View History button */}
               {(viewHistory || ownershipTransfer) && <div style={{ display: "flex" }}>
                   {/* <ViewHistory viewHistory={viewHistory} openDialog={this.openDialog} /> */}
-                  <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} />
+                  {/* <TransferOwnership ownershipTransfer={ownershipTransfer} openDialog={this.openDialog} /> */}
               </div>}
               {/* ------------------------- */}
             </div>
