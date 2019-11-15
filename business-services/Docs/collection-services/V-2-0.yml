@@ -15,8 +15,8 @@ x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/mas
 paths: 
   /_search:
     post:
-      summary: Get the payment(s) info for the consumer code/status/receipt numbers and business details etc.
-      description: This API returns list of payments created for the given servicecode and list of billNumbers/instrument numbers/receipt numbers.
+      summary: Searches the Payment based on search criteria
+      description: API to search payments based on consumerCode,mobileNumber,transactionNumber etc. 
       parameters:
         - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo"
         - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
@@ -130,7 +130,7 @@ paths:
 
   /_create:
     post:
-      summary: Validate and persist payment with transaction number.
+      summary: Creates a entry for payment in the system
       description: This API generates a transaction number and persists the payment details. The payment information is then pushed to queue for further processing.
       parameters:
         - name: PaymentRequest
@@ -155,10 +155,6 @@ definitions:
     type: object
     description: Payment Request with Request Info.
     properties:
-      tenantId:
-        type: string
-        description: Unique id of tenant.
-        format: varchar
       requestInfo:
         $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
       Payment:
@@ -168,10 +164,6 @@ definitions:
     type: object
     description: Receipt Request with Request Info.
     properties:
-      tenantId:
-        type: string
-        description: Unique id of tenant.
-        format: varchar
       responseInfo:
         $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
       receipt:
@@ -262,7 +254,6 @@ definitions:
         items:
           $ref: '#/definitions/BillDetail'
 
-    
 
   BillDetail:
     type: object
@@ -400,10 +391,12 @@ definitions:
         type: string
         description: Unique id of tenant.
         format: varchar
+        maxLength: 64
       id:
         type: string
         description: Unique id of tenant.
         format: varchar
+        maxLength: 64
       totalDue:
         type: number
         description: Total amount due.
@@ -415,6 +408,7 @@ definitions:
         type: string
         description: Transaction number of the payment
         format: varchar
+        maxLength: 128
       transactionDate:
         type: number
         description: The date of payment in epoch
@@ -437,6 +431,7 @@ definitions:
         type: string
         description: The number of the instrument like dd number,cheque number etc.
         format: varchar
+        maxLength: 128
       instrumentStatus:
         type: string
         description: The status of the instrument
@@ -453,6 +448,7 @@ definitions:
         type: string
         description: IFSC code of the bank to which payment is made
         format: varchar
+        maxLength: 64
       additionalDetails:
         type: object
         description: Any additional fields can be captured here as a map
@@ -465,26 +461,32 @@ definitions:
         type: string
         description: The person who is paying the bill
         format: varchar
+        maxLength: 128
       mobileNumber:
         type: string
         description: The mobileNumber of person who is paying
         format: varchar
+        maxLength: 64
       payerName:
         type: string
         description: The owner of the bill
         format: varchar
+        maxLength: 128
       payerAddress:
         type: string
         description: The address of the owner of the bill
         format: varchar
+        maxLength: 1024
       payerEmail:
         type: string
         description: The email id of the owner of the bill
         format: varchar
+        maxLength: 64
       payerId:
         type: string
         description: The system user id of the owner of the bill
         format: varchar
+        maxLength: 64
       paymentStatus:
         type: string
         description: Unique id of tenant.
@@ -496,6 +498,14 @@ definitions:
           - RECONCILED
       auditDetails:
           $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+    required:
+      - tenantId
+      - totalAmountPaid
+      - paymentMode
+      - paidBy
+      - mobileNumber
+      - paymentDetails
+      
 
   PaymentDetail:
     type: object
@@ -504,9 +514,11 @@ definitions:
       id: 
         type: string
         description: id of the payment detail
+        maxLength: 64
       tenantId: 
         type: string
         description: tenantId of the payment detail
+        maxLength: 64
       totalDue: 
         type: number
         description: The total amount to be paid for the bill corresponding to the payment detail
@@ -518,9 +530,11 @@ definitions:
       manualReceiptNumber: 
         type: string
         description: Receipt number entered manually for legacy data.
+        maxLength: 64
       receiptNumber: 
         type: string
         description: The receipt number generated for the payment against the bill
+        maxLength: 64
       receiptType: 
         type: string
         description: The receipt type generated for the payment against the bill
@@ -533,6 +547,7 @@ definitions:
       billId: 
         type: string
         description: The id of the bill for which the payment is made
+        maxLength: 64
       bill: 
           $ref: '#/definitions/Bill'
       additionalDetails: 
@@ -540,6 +555,9 @@ definitions:
         description: Any additional fields can be captured here as a map
       auditDetails:
           $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+    required:
+      - billId
+      - totalAmountPaid
       
 
 
@@ -566,7 +584,10 @@ definitions:
       additionalDetails: 
         type: integer
         description: Any additional fields can be captured here as a map
-
+    required:
+      - paymentId
+      - action
+      - tenantId
 
 parameters:
   pageSize:
