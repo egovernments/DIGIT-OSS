@@ -206,41 +206,45 @@ paths:
             $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
   /bill/_fetchBill:
     post:
-      description: 'Creates a Bill for collections. By default active bill will be created. Along with tenantId, any one parameter is mandatory. Trigers bill generate internally, Checks whether a demand exists for the given data in db else creates a new one throught the revenue services.'
+      description: | 
+        Fetch a bill to make payment. 
+        By default active bill will be return. 
+        Along with tenantId, any one parameter is mandatory.
+        If a bill is expired then it will return generate the new bill and that bill as response.
+        
       parameters:
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId'
         - name: demandId
           in: query
-          description: Primary key of Demand object.
+          description: A Unique Id of the demand.
           required: false
           type: integer
           format: int64
         - name: consumerCode
           in: query
-          description: A unique identification for a billing entity.
+          description: | 
+            A unique identifier for a billing entity(ex- in case of property tax property id is the consumer code).
           required: false
           type: string
         - name: businessService
           in: query
-          description: 'Billing system details e.g., PropertyTax,Water Charges etc.'
-          required: false
-          type: string
-        - name: email
-          in: query
-          description: Email Id of Primary owner of business detail.
+          description: |
+            'Unique identifier for business modules e.g., PropertyTax,Water Charges etc.'
+            All the valid business codes are published as Master data on below link
+            https://github.com/egovernments/egov-mdms-data/blob/master/data/pb/BillingService/BusinessService.json
           required: false
           type: string
         - name: mobileNumber
           in: query
-          description: Mobile number of Primary owner of business detail.
+          description: Mobile number of Primary owner of business module.
           required: false
           type: string
       tags:
         - Bill
       responses:
-        '201':
-          description: 'Creates a Bill along with its bill details. Ex- If search is done using mobile number, combined bill will be generated, having information for each of the services(ex-Property tax, Water charges)'
+        '200':
+          description: 'On success it will return array of bills'
           schema:
             $ref: '#/definitions/BillResponse'
         '400':
@@ -470,7 +474,7 @@ definitions:
         description: email address of the payer.
       status:
         type: string
-        description: 'status of the bill .'
+        description: status of the bill .
         enum:
           - ACTIVE
           - CANCELLED
