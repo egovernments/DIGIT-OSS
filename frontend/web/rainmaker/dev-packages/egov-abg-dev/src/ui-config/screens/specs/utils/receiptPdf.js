@@ -13,6 +13,7 @@ import {
 } from "./receiptTransformer";
 import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
@@ -171,6 +172,7 @@ const getMutlipleBillsData = transformedDataArray => {
 };
 //generateMutlipleBills PDF
 export const generateMultipleBill = async (state, dispatch, type) => {
+  dispatch(toggleSpinner());
   const allBills = get(
     state.screenConfiguration,
     "preparedFinalObject.searchScreenMdmsData.billSearchResponse",
@@ -202,6 +204,7 @@ export const generateMultipleBill = async (state, dispatch, type) => {
   });
   const multipleBills = getMutlipleBillsData(transformedData);
   pdfMake.createPdf(multipleBills).open();
+  dispatch(toggleSpinner());
 };
 
 /************************************************SingleBill***********************************************************************/

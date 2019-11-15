@@ -387,6 +387,7 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
       case "PAY":
+      case "PARTIALLY PAID":
       return getLocaleLabels(
         "PAY",
         "BILL_GENIE_PAY",
@@ -405,14 +406,18 @@ export const getTextToLocalMapping = label => {
           "BILL_GENIE_DOWNLOAD_RECEIPT",
           localisationLabels
         );
-
-        case "Search Results for Bill":
+      case "Search Results for Bill":
         return getLocaleLabels(
           "Search Results for Bill",
           "BILL_GENIE_SEARCH_TABLE_HEADER",
           localisationLabels
         );
-        
-
+      case "PARTIALLY_PAID":
+      case "PARTIALLY PAID":
+        return getLocaleLabels(
+            "Partially Paid",
+            "BILL_GENIE_PARTIALLY_PAID",
+            localisationLabels
+          );      
   }
 };

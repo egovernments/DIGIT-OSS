@@ -16,11 +16,17 @@ export const searchResults = {
         name: getTextToLocalMapping("Bill No."),
         options: {
           filter: false,
-          customBodyRender: value => (
+          customBodyRender: (value) => (
             <div onClick={() => generateSingleBill(value)}>
               <a>{value}</a>
             </div>
           )
+        }
+      },
+      {
+        name: "Consumer Code",
+        options: {
+          display: false
         }
       },
       getTextToLocalMapping("Consumer Name"),
@@ -42,20 +48,20 @@ export const searchResults = {
                 const url =
                   process.env.NODE_ENV === "development"
                     ?`/egov-common/pay?consumerCode=${
-                        tableMeta.rowData[0]
-                      }&tenantId=${tableMeta.rowData[6]}&businessService=${
+                        tableMeta.rowData[1]
+                      }&tenantId=${tableMeta.rowData[7]}&businessService=${
                         tableMeta.rowData[0].split("-")[0]
                       }` 
                     :
                     `/employee/egov-common/pay?consumerCode=${
-                        tableMeta.rowData[0]
-                      }&tenantId=${tableMeta.rowData[6]}&businessService=${
+                        tableMeta.rowData[1]
+                      }&tenantId=${tableMeta.rowData[7]}&businessService=${
                         tableMeta.rowData[0].split("-")[0]
                       }` ;
                 window.location.href = `${window.origin}${url}`;
               }}
             >
-            {getTextToLocalMapping(value)}
+            {getTextToLocalMapping(value).toUpperCase()}
             </div>
           )
         }
