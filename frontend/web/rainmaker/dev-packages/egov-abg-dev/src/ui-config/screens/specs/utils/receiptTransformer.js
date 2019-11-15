@@ -41,19 +41,21 @@ export const loadUlbLogo = tenantid => {
 };
 
 export const loadPtBillData = response => {
-  const ulbData = loadMdmsData(getTenantId())
+  // const ulbData = loadMdmsData(getTenantId())
   let data = {};  
   let orderedResponse = orderBy(
     response.billDetails,
     "fromPeriod",
     "desc");
     
-  let taxHeads = orderedResponse[0].billAccountDetails.reduce((acc,item) =>{
-    acc[getLocaleLabels(
-      "",
-      item.taxHeadCode,
-      getTransformedLocalStorgaeLabels()
-    )] = item.amount  
+  let taxHeads = orderedResponse[0].billAccountDetails.reduce((acc,item,index) =>{
+    if(index<9){
+      acc[getLocaleLabels(
+        "",
+        item.taxHeadCode,
+        getTransformedLocalStorgaeLabels()
+      )] = item.amount 
+    }     
     return acc
   },[])
   const fromDate = epochToDate(get(response, "billDetails[0].fromPeriod"));
@@ -75,6 +77,7 @@ export const loadPtBillData = response => {
   );
   data.taxHeads = taxHeads
   return data;
+
   // store.dispatch(prepareFinalObject("receiptDataForReceipt", data));
 };
 
