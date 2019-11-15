@@ -78,7 +78,7 @@ class YearDialog extends Component {
   };
 
   render() {
-    let { open, closeDialogue, getYearList, history, form, removeForm, urlToAppend ,reset_property_reset} = this.props;
+    let { open, closeDialogue, getYearList, history, form, removeForm, urlToAppend, reset_property_reset } = this.props;
     return getYearList ? (
       <Dialog
         open={open}
@@ -91,22 +91,24 @@ class YearDialog extends Component {
               {getYearList &&
                 Object.values(getYearList).map((item, index) => (
                   <YearDialogueHOC
-                  handleRadioButton={this.handleRadioButton}
-                  selectedYear={this.state.selectedYear}
-                  key={index}
-                  label={item}
-                  history={history}
-                  resetFormWizard={this.resetForm}
-                  urlToAppend={urlToAppend}
-                />
+                    handleRadioButton={this.handleRadioButton}
+                    selectedYear={this.state.selectedYear}
+                    key={index}
+                    label={item}
+                    history={history}
+                    resetFormWizard={this.resetForm}
+                    urlToAppend={urlToAppend}
+                  />
                 ))}
             </div>
             <div className='year-dialogue-button'>
-              <Button label='Cancel'
+              <Button
+                label={<Label label="PT_CANCEL" buttonLabel={true} color="black" />}
                 onClick={() => { closeDialogue() }}
                 labelColor="#fe7a51"
                 buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }}></Button>
-              <Button label='OK'
+              <Button
+                label={<Label label="PT_OK" buttonLabel={true} color="black" />}
                 labelColor="#fe7a51"
                 buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }} onClick={() => {
                   if (this.state.selectedYear !== '') {
@@ -144,7 +146,7 @@ const mapDispatchToProps = (dispatch) => {
     removeForm: (formkey) => dispatch(removeForm(formkey)),
     toggleSpinner: () => dispatch(toggleSpinner()),
     prepareFormData: (path, value) => dispatch(prepareFormData(path, value)),
-    reset_property_reset:()=>dispatch(reset_property_reset())
+    reset_property_reset: () => dispatch(reset_property_reset())
   };
 };
 
