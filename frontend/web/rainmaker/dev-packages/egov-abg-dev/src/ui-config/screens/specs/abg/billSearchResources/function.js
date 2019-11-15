@@ -96,6 +96,7 @@ export const searchApiCall = async (state, dispatch) => {
     try {
       let data = billTableData.map(item => ({
         [getTextToLocalMapping("Bill No.")]: item.billNumber || "-",
+        "Consumer Code" : item.consumerCode || "-",
         [getTextToLocalMapping("Consumer Name")]: item.consumerName || "-",
         [getTextToLocalMapping("Bill Date")]:
           convertEpochToDate(item.billDate) || "-",
@@ -164,6 +165,7 @@ const getActionItem = (status) => {
     case "CANCELLED" : 
     case "EXPIRED":  return "GENERATE NEW BILL"
     case "PAID" : return "DOWNLOAD RECEIPT"
+    case "PARTIALLY_PAID" : return "PARTIALLY PAID"
    }
 }
 
