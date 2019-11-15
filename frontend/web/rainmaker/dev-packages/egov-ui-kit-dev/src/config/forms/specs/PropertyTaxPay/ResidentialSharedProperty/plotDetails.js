@@ -1,5 +1,5 @@
 import { MDMS } from "egov-ui-kit/utils/endPoints";
-import { subUsageType, measuringUnit, occupancy, beforeInitFormForPlot, superArea, floorName } from "../utils/reusableFields";
+import { subUsageType, measuringUnit, occupancy, beforeInitFormForPlot, superArea, floorName,constructionType,innerDimensions,roomArea,balconyArea,garageArea,bathroomArea,builtArea } from "../utils/reusableFields";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
 
 const formConfig = {
@@ -15,8 +15,16 @@ const formConfig = {
       disabled: true,
       numcols: 4,
     },
-    ...subUsageType,
+   // ...subUsageType,
     ...occupancy,
+    ...constructionType,
+    ...innerDimensions,
+    ...roomArea,
+    ...balconyArea,
+    ...garageArea,
+    ...bathroomArea,
+    // ...coveredArea,
+    ...builtArea,
     ...superArea,
     ...measuringUnit,
     ...floorName,

@@ -12,7 +12,7 @@ import { localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorage
 import { setFieldProperty } from "egov-ui-kit/redux/form/actions";
 
 let floorDropDownData = [];
-let innerDimensionsData = [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }];
+let innerDimensionsData = [{ value: "true", label: "Yes" }, { value: "false", label: "No" }];
 let constructiontypes = [{ value: "road1", label: "rd1" }];
 
 
@@ -135,7 +135,7 @@ export const occupancy = {
 export const innerDimensions = {
   innerDimensions: {
     id: "innerDimensions",
-    // jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
+     jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.innerDimensionsKnown",
     type: "singleValueList",
     floatingLabelText: "Inner Dimensions Known",
     hintText: "Enter Inner Dimensions",
@@ -175,7 +175,7 @@ export const innerDimensions = {
 export const roomArea = {
   roomArea: {
     id: "roomArea",
-    // jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
+     jsonPath: "Properties[0].propertyDetails[0].units[0].roomArea",
     type: "number",
     floatingLabelText: "Room Area(sq ft)",
     hintText: "Enter Room Area",
@@ -196,7 +196,7 @@ export const roomArea = {
 export const balconyArea = {
   balconyArea: {
     id: "balconyArea",
-    // jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
+     jsonPath: "Properties[0].propertyDetails[0].units[0].balconyArea",
     type: "number",
     floatingLabelText: "Balcony ,Corridor, Kitchen ,store Area(sq ft)",
     hintText: "Enter Balcony Area",
@@ -218,7 +218,7 @@ export const balconyArea = {
 export const garageArea = {
   garageArea: {
     id: "garageArea",
-    // jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
+    jsonPath: "Properties[0].propertyDetails[0].units[0].garageArea",
     type: "number",
     floatingLabelText: "Garage Area(sq ft)",
     hintText: "Enter Garage Area",
@@ -241,7 +241,7 @@ export const garageArea = {
 export const bathroomArea = {
   bathroomArea: {
     id: "bathroomArea",
-    // jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
+     jsonPath: "Properties[0].propertyDetails[0].units[0].bathroomArea",
     type: "number",
     floatingLabelText: "Bathroom & Staircase Area(sq ft)",
     hintText: "PT_FORM2_PLOT_SIZE_PLACEHOLDER",
@@ -255,7 +255,7 @@ export const bathroomArea = {
 export const coveredArea = {
   coveredArea: {
     id: "coveredArea",
-    // jsonPath: "Properties[0].propertyDetails[0].buildUpArea",
+     jsonPath: "Properties[0].propertyDetails[0].units[0].coverArea",
     type: "number",
     floatingLabelText: "Covered Area(sq ft)",
     hintText: "PT_FORM2_PLOT_SIZE_PLACEHOLDER",
@@ -403,7 +403,7 @@ export const beforeInitForm = {
         const updatedFields = Object.keys(fields).reduce((updatedFields, fieldKey) => {
           const jsonPath = fields[fieldKey].jsonPath;
           updatedFields[fieldKey] = { ...fields[fieldKey], unitsIndex: unitsCount };
-          if (jsonPath.indexOf("units[") > -1) {
+          if ( jsonPath && jsonPath.indexOf("units[") > -1) {
             const first = jsonPath.split("units[")[0];
             const last = jsonPath.split("units[")[1].split("]")[1];
             updatedFields[fieldKey].jsonPath = `${first}units[${unitsCount}]${last}`;
