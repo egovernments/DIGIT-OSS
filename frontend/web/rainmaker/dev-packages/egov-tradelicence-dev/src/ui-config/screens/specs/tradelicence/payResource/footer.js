@@ -65,7 +65,7 @@ export const callPGService = async (state, dispatch) => {
             "billResponse.Bill[0].billDetails[0].consumerCode"
           ),
           productInfo: "Trade License Payment",
-          gateway: "AXIS",
+          gateway: "EASYPAY",
           callbackUrl
         }
       };
