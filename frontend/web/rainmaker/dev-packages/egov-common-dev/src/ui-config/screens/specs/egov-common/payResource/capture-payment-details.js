@@ -24,22 +24,22 @@ const capturePaymentDetails = getCommonGrayCard({
       // },
       tabs: [
         {
-          tabButton: "CASH",
+          tabButton: "COMMON_CASH",
           tabIcon: "Dashboard",
           tabContent: { cash }
         },
         {
-          tabButton: "CHEQUE",
+          tabButton: "COMMON_CHEQUE",
           tabIcon: "Schedule",
           tabContent: { cheque }
         },
         {
-          tabButton: "DD",
+          tabButton: "COMMON_DD",
           tabIcon: "Schedule",
           tabContent: { demandDraft }
         },
         {
-          tabButton: "Credit/Debit Card",
+          tabButton: "COMMON_CREDIT_DEBIT_CARD",
           tabIcon: "Schedule",
           tabContent: { card }
         }
