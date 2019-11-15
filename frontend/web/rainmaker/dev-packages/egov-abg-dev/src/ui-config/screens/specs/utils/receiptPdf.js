@@ -216,7 +216,7 @@ const getSingleBillData = transformedData => {
   return singleBillData;
 };
 
-export const generateSingleBill = async rowData => {
+export const generateSingleBill = async billNo => {
   const state = store.getState();
   const allBills = get(
     state.screenConfiguration,
@@ -225,7 +225,7 @@ export const generateSingleBill = async rowData => {
   );
   let billData = {};
   const data = allBills.find(
-    item => get(item, "consumerCode", "") === rowData[1]
+    item => get(item, "billNumber", "") === billNo
   );
   if (isEmpty(data)) {
     alert("Bill not found !");

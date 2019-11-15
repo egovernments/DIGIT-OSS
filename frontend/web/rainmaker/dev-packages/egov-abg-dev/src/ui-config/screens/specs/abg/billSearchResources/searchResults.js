@@ -2,26 +2,25 @@ import React from "react";
 import {
   sortByEpoch,
   getEpochForDate,
-  getTextToLocalMapping,
-  } from "../../utils";
-
-import {
-  generateSingleBill
-} from "../../utils/receiptPdf";
-
+  getTextToLocalMapping
+} from "../../utils";
+import { generateSingleBill } from "../../utils/receiptPdf";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: false,
   props: {
     columns: [
-      getTextToLocalMapping("Bill No."),
       {
-        name: "Consumer Code",
+        name: getTextToLocalMapping("Bill No."),
         options: {
-          display: false
+          filter: false,
+          customBodyRender: value => (
+            <div onClick={() => generateSingleBill(value)}>
+              <a>{value}</a>
+            </div>
+          )
         }
       },
       getTextToLocalMapping("Consumer Name"),
@@ -32,15 +31,32 @@ export const searchResults = {
         name: getTextToLocalMapping("Action"),
         options: {
           filter: false,
-          customBodyRender: value => (
-            <span
+
+          customBodyRender: (value, tableMeta, updateValue) => (
+            <div
               style={{
                 color: "#FE7A51",
                 cursor: "pointer"
               }}
+              onClick={() => {
+                const url =
+                  process.env.NODE_ENV === "development"
+                    ?`/egov-common/pay?consumerCode=${
+                        tableMeta.rowData[0]
+                      }&tenantId=${tableMeta.rowData[6]}&businessService=${
+                        tableMeta.rowData[0].split("-")[0]
+                      }` 
+                    :
+                    `/employee/egov-common/pay?consumerCode=${
+                        tableMeta.rowData[0]
+                      }&tenantId=${tableMeta.rowData[6]}&businessService=${
+                        tableMeta.rowData[0].split("-")[0]
+                      }` ;
+                window.location.href = `${window.origin}${url}`;
+              }}
             >
-              {getTextToLocalMapping(value)}
-            </span>
+            {getTextToLocalMapping(value)}
+            </div>
           )
         }
       },
@@ -49,8 +65,8 @@ export const searchResults = {
         options: {
           display: false
         }
-      },
-     ],
+      }
+    ],
     title: getTextToLocalMapping("Search Results for Bill"),
     options: {
       filter: false,
@@ -58,8 +74,7 @@ export const searchResults = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) =>  generateSingleBill(row)
+      rowsPerPageOptions: [10, 15, 20]
     },
     customSortColumn: {
       column: "Bill Date",
