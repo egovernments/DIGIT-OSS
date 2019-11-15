@@ -61,7 +61,7 @@ export const searchResults = {
                 window.location.href = `${window.origin}${url}`;
               }}
             >
-            {getTextToLocalMapping(value).toUpperCase()}
+            {getTextToLocalMapping(value)}
             </div>
           )
         }
