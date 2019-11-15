@@ -63,7 +63,8 @@ export const httpRequest = async (
   requestBody = {},
   headers = [],
   customRequestInfo = {},
-  ignoreTenantId = false
+  ignoreTenantId = false,
+  isGetMethod=false
 ) => {
   const tenantId = getTenantId() || commonConfig.tenantId;
   let apiError = "Api Error";
@@ -83,11 +84,20 @@ export const httpRequest = async (
 
   endPoint = addQueryArg(endPoint, queryObject);
   try {
-    const response = await instance.post(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
-    const responseStatus = parseInt(response.status, 10);
-    if (responseStatus === 200 || responseStatus === 201) {    
-      return response.data;
-    }
+if(isGetMethod){
+  const getResponse = await instance.get(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
+  const getResponseStatus = parseInt(getResponse.status, 10);
+  if (getResponseStatus === 200 || getResponseStatus === 201) {    
+    return getResponse.data;
+  }
+}else{
+  const response = await instance.post(endPoint, wrapRequestBody(requestBody, action, customRequestInfo));
+  const responseStatus = parseInt(response.status, 10);
+  if (responseStatus === 200 || responseStatus === 201) {    
+    return response.data;
+  }
+}
+   
   } catch (error) {
     const { data, status } = error.response;
     if (hasTokenExpired(status, data)) {

@@ -182,7 +182,7 @@ export const FETCHRECEIPT = {
 };
 export const DOWNLOADRECEIPT = {
   GET: {
-    URL: "/pdf-service/v1/_createnosave",
+    URL: "/pdf-service/v1/_create",
     ACTION: "_get",
   },
 };

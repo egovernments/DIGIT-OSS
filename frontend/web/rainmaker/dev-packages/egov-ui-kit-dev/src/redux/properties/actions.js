@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL,FETCHRECEIPT,DOWNLOADRECEIPT } from "egov-ui-kit/utils/endPoints";
+import { PROPERTY, DRAFT, PGService, RECEIPT, BOUNDARY, FETCHBILL, FETCHRECEIPT, DOWNLOADRECEIPT } from "egov-ui-kit/utils/endPoints";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import { transformById } from "egov-ui-kit/utils/commons";
 import orderby from "lodash/orderBy";
@@ -346,35 +346,35 @@ const getStatusAndAmount = (receiptArrayItem) => {
   }
   return receiptTransformed;
 };
-const getFinancialYear = (fromDate,toDate)=>{
-  let  financialYear = '';
-  financialYear=(new Date(fromDate).getFullYear())+'-'+String(new Date(toDate).getFullYear()).slice(2);
- return financialYear;
- }
- const getYearlyAssessments = (propertiesArray=[]) => {
-   let yearlyAssessments = [];
-   propertiesArray&&propertiesArray.map((property) => {
-     if (yearlyAssessments.length == 0) {
-       yearlyAssessments[0] = [property];
-     } else {
-       let bool = true;
-       for (let pty of yearlyAssessments) {
-         if (pty[0].financialYear == property.financialYear) {
-           pty.push(property)
-           bool = false;
-         }
-       }
-       if (bool) {
-         yearlyAssessments.push([property]);
-       }
-     }
-   })
-   for (let eachYrAssessments of yearlyAssessments) {
-     eachYrAssessments.sort((x, y) => y.receiptDate - x.receiptDate);
-   }
-   yearlyAssessments.sort((x, y) => x[0].financialYear.localeCompare(y[0].financialYear));
-   return yearlyAssessments;
- }
+const getFinancialYear = (fromDate, toDate) => {
+  let financialYear = '';
+  financialYear = (new Date(fromDate).getFullYear()) + '-' + String(new Date(toDate).getFullYear()).slice(2);
+  return financialYear;
+}
+const getYearlyAssessments = (propertiesArray = []) => {
+  let yearlyAssessments = [];
+  propertiesArray && propertiesArray.map((property) => {
+    if (yearlyAssessments.length == 0) {
+      yearlyAssessments[0] = [property];
+    } else {
+      let bool = true;
+      for (let pty of yearlyAssessments) {
+        if (pty[0].financialYear == property.financialYear) {
+          pty.push(property)
+          bool = false;
+        }
+      }
+      if (bool) {
+        yearlyAssessments.push([property]);
+      }
+    }
+  })
+  for (let eachYrAssessments of yearlyAssessments) {
+    eachYrAssessments.sort((x, y) => y.receiptDate - x.receiptDate);
+  }
+  yearlyAssessments.sort((x, y) => x[0].financialYear.localeCompare(y[0].financialYear));
+  return yearlyAssessments;
+}
 const mergeReceiptsInProperty = (receiptsArray, propertyObj) => {
   const transformedPropertyObj = {
     ...propertyObj
@@ -472,7 +472,7 @@ export const getAssesmentsandStatus = (queryObjectproperty) => {
           return acc;
         }, {});
 
-        const receiptDetailsArray =
+      const receiptDetailsArray =
         receiptbyId &&
         Object.values(receiptbyId).reduce((acc, curr) => {
           if (!acc[curr.Bill[0].billDetails[0].consumerCode]) acc[curr.Bill[0].billDetails[0].consumerCode] = [];
@@ -480,13 +480,13 @@ export const getAssesmentsandStatus = (queryObjectproperty) => {
             amountPaid: curr.Bill[0].billDetails[0].amountPaid,
             consumerCode: curr.Bill[0].billDetails[0].consumerCode,
             totalAmount: curr.Bill[0].billDetails[0].totalAmount,
-            fromPeriod:curr.Bill[0].billDetails[0].fromPeriod,
-            toPeriod:curr.Bill[0].billDetails[0].toPeriod,
-            receiptDate:curr.Bill[0].billDetails[0].receiptDate,
+            fromPeriod: curr.Bill[0].billDetails[0].fromPeriod,
+            toPeriod: curr.Bill[0].billDetails[0].toPeriod,
+            receiptDate: curr.Bill[0].billDetails[0].receiptDate,
           });
           return acc;
         }, {});
-      let arr = [mergeReceiptsInProperty(receiptDetails, finalcc), {receiptDetailsArray}]
+      let arr = [mergeReceiptsInProperty(receiptDetails, finalcc), { receiptDetailsArray }]
       dispatch(AssessmentStatusFetchComplete(arr));
     } catch (error) {
       dispatch(AssessmentStatusFetchError(error.message));
@@ -545,7 +545,7 @@ export const getSingleAssesmentandStatus = (queryObjectproperty) => {
           });
           return acc;
         }, {});
-        const receiptDetailArray =
+      const receiptDetailArray =
         receiptbyId &&
         Object.values(receiptbyId).reduce((acc, curr) => {
           if (!acc[curr.Bill[0].billDetails[0].consumerCode]) acc[curr.Bill[0].billDetails[0].consumerCode] = [];
@@ -553,15 +553,15 @@ export const getSingleAssesmentandStatus = (queryObjectproperty) => {
             amountPaid: curr.Bill[0].billDetails[0].amountPaid,
             consumerCode: curr.Bill[0].billDetails[0].consumerCode,
             totalAmount: curr.Bill[0].billDetails[0].totalAmount,
-            fromPeriod:curr.Bill[0].billDetails[0].fromPeriod,
-            toPeriod:curr.Bill[0].billDetails[0].toPeriod,
-            receiptDate:curr.Bill[0].billDetails[0].receiptDate,
-            financialYear:getFinancialYear(curr.Bill[0].billDetails[0].fromPeriod,curr.Bill[0].billDetails[0].toPeriod)
+            fromPeriod: curr.Bill[0].billDetails[0].fromPeriod,
+            toPeriod: curr.Bill[0].billDetails[0].toPeriod,
+            receiptDate: curr.Bill[0].billDetails[0].receiptDate,
+            financialYear: getFinancialYear(curr.Bill[0].billDetails[0].fromPeriod, curr.Bill[0].billDetails[0].toPeriod)
           });
           return acc;
         }, {});
-        let receiptDetailsArray=receiptDetailArray&&getYearlyAssessments(receiptDetailArray[finalcc]);
-      let arr = [mergeReceiptsInProperty(receiptDetails, finalcc), {receiptDetailsArray}]
+      let receiptDetailsArray = receiptDetailArray && getYearlyAssessments(receiptDetailArray[finalcc]);
+      let arr = [mergeReceiptsInProperty(receiptDetails, finalcc), { receiptDetailsArray }]
       dispatch(SingleAssessmentStatusFetchComplete(arr));
     } catch (error) {
       dispatch(SingleAssessmentStatusFetchError(error.message));
@@ -595,45 +595,45 @@ export const fetchReceipt = (fetchReceiptQueryObject) => {
     }
   }
 }
+export const getFileUrlFromAPI = async fileStoreId => {
+  const queryObject = [
+    { key: "tenantId", value: "pb" },
+    { key: "fileStoreIds", value: fileStoreId }
+  ];
+  try {
+    const fileUrl = await httpRequest(
+      "/filestore/v1/files/url",
+      "",
+      queryObject,
+      {},
+      [], {}, false, true
+    );
+    return fileUrl;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const downloadReceipt = (receiptQueryString) => {
   return async (dispatch) => {
     if (receiptQueryString) {
       dispatch(downloadReceiptPending());
       try {
         const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
-        const queryStr=[
-          { key: "key", value:"consolidatedreceipt" },
-          { key: "tenantId", value: "pb"}
+        const queryStr = [
+          { key: "key", value: "consolidatedreceipt" },
+          { key: "tenantId", value: "pb" }
         ]
-        
-        httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr,{Payments:payloadReceiptDetails.Payments},{'Accept': 'application/pdf'}, {responseType:'arraybuffer'})
-        .then(res => 
-          {
-            console.log(res);
-            const blob = new Blob([res], {type: 'application/pdf'});
-            FileSaver.saveAs(blob, "test.pdf");
-            FileDownload(blob, receiptQueryString[0].value+'1.pdf');
-            // var content = "What's up , hello world";
-            // // any kind of extension (.txt,.cpp,.cs,.bat)
-            // var filename = "hello.pdf";
-            // var filename1 = "hello22.pdf";
-    
-            // var blob = new Blob([payloadReceipt], {
-            //  type: "application/pdf;"
-            // });
-            
-            // saveAs(blob, filename);
-            // FileSaver.saveAs(blob, filename1);
-            // FileDownload(blob, receiptQueryString[0].value+'.pdf');
-           
-    
-            // FileDownload(payloadReceipt, receiptQueryString[0].value+'1.pdf');
-            // FileSaver.saveAs(payloadReceipt, filename1);
-            // saveAs(payloadReceipt, filename);
-    
-            dispatch(downloadReceiptComplete(res));
-          })
-      
+
+        httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+          .then(res => {
+            getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+              var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
+              win.focus();
+            });
+
+          });
+
       } catch (error) {
         dispatch(downloadReceiptError(error.message));
       }
