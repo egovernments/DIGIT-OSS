@@ -1,8 +1,10 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { httpRequest } from "../../../../../ui-utils/api";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../../utils";
+import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 const getCommonApplyFooter = children => {
     return {
         uiFramework: "custom-atoms",
@@ -14,6 +16,44 @@ const getCommonApplyFooter = children => {
     };
 };
 
+
+const download = (receiptQueryString) => {
+    const FETCHRECEIPT = {
+        GET: {
+            URL: "/collection-services/payments/_search",
+            ACTION: "_get",
+        },
+    };
+    const DOWNLOADRECEIPT = {
+        GET: {
+            URL: "/pdf-service/v1/_create",
+            ACTION: "_get",
+        },
+    };
+
+    // const receiptQueryString= [
+    //     { key: "receiptNumbers", value: payment.paymentDetails[0].receiptNumber },
+    //     { key: "tenantId", value: payment.paymentDetails[0].tenantId }
+    //   ]
+    httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+        const queryStr = [
+            { key: "key", value: "consolidatedreceipt" },
+            { key: "tenantId", value: "pb" }
+        ]
+
+        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+            .then(res => {
+                getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+                    var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
+                    win.focus();
+                });
+
+            });
+    })
+
+}
+
+
 const generatePdfAndDownload = (
     state,
     dispatch,
@@ -24,9 +64,9 @@ const generatePdfAndDownload = (
     dispatch(
         toggleSnackbar(
             true, {
-                labelName: "Preparing confirmation form, please wait...",
-                labelKey: "ERR_PREPARING_CONFIRMATION_FORM"
-            },
+            labelName: "Preparing confirmation form, please wait...",
+            labelKey: "ERR_PREPARING_CONFIRMATION_FORM"
+        },
             "info"
         )
     );
@@ -37,7 +77,7 @@ const generatePdfAndDownload = (
         `/tradelicence/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenant}`;
     var hasIframeLoaded = false,
         hasEstimateLoaded = false;
-    iframe.onload = function(e) {
+    iframe.onload = function (e) {
         hasIframeLoaded = true;
         if (hasEstimateLoaded) {
             downloadConfirmationForm();
@@ -58,7 +98,7 @@ const generatePdfAndDownload = (
         let target = iframe.contentDocument.querySelector(
             "#material-ui-tradeReviewDetails"
         );
-        html2canvas(target).then(function(canvas) {
+        html2canvas(target).then(function (canvas) {
             document.querySelector("#custom-atoms-iframeForPdf").removeChild(iframe);
             var data = canvas.toDataURL("image/jpeg", 1);
             var imgWidth = 200;
@@ -117,7 +157,7 @@ export const applicationSuccessFooter = (
                     height: "48px",
                     marginRight: "16px"
                 },
-                disabled:true
+                // disabled:true
             },
             children: {
                 downloadFormButtonLabel: getLabel({
@@ -128,13 +168,12 @@ export const applicationSuccessFooter = (
             onClickDefination: {
                 action: "condition",
                 callBack: () => {
-                    generatePdfAndDownload(
-                        state,
-                        dispatch,
-                        "download",
-                        applicationNumber,
-                        tenant
-                    );
+
+                    const receiptQueryString = [
+                        { key: "receiptNumbers", value: applicationNumber },
+                        { key: "tenantId", value: tenant }
+                    ]
+                    download(receiptQueryString);
                 }
             }
         },
@@ -149,7 +188,7 @@ export const applicationSuccessFooter = (
                     height: "48px",
                     marginRight: "16px"
                 },
-                disabled:true
+                disabled: true
             },
             children: {
                 printFormButtonLabel: getLabel({
