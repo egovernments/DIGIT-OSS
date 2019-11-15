@@ -18,7 +18,7 @@ import { ifUserRoleExists } from "../utils";
 import set from "lodash/set";
 import { componentJsonpath, radioButtonJsonPath, paybuttonJsonpath } from "./payResource/constants";
 
-const header =()=>getCommonContainer({
+const header =getCommonContainer({
       header: getCommonHeader({
           labelName: `Payment (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
           labelKey: "COMMON_PAY_SCREEN_HEADER"
@@ -190,7 +190,7 @@ const screenConfig = {
                                 xs: 12,
                                 sm: 10
                             },
-                            ...header()
+                            ...header
                         }
                     }
                 },
