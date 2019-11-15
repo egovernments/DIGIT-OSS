@@ -122,7 +122,7 @@ class ComponentInterface extends React.Component {
         splitList.slice(1).join("."),
         localdata
       );
-      const roleCodes = localRoles.map(elem => {
+      const roleCodes =localRoles&& localRoles.map(elem => {
         return get(elem, "code");
       });
       if (get(roleDefination, "roles")) {
