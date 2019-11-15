@@ -120,7 +120,7 @@ serviceMaps:
 
 
 
-       - query: INSERT INTO eg_tl_accessory( id, tenantid,active, accessoryCategory, uom, uomvalue, tradelicensedetailid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+       - query: INSERT INTO eg_tl_accessory( id, tenantid,active, accessoryCategory, uom, uomvalue, count, tradelicensedetailid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
          basePath: Licenses.*.tradeLicenseDetail.accessories.*
          jsonMaps:
           - jsonPath: $.Licenses.*.tradeLicenseDetail.accessories.*.id
@@ -134,6 +134,8 @@ serviceMaps:
           - jsonPath: $.Licenses.*.tradeLicenseDetail.accessories.*.uom
 
           - jsonPath: $.Licenses.*.tradeLicenseDetail.accessories.*.uomValue
+
+          - jsonPath: $.Licenses.*.tradeLicenseDetail.accessories.*.count
 
           - jsonPath: $.Licenses[*][?({id} in @.tradeLicenseDetail.accessories[*].id)].tradeLicenseDetail.id
 
@@ -259,7 +261,7 @@ serviceMaps:
 
           - jsonPath: $.Licenses.*.tradeLicenseDetail.address.addressline1
 
-          - jsonPath: $.Licenses.*.tradeLicenseDetail.address.addressline1
+          - jsonPath: $.Licenses.*.tradeLicenseDetail.address.addressline2
 
           - jsonPath: $.Licenses.*.tradeLicenseDetail.address.landmark
 
@@ -369,7 +371,7 @@ serviceMaps:
 
 
 
-       - query: UPDATE eg_tl_tradelicensedetail SET surveyno = ?, subownershipcategory = ?, channel = ?, additionaldetail = ?,operationalArea = ?,noOfEmployees = ?,structureType = ?,lastmodifiedby = ?,  lastmodifiedtime = ? WHERE id = ?;
+       - query: UPDATE eg_tl_tradelicensedetail SET surveyno = ?, subownershipcategory = ?, channel = ?, additionaldetail = ?,operationalArea = ?,noOfEmployees = ?,structureType = ?,adhocExemption = ?,adhocPenalty = ?,adhocExemptionReason = ?,adhocPenaltyReason = ?,lastmodifiedby = ?,  lastmodifiedtime = ? WHERE id = ?;
          basePath: Licenses.*.tradeLicenseDetail
          jsonMaps:
           - jsonPath: $.Licenses.*.tradeLicenseDetail.surveyNo
@@ -387,6 +389,14 @@ serviceMaps:
           - jsonPath: $.Licenses.*.tradeLicenseDetail.noOfEmployees
 
           - jsonPath: $.Licenses.*.tradeLicenseDetail.structureType
+
+          - jsonPath: $.Licenses.*.tradeLicenseDetail.adhocExemption
+
+          - jsonPath: $.Licenses.*.tradeLicenseDetail.adhocPenalty
+
+          - jsonPath: $.Licenses.*.tradeLicenseDetail.adhocExemptionReason
+
+          - jsonPath: $.Licenses.*.tradeLicenseDetail.adhocPenaltyReason
 
           - jsonPath: $.Licenses.*.auditDetails.lastModifiedBy
 
@@ -433,7 +443,7 @@ serviceMaps:
           - jsonPath: $.Licenses[*][?({id} in @.tradeLicenseDetail.tradeUnits[*].id)].auditDetails.lastModifiedTime
 
 
-       - query: INSERT INTO eg_tl_accessory(id, tenantid, active, accessoryCategory, uom, uomvalue, tradelicensedetailid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET active = ?,accessoryCategory = ?, uom = ?, uomvalue = ?,  lastmodifiedby = ?,  lastmodifiedtime = ?;
+       - query: INSERT INTO eg_tl_accessory(id, tenantid, active, accessoryCategory, uom, uomvalue, count, tradelicensedetailid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET active = ?,accessoryCategory = ?, uom = ?, uomvalue = ?,count =?, lastmodifiedby = ?,  lastmodifiedtime = ?;
          basePath: Licenses.*.tradeLicenseDetail.accessories.*
          jsonMaps:
           - jsonPath: $.Licenses.*.tradeLicenseDetail.accessories.*.id
@@ -447,6 +457,8 @@ serviceMaps:
           - jsonPath: $.Licenses.*.tradeLicenseDetail.accessories.*.uom
 
           - jsonPath: $.Licenses.*.tradeLicenseDetail.accessories.*.uomValue
+
+          - jsonPath: $.Licenses.*.tradeLicenseDetail.accessories.*.count
 
           - jsonPath: $.Licenses[*][?({id} in @.tradeLicenseDetail.accessories[*].id)].tradeLicenseDetail.id
 
@@ -465,6 +477,8 @@ serviceMaps:
           - jsonPath: $.Licenses.*.tradeLicenseDetail.accessories.*.uom
 
           - jsonPath: $.Licenses.*.tradeLicenseDetail.accessories.*.uomValue
+
+          - jsonPath: $.Licenses.*.tradeLicenseDetail.accessories.*.count
 
           - jsonPath: $.Licenses[*][?({id} in @.tradeLicenseDetail.accessories[*].id)].auditDetails.lastModifiedBy
 
@@ -617,7 +631,7 @@ serviceMaps:
 
           - jsonPath: $.Licenses.*.tradeLicenseDetail.address.addressline1
 
-          - jsonPath: $.Licenses.*.tradeLicenseDetail.address.addressline1
+          - jsonPath: $.Licenses.*.tradeLicenseDetail.address.addressline2
 
           - jsonPath: $.Licenses.*.tradeLicenseDetail.address.landmark
 
