@@ -75,10 +75,10 @@ export const payeeDetails = getCommonContainer({
     },
     data: [
       {
-        code: "Owner"
+        code: "COMMON_OWNER"
       },
       {
-        code: "Others"
+        code: "COMMON_OTHER"
       }
     ],
     jsonPath: "ReceiptTemp[0].Bill[0].payer",
