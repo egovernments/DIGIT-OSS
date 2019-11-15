@@ -7,6 +7,7 @@ import get from "lodash/get";
 import FileSaver from 'file-saver';
 import cloneDeep from "lodash/cloneDeep";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
+import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 const FileDownload = require('js-file-download');
 const reset_property_reset = () => {
   return {
@@ -577,6 +578,11 @@ export const fetchTotalBillAmount = (fetchBillQueryObject) => {
         const payloadProperty = await httpRequest(FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, fetchBillQueryObject);
         dispatch(fetchBillComplete(payloadProperty));
       } catch (error) {
+        dispatch(toggleSnackbarAndSetText(
+          true,
+          { labelName: error.message, labelKey: error.message },
+          "error"
+        ))
         dispatch(fetchBillError(error.message));
       }
     }
