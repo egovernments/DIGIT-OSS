@@ -18,21 +18,26 @@ import { ifUserRoleExists } from "../utils";
 import set from "lodash/set";
 import { componentJsonpath, radioButtonJsonPath, paybuttonJsonpath } from "./payResource/constants";
 
-const header = getCommonContainer({
-    header: getCommonHeader({
-        labelName: `Payment (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-        labelKey: "COMMON_PAY_SCREEN_HEADER"
-    }),
-    consumerCode: {
-        uiFramework: "custom-atoms-local",
-        moduleName: "egov-common",
-        componentPath: "ApplicationNoContainer",
-        props: {
-            number: getQueryArg(window.location.href, "consumerCode"),
-            label: "Consumer Code.:"
-        }
-    }
-});
+const header =getCommonContainer({
+      header: getCommonHeader({
+          labelName: `Payment (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
+          labelKey: "COMMON_PAY_SCREEN_HEADER"
+      }),
+      consumerCode: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-common",
+          componentPath: "ApplicationNoContainer",
+          props: {
+              number: '',
+              label: {
+                  labelValue:"Consumer Code.:",
+                  labelKey:"PAYMENT_COMMON_CONSUMER_CODE"
+              }
+          }
+      }
+  });
+
+
 const getPaymentCard = () => {
 
     const roleExists = ifUserRoleExists("CITIZEN");
@@ -126,7 +131,23 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
         dispatch(handleField("pay", radioButtonJsonPath, "props.buttons[1].disabled", true));
     }
 
-    
+    const consumeCodeComponentPath='components.div.children.headerDiv.children.header.children.consumerCode';
+    const consumerCodeFromResponse=get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].consumerCode");;
+    dispatch(handleField("pay", consumeCodeComponentPath, "props.number",consumerCodeFromResponse ));
+
+    const raidButtonComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.AmountToPaidButton";
+    dispatch(handleField("pay", raidButtonComponentPath, "props.value","full_amount" ));
+
+    // dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", "Owner"));
+    // const payerComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.card.children.payeeDetails.children.payer";
+    // dispatch(handleField("pay", payerComponentPath, "props.value","" ));
+    //
+    // const paidByComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.card.children.payeeDetails.children.paidBy";
+    // dispatch(handleField("pay", paidByComponentPath, "props.value","" ));
+    //
+    // const numberComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.card.children.payeeDetails.children.payerMobileNumber";
+    // dispatch(handleField("pay", numberComponentPath, "props.value","" ));
+
 
     //Initially select instrument type as Cash
     dispatch(prepareFinalObject("ReceiptTemp[0].instrument.instrumentType.name", "Cash"));
