@@ -10,7 +10,6 @@ import { getBoundaryData } from "../../../../ui-utils/commons";
 import { searchResults } from "./groupBillResource/searchResults";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
@@ -20,9 +19,6 @@ const header = getCommonHeader({
   labelName: "Group Bills",
   labelKey: "ABG_COMMON_HEADER"
 });
-const hasButton = getQueryArg(window.location.href, "hasButton");
-let enableButton = true;
-enableButton = hasButton && hasButton === "false" ? false : true;
 
 const getMDMSData = async (action, state, dispatch) => {
   const tenantId = getTenantId();

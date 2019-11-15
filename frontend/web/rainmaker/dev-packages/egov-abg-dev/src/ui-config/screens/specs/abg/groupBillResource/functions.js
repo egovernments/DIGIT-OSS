@@ -17,13 +17,6 @@ const tenantId = getTenantId();
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   showHideMergeButton(false, dispatch);
-  let queryObject = [
-    {
-      key: "tenantId",
-      value: tenantId
-    },
-    { key: "limit", value: "10" }
-  ];
   let searchScreenObject = get(
     state.screenConfiguration.preparedFinalObject,
     "searchCriteria",
@@ -78,7 +71,7 @@ export const searchApiCall = async (state, dispatch) => {
       }
     }
     searchScreenObject.tenantId = tenantId;
-    const responseFromAPI = await getGroupBillSearch(searchScreenObject);
+    const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject);
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];
     dispatch(
       prepareFinalObject("searchScreenMdmsData.billSearchResponse", bills)
@@ -86,10 +79,11 @@ export const searchApiCall = async (state, dispatch) => {
     const response = [];
     for (let i = 0; i < bills.length; i++) {
       response[i] = {
-        consumerId: get(bills[i], `billDetails[0].consumerCode`),
-        billNo: get(bills[i], `billDetails[0].billNumber`),
-        ownerName: get(bills[i], `payerName`),
-        billDate: get(bills[i], `billDetails[0].billDate`),
+        consumerId: get(bills[i], "consumerCode"),
+        billNo: get(bills[i], "billNumber"),
+        ownerName: get(bills[i], "payerName"),
+        billDate: get(bills[i], "billDate"),
+        status : get(bills[i], "status"),
         tenantId: tenantId
       };
     }
@@ -101,7 +95,7 @@ export const searchApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("Owner Name")]: item.ownerName || "-",
         [getTextToLocalMapping("Bill Date")]:
           convertEpochToDate(item.billDate) || "-",
-        [getTextToLocalMapping("Status")]: item.status || "-",
+        [getTextToLocalMapping("Status")]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
         tenantId: item.tenantId
       }));
 

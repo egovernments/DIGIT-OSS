@@ -1,23 +1,29 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import {
   sortByEpoch,
   getEpochForDate,
-  getTextToLocalMapping,
-  onActionClick
+  getTextToLocalMapping
 } from "../../utils";
-
+import { generateSingleBill } from "../../utils/receiptPdf";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
-  // moduleName: "egov-tradelicence",
   componentPath: "Table",
   visible: false,
   props: {
     columns: [
-      getTextToLocalMapping("Bill No."),
+      {
+        name: getTextToLocalMapping("Bill No."),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <div onClick={() => generateSingleBill(value)}>
+              <a>{value}</a>
+            </div>
+          )
+        }
+      },
       getTextToLocalMapping("Consumer Name"),
-      getTextToLocalMapping("Service Category"),
       getTextToLocalMapping("Bill Date"),
       getTextToLocalMapping("Bill Amount[INR]"),
       getTextToLocalMapping("Status"),
@@ -25,29 +31,37 @@ export const searchResults = {
         name: getTextToLocalMapping("Action"),
         options: {
           filter: false,
-          customBodyRender: (value, row) => (
-            <Link to={navigateToCommonPay(row.rowData)}>
-            <span
+
+          customBodyRender: (value, tableMeta, updateValue) => (
+            <div
               style={{
                 color: "#FE7A51",
                 cursor: "pointer"
               }}
+              onClick={() => {
+                const url =
+                  process.env.NODE_ENV === "development"
+                    ?`/egov-common/pay?consumerCode=${
+                        tableMeta.rowData[0]
+                      }&tenantId=${tableMeta.rowData[6]}&businessService=${
+                        tableMeta.rowData[0].split("-")[0]
+                      }` 
+                    :
+                    `/employee/egov-common/pay?consumerCode=${
+                        tableMeta.rowData[0]
+                      }&tenantId=${tableMeta.rowData[6]}&businessService=${
+                        tableMeta.rowData[0].split("-")[0]
+                      }` ;
+                window.location.href = `${window.origin}${url}`;
+              }}
             >
-              {getTextToLocalMapping(value)}
-              {console.log('row----', row)}
-            </span>
-            </Link>
+            {getTextToLocalMapping(value)}
+            </div>
           )
-        },
-      },
-      {
-        name: "tenantId",
-        options: {
-          display: false
         }
       },
       {
-        name: "action",
+        name: "tenantId",
         options: {
           display: false
         }
@@ -60,8 +74,7 @@ export const searchResults = {
       responsive: "stacked",
       selectableRows: false,
       hover: true,
-      rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => onActionClick(row)
+      rowsPerPageOptions: [10, 15, 20]
     },
     customSortColumn: {
       column: "Bill Date",
@@ -77,14 +90,6 @@ export const searchResults = {
         });
         return { data: finalData, currentOrder: !order ? "asc" : "desc" };
       }
-    },
-    
-  },
-  
-};
-
-const navigateToCommonPay = (rowData)=>{
-  if(Array.isArray(rowData) && rowData.length > 0){
-    return `/egov-common/pay?consumerCode=${rowData[0]}&tenantId=${rowData[7]}&businessService=${rowData[2]}`
+    }
   }
-}
+};
