@@ -9,7 +9,7 @@ import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import { removeForm } from "egov-ui-kit/redux/form/actions";
 import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
 import commonConfig from "config/common.js";
-import { prepareFormData } from "egov-ui-kit/redux/common/actions";
+import { prepareFormData,loadMDMSData } from "egov-ui-kit/redux/common/actions";
 import { reset_property_reset } from "egov-ui-kit/redux/properties/actions";
 import { resetFormWizard } from "egov-ui-kit/utils/PTCommon";
 
@@ -49,7 +49,7 @@ class YearDialog extends Component {
     })
   }
   componentDidMount = () => {
-    const { fetchGeneralMDMSData, toggleSpinner } = this.props;
+    const { fetchGeneralMDMSData, toggleSpinner,loadMDMSData } = this.props;
     const requestBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -63,11 +63,26 @@ class YearDialog extends Component {
               },
             ],
           },
+          {
+            moduleName: "PropertyTax",
+            masterDetails: [
+              {
+                name: "RoadType"
+              },
+              {
+                name: "ConstructionType"
+              },
+              {
+                name:"Thana"
+              },
+            ]
+          }
         ],
       },
     };
     toggleSpinner();
     fetchGeneralMDMSData(requestBody, "egf-master", ["FinancialYear"]);
+    loadMDMSData(requestBody);
     toggleSpinner();
   };
 
@@ -132,7 +147,7 @@ class YearDialog extends Component {
 
 const mapStateToProps = (state) => {
   const { common, form } = state;
-  const { generalMDMSDataById } = common;
+  const { generalMDMSDataById ,loadMdmsData} = common;
   const FinancialYear = generalMDMSDataById && generalMDMSDataById.FinancialYear;
   const getYearList = FinancialYear && Object.keys(FinancialYear);
   return { getYearList, form };
@@ -144,6 +159,8 @@ const mapDispatchToProps = (dispatch) => {
     removeForm: (formkey) => dispatch(removeForm(formkey)),
     toggleSpinner: () => dispatch(toggleSpinner()),
     prepareFormData: (path, value) => dispatch(prepareFormData(path, value)),
+    loadMDMSData: (requestBody, moduleName, masterName) =>
+      dispatch(loadMDMSData(requestBody, moduleName, masterName)),
     reset_property_reset:()=>dispatch(reset_property_reset())
   };
 };

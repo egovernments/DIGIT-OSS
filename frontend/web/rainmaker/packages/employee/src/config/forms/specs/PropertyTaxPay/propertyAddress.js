@@ -147,12 +147,51 @@ const formConfig = {
       toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
       maxLength: 64,
     },
+    roadType: {
+      id: "roadType",
+      jsonPath: "property.propertyDetails[0].additionalDetails.roadType",
+      localePrefix: { moduleName: "PropertyTax", masterName: "RoadType" },
+      type: "singleValueList",
+      floatingLabelText: "Road Type",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      fullWidth: true,
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+      numcols: 6,
+    },
+    thanaType: {
+      id: "Thana",
+      jsonPath: "property.propertyDetails[0].additionalDetails.Thana",
+      localePrefix: { moduleName: "PropertyTax", masterName: "Thana" },
+      type: "singleValueList",
+      floatingLabelText: "Thana",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      fullWidth: true,
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+      numcols: 6,
+    },
   },
   afterInitForm: (action, store, dispatch) => {
     let tenantId = JSON.parse(getUserInfo()).tenantId;
     let city = JSON.parse(getUserInfo()).permanentAddress;
     let state = store.getState();
-    const { citiesByModule } = state.common;
+    const { citiesByModule,loadMdmsData } = state.common;
+
+    const roadTypeData =
+        get(loadMdmsData, "PropertyTax.RoadType") &&
+        Object.values(get(loadMdmsData, "PropertyTax.RoadType")).map((item, index) => {
+          return { value: item.code, label: item.name };
+        });
+
+      dispatch(setFieldProperty("propertyAddress", "roadType", "dropDownData", roadTypeData));
+
+     const thanaData =
+      get(loadMdmsData, "PropertyTax.Thana") &&
+      Object.values(get(loadMdmsData, "PropertyTax.Thana")).map((item, index) => {
+      return { value: item.code, label: item.name };
+      });
+      console.log("thanaData------->>>",thanaData)
+      dispatch(setFieldProperty("propertyAddress", "thanaType", "dropDownData", thanaData));
+
     const { PT } = citiesByModule || {};
     if (PT) {
       const tenants = PT.tenants;
