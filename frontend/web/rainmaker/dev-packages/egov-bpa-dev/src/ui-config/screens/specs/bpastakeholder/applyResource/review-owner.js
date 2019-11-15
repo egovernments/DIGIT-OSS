@@ -9,48 +9,23 @@ import { convertEpochToDate } from "../../utils";
 
 import { changeStep } from "./footer";
 
-export const reviewownershipType = getLabelWithValue(
+export const reviewLicenseeType = getLabelWithValue(
   {
-    labelName: "Type of ownership",
-    labelKey: "TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL"
+    labelName: "Technical Person Licensee Type",
+    labelKey: "BPA_LICENSEE_TYPE_LABEL"
   },
   {
-    jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+    jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
     localePrefix: {
-      moduleName: "common-masters",
-      masterName: "OwnerShipCategory"
-    },
-    callBack: value => {
-      return value.split(".")[0];
+      moduleName: "TRADELICENSE",
+      masterName: "TRADETYPE"
     }
-  }
-);
-export const reviewsubOwnership = getLabelWithValue(
-  {
-    labelName: "Type of sub-ownership",
-    labelKey: "TL_NEW_OWNER_DETAILS_TYPE_OF_OWNERSHIP"
-  },
-  {
-    jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
-    localePrefix: {
-      moduleName: "common-masters",
-      masterName: "OwnerShipCategory"
-    }
-  }
-);
-export const reviewOwnerFatherName = getLabelWithValue(
-  {
-    labelName: "Father/Husband's Name",
-    labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_LABEL"
-  },
-  {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].fatherOrHusbandName"
   }
 );
 export const reviewOwnerGender = getLabelWithValue(
   {
-    labelName: "Gender",
-    labelKey: "TL_NEW_OWNER_DETAILS_GENDER_LABEL"
+    name: "Gender",
+    key: "BAP_COMMON_GENDER_LABEL"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
@@ -113,8 +88,8 @@ export const getReviewOwner = (isEditable = true) => {
             sm: 10
           },
           ...getCommonSubHeader({
-            labelName: "Owner Details",
-            labelKey: "TL_COMMON_OWN_DETAILS"
+            labelName: "Licensee Details",
+            labelKey: "BPA_LICENSEE_DETAILS_HEADER_OWNER_INFO"
           })
         },
         editSection: {
@@ -156,44 +131,19 @@ export const getReviewOwner = (isEditable = true) => {
       props: {
         scheama: getCommonGrayCard({
           viewFive: getCommonContainer({
-            reviewownershipType,
-            reviewsubOwnership,
-            reviewOwnerPhoneNo,
-            reviewOwnerName: getLabelWithValue(
+            reviewApplicantName: getLabelWithValue(
               {
-                labelName: "Name",
-                labelKey: "TL_NEW_OWNER_DETAILS_NAME_LABEL"
+                labelName: "Applicant Name",
+                labelKey: "BPA_APPLICANT_NAME_LABEL"
               },
               { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name" }
             ),
-            reviewOwnerFatherName,
+            reviewLicenseeType,
             reviewOwnerGender,
             reviewOwnerDOB,
+            reviewOwnerPhoneNo,
             reviewOwnerEmail,
-            reviewOwnerPAN,
-            reviewOwnerAddr: getLabelWithValue(
-              {
-                labelName: "Corrospondence Address",
-                labelKey: "TL_NEW_OWNER_DETAILS_ADDR_LABEL"
-              },
-              {
-                jsonPath:
-                  "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
-              }
-            ),
-            reviewOwnerSpecialCat: getLabelWithValue(
-              {
-                labelName: "Special Owner Category",
-                labelKey: "TL_NEW_OWNER_DETAILS_SPL_OWN_CAT_LABEL"
-              },
-              {
-                jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].ownerType",
-                localePrefix: {
-                  moduleName: "common-masters",
-                  masterName: "OwnerType"
-                }
-              }
-            )
+            reviewOwnerPAN
           })
         }),
 
@@ -202,67 +152,6 @@ export const getReviewOwner = (isEditable = true) => {
         sourceJsonPath: "Licenses[0].tradeLicenseDetail.owners",
         prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
         afterPrefixJsonPath: "children.value.children.key"
-      },
-      type: "array"
-    },
-    multiOwnerInstitutional: {
-      uiFramework: "custom-containers",
-      componentPath: "MultiItem",
-      props: {
-        scheama: getCommonGrayCard({
-          viewFive: getCommonContainer({
-            reviewownershipType,
-            reviewsubOwnership,
-            reviewOwnerPhoneNo,
-            reviewoffTelephone: getLabelWithValue(
-              {
-                labelName: "Official Telephone No.",
-                labelKey: "TL_NEW_OWNER_PHONE_LABEL"
-              },
-              {
-                jsonPath:
-                  "Licenses[0].tradeLicenseDetail.owners[0].altContactNumber"
-              }
-            ),
-            reviewOwnerName: getLabelWithValue(
-              {
-                labelName: "Name of the Authorised Person",
-                labelKey: "TL_NEW_OWNER_AUTH_PER_LABEL"
-              },
-              { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name" }
-            ),
-            reviewDesignation: getLabelWithValue(
-              {
-                labelName: "Designation",
-                labelKey: "TL_NEW_OWNER_DESIG_LABEL"
-              },
-              {
-                jsonPath:
-                  "Licenses[0].tradeLicenseDetail.institution.designation"
-              }
-            ),
-            reviewOwnerFatherName,
-            reviewOwnerGender,
-            reviewOwnerDOB,
-
-            reviewOwnerEmail,
-            reviewOwnerAddr: getLabelWithValue(
-              {
-                labelName: "Official Corrospondence Address",
-                labelKey: "TL_NEW_OWNER_OFF_ADDR_LABEL"
-              },
-              {
-                jsonPath:
-                  "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
-              }
-            )
-          })
-        }),
-
-        items: [],
-        hasAddItem: false,
-        sourceJsonPath: "Licenses[0].tradeLicenseDetail.owners",
-        prefixSourceJsonPath: "children.cardContent.children.viewFive.children"
       },
       type: "array"
     }

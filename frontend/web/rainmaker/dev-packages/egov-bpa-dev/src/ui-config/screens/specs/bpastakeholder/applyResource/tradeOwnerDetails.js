@@ -88,7 +88,7 @@ export const getGenderRadioButton = {
         value: "TRANSGENDER"
       }
     ],
-    jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender",
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
     required: true
   },
   required: true,
@@ -124,104 +124,6 @@ export const getOwnerEmailField = getTextField({
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId",
   required: true
 });
-
-export const ownerInfoInstitutional = {
-  ...getCommonGrayCard({
-    header: getCommonSubHeader(
-      {
-        labelName: "Owner Information",
-        labelKey: "TL_NEW_OWNER_DETAILS_HEADER_OWNER_INFO"
-      },
-      {
-        style: {
-          marginBottom: 18
-        }
-      }
-    ),
-    tradeUnitCardContainer: getCommonContainer({
-      getOwnerMobNoField,
-      offTelephone: getTextField({
-        label: {
-          labelName: "Official Telephone No.",
-          labelKey: "TL_NEW_OWNER_PHONE_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Official Telephone No.",
-          labelKey: "TL_NEW_OWNER_PHONE_PLACEHOLDER"
-        },
-        pattern: /^[0-9]{10,11}$/i,
-        required: true,
-        jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].altContactNumber"
-      }),
-
-      authPerson: getTextField({
-        label: {
-          labelName: "Name of Authorised Person",
-          labelKey: "TL_NEW_OWNER_AUTH_PER_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Name of Authorised Person",
-          labelKey: "TL_NEW_OWNER_AUTH_PER_PLACEHOLDER"
-        },
-        pattern: getPattern("Name"),
-        required: true,
-        jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name"
-      }),
-
-      designation: getTextField({
-        label: {
-          labelName: "Designation",
-          labelKey: "TL_NEW_OWNER_DESIG_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Designation",
-          labelKey: "TL_NEW_OWNER_DESIG_PLACEHOLDER"
-        },
-        pattern: getPattern("Name"),
-        required: true,
-        jsonPath: "Licenses[0].tradeLicenseDetail.institution.designation"
-      }),
-      getGenderRadioButton,
-      ownerDOB: {
-        ...getDateField({
-          label: {
-            labelName: "Date of Birth",
-            labelKey: "TL_EMP_APPLICATION_DOB"
-          },
-          placeholder: {
-            labelName: "Enter Date of Birth",
-            labelKey: "TL_NEW_OWNER_DETAILS_DOB_PLACEHOLDER"
-          },
-          required: true,
-          pattern: getPattern("Date"),
-          isDOB: true,
-          errorMessage: "TL_DOB_ERROR_MESSAGE",
-          jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].dob",
-          props: {
-            inputProps: {
-              max: getTodaysDateInYMD()
-            }
-          }
-        })
-      },
-      getOwnerEmailField,
-      ownerAddress: getTextField({
-        label: {
-          labelName: "Official Corrospondence Address",
-          labelKey: "TL_NEW_OWNER_OFF_ADDR_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Official Corrospondence Address",
-          labelKey: "TL_NEW_OWNER_OFF_ADDR_PLACEHOLDER"
-        },
-        required: true,
-        pattern: getPattern("Address"),
-        jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
-      })
-    })
-  }),
-  visible: false
-};
 
 export const OwnerInfoCard = getCommonCard({
   header: getCommonSubHeader(

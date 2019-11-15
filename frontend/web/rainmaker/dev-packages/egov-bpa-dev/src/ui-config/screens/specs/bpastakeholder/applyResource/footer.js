@@ -229,7 +229,7 @@ export const callBackForNext = async (state, dispatch) => {
       return false; // to show the above message
     }
     if (isFormValid && isOwnerShipValid) {
-      isFormValid = await applyTradeLicense(state, dispatch, activeStep);
+      // isFormValid = await applyTradeLicense(state, dispatch, activeStep);
       if (!isFormValid) {
         hasFieldToaster = false;
       }
@@ -320,7 +320,7 @@ export const callBackForNext = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
     );
-    isFormValid = await applyTradeLicense(state, dispatch);
+    // isFormValid = await applyTradeLicense(state, dispatch);
     if (isFormValid) {
       moveToSuccess(LicenseData, dispatch);
     }
@@ -389,7 +389,7 @@ export const changeStep = (
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
   const isNextButtonVisible = activeStep < 3 ? true : false;
-  const isPayButtonVisible = activeStep === 3 ? true : false;
+  const isPayButtonVisible = activeStep === 2 ? true : false;
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
