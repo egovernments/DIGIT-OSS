@@ -40,7 +40,7 @@ public class PropertyQueryBuilder {
 			+ " WHERE ";
 
 	private static final String LIKE_QUERY = "SELECT pt.*,ptdl.*,address.*,owner.*,doc.*,unit.*,insti.*,"
-			+ " pt.propertyid as propid,ptdl.assessmentnumber as propertydetailid,doc.id as documentid,unit.id as unitid,"
+			+ " pt.propertyid as ptid,ptdl.assessmentnumber as propertydetailid,doc.id as documentid,unit.id as unitid,"
 			+ "address.id as addresskeyid,insti.id as instiid,pt.additionalDetails as pt_additionalDetails,"
 			+ "ownerdoc.id as ownerdocid,ownerdoc.documenttype as ownerdocType,ownerdoc.filestore as ownerfileStore,"
 			+ "ownerdoc.documentuid as ownerdocuid, ptdl.additionalDetails as ptdl_additionalDetails,"
@@ -63,7 +63,7 @@ public class PropertyQueryBuilder {
 			+ " WHERE ";
 
 	private final String paginationWrapper = "SELECT * FROM "
-			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY propid) offset_ FROM " + "({})" + " result) result_offset "
+			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY ptid) offset_ FROM " + "({})" + " result) result_offset "
 			+ "WHERE offset_ > ? AND offset_ <= ?";
 
 
@@ -102,7 +102,7 @@ public class PropertyQueryBuilder {
 				 LEFT_OUTER_JOIN_STRING+
 			"    eg_pt_document_owner_v2 ownerdoc ON ownerdoc.userid=owner.userid  "+
 				 LEFT_OUTER_JOIN_STRING+
-			"    eg_pt_institution_v2 insti ON asmt.assessmentnumber=insti.propertydetail WHERE_CLAUSE_PLACHOLDER ;";
+			"    eg_pt_institution_v2 insti ON asmt.assessmentnumber=insti.propertydetail WHERE_CLAUSE_PLACHOLDER ";
 	
 
 	public String getPropertyLikeQuery(PropertyCriteria criteria, List<Object> preparedStmtList) {
@@ -269,7 +269,8 @@ public class PropertyQueryBuilder {
 
 		query = query.replace("WHERE_CLAUSE_PLACHOLDER",WHERE_CLAUSE_PLACHOLDER);
 
-		return query;
+		return addPaginationWrapper(query, preparedStmtList, criteria);
+
 	}
 
 	/*
