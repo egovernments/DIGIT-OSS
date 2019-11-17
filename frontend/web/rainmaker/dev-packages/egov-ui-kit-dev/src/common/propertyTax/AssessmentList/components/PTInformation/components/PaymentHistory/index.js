@@ -48,7 +48,7 @@ class PaymentHistory extends Component {
                     {getFullRow("PT_HISTORY_RECEIPT_NO", payment.paymentDetails[0].receiptNumber ? '' + payment.paymentDetails[0].receiptNumber : "NA", 12)}
                     {getFullRow("PT_HISTORY_AMOUNT_PAID", payment.totalAmountPaid ? 'Rs ' + payment.totalAmountPaid : "NA", 12)}
                     {getFullRow("PT_HISTORY_PAYMENT_DATE", payment.transactionDate ? getFormattedDate(payment.transactionDate) : "NA", 12)}
-                    {getFullRow("PT_HISTORY_BILL_NO", payment.transactionNumber ? '' + payment.transactionNumber : "NA", 12)}
+                    {getFullRow("PT_HISTORY_BILL_NO", payment.paymentDetails[0].bill.billNumber ? '' + payment.paymentDetails[0].bill.billNumber : "NA", 12)}
                     {getFullRow("PT_HISTORY_BILL_PERIOD", this.getBillPeriod(payment.paymentDetails[0].bill.billDetails), 6)}
                     <div className="col-sm-6 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
                         <div style={{ float: "right" }}>

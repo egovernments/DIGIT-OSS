@@ -46,7 +46,7 @@ const HistoryCard = ({ header, backgroundColor = 'rgb(242, 242, 242)', items = [
               </div></span>
             </div>
             <div>
-              <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: '25px' }}>
+              <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: '13px' }}>
                 {errorMessage && <Label
                   labelStyle={{ letterSpacing: "0.67px", color: "red", fontWeight: "400", lineHeight: "19px" }}
                   label={errorMessage}
