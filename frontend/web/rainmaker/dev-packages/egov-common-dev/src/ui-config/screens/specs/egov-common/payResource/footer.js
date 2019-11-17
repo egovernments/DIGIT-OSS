@@ -29,7 +29,7 @@ export const callPGService = async (state, dispatch) => {
     ReceiptTemp = {}
   } = preparedFinalObject;
   const billPayload = ReceiptTemp[0];
-  const taxAmount=Number(get(billPayload, "Bill[0].billDetails[0].amount"));
+  const taxAmount=Number(get(billPayload, "Bill[0].totalAmount"));
   let amtToPay = state.screenConfiguration.preparedFinalObject.AmountType === "partial_amount" ? state.screenConfiguration.preparedFinalObject.AmountPaid : taxAmount;
   amtToPay = amtToPay ? Number(amtToPay) :taxAmount;
   const user={
