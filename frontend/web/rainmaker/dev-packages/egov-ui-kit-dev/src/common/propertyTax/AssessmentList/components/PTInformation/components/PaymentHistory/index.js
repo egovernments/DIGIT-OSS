@@ -15,6 +15,7 @@ class PaymentHistory extends Component {
         this.state = {
             items: [],
             showItems: false,
+            errorMessage:"PT_PAYMENT_HISTORY_ERROR"
         };
     }
     getBillPeriod(billDetails = []) {
@@ -80,7 +81,8 @@ class PaymentHistory extends Component {
             paymentHistoryItem = this.getTransformedPaymentHistory();
         }
         const items = this.state.showItems ? this.state.items : [];
-        return (<HistoryCard header={'PT_PAYMENT_HISTORY'} items={items} onHeaderClick={() => {
+        const errorMessage = this.state.showItems&&items.length==0 ? this.state.errorMessage : '';
+        return (<HistoryCard header={'PT_PAYMENT_HISTORY'} items={items} errorMessage={errorMessage} onHeaderClick={() => {
             console.log("clicked");
             this.setState({ showItems: !this.state.showItems, items: paymentHistoryItem })
         }}></HistoryCard>)

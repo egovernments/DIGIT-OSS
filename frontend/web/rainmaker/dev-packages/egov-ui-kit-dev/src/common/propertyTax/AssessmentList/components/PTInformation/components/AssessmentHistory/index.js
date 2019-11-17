@@ -41,6 +41,7 @@ class AssessmentHistory extends Component {
         this.state = {
             items: [],
             showItems: false,
+            errorMessage:"PT_ASSESSMENT_HISTORY_ERROR"
         };
     }
 
@@ -102,9 +103,9 @@ class AssessmentHistory extends Component {
             paymentHistoryItems = this.getTransformedPaymentHistory();
         }
         // console.log(this.props,'props');
-
         const items = this.state.showItems ? this.state.items : [];
-        return (<HistoryCard header={'PT_ASSESMENT_HISTORY'} items={items} onHeaderClick={() => {
+        const errorMessage = this.state.showItems&&items.length==0 ? this.state.errorMessage : '';
+        return (<HistoryCard header={'PT_ASSESMENT_HISTORY'} items={items} errorMessage={errorMessage} onHeaderClick={() => {
             console.log("clicked");
             this.setState({ showItems: !this.state.showItems, items: paymentHistoryItems })
         }}></HistoryCard>)

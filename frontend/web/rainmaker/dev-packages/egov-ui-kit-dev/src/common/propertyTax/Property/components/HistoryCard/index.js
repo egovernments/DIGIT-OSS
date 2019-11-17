@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Button,Divider } from "components";
+import { Card, Button, Divider } from "components";
 import { Icon } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 const IconStyle = {
@@ -16,7 +16,7 @@ const labelStyle = {
   lineHeight: "40px",
 };
 const buttonStyle = {
-  float:'right',
+  float: 'right',
   lineHeight: "35px",
   height: "35px",
   backgroundColor: "rgb(242, 242, 242)",
@@ -26,7 +26,7 @@ const buttonStyle = {
   outline: "none",
   alignItems: "right",
 };
-const HistoryCard = ({ header, backgroundColor = 'rgb(242, 242, 242)', items = [], onHeaderClick }) => {
+const HistoryCard = ({ header, backgroundColor = 'rgb(242, 242, 242)', items = [], onHeaderClick, errorMessage }) => {
 
   return (
     <div>
@@ -41,9 +41,18 @@ const HistoryCard = ({ header, backgroundColor = 'rgb(242, 242, 242)', items = [
                   fontSize="18px"
                 />}
               </div>
-              <span style={{ alignItems: "right" , cursor:'pointer' }} > <div style={IconStyle}>
+              <span style={{ alignItems: "right", cursor: 'pointer' }} > <div style={IconStyle}>
                 <Icon action="hardware" name="keyboard-arrow-down" color="#484848" onClick={() => onHeaderClick()} />
               </div></span>
+            </div>
+            <div>
+              <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: '25px' }}>
+                {errorMessage && <Label
+                  labelStyle={{ letterSpacing: "0.67px", color: "red", fontWeight: "400", lineHeight: "19px" }}
+                  label={errorMessage}
+                  fontSize="16px"
+                />}
+              </div>
             </div>
             <div>
               {
