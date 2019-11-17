@@ -138,6 +138,11 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
     const raidButtonComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.AmountToPaidButton";
     dispatch(handleField("pay", raidButtonComponentPath, "props.value","full_amount" ));
 
+    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", "COMMON_OWNER"));
+    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].paidBy", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].payerName")));
+    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payerMobileNumber", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].mobileNumber")));
+
+
     // dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", "Owner"));
     // const payerComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.capturePaymentDetails.children.cardContent.children.tabSection.props.tabs[0].tabContent.card.children.payeeDetails.children.payer";
     // dispatch(handleField("pay", payerComponentPath, "props.value","" ));
