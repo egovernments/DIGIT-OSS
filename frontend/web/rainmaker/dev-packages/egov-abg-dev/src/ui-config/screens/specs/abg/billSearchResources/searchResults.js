@@ -5,6 +5,7 @@ import {
   getTextToLocalMapping
 } from "../../utils";
 import { generateSingleBill } from "../../utils/receiptPdf";
+import {download} from "egov-common/ui-utils/commons"
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -44,8 +45,16 @@ export const searchResults = {
                 color: "#FE7A51",
                 cursor: "pointer"
               }}
-              onClick={() => {
-                const url =
+              onClick={(value) => {
+                  if(tableMeta.rowData[5] === "Paid"){
+
+                  const receiptQueryString = [
+                        { key: "billIds", value:  tableMeta.rowData[8] },
+                        { key: "tenantId", value: tableMeta.rowData[7] }
+                    ]
+                  download(receiptQueryString);
+                }else{
+                  const url =
                   process.env.NODE_ENV === "development"
                     ?`/egov-common/pay?consumerCode=${
                         tableMeta.rowData[1]
@@ -59,6 +68,7 @@ export const searchResults = {
                         tableMeta.rowData[0].split("-")[0]
                       }` ;
                 window.location.href = `${window.origin}${url}`;
+                }
               }}
             >
             {getTextToLocalMapping(value)}
@@ -71,7 +81,13 @@ export const searchResults = {
         options: {
           display: false
         }
-      }
+      },
+      {
+        name: "Bill Id",
+        options: {
+          display: false
+        }
+      },
     ],
     title: getTextToLocalMapping("Search Results for Bill"),
     options: {
