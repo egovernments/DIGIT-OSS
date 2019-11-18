@@ -103,7 +103,7 @@ class YearDialog extends Component {
             </div>
             <div className='year-dialogue-button'>
               <Button
-                label={<Label label="PT_CANCEL" buttonLabel={true} color="black" />}
+                label={<Label label="PT_COMMON_CANCEL" buttonLabel={true} color="black" />}
                 onClick={() => { closeDialogue() }}
                 labelColor="#fe7a51"
                 buttonStyle={{ border: "1px solid rgb(255, 255, 255)" }}></Button>
