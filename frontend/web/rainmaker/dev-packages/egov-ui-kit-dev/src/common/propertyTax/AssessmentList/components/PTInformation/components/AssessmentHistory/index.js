@@ -13,18 +13,18 @@ export const getFullRow = (labelKey, labelValue, rowGrid = 12) => {
         subRowGrid = 2;
     }
     return (<div className={`col-sm-${rowGrid} col-xs-12`} style={{ marginBottom: 1, marginTop: 1 }}>
-        <div className={`col-sm-${2 * subRowGrid} col-xs-${2 * subRowGrid} `} style={{ padding: "3px 0px 0px 0px" }}>
+        <div className={`col-sm-${2 * subRowGrid} col-xs-4`} style={{ padding: "3px 0px 0px 0px" }}>
             <Label
                 labelStyle={{ letterSpacing: 0, color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "19px" }}
                 label={labelKey}
-                fontSize="15px"
+                fontSize="14px"
             />
         </div>
-        <div className={`col-sm-${4 * subRowGrid} col-xs-${4 * subRowGrid} `} style={{ padding: "3px 0px 0px 0px" }}>
+        <div className={`col-sm-${4 * subRowGrid} col-xs-8`} style={{ padding: "3px 0px 0px 0px",paddingLeft:rowGrid==12?'10px':'15px' }}>
             <Label
-                labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px" }}
+                labelStyle={{ letterSpacing: "0.47px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px"  }}
                 label={labelValue}
-                fontSize="15px"
+                fontSize="14px"
             />
         </div>
     </div>)
