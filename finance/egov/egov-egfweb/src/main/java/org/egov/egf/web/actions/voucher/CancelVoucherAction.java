@@ -550,6 +550,9 @@ public class CancelVoucherAction extends BaseFormAction {
 			billQry.executeUpdate();
 			if (LOGGER.isDebugEnabled())
 				LOGGER.debug("Bill Cancelled Successfully" + bill[1]);
+			
+			//Updating dasboard
+			finDashboardService.publishEvent(FinanceEventType.billUpdateByIds, new HashSet<>(Arrays.asList(bill[1])));
 		}
 	}
 

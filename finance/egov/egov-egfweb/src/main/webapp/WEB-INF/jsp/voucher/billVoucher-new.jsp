@@ -125,9 +125,9 @@
 
 						<tr>
 							<td class="greybox">From Date</td>
-							<td class="greybox"><s:textfield id="voucherDateFrom" name="voucherTypeBean.voucherDateFrom" data-date-end-date="0d" onkeyup="DateFormat(this,this.value,event,false,'3')" placeholder="DD/MM/YYYY" class="form-control datepicker" data-inputmask="'mask': 'd/m/y'" /></td>
+							<td class="greybox"><s:textfield id="voucherDateFrom" name="voucherTypeBean.voucherDateFrom" data-date-end-date="0d" onkeyup="DateFormat(this,this.value,event,false,'3')" placeholder="DD/MM/YYYY" class="form-control datepicker" data-inputmask="'mask': 'd/m/y'"  autocomplete="off"/></td>
 							<td class="greybox">To Date</td>
-							<td class="greybox"><s:textfield id="voucherDateTo" name="voucherTypeBean.voucherDateTo" data-date-end-date="0d" onkeyup="DateFormat(this,this.value,event,false,'3')" placeholder="DD/MM/YYYY" class="form-control datepicker" data-inputmask="'mask': 'd/m/y'" />
+							<td class="greybox"><s:textfield id="voucherDateTo" name="voucherTypeBean.voucherDateTo" data-date-end-date="0d" onkeyup="DateFormat(this,this.value,event,false,'3')" placeholder="DD/MM/YYYY" class="form-control datepicker" data-inputmask="'mask': 'd/m/y'"  autocomplete="off"/>
 						</tr>
 						<tr>
 							<td class="bluebox"><s:text name="bill.Number" /></td>

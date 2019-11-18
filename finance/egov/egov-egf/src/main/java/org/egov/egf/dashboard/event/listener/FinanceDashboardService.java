@@ -28,7 +28,8 @@ import org.egov.egf.dashboard.model.EgBillRegisterWrapper;
 import org.egov.egf.dashboard.model.EgBilldetailsData;
 import org.egov.egf.dashboard.model.VoucherHeaderData;
 import org.egov.egf.dashboard.model.VoucherStatus;
-import org.egov.egf.expensebill.service.ExpenseBillService;
+import org.egov.infra.admin.master.entity.City;
+import org.egov.infra.admin.master.service.CityService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.microservice.models.Department;
 import org.egov.infra.microservice.models.RequestInfo;
@@ -38,6 +39,7 @@ import org.egov.model.bills.EgBillPayeedetails;
 import org.egov.model.bills.EgBilldetails;
 import org.egov.model.bills.EgBillregister;
 import org.egov.model.bills.EgBillregistermis;
+import org.egov.model.payment.Paymentheader;
 import org.egov.utils.FinancialConstants;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -78,6 +80,9 @@ public class FinanceDashboardService {
     @PersistenceContext
     private EntityManager entityManager;
     
+    @Autowired
+    private CityService cityService;
+    
     @Value("${finance.esk.dashboard.event.enabled}")
     private boolean isEsDashboardIndexingEnabled;
     
@@ -91,7 +96,8 @@ public class FinanceDashboardService {
         if(isEsDashboardIndexingEnabled){
             String tenantId = microServiceUtil.getTenentId();
             String token = microServiceUtil.generateAdminToken(tenantId);
-            FinanceDashboardEvent event = new FinanceDashboardEvent(this, data,eventType, tenantId,token);
+            String domainName = ApplicationThreadLocals.getDomainName();
+            FinanceDashboardEvent event = new FinanceDashboardEvent(this, data,eventType, tenantId, token, domainName);
             eventPublisher.publishEvent(event);
             LOG.info("EVENT : {} PUBLISHED TO ESK DASHBOARD , ",event);
         }else{
@@ -105,7 +111,8 @@ public class FinanceDashboardService {
             Object data = event.getData();
             String tenantId = event.getTenantId();
             String token = event.getToken();
-            this.prepareThreadLocal(tenantId);
+            String domainName = event.getDomainName();
+            this.prepareThreadLocal(tenantId, domainName);
             EgBillRegisterWrapper wrapper = new EgBillRegisterWrapper();
             List<EgBillRegisterData> egBillDataList = new ArrayList<>();
             List<VoucherHeaderData> vhDataList = new ArrayList<>();
@@ -161,6 +168,7 @@ public class FinanceDashboardService {
                 break;
             }
             if(!egBillDataList.isEmpty()){
+                this.prepareUlbDetails(egBillDataList,null);
                 wrapper.setEgBillRegisterData(egBillDataList);
                 RequestInfo requestInfo = new RequestInfo();
                 requestInfo.setAuthToken(token);
@@ -168,6 +176,7 @@ public class FinanceDashboardService {
                 microServiceUtil.pushDataToIndexer(wrapper,finIndexerEgBillTopic);
                 LOG.info("SUCCESS : CREATED/UPDATED EgBillRegister with IDs : {} is getting indexed to ES successfully",StringUtils.join(idSets,","));
             }else if(!vhDataList.isEmpty()){
+                this.prepareUlbDetails(null,vhDataList);
                 wrapper.setVoucherHeaderData(vhDataList);
                 RequestInfo requestInfo = new RequestInfo();
                 requestInfo.setAuthToken(token);
@@ -180,6 +189,41 @@ public class FinanceDashboardService {
             
         } catch (Exception e) {
             LOG.error("ERROR while generation event to publish data to ESK");
+        }
+    }
+
+    private void prepareUlbDetails(List<EgBillRegisterData> egBillDataList, List<VoucherHeaderData> vhDataList) {
+        String id = "";
+        try {
+            City city = cityService.getCityByURL(ApplicationThreadLocals.getDomainName());
+            if(city != null){
+                if(egBillDataList != null && !egBillDataList.isEmpty()){
+                    for(EgBillRegisterData egbd : egBillDataList){
+                        id=egbd.getId();
+                        egbd.setId(StringUtils.defaultIfBlank(city.getCode(),"")+"_"+egbd.getId());
+                        egbd.setUlbCode(StringUtils.defaultIfBlank(city.getCode(), ""));
+                        egbd.setUlbname(StringUtils.defaultIfBlank(city.getName(), ""));
+                        egbd.setDistrictname(StringUtils.defaultIfBlank(city.getDistrictName(), ""));
+                        egbd.setRegionname(StringUtils.defaultIfBlank(city.getRegionName(), ""));
+                        egbd.setUlbgrade(StringUtils.defaultIfBlank(city.getGrade(), ""));
+                    }
+                }
+                if(vhDataList != null && !vhDataList.isEmpty()){
+                    for(VoucherHeaderData vhData : vhDataList){
+                        id=vhData.getId();
+                        vhData.setId(StringUtils.defaultIfBlank(city.getCode(),"")+"_"+vhData.getId());
+                        vhData.setUlbCode(StringUtils.defaultIfBlank(city.getCode(), ""));
+                        vhData.setUlbname(StringUtils.defaultIfBlank(city.getName(), ""));
+                        vhData.setDistrictname(StringUtils.defaultIfBlank(city.getDistrictName(), ""));
+                        vhData.setRegionname(StringUtils.defaultIfBlank(city.getRegionName(), ""));
+                        vhData.setUlbgrade(StringUtils.defaultIfBlank(city.getGrade(), ""));
+                    }
+                }
+          }else{
+              LOG.error("City data not found for domain name : {}", ApplicationThreadLocals.getDomainName());
+          }
+        } catch (Exception e) {
+            LOG.error("ERROR occurred while setting the ulb details to EgBillRegister/VoucherHeader Data ID : {}", id,e);
         }
     }
 
@@ -239,7 +283,7 @@ public class FinanceDashboardService {
     }
 
     private void prepareGeneralLedgerData(CVoucherHeader vh, VoucherHeaderData vhd) {
-        Set<CGeneralLedger> generalLedger = vh.getGeneralLedger() != null ? vh.getGeneralLedger() : this.getGeneralLedger(vhd.getId());
+        Set<CGeneralLedger> generalLedger = vh.getGeneralLedger() != null ? vh.getGeneralLedger() : this.getGeneralLedger(Long.parseLong(vhd.getId()));
         Set<CGeneralLedgerData> glData = new HashSet<>();
         try {
             if(!CollectionUtils.isEmpty(generalLedger)){
@@ -309,7 +353,6 @@ public class FinanceDashboardService {
                     vhd.setDepartmentName(department.getName());
                 }
             }
-            vhd.setDepartmentName(StringUtils.defaultIfBlank(vouchermis.getDepartmentcode(), DEFAULT_STRING));
             vhd.setSchemecode(vouchermis.getSchemeid() != null ? vouchermis.getSchemeid().getCode() : DEFAULT_STRING);
             vhd.setSchemecname(vouchermis.getSchemeid() != null ? vouchermis.getSchemeid().getName() : DEFAULT_STRING);
             vhd.setSubschemecode(vouchermis.getSubschemeid() != null ? vouchermis.getSubschemeid().getCode() : DEFAULT_STRING);
@@ -336,6 +379,7 @@ public class FinanceDashboardService {
         return egbillList;
     }
     
+    @Transactional(propagation=Propagation.REQUIRED,readOnly=true)
     public EgBillRegisterData prepareEgBillRegisterData(EgBillregister billRegister, String tenantId, String token) {
         try {
             this.populateBillDetails(billRegister);
@@ -358,7 +402,7 @@ public class FinanceDashboardService {
             return data;
             
         } catch (Exception e) {
-            LOG.error("ERROR while setting the egbillregister data for ID : ",billRegister.getId(), e.getStackTrace());
+            LOG.error("ERROR while setting the egbillregister data for ID : {} ",billRegister.getId(), e);
         }
         return null;
     }
@@ -466,6 +510,7 @@ public class FinanceDashboardService {
         }
     }
 
+    @Transactional
     protected void populateBillPayeeDetails(final EgBillregister egBillregister) {
         try {
             for (final EgBilldetails details : egBillregister.getEgBilldetailes()){
@@ -495,8 +540,9 @@ public class FinanceDashboardService {
         return sqlQuery.list();
     }
     
-    private void prepareThreadLocal(String tenant) {
+    private void prepareThreadLocal(String tenant, String domainName) {
         ApplicationThreadLocals.setTenantID(tenant.split(Pattern.quote("."))[1]);
+        ApplicationThreadLocals.setDomainName(domainName);
     }
     
     private Session getSession(){
@@ -520,5 +566,14 @@ public class FinanceDashboardService {
             LOG.error("ERROR occurred while fetching the billRegister Data for billNumber :  {}",billNumber);
         }
         return null;
+    }
+    
+    public void billPaymentUpdatedAction(Paymentheader paymentheader){
+        try {
+            CVoucherHeader voucherHeader = paymentheader.getVoucherheader();
+            this.publishEvent(FinanceEventType.voucherUpdateById ,  new HashSet<>(Arrays.asList(voucherHeader.getId())));
+        } catch (Exception e) {
+            LOG.error("ERROR occurred while pushing data to index in billPaymentUpdatedAction method :", e);
+        }
     }
 }

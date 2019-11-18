@@ -56,6 +56,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -80,6 +81,8 @@ import org.egov.commons.dao.FinancialYearHibernateDAO;
 import org.egov.commons.service.ChartOfAccountDetailService;
 import org.egov.commons.utils.EntityType;
 import org.egov.egf.commons.EgovCommon;
+import org.egov.egf.dashboard.event.FinanceEventType;
+import org.egov.egf.dashboard.event.listener.FinanceDashboardService;
 import org.egov.eis.service.EisCommonService;
 import org.egov.eis.web.actions.workflow.GenericWorkFlowAction;
 import org.egov.infra.admin.master.entity.AppConfig;
@@ -219,6 +222,8 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
     DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
     Date date;
+    @Autowired
+    FinanceDashboardService finDashboardService;
 
     @Override
     public StateAware getModel() {
@@ -708,6 +713,10 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
                 addActionMessage(getText("billVoucher.file.canceled"));
             else if (FinancialConstants.BUTTONAPPROVE.equalsIgnoreCase(workflowBean.getWorkFlowAction())) {
                 addActionMessage(getText("pjv.voucher.final.approval", new String[] { "The File has been approved" }));
+            }
+            // Update the ES index 
+            if(voucherHeader.getId() != null && voucherHeader.getId().compareTo(new Long(0)) > 0){
+                finDashboardService.publishEvent(FinanceEventType.voucherUpdateById , new HashSet<>(Arrays.asList(voucherHeader.getId())));
             }
         } catch (final ValidationException e) {
 

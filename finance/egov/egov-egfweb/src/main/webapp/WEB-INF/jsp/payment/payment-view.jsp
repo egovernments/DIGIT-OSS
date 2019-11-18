@@ -514,7 +514,7 @@ function openVoucher(vid)
 		{
 					document.forms[0].action='${pageContext.request.contextPath}/payment/payment-sendForApproval.action';
 		    		document.forms[0].submit();
-					
+		    		return false;					
 		}
 		function validateAppoveUser(name,value){
 			document.getElementById('lblError').innerHTML ="";

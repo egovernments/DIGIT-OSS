@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EgBillRegisterData{
-    private Long id;
+    private String id;
     private String billnumber;
     private Date billdate;
     private BigDecimal billamount;
@@ -42,11 +42,16 @@ public class EgBillRegisterData{
     private String fundsource;
     private String egBillSubType;
     private Set<EgBilldetailsData> egbilldetailes;
+    private String ulbCode;
+    private String ulbname;
+    private String ulbgrade;
+    private String districtname;
+    private String regionname;
     public EgBillRegisterData() {
         // TODO Auto-generated constructor stub
     }
    
-    public EgBillRegisterData(Long id, String billnumber, Date billdate, BigDecimal billamount, String narration,
+    public EgBillRegisterData(String id, String billnumber, Date billdate, BigDecimal billamount, String narration,
             BigDecimal passedamount, String billtype, String expendituretype, String workordernumber, String billapprovalstatus,
             Long timeStamp, EgwStatus status, Date lastupdatedtime, String departmentcode, String departmentname, String payto,
             String functionname, String schemename, String schemecode, String subschemename, String subschemecode,
@@ -243,15 +248,15 @@ public class EgBillRegisterData{
             return this;
         }
         public EgBillRegisterData build(){
-            return new EgBillRegisterData(id, billnumber, billdate, billamount, narration, passedamount, billtype, expendituretype, workordernumber, billapprovalstatus, timeStamp, status, lastupdatedtime, departmentcode, departmentname, payto, functionname, schemename, schemecode, subscheme, subcchemecode, vouchernumber, fundname, fundCode, partyBillNumber, partyBillDate, budgetaryAppnumber, fundsource, egBillSubType, egbilldetailes);
+            return new EgBillRegisterData(id+"", billnumber, billdate, billamount, narration, passedamount, billtype, expendituretype, workordernumber, billapprovalstatus, timeStamp, status, lastupdatedtime, departmentcode, departmentname, payto, functionname, schemename, schemecode, subscheme, subcchemecode, vouchernumber, fundname, fundCode, partyBillNumber, partyBillDate, budgetaryAppnumber, fundsource, egBillSubType, egbilldetailes);
         }
         
     }
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -508,6 +513,46 @@ public class EgBillRegisterData{
                 + ", vouchernumber=" + vouchernumber + ", fundname=" + fundname + ", fundCode=" + fundCode + ", partyBillNumber="
                 + partyBillNumber + ", partyBillDate=" + partyBillDate + ", budgetaryAppnumber=" + budgetaryAppnumber
                 + ", fundsource=" + fundsource + ", egBillSubType=" + egBillSubType + ", egbilldetailes=" + egbilldetailes + "]";
+    }
+
+    public String getUlbCode() {
+        return ulbCode;
+    }
+
+    public void setUlbCode(String ulbCode) {
+        this.ulbCode = ulbCode;
+    }
+
+    public String getUlbname() {
+        return ulbname;
+    }
+
+    public void setUlbname(String ulbname) {
+        this.ulbname = ulbname;
+    }
+
+    public String getUlbgrade() {
+        return ulbgrade;
+    }
+
+    public void setUlbgrade(String ulbgrade) {
+        this.ulbgrade = ulbgrade;
+    }
+
+    public String getDistrictname() {
+        return districtname;
+    }
+
+    public void setDistrictname(String districtname) {
+        this.districtname = districtname;
+    }
+
+    public String getRegionname() {
+        return regionname;
+    }
+
+    public void setRegionname(String regionname) {
+        this.regionname = regionname;
     }
     
     
