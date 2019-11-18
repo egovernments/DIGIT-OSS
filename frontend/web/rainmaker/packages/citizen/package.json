@@ -41,6 +41,7 @@
     "pgr-citizen": "^0.0.2",
     "prop-types": "^15.6.2",
     "pt-citizen": "^0.0.2",
+    "qrcode": "^1.3.3",
     "react": "^16.7.0",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.7.0",
