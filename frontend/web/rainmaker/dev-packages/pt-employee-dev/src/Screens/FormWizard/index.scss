@@ -39,11 +39,8 @@
     .ownerCategoryIdType {
       width: 100% !important;
     }
-    div#ownerCategoryIdType { div { div { div.label-container { div.label-text {
-      overflow-x:auto !important;
-      white-space:inherit !important;
-    }}}}}
     
+
     .dropdown {
       display: flow-root !important;
     }
@@ -77,6 +74,16 @@
     }
     .address {
       margin-left: 130px;
+    }
+    @media only screen and (max-width: 768px) {
+      .address {
+        margin-left: 0px;
+    }
+    }
+    @media only screen and (max-width: 768px) {
+      .authority-details-form{
+        display: grid !important;
+      }
     }
     .property-corr {
       > div {
@@ -493,6 +500,7 @@ div[class^="MuiPaper-root"],
       div:nth-of-type(2) {
         width: 100% !important;
         margin: 0 !important;
+        
       }
     }
   }
