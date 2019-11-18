@@ -4,6 +4,7 @@ import jsPDF from "jspdf";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { ifUserRoleExists } from "../../utils";
+import {download} from  "../../../../../ui-utils/commons"
 import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
 const getCommonApplyFooter = children => {
     return {
@@ -15,43 +16,6 @@ const getCommonApplyFooter = children => {
         children
     };
 };
-
-
-const download = (receiptQueryString) => {
-    const FETCHRECEIPT = {
-        GET: {
-            URL: "/collection-services/payments/_search",
-            ACTION: "_get",
-        },
-    };
-    const DOWNLOADRECEIPT = {
-        GET: {
-            URL: "/pdf-service/v1/_create",
-            ACTION: "_get",
-        },
-    };
-
-    // const receiptQueryString= [
-    //     { key: "receiptNumbers", value: payment.paymentDetails[0].receiptNumber },
-    //     { key: "tenantId", value: payment.paymentDetails[0].tenantId }
-    //   ]
-    httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
-        const queryStr = [
-            { key: "key", value: "consolidatedreceipt" },
-            { key: "tenantId", value: "pb" }
-        ]
-
-        httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
-            .then(res => {
-                getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-                    var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
-                    win.focus();
-                });
-
-            });
-    })
-
-}
 
 
 const generatePdfAndDownload = (

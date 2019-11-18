@@ -79,6 +79,7 @@ export const searchApiCall = async (state, dispatch) => {
     const billTableData = bills.map(item => {
       return {
         billNumber: get(item, "billNumber"),
+        billId : get(item,"id"),
         consumerCode : get(item, "consumerCode"),
         consumerName: get(item, "payerName"),
         billDate: get(item, "billDate"),
@@ -104,6 +105,7 @@ export const searchApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("Status")]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
         [getTextToLocalMapping("Action")]: item.action || "-",
         tenantId: item.tenantId,
+        "Bill Id": item.billId,
       }));
       dispatch(
         handleField(

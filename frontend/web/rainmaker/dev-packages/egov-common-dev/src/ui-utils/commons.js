@@ -6,7 +6,7 @@ import {
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
-import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { getTransformedLocale ,getFileUrlFromAPI} from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import jp from "jsonpath";
 import get from "lodash/get";
@@ -489,3 +489,37 @@ export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
     );
   }
 };
+
+
+
+export const download = (receiptQueryString) => {
+  const FETCHRECEIPT = {
+      GET: {
+          URL: "/collection-services/payments/_search",
+          ACTION: "_get",
+      },
+  };
+  const DOWNLOADRECEIPT = {
+      GET: {
+          URL: "/pdf-service/v1/_create",
+          ACTION: "_get",
+      },
+  };
+
+  httpRequest("post", FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+      const queryStr = [
+          { key: "key", value: "consolidatedreceipt" },
+          { key: "tenantId", value: "pb" }
+      ]
+
+  httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+          .then(res => {
+              getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+                  var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
+                  win.focus();
+              });
+
+          });
+  })
+
+}

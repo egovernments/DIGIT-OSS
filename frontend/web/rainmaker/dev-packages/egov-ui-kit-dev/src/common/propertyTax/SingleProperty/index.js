@@ -26,8 +26,8 @@ class SingleProperty extends React.Component {
                     <Label label="PT_SEARCHPROPERTY_TABEL_PTUID" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
                   </Grid>
                   <Grid item xs={6}>
-                    {/* <Label label={item.propertyId} fontSize={14} color={"rgba(0, 0, 0, 0.87"} /> */}
-                    {item.propertyId}
+                    <Label label={item.propertyId} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
+                    {/* {item.propertyId} */}
                   </Grid>
                 </Grid>
                 <Grid container style={{ marginBottom: 12 }}>
