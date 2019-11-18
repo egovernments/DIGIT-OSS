@@ -71,6 +71,8 @@ import org.egov.deduction.model.EgRemittance;
 import org.egov.deduction.model.EgRemittanceDetail;
 import org.egov.deduction.model.EgRemittanceGl;
 import org.egov.deduction.model.EgRemittanceGldtl;
+import org.egov.egf.dashboard.event.FinanceEventType;
+import org.egov.egf.dashboard.event.listener.FinanceDashboardService;
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.service.AssignmentService;
 import org.egov.eis.service.PositionMasterService;
@@ -143,6 +145,8 @@ public class PaymentActionHelper {
 
     @Autowired
     PositionMasterService positionMasterService;
+    @Autowired
+    FinanceDashboardService finDashboardService;
 
     @Transactional
     public Paymentheader createDirectBankPayment(Paymentheader paymentheader, CVoucherHeader voucherHeader,
@@ -293,6 +297,8 @@ public class PaymentActionHelper {
             paymentService.applyAuditing(paymentheader.getState());
         }
         paymentService.persist(paymentheader);
+        paymentService.getSession().flush();
+        finDashboardService.billPaymentUpdatedAction(paymentheader);
         return paymentheader;
     }
 

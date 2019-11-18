@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class VoucherHeaderData {
-    private Long id;
+    private String id;
     private String name;
     private String type;
     private String description;
@@ -44,12 +44,18 @@ public class VoucherHeaderData {
     private String referenceDocument;
     private String serviceName;
     private Set<CGeneralLedgerData> generalLedger;
+    
+    private String ulbCode;
+    private String ulbname;
+    private String ulbgrade;
+    private String districtname;
+    private String regionname;
 
     public VoucherHeaderData() {
         // TODO Auto-generated constructor stub
     }
 
-    public VoucherHeaderData(Long id, String name, String type, String description, Date effectiveDate, String voucherNumber,
+    public VoucherHeaderData(String id, String name, String type, String description, Date effectiveDate, String voucherNumber,
             Date voucherDate, String fundcode, String fundname, String fiscalperiodname, String status,
             Long originalvcId, Long refvhId, String voucherSubType, String billNumber, Date billDate, Long timeStamp,
             String fundsourcecode, String fundsourcename, String departmentcode, String departmentName, String schemecode,
@@ -88,11 +94,11 @@ public class VoucherHeaderData {
         this.serviceName = serviceName;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -495,7 +501,7 @@ public class VoucherHeaderData {
         
         
         public VoucherHeaderData build(){
-            return new VoucherHeaderData(id, name, type, description, effectiveDate, voucherNumber, voucherDate, fundcode, fundname, fiscalperiodname, status, originalvcId, refvhId, voucherSubType, billNumber, billDate, timeStamp, fundsourcecode, fundsourcename, departmentcode, departmentName, schemecode, schemecname, subschemecode, subschemename, functionarycode, functionaryname, functioncode, functionname, referenceDocument, serviceName);
+            return new VoucherHeaderData(id+"", name, type, description, effectiveDate, voucherNumber, voucherDate, fundcode, fundname, fiscalperiodname, status, originalvcId, refvhId, voucherSubType, billNumber, billDate, timeStamp, fundsourcecode, fundsourcename, departmentcode, departmentName, schemecode, schemecname, subschemecode, subschemename, functionarycode, functionaryname, functioncode, functionname, referenceDocument, serviceName);
         }
         
     }
@@ -515,6 +521,46 @@ public class VoucherHeaderData {
 
     public void setTimeStamp(Long timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public String getUlbCode() {
+        return ulbCode;
+    }
+
+    public void setUlbCode(String ulbCode) {
+        this.ulbCode = ulbCode;
+    }
+
+    public String getUlbname() {
+        return ulbname;
+    }
+
+    public void setUlbname(String ulbname) {
+        this.ulbname = ulbname;
+    }
+
+    public String getUlbgrade() {
+        return ulbgrade;
+    }
+
+    public void setUlbgrade(String ulbgrade) {
+        this.ulbgrade = ulbgrade;
+    }
+
+    public String getDistrictname() {
+        return districtname;
+    }
+
+    public void setDistrictname(String districtname) {
+        this.districtname = districtname;
+    }
+
+    public String getRegionname() {
+        return regionname;
+    }
+
+    public void setRegionname(String regionname) {
+        this.regionname = regionname;
     }
 
 }

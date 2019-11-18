@@ -98,7 +98,7 @@ function onSubmit()
 {
 			document.forms[0].action='${pageContext.request.contextPath}/voucher/preApprovedVoucher-update.action';
     		document.forms[0].submit();
-			
+			return false;
 }
 </script>
 

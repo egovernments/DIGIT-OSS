@@ -10,13 +10,15 @@ public class FinanceDashboardEvent extends ApplicationEvent{
     FinanceEventType eventType;
     String tenantId;
     String token;
+    String domainName;
     
-    public FinanceDashboardEvent(Object source, Object data, FinanceEventType eventType, String tenantId, String token) {
+    public FinanceDashboardEvent(Object source, Object data, FinanceEventType eventType, String tenantId, String token, String domainName) {
         super(source);
         this.data = data;
         this.eventType = eventType;
         this.tenantId = tenantId;
         this.token = token;
+        this.domainName = domainName;
     }
 
     public Object getData() {
@@ -35,10 +37,14 @@ public class FinanceDashboardEvent extends ApplicationEvent{
         return token;
     }
 
+    public String getDomainName() {
+        return domainName;
+    }
+
     @Override
     public String toString() {
         return "FinanceDashboardEvent [data=" + data + ", eventType=" + eventType + ", tenantId=" + tenantId + ", token=" + token
-                + "]";
+                + ", domainName=" + domainName + "]";
     }
 
 }

@@ -96,7 +96,7 @@ public class BankStatementUploadSearchController {
         model.addAttribute("bankbranches", createBankBranchService.getByIsActiveTrueOrderByBranchname());
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    @RequestMapping(value = "/search", method = {RequestMethod.POST,RequestMethod.GET})
     public String search(final Model model) {
         setDropDownValues(model);
         model.addAttribute("bankStatementUploadFile", new BankStatementUploadFile());

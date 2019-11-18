@@ -94,6 +94,7 @@ import org.egov.infra.validation.exception.ValidationException;
 import org.egov.infra.workflow.matrix.entity.WorkFlowMatrix;
 import org.egov.infra.workflow.service.SimpleWorkflowService;
 import org.egov.infstr.models.EgChecklists;
+import org.egov.infstr.services.PersistenceService;
 import org.egov.model.bills.DocumentUpload;
 import org.egov.model.bills.EgBillPayeedetails;
 import org.egov.model.bills.EgBilldetails;
@@ -168,6 +169,10 @@ public class ExpenseBillService {
     
     @Autowired
     FinanceDashboardService finDashboardService;
+    
+    @Autowired
+    @Qualifier("persistenceService")
+    private PersistenceService persistenceService;
     
 
     @Autowired
@@ -263,6 +268,7 @@ public class ExpenseBillService {
                     "/services/EGF/expensebill/view/" + savedEgBillregister.getId().toString());
 
         EgBillregister egbillReg = expenseBillRepository.save(savedEgBillregister);
+        persistenceService.getSession().flush();
         finDashboardService.publishEvent(FinanceEventType.billCreateOrUpdate, egbillReg);
         return egbillReg;
     }
@@ -342,6 +348,7 @@ public class ExpenseBillService {
                         workFlowAction,approverDesignation);
             }
             updatedegBillregister = expenseBillRepository.save(updatedegBillregister);
+            persistenceService.getSession().flush();
             finDashboardService.publishEvent(FinanceEventType.billCreateOrUpdate, updatedegBillregister);
         } else {
             if (workFlowAction.equals(FinancialConstants.CREATEANDAPPROVE))
@@ -354,6 +361,7 @@ public class ExpenseBillService {
                         workFlowAction,"");
             }
             updatedegBillregister = expenseBillRepository.save(egBillregister);
+            persistenceService.getSession().flush();
             finDashboardService.publishEvent(FinanceEventType.billCreateOrUpdate, updatedegBillregister);
         }
         return updatedegBillregister;
