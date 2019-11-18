@@ -15,7 +15,7 @@
               {
                 "variable": "payerName", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.payerName"
+                  "path": "$.payerName"
                 }
               },
               {
@@ -28,7 +28,7 @@
               {
                 "variable": "payerContact", 
                 "value": {
-                  "path": "$.paymentDetails[0].bill.mobileNumber"
+                  "path": "$.mobileNumber"
                 }
               },
               {
@@ -44,8 +44,8 @@
                 },
                 "localisation":{
                   "required":true,
-                  "prefix":"TL_EMP_HOME",   
-                  "module":"rainmaker-tl"
+                  "prefix":"MODULE",   
+                  "module":"rainmaker-common"
                }
               },
               {
@@ -70,7 +70,12 @@
                 "variable": "paymentMode", 
                 "value": {
                   "path": "$.paymentMode"
-                }
+                },
+                "localisation":{
+                  "required":true,
+                  "prefix":"COMMON",   
+                  "module":"rainmaker-common"
+               }
               },
               {
                 "variable": "G8ReceiptNo",
@@ -103,7 +108,7 @@
                 }
               },
               {
-                "variable": "pendingAmount", 
+                "variable": "dueAmount", 
                 "value": {
                   "path": "$.paymentDetails[0].totalDue"
                 }
@@ -115,6 +120,14 @@
               }
             ]
           },
+          {
+            "derived": [
+               {
+                  "variable": "pendingAmount",
+                  "formula": "{{dueAmount}}-{{paidAmount}}"
+               }
+            ]
+         },
           {
             "externalAPI": [     
               { 

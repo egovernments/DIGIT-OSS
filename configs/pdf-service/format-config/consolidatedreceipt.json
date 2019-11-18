@@ -24,7 +24,7 @@
                     "style": "receipt-logo-header"
                   },
                   {
-                    "text": "Property Tax payment Receipt",
+                    "text": "{{serviceType}} payment Receipt",
                     "style": "receipt-logo-sub-header"
                   }
                 ],
@@ -269,7 +269,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{paidAmount}}",
+                "text": "₹ {{paidAmount}}",
                 "border": [
                   false,
                   false,
@@ -289,7 +289,7 @@
                 "style": "receipt-table-value"
               },
               {
-                "text": "{{pendingAmount}}",
+                "text": "₹ {{pendingAmount}}",
                 "border": [
                   false,
                   false,
