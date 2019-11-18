@@ -17,6 +17,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { ifUserRoleExists } from "../utils";
 import set from "lodash/set";
 import { componentJsonpath, radioButtonJsonPath, paybuttonJsonpath } from "./payResource/constants";
+import "./pay.css";
 
 const header =getCommonContainer({
       header: getCommonHeader({

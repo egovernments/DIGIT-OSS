@@ -58,7 +58,8 @@ const AmountToBePaid = getCommonGrayCard({
         jsonPath: "AmountPaid",
         // required: true,
         props: {
-          disabled: true
+          disabled: true,
+          className: 'pay-amount-text-field'
         }
       }),
       beforeFieldChange: (action, state, dispatch) => {
