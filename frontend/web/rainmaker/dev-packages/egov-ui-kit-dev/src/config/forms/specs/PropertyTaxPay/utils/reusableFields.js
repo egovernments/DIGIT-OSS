@@ -161,7 +161,7 @@ export const innerDimensions = {
       //     setDependentFields(dependentFields1, dispatch, formKey, false);
       //     break;
       // }
-      if (value === "no") {
+      if (value === "false") {
         setDependentFields(dependentFields1, dispatch, formKey, true);
         setDependentFields(dependentFields2, dispatch, formKey, false);
       }
