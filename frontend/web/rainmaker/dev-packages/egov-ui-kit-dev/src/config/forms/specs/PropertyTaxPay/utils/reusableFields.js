@@ -141,7 +141,7 @@ export const innerDimensions = {
     hintText: "Enter Inner Dimensions",
     // errorMessage: "PT_PLOT_SIZE_ERROR_MESSAGE",
     fullWidth: true,
-    pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
+  //  pattern: /^([1-9]\d{0,7})(\.\d+)?$/,
     numcols: 4,
     dropDownData: innerDimensionsData,
     updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
