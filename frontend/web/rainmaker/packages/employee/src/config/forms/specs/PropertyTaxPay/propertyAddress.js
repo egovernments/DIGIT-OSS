@@ -149,7 +149,7 @@ const formConfig = {
     },
     roadType: {
       id: "roadType",
-      jsonPath: "property.propertyDetails[0].additionalDetails.roadType",
+      jsonPath: "Properties[0].propertyDetails[0].additionalDetails.roadType",
       localePrefix: { moduleName: "PropertyTax", masterName: "RoadType" },
       type: "singleValueList",
       floatingLabelText: "Road Type",
@@ -160,7 +160,7 @@ const formConfig = {
     },
     thanaType: {
       id: "Thana",
-      jsonPath: "property.propertyDetails[0].additionalDetails.Thana",
+      jsonPath: "Properties[0].propertyDetails[0].additionalDetails.Thana",
       localePrefix: { moduleName: "PropertyTax", masterName: "Thana" },
       type: "singleValueList",
       floatingLabelText: "Thana",

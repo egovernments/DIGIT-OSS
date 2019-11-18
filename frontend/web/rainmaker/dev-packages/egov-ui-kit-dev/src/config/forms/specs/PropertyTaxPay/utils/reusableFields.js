@@ -175,7 +175,7 @@ export const innerDimensions = {
 export const roomArea = {
   roomArea: {
     id: "roomArea",
-     jsonPath: "Properties[0].propertyDetails[0].units[0].roomArea",
+     jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.roomsArea",
     type: "number",
     floatingLabelText: "Room Area(sq ft)",
     hintText: "Enter Room Area",
@@ -196,7 +196,7 @@ export const roomArea = {
 export const balconyArea = {
   balconyArea: {
     id: "balconyArea",
-     jsonPath: "Properties[0].propertyDetails[0].units[0].balconyArea",
+     jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.commonArea",
     type: "number",
     floatingLabelText: "Balcony ,Corridor, Kitchen ,store Area(sq ft)",
     hintText: "Enter Balcony Area",
@@ -218,7 +218,7 @@ export const balconyArea = {
 export const garageArea = {
   garageArea: {
     id: "garageArea",
-    jsonPath: "Properties[0].propertyDetails[0].units[0].garageArea",
+    jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.garageArea",
     type: "number",
     floatingLabelText: "Garage Area(sq ft)",
     hintText: "Enter Garage Area",
@@ -241,7 +241,7 @@ export const garageArea = {
 export const bathroomArea = {
   bathroomArea: {
     id: "bathroomArea",
-     jsonPath: "Properties[0].propertyDetails[0].units[0].bathroomArea",
+     jsonPath: "Properties[0].propertyDetails[0].units[0].additionalDetails.bathroomArea",
     type: "number",
     floatingLabelText: "Bathroom & Staircase Area(sq ft)",
     hintText: "PT_FORM2_PLOT_SIZE_PLACEHOLDER",
