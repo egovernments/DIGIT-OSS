@@ -47,3 +47,7 @@ input[type="radio"]:checked:before {
   background: #fe7a51;
 }
 
+input[type="checkbox"]:focus, input[type="radio"]:focus {
+  outline: none !important;
+}
+
