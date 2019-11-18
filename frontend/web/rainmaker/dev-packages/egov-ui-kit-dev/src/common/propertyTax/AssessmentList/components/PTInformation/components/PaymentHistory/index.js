@@ -28,7 +28,7 @@ class PaymentHistory extends Component {
         const labelStyle = {
             letterSpacing: 1.2,
             fontWeight: "600",
-            lineHeight: "40px",
+            lineHeight: "35px",
         };
         const buttonStyle = {
             float: 'right',
@@ -53,7 +53,7 @@ class PaymentHistory extends Component {
                     <div className="col-sm-6 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
                         <div style={{ float: "right" }}>
                             <Button
-                                label={<Label buttonLabel={true} label="PT_DOWNLOAD_RECEIPT" color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
+                                label={<Label buttonLabel={true} label="PT_DOWNLOAD_RECEIPT" color="rgb(254, 122, 81)" fontSize="16px" height="35px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
                                     const receiptQueryString= [
