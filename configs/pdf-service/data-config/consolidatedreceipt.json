@@ -70,12 +70,7 @@
                 "variable": "paymentMode", 
                 "value": {
                   "path": "$.paymentMode"
-                },
-                "localisation":{
-                  "required":true,
-                  "prefix":"COMMON",   
-                  "module":"rainmaker-common"
-               }
+                }
               },
               {
                 "variable": "G8ReceiptNo",
