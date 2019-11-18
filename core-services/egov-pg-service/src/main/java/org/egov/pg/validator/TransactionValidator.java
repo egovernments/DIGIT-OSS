@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.egov.common.contract.request.User;
+import org.egov.pg.config.AppProperties;
 import org.egov.pg.constants.PgConstants;
 import org.egov.pg.models.TaxAndPayment;
 import org.egov.pg.models.Transaction;
@@ -31,13 +32,16 @@ public class TransactionValidator {
     private GatewayService gatewayService;
     private TransactionRepository transactionRepository;
     private PaymentsService paymentsService;
+    private AppProperties props;
 
 
     @Autowired
-    public TransactionValidator(GatewayService gatewayService, TransactionRepository transactionRepository, PaymentsService paymentsService) {
+    public TransactionValidator(GatewayService gatewayService, TransactionRepository transactionRepository, 
+    		PaymentsService paymentsService, AppProperties props) {
         this.gatewayService = gatewayService;
         this.transactionRepository = transactionRepository;
         this.paymentsService = paymentsService;
+        this.props = props;
     }
 
     /**
@@ -136,8 +140,11 @@ public class TransactionValidator {
         List<Transaction> existingTxnsForBill = transactionRepository.fetchTransactions(criteria);
 
         for (Transaction curr : existingTxnsForBill) {
-            if (curr.getTxnStatus().equals(Transaction.TxnStatusEnum.PENDING) || curr
-                    .getTxnStatus().equals(Transaction.TxnStatusEnum.SUCCESS)) {
+            if (curr.getTxnStatus().equals(Transaction.TxnStatusEnum.PENDING)) {
+                errorMap.put("TXN_ABRUPTLY_DISCARDED", 
+                		"A transaction for this bill has been abruptly discarded, please retry after "+props.getEarlyReconcileJobRunInterval()+" mins");
+            }
+            if(curr.getTxnStatus().equals(Transaction.TxnStatusEnum.SUCCESS)) {
                 errorMap.put("TXN_CREATE_BILL_ALREADY_PAID", "Bill has already been paid or is in pending state");
             }
         }

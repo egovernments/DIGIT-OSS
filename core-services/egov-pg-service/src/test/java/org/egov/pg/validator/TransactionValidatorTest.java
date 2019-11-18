@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
+import org.egov.pg.config.AppProperties;
 import org.egov.pg.models.Bill;
 import org.egov.pg.models.BillDetail;
 import org.egov.pg.models.TaxAndPayment;
@@ -38,6 +39,9 @@ public class TransactionValidatorTest {
     
     @Mock
     private PaymentsService paymentsService;
+    
+    @Mock
+    private AppProperties props;
 
     private TransactionValidator validator;
     private List<Bill> bills;
@@ -45,7 +49,7 @@ public class TransactionValidatorTest {
 
     @Before
     public void setUp() {
-        validator = new TransactionValidator(gatewayService, transactionRepository, paymentsService);
+        validator = new TransactionValidator(gatewayService, transactionRepository, paymentsService, props);
         TaxAndPayment taxAndPayment = TaxAndPayment.builder()
                 .amountPaid(new BigDecimal("100"))
                 .taxAmount(new BigDecimal("100"))
