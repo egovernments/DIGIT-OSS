@@ -7,7 +7,7 @@ import { getSearchResults,getGroupBillSearch } from "../../../../../ui-utils/com
 import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const tenantId = getTenantId();
 
@@ -72,7 +72,7 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    searchScreenObject.tenantId = tenantId;
+    searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
     // const responseFromAPI = await getSearchResults(dispatch,queryObject);
     const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject)
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];
@@ -89,7 +89,6 @@ export const searchApiCall = async (state, dispatch) => {
         tenantId : get(item, "tenantId")
       };
     });
-
     dispatch(
       prepareFinalObject("searchScreenMdmsData.billSearchResponse", bills)
     );

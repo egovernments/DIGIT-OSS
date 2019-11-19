@@ -9,6 +9,7 @@ const labelStyle = {
   lineHeight: "40px",
 };
 const buttonStyle = {
+  float:'right',
   lineHeight: "35px",
   height: "35px",
   backgroundColor: "rgb(242, 242, 242)",

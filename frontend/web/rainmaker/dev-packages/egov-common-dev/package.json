@@ -44,7 +44,8 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "url-search-params-polyfill": "^5.0.0"
+    "url-search-params-polyfill": "^5.0.0",
+    "print-js":"1.0.63"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

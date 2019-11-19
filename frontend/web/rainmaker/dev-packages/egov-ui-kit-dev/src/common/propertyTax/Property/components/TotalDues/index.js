@@ -14,18 +14,18 @@ const labelStyle = {
   paddingRight: "20px",
 };
 
-const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => { 
+const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
   const envURL='/egov-common/pay';
   const data = { value: "PT_TOTALDUES_TOOLTIP", key: "PT_TOTALDUES_TOOLTIP" };
   return (
-    <div className="row col-sm-12">
+    <div className="">
       <div className="col-xs-6 col-sm-3 flex-child">
         <Label buttonLabel={false} label="PT_TOTAL_DUES" color="rgb(0, 0, 0, 0.87)" height="35px" labelStyle={labelStyle} fontSize="20px" />
       </div>
       <Tooltip
         val={data}
         icon={"info_circle"}
-        style={{ position: "absolute", left: "130px", padding: "4px", width: "30px", display: "inline-flex" }}
+        style={{ position: "absolute", left: "135px", padding: "4px", width: "30px", display: "inline-flex" }}
       />
       <div className="col-xs-6 col-sm-3 flex-child">
         <Label label="Rs " secondaryText={totalBillAmountDue} labelStyle={labelStyle} fontSize="20px" color="rgb(0, 0, 0, 0.87)" height="35px"></Label>
@@ -36,11 +36,13 @@ const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
         </div>
       )}
       {totalBillAmountDue > 0 && (
-        <div className="col-xs-6 col-sm-3 flex-child " style={{alignItems:'right'}}>
+        <div className="col-xs-6 col-sm-3 flex-child " >
+          <div style={{ float: "right" }}>
           <TotalDuesButton labelText="PT_TOTALDUES_PAY" onClickAction={() => {
             history.push(
               `${envURL}?consumerCode=${consumerCode}&tenantId=${tenantId}`);
           }} />
+          </div>
         </div>
       )}
     </div>

@@ -120,7 +120,8 @@ const billSearchAndResult = {
                   process.env.REACT_APP_SELF_RUNNING === "true"
                     ? `/egov-ui-framework/abg/groupBills`
                     : `/abg/groupBills`
-              }
+              },
+              visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
             }
           }
         },

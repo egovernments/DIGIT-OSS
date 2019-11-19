@@ -10,7 +10,7 @@ import {
   getTextToLocalMapping
 } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import isEmpty from "lodash/isEmpty"
 
 // const tenantId = getTenantId();
@@ -71,7 +71,7 @@ export const searchApiCall = async (state, dispatch) => {
         delete searchScreenObject[key];
       }
     }
-    searchScreenObject.tenantId = tenantId;
+    searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
     const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject);
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];
     dispatch(
@@ -90,7 +90,6 @@ export const searchApiCall = async (state, dispatch) => {
         })
       }      
     }
-
     try {
       let data = response.map(item => ({
         [getTextToLocalMapping("Bill No.")]: item.billNo || "-",

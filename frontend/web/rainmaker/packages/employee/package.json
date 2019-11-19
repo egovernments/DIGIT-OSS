@@ -2,8 +2,8 @@
   "name": "rainmaker-employee",
   "version": "0.0.2",
   "private": true,
-  "homepage": "https://egov-micro-dev.egovernments.org/employee/",
-  "proxy": "https://egov-micro-dev.egovernments.org/",
+  "homepage": "https://egov-micro-qa.egovernments.org/employee/",
+  "proxy": "https://egov-micro-qa.egovernments.org/",
   "dependencies": {
     "@babel/runtime": "^7.3.1",
     "@material-ui/core": "^1.5.1",
@@ -66,7 +66,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "url-search-params-polyfill": "^3.0.0",
-    "webfontloader": "^1.6.28"
+    "webfontloader": "^1.6.28",
+    "print-js":"1.0.63"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
