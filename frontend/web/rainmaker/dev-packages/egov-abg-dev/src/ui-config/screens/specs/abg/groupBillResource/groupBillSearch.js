@@ -276,7 +276,8 @@ export const mergeDownloadButton = {
       onClickDefination: {
         action: "condition",
         callBack: generateMultipleBill
-      }
+      },
+      visible : false
     }
   }
 };
