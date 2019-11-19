@@ -417,10 +417,11 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "379px",
-        height: "48px",
-        right: "19px",
-        position:"relative"
+        width: "379px",
+        height: "48px ",
+        right: "19px ",
+        position:"relative",
+        borderRadius:"0px "
       }
     },
     children: {
@@ -433,6 +434,7 @@ export const footer = getCommonApplyFooter({
         componentPath: "Icon",
         props: {
           iconName: "keyboard_arrow_right"
+          
         }
       }
     },
@@ -453,10 +455,11 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "379px",
-        height: "48px",
+        width: "363px",
+        height: "48px ",
         right: "19px",
-        position:"relative"
+        position:"relative",
+        borderRadius:"0px "
       }
     },
     children: {
@@ -468,7 +471,8 @@ export const footer = getCommonApplyFooter({
         uiFramework: "custom-atoms",
         componentPath: "Icon",
         props: {
-          iconName: "keyboard_arrow_right"
+          iconName: "keyboard_arrow_right",
+          className:""
         }
       }
     },
