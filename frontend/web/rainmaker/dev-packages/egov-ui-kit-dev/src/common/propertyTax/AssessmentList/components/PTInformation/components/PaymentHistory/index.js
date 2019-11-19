@@ -51,7 +51,7 @@ class PaymentHistory extends Component {
                     {getFullRow("PT_HISTORY_BILL_NO", payment.paymentDetails[0].bill.billNumber ? '' + payment.paymentDetails[0].bill.billNumber : "NA", 12)}
                     {getFullRow("PT_HISTORY_BILL_PERIOD", this.getBillPeriod(payment.paymentDetails[0].bill.billDetails), 6)}
                     <div className="col-sm-6 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
-                        <div style={{ float: "right" }}>
+                        <div className="assess-history" style={{ float: "right" }}>
                             <Button
                                 label={<Label buttonLabel={true} label="PT_DOWNLOAD_RECEIPT" color="rgb(254, 122, 81)" fontSize="16px" height="35px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
