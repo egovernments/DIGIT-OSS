@@ -68,10 +68,14 @@ export const getCommonParagraph = (paragraph, props = {}) => {
         fontSize: "14px",
         fontWeight: 400,
         lineHeight: "20px",
-        marginBottom: "12px"
+        marginBottom: "12px",
+        position: "relative",
+        top: "1px",
+        flex: "none"
       },
       ...props
     },
+
     children: {
       [paragraph]: getLabel(paragraph)
     }
@@ -212,7 +216,7 @@ export const getTextField = textScheama => {
     pattern,
     jsonPath = "",
     sourceJsonPath = "",
-    cityDropdown="",
+    cityDropdown = "",
     data = [],
     optionValue = "code",
     optionLabel = "code",
