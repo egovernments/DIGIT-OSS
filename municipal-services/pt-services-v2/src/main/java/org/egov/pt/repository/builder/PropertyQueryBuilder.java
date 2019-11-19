@@ -158,11 +158,19 @@ public class PropertyQueryBuilder {
 
 
 		if (criteria.getAccountId() != null) {
-			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_ASSESSMENT);
-			WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.append(" ptd.accountid = ? ");
+			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER);
+			WHERE_CLAUSE_PLACHOLDER.append(" asmt.accountid = ? ");
 			preparedStmtList.add(criteria.getAccountId());
-			/*return builder.toString().replace("WHERE_CLAUSE_PLACHOLDER_ASSESSMENT",WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.toString())
-					.replace("WHERE_CLAUSE_PLACHOLDER_PROPERTY","").replace("WHERE_CLAUSE_PLACHOLDER","");*/
+
+			Set<String> ownerids = criteria.getOwnerids();
+			if (!CollectionUtils.isEmpty(ownerids)) {
+				WHERE_CLAUSE_PLACHOLDER.append(" OR ");
+				WHERE_CLAUSE_PLACHOLDER.append(" owner.userid IN (").append(createQuery(ownerids)).append(")");
+				addToPreparedStatement(preparedStmtList, ownerids);
+			}
+
+			return builder.toString().replace("WHERE_CLAUSE_PLACHOLDER_ASSESSMENT",WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.toString())
+					.replace("WHERE_CLAUSE_PLACHOLDER_PROPERTY","").replace("WHERE_CLAUSE_PLACHOLDER",WHERE_CLAUSE_PLACHOLDER);
 		}
 
 		

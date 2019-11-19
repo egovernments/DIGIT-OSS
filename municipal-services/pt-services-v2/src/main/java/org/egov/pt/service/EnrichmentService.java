@@ -328,6 +328,21 @@ public class EnrichmentService {
        return requests;
     }
 
+
+
+    /**
+     *
+     * @param criteria The PropertyCriteria to be enriched
+     */
+    public void enrichPropertyCriteriaForDefaultSearch(RequestInfo requestInfo, PropertyCriteria criteria){
+
+        criteria.setMobileNumber(requestInfo.getUserInfo().getUserName());
+        criteria.setAccountId(requestInfo.getUserInfo().getUuid());
+        criteria.setTenantId(requestInfo.getUserInfo().getTenantId());
+    }
+
+
+
     /**
      *
      * @param request The propertyrequest received for update

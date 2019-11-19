@@ -63,6 +63,10 @@ public class PropertyService {
      */
     public List<Property> searchProperty(PropertyCriteria criteria, RequestInfo requestInfo) {
         List<Property> properties;
+
+        if(criteria.isNull())
+            enrichmentService.enrichPropertyCriteriaForDefaultSearch(requestInfo,criteria);
+
         propertyValidator.validatePropertyCriteria(criteria, requestInfo);
         if (criteria.getMobileNumber() != null || criteria.getName() != null) {
             UserDetailResponse userDetailResponse = userService.getUser(criteria, requestInfo);
