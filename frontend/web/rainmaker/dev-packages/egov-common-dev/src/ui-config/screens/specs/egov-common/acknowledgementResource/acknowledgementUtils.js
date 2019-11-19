@@ -4,6 +4,7 @@ import {
   getCommonParagraph,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import "./acknowledgementUtils.css";
 
 const style = {
   bodyBox: {
