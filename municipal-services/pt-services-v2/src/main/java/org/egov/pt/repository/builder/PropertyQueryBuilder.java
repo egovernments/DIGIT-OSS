@@ -202,7 +202,7 @@ public class PropertyQueryBuilder {
 			preparedStmtList.add(criteria.getFinancialYear());
 		}
 
-		if(criteria.getAccountId()==null){
+		if(criteria.getTenantId()!=null){
 			addClauseIfRequired(WHERE_CLAUSE_PLACHOLDER_PROPERTY);
 			WHERE_CLAUSE_PLACHOLDER_PROPERTY.append("  pt.tenantid=? ");
 			preparedStmtList.add(criteria.getTenantId());

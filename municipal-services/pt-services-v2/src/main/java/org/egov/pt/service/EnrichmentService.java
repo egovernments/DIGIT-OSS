@@ -284,7 +284,7 @@ public class EnrichmentService {
         Set<String> propertyids = new HashSet<>();
         properties.forEach(property -> propertyids.add(property.getPropertyId()));
         criteria.setIds(propertyids);
-        criteria.setTenantId(properties.get(0).getTenantId());
+    //    criteria.setTenantId(properties.get(0).getTenantId());
         return criteria;
     }
 
