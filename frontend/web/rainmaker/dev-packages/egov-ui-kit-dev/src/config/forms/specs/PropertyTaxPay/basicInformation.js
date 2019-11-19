@@ -62,9 +62,9 @@ const formConfig = {
 
     datePicker:{
       id:"constructionyear",
-      jsonPath: "Properties[0].propertyDetails[0].propertySubType",
+      jsonPath: "Properties[0].propertyDetails[0].units[0].constructionYear",
       type:"date",
-      floatingLabelText: "Construction Date",
+      floatingLabelText: "PT_ASSESMENT_INFO_CONSTRUCTION_DATE",
       localePrefix: { moduleName: "PropertyTax", masterName: "datePicker" },
       numcols: 6,
       fullWidth:true,

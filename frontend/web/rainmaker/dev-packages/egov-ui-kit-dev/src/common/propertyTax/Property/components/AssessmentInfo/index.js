@@ -144,6 +144,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 //   };
 const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
   const { units=[], noOfFloors } = propertyDetails || {};
+  var construction_date = new Date(units[0].constructionYear).toLocaleDateString();
 
   return (
     propertyDetails && [
@@ -182,8 +183,9 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
           value: noOfFloors ? `${noOfFloors}` : "NA", //noOfFloors
         },
         {
-          key :"Construction Date",
-          value: "NA"
+          key: getTranslatedLabel("PT_ASSESMENT_INFO_CONSTRUCTION_DATE", localizationLabelsData),
+          value: units[0].constructionYear ? `${construction_date}` : "NA",
+
         }
     ]
   );
@@ -201,8 +203,32 @@ const getUnitInfo = (units = []) => {
 
       key: getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
       value: unit.occupancyType ? 'PROPERTYTAX_OCCUPANCYTYPE_' + unit.occupancyType : "NA",
-    }, {
-
+    },
+    {
+      key: getTranslatedLabel("PT_ASSESMENT_INFO_CONSTRUCTION_TYPE", localizationLabelsData),
+      value: unit.ConstructionType ?  'PROPERTYTAX_CONSTRUCTIONTYPE_'+ unit.ConstructionType : "NA",
+    },
+    {
+      key: getTranslatedLabel("PT_ASSESMENT_INFO_INNER_DIMENSION", localizationLabelsData),
+      value: unit.additionalDetails.innerDimensionsKnown ? unit.additionalDetails.innerDimensionsKnown === "true"? "Yes" : "No" : "NA",
+    },
+    {
+      key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR26", localizationLabelsData),
+      value: unit.additionalDetails.roomsArea ? unit.additionalDetails.roomsArea : "NA",
+    },
+    {
+      key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR27", localizationLabelsData),
+      value: unit.additionalDetails.commonArea ? unit.additionalDetails.commonArea : "NA",
+    },
+    {
+      key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR28", localizationLabelsData),
+      value: unit.additionalDetails.garageArea ?  unit.additionalDetails.garageArea : "NA",
+    },
+    {
+      key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR29", localizationLabelsData),
+      value: unit.additionalDetails.bathroomArea ? unit.additionalDetails.bathroomArea : "NA",
+    },
+     {
       key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
       value: unit.unitArea ? unit.unitArea + '' : "NA",
     }];

@@ -72,7 +72,7 @@ class ReviewForm extends Component {
     let { addRebateBox, updateCalculation, onEditButtonClick } = this;
     let { showRebateBox } = this.state;
     let { stepZero, stepTwo, stepOne, estimationDetails, importantDates, totalAmount } = this.props;
-    const { generalMDMSDataById = {} } = this.props;
+    const { generalMDMSDataById = {} , loadMdmsData={} } = this.props;
     return (
       <div>
         <Card
@@ -84,7 +84,7 @@ class ReviewForm extends Component {
                 addRebateBox={addRebateBox}
                 openCalculationDetails={this.openCalculationDetails}
               />
-              <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
+              <PropertyAddressInfo loadMdmsData={loadMdmsData}  generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
               <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
               <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo>
             </div>
@@ -118,10 +118,11 @@ class ReviewForm extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
   const { common = {} } = state;
-  const { generalMDMSDataById } = common || {};
+  const { generalMDMSDataById , loadMdmsData} = common || {};
   return {
     ownProps,
     generalMDMSDataById,
+    loadMdmsData,
   };
 };
 const mapDispatchToProps = (dispatch) => ({

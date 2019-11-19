@@ -160,7 +160,7 @@ const formConfig = {
     },
     thanaType: {
       id: "Thana",
-      jsonPath: "Properties[0].propertyDetails[0].additionalDetails.Thana",
+      jsonPath: "Properties[0].propertyDetails[0].additionalDetails.thana",
       localePrefix: { moduleName: "PropertyTax", masterName: "Thana" },
       type: "singleValueList",
       floatingLabelText: "Thana",
