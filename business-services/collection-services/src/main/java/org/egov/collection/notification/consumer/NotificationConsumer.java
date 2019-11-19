@@ -124,7 +124,7 @@ public class NotificationConsumer {
 	 * @throws Exception
 	 */
 	private void sendNotification(PaymentRequest receiptReq){
-		Payment receipt = receiptReq.getPayment(); //currently we dont support mutliple receipts.
+		Payment receipt = receiptReq.getPayment();
 		List<String> businessServiceAllowed = fetchBusinessServiceFromMDMS(receiptReq.getRequestInfo());
 		if(!CollectionUtils.isEmpty(businessServiceAllowed)) {
 			for(PaymentDetail detail: receipt.getPaymentDetails()) {
@@ -142,7 +142,7 @@ public class NotificationConsumer {
 						log.error("No message configured! Notification will not be sent.");
 					}
 				} else {
-					log.info("Notification not configurereceiptd for this business service!");
+					log.info("Notification not configured for this business service!");
 				}
 			}
 
