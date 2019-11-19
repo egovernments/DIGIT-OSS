@@ -417,9 +417,10 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "200px",
+        minWidth: "379px",
         height: "48px",
-        marginRight: "45px"
+        right: "19px",
+        position:"relative"
       }
     },
     children: {
@@ -452,9 +453,10 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       style: {
-        minWidth: "200px",
+        minWidth: "379px",
         height: "48px",
-        marginRight: "45px"
+        right: "19px",
+        position:"relative"
       }
     },
     children: {
