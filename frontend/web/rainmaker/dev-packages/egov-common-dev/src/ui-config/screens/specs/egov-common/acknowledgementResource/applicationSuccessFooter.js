@@ -6,6 +6,7 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { ifUserRoleExists } from "../../utils";
 import {download} from  "../../../../../ui-utils/commons"
 import { getFileUrlFromAPI } from "egov-ui-framework/ui-utils/commons";
+
 const getCommonApplyFooter = children => {
     return {
         uiFramework: "custom-atoms",
@@ -18,84 +19,7 @@ const getCommonApplyFooter = children => {
 };
 
 
-const generatePdfAndDownload = (
-    state,
-    dispatch,
-    action,
-    applicationNumber,
-    tenant
-) => {
-    dispatch(
-        toggleSnackbar(
-            true, {
-            labelName: "Preparing confirmation form, please wait...",
-            labelKey: "ERR_PREPARING_CONFIRMATION_FORM"
-        },
-            "info"
-        )
-    );
-    var iframe = document.createElement("iframe");
-    iframe.src =
-        document.location.origin +
-        window.basename +
-        `/tradelicence/search-preview?applicationNumber=${applicationNumber}&tenantId=${tenant}`;
-    var hasIframeLoaded = false,
-        hasEstimateLoaded = false;
-    iframe.onload = function (e) {
-        hasIframeLoaded = true;
-        if (hasEstimateLoaded) {
-            downloadConfirmationForm();
-        }
-    };
-    window.document.addEventListener("estimateLoaded", handleEvent, false);
 
-    function handleEvent(e) {
-        if (e.detail && iframe.contentDocument) {
-            hasEstimateLoaded = true;
-            if (hasIframeLoaded) {
-                downloadConfirmationForm();
-            }
-        }
-    }
-
-    function downloadConfirmationForm() {
-        let target = iframe.contentDocument.querySelector(
-            "#material-ui-tradeReviewDetails"
-        );
-        html2canvas(target).then(function (canvas) {
-            document.querySelector("#custom-atoms-iframeForPdf").removeChild(iframe);
-            var data = canvas.toDataURL("image/jpeg", 1);
-            var imgWidth = 200;
-            var pageHeight = 295;
-            var imgHeight = (canvas.height * imgWidth) / canvas.width;
-            var heightLeft = imgHeight;
-            var doc = new jsPDF("p", "mm");
-            var position = 0;
-
-            doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-
-            while (heightLeft >= 0) {
-                position = heightLeft - imgHeight;
-                doc.addPage();
-                doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-            }
-            if (action === "download") {
-                doc.save(`application_summary_${applicationNumber}.pdf`);
-            } else if (action === "print") {
-                doc.autoPrint();
-                window.open(doc.output("bloburl"), "_blank");
-            }
-        });
-    }
-
-    // To hide the iframe
-    iframe.style.cssText =
-        "position: absolute; opacity:0; z-index: -9999; width: 900px; height: 100%";
-    document.querySelector("#custom-atoms-iframeForPdf").appendChild(iframe);
-
-};
 
 export const applicationSuccessFooter = (
     state,
@@ -152,7 +76,7 @@ export const applicationSuccessFooter = (
                     height: "48px",
                     marginRight: "16px"
                 },
-                disabled: true
+                // disabled: true
             },
             children: {
                 printFormButtonLabel: getLabel({
@@ -163,13 +87,12 @@ export const applicationSuccessFooter = (
             onClickDefination: {
                 action: "condition",
                 callBack: () => {
-                    generatePdfAndDownload(
-                        state,
-                        dispatch,
-                        "print",
-                        applicationNumber,
-                        tenant
-                    );
+
+                    const receiptQueryString = [
+                        { key: "receiptNumbers", value: applicationNumber },
+                        { key: "tenantId", value: tenant }
+                    ]
+                    download(receiptQueryString,"print");
                 }
             }
         }
