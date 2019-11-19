@@ -80,12 +80,6 @@
         margin-left: 0px;
     }
     }
-    @media only screen and (max-width: 768px) {
-      .pt-institute-authority-info> .authority-details-form{
-        display: grid !important;
-        overflow: auto !important;
-      }
-    }
     .property-corr {
       > div {
         margin-top: 2px !important;
@@ -112,6 +106,7 @@
 .grayout {
   box-shadow: none;
   background-color: #f6f6f6 !important;
+  overflow: hidden !important;
 }
 
 .payment-details {
@@ -535,4 +530,11 @@ div[class^="MuiPaper-root"],
 }
 .general-field-padding .textfield{
   background: none!important;
+}
+
+@media only screen and (max-width: 768px) {
+  .authority-details-form{
+   display: grid !important;
+   overflow: auto !important;
+ }
 }
