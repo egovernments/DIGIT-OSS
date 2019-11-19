@@ -89,172 +89,29 @@ export const callBackForNext = async (state, dispatch) => {
     await getDocList(state, dispatch);
 
     const data = get(state.screenConfiguration, "preparedFinalObject");
-    setOwnerShipDropDownFieldChange(state, dispatch, data);
 
     const isTradeDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children",
+      "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children",
       state,
       dispatch
     );
     const isTradeLocationValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.organizationDetails.children.cardContent.children.organizationDetailsConatiner.children",
+      state,
+      dispatch
+    );
+    const isLocationValid = validateFields(
       "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children",
       state,
       dispatch
     );
-    let accessoriesJsonPath =
-      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.accessoriesCard.props.items";
-    let accessories = get(
-      state.screenConfiguration.screenConfig.apply,
-      accessoriesJsonPath,
-      []
-    );
-    let isAccessoriesValid = true;
-    for (var i = 0; i < accessories.length; i++) {
-      if (
-        (accessories[i].isDeleted === undefined ||
-          accessories[i].isDeleted !== false) &&
-        !validateFields(
-          `${accessoriesJsonPath}[${i}].item${i}.children.cardContent.children.accessoriesCardContainer.children`,
-          state,
-          dispatch
-        )
-      )
-        isAccessoriesValid = false;
-    }
 
-    let tradeUnitJsonPath =
-      "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeUnitCard.props.items";
-    let tradeUnits = get(
-      state.screenConfiguration.screenConfig.apply,
-      tradeUnitJsonPath,
-      []
-    );
-    let isTradeUnitValid = true;
-
-    for (var j = 0; j < tradeUnits.length; j++) {
-      if (
-        (tradeUnits[j].isDeleted === undefined ||
-          tradeUnits[j].isDeleted !== false) &&
-        !validateFields(
-          `${tradeUnitJsonPath}[${j}].item${j}.children.cardContent.children.tradeUnitCardContainer.children`,
-          state,
-          dispatch
-        )
-      )
-        isTradeUnitValid = false;
-    }
-    if (
-      !isTradeDetailsValid ||
-      !isTradeLocationValid ||
-      !isAccessoriesValid ||
-      !isTradeUnitValid
-    ) {
+    if (!isTradeDetailsValid || !isTradeLocationValid || !isLocationValid) {
       isFormValid = false;
     }
   }
 
   if (activeStep === 1) {
-    let isOwnerShipValid = validateFields(
-      "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownershipType.children",
-      state,
-      dispatch
-    );
-    let ownership = get(
-      state.screenConfiguration.preparedFinalObject,
-      "LicensesTemp[0].tradeLicenseDetail.ownerShipCategory",
-      "INDIVIDUAL"
-    );
-    if (ownership === "INDIVIDUAL") {
-      let ownersJsonPath =
-        "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.OwnerInfoCard.props.items";
-      let owners = get(
-        state.screenConfiguration.screenConfig.apply,
-        ownersJsonPath,
-        []
-      );
-      for (var k = 0; k < owners.length; k++) {
-        if (
-          (owners[k].isDeleted === undefined ||
-            owners[k].isDeleted !== false) &&
-          !validateFields(
-            `${ownersJsonPath}[${k}].item${k}.children.cardContent.children.tradeUnitCardContainer.children`,
-            state,
-            dispatch
-          )
-        )
-          isFormValid = false;
-      }
-    } else {
-      let ownersJsonPath =
-        "components.div.children.formwizardSecondStep.children.tradeOwnerDetails.children.cardContent.children.ownerInfoInstitutional.children.cardContent.children.tradeUnitCardContainer.children";
-      // let owners = get(
-      //   state.screenConfiguration.screenConfig.apply,
-      //   ownersJsonPath,
-      //   []
-      // );
-      // for (var x = 0; x < owners.length; x++) {
-      //   if (
-      //     (owners[x].isDeleted === undefined ||
-      //       owners[x].isDeleted !== false) &&
-      //     !validateFields(
-      //       `${ownersJsonPath}[${x}].item${x}.children.cardContent.children.tradeUnitCardContainer.children`,
-      //       state,
-      //       dispatch
-      //     )
-      //   )
-      if (!validateFields(ownersJsonPath, state, dispatch)) isFormValid = false;
-    }
-
-    // check for multiple owners
-    if (
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
-      ) === "INDIVIDUAL.MULTIPLEOWNERS" &&
-      get(
-        state.screenConfiguration.preparedFinalObject,
-        "Licenses[0].tradeLicenseDetail.owners"
-      ).length <= 1
-    ) {
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "Please add multiple owners !",
-            labelKey: "ERR_ADD_MULTIPLE_OWNERS"
-          },
-          "error"
-        )
-      );
-      return false; // to show the above message
-    }
-    if (isFormValid && isOwnerShipValid) {
-      // isFormValid = await applyTradeLicense(state, dispatch, activeStep);
-      if (!isFormValid) {
-        hasFieldToaster = false;
-      }
-    } else {
-      isFormValid = false;
-    }
-  }
-  if (activeStep === 2) {
-    const LicenseData = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0]",
-      {}
-    );
-
-    get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory") &&
-    get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory").split(
-      "."
-    )[0] === "INDIVIDUAL"
-      ? setMultiOwnerForApply(state, true)
-      : setMultiOwnerForApply(state, false);
-
-    if (get(LicenseData, "licenseType")) {
-      setValidToFromVisibilityForApply(state, get(LicenseData, "licenseType"));
-    }
-
     const uploadedDocData = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0].tradeLicenseDetail.applicationDocuments",
@@ -274,48 +131,30 @@ export const callBackForNext = async (state, dispatch) => {
       ) {
         isFormValid = false;
       }
-    }
-
-    if (isFormValid) {
-      if (getQueryArg(window.location.href, "action") === "edit") {
-        //EDIT FLOW
-        const businessId = getQueryArg(
-          window.location.href,
-          "applicationNumber"
-        );
-        const tenantId = getQueryArg(window.location.href, "tenantId");
+      if (isFormValid) {
+        const reviewDocData =
+          uploadedDocData &&
+          uploadedDocData.map(item => {
+            return {
+              title: `TL_${item.documentType}`,
+              link: item.fileUrl && item.fileUrl.split(",")[0],
+              linkText: "View",
+              name: item.fileName
+            };
+          });
+        // createEstimateData(
+        //   LicenseData,
+        //   "LicensesTemp[0].estimateCardData",
+        //   dispatch
+        // ); //get bill and populate estimate card
         dispatch(
-          setRoute(
-            `/tradelicence/search-preview?applicationNumber=${businessId}&tenantId=${tenantId}&edited=true`
-          )
+          prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
         );
-        const updateMessage = {
-          labelName: "Rates will be updated on submission",
-          labelKey: "TL_COMMON_EDIT_UPDATE_MESSAGE"
-        };
-        dispatch(toggleSnackbar(true, updateMessage, "info"));
       }
-      const reviewDocData =
-        uploadedDocData &&
-        uploadedDocData.map(item => {
-          return {
-            title: `TL_${item.documentType}`,
-            link: item.fileUrl && item.fileUrl.split(",")[0],
-            linkText: "View",
-            name: item.fileName
-          };
-        });
-      createEstimateData(
-        LicenseData,
-        "LicensesTemp[0].estimateCardData",
-        dispatch
-      ); //get bill and populate estimate card
-      dispatch(
-        prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
-      );
     }
   }
-  if (activeStep === 3) {
+
+  if (activeStep === 2) {
     const LicenseData = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
@@ -325,7 +164,7 @@ export const callBackForNext = async (state, dispatch) => {
       moveToSuccess(LicenseData, dispatch);
     }
   }
-  if (activeStep !== 3) {
+  if (activeStep !== 2) {
     if (isFormValid) {
       changeStep(state, dispatch);
     } else if (hasFieldToaster) {
@@ -373,13 +212,13 @@ export const changeStep = (
     0
   );
   if (defaultActiveStep === -1) {
-    if (activeStep === 2 && mode === "next") {
+    if (activeStep === 1 && mode === "next") {
       const isDocsUploaded = get(
         state.screenConfiguration.preparedFinalObject,
         "LicensesTemp[0].reviewDocData",
         null
       );
-      activeStep = isDocsUploaded ? 3 : 2;
+      activeStep = isDocsUploaded ? 2 : 1;
     } else {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
     }
@@ -388,8 +227,8 @@ export const changeStep = (
   }
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
-  const isNextButtonVisible = activeStep < 3 ? true : false;
-  const isPayButtonVisible = activeStep === 2 ? true : false;
+  const isNextButtonVisible = activeStep < 2 ? true : false;
+  const isSubmitButtonVisible = activeStep === 2 ? true : false;
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",
@@ -407,9 +246,9 @@ export const changeStep = (
       value: isNextButtonVisible
     },
     {
-      path: "components.div.children.footer.children.payButton",
+      path: "components.div.children.footer.children.submitButton",
       property: "visible",
-      value: isPayButtonVisible
+      value: isSubmitButtonVisible
     }
   ];
   dispatchMultipleFieldChangeAction("apply", actionDefination, dispatch);
@@ -558,7 +397,7 @@ export const footer = getCommonApplyFooter({
       callBack: callBackForNext
     }
   },
-  payButton: {
+  submitButton: {
     componentPath: "Button",
     props: {
       variant: "contained",
