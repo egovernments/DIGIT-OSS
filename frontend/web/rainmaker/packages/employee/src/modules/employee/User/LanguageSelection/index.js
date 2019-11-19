@@ -37,7 +37,7 @@ const mapStateToProps = ({ common }) => {
   const { stateInfoById } = common;
   let bannerUrl = get(stateInfoById, "0.bannerUrl");
   let logoUrl = get(stateInfoById, "0.logoUrl");
-  let languages = get(stateInfoById, "0.languages");
+  let languages = get(stateInfoById, "0.languages", []);
   return { bannerUrl, logoUrl, languages };
 };
 
