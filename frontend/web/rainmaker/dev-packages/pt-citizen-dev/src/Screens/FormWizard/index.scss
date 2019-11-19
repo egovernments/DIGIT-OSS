@@ -59,6 +59,7 @@
 @media only screen and (max-width: 768px) {
   .authority-details-form{
     display: grid !important;
+    overflow: auto !important;
   }
 }
 
