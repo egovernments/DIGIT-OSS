@@ -96,7 +96,7 @@ class SearchProperty extends Component {
     }
   };
 
-  getLink = (userType, history, id, tenantId)=>{
+  getLink = (userType, history, id, tenantId) => {
     return (
       <a
         style={{
@@ -155,7 +155,11 @@ class SearchProperty extends Component {
             lineHeight: "auto",
             minWidth: "inherit",
             cursor: "pointer",
-            textDecoration: "underline"
+            textDecoration: "underline",
+            fontWeight: '400',
+            fontSize: "14px",
+            color: 'rgba(0, 0, 0, 0.87)',
+            lineHeight: '30px'
           }}
           onClick={
             userType === "CITIZEN"

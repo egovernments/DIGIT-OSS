@@ -14,6 +14,7 @@ const PopperProps = {
   className: "tooltip-popper",
   fontSize: 48,
   style: {
+    zIndex:4,
     color: "#ffffff",
   },
 };

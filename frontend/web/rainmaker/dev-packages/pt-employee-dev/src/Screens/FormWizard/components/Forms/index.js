@@ -103,7 +103,7 @@ const OwnerInformation = ({
               <div className="col-sm-6">
                 <Field fieldKey="ownerGuardian" field={fields["ownerGuardian"]} handleFieldChange={handleFieldChange} disabled={disabled} />
               </div>
-              <div className="col-sm-6">
+              <div className="col-sm-6 owner-relationship">
                 <Field fieldKey="ownerRelationship" field={fields["ownerRelationship"]} handleFieldChange={handleFieldChange} disabled={disabled} />
               </div>
             </div>

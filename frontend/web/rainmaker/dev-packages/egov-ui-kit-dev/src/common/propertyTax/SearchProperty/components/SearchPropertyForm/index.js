@@ -58,8 +58,8 @@ const SearchPropertyForm = ({ handleFieldChange, form, formKey, onSearchClick ,
                     backgroundColor="white"
                     fullWidth={true}
                     style={{
-                      backgroundColor: "white",
-                      border: "1px solid rgb(72, 72, 72)"
+                      backgroundColor: "white"
+                     
                     }}
                   />
                 </div>

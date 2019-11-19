@@ -50,6 +50,18 @@
     }
   }
 }
+@media only screen and (max-width: 768px) {
+  .address {
+    margin-left: 0px !important;
+  }
+ 
+}
+@media only screen and (max-width: 768px) {
+  .authority-details-form{
+    display: grid !important;
+    overflow: auto !important;
+  }
+}
 
 .pt-institute-authority-info {
   margin-left: 25px;
@@ -235,6 +247,11 @@ div[class^="MuiPaper-root"],
       div:nth-of-type(2) {
         width: 100% !important;
         margin: 0 !important;
+        white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px!important;
+        
       }
     }
   }
