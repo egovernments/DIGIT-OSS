@@ -11,6 +11,7 @@ import {
 } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import isEmpty from "lodash/isEmpty"
 
 // const tenantId = getTenantId();
 const tenantId = getTenantId();
@@ -78,14 +79,16 @@ export const searchApiCall = async (state, dispatch) => {
     );
     const response = [];
     for (let i = 0; i < bills.length; i++) {
-      response[i] = {
-        consumerId: get(bills[i], "consumerCode"),
-        billNo: get(bills[i], "billNumber"),
-        ownerName: get(bills[i], "payerName"),
-        billDate: get(bills[i], "billDate"),
-        status : get(bills[i], "status"),
-        tenantId: tenantId
-      };
+      if(get(bills[i], "status") === "ACTIVE"){
+        response.push({
+          consumerId: get(bills[i], "consumerCode"),
+          billNo: get(bills[i], "billNumber"),
+          ownerName: get(bills[i], "payerName"),
+          billDate: get(bills[i], "billDate"),
+          status : get(bills[i], "status"),
+          tenantId: tenantId
+        })
+      }      
     }
 
     try {
@@ -109,16 +112,16 @@ export const searchApiCall = async (state, dispatch) => {
       );
       dispatch(
         handleField(
-          "search",
+          "groupBills",
           "components.div.children.searchResults",
           "props.title",
           `${getTextToLocalMapping(
-            "Search Results for Trade License Applications"
+            "BILL_GENIE_GROUP_SEARCH_HEADER"
           )} (${data.length})`
         )
-      );
+      );      
       showHideTable(true, dispatch);
-      showHideMergeButton(true, dispatch);
+      if(!isEmpty(response)){showHideMergeButton(true, dispatch)};
     } catch (error) {
       dispatch(toggleSnackbar(true, error.message, "error"));
       console.log(error);

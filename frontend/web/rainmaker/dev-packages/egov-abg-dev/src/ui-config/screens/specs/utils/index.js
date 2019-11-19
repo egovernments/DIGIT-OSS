@@ -418,6 +418,12 @@ export const getTextToLocalMapping = label => {
             "Partially Paid",
             "BILL_GENIE_PARTIALLY_PAID",
             localisationLabels
-          );      
+          ); 
+      case "BILL_GENIE_GROUP_SEARCH_HEADER" : 
+          return getLocaleLabels(
+            "Search Results for Group Bills",
+            "BILL_GENIE_GROUP_SEARCH_HEADER",
+            localisationLabels
+          ); 
   }
 };
