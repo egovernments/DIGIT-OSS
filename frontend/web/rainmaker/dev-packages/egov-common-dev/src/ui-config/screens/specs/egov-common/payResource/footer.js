@@ -322,8 +322,9 @@ const callBackForPay = async (state, dispatch) => {
   ReceiptBodyNew.Payment['totalDue'] = totalAmount;
 
   ReceiptBodyNew.Payment['paymentMode'] = finalReceiptData.instrument.instrumentType.name;
-  ReceiptBodyNew.Payment['paidBy'] = finalReceiptData.Bill[0].payerName;
-  ReceiptBodyNew.Payment['mobileNumber'] = finalReceiptData.Bill[0].mobileNumber;
+  ReceiptBodyNew.Payment['paidBy'] = finalReceiptData.Bill[0].payer;
+  ReceiptBodyNew.Payment['mobileNumber'] = finalReceiptData.Bill[0].payerMobileNumber;
+  ReceiptBodyNew.Payment['payerName'] = finalReceiptData.Bill[0].payerName;
   if (ReceiptBodyNew.Payment.paymentMode !== 'Cash') {
     ReceiptBodyNew.Payment['transactionNumber'] = finalReceiptData.instrument.transactionNumber;
     ReceiptBodyNew.Payment['instrumentNumber'] = finalReceiptData.instrument.instrumentNumber;
@@ -336,6 +337,8 @@ const callBackForPay = async (state, dispatch) => {
   amtPaid = amtPaid ? Number(amtPaid) :totalAmount;
   ReceiptBodyNew.Payment.paymentDetails.push(
     {
+      manualReceiptDate:finalReceiptData.Bill[0].billDetails[0].manualReceiptDate,
+      manualReceiptNumber:finalReceiptData.Bill[0].billDetails[0].manualReceiptNumber,
       businessService: finalReceiptData.Bill[0].businessService,
       billId: finalReceiptData.Bill[0].id,
       totalDue:totalAmount,
