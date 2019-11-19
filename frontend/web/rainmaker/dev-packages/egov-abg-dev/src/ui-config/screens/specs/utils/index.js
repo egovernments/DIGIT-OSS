@@ -393,6 +393,12 @@ export const getTextToLocalMapping = label => {
         "BILL_GENIE_PAY",
         localisationLabels
       );
+      case "EXPIRED":
+      return getLocaleLabels(
+        "Expired",
+        "BILL_GENIE_EXPIRED",
+        localisationLabels
+      );
       case "GENERATE NEW BILL":
       return getLocaleLabels(
         "GENERATE NEW BILL",
