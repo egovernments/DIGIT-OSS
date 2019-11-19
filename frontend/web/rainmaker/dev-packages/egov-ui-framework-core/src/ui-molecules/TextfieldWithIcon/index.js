@@ -66,7 +66,7 @@ function InputWithIcon(props) {
       : {
         InputProps: {
           startAdornment: (
-            <InputAdornment position="start" style={{ position: "relative", top: "10px", flex: "none" }}>
+            <InputAdornment position="start" style={{ position: "relative", top: "2px", flex: "none" }}>
               {
                 iconObj.onClick ?
                   <IconButton onClick={() => {
@@ -74,7 +74,7 @@ function InputWithIcon(props) {
                   }}>
                     <span
                       style={{
-                        color: iconObj.color ? iconObj.color : "rgba(0, 0, 0, 0.60", position: "relative", top: "1px", flex: "none"
+                        color: iconObj.color ? iconObj.color : "rgba(0, 0, 0, 0.60"
                       }}
                     >
                       {iconObj.iconName && <Icon iconName={iconObj.iconName} />}
