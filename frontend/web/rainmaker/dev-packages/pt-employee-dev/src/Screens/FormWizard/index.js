@@ -759,6 +759,7 @@ class FormWizard extends Component {
         const isProperyAddressFormValid = validateForm(form.propertyAddress);
         if (isProperyAddressFormValid) {
           //callDraft();
+          window.scrollTo(0, 0);
           this.setState({
             selected: index,
             formValidIndexArray: [...formValidIndexArray, selected]
@@ -811,6 +812,7 @@ class FormWizard extends Component {
                     }
                     if (floorValidation) {
                       //callDraft();
+                      window.scrollTo(0, 0);
                       this.setState({
                         selected: index,
                         formValidIndexArray: [...formValidIndexArray, selected]
@@ -818,6 +820,7 @@ class FormWizard extends Component {
                     }
                   } else {
                     //callDraft();
+                    window.scrollTo(0, 0);
                     this.setState({
                       selected: index,
                       formValidIndexArray: [...formValidIndexArray, selected]
@@ -854,6 +857,7 @@ class FormWizard extends Component {
         const estimateCall = () => {
           estimate().then(estimateResponse => {
             if (estimateResponse) {
+              window.scrollTo(0, 0);
               this.setState({
                 estimation: estimateResponse && estimateResponse.Calculation,
                 totalAmountToBePaid:
@@ -877,6 +881,7 @@ class FormWizard extends Component {
               const isOwnerInfoFormValid = validateForm(ownerInfo);
               if (isOwnerInfoFormValid) {
                 //callDraft();
+                window.scrollTo(0, 0);
                 this.setState(
                   {
                     selected: index,
@@ -900,6 +905,7 @@ class FormWizard extends Component {
               }
               if (ownerValidation) {
                 //callDraft();
+                window.scrollTo(0, 0);
                 this.setState(
                   {
                     selected: index,
@@ -930,6 +936,7 @@ class FormWizard extends Component {
               }
               if (institutionFormValid) {
                 //callDraft();
+                window.scrollTo(0, 0);
                 this.setState(
                   {
                     selected: index,
@@ -949,6 +956,7 @@ class FormWizard extends Component {
         if (estimation[0].totalAmount < 0) {
           alert('Property Tax amount cannot be Negative!');
         } else {
+          window.scrollTo(0, 0);
           createAndUpdate(index);
         }
         break;
