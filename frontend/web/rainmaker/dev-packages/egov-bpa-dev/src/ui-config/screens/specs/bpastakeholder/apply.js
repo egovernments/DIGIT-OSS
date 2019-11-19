@@ -25,10 +25,7 @@ import { footer } from "./applyResource/footer";
 import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
 import { organizationDetails } from "./applyResource/organizationDetails";
 import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
-import {
-  OwnerInfoCard,
-  tradeOwnerDetails
-} from "./applyResource/tradeOwnerDetails";
+import { OwnerInfoCard } from "./applyResource/tradeOwnerDetails";
 import { documentList } from "./applyResource/documentList";
 import { httpRequest } from "../../../../ui-utils";
 import {
@@ -177,13 +174,8 @@ export const getMdmsData = async (action, state, dispatch) => {
 
 export const getData = async (action, state, dispatch) => {
   const queryValue = getQueryArg(window.location.href, "applicationNumber");
-  const applicationNo = queryValue
-    ? queryValue
-    : get(
-        state.screenConfiguration.preparedFinalObject,
-        "Licenses[0].oldLicenseNumber",
-        null
-      );
+  const applicationNo = queryValue;
+
   await getMdmsData(action, state, dispatch);
   await getAllDataFromBillingSlab(getTenantId(), dispatch);
 
@@ -266,8 +258,8 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    organizationDetails,
     OwnerInfoCard,
+    organizationDetails,
     tradeLocationDetails
   }
 };

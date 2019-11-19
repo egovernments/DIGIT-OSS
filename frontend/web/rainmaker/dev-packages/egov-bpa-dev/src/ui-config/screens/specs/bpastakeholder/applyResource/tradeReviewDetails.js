@@ -35,8 +35,8 @@ export const tradeReviewDetails = getCommonCard({
     "TL_PAYMENT_VIEW_BREAKUP",
     "apply"
   ),
-  reviewOrganizationDetails,
   reviewOwnerDetails,
+  reviewOrganizationDetails,
   reviewLocationDetails,
   reviewDocumentDetails
 });

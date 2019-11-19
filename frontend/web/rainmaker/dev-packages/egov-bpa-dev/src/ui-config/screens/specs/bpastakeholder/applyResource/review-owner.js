@@ -119,7 +119,7 @@ export const getReviewOwner = (isEditable = true) => {
           onClickDefination: {
             action: "condition",
             callBack: (state, dispatch) => {
-              changeStep(state, dispatch, "", 1);
+              changeStep(state, dispatch, "", 0);
             }
           }
         }
