@@ -35,7 +35,7 @@ const moveToSuccess = (LicenseData, dispatch) => {
   const status = "success";
   dispatch(
     setRoute(
-      `/tradelicence/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+      `/bpastakeholder/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
     )
   );
 };

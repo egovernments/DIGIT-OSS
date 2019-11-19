@@ -27,9 +27,8 @@ const getAcknowledgementCard = (
   if (purpose === "apply" && status === "success") {
     return {
       header: getCommonHeader({
-        labelName: `Application for New Trade License (${financialYearText})`,
-        labelKey: "TL_COMMON_APPLICATION_NEW_LICENSE",
-        dynamicArray: [financialYearText]
+        labelName: "Application for New Stakeholder Registration",
+        labelKey: "BPA_COMMON_APPLICATION_NEW_LICENSE"
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -46,12 +45,12 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application Submitted Successfully",
-              labelKey: "TL_APPLICATION_SUCCESS_MESSAGE_MAIN"
+              labelKey: "BPA_APPLICATION_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName:
-                "A notification regarding Application Submission has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPLICATION_SUCCESS_MESSAGE_SUB"
+                "A notification regarding Application Submission has been sent at registered Mobile No.",
+              labelKey: "BPA_APPLICATION_SUCCESS_MESSAGE_SUB"
             },
             tailText: {
               labelName: "Application No.",

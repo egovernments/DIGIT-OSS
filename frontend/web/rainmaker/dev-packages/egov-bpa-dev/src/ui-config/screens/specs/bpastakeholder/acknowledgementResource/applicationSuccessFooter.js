@@ -130,7 +130,6 @@ export const applicationSuccessFooter = (
   /* Mseva 2.0 changes */
   const redirectionURL = roleExists ? "/" : "/inbox";
   return getCommonApplyFooter({
-
     gotoHome: {
       componentPath: "Button",
       props: {
@@ -153,67 +152,6 @@ export const applicationSuccessFooter = (
         path: redirectionURL
       }
     },
-    downloadFormButton: {
-      componentPath: "Button",
-      props: {
-        variant: "outlined",
-        color: "primary",
-        style: {
-          minWidth: "290px",
-          height: "48px",
-          marginRight: "16px"
-        }
-      },
-      children: {
-        downloadFormButtonLabel: getLabel({
-          labelName: "DOWNLOAD CONFIRMATION FORM",
-          labelKey: "TL_APPLICATION_BUTTON_DOWN_CONF"
-        })
-      },
-      onClickDefination: {
-        action: "condition",
-        callBack: () => {
-          generatePdfAndDownload(
-            state,
-            dispatch,
-            "download",
-            applicationNumber,
-            tenant
-          );
-        }
-      }
-    },
-    printFormButton: {
-      componentPath: "Button",
-      props: {
-        variant: "outlined",
-        color: "primary",
-        style: {
-          minWidth: "290px",
-          height: "48px",
-          marginRight: "16px"
-        }
-      },
-      children: {
-        printFormButtonLabel: getLabel({
-          labelName: "PRINT CONFIRMATION FORM",
-          labelKey: "TL_APPLICATION_BUTTON_PRINT_CONF"
-        })
-      },
-      onClickDefination: {
-        action: "condition",
-        callBack: () => {
-          generatePdfAndDownload(
-            state,
-            dispatch,
-            "print",
-            applicationNumber,
-            tenant
-          );
-        }
-      }
-    }
-
     // collectPaymentButton: {
     //   componentPath: "Button",
     //   props: {
@@ -240,33 +178,27 @@ export const applicationSuccessFooter = (
     //     roles: ["TL_CEMP"]
     //   }
     // },
-    // proceedToPay: {
-    //   componentPath: "Button",
-    //   props: {
-    //     variant: "contained",
-    //     color: "primary",
-    //     style: {
-    //       minWidth: "200px",
-    //       height: "48px",
-    //       marginRight: "40px"
-    //     }
-    //   },
-    //   children: {
-    //     collectPaymentButtonLabel: getLabel({
-    //       labelName: "PROCEED TO PAYMENT",
-    //       labelKey: "TL_PROCEED_PAYMENT"
-    //     })
-    //   },
-    //   onClickDefination: {
-    //     action: "page_change",
-    //     path: `/tradelicense-citizen/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`
-    //   },
-    //   roleDefination: {
-    //     rolePath: "user-info.roles",
-    //     action: "PAY",
-    //     roles: ["TL_CEMP"]
-    //   }
-    // }
-
+    proceedToPay: {
+      componentPath: "Button",
+      props: {
+        variant: "contained",
+        color: "primary",
+        style: {
+          minWidth: "200px",
+          height: "48px",
+          marginRight: "40px"
+        }
+      },
+      children: {
+        collectPaymentButtonLabel: getLabel({
+          labelName: "PROCEED TO PAYMENT",
+          labelKey: "TL_PROCEED_PAYMENT"
+        })
+      },
+      onClickDefination: {
+        action: "page_change",
+        path: `/bpastakeholder-citizen/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`
+      }
+    }
   });
 };
