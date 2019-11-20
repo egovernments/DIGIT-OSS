@@ -32,7 +32,7 @@ export const searchResults = {
       },
       getTextToLocalMapping("Consumer Name"),
       getTextToLocalMapping("Bill Date"),
-      getTextToLocalMapping("Bill Amount[INR]"),
+      getTextToLocalMapping("Bill Amount(Rs)"),
       getTextToLocalMapping("Status"),
       {
         name: getTextToLocalMapping("Action"),
