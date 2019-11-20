@@ -22,7 +22,9 @@ class AddRebateExemption extends React.Component {
   state = {
     showExtraPenaltyField: false,
     showExtraExemptField: false,
-    exemptValue: null
+    exemptValue: null,
+    initialTaxValue:0,
+    isTaxValueInitialized:false
   };
 
   onChangePenaltyField = value => {
@@ -86,8 +88,13 @@ class AddRebateExemption extends React.Component {
     let { adhocExemption } = this.props;
     const { exemptValue } = this.state;
     adhocExemption = { ...adhocExemption, value: exemptValue };
+
+
+
+
+
     if (adhocExemption.value >= 0) {
-      if (adhocExemption.value > totalAmount) {
+      if (adhocExemption.value > sessionStorage.getItem('taxValue')) {
         if (validateForm(additionalRebate)) {
           alert(
             "Adhoc Exemption cannot be greater than the estimated tax for the given property"
@@ -115,7 +122,7 @@ class AddRebateExemption extends React.Component {
   };
 
   render() {
-    const { handleFieldChange, fields } = this.props;
+    const { handleFieldChange, fields,totalAmount } = this.props;
     const {
       showExtraExemptField,
       showExtraPenaltyField,
@@ -129,12 +136,22 @@ class AddRebateExemption extends React.Component {
       otherExemptionReason,
       otherPenaltyReason
     } = fields || {};
+    if(!sessionStorage.getItem('taxValue')){
+      sessionStorage.setItem('taxValue',totalAmount)
+    }
+    if(!this.state.isTaxValueInitialized){
+     
+      this.setState({
+        isTaxValueInitialized:true,
+        initialTaxValue:totalAmount
+      })
+    }
     adhocExemption = { ...adhocExemption, value: exemptValue };
     return (
       <div className="add-rebate-box">
         <div className="pt-emp-penalty-charges col-xs-12">
           <Label
-            label="Additional Charges"
+            label="PT_ADDITIONAL_CHARGES"
             className="rebate-box-labels"
             labelStyle={labelStyle}
           />
@@ -163,7 +180,10 @@ class AddRebateExemption extends React.Component {
           )}
         </div>
         <div className="pt-emp-rebate-charges col-xs-12">
-          <Label label="Additional Rebate" labelStyle={labelStyle} />
+          <Label
+
+            label="PT_ADDITIONAL_REBATE"
+            labelStyle={labelStyle} />
           <div className="adhocExemption col-sm-6 col-xs-12">
             <TextField
               onChange={(e, value) => {

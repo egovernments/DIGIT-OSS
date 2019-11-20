@@ -14,7 +14,7 @@ const formConfig = {
     },
     adhocPenaltyReason: {
       id: "adhocPenaltyReason",
-      type: "singleValueList",
+      type: "AutoSuggestDropdown",
       dropDownData: [
         {
           label: <Label label="PT_PENDING_DUES_FROM_EARLIER" />,

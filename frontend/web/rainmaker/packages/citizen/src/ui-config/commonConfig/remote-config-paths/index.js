@@ -9,9 +9,21 @@ const remoteConfigPath = (path, screenKey) => {
     // case "pt-citizen":
       config = require(`egov-pt/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
+    case "fire-noc":
+      config = require(`egov-noc/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
+    case "egov-common":
+        config = require(`egov-common/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break;
     case "uc-citizen":
       config = require(`egov-uc/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
+    case "abg":
+        config = require(`egov-abg/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break;
+    case "egov-common":
+        config = require(`egov-common/ui-config/screens/specs/${path}/${screenKey}`).default;
+        break;
     default:
       config = require(`ui-config/screens/specs/${path}/${screenKey}`).default;
       break;

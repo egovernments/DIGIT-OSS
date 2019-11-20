@@ -34,7 +34,7 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessService", value: "newTL" }
+      { key: "businessServices", value: "NewTL" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     fetchBill(action, state, dispatch);

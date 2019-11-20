@@ -60,7 +60,7 @@ class SearchProperty extends Component {
 
   onSearchClick = (form, formKey) => {
     const { propertiesFound } = this.props;
-    const { city, ids, oldpropertyids, mobileNumber } = form.fields || {};
+    const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
     const tableData = this.extractTableData(propertiesFound);
 
     if (!validateForm(form)) {
@@ -83,10 +83,7 @@ class SearchProperty extends Component {
         queryParams.push({ key: "ids", value: ids.value });
       }
       if (oldpropertyids.value) {
-        queryParams.push({
-          key: "oldpropertyids",
-          value: oldpropertyids.value
-        });
+        queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
       }
       if (mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
@@ -98,6 +95,35 @@ class SearchProperty extends Component {
       this.setState({ showTable: true });
     }
   };
+
+  getLink = (userType, history, id, tenantId) => {
+    return (
+      <a
+        style={{
+          height: 20,
+          lineHeight: "auto",
+          minWidth: "inherit",
+          cursor: "pointer",
+          textDecoration: "underline"
+        }}
+        onClick={
+          userType === "CITIZEN"
+            ? e => {
+              history.push(
+                `/property-tax/my-properties/property/${id}/${tenantId}?isMutationApplication=true`
+              );
+            }
+            : e => {
+              history.push(
+                `/property-tax/property/${id}/${tenantId}`
+              );
+            }
+        }
+      >
+        {id}
+      </a>
+    );
+  }
 
   extractTableData = properties => {
     const { history } = this.props;
@@ -129,7 +155,11 @@ class SearchProperty extends Component {
             lineHeight: "auto",
             minWidth: "inherit",
             cursor: "pointer",
-            textDecoration: "underline"
+            textDecoration: "underline",
+            fontWeight: '400',
+            fontSize: "14px",
+            color: 'rgba(0, 0, 0, 0.87)',
+            lineHeight: '30px'
           }}
           onClick={
             userType === "CITIZEN"

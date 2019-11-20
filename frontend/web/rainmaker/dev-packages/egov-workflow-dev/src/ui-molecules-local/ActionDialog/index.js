@@ -24,21 +24,21 @@ const fieldConfig = {
   approverName: {
     label: {
       labelName: "Assignee Name",
-      labelKey: "TL_ASSIGNEE_NAME_LABEL"
+      labelKey: "WF_ASSIGNEE_NAME_LABEL"
     },
     placeholder: {
       labelName: "Select assignee Name",
-      labelKey: "TL_ASSIGNEE_NAME_PLACEHOLDER"
+      labelKey: "WF_ASSIGNEE_NAME_PLACEHOLDER"
     }
   },
   comments: {
     label: {
       labelName: "Comments",
-      labelKey: "CS_COMMON_COMMENTS"
+      labelKey: "WF_COMMON_COMMENTS"
     },
     placeholder: {
       labelName: "Enter Comments",
-      labelKey: "TL_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
+      labelKey: "WF_ADD_HOC_CHARGES_POPUP_COMMENT_LABEL"
     }
   }
 };
@@ -73,7 +73,6 @@ class ActionDialog extends React.Component {
       case "REJECT":
         return "Reject";
       case "CANCEL":
-        return "purpose=application&status=cancelled";
       case "APPROVE":
         return "APPROVE";
       case "PAY":
@@ -86,13 +85,14 @@ class ActionDialog extends React.Component {
   };
 
   render() {
-    const {
+    let {
       open,
       onClose,
       dropDownData,
       handleFieldChange,
       onButtonClick,
-      dialogData
+      dialogData,
+      dataPath
     } = this.props;
     const {
       buttonLabel,
@@ -106,6 +106,10 @@ class ActionDialog extends React.Component {
     if (window.innerWidth <= 768) {
       fullscreen = true;
     }
+    dataPath =
+      dataPath === "FireNOCs"
+        ? `${dataPath}[0].fireNOCDetails`
+        : `${dataPath}[0]`;
     return (
       <Dialog
         fullScreen={fullscreen}
@@ -169,11 +173,11 @@ class ActionDialog extends React.Component {
                         //onChange={e => this.onEmployeeClick(e)}
                         onChange={e =>
                           handleFieldChange(
-                            "Licenses[0].assignee",
+                            `${dataPath}.assignee`,
                             e.target.value
                           )
                         }
-                        jsonPath="Licenses[0].assignee"
+                        jsonPath={`${dataPath}.assignee`}
                       />
                     </Grid>
                   )}
@@ -182,9 +186,9 @@ class ActionDialog extends React.Component {
                       InputLabelProps={{ shrink: true }}
                       label={fieldConfig.comments.label}
                       onChange={e =>
-                        handleFieldChange("Licenses[0].comment", e.target.value)
+                        handleFieldChange(`${dataPath}.comment`, e.target.value)
                       }
-                      jsonPath="Licenses[0].comment"
+                      jsonPath={`${dataPath}.comment`}
                       placeholder={fieldConfig.comments.placeholder}
                     />
                   </Grid>
@@ -204,7 +208,7 @@ class ActionDialog extends React.Component {
                       <div className="rainmaker-displayInline">
                         <LabelContainer
                           labelName="Supporting Documents"
-                          labelKey="TL_APPROVAL_UPLOAD_HEAD"
+                          labelKey="WF_APPROVAL_UPLOAD_HEAD"
                         />
                         {isDocRequired && (
                           <span style={{ marginLeft: 5, color: "red" }}>*</span>
@@ -222,7 +226,7 @@ class ActionDialog extends React.Component {
                     >
                       <LabelContainer
                         labelName="Only .jpg and .pdf files. 5MB max file size."
-                        labelKey="TL_APPROVAL_UPLOAD_SUBHEAD"
+                        labelKey="WF_APPROVAL_UPLOAD_SUBHEAD"
                       />
                     </div>
                     <UploadMultipleFiles
@@ -231,7 +235,7 @@ class ActionDialog extends React.Component {
                         accept: "image/*, .pdf, .png, .jpeg"
                       }}
                       buttonLabel={{ labelName: "UPLOAD FILES" }}
-                      jsonPath="Licenses[0].wfDocuments"
+                      jsonPath={`${dataPath}.wfDocuments`}
                       maxFileSize={5000}
                     />
                     <Grid sm={12} style={{ textAlign: "right" }}>

@@ -821,6 +821,7 @@ class FormWizard extends Component {
         const isProperyAddressFormValid = validateForm(form.propertyAddress);
         if (isProperyAddressFormValid) {
           callDraft(this);
+          window.scrollTo(0, 0);
           this.setState({
             selected: index,
             formValidIndexArray: [...formValidIndexArray, selected]
@@ -873,6 +874,7 @@ class FormWizard extends Component {
                     }
                     if (floorValidation) {
                       callDraft(this);
+                      window.scrollTo(0, 0);
                       this.setState({
                         selected: index,
                         formValidIndexArray: [...formValidIndexArray, selected]
@@ -880,6 +882,7 @@ class FormWizard extends Component {
                     }
                   } else {
                     callDraft(this);
+                    window.scrollTo(0, 0);
                     this.setState({
                       selected: index,
                       formValidIndexArray: [...formValidIndexArray, selected]
@@ -915,6 +918,7 @@ class FormWizard extends Component {
         const estimateCall = () => {
           estimate().then(estimateResponse => {
             if (estimateResponse) {
+              window.scrollTo(0, 0);
               this.setState({
                 estimation: estimateResponse && estimateResponse.Calculation,
                 totalAmountToBePaid: 1, // What is this?
@@ -935,6 +939,7 @@ class FormWizard extends Component {
               const isOwnerInfoFormValid = validateForm(ownerInfo);
               if (isOwnerInfoFormValid) {
                 callDraft(this);
+                window.scrollTo(0, 0);
                 this.setState(
                   {
                     selected: index,
@@ -958,6 +963,7 @@ class FormWizard extends Component {
               }
               if (ownerValidation) {
                 callDraft(this);
+                window.scrollTo(0, 0);
                 this.setState(
                   {
                     selected: index,
@@ -988,6 +994,7 @@ class FormWizard extends Component {
               }
               if (institutionFormValid) {
                 callDraft(this);
+                window.scrollTo(0, 0);
                 this.setState(
                   {
                     selected: index,
@@ -1007,20 +1014,30 @@ class FormWizard extends Component {
         if (estimation[0].totalAmount < 0) {
           alert('Property Tax amount cannot be Negative!');
         } else {
+          window.scrollTo(0, 0);
           createAndUpdate(index);
         }
 
 
         break;
       case 4:
-
+        const { assessedPropertyDetails = {} } = this.state;
+        const { Properties = [] } = assessedPropertyDetails;
+        let propertyId = '';
+        let tenantId = '';
+        for (let pty of Properties) {
+          propertyId = pty.propertyId;
+          tenantId = pty.tenantId;
+        }
+        this.props.history.push(`./../egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}`
+        )
         // added tryout
-        callDraft(this);
-        this.setState(
-          {
-            selected: index,
-            formValidIndexArray: [...formValidIndexArray, selected]
-          });
+        // callDraft(this);
+        // this.setState(
+        //   {
+        //     selected: index,
+        //     formValidIndexArray: [...formValidIndexArray, selected]
+        //   });
         break;
       case 5:
         if (this.state.partialAmountError.length == 0) {
@@ -1046,6 +1063,17 @@ class FormWizard extends Component {
     const { search } = location;
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
     toggleSpinner();
+    // const queryObj = [
+    //   { key: "propertyId", value: propertyId },
+    //   { key: "assessmentNumber", value: assessmentNumber },
+    //   { key: "assessmentYear", value: assessmentYear },
+    //   { key: "tenantId", value: tenantId }
+    // ];
+    // !isCompletePayment &&
+    //   queryObj.push({
+    //     key: "amountExpected",
+    //     value: isFullPayment ? estimation[0].totalAmount : totalAmountToBePaid
+    //   });
     const queryObj = [
       { key: "consumerCodes", value: propertyId },
       { key: "tenantId", value: tenantId }
@@ -1152,7 +1180,7 @@ class FormWizard extends Component {
             "/property-tax/payment-success/" +
             moduleId.split(":")[0] +
             "/" +
-            tenantId 
+            tenantId
           );
         }
       } catch (e) {
@@ -1310,7 +1338,7 @@ class FormWizard extends Component {
   };
 
   pay = async () => {
-    //utils
+
     const { callPGService } = this;
     const { financialYearFromQuery, assessedPropertyDetails = {} } = this.state;
     const { Properties = [] } = assessedPropertyDetails;
@@ -1453,6 +1481,7 @@ class FormWizard extends Component {
           get(assessedPropertyDetails, "Properties[0].tenantId")
         );
       }
+
     } catch (e) {
       toggleSpinner();
       alert(e);
@@ -1635,7 +1664,7 @@ class FormWizard extends Component {
     const { address, propertyDetails, propertyId } = Properties[0];
     const { owners } = propertyDetails[0];
     const { localizationLabels } = app;
-    const { cities } = common;
+    const { cities,generalMDMSDataById } = common;
     const header = getHeaderDetails(Properties[0], cities, localizationLabels, true)
     let receiptDetails = {};
     receiptDetails = {
@@ -1646,7 +1675,7 @@ class FormWizard extends Component {
       header,
       propertyId
     }
-    generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, {}, imageUrl);
+    generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl);
   }
   render() {
     const {

@@ -68,10 +68,14 @@ export const getCommonParagraph = (paragraph, props = {}) => {
         fontSize: "14px",
         fontWeight: 400,
         lineHeight: "20px",
-        marginBottom: "12px"
+        marginBottom: "12px",
+        position: "relative",
+        top: "1px",
+        flex: "none"
       },
       ...props
     },
+
     children: {
       [paragraph]: getLabel(paragraph)
     }
@@ -212,6 +216,7 @@ export const getTextField = textScheama => {
     pattern,
     jsonPath = "",
     sourceJsonPath = "",
+    cityDropdown = "",
     data = [],
     optionValue = "code",
     optionLabel = "code",
@@ -247,6 +252,7 @@ export const getTextField = textScheama => {
       optionValue,
       optionLabel,
       sourceJsonPath,
+      cityDropdown,
       jsonPath,
       iconObj,
       title,
@@ -357,7 +363,8 @@ export const getRadioButton = (buttons, jsonPath, defaultValue) => {
       buttons,
       jsonPath,
       defaultValue
-    }
+    },
+    jsonPath
   };
 };
 
@@ -501,5 +508,7 @@ export const getPattern = type => {
       return /^[a-zA-Z0-9\s()!-@#&.,?/]{1,65}$/i;
     case "eventDescription":
       return /^[a-zA-Z0-9\s()!-@#&.,?/]{1,500}$/i;
+    case "FireNOCNo":
+      return /^[a-zA-Z0-9-]*$/i;
   }
 };

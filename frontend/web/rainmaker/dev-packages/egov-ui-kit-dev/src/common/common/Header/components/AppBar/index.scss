@@ -39,9 +39,20 @@
   .appbar-municipal-label {
     display: none !important;
   }
+
+  .notification-icon-web {
+    display: none !important;
+  }
 }
 @media only screen and (min-width: 768px) {
   .appbar-title-label {
     display: none !important;
+  }
+  .notification-icon-mobile {
+    display: none !important;
+  }
+
+  .notification-icon-web {
+    margin-right: 50px;
   }
 }

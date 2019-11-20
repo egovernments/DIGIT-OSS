@@ -1,3 +1,4 @@
+
 {
   "name": "rainmaker",
   "version": "0.0.1",
@@ -12,9 +13,9 @@
     "dev:employee": "yarn run build-css-employee && cd packages/employee && set PORT=3006 && yarn start",
     "prod:citizen": "yarn run go_citizen && cd packages/citizen && yarn run build",
     "prod:employee": "yarn run go_employee && cd packages/employee && yarn run build",
-    "transpile-citizen-modules": "run-p pgr-citizen pt-citizen",
-    "transpile-employee-modules": "run-p pgr-employee pt-employee egov-hrms",
-    "transpile-common-modules": "run-p egov-ui-kit egov-ui-framework egov-workflow egov-tradelicence egov-uc egov-pt",
+    "transpile-citizen-modules": "run-p pgr-citizen pt-citizen egov-noc egov-abg",
+    "transpile-common-modules": "run-p egov-ui-kit egov-ui-framework egov-workflow egov-tradelicence egov-uc egov-pt egov-boilerplate egov-common",
+    "transpile-employee-modules": "run-p pgr-employee pt-employee egov-hrms egov-noc egov-abg",
     "egov-ui-kit-config": "babel dev-packages/egov-ui-kit-dev/src/config --out-dir packages/lib/egov-ui-kit/config --copy-files",
     "egov-ui-kit-components": "babel dev-packages/egov-ui-kit-dev/src/components --out-dir packages/lib/egov-ui-kit/components --copy-files",
     "egov-ui-kit-redux": "babel dev-packages/egov-ui-kit-dev/src/redux --out-dir packages/lib/egov-ui-kit/redux --copy-files",
@@ -30,7 +31,7 @@
     "pt-employee": "babel dev-packages/pt-employee-dev/src --out-dir packages/lib/pt-employee --copy-files",
     "build-css-employee": "run-p build-css-egov-pgr-employee build-css-egov-pt-employee",
     "build-css-citizen": "run-p  build-css-pgr-citizen build-css-egov-pt-citizen",
-    "build-css-common": "run-p build-css-egov-ui-kit build-css-egov-ui-framework-core build-css-egov-workflow build-css-egov-tradelicence build-css-egov-uc build-css-egov-pt",
+    "build-css-common": "run-p build-css-egov-ui-kit build-css-egov-ui-framework-core build-css-egov-workflow build-css-egov-tradelicence build-css-egov-uc build-css-egov-pt build-css-egov-noc build-css-egov-boilerplate build-css-egov-common build-css-egov-abg",
     "build-css-egov-ui-kit": "node-sass-chokidar dev-packages/egov-ui-kit-dev/src -o dev-packages/egov-ui-kit-dev/src",
     "build-css-pgr-citizen": "node-sass-chokidar dev-packages/pgr-citizen-dev/src -o dev-packages/pgr-citizen-dev/src",
     "build-css-egov-ui-framework-core": "node-sass-chokidar dev-packages/egov-ui-framework-core/src -o dev-packages/egov-ui-framework-core/src",
@@ -40,7 +41,11 @@
     "build-css-egov-workflow": "node-sass-chokidar dev-packages/egov-workflow-dev/src -o dev-packages/egov-workflow-dev/src",
     "build-css-egov-tradelicence": "node-sass-chokidar dev-packages/egov-tradelicence-dev/src -o dev-packages/egov-tradelicence-dev/src",
     "build-css-egov-pt": "node-sass-chokidar dev-packages/egov-pt-dev/src -o dev-packages/egov-pt-dev/src",
+    "build-css-egov-noc": "node-sass-chokidar dev-packages/egov-noc-dev/src -o dev-packages/egov-noc-dev/src",
     "build-css-egov-uc": "node-sass-chokidar dev-packages/egov-uc-dev/src -o dev-packages/egov-uc-dev/src",
+    "build-css-egov-boilerplate": "node-sass-chokidar dev-packages/egov-boilerplate-dev/src -o dev-packages/egov-boilerplate-dev/src",
+    "build-css-egov-common": "node-sass-chokidar dev-packages/egov-common-dev/src -o dev-packages/egov-common-dev/src",
+    "build-css-egov-abg": "node-sass-chokidar dev-packages/egov-abg-dev/src -o dev-packages/egov-abg-dev/src",
     "egov-ui-framework-redux": "babel dev-packages/egov-ui-framework-core/src/ui-redux --out-dir packages/lib/egov-ui-framework/ui-redux --copy-files",
     "egov-ui-framework-utils": "babel dev-packages/egov-ui-framework-core/src/ui-utils --out-dir packages/lib/egov-ui-framework/ui-utils --copy-files",
     "egov-ui-framework-config": "babel dev-packages/egov-ui-framework-core/src/ui-config/screens/specs --out-dir packages/lib/egov-ui-framework/ui-config/screens/specs --copy-files",
@@ -53,10 +58,14 @@
     "egov-tradelicence": "babel dev-packages/egov-tradelicence-dev/src --out-dir packages/lib/egov-tradelicence --copy-files",
     "egov-pt": "babel dev-packages/egov-pt-dev/src --out-dir packages/lib/egov-pt --copy-files",
     "egov-uc": "babel dev-packages/egov-uc-dev/src --out-dir packages/lib/egov-uc --copy-files",
+    "egov-abg": "babel dev-packages/egov-abg-dev/src --out-dir packages/lib/egov-abg --copy-files",
     "egov-hrms": "babel dev-packages/egov-hrms-dev/src --out-dir packages/lib/egov-hrms --copy-files",
+    "egov-noc": "babel dev-packages/egov-noc-dev/src --out-dir packages/lib/egov-noc --copy-files",
+    "egov-boilerplate": "babel dev-packages/egov-boilerplate-dev/src --out-dir packages/lib/egov-boilerplate --copy-files",
+    "egov-common": "babel dev-packages/egov-common-dev/src --out-dir packages/lib/egov-common --copy-files",
     "go": "yarn && yarn run build-css-employee && yarn run build-css-citizen && yarn run build-css-common && yarn run transpile-common-modules && yarn run transpile-citizen-modules && yarn run transpile-employee-modules && lerna bootstrap",
-    "go_employee": "yarn && yarn run build-css-employee  && yarn run build-css-common && yarn run transpile-common-modules  && yarn run transpile-employee-modules && lerna bootstrap  --ignore egov-ui-transform-service --ignore RNativeApp --ignore rainmaker-citizen --ignore pgr-citizen --ignore pt-citizen  --ignore egov-hrms-dev  --ignore egov-tradelicence-core --ignore egov-uc-dev --ignore egov-pt-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev",
-    "go_citizen": "yarn  && yarn run build-css-citizen && yarn run build-css-common && yarn run transpile-common-modules && yarn run transpile-citizen-modules  && lerna bootstrap  --ignore egov-ui-transform-service --ignore RNativeApp --ignore rainmaker-employee --ignore pgr-employee --ignore pt-employee --ignore egov-hrms-dev  --ignore egov-tradelicence-core --ignore egov-uc-dev --ignore egov-pt-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev --ignore egov-hrms"
+    "go_employee": "yarn && yarn run build-css-employee  && yarn run build-css-common && yarn run transpile-common-modules  && yarn run transpile-employee-modules && lerna bootstrap  --ignore egov-ui-transform-service --ignore RNativeApp --ignore rainmaker-citizen --ignore pgr-citizen --ignore pt-citizen  --ignore egov-hrms-dev  --ignore egov-tradelicence-core --ignore egov-uc-dev --ignore egov-pt-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev --ignore abg-dev --ignore egov-noc-dev",
+    "go_citizen": "yarn  && yarn run build-css-citizen && yarn run build-css-common && yarn run transpile-common-modules && yarn run transpile-citizen-modules  && lerna bootstrap  --ignore egov-ui-transform-service --ignore RNativeApp --ignore rainmaker-employee --ignore pgr-employee --ignore pt-employee --ignore egov-hrms-dev  --ignore egov-tradelicence-core --ignore egov-uc-dev --ignore egov-pt-dev --ignore egov-workflow-dev --ignore pt-employee-dev --ignore pt-citizen-dev --ignore pgr-employee-dev --ignore pgr-citizen-dev --ignore egov-hrms --ignore abg-dev --ignore abg --ignore egov-noc-dev"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -71,6 +80,8 @@
   },
   "dependencies": {
     "@material-ui/icons": "^3.0.2",
+    "file-saver": "^2.0.2",
+    "js-file-download": "^0.4.8",
     "node-sass": "^4.11.0",
     "node-sass-chokidar": "^1.3.4",
     "npm-run-all": "^4.1.5"

@@ -17,7 +17,7 @@ import {
   getUlbGradeLabel,
   getTranslatedLabel,
   transformById,
-  getTransformedLocale
+  getTransformedLocale,
 } from "egov-ui-framework/ui-utils/commons";
 
 const ifNotNull = value => {
@@ -47,11 +47,11 @@ const epochToDate = et => {
 };
 
 const getMessageFromLocalization = code => {
-  let messageObject = JSON.parse(getLocalization(`localization_${getLocale()}`)).find(
-    item => {
-      return item.code == code;
-    }
-  );
+  let messageObject = JSON.parse(
+    getLocalization(`localization_${getLocale()}`)
+  ).find(item => {
+    return item.code == code;
+  });
   return messageObject ? messageObject.message : code;
 };
 
@@ -137,7 +137,9 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     let cityCode = nullToNa(
       get(response, "Licenses[0].tradeLicenseDetail.address.tenantId", "NA")
     );
-    data.city = getMessageFromLocalization("TENANT_TENANTS_"+getTransformedLocale(cityCode));
+    data.city = getMessageFromLocalization(
+      "TENANT_TENANTS_" + getTransformedLocale(cityCode)
+    );
     /** Make owners data array */
     let ownersData = get(response, "Licenses[0].tradeLicenseDetail.owners", []);
     data.owners = ownersData.map(owner => {
@@ -178,7 +180,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
             tradeCategory = nullToNa(tradeCode);
           } else if (tradeCodeArray.length == 2) {
             tradeCategory = nullToNa(tradeCodeArray[0]);
-            tradeType = nullToNa( tradeCode);
+            tradeType = nullToNa(tradeCode);
           } else if (tradeCodeArray.length > 2) {
             tradeCategory = nullToNa(tradeCodeArray[0]);
             tradeType = nullToNa(tradeCodeArray[1]);
@@ -242,9 +244,11 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     if (accessories && accessories.length > 0) {
       data.accessoriesList = response.Licenses[0].tradeLicenseDetail.accessories
         .map(item => {
-          return `${getMessageFromLocalization(`TRADELICENSE_ACCESSORIESCATEGORY_${getTransformedLocale(item.accessoryCategory)}`)}(${
-            item.count ? item.count :"0"
-          })`;
+          return `${getMessageFromLocalization(
+            `TRADELICENSE_ACCESSORIESCATEGORY_${getTransformedLocale(
+              item.accessoryCategory
+            )}`
+          )}(${item.count ? item.count : "0"})`;
         })
         .reduce((pre, cur) => {
           return pre.concat(", " + cur);
@@ -382,10 +386,7 @@ export const loadMdmsData = async tenantid => {
       .toUpperCase()
       .replace(/[.]/g, "_")}`;
 
-    data.corporationName = `${getTranslatedLabel(ulbGrade, localizationLabels)} ${getTranslatedLabel(
-      cityKey,
-      localizationLabels
-    ).toUpperCase()} `;
+    data.corporationName = `${getTranslatedLabel(ulbGrade, localizationLabels)} ${getTranslatedLabel(cityKey,localizationLabels).toUpperCase()}`;
 
     /** END */
     data.corporationAddress = get(ulbData, "address", "NA");

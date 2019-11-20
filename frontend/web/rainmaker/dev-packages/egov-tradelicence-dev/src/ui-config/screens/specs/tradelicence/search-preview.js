@@ -497,7 +497,12 @@ const screenConfig = {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",
           moduleName: "egov-workflow",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
+          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          props: {
+            dataPath: "Licenses",
+            moduleName: "NewTL",
+            updateUrl: "/tl-services/v1/_update"
+          }
         },
         tradeReviewDetails
         //footer

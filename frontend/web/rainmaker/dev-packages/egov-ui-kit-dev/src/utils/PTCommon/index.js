@@ -32,6 +32,18 @@ export const resetFormWizard = (form, removeForm) => {
   });
 };
 
+
+export const getFormattedDate = (date)=>{
+  const dateArray=new Date(date).toString().split(' ');
+  if(dateArray.length>0){
+    return dateArray[2]+'-'+dateArray[1]+'-'+dateArray[3];
+  }
+ else{
+   return 'dd-mmm-yyyy';
+ }
+}
+
+
 export const getLatestPropertyDetails = (propertyDetailsArray) => {
   if (propertyDetailsArray) {
     const currentFinancialYear = getCurrentFinancialYear();
@@ -361,3 +373,4 @@ const modifyEndOfJsonPath = (jsonpath, toReplaceWith) => {
   jP.pop();
   return jP.join(".") + "." + toReplaceWith;
 };
+

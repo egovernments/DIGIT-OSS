@@ -103,7 +103,7 @@ class DropDown extends Component {
   };
 
   downloadReceipt = async (item, generalMDMSDataById, isEmployeeReceipt, imageUrl) => {
-    const queryObj = [{ key: "tenantId", value: item.tenantId }, { key: "consumerCode", value: item.consumerCode }];
+    const queryObj = [{ key: "tenantId", value: item.tenantId }, { key: "consumerCode", value: item.consumerCode }];//todo Consumer code uniqueness
 
     try {
       const payload = await httpRequest("/collection-services/receipts/_search", "_search", queryObj, {}, [], { ts: 0 });

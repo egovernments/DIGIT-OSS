@@ -28,7 +28,7 @@ const formConfig = {
     userType: {
       id: "user-type",
       jsonPath: "otp.userType",
-      value: 'CITIZEN',
+      value: "CITIZEN",
     },
   },
   submit: {

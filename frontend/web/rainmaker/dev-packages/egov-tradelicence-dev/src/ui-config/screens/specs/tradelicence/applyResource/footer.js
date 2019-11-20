@@ -805,12 +805,11 @@ export const footerReview = (
               },
               onClickDefination: {
                 action: "page_change",
-                path: `${redirectionURL}/pay?applicationNumber=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
+                path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=NewTL`
+                //path: `${redirectionURL}/pay?applicationNumber=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
               },
-              //visible: getButtonVisibility(status, "PROCEED TO PAYMENT"),
               roleDefination: {
                 rolePath: "user-info.roles",
-                //roles: ["TL_CEMP", "CITIZEN"]
                 action: "PAY"
               }
             },

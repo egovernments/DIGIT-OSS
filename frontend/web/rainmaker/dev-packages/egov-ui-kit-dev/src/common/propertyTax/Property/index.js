@@ -10,7 +10,7 @@ import { Icon, BreadCrumbs } from "egov-ui-kit/components";
 import { addBreadCrumbs } from "egov-ui-kit/redux/app/actions";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import PropertyInformation from "./components/PropertyInformation";
-import { fetchProperties, getSingleAssesmentandStatus } from "egov-ui-kit/redux/properties/actions";
+import { fetchProperties, getSingleAssesmentandStatus, fetchTotalBillAmount,fetchReceipt } from "egov-ui-kit/redux/properties/actions";
 import { getCompletedTransformedItems } from "egov-ui-kit/common/propertyTax/TransformedAssessments";
 import isEqual from "lodash/isEqual";
 import orderby from "lodash/orderBy";
@@ -60,7 +60,7 @@ class Property extends Component {
   }
 
   componentDidMount = () => {
-    const { location, addBreadCrumbs, fetchGeneralMDMSData, renderCustomTitleForPt, customTitle, fetchProperties } = this.props;
+    const { location, addBreadCrumbs, fetchGeneralMDMSData, renderCustomTitleForPt, customTitle, fetchProperties, fetchTotalBillAmount,fetchReceipt } = this.props;
     const requestBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -124,6 +124,15 @@ class Property extends Component {
       customTitle && addBreadCrumbs({ title: customTitle, path: window.location.pathname });
     }
     renderCustomTitleForPt(customTitle);
+    fetchTotalBillAmount([
+      { key: "consumerCode", value: decodeURIComponent(this.props.match.params.propertyId) },
+      { key: "tenantId", value: this.props.match.params.tenantId },
+      { key: "businessService", value: 'PT' }
+    ]);
+    fetchReceipt([
+      { key: "consumerCodes", value: decodeURIComponent(this.props.match.params.propertyId) },
+      { key: "tenantId", value: this.props.match.params.tenantId }
+    ]);
   };
 
   onListItemClick = (item, index) => {
@@ -259,7 +268,7 @@ class Property extends Component {
   };
 
   render() {
-    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails, receiptsByYr } = this.props;
+    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails, receiptsByYr ,totalBillAmountDue} = this.props;
     const { closeYearRangeDialogue } = this;
     const { dialogueOpen, urlToAppend, showAssessmentHistory } = this.state;
     let urlArray = [];
@@ -285,6 +294,7 @@ class Property extends Component {
             hoverColor="#fff"
             properties={selPropertyDetails}
             generalMDMSDataById={generalMDMSDataById && generalMDMSDataById}
+            totalBillAmountDue={totalBillAmountDue}
           />
         }
         <div
@@ -613,7 +623,7 @@ const mapStateToProps = (state, ownProps) => {
   const { urls, localizationLabels } = app;
   const { cities } = common;
   const { generalMDMSDataById } = state.common || {};
-  const { propertiesById, singleAssessmentByStatus = [], loading, receiptsByYr } = state.properties || {};
+  const { propertiesById, singleAssessmentByStatus = [], loading, receiptsByYr, totalBillAmountDue } = state.properties || {};
   const tenantId = ownProps.match.params.tenantId;
   const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
   const selPropertyDetails = propertiesById[propertyId] || {};
@@ -656,7 +666,8 @@ const mapStateToProps = (state, ownProps) => {
     sortedAssessments,
     generalMDMSDataById,
     receiptsByYr,
-    localization
+    localization,
+    totalBillAmountDue
   };
 };
 
@@ -666,6 +677,8 @@ const mapDispatchToProps = (dispatch) => {
     fetchGeneralMDMSData: (requestBody, moduleName, masterName) => dispatch(fetchGeneralMDMSData(requestBody, moduleName, masterName)),
     fetchProperties: (queryObjectProperty) => dispatch(fetchProperties(queryObjectProperty)),
     getSingleAssesmentandStatus: (queryObj) => dispatch(getSingleAssesmentandStatus(queryObj)),
+    fetchTotalBillAmount: (fetchBillQueryObject) => dispatch(fetchTotalBillAmount(fetchBillQueryObject)),
+    fetchReceipt: (fetchReceiptQueryObject) => dispatch(fetchReceipt(fetchReceiptQueryObject)),
   };
 };
 

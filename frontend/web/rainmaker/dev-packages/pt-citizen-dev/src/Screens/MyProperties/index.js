@@ -90,7 +90,7 @@ class MyProperties extends Component {
     this.props.history.push(
       `/property-tax/my-properties/property/${encodeURIComponent(
         propertyId
-      )}/${tenantId}`
+      )}/${tenantId}?isMutationApplication=true`
     );
   };
 
@@ -160,11 +160,11 @@ const mapStateToProps = state => {
             fontSize="16px"
             color="#484848"
             bold={true}
-            labelStyle={{ letterSpacing: 0.6, marginBottom: 10 }}
+            labelStyle={{ letterSpacing: 0.6 }}
           />
         ),
         secondaryText: (
-          <div className="rainmaker-displayInline">
+          <div className="rainmaker-displayInline" style={{height: "25px !important", marginTop: "0px !important"}}>
             <Label
               label="PT_PROPERTY_ASSESSMENT_ID"
               color="#484848"

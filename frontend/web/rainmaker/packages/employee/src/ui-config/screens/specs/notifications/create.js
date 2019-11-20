@@ -17,8 +17,8 @@ import set from "lodash/set";
 import { footer, getSingleMessage, getMdmsData, getDeleteButton } from "../utils";
 
 const header = getCommonHeader({
-  labelName: "Add New Public Message",
-  labelKey: "ADD_NEW_PUBLIC_MESSAGE",
+  labelName: getQueryArg(window.location.href, "uuid") ? "Edit Public Message" : "Add New Public Message",
+  labelKey: getQueryArg(window.location.href, "uuid") ? "EDIT_NEW_PUBLIC_MESSAGE" : "ADD_NEW_PUBLIC_MESSAGE",
 });
 
 export const createForm = getCommonCard({
@@ -91,12 +91,16 @@ export const createForm = getCommonCard({
         labelName: "Message Content",
         labelKey: "EVENTS_COMMENTS_LABEL",
       },
+      // placeholder: {
+      //   labelName: "Message Content ( Character Length:280)",
+      //   labelKey: "EVENTS_COMMENTS_PLACEHOLDER",
+      // },
       placeholder: {
-        labelName: "Message Content ( Character Length:280)",
-        labelKey: "EVENTS_COMMENTS_PLACEHOLDER",
+        labelName: "Description (Max Char Limit : 500)",
+        labelKey: "EVENTS_DESCRIPTION_LIMIT_PLACEHOLDER",
       },
       required: true,
-      pattern: getPattern("description"),
+      pattern: getPattern("eventDescription"),
       jsonPath: "events[0].description",
       props: {
         multiline: true,
@@ -241,7 +245,6 @@ const screenConfig = {
   name: "create",
   beforeInitScreen: (action, state, dispatch) => {
     const tenantId = getTenantId();
-    //const isEditable = getQueryArg(window.location.href, "edit");
     const uuid = getQueryArg(window.location.href, "uuid");
     const messageTenant = getQueryArg(window.location.href, "tenantId");
     getMdmsData(action, state, dispatch);
@@ -284,7 +287,7 @@ const screenConfig = {
               },
               ...header,
             },
-            deleteButton: getDeleteButton(),
+            deleteButton: getDeleteButton("BROADCAST"),
           },
         },
         createCard: {

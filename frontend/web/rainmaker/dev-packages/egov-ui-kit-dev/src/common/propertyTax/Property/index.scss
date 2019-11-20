@@ -91,6 +91,10 @@
       div:nth-of-type(2) {
         width: 100% !important;
         margin: 0 !important;
+        white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px!important;
       }
     }
   }

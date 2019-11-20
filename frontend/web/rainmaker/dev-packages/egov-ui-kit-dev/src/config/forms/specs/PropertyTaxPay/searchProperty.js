@@ -1,3 +1,4 @@
+
 import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { CITY } from "egov-ui-kit/utils/endPoints";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -23,7 +24,7 @@ const formConfig = {
     },
     mobileNumber: {
       id: "complainant-mobile-no",
-      type: "mobilenumber",
+      type: "textfield",
       jsonPath: "",
       floatingLabelText: "PT_OWNER_MOBILE_NUMBER",
       errorMessage: "CORE_COMMON_PHONENO_INVALIDMSG",

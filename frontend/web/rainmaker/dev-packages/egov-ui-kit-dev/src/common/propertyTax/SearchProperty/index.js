@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import Hidden from "@material-ui/core/Hidden";
 import formHoc from "egov-ui-kit/hocs/form";
 import Label from "egov-ui-kit/utils/translationNode";
 import Screen from "egov-ui-kit/common/common/Screen";
+import SingleProperty from "../SingleProperty";
 import YearDialogue from "../YearDialogue";
 import { Button, BreadCrumbs, Icon } from "egov-ui-kit/components";
 import { addBreadCrumbs, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
@@ -46,7 +48,7 @@ class SearchProperty extends Component {
 
   };
   onSearchClick = (form, formKey) => {
-    const { city, ids, oldpropertyids, mobileNumber } = form.fields || {};
+    const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
     } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value) {
@@ -57,22 +59,53 @@ class SearchProperty extends Component {
       );
     } else {
       const queryParams = [];
-      if (city.value) {
+      if (city && city.value) {
         queryParams.push({ key: "tenantId", value: city.value });
       }
-      if (ids.value) {
+      if ( ids && ids.value) {
         queryParams.push({ key: "ids", value: ids.value });
       }
-      if (oldpropertyids.value) {
+      if (oldpropertyids && oldpropertyids.value) {
         queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
       }
-      if (mobileNumber.value) {
+      if ( mobileNumber && mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
+      }
+      if (applicationNumber && applicationNumber.value) {
+        queryParams.push({ key: "applicationNumber", value: applicationNumber.value });
       }
       this.props.fetchProperties(queryParams);
       this.setState({ showTable: true });
     }
   };
+
+  getLink = (userType, history, propertyId, tenantId) => {
+    return (
+      <a
+        onClick={
+          userType === "CITIZEN"
+            ? () => {
+              // localStorageSet("draftId", "")
+              this.setState({
+                dialogueOpen: true,
+                urlToAppend: `/property-tax/assessment-form?isReassesment=false&propertyId=${propertyId}&tenantId=${tenantId}`,
+              });
+            }
+            : (e) => {
+              // localStorageSet("draftId", "")
+              history.push(`/property-tax/property/${propertyId}/${tenantId}?isMutationApplication=true`);
+            }
+        }
+        style={{
+          height: 20,
+          lineHeight: "auto",
+          minWidth: "inherit",
+          cursor: "pointer",
+          textDecoration: "underline"
+        }}>
+        {propertyId}
+      </a>);
+  }
 
   extractTableData = (properties) => {
     const { history } = this.props;
@@ -140,7 +173,11 @@ class SearchProperty extends Component {
             lineHeight: "auto",
             minWidth: "inherit",
             cursor: "pointer",
-            textDecoration: "underline"
+            textDecoration: "underline",
+            fontWeight: '400',
+            fontSize: "14px",
+            color: 'rgba(0, 0, 0, 0.87)',
+            lineHeight: '30px'
           }}>
           {propertyId}
         </a>);
@@ -230,7 +267,34 @@ class SearchProperty extends Component {
           </div>
         </div>
         <PropertySearchFormHOC history={this.props.history} onSearchClick={this.onSearchClick} onResetClick={this.onResetClick} />
-        {!loading && showTable && tableData.length > 0  ? <PropertyTable tableData={tableData} sortOnObject="propertyId" onActionClick={this.onActionClick} /> : null}
+        <Hidden xsDown>
+        {!loading && showTable && tableData.length > 0  ? 
+        <PropertyTable tableData={tableData} sortOnObject="propertyId" onActionClick={this.onActionClick} /> : null}
+        </Hidden>
+        <Hidden smUp>
+          {tableData && tableData.length > 0 && showTable && (
+
+            <Label
+              secondaryText={'(' + tableData.length + ')'}
+              label="PT_SEARCH_PROPERTY_TABLE_HEADERS"
+              className="property-search-table-heading"
+              fontSize={16}
+              labelStyle={{
+                fontFamily: "Roboto",
+                fontSize: "16px",
+                fontWeight: 500,
+                letterSpacing: "0px",
+                textAlign: "left",
+                color: "#484848"
+              }}
+            />
+          )}
+          <SingleProperty
+            data={tableData}
+            action={"PT_PAYMENT_ACCESSANDPAY"}
+            onActionClick={this.onAddButtonClick}
+          />
+        </Hidden>
         {!loading && showTable && !tableData.length && (
           <div className="search-no-property-found">
             <div className="no-search-text">

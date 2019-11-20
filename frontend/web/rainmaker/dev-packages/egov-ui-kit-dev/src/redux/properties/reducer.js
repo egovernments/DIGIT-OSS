@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import { transformById } from "egov-ui-kit/utils/commons";
+import { transformById, getTotalAmountDue } from "egov-ui-kit/utils/commons";
 
 const initialState = {
   loading: false,
@@ -187,6 +187,82 @@ const propertyReducer = (state = initialState, action) => {
         errorMessage: "",
         singleAssessmentByStatus,
         receiptsByYr
+      };
+    case actionTypes.PROPERTY_FETCH_BILL_PENDING:
+        return {
+          ...state,
+          loading: true,
+          error: false,
+          errorMessage: "",
+        };
+    case actionTypes.PROPERTY_FETCH_BILL_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMessage: action.error,
+        totalBillAmountDue: ""
+      };
+    case actionTypes.PROPERTY_FETCH_BILL_COMPLETE:
+      const totalBillAmountDue = getTotalAmountDue(action.payload);
+      const Bill=action.payload.Bill;
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        errorMessage: "",
+        totalBillAmountDue,
+        Bill
+      };
+    case actionTypes.PROPERTY_FETCH_RECEIPT_PENDING:
+        return {
+          ...state,
+          loading: true,
+          error: false,
+          errorMessage: "",
+        };
+    case actionTypes.PROPERTY_FETCH_RECEIPT_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMessage: action.error,
+        Payments: []
+      };
+    case actionTypes.PROPERTY_FETCH_RECEIPT_COMPLETE:
+    
+      const Payments=action.payload.Payments;
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        errorMessage: "",
+        Payments
+      };
+      case actionTypes.PROPERTY_DOWNLOAD_RECEIPT_PENDING:
+        return {
+          ...state,
+          loading: true,
+          error: false,
+          errorMessage: "",
+        };
+    case actionTypes.PROPERTY_DOWNLOAD_RECEIPT_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: true,
+        errorMessage: action.error,
+        Payments: []
+      };
+    case actionTypes.PROPERTY_DOWNLOAD_RECEIPT_COMPLETE:
+    
+      const receipt=action.payload;
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        errorMessage: "",
+        receipt
       };
     case actionTypes.RESET_PROPERTY_STATE:
       return initialState;

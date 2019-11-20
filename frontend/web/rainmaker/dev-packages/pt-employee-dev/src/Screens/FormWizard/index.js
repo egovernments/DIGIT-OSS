@@ -759,6 +759,7 @@ class FormWizard extends Component {
         const isProperyAddressFormValid = validateForm(form.propertyAddress);
         if (isProperyAddressFormValid) {
           //callDraft();
+          window.scrollTo(0, 0);
           this.setState({
             selected: index,
             formValidIndexArray: [...formValidIndexArray, selected]
@@ -811,6 +812,7 @@ class FormWizard extends Component {
                     }
                     if (floorValidation) {
                       //callDraft();
+                      window.scrollTo(0, 0);
                       this.setState({
                         selected: index,
                         formValidIndexArray: [...formValidIndexArray, selected]
@@ -818,6 +820,7 @@ class FormWizard extends Component {
                     }
                   } else {
                     //callDraft();
+                    window.scrollTo(0, 0);
                     this.setState({
                       selected: index,
                       formValidIndexArray: [...formValidIndexArray, selected]
@@ -854,6 +857,7 @@ class FormWizard extends Component {
         const estimateCall = () => {
           estimate().then(estimateResponse => {
             if (estimateResponse) {
+              window.scrollTo(0, 0);
               this.setState({
                 estimation: estimateResponse && estimateResponse.Calculation,
                 totalAmountToBePaid:
@@ -877,6 +881,7 @@ class FormWizard extends Component {
               const isOwnerInfoFormValid = validateForm(ownerInfo);
               if (isOwnerInfoFormValid) {
                 //callDraft();
+                window.scrollTo(0, 0);
                 this.setState(
                   {
                     selected: index,
@@ -900,6 +905,7 @@ class FormWizard extends Component {
               }
               if (ownerValidation) {
                 //callDraft();
+                window.scrollTo(0, 0);
                 this.setState(
                   {
                     selected: index,
@@ -930,6 +936,7 @@ class FormWizard extends Component {
               }
               if (institutionFormValid) {
                 //callDraft();
+                window.scrollTo(0, 0);
                 this.setState(
                   {
                     selected: index,
@@ -949,18 +956,26 @@ class FormWizard extends Component {
         if (estimation[0].totalAmount < 0) {
           alert('Property Tax amount cannot be Negative!');
         } else {
+          window.scrollTo(0, 0);
           createAndUpdate(index);
         }
-
-
         break;
       case 4:
-
-        this.setState(
-          {
-            selected: index,
-            formValidIndexArray: [...formValidIndexArray, selected]
-          });
+          const { assessedPropertyDetails = {} } = this.state;
+          const { Properties = [] } = assessedPropertyDetails;
+          let propertyId = '';
+          let tenantId = '';
+          for (let pty of Properties) {
+            propertyId = pty.propertyId;
+            tenantId = pty.tenantId;
+          }
+          this.props.history.push(`./../egov-common/pay?consumerCode=${propertyId}&tenantId=${tenantId}`
+          )
+        // this.setState(
+        //   {
+        //     selected: index,
+        //     formValidIndexArray: [...formValidIndexArray, selected]
+        //   });
         break;
       case 5:
         onPayButtonClick();
@@ -1065,7 +1080,7 @@ class FormWizard extends Component {
       tenantId,
       assessmentYear
     } = propertyDetails;
-    set(prepareFormData, "Receipt[0].Bill[0].billDetails[0].amountPaid", 0);
+    set(prepareFormData, "Receipt[0].Bill[0].billDetails[0].amountPaid", 0); //todo Consumer code uniqueness //i guess here
     prepareFormData.Receipt[0].Bill[0] = {
       ...Bill[0],
       ...prepareFormData.Receipt[0].Bill[0]
@@ -1194,7 +1209,7 @@ class FormWizard extends Component {
 
     try {
       const getReceipt = await httpRequest(
-        "collection-services/receipts/_create",
+        "collection-services/receipts/_create",//todo Consumer code uniqueness
         "_create",
         [],
         formData,
@@ -1511,7 +1526,6 @@ class FormWizard extends Component {
           Properties: properties
         }
       );
-      console.log(createPropertyResponse, 'createPropertyResponse');
       this.setState(
         {
           assessedPropertyDetails: createPropertyResponse,
@@ -1815,7 +1829,7 @@ class FormWizard extends Component {
     const { address, propertyDetails, propertyId } = Properties[0];
     const { owners } = propertyDetails[0];
     const { localizationLabels } = app;
-    const { cities } = common;
+    const { cities,generalMDMSDataById } = common;
     const header = getHeaderDetails(Properties[0], cities, localizationLabels, true)
     let receiptDetails = {};
     receiptDetails = {
@@ -1826,7 +1840,7 @@ class FormWizard extends Component {
       header,
       propertyId
     }
-    generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, {}, imageUrl);
+    generateAcknowledgementForm("pt-reciept-citizen", receiptDetails, generalMDMSDataById, imageUrl);
   }
 
   render() {

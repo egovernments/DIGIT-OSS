@@ -5,6 +5,8 @@
 
 .owner-gender-selection {
   display: flex;
+  position: inherit;
+  top: -5px;
 }
 
 .pt-ownerinfo-deletebtn {
@@ -46,6 +48,18 @@
       color: rgb(72, 72, 72) !important;
       font-weight: 500;
     }
+  }
+}
+@media only screen and (max-width: 768px) {
+  .address {
+    margin-left: 0px !important;
+  }
+ 
+}
+@media only screen and (max-width: 768px) {
+  .authority-details-form{
+    display: grid !important;
+    overflow: auto !important;
   }
 }
 
@@ -94,6 +108,7 @@
 .grayout {
   box-shadow: none;
   background-color: #f6f6f6 !important;
+  overflow: hidden !important;
 }
 
 .review-pay-tab {
@@ -233,6 +248,11 @@ div[class^="MuiPaper-root"],
       div:nth-of-type(2) {
         width: 100% !important;
         margin: 0 !important;
+        white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px!important;
+        
       }
     }
   }

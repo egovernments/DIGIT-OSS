@@ -26,25 +26,29 @@ const styles = theme => ({
   radioRoot: {
     marginBottom: 12
   },
-  formlabel:{
-    fontSize:12,
-    fontWeight:400,
-    letterSpacing:0.56
+  formLabel: {
+    fontSize: 12,
+    fontWeight: 400,
+    letterSpacing: 0.56
   }
 });
 
-class RadioButtonsGroup extends React.Component {
- 
+const disableRadioButton = {
+  pointerEvents : "none",
+  opacity : 0.5
+}
 
+class RadioButtonsGroup extends React.Component {
   handleChange = event => {
     const {
       screenKey,
       componentJsonpath,
       jsonPath,
       approveCheck,
-      onFieldChange
+      onFieldChange,
+      onChange
     } = this.props;
-    onFieldChange(
+    onChange?onChange(event):onFieldChange(
       screenKey,
       componentJsonpath,
       "props.value",
@@ -93,6 +97,7 @@ class RadioButtonsGroup extends React.Component {
               buttons.map((button, index) => {
                 return (
                   <FormControlLabel
+                    disabled={button.disabled ? true : false}
                     key={index}
                     classes={{ label: "radio-button-label" }}
                     value={button.value}

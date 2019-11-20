@@ -17,12 +17,16 @@
     "datatables.net-buttons": "^1.5.4",
     "datatables.net-buttons-bs": "^1.5.3",
     "egov-hrms": "0.0.1",
+    "egov-noc": "0.0.1",
     "egov-tradelicence": "0.0.1",
     "egov-pt": "0.0.1",
     "egov-ui-framework": "0.1.41",
+    "egov-boilerplate": "0.0.1",
+    "egov-common": "0.0.1",
     "egov-ui-kit": "^0.0.1",
     "egov-workflow": "0.0.1",
     "egov-uc": "0.0.1",
+    "egov-abg": "0.0.1",
     "html2canvas": "^1.0.0-alpha.12",
     "jsonpath": "^1.0.0",
     "jsonpath-plus": "^0.16.0",
@@ -62,7 +66,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "url-search-params-polyfill": "^3.0.0",
-    "webfontloader": "^1.6.28"
+    "webfontloader": "^1.6.28",
+    "print-js":"1.0.63"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",

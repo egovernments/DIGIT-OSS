@@ -20,8 +20,12 @@ class Footer extends React.Component {
   };
 
   getDownloadData = () => {
-    const { Licenses, state } = this.props;
-    const { status, applicationNumber } = (Licenses && Licenses[0]) || "";
+    const { dataPath, state } = this.props;
+    const data = get(
+      state,
+      `screenConfiguration.preparedFinalObject.${dataPath}`
+    );
+    const { status, applicationNumber } = (data && data[0]) || "";
     return {
       label: "Download",
       leftIcon: "cloud_download",
@@ -33,8 +37,12 @@ class Footer extends React.Component {
   };
 
   getPrintData = () => {
-    const { Licenses, state } = this.props;
-    const { status, applicationNumber } = (Licenses && Licenses[0]) || "";
+    const { dataPath, state } = this.props;
+    const data = get(
+      state,
+      `screenConfiguration.preparedFinalObject.${dataPath}`
+    );
+    const { status, applicationNumber } = (data && data[0]) || "";
     return {
       label: "Print",
       leftIcon: "print",
@@ -46,13 +54,13 @@ class Footer extends React.Component {
   };
 
   openActionDialog = async item => {
-    const { handleFieldChange, setRoute } = this.props;
+    const { handleFieldChange, setRoute, dataPath } = this.props;
     let employeeList = [];
-    handleFieldChange("Licenses[0].comment", "");
-    handleFieldChange("Licenses[0].assignee", "");
+    handleFieldChange(`${dataPath}[0].comment`, "");
+    handleFieldChange(`${dataPath}[0].assignee`, "");
     if (item.isLast) {
-      setRoute(item.buttonUrl);
-      // window.location.href = window.origin + item.buttonUrl;
+      const url = process.env.NODE_ENV === "development" ? item.buttonUrl : `employee/${item.buttonUrl}` ;
+      window.location.href = `${window.origin}/${url}`;
       return;
     }
     if (item.showEmployeeList) {
@@ -99,10 +107,13 @@ class Footer extends React.Component {
       variant,
       contractData,
       handleFieldChange,
-      onDialogButtonClick
+      onDialogButtonClick,
+      dataPath,
+      moduleName
     } = this.props;
     const { open, data, employeeList } = this.state;
     const { getPrintData, getDownloadData } = this;
+    let visibility = moduleName === "FIRENOC" ? "hidden" : "visible";
     return (
       <div
         className="apply-wizard-footer"
@@ -110,18 +121,7 @@ class Footer extends React.Component {
         style={{ textAlign: "right" }}
       >
         <Container>
-          <Item xs={12} sm={4} style={{ paddingLeft: "20px" }}>
-            <Container>
-              <Item xs={12} sm={6}>
-                <MenuButton data={getDownloadData()} />
-              </Item>
-
-              <Item xs={12} sm={6}>
-                <MenuButton data={getPrintData()} />
-              </Item>
-            </Container>
-          </Item>
-          <Item xs={12} sm={8}>
+          <Item xs={12} sm={12}>
             {contractData &&
               contractData.map(item => {
                 const { buttonLabel, moduleName } = item;
@@ -133,7 +133,8 @@ class Footer extends React.Component {
                     style={{
                       minWidth: "200px",
                       height: "48px",
-                      marginRight: "45px"
+                      marginRight: "45px",
+                      display: buttonLabel === "REFER" ? "none" : "initial"
                     }}
                   >
                     <LabelContainer
@@ -152,6 +153,7 @@ class Footer extends React.Component {
           dropDownData={employeeList}
           handleFieldChange={handleFieldChange}
           onButtonClick={onDialogButtonClick}
+          dataPath={dataPath}
         />
       </div>
     );
@@ -159,10 +161,7 @@ class Footer extends React.Component {
 }
 
 const mapStateToProps = state => {
-  const { screenConfiguration } = state;
-  const { preparedFinalObject } = screenConfiguration;
-  const { Licenses } = preparedFinalObject;
-  return { Licenses, state };
+  return { state };
 };
 
 const mapDispatchToProps = dispatch => {

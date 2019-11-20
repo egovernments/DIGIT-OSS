@@ -13,20 +13,11 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
-import {
-  footer,
-  getSingleMessage,
-  getMdmsData,
-  getMapLocator,
-  getFinancialYearDates,
-  showHideMapPopup,
-  getDeleteButton,
-  getTodaysDateInYMD,
-} from "../utils";
+import { footer, getSingleMessage, getMdmsData, getMapLocator, showHideMapPopup, getDeleteButton } from "../utils";
 
 const header = getCommonHeader({
-  labelName: "Add New Event",
-  labelKey: "EVENT_ADD_NEW_LABEL",
+  labelName: getQueryArg(window.location.href, "uuid") ? "Edit Event" : "Add New Event",
+  labelKey: getQueryArg(window.location.href, "uuid") ? "EVENT_EDIT_LABEL" : "EVENT_ADD_NEW_LABEL",
 });
 
 export const createForm = getCommonCard({
@@ -312,49 +303,6 @@ export const createForm = getCommonCard({
         disabled: true,
       },
     },
-    // LocateMap: {
-    //   uiFramework: "custom-atoms",
-    //   componentPath: "Div",
-    //   gridDefination: {
-    //     xs: 12,
-    //     sm: 6,
-    //   },
-    //   children: {
-    //     subheader: getCommonSubHeader(
-    //       {
-    //         labelName: "Pick event location from the map",
-    //         labelKey: "EVENTS_PICK_MAP_LABEL",
-    //       },
-    //       {
-    //         style: {
-    //           fontSize: "12px",
-    //           fontWeight: 500,
-    //           color: "rgba(0, 0, 0, 0.60)",
-    //           marginBottom: 5,
-    //         },
-    //       }
-    //     ),
-    //     uploadButton: {
-    //       componentPath: "Button",
-    //       props: {
-    //         color: "primary",
-    //         fullWidth: true,
-    //         style: {
-    //           border: "1px solid #F48841",
-    //           width: "20%",
-    //           marginBottom: 10,
-    //         },
-    //       },
-    //       children: {
-    //         mihyLoginButtonText: getLabel({ labelName: "Locate On Map" }),
-    //       },
-    //       onClickDefination: {
-    //         action: "condition",
-    //         callBack: showHideMapPopup,
-    //       },
-    //     },
-    //   },
-    // },
     eventLocGISCoord: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
@@ -515,7 +463,7 @@ const screenConfig = {
               },
               ...header,
             },
-            deleteButton: getDeleteButton(),
+            deleteButton: getDeleteButton("EVENTSONGROUND"),
           },
         },
         createCard: {

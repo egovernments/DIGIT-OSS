@@ -58,6 +58,9 @@ class App extends Component {
               {
                 name: "citymodule",
               },
+              {
+                name: "tenantInfo",
+              },
             ],
           },
         ],

@@ -20,7 +20,7 @@ import {
 } from "egov-ui-kit/redux/common/actions";
 import set from "lodash/set";
 import commonConfig from "config/common.js";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 // const Search = <Icon action="action" name="home" color="#30588c" />;
 
 const formConfig = {
@@ -158,7 +158,7 @@ const formConfig = {
     }
   },
   afterInitForm: (action, store, dispatch) => {
-    let tenantId = JSON.parse(getUserInfo()).tenantId;
+    let tenantId = getTenantId();
     let city = JSON.parse(getUserInfo()).permanentAddress;
     let state = store.getState();
     const { citiesByModule } = state.common;

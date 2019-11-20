@@ -26,7 +26,7 @@ class PaymentForm extends Component {
     minLength: 1,
     maxLength: 11,
     calculationDetails: false
-    
+
   };
 
   // componentWillReceiveProps(nextProps) {
@@ -43,7 +43,7 @@ class PaymentForm extends Component {
   componentDidMount() {
     this.getImportantDates();
   }
- 
+
 
   getImportantDates = async () => {
     const { currentTenantId } = this.props;
@@ -102,7 +102,7 @@ class PaymentForm extends Component {
       alert(e);
     }
   };
-  
+
   getErrorMessage = value => {
     let { totalAmount } = this.props.estimationDetails[0] || {};
     let errorText = `amount should be numeric`;
@@ -204,7 +204,7 @@ class PaymentForm extends Component {
     return (
       <div>
         <Card
-        
+
           textChildren={
             <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
               <PropertyTaxDetailsCard
