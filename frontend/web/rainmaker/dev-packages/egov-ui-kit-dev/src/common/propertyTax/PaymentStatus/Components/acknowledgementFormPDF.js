@@ -296,7 +296,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
               body: [
                 [
                   { text: "Plot Size(sq yards)", border: borderKey, style: "receipt-table-key" },
-                  { text: propertyDetails[0].landArea ? `${Math.round(propertyDetails[0].landArea * 100) / 100}` : "NA", border: borderValue },
+                  { text: propertyDetails[0].landArea ? `${Math.round(propertyDetails[0].landArea * 100) / 100}` : (propertyDetails[0].buildUpArea ? `${Math.round(propertyDetails[0].buildUpArea * 100) / 100}` : "NA"), border: borderValue },
                   { text: "Property Type:", border: borderKey, style: "receipt-table-key" },
                   {
                     text: propertyDetails[0].propertySubType
