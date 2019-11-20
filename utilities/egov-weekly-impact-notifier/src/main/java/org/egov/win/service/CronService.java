@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
@@ -25,7 +26,7 @@ import org.egov.win.model.StateWide;
 import org.egov.win.model.TL;
 import org.egov.win.model.WaterAndSewerage;
 import org.egov.win.producer.Producer;
-import org.egov.win.repository.CronRepository;
+import org.egov.win.repository.ServiceCallRepository;
 import org.egov.win.utils.CronConstants;
 import org.egov.win.utils.CronUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,8 @@ public class CronService {
 	private Email getDataFromDb() {
 		Body body = new Body();
 		List<Map<String, Object>> wsData = externalAPIService.getWSData();
+		if(CollectionUtils.isEmpty(wsData))
+			throw new CustomException("EMAILER_DATA_RETREIVAL_FAILED", "Failed to retrieve data from WS module");
 		enrichHeadersOfTheTable(body);
 		enrichBodyWithStateWideData(body, wsData);
 		enrichBodyWithPGRData(body);

@@ -22,7 +22,10 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -175,6 +178,14 @@ public class CronUtils {
 		date.append(calendar.get(Calendar.DAY_OF_MONTH)).append(suffix)
 				.append(new DateFormatSymbols().getMonths()[calendar.get(Calendar.MONTH)]);
 		return date.toString();
+	}
+	
+	public RestTemplate restTemplate() {
+		RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
+	    return restTemplateBuilder
+	            .setConnectTimeout(propertyManager.getRestTemplateInMS())
+	            .setReadTimeout(propertyManager.getRestTemplateInMS())
+	            .build();
 	}
 
 }

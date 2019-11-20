@@ -9,7 +9,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.tracer.model.CustomException;
 import org.egov.win.model.SearcherRequest;
-import org.egov.win.repository.CronRepository;
+import org.egov.win.repository.ServiceCallRepository;
 import org.egov.win.utils.CronConstants;
 import org.egov.win.utils.CronUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ExternalAPIService {
 	
 	@Autowired
-	private CronRepository repository;
+	private ServiceCallRepository repository;
 
 	@Autowired
 	private CronUtils utils;

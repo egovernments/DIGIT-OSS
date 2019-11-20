@@ -36,5 +36,8 @@ public class PropertyManager {
 	@Value("${egov.ws.interval.in.ms}")
 	public Long wsIntervalInMS;
 	
+	@Value("${egov.resttemplate.timeout.in.ms}")
+	public Integer restTemplateInMS;
+	
 
 }

@@ -8,8 +8,6 @@ import org.egov.win.service.CronService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
@@ -24,11 +22,10 @@ public class WeeklyImpactEmailerApp
 	@Autowired
 	private CronService service;
 	
-	
 	public static void main(String[] args) {
 		SpringApplication.run(WeeklyImpactEmailerApp.class, args);
-	} 
-	
+	}
+		
 	@PostConstruct
 	private void start() {
 		try {

@@ -1,10 +1,9 @@
 package org.egov.win.repository;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.egov.tracer.model.ServiceCallException;
+import org.egov.win.utils.CronUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.HttpClientErrorException;
@@ -18,10 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Repository
 @Slf4j
-public class CronRepository {
+public class ServiceCallRepository {
 
 	@Autowired
-	private RestTemplate restTemplate;
+	private CronUtils utils;
 
 	/**
 	 * Fetches results from a REST service using the uri and object
@@ -34,6 +33,7 @@ public class CronRepository {
 	public Optional<Object> fetchResult(StringBuilder uri, Object request) {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		RestTemplate restTemplate = utils.restTemplate();
 		Object response = null;
 		try {
 			response = restTemplate.postForObject(uri.toString(), request, JsonNode.class);
