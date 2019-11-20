@@ -218,7 +218,7 @@ class ReviewForm extends Component {
       toggleTerms
     } = this.props;
     let { totalAmount } = estimationDetails[0] || {};
-    const { generalMDMSDataById = {} } = this.props;
+    const { generalMDMSDataById = {}  , loadMdmsData={}} = this.props;
     return (
       <div>
         <Card
@@ -230,7 +230,7 @@ class ReviewForm extends Component {
                 openCalculationDetails={this.openCalculationDetails}
                 optionSelected={valueSelected}
               />
-              <PropertyAddressInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
+              <PropertyAddressInfo loadMdmsData={loadMdmsData} generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
               <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
               <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo>
               {/* {isAssesment && */}
@@ -293,10 +293,11 @@ class ReviewForm extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
   const { common = {} } = state;
-  const { generalMDMSDataById } = common || {};
+  const { generalMDMSDataById , loadMdmsData } = common || {};
   return {
     ownProps,
     generalMDMSDataById,
+     loadMdmsData,
   };
 };
 const mapDispatchToProps = dispatch => ({

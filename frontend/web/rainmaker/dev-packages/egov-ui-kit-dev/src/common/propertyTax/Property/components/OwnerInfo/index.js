@@ -59,6 +59,7 @@ const getOwnerInfo = (latestPropertyDetails, generalMDMSDataById) => {
                 institution.type &&
                 generalMDMSDataById &&
                 generalMDMSDataById["OwnerShipCategory"] &&
+                generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory] &&
                 generalMDMSDataById["OwnerShipCategory"][latestPropertyDetails.ownershipCategory].name) ||
                 "NA",
             }
