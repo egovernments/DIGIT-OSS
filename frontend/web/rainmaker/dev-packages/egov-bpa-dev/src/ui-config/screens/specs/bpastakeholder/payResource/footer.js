@@ -19,7 +19,7 @@ export const callPGService = async (state, dispatch) => {
   const tenantId = getQueryArg(window.location.href, "tenantId");
   let callbackUrl = `${document.location.origin}/${
     process.env.NODE_ENV === "production" ? "citizen" : ""
-  }/tradelicense-citizen/PaymentRedirectPage`;
+  }/bpastakeholder-citizen/PaymentRedirectPage`;
   try {
     const queryObj = [
       {
@@ -376,7 +376,7 @@ export const footer = getCommonApplyFooter({
     },
     roleDefination: {
       rolePath: "user-info.roles",
-      // roles: ["CITIZEN"]
+      roles: ["CITIZEN"],
       action: "PAY"
     },
     visible: process.env.REACT_APP_NAME === "Citizen" ? true : false

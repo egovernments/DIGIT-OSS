@@ -34,7 +34,8 @@ export const tradeLocationDetails = getCommonCard(
           sm: 12
         },
         jsonPath:
-          "Licenses[0].tradeLicenseDetail.owners[0].address.addressLine1"
+          "Licenses[0].tradeLicenseDetail.owners[0].address.addressLine1",
+        required: true
       }),
       communicationAddress: getTextField({
         label: {
@@ -49,7 +50,8 @@ export const tradeLocationDetails = getCommonCard(
           xs: 12,
           sm: 12
         },
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.addressLine1"
+        jsonPath: "Licenses[0].tradeLicenseDetail.address.addressLine1",
+        required: true
       })
     })
   },
