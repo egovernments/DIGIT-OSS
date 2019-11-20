@@ -36,6 +36,8 @@ public class EasyPayGateway implements Gateway {
     private final String OPTIONAL_FIELDS;
     private final String SUB_MERCHANT_ID;
     private final String PAYMENT_MODE;
+    private final String RETURN_URL;
+    private final String ORIGINAL_RETURN_URL_KEY;
 
     private final String MERCHANT_ID_KEY = "merchantid";
     private final String MANDATORY_FIELDS_KEY = "mandatory fields";
@@ -67,6 +69,8 @@ public class EasyPayGateway implements Gateway {
         PAYMENT_MODE = environment.getRequiredProperty("easypay.payment.mode");
         GATEWAY_URL = environment.getRequiredProperty("easypay.gateway.url");
         GATEWAY_TRANSACTION_STATUS_URL = environment.getRequiredProperty("easypay.gateway.status.url");
+        RETURN_URL = environment.getRequiredProperty("easypay.gateway.return.url");
+        ORIGINAL_RETURN_URL_KEY= environment.getRequiredProperty("easypay.original.return.url.key");
     }
 
 
@@ -79,7 +83,7 @@ public class EasyPayGateway implements Gateway {
                 SUB_MERCHANT_ID+"|"+ 
                 Utils.formatAmtAsRupee(transaction.getTxnAmount()));
         treeMap.put(OPTIONAL_FIELDS_KEY, (OPTIONAL_FIELDS));
-        treeMap.put(RETURN_URL_KEY, transaction.getCallbackUrl());
+        treeMap.put(RETURN_URL_KEY, getReturnUrl(transaction.getCallbackUrl()));
         treeMap.put(REFERENCE_NO_KEY, (transaction.getTxnId()));
         treeMap.put(SUB_MERCHANT_ID_KEY, (SUB_MERCHANT_ID));
         treeMap.put(TRANSACTION_AMOUNT_KEY, (Utils.formatAmtAsRupee(transaction.getTxnAmount())));
@@ -100,7 +104,7 @@ public class EasyPayGateway implements Gateway {
             paramMap.put(MANDATORY_FIELDS_KEY, easypayUtil.getEncryptedMandatoryFields(transaction.getTxnId(), 
                     SUB_MERCHANT_ID,
                     Utils.formatAmtAsRupee(transaction.getTxnAmount())));
-            paramMap.put(RETURN_URL_KEY, easypayUtil.encrypt(transaction.getCallbackUrl()));
+            paramMap.put(RETURN_URL_KEY, easypayUtil.encrypt(getReturnUrl(transaction.getCallbackUrl())));
             paramMap.put(OPTIONAL_FIELDS_KEY, easypayUtil.encrypt(OPTIONAL_FIELDS));
             paramMap.put(REFERENCE_NO_KEY, easypayUtil.encrypt(transaction.getTxnId()));
             paramMap.put(SUB_MERCHANT_ID_KEY, easypayUtil.encrypt(SUB_MERCHANT_ID));
@@ -122,6 +126,11 @@ public class EasyPayGateway implements Gateway {
             throw new CustomException("URL_GEN_FAILED",
                     "URL generation failed, gateway redirect URI cannot be generated");
         }
+    }
+
+    private String getReturnUrl(String callbackUrl) {
+        return UriComponentsBuilder.fromHttpUrl(RETURN_URL).queryParam(ORIGINAL_RETURN_URL_KEY, callbackUrl)
+        .build().encode().toUriString();
     }
 
     @Override
