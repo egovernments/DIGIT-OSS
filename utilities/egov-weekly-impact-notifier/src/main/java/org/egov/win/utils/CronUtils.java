@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -181,11 +182,10 @@ public class CronUtils {
 	}
 	
 	public RestTemplate restTemplate() {
-		RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
-	    return restTemplateBuilder
-	            .setConnectTimeout(propertyManager.getRestTemplateInMS())
-	            .setReadTimeout(propertyManager.getRestTemplateInMS())
-	            .build();
+		HttpComponentsClientHttpRequestFactory clientRequestFactory = new HttpComponentsClientHttpRequestFactory();
+		clientRequestFactory.setReadTimeout(propertyManager.getRestTemplateInMS());
+		RestTemplate restTemplate = new RestTemplate(clientRequestFactory);
+	    return restTemplate;
 	}
 
 }
