@@ -75,7 +75,11 @@ const prepareTextField = uom => {
       placeholder: {
         labelKey: `NOC_PROPERTY_DETAILS_${uom}_PLACEHOLDER`
       },
-      pattern: /^[0-9]*$/i,
+      pattern: /^\d{0,10}$/i,
+      
+    //   onInput:(e)=>{ 
+    //     e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,2)
+    // },
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       // required: true,
       jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${uom}`,
