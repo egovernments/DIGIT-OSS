@@ -9,7 +9,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @ToString
-@NoArgsConstructor
 public class IdResponse {
 
     private String id;
