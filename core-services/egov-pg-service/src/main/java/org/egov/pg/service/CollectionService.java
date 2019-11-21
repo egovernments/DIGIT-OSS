@@ -1,4 +1,4 @@
-package org.egov.pg.service;
+/*package org.egov.pg.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
@@ -80,7 +80,7 @@ public class CollectionService {
                 return receipts;
     }
 
-    public List<Receipt> validateProvisionalReceipt(TransactionRequest transactionRequest){
+    public List<Receipt> (TransactionRequest transactionRequest){
         Transaction transaction = transactionRequest.getTransaction();
 
         List<BillDetail> billDetails = new ArrayList<>();
@@ -138,3 +138,4 @@ public class CollectionService {
 
     }
 }
+*/

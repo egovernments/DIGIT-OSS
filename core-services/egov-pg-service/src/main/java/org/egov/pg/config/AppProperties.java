@@ -36,6 +36,10 @@ public class AppProperties {
     private final String collectionServiceCreatePath;
 
     private final String collectionServiceValidatePath;
+    
+    private final String paymentCreatePath;
+
+    private final String paymentValidatePath;
 
     private final String bankAccountHost;
 
@@ -57,6 +61,8 @@ public class AppProperties {
         this.collectionServiceValidatePath = environment.getRequiredProperty("egov.collectionservice.validate.path");
         this.bankAccountHost = environment.getRequiredProperty("egov.bankaccountservice.host");
         this.bankAccountPath = environment.getRequiredProperty("egov.bankaccountservice.path");
+        this.paymentCreatePath = environment.getRequiredProperty("egov.collectionservice.payment.create.path");
+        this.paymentValidatePath = environment.getRequiredProperty("egov.collectionservice.payment.validate.path");
     }
 
 }

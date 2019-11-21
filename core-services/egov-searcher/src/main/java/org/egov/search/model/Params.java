@@ -26,4 +26,10 @@ public class Params {
 	
 	@JsonProperty("operator")
 	private String operator;
+	
+	@JsonProperty("isConstant")
+	private Boolean isConstant;
+	
+	@JsonProperty("value")
+	private String value;
 }

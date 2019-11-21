@@ -2,7 +2,6 @@ package org.egov.search.service;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +12,7 @@ import org.egov.search.model.SearchDefinition;
 import org.egov.search.model.SearchRequest;
 import org.egov.search.repository.SearchRepository;
 import org.egov.search.utils.ResponseInfoFactory;
+import org.egov.search.utils.SearchReqValidator;
 import org.egov.search.utils.SearchUtils;
 import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
@@ -26,11 +26,17 @@ import com.google.gson.reflect.TypeToken;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class SearchService {
 
 	@Autowired
 	private SearchRepository searchRepository;
+	
+	@Autowired
+	private SearchReqValidator searchReqValidator;
 	
 	@Autowired
 	private SearchApplicationRunnerImpl runner;
@@ -41,33 +47,27 @@ public class SearchService {
 	@Autowired
 	private SearchUtils searchUtils;
 	
-	public static final Logger logger = LoggerFactory.getLogger(SearchService.class);
+	public static final Logger log = LoggerFactory.getLogger(SearchService.class);
 
 
 	public Object searchData(SearchRequest searchRequest, String moduleName, String searchName) {
+		searchReqValidator.validate(searchRequest, moduleName, searchName);
 		Map<String, SearchDefinition> searchDefinitionMap = runner.getSearchDefinitionMap();
 		Definition searchDefinition = null;
-		try{
-			searchDefinition = searchUtils.getSearchDefinition(searchDefinitionMap, moduleName, searchName);
-		}catch(CustomException e){
-			throw e;
-		}
+		searchDefinition = searchUtils.getSearchDefinition(searchDefinitionMap, moduleName, searchName);
 		List<String> maps = new ArrayList<>();
 		try{
-			maps = searchRepository.searchData(searchRequest, searchDefinition);
-		}catch(CustomException e){
-			throw e;
+			maps = searchRepository.fetchData(searchRequest, searchDefinition);
 		}catch(Exception e){
-			logger.error("Exception: ",e);
-			throw new CustomException(HttpStatus.INTERNAL_SERVER_ERROR.toString(), 
-					"There was an error encountered at the Db");
+			log.error("Exception: ",e);
+			throw new CustomException("DB_QUERY_EXECUTION_ERROR", "There was an error encountered at the Db");
 		}
 		Object data = null;
 		try{
 			data = formatResult(maps, searchDefinition, searchRequest);
 		}catch(Exception e){
-			logger.error("Exception: ",e);
-			throw new CustomException(HttpStatus.BAD_REQUEST.toString(), 
+			log.error("Exception: ",e);
+			throw new CustomException("RESULT_FORMAT_ERROR", 
 					"There was an error encountered while formatting the result, Verify output config from the yaml file.");
 		}
 		
@@ -102,33 +102,5 @@ public class SearchService {
 		
 		return documentContext.jsonString().toString();
 		
-	}
-
-	/**+
-	 *
-	 * @param searchCriteriafromBody :- search criteria coming from request body
-	 * @param searchCriteriafromUrl	:- search criteria coming from url query params
-	 * @return	search criteria with combination of both criterias
-	 */
-	public HashMap<String,String> fetchSearchCriteria(HashMap<String,String> searchCriteriafromBody,HashMap<String,String>searchCriteriafromUrl)
-	{
-		if(((searchCriteriafromBody == null) || searchCriteriafromBody.isEmpty()) && ((searchCriteriafromUrl == null) || searchCriteriafromUrl.isEmpty()))
-		{
-			return null;
-		}
-		else {
-
-			if((searchCriteriafromUrl==null)||searchCriteriafromUrl.isEmpty()){
-				return searchCriteriafromBody;
-			}
-			else if((searchCriteriafromBody==null)||searchCriteriafromBody.isEmpty()){
-				return 	searchCriteriafromUrl;
-			}
-			else{
-				searchCriteriafromBody.putAll(searchCriteriafromUrl);
-				return searchCriteriafromBody;
-			}
-
-		}
 	}
 }
