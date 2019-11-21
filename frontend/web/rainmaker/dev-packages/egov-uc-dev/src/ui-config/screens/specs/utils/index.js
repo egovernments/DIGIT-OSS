@@ -374,5 +374,11 @@ export const getTextToLocalMapping = label => {
         "UC_COMMON_TABLE_COL_STATUS",
         localisationLabels
       );
+    case "BILLINGSERVICE_BUSINESSSERVICE_PT":
+      return getLocaleLabels(
+        "Property Tax",
+        "BILLINGSERVICE_BUSINESSSERVICE_PT",
+        localisationLabels
+      );
   }
 };
