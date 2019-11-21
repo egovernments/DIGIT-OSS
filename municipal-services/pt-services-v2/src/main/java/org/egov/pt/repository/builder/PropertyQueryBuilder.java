@@ -169,8 +169,10 @@ public class PropertyQueryBuilder {
 				addToPreparedStatement(preparedStmtList, ownerids);
 			}
 
-			return builder.toString().replace("WHERE_CLAUSE_PLACHOLDER_ASSESSMENT",WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.toString())
+			String defaultQuery =  builder.toString().replace("WHERE_CLAUSE_PLACHOLDER_ASSESSMENT",WHERE_CLAUSE_PLACHOLDER_ASSESSMENT.toString())
 					.replace("WHERE_CLAUSE_PLACHOLDER_PROPERTY","").replace("WHERE_CLAUSE_PLACHOLDER",WHERE_CLAUSE_PLACHOLDER);
+
+			return addPaginationWrapper(defaultQuery, preparedStmtList, criteria);
 		}
 
 		
