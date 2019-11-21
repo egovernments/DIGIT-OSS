@@ -1195,12 +1195,13 @@ const fetchBillResponse=await getBill(getBillQueryObj)
   const payload = isPAID
     ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
     : fetchBillResponse.Bill[0];
-  const estimateData = payload
+  let estimateData = payload
     ? isPAID
-      ? getEstimateData(payload.Payments[0].paymentDetails[0].bill, isPAID, LicenseData)
+      ?payload&&payload.Payments&&payload.Payments.length>0&& getEstimateData(payload.Payments[0].paymentDetails[0].bill, isPAID, LicenseData)
       : payload&&
         getEstimateData(payload, false, LicenseData)
     : [];
+    estimateData=estimateData||[];
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
   payload &&
