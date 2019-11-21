@@ -39,6 +39,26 @@ export const header = getCommonContainer({
   }
 });
 
+
+const getHeader=(applicationNumber)=>{
+return getCommonContainer({
+  header: getCommonHeader({
+    labelName: `Application for Fire NOC (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
+    labelKey: "NOC_COMMON_APPLY_FIRE_NOC_HEADER_LABEL"
+  }),
+  applicationNumber: {
+    uiFramework: "custom-atoms-local",
+    moduleName: "egov-noc",
+    componentPath: "ApplicationNoContainer",
+    props: {
+      number:applicationNumber
+    },
+    visible: true
+  }
+})
+}
+
+
 const getAcknowledgementCard = (
   state,
   dispatch,
@@ -51,7 +71,7 @@ const getAcknowledgementCard = (
   if (purpose === "apply" && status === "success") {
     loadPdfGenerationData(applicationNumber, tenant);
     return {
-      header,
+      header:getHeader(applicationNumber),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
