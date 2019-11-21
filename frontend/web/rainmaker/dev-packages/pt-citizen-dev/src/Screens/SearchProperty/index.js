@@ -60,12 +60,12 @@ class SearchProperty extends Component {
 
   onSearchClick = (form, formKey) => {
     const { propertiesFound } = this.props;
-    const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
+    const { city, ids, oldpropertyids, mobileNumber, applicationNumber,houseNumber } = form.fields || {};
     const tableData = this.extractTableData(propertiesFound);
 
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
-    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value) {
+    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value  && !houseNumber.value) {
       this.props.toggleSnackbarAndSetText(
         true,
         {
@@ -87,6 +87,9 @@ class SearchProperty extends Component {
       }
       if (mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
+      }
+      if (houseNumber && houseNumber.value) {
+        queryParams.push({ key: "houseNumber", value: houseNumber.value });
       }
       this.setState({
         searchResult: tableData

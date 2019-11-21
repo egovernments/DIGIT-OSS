@@ -1,6 +1,6 @@
 import { sortDropdown } from "egov-ui-kit/utils/PTCommon";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
-import { removeForm } from "egov-ui-kit/redux/form/actions";
+import { removeForm ,setFieldProperty} from "egov-ui-kit/redux/form/actions";
 import { removeFormKey } from "./utils/removeFloors";
 import { prepareDropDownData } from "./utils/reusableFields";
 import set from "lodash/set";
@@ -24,6 +24,10 @@ const formConfig = {
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         removeFormKey(formKey, field, dispatch, state);
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, []));
+       // dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].additionalDetails.innerDimensionsKnown`, "false"));
+        //dispatch(setFieldProperty("basicInformation", "innerDimensions", "dropDownData", "Yes"));
+        dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].constructionYear`, null));
+        dispatch(setFieldProperty("basicInformation", "datePicker", "value", ""));
         let minorObject = get(state, `common.generalMDMSDataById.UsageCategoryMinor[${field.value}]`);
         if (!isEmpty(minorObject)) {
           dispatch(prepareFormData("Properties[0].propertyDetails[0].usageCategoryMajor", minorObject.usageCategoryMajor));
@@ -45,8 +49,11 @@ const formConfig = {
       fullWidth: true,
       updateDependentFields: ({ formKey, field, dispatch, state }) => {
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].units`, []));
+     //   dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].additionalDetails.innerDimensionsKnown`, "false"));
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].landArea`, null));
         dispatch(prepareFormData(`Properties[0].propertyDetails[0].buildUpArea`, null));
+        dispatch(prepareFormData(`Properties[0].propertyDetails[0].units[0].constructionYear`, null));
+        dispatch(setFieldProperty("basicInformation", "datePicker", "value", ""));
         dispatch(removeForm("plotDetails"));
         removeFormKey(formKey, field, dispatch, state);
         let subTypeObject = get(state, `common.generalMDMSDataById.PropertySubType[${field.value}]`);

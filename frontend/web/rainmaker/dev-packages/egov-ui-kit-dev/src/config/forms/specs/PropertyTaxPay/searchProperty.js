@@ -59,6 +59,18 @@ const formConfig = {
       maxLength: 64,
       value: "",
     },
+      houseNumber: {
+        id: "house-number",
+        jsonPath: "",
+        type: "textfield",
+        floatingLabelText: "PT_PROPERTY_DETAILS_DOOR_NUMBER",
+        hintText: "PT_PROPERTY_DETAILS_DOOR_NUMBER_PLACEHOLDER",
+        numcols: 4,
+        errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
+        errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+        maxLength: 64,
+        value: "",
+      },
   },
   submit: {
     type: "submit",

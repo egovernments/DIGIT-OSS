@@ -196,8 +196,8 @@ const getUnitInfo = (units = []) => {
   let floors = [];
   units.map((unit, index) => {
     let floor = [{
-      key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
-      value: unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor :
+      key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),  
+      value: unit && unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor :
         unit.usageCategoryMajor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMajor : "NA",
     }, {
 
@@ -210,23 +210,23 @@ const getUnitInfo = (units = []) => {
     },
     {
       key: getTranslatedLabel("PT_ASSESMENT_INFO_INNER_DIMENSION", localizationLabelsData),
-      value: unit.additionalDetails.innerDimensionsKnown ? unit.additionalDetails.innerDimensionsKnown === "true"? "Yes" : "No" : "NA",
+      value: unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown ? unit.additionalDetails.innerDimensionsKnown === "true"? "Yes" : "No" : "NA",
     },
     {
       key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR26", localizationLabelsData),
-      value: unit.additionalDetails.roomsArea ? unit.additionalDetails.roomsArea : "NA",
+      value: unit.additionalDetails && unit.additionalDetails.roomsArea ? unit.additionalDetails.roomsArea : "NA",
     },
     {
       key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR27", localizationLabelsData),
-      value: unit.additionalDetails.commonArea ? unit.additionalDetails.commonArea : "NA",
+      value: unit.additionalDetails && unit.additionalDetails.commonArea ? unit.additionalDetails.commonArea : "NA",
     },
     {
       key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR28", localizationLabelsData),
-      value: unit.additionalDetails.garageArea ?  unit.additionalDetails.garageArea : "NA",
+      value: unit.additionalDetails && unit.additionalDetails.garageArea ?  unit.additionalDetails.garageArea : "NA",
     },
     {
       key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR29", localizationLabelsData),
-      value: unit.additionalDetails.bathroomArea ? unit.additionalDetails.bathroomArea : "NA",
+      value: unit.additionalDetails &&  unit.additionalDetails.bathroomArea ? unit.additionalDetails.bathroomArea : "NA",
     },
      {
       key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),

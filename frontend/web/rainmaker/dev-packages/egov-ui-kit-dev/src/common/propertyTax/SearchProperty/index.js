@@ -48,10 +48,10 @@ class SearchProperty extends Component {
 
   };
   onSearchClick = (form, formKey) => {
-    const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
+    const { city, ids, oldpropertyids, mobileNumber, applicationNumber,houseNumber } = form.fields || {};
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
-    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value) {
+    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value && !houseNumber.value) {
       this.props.toggleSnackbarAndSetText(
         true,
         { labelName: "Please fill atleast one field along with city", labelKey: "ERR_FILL_ATLEAST_ONE_FIELD_WITH_CITY" },
@@ -73,6 +73,9 @@ class SearchProperty extends Component {
       }
       if (applicationNumber && applicationNumber.value) {
         queryParams.push({ key: "applicationNumber", value: applicationNumber.value });
+      }
+      if (houseNumber && houseNumber.value) {
+        queryParams.push({ key: "houseNumber", value: houseNumber.value });
       }
       this.props.fetchProperties(queryParams);
       this.setState({ showTable: true });
