@@ -13,6 +13,7 @@ import get from "lodash/get";
 import set from "lodash/set";
 import commonConfig from "config/common.js";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -553,4 +554,14 @@ export const getUserDataFromUuid = async bodyObject => {
     console.log(error);
     return {};
   }
+};
+
+export const getCommonPayUrl = (dispatch , applicationNo, tenantId) => {
+  const appName =
+    process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee";
+  const url =
+    process.env.NODE_ENV === "development"
+      ? `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}`
+      : `/${appName}/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}`;
+      dispatch(setRoute(url));
 };

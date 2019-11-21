@@ -12,6 +12,7 @@ import {
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {getCommonPayUrl} from "egov-ui-framework/ui-utils/commons"
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
@@ -58,7 +59,9 @@ export const newCollectionFooter = getCommonApplyFooter({
     onClickDefination: {
       action: "condition",
       callBack: (state, dispatch) => {
-        processDemand(state, dispatch);
+        const applicationNumber = get(state.screenConfiguration.preparedFinalObject, "Demands[0].consumerCode");
+        const tenantId = get(state.screenConfiguration.preparedFinalObject, "Demands[0].tenantId");
+        getCommonPayUrl(dispatch,applicationNumber, tenantId);
       }
     }
   }
