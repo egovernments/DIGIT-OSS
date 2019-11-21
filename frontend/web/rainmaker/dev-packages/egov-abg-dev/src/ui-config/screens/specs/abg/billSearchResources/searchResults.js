@@ -46,6 +46,7 @@ export const searchResults = {
                 cursor: "pointer"
               }}
               onClick={(value) => {
+                const appName = process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee";
                   if(tableMeta.rowData[5] === "Paid"){
 
                   const receiptQueryString = [
@@ -62,7 +63,7 @@ export const searchResults = {
                         tableMeta.rowData[0].split("-")[0]
                       }` 
                     :
-                    `/employee/egov-common/pay?consumerCode=${
+                    `/${appName}/egov-common/pay?consumerCode=${
                         tableMeta.rowData[1]
                       }&tenantId=${tableMeta.rowData[7]}&businessService=${
                         tableMeta.rowData[0].split("-")[0]
