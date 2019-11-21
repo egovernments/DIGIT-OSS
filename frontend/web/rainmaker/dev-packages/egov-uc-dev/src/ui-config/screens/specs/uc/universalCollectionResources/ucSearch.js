@@ -15,13 +15,10 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import set from "lodash/set";
 import get from "lodash/get";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
-//const hasApproval = getQueryArg(window.location.href, "hasApproval");
 let enableButton = true;
-//enableInbox = hasApproval && hasApproval === "false" ? false : true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 
 const resetFields = (state, dispatch) => {
@@ -94,7 +91,6 @@ export const UCSearchCard = getCommonCard({
       required: false,
       visible: true,
       jsonPath: "searchScreen.receiptNumbers",
-      // sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -110,7 +106,7 @@ export const UCSearchCard = getCommonCard({
           labelName: "Select Service Category",
           labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
         },
-        required: true,
+        // required: true,
         jsonPath: "searchScreenMdmsData.businessServiceSelected",
         localePrefix: {
           masterName: "BusinessService",

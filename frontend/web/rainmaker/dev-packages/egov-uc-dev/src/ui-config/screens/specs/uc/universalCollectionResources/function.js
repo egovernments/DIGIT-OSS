@@ -33,7 +33,6 @@ export const searchApiCall = async (state, dispatch) => {
       key: "tenantId",
       value: tenantId
     },
-    // { key: "limit", value: "10" },
     { key: "offset", value: "0" }
   ];
   let searchScreenObject = get(
@@ -58,7 +57,8 @@ export const searchApiCall = async (state, dispatch) => {
         "warning"
       )
     );
-  } else if (
+  }
+  else if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
   ) {
@@ -72,15 +72,17 @@ export const searchApiCall = async (state, dispatch) => {
         "warning"
       )
     );
-  } else if (
-    (searchScreenObject["fromDate"] === undefined ||
-      searchScreenObject["fromDate"].length === 0) &&
-    searchScreenObject["toDate"] !== undefined &&
-    searchScreenObject["toDate"].length !== 0
-  ) {
-    dispatch(toggleSnackbar(true, "Please fill From Date", "warning"));
-  } else {
-    //  showHideProgress(true, dispatch);
+  } 
+  //else if (
+  //   (searchScreenObject["fromDate"] === undefined ||
+  //     searchScreenObject["fromDate"].length === 0) &&
+  //   searchScreenObject["toDate"] !== undefined &&
+  //   searchScreenObject["toDate"].length !== 0
+  // ) {
+  //   dispatch(toggleSnackbar(true, "Please fill From Date", "warning"));
+  // } 
+  
+  else {
     for (var key in searchScreenObject) {
       if (searchScreenObject.hasOwnProperty(key) && key === "businessCodes") {
         queryObject.push({ key: key, value: searchScreenObject[key] });
@@ -103,39 +105,33 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
-
-    if (queryObject.length > 3) {
       const responseFromAPI = await getSearchResults(queryObject);
       dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
-      const Receipt = (responseFromAPI && responseFromAPI.Receipt) || [];
+      const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
       const response = [];
-      for (let i = 0; i < Receipt.length; i++) {
+      for (let i = 0; i < Payments.length; i++) {
         const serviceTypeLabel = getTransformedLocale(
-          get(Receipt[i], `Bill[0].billDetails[0].businessService`)
+          get(Payments[i], `paymentDetails[0].bill.businessService`)
         );
         response[i] = {
-          receiptNumber: get(Receipt[i], `receiptNumber`),
-          payeeName: get(Receipt[i], `Bill[0].payerName`),
-          serviceType: getLocaleLabels(
-            "",
-            `BILLINGSERVICE_BUSINESSSERVICE_${serviceTypeLabel}`,
-            transfomedKeys
-          ),
-          date: Receipt[i].receiptDate,
-          amount: Receipt[i].Bill[0].billDetails[0].amountPaid,
-          status: Receipt[i].Bill[0].billDetails[0].status
-        };
+        receiptNumber: get(Payments[i], `paymentDetails[0].receiptNumber`),
+        payeeName: get(Payments[i], `payerName`),
+        serviceType: serviceTypeLabel,
+        receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
+        amount: get(Payments[i], `paymentDetails[0].bill.totalAmount`),
+        status: get(Payments[i], `paymentDetails[0].bill.status`),
+        tenantId : get(Payments[i], `tenantId`),        };
       }
 
       try {
         let data = response.map(item => ({
           [getTextToLocalMapping("Receipt No.")]: item.receiptNumber || "-",
           [getTextToLocalMapping("Payee Name")]: item.payeeName || "-",
-          [getTextToLocalMapping("Service Type")]: item.serviceType || "-",
-          [getTextToLocalMapping("Date")]: convertEpochToDate(item.date) || "-",
+          [getTextToLocalMapping("Service Type")]: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
+          [getTextToLocalMapping("Date")]: convertEpochToDate(item.receiptdate) || "-",
           [getTextToLocalMapping("Amount[INR]")]: item.amount || "-",
           [getTextToLocalMapping("Status")]: item.status || "-",
-          ["tenantId"]: item.tenantId
+          ["tenantId"]: item.tenantId || "-"
         }));
         dispatch(
           handleField(
@@ -162,19 +158,19 @@ export const searchApiCall = async (state, dispatch) => {
         dispatch(toggleSnackbar(true, error.message, "error"));
         console.log(error);
       }
-    } else {
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName:
-              "Please fill atleast one more field apart from service category !",
-            labelKey: "ERR_FILL_ONE_MORE_SEARCH_FIELD"
-          },
-          "warning"
-        )
-      );
-    }
+    // } else {
+    //   dispatch(
+    //     toggleSnackbar(
+    //       true,
+    //       {
+    //         labelName:
+    //           "Please fill atleast one more field apart from service category !",
+    //         labelKey: "ERR_FILL_ONE_MORE_SEARCH_FIELD"
+    //       },
+    //       "warning"
+    //     )
+    //   );
+    // }
   }
 };
 
