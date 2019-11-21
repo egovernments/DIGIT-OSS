@@ -6,13 +6,10 @@ import { applyTradeLicense } from "../../../../../ui-utils/commons";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
-  setMultiOwnerForApply,
-  setValidToFromVisibilityForApply,
   getDocList,
-  setOwnerShipDropDownFieldChange,
-  createEstimateData,
   validateFields,
-  ifUserRoleExists
+  ifUserRoleExists,
+  createEstimateData
 } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
@@ -29,7 +26,7 @@ import some from "lodash/some";
 
 const moveToSuccess = (LicenseData, dispatch) => {
   const applicationNo = get(LicenseData, "applicationNumber");
-  const tenantId = get(LicenseData, "tenantId");
+  const tenantId = process.env.REACT_APP_DEFAULT_TENANT_ID;
   const financialYear = get(LicenseData, "financialYear");
   const purpose = "apply";
   const status = "success";
@@ -108,6 +105,8 @@ export const callBackForNext = async (state, dispatch) => {
 
     if (!isTradeDetailsValid || !isTradeLocationValid || !isLocationValid) {
       isFormValid = false;
+    } else {
+      isFormValid = await applyTradeLicense(state, dispatch);
     }
   }
 
@@ -159,7 +158,7 @@ export const callBackForNext = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
     );
-    // isFormValid = await applyTradeLicense(state, dispatch);
+    isFormValid = await applyTradeLicense(state, dispatch);
     if (isFormValid) {
       moveToSuccess(LicenseData, dispatch);
     }

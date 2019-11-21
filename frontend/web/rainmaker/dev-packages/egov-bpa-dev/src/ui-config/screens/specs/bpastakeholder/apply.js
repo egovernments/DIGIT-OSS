@@ -309,12 +309,6 @@ const screenConfig = {
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     getData(action, state, dispatch).then(responseAction => {
       const queryObj = [{ key: "tenantId", value: tenantId }];
-      getBoundaryData(action, state, dispatch, queryObj);
-      let props = get(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
-        {}
-      );
       props.value = tenantId;
       props.disabled = true;
       set(
@@ -327,21 +321,6 @@ const screenConfig = {
           "Licenses[0].tradeLicenseDetail.address.city",
           tenantId
         )
-      );
-      const mohallaLocalePrefix = {
-        moduleName: tenantId,
-        masterName: "REVENUE"
-      };
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla.props.localePrefix",
-        mohallaLocalePrefix
-      );
-      //hardcoding license type to permanent
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLicenseType.props.value",
-        "PERMANENT"
       );
     });
 

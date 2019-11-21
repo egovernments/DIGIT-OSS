@@ -56,6 +56,7 @@ export const organizationDetails = getCommonCard({
       },
       jsonPath: "Licenses[0].tradeLicenseDetail.institution.instituionName"
     }),
+
     contactNo: getTextField({
       label: {
         labelName: "Contact No.",

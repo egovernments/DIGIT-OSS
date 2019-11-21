@@ -79,7 +79,7 @@ export const getGenderRadioButton = {
       },
       {
         label: "Female",
-        labelKey: "COMMON_GENDER_MALE",
+        labelKey: "COMMON_GENDER_FEMALE",
         value: "FEMALE"
       },
       {

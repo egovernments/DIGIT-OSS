@@ -253,6 +253,20 @@ export const getBoundaryData = async (
   }
 };
 
+const updateownersAddress = (dispatch, payload) => {
+  const owners = get(payload, "Licenses[0].tradeLicenseDetail.owners");
+  let permanantAddrLine1 = get(owners[0], "address.addressLine1");
+  let permanantAddr = get(owners[0], "permanentAddress");
+  if (!permanantAddrLine1) {
+    set(owners[0], "address.addressLine1", permanantAddr);
+  }
+  dispatch(
+    prepareFinalObject(
+      "LicensesTemp[0].tradeLicenseDetail.owners",
+      JSON.parse(JSON.stringify(owners))
+    )
+  );
+};
 const createOwnersBackup = (dispatch, payload) => {
   const owners = get(payload, "Licenses[0].tradeLicenseDetail.owners");
   owners &&
@@ -264,33 +278,6 @@ const createOwnersBackup = (dispatch, payload) => {
       )
     );
 };
-
-// const getMultipleAccessories = licenses => {
-//   let accessories = get(licenses, "tradeLicenseDetail.accessories");
-//   let mergedAccessories =
-//     accessories &&
-//     accessories.reduce((result, item) => {
-//       if (item && item !== null && item.hasOwnProperty("accessoryCategory")) {
-//         if (item.hasOwnProperty("id")) {
-//           if (item.hasOwnProperty("active") && item.active) {
-//             if (item.hasOwnProperty("isDeleted") && !item.isDeleted) {
-//               set(item, "active", false);
-//               result.push(item);
-//             } else {
-//               result.push(item);
-//             }
-//           }
-//         } else {
-//           if (!item.hasOwnProperty("isDeleted")) {
-//             result.push(item);
-//           }
-//         }
-//       }
-//       return result;
-//     }, []);
-
-//   return mergedAccessories;
-// };
 
 const getMultipleOwners = owners => {
   let mergedOwners =
@@ -346,52 +333,50 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     }
     let owners = get(queryObject[0], "tradeLicenseDetail.owners");
     owners = (owners && convertOwnerDobToEpoch(owners)) || [];
-
-    //set(queryObject[0], "tradeLicenseDetail.owners", getMultipleOwners(owners));
-    const cityId = get(
-      queryObject[0],
-      "tradeLicenseDetail.address.tenantId",
-      ""
-    );
-    const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
-    const BSqueryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessService", value: "newTL" }
-    ];
-    if (process.env.REACT_APP_NAME === "Citizen") {
-      let currentFinancialYr = getCurrentFinancialYear();
-      //Changing the format of FY
-      let fY1 = currentFinancialYr.split("-")[1];
-      fY1 = fY1.substring(2, 4);
-      currentFinancialYr = currentFinancialYr.split("-")[0] + "-" + fY1;
-      set(queryObject[0], "financialYear", currentFinancialYr);
-      // setBusinessServiceDataToLocalStorage(BSqueryObject, dispatch);
-    }
+    set(queryObject[0], "tradeLicenseDetail.owners", owners);
+    set(queryObject[0], "licenseType", "BPASTAKEHOLDER");
+    const tenantId = process.env.REACT_APP_DEFAULT_TENANT_ID;
 
     set(queryObject[0], "tenantId", tenantId);
+    let permanantAddr = get(
+      queryObject[0],
+      "tradeLicenseDetail.owners[0].address.addressLine1"
+    );
+    let corrospondenceAddr = get(
+      queryObject[0],
+      "tradeLicenseDetail.address.addressLine1"
+    );
+    set(
+      queryObject[0],
+      "tradeLicenseDetail.owners[0].correspondenceAddress",
+      corrospondenceAddr
+    );
+    set(
+      queryObject[0],
+      "tradeLicenseDetail.owners[0].permanentAddress",
+      permanantAddr
+    );
+    set(
+      queryObject[0],
+      "tradeLicenseDetail.subOwnerShipCategory",
+      "INDIVIDUAL"
+    );
 
     if (queryObject[0].applicationNumber) {
       //call update
 
-      let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
       set(
         queryObject[0],
         "tradeLicenseDetail.tradeUnits",
         getMultiUnits(tradeUnits)
       );
-      set(
-        queryObject[0],
-        "tradeLicenseDetail.accessories",
-        getMultiUnits(accessories)
-      );
-      set(
-        queryObject[0],
-        "tradeLicenseDetail.owners",
-        getMultipleOwners(owners)
-      );
-
-      let action = "INITIATE";
+      // set(
+      //   queryObject[0],
+      //   "tradeLicenseDetail.owners",
+      //   getMultipleOwners(owners)
+      // );
+      let action = "NOWORKFLOW";
       if (
         queryObject[0].tradeLicenseDetail &&
         queryObject[0].tradeLicenseDetail.applicationDocuments
@@ -410,7 +395,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
           //   ),
           //   ...removedDocs
           // ]);
-        } else if (activeIndex === 1) {
+        } else if (activeIndex === 2) {
           set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
         } else action = "APPLY";
       }
@@ -452,24 +437,17 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         };
       });
       dispatch(prepareFinalObject("LicensesTemp.tradeUnits", tradeTemp));
+      updateownersAddress(dispatch, searchResponse);
       createOwnersBackup(dispatch, searchResponse);
     } else {
-      let accessories = get(queryObject[0], "tradeLicenseDetail.accessories");
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
       // let owners = get(queryObject[0], "tradeLicenseDetail.owners");
       let mergedTradeUnits =
         tradeUnits &&
         tradeUnits.filter(item => !item.hasOwnProperty("isDeleted"));
-      let mergedAccessories =
-        accessories &&
-        accessories.filter(item => !item.hasOwnProperty("isDeleted"));
-      let mergedOwners =
-        owners && owners.filter(item => !item.hasOwnProperty("isDeleted"));
 
       set(queryObject[0], "tradeLicenseDetail.tradeUnits", mergedTradeUnits);
-      set(queryObject[0], "tradeLicenseDetail.accessories", mergedAccessories);
-      set(queryObject[0], "tradeLicenseDetail.owners", mergedOwners);
-      set(queryObject[0], "action", "INITIATE");
+      set(queryObject[0], "action", "NOWORKFLOW");
       //Emptying application docs to "INITIATE" form in case of search and fill from old TL Id.
       if (!queryObject[0].applicationNumber)
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
@@ -480,7 +458,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         [],
         { Licenses: queryObject }
       );
+
       dispatch(prepareFinalObject("Licenses", response.Licenses));
+      updateownersAddress(dispatch, response);
       createOwnersBackup(dispatch, response);
     }
     /** Application no. box setting */
