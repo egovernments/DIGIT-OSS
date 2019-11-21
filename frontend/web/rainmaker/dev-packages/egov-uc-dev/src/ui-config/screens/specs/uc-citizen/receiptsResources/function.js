@@ -120,6 +120,7 @@ export const searchApiCall = async (state, dispatch) => {
         receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
         amount: get(Payments[i], `paymentDetails[0].bill.totalAmount`),
         status: get(Payments[i], `paymentDetails[0].bill.status`),
+        tenantId : get(Payments[i], `tenantId`),
       };
     }
 
@@ -131,7 +132,7 @@ export const searchApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("Date")]: convertEpochToDate(item.receiptdate) || "-",
         [getTextToLocalMapping("Amount[INR]")]: item.amount || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
-        ["tenantId"]: item.tenantId
+        ["tenantId"]: item.tenantId || "-"
       }));
       dispatch(
         handleField(
