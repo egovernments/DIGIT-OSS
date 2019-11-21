@@ -3,9 +3,7 @@ package org.egov.persistence.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 import org.egov.domain.model.MessageIdentity;
 import org.egov.domain.model.Tenant;
 
@@ -15,7 +13,6 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "message")
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString

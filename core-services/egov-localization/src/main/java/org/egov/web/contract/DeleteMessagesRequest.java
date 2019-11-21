@@ -3,6 +3,7 @@ package org.egov.web.contract;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.domain.model.MessageIdentity;
 import org.egov.domain.model.Tenant;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class DeleteMessagesRequest {
 
 	@JsonProperty("RequestInfo")
