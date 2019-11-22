@@ -171,7 +171,7 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
             ? "NA"
             : propertyDetails.uom
               ? `${propertyDetails.landArea} ${propertyDetails.uom}`
-              : `${Math.round(propertyDetails.landArea * 100) / 100} sq yards`,
+              : `${Math.round(propertyDetails.landArea * 100) / 100}  ${getTranslatedLabel("PT_LABEL_SQFT", localizationLabelsData)}`,
       },
       propertyDetails.propertySubType === "SHAREDPROPERTY"
         ? {

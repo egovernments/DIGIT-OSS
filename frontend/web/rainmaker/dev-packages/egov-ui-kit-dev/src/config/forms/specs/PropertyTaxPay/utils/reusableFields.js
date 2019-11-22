@@ -774,7 +774,7 @@ export const thana = {
   thana: {
     id: "thana",
     type: "singleValueList",
-    floatingLabelText: "Thana",
+    floatingLabelText: "PT_PROPERTY_ADDRESS_THANA",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
     errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
@@ -785,7 +785,7 @@ export const roadType = {
     id: "road-type",
     // jsonPath: "Properties[0].address.doorNo",
     type: "singleValueList",
-    floatingLabelText: "Road Type",
+    floatingLabelText: "PT_PROPERTY_ADDRESS_ROAD_TYPE",
     hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
     numcols: 6,
     errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",

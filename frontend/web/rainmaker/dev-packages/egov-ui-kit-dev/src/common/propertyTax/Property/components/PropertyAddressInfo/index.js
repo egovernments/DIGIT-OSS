@@ -13,6 +13,8 @@ const localizationLabelsData = initLocalizationLabels(locale);
 const getAddressItems = (properties , loadMdmsData) => {
  
   const {address , propertyDetails} = properties;
+
+  //if (propertyDetails)
   const {additionalDetails} = propertyDetails[0]
     return  (
      address &&    [
@@ -47,7 +49,7 @@ const getAddressItems = (properties , loadMdmsData) => {
         value: properties.oldPropertyId || "NA",
       },
       {
-        key: getTranslatedLabel("Road Type", localizationLabelsData),
+        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_ROAD_TYPE", localizationLabelsData),
         value: (
           additionalDetails &&
           additionalDetails.roadType &&
@@ -58,7 +60,7 @@ const getAddressItems = (properties , loadMdmsData) => {
           || "NA",
       },
       {
-        key: getTranslatedLabel("Thana", localizationLabelsData),
+        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_THANA", localizationLabelsData),
         value:(
           additionalDetails &&
           additionalDetails.thana &&

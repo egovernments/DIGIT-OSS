@@ -407,11 +407,11 @@ const getAddressInfo = (addressObj, extraItems) => {
             value: addressObj.pincode || "NA",
           },
           {
-            key: getTranslatedLabel("Road Type", localizationLabelsData),
+            key: getTranslatedLabel("PT_PROPERTY_ADDRESS_ROAD_TYPE", localizationLabelsData),
             value: addressObj.roadType || "NA",
           },
           {
-            key: getTranslatedLabel("Thana", localizationLabelsData),
+            key: getTranslatedLabel("PT_PROPERTY_ADDRESS_THANA", localizationLabelsData),
             value: addressObj.thana || "NA",
           },
           ...extraItems,
