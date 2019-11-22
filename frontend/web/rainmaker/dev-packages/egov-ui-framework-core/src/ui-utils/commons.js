@@ -557,11 +557,7 @@ export const getUserDataFromUuid = async bodyObject => {
 };
 
 export const getCommonPayUrl = (dispatch , applicationNo, tenantId) => {
-  const appName =
-    process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee";
-  const url =
-    process.env.NODE_ENV === "development"
-      ? `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}`
-      : `/${appName}/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}`;
+    const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}`;
       dispatch(setRoute(url));
 };
+ 
