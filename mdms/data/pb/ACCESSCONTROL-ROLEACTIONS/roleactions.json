@@ -19088,13 +19088,13 @@
       "actioncode": "",
       "tenantId": "pb"
     },
-        {
+    {
       "rolecode": "CITIZEN",
       "actionid": 1834,
       "actioncode": "",
       "tenantId": "pb"
     },
-        {
+    {
       "rolecode": "CITIZEN",
       "actionid": 1835,
       "actioncode": "",
@@ -19106,9 +19106,15 @@
       "actioncode": "",
       "tenantId": "pb"
     },
-     {
+    {
       "rolecode": "CITIZEN",
       "actionid": 1804,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "SUPERUSER",
+      "actionid": 1874,
       "actioncode": "",
       "tenantId": "pb"
     }
