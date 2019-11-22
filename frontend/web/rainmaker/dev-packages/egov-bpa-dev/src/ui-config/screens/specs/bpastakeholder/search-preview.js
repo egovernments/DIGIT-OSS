@@ -28,10 +28,11 @@ import {
   getHeaderSideText,
   getTransformedStatus
 } from "../utils";
-import { getReviewTrade } from "./applyResource/review-trade";
+
+import { getOrganizationDetails } from "./applyResource/review-organization";
 import { getReviewOwner } from "./applyResource/review-owner";
+import { getLocationDetails } from "./applyResource/review-location";
 import { getReviewDocuments } from "./applyResource/review-documents";
-import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -236,9 +237,22 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         true
       );
 
+    if (status === "APPLIED" && process.env.REACT_APP_NAME === "Citizen") {
+    }
     setActionItems(action, obj);
-    loadReceiptGenerationData(applicationNumber, tenantId);
+    // loadReceiptGenerationData(applicationNumber, tenantId);
   }
+
+  let businessService = get(
+    state,
+    "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType"
+  );
+
+  const queryObject = [
+    { key: "tenantId", value: tenantId },
+    { key: "businessService", value: businessService }
+  ];
+  setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 };
 
 let titleText = "";
@@ -318,11 +332,12 @@ const estimate = getCommonGrayCard({
   })
 });
 
-const reviewTradeDetails = getReviewTrade(false);
+const reviewOrganizationDetails = getOrganizationDetails(false);
 
+const reviewLocationDetails = getLocationDetails(false);
 const reviewOwnerDetails = getReviewOwner(false);
 
-const reviewDocumentDetails = getReviewDocuments(false, false);
+const reviewDocumentDetails = getReviewDocuments(false);
 
 // let approvalDetails = getApprovalDetails(status);
 let title = getCommonTitle({ labelName: titleText });
@@ -356,8 +371,9 @@ export const tradeReviewDetails = getCommonCard({
     "TL_PAYMENT_VIEW_BREAKUP",
     "search-preview"
   ),
-  reviewTradeDetails,
   reviewOwnerDetails,
+  reviewOrganizationDetails,
+  reviewLocationDetails,
   reviewDocumentDetails
 });
 
@@ -381,12 +397,8 @@ const screenConfig = {
         false
       );
     }
-    const queryObject = [
-      { key: "tenantId", value: tenantId },
-      { key: "businessService", value: "newTL" }
-    ];
-    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, applicationNumber);
+
     return action;
   },
 

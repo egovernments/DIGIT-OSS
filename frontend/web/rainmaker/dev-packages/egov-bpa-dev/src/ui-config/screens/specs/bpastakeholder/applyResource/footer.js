@@ -531,34 +531,34 @@ export const footerReview = (
             style: { textAlign: "left", display: "flex" }
           },
           children: {
-            downloadMenu: {
-              uiFramework: "custom-atoms-local",
-              moduleName: "egov-tradelicence",
-              componentPath: "MenuButton",
-              props: {
-                data: {
-                  label: "Download",
-                  leftIcon: "cloud_download",
-                  rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { marginLeft: 10 } },
-                  menu: downloadMenu
-                }
-              }
-            },
-            printMenu: {
-              uiFramework: "custom-atoms-local",
-              moduleName: "egov-tradelicence",
-              componentPath: "MenuButton",
-              props: {
-                data: {
-                  label: "Print",
-                  leftIcon: "print",
-                  rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { marginLeft: 10 } },
-                  menu: printMenu
-                }
-              }
-            }
+            // downloadMenu: {
+            //   uiFramework: "custom-atoms-local",
+            //   moduleName: "egov-tradelicence",
+            //   componentPath: "MenuButton",
+            //   props: {
+            //     data: {
+            //       label: "Download",
+            //       leftIcon: "cloud_download",
+            //       rightIcon: "arrow_drop_down",
+            //       props: { variant: "outlined", style: { marginLeft: 10 } },
+            //       menu: downloadMenu
+            //     }
+            //   }
+            // },
+            // printMenu: {
+            //   uiFramework: "custom-atoms-local",
+            //   moduleName: "egov-tradelicence",
+            //   componentPath: "MenuButton",
+            //   props: {
+            //     data: {
+            //       label: "Print",
+            //       leftIcon: "print",
+            //       rightIcon: "arrow_drop_down",
+            //       props: { variant: "outlined", style: { marginLeft: 10 } },
+            //       menu: printMenu
+            //     }
+            //   }
+            // }
           },
           gridDefination: {
             xs: 12,
@@ -642,13 +642,13 @@ export const footerReview = (
               },
               onClickDefination: {
                 action: "page_change",
-                path: `${redirectionURL}/pay?applicationNumber=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
+                path: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}`
+                //path: `${redirectionURL}/pay?applicationNumber=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
               },
-              //visible: getButtonVisibility(status, "PROCEED TO PAYMENT"),
               roleDefination: {
                 rolePath: "user-info.roles",
-                //roles: ["TL_CEMP", "CITIZEN"]
-                action: "PAY"
+                roles: ["TL_CEMP", "CITIZEN"]
+                // action: "PAY"
               }
             },
             cancelButton: {

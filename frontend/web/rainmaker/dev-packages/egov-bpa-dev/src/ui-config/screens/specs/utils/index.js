@@ -434,8 +434,7 @@ export const showHideAdhocPopup = (state, dispatch) => {
 };
 
 export const getButtonVisibility = (status, button) => {
-  if (status === "pending_payment" && button === "PROCEED TO PAYMENT")
-    return true;
+  if (status === "APPLIED" && button === "PROCEED TO PAYMENT") return true;
   if (status === "pending_approval" && button === "APPROVE") return true;
   if (status === "pending_approval" && button === "REJECT") return true;
   if (status === "approved" && button === "CANCEL TRADE LICENSE") return true;
@@ -1174,7 +1173,7 @@ export const createEstimateData = async (
     getQueryArg(href, "applicationNumber");
   const tenantId =
     get(LicenseData, "tenantId") || getQueryArg(href, "tenantId");
-  const businessService = "TL"; //Hardcoding Alert
+  const businessService = "BPAREG"; //Hardcoding Alert
   const queryObj = [
     { key: "tenantId", value: tenantId },
     {

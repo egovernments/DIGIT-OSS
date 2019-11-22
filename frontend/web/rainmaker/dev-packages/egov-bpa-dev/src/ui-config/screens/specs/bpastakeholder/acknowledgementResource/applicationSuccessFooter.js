@@ -151,7 +151,7 @@ export const applicationSuccessFooter = (
         action: "page_change",
         path: redirectionURL
       }
-    },
+    }
     // collectPaymentButton: {
     //   componentPath: "Button",
     //   props: {
@@ -178,27 +178,27 @@ export const applicationSuccessFooter = (
     //     roles: ["TL_CEMP"]
     //   }
     // },
-    proceedToPay: {
-      componentPath: "Button",
-      props: {
-        variant: "contained",
-        color: "primary",
-        style: {
-          minWidth: "200px",
-          height: "48px",
-          marginRight: "40px"
-        }
-      },
-      children: {
-        collectPaymentButtonLabel: getLabel({
-          labelName: "PROCEED TO PAYMENT",
-          labelKey: "TL_PROCEED_PAYMENT"
-        })
-      },
-      onClickDefination: {
-        action: "page_change",
-        path: `/bpastakeholder-citizen/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`
-      }
-    }
+    // proceedToPay: {
+    //   componentPath: "Button",
+    //   props: {
+    //     variant: "contained",
+    //     color: "primary",
+    //     style: {
+    //       minWidth: "200px",
+    //       height: "48px",
+    //       marginRight: "40px"
+    //     }
+    //   },
+    //   children: {
+    //     collectPaymentButtonLabel: getLabel({
+    //       labelName: "PROCEED TO PAYMENT",
+    //       labelKey: "TL_PROCEED_PAYMENT"
+    //     })
+    //   },
+    //   onClickDefination: {
+    //     action: "page_change",
+    //     path: `/bpastakeholder-citizen/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`
+    //   }
+    // }
   });
 };
