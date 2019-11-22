@@ -627,8 +627,9 @@ export const downloadReceipt = (receiptQueryString) => {
       try {
         const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
         const queryStr = [
-          { key: "key", value: "consolidatedreceipt" },
-          { key: "tenantId", value: "pb" }
+          { key: "key", value: "consolidatedreceipt" }, 
+          { key: "tenantId", value: receiptQueryString[1].value } 
+        //  { key: "tenantId", value: "pb" }
         ]
 
         httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
