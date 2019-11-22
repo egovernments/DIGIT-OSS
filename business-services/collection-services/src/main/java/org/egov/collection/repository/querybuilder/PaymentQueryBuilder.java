@@ -391,6 +391,12 @@ public class PaymentQueryBuilder {
             selectQuery.append(" py.payerid IN (:payerid)  ");
             preparedStatementValues.put("payerid", searchCriteria.getPayerIds());
         }
+        
+        if (!CollectionUtils.isEmpty(searchCriteria.getBusinessServices())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" businessService IN (:businessService)  ");
+            preparedStatementValues.put("businessService", searchCriteria.getBusinessServices());
+        }
 
         if (!CollectionUtils.isEmpty(searchCriteria.getConsumerCodes())) {
 
