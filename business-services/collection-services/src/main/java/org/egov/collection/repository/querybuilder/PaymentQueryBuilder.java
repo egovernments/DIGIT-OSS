@@ -394,7 +394,7 @@ public class PaymentQueryBuilder {
         
         if (!CollectionUtils.isEmpty(searchCriteria.getBusinessServices())) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
-            selectQuery.append(" businessService IN (:businessService)  ");
+            selectQuery.append(" pyd.businessService IN (:businessService)  ");
             preparedStatementValues.put("businessService", searchCriteria.getBusinessServices());
         }
 
