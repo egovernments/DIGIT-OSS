@@ -71,6 +71,7 @@ class AssessmentHistory extends Component {
                     {getFullRow("PT_ASSESSMENT_NO", propertyDetail.assessmentNumber ? propertyDetail.assessmentNumber : "NA", 12)}
                     {getFullRow("PT_ASSESSMENT_YEAR", propertyDetail.financialYear ? propertyDetail.financialYear : "NA", 6)}
 
+                      {/* Commenting add and assess property for 10 dec release
                     <div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
                         <div className="assess-history" style={{ float: "right" }}>
                             <Button
@@ -88,7 +89,7 @@ class AssessmentHistory extends Component {
                             ></Button>
                         </div>
 
-                    </div >
+                            </div > */}
 
                 </div>)
 

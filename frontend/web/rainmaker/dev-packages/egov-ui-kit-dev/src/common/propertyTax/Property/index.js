@@ -302,6 +302,7 @@ class Property extends Component {
           className="wizard-footer col-sm-12"
           style={{ textAlign: "right" }}
         >
+            {/* Commenting add and assess property for 10 dec release
           <div className="button-container col-xs-6 property-info-access-btn" style={{ float: "right" }}>
             <Button
               onClick={() => this.onAssessPayClick()}
@@ -309,7 +310,7 @@ class Property extends Component {
               primary={true}
               style={{ lineHeight: "auto", minWidth: "inherit" }}
             />
-          </div>
+            </div> */}
         </div>
         {dialogueOpen && <YearDialogue open={dialogueOpen} history={history} urlToAppend={urlToAppend} closeDialogue={closeYearRangeDialogue} />}
       </Screen>

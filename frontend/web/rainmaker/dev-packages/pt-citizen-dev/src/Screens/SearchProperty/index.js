@@ -225,7 +225,8 @@ class SearchProperty extends Component {
           history={history}
         /> */}
         {/* <br /> */}
-        <div className="rainmaker-displayInline inner-header-style">
+     
+       <div className="rainmaker-displayInline inner-header-style"> 
           <Label
             label="PT_PROPERTY_TAX"
             dark={true}
@@ -234,6 +235,8 @@ class SearchProperty extends Component {
             bold={true}
             labelStyle={{ marginTop: "20px" }}
           />
+         
+           {/* Commenting add and assess property for 10 dec release 
           <div
             className="rainmaker-displayInline"  >
             <Button
@@ -259,8 +262,8 @@ class SearchProperty extends Component {
               primary={true}
               fullWidth={true}
             />
-          </div>
-        </div>
+          </div>*/}
+        </div>  
 
         <PropertySearchFormHOC
           history={this.props.history}
@@ -307,6 +310,8 @@ class SearchProperty extends Component {
             <div className="no-search-text">
               <Label label="PT_NO_PROPERTY_RECORD" />
             </div>
+
+               {/* Commenting add and assess property for 10 dec release
             <div className="new-assess-btn">
               <Button
                 label={<Label label="PT_ADD_ASSESS_PROPERTY" buttonLabel={true} />}
@@ -316,7 +321,7 @@ class SearchProperty extends Component {
                 primary={true}
                 fullWidth={true}
               />
-            </div>
+               </div> */}
           </div>
         )}
         <YearDialogue
