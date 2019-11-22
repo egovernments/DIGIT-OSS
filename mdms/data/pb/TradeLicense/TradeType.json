@@ -1795,7 +1795,7 @@
       "type": "TL"
     },
     {
-      "code": "SERVICES.NGBS.ARCHITECT",
+      "code": "SERVICES.ARCHITECT.CLASS-A",
       "uom": null,
       "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","EXPERIENCEPROOF"],
       "verificationDocument":[],
@@ -1803,7 +1803,7 @@
       "type": "BPA"
     },
     {
-      "code": "SERVICES.NGBS.BUILDER",
+      "code": "SERVICES.ARCHITECT.CLASS-B",
       "uom": null,
       "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","EXPERIENCEPROOF"],
       "verificationDocument":[],
@@ -1811,7 +1811,7 @@
       "type": "BPA"
     },
     {
-      "code": "SERVICES.NGBS.ENGINEER",
+      "code": "SERVICES.ARCHITECT.CLASS-C",
       "uom": null,
       "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","EXPERIENCEPROOF"],
       "verificationDocument":[],
@@ -1819,7 +1819,71 @@
       "type": "BPA"
     },
     {
-      "code": "SERVICES.NGBS.STRUCTURALENGINEER",
+      "code": "SERVICES.BUILDER.CLASS-A",
+      "uom": null,
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","EXPERIENCEPROOF"],
+      "verificationDocument":[],
+      "active": true,
+      "type": "BPA"
+    },
+    {
+      "code": "SERVICES.BUILDER.CLASS-B",
+      "uom": null,
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","EXPERIENCEPROOF"],
+      "verificationDocument":[],
+      "active": true,
+      "type": "BPA"
+    },
+    {
+      "code": "SERVICES.BUILDER.CLASS-C",
+      "uom": null,
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","EXPERIENCEPROOF"],
+      "verificationDocument":[],
+      "active": true,
+      "type": "BPA"
+    },
+    {
+      "code": "SERVICES.ENGINEER.CLASS-A",
+      "uom": null,
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","EXPERIENCEPROOF"],
+      "verificationDocument":[],
+      "active": true,
+      "type": "BPA"
+    },
+    {
+      "code": "SERVICES.ENGINEER.CLASS-B",
+      "uom": null,
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","EXPERIENCEPROOF"],
+      "verificationDocument":[],
+      "active": true,
+      "type": "BPA"
+    },
+    {
+      "code": "SERVICES.ENGINEER.CLASS-C",
+      "uom": null,
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","EXPERIENCEPROOF"],
+      "verificationDocument":[],
+      "active": true,
+      "type": "BPA"
+    },
+    {
+      "code": "SERVICES.STRUCTURALENGINEER.CLASS-C",
+      "uom": null,
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","EXPERIENCEPROOF"],
+      "verificationDocument":[],
+      "active": true,
+      "type": "BPA"
+    },
+    {
+      "code": "SERVICES.STRUCTURALENGINEER.CLASS-B",
+      "uom": null,
+      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","EXPERIENCEPROOF"],
+      "verificationDocument":[],
+      "active": true,
+      "type": "BPA"
+    },
+    {
+      "code": "SERVICES.STRUCTURALENGINEER.CLASS-C",
       "uom": null,
       "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","EXPERIENCEPROOF"],
       "verificationDocument":[],
