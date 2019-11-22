@@ -15119,7 +15119,7 @@
       "leftIcon": "editor:insert-chart",
       "path": "Finance.Transactions.Bank Reconciliation.View Bank Statement Uploaded Files"
     },
-        {
+    {
       "id": 1872,
       "name": "Pdf Generator createnosave",
       "url": "/pdf-service/v1/_createnosave",
@@ -15143,6 +15143,18 @@
       "leftIcon": "editor:insert-chart",
       "path": "Finance.Period End Activities.Close Financial Year",
       "navigationURL": "services/EGF/cfinancialyear/search/close"
+    },
+    {
+      "id": 1874,
+      "name": "tradelicense Calculation",
+      "url": "/tl-calculator/v1/_calculate",
+      "displayName": "TradeLicenseCalculation",
+      "orderNumber": 0,
+      "parentModule": null,
+      "enabled": false,
+      "serviceCode": "TradeLicenseCalculator",
+      "code": "null",
+      "path": "null"
     }
   ]
 }
