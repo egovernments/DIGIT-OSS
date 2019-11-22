@@ -4,32 +4,80 @@
   "TradeTypetoRoleMapping": [
     {
       "id": "313bbadb-c0d7-49b5-b021-77a608f13a31",
-      "tradeType": "SERVICES.NGBS.ARCHITECT",
-      "role": "BPA_ARCHITECT",
+      "tradeType": "ARCHITECT.CLASSA",
+      "role": ["BPA_ARCHITECT","BPA_ENGINEER"],
       "applicationFee": 100
     },
     {
+      "id": "313bbadb-c0d7-49b5-b021-77a608f13a31",
+      "tradeType": "ARCHITECT.CLASSB",
+      "role": "BPA_ARCHITECT",
+      "applicationFee": 150
+    },
+    {
+      "id": "313bbadb-c0d7-49b5-b021-77a608f13a31",
+      "tradeType": "ARCHITECT.CLASSC",
+      "role": "BPA_ARCHITECT",
+      "applicationFee": 160
+    },
+    {
       "id": "df027b77-69c1-4749-8608-601328a2deea",
-      "tradeType": "SERVICES.NGBS.BUILDER",
+      "tradeType": "BUILDER.CLASSA",
+      "role": ["BPA_BUILDER","BPA_ARCHITECT"],
+      "applicationFee": 220
+    },
+    {
+      "id": "df027b77-69c1-4749-8608-601328a2deea",
+      "tradeType": "BUILDER.CLASSB",
+      "role": "BPA_BUILDER",
+      "applicationFee": 250
+    },
+    {
+      "id": "df027b77-69c1-4749-8608-601328a2deea",
+      "tradeType": "BUILDER.CLASSC",
       "role": "BPA_BUILDER",
       "applicationFee": 200
     },
     {
       "id": "7f26d283-cc52-4684-9bbc-f87ade6f2228",
-      "tradeType": "SERVICES.NGBS.ENGINEER",
+      "tradeType": "ENGINEER.CLASSA",
       "role": "BPA_ENGINEER",
       "applicationFee": 300
     },
     {
+      "id": "7f26d283-cc52-4684-9bbc-f87ade6f2228",
+      "tradeType": "ENGINEER.CLASSB",
+      "role": "BPA_ENGINEER",
+      "applicationFee": 320
+    },
+    {
+      "id": "7f26d283-cc52-4684-9bbc-f87ade6f2228",
+      "tradeType": "ENGINEER.CLASSC",
+      "role": ["BPA_ENGINEER","BPA_STRUCTURALENGINEER"],
+      "applicationFee": 300
+    },
+    {
       "id": "91d278e9-0bcd-4436-978e-793af58e325f",
-      "tradeType": "SERVICES.NGBS.STRUCTURALENGINEER",
+      "tradeType": "STRUCTURALENGINEER.CLASSA",
       "role": "BPA_STRUCTURALENGINEER",
       "applicationFee": 400
     },
     {
+      "id": "91d278e9-0bcd-4436-978e-793af58e325f",
+      "tradeType": "STRUCTURALENGINEER.CLASSB",
+      "role": "BPA_STRUCTURALENGINEER",
+      "applicationFee": 450
+    },
+    {
+      "id": "91d278e9-0bcd-4436-978e-793af58e325f",
+      "tradeType": "STRUCTURALENGINEER.CLASSC",
+      "role": "BPA_STRUCTURALENGINEER",
+      "applicationFee": 460
+    },
+    {
       "id": "57b66c2a-0033-4875-a3bd-856e5cf82427",
-      "tradeType": "SERVICES.NGBS.TOWNPLANNER",
-      "role": "BPA_TOWNPLANNER",
+      "tradeType": "TOWNPLANNER",
+      "role": ["BPA_TOWNPLANNER","BPA_STRUCTURALENGINEER"],
       "applicationFee": 500
     }
   ]
