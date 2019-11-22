@@ -25,7 +25,7 @@ public class RedirectController {
     @Value("${easypay.original.return.url.key:originalreturnurl}")
     private String returnUrlKey;
 
-    @RequestMapping(value = "/payment/_redirect", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @RequestMapping(value = "/transaction/v1/_redirect", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<Object> method(@RequestBody MultiValueMap<String, String> formData) {
 
         HttpHeaders httpHeaders = new HttpHeaders();
