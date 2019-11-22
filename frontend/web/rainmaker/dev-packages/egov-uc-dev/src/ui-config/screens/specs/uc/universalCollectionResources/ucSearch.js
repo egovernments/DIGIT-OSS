@@ -32,7 +32,7 @@ const resetFields = (state, dispatch) => {
   );
   get(
     state.screenConfiguration,
-    "preparedFinalObject.searchScreen.businessCodes",
+    "preparedFinalObject.searchScreen.businessServices",
     null
   ) &&
     dispatch(
@@ -131,7 +131,7 @@ export const UCSearchCard = getCommonCard({
           selectedCategory.child &&
           selectedCategory.child.map(item => item.code);
         dispatch(
-          prepareFinalObject("searchScreen.businessCodes", serviceTypes)
+          prepareFinalObject("searchScreen.businessServices", serviceTypes)
         );
         return action;
       }
