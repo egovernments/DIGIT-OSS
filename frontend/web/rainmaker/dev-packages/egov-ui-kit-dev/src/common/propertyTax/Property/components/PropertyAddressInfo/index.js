@@ -14,11 +14,9 @@ const getAddressItems = (properties , loadMdmsData) => {
  
   const {address , propertyDetails} = properties;
 
-  //if (propertyDetails)
-  const {additionalDetails} = propertyDetails[0]
+  const {additionalDetails} = Boolean(propertyDetails) && propertyDetails[0]
     return  (
      address &&    [
-      // [
 
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_CITY", localizationLabelsData),

@@ -44,7 +44,26 @@ class AssessmentHistory extends Component {
             errorMessage:"PT_ASSESSMENT_HISTORY_ERROR"
         };
     }
+    
+    getAmntIfAssessmntYrEqBillYr(bill , financialAssmntYr) {
 
+        let billAmount = 'NA'
+
+        if(bill && bill[0].billDetails && financialAssmntYr){
+
+            const {fromPeriod ,toPeriod, amount}  =  bill[0].billDetails[0];
+    
+            const fromYear = new Date(fromPeriod).getFullYear();
+            const assmntStrtYr = String(financialAssmntYr).substring(0, 4)
+    
+            if (fromYear === assmntStrtYr)
+                billAmount = amount;
+            
+        }
+
+        return billAmount
+            
+    }
 
     getTransformedPaymentHistory() {
         const labelStyle = {
@@ -63,14 +82,19 @@ class AssessmentHistory extends Component {
             outline: "none",
             alignItems: "right",
         };
-        const { propertyDetails = [], history, propertyId } = this.props;
+       
+
+        const { propertyDetails = [], history, propertyId , Bill:bill } = this.props;
+
         const paymentHistoryItems = propertyDetails.map((propertyDetail) => {
+
+               const taxAmount =  this.getAmntIfAssessmntYrEqBillYr(bill , propertyDetail.financialYear ) ;           
             return (
                 <div>
                     {getFullRow("PT_HISTORY_ASSESSMENT_DATE", propertyDetail.assessmentDate ? getFormattedDate(propertyDetail.assessmentDate) : "NA", 12)}
                     {getFullRow("PT_ASSESSMENT_NO", propertyDetail.assessmentNumber ? propertyDetail.assessmentNumber : "NA", 12)}
-                    {getFullRow("PT_ASSESSMENT_YEAR", propertyDetail.financialYear ? propertyDetail.financialYear : "NA", 6)}
-
+                    {getFullRow("PT_ASSESSMENT_YEAR", propertyDetail.financialYear ? propertyDetail.financialYear : "NA", 12)}
+                    {getFullRow("PT_ASSESSMENT_AMOUNT", taxAmount , 6)}
                       {/* Commenting add and assess property for 10 dec release
                     <div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
                         <div className="assess-history" style={{ float: "right" }}>
@@ -115,14 +139,15 @@ class AssessmentHistory extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const { propertiesById } = state.properties || {};
+    const { propertiesById , Bill } = state.properties || {};
     const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
     const selPropertyDetails = propertiesById[propertyId] || {};
     const propertyDetails = selPropertyDetails.propertyDetails || [];
 
     return {
         propertyDetails,
-        propertyId
+        propertyId,
+        Bill
     };
 };
 
