@@ -9,11 +9,15 @@ import {
   getDateField,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 import {
   getDetailsForOwner,
   getTodaysDateInYMD,
-  getRadioGroupWithLabel
+  getRadioGroupWithLabel,
+  setLicenseeSubTypeDropdownData
 } from "../../utils";
+
 import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getRadioButton } from "egov-ui-framework/ui-config/screens/specs/utils";
 
@@ -28,23 +32,7 @@ export const getOwnerMobNoField = getTextField({
   },
   required: true,
   pattern: getPattern("MobileNo"),
-  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber",
-  iconObj: {
-    iconName: "search",
-    position: "end",
-    color: "#FE7A51",
-    onClickDefination: {
-      action: "condition",
-      callBack: (state, dispatch, fieldInfo) => {
-        getDetailsForOwner(state, dispatch, fieldInfo);
-      }
-    }
-  },
-  title: {
-    value: "Please search owner profile linked to the mobile no.",
-    key: "TL_MOBILE_NO_TOOLTIP_MESSAGE"
-  },
-  infoIcon: "info_circle"
+  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber"
 });
 
 export const getGenderRadioButton = {
@@ -159,9 +147,53 @@ export const OwnerInfoCard = getCommonCard({
         },
         placeholder: {
           labelName: "Select Technical Person Licensee Type",
-          labelKey: "BPA_LICENSEE_TYPE__PLACEHOLDER"
+          labelKey: "BPA_LICENSEE_TYPE_PLACEHOLDER"
         },
         required: true,
+        jsonPath: "LicensesTemp[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+        localePrefix: {
+          moduleName: "TRADELICENSE",
+          masterName: "TRADETYPE"
+        },
+        sourceJsonPath: "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
+        gridDefination: {
+          xs: 12,
+          sm: 6
+        }
+      }),
+      beforeFieldChange: (action, state, dispatch) => {
+        setLicenseeSubTypeDropdownData(action, state, dispatch);
+        if (action.value == "ARCHITECT")
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
+              "visible",
+              true
+            )
+          );
+        else
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
+              "visible",
+              false
+            )
+          );
+      }
+    },
+    licenseeSubType: {
+      ...getSelectField({
+        label: {
+          labelName: "Technical Person Licensee Sub Type",
+          labelKey: "BPA_LICENSEE_SUB_TYPE_LABEL"
+        },
+        placeholder: {
+          labelName: "Select Technical Person Licensee Sub Type",
+          labelKey: "BPA_LICENSEE_SUB_TYPE_PLACEHOLDER"
+        },
+        required: false,
         jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
         localePrefix: {
           moduleName: "TRADELICENSE",
@@ -171,7 +203,7 @@ export const OwnerInfoCard = getCommonCard({
           jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
           setDataInField: true
         },
-        sourceJsonPath: "applyScreenMdmsData.TradeLicense.MdmsTradeType",
+        sourceJsonPath: "applyScreenMdmsData.TradeLicense.tradeSubType",
         gridDefination: {
           xs: 12,
           sm: 6
@@ -225,6 +257,7 @@ export const OwnerInfoCard = getCommonCard({
         labelName: "Enter Council for Architecture No.",
         labelKey: "BPA_COUNCIL_FOR_ARCH_NO_PLACEHOLDER"
       },
+      visible: false,
       jsonPath:
         "Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo"
     })

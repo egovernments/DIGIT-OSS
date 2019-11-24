@@ -36,7 +36,7 @@ export const updateTradeDetails = async requestBody => {
   try {
     const payload = await httpRequest(
       "post",
-      "/tl-services/v1/_update",
+      "/tl-services/v1/BPAREG/_update",
       "",
       [],
       requestBody
@@ -64,7 +64,7 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-services/v1/_search",
+      "/tl-services/v1/BPAREG/_search",
       "",
       queryObject
     );
@@ -334,7 +334,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     let owners = get(queryObject[0], "tradeLicenseDetail.owners");
     owners = (owners && convertOwnerDobToEpoch(owners)) || [];
     set(queryObject[0], "tradeLicenseDetail.owners", owners);
-    set(queryObject[0], "licenseType", "BPASTAKEHOLDER");
+    set(queryObject[0], "licenseType", "PERMANENT");
+    set(queryObject[0], "businessService", "BPAREG");
+
     const tenantId = process.env.REACT_APP_DEFAULT_TENANT_ID;
 
     set(queryObject[0], "tenantId", tenantId);
@@ -413,7 +415,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       !isEditFlow &&
-        (await httpRequest("post", "/tl-services/v1/_update", "", [], {
+        (await httpRequest("post", "/tl-services/v1/BPAREG/_update", "", [], {
           Licenses: queryObject
         }));
       let searchQueryObject = [
@@ -453,7 +455,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
       const response = await httpRequest(
         "post",
-        "/tl-services/v1/_create",
+        "/tl-services/v1/BPAREG/_create",
         "",
         [],
         { Licenses: queryObject }

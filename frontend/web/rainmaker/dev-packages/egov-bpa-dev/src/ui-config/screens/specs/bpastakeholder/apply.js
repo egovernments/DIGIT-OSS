@@ -14,7 +14,9 @@ import {
   commonTransform,
   objectToDropdown,
   getCurrentFinancialYear,
-  getAllDataFromBillingSlab
+  getAllDataFromBillingSlab,
+  getLicenseeTypeDropdownData,
+  setLicenseeSubTypeDropdownData
 } from "../utils";
 import {
   prepareFinalObject,
@@ -140,7 +142,17 @@ export const getMdmsData = async (action, state, dispatch) => {
       "MdmsRes.TradeLicense.MdmsTradeType",
       get(payload, "MdmsRes.TradeLicense.TradeType", [])
     );
-    payload = commonTransform(payload, "MdmsRes.TradeLicense.TradeType");
+    const tradeTypes = get(payload, "MdmsRes.TradeLicense.TradeType", []);
+
+    const tradeTypeDdData = getLicenseeTypeDropdownData(tradeTypes);
+    tradeTypeDdData &&
+      set(
+        payload,
+        "MdmsRes.TradeLicense.TradeTypeTransformed",
+        tradeTypeDdData
+      );
+
+    // payload = commonTransform(payload, "MdmsRes.TradeLicense.TradeType");
     payload = commonTransform(
       payload,
       "MdmsRes.common-masters.OwnerShipCategory"
@@ -177,7 +189,7 @@ export const getData = async (action, state, dispatch) => {
   const applicationNo = queryValue;
 
   await getMdmsData(action, state, dispatch);
-  await getAllDataFromBillingSlab(getTenantId(), dispatch);
+  // await getAllDataFromBillingSlab(getTenantId(), dispatch);
 
   if (applicationNo) {
     //Edit/Update Flow ----

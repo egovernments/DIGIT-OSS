@@ -486,7 +486,7 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-services/v1/_search",
+      "/tl-services/v1/BPAREG/_search",
       "",
       queryObject
     );
@@ -2163,13 +2163,104 @@ export const getEpochForDate = date => {
   return new Date(dateSplit[2], dateSplit[1] - 1, dateSplit[0]).getTime();
 };
 
-export const getTradeTypeDropdownData = tradeTypes => {
-  return (
-    tradeTypes &&
-    tradeTypes.TradeType &&
-    Object.keys(tradeTypes.TradeType).map(item => {
-      return { code: item, active: true };
-    })
+export const getLicenseeTypeDropdownData = tradeTypes => {
+  let tt = [];
+  let tradeTypesFiltered = [];
+  tradeTypes.forEach(tradeType => {
+    if (tt.indexOf(tradeType.code.split(".")[0]) == -1) {
+      tradeTypesFiltered.push({
+        code: tradeType.code.split(".")[0],
+        active: true
+      });
+      tt.push(tradeType.code.split(".")[0]);
+    }
+  });
+  return tradeTypesFiltered;
+};
+
+export const setLicenseeSubTypeDropdownData = (action, state, dispatch) => {
+  const tradeTypes = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.TradeLicense.TradeType",
+    []
+  );
+  dispatch(
+    prepareFinalObject(
+      "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+      ""
+    )
+  );
+  const selectedTradeType = action.value;
+  let filterdTradeTypes = [];
+  filterdTradeTypes = tradeTypes.filter(tradeType => {
+    return (
+      tradeType.code.split(".")[0] == selectedTradeType &&
+      tradeType.code.split(".")[1]
+    );
+  });
+  if (filterdTradeTypes.length == 0) {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "props.disabled",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "props.required",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "visible",
+        false
+      )
+    );
+
+    dispatch(
+      prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+        selectedTradeType
+      )
+    );
+  } else {
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "props.disabled",
+        false
+      )
+    );
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "props.required",
+        true
+      )
+    );
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "visible",
+        true
+      )
+    );
+  }
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.TradeLicense.tradeSubType",
+      filterdTradeTypes
+    )
   );
 };
 

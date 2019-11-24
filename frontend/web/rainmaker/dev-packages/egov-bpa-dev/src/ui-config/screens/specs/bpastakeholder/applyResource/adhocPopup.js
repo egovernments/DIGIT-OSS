@@ -24,7 +24,7 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   set(TLRequestBody[0], "action", "ADHOC");
   const TLpayload = await httpRequest(
     "post",
-    "/tl-services/v1/_update",
+    "/tl-services/v1/BPAREG/_update",
     "",
     [],
     { Licenses: TLRequestBody }
