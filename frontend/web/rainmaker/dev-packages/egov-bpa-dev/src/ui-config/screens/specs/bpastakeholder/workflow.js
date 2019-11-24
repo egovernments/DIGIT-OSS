@@ -20,7 +20,6 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { footer } from "./applyResource/footer";
 import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
-import { tradeDetails } from "./applyResource/tradeDetails";
 import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
 import { tradeOwnerDetails } from "./applyResource/tradeOwnerDetails";
 import { documentList } from "./applyResource/documentList";
