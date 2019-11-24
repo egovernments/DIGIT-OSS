@@ -15,7 +15,7 @@ export const searchApiCall = async (state, dispatch) => {
   let queryObject = [
     {
       key: "tenantId",
-      value: JSON.parse(getUserInfo()).tenantId
+      value: process.env.REACT_APP_DEFAULT_TENANT_ID
     },
     { key: "offset", value: "0" }
   ];
