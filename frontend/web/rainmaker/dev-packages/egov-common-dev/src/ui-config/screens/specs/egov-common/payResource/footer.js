@@ -10,31 +10,33 @@ import { convertDateToEpoch, validateFields } from "../../utils";
 import { ifUserRoleExists } from "../../utils";
 
 export const callPGService = async (state, dispatch) => {
-  
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const consumerCode = getQueryArg(window.location.href, "consumerCode");
-  const businessService =  get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService");
+  const businessService = get(
+    state,
+    "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService"
+  );
   // const businessService = getQueryArg(window.location.href, "businessService"); businessService
   let callbackUrl = `${
     process.env.NODE_ENV === "production"
       ? `${window.origin}/citizen`
       : window.origin
-    }/egov-common/paymentRedirectPage`;
+  }/egov-common/paymentRedirectPage`;
 
   const { screenConfiguration = {} } = state;
-  const {
-    preparedFinalObject = {}
-  } = screenConfiguration;
-  const {
-    ReceiptTemp = {}
-  } = preparedFinalObject;
+  const { preparedFinalObject = {} } = screenConfiguration;
+  const { ReceiptTemp = {} } = preparedFinalObject;
   const billPayload = ReceiptTemp[0];
-  const taxAmount=Number(get(billPayload, "Bill[0].totalAmount"));
-  let amtToPay = state.screenConfiguration.preparedFinalObject.AmountType === "partial_amount" ? state.screenConfiguration.preparedFinalObject.AmountPaid : taxAmount;
-  amtToPay = amtToPay ? Number(amtToPay) :taxAmount;
-  const user={
-    name:get(billPayload, "Bill[0].payerName"),
-    mobileNumber:get(billPayload, "Bill[0].mobileNumber"),
+  const taxAmount = Number(get(billPayload, "Bill[0].totalAmount"));
+  let amtToPay =
+    state.screenConfiguration.preparedFinalObject.AmountType ===
+    "partial_amount"
+      ? state.screenConfiguration.preparedFinalObject.AmountPaid
+      : taxAmount;
+  amtToPay = amtToPay ? Number(amtToPay) : taxAmount;
+  const user = {
+    name: get(billPayload, "Bill[0].payerName"),
+    mobileNumber: get(billPayload, "Bill[0].mobileNumber"),
     tenantId
   };
   let taxAndPayments = [];
@@ -43,7 +45,7 @@ export const callPGService = async (state, dispatch) => {
     // businessService: businessService,
     billId: get(billPayload, "Bill[0].id"),
     amountPaid: amtToPay
-  })
+  });
   try {
     const requestBody = {
       Transaction: {
@@ -67,33 +69,36 @@ export const callPGService = async (state, dispatch) => {
       requestBody
     );
 
-    if(get(goToPaymentGateway, "Transaction.txnAmount")==0){
-      const srcQuery=`?tenantId=${get(goToPaymentGateway, "Transaction.tenantId")}&billIds=${get(goToPaymentGateway, "Transaction.billId")}`
- 
- 
-        let searchResponse = await httpRequest(
-          "post",
-          "collection-services/payments/_search" + srcQuery,
-          "_search",
-          [],
-          {}
-        );
+    if (get(goToPaymentGateway, "Transaction.txnAmount") == 0) {
+      const srcQuery = `?tenantId=${get(
+        goToPaymentGateway,
+        "Transaction.tenantId"
+      )}&billIds=${get(goToPaymentGateway, "Transaction.billId")}`;
 
-        let transactionId = get(searchResponse, "Payments[0].paymentDetails[0].receiptNumber");
+      let searchResponse = await httpRequest(
+        "post",
+        "collection-services/payments/_search" + srcQuery,
+        "_search",
+        [],
+        {}
+      );
 
+      let transactionId = get(
+        searchResponse,
+        "Payments[0].paymentDetails[0].receiptNumber"
+      );
 
-        dispatch(
-          setRoute(
-            `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}`
-          )
-        );
-       
-      
-    }else{
-      const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl")|| get(goToPaymentGateway, "Transaction.callbackUrl");
+      dispatch(
+        setRoute(
+          `/egov-common/acknowledgement?status=${"success"}&consumerCode=${consumerCode}&tenantId=${tenantId}&receiptNumber=${transactionId}`
+        )
+      );
+    } else {
+      const redirectionUrl =
+        get(goToPaymentGateway, "Transaction.redirectUrl") ||
+        get(goToPaymentGateway, "Transaction.callbackUrl");
       window.location = redirectionUrl;
     }
-   
   } catch (e) {
     console.log(e);
     moveToFailure(dispatch);
@@ -112,7 +117,7 @@ const moveToSuccess = (dispatch, receiptNumber) => {
     )
   );
 };
-const moveToFailure = (dispatch) => {
+const moveToFailure = dispatch => {
   const consumerCode = getQueryArg(window.location, "consumerCode");
   const tenantId = getQueryArg(window.location, "tenantId");
   const status = "failure";
@@ -201,8 +206,8 @@ const updatePayAction = async (
 const callBackForPay = async (state, dispatch) => {
   let isFormValid = true;
   const roleExists = ifUserRoleExists("CITIZEN");
-  if(roleExists){
-    alert('You are not Authorized!');
+  if (roleExists) {
+    alert("You are not Authorized!");
     return;
   }
   // --- Validation related -----//
@@ -316,37 +321,45 @@ const callBackForPay = async (state, dispatch) => {
   };
 
   ReceiptBody.Receipt.push(finalReceiptData);
-  const totalAmount=Number(finalReceiptData.Bill[0].totalAmount);
+  const totalAmount = Number(finalReceiptData.Bill[0].totalAmount);
 
-  ReceiptBodyNew.Payment['tenantId'] = finalReceiptData.tenantId;
-  ReceiptBodyNew.Payment['totalDue'] = totalAmount;
+  ReceiptBodyNew.Payment["tenantId"] = finalReceiptData.tenantId;
+  ReceiptBodyNew.Payment["totalDue"] = totalAmount;
 
-  ReceiptBodyNew.Payment['paymentMode'] = finalReceiptData.instrument.instrumentType.name;
-  ReceiptBodyNew.Payment['paidBy'] = finalReceiptData.Bill[0].payer;
-  ReceiptBodyNew.Payment['mobileNumber'] = finalReceiptData.Bill[0].payerMobileNumber;
-  ReceiptBodyNew.Payment['payerName'] = finalReceiptData.Bill[0].payerName;
-  if (ReceiptBodyNew.Payment.paymentMode !== 'Cash') {
-    ReceiptBodyNew.Payment['transactionNumber'] = finalReceiptData.instrument.transactionNumber;
-    ReceiptBodyNew.Payment['instrumentNumber'] = finalReceiptData.instrument.instrumentNumber;
+  ReceiptBodyNew.Payment["paymentMode"] =
+    finalReceiptData.instrument.instrumentType.name;
+  ReceiptBodyNew.Payment["paidBy"] = finalReceiptData.Bill[0].payer;
+  ReceiptBodyNew.Payment["mobileNumber"] =
+    finalReceiptData.Bill[0].payerMobileNumber;
+  ReceiptBodyNew.Payment["payerName"] = finalReceiptData.Bill[0].payerName;
+  if (ReceiptBodyNew.Payment.paymentMode !== "Cash") {
+    ReceiptBodyNew.Payment["transactionNumber"] =
+      finalReceiptData.instrument.transactionNumber;
+    ReceiptBodyNew.Payment["instrumentNumber"] =
+      finalReceiptData.instrument.instrumentNumber;
     if (ReceiptBodyNew.Payment.paymentMode === "Cheque") {
-      ReceiptBodyNew.Payment['instrumentDate'] = finalReceiptData.instrument.instrumentDate;
+      ReceiptBodyNew.Payment["instrumentDate"] =
+        finalReceiptData.instrument.instrumentDate;
     }
   }
 
-  let amtPaid = state.screenConfiguration.preparedFinalObject.AmountType === "partial_amount" ? state.screenConfiguration.preparedFinalObject.AmountPaid : finalReceiptData.Bill[0].totalAmount;
-  amtPaid = amtPaid ? Number(amtPaid) :totalAmount;
-  ReceiptBodyNew.Payment.paymentDetails.push(
-    {
-      manualReceiptDate:finalReceiptData.Bill[0].billDetails[0].manualReceiptDate,
-      manualReceiptNumber:finalReceiptData.Bill[0].billDetails[0].manualReceiptNumber,
-      businessService: finalReceiptData.Bill[0].businessService,
-      billId: finalReceiptData.Bill[0].id,
-      totalDue:totalAmount,
-      totalAmountPaid: amtPaid
-    }
-  )
-  ReceiptBodyNew.Payment['totalAmountPaid'] = amtPaid;
-
+  let amtPaid =
+    state.screenConfiguration.preparedFinalObject.AmountType ===
+    "partial_amount"
+      ? state.screenConfiguration.preparedFinalObject.AmountPaid
+      : finalReceiptData.Bill[0].totalAmount;
+  amtPaid = amtPaid ? Number(amtPaid) : totalAmount;
+  ReceiptBodyNew.Payment.paymentDetails.push({
+    manualReceiptDate:
+      finalReceiptData.Bill[0].billDetails[0].manualReceiptDate,
+    manualReceiptNumber:
+      finalReceiptData.Bill[0].billDetails[0].manualReceiptNumber,
+    businessService: finalReceiptData.Bill[0].businessService,
+    billId: finalReceiptData.Bill[0].id,
+    totalDue: totalAmount,
+    totalAmountPaid: amtPaid
+  });
+  ReceiptBodyNew.Payment["totalAmountPaid"] = amtPaid;
 
   // console.log(ReceiptBody);
 
@@ -423,8 +436,8 @@ export const footer = getCommonApplyFooter({
         width: "379px",
         height: "48px ",
         right: "19px ",
-        position:"relative",
-        borderRadius:"0px "
+        position: "relative",
+        borderRadius: "0px "
       }
     },
     children: {
@@ -437,7 +450,6 @@ export const footer = getCommonApplyFooter({
         componentPath: "Icon",
         props: {
           iconName: "keyboard_arrow_right"
-          
         }
       }
     },
@@ -461,8 +473,8 @@ export const footer = getCommonApplyFooter({
         width: "363px",
         height: "48px ",
         right: "19px",
-        position:"relative",
-        borderRadius:"0px "
+        position: "relative",
+        borderRadius: "0px "
       }
     },
     children: {
@@ -475,7 +487,7 @@ export const footer = getCommonApplyFooter({
         componentPath: "Icon",
         props: {
           iconName: "keyboard_arrow_right",
-          className:""
+          className: ""
         }
       }
     },
