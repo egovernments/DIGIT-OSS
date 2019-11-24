@@ -34,7 +34,7 @@ const tradeLicenseSearchAndResult = {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    const data = find(businessServiceData, { businessService: "NewTL" });
+    const data = find(businessServiceData, { businessService: "ARCHITECT" });
     const { states } = data || [];
 
     if (states && states.length > 0) {
@@ -73,55 +73,55 @@ const tradeLicenseSearchAndResult = {
                 sm: 6
               },
               ...header
-            },
-            newApplicationButton: {
-              componentPath: "Button",
-              gridDefination: {
-                xs: 12,
-                sm: 6,
-                align: "right"
-              },
-              visible: enableButton,
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  color: "white",
-                  borderRadius: "2px",
-                  width: "250px",
-                  height: "48px"
-                }
-              },
-
-              children: {
-                plusIconInsideButton: {
-                  uiFramework: "custom-atoms",
-                  componentPath: "Icon",
-                  props: {
-                    iconName: "add",
-                    style: {
-                      fontSize: "24px"
-                    }
-                  }
-                },
-
-                buttonLabel: getLabel({
-                  labelName: "NEW APPLICATION",
-                  labelKey: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
-                })
-              },
-              onClickDefination: {
-                action: "condition",
-                callBack: (state, dispatch) => {
-                  pageResetAndChange(state, dispatch);
-                }
-              },
-              roleDefination: {
-                rolePath: "user-info.roles",
-                path : "tradelicence/apply"
-
-              }
             }
+            // newApplicationButton: {
+            //   componentPath: "Button",
+            //   gridDefination: {
+            //     xs: 12,
+            //     sm: 6,
+            //     align: "right"
+            //   },
+            //   visible: enableButton,
+            //   props: {
+            //     variant: "contained",
+            //     color: "primary",
+            //     style: {
+            //       color: "white",
+            //       borderRadius: "2px",
+            //       width: "250px",
+            //       height: "48px"
+            //     }
+            //   },
+
+            //   children: {
+            //     plusIconInsideButton: {
+            //       uiFramework: "custom-atoms",
+            //       componentPath: "Icon",
+            //       props: {
+            //         iconName: "add",
+            //         style: {
+            //           fontSize: "24px"
+            //         }
+            //       }
+            //     },
+
+            //     buttonLabel: getLabel({
+            //       labelName: "NEW APPLICATION",
+            //       labelKey: "TL_HOME_SEARCH_RESULTS_NEW_APP_BUTTON"
+            //     })
+            //   },
+            //   onClickDefination: {
+            //     action: "condition",
+            //     callBack: (state, dispatch) => {
+            //       pageResetAndChange(state, dispatch);
+            //     }
+            //   },
+            //   roleDefination: {
+            //     rolePath: "user-info.roles",
+            //     path : "tradelicence/apply"
+
+            //   }
+            // }
           }
         },
         pendingApprovals,

@@ -40,24 +40,24 @@ export const tradeLicenseApplication = getCommonCard({
       jsonPath: "searchScreen.applicationNumber"
     }),
 
-    tradeLicenseNo: getTextField({
-      label: {
-        labelName: "Trade License No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter Trade License No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
-      },
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      required: false,
-      pattern: /^[a-zA-Z0-9-]*$/i,
-      errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
-      jsonPath: "searchScreen.licenseNumber"
-    }),
+    // tradeLicenseNo: getTextField({
+    //   label: {
+    //     labelName: "Trade License No.",
+    //     labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+    //   },
+    //   placeholder: {
+    //     labelName: "Enter Trade License No.",
+    //     labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_PLACEHOLDER"
+    //   },
+    //   gridDefination: {
+    //     xs: 12,
+    //     sm: 4
+    //   },
+    //   required: false,
+    //   pattern: /^[a-zA-Z0-9-]*$/i,
+    //   errorMessage: "ERR_INVALID_TRADE_LICENSE_NO",
+    //   jsonPath: "searchScreen.licenseNumber"
+    // }),
     ownerMobNo: getTextField({
       label: {
         labelName: "Owner Mobile No.",
@@ -79,10 +79,8 @@ export const tradeLicenseApplication = getCommonCard({
       pattern: getPattern("MobileNo"),
       jsonPath: "searchScreen.mobileNumber",
       errorMessage: "ERR_INVALID_MOBILE_NUMBER"
-    })
-  }),
-  appStatusAndToFromDateContainer: getCommonContainer({
-    applicationNo: getSelectField({
+    }),
+    applicationSts: getSelectField({
       label: {
         labelName: "Application status",
         labelKey: "TL_HOME_SEARCH_RESULTS_APP_STATUS_LABEL"
@@ -102,8 +100,9 @@ export const tradeLicenseApplication = getCommonCard({
         xs: 12,
         sm: 4
       }
-    }),
-
+    })
+  }),
+  appStatusAndToFromDateContainer: getCommonContainer({
     fromDate: getDateField({
       label: { labelName: "From Date", labelKey: "TL_COMMON_FROM_DATE_LABEL" },
       placeholder: {
