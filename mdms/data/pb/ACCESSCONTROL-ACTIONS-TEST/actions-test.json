@@ -15155,6 +15155,54 @@
       "serviceCode": "TradeLicenseCalculator",
       "code": "null",
       "path": "null"
+    },
+    {
+      "id": 1875,
+      "name": "Create BPALicense",
+      "url": "/tl-services/v1/BPAREG/_create",
+      "parentModule": "",
+      "displayName": "Create BPALicense",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "tl-services",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1876,
+      "name": "Update BPALicense",
+      "url": "/tl-services/v1/BPAREG/_update",
+      "parentModule": "",
+      "displayName": "Update BPALicense",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "tl-services",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1877,
+      "name": "Search BPALicense",
+      "url": "/tl-services/v1/BPAREG/_search",
+      "parentModule": "",
+      "displayName": "Search BPALicense",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "tl-services",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1878,
+      "name": "Get Bill BPA",
+      "url": "/tl-calculator/v1/BPAREG/_getbill",
+      "parentModule": "",
+      "displayName": "Get Bill BPA",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "tl-calculator",
+      "code": "null",
+      "path": ""
     }
   ]
 }
