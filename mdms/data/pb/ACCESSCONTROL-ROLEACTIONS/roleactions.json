@@ -19119,7 +19119,7 @@
       "tenantId": "pb"
     },
     {
-      "rolecode": "SUPERUSER",
+      "rolecode": "CITIZEN",
       "actionid": 1875,
       "actioncode": "",
       "tenantId": "pb"
@@ -19131,8 +19131,14 @@
       "tenantId": "pb"
     },
     {
-      "rolecode": "SUPERUSER",
-      "actionid": 1876,
+      "rolecode": "TL_APPROVER",
+      "actionid": 1875,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "TL_CEMP",
+      "actionid": 1875,
       "actioncode": "",
       "tenantId": "pb"
     },
@@ -19143,8 +19149,20 @@
       "tenantId": "pb"
     },
     {
-      "rolecode": "SUPERUSER",
-      "actionid": 1877,
+      "rolecode": "TL_APPROVER",
+      "actionid": 1876,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "TL_CEMP",
+      "actionid": 1876,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1876,
       "actioncode": "",
       "tenantId": "pb"
     },
@@ -19155,13 +19173,43 @@
       "tenantId": "pb"
     },
     {
-      "rolecode": "SUPERUSER",
+      "rolecode": "TL_APPROVER",
+      "actionid": 1877,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "TL_CEMP",
+      "actionid": 1877,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1877,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "CITIZEN",
       "actionid": 1878,
       "actioncode": "",
       "tenantId": "pb"
     },
     {
       "rolecode": "EMPLOYEE",
+      "actionid": 1878,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "TL_APPROVER",
+      "actionid": 1878,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "TL_CEMP",
       "actionid": 1878,
       "actioncode": "",
       "tenantId": "pb"
