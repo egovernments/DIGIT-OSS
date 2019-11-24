@@ -501,7 +501,7 @@ export const getBill = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-calculator/v1/_getbill",
+      "/tl-calculator/v1/BPAREG/_getbill",
       "",
       queryObject
     );

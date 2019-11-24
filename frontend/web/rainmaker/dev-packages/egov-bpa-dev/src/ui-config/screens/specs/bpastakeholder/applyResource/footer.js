@@ -111,6 +111,12 @@ export const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 1) {
+    const LicenseData = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0]",
+      {}
+    );
+
     const uploadedDocData = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0].tradeLicenseDetail.applicationDocuments",
@@ -141,11 +147,11 @@ export const callBackForNext = async (state, dispatch) => {
               name: item.fileName
             };
           });
-        // createEstimateData(
-        //   LicenseData,
-        //   "LicensesTemp[0].estimateCardData",
-        //   dispatch
-        // ); //get bill and populate estimate card
+        createEstimateData(
+          LicenseData,
+          "LicensesTemp[0].estimateCardData",
+          dispatch
+        ); //get bill and populate estimate card
         dispatch(
           prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
         );
