@@ -78,6 +78,9 @@ public class OwnerInfo extends User  {
         private Object additionalDetails;
 
 
+        private String persisterRefId;
+
+
         @Builder
         public OwnerInfo(Long id, String uuid, String userName, String password, String salutation, String name, String gender, String mobileNumber,
                          String emailId, String altContactNumber, String pan, String aadhaarNumber, String permanentAddress, String permanentCity,

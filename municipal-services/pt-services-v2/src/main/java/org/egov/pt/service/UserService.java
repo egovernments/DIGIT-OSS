@@ -99,7 +99,7 @@ public class UserService {
      */
     private void addUserDefaultFields(String tenantId,Role role,OwnerInfo owner){
         owner.setActive(true);
-        owner.setTenantId(tenantId);
+        owner.setTenantId(tenantId.split("\\.")[0]);
         owner.setRoles(Collections.singletonList(role));
         owner.setType("CITIZEN");
         owner.setCreatedDate(null);
@@ -284,7 +284,7 @@ public class UserService {
         if(!CollectionUtils.isEmpty(userIds))
             userSearchRequest.setUuid( new ArrayList(userIds));
         userSearchRequest.setRequestInfo(requestInfo);
-        userSearchRequest.setTenantId(criteria.getTenantId());
+        userSearchRequest.setTenantId(criteria.getTenantId().split("\\.")[0]);
         userSearchRequest.setMobileNumber(criteria.getMobileNumber());
         userSearchRequest.setName(criteria.getName());
         userSearchRequest.setActive(true);

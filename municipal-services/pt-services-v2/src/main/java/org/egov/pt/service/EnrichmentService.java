@@ -76,6 +76,7 @@ public class EnrichmentService {
 
                     }
                     propertyDetail.getOwners().forEach(owner -> {
+                        owner.setPersisterRefId(UUID.randomUUID().toString());
                         if(!CollectionUtils.isEmpty(owner.getDocuments()))
                             owner.getDocuments().forEach(document -> {
                                 document.setId(UUID.randomUUID().toString());
