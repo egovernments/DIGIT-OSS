@@ -72,3 +72,15 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "finance-collections-voucher-consumer/src/main/resources/db"
         image-name: "finance-collections-voucher-consumer-db"
+
+  - name: "business-services/dashboard-analytics"
+    build:
+      - work-dir: "dashboard-analytics"
+        image-name: "dashboard-analytics"
+        dockerfile: "build/maven/Dockerfile"
+
+  - name: "business-services/dashboard-ingest"
+    build:
+      - work-dir: "dashboard-ingest"
+        image-name: "dashboard-ingest"
+        dockerfile: "build/maven/Dockerfile"        
