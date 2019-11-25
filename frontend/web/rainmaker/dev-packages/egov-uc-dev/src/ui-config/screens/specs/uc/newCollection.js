@@ -64,15 +64,9 @@ const getData = async (action, state, dispatch, demandId) => {
       []
     );
     if (serviceCategories && serviceCategories.length) {
-      const serviceCategoriesTransformed = setServiceCategory(
+      setServiceCategory(
         serviceCategories,
         dispatch
-      );
-      dispatch(
-        prepareFinalObject(
-          "applyScreenMdmsData.serviceCategories",
-          serviceCategoriesTransformed
-        )
       );
     }
   } catch (e) {
