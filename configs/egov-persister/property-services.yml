@@ -103,7 +103,7 @@ serviceMaps:
 
       - jsonPath: $.Properties[*][?({uuid} in @.propertyDetails.*.owners[*].uuid)].tenantId
 
-      - jsonPath: $.Properties.*.propertyDetails[*][?({uuid} in @.owners[*].uuid)].assessmentNumber
+      - jsonPath: $.Properties.*.propertyDetails[*][?({persisterRefId} in @.owners[*].persisterRefId)].assessmentNumber
 
       - jsonPath: $.Properties.*.propertyDetails.*.owners.*.uuid
 
@@ -482,7 +482,7 @@ serviceMaps:
 
       - jsonPath: $.Properties[*][?({uuid} in @.propertyDetails.*.owners[*].uuid)].tenantId
 
-      - jsonPath: $.Properties.*.propertyDetails[*][?({uuid} in @.owners[*].uuid)].assessmentNumber
+      - jsonPath: $.Properties.*.propertyDetails[*][?({persisterRefId} in @.owners[*].persisterRefId)].assessmentNumber
 
       - jsonPath: $.Properties.*.propertyDetails.*.owners.*.uuid
 
@@ -502,13 +502,13 @@ serviceMaps:
 
       - jsonPath: $.Properties.*.propertyDetails.*.owners.*.relationship
 
-      - jsonPath: $.Properties.*.propertyDetails[*][?({uuid} in @.owners[*].uuid)].auditDetails.lastModifiedBy
+      - jsonPath: $.Properties.*.propertyDetails[*][?({persisterRefId} in @.owners[*].persisterRefId)].auditDetails.lastModifiedBy
 
-      - jsonPath: $.Properties.*.propertyDetails[*][?({uuid} in @.owners[*].uuid)].auditDetails.lastModifiedBy
+      - jsonPath: $.Properties.*.propertyDetails[*][?({persisterRefId} in @.owners[*].persisterRefId)].auditDetails.lastModifiedBy
 
-      - jsonPath: $.Properties.*.propertyDetails[*][?({uuid} in @.owners[*].uuid)].auditDetails.lastModifiedTime
+      - jsonPath: $.Properties.*.propertyDetails[*][?({persisterRefId} in @.owners[*].persisterRefId)].auditDetails.lastModifiedTime
 
-      - jsonPath: $.Properties.*.propertyDetails[*][?({uuid} in @.owners[*].uuid)].auditDetails.lastModifiedTime
+      - jsonPath: $.Properties.*.propertyDetails[*][?({persisterRefId} in @.owners[*].persisterRefId)].auditDetails.lastModifiedTime
 
       - jsonPath: $.Properties.*.propertyDetails.*.owners.*.additionalDetails
         type: JSON
@@ -526,9 +526,9 @@ serviceMaps:
 
       - jsonPath: $.Properties.*.propertyDetails.*.owners.*.relationship
 
-      - jsonPath: $.Properties.*.propertyDetails[*][?({uuid} in @.owners[*].uuid)].auditDetails.lastModifiedBy
+      - jsonPath: $.Properties.*.propertyDetails[*][?({persisterRefId} in @.owners[*].persisterRefId)].auditDetails.lastModifiedBy
 
-      - jsonPath: $.Properties.*.propertyDetails[*][?({uuid} in @.owners[*].uuid)].auditDetails.lastModifiedTime
+      - jsonPath: $.Properties.*.propertyDetails[*][?({persisterRefId} in @.owners[*].persisterRefId)].auditDetails.lastModifiedTime
 
 
     - query: INSERT INTO eg_pt_document_propertydetail_v2(tenantId,id, propertydetail, documenttype, fileStore,documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?) ON CONFLICT (id) DO UPDATE SET documenttype = ?, fileStore = ?,documentuid=?, lastmodifiedby = ?, lastmodifiedtime = ?;
