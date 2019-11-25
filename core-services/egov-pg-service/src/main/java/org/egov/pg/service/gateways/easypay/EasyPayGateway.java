@@ -148,16 +148,11 @@ public class EasyPayGateway implements Gateway {
 
         UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(GATEWAY_TRANSACTION_STATUS_URL).queryParams(params)
                 .build().encode();
-
         try {
-
-            // HttpHeaders httpHeaders = new HttpHeaders();
-            // httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.toString());
-
             ResponseEntity<String> response = restTemplate.getForEntity(uriComponents.toUri(), String.class);
-
-            return transformRawResponse(response.getBody(), currentStatus);
-
+             Transaction transaction = transformRawResponse(response.getBody(), currentStatus);
+             log.info("Updated transaction : ", transaction.toString());
+            return transaction;
         } catch (RestClientException e) {
             log.error("Unable to fetch status from Paytm gateway", e);
             throw new CustomException("UNABLE_TO_FETCH_STATUS", "Unable to fetch status from Paytm gateway");
@@ -195,9 +190,6 @@ public class EasyPayGateway implements Gateway {
             status = Transaction.TxnStatusEnum.SUCCESS;
         else if (respMap.get("status").equalsIgnoreCase("FAILED") || respMap.get("status").equalsIgnoreCase("TIMEOUT") )
             status = Transaction.TxnStatusEnum.FAILURE;
-
-
-       //status=NotInitiated&ezpaytranid=NA&amount=NA&trandate=NA&pgreferenceno=PB_PG_2019_11_08_000035_17&sdt=&BA=null&PF=null&TAX=null&PaymentMode=null
 
         return Transaction.builder()
                 .txnId(currentStatus.getTxnId())
