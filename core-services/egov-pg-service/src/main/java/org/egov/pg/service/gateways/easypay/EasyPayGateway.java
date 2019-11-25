@@ -186,8 +186,8 @@ public class EasyPayGateway implements Gateway {
         Arrays.asList(resp.split("&")).forEach(
                 param -> respMap.put(param.split("=")[0], param.split("=").length > 1 ? param.split("=")[1] : ""));
         //As per the bank we can mark SIP and RIP as success
-        if (respMap.get("status").equalsIgnoreCase("Success") || respMap.get("status").equalsIgnoreCase("Success")
-                || respMap.get("status").equalsIgnoreCase("Success"))
+        if (respMap.get("status").equalsIgnoreCase("Success") || respMap.get("status").equalsIgnoreCase("RIP")
+                || respMap.get("status").equalsIgnoreCase("SIP"))
             status = Transaction.TxnStatusEnum.SUCCESS;
         else if (respMap.get("status").equalsIgnoreCase("FAILED") || respMap.get("status").equalsIgnoreCase("TIMEOUT") )
             status = Transaction.TxnStatusEnum.FAILURE;
