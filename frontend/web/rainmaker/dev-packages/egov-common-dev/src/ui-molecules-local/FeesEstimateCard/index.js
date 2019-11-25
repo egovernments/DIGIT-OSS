@@ -83,7 +83,7 @@ function FeesEstimateCard(props) {
   const arrears = estimate.arrears;
   const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
 
-  if (estimate.fees[estimate.fees.length-1].info.labelName!="Arrears") {
+  if (estimate.fees&&estimate.fees.length>0&&estimate.fees[estimate.fees.length-1].info.labelName!="Arrears") {
     estimate.fees.push({
       info: {
         labelKey: "COMMON_ARREARS",
