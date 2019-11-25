@@ -96,63 +96,75 @@ class WorkFlowContainer extends React.Component {
         return "purpose=approve&status=success";
       case "SENDBACK":
         return "purpose=sendback&status=success";
+      case "REFER":
+        return "purpose=refer&status=success";
     }
   };
 
-  tlUpdate = async label => {
-    let { Licenses, toggleSnackbar, preparedFinalObject } = this.props;
-    if (getQueryArg(window.location.href, "edited")) {
-      const removedDocs = get(
-        preparedFinalObject,
-        "LicensesTemp[0].removedDocs",
-        []
-      );
-      if (Licenses[0] && Licenses[0].commencementDate) {
-        Licenses[0].commencementDate = convertDateToEpoch(
-          Licenses[0].commencementDate,
-          "dayend"
+  wfUpdate = async label => {
+    let {
+      toggleSnackbar,
+      preparedFinalObject,
+      dataPath,
+      moduleName,
+      updateUrl
+    } = this.props;
+    let data = get(preparedFinalObject, dataPath, []);
+    if (moduleName === "NewTL") {
+      if (getQueryArg(window.location.href, "edited")) {
+        const removedDocs = get(
+          preparedFinalObject,
+          "LicensesTemp[0].removedDocs",
+          []
+        );
+        if (data[0] && data[0].commencementDate) {
+          data[0].commencementDate = convertDateToEpoch(
+            data[0].commencementDate,
+            "dayend"
+          );
+        }
+        let owners = get(data[0], "tradeLicenseDetail.owners");
+        owners = (owners && this.convertOwnerDobToEpoch(owners)) || [];
+        set(data[0], "tradeLicenseDetail.owners", owners);
+        set(data[0], "tradeLicenseDetail.applicationDocuments", [
+          ...get(data[0], "tradeLicenseDetail.applicationDocuments", []),
+          ...removedDocs
+        ]);
+
+        // Accessories issue fix by Gyan
+        let accessories = get(data[0], "tradeLicenseDetail.accessories");
+        let tradeUnits = get(data[0], "tradeLicenseDetail.tradeUnits");
+        set(
+          data[0],
+          "tradeLicenseDetail.tradeUnits",
+          getMultiUnits(tradeUnits)
+        );
+        set(
+          data[0],
+          "tradeLicenseDetail.accessories",
+          getMultiUnits(accessories)
         );
       }
-      let owners = get(Licenses[0], "tradeLicenseDetail.owners");
-      owners = (owners && this.convertOwnerDobToEpoch(owners)) || [];
-      set(Licenses[0], "tradeLicenseDetail.owners", owners);
-      set(Licenses[0], "tradeLicenseDetail.applicationDocuments", [
-        ...get(Licenses[0], "tradeLicenseDetail.applicationDocuments", []),
-        ...removedDocs
-      ]);
-      let accessories = get(Licenses[0], "tradeLicenseDetail.accessories");
-      let tradeUnits = get(Licenses[0], "tradeLicenseDetail.tradeUnits");
-      set(
-        Licenses[0],
-        "tradeLicenseDetail.tradeUnits",
-        getMultiUnits(tradeUnits)
-      );
-      set(
-        Licenses[0],
-        "tradeLicenseDetail.accessories",
-        getMultiUnits(accessories)
-      );
     }
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
     try {
-      const payload = await httpRequest(
-        "post",
-        "/tl-services/v1/_update",
-        "",
-        [],
-        {
-          Licenses: Licenses
-        }
-      );
+      const payload = await httpRequest("post", updateUrl, "", [], {
+        [dataPath]: data
+      });
 
       this.setState({
         open: false
       });
+
       if (payload) {
-        const licenseNumber = get(payload, "Licenses[0].licenseNumber");
+        let path = "";
+        if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
+        else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
+        else path = "Licenses[0].licenseNumber";
+        const licenseNumber = get(payload, path, "");
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
         )}&applicationNumber=${applicationNumber}&tenantId=${tenant}&secondNumber=${licenseNumber}`;
@@ -160,21 +172,26 @@ class WorkFlowContainer extends React.Component {
     } catch (e) {
       toggleSnackbar(
         true,
-        { labelName: "TL update error!", labelKey: "ERR_TL_UPDATE_ERROR" },
+        {
+          labelName: "Workflow update error!",
+          labelKey: "ERR_WF_UPDATE_ERROR"
+        },
         "error"
       );
     }
   };
 
   createWorkFLow = async (label, isDocRequired) => {
-    const { Licenses, toggleSnackbar } = this.props;
+    const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
+    let data = get(preparedFinalObject, dataPath, []);
     //setting the action to send in RequestInfo
-    set(Licenses[0], "action", label);
+    let appendToPath = dataPath === "FireNOCs" ? "fireNOCDetails." : "";
+    set(data[0], `${appendToPath}action`, label);
 
     if (isDocRequired) {
-      const documents = get(Licenses[0], "wfDocuments");
+      const documents = get(data[0], "wfDocuments");
       if (documents && documents.length > 0) {
-        this.tlUpdate(label);
+        this.wfUpdate(label);
       } else {
         toggleSnackbar(
           true,
@@ -183,68 +200,47 @@ class WorkFlowContainer extends React.Component {
         );
       }
     } else {
-      this.tlUpdate(label);
+      this.wfUpdate(label);
     }
   };
 
-  getRedirectUrl = (action, businessId) => {
+  getRedirectUrl = (action, businessId, moduleName) => {
     const isAlreadyEdited = getQueryArg(window.location.href, "edited");
-    switch (action) {
-      case "PAY":
-        return `/tradelicence/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=TL`;
-      case "EDIT":
-        return isAlreadyEdited
-          ? `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-          : `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
+    if (moduleName === "NewTL") {
+      switch (action) {
+        case "PAY":
+          return `egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}&businessService=NewTL`;
+        // return `/tradelicence/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=NewTL`;
+        case "EDIT":
+          return isAlreadyEdited
+            ? `tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
+            : `tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
+      }
+    } else if (moduleName === "FIRENOC") {
+      switch (action) {
+        case "PAY":
+          return `/egov-common/pay?consumerCode=${businessId}=${tenant}&businessService=FIRENOC`;
+        // return `/fire-noc/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=FIRENOC`;
+        case "EDIT":
+          return isAlreadyEdited
+            ? `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
+            : `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
+      }
     }
   };
 
   getHeaderName = action => {
     return {
       labelName: `${action} Application`,
-      labelKey: `TL_${action}_APPLICATION`
+      labelKey: `WF_${action}_APPLICATION`
     };
-    // switch (
-    //   action
-    // case "FORWARD":
-    //   return {
-    //     labelName: "Forward Application",
-    //     labelKey: "TL_FORWARD_APPLICATION"
-    //   };
-    // case "MARK":
-    //   return {
-    //     labelName: "Mark Application",
-    //     labelKey: "TL_MARK_APPLICATION"
-    //   };
-    // case "APPROVE":
-    //   return {
-    //     labelName: "Approve Application",
-    //     labelKey: "TL_APPROVAL_CHECKLIST_BUTTON_APPRV_APPL"
-    //   };
-    // case "CANCEL":
-    //   return {
-    //     labelName: "Cancel Application",
-    //     labelKey: "TL_WORKFLOW_CANCEL"
-    //   };
-    // case "SENDBACK":
-    //   return {
-    //     labelName: "Send Back Application",
-    //     labelKey: "TL_WORKFLOW_SENDBACK"
-    //   };
-    // default:
-    //   return {
-    //     labelName: "Reject Application",
-    //     labelKey: "TL_REJECTION_CHECKLIST_BUTTON_REJ_APPL"
-    //   };
-    // ) {
-    // }
   };
 
-  getEmployeeRoles = (nextAction, currentAction) => {
+  getEmployeeRoles = (nextAction, currentAction, moduleName) => {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    const data = find(businessServiceData, { businessService: "NewTL" });
+    const data = find(businessServiceData, { businessService: moduleName });
     let roles = [];
     if (nextAction === currentAction) {
       data.states &&
@@ -268,29 +264,33 @@ class WorkFlowContainer extends React.Component {
     return roles.toString();
   };
 
-  checkIfTerminatedState = nextStateUUID => {
+  checkIfTerminatedState = (nextStateUUID, moduleName) => {
+    console.log("modulename is....", moduleName);
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    const data = find(businessServiceData, { businessService: "NewTL" });
+    const data = find(businessServiceData, { businessService: moduleName });
+    console.log("========>2", data);
+    console.log("=======> nextStat is", nextStateUUID);
     const nextState = find(data.states, { uuid: nextStateUUID });
+    console.log("=======> state is", nextState);
     return nextState.isTerminateState;
   };
 
-  checkIfDocumentRequired = nextStateUUID => {
+  checkIfDocumentRequired = (nextStateUUID, moduleName) => {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    const data = find(businessServiceData, { businessService: "NewTL" });
+    const data = find(businessServiceData, { businessService: moduleName });
     const nextState = find(data.states, { uuid: nextStateUUID });
     return nextState.docUploadRequired;
   };
 
-  getActionIfEditable = (status, businessId) => {
+  getActionIfEditable = (status, businessId, moduleName) => {
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
-    const data = find(businessServiceData, { businessService: "NewTL" });
+    const data = find(businessServiceData, { businessService: moduleName });
     const state = find(data.states, { applicationStatus: status });
     let actions = [];
     state.actions &&
@@ -306,16 +306,17 @@ class WorkFlowContainer extends React.Component {
     if (state.isStateUpdatable && actions.length > 0 && roleIndex > -1) {
       editAction = {
         buttonLabel: "EDIT",
-        moduleName: "NewTL",
+        moduleName: moduleName,
         tenantId: state.tenantId,
         isLast: true,
-        buttonUrl: this.getRedirectUrl("EDIT", businessId)
+        buttonUrl: this.getRedirectUrl("EDIT", businessId, moduleName)
       };
     }
     return editAction;
   };
 
-  prepareWorkflowContract = data => {
+  prepareWorkflowContract = (data, moduleName) => {
+    console.log("========>1", data);
     const {
       getRedirectUrl,
       getHeaderName,
@@ -324,10 +325,6 @@ class WorkFlowContainer extends React.Component {
       checkIfDocumentRequired,
       getEmployeeRoles
     } = this;
-    // const businessServiceData = JSON.parse(
-    //   localStorageGet("businessServiceData")
-    // );
-    // const bu = find(businessServiceData, { businessService: "NewTL" });
     let businessId = get(data[data.length - 1], "businessId");
     let filteredActions = get(data[data.length - 1], "nextActions", []).filter(
       item => item.action != "ADHOC"
@@ -343,14 +340,18 @@ class WorkFlowContainer extends React.Component {
         buttonLabel: item.action,
         moduleName: data[data.length - 1].businessService,
         isLast: item.action === "PAY" ? true : false,
-        buttonUrl: getRedirectUrl(item.action, businessId),
+        buttonUrl: getRedirectUrl(item.action, businessId, moduleName),
         dialogHeader: getHeaderName(item.action),
-        showEmployeeList: !checkIfTerminatedState(item.nextState),
-        roles: getEmployeeRoles(item.nextState, item.currentState),
-        isDocRequired: checkIfDocumentRequired(item.nextState)
+        showEmployeeList: !checkIfTerminatedState(item.nextState, moduleName),
+        roles: getEmployeeRoles(item.nextState, item.currentState, moduleName),
+        isDocRequired: checkIfDocumentRequired(item.nextState, moduleName)
       };
     });
-    let editAction = getActionIfEditable(applicationStatus, businessId);
+    let editAction = getActionIfEditable(
+      applicationStatus,
+      businessId,
+      moduleName
+    );
     editAction.buttonLabel && actions.push(editAction);
     return actions;
   };
@@ -371,12 +372,16 @@ class WorkFlowContainer extends React.Component {
   };
 
   render() {
-    const { createWorkFLow } = this;
-    const { ProcessInstances, prepareFinalObject } = this.props;
+    const {
+      ProcessInstances,
+      prepareFinalObject,
+      dataPath,
+      moduleName
+    } = this.props;
     const workflowContract =
       ProcessInstances &&
       ProcessInstances.length > 0 &&
-      this.prepareWorkflowContract(ProcessInstances);
+      this.prepareWorkflowContract(ProcessInstances, moduleName);
     return (
       <div>
         {ProcessInstances && ProcessInstances.length > 0 && (
@@ -386,8 +391,10 @@ class WorkFlowContainer extends React.Component {
           handleFieldChange={prepareFinalObject}
           variant={"contained"}
           color={"primary"}
-          onDialogButtonClick={createWorkFLow}
+          onDialogButtonClick={this.createWorkFLow}
           contractData={workflowContract}
+          dataPath={dataPath}
+          moduleName={moduleName}
         />
       </div>
     );
@@ -397,9 +404,9 @@ class WorkFlowContainer extends React.Component {
 const mapStateToProps = state => {
   const { screenConfiguration } = state;
   const { preparedFinalObject } = screenConfiguration;
-  const { Licenses, workflow } = preparedFinalObject;
+  const { workflow } = preparedFinalObject;
   const { ProcessInstances } = workflow || [];
-  return { ProcessInstances, Licenses, preparedFinalObject };
+  return { ProcessInstances, preparedFinalObject };
 };
 
 const mapDispacthToProps = dispatch => {
