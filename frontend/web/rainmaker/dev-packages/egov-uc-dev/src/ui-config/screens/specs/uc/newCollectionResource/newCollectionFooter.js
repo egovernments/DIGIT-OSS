@@ -58,11 +58,11 @@ export const newCollectionFooter = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: (state, dispatch) => {
+      callBack: async (state, dispatch) => {
+        await processDemand(state, dispatch);
         const applicationNumber = get(state.screenConfiguration.preparedFinalObject, "Demands[0].consumerCode");
         const tenantId = get(state.screenConfiguration.preparedFinalObject, "Demands[0].tenantId");
         getCommonPayUrl(dispatch,applicationNumber, tenantId);
-        processDemand(state, dispatch);
       }
     }
   }
@@ -81,7 +81,7 @@ const allDateToEpoch = (finalObj, jsonPaths) => {
   });
 };
 
-const processDemand = (state, dispatch) => {
+const processDemand = async (state, dispatch) => {
   const isFormValid = validateFields(
     "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children",
     state,
