@@ -20,9 +20,9 @@ export const getFullRow = (labelKey, labelValue, rowGrid = 12) => {
                 fontSize="14px"
             />
         </div>
-        <div className={`col-sm-${4 * subRowGrid} col-xs-8`} style={{ padding: "3px 0px 0px 0px",paddingLeft:rowGrid==12?'10px':'15px' }}>
+        <div className={`col-sm-${4 * subRowGrid} col-xs-8`} style={{ padding: "3px 0px 0px 0px", paddingLeft: rowGrid == 12 ? '10px' : '15px' }}>
             <Label
-                labelStyle={{ letterSpacing: "0.47px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px"  }}
+                labelStyle={{ letterSpacing: "0.47px", color: "rgba(0, 0, 0, 1.87)", fontWeight: "400", lineHeight: "19px" }}
                 label={labelValue}
                 fontSize="14px"
             />
@@ -41,28 +41,83 @@ class AssessmentHistory extends Component {
         this.state = {
             items: [],
             showItems: false,
-            errorMessage:"PT_ASSESSMENT_HISTORY_ERROR"
+            errorMessage: "PT_ASSESSMENT_HISTORY_ERROR"
         };
     }
-    
-    getAmntIfAssessmntYrEqBillYr(bill , financialAssmntYr) {
 
-        let billAmount = 'NA'
+    getTotalBillAmount(bills, financialAssmntYr) {
+        let totalBillAmount = 0;
+        if (bills.length > 0) {
+            for (let bill of bills) {
 
-        if(bill && bill[0].billDetails && financialAssmntYr){
+                if (bill && bill.billDetails && financialAssmntYr) {
 
-            const {fromPeriod ,toPeriod, amount}  =  bill[0].billDetails[0];
-    
-            const fromYear = new Date(fromPeriod).getFullYear();
-            const assmntStrtYr = String(financialAssmntYr).substring(0, 4)
-    
-            if (fromYear === assmntStrtYr)
-                billAmount = amount;
-            
+                    for (let billDetail of bill.billDetails) {
+                        const { fromPeriod, toPeriod, amount } = billDetail;
+
+                        const fromYearOfBill = new Date(fromPeriod).getFullYear();
+                        const toYear = new Date(toPeriod).getFullYear();
+                        const toYearOfBill = parseInt(String(toYear).substr(2, 3));
+                        const assmntStrtYr = parseInt(String(financialAssmntYr).substring(0, 4))
+                        const assmntEndYr = parseInt(String(financialAssmntYr).substr(5, 6))
+
+
+                        if (fromYearOfBill === assmntStrtYr && toYearOfBill === assmntEndYr)
+                            totalBillAmount += amount;
+                    }
+                }
+            }
+        }
+        return totalBillAmount;
+    }
+
+
+    getTotalPaymentAmount(bills, financialAssmntYr) {
+        let totalBillAmount = 0;
+        if (bills) {
+
+            const { billDetails } = bills;
+            if (billDetails && financialAssmntYr) {
+
+                for (let billDetail of billDetails) {
+                    const { fromPeriod, toPeriod, amount } = billDetail;
+
+                    const fromYearOfBill = new Date(fromPeriod).getFullYear();
+                    const toYear = new Date(toPeriod).getFullYear();
+                    const toYearOfBill = parseInt(String(toYear).substr(2, 3));
+                    const assmntStrtYr = parseInt(String(financialAssmntYr).substring(0, 4))
+                    const assmntEndYr = parseInt(String(financialAssmntYr).substr(5, 6))
+
+
+                    if (fromYearOfBill === assmntStrtYr && toYearOfBill === assmntEndYr)
+                        totalBillAmount += amount;
+                }
+            }
+        }
+        return totalBillAmount;
+    }
+
+    getTotalTaxAmntForAssessmntYr(bills, payments, financialAssmntYr) {
+
+        let totalTaxAmount = 0;
+        let totalPaymentAmount = 0;
+        let totalBillAmount = this.getTotalBillAmount(bills, financialAssmntYr);
+
+        if (payments.length > 0) {
+
+            const { paymentDetails } = payments[0];
+
+            for (let paymentdetail of paymentDetails) {
+                let { bill } = paymentdetail;
+                totalPaymentAmount += this.getTotalPaymentAmount(bill, financialAssmntYr);
+
+            }
         }
 
-        return billAmount
-            
+        totalTaxAmount = totalBillAmount + totalPaymentAmount;
+
+        return totalTaxAmount + "";
+
     }
 
     getTransformedPaymentHistory() {
@@ -82,20 +137,19 @@ class AssessmentHistory extends Component {
             outline: "none",
             alignItems: "right",
         };
-       
 
-        const { propertyDetails = [], history, propertyId , Bill:bill } = this.props;
+
+        const { propertyDetails = [], history, propertyId, Bill: bill, Payments: payments } = this.props;
 
         const paymentHistoryItems = propertyDetails.map((propertyDetail) => {
-
-               const taxAmount =  this.getAmntIfAssessmntYrEqBillYr(bill , propertyDetail.financialYear ) ;           
+            const taxAmount = this.getTotalTaxAmntForAssessmntYr(bill, payments, propertyDetail.financialYear);
             return (
                 <div>
                     {getFullRow("PT_HISTORY_ASSESSMENT_DATE", propertyDetail.assessmentDate ? getFormattedDate(propertyDetail.assessmentDate) : "NA", 12)}
                     {getFullRow("PT_ASSESSMENT_NO", propertyDetail.assessmentNumber ? propertyDetail.assessmentNumber : "NA", 12)}
                     {getFullRow("PT_ASSESSMENT_YEAR", propertyDetail.financialYear ? propertyDetail.financialYear : "NA", 12)}
-                    {getFullRow("PT_ASSESSMENT_AMOUNT", taxAmount , 6)}
-                      {/* Commenting add and assess property for 10 dec release
+                    {getFullRow("PT_ASSESSMENT_AMOUNT", taxAmount, 6)}
+                    {/* Commenting add and assess property for 10 dec release
                     <div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
                         <div className="assess-history" style={{ float: "right" }}>
                             <Button
@@ -129,7 +183,7 @@ class AssessmentHistory extends Component {
         }
         // console.log(this.props,'props');
         const items = this.state.showItems ? this.state.items : [];
-        const errorMessage = this.state.showItems&&items.length==0 ? this.state.errorMessage : '';
+        const errorMessage = this.state.showItems && items.length == 0 ? this.state.errorMessage : '';
         return (<HistoryCard header={'PT_ASSESMENT_HISTORY'} items={items} errorMessage={errorMessage} onHeaderClick={() => {
             console.log("clicked");
             this.setState({ showItems: !this.state.showItems, items: paymentHistoryItems })
@@ -139,7 +193,7 @@ class AssessmentHistory extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const { propertiesById , Bill } = state.properties || {};
+    const { propertiesById, Bill = [], Payments = [] } = state.properties || {};
     const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
     const selPropertyDetails = propertiesById[propertyId] || {};
     const propertyDetails = selPropertyDetails.propertyDetails || [];
@@ -147,7 +201,8 @@ const mapStateToProps = (state, ownProps) => {
     return {
         propertyDetails,
         propertyId,
-        Bill
+        Bill,
+        Payments
     };
 };
 
