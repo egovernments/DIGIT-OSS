@@ -62,6 +62,7 @@ export const newCollectionFooter = getCommonApplyFooter({
         const applicationNumber = get(state.screenConfiguration.preparedFinalObject, "Demands[0].consumerCode");
         const tenantId = get(state.screenConfiguration.preparedFinalObject, "Demands[0].tenantId");
         getCommonPayUrl(dispatch,applicationNumber, tenantId);
+        processDemand(state, dispatch);
       }
     }
   }
@@ -146,7 +147,7 @@ const createDemand = async (state, dispatch) => {
         Demands: demands
       });
       if (payload.Demands.length > 0) {
-        const consumerCode = get(payload, "Demands[0].consumerCode");
+        //const consumerCode = get(payload, "Demands[0].consumerCode");
         const businessService = get(payload, "Demands[0].businessService");
         set(payload, "Demands[0].mobileNumber", mobileNumber);
         set(payload, "Demands[0].consumerName", consumerName);
@@ -157,7 +158,7 @@ const createDemand = async (state, dispatch) => {
           businessService.split(".")[0]
         );
         dispatch(prepareFinalObject("Demands", payload.Demands));
-        await generateBill(consumerCode, tenantId, businessService, dispatch);
+        //await generateBill(consumerCode, tenantId, businessService, dispatch);
       } else {
         alert("Empty response!!");
       }

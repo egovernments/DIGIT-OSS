@@ -7,12 +7,15 @@ const remoteConfigPath = (path, screenKey) => {
       break;
     case "pt-mutation":
       config = require(`egov-pt/ui-config/screens/specs/${path}/${screenKey}`).default;
-      break;    
+      break;
     case "hrms":
       config = require(`egov-hrms/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "uc":
       config = require(`egov-uc/ui-config/screens/specs/${path}/${screenKey}`).default;
+      break;
+    case "bpastakeholder":
+      config = require(`egov-bpa/ui-config/screens/specs/${path}/${screenKey}`).default;
       break;
     case "fire-noc":
       config = require(`egov-noc/ui-config/screens/specs/${path}/${screenKey}`).default;

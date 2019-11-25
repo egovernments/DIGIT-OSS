@@ -130,7 +130,6 @@ export const applicationSuccessFooter = (
   /* Mseva 2.0 changes */
   const redirectionURL = roleExists ? "/" : "/inbox";
   return getCommonApplyFooter({
-
     gotoHome: {
       componentPath: "Button",
       props: {
