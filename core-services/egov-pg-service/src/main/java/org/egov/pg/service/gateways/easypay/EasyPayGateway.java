@@ -151,7 +151,7 @@ public class EasyPayGateway implements Gateway {
         try {
             ResponseEntity<String> response = restTemplate.getForEntity(uriComponents.toUri(), String.class);
              Transaction transaction = transformRawResponse(response.getBody(), currentStatus);
-             log.info("Updated transaction : ", transaction.toString());
+             log.info("Updated transaction : "+ transaction.toString());
             return transaction;
         } catch (RestClientException e) {
             log.error("Unable to fetch status from Paytm gateway", e);
@@ -185,8 +185,9 @@ public class EasyPayGateway implements Gateway {
         Map<String, String> respMap = new HashMap<String, String>();
         Arrays.asList(resp.split("&")).forEach(
                 param -> respMap.put(param.split("=")[0], param.split("=").length > 1 ? param.split("=")[1] : ""));
-
-        if (respMap.get("status").equals("Success"))
+        //As per the bank we can mark SIP and RIP as success
+        if (respMap.get("status").equalsIgnoreCase("Success") || respMap.get("status").equalsIgnoreCase("Success")
+                || respMap.get("status").equalsIgnoreCase("Success"))
             status = Transaction.TxnStatusEnum.SUCCESS;
         else if (respMap.get("status").equalsIgnoreCase("FAILED") || respMap.get("status").equalsIgnoreCase("TIMEOUT") )
             status = Transaction.TxnStatusEnum.FAILURE;
