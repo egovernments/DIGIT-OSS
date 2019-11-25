@@ -1,6 +1,7 @@
 package org.egov.tl.service.notification;
 
 import com.jayway.jsonpath.DocumentContext;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tl.config.TLConfiguration;
@@ -30,14 +31,17 @@ public class PaymentNotificationService {
     private TradeLicenseService tradeLicenseService;
 
     private NotificationUtil util;
+    
+    private ObjectMapper mapper;
 
 
     @Autowired
     public PaymentNotificationService(TLConfiguration config, TradeLicenseService tradeLicenseService,
-                                      NotificationUtil util) {
+                                      NotificationUtil util,ObjectMapper mapper) {
         this.config = config;
         this.tradeLicenseService = tradeLicenseService;
         this.util = util;
+        this.mapper = mapper;
     }
 
 
@@ -68,7 +72,8 @@ public class PaymentNotificationService {
             String jsonString = new JSONObject(record).toString();
             DocumentContext documentContext = JsonPath.parse(jsonString);
             Map<String,String> valMap = enrichValMap(documentContext);
-            RequestInfo requestInfo = new RequestInfo();
+            Map<String, Object> info = documentContext.read("$.RequestInfo");
+            RequestInfo requestInfo = mapper.convertValue(info, RequestInfo.class);
 
             if(valMap.get(businessServiceKey).equalsIgnoreCase(config.getBusinessService())){
                 TradeLicense license = getTradeLicenseFromConsumerCode(valMap.get(tenantIdKey),valMap.get(consumerCodeKey),
@@ -151,14 +156,14 @@ public class PaymentNotificationService {
     private Map<String,String> enrichValMap(DocumentContext context){
         Map<String,String> valMap = new HashMap<>();
         try{
-            valMap.put(businessServiceKey,context.read("$.Receipt[0].Bill[0].billDetails[0].businessService"));
-            valMap.put(consumerCodeKey,context.read("$.Receipt[0].Bill[0].billDetails[0].consumerCode"));
-            valMap.put(tenantIdKey,context.read("$.Receipt[0].tenantId"));
-            valMap.put(payerMobileNumberKey,context.read("$.Receipt[0].Bill[0].mobileNumber"));
-            valMap.put(paidByKey,context.read("$.Receipt[0].Bill[0].paidBy"));
-            Integer amountPaid = context.read("$.Receipt[0].instrument.amount");
+            valMap.put(businessServiceKey,context.read("$.Payments.*.paymentDetails[?(@.businessService=='TL')].businessService"));
+            valMap.put(consumerCodeKey,context.read("$.Payments.*.paymentDetails[?(@.businessService=='TL')].bill.consumerCode"));
+            valMap.put(tenantIdKey,context.read("$.Payments[0].tenantId"));
+            valMap.put(payerMobileNumberKey,context.read("$.Payments.*.paymentDetails[?(@.businessService=='TL')].bill.mobileNumber"));
+            valMap.put(paidByKey,context.read("$.Payments[0].paidBy"));
+            Integer amountPaid = context.read("$.Payments.*.paymentDetails[?(@.businessService=='TL')].bill.amountPaid");
             valMap.put(amountPaidKey,amountPaid.toString());
-            valMap.put(receiptNumberKey,context.read("$.Receipt[0].Bill[0].billDetails[0].receiptNumber"));
+            valMap.put(receiptNumberKey,context.read("$.Payments.*.paymentDetails[?(@.businessService=='TL')].receiptNumber"));
 
         }
         catch (Exception e){
