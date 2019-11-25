@@ -370,9 +370,9 @@ serviceMaps:
 
       - jsonPath: $.Licenses.*.auditDetails.lastModifiedTime
 
-      - jsonPath: $.Licenses.*.id
-
       - jsonPath: $.Licenses.*.businessService
+
+      - jsonPath: $.Licenses.*.id
 
     - query: INSERT INTO eg_tl_tradelicensedetail_audit SELECT * FROM eg_tl_tradelicensedetail WHERE id = ?;
       basePath: Licenses.*.tradeLicenseDetail
