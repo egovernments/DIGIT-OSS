@@ -988,7 +988,8 @@ const generateReceipt = async (state, dispatch, type) => {
     case "certificate_download":
       let certificate_data = getCertificateData(transformedData, ulbLogo);
       certificate_data &&
-        pdfMake.createPdf(certificate_data).download("tl_certificate.pdf");
+        // pdfMake.createPdf(certificate_data).download("tl_certificate.pdf");
+        pdfMake.createPdf(certificate_data).open();
       break;
     case "certificate_print":
       certificate_data = getCertificateData(transformedData, ulbLogo);
@@ -997,7 +998,8 @@ const generateReceipt = async (state, dispatch, type) => {
     case "receipt_download":
       let receipt_data = getReceiptData(transformedData, ulbLogo);
       receipt_data &&
-        pdfMake.createPdf(receipt_data).download("tl_receipt.pdf");
+        // pdfMake.createPdf(receipt_data).download("tl_receipt.pdf");
+        pdfMake.createPdf(receipt_data).open();
       break;
     case "receipt_print":
       receipt_data = getReceiptData(transformedData, ulbLogo);
