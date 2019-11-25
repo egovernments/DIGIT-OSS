@@ -111,7 +111,8 @@ class ComponentInterface extends React.Component {
       visible = true,
       roleDefination = {},
       applicationStatus,
-      menu
+      menu,
+      bpaTradeType
     } = this.props;
     if (visible && !isEmpty(roleDefination)) {
       const splitList = get(roleDefination, "rolePath").split(".");
@@ -121,9 +122,11 @@ class ComponentInterface extends React.Component {
         splitList.slice(1).join("."),
         localdata
       );
-      const roleCodes =localRoles&& localRoles.map(elem => {
-        return get(elem, "code");
-      });
+      const roleCodes =
+        localRoles &&
+        localRoles.map(elem => {
+          return get(elem, "code");
+        });
       if (get(roleDefination, "roles")) {
         const roles = get(roleDefination, "roles");
         let found = roles.some(elem => roleCodes.includes(elem));
@@ -140,7 +143,7 @@ class ComponentInterface extends React.Component {
           localStorageGet("businessServiceData")
         );
         const data = find(businessServiceData, {
-          businessService: getModuleName(window.location.pathname)
+          businessService: getModuleName(window.location.pathname, bpaTradeType)
         });
         const filteredData =
           data &&
@@ -205,10 +208,19 @@ const mapStateToProps = state => {
     jsonPath = "FireNOCs[0].fireNOCDetails.status";
   } else if (moduleName === "NewTL") {
     jsonPath = "Licenses[0].status";
+  } else {
+    jsonPath = "Licenses[0].status";
   }
   const applicationStatus = get(preparedFinalObject, jsonPath);
-
-  return { applicationStatus, menu };
+  let bpaTradeType = "";
+  if (window.location.pathname.includes("bpastakeholder")) {
+    bpaTradeType = get(
+      preparedFinalObject,
+      "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+      ""
+    );
+  }
+  return { applicationStatus, menu, bpaTradeType };
 };
 
 export default connect(
