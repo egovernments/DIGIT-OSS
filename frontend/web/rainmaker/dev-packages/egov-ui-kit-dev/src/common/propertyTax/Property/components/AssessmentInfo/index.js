@@ -210,28 +210,31 @@ const getUnitInfo = (units = []) => {
     },
     {
       key: getTranslatedLabel("PT_ASSESMENT_INFO_INNER_DIMENSION", localizationLabelsData),
-      value: unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown ? unit.additionalDetails.innerDimensionsKnown === "true"? "Yes" : "No" : "NA",
-    },
-    {
-      key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR26", localizationLabelsData),
-      value: unit.additionalDetails && unit.additionalDetails.roomsArea ? unit.additionalDetails.roomsArea : "NA",
-    },
-    {
-      key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR27", localizationLabelsData),
-      value: unit.additionalDetails && unit.additionalDetails.commonArea ? unit.additionalDetails.commonArea : "NA",
-    },
-    {
-      key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR28", localizationLabelsData),
-      value: unit.additionalDetails && unit.additionalDetails.garageArea ?  unit.additionalDetails.garageArea : "NA",
-    },
-    {
-      key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR29", localizationLabelsData),
-      value: unit.additionalDetails &&  unit.additionalDetails.bathroomArea ? unit.additionalDetails.bathroomArea : "NA",
+      value: unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown ? unit.additionalDetails.innerDimensionsKnown === "true"? "Yes" : "No" : "No",
     },
      {
       key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
       value: unit.unitArea ? unit.unitArea + '' : "NA",
     }];
+    if( unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown === "true"){
+      floor.push( {
+        key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR26", localizationLabelsData),
+        value: unit.additionalDetails && unit.additionalDetails.roomsArea ? unit.additionalDetails.roomsArea+ '' : "NA",
+      },
+      {
+        key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR27", localizationLabelsData),
+        value: unit.additionalDetails && unit.additionalDetails.commonArea ? unit.additionalDetails.commonArea+ '' : "NA",
+      },
+      {
+        key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR28", localizationLabelsData),
+        value: unit.additionalDetails && unit.additionalDetails.garageArea ?  unit.additionalDetails.garageArea+ '' : "NA",
+      },
+      {
+        key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR29", localizationLabelsData),
+        value: unit.additionalDetails &&  unit.additionalDetails.bathroomArea ? unit.additionalDetails.bathroomArea+ '' : "NA",
+      })
+    }
+
     if (unit.occupancyType === "RENTED") {
       floor.push({
         key: getTranslatedLabel("PT_FORM2_TOTAL_ANNUAL_RENT", localizationLabelsData),
