@@ -16,117 +16,49 @@ import java.util.List;
 /**
  * BillDetail
  */
-
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class BillDetail {
 
     @JsonProperty("id")
-    private String id = null;
+    private String id;
 
     @JsonProperty("tenantId")
-    private String tenantId = null;
+    private String tenantId;
 
     @JsonProperty("demandId")
-    private String demandId = null;
+    private String demandId;
 
-    @JsonProperty("bill")
-    private String bill = null;
+    @JsonProperty("billId")
+    private String billId;
 
-    @JsonProperty("businessService")
-    private String businessService = null;
+    @JsonProperty("expiryDate")
+    private Long expiryDate;
 
-    @JsonProperty("billNumber")
-    private String billNumber = null;
-
-    @JsonProperty("billDate")
-    private Long billDate = null;
-
-    @JsonProperty("consumerCode")
-    private String consumerCode = null;
-
-    @JsonProperty("consumerType")
-    private String consumerType = null;
-
-    @JsonProperty("minimumAmount")
-    private BigDecimal minimumAmount = null;
-
-    @JsonProperty("totalAmount")
-    @NotNull
-    private BigDecimal totalAmount = null;
-
-    @JsonProperty("amountPaid")
-    @NotNull
-    private BigDecimal amountPaid = null;
+    @JsonProperty("amount")
+    private BigDecimal amount;
 
     @JsonProperty("fromPeriod")
-    private Long fromPeriod = null;
+    private Long fromPeriod;
 
     @JsonProperty("toPeriod")
-    private Long toPeriod = null;
-
-    @JsonProperty("collectedAmount")
-    private BigDecimal collectedAmount = null;
-
-    @JsonProperty("collectionModesNotAllowed")
-    private List<String> collectionModesNotAllowed = null;
-
-    @JsonProperty("partPaymentAllowed")
-    private Boolean partPaymentAllowed = null;
+    private Long toPeriod;
 
     @JsonProperty("additionalDetails")
-    private JsonNode additionalDetails = null;
-
-    @JsonProperty("receiptNumber")
-    private String receiptNumber = null;
-
-    @JsonProperty("receiptDate")
-    private Long receiptDate = null;
-
-    @JsonProperty("receiptType")
-    private String receiptType = null;
-
-    @JsonProperty("channel")
-    private String channel = null;
-
-    @JsonProperty("voucherHeader")
-    private String voucherHeader = null;
-
-    @JsonProperty("boundary")
-    private String boundary = null;
-
-    @JsonProperty("reasonForCancellation")
-    private String reasonForCancellation = null;
-
-    @JsonProperty("manualReceiptNumber")
-    private String manualReceiptNumber = null;
-
-    @JsonProperty("manualReceiptDate")
-    private Long manualReceiptDate = null;
-
-    @JsonProperty("stateId")
-    private String stateId = null;
-
-    @JsonProperty("fund")
-    private String fund = null;
-
-    @JsonProperty("function")
-    private String function = null;
-
-    @JsonProperty("department")
-    private String department = null;
+    private Object additionalDetails;
 
     @JsonProperty("billAccountDetails")
-    private List<BillAccountDetail> billAccountDetails = null;
+    @Valid
+    private List<BillAccountDetail> billAccountDetails;
 
-    @JsonProperty("status")
-    private String status = null;
-
-    @JsonProperty("collectionType")
-    private CollectionType collectionType = null;
-
-
+    public BillDetail addBillAccountDetailsItem(BillAccountDetail billAccountDetailsItem) {
+        if (this.billAccountDetails == null) {
+            this.billAccountDetails = new ArrayList<>();
+        }
+        if (!this.billAccountDetails.contains(billAccountDetailsItem))
+            this.billAccountDetails.add(billAccountDetailsItem);
+        return this;
+    }
 }

@@ -3,8 +3,8 @@ package org.egov.tlcalculator.web.models.demand;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
+import org.egov.tlcalculator.web.models.AuditDetails;
 import org.egov.tlcalculator.web.models.enums.Purpose;
 
 import java.math.BigDecimal;
@@ -12,46 +12,41 @@ import java.math.BigDecimal;
 /**
  * BillAccountDetail
  */
-@Getter
-@Setter
-@AllArgsConstructor
+
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class BillAccountDetail {
 
     @JsonProperty("id")
-    private String id = null;
+    private String id;
 
     @JsonProperty("tenantId")
-    private String tenantId = null;
+    private String tenantId;
 
-    @JsonProperty("billDetail")
-    private String billDetail = null;
+    @JsonProperty("billDetailId")
+    private String billDetailId;
 
     @JsonProperty("demandDetailId")
-    private String demandDetailId = null;
+    private String demandDetailId;
 
     @JsonProperty("order")
-    private Integer order = null;
+    private Integer order;
 
     @JsonProperty("amount")
-    private BigDecimal amount = null;
+    private BigDecimal amount;
 
     @JsonProperty("adjustedAmount")
-    private BigDecimal adjustedAmount = null;
-
-    @JsonProperty("isActualDemand")
-    private Boolean isActualDemand = null;
-
-    @JsonProperty("glcode")
-    private String glcode = null;
+    private BigDecimal adjustedAmount;
 
     @JsonProperty("taxHeadCode")
-    private String taxHeadCode = null;
+    private String taxHeadCode;
 
     @JsonProperty("additionalDetails")
-    private JsonNode additionalDetails = null;
+    private Object additionalDetails;
 
-    @JsonProperty("purpose")
-    private Purpose purpose = null;
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails;
 }
+
