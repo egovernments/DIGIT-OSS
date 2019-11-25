@@ -11,18 +11,23 @@
     text-align: right;
     display: flex;
     padding: initial;
-    overflow: auto;
-  }
-
+    overflow: auto; }
   .apply-wizard-footer button {
     width: 100% !important;
     margin: initial;
     border: none;
     margin: 0 !important;
-    border-radius: none !important;
-  }
-}
+    border-radius: none !important; } }
 
 .tl-trade-type div {
-  color: rgba(0, 0, 0, 0.87);
-}
+  color: rgba(0, 0, 0, 0.87); }
+
+.applicant-details-error p {
+  font-size: 14px; }
+
+#custom-containers-local-tradeSubType div p {
+  font-size: 14px; }
+
+  #custom-containers-local-tradeLocMohalla>div>p{
+    font-size: 14px;
+  }  
