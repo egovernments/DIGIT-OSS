@@ -194,7 +194,7 @@ public class EasyPayGateway implements Gateway {
 
         return Transaction.builder()
                 .txnId(currentStatus.getTxnId())
-                .txnAmount(Utils.formatAmtAsRupee(respMap.get("amount").equals("NA")? "0.00" : respMap.get("amount")))
+                .txnAmount(Utils.formatAmtAsRupee(respMap.get("BA").equals("NA")? "0.00" : respMap.get("BA")))
                 .txnStatus(status)
                 .gatewayTxnId(respMap.get("ezpaytranid"))
                 .gatewayPaymentMode(respMap.get("PaymentMode"))
