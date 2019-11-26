@@ -48,11 +48,11 @@ const getAddressItems = (properties, loadMdmsData) => {
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_ROAD_TYPE", localizationLabelsData),
-        value: getTranslatedLabel(('PT_PROPERTY_ROAD_TYPE_' + additionalDetails.roadType).toUpperCase(), localizationLabelsData) || "NA",
+        value: getTranslatedLabel(('PROPERTYTAX_ROADTYPE_' + additionalDetails.roadType).toUpperCase(), localizationLabelsData) || "NA",
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_THANA", localizationLabelsData),
-        value: getTranslatedLabel(('PT_PROPERTY_THANA_' + additionalDetails.thana).toUpperCase(), localizationLabelsData) || "NA",
+        value: getTranslatedLabel(('PROPERTYTAX_THANA_' + additionalDetails.thana.replace('-', '_')).toUpperCase(), localizationLabelsData) || "NA",
 
       }
     ]
