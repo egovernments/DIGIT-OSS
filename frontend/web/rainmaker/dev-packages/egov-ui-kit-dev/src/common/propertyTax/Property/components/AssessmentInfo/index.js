@@ -143,7 +143,7 @@ const transform = (floor, key, generalMDMSDataById, propertyDetails) => {
 //     );
 //   };
 const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
-  const { units=[], noOfFloors } = propertyDetails || {};
+  const { units = [], noOfFloors } = propertyDetails || {};
   var construction_date = new Date(units[0].constructionYear).toLocaleDateString();
 
   return (
@@ -176,17 +176,17 @@ const getAssessmentInfo = (propertyDetails, generalMDMSDataById) => {
       propertyDetails.propertySubType === "SHAREDPROPERTY"
         ? {
           key: getTranslatedLabel("PT_FLOOR_NO", localizationLabelsData),
-          value: units.length>0? `${units[0].floorNo}` : "NA",
+          value: units.length > 0 ? `${units[0].floorNo}` : "NA",
         } :
         {
           key: getTranslatedLabel("PT_ASSESMENT_INFO_NO_OF_FLOOR", localizationLabelsData),
           value: noOfFloors ? `${noOfFloors}` : "NA", //noOfFloors
         },
-        {
-          key: getTranslatedLabel("PT_ASSESMENT_INFO_CONSTRUCTION_DATE", localizationLabelsData),
-          value: units[0].constructionYear ? `${construction_date}` : "NA",
+      {
+        key: getTranslatedLabel("PT_ASSESMENT_INFO_CONSTRUCTION_DATE", localizationLabelsData),
+        value: units[0].constructionYear ? `${construction_date}` : "NA",
 
-        }
+      }
     ]
   );
 };
@@ -196,7 +196,7 @@ const getUnitInfo = (units = []) => {
   let floors = [];
   units.map((unit, index) => {
     let floor = [{
-      key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),  
+      key: getTranslatedLabel("PT_ASSESSMENT_UNIT_USAGE_TYPE", localizationLabelsData),
       value: unit && unit.usageCategoryMinor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMinor :
         unit.usageCategoryMajor ? 'PROPERTYTAX_BILLING_SLAB_' + unit.usageCategoryMajor : "NA",
     }, {
@@ -206,33 +206,36 @@ const getUnitInfo = (units = []) => {
     },
     {
       key: getTranslatedLabel("PT_ASSESMENT_INFO_CONSTRUCTION_TYPE", localizationLabelsData),
-      value: unit.ConstructionType ?  'PROPERTYTAX_CONSTRUCTIONTYPE_'+ unit.ConstructionType : "NA",
+      value: unit.ConstructionType ? 'PROPERTYTAX_CONSTRUCTIONTYPE_' + unit.ConstructionType : "NA",
     },
     {
       key: getTranslatedLabel("PT_ASSESMENT_INFO_INNER_DIMENSION", localizationLabelsData),
-      value: unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown ? unit.additionalDetails.innerDimensionsKnown === "true"? "Yes" : "No" : "No",
-    },
-     {
-      key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
-      value: unit.unitArea ? unit.unitArea + '' : "NA",
+      value: unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown ? unit.additionalDetails.innerDimensionsKnown === "true" ? "Yes" : "No" : "No",
     }];
-    if( unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown === "true"){
-      floor.push( {
+    if (unit.additionalDetails && unit.additionalDetails.innerDimensionsKnown === "true") {
+      floor.push({
         key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR26", localizationLabelsData),
-        value: unit.additionalDetails && unit.additionalDetails.roomsArea ? unit.additionalDetails.roomsArea+ '' : "NA",
+        value: unit.additionalDetails && unit.additionalDetails.roomsArea ? unit.additionalDetails.roomsArea + '' : "NA",
       },
-      {
-        key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR27", localizationLabelsData),
-        value: unit.additionalDetails && unit.additionalDetails.commonArea ? unit.additionalDetails.commonArea+ '' : "NA",
-      },
-      {
-        key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR28", localizationLabelsData),
-        value: unit.additionalDetails && unit.additionalDetails.garageArea ?  unit.additionalDetails.garageArea+ '' : "NA",
-      },
-      {
-        key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR29", localizationLabelsData),
-        value: unit.additionalDetails &&  unit.additionalDetails.bathroomArea ? unit.additionalDetails.bathroomArea+ '' : "NA",
-      })
+        {
+          key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR27", localizationLabelsData),
+          value: unit.additionalDetails && unit.additionalDetails.commonArea ? unit.additionalDetails.commonArea + '' : "NA",
+        },
+        {
+          key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR28", localizationLabelsData),
+          value: unit.additionalDetails && unit.additionalDetails.garageArea ? unit.additionalDetails.garageArea + '' : "NA",
+        },
+        {
+          key: getTranslatedLabel("PROPERTYTAX_BILLING_SLAB_SUBMNR29", localizationLabelsData),
+          value: unit.additionalDetails && unit.additionalDetails.bathroomArea ? unit.additionalDetails.bathroomArea + '' : "NA",
+        })
+    }
+    else {
+      floor.push(
+        {
+          key: getTranslatedLabel("PT_FORM2_BUILT_AREA", localizationLabelsData),
+          value: unit.unitArea ? unit.unitArea + '' : "NA",
+        })
     }
 
     if (unit.occupancyType === "RENTED") {
@@ -256,7 +259,7 @@ const getUnitInfo = (units = []) => {
 
 
 const AssessmentInfo = ({ properties, editIcon, generalMDMSDataById }) => {
-let hideSubsectionLabel=false;
+  let hideSubsectionLabel = false;
   let assessmentItems = [];
   let subUnitItems = [];
   const header = 'PT_ASSESMENT_INFO_SUB_HEADER';
@@ -265,12 +268,12 @@ let hideSubsectionLabel=false;
     if (propertyDetails && propertyDetails.length > 0) {
       subUnitItems = getUnitInfo(propertyDetails[0]['units']);
       assessmentItems = getAssessmentInfo(propertyDetails[0], generalMDMSDataById);
-      if(propertyDetails[0].propertySubType === "SHAREDPROPERTY"){
-        hideSubsectionLabel=true;
+      if (propertyDetails[0].propertySubType === "SHAREDPROPERTY") {
+        hideSubsectionLabel = true;
       }
     }
   }
- 
+
   return (
     <PropertyInfoCard editIcon={editIcon} items={assessmentItems} header={header} subSection={subUnitItems} hideSubsectionLabel={hideSubsectionLabel} ></PropertyInfoCard>
   );

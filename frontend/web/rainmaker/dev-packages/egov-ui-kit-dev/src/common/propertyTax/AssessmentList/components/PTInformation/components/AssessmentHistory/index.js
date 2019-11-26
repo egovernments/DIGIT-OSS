@@ -142,13 +142,13 @@ class AssessmentHistory extends Component {
         const { propertyDetails = [], history, propertyId, Bill: bill, Payments: payments } = this.props;
 
         const paymentHistoryItems = propertyDetails.map((propertyDetail) => {
-            const taxAmount = this.getTotalTaxAmntForAssessmntYr(bill, payments, propertyDetail.financialYear);
+            // const taxAmount = this.getTotalTaxAmntForAssessmntYr(bill, payments, propertyDetail.financialYear);
             return (
                 <div>
                     {getFullRow("PT_HISTORY_ASSESSMENT_DATE", propertyDetail.assessmentDate ? getFormattedDate(propertyDetail.assessmentDate) : "NA", 12)}
                     {getFullRow("PT_ASSESSMENT_NO", propertyDetail.assessmentNumber ? propertyDetail.assessmentNumber : "NA", 12)}
                     {getFullRow("PT_ASSESSMENT_YEAR", propertyDetail.financialYear ? propertyDetail.financialYear : "NA", 12)}
-                    {getFullRow("PT_ASSESSMENT_AMOUNT", taxAmount, 6)}
+                    {/*getFullRow("PT_ASSESSMENT_AMOUNT", taxAmount, 6) */}
                     {/* Commenting add and assess property for 10 dec release
                     <div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
                         <div className="assess-history" style={{ float: "right" }}>
