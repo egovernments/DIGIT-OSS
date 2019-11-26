@@ -1,0 +1,135 @@
+apply plugin: 'com.android.application'
+
+buildscript {
+	repositories {
+		jcenter()
+		google()
+	}
+	dependencies {
+		classpath 'com.android.tools.build:gradle:3.3.2'
+
+		// NOTE: Do not place your application dependencies here; they belong
+		// in the individual module build.gradle files
+	}
+}
+
+allprojects {
+	repositories {
+		jcenter()
+		google()
+	}
+}
+
+android {
+	compileSdkVersion 26
+	buildTypes {
+		release {
+			minifyEnabled true
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+			applicationVariants.all { variant ->
+				variant.outputs.all {
+					def date = new Date()
+					def formattedDate = date.format('ddMMMyyyy_HH:mm:ss')
+					outputFileName = "${variant.name}_${variant.versionName}_${formattedDate}.apk"
+				}
+			}
+		}
+	}
+
+	lintOptions {
+		checkReleaseBuilds true
+		abortOnError false
+	}
+
+	signingConfigs {
+		Citizen {
+			keyAlias 'mseva.punjab.citizen'
+			keyPassword 'egov123'
+			storeFile file('keystore/citizen/keystore')
+			storePassword 'egov123'
+		}
+		Employee {
+			keyAlias 'mseva.punjab.employee'
+			keyPassword 'egov123'
+			storeFile file('keystore/employee/keystore')
+			storePassword 'egov123'
+		}
+	}
+
+	flavorDimensions "default"
+	productFlavors {
+		CitizenProd {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.citizen'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 13
+			versionName '1.0.14'
+			resValue "string", "app_name", "mSeva-Punjab"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
+			signingConfig signingConfigs.Citizen
+
+			// Production
+			buildConfigField 'String', 'url', '"https://mseva.lgpunjab.gov.in/citizen/user/register"'
+		}
+		EmployeeProd {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.employee'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 13
+			versionName '1.0.14'
+			resValue "string", "app_name", "mSeva-Punjab Employee"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
+			signingConfig signingConfigs.Employee
+
+			// Production
+			buildConfigField 'String', 'url', '"https://mseva.lgpunjab.gov.in/employee/user/login"'
+		}
+		CitizenUAT {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.citizen'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 13
+			versionName '1.0.14'
+			resValue "string", "app_name", "UAT mSeva-Punjab"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_citizen"
+			signingConfig signingConfigs.Citizen
+
+			// QA
+//			buildConfigField 'String', 'url', '"https://egov-micro-qa.egovernments.org/citizen/user/register"'
+
+			// DEV
+//			buildConfigField 'String', 'url', '"https://egov-micro-dev.egovernments.org/citizen/user/register"'
+
+			//UAT
+			buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/citizen/user/register"'
+		}
+		EmployeeUAT {
+			minSdkVersion 19
+			applicationId 'org.egovernment.mseva.employee'
+			targetSdkVersion 26
+			testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+			versionCode 13
+			versionName '1.0.14'
+			resValue "string", "app_name", "UAT mSeva-Punjab Employee"
+			resValue "string", "launcher_icon", "@mipmap/ic_launcher_employee"
+			signingConfig signingConfigs.Employee
+
+			//QA
+//			buildConfigField 'String', 'url', '"https://egov-micro-qa.egovernments.org/employee/user/login"'
+
+			//DEV
+//			buildConfigField 'String', 'url', '"https://egov-micro-dev.egovernments.org/employee/user/login"'
+
+			//UAT
+			buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/employee/user/login"'
+		}
+	}
+}
+
+dependencies {
+	implementation 'com.android.support:appcompat-v7:26.1.0'
+	implementation 'com.google.android.gms:play-services-base:15.0.1'
+}
