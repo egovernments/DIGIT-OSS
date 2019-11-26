@@ -97,21 +97,23 @@ class PTHome extends Component {
       //     </div>
       //   )
       // },
-      {
-        primaryText: (
-          <Label
-            label="PT_INCOMPLETE_ASSESSMENT"
-            dynamicArray={[numDrafts]}
-            labelStyle={labelStyle}
-          />
-        ),
-        route: "/property-tax/incomplete-assessments",
-        rightIcon: (
-          <div style={listIconStyle}>
-            <Icon action="hardware" name="keyboard-arrow-right" />
-          </div>
-        )
-      },
+      /*  Commenting for 10 dec release
+     {
+       
+       primaryText: (
+         <Label
+           label="PT_INCOMPLETE_ASSESSMENT"
+           dynamicArray={[numDrafts]}
+           labelStyle={labelStyle}
+         />
+       ),
+       route: "/property-tax/incomplete-assessments",
+       rightIcon: (
+         <div style={listIconStyle}>
+           <Icon action="hardware" name="keyboard-arrow-right" />
+         </div>
+       )
+     }, */
       {
         primaryText: <Label label="PT_HOW_IT_WORKS" labelStyle={labelStyle} />,
         route: "/property-tax/how-it-works",
@@ -121,6 +123,7 @@ class PTHome extends Component {
           </div>
         )
       },
+      /*  Commenting for 10 dec release
       {
         primaryText: <Label label="PT_EXAMPLE" labelStyle={labelStyle} />,
         route: "/property-tax/pt-examples",
@@ -129,7 +132,7 @@ class PTHome extends Component {
             <Icon action="hardware" name="keyboard-arrow-right" />
           </div>
         )
-      }
+      }*/
     ];
   };
 

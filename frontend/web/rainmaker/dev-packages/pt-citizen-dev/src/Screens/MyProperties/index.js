@@ -114,7 +114,7 @@ class MyProperties extends Component {
             items={transformedPropertiesWeb}
             history={this.props.history}
             noAssessmentMessage="PT_NO_ASSESSMENT_MESSAGE3"
-            button={true}
+            // button={true}   Commenting add and assess property for 10 dec release
             yearDialogue={this.state.dialogueOpen}
             closeDialogue={this.closeYearRangeDialogue}
             onNewPropertyButtonClick={this.onNewPropertyButtonClick}
@@ -125,7 +125,7 @@ class MyProperties extends Component {
             data={transformedPropertiesMobile}
             action="PT_VIEW_DETAILS"
             history={history}
-            // onActionClick={this.onListItemClick}
+          // onActionClick={this.onListItemClick}
           />
         </Hidden>
       </Screen>
@@ -164,7 +164,7 @@ const mapStateToProps = state => {
           />
         ),
         secondaryText: (
-          <div className="rainmaker-displayInline" style={{height: "25px !important", marginTop: "0px !important"}}>
+          <div className="rainmaker-displayInline" style={{ height: "25px !important", marginTop: "0px !important" }}>
             <Label
               label="PT_PROPERTY_ASSESSMENT_ID"
               color="#484848"

@@ -105,6 +105,7 @@ class HowItWorks extends Component {
   renderList = items => {
     return (
       <div>
+        {/* Commenting for 10 dec release
         <div className="row">
           <div style={{ padding: "15px" }}>
             <Label
@@ -309,26 +310,31 @@ class HowItWorks extends Component {
             </p>
           </div>
         </div>
-
+     */}
         <div className="col-sm-12" style={{ padding: "15px 0px 30px 0px" }}>
+          {/* Commenting for 10 dec release
+
           <a
             href={
               "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb/PT_User_Manual_Citizen.pdf"
             }
             target="_blank"
           >
-            <Button
-              label={
-                <Label
-                  buttonLabel={true}
-                  label="PT_DOWNLOAD_HELP_DOCUMENT"
-                  fontSize="12px"
-                />
-              }
-              primary={true}
-              style={{ height: 30, lineHeight: "auto", minWidth: "inherit" }}
-            />
+          */}
+          <Button
+            label={
+              <Label
+                buttonLabel={true}
+                label="PT_DOWNLOAD_HELP_DOCUMENT"
+                fontSize="12px"
+              />
+            }
+            primary={true}
+            style={{ height: 30, lineHeight: "auto", minWidth: "inherit" }}
+          />
+          {/* Commenting for 10 dec release
           </a>
+           */}
         </div>
 
         <div>
@@ -344,9 +350,9 @@ class HowItWorks extends Component {
                 innerDivStyle={
                   index !== 0
                     ? {
-                        ...genericInnerdivStyle,
-                        borderTop: "solid 1px #e0e0e0"
-                      }
+                      ...genericInnerdivStyle,
+                      borderTop: "solid 1px #e0e0e0"
+                    }
                     : genericInnerdivStyle
                 }
                 nestedListStyle={{ padding: "0 0 16px 0" }}
@@ -370,7 +376,7 @@ class HowItWorks extends Component {
             );
           })}
         </List>
-      </div>
+      </div >
     );
   };
 
