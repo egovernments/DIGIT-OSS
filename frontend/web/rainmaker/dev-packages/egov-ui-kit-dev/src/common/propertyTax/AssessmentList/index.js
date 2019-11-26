@@ -35,18 +35,18 @@ const getItemStatus = (item, history, generalMDMSDataById) => {
       break;
 
     case "Pending":
-          return (
-            <div>
-              <div className="assessment-displayInline" style={{ marginTop: "8px" }}>
-                <Label label="PT_STATUS_COMMON_PENDING" labelStyle={{ marginLeft: "8px" }} color={"#e74c3c"} />
-                <Icon action="navigation" name="exclamation" style={styles.paidIconStyle} color={"#e74c3c"} />
-              </div>
-              <div style={{ height: "30px", marginTop: "8px" }}>
-                {history && <DropDown generalMDMSDataById={generalMDMSDataById} history={history} item={item} />}
-              </div>
-            </div>
-          );
-          break;
+      return (
+        <div>
+          <div className="assessment-displayInline" style={{ marginTop: "8px" }}>
+            <Label label="PT_STATUS_COMMON_PENDING" labelStyle={{ marginLeft: "8px" }} color={"#e74c3c"} />
+            <Icon action="navigation" name="exclamation" style={styles.paidIconStyle} color={"#e74c3c"} />
+          </div>
+          <div style={{ height: "30px", marginTop: "8px" }}>
+            {history && <DropDown generalMDMSDataById={generalMDMSDataById} history={history} item={item} />}
+          </div>
+        </div>
+      );
+      break;
     case "Partially Paid":
     case "Completed":
       return (
@@ -117,8 +117,8 @@ const getRightIconItems = (item, history, generalMDMSDataById) => {
       </div>
     </div>
   ) : (
-    item.rightIcon
-  );
+      item.rightIcon
+    );
 };
 
 const getListItems = (items, history, generalMDMSDataById) => {
@@ -133,8 +133,8 @@ const getListItems = (items, history, generalMDMSDataById) => {
             (typeof item.secondaryText === "object" ? (
               item.secondaryText
             ) : (
-              <Label label={item.secondaryText} fontSize="14px" color="#484848" containerStyle={{ marginTop: "15px" }} />
-            )),
+                <Label label={item.secondaryText} fontSize="14px" color="#484848" containerStyle={{ marginTop: "15px" }} />
+              )),
           route: item.route,
           leftIcon: item.leftIcon,
           rightIcon: getRightIconItems(item, history, generalMDMSDataById),
@@ -150,9 +150,9 @@ const getListItems = (items, history, generalMDMSDataById) => {
                     <Label label={nestedItem.primaryText} fontSize="14px" color="#484848" containerStyle={{ marginLeft: "8px" }} />
                   </div>
                 ) : (
-                  nestedItem.primaryText
-                  // <Label label={nestedItem.primaryText} fontSize="16px" color="#484848" containerStyle={{ padding: "10px 0" }} />
-                ),
+                    nestedItem.primaryText
+                    // <Label label={nestedItem.primaryText} fontSize="16px" color="#484848" containerStyle={{ padding: "10px 0" }} />
+                  ),
                 secondaryText: nestedItem.secondaryText,
                 route: nestedItem.route,
                 rightIcon: getRightIconItems(nestedItem, history, generalMDMSDataById),
@@ -164,7 +164,7 @@ const getListItems = (items, history, generalMDMSDataById) => {
   );
 };
 
-const AssessmentList = ({properties,
+const AssessmentList = ({ properties,
   items,
   history,
   onItemClick,
@@ -177,7 +177,8 @@ const AssessmentList = ({properties,
   onNewPropertyButtonClick,
   hoverColor,
   generalMDMSDataById,
-  totalBillAmountDue
+  totalBillAmountDue,
+  loadMdmsData
 }) => {
   return items.length == 0 ? (
     <BlankAssessment
@@ -190,16 +191,16 @@ const AssessmentList = ({properties,
     />
   ) : (
 
-    properties== null ? ( <PTList
-      properties={properties}
+      properties == null ? (<PTList
+        properties={properties}
         items={getListItems(items, history, generalMDMSDataById)}
         history={history}
         onItemClick={onItemClick}
         innerDivStyle={innerDivStyle}
         listItemStyle={listItemStyle}
         hoverColor={hoverColor}
-      />):( <PTInformation
-      properties={properties}
+      />) : (<PTInformation
+        properties={properties}
         items={getListItems(items, history, generalMDMSDataById)}
         history={history}
         onItemClick={onItemClick}
@@ -208,13 +209,14 @@ const AssessmentList = ({properties,
         hoverColor={hoverColor}
         generalMDMSDataById={generalMDMSDataById}
         totalBillAmountDue={totalBillAmountDue}
+        loadMdmsData={loadMdmsData}
       />)
 
 
 
 
 
-  );
+    );
 };
 
 export default AssessmentList;

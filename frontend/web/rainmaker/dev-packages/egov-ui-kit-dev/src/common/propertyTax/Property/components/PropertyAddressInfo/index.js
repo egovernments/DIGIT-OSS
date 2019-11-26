@@ -10,13 +10,13 @@ const localizationLabelsData = initLocalizationLabels(locale);
 
 
 
-const getAddressItems = (properties , loadMdmsData) => {
- 
-  const {address , propertyDetails} = properties;
+const getAddressItems = (properties, loadMdmsData) => {
 
-  const {additionalDetails} = Boolean(propertyDetails) && propertyDetails[0]
-    return  (
-     address &&    [
+  const { address, propertyDetails } = properties;
+
+  const { additionalDetails } = Boolean(propertyDetails) && propertyDetails[0]
+  return (
+    address && [
 
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_CITY", localizationLabelsData),
@@ -36,7 +36,7 @@ const getAddressItems = (properties , loadMdmsData) => {
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
-        value: getTranslatedLabel((properties.tenantId.replace('.','_')+'_REVENUE_'+address.locality.code).toUpperCase(), localizationLabelsData) || "NA",
+        value: getTranslatedLabel((properties.tenantId.replace('.', '_') + '_REVENUE_' + address.locality.code).toUpperCase(), localizationLabelsData) || "NA",
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PINCODE", localizationLabelsData),
@@ -48,38 +48,25 @@ const getAddressItems = (properties , loadMdmsData) => {
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_ROAD_TYPE", localizationLabelsData),
-        value: (
-          additionalDetails &&
-          additionalDetails.roadType &&
-          loadMdmsData &&
-          loadMdmsData["PropertyTax"] &&
-          loadMdmsData["PropertyTax"]["RoadType"] &&
-          loadMdmsData["PropertyTax"]["RoadType"][additionalDetails.roadType].name)    
-          || "NA",
+        value: getTranslatedLabel(('PT_PROPERTY_ROAD_TYPE_' + additionalDetails.roadType).toUpperCase(), localizationLabelsData) || "NA",
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_THANA", localizationLabelsData),
-        value:(
-          additionalDetails &&
-          additionalDetails.thana &&
-          loadMdmsData &&
-          loadMdmsData["PropertyTax"] &&
-          loadMdmsData["PropertyTax"]["Thana"] &&
-          loadMdmsData["PropertyTax"]["Thana"][additionalDetails.thana].name)    
-          || "NA",
+        value: getTranslatedLabel(('PT_PROPERTY_THANA_' + additionalDetails.thana).toUpperCase(), localizationLabelsData) || "NA",
+
       }
     ]
   );
 }
 
-const PropertyAddressInfo= ({properties ,editIcon ,loadMdmsData}) => {
-  
+const PropertyAddressInfo = ({ properties, editIcon, loadMdmsData }) => {
+
   let addressItems = [];
   const header = 'PT_PROPERTY_ADDRESS_SUB_HEADER';
-  if(properties){
-    addressItems = getAddressItems(properties , loadMdmsData);
+  if (properties) {
+    addressItems = getAddressItems(properties, loadMdmsData);
   }
-  
+
   return (
     <PropertyInfoCard editIcon={editIcon} items={addressItems} header={header}></PropertyInfoCard>
   );

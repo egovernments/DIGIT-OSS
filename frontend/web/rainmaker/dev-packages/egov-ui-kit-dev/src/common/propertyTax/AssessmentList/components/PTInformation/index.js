@@ -10,7 +10,7 @@ import TotalDues from '../../../Property/components/TotalDues';
 import AssessmentHistory from "./components/AssessmentHistory";
 import PaymentHistory from "./components/PaymentHistory";
 
-const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, properties, style ,generalMDMSDataById, totalBillAmountDue,history}) => {
+const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, properties, style, generalMDMSDataById, totalBillAmountDue, history, loadMdmsData }) => {
     const items2 = [items[1]];
     return (
         <div className="form-without-button-cont-generic" >
@@ -28,7 +28,7 @@ const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, p
                 <Card
                     textChildren={
                         <div className="col-sm-12 col-xs-12" style={{ alignItems: "center" }}>
-                            <PropertyAddressInfo properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
+                            <PropertyAddressInfo loadMdmsData={loadMdmsData} properties={properties} generalMDMSDataById={generalMDMSDataById}></PropertyAddressInfo>
                             <AssessmentInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ></AssessmentInfo>
                             <OwnerInfo properties={properties} generalMDMSDataById={generalMDMSDataById} ownershipTransfer={true} viewHistory={true}></OwnerInfo>
                             {/* <Card style={{ backgroundColor: 'rgb(242,242,242)', boxShadow: 'none' }}
@@ -43,9 +43,9 @@ const PTInformation = ({ items, label, onItemClick, innerDivStyle, hoverColor, p
                                         />
                                     </div>
                                 } /> */}
-                                <AssessmentHistory></AssessmentHistory>
-                                <PaymentHistory></PaymentHistory>
-                                <Card textChildren={<TotalDues history tenantId={properties.tenantId}  consumerCode={properties.propertyId} totalBillAmountDue={totalBillAmountDue} />} style={{ backgroundColor: 'rgb(242,242,242)', boxShadow: 'none' }} />
+                            <AssessmentHistory></AssessmentHistory>
+                            <PaymentHistory></PaymentHistory>
+                            <Card textChildren={<TotalDues history tenantId={properties.tenantId} consumerCode={properties.propertyId} totalBillAmountDue={totalBillAmountDue} />} style={{ backgroundColor: 'rgb(242,242,242)', boxShadow: 'none' }} />
 
                         </div>
                     }

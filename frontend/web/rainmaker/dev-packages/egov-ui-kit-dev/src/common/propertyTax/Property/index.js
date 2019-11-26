@@ -10,7 +10,7 @@ import { Icon, BreadCrumbs } from "egov-ui-kit/components";
 import { addBreadCrumbs } from "egov-ui-kit/redux/app/actions";
 import { fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import PropertyInformation from "./components/PropertyInformation";
-import { fetchProperties, getSingleAssesmentandStatus, fetchTotalBillAmount,fetchReceipt } from "egov-ui-kit/redux/properties/actions";
+import { fetchProperties, getSingleAssesmentandStatus, fetchTotalBillAmount, fetchReceipt } from "egov-ui-kit/redux/properties/actions";
 import { getCompletedTransformedItems } from "egov-ui-kit/common/propertyTax/TransformedAssessments";
 import isEqual from "lodash/isEqual";
 import orderby from "lodash/orderBy";
@@ -60,7 +60,7 @@ class Property extends Component {
   }
 
   componentDidMount = () => {
-    const { location, addBreadCrumbs, fetchGeneralMDMSData, renderCustomTitleForPt, customTitle, fetchProperties, fetchTotalBillAmount,fetchReceipt } = this.props;
+    const { location, addBreadCrumbs, fetchGeneralMDMSData, renderCustomTitleForPt, customTitle, fetchProperties, fetchTotalBillAmount, fetchReceipt } = this.props;
     const requestBody = {
       MdmsCriteria: {
         tenantId: commonConfig.tenantId,
@@ -268,7 +268,7 @@ class Property extends Component {
   };
 
   render() {
-    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails, receiptsByYr ,totalBillAmountDue} = this.props;
+    const { urls, location, history, generalMDMSDataById, latestPropertyDetails, propertyId, selPropertyDetails, receiptsByYr, totalBillAmountDue, loadMdmsData } = this.props;
     const { closeYearRangeDialogue } = this;
     const { dialogueOpen, urlToAppend, showAssessmentHistory } = this.state;
     let urlArray = [];
@@ -295,6 +295,7 @@ class Property extends Component {
             properties={selPropertyDetails}
             generalMDMSDataById={generalMDMSDataById && generalMDMSDataById}
             totalBillAmountDue={totalBillAmountDue}
+            loadMdmsData={loadMdmsData}
           />
         }
         <div
@@ -302,7 +303,7 @@ class Property extends Component {
           className="wizard-footer col-sm-12"
           style={{ textAlign: "right" }}
         >
-            {/* Commenting add and assess property for 10 dec release
+          {/* Commenting add and assess property for 10 dec release
           <div className="button-container col-xs-6 property-info-access-btn" style={{ float: "right" }}>
             <Button
               onClick={() => this.onAssessPayClick()}
@@ -475,24 +476,24 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
                   : "NA"
               : "NA",
           },
-          
+
         ],
         items: {
           header: units
             ? [
-                getTranslatedLabel("PT_ASSESMENT_INFO_FLOOR", localizationLabelsData),
-                getTranslatedLabel("PT_ASSESMENT_INFO_USAGE_TYPE", localizationLabelsData),
-                getTranslatedLabel("PT_ASSESMENT_INFO_SUB_USAGE_TYPE", localizationLabelsData),
-                getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
-                getTranslatedLabel("PT_ASSESMENT_INFO_AREA_RENT", localizationLabelsData),
-                getTranslatedLabel("Construction Date", localizationLabelsData),
-                getTranslatedLabel("Construction Type", localizationLabelsData),
-                getTranslatedLabel("Room Area", localizationLabelsData),
-                getTranslatedLabel("Balcony,Corridor,Kitchen,Store Area", localizationLabelsData),
-                getTranslatedLabel("Garage Area", localizationLabelsData),
-                getTranslatedLabel("Bathroom Area", localizationLabelsData),  
-                getTranslatedLabel("Covered Area", localizationLabelsData),            
-              ]
+              getTranslatedLabel("PT_ASSESMENT_INFO_FLOOR", localizationLabelsData),
+              getTranslatedLabel("PT_ASSESMENT_INFO_USAGE_TYPE", localizationLabelsData),
+              getTranslatedLabel("PT_ASSESMENT_INFO_SUB_USAGE_TYPE", localizationLabelsData),
+              getTranslatedLabel("PT_ASSESMENT_INFO_OCCUPLANCY", localizationLabelsData),
+              getTranslatedLabel("PT_ASSESMENT_INFO_AREA_RENT", localizationLabelsData),
+              getTranslatedLabel("Construction Date", localizationLabelsData),
+              getTranslatedLabel("Construction Type", localizationLabelsData),
+              getTranslatedLabel("Room Area", localizationLabelsData),
+              getTranslatedLabel("Balcony,Corridor,Kitchen,Store Area", localizationLabelsData),
+              getTranslatedLabel("Garage Area", localizationLabelsData),
+              getTranslatedLabel("Bathroom Area", localizationLabelsData),
+              getTranslatedLabel("Covered Area", localizationLabelsData),
+            ]
             : [],
           values: units
 
@@ -504,7 +505,7 @@ const getAssessmentInfo = (propertyDetails, keys, generalMDMSDataById) => {
               };
             })
             : [],
-            
+
         },
       },
     ]
@@ -623,7 +624,7 @@ const mapStateToProps = (state, ownProps) => {
   const { app, common } = state;
   const { urls, localizationLabels } = app;
   const { cities } = common;
-  const { generalMDMSDataById } = state.common || {};
+  const { generalMDMSDataById, loadMdmsData } = state.common || {};
   const { propertiesById, singleAssessmentByStatus = [], loading, receiptsByYr, totalBillAmountDue } = state.properties || {};
   const tenantId = ownProps.match.params.tenantId;
   const propertyId = decodeURIComponent(ownProps.match.params.propertyId);
@@ -668,7 +669,8 @@ const mapStateToProps = (state, ownProps) => {
     generalMDMSDataById,
     receiptsByYr,
     localization,
-    totalBillAmountDue
+    totalBillAmountDue,
+    loadMdmsData
   };
 };
 
