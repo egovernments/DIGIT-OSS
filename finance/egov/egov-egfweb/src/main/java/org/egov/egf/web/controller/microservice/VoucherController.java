@@ -26,6 +26,7 @@ import org.egov.egf.contract.model.VoucherRequest;
 import org.egov.egf.contract.model.VoucherResponse;
 import org.egov.egf.contract.model.VoucherSearchRequest;
 import org.egov.infra.admin.master.entity.AppConfigValues;
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationException;
@@ -152,7 +153,7 @@ public class VoucherController {
 						subledgerDetails.add(subledgertDetailMap);
 					}
 				}
-
+				ApplicationThreadLocals.setUserId(1L);
 				CVoucherHeader voucherHeader = createVoucher.createVoucher(headerDetails, accountdetails,
 						subledgerDetails);
 				voucher.setId(voucherHeader.getId());
