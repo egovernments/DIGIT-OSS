@@ -103,7 +103,7 @@ export const searchApiCall = async (state, dispatch) => {
       let data = response.Licenses.map(item => ({
         [getTextToLocalMapping("Application No")]:
           item.applicationNumber || "-",
-        [getTextToLocalMapping("Appliact Name")]:
+        [getTextToLocalMapping("Applicant Name")]:
           item.tradeLicenseDetail.owners[0].name || "-",
         [getTextToLocalMapping("Licensee Type")]:
           item.tradeLicenseDetail.tradeUnits[0].tradeType || "-",
