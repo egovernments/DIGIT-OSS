@@ -114,6 +114,17 @@ const transformer = (formKey, form = {}, state = {}) => {
             value: fields.phone.value,
           },
         };
+      } else if (previousRoute.indexOf("smsLink=true") > 0) {	
+        fields = {	
+          password: {	
+            jsonPath: "login.password",	
+            value: otpFields.otp.value,	
+          },	
+          username: {	
+            jsonPath: "login.username",	
+            value: otpFields.otp.phone,	
+          },	
+        };
       }
       return prepareFormData({ ...form, fields });
     },
