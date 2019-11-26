@@ -82,7 +82,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 				Long lastModifiedTime = rs.getLong("propertylastModifiedTime");
 				if(rs.wasNull()){lastModifiedTime = null;}
 				AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("propertyCreatedby"))
-						.createdTime(rs.getLong("propertyCreatedTime")).lastModifiedBy(rs.getString("propertylastModifiedTime"))
+						.createdTime(rs.getLong("propertyCreatedTime")).lastModifiedBy(rs.getString("propertyModifiedBy"))
 						.lastModifiedTime(lastModifiedTime)
 						.build();
 

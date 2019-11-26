@@ -284,7 +284,7 @@ public class UserService {
         if(!CollectionUtils.isEmpty(userIds))
             userSearchRequest.setUuid( new ArrayList(userIds));
         userSearchRequest.setRequestInfo(requestInfo);
-        userSearchRequest.setTenantId(criteria.getTenantId().split("\\.")[0]);
+        userSearchRequest.setTenantId(criteria.getTenantId());
         userSearchRequest.setMobileNumber(criteria.getMobileNumber());
         userSearchRequest.setName(criteria.getName());
         userSearchRequest.setActive(true);
