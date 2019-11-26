@@ -22,13 +22,17 @@ const TotalDues = ({ totalBillAmountDue, consumerCode, tenantId, history }) => {
       <div className="col-xs-6 col-sm-3 flex-child">
         <Label buttonLabel={false} label="PT_TOTAL_DUES" color="rgb(0, 0, 0, 0.87)" height="35px" labelStyle={labelStyle} fontSize="20px" />
       </div>
+      {/*
+      
+        Commenting add and assess property for 10 dec release
+
       <Tooltip
         val={data}
         icon={"info_circle"}
         style={{ position: "absolute", left: "135px", padding: "4px", width: "30px", display: "inline-flex" }}
-      />
+      /> */}
       <div className="col-xs-6 col-sm-3 flex-child">
-        <Label label="Rs " secondaryText={totalBillAmountDue} labelStyle={labelStyle} fontSize="20px" color="rgb(0, 0, 0, 0.87)" height="35px"></Label>
+        <Label label= "&#8377;" secondaryText={totalBillAmountDue} labelStyle={labelStyle} fontSize="20px" color="rgb(0, 0, 0, 0.87)" height="35px"></Label>
       </div>
       {totalBillAmountDue > 0 && (
         <div className="col-xs-6 col-sm-3 flex-child">

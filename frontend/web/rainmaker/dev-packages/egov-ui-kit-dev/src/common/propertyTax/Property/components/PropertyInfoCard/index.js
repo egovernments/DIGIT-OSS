@@ -3,7 +3,14 @@ import { Card } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import PendingAmountDialog from "../PendingAmountDue";
 import ViewHistoryDialog from "../ViewHistory";
+import { getTranslatedLabel} from "egov-ui-kit/utils/commons"
 import {ViewHistory, TransferOwnership} from "../ActionItems";
+import { from } from "rxjs";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
+
+const locale = getLocale() || "en_IN";
+const localizationLabelsData = initLocalizationLabels(locale);
 
 class PropertyInfoCard extends Component {
   state = {
@@ -77,7 +84,7 @@ class PropertyInfoCard extends Component {
                       fontSize="18px"
                     />}
                     {units.map((unit, index) => {
-                      const subUnitHeader=hideSubsectionLabel?undefined:"Unit - " + (index + 1);
+                      const subUnitHeader=hideSubsectionLabel?undefined:`${getTranslatedLabel("PT_PROPERTY_UNIT", localizationLabelsData)} - ` + (index + 1);
                       return <PropertyInfoCard backgroundColor='white' items={unit} header={subUnitHeader}></PropertyInfoCard>
                     })}
                   </div>
