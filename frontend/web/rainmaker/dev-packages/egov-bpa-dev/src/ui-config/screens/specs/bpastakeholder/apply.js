@@ -45,6 +45,54 @@ export const stepper = getStepperObject(
   stepsData
 );
 
+export const getGenderRadioButton1 = {
+  uiFramework: "custom-containers-local",
+  componentPath: "RadioGroupWithLabelContainer",
+  gridDefination: {
+    xs: 12,
+    sm: 12,
+    md: 6
+  },
+  jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
+  props: {
+    label: {
+      name: "Gender",
+      key: "BAP_COMMON_GENDER_LABEL"
+    },
+    //     {
+    //       label: "Husband",
+    //       labelKey: "COMMON_RELATION_HUSBAND",
+    //       value: "HUSBAND"
+    //     }
+    //   ],
+    //   "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+    //   ""
+    // );
+
+    buttons: [
+      {
+        labelName: "Male",
+        labelKey: "COMMON_GENDER_MALE",
+        value: "MALE"
+      },
+      {
+        label: "Female",
+        labelKey: "COMMON_GENDER_FEMALE",
+        value: "FEMALE"
+      },
+      {
+        label: "Transgender",
+        labelKey: "COMMON_GENDER_TRANSGENDER",
+        value: "TRANSGENDER"
+      }
+    ],
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
+    required: true
+  },
+  required: true,
+  type: "array"
+};
+
 export const header = getCommonContainer({
   header:
     getQueryArg(window.location.href, "action") !== "edit"

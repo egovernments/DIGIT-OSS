@@ -22,11 +22,28 @@ const styles = {
 
 class SingleApplication extends React.Component {
   onCardClick = item => {
-    switch (item.status) {
-      case "INITIATED":
-        return `/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
-      default:
-        return `/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+    const { moduleName } = this.props;
+    if (moduleName === "TL") {
+      switch (item.status) {
+        case "INITIATED":
+          return `/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+        default:
+          return `/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+      }
+    } else if (moduleName === "FIRENOC") {
+      switch (item.fireNOCDetails.status) {
+        case "INITIATED":
+          return `/fire-noc/apply?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
+        default:
+          return `/fire-noc/search-preview?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
+      }
+    } else if (moduleName === "BPAREG") {
+      switch (item.status) {
+        case "INITIATED":
+          return `/bpastakeholder-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+        default:
+          return `/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+      }
     }
   };
 
