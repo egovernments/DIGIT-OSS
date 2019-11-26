@@ -15,12 +15,14 @@ import PropertyTable from "./components/PropertyTable";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { displayFormErrors, resetForm } from "egov-ui-kit/redux/form/actions";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { connect } from "react-redux";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import get from "lodash/get";
 import {
   getUserInfo,
-  localStorageGet
+  localStorageGet,
+  getLocale
 } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
@@ -59,9 +61,10 @@ class SearchProperty extends Component {
   };
 
   onSearchClick = (form, formKey) => {
-    const { propertiesFound } = this.props;
+    const { propertiesFound, fetchLocalizationLabel } = this.props;
     const { city, ids, oldpropertyids, mobileNumber, applicationNumber, mohalla, houseNumber } = form.fields || {};
     const tableData = this.extractTableData(propertiesFound);
+    fetchLocalizationLabel(getLocale(), city.value, city.value);
 
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
@@ -359,7 +362,8 @@ const mapDispatchToProps = dispatch => {
     fetchProperties: queryObject => dispatch(fetchProperties(queryObject)),
     toggleSnackbarAndSetText: (open, message, error) =>
       dispatch(toggleSnackbarAndSetText(open, message, error)),
-    resetForm: formKey => dispatch(resetForm(formKey))
+    resetForm: formKey => dispatch(resetForm(formKey)),
+    fetchLocalizationLabel: (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
   };
 };
 
