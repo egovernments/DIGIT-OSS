@@ -15236,9 +15236,9 @@
     },
     {
       "id": 1881,
-      "name": "BPAStakeHolderHome",
+      "name": "rainmaker-citizen-BPAStakeHolderHome",
       "url": "card",
-      "displayName": "BPA Stake Holder Home",
+      "displayName": "BPA Stakeholder Registration",
       "orderNumber": 1,
       "parentModule": "",
       "enabled": true,
