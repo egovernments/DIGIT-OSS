@@ -27,11 +27,13 @@ import {
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import filter from "lodash/filter";
+import "./index.css";
 
 const tradeUnitCard = {
   uiFramework: "custom-containers",
   componentPath: "MultiItem",
   props: {
+    
     scheama: getCommonGrayCard({
       header: getCommonSubHeader(
         {
@@ -64,7 +66,8 @@ const tradeUnitCard = {
               },
               props: {
                 jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
-                setDataInField: true
+                setDataInField: true,
+                className:"applicant-details-error"
               },
               sourceJsonPath:
                 "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
@@ -157,7 +160,8 @@ const tradeUnitCard = {
               },
               jsonPath: "LicensesTemp.tradeUnits[0].tradeSubType",
               props: {
-                jsonPathUpdatePrefix: "LicensesTemp.tradeUnits"
+                jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
+                className:"applicant-details-error"
               },
               sourceJsonPath:
                 "applyScreenMdmsData.TradeLicense.TradeCategoryTransformed",
@@ -230,6 +234,7 @@ const tradeUnitCard = {
                 labelName: "Trade Sub-Type",
                 labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL"
               },
+              
               placeholder: {
                 labelName: "Select Trade Sub-Type",
                 labelKey: "TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_PLACEHOLDER"
@@ -679,6 +684,7 @@ const accessoriesCard = {
             },
             pattern: getPattern("UOMValue"),
             props: {
+              className:"applicant-details-error",
               disabled: true,
               setDataInField: true,
               jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uomValue"
@@ -703,6 +709,7 @@ const accessoriesCard = {
             },
             pattern: getPattern("NoOfEmp"),
             props: {
+              className:"applicant-details-error",
               setDataInField: true,
               jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].count",
               disabled: true
@@ -802,6 +809,9 @@ export const tradeDetails = getCommonCard({
         gridDefination: {
           xs: 12,
           sm: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       }),
       beforeFieldChange: (action, state, dispatch) => {
@@ -925,6 +935,9 @@ export const tradeDetails = getCommonCard({
         labelName: "Name of Trade",
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_NAME_LABEL"
       },
+      props:{
+        className:"applicant-details-error"
+      }, 
       placeholder: {
         labelName: "Example Diljit Da Dhaba",
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_NAME_PLACEHOLDER"
@@ -947,6 +960,7 @@ export const tradeDetails = getCommonCard({
         pattern: getPattern("Date"),
         jsonPath: "Licenses[0].validFrom",
         props: {
+          className:"applicant-details-error",
           inputProps: {
             min: getTodaysDateInYMD(),
             max: getFinancialYearDates("yyyy-mm-dd").endDate
@@ -984,6 +998,9 @@ export const tradeDetails = getCommonCard({
           labelName: "Select Structure Type",
           labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_TYPE_PLACEHOLDER"
         },
+        props:{
+          className:"applicant-details-error"
+        },
         localePrefix: {
           moduleName: "common-masters",
           masterName: "STRUCTURETYPE"
@@ -1017,6 +1034,9 @@ export const tradeDetails = getCommonCard({
         label: {
           labelName: "Structure Sub Type",
           labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Select Structure Sub Type",
@@ -1057,6 +1077,9 @@ export const tradeDetails = getCommonCard({
         labelName: "Trade Commencement Date",
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL"
       },
+      props:{
+        className:"applicant-details-error"
+      },
       placeholder: {
         labelName: "Enter Trade Commencement Date",
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_PLACEHOLDER"
@@ -1070,6 +1093,9 @@ export const tradeDetails = getCommonCard({
         labelName: "Trade GST No.",
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_LABEL"
       },
+      props:{
+        className:"applicant-details-error"
+      },
       placeholder: {
         labelName: "Enter Trade GST No.",
         labelKey: "TL_NEW_TRADE_DETAILS_TRADE_GST_NO_PLACEHOLDER"
@@ -1082,6 +1108,9 @@ export const tradeDetails = getCommonCard({
         labelName: "Operatonal Area (Sq Ft)",
         labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
       },
+      props:{
+        className:"applicant-details-error"
+      },
       placeholder: {
         labelName: "Enter Operatonal Area in Sq Ft",
         labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_PLACEHOLDER"
@@ -1093,6 +1122,9 @@ export const tradeDetails = getCommonCard({
       label: {
         labelName: "No. Of Employee",
         labelKey: "TL_NEW_TRADE_DETAILS_NO_EMPLOYEES_LABEL"
+      },
+      props:{
+        className:"applicant-details-error"
       },
       placeholder: {
         labelName: "Enter No. Of Employee",

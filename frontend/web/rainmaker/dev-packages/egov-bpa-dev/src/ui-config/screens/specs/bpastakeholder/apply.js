@@ -30,10 +30,7 @@ import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
 import { OwnerInfoCard } from "./applyResource/tradeOwnerDetails";
 import { documentList } from "./applyResource/documentList";
 import { httpRequest } from "../../../../ui-utils";
-import {
-  updatePFOforSearchResults,
-  getBoundaryData
-} from "../../../../ui-utils/commons";
+import { updatePFOforSearchResults } from "../../../../ui-utils/commons";
 import { getTenantId, getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
@@ -271,7 +268,7 @@ export const formwizardFirstStep = {
   },
   children: {
     OwnerInfoCard,
-    organizationDetails,
+    // organizationDetails,
     tradeLocationDetails
   }
 };

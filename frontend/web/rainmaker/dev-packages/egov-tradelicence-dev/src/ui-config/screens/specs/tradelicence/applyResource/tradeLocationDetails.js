@@ -11,6 +11,7 @@ import { getMapLocator } from "../../utils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { showHideMapPopup, getDetailsFromProperty } from "../../utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import "./index.css";
 
 export const tradeLocationDetails = getCommonCard(
   {
@@ -147,6 +148,9 @@ export const tradeLocationDetails = getCommonCard(
           labelName: "Door/House No.",
           labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
         },
+        props:{
+          className:"applicant-details-error"
+        },
         placeholder: {
           labelName: "Enter Door/House No.",
           labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
@@ -159,6 +163,9 @@ export const tradeLocationDetails = getCommonCard(
           labelName: "Building/Colony Name",
           labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
         },
+        props:{
+          className:"applicant-details-error"
+        },
         placeholder: {
           labelName: "Enter Building/Colony Name",
           labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_PLACEHOLDER"
@@ -170,6 +177,9 @@ export const tradeLocationDetails = getCommonCard(
         label: {
           labelName: "Street Name",
           labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Street Name",
@@ -225,6 +235,9 @@ export const tradeLocationDetails = getCommonCard(
         label: {
           labelName: "Pincode",
           labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Pincode",

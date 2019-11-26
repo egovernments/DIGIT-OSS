@@ -129,6 +129,17 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     );
   }
 
+  const moduleName = get(
+    payload,
+    "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType"
+  ).split(".")[0];
+
+  set(
+    action,
+    "screenConfig.components.div.children.taskStatus.props.moduleName",
+    moduleName
+  );
+
   await setDocuments(
     payload,
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
@@ -473,7 +484,11 @@ const screenConfig = {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",
           moduleName: "egov-workflow",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
+          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          props: {
+            dataPath: "Licenses",
+            updateUrl: "/tl-services/v1/BPAREG/_update"
+          }
         },
         tradeReviewDetails
         //footer

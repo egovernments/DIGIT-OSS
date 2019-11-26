@@ -18,10 +18,8 @@
     margin: 0 !important;
     border-radius: none !important; } }
 
-    .applicant-details-error>p{
-      font-size: 14px;
-    }
+.applicant-details-error p {
+  font-size: 14px; }
 
-    #custom-containers-propertyMohalla>div>p{
-      font-size: 14px;
-    }
+#custom-containers-propertyMohalla div p {
+  font-size: 14px; }

@@ -2225,9 +2225,9 @@ export const getTextToLocalMapping = label => {
     case "INITIATED":
       return getLocaleLabels("Initiated,", "TL_INITIATED", localisationLabels);
     case "APPLIED":
-      getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
+      return getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
     case "PAID":
-      getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
+      return getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
 
     case "APPROVED":
       return getLocaleLabels("Approved", "TL_APPROVED", localisationLabels);
@@ -2235,7 +2235,7 @@ export const getTextToLocalMapping = label => {
       return getLocaleLabels("Rejected", "TL_REJECTED", localisationLabels);
     case "CANCELLED":
       return getLocaleLabels("Cancelled", "TL_CANCELLED", localisationLabels);
-    case "PENDINGAPPROVAL ":
+    case "PENDINGAPPROVAL":
       return getLocaleLabels(
         "Pending for Approval",
         "WF_NEWTL_PENDINGAPPROVAL",
