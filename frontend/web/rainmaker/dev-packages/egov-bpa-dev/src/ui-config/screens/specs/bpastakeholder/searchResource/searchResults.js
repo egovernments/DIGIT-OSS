@@ -13,7 +13,7 @@ export const searchResults = {
   props: {
     columns: [
       getTextToLocalMapping("Application No"),
-      getTextToLocalMapping("Appliact Name"),
+      getTextToLocalMapping("Applicant Name"),
       getTextToLocalMapping("Licensee Type"),
       {
         name: getTextToLocalMapping("Status"),
