@@ -1,7 +1,8 @@
 {
   "tenantId": "pb",
   "moduleName": "tenant",
-  "tenants": [{
+  "tenants": [
+    {
       "code": "pb.jalandhar",
       "name": "Jalandhar",
       "description": "Jalandhar",
@@ -26,7 +27,8 @@
         "latitude": 31.3260152,
         "shapeFileLocation": null,
         "captcha": null,
-        "code": "1013"
+        "code": "1013",
+        "ddrName": "Jalandhar-MC"
       },
       "address": "Municipal Corporation Office, Dr. B.R.Ambedkar Admin Complex, Nehru Garden, Jalandhar City-144001",
       "contactNumber": "0181-2227015"
@@ -53,10 +55,11 @@
         "regionName": null,
         "ulbGrade": "MC Class I",
         "longitude": 75.7708,
-        "latitude": 31.2240,
+        "latitude": 31.224,
         "shapeFileLocation": null,
         "captcha": null,
-        "code": "807"
+        "code": "807",
+        "ddrName": "Phagwara-MC"
       },
       "address": "Town Hall, Phagwara, Punjab - 144401",
       "contactNumber": "01824-260426"
@@ -87,7 +90,8 @@
         "latitude": 31.6339793,
         "shapeFileLocation": null,
         "captcha": null,
-        "code": "107"
+        "code": "107",
+        "ddrName": "Amritsar-MC"
       },
       "address": "Municipal Corporation Amritsar, Town Hall, Amritsar,Punjab",
       "contactNumber": "0183-2545155",
@@ -118,7 +122,8 @@
         "latitude": 31.1256,
         "shapeFileLocation": null,
         "captcha": null,
-        "code": "1406"
+        "code": "1406",
+        "ddrName": "Jalandhar-DDR"
       },
       "address": "nawanshahr",
       "contactNumber": "",
@@ -149,7 +154,8 @@
         "latitude": 31.3260152,
         "shapeFileLocation": null,
         "captcha": null,
-        "code": "2004"
+        "code": "2004",
+        "ddrName": "Mohali-MC"
       },
       "address": "Sector 68, Sahibzada Ajit Singh Nagar, Punjab 160062",
       "contactNumber": "0172-5044907"
@@ -179,7 +185,8 @@
         "latitude": 30.7761,
         "shapeFileLocation": null,
         "captcha": null,
-        "code": "1506"
+        "code": "1506",
+        "ddrName": "Patiala-DDR"
       },
       "address": "Not available",
       "contactNumber": "Not available"
@@ -211,7 +218,8 @@
         "captcha": null,
         "code": "1502",
         "regionCode": "6",
-        "municipalityName": "DerraBassi"
+        "municipalityName": "DerraBassi",
+        "ddrName": "Patiala-DDR"
       },
       "address": "Not available",
       "contactNumber": "1762281025"
