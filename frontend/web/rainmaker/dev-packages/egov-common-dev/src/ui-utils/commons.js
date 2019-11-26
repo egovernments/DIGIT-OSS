@@ -521,7 +521,7 @@ export const download = (receiptQueryString,mode="download") => {
 
         httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
             .then(res => {
-                getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+                getFileUrlFromAPI(res.filestoreIds[0], receiptQueryString[1].value).then((fileRes) => {
                     if (mode==='download') {
                       var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
                       win.focus();

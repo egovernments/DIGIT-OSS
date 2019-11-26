@@ -206,9 +206,9 @@ export const replaceStrInPath = (inputString, search, replacement) => {
   return inputString.replaceAll(search, replacement);
 };
 
-export const getFileUrlFromAPI = async fileStoreId => {
+export const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
   const queryObject = [
-    { key: "tenantId", value: commonConfig.tenantId },
+    { key: "tenantId", value: tenantId? tenantId : commonConfig.tenantId },
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
