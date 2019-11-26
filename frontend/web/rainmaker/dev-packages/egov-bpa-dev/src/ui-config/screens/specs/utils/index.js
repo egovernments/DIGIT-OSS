@@ -2317,6 +2317,20 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
+    case "Appliact Name":
+      return getLocaleLabels(
+        "Appliact Name",
+        "BPA_COMMON_TABLE_COL_APP_NAME",
+        localisationLabels
+      );
+
+    case "Licensee Type":
+      return getLocaleLabels(
+        "Licensee Type",
+        "BPA_COMMON_TABLE_COL_LICENSEE_TYPE",
+        localisationLabels
+      );
+
     case "INITIATED":
       return getLocaleLabels("Initiated,", "TL_INITIATED", localisationLabels);
     case "APPLIED":
