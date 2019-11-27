@@ -13,6 +13,7 @@ import {
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
+import commonConfig from "config/common.js";
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
@@ -86,20 +87,40 @@ const processDemand = async (state, dispatch) => {
     "newCollection"
   );
   if (isFormValid) {
-    await createDemand(state, dispatch);
-    allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
-      "Demands[0].taxPeriodFrom",
-      "Demands[0].taxPeriodTo"
-    ]);
-    const applicationNumber = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Demands[0].consumerCode"
-    );
-    const tenantId = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Demands[0].tenantId"
-    );
-    getCommonPayUrl(dispatch, applicationNumber, tenantId);
+    try {
+      const mobileNumber = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Demands[0].mobileNumber"
+      );
+      let payload = await httpRequest(
+        "post",
+        `/user/_search?tenantId=${commonConfig.tenantId}`,
+        "_search",
+        [],
+        {
+          tenantId: commonConfig.tenantId,
+          userName: mobileNumber
+        }
+      );
+      if (payload ) {
+        const uuid = get(payload , "user[0].uuid");
+        dispatch(prepareFinalObject("Demands[0].payer.uuid" , uuid));
+        await createDemand(state, dispatch);
+        allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
+          "Demands[0].taxPeriodFrom",
+          "Demands[0].taxPeriodTo"
+        ]);
+        const applicationNumber = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Demands[0].consumerCode"
+        );
+        const tenantId = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Demands[0].tenantId"
+        );
+        getCommonPayUrl(dispatch, applicationNumber, tenantId);
+      }
+    } catch (error) {}
   } else {
     dispatch(
       toggleSnackbar(
