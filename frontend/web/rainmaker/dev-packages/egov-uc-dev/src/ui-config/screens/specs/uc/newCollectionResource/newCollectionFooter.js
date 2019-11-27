@@ -12,7 +12,7 @@ import {
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {getCommonPayUrl} from "egov-ui-framework/ui-utils/commons"
+import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
@@ -58,11 +58,8 @@ export const newCollectionFooter = getCommonApplyFooter({
     },
     onClickDefination: {
       action: "condition",
-      callBack: async (state, dispatch) => {
-        await processDemand(state, dispatch);
-        const applicationNumber = get(state.screenConfiguration.preparedFinalObject, "Demands[0].consumerCode");
-        const tenantId = get(state.screenConfiguration.preparedFinalObject, "Demands[0].tenantId");
-        getCommonPayUrl(dispatch,applicationNumber, tenantId);
+      callBack: (state, dispatch) => {
+        processDemand(state, dispatch);
       }
     }
   }
@@ -89,11 +86,20 @@ const processDemand = async (state, dispatch) => {
     "newCollection"
   );
   if (isFormValid) {
-    createDemand(state, dispatch);
+    await createDemand(state, dispatch);
     allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
       "Demands[0].taxPeriodFrom",
       "Demands[0].taxPeriodTo"
     ]);
+    const applicationNumber = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Demands[0].consumerCode"
+    );
+    const tenantId = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Demands[0].tenantId"
+    );
+    getCommonPayUrl(dispatch, applicationNumber, tenantId);
   } else {
     dispatch(
       toggleSnackbar(
@@ -102,7 +108,7 @@ const processDemand = async (state, dispatch) => {
           labelName: "Please fill the required fields.",
           labelKey: "UC_REQUIRED_FIELDS_ERROR_MSG"
         },
-        "error"
+        "info"
       )
     );
   }
