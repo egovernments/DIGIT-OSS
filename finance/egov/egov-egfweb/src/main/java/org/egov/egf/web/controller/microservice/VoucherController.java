@@ -9,10 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
 import org.egov.billsaccounting.services.CreateVoucher;
@@ -26,15 +22,12 @@ import org.egov.egf.contract.model.VoucherRequest;
 import org.egov.egf.contract.model.VoucherResponse;
 import org.egov.egf.contract.model.VoucherSearchRequest;
 import org.egov.infra.admin.master.entity.AppConfigValues;
-import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.services.voucher.VoucherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -153,7 +146,6 @@ public class VoucherController {
 						subledgerDetails.add(subledgertDetailMap);
 					}
 				}
-				ApplicationThreadLocals.setUserId(1L);
 				CVoucherHeader voucherHeader = createVoucher.createVoucher(headerDetails, accountdetails,
 						subledgerDetails);
 				voucher.setId(voucherHeader.getId());

@@ -86,7 +86,7 @@ public class RestServiceAuthFilter implements Filter {
         
         HttpServletRequest httpRequest = (HttpServletRequest)req;
         HttpServletResponse httpResponse = (HttpServletResponse)res;
-        
+
         if (httpRequest.getRequestURI().contains("/ClearToken")||httpRequest.getRequestURI().contains("/refreshToken"))
         {
             LOGGER.info("Clear Token request recieved ");
@@ -100,6 +100,9 @@ public class RestServiceAuthFilter implements Filter {
                 HttpSession session = httpRequest.getSession();
                 session.setAttribute(MS_TENANTID_KEY, tenantId);
                 session.setAttribute(MS_USER_TOKEN, user_token);
+                CurrentUser user = new CurrentUser(this.getUserDetails(request));
+                Authentication auth = this.prepareAuthenticationObj(request, user);
+                SecurityContextHolder.getContext().setAuthentication(auth);
                 chain.doFilter(request, res);
             } catch (Exception e) {
                 httpResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
