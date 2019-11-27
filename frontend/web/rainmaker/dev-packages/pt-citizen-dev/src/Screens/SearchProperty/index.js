@@ -95,7 +95,7 @@ class SearchProperty extends Component {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
       }
       if (mohalla && mohalla.value) {
-        queryParams.push({ key: "mohalla", value: mohalla.value });
+        queryParams.push({ key: "locality", value: mohalla.value });
       }
       if (houseNumber && houseNumber.value) {
         queryParams.push({ key: "doorNo", value: houseNumber.value });

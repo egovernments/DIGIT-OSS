@@ -8,8 +8,20 @@ import get from "lodash/get";
 
 class LanguageSelection extends Component {
   state = {
-    value: getLocale(),
+    value: this.props.defaultLanguage,
   };
+
+  componentWillReceiveProps(nextProps) {
+
+    if (nextProps.defaultLanguage !== this.props.defaultLanguage) {
+      this.props.fetchLocalizationLabel(nextProps.defaultLanguage);
+      this.setState({ value: nextProps.defaultLanguage });
+    }
+  }
+
+  componentDidMount() {
+    this.props.fetchLocalizationLabel(this.props.defaultLanguage);
+  }
 
   onClick = (value) => {
     this.setState({ value });
@@ -23,7 +35,7 @@ class LanguageSelection extends Component {
   render() {
     const { value } = this.state;
     const { onLanguageSelect, onClick } = this;
-    const { bannerUrl, logoUrl, languages } = this.props;
+    const { bannerUrl, logoUrl, languages, defaultLanguage } = this.props;
     return (
       <Banner className="language-selection" bannerUrl={bannerUrl} logoUrl={logoUrl}>
         <LanguageSelectionForm items={languages} value={value} onLanguageSelect={onLanguageSelect} onClick={onClick} logoUrl={logoUrl} />
@@ -37,7 +49,8 @@ const mapStateToProps = ({ common }) => {
   let bannerUrl = get(stateInfoById, "0.bannerUrl");
   let logoUrl = get(stateInfoById, "0.logoUrl");
   let languages = get(stateInfoById, "0.languages", []);
-  return { bannerUrl, logoUrl, languages };
+  let defaultLanguage = get(stateInfoById, "0.defaultLanguage", getLocale());
+  return { bannerUrl, logoUrl, languages, defaultLanguage };
 };
 
 const mapDispatchToProps = (dispatch) => {
