@@ -71,10 +71,10 @@ class HowItWorks extends Component {
         }
       ]
     },
-    {
-      question: "CS_HOWITWORKS_QUESTION9",
-      answer: [{ text: "CS_HOWITWORKS_ANSWER9" }]
-    },
+    /*  {
+        question: "CS_HOWITWORKS_QUESTION9",
+        answer: [{ text: "CS_HOWITWORKS_ANSWER9" }]
+      }, */
     {
       question: "CS_HOWITWORKS_QUESTION20",
       answer: [
@@ -91,10 +91,10 @@ class HowItWorks extends Component {
         }
       ]
     },
-    {
-      question: "CS_HOWITWORKS_QUESTION12",
-      answer: [{ text: "CS_HOWITWORKS_ANSWER12" }]
-    }
+    /*  {
+        question: "CS_HOWITWORKS_QUESTION12",
+        answer: [{ text: "CS_HOWITWORKS_ANSWER12" }]
+      } */
   ];
 
   componentDidMount() {

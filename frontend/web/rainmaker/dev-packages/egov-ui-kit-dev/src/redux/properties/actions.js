@@ -254,21 +254,21 @@ const setMohallaInRedux = (dispatch, state, draftResponse) => {
     }, {});
   const queryObj = Object.keys(mohallaCodes).map((item) => {
     return [{
-        key: "tenantId",
-        value: item,
-      },
-      {
-        key: "hierarchyTypeCode",
-        value: "REVENUE"
-      },
-      {
-        key: "boundaryType",
-        value: "Locality"
-      },
-      {
-        key: "codes",
-        value: mohallaCodes[item].join(",")
-      },
+      key: "tenantId",
+      value: item,
+    },
+    {
+      key: "hierarchyTypeCode",
+      value: "REVENUE"
+    },
+    {
+      key: "boundaryType",
+      value: "Locality"
+    },
+    {
+      key: "codes",
+      value: mohallaCodes[item].join(",")
+    },
     ];
   });
   dispatch(fetchMohalla(queryObj));
@@ -456,8 +456,8 @@ export const getAssesmentsandStatus = (queryObjectproperty) => {
         [{ key: "consumerCode", value: commaSeperatedCC.split(':')[0] }],
         {},
         [], {
-          ts: 0,
-        },
+        ts: 0,
+      },
         true
       );
       const receiptbyId = transformById(payloadReceipts["Receipt"], "transactionId");
@@ -601,9 +601,9 @@ export const fetchReceipt = (fetchReceiptQueryObject) => {
     }
   }
 }
-export const getFileUrlFromAPI = async fileStoreId => {
+const getFileUrlFromAPI = async (fileStoreId, tenantId) => {
   const queryObject = [
-    { key: "tenantId", value: "pb" },
+    { key: "tenantId", value: tenantId },
     { key: "fileStoreIds", value: fileStoreId }
   ];
   try {
@@ -627,14 +627,14 @@ export const downloadReceipt = (receiptQueryString) => {
       try {
         const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
         const queryStr = [
-          { key: "key", value: "consolidatedreceipt" }, 
-          { key: "tenantId", value: receiptQueryString[1].value } 
-        //  { key: "tenantId", value: "pb" }
+          { key: "key", value: "consolidatedreceipt" },
+          { key: "tenantId", value: receiptQueryString[1].value }
+          //  { key: "tenantId", value: "pb" }
         ]
 
         httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
           .then(res => {
-            getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+            getFileUrlFromAPI(res.filestoreIds[0], receiptQueryString[1].value).then((fileRes) => {
               var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
               win.focus();
             });

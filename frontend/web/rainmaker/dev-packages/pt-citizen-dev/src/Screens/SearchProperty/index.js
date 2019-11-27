@@ -60,18 +60,24 @@ class SearchProperty extends Component {
 
   onSearchClick = (form, formKey) => {
     const { propertiesFound } = this.props;
-    const { city, ids, oldpropertyids, mobileNumber, applicationNumber, houseNumber } = form.fields || {};
+    const { city, ids, oldpropertyids, mobileNumber, applicationNumber, mohalla, houseNumber } = form.fields || {};
     const tableData = this.extractTableData(propertiesFound);
 
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
-    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value && !houseNumber.value) {
+    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value && !mohalla.value) {
       this.props.toggleSnackbarAndSetText(
         true,
         {
           labelName: "Please fill atleast one field along with city",
           labelKey: "ERR_FILL_ATLEAST_ONE_FIELD_WITH_CITY"
         },
+        "error"
+      );
+    } else if (mohalla.value && !houseNumber.value) {
+      this.props.toggleSnackbarAndSetText(
+        true,
+        { labelName: "Please fill House/Shop No. along with Locality/Mohalla", labelKey: "ERR_FILL_DOORNO_WITH_LOCALITY" },
         "error"
       );
     } else {
@@ -87,6 +93,9 @@ class SearchProperty extends Component {
       }
       if (mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
+      }
+      if (mohalla && mohalla.value) {
+        queryParams.push({ key: "mohalla", value: mohalla.value });
       }
       if (houseNumber && houseNumber.value) {
         queryParams.push({ key: "doorNo", value: houseNumber.value });

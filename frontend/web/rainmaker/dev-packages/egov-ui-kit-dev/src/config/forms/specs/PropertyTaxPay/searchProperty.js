@@ -11,7 +11,7 @@ const formConfig = {
     city: {
       id: "city",
       numcols: 4,
-      dontReset:(process.env.REACT_APP_NAME !== "Citizen"? true: false),
+      dontReset: (process.env.REACT_APP_NAME !== "Citizen" ? true : false),
       fullWidth: true,
       className: "search-property-form-pt",
       jsonPath: "",
@@ -21,6 +21,13 @@ const formConfig = {
       required: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       type: "autoSuggestDropdown",
+      dataFetchConfig: {
+        dependants: [
+          {
+            fieldKey: "mohalla",
+          },
+        ],
+      },
     },
     mobileNumber: {
       id: "complainant-mobile-no",
@@ -59,18 +66,49 @@ const formConfig = {
       maxLength: 64,
       value: "",
     },
-      houseNumber: {
-        id: "house-number",
-        jsonPath: "",
-        type: "textfield",
-        floatingLabelText: "PT_PROPERTY_DETAILS_DOOR_NUMBER",
-        hintText: "PT_PROPERTY_DETAILS_DOOR_NUMBER_PLACEHOLDER",
-        numcols: 4,
-        errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
-        errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-        maxLength: 64,
-        value: "",
+    mohalla: {
+      id: "mohalla",
+      jsonPath: "",
+      type: "singleValueList",
+      floatingLabelText: "PT_PROPERTY_DETAILS_MOHALLA",
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
+      fullWidth: true,
+      toolTip: true,
+      toolTipMessage: "PT_MOHALLA_TOOLTIP_MESSAGE",
+      labelsFromLocalisation: true,
+      boundary: true,
+      numcols: 4,
+      errorMessage: "PT_PROPERTY_DETAILS_MOHALLA_ERRORMSG",
+      dataFetchConfig: {
+        url: "egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
+        action: "",
+        queryParams: [],
+        requestBody: {},
+        isDependent: true,
+        hierarchyType: "REVENUE",
       },
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      value: "",
+      updateDependentFields: ({ formKey, field: sourceField, dispatch }) => {
+        const { value } = sourceField;
+
+        if (value) {
+          dispatch(setFieldProperty("searchProperty", "houseNumber", "disabled", false));
+        }
+      }
+    },
+    houseNumber: {
+      id: "house-number",
+      jsonPath: "",
+      type: "textfield",
+      floatingLabelText: "PT_PROPERTY_DETAILS_DOOR_NUMBER",
+      hintText: "PT_PROPERTY_DETAILS_DOOR_NUMBER_PLACEHOLDER",
+      numcols: 4,
+      errorMessage: "PT_PROPERTY_DETAILS_DOOR_NUMBER_ERRORMSG",
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      value: "",
+    },
   },
   submit: {
     type: "submit",
@@ -83,6 +121,7 @@ const formConfig = {
       const { cities, citiesByModule } = state.common;
       let tenantId = JSON.parse(getUserInfo()).tenantId;
       const { PT } = citiesByModule;
+      dispatch(setFieldProperty("searchProperty", "houseNumber", "disabled", true));
       if (PT) {
         const tenants = PT.tenants;
         const dd = tenants.reduce((dd, tenant) => {

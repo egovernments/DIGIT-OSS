@@ -70,10 +70,10 @@ class HowItWorks extends Component {
         }
       ]
     },
-    {
-      question: "CS_HOWITWORKS_QUESTION9",
-      answer: [{ text: "CS_HOWITWORKS_ANSWER9" }]
-    },
+    /*   {
+         question: "CS_HOWITWORKS_QUESTION9",
+         answer: [{ text: "CS_HOWITWORKS_ANSWER9" }]
+       }, */
     {
       question: "CS_HOWITWORKS_QUESTION20",
       answer: [
@@ -90,10 +90,10 @@ class HowItWorks extends Component {
         }
       ]
     },
-    {
-      question: "CS_HOWITWORKS_QUESTION12",
-      answer: [{ text: "CS_HOWITWORKS_ANSWER12" }]
-    }
+    /*  Commenting for 10 dec release{
+        question: "CS_HOWITWORKS_QUESTION12",
+        answer: [{ text: "" }]
+      }*/
   ];
 
   componentDidMount() {
@@ -343,9 +343,9 @@ class HowItWorks extends Component {
                 innerDivStyle={
                   index !== 0
                     ? {
-                        ...genericInnerdivStyle,
-                        borderTop: "solid 1px #e0e0e0"
-                      }
+                      ...genericInnerdivStyle,
+                      borderTop: "solid 1px #e0e0e0"
+                    }
                     : genericInnerdivStyle
                 }
                 nestedListStyle={{ padding: "0 0 16px 0" }}
