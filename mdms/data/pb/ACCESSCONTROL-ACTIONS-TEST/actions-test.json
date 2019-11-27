@@ -15249,6 +15249,68 @@
       "leftIcon": "places:business-center",
       "rightIcon": "",
       "queryParams": ""
+    },
+    {
+      "id": 1882,
+      "name": "rainmaker-common-wns",
+      "url": "card",
+      "displayName": "Water & Sewerage",
+      "orderNumber": 2,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "",
+      "path": "",
+      "navigationURL": "wns/search",
+      "leftIcon": "places:business-center",
+      "rightIcon": "",
+      "queryParams": ""
+    },
+    {
+      "id": 1883,
+      "name": "rainmaker-common-wns-ctizen",
+      "url": "card",
+      "displayName": "Water & Sewerage",
+      "orderNumber": 2,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "",
+      "path": "",
+      "navigationURL": "wns-citizen/home",
+      "leftIcon": "places:business-center",
+      "rightIcon": "",
+      "queryParams": ""
+    },
+    {
+      "id": 1884,
+      "name": "Water & Sewerage",
+      "url": "url",
+      "displayName": "Water & Sewerage",
+      "orderNumber": 13,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "wns",
+      "code": "null",
+      "navigationURL": "wns-citizen/home",
+      "path": "wns",
+      "leftIcon": "places:business-center",
+      "rightIcon": ""
+    },
+    {
+      "id": 1885,
+      "name": "Water & Sewerage",
+      "url": "url",
+      "displayName": "Water & Sewerage",
+      "orderNumber": 13,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "wns",
+      "code": "null",
+      "navigationURL": "wns/search",
+      "path": "wns",
+      "leftIcon": "places:business-center",
+      "rightIcon": ""
     }
   ]
 }
