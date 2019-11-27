@@ -60,12 +60,12 @@ class SearchProperty extends Component {
 
   onSearchClick = (form, formKey) => {
     const { propertiesFound } = this.props;
-    const { city, ids, oldpropertyids, mobileNumber, applicationNumber,houseNumber } = form.fields || {};
+    const { city, ids, oldpropertyids, mobileNumber, applicationNumber, houseNumber } = form.fields || {};
     const tableData = this.extractTableData(propertiesFound);
 
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
-    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value  && !houseNumber.value) {
+    } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value && !houseNumber.value) {
       this.props.toggleSnackbarAndSetText(
         true,
         {
@@ -89,7 +89,7 @@ class SearchProperty extends Component {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
       }
       if (houseNumber && houseNumber.value) {
-        queryParams.push({ key: "houseNumber", value: houseNumber.value });
+        queryParams.push({ key: "doorNo", value: houseNumber.value });
       }
       this.setState({
         searchResult: tableData
@@ -225,8 +225,8 @@ class SearchProperty extends Component {
           history={history}
         /> */}
         {/* <br /> */}
-     
-       <div className="rainmaker-displayInline inner-header-style"> 
+
+        <div className="rainmaker-displayInline inner-header-style">
           <Label
             label="PT_PROPERTY_TAX"
             dark={true}
@@ -235,8 +235,8 @@ class SearchProperty extends Component {
             bold={true}
             labelStyle={{ marginTop: "20px" }}
           />
-         
-           {/* Commenting add and assess property for 10 dec release 
+
+          {/* Commenting add and assess property for 10 dec release 
           <div
             className="rainmaker-displayInline"  >
             <Button
@@ -263,7 +263,7 @@ class SearchProperty extends Component {
               fullWidth={true}
             />
           </div>*/}
-        </div>  
+        </div>
 
         <PropertySearchFormHOC
           history={this.props.history}
@@ -311,7 +311,7 @@ class SearchProperty extends Component {
               <Label label="PT_NO_PROPERTY_RECORD" />
             </div>
 
-               {/* Commenting add and assess property for 10 dec release
+            {/* Commenting add and assess property for 10 dec release
             <div className="new-assess-btn">
               <Button
                 label={<Label label="PT_ADD_ASSESS_PROPERTY" buttonLabel={true} />}

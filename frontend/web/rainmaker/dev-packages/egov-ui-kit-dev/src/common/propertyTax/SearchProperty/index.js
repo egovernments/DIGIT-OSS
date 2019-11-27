@@ -48,7 +48,7 @@ class SearchProperty extends Component {
 
   };
   onSearchClick = (form, formKey) => {
-    const { city, ids, oldpropertyids, mobileNumber, applicationNumber,houseNumber } = form.fields || {};
+    const { city, ids, oldpropertyids, mobileNumber, applicationNumber, houseNumber } = form.fields || {};
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
     } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value && !houseNumber.value) {
@@ -62,20 +62,20 @@ class SearchProperty extends Component {
       if (city && city.value) {
         queryParams.push({ key: "tenantId", value: city.value });
       }
-      if ( ids && ids.value) {
+      if (ids && ids.value) {
         queryParams.push({ key: "ids", value: ids.value });
       }
       if (oldpropertyids && oldpropertyids.value) {
         queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
       }
-      if ( mobileNumber && mobileNumber.value) {
+      if (mobileNumber && mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
       }
       if (applicationNumber && applicationNumber.value) {
         queryParams.push({ key: "applicationNumber", value: applicationNumber.value });
       }
       if (houseNumber && houseNumber.value) {
-        queryParams.push({ key: "houseNumber", value: houseNumber.value });
+        queryParams.push({ key: "doorNo", value: houseNumber.value });
       }
       this.props.fetchProperties(queryParams);
       this.setState({ showTable: true });
@@ -128,7 +128,7 @@ class SearchProperty extends Component {
 
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
-      let guardianName = latestAssessment.owners[0].fatherOrHusbandName ? latestAssessment.owners[0].fatherOrHusbandName :"NA";
+      let guardianName = latestAssessment.owners[0].fatherOrHusbandName ? latestAssessment.owners[0].fatherOrHusbandName : "NA";
       let assessmentNo = latestAssessment.assessmentNumber;
       const uuid = get(latestAssessment, "citizenInfo.uuid");
       // let button = (
@@ -243,7 +243,7 @@ class SearchProperty extends Component {
             labelStyle={{ marginTop: "20px" }}
           />
 
-             {/* Commenting add and assess property for 10 dec release 
+          {/* Commenting add and assess property for 10 dec release 
           <div
             className="rainmaker-displayInline"  >
             <Button
@@ -273,8 +273,8 @@ class SearchProperty extends Component {
         </div>
         <PropertySearchFormHOC history={this.props.history} onSearchClick={this.onSearchClick} onResetClick={this.onResetClick} />
         <Hidden xsDown>
-        {!loading && showTable && tableData.length > 0  ? 
-        <PropertyTable tableData={tableData} sortOnObject="propertyId" onActionClick={this.onActionClick} /> : null}
+          {!loading && showTable && tableData.length > 0 ?
+            <PropertyTable tableData={tableData} sortOnObject="propertyId" onActionClick={this.onActionClick} /> : null}
         </Hidden>
         <Hidden smUp>
           {tableData && tableData.length > 0 && showTable && (
@@ -306,7 +306,7 @@ class SearchProperty extends Component {
               <Label label="PT_NO_PROPERTY_RECORD" />
             </div>
 
-               {/* Commenting add and assess property for 10 dec release 
+            {/* Commenting add and assess property for 10 dec release 
             <div className="new-assess-btn">
               <Button
                 label={<Label label="PT_ADD_ASSESS_PROPERTY" buttonLabel={true} />}
