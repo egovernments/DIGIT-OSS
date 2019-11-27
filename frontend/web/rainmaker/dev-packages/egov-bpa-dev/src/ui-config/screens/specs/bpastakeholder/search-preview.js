@@ -31,7 +31,10 @@ import {
 
 import { getOrganizationDetails } from "./applyResource/review-organization";
 import { getReviewOwner } from "./applyResource/review-owner";
-import { getLocationDetails } from "./applyResource/review-location";
+import {
+  getPermanentDetails,
+  getCommunicactionDetails
+} from "./applyResource/review-location";
 import { getReviewDocuments } from "./applyResource/review-documents";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -345,7 +348,9 @@ const estimate = getCommonGrayCard({
 
 const reviewOrganizationDetails = getOrganizationDetails(false);
 
-const reviewLocationDetails = getLocationDetails(false);
+const reviewPermanentDetails = getPermanentDetails(false);
+const reviewCommunicationDetails = getCommunicactionDetails(false);
+
 const reviewOwnerDetails = getReviewOwner(false);
 
 const reviewDocumentDetails = getReviewDocuments(false);
@@ -384,7 +389,8 @@ export const tradeReviewDetails = getCommonCard({
   ),
   reviewOwnerDetails,
   reviewOrganizationDetails,
-  reviewLocationDetails,
+  reviewPermanentDetails,
+  reviewCommunicationDetails,
   reviewDocumentDetails
 });
 

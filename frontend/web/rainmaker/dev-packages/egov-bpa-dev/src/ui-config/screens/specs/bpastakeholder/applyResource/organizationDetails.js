@@ -54,6 +54,7 @@ export const organizationDetails = getCommonCard({
         xs: 12,
         sm: 6
       },
+      required: true,
       jsonPath: "Licenses[0].tradeLicenseDetail.institution.instituionName"
     }),
 
@@ -70,6 +71,7 @@ export const organizationDetails = getCommonCard({
         xs: 12,
         sm: 6
       },
+      required: true,
       jsonPath: "Licenses[0].tradeLicenseDetail.institution.contactNo"
     }),
     partnerName: getTextField({
@@ -85,6 +87,7 @@ export const organizationDetails = getCommonCard({
         xs: 12,
         sm: 6
       },
+      required: true,
       jsonPath: "Licenses[0].tradeLicenseDetail.institution.name"
     }),
     designation: getTextField({
@@ -131,8 +134,8 @@ export const organizationDetails = getCommonCard({
         xs: 12,
         sm: 6
       },
-      jsonPath:
-        "Licenses[0].tradeLicenseDetail.institution.organisationRegistrationNo.address"
+      required: true,
+      jsonPath: "Licenses[0].tradeLicenseDetail.institution.address"
     })
   })
 });

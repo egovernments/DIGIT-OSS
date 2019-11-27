@@ -148,22 +148,6 @@ export const updatePFOforSearchResults = async (
     dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
   }
   const licenseType = payload && get(payload, "Licenses[0].licenseType");
-  const structureSubtype =
-    payload && get(payload, "Licenses[0].tradeLicenseDetail.structureType");
-  const tradeTypes = setFilteredTradeTypes(
-    state,
-    dispatch,
-    licenseType,
-    structureSubtype
-  );
-  const tradeTypeDdData = getTradeTypeDropdownData(tradeTypes);
-  tradeTypeDdData &&
-    dispatch(
-      prepareFinalObject(
-        "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
-        tradeTypeDdData
-      )
-    );
   updateDropDowns(payload, action, state, dispatch, queryValue);
   if (queryValuePurpose !== "cancel") {
     set(payload, getSafetyNormsJson(queryValuePurpose), "yes");
@@ -303,6 +287,14 @@ const getMultipleOwners = owners => {
   return mergedOwners;
 };
 
+const userAddressConstruct = address => {
+  let doorNo = address.doorNo ? address.doorNo : "";
+  let buildingName = address.buildingName ? address.buildingName : "";
+  let street = address.street ? address.street : "";
+  let landmark = address.landmark ? address.landmark : "";
+  return `${doorNo},${buildingName},${street},${landmark}`;
+};
+
 export const applyTradeLicense = async (state, dispatch, activeIndex) => {
   try {
     let queryObject = JSON.parse(
@@ -331,6 +323,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         "dayend"
       );
     }
+    let ownershipType = get(
+      queryObject[0],
+      "tradeLicenseDetail.subOwnerShipCategory"
+    );
+    if (ownershipType == "INDIVIDUAL")
+      set(queryObject[0], "tradeLicenseDetail.institution", null);
     let owners = get(queryObject[0], "tradeLicenseDetail.owners");
     owners = (owners && convertOwnerDobToEpoch(owners)) || [];
     set(queryObject[0], "tradeLicenseDetail.owners", owners);
@@ -340,19 +338,13 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     const tenantId = process.env.REACT_APP_DEFAULT_TENANT_ID;
 
     set(queryObject[0], "tenantId", tenantId);
-    let permanantAddr = get(
-      queryObject[0],
-      "tradeLicenseDetail.owners[0].address.addressLine1"
+    let userAddress = get(
+      state.screenConfiguration.preparedFinalObject,
+      "LicensesTemp[0].userData.address"
     );
-    let corrospondenceAddr = get(
-      queryObject[0],
-      "tradeLicenseDetail.address.addressLine1"
-    );
-    set(
-      queryObject[0],
-      "tradeLicenseDetail.owners[0].correspondenceAddress",
-      corrospondenceAddr
-    );
+
+    let permanantAddr = userAddressConstruct(userAddress);
+
     set(
       queryObject[0],
       "tradeLicenseDetail.owners[0].permanentAddress",
@@ -360,10 +352,14 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     );
     set(
       queryObject[0],
-      "tradeLicenseDetail.subOwnerShipCategory",
-      "INDIVIDUAL"
+      "tradeLicenseDetail.owners[0].permanentCity",
+      userAddress.city
     );
-
+    set(
+      queryObject[0],
+      "tradeLicenseDetail.owners[0].permanentPinCode",
+      userAddress.pincode
+    );
     if (queryObject[0].applicationNumber) {
       //call update
 

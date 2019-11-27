@@ -48,6 +48,11 @@ const ViewBreakupContainer = Loadable({
   loading: () => <Loading />
 });
 
+const RadioGroupWithLabelContainer = Loadable({
+  loader: () => import("./RadioGroupWithLabelContainer"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -58,5 +63,6 @@ export {
   DocumentListContainer,
   PaymentRedirectPage,
   ViewBreakupContainer,
-  DialogContainer
+  DialogContainer,
+  RadioGroupWithLabelContainer
 };
