@@ -92,18 +92,26 @@ export const callBackForNext = async (state, dispatch) => {
       state,
       dispatch
     );
-    const isTradeLocationValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.organizationDetails.children.cardContent.children.organizationDetailsConatiner.children",
-      state,
-      dispatch
-    );
-    const isLocationValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children",
-      state,
-      dispatch
-    );
+    let isTradeOrganizationValid = true;
 
-    if (!isTradeDetailsValid || !isTradeLocationValid || !isLocationValid) {
+    let ownershipType = get(
+      data,
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+    );
+    if (ownershipType != "INDIVIDUAL") {
+      isTradeOrganizationValid = validateFields(
+        "components.div.children.formwizardFirstStep.children.organizationDetails.children.cardContent.children.organizationDetailsConatiner.children",
+        state,
+        dispatch
+      );
+    }
+    // const isLocationValid = validateFields(
+    //   "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children",
+    //   state,
+    //   dispatch
+    // );
+
+    if (!isTradeDetailsValid || !isTradeOrganizationValid) {
       isFormValid = false;
     } else {
       isFormValid = await applyTradeLicense(state, dispatch);

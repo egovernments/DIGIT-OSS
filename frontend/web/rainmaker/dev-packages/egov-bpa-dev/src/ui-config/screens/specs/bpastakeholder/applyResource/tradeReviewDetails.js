@@ -8,7 +8,10 @@ import { getFeesEstimateCard, getDialogButton } from "../../utils";
 
 import { getOrganizationDetails } from "./review-organization";
 import { getReviewOwner } from "./review-owner";
-import { getLocationDetails } from "./review-location";
+import {
+  getPermanentDetails,
+  getCommunicactionDetails
+} from "./review-location";
 import { getReviewDocuments } from "./review-documents";
 
 const estimate = getCommonGrayCard({
@@ -19,9 +22,10 @@ const estimate = getCommonGrayCard({
 
 const reviewOrganizationDetails = getOrganizationDetails();
 
-const reviewLocationDetails = getLocationDetails();
-const reviewOwnerDetails = getReviewOwner();
+const reviewPermanentDetails = getPermanentDetails();
+const reviewCommunicationDetails = getCommunicactionDetails();
 
+const reviewOwnerDetails = getReviewOwner();
 const reviewDocumentDetails = getReviewDocuments();
 
 export const tradeReviewDetails = getCommonCard({
@@ -37,6 +41,7 @@ export const tradeReviewDetails = getCommonCard({
   ),
   reviewOwnerDetails,
   reviewOrganizationDetails,
-  reviewLocationDetails,
+  reviewPermanentDetails,
+  reviewCommunicationDetails,
   reviewDocumentDetails
 });

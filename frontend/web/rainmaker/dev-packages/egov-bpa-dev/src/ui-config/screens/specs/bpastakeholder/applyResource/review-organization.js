@@ -108,8 +108,7 @@ export const getOrganizationDetails = (isEditable = true) => {
           labelKey: "BPA_ORGANIZATION_ADDRESS"
         },
         {
-          jsonPath:
-            "Licenses[0].tradeLicenseDetail.institution.organisationRegistrationNo.address"
+          jsonPath: "Licenses[0].tradeLicenseDetail.institution.address"
         }
       )
     })

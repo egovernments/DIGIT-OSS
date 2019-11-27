@@ -4,7 +4,8 @@ import {
   getCommonCard,
   getCommonContainer,
   getCommonTitle,
-  getCommonParagraph
+  getCommonParagraph,
+  getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 
 import get from "lodash/get";
@@ -14,9 +15,7 @@ import {
   commonTransform,
   objectToDropdown,
   getCurrentFinancialYear,
-  getAllDataFromBillingSlab,
-  getLicenseeTypeDropdownData,
-  setLicenseeSubTypeDropdownData
+  getLicenseeTypeDropdownData
 } from "../utils";
 import {
   prepareFinalObject,
@@ -26,7 +25,11 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { footer } from "./applyResource/footer";
 import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
 import { organizationDetails } from "./applyResource/organizationDetails";
-import { tradeLocationDetails } from "./applyResource/tradeLocationDetails";
+import {
+  tradeLocationDetails,
+  permanentAddr,
+  corrospondanceAddr
+} from "./applyResource/tradeLocationDetails";
 import { OwnerInfoCard } from "./applyResource/tradeOwnerDetails";
 import { documentList } from "./applyResource/documentList";
 import { httpRequest } from "../../../../ui-utils";
@@ -44,6 +47,57 @@ export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
   stepsData
 );
+
+export const getGenderRadioButton1 = {
+  uiFramework: "custom-containers-local",
+  moduleName: "egov-bpa",
+
+  componentPath: "RadioGroupWithLabelContainer",
+  gridDefination: {
+    xs: 12,
+    sm: 12,
+    md: 6
+  },
+  jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+
+  props: {
+    ValueToHide: "INDIVIDUAL",
+    componentPathToHide: [
+      "components.div.children.formwizardFirstStep.children.organizationDetails",
+      "components.div.children.formwizardThirdStep.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails"
+    ],
+    label: {
+      name: "On behalf of any organization?",
+      key: "BPA_ORGANIZATION_REQD_LABEL"
+    },
+    //     {
+    //       label: "Husband",
+    //       labelKey: "COMMON_RELATION_HUSBAND",
+    //       value: "HUSBAND"
+    //     }
+    //   ],
+    //   "Licenses[0].tradeLicenseDetail.owners[0].relationship",
+    //   ""
+    // );
+
+    buttons: [
+      {
+        labelName: "Yes",
+        labelKey: "BPA_ORG_YES_LABEL",
+        value: "INSTITUTIONAL"
+      },
+      {
+        label: "No",
+        labelKey: "BPA_ORG_NO_LABEL",
+        value: "INDIVIDUAL"
+      }
+    ],
+    jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+    required: true
+  },
+  required: true,
+  type: "array"
+};
 
 export const header = getCommonContainer({
   header:
@@ -268,8 +322,12 @@ export const formwizardFirstStep = {
   },
   children: {
     OwnerInfoCard,
-    // organizationDetails,
-    tradeLocationDetails
+    breakAfterSearch: getBreak(),
+    getGenderRadioButton1,
+    organizationDetails,
+    // tradeLocationDetails,
+    permanentAddr,
+    corrospondanceAddr
   }
 };
 
@@ -314,6 +372,17 @@ const screenConfig = {
   name: "apply",
   // hasBeforeInitAsync:true,
   beforeInitScreen: (action, state, dispatch) => {
+    const queryValue = getQueryArg(window.location.href, "applicationNumber");
+    const applicationNo = queryValue
+      ? queryValue
+      : get(
+          state.screenConfiguration.preparedFinalObject,
+          "Licenses[0].oldLicenseNumber",
+          null
+        );
+    if (!applicationNo) {
+      dispatch(prepareFinalObject("Licenses[0]", {}));
+    }
     const tenantId = getTenantId();
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     getData(action, state, dispatch).then(responseAction => {
@@ -324,12 +393,6 @@ const screenConfig = {
         action.screenConfig,
         "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
         props
-      );
-      dispatch(
-        prepareFinalObject(
-          "Licenses[0].tradeLicenseDetail.address.city",
-          tenantId
-        )
       );
     });
 
