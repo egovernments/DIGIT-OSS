@@ -139,8 +139,13 @@ const transformer = (formKey, form = {}, state = {}) => {
     },
     employeeChangePassword: () => {
       const formData = prepareFormData(form);
+      const { auth } = state;
+      const username = get(auth, "userInfo.userName");
+      const type = process.env.REACT_APP_NAME === "Citizen" ? "CITIZEN" : "EMPLOYEE";
       const tenantId = getTenantId();
       formData.tenantId = tenantId;
+      formData.username = username;
+      formData.type = type;
       return formData;
     },
     complaint: async () => {
