@@ -150,7 +150,7 @@ export const corrospondanceAddr = getCommonCard({
         labelKey: "BPA_NEW_TRADE_DETAILS_CITY_PLACEHOLDER"
       },
       pattern: getPattern("BuildingStreet"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.address.tenantId"
+      jsonPath: "Licenses[0].tradeLicenseDetail.address.city"
     }),
     tradeLocPincode: getTextField({
       label: {
