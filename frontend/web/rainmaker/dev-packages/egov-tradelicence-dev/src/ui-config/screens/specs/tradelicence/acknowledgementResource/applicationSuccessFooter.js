@@ -67,13 +67,13 @@ const generatePdfAndDownload = (
       var doc = new jsPDF("p", "mm");
       var position = 0;
 
-      doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+      doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight-50);
       heightLeft -= pageHeight;
 
       while (heightLeft >= 0) {
         position = heightLeft - imgHeight;
         doc.addPage();
-        doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+        doc.addImage(data, "PNG", 5, position+8, imgWidth, imgHeight-50);
         heightLeft -= pageHeight;
       }
       if (action === "download") {
