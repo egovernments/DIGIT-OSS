@@ -174,7 +174,7 @@ function FeesEstimateCard(props) {
           />
         </Typography>
         <Typography className={totalHeadClassName} align="right">
-          Rs {total}
+        &#8377; {total}
         </Typography>
         {estimate.extra && estimate.extra.length !== 0 ? (
           <Card className={classes.whiteCard}>

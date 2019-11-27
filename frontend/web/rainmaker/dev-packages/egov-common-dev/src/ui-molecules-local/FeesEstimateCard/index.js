@@ -206,7 +206,7 @@ if(estimate.fees[estimate.fees.length-1].info.labelName!="Arrears"){
           />
         </Typography>
         <Typography className={totalHeadClassName} align="right">
-          Rs {total}
+         &#8377; {total}
         </Typography>
         {estimate.extra && estimate.extra.length !== 0 ? (
           <Card className={classes.whiteCard}>
