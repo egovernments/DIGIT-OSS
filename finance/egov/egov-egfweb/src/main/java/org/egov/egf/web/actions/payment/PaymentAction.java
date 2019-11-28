@@ -1087,7 +1087,7 @@ public class PaymentAction extends BasePaymentAction {
     @ValidationErrorPage(value = VIEW)
     @SkipValidation
     @Action(value = "/payment/payment-sendForApproval")
-    public String sendForApproval() throws TaskFailedException {
+    public String sendForApproval() {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Starting sendForApproval...");
         if (paymentheader.getId() == null)

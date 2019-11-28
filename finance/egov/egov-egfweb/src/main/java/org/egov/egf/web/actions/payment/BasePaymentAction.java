@@ -127,15 +127,6 @@ public class BasePaymentAction extends BaseVoucherAction {
     public static final String ARF_TYPE = "Contractor";
     private String bankBalanceCheck = "";
     protected boolean finanicalYearAndClosedPeriodCheckIsClosed=false;
-
-    public boolean isFinanicalYearAndClosedPeriodCheckIsClosed() {
-        return finanicalYearAndClosedPeriodCheckIsClosed;
-    }
-
-    public void setFinanicalYearAndClosedPeriodCheckIsClosed(boolean finanicalYearAndClosedPeriodCheckIsClosed) {
-        this.finanicalYearAndClosedPeriodCheckIsClosed = finanicalYearAndClosedPeriodCheckIsClosed;
-    }
-
     protected static final String ACTIONNAME = "actionname";
     protected boolean canCheckBalance = false;
 
@@ -269,5 +260,12 @@ public class BasePaymentAction extends BaseVoucherAction {
 
     public void setBankBalanceCheck(final String bankBalanceCheck) {
         this.bankBalanceCheck = bankBalanceCheck;
+    }
+    public boolean isFinanicalYearAndClosedPeriodCheckIsClosed() {
+        return finanicalYearAndClosedPeriodCheckIsClosed;
+    }
+
+    public void setFinanicalYearAndClosedPeriodCheckIsClosed(boolean finanicalYearAndClosedPeriodCheckIsClosed) {
+        this.finanicalYearAndClosedPeriodCheckIsClosed = finanicalYearAndClosedPeriodCheckIsClosed;
     }
 }
