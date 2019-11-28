@@ -66,7 +66,7 @@ class PropertyInfoCard extends Component {
                         <Label
                           labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
                           label={item.value ? item.value : "NA"}
-                          fontSize="16px"
+                          fontSize="15px"
                         />
                       </div>
                     </div>
