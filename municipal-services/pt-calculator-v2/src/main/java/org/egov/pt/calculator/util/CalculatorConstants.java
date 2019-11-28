@@ -294,4 +294,8 @@ public class CalculatorConstants {
 
     public static final Long TIMEZONE_OFFSET = 19800000l;
 
+    public static final String BILLINGSLAB_KEY = "calculationDescription";
+
+
+
 }

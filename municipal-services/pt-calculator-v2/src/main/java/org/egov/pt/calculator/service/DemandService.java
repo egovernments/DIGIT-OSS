@@ -100,7 +100,7 @@ public class DemandService {
 			PropertyDetail detail = property.getPropertyDetails().get(0);
 
 			Calculation calculation = propertyCalculationMap.get(property.getPropertyDetails().get(0).getAssessmentNumber());
-			
+
 			String assessmentNumber = detail.getAssessmentNumber();
 
 			// pt_tax for the new assessment
@@ -120,6 +120,9 @@ public class DemandService {
 			if (carryForwardCollectedAmount.doubleValue() >= 0.0) {
 
 				Demand demand = prepareDemand(property, calculation ,oldDemand);
+
+				// Add billingSLabs in demand additionalDetails as map with key calculationDescription
+				demand.setAdditionalDetails(Collections.singletonMap(BILLINGSLAB_KEY, calculation.getBillingSlabIds()));
 
 				demands.add(demand);
 				consumerCodeFinYearMap.put(demand.getConsumerCode(), detail.getFinancialYear());
