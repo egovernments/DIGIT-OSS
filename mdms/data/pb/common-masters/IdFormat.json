@@ -1,7 +1,12 @@
 {
     "tenantId": "pb",
     "moduleName": "common-masters",
-    "IdFormat": [{
+    "IdFormat": [
+	{
+            "format": "TEST_seq/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_EGOV_COMMON_TEST_AUTOCRE]",
+            "idname": "seq.autocreate.test"
+        },	
+	{
             "format": "MP/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
             "idname": "watercharges.metered.receipt.id"
         },
@@ -10,8 +15,8 @@
             "idname": "pt.receipt.id"
         },
         {
-            "format": "TL/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
-            "idname": "tl.receipt.id"
+            "format": "TEST/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_EGOV_COMMON_TEST_56]",
+            "idname": "tl.receipt.id.test"
         },
         {
             "format": "MP/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
