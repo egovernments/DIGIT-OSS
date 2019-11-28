@@ -92,11 +92,11 @@ class HowItWorks extends Component {
     },
     {
       question: "CS_HOWITWORKS_QUESTION12",
-      answer: [{ text: "CS_HOWITWORKS_QUESTION12" }]
+      answer: [{ text: "CS_HOWITWORKS_ANSWER12" }]
     },
     {
       question: "CS_HOWITWORKS_QUESTION13",
-      answer: [{ text: "CS_HOWITWORKS_QUESTION13" }]
+      answer: [{ text: "CS_HOWITWORKS_ANSWER13" }]
     },
 
   ];
