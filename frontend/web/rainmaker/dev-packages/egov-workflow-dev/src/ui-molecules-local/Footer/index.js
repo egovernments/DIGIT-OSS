@@ -60,7 +60,8 @@ class Footer extends React.Component {
     handleFieldChange(`${dataPath}[0].assignee`, "");
     if (item.isLast) {
       const url = process.env.NODE_ENV === "development" ? item.buttonUrl : `employee/${item.buttonUrl}` ;
-      window.location.href = `${window.origin}/${url}`;
+      //window.location.href = `${window.origin}/${url}`;
+      setRoute(url);
       return;
     }
     if (item.showEmployeeList) {
