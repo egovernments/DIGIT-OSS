@@ -1207,7 +1207,7 @@ public class ChartOfAccounts {
 
 	}
 
-	public boolean isClosedForPosting(final String date) throws TaskFailedException {
+	public boolean isClosedForPosting(final String date) {
 		boolean isClosed = true;
 		String chkqry = null;
 		Query psmt = null;
@@ -1243,5 +1243,17 @@ public class ChartOfAccounts {
 		}
 		return isClosed;
 	}
+	
+	  public boolean checkClosedPeriods(final String vDate) throws Exception, ValidationException {
+               try {
+                       if (!validPeriod(vDate))
+                               throw new TaskFailedException(
+                                               "Voucher Date is not within an open period. Please use an open period for posting");
+               } catch (final Exception e) {
+                       LOGGER.error(e.getMessage(), e);
+                       throw new TaskFailedException(e.getMessage());
+               }
+               return true;
+       }
 
 }

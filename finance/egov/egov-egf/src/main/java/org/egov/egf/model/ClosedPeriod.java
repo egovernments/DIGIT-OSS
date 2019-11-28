@@ -48,9 +48,12 @@
 
 package org.egov.egf.model;
 
-import org.egov.commons.CFinancialYear;
+import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -59,12 +62,22 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import java.util.Date;
+import javax.persistence.Transient;
+
+import org.egov.commons.CFinancialYear;
+import org.egov.enums.CloseTypeEnum;
+import org.egov.infra.persistence.entity.AbstractAuditable;
+import org.hibernate.envers.AuditOverride;
+import org.hibernate.envers.AuditOverrides;
+import org.hibernate.envers.Audited;
 
 @Entity
 @Table(name = "closedperiods")
 @SequenceGenerator(name = ClosedPeriod.SEQ, sequenceName = ClosedPeriod.SEQ, allocationSize = 1)
-public class ClosedPeriod implements Comparable<ClosedPeriod> {
+@AuditOverrides({ @AuditOverride(forClass = AbstractAuditable.class, name = "lastModifiedBy"),
+        @AuditOverride(forClass = AbstractAuditable.class, name = "lastModifiedDate") })
+@Audited
+public class ClosedPeriod extends AbstractAuditable {
 
     private static final long serialVersionUID = 1L;
     public static final String SEQ = "seq_closedperiods";
@@ -74,44 +87,81 @@ public class ClosedPeriod implements Comparable<ClosedPeriod> {
     private Long id = null;
 
     private Date startingDate;
+    @Transient
+    private int fromDate;
+    @Transient
+    private int toDate;
 
     private Date endingDate;
 
     private Boolean isClosed = false;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "closetype")
+    private CloseTypeEnum closeType;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "financialYearId", nullable = false)
-    private CFinancialYear cFinancialYearId;
+    private CFinancialYear financialYear;
 
-    public Long getId() {
-        return id;
+    private String remarks;
+
+    public int getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(int fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public int getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(int toDate) {
+        this.toDate = toDate;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(final String remarks) {
+        this.remarks = remarks;
     }
 
     public Boolean getIsClosed() {
         return isClosed;
     }
 
-    public CFinancialYear getcFinancialYearId() {
-        return cFinancialYearId;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setIsClosed(Boolean isClosed) {
+    public void setIsClosed(final Boolean isClosed) {
         this.isClosed = isClosed;
     }
 
-    public void setcFinancialYearId(CFinancialYear cFinancialYearId) {
-        this.cFinancialYearId = cFinancialYearId;
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+   
+    @Override
+    public void setId(final Long id) {
+        this.id = id;
+    }
+
+    public CFinancialYear getFinancialYear() {
+        return financialYear;
+    }
+
+    public void setFinancialYear(CFinancialYear financialYear) {
+        this.financialYear = financialYear;
     }
 
     public Date getStartingDate() {
         return startingDate;
     }
 
-    public void setStartingDate(Date startingDate) {
+    public void setStartingDate(final Date startingDate) {
         this.startingDate = startingDate;
     }
 
@@ -119,19 +169,24 @@ public class ClosedPeriod implements Comparable<ClosedPeriod> {
         return endingDate;
     }
 
-    public void setEndingDate(Date endingDate) {
+    public void setEndingDate(final Date endingDate) {
         this.endingDate = endingDate;
     }
 
-    public int compareTo(ClosedPeriod p) {
-        if (p.getcFinancialYearId().getFinYearRange()
-                .compareTo(this.getcFinancialYearId().getFinYearRange()) > 0) {
+    public CloseTypeEnum getCloseType() {
+        return closeType;
+    }
+
+    public void setCloseType(CloseTypeEnum closeType) {
+        this.closeType = closeType;
+    }
+
+    public int compareTo(final ClosedPeriod p) {
+        if (p.getFinancialYear().getFinYearRange().compareTo(getFinancialYear().getFinYearRange()) > 0)
             return -1;
-        } else if (p.getcFinancialYearId().getFinYearRange()
-                .compareTo(this.getcFinancialYearId().getFinYearRange()) < 0)
+        else if (p.getFinancialYear().getFinYearRange().compareTo(getFinancialYear().getFinYearRange()) < 0)
             return 1;
-        else {
+        else
             return 0;
-        }
     }
 }

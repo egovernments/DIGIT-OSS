@@ -130,6 +130,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.exilant.GLEngine.ChartOfAccounts;
 import com.exilant.eGov.src.transactions.VoucherTypeForULB;
 
 @Results({
@@ -220,10 +221,13 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
     protected DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
     DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
     DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    private boolean finanicalYearAndClosedPeriodCheckIsClosed=false;
     SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
     Date date;
     @Autowired
     FinanceDashboardService finDashboardService;
+    @Autowired
+    private ChartOfAccounts chartOfAccounts;
 
     @Override
     public StateAware getModel() {
@@ -412,6 +416,15 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
         boolean ismodifyJv = false;
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("voucherHeader==" + voucherHeader);
+        
+        if(voucherHeader.getVoucherDate()!=null) {
+            Date VoucherDate=voucherHeader.getVoucherDate();
+           if( chartOfAccounts.isClosedForPosting(df.format(VoucherDate))){
+               finanicalYearAndClosedPeriodCheckIsClosed=true;
+           }
+                   
+            
+        }
         /*
          * if (voucherHeader != null && voucherHeader.getState() != null) if (!validateOwner(voucherHeader.getState())) { final
          * List<ValidationError> errors = new ArrayList<ValidationError>(); errors.add(new ValidationError("exp", "Invalid User"
@@ -1302,6 +1315,13 @@ public class PreApprovedVoucherAction extends GenericWorkFlowAction {
 
     public Map<String, Object> getBillDetails() {
         return billDetails;
+    }
+    public boolean isFinanicalYearAndClosedPeriodCheckIsClosed() {
+        return finanicalYearAndClosedPeriodCheckIsClosed;
+    }
+
+    public void setFinanicalYearAndClosedPeriodCheckIsClosed(boolean finanicalYearAndClosedPeriodCheckIsClosed) {
+        this.finanicalYearAndClosedPeriodCheckIsClosed = finanicalYearAndClosedPeriodCheckIsClosed;
     }
 
     public void setBillDetails(final Map<String, Object> billDetails) {

@@ -46,34 +46,79 @@
   ~
   --%>
 
+
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
-<form:form role="form" action="/services/EGF/closedperiod/update"
-	modelAttribute="closedPeriod" id="closedPeriodform"
-	cssClass="form-horizontal form-groups-bordered"
-	enctype="multipart/form-data">
-	<%@ include file="closedperiod-form.jsp"%>
-	<input type="hidden" name="closedPeriod"
-		value="${closedPeriod.financialYear.id}" />
-	</div>
-	</div>
-	</div>
-	</div>
-	<div class="form-group">
-		<div class="text-center">
-			<button type='submit' class='btn btn-primary' id="buttonSubmit">
-				<spring:message code='lbl.update' />
-			</button>
-			<a href='javascript:void(0)' class='btn btn-default'
-				onclick='self.close()'><spring:message code='lbl.close' /></a>
-		</div>
-	</div>
-</form:form>
-<script>
-	$('#buttonSubmit').click(function(e) {
-		if ($('form').valid()) {
-		} else {
-			e.preventDefault();
-		}
-	});
-</script>
+<div class="main-content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="panel panel-primary" data-collapsed="0">
+				<div class="panel-heading">
+					<div class="panel-title">Closed Period</div>
+				</div>
+				<div class="panel-body custom">
+					<div class="row add-border">
+						<div class="col-xs-3 add-margin">
+							<spring:message code="lbl.cfinancialyearid" />
+						</div>
+						<div class="col-sm-3 add-margin view-content">
+							${closedPeriod.financialYear.finYearRange}</div>
+						<div class="col-xs-3 add-margin">
+							<spring:message code="lbl.closetype" />
+						</div>
+						<div class="col-sm-3 add-margin view-content">
+							<c:choose>
+								<c:when test="${closedPeriod.closeType=='SOFTCLOSE'}">
+									<c:out value="Soft Close" />
+								</c:when>
+								<c:otherwise>
+									<c:out value="Hard Close" />
+								</c:otherwise>
+							</c:choose>
+
+						</div>
+					</div>
+					<div class="row add-border">
+						<div class="col-xs-3 add-margin">
+							<spring:message code="lbl.startingdate" />
+						</div>
+						<div class="col-sm-3 add-margin view-content">
+							<fmt:formatDate pattern="dd/MM/yyyy"
+								value="${closedPeriod.startingDate}" />
+						</div>
+						<div class="col-xs-3 add-margin">
+							<spring:message code="lbl.endingdate" />
+						</div>
+						<div class="col-sm-3 add-margin view-content">
+							<fmt:formatDate pattern="dd/MM/yyyy"
+								value="${closedPeriod.endingDate}" />
+						</div>
+
+					</div>
+					<div class="row add-border">
+						<div class="col-xs-3 add-margin">
+							<spring:message code="lbl.remarks" />
+						</div>
+						<div class="col-sm-3 add-margin view-content">
+							${closedPeriod.remarks}</div>
+
+						<div class="col-xs-3 add-margin">
+							<spring:message code="lbl.isclose" />
+						</div>
+						<div class="col-sm-3 add-margin view-content">
+							${closedPeriod.isClosed}</div>
+
+					</div>
+
+					<input type="hidden" name="closedPeriod" value="${closedPeriod.id}" />
+					<input type="hidden" name="closedPeriod"
+						value="${closedPeriod.financialYear.id}" />
+
+					<div class="row text-center">
+						<div class="add-margin">
+							<a href="javascript:void(0)" class="btn btn-default"
+								onclick="window.close();">Close</a>
+						</div>
+					</div>
+				</div>
+			</div>

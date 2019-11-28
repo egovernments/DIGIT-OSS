@@ -60,6 +60,7 @@ import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.exception.ApplicationException;
 import org.egov.infstr.services.PersistenceService;
+import org.egov.services.closeperiod.ClosedPeriodService;
 import org.egov.utils.Constants;
 import org.egov.utils.FinancialConstants;
 import org.hibernate.Query;
@@ -76,6 +77,7 @@ public class VoucherSearchUtil {
 	private static final Logger LOGGER = Logger.getLogger(VoucherSearchUtil.class);
 	@Autowired
 	private FinancialYearDAO financialYearDAO;
+	
 
 	public List<CVoucherHeader> search(final CVoucherHeader voucherHeader, final Date fromDate, final Date toDate,
 			final String mode) throws ApplicationException, ParseException {
@@ -308,6 +310,12 @@ public class VoucherSearchUtil {
 	public boolean validateFinancialYearForPosting(final Date fromDate, final Date toDate) {
 		return financialYearDAO.isFinancialYearActiveForPosting(fromDate, toDate);
 	}
+	
+	public boolean validateClosedPeriod(final Date fromDate, final Date toDate) {
+            return financialYearDAO.isClosedPeriod(fromDate, toDate);
+    }
+	
+	
 
 	public void setFinancialYearDAO(final FinancialYearDAO financialYearDAO) {
 		this.financialYearDAO = financialYearDAO;

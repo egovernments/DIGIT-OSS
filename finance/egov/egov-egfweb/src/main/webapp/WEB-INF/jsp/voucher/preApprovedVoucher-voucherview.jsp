@@ -115,7 +115,10 @@ function onSubmit()
 		<s:token />
 		<font style='color: red;'>
 			<p class="error-block" id="lblError" style="font: bold"></p>
-		</font>
+				<s:if test="%{finanicalYearAndClosedPeriodCheckIsClosed}">
+					<s:text name="financialyear.closedperiod.closed" ></s:text>
+				</s:if>
+				</font>
 		<span class="mandatory1"> <s:actionerror /> <s:fielderror />
 			<s:actionmessage />
 		</span>
@@ -236,12 +239,14 @@ function onSubmit()
 						</s:iterator>
 					</table>
 				</div>
-
+				<s:if test="%{!finanicalYearAndClosedPeriodCheckIsClosed}">
 				<div id="wfHistoryDiv">
 					<jsp:include page="../workflow/workflowHistory.jsp" />
 				</div>
 				<%@ include file='../workflow/commonWorkflowMatrix.jsp'%>
 				<%@ include file='../workflow/commonWorkflowMatrix-button.jsp'%>
+				</s:if>
+				
 
 
 			</div>
@@ -254,8 +259,14 @@ function onSubmit()
 					onclick="printEJV()" />
 			</s:if>
 			<s:else>
+			<s:if test="%{!finanicalYearAndClosedPeriodCheckIsClosed}">
 				<input type="button" class="button" id="print" value="Print Preview"
 					action="journalVoucherPrint" method="print" onclick="printJV()" />
+					</s:if>
+					<s:else>
+					<input type="button" name="button2" id="button2" value="Close"
+						class="button" onclick="window.parent.postMessage('close','*');window.close();" />
+					</s:else>
 			</s:else>
 
 		</div>

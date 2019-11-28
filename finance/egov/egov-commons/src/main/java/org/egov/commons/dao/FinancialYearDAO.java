@@ -80,6 +80,8 @@ public interface FinancialYearDAO {
     public CFinancialYear getPreviousFinancialYearByDate(Date date);
 
     public boolean isFinancialYearActiveForPosting(Date fromDate, Date toDate);
+    
+    public boolean isClosedPeriod(Date fromDate, Date toDate);
 
     public CFinancialYear getNextFinancialYearByDate(Date date);
 

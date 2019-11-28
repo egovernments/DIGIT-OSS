@@ -49,12 +49,31 @@
 package org.egov.repository.closeperiod;
 
 
+import java.util.Date;
+import java.util.List;
+
+import org.egov.commons.CFinancialYear;
 import org.egov.egf.model.ClosedPeriod;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
 @Repository 
 public interface ClosedPeriodRepository extends JpaRepository<ClosedPeriod,Long> {
-	ClosedPeriod findByCFinancialYearId(Long id);
+	ClosedPeriod findByFinancialYearId(Long id);
+	
+	/*@Query("select from closedperiods closedperi0_ left outer join financialyear cfinancial1_ on " + 
+	        "closedperi0_.financialYearId=cfinancial1_.id where cfinancial1_.id=36 and closedperi0_.isClosed=true " + 
+	        "and (closedperi0_.startingDate between '2019-04-01' and '2020-03-31' or closedperi0_.endingDate between ':' " + 
+	        "and '2020-03-31')")*/
+	
+	@Query("from ClosedPeriod cp where cp.financialYear.id=:financialYearId and cp.isClosed=true and (cp.startingDate between :startingDate and :endingDate or cp.endingDate between :startingDate2 and :endingDate2)")
+	 List<ClosedPeriod> getAllClosedPeriods(@Param("financialYearId") Long financialYearId ,@Param("startingDate")Date
+	      startingDate,@Param("endingDate")Date endingDate,@Param("startingDate2")Date startingDate2,@Param("endingDate2")Date endingDate2);
+	//List<ClosedPeriod> findByFinancialYearIdAndIsClosedTrueAndStartingDateBetweenOrEndingDateBetween(Long financialYearId,Date startingDate1,Date endingDate1,Date startingDate2,Date endingDate2);
+
+ 
+     
 }

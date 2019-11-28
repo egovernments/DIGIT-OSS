@@ -53,6 +53,7 @@ package org.egov.egf.web.actions.payment;
 import com.exilant.eGov.src.transactions.VoucherTypeForULB;
 import com.opensymphony.xwork2.validator.annotations.Validations;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -119,11 +120,21 @@ public class BasePaymentAction extends BaseVoucherAction {
 
     protected String action = "";
     protected String paymentid = "";
+    private Date voucherDate;
     private final String BILLPAYMENT = "billpayment";
     private final String DIRECTBANKPAYMENT = "directbankpayment";
     private final String REMITTANCEPAYMENT = "remitRecovery";
     public static final String ARF_TYPE = "Contractor";
     private String bankBalanceCheck = "";
+    protected boolean finanicalYearAndClosedPeriodCheckIsClosed=false;
+
+    public boolean isFinanicalYearAndClosedPeriodCheckIsClosed() {
+        return finanicalYearAndClosedPeriodCheckIsClosed;
+    }
+
+    public void setFinanicalYearAndClosedPeriodCheckIsClosed(boolean finanicalYearAndClosedPeriodCheckIsClosed) {
+        this.finanicalYearAndClosedPeriodCheckIsClosed = finanicalYearAndClosedPeriodCheckIsClosed;
+    }
 
     protected static final String ACTIONNAME = "actionname";
     protected boolean canCheckBalance = false;
@@ -188,6 +199,7 @@ public class BasePaymentAction extends BaseVoucherAction {
         } else
             return false;
     }
+    
     /*
      * This api is to check bank balance and allow to create bill based on appconfig values like mandatory, warning, none.
      */

@@ -50,7 +50,6 @@ jQuery('#btnsearch').click(function(e) {
 
 	callAjaxSearch();
 });
-
 function getFormData($form) {
 	var unindexed_array = $form.serializeArray();
 	var indexed_array = {};
@@ -94,8 +93,79 @@ function callAjaxSearch() {
 					"data" : "Financial Year",
 					"sClass" : "text-left"
 				}, {
-					"data" : "Closed",
+					"data" : "startingDate",
 					"sClass" : "text-left"
-				} ]
+				},
+				{
+					"data" : "endingDate",
+					"sClass" : "text-left"
+				},
+				{
+					"data" : "closeType",
+					"sClass" : "text-left"
+				}]
 			});
 }
+
+function compareDate(dt1, dt2){			
+	/*******		Return Values [0 if dt1=dt2], [1 if dt1<dt2],  [-1 if dt1>dt2]     *******/
+	var d1, m1, y1, d2, m2, y2, ret;
+	dt1 = dt1.split('/');
+	dt2 = dt2.split('/');
+	ret = (eval(dt2[2])>eval(dt1[2])) ? 1 : (eval(dt2[2])<eval(dt1[2])) ? -1 : (eval(dt2[1])>eval(dt1[1])) ? 1 : (eval(dt2[1])<eval(dt1[1])) ? -1 : (eval(dt2[0])>eval(dt1[0])) ? 1 : (eval(dt2[0])<eval(dt1[0])) ? -1 : 0 ;										
+	return ret;
+}
+
+/*function validateStartDate() {
+	var startDate = document.getElementById('startingDate').value;
+	var finYearStartDate = document.getElementById('finYearStartDate').value;
+	var currDate = new Date();
+	var currentDate = currDate.getDate() + "/" + (currDate.getMonth()+1) + "/" + currDate.getFullYear() ;
+	To check whether Start Date is Greater than End Date
+	if(startDate!=finYearStartDate){
+		if( compareDate(formatDate6(finYearStartDate),formatDate6(startDate)) == -1 )
+		{
+			bootbox.alert('Enter valid Start Date');
+			document.getElementById('endingDate').value='';
+			document.getElementById('endingDate').focus();
+			return false;
+		}
+	}
+	return true;
+}*/
+
+function validateEndDate(event) {
+	var fromdate = parseInt(document.getElementById('startingDate').value);
+	var todate = parseInt(document.getElementById('endingDate').value);
+	//var targetId = this.id
+	var endofmonth= 3;
+	if(fromdate <= endofmonth ){
+		if(fromdate > todate){
+			bootbox.alert("From period should be prior or same as that of till period.");
+			document.getElementById('startingDate').value=0;
+			console.log(this.id);
+			document.getElementById('endingDate').value=0;
+		}else if(todate>endofmonth){
+			bootbox.alert(" From period should be prior or same as that of till period.");
+			document.getElementById('startingDate').value=0;
+			document.getElementById('endingDate').value=0;
+
+		}
+	}else{
+		if(endofmonth < todate && todate < fromdate){
+			bootbox.alert("From period should be prior or same as that of till period.");
+			document.getElementById('startingDate').value=0;
+			document.getElementById('endingDate').value=0;
+		}
+	}
+}
+
+/*function formatDate6(dt){
+	if(dt==null || dt==''  || dt=="" )return '';
+	var array = dt.split("/");
+	var mon=array[1];
+	var day=array[0];
+	var year=array[2].substring(0,4);			
+	dt = day+"/"+mon+"/"+year;			
+	return dt;	
+}*/

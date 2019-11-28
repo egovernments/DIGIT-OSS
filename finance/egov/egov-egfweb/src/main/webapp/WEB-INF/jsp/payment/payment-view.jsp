@@ -106,9 +106,16 @@ function openVoucher(vid)
 			<jsp:include page="../budget/budgetHeader.jsp">
 				<jsp:param name="heading" value="Bill Payment View" />
 			</jsp:include>
-			<font style='color: red;'>
+			
+			<font style='color: red;' size="2">
 				<p id="lblError" style="font: bold"></p>
-			</font>
+				
+			<s:if test="%{finanicalYearAndClosedPeriodCheckIsClosed}">
+				<s:text name="financialyear.closedperiod.closed" ></s:text>
+				</s:if>
+				</font>
+			
+			
 			<span class="mandatory1"> <s:actionerror /> <s:fielderror /></span>
 			<span style="color: green"><s:actionmessage /></span>
 			<div class="formmainbox">
@@ -444,11 +451,19 @@ function openVoucher(vid)
 			<div class="buttonbottom" id="buttondiv">
 				<s:hidden name="paymentid" value="%{paymentheader.id}" />
 				<s:hidden name="actionname" id="actionName" value="%{action}" />
+				<s:hidden name="finanicalYearAndClosedPeriodCheckIsClosed" id="finanicalYearAndClosedPeriodCheckIsClosed" value="%{finanicalYearAndClosedPeriodCheckIsClosed}" />
 				<s:if test="%{mode!='view'}">
+				<s:if test="%{!finanicalYearAndClosedPeriodCheckIsClosed}">
 					<%@ include file='../payment/commonWorkflowMatrix.jsp'%>
 					<%@ include file='../workflow/commonWorkflowMatrix-button.jsp'%>
 					<s:submit cssClass="button" id="printPreview" value="Print Preview"
 						onclick="printVoucher()" />
+				</s:if>
+				<s:else>
+				<input type="button" name="button2" id="button2" value="Close"
+						class="button" onclick="window.parent.postMessage('close','*');window.close();" />
+				</s:else>
+				
 				</s:if>
 				<s:else>
 					<s:submit cssClass="button" id="printPreview" value="Print Preview"

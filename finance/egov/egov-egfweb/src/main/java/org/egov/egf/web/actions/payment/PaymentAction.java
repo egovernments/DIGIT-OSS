@@ -111,7 +111,9 @@ import org.egov.utils.VoucherHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.exilant.GLEngine.ChartOfAccounts;
 import com.exilant.eGov.src.transactions.VoucherTypeForULB;
+import com.exilant.exility.common.TaskFailedException;
 import com.opensymphony.xwork2.validator.annotations.Validation;
 
 @ParentPackage("egov")
@@ -221,7 +223,9 @@ public class PaymentAction extends BasePaymentAction {
     DateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
     Date date;
-
+    @Autowired
+    private ChartOfAccounts chartOfAccounts;
+ 
     public PaymentAction() {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("creating PaymentAction...");
@@ -1083,7 +1087,7 @@ public class PaymentAction extends BasePaymentAction {
     @ValidationErrorPage(value = VIEW)
     @SkipValidation
     @Action(value = "/payment/payment-sendForApproval")
-    public String sendForApproval() {
+    public String sendForApproval() throws TaskFailedException {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Starting sendForApproval...");
         if (paymentheader.getId() == null)
@@ -1107,6 +1111,7 @@ public class PaymentAction extends BasePaymentAction {
             advanceRequisitionList.addAll(paymentActionHelper.getAdvanceRequisitionDetails(paymentheader));
             return "advancePaymentView";
         }
+        
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed sendForApproval.");
         populateDepartmentName();
@@ -1143,6 +1148,14 @@ public class PaymentAction extends BasePaymentAction {
             LOGGER.info("defaultDept in vew : " + getDefaultDept());
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Completed view.");
+        if(paymentheader.getVoucherheader().getVoucherDate()!=null) {
+            Date voucherDate=paymentheader.getVoucherheader().getVoucherDate();
+           if( chartOfAccounts.isClosedForPosting(sdf.format(voucherDate))){
+               finanicalYearAndClosedPeriodCheckIsClosed=true;
+           }
+                   
+            
+        }
         return VIEW;
     }
 

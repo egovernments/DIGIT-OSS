@@ -49,6 +49,9 @@ package org.egov.commons;
 
 import org.egov.infra.persistence.entity.AbstractAuditable;
 import org.egov.infra.persistence.validator.annotation.Unique;
+import org.hibernate.envers.AuditOverride;
+import org.hibernate.envers.AuditOverrides;
+import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -74,6 +77,9 @@ import java.util.List;
 @Table(name = "financialyear")
 @Unique(id = "id", tableName = "financialyear", fields = { "finYearRange" }, columnName = { "financialyear" }, enableDfltMsg = true)
 @SequenceGenerator(name = CFinancialYear.SEQ_CFINANCIALYEAR, sequenceName = CFinancialYear.SEQ_CFINANCIALYEAR, allocationSize = 1)
+@AuditOverrides({ @AuditOverride(forClass = AbstractAuditable.class, name = "lastModifiedBy"),
+    @AuditOverride(forClass = AbstractAuditable.class, name = "lastModifiedDate") })
+@Audited
 public class CFinancialYear extends AbstractAuditable {
 
     private static final long serialVersionUID = -1563670460427134487L;

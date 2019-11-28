@@ -53,31 +53,101 @@
 				<div class="panel-heading">
 					<div class="panel-title">Closed Period</div>
 				</div>
+				 <spring:hasBindErrors name="closedPeriod">
+        <div class="alert alert-danger" style="margin-top: 20px; margin-bottom: 10px;">
+            <form:errors path="*"/>
+            <br/>
+        </div>
+    </spring:hasBindErrors>
 				<div class="panel-body">
-
+					<input type="hidden" value="${startingDate}" id="finYearStartDate" />
 					<div class="form-group">
 
 						<label class="col-sm-3 control-label text-right"><spring:message
-								code="lbl.cfinancialyearid" /> </label>
+								code="lbl.cfinancialyearid" /><span class="mandatory"></span> </label>
 						<div class="col-sm-3 add-margin">
-							<form:select path="cFinancialYearId" id="cFinancialYearId"
+							<form:select path="financialYear" id="financialYear"
 								cssClass="form-control" cssErrorClass="form-control error"
-								style="pointer-events: none; cursor: default;">
+								required="required">
 								<form:option value="">
 									<spring:message code="lbl.select" />
 								</form:option>
 								<form:options items="${cFinancialYears}" itemValue="id"
 									itemLabel="finYearRange" />
 							</form:select>
-							<form:errors path="cFinancialYearId" cssClass="error-msg" />
+							<form:errors path="financialYear" cssClass="error-msg" />
 						</div>
-						<label class="col-sm-3 control-label text-right"><spring:message
+						<!-- <label class="col-sm-3 control-label text-right"><spring:message
 								code="lbl.isclosed" /> </label>
 						<div class="col-sm-3 add-margin">
 							<form:checkbox path="isClosed" />
 							<form:errors path="isClosed" cssClass="error-msg" />
+						</div> -->
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label text-right"><spring:message
+								code="lbl.frommonth" /> <span class="mandatory"></span> </label>
+						<div class="col-sm-3 add-margin">
+							<form:select path="fromDate" id="startingDate"
+								cssClass="form-control" cssErrorClass="form-control error"
+								required="required" onchange="validateEndDate();">
+								<form:option value="0">
+									<spring:message code="lbl.select" />
+								</form:option>
+								<form:options items="${getAllMonths}" 
+									 />
+							</form:select>
+							<form:errors path="fromDate" cssClass="error-msg" />
+						</div>
+						<label class="col-sm-3 control-label text-right"><spring:message
+								code="lbl.tillmonth" /> <span class="mandatory"></span> </label>
+						<div class="col-sm-3 add-margin">
+						<form:select path="toDate" id="endingDate"
+								cssClass="form-control" cssErrorClass="form-control error"
+								required="required" onchange="validateEndDate();">
+								<form:option value="0">
+									<spring:message code="lbl.select" />
+								</form:option>
+								<form:options items="${getAllMonths}" 
+									 />
+							</form:select>
+							<form:errors path="toDate" cssClass="error-msg" />
 						</div>
 					</div>
-					<input type="hidden" name="closedPeriod"
-						value="${closedPeriod.cFinancialYearId.id}" /> <input
-						type="hidden" name="closedPeriod" value="${closedPeriod.isClosed}" />
+
+					<div class="form-group">
+
+						<label class="col-sm-3 control-label"><spring:message
+								code="lbl.closetype" /></label>
+
+						<div class="col-sm-2 col-xs-12 add-margin">
+
+							<div class="radio">
+								<label><form:radiobutton path="closeType" id="closeType"
+										value="SOFTCLOSE" checked="checked" />SoftClose</label>
+							</div>
+
+						</div>
+						<div class="col-sm-2 col-xs-12 add-margin">
+
+							<div class="radio">
+								<label><form:radiobutton path="closeType" id="closeType"
+										value="HARDCLOSE"  />HardClose</label>
+							</div>
+
+						</div>
+						<form:errors path="closeType" cssClass="error-msg" />
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label text-right"><spring:message
+								code="lbl.remarks" /> <span class="mandatory"></span> </label>
+						<div class="col-sm-3 add-margin">
+							<form:textarea path="remarks" type="text" placeholder=""
+								autocomplete="off" class="form-control low-width"
+								maxlength="250" />
+							<form:errors path="remarks" cssClass="error-msg" />
+						</div>
+						<input type="hidden" name="closedPeriod"
+							value="${closedPeriod.financialYear.id}" /> <input
+							type="hidden" name="closedPeriod"
+							value="${closedPeriod.isClosed}" />

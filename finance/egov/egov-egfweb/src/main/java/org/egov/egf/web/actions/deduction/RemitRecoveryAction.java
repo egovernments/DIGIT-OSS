@@ -200,6 +200,7 @@ public class RemitRecoveryAction extends BasePaymentAction {
     private ScriptService scriptService;
     @Autowired
     private PaymentActionHelper paymentActionHelper;
+    @Autowired
     private ChartOfAccounts chartOfAccounts;
     @Autowired
     private EgovMasterDataCaching masterDataCache;
@@ -554,6 +555,12 @@ public class RemitRecoveryAction extends BasePaymentAction {
          */
         showApprove = true;
         voucherHeader.setId(paymentheader.getVoucherheader().getId());
+        if(paymentheader.getVoucherheader().getVoucherDate()!=null) {
+            Date voucherDates=paymentheader.getVoucherheader().getVoucherDate();
+           if( chartOfAccounts.isClosedForPosting(df.format(voucherDates))){
+               finanicalYearAndClosedPeriodCheckIsClosed=true;
+           }
+        }
         prepareForViewModifyReverse();
         // loadApproverUser(voucherHeader.getType());
         return VIEW;

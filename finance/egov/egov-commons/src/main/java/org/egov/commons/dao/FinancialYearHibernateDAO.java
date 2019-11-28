@@ -237,7 +237,31 @@ public class FinancialYearHibernateDAO implements FinancialYearDAO {
         Query query = getCurrentSession()
                 .createQuery(
                         ""
-                                + " from CFinancialYear cfinancialyear where   cfinancialyear.isActiveForPosting=false and cfinancialyear.startingDate <=:sDate and cfinancialyear.endingDate >=:eDate  ");
+                                + " from CFinancialYear cfinancialyear where cfinancialyear.isActiveForPosting=false and cfinancialyear.startingDate <=:sDate and cfinancialyear.endingDate >=:eDate  ");
+        query.setDate("sDate", fromDate);
+        query.setDate("eDate", toDate);
+        ArrayList list = (ArrayList) query.list();
+        if (list.size() > 0)
+            return false;
+        else
+            return true;
+
+    }
+    
+    /**
+     * @param fromDate
+     * @param toDate
+     *            will will return false if any close period is not closed
+     *             within given date range
+     */
+    public boolean isClosedPeriod(Date fromDate, Date toDate) {
+
+        logger.info("Obtained session");
+        String result = "";
+        Query query = getCurrentSession()
+                .createQuery(
+                        ""
+                                + " from ClosedPeriod cp where cp.isClosed=true and cp.startingDate <=:sDate and cp.endingDate >=:eDate  ");
         query.setDate("sDate", fromDate);
         query.setDate("eDate", toDate);
         ArrayList list = (ArrayList) query.list();

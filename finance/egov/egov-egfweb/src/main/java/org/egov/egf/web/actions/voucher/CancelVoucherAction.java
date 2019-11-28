@@ -100,6 +100,9 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.exilant.GLEngine.ChartOfAccounts;
+import com.exilant.exility.common.TaskFailedException;
+
 @ParentPackage("egov")
 @Results({ @Result(name = CancelVoucherAction.SEARCH, location = "cancelVoucher-search.jsp") })
 public class CancelVoucherAction extends BaseFormAction {
@@ -115,6 +118,7 @@ public class CancelVoucherAction extends BaseFormAction {
 	private static final Logger LOGGER = Logger.getLogger(CancelVoucherAction.class);
 	public static final Locale LOCALE = new Locale("en", "IN");
 	public static final SimpleDateFormat DDMMYYYYFORMATS = new SimpleDateFormat("dd/MM/yyyy", LOCALE);
+	private static final String DD_MMM_YYYY = "dd-MMM-yyyy";
 	@Autowired
 	private CancelBillAndVoucher cancelBillAndVoucher;
 	private final List<String> headerFields = new ArrayList<String>();
@@ -126,6 +130,7 @@ public class CancelVoucherAction extends BaseFormAction {
 	private Date fromDate;
 	private Date toDate;
 	private Fund fundId;
+	private String voucherNumber;
 	private Long[] selectedVhs;
 	protected static final String SEARCH = "search";
 	Integer loggedInUser;
@@ -135,6 +140,9 @@ public class CancelVoucherAction extends BaseFormAction {
 	List<String> voucherTypes = VoucherHelper.VOUCHER_TYPES;
 	Map<String, List<String>> voucherNames;
 	private FinancialYearDAO financialYearDAO;
+	 @Autowired
+	 @Qualifier("chartOfAccounts")
+	private ChartOfAccounts chartOfAccounts;
 
 	@Autowired
 	private AppConfigValueService appConfigValueService;
@@ -189,7 +197,6 @@ public class CancelVoucherAction extends BaseFormAction {
 		voucherHeader.getVouchermis().setDepartmentcode(deptImpl.getCode());
 		voucherSearchList = getVouchersForCancellation();
 		List<org.egov.infra.microservice.models.Department> departments = masterDataCache.get("egi-department");
-		;
 		Map<String, String> depMap = new HashMap<>();
 		for (org.egov.infra.microservice.models.Department department : departments) {
 			depMap.put(department.getCode(), department.getName());
@@ -219,12 +226,22 @@ public class CancelVoucherAction extends BaseFormAction {
 		String voucheerWithNoPayment, allPayment, noChequePaymentQry;
 		String contraVoucherQry;
 		String filterQry = "";
+		if(!voucherNumber.isEmpty()&&voucherNumber!=null ) {
+		    CVoucherHeader vocuHeaders = (CVoucherHeader) persistenceService.find(" from CVoucherHeader vh where vh.voucherNumber = ? and vh.status = 0", voucherNumber);
+		   if(vocuHeaders!=null && vocuHeaders.getVoucherDate()!=null) {
+		    validateBeforeCancel(vocuHeaders);
+		   }
+		} else {
 		final boolean validateFinancialYearForPosting = voucherSearchUtil.validateFinancialYearForPosting(fromDate,
 				toDate);
-		if (!validateFinancialYearForPosting)
+		
+		final boolean validateClosedPeriod = voucherSearchUtil.validateClosedPeriod(fromDate,
+                        toDate);
+		if ((!validateFinancialYearForPosting) || (!validateClosedPeriod) )
 			throw new ValidationException(Arrays.asList(new ValidationError(
 					"Financial Year  Not active for Posting(either year or date within selected date range)",
 					"Financial Year  Not active for Posting(either year or date within selected date range)")));
+		}
 
 		final String filter = voucherSearchUtil.voucherFilterQuery(voucherHeader, fromDate, toDate, "");
 		final String userCond = "";
@@ -380,12 +397,18 @@ public class CancelVoucherAction extends BaseFormAction {
 
 	@SkipValidation
 	public void validateBeforeCancel(final CVoucherHeader voucherObj) {
-		try {
-			financialYearDAO.getFinancialYearByDate(voucherObj.getVoucherDate());
-		} catch (final Exception e) {
-			addActionError("Voucher Cancellation failed for " + voucherObj.getVoucherNumber());
-			throw new ValidationException(Arrays.asList(new ValidationError(e.getMessage(), e.getMessage())));
-		}
+	    final SimpleDateFormat formatter = new SimpleDateFormat(DD_MMM_YYYY);
+	    try {
+            if (chartOfAccounts.isClosedForPosting(formatter.format(voucherObj.getVoucherDate()))) {
+                throw new ValidationException(Arrays.asList(new ValidationError(
+                        "Financial Year  Not active for Posting(either year or date within selected date range)",
+                        "Financial Year  Not active for Posting(either year or date within selected date range)")));
+            }
+        } catch (ValidationException e) {
+            final List<ValidationError> errors = new ArrayList<ValidationError>();
+            errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
+            throw new ValidationException(errors);
+        }
 	}
 
 	@ValidationErrorPage(value = SEARCH)
@@ -393,7 +416,6 @@ public class CancelVoucherAction extends BaseFormAction {
 	@Action(value = "/voucher/cancelVoucher-update")
 	public String update() {
 		CVoucherHeader voucherObj;
-
 		final Date modifiedDate = new Date();
 		if (LOGGER.isDebugEnabled())
 			LOGGER.debug("Inside CancelVoucher| cancelVoucherSubmit | Selected No of Vouchers for cancellation  ="
@@ -486,6 +508,7 @@ public class CancelVoucherAction extends BaseFormAction {
 		if (voucherId != "")
 			addActionMessage(getText("Vouchers Cancelled Succesfully"));
 		return SEARCH;
+                
 	}
 
 	private void cancelBill(final Long vhId) {
@@ -791,5 +814,12 @@ public class CancelVoucherAction extends BaseFormAction {
 	public void setDeptImpl(final Department deptImpl) {
 		this.deptImpl = deptImpl;
 	}
+	public String getVoucherNumber() {
+	        return voucherNumber;
+	 }
+
+	public void setVoucherNumber(String voucherNumber) {
+	        this.voucherNumber = voucherNumber;
+	  }
 
 }

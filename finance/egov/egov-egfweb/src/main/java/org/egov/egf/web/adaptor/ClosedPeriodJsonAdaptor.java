@@ -54,26 +54,39 @@ import com.google.gson.JsonSerializer;
 import org.egov.egf.model.ClosedPeriod;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 
 public class ClosedPeriodJsonAdaptor implements JsonSerializer<ClosedPeriod> {
-	@Override
-	public JsonElement serialize(final ClosedPeriod closedPeriod,
-			final Type type, final JsonSerializationContext jsc) {
-		final JsonObject jsonObject = new JsonObject();
-		if (closedPeriod != null) {
+    @Override
+    public JsonElement serialize(final ClosedPeriod closedPeriod, final Type type, final JsonSerializationContext jsc) {
+        final JsonObject jsonObject = new JsonObject();
+        final SimpleDateFormat dtFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-			if (closedPeriod.getIsClosed() != null)
-				jsonObject.addProperty("Closed", closedPeriod.getIsClosed());
-			else
-				jsonObject.addProperty("closed", "");
-			if (closedPeriod.getcFinancialYearId() != null)
-				jsonObject.addProperty("Financial Year", closedPeriod
-						.getcFinancialYearId().getFinYearRange());
-			else
-				jsonObject.addProperty("financialyear", "");
-			jsonObject.addProperty("id", closedPeriod.getcFinancialYearId()
-					.getId());
-		}
-		return jsonObject;
-	}
+        if (closedPeriod != null) {
+
+            if (closedPeriod.getIsClosed() != null)
+                jsonObject.addProperty("Closed", closedPeriod.getIsClosed());
+            else
+                jsonObject.addProperty("closed", "");
+            if (closedPeriod.getFinancialYear() != null)
+                jsonObject.addProperty("Financial Year", closedPeriod.getFinancialYear().getFinYearRange());
+            else
+                jsonObject.addProperty("financialyear", "");
+            jsonObject.addProperty("id", closedPeriod.getId());
+            if(closedPeriod.getStartingDate()!=null)
+                jsonObject.addProperty("startingDate", dtFormat.format(closedPeriod.getStartingDate()));
+            else 
+                jsonObject.addProperty("startingDate", "");
+            if(closedPeriod.getEndingDate()!=null)
+                jsonObject.addProperty("endingDate", dtFormat.format(closedPeriod.getEndingDate()));
+            else 
+                jsonObject.addProperty("endingDate", "");
+            if(closedPeriod.getCloseType()!=null)
+                jsonObject.addProperty("closeType", closedPeriod.getCloseType().toString());
+            else 
+                jsonObject.addProperty("closeType", "");
+        }
+        
+        return jsonObject;
+    }
 }

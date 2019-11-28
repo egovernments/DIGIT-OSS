@@ -49,14 +49,17 @@
 package org.egov.services.closeperiod;
 
 import org.egov.commons.CFinancialYear;
+import org.egov.commons.Fund;
 import org.egov.commons.service.CFinancialYearService;
 import org.egov.commons.service.FinancialYearService;
 import org.egov.egf.model.ClosedPeriod;
 import org.egov.repository.closeperiod.ClosedPeriodRepository;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -66,122 +69,168 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.Metamodel;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @Transactional(readOnly = true)
 public class ClosedPeriodService {
+    final SimpleDateFormat dtFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-	@Autowired
-	private final ClosedPeriodRepository closedPeriodRepository;
-	private FinancialYearService financialYearService;
-	@Autowired
-	CFinancialYearService cFinancialYearService;
-	@PersistenceContext
-	private EntityManager entityManager;
+    @Autowired
+    private final ClosedPeriodRepository closedPeriodRepository;
+    private FinancialYearService financialYearService;
+    @Autowired
+    CFinancialYearService cFinancialYearService;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-	@Autowired
-	public ClosedPeriodService(
-			final ClosedPeriodRepository closedPeriodRepository) {
-		this.closedPeriodRepository = closedPeriodRepository;
-	}
+    @Autowired
+    public ClosedPeriodService(final ClosedPeriodRepository closedPeriodRepository) {
+        this.closedPeriodRepository = closedPeriodRepository;
+    }
 
-	@Transactional
-	public ClosedPeriod create(final ClosedPeriod closedPeriod) {
-		return closedPeriodRepository.save(closedPeriod); 
-	}
+    @Transactional
+    public ClosedPeriod create(final ClosedPeriod closedPeriod) {
+        closedPeriod.setIsClosed(true);
+        return closedPeriodRepository.save(closedPeriod);
+    }
 
-	@Transactional
-	public ClosedPeriod update(final ClosedPeriod closedPeriod) {
-		List<ClosedPeriod> closePer = findAll();
+    @Transactional
+    public ClosedPeriod update(final ClosedPeriod closedPeriod) {
+        List<ClosedPeriod> closePer = findAll();
 
-		for (ClosedPeriod cp : closePer) {
-			if (cp.getcFinancialYearId().getId() == closedPeriod
-					.getcFinancialYearId().getId())
+        for (ClosedPeriod cp : closePer) {
+            if (cp.getFinancialYear().getId() == closedPeriod.getFinancialYear().getId())
 
-				closedPeriodRepository.delete(cp);
+                closedPeriodRepository.delete(cp);
 
-		}
+        }
 
-		return closedPeriodRepository.save(closedPeriod);
-	}
+        return closedPeriodRepository.save(closedPeriod);
+    }
 
-	@Transactional
-	public void delete(final ClosedPeriod closedPeriod) {
-		closedPeriodRepository.delete(closedPeriod);
+    @Transactional
+    public void delete(final ClosedPeriod closedPeriod) {
+        closedPeriodRepository.delete(closedPeriod);
 
-	}
+    }
 
-	public List<ClosedPeriod> findAll() {
-		return closedPeriodRepository.findAll(new Sort(Sort.Direction.ASC,
-				"cFinancialYearId"));
-	}
+    public List<ClosedPeriod> findAll() {
+        return closedPeriodRepository.findAll(new Sort(Sort.Direction.ASC, "financialYear"));
+    }
 
-	public ClosedPeriod findOne(Long id) {
-		List<ClosedPeriod> closePer = findAll();
-		CFinancialYear c = cFinancialYearService.findOne(id);
-		ClosedPeriod cc = new ClosedPeriod();
+    public ClosedPeriod findOne(Long id) {
+        return closedPeriodRepository.findOne(id);
 
-		for (ClosedPeriod cp : closePer) {
-			if (cp.getcFinancialYearId().getId() == id) {
-				cc.setIsClosed(cp.getIsClosed());
-			}
+    }
 
-		}
+    public List<ClosedPeriod> search(ClosedPeriod closedPeriod) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<ClosedPeriod> createQuery = cb.createQuery(ClosedPeriod.class);
 
-		cc.setcFinancialYearId(c);
-		return cc;
-	}
+        Root<ClosedPeriod> closedPeriods = createQuery.from(ClosedPeriod.class);
+        createQuery.select(closedPeriods);
+        Metamodel m = entityManager.getMetamodel();
+        javax.persistence.metamodel.EntityType<ClosedPeriod> ClosedPeriod_ = m.entity(ClosedPeriod.class);
 
-	public List<ClosedPeriod> search(ClosedPeriod closedPeriod) {
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        if (closedPeriod.getFinancialYear() != null)
+            predicates.add(cb.equal(closedPeriods.get("financialYear"), closedPeriod.getFinancialYear()));
 
-		ClosedPeriod closedPeriodd = new ClosedPeriod();
-		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-		CriteriaQuery<ClosedPeriod> createQuery = cb
-				.createQuery(ClosedPeriod.class);
+        if (closedPeriod.getIsClosed())
+            predicates.add(cb.equal(closedPeriods.get("isclosed"), true));
+        createQuery.where(predicates.toArray(new Predicate[] {}));
+        TypedQuery<ClosedPeriod> query = entityManager.createQuery(createQuery);
+        return query.getResultList();
 
-		Root<ClosedPeriod> closedPeriods = createQuery.from(ClosedPeriod.class);
-		createQuery.select(closedPeriods);
-		Metamodel m = entityManager.getMetamodel();
-		javax.persistence.metamodel.EntityType<ClosedPeriod> ClosedPeriod_ = m
-				.entity(ClosedPeriod.class);
+    }
 
-		List<Predicate> predicates = new ArrayList<Predicate>();
+    public void prepareSartingDateAndEndingDate(final ClosedPeriod closedPeriods) {
 
-		createQuery.where(predicates.toArray(new Predicate[] {}));
-		TypedQuery<ClosedPeriod> query = entityManager.createQuery(createQuery);
+        final String[] year = closedPeriods.getFinancialYear().getFinYearRange().split("-");
 
-		if (closedPeriod.getcFinancialYearId() != null) {
-			ClosedPeriod resultList1 = findOne(closedPeriod
-					.getcFinancialYearId().getId());
-			List<ClosedPeriod> resultList = new ArrayList<ClosedPeriod>();
-			resultList.add(resultList1);
-			return resultList;
+        int fromYear;
+        int toYear;
+        int firstDay = 01;
+        int fromMonth = closedPeriods.getFromDate();
+        int toMonth = closedPeriods.getToDate();
+        Date startingDate = new Date();
+        Date endingDate = new Date();
+        if (closedPeriods.getFromDate() != 0) {
+            if (IntStream.of(1, 2, 3).anyMatch(num -> num == closedPeriods.getFromDate())) {
+                fromYear = Integer.valueOf(year[0]) + 1;
 
-		}
+            } else {
+                fromYear = Integer.valueOf(year[0]);
+            }
+            startingDate = getDateBasedOnDay(fromYear, fromMonth, firstDay, "FIRST");
+        }
+        if (closedPeriods.getToDate() != 0) {
+            if (IntStream.of(1, 2, 3).anyMatch(num -> num == closedPeriods.getToDate())) {
+                toYear = Integer.valueOf(year[0]) + 1;
+            } else {
+                toYear = Integer.valueOf(year[0]);
+            }
+            endingDate = getDateBasedOnDay(toYear, toMonth, firstDay, "LAST");
+        }
+        String sdFormat = dtFormat.format(startingDate);
+        String edFormat = dtFormat.format(endingDate);
 
-		List<ClosedPeriod> resultList = findAll();
+        try {
+            closedPeriods.setStartingDate(dtFormat.parse(sdFormat));
+            closedPeriods.setEndingDate(dtFormat.parse(edFormat));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-		List<CFinancialYear> findAll = cFinancialYearService.findAll();
-		List<Long> finIds = new ArrayList<Long>();
+    }
 
-		for (ClosedPeriod f : resultList) {
-			finIds.add(f.getcFinancialYearId().getId());
-		}
-		for (CFinancialYear f : findAll) {
-			if (finIds.contains(f.getId()))
-				continue;
-			else {
-				ClosedPeriod cp = new ClosedPeriod();
-				cp.setcFinancialYearId(f);
-				resultList.add(cp);
-			}
-		}
-		Collections.sort(resultList);
+    private Date getDateBasedOnDay(int year, int month, int firstDay, String dayType) {
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+        if (dayType.equalsIgnoreCase("LAST")) {
+            calendar.set(year, month - 1, firstDay);
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+            date = calendar.getTime();
 
-		return resultList;
+        } else if (dayType.equalsIgnoreCase("FIRST")) {
+            calendar.set(year, month - 1, firstDay);
+            date = calendar.getTime();
+        }
+        return date;
+    }
 
-	}
+    public void validateClosedPeriods(final ClosedPeriod closedPeriods, BindingResult errors) {
+        final Date startingDate = closedPeriods.getStartingDate();
+        final Date endingDate = closedPeriods.getEndingDate();
+        Long finId = closedPeriods.getFinancialYear().getId();
+        String startDate = dtFormat.format(startingDate);
+        String endDate = dtFormat.format(endingDate);
+        if (closedPeriods.getStartingDate() != null && closedPeriods.getEndingDate() != null) {
+            if (startingDate.after(endingDate)) {
+                errors.reject("msg.startingdate.endingdate.greater", new String[] {}, null);
+            }
+        }
+        List<ClosedPeriod> dateGreaterThanEqualAndIsClosedTrue = closedPeriodRepository
+                .getAllClosedPeriods(finId,startingDate, endingDate,
+                        startingDate, endingDate);
+        if (!dateGreaterThanEqualAndIsClosedTrue.isEmpty()) {
+            errors.reject("msg.startingdate.endingdate.closedperiod", new String[] { startDate, endDate }, null);
+        }
+    }
+    
+
+
 }

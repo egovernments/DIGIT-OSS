@@ -143,4 +143,8 @@ public class CFinancialYearService {
     public CFinancialYear getLatestFinancialYear() {
         return getFinancialYearByDate(new DateTime().withMonthOfYear(4).withDayOfMonth(1).toDate());
     }
+    
+    public List<CFinancialYear> getFinancialYearNotClosedAndActive() {
+        return cFinancialYearRepository.findByIsClosedFalseAndIsActiveForPostingTrueOrderByFinYearRangeDesc();
+    }
 }
