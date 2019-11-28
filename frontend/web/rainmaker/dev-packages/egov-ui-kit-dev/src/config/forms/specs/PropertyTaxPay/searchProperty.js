@@ -3,6 +3,8 @@ import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/acti
 import { CITY } from "egov-ui-kit/utils/endPoints";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import sortBy from "lodash/sortBy";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 const formConfig = {
   name: "searchProperty",
@@ -119,9 +121,13 @@ const formConfig = {
     try {
       let state = store.getState();
       const { cities, citiesByModule } = state.common;
+      const { mohalla } = state.form.searchProperty.fields;
       let tenantId = JSON.parse(getUserInfo()).tenantId;
       const { PT } = citiesByModule;
-      dispatch(setFieldProperty("searchProperty", "houseNumber", "disabled", true));
+      if (!mohalla.value) {
+        dispatch(setFieldProperty("searchProperty", "houseNumber", "disabled", true));
+      }
+
       if (PT) {
         const tenants = PT.tenants;
         const dd = tenants.reduce((dd, tenant) => {
