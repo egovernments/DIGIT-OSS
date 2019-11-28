@@ -15311,6 +15311,51 @@
       "path": "wns",
       "leftIcon": "places:business-center",
       "rightIcon": ""
+    },
+    {
+      "id": 1886,
+      "name": "Dashboard Home",
+      "url": "url",
+      "displayName": "Home",
+      "orderNumber": 2,
+      "parentModule": "dss-dashboard",
+      "enabled": true,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": "Dashboard.Home",
+      "navigationURL": "dashboard",
+      "leftIcon": "places:business-center",
+      "rightIcon": ""
+    },
+    {
+      "id": 1887,
+      "name": "Dashboard Property Tax",
+      "url": "url",
+      "displayName": "Property Tax",
+      "orderNumber": 2,
+      "parentModule": "dss-dashboard",
+      "enabled": true,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": "Dashboard.PropertyTax",
+      "navigationURL": "dashboard/propertytax",
+      "leftIcon": "places:business-center",
+      "rightIcon": ""
+    },
+    {
+      "id": 1888,
+      "name": "Dashboard Home",
+      "url": "url",
+      "displayName": "Tradelicense",
+      "orderNumber": 2,
+      "parentModule": "dss-dashboard",
+      "enabled": true,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": "Dashboard.TradeLicense",
+      "navigationURL": "dashboard/tradelicense",
+      "leftIcon": "places:business-center",
+      "rightIcon": ""
     }
   ]
 }
