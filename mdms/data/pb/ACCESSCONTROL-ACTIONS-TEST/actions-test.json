@@ -15360,7 +15360,7 @@
     {
       "id": 1889,
       "name": "DSS Dashboard config",
-      "url": "/egov-dss/dashboard/getDashboardConfig",
+      "url": "/dashboard-analytics/dashboard/getDashboardConfig",
       "parentModule": "",
       "displayName": "DSS",
       "orderNumber": 0,
@@ -15372,7 +15372,7 @@
     {
       "id": 1890,
       "name": "DSS Dashboard Charts",
-      "url": "/egov-dss/dashboard/getChartV2",
+      "url": "/dashboard-analytics/dashboard/getChartV2",
       "parentModule": "",
       "displayName": "DSS",
       "orderNumber": 0,
