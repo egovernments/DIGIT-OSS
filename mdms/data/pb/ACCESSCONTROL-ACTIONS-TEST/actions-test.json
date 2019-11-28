@@ -15323,7 +15323,7 @@
       "serviceCode": "DSS",
       "code": "null",
       "path": "Dashboard.Home",
-      "navigationURL": "dashboard",
+      "navigationURL": "integration/dss/home",
       "leftIcon": "places:business-center",
       "rightIcon": ""
     },
@@ -15338,7 +15338,7 @@
       "serviceCode": "DSS",
       "code": "null",
       "path": "Dashboard.PropertyTax",
-      "navigationURL": "dashboard/propertytax",
+      "navigationURL": "integration/dss/propertytax",
       "leftIcon": "places:business-center",
       "rightIcon": ""
     },
@@ -15353,7 +15353,7 @@
       "serviceCode": "DSS",
       "code": "null",
       "path": "Dashboard.TradeLicense",
-      "navigationURL": "dashboard/tradelicense",
+      "navigationURL": "integration/dss/tradelicense",
       "leftIcon": "places:business-center",
       "rightIcon": ""
     }
