@@ -26,6 +26,18 @@
                   "type":"selectFromRequestInfo"  
                 },
                 {
+                  "variable": "service-type", 
+                  "value": {
+                    "path": "MODULE_SERVICETYPE"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix":"",   
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
                   "variable": "payerContact", 
                   "value": {
                     "path": "$.mobileNumber"
