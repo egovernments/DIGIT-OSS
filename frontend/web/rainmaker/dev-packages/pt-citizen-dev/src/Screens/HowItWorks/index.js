@@ -70,12 +70,12 @@ class HowItWorks extends Component {
         }
       ]
     },
-    /*   {
-         question: "CS_HOWITWORKS_QUESTION9",
-         answer: [{ text: "CS_HOWITWORKS_ANSWER9" }]
-       }, */
     {
-      question: "CS_HOWITWORKS_QUESTION20",
+      question: "CS_HOWITWORKS_QUESTION9",
+      answer: [{ text: "CS_HOWITWORKS_ANSWER9" }]
+    },
+    {
+      question: "CS_HOWITWORKS_QUESTION10",
       answer: [
         {
           text: "CS_HOWITWORKS_ANSWER10"
@@ -90,10 +90,15 @@ class HowItWorks extends Component {
         }
       ]
     },
-    /*  Commenting for 10 dec release{
-        question: "CS_HOWITWORKS_QUESTION12",
-        answer: [{ text: "" }]
-      }*/
+    {
+      question: "CS_HOWITWORKS_QUESTION12",
+      answer: [{ text: "CS_HOWITWORKS_QUESTION12" }]
+    },
+    {
+      question: "CS_HOWITWORKS_QUESTION13",
+      answer: [{ text: "CS_HOWITWORKS_QUESTION13" }]
+    },
+
   ];
 
   componentDidMount() {
