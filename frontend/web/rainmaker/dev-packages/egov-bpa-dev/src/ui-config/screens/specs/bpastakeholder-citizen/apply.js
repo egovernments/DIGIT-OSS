@@ -7,6 +7,8 @@ import {
   getBoundaryData
 } from "../../../../ui-utils/commons";
 import get from "lodash/get";
+import set from "lodash/set";
+
 import { footer } from "../bpastakeholder/applyResource/footer";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
