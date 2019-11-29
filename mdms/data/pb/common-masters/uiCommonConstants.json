@@ -40,7 +40,7 @@
       "dss": {
         "iframe-routes": {
           "home": {
-            "routePath": "/dashboard",
+            "routePath": "/dashboard/",
             "isOrigin": true
           },
           "propertytax": {
