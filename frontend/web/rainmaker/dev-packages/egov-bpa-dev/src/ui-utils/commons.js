@@ -31,6 +31,7 @@ import {
   setBusinessServiceDataToLocalStorage,
   getMultiUnits
 } from "egov-ui-framework/ui-utils/commons";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -297,6 +298,7 @@ const userAddressConstruct = address => {
 
 export const applyTradeLicense = async (state, dispatch, activeIndex) => {
   try {
+    dispatch(toggleSpinner());
     let queryObject = JSON.parse(
       JSON.stringify(
         get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
@@ -414,6 +416,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         (await httpRequest("post", "/tl-services/v1/BPAREG/_update", "", [], {
           Licenses: queryObject
         }));
+      dispatch(toggleSpinner());
+
       let searchQueryObject = [
         { key: "tenantId", value: queryObject[0].tenantId },
         { key: "applicationNumber", value: queryObject[0].applicationNumber }
@@ -456,6 +460,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         [],
         { Licenses: queryObject }
       );
+      dispatch(toggleSpinner());
 
       dispatch(prepareFinalObject("Licenses", response.Licenses));
       updateownersAddress(dispatch, response);
@@ -466,6 +471,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     return true;
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+    dispatch(toggleSpinner());
+
     console.log(error);
     return false;
   }

@@ -105,13 +105,24 @@ export const callBackForNext = async (state, dispatch) => {
         dispatch
       );
     }
-    // const isLocationValid = validateFields(
-    //   "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children",
-    //   state,
-    //   dispatch
-    // );
 
-    if (!isTradeDetailsValid || !isTradeOrganizationValid) {
+    const isPermanentAddrValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.permanentAddr.children.cardContent.children.tradeDetailsConatiner.children",
+      state,
+      dispatch
+    );
+    const isCommunicationAddrValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner",
+      state,
+      dispatch
+    );
+
+    if (
+      !isTradeDetailsValid ||
+      !isTradeOrganizationValid ||
+      !isPermanentAddrValid ||
+      !isCommunicationAddrValid
+    ) {
       isFormValid = false;
     } else {
       isFormValid = await applyTradeLicense(state, dispatch);
@@ -661,8 +672,8 @@ export const footerReview = (
               },
               roleDefination: {
                 rolePath: "user-info.roles",
-                roles: ["TL_CEMP", "CITIZEN"]
-                // action: "PAY"
+                roles: ["CITIZEN"],
+                action: "PAY"
               }
             },
             cancelButton: {
