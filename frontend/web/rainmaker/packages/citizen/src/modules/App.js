@@ -83,13 +83,15 @@ class App extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    const { route: nextRoute, authenticated } = nextProps;
+    const { route: nextRoute, authenticated, location } = nextProps;
     const { route: currentRoute, history, setRoute } = this.props;
     if (nextRoute && currentRoute !== nextRoute) {
       history.push(nextRoute);
       setRoute("");
     }
-    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink")) {
+    const isWithoutAuthSelfRedirect = location && location.pathname && location.pathname.includes("whitelisted");
+
+    if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect) {
       nextProps.hasLocalisation && this.props.history.replace("/language-selection");
     }
   }
