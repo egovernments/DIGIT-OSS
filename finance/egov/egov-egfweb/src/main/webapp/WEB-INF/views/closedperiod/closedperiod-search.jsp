@@ -48,18 +48,38 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/includes/taglibs.jsp"%>
-<%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn" %>
+<%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn"%>
 <form:form role="form" action="search" modelAttribute="closedPeriod"
 	id="closedPeriodsearchform"
 	cssClass="form-horizontal form-groups-bordered"
 	enctype="multipart/form-data">
+	<%-- <td colspan="5" align="right">
+		<div align="right">
+			<button type="submit" name="submit" id="addnewcloseperiod"
+				class="btn btn-primary"
+				value="Add New Close Period>
+				<spring:message code="lbl.addnewcloseperiod" />
+			</button>
+			</div>
+			</td> --%>
+
 	<div class="main-content">
+		<td colspan="5" align="right">
+			<div align="right">
+				<button type='button' class='btn btn-primary' id="addnewcloseperiod">
+					<i class="fa fa-plus"></i>
+					<spring:message code='lbl.addnewcloseperiod' />
+				</button>
+			</div>
+		</td>
 		<div class="row">
 			<div class="col-md-12">
 				<div class="panel panel-primary" data-collapsed="0">
 					<div class="panel-heading">
 						<div class="panel-title">Search Closed Period</div>
 					</div>
+
+
 					<div class="form-group">
 
 						<label class="col-sm-3 control-label text-right"><spring:message
@@ -86,13 +106,16 @@
 									<spring:message code='lbl.search' />
 								</button>
 								<a href='javascript:void(0)' class='btn btn-default'
-									onclick="window.close();"><spring:message code='lbl.close' /></a>
+									onclick="window.parent.postMessage('close','*');window.close();"><spring:message
+										code='lbl.close' /></a>
 							</div>
+
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 	</div>
 </form:form>
 <div class="row display-hide report-section">
@@ -124,8 +147,10 @@
 	href="<cdn:url value='/resources/global/css/font-icons/entypo/css/entypo.css' context='/services/egi'/>" />
 <link rel="stylesheet"
 	href="<cdn:url value='/resources/global/css/bootstrap/bootstrap-datepicker.css' context='/services/egi'/>" />
-<link rel="stylesheet" href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/jquery.dataTables.min.css' context='/services/egi'/>"/>
-<link rel="stylesheet" href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/dataTables.bootstrap.min.css' context='/services/egi'/>">
+<link rel="stylesheet"
+	href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/jquery.dataTables.min.css' context='/services/egi'/>" />
+<link rel="stylesheet"
+	href="<cdn:url value='/resources/global/css/jquery/plugins/datatables/dataTables.bootstrap.min.css' context='/services/egi'/>">
 <script type="text/javascript"
 	src="<cdn:url value='/resources/global/js/jquery/plugins/datatables/jquery.dataTables.min.js' context='/services/egi'/>"></script>
 <script type="text/javascript"

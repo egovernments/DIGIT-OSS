@@ -160,6 +160,14 @@ function validateEndDate(event) {
 	}
 }
 
+$('#addnewcloseperiod').click(function() {
+	var url = '/services/EGF/closedperiod/new';
+	$('#closedPeriodsearchform').attr('method', 'get');
+	$('#closedPeriodsearchform').attr('action', url);
+	window.location = url;
+ 
+});
+
 /*function formatDate6(dt){
 	if(dt==null || dt==''  || dt=="" )return '';
 	var array = dt.split("/");

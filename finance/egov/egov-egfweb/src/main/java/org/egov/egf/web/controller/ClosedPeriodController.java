@@ -173,7 +173,7 @@ public class ClosedPeriodController {
 
     }
 
-    @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/view/{id}",  method = { RequestMethod.GET, RequestMethod.POST })
     public String view(@PathVariable("id") final Long id, final Model model) {
         final ClosedPeriod closedPeriod = closedPeriodService.findOne(id);
         prepareNewForm(model);
