@@ -15359,8 +15359,8 @@
     },
     {
       "id": 1889,
-      "name": "DSS Dashboard config",
-      "url": "/dashboard-analytics/dashboard/getDashboardConfig",
+      "name": "DSS Dashboard Config Home",
+      "url": "/dashboard-analytics/dashboard/getDashboardConfig/home",
       "parentModule": "",
       "displayName": "DSS",
       "orderNumber": 0,
@@ -15394,6 +15394,42 @@
       "leftIcon": "editor:insert-chart",
       "path": "Finance.Period End Activities.Close Period",
       "navigationURL": "services/EGF/closedperiod/search/view"
-    } 
+    }, 
+    {
+      "id": 1892,
+      "name": "DSS Dashboard Config Property Tax",
+      "url": "/dashboard-analytics/dashboard/getDashboardConfig/propertyTax",
+      "parentModule": "",
+      "displayName": "DSS",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1893,
+      "name": "DSS Dashboard Config Trade License",
+      "url": "/dashboard-analytics/dashboard/getDashboardConfig/tradeLicense",
+      "parentModule": "",
+      "displayName": "DSS",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1894,
+      "name": "DSS Dashboard Config PGR",
+      "url": "/dashboard-analytics/dashboard/getDashboardConfig/PGR",
+      "parentModule": "",
+      "displayName": "DSS",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": ""
+    }
   ]
 }
