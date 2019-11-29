@@ -33,7 +33,7 @@ const moveToSuccess = (LicenseData, dispatch) => {
   if (window.location.pathname.includes("whitelisted")) {
     dispatch(
       setRoute(
-        `whitelisted/bpastakeholder/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+        `/whitelisted/bpastakeholder/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
       )
     );
   } else {

@@ -84,6 +84,13 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
+    if (window.location.pathname.includes("whitelisted")) {
+      set(
+        action.screenConfig,
+        "apply.components.div.children.footer.props.style",
+        { width: "100vw" }
+      );
+    }
     const queryValue = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const applicationNo = queryValue

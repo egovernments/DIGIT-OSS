@@ -410,26 +410,39 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       // ) {
       //   action = "APPLY";
       // }
+      let searchResponse = {};
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       if (!isEditFlow) {
         if (window.location.pathname.includes("whitelisted")) {
-          await httpRequest("post", "/tl-services/v1/BPAREG1/_update", "", [], {
-            Licenses: queryObject
-          });
+          searchResponse = await httpRequest(
+            "post",
+            "/tl-services/v1/BPAREG1/_update",
+            "",
+            [],
+            {
+              Licenses: queryObject
+            }
+          );
         } else {
-          await httpRequest("post", "/tl-services/v1/BPAREG/_update", "", [], {
-            Licenses: queryObject
-          });
+          searchResponse = await httpRequest(
+            "post",
+            "/tl-services/v1/BPAREG/_update",
+            "",
+            [],
+            {
+              Licenses: queryObject
+            }
+          );
         }
       }
       dispatch(toggleSpinner());
 
-      let searchQueryObject = [
-        { key: "tenantId", value: queryObject[0].tenantId },
-        { key: "applicationNumber", value: queryObject[0].applicationNumber }
-      ];
-      let searchResponse = await getSearchResults(searchQueryObject);
+      // let searchQueryObject = [
+      //   { key: "tenantId", value: queryObject[0].tenantId },
+      //   { key: "applicationNumber", value: queryObject[0].applicationNumber }
+      // ];
+      // let searchResponse = await getSearchResults(searchQueryObject);
       if (isEditFlow) {
         searchResponse = { Licenses: queryObject };
       } else {
@@ -439,15 +452,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         searchResponse,
         "Licenses[0].tradeLicenseDetail.tradeUnits"
       );
-      const tradeTemp = updatedtradeUnits.map((item, index) => {
-        return {
-          tradeSubType: item.tradeType.split(".")[1],
-          tradeType: item.tradeType.split(".")[0]
-        };
-      });
-      dispatch(prepareFinalObject("LicensesTemp.tradeUnits", tradeTemp));
-      updateownersAddress(dispatch, searchResponse);
-      createOwnersBackup(dispatch, searchResponse);
     } else {
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
       // let owners = get(queryObject[0], "tradeLicenseDetail.owners");
