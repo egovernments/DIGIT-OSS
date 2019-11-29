@@ -5,6 +5,7 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import sortBy from "lodash/sortBy";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import _ from "lodash";
 
 const formConfig = {
   name: "searchProperty",
@@ -13,6 +14,7 @@ const formConfig = {
     city: {
       id: "city",
       numcols: 4,
+      localePrefix: { moduleName: "tenant", masterName: "tenants" },
       dontReset: (process.env.REACT_APP_NAME !== "Citizen" ? true : false),
       fullWidth: true,
       className: "search-property-form-pt",
@@ -29,6 +31,18 @@ const formConfig = {
             fieldKey: "mohalla",
           },
         ],
+      },
+      updateDependentFields: ({ formKey, field, dispatch, state }) => {
+        //  dispatch(setFieldProperty("searchProperty", "mohalla", "value", ""));
+        const moduleValue = field.value;
+        //  dispatch(fetchLocalizationLabel(getLocale(), moduleValue, moduleValue));
+      },
+      beforeFieldChange: ({ action, dispatch, state }) => {
+        if (_.get(state, "form.searchProperty.fields.city.value") !== action.value) {
+          const moduleValue = action.value;
+          dispatch(fetchLocalizationLabel(getLocale(), moduleValue, moduleValue));
+        }
+        return action;
       },
     },
     mobileNumber: {
@@ -121,7 +135,7 @@ const formConfig = {
     try {
       let state = store.getState();
       const { cities, citiesByModule } = state.common;
-      const { mohalla } = state.form.searchProperty.fields;
+      const { mohalla, city } = state.form.searchProperty.fields;
       let tenantId = JSON.parse(getUserInfo()).tenantId;
       const { PT } = citiesByModule;
       if (!mohalla.value) {
@@ -137,7 +151,9 @@ const formConfig = {
           dd.push({ label: selected.name, value: selected.code });
           return dd;
         }, []);
-        dispatch(setFieldProperty("searchProperty", "city", "dropDownData", sortBy(dd, ["label"])));
+        if (tenantId !== city.value)
+          dispatch(setFieldProperty("searchProperty", "city", "dropDownData", sortBy(dd, ["label"])));
+
         if (process.env.REACT_APP_NAME !== "Citizen") {
           let found = tenants.find((city) => {
             return city.code === tenantId;
@@ -147,6 +163,13 @@ const formConfig = {
             dispatch(setFieldProperty("searchProperty", "city", "disabled", true));
           }
         }
+        else {
+          var user = _.find(dd, { value: city.value });
+          //    if (user && user.value !== city.value)
+          if (city.value)
+            dispatch(handleFieldChange("searchProperty", "city", city.value));
+        }
+
       }
       return action;
     } catch (e) {
