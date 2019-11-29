@@ -1,0 +1,43 @@
+{
+	"$schema": "ain/getchart/schema1#",
+	"title": "getchart",
+	"description": "getchart api schema",
+	"type": "object",
+	"properties": {
+		"header": {
+			"type": "object",
+			"properties": {
+				"tenantId": {
+					"type": "string"
+				}
+			}
+		},
+		"requestInfo": {
+			"type": "object",
+			"properties": {
+				"chartType":{
+					"type":"string",
+					"enum":["bar","line","stackedbar","pie", "horizontalBar", "doughnut", "doubledonut","heat","radar"]
+				},
+				"chartFormat":{
+					"type":"string"
+				},
+				"serviceApi":{
+					"type":"string"
+				},
+				"dates":{
+					"type":"object",
+					"properties":{
+						"startDate":{
+						 	"type":"string"
+						 },
+						"endData":{
+							"type":"string"
+						}
+					}
+				}
+		 	},
+		 	"required": ["chartType","chartFormat", "serviceApi","dates"]
+		}
+	}
+}
