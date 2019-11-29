@@ -75,35 +75,37 @@ export const corrospondanceAddr = getCommonCard({
   ),
 
   tradeDetailsConatiner: getCommonContainer({
-    sameAsPermanent: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-bpa",
+    sameAsPermanentContainer: getCommonContainer({
+      sameAsPermanent: {
+        uiFramework: "custom-containers-local",
+        moduleName: "egov-bpa",
 
-      componentPath: "CheckboxContainer",
-      gridDefination: {
-        xs: 12,
-        sm: 12,
-        md: 6
-      },
-      props: {
-        label: {
-          name: "Same As Permanent Address",
-          key: "BPA_SAME_AS_PERMANENTADDR_LABEL"
+        componentPath: "CheckboxContainer",
+        gridDefination: {
+          xs: 12,
+          sm: 12,
+          md: 6
         },
-        jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory1",
-        sourceJsonPaths: ["LicensesTemp[0].userData.address"],
-        destinationJsonPaths: ["Licenses[0].tradeLicenseDetail.address"],
-        disbaleComponentJsonPaths: [
-          "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocBuilidingName",
-          "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity",
-          "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocDoorHouseNo",
-          "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
-          "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocPincode",
-          "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocStreetName"
-        ]
-      },
-      type: "array"
-    },
+        props: {
+          label: {
+            name: "Same As Permanent Address",
+            key: "BPA_SAME_AS_PERMANENTADDR_LABEL"
+          },
+          jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory1",
+          sourceJsonPaths: ["LicensesTemp[0].userData.address"],
+          destinationJsonPaths: ["Licenses[0].tradeLicenseDetail.address"],
+          disbaleComponentJsonPaths: [
+            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocBuilidingName",
+            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity",
+            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocDoorHouseNo",
+            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
+            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocPincode",
+            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocStreetName"
+          ]
+        },
+        type: "array"
+      }
+    }),
 
     tradeLocDoorHouseNo: getTextField({
       label: {
