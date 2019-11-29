@@ -160,7 +160,7 @@
                   "headers": []
                 },
                 {
-                  "id": "",
+                  "id": "slaAchieved",
                   "name": "DSS_SLA_ACHIEVED",
                   "code": "",
                   "chartType": "metric",
