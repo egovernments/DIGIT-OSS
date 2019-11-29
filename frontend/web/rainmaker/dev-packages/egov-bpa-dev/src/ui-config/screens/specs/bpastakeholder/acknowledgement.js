@@ -429,6 +429,13 @@ const screenConfig = {
       tenant
     );
     set(action, "screenConfig.components.div.children", data);
+    if (window.location.pathname.includes("whitelisted")) {
+      set(
+        action.screenConfig,
+        "components.div.children.applicationSuccessFooter.props.style",
+        { width: "100vw" }
+      );
+    }
     return action;
   }
 };

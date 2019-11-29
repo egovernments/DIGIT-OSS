@@ -395,7 +395,6 @@ const screenConfig = {
         props
       );
     });
-
     return action;
   },
 
