@@ -412,10 +412,17 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       // }
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
-      !isEditFlow &&
-        (await httpRequest("post", "/tl-services/v1/BPAREG/_update", "", [], {
-          Licenses: queryObject
-        }));
+      if (!isEditFlow) {
+        if (window.location.pathname == "whitelisted") {
+          await httpRequest("post", "/tl-services/v1/BPAREG1/_update", "", [], {
+            Licenses: queryObject
+          });
+        } else {
+          await httpRequest("post", "/tl-services/v1/BPAREG/_update", "", [], {
+            Licenses: queryObject
+          });
+        }
+      }
       dispatch(toggleSpinner());
 
       let searchQueryObject = [
@@ -461,7 +468,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         { Licenses: queryObject }
       );
       dispatch(toggleSpinner());
-
+      if (!response) {
+      }
       dispatch(prepareFinalObject("Licenses", response.Licenses));
       updateownersAddress(dispatch, response);
       createOwnersBackup(dispatch, response);
