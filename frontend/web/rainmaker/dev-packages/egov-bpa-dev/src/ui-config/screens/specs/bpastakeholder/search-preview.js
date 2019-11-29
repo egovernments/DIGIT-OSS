@@ -185,6 +185,55 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     // const status = getTransformedStatus(
     //   get(state, "screenConfiguration.preparedFinalObject.Licenses[0].status")
     // );
+
+    const subOwnerShipCategory = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+    );
+    if (subOwnerShipCategory == "INDIVIDUAL") {
+      set(
+        action,
+        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails.visible",
+        false
+      );
+    } else {
+      set(
+        action,
+        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails.visible",
+        true
+      );
+    }
+
+    const tradeType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType"
+    );
+    if (tradeType.split(".").length > 1) {
+      set(
+        action,
+        "creenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewLicenseeSubType.visible",
+        true
+      );
+      dispatch(
+        prepareFinalObject(
+          "LicensesTemp[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+          tradeType.split(".")[0]
+        )
+      );
+    } else {
+      dispatch(
+        prepareFinalObject(
+          "LicensesTemp[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+          tradeType
+        )
+      );
+      set(
+        action,
+        "creenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewLicenseeSubType.visible",
+        false
+      );
+    }
+
     const status = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"

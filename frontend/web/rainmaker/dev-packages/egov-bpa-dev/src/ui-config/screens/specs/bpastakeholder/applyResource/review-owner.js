@@ -15,6 +15,20 @@ export const reviewLicenseeType = getLabelWithValue(
     labelKey: "BPA_LICENSEE_TYPE_LABEL"
   },
   {
+    jsonPath: "LicensesTemp[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+    localePrefix: {
+      moduleName: "TRADELICENSE",
+      masterName: "TRADETYPE"
+    }
+  }
+);
+
+export const reviewLicenseeSubType = getLabelWithValue(
+  {
+    labelName: "Technical Person Licensee Sub Type",
+    labelKey: "BPA_LICENSEE_SUB_TYPE_LABEL"
+  },
+  {
     jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
     localePrefix: {
       moduleName: "TRADELICENSE",
@@ -125,35 +139,23 @@ export const getReviewOwner = (isEditable = true) => {
         }
       }
     },
-    multiOwner: {
-      uiFramework: "custom-containers",
-      componentPath: "MultiItem",
-      props: {
-        scheama: getCommonGrayCard({
-          viewFive: getCommonContainer({
-            reviewApplicantName: getLabelWithValue(
-              {
-                labelName: "Applicant Name",
-                labelKey: "BPA_APPLICANT_NAME_LABEL"
-              },
-              { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name" }
-            ),
-            reviewLicenseeType,
-            reviewOwnerGender,
-            reviewOwnerDOB,
-            reviewOwnerPhoneNo,
-            reviewOwnerEmail,
-            reviewOwnerPAN
-          })
-        }),
-
-        items: [],
-        hasAddItem: false,
-        sourceJsonPath: "Licenses[0].tradeLicenseDetail.owners",
-        prefixSourceJsonPath: "children.cardContent.children.viewFive.children",
-        afterPrefixJsonPath: "children.value.children.key"
-      },
-      type: "array"
-    }
+    multiOwner: getCommonContainer({
+      viewFive: getCommonContainer({
+        reviewApplicantName: getLabelWithValue(
+          {
+            labelName: "Applicant Name",
+            labelKey: "BPA_APPLICANT_NAME_LABEL"
+          },
+          { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name" }
+        ),
+        reviewLicenseeType,
+        reviewLicenseeSubType,
+        reviewOwnerGender,
+        reviewOwnerDOB,
+        reviewOwnerPhoneNo,
+        reviewOwnerEmail,
+        reviewOwnerPAN
+      })
+    })
   });
 };

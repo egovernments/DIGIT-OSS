@@ -90,51 +90,66 @@ class RadioButtonsGroupWithLabel extends React.Component {
           className={classes.formControl}
           required={required}
         >
-          <FormLabel className={classes.formLabel}>
-            {label && label.key && (
-              <LabelContainer
-                className={classes.formLabel}
-                labelName={label.name}
-                labelKey={label.key}
-              />
-            )}
-          </FormLabel>
-          <RadioGroup
-            aria-label="Gender"
-            name="gender1"
-            className={classes.group}
-            // value={this.state.value || fieldValue}
-            value={value || fieldValue || defaultValue}
-            onChange={this.handleChange}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center"
+            }}
           >
-            {buttons &&
-              buttons.map((button, index) => {
-                return (
-                  <FormControlLabel
-                    disabled={button.disabled ? true : false}
-                    key={index}
-                    classes={{ label: "radio-button-label" }}
-                    value={button.value}
-                    control={
-                      // <Radio
-                      //   classes={{
-                      //     root: "radio-root"
-                      //   }}
-                      //   color="primary"
-                      // />
-                      <Radio className={classes.radioRoot} color="primary" />
-                    }
-                    // label={button.label}
-                    label={
-                      <LabelContainer
-                        labelName={button.labelName}
-                        labelKey={button.labelKey}
-                      />
-                    }
+            <div style={{ marginTop: "-16px", marginRight: "16px" }}>
+              <FormLabel className={classes.formLabel}>
+                {label && label.key && (
+                  <LabelContainer
+                    className={classes.formLabel}
+                    labelName={label.name}
+                    labelKey={label.key}
                   />
-                );
-              })}
-          </RadioGroup>
+                )}
+              </FormLabel>
+            </div>
+            <div>
+              <RadioGroup
+                aria-label="Gender"
+                name="gender1"
+                className={classes.group}
+                // value={this.state.value || fieldValue}
+                value={value || fieldValue || defaultValue}
+                onChange={this.handleChange}
+              >
+                {buttons &&
+                  buttons.map((button, index) => {
+                    return (
+                      <FormControlLabel
+                        disabled={button.disabled ? true : false}
+                        key={index}
+                        classes={{ label: "radio-button-label" }}
+                        value={button.value}
+                        control={
+                          // <Radio
+                          //   classes={{
+                          //     root: "radio-root"
+                          //   }}
+                          //   color="primary"
+                          // />
+                          <Radio
+                            className={classes.radioRoot}
+                            color="primary"
+                          />
+                        }
+                        // label={button.label}
+                        label={
+                          <LabelContainer
+                            labelName={button.labelName}
+                            labelKey={button.labelKey}
+                          />
+                        }
+                      />
+                    );
+                  })}
+              </RadioGroup>
+            </div>
+          </div>
         </FormControl>
       </div>
     );
