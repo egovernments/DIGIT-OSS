@@ -7,6 +7,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
+import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
+import get from "lodash/get";
 
 const styles = {
   root: {
@@ -20,18 +22,54 @@ const styles = {
 
 class CheckboxLabels extends React.Component {
   state = {
-    checkedG: true
+    checkedG: false
   };
 
   handleChange = name => event => {
-    const { jsonPath, approveCheck } = this.props;
+    const {
+      sourceJsonPaths,
+      destinationJsonPaths,
+      disbaleComponentJsonPaths,
+      onFieldChange,
+      screenKey,
+      preparedFinalObject,
+      approveCheck,
+      jsonPath
+    } = this.props;
+    console.log("event.value", this.props);
+
+    disbaleComponentJsonPaths &&
+      disbaleComponentJsonPaths.map(componentJsonPath => {
+        onFieldChange(
+          screenKey,
+          componentJsonPath,
+          "props.disabled",
+          event.target.checked
+        );
+      });
+    if (event.target.checked) {
+      sourceJsonPaths &&
+        destinationJsonPaths &&
+        sourceJsonPaths.forEach((sourceJSonPath, index) => {
+          approveCheck(
+            destinationJsonPaths[index],
+            get(preparedFinalObject, sourceJSonPath)
+          );
+        });
+    } else {
+      sourceJsonPaths &&
+        destinationJsonPaths &&
+        destinationJsonPaths.forEach((destinationJsonPath, index) => {
+          approveCheck(destinationJsonPaths[index], {});
+        });
+    }
     this.setState({ [name]: event.target.checked }, () =>
       approveCheck(jsonPath, this.state.checkedG)
     );
   };
 
   render() {
-    const { classes, content } = this.props;
+    const { classes, content, label } = this.props;
 
     return (
       <FormGroup row>
@@ -48,7 +86,16 @@ class CheckboxLabels extends React.Component {
               }}
             />
           }
-          label={content}
+          label={
+            label &&
+            label.key && (
+              <LabelContainer
+                className={classes.formLabel}
+                labelName={label.name}
+                labelKey={label.key}
+              />
+            )
+          }
         />
       </FormGroup>
     );
