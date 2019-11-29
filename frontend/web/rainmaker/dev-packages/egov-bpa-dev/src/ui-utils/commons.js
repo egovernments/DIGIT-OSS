@@ -413,7 +413,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       if (!isEditFlow) {
-        if (window.location.pathname == "whitelisted") {
+        if (window.location.pathname.includes("whitelisted")) {
           await httpRequest("post", "/tl-services/v1/BPAREG1/_update", "", [], {
             Licenses: queryObject
           });
