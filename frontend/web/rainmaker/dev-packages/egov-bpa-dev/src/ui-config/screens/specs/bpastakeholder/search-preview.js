@@ -309,11 +309,11 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   let businessService = get(
     state,
     "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType"
-  );
+  ).split(".")[0];
 
   const queryObject = [
     { key: "tenantId", value: tenantId },
-    { key: "businessService", value: businessService }
+    { key: "businessServices", value: businessService }
   ];
   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 };
