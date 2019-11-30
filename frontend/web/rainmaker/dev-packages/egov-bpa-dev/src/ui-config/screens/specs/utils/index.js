@@ -515,7 +515,7 @@ export const getReceipt = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/collection-services/receipts/_search",
+      "/collection-services/payments/_search",
       "",
       queryObject
     );
@@ -570,7 +570,7 @@ export const getReceiptData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "collection-services/receipts/_search",
+      "collection-services/payments/_search",
       "",
       queryObject
     );
