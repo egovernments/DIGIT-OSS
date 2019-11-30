@@ -19,6 +19,10 @@
         {
           "name": "Trade License",
           "id": "tradeLicense"
+        },
+        {
+          "name": "PGR",
+          "id": "pgr"
         }
       ]
     }
