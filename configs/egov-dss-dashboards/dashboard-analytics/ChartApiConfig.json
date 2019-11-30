@@ -931,7 +931,7 @@
       "Closed Complaints"
     ],
     "isCumulative": true,
-    "interval": "week",
+    "interval": "month",
     "insight": {
     },
     "_comment": " "
