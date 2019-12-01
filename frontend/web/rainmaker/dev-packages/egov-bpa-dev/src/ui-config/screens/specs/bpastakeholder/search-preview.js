@@ -19,7 +19,8 @@ import {
   createEstimateData,
   setMultiOwnerForSV,
   setValidToFromVisibilityForSV,
-  getDialogButton
+  getDialogButton,
+  addressDestruct
 } from "../utils";
 
 import { footerReview } from "./applyResource/footer";
@@ -242,7 +243,14 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
     const obj = setStatusBasedValue(status);
-
+    if (get(data, "Licenses[0].tradeLicenseDetail.applicationDocuments")) {
+      await setDocuments(
+        data,
+        "Licenses[0].tradeLicenseDetail.applicationDocuments",
+        "LicensesTemp[0].reviewDocData",
+        dispatch
+      );
+    }
     // Get approval details based on status and set it in screenconfig
 
     if (
@@ -304,6 +312,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     }
     setActionItems(action, obj);
     // loadReceiptGenerationData(applicationNumber, tenantId);
+    addressDestruct(action, state, dispatch);
   }
 
   let businessService = get(
@@ -324,8 +333,8 @@ const setStatusBasedValue = status => {
   switch (status) {
     case "approved":
       return {
-        titleText: "Review the Trade License",
-        titleKey: "TL_REVIEW_TRADE_LICENSE",
+        titleText: "Review the stakeholder License",
+        titleKey: "BPA_REVIEW_LICENSE",
         titleVisibility: true,
         roleDefination: {
           rolePath: "user-info.roles",
@@ -376,8 +385,8 @@ const setStatusBasedValue = status => {
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({
-    labelName: "Trade License Application (2018-2019)",
-    labelKey: "TL_TRADE_APPLICATION"
+    labelName: "Stakeholder Registration Application",
+    labelKey: "BPA_REG_APPLICATION"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",

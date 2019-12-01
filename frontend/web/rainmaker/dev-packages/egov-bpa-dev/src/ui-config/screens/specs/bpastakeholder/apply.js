@@ -15,7 +15,8 @@ import {
   commonTransform,
   objectToDropdown,
   getCurrentFinancialYear,
-  getLicenseeTypeDropdownData
+  getLicenseeTypeDropdownData,
+  addressDestruct
 } from "../utils";
 import {
   prepareFinalObject,
@@ -266,6 +267,7 @@ export const getData = async (action, state, dispatch) => {
     // dispatch(prepareFinalObject("LicensesTemp", []));
 
     await updatePFOforSearchResults(action, state, dispatch, applicationNo);
+    addressDestruct(action, state, dispatch);
     if (!queryValue) {
       const oldApplicationNo = get(
         state.screenConfiguration.preparedFinalObject,
