@@ -1200,12 +1200,19 @@ export const createEstimateData = async (
   const payload = isPAID
     ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
     : await getBill(queryObj);
-  const estimateData = payload
+  let estimateData = payload
     ? isPAID
-      ? getEstimateData(payload.Receipt[0].Bill, isPAID, LicenseData)
-      : payload.billResponse &&
-        getEstimateData(payload.billResponse.Bill, false, LicenseData)
+      ? payload &&
+        payload.Payments &&
+        payload.Payments.length > 0 &&
+        getEstimateData(
+          payload.Payments[0].paymentDetails[0].bill,
+          isPAID,
+          LicenseData
+        )
+      : payload && getEstimateData(payload, false, LicenseData)
     : [];
+  estimateData = estimateData || [];
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
   payload &&
@@ -2378,4 +2385,26 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
   }
+};
+
+export const addressDestruct = (action, state, dispatch) => {
+  const ownerData = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.owners[0]"
+  );
+  const { permanentAddress, permanentCity, permanentPinCode } = ownerData;
+  const doorNo = permanentAddress.split(",")[0] || null;
+  const buildingName = permanentAddress.split(",")[1] || null;
+  const street = permanentAddress.split(",")[2] || null;
+  const landmark = permanentAddress.split(",")[3] || null;
+  const address = {
+    doorNo,
+    buildingName,
+    street,
+    landmark,
+    city: permanentCity,
+    pincode: permanentPinCode
+  };
+
+  dispatch(prepareFinalObject("LicensesTemp[0].userData.address", address));
 };
