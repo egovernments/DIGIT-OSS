@@ -1073,5 +1073,64 @@
     "insight": {
     },
     "_comment": " Complaints by Department"
+  },
+  "pgrStatusByTenant": {
+    "chartName": "DSS_PGR_STATUS_BY_TENANT",
+    "queries": [
+      {
+        "module": "PGR",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId.keyword\" }",
+        "dateRefField": "Data.dateOfComplaint",
+        "indexName": "pgrindex-v1",
+        "aggrQuery": "{\"aggs\":{\"Tenants \":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"size\":1000},\"aggs\":{\"Closed Complaints\":{\"filters\":{\"filters\":{\"Open\":{\"match\":{\"Data.status.keyword\":\"open\"}},\"Reopen\":{\"match\":{\"Data.status.keyword\":\"reopen\"}},\"Assigned\":{\"match\":{\"Data.status.keyword\":\"assigned\"}},\"Closed\":{\"match\":{\"Data.status.keyword\":\"closed\"}},\"Resolved\":{\"match\":{\"Data.status.keyword\":\"resolved\"}},\"Rejected\":{\"match\":{\"Data.status.keyword\":\"rejected\"}},\"ReassignRequested\":{\"match\":{\"Data.status.keyword\":\"reassignrequested\"}}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      "tenantId"
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "",
+    "drillFields": [
+      ""
+    ],
+    "documentType": "_doc",
+    "action": "",
+    "plotLabel": "Tenants",
+    "aggregationPaths": [
+      "Open",
+      "Reopen",
+      "Assigned",
+      "Closed",
+      "Resolved",
+      "Rejected",
+      "ReassignRequested"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "Open": "number"
+      },
+      {
+        "Reopen": "number"
+      },
+      {
+        "Assigned": "number"
+      },
+      {
+        "Closed": "number"
+      },
+      {
+        "Resolved": "number"
+      },
+      {
+        "Rejected": "number"
+      },
+      {
+        "ReassignRequested": "number"
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
   }
 }
