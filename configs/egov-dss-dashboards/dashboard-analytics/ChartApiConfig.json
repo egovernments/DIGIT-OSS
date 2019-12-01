@@ -326,14 +326,14 @@
         "requestQueryMap": "{\r\n  \"module\" : \"businessService.keyword\", \n\"tenantId\" : \"tenantIdForMunicipalCorporation\"}",
         "dateRefField": "",
         "indexName": "dss-target_v1",
-        "aggrQuery": "{\"aggs\":{\"Target Collection\":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\"},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"Target Collection\":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"desc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}"
       },
       {
         "module": "COMMON",
         "requestQueryMap": "{\r\n  \"module\" : \"Data.Bill.billDetails.businessService.keyword\", \n\"tenantId\" : \"Data.tenantId\"}",
         "dateRefField": "Data.Bill.billDetails.receiptDate",
         "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"Total Collection\":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"Total Collection\":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"desc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}"
       }
     ],
     "chartType": "perform",
@@ -359,14 +359,14 @@
         "requestQueryMap": "{\"module\" : \"businessService.keyword\",\"tenantId\" : \"tenantIdForMunicipalCorporation\" }",
         "dateRefField": "",
         "indexName": "dss-target_v1",
-        "aggrQuery": "{\"aggs\":{\"Total Collection\":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\"},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}}}},\"Target Collection\":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\"},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"Target Collection\":{\"terms\":{\"field\":\"tenantIdForMunicipalCorporation.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"asc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}"
       },
       {
         "module": "COMMON",
         "requestQueryMap": "{\"module\" : \"Data.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"Data.tenantId\" }",
         "dateRefField": "Data.Bill.billDetails.receiptDate",
         "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"Total Collection\":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"Total Collection\":{\"terms\":{\"field\":\"Data.tenantId.keyword\",\"size\":\"200\",\"order\":{\"Sum\":\"asc\"}},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}"
       }
     ],
     "chartType": "perform",
