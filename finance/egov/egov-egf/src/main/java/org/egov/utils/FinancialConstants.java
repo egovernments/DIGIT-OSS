@@ -452,4 +452,7 @@ public interface FinancialConstants {
 	public static final String STATUS_MODULE_NAME_CONTRACTOR = "Contractor";
 	public static final String STATUS_MODULE_NAME_SUPPLIER = "Supplier";
 	public static final Integer FINANCIALYEAR_STARTING_MONTH = 4;
+	public static final String EMPTY_STRING = "";
+
+	
 }

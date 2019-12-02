@@ -53,6 +53,8 @@ import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.egf.autonumber.BanNumberGenerator;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.persistence.utils.GenericSequenceNumberGenerator;
+import org.egov.infra.validation.exception.ValidationException;
+import org.egov.utils.FinancialConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,7 +73,9 @@ public class BanNumberGeneratorImpl implements BanNumberGenerator {
     public String getNextNumber() {
         final CFinancialYear financialYear = financialYearDAO.getFinYearByDate(new Date());
         if (financialYear == null)
-            throw new ApplicationRuntimeException("Financial Year is not defined for the voucher date");
+           // throw new ApplicationRuntimeException("Financial Year is not defined for the voucher date");
+            throw new ValidationException(FinancialConstants.EMPTY_STRING, "Financial Year is not defined for the voucher date" );
+
         return String.format("%s:%03d/%s", "BANo", genericSequenceNumberGenerator
                         .getNextSequence(BUDGET_REAPP_SEQ_NAME),
                 financialYear.getFinYearRange());

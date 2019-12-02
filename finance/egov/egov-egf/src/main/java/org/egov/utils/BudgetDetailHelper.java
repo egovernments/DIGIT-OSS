@@ -222,7 +222,7 @@ public class BudgetDetailHelper {
     public CFinancialYear getPreviousYearFor(final CFinancialYear financialYear) {
         try {
             return financialYearDAO.getFinancialYearByDate(subtractYear(financialYear.getStartingDate()));
-        } catch (final ApplicationRuntimeException e) {
+         } catch (final ValidationException e) {
             return null;
         }
     }

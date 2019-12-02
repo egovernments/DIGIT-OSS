@@ -50,6 +50,7 @@ package org.egov.commons.dao;
 import org.apache.log4j.Logger;
 import org.egov.commons.CFinancialYear;
 import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.validation.exception.ValidationException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -66,6 +67,7 @@ import java.util.List;
 
 @Repository
 public class FinancialYearHibernateDAO implements FinancialYearDAO {
+    private static final String EMPTY_STRING = "";
     @Transactional
     public CFinancialYear update(final CFinancialYear entity) {
         getCurrentSession().update(entity);
@@ -290,7 +292,9 @@ public class FinancialYearHibernateDAO implements FinancialYearDAO {
         if (list.size() > 0)
             cFinancialYear = (CFinancialYear) list.get(0);
         if (null == cFinancialYear)
-            throw new ApplicationRuntimeException("Financial Year is not active For Posting.");
+           // throw new ApplicationRuntimeException("Financial Year is not active For Posting.");
+            throw new ValidationException(EMPTY_STRING, "Financial Year is not active For Posting" );
+
         return cFinancialYear;
     }
 

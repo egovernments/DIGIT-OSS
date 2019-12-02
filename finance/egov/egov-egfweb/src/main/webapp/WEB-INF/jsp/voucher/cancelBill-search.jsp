@@ -51,6 +51,8 @@
 <%@ taglib prefix="egov" tagdir="/WEB-INF/tags"%>
 <%@ page language="java"%>
 <%@ taglib uri="/WEB-INF/tags/c.tld" prefix="c"%>
+<%@ taglib uri="/WEB-INF/tags/cdn.tld" prefix="cdn" %>
+
 
 <html>
 <head>
@@ -94,9 +96,15 @@ function update(obj)
 		document.getElementById('selectedRows').value=parseInt(document.getElementById('selectedRows').value)-1;
 }
 function resetSelectedRows()
-{
+{   
+	var todate=document.getElementById('toDate').value
+	//todate.mask('99/99/9999',{placeholder:"mm/dd/yyyy"});
+	jQuery('fromDate').inputmask('99/99/9999',{placeholder:"mm/dd/yyyy"});
+	console.log(fromDate);
 	document.getElementById('selectedRows').value="0";
 }
+
+
 function validateCancel()
 {
 	var rows=parseInt(document.getElementById('selectedRows').value);
@@ -141,16 +149,14 @@ function validateCancel()
 					<td class="bluebox"><s:date name="fromDate" var="fromDate"
 							format="dd/MM/yyyy" /> <s:textfield id="fromDate"
 							name="fromDate" value="%{fromDate}"
-							onkeyup="DateFormat(this,this.value,event,false,'3')"
-							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
-							data-inputmask="'mask': 'd/m/y'" /></td>
+							 cssClass="form-control datepicker"
+							 /></td>
 					<td class="bluebox"><s:text name="to.date" /></td>
 
 
 					<td class="bluebox"><s:date name="toDate" var="toDate"
 							format="dd/MM/yyyy" /> <s:textfield id="toDate" name="toDate"
 							value="%{toDate}"
-							onkeyup="DateFormat(this,this.value,event,false,'3')"
 							placeholder="DD/MM/YYYY" cssClass="form-control datepicker"
 							data-inputmask="'mask': 'd/m/y'" /></td>
 				</tr>

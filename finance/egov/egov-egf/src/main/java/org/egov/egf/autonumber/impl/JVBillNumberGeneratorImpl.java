@@ -55,7 +55,9 @@ import org.egov.commons.dao.FinancialYearDAO;
 import org.egov.egf.autonumber.JVBillNumberGenerator;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.persistence.utils.GenericSequenceNumberGenerator;
+import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.bills.EgBillregister;
+import org.egov.utils.FinancialConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -81,7 +83,8 @@ public class JVBillNumberGeneratorImpl implements JVBillNumberGenerator {
 
         final CFinancialYear financialYear = financialYearDAO.getFinancialYearByDate(br.getBilldate());
         if (financialYear == null)
-            throw new ApplicationRuntimeException("Financial Year is not defined for the voucher date");
+            //throw new ApplicationRuntimeException("Financial Year is not defined for the voucher date");
+            throw new ValidationException(FinancialConstants.EMPTY_STRING, "Financial Year is not defined for the voucher date" );
         sequenceName = "seq_jv_billnumber_" + financialYear.getFinYearRange();
         Serializable nextSequence = genericSequenceNumberGenerator.getNextSequence(sequenceName);
         jvBillNumber = String.format("%s/%s/%04d/%s", br.getEgBillregistermis().getDepartmentcode(), "MN",

@@ -83,7 +83,6 @@ import org.egov.egf.web.controller.expensebill.BaseBillController;
 import org.egov.eis.web.contract.WorkflowContainer;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
-import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.bills.BillType;
@@ -264,7 +263,7 @@ public class CreateSupplierBillController extends BaseBillController {
 
                 savedEgBillregister = supplierBillService.create(egBillregister, approvalPosition, approvalComment, null,
                         workFlowAction, approvalDesignation);
-            } catch (ApplicationRuntimeException|ValidationException e) {
+            } catch (final ValidationException e) {
                 setDropDownValues(model);
                 model.addAttribute(STATE_TYPE, egBillregister.getClass().getSimpleName());
                 prepareWorkflow(model, egBillregister, new WorkflowContainer());
@@ -277,12 +276,7 @@ public class CreateSupplierBillController extends BaseBillController {
                 prepareValidActionListByCutOffDate(model);
                 model.addAttribute(SUPPLIER_ID,
                         purchaseOrderService.getByOrderNumber(egBillregister.getWorkordernumber()).getSupplier().getId());
-                if(e instanceof ValidationException) {
-                    resultBinder.reject("", ((ValidationException)e).getErrors().get(0).getMessage());                    
-                }
-                if(e instanceof ApplicationRuntimeException) {
-                    resultBinder.reject("", ((ApplicationRuntimeException)e).getMessage());
-                }
+                resultBinder.reject("", e.getErrors().get(0).getMessage());
                 return SUPPLIERBILL_FORM;
             }
             final String approverName = String.valueOf(request.getParameter(APPROVER_NAME));
