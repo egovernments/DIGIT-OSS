@@ -29,6 +29,7 @@ import {
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
 
+
 export const getCommonApplyFooter = children => {
   return {
     uiFramework: "custom-atoms",
@@ -943,14 +944,14 @@ export const prepareDocumentTypeObj = documents => {
   let documentsArr =
     documents.length > 0
       ? documents.reduce((documentsArr, item, ind) => {
-          documentsArr.push({
-            name: item,
-            required: true,
-            jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
-            statement: getStatementForDocType(item)
-          });
-          return documentsArr;
-        }, [])
+        documentsArr.push({
+          name: item,
+          required: true,
+          jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+          statement: getStatementForDocType(item)
+        });
+        return documentsArr;
+      }, [])
       : [];
   return documentsArr;
 };
@@ -962,10 +963,10 @@ const getTaxValue = item => {
     ? item.amount
       ? item.amount
       : item.debitAmount
-      ? -Math.abs(item.debitAmount)
-      : item.crAmountToBePaid
-      ? item.crAmountToBePaid
-      : 0
+        ? -Math.abs(item.debitAmount)
+        : item.crAmountToBePaid
+          ? item.crAmountToBePaid
+          : 0
     : 0;
 };
 
@@ -1009,15 +1010,15 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
               item.accountDescription.split("-")[0],
               LicenseData
             ) && {
-              value: getToolTipInfo(
-                item.accountDescription.split("-")[0],
-                LicenseData
-              ),
-              key: getToolTipInfo(
-                item.accountDescription.split("-")[0],
-                LicenseData
-              )
-            }
+                value: getToolTipInfo(
+                  item.accountDescription.split("-")[0],
+                  LicenseData
+                ),
+                key: getToolTipInfo(
+                  item.accountDescription.split("-")[0],
+                  LicenseData
+                )
+              }
           });
       } else {
         item.taxHeadCode &&
@@ -1220,7 +1221,7 @@ export const createEstimateData = async (
     ? isPAID
       ? getEstimateData(payload.Receipt[0].Bill, isPAID, LicenseData)
       : payload.billResponse &&
-        getEstimateData(payload.billResponse.Bill, false, LicenseData)
+      getEstimateData(payload.billResponse.Bill, false, LicenseData)
     : [];
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
@@ -1605,7 +1606,7 @@ export const updateDropDowns = async (
           "applyScreenMdmsData.common-masters.StructureSubTypeTransformed",
           get(
             state.screenConfiguration.preparedFinalObject.applyScreenMdmsData[
-              "common-masters"
+            "common-masters"
             ],
             `StructureType.${structType.split(".")[0]}`,
             []
@@ -2157,8 +2158,8 @@ export const applyForm = (state, dispatch) => {
       process.env.NODE_ENV === "production"
         ? `/citizen/tradelicense-citizen/apply?tenantId=${tenantId}`
         : process.env.REACT_APP_SELF_RUNNING === true
-        ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
-        : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
+          ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
+          : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
   }
 };
 
@@ -2290,3 +2291,30 @@ export const getTextToLocalMapping = label => {
       );
   }
 };
+
+export const resetFields = (
+  objectJsonPath,
+  state,
+  dispatch,
+  screen = "apply"
+) => {
+  const fields = get(
+    state.screenConfiguration.screenConfig[screen],
+    objectJsonPath,
+    {}
+  );
+
+
+  for (var variable in fields) {
+    if (fields.hasOwnProperty(variable)) {
+      if (
+        fields[variable] &&
+        fields[variable].props &&
+        (fields[variable].props.value)) {
+
+        dispatch(handleField("search", `${objectJsonPath}.${variable}`, "props.value", " "));
+      }
+    }
+  }
+
+}

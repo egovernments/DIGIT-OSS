@@ -7,8 +7,28 @@ import {
   getTextToLocalMapping
 } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { validateFields } from "../../utils";
+import { validateFields, resetFields } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
+
+export const resetAllFields = (state, dispatch) => {
+
+  resetFields(
+    "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children",
+    state,
+    dispatch,
+    "search"
+  );
+
+  resetFields(
+    "components.div.children.tradeLicenseApplication.children.cardContent.children.appStatusAndToFromDateContainer.children",
+    state,
+    dispatch,
+    "search"
+  );
+}
+
+
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);

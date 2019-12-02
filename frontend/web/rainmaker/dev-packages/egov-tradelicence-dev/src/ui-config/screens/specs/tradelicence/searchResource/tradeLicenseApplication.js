@@ -9,7 +9,7 @@ import {
   getDateField,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { searchApiCall } from "./functions";
+import { searchApiCall, resetAllFields } from "./functions";
 
 export const tradeLicenseApplication = getCommonCard({
   subHeader: getCommonTitle({
@@ -141,19 +141,47 @@ export const tradeLicenseApplication = getCommonCard({
     // firstCont: {
 
     buttonContainer: getCommonContainer({
-      firstCont: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
+      /* firstCont: {
+         uiFramework: "custom-atoms",
+         componentPath: "Div",
+         gridDefination: {
+           xs: 12,
+           sm: 4
+         }
+       }, */
+      resetButton: {
+        componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 6
+        },
+        props: {
+          variant: "contained",
+          style: {
+            color: "black",
+
+            backgroundColor: "white",
+            borderRadius: "2px",
+            width: "80%",
+            height: "48px"
+          }
+        },
+        children: {
+          buttonLabel: getLabel({
+            labelName: "Reset",
+            labelKey: "TL_HOME_SEARCH_RESULTS_BUTTON_RESET"
+          })
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: resetAllFields
         }
       },
       searchButton: {
         componentPath: "Button",
         gridDefination: {
           xs: 12,
-          sm: 4
+          sm: 6
         },
         props: {
           variant: "contained",
@@ -177,14 +205,14 @@ export const tradeLicenseApplication = getCommonCard({
           callBack: searchApiCall
         }
       },
-      lastCont: {
-        uiFramework: "custom-atoms",
-        componentPath: "Div",
-        gridDefination: {
-          xs: 12,
-          sm: 4
-        }
-      }
+      /*   lastCont: {
+           uiFramework: "custom-atoms",
+           componentPath: "Div",
+           gridDefination: {
+             xs: 12,
+             sm: 4
+           }
+         } */
     })
   })
 });
