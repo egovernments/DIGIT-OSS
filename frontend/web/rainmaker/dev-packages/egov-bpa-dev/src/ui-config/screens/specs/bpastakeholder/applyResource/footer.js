@@ -13,6 +13,8 @@ import {
 } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { setTenantId, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
 import {
   toggleSnackbar,
   prepareFinalObject
@@ -133,6 +135,9 @@ export const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
     } else {
       isFormValid = await applyTradeLicense(state, dispatch);
+      let tenantIdInLocastorage = getTenantId();
+      if (!tenantIdInLocastorage)
+        setTenantId(process.env.REACT_APP_DEFAULT_TENANT_ID);
     }
   }
 

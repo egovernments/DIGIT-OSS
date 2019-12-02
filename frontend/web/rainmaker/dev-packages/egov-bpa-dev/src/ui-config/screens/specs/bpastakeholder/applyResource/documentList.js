@@ -1,6 +1,6 @@
 export const documentList = {
   uiFramework: "custom-containers-local",
-  moduleName: "egov-tradelicence",
+  moduleName: "egov-bpa",
   componentPath: "DocumentListContainer",
   props: {
     buttonLabel: {
