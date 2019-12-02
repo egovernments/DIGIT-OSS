@@ -166,9 +166,12 @@ public class ApplicationProperties {
 
     // Payment properties
 
-    @Value("${kafka.topics.payment.create}")
+    @Value("${kafka.topics.payment.create.name}")
     private String createPaymentTopicName;
-
+    
+    @Value("${kafka.topics.payment.create.key}")
+    private String createPaymentTopicKey;
+    
     @Value("${collection.payments.search.paginate}")
     private boolean paymentsSearchPaginationEnabled;
 

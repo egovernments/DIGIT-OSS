@@ -115,8 +115,8 @@ public class PaymentService {
             payment.setPayerId(payerId);
         paymentRepository.savePayment(payment);
 
-        producer.producer(applicationProperties.getCreateReceiptTopicName(), applicationProperties
-                .getCreatePaymentTopicName(), paymentRequest);
+        producer.producer(applicationProperties.getCreatePaymentTopicName(), applicationProperties
+                .getCreatePaymentTopicKey(), paymentRequest);
 
 
         return payment;
@@ -162,8 +162,8 @@ public class PaymentService {
                 paymentRequest.getRequestInfo());
 
         paymentRepository.updatePayment(validatedPayments);
-        producer.producer(applicationProperties.getUpdateReceiptTopicName(), applicationProperties
-                .getUpdateReceiptTopicKey(), new PaymentRequest(paymentRequest.getRequestInfo(), paymentRequest.getPayment()));
+        producer.producer(applicationProperties.getUpdatePaymentTopicName(), applicationProperties
+                .getUpdatePaymentTopicKey(), new PaymentRequest(paymentRequest.getRequestInfo(), paymentRequest.getPayment()));
 
         return validatedPayments;
     }

@@ -112,10 +112,8 @@ public class PaymentController {
                     defaultStatus.add(receiptStatus.toString());
                 }
             }
-
             paymentSearchCriteria.setInstrumentStatus(defaultStatus);
         }
-
         List<Payment> payments = paymentService.getPayments(requestInfo, paymentSearchCriteria);
 
         return getSuccessResponse(payments, requestInfo);
