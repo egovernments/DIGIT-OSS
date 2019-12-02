@@ -177,6 +177,8 @@ export const corrospondanceAddr = getCommonCard({
       props: {
         className: "applicant-details-error"
       },
+      required: true,
+
       placeholder: {
         labelName: "Enter City",
         labelKey: "BPA_NEW_TRADE_DETAILS_CITY_PLACEHOLDER"
@@ -189,6 +191,8 @@ export const corrospondanceAddr = getCommonCard({
         labelName: "Pincode",
         labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
       },
+      required: true,
+
       props: {
         className: "applicant-details-error"
       },
@@ -285,6 +289,8 @@ export const permanentAddr = getCommonCard({
       props: {
         className: "applicant-details-error"
       },
+      required: true,
+
       placeholder: {
         labelName: "Enter City",
         labelKey: "BPA_NEW_TRADE_DETAILS_CITY_PLACEHOLDER"
@@ -304,6 +310,8 @@ export const permanentAddr = getCommonCard({
         labelName: "Enter Pincode",
         labelKey: "TL_NEW_TRADE_DETAILS_PIN_PLACEHOLDER"
       },
+      required: true,
+
       pattern: getPattern("Pincode"),
       jsonPath: "LicensesTemp[0].userData.address.pincode"
     })

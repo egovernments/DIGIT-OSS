@@ -2,10 +2,7 @@ import {
   prepareFinalObject,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
-  updatePFOforSearchResults,
-  getBoundaryData
-} from "../../../../ui-utils/commons";
+import { updatePFOforSearchResults } from "../../../../ui-utils/commons";
 import get from "lodash/get";
 import set from "lodash/set";
 
@@ -20,26 +17,13 @@ import {
   stepper,
   getMdmsData
 } from "../bpastakeholder/apply";
-import { getAllDataFromBillingSlab } from "../utils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 const getData = async (action, state, dispatch, tenantId) => {
   await getMdmsData(action, state, dispatch);
-  //await getAllDataFromBillingSlab(tenantId, dispatch);
-  // await getBoundaryData(action, state, dispatch, [
-  //   { key: "tenantId", value: tenantId }
-  // ]);
-  // dispatch(
-  //   prepareFinalObject(
-  //     "Licenses[0].tradeLicenseDetail.address.tenantId",
-  //     tenantId
-  //   )
-  // );
-  // dispatch(
-  //   prepareFinalObject("Licenses[0].tradeLicenseDetail.address.city", tenantId)
-  // );
 };
+
 const updateSearchResults = async (
   action,
   state,
@@ -93,13 +77,9 @@ const screenConfig = {
     }
     const queryValue = getQueryArg(window.location.href, "applicationNumber");
     const tenantId = getQueryArg(window.location.href, "tenantId");
-    const applicationNo = queryValue
-      ? queryValue
-      : get(
-          state.screenConfiguration.preparedFinalObject,
-          "Licenses[0].oldLicenseNumber",
-          null
-        );
+    const applicationNo = queryValue;
+    dispatch(prepareFinalObject("Licenses[0]", {}));
+
     if (applicationNo) {
       updateSearchResults(action, state, dispatch, applicationNo, tenantId);
     } else {

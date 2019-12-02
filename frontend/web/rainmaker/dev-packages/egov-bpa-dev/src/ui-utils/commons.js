@@ -1,13 +1,10 @@
 import { httpRequest } from "./api";
 import {
   convertDateToEpoch,
-  getCurrentFinancialYear,
   getCheckBoxJsonpath,
   getSafetyNormsJson,
   getHygeneLevelJson,
-  getLocalityHarmedJson,
-  setFilteredTradeTypes,
-  getTradeTypeDropdownData
+  getLocalityHarmedJson
 } from "../ui-config/screens/specs/utils";
 import {
   prepareFinalObject,
@@ -15,8 +12,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getTranslatedLabel,
-  updateDropDowns,
-  ifUserRoleExists
+  updateDropDowns
 } from "../ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "redux/store";
@@ -27,10 +23,7 @@ import {
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import {
-  setBusinessServiceDataToLocalStorage,
-  getMultiUnits
-} from "egov-ui-framework/ui-utils/commons";
+import { getMultiUnits } from "egov-ui-framework/ui-utils/commons";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const updateTradeDetails = async requestBody => {
@@ -162,82 +155,6 @@ export const updatePFOforSearchResults = async (
   createOwnersBackup(dispatch, payload);
 };
 
-export const getBoundaryData = async (
-  action,
-  state,
-  dispatch,
-  queryObject,
-  code,
-  componentPath
-) => {
-  try {
-    let payload = await httpRequest(
-      "post",
-      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-      "_search",
-      queryObject,
-      {}
-    );
-    const tenantId =
-      process.env.REACT_APP_NAME === "Employee"
-        ? get(
-            state.screenConfiguration.preparedFinalObject,
-            "Licenses[0].tradeLicenseDetail.address.city"
-          )
-        : getQueryArg(window.location.href, "tenantId");
-
-    const mohallaData =
-      payload &&
-      payload.TenantBoundary[0] &&
-      payload.TenantBoundary[0].boundary &&
-      payload.TenantBoundary[0].boundary.reduce((result, item) => {
-        result.push({
-          ...item,
-          name: `${tenantId
-            .toUpperCase()
-            .replace(/[.]/g, "_")}_REVENUE_${item.code
-            .toUpperCase()
-            .replace(/[._:-\s\/]/g, "_")}`
-        });
-        return result;
-      }, []);
-
-    dispatch(
-      prepareFinalObject(
-        "applyScreenMdmsData.tenant.localities",
-        // payload.TenantBoundary && payload.TenantBoundary[0].boundary,
-        mohallaData
-      )
-    );
-
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
-        "props.suggestions",
-        mohallaData
-      )
-    );
-    if (code) {
-      let data = payload.TenantBoundary[0].boundary;
-      let messageObject =
-        data &&
-        data.find(item => {
-          return item.code == code;
-        });
-      if (messageObject)
-        dispatch(
-          prepareFinalObject(
-            "Licenses[0].tradeLicenseDetail.address.locality.name",
-            messageObject.name
-          )
-        );
-    }
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 const updateownersAddress = (dispatch, payload) => {
   const owners = get(payload, "Licenses[0].tradeLicenseDetail.owners");
   let permanantAddrLine1 = get(owners[0], "address.addressLine1");
@@ -262,30 +179,6 @@ const createOwnersBackup = (dispatch, payload) => {
         JSON.parse(JSON.stringify(owners))
       )
     );
-};
-
-const getMultipleOwners = owners => {
-  let mergedOwners =
-    owners &&
-    owners.reduce((result, item) => {
-      if (item && item !== null && item.hasOwnProperty("mobileNumber")) {
-        if (item.hasOwnProperty("active") && item.active) {
-          if (item.hasOwnProperty("isDeleted") && !item.isDeleted) {
-            set(item, "active", false);
-            result.push(item);
-          } else {
-            result.push(item);
-          }
-        } else {
-          if (!item.hasOwnProperty("isDeleted")) {
-            result.push(item);
-          }
-        }
-      }
-      return result;
-    }, []);
-
-  return mergedOwners;
 };
 
 const userAddressConstruct = address => {
