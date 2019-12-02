@@ -144,7 +144,7 @@
 						<div class="col-sm-3 add-margin">
 							<form:textarea path="remarks" type="text" placeholder=""
 								autocomplete="off" class="form-control low-width"
-								maxlength="250" />
+								maxlength="250"  required="required"  cssErrorClass="form-control error"/>
 							<form:errors path="remarks" cssClass="error-msg" />
 						</div>
 						<input type="hidden" name="closedPeriod"

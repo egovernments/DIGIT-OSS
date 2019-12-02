@@ -143,7 +143,6 @@ function validateEndDate(event) {
 		if(fromdate > todate){
 			bootbox.alert("From period should be prior or same as that of till period.");
 			document.getElementById('startingDate').value=0;
-			console.log(this.id);
 			document.getElementById('endingDate').value=0;
 		}else if(todate>endofmonth){
 			bootbox.alert(" From period should be prior or same as that of till period.");
@@ -167,6 +166,37 @@ $('#addnewcloseperiod').click(function() {
 	window.location = url;
  
 });
+
+
+$('#buttonSubmit').click(function(e) {
+	if ($('form').valid()) {
+		if(validate()){
+			return true;
+		}else{
+			e.preventDefault();
+			}
+		
+	} else {
+		e.preventDefault();
+	}
+});
+
+function validate(){
+	var fromdate = parseInt(document.getElementById('startingDate').value);
+	var todate = parseInt(document.getElementById('endingDate').value);
+
+	if(fromdate == 0 ){
+		bootbox.alert("Please select From Month");
+		return false;
+	}
+	
+	if(todate == 0 ){
+		bootbox.alert("Please select Till Month");
+		return false;
+	}
+	
+	return true;
+}
 
 /*function formatDate6(dt){
 	if(dt==null || dt==''  || dt=="" )return '';

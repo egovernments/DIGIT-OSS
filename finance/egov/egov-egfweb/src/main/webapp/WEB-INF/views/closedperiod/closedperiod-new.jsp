@@ -69,14 +69,15 @@
 		</div>
 	</div>
 </form:form>
-<script>
+<!-- <script>
 	$('#buttonSubmit').click(function(e) {
 		if ($('form').valid()) {
+			validate();
 		} else {
 			e.preventDefault();
 		}
 	});
-</script>
+</script> -->
 </script>
 <link rel="stylesheet"
 	href="<cdn:url value='/resources/global/css/font-icons/entypo/css/entypo.css' context='/services/egi'/>" />
