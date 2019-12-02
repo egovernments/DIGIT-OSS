@@ -54,7 +54,7 @@ class PropertyInfoCard extends Component {
               {items.map(
                 (item) => {
                   return (<div>
-                    <div className="col-sm-4 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
+                    <div className="col-sm-3 col-xs-12" style={{ marginBottom: 10, marginTop: 5, minHeight:60 }}>
                       <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
                         <Label
                           labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}

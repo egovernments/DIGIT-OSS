@@ -35,25 +35,24 @@ const getAddressItems = (properties, loadMdmsData) => {
         value: properties.oldPropertyId || "NA",
       },
       {
+        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_STREET_NAME", localizationLabelsData),
+        value: address.street || "NA",
+      },
+      {
+        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PINCODE", localizationLabelsData),
+        value: address.pincode || "NA",
+      },
+      {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_ROAD_TYPE", localizationLabelsData),
         value: additionalDetails && additionalDetails.roadType && getTranslatedLabel(('PROPERTYTAX_ROADTYPE_' + additionalDetails.roadType).toUpperCase(), localizationLabelsData) || "NA",
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_THANA", localizationLabelsData),
         value: additionalDetails && additionalDetails.thana && getTranslatedLabel(('PROPERTYTAX_THANA_' + additionalDetails.thana.replace('-', '_')).toUpperCase(), localizationLabelsData) || "NA",
-
-      },
-      {
-        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_STREET_NAME", localizationLabelsData),
-        value: address.street || "NA",
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
         value: getTranslatedLabel((properties.tenantId.replace('.', '_') + '_REVENUE_' + address.locality.code).toUpperCase(), localizationLabelsData) || "NA",
-      },
-      {
-        key: getTranslatedLabel("PT_PROPERTY_ADDRESS_PINCODE", localizationLabelsData),
-        value: address.pincode || "NA",
       }
     ]
   );
