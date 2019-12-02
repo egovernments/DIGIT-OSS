@@ -75,6 +75,7 @@ import org.egov.egf.utils.FinancialUtils;
 import org.egov.eis.web.contract.WorkflowContainer;
 import org.egov.infra.admin.master.service.AppConfigValueService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.infra.validation.exception.ValidationException;
 import org.egov.model.bills.DocumentUpload;
@@ -228,7 +229,7 @@ public class CreateExpenseBillController extends BaseBillController {
 
                 savedEgBillregister = expenseBillService.create(egBillregister, approvalPosition, approvalComment, null, 
                         workFlowAction,approvalDesignation);
-            } catch (final ValidationException e) {
+            } catch (ApplicationRuntimeException|ValidationException e) {
                 setDropDownValues(model);
                 model.addAttribute(STATE_TYPE, egBillregister.getClass().getSimpleName());
                 prepareWorkflow(model, egBillregister, new WorkflowContainer());
@@ -239,7 +240,12 @@ public class CreateExpenseBillController extends BaseBillController {
                 egBillregister.getBillPayeedetails().clear();
                 prepareBillDetailsForView(egBillregister);
                 prepareValidActionListByCutOffDate(model);
-                resultBinder.reject("", e.getErrors().get(0).getMessage());
+                if(e instanceof ValidationException) {
+                    resultBinder.reject("", ((ValidationException)e).getErrors().get(0).getMessage());                    
+                }
+                if(e instanceof ApplicationRuntimeException) {
+                    resultBinder.reject("", ((ApplicationRuntimeException)e).getMessage());
+                }
                 return EXPENSEBILL_FORM;
             }
             final String approverName = String.valueOf(request.getParameter("approverName"));
