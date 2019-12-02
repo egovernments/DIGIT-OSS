@@ -244,7 +244,7 @@ public class PersistRepository {
                     return true;
                 }
                 else
-                    temp = (LinkedHashMap<String, Object>) jsonTree.get(baseObjectForNullCheck);
+                    temp = (LinkedHashMap<String, Object>) temp.get(baseObjectForNullCheck);
             }
             return false;
         } else
