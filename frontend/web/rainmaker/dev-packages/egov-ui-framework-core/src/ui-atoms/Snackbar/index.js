@@ -108,6 +108,7 @@ class CustomizedSnackbars extends React.Component {
           open={open}
           autoHideDuration={5000}
           onClose={onClose}
+          style={{zIndex: 9999}}
         >
           <MySnackbarContentWrapper
             variant={variant}
