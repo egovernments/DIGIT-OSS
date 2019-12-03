@@ -966,19 +966,6 @@ const getToolTipInfo = (taxHead, LicenseData) => {
 
 const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
   if (Bill && Bill.length) {
-    const extraData = ["TL_COMMON_REBATE", "TL_COMMON_PEN"].map(item => {
-      return {
-        name: {
-          labelName: item,
-          labelKey: item
-        },
-        value: null,
-        info: getToolTipInfo(item, LicenseData) && {
-          value: getToolTipInfo(item, LicenseData),
-          key: getToolTipInfo(item, LicenseData)
-        }
-      };
-    });
     const { billAccountDetails } = Bill[0].billDetails[0];
     const transformedData = billAccountDetails.reduce((result, item) => {
       if (getFromReceipt) {
@@ -1021,8 +1008,7 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
     }, []);
     return [
       ...transformedData.filter(item => item.name.labelKey === "TL_TAX"),
-      ...transformedData.filter(item => item.name.labelKey !== "TL_TAX"),
-      ...extraData
+      ...transformedData.filter(item => item.name.labelKey !== "TL_TAX")
     ];
   }
 };
@@ -1166,7 +1152,7 @@ export const createEstimateData = async (
   jsonPath,
   dispatch,
   href = {},
-  getFromReceipt
+  isgetBill
 ) => {
   const applicationNo =
     get(LicenseData, "applicationNumber") ||
@@ -1174,7 +1160,7 @@ export const createEstimateData = async (
   const tenantId =
     get(LicenseData, "tenantId") || getQueryArg(href, "tenantId");
   const businessService = "BPAREG"; //Hardcoding Alert
-  const queryObj = [
+  const queryObjForGetBill = [
     { key: "tenantId", value: tenantId },
     {
       key: "consumerCode",
@@ -1183,6 +1169,13 @@ export const createEstimateData = async (
     {
       key: "businessService",
       value: businessService
+    }
+  ];
+  const queryObjForGetReceipt = [
+    { key: "tenantId", value: tenantId },
+    {
+      key: "consumerCodes",
+      value: applicationNo
     }
   ];
   const currentStatus = LicenseData.status;
@@ -1196,22 +1189,29 @@ export const createEstimateData = async (
   //     : payload.billResponse &&
   //       getEstimateData(payload.billResponse.Bill, false, LicenseData)
   //   : [];
-
-  const payload = isPAID
-    ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-    : await getBill(queryObj);
-  let estimateData = payload
-    ? isPAID
-      ? payload &&
-        payload.Payments &&
-        payload.Payments.length > 0 &&
-        getEstimateData(
-          payload.Payments[0].paymentDetails[0].bill,
-          isPAID,
-          LicenseData
-        )
-      : payload && getEstimateData(payload, false, LicenseData)
-    : [];
+  let payload = {};
+  let estimateData = {};
+  if (isgetBill) {
+    payload = await getBill(queryObjForGetBill);
+    estimateData =
+      payload && getEstimateData(payload.billResponse.Bill, false, LicenseData);
+  } else {
+    payload = isPAID
+      ? await getReceipt(queryObjForGetReceipt)
+      : await getBill(queryObjForGetBill);
+    estimateData = payload
+      ? isPAID
+        ? payload &&
+          payload.Payments &&
+          payload.Payments.length > 0 &&
+          getEstimateData(
+            payload.Payments[0].paymentDetails[0].bill,
+            isPAID,
+            LicenseData
+          )
+        : payload && getEstimateData(payload, false, LicenseData)
+      : [];
+  }
   estimateData = estimateData || [];
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
