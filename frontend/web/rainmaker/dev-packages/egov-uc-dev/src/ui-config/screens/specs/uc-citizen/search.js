@@ -49,17 +49,11 @@ const getMDMSData = async (action, state, dispatch) => {
       [],
       mdmsBody
     );
-    // dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-    let serviceCategories = setServiceCategory(
+        setServiceCategory(
       get(payload, "MdmsRes.BillingService.BusinessService", []),
       dispatch
     );
-    dispatch(
-      prepareFinalObject(
-        "searchScreenMdmsData.serviceCategory",
-        serviceCategories
-      )
-    );
+   
   } catch (e) {
     console.log(e);
   }

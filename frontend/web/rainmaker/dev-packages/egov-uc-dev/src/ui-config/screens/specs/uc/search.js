@@ -53,12 +53,7 @@ const getMDMSData = async (action, state, dispatch) => {
       get(payload, "MdmsRes.BillingService.BusinessService", []),
       dispatch
     );   
-    dispatch(
-      prepareFinalObject(
-        "searchScreenMdmsData.serviceCategory",
-        serviceCategories
-      )
-    );
+ 
   } catch (e) {
     console.log(e);
     alert("Billing service data fetch failed");
