@@ -88,7 +88,6 @@ export const callBackForNext = async (state, dispatch) => {
     "components.div.children.stepper.props.activeStep",
     0
   );
-  // console.log(activeStep);
   let isFormValid = true;
   let hasFieldToaster = true;
   if (activeStep === 0) {
@@ -135,6 +134,9 @@ export const callBackForNext = async (state, dispatch) => {
       isFormValid = false;
     } else {
       isFormValid = await applyTradeLicense(state, dispatch);
+      if (!isFormValid) {
+        hasFieldToaster = false;
+      }
       let tenantIdInLocastorage = getTenantId();
       if (!tenantIdInLocastorage)
         setTenantId(process.env.REACT_APP_DEFAULT_TENANT_ID);
@@ -181,7 +183,9 @@ export const callBackForNext = async (state, dispatch) => {
         createEstimateData(
           LicenseData,
           "LicensesTemp[0].estimateCardData",
-          dispatch
+          dispatch,
+          {},
+          true
         ); //get bill and populate estimate card
         dispatch(
           prepareFinalObject("LicensesTemp[0].reviewDocData", reviewDocData)
@@ -218,13 +222,6 @@ export const callBackForNext = async (state, dispatch) => {
           };
           break;
         case 1:
-          errorMessage = {
-            labelName:
-              "Please fill all mandatory fields for Owner Details, then do next !",
-            labelKey: "ERR_FILL_OWNERS_MANDATORY_FIELDS"
-          };
-          break;
-        case 2:
           errorMessage = {
             labelName: "Please upload all the required documents !",
             labelKey: "ERR_UPLOAD_REQUIRED_DOCUMENTS"
