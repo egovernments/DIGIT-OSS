@@ -6,6 +6,14 @@
             "format": "TEST_seq/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_EGOV_COMMON_TEST_AUTOCRE]",
             "idname": "seq.autocreate.test"
         },	
+        {
+            "format": "BILL-[SEQ_EGOV_COMMON_TEST_AUTOCRE]",
+            "idname": "billnumberid"
+        },	
+        {
+            "format": "PTA-[SEQ_EGOV_COMMON_TEST_AUTOCRE]",
+            "idname": "pt.assessmentnumber"
+        },	
 	{
             "format": "MP/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
             "idname": "watercharges.metered.receipt.id"
