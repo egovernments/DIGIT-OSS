@@ -9,7 +9,7 @@
     left: 0;
     width: 100vw;
     text-align: right;
-    display: flex;
+    display: block;
     padding: initial;
     overflow: auto; }
   .apply-wizard-footer button {
