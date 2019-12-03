@@ -19,7 +19,6 @@ import {
   createEstimateData,
   setMultiOwnerForSV,
   setValidToFromVisibilityForSV,
-  getDialogButton,
   addressDestruct
 } from "../utils";
 
@@ -440,11 +439,6 @@ const setActionItems = (action, object) => {
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "TL_PAYMENT_VIEW_BREAKUP",
-    "search-preview"
-  ),
   reviewOwnerDetails,
   reviewOrganizationDetails,
   reviewPermanentDetails,

@@ -34,11 +34,6 @@ export const tradeReviewDetails = getCommonCard({
     labelKey: "TL_SUMMARY_HEADER"
   }),
   estimate,
-  viewBreakupButton: getDialogButton(
-    "VIEW BREAKUP",
-    "TL_PAYMENT_VIEW_BREAKUP",
-    "apply"
-  ),
   reviewOwnerDetails,
   reviewOrganizationDetails,
   reviewPermanentDetails,
