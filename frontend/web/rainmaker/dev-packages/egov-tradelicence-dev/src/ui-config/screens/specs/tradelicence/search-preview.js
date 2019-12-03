@@ -5,6 +5,9 @@ import {
   getCommonGrayCard,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  getUserInfo
+} from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -235,7 +238,13 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     process.env.REACT_APP_NAME === "Citizen"
       ? set(action, "screenConfig.components.div.children.footer", footer)
       : set(action, "screenConfig.components.div.children.footer", {});
-
+      const userRoles = JSON.parse(getUserInfo()).roles; 
+        userRoles.map((userRole)=>{
+        if(userRole.code=='TL_CEMP' &&  userRole.tenantId==tenantId && status=="APPROVED"){
+          set(action, "screenConfig.components.div.children.footer", footer)
+        }
+      })
+      
     if (status === "cancelled")
       set(
         action,
