@@ -19,31 +19,31 @@ const instance = axios.create({
 });
 
 const userInfo = {
-  id: 1473,
+  id: 23986,
   userName: "8275218816",
   salutation: null,
-  name: "S",
+  name: "asdad",
   gender: "MALE",
   mobileNumber: "8275218816",
-  emailId: "",
-  altContactNumber: null,
-  pan: null,
+  emailId: "asd@gmail.com",
+  altContactNumber: "0727222222",
+  pan: "",
   aadhaarNumber: null,
-  permanentAddress: "d",
-  permanentCity: "pb.nawanshahr",
-  permanentPinCode: null,
+  permanentAddress: "aa,a,a,a",
+  permanentCity: "a",
+  permanentPinCode: "443121",
   correspondenceAddress: "asd",
   correspondenceCity: null,
   correspondencePinCode: null,
   addresses: [
     {
-      pinCode: null,
-      city: "pb.nawanshahr",
-      address: "d",
+      pinCode: "443121",
+      city: "a",
+      address: "aa,a,a,a",
       type: "PERMANENT",
-      id: 3144,
+      id: 47740,
       tenantId: "pb",
-      userId: 1473,
+      userId: 23986,
       addressType: "PERMANENT",
       lastModifiedDate: null,
       lastModifiedBy: null
@@ -53,9 +53,9 @@ const userInfo = {
       city: null,
       address: "asd",
       type: "CORRESPONDENCE",
-      id: 2798,
+      id: 52782,
       tenantId: "pb",
-      userId: 1473,
+      userId: 23986,
       addressType: "CORRESPONDENCE",
       lastModifiedDate: null,
       lastModifiedBy: null
@@ -71,7 +71,7 @@ const userInfo = {
   bloodGroup: null,
   photo: null,
   identificationMark: null,
-  createdBy: 1376,
+  createdBy: 23985,
   lastModifiedBy: 1,
   tenantId: "pb",
   roles: [
@@ -81,11 +81,11 @@ const userInfo = {
       tenantId: "pb"
     }
   ],
-  uuid: "024e697a-0f17-4d5a-bd67-337cd259e864",
-  createdDate: "03-07-2019 15:24:55",
-  lastModifiedDate: "29-11-2019 16:30:50",
+  uuid: "6fe8fb27-3f4b-473f-8279-ae8cff4173f4",
+  createdDate: "28-08-2018 17:02:32",
+  lastModifiedDate: "29-11-2019 15:51:30",
   dob: "11/11/2001",
-  pwdExpiryDate: "13-10-2019 13:24:00"
+  pwdExpiryDate: "07-12-2018 22:32:00"
 };
 
 const wrapRequestBody = (requestBody, action, customRequestInfo) => {
