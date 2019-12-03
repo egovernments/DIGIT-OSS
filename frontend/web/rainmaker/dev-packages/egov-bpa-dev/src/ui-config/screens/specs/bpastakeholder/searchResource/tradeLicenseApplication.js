@@ -60,12 +60,12 @@ export const tradeLicenseApplication = getCommonCard({
     // }),
     ownerMobNo: getTextField({
       label: {
-        labelName: "Owner Mobile No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
+        labelName: "Mobile No.",
+        labelKey: "BPA_HOME_SEARCH_RESULTS_OWN_MOB_LABEL"
       },
       placeholder: {
-        labelName: "Enter your mobile No.",
-        labelKey: "TL_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
+        labelName: "Enter mobile No.",
+        labelKey: "BPA_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER"
       },
       gridDefination: {
         xs: 12,
