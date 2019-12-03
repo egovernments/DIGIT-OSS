@@ -27,7 +27,6 @@ import { footer } from "./applyResource/footer";
 import { tradeReviewDetails } from "./applyResource/tradeReviewDetails";
 import { organizationDetails } from "./applyResource/organizationDetails";
 import {
-  tradeLocationDetails,
   permanentAddr,
   corrospondanceAddr
 } from "./applyResource/tradeLocationDetails";
@@ -49,7 +48,7 @@ export const stepper = getStepperObject(
   stepsData
 );
 
-export const getGenderRadioButton1 = {
+export const getOrganizationReqd = {
   uiFramework: "custom-containers-local",
   moduleName: "egov-bpa",
 
@@ -325,9 +324,8 @@ export const formwizardFirstStep = {
   children: {
     OwnerInfoCard,
     breakAfterSearch: getBreak(),
-    getGenderRadioButton1,
+    getOrganizationReqd,
     organizationDetails,
-    // tradeLocationDetails,
     permanentAddr,
     corrospondanceAddr
   }
