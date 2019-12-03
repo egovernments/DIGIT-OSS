@@ -72,8 +72,8 @@ export const getGenderRadioButton = {
       },
       {
         label: "Transgender",
-        labelKey: "COMMON_GENDER_TRANSGENDER",
-        value: "TRANSGENDER"
+        labelKey: "COMMON_GENDER_OTHERS",
+        value: "OTHERS"
       }
     ],
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
@@ -162,7 +162,7 @@ export const OwnerInfoCard = getCommonCard({
         }
       }),
       beforeFieldChange: (action, state, dispatch) => {
-        setLicenseeSubTypeDropdownData(action, state, dispatch);
+        setLicenseeSubTypeDropdownData(action.value, state, dispatch);
         if (action.value == "ARCHITECT")
           dispatch(
             handleField(
@@ -199,10 +199,10 @@ export const OwnerInfoCard = getCommonCard({
           moduleName: "TRADELICENSE",
           masterName: "TRADETYPE"
         },
-        props: {
-          jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
-          setDataInField: true
-        },
+        // props: {
+        //   jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
+        //   setDataInField: true
+        // },
         sourceJsonPath: "applyScreenMdmsData.TradeLicense.tradeSubType",
         gridDefination: {
           xs: 12,

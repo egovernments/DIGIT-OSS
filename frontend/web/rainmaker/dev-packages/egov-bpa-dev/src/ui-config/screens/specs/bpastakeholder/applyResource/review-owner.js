@@ -87,6 +87,16 @@ export const reviewOwnerPAN = getLabelWithValue(
   { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
 );
 
+export const reviewcounsilForArchNo = getLabelWithValue(
+  {
+    labelName: "Council for Architecture No.",
+    labelKey: "BPA_COUNCIL_FOR_ARCH_NO_LABEL"
+  },
+  {
+    jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo"
+  }
+);
+
 export const getReviewOwner = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {
@@ -154,7 +164,8 @@ export const getReviewOwner = (isEditable = true) => {
         reviewOwnerDOB,
         reviewOwnerPhoneNo,
         reviewOwnerEmail,
-        reviewOwnerPAN
+        reviewOwnerPAN,
+        reviewcounsilForArchNo
       })
     })
   });

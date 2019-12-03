@@ -19,31 +19,10 @@ import {
 } from "../bpastakeholder/apply";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { addressDestruct } from "../utils";
+import { addressDestruct, setOrganizationVisibility } from "../utils";
 
 const getData = async (action, state, dispatch, tenantId) => {
   await getMdmsData(action, state, dispatch);
-};
-
-const setOrganizationVisibility = (action, state, dispatch, ownerShipType) => {
-  dispatch(
-    prepareFinalObject(
-      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
-      ownerShipType
-    )
-  );
-  const componentPathToHide = [
-    "components.div.children.formwizardFirstStep.children.organizationDetails",
-    "components.div.children.formwizardThirdStep.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails"
-  ];
-  componentPathToHide &&
-    componentPathToHide.map(item => {
-      set(
-        action.screenConfig,
-        `${item}.visible`,
-        ownerShipType != "INDIVIDUAL"
-      );
-    });
 };
 
 const updateSearchResults = async (
@@ -54,7 +33,7 @@ const updateSearchResults = async (
   tenantId
 ) => {
   await getData(action, state, dispatch, tenantId);
-  await updatePFOforSearchResults(
+  let aa = await updatePFOforSearchResults(
     action,
     state,
     dispatch,
@@ -67,6 +46,7 @@ const updateSearchResults = async (
     state.screenConfiguration.preparedFinalObject,
     "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
   );
+
   setOrganizationVisibility(action, state, dispatch, subOwnerShipCategory);
   const queryValueFromUrl = getQueryArg(
     window.location.href,
