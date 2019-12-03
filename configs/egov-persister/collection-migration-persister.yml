@@ -74,7 +74,7 @@ serviceMaps:
 
             - jsonPath: $.Payments.*.paymentDetails.*.tenantId
 
-            - jsonPath: $.Payments.*.id
+            - jsonPath: $.Payments.*.paymentDetails.*.paymentId
 
             - jsonPath: $.Payments.*.paymentDetails.*.totalDue
               type: DOUBLE
