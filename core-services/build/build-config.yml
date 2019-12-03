@@ -198,4 +198,12 @@ config:
     build:
       - work-dir: "core-services/egov-telemetry/egov-telemetry-batch-process"
         image-name: "egov-telemetry-batch-process"
-        dockerfile: "build/maven/Dockerfile" 
+        dockerfile: "build/maven/Dockerfile"
+  
+  - name: "core-services/egov-url-shortening"
+    build:
+      - work-dir: "egov-url-shortening"
+        image-name: "egov-url-shortening"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-url-shortening/src/main/resources/db"
+        image-name: "egov-url-shortening-db"
