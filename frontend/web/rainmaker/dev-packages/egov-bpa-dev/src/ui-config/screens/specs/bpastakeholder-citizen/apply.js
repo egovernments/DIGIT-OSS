@@ -19,9 +19,31 @@ import {
 } from "../bpastakeholder/apply";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { addressDestruct } from "../utils";
 
 const getData = async (action, state, dispatch, tenantId) => {
   await getMdmsData(action, state, dispatch);
+};
+
+const setOrganizationVisibility = (action, state, dispatch, ownerShipType) => {
+  dispatch(
+    prepareFinalObject(
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+      ownerShipType
+    )
+  );
+  const componentPathToHide = [
+    "components.div.children.formwizardFirstStep.children.organizationDetails",
+    "components.div.children.formwizardThirdStep.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails"
+  ];
+  componentPathToHide &&
+    componentPathToHide.map(item => {
+      set(
+        action.screenConfig,
+        `${item}.visible`,
+        ownerShipType != "INDIVIDUAL"
+      );
+    });
 };
 
 const updateSearchResults = async (
@@ -40,6 +62,12 @@ const updateSearchResults = async (
     "",
     tenantId
   );
+  addressDestruct(action, state, dispatch);
+  const subOwnerShipCategory = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+  );
+  setOrganizationVisibility(action, state, dispatch, subOwnerShipCategory);
   const queryValueFromUrl = getQueryArg(
     window.location.href,
     "applicationNumber"
@@ -79,11 +107,13 @@ const screenConfig = {
     const tenantId = getQueryArg(window.location.href, "tenantId");
     const applicationNo = queryValue;
     dispatch(prepareFinalObject("Licenses[0]", {}));
+    dispatch(prepareFinalObject("LicensesTemp[0]", {}));
 
     if (applicationNo) {
       updateSearchResults(action, state, dispatch, applicationNo, tenantId);
     } else {
       getData(action, state, dispatch, tenantId);
+      setOrganizationVisibility(action, state, dispatch, "INDIVIDUAL");
     }
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     return action;
