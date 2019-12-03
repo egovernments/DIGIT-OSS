@@ -20,14 +20,11 @@ const header = getCommonHeader(
 const cardItems = [
   {
     label: {
-      labelKey: "TL_APPLY_TRADELICENSE",
-      labelName: "Apply for Trade License"
+      labelKey: "BPA_COMMON_APPL_NEW_LICENSE",
+      labelName: "Register Technical Person/Builder"
     },
     icon: <TradeLicenseIcon />,
-    route: {
-      screenKey: "home",
-      jsonPath: "components.cityPickerDialog"
-    }
+    route: "apply"
   },
   {
     label: {

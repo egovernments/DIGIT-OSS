@@ -1,13 +1,10 @@
 import { httpRequest } from "./api";
 import {
   convertDateToEpoch,
-  getCurrentFinancialYear,
   getCheckBoxJsonpath,
   getSafetyNormsJson,
   getHygeneLevelJson,
-  getLocalityHarmedJson,
-  setFilteredTradeTypes,
-  getTradeTypeDropdownData
+  getLocalityHarmedJson
 } from "../ui-config/screens/specs/utils";
 import {
   prepareFinalObject,
@@ -15,8 +12,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getTranslatedLabel,
-  updateDropDowns,
-  ifUserRoleExists
+  updateDropDowns
 } from "../ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "redux/store";
@@ -27,10 +23,8 @@ import {
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import {
-  setBusinessServiceDataToLocalStorage,
-  getMultiUnits
-} from "egov-ui-framework/ui-utils/commons";
+import { getMultiUnits } from "egov-ui-framework/ui-utils/commons";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -148,22 +142,6 @@ export const updatePFOforSearchResults = async (
     dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
   }
   const licenseType = payload && get(payload, "Licenses[0].licenseType");
-  const structureSubtype =
-    payload && get(payload, "Licenses[0].tradeLicenseDetail.structureType");
-  const tradeTypes = setFilteredTradeTypes(
-    state,
-    dispatch,
-    licenseType,
-    structureSubtype
-  );
-  const tradeTypeDdData = getTradeTypeDropdownData(tradeTypes);
-  tradeTypeDdData &&
-    dispatch(
-      prepareFinalObject(
-        "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
-        tradeTypeDdData
-      )
-    );
   updateDropDowns(payload, action, state, dispatch, queryValue);
   if (queryValuePurpose !== "cancel") {
     set(payload, getSafetyNormsJson(queryValuePurpose), "yes");
@@ -175,82 +153,6 @@ export const updatePFOforSearchResults = async (
   setApplicationNumberBox(state, dispatch);
 
   createOwnersBackup(dispatch, payload);
-};
-
-export const getBoundaryData = async (
-  action,
-  state,
-  dispatch,
-  queryObject,
-  code,
-  componentPath
-) => {
-  try {
-    let payload = await httpRequest(
-      "post",
-      "/egov-location/location/v11/boundarys/_search?hierarchyTypeCode=REVENUE&boundaryType=Locality",
-      "_search",
-      queryObject,
-      {}
-    );
-    const tenantId =
-      process.env.REACT_APP_NAME === "Employee"
-        ? get(
-            state.screenConfiguration.preparedFinalObject,
-            "Licenses[0].tradeLicenseDetail.address.city"
-          )
-        : getQueryArg(window.location.href, "tenantId");
-
-    const mohallaData =
-      payload &&
-      payload.TenantBoundary[0] &&
-      payload.TenantBoundary[0].boundary &&
-      payload.TenantBoundary[0].boundary.reduce((result, item) => {
-        result.push({
-          ...item,
-          name: `${tenantId
-            .toUpperCase()
-            .replace(/[.]/g, "_")}_REVENUE_${item.code
-            .toUpperCase()
-            .replace(/[._:-\s\/]/g, "_")}`
-        });
-        return result;
-      }, []);
-
-    dispatch(
-      prepareFinalObject(
-        "applyScreenMdmsData.tenant.localities",
-        // payload.TenantBoundary && payload.TenantBoundary[0].boundary,
-        mohallaData
-      )
-    );
-
-    dispatch(
-      handleField(
-        "apply",
-        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
-        "props.suggestions",
-        mohallaData
-      )
-    );
-    if (code) {
-      let data = payload.TenantBoundary[0].boundary;
-      let messageObject =
-        data &&
-        data.find(item => {
-          return item.code == code;
-        });
-      if (messageObject)
-        dispatch(
-          prepareFinalObject(
-            "Licenses[0].tradeLicenseDetail.address.locality.name",
-            messageObject.name
-          )
-        );
-    }
-  } catch (e) {
-    console.log(e);
-  }
 };
 
 const updateownersAddress = (dispatch, payload) => {
@@ -279,32 +181,17 @@ const createOwnersBackup = (dispatch, payload) => {
     );
 };
 
-const getMultipleOwners = owners => {
-  let mergedOwners =
-    owners &&
-    owners.reduce((result, item) => {
-      if (item && item !== null && item.hasOwnProperty("mobileNumber")) {
-        if (item.hasOwnProperty("active") && item.active) {
-          if (item.hasOwnProperty("isDeleted") && !item.isDeleted) {
-            set(item, "active", false);
-            result.push(item);
-          } else {
-            result.push(item);
-          }
-        } else {
-          if (!item.hasOwnProperty("isDeleted")) {
-            result.push(item);
-          }
-        }
-      }
-      return result;
-    }, []);
-
-  return mergedOwners;
+const userAddressConstruct = address => {
+  let doorNo = address.doorNo ? address.doorNo : "";
+  let buildingName = address.buildingName ? address.buildingName : "";
+  let street = address.street ? address.street : "";
+  let landmark = address.landmark ? address.landmark : "";
+  return `${doorNo},${buildingName},${street},${landmark}`;
 };
 
 export const applyTradeLicense = async (state, dispatch, activeIndex) => {
   try {
+    dispatch(toggleSpinner());
     let queryObject = JSON.parse(
       JSON.stringify(
         get(state.screenConfiguration.preparedFinalObject, "Licenses", [])
@@ -331,6 +218,12 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         "dayend"
       );
     }
+    let ownershipType = get(
+      queryObject[0],
+      "tradeLicenseDetail.subOwnerShipCategory"
+    );
+    if (ownershipType == "INDIVIDUAL")
+      set(queryObject[0], "tradeLicenseDetail.institution", null);
     let owners = get(queryObject[0], "tradeLicenseDetail.owners");
     owners = (owners && convertOwnerDobToEpoch(owners)) || [];
     set(queryObject[0], "tradeLicenseDetail.owners", owners);
@@ -340,19 +233,13 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     const tenantId = process.env.REACT_APP_DEFAULT_TENANT_ID;
 
     set(queryObject[0], "tenantId", tenantId);
-    let permanantAddr = get(
-      queryObject[0],
-      "tradeLicenseDetail.owners[0].address.addressLine1"
+    let userAddress = get(
+      state.screenConfiguration.preparedFinalObject,
+      "LicensesTemp[0].userData.address"
     );
-    let corrospondenceAddr = get(
-      queryObject[0],
-      "tradeLicenseDetail.address.addressLine1"
-    );
-    set(
-      queryObject[0],
-      "tradeLicenseDetail.owners[0].correspondenceAddress",
-      corrospondenceAddr
-    );
+
+    let permanantAddr = userAddressConstruct(userAddress);
+
     set(
       queryObject[0],
       "tradeLicenseDetail.owners[0].permanentAddress",
@@ -360,10 +247,14 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     );
     set(
       queryObject[0],
-      "tradeLicenseDetail.subOwnerShipCategory",
-      "INDIVIDUAL"
+      "tradeLicenseDetail.owners[0].permanentCity",
+      userAddress.city
     );
-
+    set(
+      queryObject[0],
+      "tradeLicenseDetail.owners[0].permanentPinCode",
+      userAddress.pincode
+    );
     if (queryObject[0].applicationNumber) {
       //call update
 
@@ -412,17 +303,39 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       // ) {
       //   action = "APPLY";
       // }
+      let searchResponse = {};
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
-      !isEditFlow &&
-        (await httpRequest("post", "/tl-services/v1/BPAREG/_update", "", [], {
-          Licenses: queryObject
-        }));
-      let searchQueryObject = [
-        { key: "tenantId", value: queryObject[0].tenantId },
-        { key: "applicationNumber", value: queryObject[0].applicationNumber }
-      ];
-      let searchResponse = await getSearchResults(searchQueryObject);
+      if (!isEditFlow) {
+        if (window.location.pathname.includes("whitelisted")) {
+          searchResponse = await httpRequest(
+            "post",
+            "/tl-services/v1/BPAREG1/_update",
+            "",
+            [],
+            {
+              Licenses: queryObject
+            }
+          );
+        } else {
+          searchResponse = await httpRequest(
+            "post",
+            "/tl-services/v1/BPAREG/_update",
+            "",
+            [],
+            {
+              Licenses: queryObject
+            }
+          );
+        }
+      }
+      dispatch(toggleSpinner());
+
+      // let searchQueryObject = [
+      //   { key: "tenantId", value: queryObject[0].tenantId },
+      //   { key: "applicationNumber", value: queryObject[0].applicationNumber }
+      // ];
+      // let searchResponse = await getSearchResults(searchQueryObject);
       if (isEditFlow) {
         searchResponse = { Licenses: queryObject };
       } else {
@@ -432,15 +345,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         searchResponse,
         "Licenses[0].tradeLicenseDetail.tradeUnits"
       );
-      const tradeTemp = updatedtradeUnits.map((item, index) => {
-        return {
-          tradeSubType: item.tradeType.split(".")[1],
-          tradeType: item.tradeType.split(".")[0]
-        };
-      });
-      dispatch(prepareFinalObject("LicensesTemp.tradeUnits", tradeTemp));
-      updateownersAddress(dispatch, searchResponse);
-      createOwnersBackup(dispatch, searchResponse);
     } else {
       let tradeUnits = get(queryObject[0], "tradeLicenseDetail.tradeUnits");
       // let owners = get(queryObject[0], "tradeLicenseDetail.owners");
@@ -460,7 +364,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         [],
         { Licenses: queryObject }
       );
-
+      dispatch(toggleSpinner());
+      if (!response) {
+      }
       dispatch(prepareFinalObject("Licenses", response.Licenses));
       updateownersAddress(dispatch, response);
       createOwnersBackup(dispatch, response);
@@ -470,6 +376,8 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     return true;
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+    dispatch(toggleSpinner());
+
     console.log(error);
     return false;
   }

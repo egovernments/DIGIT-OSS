@@ -276,7 +276,7 @@ body.employee-user-profile {
   background-color:#34495E;
   min-height: calc(100vh - 64px);
   position: fixed;
-  z-index: 1001;
+  z-index: 1501;
   border-right: 1px solid #00000024;
   padding: 0px;
 }
@@ -544,4 +544,11 @@ body.employee-user-profile {
   display:inline-block;
   border-radius: 50%;
   border: 1px solid #fe7a511f !important;
+}
+
+div[role="dialog"] {
+  z-index: 1501;
+  div[role="document"] {
+    max-height: calc(100% - 150px);
+  }
 }

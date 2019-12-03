@@ -18,6 +18,76 @@ const instance = axios.create({
   }
 });
 
+const userInfo = {
+  id: 1473,
+  userName: "8275218816",
+  salutation: null,
+  name: "S",
+  gender: "MALE",
+  mobileNumber: "8275218816",
+  emailId: "",
+  altContactNumber: null,
+  pan: null,
+  aadhaarNumber: null,
+  permanentAddress: "d",
+  permanentCity: "pb.nawanshahr",
+  permanentPinCode: null,
+  correspondenceAddress: "asd",
+  correspondenceCity: null,
+  correspondencePinCode: null,
+  addresses: [
+    {
+      pinCode: null,
+      city: "pb.nawanshahr",
+      address: "d",
+      type: "PERMANENT",
+      id: 3144,
+      tenantId: "pb",
+      userId: 1473,
+      addressType: "PERMANENT",
+      lastModifiedDate: null,
+      lastModifiedBy: null
+    },
+    {
+      pinCode: null,
+      city: null,
+      address: "asd",
+      type: "CORRESPONDENCE",
+      id: 2798,
+      tenantId: "pb",
+      userId: 1473,
+      addressType: "CORRESPONDENCE",
+      lastModifiedDate: null,
+      lastModifiedBy: null
+    }
+  ],
+  active: true,
+  locale: null,
+  type: "CITIZEN",
+  accountLocked: false,
+  accountLockedDate: 0,
+  fatherOrHusbandName: "s",
+  signature: null,
+  bloodGroup: null,
+  photo: null,
+  identificationMark: null,
+  createdBy: 1376,
+  lastModifiedBy: 1,
+  tenantId: "pb",
+  roles: [
+    {
+      code: "CITIZEN",
+      name: "Citizen",
+      tenantId: "pb"
+    }
+  ],
+  uuid: "024e697a-0f17-4d5a-bd67-337cd259e864",
+  createdDate: "03-07-2019 15:24:55",
+  lastModifiedDate: "29-11-2019 16:30:50",
+  dob: "11/11/2001",
+  pwdExpiryDate: "13-10-2019 13:24:00"
+};
+
 const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   const authToken = getAccessToken();
   let RequestInfo = {
@@ -29,7 +99,8 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     key: "",
     msgId: `20170310130900|${getLocale()}`,
     requesterId: "",
-    authToken
+    authToken,
+    userInfo
   };
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
   return Object.assign(

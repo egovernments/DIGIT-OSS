@@ -19,7 +19,8 @@ import {
   createEstimateData,
   setMultiOwnerForSV,
   setValidToFromVisibilityForSV,
-  getDialogButton
+  getDialogButton,
+  addressDestruct
 } from "../utils";
 
 import { footerReview } from "./applyResource/footer";
@@ -31,7 +32,10 @@ import {
 
 import { getOrganizationDetails } from "./applyResource/review-organization";
 import { getReviewOwner } from "./applyResource/review-owner";
-import { getLocationDetails } from "./applyResource/review-location";
+import {
+  getPermanentDetails,
+  getCommunicactionDetails
+} from "./applyResource/review-location";
 import { getReviewDocuments } from "./applyResource/review-documents";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
@@ -129,6 +133,17 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     );
   }
 
+  const moduleName = get(
+    payload,
+    "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType"
+  ).split(".")[0];
+
+  set(
+    action,
+    "screenConfig.components.div.children.taskStatus.props.moduleName",
+    moduleName
+  );
+
   await setDocuments(
     payload,
     "Licenses[0].tradeLicenseDetail.applicationDocuments",
@@ -171,6 +186,55 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     // const status = getTransformedStatus(
     //   get(state, "screenConfiguration.preparedFinalObject.Licenses[0].status")
     // );
+
+    const subOwnerShipCategory = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+    );
+    if (subOwnerShipCategory == "INDIVIDUAL") {
+      set(
+        action,
+        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails.visible",
+        false
+      );
+    } else {
+      set(
+        action,
+        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails.visible",
+        true
+      );
+    }
+
+    const tradeType = get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType"
+    );
+    if (tradeType.split(".").length > 1) {
+      set(
+        action,
+        "creenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewLicenseeSubType.visible",
+        true
+      );
+      dispatch(
+        prepareFinalObject(
+          "LicensesTemp[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+          tradeType.split(".")[0]
+        )
+      );
+    } else {
+      dispatch(
+        prepareFinalObject(
+          "LicensesTemp[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+          tradeType
+        )
+      );
+      set(
+        action,
+        "creenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewLicenseeSubType.visible",
+        false
+      );
+    }
+
     const status = get(
       state,
       "screenConfiguration.preparedFinalObject.Licenses[0].status"
@@ -179,7 +243,14 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     let data = get(state, "screenConfiguration.preparedFinalObject");
 
     const obj = setStatusBasedValue(status);
-
+    if (get(data, "Licenses[0].tradeLicenseDetail.applicationDocuments")) {
+      await setDocuments(
+        data,
+        "Licenses[0].tradeLicenseDetail.applicationDocuments",
+        "LicensesTemp[0].reviewDocData",
+        dispatch
+      );
+    }
     // Get approval details based on status and set it in screenconfig
 
     if (
@@ -241,16 +312,17 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     }
     setActionItems(action, obj);
     // loadReceiptGenerationData(applicationNumber, tenantId);
+    addressDestruct(action, state, dispatch);
   }
 
   let businessService = get(
     state,
     "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType"
-  );
+  ).split(".")[0];
 
   const queryObject = [
     { key: "tenantId", value: tenantId },
-    { key: "businessService", value: businessService }
+    { key: "businessServices", value: businessService }
   ];
   setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 };
@@ -261,8 +333,8 @@ const setStatusBasedValue = status => {
   switch (status) {
     case "approved":
       return {
-        titleText: "Review the Trade License",
-        titleKey: "TL_REVIEW_TRADE_LICENSE",
+        titleText: "Review the stakeholder License",
+        titleKey: "BPA_REVIEW_LICENSE",
         titleVisibility: true,
         roleDefination: {
           rolePath: "user-info.roles",
@@ -313,8 +385,8 @@ const setStatusBasedValue = status => {
 
 const headerrow = getCommonContainer({
   header: getCommonHeader({
-    labelName: "Trade License Application (2018-2019)",
-    labelKey: "TL_TRADE_APPLICATION"
+    labelName: "Stakeholder Registration Application",
+    labelKey: "BPA_REG_APPLICATION"
   }),
   applicationNumber: {
     uiFramework: "custom-atoms-local",
@@ -334,7 +406,9 @@ const estimate = getCommonGrayCard({
 
 const reviewOrganizationDetails = getOrganizationDetails(false);
 
-const reviewLocationDetails = getLocationDetails(false);
+const reviewPermanentDetails = getPermanentDetails(false);
+const reviewCommunicationDetails = getCommunicactionDetails(false);
+
 const reviewOwnerDetails = getReviewOwner(false);
 
 const reviewDocumentDetails = getReviewDocuments(false);
@@ -373,7 +447,8 @@ export const tradeReviewDetails = getCommonCard({
   ),
   reviewOwnerDetails,
   reviewOrganizationDetails,
-  reviewLocationDetails,
+  reviewPermanentDetails,
+  reviewCommunicationDetails,
   reviewDocumentDetails
 });
 
@@ -473,7 +548,11 @@ const screenConfig = {
           uiFramework: "custom-containers-local",
           componentPath: "WorkFlowContainer",
           moduleName: "egov-workflow",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
+          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
+          props: {
+            dataPath: "Licenses",
+            updateUrl: "/tl-services/v1/BPAREG/_update"
+          }
         },
         tradeReviewDetails
         //footer

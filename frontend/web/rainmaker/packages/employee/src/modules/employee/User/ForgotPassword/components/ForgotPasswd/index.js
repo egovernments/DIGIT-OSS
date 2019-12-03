@@ -22,7 +22,7 @@ const ForgotPasswd = ({ form, handleFieldChange }) => {
           <Label bold={true}  fontSize= "23px" label="|" />
           </div>
            <div style={{marginLeft:"7px" }}>
-              <Label bold={true} color="black" fontSize= "24px" label="Punjab" />
+              <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
            </div>
           </div>
           <Label

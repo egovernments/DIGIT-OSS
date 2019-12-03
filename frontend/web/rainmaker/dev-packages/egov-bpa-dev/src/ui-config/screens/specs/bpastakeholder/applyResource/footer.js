@@ -13,6 +13,8 @@ import {
 } from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { setTenantId, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
 import {
   toggleSnackbar,
   prepareFinalObject
@@ -30,13 +32,20 @@ const moveToSuccess = (LicenseData, dispatch) => {
   const financialYear = get(LicenseData, "financialYear");
   const purpose = "apply";
   const status = "success";
-  dispatch(
-    setRoute(
-      `/bpastakeholder/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
-    )
-  );
+  if (window.location.pathname.includes("whitelisted")) {
+    dispatch(
+      setRoute(
+        `/whitelisted/bpastakeholder/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+      )
+    );
+  } else {
+    dispatch(
+      setRoute(
+        `/bpastakeholder/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+      )
+    );
+  }
 };
-
 export const generatePdfFromDiv = (action, applicationNumber) => {
   let target = document.querySelector("#custom-atoms-div");
   html2canvas(target, {
@@ -92,21 +101,43 @@ export const callBackForNext = async (state, dispatch) => {
       state,
       dispatch
     );
-    const isTradeLocationValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.organizationDetails.children.cardContent.children.organizationDetailsConatiner.children",
+    let isTradeOrganizationValid = true;
+
+    let ownershipType = get(
+      data,
+      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+    );
+    if (ownershipType != "INDIVIDUAL") {
+      isTradeOrganizationValid = validateFields(
+        "components.div.children.formwizardFirstStep.children.organizationDetails.children.cardContent.children.organizationDetailsConatiner.children",
+        state,
+        dispatch
+      );
+    }
+
+    const isPermanentAddrValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.permanentAddr.children.cardContent.children.tradeDetailsConatiner.children",
       state,
       dispatch
     );
-    const isLocationValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children",
+    const isCommunicationAddrValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner",
       state,
       dispatch
     );
 
-    if (!isTradeDetailsValid || !isTradeLocationValid || !isLocationValid) {
+    if (
+      !isTradeDetailsValid ||
+      !isTradeOrganizationValid ||
+      !isPermanentAddrValid ||
+      !isCommunicationAddrValid
+    ) {
       isFormValid = false;
     } else {
       isFormValid = await applyTradeLicense(state, dispatch);
+      let tenantIdInLocastorage = getTenantId();
+      if (!tenantIdInLocastorage)
+        setTenantId(process.env.REACT_APP_DEFAULT_TENANT_ID);
     }
   }
 
@@ -653,8 +684,8 @@ export const footerReview = (
               },
               roleDefination: {
                 rolePath: "user-info.roles",
-                roles: ["TL_CEMP", "CITIZEN"]
-                // action: "PAY"
+                roles: ["CITIZEN"],
+                action: "PAY"
               }
             },
             cancelButton: {

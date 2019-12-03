@@ -18,11 +18,15 @@ import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-con
 import get from "lodash/get";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getRadioButton } from "egov-ui-framework/ui-config/screens/specs/utils";
+import "./index.css";
 
 export const getOwnerMobNoField = getTextField({
   label: {
     labelName: "Mobile No.",
     labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
+  },
+  props:{
+    className:"applicant-details-error"
   },
   placeholder: {
     labelName: "Enter Mobile No.",
@@ -99,6 +103,9 @@ export const getOwnerEmailField = getTextField({
     labelName: "Email",
     labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
   },
+  props:{
+    className:"applicant-details-error"
+  },
   placeholder: {
     labelName: "Enter Email",
     labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_PLACEHOLDER"
@@ -111,6 +118,9 @@ export const getFatherNameField = getTextField({
   label: {
     labelName: "Father/Spouse Name",
     labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_LABEL"
+  },
+  props:{
+    className:"applicant-details-error"
   },
   placeholder: {
     labelName: "Enter Father/Spouse Name",
@@ -146,8 +156,7 @@ export const getRelationshipRadioButton = {
         value: "HUSBAND"
       }
     ],
-    jsonPath:
-      "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].relationship",
+    jsonPath:"Licenses[0].tradeLicenseDetail.owners[0].relationship",
     required: true
   },
   required: true,
@@ -175,6 +184,9 @@ export const OwnerInfoCard = {
           label: {
             labelName: "Mobile No.",
             labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
+          },
+          props:{
+            className:"applicant-details-error"
           },
           placeholder: {
             labelName: "Enter Mobile No.",
@@ -205,6 +217,9 @@ export const OwnerInfoCard = {
             labelName: "Name",
             labelKey: "TL_NEW_OWNER_DETAILS_NAME_LABEL"
           },
+          props:{
+            className:"applicant-details-error"
+          },
           placeholder: {
             labelName: "Enter Name",
             labelKey: "TL_NEW_OWNER_DETAILS_NAME_PLACEHOLDER"
@@ -217,6 +232,9 @@ export const OwnerInfoCard = {
           label: {
             labelName: "Father/Spouse Name",
             labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_LABEL"
+          },
+          props:{
+            className:"applicant-details-error"
           },
           placeholder: {
             labelName: "Enter Father/Spouse Name",
@@ -254,7 +272,7 @@ export const OwnerInfoCard = {
               }
             ],
             jsonPath:
-              "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].relationship",
+              "Licenses[0].tradeLicenseDetail.owners[0].relationship",
             required: true
           },
           required: true,
@@ -315,6 +333,9 @@ export const OwnerInfoCard = {
             labelName: "Email",
             labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
           },
+          props:{
+            className:"applicant-details-error"
+          },
           placeholder: {
             labelName: "Enter Email",
             labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_PLACEHOLDER"
@@ -327,6 +348,9 @@ export const OwnerInfoCard = {
             labelName: "PAN No.",
             labelKey: "TL_NEW_OWNER_DETAILS_PAN_LABEL"
           },
+          props:{
+            className:"applicant-details-error"
+          },
           placeholder: {
             labelName: "Enter Owner's PAN No.",
             labelKey: "TL_NEW_OWNER_DETAILS_PAN_PLACEHOLDER"
@@ -338,6 +362,9 @@ export const OwnerInfoCard = {
           label: {
             labelName: "Correspondence Address",
             labelKey: "TL_NEW_OWNER_DETAILS_ADDR_LABEL"
+          },
+          props:{
+            className:"applicant-details-error"
           },
           placeholder: {
             labelName: "Enter Correspondence Address",
@@ -400,6 +427,9 @@ export const ownerInfoInstitutional = {
           labelName: "Mobile No.",
           labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
         },
+        props:{
+          className:"applicant-details-error"
+        },
         placeholder: {
           labelName: "Enter Mobile No.",
           labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_PLACEHOLDER"
@@ -429,6 +459,9 @@ export const ownerInfoInstitutional = {
           labelName: "Official Telephone No.",
           labelKey: "TL_NEW_OWNER_PHONE_LABEL"
         },
+        props:{
+          className:"applicant-details-error"
+        },
         placeholder: {
           labelName: "Enter Official Telephone No.",
           labelKey: "TL_NEW_OWNER_PHONE_PLACEHOLDER"
@@ -442,6 +475,9 @@ export const ownerInfoInstitutional = {
         label: {
           labelName: "Name of Authorised Person",
           labelKey: "TL_NEW_OWNER_AUTH_PER_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Name of Authorised Person",
@@ -457,6 +493,9 @@ export const ownerInfoInstitutional = {
           labelName: "Designation",
           labelKey: "TL_NEW_OWNER_DESIG_LABEL"
         },
+        props:{
+          className:"applicant-details-error"
+        },
         placeholder: {
           labelName: "Enter Designation",
           labelKey: "TL_NEW_OWNER_DESIG_PLACEHOLDER"
@@ -469,6 +508,9 @@ export const ownerInfoInstitutional = {
         label: {
           labelName: "Father/Spouse Name",
           labelKey: "TL_NEW_OWNER_DETAILS_FATHER_NAME_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Father/Spouse Name",
@@ -566,6 +608,9 @@ export const ownerInfoInstitutional = {
           labelName: "Email",
           labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
         },
+        props:{
+          className:"applicant-details-error"
+        },
         placeholder: {
           labelName: "Enter Email",
           labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_PLACEHOLDER"
@@ -577,6 +622,9 @@ export const ownerInfoInstitutional = {
         label: {
           labelName: "Official Corrospondence Address",
           labelKey: "TL_NEW_OWNER_OFF_ADDR_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Official Corrospondence Address",

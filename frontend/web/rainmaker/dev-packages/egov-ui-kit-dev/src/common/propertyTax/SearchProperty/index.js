@@ -10,12 +10,13 @@ import { addBreadCrumbs, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/
 import SearchPropertyForm from "./components/SearchPropertyForm";
 import PropertyTable from "./components/PropertyTable";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
+import {fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions"
 import { displayFormErrors, resetForm } from "egov-ui-kit/redux/form/actions";
 import { connect } from "react-redux";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import get from "lodash/get";
-import { getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo, localStorageGet,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 import "./index.css";
 
@@ -48,6 +49,7 @@ class SearchProperty extends Component {
 
   };
   onSearchClick = (form, formKey) => {
+    const {fetchLocalizationLabel} = this.props
     const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
@@ -77,7 +79,10 @@ class SearchProperty extends Component {
       this.props.fetchProperties(queryParams);
       this.setState({ showTable: true });
     }
+    fetchLocalizationLabel(getLocale(), city.value, city.value);
   };
+
+  
 
   getLink = (userType, history, propertyId, tenantId) => {
     return (
@@ -332,7 +337,8 @@ const mapDispatchToProps = (dispatch) => {
     displayFormErrors: (formKey) => dispatch(displayFormErrors(formKey)),
     fetchProperties: (queryObject) => dispatch(fetchProperties(queryObject)),
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
-    resetForm: formKey => dispatch(resetForm(formKey))
+    resetForm: formKey => dispatch(resetForm(formKey)),
+    fetchLocalizationLabel : (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
   };
 };
 

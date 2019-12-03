@@ -10,6 +10,7 @@ const formConfig = {
       jsonPath: "Properties[0].propertyDetails[0].units[0].usageCategoryMajor",
       type: "textfield",
       floatingLabelText: "PT_FORM2_USAGE_TYPE",
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       value: "Residential",
       required: true,
       disabled: true,

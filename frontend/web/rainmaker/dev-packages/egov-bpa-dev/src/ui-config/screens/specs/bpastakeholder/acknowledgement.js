@@ -156,8 +156,8 @@ const getAcknowledgementCard = (
               labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_SUB"
             },
             tailText: {
-              labelName: "Trade License No.",
-              labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+              labelName: "License No.",
+              labelKey: "BPA_HOME_SEARCH_RESULTS_TL_NO_LABEL"
             },
             number: secondNumber
           })
@@ -429,6 +429,13 @@ const screenConfig = {
       tenant
     );
     set(action, "screenConfig.components.div.children", data);
+    if (window.location.pathname.includes("whitelisted")) {
+      set(
+        action.screenConfig,
+        "components.div.children.applicationSuccessFooter.props.style",
+        { width: "100vw" }
+      );
+    }
     return action;
   }
 };

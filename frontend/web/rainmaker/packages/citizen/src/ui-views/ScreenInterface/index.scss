@@ -123,13 +123,13 @@ span[class^="MuiFormLabel-asterisk"] {
   .apply-wizard-footer {
     position: fixed;
     bottom: 0;
-    z-index: 1;
+    z-index: 1500;
     /* left: 35px; */
     width: 100%;
     overflow: inherit !important;
   }
   .apply-wizard-footer { button {
-     min-width: 360px !important;
+     /* min-width: 360px !important; */
      margin-left: 0 !important;
      margin-right: 0 !important;
   }}
@@ -150,7 +150,7 @@ span[class^="MuiFormLabel-asterisk"] {
     position: fixed !important;
     bottom: 0;
     right: 0;
-    z-index: 1;
+    z-index: 1500;
     width: 83.33vw;
     text-align: right;
     overflow: inherit !important;
