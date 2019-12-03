@@ -24,8 +24,8 @@ const pageResetAndChange = (state, dispatch) => {
 };
 
 const header = getCommonHeader({
-  labelName: "Trade License",
-  labelKey: "TL_COMMON_TL"
+  labelName: "Stakeholder Registraton",
+  labelKey: "BPA_COMMON_TITLE"
 });
 const tradeLicenseSearchAndResult = {
   uiFramework: "material-ui",
