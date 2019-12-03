@@ -165,24 +165,24 @@ export const getPermanentDetails = (isEditable = true) => {
           labelKey: "BPA_NEW_TRADE_DETAILS_MOHALLA_LABEL"
         },
         { jsonPath: "LicensesTemp[0].userData.address.landmark" }
+      ),
+      reviewCity: getLabelWithValue(
+        {
+          labelName: "City",
+          labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+        },
+        {
+          jsonPath: "LicensesTemp[0].userData.address.city"
+        }
+      ),
+      reviewPincode: getLabelWithValue(
+        {
+          labelName: "Pincode",
+          labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
+        },
+        { jsonPath: "LicensesTemp[0].userData.address.pincode" }
       )
-    }),
-    reviewCity: getLabelWithValue(
-      {
-        labelName: "City",
-        labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-      },
-      {
-        jsonPath: "LicensesTemp[0].userData.address.city"
-      }
-    ),
-    reviewPincode: getLabelWithValue(
-      {
-        labelName: "Pincode",
-        labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
-      },
-      { jsonPath: "LicensesTemp[0].userData.address.pincode" }
-    )
+    })
   });
 };
 
@@ -270,23 +270,23 @@ export const getCommunicactionDetails = (isEditable = true) => {
           labelKey: "BPA_NEW_TRADE_DETAILS_MOHALLA_LABEL"
         },
         { jsonPath: "Licenses[0].tradeLicenseDetail.address.landmark" }
+      ),
+      reviewCity: getLabelWithValue(
+        {
+          labelName: "City",
+          labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+        },
+        {
+          jsonPath: "Licenses[0].tradeLicenseDetail.address.city"
+        }
+      ),
+      reviewPincode: getLabelWithValue(
+        {
+          labelName: "Pincode",
+          labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
+        },
+        { jsonPath: "Licenses[0].tradeLicenseDetail.address.pincode" }
       )
-    }),
-    reviewCity: getLabelWithValue(
-      {
-        labelName: "City",
-        labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-      },
-      {
-        jsonPath: "Licenses[0].tradeLicenseDetail.address.city"
-      }
-    ),
-    reviewPincode: getLabelWithValue(
-      {
-        labelName: "Pincode",
-        labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
-      },
-      { jsonPath: "Licenses[0].tradeLicenseDetail.address.pincode" }
-    )
+    })
   });
 };
