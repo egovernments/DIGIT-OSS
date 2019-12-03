@@ -14,7 +14,7 @@ class ActionMenu extends Component {
     const roles = get(userInfo, "roles");
     const roleCodes = roles
       ? roles.map((role) => {
-          if (role.tenantId == getTenantId()) {
+          if (role.tenantId == getTenantId() || role.tenantId == getTenantId().split(".")[0]) {
             return role.code;
           }
         })
