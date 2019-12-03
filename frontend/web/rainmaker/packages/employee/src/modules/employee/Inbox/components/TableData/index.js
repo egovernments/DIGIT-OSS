@@ -57,11 +57,11 @@ const prepareInboxDataRows = (data) => {
   });
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
   textColorPrimary: {
-    color: "red"
-  }
-})
+    color: "red",
+  },
+});
 
 class TableData extends Component {
   state = {
@@ -174,7 +174,7 @@ class TableData extends Component {
 
   render() {
     const { value, taskboardData, tabData, inboxData, moduleName } = this.state;
-    const {classes} = this.props
+    const { classes } = this.props;
     return (
       <div className="col-sm-12">
         <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
@@ -186,10 +186,12 @@ class TableData extends Component {
             className={`inbox-tabs-container ${classes.textColorPrimary}`}
             indicatorColor="primary"
             textColor="primary"
-            style={{ borderBottom: "1px rgba(0, 0, 0, 0.11999999731779099) solid" ,textColor:"red" }}
+            style={{ borderBottom: "1px rgba(0, 0, 0, 0.11999999731779099) solid", textColor: "red" }}
           >
             {tabData.map((item) => {
-              return <Tab className={`inbox-tab ${classes.textColorPrimary}`} label={<Label label={item.label} dynamicArray={item.dynamicArray} />} />;
+              return (
+                <Tab className={`inbox-tab ${classes.textColorPrimary}`} label={<Label label={item.label} dynamicArray={item.dynamicArray} />} />
+              );
             })}
           </Tabs>
           <div className="inbox-filter">
@@ -208,6 +210,9 @@ class TableData extends Component {
               </MenuItem>
               <MenuItem value={"FIRENOC"}>
                 <Label label="CS_COMMON_INBOX_FIRENOC" />
+              </MenuItem>
+              <MenuItem value={"BPAREG"}>
+                <Label label="CS_COMMON_INBOX_BPAREG" />
               </MenuItem>
             </Select>
           </div>
@@ -234,7 +239,9 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withStyles(styles)(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TableData));
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(TableData)
+);

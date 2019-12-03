@@ -12,7 +12,8 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getTranslatedLabel,
-  updateDropDowns
+  updateDropDowns,
+  setOrganizationVisibility
 } from "../ui-config/screens/specs/utils";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import store from "redux/store";
@@ -143,6 +144,13 @@ export const updatePFOforSearchResults = async (
   }
   const licenseType = payload && get(payload, "Licenses[0].licenseType");
   updateDropDowns(payload, action, state, dispatch, queryValue);
+  const subOwnerShipCategory = get(
+    state.screenConfiguration.preparedFinalObject,
+    "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+  );
+
+  setOrganizationVisibility(action, state, dispatch, subOwnerShipCategory);
+
   if (queryValuePurpose !== "cancel") {
     set(payload, getSafetyNormsJson(queryValuePurpose), "yes");
     set(payload, getHygeneLevelJson(queryValuePurpose), "yes");

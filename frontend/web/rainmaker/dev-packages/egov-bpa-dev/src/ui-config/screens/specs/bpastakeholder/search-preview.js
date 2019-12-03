@@ -164,8 +164,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     LicenseData,
     "LicensesTemp[0].estimateCardData",
     dispatch,
-    {},
-    fetchFromReceipt
+    {}
   );
   //Fetch Bill and populate estimate card
   // const code = get(
@@ -209,9 +208,21 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType"
     );
     if (tradeType.split(".").length > 1) {
+      if (tradeType.split(".")[0] == "ARCHITECT")
+        set(
+          action,
+          "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
+          true
+        );
+      else
+        set(
+          action,
+          "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
+          false
+        );
       set(
         action,
-        "creenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewLicenseeSubType.visible",
+        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewLicenseeSubType.visible",
         true
       );
       dispatch(
@@ -229,7 +240,12 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
       set(
         action,
-        "creenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewLicenseeSubType.visible",
+        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewLicenseeSubType.visible",
+        false
+      );
+      set(
+        action,
+        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
         false
       );
     }
