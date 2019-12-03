@@ -76,3 +76,11 @@ config:
         image-name: "ws-services"
       - work-dir: "ws-services/src/main/resources/db"
         image-name: "ws-services-db"
+        
+  - name: "municipal-services/property-services"
+    build:
+      - work-dir: "property-services"
+        image-name: "property-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "property-services/src/main/resources/db"
+        image-name: "property-services-db"
