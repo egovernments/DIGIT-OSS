@@ -27,6 +27,7 @@
     "egov-ui-kit": "^0.0.1",
     "egov-workflow": "0.0.1",
     "egov-uc": "0.0.1",
+    "egov-bpa": "0.0.1",
     "html2canvas": "^1.0.0-alpha.12",
     "jquery": "^3.3.1",
     "jsonpath": "^1.0.0",
@@ -68,7 +69,7 @@
     "redux-thunk": "^2.2.0",
     "url-search-params-polyfill": "^3.0.0",
     "webfontloader": "^1.6.28",
-    "print-js": "1.0.63"
+    "print-js":"1.0.63"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
