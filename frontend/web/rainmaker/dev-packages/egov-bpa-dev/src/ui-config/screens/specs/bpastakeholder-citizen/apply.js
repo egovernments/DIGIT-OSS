@@ -94,6 +94,12 @@ const screenConfig = {
     } else {
       getData(action, state, dispatch, tenantId);
       setOrganizationVisibility(action, state, dispatch, "INDIVIDUAL");
+      dispatch(
+        prepareFinalObject(
+          "Licenses[0].tradeLicenseDetail.owners[0].gender",
+          "MALE"
+        )
+      );
     }
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     return action;
