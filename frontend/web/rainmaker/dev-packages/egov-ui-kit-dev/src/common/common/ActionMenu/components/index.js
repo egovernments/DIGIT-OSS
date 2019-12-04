@@ -49,7 +49,8 @@ const styles = {
     textIndent: "15px",
   },
   inputStyle: {
-    color: "#FE7A51",
+//    color: "white",
+    color: window.innerWidth > 768 ? "white" : "black",
     bottom: "5px",
     height: "auto",
     paddingLeft: "5px",
