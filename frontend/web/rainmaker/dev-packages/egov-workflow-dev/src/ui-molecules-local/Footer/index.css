@@ -33,7 +33,7 @@
     margin: 0 !important;
     border-radius: none !important;
   }
-  .wf-footer{
+  .wf-footer-container{
   display: flex;
   min-width: 50px !important;
   }
