@@ -11,9 +11,5 @@ export const getWFConfig = (module) => {
         INITIATED: "/fire-noc/apply",
         DEFAULT: "/fire-noc/search-preview",
       };
-    case "BPAREG":
-      return {
-        DEFAULT: "/bpastakeholder/search-preview",
-      };
   }
 };
