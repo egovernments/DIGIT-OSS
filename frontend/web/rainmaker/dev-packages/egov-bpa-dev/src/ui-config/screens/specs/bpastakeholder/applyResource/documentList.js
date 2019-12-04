@@ -14,7 +14,7 @@ export const documentList = {
     inputProps: {
       accept: "image/*, .pdf, .png, .jpeg"
     },
-    documentTypePrefix: "TL_",
+    documentTypePrefix: "BPA_",
     maxFileSize: 6000
   }
 };
