@@ -371,8 +371,6 @@ const callBackForPay = async (state, dispatch) => {
   });
   ReceiptBodyNew.Payment["totalAmountPaid"] = amtPaid;
 
-  // console.log(ReceiptBody);
-
   //---------------- Create Receipt ------------------//
   if (isFormValid) {
     try {

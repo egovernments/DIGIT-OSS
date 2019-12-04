@@ -6,8 +6,6 @@ import { applicationSuccessFooter } from "./acknowledgementResource/applicationS
 import { paymentFailureFooter } from "./acknowledgementResource/paymentFailureFooter";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-// import { loadReceiptGenerationData } from "../utils/receiptTransformer";
-import get from "lodash/get";
 import set from "lodash/set";
 import { ifUserRoleExists } from "../utils";
 
@@ -19,8 +17,6 @@ const getAcknowledgementCard = (
     consumerCode,
     tenant
 ) => {
-
-    console.log(status);
     const roleExists = ifUserRoleExists("CITIZEN");
     if (status === "success") {
         return {
@@ -39,8 +35,7 @@ const getAcknowledgementCard = (
                             labelValue:"Consumer Code.:",
                             labelKey:"PAYMENT_COMMON_CONSUMER_CODE"
                         }
-                    }
-                    
+                    }                  
                 }
             }),
             applicationSuccessCard: {
@@ -148,5 +143,3 @@ const screenConfig = {
 };
 
 export default screenConfig;
-//egov-common/acknowledgement?status=failure&receiptNumber=PB-TL-2019-10-29-003220&consumerCode=PT-1909-208877&tenantId=pb.amritsar
-//egov-common/acknowledgement?status=success&receiptNumber=PB-TL-2019-10-29-003220&consumerCode=PT-1909-208877&tenantId=pb.amritsar

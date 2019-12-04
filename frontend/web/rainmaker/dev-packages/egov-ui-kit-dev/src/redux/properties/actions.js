@@ -631,7 +631,7 @@ export const downloadReceipt = (receiptQueryString) => {
           { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
         ]
 
-        httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+        httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
           .then(res => {
             getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
               var win = window.open(fileRes[res.filestoreIds[0]], '_blank');

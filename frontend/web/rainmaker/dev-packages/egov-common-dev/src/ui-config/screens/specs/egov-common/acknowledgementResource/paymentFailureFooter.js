@@ -13,15 +13,8 @@ const getCommonApplyFooter = children => {
 };
 
 export const paymentFailureFooter = (consumerCode, tenant) => {
-    console.log(consumerCode, tenant);
-
-    // const roleExists = ifUserRoleExists("CITIZEN");
-    // const redirectionURL = roleExists ? "/egov-common/citizen-pay" : "/egov-common/pay";
     const redirectionURL = "/egov-common/pay";
     const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}`
-        // const path = `${redirectionURL}?consumerCode=${consumerCode}&tenantId=${tenant}&businessService=PT`
-    console.log(path);
-
     return getCommonApplyFooter({
         gotoHome: {
             componentPath: "Button",
@@ -32,8 +25,7 @@ export const paymentFailureFooter = (consumerCode, tenant) => {
                     minWidth: "200px",
                     height: "48px",
                     marginRight: "16px",
-                    marginLeft:"40px"
-
+                    marginLeft: "40px"
                 }
             },
             children: {
@@ -41,13 +33,10 @@ export const paymentFailureFooter = (consumerCode, tenant) => {
                     labelName: "RETRY",
                     labelKey: "COMMON_RETRY"
                 })
-               
-                
             },
             onClickDefination: {
                 action: "page_change",
                 path
-                // egov-common/citizen-pay?consumerCode=PT-107-017837&tenantId=pb.amritsar&businessService=PT
             }
         }
     });

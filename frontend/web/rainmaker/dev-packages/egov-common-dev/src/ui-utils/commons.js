@@ -511,7 +511,7 @@ export const download = (receiptQueryString, mode = "download") => {
         { key: "key", value: "consolidatedreceipt" },
         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
       ]
-      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+      httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
         .then(res => {
           getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
             if (mode === 'download') {
