@@ -1191,7 +1191,8 @@ export const createEstimateData = async (
   if (isgetBill) {
     payload = await getBill(queryObjForGetBill);
     estimateData =
-      payload && getEstimateData(payload.billResponse.Bill, false, LicenseData);
+      payload &&
+      getEstimateData(payload.billResponse.Bill[0], false, LicenseData);
   } else {
     payload = isPAID
       ? await getReceipt(queryObjForGetReceipt)
@@ -1207,7 +1208,7 @@ export const createEstimateData = async (
             LicenseData
           )
         : payload &&
-          getEstimateData(payload.billResponse.Bill, false, LicenseData)
+          getEstimateData(payload.billResponse.Bill[0], false, LicenseData)
       : [];
   }
   estimateData = estimateData || [];
@@ -2124,7 +2125,7 @@ export const getLicenseeTypeDropdownData = tradeTypes => {
   return tradeTypesFiltered;
 };
 
-export const setLicenseeSubTypeDropdownData = (
+export const setLicenseeSubTypeDropdownData = async (
   actionValue,
   state,
   dispatch

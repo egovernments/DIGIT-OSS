@@ -161,8 +161,8 @@ export const OwnerInfoCard = getCommonCard({
           sm: 6
         }
       }),
-      beforeFieldChange: (action, state, dispatch) => {
-        setLicenseeSubTypeDropdownData(action.value, state, dispatch);
+      beforeFieldChange: async (action, state, dispatch) => {
+        await setLicenseeSubTypeDropdownData(action.value, state, dispatch);
         if (action.value == "ARCHITECT")
           dispatch(
             handleField(
