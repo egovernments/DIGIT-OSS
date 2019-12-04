@@ -19263,7 +19263,7 @@
       "tenantId": "pb"
     },
     {
-      "rolecode": "EMPLOYEE",
+      "rolecode": "CITIZEN",
       "actionid": 1883,
       "actioncode": "",
       "tenantId": "pb"
@@ -19275,7 +19275,7 @@
       "tenantId": "pb"
     },
     {
-      "rolecode": "CITIZEN",
+      "rolecode": "EMPLOYEE",
       "actionid": 1885,
       "actioncode": "",
       "tenantId": "pb"
