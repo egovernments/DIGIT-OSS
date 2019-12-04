@@ -53,16 +53,6 @@
 	id="closedPeriodsearchform"
 	cssClass="form-horizontal form-groups-bordered"
 	enctype="multipart/form-data">
-	<%-- <td colspan="5" align="right">
-		<div align="right">
-			<button type="submit" name="submit" id="addnewcloseperiod"
-				class="btn btn-primary"
-				value="Add New Close Period>
-				<spring:message code="lbl.addnewcloseperiod" />
-			</button>
-			</div>
-			</td> --%>
-
 	<div class="main-content">
 		<td colspan="5" align="right">
 			<div align="right">
@@ -78,10 +68,7 @@
 					<div class="panel-heading">
 						<div class="panel-title">Search Closed Period</div>
 					</div>
-
-
 					<div class="form-group">
-
 						<label class="col-sm-3 control-label text-right"><spring:message
 								code="lbl.cfinancialyearid" /> </label>
 						<div class="col-sm-3 add-margin">
@@ -115,7 +102,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 </form:form>
 <div class="row display-hide report-section">
