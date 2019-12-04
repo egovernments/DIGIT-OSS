@@ -280,7 +280,7 @@ const callBackForNext = async (state, dispatch) => {
         case 1:
           errorMessage = {
             labelName:
-              "Please fill all mandatory fields for Property Details, then proceed!",
+              "Please check the Missing/Invalid field for Property Details, then proceed!",
             labelKey: "ERR_FILL_ALL_MANDATORY_FIELDS_PROPERTY_TOAST"
           };
           break;
