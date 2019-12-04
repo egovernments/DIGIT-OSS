@@ -21,7 +21,7 @@ export const reviewownershipType = getLabelWithValue(
       masterName: "OwnerShipCategory"
     },
     callBack: value => {
-      return value.split(".")[0];
+      return value ? value.split(".")[0] : "";
     }
   }
 );
@@ -36,7 +36,6 @@ export const reviewsubOwnership = getLabelWithValue(
       moduleName: "common-masters",
       masterName: "OwnerShipCategory"
     },
-    callBack: checkValueForNA
   }
 );
 export const reviewOwnerFatherName = getLabelWithValue(
@@ -94,7 +93,6 @@ export const reviewOwnerPhoneNo = getLabelWithValue(
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber",
-    callBack: checkValueForNA
   }
 );
 export const reviewOwnerEmail = getLabelWithValue(
@@ -250,8 +248,7 @@ export const getReviewOwner = (isEditable = true) => {
                 labelName: "Name of the Authorised Person",
                 labelKey: "TL_NEW_OWNER_AUTH_PER_LABEL"
               },
-              { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name",
-              callBack: checkValueForNA }
+              { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name"}
             ),
             reviewDesignation: getLabelWithValue(
               {
