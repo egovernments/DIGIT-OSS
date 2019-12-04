@@ -33,14 +33,14 @@
     margin: 0 !important;
     border-radius: none !important;
   }
-  .abcd{
+  .wf-footer{
   display: flex;
   min-width: 50px !important;
   }
   
 }
 @media only screen and (min-width: 768px) {
-  .abc1{
+  .wf-footer-button{
     min-width: 200px;
     }
 }

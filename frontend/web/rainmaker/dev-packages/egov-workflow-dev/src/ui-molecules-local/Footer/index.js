@@ -122,7 +122,7 @@ class Footer extends React.Component {
         style={{ textAlign: "right" }}
       >
         <Container >
-          <Item xs={12} sm={12} className="abcd">
+          <Item xs={12} sm={12} className="wf-footer-container">
             {contractData &&
               contractData.map(item => {
                 const { buttonLabel, moduleName } = item;
@@ -130,7 +130,7 @@ class Footer extends React.Component {
                   <Button
                     color={color}
                     variant={variant}
-                    className="abc1"
+                    className="wf-footer-button"
                     onClick={() => this.openActionDialog(item)}
                     style={{
                    //   minWidth: "200px",
