@@ -71,7 +71,7 @@ class LabelContainer extends React.Component {
 const mapStateToProps = (state, ownprops) => {
   let fieldValue = "";
   const { localizationLabels } = state.app;
-  const { jsonPath, callBack } = ownprops;
+  const { jsonPath, callBack ,localePrefix={}} = ownprops;
   const { screenConfiguration } = state;
   const { preparedFinalObject } = screenConfiguration;
   if (jsonPath) {
@@ -80,7 +80,16 @@ const mapStateToProps = (state, ownprops) => {
       fieldValue = callBack(fieldValue);
     }
   }
-  return { fieldValue, localizationLabels };
+  if(localePrefix && !isEmpty(localePrefix))
+  {
+      const {isJsonPath}=localePrefix;
+      if(isJsonPath)
+      {
+        localePrefix.moduleName=get(preparedFinalObject,localePrefix.moduleName,"");
+      }
+      
+  }
+  return { fieldValue, localizationLabels,localePrefix };
 };
 
 export default connect(
