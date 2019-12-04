@@ -29,7 +29,6 @@ const accessoriesCard = {
               moduleName: "TRADELICENSE",
               masterName: "ACCESSORIESCATEGORY"
             },
-            callBack: checkValueForNA
           }
         ),
         reviewAccessoryUOM: getLabelWithValue(
@@ -86,7 +85,7 @@ const tradeTypeCard = {
               masterName: "TRADETYPE"
             },
             callBack: value => {
-              return value.split(".")[0];
+              return value ? value.split(".")[0] : "NA";
             }
           }
         ),
@@ -102,7 +101,7 @@ const tradeTypeCard = {
               masterName: "TRADETYPE"
             },
             callBack: value => {
-              return value.split(".")[1];
+              return value ?  value.split(".")[1] : "NA";
             }
           }
         ),
@@ -212,7 +211,6 @@ export const getReviewTrade = (isEditable = true) => {
             moduleName: "TradeLicense",
             masterName: "ApplicationType"
           },
-          callBack: checkValueForNA
         }
       ),
       reviewOldLicenseNo: getLabelWithValue(
@@ -233,7 +231,6 @@ export const getReviewTrade = (isEditable = true) => {
             moduleName: "TRADELICENSE",
             masterName: "LICENSETYPE"
           },
-          callBack: checkValueForNA
         }
       ),
       reviewTradeName: getLabelWithValue(
@@ -241,7 +238,7 @@ export const getReviewTrade = (isEditable = true) => {
           labelName: "Trade Name",
           labelKey: "TL_COMMON_TABLE_COL_TRD_NAME"
         },
-        { jsonPath: "Licenses[0].tradeName", callBack: checkValueForNA }
+        { jsonPath: "Licenses[0].tradeName"}
       ),
       reviewFromDate: getLabelWithValue(
         { labelName: "From Date" },
@@ -266,7 +263,7 @@ export const getReviewTrade = (isEditable = true) => {
             masterName: "STRUCTURETYPE"
           },
           callBack: value => {
-            return value.split(".")[0];
+            return  value ? value.split(".")[0] : "NA";
           }
         }
       ),
@@ -278,7 +275,6 @@ export const getReviewTrade = (isEditable = true) => {
             moduleName: "common-masters",
             masterName: "STRUCTURETYPE"
           },
-          callBack: checkValueForNA
         }
       ),
       reviewCommencementDate: getLabelWithValue(
@@ -347,7 +343,6 @@ export const getReviewTrade = (isEditable = true) => {
             moduleName: "TENANT",
             masterName: "TENANTS"
           },
-          callBack: checkValueForNA
         }
       ),
       reviewDoorNo: getLabelWithValue(
