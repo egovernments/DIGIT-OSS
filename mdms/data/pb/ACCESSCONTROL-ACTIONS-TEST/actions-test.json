@@ -15236,7 +15236,7 @@
     },
     {
       "id": 1882,
-      "name": "Water & Sewerage",
+      "name": "rainmaker-common-wns",
       "url": "card",
       "displayName": "Water & Sewerage",
       "orderNumber": 2,
@@ -15268,7 +15268,7 @@
     },
     {
       "id": 1884,
-      "name": "rainmaker-citizen-wns",
+      "name": "Water & Sewerage",
       "url": "url",
       "displayName": "Water & Sewerage",
       "orderNumber": 13,
