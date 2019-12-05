@@ -315,27 +315,15 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       set(queryObject[0], "action", action);
       const isEditFlow = getQueryArg(window.location.href, "action") === "edit";
       if (!isEditFlow) {
-        if (window.location.pathname.includes("whitelisted")) {
-          searchResponse = await httpRequest(
-            "post",
-            "/tl-services/v1/BPAREG1/_update",
-            "",
-            [],
-            {
-              Licenses: queryObject
-            }
-          );
-        } else {
-          searchResponse = await httpRequest(
-            "post",
-            "/tl-services/v1/BPAREG/_update",
-            "",
-            [],
-            {
-              Licenses: queryObject
-            }
-          );
-        }
+        searchResponse = await httpRequest(
+          "post",
+          "/tl-services/v1/BPAREG/_update",
+          "",
+          [],
+          {
+            Licenses: queryObject
+          }
+        );
       }
       dispatch(toggleSpinner());
 
