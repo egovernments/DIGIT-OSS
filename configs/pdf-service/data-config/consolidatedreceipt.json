@@ -107,6 +107,11 @@
                 "value": {
                   "path": "$.paymentDetails[0].totalDue"
                 }
+              },
+	           {
+                "variable": "logoImage",                        
+                "url":"https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
+                "type":"image"      
               }
             ]
           },
@@ -140,12 +145,7 @@
                     {
                       "variable":"email",
                       "value":"$.MdmsRes.tenant.tenants[0].emailId"
-                    },
-                    {
-                       "variable": "logoImage",                        
-                       "value":"$.MdmsRes.tenant.tenants[0].logoId",
-                       "type":"image"      
-                     }
+                    }
                   ]
               }
             ]
