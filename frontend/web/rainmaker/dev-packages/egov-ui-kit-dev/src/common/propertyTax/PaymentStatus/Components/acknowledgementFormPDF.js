@@ -16,7 +16,7 @@ pdfMake.fonts = {
 };
 
 const generateAcknowledgementForm = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt) => {
-  console.log("Details--",details);
+  
   let data;
   let { owners, address, propertyDetails,header } = details;
   let dateArray=new Date(propertyDetails[0].assessmentDate).toDateString().split(' ');

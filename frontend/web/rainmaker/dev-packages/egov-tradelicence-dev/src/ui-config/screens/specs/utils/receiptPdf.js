@@ -660,7 +660,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
 };
 
 const getCertificateData = (transformedData, ulbLogo) => {
-  console.log("transformedData-- ",transformedData);
+
   var tlCertificateData = {
     defaultStyle: {
       font: "Camby"
@@ -1013,7 +1013,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
       }
     }
   };
-  console.log("tlCertificateData-- ",tlCertificateData);
+ 
   return tlCertificateData;
 };
 
@@ -1095,7 +1095,7 @@ const generateReceipt = async (state, dispatch, type) => {
       break;
     case "receipt_download":
       let receipt_data = getReceiptData(transformedData, ulbLogo);
-      console.log("receipt_data--- ",receipt_data);
+      
       receipt_data &&
      //   pdfMakeCustom.createPdf(receipt_data).download("tl_receipt.pdf");
         pdfMakeCustom.createPdf(receipt_data).open();
