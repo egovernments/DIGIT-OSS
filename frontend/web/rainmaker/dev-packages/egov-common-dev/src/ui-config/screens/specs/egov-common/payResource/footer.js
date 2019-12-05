@@ -10,6 +10,7 @@ import { convertDateToEpoch, validateFields } from "../../utils";
 import { ifUserRoleExists } from "../../utils";
 
 export const callPGService = async (state, dispatch) => {
+  const isAdvancePaymentAllowed =get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
   const tenantId = getQueryArg(window.location.href, "tenantId");
   const consumerCode = getQueryArg(window.location.href, "consumerCode");
   const businessService = get(
@@ -34,6 +35,12 @@ export const callPGService = async (state, dispatch) => {
       ? state.screenConfiguration.preparedFinalObject.AmountPaid
       : taxAmount;
   amtToPay = amtToPay ? Number(amtToPay) : taxAmount;
+
+  if(amtToPay>taxAmount&&!isAdvancePaymentAllowed){
+    alert("Advance Payment is not allowed");
+    return;
+  }
+
   const user = {
     name: get(billPayload, "Bill[0].payerName"),
     mobileNumber: get(billPayload, "Bill[0].mobileNumber"),
@@ -215,11 +222,13 @@ const updatePayAction = async (
 
 const callBackForPay = async (state, dispatch) => {
   let isFormValid = true;
+  const isAdvancePaymentAllowed =get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.isAdvanceAllowed");
   const roleExists = ifUserRoleExists("CITIZEN");
   if (roleExists) {
     alert("You are not Authorized!");
     return;
   }
+ 
   // --- Validation related -----//
 
   const selectedPaymentType = get(
@@ -359,6 +368,13 @@ const callBackForPay = async (state, dispatch) => {
       ? state.screenConfiguration.preparedFinalObject.AmountPaid
       : finalReceiptData.Bill[0].totalAmount;
   amtPaid = amtPaid ? Number(amtPaid) : totalAmount;
+
+
+  if(amtPaid>totalAmount&&!isAdvancePaymentAllowed){
+    alert("Advance Payment is not allowed");
+    return;
+  }
+
   ReceiptBodyNew.Payment.paymentDetails.push({
     manualReceiptDate:
       finalReceiptData.Bill[0].billDetails[0].manualReceiptDate,

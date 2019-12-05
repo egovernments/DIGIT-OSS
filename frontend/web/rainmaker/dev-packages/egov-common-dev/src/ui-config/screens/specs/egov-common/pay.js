@@ -6,7 +6,7 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
-import { getCurrentFinancialYear, generateBill } from "../utils";
+import { getCurrentFinancialYear, generateBill, getBusinessServiceMdmsData } from "../utils";
 import capturePaymentDetails from "./payResource/capture-payment-details";
 import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
@@ -19,24 +19,24 @@ import set from "lodash/set";
 import { componentJsonpath, radioButtonJsonPath, paybuttonJsonpath } from "./payResource/constants";
 import "./pay.css";
 
-const header =getCommonContainer({
-      header: getCommonHeader({
-          labelName: `Payment (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
-          labelKey: "COMMON_PAY_SCREEN_HEADER"
-      }),
-      consumerCode: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-common",
-          componentPath: "ApplicationNoContainer",
-          props: {
-              number: '',
-              label: {
-                  labelValue:"Consumer Code.:",
-                  labelKey:"PAYMENT_COMMON_CONSUMER_CODE"
-              }
-          }
-      }
-  });
+const header = getCommonContainer({
+    header: getCommonHeader({
+        labelName: `Payment (${getCurrentFinancialYear()})`, //later use getFinancialYearDates
+        labelKey: "COMMON_PAY_SCREEN_HEADER"
+    }),
+    consumerCode: {
+        uiFramework: "custom-atoms-local",
+        moduleName: "egov-common",
+        componentPath: "ApplicationNoContainer",
+        props: {
+            number: '',
+            label: {
+                labelValue: "Consumer Code.:",
+                labelKey: "PAYMENT_COMMON_CONSUMER_CODE"
+            }
+        }
+    }
+});
 
 
 const getPaymentCard = () => {
@@ -54,7 +54,10 @@ const getPaymentCard = () => {
                         labelKey: "NOC_PAYMENT_HEAD"
                     }),
                     estimateDetails,
-                    AmountToBePaid
+                    AmountToBePaid: {
+                        ...AmountToBePaid,
+                        visible: false
+                    }
                 })
             }
         }
@@ -69,7 +72,10 @@ const getPaymentCard = () => {
                         labelKey: "NOC_PAYMENT_HEAD"
                     }),
                     estimateDetails,
-                    AmountToBePaid,
+                    AmountToBePaid: {
+                        ...AmountToBePaid,
+                        visible: false
+                    },
                     capturePaymentDetails,
                     g8Details
                     // addPenaltyRebateButton: {
@@ -103,6 +109,8 @@ const getPaymentCard = () => {
 
 
 const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
+    await getBusinessServiceMdmsData(dispatch, tenantId);
+
     await generateBill(dispatch, consumerCode, tenantId);
 
     let payload = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].billDetails[0]");
@@ -110,7 +118,20 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
 
     //Collection Type Added in CS v1.1
     payload && dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].billDetails[0].collectionType", "COUNTER"));
-
+    const businessService = get(
+        state,
+        "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].businessService"
+    );
+    const businessServiceArray = get(state, "screenConfiguration.preparedFinalObject.businessServiceMdmsData.BillingService.BusinessService");
+    businessServiceArray && businessServiceArray.map(item => {
+        if (item.code == businessService) {
+            dispatch(prepareFinalObject("businessServiceInfo", item));
+        }
+    })
+    const isPartialPaymentAllowed = get(state, "screenConfiguration.preparedFinalObject.businessServiceInfo.partPaymentAllowed");
+    if (isPartialPaymentAllowed) {
+        dispatch(handleField("pay", "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid", "visible", true));
+    }
     if (get(payload, "amount") != undefined) {
         //set amount paid as total amount from bill - destination changed in CS v1.1
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid", payload.amount));
@@ -127,17 +148,17 @@ const fetchBill = async (state, dispatch, consumerCode, tenantId) => {
     }
 
     if (get(totalAmount, "totalAmount") === undefined) {
-        const buttonJsonpath = paybuttonJsonpath + `${process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt" }`;
+        const buttonJsonpath = paybuttonJsonpath + `${process.env.REACT_APP_NAME === "Citizen" ? "makePayment" : "generateReceipt"}`;
         dispatch(handleField("pay", buttonJsonpath, "props.disabled", true));
         dispatch(handleField("pay", radioButtonJsonPath, "props.buttons[1].disabled", true));
     }
 
-    const consumeCodeComponentPath='components.div.children.headerDiv.children.header.children.consumerCode';
-    const consumerCodeFromResponse=get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].consumerCode");;
-    dispatch(handleField("pay", consumeCodeComponentPath, "props.number",consumerCodeFromResponse ));
+    const consumeCodeComponentPath = 'components.div.children.headerDiv.children.header.children.consumerCode';
+    const consumerCodeFromResponse = get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].consumerCode");;
+    dispatch(handleField("pay", consumeCodeComponentPath, "props.number", consumerCodeFromResponse));
 
-    const raidButtonComponentPath="components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.AmountToPaidButton";
-    dispatch(handleField("pay", raidButtonComponentPath, "props.value","full_amount" ));
+    const raidButtonComponentPath = "components.div.children.formwizardFirstStep.children.paymentDetails.children.cardContent.children.AmountToBePaid.children.cardContent.children.amountDetailsCardContainer.children.AmountToPaidButton";
+    dispatch(handleField("pay", raidButtonComponentPath, "props.value", "full_amount"));
 
     dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].payer", "COMMON_OWNER"));
     dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0].paidBy", get(state, "screenConfiguration.preparedFinalObject.ReceiptTemp[0].Bill[0].payerName")));

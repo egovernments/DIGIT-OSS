@@ -36,7 +36,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
   };
 
   const transform = (value, masterName) => {
-    console.log(generalMDMSDataById);
+   // console.log(generalMDMSDataById);
     if (value) {
       return generalMDMSDataById && generalMDMSDataById[masterName] ? generalMDMSDataById[masterName][value].code: "NA";
     } else {
