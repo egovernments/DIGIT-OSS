@@ -19483,6 +19483,18 @@
       "actionid": 1911,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "BPAREG_DOC_VERIFIER",
+      "actionid": 1877,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "BPAREG_DOC_VERIFIER",
+      "actionid": 1878,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
