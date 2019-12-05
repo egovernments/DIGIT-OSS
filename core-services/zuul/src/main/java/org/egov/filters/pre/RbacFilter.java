@@ -120,7 +120,11 @@ public class RbacFilter extends ZuulFilter {
 
                 List<String> tenants = requestBody.findValuesAsText(REQUEST_TENANT_ID_KEY);
                 if( ! tenants.isEmpty())
-                    tenantIds.addAll(tenants);
+                // Filtering null tenantids will be removed once fix is done in TL service.
+                    tenants.forEach(tenant -> {
+                        if (tenant != null && !tenant.equalsIgnoreCase("null"))
+                            tenantIds.add(tenant);
+                    });
                 else{
                     if (!isNull(queryParams) && queryParams.containsKey(REQUEST_TENANT_ID_KEY) && !queryParams.get(REQUEST_TENANT_ID_KEY).isEmpty()) {
                         String tenantId = queryParams.get(REQUEST_TENANT_ID_KEY).get(0);
@@ -164,6 +168,7 @@ public class RbacFilter extends ZuulFilter {
 
             return responseEntity.getStatusCode().equals(HttpStatus.OK);
         } catch (HttpClientErrorException e) {
+            log.warn("Exception while attempting to authorize via access control", e);
             return false;
         } catch (Exception e) {
             log.warn("Unknown exception occurred while attempting to authorize via access control", e);
