@@ -15378,7 +15378,7 @@
       "leftIcon": "editor:insert-chart",
       "path": "Finance.Period End Activities.Close Period",
       "navigationURL": "services/EGF/closedperiod/search/view"
-    }, 
+    },
     {
       "id": 1892,
       "name": "DSS Dashboard Config Property Tax",
@@ -15491,6 +15491,126 @@
       "serviceCode": "ws-services",
       "code": "null",
       "path": ""
-    }            
+    },
+    {
+      "id": 1902,
+      "name": "StateLevelStatus",
+      "url": "/report/rainmaker-tl/StateLevelStatus/metadata/_get",
+      "displayName": "rainmaker-tl-StateLevelStatus",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "report",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1903,
+      "name": "StateLevelTradeWiseCollection",
+      "url": "/report/rainmaker-tl/StateLevelTradeWiseCollection/metadata/_get",
+      "displayName": "rainmaker-tl-StateLevelTradeWiseCollection",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "report",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1904,
+      "name": "StateLevelTradeLicenseRegistryReport",
+      "url": "/report/rainmaker-tl/StateLevelTradeLicenseRegistryReport/metadata/_get",
+      "displayName": "rainmaker-tl-StateLevelTradeLicenseRegistryReport",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "report",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1905,
+      "name": "TradeLicenseApplicationStatusReport",
+      "url": "/report/rainmaker-tl/TradeLicenseApplicationStatusReport/metadata/_get",
+      "displayName": "rainmaker-tl-TradeLicenseApplicationStatusReport",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "report",
+      "code": "null",
+      "path": "Asset Management.Asset Reports.AssetImmovableRegister"
+    },
+    {
+      "id": 1906,
+      "name": "TradeWiseCollectionReport",
+      "url": "/report/rainmaker-tl/TradeWiseCollectionReport/metadata/_get",
+      "displayName": "rainmaker-tl-TradeWiseCollectionReport",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "report",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1907,
+      "name": "TradeLicenseRegistryReport",
+      "url": "/report/rainmaker-tl/TradeLicenseRegistryReport/metadata/_get",
+      "displayName": "rainmaker-tl-TradeLicenseRegistryReport",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "report",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1908,
+      "name": "ULBEmployeeWiseReport",
+      "url": "/report/rainmaker-pgr/ULBEmployeeWiseReport/metadata/_get",
+      "displayName": "rainmaker-pgr-ULBEmployeeWiseReport",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "report",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1909,
+      "name": "ComplaintTypesReport",
+      "url": "/report/rainmaker-pgr/ComplaintTypesReport/metadata/_get",
+      "displayName": "rainmaker-pgr-ComplaintTypesReport",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "report",
+      "code": "null",
+      "path": "1902"
+    },
+    {
+      "id": 1910,
+      "name": "ULBDepartmentReport",
+      "url": " /report/rainmaker-pgr/ULBDepartmentReport/metadata/_get",
+      "displayName": "rainmaker-pgr-ULBDepartmentReport",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "report",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1911,
+      "name": "CollectionRegister",
+      "url": "/report/rainmaker-common/CollectionRegister/metadata/_get",
+      "displayName": "rainmaker-CollectionRegister",
+      "orderNumber": 1,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "report",
+      "code": "null",
+      "path": ""
+    }
   ]
 }
