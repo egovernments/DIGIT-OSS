@@ -27,9 +27,10 @@ const styles = theme => ({
     marginBottom: 12
   },
   formLabel: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 400,
-    letterSpacing: 0.56
+    letterSpacing: 0.56,
+    color: "rgba(0,0,0,0.87)"
   }
 });
 
