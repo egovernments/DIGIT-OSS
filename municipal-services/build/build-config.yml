@@ -84,3 +84,11 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "property-services/src/main/resources/db"
         image-name: "property-services-db"
+
+  - name: "municipal-services/ws-calculator"
+    build:
+      - work-dir: "ws-calculator"
+        image-name: "ws-calculator"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "property-services/src/main/resources/db"
+        image-name: "ws-calculator-db"
