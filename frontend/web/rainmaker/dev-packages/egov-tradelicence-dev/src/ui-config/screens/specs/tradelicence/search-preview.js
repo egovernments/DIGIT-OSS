@@ -8,6 +8,8 @@ import {
 import get from "lodash/get";
 import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage,
@@ -253,6 +255,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     setActionItems(action, obj);
     // loadReceiptGenerationData(applicationNumber, tenantId);
   }
+
 };
 
 let titleText = "";
@@ -402,6 +405,8 @@ const screenConfig = {
     const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
+    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+
     //To set the application no. at the  top
     set(
       action.screenConfig,
