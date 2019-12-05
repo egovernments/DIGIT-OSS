@@ -25,7 +25,7 @@ ServiceMaps:
         - inJsonPath: $.paymentMode
           outJsonPath: $.Data.paymentMode
         - inJsonPath: $.paymentStatus
-          outJsonPath: $.Data.paymentStatus
+          outJsonPath: $.Data.paymentStatus	
         - inJsonPath: $.payerId
           outJsonPath: $.Data.payer.id
         - inJsonPath: $.payerName
@@ -114,7 +114,7 @@ ServiceMaps:
       id: $.id
       isBulk: true
       timeStampField: $.auditDetails.createdTime
-      jsonPath: $.Payment.*
+      jsonPath: $.Payments.*
       customJsonMapping:
         indexMapping: {"Data":{"tenantId":"","id":"","transactionNumber":"","transactionDate":1,"paymentMode":"","paymentStatus":"","payer":{"id":"","name":""},"paidBy":"","paymentDetails":{},"auditDetails":{},"additionalDetails":{},"tenantData":{},"@timestamp":"timestamp"}}
         fieldMapping:
