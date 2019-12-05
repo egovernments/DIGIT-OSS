@@ -766,8 +766,9 @@
       "uniqueKeys": [
         "$.code"
       ]
-    },
-    "ws-services-masters": {
+    }
+  },
+   "ws-services-masters": {
       "connectionCategory": {
         "masterName": "connectionCategory",
         "isStateLevel": true,
@@ -844,8 +845,7 @@
         "isStateLevel": true,
         "uniqueKeys": []
       }
-    }
-  },
+    },
   "BPA": {
     "ServiceType": {
       "masterName": "ServiceType",
