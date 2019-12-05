@@ -120,7 +120,7 @@ export const callBackForNext = async (state, dispatch) => {
       dispatch
     );
     const isCommunicationAddrValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children",
+      "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner",
       state,
       dispatch
     );
