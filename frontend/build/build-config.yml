@@ -25,3 +25,9 @@ config:
     build:
     - work-dir: web/ui-uploader/
       image-name: ui-uploader
+
+-   name: frontend/dss-dashboard
+    build:
+    - work-dir: web/dss-dashboard/
+      dockerfile: web/dss-dashboard/docker/Dockerfile
+      image-name: dss-dashboard

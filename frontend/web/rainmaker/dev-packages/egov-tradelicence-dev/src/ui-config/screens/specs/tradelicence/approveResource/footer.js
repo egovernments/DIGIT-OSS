@@ -111,9 +111,10 @@ export const footerApprove = (applicationNumber, tenantId, queryPurpose) => {
         variant: "outlined",
         color: "primary",
         style: {
-          minWidth: "200px",
+          minWidth: "180px",
           height: "48px",
-          marginRight: "16px"
+          marginRight: "16px",
+          borderRadius:"inherit"
         }
       },
       children: {
@@ -134,9 +135,10 @@ export const footerApprove = (applicationNumber, tenantId, queryPurpose) => {
         variant: "contained",
         color: "primary",
         style: {
-          minWidth: "200px",
+          minWidth: "180px",
           height: "48px",
-          marginRight: "45px"
+          marginRight: "45px",
+          borderRadius:"inherit"
         }
       },
       children: {
