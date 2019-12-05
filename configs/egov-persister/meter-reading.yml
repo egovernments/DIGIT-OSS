@@ -1,0 +1,30 @@
+serviceMaps:
+ serviceName: Meter Connection Service
+ mappings:
+ - version: 1.0
+   name: MeterConnection
+   description: create meter reading for particular connection number
+   fromTopic: save-ws-meter
+   isTransaction: true
+   queryMaps:
+    - query: INSERT INTO meterreading (id,connectionNo, billingPeriod, meterStatus, lastReading, lastReadingDate, currentReading, currentReadingDate) VALUES (?, ?, ?, ?, ?, ?, ?,?);
+      basePath: $.meterReadings
+      jsonMaps:
+       - jsonPath: $.meterReadings.id
+
+       - jsonPath: $.meterReadings.connectionNo
+
+       - jsonPath: $.meterReadings.billingPeriod
+       
+       - jsonPath: $.meterReadings.meterStatus
+
+       - jsonPath: $.meterReadings.lastReading
+       
+       - jsonPath: $.meterReadings.lastReadingDate
+
+       - jsonPath: $.meterReadings.currentReading
+
+       - jsonPath: $.meterReadings.currentReadingDate
+
+      
+ 
