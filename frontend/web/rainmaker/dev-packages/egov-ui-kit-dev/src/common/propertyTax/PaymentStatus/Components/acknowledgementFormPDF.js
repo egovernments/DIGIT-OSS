@@ -16,6 +16,7 @@ pdfMake.fonts = {
 };
 
 const generateAcknowledgementForm = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt) => {
+  console.log("Details--",details);
   let data;
   let { owners, address, propertyDetails,header } = details;
   let dateArray=new Date(propertyDetails[0].assessmentDate).toDateString().split(' ');
@@ -304,7 +305,10 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
                   { text: getLocaleLabels("Street Name:","PT_ACK_LOCALIZATION_STREET_NAME"), border: borderKey, style: "receipt-table-key" },
                   { text: address.street || "NA", border: borderValue },
                   { text: getLocaleLabels("Locality/Mohalla:","PT_ACK_LOCALIZATION_LOCALITY_MOHALLA"), border: borderKey, style: "receipt-table-key" },
-                  { text: address.locality.name || "NA", border: borderValue },
+                  { text: getLocaleLabels((address.tenantId.replace('.','_')+'_REVENUE_'+address.locality.code).toUpperCase(),(address.tenantId.replace('.','_')+'_REVENUE_'+address.locality.code).toUpperCase()), 
+                  border: borderValue
+                 },
+                  
                 ],
               ],
             },
