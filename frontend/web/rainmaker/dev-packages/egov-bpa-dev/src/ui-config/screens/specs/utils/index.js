@@ -623,6 +623,12 @@ export const showHideMapPopup = (state, dispatch) => {
 
 export const getHeaderSideText = (status, licenseNo = null) => {
   switch (status) {
+    case "PENDINGDOCVERIFICATION":
+      return {
+        word1: "Status: ",
+        word2: "WF_ARCHITECT_PENDINGDOCVERIFICATION"
+      };
+
     case "PAID":
     case "PENDINGAPPROVAL":
       return { word1: "Status: ", word2: "WF_ARCHITECT_PENDINGAPPROVAL" };
