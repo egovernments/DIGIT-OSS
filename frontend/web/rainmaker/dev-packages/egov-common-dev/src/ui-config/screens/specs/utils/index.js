@@ -590,7 +590,33 @@ export const createEstimateData = billObject => {
     });
   return fees;
 };
+export const getBusinessServiceMdmsData = async (dispatch,  tenantId) => {
 
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: tenantId,
+      moduleDetails: [
+        {
+          moduleName: "BillingService",
+          masterDetails: [{ name: "BusinessService" }]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = null;
+    payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    dispatch(prepareFinalObject("businessServiceMdmsData", payload.MdmsRes));
+  } catch (e) {
+    console.log(e);
+  }
+};
 export const generateBill = async (dispatch, consumerCode, tenantId) => {
   try {
     if (consumerCode && tenantId) {
