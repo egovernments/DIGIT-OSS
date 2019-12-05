@@ -1,0 +1,12 @@
+{
+    "tenantId": "pb",
+    "moduleName": "BPA",
+    "ServiceType": [
+       {
+        "code": "NEW_CONSTRUCTION",
+        "name":"New Construction",
+        "active": true
+      }
+    ]
+  }
+  

@@ -1,0 +1,27 @@
+{
+    "tenantId": "pb",
+    "moduleName": "BPA",
+    "DocType": [
+        {
+        "code": "OWNERIDENTITYPROOF.AADHAAR",
+        "active": true
+        },
+        {
+        "code": "OWNERIDENTITYPROOF.VOTERID",
+        "active": true
+        },
+        {
+        "code": "OWNERIDENTITYPROOF.DRIVING",
+        "active": true
+        },
+        {
+        "code": "OWNERADDRESSPROOF.ELECTRICITYBILL",
+        "active": true
+        },
+        {
+        "code": "OWNERADDRESSPROOF.DL",
+        "active": true
+        }
+        ]
+  }
+  
