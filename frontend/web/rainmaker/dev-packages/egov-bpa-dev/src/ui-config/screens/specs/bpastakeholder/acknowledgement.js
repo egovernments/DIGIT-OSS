@@ -152,8 +152,8 @@ const getAcknowledgementCard = (
             },
             body: {
               labelName:
-                "A notification regarding Trade License Approval has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_SUB"
+                "A notification regarding application approval has been sent to applicant at registered Mobile No.",
+              labelKey: "BPA_APPROVAL_CHECKLIST_MESSAGE_SUB"
             },
             tailText: {
               labelName: "License No.",
@@ -234,13 +234,13 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-              labelName: "Trade License Application Rejected",
-              labelKey: "TL_APPROVAL_REJ_MESSAGE_HEAD"
+              labelName: "Stakeholder Registration Application Rejected",
+              labelKey: "BPA_APPROVAL_REJ_MESSAGE_HEAD"
             },
             body: {
               labelName:
-                "A notification regarding Trade License Rejection has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPROVAL_REJ_MESSAGE_SUBHEAD"
+                "A notification regarding Stakeholder Registration Application Rejection has been sent to applicant at registered Mobile No.",
+              labelKey: "BPA_APPROVAL_REJ_MESSAGE_SUBHEAD"
             }
           })
         }
@@ -331,9 +331,8 @@ const getAcknowledgementCard = (
   } else if (purpose === "mark" && status === "success") {
     return {
       header: getCommonHeader({
-        labelName: `Application for Trade License ${financialYearText}`,
-        labelKey: "TL_APPLICATION_TRADE_LICENSE",
-        dynamicArray: [financialYearText]
+        labelName: `Application for Stakehloder Registration`,
+        labelKey: "BPA_APPLICATION_ACK_HEADER"
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -363,9 +362,8 @@ const getAcknowledgementCard = (
   } else if (purpose === "forward" && status === "success") {
     return {
       header: getCommonHeader({
-        labelName: `Application for Trade License ${financialYearText}`,
-        labelKey: "TL_APPLICATION_TRADE_LICENSE",
-        dynamicArray: [financialYearText]
+        labelName: `Application for Stakehloder Registration`,
+        labelKey: "BPA_APPLICATION_ACK_HEADER"
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -376,12 +374,12 @@ const getAcknowledgementCard = (
             backgroundColor: "#39CB74",
             header: {
               labelName: "Application Forwarded Successfully",
-              labelKey: "TL_FORWARD_SUCCESS_MESSAGE_MAIN"
+              labelKey: "BPA_FORWARD_SUCCESS_MESSAGE_MAIN"
             },
             body: {
               labelName:
-                "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
-              labelKey: "TL_APPLICATION_FORWARD_SUCCESS"
+                "A notification regarding above application status has been sent to applicant at registered Mobile No.",
+              labelKey: "BPA_APPLICATION_FORWARD_SUCCESS"
             },
             tailText: {
               labelName: "Application No.",

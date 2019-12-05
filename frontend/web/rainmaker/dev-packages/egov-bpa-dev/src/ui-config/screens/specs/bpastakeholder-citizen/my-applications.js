@@ -53,7 +53,7 @@ const screenConfig = {
               jsonPath: "status"
             },
             moduleName: "BPAREG",
-            statusPrefix: "WF_NEWTL_"
+            statusPrefix: "WF_ARCHITECT_"
           }
         }
       }

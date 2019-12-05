@@ -174,7 +174,7 @@ export const callBackForNext = async (state, dispatch) => {
           uploadedDocData &&
           uploadedDocData.map(item => {
             return {
-              title: `TL_${item.documentType}`,
+              title: `BPA_${item.documentType}`,
               link: item.fileUrl && item.fileUrl.split(",")[0],
               linkText: "View",
               name: item.fileName
@@ -681,7 +681,6 @@ export const footerReview = (
               },
               roleDefination: {
                 rolePath: "user-info.roles",
-                roles: ["CITIZEN"],
                 action: "PAY"
               }
             },
