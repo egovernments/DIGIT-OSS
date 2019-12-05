@@ -392,6 +392,21 @@
       "code": "ANONYMOUS",
       "name": "Anonymous User",
       "description": "Anonymous User to be used in case of no auth"
+    },
+    {
+      "code": "BPAREG_APPROVER",
+      "name": "BPAREG Approver",
+      "description": "BPA Stakeholder workflow Approver"
+    },
+    {
+      "code": "BPAREG_DOC_VERIFIER",
+      "name": "BPAREG doc verifier",
+      "description": "BPA Stakeholder workflow document verifier"
+    },
+    {
+      "code": "BPAREG_EMPLOYEE",
+      "name": "BPAREG Employee",
+      "description": "BPA Stakeholder Employee"
     }
   ]
 }
