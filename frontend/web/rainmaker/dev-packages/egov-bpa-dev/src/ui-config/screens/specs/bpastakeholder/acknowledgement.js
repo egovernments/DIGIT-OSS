@@ -76,9 +76,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Payment for New Trade License ${financialYearText}`,
-          labelKey: "TL_COMMON_PAYMENT_NEW_LICENSE",
-          dynamicArray: [financialYearText]
+          labelName: "Stakeholder Registration Application",
+          labelKey: "BPA_REG_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -126,9 +125,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "TL_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: "Stakeholder Registration Application",
+          labelKey: "BPA_REG_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -170,9 +168,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "TL_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: "Stakeholder Registration Application",
+          labelKey: "BPA_REG_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -213,9 +210,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "TL_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: "Stakeholder Registration Application",
+          labelKey: "BPA_REG_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -251,9 +247,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          labelKey: "TL_TRADE_APPLICATION",
-          dynamicArray: [financialYearText]
+          labelName: "Stakeholder Registration Application",
+          labelKey: "BPA_REG_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -294,9 +289,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Trade License Application ${financialYearText}`,
-          dynamicArray: [financialYearText],
-          labelKey: "TL_TRADE_APPLICATION"
+          labelName: "Stakeholder Registration Application",
+          labelKey: "BPA_REG_APPLICATION"
         }),
         applicationNumber: {
           uiFramework: "custom-atoms-local",
@@ -331,8 +325,8 @@ const getAcknowledgementCard = (
   } else if (purpose === "mark" && status === "success") {
     return {
       header: getCommonHeader({
-        labelName: `Application for Stakehloder Registration`,
-        labelKey: "BPA_APPLICATION_ACK_HEADER"
+        labelName: "Stakeholder Registration Application",
+        labelKey: "BPA_REG_APPLICATION"
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
@@ -362,8 +356,8 @@ const getAcknowledgementCard = (
   } else if (purpose === "forward" && status === "success") {
     return {
       header: getCommonHeader({
-        labelName: `Application for Stakehloder Registration`,
-        labelKey: "BPA_APPLICATION_ACK_HEADER"
+        labelName: "Stakeholder Registration Application",
+        labelKey: "BPA_REG_APPLICATION"
       }),
       applicationSuccessCard: {
         uiFramework: "custom-atoms",
