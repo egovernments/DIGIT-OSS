@@ -1,0 +1,14 @@
+{
+  "tenantId": "pb",
+  "moduleName": "ws-services-masters",
+  "billingPeriod": [
+    {
+      "active": true,
+      "billingCycle": "monthly"
+    },
+    {
+      "active": true,
+      "billingCycle": "quarterly"
+    }
+  ]
+}

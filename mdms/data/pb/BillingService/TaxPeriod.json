@@ -265,7 +265,6 @@
       "service": "DISP_FIXED_ASSET.MOTOR_VEHICLE",
       "code": "DFAMV10YRS2018",
       "financialYear": "2018-28"
-
     },
     {
       "fromDate": 1522540801000,
@@ -274,6 +273,22 @@
       "service": "BPAREG",
       "code": "BPAREG10YRS2018",
       "financialYear": "2018-28"
+    },
+    {
+      "fromDate": 1554076800,
+      "toDate": 1585612800,
+      "periodCycle": "ANNUAL",
+      "service": "WS",
+      "code": "WC2018",
+      "financialYear": "2019-20"
+    },
+    {
+      "fromDate": 1554076801,
+      "toDate": 1585612801,
+      "periodCycle": "ANNUAL",
+      "service": "SW",
+      "code": "SC2018",
+      "financialYear": "2019-20"
     }
   ]
 }

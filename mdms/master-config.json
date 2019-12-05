@@ -713,7 +713,6 @@
         "$.code"
       ]
     }
-
   },
   "BillingService": {
     "TaxPeriod": {
@@ -751,7 +750,7 @@
       "isStateLevel": true,
       "uniqueKeys": [
         "$.billingservicecode",
-         "$.taxhead"
+        "$.taxhead"
       ]
     },
     "InstrumentGLcodeMapping": {
@@ -767,6 +766,84 @@
       "uniqueKeys": [
         "$.code"
       ]
+    },
+    "ws-services-masters": {
+      "connectionCategory": {
+        "masterName": "connectionCategory",
+        "isStateLevel": true,
+        "uniqueKeys": [
+          "$.code"
+        ]
+      },
+      "connectionType": {
+        "masterName": "connectionType",
+        "isStateLevel": true,
+        "uniqueKeys": [
+          "$.code"
+        ]
+      },
+      "waterSource": {
+        "masterName": "waterSource",
+        "isStateLevel": true,
+        "uniqueKeys": [
+          "$.code"
+        ]
+      },
+      "billingPeriod": {
+        "masterName": "billingPeriod",
+        "isStateLevel": true,
+        "uniqueKeys": [
+          "$.billingCycle"
+        ]
+      }
+    },
+    "ws-services-calculation": {
+      "WaterCess": {
+        "masterName": "WaterCess",
+        "isStateLevel": true,
+        "uniqueKeys": []
+      },
+      "Interest": {
+        "masterName": "Interest",
+        "isStateLevel": true,
+        "uniqueKeys": [
+          "$.fromFY"
+        ]
+      },
+      "Rebate": {
+        "masterName": "Rebate",
+        "isStateLevel": true,
+        "uniqueKeys": [
+          "$.fromFY"
+        ]
+      },
+      "Penalty": {
+        "masterName": "Penalty",
+        "isStateLevel": true,
+        "uniqueKeys": [
+          "$.fromFY"
+        ]
+      },
+      "WCBillingSlab": {
+        "masterName": "WCBillingSlab",
+        "isStateLevel": true,
+        "uniqueKeys": []
+      },
+      "WS_CHARGE": {
+        "masterName": "WS_CHARGE",
+        "isStateLevel": true,
+        "uniqueKeys": []
+      },
+      "WS_TIME_PENALTY": {
+        "masterName": "WS_TIME_PENALTY",
+        "isStateLevel": true,
+        "uniqueKeys": []
+      },
+      "WS_WATER_CESS": {
+        "masterName": "WS_WATER_CESS",
+        "isStateLevel": true,
+        "uniqueKeys": []
+      }
     }
   }
 }

@@ -1,0 +1,186 @@
+{
+  "tenantId": "pb",
+  "moduleName": "sw-services-calculation",
+  "SCBillingSlab": [
+    {
+      "id": "1",
+      "BuildingType": "Domestic",
+      "CalculationAttribute": "No. of water closets",
+      "ConnectionType": "Non Metered",
+      "UOM": "Number",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 15,
+          "minimumCharge": 0
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "BuildingType": "Domestic",
+      "CalculationAttribute": "No. of toilets",
+      "ConnectionType": "Non Metered",
+      "UOM": "Number",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 15,
+          "minimumCharge": 0
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "BuildingType": "Commercial",
+      "CalculationAttribute": "No. of water closets",
+      "ConnectionType": "Non Metered",
+      "UOM": "Number",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 30,
+          "minimumCharge": 0
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "BuildingType": "Commercial",
+      "CalculationAttribute": "No. of toilets",
+      "ConnectionType": "Non Metered",
+      "UOM": "Number",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 30,
+          "minimumCharge": 0
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "BuildingType": "Government",
+      "CalculationAttribute": "No. of water closets",
+      "ConnectionType": "Non Metered",
+      "UOM": "Number",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 30,
+          "minimumCharge": 0
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "BuildingType": "Government",
+      "CalculationAttribute": "No. of toilets",
+      "ConnectionType": "Non Metered",
+      "UOM": "Number",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 30,
+          "minimumCharge": 0
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "BuildingType": "Partly Commercial",
+      "CalculationAttribute": "No. of water closets",
+      "ConnectionType": "Non Metered",
+      "UOM": "Number",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 25,
+          "minimumCharge": 0
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "BuildingType": "Partly Commercial",
+      "CalculationAttribute": "No. of toilets",
+      "ConnectionType": "Non Metered",
+      "UOM": "Number",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 25,
+          "minimumCharge": 0
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "BuildingType": "Domestic",
+      "CalculationAttribute": "Flat",
+      "ConnectionType": "Non Metered",
+      "UOM": "Flat",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 100,
+          "minimumCharge": 0
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "BuildingType": "Commercial",
+      "CalculationAttribute": "Flat",
+      "ConnectionType": "Non Metered",
+      "UOM": "Flat",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 250,
+          "minimumCharge": 0
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "BuildingType": "Government",
+      "CalculationAttribute": "Flat",
+      "ConnectionType": "Non Metered",
+      "UOM": "Flat",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 350,
+          "minimumCharge": 0
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "BuildingType": "Partly commercial",
+      "CalculationAttribute": "Flat",
+      "ConnectionType": "Non Metered",
+      "UOM": "Flat",
+      "slabs": [
+        {
+          "from": 0,
+          "to": 1000000000,
+          "charge": 200,
+          "minimumCharge": 0
+        }
+      ]
+    }
+  ]
+}
