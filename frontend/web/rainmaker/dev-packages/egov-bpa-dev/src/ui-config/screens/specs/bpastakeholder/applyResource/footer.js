@@ -120,7 +120,7 @@ export const callBackForNext = async (state, dispatch) => {
       dispatch
     );
     const isCommunicationAddrValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner",
+      "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children",
       state,
       dispatch
     );
@@ -217,13 +217,13 @@ export const callBackForNext = async (state, dispatch) => {
         case 0:
           errorMessage = {
             labelName:
-              "Please fill all mandatory fields for Trade Details, then do next !",
-            labelKey: "ERR_FILL_TRADE_MANDATORY_FIELDS"
+              "Please fill all mandatory fields for Stakeholder Registration, then do next!",
+            labelKey: "ERR_FILL_BPA_FIELDS"
           };
           break;
         case 1:
           errorMessage = {
-            labelName: "Please upload all the required documents !",
+            labelName: "Please upload all the required documents!",
             labelKey: "ERR_UPLOAD_REQUIRED_DOCUMENTS"
           };
           break;
