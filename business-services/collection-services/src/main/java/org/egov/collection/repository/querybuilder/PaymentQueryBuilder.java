@@ -111,16 +111,14 @@ public class PaymentQueryBuilder {
     // Payment Status update queries
 
     public static final String STATUS_UPDATE_PAYMENT_SQL = "UPDATE egcl_payment SET instrumentstatus=:instrumentstatus,additionaldetails=:additionaldetails," +
-            " paymentstatus=:paymentstatus,createdby=:createdby, createdtime=:createdtime, lastmodifiedby=:lastmodifiedby,lastmodifiedtime=:lastmodifiedtime" +
+            " paymentstatus=:paymentstatus, lastmodifiedby=:lastmodifiedby,lastmodifiedtime=:lastmodifiedtime" +
             " WHERE id=:id;";
 
-    public static final String STATUS_UPDATE_PAYMENTDETAIL_SQL = "UPDATE egcl_paymentdetail SET  additionaldetails=:additionaldetails, createdby=:createdby," +
-            " createdtime=:createdtime, lastmodifiedby=:lastmodifiedby, lastmodifiedtime=:lastmodifiedtime " +
+    public static final String STATUS_UPDATE_PAYMENTDETAIL_SQL = "UPDATE egcl_paymentdetail SET  additionaldetails=:additionaldetails, lastmodifiedby=:lastmodifiedby, lastmodifiedtime=:lastmodifiedtime " +
             " WHERE id=:id;";
 
     public static final String STATUS_UPDATE_BILL_SQL = "UPDATE egcl_bill " +
-            "   SET  status= :status, iscancelled= :iscancelled, additionaldetails= :additionaldetails, createdby=:createdby," +
-            "   createdtime= :createdtime,lastmodifiedby= :lastmodifiedby, lastmodifiedtime=:lastmodifiedtime" +
+            "   SET  status= :status, iscancelled= :iscancelled, additionaldetails= :additionaldetails, lastmodifiedby= :lastmodifiedby, lastmodifiedtime=:lastmodifiedtime" +
             "   WHERE id=:id;";
 
     public static final String COPY_PAYMENT_SQL = "INSERT INTO egcl_payment_audit SELECT * FROM egcl_payment WHERE id = :id;";
