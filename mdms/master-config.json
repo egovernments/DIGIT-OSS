@@ -145,7 +145,7 @@
       ]
     },
     "DocumentType": {
-      "masterName": "StructureType",
+      "masterName": "DocumentType",
       "moduleDefinition": null,
       "isStateLevel": true,
       "uniqueKeys": [
@@ -861,15 +861,8 @@
         "$.code"
       ]
     },
-    "DocType": {
-      "masterName": "DocType",
-      "isStateLevel": true,
-      "uniqueKeys": [
-        "$.code"
-      ]
-    },
-    "CheckList": {
-      "masterName": "CheckList",
+    "DocTypeMapping": {
+      "masterName": "DocTypeMapping",
       "isStateLevel": true,
       "uniqueKeys": [
         "$.code"

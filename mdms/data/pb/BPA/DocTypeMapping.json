@@ -1,19 +1,19 @@
 {
     "tenantId": "pb",
     "moduleName": "BPA",
-    "CheckList": [
+    "DocTypeMapping": [
         {
             "applicationType": "BUILDING_PLAN_SCRUTINY",
             "ServiceType": "NEW_CONSTRUCTION",
             "RiskType": "High",
             "docTypes": [
                 {
-                    "code": "OWNERIDENTITYPROOF.VOTERID",
+                    "code": "VOTERID",
                     "required": true,
                     "sequence":0
                 },
                 {
-                    "code": "OWNERIDENTITYPROOF.AADHAAR",
+                    "code": "AADHAAR",
                     "required": false,
                     "sequence":1
                 }

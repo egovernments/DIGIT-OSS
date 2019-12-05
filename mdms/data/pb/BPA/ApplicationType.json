@@ -4,7 +4,6 @@
   "ApplicationType": [
      {
       "code": "BUILDING_PLAN_SCRUTINY",
-      "name":"Buildind Plan Scrutiny",
       "active": true
     }
   ]

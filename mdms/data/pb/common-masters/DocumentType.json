@@ -9,6 +9,22 @@
     {
       "code": "OWNERSHIPPROOF",
       "active": true
+    },
+    {
+      "code": "AADHAAR",
+      "active": true
+    },
+    {
+      "code": "VOTERID",
+      "active": true
+    },
+    {
+      "code": "ELECTRICITYBILL",
+      "active": true
+    },
+    {
+      "code": "DRIVINGLICENSE",
+      "active": true
     }
   ]
 }

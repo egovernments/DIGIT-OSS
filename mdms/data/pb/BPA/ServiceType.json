@@ -4,7 +4,6 @@
     "ServiceType": [
        {
         "code": "NEW_CONSTRUCTION",
-        "name":"New Construction",
         "active": true
       }
     ]
