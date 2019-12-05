@@ -19131,12 +19131,6 @@
       "tenantId": "pb"
     },
     {
-      "rolecode": "BPAREG_APPROVER",
-      "actionid": 1875,
-      "actioncode": "",
-      "tenantId": "pb"
-    },
-    {
       "rolecode": "BPAREG_EMPLOYEE",
       "actionid": 1876,
       "actioncode": "",
