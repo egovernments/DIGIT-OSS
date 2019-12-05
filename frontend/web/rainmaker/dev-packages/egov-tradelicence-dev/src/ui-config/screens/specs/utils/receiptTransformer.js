@@ -45,13 +45,13 @@ const epochToDate = et => {
   return formattedDate;
 };
 
-const getMessageFromLocalization = code => {
+export const getMessageFromLocalization = code => {
   let messageObject = JSON.parse(
     getLocalization(`localization_${getLocale()}`)
   ).find(item => {
     return item.code == code;
   });
-  return messageObject ? messageObject.message : code;
+  return messageObject ? messageObject.code : code;
 };
 
 export const loadUlbLogo = tenantid => {
