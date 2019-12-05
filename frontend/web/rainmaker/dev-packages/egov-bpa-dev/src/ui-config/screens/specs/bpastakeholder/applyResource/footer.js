@@ -100,19 +100,27 @@ export const callBackForNext = async (state, dispatch) => {
       state,
       dispatch
     );
-    let isTradeOrganizationValid = true;
+    // let isTradeOrganizationValid = true;
 
-    let ownershipType = get(
-      data,
-      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
-    );
-    if (ownershipType != "INDIVIDUAL") {
-      isTradeOrganizationValid = validateFields(
-        "components.div.children.formwizardFirstStep.children.organizationDetails.children.cardContent.children.organizationDetailsConatiner.children",
+    // let ownershipType = get(
+    //   data,
+    //   "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+    // );
+
+    dispatch(
+      prepareFinalObject(
         state,
-        dispatch
-      );
-    }
+        "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+        "INDIVIDUAL"
+      )
+    );
+    // if (ownershipType != "INDIVIDUAL") {
+    //   isTradeOrganizationValid = validateFields(
+    //     "components.div.children.formwizardFirstStep.children.organizationDetails.children.cardContent.children.organizationDetailsConatiner.children",
+    //     state,
+    //     dispatch
+    //   );
+    // }
 
     const isPermanentAddrValid = validateFields(
       "components.div.children.formwizardFirstStep.children.permanentAddr.children.cardContent.children.tradeDetailsConatiner.children",
@@ -127,7 +135,6 @@ export const callBackForNext = async (state, dispatch) => {
 
     if (
       !isTradeDetailsValid ||
-      !isTradeOrganizationValid ||
       !isPermanentAddrValid ||
       !isCommunicationAddrValid
     ) {

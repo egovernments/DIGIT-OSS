@@ -314,8 +314,8 @@ export const formwizardFirstStep = {
   children: {
     OwnerInfoCard,
     breakAfterSearch: getBreak(),
-    getOrganizationReqd,
-    organizationDetails,
+    // getOrganizationReqd,
+    // organizationDetails,
     permanentAddr,
     corrospondanceAddr
   }
