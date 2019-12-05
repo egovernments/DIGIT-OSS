@@ -1,5 +1,5 @@
 {
-  "key": "testconsolidatedreceipt",
+  "key": "consolidatedreceipt",
   "config": {
     "content": [
       {
@@ -217,7 +217,7 @@
           "body": [
             [
               {
-                "text": "{{service-type}}",
+                "text": "Service Type",
                 "border": [
                   true,
                   true,
