@@ -185,23 +185,23 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     //   get(state, "screenConfiguration.preparedFinalObject.Licenses[0].status")
     // );
 
-    const subOwnerShipCategory = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
-    );
-    if (subOwnerShipCategory == "INDIVIDUAL") {
-      set(
-        action,
-        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails.visible",
-        false
-      );
-    } else {
-      set(
-        action,
-        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails.visible",
-        true
-      );
-    }
+    // const subOwnerShipCategory = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
+    // );
+    // if (subOwnerShipCategory == "INDIVIDUAL") {
+    //   set(
+    //     action,
+    //     "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails.visible",
+    //     false
+    //   );
+    // } else {
+    //   set(
+    //     action,
+    //     "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails.visible",
+    //     true
+    //   );
+    // }
 
     const tradeType = get(
       state.screenConfiguration.preparedFinalObject,
@@ -410,7 +410,7 @@ const estimate = getCommonGrayCard({
   })
 });
 
-const reviewOrganizationDetails = getOrganizationDetails(false);
+// const reviewOrganizationDetails = getOrganizationDetails(false);
 
 const reviewPermanentDetails = getPermanentDetails(false);
 const reviewCommunicationDetails = getCommunicactionDetails(false);
@@ -447,7 +447,7 @@ export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
   reviewOwnerDetails,
-  reviewOrganizationDetails,
+  // reviewOrganizationDetails,
   reviewPermanentDetails,
   reviewCommunicationDetails,
   reviewDocumentDetails

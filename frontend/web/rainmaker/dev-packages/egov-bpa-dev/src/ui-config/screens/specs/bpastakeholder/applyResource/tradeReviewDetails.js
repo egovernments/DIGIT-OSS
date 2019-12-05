@@ -20,7 +20,7 @@ const estimate = getCommonGrayCard({
   })
 });
 
-const reviewOrganizationDetails = getOrganizationDetails();
+// const reviewOrganizationDetails = getOrganizationDetails();
 
 const reviewPermanentDetails = getPermanentDetails();
 const reviewCommunicationDetails = getCommunicactionDetails();
@@ -35,7 +35,7 @@ export const tradeReviewDetails = getCommonCard({
   }),
   estimate,
   reviewOwnerDetails,
-  reviewOrganizationDetails,
+  // reviewOrganizationDetails,
   reviewPermanentDetails,
   reviewCommunicationDetails,
   reviewDocumentDetails
