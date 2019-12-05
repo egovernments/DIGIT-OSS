@@ -178,11 +178,13 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                     .lastModifiedBy("bill_lastmodifiedby")
                     .lastModifiedTime(rs.getLong("bill_lastModifiedTime"))
                     .build();
-
-            String[] collectionModesAllowed = rs.getString("collectionmodesnotallowed").split(",");
+            
             List<String> collectionModesAllowedList = new LinkedList<>();
-            if(collectionModesAllowed.length!=0)
-                collectionModesAllowedList = Arrays.asList(collectionModesAllowed);
+            if(null != rs.getString("collectionmodesnotallowed")) {
+                String[] collectionModesAllowed = rs.getString("collectionmodesnotallowed").split(",");
+                if(collectionModesAllowed.length!=0)
+                    collectionModesAllowedList = Arrays.asList(collectionModesAllowed);
+            }
 
             PGobject billAdditionalObj = (PGobject) rs.getObject("bill_additionalDetails");
 
@@ -209,12 +211,6 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
             payment.addpaymentDetailsItem(paymentDetail);
         }
 
-
-        // BillAccountDetail
-//        AuditDetails billAccountDetailAudit = AuditDetails.builder()
-//                .createdBy(rs.getString("bacdt_createdby")).createdTime(rs.getLong("bacdt_createdTime"))
-//                .lastModifiedBy(rs.getString("bacdt_lastmodifiedby")).lastModifiedTime(rs.getLong("bacdt_lastModifiedTime")).build();
-
         PGobject billAccountDetailAdditionalObj = (PGobject) rs.getObject("bacdt_additionalDetails");
 
         Integer order = rs.getInt("order");
@@ -231,13 +227,6 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                 .additionalDetails(getJsonValue(billAccountDetailAdditionalObj))
                 .build();
 
-
-
-        // BillDetail
-       /* AuditDetails billDetailAuditDetials = AuditDetails.builder()
-                .createdBy(rs.getString("bd_createdby")).createdTime(rs.getLong("bd_createdTime"))
-                .lastModifiedBy(rs.getString("bd_lastmodifiedby")).lastModifiedTime(rs.getLong("bd_lastModifiedTime"))
-                .build();*/
 
         PGobject billDetailAdditionalObj = (PGobject) rs.getObject("bd_additionalDetails");
 
