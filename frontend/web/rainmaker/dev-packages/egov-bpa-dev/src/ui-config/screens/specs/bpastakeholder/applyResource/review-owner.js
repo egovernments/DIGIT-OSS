@@ -5,7 +5,7 @@ import {
   getLabelWithValue,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDate } from "../../utils";
+import { convertEpochToDate, checkValueForNA } from "../../utils";
 
 import { changeStep } from "./footer";
 
@@ -19,7 +19,8 @@ export const reviewLicenseeType = getLabelWithValue(
     localePrefix: {
       moduleName: "TRADELICENSE",
       masterName: "TRADETYPE"
-    }
+    },
+    callBack: checkValueForNA
   }
 );
 
@@ -33,20 +34,22 @@ export const reviewLicenseeSubType = getLabelWithValue(
     localePrefix: {
       moduleName: "TRADELICENSE",
       masterName: "TRADETYPE"
-    }
+    },
+    callBack: checkValueForNA
   }
 );
 export const reviewOwnerGender = getLabelWithValue(
   {
-    name: "Gender",
-    key: "BAP_COMMON_GENDER_LABEL"
+    labelName: "Gender",
+    labelKey: "BAP_COMMON_GENDER_LABEL"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",
     localePrefix: {
       moduleName: "COMMON",
       masterName: "GENDER"
-    }
+    },
+    callBack: checkValueForNA
   }
 );
 
@@ -67,7 +70,8 @@ export const reviewOwnerPhoneNo = getLabelWithValue(
     labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
   },
   {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber"
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber",
+    callBack: checkValueForNA
   }
 );
 export const reviewOwnerEmail = getLabelWithValue(
@@ -76,7 +80,8 @@ export const reviewOwnerEmail = getLabelWithValue(
     labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
   },
   {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId",
+    callBack: checkValueForNA
   }
 );
 export const reviewOwnerPAN = getLabelWithValue(
@@ -84,7 +89,10 @@ export const reviewOwnerPAN = getLabelWithValue(
     labelName: "PAN No.",
     labelKey: "TL_NEW_OWNER_DETAILS_PAN_LABEL"
   },
-  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+  {
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan",
+    callBack: checkValueForNA
+  }
 );
 
 export const reviewcounsilForArchNo = getLabelWithValue(
@@ -93,7 +101,9 @@ export const reviewcounsilForArchNo = getLabelWithValue(
     labelKey: "BPA_COUNCIL_FOR_ARCH_NO_LABEL"
   },
   {
-    jsonPath: "Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo"
+    jsonPath:
+      "Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo",
+    callBack: checkValueForNA
   }
 );
 

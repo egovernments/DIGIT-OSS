@@ -6,6 +6,7 @@ import {
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { changeStep } from "./footer";
+import { checkValueForNA } from "../../utils";
 
 export const getOrganizationDetails = (isEditable = true) => {
   return getCommonGrayCard({
@@ -66,7 +67,8 @@ export const getOrganizationDetails = (isEditable = true) => {
           labelKey: "BPA_ORGANIZATION_NAME"
         },
         {
-          jsonPath: "Licenses[0].tradeLicenseDetail.institution.instituionName"
+          jsonPath: "Licenses[0].tradeLicenseDetail.institution.instituionName",
+          callBack: checkValueForNA
         }
       ),
       reviewContactNo: getLabelWithValue(
@@ -74,7 +76,10 @@ export const getOrganizationDetails = (isEditable = true) => {
           labelName: "Contact No.",
           labelKey: "BPA_ORGANIZATION_CONTACT_NO"
         },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.institution.contactNo" }
+        {
+          jsonPath: "Licenses[0].tradeLicenseDetail.institution.contactNo",
+          callBack: checkValueForNA
+        }
       ),
       reviewpartnerName: getLabelWithValue(
         {
@@ -82,7 +87,8 @@ export const getOrganizationDetails = (isEditable = true) => {
           labelKey: "BPA_ORGANIZATION_CONTACT_PERSON_NAME"
         },
         {
-          jsonPath: "Licenses[0].tradeLicenseDetail.institution.name"
+          jsonPath: "Licenses[0].tradeLicenseDetail.institution.name",
+          callBack: checkValueForNA
         }
       ),
       reviewDesignation: getLabelWithValue(
@@ -90,7 +96,10 @@ export const getOrganizationDetails = (isEditable = true) => {
           labelName: "Designation",
           labelKey: "BPA_ORGANIZATION_DESIGNATION"
         },
-        { jsonPath: "Licenses[0].tradeLicenseDetail.institution.designation" }
+        {
+          jsonPath: "Licenses[0].tradeLicenseDetail.institution.designation",
+          callBack: checkValueForNA
+        }
       ),
       reviewOrgRegistraionNo: getLabelWithValue(
         {
@@ -99,7 +108,8 @@ export const getOrganizationDetails = (isEditable = true) => {
         },
         {
           jsonPath:
-            "Licenses[0].tradeLicenseDetail.institution.organisationRegistrationNo"
+            "Licenses[0].tradeLicenseDetail.institution.organisationRegistrationNo",
+          callBack: checkValueForNA
         }
       ),
       reviewOrgAddress: getLabelWithValue(
@@ -108,7 +118,8 @@ export const getOrganizationDetails = (isEditable = true) => {
           labelKey: "BPA_ORGANIZATION_ADDRESS"
         },
         {
-          jsonPath: "Licenses[0].tradeLicenseDetail.institution.address"
+          jsonPath: "Licenses[0].tradeLicenseDetail.institution.address",
+          callBack: checkValueForNA
         }
       )
     })

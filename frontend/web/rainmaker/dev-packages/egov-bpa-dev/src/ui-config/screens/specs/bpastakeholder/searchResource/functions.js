@@ -130,7 +130,7 @@ export const searchApiCall = async (state, dispatch) => {
           "components.div.children.searchResults",
           "props.title",
           `${getTextToLocalMapping(
-            "Search Results for Trade License Applications"
+            "Search Results for Stakeholder Registration Applications"
           )} (${response.Licenses.length})`
         )
       );

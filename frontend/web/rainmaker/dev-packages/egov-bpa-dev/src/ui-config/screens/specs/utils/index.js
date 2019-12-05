@@ -623,13 +623,19 @@ export const showHideMapPopup = (state, dispatch) => {
 
 export const getHeaderSideText = (status, licenseNo = null) => {
   switch (status) {
+    case "PENDINGDOCVERIFICATION":
+      return {
+        word1: "Status: ",
+        word2: "WF_ARCHITECT_PENDINGDOCVERIFICATION"
+      };
+
     case "PAID":
     case "PENDINGAPPROVAL":
-      return { word1: "Status: ", word2: "WF_NEWTL_PENDINGAPPROVAL" };
+      return { word1: "Status: ", word2: "WF_ARCHITECT_PENDINGAPPROVAL" };
     case "PENDINGPAYMENT":
-      return { word1: "Status: ", word2: "WF_NEWTL_PENDINGPAYMENT" };
+      return { word1: "Status: ", word2: "WF_ARCHITECT_PENDINGPAYMENT" };
     case "FIELDINSPECTION":
-      return { word1: "Status: ", word2: "WF_NEWTL_FIELDINSPECTION" };
+      return { word1: "Status: ", word2: "WF_ARCHITECT_FIELDINSPECTION" };
     case "APPLIED":
       return { word1: "Status: ", word2: "TL_APPLIED" };
     case "REJECTED":
@@ -915,9 +921,11 @@ export const getUserDataFromUuid = async bodyObject => {
 const getStatementForDocType = docType => {
   switch (docType) {
     case "OWNERIDPROOF":
-      return "Allowed documents are Aadhar Card / Voter ID Card / Driving License";
+      return "BPA_UPLOAD_STATEMENT1";
     case "OWNERSHIPPROOF":
-      return "Allowed documents are Rent Deed / Lease Doc / Property Registry / General or Special Power of Attorney";
+      return "BPA_UPLOAD_STATEMENT2";
+    case "EXPERIENCEPROOF":
+      return "BPA_UPLOAD_STATEMENT3";
     default:
       return "";
   }
@@ -2268,9 +2276,9 @@ export const getTextToLocalMapping = label => {
         localisationLabels
       );
 
-    case "Appliact Name":
+    case "Applicant Name":
       return getLocaleLabels(
-        "Appliact Name",
+        "Applicant Name",
         "BPA_COMMON_TABLE_COL_APP_NAME",
         localisationLabels
       );
@@ -2285,10 +2293,19 @@ export const getTextToLocalMapping = label => {
     case "INITIATED":
       return getLocaleLabels("Initiated,", "TL_INITIATED", localisationLabels);
     case "APPLIED":
-      getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
+      return getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
     case "PAID":
-      getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
-
+      return getLocaleLabels(
+        "Paid",
+        "WF_ARCHITECT_PENDINGAPPROVAL",
+        localisationLabels
+      );
+    case "PENDINGDOCVERIFICATION":
+      return getLocaleLabels(
+        "Pending for Document Verification",
+        "WF_ARCHITECT_PENDINGDOCVERIFICATION",
+        localisationLabels
+      );
     case "APPROVED":
       return getLocaleLabels("Approved", "TL_APPROVED", localisationLabels);
     case "REJECTED":
@@ -2298,27 +2315,27 @@ export const getTextToLocalMapping = label => {
     case "PENDINGAPPROVAL ":
       return getLocaleLabels(
         "Pending for Approval",
-        "WF_NEWTL_PENDINGAPPROVAL",
+        "WF_ARCHITECT_PENDINGAPPROVAL",
         localisationLabels
       );
     case "PENDINGPAYMENT":
       return getLocaleLabels(
         "Pending payment",
-        "WF_NEWTL_PENDINGPAYMENT",
+        "WF_ARCHITECT_PENDINGPAYMENT",
         localisationLabels
       );
 
     case "FIELDINSPECTION":
       return getLocaleLabels(
         "Pending for Field Inspection",
-        "WF_NEWTL_FIELDINSPECTION",
+        "WF_ARCHITECT_FIELDINSPECTION",
         localisationLabels
       );
 
-    case "Search Results for Trade License Applications":
+    case "Search Results for Stakeholder Registration Applications":
       return getLocaleLabels(
         "",
-        "TL_HOME_SEARCH_RESULTS_TABLE_HEADING",
+        "BPA_HOME_SEARCH_RESULTS_TABLE_HEADING",
         localisationLabels
       );
 
@@ -2377,4 +2394,8 @@ export const setOrganizationVisibility = (
         ownerShipType != "INDIVIDUAL"
       );
     });
+};
+
+export const checkValueForNA = value => {
+  return value ? value : "NA";
 };

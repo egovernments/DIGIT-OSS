@@ -5,11 +5,11 @@ export const documentList = {
   props: {
     buttonLabel: {
       labelName: "UPLOAD FILE",
-      labelKey: "TL_BUTTON_UPLOAD FILE"
+      labelKey: "BPA_BUTTON_UPLOAD FILE"
     },
     description: {
       labelName: "Only .jpg and .pdf files. 6MB max file size.",
-      labelKey: "TL_UPLOAD_RESTRICTIONS"
+      labelKey: "BPA_UPLOAD_RESTRICTIONS"
     },
     inputProps: {
       accept: "image/*, .pdf, .png, .jpeg"
