@@ -249,6 +249,17 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
         false
       );
     }
+    let businessService = get(
+      state,
+      "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType"
+    ).split(".")[0];
+
+    const queryObject = [
+      { key: "tenantId", value: tenantId },
+      { key: "businessServices", value: businessService }
+    ];
+
+    setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
     const status = get(
       state,
@@ -316,30 +327,10 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       ? set(action, "screenConfig.components.div.children.footer", footer)
       : set(action, "screenConfig.components.div.children.footer", {});
 
-    if (status === "cancelled")
-      set(
-        action,
-        "screenConfig.components.div.children.headerDiv.children.helpSection.children.cancelledLabel.visible",
-        true
-      );
-
-    if (status === "APPLIED" && process.env.REACT_APP_NAME === "Citizen") {
-    }
     setActionItems(action, obj);
     // loadReceiptGenerationData(applicationNumber, tenantId);
     addressDestruct(action, state, dispatch);
   }
-
-  let businessService = get(
-    state,
-    "screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType"
-  ).split(".")[0];
-
-  const queryObject = [
-    { key: "tenantId", value: tenantId },
-    { key: "businessServices", value: businessService }
-  ];
-  setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 };
 
 let titleText = "";
