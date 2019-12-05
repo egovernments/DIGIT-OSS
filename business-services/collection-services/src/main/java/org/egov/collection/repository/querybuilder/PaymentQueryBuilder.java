@@ -316,6 +316,12 @@ public class PaymentQueryBuilder {
             }
 
         }
+        
+        if(!CollectionUtils.isEmpty(searchCriteria.getIds())) {
+            addClauseIfRequired(preparedStatementValues, selectQuery);
+            selectQuery.append(" py.id IN (:id)  ");
+            preparedStatementValues.put("id", searchCriteria.getIds());	
+        }
 
         if (searchCriteria.getReceiptNumbers() != null && !searchCriteria.getReceiptNumbers().isEmpty()) {
             addClauseIfRequired(preparedStatementValues, selectQuery);
