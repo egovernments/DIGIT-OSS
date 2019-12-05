@@ -11,7 +11,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import { getTenantId ,getUserInfo} from "egov-ui-kit/utils/localStorageUtils";
 
 const tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
-export const resetFields = (state, dispatch) => {
+const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "groupBills",
@@ -33,7 +33,7 @@ export const resetFields = (state, dispatch) => {
       "groupBills",
       "components.div.children.abgSearchCard.children.cardContent.children.searchContainer.children.locMohalla",
       "props.value",
-      " "
+     undefined
     )
   );
 };
