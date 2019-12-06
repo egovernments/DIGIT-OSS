@@ -502,6 +502,19 @@ export const getBill = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const calculateBill = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
       "/tl-calculator/v1/_getbill",
       "",
       queryObject
@@ -511,12 +524,11 @@ export const getBill = async queryObject => {
     console.log(error);
   }
 };
-
 export const getReceipt = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/collection-services/receipts/_search",
+      "/collection-services/payments/_search",
       "",
       queryObject
     );
@@ -571,7 +583,7 @@ export const getReceiptData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "collection-services/receipts/_search",
+      "collection-services/payments/_search",
       "",
       queryObject
     );
@@ -896,23 +908,6 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
   }
 };
 
-// Get user data from uuid API call
-export const getUserDataFromUuid = async bodyObject => {
-  try {
-    const response = await httpRequest(
-      "post",
-      "/user/_search",
-      "",
-      [],
-      bodyObject
-    );
-    return response;
-  } catch (error) {
-    console.log(error);
-    return {};
-  }
-};
-
 const getStatementForDocType = docType => {
   switch (docType) {
     case "OWNERIDPROOF":
@@ -966,7 +961,7 @@ const getToolTipInfo = (taxHead, LicenseData) => {
 };
 
 const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
-  if (Bill && Bill.length) {
+  if (Bill ) {
     const extraData = ["TL_COMMON_REBATE", "TL_COMMON_PEN"].map(item => {
       return {
         name: {
@@ -980,7 +975,7 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
         }
       };
     });
-    const { billAccountDetails } = Bill[0].billDetails[0];
+    const { billAccountDetails } = Bill.billDetails[0];
     const transformedData = billAccountDetails.reduce((result, item) => {
       if (getFromReceipt) {
         item.accountDescription &&
@@ -1178,6 +1173,17 @@ export const createEstimateData = async (
   const queryObj = [
     { key: "tenantId", value: tenantId },
     {
+      key: "consumerCodes",
+      value: applicationNo
+    },
+    {
+      key: "businessService",
+      value: businessService
+    }
+  ];
+  const getBillQueryObj = [
+    { key: "tenantId", value: tenantId },
+    {
       key: "consumerCode",
       value: applicationNo
     },
@@ -1197,21 +1203,26 @@ export const createEstimateData = async (
   //     : payload.billResponse &&
   //       getEstimateData(payload.billResponse.Bill, false, LicenseData)
   //   : [];
-
+const fetchBillResponse=await getBill(getBillQueryObj);
   const payload = isPAID
     ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-    : await getBill(queryObj);
-  const estimateData = payload
+    : fetchBillResponse&&fetchBillResponse.Bill&&fetchBillResponse.Bill[0];
+  let estimateData = payload
     ? isPAID
-      ? getEstimateData(payload.Receipt[0].Bill, isPAID, LicenseData)
-      : payload.billResponse &&
-        getEstimateData(payload.billResponse.Bill, false, LicenseData)
+      ?payload&&payload.Payments&&payload.Payments.length>0&& getEstimateData(payload.Payments[0].paymentDetails[0].bill, isPAID, LicenseData)
+      : payload&&
+        getEstimateData(payload, false, LicenseData)
     : [];
+    estimateData=estimateData||[];
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
-  payload &&
-    payload.billingSlabIds &&
-    getBillingSlabData(dispatch, payload.billingSlabIds, tenantId, accessories);
+  if(payload){
+    const getBillResponse=await calculateBill(getBillQueryObj);
+    getBillResponse &&
+    getBillResponse.billingSlabIds &&
+      getBillingSlabData(dispatch, getBillResponse.billingSlabIds, tenantId, accessories);
+  }
+
 
   /** Waiting for estimate to load while downloading confirmation form */
   var event = new CustomEvent("estimateLoaded", { detail: true });
@@ -2230,9 +2241,9 @@ export const getTextToLocalMapping = label => {
     case "INITIATED":
       return getLocaleLabels("Initiated,", "TL_INITIATED", localisationLabels);
     case "APPLIED":
-      getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
+      return getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
     case "PAID":
-      getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
+      return getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
 
     case "APPROVED":
       return getLocaleLabels("Approved", "TL_APPROVED", localisationLabels);
@@ -2240,7 +2251,7 @@ export const getTextToLocalMapping = label => {
       return getLocaleLabels("Rejected", "TL_REJECTED", localisationLabels);
     case "CANCELLED":
       return getLocaleLabels("Cancelled", "TL_CANCELLED", localisationLabels);
-    case "PENDINGAPPROVAL ":
+    case "PENDINGAPPROVAL":
       return getLocaleLabels(
         "Pending for Approval",
         "WF_NEWTL_PENDINGAPPROVAL",
@@ -2275,3 +2286,7 @@ export const getTextToLocalMapping = label => {
       );
   }
 };
+
+export const checkValueForNA = (value) => {
+  return value ? value : "NA";
+}

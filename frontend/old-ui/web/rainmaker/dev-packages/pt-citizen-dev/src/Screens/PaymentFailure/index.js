@@ -9,6 +9,9 @@ import { createReceiptUIInfo } from "egov-ui-kit/common/propertyTax/PaymentStatu
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { httpRequest } from "egov-ui-kit/utils/api";
 import Label from "egov-ui-kit/utils/translationNode";
+import AcknowledgementCard from 'egov-ui-kit/common/propertyTax/AcknowledgementCard';
+import PTHeader from "egov-ui-kit/common/common/PTHeader";
+import ActionFooter from "egov-ui-kit/common/common/ActionFooter";
 
 const buttons = {
   button2: "Retry"
@@ -52,15 +55,15 @@ const failureMessages = billAmount => {
               />
             </div>
           ) : (
-            <div>
-              <Label
-                containerStyle={{ paddingTop: "10px" }}
-                fontSize={16}
-                label={"PT_RECEIPT_FAILURE_MESSAGE"}
-                labelStyle={{ color: "#484848", fontWeight: 500 }}
-              />
-            </div>
-          )}
+              <div>
+                <Label
+                  containerStyle={{ paddingTop: "10px" }}
+                  fontSize={16}
+                  label={"PT_RECEIPT_FAILURE_MESSAGE"}
+                  labelStyle={{ color: "#484848", fontWeight: 500 }}
+                />
+              </div>
+            )}
         </div>
         <Label
           containerStyle={{ paddingTop: "10px" }}
@@ -87,13 +90,13 @@ class PaymentFailure extends Component {
       { key: "tenantId", value: tenantId }
     ];
     try {
-      const payload = await httpRequest(
-        "pt-calculator-v2/propertytax/_getbill",
-        "_create",
-        queryObj,
-        {}
-      );
-      this.setState({ bill: payload["Bill"] });
+      // const payload = await httpRequest(
+      //   "pt-calculator-v2/propertytax/_getbill",
+      //   "_create",
+      //   queryObj,
+      //   {}
+      // );
+      // this.setState({ bill: payload["Bill"] });
     } catch (e) {
       console.log(e);
     }
@@ -115,23 +118,28 @@ class PaymentFailure extends Component {
   };
 
   redirectToReview = () => {
-    const { match, history } = this.props;
+    const { match, history, assessmentNumber } = this.props;
     const {
-      assessmentNumber,
       assessmentYear,
       propertyId,
       tenantId
     } = match.params;
     history.push(
-      `/property-tax/assessment-form?FY=${assessmentYear}&assessmentId=${assessmentNumber}&isReassesment=true&propertyId=${propertyId}&tenantId=${tenantId}`
+      `/property-tax/assessment-form?assessmentId=${assessmentNumber}&isReassesment=true&proceedToPayment=true&isAssesment=true&propertyId=${propertyId}&tenantId=${tenantId}&FY=${assessmentYear}`
     );
   };
 
   render() {
+
     const { bill } = this.state;
-    const { txnAmount } = this.props.match.params;
+    const { txnAmount, assessmentYear, propertyId } = this.props.match.params;
     const amountPaid = get(bill[0], "billDetails[0].totalAmount");
-    const { cities, selProperty, latestPropertyDetails, extraData } = this.props;
+    const {
+      cities,
+      selProperty,
+      latestPropertyDetails,
+      extraData
+    } = this.props;
     const receiptUIDetails =
       selProperty &&
       bill &&
@@ -147,17 +155,41 @@ class PaymentFailure extends Component {
         latestPropertyDetails
       );
     const messages = failureMessages(txnAmount);
+
+    const headerValue = "(" + assessmentYear + ")";
+
+    const header = "PT_PAYMENT_HEADER";
+    const subHeaderValue = propertyId;
+    const { loading } = this.props;
     return (
-      <Screen>
-        <PaymentStatus
-          receiptUIDetails={receiptUIDetails && receiptUIDetails}
-          floatingButtonColor="#e74c3c"
-          icon={icon}
-          messages={messages}
-          buttons={buttons}
-          primaryAction={this.redirectToReview}
-          extraData={extraData}
-        />
+      <Screen loading={loading}>
+        <div>
+          <div
+            key={1}
+            style={{ marginBottom: "50px" }}
+            className=" col-md-12 col-lg-12"
+          >
+            <PTHeader
+              header={header}
+              subHeaderTitle="PT_PROPERTY_PTUID"
+              headerValue={headerValue}
+              subHeaderValue={subHeaderValue}
+            />
+            <AcknowledgementCard
+              acknowledgeType="failed"
+              receiptHeader="PT_TRANSACTION_AMT"
+              messageHeader="PT_OOPS"
+              message="PT_FAILURE_MESSAGE"
+              receiptNo={txnAmount ? 'Rs:' + txnAmount : txnAmount}
+            />
+            {/* <AcknowledgementCard acknowledgeType='success'  messageHeader='' message='' receiptHeader='PT_APPLICATION_NO_LABEL' receiptNo=''/> */}
+          </div>
+          <ActionFooter
+            key={2}
+            label2="PT_RETRY_BUTTON"
+            primaryAction={this.redirectToReview}
+          />
+        </div>
       </Screen>
     );
   }
@@ -166,12 +198,16 @@ class PaymentFailure extends Component {
 const mapStateToProps = (state, ownProps) => {
   const { properties, common } = state || {};
   const { cities } = common;
-  const { propertiesById } = properties;
+  const { propertiesById, loading } = properties;
   const selProperty =
     propertiesById && propertiesById[ownProps.match.params.propertyId];
   const latestPropertyDetails =
     selProperty && getLatestPropertyDetails(selProperty.propertyDetails);
-  return { selProperty, cities, latestPropertyDetails };
+  let assessmentNumber;
+  if (latestPropertyDetails && latestPropertyDetails.assessmentNumber) {
+    assessmentNumber = latestPropertyDetails.assessmentNumber;
+  }
+  return { selProperty, cities, latestPropertyDetails, loading, assessmentNumber };
 };
 
 const mapDispatchToProps = dispatch => {

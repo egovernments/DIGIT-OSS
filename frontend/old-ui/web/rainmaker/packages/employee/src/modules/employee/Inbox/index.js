@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import TableData from "./components/TableData";
 import Label from "egov-ui-kit/utils/translationNode";
-import ServiceList from "egov-ui-kit/common/common/ServiceList";
+import ServiceList from "egov-ui-kit/common/common/ServiceList"
 
 const iconStyle = {
   width: "48px",
@@ -62,5 +62,4 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  null
-)(Inbox);
+  )(Inbox);

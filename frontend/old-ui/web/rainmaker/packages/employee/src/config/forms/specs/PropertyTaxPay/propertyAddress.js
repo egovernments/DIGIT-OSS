@@ -4,7 +4,7 @@ import { CITY } from "egov-ui-kit/utils/endPoints";
 import { prepareFormData, fetchGeneralMDMSData } from "egov-ui-kit/redux/common/actions";
 import set from "lodash/set";
 import get from "lodash/get";
-import { getUserInfo, getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from '../../../common'
 
@@ -143,14 +143,13 @@ const formConfig = {
       errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       toolTip: true,
-      pattern: /^[a-zA-Z0-9\:\#\/\-\s]{1,64}$/i,
+      pattern: /^[^\$\"'<>?\\\\~`!@$%^+={}*,.:;“”‘’]{1,64}$/i,
       toolTipMessage: "PT_OLDPID_TOOLTIP_MESSAGE",
       maxLength: 64,
     },
   },
   afterInitForm: (action, store, dispatch) => {
-    let tenantId = JSON.parse(getUserInfo()).tenantId;
-    let city = JSON.parse(getUserInfo()).permanentAddress;
+    let tenantId = getTenantId();
     let state = store.getState();
     const { citiesByModule } = state.common;
     const { PT } = citiesByModule || {};

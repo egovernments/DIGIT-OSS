@@ -358,11 +358,6 @@ export const footer = getCommonApplyFooter({
       variant: "contained",
       color: "primary",
       className: "framework-responsive-button"
-      // style: {
-      //   minWidth: "200px",
-      //   height: "48px",
-      //   marginRight: "45px"
-      // }
     },
     children: {
       submitButtonLabel: getLabel({
@@ -376,7 +371,6 @@ export const footer = getCommonApplyFooter({
     },
     roleDefination: {
       rolePath: "user-info.roles",
-      // roles: ["CITIZEN"]
       action: "PAY"
     },
     visible: process.env.REACT_APP_NAME === "Citizen" ? true : false

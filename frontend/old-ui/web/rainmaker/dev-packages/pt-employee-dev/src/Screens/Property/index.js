@@ -132,7 +132,7 @@ class Property extends Component {
     // localStorage.removeItem("draftId");
     this.setState({
       dialogueOpen: true,
-      urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`
+      urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isAssesment=true&isReassesment=true&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`
     });
   };
   getAssessmentListItems = props => {
@@ -176,7 +176,7 @@ class Property extends Component {
           <div style={IconStyle}>
             <Icon
               action="hardware"
-              name="keyboard-arrow-right"
+              name="keyboard-arrow-down"
               color="#484848"
             />
           </div>
@@ -208,7 +208,7 @@ class Property extends Component {
           <div style={IconStyle}>
             <Icon
               action="hardware"
-              name="keyboard-arrow-right"
+              name="keyboard-arrow-down"
               color="#484848"
             />
           </div>

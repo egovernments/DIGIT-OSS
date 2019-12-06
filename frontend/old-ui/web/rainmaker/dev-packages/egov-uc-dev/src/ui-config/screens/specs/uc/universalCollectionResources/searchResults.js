@@ -3,7 +3,7 @@ import {
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
-import { generateReciept } from "../../utils/recieptPdf";
+import {download} from "egov-common/ui-utils/commons"
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -31,7 +31,13 @@ export const searchResults = {
       selectableRows: false,
       hover: true,
       rowsPerPageOptions: [10, 15, 20],
-      onRowClick: (row, index) => generateReciept(row)
+      onRowClick: (row, index) => {
+        const receiptQueryString = [
+          { key: "receiptNumbers", value:  row[0]},
+          { key: "tenantId", value: row[6] }
+        ]
+        download(receiptQueryString);
+      }
     },
     customSortColumn: {
       column: "Date",

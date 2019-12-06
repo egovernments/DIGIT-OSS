@@ -13,6 +13,17 @@ const textFieldBaseStyle = {
   textIndent: 35,
 };
 
+// const inputBaseStyle = {
+//   width: "80% ! important",
+//   paddingBottom: 10,
+//   fontSize: "16px",
+//   color: "#484848",
+//   letterSpacing: "0.7px",
+// };
+// // const inputStyle = {
+// //   //width: "80% ! important"
+// // };
+
 const prefixBaseStyle = {
   position: "absolute",
   color: "#969696",
@@ -40,6 +51,7 @@ const MobileNumberField = ({ className, textFieldStyle = {}, prefix = "+91", pre
           minLength: 10,
         }}
         errorStyle={{ marginLeft: "-35px" }}
+    inputStyle={{width:"85%" }}
         style={{ ...textFieldBaseStyle, ...textFieldStyle }}
         {...textFieldProps}
         floatingLabelStyle={floatingLabelStyle}

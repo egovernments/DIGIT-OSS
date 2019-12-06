@@ -4,7 +4,7 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { handleScreenConfigurationFieldChange as handleField,prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import set from "lodash/set";
 import {
   getCommonCard,
@@ -329,10 +329,21 @@ export const setServiceCategory = (businessServiceData, dispatch) => {
       set(nestedServiceData, `${item.code}`, item);
     }
   });
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.nestedServiceData",
+      nestedServiceData
+    )
+  );
   let serviceCategories = Object.values(nestedServiceData).filter(
     item => item.code
   );
-  return serviceCategories;
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.serviceCategories",
+      serviceCategories
+    )
+  );
 };
 
 export const getTextToLocalMapping = label => {
@@ -372,6 +383,12 @@ export const getTextToLocalMapping = label => {
       return getLocaleLabels(
         "Status",
         "UC_COMMON_TABLE_COL_STATUS",
+        localisationLabels
+      );
+    case "BILLINGSERVICE_BUSINESSSERVICE_PT":
+      return getLocaleLabels(
+        "Property Tax",
+        "BILLINGSERVICE_BUSINESSSERVICE_PT",
         localisationLabels
       );
   }

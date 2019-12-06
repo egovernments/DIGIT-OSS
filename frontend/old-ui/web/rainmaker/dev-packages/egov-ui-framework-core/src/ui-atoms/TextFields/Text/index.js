@@ -11,6 +11,7 @@ const MihyText=(props)=> {
           label={label}
           value={value}
           fullWidth={true}
+          FormHelperTextProps={{ style: { fontSize: "1.4rem" } }}
           {...rest}
         />
     );

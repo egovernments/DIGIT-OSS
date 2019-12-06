@@ -2,7 +2,7 @@ import { pincode, mohalla, street, colony, houseNumber, dummy, city } from "egov
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
 import set from "lodash/set";
 import { handleFieldChange } from "egov-ui-kit/redux/form/actions";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
 const formConfig = {
   name: "propertyInformation",
@@ -38,7 +38,7 @@ const formConfig = {
       numcols: 6,
       errorMessage: "PT_PROPERTY_DETAILS_PINCODE_ERRORMSG",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      pattern: /^[a-zA-Z0-9\:\#\/\-\s]{1,64}$/i,
+      pattern: /^[^\$\"'<>?\\\\~`!@$%^+={}*,.:;“”‘’]{1,64}$/i,
       maxLength: 64,
     },
   },
@@ -49,7 +49,7 @@ const formConfig = {
     return action;
   },
   afterInitForm: (action, store, dispatch) => {
-    let tenantId = JSON.parse(getUserInfo()).tenantId;
+    let tenantId = getTenantId();
     dispatch(handleFieldChange("propertyInformation", "city", tenantId));
     return action;
   },

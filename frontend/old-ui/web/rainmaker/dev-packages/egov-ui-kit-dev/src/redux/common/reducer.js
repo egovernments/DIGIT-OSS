@@ -98,6 +98,7 @@ const commonReducer = (state = intialState, action) => {
       let stateInfoById = action.payload.MdmsRes["common-masters"].StateInfo;
       // transformById(action.payload.MdmsRes["common-masters"].StateInfo, "code");
       const citiesByModule = transformById(action.payload.MdmsRes["tenant"].citymodule, "code");
+      const tenantInfo = action.payload.MdmsRes["tenant"]["tenantInfo"];
       const cities = action.payload.MdmsRes["tenant"]["tenants"].map((item) => {
         return {
           key: item.code,
@@ -119,6 +120,7 @@ const commonReducer = (state = intialState, action) => {
         stateInfoById,
         cities: [...cities],
         citiesByModule: citiesByModule,
+        tenantInfo: tenantInfo,
       };
     case commonTypes.MDMS_FETCH_ERROR:
       return {

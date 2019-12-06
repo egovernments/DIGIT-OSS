@@ -64,6 +64,7 @@ const DropDownUi = ({
   dataFetchConfig,
   errorMessage,
   toolTip,
+  iconStyle,
   autoWidth,
   toolTipMessage,
   updateDependentFields,
@@ -130,7 +131,7 @@ const DropDownUi = ({
         ) : null,
       ]}
       floatingLabelStyle={floatingLabelStyle}
-      iconStyle={{ fill: "#484848" }}
+      iconStyle={ iconStyle ? iconStyle : { fill: "#484848" }}
       underlineStyle={{ ...underlineFocusBaseStyle, ...underlineStyle }}
       hintStyle={{ ...hintBaseStyle, ...hintStyle }}
       {...rest}

@@ -70,7 +70,7 @@ const getItemStatus = (item, history) => {
             onClick={(e) => {
               
               history.push(
-                `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${item.assessmentNo}&isReassesment=true&propertyId=${
+                `/property-tax/assessment-form?FY=${item.financialYear}&assessmentId=${item.assessmentNo}&isAssesment=true&isReassesment=true&propertyId=${
                   item.propertyId
                 }&tenantId=${item.tenantId}`
               );
