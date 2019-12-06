@@ -455,8 +455,6 @@ public class PaymentQueryBuilder {
         sqlParameterSource.addValue("additionaldetails", getJsonb(bill.getAdditionalDetails()));
         sqlParameterSource.addValue("status", bill.getStatus().toString());
         sqlParameterSource.addValue("reasonforcancellation", bill.getReasonForCancellation());
-        sqlParameterSource.addValue("createdby", bill.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createdtime", bill.getAuditDetails().getCreatedTime());
         sqlParameterSource.addValue("lastmodifiedby", bill.getAuditDetails().getLastModifiedBy());
         sqlParameterSource.addValue("lastmodifiedtime", bill.getAuditDetails().getLastModifiedTime());
 
@@ -469,8 +467,6 @@ public class PaymentQueryBuilder {
 
         sqlParameterSource.addValue("id", paymentDetail.getId());
         sqlParameterSource.addValue("additionaldetails",getJsonb(paymentDetail.getAdditionalDetails()));
-        sqlParameterSource.addValue("createdby", paymentDetail.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createdtime", paymentDetail.getAuditDetails().getCreatedTime());
         sqlParameterSource.addValue("lastmodifiedby", paymentDetail.getAuditDetails().getLastModifiedBy());
         sqlParameterSource.addValue("lastmodifiedtime", paymentDetail.getAuditDetails().getLastModifiedTime());
 
@@ -483,10 +479,8 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", payment.getId());
-        sqlParameterSource.addValue("instrumentStatus", payment.getInstrumentStatus());
+        sqlParameterSource.addValue("instrumentstatus", payment.getInstrumentStatus());
         sqlParameterSource.addValue("additionaldetails", getJsonb(payment.getAdditionalDetails()));
-        sqlParameterSource.addValue("createdby", payment.getAuditDetails().getCreatedBy());
-        sqlParameterSource.addValue("createdtime", payment.getAuditDetails().getCreatedTime());
         sqlParameterSource.addValue("lastmodifiedby", payment.getAuditDetails().getLastModifiedBy());
         sqlParameterSource.addValue("lastmodifiedtime", payment.getAuditDetails().getLastModifiedTime());
 
