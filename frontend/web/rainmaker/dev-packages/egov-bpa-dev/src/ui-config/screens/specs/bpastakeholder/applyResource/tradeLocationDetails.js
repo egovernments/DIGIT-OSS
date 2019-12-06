@@ -74,7 +74,7 @@ export const corrospondanceAddr = getCommonCard({
     }
   ),
 
-  tradeDetailsConatiner: getCommonContainer({
+  AddressWithCheckBoxContainer: getCommonContainer({
     sameAsPermanentContainer: getCommonContainer({
       sameAsPermanent: {
         uiFramework: "custom-containers-local",
@@ -91,117 +91,119 @@ export const corrospondanceAddr = getCommonCard({
             name: "Same As Permanent Address",
             key: "BPA_SAME_AS_PERMANENTADDR_LABEL"
           },
-          jsonPath: "Licenses[0].tradeLicenseDetail.subOwnerShipCategory1",
+          jsonPath: "LicensesTemp[0].userData.isSameAddress",
           sourceJsonPaths: ["LicensesTemp[0].userData.address"],
           destinationJsonPaths: ["Licenses[0].tradeLicenseDetail.address"],
           disbaleComponentJsonPaths: [
-            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocBuilidingName",
-            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity",
-            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocDoorHouseNo",
-            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
-            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocPincode",
-            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner.children.tradeLocStreetName"
+            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocBuilidingName",
+            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocCity",
+            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocDoorHouseNo",
+            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocMohalla",
+            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocPincode",
+            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocStreetName"
           ]
         },
         type: "array"
       }
     }),
 
-    tradeLocDoorHouseNo: getTextField({
-      label: {
-        labelName: "Door/House No.",
-        labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
-      },
-      props: {
-        className: "applicant-details-error"
-      },
-      placeholder: {
-        labelName: "Enter Door/House No.",
-        labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
-      },
-      pattern: getPattern("DoorHouseNo"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.address.doorNo"
-    }),
-    tradeLocBuilidingName: getTextField({
-      label: {
-        labelName: "Building/Colony Name",
-        labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
-      },
-      props: {
-        className: "applicant-details-error"
-      },
-      placeholder: {
-        labelName: "Enter Building/Colony Name",
-        labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_PLACEHOLDER"
-      },
-      pattern: getPattern("BuildingStreet"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.address.buildingName"
-    }),
-    tradeLocStreetName: getTextField({
-      label: {
-        labelName: "Street Name",
-        labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
-      },
-      props: {
-        className: "applicant-details-error"
-      },
-      placeholder: {
-        labelName: "Enter Street Name",
-        labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_PLACEHOLDER"
-      },
-      pattern: getPattern("BuildingStreet"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.address.street"
-    }),
-    tradeLocMohalla: getTextField({
-      label: {
-        labelName: "Locality",
-        labelKey: "BPA_NEW_TRADE_DETAILS_MOHALLA_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter Locality",
-        labelKey: "BPA_NEW_TRADE_DETAILS_MOHALLA_PLACEHOLDER"
-      },
-      required: true,
-      props: {
-        className: "applicant-details-error"
-      },
-      pattern: getPattern("BuildingStreet"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.address.landmark"
-    }),
+    addressContainer: getCommonContainer({
+      tradeLocDoorHouseNo: getTextField({
+        label: {
+          labelName: "Door/House No.",
+          labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_LABEL"
+        },
+        props: {
+          className: "applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Door/House No.",
+          labelKey: "TL_NEW_TRADE_DETAILS_DOOR_NO_PLACEHOLDER"
+        },
+        pattern: getPattern("DoorHouseNo"),
+        jsonPath: "Licenses[0].tradeLicenseDetail.address.doorNo"
+      }),
+      tradeLocBuilidingName: getTextField({
+        label: {
+          labelName: "Building/Colony Name",
+          labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_LABEL"
+        },
+        props: {
+          className: "applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Building/Colony Name",
+          labelKey: "TL_NEW_TRADE_DETAILS_BLDG_NAME_PLACEHOLDER"
+        },
+        pattern: getPattern("BuildingStreet"),
+        jsonPath: "Licenses[0].tradeLicenseDetail.address.buildingName"
+      }),
+      tradeLocStreetName: getTextField({
+        label: {
+          labelName: "Street Name",
+          labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_LABEL"
+        },
+        props: {
+          className: "applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Street Name",
+          labelKey: "TL_NEW_TRADE_DETAILS_SRT_NAME_PLACEHOLDER"
+        },
+        pattern: getPattern("BuildingStreet"),
+        jsonPath: "Licenses[0].tradeLicenseDetail.address.street"
+      }),
+      tradeLocMohalla: getTextField({
+        label: {
+          labelName: "Locality",
+          labelKey: "BPA_NEW_TRADE_DETAILS_MOHALLA_LABEL"
+        },
+        placeholder: {
+          labelName: "Enter Locality",
+          labelKey: "BPA_NEW_TRADE_DETAILS_MOHALLA_PLACEHOLDER"
+        },
+        required: true,
+        props: {
+          className: "applicant-details-error"
+        },
+        pattern: getPattern("BuildingStreet"),
+        jsonPath: "Licenses[0].tradeLicenseDetail.address.landmark"
+      }),
 
-    tradeLocCity: getTextField({
-      label: {
-        labelName: "City",
-        labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
-      },
-      props: {
-        className: "applicant-details-error"
-      },
-      required: true,
+      tradeLocCity: getTextField({
+        label: {
+          labelName: "City",
+          labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+        },
+        props: {
+          className: "applicant-details-error"
+        },
+        required: true,
 
-      placeholder: {
-        labelName: "Enter City",
-        labelKey: "BPA_NEW_TRADE_DETAILS_CITY_PLACEHOLDER"
-      },
-      pattern: getPattern("BuildingStreet"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.address.city"
-    }),
-    tradeLocPincode: getTextField({
-      label: {
-        labelName: "Pincode",
-        labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
-      },
-      required: true,
+        placeholder: {
+          labelName: "Enter City",
+          labelKey: "BPA_NEW_TRADE_DETAILS_CITY_PLACEHOLDER"
+        },
+        pattern: getPattern("BuildingStreet"),
+        jsonPath: "Licenses[0].tradeLicenseDetail.address.city"
+      }),
+      tradeLocPincode: getTextField({
+        label: {
+          labelName: "Pincode",
+          labelKey: "TL_NEW_TRADE_DETAILS_PIN_LABEL"
+        },
+        required: true,
 
-      props: {
-        className: "applicant-details-error"
-      },
-      placeholder: {
-        labelName: "Enter Pincode",
-        labelKey: "TL_NEW_TRADE_DETAILS_PIN_PLACEHOLDER"
-      },
-      pattern: getPattern("Pincode"),
-      jsonPath: "Licenses[0].tradeLicenseDetail.address.pincode"
+        props: {
+          className: "applicant-details-error"
+        },
+        placeholder: {
+          labelName: "Enter Pincode",
+          labelKey: "TL_NEW_TRADE_DETAILS_PIN_PLACEHOLDER"
+        },
+        pattern: getPattern("Pincode"),
+        jsonPath: "Licenses[0].tradeLicenseDetail.address.pincode"
+      })
     })
   })
 });
