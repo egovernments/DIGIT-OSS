@@ -123,7 +123,9 @@ public class PaymentQueryBuilder {
 
     public static final String COPY_PAYMENT_SQL = "INSERT INTO egcl_payment_audit SELECT * FROM egcl_payment WHERE id = :id;";
 
-    public static final String COPY_PAYMENTDETAIL_SQL = "INSERT INTO egcl_paymentdetail_audit SELECT * FROM egcl_paymentdetail WHERE id = :id;";
+    public static final String COPY_PAYMENTDETAIL_SQL = "INSERT INTO egcl_paymentdetail_audit SELECT id, tenantid, paymentid, due, amountpaid, receiptnumber, "
+    		+ "businessservice, billid, additionaldetails,  createdby, createdtime, lastmodifiedby, lastmodifiedtime, manualreceiptnumber, "
+    		+ "manualreceiptdate, receiptdate, receipttype FROM egcl_paymentdetail WHERE id = :id ;";
 
     public static final String COPY_BILL_SQL = "INSERT INTO egcl_bill_audit SELECT * FROM egcl_bill WHERE id = :id;";
 
