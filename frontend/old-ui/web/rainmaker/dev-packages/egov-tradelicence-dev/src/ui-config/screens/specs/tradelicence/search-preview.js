@@ -475,7 +475,7 @@ const screenConfig = {
               componentPath: "Container",
               props: {
                 color: "primary",
-                style: { justifyContent: "flex-end", display: "block" }
+                style: { justifyContent: "flex-end" }
               },
               gridDefination: {
                 xs: 12,
