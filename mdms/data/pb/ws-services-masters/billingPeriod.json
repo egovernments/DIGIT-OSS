@@ -4,11 +4,14 @@
   "billingPeriod": [
     {
       "active": true,
+      "connectionType":"Metered",
       "billingCycle": "monthly"
     },
+  
     {
       "active": true,
-      "billingCycle": "quarterly"
-    }
-  ]
+      "connectionType":"Non-metered",
+      "billingCycle": "quaterly"
+    } 
+   ]
 }
