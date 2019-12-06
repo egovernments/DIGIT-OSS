@@ -100,6 +100,13 @@ const screenConfig = {
           "MALE"
         )
       );
+      dispatch(
+        prepareFinalObject(
+          "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
+          "INDIVIDUAL"
+        )
+      );
+
       if (!window.location.pathname.includes("whitelisted")) {
         setMobileNoField(action, state, dispatch);
       }

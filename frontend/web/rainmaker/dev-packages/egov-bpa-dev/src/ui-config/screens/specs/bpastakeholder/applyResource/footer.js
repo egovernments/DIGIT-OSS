@@ -105,13 +105,6 @@ export const callBackForNext = async (state, dispatch) => {
     //   "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
     // );
 
-    dispatch(
-      prepareFinalObject(
-        state,
-        "Licenses[0].tradeLicenseDetail.subOwnerShipCategory",
-        "INDIVIDUAL"
-      )
-    );
     // if (ownershipType != "INDIVIDUAL") {
     //   isTradeOrganizationValid = validateFields(
     //     "components.div.children.formwizardFirstStep.children.organizationDetails.children.cardContent.children.organizationDetailsConatiner.children",
@@ -126,7 +119,7 @@ export const callBackForNext = async (state, dispatch) => {
       dispatch
     );
     const isCommunicationAddrValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.tradeDetailsConatiner",
+      "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children",
       state,
       dispatch
     );
