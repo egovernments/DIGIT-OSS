@@ -142,9 +142,11 @@ export const updatePFOforSearchResults = async (
     : {
         Licenses: get(state.screenConfiguration.preparedFinalObject, "Licenses")
       };
-  getQueryArg(window.location.href, "action") === "edit" &&
-    (await setDocsForEditFlow(state, dispatch));
-  if (payload) {
+  // const payload = await getSearchResults(queryObject)
+  // getQueryArg(window.location.href, "action") === "edit" &&
+  //   (await setDocsForEditFlow(state, dispatch));
+
+  if (payload&&payload.Licenses) {
     dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
   }
   const licenseType = payload && get(payload, "Licenses[0].licenseType");
@@ -164,6 +166,7 @@ export const updatePFOforSearchResults = async (
         tradeTypeDdData
       )
     );
+    setDocsForEditFlow(state, dispatch);
   updateDropDowns(payload, action, state, dispatch, queryValue);
   if (queryValuePurpose !== "cancel") {
     set(payload, getSafetyNormsJson(queryValuePurpose), "yes");

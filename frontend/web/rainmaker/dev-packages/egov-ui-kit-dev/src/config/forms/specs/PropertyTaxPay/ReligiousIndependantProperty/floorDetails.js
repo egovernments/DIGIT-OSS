@@ -10,6 +10,7 @@ const formConfig = {
       type: "textfield",
       floatingLabelText: "PT_FORM2_USAGE_TYPE",
       // value: "Religious",
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       value: "PROPERTYTAX_BILLING_SLAB_RELIGIOUS",
       required: true,
       disabled: true,

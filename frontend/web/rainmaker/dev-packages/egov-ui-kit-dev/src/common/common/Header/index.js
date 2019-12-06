@@ -198,7 +198,7 @@ class Header extends Component {
           isCSR={role === "pgr-admin" ? true : false}
           openSecondary={window.innerWidth >= 768 ? true : false}
           width={300}
-          // containerStyle={{ top: "64px" }}
+          containerStyle={{ zIndex: 1999 }}
         />
         <LogoutDialog
           logoutPopupOpen={logoutPopupOpen}

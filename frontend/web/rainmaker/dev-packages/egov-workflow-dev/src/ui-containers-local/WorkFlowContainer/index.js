@@ -163,6 +163,7 @@ class WorkFlowContainer extends React.Component {
         let path = "";
         if (moduleName === "NewTL") path = "Licenses[0].licenseNumber";
         else if (moduleName === "FIRENOC") path = "FireNOCs[0].fireNOCNumber";
+        else path = "Licenses[0].licenseNumber";
         const licenseNumber = get(payload, path, "");
         window.location.href = `acknowledgement?${this.getPurposeString(
           label
@@ -208,8 +209,8 @@ class WorkFlowContainer extends React.Component {
     if (moduleName === "NewTL") {
       switch (action) {
         case "PAY":
-          return `egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}&businessService=NewTL`
-         // return `/tradelicence/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=NewTL`;
+          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}&businessService=NewTL`;
+        // return `/tradelicence/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=NewTL`;
         case "EDIT":
           return isAlreadyEdited
             ? `tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
@@ -218,8 +219,8 @@ class WorkFlowContainer extends React.Component {
     } else if (moduleName === "FIRENOC") {
       switch (action) {
         case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}=${tenant}&businessService=FIRENOC`
-          // return `/fire-noc/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=FIRENOC`;
+          return `/egov-common/pay?consumerCode=${businessId}=${tenant}&businessService=FIRENOC`;
+        // return `/fire-noc/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=FIRENOC`;
         case "EDIT":
           return isAlreadyEdited
             ? `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
@@ -264,15 +265,15 @@ class WorkFlowContainer extends React.Component {
   };
 
   checkIfTerminatedState = (nextStateUUID, moduleName) => {
-    console.log("modulename is....",moduleName)
+    console.log("modulename is....", moduleName);
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
     const data = find(businessServiceData, { businessService: moduleName });
-    console.log("========>2",data)
-    console.log("=======> nextStat is",nextStateUUID)
+    console.log("========>2", data);
+    console.log("=======> nextStat is", nextStateUUID);
     const nextState = find(data.states, { uuid: nextStateUUID });
-    console.log("=======> state is",nextState)
+    console.log("=======> state is", nextState);
     return nextState.isTerminateState;
   };
 
@@ -315,7 +316,7 @@ class WorkFlowContainer extends React.Component {
   };
 
   prepareWorkflowContract = (data, moduleName) => {
-    console.log("========>1",data)
+    console.log("========>1", data);
     const {
       getRedirectUrl,
       getHeaderName,

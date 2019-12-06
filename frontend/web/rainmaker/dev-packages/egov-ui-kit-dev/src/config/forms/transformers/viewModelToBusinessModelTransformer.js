@@ -114,6 +114,17 @@ const transformer = (formKey, form = {}, state = {}) => {
             value: fields.phone.value,
           },
         };
+      } else if (previousRoute.indexOf("smsLink=true") > 0) {	
+        fields = {	
+          password: {	
+            jsonPath: "login.password",	
+            value: otpFields.otp.value,	
+          },	
+          username: {	
+            jsonPath: "login.username",	
+            value: otpFields.otp.phone,	
+          },	
+        };
       }
       return prepareFormData({ ...form, fields });
     },
@@ -128,8 +139,13 @@ const transformer = (formKey, form = {}, state = {}) => {
     },
     employeeChangePassword: () => {
       const formData = prepareFormData(form);
+      const { auth } = state;
+      const username = get(auth, "userInfo.userName");
+      const type = process.env.REACT_APP_NAME === "Citizen" ? "CITIZEN" : "EMPLOYEE";
       const tenantId = getTenantId();
       formData.tenantId = tenantId;
+      formData.username = username;
+      formData.type = type;
       return formData;
     },
     complaint: async () => {

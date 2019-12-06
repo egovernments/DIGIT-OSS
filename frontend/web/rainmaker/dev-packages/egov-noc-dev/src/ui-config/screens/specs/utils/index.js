@@ -458,7 +458,7 @@ export const getReceiptData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "collection-services/receipts/_search",
+      "collection-services/payments/_search",
       "",
       queryObject
     );
@@ -506,7 +506,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
         value: tenantId
       },
       {
-        key: "consumerCode",
+        key: "consumerCodes",
         value: applicationNumber
       }
     ];
@@ -514,7 +514,7 @@ export const searchBill = async (dispatch, applicationNumber, tenantId) => {
     // Get Receipt
     let payload = await httpRequest(
       "post",
-      "/collection-services/receipts/_search",
+      "/collection-services/payments/_search",
       "",
       queryObject
     );
@@ -652,7 +652,7 @@ export const resetFields = (state, dispatch) => {
 
 export const getRequiredDocData = async (action, state, dispatch) => {
   let tenantId =
-    process.env.REACT_APP_NAME === "Citizen" ? "pb.amritsar" : getTenantId();
+    process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
   let mdmsBody = {
     MdmsCriteria: {
       tenantId: tenantId,

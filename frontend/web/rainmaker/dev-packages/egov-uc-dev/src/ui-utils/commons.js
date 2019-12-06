@@ -61,7 +61,7 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "collection-services/receipts/_search",
+      "collection-services/payments/_search",
       "",
       queryObject
     );

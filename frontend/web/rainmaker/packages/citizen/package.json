@@ -39,7 +39,7 @@
     "node-sass": "^4.11.0",
     "node-sass-chokidar": "^1.3.4",
     "npm-run-all": "^4.1.5",
-    "pdfmake": "^0.1.40",
+    "pdfmake": "^0.1.62",
     "pgr-citizen": "^0.0.2",
     "prop-types": "^15.6.2",
     "pt-citizen": "^0.0.2",
@@ -68,7 +68,7 @@
     "redux-thunk": "^2.2.0",
     "url-search-params-polyfill": "^3.0.0",
     "webfontloader": "^1.6.28",
-    "print-js":"1.0.63"
+    "print-js": "1.0.63"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",

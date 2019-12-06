@@ -13,6 +13,7 @@ import {
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getDetailsForOwner } from "../../utils";
 import get from "lodash/get";
+import "./index.css";
 
 const showComponent = (dispatch, componentJsonPath, display) => {
   let displayProps = display ? {} : { display: "none" };
@@ -45,6 +46,9 @@ const commonApplicantInformation = () => {
           labelKey: "NOC_ENTER_APPLICANT_MOBILE_NO_PLACEHOLDER"
         },
         required: true,
+        props:{
+          className:"applicant-details-error"
+        },
         title: {
           value: "Please search profile linked to the mobile no.",
           key: "NOC_APPLICANT_MOBILE_NO_TOOLTIP_MESSAGE"
@@ -101,11 +105,9 @@ const commonApplicantInformation = () => {
         pattern: getPattern("Name"),
         errorMessage: "Invalid Name",
         jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name",
-        // props: {
-        //   style: {
-        //     maxWidth: "400px"
-        //   }
-        // },
+        props:{
+          className:"applicant-details-error"
+        },
         gridDefination: {
           xs: 12,
           sm: 12,
@@ -124,6 +126,7 @@ const commonApplicantInformation = () => {
           "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender",
         props: {
           label: { name: "Gender", key: "NOC_GENDER_LABEL" },
+          className:"applicant-details-error",
           buttons: [
             {
               labelName: "Male",
@@ -164,6 +167,9 @@ const commonApplicantInformation = () => {
           xs: 12,
           sm: 12,
           md: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       }),
       applicantEmail: getTextField({
@@ -183,6 +189,9 @@ const commonApplicantInformation = () => {
           xs: 12,
           sm: 12,
           md: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       }),
       fatherHusbandName: getTextField({
@@ -203,6 +212,9 @@ const commonApplicantInformation = () => {
           xs: 12,
           sm: 12,
           md: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       }),
       relationshipRadioGroup: {
@@ -218,7 +230,8 @@ const commonApplicantInformation = () => {
         props: {
           label: {
             name: "Relationship",
-            key: "NOC_APPLICANT_RELATIONSHIP_LABEL"
+            key: "NOC_APPLICANT_RELATIONSHIP_LABEL",
+            className:"applicant-details-error"
           },
           buttons: [
             {
@@ -255,6 +268,9 @@ const commonApplicantInformation = () => {
           xs: 12,
           sm: 12,
           md: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       }),
       applicantAddress: getTextField({
@@ -275,6 +291,9 @@ const commonApplicantInformation = () => {
           xs: 12,
           sm: 12,
           md: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       }),
       specialApplicantCategory: getSelectField({
@@ -517,6 +536,9 @@ export const applicantDetails = getCommonCard({
             xs: 12,
             sm: 12,
             md: 6
+          },
+          props:{
+            className:"applicant-details-error"
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
@@ -565,6 +587,9 @@ export const applicantDetails = getCommonCard({
             xs: 12,
             sm: 12,
             md: 6
+          },
+          props:{
+            className:"applicant-details-error"
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {

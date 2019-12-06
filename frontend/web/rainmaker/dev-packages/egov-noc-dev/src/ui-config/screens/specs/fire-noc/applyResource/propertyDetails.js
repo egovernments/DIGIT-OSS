@@ -13,6 +13,7 @@ import {
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
+import "./index.css";
 
 let previousUoms = [];
 
@@ -28,7 +29,7 @@ const dynamic = (uom, path, buildingIndex) => {
       pattern: /^[0-9]*$/i,
       jsonPath: `FireNOCs[0].fireNOCDetails.buildings[${buildingIndex}].uomsMap.${uom}`,
       required: true,
-      props: { type: "number" },
+      props: { type: "number", className:"applicant-details-error" },
       gridDefination: {
         xs: 12,
         sm: 12,
@@ -61,6 +62,9 @@ const prepareSelectField = (uom, start, end) => {
         xs: 12,
         sm: 12,
         md: 6
+      },
+      props:{
+        className:"applicant-details-error"
       }
     })
   };
@@ -75,7 +79,11 @@ const prepareTextField = uom => {
       placeholder: {
         labelKey: `NOC_PROPERTY_DETAILS_${uom}_PLACEHOLDER`
       },
-      pattern: /^[0-9]*$/i,
+      pattern: /^\d{0,10}$/i,
+      
+    //   onInput:(e)=>{ 
+    //     e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,2)
+    // },
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       // required: true,
       jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${uom}`,
@@ -83,6 +91,9 @@ const prepareTextField = uom => {
         xs: 12,
         sm: 12,
         md: 6
+      },
+      props:{
+        className:"applicant-details-error"
       }
     })
   };
@@ -128,6 +139,9 @@ const commonBuildingData = buildingType => {
           xs: 12,
           sm: 12,
           md: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       })
     };
@@ -156,6 +170,9 @@ const commonBuildingData = buildingType => {
           xs: 12,
           sm: 12,
           md: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       })
     },
@@ -192,6 +209,9 @@ const commonBuildingData = buildingType => {
           xs: 12,
           sm: 12,
           md: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       }),
       beforeFieldChange: (action, state, dispatch) => {
@@ -232,6 +252,9 @@ const commonBuildingData = buildingType => {
           xs: 12,
           sm: 12,
           md: 6
+        },
+        props:{
+          className:"applicant-details-error"
         }
       }),
       beforeFieldChange: (action, state, dispatch) => {
@@ -310,6 +333,7 @@ export const propertyDetails = getCommonCard({
       },
       jsonPath: "FireNOCs[0].fireNOCDetails.noOfBuildings",
       props: {
+        className:"applicant-details-error",
         required: true,
         label: { name: "No. of Buildings", key: "NOC_NO_OF_BUILDINGS_LABEL" },
         buttons: [
@@ -387,6 +411,7 @@ export const propertyDetails = getCommonCard({
         uiFramework: "custom-atoms",
         componentPath: "Div",
         props: {
+          className:"applicant-details-error",
           style: {
             display: "none"
           }

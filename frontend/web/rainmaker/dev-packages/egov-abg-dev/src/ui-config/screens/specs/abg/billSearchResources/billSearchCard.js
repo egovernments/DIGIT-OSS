@@ -69,10 +69,10 @@ export const billSearchCard = getCommonCard({
       sourceJsonPath: "searchScreenMdmsData.tenant.tenants",
       jsonPath: "searchScreen.tenantId",
       required: true,
-      disabled: false,
+      disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true,
       props: {
         value: tenantId,
-        disabled: true
+        disabled: process.env.REACT_APP_NAME === "Citizen" ? false : true
       },
       gridDefination: {
         xs: 12,

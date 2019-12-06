@@ -26,6 +26,7 @@ const formConfig = {
       localePrefix: "PROPERTYTAX_BILLING_SLAB",
       type: "singleValueList",
       floatingLabelText: "PT_FORM2_USAGE_TYPE",
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       required: true,
       numcols: 4,
       dropDownData: [],

@@ -5,6 +5,7 @@ import {
   getCommonGrayCard,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import generateReceipt from "../utils/receiptPdf";
 import get from "lodash/get";
 import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -24,7 +25,7 @@ import {
   getDialogButton
 } from "../utils";
 
-import { footerReview } from "./applyResource/footer";
+import { footerReview ,downloadPrintContainer} from "./applyResource/footer";
 import {
   getFeesEstimateCard,
   getHeaderSideText,
@@ -194,6 +195,58 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     }
 
     const obj = setStatusBasedValue(status);
+    if (get(data, "Licenses[0].tradeLicenseDetail.applicationDocuments")) {
+      await setDocuments(
+        data,
+        "Licenses[0].tradeLicenseDetail.applicationDocuments",
+        "LicensesTemp[0].reviewDocData",
+        dispatch
+      );
+    }
+
+    const statusCont = {
+        word1: {
+          ...getCommonTitle(
+            {
+              jsonPath: "Licenses[0].headerSideText.word1"
+            },
+            {
+              style: {
+                marginRight: "10px",
+                color: "rgba(0, 0, 0, 0.6000000238418579)"
+              }
+            }
+          )
+        },
+        word2: {
+          ...getCommonTitle({
+            jsonPath: "Licenses[0].headerSideText.word2"
+          })
+        },
+        cancelledLabel: {
+          ...getCommonHeader(
+            {
+              labelName: "Cancelled",
+              labelKey: "TL_COMMON_STATUS_CANC"
+            },
+            { variant: "body1", style: { color: "#E54D42" } }
+          ),
+          visible: false
+        }
+    };
+
+    const printCont = downloadPrintContainer(
+      action,
+      state,
+      dispatch,
+      status,
+      applicationNumber,
+      tenantId
+    );
+
+    process.env.REACT_APP_NAME === "Citizen"
+      ? set(action, "screenConfig.components.div.children.headerDiv.children.helpSection.children", statusCont)
+      : set(action, "screenConfig.components.div.children.headerDiv.children.helpSection.children", printCont);
 
     // Get approval details based on status and set it in screenconfig
 
@@ -241,9 +294,17 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       applicationNumber,
       tenantId
     );
+
     process.env.REACT_APP_NAME === "Citizen"
       ? set(action, "screenConfig.components.div.children.footer", footer)
       : set(action, "screenConfig.components.div.children.footer", {});
+
+    // const userRoles = JSON.parse(getUserInfo()).roles;
+    //   userRoles.map((userRole)=>{
+    //   if(userRole.code=='TL_CEMP' &&  userRole.tenantId==tenantId && status=="APPROVED"){
+    //     set(action, "screenConfig.components.div.children.footer", footer)
+    //   }
+    // })
 
     if (status === "cancelled")
       set(
@@ -462,39 +523,39 @@ const screenConfig = {
                 sm: 4,
                 align: "right"
               },
-              children:
-                process.env.REACT_APP_NAME === "Employee"
-                  ? {}
-                  : {
-                      word1: {
-                        ...getCommonTitle(
-                          {
-                            jsonPath: "Licenses[0].headerSideText.word1"
-                          },
-                          {
-                            style: {
-                              marginRight: "10px",
-                              color: "rgba(0, 0, 0, 0.6000000238418579)"
-                            }
-                          }
-                        )
-                      },
-                      word2: {
-                        ...getCommonTitle({
-                          jsonPath: "Licenses[0].headerSideText.word2"
-                        })
-                      },
-                      cancelledLabel: {
-                        ...getCommonHeader(
-                          {
-                            labelName: "Cancelled",
-                            labelKey: "TL_COMMON_STATUS_CANC"
-                          },
-                          { variant: "body1", style: { color: "#E54D42" } }
-                        ),
-                        visible: false
-                      }
-                    }
+              // children:
+              //   process.env.REACT_APP_NAME === "Employee"
+              //     ? {}
+              //     : {
+              //       word1: {
+              //         ...getCommonTitle(
+              //           {
+              //             jsonPath: "Licenses[0].headerSideText.word1"
+              //           },
+              //           {
+              //             style: {
+              //               marginRight: "10px",
+              //               color: "rgba(0, 0, 0, 0.6000000238418579)"
+              //             }
+              //           }
+              //         )
+              //       },
+              //       word2: {
+              //         ...getCommonTitle({
+              //           jsonPath: "Licenses[0].headerSideText.word2"
+              //         })
+              //       },
+              //       cancelledLabel: {
+              //         ...getCommonHeader(
+              //           {
+              //             labelName: "Cancelled",
+              //             labelKey: "TL_COMMON_STATUS_CANC"
+              //           },
+              //           { variant: "body1", style: { color: "#E54D42" } }
+              //         ),
+              //         visible: false
+              //       }
+              //     }
             }
           }
         },

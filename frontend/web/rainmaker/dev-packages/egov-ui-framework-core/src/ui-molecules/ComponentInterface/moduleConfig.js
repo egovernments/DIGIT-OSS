@@ -1,4 +1,4 @@
-export const getModuleName = pathName => {
+export const getModuleName = (pathName, BPAtradeType) => {
   if (pathName && pathName.includes("fire-noc")) {
     return "FIRENOC";
   } else if (
@@ -6,5 +6,7 @@ export const getModuleName = pathName => {
     (pathName && pathName.includes("tradelicense"))
   ) {
     return "NewTL";
+  } else if (BPAtradeType) {
+    return BPAtradeType.split(".")[0];
   }
 };

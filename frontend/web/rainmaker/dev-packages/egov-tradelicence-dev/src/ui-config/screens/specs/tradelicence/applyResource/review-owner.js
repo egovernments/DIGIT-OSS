@@ -5,7 +5,7 @@ import {
   getLabelWithValue,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { convertEpochToDate } from "../../utils";
+import { convertEpochToDate, checkValueForNA } from "../../utils";
 
 import { changeStep } from "./footer";
 
@@ -21,7 +21,7 @@ export const reviewownershipType = getLabelWithValue(
       masterName: "OwnerShipCategory"
     },
     callBack: value => {
-      return value.split(".")[0];
+      return value ? value.split(".")[0] : "";
     }
   }
 );
@@ -35,7 +35,7 @@ export const reviewsubOwnership = getLabelWithValue(
     localePrefix: {
       moduleName: "common-masters",
       masterName: "OwnerShipCategory"
-    }
+    },
   }
 );
 export const reviewOwnerFatherName = getLabelWithValue(
@@ -92,7 +92,7 @@ export const reviewOwnerPhoneNo = getLabelWithValue(
     labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_LABEL"
   },
   {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber"
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber",
   }
 );
 export const reviewOwnerEmail = getLabelWithValue(
@@ -101,7 +101,8 @@ export const reviewOwnerEmail = getLabelWithValue(
     labelKey: "TL_NEW_OWNER_DETAILS_EMAIL_LABEL"
   },
   {
-    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId"
+    jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].emailId",
+    callBack: checkValueForNA
   }
 );
 export const reviewOwnerPAN = getLabelWithValue(
@@ -109,7 +110,7 @@ export const reviewOwnerPAN = getLabelWithValue(
     labelName: "PAN No.",
     labelKey: "TL_NEW_OWNER_DETAILS_PAN_LABEL"
   },
-  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan" }
+  { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan", callBack: checkValueForNA }
 );
 
 export const getReviewOwner = (isEditable = true) => {
@@ -193,7 +194,8 @@ export const getReviewOwner = (isEditable = true) => {
               },
               {
                 jsonPath:
-                  "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+                  "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress",
+                  callBack: checkValueForNA
               }
             ),
             reviewRelationType: getLabelWithValue(
@@ -205,9 +207,10 @@ export const getReviewOwner = (isEditable = true) => {
                 jsonPath:
                   "Licenses[0].tradeLicenseDetail.additionalDetail.relationType",
                 localePrefix: {
-                  moduleName: "TradeLicense",
-                  masterName: "RelationType"
-                }
+                  moduleName: "common-masters",
+                  masterName: "OwnerType"
+                },
+                callBack: checkValueForNA
               }
             )
             // reviewOwnerSpecialCat: getLabelWithValue(
@@ -250,7 +253,8 @@ export const getReviewOwner = (isEditable = true) => {
               },
               {
                 jsonPath:
-                  "Licenses[0].tradeLicenseDetail.owners[0].altContactNumber"
+                  "Licenses[0].tradeLicenseDetail.owners[0].altContactNumber",
+                  callBack: checkValueForNA
               }
             ),
             reviewOwnerName: getLabelWithValue(
@@ -258,7 +262,7 @@ export const getReviewOwner = (isEditable = true) => {
                 labelName: "Name of the Authorised Person",
                 labelKey: "TL_NEW_OWNER_AUTH_PER_LABEL"
               },
-              { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name" }
+              { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name"}
             ),
             reviewDesignation: getLabelWithValue(
               {
@@ -267,7 +271,8 @@ export const getReviewOwner = (isEditable = true) => {
               },
               {
                 jsonPath:
-                  "Licenses[0].tradeLicenseDetail.institution.designation"
+                  "Licenses[0].tradeLicenseDetail.institution.designation",
+                  callBack: checkValueForNA
               }
             ),
             reviewOwnerFatherName,
@@ -283,7 +288,8 @@ export const getReviewOwner = (isEditable = true) => {
               },
               {
                 jsonPath:
-                  "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress"
+                  "Licenses[0].tradeLicenseDetail.owners[0].permanentAddress",
+                  callBack: checkValueForNA
               }
             ),
             reviewRelationType: getLabelWithValue(

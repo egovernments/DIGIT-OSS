@@ -82,8 +82,8 @@ function FeesEstimateCard(props) {
   const total = estimate.totalAmount;
   const arrears = estimate.arrears;
   const totalHeadClassName = "tl-total-amount-value " + classes.bigheader;
-  //if(estimate.fees[estimate.fees.length-1].info.labelName!="Arrears"){
-  if (estimate.fees && estimate.fees.length > 0 && estimate.fees[estimate.fees.length - 1].info.labelName != "Arrears") {
+
+  if (estimate.fees&&estimate.fees.length>0&&estimate.fees[estimate.fees.length-1].info.labelName!="Arrears") {
     estimate.fees.push({
       info: {
         labelKey: "COMMON_ARREARS",
@@ -96,20 +96,6 @@ function FeesEstimateCard(props) {
       value: arrears
     });
   }
-  // if (arrears > 0 && estimate.fees.length == 9) {
-  //   estimate.fees.push({
-  //     info: {
-  //       labelKey: "COMMON_ARREARS",
-  //       labelName: "Arrears"
-  //     },
-  //     name: {
-  //       labelKey: "COMMON_ARREARS",
-  //       labelName: "Arrears"
-  //     },
-  //     value: arrears
-  //   });
-  // }
-  console.log(estimate.fees);
 
   return (
     <Grid container>

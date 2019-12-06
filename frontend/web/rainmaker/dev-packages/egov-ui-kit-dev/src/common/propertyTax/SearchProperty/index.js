@@ -10,13 +10,13 @@ import { addBreadCrumbs, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/
 import SearchPropertyForm from "./components/SearchPropertyForm";
 import PropertyTable from "./components/PropertyTable";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions"
+import {fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions"
 import { displayFormErrors, resetForm } from "egov-ui-kit/redux/form/actions";
 import { connect } from "react-redux";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import get from "lodash/get";
-import { getUserInfo, localStorageGet, getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo, localStorageGet,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 import "./index.css";
 
@@ -258,7 +258,7 @@ class SearchProperty extends Component {
             labelStyle={{ marginTop: "20px" }}
           />
 
-          {/* Commenting add and assess property for 10 dec release 
+          {/* Commenting add and assess property for 10 dec release
           <div
             className="rainmaker-displayInline"  >
             <Button
@@ -321,7 +321,7 @@ class SearchProperty extends Component {
               <Label label="PT_NO_PROPERTY_RECORD" />
             </div>
 
-            {/* Commenting add and assess property for 10 dec release 
+            {/* Commenting add and assess property for 10 dec release
             <div className="new-assess-btn">
               <Button
                 label={<Label label="PT_ADD_ASSESS_PROPERTY" buttonLabel={true} />}
@@ -355,7 +355,7 @@ const mapDispatchToProps = (dispatch) => {
     fetchProperties: (queryObject) => dispatch(fetchProperties(queryObject)),
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
     resetForm: formKey => dispatch(resetForm(formKey)),
-    fetchLocalizationLabel: (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
+    fetchLocalizationLabel : (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
   };
 };
 

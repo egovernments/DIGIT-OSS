@@ -4,7 +4,6 @@ import {
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { billSearchCard } from "./billSearchResources/billSearchCard";
-//   import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { searchResults } from "./billSearchResources/searchResults";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils";

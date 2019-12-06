@@ -15,7 +15,7 @@ import PropertyTable from "./components/PropertyTable";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { displayFormErrors, resetForm } from "egov-ui-kit/redux/form/actions";
-import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
+import {fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { connect } from "react-redux";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import get from "lodash/get";
@@ -248,7 +248,7 @@ class SearchProperty extends Component {
             labelStyle={{ marginTop: "20px" }}
           />
 
-          {/* Commenting add and assess property for 10 dec release 
+          {/* Commenting add and assess property for 10 dec release
           <div
             className="rainmaker-displayInline"  >
             <Button
@@ -363,7 +363,7 @@ const mapDispatchToProps = dispatch => {
     toggleSnackbarAndSetText: (open, message, error) =>
       dispatch(toggleSnackbarAndSetText(open, message, error)),
     resetForm: formKey => dispatch(resetForm(formKey)),
-    fetchLocalizationLabel: (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
+    fetchLocalizationLabel : (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
   };
 };
 

@@ -1,14 +1,15 @@
-export const getWFConfig = module => {
+export const getWFConfig = (module) => {
+  console.log("module", module);
   switch (module.toUpperCase()) {
     case "CS_COMMON_INBOX_NEWTL":
       return {
         INITIATED: "/tradelicence/apply",
-        DEFAULT: "/tradelicence/search-preview"
+        DEFAULT: "/tradelicence/search-preview",
       };
     case "FIRENOC":
       return {
         INITIATED: "/fire-noc/apply",
-        DEFAULT: "/fire-noc/search-preview"
+        DEFAULT: "/fire-noc/search-preview",
       };
   }
 };

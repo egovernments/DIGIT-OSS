@@ -105,39 +105,34 @@ export const searchApiCall = async (state, dispatch) => {
     }
 
     const responseFromAPI = await getSearchResults(queryObject);
-    dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
+    dispatch(prepareFinalObject("PaymentsSearchResponse", responseFromAPI));
 
-    const Receipt = (responseFromAPI && responseFromAPI.Receipt) || [];
+    const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
     const response = [];
-    for (let i = 0; i < Receipt.length; i++) {
+    for (let i = 0; i < Payments.length; i++) {
       const serviceTypeLabel = getTransformedLocale(
-        get(Receipt[i], `Bill[0].billDetails[0].businessService`)
+        get(Payments[i], `paymentDetails[0].bill.businessService`)
       );
       response[i] = {
-        receiptNumber: get(Receipt[i], `receiptNumber`),
-        payeeName: get(Receipt[i], `Bill[0].payerName`),
-        serviceType: getLocaleLabels(
-          "",
-          `BILLINGSERVICE_BUSINESSSERVICE_${serviceTypeLabel}`,
-          transfomedKeys
-        ),
-        date: Receipt[i].receiptDate,
-        amount: Receipt[i].Bill[0].billDetails[0].amountPaid,
-        status: Receipt[i].Bill[0].billDetails[0].status
+        receiptNumber: get(Payments[i], `paymentDetails[0].receiptNumber`),
+        payeeName: get(Payments[i], `payerName`),
+        serviceType: serviceTypeLabel,
+        receiptdate: get(Payments[i], `paymentDetails[0].receiptDate`),
+        amount: get(Payments[i], `paymentDetails[0].bill.totalAmount`),
+        status: get(Payments[i], `paymentDetails[0].bill.status`),
+        tenantId : get(Payments[i], `tenantId`),
       };
     }
-    // dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
-    console.log(response);
 
     try {
       let data = response.map(item => ({
         [getTextToLocalMapping("Receipt No.")]: item.receiptNumber || "-",
         [getTextToLocalMapping("Payee Name")]: item.payeeName || "-",
-        [getTextToLocalMapping("Service Type")]: item.serviceType || "-",
-        [getTextToLocalMapping("Date")]: convertEpochToDate(item.date) || "-",
+        [getTextToLocalMapping("Service Type")]: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
+        [getTextToLocalMapping("Date")]: convertEpochToDate(item.receiptdate) || "-",
         [getTextToLocalMapping("Amount[INR]")]: item.amount || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
-        ["tenantId"]: item.tenantId
+        ["tenantId"]: item.tenantId || "-"
       }));
       dispatch(
         handleField(
@@ -152,7 +147,7 @@ export const searchApiCall = async (state, dispatch) => {
           "search",
           "components.div.children.searchResult",
           "props.title",
-          "Search Results for Receipt (" + data.length + ")"
+          "Search Results for Payments (" + data.length + ")"
         )
       );
 

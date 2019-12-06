@@ -16,6 +16,7 @@ import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import "./index.css";
 
 const showHideMapPopup = (state, dispatch) => {
   let toggle = get(
@@ -189,6 +190,7 @@ export const propertyLocationDetails = getCommonCard(
           jsonPath: "FireNOCs[0].fireNOCDetails.propertyDetails.address.city",
           required: true,
           props: {
+            className:"applicant-details-error",
             required: true
             // disabled: true
           }
@@ -261,7 +263,7 @@ export const propertyLocationDetails = getCommonCard(
           } catch (e) {
             console.log(e);
           }
-          // Set Firestation based on ULB
+          // Set Firestation based on ULBl
           let fireStationsList = get(
             state,
             "screenConfiguration.preparedFinalObject.applyScreenMdmsData.firenoc.FireStations",
@@ -285,6 +287,9 @@ export const propertyLocationDetails = getCommonCard(
           labelName: "Plot/Survey No.",
           labelKey: "NOC_PROPERTY_PLOT_NO_LABEL"
         },
+        props:{
+          className:"applicant-details-error"
+        },
         placeholder: {
           labelName: "Enter Plot/Survey No.",
           labelKey: "NOC_PROPERTY_PLOT_NO_PLACEHOLDER"
@@ -297,6 +302,9 @@ export const propertyLocationDetails = getCommonCard(
         label: {
           labelName: "Building/Colony Name",
           labelKey: "NOC_PROPERTY_DETAILS_BLDG_NAME_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Building/Colony Name",
@@ -313,6 +321,9 @@ export const propertyLocationDetails = getCommonCard(
           labelName: "Street Name",
           labelKey: "NOC_PROPERTY_DETAILS_SRT_NAME_LABEL"
         },
+        props:{
+          className:"applicant-details-error"
+        },
         placeholder: {
           labelName: "Enter Street Name",
           labelKey: "NOC_PROPERTY_DETAILS_SRT_NAME_PLACEHOLDER"
@@ -327,7 +338,7 @@ export const propertyLocationDetails = getCommonCard(
         jsonPath:
           "FireNOCs[0].fireNOCDetails.propertyDetails.address.locality.code",
         required: true,
-        props: {
+        props: { 
           style: {
             width: "100%",
             cursor: "pointer"
@@ -370,6 +381,9 @@ export const propertyLocationDetails = getCommonCard(
         label: {
           labelName: "Pincode",
           labelKey: "NOC_PROPERTY_DETAILS_PIN_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Enter Pincode",
@@ -436,6 +450,9 @@ export const propertyLocationDetails = getCommonCard(
         label: {
           labelName: "Applicable Fire Station",
           labelKey: "NOC_PROPERTY_DETAILS_FIRESTATION_LABEL"
+        },
+        props:{
+          className:"applicant-details-error"
         },
         placeholder: {
           labelName: "Select Applicable Fire Station",

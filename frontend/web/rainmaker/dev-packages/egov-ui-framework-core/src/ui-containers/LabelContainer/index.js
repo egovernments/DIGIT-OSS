@@ -76,7 +76,7 @@ const mapStateToProps = (state, ownprops) => {
   const { preparedFinalObject } = screenConfiguration;
   if (jsonPath) {
     fieldValue = get(preparedFinalObject, jsonPath);
-    if (fieldValue && callBack && typeof callBack === "function") {
+    if (callBack && typeof callBack === "function") {
       fieldValue = callBack(fieldValue);
     }
   }

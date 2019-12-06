@@ -10,6 +10,7 @@ const formConfig = {
       jsonPath: "Properties[0].propertyDetails[0].units[0].usageCategoryMinor",
       type: "textfield",
       floatingLabelText: "PT_FORM2_USAGE_TYPE",
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       value: "PROPERTYTAX_BILLING_SLAB_COMMERCIAL",
       // value: "Commercial",
       required: true,

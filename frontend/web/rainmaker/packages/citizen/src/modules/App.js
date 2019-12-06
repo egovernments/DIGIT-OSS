@@ -92,7 +92,8 @@ class App extends Component {
       history.push(nextRoute);
       setRoute("");
     }
-    const isWithoutAuthSelfRedirect = location && location.pathname && location.pathname.includes("withoutAuth");
+    const isWithoutAuthSelfRedirect = location && location.pathname && location.pathname.includes("whitelisted");
+
     if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !getQueryArg("", "smsLink") && !isWithoutAuthSelfRedirect) {
       nextProps.hasLocalisation && this.props.history.replace("/language-selection");
     }

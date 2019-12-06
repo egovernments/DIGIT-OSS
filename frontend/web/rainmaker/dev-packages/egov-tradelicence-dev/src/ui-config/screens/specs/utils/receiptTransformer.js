@@ -46,13 +46,13 @@ const epochToDate = et => {
   return formattedDate;
 };
 
-const getMessageFromLocalization = code => {
+export const getMessageFromLocalization = code => {
   let messageObject = JSON.parse(
     getLocalization(`localization_${getLocale()}`)
   ).find(item => {
     return item.code == code;
   });
-  return messageObject ? messageObject.message : code;
+  return messageObject ? messageObject.code : code;
 };
 
 const getMessageFromLocalizationNonTLCodes = code => {
@@ -274,35 +274,35 @@ export const loadReceiptData = async (consumerCode, tenant) => {
       value: tenant
     },
     {
-      key: "consumerCode",
+      key: "consumerCodes",
       value: consumerCode
     }
   ];
   let response = await getReceiptData(queryObject);
 
-  if (response && response.Receipt && response.Receipt.length > 0) {
+  if (response && response.Payments && response.Payments.length > 0) {
     data.receiptNumber = nullToNa(
-      get(response, "Receipt[0].Bill[0].billDetails[0].receiptNumber", "NA")
+      get(response, "Payments[0].paymentDetails[0].receiptNumber", "NA")
     );
     data.amountPaid = get(
       response,
-      "Receipt[0].Bill[0].billDetails[0].amountPaid",
+      "Payments[0].paymentDetails[0].totalAmountPaid",
       0
     );
     data.totalAmount = get(
       response,
-      "Receipt[0].Bill[0].billDetails[0].totalAmount",
+      "Payments[0].paymentDetails[0].totalDue",
       0
     );
     data.amountDue = data.totalAmount - data.amountPaid;
     data.paymentMode = nullToNa(
-      get(response, "Receipt[0].instrument.instrumentType.name", "NA")
+      get(response, "Payments[0].paymentMode", "NA")
     );
     data.transactionNumber = nullToNa(
-      get(response, "Receipt[0].instrument.transactionNumber", "NA")
+      get(response, "Payments[0].transactionNumber", "NA")
     );
-    data.bankName = get(response, "Receipt[0].instrument.bank.name", "NA");
-    data.branchName = get(response, "Receipt[0].instrument.branchName", null);
+    data.bankName = get(response, "Payments[0].bankName", "NA");
+    data.branchName = get(response, "Payments[0].branchName", null);
     data.bankAndBranch = nullToNa(
       data.bankName && data.branchName
         ? data.bankName + ", " + data.branchName
@@ -310,25 +310,25 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     );
     data.paymentDate = nullToNa(
       epochToDate(
-        get(response, "Receipt[0].Bill[0].billDetails[0].receiptDate", 0)
+        get(response, "Payments[0].transactionDate", 0)
       )
     );
     data.g8ReceiptNo = nullToNa(
       get(
         response,
-        "Receipt[0].Bill[0].billDetails[0].manualReceiptNumber",
+        "Payments[0].paymentDetails[0].manualReceiptNumber",
         "NA"
       )
     );
     data.g8ReceiptDate = nullToNa(
       epochToDate(
-        get(response, "Receipt[0].Bill[0].billDetails[0].manualReceiptDate", 0)
+        get(response, "Payments[0].paymentDetails[0].manualReceiptDate", 0)
       )
     );
     /** START TL Fee, Adhoc Penalty/Rebate Calculation */
     var tlAdhocPenalty = 0,
       tlAdhocRebate = 0;
-    response.Receipt[0].Bill[0].billDetails[0].billAccountDetails.map(item => {
+    response.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails.map(item => {
       let desc = item.taxHeadCode ? item.taxHeadCode : "";
       if (desc === "TL_TAX") {
         data.tlFee = item.amount;

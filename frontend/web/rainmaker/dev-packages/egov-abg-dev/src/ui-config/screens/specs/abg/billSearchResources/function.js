@@ -3,16 +3,19 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getSearchResults,getGroupBillSearch } from "../../../../../ui-utils/commons";
+import { getGroupBillSearch } from "../../../../../ui-utils/commons";
 import { convertEpochToDate, getTextToLocalMapping } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
-import { getTenantId,getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 
-const tenantId = getTenantId();
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
+  let tenantId = get(
+    state.screenConfiguration.preparedFinalObject,
+    "searchScreen.tenantId"
+  );
   let queryObject = [
     {
       key: "tenantId",
@@ -72,8 +75,8 @@ export const searchApiCall = async (state, dispatch) => {
         queryObject.push({ key: key, value: searchScreenObject[key].trim() });
       }
     }
-    searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Employee" ?  getTenantId() : JSON.parse(getUserInfo()).permanentCity;
-    // const responseFromAPI = await getSearchResults(dispatch,queryObject);
+    
+    searchScreenObject.tenantId = process.env.REACT_APP_NAME === "Citizen" ? tenantId : getTenantId();
     const responseFromAPI = await getGroupBillSearch(dispatch,searchScreenObject)
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];
     const billTableData = bills.map(item => {
