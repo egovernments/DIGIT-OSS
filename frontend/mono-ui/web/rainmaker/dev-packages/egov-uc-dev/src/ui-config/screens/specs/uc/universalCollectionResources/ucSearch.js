@@ -15,13 +15,10 @@ import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import set from "lodash/set";
 import get from "lodash/get";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
-//const hasApproval = getQueryArg(window.location.href, "hasApproval");
 let enableButton = true;
-//enableInbox = hasApproval && hasApproval === "false" ? false : true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 
 const resetFields = (state, dispatch) => {
@@ -35,7 +32,7 @@ const resetFields = (state, dispatch) => {
   );
   get(
     state.screenConfiguration,
-    "preparedFinalObject.searchScreen.businessCodes",
+    "preparedFinalObject.searchScreen.businessServices",
     null
   ) &&
     dispatch(
@@ -94,7 +91,6 @@ export const UCSearchCard = getCommonCard({
       required: false,
       visible: true,
       jsonPath: "searchScreen.receiptNumbers",
-      // sourceJsonPath: "applyScreenMdmsData.egf-master.FinancialYear",
       gridDefination: {
         xs: 12,
         sm: 4
@@ -110,7 +106,7 @@ export const UCSearchCard = getCommonCard({
           labelName: "Select Service Category",
           labelKey: "UC_SERVICE_CATEGORY_PLACEHOLDER"
         },
-        required: true,
+        // required: true,
         jsonPath: "searchScreenMdmsData.businessServiceSelected",
         localePrefix: {
           masterName: "BusinessService",
@@ -120,12 +116,12 @@ export const UCSearchCard = getCommonCard({
           xs: 12,
           sm: 4
         },
-        sourceJsonPath: "searchScreenMdmsData.serviceCategory"
+        sourceJsonPath: "applyScreenMdmsData.serviceCategories"
       }),
       beforeFieldChange: async (action, state, dispatch) => {
         const serviceCategory = get(
           state.screenConfiguration,
-          "preparedFinalObject.searchScreenMdmsData.serviceCategory"
+          "preparedFinalObject.applyScreenMdmsData.serviceCategories"
         );
         const selectedCategory = serviceCategory.find(
           item => item.code === action.value
@@ -135,7 +131,7 @@ export const UCSearchCard = getCommonCard({
           selectedCategory.child &&
           selectedCategory.child.map(item => item.code);
         dispatch(
-          prepareFinalObject("searchScreen.businessCodes", serviceTypes)
+          prepareFinalObject("searchScreen.businessServices", serviceTypes)
         );
         return action;
       }

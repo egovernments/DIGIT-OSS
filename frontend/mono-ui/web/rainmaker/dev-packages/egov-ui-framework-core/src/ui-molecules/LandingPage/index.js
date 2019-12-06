@@ -8,7 +8,10 @@ import { Link } from "react-router-dom";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
 import LabelContainer from "../../ui-containers/LabelContainer";
-import { handleScreenConfigurationFieldChange as handleField } from "../../ui-redux/screen-configuration/actions";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject
+} from "../../ui-redux/screen-configuration/actions";
 import "./index.css";
 
 const styles = theme => ({
@@ -34,10 +37,22 @@ const styles = theme => ({
 
 class LandingPage extends React.Component {
   onCardCLick = route => {
-    const { screenConfig, handleField, setRoute } = this.props;
+    const {
+      screenConfig,
+      handleField,
+      setRoute,
+      moduleName,
+      jsonPath,
+      value
+    } = this.props;
     if (typeof route === "string") {
       setRoute(route);
     } else {
+      if (moduleName === "fire-noc") {
+        prepareFinalObject("FireNOCs", [
+          { "fireNOCDetails.fireNOCType": "NEW" }
+        ]);
+      }
       let toggle = get(
         screenConfig[route.screenKey],
         `${route.jsonPath}.props.open`,
@@ -83,18 +98,21 @@ class LandingPage extends React.Component {
 
 const mapStateToProps = state => {
   const screenConfig = get(state.screenConfiguration, "screenConfig");
+  const moduleName = get(state.screenConfiguration, "moduleName");
   const applicationCount = get(
     state.screenConfiguration.preparedFinalObject,
     "myApplicationsCount"
   );
-  return { screenConfig, applicationCount };
+  return { screenConfig, moduleName,applicationCount };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     handleField: (screenKey, jsonPath, fieldKey, value) =>
       dispatch(handleField(screenKey, jsonPath, fieldKey, value)),
-    setRoute: path => dispatch(setRoute(path))
+    setRoute: path => dispatch(setRoute(path)),
+    prepareFinalObject: (jsonPath, value) =>
+      dispatch(prepareFinalObject(jsonPath, value))
   };
 };
 

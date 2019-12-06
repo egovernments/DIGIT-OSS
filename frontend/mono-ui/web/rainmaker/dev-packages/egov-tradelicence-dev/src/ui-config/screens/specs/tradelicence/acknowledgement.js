@@ -12,6 +12,126 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import get from "lodash/get";
 import set from "lodash/set";
+import generatePdf from "../utils/receiptPdf";
+import { Icon } from "egov-ui-framework/ui-atoms";
+import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {generatePdfAndDownload} from "./acknowledgementResource/applicationSuccessFooter";
+
+const abc=(  state,
+  dispatch,
+ applicationNumber,
+  tenant)=>{
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    children: {
+      downloadFormButton: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+
+          div1: {
+            uiFramework: "custom-atoms",
+            componentPath: "Icon",
+
+            props:{
+              iconName: "cloud_download",
+            style:{
+              marginTop: "7px",
+              marginRight: "8px",
+            }
+          },
+            onClick: {
+              action: "condition",
+              callBack: () => {
+                generatePdfAndDownload(
+                  state,
+                  dispatch,
+                  "download",
+                  applicationNumber,
+                  tenant
+                );
+              }
+            },
+          },
+          div2: getLabel({
+            labelName: "DOWNLOAD CONFIRMATION FORM",
+            labelKey: "NOC_APPLICATION_BUTTON_DOWN_CONF"
+          })
+
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: () => {
+            generatePdfAndDownload(
+              state,
+              dispatch,
+              "download",
+              applicationNumber,
+              tenant
+            );
+          }
+        },
+      },
+      PrintFormButton: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          div1: {
+            uiFramework: "custom-atoms",
+            componentPath: "Icon",
+
+            props:{
+              iconName: "local_printshop",
+              style:{
+                marginTop: "7px",
+                marginRight: "8px",
+                marginLeft:"10px",
+              }
+          },
+           onClick: {
+            action: "condition",
+            callBack: () => {
+              generatePdfAndDownload(
+                state,
+                dispatch,
+                "print",
+                applicationNumber,
+                tenant
+              );
+            }
+          },
+
+          },
+          div2: getLabel({
+            labelName: "PRINT CONFIRMATION FORM",
+            labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
+          })
+
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: () => {
+            generatePdfAndDownload(
+              state,
+              dispatch,
+              "print",
+              applicationNumber,
+              tenant
+            );
+          }
+        },
+      }
+
+    },
+    props: {
+      style: {
+        display: "flex",
+
+      }
+    },
+  }
+}
 
 const getAcknowledgementCard = (
   state,
@@ -61,6 +181,118 @@ const getAcknowledgementCard = (
           })
         }
       },
+      abc: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          downloadFormButton: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            children: {
+
+              div1: {
+                uiFramework: "custom-atoms",
+                componentPath: "Icon",
+
+                props:{
+                  iconName: "cloud_download",
+                style:{
+                  marginTop: "7px",
+                  marginRight: "8px",
+                }
+              },
+                onClick: {
+                  action: "condition",
+                  callBack: () => {
+                    generatePdfAndDownload(
+                      state,
+                      dispatch,
+                      "download",
+                      applicationNumber,
+                      tenant
+                    );
+                  }
+                },
+              },
+              div2: getLabel({
+                labelName: "DOWNLOAD CONFIRMATION FORM",
+                labelKey: "NOC_APPLICATION_BUTTON_DOWN_CONF"
+              })
+
+            },
+            onClickDefination: {
+              action: "condition",
+              callBack: () => {
+                generatePdfAndDownload(
+                  state,
+                  dispatch,
+                  "download",
+                  applicationNumber,
+                  tenant
+                );
+              }
+            },
+          },
+          PrintFormButton: {
+            uiFramework: "custom-atoms",
+            componentPath: "Div",
+            children: {
+              div1: {
+                uiFramework: "custom-atoms",
+                componentPath: "Icon",
+
+                props:{
+                  iconName: "local_printshop",
+                  style:{
+                    marginTop: "7px",
+                    marginRight: "8px",
+                    marginLeft:"10px",
+                  }
+              },
+               onClick: {
+                action: "condition",
+                callBack: () => {
+                  generatePdfAndDownload(
+                    state,
+                    dispatch,
+                    "print",
+                    applicationNumber,
+                    tenant
+                  );
+                }
+              },
+
+              },
+              div2: getLabel({
+                labelName: "PRINT CONFIRMATION FORM",
+                labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
+              })
+
+            },
+            onClickDefination: {
+              action: "condition",
+              callBack: () => {
+                generatePdfAndDownload(
+                  state,
+                  dispatch,
+                  "print",
+                  applicationNumber,
+                  tenant
+                );
+              }
+            },
+          }
+
+        },
+        props: {
+          style: {
+            display: "flex",
+
+          }
+        },
+      },
+    
+  
       iframeForPdf: {
         uiFramework: "custom-atoms",
         componentPath: "Div"

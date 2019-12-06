@@ -37,7 +37,7 @@ const styles = {
   },
   iconStyle: {
     width: 16,
-    height: 16,
+    height: 27,
   },
 };
 
@@ -77,7 +77,7 @@ const OwnerInformation = ({
             <div className="col-sm-6">
               <Field fieldKey="ownerName" field={fields["ownerName"]} handleFieldChange={handleFieldChange} disabled={disabled} />
             </div>
-            <div className="col-sm-6" style={{ paddingTop: "10px", paddingBottom: "5px" }}>
+            <div className="col-sm-6">
               <Label label={"PT_FORM3_GENDER"} required fontSize={12} labelStyle={styles.labelStyle} bold={true} />
               <RadioButton
                 id="gender-selection"
@@ -103,7 +103,7 @@ const OwnerInformation = ({
               <div className="col-sm-6">
                 <Field fieldKey="ownerGuardian" field={fields["ownerGuardian"]} handleFieldChange={handleFieldChange} disabled={disabled} />
               </div>
-              <div className="col-sm-6">
+              <div className="col-sm-6 owner-relationship">
                 <Field fieldKey="ownerRelationship" field={fields["ownerRelationship"]} handleFieldChange={handleFieldChange} disabled={disabled} />
               </div>
             </div>

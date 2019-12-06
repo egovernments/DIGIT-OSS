@@ -1,3 +1,4 @@
+
 import { setFieldProperty, handleFieldChange } from "egov-ui-kit/redux/form/actions";
 import { CITY } from "egov-ui-kit/utils/endPoints";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
@@ -9,7 +10,8 @@ const formConfig = {
   fields: {
     city: {
       id: "city",
-      numcols: 6,
+      numcols: 4,
+      dontReset:(process.env.REACT_APP_NAME !== "Citizen"? true: false),
       fullWidth: true,
       className: "search-property-form-pt",
       jsonPath: "",
@@ -18,32 +20,20 @@ const formConfig = {
       errorMessage: "CS_ADDCOMPLAINT_COMPLAINT_TYPE_PLACEHOLDER",
       required: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      type: "singleValueList",
+      type: "autoSuggestDropdown",
     },
     mobileNumber: {
       id: "complainant-mobile-no",
-      type: "mobilenumber",
+      type: "textfield",
       jsonPath: "",
       floatingLabelText: "PT_OWNER_MOBILE_NUMBER",
       errorMessage: "CORE_COMMON_PHONENO_INVALIDMSG",
       hintText: "PT_OWNER_MOBILE_NUMBER_PLACEHOLDER",
       inputStyle: { width: "calc(100% - 35px)" },
-      numcols: 6,
+      numcols: 4,
       pattern: "^([0-9]){10}$",
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       pattern: /^(\+\d{1,2}\s)?\(?[6-9]\d{2}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/i,
-      value: "",
-    },
-    oldpropertyids: {
-      id: "old-property-id",
-      jsonPath: "",
-      type: "textfield",
-      floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
-      errorMessage: "",
-      hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",
-      numcols: 6,
-      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
-      maxLength: 64,
       value: "",
     },
     ids: {
@@ -53,9 +43,22 @@ const formConfig = {
       floatingLabelText: "PT_UNIQUE_ID",
       errorMessage: "",
       hintText: "PT_UNIQUE_ID_PLACEHOLDER",
-      numcols: 6,
+      numcols: 4,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       maxLength: 64,
+    },
+    oldpropertyids: {
+      id: "old-property-id",
+      jsonPath: "",
+      type: "textfield",
+      floatingLabelText: "PT_PROPERTY_ADDRESS_EXISTING_PID",
+      errorMessage: "",
+      hintText: "PT_PROPERTY_ADDRESS_EXISTING_PID_PLACEHOLDER",
+      numcols: 4,
+      errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
+      maxLength: 64,
+      value: "",
+      pattern: /^[^\$\"'<>?\\\\~`!@$%^+={}*,.:;“”‘’]{1,64}$/i
     },
   },
   submit: {

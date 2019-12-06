@@ -26,7 +26,7 @@ const tabs = [
     formValid: false,
   },
   {
-    heading: "PT_OWNER_INFORMATION_FORM_HEADING",
+    heading: "PT_OWNERSHIP_INFO_SUB_HEADER",
     // icon: {
     //   name: "person",
     //   action: "social",
@@ -34,7 +34,7 @@ const tabs = [
     formValid: false,
   },
   {
-    heading: "PT_REVIEW_PAY_FORM_HEADING",
+    heading: "PT_COMMON_SUMMARY",
     // icon: {
     //   name: "attach-money",
     //   action: "editor",

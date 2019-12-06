@@ -5,7 +5,6 @@ import {
   getCommonContainer,
   getPattern,
   getDateField
-  // getCommonTitle
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {
   getTransformedLocale
@@ -16,17 +15,9 @@ import {
   prepareFinalObject
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import {
-  getTransformedLocalStorgaeLabels,
-  getLocaleLabels
-} from "egov-ui-framework/ui-utils/commons";
-import set from "lodash/set";
+import {setServiceCategory} from "../../utils"
 import get from "lodash/get";
 
-const hasButton = getQueryArg(window.location.href, "hasButton");
-let enableButton = true;
-enableButton = hasButton && hasButton === "false" ? false : true;
 const tenantId = getTenantId();
 
 export const newCollectionDetailsCard = getCommonCard(
@@ -482,43 +473,43 @@ const setTaxHeadFields = (action, state, dispatch) => {
   }
 };
 
-const setServiceCategory = (businessServiceData, dispatch) => {
-  let nestedServiceData = {};
-  businessServiceData.forEach(item => {
-    if (item.code && item.code.indexOf(".") > 0) {
-      if (nestedServiceData[item.code.split(".")[0]]) {
-        let child = get(
-          nestedServiceData,
-          `${item.code.split(".")[0]}.child`,
-          []
-        );
-        child.push(item);
-        set(nestedServiceData, `${item.code.split(".")[0]}.child`, child);
-      } else {
-        set(
-          nestedServiceData,
-          `${item.code.split(".")[0]}.code`,
-          item.code.split(".")[0]
-        );
-        set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
-      }
-    } else {
-      set(nestedServiceData, `${item.code}`, item);
-    }
-  });
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.nestedServiceData",
-      nestedServiceData
-    )
-  );
-  let serviceCategories = Object.values(nestedServiceData).filter(
-    item => item.code
-  );
-  dispatch(
-    prepareFinalObject(
-      "applyScreenMdmsData.serviceCategories",
-      serviceCategories
-    )
-  );
-};
+// const setServiceCategory = (businessServiceData, dispatch) => {
+//   let nestedServiceData = {};
+//   businessServiceData.forEach(item => {
+//     if (item.code && item.code.indexOf(".") > 0) {
+//       if (nestedServiceData[item.code.split(".")[0]]) {
+//         let child = get(
+//           nestedServiceData,
+//           `${item.code.split(".")[0]}.child`,
+//           []
+//         );
+//         child.push(item);
+//         set(nestedServiceData, `${item.code.split(".")[0]}.child`, child);
+//       } else {
+//         set(
+//           nestedServiceData,
+//           `${item.code.split(".")[0]}.code`,
+//           item.code.split(".")[0]
+//         );
+//         set(nestedServiceData, `${item.code.split(".")[0]}.child[0]`, item);
+//       }
+//     } else {
+//       set(nestedServiceData, `${item.code}`, item);
+//     }
+//   });
+//   dispatch(
+//     prepareFinalObject(
+//       "applyScreenMdmsData.nestedServiceData",
+//       nestedServiceData
+//     )
+//   );
+//   let serviceCategories = Object.values(nestedServiceData).filter(
+//     item => item.code
+//   );
+//   dispatch(
+//     prepareFinalObject(
+//       "applyScreenMdmsData.serviceCategories",
+//       serviceCategories
+//     )
+//   );
+// };

@@ -12,6 +12,8 @@ import {
   prepareFinalObject,
   toggleSnackbar
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getCommonPayUrl } from "egov-ui-framework/ui-utils/commons";
+import commonConfig from "config/common.js";
 
 const tenantId = getTenantId();
 export const getRedirectionURL = () => {
@@ -77,7 +79,7 @@ const allDateToEpoch = (finalObj, jsonPaths) => {
   });
 };
 
-const processDemand = (state, dispatch) => {
+const processDemand = async (state, dispatch) => {
   const isFormValid = validateFields(
     "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children",
     state,
@@ -85,11 +87,40 @@ const processDemand = (state, dispatch) => {
     "newCollection"
   );
   if (isFormValid) {
-    createDemand(state, dispatch);
-    allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
-      "Demands[0].taxPeriodFrom",
-      "Demands[0].taxPeriodTo"
-    ]);
+    try {
+      const mobileNumber = get(
+        state.screenConfiguration.preparedFinalObject,
+        "Demands[0].mobileNumber"
+      );
+      let payload = await httpRequest(
+        "post",
+        `/user/_search?tenantId=${commonConfig.tenantId}`,
+        "_search",
+        [],
+        {
+          tenantId: commonConfig.tenantId,
+          userName: mobileNumber
+        }
+      );
+      if (payload ) {
+        const uuid = get(payload , "user[0].uuid");
+        dispatch(prepareFinalObject("Demands[0].payer.uuid" , uuid));
+        await createDemand(state, dispatch);
+        allDateToEpoch(state.screenConfiguration.preparedFinalObject, [
+          "Demands[0].taxPeriodFrom",
+          "Demands[0].taxPeriodTo"
+        ]);
+        const applicationNumber = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Demands[0].consumerCode"
+        );
+        const tenantId = get(
+          state.screenConfiguration.preparedFinalObject,
+          "Demands[0].tenantId"
+        );
+        getCommonPayUrl(dispatch, applicationNumber, tenantId);
+      }
+    } catch (error) {}
   } else {
     dispatch(
       toggleSnackbar(
@@ -98,7 +129,7 @@ const processDemand = (state, dispatch) => {
           labelName: "Please fill the required fields.",
           labelKey: "UC_REQUIRED_FIELDS_ERROR_MSG"
         },
-        "error"
+        "info"
       )
     );
   }
@@ -143,7 +174,7 @@ const createDemand = async (state, dispatch) => {
         Demands: demands
       });
       if (payload.Demands.length > 0) {
-        const consumerCode = get(payload, "Demands[0].consumerCode");
+        //const consumerCode = get(payload, "Demands[0].consumerCode");
         const businessService = get(payload, "Demands[0].businessService");
         set(payload, "Demands[0].mobileNumber", mobileNumber);
         set(payload, "Demands[0].consumerName", consumerName);
@@ -154,7 +185,7 @@ const createDemand = async (state, dispatch) => {
           businessService.split(".")[0]
         );
         dispatch(prepareFinalObject("Demands", payload.Demands));
-        await generateBill(consumerCode, tenantId, businessService, dispatch);
+        //await generateBill(consumerCode, tenantId, businessService, dispatch);
       } else {
         alert("Empty response!!");
       }

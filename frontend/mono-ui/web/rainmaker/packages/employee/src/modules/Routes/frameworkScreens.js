@@ -20,7 +20,7 @@ const routes = [
       hideTitle: true,
       hideBackButton: true,
       isHomeScreen: true,
-    },
+    }
   },
 ];
 

@@ -24,7 +24,7 @@ const RegisterForm = ({ handleFieldChange, form,logoUrl }) => {
           <Label bold={true}  fontSize= "23px" label="|" />
           </div>
            <div style={{marginLeft:"7px" }}>
-              <Label bold={true} color="black" fontSize= "24px" label="Punjab" />
+              <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
            </div>
           </div>
           <Label className="heading text-center" bold={true} dark={true} fontSize={16} label="CORE_REGISTER_HEADING" />

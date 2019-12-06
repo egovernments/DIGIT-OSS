@@ -4,7 +4,7 @@ import { get } from "lodash";
 import ActionMenuComp from "../ActionMenu/components";
 import "./index.css";
 import { fetchActionItems, updateActiveRoute } from "egov-ui-kit/redux/app/actions";
-import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 
 class ActionMenu extends Component {
@@ -12,7 +12,13 @@ class ActionMenu extends Component {
     let userInfo = JSON.parse(getUserInfo());
     let { fetchActionMenu } = this.props;
     const roles = get(userInfo, "roles");
-    const roleCodes = roles ? roles.map((role) => role.code) : [];
+    const roleCodes = roles
+      ? roles.map((role) => {
+          if (role.tenantId == getTenantId()) {
+            return role.code;
+          }
+        })
+      : [];
     await fetchActionMenu(
       {
         roleCodes: roleCodes,

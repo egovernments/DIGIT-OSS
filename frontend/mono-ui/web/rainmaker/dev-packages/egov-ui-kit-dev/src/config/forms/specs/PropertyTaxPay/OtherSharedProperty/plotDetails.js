@@ -11,6 +11,7 @@ const formConfig = {
       type: "textfield",
       floatingLabelText: "PT_FORM2_USAGE_TYPE",
       // value: "Other",
+      hintText: "PT_COMMONS_SELECT_PLACEHOLDER",
       value: "PROPERTYTAX_BILLING_SLAB_SHARED",
       required: true,
       disabled: true,

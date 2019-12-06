@@ -14,7 +14,7 @@ const getCommonApplyFooter = children => {
   };
 };
 
-const generatePdfAndDownload = (
+export const generatePdfAndDownload = (
   state,
   dispatch,
   action,
@@ -67,13 +67,13 @@ const generatePdfAndDownload = (
       var doc = new jsPDF("p", "mm");
       var position = 0;
 
-      doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+      doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight-50);
       heightLeft -= pageHeight;
 
       while (heightLeft >= 0) {
         position = heightLeft - imgHeight;
         doc.addPage();
-        doc.addImage(data, "PNG", 5, 5 + position, imgWidth, imgHeight);
+        doc.addImage(data, "PNG", 5, position+8, imgWidth, imgHeight-50);
         heightLeft -= pageHeight;
       }
       if (action === "download") {
@@ -130,7 +130,6 @@ export const applicationSuccessFooter = (
   /* Mseva 2.0 changes */
   const redirectionURL = roleExists ? "/" : "/inbox";
   return getCommonApplyFooter({
-
     gotoHome: {
       componentPath: "Button",
       props: {
@@ -181,7 +180,8 @@ export const applicationSuccessFooter = (
             tenant
           );
         }
-      }
+      },
+      visible:false
     },
     printFormButton: {
       componentPath: "Button",
@@ -211,62 +211,8 @@ export const applicationSuccessFooter = (
             tenant
           );
         }
-      }
+      },
+      visible:false
     }
-
-    // collectPaymentButton: {
-    //   componentPath: "Button",
-    //   props: {
-    //     variant: "contained",
-    //     color: "primary",
-    //     style: {
-    //       minWidth: "200px",
-    //       height: "48px",
-    //       marginRight: "40px"
-    //     }
-    //   },
-    //   children: {
-    //     collectPaymentButtonLabel: getLabel({
-    //       labelName: "COLLECT PAYMENT",
-    //       labelKey: "TL_COLLECT_PAYMENT"
-    //     })
-    //   },
-    //   onClickDefination: {
-    //     action: "page_change",
-    //     path: `/egov-ui-framework/tradelicence/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`
-    //   },
-    //   roleDefination: {
-    //     rolePath: "user-info.roles",
-    //     roles: ["TL_CEMP"]
-    //   }
-    // },
-    // proceedToPay: {
-    //   componentPath: "Button",
-    //   props: {
-    //     variant: "contained",
-    //     color: "primary",
-    //     style: {
-    //       minWidth: "200px",
-    //       height: "48px",
-    //       marginRight: "40px"
-    //     }
-    //   },
-    //   children: {
-    //     collectPaymentButtonLabel: getLabel({
-    //       labelName: "PROCEED TO PAYMENT",
-    //       labelKey: "TL_PROCEED_PAYMENT"
-    //     })
-    //   },
-    //   onClickDefination: {
-    //     action: "page_change",
-    //     path: `/tradelicense-citizen/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`
-    //   },
-    //   roleDefination: {
-    //     rolePath: "user-info.roles",
-    //     action: "PAY",
-    //     roles: ["TL_CEMP"]
-    //   }
-    // }
-
   });
 };

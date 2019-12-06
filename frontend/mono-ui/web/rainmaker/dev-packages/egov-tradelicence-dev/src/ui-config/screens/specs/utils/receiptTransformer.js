@@ -5,7 +5,6 @@ import {
   getMdmsData,
   getReceiptData,
   getSearchResults,
-  getUserDataFromUuid,
   getFinancialYearDates
 } from "../utils";
 import {
@@ -16,7 +15,8 @@ import {
   getUlbGradeLabel,
   getTranslatedLabel,
   transformById,
-  getTransformedLocale
+  getTransformedLocale,
+  getUserDataFromUuid
 } from "egov-ui-framework/ui-utils/commons";
 
 const ifNotNull = value => {
@@ -45,13 +45,13 @@ const epochToDate = et => {
   return formattedDate;
 };
 
-const getMessageFromLocalization = code => {
-  let messageObject = JSON.parse(getLocalization(`localization_${getLocale()}`)).find(
-    item => {
-      return item.code == code;
-    }
-  );
-  return messageObject ? messageObject.message : code;
+export const getMessageFromLocalization = code => {
+  let messageObject = JSON.parse(
+    getLocalization(`localization_${getLocale()}`)
+  ).find(item => {
+    return item.code == code;
+  });
+  return messageObject ? messageObject.code : code;
 };
 
 export const loadUlbLogo = tenantid => {
@@ -117,7 +117,9 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     let cityCode = nullToNa(
       get(response, "Licenses[0].tradeLicenseDetail.address.tenantId", "NA")
     );
-    data.city = getMessageFromLocalization("TENANT_TENANTS_"+getTransformedLocale(cityCode));
+    data.city = getMessageFromLocalization(
+      "TENANT_TENANTS_" + getTransformedLocale(cityCode)
+    );
     /** Make owners data array */
     let ownersData = get(response, "Licenses[0].tradeLicenseDetail.owners", []);
     data.owners = ownersData.map(owner => {
@@ -158,7 +160,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
             tradeCategory = nullToNa(tradeCode);
           } else if (tradeCodeArray.length == 2) {
             tradeCategory = nullToNa(tradeCodeArray[0]);
-            tradeType = nullToNa( tradeCode);
+            tradeType = nullToNa(tradeCode);
           } else if (tradeCodeArray.length > 2) {
             tradeCategory = nullToNa(tradeCodeArray[0]);
             tradeType = nullToNa(tradeCodeArray[1]);
@@ -175,11 +177,15 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
             getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+getTransformedLocale(tradeSubType))
         );
         res.tradeTypeCertificate.push(
-          getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeCategory) +
+          getMessageFromLocalization(
+            "TRADELICENSE_TRADETYPE_" + tradeCategory
+          ) +
             " / " +
-            getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeType) +
+            getMessageFromLocalization("TRADELICENSE_TRADETYPE_" + tradeType) +
             " / " +
-            getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+getTransformedLocale(tradeSubType))
+            getMessageFromLocalization(
+              "TRADELICENSE_TRADETYPE_" + getTransformedLocale(tradeSubType)
+            )
         );
         return res;
       },
@@ -212,9 +218,11 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     if (accessories && accessories.length > 0) {
       data.accessoriesList = response.Licenses[0].tradeLicenseDetail.accessories
         .map(item => {
-          return `${getMessageFromLocalization(`TRADELICENSE_ACCESSORIESCATEGORY_${getTransformedLocale(item.accessoryCategory)}`)}(${
-            item.count ? item.count :"0"
-          })`;
+          return `${getMessageFromLocalization(
+            `TRADELICENSE_ACCESSORIESCATEGORY_${getTransformedLocale(
+              item.accessoryCategory
+            )}`
+          )}(${item.count ? item.count : "0"})`;
         })
         .reduce((pre, cur) => {
           return pre.concat(", " + cur);
@@ -236,35 +244,35 @@ export const loadReceiptData = async (consumerCode, tenant) => {
       value: tenant
     },
     {
-      key: "consumerCode",
+      key: "consumerCodes",
       value: consumerCode
     }
   ];
   let response = await getReceiptData(queryObject);
 
-  if (response && response.Receipt && response.Receipt.length > 0) {
+  if (response && response.Payments && response.Payments.length > 0) {
     data.receiptNumber = nullToNa(
-      get(response, "Receipt[0].Bill[0].billDetails[0].receiptNumber", "NA")
+      get(response, "Payments[0].paymentDetails[0].receiptNumber", "NA")
     );
     data.amountPaid = get(
       response,
-      "Receipt[0].Bill[0].billDetails[0].amountPaid",
+      "Payments[0].paymentDetails[0].totalAmountPaid",
       0
     );
     data.totalAmount = get(
       response,
-      "Receipt[0].Bill[0].billDetails[0].totalAmount",
+      "Payments[0].paymentDetails[0].totalDue",
       0
     );
     data.amountDue = data.totalAmount - data.amountPaid;
     data.paymentMode = nullToNa(
-      get(response, "Receipt[0].instrument.instrumentType.name", "NA")
+      get(response, "Payments[0].paymentMode", "NA")
     );
     data.transactionNumber = nullToNa(
-      get(response, "Receipt[0].instrument.transactionNumber", "NA")
+      get(response, "Payments[0].transactionNumber", "NA")
     );
-    data.bankName = get(response, "Receipt[0].instrument.bank.name", "NA");
-    data.branchName = get(response, "Receipt[0].instrument.branchName", null);
+    data.bankName = get(response, "Payments[0].bankName", "NA");
+    data.branchName = get(response, "Payments[0].branchName", null);
     data.bankAndBranch = nullToNa(
       data.bankName && data.branchName
         ? data.bankName + ", " + data.branchName
@@ -272,25 +280,25 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     );
     data.paymentDate = nullToNa(
       epochToDate(
-        get(response, "Receipt[0].Bill[0].billDetails[0].receiptDate", 0)
+        get(response, "Payments[0].transactionDate", 0)
       )
     );
     data.g8ReceiptNo = nullToNa(
       get(
         response,
-        "Receipt[0].Bill[0].billDetails[0].manualReceiptNumber",
+        "Payments[0].paymentDetails[0].manualReceiptNumber",
         "NA"
       )
     );
     data.g8ReceiptDate = nullToNa(
       epochToDate(
-        get(response, "Receipt[0].Bill[0].billDetails[0].manualReceiptDate", 0)
+        get(response, "Payments[0].paymentDetails[0].manualReceiptDate", 0)
       )
     );
     /** START TL Fee, Adhoc Penalty/Rebate Calculation */
     var tlAdhocPenalty = 0,
       tlAdhocRebate = 0;
-    response.Receipt[0].Bill[0].billDetails[0].billAccountDetails.map(item => {
+    response.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails.map(item => {
       let desc = item.taxHeadCode ? item.taxHeadCode : "";
       if (desc === "TL_TAX") {
         data.tlFee = item.amount;
@@ -348,10 +356,7 @@ export const loadMdmsData = async tenantid => {
       .toUpperCase()
       .replace(/[.]/g, "_")}`;
 
-    data.corporationName = `${getTranslatedLabel(ulbGrade, localizationLabels)} ${getTranslatedLabel(
-      cityKey,
-      localizationLabels
-    ).toUpperCase()} `;
+    data.corporationName = `${getTranslatedLabel(ulbGrade, localizationLabels)} ${getTranslatedLabel(cityKey,localizationLabels).toUpperCase()}`;
 
     /** END */
     data.corporationAddress = get(ulbData, "address", "NA");
@@ -372,7 +377,7 @@ export const loadUserNameData = async uuid => {
   if (response && response.user && response.user.length > 0) {
     data.auditorName = get(response, "user[0].name", "NA");
   }
-  data.Disclaimer=getMessageFromLocalization("TL_RECEIPT_FOOTER_1");
+  data.Disclaimer = getMessageFromLocalization("TL_RECEIPT_FOOTER_1");
   store.dispatch(prepareFinalObject("userDataForReceipt", data));
 };
 

@@ -1,6 +1,7 @@
 import { prepareFormData, getTenantForLatLng } from "egov-ui-kit/utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
+import get from "lodash/get";
 
 const updateComplaintStatus = (state, form) => {
   const formData = prepareFormData(form);
@@ -80,7 +81,6 @@ const transformer = (formKey, form = {}, state = {}) => {
       const { previousRoute } = state.app;
       const { fields: otpFields } = form;
       let fields;
-      debugger;
       if (previousRoute.endsWith("register")) {
         fields = state.form["register"].fields;
         fields = {
@@ -114,6 +114,17 @@ const transformer = (formKey, form = {}, state = {}) => {
             value: fields.phone.value,
           },
         };
+      } else if (previousRoute.indexOf("smsLink=true") > 0) {	
+        fields = {	
+          password: {	
+            jsonPath: "login.password",	
+            value: otpFields.otp.value,	
+          },	
+          username: {	
+            jsonPath: "login.username",	
+            value: otpFields.otp.phone,	
+          },	
+        };
       }
       return prepareFormData({ ...form, fields });
     },
@@ -128,8 +139,13 @@ const transformer = (formKey, form = {}, state = {}) => {
     },
     employeeChangePassword: () => {
       const formData = prepareFormData(form);
+      const { auth } = state;
+      const username = get(auth, "userInfo.userName");
+      const type = process.env.REACT_APP_NAME === "Citizen" ? "CITIZEN" : "EMPLOYEE";
       const tenantId = getTenantId();
       formData.tenantId = tenantId;
+      formData.username = username;
+      formData.type = type;
       return formData;
     },
     complaint: async () => {
@@ -142,9 +158,15 @@ const transformer = (formKey, form = {}, state = {}) => {
       } catch (error) {}
 
       try {
-        const { latitude, longitude } = form.fields;
-        const tenantId = await getTenantForLatLng(latitude.value, longitude.value);
-        formData.services[0].tenantId = tenantId;
+
+        const { latitude={}, longitude={} } = form.fields;
+        if (latitude.value && longitude.value) {
+          const tenantId = await getTenantForLatLng(latitude.value, longitude.value);
+          formData.services[0].tenantId = tenantId;
+        }
+        else {
+          formData.services[0].tenantId =get(formData,"services.0.addressDetail.city");
+        }
       } catch (error) {
         throw new Error(error.message);
       }

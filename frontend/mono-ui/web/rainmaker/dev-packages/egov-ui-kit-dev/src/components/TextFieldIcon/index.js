@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+import SearchIcon from "material-ui/svg-icons/action/search";
+import { Hidden } from '@material-ui/core';
 // can we pull the existing textfield
 import Label from "../../utils/translationNode";
 import TextField from "../TextField";
-import SearchIcon from "material-ui/svg-icons/action/search";
 
 const containerStyle = {
   position: "relative",
@@ -24,6 +25,7 @@ const getStyles = (iconPosition, textFieldProps) => {
     bottom: 0,
     top: 0,
     margin: "auto",
+    cursor: "pointer"
   };
   iconStyle[iconPosition === "before" ? "left" : "right"] = 0;
   textFieldStyle["textIndent"] = iconPosition === "before" ? 40 : 0;
@@ -60,7 +62,12 @@ const TextFieldIcon = ({
     <div onClick={onClick} style={containerStyle}>
       {text ? (
         <div onClick={onIconClick} style={{ cursor: "pointer" }}>
+          <Hidden only={['sm', 'lg','xl','md']}>
+          <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle }} />
+          </Hidden>
+          <Hidden only='xs'>
           <Label className="textfield-text" label={text} labelStyle={{ ...style.iconStyle, ...iconStyle, top: 36 }} />
+          </Hidden>
         </div>
       ) : (
         <TargetIcon onClick={onIconClick} style={{ ...style.iconStyle, ...iconStyle }} />

@@ -87,6 +87,11 @@ span[class^="MuiFormLabel-asterisk"] {
 .search-preview button[aria-label="Remove"] {
   display: none;
 }
+
+.common-header-cont {
+  display: none;
+}
+
 /* div[class^="MuiGrid-item"]   {
     padding-right: 80px
 } */
@@ -119,10 +124,16 @@ span[class^="MuiFormLabel-asterisk"] {
     position: fixed;
     bottom: 0;
     z-index: 1;
-    left: 0;
+    /* left: 35px; */
     width: 100%;
     overflow: inherit !important;
   }
+  .apply-wizard-footer { button {
+     /* min-width: 360px !important; */
+     margin-left: 0 !important;
+     margin-right: 0 !important;
+  }}
+
 }
 @media only screen and (min-width: 768px) {
   .common-div-css {

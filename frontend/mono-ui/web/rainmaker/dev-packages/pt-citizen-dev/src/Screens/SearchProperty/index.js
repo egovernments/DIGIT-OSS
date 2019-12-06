@@ -15,12 +15,14 @@ import PropertyTable from "./components/PropertyTable";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import { displayFormErrors, resetForm } from "egov-ui-kit/redux/form/actions";
+import {fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { connect } from "react-redux";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import get from "lodash/get";
 import {
   getUserInfo,
-  localStorageGet
+  localStorageGet,
+  getLocale
 } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
@@ -50,15 +52,19 @@ class SearchProperty extends Component {
     }
     this.setState({ searchResult: [] });
   };
-
+  onResetClick = () => {
+    const { resetForm } = this.props;
+    resetForm("searchProperty");
+  };
   closeYearRangeDialogue = () => {
     this.setState({ dialogueOpen: false });
   };
 
   onSearchClick = (form, formKey) => {
-    const { propertiesFound } = this.props;
-    const { city, ids, oldpropertyids, mobileNumber } = form.fields || {};
+    const { propertiesFound,fetchLocalizationLabel } = this.props;
+    const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
     const tableData = this.extractTableData(propertiesFound);
+    fetchLocalizationLabel(getLocale(), city.value, city.value);
 
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
@@ -80,10 +86,7 @@ class SearchProperty extends Component {
         queryParams.push({ key: "ids", value: ids.value });
       }
       if (oldpropertyids.value) {
-        queryParams.push({
-          key: "oldpropertyids",
-          value: oldpropertyids.value
-        });
+        queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
       }
       if (mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
@@ -96,12 +99,42 @@ class SearchProperty extends Component {
     }
   };
 
+  getLink = (userType, history, id, tenantId) => {
+    return (
+      <a
+        style={{
+          height: 20,
+          lineHeight: "auto",
+          minWidth: "inherit",
+          cursor: "pointer",
+          textDecoration: "underline"
+        }}
+        onClick={
+          userType === "CITIZEN"
+            ? e => {
+              history.push(
+                `/property-tax/my-properties/property/${id}/${tenantId}?isMutationApplication=true`
+              );
+            }
+            : e => {
+              history.push(
+                `/property-tax/property/${id}/${tenantId}`
+              );
+            }
+        }
+      >
+        {id}
+      </a>
+    );
+  }
+
   extractTableData = properties => {
     const { history } = this.props;
     const userType = JSON.parse(getUserInfo()).type;
     const tableData = properties.reduce((tableData, property, index) => {
       let {
         propertyId,
+        status,
         oldPropertyId,
         address,
         propertyDetails,
@@ -110,50 +143,52 @@ class SearchProperty extends Component {
       const { doorNo, buildingName, street, locality } = address;
       let displayAddress = doorNo
         ? `${doorNo ? doorNo + "," : ""}` +
-          `${buildingName ? buildingName + "," : ""}` +
-          `${street ? street + "," : ""}`
+        `${buildingName ? buildingName + "," : ""}` +
+        `${street ? street + "," : ""}`
         : `${locality.name ? locality.name : ""}`;
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
+      const guardianName = latestAssessment.owners[0].fatherOrHusbandName;
       let assessmentNo = latestAssessment.assessmentNumber;
       const uuid = get(latestAssessment, "citizenInfo.uuid");
-
       let button = (
-        <Button
+        <a
+          style={{
+            height: 20,
+            lineHeight: "auto",
+            minWidth: "inherit",
+            cursor: "pointer",
+            textDecoration: "underline",
+            fontWeight: '400',
+            fontSize: "14px",
+            color: 'rgba(0, 0, 0, 0.87)',
+            lineHeight: '30px'
+          }}
           onClick={
             userType === "CITIZEN"
-              ? () => {
-                  this.setState({
-                    dialogueOpen: true,
-                    urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`
-                  });
-                }
+              ? e => {
+                history.push(
+                  `/property-tax/my-properties/property/${propertyId}/${tenantId}`
+                );
+              }
               : e => {
-                  history.push(
-                    `/property-tax/property/${propertyId}/${tenantId}`
-                  );
-                }
+                history.push(
+                  `/property-tax/property/${propertyId}/${tenantId}`
+                );
+              }
           }
-          label={
-            <Label
-              buttonLabel={true}
-              label="PT_PAYMENT_ASSESS_AND_PAY"
-              fontSize="12px"
-            />
-          }
-          value={propertyId}
-          primary={true}
-          className="pt-search-table-action"
-          style={{ height: 20, lineHeight: "auto", minWidth: "inherit" }}
-        />
+        >
+          {propertyId}
+        </a>
       );
       let item = {
         index: index + 1,
+        propertyId: button,
         name: name,
-        propertyId: propertyId,
+        guardianName: guardianName,
         oldPropertyId: oldPropertyId,
         address: displayAddress,
-        action: button
+        status: status
       };
       tableData.push(item);
       return tableData;
@@ -169,6 +204,7 @@ class SearchProperty extends Component {
     this.setState({
       dialogueOpen: true
     });
+
   };
 
   render() {
@@ -177,7 +213,7 @@ class SearchProperty extends Component {
     const { closeYearRangeDialogue } = this;
     let urlArray = [];
     const { pathname } = location;
-    // const tableData = this.extractTableData(propertiesFound);
+    const tableData = this.extractTableData(propertiesFound);
     const { searchResult } = this.state;
     if (urls.length == 0 && localStorageGet("path") === pathname) {
       urlArray = JSON.parse(localStorageGet("breadCrumbObject"));
@@ -188,66 +224,95 @@ class SearchProperty extends Component {
           url={urls.length > 0 ? urls : urlArray}
           history={history}
         /> */}
+        {/* <br /> */}
         <div className="rainmaker-displayInline inner-header-style">
           <Label
-            label="PT_SEARCH_PROPERTY"
+            label="PT_PROPERTY_TAX"
             dark={true}
-            fontSize={16}
-            fontWeight={900}
+            fontSize={18}
+            fontWeight={500}
             bold={true}
+            labelStyle={{ marginTop: "20px" }}
           />
           <div
-            className="rainmaker-displayInline"
-            onClick={this.onAddButtonClick}
-          >
-            <Icon
-              action="content"
-              name="add"
-              color="#fe7a51"
-              style={{ height: 22 }}
+            className="rainmaker-displayInline"  >
+            <Button
+              Icon={
+                <Icon
+                  action="content"
+                  name="add"
+                  color="#fe7a51"
+                  style={{ height: 22 }}
+                />
+              }
+              label={
+                <Label
+                  label="PT_ADD_ASSESS_PROPERTY"
+                  buttonLabel={true}
+                  fontSize="16px"
+                  color="white"
+                />
+              }
+              labelStyle={{ fontSize: 12 }}
+              className="new-property-assessment"
+              onClick={() => this.onAddButtonClick()}
+              primary={true}
+              fullWidth={true}
             />
-            <Label label="ADD NEW PROPERTY" color="#fe7a51" />
           </div>
         </div>
 
         <PropertySearchFormHOC
           history={this.props.history}
           onSearchClick={this.onSearchClick}
+          onResetClick={this.onResetClick}
         />
         <Hidden xsDown>
-          {searchResult && searchResult.length > 0 && showTable ? (
+          {/* {showTable && tableData.length === 0 && loading==false&&  */}
+          {tableData && tableData.length > 0 && showTable ? (
             <PropertyTable
-              tableData={searchResult}
+              sortOnObject="propertyId"
+              tableData={tableData}
               onActionClick={this.onActionClick}
             />
           ) : null}
         </Hidden>
         <Hidden smUp>
-          {searchResult && searchResult.length > 0 && (
+          {tableData && tableData.length > 0 && showTable && (
+
             <Label
-              label="PT_SEARCH_RESULTS"
-              dynamicArray={[searchResult.length]}
+              secondaryText={'(' + tableData.length + ')'}
+              label="PT_SEARCH_PROPERTY_TABLE_HEADERS"
+              className="property-search-table-heading"
               fontSize={16}
-              color="rgba(0, 0, 0, 0.87)"
+              labelStyle={{
+                fontFamily: "Roboto",
+                fontSize: "16px",
+                fontWeight: 500,
+                letterSpacing: "0px",
+                textAlign: "left",
+                color: "#484848"
+              }}
             />
           )}
           <SingleProperty
-            data={searchResult}
+            data={tableData}
             action={"PT_PAYMENT_ACCESSANDPAY"}
             onActionClick={this.onAddButtonClick}
           />
         </Hidden>
-        {showTable && searchResult.length === 0 && (
+
+        {showTable && tableData.length === 0 && loading == false && (
           <div className="search-no-property-found">
             <div className="no-search-text">
               <Label label="PT_NO_PROPERTY_RECORD" />
             </div>
             <div className="new-assess-btn">
               <Button
-                label={"New Property Assessment"}
+                label={<Label label="PT_ADD_ASSESS_PROPERTY" buttonLabel={true} />}
                 labelStyle={{ fontSize: 12 }}
                 className="new-property-assessment"
-                onClick={() => history.push("/property-tax/assess-pay")}
+                onClick={() => this.onAddButtonClick()}
                 primary={true}
                 fullWidth={true}
               />
@@ -280,7 +345,8 @@ const mapDispatchToProps = dispatch => {
     fetchProperties: queryObject => dispatch(fetchProperties(queryObject)),
     toggleSnackbarAndSetText: (open, message, error) =>
       dispatch(toggleSnackbarAndSetText(open, message, error)),
-    resetForm: formKey => dispatch(resetForm(formKey))
+    resetForm: formKey => dispatch(resetForm(formKey)),
+    fetchLocalizationLabel : (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
   };
 };
 

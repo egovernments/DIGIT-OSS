@@ -1,7 +1,10 @@
 import React from "react";
 import { Card, Icon } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
+import ReadMore from "../ReadMore";
 import Grid from "@material-ui/core/Grid";
+import Hidden from "@material-ui/core/Hidden";
+import { DownloadFileContainer } from "egov-ui-framework/ui-containers";
 import "./index.css";
 
 const pStyle = {
@@ -23,7 +26,7 @@ const divStyle = {
 
 const Notifications = ({ notifications = [], history }) => {
   const renderUpdate = (notification, index) => {
-    const { description, buttons, address, name, SLA, type, id, tenantId, eventDate } = notification;
+    const { description, buttons, address, name, SLA, type, id, tenantId, eventDate,eventToDate,documents } = notification;
     return (
       <Card
         className="home-notification"
@@ -36,10 +39,10 @@ const Notifications = ({ notifications = [], history }) => {
             {type === "EVENTSONGROUND" && (
               <Grid item xs={4} direction="column" style={{ maxWidth: "100px", maxHeight: "100px", minWidth: "100px", minHeight: "100px" }}>
                 <div style={divStyle}>
-                  <Label label={eventDate.split(":")[0]} color="#fff" fontSize="17px" />
+                  <Label label={(eventDate.split(":")[0]===eventToDate.split(":")[0])? eventDate.split(":")[0]:eventDate.split(":")[0]+"-"+eventToDate.split(":")[0]} color="#fff" fontSize="17px" />
                 </div>
                 <div style={pStyle}>
-                  <Label label={eventDate.split(":")[1]} color="#FC8019" fontSize="34px" />
+                  <Label label={(eventDate.split(":")[1]===eventToDate.split(":")[1]&&eventDate.split(":")[0]===eventToDate.split(":")[0])?eventDate.split(":")[1]: eventDate.split(":")[1]+"-"+eventToDate.split(":")[1]} color="#FC8019" fontSize="34px" />
                 </div>
               </Grid>
             )}
@@ -55,13 +58,28 @@ const Notifications = ({ notifications = [], history }) => {
               <Label fontSize={16} color="rgba(0, 0, 0, 0.87)" label={name} containerStyle={{ marginBottom: 10 }} />
 
               {type != "EVENTSONGROUND" && (
-                <Label
-                  fontSize={14}
-                  color="rgba(0, 0, 0, 0.60)"
-                  label={description}
-                  labelStyle={{ width: "100%", wordWrap: "break-word" }}
-                  containerStyle={{ marginBottom: 10 }}
-                />
+                <div>
+                  <Hidden xsDown>
+                    <Label
+                      fontSize={14}
+                      color="rgba(0, 0, 0, 0.60)"
+                      label={description}
+                      labelStyle={{ width: "100%", wordWrap: "break-word" }}
+                      containerStyle={{ marginBottom: 10 }}
+                    />
+                  </Hidden>
+                  <Hidden smUp>
+                    <ReadMore
+                      className="read-more-content"
+                      charLimit={90}
+                      readMoreText="CS_READ_MORE"
+                      readLessText="CS_READ_LESS"
+                      containerStyle={{ marginBottom: 10 }}
+                    >
+                      {description}
+                    </ReadMore>
+                  </Hidden>
+                </div>
               )}
               {address && (
                 <div className="rainmaker-displayInline">
@@ -76,7 +94,12 @@ const Notifications = ({ notifications = [], history }) => {
                     }}
                     viewBox="10 0 24 24"
                   />
-                  <Label fontSize={14} color="rgba(0, 0, 0, 0.60)" label={address} containerStyle={{ marginLeft: 2, marginBottom: 10 }} />
+                  <Label
+                    fontSize={14}
+                    color="rgba(0, 0, 0, 0.60)"
+                    label={address}
+                    containerStyle={{ marginLeft: -7, marginBottom: 10, width: "90%" }}
+                  />
                 </div>
               )}
 
@@ -101,7 +124,7 @@ const Notifications = ({ notifications = [], history }) => {
                   })}
                 </div>
               )}
-
+              {documents && <DownloadFileContainer data={documents} className="review-documents" backgroundGrey={true} />}
               {type === "EVENTSONGROUND" ? (
                 <div className="rainmaker-displayInline">
                   <Icon name="access-time" action="device" viewBox="10 0 24 24" style={{ height: "20px", width: "35px" }} />
@@ -117,7 +140,10 @@ const Notifications = ({ notifications = [], history }) => {
     );
   };
 
-  return <div>{notifications.map((notification, index) => renderUpdate(notification, index))}</div>;
+  return notifications && notifications.length > 0 && <div>{notifications.map((notification, index) => renderUpdate(notification, index))}</div>;
+  //  : (
+  //   <div className="no-assessment-message-cont"><Label label="EMPTY_NOTIFICATIONS" /></div>
+  // );
 };
 
 export default Notifications;

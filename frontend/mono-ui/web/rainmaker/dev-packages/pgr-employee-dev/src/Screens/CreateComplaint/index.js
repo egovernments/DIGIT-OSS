@@ -17,7 +17,7 @@ class AddComplaints extends Component {
   // componentWillReceiveProps = (nextProps) => {
   //   const { form, handleFieldChange } = this.props;
   //    if (form) {
-  //const tenantId = JSON.parse(getUserInfo()).tenantId;
+  //const tenantId = getTenantId();
   //   // if (nextProps.currentLocation && nextProps.currentLocation.address) {
   //   //   const { lat, lng, address } = nextProps.currentLocation;
   //   //   handleFieldChange("complaint", "latitude", lat);

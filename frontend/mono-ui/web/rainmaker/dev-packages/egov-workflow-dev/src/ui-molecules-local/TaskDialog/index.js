@@ -57,27 +57,6 @@ const TaskDialog = props => {
                     <CloseIcon />
                   </Grid>
                 </Grid>
-                {/* <Grid item sm={10} style={{ margin: "10px 0 0 10px" }}>
-                  <Stepper orientation="vertical">
-                    {history &&
-                      history.map((item, index) => {
-                        return (
-                          <div>
-                            <Step key={index}>
-                              <StepLabel />
-                              <StepContent>
-                                <TaskStatusComponents
-                                  currentObj={item}
-                                  index={index}
-                                />
-                                <Divider className={classes.root} />
-                              </StepContent>
-                            </Step>
-                          </div>
-                        );
-                      })}
-                  </Stepper>
-                </Grid> */}
                 <VerticalStepper content={history} />
               </Grid>
             }
