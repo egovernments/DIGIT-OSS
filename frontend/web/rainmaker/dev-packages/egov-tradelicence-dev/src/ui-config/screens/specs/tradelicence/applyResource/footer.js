@@ -925,10 +925,6 @@ export const downloadPrintContainer = (
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
       break;
-    case "pending_approval":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
-      break;
     case "CANCELLED":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
