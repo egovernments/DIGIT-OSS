@@ -88,9 +88,9 @@ public class PaymentEnricher {
 				}
 				else {
 					bill.setPaidBy(payment.getPaidBy());
-					bill.setPayerName(payment.getPayerName());
-					bill.setMobileNumber(payment.getMobileNumber());
-					bill.setPayerAddress(payment.getPayerAddress());
+					payment.setPayerName(bill.getPayerName());
+					payment.setPayerAddress(bill.getPayerAddress());
+					payment.setMobileNumber(bill.getMobileNumber());
 					try{
 						List<String> collectionsModeNotAllowed = (List<String>)billingServiceMaster.get(MASTER_COLLECTIONMODESNOTALLOWED_KEY);
 						bill.setIsAdvanceAllowed(((Boolean)billingServiceMaster.get(MASTER_ISADVANCEALLOWED_KEY)));

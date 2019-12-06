@@ -45,7 +45,7 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
 
             String id = rs.getString("py_id");
 
-            if(idToPaymentMap.get(id)!=null)
+            if(idToPaymentMap.get(id) != null)
                 currentPayment = idToPaymentMap.get(id);
             else{
 
@@ -136,7 +136,7 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
             }
         }
 
-        if(paymentDetail==null){
+        if(paymentDetail == null){
 
             String id = rs.getString("pyd_id");
             String tenantId = rs.getString("pyd_tenantId");
@@ -261,11 +261,7 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
 
 
     }
-
-
-
-
-
+    
 
     private JsonNode getJsonValue(PGobject pGobject){
         try {

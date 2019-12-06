@@ -147,11 +147,29 @@ public class PaymentQueryBuilder {
     public static final String UPDATE_BILLDETAIL_SQL = "UPDATE egcl_billdetial SET additionaldetails=:additionaldetails, voucherheader=:voucherheader," +
             " manualreceiptnumber=:manualreceiptnumber, manualreceiptdate=:manualreceiptdate, billdescription=:billdescription,displaymessage=:displaymessage," +
             "createdby=:createdby, createdtime=:createdtime, lastmodifiedby=:lastmodifiedby,lastmodifiedtime=:lastmodifiedtime WHERE id=:id ";
+    
+    
+	public static final String BILL_BASE_QUERY = "SELECT b.id AS b_id, b.tenantid AS b_tenantid, b.iscancelled AS b_iscancelled, b.businessservice AS b_businessservice, "
+			+ "b.billnumber AS b_billnumber, b.billdate AS b_billdate, b.consumercode AS b_consumercode, b.createdby AS b_createdby, b.status as b_status, b.minimumamounttobepaid AS b_minimumamounttobepaid, "
+			+ "b.totalamount AS b_totalamount, b.partpaymentallowed AS b_partpaymentallowed, b.isadvanceallowed as b_isadvanceallowed, "
+			+ "b.collectionmodesnotallowed AS b_collectionmodesnotallowed, b.createdtime AS b_createdtime, b.lastmodifiedby AS b_lastmodifiedby, "
+			+ "b.lastmodifiedtime AS b_lastmodifiedtime, bd.id AS bd_id, bd.billid AS bd_billid, bd.tenantid AS bd_tenantid, bd.demandid, "
+			+ "bd.fromperiod, bd.toperiod, bd.billdescription AS bd_billdescription, bd.displaymessage AS bd_displaymessage, bd.amount AS bd_amount, bd.amountpaid AS bd_amountpaid, "
+			+ "bd.callbackforapportioning AS bd_callbackforapportioning, bd.expirydate AS bd_expirydate, ad.id AS ad_id, ad.tenantid AS ad_tenantid, "
+			+ "ad.billdetailid AS ad_billdetailid, ad.order AS ad_order, ad.amount AS ad_amount, ad.adjustedamount AS ad_adjustedamount, "
+			+ "ad.taxheadcode AS ad_taxheadcode, ad.demanddetailid, ad.isactualdemand AS ad_isactualdemand, b.additionaldetails as b_additionaldetails,  "
+			+ "bd.additionaldetails as bd_additionaldetails,  ad.additionaldetails as ad_additionaldetails "
+			+ "FROM egcl_bill b LEFT OUTER JOIN egcl_billdetial bd ON b.id = bd.billid AND b.tenantid = bd.tenantid "
+			+ "LEFT OUTER JOIN egcl_billaccountdetail ad ON bd.id = ad.billdetailid AND bd.tenantid = ad.tenantid "
+			+ "WHERE b.id IN (:id);"; 
 
 
 
-
-
+	public static String getBillQuery() {
+		return BILL_BASE_QUERY;
+	}
+	
+	
     public static MapSqlParameterSource getParametersForPaymentCreate(Payment payment) {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 

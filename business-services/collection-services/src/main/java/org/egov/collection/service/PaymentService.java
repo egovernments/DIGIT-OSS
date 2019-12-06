@@ -123,7 +123,15 @@ public class PaymentService {
     }
 
 
-
+    /**
+     * If Citizen is paying, the id of the logged in user becomes payer id.
+     * If Employee is paying, 
+     * 1. the id of the owner of the bill will be attached as payer id.
+     * 2. In case the bill is for a misc payment, payer id is empty.
+     * 
+     * @param paymentRequest
+     * @return
+     */
     public String createUser(PaymentRequest paymentRequest) {
         String id = null;
         if(paymentRequest.getRequestInfo().getUserInfo().getType().equals("CITIZEN")) {

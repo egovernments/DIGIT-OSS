@@ -5,18 +5,26 @@ import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentSearchCriteria;
 import org.egov.collection.repository.querybuilder.PaymentQueryBuilder;
+import org.egov.collection.repository.rowmapper.BillRowMapper;
 import org.egov.collection.repository.rowmapper.PaymentRowMapper;
+import org.egov.collection.web.contract.Bill;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.security.Identity;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.*;
 
@@ -30,12 +38,16 @@ public class PaymentRepository {
     private PaymentQueryBuilder paymentQueryBuilder;
 
     private PaymentRowMapper paymentRowMapper;
+    
+    private BillRowMapper billRowMapper;
 
     @Autowired
-    public PaymentRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, PaymentQueryBuilder paymentQueryBuilder, PaymentRowMapper paymentRowMapper) {
+    public PaymentRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate, PaymentQueryBuilder paymentQueryBuilder, 
+    		PaymentRowMapper paymentRowMapper, BillRowMapper billRowMapper) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
         this.paymentQueryBuilder = paymentQueryBuilder;
         this.paymentRowMapper = paymentRowMapper;
+        this.billRowMapper = billRowMapper;
     }
 
 
@@ -80,7 +92,36 @@ public class PaymentRepository {
         log.info("Query: "+query);
         log.info("preparedStatementValues: "+preparedStatementValues);
         List<Payment> payments = namedParameterJdbcTemplate.query(query, preparedStatementValues,paymentRowMapper);
+        if(!CollectionUtils.isEmpty(payments)) {
+            Set<String> billIds = new HashSet<>();
+            for(Payment payment : payments) {
+            	billIds.addAll(payment.getPaymentDetails().stream().map(detail -> detail.getBillId()).collect(Collectors.toSet()));
+            }
+            Map<String, Bill> billMap = getBills(billIds);
+            
+            for(Payment payment : payments) {
+            	payment.getPaymentDetails().forEach(detail -> {
+            		detail.setBill(billMap.get(detail.getBill()));
+            	});
+            }
+        }
+
         return payments;
+    }
+    
+    private Map<String, Bill> getBills(Set<String> ids){
+    	Map<String, Bill> mapOfIdAndBills = new HashMap<>();
+        Map<String, Object> preparedStatementValues = new HashMap<>();
+        preparedStatementValues.put("id", ids);
+        String query = paymentQueryBuilder.getBillQuery();
+        log.info("Bill Query: "+ query);
+        List<Bill> bills = namedParameterJdbcTemplate.query(query, preparedStatementValues, billRowMapper);
+        bills.forEach(bill -> {
+        	mapOfIdAndBills.put(bill.getId(), bill);
+        });
+        
+        return mapOfIdAndBills;
+
     }
 
 
