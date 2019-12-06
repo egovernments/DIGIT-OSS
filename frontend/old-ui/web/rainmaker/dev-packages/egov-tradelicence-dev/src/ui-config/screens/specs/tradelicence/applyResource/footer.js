@@ -918,13 +918,11 @@ export const downloadPrintContainer = (
       ];
       break;
     case "APPLIED":
+    case "FIELDINSPECTION":
+    case "PENDINGAPPROVAL":
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
-      break;
-    case "pending_approval":
-      downloadMenu = [receiptDownloadObject, applicationDownloadObject];
-      printMenu = [receiptPrintObject, applicationPrintObject];
       break;
     case "CANCELLED":
       downloadMenu = [applicationDownloadObject];
