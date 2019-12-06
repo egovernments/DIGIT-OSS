@@ -72,8 +72,7 @@ serviceMaps:
     - query: UPDATE connection SET property_id=?, applicationNo=?, applicationStatus=?, status=?, connectionNo=?, oldConnectionNo=?, documents_id=? WHERE id=?;
       basePath: $.WaterConnection
       jsonMaps:
-       - jsonPath: $.WaterConnection.id 
-        
+
        - jsonPath: $.WaterConnection.property.propertyId
 
        - jsonPath: $.WaterConnection.applicationNo
