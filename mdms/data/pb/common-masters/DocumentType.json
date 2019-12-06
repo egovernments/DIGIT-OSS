@@ -3,11 +3,19 @@
   "moduleName": "common-masters",
   "DocumentType": [
     {
-      "code": "OWNERIDPROOF",
+      "code": "OWNERIDENTITYPROOF.AADHAAR",
       "active": true
     },
     {
-      "code": "OWNERSHIPPROOF",
+      "code": "OWNERIDENTITYPROOF.VOTERID",
+      "active": true
+    },
+    {
+      "code": "OWNERIDENTITYPROOF.DRIVINGLICENSE",
+      "active": true
+    },
+    {
+      "code": "OWNERADDRESSPROOF.ELECTRICITYBILL",
       "active": true
     }
   ]

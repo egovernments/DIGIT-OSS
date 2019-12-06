@@ -145,7 +145,7 @@
       ]
     },
     "DocumentType": {
-      "masterName": "StructureType",
+      "masterName": "DocumentType",
       "moduleDefinition": null,
       "isStateLevel": true,
       "uniqueKeys": [
@@ -845,5 +845,28 @@
         "isStateLevel": true,
         "uniqueKeys": []
       }
+    },
+  "BPA": {
+    "ServiceType": {
+      "masterName": "ServiceType",
+      "isStateLevel": true,
+      "uniqueKeys": [
+        "$.code"
+      ]
+    },
+    "ApplicationType": {
+      "masterName": "ApplicationType",
+      "isStateLevel": true,
+      "uniqueKeys": [
+        "$.code"
+      ]
+    },
+    "DocTypeMapping": {
+      "masterName": "DocTypeMapping",
+      "isStateLevel": true,
+      "uniqueKeys": [
+        "$.code"
+      ]
     }
+  }
 }
