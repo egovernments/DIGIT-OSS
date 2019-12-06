@@ -1,5 +1,6 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
+import "./index.css";
 
 const getCommonApplyFooter = children => {
   return {
@@ -24,11 +25,13 @@ const getRedirectionURL = () => {
 export const gotoHomeFooter = getCommonApplyFooter({
   gotoHome: {
     componentPath: "Button",
+    
     props: {
       variant: "outlined",
+      className:"home-footer",
       color: "primary",
       style: {
-        minWidth: "200px",
+    //    minWidth: "200px",
         height: "48px",
         marginRight: "16px"
       }

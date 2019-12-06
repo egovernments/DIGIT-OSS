@@ -11,16 +11,22 @@ const columnData = [
     label: "PT_SEARCHPROPERTY_TABEL_SNO"
   },
   {
+    id: "propertyId",
+    numeric: false,
+    disablePadding: false,
+    label: "PT_SEARCHPROPERTY_TABEL_PTUID"
+  },
+  {
     id: "name",
     numeric: false,
     disablePadding: true,
     label: "PT_SEARCHPROPERTY_TABEL_OWNERNAME"
   },
   {
-    id: "propertyId",
+    id: "guardianName",
     numeric: false,
-    disablePadding: false,
-    label: "PT_SEARCHPROPERTY_TABEL_PTUID"
+    disablePadding: true,
+    label: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"
   },
   {
     id: "oldPropertyId",
@@ -35,32 +41,35 @@ const columnData = [
     label: "PT_SEARCHPROPERTY_TABEL_ADDRESS"
   },
   {
-    id: "action",
+    id: "status",
     numeric: false,
     disablePadding: false,
-    label: "PT_SEARCHPROPERTY_TABEL_ACTION"
+    label: "PT_SEARCHPROPERTY_TABEL_STATUS"
   }
 ];
 
-const PropertyTable = ({ tableData, onActionClick }) => {
+const PropertyTable = ({ tableData, onActionClick, sortOnObject }) => {
   return (
     <div className="form-without-button-cont-generic">
       <Card
         textChildren={
           <div>
             <Label
+            secondaryText={'('+tableData.length+')'}
               label="PT_SEARCH_PROPERTY_TABLE_HEADERS"
               className="property-search-table-heading"
+              fontSize={16}
               labelStyle={{
                 fontFamily: "Roboto",
                 fontSize: "16px",
                 fontWeight: 500,
                 letterSpacing: "0px",
-                textAlign: "center",
+                textAlign: "left",
                 color: "#484848"
               }}
             />
             <TableUi
+              sortOnObject={sortOnObject}
               rowCheckBox={false}
               orderby={"index"}
               columnData={columnData}

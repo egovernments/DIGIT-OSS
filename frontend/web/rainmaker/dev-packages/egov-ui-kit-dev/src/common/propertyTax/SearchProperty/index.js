@@ -1,19 +1,22 @@
 import React, { Component } from "react";
+import Hidden from "@material-ui/core/Hidden";
 import formHoc from "egov-ui-kit/hocs/form";
 import Label from "egov-ui-kit/utils/translationNode";
 import Screen from "egov-ui-kit/common/common/Screen";
+import SingleProperty from "../SingleProperty";
 import YearDialogue from "../YearDialogue";
-import { Button, BreadCrumbs } from "egov-ui-kit/components";
+import { Button, BreadCrumbs, Icon } from "egov-ui-kit/components";
 import { addBreadCrumbs, toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
 import SearchPropertyForm from "./components/SearchPropertyForm";
 import PropertyTable from "./components/PropertyTable";
 import { validateForm } from "egov-ui-kit/redux/form/utils";
-import { displayFormErrors } from "egov-ui-kit/redux/form/actions";
+import {fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions"
+import { displayFormErrors, resetForm } from "egov-ui-kit/redux/form/actions";
 import { connect } from "react-redux";
 import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
 import { getLatestPropertyDetails } from "egov-ui-kit/utils/PTCommon";
 import get from "lodash/get";
-import { getUserInfo, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
+import { getUserInfo, localStorageGet,getLocale } from "egov-ui-kit/utils/localStorageUtils";
 
 import "./index.css";
 
@@ -33,15 +36,21 @@ class SearchProperty extends Component {
   }
 
   componentDidMount = () => {
-    const { location, addBreadCrumbs, title } = this.props;
+    const { location, addBreadCrumbs, title, resetForm } = this.props;
     const pathname = location && location.pathname;
     if (userType === "CITIZEN" && !(localStorageGet("path") === pathname)) {
       title && addBreadCrumbs({ title: title, path: window.location.pathname });
     }
+    resetForm("searchProperty");
   };
+  onResetClick = () => {
+    const { resetForm } = this.props;
+    resetForm("searchProperty");
 
+  };
   onSearchClick = (form, formKey) => {
-    const { city, ids, oldpropertyids, mobileNumber } = form.fields || {};
+    const {fetchLocalizationLabel} = this.props
+    const { city, ids, oldpropertyids, mobileNumber, applicationNumber } = form.fields || {};
     if (!validateForm(form)) {
       this.props.displayFormErrors(formKey);
     } else if (!oldpropertyids.value && !ids.value && !mobileNumber.value) {
@@ -52,27 +61,68 @@ class SearchProperty extends Component {
       );
     } else {
       const queryParams = [];
-      if (city.value) {
+      if (city && city.value) {
         queryParams.push({ key: "tenantId", value: city.value });
       }
-      if (ids.value) {
+      if ( ids && ids.value) {
         queryParams.push({ key: "ids", value: ids.value });
       }
-      if (oldpropertyids.value) {
+      if (oldpropertyids && oldpropertyids.value) {
         queryParams.push({ key: "oldpropertyids", value: oldpropertyids.value });
       }
-      if (mobileNumber.value) {
+      if ( mobileNumber && mobileNumber.value) {
         queryParams.push({ key: "mobileNumber", value: mobileNumber.value });
+      }
+      if (applicationNumber && applicationNumber.value) {
+        queryParams.push({ key: "applicationNumber", value: applicationNumber.value });
       }
       this.props.fetchProperties(queryParams);
       this.setState({ showTable: true });
     }
+    fetchLocalizationLabel(getLocale(), city.value, city.value);
   };
+
+  
+
+  getLink = (userType, history, propertyId, tenantId) => {
+    return (
+      <a
+        onClick={
+          userType === "CITIZEN"
+            ? () => {
+              // localStorageSet("draftId", "")
+              this.setState({
+                dialogueOpen: true,
+                urlToAppend: `/property-tax/assessment-form?isReassesment=false&propertyId=${propertyId}&tenantId=${tenantId}`,
+              });
+            }
+            : (e) => {
+              // localStorageSet("draftId", "")
+              history.push(`/property-tax/property/${propertyId}/${tenantId}?isMutationApplication=true`);
+            }
+        }
+        style={{
+          height: 20,
+          lineHeight: "auto",
+          minWidth: "inherit",
+          cursor: "pointer",
+          textDecoration: "underline"
+        }}>
+        {propertyId}
+      </a>);
+  }
 
   extractTableData = (properties) => {
     const { history } = this.props;
     const tableData = properties.reduce((tableData, property, index) => {
-      let { propertyId, oldPropertyId, address, propertyDetails } = property;
+      let {
+        propertyId,
+        status,
+        oldPropertyId,
+        address,
+        propertyDetails,
+        tenantId
+      } = property;
       const { doorNo, buildingName, street, locality } = address;
       let displayAddress = doorNo
         ? `${doorNo ? doorNo + "," : ""}` + `${buildingName ? buildingName + "," : ""}` + `${street ? street + "," : ""}`
@@ -80,41 +130,72 @@ class SearchProperty extends Component {
 
       const latestAssessment = getLatestPropertyDetails(propertyDetails);
       let name = latestAssessment.owners[0].name;
-      let fatherOrHusbandName = latestAssessment.owners[0].fatherOrHusbandName || "";
+      let guardianName = latestAssessment.owners[0].fatherOrHusbandName || "";
       let assessmentNo = latestAssessment.assessmentNumber;
       const uuid = get(latestAssessment, "citizenInfo.uuid");
+      // let button = (
+      //   <Button
+      //     onClick={
+      //       userType === "CITIZEN"
+      //         ? () => {
+      //           // localStorageSet("draftId", "")
+      //           this.setState({
+      //             dialogueOpen: true,
+      //             urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`,
+      //           });
+      //         }
+      //         : (e) => {
+      //           // localStorageSet("draftId", "")
+      //           history.push(`/property-tax/property/${propertyId}/${property.tenantId}`);
+      //         }
+      //     }
+      //     label={
+      //       <Label buttonLabel={true} label={userType === "CITIZEN" ? "PT_PAYMENT_ASSESS_AND_PAY" : "PT_SEARCHPROPERTY_TABLE_VIEW"} fontSize="12px" />
+      //     }
+      //     value={propertyId}
+      //     primary={true}
+      //     style={{ height: 20, lineHeight: "auto", minWidth: "inherit" }}
+      //   />
+      // );
       let button = (
-        <Button
+        <a
           onClick={
             userType === "CITIZEN"
               ? () => {
-                  // localStorageSet("draftId", "")
-                  this.setState({
-                    dialogueOpen: true,
-                    urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=true&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`,
-                  });
-                }
+                // localStorageSet("draftId", "")
+                this.setState({
+                  dialogueOpen: true,
+                  urlToAppend: `/property-tax/assessment-form?assessmentId=${assessmentNo}&isReassesment=false&uuid=${uuid}&propertyId=${propertyId}&tenantId=${tenantId}`,
+                });
+              }
               : (e) => {
-                  // localStorageSet("draftId", "")
-                  history.push(`/property-tax/property/${propertyId}/${property.tenantId}`);
-                }
+                // localStorageSet("draftId", "")
+                history.push(`/property-tax/property/${propertyId}/${property.tenantId}`);
+              }
           }
-          label={
-            <Label buttonLabel={true} label={userType === "CITIZEN" ? "PT_PAYMENT_ASSESS_AND_PAY" : "PT_SEARCHPROPERTY_TABLE_VIEW"} fontSize="12px" />
-          }
-          value={propertyId}
-          primary={true}
-          style={{ height: 20, lineHeight: "auto", minWidth: "inherit" }}
-        />
-      );
+          style={{
+            height: 20,
+            lineHeight: "auto",
+            minWidth: "inherit",
+            cursor: "pointer",
+            textDecoration: "underline",
+            fontWeight: '400',
+            fontSize: "14px",
+            color: 'rgba(0, 0, 0, 0.87)',
+            lineHeight: '30px'
+          }}>
+          {propertyId}
+        </a>);
+
       let item = {
         index: index + 1,
+        propertyId: button,
         name: name,
-        fatherOrHusbandName: fatherOrHusbandName,
-        propertyId: propertyId,
+        guardianName: guardianName,
         oldPropertyId: oldPropertyId,
         address: displayAddress,
-        action: button,
+        status: status
+
       };
       tableData.push(item);
       return tableData;
@@ -129,7 +210,12 @@ class SearchProperty extends Component {
   closeYearRangeDialogue = () => {
     this.setState({ dialogueOpen: false });
   };
+  onAddButtonClick = () => {
+    this.setState({
+      dialogueOpen: true
+    });
 
+  };
   onNewPropertyButtonClick = () => {
     this.setState({
       dialogueOpen: true,
@@ -148,20 +234,83 @@ class SearchProperty extends Component {
     }
     return (
       <Screen loading={loading}>
-        {userType === "CITIZEN" ? <BreadCrumbs url={urls.length > 0 ? urls : urlArray} history={history} /> : []}
-        <PropertySearchFormHOC history={this.props.history} onSearchClick={this.onSearchClick} />
-        {tableData.length > 0 && showTable ? <PropertyTable tableData={tableData} onActionClick={this.onActionClick} /> : null}
-        {showTable && tableData.length === 0 && (
+        {/* {userType === "CITIZEN" ? <BreadCrumbs url={urls.length > 0 ? urls : urlArray} history={history} /> : []} */}
+        <div className="rainmaker-displayInline inner-header-style">
+          <Label
+            label="PT_PROPERTY_TAX"
+            dark={true}
+            fontSize={18}
+            fontWeight={500}
+            bold={true}
+            labelStyle={{ marginTop: "20px" }}
+          />
+          <div
+            className="rainmaker-displayInline"  >
+            <Button
+              Icon={
+                <Icon
+                  action="content"
+                  name="add"
+                  color="#fe7a51"
+                  style={{ height: 22 }}
+                />
+              }
+              label={
+                <Label
+                  label="PT_ADD_ASSESS_PROPERTY"
+                  buttonLabel={true}
+                  fontSize="16px"
+                  color="white"
+                />
+              }
+              labelStyle={{ fontSize: 12 }}
+              className="new-property-assessment"
+              onClick={() => this.onAddButtonClick()}
+              primary={true}
+              fullWidth={true}
+            />
+          </div>
+        </div>
+        <PropertySearchFormHOC history={this.props.history} onSearchClick={this.onSearchClick} onResetClick={this.onResetClick} />
+        <Hidden xsDown>
+        {!loading && showTable && tableData.length > 0  ? 
+        <PropertyTable tableData={tableData} sortOnObject="propertyId" onActionClick={this.onActionClick} /> : null}
+        </Hidden>
+        <Hidden smUp>
+          {tableData && tableData.length > 0 && showTable && (
+
+            <Label
+              secondaryText={'(' + tableData.length + ')'}
+              label="PT_SEARCH_PROPERTY_TABLE_HEADERS"
+              className="property-search-table-heading"
+              fontSize={16}
+              labelStyle={{
+                fontFamily: "Roboto",
+                fontSize: "16px",
+                fontWeight: 500,
+                letterSpacing: "0px",
+                textAlign: "left",
+                color: "#484848"
+              }}
+            />
+          )}
+          <SingleProperty
+            data={tableData}
+            action={"PT_PAYMENT_ACCESSANDPAY"}
+            onActionClick={this.onAddButtonClick}
+          />
+        </Hidden>
+        {!loading && showTable && !tableData.length && (
           <div className="search-no-property-found">
             <div className="no-search-text">
               <Label label="PT_NO_PROPERTY_RECORD" />
             </div>
             <div className="new-assess-btn">
               <Button
-                label={<Label label="PT_SEARCH_PROPERTY_NEWPROP_ASSESSMENT" buttonLabel={true} />}
+                label={<Label label="PT_ADD_ASSESS_PROPERTY" buttonLabel={true} />}
                 labelStyle={{ fontSize: 12 }}
                 className="new-property-assessment"
-                onClick={() => history.push("/property-tax")}
+                onClick={() => this.onAddButtonClick()}
                 primary={true}
                 fullWidth={true}
               />
@@ -188,6 +337,8 @@ const mapDispatchToProps = (dispatch) => {
     displayFormErrors: (formKey) => dispatch(displayFormErrors(formKey)),
     fetchProperties: (queryObject) => dispatch(fetchProperties(queryObject)),
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
+    resetForm: formKey => dispatch(resetForm(formKey)),
+    fetchLocalizationLabel : (locale, tenantId, moduleValue) => dispatch(fetchLocalizationLabel(locale, tenantId, moduleValue))
   };
 };
 

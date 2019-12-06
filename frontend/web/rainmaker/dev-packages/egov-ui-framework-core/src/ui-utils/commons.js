@@ -9,10 +9,11 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import orderBy from "lodash/orderBy";
-import set from "lodash/set";
 import get from "lodash/get";
+import set from "lodash/set";
 import commonConfig from "config/common.js";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 
 export const addComponentJsonpath = (components, jsonPath = "components") => {
   for (var componentKey in components) {
@@ -77,6 +78,15 @@ export const persistInLocalStorage = obj => {
     const objValue = obj[objKey];
     localStorageSet(objKey, objValue);
   }, this);
+};
+
+export const ifUserRoleExists = role => {
+  let userInfo = JSON.parse(getUserInfo());
+  const roles = get(userInfo, "roles");
+  const roleCodes = roles ? roles.map(role => role.code) : [];
+  if (roleCodes.indexOf(role) > -1) {
+    return true;
+  } else return false;
 };
 
 export const fetchFromLocalStorage = key => {
@@ -274,7 +284,7 @@ export const setBusinessServiceDataToLocalStorage = async (
     ) {
       localStorageSet(
         "businessServiceData",
-        JSON.stringify(_.get(payload, "BusinessServices"))
+        JSON.stringify(get(payload, "BusinessServices"))
       );
     } else {
       dispatch(
@@ -529,3 +539,25 @@ export const downloadPDFFileUsingBase64 = (receiptPDF, filename) => {
 if (window) {
   window.downloadPDFFileUsingBase64 = downloadPDFFileUsingBase64;
 }
+// Get user data from uuid API call
+export const getUserDataFromUuid = async bodyObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/user/_search",
+      "",
+      [],
+      bodyObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
+};
+
+export const getCommonPayUrl = (dispatch , applicationNo, tenantId) => {
+    const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}`;
+      dispatch(setRoute(url));
+};
+ 

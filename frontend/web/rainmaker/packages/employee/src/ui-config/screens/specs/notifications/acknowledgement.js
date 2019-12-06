@@ -51,11 +51,11 @@ const getAcknowledgementCard = (state, dispatch, purpose, status, applicationNum
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Message added Submitted Successfully",
+              labelName: "Message published Successfully",
               labelKey: "MESSAGE_ADD_SUCCESS_MESSAGE_MAIN",
             },
             body: {
-              labelName: "A notification regarding this message has been sent to citizen at registered Mobile No.",
+              labelName: "",
               labelKey: "MESSAGE_ADD_SUCCESS_MESSAGE_SUB",
             },
             number: applicationNumber,

@@ -31,17 +31,6 @@ const styles = (theme) => ({
   },
 });
 
-// const services = [
-//   {
-//     label: "Complaints",
-//     icon: <Icon className="service-icon" action="custom" name="comment-plus" />,
-//     route: "/pgr-home",
-//   },
-//   { label: "Property Tax", icon: <Icon className="service-icon" action="custom" name="home-city-outline" />, route: "/property-tax" },
-//   { label: "Trade License", icon: <Icon className="service-icon" action="custom" name="trade-license" />, route: "/tradelicense-citizen/home" },
-//   { label: "Fire Noc", icon: <Icon className="service-icon" action="custom" name="fire" />, route: "fire-noc/home" },
-// ];
-
 class ServiceList extends React.Component {
   state = {
     actionList: [],
@@ -54,7 +43,7 @@ class ServiceList extends React.Component {
     });
   }
   render() {
-    const { classes, history } = this.props;
+    const { classes, history, setRoute } = this.props;
     const { actionList } = this.state;
     return (
       <Grid container>
@@ -66,12 +55,12 @@ class ServiceList extends React.Component {
               <Grid item xs={3} sm={1} align="center">
                 <Card
                   className={classes.paper}
-                  onClick={(e) => {
+                  /* onClick={(e) => {
                     history.push(service.navigationURL);
-                  }}
+                  }} */
+                  onClick={() => setRoute(service.navigationURL)}
                 >
                   <CardContent classes={{ root: "card-content-style" }}>
-                    {/* {service.icon} */}
                     <Icon className="service-icon" action={service.leftIcon.split(":")[0]} name={service.leftIcon.split(":")[1]} />
                     <Label className="service-label-cont" label={`ACTION_TEST_${translatedLabel}`} fontSize={12} color="rgba(0, 0, 0, 0.87)" />
                   </CardContent>
@@ -88,12 +77,12 @@ class ServiceList extends React.Component {
               <Grid className={classes.root} item align="center">
                 <Card
                   className={`${classes.paper} service-module-style`}
-                  onClick={(e) => {
+                  /* onClick={(e) => {
                     history.push(service.navigationURL);
-                  }}
+                  }} */
+                  onClick={() => setRoute(service.navigationURL)}
                 >
                   <CardContent classes={{ root: "card-content-style" }}>
-                    {/* <div>{service.icon}</div> */}
                     <Icon className="service-icon" action={service.leftIcon.split(":")[0]} name={service.leftIcon.split(":")[1]} />
                     <Label className="service-label-cont" label={`ACTION_TEST_${translatedLabel}`} fontSize={14} color="rgba(0, 0, 0, 0.87)" />
                   </CardContent>

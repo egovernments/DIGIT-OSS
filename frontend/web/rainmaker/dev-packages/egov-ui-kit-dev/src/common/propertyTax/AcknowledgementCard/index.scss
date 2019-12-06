@@ -1,0 +1,77 @@
+.ack-header {
+    display: flex !important;
+    min-height: 106px !important;
+    justify-content: center !important;
+    align-items: center !important; }
+  
+  .ack-icon {
+    width: 72px !important;
+    height: 72px !important;
+    background-color: #39cb74 !important; }
+  
+  .ack-body {
+    margin-left: 16px !important;
+    flex: 2 1 0% !important; }
+  
+  .ack-sub-body {
+    margin-top: 8px !important;
+    margin-bottom: 0px !important;
+    color: rgba(0, 0, 0, 0.6) !important;
+    font-family: Roboto !important; }
+  
+  .ack-text {
+    text-align: right !important;
+    justify-content: center !important;
+    flex: 1 1 0% !important; }
+  
+  .MuiAvatar-root-195 {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    font-size: 1.25rem;
+    align-items: center;
+    flex-shrink: 0;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    user-select: none;
+    border-radius: 50%;
+    justify-content: center; }
+  
+  .MuiAvatar-colorDefault-196 {
+    color: #F4F7FB;
+    background-color: #bdbdbd; }
+  
+  .MuiTypography-headline-13 {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 24px;
+    font-weight: 400;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    line-height: 1.35417em; }
+  
+  .MuiTypography-root-8 {
+    margin: 0;
+    display: block; }
+  
+  .MuiGrid-container-98 {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box; }
+  
+  .MuiCardContent-root-97 {
+    padding-top: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px; }
+    @media only screen and (max-width: 768px) {
+      .ack-body {
+        margin-left: 16px !important;
+        width: fit-content !important;
+        flex: none !important; }
+      .ack-text {
+        padding: 20px;
+        text-align: left !important;
+        justify-content: center !important;
+        flex: none !important; }
+    }

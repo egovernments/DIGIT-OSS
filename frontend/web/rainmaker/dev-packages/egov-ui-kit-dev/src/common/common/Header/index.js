@@ -198,9 +198,17 @@ class Header extends Component {
           isCSR={role === "pgr-admin" ? true : false}
           openSecondary={window.innerWidth >= 768 ? true : false}
           width={300}
-          // containerStyle={{ top: "64px" }}
+          containerStyle={{ zIndex: 1999 }}
         />
-        <LogoutDialog logoutPopupOpen={logoutPopupOpen} closeLogoutDialog={_closeLogoutDialog} logout={_logout} />
+        <LogoutDialog
+          logoutPopupOpen={logoutPopupOpen}
+          closeLogoutDialog={_closeLogoutDialog}
+          logout={_logout}
+          oktext={"CORE_LOGOUTPOPUP_LOGOUT"}
+          canceltext={"CORE_LOGOUTPOPUP_CANCEL"}
+          title={"CORE_COMMON_LOGOUT"}
+          body={"CORE_LOGOUTPOPUP_CONFIRM"}
+        />
         <SortDialog sortPopOpen={sortPopOpen} closeSortDialog={closeSortDialog} />
       </div>
     );

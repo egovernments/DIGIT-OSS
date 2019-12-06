@@ -45,7 +45,7 @@ const LanguageSelectionForm = ({ items, onLanguageSelect, value, onClick }) => {
           <Label bold={true}  fontSize= "23px" label="|" />
           </div>
            <div style={{marginLeft:"7px" }}>
-              <Label bold={true} color="black" fontSize= "24px" label="PUNJAB" />
+              <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
            </div>
           </div>
         <form>

@@ -5,6 +5,8 @@
 
 .owner-gender-selection {
   display: flex;
+  position: inherit;
+  top: -5px;
 }
 
 .pt-ownerinfo-deletebtn {
@@ -37,6 +39,8 @@
     .ownerCategoryIdType {
       width: 100% !important;
     }
+    
+
     .dropdown {
       display: flow-root !important;
     }
@@ -71,6 +75,11 @@
     .address {
       margin-left: 130px;
     }
+    @media only screen and (max-width: 768px) {
+      .address {
+        margin-left: 0px;
+    }
+    }
     .property-corr {
       > div {
         margin-top: 2px !important;
@@ -97,6 +106,7 @@
 .grayout {
   box-shadow: none;
   background-color: #f6f6f6 !important;
+  
 }
 
 .payment-details {
@@ -114,7 +124,7 @@
     }
   }
   .receipt-details {
-    background-color: white;
+    background-color: rgb(242, 242, 242);;
     margin-bottom: 18px;
     padding: 10px;
     .receipt-header {
@@ -137,9 +147,13 @@
       display: flex;
       .textfield:nth-of-type(1) {
         width: 35% !important;
+        background: none!important;
         margin-left: 15px;
       }
+      
+     
       .textfield:nth-of-type(2) {
+        background: none!important;
         width: 35% !important;
         margin-left: 237px;
       }
@@ -250,7 +264,7 @@
   .payment-modes {
     margin-top: 5px;
     margin-bottom: 10px;
-    background-color: white;
+    background-color: rgb(242, 242, 242);
     .payment-mode-info {
       padding: 2px 18px;
       width: 42.5%;
@@ -265,11 +279,13 @@
       padding-left: 27px;
     }
     .textfield {
+      background: none!important;
       display: flow-root !important;
     }
     .dropdown {
       display: flow-root !important;
       width: 100% !important;
+      background: none !important;
     }
     .payer-details {
       margin: 16px 30px 7px 18px;
@@ -480,12 +496,15 @@ div[class^="MuiPaper-root"],
       div:nth-of-type(2) {
         width: 100% !important;
         margin: 0 !important;
+        
       }
     }
   }
   .stepper-container {
-    padding: 0px !important;
-    margin-top: 73px;
+    padding: 10px 0px 0px 0px !important;
+  } 
+  .form-header{
+    margin-top:50px;
   }
   // .year-dialog {
   //   // left: initial;
@@ -505,4 +524,17 @@ div[class^="MuiPaper-root"],
   .MuiStepLabel-labelContainer-47 >span{
     font-size :12px !important;
   }
+}
+.general-field-padding .textfield div{
+  background: none!important;
+}
+.general-field-padding .textfield{
+  background: none!important;
+}
+
+@media only screen and (max-width: 768px) {
+  .authority-details-form{
+   display: grid !important;
+   overflow: auto !important;
+ }
 }

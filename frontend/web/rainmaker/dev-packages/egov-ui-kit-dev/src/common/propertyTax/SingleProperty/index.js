@@ -23,10 +23,11 @@ class SingleProperty extends React.Component {
               <div>
                 <Grid container style={{ marginBottom: 12 }}>
                   <Grid item xs={6}>
-                    <Label label="PT_SEARCHPROPERTY_TABEL_ADDRESS" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
+                    <Label label="PT_SEARCHPROPERTY_TABEL_PTUID" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
                   </Grid>
                   <Grid item xs={6}>
-                    <Label label={item.address} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
+                    {/* <Label label={item.propertyId} fontSize={14} color={"rgba(0, 0, 0, 0.87"} /> */}
+                    {item.propertyId}
                   </Grid>
                 </Grid>
                 <Grid container style={{ marginBottom: 12 }}>
@@ -39,10 +40,10 @@ class SingleProperty extends React.Component {
                 </Grid>
                 <Grid container style={{ marginBottom: 12 }}>
                   <Grid item xs={6}>
-                    <Label label="PT_SEARCHPROPERTY_TABEL_PTUID" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
+                    <Label label="PT_SEARCHPROPERTY_TABEL_GUARDIANNAME" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
                   </Grid>
                   <Grid item xs={6}>
-                    <Label label={item.propertyId} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
+                    <Label label={item.guardianName} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
                   </Grid>
                 </Grid>
                 <Grid container style={{ marginBottom: 12 }}>
@@ -53,9 +54,27 @@ class SingleProperty extends React.Component {
                     <Label label={item.oldPropertyId ? item.oldPropertyId : "NA"} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
                   </Grid>
                 </Grid>
+                <Grid container style={{ marginBottom: 12 }}>
+                  <Grid item xs={6}>
+                    <Label label="PT_SEARCHPROPERTY_TABEL_ADDRESS" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Label label={item.address} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
+                  </Grid>
+                </Grid>
+                <Grid container style={{ marginBottom: 12 }}>
+                  <Grid item xs={6}>
+                    <Label label="PT_SEARCHPROPERTY_TABEL_STATUS" fontSize={14} color={"rgba(0, 0, 0, 0.60"} />
+                  </Grid>
+                  <Grid item xs={6}>
+                  <Label label={item.status} fontSize={14} color={"rgba(0, 0, 0, 0.87"} />
+                  </Grid>
+                </Grid>
+                
+{/*                
                 <div onClick={onActionClick ? onActionClick : () => this.onCardClick(item)}>
                   <Label label={action} textTransform={"uppercase"} color="#fe7a51" fontSize={14} labelStyle={{ textTransform: "uppercase" }} />
-                </div>
+                </div> */}
               </div>
             }
           />

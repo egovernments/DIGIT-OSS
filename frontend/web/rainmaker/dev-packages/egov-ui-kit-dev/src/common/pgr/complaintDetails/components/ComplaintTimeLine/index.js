@@ -5,14 +5,12 @@ import "./index.css";
 import { getDateFromEpoch, isImage } from "egov-ui-kit/utils/commons";
 
 const timelineButtonLabelStyle = {
-  height: 12,
   lineHeight: 1,
   color: "#ffffff",
   fontWeight: 500,
 };
 const timelineButtonContainerStyle = {
   lineHeight: 1,
-  height: 12,
 };
 
 const statusContainerStyle = {

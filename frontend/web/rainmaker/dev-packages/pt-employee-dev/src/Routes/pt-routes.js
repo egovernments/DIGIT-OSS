@@ -7,6 +7,15 @@ const PTHome = Loadable({
   loader: () => import("../Screens/PTHome"),
   loading: Loading
 });
+
+const HowItWorks = Loadable({
+  loader: () => import("egov-ui-kit/common/propertyTax/HowItWorks"),
+  loading: Loading
+});
+const PTExamples = Loadable({
+  loader: () => import("egov-ui-kit/common/propertyTax/PTExample"),
+  loading: Loading
+});
 const SearchProperty = Loadable({
   loader: () => import("../Screens/SearchProperty"),
   loading: Loading
@@ -42,6 +51,7 @@ const routes = [
     needsAuthentication: true,
     options: {
       title: "PT_HOME_PROPERTY_TAX",
+      hideTitle: true,
       hideFooter: true
       // hideBackButton: true,
       // isHomeScreen: true,
@@ -53,7 +63,8 @@ const routes = [
     needsAuthentication: true,
     options: {
       hideFooter: true,
-      title: "PT_SEARCH_PROPERTY_TITLE"
+      title: "PT_HOME_PROPERTY_TAX",
+      hideTitle:true,
       // hideBackButton: true,
     }
   },
@@ -62,7 +73,8 @@ const routes = [
     component: Property,
     needsAuthentication: true,
     options: {
-      hideFooter: true
+      hideFooter: true,
+      hideTitle:true,
       // hideBackButton: true,
     }
   },
@@ -72,7 +84,8 @@ const routes = [
     component: FormWizard,
     needsAuthentication: true,
     options: {
-      hideFooter: true
+      hideFooter: true,
+      hideTitle:true
       // hideBackButton: true,
     }
   },
@@ -106,6 +119,26 @@ const routes = [
       hideFooter: true,
       hideBackButton: true,
       hideTitle: true
+    }
+  },
+  {
+    path: "property-tax/how-it-works",
+    component: HowItWorks,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      // hideBackButton: true,
+      title: "PT_HOW_IT_WORKS"
+    }
+  },
+  {
+    path: "property-tax/pt-examples",
+    component: PTExamples,
+    needsAuthentication: true,
+    options: {
+      hideFooter: true,
+      // hideBackButton: true,
+      title: "PT_EXAMPLES"
     }
   }
 ];

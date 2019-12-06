@@ -112,7 +112,7 @@ class AllComplaints extends Component {
             }
           ],
           true,
-          true
+          false
         );
         fetchComplaints(
           [
