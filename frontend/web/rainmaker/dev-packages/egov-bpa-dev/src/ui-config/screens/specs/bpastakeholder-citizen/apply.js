@@ -19,7 +19,7 @@ import {
 } from "../bpastakeholder/apply";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { addressDestruct, setOrganizationVisibility } from "../utils";
+import { addressDestruct, setMobileNoField } from "../utils";
 
 const getData = async (action, state, dispatch, tenantId) => {
   await getMdmsData(action, state, dispatch);
@@ -47,7 +47,7 @@ const updateSearchResults = async (
     "Licenses[0].tradeLicenseDetail.subOwnerShipCategory"
   );
 
-  setOrganizationVisibility(action, state, dispatch, subOwnerShipCategory);
+  // setOrganizationVisibility(action, state, dispatch, subOwnerShipCategory);
   const queryValueFromUrl = getQueryArg(
     window.location.href,
     "applicationNumber"
@@ -93,13 +93,16 @@ const screenConfig = {
       updateSearchResults(action, state, dispatch, applicationNo, tenantId);
     } else {
       getData(action, state, dispatch, tenantId);
-      setOrganizationVisibility(action, state, dispatch, "INDIVIDUAL");
+      // setOrganizationVisibility(action, state, dispatch, "INDIVIDUAL");
       dispatch(
         prepareFinalObject(
           "Licenses[0].tradeLicenseDetail.owners[0].gender",
           "MALE"
         )
       );
+      if (!window.location.pathname.includes("whitelisted")) {
+        setMobileNoField(action, state, dispatch);
+      }
     }
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     return action;

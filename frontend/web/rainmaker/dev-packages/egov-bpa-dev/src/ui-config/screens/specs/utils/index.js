@@ -2399,3 +2399,21 @@ export const setOrganizationVisibility = (
 export const checkValueForNA = value => {
   return value ? value : "NA";
 };
+
+export const setMobileNoField = (action, state, dispatch) => {
+  let userInfo = JSON.parse(getUserInfo());
+  let { mobileNumber } = userInfo;
+  if (mobileNumber) {
+    dispatch(
+      prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber",
+        mobileNumber
+      )
+    );
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getOwnerMobNoField.props.disabled`,
+      true
+    );
+  }
+};
