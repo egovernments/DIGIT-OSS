@@ -1,9 +1,14 @@
 package org.egov.collection.repository.querybuilder;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import static java.util.stream.Collectors.toSet;
+
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
+import java.util.Objects;
+
 import org.apache.commons.lang3.StringUtils;
-import org.apache.kafka.common.protocol.types.Field;
-import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentSearchCriteria;
@@ -12,19 +17,11 @@ import org.egov.collection.web.contract.BillAccountDetail;
 import org.egov.collection.web.contract.BillDetail;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-import java.util.Objects;
-
-import static java.util.stream.Collectors.toSet;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @Service
 public class PaymentQueryBuilder {
@@ -41,7 +38,8 @@ public class PaymentQueryBuilder {
             "bill.status as bill_status,bill.additionalDetails as bill_additionalDetails," +
             "bill.tenantid as bill_tenantid,bill.totalamount as bill_totalamount," +
             "bd.id as bd_id,bd.tenantid as bd_tenantid,bd.additionalDetails as bd_additionalDetails," +
-            "bacdt.id as bacdt_id,bacdt.tenantid as bacdt_tenantid,bacdt.additionalDetails as bacdt_additionalDetails" +
+            "bacdt.id as bacdt_id,bacdt.tenantid as bacdt_tenantid, bacdt.amount as bacdt_amount, bacdt.adjustedamount as bacdt_adjustedamount, "
+            + "bacdt.additionalDetails as bacdt_additionalDetails" +
             " FROM egcl_payment py  " +
             " INNER JOIN egcl_paymentdetail pyd ON pyd.paymentid = py.id " +
             " INNER JOIN egcl_bill bill ON bill.id = pyd.billid " +
@@ -480,10 +478,11 @@ public class PaymentQueryBuilder {
 
         sqlParameterSource.addValue("id", payment.getId());
         sqlParameterSource.addValue("instrumentstatus", payment.getInstrumentStatus());
+        sqlParameterSource.addValue("paymentstatus", payment.getPaymentStatus());
         sqlParameterSource.addValue("additionaldetails", getJsonb(payment.getAdditionalDetails()));
         sqlParameterSource.addValue("lastmodifiedby", payment.getAuditDetails().getLastModifiedBy());
         sqlParameterSource.addValue("lastmodifiedtime", payment.getAuditDetails().getLastModifiedTime());
-
+        
         return sqlParameterSource;
 
     }

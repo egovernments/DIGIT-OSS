@@ -224,6 +224,8 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                 .order(order)
                 .isActualDemand(rs.getBoolean("isactualdemand"))
                 .taxHeadCode(rs.getString("taxheadcode"))
+                .amount(rs.getBigDecimal("bacdt_amount"))
+                .adjustedAmount(rs.getBigDecimal("bacdt_adjustedamount"))
                 .additionalDetails(getJsonValue(billAccountDetailAdditionalObj))
                 .build();
 
