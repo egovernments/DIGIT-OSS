@@ -16,7 +16,8 @@ pdfMake.fonts = {
 };
 
 const generateAcknowledgementForm = (role, details, generalMDMSDataById, receiptImageUrl, isEmployeeReceipt) => {
-  
+  console.log('details--'+details);
+  console.log(generalMDMSDataById);
   let data;
   let { owners, address, propertyDetails,header } = details;
   let dateArray=new Date(propertyDetails[0].assessmentDate).toDateString().split(' ');
@@ -186,7 +187,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
             style: "pt-reciept-citizen-table",
             margin: [0, 0, 0, 18],
             table: {
-              widths: [50, "*", 100],
+              widths: [100, "*", 100],
               body: [
                 [
                   {
@@ -197,9 +198,12 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
                   {
                     //stack is used here to give multiple sections one after another in same body
                     stack: [
-                      { text: header.header || "", style: "receipt-logo-header" },
+                      { 
+                      text:  getLocaleLabels(("TENANT_TENANTS_"+address.tenantId.replace('.','_')).toUpperCase(),("TENANT_TENANTS_"+address.tenantId.replace('.','_')).toUpperCase()) +" "+ getLocaleLabels(("CORPORATION","PT_ACK_CORPORATION_HEADER").toUpperCase(),("CORPORATION","PT_ACK_CORPORATION_HEADER").toUpperCase()),
+                       style: "receipt-logo-header" 
+                      },
                       {
-                        text: `${header.subheader} ${isEmployeeReceipt ? ` ` : ` `} ` || "",
+                        text: getLocaleLabels("PT_ACK_PROPERTY_TAX_ASSESS_ACKNOWLEDGEMENT","PT_ACK_PROPERTY_TAX_ASSESS_ACKNOWLEDGEMENT")|| "",
                         style: "receipt-logo-sub-header",
                       },
                     ],
@@ -276,6 +280,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
           {
             style: "pt-reciept-citizen-table",
             table: {
+                widths: ['12.5%','12.5%','25%','25%','12.5%','12.5%'],
               body: [
                 [
                   { text: getLocaleLabels("Existing Property ID:","PT_ACK_LOCALIZATION_EXISTING_PROPERTY_ID"), border: borderKey, style: "receipt-table-key" },
@@ -293,7 +298,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
           {
             style: "pt-reciept-citizen-table",
             table: {
-              widths: receiptTableWidth,
+              widths: ['25%','25%','25%','25%'],
               body: [
                 [
                   { text: getLocaleLabels("House/Door No.:","PT_ACK_LOCALIZATION_HOUSE_DOOR_NO"), border: borderKey, style: "receipt-table-key" },
@@ -318,7 +323,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
           {
             style: "pt-reciept-citizen-table",
             table: {
-              widths: receiptTableWidth,
+              widths: ['25%','25%','25%','25%'],
               body: [
                 [
                   { text: getLocaleLabels("Plot Size(sq yards)","PT_ACK_LOCALIZATION_PLOTSIZE_SQ_YARDS"), border: borderKey, style: "receipt-table-key" },
@@ -340,7 +345,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
           floorData && {
             style: "receipt-assess-table",
             table: {
-              widths: ["*", "*", "*", "*", "*"],
+              widths: ["20%", "20%", "20%", "20%", "20%"],
               body: floorData,
             },
             layout: tableborder,
@@ -349,7 +354,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
           {
             style: "pt-reciept-citizen-table",
             table: {
-              widths: receiptTableWidth,
+              widths: ['25%','25%','25%','25%'],
               body: getOwnerDetails(owners, 4),
             },
             layout: tableborder,
@@ -361,17 +366,17 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
 
         styles: {
           "pt-reciept-citizen-subheader": {
-            fontSize: 10,
+            fontSize: 12,
             bold: true,
             margin: [0, 16, 0, 8], //left top right bottom
             color: "#484848",
           },
           "pt-reciept-citizen-table": {
-            fontSize: 10,
+            fontSize: 12,
             color: "#484848",
           },
           "receipt-assess-table": {
-            fontSize: 10,
+            fontSize: 12,
             color: "#484848",
             margin: [0, 8, 0, 0],
           },
@@ -381,7 +386,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
             color: "#484848",
           },
           "receipt-header-details": {
-            fontSize: 9,
+            fontSize: 12,
             margin: [0, 0, 0, 8],
             color: "#484848",
           },
