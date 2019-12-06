@@ -214,7 +214,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       "validFrom",
       convertDateToEpoch(queryObject[0].validFrom, "dayend")
     );
-    set(queryObject[0], "wfDocuments", documents);
+    // set(queryObject[0], "wfDocuments", documents);
     set(
       queryObject[0],
       "validTo",
@@ -282,23 +282,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         queryObject[0].tradeLicenseDetail &&
         queryObject[0].tradeLicenseDetail.applicationDocuments
       ) {
-        if (getQueryArg(window.location.href, "action") === "edit") {
-          // const removedDocs = get(
-          //   state.screenConfiguration.preparedFinalObject,
-          //   "LicensesTemp[0].removedDocs",
-          //   []
-          // );
-          // set(queryObject[0], "tradeLicenseDetail.applicationDocuments", [
-          //   ...get(
-          //     state.screenConfiguration.prepareFinalObject,
-          //     "Licenses[0].tradeLicenseDetail.applicationDocuments",
-          //     []
-          //   ),
-          //   ...removedDocs
-          // ]);
-        } else if (activeIndex === 2) {
-          set(queryObject[0], "tradeLicenseDetail.applicationDocuments", null);
-        } else action = "APPLY";
+        if (activeIndex === 2) {
+          action = "APPLY";
+        }
       }
       // else if (
       //   queryObject[0].tradeLicenseDetail &&
@@ -336,6 +322,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         searchResponse = { Licenses: queryObject };
       } else {
         dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
+        await setDocsForEditFlow(state, dispatch);
       }
       const updatedtradeUnits = get(
         searchResponse,
@@ -364,7 +351,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       if (!response) {
       }
       dispatch(prepareFinalObject("Licenses", response.Licenses));
-      updateownersAddress(dispatch, response);
       createOwnersBackup(dispatch, response);
     }
     /** Application no. box setting */
