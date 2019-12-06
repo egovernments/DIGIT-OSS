@@ -47,9 +47,9 @@ public class BillRowMapper implements ResultSetExtractor<List<Bill>> {
 
 				AuditDetails auditDetails = new AuditDetails();
 				auditDetails.setCreatedBy(rs.getString("b_createdby"));
-				auditDetails.setCreatedTime((Long) rs.getObject("b_createddate"));
+				auditDetails.setCreatedTime((Long) rs.getObject("b_createdtime"));
 				auditDetails.setLastModifiedBy(rs.getString("b_lastmodifiedby"));
-				auditDetails.setLastModifiedTime((Long) rs.getObject("b_lastmodifieddate"));
+				auditDetails.setLastModifiedTime((Long) rs.getObject("b_lastmodifiedtime"));
 
 				bill = Bill.builder().id(billId).totalAmount(BigDecimal.ZERO).tenantId(rs.getString("b_tenantid"))
 						.status(StatusEnum.fromValue(rs.getString("b_status")))
