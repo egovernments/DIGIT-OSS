@@ -8,14 +8,12 @@
             "RiskType": "High",
             "docTypes": [
                 {
-                    "code": "VOTERID",
-                    "required": true,
-                    "sequence":0
+                    "code": "OWNERIDENTITYPROOF.VOTERID",
+                    "required": true
                 },
                 {
-                    "code": "AADHAAR",
-                    "required": false,
-                    "sequence":1
+                    "code": "OWNERIDENTITYPROOF.AADHAAR",
+                    "required": false
                 }
             ]
         }
