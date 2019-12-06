@@ -15611,6 +15611,39 @@
       "serviceCode": "report",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1912,
+      "name": "Enter Meter Reading",
+      "url": "/ws-calculator/meterConnection/_create",
+      "displayName": "Enter Meter Reading",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "ws-calculator",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1913,
+      "name": "Search Meter Reading",
+      "url": "/ws-calculator/meterConnection/_search",
+      "displayName": "Search Meter Reading",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "ws-calculator",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1914,
+      "name": "Calculate Water Bill",
+      "url": "/ws-calculator/waterCalculator/_calculate",
+      "displayName": "Calculate Water Bill",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "ws-calculator",
+      "code": "null",
+      "path": ""
     }
   ]
 }
