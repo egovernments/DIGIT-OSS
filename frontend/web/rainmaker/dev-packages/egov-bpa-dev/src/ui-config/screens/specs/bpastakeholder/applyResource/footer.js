@@ -91,8 +91,6 @@ export const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = true;
   if (activeStep === 0) {
-    await getDocList(state, dispatch);
-
     const data = get(state.screenConfiguration, "preparedFinalObject");
 
     const isTradeDetailsValid = validateFields(
@@ -140,6 +138,8 @@ export const callBackForNext = async (state, dispatch) => {
     ) {
       isFormValid = false;
     } else {
+      await getDocList(state, dispatch);
+
       isFormValid = await applyTradeLicense(state, dispatch);
       if (!isFormValid) {
         hasFieldToaster = false;
@@ -206,7 +206,7 @@ export const callBackForNext = async (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
     );
-    isFormValid = await applyTradeLicense(state, dispatch);
+    isFormValid = await applyTradeLicense(state, dispatch, 2);
     if (isFormValid) {
       moveToSuccess(LicenseData, dispatch);
     }
