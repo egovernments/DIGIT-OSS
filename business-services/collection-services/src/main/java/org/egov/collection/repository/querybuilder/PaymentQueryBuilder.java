@@ -477,8 +477,8 @@ public class PaymentQueryBuilder {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
 
         sqlParameterSource.addValue("id", payment.getId());
-        sqlParameterSource.addValue("instrumentstatus", payment.getInstrumentStatus());
-        sqlParameterSource.addValue("paymentstatus", payment.getPaymentStatus());
+        sqlParameterSource.addValue("instrumentstatus", payment.getInstrumentStatus().toString());
+        sqlParameterSource.addValue("paymentstatus", payment.getPaymentStatus().toString());
         sqlParameterSource.addValue("additionaldetails", getJsonb(payment.getAdditionalDetails()));
         sqlParameterSource.addValue("lastmodifiedby", payment.getAuditDetails().getLastModifiedBy());
         sqlParameterSource.addValue("lastmodifiedtime", payment.getAuditDetails().getLastModifiedTime());
