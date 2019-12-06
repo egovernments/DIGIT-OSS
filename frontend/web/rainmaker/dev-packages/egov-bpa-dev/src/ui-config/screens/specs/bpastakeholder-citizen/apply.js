@@ -19,7 +19,11 @@ import {
 } from "../bpastakeholder/apply";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { addressDestruct, setOrganizationVisibility } from "../utils";
+import {
+  addressDestruct,
+  setOrganizationVisibility,
+  setMobileNoField
+} from "../utils";
 
 const getData = async (action, state, dispatch, tenantId) => {
   await getMdmsData(action, state, dispatch);
@@ -100,6 +104,9 @@ const screenConfig = {
           "MALE"
         )
       );
+      if (!window.location.pathname.includes("whitelisted")) {
+        setMobileNoField(action, state, dispatch);
+      }
     }
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     return action;
