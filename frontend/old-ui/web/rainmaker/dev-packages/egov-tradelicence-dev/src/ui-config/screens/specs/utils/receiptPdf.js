@@ -1018,6 +1018,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
 };
 
 const generateReceipt = async (state, dispatch, type) => {
+//  console.log("Transformed Data--",transformedData);
   pdfMakeCustom.vfs = pdfFonts.vfs;
   pdfMakeCustom.fonts = {
     Camby:{
@@ -1084,6 +1085,7 @@ const generateReceipt = async (state, dispatch, type) => {
   };
   switch (type) {
     case "certificate_download":
+   
       let certificate_data = getCertificateData(transformedData, ulbLogo);
       certificate_data &&
      //  pdfMakeCustom.createPdf(certificate_data).download("tl_certificate.pdf");
