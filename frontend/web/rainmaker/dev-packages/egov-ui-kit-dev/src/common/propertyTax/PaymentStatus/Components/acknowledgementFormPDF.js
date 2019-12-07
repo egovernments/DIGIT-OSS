@@ -187,12 +187,13 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
             style: "pt-reciept-citizen-table",
             margin: [0, 0, 0, 18],
             table: {
-              widths: [100, "*", 100],
+              widths: ['15%', '70%', '15%'],
+              alignment: 'center',
               body: [
                 [
                   {
                     image: receiptImageUrl || msevaLogo,
-                    width: 30,
+                    width: 40,
                     margin: [10, 10, 10, 10],
                   },
                   {
