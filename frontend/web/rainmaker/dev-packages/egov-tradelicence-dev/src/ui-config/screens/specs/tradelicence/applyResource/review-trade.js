@@ -255,7 +255,9 @@ export const getReviewTrade = (isEditable = true) => {
         }
       ),
       reviewStructureType: getLabelWithValue(
-        { labelName: "Structure Type" },
+        { labelName: "Structure Type",
+          labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_TYPE_LABEL"
+      },
         {
           jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
           localePrefix: {
@@ -268,7 +270,9 @@ export const getReviewTrade = (isEditable = true) => {
         }
       ),
       reviewSubStructureType: getLabelWithValue(
-        { labelName: "Structure Sub Type" },
+        { labelName: "Structure Sub Type",
+          labelKey: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_LABEL"
+      },
         {
           jsonPath: "Licenses[0].tradeLicenseDetail.structureType",
           localePrefix: {
