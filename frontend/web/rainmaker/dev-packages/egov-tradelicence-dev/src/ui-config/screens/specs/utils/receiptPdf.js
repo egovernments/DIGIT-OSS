@@ -163,7 +163,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 bold: true
               },
               {
-                text: transformedData.applicationType,
+                text: getLocaleLabels("TL_LOCALIZATION_" + (transformedData.applicationType).replace('.','_'),"TL_LOCALIZATION_" + (transformedData.applicationType).replace('.','_')),
                 bold: false
               }
             ],
