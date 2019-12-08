@@ -21,7 +21,7 @@ export const callPGService = async (state, dispatch) => {
   let callbackUrl = `${
     process.env.NODE_ENV === "production"
       ? `${window.origin}/citizen`
-      : window.origin
+      : 'https://uttarakhand-uat.egovernments.org/citizen'
   }/egov-common/paymentRedirectPage`;
 
   const { screenConfiguration = {} } = state;
@@ -62,7 +62,7 @@ export const callPGService = async (state, dispatch) => {
         billId: get(billPayload, "Bill[0].id"),
         consumerCode: consumerCode,
         productInfo: "Common Payment",
-        gateway: "EASYPAY",
+        gateway: "CCAVENUE",
         taxAndPayments,
         user,
         callbackUrl
@@ -104,7 +104,13 @@ export const callPGService = async (state, dispatch) => {
       const redirectionUrl =
         get(goToPaymentGateway, "Transaction.redirectUrl") ||
         get(goToPaymentGateway, "Transaction.callbackUrl");
-      window.location = redirectionUrl;
+        if(get(goToPaymentGateway, "Transaction.gateway")
+        && get(goToPaymentGateway, "Transaction.gateway") === 'CCAVENUE'){
+          //custom method to redirect user using post for ccavenue
+          postPGReqeust(redirectionUrl);
+        }else{
+          window.location = redirectionUrl;
+        }
     }
   } catch (e) {
     console.log(e);
@@ -120,6 +126,32 @@ export const callPGService = async (state, dispatch) => {
       moveToFailure(dispatch);
     }
   }
+};
+
+const postPGReqeust = (redirectionUrl) => {
+
+  let params = (new URL(redirectionUrl)).searchParams;
+  
+  let form = document.createElement("form");
+  form.setAttribute("method", "post");
+  //get this from redirectUrl
+  form.setAttribute("action", "https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction");
+  
+  let accessCode = document.createElement("input");
+  accessCode.setAttribute("type", "hidden");
+  accessCode.setAttribute("name", "access_code");
+  accessCode.setAttribute("value", params.get("access_code"));
+  form.appendChild(accessCode);
+
+  let encRequest = document.createElement("input");
+  encRequest.setAttribute("type", "hidden");
+  encRequest.setAttribute("name", "encRequest");
+  encRequest.setAttribute("value", params.get("encRequest"));
+  form.appendChild(encRequest);
+
+  document.body.appendChild(form);
+  form.submit();
+
 };
 
 const moveToSuccess = (dispatch, receiptNumber) => {
