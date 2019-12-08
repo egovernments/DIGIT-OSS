@@ -154,10 +154,10 @@ public class EasyPayGateway implements Gateway {
              log.info("Updated transaction : "+ transaction.toString());
             return transaction;
         } catch (RestClientException e) {
-            log.error("Unable to fetch status from Paytm gateway", e);
-            throw new CustomException("UNABLE_TO_FETCH_STATUS", "Unable to fetch status from Paytm gateway");
+            log.error("Unable to fetch status from EasyPay gateway", e);
+            throw new CustomException("UNABLE_TO_FETCH_STATUS", "Unable to fetch status from EasyPay gateway");
         } catch (Exception e) {
-            log.error("Paytm Checksum generation failed", e);
+            log.error("EasyPay Checksum generation failed", e);
             throw new CustomException("CHECKSUM_GEN_FAILED",
                     "Hash generation failed, gateway redirect URI cannot be generated");
         }
