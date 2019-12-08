@@ -779,7 +779,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
         ]
       },
       {
-        style: "tl-certificate-data",
+        style: "tl-certificate-data-2",
         columns: [
           {
             width: 160,
@@ -960,13 +960,13 @@ const getCertificateData = (transformedData, ulbLogo) => {
         color: "#1E1E1E"
       },
       "tl-certificate-data": {
-        fontSize: 14,
+        fontSize: 12,
         margin: [0, 12, 0, 0], //left top right bottom
         color: "#1E1E1E"
       },
       "tl-certificate-data-2": {
-        fontSize: 14,
-        margin: [0, 8, 0, 0], //left top right bottom
+        fontSize: 12,
+        margin: [0, 5, 0, 0], //left top right bottom
         color: "#1E1E1E",
       },
 
