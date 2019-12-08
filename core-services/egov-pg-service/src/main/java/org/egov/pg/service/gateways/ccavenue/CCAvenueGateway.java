@@ -84,8 +84,8 @@ public class CCAvenueGateway implements Gateway {
         encRequestMap.put(ORDER_ID_KEY, transaction.getTxnId());
         encRequestMap.put(CURRENCY_KEY, CURRENCY);
         encRequestMap.put(AMOUNT_KEY, transaction.getTxnAmount());
-        encRequestMap.put(REDIRECT_URL_KEY, getReturnUrl(transaction.getCallbackUrl(), REDIRECT_URL));
-        encRequestMap.put(CANCEL_URL_KEY, getReturnUrl(transaction.getCallbackUrl(), CANCEL_URL));
+        encRequestMap.put(REDIRECT_URL_KEY, transaction.getCallbackUrl());
+        encRequestMap.put(CANCEL_URL_KEY, transaction.getCallbackUrl());
         encRequestMap.put(LANGUAGE_KEY, LANGUAGE);
         encRequestMap.put(SUB_ACCOUNT_ID_KEY, "nagarsewa1");
         StringBuilder encRequest = new StringBuilder("");
