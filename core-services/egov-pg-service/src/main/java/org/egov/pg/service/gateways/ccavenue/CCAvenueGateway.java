@@ -126,7 +126,7 @@ public class CCAvenueGateway implements Gateway {
 
         try {
 
-            String jsonRequest = ccavenueUtil.encrypt("{\"order_id\" : \"" + currentStatus.getTxnId() + "\"}");
+            String jsonRequest = ccavenueUtil.encrypt("{\"order_no\" : \"" + currentStatus.getTxnId() + "\"}");
             UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(GATEWAY_TRANSACTION_STATUS_URL)
                     .buildAndExpand(Collections.singletonMap("enc_request", jsonRequest)).encode();
             ResponseEntity<String> response = restTemplate.postForEntity(uriComponents.toUri(),"", String.class);
