@@ -626,14 +626,23 @@ export const downloadReceipt = (receiptQueryString) => {
       dispatch(downloadReceiptPending());
       try {
         const payloadReceiptDetails = await httpRequest(FETCHRECEIPT.GET.URL, FETCHRECEIPT.GET.ACTION, receiptQueryString);
-        const queryStr = [
+        let queryStr = {};         
+        if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'PT'){
+          queryStr = [
           { key: "key", value: "consolidatedreceipt" },
-          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0]}
+          { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
         ]
+        }
+        if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'TL'){
+          queryStr = [
+            { key: "key", value: "tl-receipt" },
+            { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+          ]
+        }
 
         httpRequest(DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Payments: payloadReceiptDetails.Payments }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
           .then(res => {
-            getFileUrlFromAPI(res.filestoreIds[0], receiptQueryString[1].value).then((fileRes) => {
+            getFileUrlFromAPI(res.filestoreIds[0], receiptQueryString[1].value.split('.')[0]).then((fileRes) => {
               var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
               win.focus();
             });
