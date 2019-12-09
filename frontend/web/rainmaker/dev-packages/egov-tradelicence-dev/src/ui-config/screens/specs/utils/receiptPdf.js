@@ -80,8 +80,8 @@ const getAssesories = (accessories) => {
 
 const getCorporationName = (corporationName, actualAddress) => {
   if(corporationName){
-    const splittedName = corporationName.split(" ");
-    return splittedName[0]+" "+ getLocaleLabels("NA","TENANT_TENANTS_"+actualAddress.tenantId.replace('.','_').toUpperCase());
+    //const splittedName = corporationName.split(" ");
+    return getLocaleLabels("TL_LOCALIZATION_ULBGRADE_MC1","TL_LOCALIZATION_ULBGRADE_MC1")+" "+ getLocaleLabels("TENANT_TENANTS_"+actualAddress.tenantId.replace('.','_').toUpperCase(),"TENANT_TENANTS_"+actualAddress.tenantId.replace('.','_').toUpperCase());
   } else {
     return "NA"
   }
@@ -163,7 +163,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 bold: true
               },
               {
-                text: transformedData.applicationType,
+                text: getLocaleLabels("TL_LOCALIZATION_" + (transformedData.applicationType).replace('.','_'),"TL_LOCALIZATION_" + (transformedData.applicationType).replace('.','_')),
                 bold: false
               }
             ],
@@ -318,7 +318,9 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 border: borderKey,
                 style: "receipt-table-key"
               },
-              { text: transformedData.doorNo, border: borderValue },
+              { text: transformedData.doorNo, 
+                border: borderValue 
+              },
               {
                 text: getLocaleLabels("Building Name","TL_LOCALIZATION_BUILDING_NAME"),
                 border: borderKey,
@@ -660,7 +662,7 @@ const getReceiptData = (transformedData, ulbLogo) => {
 };
 
 const getCertificateData = (transformedData, ulbLogo) => {
-
+console.log(transformedData);
   var tlCertificateData = {
     defaultStyle: {
       font: "Camby"
@@ -686,7 +688,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
                    // font:"Roboto"
                   },
                   {
-                    text: transformedData.corporationAddress+ "\n" + getLocaleLabels("Contact : ","TL_LOCALIZATION_CORPORATION_CONTACT") + 
+                    text: getLocaleLabels("TL_LOCALIZATION_CORPORATION_ADDRESS","TL_LOCALIZATION_CORPORATION_ADDRESS")+ "\n" + getLocaleLabels("Contact : ","TL_LOCALIZATION_CORPORATION_CONTACT") + 
                       transformedData.corporationContact +
                       "\n" +getLocaleLabels("Website : ","TL_LOCALIZATION_CORPORATION_WEBSITE") +
                       transformedData.corporationWebsite +
