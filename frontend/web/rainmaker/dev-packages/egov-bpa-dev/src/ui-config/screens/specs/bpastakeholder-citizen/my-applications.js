@@ -31,29 +31,34 @@ const screenConfig = {
           componentPath: "SingleApplication",
           visible: true,
           props: {
-            applicationName: {
-              label: "TL_COMMON_TABLE_COL_OWN_NAME",
-              jsonPath: "tradeLicenseDetail.owners[0].name"
-            },
-            applicationNumber: {
-              label: "TL_COMMON_TABLE_COL_APP_NO",
-              jsonPath: "applicationNumber"
-            },
+            contents: [
+              {
+                label: "TL_COMMON_TABLE_COL_OWN_NAME",
+                jsonPath: "tradeLicenseDetail.owners[0].name"
+              },
+              {
+                label: "TL_COMMON_TABLE_COL_APP_NO",
+                jsonPath: "applicationNumber"
+              },
 
-            ownerName: {
-              label: "BPA_LICENSEE_TYPE_LABEL",
-              jsonPath: "tradeLicenseDetail.tradeUnits[0].tradeType"
-            },
-            moduleNumber: {
-              label: "BPA_COMMON_TABLE_COL_LIC_NO",
-              jsonPath: "licenseNumber"
-            },
-            status: {
-              label: "TL_COMMON_TABLE_COL_STATUS",
-              jsonPath: "status"
-            },
+              {
+                label: "BPA_LICENSEE_TYPE_LABEL",
+                jsonPath: "tradeLicenseDetail.tradeUnits[0].tradeType",
+                prefix: "TRADELICENSE_TRADETYPE_",
+                suffix: "_VIEW"
+              },
+              {
+                label: "BPA_COMMON_TABLE_COL_LIC_NO",
+                jsonPath: "licenseNumber"
+              },
+              {
+                label: "TL_COMMON_TABLE_COL_STATUS",
+                jsonPath: "status",
+                prefix: "WF_ARCHITECT_"
+              }
+            ],
             moduleName: "BPAREG",
-            statusPrefix: "WF_ARCHITECT_"
+            homeURL: "/bpastakeholder-citizen/home"
           }
         }
       }
