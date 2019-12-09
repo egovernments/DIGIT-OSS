@@ -1,10 +1,5 @@
 package org.egov.pg.service.gateways.ccavenue;
 
-import java.util.HashMap;
-import java.util.Map;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -32,7 +27,7 @@ import lombok.Setter;
 public class CCAvenueStatusResponse {
 
     @JsonProperty("reference_no")
-    private Integer referenceNo;
+    private String referenceNo;
 
     @JsonProperty("order_no")
     private String orderNo;
@@ -41,7 +36,7 @@ public class CCAvenueStatusResponse {
     private String orderCurrncy;
 
     @JsonProperty("order_amt")
-    private Double orderAmt;
+    private String orderAmt;
 
     @JsonProperty("order_date_time")
     private String orderDateTime;
@@ -107,28 +102,28 @@ public class CCAvenueStatusResponse {
     private String orderStatusDateTime;
 
     @JsonProperty("order_capt_amt")
-    private Double orderCaptAmt;
+    private String orderCaptAmt;
 
     @JsonProperty("order_card_name")
     private String orderCardName;
 
     @JsonProperty("order_fee_perc")
-    private Double orderFeePerc;
+    private String orderFeePerc;
 
     @JsonProperty("order_fee_perc_value")
-    private Double orderFeePercValue;
+    private String orderFeePercValue;
 
     @JsonProperty("order_fee_flat")
-    private Double orderFeeFlat;
+    private String orderFeeFlat;
 
     @JsonProperty("order_gross_amt")
-    private Double orderGrossAmt;
+    private String orderGrossAmt;
 
     @JsonProperty("order_discount")
-    private Double orderDiscount;
+    private String orderDiscount;
 
     @JsonProperty("order_tax")
-    private Double orderTax;
+    private String orderTax;
 
     @JsonProperty("order_bank_ref_no")
     private String orderBankRefNo;
@@ -143,13 +138,13 @@ public class CCAvenueStatusResponse {
     private String orderOptionType;
 
     @JsonProperty("order_TDS")
-    private Double orderTDS;
+    private String orderTDS;
 
     @JsonProperty("order_device_type")
     private String orderDeviceType;
 
     @JsonProperty("status")
-    private Integer status;
+    private String status;
 
     @JsonProperty("error_desc")
     private String errorDesc;
