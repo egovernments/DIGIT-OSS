@@ -179,7 +179,7 @@ public class CCAvenueGateway implements Gateway {
                 status = Transaction.TxnStatusEnum.FAILURE;
 
             return Transaction.builder().txnId(currentStatus.getTxnId())
-                    .txnAmount(Utils.formatAmtAsRupee(statusResponse.getOrderCaptAmt()))
+                    .txnAmount(Utils.formatAmtAsRupee(statusResponse.getOrderAmt()))
                     .txnStatus(status).gatewayTxnId(statusResponse.getReferenceNo())
                     .gatewayPaymentMode(statusResponse.getOrderOptionType())
                     .gatewayStatusCode(statusResponse.getOrderStatus())
