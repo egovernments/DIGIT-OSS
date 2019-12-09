@@ -18,6 +18,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.security.Identity;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.reverseOrder;
 import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.*;
 
 @Slf4j
@@ -98,12 +100,12 @@ public class PaymentRepository {
             	billIds.addAll(payment.getPaymentDetails().stream().map(detail -> detail.getBillId()).collect(Collectors.toSet()));
             }
             Map<String, Bill> billMap = getBills(billIds);
-            
             for(Payment payment : payments) {
             	payment.getPaymentDetails().forEach(detail -> {
             		detail.setBill(billMap.get(detail.getBillId()));
             	});
             }
+           payments.sort(reverseOrder(Comparator.comparingLong(Payment::getTransactionDate)));
         }
 
         return payments;
@@ -114,7 +116,6 @@ public class PaymentRepository {
         Map<String, Object> preparedStatementValues = new HashMap<>();
         preparedStatementValues.put("id", ids);
         String query = paymentQueryBuilder.getBillQuery();
-        log.info("Bill Query: "+ query);
         List<Bill> bills = namedParameterJdbcTemplate.query(query, preparedStatementValues, billRowMapper);
         bills.forEach(bill -> {
         	mapOfIdAndBills.put(bill.getId(), bill);
