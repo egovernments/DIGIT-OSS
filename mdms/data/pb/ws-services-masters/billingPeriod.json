@@ -10,7 +10,7 @@
   
     {
       "active": true,
-      "connectionType":"Non-metered",
+      "connectionType":"Non Metered",
       "billingCycle": "quaterly"
     } 
    ]

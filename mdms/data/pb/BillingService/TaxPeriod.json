@@ -275,8 +275,8 @@
       "financialYear": "2018-28"
     },
     {
-      "fromDate": 1554076800,
-      "toDate": 1585612800,
+      "fromDate": 1554076800000,
+      "toDate": 1585612800000,
       "periodCycle": "ANNUAL",
       "service": "WS",
       "code": "WC2018",
