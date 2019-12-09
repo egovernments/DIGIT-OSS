@@ -213,8 +213,8 @@ class WorkFlowContainer extends React.Component {
         // return `/tradelicence/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=NewTL`;
         case "EDIT":
           return isAlreadyEdited
-            ? `tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
-            : `tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
+            ? `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
+            : `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit`;
       }
     } else if (moduleName === "FIRENOC") {
       switch (action) {
