@@ -1,6 +1,9 @@
 {
-  "key": "consolidatedreceipt",
+  "key": "testconsolidatedreceipt",
   "config": {
+    "defaultStyle": {
+      "font": "Cambay"
+     },
     "content": [
       {
         "style": "noc-head",
@@ -471,7 +474,6 @@
     },
     "receipt-logo-header": {
       "color": "#000000",
-      "fontFamily": "Roboto",
       "fontSize": 14,
       "bold": true,
       "letterSpacing": 0.74,
@@ -484,7 +486,6 @@
     },
     "receipt-logo-sub-header": {
       "color": "#000000",
-      "fontFamily": "Roboto",
       "fontSize": 12,
       "letterSpacing": 0.6
     },
