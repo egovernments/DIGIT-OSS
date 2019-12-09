@@ -92,8 +92,22 @@ export const corrospondanceAddr = getCommonCard({
             key: "BPA_SAME_AS_PERMANENTADDR_LABEL"
           },
           jsonPath: "LicensesTemp[0].userData.isSameAddress",
-          sourceJsonPaths: ["LicensesTemp[0].userData.address"],
-          destinationJsonPaths: ["Licenses[0].tradeLicenseDetail.address"],
+          sourceJsonPaths: [
+            "LicensesTemp[0].userData.address.buildingName",
+            "LicensesTemp[0].userData.address.city",
+            "LicensesTemp[0].userData.address.doorNo",
+            "LicensesTemp[0].userData.address.landmark",
+            "LicensesTemp[0].userData.address.pincode",
+            "LicensesTemp[0].userData.address.street"
+          ],
+          destinationJsonPaths: [
+            "Licenses[0].tradeLicenseDetail.address.buildingName",
+            "Licenses[0].tradeLicenseDetail.address.city",
+            "Licenses[0].tradeLicenseDetail.address.doorNo",
+            "Licenses[0].tradeLicenseDetail.address.landmark",
+            "Licenses[0].tradeLicenseDetail.address.pincode",
+            "Licenses[0].tradeLicenseDetail.address.street"
+          ],
           disbaleComponentJsonPaths: [
             "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocBuilidingName",
             "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocCity",
