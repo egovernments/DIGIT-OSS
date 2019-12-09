@@ -202,15 +202,15 @@ class TableData extends Component {
               <MenuItem value={"NewTL"}>
                 <Label label="CS_COMMON_INBOX_NEWTL" />
               </MenuItem>
-              <MenuItem value={"PGR"}>
+              {/* <MenuItem value={"PGR"}>
                 <Label label="CS_COMMON_INBOX_PGR" />
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem value={"PT"}>
                 <Label label="CS_COMMON_INBOX_PT" />
               </MenuItem>
-              <MenuItem value={"FIRENOC"}>
+              {/* <MenuItem value={"FIRENOC"}>
                 <Label label="CS_COMMON_INBOX_FIRENOC" />
-              </MenuItem>
+              </MenuItem> */}
             </Select>
           </div>
           <InboxData data={inboxData[value]} />
