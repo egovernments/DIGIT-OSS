@@ -512,3 +512,7 @@ export const getPattern = type => {
       return /^[a-zA-Z0-9-]*$/i;
   }
 };
+
+export const checkValueForNA = value => {
+  return value && value !== "null" ? value : "NA";
+};

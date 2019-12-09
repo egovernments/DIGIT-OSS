@@ -11,7 +11,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import "./index.css";
 import { handleScreenConfigurationFieldChange as handleField } from "../../ui-redux/screen-configuration/actions";
-
+import { checkValueForNA } from "../../ui-config/screens/specs/utils";
 const styles = {
   card: {
     marginLeft: 8,
@@ -48,8 +48,8 @@ class SingleApplication extends React.Component {
   };
 
   onButtonCLick = () => {
-    const { setRoute } = this.props;
-    setRoute("/tradelicense-citizen/home");
+    const { setRoute, homeURL } = this.props;
+    setRoute(homeURL);
     // let toggle = get(
     //   screenConfig["my-applications"],
     //   "components.cityPickerDialog.props.open",
@@ -62,6 +62,27 @@ class SingleApplication extends React.Component {
     //   !toggle
     // );
   };
+  generateLabelKey = (content, item) => {
+    let LabelKey = "";
+    if (content.prefix && content.suffix) {
+      LabelKey = `${content.prefix}${get(item, content.jsonPath).replace(
+        /[._:-\s\/]/g,
+        "_"
+      )}${content.suffix}`;
+    } else if (content.prefix) {
+      LabelKey = `${content.prefix}${get(item, content.jsonPath).replace(
+        /[._:-\s\/]/g,
+        "_"
+      )}`;
+    } else if (content.suffix) {
+      LabelKey = `${get(item, content.jsonPath).replace(/[._:-\s\/]/g, "_")}${
+        content.suffix
+      }`;
+    } else {
+      LabelKey = `${get(item, content.jsonPath)}`;
+    }
+    return LabelKey;
+  };
 
   render() {
     const {
@@ -73,7 +94,9 @@ class SingleApplication extends React.Component {
       ownerName,
       moduleNumber,
       status,
-      statusPrefix
+      statusPrefix,
+      contents,
+      moduleName
     } = this.props;
     return (
       <div className="application-card">
@@ -83,94 +106,33 @@ class SingleApplication extends React.Component {
               <Card className={classes.card}>
                 <CardContent>
                   <div>
-                    <Grid container style={{ marginBottom: 12 }}>
-                      <Grid item xs={6}>
-                        <Label
-                          labelKey={applicationName.label}
-                          fontSize={14}
-                          style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Label
-                          labelKey={get(item, applicationName.jsonPath)}
-                          fontSize={14}
-                          style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                        />
-                      </Grid>
-                    </Grid>
-                    <Grid container style={{ marginBottom: 12 }}>
-                      <Grid item xs={6}>
-                        <Label
-                          labelKey={applicationNumber.label}
-                          fontSize={14}
-                          style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Label
-                          labelKey={get(item, applicationNumber.jsonPath)}
-                          fontSize={14}
-                          style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                        />
-                      </Grid>
-                    </Grid>
-                    <Grid container style={{ marginBottom: 12 }}>
-                      <Grid item xs={6}>
-                        <Label
-                          labelKey={ownerName.label}
-                          fontSize={14}
-                          style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Label
-                          labelKey={get(item, ownerName.jsonPath)}
-                          fontSize={14}
-                          style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                        />
-                      </Grid>
-                    </Grid>
-                    {get(item, moduleNumber.jsonPath) && (
-                      <Grid container style={{ marginBottom: 12 }}>
-                        <Grid item xs={6}>
-                          <Label
-                            labelKey={moduleNumber.label}
-                            fontSize={14}
-                            style={{
-                              fontSize: 14,
-                              color: "rgba(0, 0, 0, 0.60"
-                            }}
-                          />
+                    {contents.map(content => {
+                      return (
+                        <Grid container style={{ marginBottom: 12 }}>
+                          <Grid item xs={6}>
+                            <Label
+                              labelKey={content.label}
+                              fontSize={14}
+                              style={{
+                                fontSize: 14,
+                                color: "rgba(0, 0, 0, 0.60"
+                              }}
+                            />
+                          </Grid>
+                          <Grid item xs={6}>
+                            <Label
+                              labelKey={this.generateLabelKey(content, item)}
+                              fontSize={14}
+                              checkValueForNA={checkValueForNA}
+                              style={{
+                                fontSize: 14,
+                                color: "rgba(0, 0, 0, 0.87"
+                              }}
+                            />
+                          </Grid>
                         </Grid>
-                        <Grid item xs={6}>
-                          <Label
-                            labelKey={get(item, moduleNumber.jsonPath)}
-                            style={{
-                              fontSize: 14,
-                              color: "rgba(0, 0, 0, 0.87"
-                            }}
-                          />
-                        </Grid>
-                      </Grid>
-                    )}
-                    <Grid container style={{ marginBottom: 12 }}>
-                      <Grid item xs={6}>
-                        <Label
-                          labelKey={status.label}
-                          style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.60" }}
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Label
-                          labelKey={`${statusPrefix}${get(
-                            item,
-                            status.jsonPath
-                          )}`}
-                          style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
-                        />
-                      </Grid>
-                    </Grid>
+                      );
+                    })}
                     <Link to={this.onCardClick(item)}>
                       <div>
                         <Label
@@ -206,7 +168,7 @@ class SingleApplication extends React.Component {
               color="primary"
               onClick={this.onButtonCLick}
             >
-              <Label labelKey="NEW TRADE LICENSE" />
+              <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
             </Button>
           </div>
         )}
