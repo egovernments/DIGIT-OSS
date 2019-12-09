@@ -101,7 +101,7 @@ public class PaymentRepository {
             
             for(Payment payment : payments) {
             	payment.getPaymentDetails().forEach(detail -> {
-            		detail.setBill(billMap.get(detail.getBill()));
+            		detail.setBill(billMap.get(detail.getBillId()));
             	});
             }
         }
