@@ -53,12 +53,18 @@ public class BillRowMapper implements ResultSetExtractor<List<Bill>> {
 
 				bill = Bill.builder().id(billId).totalAmount(BigDecimal.ZERO).tenantId(rs.getString("b_tenantid"))
 						.status(StatusEnum.fromValue(rs.getString("b_status")))
-						.businessService(rs.getString("b_businessService")).billNumber(rs.getString("b_billnumber"))
-						.billDate(rs.getLong("b_billdate")).consumerCode(rs.getString("b_consumerCode"))
-						.collectionModesNotAllowed(
-								Arrays.asList(rs.getString("b_collectionmodesnotallowed").split(",")))
+						.businessService(rs.getString("b_businessService"))
+						.billNumber(rs.getString("b_billnumber"))
+						.billDate(rs.getLong("b_billdate"))
+						.consumerCode(rs.getString("b_consumerCode"))
 						.partPaymentAllowed(rs.getBoolean("b_partpaymentallowed"))
-						.isAdvanceAllowed(rs.getBoolean("b_isadvanceallowed")).auditDetails(auditDetails).build();
+						.isAdvanceAllowed(rs.getBoolean("b_isadvanceallowed"))
+						.auditDetails(auditDetails).build();
+				
+				if(null != rs.getString("b_collectionmodesnotallowed")) {
+					bill.setCollectionModesNotAllowed(
+							Arrays.asList(rs.getString("b_collectionmodesnotallowed").split(",")));
+				}
 
 				PGobject obj = (PGobject) rs.getObject("b_additionalDetails");
 				bill.setAdditionalDetails(getJsonValue(obj));
@@ -93,7 +99,7 @@ public class BillRowMapper implements ResultSetExtractor<List<Bill>> {
 					.tenantId(rs.getString("ad_tenantid")).billDetailId(rs.getString("ad_billdetailid"))
 					.order(rs.getInt("ad_order")).amount(rs.getBigDecimal("ad_amount"))
 					.adjustedAmount(rs.getBigDecimal("ad_adjustedamount")).taxHeadCode(rs.getString("ad_taxheadcode"))
-					.demandDetailId(rs.getString("demanddetailid")).build();
+					.demandDetailId(rs.getString("ad_demanddetailid")).build();
 			
 			PGobject obj = (PGobject) rs.getObject("ad_additionalDetails");
 			billAccDetail.setAdditionalDetails(getJsonValue(obj));
