@@ -824,7 +824,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
         columns: [
           {
             width: 160,
-            text: "Occupancy Type"
+            text: getLocaleLabels("Occupancy Type","TL_LOCALIZATION_OCCUPANCY_TYPE")
           },
           {
             width: "*",
@@ -837,7 +837,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
         columns: [
           {
             width: 160,
-            text: "Trade Address"
+            text: getLocaleLabels("Trade Address","TL_LOCALIZATION_TRADE_ADDRESS")
           },
           {
             width: "*",
@@ -850,7 +850,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
         columns: [
           {
             width: 160,
-            text: "Trade Type"
+            text: getLocaleLabels("Trade Type","TL_LOCALIZATION_TRADE_TYPE")
           },
           {
             width: "*",
@@ -1033,7 +1033,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
       },
       "tl-certificate-footer": {
         fontSize: 14,
-        margin: [0, 50, 0, 0], //left top right bottom
+        margin: [0, 30, 0, 0], //left top right bottom
         color: "#1E1E1E"
       },
 
