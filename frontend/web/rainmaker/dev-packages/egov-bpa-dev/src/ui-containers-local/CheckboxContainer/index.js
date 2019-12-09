@@ -36,7 +36,6 @@ class CheckboxLabels extends React.Component {
       approveCheck,
       jsonPath
     } = this.props;
-    console.log("event.value", this.props);
 
     disbaleComponentJsonPaths &&
       disbaleComponentJsonPaths.map(componentJsonPath => {
@@ -51,8 +50,14 @@ class CheckboxLabels extends React.Component {
       sourceJsonPaths &&
         destinationJsonPaths &&
         sourceJsonPaths.forEach((sourceJSonPath, index) => {
-          approveCheck(
-            destinationJsonPaths[index],
+          // approveCheck(
+          //   destinationJsonPaths[index],
+          //   get(preparedFinalObject, sourceJSonPath)
+          // );
+          onFieldChange(
+            screenKey,
+            disbaleComponentJsonPaths[index],
+            "props.value",
             get(preparedFinalObject, sourceJSonPath)
           );
         });
@@ -60,7 +65,11 @@ class CheckboxLabels extends React.Component {
       sourceJsonPaths &&
         destinationJsonPaths &&
         destinationJsonPaths.forEach((destinationJsonPath, index) => {
-          approveCheck(destinationJsonPaths[index], {});
+          approveCheck(destinationJsonPaths[index], "");
+        });
+      disbaleComponentJsonPaths &&
+        disbaleComponentJsonPaths.map(componentJsonPath => {
+          onFieldChange(screenKey, componentJsonPath, "props.value", "");
         });
     }
     this.setState({ [name]: event.target.checked }, () =>
