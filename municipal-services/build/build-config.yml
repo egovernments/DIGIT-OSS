@@ -92,3 +92,19 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "ws-calculator/src/main/resources/db"
         image-name: "ws-calculator-db"
+
+  - name: "municipal-services/sw-services"
+    build:
+      - work-dir: "sw-services"
+        image-name: "sw-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "sw-services/src/main/resources/db"
+        image-name: "sw-services-db"
+
+  - name: "municipal-services/sw-calculator"
+    build:
+      - work-dir: "sw-calculator"
+        image-name: "sw-calculator"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "sw-calculator/src/main/resources/db"
+        image-name: "sw-calculator-db"                
