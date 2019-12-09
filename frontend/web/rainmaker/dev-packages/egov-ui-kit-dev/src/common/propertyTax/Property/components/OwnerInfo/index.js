@@ -1,3 +1,6 @@
+
+import { Card } from "components";
+import Label from "egov-ui-kit/utils/translationNode";
 import React from "react";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
@@ -137,16 +140,83 @@ const formatOwnerInfo = (itemsArray = []) => {
 
 const OwnerInfo = ({ properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory }) => {
   let ownerItems = [];
+  let ownerInfo = []
+  let multipleOwner = false;
   const header = 'PT_OWNERSHIP_INFO_SUB_HEADER';
   if (properties) {
     const { propertyDetails } = properties;
     if (propertyDetails && propertyDetails.length > 0) {
-      ownerItems = formatOwnerInfo(getOwnerInfo(propertyDetails[0], generalMDMSDataById));
+
+      ownerInfo = getOwnerInfo(propertyDetails[0], generalMDMSDataById);
+      if (ownerInfo.length == 1) {
+        ownerItems = formatOwnerInfo(ownerInfo);
+      } else {
+        multipleOwner = true;
+      }
+
     }
   }
   return (
-    <PropertyInfoCard editIcon={editIcon} items={ownerItems} header={header} ownershipTransfer={ownershipTransfer} viewHistory={viewHistory}></PropertyInfoCard>
-  );
+    <div>
+      {multipleOwner && <div>
+        {ownerInfo && <Card style={{ backgroundColor: 'rgb(242, 242, 242)', boxShadow: 'none' }}
+          textChildren={
+            <div >
+              <div className="pt-rf-title rainmaker-displayInline" style={{ justifyContent: "space-between", margin: '5px 0px 5px 0px' }}>
+                <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: '13px' }}>
+                  {header && <Label
+                    labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                    label={header}
+                    fontSize="18px"
+                  />}
+                </div>
+                {{ editIcon } && <span style={{ alignItems: "right" }} >{editIcon}</span>}
+              </div>
+              <div>
+                {ownerInfo.map(
+                  (ownerItem, ind) => {
+                    return (<div className="col-sm-12 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
+                      <div className="pt-rf-title rainmaker-displayInline" style={{ justifyContent: "space-between", margin: '5px 0px 5px 0px' }}>
+                        <div className="rainmaker-displayInline" style={{ alignItems: "center", marginLeft: '13px' }}>
+                          {<Label
+                            labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                            label={'COMMON_OWNER'}
+                            secondaryText={'-' + (ind + 1)}
+                            fontSize="18px"
+                          />}
+                        </div>
+                      </div>
+                      {ownerItem.items.map(
+                        (item) => {
+                          return (<div>
+                            <div className="col-sm-3 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
+                              <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                                <Label
+                                  labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.54)", fontWeight: "400", lineHeight: "1.375em" }}
+                                  label={item.key ? item.key : "NA"}
+                                  fontSize="12px"
+                                />
+                              </div>
+                              <div className="col-sm-12 col-xs-12" style={{ padding: "5px 0px 0px 0px" }}>
+                                <Label
+                                  labelStyle={{ letterSpacing: "0.67px", color: "rgba(0, 0, 0, 0.87)", fontWeight: "400", lineHeight: "19px" }}
+                                  label={item.value ? item.value : "NA"}
+                                  fontSize="16px"
+                                />
+                              </div>
+                            </div>
+                          </div>)
+                        })}
+                    </div>)
+                  }
+                )}
+              </div>
+            </div>
+          }
+        />}
+      </div>}
+      {!multipleOwner && <PropertyInfoCard editIcon={editIcon} items={ownerItems} header={header} ownershipTransfer={ownershipTransfer} viewHistory={viewHistory}></PropertyInfoCard>}
+    </div>);
 };
 
 export default OwnerInfo;

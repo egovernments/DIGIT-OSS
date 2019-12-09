@@ -7,6 +7,7 @@ import {
   mergeDownloadButton
 } from "./groupBillResource/groupBillSearch";
 import { getBoundaryData } from "../../../../ui-utils/commons";
+import { resetFields } from "./groupBillResource/groupBillSearch";
 import { searchResults } from "./groupBillResource/searchResults";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "../../../../ui-utils";
@@ -80,6 +81,7 @@ const abgSearchAndResult = {
   uiFramework: "material-ui",
   name: "groupBills",
   beforeInitScreen: (action, state, dispatch) => {
+    resetFields(state,dispatch);
     getData(action, state, dispatch).then(responseAction => {
       const queryObj = [{ key: "tenantId", value: tenantId }];
       dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
