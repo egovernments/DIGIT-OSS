@@ -161,6 +161,7 @@ public class CCAvenueGateway implements Gateway {
     private Transaction transformRawResponse(String resp, Transaction currentStatus)
             throws JsonParseException, JsonMappingException, IOException {
 
+        String decyJsonString= "";
         Transaction.TxnStatusEnum status = Transaction.TxnStatusEnum.PENDING;
         CCAvenueStatusResponse statusResponse;
         Map<String, String> respMap = new HashMap<String, String>();
@@ -168,22 +169,21 @@ public class CCAvenueGateway implements Gateway {
                 param -> respMap.put(param.split("=")[0], param.split("=").length > 1 ? param.split("=")[1] : ""));
 
         if (respMap.get("status").equals("0")) {
+            decyJsonString = ccavenueUtil.decrypt(respMap.get("enc_response").replace("\r\n", ""));
+            statusResponse = new ObjectMapper().readValue(decyJsonString,CCAvenueStatusResponse.class);
 
-            statusResponse = new ObjectMapper().readValue(ccavenueUtil.decrypt(respMap.get("enc_response").replace("\r\n", "")),
-                    CCAvenueStatusResponse.class);
-
-            if (statusResponse.getOrderStatus().equalsIgnoreCase("Successful")
-                    || respMap.get("status").equalsIgnoreCase("RIP") || respMap.get("status").equalsIgnoreCase("SIP"))
+            if (statusResponse.getOrderStatus().equalsIgnoreCase("Successful") || 
+                statusResponse.getOrderStatus().equalsIgnoreCase("Shipped"))
                 status = Transaction.TxnStatusEnum.SUCCESS;
-            else if (respMap.get("status").equalsIgnoreCase("FAILED")
-                    || respMap.get("status").equalsIgnoreCase("TIMEOUT"))
+            else if (statusResponse.getOrderStatus().equalsIgnoreCase("Unsuccessful"))
                 status = Transaction.TxnStatusEnum.FAILURE;
 
             return Transaction.builder().txnId(currentStatus.getTxnId())
-                    .txnAmount(Utils.formatAmtAsRupee(respMap.get("BA").equals("NA") ? "0.00" : respMap.get("BA")))
-                    .txnStatus(status).gatewayTxnId(respMap.get("ezpaytranid"))
-                    .gatewayPaymentMode(respMap.get("PaymentMode")).gatewayStatusCode(respMap.get("status"))
-                    .responseJson(resp).build();
+                    .txnAmount(Utils.formatAmtAsRupee(statusResponse.getOrderCaptAmt()))
+                    .txnStatus(status).gatewayTxnId(statusResponse.getReferenceNo())
+                    .gatewayPaymentMode(statusResponse.getOrderOptionType())
+                    .gatewayStatusCode(statusResponse.getOrderStatus())
+                    .responseJson(decyJsonString).build();
 
         } else {
             log.error("Received error response from status call : " + respMap.get("enc_response"));

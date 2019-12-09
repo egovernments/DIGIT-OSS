@@ -1,5 +1,6 @@
 package org.egov.pg.service.gateways.ccavenue;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({ "reference_no", "order_no", "order_currncy", "order_amt", "order_date_time", "order_bill_name",
         "order_bill_address", "order_bill_zip", "order_bill_tel", "order_bill_email", "order_bill_country",
         "order_ship_name", "order_ship_address", "order_ship_country", "order_ship_tel", "order_bill_city",
