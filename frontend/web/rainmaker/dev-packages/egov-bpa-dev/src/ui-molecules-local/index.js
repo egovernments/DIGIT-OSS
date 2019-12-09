@@ -22,6 +22,11 @@ const CustomTab = Loadable({
   loading: () => <Loading />
 });
 
+const SingleApplicationedcr = Loadable({
+  loader: () => import("./SingleApplicationedcr"),
+  loading: () => <Loading />
+});
+
 const UploadSingleFile = Loadable({
   loader: () => import("./UploadSingleFile"),
   loading: () => <Loading />
@@ -61,5 +66,6 @@ export {
   DocumentList,
   MapLocator,
   FeesEstimateCard,
-  HowItWorks
+  HowItWorks,
+  SingleApplicationedcr
 };
