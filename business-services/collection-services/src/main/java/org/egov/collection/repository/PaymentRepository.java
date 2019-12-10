@@ -1,6 +1,44 @@
 package org.egov.collection.repository;
 
-import lombok.extern.slf4j.Slf4j;
+import static java.util.Collections.reverseOrder;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.COPY_BILLDETAIL_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.COPY_BILL_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.COPY_PAYMENTDETAIL_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.COPY_PAYMENT_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.INSERT_BILLACCOUNTDETAIL_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.INSERT_BILLDETAIL_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.INSERT_BILL_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.INSERT_PAYMENTDETAIL_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.INSERT_PAYMENT_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.STATUS_UPDATE_BILL_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.STATUS_UPDATE_PAYMENTDETAIL_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.STATUS_UPDATE_PAYMENT_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.UPDATE_BILLDETAIL_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.UPDATE_BILL_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.UPDATE_PAYMENTDETAIL_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.UPDATE_PAYMENT_SQL;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParametersForBillAccountDetailCreate;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParametersForPaymentCreate;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParametersForPaymentDetailCreate;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParametersForPaymentDetailStatusUpdate;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParametersForPaymentDetailUpdate;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParametersForPaymentStatusUpdate;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParametersForPaymentUpdate;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParamtersForBillCreate;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParamtersForBillDetailCreate;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParamtersForBillDetailUpdate;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParamtersForBillStatusUpdate;
+import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.getParamtersForBillUpdate;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentDetail;
 import org.egov.collection.model.PaymentSearchCriteria;
@@ -16,19 +54,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.security.Identity;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
-import static java.util.Collections.reverseOrder;
-import static org.egov.collection.repository.querybuilder.PaymentQueryBuilder.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Repository
