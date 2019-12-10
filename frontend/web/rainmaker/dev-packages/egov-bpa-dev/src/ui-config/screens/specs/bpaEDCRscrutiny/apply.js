@@ -8,7 +8,7 @@ import {
   getCommonParagraph,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { documentList } from "./applyResource/documentList";
+// import { documentList } from "./applyResource/documentList";
 
 const header = getCommonHeader({
   labelName: "New Building Plan Scrutiny",
@@ -79,7 +79,7 @@ const buildingInfoCard = getCommonCard({
         sm: 6
       },
       required: true,
-      pattern: getPattern("Name"),
+      pattern: getPattern("Name")
     }),
     licenseeSubType: {
       ...getSelectField({
@@ -96,7 +96,7 @@ const buildingInfoCard = getCommonCard({
           xs: 12,
           sm: 6
         }
-      }),
+      })
     },
     buttonContainer: getCommonContainer({
       firstCont: {
@@ -136,7 +136,7 @@ const buildingInfoCard = getCommonCard({
           callBack: resetFields
         }
       },
-  
+
       searchButton: {
         componentPath: "Button",
         gridDefination: {
@@ -167,7 +167,7 @@ const buildingInfoCard = getCommonCard({
           }
         }
       },
-  
+
       lastCont: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
