@@ -112,7 +112,7 @@ serviceMaps:
     fromTopic: update-pt-assessment
     isTransaction: true
     queryMaps:
-    
+
     - query: INSERT INTO eg_pt_assessment_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_assessment WHERE id = ?;
       basePath: Assessment
       jsonMaps:
@@ -126,7 +126,7 @@ serviceMaps:
 
       - jsonPath: $.Assessment.units.*.id
       
-
+      
     - query: UPDATE eg_pt_assessment SET financialyear = ?, status = ?, source = ?, assessmentDate = ?, buildUpArea = ?, additionaldetails = ?, lastmodifiedby = ?, lastmodifiedtime = ? WHERE id = ?;
       basePath: Assessment
       jsonMaps:
@@ -246,7 +246,5 @@ serviceMaps:
       - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedBy
 
       - jsonPath: $.Assessment.documents.*.auditDetails.lastModifiedTime
-      
-      
       
       
