@@ -7,7 +7,7 @@ serviceMaps:
     isTransaction: true
     queryMaps:
 
-    - query: INSERT INTO eg_pt_property (id, propertyid, tenantid, accountid, oldpropertyid, status, acknowldgementnumber, propertytype, ownershipcategory, creationreason, occupancydate, constructiondate, nooffloors, landarea, source, parentproperties, createdby, createdtime, lastmodifiedby, lastmodifiedtime, additionaldetails) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_pt_property (id, propertyid, tenantid, accountid, oldpropertyid, status, acknowldgementnumber, propertytype, ownershipcategory, usagecategory, creationreason, occupancydate, constructiondate, nooffloors, landarea, source, parentproperties, createdby, createdtime, lastmodifiedby, lastmodifiedtime, additionaldetails) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: Property
       jsonMaps:
 
@@ -28,6 +28,8 @@ serviceMaps:
       - jsonPath: $.Property.propertyType
 
       - jsonPath: $.Property.ownershipCategory
+      
+      - jsonPath: $.Property.usageCategory      
 
       - jsonPath: $.Property.creationReason
 
@@ -417,5 +419,4 @@ serviceMaps:
       - jsonPath: $.Property.auditDetails.createdTime
 
       - jsonPath: $.Property.auditDetails.lastModifiedTime    
-    
-    
+   
