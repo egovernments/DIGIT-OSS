@@ -116,7 +116,7 @@
               {
                 "variable": "logo-header",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.logo-header"
                 },
                 "type": "label",
                 "localisation":{
@@ -128,7 +128,7 @@
               {
                 "variable": "payment_receipt",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.payment_receipt"
                 },
                 "type": "label",
                 "localisation":{
@@ -140,7 +140,7 @@
               {
                 "variable": "receipt_no",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.receipt_no"
                 },
                 "type": "label",
                 "localisation":{
@@ -152,7 +152,7 @@
               {
                 "variable": "consumer_id",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.consumer_id"
                 },
                 "type": "label",
                 "localisation":{
@@ -164,7 +164,7 @@
               {
                 "variable": "payment_date",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.payment_date"
                 },
                 "type": "label",
                 "localisation":{
@@ -176,7 +176,7 @@
               {
                 "variable": "payer_name",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.payer_name"
                 },
                 "type": "label",
                 "localisation":{
@@ -188,7 +188,7 @@
               {
                 "variable": "payer_contact",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.payer_contact"
                 },
                 "type": "label",
                 "localisation":{
@@ -200,7 +200,7 @@
               {
                 "variable": "service_type",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.service_type"
                 },
                 "type": "label",
                 "localisation":{
@@ -212,7 +212,7 @@
               {
                 "variable": "billing_period",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.billing_period"
                 },
                 "type": "label",
                 "localisation":{
@@ -224,7 +224,7 @@
               {
                 "variable": "paid_amount",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.paid_amount"
                 },
                 "type": "label",
                 "localisation":{
@@ -236,7 +236,7 @@
               {
                 "variable": "pending_amount",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.pending_amount"
                 },
                 "type": "label",
                 "localisation":{
@@ -248,7 +248,7 @@
               {
                 "variable": "payment_mode",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.payment_mode"
                 },
                 "type": "label",
                 "localisation":{
@@ -260,7 +260,7 @@
               {
                 "variable": "transaction_id",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.transaction_id"
                 },
                 "type": "label",
                 "localisation":{
@@ -272,7 +272,7 @@
               {
                 "variable": "g8_receipt_no",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.g8_receipt_no"
                 },
                 "type": "label",
                 "localisation":{
@@ -284,7 +284,7 @@
               {
                 "variable": "g8_receipt_date",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.g8_receipt_date"
                 },
                 "type": "label",
                 "localisation":{
@@ -296,7 +296,7 @@
               {
                 "variable": "generated_by",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.generated_by"
                 },
                 "type": "label",
                 "localisation":{
@@ -306,9 +306,9 @@
                }
               },
               {
-                "variable": "commissioner/eO",
+                "variable": "commissioner/eo",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.commissioner_eo"
                 },
                 "type": "label",
                 "localisation":{
@@ -320,7 +320,7 @@
               {
                 "variable": "no_signature",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.no_signature"
                 },
                 "type": "label",
                 "localisation":{
@@ -332,7 +332,7 @@
               {
                 "variable": "disclamer",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.disclamer"
                 },
                 "type": "label",
                 "localisation":{
@@ -344,7 +344,7 @@
               {
                 "variable": "disclamer_1",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.disclamer_1"
                 },
                 "type": "label",
                 "localisation":{
@@ -356,7 +356,7 @@
               {
                 "variable": "disclamer_2",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.disclamer_2"
                 },
                 "type": "label",
                 "localisation":{
@@ -368,7 +368,7 @@
               {
                 "variable": "disclamer_3",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.disclamer_3"
                 },
                 "type": "label",
                 "localisation":{
@@ -380,7 +380,7 @@
               {
                 "variable": "disclamer_4",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.disclamer_4"
                 },
                 "type": "label",
                 "localisation":{
@@ -392,7 +392,7 @@
               {
                 "variable": "disclamer_5",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.disclamer_5"
                 },
                 "type": "label",
                 "localisation":{
@@ -404,7 +404,7 @@
               {
                 "variable": "to",
                 "value": {
-                  "path": "localisation-code"
+                  "path": "pdf.static.label.consolidated.receipt.to"
                 },
                 "type": "label",
                 "localisation":{
