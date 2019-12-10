@@ -18,9 +18,9 @@ SearchDefinitions:
     searchParams:
       condition: AND
       params:
-      - name: result.applicationNumber
+      - name: result.referenceNumber
         isMandatory: true
-        jsonPath: $.searchCriteria.id
+        jsonPath: $.searchCriteria.referenceNumber
         operator: 
       - name: result.tenantid
         isMandatory: true
@@ -46,9 +46,9 @@ SearchDefinitions:
     searchParams:
       condition: AND
       params:
-      - name: result.firenocnumber
+      - name: result.referenceNumber
         isMandatory: true
-        jsonPath: $.searchCriteria.id
+        jsonPath: $.searchCriteria.referenceNumber
         operator: 
       - name: result.tenantid
         isMandatory: true
