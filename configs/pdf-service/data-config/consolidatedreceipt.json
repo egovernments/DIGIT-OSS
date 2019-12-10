@@ -114,7 +114,7 @@
                 "type":"image"      
               },
               {
-                "variable": "amc",
+                "variable": "logo-header",
                 "value": {
                   "path": "localisation-code"
                 },

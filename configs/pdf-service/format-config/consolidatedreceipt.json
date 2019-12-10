@@ -23,7 +23,7 @@
               {
                 "stack": [
                   {
-                    "text": "{{amc}}",
+                    "text": "{{logo-header}}",
                     "style": "receipt-logo-header"
                   },
                   {
