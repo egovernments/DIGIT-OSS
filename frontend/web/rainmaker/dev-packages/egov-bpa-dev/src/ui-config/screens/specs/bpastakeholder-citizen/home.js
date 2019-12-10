@@ -7,8 +7,8 @@ import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon"
 import "../utils/index.css";
 const header = getCommonHeader(
   {
-    labelName: "Trade License",
-    labelKey: "TL_COMMON_TL"
+    labelName: "Building Plan Approval",
+    labelKey: "BPA_CITIZEN_COMMON_TITLE"
   },
   {
     classes: {
