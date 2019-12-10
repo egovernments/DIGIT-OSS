@@ -7,7 +7,7 @@ import isUndefined from "lodash/isUndefined";
 import sortBy from "lodash/sortBy";
 import DownArrow from "material-ui/svg-icons/navigation/arrow-drop-down";
 import Label from "../../utils/translationNode";
-import { getTranslatedLabel ,replaceDotWithUnderscore} from "../../utils/commons";
+import { getTranslatedLabel } from "../../utils/commons";
 import { relative } from "path";
 
 const hintBaseStyle = {
@@ -56,21 +56,9 @@ class AutoSuggestDropdown extends React.Component {
     this.setState({ searchText });
   };
 
-  getTransformedLocale = (label) => {
-    return label.toUpperCase().replace(/[.:-\s\/]/g, "_");
-  };
-
   getLocalizedLabel = (label) => {
-    const { localizationLabels ,localePrefix} = this.props;
-    const { moduleName, masterName } = localePrefix || "";
-    const {getTransformedLocale}=this;
-    return typeof localePrefix === "string" ? (
-      getTranslatedLabel(`${getTransformedLocale(localePrefix)}_${getTransformedLocale(replaceDotWithUnderscore(label))}`)
-    ) : typeof localePrefix === "object" ? (
-      getTranslatedLabel(`${getTransformedLocale(moduleName)}_${getTransformedLocale(masterName)}_${getTransformedLocale(replaceDotWithUnderscore(label))}`)
-    ) : (
-      value
-    );
+    const { localizationLabels } = this.props;
+    return getTranslatedLabel(label, localizationLabels);
   };
 
   render() {
@@ -89,7 +77,6 @@ class AutoSuggestDropdown extends React.Component {
       toolTip,
       updateDependentFields,
       toolTipMessage,
-      localePrefix,
       ...restProps
     } = this.props;
     const { filterAutoComplete, getNameById, onChangeText, getLocalizedLabel } = this;
@@ -122,7 +109,7 @@ class AutoSuggestDropdown extends React.Component {
           searchText={searchText}
           underlineDisabledStyle={underlineDisabledStyle}
           dataSource={(items && [...items]) || []}
-          menuStyle={{ maxHeight: "250px"}}
+          menuStyle={{ maxHeight: "150px", overflowY: "hidden" }}
           dataSourceConfig={{ text: "label", value: "value" }}
           onNewRequest={onChange}
           onUpdateInput={onChangeText}

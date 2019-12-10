@@ -14,7 +14,7 @@ const formConfig = {
     city: {
       id: "city",
       numcols: 4,
-      localePrefix: { moduleName: "tenant", masterName: "tenants" },
+      // localePrefix: { moduleName: "tenant", masterName: "tenants" },
       dontReset: (process.env.REACT_APP_NAME !== "Citizen" ? true : false),
       fullWidth: true,
       className: "search-property-form-pt",
