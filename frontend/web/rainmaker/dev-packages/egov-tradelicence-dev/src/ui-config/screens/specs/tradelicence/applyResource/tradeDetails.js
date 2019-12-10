@@ -1073,11 +1073,11 @@ export const tradeDetails = getCommonCard(
       }),
       tradeOperationalArea: getTextField({
         label: {
-          labelName: "Operatonal Area (Sq Ft)",
+          labelName: "Operatonal Area (Sq.ft)",
           labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_LABEL"
         },
         placeholder: {
-          labelName: "Enter Operatonal Area in Sq Ft",
+          labelName: "Enter Operatonal Area in Sq.ft",
           labelKey: "TL_NEW_TRADE_DETAILS_OPR_AREA_PLACEHOLDER"
         },
         pattern: getPattern("OperationalArea"),

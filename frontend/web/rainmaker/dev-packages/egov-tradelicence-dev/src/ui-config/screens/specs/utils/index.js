@@ -2340,7 +2340,7 @@ export const resetFields = (
         fields[variable].props &&
         (fields[variable].props.value)) {
 
-        dispatch(handleField("search", `${objectJsonPath}.${variable}`, "props.value", " "));
+        dispatch(handleField("search", `${objectJsonPath}.${variable}`, "props.value", ""));
       }
     }
   }
