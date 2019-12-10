@@ -961,7 +961,7 @@ const getToolTipInfo = (taxHead, LicenseData) => {
 };
 
 const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
-  if (Bill ) {
+  if (Bill) {
     const extraData = ["TL_COMMON_REBATE", "TL_COMMON_PEN"].map(item => {
       return {
         name: {
@@ -1134,16 +1134,15 @@ const isApplicationPaid = currentStatus => {
   let isPAID = false;
 
   if (!isEmpty(JSON.parse(localStorageGet("businessServiceData")))) {
-    const buisnessSeviceStates = JSON.parse(
-      localStorageGet("businessServiceData")
-    )[0].states;
-    for (var i = 0; i < buisnessSeviceStates.length; i++) {
-      if (buisnessSeviceStates[i].state === currentStatus) {
+    const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item=>item.businessService === "NewTL")
+    const states = tlBusinessService[0].states;
+    for (var i = 0; i < states.length; i++) {
+      if (states[i].state === currentStatus) {
         break;
       }
       if (
-        buisnessSeviceStates[i].actions &&
-        buisnessSeviceStates[i].actions.filter(item => item.action === "PAY")
+        states[i].actions &&
+        states[i].actions.filter(item => item.action === "PAY")
           .length > 0
       ) {
         isPAID = true;
@@ -1194,35 +1193,36 @@ export const createEstimateData = async (
   ];
   const currentStatus = LicenseData.status;
   const isPAID = isApplicationPaid(currentStatus);
-  // const payload = getFromReceipt
-  //   ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-  //   : await getBill(queryObj);
-  // const estimateData = payload
-  //   ? getFromReceipt
-  //     ? getEstimateData(payload.Receipt[0].Bill, getFromReceipt, LicenseData)
-  //     : payload.billResponse &&
-  //       getEstimateData(payload.billResponse.Bill, false, LicenseData)
-  //   : [];
-const fetchBillResponse=await getBill(getBillQueryObj);
+  const fetchBillResponse = await getBill(getBillQueryObj);
   const payload = isPAID
     ? await getReceipt(queryObj.filter(item => item.key !== "businessService"))
-    : fetchBillResponse&&fetchBillResponse.Bill&&fetchBillResponse.Bill[0];
+    : fetchBillResponse && fetchBillResponse.Bill && fetchBillResponse.Bill[0];
   let estimateData = payload
     ? isPAID
-      ?payload&&payload.Payments&&payload.Payments.length>0&& getEstimateData(payload.Payments[0].paymentDetails[0].bill, isPAID, LicenseData)
-      : payload&&
-        getEstimateData(payload, false, LicenseData)
+      ? payload &&
+        payload.Payments &&
+        payload.Payments.length > 0 &&
+        getEstimateData(
+          payload.Payments[0].paymentDetails[0].bill,
+          isPAID,
+          LicenseData
+        )
+      : payload && getEstimateData(payload, false, LicenseData)
     : [];
-    estimateData=estimateData||[];
+  estimateData = estimateData || [];
   dispatch(prepareFinalObject(jsonPath, estimateData));
   const accessories = get(LicenseData, "tradeLicenseDetail.accessories", []);
-  if(payload){
-    const getBillResponse=await calculateBill(getBillQueryObj);
+  if (payload) {
+    const getBillResponse = await calculateBill(getBillQueryObj);
     getBillResponse &&
-    getBillResponse.billingSlabIds &&
-      getBillingSlabData(dispatch, getBillResponse.billingSlabIds, tenantId, accessories);
+      getBillResponse.billingSlabIds &&
+      getBillingSlabData(
+        dispatch,
+        getBillResponse.billingSlabIds,
+        tenantId,
+        accessories
+      );
   }
-
 
   /** Waiting for estimate to load while downloading confirmation form */
   var event = new CustomEvent("estimateLoaded", { detail: true });
@@ -2243,7 +2243,11 @@ export const getTextToLocalMapping = label => {
     case "APPLIED":
       return getLocaleLabels("Applied", "TL_APPLIED", localisationLabels);
     case "PAID":
-      return getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
+      return getLocaleLabels(
+        "Paid",
+        "WF_NEWTL_PENDINGAPPROVAL",
+        localisationLabels
+      );
 
     case "APPROVED":
       return getLocaleLabels("Approved", "TL_APPROVED", localisationLabels);
@@ -2287,6 +2291,6 @@ export const getTextToLocalMapping = label => {
   }
 };
 
-export const checkValueForNA = (value) => {
+export const checkValueForNA = value => {
   return value ? value : "NA";
-}
+};
