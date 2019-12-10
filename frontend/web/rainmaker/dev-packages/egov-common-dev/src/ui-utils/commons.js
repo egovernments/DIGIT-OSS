@@ -528,6 +528,13 @@ export const download = (receiptQueryString, mode = "download") => {
         { key: "key", value: "consolidatedreceipt" },
         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
       ]
+      }
+      if(payloadReceiptDetails.Payments[0].paymentDetails[0].businessService === 'TL'){
+        queryStr = [
+         { key: "key", value: "tl-receipt" },
+         { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+       ]
+       }
       if(payloadReceiptDetails&&payloadReceiptDetails.Payments&&payloadReceiptDetails.Payments.length==0){
         console.log("Could not find any receipts");
         return;
