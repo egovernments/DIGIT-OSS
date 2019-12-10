@@ -1,0 +1,136 @@
+{
+  "tenantId": "pb",
+  "moduleName": "PropertyTax",
+  "UsageCategory": [
+    {
+      "name": "Residential",
+      "code": "RESIDENTIAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "NonResidential",
+      "code": "NONRESIDENTIAL",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Mixed",
+      "code": "MIXED",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Commercial",
+      "code": "NONRESIDENTIAL.COMMERCIAL",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 0,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },
+    {
+      "name": "Industrial",
+      "code": "NONRESIDENTIAL.INDUSTRIAL",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 0,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },
+    {
+      "name": "Institutional",
+      "code": "NONRESIDENTIAL.INSTITUTIONAL",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 0,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },
+    {
+      "name": "Other Non-Residential",
+      "code": "NONRESIDENTIAL.OTHERS",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 100,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },
+    {
+      "name": "Retail",
+      "code": "NONRESIDENTIAL.COMMERCIAL.RETAIL",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 0,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },
+    {
+      "name": "Hotels",
+      "code": "NONRESIDENTIAL.COMMERCIAL.HOTELS",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 0,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },
+    {
+      "name": "Office Space",
+      "code": "NONRESIDENTIAL.COMMERCIAL.OFFICESPACE",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 0,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },
+    {
+      "name": "Food Joints",
+      "code": "NONRESIDENTIAL.COMMERCIAL.FOODJOINTS",
+      "active": true,
+      "fromFY": "2015-16",
+      "exemption": {
+        "rate": 0,
+        "maxAmount": 0,
+        "flatAmount": 0
+      }
+    },
+    {
+      "name": "Showroom",
+      "code": "NONRESIDENTIAL.COMMERCIAL.RETAIL.SHOWROOM",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Malls",
+      "code": "NONRESIDENTIAL.COMMERCIAL.RETAIL.MALLS",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "AC Restaurant",
+      "code": "NONRESIDENTIAL.COMMERCIAL.FOODJOINTS.ACRESTAURANT",
+      "active": true,
+      "fromFY": "2015-16"
+    },
+    {
+      "name": "Non AC Restaurant",
+      "code": "NONRESIDENTIAL.COMMERCIAL.FOODJOINTS.NONACRESTAURANT",
+      "active": true,
+      "fromFY": "2015-16"
+    }
+  ]
+}
