@@ -359,7 +359,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     const tenantId = ifUserRoleExists("CITIZEN") ? cityId : getTenantId();
     const BSqueryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessService", value: "newTL" }
+      { key: "businessServices", value: "NewTL" }
     ];
     if (process.env.REACT_APP_NAME === "Citizen") {
       let currentFinancialYr = getCurrentFinancialYear();
