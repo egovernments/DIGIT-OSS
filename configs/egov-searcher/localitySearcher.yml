@@ -22,10 +22,6 @@ SearchDefinitions:
         isMandatory: true
         jsonPath: $.searchCriteria.referenceNumber
         operator: 
-      - name: result.tenantid
-        isMandatory: true
-        jsonPath: $.searchCriteria.tenantId
-        operator: =
 
     output:
       jsonFormat: {"ResponseInfo": {}}
@@ -50,10 +46,6 @@ SearchDefinitions:
         isMandatory: true
         jsonPath: $.searchCriteria.referenceNumber
         operator: 
-      - name: result.tenantid
-        isMandatory: true
-        jsonPath: $.searchCriteria.tenantId
-        operator: =
 
     output:
       jsonFormat: {"ResponseInfo": {}}
