@@ -85,19 +85,7 @@ class SingleApplication extends React.Component {
   };
 
   render() {
-    const {
-      searchResults,
-      onActionClick,
-      classes,
-      applicationName,
-      applicationNumber,
-      ownerName,
-      moduleNumber,
-      status,
-      statusPrefix,
-      contents,
-      moduleName
-    } = this.props;
+    const { searchResults, classes, contents, moduleName } = this.props;
     return (
       <div className="application-card">
         {searchResults && searchResults.length > 0 ? (
