@@ -15645,5 +15645,28 @@
       "code": "null",
       "path": ""
     }
+    ,
+    {
+      "id": 1915,
+      "name": "Locality searcher endpoint for TL",
+      "url": "/egov-searcher/locality/TLLocalitySearcher/_get",
+      "displayName": "TL locality searcher",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-searcher",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1916,
+      "name": "Locality searcher endpoint for PT",
+      "url": "/egov-searcher/locality/FireNOCLocalitySearcher/_get",
+      "displayName": "FIRENOC locality searcher",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "egov-searcher",
+      "code": "null",
+      "path": ""
+    }
   ]
 }
