@@ -395,11 +395,16 @@
 						if(document.forms[0].elements[i].name != 'bankaccount' && document.forms[0].elements[i].name != 'bank_branch'
 							&& document.forms[0].elements[i].name != 'fromDate' && document.forms[0].elements[i].name != 'toDate' &&
 							document.forms[0].elements[i].name != 'button' && document.forms[0].elements[i].name != 'selectedRowsId'
-							&& document.forms[0].elements[i].name != 'containsRTGS' && document.forms[0].elements[i].name != 'voucherNumber'
-							&& document.forms[0].elements[i].name != 'instrumentNumber' && document.forms[0].elements[i].name != 'surrender'
-							&& document.forms[0].elements[i].name != 'department' && document.forms[0].elements[i].name != 'newInstrumentNumber' 
-							&& document.forms[0].elements[i].name != 'newInstrumentDate' && document.forms[0].elements[i].name != 'surrendarReasons' 
-							&& document.forms[0].elements[i].name != 'newInstrumentDate' && document.forms[0].elements[i].name != 'newSerialNo'){
+							&& document.forms[0].elements[i].name != 'containsRTGS' 
+							&& document.forms[0].elements[i].name != 'voucherNumber'
+							 /* && document.forms[0].elements[i].name != 'instrumentNumber' */ 
+							/* && document.forms[0].elements[i].name != 'surrender'  */
+							&& document.forms[0].elements[i].name != 'department' 
+							/* && document.forms[0].elements[i].name != 'newInstrumentNumber'  */
+							/* && document.forms[0].elements[i].name != 'newInstrumentDate'  */
+							 /* && document.forms[0].elements[i].name != 'surrendarReasons' */  
+							/* && document.forms[0].elements[i].name != 'newInstrumentDate' */ 
+							/* && document.forms[0].elements[i].name != 'newSerialNo' */){
 							document.forms[frmIndex].elements[i].disabled =true;
 						}						
 					}	

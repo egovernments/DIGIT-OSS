@@ -1498,7 +1498,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Starting searchChequesForSurrender...");
 
-        validateForSuurenderSearch();
+        validateForSurrenderSearch();
         if (getFieldErrors().size() > 0) {
             if (bank_branch != null && !bank_branch.equals("-1"))
                 addDropdownData(
@@ -1562,7 +1562,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
         if (LOGGER.isDebugEnabled())
             LOGGER.debug("Starting searchRTGSForSurrender...");
 
-        validateForSuurenderSearch();
+        validateForSurrenderSearch();
         if (getFieldErrors().size() > 0) {
             if (bank_branch != null && !bank_branch.equals("-1"))
                 addDropdownData(
@@ -1700,9 +1700,9 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
     }
 
     @SkipValidation
-    private void validateForSuurenderSearch() {
+    private void validateForSurrenderSearch() {
         if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Starting validateForSuurenderSearch...");
+            LOGGER.debug("Starting validateForSurrenderSearch...");
 
         if (bankaccount == null || bankaccount == -1)
             addFieldError("bankaccount", getMessage("bankaccount.empty"));
@@ -1713,7 +1713,7 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
             addFieldError("department", getMessage("validate.department.null"));
 
         if (LOGGER.isDebugEnabled())
-            LOGGER.debug("Completed validateForSuurenderSearch.");
+            LOGGER.debug("Completed validateForSurrenderSearch.");
     }
 
     @ValidationErrorPage(value = "surrendercheques")
@@ -1749,17 +1749,17 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
                 throw new ValidationException(Arrays.asList(new ValidationError("Exception while surrender Cheque ",
                         "please select department")));
             int j = 0;
-            instrumentHeaderList = (List<InstrumentHeader>) getSession().get("instrumentHeaderList");
-            final String[] newSurrender = new String[instrumentHeaderList.size()];
-            for (final InstrumentHeader iheader : instrumentHeaderList) {
-                newSurrender[j] = null;
-
-                for (final String ih : surrender)
-                    if (ih.equalsIgnoreCase(iheader.getId().toString()))
-                        newSurrender[j] = ih;
-                j++;
-            }
-            surrender = newSurrender;
+//            instrumentHeaderList = (List<InstrumentHeader>) getSession().get("instrumentHeaderList");
+//            final String[] newSurrender = new String[instrumentHeaderList.size()];
+//            for (final InstrumentHeader iheader : instrumentHeaderList) {
+//                newSurrender[j] = null;
+//
+//                for (final String ih : surrender)
+//                    if (ih.equalsIgnoreCase(iheader.getId().toString()))
+//                        newSurrender[j] = ih;
+//                j++;
+//            }
+//            surrender = newSurrender;
             if (surrender != null && surrender.length > 0) {
                 for (int i = 0; i < surrender.length; i++) {
                     if (surrender[i] == null)
@@ -1848,30 +1848,40 @@ public class ChequeAssignmentAction extends BaseVoucherAction {
         if (!selectedRowsId.isEmpty()) {
             instrumentHeaderList = new ArrayList<>();
             int length = selectedArray.length;
+            surrender = new String[length];
+            newInstrumentNumber = new String[length];
+            newInstrumentDate = new String[length];
+            newSerialNo = new String[length];
+            surrendarReasons = new String[length];
             for (int i = 0; i < length; i++) {
                 InstrumentHeader instrumentsHeader = new InstrumentHeader();
                 String[] items = selectedArray[i].split("\\~");
                 if (items[0] != null && !items[0].isEmpty()) {
                     instrumentsHeader.setId(Long.valueOf(items[0]));
+                    surrender[i]=items[0];
                 }
                 if (items[1] != null && !items[1].isEmpty()) {
                     instrumentsHeader.setInstrumentNumber(items[1]);
+                    newInstrumentNumber[i]=items[1];
                 }
                 try {
                     if (items[2] != null && !items[2].isEmpty()) {
                         instrumentsHeader.setInstrumentDate(formatter.parse(items[2]));
+                        newInstrumentDate[i]=items[2];
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 if (items[3] != null && !items[3].isEmpty()) {
                     instrumentsHeader.setSerialNo(financialYearDAO.findById(Long.valueOf(items[3]), false));
+                    newSerialNo[i]=items[3];
                 }
                 if (items[4] != null && !items[4].isEmpty()) {
                     String item = items[4];
                     if (item.contains(";"))
                         item = items[4].replace(";", "");
                     instrumentsHeader.setSurrendarReason(item);
+                    surrendarReasons[i]=item;
                 }
                 instrumentHeaderList.add(instrumentsHeader);
             }
