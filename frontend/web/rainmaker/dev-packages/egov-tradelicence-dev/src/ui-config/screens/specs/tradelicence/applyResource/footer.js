@@ -2,6 +2,7 @@ import {
   getLabel,
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {download} from "egov-common/ui-utils/commons"
 import { applyTradeLicense } from "../../../../../ui-utils/commons";
 import {
   getButtonVisibility,
@@ -621,7 +622,14 @@ export const footerReview = (
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-      generateReceipt(state, dispatch, "receipt_download");
+     
+      
+      const receiptQueryString = [
+        { key: "consumerCodes", value:  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber")},
+        { key: "tenantId", value:get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString);
+      // generateReceipt(state, dispatch, "receipt_download");
     },
     leftIcon: "receipt"
   };
@@ -660,6 +668,8 @@ export const footerReview = (
       ];
       break;
     case "APPLIED":
+    case "FIELDINSPECTION":
+    case "PENDINGAPPROVAL":
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
@@ -704,20 +714,6 @@ export const footerReview = (
                   rightIcon: "arrow_drop_down",
                   props: { variant: "outlined", style: { marginLeft: 10 } },
                   menu: downloadMenu
-                }
-              }
-            },
-            printMenu: {
-              uiFramework: "custom-atoms-local",
-              moduleName: "egov-tradelicence",
-              componentPath: "MenuButton",
-              props: {
-                data: {
-                  label: "Print",
-                  leftIcon: "print",
-                  rightIcon: "arrow_drop_down",
-                  props: { variant: "outlined", style: { marginLeft: 10 } },
-                  menu: printMenu
                 }
               }
             }
@@ -880,7 +876,11 @@ export const downloadPrintContainer = (
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-      generateReceipt(state, dispatch, "receipt_download");
+      const receiptQueryString = [
+        { key: "consumerCodes", value:  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber")},
+        { key: "tenantId", value:get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString);
     },
     leftIcon: "receipt"
   };
@@ -919,6 +919,8 @@ export const downloadPrintContainer = (
       ];
       break;
     case "APPLIED":
+    case "FIELDINSPECTION":
+    case "PENDINGAPPROVAL":
     case "PENDINGPAYMENT":
       downloadMenu = [applicationDownloadObject];
       printMenu = [applicationPrintObject];
@@ -941,11 +943,11 @@ export const downloadPrintContainer = (
   /** END */
 
   return {
-    leftdiv: {
+    rightdiv: {
       uiFramework: "custom-atoms",
       componentPath: "Div",
       props: {
-        style: { textAlign: "left", display: "flex" }
+        style: { textAlign: "right", display: "flex" }
       },
       children: {
         downloadMenu: {
@@ -959,20 +961,6 @@ export const downloadPrintContainer = (
               rightIcon: "arrow_drop_down",
               props: { variant: "outlined", style: { marginLeft: 10 } },
               menu: downloadMenu
-            }
-          }
-        },
-        printMenu: {
-          uiFramework: "custom-atoms-local",
-          moduleName: "egov-tradelicence",
-          componentPath: "MenuButton",
-          props: {
-            data: {
-              label: "Print",
-              leftIcon: "print",
-              rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { marginLeft: 10 } },
-              menu: printMenu
             }
           }
         }
