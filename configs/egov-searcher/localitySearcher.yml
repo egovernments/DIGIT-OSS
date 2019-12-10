@@ -1,0 +1,62 @@
+SearchDefinitions:
+  moduleName: locality
+  summary: Searcher configuration for searching locality in workflow inbox
+  version: 1.0.0
+  definitions:
+
+  - name: TLLocalitySearcher
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+          select applicationNumber as referenceNumber,locality from eg_tl_tradelicense tl
+          INNER JOIN eg_tl_TradeLicenseDetail tld ON tld.tradelicenseId = tl.id
+          INNER JOIN eg_tl_address ad ON ad.tradeLicenseDetailId = tld.id
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.applicationNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.id
+        operator: 
+      - name: result.tenantid
+        isMandatory: true
+        jsonPath: $.searchCriteria.tenantId
+        operator: =
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo
+
+  - name: FireNOCLocalitySearcher
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+          select firenocnumber as referenceNumber,locality from eg_fn_firenoc fn
+          INNER JOIN eg_fn_firenocDetail fnd ON fnd.firenoc = fn.uuid
+          INNER JOIN eg_fn_address ad ON ad.firenocdetailsuuid = fnd.uuid
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.firenocnumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.id
+        operator: 
+      - name: result.tenantid
+        isMandatory: true
+        jsonPath: $.searchCriteria.tenantId
+        operator: =
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo
+      
