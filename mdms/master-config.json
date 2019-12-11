@@ -875,5 +875,43 @@
         "$.code"
       ]
     }
+  },
+  "sw-services-calculation": {
+    "Interest": {
+      "masterName": "Interest",
+      "isStateLevel": true,
+      "uniqueKeys": [
+        "$.fromFY"
+      ]
+    },
+    "Rebate": {
+      "masterName": "Rebate",
+      "isStateLevel": true,
+      "uniqueKeys": [
+        "$.fromFY"
+      ]
+    },
+    "Penalty": {
+      "masterName": "Penalty",
+      "isStateLevel": true,
+      "uniqueKeys": [
+        "$.fromFY"
+      ]
+    },
+    "SCBillingSlab": {
+      "masterName": "SCBillingSlab",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+    "SW_CHARGE": {
+      "masterName": "SW_CHARGE",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+    "SW_TIME_PENALTY": {
+      "masterName": "SW_TIME_PENALTY",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    }
   }
 }

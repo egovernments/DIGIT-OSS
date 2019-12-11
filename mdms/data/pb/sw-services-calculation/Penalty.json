@@ -1,3 +1,4 @@
+
 {
   "tenantId": "pb",
   "moduleName": "sw-services-calculation",
@@ -5,6 +6,7 @@
     {
       "rate": 10,
       "minAmount": null,
+      "applicableAfterDays": 15,
       "flatAmount": null,
       "fromFY": "2019-20",
       "startingDay": "1/01/2019"
