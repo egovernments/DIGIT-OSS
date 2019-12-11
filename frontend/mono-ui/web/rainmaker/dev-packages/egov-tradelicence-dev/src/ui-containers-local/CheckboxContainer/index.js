@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import "./index.css";
+//import "./index.css";
 
 const styles = {
   root: {
