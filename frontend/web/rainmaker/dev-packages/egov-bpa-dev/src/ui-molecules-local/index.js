@@ -52,6 +52,11 @@ const HowItWorks = Loadable({
   loading: () => <Loading />
 });
 
+const EdcrSingleApplication = Loadable({
+  loader: () => import("./EdcrSingleApplication"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -61,5 +66,6 @@ export {
   DocumentList,
   MapLocator,
   FeesEstimateCard,
-  HowItWorks
+  HowItWorks,
+  EdcrSingleApplication
 };
