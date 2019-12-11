@@ -21,26 +21,10 @@ const styles = {
 
 class EdcrSingleApplication extends React.Component {
   onCardClick1 = item => {
-    const { moduleName } = this.props;
-    if (moduleName === "TL") {
-      switch (item.status) {
-        case "INITIATED":
-          return `/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
-        default:
-          return `/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
-      }
-    }
+    item && item.dxfFile && window.open(item.dxfFile);
   };
   onCardClick2 = item => {
-    const { moduleName } = this.props;
-    if (moduleName === "TL") {
-      switch (item.status) {
-        case "INITIATED":
-          return `/tradelicense-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
-        default:
-          return `/tradelicence/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
-      }
-    }
+    item && item.planReport && window.open(item.planReport);
   };
 
   onButtonCLick = () => {
@@ -80,7 +64,6 @@ class EdcrSingleApplication extends React.Component {
 
   render() {
     const { searchResults, classes, contents, moduleName } = this.props;
-    console.log("searchResult", searchResults);
     return (
       <div className="application-card">
         {searchResults && searchResults.length > 0 ? (
@@ -116,38 +99,40 @@ class EdcrSingleApplication extends React.Component {
                         </Grid>
                       );
                     })}
-                    {/* <Grid container style={{ marginBottom: 12 }}>
+                    <Grid container style={{ marginBottom: 12 }}>
                       <Grid item xs={6}>
-                        <Link to={this.onCardClick1(item)}>
-                          <div>
-                            <Label
-                              labelKey={"EDCR_DOWNLOAD_BUILDING_PLAN"}
-                              textTransform={"uppercase"}
-                              style={{
-                                color: "#fe7a51",
-                                fontSize: 14,
-                                textTransform: "uppercase"
-                              }}
-                            />
-                          </div>
-                        </Link>
+                        <div
+                          onClick={() => this.onCardClick1(item)}
+                          className="myclassPointer"
+                        >
+                          <Label
+                            labelKey={"EDCR_DOWNLOAD_BUILDING_PLAN"}
+                            textTransform={"uppercase"}
+                            style={{
+                              color: "#fe7a51",
+                              fontSize: 14,
+                              textTransform: "uppercase"
+                            }}
+                          />
+                        </div>
                       </Grid>
                       <Grid item xs={6}>
-                        <Link to={this.onCardClick2(item)}>
-                          <div>
-                            <Label
-                              labelKey={"EDCR_DOWNLOAD_REPORT"}
-                              textTransform={"uppercase"}
-                              style={{
-                                color: "#fe7a51",
-                                fontSize: 14,
-                                textTransform: "uppercase"
-                              }}
-                            />
-                          </div>
-                        </Link>
+                        <div
+                          onClick={() => this.onCardClick2(item)}
+                          className="myclassPointer"
+                        >
+                          <Label
+                            labelKey={"EDCR_DOWNLOAD_REPORT"}
+                            textTransform={"uppercase"}
+                            style={{
+                              color: "#fe7a51",
+                              fontSize: 14,
+                              textTransform: "uppercase"
+                            }}
+                          />
+                        </div>
                       </Grid>
-                    </Grid>*/}
+                    </Grid>
                   </div>
                 </CardContent>
               </Card>
