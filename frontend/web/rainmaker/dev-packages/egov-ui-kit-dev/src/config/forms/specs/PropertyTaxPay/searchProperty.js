@@ -25,6 +25,7 @@ const formConfig = {
       required: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       type: "autoSuggestDropdown",
+      labelsFromLocalisation:true,
       dataFetchConfig: {
         dependants: [
           {

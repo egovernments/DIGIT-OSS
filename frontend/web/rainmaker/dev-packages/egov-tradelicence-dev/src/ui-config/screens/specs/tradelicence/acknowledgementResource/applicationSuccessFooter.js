@@ -172,47 +172,48 @@ export const applicationSuccessFooter = (
       onClickDefination: {
         action: "condition",
         callBack: () => {
-          generatePdfAndDownload(
-            state,
-            dispatch,
-            "download",
-            applicationNumber,
-            tenant
-          );
+          generateReceipt(state, dispatch, "ack_download");
+          // generatePdfAndDownload(
+          //   state,
+          //   dispatch,
+          //   "download",
+          //   applicationNumber,
+          //   tenant
+          // );
         }
       },
       visible:false
     },
-    printFormButton: {
-      componentPath: "Button",
-      props: {
-        variant: "outlined",
-        color: "primary",
-        style: {
-          minWidth: "290px",
-          height: "48px",
-          marginRight: "16px"
-        }
-      },
-      children: {
-        printFormButtonLabel: getLabel({
-          labelName: "PRINT CONFIRMATION FORM",
-          labelKey: "TL_APPLICATION_BUTTON_PRINT_CONF"
-        })
-      },
-      onClickDefination: {
-        action: "condition",
-        callBack: () => {
-          generatePdfAndDownload(
-            state,
-            dispatch,
-            "print",
-            applicationNumber,
-            tenant
-          );
-        }
-      },
-      visible:false
-    }
+    // printFormButton: {
+    //   componentPath: "Button",
+    //   props: {
+    //     variant: "outlined",
+    //     color: "primary",
+    //     style: {
+    //       minWidth: "290px",
+    //       height: "48px",
+    //       marginRight: "16px"
+    //     }
+    //   },
+    //   children: {
+    //     printFormButtonLabel: getLabel({
+    //       labelName: "PRINT CONFIRMATION FORM",
+    //       labelKey: "TL_APPLICATION_BUTTON_PRINT_CONF"
+    //     })
+    //   },
+    //   onClickDefination: {
+    //     action: "condition",
+    //     callBack: () => {
+    //       generatePdfAndDownload(
+    //         state,
+    //         dispatch,
+    //         "print",
+    //         applicationNumber,
+    //         tenant
+    //       );
+    //     }
+    //   },
+    //   visible:false
+    // }
   });
 };
