@@ -1,5 +1,5 @@
 {
-  "key": "testlocalconsolidatedreceipt",
+  "key": "consolidatedreceipt",
   "DataConfigs": {
     "serviceName": "rainmaker-common",
     "version": "1.0.0",
@@ -426,7 +426,7 @@
           {
             "externalAPI": [     
               { 
-                  "path": "http://localhost:8069/egov-mdms-service/v1/_get",
+                  "path": "https://egov-mdms-service:8080/egov-mdms-service/v1/_get",
                   "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='$.tenantId')%5D",
                   "apiRequest": null,
                   "responseMapping":[
