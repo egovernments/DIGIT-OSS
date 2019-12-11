@@ -62,6 +62,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
@@ -835,8 +836,12 @@ public class PaymentAction extends BasePaymentAction {
                 disableExpenditureType = true;
                 enablePensionType = true;
             }
-
-            billregister = (EgBillregister) persistenceService.find(" from EgBillregister where id=?",
+            if(CollectionUtils.isEmpty(billList)) 
+                throw new ValidationException(Arrays.asList(new ValidationError(
+                        "Please select a bill before making the payment.",
+                        "Please select a bill before making the payment.")));
+             
+               billregister = (EgBillregister) persistenceService.find(" from EgBillregister where id=?",
                     billList.get(0).getBillId());
             if (billregister.getEgBillregistermis().getFunction() != null)
                 setFunctionSel(billregister.getEgBillregistermis().getFunction().getId());
@@ -861,6 +866,7 @@ public class PaymentAction extends BasePaymentAction {
             }
         } catch (final ValidationException e) {
             try {
+                this.setMiscount(0);
                 search();
             } catch (final Exception e1) {
                 LOGGER.error(e.getMessage(), e1);
@@ -872,6 +878,7 @@ public class PaymentAction extends BasePaymentAction {
             throw new ValidationException(e.getErrors());
         } catch (final ApplicationException e) {
             try {
+               this.setMiscount(0);
                 search();
             } catch (final Exception e1) {
                 LOGGER.error(e.getMessage(), e1);
