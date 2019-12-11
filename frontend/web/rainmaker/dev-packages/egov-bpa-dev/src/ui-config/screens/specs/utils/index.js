@@ -2170,7 +2170,7 @@ export const setLicenseeSubTypeDropdownData = async (
       handleField(
         "apply",
         "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
-        "props.required",
+        "required",
         false
       )
     );
@@ -2202,7 +2202,7 @@ export const setLicenseeSubTypeDropdownData = async (
       handleField(
         "apply",
         "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
-        "props.required",
+        "required",
         true
       )
     );

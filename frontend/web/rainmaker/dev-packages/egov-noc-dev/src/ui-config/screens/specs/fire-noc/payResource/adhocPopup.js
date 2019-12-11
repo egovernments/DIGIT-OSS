@@ -6,7 +6,7 @@ import {
   getCommonSubHeader,
   getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { showHideAdhocPopup, getBill } from "../../utils";
+import { showHideAdhocPopup, getBill ,createBill} from "../../utils";
 import get from "lodash/get";
 import { httpRequest } from "../../../../../ui-utils/api";
 import cloneDeep from "lodash/cloneDeep";
@@ -45,11 +45,12 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
           value: tenantId
         },
         {
-          key: "applicationNumber",
+          key: "consumerCode",
           value: applicationNumber
-        }
+        },
+        { key: "services", value: "FIRENOC" }
       ];
-      const billPayload = await getBill(queryObj);
+      const billPayload = await createBill(queryObj,dispatch);
       // let payload = sampleGetBill();
       if (billPayload && billPayload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", billPayload.Bill));
