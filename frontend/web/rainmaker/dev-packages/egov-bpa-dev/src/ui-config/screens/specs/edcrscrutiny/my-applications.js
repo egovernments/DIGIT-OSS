@@ -34,7 +34,7 @@ const screenConfig = {
           props: {
             contents: [
               {
-                label: "EDCR_COMMON_TABLE_APPL_No",
+                label: "EDCR_COMMON_TABLE_APPL_NO",
                 jsonPath: "transactionNumber"
               },
               {
@@ -45,7 +45,7 @@ const screenConfig = {
               {
                 label: "EDCR_COMMON_TABLE_CITY_LABEL",
                 jsonPath: "tenantId",
-                prefix: "TENANTS_TENANT_"
+                prefix: "TENANT_TENANTS_"
               },
               {
                 label: "EDCR_COMMON_TABLE_APPL_NAME",
