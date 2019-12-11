@@ -41,7 +41,7 @@ export const reviewLicenseeSubType = getLabelWithValue(
 export const reviewOwnerGender = getLabelWithValue(
   {
     labelName: "Gender",
-    labelKey: "BAP_COMMON_GENDER_LABEL"
+    labelKey: "BPA_COMMON_GENDER_LABEL"
   },
   {
     jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].gender",

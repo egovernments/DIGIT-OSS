@@ -47,7 +47,7 @@ export const getGenderRadioButton = {
   props: {
     label: {
       name: "Gender",
-      key: "BAP_COMMON_GENDER_LABEL"
+      key: "BPA_COMMON_GENDER_LABEL"
     },
     //     {
     //       label: "Husband",
