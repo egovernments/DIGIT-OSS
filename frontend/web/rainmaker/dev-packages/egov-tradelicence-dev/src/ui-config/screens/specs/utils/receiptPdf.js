@@ -1448,25 +1448,25 @@ const getACKData = (transformedData, ulbLogo) => {
           }
         ]
       },
-      {
-        style: "tl-certificate-data-2",
-        columns: [
-          {
-            width: 160,
-            text: getLocaleLabels(
-              "Trade License Fee",
-              "TL_LOCALIZATION_TRADE_LICENSE_FEE"
-            )
-          },
-          {
-            width: "*",
-            text:
-              getLocaleLabels("Rs.", "TL_LOCALIZATION_TRADE_LICENSE_RS") +
-              transformedData.totalAmount
-            //     font: "Roboto"
-          }
-        ]
-      },
+      // {
+      //   style: "tl-certificate-data-2",
+      //   columns: [
+      //     {
+      //       width: 160,
+      //       text: getLocaleLabels(
+      //         "Trade License Fee",
+      //         "TL_LOCALIZATION_TRADE_LICENSE_FEE"
+      //       )
+      //     },
+      //     {
+      //       width: "*",
+      //       text:
+      //         getLocaleLabels("Rs.", "TL_LOCALIZATION_TRADE_LICENSE_RS") +
+      //         transformedData.totalAmount
+      //       //     font: "Roboto"
+      //     }
+      //   ]
+      // },
       // {
       //   style: "tl-certificate-data-2",
       //   columns: [
@@ -1631,10 +1631,7 @@ const generateReceipt = async (state, dispatch, type) => {
   if (_.isEmpty(data1)) {
     console.log("Error in application data");
     return;
-  } else if (_.isEmpty(data2)) {
-    console.log("Error in receipt data");
-    return;
-  } else if (_.isEmpty(data3)) {
+  }  else if (_.isEmpty(data3)) {
     console.log("Error in mdms data");
     return;
   } else if (_.isEmpty(data4)) {
@@ -1646,7 +1643,6 @@ const generateReceipt = async (state, dispatch, type) => {
   }
   let transformedData = {
     ...data1,
-    ...data2,
     ...data3,
     ...data4,
     actualAddress: data5

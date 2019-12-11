@@ -164,7 +164,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
   // // getBoundaryData(action, state, dispatch, queryObj, code);
 };
 
-const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
+export const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   //Search details for given application Number
   if (applicationNumber) {
     !getQueryArg(window.location.href, "edited") &&
@@ -463,6 +463,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
+    
     const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
