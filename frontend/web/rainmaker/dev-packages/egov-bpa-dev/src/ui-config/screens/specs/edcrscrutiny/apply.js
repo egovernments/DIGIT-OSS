@@ -6,32 +6,13 @@ import {
   getCommonContainer,
   getCommonHeader,
   getCommonParagraph,
-  getPattern
+  getPattern,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-// import { documentList } from "./applyResource/documentList";
 
 const header = getCommonHeader({
   labelName: "New Building Plan Scrutiny",
   labelKey: "BPA_SCRUTINY_TITLE"
-});
-
-const tradeDocumentDetails = getCommonCard({
-  header: getCommonTitle(
-    {
-      labelName: "Required Documents",
-      labelKey: "TL_NEW-UPLOAD-DOCS_HEADER"
-    },
-    {
-      style: {
-        marginBottom: 18
-      }
-    }
-  ),
-  paragraph: getCommonParagraph({
-    labelName:
-      "Only one file can be uploaded for one document. If multiple files need to be uploaded then please combine all files in a pdf and then upload",
-    labelKey: "TL_NEW-UPLOAD-DOCS_SUBHEADER"
-  })
 });
 
 const buildingInfoCard = getCommonCard({
@@ -79,7 +60,7 @@ const buildingInfoCard = getCommonCard({
         sm: 6
       },
       required: true,
-      pattern: getPattern("Name")
+      pattern: getPattern("Name"),
     }),
     licenseeSubType: {
       ...getSelectField({
@@ -96,7 +77,7 @@ const buildingInfoCard = getCommonCard({
           xs: 12,
           sm: 6
         }
-      })
+      }),
     },
     buttonContainer: getCommonContainer({
       firstCont: {
@@ -127,16 +108,16 @@ const buildingInfoCard = getCommonCard({
         },
         children: {
           buttonLabel: getLabel({
-            labelName: "RESET",
-            labelKey: "ABG_RESET_BUTTON"
+            labelName: "CLEAR FORM",
+            labelKey: "BPA_SCRUTINY_CLEARFORM_BUTTON"
           })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: resetFields
         }
+        // onClickDefination: {
+        //   action: "condition",
+        //   callBack: resetFields
+        // }
       },
-
+  
       searchButton: {
         componentPath: "Button",
         gridDefination: {
@@ -148,7 +129,7 @@ const buildingInfoCard = getCommonCard({
           variant: "contained",
           style: {
             color: "white",
-            backgroundColor: "#696969",
+            backgroundColor: "#FE7A51",
             borderRadius: "2px",
             width: window.innerWidth > 480 ? "80%" : "100%",
             height: "48px"
@@ -156,18 +137,18 @@ const buildingInfoCard = getCommonCard({
         },
         children: {
           buttonLabel: getLabel({
-            labelName: "SEARCH",
-            labelKey: "ABG_SEARCH_BUTTON"
+            labelName: "SUBMIT",
+            labelKey: "BPA_SCRUTINY_SUBMIT_BUTTON"
           })
-        },
-        onClickDefination: {
-          action: "condition",
-          callBack: (state, dispatch) => {
-            searchApiCall(state, dispatch);
-          }
         }
+        // onClickDefination: {
+        //   action: "condition",
+        //   callBack: (state, dispatch) => {
+        //     searchApiCall(state, dispatch);
+        //   }
+        // }
       },
-
+  
       lastCont: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
