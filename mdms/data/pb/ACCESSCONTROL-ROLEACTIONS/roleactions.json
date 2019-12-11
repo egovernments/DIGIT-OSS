@@ -19537,6 +19537,36 @@
       "actionid": 1916,
       "actioncode": "",
       "tenantId": "pb"
-    }
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1917,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1918,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1919,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "CITIZEN",
+      "actionid": 1919,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1920,
+      "actioncode": "",
+      "tenantId": "pb"
+    }        
   ]
 }
