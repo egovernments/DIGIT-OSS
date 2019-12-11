@@ -660,8 +660,9 @@ export const getMdmsData = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "egov-mdms-service/v1/_get",
+      "egov-mdms-service/v1/_search",
       "",
+      [],
       queryObject
     );
     return response;
