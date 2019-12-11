@@ -246,6 +246,10 @@ export const getUlbGradeLabel = (ulbGrade) => {
   }
 };
 
+export const replaceDotWithUnderscore=(string)=>{
+  return string.split(".").join("_");
+}
+
 export const getTranslatedLabel = (labelKey, localizationLabels) => {
   let translatedLabel = null;
   if (localizationLabels && localizationLabels.hasOwnProperty(labelKey)) {

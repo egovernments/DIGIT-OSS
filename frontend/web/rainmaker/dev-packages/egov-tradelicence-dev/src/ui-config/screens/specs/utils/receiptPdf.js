@@ -1,14 +1,11 @@
 import pdfMakeCustom from "pdfmake/build/pdfmake";
-import {getLocaleLabels} from "egov-ui-framework/ui-utils/commons.js";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons.js";
 import _ from "lodash";
-import {getMessageFromLocalization} from "./receiptTransformer";
+import { getMessageFromLocalization } from "./receiptTransformer";
 import pdfFonts from "./vfs_fonts";
 // pdfMakeCustom.vfs = pdfFonts.vfs;
-import {
-  getLocale
-} from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { from } from "rxjs";
-
 
 // pdfMakeCustom.fonts = {
 //   Camby:{
@@ -19,7 +16,6 @@ import { from } from "rxjs";
 //   },
 
 // };
-
 
 let tableborder = {
   hLineColor: function(i, node) {
@@ -53,61 +49,85 @@ let payableAmountBorderKey = [true, true, true, true, true, true, true];
 let payableInfoTable3 = ["*", "*", "*"];
 let accessoriesTable = ["24%", "76%"];
 
-const getLocaleForTradeType = (tradeType)=>{
-  if(tradeType && tradeType.split("/").length){
+const getLocaleForTradeType = tradeType => {
+  if (tradeType && tradeType.split("/").length) {
     const tradeTypeSplitted = tradeType.toUpperCase().split("/");
-    if(tradeTypeSplitted.length===3){
-      return getLocaleLabels("NA", (tradeTypeSplitted[0].trim())) + "/"+
-      getLocaleLabels("NA", (tradeTypeSplitted[1].trim())) +"/"+
-      getLocaleLabels("NA", (tradeTypeSplitted[2].trim().trim()));
+    if (tradeTypeSplitted.length === 3) {
+      return (
+        getLocaleLabels("NA", tradeTypeSplitted[0].trim()) +
+        "/" +
+        getLocaleLabels("NA", tradeTypeSplitted[1].trim()) +
+        "/" +
+        getLocaleLabels("NA", tradeTypeSplitted[2].trim().trim())
+      );
     } else {
-      return getLocaleLabels("NA", (tradeTypeSplitted[0].trim())) + "/"+
-      getLocaleLabels("NA", (tradeTypeSplitted[1].trim()));
+      return (
+        getLocaleLabels("NA", tradeTypeSplitted[0].trim()) +
+        "/" +
+        getLocaleLabels("NA", tradeTypeSplitted[1].trim())
+      );
     }
   } else {
     return tradeType;
   }
-}
+};
 
-const getAssesories = (accessories) => {
-  if(accessories){
+const getAssesories = accessories => {
+  if (accessories) {
     const splittedAccessories = accessories.split("(");
-  return splittedAccessories.length ? getLocaleLabels("NA",splittedAccessories[0])+"("+splittedAccessories[1]: "NA"
-  }else{
-    return "NA"
+    return splittedAccessories.length
+      ? getLocaleLabels("NA", splittedAccessories[0]) +
+          "(" +
+          splittedAccessories[1]
+      : "NA";
+  } else {
+    return "NA";
   }
-}
+};
 
 const getCorporationName = (corporationName, actualAddress) => {
-  if(corporationName){
+  if (corporationName) {
     //const splittedName = corporationName.split(" ");
-    return getLocaleLabels("TL_LOCALIZATION_ULBGRADE_MC1","TL_LOCALIZATION_ULBGRADE_MC1")+" "+ getLocaleLabels("TENANT_TENANTS_"+actualAddress.tenantId.replace('.','_').toUpperCase(),"TENANT_TENANTS_"+actualAddress.tenantId.replace('.','_').toUpperCase());
+    return (
+      getLocaleLabels(
+        "TL_LOCALIZATION_ULBGRADE_MC1",
+        "TL_LOCALIZATION_ULBGRADE_MC1"
+      ) +
+      " " +
+      getLocaleLabels(
+        "TENANT_TENANTS_" +
+          actualAddress.tenantId.replace(".", "_").toUpperCase(),
+        "TENANT_TENANTS_" +
+          actualAddress.tenantId.replace(".", "_").toUpperCase()
+      )
+    );
   } else {
-    return "NA"
+    return "NA";
   }
-}
+};
 
 const getReceiptData = (transformedData, ulbLogo) => {
   let owners = transformedData.owners.map(owner => [
     {
-      text: getLocaleLabels("Owner Name","TL_LOCALIZATION_OWNER_NAME"),
+      text: getLocaleLabels("Owner Name", "TL_LOCALIZATION_OWNER_NAME"),
       border: [true, true, false, true],
       style: "receipt-table-key"
     },
     {
-    text:owner.name  },
+      text: owner.name
+    },
 
     {
-      text: getLocaleLabels("Owner Mobile","TL_LOCALIZATION_OWNER_MOBILE"),
+      text: getLocaleLabels("Owner Mobile", "TL_LOCALIZATION_OWNER_MOBILE"),
       border: [true, true, false, true],
       style: "receipt-table-key"
     },
-    { text:owner.mobile, }
+    { text: owner.mobile }
   ]);
   var receiptData = {
     defaultStyle: {
       font: "Camby"
-     },
+    },
     content: [
       {
         style: "tl-head",
@@ -125,11 +145,17 @@ const getReceiptData = (transformedData, ulbLogo) => {
                 //stack is used here to give multiple sections one after another in same body
                 stack: [
                   {
-                    text: getCorporationName(transformedData.corporationName, transformedData.actualAddress),
+                    text: getCorporationName(
+                      transformedData.corporationName,
+                      transformedData.actualAddress
+                    ),
                     style: "receipt-logo-header"
                   },
                   {
-                    text: getLocaleLabels("Trade License Payment reciept","TL_LOCALIZATION_PAYMENT_RECIEPT"),
+                    text: getLocaleLabels(
+                      "Trade License Payment reciept",
+                      "TL_LOCALIZATION_PAYMENT_RECIEPT"
+                    ),
                     style: "receipt-logo-sub-header"
                   }
                 ],
@@ -139,8 +165,12 @@ const getReceiptData = (transformedData, ulbLogo) => {
               {
                 text: [
                   {
-               //     text: `Receipt No.\n ${transformedData.receiptNumber}`,
-               text : getLocaleLabels("Receipt No.","TL_LOCALIZATION_RECIEPT_NO") + transformedData.receiptNumber,
+                    //     text: `Receipt No.\n ${transformedData.receiptNumber}`,
+                    text:
+                      getLocaleLabels(
+                        "Receipt No.",
+                        "TL_LOCALIZATION_RECIEPT_NO"
+                      ) + transformedData.receiptNumber,
                     bold: true,
                     style: "receipt-no"
                   }
@@ -159,11 +189,19 @@ const getReceiptData = (transformedData, ulbLogo) => {
           {
             text: [
               {
-                text: getLocaleLabels("Application Type","TL_LOCALIZATION_APPLICATION_TYPE"),
+                text: getLocaleLabels(
+                  "Application Type",
+                  "TL_LOCALIZATION_APPLICATION_TYPE"
+                ),
                 bold: true
               },
               {
-                text: getLocaleLabels("TL_LOCALIZATION_" + (transformedData.applicationType).replace('.','_'),"TL_LOCALIZATION_" + (transformedData.applicationType).replace('.','_')),
+                text: getLocaleLabels(
+                  "TL_LOCALIZATION_" +
+                    transformedData.applicationType.replace(".", "_"),
+                  "TL_LOCALIZATION_" +
+                    transformedData.applicationType.replace(".", "_")
+                ),
                 bold: false
               }
             ],
@@ -173,7 +211,10 @@ const getReceiptData = (transformedData, ulbLogo) => {
           {
             text: [
               {
-                text: getLocaleLabels("Old License No.","TL_LOCALIZATION_OLD_LICENSE_NO"),
+                text: getLocaleLabels(
+                  "Old License No.",
+                  "TL_LOCALIZATION_OLD_LICENSE_NO"
+                ),
                 bold: true
               },
               {
@@ -191,7 +232,10 @@ const getReceiptData = (transformedData, ulbLogo) => {
           {
             text: [
               {
-                text: getLocaleLabels("Application No.","TL_LOCALIZATION_APPLICATION_NO"),
+                text: getLocaleLabels(
+                  "Application No.",
+                  "TL_LOCALIZATION_APPLICATION_NO"
+                ),
                 bold: true
               },
               {
@@ -205,7 +249,10 @@ const getReceiptData = (transformedData, ulbLogo) => {
           {
             text: [
               {
-                text: getLocaleLabels("Reciept No.","TL_LOCALIZATION_RECIEPT_NO"),
+                text: getLocaleLabels(
+                  "Reciept No.",
+                  "TL_LOCALIZATION_RECIEPT_NO"
+                ),
                 bold: true
               },
               {
@@ -223,7 +270,10 @@ const getReceiptData = (transformedData, ulbLogo) => {
           {
             text: [
               {
-                text: getLocaleLabels("Financial Year","TL_LOCALIZATION_FINANCIAL_YEAR"),
+                text: getLocaleLabels(
+                  "Financial Year",
+                  "TL_LOCALIZATION_FINANCIAL_YEAR"
+                ),
                 bold: true
               },
               {
@@ -236,7 +286,10 @@ const getReceiptData = (transformedData, ulbLogo) => {
           {
             text: [
               {
-                text: getLocaleLabels("Payment Date","TL_LOCALIZATION_PAYMENT_DATE"),
+                text: getLocaleLabels(
+                  "Payment Date",
+                  "TL_LOCALIZATION_PAYMENT_DATE"
+                ),
                 bold: true
               },
               {
@@ -248,7 +301,10 @@ const getReceiptData = (transformedData, ulbLogo) => {
           }
         ]
       },
-      { text: getLocaleLabels("Trade Details","TL_LOCALIZATION_TRADE_DETAILS"), style: "pt-reciept-citizen-subheader" },
+      {
+        text: getLocaleLabels("Trade Details", "TL_LOCALIZATION_TRADE_DETAILS"),
+        style: "pt-reciept-citizen-subheader"
+      },
       {
         style: "pt-reciept-citizen-table",
         table: {
@@ -256,18 +312,24 @@ const getReceiptData = (transformedData, ulbLogo) => {
           body: [
             [
               {
-                text: getLocaleLabels(" Trade Name","TL_LOCALIZATION_TRADE_NAME"),
+                text: getLocaleLabels(
+                  " Trade Name",
+                  "TL_LOCALIZATION_TRADE_NAME"
+                ),
                 border: borderKey,
                 style: "receipt-table-key"
               },
               { text: transformedData.tradeName, border: borderValue },
               {
-                text:getLocaleLabels("Trade Category","TL_LOCALIZATION_TRADE_CATEGORY"),
+                text: getLocaleLabels(
+                  "Trade Category",
+                  "TL_LOCALIZATION_TRADE_CATEGORY"
+                ),
                 border: borderKey,
                 style: "receipt-table-key"
               },
               {
-                text: getLocaleLabels("NA",transformedData.tradeCategory),
+                text: getLocaleLabels("NA", transformedData.tradeCategory),
                 border: borderValue
               }
             ]
@@ -282,7 +344,10 @@ const getReceiptData = (transformedData, ulbLogo) => {
           body: [
             [
               {
-                text: getLocaleLabels("Trade Type","TL_LOCALIZATION_TRADE_TYPE"),
+                text: getLocaleLabels(
+                  "Trade Type",
+                  "TL_LOCALIZATION_TRADE_TYPE"
+                ),
                 border: [true, false, false, true],
                 style: "receipt-table-key"
               },
@@ -319,7 +384,13 @@ const getReceiptData = (transformedData, ulbLogo) => {
         },
         layout: tableborder
       },
-      { text: getLocaleLabels("Trade Category","TL_LOCALIZATION_TRADE_CATEGORY"), style: "pt-reciept-citizen-subheader" },
+      {
+        text: getLocaleLabels(
+          "Trade Category",
+          "TL_LOCALIZATION_TRADE_CATEGORY"
+        ),
+        style: "pt-reciept-citizen-subheader"
+      },
       {
         style: "pt-reciept-citizen-table",
         table: {
@@ -327,15 +398,19 @@ const getReceiptData = (transformedData, ulbLogo) => {
           body: [
             [
               {
-                text: getLocaleLabels("House Door No.","TL_LOCALIZATION_HOUSE_DOOR_NO"),
+                text: getLocaleLabels(
+                  "House Door No.",
+                  "TL_LOCALIZATION_HOUSE_DOOR_NO"
+                ),
                 border: borderKey,
                 style: "receipt-table-key"
               },
-              { text: transformedData.doorNo,
-                border: borderValue
-              },
+              { text: transformedData.doorNo, border: borderValue },
               {
-                text: getLocaleLabels("Building Name","TL_LOCALIZATION_BUILDING_NAME"),
+                text: getLocaleLabels(
+                  "Building Name",
+                  "TL_LOCALIZATION_BUILDING_NAME"
+                ),
                 border: borderKey,
                 style: "receipt-table-key"
               },
@@ -346,18 +421,31 @@ const getReceiptData = (transformedData, ulbLogo) => {
             ],
             [
               {
-                text: getLocaleLabels("Street Name","TL_LOCALIZATION_STREET_NAME"),
+                text: getLocaleLabels(
+                  "Street Name",
+                  "TL_LOCALIZATION_STREET_NAME"
+                ),
                 border: borderKey,
                 style: "receipt-table-key"
               },
               { text: transformedData.streetName, border: borderValue },
               {
-                text: getLocaleLabels("Locality","TL_LOCALIZATION_LOCALITY"),
+                text: getLocaleLabels("Locality", "TL_LOCALIZATION_LOCALITY"),
                 border: borderKey,
                 style: "receipt-table-key"
               },
               {
-                text: getLocaleLabels("NA",(transformedData.actualAddress.tenantId.replace('.','_')+'_REVENUE_'+transformedData.actualAddress.locality.code).toUpperCase())+" "+getLocaleLabels("NA", transformedData.city),
+                text:
+                  getLocaleLabels(
+                    "NA",
+                    (
+                      transformedData.actualAddress.tenantId.replace(".", "_") +
+                      "_REVENUE_" +
+                      transformedData.actualAddress.locality.code
+                    ).toUpperCase()
+                  ) +
+                  " " +
+                  getLocaleLabels("NA", transformedData.city),
                 border: borderValue
               }
             ]
@@ -365,7 +453,13 @@ const getReceiptData = (transformedData, ulbLogo) => {
         },
         layout: tableborder
       },
-      { text: getLocaleLabels("Ownership Information","TL_LOCALIZATION_OWNERSHIP_INFORMATION"), style: "pt-reciept-citizen-subheader" },
+      {
+        text: getLocaleLabels(
+          "Ownership Information",
+          "TL_LOCALIZATION_OWNERSHIP_INFORMATION"
+        ),
+        style: "pt-reciept-citizen-subheader"
+      },
       {
         style: "pt-reciept-citizen-table",
         table: {
@@ -374,7 +468,13 @@ const getReceiptData = (transformedData, ulbLogo) => {
         },
         layout: tableborder
       },
-      { text: getLocaleLabels("Payable Amount","TL_LOCALIZATION_PAYABLE_AMOUNT"), style: "pt-reciept-citizen-subheader" },
+      {
+        text: getLocaleLabels(
+          "Payable Amount",
+          "TL_LOCALIZATION_PAYABLE_AMOUNT"
+        ),
+        style: "pt-reciept-citizen-subheader"
+      },
       {
         style: "pt-reciept-citizen-table",
         table: {
@@ -382,37 +482,46 @@ const getReceiptData = (transformedData, ulbLogo) => {
           body: [
             [
               {
-                text: getLocaleLabels("Trade License Fee","TL_LOCALIZATION_TRADE_LICENSE_FEE"),
+                text: getLocaleLabels(
+                  "Trade License Fee",
+                  "TL_LOCALIZATION_TRADE_LICENSE_FEE"
+                ),
                 border: payableAmountBorderKey,
                 style: "receipt-table-key",
                 alignment: "center"
               },
               {
-                text: getLocaleLabels("Penalty","TL_LOCALIZATION_PENALTY"),
+                text: getLocaleLabels("Penalty", "TL_LOCALIZATION_PENALTY"),
                 border: payableAmountBorderKey,
                 style: "receipt-table-key",
                 alignment: "center"
               },
               {
-                text: getLocaleLabels("Rebate","TL_LOCALIZATION_REBATE"),
+                text: getLocaleLabels("Rebate", "TL_LOCALIZATION_REBATE"),
                 border: payableAmountBorderKey,
                 style: "receipt-table-key",
                 alignment: "center"
               },
               {
-                text: getLocaleLabels("Adhoc Penalty","TL_LOCALIZATION_ADHOC_PENALTY"),
+                text: getLocaleLabels(
+                  "Adhoc Penalty",
+                  "TL_LOCALIZATION_ADHOC_PENALTY"
+                ),
                 border: payableAmountBorderKey,
                 style: "receipt-table-key",
                 alignment: "center"
               },
               {
-                text: getLocaleLabels("Adhoc Rebate","TL_LOCALIZATION_ADHOC_REBATE"),
+                text: getLocaleLabels(
+                  "Adhoc Rebate",
+                  "TL_LOCALIZATION_ADHOC_REBATE"
+                ),
                 border: payableAmountBorderKey,
                 style: "receipt-table-key",
                 alignment: "center"
               },
               {
-                text: getLocaleLabels("Total","TL_LOCALIZATION_TOTAL"),
+                text: getLocaleLabels("Total", "TL_LOCALIZATION_TOTAL"),
                 border: payableAmountBorderKey,
                 style: "receipt-table-key",
                 alignment: "center"
@@ -460,7 +569,13 @@ const getReceiptData = (transformedData, ulbLogo) => {
         },
         layout: tableborder
       },
-      { text: getLocaleLabels("Payment Information","TL_LOCALIZATION_PAYMENT_INFORMATION"), style: "pt-reciept-citizen-subheader" },
+      {
+        text: getLocaleLabels(
+          "Payment Information",
+          "TL_LOCALIZATION_PAYMENT_INFORMATION"
+        ),
+        style: "pt-reciept-citizen-subheader"
+      },
       {
         style: "pt-reciept-citizen-table",
         table: {
@@ -468,13 +583,19 @@ const getReceiptData = (transformedData, ulbLogo) => {
           body: [
             [
               {
-                text: getLocaleLabels("Total Amount Paid:","TL_LOCALIZATION_TOTAL_AMOUNT_PAID"),
+                text: getLocaleLabels(
+                  "Total Amount Paid:",
+                  "TL_LOCALIZATION_TOTAL_AMOUNT_PAID"
+                ),
                 border: borderKey,
                 style: "receipt-table-key"
               },
               { text: transformedData.amountPaid, border: borderValue },
               {
-                text: getLocaleLabels("Amount Due:","TL_LOCALIZATION_AMOUNT_DUE"),
+                text: getLocaleLabels(
+                  "Amount Due:",
+                  "TL_LOCALIZATION_AMOUNT_DUE"
+                ),
                 border: borderKey,
                 style: "receipt-table-key"
               },
@@ -494,19 +615,28 @@ const getReceiptData = (transformedData, ulbLogo) => {
           body: [
             [
               {
-                text: getLocaleLabels("Payment Mode","TL_LOCALIZATION_PAYMENT_MODE"),
+                text: getLocaleLabels(
+                  "Payment Mode",
+                  "TL_LOCALIZATION_PAYMENT_MODE"
+                ),
                 border: payableAmountBorderKey,
                 style: "receipt-table-key",
                 alignment: "center"
               },
               {
-                text: getLocaleLabels("Transaction ID/ Cheque/ DD No.","TL_LOCALIZATION_TRANSACTION_ID"),
+                text: getLocaleLabels(
+                  "Transaction ID/ Cheque/ DD No.",
+                  "TL_LOCALIZATION_TRANSACTION_ID"
+                ),
                 border: payableAmountBorderKey,
                 style: "receipt-table-key",
                 alignment: "center"
               },
               {
-                text: getLocaleLabels("Bank Name & Branch","TL_LOCALIZATION_BANK_NAME_WITH_BRANCH"),
+                text: getLocaleLabels(
+                  "Bank Name & Branch",
+                  "TL_LOCALIZATION_BANK_NAME_WITH_BRANCH"
+                ),
                 border: payableAmountBorderKey,
                 style: "receipt-table-key",
                 alignment: "center"
@@ -543,13 +673,19 @@ const getReceiptData = (transformedData, ulbLogo) => {
           body: [
             [
               {
-                text: getLocaleLabels("G8 Receipt No:","TL_LOCALIZATION_G8_RECEIPT_NO"),
+                text: getLocaleLabels(
+                  "G8 Receipt No:",
+                  "TL_LOCALIZATION_G8_RECEIPT_NO"
+                ),
                 border: borderKey,
                 style: "receipt-table-key"
               },
               { text: transformedData.g8ReceiptNo, border: borderValue },
               {
-                text: getLocaleLabels("G8 Receipt Issue Date:","TL_LOCALIZATION_G8_RECEIPT_ISSUE_DATE"),
+                text: getLocaleLabels(
+                  "G8 Receipt Issue Date:",
+                  "TL_LOCALIZATION_G8_RECEIPT_ISSUE_DATE"
+                ),
                 border: borderKey,
                 style: "receipt-table-key"
               },
@@ -568,7 +704,10 @@ const getReceiptData = (transformedData, ulbLogo) => {
           {
             text: [
               {
-                text: getLocaleLabels("Generated By:","TL_LOCALIZATION_GENERATED_BY"),
+                text: getLocaleLabels(
+                  "Generated By:",
+                  "TL_LOCALIZATION_GENERATED_BY"
+                ),
                 bold: true
               },
               {
@@ -581,7 +720,10 @@ const getReceiptData = (transformedData, ulbLogo) => {
           {
             text: [
               {
-                text: getLocaleLabels("Commissioner/EO","TL_LOCALIZATION_COMMISSIONER_OR_EO"),
+                text: getLocaleLabels(
+                  "Commissioner/EO",
+                  "TL_LOCALIZATION_COMMISSIONER_OR_EO"
+                ),
                 bold: true
               }
             ],
@@ -592,8 +734,10 @@ const getReceiptData = (transformedData, ulbLogo) => {
     ],
     footer: [
       {
-        text:
-          getLocaleLabels("Note:\n1. Payment received by cheque/demand draft shall be subject to realization.\n2. This document is not a proof of Property Ownership.\n3. This is a computer generated document, hence requires no signature.","TL_LOCALIZATION_NOTE"),
+        text: getLocaleLabels(
+          "Note:\n1. Payment received by cheque/demand draft shall be subject to realization.\n2. This document is not a proof of Property Ownership.\n3. This is a computer generated document, hence requires no signature.",
+          "TL_LOCALIZATION_NOTE"
+        ),
         style: "receipt-footer"
       }
     ],
@@ -642,14 +786,14 @@ const getReceiptData = (transformedData, ulbLogo) => {
       },
       "receipt-logo-header": {
         color: "#484848",
-      //  fontFamily: fontName,
+        //  fontFamily: fontName,
         fontSize: 16,
         bold: true,
         letterSpacing: 0.74
       },
       "receipt-logo-sub-header": {
         color: "#484848",
-      //  fontFamily: fontName,
+        //  fontFamily: fontName,
         fontSize: 13,
         letterSpacing: 1.6,
         margin: [0, 6, 0, 0]
@@ -675,11 +819,11 @@ const getReceiptData = (transformedData, ulbLogo) => {
 };
 
 const getCertificateData = (transformedData, ulbLogo) => {
-console.log(transformedData);
+  console.log(transformedData);
   var tlCertificateData = {
     defaultStyle: {
       font: "Camby"
-     },
+    },
     content: [
       {
         table: {
@@ -695,23 +839,46 @@ console.log(transformedData);
                     alignment: "center"
                   },
                   {
-                    text: getCorporationName(transformedData.corporationName, transformedData.actualAddress),
+                    text: getCorporationName(
+                      transformedData.corporationName,
+                      transformedData.actualAddress
+                    ),
                     style: "receipt-logo-header",
-                    margin: [0, 10, 0, 0],
-                   // font:"Roboto"
+                    margin: [0, 10, 0, 0]
+                    // font:"Roboto"
                   },
                   {
-                    text: getLocaleLabels("TL_LOCALIZATION_CORPORATION_ADDRESS","TL_LOCALIZATION_CORPORATION_ADDRESS")+ "\n" + getLocaleLabels("Contact : ","TL_LOCALIZATION_CORPORATION_CONTACT") +
+                    text:
+                      getLocaleLabels(
+                        "TL_LOCALIZATION_CORPORATION_ADDRESS",
+                        "TL_LOCALIZATION_CORPORATION_ADDRESS"
+                      ) +
+                      "\n" +
+                      getLocaleLabels(
+                        "Contact : ",
+                        "TL_LOCALIZATION_CORPORATION_CONTACT"
+                      ) +
                       transformedData.corporationContact +
-                      "\n" +getLocaleLabels("Website : ","TL_LOCALIZATION_CORPORATION_WEBSITE") +
+                      "\n" +
+                      getLocaleLabels(
+                        "Website : ",
+                        "TL_LOCALIZATION_CORPORATION_WEBSITE"
+                      ) +
                       transformedData.corporationWebsite +
-                      "\n" +getLocaleLabels("Email : ","TL_LOCALIZATION_CORPORATION_EMAIL") + transformedData.corporationEmail,
+                      "\n" +
+                      getLocaleLabels(
+                        "Email : ",
+                        "TL_LOCALIZATION_CORPORATION_EMAIL"
+                      ) +
+                      transformedData.corporationEmail,
                     style: "receipt-logo-sub-text",
-                    margin: [0, 8, 0, 0],
-
+                    margin: [0, 8, 0, 0]
                   },
                   {
-                    text: getLocaleLabels("TRADE LICENSE CERTIFICATE","TL_LOCALIZATION_TRADE_LICENSE_CERTIFICATE"),
+                    text: getLocaleLabels(
+                      "TRADE LICENSE CERTIFICATE",
+                      "TL_LOCALIZATION_TRADE_LICENSE_CERTIFICATE"
+                    ),
                     style: "receipt-logo-sub-header",
                     margin: [0, 30, 0, 0]
                   }
@@ -729,12 +896,14 @@ console.log(transformedData);
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Trade License Number","TL_LOCALIZATION_TRADE_LICENSE_NO")
+            text: getLocaleLabels(
+              "Trade License Number",
+              "TL_LOCALIZATION_TRADE_LICENSE_NO"
+            )
           },
           {
             width: "*",
-            text: transformedData.licenseNumber,
-
+            text: transformedData.licenseNumber
           }
         ]
       },
@@ -743,12 +912,14 @@ console.log(transformedData);
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Application Number","TL_LOCALIZATION_APPLICATION_NO")
+            text: getLocaleLabels(
+              "Application Number",
+              "TL_LOCALIZATION_APPLICATION_NO"
+            )
           },
           {
             width: "*",
-            text: transformedData.applicationNumber,
-
+            text: transformedData.applicationNumber
           }
         ]
       },
@@ -757,12 +928,14 @@ console.log(transformedData);
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Receipt Number","TL_LOCALIZATION_RECIEPT_NO")
+            text: getLocaleLabels(
+              "Receipt Number",
+              "TL_LOCALIZATION_RECIEPT_NO"
+            )
           },
           {
             width: "*",
-            text: transformedData.receiptNumber,
-
+            text: transformedData.receiptNumber
           }
         ]
       },
@@ -771,12 +944,14 @@ console.log(transformedData);
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Financial Year","TL_LOCALIZATION_FINANCIAL_YEAR")
+            text: getLocaleLabels(
+              "Financial Year",
+              "TL_LOCALIZATION_FINANCIAL_YEAR"
+            )
           },
           {
             width: "*",
-            text: transformedData.financialYear,
-
+            text: transformedData.financialYear
           }
         ]
       },
@@ -785,12 +960,12 @@ console.log(transformedData);
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Trade Name","TL_LOCALIZATION_TRADE_NAME")
+            text: getLocaleLabels("Trade Name", "TL_LOCALIZATION_TRADE_NAME")
           },
           {
             width: "*",
-            text: transformedData.tradeName,
-         //  font: "Roboto"
+            text: transformedData.tradeName
+            //  font: "Roboto"
           }
         ]
       },
@@ -799,12 +974,15 @@ console.log(transformedData);
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Trade Owner Name","TL_LOCALIZATION_TRADE_OWNER_NAME")
+            text: getLocaleLabels(
+              "Trade Owner Name",
+              "TL_LOCALIZATION_TRADE_OWNER_NAME"
+            )
           },
           {
             width: "*",
-            text: transformedData.ownersList,
-         //   font: "Roboto"
+            text: transformedData.ownersList
+            //   font: "Roboto"
           }
         ]
       },
@@ -813,11 +991,14 @@ console.log(transformedData);
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Trade Owner Contact","TL_LOCALIZATION_TRADE_OWNER_CONTACT")
+            text: getLocaleLabels(
+              "Trade Owner Contact",
+              "TL_LOCALIZATION_TRADE_OWNER_CONTACT"
+            )
           },
           {
             width: "*",
-            text: transformedData.owners[0].mobile,
+            text: transformedData.owners[0].mobile
           }
         ]
       },
@@ -826,7 +1007,10 @@ console.log(transformedData);
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Occupancy Type","TL_LOCALIZATION_OCCUPANCY_TYPE")
+            text: getLocaleLabels(
+              "Occupancy Type",
+              "TL_LOCALIZATION_OCCUPANCY_TYPE"
+            )
           },
           {
             width: "*",
@@ -839,7 +1023,10 @@ console.log(transformedData);
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Trade Address","TL_LOCALIZATION_TRADE_ADDRESS")
+            text: getLocaleLabels(
+              "Trade Address",
+              "TL_LOCALIZATION_TRADE_ADDRESS"
+            )
           },
           {
             width: "*",
@@ -852,7 +1039,7 @@ console.log(transformedData);
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Trade Type","TL_LOCALIZATION_TRADE_TYPE")
+            text: getLocaleLabels("Trade Type", "TL_LOCALIZATION_TRADE_TYPE")
           },
           {
             width: "*",
@@ -878,12 +1065,17 @@ console.log(transformedData);
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Trade License Fee","TL_LOCALIZATION_TRADE_LICENSE_FEE")
+            text: getLocaleLabels(
+              "Trade License Fee",
+              "TL_LOCALIZATION_TRADE_LICENSE_FEE"
+            )
           },
           {
             width: "*",
-            text: getLocaleLabels("Rs.","TL_LOCALIZATION_TRADE_LICENSE_RS") +transformedData.totalAmount,
-       //     font: "Roboto"
+            text:
+              getLocaleLabels("Rs.", "TL_LOCALIZATION_TRADE_LICENSE_RS") +
+              transformedData.totalAmount
+            //     font: "Roboto"
           }
         ]
       },
@@ -892,12 +1084,14 @@ console.log(transformedData);
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("License Issue Date","TL_LOCALIZATION_LICENSE_ISSUE_DATE")
+            text: getLocaleLabels(
+              "License Issue Date",
+              "TL_LOCALIZATION_LICENSE_ISSUE_DATE"
+            )
           },
           {
             width: "*",
-            text: transformedData.licenseIssueDate,
-
+            text: transformedData.licenseIssueDate
           }
         ]
       },
@@ -906,14 +1100,17 @@ console.log(transformedData);
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("License Validity","TL_LOCALIZATION_LICENSE_VALIDITY")
+            text: getLocaleLabels(
+              "License Validity",
+              "TL_LOCALIZATION_LICENSE_VALIDITY"
+            )
           },
           {
             width: "*",
-            text: transformedData.licenseValidity.startDate +getLocaleLabels("To","TL_LOCALIZATION_TRADE_LICENSE_TO")+
+            text:
+              transformedData.licenseValidity.startDate +
+              getLocaleLabels("To", "TL_LOCALIZATION_TRADE_LICENSE_TO") +
               transformedData.licenseValidity.endDate
-            ,
-
           }
         ]
       },
@@ -923,12 +1120,13 @@ console.log(transformedData);
           {
             text: [
               {
-                text: getLocaleLabels("Approved By:","TL_LOCALIZATION_APPROVED_BY")
+                text: getLocaleLabels(
+                  "Approved By:",
+                  "TL_LOCALIZATION_APPROVED_BY"
+                )
               },
               {
-                text: `${transformedData.auditorName}\n${
-                  transformedData.designation
-                }`
+                text: `${transformedData.auditorName}\n${transformedData.designation}`
               }
             ],
             alignment: "left"
@@ -936,7 +1134,10 @@ console.log(transformedData);
           {
             text: [
               {
-                text: getLocaleLabels("Commissioner/EO","TL_LOCALIZATION_COMMISSIONER_OR_EO"),
+                text: getLocaleLabels(
+                  "Commissioner/EO",
+                  "TL_LOCALIZATION_COMMISSIONER_OR_EO"
+                ),
                 bold: false
               }
             ],
@@ -969,7 +1170,7 @@ console.log(transformedData);
       "tl-certificate-data-2": {
         fontSize: 12,
         margin: [0, 5, 0, 0], //left top right bottom
-        color: "#1E1E1E",
+        color: "#1E1E1E"
       },
 
       "pt-reciept-citizen-subheader": {
@@ -1050,17 +1251,350 @@ console.log(transformedData);
   return tlCertificateData;
 };
 
+const getACKData = (transformedData, ulbLogo) => {
+  console.log(transformedData);
+  var tlACKData = {
+    defaultStyle: {
+      font: "Camby"
+    },
+    content: [
+      {
+        table: {
+          widths: ["*"],
+          body: [
+            [
+              {
+                stack: [
+                  {
+                    image: ulbLogo,
+                    width: 50,
+                    height: 61.25,
+                    alignment: "center"
+                  },
+                  {
+                    text: getCorporationName(
+                      transformedData.corporationName,
+                      transformedData.actualAddress
+                    ),
+                    style: "receipt-logo-header",
+                    margin: [0, 10, 0, 0]
+                    // font:"Roboto"
+                  },
+                  {
+                    text:
+                      getLocaleLabels(
+                        "TL_LOCALIZATION_CORPORATION_ADDRESS",
+                        "TL_LOCALIZATION_CORPORATION_ADDRESS"
+                      ) +
+                      "\n" +
+                      getLocaleLabels(
+                        "Contact : ",
+                        "TL_LOCALIZATION_CORPORATION_CONTACT"
+                      ) +
+                      transformedData.corporationContact +
+                      "\n" +
+                      getLocaleLabels(
+                        "Website : ",
+                        "TL_LOCALIZATION_CORPORATION_WEBSITE"
+                      ) +
+                      transformedData.corporationWebsite +
+                      "\n" +
+                      getLocaleLabels(
+                        "Email : ",
+                        "TL_LOCALIZATION_CORPORATION_EMAIL"
+                      ) +
+                      transformedData.corporationEmail,
+                    style: "receipt-logo-sub-text",
+                    margin: [0, 8, 0, 0]
+                  },
+                  {
+                    text: getLocaleLabels(
+                      "TRADE LICENSE ACKNOWLEDGMENT",
+                      "TL_LOCALIZATION_TRADE_ACKNOWLEDGMENT"
+                    ),
+                    style: "receipt-logo-sub-header",
+                    margin: [0, 30, 0, 0]
+                  }
+                ],
+                alignment: "center",
+                margin: [0, 0, 0, 0]
+              }
+            ]
+          ]
+        },
+        layout: noborder
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Application Number",
+              "TL_LOCALIZATION_APPLICATION_NO"
+            )
+          },
+          {
+            width: "*",
+            text: transformedData.applicationNumber
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Financial Year",
+              "TL_LOCALIZATION_FINANCIAL_YEAR"
+            )
+          },
+          {
+            width: "*",
+            text: transformedData.financialYear
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels("Trade Name", "TL_LOCALIZATION_TRADE_NAME")
+          },
+          {
+            width: "*",
+            text: transformedData.tradeName
+            //  font: "Roboto"
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Trade Owner Name",
+              "TL_LOCALIZATION_TRADE_OWNER_NAME"
+            )
+          },
+          {
+            width: "*",
+            text: transformedData.ownersList
+            //   font: "Roboto"
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Trade Owner Contact",
+              "TL_LOCALIZATION_TRADE_OWNER_CONTACT"
+            )
+          },
+          {
+            width: "*",
+            text: transformedData.owners[0].mobile
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Occupancy Type",
+              "TL_LOCALIZATION_OCCUPANCY_TYPE"
+            )
+          },
+          {
+            width: "*",
+            text: transformedData.occupancyType
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Trade Address",
+              "TL_LOCALIZATION_TRADE_ADDRESS"
+            )
+          },
+          {
+            width: "*",
+            text: transformedData.address
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels("Trade Type", "TL_LOCALIZATION_TRADE_TYPE")
+          },
+          {
+            width: "*",
+            text: transformedData.tradeTypeCertificate
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Trade License Fee",
+              "TL_LOCALIZATION_TRADE_LICENSE_FEE"
+            )
+          },
+          {
+            width: "*",
+            text:
+              getLocaleLabels("Rs.", "TL_LOCALIZATION_TRADE_LICENSE_RS") +
+              transformedData.totalAmount
+            //     font: "Roboto"
+          }
+        ]
+      },
+      // {
+      //   style: "tl-certificate-data-2",
+      //   columns: [
+      //     {
+      //       width: 160,
+      //       text: getLocaleLabels(
+      //         "License Applied date",
+      //         "TL_LOCALIZATION_APPLICATION_APPLIED_DATE"
+      //       )
+      //     },
+      //     {
+      //       width: "*",
+      //       text: transformedData.applicationDate
+      //     }
+      //   ]
+      // }
+    ],
+    // footer: [
+    //   {
+    //     text: transformedData.Disclaimer,
+    //     style: "receipt-footer"
+    //   }
+    // ], //define all the styles here
+    styles: {
+      "pt-reciept-citizen-header": {
+        fontSize: 14,
+        margin: [0, 24, 0, 0], //left top right bottom
+        color: "#1E1E1E"
+      },
+      "tl-certificate-data": {
+        fontSize: 12,
+        margin: [0, 12, 0, 0], //left top right bottom
+        color: "#1E1E1E"
+      },
+      "tl-certificate-data-2": {
+        fontSize: 12,
+        margin: [0, 5, 0, 0], //left top right bottom
+        color: "#1E1E1E"
+      },
+
+      "pt-reciept-citizen-subheader": {
+        fontSize: 10,
+        bold: true,
+        margin: [0, 16, 0, 8], //left top right bottom
+        color: "#484848"
+      },
+      "pt-reciept-citizen-table": {
+        fontSize: 10,
+        color: "#484848"
+      },
+      "receipt-assess-table": {
+        fontSize: 10,
+        color: "#484848",
+        margin: [0, 8, 0, 0]
+      },
+      "receipt-assess-table-header": {
+        bold: true,
+        fillColor: "#D8D8D8",
+        color: "#484848"
+      },
+      "receipt-header-details": {
+        fontSize: 9,
+        margin: [0, 0, 0, 8],
+        color: "#484848"
+      },
+      "receipt-table-key": {
+        color: "#484848",
+        bold: true
+      },
+      "receipt-table-value": {
+        color: "#484848"
+      },
+      "receipt-logo-header": {
+        color: "#1E1E1E",
+
+        fontSize: 18,
+        bold: true,
+        letterSpacing: 0.74
+      },
+      "receipt-logo-sub-text": {
+        color: "#656565",
+
+        fontSize: 14,
+        letterSpacing: 0.74
+      },
+      "receipt-logo-sub-header": {
+        color: "#1E1E1E",
+
+        fontSize: 16,
+        letterSpacing: 1.6,
+        bold: true
+      },
+      "receipt-footer": {
+        color: "#484848",
+        fontSize: 8,
+        margin: [10, -35, 5, 5]
+      },
+      "receipt-no": {
+        color: "#484848",
+        fontSize: 10
+      },
+      "tl-certificate-footer": {
+        fontSize: 14,
+        margin: [0, 30, 0, 0], //left top right bottom
+        color: "#1E1E1E"
+      },
+
+      "tl-certificate-footer1": {
+        fontSize: 14,
+        margin: [0, 10, 0, 0], //left top right bottom
+        color: "#1E1E1E"
+      }
+    }
+  };
+
+  return tlACKData;
+};
+
 const generateReceipt = async (state, dispatch, type) => {
-//  console.log("Transformed Data--",transformedData);
+  //  console.log("Transformed Data--",transformedData);
   pdfMakeCustom.vfs = pdfFonts.vfs;
   pdfMakeCustom.fonts = {
-    Camby:{
-            normal: 'Cambay-Regular.ttf',
-            bold: 'Cambay-Regular.ttf',
-            italics: 'Cambay-Regular.ttf',
-            bolditalics: 'Cambay-Regular.ttf'
-    },
-
+    Camby: {
+      normal: "Cambay-Regular.ttf",
+      bold: "Cambay-Regular.ttf",
+      italics: "Cambay-Regular.ttf",
+      bolditalics: "Cambay-Regular.ttf"
+    }
   };
   let data1 = _.get(
     state.screenConfiguration.preparedFinalObject,
@@ -1083,7 +1617,8 @@ const generateReceipt = async (state, dispatch, type) => {
     {}
   );
   let data5 = _.get(
-    state.screenConfiguration.preparedFinalObject.Licenses[0].tradeLicenseDetail,
+    state.screenConfiguration.preparedFinalObject.Licenses[0]
+      .tradeLicenseDetail,
     "address",
     {}
   );
@@ -1114,15 +1649,14 @@ const generateReceipt = async (state, dispatch, type) => {
     ...data2,
     ...data3,
     ...data4,
-    actualAddress:data5
+    actualAddress: data5
   };
   switch (type) {
     case "certificate_download":
-
       let certificate_data = getCertificateData(transformedData, ulbLogo);
       certificate_data &&
-     //  pdfMakeCustom.createPdf(certificate_data).download("tl_certificate.pdf");
-      pdfMakeCustom.createPdf(certificate_data).open();
+        //  pdfMakeCustom.createPdf(certificate_data).download("tl_certificate.pdf");
+        pdfMakeCustom.createPdf(certificate_data).open();
       break;
     case "certificate_print":
       certificate_data = getCertificateData(transformedData, ulbLogo);
@@ -1132,12 +1666,19 @@ const generateReceipt = async (state, dispatch, type) => {
       let receipt_data = getReceiptData(transformedData, ulbLogo);
 
       receipt_data &&
-     //   pdfMakeCustom.createPdf(receipt_data).download("tl_receipt.pdf");
+        //   pdfMakeCustom.createPdf(receipt_data).download("tl_receipt.pdf");
         pdfMakeCustom.createPdf(receipt_data).open();
       break;
     case "receipt_print":
       receipt_data = getReceiptData(transformedData, ulbLogo);
       receipt_data && pdfMakeCustom.createPdf(receipt_data).print();
+      break;
+    case "ack_download":
+      let ack_data = getACKData(transformedData, ulbLogo);
+
+      ack_data &&
+        //   pdfMakeCustom.createPdf(receipt_data).download("tl_receipt.pdf");
+        pdfMakeCustom.createPdf(ack_data).open();
       break;
     default:
       break;

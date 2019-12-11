@@ -622,8 +622,8 @@ export const footerReview = (
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-     
-      
+
+
       const receiptQueryString = [
         { key: "consumerCodes", value:  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber")},
         { key: "tenantId", value:get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
@@ -643,7 +643,8 @@ export const footerReview = (
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download", applicationNumber);
+      generateReceipt(state, dispatch, "ack_download");
+      // generatePdfFromDiv("download", applicationNumber);
     },
     leftIcon: "assignment"
   };
@@ -894,7 +895,8 @@ export const downloadPrintContainer = (
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download", applicationNumber);
+      generateReceipt(state, dispatch, "ack_download");
+      // generatePdfFromDiv("download", applicationNumber);
     },
     leftIcon: "assignment"
   };
