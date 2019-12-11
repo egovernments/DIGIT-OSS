@@ -566,6 +566,28 @@ export const createEstimateData = billObject => {
   return fees;
 };
 
+
+export const createBill = async (queryObject,dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error,'fetxh');
+  }
+};
+
 export const generateBill = async (dispatch, applicationNumber, tenantId) => {
   try {
     if (applicationNumber && tenantId) {
@@ -575,11 +597,12 @@ export const generateBill = async (dispatch, applicationNumber, tenantId) => {
           value: tenantId
         },
         {
-          key: "applicationNumber",
+          key: "consumerCode",
           value: applicationNumber
-        }
+        },
+        { key: "services", value: "FIRENOC" }
       ];
-      const payload = await getBill(queryObj);
+      const payload = await createBill(queryObj,dispatch);
       // let payload = sampleGetBill();
       if (payload && payload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
