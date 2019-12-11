@@ -407,7 +407,8 @@ export const getLabelWithValue = (label, value, props = {}) => {
     },
     props: {
       style: {
-        marginBottom: "16px"
+        marginBottom: "16px",
+        wordBreak : "break-word"
       },
       ...props
     },

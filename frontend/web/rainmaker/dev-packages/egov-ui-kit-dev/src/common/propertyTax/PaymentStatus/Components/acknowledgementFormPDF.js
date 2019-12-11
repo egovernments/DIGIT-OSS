@@ -247,7 +247,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
                     text: getLocaleLabels("Contact Us:","PT_ACK_LOCALIZATION_CONTACT_US"),
                     bold: true,
                   },
-                  header.contact || "NA",
+                  header.contact || getLocaleLabels("PT_LOCALIZATION_NOT_AVAILABLE","PT_LOCALIZATION_NOT_AVAILABLE"),
                 ],
                 alignment: "right",
               },
@@ -272,7 +272,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
                     text: getLocaleLabels("Website:","PT_ACK_LOCALIZATION_WEBSITE"),
                     bold: true,
                   },
-                  header.website || "NA",
+                  header.website || getLocaleLabels("PT_LOCALIZATION_NOT_AVAILABLE","PT_LOCALIZATION_NOT_AVAILABLE"),
                 ],
                 alignment: "right",
               },
@@ -285,7 +285,7 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
               body: [
                 [
                   { text: getLocaleLabels("Existing Property ID:","PT_ACK_LOCALIZATION_EXISTING_PROPERTY_ID"), border: borderKey, style: "receipt-table-key" },
-                  { text: details.existingPropertyId || "NA", border: borderValue },
+                  { text: details.existingPropertyId || getLocaleLabels("PT_LOCALIZATION_NOT_AVAILABLE","PT_LOCALIZATION_NOT_AVAILABLE"), border: borderValue },
                   { text: getLocaleLabels("Property Tax Unique ID:","PT_ACK_LOCALIZATION_PROPERTY_TAX_UNIQUE_ID"),  border: borderKey, style: "receipt-table-key" },
                   { text: details.propertyId || "", border: borderValue }, //need to confirm this data
                   { text: getLocaleLabels("Assessment No:","PT_ACK_LOCALIZATION_ASSESSMENT_NO"), border: borderKey, style: "receipt-table-key" },
@@ -303,13 +303,13 @@ const generateAcknowledgementForm = (role, details, generalMDMSDataById, receipt
               body: [
                 [
                   { text: getLocaleLabels("House/Door No.:","PT_ACK_LOCALIZATION_HOUSE_DOOR_NO"), border: borderKey, style: "receipt-table-key" },
-                  { text: address.doorNo || "NA", border: borderValue },
+                  { text: address.doorNo || getLocaleLabels("PT_LOCALIZATION_NOT_AVAILABLE","PT_LOCALIZATION_NOT_AVAILABLE"), border: borderValue },
                   { text: getLocaleLabels("Building/Colony Name.:","PT_ACK_LOCALIZATION_BUILDING_COLONY_NAME"), border: borderKey, style: "receipt-table-key" },
-                  { text: address.buildingName || "NA", border: borderValue },
+                  { text: address.buildingName || getLocaleLabels("PT_LOCALIZATION_NOT_AVAILABLE","PT_LOCALIZATION_NOT_AVAILABLE"), border: borderValue },
                 ],
                 [
                   { text: getLocaleLabels("Street Name:","PT_ACK_LOCALIZATION_STREET_NAME"), border: borderKey, style: "receipt-table-key" },
-                  { text: address.street || "NA", border: borderValue },
+                  { text: address.street || getLocaleLabels("PT_LOCALIZATION_NOT_AVAILABLE","PT_LOCALIZATION_NOT_AVAILABLE"), border: borderValue },
                   { text: getLocaleLabels("Locality/Mohalla:","PT_ACK_LOCALIZATION_LOCALITY_MOHALLA"), border: borderKey, style: "receipt-table-key" },
                   { text: getLocaleLabels((address.tenantId.replace('.','_')+'_REVENUE_'+address.locality.code).toUpperCase(),(address.tenantId.replace('.','_')+'_REVENUE_'+address.locality.code).toUpperCase()), 
                   border: borderValue

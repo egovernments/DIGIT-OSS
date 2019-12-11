@@ -21,6 +21,7 @@ const formConfig = {
       required: true,
       errorStyle: { position: "absolute", bottom: -8, zIndex: 5 },
       type: "autoSuggestDropdown",
+      labelsFromLocalisation: true,
     },
     mobileNumber: {
       id: "complainant-mobile-no",
@@ -78,7 +79,7 @@ const formConfig = {
           let selected = cities.find((city) => {
             return city.code === tenant.code;
           });
-          dd.push({ label: selected.name, value: selected.code });
+          dd.push({ label: `TENANT_TENANTS_${selected.code.toUpperCase().replace(/[.:-\s\/]/g, "_")}` , value: selected.code });
           return dd;
         }, []);
         dispatch(setFieldProperty("searchProperty", "city", "dropDownData", sortBy(dd, ["label"])));

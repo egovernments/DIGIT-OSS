@@ -444,7 +444,7 @@ const screenConfig = {
     }
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessService", value: "newTL" }
+      { key: "businessServices", value: "NewTL" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
     beforeInitFn(action, state, dispatch, applicationNumber);
@@ -475,7 +475,7 @@ const screenConfig = {
               componentPath: "Container",
               props: {
                 color: "primary",
-                style: { justifyContent: "flex-end", display: "block" }
+                style: { justifyContent: "flex-end" }
               },
               gridDefination: {
                 xs: 12,
