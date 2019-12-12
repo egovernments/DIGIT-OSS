@@ -15726,6 +15726,20 @@
       "navigationURL": "edcrscrutiny/home",
       "leftIcon": "places:business-center",
       "rightIcon": ""
-    }
+    },
+    {
+      "id": 1922,
+      "name": "BPASearch",
+      "url": "url",
+      "displayName": "Search",
+      "orderNumber": 0,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "BPA",
+      "code": "null",
+      "navigationURL": "bpa/search",
+      "path": "BPA.Search",
+      "leftIcon": "places:business-center"
+    },
   ]
 }
