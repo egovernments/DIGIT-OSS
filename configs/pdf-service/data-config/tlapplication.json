@@ -12,7 +12,7 @@
             {
               "direct": [
                 {
-                    "variable": "applicationNo",
+                    "variable": "applicationNumber",
                     "value": {
                       "path": "$.applicationNumber"
                     }
@@ -45,10 +45,15 @@
                   "variable": "applicationType",
                   "value": {
                     "path": "$.tradeLicenseDetail.additionalDetail.applicationType"
-                  }
+                  },
+                  "localisation":{
+                    "required":true,
+                    "prefix": "TRADELICENSE_APPLICATIONTYPE",
+                    "module": "rainmaker-tl"
+                 }
                 },
                 {
-                  "variable": "oldApplicationNumber",
+                  "variable": "oldLicenseNumber",
                   "value": {
                     "path": "$.oldLicenseNumber"
                   }
@@ -69,16 +74,26 @@
                     "variable": "structureType",
                     "value": {
                       "path": "$.tradeLicenseDetail.structureType"
-                    }
+                    },
+                    "localisation":{
+                      "required":true,
+                      "prefix": "COMMON_MASTERS_STRUCTURETYPE",
+                      "module": "rainmaker-tl"
+                   }
                 },
                 {
                     "variable": "structureSubType",
                     "value": {
                       "path": "$.tradeLicenseDetail.structureType"
-                    }
+                    },
+                    "localisation":{
+                      "required":true,
+                      "prefix": "COMMON_MASTERS_STRUCTURETYPE",
+                      "module": "rainmaker-tl"
+                   }
                 },
                 {
-                    "variable": "tradeCommencementDate",
+                    "variable": "commencementDate",
                     "value": {
                       "path": "$.commencementDate"
                     }
@@ -90,7 +105,7 @@
                     }
                 },
                 {
-                    "variable": "operationalArea ",
+                    "variable": "operationalArea",
                     "value": {
                       "path": "$.tradeLicenseDetail.operationalArea"
                     }
@@ -105,19 +120,34 @@
                     "variable": "tradeCategory",
                     "value": {
                       "path": "$.tradeLicenseDetail.tradeUnits[0].tradeType"
-                    }
+                    },
+                    "localisation":{
+                      "required":true,
+                      "prefix": "TRADELICENSE_TRADETYPE",
+                      "module": "rainmaker-tl"
+                   }
                 },
                 {
                     "variable": "tradeType",
                     "value": {
                       "path": "$.tradeLicenseDetail.tradeUnits[0].tradeType"
-                    }
+                    },
+                    "localisation":{
+                      "required":true,
+                      "prefix": "TRADELICENSE_TRADETYPE",
+                      "module": "rainmaker-tl"
+                   }
                 },
                 {
                     "variable": "tradeSubType",
                     "value": {
                       "path": "$.tradeLicenseDetail.tradeUnits[0].tradeType"
-                    }
+                    },
+                    "localisation":{
+                      "required":true,
+                      "prefix": "TRADELICENSE_TRADETYPE",
+                      "module": "rainmaker-tl"
+                   }
                 },
                 {
                     "variable": "uomMeasurement",
@@ -135,7 +165,12 @@
                     "variable": "accesoryType",
                     "value": {
                       "path": "$.tradeLicenseDetail.accessories[0].accessoryCategory"
-                    }
+                    },
+                    "localisation":{
+                      "required":true,
+                      "prefix": "TRADELICENSE_ACCESSORIESCATEGORY",
+                      "module": "rainmaker-tl"
+                   }
                 },
                 {
                     "variable": "uom",
@@ -159,7 +194,13 @@
                     "variable": "city",
                     "value": {
                       "path": "$..tradeLicenseDetail.address.city"
-                    }
+                    },
+                    "localisation":{
+                      "required":true,
+                      "prefix": "TENANT_TENANTS",
+                      "module": "rainmaker-common"
+                   }
+                    
                 },
                 {
                     "variable": "doorHouseNo",
@@ -201,13 +242,24 @@
                     "variable": "typeOfOwnership",
                     "value": {
                       "path": "$.tradeLicenseDetail.subOwnerShipCategory"
-                    }
+                    },
+                    "localisation":{
+                      "required":true,
+                      "prefix": "COMMON_MASTERS_OWNERSHIPCATEGORY",
+                      "module": "rainmaker-tl"
+                   }
+                    
                 },
                 {
                     "variable": "typeOfSubOwnership",
                     "value": {
                       "path": "$.tradeLicenseDetail.subOwnerShipCategory"
-                    }
+                    },
+                    "localisation":{
+                      "required":true,
+                      "prefix": "COMMON_MASTERS_OWNERSHIPCATEGORY",
+                      "module": "rainmaker-tl"
+                   }
                 },
                 {
                     "variable": "mobileNo",
