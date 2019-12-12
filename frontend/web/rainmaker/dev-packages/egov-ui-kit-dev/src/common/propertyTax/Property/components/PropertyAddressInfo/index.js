@@ -52,7 +52,7 @@ const getAddressItems = (properties, loadMdmsData) => {
       },
       {
         key: getTranslatedLabel("PT_PROPERTY_ADDRESS_MOHALLA", localizationLabelsData),
-        value: getTranslatedLabel((properties.tenantId.replace('.', '_') + '_REVENUE_' + address.locality.code).toUpperCase(), localizationLabelsData) || "NA",
+        value: address.locality.name || "NA",
       }
     ]
   );
