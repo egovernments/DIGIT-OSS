@@ -1258,7 +1258,8 @@ const getCertificateData = (transformedData, ulbLogo) => {
   return tlCertificateData;
 };
 const validateNull = value =>{
-  if(value !== null ? value : "NA" );
+  if(value && value !== "null"  ? value : "NA" );
+  console.log("value====",value);
 }
 const getACKData = (transformedData, ulbLogo) => {
   console.log(transformedData);
