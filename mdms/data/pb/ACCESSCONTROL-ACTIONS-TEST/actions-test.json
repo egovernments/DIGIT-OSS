@@ -15229,7 +15229,7 @@
       "enabled": true,
       "serviceCode": "BPAREG",
       "code": "null",
-      "path": "BPAStakeHolder.Home",
+      "path": "BPAStakeHolder",
       "navigationURL": "bpastakeholder-citizen/home",
       "leftIcon": "places:business-center",
       "rightIcon": ""
@@ -15711,6 +15711,21 @@
       "serviceCode": "sw-calculator",
       "code": "null",
       "path": ""
-    }       
+    },
+    {
+      "id": 1921,
+      "name": "eDCRScrutinyHome",
+      "url": "url",
+      "displayName": "eDCR Scrutiny Home",
+      "orderNumber": 1,
+      "parentModule": "rainmaker-edcr",
+      "enabled": true,
+      "serviceCode": "EDCR",
+      "code": "null",
+      "path": "eDCRScrutiny",
+      "navigationURL": "edcrscrutiny/home",
+      "leftIcon": "places:business-center",
+      "rightIcon": ""
+    }
   ]
 }
