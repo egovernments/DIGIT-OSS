@@ -26,7 +26,7 @@ import {
 import commonConfig from "config/common.js";
 import {
   getLocaleLabels,
-  getTransformedLocalStorgaeLabels
+  getTransformedLocalStorgaeLabels, getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
 
 export const getCommonApplyFooter = children => {
@@ -920,18 +920,57 @@ const getStatementForDocType = docType => {
   }
 };
 
+
+export const downloadAcknowledgementForm = (Licenses) => {
+  const queryStr = [
+    { key: "key", value: "tlapplication" },
+    { key: "tenantId", value: Licenses[0].tenantId }
+  ]
+  const DOWNLOADRECEIPT = {
+    GET: {
+      URL: "/pdf-service/v1/_create",
+      ACTION: "_get",
+    },
+  };
+  try {
+    httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Licenses }, { 'Accept': 'application/json' }, { responseType: 'arraybuffer' })
+      .then(res => {
+        res.filestoreIds[0]
+        if (res && res.filestoreIds && res.filestoreIds.length > 0) {
+          res.filestoreIds.map(fileStoreId => {
+            downloadReceiptFromFilestoreID(fileStoreId)
+          })
+        } else {
+          console.log("Error In Acknowledgement form Download");
+        }
+      });
+  } catch (exception) {
+    alert('Some Error Occured while downloading Acknowledgement form!');
+  }
+}
+
+const downloadReceiptFromFilestoreID = (fileStoreId) => {
+  getFileUrlFromAPI(fileStoreId).then((fileRes) => {
+    var win = window.open(fileRes[fileStoreId], '_blank');
+    if (win) {
+      win.focus();
+    }
+  });
+}
+
+
 export const prepareDocumentTypeObj = documents => {
   let documentsArr =
     documents.length > 0
       ? documents.reduce((documentsArr, item, ind) => {
-          documentsArr.push({
-            name: item,
-            required: true,
-            jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
-            statement: getStatementForDocType(item)
-          });
-          return documentsArr;
-        }, [])
+        documentsArr.push({
+          name: item,
+          required: true,
+          jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+          statement: getStatementForDocType(item)
+        });
+        return documentsArr;
+      }, [])
       : [];
   return documentsArr;
 };
@@ -943,10 +982,10 @@ const getTaxValue = item => {
     ? item.amount
       ? item.amount
       : item.debitAmount
-      ? -Math.abs(item.debitAmount)
-      : item.crAmountToBePaid
-      ? item.crAmountToBePaid
-      : 0
+        ? -Math.abs(item.debitAmount)
+        : item.crAmountToBePaid
+          ? item.crAmountToBePaid
+          : 0
     : 0;
 };
 
@@ -990,15 +1029,15 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
               item.accountDescription.split("-")[0],
               LicenseData
             ) && {
-              value: getToolTipInfo(
-                item.accountDescription.split("-")[0],
-                LicenseData
-              ),
-              key: getToolTipInfo(
-                item.accountDescription.split("-")[0],
-                LicenseData
-              )
-            }
+                value: getToolTipInfo(
+                  item.accountDescription.split("-")[0],
+                  LicenseData
+                ),
+                key: getToolTipInfo(
+                  item.accountDescription.split("-")[0],
+                  LicenseData
+                )
+              }
           });
       } else {
         item.taxHeadCode &&
@@ -1135,7 +1174,7 @@ const isApplicationPaid = currentStatus => {
   let isPAID = false;
 
   if (!isEmpty(JSON.parse(localStorageGet("businessServiceData")))) {
-    const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item=>item.businessService === "NewTL")
+    const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === "NewTL")
     const states = tlBusinessService[0].states;
     for (var i = 0; i < states.length; i++) {
       if (states[i].state === currentStatus) {
@@ -1201,13 +1240,13 @@ export const createEstimateData = async (
   let estimateData = payload
     ? isPAID
       ? payload &&
-        payload.Payments &&
-        payload.Payments.length > 0 &&
-        getEstimateData(
-          payload.Payments[0].paymentDetails[0].bill,
-          isPAID,
-          LicenseData
-        )
+      payload.Payments &&
+      payload.Payments.length > 0 &&
+      getEstimateData(
+        payload.Payments[0].paymentDetails[0].bill,
+        isPAID,
+        LicenseData
+      )
       : payload && getEstimateData(payload, false, LicenseData)
     : [];
   estimateData = estimateData || [];
@@ -1602,7 +1641,7 @@ export const updateDropDowns = async (
           "applyScreenMdmsData.common-masters.StructureSubTypeTransformed",
           get(
             state.screenConfiguration.preparedFinalObject.applyScreenMdmsData[
-              "common-masters"
+            "common-masters"
             ],
             `StructureType.${structType.split(".")[0]}`,
             []
@@ -2154,8 +2193,8 @@ export const applyForm = (state, dispatch) => {
       process.env.NODE_ENV === "production"
         ? `/citizen/tradelicense-citizen/apply?tenantId=${tenantId}`
         : process.env.REACT_APP_SELF_RUNNING === true
-        ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
-        : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
+          ? `/egov-ui-framework/tradelicense-citizen/apply?tenantId=${tenantId}`
+          : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
   }
 };
 
