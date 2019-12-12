@@ -18,14 +18,10 @@ SearchDefinitions:
     searchParams:
       condition: AND
       params:
-      - name: result.applicationNumber
+      - name: result.referenceNumber
         isMandatory: true
-        jsonPath: $.searchCriteria.id
+        jsonPath: $.searchCriteria.referenceNumber
         operator: 
-      - name: result.tenantid
-        isMandatory: true
-        jsonPath: $.searchCriteria.tenantId
-        operator: =
 
     output:
       jsonFormat: {"ResponseInfo": {}}
@@ -46,14 +42,10 @@ SearchDefinitions:
     searchParams:
       condition: AND
       params:
-      - name: result.firenocnumber
+      - name: result.referenceNumber
         isMandatory: true
-        jsonPath: $.searchCriteria.id
+        jsonPath: $.searchCriteria.referenceNumber
         operator: 
-      - name: result.tenantid
-        isMandatory: true
-        jsonPath: $.searchCriteria.tenantId
-        operator: =
 
     output:
       jsonFormat: {"ResponseInfo": {}}
