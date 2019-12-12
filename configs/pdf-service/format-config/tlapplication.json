@@ -21,7 +21,7 @@
                    },
                    {
                        "text":"{{application_no}}",
-                       "alignment": "right",
+                       "alignment":"right",
                        "color": "#484848",
                        "margin": [
                         0,
@@ -606,7 +606,7 @@
                          ],
                          [
                            {
-                             "text":"{{tradeCategoty}}",
+                             "text":"{{tradeCategory}}",
                              "border":[
                                false,
                                false,
@@ -636,7 +636,7 @@
                               "style": "receipt-table2"
                            },  
                            {
-                             "text":"{{uomMeasurement)}}",
+                             "text":"{{uomMeasurement}}",
                              "border":[
                                false,
                                false,
