@@ -1,0 +1,535 @@
+{
+    "key": "testlocalconsolidatedbill",
+    "DataConfigs": {
+      "serviceName": "rainmaker-common",
+      "version": "1.0.0",
+      "baseKeyPath": "$.Bill.*",
+      "entityIdPath":"$.billNumber",
+      "isCommonTableBorderRequired": true,
+      "mappings": [
+        {
+          "topic": "common-pdf-generation-1",
+          "staticConfigPath": "https://raw.githubusercontent.com/egovernments/egov-services/vishal-feature-filestore/core/egov-indexer/src/main/resources/rainmaker-pgr-indexer.yml",
+          "mappings": [
+            {
+              "direct": [
+                {
+                  "variable": "logoImage",
+                  "url": "https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
+                  "type": "image"
+                },
+                {
+                  "variable": "logo_header",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_LOGO_HEADER"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "total_amount_due",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_TOTAL_AMOUNT_DUE"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "payer_name",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_PAYER_NAME"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "bill_no",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_BILL_NO"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "mobile_no",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_MOBILE_NO"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "bill_period",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_BILL_PERIOD"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "payer_address",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_PAYER_ADDRESS"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                
+                {
+                  "variable": "bill_issue_date",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_ISSUE_DATE"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "bill_due_date",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_BILL_DUE_DATE"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "billing_summary_property_tax",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_BILLING_SUMMARY"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "property_id",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_PROPERTY_ID"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "arrears_label",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_ARREARS"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "charge_label",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_CHARGE"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                
+                {
+                  "variable": "penalty_label",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_PENALTY"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "rebate_label",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_REBATE"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "others_label",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_OTHERS"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "total_label",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_TOTAL"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "important_message",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_IMPORTANT_MESSAGE"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "payment_received",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_PAYMENT_RECEIVED"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "this_document",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_THIS_DOCUMENT"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "this_is_a",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_THIS_IS"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "assessment_payment",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_ASSESSSMENT_PAYMENT"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "please_deposit",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_PLEASE_DEPOSIT"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "if_the_tax",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_IF_THE_TAX"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "acknowledgement_for",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_ACKNOWLEDGEMENT"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "date_label",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_DATE"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "consumer_id",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_CONSUMER_ID"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "name_address",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_NAME_ADDRESS"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "total_payment",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_TOTAL_PAYMENT"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "receivers_signature",
+                  "value": {
+                    "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_RECEIVERS_SIGNATURE"
+                  },
+                  "type": "label",
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module":"rainmaker-common"
+                 }
+                },
+                {
+                  "variable": "totalAmountDue",
+                  "value": {
+                    "path": "$.totalAmount"
+                  }
+                },
+                {
+                  "variable": "total",
+                  "value": {
+                    "path": "$.totalAmount"
+                  }
+                },
+                
+                {
+                  "variable": "payerName",
+                  "value": {
+                    "path": "$.payerName"
+                  }
+                },
+                
+                {
+                  "variable": "mobileNo",
+                  "value": {
+                    "path": "$.mobileNumber"
+                  }
+                },
+                
+                {
+                  "variable": "payerAddress",
+                  "value": {
+                    "path": "$.payerAddress"
+                  }
+                },
+                {
+                  "variable": "nameAddress",
+                  "value": {
+                    "path": "$.payerAddress"
+                  }
+                },
+                
+                {
+                  "variable": "billNo",
+                  "value": {
+                    "path": "$.billNumber"
+                  }
+                },
+                {
+                  "variable": "fromPeriod",
+                  "value": {
+                    "path": "$.billDetails[0].fromPeriod"
+                  }
+                },
+                {
+                  "variable": "toPeriod",
+                  "value": {
+                    "path": "$.billDetails[0].toPeriod"
+                  }
+                },
+                
+            {
+                  "variable": "billIssueDate",
+                  "value": {
+                    "path": "$.billDate"
+                  }
+                },
+                
+                {
+                  "variable": "billDueDate",
+                  "value": {
+                    "path": "$.billDetails[0].expiryDate"
+                  }
+                },
+                
+            {
+                  "variable": "propertyID",
+                  "value": {
+                    "path": "$.consumerCode"
+                  }
+                },
+                
+                {
+                  "variable": "arrears",
+                  "value": {
+                    "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].amount"
+                  }
+                },
+                
+                {
+                  "variable": "charge",
+                  "value": {
+                    "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE')].amount"
+                  }
+                },
+               
+                {
+                  "variable": "rebate",
+                  "value": {
+                    "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE')].amount"
+                  }
+                },
+                
+                {
+                  "variable": "penalty",
+                  "value": {
+                    "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE')].amount"
+                  }
+                },
+                
+                {
+                  "variable": "others",
+                  "value": {
+                    "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TAX')].amount"
+                  }
+                },
+               
+                {
+                  "variable": "consumerID",
+                  "value": {
+                    "path": "$.consumerCode"
+                  }
+                },
+               {
+                  "variable": "date",
+                  "value": {
+                    "path": "$.billDate"
+                  }
+                },
+                {
+                  "variable": "totalPayment",
+                  "value": {
+                    "path": "$.billDetails[0].amountPaid"
+                  }
+                },
+                {
+                  "variable":"scissorImage",
+                  "url":"https://raw.githubusercontent.com/egovernments/egov-web-app/master/web/rainmaker/dev-packages/egov-ui-kit-dev/src/assets/images/pblogo.png",
+                  "type":"image"
+                }
+              ]
+            },
+            {
+              "derived": [
+                {
+                  "variable": "variable19",
+                  "formula": "{{totalPayment}}-{{totalPayment}}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
