@@ -27,14 +27,22 @@ const jurisdictionCard = {
             labelName: "Hierarchy",
             labelKey: "HR_HIERARCHY_LABEL"
           },
-          { jsonPath: "Employee[0].jurisdictions[0].hierarchy" }
+          { jsonPath: "Employee[0].jurisdictions[0].hierarchy",
+          localePrefix :{
+            moduleName : "EGOV_LOCATION",
+            masterName : "TENANTBOUNDARY"
+          }, }
         ),
         reviewBoundaryType: getLabelWithValue(
           {
             labelName: "Boundary Type",
             labelKey: "HR_BOUNDARY_TYPE_LABEL"
           },
-          { jsonPath: "Employee[0].jurisdictions[0].boundaryType" }
+          { jsonPath: "Employee[0].jurisdictions[0].boundaryType",
+          localePrefix :{
+            moduleName : "EGOV_LOCATION",
+            masterName : "BOUNDARYTYPE"
+          }, }
         ),
         reviewBoundary: getLabelWithValue(
           { labelName: "Boundary", labelKey: "HR_BOUNDARY_LABEL" },

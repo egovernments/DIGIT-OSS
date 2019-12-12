@@ -43,6 +43,17 @@ class Header extends Component {
     updateActiveRoute(menupath, menuName);
   };
 
+  componentWillReceiveProps = (nextProps) => {
+    const { role, userInfo } = this.props;
+    const permanentCity = get(nextProps, "userInfo.permanentCity");
+    if (get(userInfo ,"permanentCity") !== get(nextProps, "userInfo.permanentCity")) {
+      const tenantId = role.toLowerCase() === "citizen" ? permanentCity : getTenantId();
+      const ulbLogo = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
+      this.setState({ ulbLogo });
+    }
+   
+  }
+
   _handleToggleMenu = () => {
     const { toggleMenu } = this.state;
     this.setState({
