@@ -21,8 +21,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Create New Employee`
-          // labelKey: "TL_TRADE_APPLICATION"
+          labelName: `Create New Employee`,
+          labelKey: "HR_COMMON_CREATE_EMPLOYEE_HEADER"
         })
       }),
       applicationSuccessCard: {
@@ -55,8 +55,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Update Employee`
-          // labelKey: "TL_TRADE_APPLICATION"
+          labelName: `Update Employee`,
+          labelKey: "HR_COMMON_UPDATE_EMPLOYEE_HEADER"
         })
       }),
       applicationSuccessCard: {
@@ -89,8 +89,8 @@ const getAcknowledgementCard = (
     return {
       header: getCommonContainer({
         header: getCommonHeader({
-          labelName: `Deactivated Employee`
-          // labelKey: "TL_TRADE_APPLICATION"
+          labelName: `Deactivated Employee`,
+          labelKey: "HR_COMMON_DEACTIVATED_EMPLOYEE_HEADER"
         })
       }),
       applicationSuccessCard: {
