@@ -7,12 +7,14 @@ serviceMaps:
    fromTopic: save-sw-connection
    isTransaction: true
    queryMaps: 
-    - query: INSERT INTO eg_sw_connection (id, property_id, applicationNo, applicationStatus, status, connectionNo, oldConnectionNo, documents_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_sw_connection (id, tenantid, property_id, applicationNo, applicationStatus, status, connectionNo, oldConnectionNo, documents_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: $.SewerageConnection
       jsonMaps:
        - jsonPath: $.SewerageConnection.id 
-        
-       - jsonPath: $.SewerageConnection.property.id
+       
+       - jsonPath: $.SewerageConnection.property.tenantId
+       
+       - jsonPath: $.SewerageConnection.property.propertyId
 
        - jsonPath: $.SewerageConnection.applicationNo
         
