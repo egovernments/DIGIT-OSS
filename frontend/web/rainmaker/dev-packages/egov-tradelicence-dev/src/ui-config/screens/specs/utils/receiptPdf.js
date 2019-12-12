@@ -850,27 +850,28 @@ const getCertificateData = (transformedData, ulbLogo) => {
                   {
                     text:
                       getLocaleLabels(
-                        "TL_LOCALIZATION_CORPORATION_ADDRESS",
+                        "Address :",
                         "TL_LOCALIZATION_CORPORATION_ADDRESS"
                       ) +
+                      validateNull(transformedData.corporationAddress)+
                       "\n" +
                       getLocaleLabels(
                         "Contact : ",
                         "TL_LOCALIZATION_CORPORATION_CONTACT"
                       ) +
-                      transformedData.corporationContact +
+                      validateNull(transformedData.corporationContact)+
                       "\n" +
                       getLocaleLabels(
                         "Website : ",
                         "TL_LOCALIZATION_CORPORATION_WEBSITE"
                       ) +
-                      transformedData.corporationWebsite +
+                      validateNull(transformedData.corporationWebsite) +
                       "\n" +
                       getLocaleLabels(
                         "Email : ",
                         "TL_LOCALIZATION_CORPORATION_EMAIL"
                       ) +
-                      transformedData.corporationEmail,
+                      validateNull(transformedData.corporationEmail),
                     style: "receipt-logo-sub-text",
                     margin: [0, 8, 0, 0]
                   },
@@ -1030,7 +1031,13 @@ const getCertificateData = (transformedData, ulbLogo) => {
           },
           {
             width: "*",
-            text: transformedData.address
+            text: getLocaleLabels("NA", (transformedData.actualAddress.tenantId.replace(".", "_") +
+            "_REVENUE_" +
+            transformedData.actualAddress.locality.code
+            ).toUpperCase())
+            +
+              ", " +
+            getLocaleLabels("NA", transformedData.city.replace(".","_").toUpperCase())
           }
         ]
       },
@@ -1250,7 +1257,9 @@ const getCertificateData = (transformedData, ulbLogo) => {
 
   return tlCertificateData;
 };
-
+const validateNull = value =>{
+  if(value !== null ? value : "NA" );
+}
 const getACKData = (transformedData, ulbLogo) => {
   console.log(transformedData);
   var tlACKData = {
@@ -1283,27 +1292,28 @@ const getACKData = (transformedData, ulbLogo) => {
                   {
                     text:
                       getLocaleLabels(
-                        "TL_LOCALIZATION_CORPORATION_ADDRESS",
+                        "Address :",
                         "TL_LOCALIZATION_CORPORATION_ADDRESS"
                       ) +
+                      validateNull(transformedData.corporationAddress)+
                       "\n" +
                       getLocaleLabels(
                         "Contact : ",
                         "TL_LOCALIZATION_CORPORATION_CONTACT"
                       ) +
-                      transformedData.corporationContact +
+                      validateNull(transformedData.corporationContact) +
                       "\n" +
                       getLocaleLabels(
                         "Website : ",
                         "TL_LOCALIZATION_CORPORATION_WEBSITE"
                       ) +
-                      transformedData.corporationWebsite +
+                      validateNull(transformedData.corporationWebsite) +
                       "\n" +
                       getLocaleLabels(
                         "Email : ",
                         "TL_LOCALIZATION_CORPORATION_EMAIL"
                       ) +
-                      transformedData.corporationEmail,
+                      validateNull(transformedData.corporationEmail),
                     style: "receipt-logo-sub-text",
                     margin: [0, 8, 0, 0]
                   },
@@ -1431,7 +1441,13 @@ const getACKData = (transformedData, ulbLogo) => {
           },
           {
             width: "*",
-            text: transformedData.address
+            text: getLocaleLabels("NA", (transformedData.actualAddress.tenantId.replace(".", "_") +
+            "_REVENUE_" +
+            transformedData.actualAddress.locality.code
+            ).toUpperCase())
+            +
+              ", " +
+            getLocaleLabels("NA", transformedData.city.replace(".","_").toUpperCase())
           }
         ]
       },
@@ -1646,6 +1662,7 @@ const generateReceipt = async (state, dispatch, type) => {
   }
   let transformedData = {
     ...data1,
+    ...data2,
     ...data3,
     ...data4,
     actualAddress: data5
