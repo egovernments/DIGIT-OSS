@@ -38,7 +38,12 @@
                   "variable": "licenseType",
                   "value": {
                     "path": "$.licenseType"
-                  }
+                  },
+                  "localisation":{
+                    "required":true,
+                    "prefix": "TRADELICENSE_LICENSETYPE",
+                    "module": "rainmaker-tl"
+                 }
                 },
                 {
                     "variable": "tradeName",
@@ -259,13 +264,23 @@
                     "variable": "relationship",
                     "value": {
                       "path": "$.tradeLicenseDetail.owners[0].relationship"
-                    }
+                    },
+                    "localisation":{
+                      "required":true,
+                      "prefix": "COMMON_RELATION",
+                      "module": "rainmaker-tl"
+                   }
                 },
                 {
                     "variable": "gender",
                     "value": {
                       "path": "$.tradeLicenseDetail.owners[0].gender"
-                    }
+                    },
+                    "localisation":{
+                      "required":true,
+                      "prefix": "COMMON_GENDER",
+                      "module": "rainmaker-common"
+                   }
                 },
                 {
                     "variable": "dateOfBirth",
