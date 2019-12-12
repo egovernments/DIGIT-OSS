@@ -70,7 +70,12 @@
                 "variable": "paymentMode", 
                 "value": {
                   "path": "$.paymentMode"
-                }
+                },
+                "localisation":{
+                  "required":true,
+                  "prefix": "TL_PAYMENT",
+                  "module": "rainmaker-tl"
+               }
               },
               {
                 "variable": "G8ReceiptNo",
