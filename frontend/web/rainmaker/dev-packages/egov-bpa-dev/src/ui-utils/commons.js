@@ -401,7 +401,7 @@ export const isFileValid = (file, acceptedFiles) => {
   return (
     (mimeType &&
       acceptedFiles &&
-      acceptedFiles.indexOf(mimeType.split("/")[1]) > -1) ||
+      acceptedFiles.indexOf(mimeType.toUpperCase()) > -1) ||
     false
   );
 };
@@ -437,5 +437,38 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
     if (conditionCheckerFn(arr[i])) {
       return arr[i];
     }
+  }
+};
+
+export const acceptedFiles = acceptedExt => {
+  const splitExtByName = acceptedExt.split(",");
+  const acceptedFileTypes = splitExtByName.map(item => {
+    return item.toUpperCase();
+  });
+  return acceptedFileTypes;
+};
+
+export const handleFileUpload = (event, handleDocument, props) => {
+  let uploadDocument = true;
+  const { inputProps, maxFileSize, moduleName } = props;
+  const input = event.target;
+  if (input.files && input.files.length > 0) {
+    const files = input.files;
+    Object.keys(files).forEach(async (key, index) => {
+      const file = files[key];
+      const fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
+      const isSizeValid = getFileSize(file) <= maxFileSize;
+      if (!fileValid) {
+        alert(`Only dxf files can be uploaded`);
+        uploadDocument = false;
+      }
+      if (!isSizeValid) {
+        alert(`Maximum file size can be ${Math.round(maxFileSize / 1000)} MB`);
+        uploadDocument = false;
+      }
+      if (uploadDocument) {
+        handleDocument(file);
+      }
+    });
   }
 };

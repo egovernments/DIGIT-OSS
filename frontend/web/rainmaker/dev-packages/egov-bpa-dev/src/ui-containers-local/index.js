@@ -53,6 +53,11 @@ const RadioGroupWithLabelContainer = Loadable({
   loading: () => <Loading />
 });
 
+const EDCRUploadCard = Loadable({
+  loader: () => import("./EDCRUploadCard"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -64,5 +69,6 @@ export {
   PaymentRedirectPage,
   ViewBreakupContainer,
   DialogContainer,
-  RadioGroupWithLabelContainer
+  RadioGroupWithLabelContainer,
+  EDCRUploadCard
 };

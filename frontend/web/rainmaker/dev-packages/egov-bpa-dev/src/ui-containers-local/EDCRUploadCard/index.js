@@ -5,10 +5,10 @@ import Grid from "@material-ui/core/Grid";
 import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
 import {
-  handleFileUpload,
   getFileUrlFromAPI,
   getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
+import { handleFileUpload } from "../../ui-utils/commons";
 import { connect } from "react-redux";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { UploadSingleFile } from "../../ui-molecules-local";
@@ -102,32 +102,29 @@ class DocumentList extends Component {
         uploadedIndex
       });
     }
-    getQueryArg(window.location.href, "action") !== "edit" &&
-      Object.values(uploadedDocuments).forEach((item, index) => {
-        prepareFinalObject(
-          `Licenses[0].tradeLicenseDetail.applicationDocuments[${index}]`,
-          { ...item[0] }
-        );
-      });
+    // getQueryArg(window.location.href, "action") !== "edit" &&
+    //   Object.values(uploadedDocuments).forEach((item, index) => {
+    //     prepareFinalObject(
+    //       `Licenses[0].tradeLicenseDetail.applicationDocuments[${index}]`,
+    //       { ...item[0] }
+    //     );
+    //   });
   };
 
   onUploadClick = uploadedDocIndex => {
     this.setState({ uploadedDocIndex });
   };
 
-  handleDocument = async (file, fileStoreId) => {
+  handleDocument = async file => {
     let { uploadedDocIndex, uploadedDocuments } = this.state;
     const { prepareFinalObject, documents, tenantId } = this.props;
-    const { jsonPath, name } = documents[uploadedDocIndex];
-    const fileUrl = await getFileUrlFromAPI(fileStoreId);
+    const { jsonPath } = documents[uploadedDocIndex];
     uploadedDocuments = {
       ...uploadedDocuments,
       [uploadedDocIndex]: [
         {
           fileName: file.name,
-          fileStoreId,
-          documentType: name,
-          tenantId
+          documentType: name
         }
       ]
     };
@@ -135,13 +132,7 @@ class DocumentList extends Component {
     prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux", {
       ...uploadedDocuments
     });
-    prepareFinalObject(jsonPath, {
-      fileName: file.name,
-      fileStoreId,
-      fileUrl: Object.values(fileUrl)[0],
-      documentType: name,
-      tenantId
-    });
+    prepareFinalObject(jsonPath, file);
     this.setState({ uploadedDocuments });
     this.getFileUploadStatus(true, uploadedDocIndex);
   };
@@ -194,19 +185,6 @@ class DocumentList extends Component {
                 className={classes.documentContainer}
               >
                 <Grid container={true}>
-                  <Grid item={true} xs={2} sm={1} align="center">
-                    {uploadedIndex.indexOf(key) > -1 ? (
-                      <div className={classes.documentSuccess}>
-                        <Icon>
-                          <i class="material-icons">done</i>
-                        </Icon>
-                      </div>
-                    ) : (
-                      <div className={classes.documentIcon}>
-                        <span>{key + 1}</span>
-                      </div>
-                    )}
-                  </Grid>
                   <Grid item={true} xs={6} sm={6} align="left">
                     <LabelContainer
                       labelName={documentTypePrefix + document.name}
@@ -216,13 +194,6 @@ class DocumentList extends Component {
                     {document.required && (
                       <sup style={{ color: "#E54D42" }}>*</sup>
                     )}
-                    <Typography variant="caption">
-                      <LabelContainer
-                        labelName={document.statement}
-                        labelKey={document.statement}
-                      />
-                      {/* {document.statement} */}
-                    </Typography>
                     <Typography variant="caption">
                       <LabelContainer
                         labelName={description.labelName}

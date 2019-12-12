@@ -20,7 +20,7 @@ const routes = [
     },
   },
   {
-    path: "whitelisted/:path/:screenKey",
+    path: "openlink/:path/:screenKey",
     component: ScreenInterface,
     options: {
       title: "",

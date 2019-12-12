@@ -32,10 +32,10 @@ const moveToSuccess = (LicenseData, dispatch) => {
   const financialYear = get(LicenseData, "financialYear");
   const purpose = "apply";
   const status = "success";
-  if (window.location.pathname.includes("whitelisted")) {
+  if (window.location.pathname.includes("openlink")) {
     dispatch(
       setRoute(
-        `/whitelisted/bpastakeholder/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
+        `/openlink/bpastakeholder/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&FY=${financialYear}&tenantId=${tenantId}`
       )
     );
   } else {

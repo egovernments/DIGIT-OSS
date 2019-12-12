@@ -78,7 +78,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
-    if (window.location.pathname.includes("whitelisted")) {
+    if (window.location.pathname.includes("openlink")) {
       set(action.screenConfig, "components.div.children.footer.props.style", {
         width: "100vw"
       });
@@ -107,7 +107,7 @@ const screenConfig = {
         )
       );
 
-      if (!window.location.pathname.includes("whitelisted")) {
+      if (!window.location.pathname.includes("openlink")) {
         setMobileNoField(action, state, dispatch);
       }
     }

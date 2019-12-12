@@ -421,7 +421,7 @@ const screenConfig = {
       tenant
     );
     set(action, "screenConfig.components.div.children", data);
-    if (window.location.pathname.includes("whitelisted")) {
+    if (window.location.pathname.includes("openlink")) {
       set(
         action.screenConfig,
         "components.div.children.applicationSuccessFooter.props.style",
