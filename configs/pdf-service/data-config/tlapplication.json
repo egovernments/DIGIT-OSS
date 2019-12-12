@@ -18,30 +18,6 @@
                     }
                 },
                 {
-                    "variable": "totalAmount",
-                    "value": {
-                      "path": "$.totalDue"
-                    }
-                },
-                {
-                    "variable": "tradeLicenseTax",
-                    "value": {
-                      "path": "$.totalDue"
-                    }
-                },
-                {
-                    "variable": "rebate",
-                    "value": {
-                      "path": "$.totalDue"
-                    }
-                },
-                {
-                    "variable": "penalty",
-                    "value": {
-                      "path": "$.totalDue"
-                    }
-                },
-                {
                   "variable": "applicationType",
                   "value": {
                     "path": "$.tradeLicenseDetail.additionalDetail.applicationType"
@@ -908,6 +884,33 @@
                       "prefix": null,
                       "module":"rainmaker-common"
                    }
+                }
+              ]
+            },
+            {
+              "externalAPI": [     
+                { 
+                    "path": "https://egov-micro-dev.egovernments.org/collection-services/payments/_search",
+                    "queryParam": "tenantId=$.tenantId,consumerCodes=$.applicationNumber,businessServices=TL",
+                    "apiRequest": null,
+                    "responseMapping":[
+                      {             
+                        "variable":"totalAmount",
+                        "value":"$.Payments[0].totalAmountPaid"
+                      },
+                      {
+                        "variable":"tradeLicenseTax",
+                        "value":"$.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_TAX')].amount"
+                      },
+                      {
+                        "variable":"rebate",
+                        "value":"$.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_ADHOC_REBATE')].amount"
+                      },
+                      {
+                        "variable":"penalty",
+                        "value":"$.Payments[0].paymentDetails[0].bill.billDetails[0].billAccountDetails[?(@.taxHeadCode == 'TL_ADHOC_PENALTY')].amount"
+                      }
+                    ]
                 }
               ]
             }
