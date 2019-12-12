@@ -5,10 +5,7 @@ import {
   getSelectField,
   getCommonContainer
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-
-import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
-import map from "lodash/map";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
 const arrayCrawler = (arr, n) => {
@@ -39,6 +36,10 @@ const jurisdictionDetailsCard = {
               required: true,
               jsonPath: "Employee[0].jurisdictions[0].hierarchy",
               sourceJsonPath: "createScreenMdmsData.hierarchyList",
+              localePrefix :{
+                moduleName : "EGOV_LOCATION",
+                masterName : "TENANTBOUNDARY"
+              },
               props: {
                 className: "hr-generic-selectfield",
                 optionValue: "code",
@@ -71,19 +72,12 @@ const jurisdictionDetailsCard = {
               let boundaryList = [];
               let crawlBoundaryData = selectedBoundaryData;
               while (crawlBoundaryData != null) {
-                // console.log(crawlBoundaryData.label);
                 boundaryList.push({
                   value: crawlBoundaryData.label,
                   label: crawlBoundaryData.label
                 });
                 crawlBoundaryData = get(crawlBoundaryData, "children[0]", null);
               }
-              // dispatch(
-              //   prepareFinalObject(
-              //     "createScreenMdmsData.boundaryList",
-              //     boundaryList
-              //   )
-              // );
               dispatch(
                 handleField(
                   "create",
@@ -95,8 +89,6 @@ const jurisdictionDetailsCard = {
                   boundaryList
                 )
               );
-              // console.log("!!!!!!!ASD", action, hierarchyIndex);
-              // return action;
             }
           },
           boundaryType: {
@@ -111,22 +103,14 @@ const jurisdictionDetailsCard = {
               },
               required: true,
               jsonPath: "Employee[0].jurisdictions[0].boundaryType",
-              // sourceJsonPath: "createScreenMdmsData.boundaryList",
+              localePrefix :{
+                moduleName : "EGOV_LOCATION",
+                masterName : "BOUNDARYTYPE"
+              },
               props: {
                 className: "hr-generic-selectfield",
-                // data: [
-                //   {
-                //     value: "Block",
-                //     label: "Block"
-                //   },
-                //   {
-                //     value: "Zone",
-                //     label: "Zone"
-                //   }
-                // ],
                 optionValue: "value",
                 optionLabel: "label",
-                hasLocalization: false
               }
             }),
             beforeFieldChange: (action, state, dispatch) => {
@@ -148,13 +132,6 @@ const jurisdictionDetailsCard = {
                 `${action.componentJsonpath}.props.data`,
                 []
               );
-
-              // GET BOUNDARY "TYPE" LIST FROM PFO
-              // let boundaryList = get(
-              //   state.screenConfiguration.preparedFinalObject,
-              //   `createScreenMdmsData.boundaryList`,
-              //   []
-              // );
               // GET THE CURRENT CARD NUMBER WHICH IS BEING CHANGED
               let cardNumber = action.componentJsonpath
                 .match(/\[[0-9]*\]/g)
@@ -209,12 +186,6 @@ const jurisdictionDetailsCard = {
                   }
                 ];
               }
-              // dispatch(
-              //   prepareFinalObject(
-              //     "createScreenMdmsData.processedBoundaryDataList",
-              //     processedBoundaryData
-              //   )
-              // );
               dispatch(
                 handleField(
                   "create",
@@ -226,9 +197,6 @@ const jurisdictionDetailsCard = {
                   processedBoundaryData
                 )
               );
-              // console.log(
-              //   arrayCrawler(crawlingData, boundaryIndex).flat(boundaryIndex)
-              // );
             }
           },
           boundary: {
@@ -240,20 +208,12 @@ const jurisdictionDetailsCard = {
               },
               required: true,
               jsonPath: "Employee[0].jurisdictions[0].boundary",
-              // sourceJsonPath: "createScreenMdmsData.processedBoundaryDataList",
+              localePrefix:{
+                moduleName:"TENANT",
+                masterName:"TENANTS"
+              },
               props: {
                 className: "hr-generic-selectfield",
-                // data: [
-                //   {
-                //     value: "B1",
-                //     label: "Block 1"
-                //   },
-                //   {
-                //     value: "B2",
-                //     label: "Block 2"
-                //   }
-                // ],
-                hasLocalization: false,
                 optionValue: "value",
                 optionLabel: "label"
               }
