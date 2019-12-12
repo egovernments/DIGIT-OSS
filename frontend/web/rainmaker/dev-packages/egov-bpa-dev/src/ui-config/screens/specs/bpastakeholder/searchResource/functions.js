@@ -10,6 +10,8 @@ import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/
 import { validateFields } from "../../utils";
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
   let queryObject = [
@@ -97,8 +99,8 @@ export const searchApiCall = async (state, dispatch) => {
         }
       }
     }
-
     const response = await getSearchResults(queryObject);
+    const businessIdToOwnerMapping = await getWorkFlowData(response.Licenses);
     try {
       let data = response.Licenses.map(item => ({
         [getTextToLocalMapping("Application No")]:
@@ -109,7 +111,7 @@ export const searchApiCall = async (state, dispatch) => {
           item.tradeLicenseDetail.tradeUnits[0].tradeType || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
         [getTextToLocalMapping("Owner Name")]:
-          item.tradeLicenseDetail.owners[0].name || "-",
+          businessIdToOwnerMapping[item.applicationNumber] || "-",
         [getTextToLocalMapping("Application Date")]:
           convertEpochToDate(item.applicationDate) || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
@@ -150,4 +152,40 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
       booleanHideOrShow
     )
   );
+};
+
+const getWorkFlowData = async Licenses => {
+  var businessIds = [];
+  Licenses.forEach(item => {
+    businessIds.push(item.applicationNumber);
+  });
+  const queryObject = [
+    {
+      key: "tenantId",
+      value: process.env.REACT_APP_DEFAULT_TENANT_ID,
+    },
+    {
+      key: "businessIds",
+      value: businessIds
+    }
+  ];
+  try {
+    const payload = await httpRequest(
+      "post",
+      "egov-workflow-v2/egov-wf/process/_search",
+      "",
+      queryObject
+    );
+    var businessIdToOwnerMapping = {};
+    payload.ProcessInstances.filter(
+      record => record.moduleName === "BPAREG"
+    ).forEach(item => {
+      businessIdToOwnerMapping[item.businessId] =
+        item.assignee && item.assignee.name;
+    });
+    return businessIdToOwnerMapping;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
 };

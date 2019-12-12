@@ -2312,7 +2312,7 @@ export const getTextToLocalMapping = label => {
       return getLocaleLabels("Rejected", "TL_REJECTED", localisationLabels);
     case "CANCELLED":
       return getLocaleLabels("Cancelled", "TL_CANCELLED", localisationLabels);
-    case "PENDINGAPPROVAL ":
+    case "PENDINGAPPROVAL":
       return getLocaleLabels(
         "Pending for Approval",
         "WF_ARCHITECT_PENDINGAPPROVAL",
