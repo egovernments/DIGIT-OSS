@@ -79,7 +79,6 @@ public class Payment {
     private String paidBy = null;
 
     @Size(max=64)
-    @NotNull
     @JsonProperty("mobileNumber")
     private String mobileNumber = null;
 
