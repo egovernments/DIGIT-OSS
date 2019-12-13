@@ -826,7 +826,7 @@ export const tradeDetails = getCommonCard(
         },
         placeholder: {
           labelName: "Enter Old License No",
-          labelKey: ""
+          labelKey: "TL_OLD_LICENSE_NO_PLACEHOLDER"
         },
         gridDefination: {
           xs: 12,

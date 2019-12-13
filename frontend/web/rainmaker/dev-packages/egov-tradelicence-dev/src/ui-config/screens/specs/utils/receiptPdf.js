@@ -900,7 +900,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Trade License Number",
               "TL_LOCALIZATION_TRADE_LICENSE_NO"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -916,7 +916,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Application Number",
               "TL_LOCALIZATION_APPLICATION_NO"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -932,7 +932,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Receipt Number",
               "TL_LOCALIZATION_RECIEPT_NO"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -948,7 +948,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Financial Year",
               "TL_LOCALIZATION_FINANCIAL_YEAR"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -961,7 +961,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Trade Name", "TL_LOCALIZATION_TRADE_NAME")
+            text: getLocaleLabels("Trade Name", "TL_LOCALIZATION_TRADE_NAME")+":"
           },
           {
             width: "*",
@@ -978,7 +978,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Trade Owner Name",
               "TL_LOCALIZATION_TRADE_OWNER_NAME"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -995,7 +995,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Trade Owner Contact",
               "TL_LOCALIZATION_TRADE_OWNER_CONTACT"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -1011,7 +1011,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Occupancy Type",
               "TL_LOCALIZATION_OCCUPANCY_TYPE"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -1027,7 +1027,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Trade Address",
               "TL_LOCALIZATION_TRADE_ADDRESS"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -1046,7 +1046,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Trade Type", "TL_LOCALIZATION_TRADE_TYPE")
+            text: getLocaleLabels("Trade Type", "TL_LOCALIZATION_TRADE_TYPE")+":"
           },
           {
             width: "*",
@@ -1075,7 +1075,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Trade License Fee",
               "TL_LOCALIZATION_TRADE_LICENSE_FEE"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -1094,7 +1094,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "License Issue Date",
               "TL_LOCALIZATION_LICENSE_ISSUE_DATE"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -1110,7 +1110,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "License Validity",
               "TL_LOCALIZATION_LICENSE_VALIDITY"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -1130,7 +1130,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
                 text: getLocaleLabels(
                   "Approved By:",
                   "TL_LOCALIZATION_APPROVED_BY"
-                )
+                )+":"
               },
               {
                 text: `${transformedData.auditorName}\n${transformedData.designation}`
@@ -1340,7 +1340,7 @@ const getACKData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Application Number",
               "TL_LOCALIZATION_APPLICATION_NO"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -1356,7 +1356,7 @@ const getACKData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Financial Year",
               "TL_LOCALIZATION_FINANCIAL_YEAR"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -1369,7 +1369,7 @@ const getACKData = (transformedData, ulbLogo) => {
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Trade Name", "TL_LOCALIZATION_TRADE_NAME")
+            text: getLocaleLabels("Trade Name", "TL_LOCALIZATION_TRADE_NAME")+":"
           },
           {
             width: "*",
@@ -1386,7 +1386,7 @@ const getACKData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Trade Owner Name",
               "TL_LOCALIZATION_TRADE_OWNER_NAME"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -1403,7 +1403,7 @@ const getACKData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Trade Owner Contact",
               "TL_LOCALIZATION_TRADE_OWNER_CONTACT"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -1419,7 +1419,7 @@ const getACKData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Occupancy Type",
               "TL_LOCALIZATION_OCCUPANCY_TYPE"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -1435,7 +1435,7 @@ const getACKData = (transformedData, ulbLogo) => {
             text: getLocaleLabels(
               "Trade Address",
               "TL_LOCALIZATION_TRADE_ADDRESS"
-            )
+            )+":"
           },
           {
             width: "*",
@@ -1454,7 +1454,7 @@ const getACKData = (transformedData, ulbLogo) => {
         columns: [
           {
             width: 160,
-            text: getLocaleLabels("Trade Type", "TL_LOCALIZATION_TRADE_TYPE")
+            text: getLocaleLabels("Trade Type", "TL_LOCALIZATION_TRADE_TYPE")+":"
           },
           {
             width: "*",
