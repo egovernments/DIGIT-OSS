@@ -29,16 +29,16 @@
                   {
                     "stack": [
                       {
-                        "text": "C Block, Ranjit Avenue, Amritsar"
+                        "text": "{{address}}"
                       },
                       {
-                        "text": " Tel. +91-183-2502339"
+                        "text": "{{phoneNumber}}"
                       },
                       {
-                        "text": "website: www.amritsarcorp.com"
+                        "text": "{{website}}"
                       },
                       {
-                        "text": "Email: cmcasr@punjab.gov.in"
+                        "text": "{{email}}"
                       }
                     ]
                   }
