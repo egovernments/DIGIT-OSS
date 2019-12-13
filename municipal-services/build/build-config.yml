@@ -107,4 +107,12 @@ config:
         image-name: "sw-calculator"
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "sw-calculator/src/main/resources/db"
-        image-name: "sw-calculator-db"                
+        image-name: "sw-calculator-db"     
+
+  - name: "municipal-services/bpa-services"
+    build:
+      - work-dir: "bpa-services"
+        image-name: "bpa-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "bpa-services/src/main/resources/db"
+        image-name: "bpa-services-db"             
