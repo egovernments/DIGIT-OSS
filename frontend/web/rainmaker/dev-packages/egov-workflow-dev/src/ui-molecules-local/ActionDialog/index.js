@@ -234,7 +234,7 @@ class ActionDialog extends React.Component {
                       inputProps={{
                         accept: "image/*, .pdf, .png, .jpeg"
                       }}
-                      buttonLabel={{ labelName: "UPLOAD FILES" }}
+                      buttonLabel={{ labelName: "UPLOAD FILES",labelKey : "TL_UPLOAD_FILES_BUTTON" }}
                       jsonPath={`${dataPath}.wfDocuments`}
                       maxFileSize={5000}
                     />
