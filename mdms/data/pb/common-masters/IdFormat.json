@@ -465,6 +465,14 @@
     {
       "format": "PB_PG_[cy:yyyy_MM_dd]_[SEQ_EG_PG_TXN]_[d{2}]",
       "idname": "pg.txnid"
+    },
+    {
+      "format": "[cy:MM]/[fy:yyyy-yy]/[SEQ_COLL_RCPT_NUM]",
+      "idname": "receipt.id"
+    },
+    {
+      "format": "BPAREG/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
+      "idname": "bpareg.receipt.id"
     }
   ]
 }
