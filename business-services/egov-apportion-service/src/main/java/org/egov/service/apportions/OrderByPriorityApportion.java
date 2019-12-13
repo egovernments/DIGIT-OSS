@@ -5,6 +5,7 @@ import org.egov.config.ApportionConfig;
 import org.egov.service.Apportion;
 import org.egov.service.TaxHeadMasterService;
 import org.egov.tracer.model.CustomException;
+import org.egov.web.models.Bill;
 import org.egov.web.models.enums.Purpose;
 import org.egov.web.models.BillAccountDetail;
 import org.egov.web.models.BillDetail;
@@ -49,14 +50,14 @@ public class OrderByPriorityApportion implements Apportion {
      *    and negative adjustmentAmount for postive amounts
      * 4. If any advance amount is remaining new BillAccountDetail is created for it
      *    and assigned to last BillDetail
-     * @param billDetails The list of BillDetail to be apportioned
-     * @param amountPaid The total amount paid against the list of billDetails
      * @return
      */
     @Override
-    public List<BillDetail> apportionPaidAmount(List<BillDetail> billDetails,BigDecimal amountPaid,Object masterData) {
-        billDetails.sort(Comparator.comparing(BillDetail::getFromPeriod));
-        BigDecimal remainingAmount = amountPaid;
+    public List<BillDetail> apportionPaidAmount(Bill bill, Object masterData) {
+        bill.getBillDetails().sort(Comparator.comparing(BillDetail::getFromPeriod));
+        List<BillDetail> billDetails = bill.getBillDetails();
+        BigDecimal amountBeforeApportion = bill.getAmountPaid();
+        BigDecimal remainingAmount = bill.getAmountPaid();
         BigDecimal amount;
         Boolean isAmountPositive;
 
@@ -65,7 +66,12 @@ public class OrderByPriorityApportion implements Apportion {
 
 
         for (BillDetail billDetail : billDetails){
-        	
+
+            if(remainingAmount.compareTo(BigDecimal.ZERO)==0){
+                billDetail.setAmountPaid(BigDecimal.ZERO);
+                continue;
+            }
+
             if(!config.getApportionByValueAndOrder())
                 billDetail.getBillAccountDetails().sort(Comparator.comparing(BillAccountDetail::getAmount));
             else
@@ -99,12 +105,14 @@ public class OrderByPriorityApportion implements Apportion {
                     remainingAmount = remainingAmount.subtract(amount);
                 }
             }
-            billDetail.setAmountPaid(amountPaid.subtract(remainingAmount));
+            billDetail.setAmountPaid(amountBeforeApportion.subtract(remainingAmount));
+            amountBeforeApportion = remainingAmount;
         }
+
 
         //If advance amount is available
         if(remainingAmount.compareTo(BigDecimal.ZERO)>0){
-            addAdvanceBillAccountDetail(remainingAmount,billDetails,masterData);
+            addAdvanceBillAccountDetail(remainingAmount,bill,masterData);
         }
 
 
@@ -155,11 +163,12 @@ public class OrderByPriorityApportion implements Apportion {
     /**
      * Creates a advance BillAccountDetail and adds it to the latest billDetail
      * @param advanceAmount The advance amount paid
-     * @param billDetails The list of BillDetatils for which apportioning is done
+     * @param bill The bill for which apportioning is done
      * @param masterData The required masterData for the TaxHeads
      */
-    private void addAdvanceBillAccountDetail(BigDecimal advanceAmount,List<BillDetail> billDetails,Object masterData){
-        String taxHead = taxHeadMasterService.getAdvanceTaxHead(billDetails.get(0).getBusinessService(),masterData);
+    private void addAdvanceBillAccountDetail(BigDecimal advanceAmount,Bill bill,Object masterData){
+        List<BillDetail> billDetails = bill.getBillDetails();
+        String taxHead = taxHeadMasterService.getAdvanceTaxHead(bill.getBusinessService(),masterData);
         BillAccountDetail billAccountDetailForAdvance = new BillAccountDetail();
         billAccountDetailForAdvance.setAmount(advanceAmount.negate());
         billAccountDetailForAdvance.setPurpose(Purpose.ADVANCE_AMOUNT);

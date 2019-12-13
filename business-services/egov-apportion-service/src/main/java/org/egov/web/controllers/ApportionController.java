@@ -8,7 +8,7 @@ import org.egov.web.models.ApportionResponse;
     import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.egov.web.models.AuditDetails;
-import org.egov.web.models.BillInfo;
+import org.egov.web.models.Bill;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ import java.util.*;
      */
     @RequestMapping(value="/_apportion", method = RequestMethod.POST)
         public ResponseEntity<ApportionResponse> apportionPost(@Valid @RequestBody ApportionRequest apportionRequest){
-            List<BillInfo> billInfos = apportionService.apportionBills(apportionRequest);
+            List<Bill> billInfos = apportionService.apportionBills(apportionRequest);
             ApportionResponse response = ApportionResponse.builder()
                     .tenantId(apportionRequest.getTenantId())
                     .bills(billInfos)

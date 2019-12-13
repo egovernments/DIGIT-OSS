@@ -1,40 +1,44 @@
 package org.egov.web.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.egov.web.models.enums.Purpose;
-import org.springframework.validation.annotation.Validated;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Builder;
+import lombok.ToString;
+import org.egov.web.models.AuditDetails;
+import org.egov.web.models.enums.Purpose;
 
-/**
- * BillAccountDetail
- */
-@Validated
-@javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2019-02-25T15:07:36.183+05:30")
+import javax.validation.constraints.Size;
 
-@Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@ToString
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class BillAccountDetail {
 
+        @Size(max=64)
         @JsonProperty("id")
         private String id = null;
 
+        @Size(max=64)
         @JsonProperty("tenantId")
         private String tenantId = null;
 
-        @JsonProperty("billDetail")
-        private String billDetail = null;
+        @Size(max=64)
+        @JsonProperty("billDetailId")
+        private String billDetailId = null;
 
+        @Size(max=64)
         @JsonProperty("demandDetailId")
         private String demandDetailId = null;
 
@@ -50,9 +54,7 @@ public class BillAccountDetail {
         @JsonProperty("isActualDemand")
         private Boolean isActualDemand = null;
 
-        @JsonProperty("glcode")
-        private String glcode = null;
-
+        @Size(max=64)
         @JsonProperty("taxHeadCode")
         private String taxHeadCode = null;
 
@@ -61,4 +63,7 @@ public class BillAccountDetail {
 
         @JsonProperty("purpose")
         private Purpose purpose = null;
+
+        @JsonProperty("auditDetails")
+        private AuditDetails auditDetails;
 }

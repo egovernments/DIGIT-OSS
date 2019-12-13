@@ -37,10 +37,10 @@ public class ApportionRequest   {
 
         @JsonProperty("Bills")
         @Valid
-        private List<BillInfo> bills = null;
+        private List<Bill> bills = null;
 
 
-        public ApportionRequest addBillsItem(BillInfo billsItem) {
+        public ApportionRequest addBillsItem(Bill billsItem) {
             if (this.bills == null) {
             this.bills = new ArrayList<>();
             }

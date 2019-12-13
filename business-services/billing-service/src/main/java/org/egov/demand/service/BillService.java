@@ -266,6 +266,7 @@ public class BillService {
 				.tenantId(billCriteria.getTenantId())
 				.email(billCriteria.getEmail())
 				.consumerCode(consumerCodes)
+				.status(DemandStatus.ACTIVE.toString())
 				.receiptRequired(false)
 				.demandId(demandIds)
 				.build();
