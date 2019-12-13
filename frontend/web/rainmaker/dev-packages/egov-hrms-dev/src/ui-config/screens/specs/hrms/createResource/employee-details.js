@@ -208,8 +208,6 @@ export const professionalDetails = getCommonCard(
           props: {
             optionLabel: "status",
             optionValue: "code"
-            // hasLocalization: false,
-            // jsonPath: "Employee[0].employeeType"
           },
           localePrefix: {
             moduleName: "egov-hrms",
@@ -232,8 +230,6 @@ export const professionalDetails = getCommonCard(
             optionValue: "code",
             disabled: true,
             value: "EMPLOYED"
-            // hasLocalization: false,
-            // jsonPath: "Employee[0].employeeStatus"
           },
           localePrefix: {
             moduleName: "egov-hrms",
@@ -241,18 +237,6 @@ export const professionalDetails = getCommonCard(
           }
         })
       },
-      // role: {
-      //   ...getSelectField({
-      //     label: { labelName: "Role", labelKey: "HR_ROLE_LABEL" },
-      //     placeholder: {
-      //       labelName: "Select Role",
-      //       labelKey: "HR_ROLE_PLACEHOLDER"
-      //     },
-      //     required: true,
-      //     jsonPath: "Employee[0].user.roles",
-      //     sourceJsonPath: "createScreenMdmsData.ACCESSCONTROL-ROLES.roles"
-      //   })
-      // },
       role: {
         uiFramework: "custom-containers-local",
         moduleName: "egov-hrms",
@@ -271,16 +255,18 @@ export const professionalDetails = getCommonCard(
           },
           jsonPath: "Employee[0].user.roles",
           sourceJsonPath: "createScreenMdmsData.furnishedRolesList",
-          labelsFromLocalisation: false,
+          labelsFromLocalisation: true,
           suggestions: [],
           fullwidth: true,
           required: true,
           inputLabelProps: {
             shrink: true
           },
+          localePrefix: {
+            moduleName: "ACCESSCONTROL_ROLES",
+            masterName: "ROLES"
+          },
           isMulti: true,
-          labelName: "name",
-          valueName: "code"
         },
         gridDefination: {
           xs: 12,
