@@ -87,7 +87,7 @@ public class CCAvenueGateway implements Gateway {
         encRequestMap.put(REDIRECT_URL_KEY, getReturnUrl(transaction.getCallbackUrl(), REDIRECT_URL));
         encRequestMap.put(CANCEL_URL_KEY, getReturnUrl(transaction.getCallbackUrl(), CANCEL_URL));
         encRequestMap.put(LANGUAGE_KEY, LANGUAGE);
-        encRequestMap.put(SUB_ACCOUNT_ID_KEY, "nagarsewa1");
+        encRequestMap.put(SUB_ACCOUNT_ID_KEY, transaction.getTenantId());
         StringBuilder encRequest = new StringBuilder("");
 
         encRequestMap.forEach((key, value) -> encRequest.append(key).append("=").append(value).append("&"));
@@ -127,8 +127,11 @@ public class CCAvenueGateway implements Gateway {
         try {
 
             String jsonRequest = ccavenueUtil.encrypt("{\"order_no\" : \"" + currentStatus.getTxnId() + "\"}");
+            HashMap<String, String> params = new HashMap<>();
+            params.put("enc_request", jsonRequest);
+            params.put("access_code", ACCESS_CODE);
             UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(GATEWAY_TRANSACTION_STATUS_URL)
-                    .buildAndExpand(Collections.singletonMap("enc_request", jsonRequest)).encode();
+                    .buildAndExpand(params).encode();
             ResponseEntity<String> response = restTemplate.postForEntity(uriComponents.toUri(),"", String.class);
             Transaction transaction = transformRawResponse(response.getBody(), currentStatus);
             log.info("Updated transaction : " + transaction.toString());
