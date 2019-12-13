@@ -903,6 +903,13 @@
       "isStateLevel": true,
       "uniqueKeys": []
     },
+    "billingPeriod": {
+      "masterName": "billingPeriod",
+      "isStateLevel": true,
+      "uniqueKeys": [
+        "$.billingCycle"
+      ]
+    },
     "SW_CHARGE": {
       "masterName": "SW_CHARGE",
       "isStateLevel": true,
