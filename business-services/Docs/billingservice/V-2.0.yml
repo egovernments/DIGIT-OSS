@@ -17,6 +17,7 @@ paths:
   /demand/_search:
     post:
       description: 'Returns a demand along with its list of demand details. Along with tenantId, any one parameter is mandatory. In case search is performed based on the demand amounts, then demandFrom and demandTo parameters will be mandatory. When both demandFrom and demandTo parameters are passed, the type parameter will be mandatory. By default results will be sorted by fromDate'
+
       parameters:
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId'
@@ -102,9 +103,11 @@ paths:
           description: Invalid input
           schema:
             $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
-  /bill/_search:
+
+/bill/_search:
     post:
       description: 'Returns a Bill along with its list of bill details. By default active and non-cancelled bills will be returned when no value passed for active or cancelled. Along with tenantId, any one parameter is mandatory. By default results will be sorted by bill creation date'
+
       parameters:
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId'
@@ -161,9 +164,11 @@ paths:
           description: Invalid input
           schema:
             $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
-  /bill/_generate:
+
+/bill/_generate:
     post:
       description: 'Creates a Bill for collections. By default active bill will be created. Along with tenantId, any one parameter is mandatory. The bill type is AUTO here.'
+
       parameters:
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId'
