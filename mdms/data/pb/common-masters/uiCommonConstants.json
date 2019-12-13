@@ -50,6 +50,10 @@
           "tradelicense": {
             "routePath": "/dashboard/tradelicense",
             "isOrigin": true
+          },
+          "pgr": {
+            "routePath": "/dashboard/pgr",
+            "isOrigin": true
           }
         }
       }
