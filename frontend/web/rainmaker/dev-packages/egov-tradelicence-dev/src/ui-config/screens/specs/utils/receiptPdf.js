@@ -852,7 +852,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
                       getLocaleLabels(
                         "Address :",
                         "TL_LOCALIZATION_CORPORATION_ADDRESS"
-                      ) +
+                      ) +" : "+
                       validateNull(transformedData.corporationAddress)+
                       "\n" +
                       getLocaleLabels(
@@ -1257,10 +1257,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
 
   return tlCertificateData;
 };
-const validateNull = value =>{
-  if(value && value !== "null"  ? value : "NA" );
-  console.log("value====",value);
-}
+const validateNull = value =>value? value : "NA";
 const getACKData = (transformedData, ulbLogo) => {
   console.log(transformedData);
   var tlACKData = {
@@ -1295,7 +1292,7 @@ const getACKData = (transformedData, ulbLogo) => {
                       getLocaleLabels(
                         "Address :",
                         "TL_LOCALIZATION_CORPORATION_ADDRESS"
-                      ) +
+                      ) +" : "+
                       validateNull(transformedData.corporationAddress)+
                       "\n" +
                       getLocaleLabels(

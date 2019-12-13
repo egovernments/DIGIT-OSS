@@ -39,7 +39,7 @@ const prepareInboxDataRows = (data) => {
   return data.map((item) => {
     var sla = item.businesssServiceSla && item.businesssServiceSla / (1000 * 60 * 60 * 24);
     let dataRows = [
-      { text: _.get(item, "moduleName", "--"), subtext: `CS_COMMON_INBOX_${item.businessService.toUpperCase()}` },
+      { text: `CS_COMMON_INBOX_${item.businessService.toUpperCase()}`, subtext: `WF_COMMON_INBOX_${item.businessService.toUpperCase()}`  },
       { text: item.businessId },
       {
         text: item.state ? (
@@ -57,11 +57,11 @@ const prepareInboxDataRows = (data) => {
   });
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
   textColorPrimary: {
-    color: "red"
-  }
-})
+    color: "red",
+  },
+});
 
 class TableData extends Component {
   state = {
@@ -175,7 +175,7 @@ class TableData extends Component {
 
   render() {
     const { value, taskboardData, tabData, inboxData, moduleName } = this.state;
-    const {classes} = this.props
+    const { classes } = this.props;
     return (
       <div className="col-sm-12">
         <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
@@ -187,10 +187,12 @@ class TableData extends Component {
             className={`inbox-tabs-container ${classes.textColorPrimary}`}
             indicatorColor="primary"
             textColor="primary"
-            style={{ borderBottom: "1px rgba(0, 0, 0, 0.11999999731779099) solid" ,textColor:"red" }}
+            style={{ borderBottom: "1px rgba(0, 0, 0, 0.11999999731779099) solid", textColor: "red" }}
           >
             {tabData.map((item) => {
-              return <Tab className={`inbox-tab ${classes.textColorPrimary}`} label={<Label label={item.label} dynamicArray={item.dynamicArray} />} />;
+              return (
+                <Tab className={`inbox-tab ${classes.textColorPrimary}`} label={<Label label={item.label} dynamicArray={item.dynamicArray} />} />
+              );
             })}
           </Tabs>
           <div className="inbox-filter">
@@ -201,15 +203,15 @@ class TableData extends Component {
               <MenuItem value={"NewTL"}>
                 <Label label="CS_COMMON_INBOX_NEWTL" />
               </MenuItem>
-              <MenuItem value={"PGR"}>
+              {/* <MenuItem value={"PGR"}>
                 <Label label="CS_COMMON_INBOX_PGR" />
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem value={"PT"}>
                 <Label label="CS_COMMON_INBOX_PT" />
               </MenuItem>
-              <MenuItem value={"FIRENOC"}>
+              {/* <MenuItem value={"FIRENOC"}>
                 <Label label="CS_COMMON_INBOX_FIRENOC" />
-              </MenuItem>
+              </MenuItem> */}
             </Select>
           </div>
           <InboxData data={inboxData[value]} />
@@ -235,7 +237,9 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withStyles(styles)(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TableData));
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(TableData)
+);
