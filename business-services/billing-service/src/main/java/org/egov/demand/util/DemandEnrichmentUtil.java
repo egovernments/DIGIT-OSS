@@ -66,6 +66,10 @@ public class DemandEnrichmentUtil {
 		List<Demand> rsDemands = new ArrayList<>();
 
 		for (Demand demand : demands) {
+			
+			if (null == demand.getPayer())
+				continue;
+
 			String payerUuid = demand.getPayer().getUuid();
 			if (map.containsKey(payerUuid)) {
 				demand.setPayer(map.get(payerUuid));

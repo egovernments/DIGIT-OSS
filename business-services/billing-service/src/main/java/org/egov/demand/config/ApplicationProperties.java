@@ -83,56 +83,6 @@ public class ApplicationProperties {
 	@Value("${kafka.topics.update.bill.key}")
 	private String updatekBillTopicKey;
 
-	//Added for Creatining taxHeadMaster
-	@Value("${kafka.topics.save.taxHeadMaster}")
-	private String createTaxHeadMasterTopicName;
-
-	@Value("${kafka.topics.update.taxHeadMaster}")
-	private String updateTaxHeadMasterTopicName;
-
-	@Value("${kafka.topics.save.taxHeadMaster.key}")
-	private String createTaxHeadMasterTopicKey;
-
-	@Value("${kafka.topics.update.taxHeadMaster.key}")
-	private String updateTaxHeadMasterTopicKey;
-
-	//Added for GlCodeMaster
-	@Value("${kafka.topics.save.glCodeMaster}")
-	private String createGlCodeMasterTopicName;
-	
-	@Value("${kafka.topics.save.glCodeMaster.key}")
-	private String createGlCodeMasterTopicKey;
-	
-	@Value("${kafka.topics.update.glCodeMaster}")
-	private String updateGlCodeMasterTopicName;
-	
-	@Value("${kafka.topics.update.glCodeMaster.key}")
-	private String updateGlCodeMasterTopicKey;
-	
-	@Value("${kafka.topics.create.taxperiod.name}")
-	private String createTaxPeriodTopicName;
-
-	@Value("${kafka.topics.update.taxperiod.name}")
-	private String updateTaxPeriodTopicName;
-
-	@Value("${kafka.topics.create.taxperiod.key}")
-	private String createTaxPeriodTopicKey;
-
-	@Value("${kafka.topics.update.taxperiod.key}")
-	private String updateTaxPeriodTopicKey;
-
-	@Value("${kafka.topics.create.businessservicedetail.name}")
-	private String createBusinessServiceDetailTopicName;
-
-	@Value("${kafka.topics.update.businessservicedetail.name}")
-	private String updateBusinessServiceDetailTopicName;
-
-	@Value("${kafka.topics.create.businessservicedetail.key}")
-	private String createBusinessServiceDetailTopicKey;
-
-	@Value("${kafka.topics.update.businessservicedetail.key}")
-	private String updateBusinessServiceDetailTopicKey;
-
 	@Value("${bs.bill.seq.name}")
 	private String billSeqName;
 
@@ -181,21 +131,6 @@ public class ApplicationProperties {
 	@Value("${bs.billdetail.billnumber.seq.name}")
 	private String billNumSeqName;
 
-	@Value("${bs.taxhead.seq.name}")
-	private String taxHeadSeqName;
-
-	@Value("${bs.taxhead.code.seq.name}")
-	private String taxHeadCodeSeqName;
-	
-	@Value("${bs.glcodehead.seq.name}")
-	private String glCodeMasterseqName;
-
-	@Value("${bs.taxperiod.seq.name}")
-	private String taxPeriodSeqName;
-
-	@Value("${bs.businessservicedetail.seq.name}")
-	private String businessServiceDetailSeqName;
-
 	@Value("${kafka.topics.receipt.cancel.name}")
 	private String receiptCancellationTopic;
 	
@@ -227,6 +162,14 @@ public class ApplicationProperties {
 	
 	@Value("#{${bs.businesscode.demand.updateurl}}")
 	private Map<String, String> businessCodeAndDemandUpdateUrlMap;
+	
+	// V2
+	
+	@Value("${kafka.topics.receipt.update.demand.v2}")
+	private String updateDemandFromReceiptV2;
+	
+	@Value("${kafka.topics.receipt.cancel.name.v2}")
+	private String receiptCancellationTopicV2;
 	
 	public String commonsSearchPageSizeDefault() {
 		return environment.getProperty(SEARCH_PAGESIZE_DEFAULT);

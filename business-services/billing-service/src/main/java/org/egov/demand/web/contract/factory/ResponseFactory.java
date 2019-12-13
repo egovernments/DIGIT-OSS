@@ -39,18 +39,12 @@
  */
 package org.egov.demand.web.contract.factory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.Error;
-import org.egov.common.contract.response.ErrorField;
 import org.egov.common.contract.response.ErrorResponse;
 import org.egov.common.contract.response.ResponseInfo;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
 
 @Configuration
 public class ResponseFactory {
@@ -69,18 +63,12 @@ public class ResponseFactory {
 		return responseInfo;
 	}
 
-	public ErrorResponse getErrorResponse(Errors bindingResult, RequestInfo requestInfo) {
+	public ErrorResponse getErrorResponse(RequestInfo requestInfo) {
 
 		Error error = new Error();
 		error.setCode(400);
-		error.setMessage("Mandatory Fields Missing");
-		error.setDescription("Mandatory Fields Missing");
-		List<ErrorField> errorFields =  new ArrayList<>();
-		error.setFields(errorFields);
-		for (FieldError fieldError : bindingResult.getFieldErrors()) {
-			ErrorField errorField = new ErrorField(fieldError.getCode(), fieldError.getDefaultMessage(),fieldError.getField());
-			errorFields.add(errorField);
-		}
+		error.setMessage("EG_BS_API_ERROR");
+		error.setDescription("The API you are trying to access has been depricated, Access the V2 API's");
 		return new ErrorResponse(getResponseInfo(requestInfo, HttpStatus.BAD_REQUEST), error);
 	}
 }

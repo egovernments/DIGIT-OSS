@@ -41,15 +41,10 @@ package org.egov.demand.web.controller;
 
 import javax.validation.Valid;
 
-import org.egov.common.contract.request.RequestInfo;
-import org.egov.common.contract.response.ErrorResponse;
 import org.egov.demand.service.BusinessServDetailService;
 import org.egov.demand.web.contract.BusinessServiceDetailCriteria;
-import org.egov.demand.web.contract.BusinessServiceDetailRequest;
 import org.egov.demand.web.contract.BusinessServiceDetailResponse;
 import org.egov.demand.web.contract.RequestInfoWrapper;
-import org.egov.demand.web.contract.factory.ResponseFactory;
-import org.egov.demand.web.validator.BusinessServiceDetailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,51 +66,14 @@ public class BusinessServiceDetailController {
     @Autowired
     private BusinessServDetailService businessServDetailService;
 
-    @Autowired
-    private ResponseFactory responseFactory;
-
-    @Autowired
-    private BusinessServiceDetailValidator businessServiceDetailValidator;
-
     @PostMapping("_search")
     @ResponseBody
     public ResponseEntity<?> search(@RequestBody @Valid final RequestInfoWrapper requestInfoWrapper,
                                     @ModelAttribute @Valid final BusinessServiceDetailCriteria BusinessServiceDetailsCriteria, final BindingResult bindingResult) {
         log.info("BusinessServiceDetailsCriteria -> " + BusinessServiceDetailsCriteria + "requestInfoWrapper -> " + requestInfoWrapper);
 
-        if (bindingResult.hasErrors()) {
-            final ErrorResponse errorResponse = responseFactory.getErrorResponse(bindingResult, requestInfoWrapper.getRequestInfo());
-            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-        }
         final BusinessServiceDetailResponse businessServiceDetailResponse = businessServDetailService.searchBusinessServiceDetails(BusinessServiceDetailsCriteria, requestInfoWrapper.getRequestInfo());
         return new ResponseEntity<>(businessServiceDetailResponse, HttpStatus.OK);
     }
 
-    @PostMapping("_create")
-    @ResponseBody
-    @Deprecated
-    public ResponseEntity<?> create(@RequestBody @Valid final BusinessServiceDetailRequest businessServiceDetailRequest, final BindingResult bindingResult) {
-        RequestInfo requestInfo = businessServiceDetailRequest.getRequestInfo();
-        if (bindingResult.hasErrors()) {
-            ErrorResponse errorResponse = responseFactory.getErrorResponse(bindingResult, requestInfo);
-            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-        }
-        businessServiceDetailValidator.validateBusinessServDetails(businessServiceDetailRequest, "create");
-        BusinessServiceDetailResponse businessServiceDetailResponse = businessServDetailService.createAsync(businessServiceDetailRequest);
-        return new ResponseEntity<>(businessServiceDetailResponse, HttpStatus.CREATED);
-    }
-
-    @PostMapping("_update")
-    @ResponseBody
-    @Deprecated
-    public ResponseEntity<?> update(@RequestBody @Valid final BusinessServiceDetailRequest businessServiceDetailRequest, final BindingResult bindingResult) {
-        RequestInfo requestInfo = businessServiceDetailRequest.getRequestInfo();
-        if (bindingResult.hasErrors()) {
-            ErrorResponse errorResponse = responseFactory.getErrorResponse(bindingResult, requestInfo);
-            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-        }
-        businessServiceDetailValidator.validateBusinessServDetails(businessServiceDetailRequest, "edit");
-        BusinessServiceDetailResponse businessServiceDetailResponse = businessServDetailService.updateAsync(businessServiceDetailRequest);
-        return new ResponseEntity<>(businessServiceDetailResponse, HttpStatus.OK);
-    }
 }

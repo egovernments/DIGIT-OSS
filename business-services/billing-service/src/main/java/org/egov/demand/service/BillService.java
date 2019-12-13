@@ -67,7 +67,6 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.demand.config.ApplicationProperties;
 import org.egov.demand.model.Bill;
 import org.egov.demand.model.BillAccountDetail;
-import org.egov.demand.model.BillAccountDetail.PurposeEnum;
 import org.egov.demand.model.BillDetail;
 import org.egov.demand.model.BillSearchCriteria;
 import org.egov.demand.model.BusinessServiceDetail;
@@ -78,7 +77,6 @@ import org.egov.demand.model.GenerateBillCriteria;
 import org.egov.demand.model.TaxAndPayment;
 import org.egov.demand.model.TaxHeadMaster;
 import org.egov.demand.model.TaxHeadMasterCriteria;
-import org.egov.demand.model.enums.Category;
 import org.egov.demand.repository.BillRepository;
 import org.egov.demand.repository.IdGenRepo;
 import org.egov.demand.repository.ServiceRequestRepository;
@@ -299,7 +297,7 @@ public class BillService {
 		/* map to keep check on the values of total amount for each business in bill
 		 */
 		Map<String, TaxAndPayment> serviceCodeAndTaxAmountMap = new HashMap<>();
-		User payer = demands.get(0).getPayer();
+		User payer = null != demands.get(0).getPayer() ? demands.get(0).getPayer() : new User();
 		
 		
 		List<BillDetail> billDetails = new ArrayList<>();
@@ -507,8 +505,6 @@ public class BillService {
 	private void addOrUpdateBillAccDetailInTaxCodeAccDetailMap(Demand demand, Map<String, BillAccountDetail> taxCodeAccDetailMap,
 			DemandDetail demandDetail, TaxHeadMaster taxHead) {
 		
-		Long startPeriod = demand.getTaxPeriodFrom();
-		Long endPeriod = demand.getTaxPeriodTo();
 		String tenantId = demand.getTenantId();
 
 		BigDecimal newAmountForAccDeatil = demandDetail.getTaxAmount().subtract(demandDetail.getCollectionAmount());
@@ -531,50 +527,19 @@ public class BillService {
 			
 		} else {
 
-			PurposeEnum purpose = getPurpose(taxHead.getCategory(), taxHead.getCode(), startPeriod, endPeriod);
-
 			BillAccountDetail accountDetail = BillAccountDetail.builder()
-					.isActualDemand(taxHead.getIsActualDemand())
 					.demandDetailId(demandDetail.getId())
 					.adjustedAmount(BigDecimal.ZERO)
 					.taxHeadCode(taxHead.getCode())
 					.amount(newAmountForAccDeatil)
 					.order(taxHead.getOrder())
 					.tenantId(tenantId)
-					.purpose(purpose)
 					.build();
 		
 			taxCodeAccDetailMap.put(taxHead.getCode(), accountDetail);
 		}
 	}
 
-	/**
-	 * Returns Applies the purpose on Bill Account Details
-	 * 
-	 * @param category
-	 * @param taxHeadCode
-	 * @param taxPeriodFrom
-	 * @param taxPeriodTo
-	 * @return
-	 */
-	private PurposeEnum getPurpose(Category category, String taxHeadCode, Long taxPeriodFrom, Long taxPeriodTo) {
-
-		Long currDate = System.currentTimeMillis();
-
-		if (category.equals(Category.TAX) || category.equals(Category.FEE) || category.equals(Category.CHARGES)) {
-
-			if (taxPeriodFrom <= currDate && taxPeriodTo >= currDate)
-				return PurposeEnum.CURRENT;
-			else if (currDate > taxPeriodTo)
-				return PurposeEnum.ARREAR;
-			else
-				return PurposeEnum.ADVANCE;
-		} else if (category.equals(Category.ADVANCE_COLLECTION)) {
-			return PurposeEnum.ADVANCE;
-		} else {
-			return PurposeEnum.OTHERS;
-		}
-	}
 
 	/**
 	 * Fetches the tax-head master data for the given tax-head codes

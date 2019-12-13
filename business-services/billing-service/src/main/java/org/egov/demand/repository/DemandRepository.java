@@ -64,20 +64,15 @@ import org.egov.demand.repository.querybuilder.DemandQueryBuilder;
 import org.egov.demand.repository.rowmapper.CollectedReceiptsRowMapper;
 import org.egov.demand.repository.rowmapper.DemandDetailRowMapper;
 import org.egov.demand.repository.rowmapper.DemandRowMapper;
-import org.egov.demand.util.Constants;
 import org.egov.demand.util.SequenceGenService;
+import org.egov.demand.util.Util;
 import org.egov.demand.web.contract.DemandRequest;
-import org.egov.tracer.model.CustomException;
-import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -101,13 +96,13 @@ public class DemandRepository {
 	private DemandRowMapper demandRowMapper;
 	
 	@Autowired
-	private ObjectMapper mapper;
+	private Util util;
 	
 	public List<Demand> getDemands(DemandCriteria demandCriteria) {
 
 		List<Object> preparedStatementValues = new ArrayList<>();
 		String searchDemandQuery = demandQueryBuilder.getDemandQuery(demandCriteria, preparedStatementValues);
-		return jdbcTemplate.query(searchDemandQuery, preparedStatementValues.toArray(), new DemandRowMapper());
+		return jdbcTemplate.query(searchDemandQuery, preparedStatementValues.toArray(), demandRowMapper);
 	}
 	
 	/**
@@ -218,7 +213,7 @@ public class DemandRepository {
 				ps.setLong(12, auditDetail.getLastModifiedTime());
 				ps.setString(13, demand.getTenantId());
 				ps.setString(14, status);
-				ps.setObject(15, getPGObject(demand.getAdditionalDetails()));
+				ps.setObject(15, util.getPGObject(demand.getAdditionalDetails()));
 				ps.setObject(16, demand.getBillExpiryTime());
 			}
 
@@ -244,7 +239,7 @@ public class DemandRepository {
 				ps.setLong(8, auditDetail.getCreatedTime());
 				ps.setLong(9, auditDetail.getLastModifiedTime());
 				ps.setString(10, demandDetail.getTenantId());
-				ps.setObject(11, getPGObject(demandDetail.getAdditionalDetails()));
+				ps.setObject(11, util.getPGObject(demandDetail.getAdditionalDetails()));
 			}
 
 			@Override
@@ -274,7 +269,7 @@ public class DemandRepository {
 				ps.setLong(6, auditDetail.getLastModifiedTime());
 				ps.setString(7, demand.getTenantId());
 				ps.setString(8, status);
-				ps.setObject(9, getPGObject(demand.getAdditionalDetails()));
+				ps.setObject(9, util.getPGObject(demand.getAdditionalDetails()));
 				ps.setObject(10, demand.getBillExpiryTime());
 				ps.setString(11, demand.getId());
 				ps.setString(12, demand.getTenantId());
@@ -297,7 +292,7 @@ public class DemandRepository {
 				ps.setBigDecimal(2, demandDetail.getCollectionAmount());
 				ps.setString(3, auditDetail.getLastModifiedBy());
 				ps.setLong(4, auditDetail.getLastModifiedTime());
-				ps.setObject(5, getPGObject(demandDetail.getAdditionalDetails()));
+				ps.setObject(5, util.getPGObject(demandDetail.getAdditionalDetails()));
 				ps.setString(6, demandDetail.getId());
 				ps.setString(7, demandDetail.getDemandId());
 				ps.setString(8, demandDetail.getTenantId());
@@ -339,7 +334,7 @@ public class DemandRepository {
 				ps.setLong(10, auditDetail.getLastModifiedTime());
 				ps.setString(11, demand.getTenantId());
 				ps.setString(12, status);
-				ps.setObject(13, getPGObject(demand.getAdditionalDetails()));
+				ps.setObject(13, util.getPGObject(demand.getAdditionalDetails()));
 				ps.setString(14, UUID.randomUUID().toString());
 				ps.setObject(15, demand.getBillExpiryTime());
 			}
@@ -365,7 +360,7 @@ public class DemandRepository {
 						ps.setString(6, auditDetail.getLastModifiedBy());
 						ps.setLong(7, auditDetail.getLastModifiedTime());
 						ps.setString(8, demandDetail.getTenantId());
-						ps.setObject(9, getPGObject(demandDetail.getAdditionalDetails()));
+						ps.setObject(9, util.getPGObject(demandDetail.getAdditionalDetails()));
 						ps.setString(10, UUID.randomUUID().toString());
 					}
 
@@ -426,31 +421,4 @@ public class DemandRepository {
 		return jdbcTemplate.query(demandQueryBuilder.getCollectedReceiptsQuery(demandCriteria), new CollectedReceiptsRowMapper());
 	}
 
-	/*
-	 * Utility methods
-	 */
-	/**
-	 * converts the object to a pgObject for persistence
-	 * 
-	 * @param additionalDetails
-	 * @return
-	 */
-	private PGobject getPGObject(Object additionalDetails) {
-
-		String value = null;
-		try {
-			value = mapper.writeValueAsString(additionalDetails);
-		} catch (JsonProcessingException e) {
-			throw new CustomException(Constants.EG_BS_JSON_EXCEPTION_KEY, Constants.EG_BS_JSON_EXCEPTION_MSG);
-		}
-
-		PGobject json = new PGobject();
-		json.setType(Constants.DB_TYPE_JSONB);
-		try {
-			json.setValue(value);
-		} catch (SQLException e) {
-			throw new CustomException(Constants.EG_BS_JSON_EXCEPTION_KEY, Constants.EG_BS_JSON_EXCEPTION_MSG);
-		}
-		return json;
-	}
 }

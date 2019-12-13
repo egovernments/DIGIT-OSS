@@ -44,6 +44,7 @@ import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
+import org.egov.demand.model.BillV2.StatusEnum;
 import org.hibernate.validator.constraints.Email;
 
 import lombok.AllArgsConstructor;
@@ -87,10 +88,22 @@ public class GenerateBillCriteria {
 				.tenantId(tenantId).demandId(demandIdSet).email(email).mobileNumber(mobileNumber).build();
 	}
 	
+	/**
+	 * Converts Gen Bill criteria to search bill criteria to fetch only active bills
+	 * 
+	 * @return BillSearchCriteria
+	 */
 	public BillSearchCriteria toBillSearchCriteria() {
 
-		return BillSearchCriteria.builder().service(businessService).consumerCode(consumerCode).isOrderBy(true)
-				.mobileNumber(mobileNumber).email(email).tenantId(tenantId).build();
+		return BillSearchCriteria.builder()
+				.consumerCode(consumerCode)
+				.mobileNumber(mobileNumber)
+				.status(StatusEnum.ACTIVE)
+				.service(businessService)
+				.tenantId(tenantId)
+				.isOrderBy(true)
+				.email(email)
+				.build();
 	}
 
 }

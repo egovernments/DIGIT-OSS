@@ -12,7 +12,6 @@ import java.util.Map;
 import org.egov.demand.model.AuditDetails;
 import org.egov.demand.model.Bill;
 import org.egov.demand.model.BillAccountDetail;
-import org.egov.demand.model.BillAccountDetail.PurposeEnum;
 import org.egov.demand.model.BillDetail;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
@@ -94,8 +93,6 @@ public class BillRowMapper implements ResultSetExtractor<List<Bill>>{
 			billAccDetail.setBillDetail(rs.getString("ad_billdetail"));
 			billAccDetail.setGlcode(rs.getString("ad_glcode"));
 			billAccDetail.setOrder(rs.getInt("ad_orderno"));
-			billAccDetail.setIsActualDemand(rs.getBoolean("ad_isactualdemand"));
-			billAccDetail.setPurpose(PurposeEnum.fromValue(rs.getString("ad_purpose")));
 
 			billAccDetail.setAmount(rs.getBigDecimal("ad_amount"));
 			billAccDetail.setAdjustedAmount(rs.getBigDecimal("ad_adjustedamount"));

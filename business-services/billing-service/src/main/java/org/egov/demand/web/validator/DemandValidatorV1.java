@@ -57,6 +57,7 @@ import java.util.stream.Collectors;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.demand.config.ApplicationProperties;
 import org.egov.demand.model.Demand;
+import org.egov.demand.model.Demand.StatusEnum;
 import org.egov.demand.model.DemandCriteria;
 import org.egov.demand.model.DemandDetail;
 import org.egov.demand.model.TaxHeadMaster;
@@ -173,15 +174,17 @@ public class DemandValidatorV1 {
 			if (!businessServiceCodes.contains(demand.getBusinessService()))
 				businessServicesNotFound.add(demand.getBusinessService());
 
-			details.forEach(detail -> {
+			if (!CollectionUtils.isEmpty(taxHeadMap))
+				details.forEach(detail -> {
 
-				if (!taxHeadMap.containsKey(detail.getTaxHeadMasterCode()))
-					taxHeadsNotFound.add(detail.getTaxHeadMasterCode());
-				else if (!HttpUtils.isInterServiceCall(headers))
-					alterDebitTaxToNegativeInCaseOfPositve(taxHeadMap, detail);
-			});
+					if (!taxHeadMap.containsKey(detail.getTaxHeadMasterCode()))
+						taxHeadsNotFound.add(detail.getTaxHeadMasterCode());
+				});
 
 			validateTaxPeriod(taxPeriodBusinessMap, demand, errorMap, businessServicesWithNoTaxPeriods);
+			
+			// by default demands are being set to active during create but validation should be done for inactive/ cancelled demand in another logic
+			if(demand.getStatus() == null) demand.setStatus(StatusEnum.ACTIVE);
 		}
 
 		/*

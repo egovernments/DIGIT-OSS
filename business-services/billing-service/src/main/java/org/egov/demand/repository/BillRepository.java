@@ -16,9 +16,11 @@ import org.egov.demand.model.Bill;
 import org.egov.demand.model.BillAccountDetail;
 import org.egov.demand.model.BillDetail;
 import org.egov.demand.model.BillSearchCriteria;
+import org.egov.demand.model.BillV2.StatusEnum;
 import org.egov.demand.model.BusinessServiceDetail;
 import org.egov.demand.repository.querybuilder.BillQueryBuilder;
 import org.egov.demand.repository.rowmapper.BillRowMapper;
+import org.egov.demand.util.Util;
 import org.egov.demand.web.contract.BillRequest;
 import org.egov.demand.web.contract.BillResponse;
 import org.egov.demand.web.contract.BusinessServiceDetailCriteria;
@@ -27,6 +29,7 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +46,9 @@ public class BillRepository {
 	
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private Util util;
 	
 	@Autowired
 	private BillRowMapper searchBillRowMapper;
@@ -73,6 +79,10 @@ public class BillRepository {
 			public void setValues(PreparedStatement ps, int index) throws SQLException {
 				Bill bill = bills.get(index);
 
+				StatusEnum status = StatusEnum.ACTIVE;
+				if(!ObjectUtils.isEmpty(bill.getIsCancelled()) &&  bill.getIsCancelled() == true)
+					status = StatusEnum.CANCELLED;
+				
 				AuditDetails auditDetails = bill.getAuditDetails();
 				
 				ps.setString(1, bill.getId());
@@ -87,6 +97,8 @@ public class BillRepository {
 				ps.setString(10, auditDetails.getLastModifiedBy());
 				ps.setLong(11, auditDetails.getLastModifiedTime());
 				ps.setString(12, bill.getMobileNumber());
+				ps.setString(13, status.toString());
+				ps.setObject(14, util.getPGObject(bill.getAdditionalDetails()));
 			}
 			
 			@Override
@@ -170,10 +182,6 @@ public class BillRepository {
 			public void setValues(PreparedStatement ps, int index) throws SQLException {
 				BillAccountDetail billAccountDetail = billAccountDetails.get(index);
 				
-				String purpose = null;
-				if(billAccountDetail.getPurpose()!=null)
-					purpose = billAccountDetail.getPurpose().toString();
-					
 				ps.setString(1, billAccountDetail.getId());
 				ps.setString(2, billAccountDetail.getTenantId());
 				ps.setString(3, billAccountDetail.getBillDetail());
@@ -181,8 +189,8 @@ public class BillRepository {
 				ps.setObject(5, billAccountDetail.getOrder());
 				ps.setBigDecimal(6, billAccountDetail.getAmount());
 				ps.setObject(7, billAccountDetail.getAdjustedAmount());
-				ps.setObject(8, billAccountDetail.getIsActualDemand());
-				ps.setString(9, purpose);
+				ps.setObject(8, null);
+				ps.setString(9, null);
 				ps.setString(10, auditDetails.getCreatedBy());
 				ps.setLong(11, auditDetails.getCreatedTime());
 				ps.setString(12, auditDetails.getLastModifiedBy());

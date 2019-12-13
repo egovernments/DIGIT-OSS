@@ -56,6 +56,7 @@ import org.egov.demand.config.ApplicationProperties;
 import org.egov.demand.model.AuditDetails;
 import org.egov.demand.model.Bill;
 import org.egov.demand.model.BillDetail;
+import org.egov.demand.model.BillV2.StatusEnum;
 import org.egov.demand.model.ConsolidatedTax;
 import org.egov.demand.model.Demand;
 import org.egov.demand.model.DemandCriteria;
@@ -64,6 +65,7 @@ import org.egov.demand.model.DemandDetailCriteria;
 import org.egov.demand.model.DemandDue;
 import org.egov.demand.model.DemandDueCriteria;
 import org.egov.demand.model.DemandUpdateMisRequest;
+import org.egov.demand.repository.BillRepositoryV2;
 import org.egov.demand.repository.DemandRepository;
 import org.egov.demand.repository.ServiceRequestRepository;
 import org.egov.demand.util.DemandEnrichmentUtil;
@@ -111,6 +113,9 @@ public class DemandService {
 	private ServiceRequestRepository serviceRequestRepository;
 	
 	@Autowired
+	private BillRepositoryV2 billRepoV2;
+	
+	@Autowired
 	private ObjectMapper mapper;
 	
 	@Autowired
@@ -134,7 +139,9 @@ public class DemandService {
 
 		generateAndSetIdsForNewDemands(demands, auditDetail);
 		save(demandRequest);
-		//producer.push(applicationProperties.getDemandIndexTopic(), demandRequest);
+		billRepoV2.updateBillStatus(demands.stream().map(Demand::getConsumerCode).collect(Collectors.toList()),
+				StatusEnum.EXPIRED);
+		// producer.push(applicationProperties.getDemandIndexTopic(), demandRequest);
 		return new DemandResponse(responseInfoFactory.getResponseInfo(requestInfo, HttpStatus.CREATED), demands);
 	}
 
@@ -218,7 +225,9 @@ public class DemandService {
 		generateAndSetIdsForNewDemands(newDemands, auditDetail);
 
 		update(demandRequest);
-		//producer.push(applicationProperties.getDemandIndexTopic(), demandRequest);
+		billRepoV2.updateBillStatus(demands.stream().map(Demand::getConsumerCode).collect(Collectors.toList()),
+				StatusEnum.EXPIRED);
+		// producer.push(applicationProperties.getDemandIndexTopic(), demandRequest);
 		return new DemandResponse(responseInfoFactory.getResponseInfo(requestInfo, HttpStatus.CREATED), demands);
 	}
 
