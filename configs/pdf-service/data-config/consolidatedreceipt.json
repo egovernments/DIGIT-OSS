@@ -70,7 +70,12 @@
                 "variable": "paymentMode", 
                 "value": {
                   "path": "$.paymentMode"
-                }
+                },
+                "localisation":{
+                  "required":true,
+                  "prefix": "COMMON_MASTERS_PAYMENTMODE",
+                  "module": "rainmaker-common"
+               }
               },
               {
                 "variable": "G8ReceiptNo",
@@ -426,7 +431,7 @@
           {
             "externalAPI": [     
               { 
-                  "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                  "path": "http://localhost:8087/egov-mdms-service/v1/_get",
                   "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='$.tenantId')%5D",
                   "apiRequest": null,
                   "responseMapping":[
