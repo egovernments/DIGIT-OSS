@@ -19603,6 +19603,18 @@
       "actionid": 1922,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "BPAREG_APPROVER",
+      "actionid": 1766,
+      "actioncode": "",
+      "tenantId": "pb"
+    },
+    {
+      "rolecode": "BPAREG_DOC_VERIFIER",
+      "actionid": 1766,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
