@@ -146,6 +146,8 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
             Long receiptDate = rs.getLong("receiptdate");
             String receiptType = rs.getString("receipttype");
             String businessService = rs.getString("businessService");
+            String manualReceiptNo = rs.getString("manualreceiptnumber");
+            Long manualReceiptDate = rs.getLong("manualreceiptdate");
             String billId = rs.getString("billId");
             PGobject obj = (PGobject) rs.getObject("pyd_additionalDetails");
             String createdBy = rs.getString("pyd_createdBy");
@@ -165,8 +167,11 @@ public class PaymentRowMapper implements ResultSetExtractor<List<Payment>> {
                     .businessService(businessService)
                     .billId(billId)
                     .receiptDate(receiptDate)
+                    .manualReceiptDate(manualReceiptDate)
+                    .manualReceiptNumber(manualReceiptNo)
                     .receiptType(receiptType)
                     .additionalDetails(getJsonValue(obj))
+                    
                     .auditDetails(auditDetails)
                     .build();
 
