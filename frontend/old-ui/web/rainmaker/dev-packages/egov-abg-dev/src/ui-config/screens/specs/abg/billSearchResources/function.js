@@ -104,7 +104,7 @@ export const searchApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("Bill Date")]:
           convertEpochToDate(item.billDate) || "-",
         [getTextToLocalMapping("Bill Amount(Rs)")]: item.billAmount || "-",
-        [getTextToLocalMapping("Status")]: item.status && getTextToLocalMapping(item.status.toUpperCase())  || "-",
+        [getTextToLocalMapping("Status")]: item.status  || "-",
         [getTextToLocalMapping("Action")]: item.action || "-",
         tenantId: item.tenantId,
         "Bill Id": item.billId,
