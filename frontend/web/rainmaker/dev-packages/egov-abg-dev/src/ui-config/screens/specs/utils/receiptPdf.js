@@ -323,9 +323,9 @@ const getPdfContent = (transformedData,length,index) =>{
         body: [
           [
             {
-              image: transformedData.ulbLogo,
-              width: 50,
-              height: 61.25
+              // image: transformedData.ulbLogo,
+              // width: 50,
+              // height: 61.25
             },
             {
               stack: [
