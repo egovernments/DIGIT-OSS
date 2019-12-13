@@ -104,7 +104,7 @@ export const getUploadFilesMultiple = jsonPath => {
       inputProps: {
         accept: "image/*, .pdf, .png, .jpeg"
       },
-      buttonLabel: "UPLOAD FILES",
+      buttonLabel: {labelName: "UPLOAD FILES",labelKey : "TL_UPLOAD_FILES_BUTTON"},
       maxFileSize: 5000,
       moduleName: "TL"
     }
@@ -912,9 +912,9 @@ export const getDetailsForOwner = async (state, dispatch, fieldInfo) => {
 const getStatementForDocType = docType => {
   switch (docType) {
     case "OWNERIDPROOF":
-      return "Allowed documents are Aadhar Card / Voter ID Card / Driving License";
+      return "TL_OWNERIDPROOF_NOTE";
     case "OWNERSHIPPROOF":
-      return "Allowed documents are Rent Deed / Lease Doc / Property Registry / General or Special Power of Attorney";
+      return "TL_OWNERSHIPPROOF_NOTE";
     default:
       return "";
   }
@@ -2277,7 +2277,6 @@ export const getTextToLocalMapping = label => {
         "TL_COMMON_TABLE_COL_STATUS",
         localisationLabels
       );
-
     case "INITIATED":
       return getLocaleLabels("Initiated,", "TL_INITIATED", localisationLabels);
     case "APPLIED":
@@ -2288,7 +2287,6 @@ export const getTextToLocalMapping = label => {
         "WF_NEWTL_PENDINGAPPROVAL",
         localisationLabels
       );
-
     case "APPROVED":
       return getLocaleLabels("Approved", "TL_APPROVED", localisationLabels);
     case "REJECTED":
