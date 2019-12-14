@@ -204,11 +204,11 @@
               {
                   "variable": "mohalla",
                   "value": {
-                    "path": "$.tradeLicenseDetail.address.locality.name"
+                    "path": "$.tradeLicenseDetail.address.locality.code"
                   },
                   "localisation":{
                     "required":true,
-                    "prefix": null,
+                    "prefix": "TENANTS_MOHALLA",
                     "module": "rainmaker-common"
                  }
               },
