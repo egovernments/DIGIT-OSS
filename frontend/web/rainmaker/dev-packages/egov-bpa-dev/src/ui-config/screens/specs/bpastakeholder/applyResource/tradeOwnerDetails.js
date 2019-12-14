@@ -180,6 +180,14 @@ export const OwnerInfoCard = getCommonCard({
               true
             )
           );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo",
+              "visible",
+              true
+            )
+          );
         } else {
           dispatch(
             handleField(
@@ -194,6 +202,14 @@ export const OwnerInfoCard = getCommonCard({
               "apply",
               "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
               "required",
+              false
+            )
+          );
+          dispatch(
+            handleField(
+              "apply",
+              "components.div.children.formwizardThirdStep.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo",
+              "visible",
               false
             )
           );

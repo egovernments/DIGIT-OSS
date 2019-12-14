@@ -108,7 +108,11 @@ export const searchApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("Applicant Name")]:
           item.tradeLicenseDetail.owners[0].name || "-",
         [getTextToLocalMapping("Licensee Type")]:
-          item.tradeLicenseDetail.tradeUnits[0].tradeType || "-",
+          getTextToLocalMapping(
+            `TRADELICENSE_TRADETYPE_${item.tradeLicenseDetail.tradeUnits[0].tradeType
+              .toUpperCase()
+              .replace(/[._:-\s\/]/g, "_")}_VIEW`
+          ) || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
         [getTextToLocalMapping("Owner Name")]:
           businessIdToOwnerMapping[item.applicationNumber] || "-",
@@ -162,7 +166,7 @@ const getWorkFlowData = async Licenses => {
   const queryObject = [
     {
       key: "tenantId",
-      value: process.env.REACT_APP_DEFAULT_TENANT_ID,
+      value: process.env.REACT_APP_DEFAULT_TENANT_ID
     },
     {
       key: "businessIds",

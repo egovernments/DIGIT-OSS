@@ -116,22 +116,24 @@ class EdcrSingleApplication extends React.Component {
                           />
                         </div>
                       </Grid>
-                      <Grid item xs={6}>
-                        <div
-                          onClick={() => this.onCardClick2(item)}
-                          className="myclassPointer"
-                        >
-                          <Label
-                            labelKey={"EDCR_DOWNLOAD_REPORT"}
-                            textTransform={"uppercase"}
-                            style={{
-                              color: "#fe7a51",
-                              fontSize: 14,
-                              textTransform: "uppercase"
-                            }}
-                          />
-                        </div>
-                      </Grid>
+                      {item.status.toUpperCase !== "ABORTED" && (
+                        <Grid item xs={6}>
+                          <div
+                            onClick={() => this.onCardClick2(item)}
+                            className="myclassPointer"
+                          >
+                            <Label
+                              labelKey={"EDCR_DOWNLOAD_REPORT"}
+                              textTransform={"uppercase"}
+                              style={{
+                                color: "#fe7a51",
+                                fontSize: 14,
+                                textTransform: "uppercase"
+                              }}
+                            />
+                          </div>
+                        </Grid>
+                      )}
                     </Grid>
                   </div>
                 </CardContent>

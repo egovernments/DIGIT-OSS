@@ -203,6 +203,9 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
+    dispatch(prepareFinalObject("Scrutiny[0]", {}));
+    dispatch(prepareFinalObject("LicensesTemp[0]", {}));
+
     let tenantList = [
       {
         code: "pb.amritsar",

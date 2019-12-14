@@ -145,8 +145,8 @@ const getAcknowledgementCard = (
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Application is Approved Successfully",
-              labelKey: "TL_APPROVAL_CHECKLIST_MESSAGE_HEAD"
+              labelName: "Application Approved Successfully",
+              labelKey: "BPA_APPROVAL_CHECKLIST_MESSAGE_HEAD"
             },
             body: {
               labelName:
