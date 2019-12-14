@@ -205,7 +205,12 @@
                   "variable": "mohalla",
                   "value": {
                     "path": "$.tradeLicenseDetail.address.locality.name"
-                  }
+                  },
+                  "localisation":{
+                    "required":true,
+                    "prefix": null,
+                    "module": "rainmaker-common"
+                 }
               },
               {
                   "variable": "pincode",
