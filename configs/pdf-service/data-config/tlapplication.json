@@ -315,7 +315,13 @@
                   "variable": "specialOwnerCategory",
                   "value": {
                     "path": "$.tradeLicenseDetail.owners[0].ownerType"
-                  }
+                  },
+                  "localisation":{
+                    "required":true,
+                    "prefix": "COMMON_MASTERS_OWNERTYPE",
+                    "module":"rainmaker-common"
+                 }
+
               },
               {
                   "variable": "trade_license_application",
