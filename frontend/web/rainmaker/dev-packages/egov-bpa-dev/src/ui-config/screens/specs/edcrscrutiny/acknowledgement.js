@@ -164,8 +164,10 @@ const generatePdfAndDownload = async (
     const file = new Blob([response.data], { type: "application/pdf" });
     const fileURL = URL.createObjectURL(file);
     var myWindow = window.open(fileURL);
-    myWindow.focus();
-    myWindow.print();
+    myWindow.onload = ()=>{
+      myWindow.focus();
+      myWindow.print();
+    } 
   } else if (action === "download") {
     var iframe = document.createElement("iframe");
     iframe.src = reporturl;

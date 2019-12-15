@@ -456,7 +456,8 @@ export const handleFileUpload = (event, handleDocument, props) => {
     const files = input.files;
     Object.keys(files).forEach(async (key, index) => {
       const file = files[key];
-      const fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
+      // const fileValid = isFileValid(file, acceptedFiles(inputProps.accept));
+      const fileValid = true //temporary disabling check as dxf issues in other os
       const isSizeValid = getFileSize(file) <= maxFileSize;
       if (!fileValid) {
         alert(`Only dxf files can be uploaded`);
