@@ -104,7 +104,10 @@ android {
 //			buildConfigField 'String', 'url', '"https://egov-micro-dev.egovernments.org/citizen/user/register"'
 
 			//UAT
-			buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/citizen/user/register"'
+			//buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/citizen/user/register"'
+
+			buildConfigField 'String', 'url', '"https://uttarakhand-uat.egovernments.org/citizen/user/register"'
+
 		}
 		EmployeeUAT {
 			minSdkVersion 19
@@ -124,7 +127,10 @@ android {
 //			buildConfigField 'String', 'url', '"https://egov-micro-dev.egovernments.org/employee/user/login"'
 
 			//UAT
-			buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/employee/user/login"'
+			//buildConfigField 'String', 'url', '"https://mseva-uat.lgpunjab.gov.in/employee/user/login"'
+
+			buildConfigField 'String', 'url', '"https://uttarakhand-uat.egovernments.org/employee/user/login"'
+
 		}
 	}
 }
@@ -132,4 +138,6 @@ android {
 dependencies {
 	implementation 'com.android.support:appcompat-v7:26.1.0'
 	implementation 'com.google.android.gms:play-services-base:15.0.1'
+	testImplementation 'junit:junit:4.12'
+	androidTestImplementation 'junit:junit:4.12'
 }
