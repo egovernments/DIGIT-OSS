@@ -398,10 +398,13 @@ export const getFileSize = file => {
 
 export const isFileValid = (file, acceptedFiles) => {
   const mimeType = file["type"];
+  const fileNameArray = file["name"].split(".");
+  const fileFormat = fileNameArray[fileNameArray.length - 1];
+
   return (
     (mimeType &&
       acceptedFiles &&
-      acceptedFiles.indexOf(mimeType.toUpperCase()) > -1) ||
+      acceptedFiles.indexOf(fileFormat.toUpperCase()) > -1) ||
     false
   );
 };

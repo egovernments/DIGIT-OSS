@@ -12,8 +12,7 @@ export const documentList = {
       labelKey: "EDCR_UPLOAD_RESTRICTIONS"
     },
     inputProps: {
-      accept:
-        "application/dxf,application/x-autocad,application/x-dxf,drawing/x-dxf,image/vnd.dxf,image/x-autocad,image/x-dxf,zz-application/zz-winassoc-dxf"
+      accept: "dxf"
     },
     documents: [
       {
