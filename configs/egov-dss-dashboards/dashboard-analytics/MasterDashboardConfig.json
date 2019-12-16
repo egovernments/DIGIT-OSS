@@ -2,25 +2,28 @@
   "_comment": "Master dashboard which holds all the possible visualisation. Note new dashboards/visualisations can be added",
   "dashboards": [
     {
-      "name": "My Dashboard",
+      "name": "State Wide Urban Real-Time Executive (SURE) Dashboard",
       "id": "home",
       "isActive": "",
-      "style": "tabbed",
+      "style": "",
       "visualizations": [
         {
-          "row": 1,
           "name": "DSS_REVENUE",
           "vizArray": [
             {
               "id": 111,
-              "name": "",
-              "dimensions": {
-                "height": 350,
-                "width": 5
-              },
+              "name": "Overview",
               "vizType": "metric-collection",
               "noUnit": false,
               "charts": [
+                {
+                  "id": "todaysCollection",
+                  "name": "DSS_TOTAL_COLLECTION_TODAY",
+                  "code": "",
+                  "chartType": "",
+                  "filter": "",
+                  "headers": []
+                },
                 {
                   "id": "totalCollection",
                   "name": "DSS_TOTAL_COLLECTION",
@@ -55,6 +58,7 @@
                 "width": 7
               },
               "vizType": "chart",
+              "label": "",
               "noUnit": true,
               "charts": [
                 {
@@ -82,6 +86,7 @@
               },
               "vizType": "performing-metric",
               "noUnit": false,
+              "label": "",
               "charts": [
                 {
                   "id": "topPerformingUlbs",
@@ -147,6 +152,7 @@
                 "width": 5
               },
               "vizType": "metric-collection",
+              "label": "",
               "charts": [
                 {
                   "id": "totalApplication",
@@ -215,6 +221,7 @@
                 "width": 4
               },
               "vizType": "performing-metric",
+              "label": "",
               "charts": [
                 {
                   "id": "topPerformingUlbsCompletionRate",
@@ -269,7 +276,7 @@
       ]
     },
     {
-      "name": "Property Tax",
+      "name": "Property Tax (SURE) Dashboard",
       "id": "propertyTax",
       "isActive": "",
       "style": "linear",
@@ -280,14 +287,23 @@
           "vizArray": [
             {
               "id": 211,
-              "name": "",
+              "name": "Overview",
               "dimensions": {
                 "height": 350,
                 "width": 5
               },
               "vizType": "metric-collection",
               "noUnit": true,
+              "label": "Overview",
               "charts": [
+                {
+                  "id": "todaysCollectionPT",
+                  "name": "DSS_TOTAL_COLLECTION_TODAY",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
                 {
                   "id": "totalCollection",
                   "name": "DSS_TOTAL_COLLECTION",
@@ -349,6 +365,7 @@
               },
               "vizType": "performing-metric",
               "noUnit": false,
+              "label": "",
               "charts": [
                 {
                   "id": "topPerformingUlbs",
@@ -438,16 +455,52 @@
         },
         {
           "row": 4,
+          "name": "DSS_REVENUE",
+          "vizArray": [
+            {
+              "id": 231,
+              "name": "DSS_PT_TAX_HEAD",
+              "dimensions": {
+                "height": 350,
+                "width": 12
+              },
+              "vizType": "chart",
+              "label": "",
+              "noUnit": false,
+              "charts": [
+                {
+                  "id": "taxHeadsBreakupRevenue",
+                  "name": "DSS_PT_TAX_HEAD_BREAKUP_REVENUE",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "taxHeadsBreakupUsage",
+                  "name": "DSS_PT_TAX_HEAD_BREAKUP_USAGE",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 5,
           "name": "DSS_SERVICE",
           "vizArray": [
             {
               "id": 241,
-              "name": "",
+              "name": "Overview",
               "dimensions": {
                 "height": 350,
                 "width": 5
               },
               "vizType": "metric-collection",
+              "label": "Overview",
               "charts": [
                 {
                   "id": "propertiesAssessed",
@@ -497,7 +550,7 @@
           ]
         },
         {
-          "row": 5,
+          "row": 6,
           "name": "DSS_SERVICE",
           "vizArray": [
             {
@@ -508,6 +561,7 @@
                 "width": 4
               },
               "vizType": "performing-metric",
+              "label": "",
               "charts": [
                 {
                   "id": "topPerformingUlbsCompletionRate",
@@ -562,7 +616,7 @@
       ]
     },
     {
-      "name": "Trade License",
+      "name": "Trade License (SURE) Dashboard",
       "id": "tradeLicense",
       "isActive": "",
       "style": "linear",
@@ -572,15 +626,23 @@
           "name": "DSS_REVENUE",
           "vizArray": [
             {
-              "id": 311,
-              "name": "",
+              "name": "Overview",
               "dimensions": {
                 "height": 350,
                 "width": 5
               },
               "vizType": "metric-collection",
+              "label": "Overview",
               "noUnit": true,
               "charts": [
+                {
+                  "id": "todaysCollectionTL",
+                  "name": "DSS_TOTAL_COLLECTION_TODAY",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
                 {
                   "id": "totalCollection",
                   "name": "DSS_TOTAL_COLLECTION",
@@ -615,6 +677,7 @@
                 "width": 7
               },
               "vizType": "chart",
+              "label": "",
               "noUnit": true,
               "charts": [
                 {
@@ -641,6 +704,7 @@
                 "width": 4
               },
               "vizType": "performing-metric",
+              "label": "",
               "noUnit": false,
               "charts": [
                 {
@@ -661,6 +725,7 @@
                 "width": 4
               },
               "vizType": "performing-metric",
+              "label": "",
               "noUnit": false,
               "charts": [
                 {
@@ -681,6 +746,7 @@
                 "width": 4
               },
               "vizType": "chart",
+              "label": "",
               "noUnit": false,
               "charts": [
                 {
@@ -697,16 +763,71 @@
         },
         {
           "row": 4,
+          "name": "DSS_REVENUE",
+          "vizArray": [
+            {
+              "id": 231,
+              "name": "DSS_TL_DEMAND_COLLECTION",
+              "dimensions": {
+                "height": 350,
+                "width": 12
+              },
+              "vizType": "chart",
+              "label": "",
+              "noUnit": false,
+              "charts": [
+                {
+                  "id": "licenseIssuedBoundaryRevenue",
+                  "name": "DSS_TL_DEMAND_COLLECTION_BOUNDARY",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 5,
+          "name": "DSS_REVENUE",
+          "vizArray": [
+            {
+              "id": 231,
+              "name": "DSS_TL_TAX_HEAD_BREAKUP",
+              "dimensions": {
+                "height": 350,
+                "width": 12
+              },
+              "vizType": "chart",
+              "label": "",
+              "noUnit": false,
+              "charts": [
+                {
+                  "id": "licenceTaxHeadsBreakupBoundary",
+                  "name": "DSS_TL_TAX_HEAD_BREAKUP_BOUNDARY",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 6,
           "name": "DSS_SERVICE",
           "vizArray": [
             {
               "id": 341,
-              "name": "",
+              "name": "Overview",
               "dimensions": {
                 "height": 350,
                 "width": 5
               },
               "vizType": "metric-collection",
+              "label": "Overview",
               "charts": [
                 {
                   "id": "totalApplication",
@@ -756,7 +877,7 @@
           ]
         },
         {
-          "row": 5,
+          "row": 7,
           "name": "DSS_SERVICE",
           "vizArray": [
             {
@@ -767,6 +888,7 @@
                 "width": 4
               },
               "vizType": "performing-metric",
+              "label": "",
               "noUnit": false,
               "charts": [
                 {
@@ -823,23 +945,25 @@
       ]
     },
     {
-      "name": "PGR",
+      "name": "PGR (SURE) Dashboard",
       "id": "pgr",
       "isActive": "",
       "style": "linear",
       "visualizations": [
+
         {
           "row": 1,
           "name": "DSS_SERVICE",
           "vizArray": [
             {
-              "id": 411,
-              "name": "",
+              "id": 412,
+              "name": "Overview",
               "dimensions": {
                 "height": 350,
                 "width": 5
               },
               "vizType": "metric-collection",
+              "label": "Overview",
               "noUnit": true,
               "charts": [
                 {
@@ -865,6 +989,14 @@
                   "chartType": "metric",
                   "filter": "",
                   "headers": []
+                },
+                {
+                  "id": "completionRate",
+                  "name": "DSS_PGR_COMPLETION_RATE",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
                 }
               ]
             },
@@ -876,6 +1008,7 @@
                 "width": 7
               },
               "vizType": "chart",
+              "label": "",
               "charts": [
                 {
                   "id": "cumulativeClosedComplaints",
@@ -894,6 +1027,52 @@
           "name": "DSS_SERVICE",
           "vizArray": [
             {
+              "id": 412,
+              "name": "DSS_TOTAL_COMPLAINTS_BY_SOURCE",
+              "dimensions": {
+                "height": 350,
+                "width": 7
+              },
+              "vizType": "chart",
+              "label": "",
+              "charts": [
+                {
+                  "id": "totalComplaintsbySource",
+                  "name": "Monthly",
+                  "code": "",
+                  "chartType": "line",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 413,
+              "name": "DSS_TOTAL_COMPLAINTS_STATUS",
+              "dimensions": {
+                "height": 350,
+                "width": 7
+              },
+              "vizType": "chart",
+              "label": "",
+              "charts": [
+                {
+                  "id": "totalComplaintsbyStatus",
+                  "name": "",
+                  "code": "",
+                  "chartType": "line",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 3,
+          "name": "DSS_SERVICE",
+          "vizArray": [
+            {
               "id": 421,
               "name": "DSS_PGR_COMPLAINTS_BY_STATUS",
               "dimensions": {
@@ -901,6 +1080,7 @@
                 "width": 4
               },
               "vizType": "chart",
+              "label": "",
               "charts": [
                 {
                   "id": "complaintsByStatus",
@@ -953,7 +1133,7 @@
           ]
         },
         {
-          "row": 3,
+          "row": 4,
           "name": "DSS_SERVICE",
           "vizArray": [
             {
@@ -964,11 +1144,20 @@
                 "width": 12
               },
               "vizType": "chart",
+              "label": "",
               "noUnit": false,
               "charts": [
                 {
                   "id": "pgrStatusByTenant",
                   "name": "DSS_PGR_STATUS_BY_TENANT",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "pgrStatusByDepartment",
+                  "name": "DSS_PGR_STATUS_BY_DEPARTMENT",
                   "code": "",
                   "chartType": "table",
                   "filter": "",
