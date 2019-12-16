@@ -858,19 +858,19 @@ const getCertificateData = (transformedData, ulbLogo) => {
                       getLocaleLabels(
                         "Contact : ",
                         "TL_LOCALIZATION_CORPORATION_CONTACT"
-                      ) +
+                      ) +" : "+
                       validateNull(transformedData.corporationContact)+
                       "\n" +
                       getLocaleLabels(
                         "Website : ",
                         "TL_LOCALIZATION_CORPORATION_WEBSITE"
-                      ) +
+                      )+" : "+
                       validateNull(transformedData.corporationWebsite) +
                       "\n" +
                       getLocaleLabels(
                         "Email : ",
                         "TL_LOCALIZATION_CORPORATION_EMAIL"
-                      ) +
+                      ) +" : "+
                       validateNull(transformedData.corporationEmail),
                     style: "receipt-logo-sub-text",
                     margin: [0, 8, 0, 0]
@@ -1133,7 +1133,7 @@ const getCertificateData = (transformedData, ulbLogo) => {
                 )+":"
               },
               {
-                text: `${transformedData.auditorName}\n${transformedData.designation}`
+                text: `${transformedData.auditorName}, ${transformedData.designation}`
               }
             ],
             alignment: "left"
@@ -1154,12 +1154,15 @@ const getCertificateData = (transformedData, ulbLogo) => {
       },
       {
         style: "tl-certificate-footer1",
-        text: transformedData.signature
+        bold: true,
+        text: getLocaleLabels("Signature",
+        "TL_LOCALIZATION_SIGNATURE"
+        )
       }
     ],
     footer: [
       {
-        text: transformedData.Disclaimer,
+        text: getLocaleLabels("Disclaimer","TL_LOCALIZATION_DISCLAIMER"),
         style: "receipt-footer"
       }
     ], //define all the styles here
@@ -1298,19 +1301,19 @@ const getACKData = (transformedData, ulbLogo) => {
                       getLocaleLabels(
                         "Contact : ",
                         "TL_LOCALIZATION_CORPORATION_CONTACT"
-                      ) +
+                      )+" : "+
                       validateNull(transformedData.corporationContact) +
                       "\n" +
                       getLocaleLabels(
                         "Website : ",
                         "TL_LOCALIZATION_CORPORATION_WEBSITE"
-                      ) +
+                      ) +" : "+
                       validateNull(transformedData.corporationWebsite) +
                       "\n" +
                       getLocaleLabels(
                         "Email : ",
                         "TL_LOCALIZATION_CORPORATION_EMAIL"
-                      ) +
+                      ) +" : "+
                       validateNull(transformedData.corporationEmail),
                     style: "receipt-logo-sub-text",
                     margin: [0, 8, 0, 0]
@@ -1497,7 +1500,20 @@ const getACKData = (transformedData, ulbLogo) => {
       //     }
       //   ]
       // }
-    ],
+      {
+        style: "tl-certificate-footer1",
+        bold: true,
+        text: getLocaleLabels("Signature",
+        "TL_LOCALIZATION_SIGNATURE"
+        )
+      }
+      ],
+      footer: [
+        {
+          text: getLocaleLabels("Disclaimer","TL_LOCALIZATION_DISCLAIMER"),
+          style: "receipt-footer"
+        }
+      ],
     // footer: [
     //   {
     //     text: transformedData.Disclaimer,
