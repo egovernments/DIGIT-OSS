@@ -7,7 +7,7 @@ serviceMaps:
     isTransaction: true
     queryMaps:
 
-    - query: INSERT INTO eg_pt_assessment (id, financialyear, tenantid, assessmentNumber, status, propertyId, source, assessmentDate, buildUpArea, additionaldetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_pt_assessments (id, financialyear, tenantid, assessmentNumber, status, propertyId, source, assessmentDate, buildUpArea, additionaldetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       basePath: Assessment
       jsonMaps:
 
@@ -113,7 +113,7 @@ serviceMaps:
     isTransaction: true
     queryMaps:
 
-    - query: INSERT INTO eg_pt_assessment_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_assessment WHERE id = ?;
+    - query: INSERT INTO eg_pt_assessments_audit SELECT *, (SELECT extract(epoch from now())) FROM eg_pt_assessment WHERE id = ?;
       basePath: Assessment
       jsonMaps:
 
@@ -127,7 +127,7 @@ serviceMaps:
       - jsonPath: $.Assessment.units.*.id
       
       
-    - query: UPDATE eg_pt_assessment SET financialyear = ?, status = ?, source = ?, assessmentDate = ?, buildUpArea = ?, additionaldetails = ?, lastmodifiedby = ?, lastmodifiedtime = ? WHERE id = ?;
+    - query: UPDATE eg_pt_assessments SET financialyear = ?, status = ?, source = ?, assessmentDate = ?, buildUpArea = ?, additionaldetails = ?, lastmodifiedby = ?, lastmodifiedtime = ? WHERE id = ?;
       basePath: Assessment
       jsonMaps:
 
