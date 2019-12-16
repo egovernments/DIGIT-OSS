@@ -16,7 +16,7 @@ paths:
   /_search:
     post:
       summary: Searches the Payment based on search criteria
-      description: API to search payments based on consumerCode,mobileNumber,transactionNumber etc. 
+      description: API to search payments based on search parameters like consumerCode, mobileNumber, transactionNumber etc. 
       parameters:
         - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo"
         - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId"
@@ -30,12 +30,6 @@ paths:
           type: array
           items:
             type: string
-        - name: tenantId
-          in: query
-          description: Unique ulb identifier.
-          required: true
-          type: string
-          format: varchar
         - name: consumerCodes
           in: query
           required: false
@@ -52,26 +46,26 @@ paths:
             type: string
         - name: fromDate
           in: query
-          description: Receipt date, here search will happen as Receipt date is greater or equal to given fromDate.
+          description: Transaction date, here search will happen as Transaction date is greater or equal to given fromDate.
           required: false
           type: string
           format: varchar
         - name: toDate
           in: query
-          description: Receipt date, here search will happen as Receipt date is lesser or equal to given toDate.
+          description: Transaction date, here search will happen as Transaction date is lesser or equal to given toDate.
           required: false
           type: string
           format: varchar
         - name: status
           in: query
-          description: Search based on the status of the Receipt.
+          description: Search based on the status of the Payment.
           required: false
           type: array
           items:
             type: string
         - name: instrumentStatus
           in: query
-          description: Search based on the status of the Receipt.
+          description: Search based on the status of the instrument.
           required: false
           type: array
           items:
@@ -85,7 +79,7 @@ paths:
             type: string
         - name: payerIds
           in: query
-          required: true
+          required: false
           description: The ids of the payer
           type: array
           items:
@@ -130,7 +124,7 @@ paths:
 
   /_create:
     post:
-      summary: Creates a entry for payment in the system
+      summary: Records the payment in the system
       description: This API generates a transaction number and persists the payment details. The payment information is then pushed to queue for further processing.
       parameters:
         - name: PaymentRequest
@@ -144,6 +138,59 @@ paths:
       responses:
         '201':
           description: Payment created sucessfully.
+          schema:
+            $ref: '#/definitions/PaymentResponse'
+        '400':
+          description: Invalid input.
+
+  /_validate:
+    post:
+      summary: Validates the PaymentRequest
+      description: |
+       The API runs the following set of validations on the payment request.
+       1. Bill is present and is in valid state
+       2. Amount paid is positive integer
+       3. Zero amount payment is allowed only if bill amount is zero
+       4. Payment mode is allowed
+       5. Partial Payment is allowed based on the businessService
+       6. Advance payment is allowed based on the businessService
+      parameters:
+        - name: PaymentRequest
+          in: body
+          description: The request to be validated
+          required: true
+          schema:
+            $ref: '#/definitions/PaymentRequest'
+      tags:
+        - Payment
+      responses:
+        '201':
+          description: Payment info validated sucessfully.
+          schema:
+            $ref: '#/definitions/PaymentResponse'
+        '400':
+          description: Invalid input.
+
+  /_workflow:
+    post:
+      summary: Performs workflow actions on the payment
+      description: | 
+       The API can perform the following operations:  
+       1. Cancellation of receipts in open state.
+       2. Remittance of instruments such as Cash, Cheque, DD .
+       3. Dishonoring of instruments such as Cheque, DD.
+      parameters:
+        - name: PaymentWorkflowRequest
+          in: body
+          description: The workflow request
+          required: true
+          schema:
+            $ref: '#/definitions/PaymentWorkflowRequest'
+      tags:
+        - Payment
+      responses:
+        '201':
+          description: Payment status updated sucessfully.
           schema:
             $ref: '#/definitions/PaymentResponse'
         '400':
@@ -166,8 +213,19 @@ definitions:
     properties:
       responseInfo:
         $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
-      receipt:
+      Payment:
         $ref: '#/definitions/Payment'
+
+
+  PaymentWorkflowRequest:
+    type: object
+    description: Payment Workflow Request with Request Info.
+    properties:
+      requestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      Payment:
+        $ref: '#/definitions/PaymentWorkflow'
+
 
   Bill:
     type: object
@@ -415,7 +473,7 @@ definitions:
         format: int64
       paymentMode:
         type: string
-        description: Unique id of tenant.
+        description: Mode of payment used.
         format: varchar
         enum:
          - CASH
