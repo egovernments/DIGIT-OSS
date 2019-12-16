@@ -65,9 +65,9 @@ serviceMaps:
 
       - jsonPath: $.Assessment.units.*.constructionType
 
-      - jsonPath: $.Assessment.units.*.active
-
       - jsonPath: $.Assessment.units.*.arv
+
+      - jsonPath: $.Assessment.units.*.active
 
       - jsonPath: $.Assessment.units.*.auditDetails.createdBy
 
@@ -176,9 +176,9 @@ serviceMaps:
 
       - jsonPath: $.Assessment.units.*.constructionType
 
-      - jsonPath: $.Assessment.units.*.active
-
       - jsonPath: $.Assessment.units.*.arv
+
+      - jsonPath: $.Assessment.units.*.active
 
       - jsonPath: $.Assessment.units.*.auditDetails.createdBy
 
@@ -200,9 +200,9 @@ serviceMaps:
 
       - jsonPath: $.Assessment.units.*.constructionType
 
-      - jsonPath: $.Assessment.units.*.active
-
       - jsonPath: $.Assessment.units.*.arv
+
+      - jsonPath: $.Assessment.units.*.active
 
       - jsonPath: $.Assessment.units.*.auditDetails.lastModifiedBy
 
