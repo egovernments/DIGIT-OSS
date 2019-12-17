@@ -15849,6 +15849,28 @@
       "navigationURL": "tradelicence/apply",
       "path": "TradeLicense.Apply",
       "leftIcon": "places:business-center"
+    },
+    {
+      "id": 1930,
+      "name": "BPA-applicationsearch",
+      "url": "/bpa-services/bpa/appl/_search",
+      "displayName": "Search",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "BPA",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1931,
+      "name": "BPA-updateapplicationservice",
+      "url": "/bpa-services/bpa/appl/_update",
+      "displayName": "Apply",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "BPA",
+      "code": "null",
+      "path": ""
     }
   ]
 }
