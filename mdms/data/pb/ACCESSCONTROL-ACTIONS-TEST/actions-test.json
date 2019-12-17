@@ -11089,7 +11089,6 @@
       "code": "null",
       "path": "Complaints.CreateComplaint",
       "navigationURL": "create-complaint",
-      "quickAction": true,
       "leftIcon": "content:add",
       "rightIcon": ""
     },
@@ -11358,7 +11357,6 @@
       "lastModifiedBy": null,
       "path": "Property Tax.Assess And Search Properties",
       "navigationURL": "property-tax/search-property",
-      "quickAction": true,
       "leftIcon": "communication:business",
       "rightIcon": ""
     },
@@ -13936,7 +13934,6 @@
       "path": "",
       "navigationURL": "all-complaints",
       "leftIcon": "action:announcement",
-      "quickAction": true,
       "rightIcon": "",
       "queryParams": ""
     },
@@ -13984,9 +13981,7 @@
       "code": "",
       "path": "",
       "navigationURL": "tradelicence/search",
-      "quickAction": true,
       "leftIcon": "places:business-center",
-      
       "rightIcon": "",
       "queryParams": ""
     },
@@ -14771,7 +14766,6 @@
       "serviceCode": "TradeLicense",
       "code": "null",
       "navigationURL": "tradelicence/apply",
-      "quickAction": true,
       "path": "TradeLicense.Apply",
       "leftIcon": "places:business-center"
     },
@@ -15772,6 +15766,89 @@
       "serviceCode": "BPA",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1925,
+      "name": "CreateComplaint",
+      "url": "quickAction",
+      "displayName": "File Complaint",
+      "orderNumber": 1,
+      "parentModule": "rainmaker-pgr",
+      "enabled": true,
+      "serviceCode": "PGR",
+      "code": "null",
+      "path": "Complaints.CreateComplaint",
+      "navigationURL": "create-complaint",
+      "quickAction": true,
+      "leftIcon": "content:add",
+      "rightIcon": ""
+    },
+    {
+      "id": 1926,
+      "name": "Assess And Search Properties",
+      "url": "quickAction",
+      "displayName": "Search Property",
+      "orderNumber": 1,
+      "queryParams": "",
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "tenantId": "pb",
+      "createdDate": null,
+      "createdBy": null,
+      "lastModifiedDate": null,
+      "lastModifiedBy": null,
+      "path": "Property Tax.Assess And Search Properties",
+      "navigationURL": "property-tax/search-property",
+      "quickAction": true,
+      "leftIcon": "communication:business",
+      "rightIcon": ""
+    },
+    {
+      "id": 1927,
+      "name": "rainmaker-common-complaints",
+      "url": "quickAction",
+      "displayName": "Search Complaints",
+      "orderNumber": 2,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "",
+      "path": "",
+      "navigationURL": "all-complaints",
+      "leftIcon": "action:announcement",
+      "rightIcon": "",
+      "queryParams": ""
+    },
+    {
+      "id": 1928,
+      "name": "rainmaker-common-tradelicence",
+      "url": "quickAction",
+      "displayName": "Search TL",
+      "orderNumber": 2,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "code": "",
+      "path": "",
+      "navigationURL": "tradelicence/search",
+      "leftIcon": "places:business-center",
+      "rightIcon": "",
+      "queryParams": ""
+    },
+    {
+      "id": 1929,
+      "name": "TradeLicenseApplication",
+      "url": "quickAction",
+      "displayName": "Apply TL",
+      "orderNumber": 13,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "TradeLicense",
+      "code": "null",
+      "navigationURL": "tradelicence/apply",
+      "path": "TradeLicense.Apply",
+      "leftIcon": "places:business-center"
     }
   ]
 }
