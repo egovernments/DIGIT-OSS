@@ -19627,6 +19627,12 @@
       "actionid": 1923,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "BPA_ARCHITECT",
+      "actionid": 1924,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }

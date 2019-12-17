@@ -15755,6 +15755,20 @@
       "navigationURL": "integration/dss/pgr",
       "leftIcon": "places:business-center",
       "rightIcon": ""
+    },
+    {
+      "id": 1924,
+      "name": "BPA-Applyforservice",
+      "url": "url",
+      "displayName": "Apply",
+      "orderNumber": 0,
+      "parentModule": "",
+      "enabled": false,
+      "serviceCode": "BPA",
+      "code": "null",
+      "navigationURL": "bpa-services/bpa/appl/_create",
+      "path": "BPA.Apply.New",
+      "leftIcon": "places:business-center"
     }
   ]
 }
