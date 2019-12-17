@@ -25,19 +25,7 @@ class Header extends Component {
   };
 
   componentDidMount = () => {
-    const { role, updateActiveRoute, userInfo } = this.props;
-    const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();
-
-    if (role && role.toLowerCase() !== "citizen") {
-      // const menupath = localStorageGet("menuPath");
-      const ulbLogo = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
-      // updateActiveRoute(menupath);
-      this.setState({ ulbLogo });
-    }
-    if (tenantId) {
-      const ulbLogo = `https://s3.ap-south-1.amazonaws.com/pb-egov-assets/${tenantId}/logo.png`;
-      this.setState({ ulbLogo });
-    }
+    const { updateActiveRoute } = this.props;
     const menupath = localStorageGet("menuPath");
     const menuName = localStorageGet("menuName");
     updateActiveRoute(menupath, menuName);
@@ -171,6 +159,10 @@ class Header extends Component {
       hasLocalisation,
       notificationsCount,
     } = this.props;
+    const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();
+    const currentCity = cities.filter((item) => item.code === tenantId);
+    const ulbLogo =
+      currentCity.length > 0 ? get(currentCity[0], "logoId") : "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png";
     return (
       <div>
         <AppBar
@@ -180,7 +172,7 @@ class Header extends Component {
           defaultTitle={defaultTitle}
           titleAddon={titleAddon}
           role={role}
-          ulbLogo={this.state.ulbLogo}
+          ulbLogo={ulbLogo}
           {...appBarProps}
           fetchLocalizationLabel={fetchLocalizationLabel}
           userInfo={userInfo}
@@ -258,7 +250,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

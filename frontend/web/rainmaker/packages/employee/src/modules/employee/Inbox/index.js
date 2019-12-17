@@ -57,10 +57,9 @@ class Inbox extends Component {
       }
     })
     const buttonItems = {
-      label: "Take Action",
+      label: {labelName : "Take Action" , labelKey : "INBOX_QUICK_ACTION"},
       rightIcon: "arrow_drop_down",
-      props: { variant: "outlined", style: { marginRight: 15,
-        backgroundColor:"#FE7A51",color:"#fff",border:"none",height:"48px",width :"200px" } },
+      props: { variant: "outlined", style: { marginRight: 15,backgroundColor:"#FE7A51",color:"#fff",border:"none",height:"60px",width :"200px" } },
       menu: downloadMenu
     }
     return (

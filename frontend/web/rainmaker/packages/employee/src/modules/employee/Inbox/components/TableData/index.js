@@ -223,8 +223,8 @@ class TableData extends Component {
       <div className="col-sm-12">
         <div>
           <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
-          <TextField value={"search"} />
-          <Icon action="custom" name="filter" onClick={onPopupOpen} style={{ cursor: "pointer" }} />
+          {/* <TextField value={"search"} />
+          <Icon action="custom" name="filter" onClick={onPopupOpen} style={{ cursor: "pointer" }} /> */}
         </div>
 
         <Taskboard data={taskboardData} onSlaClick={this.onTaskBoardClick} color={this.state.color} />

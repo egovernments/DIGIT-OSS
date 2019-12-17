@@ -2,7 +2,7 @@ import {
   getLabel,
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {download} from "egov-common/ui-utils/commons"
+import { download } from "egov-common/ui-utils/commons"
 import { applyTradeLicense } from "../../../../../ui-utils/commons";
 import {
   getButtonVisibility,
@@ -13,7 +13,8 @@ import {
   setOwnerShipDropDownFieldChange,
   createEstimateData,
   validateFields,
-  } from "../../utils";
+  downloadAcknowledgementForm,
+} from "../../utils";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import {
@@ -226,9 +227,9 @@ export const callBackForNext = async (state, dispatch) => {
     );
 
     get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory") &&
-    get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory").split(
-      "."
-    )[0] === "INDIVIDUAL"
+      get(LicenseData, "tradeLicenseDetail.subOwnerShipCategory").split(
+        "."
+      )[0] === "INDIVIDUAL"
       ? setMultiOwnerForApply(state, true)
       : setMultiOwnerForApply(state, false);
 
@@ -489,7 +490,7 @@ export const footer = getCommonApplyFooter({
         minWidth: "180px",
         height: "48px",
         marginRight: "16px",
-        borderRadius:"inherit"
+        borderRadius: "inherit"
       }
     },
     children: {
@@ -520,7 +521,7 @@ export const footer = getCommonApplyFooter({
         minWidth: "180px",
         height: "48px",
         marginRight: "45px",
-        borderRadius:"inherit"
+        borderRadius: "inherit"
       }
     },
     children: {
@@ -550,7 +551,7 @@ export const footer = getCommonApplyFooter({
         minWidth: "180px",
         height: "48px",
         marginRight: "45px",
-        borderRadius:"inherit"
+        borderRadius: "inherit"
       }
     },
     children: {
@@ -602,11 +603,11 @@ export const footerReview = (
   let receiptDownloadObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-     
-      
+
+
       const receiptQueryString = [
-        { key: "consumerCodes", value:  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber")},
-        { key: "tenantId", value:get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       download(receiptQueryString);
       // generateReceipt(state, dispatch, "receipt_download");
@@ -623,7 +624,8 @@ export const footerReview = (
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download", applicationNumber);
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadAcknowledgementForm(Licenses);
     },
     leftIcon: "assignment"
   };
@@ -716,7 +718,7 @@ export const footerReview = (
                   minWidth: "180px",
                   height: "48px",
                   marginRight: "16px",
-                  borderRadius:"inherit"
+                  borderRadius: "inherit"
                 }
               },
               children: {
@@ -781,7 +783,7 @@ export const footerReview = (
               },
               onClickDefination: {
                 action: "page_change",
-                path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=NewTL`
+                path: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=NewTL`
                 //path: `${redirectionURL}/pay?applicationNumber=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
               },
               roleDefination: {
@@ -857,8 +859,8 @@ export const downloadPrintContainer = (
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
       const receiptQueryString = [
-        { key: "consumerCodes", value:  get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber")},
-        { key: "tenantId", value:get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
       ]
       download(receiptQueryString);
     },
@@ -874,7 +876,8 @@ export const downloadPrintContainer = (
   let applicationDownloadObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("download", applicationNumber);
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadAcknowledgementForm(Licenses);
     },
     leftIcon: "assignment"
   };
@@ -932,10 +935,10 @@ export const downloadPrintContainer = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: "Download",
-              leftIcon: "cloud_download",
+              label: {labelName : "DOWNLOAD" , labelKey :"DOWNLOAD"},
+              // leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { marginLeft: 10 } },
+              props: { variant: "outlined", style: { marginLeft: 10,height: "60px", width: "200px" , color : "#FE7A51" } },
               menu: downloadMenu
             }
           }

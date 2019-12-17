@@ -4,8 +4,7 @@ import {
   getEpochForDate,
   getTextToLocalMapping
 } from "../../utils";
-import { generateSingleBill } from "../../utils/receiptPdf";
-import {download} from "egov-common/ui-utils/commons"
+import { download, downloadBill } from "egov-common/ui-utils/commons";
 
 export const searchResults = {
   uiFramework: "custom-molecules",
@@ -17,8 +16,12 @@ export const searchResults = {
         name: getTextToLocalMapping("Bill No."),
         options: {
           filter: false,
-          customBodyRender: (value) => (
-            <div onClick={() => generateSingleBill(value)}>
+          customBodyRender: (value, tableMeta, updateValue) => (
+            <div
+              onClick={() => {
+                downloadBill(tableMeta.rowData[1], tableMeta.rowData[7]);
+              }}
+            >
               <a>{value}</a>
             </div>
           )
@@ -33,46 +36,57 @@ export const searchResults = {
       getTextToLocalMapping("Consumer Name"),
       getTextToLocalMapping("Bill Date"),
       getTextToLocalMapping("Bill Amount(Rs)"),
-      getTextToLocalMapping("Status"),
+      {
+        name : getTextToLocalMapping("Status"),
+        options:{
+          filter: false,
+          customBodyRender: value => (
+            <span>
+               {getTextToLocalMapping(value.toUpperCase())}
+            </span>
+          )
+
+        }
+      },
       {
         name: getTextToLocalMapping("Action"),
         options: {
           filter: false,
-
           customBodyRender: (value, tableMeta, updateValue) => (
             <div
               style={{
                 color: "#FE7A51",
                 cursor: "pointer"
               }}
-              onClick={(value) => {
-                const appName = process.env.REACT_APP_NAME === "Citizen" ? "citizen" : "employee";
-                  if(tableMeta.rowData[5] === "Paid"){
-
+              onClick={value => {
+                const appName =
+                  process.env.REACT_APP_NAME === "Citizen"
+                    ? "citizen"
+                    : "employee";
+                if (tableMeta.rowData[5] === "PAID") {
                   const receiptQueryString = [
-                        { key: "billIds", value:  tableMeta.rowData[8] },
-                        { key: "tenantId", value: tableMeta.rowData[7] }
-                    ]
+                    { key: "billIds", value: tableMeta.rowData[8] },
+                    { key: "tenantId", value: tableMeta.rowData[7] }
+                  ];
                   download(receiptQueryString);
-                }else{
+                } else {
                   const url =
-                  process.env.NODE_ENV === "development"
-                    ?`/egov-common/pay?consumerCode=${
-                        tableMeta.rowData[1]
-                      }&tenantId=${tableMeta.rowData[7]}&businessService=${
-                        tableMeta.rowData[0].split("-")[0]
-                      }` 
-                    :
-                    `/${appName}/egov-common/pay?consumerCode=${
-                        tableMeta.rowData[1]
-                      }&tenantId=${tableMeta.rowData[7]}&businessService=${
-                        tableMeta.rowData[0].split("-")[0]
-                      }` ;
-                window.location.href = `${window.origin}${url}`;
+                    process.env.NODE_ENV === "development"
+                      ? `/egov-common/pay?consumerCode=${
+                          tableMeta.rowData[1]
+                        }&tenantId=${tableMeta.rowData[7]}&businessService=${
+                          tableMeta.rowData[0].split("-")[0]
+                        }`
+                      : `/${appName}/egov-common/pay?consumerCode=${
+                          tableMeta.rowData[1]
+                        }&tenantId=${tableMeta.rowData[7]}&businessService=${
+                          tableMeta.rowData[0].split("-")[0]
+                        }`;
+                  document.location.href = `${document.location.origin}${url}`;
                 }
               }}
             >
-            {getTextToLocalMapping(value)}
+              {getTextToLocalMapping(value)}
             </div>
           )
         }
@@ -88,7 +102,7 @@ export const searchResults = {
         options: {
           display: false
         }
-      },
+      }
     ],
     title: getTextToLocalMapping("Search Results for Bill"),
     options: {

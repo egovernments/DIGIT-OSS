@@ -127,16 +127,16 @@ class Footer extends React.Component {
         };
       });
     const buttonItems = {
-      label: "Take Action",
+      label: { labelName : "Take Action", labelKey : "WF_TAKE_ACTION"},
       rightIcon: "arrow_drop_down",
       props: {
         variant: "outlined",
         style: {
-          marginLeft: 10,
+          marginRight: 15,
           backgroundColor: "#FE7A51",
           color: "#fff",
           border: "none",
-          height: "48px",
+          height: "60px",
           width: "200px"
         }
       },
