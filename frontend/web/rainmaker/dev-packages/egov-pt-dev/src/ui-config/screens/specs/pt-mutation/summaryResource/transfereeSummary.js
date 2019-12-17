@@ -10,7 +10,7 @@ import {
 import { gotoApplyWithStep } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
-export const applicantSummary = getCommonGrayCard({
+export const transfereeSummary = getCommonGrayCard({
   header: {
     uiFramework: "custom-atoms",
     componentPath: "Container",
@@ -23,8 +23,8 @@ export const applicantSummary = getCommonGrayCard({
           xs: 8
         },
         ...getCommonSubHeader({
-          labelName: "Applicant Details",
-          labelKey: "NOC_APPLICANT_DETAILS_HEADER"
+          labelName: "Transferee Details",
+          labelKey: "PT_MUTATION_TRANSFEREE_DETAILS"
         })
       },
       editSection: {
@@ -50,13 +50,13 @@ export const applicantSummary = getCommonGrayCard({
           },
           buttonLabel: getLabel({
             labelName: "Edit",
-            labelKey: "NOC_SUMMARY_EDIT"
+            labelKey: "PT_EDIT"
           })
         },
         onClickDefination: {
           action: "condition",
           callBack: (state, dispatch) => {
-            gotoApplyWithStep(state, dispatch, 2);
+            gotoApplyWithStep(state, dispatch, 0);
           }
         }
       }
@@ -66,59 +66,69 @@ export const applicantSummary = getCommonGrayCard({
     uiFramework: "custom-containers",
     componentPath: "MultiItem",
     props: {
-      className: "applicant-summary",
+      className: "owner-summary",
       scheama: getCommonGrayCard({
-        applicantContainer: getCommonContainer({
-          mobileNo: getLabelWithValue(
-            {
-              labelName: "Mobile No.",
-              labelKey: "NOC_APPLICANT_MOBILE_NO_LABEL"
-            },
-            {
-              jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber"
-              // callBack: value => {
-              //   return value.split(".")[0];
-              // }
-            }
-          ),
-          applicantName: getLabelWithValue(
+        ownerContainer: getCommonContainer({
+          ownerName: getLabelWithValue(
             {
               labelName: "Name",
-              labelKey: "NOC_APPLICANT_NAME_LABEL"
+              labelKey: "PT_OWNERSHIP_INFO_NAME"
             },
             {
               jsonPath:
                 "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
-              // callBack: value => {
-              //   return value.split(".")[1];
-              // }
             }
-          ),
-          applicantGender: getLabelWithValue(
+          ), ownerFatherHusbandName: getLabelWithValue(
             {
-              labelName: "Gender",
-              labelKey: "NOC_GENDER_LABEL"
-            },
-            {
-              jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender"
-            }
-          ),
-          applicantFatherHusbandName: getLabelWithValue(
-            {
-              labelName: "Father/Husband's Name",
-              labelKey: "NOC_APPLICANT_FATHER_HUSBAND_NAME_LABEL"
+              labelName: "Guardian's Name",
+              labelKey: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"
             },
             {
               jsonPath:
                 "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].fatherOrHusbandName"
             }
-          ),
-          applicantDob: getLabelWithValue(
+          ),  ownerGender: getLabelWithValue(
             {
-              labelName: "Date of Birth",
-              labelKey: "NOC_APPLICANT_DOB_LABEL"
+              labelName: "Gender",
+              labelKey: "PT_OWNERSHIP_INFO_GENDER"
+            },
+            {
+              jsonPath:
+                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].gender"
+            }
+          ), ownerType: getLabelWithValue(
+            {
+              labelName: "Type of Ownership",
+              labelKey: "PT_FORM3_OWNERSHIP_TYPE"
+            },
+            {
+              jsonPath:
+                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].pan"
+            }
+          ),
+          mobileNo: getLabelWithValue(
+            {
+              labelName: "Mobile No.",
+              labelKey: "PT_OWNERSHIP_INFO_MOBILE_NO"
+            },
+            {
+              jsonPath:
+                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].mobileNumber"
+            }
+          ),  ownerEmail: getLabelWithValue(
+            {
+              labelName: "Email",
+              labelKey: "PT_OWNERSHIP_INFO_EMAIL_ID"
+            },
+            {
+              jsonPath:
+                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId"
+            }
+          ),       
+          ownerDob: getLabelWithValue(
+            {
+              labelName: "Special Category",
+              labelKey: "PT_OWNERSHIP_INFO_USER_CATEGORY"
             },
             {
               jsonPath:
@@ -128,30 +138,10 @@ export const applicantSummary = getCommonGrayCard({
               }
             }
           ),
-          applicantEmail: getLabelWithValue(
-            {
-              labelName: "Email",
-              labelKey: "NOC_APPLICANT_EMAIL_LABEL"
-            },
-            {
-              jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].emailId"
-            }
-          ),
-          applicantPan: getLabelWithValue(
-            {
-              labelName: "PAN",
-              labelKey: "NOC_APPLICANT_PAN_LABEL"
-            },
-            {
-              jsonPath:
-                "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].pan"
-            }
-          ),
-          applicantAddress: getLabelWithValue(
+          ownerAddress: getLabelWithValue(
             {
               labelName: "Correspondence Address",
-              labelKey: "NOC_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL"
+              labelKey: "PT_OWNERSHIP_INFO_CORR_ADDR"
             },
             {
               jsonPath:
@@ -165,14 +155,14 @@ export const applicantSummary = getCommonGrayCard({
       isReviewPage: true,
       sourceJsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
       prefixSourceJsonPath:
-        "children.cardContent.children.applicantContainer.children",
+        "children.cardContent.children.ownerContainer.children",
       afterPrefixJsonPath: "children.value.children.key"
     },
     type: "array"
   }
 });
 
-export const institutionSummary = getCommonGrayCard({
+export const transfereeInstitutionSummary = getCommonGrayCard({
   header: {
     uiFramework: "custom-atoms",
     componentPath: "Container",
@@ -186,7 +176,7 @@ export const institutionSummary = getCommonGrayCard({
         },
         ...getCommonSubHeader({
           labelName: "Institution Details",
-          labelKey: "NOC_INSTITUTION_DETAILS_HEADER"
+          labelKey: "PT_INSTITUTION_DETAILS_HEADER"
         })
       },
       editSection: {
@@ -212,7 +202,7 @@ export const institutionSummary = getCommonGrayCard({
           },
           buttonLabel: getLabel({
             labelName: "Edit",
-            labelKey: "NOC_SUMMARY_EDIT"
+            labelKey: "PT_EDIT"
           })
         },
         onClickDefination: {
@@ -228,7 +218,7 @@ export const institutionSummary = getCommonGrayCard({
     institutionType: getLabelWithValue(
       {
         labelName: "Institution Type",
-        labelKey: "NOC_INSTITUTION_TYPE_LABEL"
+        labelKey: "PT_OWNERSHIP_INFO_NAME_INSTI"
       },
       {
         jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
@@ -240,7 +230,7 @@ export const institutionSummary = getCommonGrayCard({
     institutionName: getLabelWithValue(
       {
         labelName: "Name of Institution",
-        labelKey: "NOC_NAME_OF_INSTITUTION_LABEL"
+        labelKey: "PT_OWNERSHIP_INFO_TYPE_INSTI"
       },
       {
         jsonPath:
@@ -250,7 +240,7 @@ export const institutionSummary = getCommonGrayCard({
     telephoneNumber: getLabelWithValue(
       {
         labelName: "Official Telephone No.",
-        labelKey: "NOC_OFFICIAL_TELEPHONE_LABEL"
+        labelKey: "PT_OWNERSHIP_INFO_TEL_NO"
       },
       {
         jsonPath:
@@ -260,7 +250,7 @@ export const institutionSummary = getCommonGrayCard({
     authorizedPersonName: getLabelWithValue(
       {
         labelName: "Name of Authorized Person",
-        labelKey: "NOC_AUTHORIZED_PERSON_NAME_LABEL"
+        labelKey: "PT_OWNERSHIP_INFO_NAME_OF_AUTH"
       },
       {
         jsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners[0].name"
@@ -269,7 +259,7 @@ export const institutionSummary = getCommonGrayCard({
     designation: getLabelWithValue(
       {
         labelName: "Designation in Institution",
-        labelKey: "NOC_DESIGNATION_LABEL"
+        labelKey: "PT_OWNERSHIP_INFO_DESIGNATION"
       },
       {
         jsonPath:
@@ -279,7 +269,7 @@ export const institutionSummary = getCommonGrayCard({
     mobileNumber: getLabelWithValue(
       {
         labelName: "Mobile No. of Authorized Person",
-        labelKey: "NOC_AUTHORIZED_PERSON_MOBILE_LABEL"
+        labelKey: "PT_OWNERSHIP_INFO_MOBILE_NO"
       },
       {
         jsonPath:
@@ -289,7 +279,7 @@ export const institutionSummary = getCommonGrayCard({
     authorizedEmail: getLabelWithValue(
       {
         labelName: "Email of Authorized Person",
-        labelKey: "NOC_AUTHORIZED_PERSON_EMAIL_LABEL"
+        labelKey: "PT_OWNERSHIP_INFO_EMAIL_ID"
       },
       {
         jsonPath:
@@ -299,7 +289,7 @@ export const institutionSummary = getCommonGrayCard({
     officialAddress: getLabelWithValue(
       {
         labelName: "Official Correspondence Address",
-        labelKey: "NOC_OFFICIAL_CORRESPONDENCE_ADDRESS_LABEL"
+        labelKey: "PT_OWNERSHIP_INFO_CORR_ADDR"
       },
       {
         jsonPath:

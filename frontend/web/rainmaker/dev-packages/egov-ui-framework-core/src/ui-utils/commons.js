@@ -371,7 +371,7 @@ export const handleFileUpload = (event, handleDocument, props) => {
 
 //localizations
 export const getTransformedLocale = label => {
-  return label.toUpperCase().replace(/[.:-\s\/]/g, "_");
+  return label&&label.toUpperCase().replace(/[.:-\s\/]/g, "_");
 };
 
 export const appendModulePrefix = (value, localePrefix) => {

@@ -44,6 +44,13 @@ class SingleApplication extends React.Component {
         default:
           return `/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
       }
+    } else if (moduleName === "PT-MUTATION") {
+      switch (item.fireNOCDetails.status) {
+        case "INITIATED":
+          return `/pt-mutation/apply?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
+        default:
+          return `/pt-mutation/search-preview?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
+      }
     }
   };
 
@@ -77,7 +84,7 @@ class SingleApplication extends React.Component {
     } else if (content.suffix) {
       LabelKey = `${get(item, content.jsonPath).replace(/[._:-\s\/]/g, "_")}${
         content.suffix
-      }`;
+        }`;
     } else {
       LabelKey = `${get(item, content.jsonPath)}`;
     }
@@ -140,26 +147,26 @@ class SingleApplication extends React.Component {
             );
           })
         ) : (
-          <div className="no-assessment-message-cont">
-            <Label
-              labelKey={"No results Found!"}
-              style={{ marginBottom: 10 }}
-            />
-            <Button
-              style={{
-                height: 36,
-                lineHeight: "auto",
-                minWidth: "inherit"
-              }}
-              className="assessment-button"
-              variant="contained"
-              color="primary"
-              onClick={this.onButtonCLick}
-            >
-              <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
-            </Button>
-          </div>
-        )}
+            <div className="no-assessment-message-cont">
+              <Label
+                labelKey={"No results Found!"}
+                style={{ marginBottom: 10 }}
+              />
+              <Button
+                style={{
+                  height: 36,
+                  lineHeight: "auto",
+                  minWidth: "inherit"
+                }}
+                className="assessment-button"
+                variant="contained"
+                color="primary"
+                onClick={this.onButtonCLick}
+              >
+                <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
+              </Button>
+            </div>
+          )}
       </div>
     );
   }
