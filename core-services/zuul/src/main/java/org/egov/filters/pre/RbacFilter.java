@@ -1,7 +1,7 @@
 package org.egov.filters.pre;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.node.*;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.extern.slf4j.Slf4j;
@@ -118,7 +118,16 @@ public class RbacFilter extends ZuulFilter {
 
                 stripRequestInfo(requestBody);
 
-                List<String> tenants = requestBody.findValuesAsText(REQUEST_TENANT_ID_KEY);
+                List<String> tenants = new LinkedList<>();
+
+                for (JsonNode node : requestBody.findValues(REQUEST_TENANT_ID_KEY)) {
+                    if (node.getNodeType() == JsonNodeType.ARRAY)
+                    {
+                        node.elements().forEachRemaining(n -> tenants.add(n.asText()));
+                    } else if (node.getNodeType() == JsonNodeType.STRING) {
+                        tenants.add(node.asText());
+                    }
+                }
                 if( ! tenants.isEmpty())
                 // Filtering null tenantids will be removed once fix is done in TL service.
                     tenants.forEach(tenant -> {
