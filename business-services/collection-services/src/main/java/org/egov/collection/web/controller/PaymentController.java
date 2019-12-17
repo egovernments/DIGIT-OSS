@@ -51,6 +51,7 @@ import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.model.PaymentResponse;
 import org.egov.collection.model.PaymentSearchCriteria;
+import org.egov.collection.model.enums.PaymentStatusEnum;
 import org.egov.collection.model.enums.ReceiptStatus;
 import org.egov.collection.service.PaymentService;
 import org.egov.collection.service.PaymentWorkflowService;
@@ -107,12 +108,12 @@ public class PaymentController {
                 && (CollectionUtils.isEmpty(paymentSearchCriteria.getStatus()))) {
             // Do not return ignored status for receipts by default
             Set<String> defaultStatus = new HashSet<>();
-            for (ReceiptStatus receiptStatus : ReceiptStatus.values()) {
-                if (!searchIgnoreStatus.contains(receiptStatus.toString())) {
-                    defaultStatus.add(receiptStatus.toString());
+            for (PaymentStatusEnum paymentStatus : PaymentStatusEnum.values()) {
+                if (!searchIgnoreStatus.contains(paymentStatus.toString())) {
+                    defaultStatus.add(paymentStatus.toString());
                 }
             }
-            paymentSearchCriteria.setInstrumentStatus(defaultStatus);
+            paymentSearchCriteria.setStatus(defaultStatus);
         }
         List<Payment> payments = paymentService.getPayments(requestInfo, paymentSearchCriteria);
 
