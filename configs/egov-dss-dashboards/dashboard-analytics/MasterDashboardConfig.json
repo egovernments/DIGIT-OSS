@@ -950,207 +950,6 @@
       "isActive": "",
       "style": "linear",
       "visualizations": [
-
-        {
-          "row": 1,
-          "name": "DSS_SERVICE",
-          "vizArray": [
-            {
-              "id": 412,
-              "name": "Overview",
-              "dimensions": {
-                "height": 350,
-                "width": 5
-              },
-              "vizType": "metric-collection",
-              "label": "Overview",
-              "noUnit": true,
-              "charts": [
-                {
-                  "id": "totalComplaints",
-                  "name": "DSS_PGR_TOTAL_COMPLAINTS",
-                  "code": "",
-                  "chartType": "metric",
-                  "filter": "",
-                  "headers": []
-                },
-                {
-                  "id": "closedComplaints",
-                  "name": "DSS_PGR_CLOSED_COMPLAINTS",
-                  "code": "",
-                  "chartType": "metric",
-                  "filter": "",
-                  "headers": []
-                },
-                {
-                  "id": "slaAchieved",
-                  "name": "DSS_SLA_ACHIEVED",
-                  "code": "",
-                  "chartType": "metric",
-                  "filter": "",
-                  "headers": []
-                },
-                {
-                  "id": "completionRate",
-                  "name": "DSS_PGR_COMPLETION_RATE",
-                  "code": "",
-                  "chartType": "metric",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            },
-            {
-              "id": 412,
-              "name": "DSS_TOTAL_CUMULATIVE_CLOSED_COMPLAINTS",
-              "dimensions": {
-                "height": 350,
-                "width": 7
-              },
-              "vizType": "chart",
-              "label": "",
-              "charts": [
-                {
-                  "id": "cumulativeClosedComplaints",
-                  "name": "Monthly",
-                  "code": "",
-                  "chartType": "line",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "row": 2,
-          "name": "DSS_SERVICE",
-          "vizArray": [
-            {
-              "id": 412,
-              "name": "DSS_TOTAL_COMPLAINTS_BY_SOURCE",
-              "dimensions": {
-                "height": 350,
-                "width": 7
-              },
-              "vizType": "chart",
-              "label": "",
-              "charts": [
-                {
-                  "id": "totalComplaintsbySource",
-                  "name": "Monthly",
-                  "code": "",
-                  "chartType": "line",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            },
-            {
-              "id": 413,
-              "name": "DSS_TOTAL_COMPLAINTS_STATUS",
-              "dimensions": {
-                "height": 350,
-                "width": 7
-              },
-              "vizType": "chart",
-              "label": "",
-              "charts": [
-                {
-                  "id": "totalComplaintsbyStatus",
-                  "name": "",
-                  "code": "",
-                  "chartType": "line",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "row": 3,
-          "name": "DSS_SERVICE",
-          "vizArray": [
-            {
-              "id": 421,
-              "name": "DSS_PGR_COMPLAINTS_BY_STATUS",
-              "dimensions": {
-                "height": 250,
-                "width": 4
-              },
-              "vizType": "chart",
-              "label": "",
-              "charts": [
-                {
-                  "id": "complaintsByStatus",
-                  "name": "DSS_PGR_COMPLAINTS_BY_STATUS",
-                  "code": "",
-                  "chartType": "pie",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            },
-            {
-              "id": 422,
-              "name": "DSS_PGR_COMPLAINTS_BY_CHANNEL",
-              "dimensions": {
-                "height": 250,
-                "width": 4
-              },
-              "vizType": "chart",
-              "charts": [
-                {
-                  "id": "complaintsByChannel",
-                  "name": "DSS_PGR_COMPLAINTS_BY_CHANNEL",
-                  "code": "",
-                  "chartType": "pie",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            },
-            {
-              "id": 423,
-              "name": "DSS_PGR_COMPLAINTS_BY_DEPARTMENT",
-              "dimensions": {
-                "height": 250,
-                "width": 4
-              },
-              "vizType": "chart",
-              "charts": [
-                {
-                  "id": "complaintsByDepartment",
-                  "name": "DSS_PGR_COMPLAINTS_BY_DEPARTMENT",
-                  "code": "",
-                  "chartType": "pie",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            },
-            {
-              "id": 423,
-              "name": "DSS_PGR_COMPLAINTS_BY_CATEGORY",
-              "dimensions": {
-                "height": 250,
-                "width": 4
-              },
-              "vizType": "chart",
-              "charts": [
-                {
-                  "id": "complaintsByCategory",
-                  "name": "DSS_PGR_COMPLAINTS_BY_CATEGORY",
-                  "code": "",
-                  "chartType": "pie",
-                  "filter": "",
-                  "headers": []
-                }
-              ]
-            }
-          ]
-        },
         {
           "row": 5,
           "name": "DSS_SERVICE",
@@ -1173,37 +972,21 @@
                   "headers": []
                 }
               ]
-            }
-          ]
-        },
-        {
-          "row": 4,
-          "name": "DSS_SERVICE",
-          "vizArray": [
+            },
             {
-              "id": 431,
-              "name": "DSS_PGR_STATUS_BY_TENANT",
+              "id": 452,
+              "name": "DSS_PGR_COMPLAINTS_BY_ULB",
               "dimensions": {
-                "height": 350,
-                "width": 12
+                "height": 250,
+                "width": 4
               },
               "vizType": "chart",
-              "label": "",
-              "noUnit": false,
               "charts": [
                 {
-                  "id": "pgrStatusByTenant",
-                  "name": "DSS_PGR_STATUS_BY_TENANT",
+                  "id": "complaintsByULB",
+                  "name": "DSS_PGR_COMPLAINTS_BY_ULB",
                   "code": "",
-                  "chartType": "table",
-                  "filter": "",
-                  "headers": []
-                },
-                {
-                  "id": "pgrStatusByDepartment",
-                  "name": "DSS_PGR_STATUS_BY_DEPARTMENT",
-                  "code": "",
-                  "chartType": "table",
+                  "chartType": "pie",
                   "filter": "",
                   "headers": []
                 }
@@ -1211,6 +994,7 @@
             }
           ]
         }
+       
       ]
     }
   ]
