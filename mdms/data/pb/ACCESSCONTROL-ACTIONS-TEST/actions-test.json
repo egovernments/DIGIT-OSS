@@ -15737,7 +15737,7 @@
       "enabled": true,
       "serviceCode": "BPA",
       "code": "null",
-      "navigationURL": "bpa/search",
+      "navigationURL": "egov-bpa/search",
       "path": "BPA.Search",
       "leftIcon": "places:business-center"
     },
