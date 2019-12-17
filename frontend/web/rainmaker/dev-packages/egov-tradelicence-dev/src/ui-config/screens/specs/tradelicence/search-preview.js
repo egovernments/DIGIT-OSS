@@ -3,7 +3,8 @@ import {
   getCommonCard,
   getCommonTitle,
   getCommonGrayCard,
-  getCommonContainer
+  getCommonContainer,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import generateReceipt from "../utils/receiptPdf";
 import get from "lodash/get";
@@ -22,7 +23,8 @@ import {
   createEstimateData,
   setMultiOwnerForSV,
   setValidToFromVisibilityForSV,
-  getDialogButton
+  getDialogButton,
+  showHideAdhocPopup
 } from "../utils";
 
 import { footerReview ,downloadPrintContainer} from "./applyResource/footer";
@@ -35,6 +37,8 @@ import { getReviewTrade } from "./applyResource/review-trade";
 import { getReviewOwner } from "./applyResource/review-owner";
 import { getReviewDocuments } from "./applyResource/review-documents";
 import { loadReceiptGenerationData } from "../utils/receiptTransformer";
+import { adhocPopup } from "./applyResource/adhocPopup";
+
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -454,6 +458,27 @@ export const tradeReviewDetails = getCommonCard({
     "TL_PAYMENT_VIEW_BREAKUP",
     "search-preview"
   ),
+  addPenaltyRebateButton: {
+    componentPath: "Button",
+    props: {
+      color: "primary",
+      style: {}
+    },
+    children: {
+      previousButtonLabel: getLabel({
+        labelName: "ADD REBATE/PENALTY",
+        labelKey: "TL_PAYMENT_ADD_RBT_PEN"
+      })
+    },
+    onClickDefination: {
+      action: "condition",
+      callBack: showHideAdhocPopup
+    },
+    // roleDefination: {
+    //   rolePath: "user-info.roles",
+    //   roles: ["TL_APPROVER"]
+    // }
+  },
   reviewTradeDetails,
   reviewOwnerDetails,
   reviewDocumentDetails
@@ -463,7 +488,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
   beforeInitScreen: (action, state, dispatch) => {
-    
+
     const status = getQueryArg(window.location.href, "status");
     const tenantId = getQueryArg(window.location.href, "tenantId");
     applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -583,6 +608,19 @@ const screenConfig = {
         open: false,
         maxWidth: "md",
         screenKey: "search-preview"
+      }
+    },
+    adhocDialog: {
+      uiFramework: "custom-containers-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "DialogContainer",
+      props: {
+        open: false,
+        maxWidth: "sm",
+        screenKey: "search-preview"
+      },
+      children: {
+        popup: adhocPopup
       }
     }
   }

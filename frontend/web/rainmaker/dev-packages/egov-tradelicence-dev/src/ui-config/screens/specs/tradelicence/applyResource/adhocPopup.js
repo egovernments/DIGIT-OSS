@@ -40,53 +40,53 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
   );
 
   //get deep copy of bill in redux - merge new bill after adhoc
-  const billInRedux = cloneDeep(
-    get(state.screenConfiguration.preparedFinalObject, "ReceiptTemp[0].Bill[0]")
-  );
-  const mergedBillObj = { ...billInRedux, ...billPayload.billResponse.Bill[0] };
+  // const billInRedux = cloneDeep(
+  //   get(state.screenConfiguration.preparedFinalObject, "ReceiptTemp[0].Bill[0]")
+  // );
+  // const mergedBillObj = { ...billInRedux, ...billPayload.billResponse.Bill[0] };
 
   //merge bill in Receipt obj
-  billPayload &&
-    dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0]", mergedBillObj));
+  // billPayload &&
+  //   dispatch(prepareFinalObject("ReceiptTemp[0].Bill[0]", mergedBillObj));
 
   //set amount paid as total amount from bill
-  billPayload &&
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].Bill[0].billDetails[0].amountPaid",
-        billPayload.billResponse.Bill[0].billDetails[0].totalAmount
-      )
-    );
+  // billPayload &&
+  //   dispatch(
+  //     prepareFinalObject(
+  //       "ReceiptTemp[0].Bill[0].billDetails[0].amountPaid",
+  //       billPayload.billResponse.Bill[0].billDetails[0].totalAmount
+  //     )
+  //   );
 
   //set total amount in instrument
-  billPayload &&
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].instrument.amount",
-        billPayload.billResponse.Bill[0].billDetails[0].totalAmount
-      )
-    );
+  // billPayload &&
+  //   dispatch(
+  //     prepareFinalObject(
+  //       "ReceiptTemp[0].instrument.amount",
+  //       billPayload.billResponse.Bill[0].billDetails[0].totalAmount
+  //     )
+  //   );
 
   //Collection Type Added in CS v1.1
-  const totalAmount = get(
-    billPayload,
-    "billResponse.Bill[0].billDetails[0].totalAmount"
-  );
-  dispatch(
-    prepareFinalObject(
-      "ReceiptTemp[0].Bill[0].billDetails[0].collectionType",
-      "COUNTER"
-    )
-  );
-  if (totalAmount) {
-    //set amount paid as total amount from bill - destination changed in CS v1.1
-    dispatch(
-      prepareFinalObject(
-        "ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid",
-        totalAmount
-      )
-    );
-  }
+  // const totalAmount = get(
+  //   billPayload,
+  //   "billResponse.Bill[0].billDetails[0].totalAmount"
+  // );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "ReceiptTemp[0].Bill[0].billDetails[0].collectionType",
+  //     "COUNTER"
+  //   )
+  // );
+  // if (totalAmount) {
+  //   //set amount paid as total amount from bill - destination changed in CS v1.1
+  //   dispatch(
+  //     prepareFinalObject(
+  //       "ReceiptTemp[0].Bill[0].taxAndPayments[0].amountPaid",
+  //       totalAmount
+  //     )
+  //   );
+  // }
 
   showHideAdhocPopup(state, dispatch);
 };
