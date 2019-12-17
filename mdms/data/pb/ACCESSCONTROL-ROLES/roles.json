@@ -404,9 +404,14 @@
       "description": "BPA Stakeholder workflow document verifier"
     },
     {
-      "code": "BPAREG_EMPLOYEE",
-      "name": "BPAREG Employee",
-      "description": "BPA Stakeholder Employee"
+      "code": "BPA_APPROVER",
+      "name": "BPA Services Approver",
+      "description": "BPA Services workflow Approver"
+    },
+    {
+      "code": "BPA_VERIFIER",
+      "name": "BPA Services verifier",
+      "description": "BPA Services workflow document & field inspection verifier"
     }
   ]
 }
