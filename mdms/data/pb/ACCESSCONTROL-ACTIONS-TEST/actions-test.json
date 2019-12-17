@@ -11089,6 +11089,7 @@
       "code": "null",
       "path": "Complaints.CreateComplaint",
       "navigationURL": "create-complaint",
+      "quickAction": true,
       "leftIcon": "content:add",
       "rightIcon": ""
     },
@@ -11357,6 +11358,7 @@
       "lastModifiedBy": null,
       "path": "Property Tax.Assess And Search Properties",
       "navigationURL": "property-tax/search-property",
+      "quickAction": true,
       "leftIcon": "communication:business",
       "rightIcon": ""
     },
@@ -13934,6 +13936,7 @@
       "path": "",
       "navigationURL": "all-complaints",
       "leftIcon": "action:announcement",
+      "quickAction": true,
       "rightIcon": "",
       "queryParams": ""
     },
@@ -13981,7 +13984,9 @@
       "code": "",
       "path": "",
       "navigationURL": "tradelicence/search",
+      "quickAction": true,
       "leftIcon": "places:business-center",
+      
       "rightIcon": "",
       "queryParams": ""
     },
@@ -14766,6 +14771,7 @@
       "serviceCode": "TradeLicense",
       "code": "null",
       "navigationURL": "tradelicence/apply",
+      "quickAction": true,
       "path": "TradeLicense.Apply",
       "leftIcon": "places:business-center"
     },
