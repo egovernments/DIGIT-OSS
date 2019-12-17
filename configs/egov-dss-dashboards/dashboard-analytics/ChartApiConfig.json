@@ -1737,6 +1737,29 @@
     },
     "_comment": " Complaints By Category "
   },
+  "complaintsByULB": {
+    "chartName": "DSS_PGR_COMPLAINTS_BY_ULB",
+    "queries": [
+      {
+        "module": "PGR",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId\"}",
+        "dateRefField": "Data.dateOfComplaint",
+        "indexName": "pgrindex-v1",
+        "aggrQuery": "{\"aggs\":{\"Complaints By ULB\":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}}"
+      }
+    ],
+    "chartType": "pie",
+    "valueType": "number",
+    "action": "",
+    "documentType": "_doc",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "Complaints By ULB"
+    ],
+    "insight": {
+    },
+    "_comment": " Complaints By ULB "
+  },
   "pgrStatusByTenant": {
     "chartName": "DSS_PGR_STATUS_BY_TENANT",
     "queries": [
