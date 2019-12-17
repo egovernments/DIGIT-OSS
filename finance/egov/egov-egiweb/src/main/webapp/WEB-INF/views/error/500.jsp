@@ -58,6 +58,21 @@
             <hr/>
         </div>
     </c:when>
+    <c:when test="${not empty microServiceError}">
+        <div class="alert alert-danger" role="alert">
+            <i class="fa fa-exclamation-triangle error-symbol"></i>
+            <hr/>
+            <spring:message code="error.500" var="altError"/>
+            <p style="color:#000;font-size:17px"><spring:message code="${error}" text="${altError}"/></p>
+            <div align="center">
+            <p style="color:#000;font-size:17px">Status Code :   ${statusCode}</p>
+            <p style="color:#000;font-size:17px">Message :   ${message}</p>
+            <p style="color:#000;font-size:17px">Status Text :   ${statusText}</p>
+            <p style="color:#000;font-size:17px">Url :   ${url}</p>
+            </div>
+            <hr/>
+        </div>
+    </c:when>
     <c:otherwise>
         <div class="alert alert-danger" role="alert">
             <i class="fa fa-exclamation-triangle error-symbol"></i>

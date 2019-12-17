@@ -77,12 +77,15 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.RoleService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.config.properties.ApplicationPropertiesManager;
+import org.egov.infra.exception.MicroServiceHttpClientErrorException;
 import org.egov.infra.microservice.contract.ActionRequest;
 import org.egov.infra.microservice.contract.ActionResponse;
 import org.egov.infra.microservice.contract.CreateUserRequest;
@@ -126,9 +129,14 @@ import org.egov.infra.microservice.models.MdmsCriteria;
 import org.egov.infra.microservice.models.MdmsCriteriaReq;
 import org.egov.infra.microservice.models.MdmsResponse;
 import org.egov.infra.microservice.models.ModuleDetail;
+import org.egov.infra.microservice.models.Payment;
+import org.egov.infra.microservice.models.PaymentRequest;
+import org.egov.infra.microservice.models.PaymentResponse;
+import org.egov.infra.microservice.models.PaymentUtils;
 import org.egov.infra.microservice.models.Receipt;
 import org.egov.infra.microservice.models.ReceiptRequest;
 import org.egov.infra.microservice.models.ReceiptResponse;
+import org.egov.infra.microservice.models.ReceiptSearchCriteria;
 import org.egov.infra.microservice.models.Remittance;
 import org.egov.infra.microservice.models.RemittanceRequest;
 import org.egov.infra.microservice.models.RemittanceResponse;
@@ -157,15 +165,14 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.jayway.jsonpath.JsonPath;
 
 @Service
@@ -196,9 +203,6 @@ public class MicroserviceUtils {
 
     @Value("${egov.services.workflow.url}")
     private String workflowServiceUrl;
-
-    @Value("${egov.services.user.create.url}")
-    private String userServiceUrl;
 
     @Value("${egov.services.user.approvers.url}")
     private String approverSrvcUrl;
@@ -282,8 +286,17 @@ public class MicroserviceUtils {
     @Value("${egov.services.egov-indexer.url}")
     private String egovIndexerUrl;
     
+    @Value("{egov.service.application.version:V1}")
+    private String appVer; 
+    
+    @Autowired
+    private ApplicationPropertiesManager appPropMgr;
+    
     private ObjectMapper mapper;
     SimpleDateFormat ddMMMyyyyFormat = new SimpleDateFormat("dd-MMM-yyyy");
+    
+    @Autowired
+    private PaymentUtils paymentUtils;
     
     public MicroserviceUtils() {
         mapper = new ObjectMapper();
@@ -332,19 +345,19 @@ public class MicroserviceUtils {
     }
 
     public void createUserMicroservice(final User user) {
-        if (isNotBlank(userServiceUrl)) {
-
+        if (isNotBlank(appPropMgr.getEgovServcUserCreateUrl())) {
+            
             if (user.getRoles().isEmpty() && user.getType().equals(UserType.CITIZEN))
                 user.addRole(roleService.getRoleByName(CITIZEN_ROLE_NAME));
-
+            
             final CreateUserRequest createUserRequest = new CreateUserRequest();
             final UserRequest userRequest = new UserRequest(user, getTenentId());
             createUserRequest.setUserRequest(userRequest);
             createUserRequest.setRequestInfo(createRequestInfo());
-
+            
             final RestTemplate restTemplate = new RestTemplate();
             try {
-                restTemplate.postForObject(userServiceUrl, createUserRequest, UserDetailResponse.class);
+                restTemplate.postForObject(appPropMgr.getEgovServcUserCreateUrl(), createUserRequest, UserDetailResponse.class);
             } catch (final Exception e) {
                 final String errMsg = "Exception while creating User in microservice ";
                 // throw new ApplicationRuntimeException(errMsg, e);
@@ -372,7 +385,7 @@ public class MicroserviceUtils {
     private HashMap getFinanceMdmsObj() {
         HashMap mdmObj = null;
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
-        this.prepareModuleDetails(moduleDetailsList , "common-masters", "mapping", null, null);
+        this.prepareModuleDetails(moduleDetailsList , "common-masters", "mapping", null, null, String.class);
         Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
         if(postForObject != null){
             mdmObj = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.common-masters.mapping[0]"),HashMap.class);
@@ -473,7 +486,7 @@ public class MicroserviceUtils {
 }
     
     public JSONArray getFinanceMdmsByModuleNameAndMasterDetails(String moduleName,String name, FilterRequest filter){
-        String mdmsUrl = this.hostUrl + this.mdmsSearchUrl;
+        String mdmsUrl = appPropMgr.getEgovServiceHost() + appPropMgr.getEgovServcMasterMdmsSearchUrl();
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(getUserToken());
         MasterDetail masterDetail = new MasterDetail();
@@ -521,7 +534,7 @@ public class MicroserviceUtils {
                 return mdmsmap.get(name);
             }
         } catch (Exception e) {
-           e.printStackTrace();
+            e.printStackTrace();
         }
         return null;
     }
@@ -531,26 +544,18 @@ public class MicroserviceUtils {
     }
 
     public List<EmployeeInfo> getApprovers(String departmentId, String designationId) {
-
+        EmployeeInfoResponse empResponse = null;
         final RestTemplate restTemplate = createRestTemplate();
-
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-        final String approver_url = approverSrvcUrl + "?tenantId=" + getTenentId() + "&departments="
+        final String approver_url = appPropMgr.getEgovServcUserApprvrUrl() + "?tenantId=" + getTenentId() + "&departments="
                 + departmentId + "&designations="+designationId;
-//                +"&asOnDate="+ getEpochDate();
-
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-        // tenantId=default&assignment.departmentId=1&assignment.designationId=1&asOnDate=28/07/2018
-
         requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(getEpochDate(new Date()));
-        
         reqWrapper.setRequestInfo(requestInfo);
-
-        EmployeeInfoResponse empResponse = restTemplate.postForObject(approver_url, reqWrapper, EmployeeInfoResponse.class);
-         return empResponse.getEmployees();
+        empResponse = restTemplate.postForObject(approver_url, reqWrapper, EmployeeInfoResponse.class);
+        return empResponse.getEmployees();
     }
 
     public EmployeeInfo getEmployeeByPositionId(Long positionId) {
@@ -885,7 +890,8 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String url = hostUrl + taxperiodsSearchUrl + "?tenantId=" + getTenentId() + "&service=" + type;
+//        final String url = hostUrl + taxperiodsSearchUrl + "?tenantId=" + getTenentId() + "&service=" + type;
+        final String url = "http://localhost:8096/" + taxperiodsSearchUrl + "?tenantId=" + getTenentId() + "&service=" + type;
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
@@ -898,53 +904,31 @@ public class MicroserviceUtils {
         else
             return null;
     }
-
+    
     public List<BankAccountServiceMapping> getBankAcntServiceMappings() {
+        return this.getBankAcntServiceMappings(null, null);
+    }
 
-        final RestTemplate restTemplate = createRestTemplate();
-        final String url = hostUrl + bankAccountServiceMappingSearchUrl + "?tenantId=" + getTenentId();
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setUserInfo(getUserInfo());
-        reqWrapper.setRequestInfo(requestInfo);
-
-        BankAccountServiceMappingResponse response = restTemplate.postForObject(url, reqWrapper,
-                BankAccountServiceMappingResponse.class);
-        if (response != null && response.getBankAccountServiceMapping() != null)
-            return response.getBankAccountServiceMapping();
-        else
-            return null;
+    public List<BankAccountServiceMapping> getBankAcntServiceMappings(String bankAccount, String businessDetails) {
+        List<BankAccountServiceMapping> basm = Collections.EMPTY_LIST;
+        List<ModuleDetail> moduleDetailList = new ArrayList<>();
+        try {
+            this.prepareModuleDetails(moduleDetailList, "FinanceModule", "BankAccountServiceMapping", bankAccount != null ?  "bankAccount" : null, bankAccount != null ?  bankAccount : null, String.class);
+            this.prepareModuleDetails(moduleDetailList, "FinanceModule", "BankAccountServiceMapping", businessDetails != null ?  "businessDetails" : null, businessDetails != null ?  businessDetails : null, String.class);
+            Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailList, false, null, null), Map.class);
+            if (postForObject != null) {
+                basm = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.FinanceModule.BankAccountServiceMapping"),
+                        new TypeReference<List<BankAccountServiceMapping>>() {
+                        });
+            }
+        } catch (Exception e) {
+            LOGGER.error("ERROR occurred while fetching header name of tenant in getHeaderNameForTenant : ", e);
+        }
+        return basm;
     }
 
     public List<BankAccountServiceMapping> getBankAcntServiceMappingsByBankAcc(String bankAccount, String businessDetails) {
-
-        final RestTemplate restTemplate = createRestTemplate();
-        String url = hostUrl + bankAccountServiceMappingSearchUrl + "?tenantId=" + getTenentId();
-
-        if (bankAccount != null && !bankAccount.isEmpty() && !bankAccount.equalsIgnoreCase("-1")) {
-            url = url + "&bankAccount="
-                    + bankAccount;
-        }
-        if (businessDetails != null && !businessDetails.isEmpty() && !businessDetails.equalsIgnoreCase("-1")) {
-            url = url + "&businessDetails="
-                    + businessDetails;
-        }
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        reqWrapper.setRequestInfo(requestInfo);
-
-        BankAccountServiceMappingResponse response = restTemplate.postForObject(url, reqWrapper,
-                BankAccountServiceMappingResponse.class);
-        if (response != null && response.getBankAccountServiceMapping() != null)
-            return response.getBankAccountServiceMapping();
-        else
-            return null;
+        return this.getBankAcntServiceMappings(bankAccount, businessDetails);
     }
 
     public List<BankAccountServiceMapping> createBankAcntServiceMappings(BankAccountServiceMapping basm) {
@@ -996,7 +980,8 @@ public class MicroserviceUtils {
     }
     
     public List<Instrument> getInstrumentsBySearchCriteria(InstrumentSearchContract insSearchContra) {
-        StringBuilder url = new StringBuilder().append(hostUrl).append(instrumentSearchUrl)
+            StringBuilder url = new StringBuilder().append("http://localhost:8097/").append(instrumentSearchUrl)
+//        StringBuilder url = new StringBuilder().append(hostUrl).append(instrumentSearchUrl)
                 .append("?tenantId=").append(getTenentId());
         if(StringUtils.isNotBlank(insSearchContra.getIds())){
            url.append("&ids=").append(insSearchContra.getIds());
@@ -1054,58 +1039,85 @@ public class MicroserviceUtils {
     }
 
     public List<Receipt> getReceipts(String ids, String status, String serviceCodes, Date fromDate, Date toDate) {
-        String url = hostUrl + receiptSearchUrl + "?tenantId=" + getTenentId() + "&status=" + status
-                + "&businessCodes=" + serviceCodes + "&fromDate=" + fromDate.getTime() + "&toDate="
-                + toDate.getTime();
-        if(StringUtils.isBlank(ids)){
-            url += "&receiptNumbers=''";
-        }else{
-            url += "&receiptNumbers=" + ids;
+        ReceiptSearchCriteria criteria = new ReceiptSearchCriteria().builder()
+                .status(Arrays.stream(status.split(",")).collect(Collectors.toSet()))
+                .fromDate(fromDate)
+                .toDate(toDate)
+                .receiptNumbers(Arrays.stream(ids.split(",")).collect(Collectors.toSet()))
+                .businessCodes(Arrays.stream(serviceCodes.split(",")).collect(Collectors.toSet()))
+                .build();
+        return this.getReceipt(criteria);
+    }
+    
+    public List<Receipt> getReceipt(ReceiptSearchCriteria rSearchcriteria) {
+        // Checking for the collection version either older version or new version are getting used
+        List<Receipt> receipts = new ArrayList<>();
+        switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
+        case "V2":
+        case "VERSION2":
+            PaymentSearchCriteria paySearchCriteria=new PaymentSearchCriteria();
+            rSearchcriteria.toPayemntSerachCriteriaContract(paySearchCriteria);
+            List<Payment> payments = this.getPayments(paySearchCriteria);
+            paymentUtils.getReceiptsFromPayments(payments, receipts);
+            break;
+
+        default:
+            RequestInfo requestInfo = new RequestInfo();
+            RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+            requestInfo.setAuthToken(getUserToken());
+            requestInfo.setUserInfo(getUserInfo());
+            reqWrapper.setRequestInfo(requestInfo);
+            StringBuilder url = new StringBuilder();
+            url.append(hostUrl).append(receiptSearchUrl).append("tenantId=").append(getTenentId());
+            prepareReceiptSearchUrl(rSearchcriteria, url);
+            LOGGER.info("call:" + url.toString());
+            ReceiptResponse response = restTemplate.postForObject(url.toString(), reqWrapper, ReceiptResponse.class);
+            receipts = response.getReceipts();
         }
+        return receipts;
+    }
 
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setUserInfo(getUserInfo());
-        reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:" + url);
-        ReceiptResponse response = restTemplate.postForObject(url, reqWrapper, ReceiptResponse.class);
-
-        return response.getReceipts();
+    private void prepareReceiptSearchUrl(ReceiptSearchCriteria criteria, StringBuilder url) {
+        if(CollectionUtils.isNotEmpty(criteria.getIds())){
+            url.append("&receiptNumbers=").append(StringUtils.join(criteria.getIds(), ","));
+        }
+        if(StringUtils.isNotBlank(criteria.getDepartment())){
+            url.append("&department=").append(criteria.getDepartment());
+        }
+        if(StringUtils.isNotBlank(criteria.getFund())){
+            url.append("&fund=").append(criteria.getFund());
+        }
+        if(CollectionUtils.isNotEmpty(criteria.getBusinessCodes())){
+            url.append("&businessCodes=").append(criteria.getBusinessCodes());
+        }
+        if(criteria.getFromDate() != null){
+            url.append("&fromDate=").append(criteria.getFromDate().getTime());
+        }
+        if(criteria.getToDate() != null){
+            url.append("&toDate=").append(criteria.getToDate().getTime());
+        }
+        if(StringUtils.isNotBlank(criteria.getClassification())){
+            url.append("&classification=").append(criteria.getClassification());
+        }
     }
 
     public List<Receipt> getReceipts(String receiptNumbers) {
-        final String url = hostUrl + receiptSearchUrl + "?tenantId=" + getTenentId() + "&receiptNumbers=" + receiptNumbers;
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setUserInfo(getUserInfo());
-        reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:" + url);
-        ReceiptResponse response = restTemplate.postForObject(url, reqWrapper, ReceiptResponse.class);
-
-        return response.getReceipts();
+        ReceiptSearchCriteria criteria = new ReceiptSearchCriteria().builder()
+                .receiptNumbers(Arrays.stream(receiptNumbers.split(",")).collect(Collectors.toSet()))
+                .build();
+        return this.getReceipt(criteria);
     }
 
     public List<Receipt> getReceipts(String status, String serviceCode, String fund, String department, String receiptDate) {
-        final String url = hostUrl + receiptSearchUrl + "?tenantId=" + getTenentId() + "&status=" + status
-                + "&businessCodes=" + serviceCode + "&fund=" + fund + "&department=" + department + "&fromDate="
-                + DateUtils.toDateUsingDefaultPattern(receiptDate).getTime() + "&toDate="
-                + DateUtils.toDateUsingDefaultPattern(receiptDate).getTime();
-
-        RequestInfo requestInfo = new RequestInfo();
-        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setUserInfo(getUserInfo());
-        reqWrapper.setRequestInfo(requestInfo);
-        LOGGER.info("call:" + url);
-        ReceiptResponse response = restTemplate.postForObject(url, reqWrapper, ReceiptResponse.class);
-
-        return response.getReceipts();
+        ReceiptSearchCriteria criteria = new ReceiptSearchCriteria().builder()
+                .status(Arrays.stream(status.split(",")).collect(Collectors.toSet()))
+                .businessCodes(Arrays.stream(serviceCode.split(",")).collect(Collectors.toSet()))
+                .fund(fund)
+                .department(department)
+                .fromDate(DateUtils.toDateUsingDefaultPattern(receiptDate))
+                .toDate(DateUtils.toDateUsingDefaultPattern(receiptDate))
+                .build();
+        return this.getReceipt(criteria);
     }
 
     public List<Receipt> searchReciepts(String classification, Date fromDate, Date toDate, String businessCode,
@@ -1117,36 +1129,14 @@ public class MicroserviceUtils {
 
     public List<Receipt> searchReciepts(String classification, Date fromDate, Date toDate, String businessCode,
             List<String> receiptNos) {
-        final StringBuilder url = new StringBuilder(hostUrl + receiptSearchUrl);
-        final RequestInfoWrapper request = new RequestInfoWrapper();
-        final RequestInfo requestinfo = new RequestInfo();
-
-        String tenantId = getTenentId();
-        requestinfo.setAuthToken(getUserToken());
-        requestinfo.setUserInfo(getUserInfo());
-        request.setRequestInfo(requestinfo);
-
-        url.append("?tenantId=" + tenantId);
-
-        if (null != classification)
-            url.append("&classification=" + classification);
-
-        if (null != fromDate)
-            url.append("&fromDate=" + fromDate.getTime());
-
-        if (null != toDate)
-            url.append("&toDate=" + toDate.getTime());
-
-        if (null != businessCode)
-            url.append("&businessCode=" + businessCode);
-
-        if (null != receiptNos && receiptNos.size() > 0) {
-            url.append("&receiptNumbers=" + StringUtils.join(receiptNos, ","));
-        }
-
-        ReceiptResponse response = restTemplate.postForObject(url.toString(), request, ReceiptResponse.class);
-
-        return response.getReceipts();
+        ReceiptSearchCriteria criteria = new ReceiptSearchCriteria().builder()
+                .fromDate(fromDate)
+                .toDate(toDate)
+                .businessCodes(Arrays.stream(businessCode.split(",")).collect(Collectors.toSet()))
+                .receiptNumbers(receiptNos.stream().collect(Collectors.toSet()))
+                .classification(classification)
+                .build();
+        return this.getReceipt(criteria);
     }
 
     public InstrumentResponse reconcileInstruments(List<Instrument> instruments, String depositedBankAccountNum) {
@@ -1174,7 +1164,8 @@ public class MicroserviceUtils {
     }
 
     public RemittanceResponse createRemittance(List<Remittance> remittanceList) {
-        final StringBuilder url = new StringBuilder(hostUrl + remittanceCreateUrl);
+//        final StringBuilder url = new StringBuilder(hostUrl + remittanceCreateUrl);
+        final StringBuilder url = new StringBuilder("http://localhost:8095/collection-services/remittances/_create");
         RemittanceRequest request = new RemittanceRequest();
         request.setRemittances(remittanceList);
         final RequestInfo requestInfo = new RequestInfo();
@@ -1358,6 +1349,7 @@ public class MicroserviceUtils {
     
     public void pushDataToIndexer(Object data, String topicName){
         try {
+            egovIndexerUrl = "http://localhost:8095/egov-indexer/index-operations/{financeTopic}/_index";
             Object postForObject = restTemplate.postForObject(egovIndexerUrl, data, Object.class, topicName);
         } catch (Exception e) {
             Log.error("ERROR occurred while trying to push the data to indexer : ", e);
@@ -1365,7 +1357,8 @@ public class MicroserviceUtils {
     }
     
     public Object getMdmsData(List<ModuleDetail> moduleDetails,boolean isStateLevel, String tenantId, String token){
-        String mdmsUrl = this.hostUrl + this.mdmsSearchUrl;
+//        String mdmsUrl = this.hostUrl + this.mdmsSearchUrl;
+        String mdmsUrl = "http://localhost:8094/egov-mdms-service/v1/_search";
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(token != null && !token.isEmpty() ? token : getUserToken());
         MdmsCriteria mdmscriteria = new MdmsCriteria();
@@ -1390,7 +1383,7 @@ public class MicroserviceUtils {
         List<ModuleDetail> moduleDetailList = new ArrayList<>();
         String tenentId = getTenentId();
         try {
-            this.prepareModuleDetails(moduleDetailList, "tenant", "tenants", "code", tenentId);
+            this.prepareModuleDetails(moduleDetailList, "tenant", "tenants", "code", tenentId, String.class);
             Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailList, true, null, null), Map.class);
             if(postForObject != null){
                 ulbGrade = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.tenant.tenants[0].city.ulbGrade"),String.class);
@@ -1403,36 +1396,56 @@ public class MicroserviceUtils {
         return tenentId.split(Pattern.quote("."))[1]+" "+(ulbGrade != null ? ulbGrade : "");
     }
     
-    private void prepareModuleDetails(List<ModuleDetail> moduleDetailsList,String moduleNme,String masterName,String filterKey, String filterValue){
+    private void prepareModuleDetails(List<ModuleDetail> moduleDetailsList,String moduleNme,String masterName,String filterKey, String filterValue, Class filterType){
         List<MasterDetail> masterDetails = new ArrayList<>();
         ListIterator<ModuleDetail> listIterator = moduleDetailsList.listIterator();
         while(listIterator.hasNext()){
              ModuleDetail existModName = listIterator.next();
             if(existModName.getModuleName().equals(moduleNme)){
-                this.prepareMasterDetails(existModName.getMasterDetails(), masterName, filterKey, filterValue);
+                this.prepareMasterDetails(existModName.getMasterDetails(), masterName, filterKey, filterValue, filterType);
                 listIterator.remove();
                 listIterator.add(existModName);
                 return;
             }
         }
-        this.prepareMasterDetails(masterDetails , masterName, filterKey, filterValue);
+        this.prepareMasterDetails(masterDetails , masterName, filterKey, filterValue, filterType);
         moduleDetailsList.add(new ModuleDetail(moduleNme, masterDetails));
     }
     
-    private void prepareMasterDetails(List<MasterDetail> masterDetailList,String masterName,String filterKey,String filterValue){
-        for(MasterDetail md : masterDetailList){
-            if(md.getName().equals(masterName))
-                break;
-        }
+    private void prepareMasterDetails(List<MasterDetail> masterDetailList,String masterName,String filterKey,String filterValue, Class filterType){
         String filter = null;
+        StringBuilder filterBuilder = new StringBuilder();
+        ListIterator<MasterDetail> listIterator = masterDetailList.listIterator();
+        while(listIterator.hasNext()){
+            MasterDetail md = listIterator.next();
+            if(md.getName().equals(masterName)){
+                if(StringUtils.isNotBlank(filterKey) && StringUtils.isNotBlank(filterValue)){
+                    String oldFilter = md.getFilter();
+                    if(StringUtils.isNotBlank(oldFilter)){
+                        String newFilter = oldFilter.substring(0, oldFilter.length()-2);
+                        filterBuilder.append(newFilter).append(" && ").append("@.").append(filterKey).append(" in [").append(getSingleQuoteBasedOnType(filterType)).append(filterValue).append(getSingleQuoteBasedOnType(filterType)).append("])]");
+                    }else{
+                        filterBuilder.append("[?(@.").append(filterKey).append(" in [").append(getSingleQuoteBasedOnType(filterType)).append(filterValue).append(getSingleQuoteBasedOnType(filterType)).append("])]");
+                    }
+                    listIterator.remove();
+                    filter = filterBuilder.toString();
+                    masterDetailList.add(new MasterDetail(masterName, filter));
+                }
+                return;
+            }
+        }
         if(filterKey != null && filterValue != null){
-            StringBuilder filterBuilder = new StringBuilder();
-            filterBuilder.append("[?(@.").append(filterKey).append(" in [").append(filterValue).append("])]");
+            filterBuilder.append("[?(@.").append(filterKey).append(" in [").append(getSingleQuoteBasedOnType(filterType)).append(filterValue).append(getSingleQuoteBasedOnType(filterType)).append("])]");
             filter = filterBuilder.toString();
         }
         masterDetailList.add(new MasterDetail(masterName, filter));
     }
     
+    private String getSingleQuoteBasedOnType(Class filterType) {
+        String string = filterType.getSimpleName().equalsIgnoreCase("Boolean") ||  filterType.getSimpleName().equalsIgnoreCase("Long") ?  "" : "'";
+        return string;
+    }
+
     public String getBusinessServiceNameByCode(String code){
         String serviceName = "";
         try {
@@ -1450,7 +1463,7 @@ public class MicroserviceUtils {
         List<BusinessService> list = null;
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
         try {
-            this.prepareModuleDetails(moduleDetailsList , "BillingService", "BusinessService", "code", codes);
+            this.prepareModuleDetails(moduleDetailsList , "BillingService", "BusinessService", "code", codes, String.class);
             Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
             if(postForObject != null){
                 return list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.BillingService.BusinessService"),new TypeReference<List<BusinessService>>(){});
@@ -1464,7 +1477,7 @@ public class MicroserviceUtils {
     public List<BusinessService> getBusinessService(String type) {
         List<BusinessService> list = null;
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
-        this.prepareModuleDetails(moduleDetailsList, "BillingService", "BusinessService", "type", type);
+        this.prepareModuleDetails(moduleDetailsList, "BillingService", "BusinessService", "type", type, String.class);
         Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
         if(postForObject != null){
              list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.BillingService.BusinessService"),new TypeReference<List<BusinessService>>(){});
@@ -1480,9 +1493,14 @@ public class MicroserviceUtils {
             field.setAccessible(true);
             String fieldName = field.getName();
             String fieldValue = null;
+            Class<?> fieldType = String.class;
             try {
                 if(field.getType().equals(Boolean.TYPE)){
                     fieldValue = (Boolean)field.get(criteria) ? "true" : "false";
+                     fieldType = Boolean.class;
+                }else if(field.getType().equals(Long.TYPE)){
+                    fieldValue = (String)field.get(criteria);
+                    fieldType = Long.class;
                 }else{
                     fieldValue = (String)field.get(criteria);
                 }
@@ -1490,7 +1508,7 @@ public class MicroserviceUtils {
                 e.printStackTrace();
             }
             if(StringUtils.isNotBlank(fieldValue)){
-                this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "BusinessServiceMapping", fieldName, fieldValue);
+                this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "BusinessServiceMapping", fieldName, fieldValue, fieldType);
             }
         }
         Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
@@ -1503,7 +1521,7 @@ public class MicroserviceUtils {
     public List<TaxHeadMaster> getTaxheadsByServiceCode(String serviceCode) {
         List<TaxHeadMaster> list = null;
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
-        this.prepareModuleDetails(moduleDetailsList, "BillingService", "TaxHeadMaster", "service", serviceCode);
+        this.prepareModuleDetails(moduleDetailsList, "BillingService", "TaxHeadMaster", "service", serviceCode, String.class);
         Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
         if(postForObject != null){
              list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.BillingService.TaxHeadMaster"),new TypeReference<List<TaxHeadMaster>>(){});
@@ -1512,7 +1530,8 @@ public class MicroserviceUtils {
     }
     
     public InstrumentResponse updateInstruments(List<Instrument> instruments, String depositedBankAccountNum, FinancialStatus finStatus) {
-        final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
+        StringBuilder url = new StringBuilder().append("http://localhost:8097/").append(instrumentUpdateUrl);        
+//        final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
         for (Instrument i : instruments) {
             i.setFinancialStatus(finStatus);
             if (depositedBankAccountNum != null) {
@@ -1532,7 +1551,7 @@ public class MicroserviceUtils {
     public InstrumentAccountCode getInstrumentAccountGlCodeByType(String type) {
         List<InstrumentAccountCode> list = null;
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
-        this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "InstrumentGLcodeMapping", "instrumenttype", type);
+        this.prepareModuleDetails(moduleDetailsList, "FinanceModule", "InstrumentGLcodeMapping", "instrumenttype", type, String.class);
         Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, null, null), Map.class);
         if(postForObject != null){
              list = mapper.convertValue(JsonPath.read(postForObject, "$.MdmsRes.FinanceModule.InstrumentGLcodeMapping"),new TypeReference<List<InstrumentAccountCode>>(){});
@@ -1542,7 +1561,7 @@ public class MicroserviceUtils {
     
     public Department getDepartment(String code, String tenantId, String token){
         List<ModuleDetail> moduleDetailsList = new ArrayList<>();
-        this.prepareModuleDetails(moduleDetailsList , "common-masters", "Department", "code", code);
+        this.prepareModuleDetails(moduleDetailsList , "common-masters", "Department", "code", code, String.class);
         try {
             Map postForObject = mapper.convertValue(this.getMdmsData(moduleDetailsList, true, tenantId, token), Map.class);
             if(postForObject != null){
@@ -1553,6 +1572,114 @@ public class MicroserviceUtils {
         }
         return null;
     }
+    
+    public List<Payment> getPayments(PaymentSearchCriteria searchCriteria){
+        PaymentResponse response = null;
+        StringBuilder url = new StringBuilder();
+        final RequestInfo requestInfo = new RequestInfo();
+        requestInfo.setAuthToken(getUserToken());
+        requestInfo.setUserInfo(getUserInfo());
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+        reqWrapper.setRequestInfo(requestInfo);
+        try {
+//            url.append(appPropMgr.getEgovServiceHost()).append(appPropMgr.getEgovServcCollectionServcPaymentSearchUrl()).append("?");
+//            String url2 ="http://localhost:8095/collection-services/payments/_search?&tenantId=pb.jalandhar&receiptNumbers=11/2019-20/000014&status=NEW"
+//                    + "&instrumentStatus=APPROVED&paymentModes=CASH&fromDate=1574765767976&toDate=1574765767976&transactionNumber=10132013121617"
+//                    + "&businessServices=PT,TL&billIds=41ff69f3-c92b-4b2b-90cc-543fb1973782&ids=12345";
+            String url2 ="http://localhost:8095/collection-services/payments/_search?";
+            url.append(url2);
+            preparePaymentSearchQueryString(searchCriteria, url);
+            response = restTemplate.postForObject(url.toString(), reqWrapper, PaymentResponse.class);
+            return response.getPayments();
+        } catch (Exception e) {
+            LOGGER.error("ERROR occurred while fetching the Payment list : ",e);
+        }
+        return null;
+    }
+
+    private void preparePaymentSearchQueryString(PaymentSearchCriteria searchCriteria, StringBuilder url) {
+        if(StringUtils.isNotBlank(searchCriteria.getTenantId())){
+            url.append("&tenantId=").append(searchCriteria.getTenantId());
+        }
+        if(CollectionUtils.isNotEmpty(searchCriteria.getReceiptNumbers())){
+            url.append("&receiptNumbers=").append(StringUtils.join(searchCriteria.getReceiptNumbers(),","));
+        }
+        if(CollectionUtils.isNotEmpty(searchCriteria.getStatus())){
+            url.append("&status=").append(StringUtils.join(searchCriteria.getStatus(),","));
+        }
+        if(CollectionUtils.isNotEmpty(searchCriteria.getInstrumentStatus())){
+            url.append("&instrumentStatus=").append(StringUtils.join(searchCriteria.getInstrumentStatus(),","));
+        }
+        if(CollectionUtils.isNotEmpty(searchCriteria.getPaymentModes())){
+            url.append("&paymentModes=").append(StringUtils.join(searchCriteria.getPaymentModes(),","));
+        }
+        if(searchCriteria.getFromDate() != null){
+            url.append("&fromDate=").append(searchCriteria.getFromDate());
+        }
+        if(searchCriteria.getToDate() != null){
+            url.append("&toDate=").append(searchCriteria.getToDate());
+        }
+        if(StringUtils.isNotBlank(searchCriteria.getTransactionNumber())){
+            url.append("&transactionNumber=").append(searchCriteria.getTransactionNumber());
+        }
+        if(CollectionUtils.isNotEmpty(searchCriteria.getBusinessServices())){
+            url.append("&businessServices=").append(StringUtils.join(searchCriteria.getBusinessServices(),","));
+        }
+        if(CollectionUtils.isNotEmpty(searchCriteria.getBillIds())){
+            url.append("&billIds=").append(StringUtils.join(searchCriteria.getBillIds(),","));
+        }
+        if(CollectionUtils.isNotEmpty(searchCriteria.getIds())){
+            url.append("&ids=").append(StringUtils.join(searchCriteria.getIds(),","));
+        }
+    }
+
+    public PaymentResponse generatePayments(Payment payment) {
+//        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+//        queryParams.add("tenantId", tenantId);
+//        queryParams.add("billId", StringUtils.join(billIds,","));
+//        String uri = UriComponentsBuilder
+//                .fromHttpUrl(appPropMgr.getEgovServiceHost())
+//                .path(appPropMgr.getEgovServcCollectionServcRecieptCreateUrl())
+//                .queryParams(queryParams)
+//                .build()
+//                .toUriString();
+        PaymentResponse response = null;
+        String uri = "http://localhost:8095/collection-services/payments/_create";
+        final RequestInfo requestInfo = new RequestInfo();
+        requestInfo.setAuthToken(getUserToken());
+        requestInfo.setUserInfo(getUserInfo());
+        PaymentRequest request = PaymentRequest.builder().requestInfo(requestInfo).payment(payment).build();
+        try {
+            response = restTemplate.postForObject(uri, request , PaymentResponse.class);            
+        } catch (HttpClientErrorException exc) {
+           throw MicroServiceHttpClientErrorException.builder().statusCode(exc.getStatusCode().name()).message(exc.getMessage()).statusText(exc.getStatusText()).build();
+        }
+        return response;
+    }
+    
+    public PaymentResponse updatePayments(Payment payment) {
+//      MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+//      queryParams.add("tenantId", tenantId);
+//      queryParams.add("billId", StringUtils.join(billIds,","));
+//      String uri = UriComponentsBuilder
+//              .fromHttpUrl(appPropMgr.getEgovServiceHost())
+//              .path(appPropMgr.getEgovServcCollectionServcRecieptCreateUrl())
+//              .queryParams(queryParams)
+//              .build()
+//              .toUriString();
+      PaymentResponse response = null;
+      String uri = "http://localhost:8095/collection-services/payments/_update";
+      final RequestInfo requestInfo = new RequestInfo();
+      requestInfo.setAuthToken(getUserToken());
+      requestInfo.setUserInfo(getUserInfo());
+      PaymentRequest request = PaymentRequest.builder().requestInfo(requestInfo).payment(payment).build();
+      try {
+          response = restTemplate.postForObject(uri, request , PaymentResponse.class);            
+      } catch (HttpClientErrorException exc) {
+         throw MicroServiceHttpClientErrorException.builder().statusCode(exc.getStatusCode().name()).message(exc.getMessage()).statusText(exc.getStatusText()).build();
+      }
+      return response;
+  }
     
 }
 

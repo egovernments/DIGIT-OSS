@@ -752,6 +752,7 @@ public class ReceiptAction extends BaseFormAction {
                             CollectionConstants.RECEIPT_STATUS_CODE_TO_BE_SUBMITTED));
             receiptHeader.setPaidBy(StringEscapeUtils.unescapeHtml(paidBy));
             receiptHeader.setSource(Source.SYSTEM.toString());
+            receiptHeader.setModOfPayment(instrumentType);
 
             // If this is a new receipt in lieu of cancelling old
             // receipt, update
@@ -1213,23 +1214,23 @@ public class ReceiptAction extends BaseFormAction {
                     billDetail.getBillAccountDetails().forEach(billAccountDetail -> {
                         ReceiptDetail receiptDetail = new ReceiptDetail();
 
-                        CChartOfAccounts accountHead = new CChartOfAccounts();
-                        accountHead.setGlcode(billAccountDetail.getGlcode());
+//                        CChartOfAccounts accountHead = new CChartOfAccounts();
+//                        accountHead.setGlcode(billAccountDetail.getGlcode());
                         // accountHead.setName(name);
                         receiptDetail.setAccounthead(new CChartOfAccounts());
 
                         // CFunction function = new CFunction();
                         // function.setCode(billDetail.get);
                         // receiptDetail.setFunction(function);
-                        receiptDetail.setDramount(billAccountDetail.getDebitAmount());
-                        receiptDetail.setCramount(billAccountDetail.getCreditAmount());
+                        receiptDetail.setDramount(billAccountDetail.getAmount().compareTo(BigDecimal.ZERO) > 0 ? BigDecimal.ZERO : billAccountDetail.getAmount());
+                        receiptDetail.setCramount(billAccountDetail.getAmount().compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : billAccountDetail.getAmount());
                         receiptDetail.setOrdernumber(billAccountDetail.getOrder().longValue());
-                        receiptDetail.setDescription(billAccountDetail.getAccountDescription());
+//                        receiptDetail.setDescription(billAccountDetail.getAccountDescription());
 
                         // CFinancialYear financialYear = new CFinancialYear();
                         // receiptDetail.setFinancialYear(financialYear);
 
-                        receiptDetail.setCramountToBePaid(billAccountDetail.getCrAmountToBePaid());
+//                        receiptDetail.setCramountToBePaid(billAccountDetail.getCrAmountToBePaid());
                         receiptDetail.setPurpose(billAccountDetail.getPurpose()!=null?billAccountDetail.getPurpose().toString():"");
 
                         // receiptDetail.setGroupId(groupId);

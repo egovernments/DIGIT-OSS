@@ -50,6 +50,7 @@ package org.egov.infra.web.spring.handler;
 
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.exception.ApplicationValidationException;
+import org.egov.infra.exception.MicroServiceHttpClientErrorException;
 import org.egov.infra.exception.MicroServiceInvalidTokenException;
 import org.egov.infra.exception.MicroServiceNotAuthroizedException;
 import org.slf4j.Logger;
@@ -58,13 +59,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice(annotations = Controller.class)
-public final class GlobalExceptionHandler {
+public final class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
     private static final Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     private static final String DEFAULT_ERROR_VIEW = "/error/500";
@@ -98,11 +100,30 @@ public final class GlobalExceptionHandler {
         return errorView(request, e.getMessage(),MS_NOTAUTHROIZED_TOKEN);
     }
     
+    @ExceptionHandler(MicroServiceHttpClientErrorException.class)
+    public RedirectView handleMicroServiceHttpClientErrorException(HttpServletRequest request,MicroServiceHttpClientErrorException e){
+        LOG.error(ERROR_MESSAGE, e);
+        return microServiceErrorView(request, e.getMessage(), e.getStatusCode(), e.getStatusText(),MS_NOTAUTHROIZED_TOKEN);
+    }
+    
     public RedirectView errorView(HttpServletRequest request, String message,String view) {
         RedirectView rw = new RedirectView(view, true);
         FlashMap outputFlashMap = RequestContextUtils.getOutputFlashMap(request);
         if (outputFlashMap != null) {
             outputFlashMap.put("error", message);
+            outputFlashMap.put("url", request.getRequestURL());
+        }
+        return rw;
+    }
+    
+    public RedirectView microServiceErrorView(HttpServletRequest request, String message, String statusCode, String statusText, String view) {
+        RedirectView rw = new RedirectView(view, true);
+        FlashMap outputFlashMap = RequestContextUtils.getOutputFlashMap(request);
+        if (outputFlashMap != null) {
+            outputFlashMap.put("microServiceError", true);
+            outputFlashMap.put("message", message);
+            outputFlashMap.put("statusCode", statusCode);
+            outputFlashMap.put("statusText", statusText);
             outputFlashMap.put("url", request.getRequestURL());
         }
         return rw;

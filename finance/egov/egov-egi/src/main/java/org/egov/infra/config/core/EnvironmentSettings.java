@@ -65,6 +65,7 @@ public class EnvironmentSettings {
     private static final String HIBERNATE_JDBC_BATCH_SIZE = "hibernate.jdbc.batch_size";
     private static final String STATE_WIDE_SCHEMA_NAME = "statewide.schema.name";
     private static final String DEFAULT_SCHEMA_NAME = "default.schema.name";
+    private static final String COLLECTION_VERSION = "egov.collection.version";
 
     @Autowired
     private Environment environment;
@@ -107,5 +108,9 @@ public class EnvironmentSettings {
 
     public String schemaName(String domainName) {
         return environment.getProperty("tenant." + domainName, defaultSchemaName());
+    }
+
+    public String collectionVersion() {
+        return environment.getProperty(COLLECTION_VERSION, "V1");
     }
 }
