@@ -154,7 +154,7 @@ serviceMaps:
 
 
 
-    - query: INSERT INTO eg_pt_unit (tenantid, id, assessmentId, floorNo, unitArea, usageCategory, occupancyType, occupancyDate, constructionType, arv, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE floorNo = ?, unitArea = ?, usageCategory = ?, occupancyType = ?, occupancyDate = ?, constructionType = ?, arv = ?, active = ?, lastmodifiedby = ?, lastmodifiedtime = ?;
+    - query: INSERT INTO eg_pt_unit (tenantid, id, assessmentId, floorNo, unitArea, usageCategory, occupancyType, occupancyDate, constructionType, arv, active, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET floorNo = ?, unitArea = ?, usageCategory = ?, occupancyType = ?, occupancyDate = ?, constructionType = ?, arv = ?, active = ?, lastmodifiedby = ?, lastmodifiedtime = ?;
       basePath: Assessment.units.*
       jsonMaps:
 
@@ -211,7 +211,7 @@ serviceMaps:
 
 
 
-    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, filestore, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE documenttype = ?, documentuid = ?, status = ?, lastmodifiedby = ?, lastmodifiedtime = ?;
+    - query: INSERT INTO eg_pt_document (id, tenantid, entityid, documenttype, filestore, documentuid, status, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype = ?, documentuid = ?, status = ?, lastmodifiedby = ?, lastmodifiedtime = ?;
       basePath: $.Assessment.documents.*
       jsonMaps:
 
