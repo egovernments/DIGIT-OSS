@@ -546,13 +546,6 @@
         "$.code"
       ]
     },
-    "UsageCategory": {
-      "masterName": "UsageCategory",
-      "isStateLevel": true,
-      "uniqueKeys": [
-        "$.code"
-      ]
-    },
     "UsageCategoryMajor": {
       "masterName": "UsageCategoryMajor",
       "isStateLevel": true,
@@ -804,6 +797,7 @@
         "$.billingCycle"
       ]
     }
+ 
   },
   "ws-services-calculation": {
     "WaterCess": {
@@ -849,6 +843,11 @@
     },
     "WS_WATER_CESS": {
       "masterName": "WS_WATER_CESS",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+   "MeterStatus": {
+      "masterName": "MeterStatus",
       "isStateLevel": true,
       "uniqueKeys": []
     }
