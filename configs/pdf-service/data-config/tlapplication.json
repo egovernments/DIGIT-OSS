@@ -923,7 +923,7 @@
           {
             "externalAPI": [    
               {
-                  "path": "http://localhost:8070/billing-service/bill/v2/_fetchbill",
+                  "path": "http://billing-service:8080/billing-service/bill/v2/_fetchbill",
                   "queryParam": "tenantId=$.tenantId,consumerCode=$.applicationNumber,service=TL",
                   "apiRequest": null,
                   "responseMapping":[
