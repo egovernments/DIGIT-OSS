@@ -63,7 +63,7 @@
                                 "bold" : false
                                },
                                {
-                                "text":"{{totalAmount}}",
+                                "text":"{{Rs}} {{totalAmount}}",
                                 "style":"receipt-table-value-total",
                                 "fontSize": 20
                                }

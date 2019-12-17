@@ -367,6 +367,18 @@
                  }
               },
               {
+                "variable": "Rs",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLAPP_RUPEE"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+            },
+              {
                   "variable": "trade_license_tax",
                   "value": {
                     "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLAPP_TRADE_LICENSE"
