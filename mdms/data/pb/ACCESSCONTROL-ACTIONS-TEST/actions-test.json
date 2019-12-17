@@ -15765,16 +15765,13 @@
     {
       "id": 1924,
       "name": "BPA-Applyforservice",
-      "url": "url",
+      "url": "/bpa-services/bpa/appl/_create",
       "displayName": "Apply",
       "orderNumber": 0,
-      "parentModule": "",
       "enabled": false,
       "serviceCode": "BPA",
       "code": "null",
-      "navigationURL": "bpa-services/bpa/appl/_create",
-      "path": "BPA.Apply.New",
-      "leftIcon": "places:business-center"
+      "path": ""
     }
   ]
 }
