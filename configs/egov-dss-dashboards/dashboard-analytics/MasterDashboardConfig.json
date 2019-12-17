@@ -1129,6 +1129,25 @@
                   "headers": []
                 }
               ]
+            },
+            {
+              "id": 423,
+              "name": "DSS_PGR_COMPLAINTS_BY_CATEGORY",
+              "dimensions": {
+                "height": 250,
+                "width": 4
+              },
+              "vizType": "chart",
+              "charts": [
+                {
+                  "id": "complaintsByCategory",
+                  "name": "DSS_PGR_COMPLAINTS_BY_CATEGORY",
+                  "code": "",
+                  "chartType": "pie",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
             }
           ]
         },
