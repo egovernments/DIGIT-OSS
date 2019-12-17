@@ -1464,7 +1464,7 @@ const getACKData = (transformedData, ulbLogo) => {
             text: transformedData.tradeTypeCertificate
           }
         ]
-      },
+      }
       // {
       //   style: "tl-certificate-data-2",
       //   columns: [
@@ -1500,18 +1500,14 @@ const getACKData = (transformedData, ulbLogo) => {
       //     }
       //   ]
       // }
-      {
-        style: "tl-certificate-footer1",
-        bold: true,
-        text: getLocaleLabels("Signature",
-        "TL_LOCALIZATION_SIGNATURE"
-        )
-      }
       ],
       footer: [
         {
-          text: getLocaleLabels("Disclaimer","TL_LOCALIZATION_DISCLAIMER"),
-          style: "receipt-footer"
+          style: "tl-certificate-footer1",
+          bold: true,
+          text: getLocaleLabels("Signature",
+          "TL_LOCALIZATION_SIGNATURE"
+          )
         }
       ],
     // footer: [
