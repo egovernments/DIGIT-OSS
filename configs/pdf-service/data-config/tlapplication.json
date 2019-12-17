@@ -59,7 +59,8 @@
                   "localisation":{
                     "required":true,
                     "prefix": "COMMON_MASTERS_STRUCTURETYPE",
-                    "module": "rainmaker-tl"
+                    "module": "rainmaker-tl",
+                    "isCategoryRequired":true
                  }
               },
               {
@@ -70,7 +71,8 @@
                   "localisation":{
                     "required":true,
                     "prefix": "COMMON_MASTERS_STRUCTURETYPE",
-                    "module": "rainmaker-tl"
+                    "module": "rainmaker-tl",
+                    "isSubTypeRequired":true
                  }
               },
               {
@@ -105,7 +107,8 @@
                   "localisation":{
                     "required":true,
                     "prefix": "TRADELICENSE_TRADETYPE",
-                    "module": "rainmaker-tl"
+                    "module": "rainmaker-tl",
+                    "isCategoryRequired":true
                  }
               },
               {
@@ -116,7 +119,8 @@
                   "localisation":{
                     "required":true,
                     "prefix": "TRADELICENSE_TRADETYPE",
-                    "module": "rainmaker-tl"
+                    "module": "rainmaker-tl",
+                    "isMainTypeRequired":true
                  }
               },
               {
@@ -127,7 +131,8 @@
                   "localisation":{
                     "required":true,
                     "prefix": "TRADELICENSE_TRADETYPE",
-                    "module": "rainmaker-tl"
+                    "module": "rainmaker-tl",
+                    "isSubTypeRequired":true
                  }
               },
               {
@@ -232,7 +237,8 @@
                   "localisation":{
                     "required":true,
                     "prefix": "COMMON_MASTERS_OWNERSHIPCATEGORY",
-                    "module": "rainmaker-tl"
+                    "module": "rainmaker-tl",
+                    "isCategoryRequired":true
                  }
                  
               },
@@ -244,7 +250,8 @@
                   "localisation":{
                     "required":true,
                     "prefix": "COMMON_MASTERS_OWNERSHIPCATEGORY",
-                    "module": "rainmaker-tl"
+                    "module": "rainmaker-tl",
+                    "isSubTypeRequired":true
                  }
               },
               {
@@ -916,7 +923,7 @@
           {
             "externalAPI": [    
               {
-                  "path": "http://billing-service:8080/billing-service/bill/v2/_fetchbill",
+                  "path": "http://localhost:8070/billing-service/bill/v2/_fetchbill",
                   "queryParam": "tenantId=$.tenantId,consumerCode=$.applicationNumber,service=TL",
                   "apiRequest": null,
                   "responseMapping":[

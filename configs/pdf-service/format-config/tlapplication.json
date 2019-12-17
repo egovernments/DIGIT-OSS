@@ -815,7 +815,7 @@
                          ],
                          [
                            {
-                             "text":"{{accessoryCount}}",
+                             "text":"{{accesoryType}}",
                              "border":[
                                false,
                                false,
