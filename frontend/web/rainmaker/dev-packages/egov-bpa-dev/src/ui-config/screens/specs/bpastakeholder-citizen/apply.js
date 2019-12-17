@@ -19,7 +19,7 @@ import {
 } from "../bpastakeholder/apply";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
-import { addressDestruct, setMobileNoField } from "../utils";
+import { addressDestruct, setMobileNoField, setNameOfUser } from "../utils";
 
 const getData = async (action, state, dispatch, tenantId) => {
   await getMdmsData(action, state, dispatch);
@@ -109,6 +109,7 @@ const screenConfig = {
 
       if (!window.location.pathname.includes("openlink")) {
         setMobileNoField(action, state, dispatch);
+        setNameOfUser(action, state, dispatch);
       }
     }
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));

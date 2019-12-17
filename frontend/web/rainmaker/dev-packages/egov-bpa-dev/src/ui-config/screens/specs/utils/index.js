@@ -2419,3 +2419,21 @@ export const setMobileNoField = (action, state, dispatch) => {
     );
   }
 };
+
+export const setNameOfUser = (action, state, dispatch) => {
+  let userInfo = JSON.parse(getUserInfo());
+  let { name } = userInfo;
+  if (name) {
+    dispatch(
+      prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.owners[0].name",
+        name
+      )
+    );
+    set(
+      action.screenConfig,
+      `components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.ownerName.props.disabled`,
+      true
+    );
+  }
+};

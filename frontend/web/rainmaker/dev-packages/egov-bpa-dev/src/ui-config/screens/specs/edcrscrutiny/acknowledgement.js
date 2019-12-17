@@ -37,7 +37,8 @@ const getPDFbuttons = (
               iconName: "cloud_download",
               style: {
                 marginTop: "7px",
-                marginRight: "8px"
+                marginRight: "8px",
+                cursor:"pointer"
               }
             },
             onClick: {
@@ -58,8 +59,7 @@ const getPDFbuttons = (
             labelName: "Scrutiny Report",
             labelKey: "EDCR_SCUTINY_REPORT",
             style: {
-              marginTop: "7px",
-              marginRight: "8px"
+              cursor:"pointer"
             }
           })
         },
@@ -90,7 +90,8 @@ const getPDFbuttons = (
               style: {
                 marginTop: "7px",
                 marginRight: "8px",
-                marginLeft: "10px"
+                marginLeft: "10px",
+                cursor:"pointer"
               }
             },
             onClick: {
@@ -109,7 +110,10 @@ const getPDFbuttons = (
           },
           div2: getLabel({
             labelName: "Scrutiny Report",
-            labelKey: "EDCR_SCUTINY_REPORT"
+            labelKey: "EDCR_SCUTINY_REPORT",
+            style: {
+              cursor:"pointer"
+            }
           })
         },
         onClickDefination: {

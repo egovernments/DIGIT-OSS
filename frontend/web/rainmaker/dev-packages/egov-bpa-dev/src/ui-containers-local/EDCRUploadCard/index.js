@@ -118,7 +118,7 @@ class DocumentList extends Component {
   handleDocument = async file => {
     let { uploadedDocIndex, uploadedDocuments } = this.state;
     const { prepareFinalObject, documents, tenantId } = this.props;
-    const { jsonPath } = documents[uploadedDocIndex];
+    const { jsonPath, name } = documents[uploadedDocIndex];
     uploadedDocuments = {
       ...uploadedDocuments,
       [uploadedDocIndex]: [
