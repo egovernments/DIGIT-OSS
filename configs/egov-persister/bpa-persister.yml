@@ -7,7 +7,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: INSERT INTO eg_bpa_buildingplan(id, applicationno, edcrnumber, tenantid, servicetype, risktype, status, ownershipcategory, additionaldetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); 
+       - query: INSERT INTO eg_bpa_buildingplan(id, applicationno, edcrnumber, tenantid, applicationtype, action, servicetype, risktype, status, ownershipcategory, additionaldetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); 
          basePath: BPA
          jsonMaps:
           - jsonPath: $.BPA.id
@@ -17,6 +17,10 @@ serviceMaps:
           - jsonPath: $.BPA.edcrNumber
 
           - jsonPath: $.BPA.tenantId
+
+          - jsonPath: $.BPA.applicationType
+
+          - jsonPath: $.BPA.action
 
           - jsonPath: $.BPA.serviceType
 
@@ -102,7 +106,7 @@ serviceMaps:
 
           - jsonPath: $.BPA.auditDetails.lastModifiedTime
 
-       - query: INSERT INTO eg_bpa_owner( id, name, tenantid, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, institutionid, isprimaryowner, ownertype, ownershippercentage, relationship, buildingplanid, createdby,lastmodifiedby, createdtime, lastmodifiedtime,active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+       - query: INSERT INTO eg_bpa_owner( id, name, tenantid, mobilenumber, gender, fatherorhusbandname, correspondenceaddress, institutionid, isprimaryowner, ownertype, ownershippercentage, relationship, buildingplanid, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
          basePath: BPA.owners.*
          jsonMaps:
           - jsonPath: $.BPA.owners.*.uuid
@@ -138,8 +142,6 @@ serviceMaps:
           - jsonPath: $.BPA.owners.*.auditDetails.createdTime
 
           - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedTime
-
-          - jsonPath: $.BPA.owners.*.userActive
 
 
        - query: INSERT INTO eg_bpa_unit( id,tenantid, usageCategory, buildingplanid, additionaldetails, createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
@@ -246,7 +248,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, edcrnumber=?, tenantid=?, servicetype=?, riskType=?, status=?, ownershipcategory=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, edcrnumber=?, tenantid=?, action=?, servicetype=?, riskType=?, status=?, ownershipcategory=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
          basePath: BPA
          jsonMaps:
           - jsonPath: $.BPA.applicationNo
@@ -254,6 +256,8 @@ serviceMaps:
           - jsonPath: $.BPA.edcrNumber
 
           - jsonPath: $.BPA.tenantId
+
+          - jsonPath: $.BPA.action
 
           - jsonPath: $.BPA.serviceType
 
@@ -338,7 +342,7 @@ serviceMaps:
 
           - jsonPath: $.BPA.address.id
 
-       - query: UPDATE eg_bpa_owner SET name=?, id=?, tenantid=?, mobilenumber=?, gender=?, fatherorhusbandname=?, correspondenceaddress=?, institutionid=?, isprimaryowner=?, ownertype=?, ownershippercentage=?, relationship=?, lastmodifiedby=?, lastmodifiedtime=?, active=? WHERE id=?;
+       - query: UPDATE eg_bpa_owner SET name=?, id=?, tenantid=?, mobilenumber=?, gender=?, fatherorhusbandname=?, correspondenceaddress=?, institutionid=?, isprimaryowner=?, ownertype=?, ownershippercentage=?, relationship=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
          basePath: BPA.owners.*
          jsonMaps:
           - jsonPath: $.BPA.owners.*.name
@@ -368,8 +372,6 @@ serviceMaps:
           - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedBy
 
           - jsonPath: $.BPA.owners.*.auditDetails.lastModifiedTime
-
-          - jsonPath: $.BPA.owners.*.userActive
 
           - jsonPath: $.BPA.owners.*.uuid
 
