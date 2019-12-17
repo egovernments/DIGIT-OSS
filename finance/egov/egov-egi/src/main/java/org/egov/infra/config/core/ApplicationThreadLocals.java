@@ -60,6 +60,7 @@ public class ApplicationThreadLocals {
     private static ThreadLocal<String> ipAddress = new ThreadLocal<>();
     private static ThreadLocal<String> userTenantId = new ThreadLocal<>();
     private static ThreadLocal<String> userToken = new ThreadLocal<>();
+    private static ThreadLocal<String> collectionVersion = new ThreadLocal<>();
     
     private ApplicationThreadLocals() {
         //Not to be initialized
@@ -146,6 +147,14 @@ public class ApplicationThreadLocals {
     	userToken.set(token);
     }
     
+    public static String getCollectionVersion(){
+        return collectionVersion.get();
+    }
+    
+    public static void setCollectionVersion(String colVersion){
+        collectionVersion.set(colVersion);
+    }
+    
     public static void clearValues() {
         domainName.remove();
         userId.remove();
@@ -157,5 +166,7 @@ public class ApplicationThreadLocals {
         ipAddress.remove();
         userTenantId.remove();
         userToken.remove();
+        collectionVersion.remove();
     }
+    
 }

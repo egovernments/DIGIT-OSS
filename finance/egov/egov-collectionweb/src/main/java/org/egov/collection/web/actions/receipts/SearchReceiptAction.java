@@ -187,7 +187,7 @@ public class SearchReceiptAction extends SearchFormAction {
         // serviceClassMap.putAll(CollectionConstants.SERVICE_TYPE_CLASSIFICATION);
         // serviceClassMap.remove(CollectionConstants.SERVICE_TYPE_PAYMENT);
         // addDropdownData("serviceTypeList", Collections.EMPTY_LIST);
-        addDropdownData("businessCategorylist", microserviceUtils.getBusinessCategories());
+//        addDropdownData("businessCategorylist", microserviceUtils.getBusinessCategories());
         addDropdownData("serviceTypeList", microserviceUtils.getBusinessService("Finance"));
 
         // addDropdownData("bankBranchList", collectionsUtil.getBankCollectionBankBranchList());
@@ -235,7 +235,7 @@ public class SearchReceiptAction extends SearchFormAction {
                         receiptHeader.setManualreceiptnumber(billDetail.getManualReceiptNumber());
                         receiptHeader.setG8data(billDetail.getManualReceiptNumber());
                     }
-                    if (billDetail.getManualReceiptDate() != 0) {
+                    if (billDetail.getManualReceiptDate() != null && billDetail.getManualReceiptDate() != 0) {
                         receiptHeader.setManualreceiptdate(new Date(billDetail.getManualReceiptDate()));
                         if (null != billDetail.getManualReceiptNumber()) {
                             receiptHeader.setG8data(billDetail.getManualReceiptNumber()+"/"+new Date(billDetail.getManualReceiptDate()).toString()); 

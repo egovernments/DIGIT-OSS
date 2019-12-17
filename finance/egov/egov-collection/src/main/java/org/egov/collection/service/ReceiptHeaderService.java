@@ -101,6 +101,7 @@ import org.egov.infra.microservice.models.Bank;
 import org.egov.infra.microservice.models.Bill;
 import org.egov.infra.microservice.models.BillDetailAdditional;
 import org.egov.infra.microservice.models.BillResponse;
+import org.egov.infra.microservice.models.BillV2;
 import org.egov.infra.microservice.models.BusinessDetails;
 import org.egov.infra.microservice.models.CollectionType;
 import org.egov.infra.microservice.models.Demand;
@@ -108,6 +109,14 @@ import org.egov.infra.microservice.models.DemandDetail;
 import org.egov.infra.microservice.models.DemandRequest;
 import org.egov.infra.microservice.models.DemandResponse;
 import org.egov.infra.microservice.models.Instrument;
+import org.egov.infra.microservice.models.InstrumentAccountCode;
+import org.egov.infra.microservice.models.InstrumentStatusEnum;
+import org.egov.infra.microservice.models.Payment;
+import org.egov.infra.microservice.models.PaymentDetail;
+import org.egov.infra.microservice.models.PaymentModeEnum;
+import org.egov.infra.microservice.models.PaymentResponse;
+import org.egov.infra.microservice.models.PaymentStatusEnum;
+import org.egov.infra.microservice.models.PaymentUtils;
 import org.egov.infra.microservice.models.Receipt;
 import org.egov.infra.microservice.models.ReceiptRequest;
 import org.egov.infra.microservice.models.ReceiptResponse;
@@ -133,8 +142,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 
 /**
  * Provides services related to receipt header
@@ -171,6 +182,9 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
 
     @Autowired
     private MicroserviceUtils microserviceUtils;
+    
+    @Autowired
+    private PaymentUtils paymentUtils;
 
     @Value("${egov.services.host}")
     private String hostUrl;
@@ -1166,14 +1180,15 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
             final List<InstrumentHeader> receiptInstrList) {
         String consumerCode = getConsumerCode(receiptHeader);
         DemandResponse demandResponse = generateDemand(consumerCode, receiptHeader);
-        BillResponse billResponse = generateBill(consumerCode, receiptHeader.getService());
-        return generateReceipt(receiptHeader, billResponse);
+        List billList = generateBill(consumerCode, receiptHeader.getService());
+        return generateReceipt(receiptHeader, billList);
     }
 
     private DemandResponse generateDemand(String consumerCode, ReceiptHeader receiptHeader) {
         DemandRequest request = new DemandRequest();
         final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
-        final String url = hostUrl + demandCreateUrl;
+//        final String url = hostUrl + demandCreateUrl;
+        final String url = "http://localhost:8096/billing-service/demand/_create";
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(microserviceUtils.getUserToken());
         requestInfo.setUserInfo(microserviceUtils.getUserInfo());
@@ -1220,10 +1235,12 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         return restTemplate.postForObject(url, request, DemandResponse.class);
     }
 
-    private BillResponse generateBill(String consumerCode, String service) {
+    private List generateBill(String consumerCode, String service) {
         final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
-        final String url = hostUrl + billGenerateUrl + "?tenantId=" + microserviceUtils.getTenentId() + "&businessService="
-                + service + "&consumerCode=" + consumerCode;
+//        final String url = hostUrl + billGenerateUrl + "?tenantId=" + microserviceUtils.getTenentId() + "&businessService="
+//                + service + "&consumerCode=" + consumerCode;
+                    final String url = "http://localhost:8096/billing-service/bill/v2/_generate?tenantId=" + microserviceUtils.getTenentId() + "&businessService="
+                            + service + "&consumerCode=" + consumerCode;
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(microserviceUtils.getUserToken());
@@ -1238,95 +1255,117 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
             e.printStackTrace();
         }
         System.out.println(jsonInString);
-        return restTemplate.postForObject(url, reqWrapper, BillResponse.class);
+        Map postForObject = restTemplate.postForObject(url, reqWrapper, Map.class);
+        switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
+        case "V2":
+        case "VERSION2":
+            return mapper.convertValue(JsonPath.read(postForObject, "$.Bill"),new TypeReference<List<BillV2>>(){});
+            
+        default:
+            return mapper.convertValue(JsonPath.read(postForObject, "$.Bill"),new TypeReference<List<Bill>>(){});
+        }
     }
 
-    private ReceiptResponse generateReceipt(ReceiptHeader receiptHeader, BillResponse billResponse) {
-        String tenantId = microserviceUtils.getTenentId();
-        final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
-        final String url = hostUrl + receiptCreateUrl;
-        ReceiptRequest request = new ReceiptRequest();
-        RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setAuthToken(microserviceUtils.getUserToken());
-        requestInfo.setUserInfo(microserviceUtils.getUserInfo());
-        requestInfo.getUserInfo().setId(ApplicationThreadLocals.getUserId());
-        Receipt receipt = new Receipt();
-        List<Bill> bills = billResponse.getBill();
-        if(!bills.isEmpty() && bills.get(0) != null){
-            Bill bill = bills.get(0);
-            bill.getBillDetails().get(0)
-            .setAmountPaid(billResponse.getBill().get(0).getBillDetails().get(0).getTotalAmount());
-            bill.getTaxAndPayments().get(0).setAmountPaid(billResponse.getBill().get(0).getBillDetails().get(0).getTotalAmount());
-            bill.setPaidBy(receiptHeader.getPaidBy());
-            bill.setPayerName(receiptHeader.getPayeeName());
-            bill.setPayerAddress(receiptHeader.getPayeeAddress());
-            bill.getBillDetails().get(0).setCollectionType(CollectionType.COUNTER);
-            bill.getBillDetails().get(0).setManualReceiptNumber(receiptHeader.getManualreceiptnumber());
-            bill.getBillDetails().get(0).setManualReceiptDate(
-                    receiptHeader.getManualreceiptdate() != null ? receiptHeader.getManualreceiptdate().getTime() : null);
-            bill.getBillDetails().get(0).setBillDescription(receiptHeader.getReferenceDesc());
+    private ReceiptResponse generateReceipt(ReceiptHeader receiptHeader, List billList) {
+        ReceiptResponse response= new  ReceiptResponse();
+        switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
+        case "V2":
+        case "VERSION2":
+            List<Payment> payments = this.generatePayments(receiptHeader, billList);
+            List<Receipt> receipts = new ArrayList<>();
+            paymentUtils.getReceiptsFromPayments(payments, receipts );
+            response.setReceipts(receipts);
+            break;
+
+        default:
+            String tenantId = microserviceUtils.getTenentId();
+            final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
+            final String url = hostUrl + receiptCreateUrl;
+            ReceiptRequest request = new ReceiptRequest();
+            RequestInfo requestInfo = new RequestInfo();
+            requestInfo.setAuthToken(microserviceUtils.getUserToken());
+            requestInfo.setUserInfo(microserviceUtils.getUserInfo());
+            requestInfo.getUserInfo().setId(ApplicationThreadLocals.getUserId());
+            Receipt receipt = new Receipt();
+            List<Bill> bills = billList;
+            if(!bills.isEmpty() && bills.get(0) != null){
+                Bill bill = bills.get(0);
+                bill.getBillDetails().get(0)
+                .setAmountPaid(bills.get(0).getBillDetails().get(0).getTotalAmount());
+                bill.getTaxAndPayments().get(0).setAmountPaid(bills.get(0).getBillDetails().get(0).getTotalAmount());
+                bill.setPaidBy(receiptHeader.getPaidBy());
+                bill.setPayerName(receiptHeader.getPayeeName());
+                bill.setPayerAddress(receiptHeader.getPayeeAddress());
+                bill.getBillDetails().get(0).setCollectionType(CollectionType.COUNTER);
+                bill.getBillDetails().get(0).setManualReceiptNumber(receiptHeader.getManualreceiptnumber());
+                bill.getBillDetails().get(0).setManualReceiptDate(
+                        receiptHeader.getManualreceiptdate() != null ? receiptHeader.getManualreceiptdate().getTime() : null);
+                bill.getBillDetails().get(0).setBillDescription(receiptHeader.getReferenceDesc());
+                
+                /* Setting Additional Detils in bill payload*/
+                BillDetailAdditional additional = new BillDetailAdditional();
+                additional.setNarration(receiptHeader.getReferenceDesc());
+                additional.setPayeeaddress(receiptHeader.getPayeeAddress());
+                additional.setBusinessReason(receiptHeader.getServiceIdText());
+                JsonNode jsonNode = new ObjectMapper().convertValue(additional, JsonNode.class);
+                bill.getBillDetails().get(0).setAdditionalDetails(jsonNode);
+                receipt.setBill(Arrays.asList(bill));
+            }
+            /* Setting Instrument Data in Receipt payload*/
+            Instrument instrument = new Instrument();
+            instrument.setInstrumentNumber(
+                    receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentNumber());
+            instrument.setInstrumentDate(
+                    receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate() != null
+                    ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate().getTime()
+                            : null);
+            Long transactionDateInput = null;
+            Date transactionDate = null;
+            if (receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate() != null) {
+                transactionDate = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate();
+            } else {
+                transactionDate = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate();
+            }
+            if (transactionDate != null) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(transactionDate);
+                cal.add(Calendar.HOUR_OF_DAY, 5);
+                cal.add(Calendar.MINUTE, 30);
+                transactionDateInput = cal.getTime().getTime();
+            }
+            instrument.setTransactionDateInput(transactionDateInput);
+            instrument.setTransactionNumber(
+                    receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionNumber() != null
+                    ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionNumber()
+                            : receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentNumber());
             
-            /* Setting Additional Detils in bill payload*/
-            BillDetailAdditional additional = new BillDetailAdditional();
-            additional.setNarration(receiptHeader.getReferenceDesc());
-            additional.setPayeeaddress(receiptHeader.getPayeeAddress());
-            additional.setBusinessReason(receiptHeader.getServiceIdText());
-            JsonNode jsonNode = new ObjectMapper().convertValue(additional, JsonNode.class);
-            bill.getBillDetails().get(0).setAdditionalDetails(jsonNode);
-            receipt.setBill(Arrays.asList(bill));
+            instrument.setInstrumentType(new org.egov.infra.microservice.models.InstrumentType());
+            instrument.getInstrumentType().setName(CollectionConstants.INSTRUMENT_MODES_MAP.get(receiptHeader.getInstrumentType()));
+            instrument.setPayee(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getPayee());
+            instrument.setAmount(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentAmount());
+            instrument.setBank(new Bank());
+            instrument.getBank().setTenantId(tenantId);
+            instrument.getBank()
+            .setCode(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId() != null
+            ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId().getCode()
+                    : null);
+            instrument.getBank()
+            .setName(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId() != null
+            ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId().getName()
+                    : null);
+            instrument.setBranchName(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankBranchName());
+            instrument.setTenantId(tenantId);
+            instrument.setIfscCode(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getIfscCode());
+            receipt.setInstrument(instrument);
+            
+            receipt.setTenantId(tenantId);
+            request.setReceipt(Collections.singletonList(receipt));
+            request.setRequestInfo(requestInfo);
+            response = restTemplate.postForObject(url, request, ReceiptResponse.class);
+            break;
         }
-        /* Setting Instrument Data in Receipt payload*/
-        Instrument instrument = new Instrument();
-        instrument.setInstrumentNumber(
-                receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentNumber());
-        instrument.setInstrumentDate(
-                receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate() != null
-                        ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate().getTime()
-                        : null);
-        Long transactionDateInput = null;
-        Date transactionDate = null;
-        if (receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate() != null) {
-            transactionDate = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate();
-        } else {
-            transactionDate = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate();
-        }
-        if (transactionDate != null) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(transactionDate);
-            cal.add(Calendar.HOUR_OF_DAY, 5);
-            cal.add(Calendar.MINUTE, 30);
-            transactionDateInput = cal.getTime().getTime();
-        }
-        instrument.setTransactionDateInput(transactionDateInput);
-        instrument.setTransactionNumber(
-                receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionNumber() != null
-                        ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionNumber()
-                        : receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentNumber());
-
-        instrument.setInstrumentType(new org.egov.infra.microservice.models.InstrumentType());
-        instrument.getInstrumentType().setName(CollectionConstants.INSTRUMENT_MODES_MAP.get(receiptHeader.getInstrumentType()));
-        instrument.setPayee(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getPayee());
-        instrument.setAmount(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentAmount());
-        instrument.setBank(new Bank());
-        instrument.getBank().setTenantId(tenantId);
-        instrument.getBank()
-                .setCode(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId() != null
-                        ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId().getCode()
-                        : null);
-        instrument.getBank()
-        .setName(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId() != null
-                ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId().getName()
-                : null);
-        instrument.setBranchName(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankBranchName());
-        instrument.setTenantId(tenantId);
-        instrument.setIfscCode(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getIfscCode());
-        receipt.setInstrument(instrument);
-
-        receipt.setTenantId(tenantId);
-        request.setReceipt(Collections.singletonList(receipt));
-        request.setRequestInfo(requestInfo);
-        ReceiptResponse postForObject = restTemplate.postForObject(url, request, ReceiptResponse.class);
-        return postForObject;
+        
+        return response;
     }
 
     private String getConsumerCode(ReceiptHeader receiptHeader) {
@@ -1588,5 +1627,76 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
                 throw new ValidationException(new ValidationError("validationMsg", validationMsg));
             }
         }
+    }
+    
+    public List<Payment> generatePayments(ReceiptHeader receiptHeader, List<BillV2> billList) {
+        List<PaymentDetail> paymentDetails = new ArrayList<PaymentDetail>();
+        billList.stream().forEach(bill -> {
+            PaymentDetail pd = PaymentDetail.builder()
+                    .billId(bill.getId())
+                    .businessService(bill.getBusinessService())
+                    .totalDue(bill.getTotalAmount())
+                    .totalAmountPaid(bill.getTotalAmount())
+                    .tenantId(microserviceUtils.getTenentId())
+                    .build();
+            paymentDetails.add(pd);
+        });
+        Payment payment = Payment.builder().paymentDetails(paymentDetails)
+                .tenantId(microserviceUtils.getTenentId())
+                .paymentMode(getPaymentModeEnum(receiptHeader.getModOfPayment()))
+                .totalDue(receiptHeader.getTotalAmount())
+                .totalAmountPaid(receiptHeader.getTotalAmount())
+                .paidBy(receiptHeader.getPaidBy())
+                .mobileNumber("9964902367")
+                .paymentStatus(PaymentStatusEnum.NEW)
+                .build();
+        this.prepareInstrumentsDetails(payment,receiptHeader);
+        PaymentResponse response = microserviceUtils.generatePayments(payment);
+        return response.getPayments();
+    }
+    
+    private void prepareInstrumentsDetails(Payment payment, ReceiptHeader receiptHeader) {
+        try {
+            InstrumentHeader instrumentHeader = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0);
+            Long instrumentDate = instrumentHeader.getInstrumentDate() != null ? instrumentHeader.getInstrumentDate().getTime() : 0l;
+            String instrumentNumber = instrumentHeader.getInstrumentNumber();
+            InstrumentStatusEnum instrumentStatus = InstrumentStatusEnum.APPROVED;
+            Long transactionDate = instrumentHeader.getTransactionDate() != null ? instrumentHeader.getTransactionDate().getTime() : instrumentHeader.getInstrumentDate().getTime();
+            String transactionNumber = instrumentHeader.getTransactionNumber() != null ? instrumentHeader.getTransactionNumber() : instrumentHeader.getInstrumentNumber();
+            String ifscCode = instrumentHeader.getIfscCode();
+            payment.setInstrumentDate(instrumentDate);
+            payment.setInstrumentNumber(instrumentNumber);
+            payment.setInstrumentStatus(instrumentStatus);
+            payment.setTransactionDate(transactionDate);
+            payment.setTransactionNumber(transactionNumber);
+            payment.setIfscCode(ifscCode);
+        } catch (Exception e) {
+            LOGGER.error("ERROR occurred while setting the instruments details",e);
+        }
+    }
+
+    private PaymentModeEnum getPaymentModeEnum(String modeOfPayment){
+        PaymentModeEnum payModeEnum = null;
+        switch (modeOfPayment.toUpperCase()) {
+        case "CASH":
+            payModeEnum = PaymentModeEnum.CASH;
+            break;
+        case "CARD":
+            payModeEnum = PaymentModeEnum.CARD;
+            break;
+        case "CHEQUE":
+            payModeEnum = PaymentModeEnum.CHEQUE;
+            break;
+        case "DD":
+            payModeEnum = PaymentModeEnum.DD;
+            break;
+        case "ONLINE":
+            payModeEnum = PaymentModeEnum.ONLINE;
+            break;
+
+        default:
+            payModeEnum = PaymentModeEnum.CASH;
+        }
+        return payModeEnum;
     }
 }

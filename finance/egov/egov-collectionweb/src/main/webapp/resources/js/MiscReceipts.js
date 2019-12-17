@@ -1130,12 +1130,15 @@ function updatetotalAmounts(){
 	var totalamount = 0;
 	console.log('billDetailTableIndex : ',billDetailTableIndex);
 	for(var index=0;index<billDetailTableIndex;index++){
-		var inputAmount=parseFloat(document.getElementById('billCreditDetailslist['+index+'].creditAmountDetail').value);
+		var inputAmount=Math.abs(parseFloat(document.getElementById('billCreditDetailslist['+index+'].creditAmountDetail').value));
+		console.log('inputAmount : ',inputAmount);
 		if(document.getElementById('billCreditDetailslist['+index+'].amounttype') !=null){
 			var amountType = document.getElementById('billCreditDetailslist['+index+'].amounttype').innerText;
 			if(amountType.toLowerCase()=='credit'){
+//				document.getElementById('billCreditDetailslist['+index+'].creditAmountDetail').value = "+"+inputAmount;
 				totalamount += parseFloat(inputAmount);
 			}else{
+				document.getElementById('billCreditDetailslist['+index+'].creditAmountDetail').value = "-"+inputAmount;
 				totalamount -= parseFloat(inputAmount);
 			}
 		}

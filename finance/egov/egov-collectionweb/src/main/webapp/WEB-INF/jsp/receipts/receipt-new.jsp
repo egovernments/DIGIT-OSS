@@ -1189,6 +1189,11 @@ function showHideMandataryMark(obj){
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" >
 			<%@include file="receipt-instrumentdetails.jsp" %>
 		<!-- Paid by details -->
+		<tr >
+		   <td class="bluebox" width="3%" ></td>
+		   <td class="bluebox" width="21%"><s:text name="billreceipt.mobile.number"/><span class="mandatory1">*</span></td>
+		   <td class="bluebox"><s:textfield label="mobileNumber" id="mobileNumberId" maxlength="10" name="mobileNumber" value="%{mobileNumber}"  data-pattern="number" /></td>
+	    </tr>
 		<s:if test="%{!isBillSourcemisc()}">
 		<tr >
 		   <td class="bluebox" width="3%" ></td>

@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Receipt {
@@ -34,6 +35,9 @@ public class Receipt {
 
     @Valid
     private Instrument instrument;
+    
+    @JsonIgnore
+    private String paymentId;
 
     public String getTenantId() {
         return tenantId;
@@ -99,4 +103,11 @@ public class Receipt {
         this.instrument = instrument;
     }
     
+    public String getPaymentId() {
+        return paymentId;
+    }
+    
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
 }
