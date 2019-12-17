@@ -1,13 +1,11 @@
 import React from "react";
-import { Button } from "@material-ui/core";
 import { connect } from "react-redux";
-import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { ActionDialog } from "../";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { Container, Item } from "egov-ui-framework/ui-atoms";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import MenuButton from "egov-ui-framework/ui-atoms/MenuButton";
+import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import { getDownloadItems } from "./downloadItems";
 import get from "lodash/get";
 import "./index.css";
@@ -59,7 +57,10 @@ class Footer extends React.Component {
     handleFieldChange(`${dataPath}[0].comment`, "");
     handleFieldChange(`${dataPath}[0].assignee`, "");
     if (item.isLast) {
-      const url = process.env.NODE_ENV === "development" ? item.buttonUrl : item.buttonUrl ;
+      const url =
+        process.env.NODE_ENV === "development"
+          ? item.buttonUrl
+          : item.buttonUrl;
       //window.location.href = `${window.origin}/${url}`;
       setRoute(url);
       return;
@@ -104,8 +105,8 @@ class Footer extends React.Component {
 
   render() {
     const {
-      color,
-      variant,
+      // color,
+      // variant,
       contractData,
       handleFieldChange,
       onDialogButtonClick,
@@ -113,40 +114,39 @@ class Footer extends React.Component {
       moduleName
     } = this.props;
     const { open, data, employeeList } = this.state;
-    const { getPrintData, getDownloadData } = this;
-    let visibility = moduleName === "FIRENOC" ? "hidden" : "visible";
+    const downloadMenu =
+      contractData &&
+      contractData.map(item => {
+        const { buttonLabel, moduleName } = item;
+        return {
+          labelName: { buttonLabel },
+          labelKey: `WF_${moduleName.toUpperCase()}_${buttonLabel}`,
+          link: () => {
+            this.openActionDialog(item);
+          }
+        };
+      });
+    const buttonItems = {
+      label: "Take Action",
+      rightIcon: "arrow_drop_down",
+      props: {
+        variant: "outlined",
+        style: {
+          marginLeft: 10,
+          backgroundColor: "#FE7A51",
+          color: "#fff",
+          border: "none",
+          height: "48px",
+          width: "200px"
+        }
+      },
+      menu: downloadMenu
+    };
     return (
-      <div
-        className="apply-wizard-footer"
-        id="custom-atoms-footer"
-        style={{ textAlign: "right" }}
-      >
-        <Container >
+      <div className="apply-wizard-footer" id="custom-atoms-footer">
+        <Container>
           <Item xs={12} sm={12} className="wf-footer-container">
-            {contractData &&
-              contractData.map(item => {
-                const { buttonLabel, moduleName } = item;
-                return (
-                  <Button
-                    color={color}
-                    variant={variant}
-                    className="wf-footer-button"
-                    onClick={() => this.openActionDialog(item)}
-                    style={{
-                   //   minWidth: "200px",
-                      height: "48px",
-                      marginRight: "45px",
-                      borderRadius:"inherit",
-                      display: buttonLabel === "REFER" ? "none" : "initial"
-                    }}
-                  >
-                    <LabelContainer
-                      labelName={buttonLabel}
-                      labelKey={`WF_${moduleName.toUpperCase()}_${buttonLabel}`}
-                    />
-                  </Button>
-                );
-              })}
+            <MenuButton data={buttonItems} />
           </Item>
         </Container>
         <ActionDialog
@@ -173,7 +173,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Footer);
+export default connect(mapStateToProps, mapDispatchToProps)(Footer);

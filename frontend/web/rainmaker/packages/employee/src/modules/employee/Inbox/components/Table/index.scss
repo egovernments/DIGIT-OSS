@@ -88,11 +88,15 @@
   line-height: 17px;
 }
 
-.sla--positive-value {
-  background-color: #00b200;
+.sla-positive-value {
+  background-color: #4CAF50;
 }
-.sla--negative-value {
-  background-color: rgba(244, 67, 54, 0.87);
+.sla-negative-value {
+  background-color: #F44336;
+}
+
+.sla-middle-value {
+  background-color: #EEA73A;
 }
 
 .inbox-taskboard {

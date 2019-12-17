@@ -78,6 +78,22 @@ class InboxData extends React.Component {
     window.location.href = `${baseUrl}${contextPath}?${queryParams}`;
   };
 
+  getSlaColor =(sla) => {
+    let slaValue = "";
+    if(0<sla<=4){
+      slaValue = "greenSlab"
+    }else if(4<sla<=8){
+      slaValue = "yellowSlab"
+    }else{
+      slaValue = "redSlab"
+    }
+    switch(slaValue){
+      case "greenSlab" : return "inbox-cell-badge-primary sla-positive-value"
+      case "yellowSlab" : return "inbox-cell-badge-primary sla-middle-value"
+      case "redSlab" : return "inbox-cell-badge-primary sla-negative-value"
+    }
+  }
+
   render() {
     const { data, ProcessInstances } = this.props;
     const { onHistoryClick, onDialogClose, getModuleLink } = this;
@@ -113,7 +129,8 @@ class InboxData extends React.Component {
                       return (
                         <TableCell className={classNames}>
                           <span
-                            class={item.text >= 1 ? "inbox-cell-badge-primary sla--positive-value" : "inbox-cell-badge-primary sla--negative-value"}
+                          class ={this.getSlaColor(item.text)}
+                            //class={item.text >= 1 ? "inbox-cell-badge-primary sla--positive-value" : "inbox-cell-badge-primary sla--negative-value"}
                           >
                             {item.text}
                           </span>

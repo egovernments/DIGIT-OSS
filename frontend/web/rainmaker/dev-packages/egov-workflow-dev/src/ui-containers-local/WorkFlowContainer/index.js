@@ -209,8 +209,7 @@ class WorkFlowContainer extends React.Component {
     if (moduleName === "NewTL") {
       switch (action) {
         case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}&businessService=NewTL`;
-        // return `/tradelicence/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=NewTL`;
+          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
         case "EDIT":
           return isAlreadyEdited
             ? `/tradelicence/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
@@ -219,8 +218,7 @@ class WorkFlowContainer extends React.Component {
     } else if (moduleName === "FIRENOC") {
       switch (action) {
         case "PAY":
-          return `/egov-common/pay?consumerCode=${businessId}=${tenant}&businessService=FIRENOC`;
-        // return `/fire-noc/pay?applicationNumber=${businessId}&tenantId=${tenant}&businessService=FIRENOC`;
+          return `/egov-common/pay?consumerCode=${businessId}&tenantId=${tenant}`;
         case "EDIT":
           return isAlreadyEdited
             ? `/fire-noc/apply?applicationNumber=${businessId}&tenantId=${tenant}&action=edit&edited=true`
@@ -260,20 +258,15 @@ class WorkFlowContainer extends React.Component {
     }
     roles = [...new Set(roles)];
     roles.indexOf("*") > -1 && roles.splice(roles.indexOf("*"), 1);
-    //return [...new Set(roles)];
     return roles.toString();
   };
 
   checkIfTerminatedState = (nextStateUUID, moduleName) => {
-    console.log("modulename is....", moduleName);
     const businessServiceData = JSON.parse(
       localStorageGet("businessServiceData")
     );
     const data = find(businessServiceData, { businessService: moduleName });
-    console.log("========>2", data);
-    console.log("=======> nextStat is", nextStateUUID);
     const nextState = find(data.states, { uuid: nextStateUUID });
-    console.log("=======> state is", nextState);
     return nextState.isTerminateState;
   };
 
@@ -316,7 +309,6 @@ class WorkFlowContainer extends React.Component {
   };
 
   prepareWorkflowContract = (data, moduleName) => {
-    console.log("========>1", data);
     const {
       getRedirectUrl,
       getHeaderName,
