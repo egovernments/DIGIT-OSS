@@ -56,7 +56,7 @@ export const getMessageFromLocalization = code => {
 };
 
 const getMessageFromLocalizationNonTLCodes = code => {
-  let messageObject = JSON.parse(getLocalization("localization_en_IN")).find(
+  let messageObject = JSON.parse(getLocalization(`localization_${getLocale()}`)).find(
     item => {
       return item.code == code.toUpperCase().replace(/[.]/g, "_");
     }
@@ -109,7 +109,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
           response,
           "Licenses[0].tradeLicenseDetail.additionalDetail.occupancyType",
           "NA"
-        )
+        ).replace(".","_")
       )}`
     );
 
@@ -202,16 +202,8 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         );
         res.tradeTypeCertificate.push(
           getMessageFromLocalizationNonTLCodes(
-            `TRADELICENSE_TRADETYPE_${tradeCategory}`
-          ) +
-            " / " +
-            getMessageFromLocalizationNonTLCodes(
-              `TRADELICENSE_TRADETYPE_${tradeType}`
-            ) +
-            " / " +
-            getMessageFromLocalizationNonTLCodes(
-              `TRADELICENSE_TRADETYPE_${tradeSubType}`
-            )
+            `TRADELICENSE_TRADETYPE_${tradeCode.replace(".","_")}`
+          )
         );
         return res;
       },
@@ -291,7 +283,7 @@ export const loadReceiptData = async (consumerCode, tenant) => {
     );
     data.totalAmount = get(
       response,
-      "Payments[0].paymentDetails[0].totalDue",
+      "Payments[0].paymentDetails[0].bill.totalAmount",
       0
     );
     data.amountDue = data.totalAmount - data.amountPaid;
