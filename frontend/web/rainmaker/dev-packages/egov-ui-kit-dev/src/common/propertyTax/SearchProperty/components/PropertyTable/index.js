@@ -18,16 +18,16 @@ const columnData = [
     label: "PT_SEARCHPROPERTY_TABEL_PID"
   },
   {
-    id: "applicationType",
-    numeric: false,
-    disablePadding: true,
-    label: "PT_SEARCHPROPERTY_TABEL_APPLICATIONTYPE"
-  },
-  {
     id: "name",
     numeric: false,
     disablePadding: true,
     label: "PT_SEARCHPROPERTY_TABEL_OWNERNAME"
+  },
+  {
+    id: "applicationType",
+    numeric: false,
+    disablePadding: true,
+    label: "PT_SEARCHPROPERTY_TABEL_APPLICATIONTYPE"
   },
   // {
   //   id: "guardianName",
