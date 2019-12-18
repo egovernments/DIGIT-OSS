@@ -203,7 +203,7 @@
       "Collections"
     ],
     "isCumulative": true,
-    "interval": "week",
+    "interval": "month",
     "insight": {
     },
     "_comment": " "
@@ -1326,7 +1326,7 @@
       {
         "module": "TL",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"Collections\":{\"date_histogram\":{\"field\":\"Data.tradelicense.issueddate\",\"interval\":\"week\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.issueddate\"}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"Collections\":{\"date_histogram\":{\"field\":\"Data.tradelicense.issueddate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.issueddate\"}}}}}}",
         "requestQueryMap": "{\"tenantId\" : \"Data.tenantData.code\" ,\"district\" : \"Data.tenantData.city.districtCode\"}",
         "dateRefField": "Data.tradelicense.issueddate"
       }
@@ -1340,7 +1340,7 @@
       "Collections"
     ],
     "isCumulative": true,
-    "interval": "month",
+    "interval": "week",
     "insight": {
     },
     "_comment": " Total Number of License having issued"
@@ -1501,7 +1501,7 @@
         "dateRefField": "Data.dateOfComplaint",
         "requestQueryMap": "{\"tenantId\" : \"Data.tenantId\"}",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"Total Complaints\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"month\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Closed Complaints\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"month\"},\"aggs\":{\"Closed\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.status.keyword\":\"closed\"}},\"resolved\":{\"match\":{\"Data.status.keyword\":\"resolved\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}},\"Reopened Complaints\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"month\"},\"aggs\":{\"Reopened\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.status.keyword\":\"reopened\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"Total Complaints\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}},\"Closed Complaints\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Closed\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.status.keyword\":\"closed\"}},\"resolved\":{\"match\":{\"Data.status.keyword\":\"resolved\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}},\"Reopened Complaints\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Reopened\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.status.keyword\":\"reopened\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}}}}}"
       }
     ],
     "chartType": "line",
@@ -1528,7 +1528,7 @@
         "dateRefField": "Data.dateOfComplaint",
         "requestQueryMap": "{\"tenantId\" : \"Data.tenantId\"}",
         "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"Ivr\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"month\"},\"aggs\":{\"ivr\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.source.keyword\":\"ivr\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}},\"Web\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"month\"},\"aggs\":{\"web\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.source.keyword\":\"web\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}},\"Whatapp\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"month\"},\"aggs\":{\"whatapp\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.source.keyword\":\"whatapp\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}},\"Mobileapp\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"month\"},\"aggs\":{\"mobileapp\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.source.keyword\":\"mobileapp\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"Ivr\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"ivr\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.source.keyword\":\"ivr\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}},\"Web\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"web\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.source.keyword\":\"web\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}},\"Whatapp\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"whatapp\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.source.keyword\":\"whatapp\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}},\"Mobileapp\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"intervalvalue\"},\"aggs\":{\"mobileapp\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.source.keyword\":\"mobileapp\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}}}}"
       }
     ],
     "chartType": "line",
@@ -1713,52 +1713,6 @@
     "insight": {
     },
     "_comment": " Complaints by Department"
-  },
-  "complaintsByCategory": {
-    "chartName": "DSS_PGR_COMPLAINTS_BY_CATEGORY",
-    "queries": [
-      {
-        "module": "PGR",
-        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId\"}",
-        "dateRefField": "Data.dateOfComplaint",
-        "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"ComplaintsByCategory\":{\"terms\":{\"field\":\"Data.complainCategory.keyword\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}}"
-      }
-    ],
-    "chartType": "pie",
-    "valueType": "number",
-    "action": "",
-    "documentType": "_doc",
-    "drillChart": "none",
-    "aggregationPaths": [
-      "ComplaintsByCategory"
-    ],
-    "insight": {
-    },
-    "_comment": " Complaints By Category "
-  },
-  "complaintsByULB": {
-    "chartName": "DSS_PGR_COMPLAINTS_BY_ULB",
-    "queries": [
-      {
-        "module": "PGR",
-        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId\"}",
-        "dateRefField": "Data.dateOfComplaint",
-        "indexName": "pgrindex-v1",
-        "aggrQuery": "{\"aggs\":{\"Complaints By ULB\":{\"terms\":{\"field\":\"Data.tenantId.keyword\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}}"
-      }
-    ],
-    "chartType": "pie",
-    "valueType": "number",
-    "action": "",
-    "documentType": "_doc",
-    "drillChart": "none",
-    "aggregationPaths": [
-      "Complaints By ULB"
-    ],
-    "insight": {
-    },
-    "_comment": " Complaints By ULB "
   },
   "pgrStatusByTenant": {
     "chartName": "DSS_PGR_STATUS_BY_TENANT",
