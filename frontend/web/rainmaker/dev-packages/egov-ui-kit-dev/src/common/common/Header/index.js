@@ -245,7 +245,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     logout: () => dispatch(logout()),
-    fetchLocalizationLabel: (locale) => dispatch(fetchLocalizationLabel(locale)),
+    fetchLocalizationLabel: (locale,tenants,tenant) => dispatch(fetchLocalizationLabel(locale,tenants,tenant)),
     updateActiveRoute: (routepath, menuName) => dispatch(updateActiveRoute(routepath, menuName)),
   };
 };
