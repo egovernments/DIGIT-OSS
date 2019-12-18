@@ -5,16 +5,22 @@ import Label from "egov-ui-kit/utils/translationNode";
 
 const columnData = [
   {
-    id: "index",
-    numeric: true,
+    id: "applicationNo",
+    numeric: false,
     disablePadding: false,
-    label: "PT_SEARCHPROPERTY_TABEL_SNO"
+    label: "PT_PROPERTY_APPLICATION_NUMBER"
   },
   {
     id: "propertyId",
     numeric: false,
     disablePadding: false,
-    label: "PT_SEARCHPROPERTY_TABEL_PTUID"
+    label: "PT_SEARCHPROPERTY_TABEL_PID"
+  },
+  {
+    id: "applicationType",
+    numeric: false,
+    disablePadding: true,
+    label: "PT_SEARCHPROPERTY_TABEL_APPLICATIONTYPE"
   },
   {
     id: "name",
@@ -22,23 +28,17 @@ const columnData = [
     disablePadding: true,
     label: "PT_SEARCHPROPERTY_TABEL_OWNERNAME"
   },
+  // {
+  //   id: "guardianName",
+  //   numeric: false,
+  //   disablePadding: true,
+  //   label: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"
+  // },
   {
-    id: "guardianName",
-    numeric: false,
-    disablePadding: true,
-    label: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME"
-  },
-  {
-    id: "oldPropertyId",
-    numeric: false,
-    disablePadding: false,
-    label: "PT_SEARCHPROPERTY_TABEL_EPID"
-  },
-  {
-    id: "address",
+    id: "date",
     numeric: false,
     disablePadding: false,
-    label: "PT_SEARCHPROPERTY_TABEL_ADDRESS"
+    label: "PT_SEARCHPROPERTY_TABEL_APPLICATIONDATE"
   },
   {
     id: "status",
