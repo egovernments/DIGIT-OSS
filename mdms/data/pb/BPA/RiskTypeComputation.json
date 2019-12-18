@@ -1,0 +1,25 @@
+{
+    "tenantId": "pb",
+    "moduleName": "BPA",
+    "RiskTypeComputation": [
+        {
+            "fromPlotArea": 500,
+            "toPlotArea": 9999999999,
+            "fromBuildingHeight": 15,
+            "toBuildingHeight":9999999999,
+            "riskType": "HIGH"
+        },{
+            "fromPlotArea": 300,
+            "toPlotArea": 500,
+            "fromBuildingHeight": 10,
+            "toBuildingHeight":15,
+            "riskType": "MEDIUM"
+        },{
+            "fromPlotArea": 0,
+            "toPlotArea": 300,
+            "fromBuildingHeight": 0,
+            "toBuildingHeight":10,
+            "riskType": "LOW"
+        }
+    ]
+}

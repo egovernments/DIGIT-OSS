@@ -461,6 +461,9 @@
     {
       "format": "SW/[CITY.CODE]/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
       "idname": "sewerageservice.connection.id"
+    },{
+      "idname":"egov.idgen.bpa.applicationNum",
+      "format":"PB-BP-[cy:yyyy-MM-dd]-[SEQ_EG_BP_APN]"
     },
     {
       "format": "PB_PG_[cy:yyyy_MM_dd]_[SEQ_EG_PG_TXN]_[d{2}]",

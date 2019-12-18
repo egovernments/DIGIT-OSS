@@ -5,18 +5,78 @@
         {
             "applicationType": "BUILDING_PLAN_SCRUTINY",
             "ServiceType": "NEW_CONSTRUCTION",
-            "RiskType": "High",
+            "RiskType": "LOW",
+            "WFState": "INITIATED",
             "docTypes": [
                 {
-                    "code": "OWNERIDENTITYPROOF.VOTERID",
+                    "code": "OWNER.IDENTITYPROOF",
                     "required": true
                 },
                 {
-                    "code": "OWNERIDENTITYPROOF.AADHAAR",
+                    "code": "OWNER.ADDRESSPROOF",
                     "required": false
+                },
+                {
+                    "code": "APPL.BUILDING_DIAGRAM",
+                    "required": false
+                },
+                {
+                    "code": "APPL.LOCALBODY",
+                    "required": false
+                }, 
+                {
+                    "code": "NOC.FIRE",
+                    "required": false
+                },
+                {
+                    "code": "NOC.AIRPORT",
+                    "required": false
+                }
+            ]
+        },
+        {
+            "applicationType": "BUILDING_PLAN_SCRUTINY",
+            "ServiceType": "NEW_CONSTRUCTION",
+            "RiskType": "LOW",
+            "WFState": "DOC_VERIFICATION_PENDING",
+            "docTypes": [
+                {
+                    "code": "APPL.BUILDING_DIAGRAM",
+                    "required": true
+                },
+                {
+                    "code": "APPL.LOCALBODY",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "applicationType": "BUILDING_PLAN_SCRUTINY",
+            "ServiceType": "NEW_CONSTRUCTION",
+            "RiskType": "LOW",
+            "WFState": "FIELDINSPECTION_PENDING",
+            "docTypes": [
+                {
+                    "code": "NOC.AGRIGULTURE",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "applicationType": "BUILDING_PLAN_SCRUTINY",
+            "ServiceType": "NEW_CONSTRUCTION",
+            "RiskType": "LOW",
+            "WFState": "NOC_VERIFICATION_PENDING",
+            "docTypes": [
+                {
+                    "code": "NOC.FIRE",
+                    "required": true
+                },
+                {
+                    "code": "NOC.AIRPORT",
+                    "required": true
                 }
             ]
         }
     ]
-  }
-  
+}

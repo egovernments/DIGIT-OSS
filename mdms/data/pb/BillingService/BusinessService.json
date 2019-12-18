@@ -1037,6 +1037,17 @@
       "isAdvanceAllowed": true,
       "demandUpdateTime": 86400000,
       "isVoucherCreationEnabled": false
-    } 
+    },
+    {
+      "businessService": "BPA",
+      "code": "BPA",
+      "collectionModesNotAllowed": [
+        "DD"
+      ],
+      "partPaymentAllowed": false,
+      "isAdvanceAllowed": false,
+      "isVoucherCreationEnabled": true,
+      "isActive": true
+    }
   ]
 }

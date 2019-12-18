@@ -1971,6 +1971,26 @@
       "isActualDemand": true,
       "order": "4",
       "isRequired": false
-    }
+    },
+    {
+      "category": "FEE",
+      "service": "BPA",
+      "name": "BPA Application fees",
+      "code": "BPA_APPL_FEES",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "1",
+      "isRequired": false
+     },  
+     {
+      "category": "FEE",
+      "service": "BPA",
+      "name": "BPA Sanction fees",
+      "code": "BPA_SANC_FEES",
+      "isDebit": false,
+      "isActualDemand": true,
+      "order": "2",
+      "isRequired": false
+     }
   ]
 }

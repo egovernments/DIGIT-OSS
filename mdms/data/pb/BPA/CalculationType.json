@@ -1,0 +1,47 @@
+{
+    "tenantId":"pb",
+    "moduleName":"BPA",
+    "CalculationType":[
+        {
+            "applicationType": "BUILDING_PLAN_SCRUTINY",
+            "serviceType": "ALL",
+            "riskType": "LOW",
+            "feeType":"ApplicationFee",
+            "amount":100
+        },
+        {
+            "applicationType": "ALL",
+            "serviceType": "ALL",
+            "riskType": "LOW",
+            "feeType":"ApplicationFee",
+            "amount":110
+        },
+        {
+            "applicationType": "BUILDING_PLAN_SCRUTINY",
+            "serviceType": "NEW_CONSTRUCTION",
+            "riskType": "ALL",
+            "feeType":"ApplicationFee",
+            "amount":120
+        },
+        {
+            "applicationType": "BUILDING_PLAN_SCRUTINY",
+            "serviceType": "NEW_CONSTRUCTION",
+            "riskType": "LOW",
+            "feeType":"ApplicationFee",
+            "amount":200
+        },{
+            "applicationType": "BUILDING_PLAN_SCRUTINY",
+            "serviceType": "NEW_CONSTRUCTION",
+            "riskType": "LOW",
+            "feeType":"SanctionFee",
+            "amount":500
+        },{
+            "applicationType": "BUILDING_PLAN_SCRUTINY",
+            "serviceType": "ALL",
+            "riskType": "LOW",
+            "feeType":"SanctionFee",
+            "amount":500
+        }
+    ]
+}
+

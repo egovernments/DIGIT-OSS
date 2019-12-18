@@ -879,6 +879,16 @@
       "uniqueKeys": [
         "$.code"
       ]
+    },
+    "CalculationType": {
+      "masterName": "CalculationType",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+    "RiskTypeComputation": {
+      "masterName": "RiskTypeComputation",
+      "isStateLevel": true,
+      "uniqueKeys": []
     }
   },
   "sw-services-calculation": {
