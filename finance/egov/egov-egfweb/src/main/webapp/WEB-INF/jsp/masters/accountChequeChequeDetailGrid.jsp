@@ -53,12 +53,13 @@
    var deletedChqDeptCode="";
    var CHQDETAILSLIST = "chequeDetailsList";
    var chqDetailsIndex = 0;
+   var chequeDetailsMap = new Map();
 	var makeChequeDetailsGridTable = function() {    
     var chequeDetailsGridColumns = [ 
 	{key:"fromChqNo",label:'From Cheque Number', formatter:createTextField(CHQDETAILSLIST,".fromChqNo")},
 	{key:"isExhaustedH",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".isExhusted","hidden")},
 	{key:"toChqNo",label:'To Cheque Number', formatter:createTextField(CHQDETAILSLIST,".toChqNo")},
-	{key:"chequeDeptCode",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".chequeDeptCode","hidden")},
+	{key:"chequeDeptId",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".chequeDeptId","hidden")},
 	{key:"deptName",label:'Department', formatter:createLabelSamll(CHQDETAILSLIST,".deptName")},
 	{key:"deptCode",hidden:true,formatter:createHiddenField(CHQDETAILSLIST,".deptCode","hidden")},
 	{key:"receivedDateL",label:'Received Date', formatter:createLabelSamll(CHQDETAILSLIST,".receivedDateL")},
@@ -84,10 +85,15 @@
 						bootbox.alert("cannot be deleted");
 					}else{
 						this.deleteRow(record);
-						var index = chequeRangeArray.indexOf(record.getData("fromChqNo")+"-"+record.getData("toChqNo")+"-"+record.getData("deptCode")+"-"+record.getData("serialNo"));
+						var key = record.getData("fromChqNo")+"~"+record.getData("toChqNo")+"~"+record.getData("deptCode")+"~"+record.getData("serialNoH");
+						if(chequeDetailsMap.has(key)){
+							chequeDetailsMap.delete(key);
+							document.getElementById('chequeDetailsRowId').value =[ ...chequeDetailsMap.values() ];
+						}
+						var index = chequeRangeArray.indexOf(record.getData("fromChqNo")+"-"+record.getData("toChqNo")+"-"+record.getData("deptCode")+"-"+record.getData("serialNoH"));
 						chequeRangeArray.splice(index,1);
-						if(record.getData("chequeDeptCode")){ // for new cheque leaf records the chequeDeptId value will be blank
-							document.getElementById("deletedChqDeptCode").value = document.getElementById("deletedChqDeptCode").value==""?record.getData("chequeDeptCode"):document.getElementById("deletedChqDeptCode").value+","+record.getData("chequeDeptCode");
+						if(record.getData("chequeDeptId")){ // for new cheque leaf records the chequeDeptId value will be blank
+							document.getElementById("deletedChqDeptId").value = document.getElementById("deletedChqDeptId").value==""?record.getData("chequeDeptId"):document.getElementById("deletedChqDeptId").value+","+record.getData("chequeDeptId");
 							
 						}
 						
@@ -110,7 +116,7 @@
 			"isExhustedH":'<s:property value="isExhusted"/>',
 			"nextChqPresent":'<s:property value="nextChqPresent"/>',
 			"accountChequeId":'<s:property value="accountChequeId"/>',
-			"chequeDeptCode":'<s:property value="chequeDeptCode"/>'
+			"chequeDeptId":'<s:property value="chequeDeptId"/>'
 		});
 		updateFieldChq('fromChqNo',chqDetailsIndex,'<s:property value="fromChqNo"/>','<s:property value="nextChqPresent"/>','<s:property value="isExhusted"/>');
 		updateFieldChq('toChqNo',chqDetailsIndex,'<s:property value="toChqNo"/>','<s:property value="nextChqPresent"/>','<s:property value="isExhusted"/>');
@@ -123,16 +129,25 @@
 		updateLabel('isExhustedL',chqDetailsIndex,'<s:property value="isExhusted"/>');
 		updateField('isExhusted',chqDetailsIndex,'<s:property value="isExhusted"/>');
 		updateField('accountChequeId',chqDetailsIndex,'<s:property value="accountChequeId"/>');
-		updateField('chequeDeptCode',chqDetailsIndex,'<s:property value="chequeDeptCode"/>');
+		updateField('chequeDeptId',chqDetailsIndex,'<s:property value="chequeDeptId"/>');
 		updateField('nextChqPresent',chqDetailsIndex,'<s:property value="nextChqPresent"/>');
 		chqDetailsIndex = chqDetailsIndex + 1;
+		var chequeRowDetails = "<s:property value='fromChqNo'/>~<s:property value='toChqNo'/>~<s:property value='deptCode'/>~<s:property value='receivedDate'/>~<s:property value='serialNo'/>~<s:property value='isExhusted'/>~<s:property value='nextChqPresent'/>~<s:property value='accountChequeId'/>;";
+		var key = "<s:property value='fromChqNo'/>~<s:property value='toChqNo'/>~<s:property value='deptCode'/>~<s:property value='serialNo'/>";
+		chequeDetailsMap.set(key,chequeRowDetails);
 		var chequeRange = '<s:property value="fromChqNo"/>'+"-"+'<s:property value="toChqNo"/>'+"-"+'<s:property value="deptCode"/>'+"-"+'<s:property value="serialNo"/>';
 		if(chequeRangeArray.indexOf(chequeRange) == -1){
 			chequeRangeArray.push(chequeRange);
 		}
 		
         </s:iterator>
+        document.getElementById('chequeDetailsRowId').value =[ ...chequeDetailsMap.values() ];
 }
+
+	var modifyChequeDetailRows = function(key, value){
+		chequeDetailsMap.set(key,value);
+		document.getElementById('chequeDetailsRowId').value = [ ...chequeDetailsMap.values() ];
+	}
 
 function createLabelSamll(prefix,suffix){
     return function(el, oRecord, oColumn, oData) {

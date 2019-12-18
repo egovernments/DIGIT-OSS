@@ -213,6 +213,7 @@
 
 
 			<div class="yui-skin-sam" align="center">
+				<s:hidden name="chequeDetailsRows"  id="chequeDetailsRowId"/>
 				<div id="chequeDetailsGridTable">
 					<script>
 						makeChequeDetailsGridTable();
@@ -244,6 +245,7 @@
 			if ((fromChequeNo != "" || toChequeNo != "" || receivedDate != "") ? true : isDefaultDeptEnabled == 'true' ? false : department != "")
 				document.getElementById("lblError").innerHTML = "Please click on add new cheque or unselect required fields";
 			else {
+				disableParameters();
 				document.chequeMaster.action = '/services/EGF/masters/accountCheque-save.action';
 				document.chequeMaster.submit();
 			}

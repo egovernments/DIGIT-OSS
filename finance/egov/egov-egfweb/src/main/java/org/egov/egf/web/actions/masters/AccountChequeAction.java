@@ -53,6 +53,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Result;
@@ -109,6 +110,7 @@ public class AccountChequeAction extends BaseFormAction {
 
     private String deletedChqDeptId;
     private String defaultSelectedDepartments = "";
+    private String chequeDetailsRows;
     
     @Autowired
     protected AppConfigValueService appConfigValuesService;
@@ -230,6 +232,7 @@ public class AccountChequeAction extends BaseFormAction {
         removeEmptyRows();
         bankaccount = (Bankaccount) persistenceService
                 .find("from Bankaccount where id =" + Long.valueOf(parameters.get("bankAccId")[0]));
+        this.prepareChequeDetailsList(chequeDetailsRows);
         if (null == chequeDetailsList) {
             accountChequesService.deleteRecords(bankaccount);
             addActionMessage("Cheque Master deleted Successfully : No cheque leafs available");
@@ -247,6 +250,34 @@ public class AccountChequeAction extends BaseFormAction {
             prepareChequeDetails(chequeList);
         addActionMessage("Cheque Master updated Successfully");
         return "manipulateCheques";
+    }
+
+    private void prepareChequeDetailsList(String chequeDetailsRows2) {
+        // TODO Auto-generated method stub
+        if (StringUtils.isNotBlank(chequeDetailsRows)) {
+            chequeDetailsList = new ArrayList<>();
+            String[] cheqDetailsArr = chequeDetailsRows.split(";,");
+            for (String str : cheqDetailsArr) {
+                String[] split = str.split("~");
+                ChequeDetail cd = new ChequeDetail();
+                cd.setFromChqNo(StringUtils.defaultIfBlank(split[0], null));
+                cd.setToChqNo(StringUtils.defaultIfBlank(split[1], null));
+                cd.setDeptCode(StringUtils.defaultIfBlank(split[2], null));
+                cd.setReceivedDate(StringUtils.defaultIfBlank(split[3], null));
+                cd.setSerialNo(StringUtils.defaultIfBlank(split[4], null));
+                try {
+                    cd.setIsExhusted(StringUtils.defaultIfBlank(split[5], "No"));
+                    cd.setNextChqPresent(StringUtils.defaultIfBlank(split[6], "No"));
+                    cd.setAccountChequeId(StringUtils.isNotBlank(split[7]) ? split[7].lastIndexOf(";") == -1
+                            ? Long.parseLong(split[7]) : split[7].substring(0, split[7].lastIndexOf(";")).isEmpty() ? 0l
+                                    : Long.parseLong(split[7].substring(0, split[7].lastIndexOf(";")))
+                            : null);
+                } catch (Exception e) {
+                    LOGGER.error("ERROR occurred while setting the cheque details123",e.getCause());
+                }
+                chequeDetailsList.add(cd);
+            }
+        }
     }
 
     private void removeEmptyRows() {
@@ -323,5 +354,13 @@ public class AccountChequeAction extends BaseFormAction {
 
     public void setDefaultSelectedDepartments(String defaultSelectedDepartment) {
         this.defaultSelectedDepartments = defaultSelectedDepartment;
+    }
+    
+    public String getChequeDetailsRows() {
+        return chequeDetailsRows;
+    }
+    
+    public void setChequeDetailsRows(String chequeDetailsRows) {
+        this.chequeDetailsRows = chequeDetailsRows;
     }
 }
