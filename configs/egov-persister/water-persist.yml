@@ -32,7 +32,7 @@ serviceMaps:
        
           
 
-    - query: INSERT INTO water_service_connection(connection_id,connectionCategory,rainWaterHarvesting,connectionType,waterSource,meterId,meterInstallationDate,pipeSize,noOfTaps,uom,waterSubSource,calculationAttribute) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);
+    - query: INSERT INTO water_service_connection(connection_id,connectionCategory,rainWaterHarvesting,connectionType,waterSource,meterId,meterInstallationDate,pipeSize,noOfTaps,uom,waterSubSource,calculationAttribute,connectionexecutiondate) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?);
       basePath: $.WaterConnection
       jsonMaps:
 
@@ -61,7 +61,8 @@ serviceMaps:
        - jsonPath: $.WaterConnection.waterSubSource
       
        - jsonPath: $.WaterConnection.calculationAttribute
-     
+       
+       - jsonPath: $.WaterConnection.connectionExecutionDate
 
  - version: 1.0
    name: WaterConnection
