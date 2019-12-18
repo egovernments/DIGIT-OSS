@@ -856,6 +856,11 @@
       "masterName": "MeterStatus",
       "isStateLevel": true,
       "uniqueKeys": []
+    },
+    "WS_Round_Off": {
+      "masterName": "WS_Round_Off",
+      "isStateLevel": true,
+      "uniqueKeys": []
     }
   },
   "BPA": {
@@ -932,6 +937,11 @@
     },
     "SW_TIME_PENALTY": {
       "masterName": "SW_TIME_PENALTY",
+      "isStateLevel": true,
+      "uniqueKeys": []
+    },
+     "SW_Round_Off": {
+      "masterName": "SW_Round_Off",
       "isStateLevel": true,
       "uniqueKeys": []
     }
