@@ -57,7 +57,6 @@
  Use case other than above 4 'll throw 'Invalid Cheque Range'
  */
 function updateGridData() {
-
 	document.getElementById("lblError").innerHTML = "";
 
 	if (document.getElementById("fromChqNo").value.trim() == "") {
@@ -157,23 +156,35 @@ function updateGridData() {
 	}
 
 	for (var i = 0; i < deptSelectedValue.length; i++) {
+		var fromChqNo = document.getElementById("fromChqNo").value.trim();
+		var toChqNo = document.getElementById("toChqNo").value.trim();
+		var deptCode = deptSelectedValue[i];
+		var receivedDate =  document.getElementById("receivedDate").value;
+		var serialNo = serialNoSelectedValue[0];
+		var isExhusted = "No";
+		var chequeDeptCode = "";
+		var nextChqPresent = "No";
+		var accountChequeId = "";
+		var newlyAddedCheque = fromChqNo +"~"+toChqNo +"~"+deptCode +"~"+receivedDate +"~"+serialNo +"~"+isExhusted +"~"+nextChqPresent +"~"+accountChequeId+";";
+		var key = fromChqNo +"~"+toChqNo +"~"+deptCode +"~"+serialNo ;
+		modifyChequeDetailRows(key,newlyAddedCheque);
 		chequeDetailsGridTable.addRow({
-			SlNo : chequeDetailsGridTable.getRecordSet().getLength() + 1
+			SlNo : chequeDetailsGridTable.getRecordSet().getLength() + 1,
+			fromChqNo : fromChqNo,
+			toChqNo : toChqNo,
+			deptCode : deptCode,
+			serialNoH : serialNo
 		});
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
-				+ '].fromChqNo').value = document.getElementById("fromChqNo").value
-				.trim();
+				+ '].fromChqNo').value = fromChqNo;
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
-				+ '].toChqNo').value = document.getElementById("toChqNo").value
-				.trim();
+				+ '].toChqNo').value = toChqNo;
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
 				+ '].deptName').innerHTML = deptSelectedText[i];
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
-				+ '].receivedDateL').innerHTML = document
-				.getElementById("receivedDate").value;
+				+ '].receivedDateL').innerHTML = receivedDate;
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
-				+ '].receivedDate').value = document
-				.getElementById("receivedDate").value;
+				+ '].receivedDate').value = receivedDate;
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
 				+ '].serialNoL').innerHTML =serialNoSelectedText[0];
 		document.getElementById(CHQDETAILSLIST + '[' + chqDetailsIndex
@@ -292,4 +303,22 @@ if (!Array.indexOf) {
 
 String.prototype.trim = function() {
 	return this.replace(/^\s*/, "").replace(/\s*$/, "");
+}
+
+var disableParameters = function(){
+		var frmIndex=0;
+		for(var i=0;i<document.forms[frmIndex].length;i++)
+			{
+				for(var i=0;i<document.forms[0].length;i++)
+					{
+						if(document.forms[0].elements[i].name != 'bankAccId' && document.forms[0].elements[i].name != 'financialYearId'
+							&& document.forms[0].elements[i].name != 'isDefaultDeptEnabled' && document.forms[0].elements[i].name != 'fromChqNo' &&
+							document.forms[0].elements[i].name != 'toChqNo' && document.forms[0].elements[i].name != 'receivedDate'
+							&& document.forms[0].elements[i].name != 'departmentList' && document.forms[0].elements[i].name != 'deletedChqDeptId'
+							&& document.forms[0].elements[i].name != 'struts.token.name' && document.forms[0].elements[i].name != 'token'
+							&& document.forms[0].elements[i].name != 'chequeDetailsRows'){
+							document.forms[frmIndex].elements[i].disabled =true;
+						}						
+					}	
+			}
 }
