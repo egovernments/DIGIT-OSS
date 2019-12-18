@@ -5,6 +5,7 @@ import {
 import set from "lodash/set";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
+import {getLocaleLabels} from "egov-ui-framework/ui-utils/commons.js";
 
 export const validateField = field => {
   const {
@@ -34,7 +35,8 @@ export const validateField = field => {
 
   if (required && !value) {
     isFieldValid = false;
-    errorText = field.requiredMessage || "Required";
+    
+    errorText = field.requiredMessage ||getLocaleLabels("REQUIRED_FIELD","REQUIRED_FIELD");
   }
 
   if (value) {
