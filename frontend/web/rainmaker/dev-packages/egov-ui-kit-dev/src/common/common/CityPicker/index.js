@@ -65,7 +65,7 @@ class CityPickerDialog extends Component {
   render() {
     const { autoSuggestCallback, prepareResultsForDisplay, onClose, onCityFieldClicked, onItemClick } = this;
     const { results, searchTerm, open } = this.state;
-    const { field, cities } = this.props;
+    const { field, localizationLabels,cities } = this.props;
     const displayInitialList = searchTerm.length === 0 ? true : false;
     return (
       <div>
@@ -73,7 +73,7 @@ class CityPickerDialog extends Component {
           <TextFieldIcon
             {...field}
             errorStyle={{ bottom: "0px" }}
-            value={getCityNameByCode((field || {}).value, cities)}
+            value={getCityNameByCode((field || {}).value, localizationLabels)}
             id="person-city"
             iconPosition="after"
             Icon={DownArrow}
