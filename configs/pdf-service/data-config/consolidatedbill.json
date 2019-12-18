@@ -67,6 +67,18 @@
                }
               },
               {
+                "variable": "Rs",
+                "value": {
+                  "path": "PDF_STATIC_LABEL_CONSOLIDATED_TLAPP_RUPEE"
+                },
+                "type": "label",
+                "localisation":{
+                  "required":true,
+                  "prefix": null,
+                  "module":"rainmaker-common"
+               }
+            },
+              {
                 "variable": "mobile_no",
                 "value": {
                   "path": "PDF_STATIC_LABEL_CONSOLIDATED_BILL_MOBILE_NO"
@@ -537,7 +549,7 @@
           {
             "externalAPI": [     
               { 
-                  "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                  "path": "http://localhost:8070/egov-mdms-service/v1/_get",
                   "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='$.tenantId')%5D",
                   "apiRequest": null,
                   "responseMapping":[
