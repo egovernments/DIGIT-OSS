@@ -85,7 +85,7 @@ class UserSettings extends Component {
   onLanguageChange = (event, index, value) => {
     //const {setRote} = this.props;
     this.setState({ languageSelected: value });
-    this.props.fetchLocalizationLabel(value);
+    this.props.fetchLocalizationLabel(value,getTenantId(), getTenantId());
   };
 
   // onUserChange = (event, index, value) => {
