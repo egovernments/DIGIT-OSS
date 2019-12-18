@@ -11,7 +11,7 @@
       "idname": "billnumberid"
     },
     {
-      "format": "PTA-[SEQ_EGOV_COMMON_TEST_AUTOCRE]",
+      "format": "PB-AS-[cy:yyyy-MM-dd]-[SEQ_EG_PT_ASSM]",
       "idname": "pt.assessmentnumber"
     },
     {
