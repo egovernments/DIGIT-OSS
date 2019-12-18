@@ -57,7 +57,7 @@
                     "text": "{{total_amount_due}}"
                   },
                   {
-                    "text": "{{totalAmountDue}}",
+                    "text": "{{Rs}} {{totalAmountDue}}",
                     "style": "amount-due"
                   }
                 ],
@@ -1001,10 +1001,11 @@
       "footer-bottom": {
         "margin": [
           0,
-          10,
+          50,
           0,
           0
         ],
+        "bold": true,
         "color": "#000000",
         "alignment": "right"
       }
