@@ -31,7 +31,12 @@ const getMdmsData = async () => {
     console.log(e);
   }
 };
-export const fetchData = async (action, state, dispatch) => {
+export const fetchData = async (
+  action,
+  state,
+  dispatch,
+  fromMyApplicationPage = false
+) => {
   const response = await getSearchResults();
   const mdmsRes = await getMdmsData(dispatch);
   let tenants =
@@ -79,6 +84,17 @@ export const fetchData = async (action, state, dispatch) => {
       dispatch(
         prepareFinalObject("myApplicationsCount", response.Licenses.length)
       );
+      const myApplicationsCount = response.Licenses.length;
+      if (fromMyApplicationPage) {
+        dispatch(
+          handleField(
+            "my-applications",
+            "components.div.children.header.children.key",
+            "props.dynamicArray",
+            myApplicationsCount ? [myApplicationsCount] : [0]
+          )
+        );
+      }
     }
   } catch (error) {
     console.log(error);

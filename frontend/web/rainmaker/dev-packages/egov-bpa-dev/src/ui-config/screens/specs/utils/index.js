@@ -2257,8 +2257,8 @@ export const getTextToLocalMapping = label => {
       );
     case "Owner Name":
       return getLocaleLabels(
-        "Owner Name",
-        "TL_COMMON_TABLE_COL_OWN_NAME",
+        "Assigned To",
+        "BPA_COMMON_TABLE_COL_ASSIGN_TO",
         localisationLabels
       );
 

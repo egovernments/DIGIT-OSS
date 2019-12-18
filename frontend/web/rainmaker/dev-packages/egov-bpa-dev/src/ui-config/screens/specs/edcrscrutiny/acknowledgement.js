@@ -38,7 +38,7 @@ const getPDFbuttons = (
               style: {
                 marginTop: "7px",
                 marginRight: "8px",
-                cursor:"pointer"
+                cursor: "pointer"
               }
             },
             onClick: {
@@ -59,7 +59,7 @@ const getPDFbuttons = (
             labelName: "Scrutiny Report",
             labelKey: "EDCR_SCUTINY_REPORT",
             style: {
-              cursor:"pointer"
+              cursor: "pointer"
             }
           })
         },
@@ -91,7 +91,7 @@ const getPDFbuttons = (
                 marginTop: "7px",
                 marginRight: "8px",
                 marginLeft: "10px",
-                cursor:"pointer"
+                cursor: "pointer"
               }
             },
             onClick: {
@@ -112,7 +112,7 @@ const getPDFbuttons = (
             labelName: "Scrutiny Report",
             labelKey: "EDCR_SCUTINY_REPORT",
             style: {
-              cursor:"pointer"
+              cursor: "pointer"
             }
           })
         },
@@ -168,10 +168,12 @@ const generatePdfAndDownload = async (
     const file = new Blob([response.data], { type: "application/pdf" });
     const fileURL = URL.createObjectURL(file);
     var myWindow = window.open(fileURL);
-    myWindow.onload = ()=>{
-      myWindow.focus();
-      myWindow.print();
-    } 
+    if (myWindow != undefined) {
+      myWindow.addEventListener('load', (event) => {
+        myWindow.focus();
+        myWindow.print();
+      });
+    }
   } else if (action === "download") {
     var iframe = document.createElement("iframe");
     iframe.src = reporturl;
@@ -197,12 +199,12 @@ const generatePdfAndDownload = async (
         "#material-ui-tradeReviewDetails"
       );
     }
-  
+
     // To hide the iframe
     iframe.style.cssText =
       "position: absolute; opacity:0; z-index: -9999; width: 900px; height: 100%";
     document.querySelector("#custom-atoms-iframeForPdf").appendChild(iframe);
-  };
+  }
 };
 
 const getAcknowledgementCard = (
@@ -245,8 +247,12 @@ const getAcknowledgementCard = (
             icon: "done",
             backgroundColor: "#39CB74",
             header: {
-              labelName: "Building Plan Scrutiny is Processed",
+              labelName: "Building plan eDCR scrutiny is Accepted",
               labelKey: "EDCR_ACKNOWLEDGEMENT_SUCCESS_MESSAGE"
+            },
+            body: {
+              labelName:"This plan can now be used for creating permit application",
+              labelKey: "EDCR_ACKNOWLEDGEMENT_SUCCESS_COMMENT"
             },
             tailText: {
               labelName: "Building Plan Scrutiny Number",
@@ -287,8 +293,12 @@ const getAcknowledgementCard = (
             icon: "close",
             backgroundColor: "#E54D42",
             header: {
-              labelName: "Building Plan Scrutiny is Rejected",
+              labelName: "Building plan eDCR is Not Accepted",
               labelKey: "EDCR_REJECTION_MESSAGE"
+            },
+            body: {
+              labelName:"Please make corrections in the diagram and try again",
+              labelKey: "EDCR_REJECTION_COMMENT"
             }
           })
         }

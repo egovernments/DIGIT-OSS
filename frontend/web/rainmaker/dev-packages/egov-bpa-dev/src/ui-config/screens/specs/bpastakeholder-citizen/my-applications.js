@@ -4,7 +4,7 @@ import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils
 const header = getCommonHeader(
   {
     labelName: "My Applications",
-    labelKey: "TL_MY_APPLICATIONS_HEADER"
+    labelKey: "TL_MY_APPLICATIONS"
   },
   {
     classes: {
@@ -17,7 +17,7 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "my-applications",
   beforeInitScreen: (action, state, dispatch) => {
-    fetchData(action, state, dispatch);
+    fetchData(action, state, dispatch, true);
     return action;
   },
   components: {

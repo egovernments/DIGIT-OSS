@@ -12,7 +12,12 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { validateFields } from "../utils";
 
-export const fetchData = async (action, state, dispatch) => {
+export const fetchData = async (
+  action,
+  state,
+  dispatch,
+  fromMyApplicationPage = false
+) => {
   const response = await getSearchResultsfromEDCR(action, state, dispatch);
   try {
     if (response && response.edcrDetail) {
@@ -20,6 +25,17 @@ export const fetchData = async (action, state, dispatch) => {
       dispatch(
         prepareFinalObject("myApplicationsCount", response.edcrDetail.length)
       );
+      const myApplicationsCount = response.edcrDetail.length;
+      if (fromMyApplicationPage) {
+        dispatch(
+          handleField(
+            "my-applications",
+            "components.div.children.header.children.key",
+            "props.dynamicArray",
+            myApplicationsCount ? [myApplicationsCount] : [0]
+          )
+        );
+      }
     }
   } catch (error) {
     console.log(error);
@@ -78,10 +94,16 @@ const getSearchResultsfromEDCR = async (action, state, dispatch) => {
   }
 };
 
-export const getSearchResultsfromEDCRWithApplcationNo = async (applicationNumber, tenantId) => {
+export const getSearchResultsfromEDCRWithApplcationNo = async (
+  applicationNumber,
+  tenantId
+) => {
   try {
+    let EDCRHost = process.env.REACT_APP_EDCR_API_HOST
+    ? process.env.REACT_APP_EDCR_API_HOST
+    : "https://egov-dcr-galaxy.egovernments.org";
     const response = await axios.post(
-      `https://egov-dcr-galaxy.egovernments.org/edcr/rest/dcr/scrutinydetails?tenantId=${tenantId}&transactionNumber=${applicationNumber}`,
+      `${EDCRHost}/edcr/rest/dcr/scrutinydetails?tenantId=${tenantId}&transactionNumber=${applicationNumber}`,
       {
         RequestInfo: {
           apiId: "1",

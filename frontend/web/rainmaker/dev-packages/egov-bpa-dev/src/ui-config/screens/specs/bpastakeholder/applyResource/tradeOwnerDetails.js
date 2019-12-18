@@ -30,6 +30,10 @@ export const getOwnerMobNoField = getTextField({
     labelName: "Enter Mobile No.",
     labelKey: "TL_NEW_OWNER_DETAILS_MOB_NO_PLACEHOLDER"
   },
+  iconObj: {
+    label: "+91 |",
+    position: "start"
+  },
   required: true,
   pattern: getPattern("MobileNo"),
   jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].mobileNumber"

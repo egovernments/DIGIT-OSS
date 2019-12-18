@@ -25,6 +25,10 @@ const getAcknowledgementCard = (
 ) => {
   const financialYearText = financialYear ? financialYear : "";
   if (purpose === "apply" && status === "success") {
+    var openlink =false;
+    if (window.location.pathname.includes("openlink")) {
+      openlink = true;
+    }
     return {
       header: getCommonHeader({
         labelName: "Application for New Stakeholder Registration",
@@ -48,9 +52,9 @@ const getAcknowledgementCard = (
               labelKey: "BPA_APPLICATION_SUCCESS_MESSAGE_MAIN"
             },
             body: {
-              labelName:
-                "A notification regarding Application Submission has been sent at registered Mobile No.",
-              labelKey: "BPA_APPLICATION_SUCCESS_MESSAGE_SUB"
+              labelName:openlink?
+              "User credentials and Login URL have been sent to your registered mobile number.Please login and make payment from my applications under building plan menu for this application to get registered as Stakeholder":"Application details have been sent to your registered mobile number.",
+              labelKey: openlink?"BPA_CONFIRMATION_MESSAGE_OPENLINK":"BPA_CONFIRMATION_MESSAGE_AUTH"
             },
             tailText: {
               labelName: "Application No.",

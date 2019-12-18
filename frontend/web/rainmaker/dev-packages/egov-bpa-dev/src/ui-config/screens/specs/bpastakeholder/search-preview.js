@@ -62,7 +62,7 @@ const setDocuments = async (
     uploadedDocData &&
     uploadedDocData.map((item, index) => {
       return {
-        title: `TL_${item.documentType}` || "",
+        title: `BPA_${item.documentType}` || "",
         link:
           (fileUrlPayload &&
             fileUrlPayload[item.fileStoreId] &&
