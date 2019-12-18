@@ -1174,9 +1174,7 @@ const isApplicationPaid = currentStatus => {
   let isPAID = false;
 
   if (!isEmpty(JSON.parse(localStorageGet("businessServiceData")))) {
-    const tlBusinessService = JSON.parse(
-      localStorageGet("businessServiceData")
-    ).filter(item => item.businessService === "NewTL");
+    const tlBusinessService = JSON.parse(localStorageGet("businessServiceData")).filter(item => item.businessService === "NewTL")
     const states = tlBusinessService[0].states;
     for (var i = 0; i < states.length; i++) {
       if (states[i].state === currentStatus) {
