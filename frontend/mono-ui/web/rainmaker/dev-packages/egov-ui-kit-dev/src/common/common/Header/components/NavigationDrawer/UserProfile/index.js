@@ -1,7 +1,8 @@
 import React from "react";
 import { ProfileSection } from "components";
 import { getCityNameByCode } from "egov-ui-kit/utils/commons";
-
+import { connect } from "react-redux";
+import get from "lodash/get";
 import emptyFace from "egov-ui-kit/assets/images/download.png";
 
 const styles = {
@@ -41,14 +42,14 @@ const styles = {
   },
 };
 
-const prepareUserInfo = (userInfo = {}, cities = []) => {
+const prepareUserInfo = (userInfo = {}, cities = [],localizationLabels) => {
   const { photo, name, emailId, permanentCity, tenantId } = userInfo;
-  const location = getCityNameByCode(permanentCity, cities) || getCityNameByCode(tenantId, cities);
+  const location = getCityNameByCode(permanentCity, localizationLabels) || getCityNameByCode(tenantId, localizationLabels);
   return { photo, name, emailId, location };
 };
 
-const UserProfile = ({ role = "citizen", cities = [], userInfo = {} }) => {
-  userInfo = prepareUserInfo(userInfo, cities);
+const UserProfile = ({ role = "citizen", cities = [], userInfo = {} ,localizationLabels}) => {
+  userInfo = prepareUserInfo(userInfo, cities,localizationLabels);
   return (
     <ProfileSection
       imgStyle={styles.imageStyle}
@@ -65,4 +66,11 @@ const UserProfile = ({ role = "citizen", cities = [], userInfo = {} }) => {
   );
 };
 
-export default UserProfile;
+// export default UserProfile;
+
+const mapStateToProps = (state) => {
+  const localizationLabels = get(state.app, "localizationLabels", {});
+  return {  localizationLabels };
+};
+
+export default connect(mapStateToProps)(UserProfile);
