@@ -47,11 +47,11 @@ serviceMaps:
       basePath: Assessment.units.*
       jsonMaps:
 
-      - jsonPath: $.Assessment.units.*.tenantId
+      - jsonPath: $.Assessment.tenantId
 
       - jsonPath: $.Assessment.units.*.id
 
-      - jsonPath: $.Assessment.units.*.assessmentId
+      - jsonPath: $.Assessment.id
 
       - jsonPath: $.Assessment.units.*.floorNo
 
@@ -85,7 +85,7 @@ serviceMaps:
 
       - jsonPath: $.Assessment.documents.*.id
 
-      - jsonPath: $.Assessment.documents.*.tenantId
+      - jsonPath: $.Assessment.tenantId
 
       - jsonPath: $.Assessment.id
 
@@ -158,11 +158,11 @@ serviceMaps:
       basePath: Assessment.units.*
       jsonMaps:
 
-      - jsonPath: $.Assessment.units.*.tenantId
+      - jsonPath: $.Assessment.tenantId
 
       - jsonPath: $.Assessment.units.*.id
 
-      - jsonPath: $.Assessment.units.*.assessmentId
+      - jsonPath: $.Assessment.id
 
       - jsonPath: $.Assessment.units.*.floorNo
 
@@ -217,7 +217,7 @@ serviceMaps:
 
       - jsonPath: $.Assessment.documents.*.id
 
-      - jsonPath: $.Assessment.documents.*.tenantId
+      - jsonPath: $.Assessment.tenantId
 
       - jsonPath: $.Assessment.id
 
