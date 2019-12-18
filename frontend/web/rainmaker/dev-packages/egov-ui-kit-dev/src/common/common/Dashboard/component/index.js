@@ -28,7 +28,7 @@ const ModuleCard = ({ items, onButton1Click, onPGRClick, onButton2Click, history
       {items &&
         items.map((item, key) => {
           return (
-            <div key={key} className={`col-sm-6 ${item.className}`}>
+            <div key={key} className={`col-sm-6 ${item.className}` }>
               <Card
                 id="home-complaint-card"
                 className="clearfix landingPageCard"
