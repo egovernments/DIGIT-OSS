@@ -15884,6 +15884,39 @@
       "navigationURL": "fire-noc/search",
       "path": "FIRE-NOC.Search",
       "leftIcon": "social:people"
+    },
+    {
+      "id": 1933,
+      "name": "Create Assessment registry",
+      "url": "/property-services/assessment/_create",
+      "displayName": "Create Assessment Registry",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "property-services",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1934,
+      "name": "Update Assessment registry",
+      "url": "/property-services/assessment/_update",
+      "displayName": "Update Assessment Registry",
+      "orderNumber": 1,
+      "enabled": false,
+      "serviceCode": "property-services",
+      "code": "null",
+      "path": ""
+    },
+    {
+      "id": 1935,
+      "name": "Search Assessment registry",
+      "url": "/property-services/assessment/_search",
+      "displayName": "Search Assessment Registry",
+      "orderNumber": 3,
+      "enabled": false,
+      "serviceCode": "property-services",
+      "code": "null",
+      "path": ""
     }
   ]
 }
