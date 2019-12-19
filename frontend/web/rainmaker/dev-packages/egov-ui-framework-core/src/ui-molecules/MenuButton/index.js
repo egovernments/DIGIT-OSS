@@ -52,7 +52,6 @@ class MenuListComposition extends React.Component {
   render() {
     const { classes, data } = this.props;
     const { open } = this.state;
-
     return (
       <div className={classes.root} data-html2canvas-ignore={true}>
         <div>
@@ -65,7 +64,7 @@ class MenuListComposition extends React.Component {
             onClick={this.handleToggle}
             {...data.props}
           >
-            <Icon className={classes.leftIcon} iconName={data.leftIcon} />
+            {data.leftIcon && <Icon className={classes.leftIcon} iconName={data.leftIcon} />}
               <LabelContainer labelName={data.label.labelName} labelKey={data.label.labelKey} style={{color:data.props.style.color}}/>
               <span style={{marginLeft:30 ,color : data.props.color}}> |  </span>
             <Icon className={classes.rightIcon} iconName={data.rightIcon} />

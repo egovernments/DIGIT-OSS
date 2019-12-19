@@ -8,6 +8,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import MenuButton from "egov-ui-framework/ui-molecules/MenuButton";
 import { getDownloadItems } from "./downloadItems";
 import get from "lodash/get";
+import isEmpty from "lodash/isEmpty"
 import "./index.css";
 
 class Footer extends React.Component {
@@ -61,7 +62,6 @@ class Footer extends React.Component {
         process.env.NODE_ENV === "development"
           ? item.buttonUrl
           : item.buttonUrl;
-      //window.location.href = `${window.origin}/${url}`;
       setRoute(url);
       return;
     }
@@ -105,8 +105,6 @@ class Footer extends React.Component {
 
   render() {
     const {
-      // color,
-      // variant,
       contractData,
       handleFieldChange,
       onDialogButtonClick,
@@ -144,11 +142,11 @@ class Footer extends React.Component {
     };
     return (
       <div className="apply-wizard-footer" id="custom-atoms-footer">
-        <Container>
+        {!isEmpty(downloadMenu) && <Container>
           <Item xs={12} sm={12} className="wf-footer-container">
             <MenuButton data={buttonItems} />
           </Item>
-        </Container>
+        </Container>}
         <ActionDialog
           open={open}
           onClose={this.onClose}
