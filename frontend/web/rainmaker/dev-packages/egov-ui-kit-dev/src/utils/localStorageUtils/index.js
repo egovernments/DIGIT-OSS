@@ -10,9 +10,6 @@ export const getUserInfo = () => {
   return localStorageGet("user-info");
 };
 export const getTenantId = () => {
-  if(process.env.REACT_APP_NAME === "Citizen") {
-    return JSON.parse(getUserInfo()).permanentCity;
-  }
   return localStorageGet("tenant-id");
 };
 export const getLocalization = (key) => {
