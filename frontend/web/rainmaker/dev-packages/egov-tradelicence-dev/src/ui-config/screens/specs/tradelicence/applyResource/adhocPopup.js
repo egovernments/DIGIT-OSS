@@ -4,7 +4,8 @@ import {
   getSelectField,
   getCommonContainer,
   getCommonSubHeader,
-  getLabel
+  getLabel,
+  getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { showHideAdhocPopup } from "../../utils";
 import get from "lodash/get";
@@ -244,6 +245,7 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
+          pattern: getPattern("Amount"),
           jsonPath: "Licenses[0].tradeLicenseDetail.adhocPenalty"
         }),
         penaltyReason: getSelectField({
