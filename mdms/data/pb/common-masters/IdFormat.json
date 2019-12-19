@@ -476,6 +476,14 @@
     {
       "format": "BPAREG/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
       "idname": "bpareg.receipt.id"
+    },
+    {
+      "format": "BPA_APPL_FEE/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
+      "idname": "BPA.NC_APP_FEE.receipt.id"
+    },
+    {
+      "format": "BPA_SANC_FEE/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
+      "idname": "BPA.NC_SAN_FEE.receipt.id"
     }
   ]
 }

@@ -1974,7 +1974,7 @@
     },
     {
       "category": "FEE",
-      "service": "BPA",
+      "service": "BPA.NC_APP_FEE",
       "name": "BPA Application fees",
       "code": "BPA_APPL_FEES",
       "isDebit": false,
@@ -1984,7 +1984,7 @@
      },  
      {
       "category": "FEE",
-      "service": "BPA",
+      "service": "BPA.NC_SAN_FEE",
       "name": "BPA Sanction fees",
       "code": "BPA_SANC_FEES",
       "isDebit": false,
