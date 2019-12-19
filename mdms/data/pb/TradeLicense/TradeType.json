@@ -1889,14 +1889,6 @@
       "verificationDocument":[],
       "active": true,
       "type": "BPA"
-    },
-    {
-      "code": "TOWNPLANNER",
-      "uom": null,
-      "applicationDocument":["OWNERIDPROOF", "OWNERSHIPPROOF","EXPERIENCEPROOF"],
-      "verificationDocument":[],
-      "active": true,
-      "type": "BPA"
     }
   ]
 }
