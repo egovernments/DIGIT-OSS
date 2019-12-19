@@ -6,7 +6,7 @@
             "applicationType": "BUILDING_PLAN_SCRUTINY",
             "ServiceType": "NEW_CONSTRUCTION",
             "RiskType": "LOW",
-            "WFState": "INITIATED",
+            "WFState": "null",
             "docTypes": [
                 {
                     "code": "OWNER.IDENTITYPROOF",
@@ -38,7 +38,7 @@
             "applicationType": "BUILDING_PLAN_SCRUTINY",
             "ServiceType": "NEW_CONSTRUCTION",
             "RiskType": "LOW",
-            "WFState": "DOC_VERIFICATION_PENDING",
+            "WFState": "INITIATED",
             "docTypes": [
                 {
                     "code": "APPL.BUILDING_DIAGRAM",
@@ -80,3 +80,5 @@
         }
     ]
 }
+
+
