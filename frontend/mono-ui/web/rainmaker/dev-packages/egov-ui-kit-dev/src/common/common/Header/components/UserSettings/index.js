@@ -4,6 +4,7 @@ import emptyFace from "egov-ui-kit/assets/images/download.png";
 import { getLocale, getTenantId, setTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import React, { Component } from "react";
 import LogoutDialog from "../LogoutDialog";
+import { getQueryArg } from "egov-ui-kit/utils/commons";
 import { CommonMenuItems } from "../NavigationDrawer/commonMenuItems";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import { connect } from "react-redux";
@@ -88,10 +89,11 @@ class UserSettings extends Component {
     let tenantId = getTenantId();
 
     if (process.env.REACT_APP_NAME === "Citizen") {
+      const tenantInfo=getQueryArg(window.location.href, "tenantId")
       const userInfo = JSON.parse(getUserInfo());
       tenantId = userInfo && userInfo.permanentCity;
+      tenantId = tenantInfo?tenantInfo:tenantId;
     }
-
     this.props.fetchLocalizationLabel(value, tenantId, tenantId);
   };
 
