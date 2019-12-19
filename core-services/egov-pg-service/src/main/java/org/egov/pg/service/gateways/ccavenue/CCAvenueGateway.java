@@ -38,7 +38,8 @@ public class CCAvenueGateway implements Gateway {
     private final String GATEWAY_TRANSACTION_STATUS_URL;
     private final boolean ACTIVE;
     private final String MERCHANT_ID;
-    private final String ACCESS_CODE;
+    private final String REDIRECT_ACCESS_CODE;
+    private final String STATUS_ACCESS_CODE;
     private final String CURRENCY;
     private final String REDIRECT_URL;
     private final String CANCEL_URL;
@@ -57,14 +58,17 @@ public class CCAvenueGateway implements Gateway {
     private final String ENCREQUEST_KEY = "encRequest";
 
     private RestTemplate restTemplate;
-    private CCAvenueCryptUtil ccavenueUtil;
+    private CCAvenueCryptUtil redirectCCavenueUtil;
+    private CCAvenueCryptUtil statusCCavenueUtil;
 
     @Autowired
     public CCAvenueGateway(RestTemplate restTemplate, Environment environment) {
         this.restTemplate = restTemplate;
 
-        this.ccavenueUtil = new CCAvenueCryptUtil(environment.getRequiredProperty("ccavenue.working.key"));
-        ACCESS_CODE = environment.getRequiredProperty("ccavenue.access.code");
+        this.redirectCCavenueUtil = new CCAvenueCryptUtil(environment.getRequiredProperty("ccavenue.redirect.working.key"));
+        this.statusCCavenueUtil = new CCAvenueCryptUtil(environment.getRequiredProperty("ccavenue.status.working.key"));
+        REDIRECT_ACCESS_CODE = environment.getRequiredProperty("ccavenue.redirect.access.code");
+        STATUS_ACCESS_CODE = environment.getRequiredProperty("ccavenue.status.access.code");
         ACTIVE = Boolean.valueOf(environment.getRequiredProperty("ccavenue.active"));
         MERCHANT_ID = environment.getRequiredProperty("ccavenue.merchant.id");
         CURRENCY = environment.getRequiredProperty("ccavenue.currency");
@@ -95,8 +99,8 @@ public class CCAvenueGateway implements Gateway {
 
         try {
             TreeMap<String, String> paramMap = new TreeMap<>();
-            paramMap.put(ACCESS_CODE_KEY, ACCESS_CODE);
-            paramMap.put(ENCREQUEST_KEY, ccavenueUtil.encrypt(encRequest.toString()));
+            paramMap.put(ACCESS_CODE_KEY, REDIRECT_ACCESS_CODE);
+            paramMap.put(ENCREQUEST_KEY, redirectCCavenueUtil.encrypt(encRequest.toString()));
 
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
             paramMap.forEach((key, value) -> params.put(key, Collections.singletonList(value)));
@@ -126,10 +130,10 @@ public class CCAvenueGateway implements Gateway {
 
         try {
 
-            String jsonRequest = ccavenueUtil.encrypt("{\"order_no\" : \"" + currentStatus.getTxnId() + "\"}");
+            String jsonRequest = statusCCavenueUtil.encrypt("{\"order_no\" : \"" + currentStatus.getTxnId() + "\"}");
             HashMap<String, String> params = new HashMap<>();
             params.put("enc_request", jsonRequest);
-            params.put("access_code", ACCESS_CODE);
+            params.put("access_code", STATUS_ACCESS_CODE);
             UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(GATEWAY_TRANSACTION_STATUS_URL)
                     .buildAndExpand(params).encode();
             ResponseEntity<String> response = restTemplate.postForEntity(uriComponents.toUri(),"", String.class);
@@ -172,7 +176,7 @@ public class CCAvenueGateway implements Gateway {
                 param -> respMap.put(param.split("=")[0], param.split("=").length > 1 ? param.split("=")[1] : ""));
 
         if (respMap.get("status").equals("0")) {
-            decyJsonString = ccavenueUtil.decrypt(respMap.get("enc_response").replace("\r\n", ""));
+            decyJsonString = statusCCavenueUtil.decrypt(respMap.get("enc_response").replace("\r\n", ""));
             statusResponse = new ObjectMapper().readValue(decyJsonString,CCAvenueStatusResponse.class);
 
             if (statusResponse.getOrderStatus().equalsIgnoreCase("Successful") || 
