@@ -195,17 +195,11 @@ serviceMaps:
   
 
 
-       - query: INSERT INTO eg_bpa_auditdetails( createdby,lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?);
-         basePath: BPA.auditDetails
+       - query: INSERT INTO eg_bpa_auditdetails SELECT * FROM eg_bpa_buildingplan WHERE id =?;
+         basePath: BPA
          jsonMaps:
 
-          - jsonPath: $.BPA.auditDetails.createdBy
-
-          - jsonPath: $.BPA.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.auditDetails.createdTime
-
-          - jsonPath: $.BPA.auditDetails.lastModifiedTime
+          - jsonPath: $.BPA.id
   
 
 
@@ -248,14 +242,12 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, edcrnumber=?, tenantid=?, action=?, servicetype=?, riskType=?, status=?, ownershipcategory=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+       - query: UPDATE eg_bpa_buildingplan SET applicationno=?, edcrnumber=?,  action=?, servicetype=?, riskType=?, status=?, ownershipcategory=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
          basePath: BPA
          jsonMaps:
           - jsonPath: $.BPA.applicationNo
 
           - jsonPath: $.BPA.edcrNumber
-
-          - jsonPath: $.BPA.tenantId
 
           - jsonPath: $.BPA.action
 
@@ -277,40 +269,15 @@ serviceMaps:
 
           - jsonPath: $.BPA.id
 
-
-       - query: INSERT INTO eg_bpa_document( id, documenttype, filestore, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documentType = ?,  lastmodifiedby = ?,  lastmodifiedtime = ?;
-         basePath: BPA.documents.*
+       - query: INSERT INTO eg_bpa_auditdetails SELECT * FROM eg_bpa_buildingplan WHERE id =?;
+         basePath: BPA
          jsonMaps:
-          - jsonPath: $.BPA.documents.*.id
 
-          - jsonPath: $.BPA.documents.*.documentType
+           - jsonPath: $.BPA.id
 
-          - jsonPath: $.BPA.documents.*.fileStore
-
-          - jsonPath: $.BPA.id
-
-          - jsonPath: $.BPA.documents.*.documentuid
-
-          - jsonPath: $.BPA.auditDetails.createdBy
-
-          - jsonPath: $.BPA.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.auditDetails.createdTime
-
-          - jsonPath: $.BPA.auditDetails.lastModifiedTime
-
-          - jsonPath: $.BPA.documents.*.documentType
-
-          - jsonPath: $.BPA.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.auditDetails.lastModifiedTime
-
-
-       - query: UPDATE eg_bpa_address SET tenantid=?, doorno=?, plotno=?, district=?, region=?, state=?, country=?, pincode=?, additiondetails=?, buildingname=?, locality=?, landmark=?, city=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+       - query: UPDATE eg_bpa_address SET  doorno=?, plotno=?, district=?, region=?, state=?, country=?, pincode=?, additiondetails=?, buildingname=?, locality=?, landmark=?, city=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
          basePath: BPA.address
          jsonMaps:
-
-          - jsonPath: $.BPA.address.tenantId
 
           - jsonPath: $.BPA.address.doorNo
 
@@ -342,14 +309,10 @@ serviceMaps:
 
           - jsonPath: $.BPA.address.id
 
-       - query: UPDATE eg_bpa_owner SET name=?, id=?, tenantid=?, mobilenumber=?, gender=?, fatherorhusbandname=?, correspondenceaddress=?, institutionid=?, isprimaryowner=?, ownertype=?, ownershippercentage=?, relationship=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+       - query: UPDATE eg_bpa_owner SET name=?, mobilenumber=?, gender=?, fatherorhusbandname=?, correspondenceaddress=?, institutionid=?, isprimaryowner=?, ownertype=?, ownershippercentage=?, relationship=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
          basePath: BPA.owners.*
          jsonMaps:
           - jsonPath: $.BPA.owners.*.name
-
-          - jsonPath: $.BPA.owners.*.uuid
-
-          - jsonPath: $.BPA.owners.*.tenantId
 
           - jsonPath: $.BPA.owners.*.mobileNumber
 
@@ -376,10 +339,9 @@ serviceMaps:
           - jsonPath: $.BPA.owners.*.uuid
 
 
-       - query: UPDATE eg_bpa_unit SET tenantid=?, usageCategory=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?
+       - query: UPDATE eg_bpa_unit SET usageCategory=?, additionaldetails=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?
          basePath: BPA.units.*
-         jsonMaps:
-          - jsonPath: $.BPA.units.*.tenantId
+         jsonMaps: 
 
           - jsonPath: $.BPA.units.*.usageCategoryowners
 
@@ -393,16 +355,6 @@ serviceMaps:
 
           - jsonPath: $.BPA.units.*.id
 
-       - query: UPDATE eg_bpa_auditdetails SET lastmodifiedby=?, lastmodifiedtime=? WHERE buildingplanid=?
-         basePath: BPA.auditDetails
-         jsonMaps:
-
-          - jsonPath: $.BPA.auditDetails.lastModifiedBy
-
-          - jsonPath: $.BPA.auditDetails.lastModifiedTime
-
-          - jsonPath: $.BPA.id
-  
 
 
        - query: UPDATE eg_bpa_document_owner SET tenantId=?,owner=?,active=?, buildingplanid=?, documenttype=?, fileStore=?,documentuid=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
@@ -428,7 +380,82 @@ serviceMaps:
            - jsonPath: $.BPA.owners.*.documents.*.auditDetails.lastModifiedTime
 
            - jsonPath: $.BPA.owners.*.documents.*.id
+           
+       - query: INSERT INTO eg_bpa_document( id, documenttype, filestore, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestore =?,lastmodifiedby =?, lastmodifiedtime =?;
+         basePath: BPA.documents.*
+         jsonMaps:
+          
+           - jsonPath: $.BPA.documents.*.id
+  
+           - jsonPath: $.BPA.documents.*.documentType
+  
+           - jsonPath: $.BPA.documents.*.fileStore
+  
+           - jsonPath: $.BPA.id
+  
+           - jsonPath: $.BPA.documents.*.documentuid
+  
+           - jsonPath: $.BPA.auditDetails.createdBy
+  
+           - jsonPath: $.BPA.auditDetails.lastModifiedBy
+  
+           - jsonPath: $.BPA.auditDetails.createdTime
 
+           - jsonPath: $.BPA.auditDetails.lastModifiedTime
 
+           - jsonPath: $.BPA.documents.*.documentType
 
+           - jsonPath: $.BPA.documents.*.fileStore
 
+           - jsonPath: $.BPA.auditDetails.lastModifiedBy
+
+           - jsonPath: $.BPA.auditDetails.lastModifiedTime
+          
+ - version: 1.0
+   description: update buildingplan details in EG_BPA_BuildingPlan  table
+   fromTopic: update-bpa-workflow
+   isTransaction: true
+   queryMaps:
+   
+       - query: INSERT INTO eg_bpa_document( id, documenttype, filestore, buildingplanid, documentuid, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET documenttype =?,  filestore =?,lastmodifiedby =?, lastmodifiedtime =?;
+         basePath: BPA.documents.*
+         jsonMaps:
+          
+           - jsonPath: $.BPA.documents.*.id
+  
+           - jsonPath: $.BPA.documents.*.documentType
+  
+           - jsonPath: $.BPA.documents.*.fileStore
+  
+           - jsonPath: $.BPA.id
+  
+           - jsonPath: $.BPA.documents.*.documentuid
+  
+           - jsonPath: $.BPA.auditDetails.createdBy
+  
+           - jsonPath: $.BPA.auditDetails.lastModifiedBy
+  
+           - jsonPath: $.BPA.auditDetails.createdTime
+
+           - jsonPath: $.BPA.auditDetails.lastModifiedTime
+
+           - jsonPath: $.BPA.documents.*.documentType
+
+           - jsonPath: $.BPA.documents.*.fileStore
+
+           - jsonPath: $.BPA.auditDetails.lastModifiedBy
+
+           - jsonPath: $.BPA.auditDetails.lastModifiedTime
+          
+       - query: INSERT INTO eg_bpa_auditdetails SELECT * FROM eg_bpa_buildingplan WHERE id =?;
+         basePath: BPA
+         jsonMaps:
+
+           - jsonPath: $.BPA.id
+
+       - query: UPDATE eg_bpa_buildingplan SET status =? WHERE id =?;
+         basePath: BPA
+         jsonMaps:
+           - jsonPath: $.BPA.status
+           
+           - jsonPath: $.BPA.id
