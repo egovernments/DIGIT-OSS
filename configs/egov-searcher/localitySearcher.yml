@@ -4,7 +4,7 @@ SearchDefinitions:
   version: 1.0.0
   definitions:
 
-  - name: TLLocalitySearcher
+  - name: TL
     query:
       baseQuery: |
         Select row_to_json(result) from
@@ -28,7 +28,7 @@ SearchDefinitions:
       outJsonPath: $.Localities
       responseInfoPath: $.ResponseInfo
 
-  - name: FireNOCLocalitySearcher
+  - name: FIRENOC
     query:
       baseQuery: |
         Select row_to_json(result) from
