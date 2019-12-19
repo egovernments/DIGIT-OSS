@@ -15871,6 +15871,20 @@
       "serviceCode": "BPA",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1932,
+      "name": "FIRE-NOC",
+      "url": "quickAction",
+      "displayName": "Search Fire Noc",
+      "orderNumber": 3,
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "FIRE-NOC",
+      "code": "null",
+      "navigationURL": "fire-noc/search",
+      "path": "FIRE-NOC.Search",
+      "leftIcon": "social:people"
     }
   ]
 }

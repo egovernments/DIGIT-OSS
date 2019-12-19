@@ -19687,6 +19687,12 @@
       "actionid": 1931,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "NOC_CEMP",
+      "actionid": 1932,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }
