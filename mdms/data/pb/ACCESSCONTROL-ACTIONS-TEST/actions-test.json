@@ -15648,7 +15648,7 @@
     {
       "id": 1915,
       "name": "Locality searcher endpoint for TL",
-      "url": "/egov-searcher/locality/TL/_get",
+      "url": "/egov-searcher/locality/tl-services/_get",
       "displayName": "TL locality searcher",
       "orderNumber": 0,
       "enabled": false,
@@ -15659,7 +15659,7 @@
     {
       "id": 1916,
       "name": "Locality searcher endpoint for PT",
-      "url": "/egov-searcher/locality/FIRENOC/_get",
+      "url": "/egov-searcher/locality/fireNoc/_get",
       "displayName": "FIRENOC locality searcher",
       "orderNumber": 0,
       "enabled": false,
