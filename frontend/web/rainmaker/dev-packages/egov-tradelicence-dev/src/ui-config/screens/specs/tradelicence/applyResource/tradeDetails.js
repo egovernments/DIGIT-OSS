@@ -686,7 +686,6 @@ const accessoriesCard = {
             props: {
               className:"applicant-details-error",
               disabled: true,
-              setDataInField: true,
               jsonPath: "Licenses[0].tradeLicenseDetail.accessories[0].uomValue"
             },
             required: true,
