@@ -474,10 +474,10 @@ export const tradeReviewDetails = getCommonCard({
       action: "condition",
       callBack: showHideAdhocPopup
     },
-    // roleDefination: {
-    //   rolePath: "user-info.roles",
-    //   roles: ["TL_APPROVER"]
-    // }
+    roleDefination: {
+      rolePath: "user-info.roles",
+       roles: ["TL_APPROVER","TL_DOC_VERIFIER"]
+     }
   },
   reviewTradeDetails,
   reviewOwnerDetails,
