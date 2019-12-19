@@ -44,7 +44,10 @@ const moveToSuccess = (LicenseData, dispatch) => {
 export const generatePdfFromDiv = (action, applicationNumber) => {
   let target = document.querySelector("#custom-atoms-div");
   html2canvas(target, {
-    onclone: function(clonedDoc) {
+    onclone: function (clonedDoc) {
+      // clonedDoc.getElementById("custom-atoms-footer")[
+      //   "data-html2canvas-ignore"
+      // ] = "true";
       clonedDoc.getElementById("custom-atoms-footer").style.display = "none";
     }
   }).then(canvas => {

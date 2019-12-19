@@ -1,7 +1,7 @@
 import { DropDown, Icon, Image, List } from "components";
 import { getTransformedLocale, getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import emptyFace from "egov-ui-kit/assets/images/download.png";
-import { getLocale, getTenantId, setTenantId } from "egov-ui-kit/utils/localStorageUtils";
+import { getLocale, getTenantId, setTenantId, getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import React, { Component } from "react";
 import LogoutDialog from "../LogoutDialog";
 import { CommonMenuItems } from "../NavigationDrawer/commonMenuItems";
@@ -85,7 +85,14 @@ class UserSettings extends Component {
   onLanguageChange = (event, index, value) => {
     //const {setRote} = this.props;
     this.setState({ languageSelected: value });
-    this.props.fetchLocalizationLabel(value,getTenantId(), getTenantId());
+    let tenantId = getTenantId();
+
+    if (process.env.REACT_APP_NAME === "Citizen") {
+      const userInfo = JSON.parse(getUserInfo());
+      tenantId = userInfo && userInfo.permanentCity;
+    }
+
+    this.props.fetchLocalizationLabel(value, tenantId, tenantId);
   };
 
   // onUserChange = (event, index, value) => {
@@ -186,7 +193,7 @@ class UserSettings extends Component {
             <div className="user-acc-info">
               {displayAccInfo ? (
                 <List
-                opem
+                  opem
                   onItemClick={(item) => {
                     handleItemClick(item, false);
                   }}
