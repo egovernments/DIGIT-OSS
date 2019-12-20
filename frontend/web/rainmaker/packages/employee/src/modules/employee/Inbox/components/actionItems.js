@@ -8,14 +8,7 @@ export class Taskboard extends React.Component{
     color:""
   }
 
-  // onTaskBoardClick = (baseColor) =>{
-  //   this.setState({
-  //     color : baseColor 
-  //   })
-  // } 
-
   render(){
-    // const {onTaskBoardClick} = this;
     const {data ,onSlaClick , color} = this.props
     return (
       <div className="inbox-taskboard">
@@ -38,31 +31,7 @@ export class Taskboard extends React.Component{
   }
 }
 
-// export const Taskboard = ({ data }) => {
-//   return (
-//     <div className="inbox-taskboard">
-//       {data.map((item, i) => (
-//         <Card
-//           className="inbox-card inbox-worklist-card"
-//           key={i}
-//           style={{backgroundColor : item.color}}
-//           textChildren={
-//             <div>
-//               <div className="head">{item.head}</div>
-//               <Label labelClassName="inbox-taskboard-subtext" label={item.body} />
-//             </div>
-//           }
-//         />
-//       ))}
-//     </div>
-//   );
-// };
-
-
-
 const onModuleCardClick = (route, setRoute) => {
-  // const url = process.env.NODE_ENV === "production" ? `employee/${route}` : route;
-  // window.location.href = window.origin + "/" + url;
   setRoute("/" + route);
 };
 

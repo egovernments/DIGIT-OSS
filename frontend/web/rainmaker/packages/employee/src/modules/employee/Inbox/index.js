@@ -16,8 +16,10 @@ class Inbox extends Component {
   state = {
     actionList: [],
     hasWorkflow: false,
-    filterPopupOpen : false
+    filterPopupOpen: false
   };
+
+ 
   componentWillReceiveProps(nextProps) {
     const { menu } = nextProps;
     const workflowList = menu && menu.filter((item) => item.name === "rainmaker-common-workflow");
@@ -46,39 +48,39 @@ class Inbox extends Component {
   }
 
   render() {
-    const { name, history ,setRoute , menu} = this.props;
+    const { name, history, setRoute, menu } = this.props;
     const { actionList, hasWorkflow } = this.state;
     const a = menu ? menu.filter(item => item.url === "quickAction") : [];
-    const downloadMenu =a.map((obj,index) => {
+    const downloadMenu = a.map((obj, index) => {
       return {
-        labelName:obj.displayName,
-        labelKey:`ACTION_TEST_${obj.displayName.toUpperCase().replace(/[._:-\s\/]/g, "_")}`,
-        link : () => setRoute(obj.navigationURL)
+        labelName: obj.displayName,
+        labelKey: `ACTION_TEST_${obj.displayName.toUpperCase().replace(/[._:-\s\/]/g, "_")}`,
+        link: () => setRoute(obj.navigationURL)
       }
     })
     const buttonItems = {
-      label: {labelName : "Take Action" , labelKey : "INBOX_QUICK_ACTION"},
+      label: { labelName: "Take Action", labelKey: "INBOX_QUICK_ACTION" },
       rightIcon: "arrow_drop_down",
-      props: { variant: "outlined", style: { marginRight: 15,backgroundColor:"#FE7A51",color:"#fff",border:"none",height:"60px",width :"200px" } },
+      props: { variant: "outlined", style: { marginRight: 15, backgroundColor: "#FE7A51", color: "#fff", border: "none", height: "60px", width: "200px" } },
       menu: downloadMenu
     }
     return (
       <div>
-        <div className="rainmaker-topHeader" style={{marginTop : 30 , justifyContent : "space-between"}}>
+        <div className="rainmaker-topHeader" style={{ marginTop: 30, justifyContent: "space-between" }}>
           <div className="rainmaker-topHeader">
-          <Label className="landingPageUser" label={"CS_LANDING_PAGE_WELCOME_TEXT"} />
-          <Label className="landingPageUser" label={name} />
+            <Label className="landingPageUser" label={"CS_LANDING_PAGE_WELCOME_TEXT"} />
+            <Label className="landingPageUser" label={name} />
           </div>
           <div >
-          <MenuButton data={buttonItems} />
+            <MenuButton data={buttonItems} />
           </div>
         </div>
-        <div style={{margin : "16px 16px 0px 16px" }}>
+        <div style={{ margin: "16px 16px 0px 16px" }}>
           <ServiceList history={history} />
         </div>
 
-        {hasWorkflow && <TableData onPopupOpen={this.onPopupOpen}/>}
-        <FilterDialog   popupOpen={this.state.filterPopupOpen}  popupClose={this.handleClose}/>
+        {hasWorkflow && <TableData onPopupOpen={this.onPopupOpen} />}
+        <FilterDialog popupOpen={this.state.filterPopupOpen} popupClose={this.handleClose} />
       </div>
     );
   }
@@ -100,5 +102,5 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(
-  mapStateToProps,mapDispatchToProps
-  )(Inbox);
+  mapStateToProps, mapDispatchToProps
+)(Inbox);

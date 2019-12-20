@@ -103,7 +103,7 @@ class InboxData extends React.Component {
           <TableRow>
             {data.headers.map((item, index) => {
               let classNames = `inbox-data-table-headcell inbox-data-table-headcell-${index}`;
-              return <TableCell className={classNames}>{<Label label={item} />}</TableCell>;
+              return <TableCell className={classNames}>{<Label label={item} labelStyle={{fontWeight : "500"}} color="#000000"/>}</TableCell>;
             })}
           </TableRow>
         </TableHead>
@@ -121,8 +121,8 @@ class InboxData extends React.Component {
                     if (item.subtext) {
                       return (
                         <TableCell className={classNames}>
-                          <div className="inbox-cell-text">{<Label label={item.text} />}</div>
-                          <div className="inbox-cell-subtext">{<Label label={item.subtext} />}</div>
+                          <div className="inbox-cell-text">{ <a>{item.text} </a>}</div>
+                          <div onClick={() => getModuleLink(item, row, index)} className="inbox-cell-subtext">{<Label label={item.subtext} color="#000000"/>}</div>
                         </TableCell>
                       );
                     } else if (item.badge) {
@@ -147,16 +147,9 @@ class InboxData extends React.Component {
                     } else {
                       return (
                         <TableCell className={classNames}>
-                          {index === 1 ? (
-                            <div onClick={() => getModuleLink(item, row, index)} style={{ cursor: "pointer" }}>
-                              <a>{item.text} </a>
-                            </div>
-                          ) : (
-                            <div>{item.text}</div>
-                          )}
-                          {/* <div onClick={() => getModuleLink(item, row, index)} style={{ cursor: "pointer" }}>
-                            {index === 1 ? <a>{item.text} </a> : item.text}
-                          </div> */}
+                          <div>
+                            {item.text}
+                          </div>
                         </TableCell>
                       );
                     }
