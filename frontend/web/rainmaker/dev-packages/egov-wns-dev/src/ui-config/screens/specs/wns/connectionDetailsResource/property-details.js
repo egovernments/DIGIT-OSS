@@ -78,7 +78,7 @@ const propertyLocationDetails = getCommonContainer({
       labelKey: "WS_PROP_DETAIL_PH_SURVEYNO_LABEL"
     },
     {
-      jsonPath: "WaterConnection[0].property.address.plotNo",
+      jsonPath: "WaterConnection[0].property.address.doorNo",
     }
   ),
   buildingOrColonyName: getLabelWithValue(
