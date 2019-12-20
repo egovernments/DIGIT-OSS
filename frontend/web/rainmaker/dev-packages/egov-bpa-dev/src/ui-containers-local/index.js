@@ -8,6 +8,27 @@ const CustomTabContainer = Loadable({
   loader: () => import("./CustomTabContainer"),
   loading: () => <Loading />
 });
+
+const TestContainer = Loadable({
+  loader: () => import("./TestContainer"),
+  loading: () => <Loading />
+});
+
+const DocumentListContainer = Loadable({
+  loader: () => import("./DocumentListContainer"),
+  loading: () => <Loading />
+});
+
+const BpaDocumentListContainer = Loadable({
+  loader: () => import("./BpaDocumentListContainer"),
+  loading: () => <Loading />
+});
+
+const NocListContainer = Loadable({
+  loader: () => import("./NocListContainer"),
+  loading: () => <Loading />
+});
+
 const LabelContainer = Loadable({
   loader: () => import("./LabelContainer"),
   loading: () => <Loading />
@@ -17,22 +38,22 @@ const CheckboxContainer = Loadable({
   loader: () => import("./CheckboxContainer"),
   loading: () => <Loading />
 });
+
 const DownloadFileContainer = Loadable({
   loader: () => import("./DownloadFileContainer"),
   loading: () => <Loading />
 });
+
 const EstimateCardContainer = Loadable({
   loader: () => import("./EstimateCardContainer"),
   loading: () => <Loading />
 });
+
 const AutosuggestContainer = Loadable({
   loader: () => import("./AutosuggestContainer"),
   loading: () => <Loading />
 });
-const DocumentListContainer = Loadable({
-  loader: () => import("./DocumentListContainer"),
-  loading: () => <Loading />
-});
+
 const PaymentRedirectPage = Loadable({
   loader: () => import("./PaymentRedirectPage"),
   loading: () => <Loading />
@@ -66,9 +87,11 @@ export {
   EstimateCardContainer,
   AutosuggestContainer,
   DocumentListContainer,
+  BpaDocumentListContainer,
   PaymentRedirectPage,
   ViewBreakupContainer,
   DialogContainer,
   RadioGroupWithLabelContainer,
-  EDCRUploadCard
+  EDCRUploadCard,
+  NocListContainer
 };

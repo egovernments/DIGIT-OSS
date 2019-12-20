@@ -11,21 +11,17 @@ class EstimateCardContainer extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const { screenConfiguration } = state;
-  const fees = get(
-    screenConfiguration.preparedFinalObject,
-    ownProps.sourceJsonPath,
-    []
-  );
+  const fees = get(screenConfiguration, "preparedFinalObject.applyScreenMdmsData.estimateCardData", []);
   const estimate = {
-    header: { labelName: "Fee Estimate", labelKey: "TL_SUMMARY_FEE_EST" },
-    fees,
-    extra: [
-      //   { textLeft: "Last Date for Rebate (20% of TL)" },
-      //   {
-      //     textLeft: "Penalty (10% of TL) applicable from"
-      //   },
-      //   { textLeft: "Additional Penalty (20% of TL) applicable from" }
-    ]
+    header: { labelName: "Fee Estimate", labelKey: "NOC_FEE_ESTIMATE_HEADER" },
+    fees
+    // extra: [
+    //   { textLeft: "Last Date for Rebate (20% of TL)" },
+    //   {
+    //     textLeft: "Penalty (10% of TL) applicable from"
+    //   },
+    //   { textLeft: "Additional Penalty (20% of TL) applicable from" }
+    // ]
   };
   return { estimate };
 };

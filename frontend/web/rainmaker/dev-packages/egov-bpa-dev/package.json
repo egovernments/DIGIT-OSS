@@ -14,6 +14,9 @@
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "egov-ui-framework": "0.1.41",
+    "egov-ui-kit": "^0.0.1",
+    "jsonpath": "^1.0.2",
+    "qrcode": "^1.3.3",
     "egov-workflow": "0.0.1",
     "html2canvas": "^1.0.0-alpha.12",
     "jquery": "^3.3.1",
@@ -56,7 +59,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build-css": "node-sass-chokidar src/ -o src/",
-    "transpile": "npm run build-css && babel src -d ../../packages/egov-tradelicence --copy-files",
+    "transpile": "npm run build-css && babel src -d ../../packages/egov-bpa --copy-files",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

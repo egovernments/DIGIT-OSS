@@ -3,7 +3,7 @@ import {
   fetchFromLocalStorage,
   addQueryArg
 } from "egov-ui-framework/ui-utils/commons";
-import store from "../ui-redux/store";
+import store from "ui-redux/store";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getAccessToken,
@@ -18,6 +18,13 @@ const instance = axios.create({
   }
 });
 
+const edcrInstance = axios.create({
+  baseURL: "https://egov-dcr-galaxy.egovernments.org",
+  headers: {
+    "Content-Type": "application/json"
+  }
+})
+
 const wrapRequestBody = (requestBody, action, customRequestInfo) => {
   const authToken = getAccessToken();
   let RequestInfo = {
@@ -27,10 +34,39 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
     action: action,
     did: "1",
     key: "",
-    msgId: `20170310130900|${getLocale()}`,
+    msgId: "20170310130900|en_IN",
     requesterId: "",
     authToken
   };
+
+  RequestInfo = { ...RequestInfo, ...customRequestInfo };
+  return Object.assign(
+    {},
+    {
+      RequestInfo
+    },
+    requestBody
+  );
+};
+
+const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
+  const authToken = getAccessToken();
+  let RequestInfo = {
+    "apiId": "1",
+    "ver": "1",
+    "ts": "01-01-2017 01:01:01",
+    "action": "create",
+    "did": "jh",
+    "key": "",
+    "msgId": "gfcfc",
+    "correlationId": "wefiuweiuff897",
+    authToken,
+    "userInfo": {
+        "id":1,
+        "tenantId": "generic"
+    }
+  };
+
   RequestInfo = { ...RequestInfo, ...customRequestInfo };
   return Object.assign(
     {},
@@ -71,6 +107,58 @@ export const httpRequest = async (
       default:
         response = await instance.get(endPoint);
     }
+    const responseStatus = parseInt(response.status, 10);
+    store.dispatch(toggleSpinner());
+    if (responseStatus === 200 || responseStatus === 201) {
+      return response.data;
+    }
+  } catch (error) {
+    const { data, status } = error.response;
+    if (status === 400 && data === "") {
+      apiError = "INVALID_TOKEN";
+    } else {
+      apiError =
+        (data.hasOwnProperty("Errors") &&
+          data.Errors &&
+          data.Errors.length &&
+          data.Errors[0].message) ||
+        (data.hasOwnProperty("error") &&
+          data.error.fields &&
+          data.error.fields.length &&
+          data.error.fields[0].message) ||
+        (data.hasOwnProperty("error_description") && data.error_description) ||
+        apiError;
+    }
+    store.dispatch(toggleSpinner());
+  }
+  // unhandled error
+  throw new Error(apiError);
+};
+
+export const edcrHttpRequest = async (
+  method = "post",
+  endPoint,
+  action,
+  queryObject = [],
+  requestBody = {},
+  headers = [],
+  customRequestInfo = {}
+) => {
+  store.dispatch(toggleSpinner());
+  let apiError = "Api Error";
+
+  if (headers)
+    edcrInstance.defaults = Object.assign(edcrInstance.defaults, {
+      headers
+    });
+
+  endPoint = addQueryArg(endPoint, queryObject);
+  var response;
+  try {
+    response = await edcrInstance.post(
+        endPoint,
+        wrapEdcrRequestBody(requestBody, action, customRequestInfo)
+      );
     const responseStatus = parseInt(response.status, 10);
     store.dispatch(toggleSpinner());
     if (responseStatus === 200 || responseStatus === 201) {

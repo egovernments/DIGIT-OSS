@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { MultiDownloadCard } from "egov-ui-framework/ui-molecules";
 import { connect } from "react-redux";
 import get from "lodash/get";
-import "./index.css";
+import "./index.scss";
 
 class DownloadFileContainer extends Component {
   render() {

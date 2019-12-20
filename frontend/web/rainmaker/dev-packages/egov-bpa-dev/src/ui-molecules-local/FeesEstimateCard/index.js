@@ -4,7 +4,8 @@ import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
-import { Tooltip } from "egov-ui-framework/ui-molecules";
+import Tooltip from "@material-ui/core/Tooltip";
+import Icon from "@material-ui/core/Icon";
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 
 const styles = {

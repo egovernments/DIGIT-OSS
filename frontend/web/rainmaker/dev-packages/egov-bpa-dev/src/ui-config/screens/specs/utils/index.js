@@ -10,12 +10,11 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import get from "lodash/get";
 import set from "lodash/set";
 import filter from "lodash/filter";
-import { httpRequest } from "../../../../ui-utils/api";
+import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
 import {
   prepareFinalObject,
   initScreen
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import isUndefined from "lodash/isUndefined";
 import isEmpty from "lodash/isEmpty";
 import {
@@ -25,9 +24,22 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 import {
+  getQueryArg,
   getLocaleLabels,
   getTransformedLocalStorgaeLabels
 } from "egov-ui-framework/ui-utils/commons";
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
+import {
+  getCommonCard,
+  getCommonValue,
+  getCommonCaption,
+  getPattern
+} from "egov-ui-framework/ui-config/screens/specs/utils";
+import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
+import { mdmsMockJson } from '../egov-bpa/mdmsMock';
+import { scrutinyDetailsMockJson, scrutinyDetailsMockJson1 } from './scrutinyDetailsMockJson';
+import { cityModuleMockJson } from '../egov-bpa/cityResJson';
+
 
 export const getCommonApplyFooter = children => {
   return {
@@ -122,7 +134,7 @@ export const getRadioButton = (buttons, jsonPath, defaultValue) => {
     }
   };
 };
-
+/*
 export const getRadioGroupWithLabel = (
   label,
   labelKey,
@@ -171,7 +183,7 @@ export const getRadioGroupWithLabel = (
     }
   };
 };
-
+*/
 export const getApplicationNoContainer = number => {
   return {
     uiFramework: "custom-atoms-local",
@@ -424,14 +436,14 @@ export const getIconStyle = key => {
   return style[key];
 };
 
-export const showHideAdhocPopup = (state, dispatch) => {
-  let toggle = get(
-    state.screenConfiguration.screenConfig["pay"],
-    "components.adhocDialog.props.open",
-    false
-  );
-  dispatch(handleField("pay", "components.adhocDialog", "props.open", !toggle));
-};
+// export const showHideAdhocPopup = (state, dispatch) => {
+//   let toggle = get(
+//     state.screenConfiguration.screenConfig["pay"],
+//     "components.adhocDialog.props.open",
+//     false
+//   );
+//   dispatch(handleField("pay", "components.adhocDialog", "props.open", !toggle));
+// };
 
 export const getButtonVisibility = (status, button) => {
   if (status === "APPLIED" && button === "PROCEED TO PAYMENT") return true;
@@ -486,7 +498,7 @@ export const getSearchResults = async queryObject => {
   try {
     const response = await httpRequest(
       "post",
-      "/tl-services/v1/BPAREG/_search",
+      "/bpa-services/v1/BPAREG/_search",
       "",
       queryObject
     );
@@ -935,14 +947,14 @@ export const prepareDocumentTypeObj = documents => {
   let documentsArr =
     documents.length > 0
       ? documents.reduce((documentsArr, item, ind) => {
-          documentsArr.push({
-            name: item,
-            required: true,
-            jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
-            statement: getStatementForDocType(item)
-          });
-          return documentsArr;
-        }, [])
+        documentsArr.push({
+          name: item,
+          required: true,
+          jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+          statement: getStatementForDocType(item)
+        });
+        return documentsArr;
+      }, [])
       : [];
   return documentsArr;
 };
@@ -954,10 +966,10 @@ const getTaxValue = item => {
     ? item.amount
       ? item.amount
       : item.debitAmount
-      ? -Math.abs(item.debitAmount)
-      : item.crAmountToBePaid
-      ? item.crAmountToBePaid
-      : 0
+        ? -Math.abs(item.debitAmount)
+        : item.crAmountToBePaid
+          ? item.crAmountToBePaid
+          : 0
     : 0;
 };
 
@@ -988,12 +1000,12 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
               item.taxHeadCode.split("-")[0],
               LicenseData
             ) && {
-              value: getToolTipInfo(
-                item.taxHeadCode.split("-")[0],
-                LicenseData
-              ),
-              key: getToolTipInfo(item.taxHeadCode.split("-")[0], LicenseData)
-            }
+                value: getToolTipInfo(
+                  item.taxHeadCode.split("-")[0],
+                  LicenseData
+                ),
+                key: getToolTipInfo(item.taxHeadCode.split("-")[0], LicenseData)
+              }
           });
       } else {
         item.taxHeadCode &&
@@ -1111,16 +1123,16 @@ const getBillingSlabData = async (
         )
       );
     } catch (e) {
-      dispatch(
-        toggleSnackbar(
-          open,
-          {
-            lableName: "Billing Slab error!",
-            labelKey: "ERR_BILLING_SLAB_ERROR"
-          },
-          "error"
-        )
-      );
+      // dispatch(
+      //   toggleSnackbar(
+      //     open,
+      //     {
+      //       lableName: "Billing Slab error!",
+      //       labelKey: "ERR_BILLING_SLAB_ERROR"
+      //     },
+      //     "error"
+      //   )
+      // );
     }
   }
 };
@@ -1208,15 +1220,15 @@ export const createEstimateData = async (
     estimateData = payload
       ? isPAID
         ? payload &&
-          payload.Payments &&
-          payload.Payments.length > 0 &&
-          getEstimateData(
-            payload.Payments[0].paymentDetails[0].bill,
-            isPAID,
-            LicenseData
-          )
+        payload.Payments &&
+        payload.Payments.length > 0 &&
+        getEstimateData(
+          payload.Payments[0].paymentDetails[0].bill,
+          isPAID,
+          LicenseData
+        )
         : payload &&
-          getEstimateData(payload.billResponse.Bill[0], false, LicenseData)
+        getEstimateData(payload.billResponse.Bill[0], false, LicenseData)
       : [];
   }
   estimateData = estimateData || [];
@@ -2077,7 +2089,7 @@ export const showCityPicker = (state, dispatch) => {
     handleField("home", "components.cityPickerDialog", "props.open", !toggle)
   );
 };
-
+/*
 export const applyForm = (state, dispatch) => {
   const tenantId = get(
     state.screenConfiguration.preparedFinalObject,
@@ -2100,7 +2112,7 @@ export const applyForm = (state, dispatch) => {
         : `/tradelicense-citizen/apply?tenantId=${tenantId}`;
   }
 };
-
+*/
 export const sortByEpoch = (data, order) => {
   if (order) {
     return data.sort((a, b) => {
@@ -2232,6 +2244,7 @@ export const fillOldLicenseData = async (state, dispatch) => {
   );
 };
 
+/*
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
@@ -2348,7 +2361,7 @@ export const getTextToLocalMapping = label => {
     default:
       return getLocaleLabels(label, label, localisationLabels);
   }
-};
+};*/
 
 export const addressDestruct = (action, state, dispatch) => {
   const ownerData = get(
@@ -2417,6 +2430,834 @@ export const setMobileNoField = (action, state, dispatch) => {
       `components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getOwnerMobNoField.props.disabled`,
       true
     );
+  }
+};
+
+export const gotoApplyWithStep = (state, dispatch, step) => {
+  const applicationNumber = getQueryArg(
+    window.location.href,
+    "applicationNumber"
+  );
+  const applicationNumberQueryString = applicationNumber
+    ? `&applicationNumber=${applicationNumber}`
+    : ``;
+  const applyUrl =
+    process.env.REACT_APP_SELF_RUNNING === "true"
+      ? `/egov-ui-framework/egov-bpa/apply?step=${step}${applicationNumberQueryString}`
+      : `/egov-bpa/apply?step=${step}${applicationNumberQueryString}`;
+  dispatch(setRoute(applyUrl));
+};
+
+export const showHideAdhocPopup = (state, dispatch, screenKey) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig[screenKey],
+    "components.adhocDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField(screenKey, "components.adhocDialog", "props.open", !toggle)
+  );
+};
+
+export const getCommonGrayCard = children => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Container",
+    children: {
+      body: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          ch1: getCommonCard(children, {
+            style: {
+              backgroundColor: "rgb(242, 242, 242)",
+              boxShadow: "none",
+              borderRadius: 0,
+              overflow: "visible"
+            }
+          })
+        },
+        gridDefination: {
+          xs: 12
+        }
+      }
+    },
+    gridDefination: {
+      xs: 12
+    }
+  };
+};
+
+export const getLabelOnlyValue = (value, props = {}) => {
+  return {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    gridDefination: {
+      xs: 6,
+      sm: 4
+    },
+    props: {
+      style: {
+        marginBottom: "16px"
+      },
+      ...props
+    },
+    children: {
+      value: getCommonCaption(value)
+    }
+  };
+};
+
+export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
+  try {
+    const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
+    const ownerNo = get(
+      state.screenConfiguration.preparedFinalObject,
+      `BPA.owners[${cardIndex}].mobileNumber`,
+      ""
+    );
+    if (!ownerNo.match(getPattern("MobileNo"))) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Incorrect Number!",
+            labelKey: "ERR_MOBILE_NUMBER_INCORRECT"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+    const owners = get(
+      state.screenConfiguration.preparedFinalObject,
+      `BPA.owners`,
+      []
+    );
+    //owners from search call before modification.
+    const oldOwnersArr = get(
+      state.screenConfiguration.preparedFinalObject,
+      "BPA.owners",
+      []
+    );
+    //Same no search on Same index
+    if (ownerNo === owners[cardIndex].userName) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Owner has been added already!",
+            labelKey: "ERR_OWNER_ALREADY_ADDED_TOGGLE_MSG"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+
+    //Same no search in whole array
+    const matchingOwnerIndex = owners.findIndex(
+      item => item.userName === ownerNo
+    );
+    if (matchingOwnerIndex > -1) {
+      if (
+        !isUndefined(owners[matchingOwnerIndex].userActive) &&
+        owners[matchingOwnerIndex].userActive === false
+      ) {
+        //rearrange
+        dispatch(
+          prepareFinalObject(
+            `BPA.owners[${matchingOwnerIndex}].userActive`,
+            true
+          )
+        );
+        dispatch(
+          prepareFinalObject(
+            `BPA.owners[${cardIndex}].userActive`,
+            false
+          )
+        );
+        //Delete if current card was not part of oldOwners array - no need to save.
+        if (
+          oldOwnersArr.findIndex(
+            item => owners[cardIndex].userName === item.userName
+          ) == -1
+        ) {
+          owners.splice(cardIndex, 1);
+          dispatch(
+            prepareFinalObject(
+              `BPA.owners`,
+              owners
+            )
+          );
+        }
+      } else {
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "Owner already added!",
+              labelKey: "ERR_OWNER_ALREADY_ADDED_1"
+            },
+            "error"
+          )
+        );
+      }
+      return;
+    } else {
+      //New number search only
+      let payload = await httpRequest(
+        "post",
+        "/user/_search?tenantId=pb",
+        "_search",
+        [],
+        {
+          tenantId: "pb",
+          userName: `${ownerNo}`
+        }
+      );
+      if (payload && payload.user && payload.user.hasOwnProperty("length")) {
+        if (payload.user.length === 0) {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: "This mobile number is not registered!",
+                labelKey: "ERR_MOBILE_NUMBER_NOT_REGISTERED"
+              },
+              "info"
+            )
+          );
+        } else {
+          const userInfo =
+            payload.user &&
+            payload.user[0] &&
+            JSON.parse(JSON.stringify(payload.user[0]));
+          if (userInfo && userInfo.createdDate) {
+            userInfo.createdDate = convertDateTimeToEpoch(userInfo.createdDate);
+            userInfo.lastModifiedDate = convertDateTimeToEpoch(
+              userInfo.lastModifiedDate
+            );
+            userInfo.pwdExpiryDate = convertDateTimeToEpoch(
+              userInfo.pwdExpiryDate
+            );
+          }
+          let currOwnersArr = get(
+            state.screenConfiguration.preparedFinalObject,
+            "BPA.owners",
+            []
+          );
+
+          currOwnersArr[cardIndex] = userInfo;
+          dispatch(
+            prepareFinalObject(
+              `BPA.owners`,
+              currOwnersArr
+            )
+          );
+        }
+      }
+    }
+  } catch (e) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: e.message, labelKey: e.message },
+        "info"
+      )
+    );
+  }
+};
+
+
+const riskType = (state, dispatch) => {
+  let occupancyType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "srutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
+  );
+  let plotArea = get(
+    state.screenConfiguration.preparedFinalObject,
+    "srutinyDetails.planDetail.plot.area"
+  );
+  let buildingBlocks = get(
+    state.screenConfiguration.preparedFinalObject,
+    "srutinyDetails.planDetail.blocks"
+  );
+  let blocks = buildingBlocks.map(item => {
+    return item && item.building && item.building.buildingHeight;
+  });
+  let buildingHeight = Math.max(blocks);
+  let scrutinyRiskType;
+  if (
+    occupancyType === "Residential" &&
+    plotArea > 500 &&
+    buildingHeight > 15
+  ) {
+    scrutinyRiskType = "HIGH";
+  } else if (
+    occupancyType === "Residential" &&
+    plotArea <= 500 &&
+    plotArea >= 300 &&
+    buildingHeight <= 15 &&
+    buildingHeight >= 10
+  ) {
+    scrutinyRiskType = "MEDIUM";
+  } else {
+    scrutinyRiskType = "LOW";
+  }
+  dispatch(
+    prepareFinalObject(
+      "BPA.riskType",
+      scrutinyRiskType
+    )
+  );
+};
+
+export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
+  try {
+    const cardIndex = fieldInfo && fieldInfo.index ? fieldInfo.index : "0";
+    const scrutinyNo = get(
+      state.screenConfiguration.preparedFinalObject,
+      `BPA.edcrNumber`,
+      ""
+    );
+
+    // const tenantId = get(
+    //   state.screenConfiguration.preparedFinalObject,
+    //   "citiesByModule.citizenTenantId.value"
+    // );
+    if (!scrutinyNo || !scrutinyNo.match(getPattern("^[a-zA-Z0-9]*$"))) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Incorrect Scrutiny Number!",
+            labelKey: "BPA_INCORRECT_SCRUTINY_NUMBER"
+          },
+          "error"
+        )
+      );
+      return;
+    }
+    let payload = await edcrHttpRequest(
+      "post",
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + scrutinyNo + "&tenantId=pb.amritsar",
+      {}
+    );
+    payload = payload.edcrDetail;
+    if (payload && payload.hasOwnProperty("length")) {
+      if (payload.length === 0) {
+        dispatch(
+          toggleSnackbar(
+            true,
+            {
+              labelName: "This scrutiny number is not registered!",
+              labelKey: "ERR_SCRUTINY_NUMBER_NOT_REGISTERED"
+            },
+            "info"
+          )
+        );
+      } else {
+        const scrutinyData = payload && JSON.parse(JSON.stringify(payload));
+
+        if (scrutinyData && scrutinyData.planDetail && scrutinyData.planDetail.applicationDate) {
+          scrutinyData.planDetail.applicationDate = convertDateTimeToEpoch(scrutinyData.planDetail.applicationDate);
+          scrutinyData.lastModifiedDate = convertDateTimeToEpoch(
+            scrutinyData.lastModifiedDate
+          );
+          scrutinyData.pwdExpiryDate = convertDateTimeToEpoch(
+            scrutinyData.pwdExpiryDate
+          );
+        };
+
+        const tenantId = get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPAs[0].BPADetails.plotdetails.citytown"
+        );
+        const city = scrutinyData[0].tenantId;
+
+        if (tenantId.value === city) {
+          let currOwnersArr = get(
+            state.screenConfiguration.preparedFinalObject,
+            "srutinyDetails",
+            []
+          );
+          currOwnersArr = scrutinyData[0];
+          dispatch(
+            prepareFinalObject(
+              `srutinyDetails`,
+              currOwnersArr
+            )
+          );
+          riskType(state, dispatch);
+        } else {
+          dispatch(
+            toggleSnackbar(
+              true,
+              {
+                labelName: `Scrutiny number ${scrutinyNo} is from ${city}`,
+                labelKey: `Scrutiny number ${scrutinyNo} is from ${city}`
+              },
+              "error"
+            )
+          );
+        }
+      }
+    }
+  } catch (e) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: e.message, labelKey: e.message },
+        "info"
+      )
+    );
+  }
+};
+
+// export const getMdmsData = async queryObject => {
+//   try {
+//     const response = await httpRequest(
+//       "post",
+//       "egov-mdms-service/v1/_get",
+//       "",
+//       queryObject
+//     );
+//     return response;
+//   } catch (error) {
+//     console.log(error);
+//     return {};
+//   }
+// };
+
+// Get user data from uuid API call
+
+
+
+export const searchBill = async (dispatch, applicationNumber, tenantId) => {
+  try {
+    let queryObject = [
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      {
+        key: "consumerCode",
+        value: applicationNumber
+      }
+    ];
+
+    // Get Receipt
+    let payload = await httpRequest(
+      "post",
+      "/collection-services/receipts/_search",
+      "",
+      queryObject
+    );
+
+    // Get Bill
+    const response = await getBill([
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      {
+        key: "applicationNumber",
+        value: applicationNumber
+      }
+    ]);
+
+    // If pending payment then get bill else get receipt
+    let billData = get(payload, "Receipt[0].Bill") || get(response, "Bill");
+
+    if (billData) {
+      dispatch(prepareFinalObject("ReceiptTemp[0].Bill", billData));
+      const estimateData = createEstimateData(billData[0]);
+      estimateData &&
+        estimateData.length &&
+        dispatch(
+          prepareFinalObject(
+            "applyScreenMdmsData.estimateCardData",
+            estimateData
+          )
+        );
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+// export const createEstimateData = billObject => {
+//   const billDetails = billObject && billObject.billDetails;
+//   let fees =
+//     billDetails &&
+//     billDetails[0].billAccountDetails &&
+//     billDetails[0].billAccountDetails.map(item => {
+//       return {
+//         name: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode },
+//         value: item.amount,
+//         info: { labelName: item.taxHeadCode, labelKey: item.taxHeadCode }
+//       };
+//     });
+//   return fees;
+// };
+
+export const generateBill = async (dispatch, applicationNumber, tenantId) => {
+  try {
+    if (applicationNumber && tenantId) {
+      const queryObj = [
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        {
+          key: "applicationNumber",
+          value: applicationNumber
+        }
+      ];
+      const payload = await getBill(queryObj);
+      // let payload = sampleGetBill();
+      if (payload && payload.Bill[0]) {
+        dispatch(prepareFinalObject("ReceiptTemp[0].Bill", payload.Bill));
+        const estimateData = createEstimateData(payload.Bill[0]);
+        estimateData &&
+          estimateData.length &&
+          dispatch(
+            prepareFinalObject(
+              "applyScreenMdmsData.estimateCardData",
+              estimateData
+            )
+          );
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const resetFields = (state, dispatch) => {
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.NOCNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.applicationNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appNOCAndMobNumContainer.children.ownerMobNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.applicationNo",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.fromDate",
+      "props.value",
+      ""
+    )
+  );
+  dispatch(
+    handleField(
+      "search",
+      "components.div.children.NOCApplication.children.cardContent.children.appStatusAndToFromDateContainer.children.toDate",
+      "props.value",
+      ""
+    )
+  );
+};
+
+// export const getRequiredDocData = async (action, state, dispatch) => {
+//   let tenantId =
+//     process.env.REACT_APP_NAME === "Citizen" ? "pb.amritsar" : getTenantId();
+//   let mdmsBody = {
+//     MdmsCriteria: {
+//       tenantId: tenantId,
+//       moduleDetails: [
+//         {
+//           moduleName: "BPA",
+//           masterDetails: [{ name: "Documents" }]
+//         }
+//       ]
+//     }
+//   };
+//   try {
+//     let payload = null;
+//     payload = mdmsMockJson;
+//     console.log(mdmsMockJson);
+//     // payload = await httpRequest(
+//     //   "post",
+//     //   "/egov-mdms-service/v1/_search",
+//     //   "_search",
+//     //   [],
+//     //   mdmsBody
+//     // );
+//     dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
+
+export const getTextToLocalMapping = label => {
+  const localisationLabels = getTransformedLocalStorgaeLabels();
+  switch (label) {
+    case "Floor Description":
+      return getLocaleLabels(
+        "Floor Description",
+        "BPA_COMMON_TABLE_COL_FLOOR_DES",
+        localisationLabels
+      );
+    case "Occupancy/Sub Occupancy":
+      return getLocaleLabels(
+        "Occupancy/Sub Occupancy",
+        "BPA_COMMON_TABLE_COL_OCCUP",
+        localisationLabels
+      );
+    case "Buildup Area":
+      return getLocaleLabels(
+        "Buildup Area",
+        "BPA_COMMON_TABLE_COL_BUILD_AREA",
+        localisationLabels
+      );
+    case "Floor Area":
+      return getLocaleLabels(
+        "Floor Area",
+        "BPA_COMMON_TABLE_COL_FLOOR_AREA",
+        localisationLabels
+      );
+    case "Carpet Area":
+      return getLocaleLabels(
+        "Carpet Area",
+        "BPA_COMMON_TABLE_COL_CARPET_AREA",
+        localisationLabels
+      );
+    case "Application No":
+      return getLocaleLabels(
+        "Application No",
+        "TL_COMMON_TABLE_COL_APP_NO",
+        localisationLabels
+      );
+
+    case "NOC No":
+      return getLocaleLabels(
+        "NOC No",
+        "NOC_COMMON_TABLE_COL_NOC_NO_LABEL",
+        localisationLabels
+      );
+
+    case "NOC Type":
+      return getLocaleLabels("NOC Type", "NOC_TYPE_LABEL", localisationLabels);
+    case "Owner Name":
+      return getLocaleLabels(
+        "Owner Name",
+        "NOC_COMMON_TABLE_COL_OWN_NAME_LABEL",
+        localisationLabels
+      );
+
+    case "Application Date":
+      return getLocaleLabels(
+        "Application Date",
+        "NOC_COMMON_TABLE_COL_APP_DATE_LABEL",
+        localisationLabels
+      );
+
+    case "Status":
+      return getLocaleLabels(
+        "Status",
+        "NOC_COMMON_TABLE_COL_STATUS_LABEL",
+        localisationLabels
+      );
+
+    case "INITIATED":
+      return getLocaleLabels("Initiated,", "NOC_INITIATED", localisationLabels);
+    case "APPLIED":
+      getLocaleLabels("Applied", "NOC_APPLIED", localisationLabels);
+    case "PAID":
+      getLocaleLabels("Paid", "WF_NEWTL_PENDINGAPPROVAL", localisationLabels);
+
+    case "APPROVED":
+      return getLocaleLabels("Approved", "NOC_APPROVED", localisationLabels);
+    case "REJECTED":
+      return getLocaleLabels("Rejected", "NOC_REJECTED", localisationLabels);
+    case "CANCELLED":
+      return getLocaleLabels("Cancelled", "NOC_CANCELLED", localisationLabels);
+    case "PENDINGAPPROVAL ":
+      return getLocaleLabels(
+        "Pending for Approval",
+        "WF_FIRENOC_PENDINGAPPROVAL",
+        localisationLabels
+      );
+    case "PENDINGPAYMENT":
+      return getLocaleLabels(
+        "Pending payment",
+        "WF_FIRENOC_PENDINGPAYMENT",
+        localisationLabels
+      );
+    case "DOCUMENTVERIFY":
+      return getLocaleLabels(
+        "Pending for Document Verification",
+        "WF_FIRENOC_DOCUMENTVERIFY",
+        localisationLabels
+      );
+    case "FIELDINSPECTION":
+      return getLocaleLabels(
+        "Pending for Field Inspection",
+        "WF_FIRENOC_FIELDINSPECTION",
+        localisationLabels
+      );
+
+    case "Search Results for BPA Applications":
+      return getLocaleLabels(
+        "Search Results for BPA Applications",
+        "BPA_HOME_SEARCH_RESULTS_TABLE_HEADING",
+        localisationLabels
+      );
+
+    case "MY_APPLICATIONS":
+      return getLocaleLabels(
+        "My Applications",
+        "TL_MY_APPLICATIONS",
+        localisationLabels
+      );
+  }
+};
+
+
+export const showApplyCityPicker = (state, dispatch) => {
+  let toggle = get(
+    state.screenConfiguration.screenConfig["search"],
+    "components.cityPickerDialog.props.open",
+    false
+  );
+  dispatch(
+    handleField("search", "components.cityPickerDialog", "props.open", !toggle)
+  );
+};
+
+
+const city = (state, dispatch, tenantId) => {
+  let city = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPAs[0].BPADetails.plotdetails.citytown"
+  );
+  if (!city) {
+    dispatch(prepareFinalObject("BPAs[0].BPADetails.plotdetails.citytown", tenantId));
+  }
+};
+
+export const applyForm = (state, dispatch) => {
+  const tenantId = get(
+    state.screenConfiguration.preparedFinalObject,
+    "citiesByModule.citizenTenantId"
+  );
+
+  const isTradeDetailsValid = validateFields(
+    "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
+    state,
+    dispatch,
+    "search"
+  );
+
+  if (isTradeDetailsValid) {
+    dispatch(prepareFinalObject("BPAs", []));
+    const applyUrl =
+      process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/egov-bpa/apply` : `/egov-bpa/apply`;
+    dispatch(setRoute(applyUrl));
+    city(state, dispatch, tenantId);
+  }
+};
+
+
+// const getMdmsData = async () => {
+//   let mdmsBody = {
+//     // MdmsCriteria: {
+//     //   tenantId: commonConfig.tenantId,
+//     //   moduleDetails: [
+//     //     {
+//     //       moduleName: "tenant",
+//     //       masterDetails: [{ name: "citymodule" }]
+//     //     }
+//     //   ]
+//     // }
+//   };
+//   try {
+//     let payload = await httpRequest(
+//       "post",
+//       "/egov-mdms-service/v1/_search",
+//       "_search",
+//       [],
+//       mdmsBody
+//     );
+//     return payload;
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
+
+export const fetchData = async (action, state, dispatch) => {
+  // const response = cityModuleMockJson; //await getSearchResults();
+  const mdmsRes = cityModuleMockJson; //await getMdmsData(dispatch);
+  let tenants =
+    mdmsRes &&
+    mdmsRes.MdmsRes &&
+    mdmsRes.MdmsRes.tenant.citymodule.find(item => {
+      if (item.code === "TL") return true;
+    });
+  dispatch(
+    prepareFinalObject(
+      "applyScreenMdmsData.common-masters.citiesByModule.TL",
+      tenants
+    )
+  );
+  // try {
+  //   if (response && response.Licenses && response.Licenses.length > 0) {
+  //     dispatch(prepareFinalObject("searchResults", response.Licenses));
+  //     dispatch(
+  //       prepareFinalObject("myApplicationsCount", response.Licenses.length)
+  //     );
+  //   }
+  // } catch (error) {
+  //   console.log(error);
+  // }
+};
+
+export const createBill = async (queryObject, dispatch) => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/billing-service/bill/v2/_fetchbill",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    console.log(error, 'fetxh');
   }
 };
 

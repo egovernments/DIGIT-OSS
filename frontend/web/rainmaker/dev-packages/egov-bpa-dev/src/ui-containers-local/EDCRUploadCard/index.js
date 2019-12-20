@@ -124,7 +124,7 @@ class DocumentList extends Component {
       [uploadedDocIndex]: [
         {
           fileName: file.name,
-          documentType: name
+          documentType: file.name
         }
       ]
     };

@@ -1,22 +1,15 @@
-import { httpRequest } from "./api";
 import {
-  convertDateToEpoch,
   getCheckBoxJsonpath,
   getSafetyNormsJson,
   getHygeneLevelJson,
   getLocalityHarmedJson
 } from "../ui-config/screens/specs/utils";
 import {
-  prepareFinalObject,
-  toggleSnackbar
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import {
   getTranslatedLabel,
   updateDropDowns,
   setOrganizationVisibility
 } from "../ui-config/screens/specs/utils";
-import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import store from "redux/store";
+import store from "ui-redux/store";
 import get from "lodash/get";
 import set from "lodash/set";
 import {
@@ -25,7 +18,53 @@ import {
 } from "egov-ui-framework/ui-utils/commons";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { getMultiUnits } from "egov-ui-framework/ui-utils/commons";
-import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import {
+  handleScreenConfigurationFieldChange as handleField,
+  prepareFinalObject,
+  toggleSnackbar,
+  toggleSpinner
+} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import jp from "jsonpath";
+import { appSearchMockData } from './searchMockJson';
+
+
+
+const handleDeletedCards = (jsonObject, jsonPath, key) => {
+  let originalArray = get(jsonObject, jsonPath, []);
+  let modifiedArray = originalArray.filter(element => {
+    return element.hasOwnProperty(key) || !element.hasOwnProperty("isDeleted");
+  });
+  modifiedArray = modifiedArray.map(element => {
+    if (element.hasOwnProperty("isDeleted")) {
+      element["isActive"] = false;
+    }
+    return element;
+  });
+  set(jsonObject, jsonPath, modifiedArray);
+};
+
+export const getSearchResults = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/tl-services/v1/BPAREG/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
 
 export const updateTradeDetails = async requestBody => {
   try {
@@ -55,24 +94,296 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
   }
 };
 
-export const getSearchResults = async queryObject => {
+export const getAppSearchResults = async (queryObject, dispatch) => {
   try {
-    const response = await httpRequest(
-      "post",
-      "/tl-services/v1/BPAREG/_search",
-      "",
-      queryObject
-    );
-    return response;
+    store.dispatch(toggleSpinner());
+    const response = "";
+    //  await httpRequest(
+      // "post",
+      // "/bpa-services/v1/_search",
+      // "",
+      // queryObject
+    // );
+    store.dispatch(toggleSpinner());
+    return appSearchMockData;
   } catch (error) {
     store.dispatch(
       toggleSnackbar(
         true,
-        { labelName: error.message, labelCode: error.message },
+        { labelName: error.message, labelKey: error.message },
         "error"
       )
     );
+    throw error;
   }
+};
+
+export const createUpdateBpaApplication = async (state, dispatch, status) => {
+  let applicationId = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.id"
+  );
+  let method = applicationId ? "UPDATE" : "CREATE";
+
+  try {
+    let payload = get(
+      state.screenConfiguration.preparedFinalObject,
+      "BPA",
+      []
+    );
+    const tenantId = get(
+      state.screenConfiguration.preparedFinalObject,
+      "BPAs[0].BPADetails.plotdetails.citytown"
+    );
+
+    set(payload, "tenantId", tenantId.value);
+    set(payload, "action", status);
+    set(payload, "address", {});
+    set(payload, "additionalDetails", {});
+    set(payload, "units", []);
+
+    // Get uploaded documents from redux
+    // let reduxDocuments = get(
+    //   state,
+    //   "screenConfiguration.preparedFinalObject.documentsContract",
+    //   {}
+    // );
+    // handleDeletedCards(
+    //   payload[0],
+    //   "BPA.owners",
+    //   "id"
+    // );
+
+    // let documents = [];
+    // jp.query(reduxDocuments, "$.*").forEach(doc => {
+    //   doc.cards.forEach(card => {
+    //     if(card.required && card.dropDownValues && card.dropDownValues.menu ){
+    //       card.dropDownValues.menu.forEach(item => {
+    //         documents.push({documentType: item.code})
+    //       })
+    //     }
+    //   })
+    // });
+
+    let documents = [
+      {"documentType": "OWNER.IDENTITYPROOF.VOTERID"}
+    ];
+    set(payload, "documents", documents);
+
+    // Set Channel and Financial Year
+    process.env.REACT_APP_NAME === "Citizen"
+      ? set(payload[0], "BPA.channel", "CITIZEN")
+      : set(payload[0], "BPA.channel", "COUNTER");
+    set(payload[0], "BPA.financialYear", "2019-20");
+
+    // Set Dates to Epoch
+    
+    let owners = get(payload, "owners", []);
+    owners.forEach((owner, index) => {
+      set(
+        payload,
+        `owners[${index}].dob`,
+        convertDateToEpoch(get(owner, "dob"))
+      );
+    });
+
+    let response;
+
+    if (method === "CREATE") {
+      response = await httpRequest(
+        "post",
+        "bpa-services/bpa/appl/_create",
+        "",
+        [],
+        { BPA : payload }
+      );
+      // response = prepareOwnershipType(response);
+      dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+      setApplicationNumberBox(state, dispatch);
+    } else if (method === "UPDATE") {
+      response = await httpRequest(
+        "post",
+        "bpa-services/bpa/appl/__update",
+        "",
+        [],
+        { BPA: payload }
+      );
+      // response = prepareOwnershipType(response);
+      dispatch(prepareFinalObject("BPA", response.Bpa[0]));
+    }
+    return { status: "success", message: response };
+  } catch (error) {
+    dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
+    return { status: "failure", message: error };
+  }
+};
+
+export const prepareDocumentsUploadData = (state, dispatch) => {
+  let documents = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.DocTypeMapping[0].docTypes",
+    []
+  );
+  let documentsDropDownValues = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.DocumentType",
+    []
+  );
+
+  let documentsList = [];
+  documents.forEach(doc => {
+    let code = doc.code.split(".")[0];
+    doc.dropDownValues = [];
+    documentsDropDownValues.forEach(value => {
+      if (code === value.code.split(".")[0]) {
+        doc.hasDropdown = true;
+        doc.dropDownValues.push(value);
+      }
+    });
+    documentsList.push(doc);
+  });
+  documents = documentsList;
+
+  // documents = documents.filter(item => {
+  //   return item.active;
+  // });
+  let documentsContract = [];
+  let tempDoc = {};
+  documents.forEach(doc => {
+    let card = {};
+    card["code"] = 'Documents',//doc.documentType;
+    card["title"] = 'Documents',//doc.documentType;
+    card["cards"] = [];
+    tempDoc[doc.documentType] = card;
+  });
+
+  documents.forEach(doc => {
+    let card = {};
+    card["name"] = doc.code;
+    card["code"] = doc.code;
+    card["required"] = doc.required ? true : false;
+    if (doc.hasDropdown && doc.dropDownValues) {
+      let dropDownValues = {};
+      dropDownValues.label = "Select Documents";
+      dropDownValues.required = doc.required;
+      dropDownValues.menu = doc.dropDownValues.filter(item => {
+        return item.active;
+      });
+      dropDownValues.menu = dropDownValues.menu.map(item => {
+        return { code: item.code, label: getTransformedLocale(item.code) };
+      });
+      card["dropDownValues"] = dropDownValues;
+    }
+    tempDoc[doc.documentType].cards.push(card);
+  });
+
+  Object.keys(tempDoc).forEach(key => {
+    documentsContract.push(tempDoc[key]);
+  });
+  dispatch(prepareFinalObject("documentsContract", documentsContract));
+};
+
+
+export const prepareNOCUploadData = (state, dispatch) => {
+  return;
+  let documents = get(
+    state,
+    "screenConfiguration.preparedFinalObject.applyScreenMdmsData.BPA.NOC",
+    []
+  );
+  documents = documents.filter(item => {
+    return item.active;
+  });
+  let documentsContract = [];
+  let tempDoc = {};
+  documents.forEach(doc => {
+    let card = {};
+    card["code"] = doc.documentType;
+    card["title"] = doc.documentType;
+    card["cards"] = [];
+    tempDoc[doc.documentType] = card;
+  });
+
+  documents.forEach(doc => {
+    // Handle the case for multiple muildings
+    if (
+      doc.code === "BUILDING.BUILDING_PLAN" &&
+      doc.hasMultipleRows &&
+      doc.options
+    ) {
+      let buildingsData = get(
+        state,
+        "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings",
+        []
+      );
+
+      buildingsData.forEach(building => {
+        let card = {};
+        card["name"] = building.name;
+        card["code"] = doc.code;
+        card["hasSubCards"] = true;
+        card["subCards"] = [];
+        doc.options.forEach(subDoc => {
+          let subCard = {};
+          subCard["name"] = subDoc.code;
+          subCard["required"] = subDoc.required ? true : false;
+          card.subCards.push(subCard);
+        });
+        tempDoc[doc.documentType].cards.push(card);
+      });
+    } else {
+      let card = {};
+      card["name"] = doc.code;
+      card["code"] = doc.code;
+      card["required"] = doc.required ? true : false;
+      if (doc.hasDropdown && doc.natureOfNoc) {
+        let natureOfNoc = {};
+        natureOfNoc.label = "Nature Of Noc";
+        natureOfNoc.required = true;
+        natureOfNoc.menu = doc.natureOfNoc.filter(item => {
+          return item.active;
+        });
+        natureOfNoc.menu = natureOfNoc.menu.map(item => {
+          return { code: item.code, label: getTransformedLocale(item.code) };
+        });
+        card["natureOfNoc"] = natureOfNoc;
+      }
+      if (doc.hasDropdown && doc.remarks) {
+        let remarks = {};
+        remarks.label = "Remarks";
+        remarks.required = true;
+        remarks.menu = doc.remarks.filter(item => {
+          return item.active;
+        });
+        remarks.menu = remarks.menu.map(item => {
+          return { code: item.code, label: getTransformedLocale(item.code) };
+        });
+        card["remarks"] = remarks;
+      }
+      tempDoc[doc.documentType].cards.push(card);
+    }
+  });
+
+  Object.keys(tempDoc).forEach(key => {
+    documentsContract.push(tempDoc[key]);
+  });
+
+  dispatch(prepareFinalObject("nocDocumentsContract", documentsContract));
+};
+
+export const prepareOwnershipType = response => {
+  console.log(response);
+  // Handle applicant ownership dependent dropdowns
+  let ownershipCategory = get(
+    response,
+    "BPA.ownerShipType"
+  );
+  set(
+    response,
+    "BPA.ownershipCategory",
+    ownershipCategory == undefined ? "SINGLE" : ownershipType.split(".")[0]
+  );
+  return response;
 };
 
 const setDocsForEditFlow = async (state, dispatch) => {
@@ -407,13 +718,16 @@ export const isFileValid = (file, acceptedFiles) => {
   );
 };
 
-const setApplicationNumberBox = (state, dispatch) => {
-  let applicationNumber = get(
-    state,
-    "screenConfiguration.preparedFinalObject.Licenses[0].applicationNumber",
-    null
-  );
-  if (applicationNumber) {
+export const setApplicationNumberBox = (state, dispatch, applicationNo) => {
+  if (!applicationNo) {
+    applicationNo = get(
+      state,
+      "screenConfiguration.preparedFinalObject.BPA.applicationNo",
+      null
+    );
+  }
+
+  if (applicationNo) {
     dispatch(
       handleField(
         "apply",
@@ -427,7 +741,7 @@ const setApplicationNumberBox = (state, dispatch) => {
         "apply",
         "components.div.children.headerDiv.children.header.children.applicationNumber",
         "props.number",
-        applicationNumber
+        applicationNo
       )
     );
   }

@@ -6,7 +6,7 @@ import MainRoutes from "ui-routes";
 //import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
 import Div from "egov-ui-framework/ui-atoms/HtmlElements/Div";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-import "./index.css";
+import "./index.scss";
 
 class App extends React.Component {
   componentWillReceiveProps(nextProps) {

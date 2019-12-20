@@ -3,8 +3,14 @@ import Loadable from "react-loadable";
 import LinearProgress from "egov-ui-framework/ui-atoms/LinearSpinner";
 
 const Loading = () => <LinearProgress />;
+
 const TestAtoms = Loadable({
   loader: () => import("./TestAtoms"),
+  loading: () => <Loading />
+});
+
+const downloadFile = Loadable({
+  loader: () => import("./downloadFile"),
   loading: () => <Loading />
 });
 
@@ -43,6 +49,11 @@ const FormIcon = Loadable({
   loading: () => <Loading />
 });
 
+// const ApplicationNumber = Loadable({
+//   loader: () => import("./ApplicationNumber"),
+//   loading: () => <Loading />
+// });
+
 const TradeLicenseIcon = Loadable({
   loader: () => import("./Icons/TradeLicenseIcon"),
   loading: () => <Loading />
@@ -50,12 +61,14 @@ const TradeLicenseIcon = Loadable({
 
 export {
   TestAtoms,
+  AutoSuggest,
+  downloadFile,
+  FormIcon,
+  //ApplicationNumber,
   ApplicationNoContainer,
   Checkbox,
   MapLocation,
-  AutoSuggest,
   Asteric,
   MenuButton,
-  FormIcon,
   TradeLicenseIcon
 };

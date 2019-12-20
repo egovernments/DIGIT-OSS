@@ -377,8 +377,10 @@ const screenConfig = {
     dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
     getData(action, state, dispatch).then(responseAction => {
       const queryObj = [{ key: "tenantId", value: tenantId }];
-      props.value = tenantId;
-      props.disabled = true;
+      const props = {
+        value: tenantId,
+        disabled: true
+      };
       set(
         action.screenConfig,
         "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",

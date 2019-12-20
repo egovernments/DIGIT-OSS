@@ -18,6 +18,7 @@ import {
   transformById,
   getTransformedLocale
 } from "egov-ui-framework/ui-utils/commons";
+import { getAppSearchResults } from "../../../../ui-utils/commons";
 
 const ifNotNull = value => {
   return !["", "NA", "null", null].includes(value);
@@ -75,7 +76,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
     { key: "tenantId", value: tenant },
     { key: "applicationNumber", value: applicationNumber }
   ];
-  let response = await getSearchResults(queryObject);
+  let response = await getAppSearchResults(queryObject);
 
   if (response && response.Licenses && response.Licenses.length > 0) {
     data.applicationNumber = nullToNa(
@@ -382,5 +383,14 @@ export const loadReceiptGenerationData = (applicationNumber, tenant) => {
   loadUlbLogo(tenant);
   loadApplicationData(applicationNumber, tenant); //PB-TL-2018-09-27-000004
   loadReceiptData(applicationNumber, tenant); //PT-107-001330:AS-2018-08-29-001426     //PT consumerCode
+  loadMdmsData(tenant);
+};
+
+/** Data used for creation of receipt is generated and stored in local storage here */
+export const loadPdfGenerationData = (applicationNumber, tenant) => {
+  /** Logo loaded and stored in local storage in base64 */
+  loadUlbLogo(tenant);
+  loadApplicationData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
+  loadReceiptData(applicationNumber, tenant); //PB-FN-2019-06-14-002241
   loadMdmsData(tenant);
 };
