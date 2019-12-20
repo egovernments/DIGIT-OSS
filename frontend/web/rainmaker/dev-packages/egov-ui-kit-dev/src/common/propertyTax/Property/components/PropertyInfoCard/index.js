@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Card } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
+import "./index.css";
 
 class PropertyInfoCard extends Component {
   render() {
@@ -11,6 +12,7 @@ class PropertyInfoCard extends Component {
         {items && (
           <Card
             style={{ backgroundColor, boxShadow: "none" }}
+            className={ownerInfo ? 'pt-info-card-style' : ""}
             textChildren={
               <div>
                 <div >
