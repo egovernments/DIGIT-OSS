@@ -1133,4 +1133,3 @@ export const downloadBill = (receiptQueryString, mode = "download") => {
         alert('Some Error Occured while downloading Bill!');
     }
 }
-
