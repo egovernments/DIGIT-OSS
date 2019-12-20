@@ -127,7 +127,7 @@ class TableData extends Component {
             }
           }
           const moduleWiseLocality = await httpRequest(`egov-searcher/locality/${uniqueModules[i]}/_get`, "search", [] , requestBody);
-          localitymap = [...moduleWiseLocality.Localities];
+          localitymap = [...localitymap , ...moduleWiseLocality.Localities];
         }catch(e){
           console.log("error");
         }       
@@ -142,14 +142,14 @@ class TableData extends Component {
         "error"
       );
     }
-    
-    return data.map((item) => {   
+ 
+    return data.map((item) => {       
       const locality = localitymap.find(locality => {
         return locality.referencenumber === item.businessId;
       }) 
       var sla = item.businesssServiceSla && item.businesssServiceSla / (1000 * 60 * 60 * 24);
       let dataRows = [
-        { text: item.businessId, subtext: `CS_COMMON_INBOX_${item.businessService.toUpperCase()}` },
+        { text: item.businessId, subtext: item.businessService , hiddenText : item.moduleName },
         { text:  locality ? <Label label={`${item.tenantId.toUpperCase().replace(/[.]/g, "_")}_REVENUE_${locality.locality}`} color="#000000"/> : <Label label={"NA"} color="#000000" />},
         {
           text: item.state ? (
@@ -274,7 +274,7 @@ class TableData extends Component {
         "WF_INBOX_HEADER_LOCALITY",
         "WF_INBOX_HEADER_STATUS",
         // "WF_INBOX_HEADER_ASSIGNED_BY",
-        "WF_INBOX_HEADER_ASSIGNED_TO",
+        "WF_INBOX_HEADER_CURRENT_OWNER",
         "WF_INBOX_HEADER_SLA_DAYS_REMAINING",
       ];
       inboxData[0].headers = headersList;

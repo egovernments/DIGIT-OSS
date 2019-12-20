@@ -56,9 +56,9 @@ class InboxData extends React.Component {
   getModuleLink = async (item, row, index) => {
     const { prepareFinalObject } = this.props;
     const status = row[2].text && row[2].text.props.defaultLabel;
-    const taskId = index === 1 && item.text;
+    const taskId = index === 0 && item.text;
     const tenantId = getTenantId();
-    const processInstances = await this.getProcessIntanceData(row[1].text);
+    const processInstances = await this.getProcessIntanceData(row[0].text);
 
     if (processInstances && processInstances.length > 0) {
       await addWflowFileUrl(processInstances, prepareFinalObject);
@@ -68,11 +68,11 @@ class InboxData extends React.Component {
     let contextPath =
       status === "Initiated"
         ? process.env.NODE_ENV === "production"
-          ? `/employee${getWFConfig(row[0].text).INITIATED}`
-          : getWFConfig(row[0].text).INITIATED
+          ? `/employee${getWFConfig(row[0].hiddenText).INITIATED}`
+          : getWFConfig(row[0].hiddenText).INITIATED
         : process.env.NODE_ENV === "production"
-        ? `/employee${getWFConfig(row[0].text).DEFAULT}`
-        : getWFConfig(row[0].text).DEFAULT;
+        ? `/employee${getWFConfig(row[0].hiddenText).DEFAULT}`
+        : getWFConfig(row[0].hiddenText).DEFAULT;
 
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
     window.location.href = `${baseUrl}${contextPath}?${queryParams}`;
@@ -121,8 +121,8 @@ class InboxData extends React.Component {
                     if (item.subtext) {
                       return (
                         <TableCell className={classNames}>
-                          <div className="inbox-cell-text">{ <a>{item.text} </a>}</div>
-                          <div onClick={() => getModuleLink(item, row, index)} className="inbox-cell-subtext">{<Label label={item.subtext} color="#000000"/>}</div>
+                          <div  onClick={() => getModuleLink(item, row, index)}  className="inbox-cell-text">{ <a>{item.text} </a>}</div>
+                          <div className="inbox-cell-subtext">{<Label label={`CS_COMMON_INBOX_${item.subtext.toUpperCase()}`} color="#000000"/>}</div>
                         </TableCell>
                       );
                     } else if (item.badge) {
@@ -139,7 +139,7 @@ class InboxData extends React.Component {
                     } else if (item.historyButton) {
                       return (
                         <TableCell className={classNames}>
-                          <div onClick={() => onHistoryClick(row[1])} style={{ cursor: "pointer" }}>
+                          <div onClick={() => onHistoryClick(row[0])} style={{ cursor: "pointer" }}>
                             <i class="material-icons">history</i>
                           </div>
                         </TableCell>
