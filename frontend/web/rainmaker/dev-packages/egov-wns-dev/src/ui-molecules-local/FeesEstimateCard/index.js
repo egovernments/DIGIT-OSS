@@ -61,7 +61,7 @@ function FeesEstimateCard(props) {
         if (estimate.fees[0].data !== null && estimate.fees[0].data !== undefined && estimate.fees[0].data.length > 0) {
             billingPeriod = convertEpochToDate(estimate.fees[0].data[0].fromPeriod) + " - " + convertEpochToDate(estimate.fees[0].data[0].toPeriod);
             totalAmount = estimate.fees[0].data[0].total;
-            dueDate = estimate.fees[0].data[0].expiryDate;
+            dueDate = convertEpochToDate(estimate.fees[0].data[0].expiryDate);
         }
         if (estimate.fees[0].description !== null && estimate.fees[0].description !== undefined && estimate.fees[0].description.length > 0) {
             sortedArray = estimate.fees[0].description.sort((a, b) => parseInt(a.order) - parseInt(b.order))
@@ -161,7 +161,7 @@ function FeesEstimateCard(props) {
                         </Grid>
                         <Grid xs={6}
                             align="right" >
-                            <Typography>{new Date(dueDate).toLocaleDateString().slice(0, 10)}</Typography>
+                            <Typography>{dueDate}</Typography>
                         </Grid>
                     </Grid>
                 </Card >
