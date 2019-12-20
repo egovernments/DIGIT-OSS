@@ -32,7 +32,7 @@ export const renderService = () => {
         children: { buttonLabel: getLabel({ labelKey: "WS_CONNECTION_DETAILS_VIEW_CONSUMPTION_LABEL" }) },
         onClickDefination: {
           action: "page_change",
-          path: `/wns/meter-reading?connectionNos=${connectionNumber}&tenantId=${tenantId}`
+          path: `meter-reading?connectionNos=${connectionNumber}&tenantId=${tenantId}`
         }
       },
     })

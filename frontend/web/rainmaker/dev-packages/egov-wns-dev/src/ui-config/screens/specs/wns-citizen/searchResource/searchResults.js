@@ -113,5 +113,5 @@ export const searchResults = {
 
 
 const getViewBillDetails = data => {
-  window.location.href = `/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`
+  window.location.href = `viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`
 }
