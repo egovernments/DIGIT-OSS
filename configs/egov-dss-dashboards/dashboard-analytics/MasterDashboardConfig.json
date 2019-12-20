@@ -2,7 +2,7 @@
   "_comment": "Master dashboard which holds all the possible visualisation. Note new dashboards/visualisations can be added",
   "dashboards": [
     {
-      "name": "State Wide Urban Real-Time Executive (SURE) Dashboard",
+      "name": "State Urban Real-Time Executive (SURE) Dashboard",
       "id": "home",
       "isActive": "",
       "style": "",
