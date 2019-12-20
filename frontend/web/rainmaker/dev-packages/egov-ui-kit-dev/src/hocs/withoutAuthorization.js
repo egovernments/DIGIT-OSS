@@ -1,9 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import "./index.css";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import digitLogo from "egov-ui-kit/assets/images/Digit_logo.png";
@@ -35,7 +32,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
           {/* FIXME need to move appbar as new component */}
           {isOpenLink ? (
             <div className="rainmaker-header-cont" style={{ position: "relative" }}>
-              <div>
+              <div style={{ lineHeight: "64px" }}>
                 <AppBar className="rainmaker-header">
                   <div className="citizen-header-logo-label">
                     <div className="citizen-header-logo">
@@ -49,7 +46,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
                       />
                       <Label containerStyle={{ marginLeft: "4px" }} className="screenHeaderLabelStyle appbar-municipal-label" label={defaultTitle} />
                     </div>
-                    <div style={{ position: "absolute", right: "12px", top: "12px" }}>
+                    <div style={{ position: "absolute", right: "12px" }}>
                       <img src={digitLogo} />
                     </div>
                   </div>

@@ -126,9 +126,14 @@ export const applicationSuccessFooter = (
 ) => {
   //const baseURL = getBaseURL();
   const roleExists = ifUserRoleExists("CITIZEN");
+  var authlink = true;
+  if (window.location.pathname.includes("openlink")) {
+    authlink = false;
+  }
   // const redirectionURL = roleExists ? "/tradelicense-citizen/home" : "/inbox";
   /* Mseva 2.0 changes */
   const redirectionURL = roleExists ? "/" : "/inbox";
+  const payURL = `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}`;
   return getCommonApplyFooter({
     gotoHome: {
       componentPath: "Button",
@@ -150,6 +155,29 @@ export const applicationSuccessFooter = (
       onClickDefination: {
         action: "page_change",
         path: redirectionURL
+      }
+    },
+    proceedToPay: {
+      componentPath: "Button",
+      visible: authlink,
+      props: {
+        variant: "contained",
+        color: "primary",
+        style: {
+          minWidth: "200px",
+          height: "48px",
+          marginRight: "40px"
+        }
+      },
+      children: {
+        collectPaymentButtonLabel: getLabel({
+          labelName: "PROCEED TO PAYMENT",
+          labelKey: "BPA_PROCEED_PAYMENT"
+        })
+      },
+      onClickDefination: {
+        action: "page_change",
+        path: payURL
       }
     }
     // collectPaymentButton: {
@@ -176,28 +204,6 @@ export const applicationSuccessFooter = (
     //   roleDefination: {
     //     rolePath: "user-info.roles",
     //     roles: ["TL_CEMP"]
-    //   }
-    // },
-    // proceedToPay: {
-    //   componentPath: "Button",
-    //   props: {
-    //     variant: "contained",
-    //     color: "primary",
-    //     style: {
-    //       minWidth: "200px",
-    //       height: "48px",
-    //       marginRight: "40px"
-    //     }
-    //   },
-    //   children: {
-    //     collectPaymentButtonLabel: getLabel({
-    //       labelName: "PROCEED TO PAYMENT",
-    //       labelKey: "TL_PROCEED_PAYMENT"
-    //     })
-    //   },
-    //   onClickDefination: {
-    //     action: "page_change",
-    //     path: `/bpastakeholder-citizen/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=TL`
     //   }
     // }
   });

@@ -170,8 +170,10 @@ const generatePdfAndDownload = async (
     var myWindow = window.open(fileURL);
     if (myWindow != undefined) {
       myWindow.addEventListener('load', (event) => {
-        myWindow.focus();
-        myWindow.print();
+        setTimeout(function() {
+          myWindow.focus();
+          myWindow.print();
+        }, 2000)
       });
     }
   } else if (action === "download") {
