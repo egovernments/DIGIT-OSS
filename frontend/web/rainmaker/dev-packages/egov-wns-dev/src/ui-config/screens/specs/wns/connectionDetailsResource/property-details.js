@@ -37,7 +37,7 @@ const propertyDetails = getCommonContainer({
     },
     {
       jsonPath:
-        "WaterConnection[0].property.propertyType"
+      "WaterConnection[0].property.propertyTypeData"
     }
   ),
   propertyUsageType: getLabelWithValue(

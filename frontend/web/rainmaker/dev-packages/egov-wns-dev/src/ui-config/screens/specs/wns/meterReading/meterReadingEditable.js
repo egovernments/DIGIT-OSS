@@ -60,7 +60,7 @@ const saveData = (state, dispatch) => {
         data.connectionNo = getQueryArg(window.location.href, "connectionNos")
         data.lastReading = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading");
         data.billingPeriod = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod");
-        if (data.currentReading < data.lastReading) {
+        if (data.currentReading <= data.lastReading) {
             dispatch(
                 toggleSnackbar(
                     true,

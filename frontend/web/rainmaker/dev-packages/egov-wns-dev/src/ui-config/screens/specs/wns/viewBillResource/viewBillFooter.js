@@ -1,6 +1,6 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCommonApplyFooter } from "../../utils";
-import { downloadBill } from "egov-common/ui-utils/commons";
+import { downloadBill } from "../../../../../ui-utils/commons";
 import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
