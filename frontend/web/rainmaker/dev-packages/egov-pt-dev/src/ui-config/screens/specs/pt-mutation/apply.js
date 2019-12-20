@@ -7,8 +7,10 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getCurrentFinancialYear } from "../utils";
 import { footer } from "./applyResource/footer";
-import { transferorDetails,mutationDetails,registrationDetails
+import {mutationDetails
    } from "./applyResourceMutation/mutationDetails";
+   import {registrationDetails} from "./applyResourceMutation/registrationDetails";
+   import {transferorDetails} from "./applyResourceMutation/transferorDetails";
    import {
     transferorSummary,transferorInstitutionSummary
   } from "./summaryResource/transferorSummary";
@@ -336,7 +338,7 @@ const screenConfig = {
         "screenConfiguration.preparedFinalObject.applyScreenMdmsData.common-masters.OwnerShipCategory",
         []
       );
-      ownershipCategory = getFirstListFromDotSeparated(ownershipCategory);
+    //  ownershipCategory = getFirstListFromDotSeparated(ownershipCategory);
       dispatch(
         prepareFinalObject(
           "applyScreenMdmsData.DropdownsData.OwnershipCategory",
@@ -350,29 +352,6 @@ const screenConfig = {
 
     // Search in case of EDIT flow
     prepareEditFlow(state, dispatch, applicationNumber, tenantId);
-
-    // // Set Property City
-    // dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.propertyDetails.address.city", getTenantId()));
-
-    // // Handle dependent dropdowns in edit flow
-    // set(
-    //   "apply",
-    //   "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingDataCard.children.singleBuildingContainer.children.singleBuilding.children.cardContent.children.singleBuildingCard.children.buildingSubUsageType",
-    //   { display: "none" }
-    // );
-
-    // let pfo = {};
-    // if (applicationNumber && !step) {
-    //   pfo = searchSampleResponse();
-    //   dispatch(prepareFinalObject("FireNOCs[0]", get(pfo, "FireNOCs[0]")));
-    // }
-    // if (step && get(state, "screenConfiguration.preparedFinalObject")) {
-    //   pfo = get(
-    //     state,
-    //     "screenConfiguration.preparedFinalObject.FireNOCs[0]",
-    //     {}
-    //   );
-    // }
 
     // Code to goto a specific step through URL
     if (step && step.match(/^\d+$/)) {
