@@ -31,7 +31,7 @@ const setAutopopulatedvalues = async (state, dispatch) => {
     let billingFrequency = get(state, "screenConfiguration.preparedFinalObject.billingCycle");
     let consumptionDetails = {};
     let date = new Date();
-    let status = get(state, "screenConfiguration.preparedFinalObject.meterMdmsData.tenant.tenants[0].name");
+    let status = get(state, "screenConfiguration.preparedFinalObject.meterMdmsData.['ws-services-calculation'].MeterStatus[0].code");
     let checkBillingPeriod = await get(state, "screenConfiguration.preparedFinalObject.consumptionDetails");
     if (checkBillingPeriod === undefined || checkBillingPeriod === []) {
 
@@ -55,8 +55,7 @@ const setAutopopulatedvalues = async (state, dispatch) => {
 
     } else {
         console.log("called")
-        let prevDataIndex = get(state, "screenConfiguration.preparedFinalObject.consumptionDetailsCount");
-        let prevBillingPeriod = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[${prevDataIndex - 1}].billingPeriod`);
+        let prevBillingPeriod = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].billingPeriod`);
         let date = new Date();
         if (billingFrequency === "quarterly") {
             let preValue = prevBillingPeriod[1]
@@ -97,9 +96,9 @@ const setAutopopulatedvalues = async (state, dispatch) => {
         }
 
 
-        consumptionDetails['lastReading'] = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[${prevDataIndex - 1}].currentReading`);
-        consumptionDetails['consumption'] = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[${prevDataIndex - 1}].lastReading`);
-        consumptionDetails['lastReadingDate'] = convertEpochToDate(get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[${prevDataIndex - 1}].currentReadingDate`))
+        consumptionDetails['lastReading'] = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReading`);
+        consumptionDetails['consumption'] = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReading`);
+        consumptionDetails['lastReadingDate'] = convertEpochToDate(get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReadingDate`))
     }
 
 

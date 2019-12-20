@@ -48,16 +48,16 @@ const saveData = (state, dispatch) => {
 
     } else {
         if (!data.meterStatus) {
-            data.meterStatus = get(state, "screenConfiguration.preparedFinalObject.meterMdmsData.tenant.tenants[0].name");
+            data.meterStatus = get(state, "screenConfiguration.preparedFinalObject.meterMdmsData.['ws-services-calculation'].MeterStatus[0].code");
         }
         if (!data.currentReadingDate) {
             data.currentReadingDate = new Date().getTime()
         }
-        data.connectionNo = getQueryArg(window.location.href, "connectionNos")
         set(data,
             "currentReadingDate",
             convertDateToEpoch(data.currentReadingDate, "dayend")
         );
+        data.connectionNo = getQueryArg(window.location.href, "connectionNos")
         data.lastReading = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading");
         data.billingPeriod = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod");
         if (data.currentReading < data.lastReading) {
@@ -74,7 +74,7 @@ const saveData = (state, dispatch) => {
             return;
         }
         if (get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate")) {
-            data.lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate");
+            data.lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReadingDate");
         } else {
             data.lastReadingDate = 0
         }
@@ -180,13 +180,13 @@ export const meterReadingEditable =
                             labelKey: "WS_SELECT_METER_STATUS_PLACEHOLDER"
                         },
                         labelPrefix: {
-                            moduleName: "TENANT",
-                            masterName: "TENANTS"
+                            moduleName: "ws-services-calculation",
+                            masterName: "MeterStatus"
                         },
                         props: {
                             value: "",
                         },
-                        sourceJsonPath: "meterMdmsData.tenant.tenants",
+                        sourceJsonPath: "meterMdmsData['ws-services-calculation'].MeterStatus",
                         jsonPath: "metereading.meterStatus",
                         gridDefination: {
                             xs: 12,

@@ -73,7 +73,12 @@ export const searchApiCall = async (state, dispatch) => {
       let finalArray = [];
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = combinedSearchResults[i];
-        let queryObjectForWaterFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
+        let queryObjectForWaterFetchBill;
+        if (element.service === "WATER") {
+          queryObjectForWaterFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "WS" }];
+        } else {
+          queryObjectForWaterFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: element.connectionNo }, { key: "businessService", value: "SW" }];
+        }
         let billResults = await fetchBill(queryObjectForWaterFetchBill, dispatch)
         try {
           billResults ? billResults.Bill.map(bill => {

@@ -117,6 +117,28 @@ export const getDescriptionFromMDMS = async (requestBody, dispatch) => {
     }
 };
 
+export const getNamesFromMDMS = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "/billing-service/taxheads/_search",
+            "_search",
+            queryObject
+        );
+        dispatch(toggleSpinner());
+        return response;
+    } catch (error) {
+        dispatch(toggleSpinner());
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+};
+
 export const fetchBill = async (queryObject, dispatch) => {
     dispatch(toggleSpinner());
     try {
@@ -144,9 +166,10 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
             "_search",
             queryObject
         );
-       
+
         if (response.WaterConnection.length > 0) {
             for (let i = 0; i < response.WaterConnection.length; i++) {
+                response.WaterConnection[i].service = "Water"
                 try {
                     const data = await httpRequest(
                         "post",
@@ -181,6 +204,7 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
             )
         );
     }
+
 };
 
 
@@ -710,15 +734,16 @@ export const getMdmsDataForMeterStatus = async (dispatch) => {
     let mdmsBody = {
         MdmsCriteria: {
             tenantId: commonConfig.tenantId,
-            moduleDetails: [
+            "moduleDetails": [
                 {
-                    moduleName: "tenant",
-                    masterDetails: [
+                    "moduleName": "ws-services-calculation",
+                    "masterDetails": [
                         {
-                            name: "tenants"
+                            "name": "MeterStatus",
+                            "filter": "$.*.name"
                         }
                     ]
-                },
+                }
             ]
         }
     };
@@ -732,65 +757,10 @@ export const getMdmsDataForMeterStatus = async (dispatch) => {
             mdmsBody
         );
         console.log(payload.MdmsRes)
-        let sampleData = [
-            {
-                "code": "Working",
-                "name": "Working",
-                "description": "Working",
-                "status": {
-                    "name": "Working",
-                    "code": "1013",
-                }
-            },
-            {
-                "code": "Locked",
-                "name": "Locked",
-                "description": "Locked",
-                "status": {
-                    "name": "Locked",
-                    "code": "1013",
-                }
-            },
-            {
-                "code": "Breakdown",
-                "name": "Breakdown",
-                "description": "Breakdown",
-                "status": {
-                    "name": "Breakdown",
-                    "code": "1013",
-                }
-            },
-            {
-                "code": "No meter",
-                "name": "No meter",
-                "description": "No meter",
-                "status": {
-                    "name": "No meter",
-                    "code": "1013",
-                }
-            },
-            {
-                "code": "Reset",
-                "name": "Reset",
-                "description": "Reset",
-                "status": {
-                    "name": "Reset",
-                    "code": "1013",
-                }
-            },
-            {
-                "code": "Replacement",
-                "name": "Replacement",
-                "description": "Replacement",
-                "status": {
-                    "name": "Replacement",
-                    "code": "1013",
-                }
-            }
-
-        ]
-        payload.MdmsRes.tenant.tenants = sampleData
-
+        let data = payload.MdmsRes['ws-services-calculation'].MeterStatus.map(ele => {
+            return { code: ele }
+        })
+        payload.MdmsRes['ws-services-calculation'].MeterStatus = data;
         dispatch(prepareFinalObject("meterMdmsData", payload.MdmsRes));
 
     } catch (e) {
@@ -930,7 +900,46 @@ export const getMeterReadingData = async (dispatch) => {
         console.log(error);
     }
 };
-
+export const getPastPayments = async (dispatch) => {
+    // console.log(getUserInfo())
+    dispatch(toggleSpinner());
+    let queryObject = [
+        {
+            key: "tenantId",
+            value: "pb.amritsar"
+        },
+        {
+            key: "businessServices",
+            value: "WS"
+        },
+        {
+            key: "mobileNumber",
+            value: JSON.parse(getUserInfo()).mobileNumber.toString()
+            // value:'9234674532'
+        },
+    ];
+    try {
+        const response = await httpRequest(
+            "post",
+            "/collection-services/payments/_search",
+            "_search",
+            queryObject
+        );
+        dispatch(toggleSpinner());
+        if (response && response.Payments) {
+            dispatch(prepareFinalObject("pastPayments", response.Payments));
+        }
+        return response;
+    } catch (error) {
+        dispatch(toggleSpinner());
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+}
 
 export const createMeterReading = async (dispatch, body) => {
 
@@ -941,6 +950,9 @@ export const createMeterReading = async (dispatch, body) => {
     );
 
     if (response && response !== undefined && response !== null) {
+        dispatch(prepareFinalObject("metereading", []));
+        dispatch(prepareFinalObject("consumptionDetails", []));
+        dispatch(prepareFinalObject("autoPopulatedValues", []));
         getMeterReadingData(dispatch)
     }
 
@@ -968,30 +980,116 @@ export const wsDownloadConnectionDetails = (receiptQueryString, mode) => {
         },
     };
 
-    try {
-        httpRequest("post", FETCHCONNECTIONDETAILS.GET.URL, FETCHCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
-            const queryStr = [
-                { key: "key", value: "ws-consolidatedacknowlegment" },
-                { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
-            ]
-            httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
-                .then(res => {
-                    getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
-                        if (mode === 'download') {
-                            var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
-                            win.focus();
-                        }
-                        else {
-                            printJS(fileRes[res.filestoreIds[0]])
-                        }
-                    });
+    const FETCHSWCONNECTIONDETAILS = {
+        GET: {
+            URL: "/sw-services/swc/_search",
+            ACTION: "_post",
+        },
+    };
+    const service = getQueryArg(window.location.href, "service")
 
-                });
-        })
+    switch (service) {
+        case 'WATER':
+            try {
+                httpRequest("post", FETCHCONNECTIONDETAILS.GET.URL, FETCHCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+                    const queryStr = [
+                        { key: "key", value: "ws-consolidatedacknowlegment" },
+                        { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+                    ]
+                    httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { WaterConnection: payloadReceiptDetails.WaterConnection }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+                        .then(res => {
+                            getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+                                if (mode === 'download') {
+                                    var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
+                                    win.focus();
+                                }
+                                else {
+                                    printJS(fileRes[res.filestoreIds[0]])
+                                }
+                            });
 
-    } catch (exception) {
-        alert('Some Error Occured while downloading!');
+                        });
+                })
+
+            } catch (exception) {
+                alert('Some Error Occured while downloading!');
+            }
+            break;
+        case 'SEWERAGE':
+            try {
+                httpRequest("post", FETCHSWCONNECTIONDETAILS.GET.URL, FETCHSWCONNECTIONDETAILS.GET.ACTION, receiptQueryString).then((payloadReceiptDetails) => {
+                    const queryStr = [
+                        { key: "key", value: "ws-consolidatedsewerageconnection" },
+                        { key: "tenantId", value: receiptQueryString[1].value.split('.')[0] }
+                    ]
+                    httpRequest("post", DOWNLOADCONNECTIONDETAILS.GET.URL, DOWNLOADCONNECTIONDETAILS.GET.ACTION, queryStr, { SewerageConnections: payloadReceiptDetails.SewerageConnections }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+                        .then(res => {
+                            getFileUrlFromAPI(res.filestoreIds[0]).then((fileRes) => {
+                                if (mode === 'download') {
+                                    var win = window.open(fileRes[res.filestoreIds[0]], '_blank');
+                                    win.focus();
+                                }
+                                else {
+                                    printJS(fileRes[res.filestoreIds[0]])
+                                }
+                            });
+
+                        });
+                })
+
+            } catch (exception) {
+                alert('Some Error Occured while downloading!');
+            }
+            break;
     }
 }
 
+export const getSWMyConnectionResults = async (queryObject, dispatch) => {
+    dispatch(toggleSpinner());
+    try {
+        const response = await httpRequest(
+            "post",
+            "/sw-services/swc/_search",
+            "_search",
+            queryObject
+        );
+        if (response.SewerageConnections.length > 0) {
+            for (let i = 0; i < response.SewerageConnections.length; i++) {
+                response.SewerageConnections[i].service = "Sewerage"
+                try {
+                    const data = await httpRequest(
+                        "post",
+                        `billing-service/bill/v2/_fetchbill?consumerCode=${response.SewerageConnections[i].connectionNo}&tenantId=${response.SewerageConnections[i].property.tenantId}&businessService=SW`,
+                        "_fetchbill",
+                        // queryObject
+                    );
+                    if (data && data !== undefined) {
+                        if (data.Bill !== undefined && data.Bill.length > 0) {
+                            response.SewerageConnections[i].due = data.Bill[0].totalAmount
+                        }
+
+                    } else {
+                        response.SewerageConnections[i].due = 0
+                    }
+
+                } catch (err) {
+                    console.log(err)
+                    response.SewerageConnections[i].due = "-"
+                }
+            }
+            // });
+        }
+        dispatch(toggleSpinner());
+        return response;
+    } catch (error) {
+        dispatch(toggleSpinner());
+        store.dispatch(
+            toggleSnackbar(
+                true, { labelName: error.message, labelCode: error.message },
+                "error"
+            )
+        );
+    }
+
+};
 

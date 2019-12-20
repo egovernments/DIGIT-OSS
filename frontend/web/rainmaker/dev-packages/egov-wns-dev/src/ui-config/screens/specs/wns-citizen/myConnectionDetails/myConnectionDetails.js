@@ -1,4 +1,4 @@
-import { getMyConnectionResults, getMyConnectionDueResults } from "../../../../../ui-utils/commons";
+import { getMyConnectionResults, getSWMyConnectionResults } from "../../../../../ui-utils/commons";
 import {
     handleScreenConfigurationFieldChange as handleField,
     prepareFinalObject
@@ -6,6 +6,7 @@ import {
 import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 export const fetchData = async (action, state, dispatch) => {
+    let finalResponse = [];
     let queryObject = [
         {
             key: "mobileNumber",
@@ -15,16 +16,25 @@ export const fetchData = async (action, state, dispatch) => {
             value: JSON.parse(getUserInfo()).permanentCity
         }]
 
-    const response = await getMyConnectionResults(queryObject,dispatch);
+    const response = await getMyConnectionResults(queryObject, dispatch);
+    const swResponse = await getSWMyConnectionResults(queryObject, dispatch);
 
-    // const billResponse = await getMyConnectionDueResults();
+    if ((response && response.WaterConnection && response.WaterConnection.length > 0) && (swResponse && swResponse.SewerageConnections && swResponse.SewerageConnections.length > 0)) {
+        finalResponse = [...response.WaterConnection, ...swResponse.SewerageConnections];
+    } else if (response && response.WaterConnection && response.WaterConnection.length > 0) {
+        finalResponse = response.WaterConnection;
+    } else {
+        if (swResponse && swResponse.SewerageConnections && swResponse.SewerageConnections.length > 0) {
+            finalResponse = swResponse.SewerageConnections;
+        }
+    }
     try {
         /*Mseva 2.0 */
-        if (response && response.WaterConnection && response.WaterConnection.length > 0) {
-            dispatch(prepareFinalObject("myConnectionResults", response.WaterConnection));
-            dispatch(prepareFinalObject("myConnectionCount", response.WaterConnection.length));
+        if (finalResponse && finalResponse.length > 0) {
+            dispatch(prepareFinalObject("myConnectionResults", finalResponse));
+            // dispatch(prepareFinalObject("myConnectionCount", response.WaterConnection.length));
         }
     } catch (error) {
         console.log(error);
-    }
-};
+    };
+}

@@ -19,13 +19,12 @@ const styles = {
 };
 
 class MyConnections extends React.Component {
-  service = 'WATER'
   getConnectionDetails = data => {
-    window.location.href = `/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${this.service}`
+    window.location.href = `/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}`
   }
 
   getViewBillDetails = data => {
-    window.location.href = `/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${this.service}`
+    window.location.href = `/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}`
   }
 
   render() {
@@ -49,7 +48,7 @@ class MyConnections extends React.Component {
                         </Grid>
                         <Grid item xs={3}>
                           <LabelContainer
-                            labelName="Water"
+                            labelName={item.service}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />
@@ -148,13 +147,13 @@ class MyConnections extends React.Component {
                         </Grid>
                         <Grid item xs={3}>
                           <Label
-                            labelName={item.due}
+                            labelName={item.due} onClick={() => this.getViewBillDetails(item)}
                             fontSize={14}
                             style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                           />
                         </Grid>
                       </Grid>
-                      <div onClick={() => this.getViewBillDetails(item)}>
+                      <div>
                         {item.due === "-" ?
                           (<div></div>)
                           : item.due === 0 ?
@@ -162,7 +161,7 @@ class MyConnections extends React.Component {
                               labelKey="WS_COMMON_PAID_LABEL"
                               style={{ color: '#008000', textTransform: 'uppercase', fontWeight: 400 }}
                             /></div>) :
-                            (<div className="linkStyle">
+                            (<div className="linkStyle" onClick={() => this.getViewBillDetails(item)}>
                               <LabelContainer
                                 labelKey="CS_COMMON_PAY"
                                 style={{

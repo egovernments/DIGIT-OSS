@@ -57,7 +57,7 @@ export const searchResults = {
       getTextToLocalMapping("Address"),
       getTextToLocalMapping("Due Date"),
       {
-        name: getTextToLocalMapping(" "),
+        name: getTextToLocalMapping("Action"),
         options: {
           filter: false,
           customBodyRender: (value, data) => {
@@ -128,9 +128,9 @@ export const searchResults = {
 };
 
 const getConnectionDetails = data => {
-  window.location.href = `/wns/connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`
+  window.location.href = `connection-details?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`
 }
 
 const getViewBillDetails = data => {
-  window.location.href = `/wns/viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`
+  window.location.href = `viewBill?connectionNumber=${data.rowData[1]}&tenantId=${data.rowData[8]}&service=${data.rowData[0]}`
 }

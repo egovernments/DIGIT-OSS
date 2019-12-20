@@ -1006,15 +1006,15 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
               item.accountDescription.split("-")[0],
               LicenseData
             ) && {
-                value: getToolTipInfo(
-                  item.accountDescription.split("-")[0],
-                  LicenseData
-                ),
-                key: getToolTipInfo(
-                  item.accountDescription.split("-")[0],
-                  LicenseData
-                )
-              }
+              value: getToolTipInfo(
+                item.accountDescription.split("-")[0],
+                LicenseData
+              ),
+              key: getToolTipInfo(
+                item.accountDescription.split("-")[0],
+                LicenseData
+              )
+            }
           });
       } else {
         item.taxHeadCode &&
@@ -2328,6 +2328,13 @@ export const getTextToLocalMapping = label => {
       return getLocaleLabels(
         "Due Date",
         "WS_COMMON_TABLE_COL_DUE_DATE_LABEL",
+        localisationLabels
+      );
+
+    case "Action":
+      return getLocaleLabels(
+        "Action",
+        "WS_COMMON_TABLE_COL_ACTION_LABEL",
         localisationLabels
       );
 

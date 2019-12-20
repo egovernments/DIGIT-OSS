@@ -78,6 +78,9 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
     if (payloadData !== null && payloadData !== undefined && payloadData.SewerageConnections.length > 0) {
       payloadData.SewerageConnections[0].service = service
       payloadData.SewerageConnections[0].connectionExecutionDate = convertEpochToDate(payloadData.SewerageConnections[0].connectionExecutionDate)
+      const lat = payloadData.SewerageConnections[0].property.address.locality.latitude ? payloadData.SewerageConnections[0].property.address.locality.latitude : ' '
+      const long = payloadData.SewerageConnections[0].property.address.locality.longitude ? payloadData.SewerageConnections[0].property.address.locality.longitude : ' '
+      payloadData.SewerageConnections[0].property.address.locality.locationOnMap = `${lat} ${long}`
       dispatch(prepareFinalObject("WaterConnection[0]", payloadData.SewerageConnections[0]))
     }
   } else if (service === "WATER") {
@@ -89,7 +92,10 @@ const searchResults = async (action, state, dispatch, connectionNumber) => {
       } else {
         payloadData.WaterConnection[0].connectionExecutionDate = ' '
       }
-      payloadData.WaterConnection[0].property.address.locality.locationOnMap = payloadData.WaterConnection[0].property.address.locality.latitude + ' ' + payloadData.WaterConnection[0].property.address.locality.longitude
+
+      const lat = payloadData.WaterConnection[0].property.address.locality.latitude ? payloadData.WaterConnection[0].property.address.locality.latitude : ' '
+      const long = payloadData.WaterConnection[0].property.address.locality.longitude ? payloadData.WaterConnection[0].property.address.locality.longitude : ' '
+      payloadData.WaterConnection[0].property.address.locality.locationOnMap = `${lat} ${long}`
       dispatch(prepareFinalObject("WaterConnection[0]", payloadData.WaterConnection[0]));
     }
   }
