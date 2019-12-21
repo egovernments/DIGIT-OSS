@@ -205,6 +205,9 @@ const getMdmsData = async (action, state, dispatch) => {
             },
             {
               name: "ServiceType"
+            },
+            {
+              name: "RiskTypeComputation"
             }
           ]
         }

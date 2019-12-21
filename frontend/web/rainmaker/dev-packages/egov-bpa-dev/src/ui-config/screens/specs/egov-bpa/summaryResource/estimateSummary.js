@@ -11,7 +11,7 @@ import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 export const estimateSummary = getCommonGrayCard({
   estimateCard: {
     uiFramework: "custom-containers-local",
-    moduleName: "egov-noc",
+    moduleName: "egov-bpa",
     componentPath: "EstimateCardContainer",
     props: {
       estimate: {

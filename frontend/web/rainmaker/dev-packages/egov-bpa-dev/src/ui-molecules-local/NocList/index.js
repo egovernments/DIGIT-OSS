@@ -175,8 +175,8 @@ class NocList extends Component {
                 documentType: docType.code,
                 documentCode: card.name,
                 isDocumentRequired: card.required,
-                isDocumentTypeRequired: card.natureOfNoc
-                  ? card.natureOfNoc.required
+                isDocumentTypeRequired: card.dropDownValues
+                  ? card.dropDownValues.required
                   : false
               };
             }
@@ -220,32 +220,20 @@ class NocList extends Component {
     this.forceUpdate();
   };
 
-  handleNatureOfNocChange = (key, event) => {
+  handleChange = (key, event) => {
     const { nocDocumentsUploadRedux, prepareFinalObject } = this.props;
     prepareFinalObject(`nocDocumentsUploadRedux`, {
       ...nocDocumentsUploadRedux,
       [key]: {
         ...nocDocumentsUploadRedux[key],
-        natureOfNoc: { value: event.target.value },
-      }
-    });
-  };
-
-  handleRemarksChange = (key, event) => {
-    const { nocDocumentsUploadRedux, prepareFinalObject } = this.props;
-    prepareFinalObject(`nocDocumentsUploadRedux`, {
-      ...nocDocumentsUploadRedux,
-      [key]: {
-        ...nocDocumentsUploadRedux[key],
-        remarks: { value: event.target.value },
+        dropDownValues: { value: event.target.value }
       }
     });
   };
 
   getUploadCard = (card, key) => {
     const { classes, nocDocumentsUploadRedux } = this.props;
-    let jsonPath = `nocDocumentsUploadRedux[${key}].natureOfNoc.value`;
-    let jsonPath1 = `nocDocumentsUploadRedux[${key}].remarks.value`
+    let jsonPath = `nocDocumentsUploadRedux[${key}].dropDownValues.value`;
     return (
       <Grid container={true}>
         <Grid item={true} xs={2} sm={1} className={classes.iconDiv}>
@@ -256,16 +244,16 @@ class NocList extends Component {
               </Icon>
             </div>
           ) : (
-              <div className={classes.documentIcon}>
-                <span>{key + 1}</span>
-              </div>
-            )}
+            <div className={classes.documentIcon}>
+              <span>{key + 1}</span>
+            </div>
+          )}
         </Grid>
         <Grid
           item={true}
           xs={10}
           sm={5}
-          md={3}
+          md={4}
           align="left"
           className={classes.descriptionDiv}
         >
@@ -275,37 +263,21 @@ class NocList extends Component {
           />
           {card.required && requiredIcon}
         </Grid>
-        <Grid item={true} xs={12} sm={6} md={3}>
-          {card.natureOfNoc && (
+        <Grid item={true} xs={12} sm={6} md={4}>
+          {card.dropDownValues && (
             <TextFieldContainer
-              select={false}
-              label={{ labelKey: getTransformedLocale(card.natureOfNoc.label) }}
-              placeholder={{ labelKey: card.natureOfNoc.label }}
-              data={card.natureOfNoc.menu}
+              select={true}
+              label={{ labelKey: getTransformedLocale(card.dropDownValues.label) }}
+              placeholder={{ labelKey: card.dropDownValues.label }}
+              data={card.dropDownValues.menu}
               optionValue="code"
               optionLabel="label"
               required={true}
-              onChange={event => this.handleNatureOfNocChange(key, event)}
+              onChange={event => this.handleChange(key, event)}
               jsonPath={jsonPath}
             />
           )}
         </Grid>
-        {card.remarks && (
-          <Grid item={true} xs={12} sm={6} md={2}>
-            <TextFieldContainer
-              select={false}
-              label={{ labelKey: getTransformedLocale(card.remarks.label) }}
-              placeholder={{ labelKey: card.remarks.label }}
-              data={card.remarks.menu}
-              optionValue="code"
-              optionLabel="label"
-              required={true}
-              onChange={event => this.handleRemarksChange(key, event)}
-              jsonPath={jsonPath1}
-            />
-          </Grid>
-        )}
-
         <Grid
           item={true}
           xs={12}

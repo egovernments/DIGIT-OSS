@@ -38,7 +38,7 @@ export const gotoHomeFooter = getCommonApplyFooter({
       //downloadReceiptButtonLabel: getLabel
       goToHomeButtonLabel: getLabel({
         labelName: "GO TO HOME",
-        labelKey: "BPA_COMMON_BUTTON_HOME"
+        labelKey: "NOC_COMMON_BUTTON_HOME"
       })
     },
     // Check this onClickDefinition later again
@@ -72,7 +72,7 @@ export const applicationSuccessFooter = (
         //downloadReceiptButtonLabel: getLabel
         goToHomeButtonLabel: getLabel({
           labelName: "GO TO HOME",
-          labelKey: "BPA_COMMON_BUTTON_HOME"
+          labelKey: "NOC_COMMON_BUTTON_HOME"
         })
       },
       // Check this onClickDefinition later again
@@ -96,7 +96,7 @@ export const applicationSuccessFooter = (
       children: {
         downloadFormButtonLabel: getLabel({
           labelName: "DOWNLOAD CONFIRMATION FORM",
-          labelKey: "BPA_APPLICATION_BUTTON_DOWN_CONF"
+          labelKey: "NOC_APPLICATION_BUTTON_DOWN_CONF"
         })
       },
       onClickDefination: {
@@ -121,7 +121,7 @@ export const applicationSuccessFooter = (
       children: {
         printFormButtonLabel: getLabel({
           labelName: "PRINT CONFIRMATION FORM",
-          labelKey: "BPA_APPLICATION_BUTTON_PRINT_CONF"
+          labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
         })
       },
       onClickDefination: {
@@ -146,13 +146,13 @@ export const applicationSuccessFooter = (
       children: {
         proceedToPaymentButtonLabel: getLabel({
           labelName: "Proceed to payment",
-          labelKey: "BPA_PROCEED_PAYMENT"
+          labelKey: "NOC_PROCEED_PAYMENT"
         })
       },
       //Add onClickDefination and RoleDefination later
       onClickDefination: {
         action: "page_change",
-        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
+        path:`/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenant}&businessService=BPA`
           // process.env.REACT_APP_SELF_RUNNING === "true"
           //   ? `/egov-ui-framework/BPA/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
           //   : `/BPA/pay?applicationNumber=${applicationNumber}&tenantId=${tenant}&businessService=FIRENOC`
@@ -179,7 +179,7 @@ export const applicationSuccessFooter = (
       children: {
         submitButtonLabel: getLabel({
           labelName: "MAKE PAYMENT",
-          labelKey: "BPA_COMMON_BUTTON_CITIZEN_MAKE_PAYMENT"
+          labelKey: "NOC_COMMON_BUTTON_CITIZEN_MAKE_PAYMENT"
         })
       },
       onClickDefination: {
