@@ -115,4 +115,10 @@ config:
         image-name: "bpa-services"
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "bpa-services/src/main/resources/db"
-        image-name: "bpa-services-db"             
+        image-name: "bpa-services-db"         
+
+  - name: "municipal-services/bpa-calculator"
+    build:
+      - work-dir: "bpa-calculator"
+        image-name: "bpa-calculator"
+        dockerfile: "build/maven/Dockerfile" 
