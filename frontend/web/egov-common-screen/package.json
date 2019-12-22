@@ -2,7 +2,7 @@
   "name": "egov-intermediate",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://uttarakhand-uat.egovernments.org/",
+  "homepage": "https://uttarakhand-uat.egovernments.org/common/",
   "proxy": "https://uttarakhand-uat.egovernments.org",
   "dependencies": {
     "@material-ui/core": "^4.8.0",
