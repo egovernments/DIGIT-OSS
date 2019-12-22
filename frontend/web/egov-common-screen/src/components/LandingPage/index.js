@@ -132,7 +132,7 @@ class LandingPage extends React.Component {
 
                                 </CardContent>
                                 <CardActions>
-                                    <a href="https://egov-micro-dev.egovernments.org/citizen/" className={classes.btn}>
+                                    <a href="/citizen" className={classes.btn}>
                                         लॉग इन / LOGIN
                                       </a>
                                 </CardActions>
@@ -166,7 +166,7 @@ class LandingPage extends React.Component {
                                     </List>
                                 </CardContent>
                                 <CardActions>
-                                    <a href="https://egov-micro-dev.egovernments.org/employee/" className={classes.btn} >लॉग इन / LOGIN
+                                    <a href="/employee" className={classes.btn} >लॉग इन / LOGIN
                              </a>
                                 </CardActions>
                             </Card>
