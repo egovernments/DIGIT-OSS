@@ -19,7 +19,7 @@ import {
 import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getAppSearchResults } from "../../../../ui-utils/commons";
 import { searchBill } from "../utils/index";
 import generatePdf from "../utils/receiptPdf";
 import { loadPdfGenerationData } from "../utils/receiptTransformer";
@@ -32,7 +32,7 @@ import { nocSummary } from "./summaryResource/nocSummary";
 import { plotAndBoundaryInfoSummary } from "./summaryResource/plotAndBoundaryInfoSummary";
 // import { propertySummary } from "./summaryResource/propertySummary";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
-import { searchResMockJson } from './searchResMockJson';
+//import { searchResMockJson } from './searchResMockJson';
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -104,10 +104,10 @@ const prepareDocumentsView = async (state, dispatch) => {
   ];
 
   allDocuments.forEach(doc => {
-    console.log('doooc', doc)
+    
     documentsPreview.push({
-      // title: getTransformedLocale(doc.documentType),
-      title: doc.documentType,
+      title: getTransformedLocale(doc.documentType),
+      //title: doc.documentType,
       fileStoreId: doc.fileStore,
       linkText: "View"
     });
@@ -132,10 +132,10 @@ const prepareDocumentsView = async (state, dispatch) => {
             .slice(13)
         )) ||
       `Document - ${index + 1}`;
-    return doc;
+      return doc;
+    
   });
-  console.log("docPre", documentsPreview)
-  dispatch(prepareFinalObject("documentsPreview", documentsPreview));
+  dispatch(prepareFinalObject("documentDetailsPreview", documentsPreview));
 };
 
 const prepareUoms = (state, dispatch) => {
@@ -281,27 +281,27 @@ const setSearchResponse = async (
   applicationNumber,
   tenantId
 ) => {
-  // const response = await getSearchResults([
-  //   {
-  //     key: "tenantId",
-  //     value: tenantId
-  //   },
-  //   { key: "applicationNumber", value: applicationNumber }
-  // ]);
-  const response = searchResMockJson;
-  const edcrNumber = response.Bpa[0].edcrNumber
+  const response = await getAppSearchResults([
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "applicationNos", value: applicationNumber }
+  ]);
+  //const response = searchResMockJson;
+  const edcrNumber = response.Bpa["0"].edcrNumber;
 
   // const response = sampleSingleSearch();
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
   let edcrRes = await edcrHttpRequest(
     "post",
-    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + "DCR122019M5HQU" + "&tenantId=jupiter",
+    "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + edcrNumber + "&tenantId=" + tenantId,
     {}
     );
-  console.log(edcrRes, "sbdhjfbdsjbfkjbsdf");
+ 
   dispatch(
     prepareFinalObject(
-      `srutinyDetails`,
+      `scrutinyDetails`,
       edcrRes.edcrDetail[0]
     )
   );
@@ -325,7 +325,7 @@ const setSearchResponse = async (
   }
 
   prepareDocumentsView(state, dispatch);
-  prepareUoms(state, dispatch);
+  //prepareUoms(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);
   setDownloadMenu(state, dispatch);
 };
@@ -346,7 +346,7 @@ const screenConfig = {
 
     const queryObject = [
       { key: "tenantId", value: tenantId },
-      { key: "businessServices", value: "FIRENOC" }
+      { key: "businessServices", value: "BPA" }
     ];
     setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
@@ -411,9 +411,9 @@ const screenConfig = {
           moduleName: "egov-workflow",
           visible: process.env.REACT_APP_NAME === "Citizen" ? false : true,
           props: {
-            dataPath: "FireNOCs",
-            moduleName: "FIRENOC",
-            updateUrl: "/firenoc-services/v1/_update"
+            dataPath: "BPA",
+            moduleName: "BPA",
+            updateUrl: "/bpa-services/bpa/appl/_update"
           }
         },
         body: getCommonCard({
@@ -421,11 +421,9 @@ const screenConfig = {
           basicSummary: basicSummary,
           scrutinySummary:scrutinySummary,
           applicantSummary: applicantSummary,
-          documentsSummary: documentsSummary,
           plotAndBoundaryInfoSummary: plotAndBoundaryInfoSummary,
-          nocSummary: nocSummary,
-          // propertySummary: propertySummary,
-         
+          documentsSummary: documentsSummary,
+          nocSummary: nocSummary
         }),
         citizenFooter:
           process.env.REACT_APP_NAME === "Citizen" ? citizenFooter : {}

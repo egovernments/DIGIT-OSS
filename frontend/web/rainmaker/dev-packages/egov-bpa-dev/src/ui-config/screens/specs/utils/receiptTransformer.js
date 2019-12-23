@@ -74,53 +74,53 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
   let data = {};
   let queryObject = [
     { key: "tenantId", value: tenant },
-    { key: "applicationNumber", value: applicationNumber }
+    { key: "applicationNos", value: applicationNumber }
   ];
   let response = await getAppSearchResults(queryObject);
 
-  if (response && response.Licenses && response.Licenses.length > 0) {
+  if (response && response.Bpa && response.Bpa.length > 0) {
     data.applicationNumber = nullToNa(
-      get(response, "Licenses[0].applicationNumber", "NA")
+      get(response, "Bpa[0].applicationNumber", "NA")
     );
     data.oldLicenseNumber = nullToNa(
-      get(response, "Licenses[0].oldLicenseNumber", "NA")
+      get(response, "Bpa[0].oldLicenseNumber", "NA")
     );
     data.applicationType = getMessageFromLocalization(
       nullToNa(
         get(
           response,
-          "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+          "Bpa[0].applicationType",
           "NA"
         )
       )
     );
-    data.licenseNumber = nullToNa(
-      get(response, "Licenses[0].licenseNumber", "NA")
-    );
+    // data.licenseNumber = nullToNa(
+    //   get(response, "Bpa[0].licenseNumber", "NA")
+    // );
     data.financialYear = nullToNa(
-      get(response, "Licenses[0].financialYear", "NA")
+      get(response, "Bpa[0].financialYear", "NA")
     );
-    data.tradeName = nullToNa(get(response, "Licenses[0].tradeName", "NA"));
+    //data.tradeName = nullToNa(get(response, "Bpa[0].tradeName", "NA"));
     data.doorNo = nullToNa(
-      get(response, "Licenses[0].tradeLicenseDetail.address.doorNo", "NA")
+      get(response, "Bpa[0].address.doorNo", "NA")
     );
     data.buildingName = nullToNa(
-      get(response, "Licenses[0].tradeLicenseDetail.address.buildingName", "NA")
+      get(response, "Bpa[0].address.buildingName", "NA")
     );
     data.streetName = nullToNa(
-      get(response, "Licenses[0].tradeLicenseDetail.address.street", "NA")
+      get(response, "Bpa[0].address.street", "NA")
     );
     data.locality = get(
       response,
-      "Licenses[0].tradeLicenseDetail.address.locality.name",
+      "Bpa[0].address.locality.name",
       "NA"
     );
     let cityCode = nullToNa(
-      get(response, "Licenses[0].tradeLicenseDetail.address.tenantId", "NA")
+      get(response, "Bpa[0].address.tenantId", "NA")
     );
     data.city = getMessageFromLocalization("TENANT_TENANTS_"+getTransformedLocale(cityCode));
     /** Make owners data array */
-    let ownersData = get(response, "Licenses[0].tradeLicenseDetail.owners", []);
+    let ownersData = get(response, "Bpa[0].owners", []);
     data.owners = ownersData.map(owner => {
       return {
         name: get(owner, "name", "NA"),
@@ -133,69 +133,13 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
       })
       .join(", ");
     /** End */
-    let licenseIssueDate = get(response, "Licenses[0].issuedDate", "NA");
+    let licenseIssueDate = get(response, "Bpa[0].issuedDate", "NA");
     data.licenseIssueDate = nullToNa(epochToDate(licenseIssueDate));
     data.licenseExpiryDate = nullToNa(
-      epochToDate(get(response, "Licenses[0].validTo", "NA"))
+      epochToDate(get(response, "Bpa[0].validTo", "NA"))
     );
-    let licenseValidTo = get(response, "Licenses[0].validTo", "NA");
+    let licenseValidTo = get(response, "Bpa[0].validTo", "NA");
     data.licenseValidity = getFinancialYearDates("dd/mm/yyyy", licenseValidTo);
-    /** Trade settings */
-    const tradeUnitsFromResponse = get(
-      response,
-      "Licenses[0].tradeLicenseDetail.tradeUnits",
-      null
-    );
-
-    const transformedTradeData = tradeUnitsFromResponse.reduce(
-      (res, curr) => {
-        let tradeCategory = "NA";
-        let tradeType = "NA";
-        let tradeSubType = "NA";
-        let tradeCode = curr.tradeType;
-        if (tradeCode) {
-          let tradeCodeArray = tradeCode.split(".");
-          if (tradeCodeArray.length == 1) {
-            tradeCategory = nullToNa(tradeCode);
-          } else if (tradeCodeArray.length == 2) {
-            tradeCategory = nullToNa(tradeCodeArray[0]);
-            tradeType = nullToNa( tradeCode);
-          } else if (tradeCodeArray.length > 2) {
-            tradeCategory = nullToNa(tradeCodeArray[0]);
-            tradeType = nullToNa(tradeCodeArray[1]);
-            tradeSubType = nullToNa(tradeCode);
-          }
-        }
-        /** End */
-
-        res.tradeCategory.push(getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeCategory));
-
-        res.tradeTypeReceipt.push(
-          getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeType) +
-            " / " +
-            getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+getTransformedLocale(tradeSubType))
-        );
-        res.tradeTypeCertificate.push(
-          getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeCategory) +
-            " / " +
-            getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+tradeType) +
-            " / " +
-            getMessageFromLocalization("TRADELICENSE_TRADETYPE_"+getTransformedLocale(tradeSubType))
-        );
-        return res;
-      },
-      {
-        tradeCategory: [],
-        tradeTypeReceipt: [],
-        tradeTypeCertificate: []
-      }
-    );
-
-    data.tradeCategory = transformedTradeData.tradeCategory.join(", ");
-    data.tradeTypeReceipt = transformedTradeData.tradeTypeReceipt.join(", ");
-    data.tradeTypeCertificate = transformedTradeData.tradeTypeCertificate.join(
-      ", "
-    );
     data.address = nullToNa(
       createAddress(
         data.doorNo,
@@ -205,25 +149,7 @@ export const loadApplicationData = async (applicationNumber, tenant) => {
         data.city
       )
     );
-    const accessories = get(
-      response,
-      "Licenses[0].tradeLicenseDetail.accessories",
-      []
-    );
-    if (accessories && accessories.length > 0) {
-      data.accessoriesList = response.Licenses[0].tradeLicenseDetail.accessories
-        .map(item => {
-          return `${getMessageFromLocalization(`TRADELICENSE_ACCESSORIESCATEGORY_${getTransformedLocale(item.accessoryCategory)}`)}(${
-            item.count ? item.count :"0"
-          })`;
-        })
-        .reduce((pre, cur) => {
-          return pre.concat(", " + cur);
-        });
-    } else {
-      data.accessoriesList = "";
-    }
-    loadUserNameData(response.Licenses[0].auditDetails.lastModifiedBy);
+    loadUserNameData(response.Bpa[0].auditDetails.lastModifiedBy);
   }
 
   store.dispatch(prepareFinalObject("applicationDataForReceipt", data));

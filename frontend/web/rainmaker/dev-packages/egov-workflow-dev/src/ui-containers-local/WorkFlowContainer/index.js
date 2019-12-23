@@ -184,12 +184,16 @@ class WorkFlowContainer extends React.Component {
   createWorkFLow = async (label, isDocRequired) => {
     const { toggleSnackbar, dataPath, preparedFinalObject } = this.props;
     let data = get(preparedFinalObject, dataPath, []);
+    
+    if (dataPath !== "BPA") {
+      data = data[0];
+    }
     //setting the action to send in RequestInfo
     let appendToPath = dataPath === "FireNOCs" ? "fireNOCDetails." : "";
-    set(data[0], `${appendToPath}action`, label);
+    set(data, `${appendToPath}action`, label);
 
     if (isDocRequired) {
-      const documents = get(data[0], "wfDocuments");
+      const documents = get(data, "wfDocuments");
       if (documents && documents.length > 0) {
         this.wfUpdate(label);
       } else {
@@ -318,9 +322,14 @@ class WorkFlowContainer extends React.Component {
       getEmployeeRoles
     } = this;
     let businessId = get(data[data.length - 1], "businessId");
-    let filteredActions = get(data[data.length - 1], "nextActions", []).filter(
-      item => item.action != "ADHOC"
-    );
+    let filteredActions = [];
+    if (moduleName === "BPA" && data[0] && data[0].state) {
+        filteredActions = data[0].state.actions;
+    } else {
+      filteredActions = get(data[data.length - 1], "nextActions", []).filter(
+        item => item.action != "ADHOC"
+      );
+    }
     let applicationStatus = get(
       data[data.length - 1],
       "state.applicationStatus"

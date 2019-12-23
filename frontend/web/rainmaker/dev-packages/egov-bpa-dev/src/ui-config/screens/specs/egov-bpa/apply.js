@@ -44,9 +44,6 @@ import {
 } from "../../../../ui-utils/commons";
 import { getTodaysDateInYMD } from "../utils"
 
-//mdms mock json data
-import { mdmsMockJson } from './mdmsMock';
-
 export const stepsData = [
   { labelName: "Basic Details", labelKey: "" },
   { labelName: "Scrutiny Details", labelKey: "" },
@@ -55,29 +52,11 @@ export const stepsData = [
   { labelName: "Document Details", labelKey: "" },
   { labelName: "NOC Details", labelKey: "" }
 ];
+
 export const stepper = getStepperObject(
   { props: { activeStep: 0 } },
   stepsData
 );
-
-// const applicationNumberContainer = () => {
-//   const applicationNumber = getQueryArg(
-//     window.location.href,
-//     "applicationNumber"
-//   );
-//   if (applicationNumber)
-//     return {
-//       uiFramework: "custom-atoms-local",
-//       moduleName: "egov-noc",
-//       componentPath: "ApplicationNoContainer",
-//       props: {
-//         number: `${applicationNumber}`,
-//         visibility: "hidden"
-//       },
-//       visible: true
-//     };
-//   else return {};
-// };
 
 export const header = getCommonContainer({
   header: getCommonHeader({

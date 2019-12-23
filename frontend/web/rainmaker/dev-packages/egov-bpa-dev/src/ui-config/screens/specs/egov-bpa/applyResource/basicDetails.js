@@ -64,9 +64,9 @@ export const basicDetails = getCommonCard({
         labelKey: "BPA_BASIC_DETAILS_OCCUPANCY_LABEL"
       },
       required: true,
-      jsonPath: 'srutinyDetails.planDetail.planInformation.occupancy',
+      jsonPath: 'scrutinyDetails.planDetail.planInformation.occupancy',
       // jsonPath:
-      //   "srutinyDetails.planDetail.planInformation.occupancy",
+      //   "scrutinyDetails.planDetail.planInformation.occupancy",
       gridDefination: {
         xs: 12,
         sm: 12,
@@ -146,7 +146,7 @@ export const basicDetails = getCommonCard({
       },
       // required: true,
       jsonPath: "bpa.appdate",
-      // jsonPath: "srutinyDetails.planDetail.applicationDate",
+      // jsonPath: "scrutinyDetails.planDetail.applicationDate",
       props: {
         // defaultValue: getTodaysDate(),
         // inputProps: {

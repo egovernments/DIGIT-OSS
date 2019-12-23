@@ -30,7 +30,7 @@ export const citizenFooter = getCommonApplyFooter({
     children: {
       submitButtonLabel: getLabel({
         labelName: "MAKE PAYMENT",
-        labelKey: "NOC_COMMON_BUTTON_CITIZEN_MAKE_PAYMENT"
+        labelKey: "TL_COMMON_BUTTON_CITIZEN_MAKE_PAYMENT"
       })
     },
     onClickDefination: {

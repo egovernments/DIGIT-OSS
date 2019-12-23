@@ -196,7 +196,7 @@ const callBackForNext = async (state, dispatch) => {
     }
     const response = get(
       state,
-      "screenConfiguration.preparedFinalObject.srutinyDetails.planDetail.blocks[0].building.floors",
+      "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.blocks[0].building.floors",
       []
   );
 

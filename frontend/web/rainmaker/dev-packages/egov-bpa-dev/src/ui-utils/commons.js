@@ -25,7 +25,7 @@ import {
   toggleSnackbar,
   toggleSpinner
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-import { httpRequest } from "egov-ui-framework/ui-utils/api";
+import { httpRequest } from "./api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
 import { appSearchMockData } from './searchMockJson';
@@ -96,16 +96,13 @@ export const getLocaleLabelsforTL = (label, labelKey, localizationLabels) => {
 
 export const getAppSearchResults = async (queryObject, dispatch) => {
   try {
-    store.dispatch(toggleSpinner());
-    const response = "";
-    //  await httpRequest(
-      // "post",
-      // "/bpa-services/v1/_search",
-      // "",
-      // queryObject
-    // );
-    store.dispatch(toggleSpinner());
-    return appSearchMockData;
+    const response = await httpRequest(
+      "post",
+      "bpa-services/bpa/appl/_search",
+      "",
+      queryObject
+    );
+    return response;
   } catch (error) {
     store.dispatch(
       toggleSnackbar(
@@ -159,7 +156,6 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       },
       "geoLocation": null
   };
-  console.log(tenantId.value, status, address, "skjbddsijbfibfisbdfi")
     set(payload, "tenantId", tenantId.value);
     set(payload, "action", status);
     
@@ -191,29 +187,35 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
 
     let documents;
     let wfDocuments;
-    if(method === 'UPDATE'){
+    if (method === 'UPDATE') {
       documents = payload.documents;
       //hard coding these values but time being untill we fix documents capture issue.
+      //TODO: remove this block once WF Documents integrated
       wfDocuments = [
         {
-        "documentType": "APPL.LOCALBODY.DTCP_APPROVAL",
-        "id":"asfddsafdsaf",
-        "filestore":"adsfsadfsdaf"
-      },{
-        "documentType": "APPL.BUILDING_DIAGRAM.SECTION_PLAN",
-        "id":"asfddsafdsaf",
-        "filestore":"adsfsadfsdaf"
-      }
-         ];
+          "documentType": "APPL.LOCALBODY.DTCP_APPROVAL",
+          "id": "wf-doc-01",
+          "filestore": "firestore-01"
+        },
+        {
+          "documentType": "APPL.BUILDING_DIAGRAM.SECTION_PLAN",
+          "id": "wf-doc-02",
+          "filestore": "firestore-01"
+        }
+      ];
+
       let id = payload.address.id;
       address.id = id;
       set(payload, "address", address);
       set(payload, "wfDocuments", wfDocuments);
-    }else{
+    } else {
       set(payload, "address", address);
       documents = [
-        {"documentType": "OWNER.IDENTITYPROOF.VOTERID"}
-      ]
+        {
+          "documentType": "OWNER.IDENTITYPROOF.VOTERID",
+          "fileStore": "hvdsfuhvdsvf",
+        }
+      ];
     }
     
     set(payload, "documents", documents);

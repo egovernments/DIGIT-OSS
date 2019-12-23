@@ -117,21 +117,7 @@ export const searchResults = {
       // getTextToLocalMapping("NOC Type"),
       getTextToLocalMapping("Owner Name"),
       getTextToLocalMapping("Application Date"),
-      {
-        name: getTextToLocalMapping("Status"),
-        options: {
-          filter: false,
-          customBodyRender: value => (
-            <span
-              style={
-                value === "APPROVED" ? { color: "green" } : { color: "red" }
-              }
-            >
-              {getTextToLocalMapping(value)}
-            </span>
-          )
-        }
-      },
+      getTextToLocalMapping("Status"),
       {
         name: "tenantId",
         options: {
@@ -170,42 +156,15 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  switch (rowData[5]) {
+  const state = rowData[3];
+  const applicationNumber = rowData[0];
+  const tenantId = rowData[4];
+  switch (state) {
     case "INITIATED":
-      window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
-        rowData[6]
-      }`;
+      window.location.href = `apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
       break;
     default:
-      window.location.href = `search-preview?applicationNumber=${
-        rowData[0]
-      }&tenantId=${rowData[6]}`;
+      window.location.href = `search-preview?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
       break;
   }
 };
-
-// const onRowClick = rowData => {
-//   let appendUrl =
-//     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-//   switch (rowData[get(textToLocalMapping, "Status")]) {
-//     case get(textToLocalMapping, "APPLIED"):
-//     case get(textToLocalMapping, "PENDINGPAYMENT"):
-//     case get(textToLocalMapping, "APPROVED"):
-//     case get(textToLocalMapping, "PENDINGAPPROVAL"):
-//     case get(textToLocalMapping, "FIELDINSPECTION"):
-//     case get(textToLocalMapping, "REJECTED"):
-//     case get(textToLocalMapping, "CANCELLED"):
-//     case get(textToLocalMapping, "DOCUMENTVERIFY"):
-//       return `${appendUrl}/BPA/search-preview?applicationNumber=${
-//         rowData[get(textToLocalMapping, "Application No")]
-//       }&tenantId=${rowData["tenantId"]}`;
-
-//     case get(textToLocalMapping, "INITIATED"):
-//       return `${appendUrl}/BPA/apply?applicationNumber=${
-//         rowData[get(textToLocalMapping, "Application No")]
-//       }&tenantId=${rowData.tenantId}`;
-
-//     default:
-//       return `${appendUrl}/BPA/search`;
-//   }
-// };

@@ -86,7 +86,7 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "srutinyDetails.planDetail.planInformation.occupancy",
+                "scrutinyDetails.planDetail.planInformation.occupancy",
               callBack: value => {
                 return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
               }
@@ -127,7 +127,7 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "srutinyDetails.planDetail.applicationDate"
+                "scrutinyDetails.planDetail.applicationDate"
             }
           ),
           applicationFee: getLabelWithValue(

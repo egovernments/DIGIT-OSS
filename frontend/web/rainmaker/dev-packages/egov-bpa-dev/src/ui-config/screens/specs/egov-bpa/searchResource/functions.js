@@ -10,10 +10,11 @@ import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configurat
 
 export const searchApiCall = async (state, dispatch) => {
   showHideTable(false, dispatch);
+  let tenantId = getTenantId();
   let queryObject = [
     {
       key: "tenantId",
-      value: getTenantId()
+      value: tenantId
     }
   ];
   let searchScreenObject = get(
@@ -94,18 +95,18 @@ export const searchApiCall = async (state, dispatch) => {
       const response = await getAppSearchResults(queryObject);
       // const response = searchSampleResponse();
 
-      let data = response.FireNOCs.map(item => ({
-        [getTextToLocalMapping("Application No")]: item.fireNOCDetails.applicationNumber || "-",
+      let data = response.Bpa.map(item => ({
+        [getTextToLocalMapping("Application No")]: item.applicationNo || "-",
         // [getTextToLocalMapping("NOC No")]: item.fireNOCNumber || "-",
         // [getTextToLocalMapping("NOC Type")]:
         //   item.fireNOCDetails.fireNOCType || "-",
         [getTextToLocalMapping("Owner Name")]:
-          get(item, "fireNOCDetails.applicantDetails.owners[0].name") || "-",
+          get(item, "owners[0].name") || "-",
         [getTextToLocalMapping("Application Date")]:
-          convertEpochToDate(parseInt(item.fireNOCDetails.applicationDate)) ||
+          convertEpochToDate(parseInt(get(item,"owners[0].createdDate"))) ||
           "-",
         tenantId: item.tenantId,
-        [getTextToLocalMapping("Status")]: item.fireNOCDetails.status || "-"
+        [getTextToLocalMapping("Status")]: item.status || "-"
       }));
 
       dispatch(
@@ -123,7 +124,7 @@ export const searchApiCall = async (state, dispatch) => {
           "props.title",
           `${getTextToLocalMapping(
             "Search Results for BPA Applications"
-          )} (${response.FireNOCs.length})`
+          )} (${response.Bpa.length})`
         )
       );
       //showHideProgress(false, dispatch);

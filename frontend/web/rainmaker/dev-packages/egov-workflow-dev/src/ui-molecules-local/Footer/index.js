@@ -55,8 +55,15 @@ class Footer extends React.Component {
   openActionDialog = async item => {
     const { handleFieldChange, setRoute, dataPath } = this.props;
     let employeeList = [];
-    handleFieldChange(`${dataPath}[0].comment`, "");
-    handleFieldChange(`${dataPath}[0].assignee`, "");
+
+    if (dataPath === "BPA") {
+      handleFieldChange(`${dataPath}.comment`, "");
+      handleFieldChange(`${dataPath}.assignee`, "");
+    } else {
+      handleFieldChange(`${dataPath}[0].comment`, "");
+      handleFieldChange(`${dataPath}[0].assignee`, "");
+    }
+    
     if (item.isLast) {
       const url =
         process.env.NODE_ENV === "development"

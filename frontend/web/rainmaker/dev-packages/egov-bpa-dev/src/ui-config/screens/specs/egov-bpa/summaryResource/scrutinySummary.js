@@ -188,7 +188,7 @@ export const scrutinySummary = getCommonGrayCard({
                             labelKey: "BPA_APPLICATION_DEMOLITION_AREA_LABEL"
                         },
                         {
-                            jsonPath: "srutinyDetails.planDetail.planInformation.demolitionArea",
+                            jsonPath: "scrutinyDetails.planDetail.planInformation.demolitionArea",
                             callBack: value => {
                                 return value;
                             }
@@ -225,7 +225,7 @@ export const scrutinySummary = getCommonGrayCard({
                 },
                 {
                   jsonPath:
-                    "srutinyDetails.planDetail.blocks[0].building.floors[0]",
+                    "scrutinyDetails.planDetail.blocks[0].building.floors[0]",
                     callBack: value => {
                       return value && value.occupancies[0] && value.occupancies[0].type || "";
                     }
@@ -238,7 +238,7 @@ export const scrutinySummary = getCommonGrayCard({
                   },
                   {
                     jsonPath:
-                      "srutinyDetails.planDetail.blocks[0].building.floors[0]",
+                      "scrutinyDetails.planDetail.blocks[0].building.floors[0]",
                       callBack: value => {
                         return value && value.occupancies[0] && value.occupancies[0].builtUpArea || "";
                       }
@@ -251,7 +251,7 @@ export const scrutinySummary = getCommonGrayCard({
                   },
                   {
                     jsonPath:
-                      "srutinyDetails.planDetail.blocks[0].building.floors[0]",
+                      "scrutinyDetails.planDetail.blocks[0].building.floors[0]",
                       callBack: value => {
                           return value && value.occupancies[0] && value.occupancies[0].floorArea || "";
                         }
@@ -264,7 +264,7 @@ export const scrutinySummary = getCommonGrayCard({
                   },
                   {
                     jsonPath:
-                      "srutinyDetails.planDetail.blocks[0].building.floors[0]",
+                      "scrutinyDetails.planDetail.blocks[0].building.floors[0]",
                       callBack: value => {
                           return value && value.occupancies[0] && value.occupancies[0].carpetArea || "";
                         }
@@ -275,7 +275,7 @@ export const scrutinySummary = getCommonGrayCard({
           items: [],
           hasAddItem: false,
           isReviewPage: true,
-          sourceJsonPath: "srutinyDetails.planDetail.blocks[0].building.floors",
+          sourceJsonPath: "scrutinyDetails.planDetail.blocks[0].building.floors",
           prefixSourceJsonPath:
             "children.cardContent.children.buildingContainer.children",
           afterPrefixJsonPath: "children.value.children.key"
@@ -295,7 +295,7 @@ export const scrutinySummary = getCommonGrayCard({
                             labelKey: "BPA_APPLICATION_TOTAL_BUILDUP_AREA"
                         },
                         {
-                            jsonPath: "srutinyDetails.planDetail.blocks[0].building.totalBuitUpArea"
+                            jsonPath: "scrutinyDetails.planDetail.blocks[0].building.totalBuitUpArea"
                         }
                     ),
                     uploadedfile: getLabelWithValue(
@@ -305,7 +305,7 @@ export const scrutinySummary = getCommonGrayCard({
                         },
                         {
                             jsonPath:
-                                "srutinyDetails.planDetail.blocks[0].building.totalFloors"
+                                "scrutinyDetails.planDetail.blocks[0].building.totalFloors"
                         }
                     ),
                     scrutinyreport: getLabelWithValue(
@@ -315,7 +315,7 @@ export const scrutinySummary = getCommonGrayCard({
                         },
                         {
                             jsonPath:
-                                "srutinyDetails.planDetail.blocks[0].building.buildingHeight"
+                                "scrutinyDetails.planDetail.blocks[0].building.buildingHeight"
                         }
                     )
                 })
@@ -323,7 +323,7 @@ export const scrutinySummary = getCommonGrayCard({
             items: [],
             hasAddItem: false,
             isReviewPage: true,
-            sourceJsonPath: "srutinyDetails.planDetail.blocks[0].building",
+            sourceJsonPath: "scrutinyDetails.planDetail.blocks[0].building",
             prefixSourceJsonPath:
                 "children.cardContent.children.totalBuildUpAreaDetailsContainer.children",
             afterPrefixJsonPath: "children.value.children.key"

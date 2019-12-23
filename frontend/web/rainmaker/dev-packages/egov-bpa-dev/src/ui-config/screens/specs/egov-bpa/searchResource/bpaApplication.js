@@ -91,7 +91,7 @@ const resetFields = (state, dispatch) => {
 export const BPAApplication = getCommonCard({
   subHeader: getCommonTitle({
     labelName: "Search BPA Application",
-    labelKey: "BPA_HOME_SEARCH_RESULTS_HEADING"
+    labelKey: "BPA_SEARCH_RESULTS_HEADING"
   }),
   subParagraph: getCommonParagraph({
     labelName: "Provide at least one parameter to search for an application",
@@ -102,11 +102,11 @@ export const BPAApplication = getCommonCard({
     applicationType: getSelectField({
       label: {
         labelName: "Application Type",
-        labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_LABEL"
+        labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
       },
       placeholder: {
         labelName: "Select Application Type",
-        labelKey: "NOC_HOME_SEARCH_RESULTS_APP_NO_PLACEHOLDER"
+        labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_PLACEHOLDER"
       },
 
       localePrefix: {
@@ -311,7 +311,7 @@ export const BPAApplication = getCommonCard({
       required: false,
       pattern: /^[a-zA-Z0-9-]*$/i,
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      jsonPath: "searchScreen.fireNOCNumber"
+      jsonPath: "searchScreen.applicationNos"
     }),
     
     ownerMobNo: getTextField({

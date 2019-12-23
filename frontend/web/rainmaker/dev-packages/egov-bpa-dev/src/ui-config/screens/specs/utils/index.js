@@ -2661,15 +2661,15 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
 const riskType = (state, dispatch) => {
   let occupancyType = get(
     state.screenConfiguration.preparedFinalObject,
-    "srutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
+    "scrutinyDetails.planDetail.virtualBuilding.occupancyTypes[0].type.name"
   );
   let plotArea = get(
     state.screenConfiguration.preparedFinalObject,
-    "srutinyDetails.planDetail.plot.area"
+    "scrutinyDetails.planDetail.plot.area"
   );
   let buildingBlocks = get(
     state.screenConfiguration.preparedFinalObject,
-    "srutinyDetails.planDetail.blocks"
+    "scrutinyDetails.planDetail.blocks"
   );
   let blocks = buildingBlocks.map(item => {
     return item && item.building && item.building.buildingHeight;
@@ -2770,11 +2770,16 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
         if (tenantId.value === city) {
           let currOwnersArr = get(
             state.screenConfiguration.preparedFinalObject,
-            "srutinyDetails",
+            "scrutinyDetails",
             []
           );
           currOwnersArr = scrutinyData[0];
-          dispatch(prepareFinalObject(`srutinyDetails`, currOwnersArr));
+          dispatch(
+            prepareFinalObject(
+              `scrutinyDetails`,
+              currOwnersArr
+            )
+          );
           riskType(state, dispatch);
         } else {
           dispatch(
