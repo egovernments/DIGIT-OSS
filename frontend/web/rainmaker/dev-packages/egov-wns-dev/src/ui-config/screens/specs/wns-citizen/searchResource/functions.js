@@ -23,35 +23,27 @@ export const searchApiCall = async (state, dispatch) => {
   );
 
   const isSearchBoxSecondRowValid = validateFields(
-    "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children",
+    "components.div.children.citizenApplication.children.cardContent.children.cityPropertyAndMobNumContainer.children",
     state,
     dispatch,
     "search"
   );
-
+  console.log('searchScreenObject')
+  console.log(searchScreenObject)
   if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelKey: "ERR_WS_FILL_MANDATORY_FIELDS"
-        },
-        "warning"
-      )
-    );
+    dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_FILL_ATLEAST_ONE_FIELD" }, "warning"));
   } else if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
   ) {
-    dispatch(
-      toggleSnackbar(
-        true,
-        {
-          labelKey: "ERR_WS_FILL_MANDATORY_FIELDS"
-        },
-        "error"
-      )
-    );
+    dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_FILL_ATLEAST_ONE_FIELD" }, "warning"));
+  } else if (
+    (searchScreenObject["propertyId"] === undefined || searchScreenObject["propertyId"] === "") &&
+    (searchScreenObject["mobileNumber"] === undefined || searchScreenObject["mobileNumber"] === "") &&
+    (searchScreenObject["connectionNumber"] === undefined || searchScreenObject["connectionNumber"] === "") &&
+    (searchScreenObject["oldConnectionNumber"] === undefined || searchScreenObject["oldConnectionNumber"] === "")
+  ) {
+    dispatch(toggleSnackbar(true, { labelKey: "ERR_FILL_ATLEAST_ONE_FIELD_WITH_CITY" }, "error"));
   } else {
     for (var key in searchScreenObject) {
       if (

@@ -11,44 +11,51 @@ export const searchApiCall = async (state, dispatch) => {
   let queryObject = [{ key: "tenantId", value: JSON.parse(getUserInfo()).tenantId }, { key: "offset", value: "0" }];
   let searchScreenObject = get(state.screenConfiguration.preparedFinalObject, "searchScreen", {});
   const isSearchBoxFirstRowValid = validateFields(
-    "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children",
+    "components.div.children.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
     state,
     dispatch,
     "search"
   );
 
-  // const isSearchBoxSecondRowValid = validateFields(
-  //   "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children",
-  //   state,
-  //   dispatch,
-  //   "search"
-  // );
-
-  if (!(isSearchBoxFirstRowValid)) {
-    dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_FILL_MANDATORY_FIELDS" }, "warning"));
+  const isSearchBoxSecondRowValid = validateFields(
+    "components.div.children.wnsApplication.children.cardContent.children.wnsApplicationContainer.children",
+    state,
+    dispatch,
+    "search"
+  );
+  if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
+    dispatch(toggleSnackbar(true, { labelKey: "ERR_FILL_VALID_FIELDS" }, "warning"));
   } else if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
   ) {
-    dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_FILL_ATLEAST_ONE_FIELD" }, "error"));
+    dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_FILL_ATLEAST_ONE_FIELD" }, "warning"));
+  } else if (
+    (searchScreenObject["fromDate"] === undefined ||
+      searchScreenObject["fromDate"].length === 0) &&
+    searchScreenObject["toDate"] !== undefined &&
+    searchScreenObject["toDate"].length !== 0
+  ) {
+    dispatch(toggleSnackbar(true, { labelName: "Please fill From Date", labelKey: "ERR_FILL_FROM_DATE" }, "warning"));
   } else {
     for (var key in searchScreenObject) {
       if (
         searchScreenObject.hasOwnProperty(key) &&
         searchScreenObject[key].trim() !== ""
       ) {
-        // if (key === "fromDate") {
-        //   queryObject.push({
-        //     key: key,
-        //     value: convertDateToEpoch(searchScreenObject[key], "daystart")
-        //   });
-        // } else if (key === "toDate") {
-        //   queryObject.push({
-        //     key: key,
-        //     value: convertDateToEpoch(searchScreenObject[key], "dayend")
-        //   });
-        // } else {
-        queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+        if (key === "fromDate") {
+          queryObject.push({
+            key: key,
+            value: convertDateToEpoch(searchScreenObject[key], "daystart")
+          });
+        } else if (key === "toDate") {
+          queryObject.push({
+            key: key,
+            value: convertDateToEpoch(searchScreenObject[key], "dayend")
+          });
+        } else {
+          queryObject.push({ key: key, value: searchScreenObject[key].trim() });
+        }
       }
     }
     let getSearchResult = getSearchResults(queryObject)
@@ -90,10 +97,15 @@ export const searchApiCall = async (state, dispatch) => {
             status: element.status,
             address: element.property.address.street
           })
-        } catch (e) { console.error(e) }
+        } catch (e) {
+          console.error(e)
+        }
       }
       showResults(finalArray, dispatch)
-    } catch (e) { console.error(e) }
+    } catch (e) {
+      dispatch(toggleSnackbar(true, error.message, "error"));
+      console.error(e)
+    }
   }
 }
 const showHideTable = (booleanHideOrShow, dispatch) => {

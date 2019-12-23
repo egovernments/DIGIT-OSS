@@ -3,7 +3,7 @@ import {
   getLabel,
   getBreak
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { tradeLicenseApplication } from "./searchResource/tradeLicenseApplication";
+import { wnsApplication } from "./searchResource/employeeApplication";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { pendingApprovals } from "./searchResource/pendingApprovals";
@@ -76,7 +76,7 @@ const tradeLicenseSearchAndResult = {
           },
         },
         pendingApprovals,
-        tradeLicenseApplication,
+        wnsApplication,
         breakAfterSearch: getBreak(),
         searchResults
       }

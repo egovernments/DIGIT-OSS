@@ -16,7 +16,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.consumerNo",
+      "components.div.children.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.consumerNo",
       "props.value",
       ""
     )
@@ -24,7 +24,7 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.ownerMobNo",
+      "components.div.children.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.ownerMobNo",
       "props.value",
       ""
     )
@@ -32,7 +32,7 @@ const resetFields = (state, dispatch) => {
   // dispatch(
   //   handleField(
   //     "search",
-  //     "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.applicationstatus",
+  //     "components.div.children.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.applicationstatus",
   //     "props.value",
   //     ""
   //   )
@@ -40,7 +40,7 @@ const resetFields = (state, dispatch) => {
   // dispatch(
   //   handleField(
   //     "search",
-  //     "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.applicationNo",
+  //     "components.div.children.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.applicationNo",
   //     "props.value",
   //     ""
   //   )
@@ -48,7 +48,7 @@ const resetFields = (state, dispatch) => {
   // dispatch(
   //   handleField(
   //     "search",
-  //     "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.fromDate",
+  //     "components.div.children.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.fromDate",
   //     "props.value",
   //     ""
   //   )
@@ -56,27 +56,26 @@ const resetFields = (state, dispatch) => {
   // dispatch(
   //   handleField(
   //     "search",
-  //     "components.div.children.tradeLicenseApplication.children.cardContent.children.appTradeAndMobNumContainer.children.toDate",
+  //     "components.div.children.wnsApplication.children.cardContent.children.wnsApplicationContainer.children.toDate",
   //     "props.value",
   //     ""
   //   )
   // );
 };
 
-export const tradeLicenseApplication = getCommonCard({
+export const wnsApplication = getCommonCard({
   subHeader: getCommonTitle({
     labelKey: "WS_SEARCH_CONNECTION_HEADER"
   }),
   subParagraph: getCommonParagraph({
     labelKey: "WS_HOME_SEARCH_RESULTS_DESC"
   }),
-  appTradeAndMobNumContainer: getCommonContainer({
+  wnsApplicationContainer: getCommonContainer({
     consumerNo: getTextField({
       label: {
         labelKey: "WS_HOME_SEARCH_RESULTS_CONSUMER_NO_LABEL"
       },
       placeholder: {
-        labelName: "Select ULB",
         labelKey: "WS_HOME_SEARCH_RESULTS_CONSUMER_NO_PLACEHOLDER"
       },
       gridDefination: {
@@ -88,6 +87,7 @@ export const tradeLicenseApplication = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "searchScreen.connectionNumber"
     }),
+
 
     // applicationNo: getTextField({
     //   label: {

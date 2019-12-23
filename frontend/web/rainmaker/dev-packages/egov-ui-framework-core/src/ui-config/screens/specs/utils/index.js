@@ -511,6 +511,8 @@ export const getPattern = type => {
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,500}$/i;
     case "FireNOCNo":
       return /^[a-zA-Z0-9-]*$/i;
+    case "consumerNo":
+      return /^[a-zA-Z0-9/-]*$/i;
   }
 };
 

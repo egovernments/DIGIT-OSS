@@ -1,17 +1,14 @@
 import React, { Component } from "react";
-import AssessmentList from "../common/AssessmentList";
-import Screen from "egov-ui-kit/common/common/Screen";
 import { connect } from "react-redux";
 import BreadCrumbs from "../../ui-atoms-local/BreadCrumbs";
-import { addBreadCrumbs } from "egov-ui-kit/redux/app/actions";
 import Label from "egov-ui-kit/utils/translationNode";
-import { fetchProperties } from "egov-ui-kit/redux/properties/actions";
-import { getDateFromEpoch } from "egov-ui-kit/utils/commons";
-import orderby from "lodash/orderBy";
 import get from "lodash/get";
-import { getFinalAssessments } from "../common/TransformedAssessments";
-import { getCommaSeperatedAddress } from "egov-ui-kit/utils/commons";
+import { withStyles } from "@material-ui/core/styles";
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
+import Grid from '@material-ui/core/Grid';
+import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
+import { getItemStatus } from "../common/AssessmentList"
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
 
 const secondaryTextLabelStyle = {
@@ -23,285 +20,147 @@ const primaryTextLabelStyle = {
 };
 
 const secondaryTextContainer = {
-  marginTop: 5
+  marginTop: 0
 };
 
 const innerDivStyle = {
   padding: "0px",
   borderBottom: "1px solid #e0e0e0"
 };
-class IncompleteAssessments extends Component {
+const styles = {
+  card: {
+    marginLeft: 8,
+    marginRight: 8,
+    borderRadius: "inherit"
+  }
+};
+class PastPayments extends Component {
   iconStyle = {
     marginLeft: "10px",
     height: "20px"
   };
 
-  componentDidMount = () => {
-    const { addBreadCrumbs, title, userInfo, fetchProperties } = this.props;
-    title && addBreadCrumbs({ title: title, path: window.location.pathname });
-    fetchProperties(
-      [{ key: "accountId", value: 'bed33565-6ef3-4cee-aece-c14e92fdc939' }],
-      [
-        { key: "userId", value: 'bed33565-6ef3-4cee-aece-c14e92fdc939' },
-        { key: "isActive", value: true },
-        { key: "limit", value: 100 }
-      ],
-      [
-        { key: "userUuid", value: 'bed33565-6ef3-4cee-aece-c14e92fdc939' },
-        { key: "txnStatus", value: "FAILURE" },
-        { key: "limit", value: 100 }
-      ]
-    );
-  };
-
-  onListItemClick = item => {
-    const { route } = item;
-
-    this.props.history.push(route);
-  };
-
   render() {
-    const { urls, history, loading, sortedProperties } = this.props;
+    const { urls, pastPaymentsDetails } = this.props;
+
+    let address = JSON.parse(getUserInfo()).permanentAddress ? JSON.parse(getUserInfo()).permanentAddress : "-"
+    const date = (from, to) => {
+      let fromDate = new Date(convertEpochToDate(from))
+      let toDate = new Date(convertEpochToDate(to))
+      return fromDate.getFullYear().toString() + '-' + toDate.getFullYear().toString().substring(2)
+    }
+    const data = pastPaymentsDetails.map((element) =>
+      <div style={{ marginLeft: '0px', padding: '0px', position: 'relative', borderBottom: '1px solid  rgb(224, 224, 224)' }}>
+        <Grid container spacing={3}>
+          <Grid item sm={6} xs={12}>
+            <div className="incomplete-assesment-info">
+              <Label
+                label={`INR ${element.totalAmountPaid}`}
+                fontSize="16px"
+                color="#484848"
+                labelStyle={primaryTextLabelStyle}
+                bold={true}
+              />
+              <div style={{ height: "auto" }}>
+                <Label
+                  label={`${date(element.paymentDetails[0].bill.billDetails[0].fromPeriod, element.paymentDetails[0].bill.billDetails[0].toPeriod)}`}
+                  labelStyle={secondaryTextLabelStyle}
+                  fontSize="14px"
+                  containerStyle={secondaryTextContainer}
+                  color="#484848"
+                />
+              </div>
+              <div style={{ height: "auto" }}>
+                <Label
+                  label={address}
+                  labelStyle={secondaryTextLabelStyle}
+                  fontSize="14px"
+                  containerStyle={secondaryTextContainer}
+                  color="#484848"
+                />
+              </div>
+              <div style={{ height: "auto" }}>
+                <Label
+                  label={`Consumer No. :${element.paymentDetails[0].bill.consumerCode}`}
+                  labelStyle={secondaryTextLabelStyle}
+                  fontSize="14px"
+                  containerStyle={secondaryTextContainer}
+                  color="#484848"
+                />
+              </div>
+
+            </div>
+          </Grid>
+          <Grid item sm={6} xs={12} style={{ margin: '20px 0px' }}>
+            <div style={{ textAlign: "end" }}>
+              <Label
+                label={`${convertEpochToDate(element.transactionDate)}`}
+                fontSize="14px"
+                color="#484848"
+                labelStyle={primaryTextLabelStyle}
+                bold={false}
+              />
+              <div style={{ height: "auto" }}>
+                {getItemStatus(element.totalDue, element.totalAmountPaid)}
+              </div>
+            </div>
+          </Grid>
+        </Grid>
+      </div>
+    );
     return (
-      <Screen loading={loading} className="screen-with-bredcrumb">
+      <div>
         <BreadCrumbs url={urls} history="" />
-        {sortedProperties && (
-          <AssessmentList
-            // onItemClick={this.onListItemClick}
-            history={history}
-            items={sortedProperties}
-            innerDivStyle={innerDivStyle}
-            noAssessmentMessage="WS_NO_PAST_PAYMENTS_MESSAGE"
-            button={false}
-          />
-        )}
-      </Screen>
+        <div className="form-without-button-cont-generic">
+          <div className="rainmaker-card clearfix property-tax-card">
+            <div className="list-main-card">
+              <div style={{ padding: '0px 20px', background: 'rgb(255, 255, 255)' }}>
+                {
+                  pastPaymentsDetails && pastPaymentsDetails.length > 0 ? (
+                    data,
+                    data
+                  ) : (
+                      <div style={{
+                        display: "flex",
+                        width: "100%",
+                        height: '50vh',
+                        alignItems: 'center',
+                        justifyContent: "center",
+                        textAlign: "center"
+                      }}>
+                        <LabelContainer
+                          labelKey={"No results Found!"}
+                        />
+                      </div>
+                    )
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div >
     );
   }
 }
-const getTransformedItems = (propertiesById, cities) => {
-  return (
-    propertiesById &&
-    Object.values(propertiesById).reduce((acc, curr) => {
-      const propertyDetail =
-        curr.propertyDetails &&
-        curr.propertyDetails.map(item => {
-          return {
-            primaryText: (
-              <div className="incomplete-assesment-info">
-                <Label
-                  label={item.financialYear}
-                  fontSize="16px"
-                  color="#484848"
-                  labelStyle={primaryTextLabelStyle}
-                  bold={true}
-                />
-                <div style={{ height: "auto" }}>
-                  <Label
-                    label={getCommaSeperatedAddress(curr.address, cities)}
-                    labelStyle={secondaryTextLabelStyle}
-                    fontSize="14px"
-                    containerStyle={secondaryTextContainer}
-                    color="#484848"
-                  />
-                  <Label
-                    label={`Assessment No.: AS-2019-11-1762542`}
-                    labelStyle={secondaryTextLabelStyle}
-                    fontSize="13px"
-                    containerStyle={secondaryTextContainer}
-                    color="#767676"
-                  />
-                </div>
-              </div>
-            ),
-            // secondaryText: (
-            //   <div style={{ height: "auto" }}>
-            //     <Label
-            //       label={getCommaSeperatedAddress(curr.address, cities)}
-            //       labelStyle={secondaryTextLabelStyle}
-            //       fontSize="14px"
-            //       containerStyle={secondaryTextContainer}
-            //       color="#484848"
-            //     />
-            //     <Label
-            //       label={`Assessment No.: ${get(item, "assessmentNumber")}`}
-            //       labelStyle={secondaryTextLabelStyle}
-            //       fontSize="13px"
-            //       containerStyle={secondaryTextContainer}
-            //       color="#767676"
-            //     />
-            //   </div>
-            // )
-            epocDate: get(item, "auditDetails.lastModifiedTime"),
-            route: `/property-tax/assessment-form?FY=${
-              item.financialYear
-              }&assessmentId=${
-              item.assessmentNumber
-              }&isReassesment=true&propertyId=${curr.propertyId}&tenantId=${
-              item.tenantId
-              }`,
-            date: item.auditDetails
-              ? getDateFromEpoch(get(item, "auditDetails.lastModifiedTime"))
-              : "",
-            status: "Payment failed"
-          };
-        });
-      acc = [...acc, ...propertyDetail];
-      return acc;
-    }, [])
-  );
-};
-
-const getAddressFromProperty = (address, mohallaById) => {
-  return (
-    mohallaById && {
-      doorNo: get(address, "doorNo"),
-      buildingName: get(address, "buildingName"),
-      street: get(address, "street"),
-      pincode: get(address, "pincode"),
-      locality: {
-        name: mohallaById
-          ? mohallaById[get(address, "locality.code")]
-            ? mohallaById[get(address, "locality.code")].name
-            : ""
-          : ""
-      },
-      city: get(address, "city")
-    }
-  );
-};
-
 const mapStateToProps = state => {
-  const { properties, common } = state;
-  const { urls } = state.app;
-  const { cities } = common;
-  const { loading, draftsById, propertiesById, failedPayments, mohallaById } =
-    properties || {};
-
-  let transformedDrafts = Object.values(draftsById).reduce((result, draft) => {
-    const { prepareFormData, assessmentNumber } = draft.draftRecord || {};
-    if (
-      !assessmentNumber &&
-      get(prepareFormData, "Properties[0].propertyDetails[0].financialYear")
-    ) {
-      const address = getAddressFromProperty(
-        get(prepareFormData, "Properties[0].address"),
-        mohallaById
-      );
-      const financialYear = get(
-        prepareFormData,
-        "Properties[0].propertyDetails[0].financialYear"
-      );
-      result.push({
-        primaryText: (
-          <div className="incomplete-assesment-info">
-            <div style={{ height: "auto", color: "#484848", marginBottom: '5px' }}>
-              <LabelContainer
-                labelKey="WS_PAST_PAYMENTS_BILL_AMOUNT_LABEL"
-                fontSize="16px"
-                labelStyle={primaryTextLabelStyle}
-                bold={true}
-              />: <div style={{ display: 'inline-block', color: '#484848', fontWeight: '500' }} >{'INR 277'}</div>
-            </div>
-            <div style={{ height: "auto", color: "#484848", marginBottom: '5px' }}>
-              <LabelContainer
-                label={'Jan-2019'}
-                labelStyle={secondaryTextLabelStyle}
-                fontSize="14px"
-                containerStyle={secondaryTextContainer}
-              />
-            </div>
-            <div style={{ height: "auto", color: "#484848" }}>
-              <LabelContainer
-                labelKey="WS_COMMON_CONSUMER_NO_LABEL"
-                labelStyle={secondaryTextLabelStyle}
-                fontSize="14px"
-                containerStyle={secondaryTextContainer}
-                color="#484848"
-              />: {'PB-WS-CN-2019-23'}
-            </div>
-            <div style={{ height: "auto" }}>
-              <Label
-                label={"Satinder Pal"}
-                labelStyle={secondaryTextLabelStyle}
-                fontSize="14px"
-                containerStyle={secondaryTextContainer}
-                color="#484848"
-              />
-            </div>
-            <div style={{ height: "auto" }}>
-              <Label
-                label={"707/B, Railway Colony, Amrister,Punjab"}
-                labelStyle={secondaryTextLabelStyle}
-                fontSize="14px"
-                containerStyle={secondaryTextContainer}
-                color="#484848"
-              />
-            </div>
-          </div>
-        ),
-        // secondaryText: (
-        //   <div style={{ height: "auto" }}>
-        //     <Label
-        //       label={getCommaSeperatedAddress(address, cities)}
-        //       labelStyle={secondaryTextLabelStyle}
-        //       fontSize="14px"
-        //       containerStyle={secondaryTextContainer}
-        //       color="#484848"
-        //     />
-        //   </div>
-        // )
-        epocDate: get(draft, "auditDetails.lastModifiedTime"),
-        route: `/property-tax/assessment-form?FY=${financialYear}&assessmentId=${
-          draft.id
-          }&tenantId=${draft.tenantId}`,
-        financialYear: financialYear,
-        assessmentNo: draft.id,
-        date: draft.auditDetails
-          ? getDateFromEpoch(get(draft, "auditDetails.lastModifiedTime"))
-          : "",
-        status: "Saved Draft"
-      });
-    }
-    return result;
-  }, []);
-  const mergedData =
-    failedPayments &&
-    propertiesById &&
-    getFinalAssessments(failedPayments, propertiesById);
-  let finalFailedTransactions =
-    mergedData && getTransformedItems(mergedData, cities);
-  const incompleteAssessments = transformedDrafts
-    ? finalFailedTransactions
-      ? [...transformedDrafts, ...finalFailedTransactions]
-      : [...transformedDrafts]
-    : [];
-
-  const sortedProperties =
-    incompleteAssessments &&
-    orderby(incompleteAssessments, ["epocDate"], ["desc"]);
-
-  return { urls, loading, sortedProperties };
+  const pastPaymentsDetails = get(
+    state.screenConfiguration.preparedFinalObject,
+    "pastPayments",
+    []
+  );
+  const screenConfig = get(state.screenConfiguration, "screenConfig");
+  return { screenConfig, pastPaymentsDetails };
 };
+
 const mapDispatchToProps = dispatch => {
   return {
-    addBreadCrumbs: url => dispatch(addBreadCrumbs(url)),
-    fetchProperties: (
-      queryObjectProperty,
-      queryObjectDraft,
-      queryObjectFailedPayments
-    ) =>
-      dispatch(
-        fetchProperties(
-          queryObjectProperty,
-          queryObjectDraft,
-          queryObjectFailedPayments
-        )
-      )
+    setRoute: path => dispatch(setRoute(path))
+    // handleField: (screenKey, jsonPath, fieldKey, value) =>
+    //   dispatch(handleField(screenKey, jsonPath, fieldKey, value))
   };
 };
-
-export default connect(
+export default withStyles(styles)(connect(
   mapStateToProps,
   mapDispatchToProps
-)(IncompleteAssessments);
+)(PastPayments)
+);
