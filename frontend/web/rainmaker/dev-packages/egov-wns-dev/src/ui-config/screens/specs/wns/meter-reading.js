@@ -1,42 +1,32 @@
 import { getMeterReadingData } from "../../../../ui-utils/commons"
 import { getCommonHeader, getLabel, getCommonContainer } from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-    getCommonCard,
-    getCommonTitle,
-    convertEpochToDate
-} from "egov-ui-framework/ui-config/screens/specs/utils";
-import {
-
-    getQueryArg
-} from "egov-ui-framework/ui-utils/commons";
-import {
-    prepareFinalObject
-} from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import { getCommonCard, getCommonTitle } from "egov-ui-framework/ui-config/screens/specs/utils";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
+import { prepareFinalObject, toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { meterReadingEditable } from "./meterReading/meterReadingEditable";
 import { getMdmsDataForMeterStatus } from "../../../../ui-utils/commons"
 import { getMdmsDataForAutopopulated } from "../../../../ui-utils/commons"
 import get from "lodash/get";
-
+import { convertEpochToDate } from "../utils";
 
 const addMeterReading = async (state, dispatch) => {
+    dispatch(toggleSpinner());
     await getMdmsDataForAutopopulated(dispatch)
     await getMdmsDataForMeterStatus(dispatch)
     await setAutopopulatedvalues(state, dispatch)
     showHideCard(true, dispatch);
+    dispatch(toggleSpinner());
 };
 
 const setAutopopulatedvalues = async (state, dispatch) => {
-
     let billingFrequency = get(state, "screenConfiguration.preparedFinalObject.billingCycle");
     let consumptionDetails = {};
     let date = new Date();
     let status = get(state, "screenConfiguration.preparedFinalObject.meterMdmsData.['ws-services-calculation'].MeterStatus[0].code");
     let checkBillingPeriod = await get(state, "screenConfiguration.preparedFinalObject.consumptionDetails");
     if (checkBillingPeriod === undefined || checkBillingPeriod === []) {
-
         let presYear = date.getFullYear();
-        console.log(date.getFullYear())
         if (billingFrequency === "quarterly") {
             presYear = date.getFullYear();
             let prevYear = date.getFullYear() - 1;
@@ -51,10 +41,7 @@ const setAutopopulatedvalues = async (state, dispatch) => {
         consumptionDetails['lastReading'] = 0;
         consumptionDetails['consumption'] = 0;
         consumptionDetails['lastReadingDate'] = 0;
-
-
     } else {
-        console.log("called")
         let prevBillingPeriod = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].billingPeriod`);
         let date = new Date();
         if (billingFrequency === "quarterly") {
@@ -66,7 +53,6 @@ const setAutopopulatedvalues = async (state, dispatch) => {
                 consumptionDetails['lastReading'] = 0
                 consumptionDetails['consumption'] = 0;
                 consumptionDetails['lastReadingDate'] = 0;
-
             } else {
                 let newValue = parseInt(preValue) + 1
                 let finalString = newValue.toString()
@@ -86,21 +72,17 @@ const setAutopopulatedvalues = async (state, dispatch) => {
                 consumptionDetails['billingPeriod'] = prevBillingPeriod
                 consumptionDetails['lastReading'] = 0
                 consumptionDetails['consumption'] = 0;
-                consumptionDetails['lastReadingDate'] = 0;
-
+                consumptionDetails['lastReadingDate'] = '';
             }
             date.setMonth(getDatefromString)
             const month = date.toLocaleString('default', { month: 'short' });
             prevBillingPeriod = month + ' - ' + presYear
             consumptionDetails['billingPeriod'] = prevBillingPeriod
         }
-
-
         consumptionDetails['lastReading'] = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReading`);
-        consumptionDetails['consumption'] = get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReading`);
+        consumptionDetails['consumption'] = ''
         consumptionDetails['lastReadingDate'] = convertEpochToDate(get(state, `screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReadingDate`))
     }
-
 
     dispatch(
         handleField(
@@ -151,7 +133,6 @@ const setAutopopulatedvalues = async (state, dispatch) => {
             todayDate
         )
     );
-
     dispatch(prepareFinalObject("autoPopulatedValues", consumptionDetails));
 
 }
@@ -180,7 +161,6 @@ const header = getCommonContainer({
             number: queryValueAN
         }
     },
-
     classes: {
         root: "common-header-cont"
     }

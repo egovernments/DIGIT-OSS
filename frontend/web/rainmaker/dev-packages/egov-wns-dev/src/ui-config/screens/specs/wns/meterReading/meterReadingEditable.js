@@ -13,28 +13,16 @@ import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { validateFields } from "../../utils";
+import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+
 import { createMeterReading } from "../../../../../ui-utils/commons"
 import {
     getQueryArg
 } from "egov-ui-framework/ui-utils/commons";
 
-const saveData = (state, dispatch) => {
-
-    const isCurrentMeterValid = validateFields(
-        "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children",
-        state,
-        dispatch,
-        "meter-reading"
-    );
-    const isDateValid = validateFields(
-        "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children",
-        state,
-        dispatch,
-        "meter-reading"
-    );
-
+const saveData = async (state, dispatch) => {
     let data = get(state, "screenConfiguration.preparedFinalObject.metereading");
-    if (!(data)) {
+    if (data === undefined || data === null || data === []) {
         dispatch(
             toggleSnackbar(
                 true,
@@ -45,22 +33,42 @@ const saveData = (state, dispatch) => {
                 "warning"
             )
         );
-
+        return;
+    }
+    if (!data.meterStatus) {
+        data.meterStatus = get(state, "screenConfiguration.preparedFinalObject.meterMdmsData.['ws-services-calculation'].MeterStatus[0].code");
+    }
+    if (!data.currentReadingDate) {
+        data.currentReadingDate = new Date().getTime()
+    }
+    data.connectionNo = getQueryArg(window.location.href, "connectionNos")
+    data.lastReading = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading");
+    data.billingPeriod = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod");
+    let lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate")
+    console.log(lastReadingDate, "lastReadingDate")
+    if (lastReadingDate !== 0 || lastReadingDate !== undefined || lastReadingDate !== null
+        || lastReadingDate !== '') {
+        data.lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReadingDate");
     } else {
-        if (!data.meterStatus) {
-            data.meterStatus = get(state, "screenConfiguration.preparedFinalObject.meterMdmsData.['ws-services-calculation'].MeterStatus[0].code");
-        }
-        if (!data.currentReadingDate) {
-            data.currentReadingDate = new Date().getTime()
-        }
-        set(data,
-            "currentReadingDate",
-            convertDateToEpoch(data.currentReadingDate, "dayend")
+        data.lastReadingDate = new Date().getTime()
+    }
+    if (data.meterStatus === 'Working') {
+        const isCurrentMeterValid = validateFields(
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children",
+            state,
+            dispatch,
+            "meter-reading"
         );
-        data.connectionNo = getQueryArg(window.location.href, "connectionNos")
-        data.lastReading = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading");
-        data.billingPeriod = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.billingPeriod");
-        if (data.currentReading <= data.lastReading) {
+        const isDateValid = validateFields(
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children",
+            state,
+            dispatch,
+            "meter-reading"
+        );
+        if (data.currentReading === undefined || data.currentReading === null || data.currentReading === '') {
+            return;
+        }
+        if (data.currentReading < data.lastReading) {
             dispatch(
                 toggleSnackbar(
                     true,
@@ -73,15 +81,32 @@ const saveData = (state, dispatch) => {
             );
             return;
         }
-        if (get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].lastReadingDate")) {
-            data.lastReadingDate = get(state, "screenConfiguration.preparedFinalObject.consumptionDetails[0].currentReadingDate");
-        } else {
-            data.lastReadingDate = 0
+    } else {
+        const consumption = validateFields(
+            "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children",
+            state,
+            dispatch,
+            "meter-reading"
+        );
+        console.log(data.consumption, consumption)
+        if (data.consumption === undefined || data.currentReading === null || data.consumption === '') {
+            return;
         }
-        data.currentReading = parseInt(data.currentReading)
-        console.log(data)
-        createMeterReading(dispatch, data)
+        let previousreading = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading");
+        data.currentReading = parseFloat(data.consumption) + previousreading;
+        data.currentReadingDate = new Date().getTime()
     }
+    set(data,
+        "currentReadingDate",
+        convertDateToEpoch(data.currentReadingDate, "dayend")
+    );
+    data.currentReading = parseFloat(data.currentReading)
+    if (data.consumption) {
+        delete data.consumption
+    }
+    console.log(data)
+    createMeterReading(dispatch, data)
+
 }
 
 
@@ -230,6 +255,46 @@ export const meterReadingEditable =
                                     true
                                 )
                             );
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont",
+                                    "visible",
+                                    true
+                                )
+                            );
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+                                    "value",
+                                    ""
+                                )
+                            );
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+                                    "value",
+                                    ""
+                                )
+                            );
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont.children.billingPeriod.props",
+                                    "labelName",
+                                    ""
+                                )
+                            );
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont.props",
+                                    "value",
+                                    ""
+                                )
+                            );
                         } else {
                             dispatch(
                                 handleField(
@@ -261,6 +326,39 @@ export const meterReadingEditable =
                                     "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont",
                                     "visible",
                                     false
+                                )
+                            );
+                            let todayDate = new Date()
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fifthContainer.children.currentReadingDate.props",
+                                    "value",
+                                    todayDate
+                                )
+                            );
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.fourthContainer.children.currentReading.props",
+                                    "value",
+                                    ""
+                                )
+                            );
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.thirdCont.props",
+                                    "value",
+                                    ""
+                                )
+                            );
+                            dispatch(
+                                handleField(
+                                    "meter-reading",
+                                    "components.div.children.meterReadingEditable.children.card.children.cardContent.children.sixthContainer.children.secCont.children.billingPeriod.props",
+                                    "labelName",
+                                    ""
                                 )
                             );
                         }
@@ -413,18 +511,21 @@ export const meterReadingEditable =
                             sm: 3
                         },
                         required: true,
-                        pattern: /^[0-9]*$/i,
+                        pattern: /^[1-9]\d*(\.\d+)?$/i,
                         // errorMessage: "ERR_INVALID_CONSUMER_NO",
                         jsonPath: "metereading.currentReading"
                     }),
                     afterFieldChange: async (action, state, dispatch) => {
                         let lastReading = get(state, "screenConfiguration.preparedFinalObject.autoPopulatedValues.lastReading");
                         let currentReading = get(state, "screenConfiguration.preparedFinalObject.metereading.currentReading");
-                        let consumption
+                        let consumption;
                         if (lastReading === 0) {
                             consumption = currentReading
                         } else {
-                            consumption = currentReading - lastReading;
+                            consumption = (currentReading - lastReading).toFixed(2);
+                        }
+                        if (currentReading == '' || consumption < 0) {
+                            consumption = ''
                         }
                         dispatch(
                             handleField(
@@ -544,7 +645,7 @@ export const meterReadingEditable =
                         },
                         visible: false,
                         required: true,
-                        pattern: /^[0-9]*$/i,
+                        pattern: /^[1-9]\d*(\.\d+)?$/i,
                         // errorMessage: "ERR_INVALID_CONSUMER_NO",
                         jsonPath: "metereading.consumption"
                     }),
