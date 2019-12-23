@@ -12,7 +12,7 @@ const callDownload = (state, dispatch, mode) => {
     },
 
     { key: 'tenantId', value: getQueryArg(window.location.href, "tenantId") }]
-  wsDownloadConnectionDetails(val, mode);
+  wsDownloadConnectionDetails(val, mode, dispatch);
 }
 
 
