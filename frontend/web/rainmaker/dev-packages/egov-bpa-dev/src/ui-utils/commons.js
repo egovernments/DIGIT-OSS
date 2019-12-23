@@ -195,12 +195,12 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         {
           "documentType": "APPL.LOCALBODY.DTCP_APPROVAL",
           "id": "wf-doc-01",
-          "filestore": "firestore-01"
+          "fileStore": "firestore-0111"
         },
         {
           "documentType": "APPL.BUILDING_DIAGRAM.SECTION_PLAN",
           "id": "wf-doc-02",
-          "filestore": "firestore-01"
+          "fileStore": "firestore-01"
         }
       ];
 
