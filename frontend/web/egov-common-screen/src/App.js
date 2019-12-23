@@ -7,7 +7,7 @@ import LandingPage from './components/LandingPage';
 function App() {
   return (
     
-    <Grid >
+    <Grid className="app-grid">
     <LandingPage />
     </Grid>
   );

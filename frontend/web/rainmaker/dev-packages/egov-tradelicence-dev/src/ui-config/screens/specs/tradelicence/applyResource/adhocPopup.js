@@ -117,7 +117,20 @@ const updateAdhoc = (state, dispatch) => {
           "warning"
         )
       );
-    } else {
+    }
+    if (adhocAmount && !Number.isInteger(adhocAmount)) {
+      dispatch(
+        toggleSnackbar(
+        true,
+          {
+            labelName: "Adhoc Penalty amount should not be a decimal value.",
+            labelKey: "ERR_PENALTY_NOT_DECIMAL"
+          },
+        "warning"
+        )
+      );
+    }
+     else {
       getEstimateDataAfterAdhoc(state, dispatch);
     }
   } else {

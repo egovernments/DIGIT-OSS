@@ -7,7 +7,8 @@ import axios from 'axios';
 const styles = theme => ({
     root: {
         paddingTop: "30px",
-        overflow: "hidden"
+        overflow: "hidden",
+        height: '100%',
     },
     btn: {
         padding: "2.5% 5%",
@@ -89,12 +90,12 @@ class LandingPage extends React.Component {
 
         return (
             <div style={{
+                height: '100%',
                 background: `linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,.5)), url(${backgroundUrl})`,
-                height: "900px"
             }}>
                 <Grid container className={classes.root}>
 
-                    <Grid container style={{ marginBottom: "100px" }}>
+                    <Grid container style={{ marginBottom: "10px" }}>
                         <Grid item md={12} style={{ textAlign: "center" }}>
                             <img src={logoUrl} alt="company-logo" width="20%" />
                         </Grid>
@@ -103,17 +104,17 @@ class LandingPage extends React.Component {
                     <Grid container spacing={4}>
                         <Grid item md={1}></Grid>
                         <Grid item md={5}>
-                            <Card style={{ borderRadius: 0 }}>
-                                <CardContent >
-                                    <Grid container >
-                                        <Grid item md={1}>
-                                            <img src="assets/citizen.png" alt="citizen-logo" width="40px" height="40px" />
+                            <Card style={{ borderRadius: 0, height:380 }}>
+                                <CardContent style={{height:270}}> 
+                                    <Grid container  alignItems="center" >
+                                        <Grid item md={1} >
+                                            <img src="assets/citizen.png" alt="citizen-logo" width="40px" height="40px" style={{opacity:0.6}} />
                                         </Grid>
                                         <Grid item md={11}>
                                             <List style={{ padding: 0 }}>
                                                 <ListItem style={{ padding: "0px 0px 0px 8px" }}>
                                                     <ListItemText
-                                                        primary={<span style={{ fontSize: "22px", fontWeight: "680" }}>नागरिक</span>}
+                                                        primary={<span style={{ fontSize: "22px", fontWeight: "680", opacity:0.75}}>नागरिक</span>}
                                                         secondary={<span style={{ fontStyle: "italic" }}>Citizen</span>}
                                                     />
                                                 </ListItem>
@@ -124,14 +125,15 @@ class LandingPage extends React.Component {
                                     <List style={{ padding: 0 }}>
                                         <ListItem style={{ padding: 0 }}>
                                             <ListItemText
-                                                primary={<span style={{ fontSize: "14px", fontfamily: "inherit" }}>नगरसेवा नागरिक खाता नागरिकों को शहरी स्थानीय निकाय (नगर पालिका / नगर निगम) द्वारा प्रदान की गई विभिन्न सेवाओं का ऑनलाइन लाभ उठाने में सक्षम बनाता है। शहरी स्थानीय निकाय प्रमुख रूप व्यापार लाइसेंस, संपत्ति कर और नागरिक शिकायतों आदि से संबंधित सेवाएं प्रदान करते हैं। रजिस्टर / कृपया लॉग इन करने के लिए नीचे क्लिक करें।</span>}
+                                                primary={<span style={{ fontSize: "14px", fontfamily: "inherit",opacity:0.8 }}>नगरसेवा नागरिक खाता नागरिकों को शहरी स्थानीय निकाय (नगर पालिका / नगर निगम) द्वारा प्रदान की गई विभिन्न सेवाओं का ऑनलाइन लाभ उठाने में सक्षम बनाता है। शहरी स्थानीय निकाय प्रमुख रूप से व्यापार लाइसेंस, संपत्ति कर और नागरिक शिकायतों आदि से संबंधित सेवाएं प्रदान करते हैं। रजिस्टर / कृपया लॉग इन करने के लिए नीचे क्लिक करें।
+                                                </span>}
                                                 secondary={<span style={{ fontStyle: "italic" }}>A NagarSewa citizen account enables citizens to avail the various services online rendered by the urban local body (Municipality/ Municipal Corporation). The major services which the local body provides are related to Trade License, Property Tax, and Citizen Grievances etc. Please click below to register/log in.</span>}
                                             />
                                         </ListItem>
                                     </List>
 
                                 </CardContent>
-                                <CardActions>
+                                <CardActions  style={{ padding: "16px"}}>
                                     <a href="/citizen" className={classes.btn}>
                                         लॉग इन / LOGIN
                                       </a>
@@ -139,18 +141,18 @@ class LandingPage extends React.Component {
                             </Card>
                         </Grid>
                         <Grid item md={5}>
-                            <Card style={{ borderRadius: 0 }}>
-                                <CardContent>
-                                    <Grid container>
+                            <Card style={{ borderRadius: 0, height:380 }}>
+                                <CardContent style={{height:270}}>
+                                    <Grid container alignItems="center" >
                                         <Grid item md={1}>
-                                            <img src="assets/municiple-employee.png" alt="municiple-employee-logo" width="40px" height="40px" />
+                                            <img src="assets/municiple-employee.png" alt="municiple-employee-logo" width="40px" height="40px" style={{opacity:0.6}} />
                                         </Grid>
                                         <Grid item md={11}>
                                             <List style={{ padding: 0 }}>
                                                 <ListItem style={{ padding: "0px 0px 0px 8px" }}>
                                                     <ListItemText
-                                                        primary={<span style={{ fontSize: "22px", fontWeight: "680" }}>नगर निगम कर्मचारी</span>}
-                                                        secondary={<span style={{ fontStyle: "italic" }}>Municiple Employee</span>}
+                                                        primary={<span style={{ fontSize: "22px", fontWeight: "680" , opacity:0.75}}>नगर निगम कर्मचारी</span>}
+                                                        secondary={<span style={{ fontStyle: "italic" }}>Municipal Employee</span>}
                                                     />
                                                 </ListItem>
                                             </List>
@@ -159,13 +161,13 @@ class LandingPage extends React.Component {
                                     <List style={{ padding: 0 }}>
                                         <ListItem style={{ padding: 0 }}>
                                             <ListItemText
-                                                primary={<span style={{ fontSize: "14px", fontfamily: "inherit" }}>नगरसेवा कर्मचारी खाता शहरी स्थानीय निकाय (नगर पालिका / नगर निगम) के कर्मचारी को दिन-प्रतिदिन की गतिविधियों के लिए सक्षम बनाता है और उसे नागरिकों / द्वारा सौंपे गए सेवा अनुरोध की की समय पर डिलीवरी सुनिश्चित करता है। कृपया लॉग इन करने के लिए नीचे क्लिक करें।</span>}
+                                                primary={<span style={{ fontSize: "14px", fontfamily: "inherit" , opacity:0.8}}>नगरसेवा कर्मचारी खाता शहरी स्थानीय निकाय (नगर पालिका / नगर निगम) के कर्मचारी को दिन-प्रतिदिन की गतिविधियों के लिए सक्षम बनाता है और उसे नागरिकों द्वारा सौंपे गए सेवा अनुरोध की समय पर डिलीवरी सुनिश्चित करता है। कृपया लॉग इन करने के लिए नीचे क्लिक करें।</span>}
                                                 secondary={<span style={{ fontStyle: "italic" }}>A NagarSewa employee account enables the employee of urban local body (Municipality/ Municipal Corporation) to perform its day to day activities and ensure the timely delivery of services applied by citizen assigned to him/her. Please click below to login.</span>}
                                             />
                                         </ListItem>
                                     </List>
                                 </CardContent>
-                                <CardActions>
+                                <CardActions style={{ padding: "16px"}} >
                                     <a href="/employee" className={classes.btn} >लॉग इन / LOGIN
                              </a>
                                 </CardActions>
