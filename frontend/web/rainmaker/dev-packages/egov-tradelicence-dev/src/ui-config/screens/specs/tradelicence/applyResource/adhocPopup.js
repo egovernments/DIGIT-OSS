@@ -106,19 +106,19 @@ const updateAdhoc = (state, dispatch) => {
       state.screenConfiguration.preparedFinalObject,
       "ReceiptTemp[0].Bill[0].billDetails[0].totalAmount"
     );
-    if (rebateAmount && rebateAmount > totalAmount) {
-      dispatch(
-        toggleSnackbar(
-          true,
-          {
-            labelName: "Rebate should be less than or equal to total amount!",
-            labelKey: "ERR_REBATE_GREATER_THAN_AMOUNT"
-          },
-          "warning"
-        )
-      );
-    }
-    if (adhocAmount && !Number.isInteger(adhocAmount)) {
+    // if (rebateAmount && rebateAmount > totalAmount) {
+    //   dispatch(
+    //     toggleSnackbar(
+    //       true,
+    //       {
+    //         labelName: "Rebate should be less than or equal to total amount!",
+    //         labelKey: "ERR_REBATE_GREATER_THAN_AMOUNT"
+    //       },
+    //       "warning"
+    //     )
+    //   );
+    // }
+     if (adhocAmount % 1 != 0) {
       dispatch(
         toggleSnackbar(
         true,
@@ -130,7 +130,7 @@ const updateAdhoc = (state, dispatch) => {
         )
       );
     }
-     else {
+    else {
       getEstimateDataAfterAdhoc(state, dispatch);
     }
   } else {
