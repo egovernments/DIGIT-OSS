@@ -434,12 +434,13 @@
               "noUnit": false,
               "charts": [
                 {
-                  "id": "demandCollectionIndexBoundaryRevenue",
+                  "id": "demandCollectionIndexDDRRevenue",
                   "name": "DSS_PT_DEMAND_COLLECTION_BOUNDARY",
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": []
+                  "headers": [],
+                  "tabName": "Boundary"
                 },
                 {
                   "id": "demandCollectionIndexUsageRevenue",
@@ -447,7 +448,8 @@
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": []
+                  "headers": [],
+                  "tabName": "Usage"
                 }
               ]
             }
@@ -469,12 +471,14 @@
               "noUnit": false,
               "charts": [
                 {
-                  "id": "taxHeadsBreakupRevenue",
+                  "id": "taxHeadsBreakupDDRRevenue",
                   "name": "DSS_PT_TAX_HEAD_BREAKUP_REVENUE",
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": []
+                  "headers": [],
+                  "tabName": "Boundary"
+
                 },
                 {
                   "id": "taxHeadsBreakupUsage",
@@ -482,7 +486,9 @@
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": []
+                  "headers": [],
+                  "tabName": "Usage"
+
                 }
               ]
             }
@@ -777,12 +783,14 @@
               "noUnit": false,
               "charts": [
                 {
-                  "id": "licenseIssuedBoundaryRevenue",
+                  "id": "licenseIssuedDDRRevenue",
                   "name": "DSS_TL_DEMAND_COLLECTION_BOUNDARY",
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": []
+                  "headers": [],
+                  "tabName": "Boundary"
+
                 }
               ]
             }
@@ -804,12 +812,14 @@
               "noUnit": false,
               "charts": [
                 {
-                  "id": "licenceTaxHeadsBreakupBoundary",
+                  "id": "licenceTaxHeadsBreakupDDR",
                   "name": "DSS_TL_TAX_HEAD_BREAKUP_BOUNDARY",
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": []
+                  "headers": [],
+                  "tabName": "Boundary"
+
                 }
               ]
             }
@@ -1153,7 +1163,9 @@
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": []
+                  "headers": [],
+                  "tabName": "Boundary"
+
                 },
                 {
                   "id": "pgrStatusByDepartment",
@@ -1161,7 +1173,9 @@
                   "code": "",
                   "chartType": "table",
                   "filter": "",
-                  "headers": []
+                  "headers": [],
+                  "tabName": "Department"
+
                 }
               ]
             }
