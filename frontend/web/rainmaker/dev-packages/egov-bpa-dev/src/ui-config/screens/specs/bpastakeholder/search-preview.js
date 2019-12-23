@@ -339,24 +339,23 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   );
 
   const printCont = downloadPrintContainer(action, state, dispatch, status);
-    switch (status) {
-      case "PENDINGDOCVERIFICATION":
-      case "PENDINGAPPROVAL":
-      case "REJECTED":
-      case "APPROVED":
-        dispatch(
-          handleField(
-            "search-preview",
-            "components.div.children.headerDiv.children.helpSection.children.rightdiv",
-            "visible",
-            true
-          )
-        );
-        break;
-      default:
-
-        break;
-    }
+  switch (status) {
+    case "PENDINGDOCVERIFICATION":
+    case "PENDINGAPPROVAL":
+    case "REJECTED":
+    case "APPROVED":
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.headerDiv.children.helpSection.children.rightdiv",
+          "visible",
+          true
+        )
+      );
+      break;
+    default:
+      break;
+  }
 };
 
 let titleText = "";

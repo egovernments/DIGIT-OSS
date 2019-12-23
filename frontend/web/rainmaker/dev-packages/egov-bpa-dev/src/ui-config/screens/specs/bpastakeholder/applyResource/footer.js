@@ -3,7 +3,7 @@ import {
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { applyTradeLicense } from "../../../../../ui-utils/commons";
-import {download} from "egov-common/ui-utils/commons";
+import { download } from "egov-common/ui-utils/commons";
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getButtonVisibility,
@@ -724,12 +724,7 @@ export const footerReview = (
   });
 };
 
-export const downloadPrintContainer = (
-  action,
-  state,
-  dispatch,
-  status
-) => {
+export const downloadPrintContainer = (action, state, dispatch, status) => {
   /** MenuButton data based on status */
   let downloadMenu = [];
   let receiptDownloadObject = {
