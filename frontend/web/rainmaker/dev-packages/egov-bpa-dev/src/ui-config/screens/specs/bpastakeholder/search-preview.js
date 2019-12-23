@@ -13,6 +13,7 @@ import {
   setBusinessServiceDataToLocalStorage,
   getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
+import { downloadPrintContainer } from "./applyResource/footer";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getSearchResults } from "../../../../ui-utils/commons";
 import {
@@ -331,6 +332,31 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
     // loadReceiptGenerationData(applicationNumber, tenantId);
     addressDestruct(action, state, dispatch);
   }
+
+  const status = get(
+    state,
+    "screenConfiguration.preparedFinalObject.Licenses[0].status"
+  );
+
+  const printCont = downloadPrintContainer(action, state, dispatch, status);
+    switch (status) {
+      case "PENDINGDOCVERIFICATION":
+      case "PENDINGAPPROVAL":
+      case "REJECTED":
+      case "APPROVED":
+        dispatch(
+          handleField(
+            "search-preview",
+            "components.div.children.headerDiv.children.helpSection.children.rightdiv",
+            "visible",
+            true
+          )
+        );
+        break;
+      default:
+
+        break;
+    }
 };
 
 let titleText = "";
@@ -453,6 +479,45 @@ export const tradeReviewDetails = getCommonCard({
   reviewDocumentDetails
 });
 
+const rightdiv = {
+  uiFramework: "custom-atoms",
+  componentPath: "Div",
+  visible: false,
+  props: {
+    style: { textAlign: "right", display: "flex" }
+  },
+  children: {
+    downloadMenu: {
+      uiFramework: "custom-atoms-local",
+      moduleName: "egov-tradelicence",
+      componentPath: "MenuButton",
+      props: {
+        data: {
+          label: {
+            labelName: "DOWNLOAD",
+            labelKey: "DOWNLOAD"
+          },
+          // leftIcon: "cloud_download",
+          rightIcon: "arrow_drop_down",
+          props: {
+            variant: "outlined",
+            style: {
+              marginLeft: 10,
+              height: "60px",
+              width: "200px",
+              color: "#FE7A51"
+            }
+          }
+          // menu: downloadMenu
+        }
+      }
+    }
+  }
+  // gridDefination: {
+  //   xs: 12,
+  //   sm: 6
+  // }
+};
 const screenConfig = {
   uiFramework: "material-ui",
   name: "search-preview",
@@ -502,7 +567,7 @@ const screenConfig = {
               componentPath: "Container",
               props: {
                 color: "primary",
-                style: { justifyContent: "flex-end", display: "block" }
+                style: { justifyContent: "flex-end" }
               },
               gridDefination: {
                 xs: 12,
@@ -511,7 +576,9 @@ const screenConfig = {
               },
               children:
                 process.env.REACT_APP_NAME === "Employee"
-                  ? {}
+                  ? {
+                      rightdiv
+                    }
                   : {
                       word1: {
                         ...getCommonTitle(
@@ -531,16 +598,7 @@ const screenConfig = {
                           jsonPath: "Licenses[0].headerSideText.word2"
                         })
                       },
-                      cancelledLabel: {
-                        ...getCommonHeader(
-                          {
-                            labelName: "Cancelled",
-                            labelKey: "TL_COMMON_STATUS_CANC"
-                          },
-                          { variant: "body1", style: { color: "#E54D42" } }
-                        ),
-                        visible: false
-                      }
+                      rightdiv
                     }
             }
           }

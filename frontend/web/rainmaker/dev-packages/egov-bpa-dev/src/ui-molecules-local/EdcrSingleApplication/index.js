@@ -116,7 +116,7 @@ class EdcrSingleApplication extends React.Component {
                           />
                         </div>
                       </Grid>
-                      {item.status.toUpperCase !== "ABORTED" && (
+                      {item.status.toUpperCase() !== "ABORTED" ? (
                         <Grid item xs={6}>
                           <div
                             onClick={() => this.onCardClick2(item)}
@@ -133,7 +133,7 @@ class EdcrSingleApplication extends React.Component {
                             />
                           </div>
                         </Grid>
-                      )}
+                      ) : null}
                     </Grid>
                   </div>
                 </CardContent>

@@ -36,10 +36,12 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { sampleGetBill } from "../../../../ui-utils/sampleResponses";
-import { mdmsMockJson } from '../egov-bpa/mdmsMock';
-import { scrutinyDetailsMockJson, scrutinyDetailsMockJson1 } from './scrutinyDetailsMockJson';
-import { cityModuleMockJson } from '../egov-bpa/cityResJson';
-
+import { mdmsMockJson } from "../egov-bpa/mdmsMock";
+import {
+  scrutinyDetailsMockJson,
+  scrutinyDetailsMockJson1
+} from "./scrutinyDetailsMockJson";
+import { cityModuleMockJson } from "../egov-bpa/cityResJson";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -947,14 +949,14 @@ export const prepareDocumentTypeObj = documents => {
   let documentsArr =
     documents.length > 0
       ? documents.reduce((documentsArr, item, ind) => {
-        documentsArr.push({
-          name: item,
-          required: true,
-          jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
-          statement: getStatementForDocType(item)
-        });
-        return documentsArr;
-      }, [])
+          documentsArr.push({
+            name: item,
+            required: true,
+            jsonPath: `Licenses[0].tradeLicenseDetail.applicationDocuments[${ind}]`,
+            statement: getStatementForDocType(item)
+          });
+          return documentsArr;
+        }, [])
       : [];
   return documentsArr;
 };
@@ -966,10 +968,10 @@ const getTaxValue = item => {
     ? item.amount
       ? item.amount
       : item.debitAmount
-        ? -Math.abs(item.debitAmount)
-        : item.crAmountToBePaid
-          ? item.crAmountToBePaid
-          : 0
+      ? -Math.abs(item.debitAmount)
+      : item.crAmountToBePaid
+      ? item.crAmountToBePaid
+      : 0
     : 0;
 };
 
@@ -1000,12 +1002,12 @@ const getEstimateData = (Bill, getFromReceipt, LicenseData) => {
               item.taxHeadCode.split("-")[0],
               LicenseData
             ) && {
-                value: getToolTipInfo(
-                  item.taxHeadCode.split("-")[0],
-                  LicenseData
-                ),
-                key: getToolTipInfo(item.taxHeadCode.split("-")[0], LicenseData)
-              }
+              value: getToolTipInfo(
+                item.taxHeadCode.split("-")[0],
+                LicenseData
+              ),
+              key: getToolTipInfo(item.taxHeadCode.split("-")[0], LicenseData)
+            }
           });
       } else {
         item.taxHeadCode &&
@@ -1220,15 +1222,15 @@ export const createEstimateData = async (
     estimateData = payload
       ? isPAID
         ? payload &&
-        payload.Payments &&
-        payload.Payments.length > 0 &&
-        getEstimateData(
-          payload.Payments[0].paymentDetails[0].bill,
-          isPAID,
-          LicenseData
-        )
+          payload.Payments &&
+          payload.Payments.length > 0 &&
+          getEstimateData(
+            payload.Payments[0].paymentDetails[0].bill,
+            isPAID,
+            LicenseData
+          )
         : payload &&
-        getEstimateData(payload.billResponse.Bill[0], false, LicenseData)
+          getEstimateData(payload.billResponse.Bill[0], false, LicenseData)
       : [];
   }
   estimateData = estimateData || [];
@@ -2572,10 +2574,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
           )
         );
         dispatch(
-          prepareFinalObject(
-            `BPA.owners[${cardIndex}].userActive`,
-            false
-          )
+          prepareFinalObject(`BPA.owners[${cardIndex}].userActive`, false)
         );
         //Delete if current card was not part of oldOwners array - no need to save.
         if (
@@ -2584,12 +2583,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
           ) == -1
         ) {
           owners.splice(cardIndex, 1);
-          dispatch(
-            prepareFinalObject(
-              `BPA.owners`,
-              owners
-            )
-          );
+          dispatch(prepareFinalObject(`BPA.owners`, owners));
         }
       } else {
         dispatch(
@@ -2649,12 +2643,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
           );
 
           currOwnersArr[cardIndex] = userInfo;
-          dispatch(
-            prepareFinalObject(
-              `BPA.owners`,
-              currOwnersArr
-            )
-          );
+          dispatch(prepareFinalObject(`BPA.owners`, currOwnersArr));
         }
       }
     }
@@ -2668,7 +2657,6 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
     );
   }
 };
-
 
 const riskType = (state, dispatch) => {
   let occupancyType = get(
@@ -2705,12 +2693,7 @@ const riskType = (state, dispatch) => {
   } else {
     scrutinyRiskType = "LOW";
   }
-  dispatch(
-    prepareFinalObject(
-      "BPA.riskType",
-      scrutinyRiskType
-    )
-  );
+  dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
 };
 
 export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
@@ -2741,7 +2724,9 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
     }
     let payload = await edcrHttpRequest(
       "post",
-      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" + scrutinyNo + "&tenantId=pb.amritsar",
+      "/edcr/rest/dcr/scrutinydetails?edcrNumber=" +
+        scrutinyNo +
+        "&tenantId=pb.amritsar",
       {}
     );
     payload = payload.edcrDetail;
@@ -2760,15 +2745,21 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       } else {
         const scrutinyData = payload && JSON.parse(JSON.stringify(payload));
 
-        if (scrutinyData && scrutinyData.planDetail && scrutinyData.planDetail.applicationDate) {
-          scrutinyData.planDetail.applicationDate = convertDateTimeToEpoch(scrutinyData.planDetail.applicationDate);
+        if (
+          scrutinyData &&
+          scrutinyData.planDetail &&
+          scrutinyData.planDetail.applicationDate
+        ) {
+          scrutinyData.planDetail.applicationDate = convertDateTimeToEpoch(
+            scrutinyData.planDetail.applicationDate
+          );
           scrutinyData.lastModifiedDate = convertDateTimeToEpoch(
             scrutinyData.lastModifiedDate
           );
           scrutinyData.pwdExpiryDate = convertDateTimeToEpoch(
             scrutinyData.pwdExpiryDate
           );
-        };
+        }
 
         const tenantId = get(
           state.screenConfiguration.preparedFinalObject,
@@ -2783,12 +2774,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
             []
           );
           currOwnersArr = scrutinyData[0];
-          dispatch(
-            prepareFinalObject(
-              `srutinyDetails`,
-              currOwnersArr
-            )
-          );
+          dispatch(prepareFinalObject(`srutinyDetails`, currOwnersArr));
           riskType(state, dispatch);
         } else {
           dispatch(
@@ -2831,8 +2817,6 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
 // };
 
 // Get user data from uuid API call
-
-
 
 export const searchBill = async (dispatch, applicationNumber, tenantId) => {
   try {
@@ -3141,7 +3125,6 @@ export const getTextToLocalMapping = label => {
   }
 };
 
-
 export const showApplyCityPicker = (state, dispatch) => {
   let toggle = get(
     state.screenConfiguration.screenConfig["search"],
@@ -3153,14 +3136,15 @@ export const showApplyCityPicker = (state, dispatch) => {
   );
 };
 
-
 const city = (state, dispatch, tenantId) => {
   let city = get(
     state.screenConfiguration.preparedFinalObject,
     "BPAs[0].BPADetails.plotdetails.citytown"
   );
   if (!city) {
-    dispatch(prepareFinalObject("BPAs[0].BPADetails.plotdetails.citytown", tenantId));
+    dispatch(
+      prepareFinalObject("BPAs[0].BPADetails.plotdetails.citytown", tenantId)
+    );
   }
 };
 
@@ -3180,12 +3164,13 @@ export const applyForm = (state, dispatch) => {
   if (isTradeDetailsValid) {
     dispatch(prepareFinalObject("BPAs", []));
     const applyUrl =
-      process.env.REACT_APP_SELF_RUNNING === "true" ? `/egov-ui-framework/egov-bpa/apply` : `/egov-bpa/apply`;
+      process.env.REACT_APP_SELF_RUNNING === "true"
+        ? `/egov-ui-framework/egov-bpa/apply`
+        : `/egov-bpa/apply`;
     dispatch(setRoute(applyUrl));
     city(state, dispatch, tenantId);
   }
 };
-
 
 // const getMdmsData = async () => {
 //   let mdmsBody = {
@@ -3257,7 +3242,7 @@ export const createBill = async (queryObject, dispatch) => {
         "error"
       )
     );
-    console.log(error, 'fetxh');
+    console.log(error, "fetxh");
   }
 };
 
@@ -3266,10 +3251,7 @@ export const setNameOfUser = (action, state, dispatch) => {
   let { name } = userInfo;
   if (name) {
     dispatch(
-      prepareFinalObject(
-        "Licenses[0].tradeLicenseDetail.owners[0].name",
-        name
-      )
+      prepareFinalObject("Licenses[0].tradeLicenseDetail.owners[0].name", name)
     );
     set(
       action.screenConfig,

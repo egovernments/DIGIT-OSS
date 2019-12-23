@@ -3,6 +3,8 @@ import {
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { applyTradeLicense } from "../../../../../ui-utils/commons";
+import {download} from "egov-common/ui-utils/commons";
+import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import {
   getButtonVisibility,
   getCommonApplyFooter,
@@ -720,4 +722,55 @@ export const footerReview = (
       }
     }
   });
+};
+
+export const downloadPrintContainer = (
+  action,
+  state,
+  dispatch,
+  status
+) => {
+  /** MenuButton data based on status */
+  let downloadMenu = [];
+  let receiptDownloadObject = {
+    label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
+    link: () => {
+      const receiptQueryString = [
+        {
+          key: "consumerCodes",
+          value: get(
+            state.screenConfiguration.preparedFinalObject.Licenses[0],
+            "applicationNumber"
+          )
+        },
+        {
+          key: "tenantId",
+          value: get(
+            state.screenConfiguration.preparedFinalObject.Licenses[0],
+            "tenantId"
+          )
+        }
+      ];
+      download(receiptQueryString);
+    },
+    leftIcon: "receipt"
+  };
+  switch (status) {
+    case "PENDINGDOCVERIFICATION":
+    case "PENDINGAPPROVAL":
+    case "REJECTED":
+    case "APPROVED":
+      downloadMenu = [receiptDownloadObject];
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.headerDiv.children.helpSection.children.rightdiv.children.downloadMenu.props",
+          "data.menu",
+          downloadMenu
+        )
+      );
+      break;
+    default:
+      break;
+  }
 };
