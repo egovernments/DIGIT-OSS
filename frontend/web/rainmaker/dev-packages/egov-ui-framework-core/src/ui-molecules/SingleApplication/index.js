@@ -180,7 +180,7 @@ class SingleApplication extends React.Component {
                         </Grid>
                         <Grid item xs={6}>
                           <Label
-                            labelKey={get(item, tenantId.jsonPath).split('.')[1].toUpperCase()}
+                            labelKey={"TL_"+get(item, tenantId.jsonPath)}
                             style={{
                               fontSize: 14,
                               color: "rgba(0, 0, 0, 0.87"
