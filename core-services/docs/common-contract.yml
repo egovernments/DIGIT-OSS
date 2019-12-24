@@ -1,0 +1,289 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Common Object Definitions
+  description: Definitions of common objects used across the modules. These objects will/may be commonly used by all eGov API deicitions. There are no paths defined in this spec as these objects cannot be used solely on their own.
+  contact:
+    name:  eGov
+    email: info@egovernments.org
+host: phoenix-qa.egovernments.org
+
+schemes:
+  - https
+basePath: '/common/v1/definitions'
+
+paths: {}
+
+parameters:
+  requestInfo:
+    name: requestInfo
+    description: Parameter to carry Request metadata in the request body
+    in: body
+    required: false
+    schema:
+      $ref: '#/definitions/RequestInfo'
+      
+  tenantId:
+    name: tenantId
+    in: query
+    description: Unique id for a tenant.
+    required: true
+    type: string
+    format: varchar
+    
+  lastChangedSince:
+    name: lastChangedSince
+    description: |
+      epoch of the time since when the changes on the object should be picked up. Search results from this parameter should include both newly created objects since this time as well as any modified objects since this time. This criterion is included to help polling clients to get the changes in system since a last time they synchronized with the platform.
+    in: query
+    required: false
+    type: integer
+    format: int64
+
+
+definitions:
+  RequestInfo:
+    type: object
+    description: RequestInfo should be used to carry meta information about the requests to the server as described in the fields below. All eGov APIs will use requestinfo as a part of the request body to carry this meta information. Some of this information will be returned back from the server as part of the ResponseInfo in the response body to ensure correlation.
+    properties:
+      apiId:
+        type: string
+        description: unique API ID
+        maxLength: 128
+      ver:
+        type: string
+        description: API version - for HTTP based request this will be same as used in path
+        maxLength: 32
+      ts:
+        type: integer
+        format: int64
+        description: time in epoch
+      action:
+        type: string
+        description: API action to be performed like _create, _update, _search (denoting POST, PUT, GET) or _oauth etc
+        maxLength: 32
+      did:
+        type: string
+        description: Device ID from which the API is called
+        maxLength: 1024
+      key:
+        type: string
+        description: API key (API key provided to the caller in case of server to server communication)
+        maxLength: 256
+      msgId:
+        type: string
+        description: Unique request message id from the caller
+        maxLength: 256
+      requesterId:
+        type: string
+        description: UserId of the user calling
+        maxLength: 256
+      authToken:
+        type: string
+        description: //session/jwt/saml token/oauth token - the usual value that would go into HTTP bearer token
+      userInfo:
+        $ref: '#/definitions/User'
+      correlationId:
+        type: string
+        readOnly: true
+    required:
+      - apiId
+      - ver
+      - ts
+      - msgId
+      - action
+      
+  User:
+    type: object
+    description: This is acting ID token of the authenticated user on the server. Any value provided by the clients will be ignored and actual user based on authtoken will be used on the server. 
+    readOnly: true
+    properties:
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant to which user primarily belongs
+      id: 
+        type: integer
+        format: int32
+        description: User id of the authenticated user. Will be deprecated in future
+      uuid: 
+        type: string
+        description: UUID of the user
+      userName: 
+        type: string
+        description: Unique user name of the authenticated user
+      mobileNumber:
+        type: string
+        description: mobile number of the autheticated user
+      emailId: 
+        type: string
+        description: email address of the authenticated user
+      roles:
+        type: array
+        description: List of all the roles
+        items:
+          $ref: '#/definitions/Role'
+    required:
+      - tenantId
+      - userName
+      - roles
+      
+  Role:
+    type: object
+    description: |
+      minimal representation of the Roles in the system to be carried along in UserInfo with RequestInfo meta data. Actual authorization service to extend this to have more role related attributes
+    properties:
+      tenantId:
+        type: string
+        description: TenantId for which the role is given
+      id: 
+        type: string
+        format: int32
+        description: id of the role
+      name: 
+        type: string
+        description: Unique name of the role
+        maxLength: 64
+      description:
+        type: string
+        description: brief description of the role
+    required:
+      - code
+      - tenantId
+          
+
+  ResponseInfo:
+    type: object
+    readOnly: true
+    description: ResponseInfo should be used to carry metadata information about the response from the server. apiId, ver and msgId in ResponseInfo should always correspond to the same values in respective request's RequestInfo.
+    properties:
+      apiId:
+        type: string
+        description: unique API ID
+        maxLength: 128
+      ver:
+        type: string
+        description: API version
+        maxLength: 32
+      ts:
+        type: integer
+        format: int64
+        description: response time in epoch
+      resMsgId:
+        type: string
+        description: unique response message id (UUID) - will usually be the correlation id from the server
+        maxLength: 256
+      msgId:
+        type: string
+        description: message id of the request
+        maxLength: 256
+      status:
+        type: string
+        description: status of request processing - to be enhanced in futuer to include INPROGRESS
+        enum:
+          - SUCCESSFUL
+          - FAILED
+    required:
+      - apiId
+      - ver
+      - ts
+      - status
+      
+  Error:
+    type: object
+    description: Error object will be returned as a part of reponse body in conjunction with ResponseInfo as part of ErrorResponse whenever the request processing status in the ResponseInfo is FAILED. HTTP return in this scenario will usually be HTTP 400. 
+    properties:
+      code:
+        type: string
+        description: Error Code will be module specific error label/code to identiffy the error. All modules should also publish the Error codes with their specific localized values in localization service to ensure clients can print locale specific error messages. Example for error code would be User.NotFound to indicate User Not Found by User/Authentication service. All services must declare their possible Error Codes with brief description in the error response section of their API path.
+      message:
+        type: string
+        description: English locale message of the error code. Clients should make a separate call to get the other locale description if configured with the service. Clients may choose to cache these locale specific messages to enhance performance with a reasonable TTL (May be defined by the localization service based on tenant + module combination).
+      description:
+        type: string
+        description: Optional long description of the error to help clients take remedial action. This will not be available as part of localization service.
+      params:
+        type: array
+        description: Some error messages may carry replaceable fields (say $1, $2) to provide more context to the message. E.g. Format related errors may want to indicate the actual field for which the format is invalid. Client's should use the values in the param array to replace those fields. 
+        items: 
+          type: string
+    required:
+      - code
+      - message
+      
+  ErrorRes:
+    type: object
+    description: All APIs will return ErrorRes in case of failure which will carry ResponseInfo as metadata and Error object as actual representation of error. In case of bulk apis, some apis may chose to return the array of Error objects to indicate individual failure.
+    properties:
+      ResponseInfo:
+        $ref: '#/definitions/ResponseInfo'
+      Errors:
+        description: Error response array corresponding to Request Object array. In case of single object submission or _search related paths this may be an array of one error element
+        type: array
+        minLength: 1
+        items:
+          $ref: '#/definitions/Error'
+    required:
+      - ResponseInfo
+      
+  Address:
+    type: object
+    description: |
+      Representation of a address. Indiavidual APIs may choose to extend from this using allOf if more details needed to be added in their case.
+    properties:
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant to which user primarily belongs
+      latitude:
+        type: number
+        format: double
+        description: latitude of the address
+      longitude:
+        type: number
+        format: double
+        description: longitude of the address
+      addressId:
+        type: string
+        description: System generated id for the address
+        readOnly: true
+      addressNumber:
+        description: House, Door, Building number in the address
+        type: string
+      addressLine1:
+        description: Apartment, Block, Street of the address
+        type: string
+      addressLine2:
+        description: Locality, Area, Zone, Ward of the address
+        type: string
+      landmark:
+        description: additional landmark to help locate the address
+        type: string
+      city:
+        description: City of the address. Can be represented by the tenantid itself
+        type: string
+      pincode:
+        type: string
+        description: PIN code of the address. Indian pincodes will usually be all numbers.
+      detail:
+        type: string
+        description: more address detail as may be needed
+          
+  AuditDetails:
+    type: object
+    description: Collection of audit related fields used by most models
+    readOnly: true
+    properties:
+      createdBy: 
+        type: string
+        description: username (preferred) or userid of the user that created the object
+      lastModifiedBy: 
+        type: string
+        description: username (preferred) or userid of the user that last modified the object
+      createdTime:
+        type: integer
+        format: int64
+        description: epoch of the time object is created
+      lastModifiedTime:
+        type: integer
+        format: int64
+        description: epoch of the time object is last modified
+        
