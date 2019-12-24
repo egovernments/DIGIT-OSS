@@ -2,10 +2,13 @@ package org.egov.pt.calculator.validator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.jayway.jsonpath.JsonPath;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -18,11 +21,11 @@ import org.egov.pt.calculator.web.models.BillingSlabReq;
 import org.egov.pt.calculator.web.models.BillingSlabRes;
 import org.egov.pt.calculator.web.models.BillingSlabSearchCriteria;
 import org.egov.tracer.model.CustomException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
-import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,6 +41,15 @@ public class BillingSlabValidator {
 
 	@Autowired
 	private BillingSlabService billingSlabService;
+
+	@Value("${egov.location.host}")
+    private String locationHost;
+
+    @Value("${egov.location.context.path}")
+    private String locationContextPath;
+
+    @Value("${egov.location.endpoint}")
+    private String locationEndpoint;
 	
 	public void validateCreate(BillingSlabReq billingSlabReq) {
 		Map<String, String> errorMap = new HashMap<>();
@@ -154,37 +166,38 @@ public class BillingSlabValidator {
 		}
 	}
 
+	//TODO: Check validate ward
+	public void fetchAndvalidateMohalla(BillingSlabReq billingSlabReq, Map<String, String> errorMap) {
+
+		String tenantId = billingSlabReq.getBillingSlab().get(0).getTenantId();
+
+		StringBuilder uri = new StringBuilder(locationHost);
+        uri.append(locationContextPath).append(locationEndpoint);
+        uri.append("?").append("tenantId=").append(tenantId);
+        uri.append("&").append("boundaryType=").append("Locality");
+
+		LinkedHashMap responseMap = (LinkedHashMap) repository.fetchResult(uri, billingSlabReq.getRequestInfo());
+
+        if(CollectionUtils.isEmpty(responseMap))
+            throw new CustomException("BOUNDARY ERROR","The response from location service is empty or null");
+		String jsonString = new JSONObject(responseMap).toString();
+		
+
+	}
+
 	public void validateMDMSCodes(BillingSlabReq billingSlabReq, Map<String, String> errorMap, Object mdmsResponse) {
-		
-		final String allValue = BillingSlabConstants.ALL_PLACEHOLDER_BILLING_SLAB;
-		
+				
 		List<Object> propertyTypes = new ArrayList<>();
-		List<Object> propertySubtypes = new ArrayList<>();
-		List<Object> usageCategoryMajor = new ArrayList<>();
-		List<Object> usageCategoryMinors = new ArrayList<>();
-		List<Object> usageCategorySubMinor = new ArrayList<>();
-		List<Object> usageCategoryDetail = new ArrayList<>();
-		List<Object> ownerShipCategory = new ArrayList<>();
-		List<Object> subOwnerShipCategory = new ArrayList<>();
-		List<Object> occupancyType = new ArrayList<>();
+		List<Object> constructionTypes = new ArrayList<>();
+		List<Object> roadTypes = new ArrayList<>();
 		
 		try {
 			propertyTypes = JsonPath.read(mdmsResponse, BillingSlabConstants.MDMS_PROPERTYTAX_JSONPATH + BillingSlabConstants.MDMS_PROPERTYTYPE_MASTER_NAME);
-			propertySubtypes = JsonPath.read(mdmsResponse, BillingSlabConstants.MDMS_PROPERTYTAX_JSONPATH + BillingSlabConstants.MDMS_PROPERTYSUBTYPE_MASTER_NAME);
-			
-			usageCategoryMajor = JsonPath.read(mdmsResponse, BillingSlabConstants.MDMS_PROPERTYTAX_JSONPATH + BillingSlabConstants.MDMS_USAGEMAJOR_MASTER_NAME);
-			usageCategoryMinors = JsonPath.read(mdmsResponse, BillingSlabConstants.MDMS_PROPERTYTAX_JSONPATH + BillingSlabConstants.MDMS_USAGEMINOR_MASTER_NAME);
-			usageCategorySubMinor = JsonPath.read(mdmsResponse, BillingSlabConstants.MDMS_PROPERTYTAX_JSONPATH + BillingSlabConstants.MDMS_USAGESUBMINOR_MASTER_NAME);
-			usageCategoryDetail = JsonPath.read(mdmsResponse, BillingSlabConstants.MDMS_PROPERTYTAX_JSONPATH + BillingSlabConstants.MDMS_USAGEDETAIL_MASTER_NAME);
-			
-			ownerShipCategory = JsonPath.read(mdmsResponse, BillingSlabConstants.MDMS_PROPERTYTAX_JSONPATH + BillingSlabConstants.MDMS_OWNERSHIP_MASTER_NAME);
-			subOwnerShipCategory = JsonPath.read(mdmsResponse, BillingSlabConstants.MDMS_PROPERTYTAX_JSONPATH + BillingSlabConstants.MDMS_SUBOWNERSHIP_MASTER_NAME);
-			
-			occupancyType = JsonPath.read(mdmsResponse, BillingSlabConstants.MDMS_PROPERTYTAX_JSONPATH + BillingSlabConstants.MDMS_OCCUPANCYTYPE_MASTER_NAME);
+			roadTypes = JsonPath.read(mdmsResponse, BillingSlabConstants.MDMS_PROPERTYTAX_JSONPATH + BillingSlabConstants.MDMS_ROADTYPE_MASTER_NAME);
+			constructionTypes = JsonPath.read(mdmsResponse, BillingSlabConstants.MDMS_PROPERTYTAX_JSONPATH + BillingSlabConstants.MDMS_CONSTRUCTIONTYPE_MASTER_NAME);
 		} catch (Exception e) {
-			if (CollectionUtils.isEmpty(propertySubtypes) && CollectionUtils.isEmpty(usageCategoryMinors)
-					&& CollectionUtils.isEmpty(usageCategorySubMinor)
-					&& CollectionUtils.isEmpty(subOwnerShipCategory)) {
+			if (CollectionUtils.isEmpty(propertyTypes) && CollectionUtils.isEmpty(roadTypes)
+					&& CollectionUtils.isEmpty(constructionTypes)) {
 				log.error("MDMS data couldn't be fetched. Skipping code validation.....", e);
 				return;
 			}
@@ -193,70 +206,25 @@ public class BillingSlabValidator {
 		 * occupancy type is not allowed to have ALL string value
 		 */
 		for (BillingSlab billingSlab : billingSlabReq.getBillingSlab()) {
-			if(!StringUtils.isEmpty(billingSlab.getOccupancyType())) {
-				List<String> allowedOccupancyTypes = JsonPath.read(occupancyType, BillingSlabConstants.MDMS_CODE_JSONPATH);
-				if(!allowedOccupancyTypes.contains(billingSlab.getOccupancyType()) && !(billingSlab.getOccupancyType().equalsIgnoreCase(allValue)))
-					errorMap.put("INVALID_OCCUPANCY_TYPE","Occupancy Type provided is invalid");
-			}
-			
-			/*
-			 * property type is not allowed to have ALL string value
-			 */
+		
 			if(!StringUtils.isEmpty(billingSlab.getPropertyType())) {
 				List<String> allowedPropertyTypes = JsonPath.read(propertyTypes,BillingSlabConstants.MDMS_CODE_JSONPATH);
 				if(!allowedPropertyTypes.contains(billingSlab.getPropertyType())) {
 					errorMap.put("INVALID_PROPERTY_TYPE","Property Type provided is invalid");
-				}else {
-					if (!StringUtils.isEmpty(billingSlab.getPropertySubType()) && !billingSlab.getPropertySubType().equalsIgnoreCase(BillingSlabConstants.ALL_PLACEHOLDER_BILLING_SLAB)) {
-						if (!CollectionUtils.isEmpty(propertySubtypes)) {
-							List<String> allowedPropertySubTypes = JsonPath.read(propertySubtypes,"$.*.[?(@.propertyType=='" + billingSlab.getPropertyType() + "')].code");
-							if (!allowedPropertySubTypes.contains(billingSlab.getPropertySubType())) {
-								errorMap.put("INVALID_PROPERTY_SUBTYPE", "Property Subtype provided is invalid");
-							}
-						}
-					}
 				}
 			}
-			if(!StringUtils.isEmpty(billingSlab.getOwnerShipCategory())) {
-				List<String> allowedOwnerShipCategories = JsonPath.read(ownerShipCategory,BillingSlabConstants.MDMS_CODE_JSONPATH);
-				if(!allowedOwnerShipCategories.contains(billingSlab.getOwnerShipCategory()) && !(billingSlab.getOwnerShipCategory().equalsIgnoreCase(allValue)) ) {
-					errorMap.put("INVALID_OWNERSHIP_CATEGORY","Ownership category is invalid");
 
-				}else {
-					if (!CollectionUtils.isEmpty(subOwnerShipCategory)) {
-						List<String> allowedsubOwnerShipCategories = JsonPath.read(subOwnerShipCategory,"$.*.[?(@.ownerShipCategory=='" + billingSlab.getOwnerShipCategory() + "')].code");
-						if (!allowedsubOwnerShipCategories.contains(billingSlab.getSubOwnerShipCategory()) && !(billingSlab.getSubOwnerShipCategory().equalsIgnoreCase(allValue))) {
-							errorMap.put("INVALID_SUBOWNERSHIP_CATEGORY","Subownership category is invalid");
-
-						}
-					}
+			if(!StringUtils.isEmpty(billingSlab.getRoadType())) {
+				List<String> allowedRoadTypes = JsonPath.read(roadTypes,BillingSlabConstants.MDMS_CODE_JSONPATH);
+				if(!allowedRoadTypes.contains(billingSlab.getRoadType())) {
+					errorMap.put("INVALID_ROAD_TYPE","Road Type provided is invalid");
 				}
 			}
-			if(!StringUtils.isEmpty(billingSlab.getUsageCategoryMajor())) {
-				List<String> allowedUsageCategoryMajor = JsonPath.read(usageCategoryMajor, BillingSlabConstants.MDMS_CODE_JSONPATH);
-				if(!allowedUsageCategoryMajor.contains(billingSlab.getUsageCategoryMajor()) && !(billingSlab.getUsageCategoryMajor().equalsIgnoreCase(allValue)) ) {
-					errorMap.put("INVALID_USAGECATEGORY_MAJOR","Usage category Major is invalid");
-				}else {
-					if (!CollectionUtils.isEmpty(usageCategoryMinors) && !StringUtils.isEmpty(billingSlab.getUsageCategoryMinor()) && !billingSlab.getUsageCategoryMinor().equalsIgnoreCase(BillingSlabConstants.ALL_PLACEHOLDER_BILLING_SLAB)) {
-						List<String> allowedUsageCategoryMinors = JsonPath.read(usageCategoryMinors, "$.*.[?(@.usageCategoryMajor=='" + billingSlab.getUsageCategoryMajor() + "')].code");
-						if (!allowedUsageCategoryMinors.contains(billingSlab.getUsageCategoryMinor())) {
-							errorMap.put("INVALID_USAGE_CATEGORY_MINOR","Usage category minor is invalid");
-						} else {
-							if (!CollectionUtils.isEmpty(allowedUsageCategoryMinors) && !StringUtils.isEmpty(billingSlab.getUsageCategorySubMinor()) && !billingSlab.getUsageCategorySubMinor().equalsIgnoreCase(BillingSlabConstants.ALL_PLACEHOLDER_BILLING_SLAB)) {
-								List<String> allowedUsageCategorySubMinors = JsonPath.read(usageCategorySubMinor,"$.*.[?(@.usageCategoryMinor=='" + billingSlab.getUsageCategoryMinor() + "')].code");
-								if (!allowedUsageCategorySubMinors.contains(billingSlab.getUsageCategorySubMinor())) {
-									errorMap.put("INVALID_USAGE_CATEGORY_SUBMINOR","Provided Usage category sub minor is invalid");
-								}else {
-									if (!CollectionUtils.isEmpty(allowedUsageCategorySubMinors) && !StringUtils.isEmpty(billingSlab.getUsageCategoryDetail()) && !billingSlab.getUsageCategoryDetail().equalsIgnoreCase(BillingSlabConstants.ALL_PLACEHOLDER_BILLING_SLAB)) {
-										List<String> allowedUsageCategoryDetail = JsonPath.read(usageCategoryDetail ,"$.*.[?(@.usageCategorySubMinor=='" + billingSlab.getUsageCategorySubMinor() + "')].code");
-										if (!allowedUsageCategoryDetail.contains(billingSlab.getUsageCategoryDetail())) {
-											errorMap.put("INVALID_USAGE_CATEGORY_DETAIL","Provided Usage category detail is invalid");
-										}
-									}
-								}
-							}
-						}
-					}
+
+			if(!StringUtils.isEmpty(billingSlab.getConstructionType())) {
+				List<String> allowedConstructionTypes = JsonPath.read(constructionTypes,BillingSlabConstants.MDMS_CODE_JSONPATH);
+				if(!allowedConstructionTypes.contains(billingSlab.getConstructionType())) {
+					errorMap.put("INVALID_CONSTRUCTION_TYPE","Construction Type provided is invalid");
 				}
 			}
 		}

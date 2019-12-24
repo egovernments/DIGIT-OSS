@@ -181,9 +181,9 @@ public class EstimationService {
 
 			for (Unit unit : detail.getUnits()) {
 
-				BillingSlab slab = getSlabForCalc(filteredBillingSlabs, unit);
-				BigDecimal currentUnitTax = getTaxForUnit(slab, unit);
-				billingSlabIds.add(slab.getId()+"|"+i);
+				// BillingSlab slab = getSlabForCalc(filteredBillingSlabs, unit);
+				 BigDecimal currentUnitTax = BigDecimal.ZERO;//getTaxForUnit(slab, unit);
+				// billingSlabIds.add(slab.getId()+"|"+i);
 
 				/*
 				 * counting the number of units & total area in ground floor for unbuilt area
@@ -192,8 +192,8 @@ public class EstimationService {
 				if (unit.getFloorNo().equalsIgnoreCase("0")) {
 					groundUnitsCount += 1;
 					groundUnitsArea += unit.getUnitArea();
-					if (null != slab.getUnBuiltUnitRate())
-						unBuiltRate += slab.getUnBuiltUnitRate();
+					// if (null != slab.getUnBuiltUnitRate())
+					// 	unBuiltRate += slab.getUnBuiltUnitRate();
 				}
 				taxAmt = taxAmt.add(currentUnitTax);
 				usageExemption = usageExemption
@@ -296,11 +296,11 @@ public class EstimationService {
 			if (unit.getArv() == null)
                 throw new CustomException(EG_PT_ESTIMATE_ARV_NULL, EG_PT_ESTIMATE_ARV_NULL_MSG);
 
-			BigDecimal multiplier;
-			if (null != slab.getArvPercent())
-				multiplier = BigDecimal.valueOf(slab.getArvPercent() / 100);
-			else
-				multiplier = BigDecimal.valueOf(configs.getArvPercent() / 100);
+			BigDecimal multiplier = BigDecimal.ZERO;
+			// if (null != slab.getArvPercent())
+			// 	multiplier = BigDecimal.valueOf(slab.getArvPercent() / 100);
+			// else
+			// 	multiplier = BigDecimal.valueOf(configs.getArvPercent() / 100);
 			currentUnitTax = unit.getArv().multiply(multiplier);
 		} else {
 			currentUnitTax = BigDecimal.valueOf(unit.getUnitArea() * slab.getUnitRate());
@@ -514,62 +514,19 @@ public class EstimationService {
 	 * method to do a first level filtering on the slabs based on the values present in Property detail
 	 */
 	private List<BillingSlab> getSlabsFiltered(Property property, RequestInfo requestInfo) {
-
 		PropertyDetail detail = property.getPropertyDetails().get(0);
 		String tenantId = property.getTenantId();
-		BillingSlabSearchCriteria slabSearchCriteria = BillingSlabSearchCriteria.builder().tenantId(tenantId).build();
+		LinkedHashMap additionalDetails = (LinkedHashMap) detail.getAdditionalDetails();
+		String roadType = (String) additionalDetails.get(ROAD_TYPE_JSON_STRING);
+		// TODO ward
+		BillingSlabSearchCriteria slabSearchCriteria = BillingSlabSearchCriteria.builder().tenantId(tenantId).ward("")
+				.propertyType(detail.getPropertyType()).roadType(roadType)
+				.mohalla(property.getAddress().getLocality().getArea()).build();
+
 		List<BillingSlab> billingSlabs = billingSlabService.searchBillingSlabs(requestInfo, slabSearchCriteria)
 				.getBillingSlab();
+		return billingSlabs;
 
-		log.debug(" the slabs count : " + billingSlabs.size());
-		final String all = configs.getSlabValueAll();
-
-		Double plotSize = null != detail.getLandArea() ? detail.getLandArea() : detail.getBuildUpArea();
-
-		final String dtlPtType = detail.getPropertyType();
-		final String dtlPtSubType = detail.getPropertySubType();
-		final String dtlOwnerShipCat = detail.getOwnershipCategory();
-		final String dtlSubOwnerShipCat = detail.getSubOwnershipCategory();
-		final String dtlAreaType = property.getAddress().getLocality().getArea();
-		final Boolean dtlIsMultiFloored = detail.getNoOfFloors() > 1;
-
-		return billingSlabs.stream().filter(slab -> {
-
-			Boolean slabMultiFloored = slab.getIsPropertyMultiFloored();
-			String  slabAreaType = slab.getAreaType();
-			String  slabPropertyType = slab.getPropertyType();
-			String  slabPropertySubType = slab.getPropertySubType();
-			String  slabOwnerShipCat = slab.getOwnerShipCategory();
-			String  slabSubOwnerShipCat = slab.getSubOwnerShipCategory();
-			Double  slabAreaFrom = slab.getFromPlotSize();
-			Double  slabAreaTo = slab.getToPlotSize();
-
-			boolean isPropertyMultiFloored = slabMultiFloored.equals(dtlIsMultiFloored);
-
-			boolean isAreaMatching = slabAreaType.equalsIgnoreCase(dtlAreaType) || all.equalsIgnoreCase(slab.getAreaType());
-
-			boolean isPtTypeMatching = slabPropertyType.equalsIgnoreCase(dtlPtType);
-
-			boolean isPtSubTypeMatching = slabPropertySubType.equalsIgnoreCase(dtlPtSubType)
-					|| all.equalsIgnoreCase(slabPropertySubType);
-
-			boolean isOwnerShipMatching = slabOwnerShipCat.equalsIgnoreCase(dtlOwnerShipCat)
-					|| all.equalsIgnoreCase(slabOwnerShipCat);
-
-			boolean isSubOwnerShipMatching = slabSubOwnerShipCat.equalsIgnoreCase(dtlSubOwnerShipCat)
-					|| all.equalsIgnoreCase(slabSubOwnerShipCat);
-
-			boolean isPlotMatching = false;
-
-			if (plotSize == 0.0)
-				isPlotMatching = slabAreaFrom <= plotSize && slabAreaTo >= plotSize;
-			else
-				isPlotMatching = slabAreaFrom < plotSize && slabAreaTo >= plotSize;
-
-			return isPtTypeMatching && isPtSubTypeMatching && isOwnerShipMatching && isSubOwnerShipMatching
-					&& isPlotMatching && isAreaMatching && isPropertyMultiFloored;
-
-		}).collect(Collectors.toList());
 	}
 
 	/**
@@ -579,47 +536,47 @@ public class EstimationService {
 	 * @param billingSlabs slabs filtered with property detail related values
 	 * @param unit unit of the property for which the tax has be calculated
 	 */
-	private BillingSlab getSlabForCalc(List<BillingSlab> billingSlabs, Unit unit) {
+	// private BillingSlab getSlabForCalc(List<BillingSlab> billingSlabs, Unit unit) {
 
-		final String all = configs.getSlabValueAll();
+	// 	final String all = configs.getSlabValueAll();
 
-		List<BillingSlab> matchingList = new ArrayList<>();
+	// 	List<BillingSlab> matchingList = new ArrayList<>();
 
-		for (BillingSlab billSlb : billingSlabs) {
+	// 	for (BillingSlab billSlb : billingSlabs) {
 
-			Double floorNo = Double.parseDouble(unit.getFloorNo());
+	// 		Double floorNo = Double.parseDouble(unit.getFloorNo());
 
-			boolean isMajorMatching = billSlb.getUsageCategoryMajor().equalsIgnoreCase(unit.getUsageCategoryMajor())
-					|| (billSlb.getUsageCategoryMajor().equalsIgnoreCase(all));
+	// 		boolean isMajorMatching = billSlb.getUsageCategoryMajor().equalsIgnoreCase(unit.getUsageCategoryMajor())
+	// 				|| (billSlb.getUsageCategoryMajor().equalsIgnoreCase(all));
 
-			boolean isMinorMatching = billSlb.getUsageCategoryMinor().equalsIgnoreCase(unit.getUsageCategoryMinor())
-					|| (billSlb.getUsageCategoryMinor().equalsIgnoreCase(all));
+	// 		boolean isMinorMatching = billSlb.getUsageCategoryMinor().equalsIgnoreCase(unit.getUsageCategoryMinor())
+	// 				|| (billSlb.getUsageCategoryMinor().equalsIgnoreCase(all));
 
-			boolean isSubMinorMatching = billSlb.getUsageCategorySubMinor().equalsIgnoreCase(
-					unit.getUsageCategorySubMinor()) || (billSlb.getUsageCategorySubMinor().equalsIgnoreCase(all));
+	// 		boolean isSubMinorMatching = billSlb.getUsageCategorySubMinor().equalsIgnoreCase(
+	// 				unit.getUsageCategorySubMinor()) || (billSlb.getUsageCategorySubMinor().equalsIgnoreCase(all));
 
-			boolean isDetailsMatching = billSlb.getUsageCategoryDetail().equalsIgnoreCase(unit.getUsageCategoryDetail())
-					|| (billSlb.getUsageCategoryDetail().equalsIgnoreCase(all));
+	// 		boolean isDetailsMatching = billSlb.getUsageCategoryDetail().equalsIgnoreCase(unit.getUsageCategoryDetail())
+	// 				|| (billSlb.getUsageCategoryDetail().equalsIgnoreCase(all));
 
-			boolean isFloorMatching = billSlb.getFromFloor() <= floorNo && billSlb.getToFloor() >= floorNo;
+	// 		boolean isFloorMatching = billSlb.getFromFloor() <= floorNo && billSlb.getToFloor() >= floorNo;
 
-			boolean isOccupancyTypeMatching = billSlb.getOccupancyType().equalsIgnoreCase(unit.getOccupancyType())
-					|| (billSlb.getOccupancyType().equalsIgnoreCase(all));
+	// 		boolean isOccupancyTypeMatching = billSlb.getOccupancyType().equalsIgnoreCase(unit.getOccupancyType())
+	// 				|| (billSlb.getOccupancyType().equalsIgnoreCase(all));
 
-			if (isMajorMatching && isMinorMatching && isSubMinorMatching && isDetailsMatching && isFloorMatching
-					&& isOccupancyTypeMatching) {
+	// 		if (isMajorMatching && isMinorMatching && isSubMinorMatching && isDetailsMatching && isFloorMatching
+	// 				&& isOccupancyTypeMatching) {
 
-				matchingList.add(billSlb);
-				log.debug(" The Id of the matching slab : " + billSlb.getId());
-			}
-		}
-		if (matchingList.size() == 1)
-			return matchingList.get(0);
-		else if (matchingList.size() == 0)
-			return null;
-		else throw new CustomException(PT_ESTIMATE_BILLINGSLABS_UNMATCH, PT_ESTIMATE_BILLINGSLABS_UNMATCH_MSG
-					.replace(PT_ESTIMATE_BILLINGSLABS_UNMATCH_replace_id, matchingList.toString()) + unit);
-	}
+	// 			matchingList.add(billSlb);
+	// 			log.debug(" The Id of the matching slab : " + billSlb.getId());
+	// 		}
+	// 	}
+	// 	if (matchingList.size() == 1)
+	// 		return matchingList.get(0);
+	// 	else if (matchingList.size() == 0)
+	// 		return null;
+	// 	else throw new CustomException(PT_ESTIMATE_BILLINGSLABS_UNMATCH, PT_ESTIMATE_BILLINGSLABS_UNMATCH_MSG
+	// 				.replace(PT_ESTIMATE_BILLINGSLABS_UNMATCH_replace_id, matchingList.toString()) + unit);
+	// }
 
 	/**
 	 * Usage based exemptions applied on unit.

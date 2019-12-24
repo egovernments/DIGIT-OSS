@@ -55,6 +55,8 @@ public class CalculatorConstants {
 	
 	public static final String ALLOWED_RECEIPT_STATUS = "APPROVED,REMITTED";
 
+	public static final String ROAD_TYPE_JSON_STRING = "roadType";
+
 	public static final List<String> TAXES_TO_BE_CONSIDERD_WHEN_CALUCLATING_REBATE_AND_PENALTY = Collections.unmodifiableList(Arrays
 			.asList(PT_TAX));
 	

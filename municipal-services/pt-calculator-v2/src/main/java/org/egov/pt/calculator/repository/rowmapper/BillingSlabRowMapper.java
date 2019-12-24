@@ -27,19 +27,11 @@ public class BillingSlabRowMapper implements ResultSetExtractor<List<BillingSlab
 						.createdTime(rs.getLong("createdTime")).lastModifiedBy(rs.getString("lastmodifiedby"))
 						.lastModifiedTime(rs.getLong("lastmodifiedtime")).build();
 
-				currentBillingSlab = BillingSlab.builder().id(rs.getString("id")).areaType(rs.getString("areaType"))
-						.isPropertyMultiFloored(rs.getBoolean("isPropertyMultiFloored"))
-						.fromFloor(rs.getDouble("fromFloor")).fromPlotSize(rs.getDouble("fromPlotSize"))
-						.ownerShipCategory(rs.getString("ownerShipCategory"))
-						.propertySubType(rs.getString("propertySubType")).propertyType(rs.getString("propertyType"))
-						.subOwnerShipCategory(rs.getString("subOwnerShipCategory")).tenantId(rs.getString("tenantId"))
-						.toFloor(rs.getDouble("toFLoor")).toPlotSize(rs.getDouble("toPlotSize"))
-						.unitRate(rs.getDouble("unitRate")).usageCategoryDetail(rs.getString("usageCategoryDetail"))
-						.usageCategoryMajor(rs.getString("usageCategoryMajor"))
-						.usageCategoryMinor(rs.getString("usageCategoryMinor"))
-						.usageCategorySubMinor(rs.getString("usageCategorySubMinor")).unBuiltUnitRate(rs.getDouble("unbuiltunitrate"))
-						.arvPercent(rs.getDouble("arvPercent"))/*.fromDate(rs.getLong("fromDate"))*/
-						.occupancyType(rs.getString("occupancyType")).auditDetails(auditDetails).build();
+				currentBillingSlab = BillingSlab.builder().tenantId(rs.getString("tenantid"))
+						.id(rs.getString("id")).mohalla(rs.getString("mohalla"))
+						.unitRate(rs.getDouble("unitrate")).propertyType(rs.getString("propertytype"))
+						.constructionType(rs.getString("constructiontype")).ward(rs.getString("ward"))
+						.roadType(rs.getString("roadtype")).auditDetails(auditDetails).build();
 
 				billingSlabMap.put(currentId, currentBillingSlab);
 			}
