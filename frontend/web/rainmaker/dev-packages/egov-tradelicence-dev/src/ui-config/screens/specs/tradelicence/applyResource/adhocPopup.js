@@ -129,6 +129,8 @@ const updateAdhoc = (state, dispatch) => {
         "warning"
         )
       );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocPenalty", null));
     }
     else {
       getEstimateDataAfterAdhoc(state, dispatch);
