@@ -8,9 +8,8 @@ import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
 import get from "lodash/get";
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
-import { setRoute } from "egov-ui-framework/ui-redux/app/actions"; 
+import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { convertEpochToDate } from "../../ui-config/screens/specs/utils";
-
 const styles = {
   card: {
     marginLeft: 8,
@@ -18,7 +17,6 @@ const styles = {
     borderRadius: "inherit"
   }
 };
-
 // onCardClick = () => {
 // switch (item.status) {
 //   case "INITIATED":
@@ -28,16 +26,14 @@ const styles = {
 // }
 // };
 // onCardClick = () => {
-
 // }
-
 class MeterReading extends React.Component {
   render() {
     const { consumptionDetails, onActionClick, classes } = this.props;
-    if (consumptionDetails.length > 0) {
-      var lastReadingDate = convertEpochToDate(consumptionDetails[0].lastReadingDate)
-      var currentReadingDate = convertEpochToDate(consumptionDetails[0].currentReadingDate)
-    }
+    // if (consumptionDetails.length > 0) {
+    //   var lastReadingDate = convertEpochToDate(consumptionDetails[0].lastReadingDate)
+    //   var currentReadingDate = convertEpochToDate(consumptionDetails[0].currentReadingDate)
+    // }
     return (
       <div>
         {consumptionDetails && consumptionDetails.length > 0 ? (
@@ -104,7 +100,7 @@ class MeterReading extends React.Component {
                       </Grid>
                       <Grid item sm={3} xs={12}>
                         <Label
-                          labelName={lastReadingDate}
+                          labelName={`${convertEpochToDate(item.lastReadingDate)}`}
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />
@@ -136,7 +132,7 @@ class MeterReading extends React.Component {
                       </Grid>
                       <Grid item sm={3} xs={12}>
                         <Label
-                          labelName={currentReadingDate}
+                          labelName={`${convertEpochToDate(item.currentReadingDate)}`}
                           fontSize={14}
                           style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.87" }}
                         />
@@ -167,8 +163,8 @@ class MeterReading extends React.Component {
             <div style={{
               display: "flex",
               width: "100%",
-              height:'50vh',
-              alignItems:'center',
+              height: '50vh',
+              alignItems: 'center',
               justifyContent: "center",
               textAlign: "center"
             }}>
@@ -194,7 +190,6 @@ class MeterReading extends React.Component {
     );
   }
 }
-
 const mapStateToProps = state => {
   const consumptionDetails = get(
     state.screenConfiguration.preparedFinalObject,
@@ -204,7 +199,6 @@ const mapStateToProps = state => {
   const screenConfig = get(state.screenConfiguration, "screenConfig");
   return { screenConfig, consumptionDetails };
 };
-
 const mapDispatchToProps = dispatch => {
   return {
     setRoute: path => dispatch(setRoute(path))
