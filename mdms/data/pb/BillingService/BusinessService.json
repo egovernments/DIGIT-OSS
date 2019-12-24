@@ -1022,7 +1022,7 @@
       "collectionModesNotAllowed": [
         "DD"
       ],
-      "partPaymentAllowed": false,
+      "partPaymentAllowed": true,
       "isAdvanceAllowed": true,
       "demandUpdateTime": 86400000,
       "isVoucherCreationEnabled": false
@@ -1033,7 +1033,7 @@
       "collectionModesNotAllowed": [
         "DD"
       ],
-      "partPaymentAllowed": false,
+      "partPaymentAllowed": true,
       "isAdvanceAllowed": true,
       "demandUpdateTime": 86400000,
       "isVoucherCreationEnabled": false
