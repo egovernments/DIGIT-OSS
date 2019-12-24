@@ -9,8 +9,9 @@ import "./index.css";
 const ptSteps = [
   "PT_PROPERTY_ADDRESS_SUB_HEADER",
   "PT_ASSESMENT_INFO_SUB_HEADER",
+  "PT_DEMAND_AND_COLLECTION",
   "PT_OWNERSHIP_INFO_SUB_HEADER",
-  "PT_COMMON_SUMMARY",
+  "PT_COMMON_SUMMARY"
 ];
 
 const WizardComponent = ({
@@ -61,7 +62,7 @@ const WizardComponent = ({
       <div id="tax-wizard-buttons" className="wizard-footer col-sm-10" style={{ textAlign: "right" }}>
         <div className="button-container col-xs-10" style={{ float: "right" }}>
 
-          {selected != 3 && selected != 5 && selected != 4 && <Button
+      {selected != 3 && selected != 5 && selected != 4 && <Button
             label={<Label buttonLabel={true} label={backLabel} color="#fe7a51" />}
             onClick={() => {
               selected - 1 === -1 ? history.push("/property-tax") : onTabClick(selected - 1);
