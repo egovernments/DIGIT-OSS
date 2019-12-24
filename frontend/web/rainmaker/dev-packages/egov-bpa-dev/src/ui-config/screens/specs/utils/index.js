@@ -2246,7 +2246,7 @@ export const fillOldLicenseData = async (state, dispatch) => {
   );
 };
 
-/*
+
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
@@ -2363,7 +2363,7 @@ export const getTextToLocalMapping = label => {
     default:
       return getLocaleLabels(label, label, localisationLabels);
   }
-};*/
+};
 
 export const addressDestruct = (action, state, dispatch) => {
   const ownerData = get(
@@ -3006,7 +3006,7 @@ export const resetFields = (state, dispatch) => {
 //   }
 // };
 
-export const getTextToLocalMapping = label => {
+export const getBpaTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
   switch (label) {
     case "Floor Description":

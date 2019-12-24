@@ -4,7 +4,7 @@ import { getAppSearchResults } from "../../../../../ui-utils/commons";
 import { convertEpochToDate, convertDateToEpoch } from "../../utils/index";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { textToLocalMapping } from "./searchResults";
-import { validateFields, getTextToLocalMapping } from "../../utils";
+import { validateFields, getBpaTextToLocalMapping } from "../../utils";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 
@@ -96,17 +96,17 @@ export const searchApiCall = async (state, dispatch) => {
       // const response = searchSampleResponse();
 
       let data = response.Bpa.map(item => ({
-        [getTextToLocalMapping("Application No")]: item.applicationNo || "-",
-        // [getTextToLocalMapping("NOC No")]: item.fireNOCNumber || "-",
-        // [getTextToLocalMapping("NOC Type")]:
+        [getBpaTextToLocalMapping("Application No")]: item.applicationNo || "-",
+        // [getBpaTextToLocalMapping("NOC No")]: item.fireNOCNumber || "-",
+        // [getBpaTextToLocalMapping("NOC Type")]:
         //   item.fireNOCDetails.fireNOCType || "-",
-        [getTextToLocalMapping("Owner Name")]:
+        [getBpaTextToLocalMapping("Owner Name")]:
           get(item, "owners[0].name") || "-",
-        [getTextToLocalMapping("Application Date")]:
+        [getBpaTextToLocalMapping("Application Date")]:
           convertEpochToDate(parseInt(get(item,"owners[0].createdDate"))) ||
           "-",
         tenantId: item.tenantId,
-        [getTextToLocalMapping("Status")]: item.status || "-"
+        [getBpaTextToLocalMapping("Status")]: item.status || "-"
       }));
 
       dispatch(
@@ -122,7 +122,7 @@ export const searchApiCall = async (state, dispatch) => {
           "search",
           "components.div.children.searchResults",
           "props.title",
-          `${getTextToLocalMapping(
+          `${getBpaTextToLocalMapping(
             "Search Results for BPA Applications"
           )} (${response.Bpa.length})`
         )

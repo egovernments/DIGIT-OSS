@@ -4,7 +4,7 @@ import get from "lodash/get";
 import {
   sortByEpoch,
   getEpochForDate,
-  getTextToLocalMapping
+  getBpaTextToLocalMapping
 } from "../../utils";
 import {
   getLocalization,
@@ -112,12 +112,12 @@ export const searchResults = {
   props: {
     // data: [],
     columns: [
-      getTextToLocalMapping("Application No"),
-      // getTextToLocalMapping("NOC No"),
-      // getTextToLocalMapping("NOC Type"),
-      getTextToLocalMapping("Owner Name"),
-      getTextToLocalMapping("Application Date"),
-      getTextToLocalMapping("Status"),
+      getBpaTextToLocalMapping("Application No"),
+      // getBpaTextToLocalMapping("NOC No"),
+      // getBpaTextToLocalMapping("NOC Type"),
+      getBpaTextToLocalMapping("Owner Name"),
+      getBpaTextToLocalMapping("Application Date"),
+      getBpaTextToLocalMapping("Status"),
       {
         name: "tenantId",
         options: {
@@ -125,7 +125,7 @@ export const searchResults = {
         }
       }
     ],
-    title: getTextToLocalMapping("Search Results for BPA Applications"),
+    title: getBpaTextToLocalMapping("Search Results for BPA Applications"),
     options: {
       filter: false,
       download: false,

@@ -5,7 +5,7 @@ import {
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import get from "lodash/get";
-import { getCommonApplyFooter, validateFields, getTextToLocalMapping } from "../../utils";
+import { getCommonApplyFooter, validateFields, getBpaTextToLocalMapping } from "../../utils";
 // import "./index.css";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
@@ -201,12 +201,12 @@ const callBackForNext = async (state, dispatch) => {
   );
 
     let tableData = response.map((item, index) => ({
-      [getTextToLocalMapping("Floor Description")]: getFloorDetail(index),
-      [getTextToLocalMapping("Level")]: index,
-      [getTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
-      [getTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "-",
-      [getTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "-",
-      [getTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "-"
+      [getBpaTextToLocalMapping("Floor Description")]: getFloorDetail(index),
+      [getBpaTextToLocalMapping("Level")]: index,
+      [getBpaTextToLocalMapping("Occupancy/Sub Occupancy")]: item.occupancies[0].type || "-",
+      [getBpaTextToLocalMapping("Buildup Area")]: item.occupancies[0].builtUpArea || "-",
+      [getBpaTextToLocalMapping("Floor Area")]: item.occupancies[0].floorArea || "-",
+      [getBpaTextToLocalMapping("Carpet Area")]: item.occupancies[0].carpetArea || "-"
     }));
     dispatch(
       handleField(
