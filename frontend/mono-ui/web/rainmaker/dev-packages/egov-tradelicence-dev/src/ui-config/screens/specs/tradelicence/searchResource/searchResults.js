@@ -32,6 +32,12 @@ export const searchResults = {
           )
         }
       },
+      {
+        name:"status1",
+        options: {
+          display: false
+        }
+      },
 
       {
         name: "tenantId",
@@ -73,16 +79,17 @@ export const searchResults = {
 };
 
 const onRowClick = rowData => {
-  switch (rowData[5]) {
+  //console.log("rowData--",rowData);
+  switch (rowData[6]) {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[6]
-      }`;
+      }&action=edit`;
       break;
     default:
       window.location.href = `search-preview?applicationNumber=${
         rowData[0]
-      }&tenantId=${rowData[6]}`;
+      }&tenantId=${rowData[7]}`;
       break;
   }
 };
