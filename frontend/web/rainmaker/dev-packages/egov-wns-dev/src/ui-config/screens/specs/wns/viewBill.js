@@ -1,6 +1,6 @@
 import { getCommonHeader, getCommonCard, getCommonGrayCard, getCommonContainer, getCommonSubHeader, convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
 import get from "lodash/get";
-import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptionFromMDMS, getConsumptionDetails, getNamesFromMDMS } from "../../../../ui-utils/commons";
+import { getSearchResults, getSearchResultsForSewerage, fetchBill, getDescriptionFromMDMS, getConsumptionDetails } from "../../../../ui-utils/commons";
 import set from "lodash/set";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -29,16 +29,13 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
         data.Bill[0].billDetails[0].billAccountDetails.forEach(async element => {
           let cessKey = element.taxHeadCode
           let body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "ws-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
-          let queryObjForNameSearch = [{ key: "tenantId", value: tenantId }, { key: "service", value: "WS" }, { key: "code", value: cessKey }]
-          let name = await getNamesFromMDMS(queryObjForNameSearch, dispatch)
           let res = await getDescriptionFromMDMS(body, dispatch)
           let des, obj;
           if (res !== null && res !== undefined && res.MdmsRes !== undefined && res.MdmsRes !== null) { des = res.MdmsRes["ws-services-calculation"]; }
           if (des !== null && des !== undefined && des[cessKey] !== undefined && des[cessKey][0] !== undefined && des[cessKey][0] !== null) {
-            obj = { key: name.TaxHeadMasters[0].name, value: des[cessKey][0].description, amount: element.amount, order: element.order }
+            obj = { key: cessKey, value: des[cessKey][0].description, amount: element.amount, order: element.order }
           }
           viewBillTooltip.push(obj)
-
           if (viewBillTooltip.length >= data.Bill[0].billDetails[0].billAccountDetails.length) {
             let dataArray = [{ total: data.Bill[0].totalAmount, fromPeriod: data.Bill[0].billDetails[0].fromPeriod, toPeriod: data.Bill[0].billDetails[0].toPeriod, expiryDate: data.Bill[0].billDetails[0].expiryDate }]
             let descriptionArray = viewBillTooltip
@@ -53,14 +50,12 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
           meterReadingsData.meterReadings[0].currentReadingDate = convertEpochToDate(meterReadingsData.meterReadings[0].currentReadingDate)
           meterReadingsData.meterReadings[0].lastReading = meterReadingsData.meterReadings[0].lastReading === 0 ? "0" : meterReadingsData.meterReadings[0].lastReading
         }
-
         if (payload.WaterConnection[0].property.usageCategory !== null && payload.WaterConnection[0].property.usageCategory !== undefined) {
           const propertyUsageType = "[?(@.code  == " + JSON.stringify(payload.WaterConnection[0].property.usageCategory) + ")]"
           let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
           const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
           payload.WaterConnection[0].property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
         }
-
         dispatch(prepareFinalObject("WaterConnection[0]", payload.WaterConnection[0]));
         dispatch(prepareFinalObject("billData", data.Bill[0]));
         dispatch(prepareFinalObject("consumptionDetails[0]", meterReadingsData.meterReadings[0]))
@@ -69,7 +64,6 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
   } else if (service === "SEWERAGE") {
     let queryObjectForFetchBill = [{ key: "tenantId", value: tenantId }, { key: "consumerCode", value: consumerCode }, { key: "businessService", value: "SW" }];
     let meterReadingsData = await getConsumptionDetails(queryObjectForConsumptionDetails, dispatch)
-
     let payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch);
     data = await fetchBill(queryObjectForFetchBill, dispatch)
     let viewBillTooltip = []
@@ -79,14 +73,11 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
         data.Bill[0].billDetails[0].billAccountDetails.forEach(async element => {
           let cessKey = element.taxHeadCode
           let body = { "MdmsCriteria": { "tenantId": "pb.amritsar", "moduleDetails": [{ "moduleName": "sw-services-calculation", "masterDetails": [{ "name": cessKey }] }] } }
-          let queryObjForNameSearch = [{ key: "tenantId", value: tenantId }, { key: "service", value: "SW" }, { key: "code", value: cessKey }]
-          let name = await getNamesFromMDMS(queryObjForNameSearch, dispatch)
           let res = await getDescriptionFromMDMS(body, dispatch)
           let des, obj;
-
           if (res !== null && res !== undefined && res.MdmsRes !== undefined && res.MdmsRes !== null) { des = res.MdmsRes["sw-services-calculation"]; }
           if (des !== null && des !== undefined && des[cessKey] !== undefined && des[cessKey][0] !== undefined && des[cessKey][0] !== null) {
-            obj = { key: name.TaxHeadMasters[0].name, value: des[cessKey][0].description, amount: element.amount, order: element.order }
+            obj = { key: cessKey, value: des[cessKey][0].description, amount: element.amount, order: element.order }
           }
           viewBillTooltip.push(obj)
           if (viewBillTooltip.length >= data.Bill[0].billDetails[0].billAccountDetails.length) {
@@ -101,14 +92,12 @@ const searchResults = async (action, state, dispatch, consumerCode) => {
           payload.SewerageConnections[0].currentMeterReading = meterReadingsData.meterReadings[0].currentReading
           payload.SewerageConnections[0].lastMeterReading = meterReadingsData.meterReadings[0].lastReading
         }
-
         if (payload.SewerageConnections[0].property.usageCategory !== null && payload.SewerageConnections[0].property.usageCategory !== undefined) {
           const propertyUsageType = "[?(@.code  == " + JSON.stringify(payload.SewerageConnections[0].property.usageCategory) + ")]"
           let propertyUsageTypeParams = { MdmsCriteria: { tenantId: "pb", moduleDetails: [{ moduleName: "PropertyTax", masterDetails: [{ name: "UsageCategoryMajor", filter: `${propertyUsageType}` }] }] } }
           const mdmsPropertyUsageType = await getDescriptionFromMDMS(propertyUsageTypeParams, dispatch)
           payload.SewerageConnections[0].property.propertyUsageType = mdmsPropertyUsageType.MdmsRes.PropertyTax.UsageCategoryMajor[0].name;//propertyUsageType from Mdms
         }
-
         dispatch(prepareFinalObject("WaterConnection[0]", payload.SewerageConnections[0]));
         dispatch(prepareFinalObject("billData", data.Bill[0]));
         dispatch(prepareFinalObject("consumptionDetails", meterReadingsData.meterReadings[0]))

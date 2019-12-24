@@ -1,6 +1,5 @@
-import { fetchData } from "./pastPaymentResource/pastPaymentDetails";
+import { getPastPaymentsForWater,getPastPaymentsForSewerage } from "../../../../ui-utils/commons";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
-
 const header = getCommonHeader(
   {
     labelKey: "WS_COMMON_PAST_PAYMENTS"
@@ -11,12 +10,12 @@ const header = getCommonHeader(
     }
   }
 );
-
 const screenConfig = {
   uiFramework: "material-ui",
   name: "my-connections",
   beforeInitScreen: (action, state, dispatch) => {
-    fetchData(action, state, dispatch);
+    getPastPaymentsForWater(dispatch);
+    getPastPaymentsForSewerage(dispatch)
     return action;
   },
   components: {
@@ -34,5 +33,4 @@ const screenConfig = {
     }
   }
 };
-
 export default screenConfig;

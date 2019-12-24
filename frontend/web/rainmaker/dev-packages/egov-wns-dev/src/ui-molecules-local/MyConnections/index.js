@@ -20,11 +20,11 @@ const styles = {
 
 class MyConnections extends React.Component {
   getConnectionDetails = data => {
-    window.location.href = `connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}`
+    window.location.href = `/wns/connection-details?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}`
   }
 
   getViewBillDetails = data => {
-    window.location.href = `viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}`
+    window.location.href = `/wns/viewBill?connectionNumber=${data.connectionNo}&tenantId=${data.property.tenantId}&service=${data.service.toUpperCase()}`
   }
 
   render() {

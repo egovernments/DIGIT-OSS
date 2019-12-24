@@ -143,11 +143,17 @@ class PastPayments extends Component {
   }
 }
 const mapStateToProps = state => {
-  const pastPaymentsDetails = get(
+  const pastPaymentsForWater = get(
     state.screenConfiguration.preparedFinalObject,
-    "pastPayments",
+    "pastPaymentsForWater",
     []
   );
+  const pastPaymentsForSewerage = get(
+    state.screenConfiguration.preparedFinalObject,
+    "pastPaymentsForSewerage",
+    []
+  );
+  const pastPaymentsDetails = pastPaymentsForWater.concat(pastPaymentsForSewerage)
   const screenConfig = get(state.screenConfiguration, "screenConfig");
   return { screenConfig, pastPaymentsDetails };
 };

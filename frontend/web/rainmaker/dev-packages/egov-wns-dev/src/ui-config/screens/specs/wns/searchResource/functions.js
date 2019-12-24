@@ -24,7 +24,7 @@ export const searchApiCall = async (state, dispatch) => {
     "search"
   );
   if (!(isSearchBoxFirstRowValid && isSearchBoxSecondRowValid)) {
-    dispatch(toggleSnackbar(true, { labelKey: "ERR_FILL_VALID_FIELDS" }, "warning"));
+    dispatch(toggleSnackbar(true, { labelKey: "ERR_WS_FILL_ATLEAST_ONE_FIELD" }, "warning"));
   } else if (
     Object.keys(searchScreenObject).length == 0 ||
     Object.values(searchScreenObject).every(x => x === "")
