@@ -75,13 +75,13 @@
               {
                 "variable": "propertyType",
                 "value": {
-                  "path": "$.property.propertyType"
+                  "path": "$.property.propertyTypeValue"
                 }
               },
               {
                 "variable": "propertyUsageType",
                 "value": {
-                  "path": "$.property.propertyType"
+                  "path": "$.property.propertyUsageType"
                 }
               },
               {
@@ -105,7 +105,7 @@
               {
                 "variable": "plot",
                 "value": {
-                  "path": "$.property.address.plotNo"
+                  "path": "$.property.address.doorNo"
                 }
               },
               {
@@ -169,7 +169,7 @@
               {
                 "variable": "guardian",
                 "value": {
-                  "path": "$.property.owners[0].guardian"
+                  "path": "$.property.owners[0].relationship"
                 }
               },
               {
@@ -623,7 +623,7 @@
                 }
               },
               {
-                "variable": "water",
+                "variable": "water_label",
                 "value": {
                   "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_WATER"
                 },
