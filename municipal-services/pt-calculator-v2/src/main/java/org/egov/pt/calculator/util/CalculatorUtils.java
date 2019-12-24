@@ -681,6 +681,17 @@ public class CalculatorUtils {
 
         return calculationReq;
     }
+    
+	public BigDecimal getInterestRateForTaxperiod(String financialYear, List<Object> interestMasterList) {
 
+		for (Object object : interestMasterList){
+			Map<String, Object> interestMap =  (Map<String, Object>) object;
+			if( ((String) interestMap.get(CalculatorConstants.FY_FIELD_NAME)).equals(financialYear) ){
+				return BigDecimal.valueOf(((Number) interestMap.get(CalculatorConstants.RATE_FIELD_NAME)).doubleValue());
+			}
+		}
+
+		return null;
+	}
 
 }

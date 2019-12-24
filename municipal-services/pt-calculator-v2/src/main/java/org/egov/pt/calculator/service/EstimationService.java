@@ -381,20 +381,20 @@ public class EstimationService {
 
 
 		// get applicable rebate and penalty
-		Map<String, BigDecimal> rebatePenaltyMap = payService.applyPenaltyRebateAndInterest(payableTax, BigDecimal.ZERO,
-				 assessmentYear, timeBasedExemeptionMasterMap,payments,taxPeriod);
+		// Map<String, BigDecimal> rebatePenaltyMap = payService.applyPenaltyRebateAndInterest(payableTax, BigDecimal.ZERO,
+		// 		 assessmentYear, timeBasedExemeptionMasterMap,payments,taxPeriod);
 
 
-		if (null != rebatePenaltyMap) {
+		// if (null != rebatePenaltyMap) {
 
-			BigDecimal rebate = rebatePenaltyMap.get(PT_TIME_REBATE);
-			BigDecimal penalty = rebatePenaltyMap.get(PT_TIME_PENALTY);
-			BigDecimal interest = rebatePenaltyMap.get(PT_TIME_INTEREST);
-			estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_TIME_REBATE).estimateAmount(rebate).build());
-			estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_TIME_PENALTY).estimateAmount(penalty).build());
-			estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_TIME_INTEREST).estimateAmount(interest).build());
-			payableTax = payableTax.add(rebate).add(penalty).add(interest);
-		}
+		// 	BigDecimal rebate = rebatePenaltyMap.get(PT_TIME_REBATE);
+		// 	BigDecimal penalty = rebatePenaltyMap.get(PT_TIME_PENALTY);
+		// 	BigDecimal interest = rebatePenaltyMap.get(PT_TIME_INTEREST);
+		// 	estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_TIME_REBATE).estimateAmount(rebate).build());
+		// 	estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_TIME_PENALTY).estimateAmount(penalty).build());
+		// 	estimates.add(TaxHeadEstimate.builder().taxHeadCode(PT_TIME_INTEREST).estimateAmount(interest).build());
+		// 	payableTax = payableTax.add(rebate).add(penalty).add(interest);
+		// }
 
 		// AdHoc Values (additional rebate or penalty manually entered by the employee)
 		if (null != detail.getAdhocPenalty())

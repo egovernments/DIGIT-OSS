@@ -135,6 +135,8 @@ public class CalculatorConstants {
 
 	public static final String FROMFY_FIELD_NAME = "fromFY";
 
+	public static final String FY_FIELD_NAME = "financialYear";
+
 	public static final String ENDING_DATE_APPLICABLES = "endingDay";
 
 	public static final String STARTING_DATE_APPLICABLES = "startingDay";

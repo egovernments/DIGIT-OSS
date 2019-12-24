@@ -2,9 +2,8 @@ package org.egov.pt.calculator.service;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
-import org.egov.pt.calculator.util.CalculatorConstants;
+import static org.egov.pt.calculator.util.CalculatorConstants.*;
 import org.egov.pt.calculator.util.CalculatorUtils;
 import org.egov.pt.calculator.web.models.TaxHeadEstimate;
 import org.egov.pt.calculator.web.models.collections.Payment;
@@ -14,9 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import net.minidev.json.JSONArray;
-
-import static org.egov.pt.calculator.util.CalculatorConstants.TIMEZONE_OFFSET;
-import static org.egov.pt.calculator.util.CalculatorUtils.getEODEpoch;
 
 /**
  * Deals with the functionality that are performed 
@@ -45,33 +41,28 @@ public class PayService {
 	 * @param assessmentYear
 	 * @return
 	 */
-	public Map<String, BigDecimal> applyPenaltyRebateAndInterest(BigDecimal taxAmt,BigDecimal collectedPtTax,
-			 String assessmentYear, Map<String, JSONArray> timeBasedExmeptionMasterMap,List<Payment> payments,TaxPeriod taxPeriod) {
 
-		if (BigDecimal.ZERO.compareTo(taxAmt) >= 0)
-			return null;
+	public Map<String, BigDecimal> applyPenaltyRebateAndInterest(Demand demand, List<Payment> payments,
+			List<TaxPeriod> taxPeriods, Map<String, JSONArray> jsonMasterMap) {
 
-		Map<String, BigDecimal> estimates = new HashMap<>();
+			Map<String, BigDecimal> estimates = new HashMap<>();
+	
+			BigDecimal rebate = BigDecimal.ZERO; 
+			//rebate= getRebate(demand, jsonMasterMap.get(REBATE_MASTER));
+	
+			BigDecimal penalty = BigDecimal.ZERO;
+			BigDecimal interest = BigDecimal.ZERO;
+	
+			if (rebate.equals(BigDecimal.ZERO)) {
+				interest = getInterestCurrent(demand, payments,taxPeriods, jsonMasterMap.get(INTEREST_MASTER));
+			}
+	
+			estimates.put(PT_TIME_REBATE, rebate.setScale(2, 2).negate());
+			estimates.put(PT_TIME_PENALTY, penalty.setScale(2, 2));
+			estimates.put(PT_TIME_INTEREST, interest.setScale(2, 2));
+			return estimates;
 
-		BigDecimal rebate = getRebate(taxAmt, assessmentYear,
-				timeBasedExmeptionMasterMap.get(CalculatorConstants.REBATE_MASTER));
-
-		BigDecimal penalty = BigDecimal.ZERO;
-		BigDecimal interest = BigDecimal.ZERO;
-
-		if (rebate.equals(BigDecimal.ZERO)) {
-			penalty = getPenalty(taxAmt, assessmentYear, timeBasedExmeptionMasterMap.get(CalculatorConstants.PENANLTY_MASTER));
-			interest = getInterest(taxAmt, assessmentYear, timeBasedExmeptionMasterMap.get(CalculatorConstants.INTEREST_MASTER),
-					payments,taxPeriod);
-		}
-
-		estimates.put(CalculatorConstants.PT_TIME_REBATE, rebate.setScale(2, 2).negate());
-		estimates.put(CalculatorConstants.PT_TIME_PENALTY, penalty.setScale(2, 2));
-		estimates.put(CalculatorConstants.PT_TIME_INTEREST, interest.setScale(2, 2));
-		return estimates;
 	}
-
-
 
 	/**
 	 * Returns the Amount of Rebate that can be applied on the given tax amount for
@@ -88,7 +79,7 @@ public class PayService {
 
 		if (null == rebate) return rebateAmt;
 
-		String[] time = ((String) rebate.get(CalculatorConstants.ENDING_DATE_APPLICABLES)).split("/");
+		String[] time = ((String) rebate.get(ENDING_DATE_APPLICABLES)).split("/");
 		Calendar cal = Calendar.getInstance();
 		setDateToCalendar(assessmentYear, time, cal);
 
@@ -124,81 +115,76 @@ public class PayService {
 
 	/**
 	 * Returns the Amount of penalty that has to be applied on the given tax amount for the given period
+	 * If paid after April 1st full year interest on the amount is caluculated
 	 * 
 	 * @param taxAmt
 	 * @param assessmentYear
 	 * @return
 	 */
-	public BigDecimal getInterest(BigDecimal taxAmt, String assessmentYear,
-								  JSONArray interestMasterList, List<Payment> payments,TaxPeriod taxPeriod) {
+	private BigDecimal getInterestCurrent(Demand demand, List<Payment> payments, List<TaxPeriod> taxPeriods,
+			JSONArray jsonArray) {
 
 		BigDecimal interestAmt = BigDecimal.ZERO;
-		Map<String, Object> interestMap = mDService.getApplicableMaster(assessmentYear, interestMasterList);
-		if (null == interestMap)
-			return interestAmt;
 
-		String[] time = getStartTime(assessmentYear,interestMap);
-
-		Calendar cal = Calendar.getInstance();
-		setDateToCalendar(time, cal);
-		long currentUTC = System.currentTimeMillis();
-		long currentIST= System.currentTimeMillis()+TIMEZONE_OFFSET;
-		long interestStart = cal.getTimeInMillis();
-
-		if(interestStart < currentIST){
-
-			if (CollectionUtils.isEmpty(payments)) {
-				
-				long numberOfDaysInMillies = getEODEpoch(currentUTC) - interestStart;
-				return calculateInterest(numberOfDaysInMillies, taxAmt, interestMap);
+		for (TaxPeriod taxPeriod : taxPeriods) {
+			BigDecimal interestPerTaxPeriod = BigDecimal.ZERO;
+			if (taxPeriod.getFromDate() > demand.getTaxPeriodFrom()) {
+				BigDecimal taxAmt = getTaxAmountToCalculateInterestOnApplicables(taxPeriod.getFromDate(), demand, payments);
+				BigDecimal interestRateForTaxperiod = utils.getInterestRateForTaxperiod(taxPeriod.getFinancialYear(), jsonArray);
+				interestPerTaxPeriod = taxAmt.multiply(interestRateForTaxperiod.divide(HUNDRED));
 			}
-			else{
-				
-				BigDecimal applicableAmount;
-				BigDecimal interestCalculated;
-				int numberOfPeriods = payments.size()+1;
-				long numberOfDaysInMillies;
-				Payment payment;
-
-				for (int i = 0; i < numberOfPeriods; i++) {
-
-					if (i != numberOfPeriods - 1)
-						payment = payments.get(i);
-					else
-						payment = payments.get(i - 1);
-
-					if (i == 0) {
-
-						applicableAmount = taxAmt;
-						numberOfDaysInMillies = getEODEpoch(payment.getTransactionDate()) - interestStart;
-						interestCalculated = calculateInterest(numberOfDaysInMillies, applicableAmount, interestMap);
-					} else if (i == numberOfPeriods - 1) {
-
-						applicableAmount = utils.getTaxAmtFromPaymentForApplicablesGeneration(payment, taxPeriod);
-						numberOfDaysInMillies = getEODEpoch(currentUTC) - getEODEpoch(payment.getTransactionDate());
-						interestCalculated = calculateInterest(numberOfDaysInMillies, applicableAmount, interestMap);
-					} else {
-
-						Payment paymentPrev = payments.get(i - 1);
-						applicableAmount = utils.getTaxAmtFromPaymentForApplicablesGeneration(paymentPrev, taxPeriod);
-						numberOfDaysInMillies = getEODEpoch(payment.getTransactionDate()) - getEODEpoch(paymentPrev.getTransactionDate());
-						interestCalculated = calculateInterest(numberOfDaysInMillies, applicableAmount, interestMap);
-					}
-					interestAmt = interestAmt.add(interestCalculated);
-				}
-			}
+			interestAmt = interestAmt.add(interestPerTaxPeriod);
 		}
+
 		return interestAmt;
 	}
-	
-
 
 	/**
-	 * Apportions the amount paid to the bill account details based on the tax head codes priority
+	 * Calculates the tax amount on which interest need to be calculated. 
+	 * TODO: check below
+	 */
+	private BigDecimal getTaxAmountToCalculateInterestOnApplicables(Long fromDate, Demand demand,
+			List<Payment> payments) {
+
+		if (payments == null || CollectionUtils.isEmpty(payments))
+			return utils.getTaxAmtFromDemandForApplicablesGeneration(demand);
+		else {
+
+			BigDecimal taxAmt = BigDecimal.ZERO;
+			BigDecimal amtPaid = BigDecimal.ZERO;
+
+			List<BillAccountDetail> billAccountDetails = new LinkedList<>();
+
+			payments.forEach(payment -> {
+				if (payment.getTransactionDate() < fromDate) {
+					payment.getPaymentDetails().forEach(paymentDetail -> {
+						if (paymentDetail.getBusinessService().equalsIgnoreCase(SERVICE_FIELD_VALUE_PT)) {
+							paymentDetail.getBill().getBillDetails().forEach(billDetail -> {
+								billAccountDetails.addAll(billDetail.getBillAccountDetails());
+							});
+						}
+					});
+				}
+			});
+
+			for (BillAccountDetail detail : billAccountDetails) {
+				if (TAXES_TO_BE_CONSIDERD.contains(detail.getTaxHeadCode())) {
+					taxAmt = taxAmt.add(detail.getAmount());
+					amtPaid = amtPaid.add(detail.getAdjustedAmount());
+				}
+			}
+			return taxAmt.subtract(amtPaid);
+		}
+	}
+
+	/**
+	 * Apportions the amount paid to the bill account details based on the tax head
+	 * codes priority
 	 * 
 	 * The Anonymous comparator uses the priority map to decide the precedence
 	 * 
-	 * Once the list is sorted based on precedence the amount will apportioned appropriately
+	 * Once the list is sorted based on precedence the amount will apportioned
+	 * appropriately
 	 * 
 	 * @param billAccountDetails
 	 * @param amtPaid
@@ -213,8 +199,8 @@ public class PayService {
 				String taxHead0 = arg0.getTaxHeadCode();
 				String taxHead1 = arg1.getTaxHeadCode();
 
-				Integer value0 = taxHeadpriorityMap.get(CalculatorConstants.MAX_PRIORITY_VALUE);
-				Integer value1 = taxHeadpriorityMap.get(CalculatorConstants.MAX_PRIORITY_VALUE);
+				Integer value0 = taxHeadpriorityMap.get(MAX_PRIORITY_VALUE);
+				Integer value1 = taxHeadpriorityMap.get(MAX_PRIORITY_VALUE);
 
 				if (null != taxHeadpriorityMap.get(taxHead0))
 					value0 = taxHeadpriorityMap.get(taxHead0);
@@ -313,10 +299,10 @@ public class PayService {
 
 		if (roundOffPos.doubleValue() > 0)
 			return TaxHeadEstimate.builder().estimateAmount(roundOffPos)
-					.taxHeadCode(CalculatorConstants.PT_ROUNDOFF).build();
+					.taxHeadCode(PT_ROUNDOFF).build();
 		else if (roundOffNeg.doubleValue() < 0)
 			return TaxHeadEstimate.builder().estimateAmount(roundOffNeg)
-					.taxHeadCode(CalculatorConstants.PT_ROUNDOFF).build();
+					.taxHeadCode(PT_ROUNDOFF).build();
 		else
 			return null;
 	}
@@ -339,7 +325,7 @@ public class PayService {
 
 		if (roundOff.doubleValue() != 0)
 			return TaxHeadEstimate.builder().estimateAmount(roundOff)
-					.taxHeadCode(CalculatorConstants.PT_ROUNDOFF).build();
+					.taxHeadCode(PT_ROUNDOFF).build();
 		else
 			return null;
 	}
@@ -357,9 +343,9 @@ public class PayService {
 	 * @return list of string with 0'th element as day, 1'st as month and 2'nd as year
 	 */
 	private String[] getStartTime(String assessmentYear,Map<String, Object> interestMap){
-		String financialYearOfApplicableEntry = ((String) interestMap.get(CalculatorConstants.FROMFY_FIELD_NAME)).split("-")[0];
+		String financialYearOfApplicableEntry = ((String) interestMap.get(FROMFY_FIELD_NAME)).split("-")[0];
 		Integer diffInYear = Integer.valueOf(assessmentYear.split("-")[0]) - Integer.valueOf(financialYearOfApplicableEntry);
-		String startDay = ((String) interestMap.get(CalculatorConstants.STARTING_DATE_APPLICABLES));
+		String startDay = ((String) interestMap.get(STARTING_DATE_APPLICABLES));
 		Integer yearOfStartDayInApplicableEntry = Integer.valueOf((startDay.split("/")[2]));
 		startDay = startDay.replace(String.valueOf(yearOfStartDayInApplicableEntry),String.valueOf(yearOfStartDayInApplicableEntry+diffInYear));
 		String[] time = startDay.split("/");
@@ -375,9 +361,9 @@ public class PayService {
 	 * @param interestMap The interest master data
 	 * @return interest calculated
 	 */
-	private BigDecimal calculateInterest(long numberOfDaysInMillies,BigDecimal applicableAmount,Map<String, Object> interestMap){
+	private BigDecimal calculateInterest(long numberOfYears,BigDecimal applicableAmount,Map<String, Object> interestMap){
 		BigDecimal interestAmt;
-		BigDecimal noOfDays = BigDecimal.valueOf((TimeUnit.MILLISECONDS.toDays(Math.abs(numberOfDaysInMillies))));
+		BigDecimal noOfDays = BigDecimal.valueOf(numberOfYears);
 		if(BigDecimal.ONE.compareTo(noOfDays) <= 0) noOfDays = noOfDays.add(BigDecimal.ONE);
 		interestAmt = mDService.calculateApplicables(applicableAmount, interestMap);
 		return interestAmt.multiply(noOfDays.divide(BigDecimal.valueOf(365), 6, 5));
