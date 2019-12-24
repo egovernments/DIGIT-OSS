@@ -51,6 +51,10 @@ const screenConfig = {
               label: "TL_COMMON_TABLE_COL_STATUS",
               jsonPath: "status"
             },
+            tenantId: {
+              label: "TL_COMMON_TABLE_COL_ULB_CODE",
+              jsonPath: "tradeLicenseDetail.address.city"
+            },
             moduleName: "TL",
             statusPrefix: "WF_NEWTL_"
           }

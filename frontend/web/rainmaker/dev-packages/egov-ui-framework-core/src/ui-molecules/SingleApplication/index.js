@@ -66,7 +66,8 @@ class SingleApplication extends React.Component {
       ownerName,
       moduleNumber,
       status,
-      statusPrefix
+      statusPrefix,
+      tenantId
     } = this.props;
     return (
       <div className="application-card">
@@ -147,6 +148,7 @@ class SingleApplication extends React.Component {
                         </Grid>
                       </Grid>
                     )}
+                    
                     <Grid container style={{ marginBottom: 12 }}>
                       <Grid item xs={6}>
                         <Label
@@ -164,6 +166,29 @@ class SingleApplication extends React.Component {
                         />
                       </Grid>
                     </Grid>
+                    {get(item, tenantId.jsonPath) && (
+                      <Grid container style={{ marginBottom: 12 }}>
+                        <Grid item xs={6}>
+                          <Label
+                            labelKey={tenantId.label}
+                            fontSize={14}
+                            style={{
+                              fontSize: 14,
+                              color: "rgba(0, 0, 0, 0.60"
+                            }}
+                          />
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Label
+                            labelKey={get(item, tenantId.jsonPath).split('.')[1].toUpperCase()}
+                            style={{
+                              fontSize: 14,
+                              color: "rgba(0, 0, 0, 0.87"
+                            }}
+                          />
+                        </Grid>
+                      </Grid>
+                    )}
                     <Link to={this.onCardClick(item)}>
                       <div>
                         <Label
