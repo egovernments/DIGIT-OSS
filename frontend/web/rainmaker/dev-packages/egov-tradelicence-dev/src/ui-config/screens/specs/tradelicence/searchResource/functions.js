@@ -110,6 +110,7 @@ export const searchApiCall = async (state, dispatch) => {
         [getTextToLocalMapping("Application Date")]:
           convertEpochToDate(item.applicationDate) || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
+        ["status1"]: item.status || "-",
         ["tenantId"]: item.tenantId
       }));
 
