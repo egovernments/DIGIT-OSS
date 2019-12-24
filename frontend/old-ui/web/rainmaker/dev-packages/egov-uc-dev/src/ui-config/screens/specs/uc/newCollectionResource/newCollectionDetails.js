@@ -190,14 +190,16 @@ export const newCollectionDetailsCard = getCommonCard(
           },
           beforeFieldChange: async (action, state, dispatch) => {
             //Reset service type value, if any
+            if(state.screenConfiguration.preparedFinalObject.Demands[0].serviceType){
             dispatch(
               handleField(
                 "newCollection",
                 "components.div.children.newCollectionDetailsCard.children.cardContent.children.searchContainer.children.serviceType",
-                "props.value",
-                null
+               "props.value",
+                  null
               )
             );
+              }
             //Set service type data and field if available.
             const serviceData = get(
               state.screenConfiguration,
