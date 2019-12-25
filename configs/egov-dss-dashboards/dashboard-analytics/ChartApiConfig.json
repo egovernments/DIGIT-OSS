@@ -677,9 +677,10 @@
         "requestQueryMap": "{\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
         "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"DDRs \":{\"terms\":{\"field\":\"dataObject.tenantData.cityDistrictCode.keyword\",\"size\":200},\"aggs\":{\"Total Amount\":{\"value_count\":{\"field\":\"domainObject.propertyDetails.calculation.totalAmount\"}},\"PT Tax\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Fire Cess\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_FIRE_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Cancer Cess\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_CANCER_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Rebate\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_TIME_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Penalty\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_TIME_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"Total Amount\":{\"value_count\":{\"field\":\"domainObject.propertyDetails.calculation.totalAmount\"}},\"PT Tax\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Fire Cess\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_FIRE_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Cancer Cess\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_CANCER_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Rebate\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_TIME_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Penalty\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_TIME_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}}}}}}"
       }
     ],
+    "isMdmsEnabled": true,
     "filterKeys": [
       {"key": "tenantId", "column": "DDRs"}
 
@@ -781,61 +782,61 @@
     "_comment": ""
   },
   "taxHeadsBreakupBoundaryDrill": {
-  "chartName": "Tax head Breakup boundary",
-  "queries": [
-    {
-      "module": "COMMON",
-      "requestQueryMap": "{\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
-      "dateRefField": "dataObject.Bill.billDetails.receiptDate",
-      "indexName": "dss-collection_v1",
-      "aggrQuery": "{\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"domainObject.ward.name.keyword\",\"size\":200},\"aggs\":{\"Total Amount\":{\"value_count\":{\"field\":\"domainObject.propertyDetails.calculation.totalAmount\"}},\"PT Tax\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Fire Cess\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_FIRE_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Cancer Cess\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_CANCER_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Rebate\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_TIME_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Penalty\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_TIME_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}}}}}}"
-    }
-  ],
-  "filterKeys": [
-    {"key": "tenantId", "column": "Boundary"}
-  ],
-  "chartType": "table",
-  "valueType": "number",
-  "drillChart": "boundaryDrillDown",
-  "drillFields": [
-    "Ward",
-    ""
-  ],
-  "documentType": "_doc",
-  "action": "",
-  "plotLabel": "Boundary",
-  "aggregationPaths": [
-    "Total Amount",
-    "PT Tax",
-    "Fire Cess",
-    "Cancer Cess",
-    "Rebate",
-    "Penalty"
-  ],
-  "pathDataTypeMapping": [
-    {
-      "Total Amount": "amount"
+    "chartName": "Tax head Breakup boundary",
+    "queries": [
+      {
+        "module": "COMMON",
+        "requestQueryMap": "{\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
+        "dateRefField": "dataObject.Bill.billDetails.receiptDate",
+        "indexName": "dss-collection_v1",
+        "aggrQuery": "{\"aggs\":{\"Ward \":{\"terms\":{\"field\":\"domainObject.ward.name.keyword\",\"size\":200},\"aggs\":{\"Total Amount\":{\"value_count\":{\"field\":\"domainObject.propertyDetails.calculation.totalAmount\"}},\"PT Tax\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Fire Cess\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_FIRE_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Cancer Cess\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_CANCER_CESS\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Rebate\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_TIME_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}},\"Penalty\":{\"filter\":{\"term\":{\"domainObject.propertyDetails.calculation.taxHeadEstimates.taxHeadCode.keyword\":\"PT_TIME_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.propertyDetails.calculation.taxHeadEstimates.estimateAmount\"}}}}}}}}"
+      }
+    ],
+    "filterKeys": [
+      {"key": "tenantId", "column": "Boundary"}
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "boundaryDrillDown",
+    "drillFields": [
+      "Ward",
+      ""
+    ],
+    "documentType": "_doc",
+    "action": "",
+    "plotLabel": "Boundary",
+    "aggregationPaths": [
+      "Total Amount",
+      "PT Tax",
+      "Fire Cess",
+      "Cancer Cess",
+      "Rebate",
+      "Penalty"
+    ],
+    "pathDataTypeMapping": [
+      {
+        "Total Amount": "amount"
+      },
+      {
+        "PT Tax": "amount"
+      },
+      {
+        "Fire Cess": "amount"
+      },
+      {
+        "Cancer Cess": "amount"
+      },
+      {
+        "Rebate": "amount"
+      },
+      {
+        "Penalty": "amount"
+      }
+    ],
+    "insight": {
     },
-    {
-      "PT Tax": "amount"
-    },
-    {
-      "Fire Cess": "amount"
-    },
-    {
-      "Cancer Cess": "amount"
-    },
-    {
-      "Rebate": "amount"
-    },
-    {
-      "Penalty": "amount"
-    }
-  ],
-  "insight": {
+    "_comment": ""
   },
-  "_comment": ""
-},
   "_comment": "PT Tax heads Usage below",
   "taxHeadsBreakupUsage": {
     "chartName": "DSS_PT_TAX_HEAD_BREAKUP_USAGE",
@@ -1002,16 +1003,17 @@
         "requestQueryMap": "{\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
         "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"DDRs \":{\"terms\":{\"field\":\"dataObject.tenantData.cityDistrictCode.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.tenantData.cityDistrictName.keyword\"}},\"Assessed Properties\":{\"value_count\":{\"field\":\"domainObject.propertyDetails.assessmentNumber.keyword\"}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Assessed Properties\":{\"value_count\":{\"field\":\"domainObject.propertyDetails.assessmentNumber.keyword\"}}}}"
       },
       {
         "module": "COMMON",
         "requestQueryMap": "{\"module\" : \"businessService.keyword\", \"tenantId\" : \"tenantIdForMunicipalCorporation.keyword\"}",
         "dateRefField": "",
         "indexName": "dss-target_v1",
-        "aggrQuery": "{\"aggs\":{\"DDR \":{\"terms\":{\"field\":\"districCode.keyword\",\"size\":1000},\"aggs\":{\"Target Collection\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"Target Collection\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}"
       }
     ],
+    "isMdmsEnabled": true,
     "filterKeys": [
       {"key": "tenantId", "column": "DDRs"}
     ],
@@ -1106,7 +1108,7 @@
     "chartName": "Boundary",
     "queries": [
       {
-         "module": "COMMON",
+        "module": "COMMON",
         "requestQueryMap": "{\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"usageId\" : \"domainObject.propertyDetails.usageCategoryMajor.keyword\",\"minorUsageId\" : \"domainObject.propertyDetails.usageCategoryMinor.keyword\",\"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
         "indexName": "dss-collection_v1",
@@ -1281,7 +1283,7 @@
         "requestQueryMap": "{\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
         "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"DDRs \":{\"terms\":{\"field\":\"dataObject.city.districtCode.keyword\",\"size\":200},\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licensenumber.keyword\"}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"Total Collection\":{\"sum\":{\"field\":\"dataObject.Bill.billDetails.amountPaid\"}},\"Transactions\":{\"value_count\":{\"field\":\"dataObject.transactionId.keyword\"}},\"Total Licence Issued\":{\"value_count\":{\"field\":\"domainObject.tradelicense.licensenumber.keyword\"}}}}}}"
       },
       {
         "module": "COMMON",
@@ -1291,6 +1293,7 @@
         "aggrQuery": "{\"aggs\":{\"DDRs \":{\"terms\":{\"field\":\"districCode.keyword\",\"size\":1000},\"aggs\":{\"Target Collection\":{\"sum\":{\"field\":\"budgetProposedForMunicipalCorporation\"}}}}}}"
       }
     ],
+    "isMdmsEnabled": true,
     "filterKeys": [
       {"key": "tenantId", "column": "DDRs"}
     ],
@@ -1429,9 +1432,10 @@
         "requestQueryMap": "{\"module\" : \"dataObject.Bill.billDetails.businessService.keyword\", \"tenantId\" : \"dataObject.tenantId\", \"district\" : \"dataObject.tenantData.cityDistrictCode\" }",
         "dateRefField": "dataObject.Bill.billDetails.receiptDate",
         "indexName": "dss-collection_v1",
-        "aggrQuery": "{\"aggs\":{\"DDRs \":{\"terms\":{\"field\":\"dataObject.city.districtCode.keyword\",\"size\":200},\"aggs\":{\"Tax\":{\"filter\":{\"term\":{\"domainObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Adhoc Penalty\":{\"filter\":{\"term\":{\"domainObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_ADHOC_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Adhoc Rebate\":{\"filter\":{\"term\":{\"domainObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_ADHOC_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}"
+        "aggrQuery": "{\"aggs\":{\"Tax\":{\"filter\":{\"term\":{\"domainObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_TAX\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Adhoc Penalty\":{\"filter\":{\"term\":{\"domainObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_ADHOC_PENALTY\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.Bill.billDetails.billAccountDetails.amount\"}}}},\"Adhoc Rebate\":{\"filter\":{\"term\":{\"domainObject.Bill.billDetails.billAccountDetails.taxHeadCode.keyword\":\"TL_ADHOC_REBATE\"}},\"aggs\":{\"amount\":{\"sum\":{\"field\":\"domainObject.Bill.billDetails.billAccountDetails.amount\"}}}}}}}}"
       }
     ],
+    "isMdmsEnabled": true,
     "filterKeys": [
       {"key": "tenantId", "column": "DDRs"}
     ],
@@ -1795,32 +1799,32 @@
     "_comment": " "
   },
   "totalComplaintsbyStatus": {
-  "chartName": "DSS_PGR_TOTAL_COMPLAINTS_BY_STATUS",
-  "queries": [
-    {
-      "module": "PGR",
-      "dateRefField": "Data.dateOfComplaint",
-      "requestQueryMap": "{\"tenantId\" : \"Data.tenantId\"}",
-      "indexName": "pgrindex-v1",
-      "aggrQuery": "{\"size\":0,\"query\":{\"bool\":{\"adjust_pure_negative\":true,\"boost\":1.0}},\"aggs\":{\"Resolved\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"month\"},\"aggs\":{\"resolved\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.source.keyword\":\"resolved\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}},\"Open\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"month\"},\"aggs\":{\"open\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.source.keyword\":\"open\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}},\"Closed\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"month\"},\"aggs\":{\"closed\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.source.keyword\":\"closed\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}}}}"
-    }
-  ],
-  "chartType": "line",
-  "valueType": "amount",
-  "action": "",
-  "drillChart": "none",
-  "documentType": "_doc",
-  "aggregationPaths": [
-    "Resolved",
-    "Open",
-    "Closed"
-  ],
-  "isCumulative": false,
-  "interval": "month",
-  "insight": {
+    "chartName": "DSS_PGR_TOTAL_COMPLAINTS_BY_STATUS",
+    "queries": [
+      {
+        "module": "PGR",
+        "dateRefField": "Data.dateOfComplaint",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantId\"}",
+        "indexName": "pgrindex-v1",
+        "aggrQuery": "{\"size\":0,\"query\":{\"bool\":{\"adjust_pure_negative\":true,\"boost\":1.0}},\"aggs\":{\"Resolved\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"month\"},\"aggs\":{\"resolved\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.source.keyword\":\"resolved\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}},\"Open\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"month\"},\"aggs\":{\"open\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.source.keyword\":\"open\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}},\"Closed\":{\"date_histogram\":{\"field\":\"Data.dateOfComplaint\",\"interval\":\"month\"},\"aggs\":{\"closed\":{\"filters\":{\"filters\":{\"closed\":{\"match\":{\"Data.source.keyword\":\"closed\"}}}},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.dateOfComplaint\"}}}}}}}}"
+      }
+    ],
+    "chartType": "line",
+    "valueType": "amount",
+    "action": "",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "aggregationPaths": [
+      "Resolved",
+      "Open",
+      "Closed"
+    ],
+    "isCumulative": false,
+    "interval": "month",
+    "insight": {
+    },
+    "_comment": " "
   },
-  "_comment": " "
-},
 
   "complaintsByStatus": {
     "chartName": "DSS_PGR_COMPLAINTS_BY_STATUS",
