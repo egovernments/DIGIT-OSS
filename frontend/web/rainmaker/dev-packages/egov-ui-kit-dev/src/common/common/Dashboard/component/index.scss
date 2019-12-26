@@ -32,11 +32,35 @@
   // .pt-landing-card {
   //   display: none;
   // }
+  .moduleCardDescription div{
+    padding-bottom: 5px!important;
+  }
+  #citizen-tl-landingpage-button > div > div > span > div > div{
+    line-height: 15px!important;
+  }
+  .landing-page-button-container > div:nth-child(2) > div > button > div > div > span > div > div{
+    line-height: 15px!important;
+  }
+  #citizen-pt-landingpage-button > div > div > span > div > div{
+    line-height: 15px!important;
+  }
 }
 
 @media only screen and (min-width: 600px) {
   .landing-page-button-container {
     position: absolute !important;
     bottom: 0 !important;
+  }
+  .moduleCardDescription div{
+    padding-bottom: 5px!important;
+  }
+  #citizen-tl-landingpage-button > div > div > span > div > div{
+    line-height: 15px!important;
+  }
+  .landing-page-button-container > div:nth-child(2) > div > button > div > div > span > div > div{
+    line-height: 15px!important;
+  }
+  #citizen-pt-landingpage-button > div > div > span > div > div{
+    line-height: 15px!important;
   }
 }
