@@ -175,7 +175,7 @@
                     ],
                     [
                       {
-                        "text": "water",
+                        "text": "{{water_label}}",
                         "border": [
                           false,
                           false,
@@ -402,7 +402,7 @@
         "style": "header"
       },
       {
-        "style": "ws-table",
+        "style": "ws-table-property",
         "table": {
           "widths": [
             "103%"
@@ -919,6 +919,16 @@
           18,
           -8,
           10
+        ]
+      },
+      "ws-table-property": {
+        "fontSize": 12,
+        "color": "#484848",
+        "margin": [
+          -25,
+          18,
+          -8,
+          50
         ]
       },
       "header": {

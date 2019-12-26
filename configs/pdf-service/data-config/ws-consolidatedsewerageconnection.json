@@ -39,13 +39,13 @@
               {
                 "variable": "propertyType",
                 "value": {
-                  "path": "$.property.propertyType"
+                  "path": "$.property.propertyTypeValue"
                 }
               },
               {
                 "variable": "propertyUsageType",
                 "value": {
-                  "path": "$.property.propertyType"
+                  "path": "$.property.propertyUsageType"
                 }
               },
               {
@@ -176,7 +176,7 @@
               {
                 "variable": "logo_sub_header",
                 "value": {
-                  "path": "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER"
+                  "path": "PDF_STATIC_LABEL_SW_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER"
                 },
                 "type": "label",
                 "localisation": {
