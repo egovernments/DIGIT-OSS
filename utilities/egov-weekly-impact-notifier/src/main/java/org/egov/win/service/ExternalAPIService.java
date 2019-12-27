@@ -86,10 +86,8 @@ public class ExternalAPIService {
 		StringBuilder uri = new StringBuilder();
 		MdmsCriteriaReq req = utils.getReqForTaxHeads(uri, requestInfo, tenantId);
 		Optional<Object> response = repository.fetchResult(uri, req);
-		ObjectMapper mapper = new ObjectMapper();
 		List<String> codes = new ArrayList<>();
 		try {
-			log.info("MDMS Request: "+mapper.writeValueAsString(req));
 			if(response.isPresent()) {
 				codes = JsonPath.read(response.get().toString(), CronConstants.MDMS_TAXHEAD_CODE_JSONPATH);
 			}
@@ -97,8 +95,7 @@ public class ExternalAPIService {
 			log.info("Res: "+ response.get());
 			log.error("Exception while fetching from MDMS: ", e);
 		}
-		log.info("MDMS Res: "+ response.get());
-		log.info("MDMS Codes: "+codes);
+;
 		return codes;
 	}
 
