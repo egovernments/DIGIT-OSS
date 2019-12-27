@@ -65,15 +65,13 @@ public class CronUtils {
 		uri.append(endPoint);
 		HashMap<String, Object> param = new HashMap<>();
 		if(defName.equals(CronConstants.SEARCHER_MC)) {
-/*			List<String> adhocTaxHeads = service.fetchAdhocTaxheads(new RequestInfo(), "pb");
+			List<String> adhocTaxHeads = service.fetchAdhocTaxheads(new RequestInfo(), "pb");
 			if(!CollectionUtils.isEmpty(adhocTaxHeads)) {
 				param.put("taxHeads", adhocTaxHeads);
 			}else {
-				String[] ignoreTaxheads = {"PT", "TL", "FIRENOC"}; //fallback if mdms fails.
+				String[] ignoreTaxheads = {"PT", "TL", "FIRENOC", "WS"}; //fallback if mdms fails.
 				param.put("ignoreTaxHeads", Arrays.asList(ignoreTaxheads));
-			}*/ //TODO: There are 116 adhoc taxheads but MDMS is returning only 75 of them. Need to figure out.
-			String[] ignoreTaxheads = {"PT", "TL", "FIRENOC"};
-			param.put("ignoreTaxHeads", Arrays.asList(ignoreTaxheads));
+			}
 			param.put("ignoreTenant", "pb.testing");
 			param.put("ignoreStatus", "Cancelled");
 		}
