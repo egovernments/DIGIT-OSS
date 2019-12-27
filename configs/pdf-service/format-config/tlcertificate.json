@@ -14,7 +14,7 @@
                  "body":[ 
                       [
                           {
-                              "image": "{{userpic}}",
+                              "image": "{{logoImage}}",
                               "width": 50,
                               "height": 61.25,
                               "alignment": "center",
