@@ -89,7 +89,7 @@ const onRowClick = rowData => {
     default:
       window.location.href = `search-preview?applicationNumber=${
         rowData[0]
-      }&tenantId=${rowData[7]}`;
+      }&tenantId=${rowData[6]}`;
       break;
   }
 };

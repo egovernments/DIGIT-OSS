@@ -178,10 +178,10 @@ class ActionDialog extends React.Component {
                         onChange={e =>
                           handleFieldChange(
                             `${dataPath}.assignee`,
-                            e.target.value
+                            [e.target.value]
                           )
                         }
-                        jsonPath={`${dataPath}.assignee`}
+                        jsonPath={`${dataPath}.assignee[0]`}
                       />
                     </Grid>
                   )}

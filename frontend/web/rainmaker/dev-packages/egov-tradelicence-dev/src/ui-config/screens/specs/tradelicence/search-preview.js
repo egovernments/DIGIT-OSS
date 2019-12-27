@@ -112,7 +112,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     get(payload, "Licenses[0].licenseNumber")
   );
   set(payload, "Licenses[0].headerSideText", headerSideText);
-
+  set(payload, "Licenses[0].assignee", []);
   get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory") &&
   get(payload, "Licenses[0].tradeLicenseDetail.subOwnerShipCategory").split(
     "."
@@ -133,6 +133,7 @@ const searchResults = async (action, state, dispatch, applicationNo) => {
     "LicensesTemp[0].reviewDocData",
     dispatch
   );
+  
   let sts = getTransformedStatus(get(payload, "Licenses[0].status"));
   payload && dispatch(prepareFinalObject("Licenses[0]", payload.Licenses[0]));
   payload &&

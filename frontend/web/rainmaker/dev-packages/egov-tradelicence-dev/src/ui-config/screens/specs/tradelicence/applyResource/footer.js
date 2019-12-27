@@ -694,7 +694,8 @@ export const footerReview = (
               componentPath: "MenuButton",
               props: {
                 data: {
-                  label: "Download",
+                  label: {
+                    labelName:"Download"},
                   leftIcon: "cloud_download",
                   rightIcon: "arrow_drop_down",
                   props: { variant: "outlined", style: { marginLeft: 10 } },
