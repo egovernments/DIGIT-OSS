@@ -95,10 +95,10 @@ public class PropertyDetail   {
         private Long noOfFloors;
 
         @JsonProperty("landArea")
-        private Double landArea;
+        private BigDecimal landArea;
 
         @JsonProperty("buildUpArea")
-        private Double buildUpArea;
+        private BigDecimal buildUpArea;
 
         @JsonProperty("units")
         @Valid

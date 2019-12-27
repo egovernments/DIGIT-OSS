@@ -46,8 +46,8 @@ public class DemandService {
 	@Autowired
 	private Configurations configs;
 
-	@Autowired
-	private AssessmentService assessmentService;
+	// @Autowired
+	// private AssessmentService assessmentService;
 
 	@Autowired
 	private CalculatorUtils utils;

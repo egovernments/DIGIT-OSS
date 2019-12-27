@@ -42,7 +42,7 @@ public class Unit   {
 
         @NotNull
         @JsonProperty("unitArea")
-        private Float unitArea;
+        private BigDecimal unitArea;
 
         @JsonProperty("usageCategoryMajor")
         private String usageCategoryMajor;
@@ -68,6 +68,9 @@ public class Unit   {
 
         @JsonProperty("constructionSubType")
         private String constructionSubType;
+
+        @JsonProperty("additionalDetails")
+        private UnitAdditionalDetails additionalDetails;
 
         @JsonProperty("arv")
         private BigDecimal arv;

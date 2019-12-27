@@ -39,6 +39,16 @@ public class CalculatorConstants {
 
 	public static final String PT_ADVANCE_CARRYFORWARD = "PT_ADVANCE_CARRYFORWARD";
 
+	public static final String AD_HOC_REBATE_JSON_STRING = "adHocRebate";
+
+	public static final String PT_USAGE_EXEMPTION = "PT_UNIT_USAGE_EXEMPTION";
+
+	public static final String ONE_TIME_PENALTY_JSON_STRING = "oneTimePenalty";
+
+	public static final String ONE_TIME_REBATE_JSON_STRING = "oneTimeRebate";
+
+	public static final String PT_LATE_ASSESSMENT_PENALTY = "PT_LATE_ASSESSMENT_PENALTY";
+
 	public static final String PT_FIRE_CESS = "PT_FIRE_CESS";
 
 	public static final String PT_CANCER_CESS = "PT_CANCER_CESS";
@@ -95,6 +105,10 @@ public class CalculatorConstants {
 	public static final String OWNER_TYPE_MASTER = "OwnerType";
 
 	public static final String REBATE_MASTER = "Rebate";
+
+	public static final String TAX_RATE = "TaxRate";
+	public static final String ROAD_TYPE = "RoadType";
+	public static final String DEPRECIATION_APPRECIATION = "DepreciationAppreciation";
 
 	public static final String PENANLTY_MASTER = "Penalty";
 
@@ -166,6 +180,12 @@ public class CalculatorConstants {
 	 */
 
 	public static final BigDecimal HUNDRED = BigDecimal.valueOf(100);
+	public static final BigDecimal ROOMS_AREA_MULTIPLIER = BigDecimal.ONE;
+	public static final BigDecimal COMMON_AREA_MULTIPLIER = BigDecimal.valueOf(0.5) ;
+	public static final BigDecimal GARAGE_AREA_MULTIPLIER = BigDecimal.valueOf(0.25);
+	public static final BigDecimal BATHROOM_AREA_MULTIPLIER = BigDecimal.ZERO;
+	public static final BigDecimal COVERED_AREA_MULTIPLIER = BigDecimal.valueOf(0.80);
+
 
 	/*
 	 * Field Name constants
@@ -247,6 +267,7 @@ public class CalculatorConstants {
 	
 	public static final String BILLING_SLAB_MATCH_ERROR_CODE = "NO_BILLING_SLAB_FOUND";
 	public static final String BILLING_SLAB_MATCH_ERROR_MESSAGE = "No matching slabs has been found for unit on FloorNo : {floor} of Area : {area} with usageCategoryDetail : {usageDetail}";
+	public static final String BILLING_SLAB_MATCH_ERROR_PROPERTY_MESSAGE = "No matching slabs has been found for given financial year, ward, mohalla, roadType, propertyType";
 
 	
 	public static final String BILLING_SLAB_MATCH_FLOOR = "{floor}";
@@ -300,6 +321,12 @@ public class CalculatorConstants {
 
     public static final String BILLINGSLAB_KEY = "calculationDescription";
 
+	public static final String RESIDENTIAL = "RESIDENTIAL";
 
+	public static final String NONRESIDENTIAL = "NONRESIDENTIAL";
+	
+	public static final String BUILTUP = "BUILTUP";
+
+	public static final String RENTED = "RENTED";
 
 }
