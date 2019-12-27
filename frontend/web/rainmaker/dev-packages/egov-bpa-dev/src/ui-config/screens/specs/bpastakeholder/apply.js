@@ -31,6 +31,7 @@ import {
   corrospondanceAddr
 } from "./applyResource/tradeLocationDetails";
 import { OwnerInfoCard } from "./applyResource/tradeOwnerDetails";
+import { LicenseeCard } from "./applyResource/licenseeDetails";
 import { documentList } from "./applyResource/documentList";
 import { httpRequest } from "../../../../ui-utils";
 import { updatePFOforSearchResults } from "../../../../ui-utils/commons";
@@ -39,6 +40,10 @@ import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import commonConfig from "config/common.js";
 
 export const stepsData = [
+  {
+    labelName: "Licensee Details",
+    labelKey: "BPA_LICENSEE_DETAILS_HEADER_OWNER_INFO"
+  },
   { labelName: "Applicant Details", labelKey: "BPA_COMMON_AP_DETAILS" },
   { labelName: "Document Upload", labelKey: "BPA_COMMON_DOCS" },
   { labelName: "Summary", labelKey: "BPA_COMMON_SUMMARY" }
@@ -63,8 +68,8 @@ export const getOrganizationReqd = {
   props: {
     ValueToHide: "INDIVIDUAL",
     componentPathToHide: [
-      "components.div.children.formwizardFirstStep.children.organizationDetails",
-      "components.div.children.formwizardThirdStep.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails"
+      "components.div.children.formwizardSecondStep.children.organizationDetails",
+      "components.div.children.formwizardForthStep.children.tradeReviewDetails.children.cardContent.children.reviewOrganizationDetails"
     ],
     label: {
       name: "On behalf of any organization?",
@@ -225,85 +230,85 @@ export const getMdmsData = async (action, state, dispatch) => {
   }
 };
 
-export const getData = async (action, state, dispatch) => {
-  const queryValue = getQueryArg(window.location.href, "applicationNumber");
-  const applicationNo = queryValue;
+// export const getData = async (action, state, dispatch) => {
+//   const queryValue = getQueryArg(window.location.href, "applicationNumber");
+//   const applicationNo = queryValue;
 
-  await getMdmsData(action, state, dispatch);
-  // await getAllDataFromBillingSlab(getTenantId(), dispatch);
+//   await getMdmsData(action, state, dispatch);
+//   // await getAllDataFromBillingSlab(getTenantId(), dispatch);
 
-  if (applicationNo) {
-    //Edit/Update Flow ----
-    const applicationType = get(
-      state.screenConfiguration.preparedFinalObject,
-      "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-      null
-    );
-    getQueryArg(window.location.href, "action") !== "edit" &&
-      dispatch(
-        prepareFinalObject("Licenses", [
-          {
-            licenseType: "PERMANENT",
-            oldLicenseNumber: queryValue ? "" : applicationNo,
-            tradeLicenseDetail: {
-              additionalDetail: {
-                applicationType: applicationType ? applicationType : "NEW"
-              }
-            }
-          }
-        ])
-      );
-    // dispatch(prepareFinalObject("LicensesTemp", []));
+//   if (applicationNo) {
+//     //Edit/Update Flow ----
+//     const applicationType = get(
+//       state.screenConfiguration.preparedFinalObject,
+//       "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+//       null
+//     );
+//     getQueryArg(window.location.href, "action") !== "edit" &&
+//       dispatch(
+//         prepareFinalObject("Licenses", [
+//           {
+//             licenseType: "PERMANENT",
+//             oldLicenseNumber: queryValue ? "" : applicationNo,
+//             tradeLicenseDetail: {
+//               additionalDetail: {
+//                 applicationType: applicationType ? applicationType : "NEW"
+//               }
+//             }
+//           }
+//         ])
+//       );
+//     // dispatch(prepareFinalObject("LicensesTemp", []));
 
-    await updatePFOforSearchResults(action, state, dispatch, applicationNo);
-    addressDestruct(action, state, dispatch);
-    if (!queryValue) {
-      const oldApplicationNo = get(
-        state.screenConfiguration.preparedFinalObject,
-        "Licenses[0].applicationNumber",
-        null
-      );
-      dispatch(
-        prepareFinalObject("Licenses[0].oldLicenseNumber", oldApplicationNo)
-      );
-      if (oldApplicationNo !== null) {
-        dispatch(prepareFinalObject("Licenses[0].financialYear", ""));
-        dispatch(
-          prepareFinalObject(
-            "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
-            "APPLICATIONTYPE.RENEWAL"
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear",
-            "props.value",
-            ""
-          )
-        );
-        dispatch(
-          handleField(
-            "apply",
-            "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.applicationType",
-            "props.value",
-            "APPLICATIONTYPE.RENEWAL"
-          )
-        );
-      }
+//     await updatePFOforSearchResults(action, state, dispatch, applicationNo);
+//     addressDestruct(action, state, dispatch);
+//     if (!queryValue) {
+//       const oldApplicationNo = get(
+//         state.screenConfiguration.preparedFinalObject,
+//         "Licenses[0].applicationNumber",
+//         null
+//       );
+//       dispatch(
+//         prepareFinalObject("Licenses[0].oldLicenseNumber", oldApplicationNo)
+//       );
+//       if (oldApplicationNo !== null) {
+//         dispatch(prepareFinalObject("Licenses[0].financialYear", ""));
+//         dispatch(
+//           prepareFinalObject(
+//             "Licenses[0].tradeLicenseDetail.additionalDetail.applicationType",
+//             "APPLICATIONTYPE.RENEWAL"
+//           )
+//         );
+//         dispatch(
+//           handleField(
+//             "apply",
+//             "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.financialYear",
+//             "props.value",
+//             ""
+//           )
+//         );
+//         dispatch(
+//           handleField(
+//             "apply",
+//             "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.applicationType",
+//             "props.value",
+//             "APPLICATIONTYPE.RENEWAL"
+//           )
+//         );
+//       }
 
-      dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
-      dispatch(
-        handleField(
-          "apply",
-          "components.div.children.headerDiv.children.header.children.applicationNumber",
-          "visible",
-          false
-        )
-      );
-    }
-  }
-};
+//       dispatch(prepareFinalObject("Licenses[0].applicationNumber", ""));
+//       dispatch(
+//         handleField(
+//           "apply",
+//           "components.div.children.headerDiv.children.header.children.applicationNumber",
+//           "visible",
+//           false
+//         )
+//       );
+//     }
+//   }
+// };
 
 export const formwizardFirstStep = {
   uiFramework: "custom-atoms",
@@ -312,12 +317,7 @@ export const formwizardFirstStep = {
     id: "apply_form1"
   },
   children: {
-    OwnerInfoCard,
-    breakAfterSearch: getBreak(),
-    // getOrganizationReqd,
-    // organizationDetails,
-    permanentAddr,
-    corrospondanceAddr
+    LicenseeCard
   }
 };
 
@@ -328,7 +328,12 @@ export const formwizardSecondStep = {
     id: "apply_form2"
   },
   children: {
-    tradeDocumentDetails
+    OwnerInfoCard,
+    breakAfterSearch: getBreak(),
+    // getOrganizationReqd,
+    // organizationDetails,
+    permanentAddr,
+    corrospondanceAddr
   },
   visible: false
 };
@@ -340,7 +345,7 @@ export const formwizardThirdStep = {
     id: "apply_form3"
   },
   children: {
-    tradeReviewDetails
+    tradeDocumentDetails
   },
   visible: false
 };
@@ -356,80 +361,3 @@ export const formwizardFourthStep = {
   },
   visible: false
 };
-
-const screenConfig = {
-  uiFramework: "material-ui",
-  name: "apply",
-  // hasBeforeInitAsync:true,
-  beforeInitScreen: (action, state, dispatch) => {
-    const queryValue = getQueryArg(window.location.href, "applicationNumber");
-    const applicationNo = queryValue
-      ? queryValue
-      : get(
-          state.screenConfiguration.preparedFinalObject,
-          "Licenses[0].oldLicenseNumber",
-          null
-        );
-    if (!applicationNo) {
-      dispatch(prepareFinalObject("Licenses[0]", {}));
-    }
-    const tenantId = getTenantId();
-    dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
-    getData(action, state, dispatch).then(responseAction => {
-      const queryObj = [{ key: "tenantId", value: tenantId }];
-      const props = {
-        value: tenantId,
-        disabled: true
-      };
-      set(
-        action.screenConfig,
-        "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocCity.props",
-        props
-      );
-    });
-    return action;
-  },
-
-  components: {
-    div: {
-      uiFramework: "custom-atoms",
-      componentPath: "Div",
-      props: {
-        className: "common-div-css"
-      },
-      children: {
-        headerDiv: {
-          uiFramework: "custom-atoms",
-          componentPath: "Container",
-          children: {
-            header: {
-              gridDefination: {
-                xs: 12,
-                sm: 10
-              },
-              ...header
-            }
-          }
-        },
-        stepper,
-        formwizardFirstStep,
-        formwizardSecondStep,
-        formwizardThirdStep,
-        formwizardFourthStep,
-        footer
-      }
-    },
-    breakUpDialog: {
-      uiFramework: "custom-containers-local",
-      moduleName: "egov-tradelicence",
-      componentPath: "ViewBreakupContainer",
-      props: {
-        open: false,
-        maxWidth: "md",
-        screenKey: "apply"
-      }
-    }
-  }
-};
-
-export default screenConfig;

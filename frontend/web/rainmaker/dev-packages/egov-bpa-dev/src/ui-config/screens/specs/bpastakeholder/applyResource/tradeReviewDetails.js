@@ -8,6 +8,7 @@ import { getFeesEstimateCard, getDialogButton } from "../../utils";
 
 import { getOrganizationDetails } from "./review-organization";
 import { getReviewOwner } from "./review-owner";
+import { getReviewLicenseDetails } from "./review-license";
 import {
   getPermanentDetails,
   getCommunicactionDetails
@@ -26,6 +27,7 @@ const reviewPermanentDetails = getPermanentDetails();
 const reviewCommunicationDetails = getCommunicactionDetails();
 
 const reviewOwnerDetails = getReviewOwner();
+const reviewLicenseDetails = getReviewLicenseDetails();
 const reviewDocumentDetails = getReviewDocuments();
 
 export const tradeReviewDetails = getCommonCard({
@@ -34,6 +36,7 @@ export const tradeReviewDetails = getCommonCard({
     labelKey: "TL_SUMMARY_HEADER"
   }),
   estimate,
+  reviewLicenseDetails,
   reviewOwnerDetails,
   // reviewOrganizationDetails,
   reviewPermanentDetails,

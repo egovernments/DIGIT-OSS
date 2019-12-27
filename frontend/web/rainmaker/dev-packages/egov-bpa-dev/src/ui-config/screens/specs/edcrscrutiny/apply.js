@@ -10,38 +10,61 @@ import {
 import { documentList } from "./documentList";
 import { resetFields, submitFields } from "./functions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import {fetchMDMSData} from "./functions";
 
 const header = getCommonHeader({
   labelName: "New Building Plan Scrutiny",
   labelKey: "BPA_SCRUTINY_TITLE"
 });
 
+export const dropdown = {
+  uiFramework: "custom-containers",
+  componentPath: "AutosuggestContainer",
+  jsonPath:
+    "Scrutiny[0].tenantId",
+  required: true,
+  props: {
+    style: {
+      width: "100%",
+      cursor: "pointer"
+    },
+    label: {
+      labelName: "CITY",
+      labelKey: "EDCR_SCRUTINY_CITY"
+    },
+    placeholder: {
+      labelName: "Select City",
+      labelKey: "EDCR_SCRUTINY_CITY_PLACEHOLDER"
+    },
+    sourceJsonPath: "applyScreenMdmsData.tenantData",
+    labelsFromLocalisation: true,
+    errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+    suggestions: [],
+    fullwidth: true,
+    required: true,
+    inputLabelProps: {
+      shrink: true
+    }
+    // className: "tradelicense-mohalla-apply"
+  },
+  beforeFieldChange: async (action, state, dispatch) => {
+    // dispatch(
+    //   prepareFinalObject(
+    //     "Licenses[0].tradeLicenseDetail.address.locality.name",
+    //     action.value && action.value.label
+    //   )
+    // );
+  },
+  gridDefination: {
+    xs: 12,
+    sm: 6
+  }
+}
+
 const buildingInfoCard = getCommonCard({
   buildingPlanCardContainer: getCommonContainer({
     inputdetails: getCommonContainer({
-      tenantId: {
-        ...getSelectField({
-          label: {
-            labelName: "CITY",
-            labelKey: "EDCR_SCRUTINY_CITY"
-          },
-          placeholder: {
-            labelName: "Select City",
-            labelKey: "EDCR_SCRUTINY_CITY_PLACEHOLDER"
-          },
-          required: true,
-          gridDefination: {
-            xs: 12,
-            sm: 6
-          },
-          jsonPath: "Scrutiny[0].tenantId",
-          sourceJsonPath: "applyScreenMdmsData.TenantList",
-          localePrefix: {
-            moduleName: "TENANT",
-            masterName: "TENANTS"
-          }
-        })
-      },
+      dropdown,
       dummyDiv: {
         uiFramework: "custom-atoms",
         componentPath: "Div",
@@ -205,15 +228,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("Scrutiny[0]", {}));
     dispatch(prepareFinalObject("LicensesTemp[0]", {}));
-
-    let tenantList = [
-      {
-        code: "pb.amritsar",
-        active: "true"
-      }
-    ];
-    dispatch(prepareFinalObject("applyScreenMdmsData.TenantList", tenantList));
-
+    fetchMDMSData(action, state, dispatch);
     return action;
   },
   components: {

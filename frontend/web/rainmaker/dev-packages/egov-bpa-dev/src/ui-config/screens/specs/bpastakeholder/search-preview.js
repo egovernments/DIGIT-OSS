@@ -32,6 +32,8 @@ import {
 
 import { getOrganizationDetails } from "./applyResource/review-organization";
 import { getReviewOwner } from "./applyResource/review-owner";
+import { getReviewLicenseDetails } from "./applyResource/review-license";
+
 import {
   getPermanentDetails,
   getCommunicactionDetails
@@ -212,13 +214,13 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       if (tradeType.split(".")[0] == "ARCHITECT")
         set(
           action,
-          "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
+          "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
           true
         );
       else
         set(
           action,
-          "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
+          "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
           false
         );
       set(
@@ -246,7 +248,7 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
       set(
         action,
-        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
+        "screenConfig.components.div.children.tradeReviewDetails.children.cardContent.children.reviewLicenseDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo.visible",
         false
       );
     }
@@ -441,6 +443,7 @@ const reviewPermanentDetails = getPermanentDetails(false);
 const reviewCommunicationDetails = getCommunicactionDetails(false);
 
 const reviewOwnerDetails = getReviewOwner(false);
+const reviewLicenseDetails = getReviewLicenseDetails(false);
 
 const reviewDocumentDetails = getReviewDocuments(false);
 
@@ -471,6 +474,7 @@ const setActionItems = (action, object) => {
 export const tradeReviewDetails = getCommonCard({
   title,
   estimate,
+  reviewLicenseDetails,
   reviewOwnerDetails,
   // reviewOrganizationDetails,
   reviewPermanentDetails,

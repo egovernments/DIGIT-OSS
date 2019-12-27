@@ -7,10 +7,11 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import axios from "axios";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
-
+import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
 import get from "lodash/get";
 import set from "lodash/set";
 import { validateFields } from "../utils";
+import { getTenantId} from "egov-ui-kit/utils/localStorageUtils";
 
 export const fetchData = async (
   action,
@@ -67,7 +68,7 @@ const getSearchResultsfromEDCR = async (action, state, dispatch) => {
       : "https://egov-dcr-galaxy.egovernments.org";
 
     const response = await axios.post(
-      `${EDCRHost}/edcr/rest/dcr/scrutinydetails?tenantId=pb.amritsar`,
+      `${EDCRHost}/edcr/rest/dcr/scrutinydetails?tenantId=${getTenantId()}`,
       {
         RequestInfo: {
           apiId: "1",
@@ -100,8 +101,8 @@ export const getSearchResultsfromEDCRWithApplcationNo = async (
 ) => {
   try {
     let EDCRHost = process.env.REACT_APP_EDCR_API_HOST
-    ? process.env.REACT_APP_EDCR_API_HOST
-    : "https://egov-dcr-galaxy.egovernments.org";
+      ? process.env.REACT_APP_EDCR_API_HOST
+      : "https://egov-dcr-galaxy.egovernments.org";
     const response = await axios.post(
       `${EDCRHost}/edcr/rest/dcr/scrutinydetails?tenantId=${tenantId}&transactionNumber=${applicationNumber}`,
       {
@@ -210,18 +211,18 @@ export const resetFields = (state, dispatch) => {
         "props.value",
         ""
       )
-    );
+    );            
     dispatch(
       handleField(
         "apply",
-        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.tenantId",
+        "components.div.children.buildingInfoCard.children.cardContent.children.buildingPlanCardContainer.children.inputdetails.children.dropdown",
         "props.value",
-        ""
+        {name:'',code:''}
       )
     );
   }
-
   dispatch(prepareFinalObject("Scrutiny[0].buildingPlan[0]", []));
+  dispatch(prepareFinalObject("Scrutiny[0].tenantId", ""));
   dispatch(prepareFinalObject("LicensesTemp[0].uploadedDocsInRedux[0]", []));
 };
 
@@ -253,4 +254,45 @@ export const submitFields = async (state, dispatch) => {
     };
     dispatch(toggleSnackbar(true, errorMessage, "warning"));
   }
+};
+
+export const getMdmsData = async () => {
+  let mdmsBody = {
+    MdmsCriteria: {
+      tenantId: getTenantId(),
+      moduleDetails: [
+        {
+          moduleName: "tenant",
+          masterDetails: [{ name: "citymodule" }]
+        }
+      ]
+    }
+  };
+  try {
+    let payload = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "_search",
+      [],
+      mdmsBody
+    );
+    return payload;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const fetchMDMSData = async (action, state, dispatch) => {
+  const mdmsRes = await getMdmsData(dispatch);
+  let TenantList = [];
+  if (mdmsRes && mdmsRes.MdmsRes && mdmsRes.MdmsRes.tenant) {
+    mdmsRes.MdmsRes.tenant.citymodule.forEach(element => {
+      if (element.code === "BPAREG"){
+        element.tenants.forEach(tenant =>{
+          TenantList.push({code:tenant.code,name:tenant.code});
+        }); 
+      }
+    });
+  }
+  dispatch(prepareFinalObject("applyScreenMdmsData.tenantData", TenantList));
 };

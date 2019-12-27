@@ -14,8 +14,7 @@ import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-fra
 import {
   getDetailsForOwner,
   getTodaysDateInYMD,
-  getRadioGroupWithLabel,
-  setLicenseeSubTypeDropdownData
+  getRadioGroupWithLabel
 } from "../../utils";
 
 import { prepareFinalObject as pFO } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -120,8 +119,8 @@ export const getOwnerEmailField = getTextField({
 export const OwnerInfoCard = getCommonCard({
   header: getCommonSubHeader(
     {
-      labelName: "Licensee Details",
-      labelKey: "BPA_LICENSEE_DETAILS_HEADER_OWNER_INFO"
+      labelName: "Applicant Details",
+      labelKey: "BPA_COMMON_AP_DETAILS"
     },
     {
       style: {
@@ -143,111 +142,6 @@ export const OwnerInfoCard = getCommonCard({
       pattern: getPattern("Name"),
       jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name"
     }),
-    licenseeType: {
-      ...getSelectField({
-        label: {
-          labelName: "Technical Person Licensee Type",
-          labelKey: "BPA_LICENSEE_TYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Technical Person Licensee Type",
-          labelKey: "BPA_LICENSEE_TYPE_PLACEHOLDER"
-        },
-        required: true,
-        jsonPath: "LicensesTemp[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-        localePrefix: {
-          moduleName: "TRADELICENSE",
-          masterName: "TRADETYPE"
-        },
-        sourceJsonPath: "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        }
-      }),
-      beforeFieldChange: async (action, state, dispatch) => {
-        await setLicenseeSubTypeDropdownData(action.value, state, dispatch);
-        if (action.value == "ARCHITECT") {
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
-              "visible",
-              true
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
-              "required",
-              true
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardThirdStep.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo",
-              "visible",
-              true
-            )
-          );
-        } else {
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
-              "visible",
-              false
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
-              "required",
-              false
-            )
-          );
-          dispatch(
-            handleField(
-              "apply",
-              "components.div.children.formwizardThirdStep.children.tradeReviewDetails.children.cardContent.children.reviewOwnerDetails.children.cardContent.children.multiOwner.children.viewFive.children.reviewcounsilForArchNo",
-              "visible",
-              false
-            )
-          );
-        }
-      }
-    },
-    licenseeSubType: {
-      ...getSelectField({
-        label: {
-          labelName: "Technical Person Licensee Sub Type",
-          labelKey: "BPA_LICENSEE_SUB_TYPE_LABEL"
-        },
-        placeholder: {
-          labelName: "Select Technical Person Licensee Sub Type",
-          labelKey: "BPA_LICENSEE_SUB_TYPE_PLACEHOLDER"
-        },
-        required: true,
-        jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-        localePrefix: {
-          moduleName: "TRADELICENSE",
-          masterName: "TRADETYPE"
-        },
-        // props: {
-        //   jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
-        //   setDataInField: true
-        // },
-        sourceJsonPath: "applyScreenMdmsData.TradeLicense.tradeSubType",
-        gridDefination: {
-          xs: 12,
-          sm: 6
-        }
-      }),
-      beforeFieldChange: (action, state, dispatch) => {}
-    },
     getGenderRadioButton,
     ownerDOB: {
       ...getDateField({
@@ -284,20 +178,6 @@ export const OwnerInfoCard = getCommonCard({
       },
       pattern: getPattern("PAN"),
       jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].pan"
-    }),
-    counsilForArchNo: getTextField({
-      label: {
-        labelName: "Council for Architecture No.",
-        labelKey: "BPA_COUNCIL_FOR_ARCH_NO_LABEL"
-      },
-      placeholder: {
-        labelName: "Enter Council for Architecture No.",
-        labelKey: "BPA_COUNCIL_FOR_ARCH_NO_PLACEHOLDER"
-      },
-      visible: false,
-      required: true,
-      jsonPath:
-        "Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo"
     })
   })
 });

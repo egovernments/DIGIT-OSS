@@ -109,12 +109,12 @@ export const corrospondanceAddr = getCommonCard({
             "Licenses[0].tradeLicenseDetail.address.street"
           ],
           disbaleComponentJsonPaths: [
-            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocBuilidingName",
-            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocCity",
-            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocDoorHouseNo",
-            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocMohalla",
-            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocPincode",
-            "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocStreetName"
+            "components.div.children.formwizardSecondStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocBuilidingName",
+            "components.div.children.formwizardSecondStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocCity",
+            "components.div.children.formwizardSecondStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocDoorHouseNo",
+            "components.div.children.formwizardSecondStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocMohalla",
+            "components.div.children.formwizardSecondStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocPincode",
+            "components.div.children.formwizardSecondStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children.tradeLocStreetName"
           ]
         },
         type: "array"

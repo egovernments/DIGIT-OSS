@@ -261,7 +261,7 @@ export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
               .slice(13)
           );
           i.linkText = "View";
-        };
+        }
       });
     }
   });
@@ -373,7 +373,7 @@ export const handleFileUpload = (event, handleDocument, props) => {
 
 //localizations
 export const getTransformedLocale = label => {
-  return label&&label.toUpperCase().replace(/[.:-\s\/]/g, "_");
+  return label && label.toUpperCase().replace(/[.:-\s\/]/g, "_");
 };
 
 export const appendModulePrefix = (value, localePrefix) => {
@@ -558,8 +558,7 @@ export const getUserDataFromUuid = async bodyObject => {
   }
 };
 
-export const getCommonPayUrl = (dispatch , applicationNo, tenantId) => {
-    const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}`;
-      dispatch(setRoute(url));
+export const getCommonPayUrl = (dispatch, applicationNo, tenantId) => {
+  const url = `/egov-common/pay?consumerCode=${applicationNo}&tenantId=${tenantId}`;
+  dispatch(setRoute(url));
 };
- 

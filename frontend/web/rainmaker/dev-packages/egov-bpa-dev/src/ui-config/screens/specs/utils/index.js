@@ -1626,7 +1626,7 @@ export const updateDropDowns = async (
           dispatch(
             handleField(
               "apply",
-              "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
+              "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children.counsilForArchNo",
               "visible",
               true
             )
@@ -1635,7 +1635,7 @@ export const updateDropDowns = async (
           dispatch(
             handleField(
               "apply",
-              "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.counsilForArchNo",
+              "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children.counsilForArchNo",
               "visible",
               false
             )
@@ -2157,12 +2157,21 @@ export const setLicenseeSubTypeDropdownData = async (
     "applyScreenMdmsData.TradeLicense.TradeType",
     []
   );
+  // dispatch(
+  //   prepareFinalObject(
+  //     "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
+  //     null
+  //   )
+  // );
   dispatch(
-    prepareFinalObject(
-      "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-      ""
+    handleField(
+      "apply",
+      "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
+      "props.value",
+      null
     )
   );
+
   const selectedTradeType = actionValue;
   let filterdTradeTypes = [];
   filterdTradeTypes = tradeTypes.filter(tradeType => {
@@ -2175,7 +2184,7 @@ export const setLicenseeSubTypeDropdownData = async (
     dispatch(
       handleField(
         "apply",
-        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "props.disabled",
         true
       )
@@ -2183,7 +2192,7 @@ export const setLicenseeSubTypeDropdownData = async (
     dispatch(
       handleField(
         "apply",
-        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "required",
         false
       )
@@ -2191,7 +2200,7 @@ export const setLicenseeSubTypeDropdownData = async (
     dispatch(
       handleField(
         "apply",
-        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "visible",
         false
       )
@@ -2207,7 +2216,7 @@ export const setLicenseeSubTypeDropdownData = async (
     dispatch(
       handleField(
         "apply",
-        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "props.disabled",
         false
       )
@@ -2215,7 +2224,7 @@ export const setLicenseeSubTypeDropdownData = async (
     dispatch(
       handleField(
         "apply",
-        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "required",
         true
       )
@@ -2223,7 +2232,7 @@ export const setLicenseeSubTypeDropdownData = async (
     dispatch(
       handleField(
         "apply",
-        "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.licenseeSubType",
+        "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children.licenseeSubType",
         "visible",
         true
       )
@@ -2429,7 +2438,7 @@ export const setMobileNoField = (action, state, dispatch) => {
     );
     set(
       action.screenConfig,
-      `components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getOwnerMobNoField.props.disabled`,
+      `components.div.children.formwizardSecondStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.getOwnerMobNoField.props.disabled`,
       true
     );
   }
@@ -2774,12 +2783,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
             []
           );
           currOwnersArr = scrutinyData[0];
-          dispatch(
-            prepareFinalObject(
-              `scrutinyDetails`,
-              currOwnersArr
-            )
-          );
+          dispatch(prepareFinalObject(`scrutinyDetails`, currOwnersArr));
           riskType(state, dispatch);
         } else {
           dispatch(
@@ -3260,7 +3264,7 @@ export const setNameOfUser = (action, state, dispatch) => {
     );
     set(
       action.screenConfig,
-      `components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.ownerName.props.disabled`,
+      `components.div.children.formwizardSecondStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children.ownerName.props.disabled`,
       true
     );
   }

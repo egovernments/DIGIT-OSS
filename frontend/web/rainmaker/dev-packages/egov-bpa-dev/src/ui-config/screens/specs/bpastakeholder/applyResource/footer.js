@@ -93,10 +93,35 @@ export const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = true;
   if (activeStep === 0) {
+    const isLicenseeTypeValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container1.children",
+      state,
+      dispatch
+    );
+    const isLicenseeSubTypeValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container2.children",
+      state,
+      dispatch
+    );
+    const isLicenseeCOAValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.LicenseeCard.children.cardContent.children.tradeUnitCardContainer.children.container3.children",
+      state,
+      dispatch
+    );
+
+    if (
+      !isLicenseeCOAValid ||
+      !isLicenseeSubTypeValid ||
+      !isLicenseeTypeValid
+    ) {
+      isFormValid = false;
+    }
+  }
+  if (activeStep === 1) {
     const data = get(state.screenConfiguration, "preparedFinalObject");
 
     const isTradeDetailsValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children",
+      "components.div.children.formwizardSecondStep.children.OwnerInfoCard.children.cardContent.children.tradeUnitCardContainer.children",
       state,
       dispatch
     );
@@ -116,12 +141,12 @@ export const callBackForNext = async (state, dispatch) => {
     // }
 
     const isPermanentAddrValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.permanentAddr.children.cardContent.children.tradeDetailsConatiner.children",
+      "components.div.children.formwizardSecondtep.children.permanentAddr.children.cardContent.children.tradeDetailsConatiner.children",
       state,
       dispatch
     );
     const isCommunicationAddrValid = validateFields(
-      "components.div.children.formwizardFirstStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children",
+      "components.div.children.formwizardSecondStep.children.corrospondanceAddr.children.cardContent.children.AddressWithCheckBoxContainer.children.addressContainer.children",
       state,
       dispatch
     );
@@ -145,7 +170,7 @@ export const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 1) {
+  if (activeStep === 2) {
     const LicenseData = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]",
@@ -196,7 +221,7 @@ export const callBackForNext = async (state, dispatch) => {
     }
   }
 
-  if (activeStep === 2) {
+  if (activeStep === 3) {
     const LicenseData = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0]"
@@ -206,7 +231,7 @@ export const callBackForNext = async (state, dispatch) => {
       moveToSuccess(LicenseData, dispatch);
     }
   }
-  if (activeStep !== 2) {
+  if (activeStep !== 3) {
     if (isFormValid) {
       changeStep(state, dispatch);
     } else if (hasFieldToaster) {
@@ -253,7 +278,7 @@ export const changeStep = (
         "LicensesTemp[0].reviewDocData",
         null
       );
-      activeStep = isDocsUploaded ? 2 : 1;
+      activeStep = isDocsUploaded ? 3 : 2;
     } else {
       activeStep = mode === "next" ? activeStep + 1 : activeStep - 1;
     }
@@ -262,8 +287,8 @@ export const changeStep = (
   }
 
   const isPreviousButtonVisible = activeStep > 0 ? true : false;
-  const isNextButtonVisible = activeStep < 2 ? true : false;
-  const isSubmitButtonVisible = activeStep === 2 ? true : false;
+  const isNextButtonVisible = activeStep < 3 ? true : false;
+  const isSubmitButtonVisible = activeStep === 3 ? true : false;
   const actionDefination = [
     {
       path: "components.div.children.stepper.props",

@@ -9,35 +9,6 @@ import { convertEpochToDate, checkValueForNA } from "../../utils";
 
 import { changeStep } from "./footer";
 
-export const reviewLicenseeType = getLabelWithValue(
-  {
-    labelName: "Technical Person Licensee Type",
-    labelKey: "BPA_LICENSEE_TYPE_LABEL"
-  },
-  {
-    jsonPath: "LicensesTemp[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-    localePrefix: {
-      moduleName: "TRADELICENSE",
-      masterName: "TRADETYPE"
-    },
-    callBack: checkValueForNA
-  }
-);
-
-export const reviewLicenseeSubType = getLabelWithValue(
-  {
-    labelName: "Technical Person Licensee Sub Type",
-    labelKey: "BPA_LICENSEE_SUB_TYPE_LABEL"
-  },
-  {
-    jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].tradeType",
-    localePrefix: {
-      moduleName: "TRADELICENSE",
-      masterName: "TRADETYPE"
-    },
-    callBack: checkValueForNA
-  }
-);
 export const reviewOwnerGender = getLabelWithValue(
   {
     labelName: "Gender",
@@ -95,18 +66,6 @@ export const reviewOwnerPAN = getLabelWithValue(
   }
 );
 
-export const reviewcounsilForArchNo = getLabelWithValue(
-  {
-    labelName: "Council for Architecture No.",
-    labelKey: "BPA_COUNCIL_FOR_ARCH_NO_LABEL"
-  },
-  {
-    jsonPath:
-      "Licenses[0].tradeLicenseDetail.additionalDetail.counsilForArchNo",
-    callBack: checkValueForNA
-  }
-);
-
 export const getReviewOwner = (isEditable = true) => {
   return getCommonGrayCard({
     headerDiv: {
@@ -122,8 +81,8 @@ export const getReviewOwner = (isEditable = true) => {
             sm: 10
           },
           ...getCommonSubHeader({
-            labelName: "Licensee Details",
-            labelKey: "BPA_LICENSEE_DETAILS_HEADER_OWNER_INFO"
+            labelName: "Applicant Details",
+            labelKey: "BPA_COMMON_AP_DETAILS"
           })
         },
         editSection: {
@@ -153,7 +112,7 @@ export const getReviewOwner = (isEditable = true) => {
           onClickDefination: {
             action: "condition",
             callBack: (state, dispatch) => {
-              changeStep(state, dispatch, "", 0);
+              changeStep(state, dispatch, "", 1);
             }
           }
         }
@@ -168,14 +127,11 @@ export const getReviewOwner = (isEditable = true) => {
           },
           { jsonPath: "Licenses[0].tradeLicenseDetail.owners[0].name" }
         ),
-        reviewLicenseeType,
-        reviewLicenseeSubType,
         reviewOwnerGender,
         reviewOwnerDOB,
         reviewOwnerPhoneNo,
         reviewOwnerEmail,
-        reviewOwnerPAN,
-        reviewcounsilForArchNo
+        reviewOwnerPAN
       })
     })
   });

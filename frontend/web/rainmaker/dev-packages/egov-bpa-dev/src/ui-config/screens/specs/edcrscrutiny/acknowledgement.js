@@ -159,7 +159,7 @@ const generatePdfAndDownload = async (
 
   if (action === "print") {
     var response = await axios.get(reporturl, {
-      responseType: "blob",
+      responseType: "arraybuffer",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/pdf"
@@ -168,12 +168,12 @@ const generatePdfAndDownload = async (
     const file = new Blob([response.data], { type: "application/pdf" });
     const fileURL = URL.createObjectURL(file);
     var myWindow = window.open(fileURL);
-    // if (myWindow != undefined) {
-    //   myWindow.addEventListener("load", event => {
-    //     myWindow.focus();
-    //     myWindow.print();
-    //   });
-    // }
+    if (myWindow != undefined) {
+      myWindow.addEventListener("load", event => {
+        myWindow.focus();
+        myWindow.print();
+      });
+    }
   } else if (action === "download") {
     var iframe = document.createElement("iframe");
     iframe.src = reporturl;
