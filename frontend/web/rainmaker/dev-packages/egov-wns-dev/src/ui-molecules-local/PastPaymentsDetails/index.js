@@ -50,9 +50,9 @@ class PastPayments extends Component {
       return fromDate.getFullYear().toString() + '-' + toDate.getFullYear().toString().substring(2)
     }
     const data = pastPaymentsDetails.map((element) =>
-      <div style={{ marginLeft: '0px', padding: '0px', position: 'relative', borderBottom: '1px solid  rgb(224, 224, 224)' }}>
+      <div style={{ marginLeft: '0px', padding: '0px', position: 'relative', borderBottom: '1px solid  rgb(224, 224, 224)',flexgrow:1 }}>
         <Grid container spacing={3}>
-          <Grid item sm={6} xs={12}>
+          <Grid item xs={8} >
             <div className="incomplete-assesment-info">
               <Label
                 label={`INR ${element.totalAmountPaid}`}
@@ -110,7 +110,12 @@ class PastPayments extends Component {
 
             </div>
           </Grid>
-          <Grid item sm={6} xs={12} style={{ margin: '20px 0px' }}>
+          <Grid item xs={4} style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            placeContent: "flex-end"
+          }}>
             <div style={{ textAlign: "end" }}>
               <Label
                 label={`${convertEpochToDate(element.transactionDate)}`}
@@ -128,7 +133,7 @@ class PastPayments extends Component {
       </div>
     );
     return (
-      <div>
+      <div class="screen screen-with-bredcrumb">
         <BreadCrumbs url={urls} history="" />
         <div className="form-without-button-cont-generic">
           <div className="rainmaker-card clearfix property-tax-card">
@@ -136,7 +141,6 @@ class PastPayments extends Component {
               <div style={{ padding: '0px 20px', background: 'rgb(255, 255, 255)' }}>
                 {
                   pastPaymentsDetails && pastPaymentsDetails.length > 0 ? (
-                    data,
                     data
                   ) : (
                       <div style={{
