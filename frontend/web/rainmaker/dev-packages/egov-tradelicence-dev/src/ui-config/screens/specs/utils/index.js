@@ -3,6 +3,8 @@ import {
   getTextField,
   getCommonSubHeader
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons"
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import "./index.css";
 import { validate } from "egov-ui-framework/ui-redux/screen-configuration/utils";
@@ -28,6 +30,7 @@ import {
   getLocaleLabels,
   getTransformedLocalStorgaeLabels, getFileUrlFromAPI
 } from "egov-ui-framework/ui-utils/commons";
+import axios from 'axios';
 
 export const getCommonApplyFooter = children => {
   return {
@@ -921,7 +924,7 @@ const getStatementForDocType = docType => {
 };
 
 
-export const downloadAcknowledgementForm = (Licenses) => {
+export const downloadAcknowledgementForm = (Licenses,mode="download") => {
   const queryStr = [
     { key: "key", value: "tlapplication" },
     { key: "tenantId", value: "pb" }
@@ -938,7 +941,7 @@ export const downloadAcknowledgementForm = (Licenses) => {
         res.filestoreIds[0]
         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
           res.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId)
+            downloadReceiptFromFilestoreID(fileStoreId,mode)
           })
         } else {
           console.log("Error In Acknowledgement form Download");
@@ -949,7 +952,7 @@ export const downloadAcknowledgementForm = (Licenses) => {
   }
 }
 
-export const downloadCertificateForm = (Licenses) => {
+export const downloadCertificateForm = (Licenses,mode='download') => {
   const queryStr = [
     { key: "key", value: "tlcertificate" },
     { key: "tenantId", value: "pb" }
@@ -966,7 +969,7 @@ export const downloadCertificateForm = (Licenses) => {
         res.filestoreIds[0]
         if (res && res.filestoreIds && res.filestoreIds.length > 0) {
           res.filestoreIds.map(fileStoreId => {
-            downloadReceiptFromFilestoreID(fileStoreId)
+            downloadReceiptFromFilestoreID(fileStoreId,mode)
           })
         } else {
           console.log("Error In Acknowledgement form Download");
@@ -977,14 +980,10 @@ export const downloadCertificateForm = (Licenses) => {
   }
 }
 
-const downloadReceiptFromFilestoreID = (fileStoreId) => {
-  getFileUrlFromAPI(fileStoreId).then((fileRes) => {
-    var win = window.open(fileRes[fileStoreId], '_blank');
-    if (win) {
-      win.focus();
-    }
-  });
-}
+
+
+
+
 
 
 export const prepareDocumentTypeObj = documents => {

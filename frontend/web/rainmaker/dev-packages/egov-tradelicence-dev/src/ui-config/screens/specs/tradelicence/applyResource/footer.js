@@ -601,7 +601,8 @@ export const footerReview = (
   let tlCertificatePrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      generateReceipt(state, dispatch, "certificate_print");
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses,'print');
     },
     leftIcon: "book"
   };
@@ -622,7 +623,12 @@ export const footerReview = (
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-      generateReceipt(state, dispatch, "receipt_print");
+      const receiptQueryString =  [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString,"print");
+     // generateReceipt(state, dispatch, "receipt_print");
     },
     leftIcon: "receipt"
   };
@@ -637,7 +643,8 @@ export const footerReview = (
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("print", applicationNumber);
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadAcknowledgementForm(Licenses,'print');
     },
     leftIcon: "assignment"
   };
@@ -697,11 +704,26 @@ export const footerReview = (
               props: {
                 data: {
                   label: {
-                    labelName:"Download"},
+                    labelName:"Download",labelKey:"TL_DOWNLOAD"},
                   leftIcon: "cloud_download",
                   rightIcon: "arrow_drop_down",
                   props: { variant: "outlined", style: { marginLeft: 10 } },
                   menu: downloadMenu
+                }
+              }
+            },
+            printMenu: {
+              uiFramework: "custom-atoms-local",
+              moduleName: "egov-tradelicence",
+              componentPath: "MenuButton",
+              props: {
+                data: {
+                  label: {
+                    labelName:"Print",labelKey:"TL_PRINT"},
+                  leftIcon: "print",
+                  rightIcon: "arrow_drop_down",
+                  props: { variant: "outlined", style: { marginLeft: 10 } },
+                  menu: printMenu
                 }
               }
             }
@@ -858,7 +880,8 @@ export const downloadPrintContainer = (
   let tlCertificatePrintObject = {
     label: { labelName: "TL Certificate", labelKey: "TL_CERTIFICATE" },
     link: () => {
-      generateReceipt(state, dispatch, "certificate_print");
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadCertificateForm(Licenses,'print');
     },
     leftIcon: "book"
   };
@@ -876,7 +899,11 @@ export const downloadPrintContainer = (
   let receiptPrintObject = {
     label: { labelName: "Receipt", labelKey: "TL_RECEIPT" },
     link: () => {
-      generateReceipt(state, dispatch, "receipt_print");
+      const receiptQueryString =  [
+        { key: "consumerCodes", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "applicationNumber") },
+        { key: "tenantId", value: get(state.screenConfiguration.preparedFinalObject.Licenses[0], "tenantId") }
+      ]
+      download(receiptQueryString,"print");
     },
     leftIcon: "receipt"
   };
@@ -891,7 +918,8 @@ export const downloadPrintContainer = (
   let applicationPrintObject = {
     label: { labelName: "Application", labelKey: "TL_APPLICATION" },
     link: () => {
-      generatePdfFromDiv("print", applicationNumber);
+      const { Licenses } = state.screenConfiguration.preparedFinalObject;
+      downloadAcknowledgementForm(Licenses,'print');
     },
     leftIcon: "assignment"
   };
@@ -942,14 +970,29 @@ export const downloadPrintContainer = (
           componentPath: "MenuButton",
           props: {
             data: {
-              label: {labelName : "DOWNLOAD" , labelKey :"DOWNLOAD"},
-              // leftIcon: "cloud_download",
+              label: {labelName : "DOWNLOAD" , labelKey :"TL_DOWNLOAD"},
+               leftIcon: "cloud_download",
               rightIcon: "arrow_drop_down",
-              props: { variant: "outlined", style: { marginLeft: 10,height: "60px", width: "200px" , color : "#FE7A51" } },
+              props: { variant: "outlined", style: { marginLeft: 10,height: "60px", width: "180px" , color : "#FE7A51" } },
               menu: downloadMenu
             }
           }
+        },
+        printMenu: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "MenuButton",
+          props: {
+            data: {
+              label: {labelName : "PRINT" , labelKey :"TL_PRINT"},
+              leftIcon: "print",
+              rightIcon: "arrow_drop_down",
+              props: { variant: "outlined", style: { marginLeft: 10,height: "60px", width: "150px" , color : "#FE7A51" } },
+              menu: printMenu
+            }
+          }
         }
+
       },
       // gridDefination: {
       //   xs: 12,
