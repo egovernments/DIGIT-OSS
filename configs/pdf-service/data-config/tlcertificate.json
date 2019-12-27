@@ -373,7 +373,7 @@
         {
           "externalAPI": [     
             { 
-                "path": "http://egov-mdms-service:8080/egov-mdms-service/v1/_get",
+                "path": "http://localhost:8084/egov-mdms-service/v1/_get",
                 "queryParam": "moduleName=tenant&masterName=tenants&tenantId=pb&filter=%5B?(@.code=='$.tenantId')%5D",
                 "apiRequest": null,
                 "responseMapping":[
@@ -396,7 +396,7 @@
                 ]
             },
             {
-              "path": "http://collection-services:8080/collection-services/payments/_search",
+              "path": "http://localhost:8082/collection-services/payments/_search",
               "queryParam": "tenantId=$.tenantId,consumerCodes=$.applicationNumber,businessServices=TL",
               "apiRequest": null,
               "responseMapping":[
@@ -413,7 +413,7 @@
           },
           { 
             "path": "https://egov-micro-dev.egovernments.org/filestore/v1/files/url",
-            "queryParam": "tenantId=$.tenantId,fileStoreIds=$.tradeLicenseDetail.applicationDocuments[?(@.documentType == 'OWNERIDPROOF')].fileStoreId",
+            "queryParam": "tenantId=$.tenantId,fileStoreIds=$.fileStoreId",
             "apiRequest": null,
             "requesttype": "GET",
             "responseMapping":[
@@ -422,10 +422,14 @@
                 "value":"$.fileStoreIds[0].url",
                 "type": "image"
               }
-          ]
+            ]
         }
+        
      ]
    }
  ]
+
+}
+]
 }
 }
