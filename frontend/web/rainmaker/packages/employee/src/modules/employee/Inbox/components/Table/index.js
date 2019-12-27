@@ -79,13 +79,14 @@ class InboxData extends React.Component {
   };
 
   getSlaColor =(sla) => {
+   const {MAX_SLA}=this.props;
     let slaValue = "";
-    if(0<sla<=4){
-      slaValue = "greenSlab"
-    }else if(4<sla<=8){
+    if(sla<0){
+      slaValue = "redSlab"
+    }else if(0<sla&&sla<=MAX_SLA/3){
       slaValue = "yellowSlab"
     }else{
-      slaValue = "redSlab"
+      slaValue = "greenSlab"
     }
     switch(slaValue){
       case "greenSlab" : return "inbox-cell-badge-primary sla-positive-value"

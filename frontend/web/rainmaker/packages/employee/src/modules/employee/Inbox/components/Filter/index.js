@@ -1,5 +1,5 @@
 import React from "react";
-import { DropDown } from "components";
+import { DropDown,MultiSelectDropdown } from "egov-ui-kit/components";
 import Label from "egov-ui-kit/utils/translationNode";
 import "./index.css";
 
@@ -9,9 +9,10 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
     return (
         <div className="row">
             <div className="col-md-3">
-                <DropDown
-                    onChange={(e, index, value) => { handleChangeFilter('moduleFilter', value) }}
-                    floatingLabelText="Module"
+                <MultiSelectDropdown
+                multiple
+                    onChange={(e) => { handleChangeFilter('moduleFilter', e.target.value) }}
+                    floatingLabelText={<Label label="CS_INBOX_MODULE_FILTER" fontSize="12px" />}//"Module"
                     className="filter-fields"
                     dropDownData={filter.moduleFilter.dropdownData}
                     value={filter.moduleFilter.selectedValue}
@@ -24,11 +25,12 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                 />
             </div>
             <div className="col-md-3">
-                <DropDown
+                <MultiSelectDropdown
+                 multiple
                     onChange={(e, index, value) => {
-                        handleChangeFilter('localityFilter', value)
+                        handleChangeFilter('localityFilter', e.target.value)
                     }}
-                    floatingLabelText="Locality"
+                    floatingLabelText={<Label label="CS_INBOX_LOCALITY_FILTER" fontSize="12px"/>}
                     className="filter-fields"
                     dropDownData={filter.localityFilter.dropdownData}
                     value={filter.localityFilter.selectedValue}
@@ -41,11 +43,14 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                 />
             </div>
             <div className="col-md-3" >
-                <DropDown
-                    floatingLabelText="Status"
+                <MultiSelectDropdown
+                 multiple
+                    floatingLabelText={<Label label="CS_INBOX_STATUS_FILTER" fontSize="12px"  />}
                     className="filter-fields"
                     dropDownData={filter.statusFilter.dropdownData}
-                    onChange={(e, index, value) => { handleChangeFilter('statusFilter', value) }}
+                    onChange={(e, index, value) => {
+                                               
+                        handleChangeFilter('statusFilter', e.target.value) }}
                     value={filter.statusFilter.selectedValue}
                     underlineStyle={{
                         position: "absolute",
@@ -57,7 +62,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
             </div>
             <div className="col-md-3">
                 <div className="rainmaker-displayInline" onClick={clearFilter} style={{ cursor: "pointer", marginRight: 5, paddingTop: '30px' }}>
-                    <Label label="CLEAR ALL" color="#fe7a51" fontSize="15px" />
+                    <Label label="CS_INBOX_CLEAR" color="#fe7a51" fontSize="15px" />
                 </div>
             </div>
         </div>
