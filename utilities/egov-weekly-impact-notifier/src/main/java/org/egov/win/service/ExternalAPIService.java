@@ -38,6 +38,7 @@ public class ExternalAPIService {
 		log.info("URI: "+uri);
 		Optional<Object> response = repository.fetchResult(uri, request);
 		try {
+			log.info("Requuest: "+mapper.writeValueAsString(request));
 			if(response.isPresent()) {
 				Object parsedResponse = mapper.convertValue(response.get(), Map.class);
 				List<Object> dataParsedToList = mapper.convertValue(JsonPath.read(parsedResponse, "$.data"), List.class);
@@ -49,7 +50,6 @@ public class ExternalAPIService {
 		} catch (Exception e) {
 			throw new CustomException("EMAILER_DATA_RETREIVAL_FAILED", "Failed to retrieve data from the db");
 		}
-
 		return data;
 
 	}

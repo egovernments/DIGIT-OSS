@@ -275,9 +275,11 @@ public class CronService {
 	
 	private void enrichBodyWithMiscCollData(Body body) {
 		List<Map<String, Object>> data = externalAPIService.getRainmakerData(CronConstants.SEARCHER_MC);
+		log.info("Misc Data from Searcher: "+data);
 		List<Map<String, Object>> receiptsGenerated = new ArrayList<>();
 		List<Map<String, Object>> revenueCollected = new ArrayList<>();
 		for (Map<String, Object> record : data) {
+			log.info("Record: "+record);
 			Map<String, Object> receiptsGeneratedPerWeek = new HashMap<>();
 			Map<String, Object> revenueCollectedPerWeek = new HashMap<>();
 			String prefix = "Week";
