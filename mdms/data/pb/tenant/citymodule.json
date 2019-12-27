@@ -85,6 +85,15 @@
           "code": "pb.amritsar"
         }
       ]
+    },
+    {
+      "module": "BPAREG",
+      "code": "BPAREG",
+      "tenants": [
+        {
+          "code": "pb.amritsar"
+        }
+      ]
     }
   ]
 }
