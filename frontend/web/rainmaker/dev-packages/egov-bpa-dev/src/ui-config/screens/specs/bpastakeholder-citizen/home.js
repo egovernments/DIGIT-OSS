@@ -2,8 +2,10 @@ import React from "react";
 import { getCommonHeader } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { fetchData } from "./citizenSearchResource/citizenFunctions";
 import { cityPicker } from "./citypicker";
+import { ifUserRoleMatches } from "../utils";
 import FormIcon from "../../../../ui-atoms-local/Icons/FormIcon";
-import TradeLicenseIcon from "../../../../ui-atoms-local/Icons/TradeLicenseIcon";
+import BPAStakeholderRegIcon from "../../../../ui-atoms-local/Icons/BPAStakeholderRegIcon";
+import BPANewPermitIcon from "../../../../ui-atoms-local/Icons/BPANewPermitIcon";
 import "../utils/index.css";
 const header = getCommonHeader(
   {
@@ -17,14 +19,35 @@ const header = getCommonHeader(
   }
 );
 
+const hideBPACard = () => {
+  return ifUserRoleMatches([
+    "BPA_ARCHITECT",
+    "BPA_ENGINEER",
+    "BPA_BUILDER",
+    "BPA_STRUCTURALENGINEER"
+  ]);
+};
+
 const cardItems = [
   {
     label: {
       labelKey: "BPA_COMMON_APPL_NEW_LICENSE",
       labelName: "Register Technical Person/Builder"
     },
-    icon: <TradeLicenseIcon />,
+    icon: <BPAStakeholderRegIcon />,
     route: "apply"
+  },
+  {
+    label: {
+      labelKey: "BPA_COMMON_APPL_NEW_CONSTRUCTION",
+      labelName: "Building Permit New Construction"
+    },
+    hide: hideBPACard(),
+    icon: <BPANewPermitIcon />,
+    route: {
+      screenKey: "home",
+      jsonPath: "components.cityPickerDialog"
+    }
   },
   {
     label: {

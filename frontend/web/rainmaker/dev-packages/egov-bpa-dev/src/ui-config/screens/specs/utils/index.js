@@ -1577,6 +1577,14 @@ export const ifUserRoleExists = role => {
   } else return false;
 };
 
+export const ifUserRoleMatches = roleList => {
+  let userInfo = JSON.parse(getUserInfo());
+  const roles = get(userInfo, "roles");
+  const roleCodes = roles ? roles.map(role => role.code) : [];
+  let found = roleList.some(elem => roleCodes.includes(elem));
+  return !found;
+};
+
 export const getTransformedStatus = status => {
   switch (status) {
     case "PAID":
@@ -2254,7 +2262,6 @@ export const fillOldLicenseData = async (state, dispatch) => {
     )
   );
 };
-
 
 export const getTextToLocalMapping = label => {
   const localisationLabels = getTransformedLocalStorgaeLabels();
