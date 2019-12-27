@@ -507,7 +507,7 @@ class TableData extends Component {
     this.setState({
       // inboxData: filteredData,
       // tabData,
-      taskboardLabel: label
+      // taskboardLabel: label
     });
 
     this.setState({
@@ -526,16 +526,17 @@ class TableData extends Component {
       inboxData = filteredData.inboxData;
       tabData = filteredData.tabData;
     }
-    // const {taskboardData, tabData, inboxData}=this.applyFilter();
-    console.log(this.state, 'satte');
-
+  
     return (
       <div className="col-sm-12">
         <div>
-          <div className="col-md-8">
+          <div className="row" style={{marginBottom:'5px',marginLeft:'-20px'}}>
+          <div className="col-md-12">
             <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
           </div>
-          <div className="col-md-4"> <TextField floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
+          </div>
+          {/* <div className="col-md-4"> 
+           <TextField floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
             hintText={getLocaleLabels("CS_INBOX_SEARCH_PLACEHOLDER")}
             value={searchFilter.value}
             onChange={(e, value) => {
@@ -543,13 +544,11 @@ class TableData extends Component {
               handleChangeSearch(value);
             }}
 
-            className="filter-fields" /></div>
+            className="filter-fields" /> 
+            </div> */}
 
           <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter>
-          {/* <TextField value={"search"} />
-          */}
-          {/* <Icon action="custom" name="filter" onClick={onPopupOpen} style={{ cursor: "pointer" }} />  */}
-        </div>
+              </div>
         <Taskboard data={taskboardData} onSlaClick={this.onTaskBoardClick} color={this.state.color} />
         <div className="col-sm-12 backgroundWhite">
           <Tabs

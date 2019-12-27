@@ -7,7 +7,7 @@ import "./index.css";
 
 const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
     return (
-        <div className="row">
+        <div className="row" style={{marginLeft:'-5px'}}>
             <div className="col-md-3">
                 <MultiSelectDropdown
                 multiple
