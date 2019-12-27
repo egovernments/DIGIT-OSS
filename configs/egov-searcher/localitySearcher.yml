@@ -52,3 +52,27 @@ SearchDefinitions:
       outJsonPath: $.Localities
       responseInfoPath: $.ResponseInfo
       
+
+  - name: BPAREG
+    query:
+      baseQuery: |
+        Select row_to_json(result) from
+        (
+          select applicationNumber as referenceNumber,locality from eg_tl_tradelicense tl
+          INNER JOIN eg_tl_TradeLicenseDetail tld ON tld.tradelicenseId = tl.id
+          INNER JOIN eg_tl_address ad ON ad.tradeLicenseDetailId = tld.id
+        ) result  $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: result.referenceNumber
+        isMandatory: true
+        jsonPath: $.searchCriteria.referenceNumber
+        operator: 
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.Localities
+      responseInfoPath: $.ResponseInfo
