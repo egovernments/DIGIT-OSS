@@ -23,3 +23,10 @@
     }
   }
 }
+@media only screen and (max-width: 768px) {
+  .flex-child {
+    div {
+      min-width: 60px !important;
+    }
+  }
+}

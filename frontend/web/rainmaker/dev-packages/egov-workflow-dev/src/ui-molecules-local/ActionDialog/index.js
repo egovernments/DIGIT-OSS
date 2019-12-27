@@ -104,7 +104,7 @@ class ActionDialog extends React.Component {
     const { getButtonLabelName } = this;
     let fullscreen = false;
     if (window.innerWidth <= 768) {
-      fullscreen = true;
+      // fullscreen = true;
     }
     dataPath =
       dataPath === "FireNOCs"

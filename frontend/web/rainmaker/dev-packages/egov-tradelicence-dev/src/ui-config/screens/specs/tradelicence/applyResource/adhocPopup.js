@@ -427,7 +427,9 @@ export const adhocPopup = getCommonContainer({
           style: {
             width: "140px",
             height: "48px",
-            marginRight: "16px"
+            marginRight: "10px",
+            marginBottom:"10px",
+            marginTop:"10px"
           }
         },
         children: {
@@ -448,7 +450,8 @@ export const adhocPopup = getCommonContainer({
           color: "primary",
           style: {
             width: "140px",
-            height: "48px"
+            height: "48px",
+            marginRight: "10px"
           }
         },
         children: {
