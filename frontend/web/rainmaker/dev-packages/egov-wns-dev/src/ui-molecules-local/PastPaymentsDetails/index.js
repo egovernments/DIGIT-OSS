@@ -42,8 +42,8 @@ class PastPayments extends Component {
 
   render() {
     const { urls, pastPaymentsDetails } = this.props;
-
     let address = JSON.parse(getUserInfo()).permanentAddress ? JSON.parse(getUserInfo()).permanentAddress : "-"
+    let name = JSON.parse(getUserInfo()).name ? JSON.parse(getUserInfo()).name : "-"
     const date = (from, to) => {
       let fromDate = new Date(convertEpochToDate(from))
       let toDate = new Date(convertEpochToDate(to))
@@ -72,7 +72,7 @@ class PastPayments extends Component {
               </div>
               <div style={{ height: "auto" }}>
                 <Label
-                  label={address}
+                  label={`Consumer No : ${element.paymentDetails[0].bill.consumerCode}`}
                   labelStyle={secondaryTextLabelStyle}
                   fontSize="14px"
                   containerStyle={secondaryTextContainer}
@@ -81,13 +81,32 @@ class PastPayments extends Component {
               </div>
               <div style={{ height: "auto" }}>
                 <Label
-                  label={`Consumer No. :${element.paymentDetails[0].bill.consumerCode}`}
+                  label={`Owner Name : ${name}`}
                   labelStyle={secondaryTextLabelStyle}
                   fontSize="14px"
                   containerStyle={secondaryTextContainer}
                   color="#484848"
                 />
               </div>
+              <div style={{ height: "auto" }}>
+                <Label
+                  label={`Amount Paid : ${element.totalAmountPaid}`}
+                  labelStyle={secondaryTextLabelStyle}
+                  fontSize="14px"
+                  containerStyle={secondaryTextContainer}
+                  color="#484848"
+                />
+              </div>
+              <div style={{ height: "auto" }}>
+                <Label
+                  label={address}
+                  labelStyle={secondaryTextLabelStyle}
+                  fontSize="14px"
+                  containerStyle={secondaryTextContainer}
+                  color="#484848"
+                />
+              </div>
+
 
             </div>
           </Grid>
