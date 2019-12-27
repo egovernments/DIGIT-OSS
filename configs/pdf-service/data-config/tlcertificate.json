@@ -410,7 +410,18 @@
                 }
 
               ]
-          }
+          },
+          { 
+            "path": "https://egov-micro-dev.egovernments.org/filestore/v1/files/url",
+            "queryParam": "tenantId=$.tenantId,fileStoreIds=$.tradeLicenseDetail.applicationDocuments[?(@.documentType == 'OWNERIDPROOF')].fileStoreId",
+            "apiRequest": null,
+            "requesttype": "GET",
+            "responseMapping":[
+              {             
+                "variable":"userpic",
+                "value":"$.fileStoreIds[0].url",
+                "type": "image"
+              }
           ]
         }
      ]
