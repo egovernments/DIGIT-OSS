@@ -33,18 +33,18 @@ export const searchResults = {
         }
       },
       {
+        name: "tenantId",
+        options: {
+          display: false
+        }
+      },
+      {
         name:"status1",
         options: {
           display: false
         }
       },
 
-      {
-        name: "tenantId",
-        options: {
-          display: false
-        }
-      }
     ],
     title: getTextToLocalMapping(
       "Search Results for Trade License Applications"
@@ -80,7 +80,7 @@ export const searchResults = {
 
 const onRowClick = rowData => {
   //console.log("rowData--",rowData);
-  switch (rowData[6]) {
+  switch (rowData[7]) {
     case "INITIATED":
       window.location.href = `apply?applicationNumber=${rowData[0]}&tenantId=${
         rowData[6]
