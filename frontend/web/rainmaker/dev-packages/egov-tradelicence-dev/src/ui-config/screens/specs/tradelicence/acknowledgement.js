@@ -442,7 +442,51 @@ const getAcknowledgementCard = (
       },
       approvalSuccessFooter
     };
-  } else if (purpose === "application" && status === "rejected") {
+  }else if (purpose === "sendbacktocitizen" && status === "success") {
+    loadReceiptGenerationData(applicationNumber, tenant);
+    return {
+      header: getCommonContainer({
+        header: getCommonHeader({
+          labelName: `Trade License Application ${financialYearText}`,
+          labelKey: "TL_TRADE_APPLICATION",
+          dynamicArray: [financialYearText]
+        }),
+        applicationNumber: {
+          uiFramework: "custom-atoms-local",
+          moduleName: "egov-tradelicence",
+          componentPath: "ApplicationNoContainer",
+          props: {
+            number: applicationNumber
+          }
+        }
+      }),
+      applicationSuccessCard: {
+        uiFramework: "custom-atoms",
+        componentPath: "Div",
+        children: {
+          card: acknowledgementCard({
+            icon: "done",
+            backgroundColor: "#39CB74",
+            header: {
+              labelName: "Application is sent back to Citizen Successfully",
+              labelKey: "TL_SENDBACK_TOCITIZEN_CHECKLIST_MESSAGE_HEAD"
+            },
+            // body: {
+            //   labelName:
+            //     "A notification regarding above application status has been sent to trade owner at registered Mobile No.",
+            //   labelKey: "TL_SENDBACK_CHECKLIST_MESSAGE_SUB"
+            // },
+            tailText: {
+              labelName: "Trade License No.",
+              labelKey: "TL_HOME_SEARCH_RESULTS_TL_NO_LABEL"
+            },
+            number: secondNumber
+          })
+        }
+      },
+      approvalSuccessFooter
+    };
+  }  else if (purpose === "application" && status === "rejected") {
     return {
       header: getCommonContainer({
         header: getCommonHeader({

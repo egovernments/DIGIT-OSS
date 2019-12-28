@@ -83,6 +83,7 @@ class WorkFlowContainer extends React.Component {
   };
 
   getPurposeString = action => {
+       
     switch (action) {
       case "FORWARD":
         return "purpose=forward&status=success";
@@ -98,6 +99,8 @@ class WorkFlowContainer extends React.Component {
         return "purpose=sendback&status=success";
       case "REFER":
         return "purpose=refer&status=success";
+      case "SENDBACKTOCITIZEN":
+        return "purpose=sendbacktocitizen&status=success";
     }
   };
 
