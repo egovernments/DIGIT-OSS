@@ -95,19 +95,22 @@
                   "variable": "licenseIssueDate",
                   "value": {
                     "path": "$.issuedDate"
-                  }
+                  },
+                  "type": "date"
               },
               {
                   "variable": "licenseValidityFrom",
                   "value": {
                     "path": "$.validFrom"
-                  }
+                  },
+                  "type": "date"
               },
               {
                 "variable": "licenseValidityTo",
                 "value": {
                   "path": "$.validTo"
-                }
+                },
+                "type": "date"
             },
             {
               "variable": "to",
