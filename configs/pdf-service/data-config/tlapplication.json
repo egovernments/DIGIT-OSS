@@ -79,7 +79,8 @@
                   "variable": "commencementDate",
                   "value": {
                     "path": "$.commencementDate"
-                  }
+                  },
+                  "type": "date"
               },
               {
                   "variable": "tradeGstNo",
@@ -298,7 +299,8 @@
                   "variable": "dateOfBirth",
                   "value": {
                     "path": "$.tradeLicenseDetail.owners[0].dob"
-                  }
+                  },
+                  "type": "date"
               },
               {
                   "variable": "email",

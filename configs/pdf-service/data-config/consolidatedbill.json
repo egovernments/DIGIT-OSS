@@ -442,33 +442,38 @@
                 "variable": "fromPeriod",
                 "value": {
                   "path": "$.billDetails[0].fromPeriod"
-                }
+                },
+                "type": "date"
               },
               {
                 "variable": "toPeriod",
                 "value": {
                   "path": "$.billDetails[0].toPeriod"
-                }
+                },
+                "type": "date"
               },
               
           {
                 "variable": "billIssueDate",
                 "value": {
                   "path": "$.billDate"
-                }
+                },
+                "type": "date"
               },
               
               {
                 "variable": "billDueDate",
                 "value": {
                   "path": "$.billDetails[0].expiryDate"
-                }
+                },
+                "type": "date"
               },
               {
                 "variable": "billdate",
                 "value": {
                   "path": "$.billDate"
-                }
+                },
+                "type": "date"
               },
               
           {
@@ -523,7 +528,8 @@
                 "variable": "date",
                 "value": {
                   "path": "$.billDate"
-                }
+                },
+                "type": "date"
               },
               {
                 "variable": "totalPayment",
