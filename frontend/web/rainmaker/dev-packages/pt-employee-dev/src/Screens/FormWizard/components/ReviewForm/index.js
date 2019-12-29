@@ -7,11 +7,10 @@ import propertyAddressConfig from "./formConfigs/propertyAddress";
 import { connect } from "react-redux";
 import formHoc from "egov-ui-kit/hocs/form";
 import EditIcon from "./components/EditIcon";
-
 import PropertyAddressInfo from 'egov-ui-kit/common/propertyTax/Property/components/PropertyAddressInfo';
 import AssessmentInfo from 'egov-ui-kit/common/propertyTax/Property/components/AssessmentInfo';
 import OwnerInfo from 'egov-ui-kit/common/propertyTax/Property/components/OwnerInfo';
-
+import DemandCollectionInfo from 'egov-ui-kit/common/propertyTax/Property/components/DemandCollectionInfo';
 
 import "./index.css";
 const defaultIconStyle = {
@@ -72,7 +71,8 @@ class ReviewForm extends Component {
     let { addRebateBox, updateCalculation, onEditButtonClick } = this;
     let { showRebateBox } = this.state;
     let { stepZero, stepTwo, stepOne, estimationDetails, importantDates, totalAmount } = this.props;
-    const { generalMDMSDataById = {} , loadMdmsData={} } = this.props;
+    const { generalMDMSDataById = {} , loadMdmsData={} ,DemandProperties=[]} = this.props;
+    console.log("this.props:",this.props);
     return (
       <div>
         <Card
@@ -86,7 +86,8 @@ class ReviewForm extends Component {
               />
               <PropertyAddressInfo loadMdmsData={loadMdmsData}  generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(0)} />}></PropertyAddressInfo>
               <AssessmentInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(1)} />}></AssessmentInfo>
-              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></OwnerInfo>
+              <DemandCollectionInfo generalMDMSDataById={generalMDMSDataById} demandProperties={DemandProperties} properties={this.props.properties} editIcon={<EditIcon onIconClick={() => onEditButtonClick(2)} />}></DemandCollectionInfo>
+              <OwnerInfo generalMDMSDataById={generalMDMSDataById} properties={this.props.properties}  editIcon={<EditIcon onIconClick={() => onEditButtonClick(3)} />}></OwnerInfo>
             </div>
           }
         />
@@ -117,12 +118,16 @@ class ReviewForm extends Component {
   }
 }
 const mapStateToProps = (state, ownProps) => {
-  const { common = {} } = state;
+  const { common = {},screenConfiguration } = state;
+  const {preparedFinalObject}=screenConfiguration || {};
+  const {DemandProperties}=preparedFinalObject || {};
+  console.log("common:",common);
   const { generalMDMSDataById , loadMdmsData} = common || {};
   return {
     ownProps,
     generalMDMSDataById,
     loadMdmsData,
+    DemandProperties
   };
 };
 const mapDispatchToProps = (dispatch) => ({

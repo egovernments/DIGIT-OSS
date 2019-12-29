@@ -16,6 +16,9 @@ export const getLocalization = (key) => {
 export const getLocale = () => {
   return localStorage.getItem("locale");
 };
+export const getFinalData = () => {
+  return JSON.parse(localStorage.getItem("finalData"));
+};
 
 //SET methods
 export const setUserInfo = (userInfo) => {

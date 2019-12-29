@@ -328,6 +328,7 @@ class FormWizard extends Component {
   componentDidMount = async () => {
     let {
       location,
+      generalMDMSDataById,
       fetchMDMDDocumentTypeSuccess,
       renderCustomTitleForPt,
       showSpinner,
@@ -335,8 +336,10 @@ class FormWizard extends Component {
       fetchGeneralMDMSData
     } = this.props;
     let { search } = location;
+
     showSpinner();
     const { selected } = this.state;
+
     const isReasses = Boolean(
       getQueryValue(search, "isReassesment").replace("false", "")
     );
@@ -346,6 +349,7 @@ class FormWizard extends Component {
     );
     const tenantId = getQueryValue(search, "tenantId");
     const draftUuid = getQueryValue(search, "uuid");
+    const tenantId1 =getTenantId() || "uk";
     const assessmentId =
       getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
 
@@ -374,13 +378,7 @@ class FormWizard extends Component {
         tenantId
       );
       await this.fetchDraftDetails(assessmentId, isReassesment, draftUuid);
-      fetchGeneralMDMSData(
-        null,
-        "BillingService",
-        ["TaxPeriod", "TaxHeadMaster"],
-        "",
-        tenantId
-      );
+
       if (selected > 2) {
         const {
           tenantId: id
@@ -395,7 +393,13 @@ class FormWizard extends Component {
         );
       }
     }
-
+    fetchGeneralMDMSData(
+      null,
+      "BillingService",
+      ["TaxPeriod", "TaxHeadMaster"],
+      "",
+      tenantId1
+    );
     const { ownerInfoArr } = this.state;
 
     if (ownerInfoArr.length < 2) {
@@ -418,6 +422,8 @@ class FormWizard extends Component {
           ":",
           "PT_ADD_NEW_PROPERTY"
         ];
+
+
 
     renderCustomTitleForPt({ titleObject });
     hideSpinner();
@@ -443,7 +449,7 @@ class FormWizard extends Component {
 
   getOwnerDetails = ownerType => {
     const { selected } = this.state;
-    const isReviewPage = selected === 3;
+    const isReviewPage = selected === 4;
     switch (ownerType) {
       case "SINGLEOWNER":
         return <OwnerInfoHOC disabled={isReviewPage} />;
@@ -550,7 +556,7 @@ class FormWizard extends Component {
       case 2:
       return (
         <div>
-          <DemandCollection disabled={fromReviewPage} />
+          <DemandCollection disabled={fromReviewPage} datas={this.props.finalData}/>
         </div>
       );
 
@@ -952,7 +958,6 @@ class FormWizard extends Component {
             );
             if (ownershipTypeSelected === "SINGLEOWNER") {
               const { ownerInfo } = form;
-              console.log("FORM:",form);
               const isOwnerInfoFormValid = validateForm(ownerInfo);
               if (isOwnerInfoFormValid) {
                 //callDraft();
@@ -1938,9 +1943,8 @@ class FormWizard extends Component {
       assessedPropertyDetails = {}
     } = this.state;
     const fromReviewPage = selected === 3;
-    const { history, location } = this.props;
+    const { history, location,finalData=[] } = this.props;
     const { search } = location;
-
     const { Properties = [] } = assessedPropertyDetails;
     let propertyId = "";
     for (let pty of Properties) {
@@ -2013,13 +2017,15 @@ const mapStateToProps = state => {
     yeardata1[data]["taxHead"] = [...taxdata1];
     return yeardata[data];
   });
+  {finalData && finalData.length ? localStorage.setItem("finalData",JSON.stringify(finalData)):"error"  }
   return {
     form,
     currentTenantId,
     prepareFormData: common.prepareFormData,
     common,
     finalData,
-    app
+    app,
+    generalMDMSDataById
   };
 };
 
@@ -2058,3 +2064,19 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(FormWizard);
+
+// getGeneralData=()=>{
+//   let {fetchGeneralMDMSData,location,finalData}=this.props;
+//   let { search } = location;
+//   const {tenantId}=this.state;
+//   console.log("location:",location);
+//     const tenantId1 =getTenantId() || "uk";
+//     console.log("tenantId:;",tenantId,"tenantId1:",tenantId1);
+//   fetchGeneralMDMSData(
+//     null,
+//     "BillingService",
+//     ["TaxPeriod", "TaxHeadMaster"],
+//     "",
+//     tenantId1
+//   );
+// }
