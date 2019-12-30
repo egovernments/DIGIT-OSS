@@ -159,8 +159,8 @@ export const applicationSuccessFooter = (
       },
       roleDefination: {
         rolePath: "user-info.roles",
-        action: "PAY"
-        // roles: ["NOC_CEMP", "SUPERUSER"]
+        action: "PAY",
+        roles: ["NOC_CEMP", "SUPERUSER"]
       },
       visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
     },
