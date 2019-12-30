@@ -275,7 +275,7 @@ class TableData extends Component {
               "NA"
             ),
         },
-        { text: item.assignee ? <Label label={item.assignee.name} color="#000000" /> : <Label label={"NA"} color="#000000" /> },
+        { text: item.assigner ? <Label label={item.assigner.name} color="#000000" /> : <Label label={"NA"} color="#000000" /> },
         { text: Math.round(sla), badge: true },
         { historyButton: true },
       ];
@@ -332,7 +332,7 @@ class TableData extends Component {
       const requestBody = [{ key: "tenantId", value: tenantId }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
       const assignedData = orderBy(
-        filter(responseData.ProcessInstances, (item) => get(item.assignee, "uuid") === uuid),
+        filter(responseData.ProcessInstances, (item) => get(item.assigner, "uuid") === uuid),
         ["businesssServiceSla"]
       );
       const allData = orderBy(get(responseData, "ProcessInstances", []), ["businesssServiceSla"]);
