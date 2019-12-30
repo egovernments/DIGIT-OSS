@@ -19,6 +19,12 @@ public class AuditDetails implements Serializable {
     @JsonProperty("lastModifiedDate")
     private Long lastModifiedDate = null;
 
+    @JsonProperty("createdTime")
+    private Long createdTime;
+
+    @JsonProperty("lastModifiedTime")
+    private Long lastModifiedTime;
+
     public String getCreatedBy() {
         return createdBy;
     }

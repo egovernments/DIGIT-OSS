@@ -2,19 +2,70 @@ package org.egov.infra.microservice.models;
 
 import java.math.BigDecimal;
 
-public class BillAccountDetail {
+import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+@Setter
+@Getter
+@ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = {"id"})
+public class BillAccountDetail {
+    @Size(max=64)
+    @JsonProperty("id")
+    private String id = null;
+
+    @Size(max=64)
+    @JsonProperty("tenantId")
+    private String tenantId = null;
+
+    @Size(max=64)
+    @JsonProperty("billDetailId")
+    private String billDetailId = null;
+
+    @Size(max=64)
+    @JsonProperty("demandDetailId")
+    private String demandDetailId = null;
+
+    @JsonProperty("order")
+    private Integer order = null;
+
+    @JsonProperty("amount")
+    private BigDecimal amount = null;
+
+    @JsonProperty("adjustedAmount")
+    private BigDecimal adjustedAmount = null;
+
+    @JsonProperty("isActualDemand")
+    private Boolean isActualDemand = null;
+
+    @Size(max=64)
+    @JsonProperty("taxHeadCode")
+    private String taxHeadCode = null;
+
+    @JsonProperty("additionalDetails")
+    private JsonNode additionalDetails = null;
+
+    @JsonProperty("purpose")
+    private Purpose purpose = null;
+
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails;
+    
     private String glcode;
 
-    private Integer order;
-
     private String accountDescription;
-
-    private Boolean isActualDemand;
-
-    private String id;
-
-    private String tenantId;
 
     private String billDetail;
 
@@ -23,95 +74,5 @@ public class BillAccountDetail {
     private BigDecimal creditAmount = BigDecimal.ZERO;
 
     private BigDecimal debitAmount = BigDecimal.ZERO;
-
-    private Purpose purpose;
-
-    public String getGlcode() {
-        return glcode;
-    }
-
-    public void setGlcode(String glcode) {
-        this.glcode = glcode;
-    }
-
-    public Integer getOrder() {
-        return order;
-    }
-
-    public void setOrder(Integer order) {
-        this.order = order;
-    }
-
-    public String getAccountDescription() {
-        return accountDescription;
-    }
-
-    public void setAccountDescription(String accountDescription) {
-        this.accountDescription = accountDescription;
-    }
-
-    public Boolean getIsActualDemand() {
-        return isActualDemand;
-    }
-
-    public void setIsActualDemand(Boolean isActualDemand) {
-        this.isActualDemand = isActualDemand;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public String getBillDetail() {
-        return billDetail;
-    }
-
-    public void setBillDetail(String billDetail) {
-        this.billDetail = billDetail;
-    }
-
-    public BigDecimal getCrAmountToBePaid() {
-        return crAmountToBePaid;
-    }
-
-    public void setCrAmountToBePaid(BigDecimal crAmountToBePaid) {
-        this.crAmountToBePaid = crAmountToBePaid;
-    }
-
-    public BigDecimal getCreditAmount() {
-        return creditAmount;
-    }
-
-    public void setCreditAmount(BigDecimal creditAmount) {
-        this.creditAmount = creditAmount;
-    }
-
-    public BigDecimal getDebitAmount() {
-        return debitAmount;
-    }
-
-    public void setDebitAmount(BigDecimal debitAmount) {
-        this.debitAmount = debitAmount;
-    }
-
-    public Purpose getPurpose() {
-        return purpose;
-    }
-
-    public void setPurpose(Purpose purpose) {
-        this.purpose = purpose;
-    }
 
 }

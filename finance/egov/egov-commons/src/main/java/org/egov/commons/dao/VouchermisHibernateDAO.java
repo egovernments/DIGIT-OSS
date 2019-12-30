@@ -47,6 +47,7 @@
  */
 package org.egov.commons.dao;
 
+import org.apache.commons.lang.StringUtils;
 import org.egov.commons.CVoucherHeader;
 import org.egov.commons.Vouchermis;
 import org.hibernate.Query;
@@ -99,16 +100,20 @@ public class VouchermisHibernateDAO  {
         return (Vouchermis) qry.uniqueResult();
     }
     
-    public CVoucherHeader getRecentVoucherByServiceNameAndReferenceDoc(String serviceName,String referenceDocument){
-        final Query qry = getCurrentSession().createQuery("select vh from Vouchermis vmis,CVoucherHeader vh "
-                                                        + "where vmis.voucherheaderid=vh.id and vmis.serviceName=:serviceName "
-                                                        + "and vmis.referenceDocument=:referenceDocument "
-                                                        + "order by vh.createdDate desc");
-        qry.setString("serviceName", serviceName);
+    public List<CVoucherHeader> getRecentVoucherByServiceNameAndReferenceDoc(String serviceName,String referenceDocument){
+        StringBuilder builderQuery = new StringBuilder("select vh from Vouchermis vmis,CVoucherHeader vh where vmis.voucherheaderid=vh.id");
+        if(!StringUtils.isBlank(serviceName)){
+            builderQuery.append(" and vmis.serviceName=:serviceName ");
+        }
+        builderQuery.append(" and vmis.referenceDocument=:referenceDocument ");
+        builderQuery.append(" order by vh.createdDate desc ");
+        final Query qry = getCurrentSession().createQuery(builderQuery.toString());
+        if(!StringUtils.isBlank(serviceName)){
+            qry.setString("serviceName", serviceName);
+        }
         qry.setString("referenceDocument", referenceDocument);
-        qry.setMaxResults(1);
-        List list = qry.list();
-        return list.isEmpty() ? null : (CVoucherHeader)list.get(0) ;
+        List<CVoucherHeader> list = qry.list();
+        return list.isEmpty() ? null : list ;
     }
 
 }

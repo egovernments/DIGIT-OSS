@@ -46,71 +46,71 @@
  *
  */
 
-package org.egov.infra.config.core;
+package org.egov.infra.microservice.models;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
+import java.math.BigDecimal;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode
+public class PaymentDetail {
+    @Size(max=64)
+    @JsonProperty("id")
+    private String id;
 
-import static org.apache.commons.lang3.StringUtils.EMPTY;
+    @Size(max=64)
+    @JsonProperty("tenantId")
+    private String tenantId;
 
+    @JsonProperty("totalDue")
+    private BigDecimal totalDue;
 
-@Component
-public class EnvironmentSettings {
+    @NotNull
+    @JsonProperty("totalAmountPaid")
+    private BigDecimal totalAmountPaid;
 
-    private static final String DEV_MODE = "dev.mode";
-    private static final String MAIL_ENABLED = "mail.enabled";
-    private static final String SMS_ENABLED = "sms.enabled";
-    private static final String USER_PASWRD_EXPIRY_DAYS = "user.pwd.expiry.days";
-    private static final String HIBERNATE_JDBC_BATCH_SIZE = "hibernate.jdbc.batch_size";
-    private static final String STATE_WIDE_SCHEMA_NAME = "statewide.schema.name";
-    private static final String DEFAULT_SCHEMA_NAME = "default.schema.name";
-    private static final String COLLECTION_VERSION = "egov.collection.version";
+    @Size(max=64)
+    @JsonProperty("receiptNumber")
+    private String receiptNumber;
+    
+    @Size(max=64)
+    @JsonProperty("manualReceiptNumber")
+    private String manualReceiptNumber;
+    
+    @JsonProperty("manualReceiptDate")
+    private Long manualReceiptDate;
 
-    @Autowired
-    private Environment environment;
+    @JsonProperty("receiptDate")
+    private Long receiptDate = null;
 
-    public String getProperty(String propKey) {
-        return this.environment.getProperty(propKey, EMPTY);
-    }
+    @JsonProperty("receiptType")
+    private String receiptType = null;
 
-    public <T> T getProperty(String propKey, Class<T> type) {
-        return this.environment.getProperty(propKey, type);
-    }
+    @JsonProperty("businessService")
+    private String businessService;
 
-    public boolean devMode() {
-        return this.environment.getProperty(DEV_MODE, Boolean.class);
-    }
+    @NotNull
+    @Size(max=64)
+    @JsonProperty("billId")
+    private String billId;
 
-    public boolean emailEnabled() {
-        return this.environment.getProperty(MAIL_ENABLED, Boolean.class);
-    }
+    @JsonProperty("bill")
+    private BillV2 bill;
 
-    public boolean smsEnabled() {
-        return this.environment.getProperty(SMS_ENABLED, Boolean.class);
-    }
+    @JsonProperty("additionalDetails")
+    private JsonNode additionalDetails;
 
-    public Integer userPasswordExpiryInDays() {
-        return this.environment.getProperty(USER_PASWRD_EXPIRY_DAYS, Integer.class);
-    }
+    @JsonProperty("auditDetails")
+    private AuditDetails auditDetails;
 
-    public Integer getBatchUpdateSize() {
-        return this.environment.getProperty(HIBERNATE_JDBC_BATCH_SIZE, Integer.class);
-    }
-
-    public String statewideSchemaName() {
-        return environment.getProperty(STATE_WIDE_SCHEMA_NAME);
-    }
-
-    public String defaultSchemaName() {
-        return environment.getProperty(DEFAULT_SCHEMA_NAME);
-    }
-
-    public String schemaName(String domainName) {
-        return environment.getProperty("tenant." + domainName, defaultSchemaName());
-    }
-
-    public String collectionVersion() {
-        return environment.getProperty(COLLECTION_VERSION, "V1");
-    }
 }

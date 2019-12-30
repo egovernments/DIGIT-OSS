@@ -58,6 +58,7 @@ import org.egov.collection.entity.ReceiptHeader;
 import org.egov.collection.utils.CollectionsUtil;
 import org.egov.eis.entity.Assignment;
 import org.egov.eis.service.AssignmentService;
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.microservice.models.BillDetail;
 import org.egov.infra.microservice.models.BillDetailAdditional;
 import org.egov.infra.microservice.models.Receipt;
@@ -110,6 +111,8 @@ public class SearchReceiptAction extends SearchFormAction {
 
     @Autowired
     private MicroserviceUtils microserviceUtils;
+    
+    private String collectionVersion;
 
     @Override
     public Object getModel() {
@@ -187,9 +190,9 @@ public class SearchReceiptAction extends SearchFormAction {
         // serviceClassMap.putAll(CollectionConstants.SERVICE_TYPE_CLASSIFICATION);
         // serviceClassMap.remove(CollectionConstants.SERVICE_TYPE_PAYMENT);
         // addDropdownData("serviceTypeList", Collections.EMPTY_LIST);
-        addDropdownData("businessCategorylist", microserviceUtils.getBusinessCategories());
+//        addDropdownData("businessCategorylist", microserviceUtils.getBusinessCategories());
         addDropdownData("serviceTypeList", microserviceUtils.getBusinessService("Finance"));
-
+        
         // addDropdownData("bankBranchList", collectionsUtil.getBankCollectionBankBranchList());
     }
 
@@ -209,11 +212,13 @@ public class SearchReceiptAction extends SearchFormAction {
     @Action(value = "/receipts/searchReceipt-search")
     public String search() {
         target = "searchresult";
+        collectionVersion = ApplicationThreadLocals.getCollectionVersion();
 
         List<ReceiptHeader> receiptList = new ArrayList<>();
         List<Receipt> receipts = microserviceUtils.searchReciepts("MISCELLANEOUS", getFromDate(), getToDate(), getServiceTypeId(),
                 (getReceiptNumber() != null && !getReceiptNumber().isEmpty() && !"".equalsIgnoreCase(getReceiptNumber()))
                         ? getReceiptNumber() : null);
+        
 
         for (Receipt receipt : receipts) {
 
@@ -222,6 +227,7 @@ public class SearchReceiptAction extends SearchFormAction {
                 for (BillDetail billDetail : bill.getBillDetails()) {
 
                     ReceiptHeader receiptHeader = new ReceiptHeader();
+                    receiptHeader.setPaymentId(receipt.getPaymentId());
                     receiptHeader.setReceiptnumber(billDetail.getReceiptNumber());
                     receiptHeader.setReceiptdate(new Date(billDetail.getReceiptDate()));
                     receiptHeader.setService(billDetail.getBusinessService());
@@ -235,7 +241,7 @@ public class SearchReceiptAction extends SearchFormAction {
                         receiptHeader.setManualreceiptnumber(billDetail.getManualReceiptNumber());
                         receiptHeader.setG8data(billDetail.getManualReceiptNumber());
                     }
-                    if (billDetail.getManualReceiptDate() != 0) {
+                    if (billDetail.getManualReceiptDate() != null && billDetail.getManualReceiptDate() != 0) {
                         receiptHeader.setManualreceiptdate(new Date(billDetail.getManualReceiptDate()));
                         if (null != billDetail.getManualReceiptNumber()) {
                             receiptHeader.setG8data(billDetail.getManualReceiptNumber()+"/"+new Date(billDetail.getManualReceiptDate()).toString()); 
@@ -285,26 +291,6 @@ public class SearchReceiptAction extends SearchFormAction {
         }
 
         resultList = searchResult.getList();
-
-        // super.search();
-        // ArrayList<ReceiptHeader> receiptList = new ArrayList<ReceiptHeader>(0);
-        // receiptList.addAll(searchResult.getList());
-        // searchResult.getList().clear();
-        // if (!getServiceClass().equals("-1"))
-        // addDropdownData("serviceTypeList",
-        // getPersistenceService().findAllByNamedQuery(CollectionConstants.QUERY_SERVICES_BY_TYPE, getServiceClass()));
-        //
-        // for (ReceiptHeader receiptHeader : receiptList) {
-        // if (receiptHeader.getState() != null && receiptHeader.getState().getOwnerPosition() != null) {
-        // List<Assignment> assignments = assignmentService.getAssignmentsForPosition(
-        // receiptHeader.getState().getOwnerPosition(), receiptHeader.getCreatedDate());
-        // if (!assignments.isEmpty())
-        // receiptHeader.setWorkflowUserName(assignments.get(0).getEmployee().getUsername());
-        // }
-        // searchResult.getList().add(receiptHeader);
-        // }
-        // resultList.addAll(receiptList);
-        // resultList = receiptList;
         return SUCCESS;
     }
 
@@ -444,5 +430,13 @@ public class SearchReceiptAction extends SearchFormAction {
 
     public void setBranchId(Integer branchId) {
         this.branchId = branchId;
+    }
+    
+    public String getCollectionVersion() {
+        return collectionVersion;
+    }
+    
+    public void setCollectionVersion(String collectionVersion) {
+        this.collectionVersion = collectionVersion;
     }
 }

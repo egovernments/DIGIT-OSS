@@ -46,71 +46,27 @@
  *
  */
 
-package org.egov.infra.config.core;
+package org.egov.infra.microservice.models;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
+import java.util.List;
 
-import static org.apache.commons.lang3.StringUtils.EMPTY;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Component
-public class EnvironmentSettings {
+@Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class PaymentResponse {
 
-    private static final String DEV_MODE = "dev.mode";
-    private static final String MAIL_ENABLED = "mail.enabled";
-    private static final String SMS_ENABLED = "sms.enabled";
-    private static final String USER_PASWRD_EXPIRY_DAYS = "user.pwd.expiry.days";
-    private static final String HIBERNATE_JDBC_BATCH_SIZE = "hibernate.jdbc.batch_size";
-    private static final String STATE_WIDE_SCHEMA_NAME = "statewide.schema.name";
-    private static final String DEFAULT_SCHEMA_NAME = "default.schema.name";
-    private static final String COLLECTION_VERSION = "egov.collection.version";
+    @JsonProperty("ResponseInfo")
+    private ResponseInfo responseInfo;
 
-    @Autowired
-    private Environment environment;
+    @JsonProperty("Payments")
+    private List<Payment> payments;
 
-    public String getProperty(String propKey) {
-        return this.environment.getProperty(propKey, EMPTY);
-    }
-
-    public <T> T getProperty(String propKey, Class<T> type) {
-        return this.environment.getProperty(propKey, type);
-    }
-
-    public boolean devMode() {
-        return this.environment.getProperty(DEV_MODE, Boolean.class);
-    }
-
-    public boolean emailEnabled() {
-        return this.environment.getProperty(MAIL_ENABLED, Boolean.class);
-    }
-
-    public boolean smsEnabled() {
-        return this.environment.getProperty(SMS_ENABLED, Boolean.class);
-    }
-
-    public Integer userPasswordExpiryInDays() {
-        return this.environment.getProperty(USER_PASWRD_EXPIRY_DAYS, Integer.class);
-    }
-
-    public Integer getBatchUpdateSize() {
-        return this.environment.getProperty(HIBERNATE_JDBC_BATCH_SIZE, Integer.class);
-    }
-
-    public String statewideSchemaName() {
-        return environment.getProperty(STATE_WIDE_SCHEMA_NAME);
-    }
-
-    public String defaultSchemaName() {
-        return environment.getProperty(DEFAULT_SCHEMA_NAME);
-    }
-
-    public String schemaName(String domainName) {
-        return environment.getProperty("tenant." + domainName, defaultSchemaName());
-    }
-
-    public String collectionVersion() {
-        return environment.getProperty(COLLECTION_VERSION, "V1");
-    }
 }

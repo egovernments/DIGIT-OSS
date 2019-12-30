@@ -82,7 +82,7 @@ public class ApplicationTenantResolverFilter implements Filter {
         LOGGER.info(" *** Schema name  :"+environmentSettings.schemaName(domainName) );
         LOGGER.info(" *** domainName  :"+domainName);
         LOGGER.info(" *** domainURL  :"+domainURL);
-        
+        ApplicationThreadLocals.setCollectionVersion(environmentSettings.collectionVersion());
         ApplicationThreadLocals.setDomainName(domainName);
         ApplicationThreadLocals.setDomainURL(domainURL);
         chain.doFilter(request, response);

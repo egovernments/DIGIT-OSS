@@ -46,71 +46,37 @@
  *
  */
 
-package org.egov.infra.config.core;
+package org.egov.infra.microservice.utils;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
-import static org.apache.commons.lang3.StringUtils.EMPTY;
+import org.egov.infra.microservice.models.ReceiptSearchCriteria;
 
-
-@Component
-public class EnvironmentSettings {
-
-    private static final String DEV_MODE = "dev.mode";
-    private static final String MAIL_ENABLED = "mail.enabled";
-    private static final String SMS_ENABLED = "sms.enabled";
-    private static final String USER_PASWRD_EXPIRY_DAYS = "user.pwd.expiry.days";
-    private static final String HIBERNATE_JDBC_BATCH_SIZE = "hibernate.jdbc.batch_size";
-    private static final String STATE_WIDE_SCHEMA_NAME = "statewide.schema.name";
-    private static final String DEFAULT_SCHEMA_NAME = "default.schema.name";
-    private static final String COLLECTION_VERSION = "egov.collection.version";
-
-    @Autowired
-    private Environment environment;
-
-    public String getProperty(String propKey) {
-        return this.environment.getProperty(propKey, EMPTY);
-    }
-
-    public <T> T getProperty(String propKey, Class<T> type) {
-        return this.environment.getProperty(propKey, type);
-    }
-
-    public boolean devMode() {
-        return this.environment.getProperty(DEV_MODE, Boolean.class);
-    }
-
-    public boolean emailEnabled() {
-        return this.environment.getProperty(MAIL_ENABLED, Boolean.class);
-    }
-
-    public boolean smsEnabled() {
-        return this.environment.getProperty(SMS_ENABLED, Boolean.class);
-    }
-
-    public Integer userPasswordExpiryInDays() {
-        return this.environment.getProperty(USER_PASWRD_EXPIRY_DAYS, Integer.class);
-    }
-
-    public Integer getBatchUpdateSize() {
-        return this.environment.getProperty(HIBERNATE_JDBC_BATCH_SIZE, Integer.class);
-    }
-
-    public String statewideSchemaName() {
-        return environment.getProperty(STATE_WIDE_SCHEMA_NAME);
-    }
-
-    public String defaultSchemaName() {
-        return environment.getProperty(DEFAULT_SCHEMA_NAME);
-    }
-
-    public String schemaName(String domainName) {
-        return environment.getProperty("tenant." + domainName, defaultSchemaName());
-    }
-
-    public String collectionVersion() {
-        return environment.getProperty(COLLECTION_VERSION, "V1");
-    }
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PaymentSearchCriteria {
+    private Set<String> ids;
+    private Set<String> billIds;
+    private String tenantId;
+    private Set<String> receiptNumbers;
+    private Set<String> status;
+    private Set<String> instrumentStatus;
+    private Set<String> paymentModes;
+    private List<String> payerIds;
+    private Set<String> consumerCodes;
+    private Set<String> businessServices;
+    private String transactionNumber;
+    private String mobileNumber;
+    private Long fromDate;
+    private Long toDate;
+    private Integer offset;
+    private Integer limit;
 }

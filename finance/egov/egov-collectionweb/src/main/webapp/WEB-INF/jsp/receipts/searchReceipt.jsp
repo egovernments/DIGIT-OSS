@@ -500,8 +500,14 @@ function onChangeServiceClass(obj)
 <display:table name="searchResult" uid="currentRow"  style="width:100%;border-left: 1px solid #DFDFDF;" cellpadding="0" cellspacing="0" export="false" requestURI="">
 <display:caption media="pdf">&nbsp;</display:caption>
 <display:column headerClass="bluebgheadtd"  class="blueborderfortd" style="width:3%">
+<s:if test='%{collectionVersion eq "V2"}'>
+<input name="selectedReceipts" type="checkbox" id="selectedReceipts"
+				value="${currentRow.paymentId}"/>
+</s:if>
+<s:else>
 <input name="selectedReceipts" type="checkbox" id="selectedReceipts"
 				value="${currentRow.receiptnumber}"/>
+</s:else>
 <input type="hidden" name="receiptstatus" id="receiptstatus" value="${currentRow.curretnStatus}" />
 <input type="hidden" name="receipttype" id="receipttype" value="${currentreceipttype}" />
 </display:column>

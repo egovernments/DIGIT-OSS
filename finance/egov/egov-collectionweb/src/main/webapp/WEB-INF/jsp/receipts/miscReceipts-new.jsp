@@ -781,97 +781,12 @@ var totaldbamt=0,totalcramt=0;
         <td width="21%" class="bluebox"><s:text name="miscreceipt.service.category" /><span class="mandatory"/> </td>
         <td width="30%" class="bluebox">
         	<s:select headerKey="-1" headerValue="----Choose----" name="serviceCategory" id="serviceCategoryid" cssClass="selectwk" list="serviceCategoryNames" value="%{service.serviceCategory}" onChange="populateServiceType(this.value);" />
-       		<!-- <egov:ajaxdropdown id="service" fields="['Text','Value']" dropdownId="serviceId" url="receipts/ajaxReceiptCreate-ajaxLoadServiceByCategoryForMisc.action" /> -->
        	</td>
        	<td class="bluebox" colspan='2'>
        	<table width="100%" id='serviceTable'>
-       <!-- 	<tr>
-       	<td width="45%" class="bluebox"><s:text name="miscreceipt.service" /><span class="mandatory"/> </td>
-       	<td width="50%" class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="serviceId" id="serviceId" cssClass="selectwk" list="dropdownData.serviceList" listKey="id" listValue="name" value="%{serviceId}" onchange="loadFinDetails(this)"/></td>
-       	</tr> -->
        	</table>
        	</td>
-        <!-- <td width="21%" class="bluebox"><s:text name="miscreceipt.service" /><span class="mandatory"/> </td> -->
-        <!-- <td width="30%" class="bluebox"><s:select headerKey="-1" headerValue="----Choose----" name="serviceId" id="serviceId" cssClass="selectwk" list="dropdownData.serviceList" listKey="id" listValue="name" value="%{serviceId}" onchange="loadFinDetails(this)"/> -->
-<!-- 	 		<egov:ajaxdropdown id="bankBranchMasterDropdown" fields="['Text','Value']" dropdownId='bankBranchMaster' 	url='receipts/ajaxBankRemittance-bankBranchList.action' selectedValue="%{bankbranch.id}"/> --> 
-        <!-- </td> -->
         </tr>
-        
-        <!-- <s:if test="%{shouldShowHeaderField('fund') || shouldShowHeaderField('department')}">
-         <tr>
-          <td width="4%" class="bluebox">&nbsp;</td>
-           <s:if test="%{shouldShowHeaderField('fund')}">
-          <td width="21%" class="bluebox"><s:text name="miscreceipt.fund"/><s:if test="%{isFieldMandatory('fund')}"><span class="bluebox"><span class="mandatory"/></s:if></td>
-          <td width="24%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="fundId" id="fundId" cssClass="selectwk" onChange="setFundId();" list="dropdownData.fundList" listKey="code" listValue="name" value="%{fund.code}" />
-          <egov:ajaxdropdown id="bankBranchMasterDropdown" fields="['Text','Value']" dropdownId='bankBranchMaster' url='receipts/ajaxBankRemittance-bankBranchList.action' selectedValue="%{bankbranch.id}"/> 
-          <egov:ajaxdropdown id="schemeIdDropdown" fields="['Text','Value']" dropdownId='schemeId' url='receipts/ajaxReceiptCreate-ajaxLoadSchemes.action' />
-         <s:hidden label="receiptMisc.fund.id" id="receiptMisc.fund.id"  name="receiptMisc.fund.code"/>
-          </td>
-          </s:if>
-           <s:else>
-            <td colspan=2 class="bluebox"></td>
-            </s:else>
-              <s:if test="%{shouldShowHeaderField('department')}">
-           <td width="21%" class="bluebox"><s:text name="miscreceipt.department"/><s:if test="%{isFieldMandatory('department')}"><span class="bluebox"><span class="mandatory"/></s:if></td>
-          <td width="24%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="deptId" id="deptId" cssClass="selectwk" list="dropdownData.departmentList" listKey="code" listValue="name"  /> </td>
-            </s:if>
-           <s:else>
-            <td colspan=2 class="bluebox"></td>
-            </s:else>
-         </tr>
-         </s:if> -->
-          <!-- <s:if test="%{shouldShowHeaderField('function')}">
-         <tr>
-         <s:if test="%{shouldShowHeaderField('function')}">
-         <td width="4%" class="bluebox">&nbsp;</td>
-           <td width="21%" class="bluebox"><s:text name="miscreceipt.function"/><s:if test="%{isFieldMandatory('function')}"><span class="bluebox"><span class="mandatory"/></s:if></td>
-          <td width="24%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="functionId" id="functionId" cssClass="selectwk" list="dropdownData.functionList" listKey="code" listValue="name" value="%{service.function.id}" /> </td>
-            </s:if>
-           <s:else>
-            <td colspan=2 class="bluebox"></td>
-            </s:else>
-         </tr>
-         </s:if> -->
-          <!-- <s:if test="%{shouldShowHeaderField('fundsource') || shouldShowHeaderField('functionary')}">
-        <tr>
-          <td width="4%" class="bluebox">&nbsp;</td>
-          <s:if test="%{shouldShowHeaderField('fundsource')}">
-           <td width="21%" class="bluebox"><s:text name="miscreceipt.fundingsource"/> <s:if test="%{isFieldMandatory('fundsource')}"><span class="bluebox"><span class="mandatory"/></s:if></td>
-         <td width="30%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="fundSourceId" id="fundSourceId" onclick="checkfund()" onchange="setFundSourceId();" cssClass="selectwk" list="dropdownData.fundsourceList" listKey="id" listValue="name"  /></td>
-         <s:hidden label="receiptMisc.fundsource.id" id="receiptMisc.fundsource.id"  name="receiptMisc.fundsource.id"/>
-         </s:if>
-         <s:else>
-        <td colspan=2 class="bluebox"></td>
-        </s:else>
-        <s:if test="%{shouldShowHeaderField('functionary')}">
-          <td width="21%" class="bluebox"><s:text name="miscreceipt.functionary"/>  <s:if test="%{isFieldMandatory('functionary')}"><span class="bluebox"><span class="mandatory"/></s:if> </td>
-         <td width="30%" class="bluebox"><s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="receiptMisc.idFunctionary.id" id="receiptMisc.idFunctionary.id" cssClass="selectwk" list="dropdownData.functionaryList" listKey="id" listValue="name"  /></td>
-         
-         </s:if>
-         <s:else>
-        <td colspan=2 class="bluebox"></td>
-        </s:else>
-        </tr>
-        </s:if> -->
-         <!--  <s:if test="%{shouldShowHeaderField('scheme')}">
-          <tr>
-          <td width="4%" class="bluebox">&nbsp;</td>
-          <td width="21%" class="bluebox"><s:text name="miscreceipt.scheme"/> <s:if test="%{isFieldMandatory('scheme')}"><span class="mandatory"/></s:if>  </td>
-          <td width="24%" class="bluebox">
-          <s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="schemeId" id="schemeId" onclick="checkfund()" onchange="setSchemeId();getSubSchemelist(this)" cssClass="selectwk" list="dropdownData.schemeList" listKey="id" listValue="name"  value="%{scheme.id}" /> 
-          <egov:ajaxdropdown id="subschemeId" fields="['Text','Value']" dropdownId='subschemeId' url='receipts/ajaxReceiptCreate-ajaxLoadSubSchemes.action' />
-          <s:hidden label="receiptMisc.scheme.id" id="receiptMisc.scheme.id"  name="receiptMisc.scheme.id"/>
-          </td>
-          
-          <td width="21%" class="bluebox"><s:text name="miscreceipt.subscheme"/> <s:if test="%{isFieldMandatory('subscheme')}"><span class="mandatory"/></s:if>  </td>
-
-         <td width="30%" class="bluebox">
-          <s:select headerKey="-1" headerValue="%{getText('miscreceipt.select')}" name="subschemeId" id="subschemeId" onchange="setSubSchemeId();getFundSourcelist(this)" onclick="checkscheme()" cssClass="selectwk" list="dropdownData.subschemeList" listKey="id" listValue="name"  /></td>
-         <egov:ajaxdropdown id="fundSourceId" fields="['Text','Value']" dropdownId='fundSourceId' url='../../services/EGF/voucher/common-ajaxLoadFundSource.action'  />
-           <s:hidden label="receiptMisc.subscheme.id" id="receiptMisc.subscheme.id"  name="receiptMisc.subscheme.id"/>
-         
-        </tr>
-        </s:if> -->
     </table>
   </td></tr>
   <tr><td>
