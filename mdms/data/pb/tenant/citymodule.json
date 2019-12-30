@@ -92,6 +92,9 @@
       "tenants": [
         {
           "code": "pb.amritsar"
+        },
+	{
+          "code": "pb.jalandhar"
         }
       ]
     }
