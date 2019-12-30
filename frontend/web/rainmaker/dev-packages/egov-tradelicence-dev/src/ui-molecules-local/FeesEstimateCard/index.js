@@ -53,7 +53,8 @@ const styles = {
 
 function totalAmount(arr) {
   return arr
-    .map(item => (item.value ? item.value : 0))
+    .map(item => 
+      (item.name.labelName === "TL_ADHOC_REBATE" ? (item.value ? - item.value : 0) : (item.value ?  item.value : 0)))
     .reduce((prev, next) => prev + next, 0);
 }
 
