@@ -71,27 +71,28 @@ class InboxData extends React.Component {
           ? `/employee${getWFConfig(row[0].hiddenText).INITIATED}`
           : getWFConfig(row[0].hiddenText).INITIATED
         : process.env.NODE_ENV === "production"
-        ? `/employee${getWFConfig(row[0].hiddenText).DEFAULT}`
-        : getWFConfig(row[0].hiddenText).DEFAULT;
+          ? `/employee${getWFConfig(row[0].hiddenText).DEFAULT}`
+          : getWFConfig(row[0].hiddenText).DEFAULT;
 
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
     window.location.href = `${baseUrl}${contextPath}?${queryParams}`;
   };
 
-  getSlaColor =(sla) => {
-   const {MAX_SLA}=this.props;
+  getSlaColor = (sla, businessService) => {
+    const { businessServiceSla } = this.props;
+    const MAX_SLA = businessServiceSla[businessService];
     let slaValue = "";
-    if(sla<0){
+    if (sla <= 0) {
       slaValue = "redSlab"
-    }else if(0<sla&&sla<=MAX_SLA/3){
+    } else if (0 < sla && sla <= (MAX_SLA - MAX_SLA / 3)) {
       slaValue = "yellowSlab"
-    }else{
+    } else {
       slaValue = "greenSlab"
     }
-    switch(slaValue){
-      case "greenSlab" : return "inbox-cell-badge-primary sla-positive-value"
-      case "yellowSlab" : return "inbox-cell-badge-primary sla-middle-value"
-      case "redSlab" : return "inbox-cell-badge-primary sla-negative-value"
+    switch (slaValue) {
+      case "greenSlab": return "inbox-cell-badge-primary sla-positive-value"
+      case "yellowSlab": return "inbox-cell-badge-primary sla-middle-value"
+      case "redSlab": return "inbox-cell-badge-primary sla-negative-value"
     }
   }
 
@@ -104,7 +105,7 @@ class InboxData extends React.Component {
           <TableRow>
             {data.headers.map((item, index) => {
               let classNames = `inbox-data-table-headcell inbox-data-table-headcell-${index}`;
-              return <TableCell className={classNames}>{<Label label={item} labelStyle={{fontWeight : "500"}} color="#000000"/>}</TableCell>;
+              return <TableCell className={classNames}>{<Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />}</TableCell>;
             })}
           </TableRow>
         </TableHead>
@@ -113,54 +114,54 @@ class InboxData extends React.Component {
             <Label labelClassName="" label="COMMON_INBOX_NO_DATA" />
           </TableBody>
         ) : (
-          <TableBody>
-            {data.rows.map((row, i) => {
-              return (
-                <TableRow key={i} className="inbox-data-table-bodyrow">
-                  {row.map((item, index) => {
-                    let classNames = `inbox-data-table-bodycell inbox-data-table-bodycell-${index}`;
-                    if (item.subtext) {
-                      return (
-                        <TableCell className={classNames}>
-                          <div  onClick={() => getModuleLink(item, row, index)}  className="inbox-cell-text">{ <a>{item.text} </a>}</div>
-                          <div className="inbox-cell-subtext">{<Label label={`CS_COMMON_INBOX_${item.subtext.toUpperCase()}`} color="#000000"/>}</div>
-                        </TableCell>
-                      );
-                    } else if (item.badge) {
-                      return (
-                        <TableCell className={classNames}>
-                          <span
-                          class ={this.getSlaColor(item.text)}
+            <TableBody>
+              {data.rows.map((row, i) => {
+                return (
+                  <TableRow key={i} className="inbox-data-table-bodyrow">
+                    {row.map((item, index) => {
+                      let classNames = `inbox-data-table-bodycell inbox-data-table-bodycell-${index}`;
+                      if (item.subtext) {
+                        return (
+                          <TableCell className={classNames}>
+                            <div onClick={() => getModuleLink(item, row, index)} className="inbox-cell-text">{<a>{item.text} </a>}</div>
+                            <div className="inbox-cell-subtext">{<Label label={`CS_COMMON_INBOX_${item.subtext.toUpperCase()}`} color="#000000" />}</div>
+                          </TableCell>
+                        );
+                      } else if (item.badge) {
+                        return (
+                          <TableCell className={classNames}>
+                            <span
+                              class={this.getSlaColor(item.text, row[2].text.props.label.split('_')[1])}
                             //class={item.text >= 1 ? "inbox-cell-badge-primary sla--positive-value" : "inbox-cell-badge-primary sla--negative-value"}
-                          >
-                            {item.text}
-                          </span>
-                        </TableCell>
-                      );
-                    } else if (item.historyButton) {
-                      return (
-                        <TableCell className={classNames}>
-                          <div onClick={() => onHistoryClick(row[0])} style={{ cursor: "pointer" }}>
-                            <i class="material-icons">history</i>
-                          </div>
-                        </TableCell>
-                      );
-                    } else {
-                      return (
-                        <TableCell className={classNames}>
-                          <div>
-                            {item.text}
-                          </div>
-                        </TableCell>
-                      );
-                    }
-                  })}
-                </TableRow>
-              );
-            })}
-            <TaskDialog open={this.state.dialogOpen} onClose={onDialogClose} history={ProcessInstances} />
-          </TableBody>
-        )}
+                            >
+                              {item.text}
+                            </span>
+                          </TableCell>
+                        );
+                      } else if (item.historyButton) {
+                        return (
+                          <TableCell className={classNames}>
+                            <div onClick={() => onHistoryClick(row[0])} style={{ cursor: "pointer" }}>
+                              <i class="material-icons">history</i>
+                            </div>
+                          </TableCell>
+                        );
+                      } else {
+                        return (
+                          <TableCell className={classNames}>
+                            <div>
+                              {item.text}
+                            </div>
+                          </TableCell>
+                        );
+                      }
+                    })}
+                  </TableRow>
+                );
+              })}
+              <TaskDialog open={this.state.dialogOpen} onClose={onDialogClose} history={ProcessInstances} />
+            </TableBody>
+          )}
       </Table>
     );
   }
