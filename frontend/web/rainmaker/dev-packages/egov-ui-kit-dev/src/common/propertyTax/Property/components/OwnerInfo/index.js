@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Card } from "components";
+import { withRouter } from "react-router-dom";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
@@ -15,13 +16,16 @@ const localizationLabelsData = initLocalizationLabels(locale);
 class OwnerInfo extends Component {
   // Static implementation as of now. Need to change
   state = {
-    amount: "4500.00",
     pendingAmountDue: false,
     viewHistory: false,
   };
 
   openDialog = (dialogName) => {
-    this.setState({ [dialogName]: true });
+    if(this.props.totalBillAmountDue === 0){
+      this.props.history.push(`/pt-mutation/apply?consumerCode=${this.props.properties.propertyId}&tenantId=${this.props.properties.tenantId}`);
+    } else {
+      this.setState({ [dialogName]: true });
+    }
   };
 
   closeDialogue = (dialogName) => {
@@ -158,7 +162,7 @@ class OwnerInfo extends Component {
   };
 
   render() {
-    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory } = this.props;
+    const { properties, editIcon, generalMDMSDataById, ownershipTransfer, viewHistory, totalBillAmountDue } = this.props;
     let ownerInfo = [];
     let multipleOwner = false;
     const header = "PT_OWNERSHIP_INFO_SUB_HEADER";
@@ -229,7 +233,9 @@ class OwnerInfo extends Component {
         {this.state.pendingAmountDue && (
           <PendingAmountDialog
             open={this.state.pendingAmountDue}
-            amount={this.state.amount}
+            amount={totalBillAmountDue}
+            tenantId={properties.tenantId}  
+            consumerCode={properties.propertyId} 
             closeDialogue={() => this.closeDialogue("pendingAmountDue")}
           ></PendingAmountDialog>
         )}
@@ -237,7 +243,7 @@ class OwnerInfo extends Component {
         {this.state.viewHistory && (
           <ViewHistoryDialog
             open={this.state.viewHistory}
-            amount={this.state.amount}
+            amount={totalBillAmountDue}
             closeDialogue={() => this.closeDialogue("viewHistory")}
           ></ViewHistoryDialog>
         )}
@@ -246,4 +252,4 @@ class OwnerInfo extends Component {
   }
 }
 
-export default OwnerInfo;
+export default withRouter(OwnerInfo);
