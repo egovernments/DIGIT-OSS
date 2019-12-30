@@ -1644,7 +1644,6 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
                 .totalDue(receiptHeader.getTotalAmount())
                 .totalAmountPaid(receiptHeader.getTotalAmount())
                 .paidBy(receiptHeader.getPaidBy())
-                .mobileNumber("9964902367")
                 .paymentStatus(PaymentStatusEnum.NEW)
                 .build();
         this.prepareInstrumentsDetails(payment,receiptHeader);
@@ -1655,10 +1654,10 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
     private void prepareInstrumentsDetails(Payment payment, ReceiptHeader receiptHeader) {
         try {
             InstrumentHeader instrumentHeader = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0);
-            Long instrumentDate = instrumentHeader.getInstrumentDate() != null ? instrumentHeader.getInstrumentDate().getTime() : 0l;
+            Long instrumentDate = instrumentHeader.getInstrumentDate() != null ? instrumentHeader.getInstrumentDate().getTime() : new Date().getTime();
             String instrumentNumber = instrumentHeader.getInstrumentNumber();
             InstrumentStatusEnum instrumentStatus = InstrumentStatusEnum.APPROVED;
-            Long transactionDate = instrumentHeader.getTransactionDate() != null ? instrumentHeader.getTransactionDate().getTime() : instrumentHeader.getInstrumentDate().getTime();
+            Long transactionDate = instrumentHeader.getTransactionDate() != null ? instrumentHeader.getTransactionDate().getTime() : instrumentDate;
             String transactionNumber = instrumentHeader.getTransactionNumber() != null ? instrumentHeader.getTransactionNumber() : instrumentHeader.getInstrumentNumber();
             String ifscCode = instrumentHeader.getIfscCode();
             payment.setInstrumentDate(instrumentDate);

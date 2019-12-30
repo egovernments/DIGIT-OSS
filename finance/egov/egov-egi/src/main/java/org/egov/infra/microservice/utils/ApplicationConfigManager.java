@@ -89,10 +89,10 @@ public class ApplicationConfigManager {
     @Value("${egov.services.collection.service.payment.search:}")
     private String collSerPaymentSearch;
     
-    @Value("${egov.services.collection.service.payment.workflow:}")
+    @Value("${egov.services.collection.service.payment.create:}")
     private String collSerPaymentCreate;
     
-    @Value("${egov.services.collection.service.payment.create:}")
+    @Value("${egov.services.collection.service.payment.workflow:}")
     private String collSerPaymentWorkflow;
     
     public String getEgovHrmsSerHost(){
