@@ -102,6 +102,7 @@ export const searchApiCall = async (state, dispatch) => {
     const response = await getSearchResults(queryObject);
     const businessIdToOwnerMapping = await getWorkFlowData(response.Licenses);
     try {
+      // response.Licenses.sort((item1, item2) => item1.applicationDate > item2.applicationDate ? -1 : 1)
       let data = response.Licenses.map(item => ({
         [getTextToLocalMapping("Application No")]:
           item.applicationNumber || "-",
@@ -115,7 +116,7 @@ export const searchApiCall = async (state, dispatch) => {
           ) || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
         [getTextToLocalMapping("Owner Name")]:
-          businessIdToOwnerMapping[item.applicationNumber] || "-",
+          get(businessIdToOwnerMapping[item.applicationNumber],"assignee") || "-",
         [getTextToLocalMapping("Application Date")]:
           convertEpochToDate(item.applicationDate) || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
@@ -158,7 +159,7 @@ const showHideTable = (booleanHideOrShow, dispatch) => {
   );
 };
 
-const getWorkFlowData = async Licenses => {
+export const getWorkFlowData = async Licenses => {
   var businessIds = [];
   Licenses.forEach(item => {
     businessIds.push(item.applicationNumber);
@@ -184,8 +185,10 @@ const getWorkFlowData = async Licenses => {
     payload.ProcessInstances.filter(
       record => record.moduleName === "BPAREG"
     ).forEach(item => {
-      businessIdToOwnerMapping[item.businessId] =
-        item.assignee && item.assignee.name;
+      businessIdToOwnerMapping[item.businessId] = {
+        assignee: item.assignee && item.assignee.name,
+        sla: item.sla
+      };
     });
     return businessIdToOwnerMapping;
   } catch (error) {

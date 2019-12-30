@@ -33,28 +33,28 @@ const screenConfig = {
           props: {
             contents: [
               {
-                label: "TL_COMMON_TABLE_COL_OWN_NAME",
-                jsonPath: "tradeLicenseDetail.owners[0].name"
-              },
-              {
-                label: "TL_COMMON_TABLE_COL_APP_NO",
+                label: "BPA_COMMON_APP_NO",
                 jsonPath: "applicationNumber"
-              },
-
+              }, 
               {
-                label: "BPA_LICENSEE_TYPE_LABEL",
-                jsonPath: "tradeLicenseDetail.tradeUnits[0].tradeType",
-                prefix: "TRADELICENSE_TRADETYPE_",
-                suffix: "_VIEW"
+                label: "TL_COMMON_TABLE_COL_OWN_NAME",
+                jsonPath: "ownername"
               },
               {
-                label: "BPA_COMMON_TABLE_COL_LIC_NO",
-                jsonPath: "licenseNumber"
+                label: "BPA_COMMON_SERVICE",
+                jsonPath: "businessService"
+              },              {
+                label: "BPA_COMMON_TABLE_COL_ASSIGN_TO",
+                jsonPath: "assignedTo"
               },
               {
                 label: "TL_COMMON_TABLE_COL_STATUS",
                 jsonPath: "status",
                 prefix: "WF_ARCHITECT_"
+              },
+              {
+                label: "BPA_COMMON_SLA",
+                jsonPath: "sla",
               }
             ],
             moduleName: "BPAREG",
