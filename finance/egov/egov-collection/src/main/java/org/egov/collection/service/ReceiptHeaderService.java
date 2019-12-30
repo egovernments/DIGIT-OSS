@@ -109,19 +109,19 @@ import org.egov.infra.microservice.models.DemandDetail;
 import org.egov.infra.microservice.models.DemandRequest;
 import org.egov.infra.microservice.models.DemandResponse;
 import org.egov.infra.microservice.models.Instrument;
-import org.egov.infra.microservice.models.InstrumentAccountCode;
 import org.egov.infra.microservice.models.InstrumentStatusEnum;
 import org.egov.infra.microservice.models.Payment;
 import org.egov.infra.microservice.models.PaymentDetail;
 import org.egov.infra.microservice.models.PaymentModeEnum;
 import org.egov.infra.microservice.models.PaymentResponse;
 import org.egov.infra.microservice.models.PaymentStatusEnum;
-import org.egov.infra.microservice.models.PaymentUtils;
+import org.egov.infra.microservice.utils.PaymentUtils;
 import org.egov.infra.microservice.models.Receipt;
 import org.egov.infra.microservice.models.ReceiptRequest;
 import org.egov.infra.microservice.models.ReceiptResponse;
 import org.egov.infra.microservice.models.RequestInfo;
 import org.egov.infra.microservice.models.TaxPeriod;
+import org.egov.infra.microservice.utils.ApplicationConfigManager;
 import org.egov.infra.microservice.utils.MicroserviceUtils;
 import org.egov.infra.reporting.engine.ReportFormat;
 import org.egov.infra.reporting.engine.ReportRequest;
@@ -185,9 +185,9 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
     
     @Autowired
     private PaymentUtils paymentUtils;
-
-    @Value("${egov.services.host}")
-    private String hostUrl;
+    
+    @Autowired
+    private ApplicationConfigManager appConfigManager;
 
     @Value("${egov.services.billing.service.demand.create.url}")
     private String demandCreateUrl;
@@ -1187,8 +1187,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
     private DemandResponse generateDemand(String consumerCode, ReceiptHeader receiptHeader) {
         DemandRequest request = new DemandRequest();
         final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
-//        final String url = hostUrl + demandCreateUrl;
-        final String url = "http://localhost:8096/billing-service/demand/_create";
+        final String url = appConfigManager.getEgovBillingSerHost() + demandCreateUrl;
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(microserviceUtils.getUserToken());
         requestInfo.setUserInfo(microserviceUtils.getUserInfo());
@@ -1237,10 +1236,8 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
 
     private List generateBill(String consumerCode, String service) {
         final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
-//        final String url = hostUrl + billGenerateUrl + "?tenantId=" + microserviceUtils.getTenentId() + "&businessService="
-//                + service + "&consumerCode=" + consumerCode;
-                    final String url = "http://localhost:8096/billing-service/bill/v2/_generate?tenantId=" + microserviceUtils.getTenentId() + "&businessService="
-                            + service + "&consumerCode=" + consumerCode;
+        final String url = appConfigManager.getEgovBillingSerHost() + billGenerateUrl + "?tenantId=" + microserviceUtils.getTenentId() + "&businessService="
+                + service + "&consumerCode=" + consumerCode;
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(microserviceUtils.getUserToken());
@@ -1280,7 +1277,7 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
         default:
             String tenantId = microserviceUtils.getTenentId();
             final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
-            final String url = hostUrl + receiptCreateUrl;
+            final String url = appConfigManager.getEgovCollSerHost() + receiptCreateUrl;
             ReceiptRequest request = new ReceiptRequest();
             RequestInfo requestInfo = new RequestInfo();
             requestInfo.setAuthToken(microserviceUtils.getUserToken());

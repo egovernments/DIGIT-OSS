@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.http.HttpStatus;
 import org.apache.log4j.Logger;
@@ -185,16 +186,16 @@ public class VoucherController {
 	
 	@PostMapping(value = "/rest/voucher/_searchbyserviceandreference",produces="application/json")
         @ResponseBody
-        public VoucherResponse searchVoucherByServiceCodeAndReferenceDoc(@RequestParam("servicecode")  String serviceCode, @RequestParam("referencedocument")  String referenceDocument) {
+        public VoucherResponse searchVoucherByServiceCodeAndReferenceDoc(@RequestParam(name="servicecode",required=false)  String serviceCode, @RequestParam("referencedocument")  String referenceDocument) {
                 try {
                         referenceDocument = URLDecoder.decode(referenceDocument, "UTF-8");
-                        CVoucherHeader cVoucherHeader = voucherService.getVoucherByServiceNameAndReferenceDocument(serviceCode, referenceDocument);
+                        List<CVoucherHeader> cVoucherHeaders = voucherService.getVoucherByServiceNameAndReferenceDocument(serviceCode, referenceDocument);
                         VoucherResponse res = new VoucherResponse();
-                        if(cVoucherHeader == null){
+                        if(cVoucherHeaders == null){
                             res.setResponseInfo(MicroserviceUtils.getResponseInfo(null,
                                     HttpStatus.SC_NOT_FOUND, null));
                         }else{
-                            res.setVouchers(Arrays.asList(new Voucher(cVoucherHeader)));
+                            res.setVouchers(cVoucherHeaders.stream().map(cv -> new Voucher(cv)).collect(Collectors.toList()));
                         }
                         return res;
                 } catch (Exception e) {

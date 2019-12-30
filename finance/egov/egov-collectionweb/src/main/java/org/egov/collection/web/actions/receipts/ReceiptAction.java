@@ -114,6 +114,7 @@ import org.egov.infra.admin.master.entity.AppConfigValues;
 import org.egov.infra.admin.master.entity.Department;
 import org.egov.infra.admin.master.entity.Role;
 import org.egov.infra.admin.master.entity.User;
+import org.egov.infra.config.core.ApplicationThreadLocals;
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.microservice.models.BillDetailAdditional;
 import org.egov.infra.microservice.models.BusinessDetails;
@@ -331,6 +332,7 @@ public class ReceiptAction extends BaseFormAction {
     
     Map<String,String> serviceCategoryNames = new HashMap<String,String>();
     Map<String,Map<String,String>> serviceTypeMap = new HashMap<>();
+    private String[] selectedPayments;
 
     @Override
     public void prepare() {
@@ -1197,13 +1199,15 @@ public class ReceiptAction extends BaseFormAction {
                             receiptHeader.setPayeeAddress(additional.getPayeeaddress());
                     }
 
-                    if (billDetail.getCollectionType().equals(CollectionType.COUNTER))
-                        receiptHeader.setCollectiontype(CollectionConstants.COLLECTION_TYPE_COUNTER);
-                    else if (billDetail.getCollectionType().equals(CollectionType.FIELD))
-                        receiptHeader.setCollectiontype(CollectionConstants.COLLECTION_TYPE_FIELDCOLLECTION);
-                    else if (billDetail.getCollectionType().equals(CollectionType.ONLINE))
-                        receiptHeader.setCollectiontype(CollectionConstants.COLLECTION_TYPE_ONLINECOLLECTION);
-
+                    if(ApplicationThreadLocals.getCollectionVersion().toUpperCase().equalsIgnoreCase("V1")){
+                        if (billDetail.getCollectionType().equals(CollectionType.COUNTER))
+                            receiptHeader.setCollectiontype(CollectionConstants.COLLECTION_TYPE_COUNTER);
+                        else if (billDetail.getCollectionType().equals(CollectionType.FIELD))
+                            receiptHeader.setCollectiontype(CollectionConstants.COLLECTION_TYPE_FIELDCOLLECTION);
+                        else if (billDetail.getCollectionType().equals(CollectionType.ONLINE))
+                            receiptHeader.setCollectiontype(CollectionConstants.COLLECTION_TYPE_ONLINECOLLECTION);
+                    }
+                    
                     if (billDetail.getReceiptType().equalsIgnoreCase(CollectionConstants.RECEIPT_M_TYPE_MISCELLANEOUS) ||
                             billDetail.getReceiptType().equalsIgnoreCase(CollectionConstants.RECEIPT_M_TYPE_ADHOC))
                         receiptHeader.setReceipttype(CollectionConstants.RECEIPT_TYPE_ADHOC);
@@ -1213,27 +1217,22 @@ public class ReceiptAction extends BaseFormAction {
                     Set<ReceiptDetail> receiptdetailslist = new HashSet<>();
                     billDetail.getBillAccountDetails().forEach(billAccountDetail -> {
                         ReceiptDetail receiptDetail = new ReceiptDetail();
-
-//                        CChartOfAccounts accountHead = new CChartOfAccounts();
-//                        accountHead.setGlcode(billAccountDetail.getGlcode());
-                        // accountHead.setName(name);
                         receiptDetail.setAccounthead(new CChartOfAccounts());
 
-                        // CFunction function = new CFunction();
-                        // function.setCode(billDetail.get);
-                        // receiptDetail.setFunction(function);
-                        receiptDetail.setDramount(billAccountDetail.getAmount().compareTo(BigDecimal.ZERO) > 0 ? BigDecimal.ZERO : billAccountDetail.getAmount());
-                        receiptDetail.setCramount(billAccountDetail.getAmount().compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : billAccountDetail.getAmount());
+                        switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
+                        case "V2":
+                        case "VERSION2":
+                            receiptDetail.setDramount(billAccountDetail.getAmount().compareTo(BigDecimal.ZERO) > 0 ? BigDecimal.ZERO : billAccountDetail.getAmount());
+                            receiptDetail.setCramount(billAccountDetail.getAmount().compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : billAccountDetail.getAmount());
+                            break;
+
+                        default:
+                            receiptDetail.setDramount(billAccountDetail.getDebitAmount());
+                            receiptDetail.setCramount(billAccountDetail.getCreditAmount());
+                            break;
+                        }
                         receiptDetail.setOrdernumber(billAccountDetail.getOrder().longValue());
-//                        receiptDetail.setDescription(billAccountDetail.getAccountDescription());
-
-                        // CFinancialYear financialYear = new CFinancialYear();
-                        // receiptDetail.setFinancialYear(financialYear);
-
-//                        receiptDetail.setCramountToBePaid(billAccountDetail.getCrAmountToBePaid());
                         receiptDetail.setPurpose(billAccountDetail.getPurpose()!=null?billAccountDetail.getPurpose().toString():"");
-
-                        // receiptDetail.setGroupId(groupId);
                         receiptdetailslist.add(receiptDetail);
                     });
                     receiptHeader.setReceiptDetails(receiptdetailslist);
@@ -1241,14 +1240,8 @@ public class ReceiptAction extends BaseFormAction {
                     InstrumentHeader instrumentHeader = new InstrumentHeader();
 
                     Instrument _instrument = receipt.getInstrument();
-
-//                    List<Instrument> instruments = microserviceUtils.getInstrumentsByReceiptIds(
-//                            _instrument.getInstrumentType().getName(),
-//                            null, billDetail.getId());
-
-//                    Instrument instrument = instruments.get(0);
                     instrumentHeader.setInstrumentNumber(_instrument.getInstrumentNumber() != null ? _instrument.getInstrumentNumber() : _instrument.getTransactionNumber());
-                    instrumentHeader.setInstrumentDate(new Date(_instrument.getTransactionDateInput()));
+                    instrumentHeader.setInstrumentDate(new Date(_instrument.getTransactionDateInput() != null ? _instrument.getTransactionDateInput() : _instrument.getInstrumentDate()));
 
                     InstrumentType instrumentType = new InstrumentType();
                     instrumentType.setType(_instrument.getInstrumentType().getName().toLowerCase());
@@ -2169,5 +2162,12 @@ public class ReceiptAction extends BaseFormAction {
         return this.serviceCategory;
     }
     
+    public String[] getSelectedPayments() {
+        return selectedPayments;
+    }
+    
+    public void setSelectedPayments(String[] selectedPayments) {
+        this.selectedPayments = selectedPayments;
+    }
 
 }

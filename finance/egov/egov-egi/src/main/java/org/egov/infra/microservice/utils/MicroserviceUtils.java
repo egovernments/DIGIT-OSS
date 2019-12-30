@@ -68,6 +68,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -84,8 +85,6 @@ import org.egov.infra.admin.master.entity.CustomUserDetails;
 import org.egov.infra.admin.master.entity.User;
 import org.egov.infra.admin.master.service.RoleService;
 import org.egov.infra.config.core.ApplicationThreadLocals;
-import org.egov.infra.config.properties.ApplicationPropertiesManager;
-import org.egov.infra.exception.MicroServiceHttpClientErrorException;
 import org.egov.infra.microservice.contract.ActionRequest;
 import org.egov.infra.microservice.contract.ActionResponse;
 import org.egov.infra.microservice.contract.CreateUserRequest;
@@ -132,7 +131,9 @@ import org.egov.infra.microservice.models.ModuleDetail;
 import org.egov.infra.microservice.models.Payment;
 import org.egov.infra.microservice.models.PaymentRequest;
 import org.egov.infra.microservice.models.PaymentResponse;
-import org.egov.infra.microservice.models.PaymentUtils;
+import org.egov.infra.microservice.models.PaymentWorkflow;
+import org.egov.infra.microservice.models.PaymentWorkflow.PaymentAction;
+import org.egov.infra.microservice.models.PaymentWorkflowRequest;
 import org.egov.infra.microservice.models.Receipt;
 import org.egov.infra.microservice.models.ReceiptRequest;
 import org.egov.infra.microservice.models.ReceiptResponse;
@@ -195,13 +196,13 @@ public class MicroserviceUtils {
     @Autowired
     public RedisTemplate<Object, Object> redisTemplate;
 
+    @Value("${egov.services.user.create.url:}")
+    private String userServiceUrl;
+    
     @Autowired
     private RoleService roleService;
 
-    @Value("${egov.services.host}")
-    private String hostUrl;
-
-    @Value("${egov.services.workflow.url}")
+    @Value("${egov.services.workflow.url:}")
     private String workflowServiceUrl;
 
     @Value("${egov.services.user.approvers.url}")
@@ -286,17 +287,14 @@ public class MicroserviceUtils {
     @Value("${egov.services.egov-indexer.url}")
     private String egovIndexerUrl;
     
-    @Value("{egov.service.application.version:V1}")
-    private String appVer; 
-    
-    @Autowired
-    private ApplicationPropertiesManager appPropMgr;
-    
     private ObjectMapper mapper;
     SimpleDateFormat ddMMMyyyyFormat = new SimpleDateFormat("dd-MMM-yyyy");
     
     @Autowired
     private PaymentUtils paymentUtils;
+    
+    @Autowired
+    ApplicationConfigManager appConfigManager;
     
     public MicroserviceUtils() {
         mapper = new ObjectMapper();
@@ -345,19 +343,19 @@ public class MicroserviceUtils {
     }
 
     public void createUserMicroservice(final User user) {
-        if (isNotBlank(appPropMgr.getEgovServcUserCreateUrl())) {
-            
+        if (isNotBlank(userServiceUrl)) {
+
             if (user.getRoles().isEmpty() && user.getType().equals(UserType.CITIZEN))
                 user.addRole(roleService.getRoleByName(CITIZEN_ROLE_NAME));
-            
+
             final CreateUserRequest createUserRequest = new CreateUserRequest();
             final UserRequest userRequest = new UserRequest(user, getTenentId());
             createUserRequest.setUserRequest(userRequest);
             createUserRequest.setRequestInfo(createRequestInfo());
-            
+
             final RestTemplate restTemplate = new RestTemplate();
             try {
-                restTemplate.postForObject(appPropMgr.getEgovServcUserCreateUrl(), createUserRequest, UserDetailResponse.class);
+                restTemplate.postForObject(userServiceUrl, createUserRequest, UserDetailResponse.class);
             } catch (final Exception e) {
                 final String errMsg = "Exception while creating User in microservice ";
                 // throw new ApplicationRuntimeException(errMsg, e);
@@ -486,7 +484,7 @@ public class MicroserviceUtils {
 }
     
     public JSONArray getFinanceMdmsByModuleNameAndMasterDetails(String moduleName,String name, FilterRequest filter){
-        String mdmsUrl = appPropMgr.getEgovServiceHost() + appPropMgr.getEgovServcMasterMdmsSearchUrl();
+        String mdmsUrl = appConfigManager.getEgovMdmsSerHost() + this.mdmsSearchUrl;
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(getUserToken());
         MasterDetail masterDetail = new MasterDetail();
@@ -544,27 +542,22 @@ public class MicroserviceUtils {
     }
 
     public List<EmployeeInfo> getApprovers(String departmentId, String designationId) {
-        EmployeeInfoResponse empResponse = null;
         final RestTemplate restTemplate = createRestTemplate();
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        final String approver_url = appPropMgr.getEgovServcUserApprvrUrl() + "?tenantId=" + getTenentId() + "&departments="
+        final String approver_url = appConfigManager.getEgovHrmsSerHost() + approverSrvcUrl + "?tenantId=" + getTenentId() + "&departments="
                 + departmentId + "&designations="+designationId;
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
         requestInfo.setAuthToken(getUserToken());
         requestInfo.setTs(getEpochDate(new Date()));
         reqWrapper.setRequestInfo(requestInfo);
-        empResponse = restTemplate.postForObject(approver_url, reqWrapper, EmployeeInfoResponse.class);
-        return empResponse.getEmployees();
+        EmployeeInfoResponse empResponse = restTemplate.postForObject(approver_url, reqWrapper, EmployeeInfoResponse.class);
+         return empResponse.getEmployees();
     }
 
     public EmployeeInfo getEmployeeByPositionId(Long positionId) {
-
         final RestTemplate restTemplate = createRestTemplate();
-
-        final String employee_by_position_url = approverSrvcUrl + "?tenantId=" + getTenentId() + "&positionId="
+        final String employee_by_position_url = appConfigManager.getEgovHrmsSerHost() +  approverSrvcUrl + "?tenantId=" + getTenentId() + "&positionId="
                 + positionId;
-
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
         requestInfo.setAuthToken(getUserToken());
@@ -581,42 +574,36 @@ public class MicroserviceUtils {
 
     public CustomUserDetails getUserDetails(String user_token, String admin_token) {
         final RestTemplate restT = createRestTemplate();
-        final String authurl = authSrvcUrl + "?access_token=" + user_token;
-
+        final String authurl = appConfigManager.getEgovUserSerHost() + authSrvcUrl + "?access_token=" + user_token;
         RequestInfo reqInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
-
         reqInfo.setAuthToken(admin_token);
         reqWrapper.setRequestInfo(reqInfo);
         LOGGER.info("call:" + authurl);
         CustomUserDetails user = restT.postForObject(authurl, reqWrapper, CustomUserDetails.class);
-        // ResponseEntity<Object> response = restT.postForEntity(authurl,reqWrapper,Object.class);
-        // this.processResponse(response.getBody());
-        // CustomUserDetails user= null;
+        if(user_token.equals(admin_token)){
+            user.setUserName(this.siUser);
+        }
         return user;
     }
 
     public String generateAdminToken(String tenantId) {
         final RestTemplate restTemplate = createRestTemplate();
-
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         header.add("Authorization", "Basic ZWdvdi11c2VyLWNsaWVudDplZ292LXVzZXItc2VjcmV0");
-
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("username", this.siUser);
         map.add("scope", this.siScope);
         map.add("password", this.siPassword);
         map.add("grant_type", this.siGrantType);
-        // TOD-DO - Mani : why this hard coding ?
         map.add("tenantId", tenantId);
         map.add("userType", this.siUserType);
-
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, header);
-
         try {
-            LOGGER.info("call:" + tokenGenUrl);
-            Object response = restTemplate.postForObject(tokenGenUrl, request, Object.class);
+            StringBuilder url = new StringBuilder(appConfigManager.getEgovUserSerHost()).append(tokenGenUrl);
+            LOGGER.info("call:" + url);
+            Object response = restTemplate.postForObject(url.toString(), request, Object.class);
             if (response != null)
                 return String.valueOf(((HashMap) response).get("access_token"));
         } catch (RestClientException e) {
@@ -636,8 +623,9 @@ public class MicroserviceUtils {
         request.setRequestInfo(req_header);
         request.setUserName(userName);
         request.setTenantId(tenantId);
-        LOGGER.info("call:" + userSrcUrl);
-        UserSearchResponse response = restT.postForObject(userSrcUrl, request, UserSearchResponse.class);
+        String url = appConfigManager.getEgovUserSerHost() + userSrcUrl;
+        LOGGER.info("call:" + url);
+        UserSearchResponse response = restT.postForObject(url, request, UserSearchResponse.class);
         return response;
     }
 
@@ -652,7 +640,8 @@ public class MicroserviceUtils {
         posrequest.setRequestInfo(req_header);
         posrequest.setPosition(positions);
         LOGGER.info("call:" + positionSrvcUrl);
-        PositionResponse response = restT.postForObject(positionSrvcUrl, posrequest, PositionResponse.class);
+        StringBuilder uri = new StringBuilder(appConfigManager.getEgovHrMasterSerHost()).append(positionSrvcUrl);
+        PositionResponse response = restT.postForObject(uri.toString(), posrequest, PositionResponse.class);
 
         return response;
 
@@ -671,7 +660,8 @@ public class MicroserviceUtils {
         request.setActionMaster("actions-test");
         request.setEnabled(true);
         LOGGER.info("call:" + actionSrvcUrl);
-        ActionResponse response = restT.postForObject(actionSrvcUrl, request, ActionResponse.class);
+        StringBuilder uri = new StringBuilder(appConfigManager.getEgovAccessControllSerHost()).append(actionSrvcUrl);
+        ActionResponse response = restT.postForObject(uri.toString(), request, ActionResponse.class);
 
         // response.getActions()
         return response;
@@ -682,7 +672,7 @@ public class MicroserviceUtils {
         final RestTemplate restTemplate = createRestTemplate();
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        StringBuilder empUrl = new StringBuilder(approverSrvcUrl);
+        StringBuilder empUrl = new StringBuilder(appConfigManager.getEgovHrmsSerHost()).append(approverSrvcUrl);
         empUrl.append("?tenantId=" + getTenentId());
 
         if (empId != 0)
@@ -710,7 +700,7 @@ public class MicroserviceUtils {
         final RestTemplate restTemplate = createRestTemplate();
 
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        StringBuilder empUrl = new StringBuilder(approverSrvcUrl);
+        StringBuilder empUrl = new StringBuilder(appConfigManager.getEgovHrmsSerHost()).append(approverSrvcUrl);
         empUrl.append("?tenantId=" + getTenentId());
 
         if (empId != 0)
@@ -747,7 +737,7 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String bc_url = hostUrl + businessCategoryServiceUrl + "?tenantId=" + getTenentId();
+        final String bc_url = appConfigManager.getEgovCommonMasterSerHost() + businessCategoryServiceUrl + "?tenantId=" + getTenentId();
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -764,9 +754,9 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId()
-                + "&businessType=MISCELLANEOUS&businessCategoryCode="
-                + categoryCode;
+        final String bd_url = appConfigManager.getEgovCommonMasterSerHost() + businessDetailsServiceUrl + "?tenantId=" + getTenentId()
+        + "&businessType=MISCELLANEOUS&businessCategoryCode="
+        + categoryCode;
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -783,7 +773,7 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&businessType=" + type;
+        final String bd_url = appConfigManager.getEgovCommonMasterSerHost() + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&businessType=" + type;
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -803,7 +793,7 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&businessDetailsCodes="
+        final String bd_url = appConfigManager.getEgovCommonMasterSerHost() + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&businessDetailsCodes="
                 + code;
 
         RequestInfo requestInfo = new RequestInfo();
@@ -824,7 +814,7 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String bd_url = hostUrl + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&id=" + id;
+        final String bd_url = appConfigManager.getEgovCommonMasterSerHost() + businessDetailsServiceUrl + "?tenantId=" + getTenentId() + "&id=" + id;
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -844,7 +834,7 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String url = hostUrl + taxheadsSearchUrl + "?tenantId=" + getTenentId() + "&service=" + service;
+        final String url = appConfigManager.getEgovBillingSerHost() + taxheadsSearchUrl + "?tenantId=" + getTenentId() + "&service=" + service;
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -858,7 +848,7 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String url = hostUrl + taxheadsSearchUrl + "?tenantId=" + getTenentId();
+        final String url = appConfigManager.getEgovBillingSerHost() + taxheadsSearchUrl + "?tenantId=" + getTenentId();
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -874,7 +864,7 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-        final String url = hostUrl + glcodeMasterSearchUrl + "?tenantId=" + getTenentId() + "&service=" + service;
+        final String url = appConfigManager.getEgovBillingSerHost() + glcodeMasterSearchUrl + "?tenantId=" + getTenentId() + "&service=" + service;
 
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
@@ -890,8 +880,7 @@ public class MicroserviceUtils {
 
         final RestTemplate restTemplate = createRestTemplate();
 
-//        final String url = hostUrl + taxperiodsSearchUrl + "?tenantId=" + getTenentId() + "&service=" + type;
-        final String url = "http://localhost:8096/" + taxperiodsSearchUrl + "?tenantId=" + getTenentId() + "&service=" + type;
+        final String url = appConfigManager.getEgovBillingSerHost() + taxperiodsSearchUrl + "?tenantId=" + getTenentId() + "&service=" + type;
         RequestInfo requestInfo = new RequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
 
@@ -934,7 +923,7 @@ public class MicroserviceUtils {
     public List<BankAccountServiceMapping> createBankAcntServiceMappings(BankAccountServiceMapping basm) {
 
         final RestTemplate restTemplate = createRestTemplate();
-        final String url = hostUrl + bankAccountServiceMappingCreateUrl;
+        final String url = appConfigManager.getEgovCollSerHost() + bankAccountServiceMappingCreateUrl;
 
         RequestInfo requestInfo = new RequestInfo();
 
@@ -955,7 +944,7 @@ public class MicroserviceUtils {
 
     public FinancialStatus getInstrumentStatusByCode(String code) {
 
-        final String url = hostUrl + financialStatusesSearchUrl + "?tenantId="
+        final String url = appConfigManager.getEgovEgfMasterSerHost() + financialStatusesSearchUrl + "?tenantId="
                 + getTenentId() + "&moduleType=Instrument&code=" + code;
 
         RequestInfo requestInfo = new RequestInfo();
@@ -980,8 +969,7 @@ public class MicroserviceUtils {
     }
     
     public List<Instrument> getInstrumentsBySearchCriteria(InstrumentSearchContract insSearchContra) {
-            StringBuilder url = new StringBuilder().append("http://localhost:8097/").append(instrumentSearchUrl)
-//        StringBuilder url = new StringBuilder().append(hostUrl).append(instrumentSearchUrl)
+        StringBuilder url = new StringBuilder().append(appConfigManager.getEgovEgfInstSerHost()).append(instrumentSearchUrl)
                 .append("?tenantId=").append(getTenentId());
         if(StringUtils.isNotBlank(insSearchContra.getIds())){
            url.append("&ids=").append(insSearchContra.getIds());
@@ -1068,7 +1056,7 @@ public class MicroserviceUtils {
             requestInfo.setUserInfo(getUserInfo());
             reqWrapper.setRequestInfo(requestInfo);
             StringBuilder url = new StringBuilder();
-            url.append(hostUrl).append(receiptSearchUrl).append("tenantId=").append(getTenentId());
+            url.append(appConfigManager.getEgovCollSerHost()).append(receiptSearchUrl).append("?tenantId=").append(getTenentId());
             prepareReceiptSearchUrl(rSearchcriteria, url);
             LOGGER.info("call:" + url.toString());
             ReceiptResponse response = restTemplate.postForObject(url.toString(), reqWrapper, ReceiptResponse.class);
@@ -1078,8 +1066,8 @@ public class MicroserviceUtils {
     }
 
     private void prepareReceiptSearchUrl(ReceiptSearchCriteria criteria, StringBuilder url) {
-        if(CollectionUtils.isNotEmpty(criteria.getIds())){
-            url.append("&receiptNumbers=").append(StringUtils.join(criteria.getIds(), ","));
+        if(CollectionUtils.isNotEmpty(criteria.getReceiptNumbers())){
+            url.append("&receiptNumbers=").append(StringUtils.join(criteria.getReceiptNumbers(), ","));
         }
         if(StringUtils.isNotBlank(criteria.getDepartment())){
             url.append("&department=").append(criteria.getDepartment());
@@ -1088,7 +1076,7 @@ public class MicroserviceUtils {
             url.append("&fund=").append(criteria.getFund());
         }
         if(CollectionUtils.isNotEmpty(criteria.getBusinessCodes())){
-            url.append("&businessCodes=").append(criteria.getBusinessCodes());
+            url.append("&businessCodes=").append(StringUtils.join(criteria.getBusinessCodes(),","));
         }
         if(criteria.getFromDate() != null){
             url.append("&fromDate=").append(criteria.getFromDate().getTime());
@@ -1132,8 +1120,8 @@ public class MicroserviceUtils {
         ReceiptSearchCriteria criteria = new ReceiptSearchCriteria().builder()
                 .fromDate(fromDate)
                 .toDate(toDate)
-                .businessCodes(Arrays.stream(businessCode.split(",")).collect(Collectors.toSet()))
-                .receiptNumbers(receiptNos.stream().collect(Collectors.toSet()))
+                .businessCodes(businessCode != null ? Arrays.stream(businessCode.split(",")).collect(Collectors.toSet()) : Collections.EMPTY_SET)
+                .receiptNumbers(receiptNos != null ? receiptNos.stream().collect(Collectors.toSet()) : Collections.EMPTY_SET)
                 .classification(classification)
                 .build();
         return this.getReceipt(criteria);
@@ -1164,8 +1152,7 @@ public class MicroserviceUtils {
     }
 
     public RemittanceResponse createRemittance(List<Remittance> remittanceList) {
-//        final StringBuilder url = new StringBuilder(hostUrl + remittanceCreateUrl);
-        final StringBuilder url = new StringBuilder("http://localhost:8095/collection-services/remittances/_create");
+        final StringBuilder url = new StringBuilder(appConfigManager.getEgovCollSerHost() + remittanceCreateUrl);
         RemittanceRequest request = new RemittanceRequest();
         request.setRemittances(remittanceList);
         final RequestInfo requestInfo = new RequestInfo();
@@ -1179,7 +1166,7 @@ public class MicroserviceUtils {
     }
 
     public ReceiptResponse updateReceipts(List<Receipt> receiptList) {
-        final StringBuilder url = new StringBuilder(hostUrl + receiptUpdateUrl);
+        final StringBuilder url = new StringBuilder(appConfigManager.getEgovCollSerHost() + receiptUpdateUrl);
         ReceiptRequest request = new ReceiptRequest();
         receiptList.stream().forEach(rec -> {
             if(rec.getInstrument().getBank() != null){
@@ -1187,10 +1174,7 @@ public class MicroserviceUtils {
             }
         });
         request.setReceipt(receiptList);
-        final RequestInfo requestinfo = new RequestInfo();
-
-        requestinfo.setAuthToken(getUserToken());
-        requestinfo.setUserInfo(getUserInfo());
+        final RequestInfo requestinfo = getRequestInfo();
         request.setRequestInfo(requestinfo);
 
         return restTemplate.postForObject(url.toString(), request, ReceiptResponse.class);
@@ -1349,16 +1333,15 @@ public class MicroserviceUtils {
     
     public void pushDataToIndexer(Object data, String topicName){
         try {
-            egovIndexerUrl = "http://localhost:8095/egov-indexer/index-operations/{financeTopic}/_index";
-            Object postForObject = restTemplate.postForObject(egovIndexerUrl, data, Object.class, topicName);
+            StringBuilder uri = new StringBuilder(appConfigManager.getEgovIndexerSerHost()).append(egovIndexerUrl);
+            Object postForObject = restTemplate.postForObject(uri.toString(), data, Object.class, topicName);
         } catch (Exception e) {
             Log.error("ERROR occurred while trying to push the data to indexer : ", e);
         }
     }
     
     public Object getMdmsData(List<ModuleDetail> moduleDetails,boolean isStateLevel, String tenantId, String token){
-//        String mdmsUrl = this.hostUrl + this.mdmsSearchUrl;
-        String mdmsUrl = "http://localhost:8094/egov-mdms-service/v1/_search";
+        String mdmsUrl = appConfigManager.getEgovMdmsSerHost()+ this.mdmsSearchUrl;
         RequestInfo requestInfo = new RequestInfo();
         requestInfo.setAuthToken(token != null && !token.isEmpty() ? token : getUserToken());
         MdmsCriteria mdmscriteria = new MdmsCriteria();
@@ -1530,8 +1513,7 @@ public class MicroserviceUtils {
     }
     
     public InstrumentResponse updateInstruments(List<Instrument> instruments, String depositedBankAccountNum, FinancialStatus finStatus) {
-        StringBuilder url = new StringBuilder().append("http://localhost:8097/").append(instrumentUpdateUrl);        
-//        final StringBuilder url = new StringBuilder(hostUrl + instrumentUpdateUrl);
+        final StringBuilder url = new StringBuilder(appConfigManager.getEgovEgfInstSerHost()).append(instrumentUpdateUrl);
         for (Instrument i : instruments) {
             i.setFinancialStatus(finStatus);
             if (depositedBankAccountNum != null) {
@@ -1575,19 +1557,11 @@ public class MicroserviceUtils {
     
     public List<Payment> getPayments(PaymentSearchCriteria searchCriteria){
         PaymentResponse response = null;
-        StringBuilder url = new StringBuilder();
-        final RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setUserInfo(getUserInfo());
+        StringBuilder url = new StringBuilder(appConfigManager.getEgovCollSerHost()).append(appConfigManager.getCollSerPaymentSearch()).append("?");
+        final RequestInfo requestInfo = getRequestInfo();
         RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
         reqWrapper.setRequestInfo(requestInfo);
         try {
-//            url.append(appPropMgr.getEgovServiceHost()).append(appPropMgr.getEgovServcCollectionServcPaymentSearchUrl()).append("?");
-//            String url2 ="http://localhost:8095/collection-services/payments/_search?&tenantId=pb.jalandhar&receiptNumbers=11/2019-20/000014&status=NEW"
-//                    + "&instrumentStatus=APPROVED&paymentModes=CASH&fromDate=1574765767976&toDate=1574765767976&transactionNumber=10132013121617"
-//                    + "&businessServices=PT,TL&billIds=41ff69f3-c92b-4b2b-90cc-543fb1973782&ids=12345";
-            String url2 ="http://localhost:8095/collection-services/payments/_search?";
-            url.append(url2);
             preparePaymentSearchQueryString(searchCriteria, url);
             response = restTemplate.postForObject(url.toString(), reqWrapper, PaymentResponse.class);
             return response.getPayments();
@@ -1634,52 +1608,38 @@ public class MicroserviceUtils {
     }
 
     public PaymentResponse generatePayments(Payment payment) {
-//        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-//        queryParams.add("tenantId", tenantId);
-//        queryParams.add("billId", StringUtils.join(billIds,","));
-//        String uri = UriComponentsBuilder
-//                .fromHttpUrl(appPropMgr.getEgovServiceHost())
-//                .path(appPropMgr.getEgovServcCollectionServcRecieptCreateUrl())
-//                .queryParams(queryParams)
-//                .build()
-//                .toUriString();
         PaymentResponse response = null;
-        String uri = "http://localhost:8095/collection-services/payments/_create";
-        final RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setAuthToken(getUserToken());
-        requestInfo.setUserInfo(getUserInfo());
+        StringBuilder uri = new StringBuilder(appConfigManager.getEgovCollSerHost()).append(appConfigManager.getCollSerPaymentCreate());
+        final RequestInfo requestInfo = getRequestInfo();
         PaymentRequest request = PaymentRequest.builder().requestInfo(requestInfo).payment(payment).build();
-        try {
-            response = restTemplate.postForObject(uri, request , PaymentResponse.class);            
-        } catch (HttpClientErrorException exc) {
-           throw MicroServiceHttpClientErrorException.builder().statusCode(exc.getStatusCode().name()).message(exc.getMessage()).statusText(exc.getStatusText()).build();
-        }
+        response = restTemplate.postForObject(uri.toString(), request , PaymentResponse.class);            
         return response;
     }
     
     public PaymentResponse updatePayments(Payment payment) {
-//      MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-//      queryParams.add("tenantId", tenantId);
-//      queryParams.add("billId", StringUtils.join(billIds,","));
-//      String uri = UriComponentsBuilder
-//              .fromHttpUrl(appPropMgr.getEgovServiceHost())
-//              .path(appPropMgr.getEgovServcCollectionServcRecieptCreateUrl())
-//              .queryParams(queryParams)
-//              .build()
-//              .toUriString();
       PaymentResponse response = null;
       String uri = "http://localhost:8095/collection-services/payments/_update";
-      final RequestInfo requestInfo = new RequestInfo();
-      requestInfo.setAuthToken(getUserToken());
-      requestInfo.setUserInfo(getUserInfo());
+      final RequestInfo requestInfo = getRequestInfo();
       PaymentRequest request = PaymentRequest.builder().requestInfo(requestInfo).payment(payment).build();
-      try {
-          response = restTemplate.postForObject(uri, request , PaymentResponse.class);            
-      } catch (HttpClientErrorException exc) {
-         throw MicroServiceHttpClientErrorException.builder().statusCode(exc.getStatusCode().name()).message(exc.getMessage()).statusText(exc.getStatusText()).build();
-      }
+      response = restTemplate.postForObject(uri, request , PaymentResponse.class);            
       return response;
   }
+
+    private RequestInfo getRequestInfo() {
+        final RequestInfo requestInfo = new RequestInfo();
+          requestInfo.setAuthToken(getUserToken());
+          requestInfo.setUserInfo(getUserInfo());
+        return requestInfo;
+    }
+
+    public PaymentResponse performWorkflow(Set<String> paymentIdSet, PaymentAction action, String reason) {
+        List<PaymentWorkflow> paymentWFList = paymentIdSet.stream().map(id -> PaymentWorkflow.builder().paymentId(id).tenantId(getTenentId()).reason(reason).action(action).build()).collect(Collectors.toList());
+        PaymentWorkflowRequest request = PaymentWorkflowRequest.builder().paymentWorkflows(paymentWFList).requestInfo(getRequestInfo()).build();
+        PaymentResponse response = null;
+        StringBuilder uri = new StringBuilder(appConfigManager.getEgovCollSerHost()).append(appConfigManager.getCollSerPaymentWorkflow());
+        response = restTemplate.postForObject(uri.toString(), request , PaymentResponse.class);            
+        return response;
+    }
     
 }
 

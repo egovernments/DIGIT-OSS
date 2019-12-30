@@ -60,6 +60,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -1211,13 +1212,13 @@ public class CreateVoucher {
 	}
 
 	public void validateReferenceDocument(String referenceDocument, String serviceName) {
-	    CVoucherHeader cVoucherHeader = vmisHibernateDao.getRecentVoucherByServiceNameAndReferenceDoc(serviceName, referenceDocument);
-	    if(cVoucherHeader != null && cVoucherHeader.getStatus() != 4){
-	        throw new ApplicationRuntimeException("Already voucher exists ("+cVoucherHeader.getVoucherNumber()+") for service "+serviceName+" with reference number "+referenceDocument+".");
+	    List<CVoucherHeader> cVoucherHeaders = vmisHibernateDao.getRecentVoucherByServiceNameAndReferenceDoc(serviceName, referenceDocument);
+	    if(cVoucherHeaders != null && cVoucherHeaders.stream().anyMatch(vh -> vh.getStatus() != 4)){
+	        throw new ApplicationRuntimeException("Already voucher exists ("+cVoucherHeaders.stream().map(CVoucherHeader::getVoucherNumber).collect(Collectors.toSet())+") for service "+serviceName+" with reference number "+referenceDocument+".");
 	    }
 	}
 	
-	public CVoucherHeader getVoucherByServiceNameAndReferenceDocument(String referenceDocument, String serviceName) {
+	public List<CVoucherHeader> getVoucherByServiceNameAndReferenceDocument(String referenceDocument, String serviceName) {
             return vmisHibernateDao.getRecentVoucherByServiceNameAndReferenceDoc(serviceName, referenceDocument);
         }
 

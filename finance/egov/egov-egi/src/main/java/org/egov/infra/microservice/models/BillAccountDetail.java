@@ -62,4 +62,17 @@ public class BillAccountDetail {
 
     @JsonProperty("auditDetails")
     private AuditDetails auditDetails;
+    
+    private String glcode;
+
+    private String accountDescription;
+
+    private String billDetail;
+
+    private BigDecimal crAmountToBePaid = BigDecimal.ZERO;
+
+    private BigDecimal creditAmount = BigDecimal.ZERO;
+
+    private BigDecimal debitAmount = BigDecimal.ZERO;
+
 }

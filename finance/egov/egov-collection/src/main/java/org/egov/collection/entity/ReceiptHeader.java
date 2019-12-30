@@ -126,6 +126,7 @@ public class ReceiptHeader extends StateAware implements Auditable {
     private String serviceIdText;
     private String g8data;
     private String mobileNumber;
+    private String paymentId;
     public ReceiptHeader() {
     }
 
@@ -846,6 +847,14 @@ public class ReceiptHeader extends StateAware implements Auditable {
     
     public void setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
+    }
+
+    public String getPaymentId() {
+        return paymentId;
+    }
+    
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
     }
 
 }

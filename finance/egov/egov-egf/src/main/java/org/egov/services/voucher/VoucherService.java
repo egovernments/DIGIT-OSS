@@ -1522,7 +1522,7 @@ public class VoucherService extends PersistenceService<CVoucherHeader, Long> {
 	    return !egModuleServiceByName.isEmpty() ? egModuleServiceByName.get(0) : null;
 	}
 	
-	public CVoucherHeader getVoucherByServiceNameAndReferenceDocument( String serviceName, String referenceDocument) {
+	public List<CVoucherHeader> getVoucherByServiceNameAndReferenceDocument( String serviceName, String referenceDocument) {
             return vmisHibernateDao.getRecentVoucherByServiceNameAndReferenceDoc(serviceName, referenceDocument);
         }
 

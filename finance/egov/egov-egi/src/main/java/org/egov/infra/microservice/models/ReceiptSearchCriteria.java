@@ -45,75 +45,46 @@
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  *
  */
-package org.egov.commons.dao;
 
-import org.apache.commons.lang.StringUtils;
-import org.egov.commons.CVoucherHeader;
-import org.egov.commons.Vouchermis;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+package org.egov.infra.microservice.models;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.Date;
 import java.util.List;
-@Repository
-public class VouchermisHibernateDAO  {
-    @Transactional
-    public Vouchermis update(final Vouchermis entity) {
-        getCurrentSession().update(entity);
-        return entity;
-    }
+import java.util.Set;
 
-    @Transactional
-    public Vouchermis create(final Vouchermis entity) {
-        getCurrentSession().persist(entity);
-        return entity;
-    }
+import org.egov.infra.microservice.utils.PaymentSearchCriteria;
 
-    @Transactional
-    public void delete(Vouchermis entity) {
-        getCurrentSession().delete(entity);
-    }
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-    public Vouchermis findById(Number id, boolean lock) {
-        return (Vouchermis) getCurrentSession().load(Vouchermis.class, id);
-    }
-
-    public List<Vouchermis> findAll() {
-        return (List<Vouchermis>) getCurrentSession().createCriteria(Vouchermis.class).list();
-    }
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
+@Builder
+@Setter
+@Getter
+@NoArgsConstructor
+@ToString
+@AllArgsConstructor
+public class ReceiptSearchCriteria {
+    Set<String>  ids;
+    Set<String> status;
+    Set<String> businessCodes;
+    Date fromDate;
+    Date toDate;
+    Set<String>receiptNumbers;
+    String fund;
+    String department;
+    String classification;
     
-    public Session getCurrentSession() {
-        return entityManager.unwrap(Session.class);
+    public void toPayemntSerachCriteriaContract(PaymentSearchCriteria contract){
+//        contract.setIds(this.ids);
+        contract.setStatus(this.status);
+        contract.setBusinessServices(this.businessCodes);
+        contract.setFromDate(this.fromDate != null ? this.fromDate.getTime() : null);
+        contract.setToDate(this.toDate != null ? this.toDate.getTime() : null);
+//        contract.setReceiptNumbers(this.receiptNumbers);
+        contract.setIds(this.receiptNumbers);
     }
-
-
-    public Vouchermis getVouchermisByVhId(final Integer vhId) {
-        final Query qry = getCurrentSession().createQuery("from Vouchermis where voucherheaderid =:vhId");
-        qry.setInteger("vhId", vhId);
-        return (Vouchermis) qry.uniqueResult();
-    }
-    
-    public List<CVoucherHeader> getRecentVoucherByServiceNameAndReferenceDoc(String serviceName,String referenceDocument){
-        StringBuilder builderQuery = new StringBuilder("select vh from Vouchermis vmis,CVoucherHeader vh where vmis.voucherheaderid=vh.id");
-        if(!StringUtils.isBlank(serviceName)){
-            builderQuery.append(" and vmis.serviceName=:serviceName ");
-        }
-        builderQuery.append(" and vmis.referenceDocument=:referenceDocument ");
-        builderQuery.append(" order by vh.createdDate desc ");
-        final Query qry = getCurrentSession().createQuery(builderQuery.toString());
-        if(!StringUtils.isBlank(serviceName)){
-            qry.setString("serviceName", serviceName);
-        }
-        qry.setString("referenceDocument", referenceDocument);
-        List<CVoucherHeader> list = qry.list();
-        return list.isEmpty() ? null : list ;
-    }
-
 }

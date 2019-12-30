@@ -50,7 +50,6 @@ package org.egov.infra.web.spring.handler;
 
 import org.egov.infra.exception.ApplicationRuntimeException;
 import org.egov.infra.exception.ApplicationValidationException;
-import org.egov.infra.exception.MicroServiceHttpClientErrorException;
 import org.egov.infra.exception.MicroServiceInvalidTokenException;
 import org.egov.infra.exception.MicroServiceNotAuthroizedException;
 import org.slf4j.Logger;
@@ -98,12 +97,6 @@ public final class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     public RedirectView handleMicroServiceNotAuthroizedException(HttpServletRequest request,MicroServiceNotAuthroizedException e){
         LOG.error(ERROR_MESSAGE, e);
         return errorView(request, e.getMessage(),MS_NOTAUTHROIZED_TOKEN);
-    }
-    
-    @ExceptionHandler(MicroServiceHttpClientErrorException.class)
-    public RedirectView handleMicroServiceHttpClientErrorException(HttpServletRequest request,MicroServiceHttpClientErrorException e){
-        LOG.error(ERROR_MESSAGE, e);
-        return microServiceErrorView(request, e.getMessage(), e.getStatusCode(), e.getStatusText(),MS_NOTAUTHROIZED_TOKEN);
     }
     
     public RedirectView errorView(HttpServletRequest request, String message,String view) {

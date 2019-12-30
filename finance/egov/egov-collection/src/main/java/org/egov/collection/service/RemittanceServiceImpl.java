@@ -88,6 +88,8 @@ import org.egov.commons.dao.ChartOfAccountsDAO;
 import org.egov.commons.dao.FunctionHibernateDAO;
 import org.egov.commons.dao.FundHibernateDAO;
 import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.microservice.models.Bill;
+import org.egov.infra.microservice.models.BillDetail;
 import org.egov.infra.microservice.models.BusinessDetails;
 import org.egov.infra.microservice.models.BusinessService;
 import org.egov.infra.microservice.models.BusinessServiceCriteria;
@@ -100,8 +102,10 @@ import org.egov.infra.microservice.models.InstrumentResponse;
 import org.egov.infra.microservice.models.InstrumentStatusEnum;
 import org.egov.infra.microservice.models.InstrumentVoucher;
 import org.egov.infra.microservice.models.Payment;
+import org.egov.infra.microservice.models.PaymentDetail;
 import org.egov.infra.microservice.models.PaymentResponse;
 import org.egov.infra.microservice.models.PaymentStatusEnum;
+import org.egov.infra.microservice.models.PaymentWorkflow;
 import org.egov.infra.microservice.models.Receipt;
 import org.egov.infra.microservice.models.ReceiptResponse;
 import org.egov.infra.microservice.models.RemittanceReceipt;
@@ -274,7 +278,9 @@ public class RemittanceServiceImpl extends RemittanceService {
                                     } else {
                                         receiptInstrumentMap.put(iv.getReceiptHeaderId(), Collections.singleton(i));
                                     }
-                                    paymentIdSet.add(iv.getReceiptHeaderId());
+                                    if(paymentIdSet  != null){
+                                        paymentIdSet.add(iv.getReceiptHeaderId());
+                                    }
                                     bankRemittanceList.add(receiptMap.get(iv.getReceiptHeaderId()));
                                     List<CVoucherHeader> voucher = this.getVoucher(iv.getVoucherHeaderId());
                                     if(!voucher.isEmpty()){
@@ -307,16 +313,7 @@ public class RemittanceServiceImpl extends RemittanceService {
         case "V2":
         case "VERSION2":
             if(!paymentIdSet.isEmpty()){
-                List<Payment> payments = microserviceUtils.getPayments(PaymentSearchCriteria.builder().ids(paymentIdSet).build());
-                List<Payment> updatedPayment = payments.stream().map(payment -> {
-                    payment.setPaymentStatus(PaymentStatusEnum.DEPOSITED);
-                    payment.setInstrumentStatus(InstrumentStatusEnum.REMITTED);
-                    return payment;
-                }).collect(Collectors.toList());
-                updatedPayment.stream().forEach(payment -> {
-                    PaymentResponse updatePayments = microserviceUtils.updatePayments(payment);
-                });
-                
+                microserviceUtils.performWorkflow(paymentIdSet,PaymentWorkflow.PaymentAction.REMIT, "Payment got remitted from finance");
             }
             break;
 
@@ -335,6 +332,9 @@ public class RemittanceServiceImpl extends RemittanceService {
         if(!instrumentList.isEmpty()){
             microserviceUtils.reconcileInstrumentsWithPayinSlipId(instrumentList, accountNumberId,remittance.getVoucherHeader().getVoucherNumber());            
         }
+        receiptList.stream().forEach(receipt -> {
+            receipt.setRemittanceReferenceNumber(remittance.getReferenceNumber());
+        });
         return new ArrayList(bankRemittanceList);
     }
 
@@ -809,34 +809,39 @@ public class RemittanceServiceImpl extends RemittanceService {
         switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
         case "V2":
         case "VERSION2":
-            List<Receipt> payReceipts = microserviceUtils.getReceipts(StringUtils.join(receiptIds, ","), PaymentStatusEnum.NEW.name(), serviceCodes,
-                    startDate, endDate);
-            if(CollectionUtils.isNotEmpty(payReceipts)){
-                payReceipts.stream().forEach(rec -> {
-                    ReceiptBean rb1 = new ReceiptBean();
-                    rb1.setInstrumentId(receiptInstrumentMap.get(rec.getPaymentId()).getId());
-                    rb1.setInstrumentAmount(receiptInstrumentMap.get(rec.getPaymentId()).getAmount());
-                    rb1.setInstrumentNumber(receiptInstrumentMap.get(rec.getPaymentId()).getTransactionNumber());
-                    if (receiptInstrumentMap.get(rec.getPaymentId()).getTransactionDate() != null)
-                        rb1.setInstrumentDate(DateUtils.toDefaultDateFormat(
-                                receiptInstrumentMap.get(rec.getPaymentId())
-                                .getTransactionDate()));
-                    rb1.setInstrumentType(
-                            receiptInstrumentMap.get(rec.getPaymentId()).getInstrumentType().getName());
-                    rb1.setBankBranch(receiptInstrumentMap.get(rec.getPaymentId()).getBranchName());
-//                final Bank bank = (Bank) persistenceService.find("from Bank where id=?",
-//                        receiptInstrumentMap.get(r.getBill().get(0).getBillDetails().get(0).getReceiptNumber()).getBank().getId().intValue());
-                    org.egov.infra.microservice.models.Bank bank = receiptInstrumentMap.get(rec.getPaymentId()).getBank();
-                    rb1.setBank(bank != null ? bank.getName() : "");
-                    rb1.setReceiptId(rec.getBill().get(0).getBillDetails().get(0).getReceiptNumber());
-                    rb1.setReceiptNumber(rec.getBill().get(0).getBillDetails().get(0).getReceiptNumber());
-                    rb1.setReceiptDate(DateUtils.toDefaultDateTimeFormat(new Date(rec.getBill().get(0).getBillDetails().get(0).getReceiptDate())));
-                    rb1.setService(rec.getBill().get(0).getBillDetails().get(0).getBusinessService());
-//                    rb.setFund(r.getBill().get(0).getBillDetails().get(0).getFund());
-//                    rb.setDepartment(r.getBill().get(0).getBillDetails().get(0).getDepartment());
-                    finalList.add(rb1);
-                });
-            }
+            List<Payment> payments = microserviceUtils.getPayments(
+                    PaymentSearchCriteria.builder()
+                    .ids(new HashSet(receiptIds))
+                    .status(Collections.singleton(PaymentStatusEnum.NEW.name()))
+                    .businessServices(Arrays.asList(serviceCodes.split(",")).stream().collect(Collectors.toSet()))
+                    .fromDate(startDate.getTime())
+                    .toDate(endDate.getTime())
+                    .build()
+                    );
+            payments.stream().forEach(payment -> {
+                Set<String> receiptNumbers = payment.getPaymentDetails().stream().map(PaymentDetail::getReceiptNumber).collect(Collectors.toSet());
+                Set<String> services = payment.getPaymentDetails().stream().map(PaymentDetail::getBusinessService).collect(Collectors.toSet());
+                ReceiptBean rb1 = new ReceiptBean();
+                rb1.setInstrumentId(receiptInstrumentMap.get(payment.getId()).getId());
+                rb1.setInstrumentAmount(receiptInstrumentMap.get(payment.getId()).getAmount());
+                rb1.setInstrumentNumber(receiptInstrumentMap.get(payment.getId()).getTransactionNumber());
+                if (receiptInstrumentMap.get(payment.getId()).getTransactionDate() != null)
+                    rb1.setInstrumentDate(DateUtils.toDefaultDateFormat(
+                            receiptInstrumentMap.get(payment.getId())
+                            .getTransactionDate()));
+                rb1.setInstrumentType(
+                        receiptInstrumentMap.get(payment.getId()).getInstrumentType().getName());
+                rb1.setBankBranch(receiptInstrumentMap.get(payment.getId()).getBranchName());
+//            final Bank bank = (Bank) persistenceService.find("from Bank where id=?",
+//                    receiptInstrumentMap.get(r.getBill().get(0).getBillDetails().get(0).getReceiptNumber()).getBank().getId().intValue());
+                org.egov.infra.microservice.models.Bank bank = receiptInstrumentMap.get(payment.getId()).getBank();
+                rb1.setBank(bank != null ? bank.getName() : "");
+                rb1.setReceiptId(payment.getId());
+                rb1.setReceiptNumber(StringUtils.join(receiptNumbers,","));
+                rb1.setReceiptDate(DateUtils.toDefaultDateTimeFormat(new Date(payment.getTransactionDate())));
+                rb1.setService(StringUtils.join(services,","));
+                finalList.add(rb1);
+            });
             
             break;
 
@@ -914,7 +919,6 @@ public class RemittanceServiceImpl extends RemittanceService {
 
         List<Receipt> receiptList = new ArrayList<>();
         final SimpleDateFormat dateFomatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-//TODO : Make call to mdms
         InstrumentAccountCode accountCode = microserviceUtils
                 .getInstrumentAccountGlCodeByType(CollectionConstants.INSTRUMENTTYPE_NAME_CHEQUE);
 
@@ -925,8 +929,12 @@ public class RemittanceServiceImpl extends RemittanceService {
 
         String chequeInHandGlcode = null;
 
-        if (!chequeInHand.list().isEmpty())
+        if (!chequeInHand.list().isEmpty()){
             chequeInHandGlcode = chequeInHand.list().get(0).toString();
+        }else{
+            String validationMessage = String.format("Glcode: %1$s which  is mapped with Istrument type cheque in mdms is not exist in database",  accountCode.getGlcode());
+            throw new ValidationException(Arrays.asList(new ValidationError(validationMessage, validationMessage)));
+        }
 
         String functionCode = collectionsUtil.getAppConfigValue(CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
                 CollectionConstants.APPCONFIG_VALUE_COLLECTION_BANKREMITTANCE_FUNCTIONCODE);
@@ -963,13 +971,24 @@ public class RemittanceServiceImpl extends RemittanceService {
         StringBuffer receiptNumbers = new StringBuffer();
         Map<String, Set<Instrument>> receiptInstrumentMap = new HashMap<>();
         List<Instrument> instruments;
+        Set<String> paymentIdSet = new HashSet();
         for (ReceiptBean receipt : receiptBeanList) {
+            
             if (receipt.getSelected() != null && receipt.getSelected()) {
                 instruments = microserviceUtils.getInstruments(receipt.getInstrumentId());
                 receiptInstrumentMap.put(receipt.getReceiptId(), new HashSet<>(instruments));
                 instrumentIdList.add(receipt.getInstrumentId());
                 receiptNumbers.append(",");
-                receiptNumbers.append(receipt.getReceiptNumber());
+                switch(ApplicationThreadLocals.getCollectionVersion().toUpperCase()){
+                case "V2":
+                case "VERSION2":
+                    receiptNumbers.append(receipt.getReceiptId());
+                    paymentIdSet.add(receipt.getReceiptId());
+                    break;
+                default:
+                    receiptNumbers.append(receipt.getReceiptNumber());
+                    break;
+                }
 
                 if (showRemitDate && remittanceDate != null)
                     voucherDate = remittanceDate;
@@ -1026,18 +1045,28 @@ public class RemittanceServiceImpl extends RemittanceService {
                 financialsUtil.updateCheque_DD_Card_Deposit(chequeMap, remittance.getVoucherHeader(),
                         bankRemitInstrument.getInstrumentHeader(), depositedBankAccount);
         }
+        
+        switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
+        case "V2":
+        case "VERSION2":
+            if(!paymentIdSet.isEmpty()){
+                microserviceUtils.performWorkflow(paymentIdSet,PaymentWorkflow.PaymentAction.REMIT, "Payment got remitted from finance");
+            }
+            break;
 
-        for (final Receipt receiptHeader : receiptList) {
-            receiptHeader.getBill().get(0).getBillDetails().get(0).setStatus("Remitted");
-            receiptHeader.getInstrument().setTenantId(receiptHeader.getTenantId());
-            receiptHeader.getBill().get(0).setPayerName(receiptHeader.getBill().get(0).getPaidBy());
-//            receiptHeader.setReceiptNumber(remittance.getReferenceNumber());
+        default:
+            for (final Receipt receiptHeader : receiptList) {
+                receiptHeader.getBill().get(0).getBillDetails().get(0).setStatus("Remitted");
+                receiptHeader.getInstrument().setTenantId(receiptHeader.getTenantId());
+                receiptHeader.getBill().get(0).setPayerName(receiptHeader.getBill().get(0).getPaidBy());
+//                receiptHeader.setReceiptNumber(remittance.getReferenceNumber());
+            }
+            ReceiptResponse response = microserviceUtils.updateReceipts(new ArrayList<>(receiptList));
+            break;
         }
         for (ReceiptBean receipt : receiptBeanList) {
             receipt.setRemittanceReferenceNumber(remittance.getReferenceNumber());
         }
-        ReceiptResponse response = microserviceUtils.updateReceipts(new ArrayList<>(receiptList));
-
         return receiptList;
     }
 

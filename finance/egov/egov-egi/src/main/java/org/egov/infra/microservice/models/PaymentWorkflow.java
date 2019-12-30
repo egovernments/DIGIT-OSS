@@ -45,75 +45,71 @@
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  *
  */
-package org.egov.commons.dao;
 
-import org.apache.commons.lang.StringUtils;
-import org.egov.commons.CVoucherHeader;
-import org.egov.commons.Vouchermis;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+package org.egov.infra.microservice.models;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.List;
-@Repository
-public class VouchermisHibernateDAO  {
-    @Transactional
-    public Vouchermis update(final Vouchermis entity) {
-        getCurrentSession().update(entity);
-        return entity;
-    }
+import javax.validation.constraints.NotNull;
 
-    @Transactional
-    public Vouchermis create(final Vouchermis entity) {
-        getCurrentSession().persist(entity);
-        return entity;
-    }
+import org.hibernate.validator.constraints.Length;
 
-    @Transactional
-    public void delete(Vouchermis entity) {
-        getCurrentSession().delete(entity);
-    }
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.JsonNode;
 
-    public Vouchermis findById(Number id, boolean lock) {
-        return (Vouchermis) getCurrentSession().load(Vouchermis.class, id);
-    }
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode
+public class PaymentWorkflow {
+    @NotNull
+    @Length(min = 1)
+    private String paymentId;
 
-    public List<Vouchermis> findAll() {
-        return (List<Vouchermis>) getCurrentSession().createCriteria(Vouchermis.class).list();
-    }
+    @NotNull
+    private PaymentAction action;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @NotNull
+    @Length(min = 1)
+    private String tenantId;
 
-    
-    public Session getCurrentSession() {
-        return entityManager.unwrap(Session.class);
-    }
+    private String reason;
+    private JsonNode additionalDetails;
 
+    /**
+     * Current status of the transaction
+     */
+    public enum PaymentAction {
+        CANCEL("CANCEL"),
+        DISHONOUR("DISHONOUR"),
+        REMIT("REMIT");
 
-    public Vouchermis getVouchermisByVhId(final Integer vhId) {
-        final Query qry = getCurrentSession().createQuery("from Vouchermis where voucherheaderid =:vhId");
-        qry.setInteger("vhId", vhId);
-        return (Vouchermis) qry.uniqueResult();
-    }
-    
-    public List<CVoucherHeader> getRecentVoucherByServiceNameAndReferenceDoc(String serviceName,String referenceDocument){
-        StringBuilder builderQuery = new StringBuilder("select vh from Vouchermis vmis,CVoucherHeader vh where vmis.voucherheaderid=vh.id");
-        if(!StringUtils.isBlank(serviceName)){
-            builderQuery.append(" and vmis.serviceName=:serviceName ");
+        private String value;
+
+        PaymentAction(String value) {
+            this.value = value;
         }
-        builderQuery.append(" and vmis.referenceDocument=:referenceDocument ");
-        builderQuery.append(" order by vh.createdDate desc ");
-        final Query qry = getCurrentSession().createQuery(builderQuery.toString());
-        if(!StringUtils.isBlank(serviceName)){
-            qry.setString("serviceName", serviceName);
+
+        @JsonCreator
+        public static PaymentAction fromValue(String text) {
+            for (PaymentAction b : PaymentAction.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
         }
-        qry.setString("referenceDocument", referenceDocument);
-        List<CVoucherHeader> list = qry.list();
-        return list.isEmpty() ? null : list ;
+
+        @Override
+        @JsonValue
+        public String toString() {
+            return String.valueOf(value);
+        }
     }
 
 }

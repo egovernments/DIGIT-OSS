@@ -45,75 +45,49 @@
  *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
  *
  */
-package org.egov.commons.dao;
 
-import org.apache.commons.lang.StringUtils;
-import org.egov.commons.CVoucherHeader;
-import org.egov.commons.Vouchermis;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+package org.egov.infra.microservice.models;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.List;
-@Repository
-public class VouchermisHibernateDAO  {
-    @Transactional
-    public Vouchermis update(final Vouchermis entity) {
-        getCurrentSession().update(entity);
-        return entity;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+public enum PaymentStatusEnum {
+    NEW("NEW"),
+    DEPOSITED("DEPOSITED"),
+    CANCELLED("CANCELLED"),
+    DISHONOURED("DISHONOURED"),
+    RECONCILED("RECONCILED");
+
+
+    private String value;
+
+    PaymentStatusEnum(String value) {
+        this.value = value;
     }
 
-    @Transactional
-    public Vouchermis create(final Vouchermis entity) {
-        getCurrentSession().persist(entity);
-        return entity;
-    }
-
-    @Transactional
-    public void delete(Vouchermis entity) {
-        getCurrentSession().delete(entity);
-    }
-
-    public Vouchermis findById(Number id, boolean lock) {
-        return (Vouchermis) getCurrentSession().load(Vouchermis.class, id);
-    }
-
-    public List<Vouchermis> findAll() {
-        return (List<Vouchermis>) getCurrentSession().createCriteria(Vouchermis.class).list();
-    }
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    
-    public Session getCurrentSession() {
-        return entityManager.unwrap(Session.class);
+    @Override
+    @JsonValue
+    public String toString() {
+        return String.valueOf(value);
     }
 
 
-    public Vouchermis getVouchermisByVhId(final Integer vhId) {
-        final Query qry = getCurrentSession().createQuery("from Vouchermis where voucherheaderid =:vhId");
-        qry.setInteger("vhId", vhId);
-        return (Vouchermis) qry.uniqueResult();
-    }
-    
-    public List<CVoucherHeader> getRecentVoucherByServiceNameAndReferenceDoc(String serviceName,String referenceDocument){
-        StringBuilder builderQuery = new StringBuilder("select vh from Vouchermis vmis,CVoucherHeader vh where vmis.voucherheaderid=vh.id");
-        if(!StringUtils.isBlank(serviceName)){
-            builderQuery.append(" and vmis.serviceName=:serviceName ");
+    @JsonCreator
+    public static PaymentStatusEnum fromValue(String text) {
+        for (PaymentStatusEnum b : PaymentStatusEnum.values()) {
+            if (String.valueOf(b.value).equalsIgnoreCase(text)) {
+                return b;
+            }
         }
-        builderQuery.append(" and vmis.referenceDocument=:referenceDocument ");
-        builderQuery.append(" order by vh.createdDate desc ");
-        final Query qry = getCurrentSession().createQuery(builderQuery.toString());
-        if(!StringUtils.isBlank(serviceName)){
-            qry.setString("serviceName", serviceName);
-        }
-        qry.setString("referenceDocument", referenceDocument);
-        List<CVoucherHeader> list = qry.list();
-        return list.isEmpty() ? null : list ;
+        return null;
     }
 
+    public static boolean contains(String test) {
+        for (PaymentStatusEnum val : PaymentStatusEnum.values()) {
+            if (val.name().equalsIgnoreCase(test)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
