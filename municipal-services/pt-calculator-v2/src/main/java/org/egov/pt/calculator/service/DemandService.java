@@ -219,9 +219,9 @@ public class DemandService {
 		mstrDataService.setPropertyMasterValues(requestInfo, getBillCriteria.getTenantId(),
 		masterMap, jsonMasterMap);
 
-		if(CollectionUtils.isEmpty(getBillCriteria.getConsumerCodes()))
+		/*if(CollectionUtils.isEmpty(getBillCriteria.getConsumerCodes()))
 			getBillCriteria.setConsumerCodes(Collections.singletonList(getBillCriteria.getPropertyId()+ PT_CONSUMER_CODE_SEPARATOR +getBillCriteria.getAssessmentNumber()));
-
+*/
 		DemandResponse res = mapper.convertValue(
 				repository.fetchResult(utils.getDemandSearchUrl(getBillCriteria), requestInfoWrapper),
 				DemandResponse.class);

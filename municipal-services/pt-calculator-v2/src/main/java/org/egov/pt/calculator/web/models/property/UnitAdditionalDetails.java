@@ -45,5 +45,8 @@ public class UnitAdditionalDetails   {
         // @JsonProperty("coveredArea")
         // private double coveredArea;
 
+        //ConstructionDates
+        @JsonProperty("constructionDate")
+        private long constructionDate;
 }
 
