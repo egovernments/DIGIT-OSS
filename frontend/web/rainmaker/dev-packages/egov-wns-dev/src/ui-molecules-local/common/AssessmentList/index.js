@@ -12,7 +12,7 @@ import { download } from "egov-common/ui-utils/commons"
 const downloadReceipt = (tenantId, consumerCode) => {
   const val = [
     {
-      key: 'consumerCode',
+      key: 'consumerCodes',
       value: consumerCode
     },
     { key: 'tenantId', value: tenantId }]
@@ -51,8 +51,11 @@ export const getItemStatus = (due, paid, tenantId, consumerCode, history = "") =
       return (
         <div>
           <div className="assessment-displayInline" style={{ marginTop: "8px" }}>
-            <Label label={item.status} labelStyle={{ marginLeft: "8px" }} color={"#22b25f"} />
+            <Label label={status} labelStyle={{ marginLeft: "8px" }} color={"#22b25f"} />
             <Icon action="navigation" name="check" style={styles.paidIconStyle} color={"#22b25f"} />
+          </div>
+          <div className="assessment-displayInline" style={{ color: '#fe7a51' }} onClick={() => downloadReceipt(tenantId, consumerCode)}>
+            <LabelContainer labelKey="WS_COMMON_BUTTON_DOWNLOAD_RECEIPT" />
           </div>
         </div>
       );
