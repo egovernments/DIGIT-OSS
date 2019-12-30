@@ -50,7 +50,7 @@ class PastPayments extends Component {
       return fromDate.getFullYear().toString() + '-' + toDate.getFullYear().toString().substring(2)
     }
     const data = pastPaymentsDetails.map((element) =>
-      <div style={{ marginLeft: '0px', padding: '0px', position: 'relative', borderBottom: '1px solid  rgb(224, 224, 224)',flexgrow:1 }}>
+      <div style={{ marginLeft: '0px', padding: '0px', position: 'relative', borderBottom: '1px solid  rgb(224, 224, 224)', flexgrow: 1 }}>
         <Grid container spacing={3}>
           <Grid item xs={8} >
             <div className="incomplete-assesment-info">
@@ -125,7 +125,7 @@ class PastPayments extends Component {
                 bold={false}
               />
               <div style={{ height: "auto" }}>
-                {getItemStatus(element.totalDue, element.totalAmountPaid)}
+                {getItemStatus(element.totalDue, element.totalAmountPaid, element.paymentDetails[0].bill.tenantId, element.paymentDetails[0].bill.consumerCode)}
               </div>
             </div>
           </Grid>

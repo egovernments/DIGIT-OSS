@@ -7,8 +7,19 @@ import DropDown from "./components/DropDown";
 import "./index.css";
 import { Link } from "react-router-dom"
 import LabelContainer from "egov-ui-framework/ui-containers/LabelContainer";
+import { download } from "egov-common/ui-utils/commons"
 
-export const getItemStatus = (due, paid, history = "") => {
+const downloadReceipt = (tenantId, consumerCode) => {
+  const val = [
+    {
+      key: 'consumerCode',
+      value: consumerCode
+    },
+    { key: 'tenantId', value: tenantId }]
+  download(val)
+}
+
+export const getItemStatus = (due, paid, tenantId, consumerCode, history = "") => {
   let status;
   if (due == paid) {
     status = "Paid"
@@ -30,10 +41,8 @@ export const getItemStatus = (due, paid, history = "") => {
             <Label label={status} labelStyle={{ marginLeft: 10 }} color={"#22b25f"} />
             <Icon action="navigation" name="check" style={styles.paidIconStyle} color={"#22b25f"} />
           </div>
-          <div className="assessment-displayInline" style={{ color: '#fe7a51' }}>
-            <Link to="home" style={{ color: '#fe7a51' }}>
-              <LabelContainer labelKey="WS_COMMON_BUTTON_DOWNLOAD_RECEIPT" />
-            </Link>
+          <div className="assessment-displayInline" style={{ color: '#fe7a51' }} onClick={() => downloadReceipt(tenantId, consumerCode)}>
+            <LabelContainer labelKey="WS_COMMON_BUTTON_DOWNLOAD_RECEIPT" />
           </div>
         </div>
       );
@@ -63,10 +72,10 @@ export const getItemStatus = (due, paid, history = "") => {
             <Label label="paid" labelStyle={{ marginLeft: "8px" }} color={"#22b25f"} />
             <Icon action="navigation" name="check" style={styles.paidIconStyle} color={"#22b25f"} />
           </div>
-          <div className="assessment-displayInline" style={{ paddingTop: "10px", color: '#fe7a51' }}>
-            <Link to="home" style={{ color: '#fe7a51' }}>
-              <LabelContainer labelKey="WS_COMMON_BUTTON_DOWNLOAD_RECEIPT" />
-            </Link>
+          <div className="assessment-displayInline" style={{ paddingTop: "10px", color: '#fe7a51' }} onClick={() => downloadReceipt(tenantId, consumerCode)}>
+            {/* <Link to="home" style={{ color: '#fe7a51' }}> */}
+            <LabelContainer labelKey="WS_COMMON_BUTTON_DOWNLOAD_RECEIPT" />
+            {/* </Link> */}
           </div>
         </div>
       );
