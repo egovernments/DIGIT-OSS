@@ -81,7 +81,6 @@ const loadBpaData = async (dispatch, applicationNumber, tenantId) => {
     },
     { key: "applicationNumber", value: applicationNumber }
   ]);
-  // const response = sampleSingleSearch();
   dispatch(prepareFinalObject("BPA", get(response, "BPA", [])));
 };
 

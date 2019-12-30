@@ -27,6 +27,11 @@ class Table extends React.Component {
         MuiTableCell: {
           body: {
             fontSize: 14
+          },
+          head: {
+            fontSize: 14,
+            color: "rgba(0, 0, 0, 0.8700000048)",
+            fontWeight: 700
           }
         }
       }

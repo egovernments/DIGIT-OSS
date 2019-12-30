@@ -62,7 +62,7 @@ class MapLocator extends Component {
   closeMapPopup = () => {
     this.props.handleField(
       "apply",
-      "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.mapsDialog",
+      "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.mapsDialog",
       "props.open",
       false
     );
@@ -71,7 +71,7 @@ class MapLocator extends Component {
   onClickPick = () => {
     this.props.handleField(
       "apply",
-      "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocGISCoord.children.gisTextField",
+      "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocGISCoord.children.gisTextField",
       "props.value",
       `${add.lat}, ${add.lng}`
     );

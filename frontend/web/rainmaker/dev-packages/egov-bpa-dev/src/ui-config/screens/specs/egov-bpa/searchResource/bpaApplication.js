@@ -16,38 +16,6 @@ const resetFields = (state, dispatch) => {
   dispatch(
     handleField(
       "search",
-      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.applicationType",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.serviceType",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.riskType",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.applicationStatus",
-      "props.value",
-      ""
-    )
-  );
-  dispatch(
-    handleField(
-      "search",
       "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.fromDate",
       "props.value",
       ""
@@ -77,16 +45,7 @@ const resetFields = (state, dispatch) => {
       ""
     )
   );
-  dispatch(
-    handleField(
-      "search",
-      "components.div.children.BPAApplication.children.cardContent.children.appBPAHomeSearchResultsContainer.children.tenantID",
-      "props.value",
-      ""
-    )
-  );
 };
-
 
 export const BPAApplication = getCommonCard({
   subHeader: getCommonTitle({
@@ -98,203 +57,6 @@ export const BPAApplication = getCommonCard({
     labelKey: "NOC_HOME_SEARCH_RESULTS_DESC"
   }),
   appBPAHomeSearchResultsContainer: getCommonContainer({
-
-    applicationType: getSelectField({
-      label: {
-        labelName: "Application Type",
-        labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Application Type",
-        labelKey: "BPA_BASIC_DETAILS_APPLICATION_TYPE_PLACEHOLDER"
-      },
-
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "BPA"
-      },
-      jsonPath: "searchScreen.serviceType",
-      sourceJsonPath: "applyScreenMdmsData.BPA.DocTypeMapping[0].applicationType",
-      required: false,
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      data: [
-        {
-          code: "INITIATED"
-        },
-        {
-          code: "APPLIED"
-        },
-        {
-          code: "PAID"
-        },
-        {
-          code: "APPROVED"
-        },
-        {
-          code: "REJECTED"
-        },
-        {
-          code: "CANCELLED"
-        }
-      ]
-    }),
-
-    serviceType: getSelectField({
-      label: {
-        labelName: "Service type",
-        labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Service type",
-        labelKey: "BPA_BASIC_DETAILS_SERVICE_TYPE_PLACEHOLDER"
-      },
-
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "BPA"
-      },
-      jsonPath: "searchScreen.serviceSubType",
-      sourceJsonPath: "applyScreenMdmsData.BPA.DocTypeMapping[0].ServiceType",
-      required: false,
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      data: [
-        {
-          code: "INITIATED"
-        },
-        {
-          code: "APPLIED"
-        },
-        {
-          code: "PAID"
-        },
-        {
-          code: "APPROVED"
-        },
-        {
-          code: "REJECTED"
-        },
-        {
-          code: "CANCELLED"
-        }
-      ]
-    }),
-
-
-    riskType: getSelectField({
-      label: {
-        labelName: "Risk Type",
-        labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Risk Type",
-        labelKey: "BPA_BASIC_DETAILS_RISK_TYPE_PLACEHOLDER"
-      },
-
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "BPA"
-      },
-      jsonPath: "searchScreen.riskType",
-      sourceJsonPath: "applyScreenMdmsData.BPA.DocTypeMapping[0].RiskType",
-      required: false,
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      data: [
-        {
-          code: "HiGH"
-        },
-        {
-          code: "MEDIUM"
-        },
-        {
-          code: "LOW"
-        }
-      ]
-    }),
-
-    applicationStatus: getSelectField({
-      label: {
-        labelName: "Application status",
-        labelKey: "NOC_APPLICATION_NOC_LABEL"
-      },
-      placeholder: {
-        labelName: "Select Application Status",
-        labelKey: "NOC_APPLICATION_PLACEHOLDER"
-      },
-
-      localePrefix: {
-        moduleName: "WF",
-        masterName: "BPA"
-      },
-      jsonPath: "searchScreen.status",
-      sourceJsonPath: "applyScreenMdmsData.searchScreen.status",
-      required: false,
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      data: [
-        {
-          code: "INITIATED"
-        },
-        {
-          code: "APPLIED"
-        },
-        {
-          code: "PAID"
-        },
-        {
-          code: "APPROVED"
-        },
-        {
-          code: "REJECTED"
-        },
-        {
-          code: "CANCELLED"
-        }
-      ]
-    }),
-
-    fromDate: getDateField({
-      label: { labelName: "From Date", labelKey: "NOC_FROM_DATE_LABEL" },
-      placeholder: {
-        labelName: "From Date",
-        labelKey: "NOC_FROM_DATE_PLACEHOLDER"
-      },
-      jsonPath: "searchScreen.fromDate",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      // pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      required: false
-    }),
-
-    toDate: getDateField({
-      label: { labelName: "To Date", labelKey: "NOC_TO_DATE_LABEL" },
-      placeholder: {
-        labelName: "To Date",
-        labelKey: "NOC_TO_DATE_PLACEHOLDER"
-      },
-      jsonPath: "searchScreen.toDate",
-      gridDefination: {
-        xs: 12,
-        sm: 4
-      },
-      // pattern: getPattern("Date"),
-      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
-      required: false
-    }),
-
     bpaNo: getTextField({
       label: {
         labelName: "Application number",
@@ -313,7 +75,6 @@ export const BPAApplication = getCommonCard({
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "searchScreen.applicationNos"
     }),
-    
     ownerMobNo: getTextField({
       label: {
         labelName: "Mobile Number",
@@ -332,13 +93,41 @@ export const BPAApplication = getCommonCard({
         position: "start"
       },
       required: false,
-      // pattern: getPattern("MobileNo"),
+      pattern: getPattern("MobileNo"),
       jsonPath: "searchScreen.mobileNumber",
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG"
     }),
+    fromDate: getDateField({
+      label: { labelName: "From Date", labelKey: "NOC_FROM_DATE_LABEL" },
+      placeholder: {
+        labelName: "From Date",
+        labelKey: "NOC_FROM_DATE_PLACEHOLDER"
+      },
+      jsonPath: "searchScreen.fromDate",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      pattern: getPattern("Date"),
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      required: false
+    }),
+    toDate: getDateField({
+      label: { labelName: "To Date", labelKey: "NOC_TO_DATE_LABEL" },
+      placeholder: {
+        labelName: "To Date",
+        labelKey: "NOC_TO_DATE_PLACEHOLDER"
+      },
+      jsonPath: "searchScreen.toDate",
+      gridDefination: {
+        xs: 12,
+        sm: 4
+      },
+      pattern: getPattern("Date"),
+      errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
+      required: false
+    })
   }),
-
-
   button: getCommonContainer({
     buttonContainer: getCommonContainer({
       resetButton: {
@@ -346,7 +135,6 @@ export const BPAApplication = getCommonCard({
         gridDefination: {
           xs: 12,
           sm: 6
-          // align: "center"
         },
         props: {
           variant: "outlined",

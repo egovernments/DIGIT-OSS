@@ -13,7 +13,7 @@ const updateBpaApplication = async (state, dispatch) => {
   );
   let tenantId = get(
     state,
-    "screenConfiguration.preparedFinalObject.BPAs[0].BPADetails.plotdetails.citytown.value"
+    "screenConfiguration.preparedFinalObject.BPA.address.city"
   );
   if (get(response, "status", "") === "success") {
     const acknowledgementUrl =

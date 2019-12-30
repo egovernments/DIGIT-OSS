@@ -12,7 +12,7 @@ export const estimateSummary = getCommonGrayCard({
   estimateCard: {
     uiFramework: "custom-containers-local",
     moduleName: "egov-bpa",
-    componentPath: "EstimateCardContainer",
+    componentPath: "BpaEstimateCardContainer",
     props: {
       estimate: {
         header: { labelName: "Fee Estimate", labelKey: "NOC_SUMMARY_FEE_EST" },

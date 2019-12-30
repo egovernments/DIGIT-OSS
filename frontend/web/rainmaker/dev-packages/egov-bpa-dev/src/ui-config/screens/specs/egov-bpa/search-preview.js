@@ -30,9 +30,7 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { scrutinySummary } from "./summaryResource/scrutinySummary";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { plotAndBoundaryInfoSummary } from "./summaryResource/plotAndBoundaryInfoSummary";
-// import { propertySummary } from "./summaryResource/propertySummary";
 import { httpRequest, edcrHttpRequest } from "../../../../ui-utils/api";
-//import { searchResMockJson } from './searchResMockJson';
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -288,10 +286,9 @@ const setSearchResponse = async (
     },
     { key: "applicationNos", value: applicationNumber }
   ]);
-  //const response = searchResMockJson;
+
   const edcrNumber = response.Bpa["0"].edcrNumber;
 
-  // const response = sampleSingleSearch();
   dispatch(prepareFinalObject("BPA", response.Bpa[0]));
   let edcrRes = await edcrHttpRequest(
     "post",

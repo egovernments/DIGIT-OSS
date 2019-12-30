@@ -74,6 +74,11 @@ const EdcrSingleApplication = Loadable({
   loading: () => <Loading />
 });
 
+const BpaFeesEstimateCard = Loadable({
+  loader: () => import("./BpaFeesEstimateCard"),
+  loading: () => <Loading />
+});
+
 export {
   TestMolecules,
   RadioButtonsGroup,
@@ -88,5 +93,6 @@ export {
   NocList,
   Table,
   UploadSingleFile,
-  DividerWithLabel
+  DividerWithLabel,
+  BpaFeesEstimateCard
 };

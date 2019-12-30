@@ -110,14 +110,25 @@ export const searchResults = {
   componentPath: "Table",
   visible: false,
   props: {
-    // data: [],
     columns: [
       getBpaTextToLocalMapping("Application No"),
-      // getBpaTextToLocalMapping("NOC No"),
-      // getBpaTextToLocalMapping("NOC Type"),
       getBpaTextToLocalMapping("Owner Name"),
       getBpaTextToLocalMapping("Application Date"),
-      getBpaTextToLocalMapping("Status"),
+      {
+        name: getBpaTextToLocalMapping("Status"),
+        options: {
+          filter: false,
+          customBodyRender: value => (
+            <span
+              style={
+                value === "APPROVED" ? { color: "green" } : { color: "red" }
+              }
+            >
+              {getBpaTextToLocalMapping(value)}
+            </span>
+          )
+        }
+      },
       {
         name: "tenantId",
         options: {

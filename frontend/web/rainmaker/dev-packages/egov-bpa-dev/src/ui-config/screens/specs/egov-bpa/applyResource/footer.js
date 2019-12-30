@@ -14,19 +14,20 @@ import {
   prepareDocumentsUploadData
 } from "../../../../../ui-utils/commons";
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
-
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 const setReviewPageRoute = (state, dispatch) => {
-  let tenantId = get(
-    state,
-    "screenConfiguration.preparedFinalObject.BPA.address.city"
-  );
+  // let tenantId = get(
+  //   state,
+  //   "screenConfiguration.preparedFinalObject.BPA.address.city.value"
+  // );
+  const tenantId = getTenantId();
   const applicationNumber = get(
     state,
-    "screenConfiguration.preparedFinalObject.BPA.applicationNumber"
+    "screenConfiguration.preparedFinalObject.BPA.applicationNo"
   );
   const appendUrl =
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
-  const reviewUrl = `${appendUrl}/egov-bpa/summary` //?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
+  const reviewUrl = `${appendUrl}/egov-bpa/summary?applicationNumber=${applicationNumber}&tenantId=${tenantId}`;
   dispatch(setRoute(reviewUrl));
 };
 const moveToReview = (state, dispatch) => {
@@ -402,19 +403,81 @@ const callBackForNext = async (state, dispatch) => {
   if (activeStep !== 5) {
     if (isFormValid) {
       let responseStatus = "success";
+      if(activeStep === 1){
+        dispatch(prepareFinalObject("BPA.owners[0].primaryOwner", true));
+      }
       if (activeStep === 3) {
         // getMdmsData(state, dispatch);
         // prepareDocumentsUploadData(state, dispatch);
       }
       if (activeStep === 2) {
-        let response = await createUpdateBpaApplication(
-          state,
-          dispatch,
-          "INITIATE"
+        let checkingOwner = get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPA.ownershipCategory"
         );
-        responseStatus = get(response, "status", "");
+        let ownerDetails = get(
+          state.screenConfiguration.preparedFinalObject,
+          "BPA.owners"
+        );
+
+        if (checkingOwner && checkingOwner === "INDIVIDUAL.SINGLEOWNER") {
+          let primaryOwner = get(
+            state.screenConfiguration.preparedFinalObject,
+            "BPA.owners[0].primaryOwner"
+          );
+          if (primaryOwner && primaryOwner === true) {
+            let response = await createUpdateBpaApplication(
+              state,
+              dispatch,
+              "INITIATE"
+            );
+            responseStatus = get(response, "status", "");
+            responseStatus === "success" && changeStep(state, dispatch);
+          } else {
+            let errorMessage = {
+              labelName: "Please check is primary owner",
+              labelKey: "ERR_PRIMARY_OWNER_TOAST"
+            };
+            dispatch(toggleSnackbar(true, errorMessage, "warning"));
+          }
+        } else if (checkingOwner && checkingOwner === "INDIVIDUAL.MULTIPLEOWNERS") {
+          let count = 0, ownerPrimaryArray = [];
+          ownerDetails.forEach((owner, index) => {
+            let primaryOwner = get(
+              state.screenConfiguration.preparedFinalObject,
+              `BPA.owners[${index}].primaryOwner`
+            );
+            if (primaryOwner && primaryOwner === true) {
+              ownerPrimaryArray.push(primaryOwner)
+            }
+          });
+          if (ownerPrimaryArray && ownerPrimaryArray.length > 0) {
+            if (ownerPrimaryArray.length > 1) {
+              let errorMessage = {
+                labelName: "Please check only one primary owner",
+                labelKey: "ERR_PRIMARY_ONE_OWNER_TOAST"
+              };
+              dispatch(toggleSnackbar(true, errorMessage, "warning"));
+            } else {
+              let response = await createUpdateBpaApplication(
+                state,
+                dispatch,
+                "INITIATE"
+              );
+              responseStatus = get(response, "status", "");
+              responseStatus === "success" && changeStep(state, dispatch);
+            }
+          } else {
+            let errorMessage = {
+              labelName: "Please check is primary owner",
+              labelKey: "ERR_PRIMARY_OWNER_TOAST"
+            };
+            dispatch(toggleSnackbar(true, errorMessage, "warning"));
+          }
+        }
+      } else {
+        responseStatus === "success" && changeStep(state, dispatch);
       }
-      responseStatus === "success" && changeStep(state, dispatch);
     } else if (hasFieldToaster) {
       let errorMessage = {
         labelName: "Please fill all mandatory fields and upload the documents!",

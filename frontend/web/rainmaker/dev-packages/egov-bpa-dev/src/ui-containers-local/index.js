@@ -79,6 +79,11 @@ const EDCRUploadCard = Loadable({
   loading: () => <Loading />
 });
 
+const BpaEstimateCardContainer = Loadable({
+  loader: () => import("./BpaEstimateCardContainer"),
+  loading: () => <Loading />
+});
+
 export {
   CustomTabContainer,
   LabelContainer,
@@ -93,5 +98,6 @@ export {
   DialogContainer,
   RadioGroupWithLabelContainer,
   EDCRUploadCard,
-  NocListContainer
+  NocListContainer,
+  BpaEstimateCardContainer
 };

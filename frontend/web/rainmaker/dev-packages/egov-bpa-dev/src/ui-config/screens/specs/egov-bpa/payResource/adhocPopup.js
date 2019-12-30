@@ -18,25 +18,25 @@ import {
 import set from "lodash/set";
 
 const getEstimateDataAfterAdhoc = async (state, dispatch) => {
-  const NOCRequestBody = cloneDeep(
-    get(state.screenConfiguration.preparedFinalObject, "FireNOCs")
+  const BpaRequestBody = cloneDeep(
+    get(state.screenConfiguration.preparedFinalObject, "BPA")
   );
-  set(NOCRequestBody[0], "fireNOCDetails.action", "ADHOC");
+  set(BpaRequestBody[0], "BPA.action", "ADHOC");
 
   try {
-    const NOCpayload = await httpRequest(
+    const BpaPayload = await httpRequest(
       "post",
-      "/firenoc-services/v1/_update",
+      "/bpa-services/v1/_update",
       "",
       [],
-      { FireNOCs: NOCRequestBody }
+      { BPA: BpaRequestBody }
     );
 
     const applicationNumber = get(
-      NOCpayload,
-      "FireNOCs[0].fireNOCDetails.applicationNumber"
+      BpaPayload,
+      "BPA.applicationNo"
     );
-    const tenantId = get(NOCpayload, "FireNOCs[0].tenantId");
+    const tenantId = get(BpaPayload, "BPA.tenantId");
 
     if (applicationNumber && tenantId) {
       const queryObj = [
@@ -48,10 +48,9 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
           key: "consumerCode",
           value: applicationNumber
         },
-        { key: "services", value: "FIRENOC" }
+        { key: "services", value: "BPA" }
       ];
       const billPayload = await createBill(queryObj,dispatch);
-      // let payload = sampleGetBill();
       if (billPayload && billPayload.Bill[0]) {
         dispatch(prepareFinalObject("ReceiptTemp[0].Bill", billPayload.Bill));
         const estimateData = createEstimateData(billPayload.Bill[0]);
@@ -135,11 +134,11 @@ const getEstimateDataAfterAdhoc = async (state, dispatch) => {
 const updateAdhoc = (state, dispatch) => {
   const penaltyAmount = get(
     state.screenConfiguration.preparedFinalObject,
-    "FireNOCs[0].fireNOCDetails.additionalDetail.adhocPenalty"
+    "BPA.additionalDetail.adhocPenalty"
   );
   const rebateAmount = get(
     state.screenConfiguration.preparedFinalObject,
-    "FireNOCs[0].fireNOCDetails.additionalDetail.adhocRebate"
+    "BPA.additionalDetail.adhocRebate"
   );
   if (penaltyAmount || rebateAmount) {
     const totalAmount = get(
@@ -282,7 +281,7 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
-          jsonPath: "FireNOCs[0].fireNOCDetails.additionalDetail.adhocPenalty"
+          jsonPath: "BPA.additionalDetail.adhocPenalty"
         }),
         penaltyReason: getSelectField({
           label: {
@@ -313,7 +312,7 @@ export const adhocPopup = getCommonContainer({
             }
           ],
           jsonPath:
-            "FireNOCs[0].fireNOCDetails.additionalDetail.adhocPenaltyReason"
+            "BPA.additionalDetail.adhocPenaltyReason"
         })
       }),
       commentsField: getTextField({
@@ -334,7 +333,7 @@ export const adhocPopup = getCommonContainer({
             width: "90%"
           }
         },
-        jsonPath: "FireNOCs[0].fireNOCDetails.additionalDetail.penaltyComments"
+        jsonPath: "BPA.additionalDetail.penaltyComments"
       })
     },
     {
@@ -371,7 +370,7 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
-          jsonPath: "FireNOCs[0].fireNOCDetails.additionalDetail.adhocRebate"
+          jsonPath: "BPA.additionalDetail.adhocRebate"
         }),
         rebateReason: getSelectField({
           label: {
@@ -402,7 +401,7 @@ export const adhocPopup = getCommonContainer({
             }
           ],
           jsonPath:
-            "FireNOCs[0].fireNOCDetails.additionalDetail.adhocRebateReason"
+            "BPA.additionalDetail.adhocRebateReason"
         }),
         rebateCommentsField: getTextField({
           label: {
@@ -422,7 +421,7 @@ export const adhocPopup = getCommonContainer({
               width: "90%"
             }
           },
-          jsonPath: "FireNOCs[0].fireNOCDetails.additionalDetail.rebateComments"
+          jsonPath: "BPA.additionalDetail.rebateComments"
         })
       })
     },

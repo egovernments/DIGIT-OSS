@@ -7,7 +7,7 @@ import { withStyles } from "@material-ui/core/styles";
 const styles = {
   root: {
     color: 'rgba(0, 0, 0, 0.54)',
-    // fontSize: '0.75rem',
+    // fontSize: '16px',
     fontWeight: 400,
     lineHeight: '1.375em',
   },

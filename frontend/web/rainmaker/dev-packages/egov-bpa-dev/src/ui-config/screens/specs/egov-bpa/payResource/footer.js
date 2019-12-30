@@ -21,7 +21,7 @@ export const callPGService = async (state, dispatch) => {
     process.env.NODE_ENV === "production"
       ? `${window.origin}/citizen`
       : window.origin
-  }/fire-noc/paymentRedirectPage`;
+  }/egov-bpa/paymentRedirectPage`;
   try {
     const queryObj = [
       {
@@ -40,18 +40,6 @@ export const callPGService = async (state, dispatch) => {
         billId : get(billPayload, "Bill[0].id")
       }
     })
-    // const taxAndPayments = get(billPayload, "Bill[0].taxAndPayments", []).map(
-    //   item => {        
-        // if (item.businessService === "FIRENOC") {
-        //   item.amountPaid = get(
-        //     billPayload,
-        //     "Bill[0].billDetails[0].totalAmount"
-        //   );
-        //   item.billId = get(billPayload, "Bill[0].id")
-        // }
-        // return item;
-    //   }
-    // );
     try {
       const userMobileNumber = get(state,"auth.userInfo.mobileNumber")
       const userName = get(state,"auth.userInfo.name")
@@ -60,10 +48,10 @@ export const callPGService = async (state, dispatch) => {
           tenantId,
           billId : get(billPayload, "Bill[0].id"),
           txnAmount: get(billPayload, "Bill[0].billDetails[0].totalAmount"),
-          module: "FIRENOC",
+          module: "BPA",
           taxAndPayments,
           consumerCode: get(billPayload, "Bill[0].billDetails[0].consumerCode"),
-          productInfo: "Fire NOC Payment",
+          productInfo: "BPA Payment",
           gateway: "AXIS",
           user : {
             mobileNumber : userMobileNumber,
@@ -99,7 +87,7 @@ const moveToSuccess = (dispatch, receiptNumber) => {
     process.env.REACT_APP_SELF_RUNNING === "true" ? "/egov-ui-framework" : "";
   dispatch(
     setRoute(
-      `${appendUrl}/fire-noc/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&secondNumber=${receiptNumber}`
+      `${appendUrl}/egov-bpa/acknowledgement?purpose=${purpose}&status=${status}&applicationNumber=${applicationNo}&tenantId=${tenantId}&secondNumber=${receiptNumber}`
     )
   );
 };
@@ -170,17 +158,17 @@ const updatePayAction = async (
       },
       { key: "applicationNumber", value: applicationNo }
     ]);
-    set(response, "FireNOCs[0].fireNOCDetails.action", "PAY");
+    set(response, "BPA.action", "PAY");
     response = await httpRequest(
       "post",
-      "/firenoc-services/v1/_update",
+      "/bpa-services/v1/_update",
       "",
       [],
       {
-        FireNOCs: get(response, "FireNOCs", [])
+        BPA: get(response, "BPA", [])
       }
     );
-    if (get(response, "FireNOCs", []).length > 0) {
+    if (get(response, "BPA", []).length > 0) {
       moveToSuccess(dispatch, receiptNumber);
     }
   } catch (e) {

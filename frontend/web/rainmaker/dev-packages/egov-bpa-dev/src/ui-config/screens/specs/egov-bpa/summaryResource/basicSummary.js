@@ -6,6 +6,7 @@ import {
   getLabelWithValue
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { gotoApplyWithStep } from "../../utils/index";
+import { convertEpochToDate } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 export const basicSummary = getCommonGrayCard({
@@ -127,7 +128,10 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "scrutinyDetails.planDetail.applicationDate"
+                "scrutinyDetails.planDetail.applicationDate",
+                callBack: value => {
+                  return convertEpochToDate(value);
+                }
             }
           ),
           applicationFee: getLabelWithValue(

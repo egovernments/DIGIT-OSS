@@ -8,8 +8,8 @@ import {
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { getTodaysDateInYMD } from "../../utils";
-import { mockJosnRoles } from "../mockJson";
 import { getScrutinyDetails } from "../../utils";
+import "./index.css";
 
 export const basicDetails = getCommonCard({
   header: getCommonTitle(
@@ -41,6 +41,9 @@ export const basicDetails = getCommonCard({
       pattern: "^[a-zA-Z0-9]*$",
       errorMessage: "ERR_DEFAULT_INPUT_FIELD_MSG",
       jsonPath: "BPA.edcrNumber",
+      props:{
+        className:"textfield-enterable-selection"
+      },
       iconObj: {
         iconName: "search",
         position: "end",
@@ -65,8 +68,6 @@ export const basicDetails = getCommonCard({
       },
       required: true,
       jsonPath: 'scrutinyDetails.planDetail.planInformation.occupancy',
-      // jsonPath:
-      //   "scrutinyDetails.planDetail.planInformation.occupancy",
       gridDefination: {
         xs: 12,
         sm: 12,
@@ -88,6 +89,9 @@ export const basicDetails = getCommonCard({
       localePrefix: {
         moduleName: "WF",
         masterName: "BPA"
+      },
+      props: {
+        disabled: true
       },
       jsonPath: "BPA.applicationType",
       sourceJsonPath: "applyScreenMdmsData.BPA.ApplicationType",
@@ -131,6 +135,10 @@ export const basicDetails = getCommonCard({
         moduleName: "WF",
         masterName: "BPA"
       },
+      props:{
+        className:"textfield-enterable-selection"
+      },
+      required: true,
       jsonPath: "BPA.serviceType",
       sourceJsonPath: "applyScreenMdmsData.BPA.ServiceType",
       gridDefination: {
@@ -144,18 +152,9 @@ export const basicDetails = getCommonCard({
         labelName: "Application Date",
         labelKey: "BPA_BASIC_DETAILS_APP_DATE_LABEL"
       },
-      // required: true,
       jsonPath: "bpa.appdate",
-      // jsonPath: "scrutinyDetails.planDetail.applicationDate",
       props: {
-        // defaultValue: getTodaysDate(),
-        // inputProps: {
-        //   max: getTodaysDateInYMD()
-        // },
-        // disabled: true,
-        // InputProps: {
-          // readOnly: true
-        // }
+        disabled: true
       },
       gridDefination: {
         xs: 12,
@@ -190,10 +189,13 @@ export const basicDetails = getCommonCard({
         labelKey: "BPA_BASIC_DETAILS_REMARKS_PLACEHOLDER"
       },
       jsonPath: "BPA.remarks",
-      props: {
-        multiline: true,
-        rows: "4"
+      props:{
+        className:"textfield-enterable-selection"
       },
+      // props: {
+      //   multiline: true,
+      //   rows: "4"
+      // },
       gridDefination: {
         xs: 12,
         sm: 12,

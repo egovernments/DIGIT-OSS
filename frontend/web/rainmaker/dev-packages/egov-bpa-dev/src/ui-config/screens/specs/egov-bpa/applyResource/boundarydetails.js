@@ -6,6 +6,8 @@ import {
     getCommonContainer,
 
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+import "./index.css";
+
 export const boundaryDetails = getCommonCard({
     header: getCommonTitle(
         {
@@ -32,7 +34,7 @@ export const boundaryDetails = getCommonCard({
                 required: true,
                 jsonPath: "BPAs[0].BPADetails.boundarydetails.circle",
                 props: {
-                    className: "hr-generic-selectfield",
+                    className: "textfield-enterable-selection",
                     data: [
                         {
                             value: "Circle 1",
@@ -45,7 +47,12 @@ export const boundaryDetails = getCommonCard({
                     ],
                     optionValue: "value",
                     optionLabel: "label"
-                }
+                },
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
             })
         },
         revenueward: {
@@ -61,7 +68,7 @@ export const boundaryDetails = getCommonCard({
                 required: true,
                 jsonPath: "BPAs[0].BPADetails.boundarydetails.revenueward",
                 props: {
-                    className: "hr-generic-selectfield",
+                    className: "textfield-enterable-selection",
                     data: [
                         {
                             value: "Ward 1",
@@ -74,7 +81,12 @@ export const boundaryDetails = getCommonCard({
                     ],
                     optionValue: "value",
                     optionLabel: "label"
-                }
+                },
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
             })
         },
     })
@@ -103,6 +115,11 @@ export const detailsofplot = getCommonCard({
                 jsonPath: "scrutinyDetails.planDetail.plot.area",
                 props: {
                     disabled: 'true'
+                  },
+                  gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
                   }
             })
         },
@@ -117,8 +134,16 @@ export const detailsofplot = getCommonCard({
                     labelKey: "BPA_BOUNDARY_KHATA_NO_PLACEHOLDER"
                 },
                 required: true,
+                props: {
+                    className: "textfield-enterable-selection",
+                  },
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "scrutinyDetails.planDetail.planInformation.khataNo"
+                jsonPath: "scrutinyDetails.planDetail.planInformation.khataNo",
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
             })
         },
         holdingNumber: {
@@ -131,9 +156,17 @@ export const detailsofplot = getCommonCard({
                     labelName: "Enter Holding No.",
                     labelKey: "BPA_BOUNDARY_HOLDING_NO_PLACEHOLDER"
                 },
+                props: {
+                    className: "textfield-enterable-selection",
+                  },
                 required: true,
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "BPAs[0].BPADetails.plotdetails.holdingnumber"
+                jsonPath: "BPAs[0].BPADetails.plotdetails.holdingnumber",
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
             })
         },
         plotNo: {
@@ -147,46 +180,44 @@ export const detailsofplot = getCommonCard({
                     labelKey: "BPA_BOUNDARY_PLOT_NO_PLACEHOLDER"
                 },
                 required: true,
+                props: {
+                    className: "textfield-enterable-selection",
+                  },
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "scrutinyDetails.planDetail.planInformation.plotNo"
+                jsonPath: "scrutinyDetails.planDetail.planInformation.plotNo",
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
             })
         },
         cityTown: {
-            uiFramework: "custom-containers-local",
-            moduleName: "egov-bpa",
-            componentPath: "AutosuggestContainer",
-            jsonPath: "BPAs[0].BPADetails.plotdetails.citytown",
-            required: true,
-            gridDefination: {
-                xs: 12,
-                sm: 12,
-                md: 6
-            },
-            props: {
-              style: {
-                width: "100%",
-                cursor: "pointer"
-              },
-              isDisabled : true,
-              localePrefix: {
-                moduleName: "TENANT",
-                masterName: "TENANTS"
-              },
-              className: "citizen-city-picker",
-              label: {
-                labelName: "City/Town",
-                labelKey: "BPA_BOUNDARY_CITY_TOWN_LABEL"
-              },
-              placeholder: { labelName: "Select City/Town", labelKey: "BPA_BOUNDARY_CITY_TOWN_PLACEHOLDER" },
-              jsonPath: "BPAs[0].BPADetails.plotdetails.citytown",
-              labelsFromLocalisation: true,
-              fullwidth: true,
-              required: true,
-              inputLabelProps: {
-                shrink: true
-              }
-            }
-          },
+            ...getSelectField({
+                label: {
+                  labelName: "City",
+                  labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
+                },
+                localePrefix: {
+                  moduleName: "TENANT",
+                  masterName: "TENANTS"
+                },
+                optionLabel: "name",
+                placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
+                sourceJsonPath: "citiesByModule.TL.tenants",
+                jsonPath: "BPA.address.city",
+                required: true,
+                props: {
+                  required: true,
+                  disabled: true
+                },
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
+              }),
+        },
         landRegDetails: {
             ...getTextField({
                 label: {
@@ -197,8 +228,16 @@ export const detailsofplot = getCommonCard({
                     labelName: "Enter Land Registration Details",
                     labelKey: "BPA_BOUNDARY_LAND_REG_DETAIL_PLACEHOLDER"
                 },
+                props: {
+                    className: "textfield-enterable-selection",
+                  },
                 // // pattern: getPattern("Name") || null,
-                jsonPath: "BPAs[0].BPADetails.plotdetails.landregdetails"
+                jsonPath: "BPAs[0].BPADetails.plotdetails.landregdetails",
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
             })
         },
         whetherGovOrQuasi: {
@@ -213,7 +252,7 @@ export const detailsofplot = getCommonCard({
                 },
                 jsonPath: "BPAs[0].BPADetails.plotdetails.govorquasi",
                 props: {
-                    className: "hr-generic-selectfield",
+                    className: "textfield-enterable-selection",
                     data: [
                         {
                             value: "Governments",
@@ -230,7 +269,12 @@ export const detailsofplot = getCommonCard({
                     ],
                     optionValue: "value",
                     optionLabel: "label"
-                }
+                },
+                gridDefination: {
+                    xs: 12,
+                    sm: 12,
+                    md: 6
+                  }
             })
         }
     })

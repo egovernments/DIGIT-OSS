@@ -28,7 +28,6 @@ import {
 import { httpRequest } from "./api";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import jp from "jsonpath";
-import { appSearchMockData } from './searchMockJson';
 
 
 
@@ -51,6 +50,26 @@ export const getSearchResults = async queryObject => {
     const response = await httpRequest(
       "post",
       "/tl-services/v1/BPAREG/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelCode: error.message },
+        "error"
+      )
+    );
+  }
+};
+
+export const getBpaSearchResults = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/bpa-services/bpa/appl/_search",
       "",
       queryObject
     );
@@ -122,6 +141,22 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
   );
   let method = applicationId ? "UPDATE" : "CREATE";
 
+  let documentsUpdalod = get(
+    "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux"
+  );
+  
+  let requiredDocuments = [];
+  if(documentsUpdalod && documentsUpdalod.length > 0){
+  documentsUpdalod.forEach(documents => {
+    if(documents && documents.documents){
+      requiredDocuments.push({ "documentType" : documents.dropDownValues.value});
+      requiredDocuments.push({ "fileStore": documents.documents[0].fileStoreId });
+      requiredDocuments.push({ "fileName" : documents.documents[0].fileName});
+      requiredDocuments.push({ "fileUrl" : documents.documents[0].fileUrl});
+    }
+  })
+}
+
   try {
     let payload = get(
       state.screenConfiguration.preparedFinalObject,
@@ -130,33 +165,9 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     );
     const tenantId = get(
       state.screenConfiguration.preparedFinalObject,
-      "BPAs[0].BPADetails.plotdetails.citytown"
+      "BPA.address.city"
     );
-    const address = {
-      "tenantId": "pb.amritsar",
-      "doorNo": "23-pb-1212",
-      "plotNo": "1725",
-      "landmark": "temple",
-      "city": "hyd",
-      "district": "hyd",
-      "region": "hyd",
-      "state": "telangana",
-      "country": "india",
-      "pincode": "500158",
-      "additionDetails": null,
-      "buildingName": "quewyr",
-      "street": null,
-      "locality": {
-          "code": "SUN178",
-          "name": "Mohalla Singh kia - Area2",
-          "label": "Locality",
-          "latitude": null,
-          "longitude": null,
-          "children": []
-      },
-      "geoLocation": null
-  };
-    set(payload, "tenantId", tenantId.value);
+    set(payload, "tenantId", tenantId);
     set(payload, "action", status);
     
     set(payload, "additionalDetails", {});
@@ -184,8 +195,13 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
     //     }
     //   })
     // });
-
     let documents;
+    if(requiredDocuments && requiredDocuments.length >0){
+      documents = requiredDocuments;
+    }else{
+      documents = null;
+    }
+
     let wfDocuments;
     if (method === 'UPDATE') {
       documents = payload.documents;
@@ -203,19 +219,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
           "fileStore": "firestore-01"
         }
       ];
-
-      let id = payload.address.id;
-      address.id = id;
-      set(payload, "address", address);
       set(payload, "wfDocuments", wfDocuments);
-    } else {
-      set(payload, "address", address);
-      documents = [
-        {
-          "documentType": "OWNER.IDENTITYPROOF.VOTERID",
-          "fileStore": "hvdsfuhvdsvf",
-        }
-      ];
     }
     
     set(payload, "documents", documents);
@@ -236,9 +240,7 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
         convertDateToEpoch(get(owner, "dob"))
       );
     });
-
     let response;
-
     if (method === "CREATE") {
       response = await httpRequest(
         "post",

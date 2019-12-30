@@ -37,8 +37,8 @@ export const citizenFooter = getCommonApplyFooter({
       action: "page_change",
       path:
         process.env.REACT_APP_SELF_RUNNING === "true"
-          ? `/egov-ui-framework/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
-          : `/fire-noc/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
+          ? `/egov-ui-framework/egov-bpa/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
+          : `/egov-bpa/citizen-pay?applicationNumber=${applicationNumber}&tenantId=${tenant}`
     },
     roleDefination: {
       rolePath: "user-info.roles",

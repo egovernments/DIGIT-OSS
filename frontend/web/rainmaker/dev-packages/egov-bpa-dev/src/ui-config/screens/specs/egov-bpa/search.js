@@ -23,7 +23,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { setRoute } from "egov-ui-framework/ui-redux/app/actions";
 import { showApplyCityPicker, applyForm } from "../utils";
-import { fetchData } from "../utils";
+import { getBpaMdmsData, getTenantMdmsData } from "../utils";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
@@ -90,8 +90,8 @@ const BpaSearchAndResult = {
     //     // getRequiredDocuments(documents)
     //   );
     // });
-    //for city module
-    fetchData(action, state, dispatch);
+    //for service and app type
+    getTenantMdmsData(action, state, dispatch);
     return action;
   },
   components: {
@@ -133,7 +133,6 @@ const BpaSearchAndResult = {
                   height: "48px"
                 }
               },
-
               children: {
                 plusIconInsideButton: {
                   uiFramework: "custom-atoms",
@@ -154,22 +153,14 @@ const BpaSearchAndResult = {
                 action: "condition",
                 callBack: (state, dispatch) => {
                   showApplyCityPicker(state, dispatch)
-                  // pageResetAndChange(state, dispatch);
-                  // showHideAdhocPopup(state, dispatch, "search");
-                  // startApplyFlow(state, dispatch);
                 }
-              },
-              // roleDefination: {
-              //   rolePath: "user-info.roles",
-              //   roles: ["NOC_CEMP", "SUPERUSER"]
-              // }
+              }
             }
           }
         },
         pendingApprovals,
         BPAApplication,
         breakAfterSearch: getBreak(),
-        // progressStatus,
         searchResults
       }
     },
@@ -219,9 +210,8 @@ const BpaSearchAndResult = {
                       labelKey: "TL_NEW_TRADE_DETAILS_CITY_LABEL"
                     },
                     placeholder: { labelName: "Select City", labelKey: "TL_SELECT_CITY" },
-                    jsonPath: "citiesByModule.citizenTenantId",
-                    sourceJsonPath:
-                      "applyScreenMdmsData.common-masters.citiesByModule.TL.tenants",
+                    jsonPath: "BPA.address.city",
+                    sourceJsonPath: "citiesByModule.TL.tenants",
                     labelsFromLocalisation: true,
                     fullwidth: true,
                     required: true,

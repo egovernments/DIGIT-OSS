@@ -13,7 +13,8 @@ import {
 import { handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getBpaDetailsForOwner } from "../../utils";
 import get from "lodash/get";
-//   import "./index.css";
+import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import "./index.css";
 
 const showComponent = (dispatch, componentJsonPath, display) => {
   let displayProps = display ? {} : { display: "none" };
@@ -47,7 +48,7 @@ const commonApplicantInformation = () => {
         },
         required: true,
         props: {
-          className: "applicant-details-error"
+          className: "applicant-details-error textfield-enterable-selection"
         },
         title: {
           value: "Please search profile linked to the mobile no.",
@@ -100,7 +101,7 @@ const commonApplicantInformation = () => {
         errorMessage: "Invalid Name",
         jsonPath: "BPA.owners[0].name",
         props: {
-          className: "applicant-details-error"
+          className: "applicant-details-error textfield-enterable-selection"
         },
         gridDefination: {
           xs: 12,
@@ -116,10 +117,13 @@ const commonApplicantInformation = () => {
           sm: 12,
           md: 6
         },
+        style : {
+          color: "black"
+        },
         jsonPath: "BPA.owners[0].gender",
         props: {
           label: { name: "Gender", key: "NOC_GENDER_LABEL" },
-          className: "applicant-details-error",
+          className: "applicant-details-error textfield-enterable-selection radio-button-label formLabel, root",
           buttons: [
             {
               labelName: "Male",
@@ -138,7 +142,6 @@ const commonApplicantInformation = () => {
             }
           ],
           jsonPath: "BPA.owners[0].gender"
-          // required: true
         },
         type: "array"
       },
@@ -161,7 +164,7 @@ const commonApplicantInformation = () => {
           md: 6
         },
         props: {
-          className: "applicant-details-error"
+          className: "applicant-details-error textfield-enterable-selection"
         }
       }),
       applicantEmail: getTextField({
@@ -182,7 +185,7 @@ const commonApplicantInformation = () => {
           md: 6
         },
         props: {
-          className: "applicant-details-error"
+          className: "applicant-details-error textfield-enterable-selection"
         }
       }),
       fatherHusbandName: getTextField({
@@ -205,7 +208,7 @@ const commonApplicantInformation = () => {
           md: 6
         },
         props: {
-          className: "applicant-details-error"
+          className: "applicant-details-error textfield-enterable-selection"
         }
       }),
       relationshipRadioGroup: {
@@ -221,7 +224,7 @@ const commonApplicantInformation = () => {
           label: {
             name: "Relationship",
             key: "NOC_APPLICANT_RELATIONSHIP_LABEL",
-            className: "applicant-details-error"
+            className: "applicant-details-error textfield-enterable-selection"
           },
           buttons: [
             {
@@ -260,7 +263,7 @@ const commonApplicantInformation = () => {
           md: 6
         },
         props: {
-          className: "applicant-details-error"
+          className: "applicant-details-error textfield-enterable-selection"
         }
       }),
       applicantAddress: getTextField({
@@ -283,7 +286,7 @@ const commonApplicantInformation = () => {
           md: 6
         },
         props: {
-          className: "applicant-details-error"
+          className: "applicant-details-error textfield-enterable-selection"
         }
       }),
       specialApplicantCategory: getSelectField({
@@ -295,6 +298,10 @@ const commonApplicantInformation = () => {
           labelName: "Select Special Applicant Category",
           labelKey: "NOC_SPECIAL_APPLICANT_CATEGORY_PLACEHOLDER"
         },
+        props: {
+          className: "textfield-enterable-selection"
+        },
+        required: true,
         jsonPath: "BPA.owners[0].ownerType",
         localePrefix: {
           moduleName: "common-masters",
@@ -519,7 +526,7 @@ export const applicantDetails = getCommonCard({
             md: 6
           },
           props: {
-            className: "applicant-details-error"
+            className: "applicant-details-error textfield-enterable-selection"
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
@@ -560,7 +567,7 @@ export const applicantDetails = getCommonCard({
             md: 6
           },
           props: {
-            className: "applicant-details-error"
+            className: "applicant-details-error textfield-enterable-selection"
           }
         }),
         beforeFieldChange: (action, state, dispatch) => {
@@ -577,11 +584,13 @@ export const applicantDetails = getCommonCard({
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);
             showComponent(dispatch, institutionContainerJsonPath, false);
             showComponent(dispatch, primaryOwnerJsonPath, false);
+            dispatch(prepareFinalObject("BPA.owners[0].primaryOwner", true));
           } else if (action.value.includes("MULTIPLEOWNERS")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, true);
             showComponent(dispatch, institutionContainerJsonPath, false);
             showComponent(dispatch, primaryOwnerJsonPath, true);
+            dispatch(prepareFinalObject("BPA.owners[0].primaryOwner", false));
           } else if (action.value.includes("INSTITUTIONAL")) {
             showComponent(dispatch, singleApplicantContainerJsonPath, false);
             showComponent(dispatch, multipleApplicantContainerJsonPath, false);
