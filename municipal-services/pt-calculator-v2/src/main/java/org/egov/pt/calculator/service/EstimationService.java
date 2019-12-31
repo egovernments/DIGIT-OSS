@@ -73,6 +73,7 @@ public class EstimationService {
 		List<CalculationCriteria> criterias = calculationReq.getCalculationCriteria().stream().filter(criteria -> !criteria
 				.getProperty().getPropertyDetails().get(0).getSource().equals(SourceEnum.LEGACY_RECORD))
 				.collect(Collectors.toList());
+		List<CalculationCriteria> calCriteria = calculationReq.getCalculationCriteria();
 		calculationReq.setCalculationCriteria(criterias);
 		// criterias
 		if (!CollectionUtils.isEmpty(calculationReq.getCalculationCriteria())) {
@@ -81,9 +82,10 @@ public class EstimationService {
 		} else {
 			Map<String, Calculation> estimateMap = new HashMap<String, Calculation>();
 			//Sending empty Calculation for Legacy Records.
-			calculationReq.getCalculationCriteria().stream().forEach(
+			calCriteria.stream().forEach(
 					criteria -> criteria.getProperty().getPropertyDetails().forEach(propertyDetail -> estimateMap
 							.put(propertyDetail.getAssessmentNumber(), Calculation.builder().build())));
+			log.info("Sending empty response: {}",estimateMap.toString());
 			return estimateMap;
 		}
 	}
