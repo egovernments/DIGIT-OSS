@@ -15917,6 +15917,27 @@
       "serviceCode": "property-services",
       "code": "null",
       "path": ""
+    },
+    {
+      "id": 1936,
+      "name": "search BPA application",
+      "url": "quickAction",
+      "displayName": "Search Application",
+      "orderNumber": 1,
+      "queryParams": "",
+      "parentModule": "",
+      "enabled": true,
+      "serviceCode": "",
+      "tenantId": "pb",
+      "createdDate": null,
+      "createdBy": null,
+      "lastModifiedDate": null,
+      "lastModifiedBy": null,
+      "path": "Building Plan Approval.Search Application",
+      "navigationURL": "egov-bpa/search",
+      "quickAction": true,
+      "leftIcon": "communication:business",
+      "rightIcon": ""
     }
   ]
 }
