@@ -450,7 +450,7 @@ class TableData extends Component {
 
   onTaskBoardClick = (baseColor, label) => {
     this.setState({
-      // taskboardLabel: label
+      taskboardLabel: label
     });
     this.setState({
       color: baseColor,

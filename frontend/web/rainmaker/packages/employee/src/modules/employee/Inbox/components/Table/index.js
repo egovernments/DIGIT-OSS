@@ -69,12 +69,8 @@ class InboxData extends React.Component {
     let baseUrl = document.location.origin;
     let contextPath =
       status === "Initiated"
-        ? process.env.NODE_ENV === "production"
-          ? `/employee${getWFConfig(row[0].hiddenText).INITIATED}`
-          : getWFConfig(row[0].hiddenText).INITIATED
-        : process.env.NODE_ENV === "production"
-          ? `/employee${getWFConfig(row[0].hiddenText).DEFAULT}`
-          : getWFConfig(row[0].hiddenText).DEFAULT;
+        ? getWFConfig(row[0].hiddenText).INITIATED
+        :  getWFConfig(row[0].hiddenText).DEFAULT;
 
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
     this.props.setRoute(`${contextPath}?${queryParams}`);
