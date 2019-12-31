@@ -16,6 +16,8 @@ import { getWFConfig } from "./workflowRedirectionConfig";
 import React from "react";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
+import { setRoute } from "egov-ui-kit/redux/app/actions";
+
 
 class InboxData extends React.Component {
   state = {
@@ -75,7 +77,8 @@ class InboxData extends React.Component {
           : getWFConfig(row[0].hiddenText).DEFAULT;
 
     let queryParams = `applicationNumber=${taskId}&tenantId=${tenantId}`;
-    window.location.href = `${baseUrl}${contextPath}?${queryParams}`;
+    this.props.setRoute(`${contextPath}?${queryParams}`);
+    // window.location.href = `${baseUrl}${contextPath}?${queryParams}`;
   };
 
   getSlaColor = (sla, businessService) => {
@@ -123,7 +126,7 @@ class InboxData extends React.Component {
                       if (item.subtext) {
                         return (
                           <TableCell className={classNames}>
-                            <div onClick={() => getModuleLink(item, row, index)} className="inbox-cell-text">{<a>{item.text} </a>}</div>
+                            <div onClick={() => getModuleLink(item, row, index)} className="inbox-cell-text">{<a onClick={() => getModuleLink(item, row, index)}>{item.text} </a>}</div>
                             <div className="inbox-cell-subtext">{<Label label={`CS_COMMON_INBOX_${item.subtext.toUpperCase()}`} color="#000000" />}</div>
                           </TableCell>
                         );
@@ -177,6 +180,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    setRoute: url => dispatch(setRoute(url)),
     toggleSnackbarAndSetText: (open, message) => dispatch(toggleSnackbarAndSetText(open, message)),
     prepareFinalObject: (path, value) => dispatch(prepareFinalObject(path, value)),
   };

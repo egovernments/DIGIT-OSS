@@ -14,7 +14,7 @@ import filter from "lodash/filter";
 import orderBy from "lodash/orderBy";
 import uniq from "lodash/uniq";
 import { toggleSnackbarAndSetText } from "egov-ui-kit/redux/app/actions";
-import { toggleSpinner } from "egov-ui-kit/redux/common/actions";
+import { showSpinner,hideSpinner } from "egov-ui-kit/redux/common/actions";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId, localStorageSet, localStorageGet } from "egov-ui-kit/utils/localStorageUtils";
 import "./index.css";
@@ -82,8 +82,11 @@ class TableData extends Component {
       }
     },
     value: 0,
-    tabData: [],
-    taskboardData: [],
+    tabData: [{ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [0] }
+      , { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [0] }],
+    taskboardData: [{ head: 0, body: "WF_TOTAL_TASK", color: "rgb(76, 175, 80 ,0.38)", baseColor: "#4CAF50" },
+    { head: 0, body: "WF_TOTAL_NEARING_SLA", color: "rgb(238, 167, 58 ,0.38)", baseColor: "#EEA73A" },
+    { head: 0, body: "WF_ESCALATED_SLA", color: "rgb(244, 67, 54 ,0.38)", baseColor: "#F44336" }],
     taskboardLabel: '',
     inboxData: [{ headers: [], rows: [] }],
     initialInboxData: [{ headers: [], rows: [] }],
@@ -101,13 +104,13 @@ class TableData extends Component {
     })
     return newList;
   }
-  checkMatch = (uid, value) => {
-    if (uid[0].text.toLowerCase().includes(value.toLowerCase()) ||
-      uid[3].text.props.label.toLowerCase().includes(value.toLowerCase()) ||
-      String(uid[4].text).toLowerCase().includes(value.toLowerCase()) ||
-      getLocaleLabels(`CS_COMMON_INBOX_${uid[2].text.props.label.split('_')[1]}`).toLowerCase().includes(value.toLowerCase()) ||
-      getLocaleLabels(uid[1].text.props.label).toLowerCase().includes(value.toLowerCase()) ||
-      getLocaleLabels(uid[2].text.props.label).toLowerCase().includes(value.toLowerCase())
+  checkMatch = (row, value) => {
+    if (row[0].text.toLowerCase().includes(value.toLowerCase()) ||
+      row[3].text.props.label.toLowerCase().includes(value.toLowerCase()) ||
+      String(row[4].text).toLowerCase().includes(value.toLowerCase()) ||
+      getLocaleLabels(`CS_COMMON_INBOX_${row[2].text.props.label.split('_')[1]}`).toLowerCase().includes(value.toLowerCase()) ||
+      getLocaleLabels(row[1].text.props.label).toLowerCase().includes(value.toLowerCase()) ||
+      getLocaleLabels(row[2].text.props.label).toLowerCase().includes(value.toLowerCase())
     ) {
       return true;
     }
@@ -118,7 +121,7 @@ class TableData extends Component {
       searchFilter: { value }
     })
   }
-  
+
   checkSLA = (taskboardLabel, row) => {
     const MAX_SLA = this.state.businessServiceSla[row[2].text.props.label.split('_')[1]];
     if (taskboardLabel == '' || taskboardLabel == 'WF_TOTAL_TASK') {
@@ -145,14 +148,14 @@ class TableData extends Component {
   convertMillisecondsToDays = (milliseconds) => {
     return (milliseconds / (1000 * 60 * 60 * 24));
   }
-  applyFilter = () => {
-    const { toggleSpinner } = this.props;
-    toggleSpinner();
-    let initialInboxData = cloneDeep(this.state.initialInboxData);
+  applyFilter = (inboxData) => {
+    const { showSpinner,hideSpinner } = this.props;
+    showSpinner();
+    let initialInboxData = inboxData ? cloneDeep(inboxData) : cloneDeep(this.state.initialInboxData);
     const { filter, searchFilter, taskboardLabel } = this.state;
     if (initialInboxData.length == 2) {
       initialInboxData.map((row, ind) => {
-        row.rows = row.rows.filter((uid) => this.checkRow(uid, filter, searchFilter, taskboardLabel))
+        row.rows = row.rows.filter((eachRow) => this.checkRow(eachRow, filter, searchFilter, taskboardLabel))
       })
     }
     let ESCALATED_SLA = [];
@@ -172,7 +175,7 @@ class TableData extends Component {
     taskboardData[2].head = ESCALATED_SLA.length;
     tabData[0].dynamicArray = [initialInboxData[0].rows.length];
     tabData[1].dynamicArray = [initialInboxData[1].rows.length];
-    toggleSpinner()
+    hideSpinner()
     return {
       inboxData: initialInboxData,
       taskboardData,
@@ -320,14 +323,14 @@ class TableData extends Component {
   };
 
   componentDidMount = async () => {
-    const { toggleSnackbarAndSetText, prepareFinalObject, toggleSpinner } = this.props;
+    const { toggleSnackbarAndSetText, prepareFinalObject, showSpinner,hideSpinner } = this.props;
     const uuid = get(this.props, "userInfo.uuid");
     const tenantId = getTenantId();
-    const taskboardData = [];
-    const tabData = [];
+    let { taskboardData, tabData } = this.state;
+
     const inboxData = [{ headers: [], rows: [] }];
     try {
-      toggleSpinner();
+      showSpinner();
       this.setBusinessServiceDataToLocalStorage([{ key: "tenantId", value: getTenantId() }]);
       const requestBody = [{ key: "tenantId", value: tenantId }];
       const responseData = await httpRequest("egov-workflow-v2/egov-wf/process/_search", "_search", requestBody);
@@ -349,9 +352,9 @@ class TableData extends Component {
       ];
       inboxData[0].headers = headersList;
       inboxData[0].rows = assignedDataRows;
-      tabData.push({ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [assignedDataRows.length] });
-      tabData.push({ label: "COMMON_INBOX_TAB_ALL", dynamicArray: [allDataRows.length] });
 
+      tabData[0].dynamicArray = [assignedDataRows.length];
+      tabData[1].dynamicArray = [allDataRows.length];
       inboxData.push({
         headers: headersList,
         rows: allDataRows,
@@ -361,8 +364,8 @@ class TableData extends Component {
       let statusDD = [];
       let NEARING_SLA = [];
       let ESCALATED_SLA = [];
-      
-      locality = allDataRows.map((eachRow) => {
+
+      allDataRows.map((eachRow) => {
         const MAX_SLA = this.state.businessServiceSla[eachRow[2].text.props.label.split('_')[1]];
         if (eachRow[4].text <= 0) {
           ESCALATED_SLA.push(eachRow[4].text);
@@ -370,24 +373,18 @@ class TableData extends Component {
         if (eachRow[4].text > 0 && eachRow[4].text <= (MAX_SLA - MAX_SLA / 3)) {
           NEARING_SLA.push(eachRow[4].text);
         }
-        let dropdown = { label: getLocaleLabels(eachRow[1].text.props.label), value: eachRow[1].text.props.label };
-        return dropdown;
-      })
-      moduleDD = allDataRows.map((eachRow) => {
-        let dropdown = { label: getLocaleLabels(`CS_COMMON_INBOX_${eachRow[2].text.props.label.split('_')[1]}`), value: eachRow[2].text.props.label.split('_')[1] };
-        return dropdown;
-      })
-      statusDD = allDataRows.map((eachRow) => {
-        let dropdown = { label: getLocaleLabels(eachRow[2].text.props.label), value: eachRow[2].text.props.label.split('_')[2] };
-        return dropdown;
+        let localityDropdown = { label: getLocaleLabels(eachRow[1].text.props.label), value: eachRow[1].text.props.label };
+        locality.push(localityDropdown);
+        let moduleDropdown = { label: getLocaleLabels(`CS_COMMON_INBOX_${eachRow[2].text.props.label.split('_')[1]}`), value: eachRow[2].text.props.label.split('_')[1] };
+        moduleDD.push(moduleDropdown);
+        let statusDropdown = { label: getLocaleLabels(eachRow[2].text.props.label), value: eachRow[2].text.props.label.split('_')[2] };
+        statusDD.push(statusDropdown);
       })
       const taskCount = allDataRows.length;
-      // const overSla = filter(responseData.ProcessInstances, (item) => item.businesssServiceSla < 0).length;
-      taskboardData.push(
-        { head: taskCount, body: "WF_TOTAL_TASK", color: "rgb(76, 175, 80 ,0.38)", baseColor: "#4CAF50" },
-        { head: NEARING_SLA.length, body: "WF_TOTAL_NEARING_SLA", color: "rgb(238, 167, 58 ,0.38)", baseColor: "#EEA73A" },
-        { head: ESCALATED_SLA.length, body: "WF_ESCALATED_SLA", color: "rgb(244, 67, 54 ,0.38)", baseColor: "#F44336" }
-      );
+      taskboardData[0].head = taskCount;
+      taskboardData[1].head = NEARING_SLA.length;
+      taskboardData[2].head = ESCALATED_SLA.length;
+
       this.setState({
         loaded: true,
         inboxData, taskboardData, tabData, initialInboxData: cloneDeep(inboxData), filter: {
@@ -420,7 +417,7 @@ class TableData extends Component {
           }
         }
       });
-      toggleSpinner()
+      hideSpinner()
     } catch (e) {
       toggleSnackbarAndSetText(true, { labelName: "Workflow search error !", labelKey: "ERR_SEARCH_ERROR" }, "error");
     }
@@ -470,6 +467,16 @@ class TableData extends Component {
       taskboardData = filteredData.taskboardData;
       inboxData = filteredData.inboxData;
       tabData = filteredData.tabData;
+    } else {
+      const { InboxData } = this.props;
+      if (InboxData) {
+
+        const filteredData = this.applyFilter(InboxData);
+        taskboardData = filteredData.taskboardData;
+        inboxData = filteredData.inboxData;
+        tabData = filteredData.tabData;
+        this.props.hideSpinner();
+      }
     }
     return (
       <div className="col-sm-12">
@@ -507,7 +514,7 @@ class TableData extends Component {
               );
             })}
           </Tabs>
-          <InboxData  businessServiceSla={businessServiceSla} data={inboxData[value]} />
+          <InboxData businessServiceSla={businessServiceSla} data={inboxData[value]} />
         </div>
       </div>
     );
@@ -525,7 +532,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    toggleSpinner: () => dispatch(toggleSpinner()),
+    hideSpinner:()=>dispatch(hideSpinner()),
+    showSpinner: () => dispatch(showSpinner()),
     prepareFinalObject: (jsonPath, value) => dispatch(prepareFinalObject(jsonPath, value)),
     toggleSnackbarAndSetText: (open, message, error) => dispatch(toggleSnackbarAndSetText(open, message, error)),
   };
