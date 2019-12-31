@@ -6,10 +6,8 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
 import get from "lodash/get";
-import {getWorkFlowData} from "../../bpastakeholder/searchResource/functions";
-import {
-  getTextToLocalMapping
-} from "../../utils/index";
+import { getWorkFlowData } from "../../bpastakeholder/searchResource/functions";
+import { getTextToLocalMapping } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 const getMdmsData = async () => {
@@ -86,25 +84,44 @@ export const fetchData = async (
     /*Mseva 2.0 */
 
     if (response && response.Licenses && response.Licenses.length > 0) {
-
-
       const businessIdToOwnerMapping = await getWorkFlowData(response.Licenses);
       let searchConvertedArray = [];
       response.Licenses.forEach(element => {
-        let service = getTextToLocalMapping("MODULE_"+get(element,"businessService"));
-        let licensetypeFull = element.tradeLicenseDetail.tradeUnits[0].tradeType;
-        if(licensetypeFull.split(".").length>1)
-        {
-          service +=" - "+getTextToLocalMapping(`TRADELICENSE_TRADETYPE_${getTransformedLocale(licensetypeFull.split(".")[0])}`); 
+        let service = getTextToLocalMapping(
+          "MODULE_" + get(element, "businessService")
+        );
+        let licensetypeFull =
+          element.tradeLicenseDetail.tradeUnits[0].tradeType;
+        if (licensetypeFull.split(".").length > 1) {
+          service +=
+            " - " +
+            getTextToLocalMapping(
+              `TRADELICENSE_TRADETYPE_${getTransformedLocale(
+                licensetypeFull.split(".")[0]
+              )}`
+            );
         }
-        service+=" - "+getTextToLocalMapping(`TRADELICENSE_TRADETYPE_${getTransformedLocale(licensetypeFull)}`);  
+        service +=
+          " - " +
+          getTextToLocalMapping(
+            `TRADELICENSE_TRADETYPE_${getTransformedLocale(licensetypeFull)}`
+          );
         searchConvertedArray.push({
-          applicationNumber: get(element,"applicationNumber",null),
-          ownername: get(element,"tradeLicenseDetail.owners[0].name",null),
+          applicationNumber: get(element, "applicationNumber", null),
+          ownername: get(element, "tradeLicenseDetail.owners[0].name", null),
           businessService: service,
-          assignedTo: get(businessIdToOwnerMapping[element.applicationNumber],"assignee",null),
-          status: get(element, "status",null),
-          sla: get(businessIdToOwnerMapping[element.applicationNumber],"sla",null)
+          assignedTo: get(
+            businessIdToOwnerMapping[element.applicationNumber],
+            "assignee",
+            null
+          ),
+          status: get(element, "status", null),
+          sla: get(
+            businessIdToOwnerMapping[element.applicationNumber],
+            "sla",
+            null
+          ),
+          tenantId: get(element, "tenantId", null)
         });
       });
       dispatch(prepareFinalObject("searchResults", searchConvertedArray));

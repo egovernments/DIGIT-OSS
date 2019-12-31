@@ -102,7 +102,7 @@ export const searchApiCall = async (state, dispatch) => {
     const response = await getSearchResults(queryObject);
     const businessIdToOwnerMapping = await getWorkFlowData(response.Licenses);
     try {
-      // response.Licenses.sort((item1, item2) => item1.applicationDate > item2.applicationDate ? -1 : 1)
+      response.Licenses.sort((item1, item2) => item1.applicationDate > item2.applicationDate ? -1 : 1)
       let data = response.Licenses.map(item => ({
         [getTextToLocalMapping("Application No")]:
           item.applicationNumber || "-",
@@ -116,7 +116,8 @@ export const searchApiCall = async (state, dispatch) => {
           ) || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
         [getTextToLocalMapping("Owner Name")]:
-          get(businessIdToOwnerMapping[item.applicationNumber],"assignee") || "-",
+          get(businessIdToOwnerMapping[item.applicationNumber], "assignee") ||
+          "-",
         [getTextToLocalMapping("Application Date")]:
           convertEpochToDate(item.applicationDate) || "-",
         [getTextToLocalMapping("Status")]: item.status || "-",
