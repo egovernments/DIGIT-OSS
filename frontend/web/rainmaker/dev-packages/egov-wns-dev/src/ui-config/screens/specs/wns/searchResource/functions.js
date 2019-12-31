@@ -60,13 +60,13 @@ export const searchApiCall = async (state, dispatch) => {
     }
     let getSearchResult = getSearchResults(queryObject)
     let getSearchResultForSewerage = getSearchResultsForSewerage(queryObject, dispatch)
+    let finalArray = [];
     try {
       let searchWaterConnectionResults = await getSearchResult
       let searcSewerageConnectionResults = await getSearchResultForSewerage
       const waterConnections = searchWaterConnectionResults.WaterConnection.map(e => { e.service = 'WATER'; return e });
       const sewerageConnections = searcSewerageConnectionResults.SewerageConnections.map(e => { e.service = 'SEWERAGE'; return e });
       let combinedSearchResults = searchWaterConnectionResults && searcSewerageConnectionResults ? sewerageConnections.concat(waterConnections) : []
-      let finalArray = [];
       for (let i = 0; i < combinedSearchResults.length; i++) {
         let element = combinedSearchResults[i];
         let queryObjectForWaterFetchBill;
@@ -103,7 +103,7 @@ export const searchApiCall = async (state, dispatch) => {
       }
       showResults(finalArray, dispatch)
     } catch (e) {
-      dispatch(toggleSnackbar(true, error.message, "error"));
+      showResults(finalArray, dispatch)
       console.error(e)
     }
   }

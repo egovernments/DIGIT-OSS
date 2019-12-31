@@ -1,6 +1,8 @@
-.assessment-displayInline {
+.assessment-displayInline:hover {
   display: flex;
   justify-content: flex-end;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .assessment-button {

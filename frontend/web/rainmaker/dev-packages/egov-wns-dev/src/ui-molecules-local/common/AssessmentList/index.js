@@ -21,7 +21,7 @@ const downloadReceipt = (tenantId, consumerCode) => {
 
 export const getItemStatus = (due, paid, tenantId, consumerCode, history = "") => {
   let status;
-  if (due == paid) {
+  if (due === paid) {
     status = "Paid"
   } else {
     status = "Partially Paid"

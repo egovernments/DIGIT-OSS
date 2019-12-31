@@ -21,7 +21,7 @@ let enableButton = hasButton && hasButton === "false" ? false : true;
 const header = getCommonHeader({
     labelKey: "WS_SEARCH_CONNECTION_HEADER"
 });
-const tradeLicenseSearchAndResult = {
+const waterAndSewerageSearchAndResult = {
     uiFramework: "material-ui",
     name: "search",
     beforeInitScreen: (action, state, dispatch) => {
@@ -104,4 +104,4 @@ export const getMdmsData = async (action, state, dispatch) => {
     }
 };
 
-export default tradeLicenseSearchAndResult;
+export default waterAndSewerageSearchAndResult;

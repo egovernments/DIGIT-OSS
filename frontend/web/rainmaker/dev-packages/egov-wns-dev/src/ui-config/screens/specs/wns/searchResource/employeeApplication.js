@@ -204,9 +204,10 @@ export const wnsApplication = getCommonCard({
           style: {
             color: "#FE7A51",
             borderColor: "#FE7A51",
-            width: "70%",
+            width: "220px",
             height: "48px",
             margin: "8px",
+            float: "right"
           }
         },
         children: {
@@ -233,7 +234,7 @@ export const wnsApplication = getCommonCard({
             margin: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "70%",
+            width: "220px",
             height: "48px"
           }
         },

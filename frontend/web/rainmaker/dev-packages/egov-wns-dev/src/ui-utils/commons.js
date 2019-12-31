@@ -63,14 +63,7 @@ export const getSearchResults = async queryObject => {
             queryObject
         );
         return response;
-    } catch (error) {
-        store.dispatch(
-            toggleSnackbar(
-                true, { labelName: error.message, labelCode: error.message },
-                "error"
-            )
-        );
-    }
+    } catch (error) { console.log(error) }
 };
 
 export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
@@ -86,12 +79,7 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch) => {
         return response;
     } catch (error) {
         dispatch(toggleSpinner());
-        store.dispatch(
-            toggleSnackbar(
-                true, { labelName: error.message, labelCode: error.message },
-                "error"
-            )
-        );
+        console.log(error)
     }
 };
 
@@ -175,12 +163,7 @@ export const getMyConnectionResults = async (queryObject, dispatch) => {
         return response;
     } catch (error) {
         dispatch(toggleSpinner());
-        store.dispatch(
-            toggleSnackbar(
-                true, { labelName: error.message, labelCode: error.message },
-                "error"
-            )
-        );
+        console.log(error);
     }
 
 };
@@ -1192,12 +1175,7 @@ export const getSWMyConnectionResults = async (queryObject, dispatch) => {
         return response;
     } catch (error) {
         dispatch(toggleSpinner());
-        store.dispatch(
-            toggleSnackbar(
-                true, { labelName: error.message, labelCode: error.message },
-                "error"
-            )
-        );
+        console.log(error);
     }
 
 };

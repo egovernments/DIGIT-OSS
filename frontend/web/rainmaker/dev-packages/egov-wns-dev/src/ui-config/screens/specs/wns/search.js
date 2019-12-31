@@ -17,16 +17,10 @@ const hasButton = getQueryArg(window.location.href, "hasButton");
 let enableButton = true;
 enableButton = hasButton && hasButton === "false" ? false : true;
 
-const pageResetAndChange = (state, dispatch) => {
-  dispatch(prepareFinalObject("Licenses", [{ licenseType: "PERMANENT" }]));
-  dispatch(prepareFinalObject("LicensesTemp", []));
-  dispatch(setRoute("/tradelicence/apply"));
-};
-
 const header = getCommonHeader({
   labelKey: "WS_SEARCH_CONNECTION_HEADER"
 });
-const tradeLicenseSearchAndResult = {
+const employeeSearchResults = {
   uiFramework: "material-ui",
   name: "search",
   beforeInitScreen: (action, state, dispatch) => {
@@ -84,4 +78,4 @@ const tradeLicenseSearchAndResult = {
   }
 };
 
-export default tradeLicenseSearchAndResult;
+export default employeeSearchResults;

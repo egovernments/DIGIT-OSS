@@ -29,7 +29,7 @@ const cardItems = [{
     }
 ];
 
-const tradeLicenseSearchAndResult = {
+const waterAndSewerageSearchAndResult = {
     uiFramework: "material-ui",
     name: "home",
     beforeInitScreen: (action, state, dispatch) => {
@@ -168,4 +168,4 @@ const tradeLicenseSearchAndResult = {
     }
 };
 
-export default tradeLicenseSearchAndResult;
+export default waterAndSewerageSearchAndResult;

@@ -45,8 +45,8 @@ class PastPayments extends Component {
     let address = JSON.parse(getUserInfo()).permanentAddress ? JSON.parse(getUserInfo()).permanentAddress : "-"
     let name = JSON.parse(getUserInfo()).name ? JSON.parse(getUserInfo()).name : "-"
     const date = (from, to) => {
-      let fromDate = new Date(convertEpochToDate(from))
-      let toDate = new Date(convertEpochToDate(to))
+      let fromDate = new Date(from)
+      let toDate = new Date(to)
       return fromDate.getFullYear().toString() + '-' + toDate.getFullYear().toString().substring(2)
     }
     const data = pastPaymentsDetails.map((element) =>
