@@ -135,7 +135,44 @@ const getAcknowledgementCard = (
                     generatePdf(state, dispatch, "application_download");
                   }
                 },
+              },
+              printFormButton: {
+                uiFramework: "custom-atoms",
+                componentPath: "Div",
+                children: {
+
+                  div1: {
+                    uiFramework: "custom-atoms",
+                    componentPath: "Icon",
+                 
+                    props:{
+                      iconName: "print",
+                    style:{
+                      marginTop: "7px",
+                      marginRight: "8px",
+                    }
+                  },
+                    onClick: {
+                      action: "condition",
+                      callBack: () => {
+                        generatePdf(state, dispatch, "application_print");
+                      },
+                    },
+                  },
+                  div2: getLabel({
+                    labelName: "PRINT ACKNOWLEDGEMENT FORM",
+                    labelKey: "PT_MUTATION_PRINT_ACKNOWLEDGEMENT_FORM"
+                  })
+
+                },
+                onClickDefination: {
+                  action: "condition",
+                  callBack: () => {
+                    generatePdf(state, dispatch, "application_print");
+                  }
+                },
               }
+
             },
             props: {
               style: {
