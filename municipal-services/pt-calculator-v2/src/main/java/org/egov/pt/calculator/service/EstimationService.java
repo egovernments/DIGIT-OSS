@@ -21,6 +21,7 @@ import org.egov.pt.calculator.web.models.TaxHeadEstimate;
 import org.egov.pt.calculator.web.models.demand.Category;
 import org.egov.pt.calculator.web.models.demand.TaxHeadMaster;
 import org.egov.pt.calculator.web.models.property.*;
+import org.egov.pt.calculator.web.models.property.PropertyDetail.SourceEnum;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,8 +69,23 @@ public class EstimationService {
 	 */
 	public Map<String, Calculation> calculateAndCreateDemand(CalculationReq calculationReq) {
 		// assessmentService.enrichAssessment(calculationReq);
-		Map<String, Calculation> res = demandService.generateDemands(calculationReq);
-		return res;
+		// We are assuming all property details should be from same source in a property
+		List<CalculationCriteria> criterias = calculationReq.getCalculationCriteria().stream().filter(criteria -> !criteria
+				.getProperty().getPropertyDetails().get(0).getSource().equals(SourceEnum.LEGACY_RECORD))
+				.collect(Collectors.toList());
+		calculationReq.setCalculationCriteria(criterias);
+		// criterias
+		if (!CollectionUtils.isEmpty(calculationReq.getCalculationCriteria())) {
+			Map<String, Calculation> res = demandService.generateDemands(calculationReq);
+			return res;
+		} else {
+			Map<String, Calculation> estimateMap = new HashMap<String, Calculation>();
+			//Sending empty Calculation for Legacy Records.
+			calculationReq.getCalculationCriteria().stream().forEach(
+					criteria -> criteria.getProperty().getPropertyDetails().forEach(propertyDetail -> estimateMap
+							.put(propertyDetail.getAssessmentNumber(), Calculation.builder().build())));
+			return estimateMap;
+		}
 	}
 
 	/**
