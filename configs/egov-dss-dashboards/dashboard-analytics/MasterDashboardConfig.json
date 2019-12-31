@@ -1182,6 +1182,167 @@
           ]
         }
       ]
+    },
+    {
+      "name": "State Urban Real-Time Executive (SURE) Dashboard",
+      "id": "overview",
+      "isActive": "",
+      "style": "",
+      "title": "title",
+      "visualizations": [
+        {
+          "name": "DSS_OVERVIEW",
+          "row": 1,
+          "vizArray": [
+            {
+              "id": 111,
+              "name": "Overview",
+              "vizType": "chart",
+              "noUnit": true,
+              "charts": [
+                {
+                  "id": "totalCollection",
+                  "name": "DSS_TOTAL_COLLECTION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "targetAchieved",
+                  "name": "DSS_TARGET_ACHIEVED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "totalApplication",
+                  "name": "DSS_TOTAL_APPLICATION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "slaAchieved",
+                  "name": "DSS_SLA_ACHIEVED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "name": "DSS_OVERVIEW",
+          "vizArray": [
+            {
+              "id": 121,
+              "name": "DSS_PROPERTY_TAX",
+              "vizType": "chart",
+              "noUnit": false,
+              "label": "",
+              "charts": [
+                {
+                  "id": "totalCollection",
+                  "name": "DSS_TOTAL_COLLECTION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "propertiesAssessed",
+                  "name": "DSS_PT_TOTAL_PROPERTIES_ASSESSED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 131,
+              "name": "DSS_TRADE_LICENCE",
+              "vizType": "chart",
+              "label": "",
+              "charts": [
+                {
+                  "id": "totalCollection",
+                  "name": "DSS_TOTAL_COLLECTION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "totalApplication",
+                  "name": "DSS_TOTAL_APPLICATION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 141,
+              "name": "DSS_COMPLAINS",
+              "vizType": "chart",
+              "label": "",
+              "charts": [
+                {
+                  "id": "totalComplaints",
+                  "name": "DSS_PGR_TOTAL_COMPLAINTS",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "slaAchieved",
+                  "name": "DSS_SLA_ACHIEVED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 3,
+          "name": "DSS_LINK",
+          "vizArray": [
+            {
+              "id": 121,
+              "name": "DSS_EXTERNAL_LINK",
+              "vizType": "link",
+              "link": "https://marvelapp.com/dajj221/screen/65000785 ",
+              "noUnit": false,
+              "label": "",
+              "charts": [
+
+              ]
+            },
+            {
+              "id": 131,
+              "name": "DSS_INTERNAL_LINK",
+              "vizType": "link",
+              "link": "https://marvelapp.com/dajj221/screen/65000785 ",
+              "noUnit": false,
+              "label": "",
+              "charts": [
+               ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
