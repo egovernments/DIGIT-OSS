@@ -907,7 +907,23 @@ const getCertificateData = (transformedData, ulbLogo) => {
             text: transformedData.licenseNumber
           }
         ]
-      },
+      },  
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Trade License Number",
+              "TL_LOCALIZATION_OLD_LICENSE_NO"
+            )+":"
+          },
+          {
+            width: "*",
+            text: transformedData.oldLicenseNumber
+          }
+        ]
+      },    
       {
         style: "tl-certificate-data-2",
         columns: [
@@ -921,6 +937,22 @@ const getCertificateData = (transformedData, ulbLogo) => {
           {
             width: "*",
             text: transformedData.applicationNumber
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Application Type",
+              "TL_LOCALIZATION_APPLICATION_TYPE"
+            )+":"
+          },
+          {
+            width: "*",
+            text: getLocaleLabels("NA", "TRADELICENSE_APPLICATIONTYPE_"+transformedData.applicationType.replace(".","_").toUpperCase())
           }
         ]
       },
@@ -1348,6 +1380,22 @@ const getACKData = (transformedData, ulbLogo) => {
           {
             width: "*",
             text: transformedData.applicationNumber
+          }
+        ]
+      },
+      {
+        style: "tl-certificate-data-2",
+        columns: [
+          {
+            width: 160,
+            text: getLocaleLabels(
+              "Application Type",
+              "TL_LOCALIZATION_APPLICATION_TYPE"
+            )+":"
+          },
+          {
+            width: "*",
+            text: getLocaleLabels("NA", "TRADELICENSE_APPLICATIONTYPE_"+transformedData.applicationType.replace(".","_").toUpperCase())
           }
         ]
       },
