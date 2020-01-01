@@ -3,6 +3,8 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import { TaskDialog } from "egov-workflow/ui-molecules-local";
 import { addWflowFileUrl, orderWfProcessInstances } from "egov-ui-framework/ui-utils/commons";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
@@ -23,6 +25,8 @@ class InboxData extends React.Component {
   state = {
     dialogOpen: false,
     workflowHistory: [],
+    sortOrder: 'asc',
+    isSorting: false
   };
 
   getProcessIntanceData = async (pid) => {
@@ -95,16 +99,36 @@ class InboxData extends React.Component {
     }
   }
 
+  sortingTable = (order) => {
+    const { sortOrder } = this.state;
+    if (sortOrder !== order) {
+      this.setState({
+        sortOrder: order,
+        isSorting: true
+      })
+    }
+  }
+
   render() {
     const { data, ProcessInstances } = this.props;
     const { onHistoryClick, onDialogClose, getModuleLink } = this;
+    const { isSorting, sortOrder } = this.state;
+    if(isSorting){
+      data.rows.reverse();
+    }
     return (
       <Table>
         <TableHead>
           <TableRow>
             {data.headers.map((item, index) => {
               let classNames = `inbox-data-table-headcell inbox-data-table-headcell-${index}`;
-              return <TableCell className={classNames}>{<Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />}</TableCell>;
+              return <TableCell className={classNames}>
+                {<Label label={item} labelStyle={{ fontWeight: "500" }} color="#000000" />}
+                {index===4 && <span className="arrow-icon-container">
+                  {sortOrder === "desc" && <div className="arrow-icon-style" onClick={()=>this.sortingTable('asc')}><ArrowDropUpIcon /></div>}
+                  {sortOrder === "asc" && <div className="arrow-icon-style" onClick={()=>this.sortingTable('desc')}><ArrowDropDownIcon /></div>}
+                  </span>}
+                </TableCell>;
             })}
           </TableRow>
         </TableHead>

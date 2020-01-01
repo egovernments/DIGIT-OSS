@@ -205,3 +205,17 @@
     top: 0px;
   }
 }
+
+.arrow-icon-style {
+  display: block;
+  padding: 0;
+  margin: 0;
+  height: 20px;
+  cursor: pointer;
+}
+
+.arrow-icon-container {
+  position: absolute;
+  top: 60px;
+  right: 60px;
+}
