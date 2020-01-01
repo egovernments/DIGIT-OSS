@@ -5,9 +5,9 @@
       "tenantId": "tenantId",
       "transactionId": "transactionId",
       "Bill": {
-        "*": {
+        "$i": {
           "billDetails": {
-            "*": {
+            "$j": {
               "voucherHeader": "Bill.billDetails.voucherHeader",
               "boundary": "Bill.billDetails.boundary",
               "collectedAmount": "Bill.billDetails.collectedAmount",
