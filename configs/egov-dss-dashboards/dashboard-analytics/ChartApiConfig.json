@@ -2198,7 +2198,7 @@
   },
   "_comment": "W&S charts below-----------------------------------------------------------------------",
   "wsTotalCollection": {
-    "chartName": "DSS_TOTAL_COLLECYION",
+    "chartName": "DSS_TOTAL_COLLECTION",
     "queries": [
       {
         "module": "W&S",
