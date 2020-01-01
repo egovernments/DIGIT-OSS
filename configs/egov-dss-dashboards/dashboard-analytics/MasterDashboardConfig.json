@@ -1343,6 +1343,174 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Water sewerage (SURE) Dashboard",
+      "id": "w&s",
+      "isActive": "",
+      "style": "linear",
+      "visualizations": [
+        {
+          "row": 1,
+          "name": "DSS_REVENUE",
+          "vizArray": [
+            {
+              "id": 211,
+              "name": "Overview",
+              "vizType": "metric-collection",
+              "noUnit": true,
+              "label": "Overview",
+              "charts": [
+                {
+                  "id": "wsTotalCollection",
+                  "name": "DSS_W&S_TOTAL_COLLECTION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "",
+                  "name": "DSS_W&S_TARGET_COLLECTION",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                },
+                {
+                  "id": "",
+                  "name": "DSS_W&S_TARGET_ACHIEVED",
+                  "code": "",
+                  "chartType": "metric",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 212,
+              "name": "DSS_W&S_TOTAL_CUMULATIVE_COLLECTION",
+              "dimensions": {
+                "height": 350,
+                "width": 7
+              },
+              "vizType": "chart",
+              "noUnit": true,
+              "charts": [
+                {
+                  "id": "wsCumulativeCollections",
+                  "name": "Monthly",
+                  "code": "",
+                  "chartType": "line",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 2,
+          "name": "DSS_REVENUE",
+          "vizArray": [
+            {
+              "id": 221,
+              "name": "DSS_W&S_TOP_3_PERFORMING_ULBS",
+              "vizType": "performing-metric",
+              "noUnit": false,
+              "label": "",
+              "charts": [
+                {
+                  "id": "",
+                  "name": "DSS_W&S_TOP_3_PERFORMING_ULBS",
+                  "code": "",
+                  "chartType": "",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 222,
+              "name": "DSS_W&S_BOTTOM_3_PERFORMING_ULBS",
+              "vizType": "performing-metric",
+              "noUnit": false,
+              "charts": [
+                {
+                  "id": "",
+                  "name": "DSS_W&S_BOTTOM_3_PERFORMING_ULBS",
+                  "code": "",
+                  "chartType": "",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            },
+            {
+              "id": 223,
+              "name": "DSS_W&S_COLLECTION_BY_USAGE_TYPE",
+              "vizType": "chart",
+              "noUnit": true,
+              "charts": [
+                {
+                  "id": "wsCollectionByUsage",
+                  "name": "DSS_W&S_COLLECTION_BY_USAGE_TYPE",
+                  "code": "",
+                  "chartType": "pie",
+                  "filter": "",
+                  "headers": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 3,
+          "name": "DSS_REVENUE",
+          "vizArray": [
+            {
+              "id": 231,
+              "name": "DSS_W&S_DEMAND_COLLECTION",
+              "vizType": "chart",
+              "noUnit": false,
+              "charts": [
+                {
+                  "id": "wsFinancialIndicatorUlb",
+                  "name": "DSS_W&S_DEMAND_COLLECTION_BOUNDARY",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": [],
+                  "tabName": "Boundary"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "row": 4,
+          "name": "DSS_REVENUE",
+          "vizArray": [
+            {
+              "id": 231,
+              "name": "DSS_W&S_TAX_HEAD",
+              "vizType": "chart",
+              "noUnit": false,
+              "charts": [
+                {
+                  "id": "wsTaxHeadUlb",
+                  "name": "DSS_W&S_TAX_HEAD_BOUNDARY",
+                  "code": "",
+                  "chartType": "table",
+                  "filter": "",
+                  "headers": [],
+                  "tabName": "Boundary"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
