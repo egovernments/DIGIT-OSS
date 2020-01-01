@@ -2195,6 +2195,338 @@
     "insight": {
     },
     "_comment": ""
+  },
+  "_comment": "W&S charts below-----------------------------------------------------------------------",
+  "wsTotalCollection": {
+    "chartName": "DSS_TOTAL_COLLECYION",
+    "queries": [
+      {
+        "module": "W&S",
+        "indexName": "receipts-consumers",
+        "aggrQuery": "{\"aggs\":{\"Total Collection\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"approved\":{\"sum\":{\"field\":\"totalamount\"}}}}}}",
+        "requestQueryMap": "{\r\n  \"district\" : \"districtname\", \r\n\"city\" : \"cityname\" \r\n}",
+        "dateRefField": "@timestamp"
+      }
+    ],
+    "chartType": "metric",
+    "valueType": "number",
+    "action": "",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "Total Collection"
+    ],
+    "insight": {
+    },
+    "_comment": "W&S total collections "
+  },
+  "wsCumulativeCollections": {
+    "chartName": "DSS_TOTAL_CUMULATIVE_COLLECTION",
+    "queries": [
+      {
+        "module": "W&S",
+        "dateRefField": "@timestamp",
+        "requestQueryMap": "{\"city\" : \"cityname\"}",
+        "indexName": "receipts-consumers",
+        "aggrQuery": "{\"aggs\":{\"Water Sewerage Collections\":{\"date_histogram\":{\"field\":\"@timestamp\",\"interval\":\"intervalvalue\"},\"aggs\":{\"AGGR\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"approved\":{\"sum\":{\"field\":\"totalamount\"}}}}}}}}"
+      }
+    ],
+    "chartType": "line",
+    "valueType": "number",
+    "action": "",
+    "drillChart": "none",
+    "documentType": "_doc",
+    "aggregationPaths": [
+      "Water Sewerage Collections"
+    ],
+    "isCumulative": true,
+    "interval": "month",
+    "insight": {
+    },
+    "_comment": " "
+  },
+  "wsCollectionByUsage": {
+    "chartName": "DSS_COLLECTION_BY_USAGE",
+    "queries": [
+      {
+        "module": "W&S",
+        "dateRefField": "@timestamp",
+        "requestQueryMap": "{\r\n  \"district\" : \"districtname\", \r\n\"city\" : \"cityname\" \r\n}",
+        "indexName": "receipts-consumers",
+        "aggrQuery": "{\"aggs\":{\"Usage Type\":{\"terms\":{\"field\":\"consumertype.keyword\"},\"aggs\":{\"AGGR\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"approved\":{\"sum\":{\"field\":\"totalamount\"}}}}}}}}"
+      }
+    ],
+    "chartType": "pie",
+    "valueType": "number",
+    "action": "",
+    "documentType": "_doc",
+    "drillChart": "none",
+    "aggregationPaths": [
+      "Usage Type"
+    ],
+    "insight": {
+    },
+    "_comment": " "
+  },
+
+  "wsFinancialIndicatorUlb": {
+    "chartName": "DSS_DEMAND_COLLECTION_BOUNDARY",
+    "queries": [
+      {
+        "module": "W&S",
+        "requestQueryMap": "{ \"usageId\" : \".keyword\",\"minorUsageId\" : \".keyword\", \"tenantId\" : \"cityname.keyword\", \"district\" : \"districtname.keyword\" }",
+        "dateRefField": "@timestamp",
+        "indexName": "receipts-consumers",
+        "aggrQuery": "{\"aggs\":{\"ULB\":{\"terms\":{\"field\":\"cityname.keyword\"},\"aggs\":{\"Total Collection\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"collection\":{\"sum\":{\"field\":\"totalamount\"}}}},\"Total Receipt\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"receipt\":{\"value_count\":{\"field\":\"receiptnumber.keyword\"}}}}}}}}"
+      },
+      {
+        "module": "W&S",
+        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\"}",
+        "dateRefField": "@timestamp",
+        "indexName": "demandbillconsumers",
+        "aggrQuery": "{\"aggs\":{\"ULB\":{\"terms\":{\"field\":\"cityname.keyword\"},\"aggs\":{\"No of Bill\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"approved\":{\"value_count\":{\"field\":\"installmentfrom.keyword\"}}}}}}}}"
+      },
+      {
+        "module": "W&S",
+        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\"}",
+        "dateRefField": "@timestamp",
+        "indexName": "projecteddemand-consumers",
+        "aggrQuery": "{\"aggs\":{\"ULB\":{\"terms\":{\"field\":\"cityname.keyword\"},\"aggs\":{\"Project Demand\":{\"sum\":{\"field\":\"projecteddemand\"}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": false,
+    "filterKeys": [
+      {"key": "tenantId", "column": "ULB"}
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "wsFinancialIndicatorWard",
+    "action": "",
+    "plotLabel": "DDRs",
+    "isPostResponseHandler": true,
+    "postAggregationTheory" : "",
+    "aggregationPaths": [
+      "Total Collection",
+      "Total Receipt",
+      "No of Bill",
+      "Project Demand"
+
+    ],
+    "pathDataTypeMapping": [
+      {
+        "Total Collection": "amount"
+      },
+      {
+        "Total Receipt": "number"
+      },
+      {
+        "No of Bill": "number"
+      },
+      {
+        "Project Demand": "amount"
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "wsFinancialIndicatorWard": {
+    "chartName": "DSS_DEMAND_COLLECTION_BOUNDARY",
+    "queries": [
+      {
+        "module": "W&S",
+        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\", \"district\" : \"districtname.keyword\" }",
+        "dateRefField": "@timestamp",
+        "indexName": "receipts-consumers",
+        "aggrQuery": "{\"aggs\":{\"Ward\":{\"terms\":{\"field\":\"block\"},\"aggs\":{\"Total Collection\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"collection\":{\"sum\":{\"field\":\"totalamount\"}}}},\"Total Receipt\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"receipt\":{\"value_count\":{\"field\":\"receiptnumber.keyword\"}}}}}}}}"
+      },
+      {
+        "module": "W&S",
+        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\"}",
+        "dateRefField": "@timestamp",
+        "indexName": "demandbillconsumers",
+        "aggrQuery": "{\"aggs\":{\"Ward\":{\"terms\":{\"field\":\"block.keyword\"},\"aggs\":{\"No of Bill\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"approved\":{\"value_count\":{\"field\":\"installmentfrom.keyword\"}}}}}}}}"
+      },
+      {
+        "module": "W&S",
+        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\"}",
+        "dateRefField": "@timestamp",
+        "indexName": "projecteddemand-consumers",
+        "aggrQuery": "{\"aggs\":{\"Ward\":{\"terms\":{\"field\":\"block.keyword\"},\"aggs\":{\"Project Demand\":{\"sum\":{\"field\":\"projecteddemand\"}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": false,
+    "filterKeys": [
+
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "",
+    "action": "",
+    "plotLabel": "Ward",
+    "isPostResponseHandler": true,
+    "postAggregationTheory" : "",
+    "aggregationPaths": [
+      "Total Collection",
+      "Total Receipt",
+      "No of Bill",
+      "Project Demand"
+
+    ],
+    "pathDataTypeMapping": [
+      {
+        "Total Collection": "amount"
+      },
+      {
+        "Total Receipt": "number"
+      },
+      {
+        "No of Bill": "number"
+      },
+      {
+        "Project Demand": "amount"
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+
+  "wsTaxHeadUlb": {
+    "chartName": "DSS_TAX_HEAD_BOUNDARY",
+    "queries": [
+      {
+        "module": "W&S",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"district\" : \"districtname.keyword\" }",
+        "dateRefField": "@timestamp",
+        "indexName": "receipts-consumers",
+        "aggrQuery": "{\"aggs\":{\"ULB\":{\"terms\":{\"field\":\"cityname.keyword\"},\"aggs\":{\"Total Collection\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"collection\":{\"sum\":{\"field\":\"totalamount\"}}}},\"Total Reciept\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"reciept\":{\"value_count\":{\"field\":\"receiptnumber.keyword\"}}}}}}}}"
+      },
+      {
+        "module": "W&S",
+        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\"}",
+        "dateRefField": "@timestamp",
+        "indexName": "demandbillconsumers",
+        "aggrQuery": "{\"aggs\":{\"ULB\":{\"terms\":{\"field\":\"cityname.keyword\"},\"aggs\":{\"No of Bill\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"approved\":{\"value_count\":{\"field\":\"installmentfrom.keyword\"}}}},\"Late charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"penalty\":{\"sum\":{\"field\":\"penaltycollection\"}}}},\"Interest\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"interest\":{\"sum\":{\"field\":\"interestcollection\"}}}},\"Advance\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"advancecollection\"}}}},\"Current Charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"currentcharges\"}}}},\"Arrear Charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"arrearcharges\"}}}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": false,
+    "filterKeys": [
+      {"key": "tenantId", "column": "ULB"}
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "wsTaxHeadWard",
+    "action": "",
+    "plotLabel": "ULB",
+    "postAggregationTheory" : "",
+    "aggregationPaths": [
+      "Total Collection",
+      "Total Receipt",
+      "No of Bill",
+      "Late charges",
+      "Interest",
+      "Advance",
+      "Current Charges",
+      "Arrear Charges"
+
+    ],
+    "pathDataTypeMapping": [
+      {
+        "Total Collection": "amount"
+      },
+      {
+        "Total Receipt": "number"
+      },
+      {
+        "No of Bill": "number"
+      },
+      {
+        "Late charges": "amount"
+      },
+      {
+        "Interest": "amount"
+      },
+      {
+        "Advance": "amount"
+      },
+      {
+        "Current Charges": "amount"
+      },
+      {
+        "Arrear Charges": "amount"
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
+  },
+  "wsTaxHeadWard": {
+    "chartName": "DSS_TAX_HEAD_BOUNDARY",
+    "queries": [
+      {
+        "module": "W&S",
+        "requestQueryMap": "{\"tenantId\" : \"cityname.keyword\", \"district\" : \"districtname.keyword\" }",
+        "dateRefField": "@timestamp",
+        "indexName": "receipts-consumers",
+        "aggrQuery": "{\"aggs\":{\"Ward\":{\"terms\":{\"field\":\"block\"},\"aggs\":{\"Total Collection\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"collection\":{\"sum\":{\"field\":\"totalamount\"}}}},\"Total Reciept\":{\"filter\":{\"term\":{\"status\":\"Approved\"}},\"aggs\":{\"reciept\":{\"value_count\":{\"field\":\"receiptnumber.keyword\"}}}}}}}}"
+      },
+      {
+        "module": "W&S",
+        "requestQueryMap": "{ \"tenantId\" : \"cityname.keyword\"}",
+        "dateRefField": "@timestamp",
+        "indexName": "demandbillconsumers",
+        "aggrQuery": "{\"aggs\":{\"Ward\":{\"terms\":{\"field\":\"block.keyword\"},\"aggs\":{\"No of Bill\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"approved\":{\"value_count\":{\"field\":\"installmentfrom.keyword\"}}}},\"Late charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"penalty\":{\"sum\":{\"field\":\"penaltycollection\"}}}},\"Interest\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"interest\":{\"sum\":{\"field\":\"interestcollection\"}}}},\"Advance\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"advancecollection\"}}}},\"Current Charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"currentcharges\"}}}},\"Arrear Charges\":{\"filter\":{\"term\":{\"billgenerated\":true}},\"aggs\":{\"advance\":{\"sum\":{\"field\":\"arrearcharges\"}}}}}}}}"
+      }
+    ],
+    "isMdmsEnabled": false,
+    "filterKeys": [
+    ],
+    "chartType": "table",
+    "valueType": "number",
+    "drillChart": "",
+    "action": "",
+    "plotLabel": "Ward",
+    "postAggregationTheory" : "",
+    "aggregationPaths": [
+      "Total Collection",
+      "Total Receipt",
+      "No of Bill",
+      "Late charges",
+      "Interest",
+      "Advance",
+      "Current Charges",
+      "Arrear Charges"
+
+    ],
+    "pathDataTypeMapping": [
+      {
+        "Total Collection": "amount"
+      },
+      {
+        "Total Receipt": "number"
+      },
+      {
+        "No of Bill": "number"
+      },
+      {
+        "Late charges": "amount"
+      },
+      {
+        "Interest": "amount"
+      },
+      {
+        "Advance": "amount"
+      },
+      {
+        "Current Charges": "amount"
+      },
+      {
+        "Arrear Charges": "amount"
+      }
+    ],
+    "insight": {
+    },
+    "_comment": ""
   }
 
 }
