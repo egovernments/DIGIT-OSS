@@ -43,7 +43,7 @@ class LabelContainer extends React.Component {
     }
 
     if (typeof fieldValue === "boolean") {
-      fieldValue = fieldValue ? "Yes" : "No";
+      fieldValue = fieldValue ? getLocaleLabels("SCORE_YES","SCORE_YES") : getLocaleLabels("SCORE_NO","SCORE_NO");
     }
 
     let fieldLabel =
