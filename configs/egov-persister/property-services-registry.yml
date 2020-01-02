@@ -262,8 +262,6 @@ serviceMaps:
 
       - jsonPath: $.Property.parentProperties
 
-      - jsonPath: $.Property.additionaldetails
-
       - jsonPath: $.Property.auditDetails.lastModifiedBy
 
       - jsonPath: $.Property.auditDetails.lastModifiedTime
