@@ -11,8 +11,10 @@ import { httpRequest } from "egov-ui-framework/ui-utils/api.js";
 import get from "lodash/get";
 import set from "lodash/set";
 import { validateFields } from "../utils";
-import { getTenantId} from "egov-ui-kit/utils/localStorageUtils";
+import {  getTenantId, getUserInfo} from "egov-ui-kit/utils/localStorageUtils";
 
+const userTenant = getTenantId();
+const userUUid = get(JSON.parse(getUserInfo()),"uuid");
 export const fetchData = async (
   action,
   state,
@@ -81,8 +83,8 @@ const getSearchResultsfromEDCR = async (action, state, dispatch) => {
           correlationId: "wefiuweiuff897",
           authToken: "",
           userInfo: {
-            id: 1,
-            tenantId: "generic"
+            id: userUUid,
+            tenantId: userTenant
           }
         }
       },
@@ -117,8 +119,8 @@ export const getSearchResultsfromEDCRWithApplcationNo = async (
           correlationId: "wefiuweiuff897",
           authToken: "",
           userInfo: {
-            id: 1,
-            tenantId: "generic"
+            id: userUUid,
+            tenantId: userTenant
           }
         }
       },
@@ -151,7 +153,8 @@ const scrutinizePlan = async (state, dispatch) => {
         msgId: "",
         correlationId: "",
         userInfo: {
-          id: ""
+          id: userUUid,
+          tenantId: userTenant
         }
       }
     };
