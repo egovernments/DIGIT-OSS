@@ -86,6 +86,18 @@
         }
       ]
     },
+   {
+      "module": "BPAAPPLY",
+      "code": "BPAAPPLY",
+      "tenants": [
+        {
+          "code": "pb.jalandhar"
+        },
+        {
+          "code": "pb.amritsar"
+        }
+      ]
+    },
     {
       "module": "BPAREG",
       "code": "BPAREG",
