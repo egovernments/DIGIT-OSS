@@ -4,7 +4,7 @@
     "serviceName": "rainmaker-common",
     "version": "1.0.0",
     "baseKeyPath": "$.Licenses.*",
-    "entityIdPath":"$.applicationNumber",
+    "entityIdPath":"$.licenseNumber",
     "isCommonTableBorderRequired": true,
     "mappings": [
       {

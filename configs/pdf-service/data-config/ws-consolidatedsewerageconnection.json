@@ -28,7 +28,8 @@
                 "variable": "connectionExecutionDate",
                 "value": {
                   "path": "$.connectionExecutionDate"
-                }
+                },
+                "type": "date"
               },
               {
                 "variable": "uom",
