@@ -7,14 +7,14 @@
         "module": "PT",
         "indexName": "ptindex-v1",
         "aggrQuery": "{\"aggs\":{\"Total Application\":{\"value_count\":{\"field\":\"Data.tenantId.keyword\"}}}}",
-        "requestQueryMap": "{\r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tenantId\" \r\n}",
+        "requestQueryMap": "{\r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.propertyId\" \r\n}",
         "dateRefField": "Data.@timestamp"
       },
       {
         "module": "TL",
         "indexName": "tlindex-v1",
         "aggrQuery": "{\"aggs\":{\"Total Application\":{\"value_count\":{\"field\":\"Data.tradelicense.tenantid.keyword\"}}}}",
-        "requestQueryMap": "{\r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tradelicense.tenantid\" \r\n}",
+        "requestQueryMap": "{\r\n  \"district\" : \"Data.tenantData.city.districtCode\", \r\n\"tenantId\" : \"Data.tradelicense.applicationNumber\" \r\n}",
         "dateRefField": "Data.tradelicense.applicationdate"
       },
       {
@@ -180,14 +180,7 @@
     "chartName": "DSS_TOTAL_CUMULATIVE_COLLECTION",
     "queries": [
       {
-        "module": "PT",
-        "dateRefField": "Data.Bill.billDetails.receiptDate",
-        "requestQueryMap": "{\r\n  \"module\" : \"Data.Bill.billDetails.businessService.keyword\", \n\"tenantId\" : \"Data.tenantId\"}",
-        "indexName": "collectionsindex-v1",
-        "aggrQuery": "{\"aggs\":{\"Collections\":{\"date_histogram\":{\"field\":\"Data.Bill.billDetails.receiptDate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Sum\":{\"sum\":{\"field\":\"Data.Bill.billDetails.amountPaid\"}}}}}}"
-      },
-      {
-        "module": "TL",
+        "module": "COMMON",
         "dateRefField": "Data.Bill.billDetails.receiptDate",
         "requestQueryMap": "{\r\n  \"module\" : \"Data.Bill.billDetails.businessService.keyword\", \n\"tenantId\" : \"Data.tenantId\"}",
         "indexName": "collectionsindex-v1",
@@ -1575,9 +1568,16 @@
       {
         "module": "TL",
         "indexName": "tlindex-v1",
-        "aggrQuery": "{\"aggs\":{\"Total Application\":{\"date_histogram\":{\"field\":\"Data.tradelicense.applicationDate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationNumber.keyword\"}}}},\"Trade Licence Collections\":{\"date_histogram\":{\"field\":\"Data.tradelicense.issueddate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.issueddate\"}}}}}}",
+        "aggrQuery": "{\"aggs\":{\"Trade Licence Issued\":{\"date_histogram\":{\"field\":\"Data.tradelicense.issueddate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.licensenumber\"}}}}}}",
         "requestQueryMap": "{\"tenantId\" : \"Data.tenantData.code\" ,\"district\" : \"Data.tenantData.city.districtCode\"}",
         "dateRefField": "Data.tradelicense.issueddate"
+      },
+      {
+        "module": "TL",
+        "indexName": "tlindex-v1",
+        "aggrQuery": "{\"aggs\":{\"Total Application\":{\"date_histogram\":{\"field\":\"Data.tradelicense.applicationDate\",\"interval\":\"intervalvalue\"},\"aggs\":{\"Count\":{\"value_count\":{\"field\":\"Data.tradelicense.applicationNumber.keyword\"}}}}}}",
+        "requestQueryMap": "{\"tenantId\" : \"Data.tenantData.code\" ,\"district\" : \"Data.tenantData.city.districtCode\"}",
+        "dateRefField": "Data.tradelicense.applicationDate"
       }
     ],
     "chartType": "line",
@@ -1586,7 +1586,7 @@
     "documentType": "_doc",
     "drillChart": "none",
     "aggregationPaths": [
-      "Trade Licence Collections",
+      "Trade Licence Issued",
       "Total Application"
     ],
     "isCumulative": true,
@@ -1743,7 +1743,7 @@
     },
     "_comment": " Total Number of Closed Complaints "
   },
-    "cumulativeClosedComplaints": {
+  "cumulativeClosedComplaints": {
     "chartName": "DSS_TOTAL_CUMULATIVE_CLOSED_COMPLAINTS",
     "queries": [
       {
@@ -2196,9 +2196,10 @@
     },
     "_comment": ""
   },
+
   "_comment": "W&S charts below-----------------------------------------------------------------------",
   "wsTotalCollection": {
-    "chartName": "DSS_TOTAL_COLLECTION",
+    "chartName": "DSS_TOTAL_COLLECYION",
     "queries": [
       {
         "module": "W&S",
@@ -2528,5 +2529,4 @@
     },
     "_comment": ""
   }
-
 }
