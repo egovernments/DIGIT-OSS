@@ -130,7 +130,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 3
                     },
                     props: {
@@ -151,7 +151,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 3
                     },
                     props: {
@@ -171,7 +171,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 7
                     }
                 }
@@ -182,7 +182,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 3
                     },
                     props: {
@@ -214,7 +214,7 @@ export const meterReadingEditable =
                         sourceJsonPath: "meterMdmsData['ws-services-calculation'].MeterStatus",
                         jsonPath: "metereading.meterStatus",
                         gridDefination: {
-                            xs: 12,
+                            xs: 6,
                             sm: 3
                         },
                         required: false,
@@ -371,7 +371,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 7
                     }
                 }
@@ -382,7 +382,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 3
                     },
                     props: {
@@ -402,7 +402,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 3
                     },
                     props: {
@@ -422,7 +422,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 7
                     }
                 }
@@ -433,7 +433,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 3
                     },
                     props: {
@@ -453,7 +453,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 3
                     },
                     props: {
@@ -473,7 +473,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 7
                     }
                 }
@@ -484,7 +484,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 3
                     },
                     props: {
@@ -507,7 +507,7 @@ export const meterReadingEditable =
                             labelKey: "WS_CONSUMPTION_DETAILS_CURRENT_READING_PLACEHOLDER"
                         },
                         gridDefination: {
-                            xs: 12,
+                            xs: 6,
                             sm: 3
                         },
                         required: true,
@@ -541,7 +541,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 7
                     }
                 }
@@ -552,7 +552,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 3
                     },
                     props: {
@@ -573,7 +573,7 @@ export const meterReadingEditable =
                         labelKey: "WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL"
                     },
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 3
                     },
                     required: true,
@@ -585,7 +585,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 7
                     }
                 }
@@ -596,7 +596,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 3
                     },
                     props: {
@@ -618,7 +618,7 @@ export const meterReadingEditable =
                     componentPath: "Div",
                     visible: true,
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 3
                     },
                     props: {
@@ -640,7 +640,7 @@ export const meterReadingEditable =
                             labelKey: "WS_CONSUMPTION_DETAILS_CONSUMPTION_READING_PLACEHOLDER"
                         },
                         gridDefination: {
-                            xs: 12,
+                            xs: 6,
                             sm: 3
                         },
                         visible: false,
@@ -653,7 +653,7 @@ export const meterReadingEditable =
                     uiFramework: "custom-atoms",
                     componentPath: "Div",
                     gridDefination: {
-                        xs: 12,
+                        xs: 6,
                         sm: 7
                     }
                 }
@@ -667,15 +667,16 @@ export const meterReadingEditable =
                         uiFramework: "custom-atoms",
                         componentPath: "Div",
                         gridDefination: {
-                            xs: 12,
+                            xs: 3,
                             sm: 3
                         }
                     },
                     searchButton: {
                         componentPath: "Button",
                         gridDefination: {
-                            xs: 12,
-                            sm: 4
+                            xs: 6,
+                            sm: 4,
+                            align: "center"
                         },
                         props: {
                             variant: "outlined",
@@ -702,7 +703,7 @@ export const meterReadingEditable =
                         uiFramework: "custom-atoms",
                         componentPath: "Div",
                         gridDefination: {
-                            xs: 12,
+                            xs: 6,
                             sm: 4
                         }
                     }
