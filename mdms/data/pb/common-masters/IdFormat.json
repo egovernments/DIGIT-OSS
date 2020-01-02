@@ -484,6 +484,14 @@
     {
       "format": "BPA_SANC_FEE/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
       "idname": "BPA.NC_SAN_FEE.receipt.id"
+    },
+    {
+      "format": "WS/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
+      "idname": "ws.receipt.id"
+    },
+    {
+      "format": "SW/[fy:yyyy-yy]/[SEQ_EGOV_COMMON]",
+      "idname": "sw.receipt.id"
     }
   ]
 }
