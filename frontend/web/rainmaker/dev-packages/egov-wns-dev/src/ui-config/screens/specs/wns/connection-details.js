@@ -215,12 +215,6 @@ const screenConfig = {
             }
           }
         },
-        taskStatus: {
-          uiFramework: "custom-containers-local",
-          componentPath: "WorkFlowContainer",
-          moduleName: "egov-workflow",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
-        },
         connectionDetails,
         connectionDetailsFooter
       }
