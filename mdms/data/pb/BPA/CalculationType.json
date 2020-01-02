@@ -41,6 +41,12 @@
             "riskType": "LOW",
             "feeType":"SanctionFee",
             "amount":500
+        },{
+            "applicationType": "BUILDING_PLAN_SCRUTINY",
+            "serviceType": "ALL",
+            "riskType": "ALL",
+            "feeType":"SanctionFee",
+            "amount":500
         }
     ]
 }
