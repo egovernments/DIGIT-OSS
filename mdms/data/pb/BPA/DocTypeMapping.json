@@ -10,7 +10,7 @@
             "docTypes": [
                 {
                     "code": "OWNER.IDENTITYPROOF",
-                    "required": true
+                    "required": false
                 },
                 {
                     "code": "OWNER.ADDRESSPROOF",
