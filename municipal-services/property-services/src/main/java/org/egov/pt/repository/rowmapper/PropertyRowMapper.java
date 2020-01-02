@@ -74,6 +74,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 						.oldPropertyId(rs.getString("oldPropertyId"))
 						.propertyType(rs.getString("propertytype"))
 						.propertyId(rs.getString("propertyid"))
+						.accountId(rs.getString("accountid"))
 						.occupancyDate(occupancyDate)
 						.auditDetails(auditdetails)
 						.landArea(landArea)
