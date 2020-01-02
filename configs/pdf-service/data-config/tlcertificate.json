@@ -415,7 +415,7 @@
               ]
           },
           { 
-            "path": "https://egov-micro-dev.egovernments.org/filestore/v1/files/url",
+            "path": "http://egov-filestore:8080/filestore/v1/files/url",
             "queryParam": "tenantId=pb,fileStoreIds=$.tradeLicenseDetail.applicationDocuments[?(@.documentType== 'OWNERIDPROOF')].fileStoreId",
             "apiRequest": null,
             "requesttype": "GET",
