@@ -240,8 +240,6 @@ serviceMaps:
 
       - jsonPath: $.Property.propertyId
 
-      - jsonPath: $.Property.tenantId
-
       - jsonPath: $.Property.accountId
 
       - jsonPath: $.Property.oldPropertyId
