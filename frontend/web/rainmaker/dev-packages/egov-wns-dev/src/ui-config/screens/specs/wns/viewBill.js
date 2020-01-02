@@ -249,12 +249,6 @@ const screenConfig = {
           componentPath: "Container",
           children: { header1: { gridDefination: { xs: 12, sm: 8 }, ...headerrow } }
         },
-        taskStatus: {
-          uiFramework: "custom-containers-local",
-          componentPath: "WorkFlowContainer",
-          moduleName: "egov-workflow",
-          visible: process.env.REACT_APP_NAME === "Citizen" ? false : true
-        },
         viewBill,
         viewBillFooter
       }
