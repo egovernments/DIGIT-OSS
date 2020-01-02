@@ -185,18 +185,11 @@ export const wnsApplication = getCommonCard({
 
   button: getCommonContainer({
     buttonContainer: getCommonContainer({
-      mihyEmptyRow: {
-        uiFramework: "custom-atoms",
-        componentPath: "Item",
-        props: {
-          sm: 2
-        }
-      },
       resetButton: {
         componentPath: "Button",
         gridDefination: {
-          xs: 12,
-          sm: 4,
+          xs: 6,
+          sm: 6,
           align: "center"
         },
         props: {
@@ -204,10 +197,8 @@ export const wnsApplication = getCommonCard({
           style: {
             color: "#FE7A51",
             borderColor: "#FE7A51",
-            width: "220px",
-            height: "48px",
-            margin: "8px",
-            float: "right"
+            width: "85%",
+            height: "48px"
           }
         },
         children: {
@@ -223,18 +214,17 @@ export const wnsApplication = getCommonCard({
       searchButton: {
         componentPath: "Button",
         gridDefination: {
-          xs: 12,
-          sm: 4,
+          xs: 6,
+          sm: 6,
           align: "center"
         },
         props: {
           variant: "contained",
           style: {
             color: "white",
-            margin: "8px",
             backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
             borderRadius: "2px",
-            width: "220px",
+            width: "85%",
             height: "48px"
           }
         },
@@ -246,13 +236,6 @@ export const wnsApplication = getCommonCard({
         onClickDefination: {
           action: "condition",
           callBack: searchApiCall
-        }
-      },
-      mihyEmptyRow: {
-        uiFramework: "custom-atoms",
-        componentPath: "Item",
-        props: {
-          sm: 2
         }
       },
     })

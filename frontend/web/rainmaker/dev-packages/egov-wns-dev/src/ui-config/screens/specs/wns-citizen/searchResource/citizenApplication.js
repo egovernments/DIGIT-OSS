@@ -170,19 +170,17 @@ export const citizenApplication = getCommonCard({
             resetButton: {
                 componentPath: "Button",
                 gridDefination: {
-                    xs: 12,
-                    sm: 6
-                    // align: "center"
+                    xs: 6,
+                    sm: 6,
+                    align: "center"
                 },
                 props: {
                     variant: "outlined",
                     style: {
                         color: "#FE7A51",
                         borderColor: "#FE7A51",
-                        width: "220px",
-                        height: "48px",
-                        margin: "8px",
-                        float: "right"
+                        width: "85%",
+                        height: "48px"
                     }
                 },
                 children: {
@@ -198,18 +196,17 @@ export const citizenApplication = getCommonCard({
             searchButton: {
                 componentPath: "Button",
                 gridDefination: {
-                    xs: 12,
-                    sm: 6
-                    // align: "center"
+                    xs: 6,
+                    sm: 6,
+                    align: "center"
                 },
                 props: {
                     variant: "contained",
                     style: {
                         color: "white",
-                        margin: "8px",
                         backgroundColor: "rgba(0, 0, 0, 0.6000000238418579)",
                         borderRadius: "2px",
-                        width: "220px",
+                        width: "85%",
                         height: "48px"
                     }
                 },
