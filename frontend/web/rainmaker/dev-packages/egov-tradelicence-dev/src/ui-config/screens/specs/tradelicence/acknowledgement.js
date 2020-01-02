@@ -16,6 +16,7 @@ import generatePdf from "../utils/receiptPdf";
 import { Icon } from "egov-ui-framework/ui-atoms";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import {generatePdfAndDownload} from "./acknowledgementResource/applicationSuccessFooter";
+import {downloadAcknowledgementForm} from "../utils"
 
 const abc=(  state,
   dispatch,
@@ -44,32 +45,22 @@ const abc=(  state,
             onClick: {
               action: "condition",
               callBack: () => {
-                generatePdfAndDownload(
-                  state,
-                  dispatch,
-                  "download",
-                  applicationNumber,
-                  tenant
-                );
+                const { Licenses } = state.screenConfiguration.preparedFinalObject;
+                    downloadAcknowledgementForm(Licenses);
               }
             },
           },
           div2: getLabel({
             labelName: "DOWNLOAD CONFIRMATION FORM",
-            labelKey: "NOC_APPLICATION_BUTTON_DOWN_CONF"
+            labelKey: "TL_APPLICATION_BUTTON_DOWN_CONF"
           })
 
         },
         onClickDefination: {
           action: "condition",
           callBack: () => {
-            generatePdfAndDownload(
-              state,
-              dispatch,
-              "download",
-              applicationNumber,
-              tenant
-            );
+            const { Licenses } = state.screenConfiguration.preparedFinalObject;
+            downloadAcknowledgementForm(Licenses);
           }
         },
       },
@@ -92,33 +83,23 @@ const abc=(  state,
            onClick: {
             action: "condition",
             callBack: () => {
-              generatePdfAndDownload(
-                state,
-                dispatch,
-                "print",
-                applicationNumber,
-                tenant
-              );
+              const { Licenses } = state.screenConfiguration.preparedFinalObject;
+                      downloadAcknowledgementForm(Licenses,'print');
             }
           },
 
           },
           div2: getLabel({
             labelName: "PRINT CONFIRMATION FORM",
-            labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
+            labelKey: "TL_APPLICATION_BUTTON_PRINT_CONF"
           })
 
         },
         onClickDefination: {
           action: "condition",
           callBack: () => {
-            generatePdfAndDownload(
-              state,
-              dispatch,
-              "print",
-              applicationNumber,
-              tenant
-            );
+            const { Licenses } = state.screenConfiguration.preparedFinalObject;
+                      downloadAcknowledgementForm(Licenses,'print');
           }
         },
       }
@@ -204,32 +185,24 @@ const getAcknowledgementCard = (
                 onClick: {
                   action: "condition",
                   callBack: () => {
-                    generatePdfAndDownload(
-                      state,
-                      dispatch,
-                      "download",
-                      applicationNumber,
-                      tenant
-                    );
+                    
+                    const { Licenses } = state.screenConfiguration.preparedFinalObject;
+                     downloadAcknowledgementForm(Licenses);
                   }
                 },
               },
               div2: getLabel({
                 labelName: "DOWNLOAD CONFIRMATION FORM",
-                labelKey: "NOC_APPLICATION_BUTTON_DOWN_CONF"
+                labelKey: "TL_APPLICATION_BUTTON_DOWN_CONF"
               })
 
             },
             onClickDefination: {
               action: "condition",
               callBack: () => {
-                generatePdfAndDownload(
-                  state,
-                  dispatch,
-                  "download",
-                  applicationNumber,
-                  tenant
-                );
+               
+                const { Licenses } = state.screenConfiguration.preparedFinalObject;
+                downloadAcknowledgementForm(Licenses);
               }
             },
           },
@@ -252,33 +225,25 @@ const getAcknowledgementCard = (
                onClick: {
                 action: "condition",
                 callBack: () => {
-                  generatePdfAndDownload(
-                    state,
-                    dispatch,
-                    "print",
-                    applicationNumber,
-                    tenant
-                  );
+                 
+                  const { Licenses } = state.screenConfiguration.preparedFinalObject;
+                      downloadAcknowledgementForm(Licenses,'print');
                 }
               },
 
               },
               div2: getLabel({
                 labelName: "PRINT CONFIRMATION FORM",
-                labelKey: "NOC_APPLICATION_BUTTON_PRINT_CONF"
+                labelKey: "TL_APPLICATION_BUTTON_PRINT_CONF"
               })
 
             },
             onClickDefination: {
               action: "condition",
               callBack: () => {
-                generatePdfAndDownload(
-                  state,
-                  dispatch,
-                  "print",
-                  applicationNumber,
-                  tenant
-                );
+                
+                const { Licenses } = state.screenConfiguration.preparedFinalObject;
+                      downloadAcknowledgementForm(Licenses,'print');
               }
             },
           }
