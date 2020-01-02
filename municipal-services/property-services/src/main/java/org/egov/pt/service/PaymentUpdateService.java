@@ -33,7 +33,7 @@ public class PaymentUpdateService {
 	private PropertyConfiguration config;
 
 	@Autowired
-	private Workflowservice wfIntegrator;
+	private WorkflowService wfIntegrator;
 
 	@Autowired
 	private Producer producer;

@@ -1,11 +1,13 @@
 package org.egov.pt.service;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.Difference;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
@@ -20,10 +22,6 @@ import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.validator.PropertyValidator;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.javers.common.collections.Sets;
-import org.javers.core.Javers;
-import org.javers.core.JaversBuilder;
-import org.javers.core.diff.Diff;
-import org.javers.core.diff.ListCompareAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -50,7 +48,7 @@ public class PropertyService {
     private UserService userService;
 
     @Autowired
-    private Workflowservice wfService;
+	private WorkflowService wfService;
     
     @Autowired
     private PropertyUtil util;
@@ -58,7 +56,7 @@ public class PropertyService {
 
     
 	/**
-	 * Assign Ids through enrichment and pushes to Kafka
+	 * Enriches the Request and pushes to the Queue
 	 *
 	 * @param request PropertyRequest containing list of properties to be created
 	 * @return List of properties successfully created
@@ -83,9 +81,9 @@ public class PropertyService {
 	public Property updateProperty(PropertyRequest request) {
 
 		Property propertyFromSearch = propertyValidator.validateUpdateRequest(request);
-		//userService.createUser(request);
+		enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
+		userService.createUser(request);
 		if (config.getIsWorkflowEnabled()){
-
 		}
 		else
 			producer.push(config.getUpdatePropertyTopic(), request);

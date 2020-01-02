@@ -89,17 +89,35 @@ public class EnrichmentService {
      * @param request  PropertyRequest received for property update
      * @param propertiesFromResponse Properties returned by calling search based on ids in PropertyRequest
      */
-    public void enrichUpdateRequest(PropertyRequest request,List<Property> propertiesFromResponse) {
+    public void enrichUpdateRequest(PropertyRequest request,Property propertyFromDb) {
     	
     	Property property = request.getProperty();
         RequestInfo requestInfo = request.getRequestInfo();
         AuditDetails auditDetails = propertyutil.getAuditDetails(requestInfo.getUserInfo().getId().toString(), false);
 
-		Map<String, Property> propertyIdMap = propertiesFromResponse.stream()
-				.collect(Collectors.toMap(Property::getId, Function.identity()));
+		if (!CollectionUtils.isEmpty(property.getDocuments()))
+			property.getDocuments().forEach(doc -> {
 
+				if (doc.getId() == null) {
+					doc.setId(UUID.randomUUID().toString());
+					doc.setStatus(Status.ACTIVE);
+				}
+			});
+		
+		property.getOwners().forEach(owner -> {
+
+			if (!CollectionUtils.isEmpty(owner.getDocuments()))
+				owner.getDocuments().forEach(doc -> {
+					if (doc.getId() == null) {
+						doc.setId(UUID.randomUUID().toString());
+						doc.setStatus(Status.ACTIVE);
+					}
+				});
+
+			owner.setStatus(Status.ACTIVE);
+		});
+		
             property.setAuditDetails(auditDetails);
-            Property propertyFromDb = propertyIdMap.get(property.getPropertyId());
             property.getAddress().setId(propertyFromDb.getAddress().getId());
     }
 

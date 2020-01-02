@@ -30,10 +30,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
-@Slf4j
 public class UserService {
 
     @Autowired
@@ -224,7 +221,8 @@ public class UserService {
      * @param uri The address of the endpoint
      * @return Response from user service as parsed as userDetailResponse
      */
-    private UserDetailResponse userCall(Object userRequest, StringBuilder uri) {
+    @SuppressWarnings("unchecked")
+	private UserDetailResponse userCall(Object userRequest, StringBuilder uri) {
     	
         String dobFormat = null;
         if(uri.toString().contains(userSearchEndpoint) || uri.toString().contains(userUpdateEndpoint))
@@ -233,8 +231,9 @@ public class UserService {
             dobFormat = "dd/MM/yyyy";
         try{
         	Optional<Object> response = serviceRequestRepository.fetchResult(uri, userRequest);
+        	
         	if(response.isPresent()) {
-        		LinkedHashMap responseMap = (LinkedHashMap)response.get();
+        		LinkedHashMap<String, Object> responseMap = (LinkedHashMap<String, Object>)response.get();
                 parseResponse(responseMap,dobFormat);
                 UserDetailResponse userDetailResponse = mapper.convertValue(responseMap,UserDetailResponse.class);
                 return userDetailResponse;
@@ -255,11 +254,16 @@ public class UserService {
      * @param responeMap LinkedHashMap got from user api response
      * @param dobFormat dob format (required because dob is returned in different format's in search and create response in user service)
      */
-    private void parseResponse(LinkedHashMap responeMap,String dobFormat){
-        List<LinkedHashMap> users = (List<LinkedHashMap>)responeMap.get("user");
+    @SuppressWarnings("unchecked")
+	private void parseResponse(LinkedHashMap<String, Object> responeMap,String dobFormat) {
+    	
+        List<LinkedHashMap<String, Object>> users = (List<LinkedHashMap<String, Object>>)responeMap.get("user");
         String format1 = "dd-MM-yyyy HH:mm:ss";
-        if(users!=null){
+        
+        if(null != users) {
+        	
             users.forEach( map -> {
+            	
                         map.put("createdDate",dateTolong((String)map.get("createdDate"),format1));
                         if((String)map.get("lastModifiedDate")!=null)
                             map.put("lastModifiedDate",dateTolong((String)map.get("lastModifiedDate"),format1));
