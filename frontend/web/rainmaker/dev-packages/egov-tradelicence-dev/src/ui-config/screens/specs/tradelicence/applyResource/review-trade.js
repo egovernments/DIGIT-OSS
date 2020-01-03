@@ -377,7 +377,7 @@ export const getReviewTrade = (isEditable = true) => {
         {
           jsonPath:"Licenses[0].tradeLicenseDetail.address.locality.code",
           localePrefix: {
-            moduleName: getQueryArg(window.location.href, "tenantId").replace('.','_').toUpperCase(),
+            moduleName: getQueryArg(window.location.href, "tenantId") ? getQueryArg(window.location.href, "tenantId").replace('.','_').toUpperCase():"",
             masterName: "REVENUE"
           }, callBack: checkValueForNA
         }
