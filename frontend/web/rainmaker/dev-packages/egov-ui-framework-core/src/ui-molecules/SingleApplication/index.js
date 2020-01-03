@@ -88,7 +88,7 @@ class SingleApplication extends React.Component {
     } else if (content.suffix) {
       LabelKey = `${get(item, content.jsonPath).replace(/[._:-\s\/]/g, "_")}${
         content.suffix
-        }`;
+      }`;
     } else {
       LabelKey = `${get(item, content.jsonPath)}`;
     }
@@ -151,26 +151,26 @@ class SingleApplication extends React.Component {
             );
           })
         ) : (
-            <div className="no-assessment-message-cont">
-              <Label
-                labelKey={"No results Found!"}
-                style={{ marginBottom: 10 }}
-              />
-              <Button
-                style={{
-                  height: 36,
-                  lineHeight: "auto",
-                  minWidth: "inherit"
-                }}
-                className="assessment-button"
-                variant="contained"
-                color="primary"
-                onClick={this.onButtonCLick}
-              >
-                <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
-              </Button>
-            </div>
-          )}
+          <div className="no-assessment-message-cont">
+            <Label
+              labelKey={"No results Found!"}
+              style={{ marginBottom: 10 }}
+            />
+            <Button
+              style={{
+                height: 36,
+                lineHeight: "auto",
+                minWidth: "inherit"
+              }}
+              className="assessment-button"
+              variant="contained"
+              color="primary"
+              onClick={this.onButtonCLick}
+            >
+              <Label labelKey={`${moduleName}_NEW_APPLICATION`} />
+            </Button>
+          </div>
+        )}
       </div>
     );
   }

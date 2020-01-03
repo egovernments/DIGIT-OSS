@@ -25,6 +25,12 @@ class CheckboxLabels extends React.Component {
     checkedG: false
   };
 
+  componentDidMount = () => {
+    const { preparedFinalObject, approveCheck, jsonPath } = this.props;
+    let isChecked = get(preparedFinalObject, jsonPath);
+    if (isChecked) this.setState({ checkedG: isChecked });
+  };
+
   handleChange = name => event => {
     const {
       sourceJsonPaths,
