@@ -570,7 +570,8 @@ const userAddressConstruct = address => {
   let buildingName = address.buildingName ? address.buildingName : "";
   let street = address.street ? address.street : "";
   let landmark = address.landmark ? address.landmark : "";
-  return `${doorNo},${buildingName},${street},${landmark}`;
+  let city = address.city ? address.city : "";
+  return `${doorNo},${buildingName},${street},${landmark},${city}`;
 };
 
 export const applyTradeLicense = async (state, dispatch, activeIndex) => {
@@ -628,11 +629,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       queryObject[0],
       "tradeLicenseDetail.owners[0].permanentAddress",
       permanantAddr
-    );
-    set(
-      queryObject[0],
-      "tradeLicenseDetail.owners[0].permanentCity",
-      userAddress.city
     );
     set(
       queryObject[0],

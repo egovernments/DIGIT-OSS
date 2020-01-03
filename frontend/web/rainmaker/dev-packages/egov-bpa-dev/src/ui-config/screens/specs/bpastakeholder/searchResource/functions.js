@@ -197,3 +197,41 @@ export const getWorkFlowData = async Licenses => {
     return [];
   }
 };
+
+export const getWorkFlowDataForBPA = async Licenses => {
+  var businessIds = [];
+  Licenses.forEach(item => {
+    businessIds.push(item.applicationNo);
+  });
+  const queryObject = [
+    {
+      key: "tenantId",
+      value: process.env.REACT_APP_DEFAULT_TENANT_ID
+    },
+    {
+      key: "businessIds",
+      value: businessIds
+    }
+  ];
+  try {
+    const payload = await httpRequest(
+      "post",
+      "egov-workflow-v2/egov-wf/process/_search",
+      "",
+      queryObject
+    );
+    var businessIdToOwnerMapping = {};
+    payload.ProcessInstances.filter(
+      record => record.moduleName.includes("BPA.")
+    ).forEach(item => {
+      businessIdToOwnerMapping[item.businessId] = {
+        assignee: item.assignee && item.assignee.name,
+        sla: item.sla
+      };
+    });
+    return businessIdToOwnerMapping;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};

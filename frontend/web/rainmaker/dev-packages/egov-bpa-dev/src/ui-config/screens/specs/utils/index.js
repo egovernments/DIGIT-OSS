@@ -2442,12 +2442,13 @@ export const addressDestruct = (action, state, dispatch) => {
   const buildingName = permanentAddress.split(",")[1] || null;
   const street = permanentAddress.split(",")[2] || null;
   const landmark = permanentAddress.split(",")[3] || null;
+  const cityfield = permanentAddress.split(",")[4] || null;
   const address = {
     doorNo,
     buildingName,
     street,
     landmark,
-    city: permanentCity,
+    city: cityfield,
     pincode: permanentPinCode
   };
 

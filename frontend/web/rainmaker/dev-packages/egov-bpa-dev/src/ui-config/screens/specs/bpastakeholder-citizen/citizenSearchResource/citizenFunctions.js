@@ -1,4 +1,4 @@
-import { getSearchResults } from "../../../../../ui-utils/commons";
+import { getSearchResults,getBpaSearchResults } from "../../../../../ui-utils/commons";
 import { httpRequest } from "../../../../../ui-utils";
 import {
   handleScreenConfigurationFieldChange as handleField,
@@ -6,7 +6,7 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import commonConfig from "config/common.js";
 import get from "lodash/get";
-import { getWorkFlowData } from "../../bpastakeholder/searchResource/functions";
+import { getWorkFlowData,getWorkFlowDataForBPA } from "../../bpastakeholder/searchResource/functions";
 import { getTextToLocalMapping } from "../../utils/index";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
@@ -42,6 +42,7 @@ export const fetchData = async (
   fromMyApplicationPage = false
 ) => {
   const response = await getSearchResults();
+  const bpaResponse = await getBpaSearchResults();
   const mdmsRes = await getMdmsData(dispatch);
   let tenants =
     mdmsRes &&
@@ -83,9 +84,10 @@ export const fetchData = async (
     // );
     /*Mseva 2.0 */
 
+    var searchConvertedArray = [];
     if (response && response.Licenses && response.Licenses.length > 0) {
       const businessIdToOwnerMapping = await getWorkFlowData(response.Licenses);
-      let searchConvertedArray = [];
+
       response.Licenses.forEach(element => {
         let service = getTextToLocalMapping(
           "MODULE_" + get(element, "businessService")
@@ -110,6 +112,7 @@ export const fetchData = async (
           applicationNumber: get(element, "applicationNumber", null),
           ownername: get(element, "tradeLicenseDetail.owners[0].name", null),
           businessService: service,
+          serviceType: "BPAREG",
           assignedTo: get(
             businessIdToOwnerMapping[element.applicationNumber],
             "assignee",
@@ -124,21 +127,60 @@ export const fetchData = async (
           tenantId: get(element, "tenantId", null)
         });
       });
-      dispatch(prepareFinalObject("searchResults", searchConvertedArray));
-      dispatch(
-        prepareFinalObject("myApplicationsCount", response.Licenses.length)
+
+    }
+    
+    if(bpaResponse && bpaResponse.Bpa && bpaResponse.Bpa.length > 0){
+
+    const businessIdToOwnerMappingForBPA = await getWorkFlowDataForBPA(bpaResponse.Bpa);
+    bpaResponse.Bpa.forEach(element => {
+      let service = getTextToLocalMapping(
+        "BPA_APPLICATIONTYPE_" + get(element, "applicationType")
       );
-      const myApplicationsCount = response.Licenses.length;
-      if (fromMyApplicationPage) {
-        dispatch(
-          handleField(
-            "my-applications",
-            "components.div.children.header.children.key",
-            "props.dynamicArray",
-            myApplicationsCount ? [myApplicationsCount] : [0]
-          )
-        );
-      }
+      service += " - "+getTextToLocalMapping(
+        "MODULE_" + get(element, "serviceType")
+      );
+      let primaryowner = "-";
+      let owners = get(element, "owners", [])
+      owners.map(item=>{
+        if(item.isPrimaryOwner)
+        {
+          primaryowner = item.name;
+        }
+      });
+      searchConvertedArray.push({
+        applicationNumber: get(element, "applicationNo", null),
+        ownername: primaryowner,
+        businessService: service,
+        assignedTo: get(
+          businessIdToOwnerMappingForBPA[element.applicationNo],
+          "assignee",
+          null
+        ),
+        status: get(element, "status", null),
+        sla: get(
+          businessIdToOwnerMappingForBPA[element.applicationNo],
+          "sla",
+          null
+        ),
+        tenantId: get(element, "tenantId", null)
+      })});
+    }
+
+    dispatch(prepareFinalObject("searchResults", searchConvertedArray));
+    dispatch(
+      prepareFinalObject("myApplicationsCount", searchConvertedArray.length)
+    );
+    const myApplicationsCount = searchConvertedArray.length;
+    if (fromMyApplicationPage) {
+      dispatch(
+        handleField(
+          "my-applications",
+          "components.div.children.header.children.key",
+          "props.dynamicArray",
+          myApplicationsCount ? [myApplicationsCount] : [0]
+        )
+      );
     }
   } catch (error) {
     console.log(error);

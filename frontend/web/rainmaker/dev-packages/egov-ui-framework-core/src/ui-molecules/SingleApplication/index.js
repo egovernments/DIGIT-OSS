@@ -38,11 +38,15 @@ class SingleApplication extends React.Component {
           return `/fire-noc/search-preview?applicationNumber=${item.fireNOCDetails.applicationNumber}&tenantId=${item.tenantId}`;
       }
     } else if (moduleName === "BPAREG") {
-      switch (item.status) {
-        case "INITIATED":
-          return `/bpastakeholder-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
-        default:
-          return `/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+      if (item.serviceType === "BPAREG") {
+        switch (item.status) {
+          case "INITIATED":
+            return `/bpastakeholder-citizen/apply?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+          default:
+            return `/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
+        }
+      } else {
+        return `/egov-bpa/search-preview?applicationNos=${item.applicationNumber}&tenantId=${item.tenantId}`;
       }
     } else if (moduleName === "PT-MUTATION") {
       switch (item.fireNOCDetails.status) {
