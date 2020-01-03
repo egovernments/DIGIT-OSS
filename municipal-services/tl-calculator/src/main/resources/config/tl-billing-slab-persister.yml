@@ -7,7 +7,7 @@ serviceMaps:
    fromTopic: save-tl-billingslab
    isTransaction: true
    queryMaps:
-    - query: INSERT INTO eg_tl_billingSlab(id, tenantid, licensetype, structuretype, tradetype, accessorycategory, type, uom, fromUom, toUom, rate, createdby, createdtime, lastmodifiedby, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, cast(? as double precision), cast(? as double precision), ?, ?, ?, ?, ?);
+    - query: INSERT INTO eg_tl_billingSlab(id, tenantid, licensetype, structuretype, tradetype, accessorycategory, type, uom, fromUom, toUom, rate, createdby, createdtime, lastmodifiedby, lastmodifiedtime, applicationtype) VALUES (?, ?, ?, ?, ?, ?, ?, ?, cast(? as double precision), cast(? as double precision), ?, ?, ?, ?, ?, ?);
 
       basePath: billingSlab.*
       jsonMaps:
@@ -42,6 +42,7 @@ serviceMaps:
 
        - jsonPath: $.billingSlab.*.auditDetails.lastModifiedTime
        
+       - jsonPath: $.billingSlab.*.applicationType
        
  - version: 1.0
    name: tl-calculator
@@ -49,7 +50,7 @@ serviceMaps:
    fromTopic: update-tl-billingslab
    isTransaction: true
    queryMaps:
-    - query: UPDATE eg_tl_billingSlab SET licensetype=?, structuretype=?, tradetype=?, accessorycategory=?, type=?, uom=?, fromUom=?, toUom=?, rate=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=? AND tenantid=?;
+    - query: UPDATE eg_tl_billingSlab SET licensetype=?, structuretype=?, tradetype=?, accessorycategory=?, type=?, uom=?, fromUom=?, toUom=?, rate=?, lastmodifiedby=?, lastmodifiedtime=?, applicationtype=? WHERE id=? AND tenantid=?;
 
       basePath: billingSlab.*
       jsonMaps:
@@ -75,6 +76,8 @@ serviceMaps:
        - jsonPath: $.billingSlab.*.auditDetails.lastModifiedBy
 
        - jsonPath: $.billingSlab.*.auditDetails.lastModifiedTime
+
+       - jsonPath: $.billingSlab.*.applicationType
        
        - jsonPath: $.billingSlab.*.id
 

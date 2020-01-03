@@ -34,6 +34,7 @@ public class BillingSlabRowMapper implements ResultSetExtractor<List<BillingSlab
 						.accessoryCategory(rs.getString("accessorycategory"))
 						.fromUom(rs.getDouble("fromUom"))
 						.licenseType(LicenseTypeEnum.fromValue(rs.getString("licensetype")))
+						.applicationType(rs.getString("applicationtype"))
 						.rate(getBigDecimalValue(rs.getBigDecimal("rate")))
 						.structureType(rs.getString("structuretype"))
 						.tenantId(rs.getString("tenantid"))

@@ -1,6 +1,8 @@
 package org.egov.tlcalculator.service;
 
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONObject;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tlcalculator.config.TLCalculatorConfigs;
 import org.egov.tlcalculator.kafka.broker.TLCalculatorProducer;
@@ -232,6 +234,7 @@ public class CalculationService {
               BillingSlabSearchCriteria searchCriteria = new BillingSlabSearchCriteria();
               searchCriteria.setTenantId(license.getTenantId());
               searchCriteria.setStructureType(license.getTradeLicenseDetail().getStructureType());
+              searchCriteria.setApplicationType(((JSONObject) license.getTradeLicenseDetail().getAdditionalDetail()).getAsString("applicationType"));
               searchCriteria.setLicenseType(license.getLicenseType().toString());
               searchCriteria.setTradeType(tradeUnit.getTradeType());
               if(tradeUnit.getUomValue()!=null)
