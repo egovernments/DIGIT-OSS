@@ -77,9 +77,9 @@ public class EnrichmentService {
 			owner.setStatus(Status.ACTIVE);
 		});
 
-		if(CollectionUtils.isEmpty(property.getInstitution()))
+		if (!CollectionUtils.isEmpty(property.getInstitution()))
 			property.getInstitution().forEach(institute -> institute.setId(UUID.randomUUID().toString()));
-		
+
 		property.setAuditDetails(propertyAuditDetails);
 
 		setIdgenIds(request);
@@ -119,7 +119,7 @@ public class EnrichmentService {
 			owner.setStatus(Status.ACTIVE);
 		});
 		
-		if (CollectionUtils.isEmpty(property.getInstitution()))
+		if (!CollectionUtils.isEmpty(property.getInstitution()))
 			property.getInstitution().forEach(institute -> {
 
 				if (null == institute.getId())
