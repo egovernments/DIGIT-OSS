@@ -67,7 +67,9 @@ import {
 import sortBy from "lodash/sortBy";
 import {
   getTenantId,
-  getUserInfo
+  getUserInfo,
+  getFinalData,
+  getAccessToken
 } from "egov-ui-kit/utils/localStorageUtils";
 import commonConfig from "config/common.js";
 import AcknowledgementCard from "egov-ui-kit/common/propertyTax/AcknowledgementCard";
@@ -75,7 +77,7 @@ import generateAcknowledgementForm from "egov-ui-kit/common/propertyTax/PaymentS
 import { getHeaderDetails } from "egov-ui-kit/common/propertyTax/PaymentStatus/Components/createReceipt";
 import DemandCollection from "egov-ui-kit/common/propertyTax/DemandCollection";
 
-class FormWizard extends Component {
+class FormWizardDataEntry extends Component {
   state = {
     dialogueOpen: false,
     financialYearFromQuery: "",
@@ -102,7 +104,8 @@ class FormWizard extends Component {
     nextButtonEnabled: true,
     calculationScreenData: [],
     assessedPropertyDetails: {},
-    imageUrl: ""
+    imageUrl: "",
+    finlYear: ""
   };
 
   updateTotalAmount = (value, isFullPayment, errorText) => {
@@ -341,7 +344,7 @@ class FormWizard extends Component {
     let { search } = location;
 
     showSpinner();
-    const { selected } = this.state;
+    const { selected, finlYear } = this.state;
 
     const isReasses = Boolean(
       getQueryValue(search, "isReassesment").replace("false", "")
@@ -352,6 +355,7 @@ class FormWizard extends Component {
     );
     const tenantId = getQueryValue(search, "tenantId");
     const draftUuid = getQueryValue(search, "uuid");
+    const tenantId1 = getTenantId() || "uk";
     const assessmentId =
       getQueryValue(search, "assessmentId") || fetchFromLocalStorage("draftId");
 
@@ -395,6 +399,13 @@ class FormWizard extends Component {
         );
       }
     }
+    fetchGeneralMDMSData(
+      null,
+      "BillingService",
+      ["TaxPeriod", "TaxHeadMaster"],
+      "",
+      tenantId1
+    );
     const { ownerInfoArr } = this.state;
 
     if (ownerInfoArr.length < 2) {
@@ -442,7 +453,7 @@ class FormWizard extends Component {
 
   getOwnerDetails = ownerType => {
     const { selected } = this.state;
-    const isReviewPage = selected === 3;
+    const isReviewPage = selected === 4;
     switch (ownerType) {
       case "SINGLEOWNER":
         return <OwnerInfoHOC disabled={isReviewPage} />;
@@ -545,7 +556,18 @@ class FormWizard extends Component {
             )}
           </div>
         );
+
       case 2:
+        return (
+          <div>
+            <DemandCollection
+              disabled={fromReviewPage}
+              datas={this.props.finalData}
+            />
+          </div>
+        );
+
+      case 3:
         const ownerType = getSelectedCombination(
           this.props.form,
           "ownershipType",
@@ -558,7 +580,7 @@ class FormWizard extends Component {
           </div>
         );
 
-      case 3:
+      case 4:
         return (
           <div className="review-pay-tab">
             <ReviewForm
@@ -578,7 +600,7 @@ class FormWizard extends Component {
           </div>
         );
 
-      case 4:
+      case 5:
         return (
           <div>
             <AcknowledgementCard
@@ -594,7 +616,7 @@ class FormWizard extends Component {
             />
           </div>
         );
-      case 5:
+      case 6:
         return (
           <div>
             <PaymentDetails
@@ -617,7 +639,7 @@ class FormWizard extends Component {
             />
           </div>
         );
-      case 6:
+      case 7:
         return (
           <div>
             <AcknowledgementCard
@@ -644,17 +666,17 @@ class FormWizard extends Component {
     );
 
     let buttonLabel = "PT_COMMONS_NEXT";
-    if (index == 3) {
+    if (index == 4) {
       isAssesment
         ? (buttonLabel = "PT_ASSESS_PROPERTY")
         : isReassesment
         ? (buttonLabel = "PT_UPDATE_ASSESSMENT")
         : (buttonLabel = "PT_ADD_ASSESS_PROPERTY");
-    } else if (index == 4) {
-      buttonLabel = "PT_PROCEED_PAYMENT";
     } else if (index == 5) {
-      buttonLabel = "PT_GENERATE_RECEIPT";
+      buttonLabel = "PT_PROCEED_PAYMENT";
     } else if (index == 6) {
+      buttonLabel = "PT_GENERATE_RECEIPT";
+    } else if (index == 7) {
       buttonLabel = "PT_DOWNLOAD_RECEIPT";
     }
 
@@ -896,6 +918,13 @@ class FormWizard extends Component {
         getImportantDates(this);
         break;
       case 2:
+        this.setState({
+          selected: index,
+          formValidIndexArray: [...formValidIndexArray, selected]
+        });
+        break;
+
+      case 3:
         if (
           window.appOverrides &&
           !window.appOverrides.validateForm("ownerInfo", form)
@@ -913,19 +942,19 @@ class FormWizard extends Component {
 
         const { ownershipType } = form;
         const estimateCall = () => {
-          estimate().then(estimateResponse => {
-            if (estimateResponse) {
-              window.scrollTo(0, 0);
-              this.setState({
-                estimation: estimateResponse && estimateResponse.Calculation,
-                totalAmountToBePaid:
-                  estimateResponse &&
-                  estimateResponse.Calculation &&
-                  estimateResponse.Calculation[0].totalAmount,
-                valueSelected: "Full_Amount"
-              });
-            }
-          });
+          // estimate().then(estimateResponse => {
+          //   if (estimateResponse) {
+          //     window.scrollTo(0, 0);
+          //     this.setState({
+          //       estimation: estimateResponse && estimateResponse.Calculation,
+          //       totalAmountToBePaid:
+          //         estimateResponse &&
+          //         estimateResponse.Calculation &&
+          //         estimateResponse.Calculation[0].totalAmount,
+          //       valueSelected: "Full_Amount"
+          //     });
+          //   }
+          // });
         };
         if (ownershipType) {
           const isOwnershipTypeFormValid = validateForm(ownershipType);
@@ -1010,15 +1039,11 @@ class FormWizard extends Component {
         }
         break;
 
-      case 3:
-        if (estimation[0].totalAmount < 0) {
-          alert("Property Tax amount cannot be Negative!");
-        } else {
-          window.scrollTo(0, 0);
-          createAndUpdate(index);
-        }
-        break;
       case 4:
+        window.scrollTo(0, 0);
+        createAndUpdate(index);
+        break;
+      case 5:
         const { assessedPropertyDetails = {} } = this.state;
         const { Properties = [] } = assessedPropertyDetails;
         let propertyId = "";
@@ -1036,10 +1061,10 @@ class FormWizard extends Component {
         //     formValidIndexArray: [...formValidIndexArray, selected]
         //   });
         break;
-      case 5:
+      case 6:
         onPayButtonClick();
         break;
-      case 6:
+      case 7:
         pay();
         break;
     }
@@ -1295,151 +1320,156 @@ class FormWizard extends Component {
     } finally {
     }
   };
-
-  estimate = async () => {
-    let { form, common, showSpinner, hideSpinner } = this.props;
-    let prepareFormData = { ...this.props.prepareFormData };
-
-    showSpinner();
-    if (
-      get(
-        prepareFormData,
-        "Properties[0].propertyDetails[0].institution",
-        undefined
-      )
-    )
-      delete prepareFormData.Properties[0].propertyDetails[0].institution;
-    const financialYearFromQuery = getFinancialYearFromQuery();
-    const selectedownerShipCategoryType = get(
-      form,
-      "ownershipType.fields.typeOfOwnership.value",
-      ""
-    );
-    try {
-      if (financialYearFromQuery) {
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].financialYear",
-          financialYearFromQuery
-        );
-      }
-      if (selectedownerShipCategoryType === "SINGLEOWNER") {
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].owners",
-          getSingleOwnerInfo(this)
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].ownershipCategory",
-          get(
-            common,
-            `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`,
-            "INDIVIDUAL"
-          )
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].subOwnershipCategory",
-          selectedownerShipCategoryType
-        );
-      }
-      if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].owners",
-          getMultipleOwnerInfo(this)
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].ownershipCategory",
-          get(
-            common,
-            `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`,
-            "INDIVIDUAL"
-          )
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].subOwnershipCategory",
-          selectedownerShipCategoryType
-        );
-      }
-      if (
-        selectedownerShipCategoryType.toLowerCase().indexOf("institutional") !==
-        -1
-      ) {
-        const { instiObj, ownerArray } = getInstituteInfo(this);
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].owners",
-          ownerArray
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].institution",
-          instiObj
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].ownershipCategory",
-          get(form, "ownershipType.fields.typeOfOwnership.value", "")
-        );
-        set(
-          prepareFormData,
-          "Properties[0].propertyDetails[0].subOwnershipCategory",
-          get(form, "institutionDetails.fields.type.value", "")
-        );
-      }
-      const propertyDetails = normalizePropertyDetails(
-        prepareFormData.Properties,
-        this
-      );
-      let estimateResponse = await httpRequest(
-        "pt-calculator-v2/propertytax/_estimate",
-        "_estimate",
-        [],
-        {
-          CalculationCriteria: [
-            {
-              assessmentYear: financialYearFromQuery,
-              tenantId:
-                prepareFormData.Properties[0] &&
-                prepareFormData.Properties[0].tenantId,
-              property: propertyDetails[0]
-            }
-          ]
-        }
-      );
-      const tenantId =
-        prepareFormData.Properties[0] && prepareFormData.Properties[0].tenantId;
-      const calculationScreenData = await getCalculationScreenData(
-        get(estimateResponse, "Calculation[0].billingSlabIds", []),
-        tenantId,
-        this
-      );
-      this.setState({ calculationScreenData: calculationScreenData.data });
-      return estimateResponse;
-    } catch (e) {
-      if (e.message) {
-        alert(e.message);
-      } else
-        this.props.toggleSnackbarAndSetText(
-          true,
-          {
-            labelName: "Error calculating tax!",
-            labelKey: "ERR_ERROR_CALCULATING_TAX"
-          },
-          "error"
-        );
-    } finally {
-      hideSpinner();
-    }
-  };
+  //
+  // estimate = async () => {
+  //   let { form, common, showSpinner, hideSpinner } = this.props;
+  //   let prepareFormData = { ...this.props.prepareFormData };
+  //
+  //   showSpinner();
+  //   if (
+  //     get(
+  //       prepareFormData,
+  //       "Properties[0].propertyDetails[0].institution",
+  //       undefined
+  //     )
+  //   )
+  //     delete prepareFormData.Properties[0].propertyDetails[0].institution;
+  //   const financialYearFromQuery = getFinancialYearFromQuery();
+  //   const selectedownerShipCategoryType = get(
+  //     form,
+  //     "ownershipType.fields.typeOfOwnership.value",
+  //     ""
+  //   );
+  //   try {
+  //     if (financialYearFromQuery) {
+  //       set(
+  //         prepareFormData,
+  //         "Properties[0].propertyDetails[0].financialYear",
+  //         financialYearFromQuery
+  //       );
+  //     }
+  //     if (selectedownerShipCategoryType === "SINGLEOWNER") {
+  //       set(
+  //         prepareFormData,
+  //         "Properties[0].propertyDetails[0].owners",
+  //         getSingleOwnerInfo(this)
+  //       );
+  //       set(
+  //         prepareFormData,
+  //         "Properties[0].propertyDetails[0].ownershipCategory",
+  //         get(
+  //           common,
+  //           `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`,
+  //           "INDIVIDUAL"
+  //         )
+  //       );
+  //       set(
+  //         prepareFormData,
+  //         "Properties[0].propertyDetails[0].subOwnershipCategory",
+  //         selectedownerShipCategoryType
+  //       );
+  //     }
+  //     if (selectedownerShipCategoryType === "MULTIPLEOWNERS") {
+  //       set(
+  //         prepareFormData,
+  //         "Properties[0].propertyDetails[0].owners",
+  //         getMultipleOwnerInfo(this)
+  //       );
+  //       set(
+  //         prepareFormData,
+  //         "Properties[0].propertyDetails[0].ownershipCategory",
+  //         get(
+  //           common,
+  //           `generalMDMSDataById.SubOwnerShipCategory[${selectedownerShipCategoryType}].ownerShipCategory`,
+  //           "INDIVIDUAL"
+  //         )
+  //       );
+  //       set(
+  //         prepareFormData,
+  //         "Properties[0].propertyDetails[0].subOwnershipCategory",
+  //         selectedownerShipCategoryType
+  //       );
+  //     }
+  //     if (
+  //       selectedownerShipCategoryType.toLowerCase().indexOf("institutional") !==
+  //       -1
+  //     ) {
+  //       const { instiObj, ownerArray } = getInstituteInfo(this);
+  //       set(
+  //         prepareFormData,
+  //         "Properties[0].propertyDetails[0].owners",
+  //         ownerArray
+  //       );
+  //       set(
+  //         prepareFormData,
+  //         "Properties[0].propertyDetails[0].institution",
+  //         instiObj
+  //       );
+  //       set(
+  //         prepareFormData,
+  //         "Properties[0].propertyDetails[0].ownershipCategory",
+  //         get(form, "ownershipType.fields.typeOfOwnership.value", "")
+  //       );
+  //       set(
+  //         prepareFormData,
+  //         "Properties[0].propertyDetails[0].subOwnershipCategory",
+  //         get(form, "institutionDetails.fields.type.value", "")
+  //       );
+  //     }
+  //     const propertyDetails = normalizePropertyDetails(
+  //       prepareFormData.Properties,
+  //       this
+  //     );
+  //
+  // //     const finalyr=getFinalData();
+  // //     const financialYears=finalyr[0].financialYear;
+  // // propertyDetails[0].propertyDetails[0]["financialYear"]=financialYears;
+  // // console.log("propertyDetails:",propertyDetails);
+  //     let estimateResponse = await httpRequest(
+  //       "pt-calculator-v2/propertytax/_estimate",
+  //       "_estimate",
+  //       [],
+  //       {
+  //         CalculationCriteria: [
+  //           {
+  //             assessmentYear: financialYearFromQuery,
+  //             tenantId:
+  //               prepareFormData.Properties[0] &&
+  //               prepareFormData.Properties[0].tenantId,
+  //             property: propertyDetails[0]
+  //           }
+  //         ]
+  //       }
+  //     );
+  //     const tenantId =
+  //       prepareFormData.Properties[0] && prepareFormData.Properties[0].tenantId;
+  //     const calculationScreenData = await getCalculationScreenData(
+  //       get(estimateResponse, "Calculation[0].billingSlabIds", []),
+  //       tenantId,
+  //       this
+  //     );
+  //     this.setState({ calculationScreenData: calculationScreenData.data });
+  //     return estimateResponse;
+  //   } catch (e) {
+  //     if (e.message) {
+  //       alert(e.message);
+  //     } else
+  //       this.props.toggleSnackbarAndSetText(
+  //         true,
+  //         {
+  //           labelName: "Error calculating tax!",
+  //           labelKey: "ERR_ERROR_CALCULATING_TAX"
+  //         },
+  //         "error"
+  //       );
+  //   } finally {
+  //     hideSpinner();
+  //   }
+  // };
   createAndUpdate = async index => {
     const { selected, formValidIndexArray } = this.state;
     const financialYearFromQuery = getFinancialYearFromQuery();
-    let { form, common, location, hideSpinner } = this.props;
+    let { form, common, location, hideSpinner, DemandProperties } = this.props;
     const { search } = location;
     const propertyId = getQueryValue(search, "propertyId");
     const assessmentId = getQueryValue(search, "assessmentId");
@@ -1573,6 +1603,25 @@ class FormWizard extends Component {
         prepareFormData.Properties,
         this
       );
+
+      const finalyears = getFinalData();
+      const finalPropertyData = [];
+      const financialYer = DemandProperties[0].propertyDetails[0].demand.map(
+        (propertyData, index) => {
+          let yeardatas = Object.keys(propertyData.demand).map(
+            (yeardata, ind) => yeardata
+          )[0];
+          finalPropertyData.push({
+            financialYear: yeardatas,
+            ...properties[0].propertyDetails[0],
+            additionalDetails: null,
+            institution: null,
+            source: "LEGACY_RECORD",
+            assessmentDate: new Date().getTime()
+          });
+        }
+      );
+      properties[0].propertyDetails = finalPropertyData;
       let createPropertyResponse = await httpRequest(
         `pt-services-v2/property/${propertyMethodAction}`,
         `${propertyMethodAction}`,
@@ -1581,8 +1630,53 @@ class FormWizard extends Component {
           Properties: properties
         }
       );
+      const demandData = [];
+      const demandDetails = [];
+      const demandDetails1 = [];
+      const finaldemand = DemandProperties[0].propertyDetails[0].demand.map(
+        (demand, index) => {
+          return Object.keys(demand.demand).map((data, key) => {
+            return (
+              demand.demand[data].map((d, i) => {
+                demandDetails1.push({
+                  taxHeadMasterCode: d.PT_TAXHEAD,
+                  taxAmount: d.PT_DEMAND,
+                  collectionAmount: d.PT_COLLECTED
+                });
+              }),
+              demandData.push({
+                tenantId: getTenantId(),
+                consumerCode: get(
+                  createPropertyResponse,
+                  "Properties[0].propertyId"
+                ),
+                consumerType: "BUILTUP",
+                businessService: "PT",
+                taxPeriodFrom: new Date().getTime(),
+                taxPeriodTo: new Date().getTime(),
+                payer: {
+                  uuid: get(
+                    createPropertyResponse,
+                    "Properties[0].propertyDetails[0].owners[0].uuid"
+                  )
+                },
+                demandDetails: demandDetails1
+              })
+            );
+          });
+        }
+      );
+      let createDemandResponse = await httpRequest(
+        `billing-service/demand/${propertyMethodAction}`,
+        `${propertyMethodAction}`,
+        [],
+        {
+          Demands: demandData
+        }
+      );
       this.setState({
         assessedPropertyDetails: createPropertyResponse,
+        assessedDemandDetails: createDemandResponse,
         selected: index,
         formValidIndexArray: [...formValidIndexArray, selected]
       });
@@ -1967,7 +2061,7 @@ class FormWizard extends Component {
 }
 
 const mapStateToProps = state => {
-  const { form, common, app } = state || {};
+  const { form, common, app, screenConfiguration } = state || {};
   const { propertyAddress } = form;
   const { city } =
     (propertyAddress && propertyAddress.fields && propertyAddress.fields) || {};
@@ -1999,6 +2093,9 @@ const mapStateToProps = state => {
       ? localStorage.setItem("finalData", JSON.stringify(finalData))
       : "error";
   }
+  let { preparedFinalObject = {} } = screenConfiguration;
+  preparedFinalObject = { ...preparedFinalObject };
+  const { DemandProperties } = preparedFinalObject || {};
   return {
     form,
     currentTenantId,
@@ -2006,7 +2103,8 @@ const mapStateToProps = state => {
     common,
     finalData,
     app,
-    generalMDMSDataById
+    generalMDMSDataById,
+    DemandProperties
   };
 };
 
@@ -2044,4 +2142,29 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FormWizard);
+)(FormWizardDataEntry);
+
+// getGeneralData=()=>{
+//   let {fetchGeneralMDMSData,location,finalData}=this.props;
+//   let { search } = location;
+//   const {tenantId}=this.state;
+//   console.log("location:",location);
+//     const tenantId1 =getTenantId() || "uk";
+//     console.log("tenantId:;",tenantId,"tenantId1:",tenantId1);
+//   fetchGeneralMDMSData(
+//     null,
+//     "BillingService",
+//     ["TaxPeriod", "TaxHeadMaster"],
+//     "",
+//     tenantId1
+//   );
+// }
+// //
+// case 4:
+//   if (estimation[0].totalAmount < 0) {
+//     alert("Property Tax amount cannot be Negative!");
+//   } else {
+//     window.scrollTo(0, 0);
+//     createAndUpdate(index);
+//   }
+//   break;

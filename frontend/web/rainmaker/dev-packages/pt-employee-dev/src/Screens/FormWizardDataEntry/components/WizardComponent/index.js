@@ -9,6 +9,7 @@ import "./index.css";
 const ptSteps = [
   "PT_PROPERTY_ADDRESS_SUB_HEADER",
   "PT_ASSESMENT_INFO_SUB_HEADER",
+  "PT_DEMAND_AND_COLLECTION",
   "PT_OWNERSHIP_INFO_SUB_HEADER",
   "PT_COMMON_SUMMARY"
 ];
@@ -37,7 +38,7 @@ const WizardComponent = ({
     <div className={`wizard-cont active-step-${selected}`}>
       {/*<BreadCrumbsForm onTabClick={onTabClick} selected={selected} formValidIndexArray={formValidIndexArray} />*/}
 
-      {selected < 4 && <div><Stepper
+      {selected < 5 && <div><Stepper
         activeStep={selected}
         alternativeLabel
         style={{
@@ -61,7 +62,7 @@ const WizardComponent = ({
       <div id="tax-wizard-buttons" className="wizard-footer col-sm-10" style={{ textAlign: "right" }}>
         <div className="button-container col-xs-10" style={{ float: "right" }}>
 
-            {selected != 3 && selected != 5 && selected != 4 && <Button
+           {selected != 5 && selected != 4 && <Button
             label={<Label buttonLabel={true} label={backLabel} color="#fe7a51" />}
             onClick={() => {
               selected - 1 === -1 ? history.push("/property-tax") : onTabClick(selected - 1);
@@ -70,7 +71,7 @@ const WizardComponent = ({
             buttonStyle={{ border: "1px solid #fe7a51" }}
             style={{ marginRight: 45, width: "30%" }}
           />}
-          {selected == 4 && <Button
+          {selected == 5 && <Button
             label={<Label buttonLabel={true} label={backLabel} color="#fe7a51" />}
             onClick={() => {
               downloadAcknowledgementForm();
