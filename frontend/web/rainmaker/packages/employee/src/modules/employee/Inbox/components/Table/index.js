@@ -146,7 +146,7 @@ class InboxData extends React.Component {
                       if (item.subtext) {
                         return (
                           <TableCell className={classNames}>
-                            <div onClick={() => getModuleLink(item, row, index)} className="inbox-cell-text">{<a onClick={() => getModuleLink(item, row, index)}>{item.text} </a>}</div>
+                            <div onClick={() => getModuleLink(item, row, index)} className="inbox-cell-text">{<a >{item.text} </a>}</div>
                             <div className="inbox-cell-subtext">{<Label label={`CS_COMMON_INBOX_${item.subtext.toUpperCase()}`} color="#000000" />}</div>
                           </TableCell>
                         );
