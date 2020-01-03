@@ -74,7 +74,7 @@ class MyProperties extends Component {
       renderCustomTitle,
       numProperties
     } = this.props;
-    fetchProperties([{ key: "accountId", value: userInfo.uuid }]); //Unnecessary API call to prevent page break on reload
+    fetchProperties([ ]); //Unnecessary API call to prevent page break on reload
     renderCustomTitle(numProperties);
     title && addBreadCrumbs({ title: title, path: window.location.pathname });
   };
