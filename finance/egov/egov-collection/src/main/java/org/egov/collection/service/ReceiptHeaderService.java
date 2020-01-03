@@ -62,6 +62,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.egov.billsaccounting.services.VoucherConstant;
 import org.egov.collection.constants.CollectionConstants;
@@ -1635,6 +1636,8 @@ public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long
                     .totalDue(bill.getTotalAmount())
                     .totalAmountPaid(bill.getTotalAmount())
                     .tenantId(microserviceUtils.getTenentId())
+                    .manualReceiptDate(receiptHeader.getManualreceiptdate() != null ? receiptHeader.getManualreceiptdate().getTime() : null)
+                    .manualReceiptNumber(receiptHeader.getManualreceiptnumber())
                     .build();
             paymentDetails.add(pd);
         });

@@ -818,7 +818,7 @@ public class RemittanceServiceImpl extends RemittanceService {
                     .toDate(endDate.getTime())
                     .build()
                     );
-            payments.stream().forEach(payment -> {
+            payments.stream().filter(payment -> receiptInstrumentMap.containsKey(payment.getId())).forEach(payment -> {
                 Set<String> receiptNumbers = payment.getPaymentDetails().stream().map(PaymentDetail::getReceiptNumber).collect(Collectors.toSet());
                 Set<String> services = payment.getPaymentDetails().stream().map(PaymentDetail::getBusinessService).collect(Collectors.toSet());
                 ReceiptBean rb1 = new ReceiptBean();
