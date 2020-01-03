@@ -21,8 +21,8 @@ import get from "lodash/get";
 import set from "lodash/set";
 import { getAppSearchResults } from "../../../../ui-utils/commons";
 import { searchBill } from "../utils/index";
-import generatePdf from "../utils/receiptPdf";
-import { loadPdfGenerationData } from "../utils/receiptTransformer";
+import generatePdf from "../utils/generatePdfForBpa";
+import { loadPdfGenerationDataForBpa } from "../utils/receiptTransformer";
 import { citizenFooter } from "./searchResource/citizenFooter";
 import { applicantSummary } from "./summaryResource/applicantSummary";
 import { basicSummary } from "./summaryResource/basicSummary"
@@ -323,7 +323,7 @@ const setSearchResponse = async (
 
   prepareDocumentsView(state, dispatch);
   //prepareUoms(state, dispatch);
-  await loadPdfGenerationData(applicationNumber, tenantId);
+  await loadPdfGenerationDataForBpa(applicationNumber, tenantId);
   setDownloadMenu(state, dispatch);
 };
 

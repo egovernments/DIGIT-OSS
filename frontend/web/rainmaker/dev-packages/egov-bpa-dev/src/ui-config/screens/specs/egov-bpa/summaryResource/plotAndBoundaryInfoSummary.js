@@ -77,52 +77,6 @@ export const  plotAndBoundaryInfoSummary = getCommonGrayCard({
             }
         }
     },
-    boundaryDetails: getHeader({
-        labelName: "Boundary Details",
-        labelKey: "BPA_BOUNDARY_DETAILS_TITLE"
-    }),
-    break1: getBreak(),
-    cardOne: {
-        uiFramework: "custom-containers",
-        componentPath: "MultiItem",
-        props: {
-            className: "applicant-summary",
-            scheama: getCommonGrayCard({
-                boundaryDetailsConatiner: getCommonContainer({
-                    circle: getLabelWithValue(
-                        {
-                            labelName: "Circle",
-                            labelKey: "BPA_BOUNDARY_CIRCLE_LABEL"
-                        },
-                        {
-                            jsonPath: "BPAs[0].BPADetails.boundarydetails.circle",
-                            callBack: value => {
-                                return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-                            }
-                        }
-                    ),
-                    revenueward: getLabelWithValue(
-                        {
-                            labelName: "Revenue Ward",
-                            labelKey: "BPA_BOUNDARY_REVENUE_WARD_LABEL"
-                        },
-                        {
-                            jsonPath:
-                                "BPAs[0].BPADetails.boundarydetails.revenueward"
-                        }
-                    )
-                })
-            }),
-            items: [],
-            hasAddItem: false,
-            isReviewPage: true,
-            sourceJsonPath: "BPAs[0].BPADetails.boundarydetails",
-            prefixSourceJsonPath:
-                "children.cardContent.children.applicantContainer.children",
-            afterPrefixJsonPath: "children.value.children.key"
-        },
-        type: "array"
-    },
     DetailsOfPlot: getHeader({
         labelName: "Details Of Plot",
         labelKey: "BPA_BOUNDARY_PLOT_DETAILS_TITLE"

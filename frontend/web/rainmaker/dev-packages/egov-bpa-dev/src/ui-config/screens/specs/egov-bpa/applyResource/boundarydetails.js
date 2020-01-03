@@ -8,90 +8,6 @@ import {
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import "./index.css";
 
-export const boundaryDetails = getCommonCard({
-    header: getCommonTitle(
-        {
-            labelName: "Boundary Details",
-            labelKey: "BPA_BOUNDARY_DETAILS_TITLE"
-        },
-        {
-            style: {
-                marginBottom: 18
-            }
-        }
-    ),
-    boundaryDetailsConatiner: getCommonContainer({
-        circle: {
-            ...getSelectField({
-                label: {
-                    labelName: "Circle",
-                    labelKey: "BPA_BOUNDARY_CIRCLE_LABEL"
-                },
-                placeholder: {
-                    labelName: "Select Circle",
-                    labelKey: "BPA_BOUNDARY_CIRCLE_PLACEHOLDER"
-                },
-                required: true,
-                jsonPath: "BPAs[0].BPADetails.boundarydetails.circle",
-                props: {
-                    className: "textfield-enterable-selection",
-                    data: [
-                        {
-                            value: "Circle 1",
-                            label: "Circle 1"
-                        },
-                        {
-                            value: "Circle 2",
-                            label: "Circle 2"
-                        }
-                    ],
-                    optionValue: "value",
-                    optionLabel: "label"
-                },
-                gridDefination: {
-                    xs: 12,
-                    sm: 12,
-                    md: 6
-                  }
-            })
-        },
-        revenueward: {
-            ...getSelectField({
-                label: {
-                    labelName: "Revenue Ward",
-                    labelKey: "BPA_BOUNDARY_REVENUE_WARD_LABEL"
-                },
-                placeholder: {
-                    labelName: "Select Revenue Ward",
-                    labelKey: "BPA_BOUNDARY_REVENUE_WARD_PLACEHOLDER"
-                },
-                required: true,
-                jsonPath: "BPAs[0].BPADetails.boundarydetails.revenueward",
-                props: {
-                    className: "textfield-enterable-selection",
-                    data: [
-                        {
-                            value: "Ward 1",
-                            label: "Ward 1"
-                        },
-                        {
-                            value: "Ward 2",
-                            label: "Ward 2"
-                        }
-                    ],
-                    optionValue: "value",
-                    optionLabel: "label"
-                },
-                gridDefination: {
-                    xs: 12,
-                    sm: 12,
-                    md: 6
-                  }
-            })
-        },
-    })
-});
-
 export const detailsofplot = getCommonCard({
     header: getCommonTitle(
         {
@@ -159,7 +75,7 @@ export const detailsofplot = getCommonCard({
                 props: {
                     className: "textfield-enterable-selection",
                   },
-                required: true,
+                // required: true,
                 // // pattern: getPattern("Name") || null,
                 jsonPath: "BPAs[0].BPADetails.plotdetails.holdingnumber",
                 gridDefination: {

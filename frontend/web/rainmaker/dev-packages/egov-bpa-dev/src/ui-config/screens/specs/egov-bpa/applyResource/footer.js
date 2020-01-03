@@ -16,11 +16,10 @@ import {
 import { prepareFinalObject, handleScreenConfigurationFieldChange as handleField } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 const setReviewPageRoute = (state, dispatch) => {
-  // let tenantId = get(
-  //   state,
-  //   "screenConfiguration.preparedFinalObject.BPA.address.city.value"
-  // );
-  const tenantId = getTenantId();
+  let tenantId = get(
+    state,
+    "screenConfiguration.preparedFinalObject.BPA.address.city"
+  ) || getQueryArg(window.location.href, "tenantId") || getTenantId();
   const applicationNumber = get(
     state,
     "screenConfiguration.preparedFinalObject.BPA.applicationNo"
@@ -188,9 +187,15 @@ const callBackForNext = async (state, dispatch) => {
       state,
       dispatch
     );
+    let isLocationDetailsCardValid = validateFields(
+      "components.div.children.formwizardFirstStep.children.bpaLocationDetails.children.cardContent.children.bpaDetailsConatiner.children",
+      state,
+      dispatch
+    );
 
     if (
-      !isBasicDetailsCardValid
+      !isBasicDetailsCardValid ||
+      !isLocationDetailsCardValid
     ) {
       isFormValid = false;
       hasFieldToaster = true;
@@ -321,11 +326,7 @@ const callBackForNext = async (state, dispatch) => {
   }
 
   if (activeStep === 3) {
-    let isBoundaryDetailsCardValid = validateFields(
-      "components.div.children.formwizardFourthStep.children.boundaryDetails.children.cardContent.children.boundaryDetailsConatiner.children",
-      state,
-      dispatch
-    );
+   
     let isDetailsofplotCardValid = validateFields(
       "components.div.children.formwizardFourthStep.children.detailsofplot.children.cardContent.children.detailsOfPlotContainer.children",
       state,
@@ -333,7 +334,6 @@ const callBackForNext = async (state, dispatch) => {
     );
 
     if (
-      !isBoundaryDetailsCardValid ||
       !isDetailsofplotCardValid
     ) {
       isFormValid = false;
@@ -476,7 +476,24 @@ const callBackForNext = async (state, dispatch) => {
           }
         }
       } else {
-        responseStatus === "success" && changeStep(state, dispatch);
+        if(activeStep === 0){
+          const occupancytypeValid = get(
+            state,
+            "screenConfiguration.preparedFinalObject.scrutinyDetails.planDetail.planInformation.occupancy",
+            []
+          );
+          if(occupancytypeValid.length === 0){
+            let errorMessage = {
+              labelName: "Please search scrutiny details linked to the scrutiny number",
+              labelKey: "BPA_BASIC_DETAILS_SCRUTINY_NUMBER_SEARCH_TITLE"
+            };
+            dispatch(toggleSnackbar(true, errorMessage, "warning")); 
+          }else{
+            responseStatus === "success" && changeStep(state, dispatch);
+          }
+        }else{
+          responseStatus === "success" && changeStep(state, dispatch);
+        }
       }
     } else if (hasFieldToaster) {
       let errorMessage = {

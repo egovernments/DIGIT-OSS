@@ -142,7 +142,13 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
   let method = applicationId ? "UPDATE" : "CREATE";
 
   let documentsUpdalod = get(
+    state,
     "screenConfiguration.preparedFinalObject.documentDetailsUploadRedux"
+  );
+
+  let nocDocumentsUpload = get (
+    state,
+    "screenConfiguration.preparedFinalObject.nocDocumentsUploadRedux"
   );
   
   let requiredDocuments = [];
@@ -163,10 +169,10 @@ export const createUpdateBpaApplication = async (state, dispatch, status) => {
       "BPA",
       []
     );
-    const tenantId = get(
-      state.screenConfiguration.preparedFinalObject,
-      "BPA.address.city"
-    );
+    let tenantId = get(
+      state,
+      "screenConfiguration.preparedFinalObject.BPA.address.city"
+    ) || getQueryArg(window.location.href, "tenantId") || getTenantId();
     set(payload, "tenantId", tenantId);
     set(payload, "action", status);
     

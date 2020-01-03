@@ -7,8 +7,7 @@ import {
   getCommonContainer,
   getPattern
 } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { getTodaysDateInYMD } from "../../utils";
-import { getScrutinyDetails } from "../../utils";
+import { getTodaysDateInYMD, calculationType, getScrutinyDetails } from "../../utils";
 import "./index.css";
 
 export const basicDetails = getCommonCard({
@@ -145,6 +144,9 @@ export const basicDetails = getCommonCard({
         xs: 12,
         sm: 12,
         md: 6
+      },
+      afterFieldChange: (action, state, dispatch) => {
+        calculationType(state, dispatch)
       }
     }),
     applicationdate: getDateField({
@@ -152,7 +154,7 @@ export const basicDetails = getCommonCard({
         labelName: "Application Date",
         labelKey: "BPA_BASIC_DETAILS_APP_DATE_LABEL"
       },
-      jsonPath: "bpa.appdate",
+      jsonPath: "BPA.appdate",
       props: {
         disabled: true
       },
@@ -167,10 +169,10 @@ export const basicDetails = getCommonCard({
         labelName: "Application Fee",
         labelKey: "BPA_BASIC_DETAILS_APP_FEE_LABEL"
       },
-      jsonPath: "BPA.appfee",
-      value: 1000,
+      jsonPath: "BPAs[0].appfee",
+      // value: 1000,
       props: {
-        value: 100,
+        // value: 100,
         disabled: true
       },
       gridDefination: {
@@ -188,7 +190,7 @@ export const basicDetails = getCommonCard({
         labelName: "Enter Remarks Here",
         labelKey: "BPA_BASIC_DETAILS_REMARKS_PLACEHOLDER"
       },
-      jsonPath: "BPA.remarks",
+      jsonPath: "BPAs[0].remarks",
       props:{
         className:"textfield-enterable-selection"
       },

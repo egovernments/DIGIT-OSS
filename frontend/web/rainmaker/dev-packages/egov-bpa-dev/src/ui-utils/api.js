@@ -8,7 +8,8 @@ import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/a
 import {
   getAccessToken,
   getTenantId,
-  getLocale
+  getLocale,
+  getUserInfo
 } from "egov-ui-kit/utils/localStorageUtils";
 
 const instance = axios.create({
@@ -51,6 +52,8 @@ const wrapRequestBody = (requestBody, action, customRequestInfo) => {
 
 const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
   const authToken = getAccessToken();
+  const userInfo = JSON.parse(getUserInfo());
+  const uuid = userInfo.uuid;
   let RequestInfo = {
     "apiId": "1",
     "ver": "1",
@@ -62,8 +65,8 @@ const wrapEdcrRequestBody = (requestBody, action, customRequestInfo) => {
     "correlationId": "wefiuweiuff897",
     authToken,
     "userInfo": {
-        "id":1,
-        "tenantId": "generic"
+        "id": uuid,
+        "tenantId": getTenantId()
     }
   };
 

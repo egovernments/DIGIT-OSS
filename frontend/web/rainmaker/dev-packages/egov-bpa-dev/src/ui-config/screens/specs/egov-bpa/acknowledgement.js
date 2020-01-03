@@ -13,15 +13,15 @@ import {
 } from "./acknowledgementResource/footers";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getBpaSearchResults } from "../../../../ui-utils/commons";
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
-import generatePdf from "../utils/receiptPdf";
+import generatePdf from "../utils/generatePdfForBpa";
 import { Icon } from "egov-ui-framework/ui-atoms";
 // import { loadReceiptGenerationData } from "../utils/receiptTransformer";
 import set from "lodash/set";
 import get from "lodash/get";
 import { getCurrentFinancialYear } from "../utils";
-import { loadPdfGenerationData } from "../utils/receiptTransformer";
+import { loadPdfGenerationDataForBpa } from "../utils/receiptTrasformerForBpa";
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 export const header = getCommonContainer({
   header: getCommonHeader({
@@ -69,7 +69,7 @@ const getAcknowledgementCard = (
   tenant
 ) => {
   if (purpose === "apply" && status === "success") {
-    loadPdfGenerationData(applicationNumber, tenant);
+    loadPdfGenerationDataForBpa(applicationNumber, tenant);
     return {
       header:getHeader(applicationNumber),
       applicationSuccessCard: {
@@ -194,7 +194,7 @@ const getAcknowledgementCard = (
       )
     };
   } else if (purpose === "pay" && status === "success") {
-    loadPdfGenerationData(applicationNumber, tenant);
+    loadPdfGenerationDataForBpa(applicationNumber, tenant);
     return {
       header,
       applicationSuccessCard: {
@@ -224,7 +224,7 @@ const getAcknowledgementCard = (
       paymentSuccessFooter: paymentSuccessFooter()
     };
   } else if (purpose === "approve" && status === "success") {
-    loadPdfGenerationData(applicationNumber, tenant);
+    loadPdfGenerationDataForBpa(applicationNumber, tenant);
     return {
       header,
       applicationSuccessCard: {
@@ -452,12 +452,12 @@ const setApplicationData = async (dispatch, applicationNumber, tenant) => {
       value: tenant
     },
     {
-      key: "applicationNumber",
+      key: "applicationNos",
       value: applicationNumber
     }
   ];
-  const response = await getSearchResults(queryObject);
-  dispatch(prepareFinalObject("BPA", get(response, "BPA", [])));
+  const response = await getBpaSearchResults(queryObject);
+  dispatch(prepareFinalObject("BPA", get(response, "Bpa", [])));
 };
 
 const screenConfig = {

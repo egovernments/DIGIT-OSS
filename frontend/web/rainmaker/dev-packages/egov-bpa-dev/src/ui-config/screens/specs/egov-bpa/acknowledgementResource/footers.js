@@ -1,6 +1,6 @@
 import { getLabel } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { ifUserRoleExists } from "../../utils";
-import generatePdf from "../../utils/receiptPdf";
+import generatePdf from "../../utils/generatePdfForBpa";
 import "./index.css";
 
 export const getRedirectionURL = () => {

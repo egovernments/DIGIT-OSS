@@ -26,8 +26,7 @@ export const bpaLocationDetails = getCommonCard(
         }
       }
     ),
-
-    tradeDetailsConatiner: getCommonContainer({
+    bpaDetailsConatiner: getCommonContainer({
       tradeLocCity: {
         ...getSelectField({
           label: {
@@ -45,7 +44,7 @@ export const bpaLocationDetails = getCommonCard(
           required: true,
           props: {
             required: true,
-            // disabled: true
+            disabled: true
           }
         }),
         beforeFieldChange: async (action, state, dispatch) => {
@@ -113,38 +112,39 @@ export const bpaLocationDetails = getCommonCard(
           }
         }
       },
+      // tradeLocPropertyID: getTextField({
+      //   label: {
+      //     labelName: "Property ID",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Enter Property ID",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_PLACEHOLDER"
+      //   },
+      //   props: {
+      //     className: "textfield-enterable-selection",
+      //     hide: true
+      //   },
+      //   iconObj: {
+      //     iconName: "search",
+      //     position: "end",
+      //     color: "#FE7A51",
+      //     onClickDefination: {
+      //       action: "condition",
+      //       callBack: (state, dispatch) => {
+      //         geBpatDetailsFromProperty(state, dispatch);
+      //       }
+      //     }
+      //   },
+      //   title: {
+      //     value:
+      //       "If you have already assessed your property, then please search your property by your PAID",
+      //     key: "TL_PROPERTY_ID_TOOLTIP_MESSAGE"
+      //   },
+      //   infoIcon: "info_circle",
+      //   jsonPath: "BPA.propertyId"
+      // }),
 
-      tradeLocPropertyID: getTextField({
-        label: {
-          labelName: "Property ID",
-          labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Property ID",
-          labelKey: "TL_NEW_TRADE_DETAILS_PT_ID_PLACEHOLDER"
-        },
-        props: {
-          className: "textfield-enterable-selection"
-        },
-        iconObj: {
-          iconName: "search",
-          position: "end",
-          color: "#FE7A51",
-          onClickDefination: {
-            action: "condition",
-            callBack: (state, dispatch) => {
-              geBpatDetailsFromProperty(state, dispatch);
-            }
-          }
-        },
-        title: {
-          value:
-            "If you have already assessed your property, then please search your property by your PAID",
-          key: "TL_PROPERTY_ID_TOOLTIP_MESSAGE"
-        },
-        infoIcon: "info_circle",
-        jsonPath: "BPA.propertyId"
-      }),
       tradeLocDoorHouseNo: getTextField({
         label: {
           labelName: "Door/House No.",
@@ -286,21 +286,21 @@ export const bpaLocationDetails = getCommonCard(
           }
         }
       },
-      tradeLocElectricity: getTextField({
-        label: {
-          labelName: "Electricity Connection No.",
-          labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_LABEL"
-        },
-        placeholder: {
-          labelName: "Enter Electricity Connection No. of Trade Loaction",
-          labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_PLACEHOLDER"
-        },
-        props: {
-          className: "textfield-enterable-selection"
-        },
-        jsonPath:
-          "BPA.additionalDetail.electricityConnectionNo"
-      })
+      // tradeLocElectricity: getTextField({
+      //   label: {
+      //     labelName: "Electricity Connection No.",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_LABEL"
+      //   },
+      //   placeholder: {
+      //     labelName: "Enter Electricity Connection No. of Trade Loaction",
+      //     labelKey: "TL_NEW_TRADE_DETAILS_ELEC_CON_NO_PLACEHOLDER"
+      //   },
+      //   props: {
+      //     className: "textfield-enterable-selection"
+      //   },
+      //   jsonPath:
+      //     "BPA.additionalDetail.electricityConnectionNo"
+      // })
     }),
     mapsDialog: {
       componentPath: "Dialog",

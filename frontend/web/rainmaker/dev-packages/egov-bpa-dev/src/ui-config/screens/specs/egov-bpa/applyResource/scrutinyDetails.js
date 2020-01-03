@@ -26,8 +26,8 @@ export const buildingPlanScrutinyDetails = getCommonCard({
   buildingPlanScrutinyDetailsContainer: getCommonContainer({
     buildingplanscrutinyapplicationnumber: getLabelWithValue(
       {
-        labelName: "Building permit application Number",
-        labelKey: "BPA_APPLICATION_BUILDING_PERMIT_NO_LABEL"
+        labelName: "eDCR Number",
+        labelKey: "BPA_EDCR_NO_LABEL"
       },
       {
         jsonPath: "scrutinyDetails.edcrNumber"
@@ -102,7 +102,8 @@ export const blockWiseOccupancyAndUsageDetails = getCommonCard({
         required: true,
         gridDefination: {
           xs: 12,
-          sm: 12
+          sm: 12,
+          md: 3
         },
         props: {
           style: {

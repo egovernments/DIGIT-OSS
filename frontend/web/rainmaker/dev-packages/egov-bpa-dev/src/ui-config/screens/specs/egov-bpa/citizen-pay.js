@@ -7,7 +7,7 @@ import {
 import { prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
-import { getSearchResults } from "../../../../ui-utils/commons";
+import { getBpaSearchResults } from "../../../../ui-utils/commons";
 import { generateBill, getCurrentFinancialYear } from "../utils";
 import estimateDetails from "./payResource/estimate-details";
 import { footer } from "./payResource/footer";
@@ -74,12 +74,12 @@ const fetchBill = async (state, dispatch, applicationNumber, tenantId) => {
 };
 
 const loadBpaData = async (dispatch, applicationNumber, tenantId) => {
-  const response = await getSearchResults([
+  const response = await getBpaSearchResults([
     {
       key: "tenantId",
       value: tenantId
     },
-    { key: "applicationNumber", value: applicationNumber }
+    { key: "applicationNos", value: applicationNumber }
   ]);
   dispatch(prepareFinalObject("BPA", get(response, "BPA", [])));
 };

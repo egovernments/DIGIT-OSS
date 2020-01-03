@@ -15,7 +15,6 @@ import {
 } from "./applyResource/scrutinyDetails";
 import { applicantDetails } from "./applyResource/applicantDetails";
 import {
-  boundaryDetails,
   detailsofplot
 } from "./applyResource/boundarydetails";
 import { documentDetails } from "./applyResource/documentDetails";
@@ -36,7 +35,7 @@ import {
   setApplicationNumberBox,
   prepareNOCUploadData
 } from "../../../../ui-utils/commons";
-import { getTodaysDateInYMD } from "../utils";
+import { getTodaysDateInYYYMMDD } from "../utils";
 import { getTenantMdmsData } from "../utils";
 
 export const stepsData = [
@@ -116,7 +115,6 @@ export const formwizardFourthStep = {
     id: "apply_form4"
   },
   children: {
-    boundaryDetails,
     detailsofplot
   },
   visible: false
@@ -183,6 +181,9 @@ const getMdmsData = async (action, state, dispatch) => {
             },
             {
               name: "RiskTypeComputation"
+            },
+            {
+              name: "CalculationType"
             }
           ]
         }
@@ -205,8 +206,8 @@ const getMdmsData = async (action, state, dispatch) => {
 };
 
 const getTodaysDate = async(action, state, dispatch) => {
-  const today = getTodaysDateInYMD();
-    dispatch(prepareFinalObject("bpa.appdate", today));
+  const today = getTodaysDateInYYYMMDD();
+    dispatch(prepareFinalObject("BPA.appdate", today));
 }
 
 const getFirstListFromDotSeparated = list => {

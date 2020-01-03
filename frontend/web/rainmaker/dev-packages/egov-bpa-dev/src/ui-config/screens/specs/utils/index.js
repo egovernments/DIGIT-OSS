@@ -1317,6 +1317,14 @@ export const getTodaysDateInYMD = () => {
   return date;
 };
 
+export const getTodaysDateInYYYMMDD = () => {
+  let date = new Date();
+  let month = date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+  let day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  date = `${date.getFullYear()}-${month}-${day}`;
+  return date;
+};
+
 export const getNextMonthDateInYMD = () => {
   //For getting date of same day but of next month
   let date = getTodaysDateInYMD();
@@ -2595,6 +2603,11 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
       `BPA.owners`,
       []
     );
+    let tenantId =
+    get(
+      state.screenConfiguration.preparedFinalObject,
+      "BPA.address.city"
+    ) || getQueryArg(window.location.href, "tenantId") || getTenantId();
     //owners from search call before modification.
     const oldOwnersArr = get(
       state.screenConfiguration.preparedFinalObject,
@@ -2661,7 +2674,7 @@ export const getBpaDetailsForOwner = async (state, dispatch, fieldInfo) => {
       //New number search only
       let payload = await httpRequest(
         "post",
-        "/user/_search?tenantId=pb",
+        "/user/_search?tenantId="+tenantId,
         "_search",
         [],
         {
@@ -2743,21 +2756,64 @@ const riskType = (state, dispatch) => {
     "scrutinyDetails.planDetail.blocks[0].building.occupancies[0].typeHelper.type", []
   );
   dispatch(prepareFinalObject("BPA.blocks", [block]));
-
   let scrutinyRiskType;
-  riskType.forEach(type => {
     if (
-      occupancyType === "Residential" &&
-      plotArea >= type.fromPlotArea &&
-      plotArea < type.toPlotArea &&
-      buildingHeight >= type.fromBuildingHeight &&
-      buildingHeight < type.toBuildingHeight
+      plotArea < riskType[2].toPlotArea &&
+      buildingHeight < riskType[2].toBuildingHeight
     ) {
-      scrutinyRiskType = type.riskType
-    }
-  });
+      scrutinyRiskType = "LOW"
+    } else if (
+      (plotArea >= riskType[1].fromPlotArea && plotArea <= riskType[1].toPlotArea) ||
+      (buildingHeight >= riskType[1].fromBuildingHeight && buildingHeight <= riskType[1].toBuildingHeight)) {
+      scrutinyRiskType = "MEDIUM"
+    } else if (
+      (plotArea > riskType[0].fromPlotArea) ||
+      (buildingHeight >= riskType[0].fromBuildingHeight)) {
+      scrutinyRiskType = "HIGH"
+    } 
   dispatch(prepareFinalObject("BPA.riskType", scrutinyRiskType));
 };
+
+export const calculationType = (state, dispatch) => {
+  const calculation = get(
+    state.screenConfiguration.preparedFinalObject,
+    "applyScreenMdmsData.BPA.CalculationType"
+  );
+  const appType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.applicationType"
+  );
+  const riskType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.riskType"
+  );
+  const serviceType = get(
+    state.screenConfiguration.preparedFinalObject,
+    "BPA.serviceType"
+  );
+  let amount;
+  if (serviceType) {
+    let filterOneCalculation = [], filterTwoCalculation = [];
+    calculation.forEach(type => {
+      if( (appType === type.applicationType || type.applicationType === "ALL") && type.feeType === "ApplicationFee"){
+        filterOneCalculation.push(type);
+      }
+    });
+
+    filterTwoCalculation.forEach(type => {
+      if((serviceType === type.serviceType || type.serviceType === "ALL")){
+        filterTwoCalculation.push(type);
+      }
+    });
+
+    filterOneCalculation.forEach(type => {
+      if((riskType === type.riskType || type.riskType === "ALL")){
+        amount = type.amount;
+      }
+    });
+    dispatch(prepareFinalObject("BPAs[0].appfee", amount));
+  }
+}
 
 export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
   try {
@@ -2766,11 +2822,12 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
       `BPA.edcrNumber`,
       ""
     );
-
-    const tenantId = get(
-      state.screenConfiguration.preparedFinalObject,
-      "BPA.address.city"
-    );
+    let tenantId =
+      getQueryArg(window.location.href, "tenantId") ||
+      get(
+        state.screenConfiguration.preparedFinalObject,
+        "BPA.address.city"
+      );
     if (!scrutinyNo || !scrutinyNo.match(getPattern("^[a-zA-Z0-9]*$"))) {
       dispatch(
         toggleSnackbar(
@@ -2791,6 +2848,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
         "&tenantId=" + tenantId,
       {}
     );
+    console.log(payload, "shdfjhsgfjhsgdhfg")
     payload = payload.edcrDetail;
     if (payload && payload.hasOwnProperty("length")) {
       if (payload.length === 0) {
@@ -2806,6 +2864,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
         );
       } else {
         const scrutinyData = payload && JSON.parse(JSON.stringify(payload));
+        console.log(scrutinyData , "kjsdfkjsdkjf")
 
         if (
           scrutinyData &&
@@ -2827,6 +2886,7 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
           state.screenConfiguration.preparedFinalObject,
           "BPA.address.city"
         );
+        let id = tenantId.split('.')[1];
         const city = scrutinyData[0].tenantId;
 
         if (tenantId === city) {
@@ -2837,7 +2897,8 @@ export const getScrutinyDetails = async (state, dispatch, fieldInfo) => {
           );
           currOwnersArr = scrutinyData[0];
           dispatch(prepareFinalObject(`scrutinyDetails`, currOwnersArr));
-          riskType(state, dispatch);
+          await riskType(state, dispatch);
+          await calculationType(state, dispatch);
         } else {
           dispatch(
             toggleSnackbar(
@@ -3279,7 +3340,7 @@ export const applyForm = (state, dispatch) => {
     "components.cityPickerDialog.children.dialogContent.children.popup.children.cityPicker.children",
     state,
     dispatch,
-    "search"
+    "home"
   );
 
   if (isTradeDetailsValid) {
@@ -3495,7 +3556,7 @@ export const getTenantMdmsData = async (action, state, dispatch) => {
     mdmsRes &&
     mdmsRes.MdmsRes &&
     mdmsRes.MdmsRes.tenant.citymodule.find(item => {
-      if (item.code === "TL") return true;
+      if (item.code === "BPAAPPLY") return true;
     });
   dispatch(
     prepareFinalObject(
@@ -3503,4 +3564,20 @@ export const getTenantMdmsData = async (action, state, dispatch) => {
       tenants
     )
   );
+};
+
+
+export const getMdmsDataForBpa = async queryObject => {
+  try {
+    const response = await httpRequest(
+      "post",
+      "/egov-mdms-service/v1/_search",
+      "",
+      queryObject
+    );
+    return response;
+  } catch (error) {
+    console.log(error);
+    return {};
+  }
 };

@@ -77,62 +77,6 @@ export const scrutinySummary = getCommonGrayCard({
             }
         }
     },
-    buildingPlanScrutinyApplicationDetails: getHeader({
-        labelName: "Building Plan Scrutiny Application Details",
-        labelKey: "BPA_APPLICATION_SCRUNITY_DETAILS_TITLE"
-    }),
-    break1: getBreak(),
-    cardOne: {
-        uiFramework: "custom-containers",
-        componentPath: "MultiItem",
-        props: {
-            className: "applicant-summary",
-            scheama: getCommonGrayCard({
-                buildingPlanScrutinyDetailsContainer: getCommonContainer({
-                    buildingplanscrutinyapplicationnumber: getLabelWithValue(
-                        {
-                            labelName: "Building permit application Number",
-                            labelKey: "BPA_APPLICATION_BUILDING_PERMIT_NO_LABEL"
-                        },
-                        {
-                            jsonPath: "BPAs[0].BPADetails.planscrutinydetails.appnum",
-                            callBack: value => {
-                                return value //`COMMON_MASTERS_OWNERSHIPCATEGORY_${getTransformedLocale(value)}`;
-                            }
-                        }
-                    ),
-                    uploadedfile: getLabelWithValue(
-                        {
-                            labelName: "Uploaded Diagram",
-                            labelKey: "BPA_APPLICATION_UPLOAD_DIAGRAM_LABEL"
-                        },
-                        {
-                            jsonPath:
-                                "BPAs[0].BPADetails.planscrutinydetails.diagram"
-                        }
-                    ),
-                    scrutinyreport: getLabelWithValue(
-                        {
-                            labelName: "Scrutiny Report",
-                            labelKey: "BPA_APPLICATION_SCRUNITY_REPORT_LABEL"
-                        },
-                        {
-                            jsonPath:
-                                "BPAs[0].BPADetails.planscrutinydetails.report"
-                        }
-                    )
-                })
-            }),
-            items: [],
-            hasAddItem: false,
-            isReviewPage: true,
-            sourceJsonPath: "FireNOCs[0].fireNOCDetails.applicantDetails.owners",
-            prefixSourceJsonPath:
-                "children.cardContent.children.applicantContainer.children",
-            afterPrefixJsonPath: "children.value.children.key"
-        },
-        type: "array"
-    },
     BlockWiseOccupancyAndUsageDetails: getHeader({
         labelName: "Block wise occupancy /sub occupancy and usage details",
         labelKey: "BPA_APPLICATION_BLOCK_WISE_OCCUPANCY_SUB_OCCUPANCY_USAGE_TITLE"

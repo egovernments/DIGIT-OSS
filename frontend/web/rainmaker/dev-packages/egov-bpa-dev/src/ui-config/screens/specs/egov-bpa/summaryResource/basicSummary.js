@@ -141,7 +141,7 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPA.appfee"
+                "ReceiptTemp[0].bill[0].totalAmount"
             }
           ),
           remarks: getLabelWithValue(
@@ -151,7 +151,7 @@ export const basicSummary = getCommonGrayCard({
             },
             {
               jsonPath:
-                "BPA.remarks"
+                "BPAs[0].remarks"
             }
           )
         })
