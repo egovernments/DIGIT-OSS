@@ -407,7 +407,7 @@ public class BillReceiptInfoImpl implements BillReceiptInfo {
      */
     @Override
     public String getCollectionType() {
-        return receiptHeader.getCollectiontype().toString();
+        return receiptHeader.getCollectiontype() != null ? receiptHeader.getCollectiontype().toString() : "";
     }
 
     public String getConsumerCode() {
