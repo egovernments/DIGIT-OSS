@@ -478,7 +478,6 @@
                   "filter": "",
                   "headers": [],
                   "tabName": "Boundary"
-
                 },
                 {
                   "id": "taxHeadsBreakupUsage",
@@ -488,7 +487,6 @@
                   "filter": "",
                   "headers": [],
                   "tabName": "Usage"
-
                 }
               ]
             }
@@ -790,7 +788,6 @@
                   "filter": "",
                   "headers": [],
                   "tabName": "Boundary"
-
                 }
               ]
             }
@@ -819,7 +816,6 @@
                   "filter": "",
                   "headers": [],
                   "tabName": "Boundary"
-
                 }
               ]
             }
@@ -960,7 +956,6 @@
       "isActive": "",
       "style": "linear",
       "visualizations": [
-
         {
           "row": 1,
           "name": "DSS_SERVICE",
@@ -1165,7 +1160,6 @@
                   "filter": "",
                   "headers": [],
                   "tabName": "Boundary"
-
                 },
                 {
                   "id": "pgrStatusByDepartment",
@@ -1175,7 +1169,6 @@
                   "filter": "",
                   "headers": [],
                   "tabName": "Department"
-
                 }
               ]
             }
@@ -1199,6 +1192,11 @@
               "name": "Overview",
               "vizType": "chart",
               "noUnit": true,
+              "ref": {
+                "url": "main",
+                "logoUrl": "",
+                "type": "internal"
+              },
               "charts": [
                 {
                   "id": "totalCollection",
@@ -1244,7 +1242,13 @@
               "id": 121,
               "name": "DSS_PROPERTY_TAX",
               "vizType": "chart",
+              "type": "",
               "noUnit": false,
+              "ref": {
+                "url": "propertytax",
+                "logoUrl": "",
+                "type": "internal"
+              },
               "label": "",
               "charts": [
                 {
@@ -1269,6 +1273,11 @@
               "id": 131,
               "name": "DSS_TRADE_LICENCE",
               "vizType": "chart",
+              "ref": {
+                "url": "tradelicence",
+                "logoUrl": "",
+                "type": "internal"
+              },
               "label": "",
               "charts": [
                 {
@@ -1293,6 +1302,11 @@
               "id": 141,
               "name": "DSS_COMPLAINS",
               "vizType": "chart",
+              "ref": {
+                "url": "pgr",
+                "logoUrl": "",
+                "type": "internal"
+              },
               "label": "",
               "charts": [
                 {
@@ -1312,33 +1326,6 @@
                   "headers": []
                 }
               ]
-            }
-          ]
-        },
-        {
-          "row": 3,
-          "name": "DSS_LINK",
-          "vizArray": [
-            {
-              "id": 121,
-              "name": "DSS_EXTERNAL_LINK",
-              "vizType": "link",
-              "link": "https://marvelapp.com/dajj221/screen/65000785 ",
-              "noUnit": false,
-              "label": "",
-              "charts": [
-
-              ]
-            },
-            {
-              "id": 131,
-              "name": "DSS_INTERNAL_LINK",
-              "vizType": "link",
-              "link": "https://marvelapp.com/dajj221/screen/65000785 ",
-              "noUnit": false,
-              "label": "",
-              "charts": [
-               ]
             }
           ]
         }
