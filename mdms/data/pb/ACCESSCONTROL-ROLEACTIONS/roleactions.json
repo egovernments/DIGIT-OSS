@@ -19765,6 +19765,12 @@
       "actionid": 1936,
       "actioncode": "",
       "tenantId": "pb"
+    },
+    {
+      "rolecode": "EMPLOYEE",
+      "actionid": 1937,
+      "actioncode": "",
+      "tenantId": "pb"
     }
   ]
 }

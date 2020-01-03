@@ -15938,6 +15938,18 @@
       "quickAction": true,
       "leftIcon": "communication:business",
       "rightIcon": ""
+    },
+    {
+      "id": 1937,
+      "name": "DSS Dashboard Config Overview",
+      "url": "/dashboard-analytics/dashboard/getDashboardConfig/overview",
+      "parentModule": "",
+      "displayName": "DSS",
+      "orderNumber": 0,
+      "enabled": false,
+      "serviceCode": "DSS",
+      "code": "null",
+      "path": ""
     }
   ]
 }
