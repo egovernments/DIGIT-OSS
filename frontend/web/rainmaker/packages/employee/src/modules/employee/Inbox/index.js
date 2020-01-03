@@ -33,7 +33,6 @@ class Inbox extends Component {
         hasWorkflow: false,
       });
     }
-console.log(nextProps);
 
     const list = menu && menu.filter((item) => item.url === "card");
     this.setState({
@@ -67,8 +66,7 @@ console.log(nextProps);
       props: { variant: "outlined", style: { marginLeft: 5, marginRight: 15, backgroundColor: "#FE7A51", color: "#fff", border: "none", height: "60px", width: "200px" } },
       menu: downloadMenu
     }
-    console.log(this.props,this.props.isLoading,'prr');
-    
+        
     return (
       <div>
         <div className="rainmaker-topHeader" style={{ marginTop: 30, justifyContent: "space-between" }}>

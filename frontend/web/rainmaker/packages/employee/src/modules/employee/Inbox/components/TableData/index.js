@@ -19,7 +19,7 @@ import { getTenantId, localStorageSet, localStorageGet } from "egov-ui-kit/utils
 import "./index.css";
 import Filter from "../Filter";
 import { getLocaleLabels } from "../../../../../ui-utils/commons";
-import { TextField } from "components";
+import TextFieldIcon  from  "egov-ui-kit/components/TextFieldIcon";
 
 
 const getWFstatus = (status) => {
@@ -84,7 +84,7 @@ class TableData extends Component {
     value: 0,
     tabData: [{ label: "COMMON_INBOX_TAB_ASSIGNED_TO_ME", dynamicArray: [0] }
       , { label: "COMMON_INBOX_TAB_ALL", dynamicArray: [0] }],
-    taskboardData: [{ head: 0, body: "WF_TOTAL_TASK", color: "rgb(76, 175, 80 ,0.38)", baseColor: "#4CAF50" },
+    taskboardData: [{ head: 0, body: "WF_TOTAL_TASK", color: "rgb(171,211,237)", baseColor: "rgb(53,152,219)" },
     { head: 0, body: "WF_TOTAL_NEARING_SLA", color: "rgb(238, 167, 58 ,0.38)", baseColor: "#EEA73A" },
     { head: 0, body: "WF_ESCALATED_SLA", color: "rgb(244, 67, 54 ,0.38)", baseColor: "#F44336" }],
     taskboardLabel: '',
@@ -520,10 +520,12 @@ class TableData extends Component {
             <div className="col-md-8 col-sm-8 col-xs-12">
               <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
             </div>
-            <div className="col-md-4 col-sm-4 col-xs-12">
-              <TextField floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
-                hintText={getLocaleLabels("CS_INBOX_SEARCH_PLACEHOLDER")}
+            <div className="col-md-4">
+              <TextFieldIcon
+              //  floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
+                hintText={getLocaleLabels("CS_INBOX_SEARCH")}
                 value={searchFilter.value}
+                iconPosition="before"
                 className="filter-fields"
                 onChange={(e, value) => {
                   handleChangeSearch(value);

@@ -92,6 +92,7 @@ const DropDownUi = ({
     return dropDownData.map((option, index) => {
       return (
         <MenuItem
+        style={{color:"black!important"}}
           className="menu-class"
           key={option.label}
           value={option.value}
@@ -119,7 +120,8 @@ const DropDownUi = ({
       menuStyle={menuStyle}
       fullWidth={fullWidth}
       dropDownMenuProps={{
-        targetOrigin: { horizontal: "left", vertical: "top" },
+        targetOrigin: { horizontal: "left", vertical: "top",
+      height:'300px' },
       }}
       labelStyle={labelStyle}
       onChange={onChange}
