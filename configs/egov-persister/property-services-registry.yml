@@ -161,9 +161,9 @@ serviceMaps:
 
       - jsonPath: $.Property.auditDetails.createdBy
 
-      - jsonPath: $.Property.auditDetails.lastModifiedBy
-
       - jsonPath: $.Property.auditDetails.createdTime
+
+      - jsonPath: $.Property.auditDetails.lastModifiedBy
 
       - jsonPath: $.Property.auditDetails.lastModifiedTime
 
