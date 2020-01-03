@@ -1,4 +1,3 @@
-
 {
   "tenantId": "pb",
   "moduleName": "sw-services-calculation",
@@ -6,10 +5,10 @@
     {
       "active": true,
       "connectionType": "Non Metered",
-      "billingCycle": "quaterly",
-      "demandEndDateMillis": 7776000000,
-      "demandExpiryDate": 2592000000
+      "billingCycle": "monthly",
+      "demandEndDateMillis": 2592000000,
+      "demandExpiryDate": 2592000000,
+      "demandGenerationDateMillis": 345600000
     }
   ]
 }
-
