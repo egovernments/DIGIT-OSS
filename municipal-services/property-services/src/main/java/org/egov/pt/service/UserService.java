@@ -73,8 +73,11 @@ public class UserService {
 			if (CollectionUtils.isEmpty(userDetailResponse.getUser())) {
 				
 				/*
-				 * Sets userName equal to mobileNumber if mobileNumber already
-				 * assigned as user-name random number is assigned as user-name
+				 * Sets userName equal to mobileNumber
+				 * 
+				 *  If mobileNumber already assigned as user-name for another user
+				 *  
+				 *  then random uuid is assigned as user-name
 				 */
 				StringBuilder uri = new StringBuilder(userHost).append(userContextPath).append(userCreateEndpoint);
 				setUserName(owner, listOfMobileNumbers);
