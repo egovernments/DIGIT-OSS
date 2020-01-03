@@ -1190,10 +1190,10 @@
             {
               "id": 111,
               "name": "Overview",
-              "vizType": "chart",
+              "vizType": "collection",
               "noUnit": true,
               "ref": {
-                "url": "main",
+                "url": "home",
                 "logoUrl": "",
                 "type": "internal"
               },
@@ -1241,7 +1241,7 @@
             {
               "id": 121,
               "name": "DSS_PROPERTY_TAX",
-              "vizType": "chart",
+              "vizType": "module",
               "type": "",
               "noUnit": false,
               "ref": {
@@ -1272,7 +1272,7 @@
             {
               "id": 131,
               "name": "DSS_TRADE_LICENCE",
-              "vizType": "chart",
+              "vizType": "module",
               "ref": {
                 "url": "tradelicense",
                 "logoUrl": "",
@@ -1301,7 +1301,7 @@
             {
               "id": 141,
               "name": "DSS_COMPLAINS",
-              "vizType": "chart",
+              "vizType": "module",
               "ref": {
                 "url": "pgr",
                 "logoUrl": "",
