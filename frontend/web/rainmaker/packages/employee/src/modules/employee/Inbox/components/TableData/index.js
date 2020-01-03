@@ -514,14 +514,13 @@ class TableData extends Component {
       }
     }
     return (
-      <div className="col-sm-12">
-        
+      <div className="col-md-12 col-sm-12 col-xs-12">
         <div>
           <div className="row" style={{ marginBottom: '5px', marginLeft: '-20px' }}>
-            <div className="col-md-8">
+            <div className="col-md-8 col-sm-8 col-xs-12">
               <Label className="landingPageUser" label={"WF_MY_WORKLIST"} />
             </div>
-            <div className="col-md-4">
+            <div className="col-md-4 col-sm-4 col-xs-12">
               <TextField floatingLabelText={getLocaleLabels("CS_INBOX_SEARCH")}
                 hintText={getLocaleLabels("CS_INBOX_SEARCH_PLACEHOLDER")}
                 value={searchFilter.value}
@@ -535,7 +534,7 @@ class TableData extends Component {
           <Filter handleChangeFilter={handleChangeFilter.bind(this)} clearFilter={clearFilter} filter={filter}></Filter>
         </div>
         <Taskboard data={taskboardData} onSlaClick={this.onTaskBoardClick} color={this.state.color} />
-        <div className="col-sm-12 backgroundWhite">
+        <div className="col-sm-12 col-xs-12 backgroundWhite">
           <Tabs
             value={value}
             onChange={this.handleChange}
