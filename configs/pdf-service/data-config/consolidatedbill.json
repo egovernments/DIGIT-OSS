@@ -486,35 +486,35 @@
               {
                 "variable": "arrears",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_PENALTY')].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode =~ /.*_CHARGE/i )].amount"
                 }
               },
               
               {
                 "variable": "charge",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE')].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode =~ /.*_TAX/i )].amount"
                 }
               },
              
               {
                 "variable": "rebate",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE')].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode =~ /.*_REBATE/i )].amount"
                 }
               },
               
               {
                 "variable": "penalty",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TIME_REBATE')].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode =~ /.*_PENALTY/i )].amount"
                 }
               },
               
               {
                 "variable": "others",
                 "value": {
-                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode=='PT_TAX')].amount"
+                  "path": "$.billDetails[0].billAccountDetails[?(@.taxHeadCode =~ /.*_CHARGE/i )].amount"
                 }
               },
              
