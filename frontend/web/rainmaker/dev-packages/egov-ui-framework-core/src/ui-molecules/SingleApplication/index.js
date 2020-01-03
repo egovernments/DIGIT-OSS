@@ -46,7 +46,7 @@ class SingleApplication extends React.Component {
             return `/bpastakeholder/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
         }
       } else {
-        return `/egov-bpa/search-preview?applicationNos=${item.applicationNumber}&tenantId=${item.tenantId}`;
+        return `/egov-bpa/search-preview?applicationNumber=${item.applicationNumber}&tenantId=${item.tenantId}`;
       }
     } else if (moduleName === "PT-MUTATION") {
       switch (item.fireNOCDetails.status) {
