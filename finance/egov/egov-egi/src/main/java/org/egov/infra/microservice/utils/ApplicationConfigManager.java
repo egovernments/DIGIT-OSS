@@ -61,29 +61,29 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class ApplicationConfigManager {
-    @Value("${egov.hrms.service.host:}")
+    @Value("${egov.hrms.service.endpoint:}")
     private String egovHrmsSerHost;
-    @Value("${egov.accesscontrol.service.host:}")
+    @Value("${egov.accesscontrol.service.endpoint:}")
     private String egovAccessControllSerHost;
-    @Value("${egov.hr.masters.service.host:}")
+    @Value("${egov.hr.masters.service.endpoint:}")
     private String egovHrMasterSerHost;
-    @Value("${egov.user.service.host:}")
+    @Value("${egov.user.service.endpoint:}")
     private String egovUserSerHost;
-    @Value("${egov.common.masters.host:}")
+    @Value("${egov.common.masters.endpoint:}")
     private String egovCommonMasterSerHost;
-    @Value("${egov.billing.service.host:}")
+    @Value("${egov.billing.service.endpoint:}")
     private String egovBillingSerHost;
-    @Value("${egov.collection.service.host:}")
+    @Value("${egov.collection.service.endpoint:}")
     private String egovCollSerHost;
-    @Value("${egov.egf.master.service.host:}")
+    @Value("${egov.egf.master.service.endpoint:}")
     private String egovEgfMasterSerHost;
-    @Value("${egov.egf.instrument.service.host:}")
+    @Value("${egov.egf.instrument.service.endpoint:}")
     private String egovEgfInstSerHost;
-    @Value("${egov.mdms.service.host:}")
+    @Value("${egov.mdms.service.endpoint:}")
     private String egovMdmsSerHost;
-    @Value("${egov.indexer.service.host:}")
+    @Value("${egov.indexer.service.endpoint:}")
     private String egovIndexerSerHost;
-    @Value("${egov.default.services.host}")
+    @Value("${egov.default.services.endpoint}")
     private String egovSerHost;
     
     @Value("${egov.services.collection.service.payment.search:}")
