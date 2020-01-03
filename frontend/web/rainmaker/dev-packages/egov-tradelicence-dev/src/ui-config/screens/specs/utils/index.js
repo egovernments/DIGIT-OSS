@@ -1978,19 +1978,19 @@ export const getDialogButton = (name, key, screenKey) => {
   };
 };
 
-const getAllBillingSlabs = async tenantId => {
+const getAllBillingSlabs = async (tenantId,queryObj=[]) => {
   let payload = await httpRequest(
     "post",
     `/tl-calculator/billingslab/_search?tenantId=${tenantId}`,
     "_search",
-    [],
+    queryObj,
     {}
   );
   return payload;
 };
 
-export const getAllDataFromBillingSlab = async (tenantId, dispatch) => {
-  const payload = await getAllBillingSlabs(tenantId);
+export const getAllDataFromBillingSlab = async (tenantId, dispatch,queryObj=[]) => {
+  const payload = await getAllBillingSlabs(tenantId,queryObj);
   const processedData =
     payload.billingSlab &&
     payload.billingSlab.reduce(

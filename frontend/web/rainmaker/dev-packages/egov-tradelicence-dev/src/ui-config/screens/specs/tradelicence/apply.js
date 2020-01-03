@@ -14,7 +14,7 @@ import {
   commonTransform,
   objectToDropdown,
   getCurrentFinancialYear,
-  getAllDataFromBillingSlab
+  // getAllDataFromBillingSlab
 } from "../utils";
 import {
   prepareFinalObject,
@@ -189,7 +189,7 @@ export const getData = async (action, state, dispatch) => {
         null
       );
   await getMdmsData(action, state, dispatch);
-  await getAllDataFromBillingSlab(getTenantId(), dispatch);
+  // await getAllDataFromBillingSlab(getTenantId(), dispatch);
 
   if (applicationNo) {
     //Edit/Update Flow ----
