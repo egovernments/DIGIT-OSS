@@ -251,7 +251,7 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 					.designation(rs.getString("designation"))
 					.name(rs.getString("institutionName"))
 					.type(rs.getString("institutionType"))
-					.id(rs.getString(institutionId))
+					.id(institutionId)
 					.build();
 			 
 			property.addInstitutionItem(institute);
