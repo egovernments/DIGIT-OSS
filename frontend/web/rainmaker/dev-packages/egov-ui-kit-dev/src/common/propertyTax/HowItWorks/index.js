@@ -4,6 +4,7 @@ import Button from "egov-ui-kit/components/Button";
 import BreadCrumbs from "egov-ui-kit/components/BreadCrumbs";
 import Screen from "egov-ui-kit/common/common/Screen";
 import Label from "egov-ui-kit/utils/translationNode";
+import get from "lodash/get";
 import { List, ListItem } from "material-ui/List";
 import { connect } from "react-redux";
 import { addBreadCrumbs } from "egov-ui-kit/redux/app/actions";
@@ -106,7 +107,7 @@ class HowItWorks extends Component {
     title && addBreadCrumbs({ title: title, path: window.location.pathname });
   }
 
-  renderList = items => {
+  renderList = (items, manualURL) => {
     return (
       <div>
         {/* Commenting for 10 dec release
@@ -316,29 +317,26 @@ class HowItWorks extends Component {
         </div>
      */}
         <div className="col-sm-12" style={{ padding: "15px 0px 30px 0px" }}>
-          {/* Commenting for 10 dec release
 
           <a
-            href={
-              "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb/PT_User_Manual_Citizen.pdf"
-            }
+            href={manualURL}
             target="_blank"
           >
-          */}
-          <Button
-            label={
-              <Label
-                buttonLabel={true}
-                label="PT_DOWNLOAD_HELP_DOCUMENT"
-                fontSize="12px"
-              />
-            }
-            primary={true}
-            style={{ height: 30, lineHeight: "auto", minWidth: "inherit" }}
-          />
-          {/* Commenting for 10 dec release
+
+            <Button
+              label={
+                <Label
+                  buttonLabel={true}
+                  label="PT_DOWNLOAD_HELP_DOCUMENT"
+                  fontSize="12px"
+                />
+              }
+              primary={true}
+              style={{ height: 30, lineHeight: "auto", minWidth: "inherit" }}
+            />
+
           </a>
-           */}
+
         </div>
 
         <div>
@@ -386,14 +384,14 @@ class HowItWorks extends Component {
 
   render() {
     const { renderList, listItems } = this;
-    const { urls, history } = this.props;
+    const { urls, history, manualURL } = this.props;
     return (
       <Screen className="screen-with-bredcrumb">
         <BreadCrumbs url={urls} history={history} />
         <div className="form-without-button-cont-generic">
           <Card
             className="how-it-works-card"
-            textChildren={renderList(listItems)}
+            textChildren={renderList(listItems, manualURL)}
           />
         </div>
       </Screen>
@@ -403,8 +401,29 @@ class HowItWorks extends Component {
 
 const mapStateToProps = state => {
   const { common, app } = state;
-  const { urls } = app;
-  return { urls };
+  const { urls, locale } = app;
+  const { stateInfoById } = common;
+  let userInfoManual = get(stateInfoById, "0.userManuals");
+  let manualURL;
+  userInfoManual.forEach(moduleManual => {
+    if (moduleManual.module === "TL") {
+      console.log("==============cvvvcg===========" + moduleManual.manuals);
+      moduleManual.manuals.forEach(localeManual => {
+        if (localeManual.locale == locale) {
+          console.log("================>>>", JSON.stringify(localeManual.url));
+          manualURL = localeManual.url;
+        }
+      });
+    }
+  });
+
+
+
+
+
+
+
+  return { urls, manualURL };
 };
 
 const mapDispatchToProps = dispatch => {
