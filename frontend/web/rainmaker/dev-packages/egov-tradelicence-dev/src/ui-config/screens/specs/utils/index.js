@@ -437,6 +437,8 @@ export const showHideAdhocPopup = (state, dispatch) => {
 };
 
 export const getButtonVisibility = (status, button) => {
+  if(status==="CITIZENACTIONREQUIRED" && button ==="RESUBMIT")
+  return true;
   if (status === "pending_payment" && button === "PROCEED TO PAYMENT")
     return true;
   if (status === "pending_approval" && button === "APPROVE") return true;

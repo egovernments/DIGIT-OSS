@@ -2,6 +2,7 @@ import {
   getLabel,
   dispatchMultipleFieldChangeAction
 } from "egov-ui-framework/ui-config/screens/specs/utils";
+
 import { download } from "egov-common/ui-utils/commons"
 import { applyTradeLicense } from "../../../../../ui-utils/commons";
 import {
@@ -737,35 +738,8 @@ export const footerReview = (
           uiFramework: "custom-atoms",
           componentPath: "Div",
           children: {
-            rejectButton: {
-              componentPath: "Button",
-              props: {
-                variant: "outlined",
-                color: "primary",
-                style: {
-                  minWidth: "180px",
-                  height: "48px",
-                  marginRight: "16px",
-                  borderRadius: "inherit"
-                }
-              },
-              children: {
-                nextButtonLabel: getLabel({
-                  labelName: "Reject",
-                  labelKey: "TL_APPROVER_TRADE_APP_BUTTON_REJECT"
-                })
-              },
-              onClickDefination: {
-                action: "page_change",
-                path: `/tradelicence/approve?purpose=reject&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
-              },
-              visible: getButtonVisibility(status, "REJECT"),
-              roleDefination: {
-                rolePath: "user-info.roles",
-                roles: ["TL_APPROVER"]
-              }
-            },
-            approveButton: {
+           
+            resubmitButton: {
               componentPath: "Button",
               props: {
                 variant: "contained",
@@ -778,74 +752,21 @@ export const footerReview = (
               },
               children: {
                 nextButtonLabel: getLabel({
-                  labelName: "APPROVE",
-                  labelKey: "TL_APPROVER_TRADE_APP_BUTTON_APPROVE"
+                  labelName: "RESUBMIT",
+                  labelKey: "TL_RESUBMIT"
                 })
               },
               onClickDefination: {
-                action: "page_change",
-                path: `/tradelicence/approve?applicationNumber=${applicationNumber}&tenantId=${tenantId}`
+                action: "condition",
+                callBack: openPopup
               },
-              visible: getButtonVisibility(status, "APPROVE"),
+              visible:getButtonVisibility(status, "RESUBMIT"),
               roleDefination: {
                 rolePath: "user-info.roles",
-                roles: ["TL_APPROVER"]
+                roles: ["TL_CEMP", "CITIZEN"]
               }
             },
-            proceedPayButton: {
-              componentPath: "Button",
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  minWidth: "180px",
-                  height: "48px",
-                  marginRight: "45px"
-                }
-              },
-              children: {
-                nextButtonLabel: getLabel({
-                  labelName: "PROCEED TO PAYMENT",
-                  labelKey: "TL_COMMON_BUTTON_PROC_PMT"
-                })
-              },
-              onClickDefination: {
-                action: "page_change",
-                path: `/egov-common/pay?consumerCode=${applicationNumber}&tenantId=${tenantId}&businessService=NewTL`
-                //path: `${redirectionURL}/pay?applicationNumber=${applicationNumber}&tenantId=${tenantId}&businessService=TL`
-              },
-              roleDefination: {
-                rolePath: "user-info.roles",
-                action: "PAY"
-              }
-            },
-            cancelButton: {
-              componentPath: "Button",
-              props: {
-                variant: "contained",
-                color: "primary",
-                style: {
-                  minWidth: "180px",
-                  height: "48px",
-                  marginRight: "45px"
-                }
-              },
-              children: {
-                nextButtonLabel: getLabel({
-                  labelName: "CANCEL TRADE LICENSE",
-                  labelKey: "TL_COMMON_BUTTON_CANCEL_LICENSE"
-                })
-              },
-              onClickDefination: {
-                action: "page_change",
-                path: `/tradelicence/approve?purpose=cancel&applicationNumber=${applicationNumber}&tenantId=${tenantId}`
-              },
-              visible: getButtonVisibility(status, "CANCEL TRADE LICENSE"),
-              roleDefination: {
-                rolePath: "user-info.roles",
-                roles: ["TL_APPROVER"]
-              }
-            }
+           
           },
           gridDefination: {
             xs: 12,
@@ -856,7 +777,11 @@ export const footerReview = (
     }
   });
 };
-
+export const openPopup = (state, dispatch) => {
+  dispatch(
+    prepareFinalObject("ResubmitAction", true)
+  );
+}
 
 export const downloadPrintContainer = (
   action,

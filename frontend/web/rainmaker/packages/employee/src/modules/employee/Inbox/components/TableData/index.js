@@ -21,7 +21,7 @@ import "./index.css";
 import Filter from "../Filter";
 import { getLocaleLabels } from "../../../../../ui-utils/commons";
 import { TextField } from "components";
-
+import LoadingIndicator from "egov-ui-framework/ui-molecules/LoadingIndicator";
 
 const getWFstatus = (status) => {
   switch (status) {
@@ -50,7 +50,8 @@ class TableData extends Component {
   state = {
     businessServiceSla: {},
     searchFilter: {
-      value: ''
+      value: '',
+      typing:false
     },
     filter: {
       localityFilter: {
@@ -93,6 +94,7 @@ class TableData extends Component {
     moduleName: "",
     loaded: false,
     color: "",
+    timeoutForTyping:false
   };
 
   getUniqueList = (list = []) => {
@@ -118,7 +120,7 @@ class TableData extends Component {
   }
   handleChangeSearch = (value) => {
     this.setState({
-      searchFilter: { value }
+      searchFilter: { value,typing:true }
     })
   }
 
@@ -214,7 +216,7 @@ class TableData extends Component {
 
     this.setState({
       searchFilter: {
-        value: ''
+        value: '',typing:false
       }, filter, inboxData: initialInboxData,
       initialInboxData: tempObject
     });
@@ -456,22 +458,38 @@ class TableData extends Component {
       color: baseColor,
     });
   };
-
+  resetTyping(state){
+    
+  }
   render() {
     const { value, moduleName, filter, searchFilter, businessServiceSla } = this.state;
     const { classes, onPopupOpen } = this.props;
-    const { handleChangeFilter, clearFilter, handleChangeSearch } = this;
+    const { handleChangeFilter, clearFilter, handleChangeSearch,resetTyping } = this;
     let { taskboardData, tabData, inboxData } = this.state;
+   
+    
     if (this.state.loaded) {
-      const filteredData = this.applyFilter();
+      if(searchFilter.typing){
+        if(this.state.timeoutForTyping){
+          clearTimeout(this.state.timeoutForTyping);
+        }
+        this.state.timeoutForTyping=setTimeout(()=> {
+          this.setState((state, props) =>{
+            let {searchFilter}= state;
+    searchFilter.typing=false;
+    this.setState({state});
+            ({...state})})},  3000);
+        
+     }else{ const filteredData = this.applyFilter();
       taskboardData = filteredData.taskboardData;
       inboxData = filteredData.inboxData;
       tabData = filteredData.tabData;
+      }
     } else {
       const { InboxData } = this.props;
       if (InboxData) {
 
-        const filteredData = this.applyFilter(InboxData);
+        const filteredData =  this.applyFilter(InboxData);
         taskboardData = filteredData.taskboardData;
         inboxData = filteredData.inboxData;
         tabData = filteredData.tabData;
