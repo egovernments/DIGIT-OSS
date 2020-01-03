@@ -67,7 +67,7 @@ public class ApplicationConfigManager {
     private String egovAccessControllSerHost;
     @Value("${egov.hr.masters.service.host:}")
     private String egovHrMasterSerHost;
-    @Value("${egov.user.service.host:}")
+    @Value("${egov.user.service.host.test:}")
     private String egovUserSerHost;
     @Value("${egov.common.masters.host:}")
     private String egovCommonMasterSerHost;
