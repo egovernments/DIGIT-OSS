@@ -1274,7 +1274,7 @@
               "name": "DSS_TRADE_LICENCE",
               "vizType": "chart",
               "ref": {
-                "url": "tradelicence",
+                "url": "tradelicense",
                 "logoUrl": "",
                 "type": "internal"
               },
