@@ -136,6 +136,20 @@ const updateAdhoc = (state, dispatch) => {
       dispatch(prepareFinalObject(
         "Licenses[0].tradeLicenseDetail.adhocPenalty", null));
     }
+    if (rebateAmount % 1 != 0) {
+      dispatch(
+        toggleSnackbar(
+        true,
+          {
+            labelName: "Adhoc Rebate amount should not be a decimal value.",
+            labelKey: "ERR_REBATE_NOT_DECIMAL"
+          },
+        "warning"
+        )
+      );
+      dispatch(prepareFinalObject(
+        "Licenses[0].tradeLicenseDetail.adhocExemption", null));
+    }
     else {
       getEstimateDataAfterAdhoc(state, dispatch);
     }
@@ -353,6 +367,7 @@ export const adhocPopup = getCommonContainer({
                width: "90%"
              }
            },
+           pattern: getPattern("Amount"),
            jsonPath: "Licenses[0].tradeLicenseDetail.adhocExemption"
          }),
          rebateReason: getSelectField({
