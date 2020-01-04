@@ -15216,7 +15216,7 @@
       "code": "null",
       "path": "BPAStakeHolder.Search",
       "navigationURL": "bpastakeholder/search",
-      "leftIcon": "places:business-center",
+      "leftIcon": "communication:business",
       "rightIcon": ""
     },
     {
@@ -15231,7 +15231,7 @@
       "code": "null",
       "path": "BPAStakeHolder",
       "navigationURL": "bpastakeholder-citizen/home",
-      "leftIcon": "places:business-center",
+      "leftIcon": "communication:business",
       "rightIcon": ""
     },
     {
@@ -15723,7 +15723,7 @@
       "code": "null",
       "path": "eDCRScrutiny",
       "navigationURL": "edcrscrutiny/home",
-      "leftIcon": "places:business-center",
+      "leftIcon": "custom:edcr",
       "rightIcon": ""
     },
     {
@@ -15979,7 +15979,7 @@
       "code": "",
       "path": "",
       "navigationURL": "edcrscrutiny/home",
-      "leftIcon": "action:store",
+      "leftIcon": "custom:edcr",
       "rightIcon": "",
       "queryParams": ""
     }
